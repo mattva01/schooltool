@@ -21,8 +21,8 @@ Random sample data generation script.
 
 Accepts a random seed as an optional argument.
 
-Generates three CSV files: groups.csv, persons.csv and
-resources.csv
+Generates four CSV files (groups.csv, persons.csv, resources.csv and
+timetable.csv) and roster.txt.
 
 $Id$
 """
@@ -49,33 +49,24 @@ surnames = _('Moore McCullogh Buckingham Butler Davies Clark Cooper '
 years = 2
 nr_pupils = 60
 nr_teachers = 8
-subjects = {
-    'ling': _('Linguistics'),
-    'math': _('Mathematics'),
-    'biol': _('Biology'),
-    'hist': _('History')
-    }
+subjects = {'ling': _('Linguistics'),
+            'math': _('Mathematics'),
+            'biol': _('Biology'),
+            'hist': _('History')}
 pupil_age_end = 1994        # Which year the youngest pupils will be
 teacher_age_start = 1950    # Oldest teachers
 teacher_age_end = 1980      # Youngest teachers
 
-timetable = [['','','',''],
-             ['','','',''],
-             ['','','',''],
-             ['','','',''],
-             ['','','',''],
-             ['','','',''],
-             ['','','',''],
-             ['','','','']]
+timetable = [[''] * 4 for line in range(8)]
+rosters = [''] * 8
 
-rosters = ['','','','','','','','']
 
 def random_name():
     return (random.choice(surnames), random.choice(names))
 
 
 def random_date(start, end):
-    """Generates a random date in the given date range (inclusive)"""
+    """Generate a random date in the given date range (inclusive)."""
     len = end - start
     days = len.days
     return start + datetime.timedelta(days=random.randint(0, days))
@@ -104,21 +95,15 @@ def createGroups():
 
 
 def createPersons():
-    """Create a randomly generated persons.csv in the current directory.
-
-    Format of the file:
-      id, surname, name, groups, dob, comments
-    where
-      groups is a space separated list of groups this pupils is a member of
-    """
-    f = open("persons.csv", "w")
-    r = open("roster.txt", "w")
+    """Generate persons.csv and roster.txt in the current directory."""
+    persons = open("persons.csv", "w")
+    roster = open("roster.txt", "w")
     names = sets.Set()
     subNames = subjects.keys()
     subNames.extend(subjects.keys())
     team = 1
     kids = []
-    
+
     for i in range(nr_pupils):
         year = i / (nr_pupils/years) + 1
         groups = ["%s%d" % (subj, year) for subj in subjects.keys()]
@@ -133,15 +118,14 @@ def createPersons():
 
         names.add(full)
         kids.append(full)
-        
+
         groups_str = 'year%s %s' % (year, 'pupils')
-        print >> f, '"","%s","%s","%s","%s",""' % (surname, name, 
-                                                   groups_str, birthday)
-    
-    
+        print >> persons, '"","%s","%s","%s","%s",""' % (surname, name,
+                                                         groups_str, birthday)
+
     for count in range(0, nr_teachers):
         period = count
-        if count > 3: 
+        if count > 3:
             team = 2
             period = period - 4
             students = kids[31:]
@@ -153,22 +137,22 @@ def createPersons():
             if full not in names:
                 break
 
-        names.add(full)        
+        names.add(full)
         birthday = random_date(datetime.date(teacher_age_start, 1, 1),
                                datetime.date(teacher_age_end, 1, 1))
-        print >> f, '"","%s","%s","%s teachers","%s",""' % (surname, name, 
-                                                            subNames[count], 
-                                                            birthday)
-        timetable[count][period] = '%s %s | %s %s' % (\
-            subjects[subNames[count]], team, name, surname)
-        print >> r, '%s %s' % (\
-            subjects[subNames[count]], team)
+        print >> persons, ('"","%s","%s","%s teachers","%s",""'
+                           % (surname, name, subNames[count], birthday))
+        timetable[count][period] = ('%s %s | %s %s' %
+                                    (subjects[subNames[count]],
+                                     team, name, surname))
+        print >> roster, '%s %s' % (subjects[subNames[count]], team)
         for kid in students:
-            print >> r, kid
-        print >> r, ""
-    
-    r.close()
-    f.close()
+            print >> roster, kid
+        print >> roster, ""
+
+    roster.close()
+    persons.close()
+
 
 def createResources():
     """Create a generated resources.csv in the current directory.
@@ -178,31 +162,32 @@ def createResources():
     """
     f = open("resources.csv", "w")
     print >> f, '"%s","locations"' % _('Hall')
-    for i in range(1,10):
+    for i in range(1, 10):
         print >> f, '"%s","locations"' % (_('Room %d') % i)
-    for i in range(1,4):
-       print >> f, '"%s",""' % (_('Projector %d') % i)
+    for i in range(1, 4):
+        print >> f, '"%s",""' % (_('Projector %d') % i)
     f.close()
+
 
 def createTimetable():
+    """Create timetable.csv in the current directory."""
     f = open("timetable.csv", "w")
-    print >> f, '''"2004-fall","default"
-""
-"Day 1"
-"","A","B"'''
-    for count in range(1,9):
+    print >> f, '"2004-fall","default"'
+    print >> f, '""'
+    print >> f, '"Day 1"'
+    print >> f, '"","A","B"'
+    for count in range(1, 9):
         print >> f, '"Room %i","%s","%s"' % (count, timetable[count-1][0],
-                                       timetable[count-1][1])
-    print >> f, '''""
-"Day 2"
-"","C","D"'''
-    for count in range(1,9):
+                                             timetable[count-1][1])
+    print >> f, '""'
+    print >> f, '"Day 2"'
+    print >> f, '"","C","D"'
+    for count in range(1, 9):
         print >> f, '"Room %i","%s","%s"' % (count, timetable[count-1][2],
-                                       timetable[count-1][3])
+                                             timetable[count-1][3])
     f.close()
-    
 
-    
+
 def main(argv):
     if len(argv) > 1:
         random.seed(argv[1])

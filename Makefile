@@ -69,13 +69,13 @@ runclient: build
 runwxclient: build
 	$(PYTHON) wxschooltool.py
 
-sampledata persons.csv groups.csv resources.csv:
+sampledata persons.csv groups.csv resources.csv timetable.csv roster.txt:
 	$(PYTHON) generate-sampleschool.py
 
-sampleschool: build groups.csv persons.csv resources.csv timetable.csv
-	@$(PYTHON) schooltool-server.py -d \
-	&& ($(PYTHON) import-sampleschool.py ; \
-	kill `cat schooltool.pid`)
+sampleschool: build persons.csv groups.csv resources.csv timetable.csv roster.txt
+	@$(PYTHON) schooltool-server.py -d && \
+	($(PYTHON) import-sampleschool.py ; \
+	 kill `cat schooltool.pid`)
 
 coverage: build
 	rm -rf coverage

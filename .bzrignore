@@ -249,7 +249,6 @@ src/zodb-old/zeo/auth/CVS/*~
 src/zodb-old/zeo/auth/CVS/*.so
 ./Data.fs*
 ./*.csv
-./testserver.log
 ./coverage
 ./build-stamp
 ./install-stamp
@@ -261,14 +260,9 @@ debian/schooltool.prerm.debhelper
 debian/files
 src/schooltool/translation/schooltool.pot
 ./*.pid
-./schooltool.log
-./app.log
-./testserver_app.log
 src/schooltool/rest/www/*.pyc
 src/schooltool/rest/www/Data.fs*
 src/schooltool/rest/www/*~
 src/schooltool/rest/www/*.so
-./web-access.log
-./rest-access.log
-./testserver_rest_access.log
-./testserver_web_access.log
+./*.log
+./roster.txt
