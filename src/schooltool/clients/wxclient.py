@@ -1726,7 +1726,8 @@ class AppLogFrame(wxDialog):
         size = page_ctrl.GetSize()
         size.width /= 2
         page_ctrl.SetSize(size)
-        total_label = self.total_label = wxStaticText(self, -1, _("of ????"))
+        total_label = self.total_label = wxStaticText(self, -1,
+                                                      _("of ?????")) # XXX
 
         next_btn = wxButton(self, -1, _("&Next"))
         EVT_BUTTON(self, next_btn.GetId(), self.OnNext)
@@ -1771,16 +1772,13 @@ class AppLogFrame(wxDialog):
         filter_str = self.filter_ctrl.GetValue()
         pagesize = 20 # XXX
         try:
-            log_data = self.client.getApplicationLog(page=page,
-                                                     pagesize=pagesize,
-                                                     filter=filter_str)
+            log_page = self.client.getAppLogPage(page=page, pagesize=pagesize,
+                                                 filter=filter_str)
         except SchoolToolError, e:
             raise # XXX What do I do, what do I do?  We might want a statusbar.
-        self.text_ctrl.SetValue(to_wx(log_data))
-
-    def setTotalPages(self, total_pages):
-        text = _("of %d") % total_pages
-        self.total_label.SetLabel(text)
+        self.page_ctrl.SetValue(str(log_page.page))
+        self.total_label.SetLabel(_("of %d") % log_page.total_pages)
+        self.text_ctrl.SetValue(to_wx(log_page.text))
 
 
 #
@@ -2633,10 +2631,10 @@ class MainFrame(wxFrame):
         Accessible via View|Application Log
         """
         try:
-            # XXX This is grossly inefficient and should be replaced, but I
-            # think it's a good idea to check permissions before opening the
-            # log window.
-            self.client.getApplicationLog(page=1, pagesize=1)
+            # XXX This is inefficient and should be replaced, but I
+            # think that the window shouldn't be opened if the user
+            # doesn't have the permission to view the application log.
+            self.client.getAppLogPage(page=1, pagesize=1)
         except SchoolToolError, e:
             self.SetStatusText(to_wx(unicode(e)))
         else:

@@ -113,7 +113,7 @@ class ResponseStub:
         self._headers = {'server': 'UnitTest/0.0',
                          'content-type': 'text/plain'}
         for k, v in kw.items():
-            self._headers[k.lower()] = v
+            self._headers[k.replace('_', '-').lower()] = v
         self._read_called = False
 
     def read(self):
@@ -1060,24 +1060,35 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
             </booking>
         """)
 
-    def test_getApplicationLog(self):
-        response = ResponseStub(200, 'OK', 'pwn3d')
+    def test_getAppLogPage(self):
+        from schooltool.clients.guiclient import ApplicationLogPage
+        response = ResponseStub(200, 'OK', 'pwn3d',
+                                x_page='7', x_total_pages='7')
         client = self.newClient(response)
-        result = client.getApplicationLog(page=-1, pagesize=5)
-        self.assertEquals(result, 'pwn3d')
+        logpage = client.getAppLogPage(page=-1, pagesize=5)
         self.assertEquals(client._connections[0].path,
                           '/applog?page=-1&pagesize=5')
 
-        response = ResponseStub(200, 'OK', '...')
-        client = self.newClient(response)
-        result = client.getApplicationLog(page=3, pagesize=15, filter='foo!')
-        self.assertEquals(client._connections[0].path,
-                          '/applog?page=3&pagesize=15&filter=foo%21')
+        self.assert_(isinstance(logpage, ApplicationLogPage))
+        self.assertEquals(logpage.text, 'pwn3d')
+        self.assertEquals(logpage.page, 7)
+        self.assertEquals(logpage.total_pages, 7)
 
-    def test_getApplicationLog_errors(self):
+        response = ResponseStub(200, 'OK', 'abc',
+                                x_page='2', x_total_pages='3')
+        client = self.newClient(response)
+        logpage = client.getAppLogPage(page=4, pagesize=15,
+                                               filter='foo!')
+        self.assertEquals(client._connections[0].path,
+                          '/applog?page=4&pagesize=15&filter=foo%21')
+        self.assertEquals(logpage.text, 'abc')
+        self.assertEquals(logpage.page, 2)
+        self.assertEquals(logpage.total_pages, 3)
+
+    def test_getApplicationLogPage_errors(self):
         from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(ResponseStub(500, 'not OK', 'abc'))
-        self.assertRaises(SchoolToolError, client.getApplicationLog, 3, 4)
+        self.assertRaises(SchoolToolError, client.getAppLogPage, 3, 4)
 
 
 class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,

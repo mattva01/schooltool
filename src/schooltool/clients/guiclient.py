@@ -581,7 +581,7 @@ class SchoolToolClient:
         if response.status != 200:
             raise ResponseStatusError(response)
 
-    def getApplicationLog(self, page, pagesize, filter=None):
+    def getAppLogPage(self, page, pagesize, filter=None):
         args = [('page', page), ('pagesize', pagesize)]
         if filter:
             args.append(('filter', filter))
@@ -589,7 +589,10 @@ class SchoolToolClient:
         response = self.get('/applog?' + qs)
         if response.status != 200:
             raise ResponseStatusError(response)
-        return response.read()
+        page = int(response.getheader('x-page'))
+        total_pages = int(response.getheader('x-total-pages'))
+        text = response.read()
+        return ApplicationLogPage(text, page, total_pages)
 
 
 class Response:
@@ -1482,6 +1485,20 @@ class ResourceTimeSlot:
         return "%s(%r, %r, %r, %r)" % (self.__class__.__name__,
                self.resource_title, self.resource_path, self.available_from,
                self.available_for)
+
+
+
+class ApplicationLogPage:
+    """A single page of the application log."""
+
+    text = None
+    page = None
+    total_pages = None
+
+    def __init__(self, text, page, total_pages):
+        self.text = text
+        self.page = page
+        self.total_pages = total_pages
 
 
 #
