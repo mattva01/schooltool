@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+from logging import INFO
 import datetime
 from schooltool.views.tests import RequestStub, setPath, viewClass
 from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
@@ -167,7 +168,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
                           "text/plain; charset=UTF-8")
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.site.applog,
-                          [(None, 'Calendar updated: /calendar', 'INFO')])
+                          [(None, 'Calendar updated: /calendar', INFO)])
         self.assertEquals(self.sm.first, datetime.date(2004, 9, 1))
         self.assertEquals(self.sm.last, datetime.date(2004, 9, 30))
         for date in self.sm:
@@ -327,7 +328,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.site.applog,
-                          [(None, 'Calendar updated: /calendar', 'INFO')])
+                          [(None, 'Calendar updated: /calendar', INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
@@ -451,7 +452,7 @@ class TestCalendarView(TestCalendarReadView):
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.site.applog,
-                          [(None, 'Imported calendar: /calendar', 'INFO')])
+                          [(None, 'Imported calendar: /calendar', INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
@@ -514,7 +515,7 @@ class TestCalendarView(TestCalendarReadView):
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.site.applog,
-                          [(None, 'Imported calendar: /calendar', 'INFO')])
+                          [(None, 'Imported calendar: /calendar', INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
@@ -697,7 +698,7 @@ class TestBookingView(RegistriesSetupMixin, QuietLibxml2Mixin,
         result = self.view.render(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.site.applog,
-                          [(self.manager, 'Hall booked by John', 'INFO')])
+                          [(self.manager, 'Hall booked by John', INFO)])
         self.assertEquals(len(list(self.person.calendar)), 1)
         self.assertEquals(len(list(self.resource.calendar)), 1)
         ev1 = iter(self.person.calendar).next()

@@ -22,6 +22,7 @@ Unit tests for schooltool.views.model
 $Id$
 """
 
+from logging import INFO
 import unittest
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin
@@ -349,7 +350,7 @@ class TestPersonPasswordView(unittest.TestCase):
         result = v.render(request)
         self.assertEqual(request.code, 200)
         self.assertEquals(request.site.applog,
-                [(None, "Password changed for /persons/001 (John)", 'INFO')])
+                [(None, "Password changed for /persons/001 (John)", INFO)])
         self.assertEqual(result, "Password changed")
         self.assert_(p.checkPassword("Foo bar"))
 
@@ -365,7 +366,7 @@ class TestPersonPasswordView(unittest.TestCase):
         result = v.render(request)
         self.assertEqual(request.code, 200)
         self.assertEquals(request.site.applog,
-                [(None, "Account disabled for /persons/002 (John)", 'INFO')])
+                [(None, "Account disabled for /persons/002 (John)", INFO)])
         self.assertEqual(result, "Account disabled")
         self.assert_(not p.checkPassword("foo"))
 

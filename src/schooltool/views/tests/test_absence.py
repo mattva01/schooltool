@@ -23,6 +23,7 @@ $Id$
 """
 
 import datetime
+from logging import INFO
 import unittest
 from schooltool.tests.utils import RegistriesSetupMixin, EventServiceTestMixin
 from schooltool.tests.utils import XMLCompareMixin
@@ -210,7 +211,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
         self.assertEquals(request.site.applog,
-                [(None, 'Absence created: /person/absences/001', 'INFO')])
+                [(None, 'Absence created: /person/absences/001', INFO)])
         location = request.headers['location']
         self.assert_(location.startswith(baseurl),
                      "%r.startswith(%r) failed" % (location, baseurl))
@@ -243,7 +244,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         result = view.render(request)
 
         self.assertEquals(request.site.applog,
-                [(None, 'Absence updated: /person/absences/001', 'INFO')])
+                [(None, 'Absence updated: /person/absences/001', INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.reason, "OK")
         location = request.headers['location']
@@ -355,7 +356,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.site.applog,
-                [(None, 'Comment added to /person/absences/001', 'INFO')])
+                [(None, 'Comment added to /person/absences/001', INFO)])
         self.assertEquals(result, "Comment added")
         comment = absence.comments[-1]
         self.assertEquals(comment.text, u"Foo \u2730")
@@ -511,7 +512,7 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(result, "2 absences and 1 presences reported")
 
         self.assertEquals(request.site.applog,
-                [(self.manager, msg, 'INFO')
+                [(self.manager, msg, INFO)
                  for msg in ['Reported absence: /persons/b/absences/001',
                              'Reported presence: /persons/c/absences/001',
                              'Reported absence: /persons/d/absences/001']])
@@ -573,7 +574,7 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         # when reporter is not explicitly specified, take authenticated_user
         result = view.render(request)
         self.assertEquals(request.site.applog,
-                [(self.personb, msg, 'INFO')
+                [(self.personb, msg, INFO)
                  for msg in ['Reported absence: /persons/a/absences/001',
                              'Reported absence: /persons/c/absences/001',
                              'Reported absence: /persons/d/absences/001']])

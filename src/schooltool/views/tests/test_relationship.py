@@ -22,6 +22,7 @@ Unit tests for schooltool.views.relationship
 $Id$
 """
 
+from logging import INFO
 import unittest
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin
@@ -126,7 +127,7 @@ class TestRelationshipsView(RegistriesSetupMixin, QuietLibxml2Mixin,
         self.assertEquals(request.code, 201)
         self.assertEquals(request.site.applog,
                 [(None, 'Relationship created: /groups/sub/relationships/0003',
-                  'INFO')])
+                  INFO)])
         self.assertEquals(len(self.sub.listLinks()), 3)
         self.assert_(self.new in
                      [l.traverse() for l in self.sub.listLinks()])
@@ -269,7 +270,7 @@ class TestLinkView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         self.assertEqual(len(self.sub.listLinks()), 1)
         result = self.view.render(request)
         self.assertEqual(request.site.applog,
-                         [(None, 'Link removed: /groups/root/0001', 'INFO')])
+                         [(None, 'Link removed: /groups/root/0001', INFO)])
         self.assertEqual(result, 'Link removed')
         self.assertEqual(len(self.sub.listLinks()), 0)
 

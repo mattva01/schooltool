@@ -20,6 +20,7 @@
 Unit tests for the schooltool.views package.
 """
 
+import logging
 from StringIO import StringIO
 from zope.interface import implements, directlyProvides
 from twisted.protocols import http
@@ -35,7 +36,7 @@ class SiteStub:
     def __init__(self):
         self.applog = []
 
-    def logAppEvent(self, user, message, level='INFO'):
+    def logAppEvent(self, user, message, level=logging.INFO):
         self.applog.append((user, message, level))
 
 

@@ -222,10 +222,10 @@ class TestSite(unittest.TestCase):
 
         site.applogger = AppLoggerStub()
         site.logAppEvent(None, 'Hello')
-        site.logAppEvent(UserStub('me'), 'Bye', level="WARNING")
+        site.logAppEvent(UserStub('me'), 'Bye', level=logging.WARNING)
         self.assertEquals(site.applogger.applog,
-                          [("INFO", "INFO (UNKNOWN) Hello"),
-                           ("WARNING", "WARNING (me) Bye")])
+                          [(logging.INFO, "(UNKNOWN) Hello"),
+                           (logging.WARNING, "(me) Bye")])
 
 
 class TestAcceptParsing(unittest.TestCase):

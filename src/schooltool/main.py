@@ -557,13 +557,13 @@ class Site(http.HTTPFactory):
         channel.site = self
         return channel
 
-    def logAppEvent(self, user, message, level='INFO'):
+    def logAppEvent(self, user, message, level=logging.INFO):
         """Add a log entry to the application log."""
         if user is None:
             username = 'UNKNOWN'
         else:
             username = user.username
-        self.applogger.log(level, "%s (%s) %s" % (level, username, message))
+        self.applogger.log(level, "(%s) %s" % (username, message))
 
 
 #
@@ -725,7 +725,7 @@ class Server:
                          "--\n%(asctime)s\n%(message)s")
         self.setUpLogger('schooltool.access', self.config.access_log_file)
         self.setUpLogger('schooltool.app', self.config.app_log_file,
-                         "%(asctime)s %(message)s")
+                         "%(asctime)s %(levelname)s %(message)s")
 
         # Shut up ZODB lock_file, because it logs tracebacks when unable
         # to lock the database file, and we don't want that.
