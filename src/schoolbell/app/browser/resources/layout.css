@@ -36,11 +36,15 @@ body {
     bottom: 0;
     width: 70%;
     padding: 0 15%;
-    margin-top: 1em;
+    margin-top: 2em;
 }
 
 #columns {
-    margin-bottom: 4em;
+    margin-bottom: 1em;
+}
+
+.clearer {
+    clear: both;
 }
 
 /* SBMH -- see http://css-discuss.incutio.com/?page=BoxModelHack

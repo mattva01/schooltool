@@ -111,8 +111,8 @@
           <metal:block define-slot="body"/>
         </div>
       </div>
+      <div class="clearer">&nbsp;</div>
     </div>
-    <div style="clear: both"></div>
     <div id="footer" i18n:translate="">
       <p>
         &copy; The Shuttleworth Foundation 2003 - <span>2005</span>:
