@@ -1,6 +1,8 @@
 <html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title" tal:content="view/index_title">Contents</title>
+  <title metal:fill-slot="title" tal:content="view/index_title">
+    Contents
+  </title>
 </head>
 <body>
 
