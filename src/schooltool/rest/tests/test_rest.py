@@ -105,6 +105,12 @@ class TestTemplate(unittest.TestCase):
         self.assertEquals(request.headers['content-type'], "text/plain")
         self.assertEquals(result, u"code: 200\n")
 
+    def test_no_request(self):
+        from schooltool.rest import Template
+        templ = Template('sample_no_request.pt')
+        result = templ(None, foo='Foo', bar='Bar')
+        self.assertEquals(result, "foo: Foo\nbar: Bar\n")
+
     def test_translate(self):
         from schooltool.rest import Template
         templ = Template('sample_i18n.pt')

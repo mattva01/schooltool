@@ -1,0 +1,2 @@
+foo: <tal:x replace="foo" />
+<tal:y replace="string:bar: $bar" />

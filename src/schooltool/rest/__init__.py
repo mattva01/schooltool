@@ -230,7 +230,7 @@ class Template(PageTemplateFile):
         Any keyword arguments passed to this function will be accessible
         in the page template namespace.
         """
-        if self.content_type is not None:
+        if self.content_type is not None and request is not None:
             if self.charset is None:
                 request.setHeader('Content-Type', self.content_type)
             else:
