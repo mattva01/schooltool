@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.adapters
+Unit tests for schooltool.component
 
 $Id$
 """
@@ -46,22 +46,22 @@ class C1:
 class TestGetAdapter(unittest.TestCase):
 
     def setUp(self):
-        from schooltool.adapters import adapterRegistry
+        from schooltool.component import adapterRegistry
         self.reg = adapterRegistry.copy()
 
     def tearDown(self):
-        from schooltool.adapters import adapterRegistry
+        from schooltool.component import adapterRegistry
         self.adapterRegistry = self.reg
 
     def test_getAdapter(self):
-        from schooltool.adapters import getAdapter, provideAdapter
+        from schooltool.component import getAdapter, provideAdapter
         from schooltool.interfaces import ComponentLookupError
         provideAdapter(I1, C1)
         self.assertEqual(getAdapter(object(), I1).foo(), "foo")
         self.assertRaises(ComponentLookupError, getAdapter, object(), I2)
 
     def test_getAdapter_provided(self):
-        from schooltool.adapters import getAdapter, provideAdapter
+        from schooltool.component import getAdapter, provideAdapter
         ob = C1(None)
         self.assertEqual(getAdapter(ob, I1), ob)
 
@@ -69,7 +69,7 @@ class TestGetAdapter(unittest.TestCase):
 class TestCanonicalPath(unittest.TestCase):
 
     def test_path(self):
-        from schooltool.adapters import getPath
+        from schooltool.component import getPath
         from schooltool.interfaces import ILocation, IContainmentRoot
 
         class Stub:
@@ -102,20 +102,20 @@ class TestFacetFunctions(unittest.TestCase):
         self.facet = object()
 
     def test_api(self):
-        from schooltool import adapters
+        from schooltool import component
         from schooltool.interfaces import IFacetAPI, IContainmentAPI
-        verifyObject(IFacetAPI, adapters)
-        verifyObject(IContainmentAPI, adapters)
+        verifyObject(IFacetAPI, component)
+        verifyObject(IContainmentAPI, component)
 
     def test_setFacet(self):
-        from schooltool.adapters import setFacet
+        from schooltool.component import setFacet
         setFacet(self.ob, self.marker, self.facet)
         self.assert_(self.ob.__facets__[self.marker] is self.facet)
         self.assertRaises(TypeError,
                           setFacet, object(), self.marker, self.facet)
 
     def test_getFacet(self):
-        from schooltool.adapters import getFacet
+        from schooltool.component import getFacet
         self.ob.__facets__[self.marker] = self.facet
         result = getFacet(self.ob, self.marker)
         self.assertEqual(result, self.facet)
@@ -123,7 +123,7 @@ class TestFacetFunctions(unittest.TestCase):
         self.assertRaises(TypeError, getFacet, object(), self.marker)
 
     def test_queryFacet(self):
-        from schooltool.adapters import queryFacet
+        from schooltool.component import queryFacet
         self.ob.__facets__[self.marker] = self.facet
         result = queryFacet(self.ob, self.marker)
         self.assertEqual(result, self.facet)
@@ -135,7 +135,7 @@ class TestFacetFunctions(unittest.TestCase):
         self.assertRaises(TypeError, queryFacet, object(), self.marker)
 
     def test_getFacetItems(self):
-        from schooltool.adapters import getFacetItems
+        from schooltool.component import getFacetItems
         self.ob.__facets__[self.marker] = self.facet
         result = getFacetItems(self.ob)
         self.assertEqual(result, [(self.marker, self.facet)])

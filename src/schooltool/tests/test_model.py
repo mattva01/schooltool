@@ -135,7 +135,7 @@ class TestGroup(unittest.TestCase):
 
     def test_facet_management(self):
         from schooltool.model import Group
-        from schooltool.adapters import getFacet
+        from schooltool.component import getFacet
         group = Group("root", FacetStub)
         member = MemberStub()
         key = group.add(member)
@@ -289,7 +289,7 @@ class TestFacetedEventTargetMixin(unittest.TestCase):
 
     def test_getEventTable(self):
         from schooltool.model import FacetedEventTargetMixin
-        from schooltool.adapters import setFacet
+        from schooltool.component import setFacet
         et = FacetedEventTargetMixin()
         et.__facets__ = {} # use a simple dict instead of PersistentKeysDict
         et.eventTable.append(0)

@@ -32,7 +32,7 @@ from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
 from schooltool.interfaces import IEvent, IEventTarget, IEventConfigurable
 from schooltool.interfaces import IEventAction, ILookupAction
 from schooltool.interfaces import IRouteToMembersAction, IRouteToGroupsAction
-from schooltool.adapters import queryFacet, setFacet, getFacetItems
+from schooltool.component import queryFacet, setFacet, getFacetItems
 from schooltool.db import PersistentListSet, PersistentKeysDict
 
 __metaclass__ = type

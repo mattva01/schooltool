@@ -25,7 +25,7 @@ $Id$
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
 from schooltool.interfaces import IGroup, IPerson
-from schooltool.adapters import getPath, ComponentLookupError
+from schooltool.component import getPath, ComponentLookupError
 
 __metaclass__ = type
 

@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-The schooltool adapters.
+The schooltool component.
 
 $Id$
 """
@@ -48,6 +48,11 @@ def getAdapter(object, interface):
         raise ComponentLookupError("adapter from %s to %s"
                                    % (object, interface))
     return factory(object)
+
+
+#
+# IContainmentAPI
+#
 
 def getPath(obj):
     """Returns the path of an object implementing ILocation"""
@@ -98,3 +103,4 @@ def getFacetItems(ob):
     if not IFaceted.isImplementedBy(ob):
         raise TypeError("%r does not implement IFaceted" % ob)
     return ob.__facets__.items()
+
