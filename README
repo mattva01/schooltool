@@ -150,6 +150,31 @@ be sure to run
   make extract-translations
 
 
+Virtual hosting
+---------------
+
+SchoolTool provides support for virtual hosting with Apache's mod_rewrite.
+For example, let's say you have two SchoolTool instances running on ports
+7001 and 7002, and you want to make them available as school1.example.org
+and school2.example.org, both on port 80.  In order to do that, add the
+following to your Apache configuration file:
+
+  NameVirtualHost *:80
+
+  <VirtualHost *:80>
+    ServerName school1.example.org
+    RewriteEngine On
+    RewriteRule ^/(.*) http://localhost:7001/++vh++http:school1.example.org:80/$1 [P]
+  </VirtualHost>
+
+  <VirtualHost *:80>
+    ServerName school2.example.org
+    RewriteEngine On
+    RewriteRule ^/(.*) http://localhost:7002/++vh++http:school2.example.org:80/$1 [P]
+  </VirtualHost>
+
+Also, enable mod_proxy and mod_rewrite.
+
 Copyright information
 ---------------------
 
