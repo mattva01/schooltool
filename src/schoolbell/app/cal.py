@@ -66,8 +66,11 @@ class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
     def bookResource(self, resource):
         if resource in self.resources:
             raise ValueError('resource already booked')
+        if resource.calendar is self.__parent__:
+            raise ValueError('cannot book itself')
         self._resources += (resource, )
-        resource.calendar.addEvent(self)
+        if self.__parent__ is not None:
+            resource.calendar.addEvent(self)
 
     def unbookResource(self, resource):
         if resource not in self.resources:
@@ -102,11 +105,14 @@ class Calendar(Persistent, CalendarMixin):
         assert ISchoolBellCalendarEvent.providedBy(event)
         if event.unique_id in self.events:
             raise ValueError('an event with this unique_id already exists')
-        if self.__parent__ in event.resources:
-            pass # Do not fiddle with event.__parent__
-        elif event.__parent__ is None:
+        if event.__parent__ is None:
+            for resource in event.resources:
+                if resource.calendar is self:
+                    raise ValueError('cannot book itself')
             event.__parent__ = self
-        else:
+            for resource in event.resources:
+                resource.calendar.addEvent(event)
+        elif self.__parent__ not in event.resources:
             raise ValueError("Event already belongs to a calendar")
         self.events[event.unique_id] = event
 

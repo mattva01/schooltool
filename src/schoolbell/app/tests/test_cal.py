@@ -96,8 +96,10 @@ def doctest_CalendarEvent_resource_booking():
 
     All calendar events have a `resources` argument, but initially it is empty.
 
-        >>> from schoolbell.app.cal import CalendarEvent
+        >>> from schoolbell.app.cal import Calendar, CalendarEvent
+        >>> c = Calendar()
         >>> e = CalendarEvent(None, None, '')
+        >>> c.addEvent(e)
         >>> e.resources
         ()
 
@@ -134,11 +136,12 @@ def doctest_CalendarEvent_resource_booking():
         >>> a = ResourceStub()
         >>> b = ResourceStub()
         >>> e = CalendarEvent(None, None, 'title', resources=[a, b])
+        >>> c.addEvent(e)
         >>> a in e.resources and b in e.resources
         True
         >>> e in a.calendar and e in b.calendar
         True
-        >>> e.__parent__ is None
+        >>> e.__parent__ is c
         True
 
     You cannot book the same resource twice:
