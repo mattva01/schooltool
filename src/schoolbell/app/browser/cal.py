@@ -947,17 +947,6 @@ class DailyCalendarView(CalendarViewBase):
         dtend = event.dtstart + event.duration
         return max(1, self.snapToGrid(dtend) - self.snapToGrid(event.dtstart))
 
-    def update(self):
-        # Create self.cursor
-        CalendarViewBase.update(self)
-
-        # Initialize self.starthour and self.endhour
-        events = self.dayEvents(self.cursor)
-        self._setRange(events)
-
-        # The number of hours displayed in the day view
-        self.visiblehours = self.endhour - self.starthour
-
 
 #
 # Calendar modification views

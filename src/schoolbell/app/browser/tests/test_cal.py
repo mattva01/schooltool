@@ -1997,18 +1997,6 @@ class TestDailyCalendarView(unittest.TestCase):
         view.update()
         self.assertEquals(view.title(), "Friday, 2005-01-07")
 
-    def test_update(self):
-        from schoolbell.app.browser.cal import DailyCalendarView
-        from schoolbell.app.app import Person
-
-        view = DailyCalendarView(Person().calendar, TestRequest())
-        view.update()
-        self.assertEquals(view.cursor, date.today())
-
-        view.request = TestRequest(form={'date': '2004-08-18'})
-        view.update()
-        self.assertEquals(view.cursor, date(2004, 8, 18))
-
     def test__setRange(self):
         from schoolbell.app.browser.cal import DailyCalendarView
         from schoolbell.app.app import Person
