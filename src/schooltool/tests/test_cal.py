@@ -1085,7 +1085,8 @@ class TestACLCalendar(unittest.TestCase):
         calendar = ACLCalendar()
         verifyObject(IACLCalendar, calendar)
         verifyObject(IACL, calendar.acl)
-
+        self.assertEquals(calendar.acl.__parent__, calendar)
+        self.assertEquals(calendar.acl.__name__, 'acl')
 
 class TestCalendarOwnerMixin(unittest.TestCase):
 
@@ -1117,51 +1118,56 @@ class TestACL(unittest.TestCase):
         self.person2 = Person("Mark")
 
     def test_add(self):
-        from schooltool.interfaces import View, Add, Modify
-        self.acl.add((self.person, View))
-        self.assertEquals(self.acl._data[(self.person, View)], 1)
+        from schooltool.interfaces import ViewPermission, AddPermission
+        from schooltool.interfaces import ModifyPermission
+        self.acl.add((self.person, ViewPermission))
+        self.assertEquals(self.acl._data[(self.person, ViewPermission)], 1)
         self.assertEquals(len(self.acl._data), 1)
-        self.acl.add((self.person2, Modify))
-        self.acl.add((self.person2, Add))
-        self.acl.add((self.person2, Add))
+        self.acl.add((self.person2, ModifyPermission))
+        self.acl.add((self.person2, AddPermission))
+        self.acl.add((self.person2, AddPermission))
         self.assertEquals(len(self.acl._data), 3)
-        assert (self.person2, Modify) in self.acl._data
-        assert (self.person2, Add) in self.acl._data
-        assert (self.person, View) in self.acl._data
+        assert (self.person2, ModifyPermission) in self.acl._data
+        assert (self.person2, AddPermission) in self.acl._data
+        assert (self.person, ViewPermission) in self.acl._data
         self.assertRaises(ValueError, self.acl.add, (self.person, "Delete"))
 
     def test_allows_contains(self):
-        from schooltool.interfaces import View, Add, Modify
-        assert (self.person, View) not in self.acl
-        assert not self.acl.allows(self.person, View)
-        self.acl.add((self.person, View))
-        assert (self.person, View) in self.acl
-        assert self.acl.allows(self.person, View)
+        from schooltool.interfaces import ViewPermission, AddPermission
+        from schooltool.interfaces import ModifyPermission
+        assert (self.person, ViewPermission) not in self.acl
+        assert not self.acl.allows(self.person, ViewPermission)
+        self.acl.add((self.person, ViewPermission))
+        assert (self.person, ViewPermission) in self.acl
+        assert self.acl.allows(self.person, ViewPermission)
 
-        self.acl.add((self.person2, Modify))
-        self.acl.add((self.person2, Add))
+        self.acl.add((self.person2, ModifyPermission))
+        self.acl.add((self.person2, AddPermission))
 
-        assert (self.person2, Modify) in self.acl
-        assert self.acl.allows(self.person2, Modify)
+        assert (self.person2, ModifyPermission) in self.acl
+        assert self.acl.allows(self.person2, ModifyPermission)
 
         self.assertRaises(ValueError, self.acl.allows, self.person, "Delete")
         self.assertRaises(ValueError, self.acl.__contains__,
                           (self.person, "Delete"))
 
     def test_iter(self):
-        from schooltool.interfaces import View, Add, Modify
+        from schooltool.interfaces import ViewPermission, AddPermission
+        from schooltool.interfaces import ModifyPermission
         self.assertEquals(list(self.acl), [])
-        self.acl.add((self.person, View))
-        self.assertEquals(list(self.acl), [(self.person, View)])
+        self.acl.add((self.person, ViewPermission))
+        self.assertEquals(list(self.acl), [(self.person, ViewPermission)])
 
     def test_delitem(self):
-        from schooltool.interfaces import View, Add, Modify
-        self.acl.add((self.person, View))
-        assert (self.person, View) in self.acl._data
-        self.acl.remove((self.person, View))
-        assert (self.person, View) not in self.acl._data
+        from schooltool.interfaces import ViewPermission, AddPermission
+        from schooltool.interfaces import ModifyPermission
+        self.acl.add((self.person, ViewPermission))
+        assert (self.person, ViewPermission) in self.acl._data
+        self.acl.remove((self.person, ViewPermission))
+        assert (self.person, ViewPermission) not in self.acl._data
         self.assertRaises(ValueError, self.acl.remove, (self.person, "Delete"))
-        self.assertRaises(KeyError, self.acl.remove, (self.person, View))
+        self.assertRaises(KeyError, self.acl.remove,
+                          (self.person, ViewPermission))
 
 
 def test_suite():

@@ -723,9 +723,9 @@ class IFacetAPI(Interface):
 # Access control
 #
 
-View = 'View'
-Add = 'Add'
-Modify = 'Modify'
+ViewPermission = 'View'
+AddPermission = 'Add'
+ModifyPermission = 'Modify'
 
 class IACL(Interface):
     """Access control list.

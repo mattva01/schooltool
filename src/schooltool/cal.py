@@ -32,8 +32,9 @@ from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
 from schooltool.interfaces import ILocation, IDateRange
 from schooltool.interfaces import ICalendar, ICalendarWrite, ICalendarEvent
 from schooltool.interfaces import ICalendarOwner
-from schooltool.interfaces import IACL, IACLCalendar, View, Modify, Add
-
+from schooltool.interfaces import IACL, IACLCalendar
+from schooltool.interfaces import ViewPermission
+from schooltool.interfaces import ModifyPermission, AddPermission
 
 __metaclass__ = type
 
@@ -980,6 +981,8 @@ class ACLCalendar(Calendar):
 
     def __init__(self):
         self.acl = ACL()
+        self.acl.__parent__ = self
+        self.acl.__name__ = 'acl'
         Calendar.__init__(self)
 
 
@@ -996,10 +999,12 @@ class CalendarOwnerMixin:
 class ACL(Persistent):
     """Access coltrol list"""
 
-    implements(IACL)
+    implements(IACL, ILocation)
 
     def __init__(self):
         self._data = PersistentPairKeysDict()
+        self.__name__ = 'acl'
+        self.__parent__ = None
 
     def __iter__(self):
         """Iterate over tuples of (principal, permission)"""
@@ -1007,19 +1012,19 @@ class ACL(Persistent):
 
     def __contains__(self, (principal,  permission)):
         """Returns true iff the principal has the permission"""
-        if not permission in (View, Modify, Add):
+        if not permission in (ViewPermission, ModifyPermission, AddPermission):
             raise ValueError("Bad permission: %r" % (permission,))
         return (principal, permission) in self._data
 
     def add(self, (principal, permission)):
         """Grants the permission to a principal"""
-        if not permission in (View, Modify, Add):
+        if not permission in (ViewPermission, ModifyPermission, AddPermission):
             raise ValueError("Bad permission: %r" % (permission,))
         self._data[(principal, permission)] = 1
 
     def remove(self, (principal, permission)):
         """Revokes the permission from a principal"""
-        if not permission in (View, Modify, Add):
+        if not permission in (ViewPermission, ModifyPermission, AddPermission):
             raise ValueError("Bad permission: %r" % (permission,))
         del self._data[(principal, permission)]
 
