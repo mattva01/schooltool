@@ -176,11 +176,12 @@ class TestSite(unittest.TestCase):
         rootName = 'foo'
         viewFactory = object()
         authenticator = lambda c, u, p: None
-        site = Site(db, rootName, viewFactory, authenticator)
+        site = Site(db, rootName, viewFactory, authenticator, 'filename')
         self.assert_(site.db is db)
         self.assert_(site.viewFactory is viewFactory)
         self.assert_(site.rootName is rootName)
         self.assert_(site.authenticate is authenticator)
+        self.assertEqual(site.applog_path, 'filename')
         self.assertEqual(site.conflictRetries, 5)
 
     def test_buildProtocol(self):
@@ -189,7 +190,7 @@ class TestSite(unittest.TestCase):
         rootName = 'foo'
         viewFactory = object()
         authenticator = lambda c, u, p: None
-        site = Site(db, rootName, viewFactory, authenticator)
+        site = Site(db, rootName, viewFactory, authenticator, None)
         addr = None
         channel = site.buildProtocol(addr)
         self.assert_(channel.requestFactory is Request)
@@ -1168,6 +1169,18 @@ class TestTimeFormatting(unittest.TestCase):
                           '29/Apr/2004:11:05:24 -0400')
         self.assertEquals(formatHitTime(1075475124),
                           '30/Jan/2004:10:05:24 -0500')
+
+    def test_getApplicationLogPath(self):
+        from schooltool.main import Server
+        server = Server()
+        class ConfigStub: pass
+        server.config = ConfigStub()
+        server.config.app_log_file = ['STDOUT', 'STDERR', 'foo', 'bar']
+        self.assertEquals(server.getApplicationLogPath(), 'foo')
+        server.config.app_log_file = ['STDERR', 'STDOUT']
+        self.assertEquals(server.getApplicationLogPath(), None)
+        server.config.app_log_file = []
+        self.assertEquals(server.getApplicationLogPath(), None)
 
 
 def test_suite():

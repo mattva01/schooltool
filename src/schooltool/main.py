@@ -532,7 +532,7 @@ class Site(http.HTTPFactory):
 
     conflictRetries = 5     # retry up to 5 times on ZODB ConflictErrors
 
-    def __init__(self, db, rootName, viewFactory, authenticate):
+    def __init__(self, db, rootName, viewFactory, authenticate, applog_path):
         """Create a site.
 
         Arguments:
@@ -546,6 +546,7 @@ class Site(http.HTTPFactory):
         self.viewFactory = viewFactory
         self.rootName = rootName
         self.authenticate = authenticate
+        self.applog_path = applog_path
         self.logger = logging.getLogger('schooltool.error')
 
     def buildProtocol(self, addr):
@@ -824,7 +825,8 @@ class Server:
 
         self.threadable_hook.init()
 
-        site = Site(self.db, self.appname, self.viewFactory, self.authenticate)
+        site = Site(self.db, self.appname, self.viewFactory, self.authenticate,
+                    self.getApplicationLogPath())
         for interface, port in self.config.listen:
             self.reactor_hook.listenTCP(port, site, interface=interface)
             self.notifyServerStarted(interface, port)
@@ -955,6 +957,12 @@ class Server:
 
     def notifyShutdown(self):
         self.logger.info(_("Shutting down"))
+
+    def getApplicationLogPath(self):
+        for name in self.config.app_log_file:
+            if name not in ('STDOUT', 'STDERR'):
+                return name
+        return None
 
 
 def setUpModules(module_names):

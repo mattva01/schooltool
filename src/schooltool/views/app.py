@@ -37,6 +37,7 @@ from schooltool.views.timetable import SchoolTimetableTraverseView
 from schooltool.views.cal import AllCalendarsView
 from schooltool.views.csvexport import CSVExporter
 from schooltool.views.auth import PublicAccess
+from schooltool.views.applog import ApplicationLogView
 from schooltool.common import parse_date, to_unicode
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
@@ -62,6 +63,8 @@ class ApplicationView(TraversableView):
             return AvailabilityQueryView(self.context)
         elif name == 'csvexport.zip':
             return CSVExporter(self.context)
+        elif name == 'applog':
+            return ApplicationLogView(self.context)
         else:
             return TraversableView._traverse(self, name, request)
 
