@@ -123,7 +123,7 @@ class ApplicationObjectContainer(Persistent):
             while name in self._contents:
                 name = self._newName()
         elif name in self._contents:
-            raise KeyError, name
+            raise KeyError(name)
         obj = self._factory(**kw)
         self._contents[name] = obj
         obj.__name__ = name
