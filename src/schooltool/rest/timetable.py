@@ -228,40 +228,28 @@ class TimetableReadWriteView(TimetableReadView):
 
             time_period_id, schema_id = self.key
             if time_period_id not in getTimePeriodService(self.timetabled):
-                return textErrorPage(request,
-                            _("Time period not defined: %s") % time_period_id)
+                raise ViewError(_("Time period not defined: %s")
+                                % time_period_id)
             try:
                 tt = getTimetableSchemaService(self.timetabled)[schema_id]
             except KeyError:
-                return textErrorPage(request,
-                             _("Timetable schema not defined: %s") % schema_id)
+                raise ViewError(_("Timetable schema not defined: %s")
+                                % schema_id)
             for day in doc.query('/tt:timetable/tt:day'):
                 day_id = day['id']
                 if day_id not in tt.keys():
-                    return textErrorPage(request,
-                                         _("Unknown day id: %r") % day_id)
+                    raise ViewError(_("Unknown day id: %r") % day_id)
                 ttday = tt[day_id]
                 for period in day.query('tt:period'):
                     period_id = period['id']
                     if period_id not in ttday.periods:
-                        return textErrorPage(request,
-                                     _("Unknown period id: %r") % period_id)
+                        raise ViewError(_("Unknown period id: %r") % period_id)
                     for activity in period.query('tt:activity'):
-                        title = activity['title']
-                        resources = []
-                        for resource in activity.query('tt:resource'):
-                            path = resource['xlink:href']
-                            try:
-                                res = traverse(self.timetabled, path)
-                            except KeyError:
-                                return textErrorPage(request,
-                                            _("Invalid path: %s") % path)
-                            resources.append(res)
-                        ttday.add(period_id,
-                                  TimetableActivity(title, self.timetabled,
-                                                    resources))
-        finally:
+                        ttday.add(period_id, self._parseActivity(activity))
             doc.free()
+        except ViewError, e:
+            doc.free()
+            return textErrorPage(request, e)
 
         if self.context is None:
             self.timetabled.timetables[self.key] = tt
@@ -283,6 +271,29 @@ class TimetableReadWriteView(TimetableReadView):
                         ", ".join(self.key)))
         request.setHeader('Content-Type', 'text/plain')
         return _("OK")
+
+    def _parseActivity(self, activity_node):
+        """Parse the <activity> element and return a TimetableActivity.
+
+        The element looks like this:
+
+            <activity title="TITLE">
+              <resource xlink:href="/PATH1" />
+              <resource xlink:href="/PATH2" />
+              ...
+            </activity>
+
+        """
+        title = activity_node['title']
+        resources = []
+        for resource in activity_node.query('tt:resource'):
+            path = resource['xlink:href']
+            try:
+                res = traverse(self.timetabled, path)
+            except KeyError:
+                raise ViewError(_("Invalid path: %s") % path)
+            resources.append(res)
+        return TimetableActivity(title, self.timetabled, resources)
 
     def do_DELETE(self, request):
         if self.context is None:
