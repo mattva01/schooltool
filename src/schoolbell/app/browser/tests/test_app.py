@@ -218,7 +218,7 @@ def doctest_GroupListView():
 
 
 def doctest_MemberListView():
-    r"""Test for GroupListView
+    r"""Test for MemberListView
 
     We will be (ab)using a group and three test subjects:
 
@@ -349,6 +349,130 @@ def doctest_GroupView():
 
         >>> view.canEdit()
         True
+
+    """
+
+
+def doctest_GroupAddView():
+    r"""Test for GroupAddView
+
+    Let's create a view for adding a group:
+
+        >>> from schoolbell.app.browser.app import GroupAddView
+        >>> from schoolbell.app.app import GroupContainer, Group
+        >>> from schoolbell.app.interfaces import IGroup
+        >>> context = GroupContainer()
+        >>> context.context = context  # The view is expecting a + object
+        >>> request = TestRequest()
+
+        >>> class TestGroupAddView(GroupAddView):
+        ...     schema = IGroup
+        ...     _factory = Group
+
+        >>> view = TestGroupAddView(context, request)
+
+    After successfully adding a group you should be redirected:
+
+        >>> directlyProvides(context, IContainmentRoot)
+        >>> view.nextURL()
+        'http://127.0.0.1'
+
+    We can cancel an action if we want to:
+
+        >>> request = TestRequest()
+        >>> request.form = {'CANCEL': 'Cancel'}
+        >>> view = TestGroupAddView(context, request)
+        >>> view.update()
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1'
+
+    """
+
+def doctest_GroupEditView():
+    r"""Test for GroupEditView
+
+    Let's create a view for editing a group:
+
+        >>> from schoolbell.app.browser.app import GroupEditView
+        >>> from schoolbell.app.app import Group
+        >>> from schoolbell.app.interfaces import IGroup
+        >>> group = Group()
+        >>> directlyProvides(group, IContainmentRoot)
+        >>> request = TestRequest()
+
+        >>> class TestGroupEditView(GroupEditView):
+        ...     schema = IGroup
+        ...     _factory = Group
+
+        >>> view = TestGroupEditView(group, request)
+
+    We should not get redirected if we did not click on apply button:
+
+        >>> request = TestRequest()
+        >>> view = TestGroupEditView(group, request)
+        >>> view.update()
+        ''
+        >>> request.response.getStatus()
+        599
+
+    After changing name of the group you should get redirected to the group list:
+
+        >>> request = TestRequest()
+        >>> request.form = {'UPDATE_SUBMIT': 'Apply',
+        ...                 'field.title': u'new_title'}
+        >>> view = TestGroupEditView(group, request)
+        >>> view.update()
+        u'Updated on ${date_time}'
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1'
+
+        >>> group.title
+        u'new_title'
+
+    Even if the title has not changed you should get redirected to the group list:
+
+        >>> request = TestRequest()
+        >>> request.form = {'UPDATE_SUBMIT': 'Apply',
+        ...                 'field.title': u'new_title'}
+        >>> view = TestGroupEditView(group, request)
+        >>> view.update()
+        ''
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1'
+
+        >>> group.title
+        u'new_title'
+
+    We should not get redirected if there were errors:
+
+        >>> request = TestRequest()
+        >>> request.form = {'UPDATE_SUBMIT': 'Apply',
+        ...                 'field.title': u''}
+        >>> view = TestGroupEditView(group, request)
+        >>> view.update()
+        u'An error occured.'
+        >>> request.response.getStatus()
+        599
+
+        >>> group.title
+        u'new_title'
+
+    We can cancel an action if we want to:
+
+        >>> request = TestRequest()
+        >>> request.form = {'CANCEL': 'Cancel'}
+        >>> view = TestGroupEditView(group, request)
+        >>> view.update()
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1'
 
     """
 
@@ -510,7 +634,7 @@ def doctest_PersonAddAdapter():
 def doctest_PersonAddView():
     r"""Test for PersonAddView
 
-    We need some setup to make widgets work in a unit test.
+    We need some setup to make traversal work in a unit test.
 
         >>> class FakeURL:
         ...     def __init__(self, context, request): pass
@@ -529,7 +653,7 @@ def doctest_PersonAddView():
         >>> ztapi.provideAdapter(IPerson, IPersonAddForm, PersonAddAdapter)
 
 
-    Let's create a PersonConatiner
+    Let's create a PersonContainer
 
         >>> from schoolbell.app.app import PersonContainer
         >>> pc = PersonContainer()

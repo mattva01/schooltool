@@ -48,14 +48,16 @@
              </label>
            </div>
            <div class="field">
-              <input id="add_name" type='text' name='add_input_name'
+              <input id="add_name" type="text" name="add_input_name"
                      tal:attributes="value context/contentName" />
            </div>
         </div>
       </fieldset>
       <div class="controls">
-        <input type='submit' value='Add' name='UPDATE_SUBMIT'
-               i18n:attributes='value add-button' />
+        <input class="button-ok" type="submit" name="UPDATE_SUBMIT" value="Add"
+               i18n:attributes="value" />
+        <input class="button-cancel" type="submit" name="CANCEL"
+               value="Cancel" i18n:attributes="value" />
       </div>
 
     </form>

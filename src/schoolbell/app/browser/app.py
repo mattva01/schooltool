@@ -397,6 +397,12 @@ class GroupAddView(AddView):
     def nextURL(self):
         return zapi.absoluteURL(self.context.context, self.request)
 
+    def update(self):
+        if 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+        else:
+            return AddView.update(self)
+
 
 class GroupEditView(EditView):
     """A view for adding a group."""
@@ -406,8 +412,8 @@ class GroupEditView(EditView):
             url = zapi.absoluteURL(self.context, self.request)
             self.request.response.redirect(url)
         else:
-            return EditView.update(self)
-
-    def changed(self):
-        url = zapi.absoluteURL(self.context, self.request)
-        self.request.response.redirect(url)
+            status = EditView.update(self)
+            if 'UPDATE_SUBMIT' in self.request and not self.errors:
+                url = zapi.absoluteURL(self.context, self.request)
+                self.request.response.redirect(url)
+            return status
