@@ -69,7 +69,7 @@ class SchoolBellApplication(Persistent, SampleContainer,
 class PersonContainer(BTreeContainer):
     """Container of persons."""
 
-    implements(IPersonContainer)
+    implements(IPersonContainer, IAttributeAnnotatable)
 
     def __conform__(self, protocol):
         if protocol is ISchoolBellApplication:
@@ -87,7 +87,7 @@ class PersonContainer(BTreeContainer):
 class GroupContainer(BTreeContainer):
     """Container of groups."""
 
-    implements(IGroupContainer)
+    implements(IGroupContainer, IAttributeAnnotatable)
 
     def __conform__(self, protocol):
         if protocol is ISchoolBellApplication:
@@ -97,7 +97,7 @@ class GroupContainer(BTreeContainer):
 class ResourceContainer(BTreeContainer):
     """Container of resources."""
 
-    implements(IResourceContainer)
+    implements(IResourceContainer, IAttributeAnnotatable)
 
     def __conform__(self, protocol):
         if protocol is ISchoolBellApplication:
