@@ -26,6 +26,7 @@ sslcert=/etc/$package/$package.cert.pem
 sslkey=/etc/$package/$package.privkey.pem
 sslconf=/etc/$package/ssl-cert.cnf
 config=/etc/$package/$package.conf
+db_version=0.9.1     # TODO - delete this when schooltool can upgrade it's own database
 
 # Helper Functions
 set_simple () {
@@ -73,9 +74,10 @@ case "$1" in
     chown $package:$package /var/run/$package
     chown $package:$package /var/log/$package
 
-    # Remove the obsolete database versioning stamp.
-    # TODO - delete this after a few releases (0.9=current)
-    rm -f /var/lib/$package/database_ver
+    # Set the database version.
+    # This is depended on and depends on code in preinst
+    # TODO - delete this when schooltool can upgrade it's own database
+    echo $db_version > /var/lib/$package/database_ver
 
     #Make the config file
     #Put the default template there if none exists
