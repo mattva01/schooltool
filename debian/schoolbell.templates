@@ -6,7 +6,7 @@ _Description: Network interfaces for SchoolBell XML web services
  would like the server to listen on.
  .
  This interface is used by SchoolBell for communicating with non-HTML clients
- such as the SchoolTool and 3rd party clients (e.g. Mozilla Calender). XML and
+ such as the SchoolTool and 3rd party clients (e.g. Mozilla Calendar). XML and
  iCalendar messages can be PUT or GET to this interface via HTTP allowing
  access to all SchoolBell functionality.
 
@@ -27,7 +27,7 @@ _Description: Network interfaces for SchoolBell XML web services (SSL)
  would like the server to listen on.
  .
  This interface is used by SchoolBell for communicating with non-HTML clients
- such as the SchoolTool and 3rd party clients (e.g. Mozilla Calender). XML and
+ such as the SchoolTool and 3rd party clients (e.g. Mozilla Calendar). XML and
  iCalendar messages can be PUT or GET to this interface via HTTP allowing
  access to all SchoolBell functionality.
  .
