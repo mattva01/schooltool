@@ -648,6 +648,9 @@ class Server:
         # callback that logs the error to the appropriate channel.
         libxml2.registerErrorHandler(lambda ctx, error: None, None)
 
+        # This must be called here because we use threads
+        libxml2.initParser()
+
         db_configuration = self.config.database
         self.db = db_configuration.open()
         self.prepareDatabase()
