@@ -620,6 +620,7 @@ class Server:
         self.stdout = StreamWrapper(stdout)
         self.stderr = StreamWrapper(stderr)
         self.get_transaction_hook = get_transaction
+        self.logger = logging.getLogger('schooltool.server')
 
     def main(self, args):
         """Start the SchoolTool HTTP server.
@@ -703,6 +704,8 @@ class Server:
         self.config.module.insert(0, 'schooltool.main')
 
         # Set up logging
+        self.setUpLogger('schooltool.server', self.config.error_log_file,
+                         "%(asctime)s %(message)s")
         self.setUpLogger('schooltool.error', self.config.error_log_file,
                          "--\n%(asctime)s\n%(message)s")
         self.setUpLogger('schooltool.access', self.config.access_log_file)
@@ -930,17 +933,17 @@ class Server:
     authenticate = staticmethod(authenticate)
 
     def notifyConfigFile(self, config_file):
-        print >> self.stdout, _("Reading configuration from %s") % config_file
+        self.logger.info(_("Reading configuration from %s"), config_file)
 
     def notifyServerStarted(self, network_interface, port):
-        print >> self.stdout, (_("Started HTTP server on %s:%s")
-                               % (network_interface or "*", port))
+        self.logger.info(_("Started HTTP server on %s:%s"),
+                         network_interface or "*", port)
 
     def notifyDaemonized(self, pid):
-        print >> self.stdout, _("Going background, daemon pid %d") % pid
+        self.logger.info(_("Going to background, daemon pid %d"), pid)
 
     def notifyShutdown(self):
-        print >> self.stdout, _("Shutting down")
+        self.logger.info(_("Shutting down"))
 
 
 def setUpModules(module_names):
