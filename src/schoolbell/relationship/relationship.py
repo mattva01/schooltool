@@ -297,6 +297,14 @@ class BoundRelationshipProperty(object):
         self.my_role = my_role
         self.other_role = other_role
 
+    def __nonzero__(self):
+        try:
+            iter(self).next()
+        except StopIteration:
+            return False
+        else:
+            return True
+
     def __iter__(self):
         for link in IRelationshipLinks(self.this):
             if link.role == self.other_role and link.rel_type == self.rel_type:

@@ -33,6 +33,13 @@ class IRelationshipProperty(Interface):
     other_role = Attribute("""Role of other objects in this relationship""")
     this = Attribute("""The object that this property is bound to.""")
 
+    def __nonzero__():
+        """Are there any related objects?
+
+        Equivalent to bool(list(self)), but can be implemented more
+        efficiently.
+        """
+
     def __iter__():
         """Iterate over all related objects."""
 

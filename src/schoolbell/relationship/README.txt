@@ -203,12 +203,18 @@ Usage example:
     >>> list(dogs.members)
     []
 
+    >>> bool(fido.groups)
+    False
+
     >>> dogs.members.add(fido)
 
     >>> list(fido.groups)
     [dogs]
     >>> list(dogs.members)
     [fido]
+
+    >>> bool(fido.groups)
+    True
 
     >>> fido.groups.remove(dogs)
 
