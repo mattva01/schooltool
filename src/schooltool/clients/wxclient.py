@@ -47,6 +47,91 @@ from schooltool.uris import URITeaching, URITaught
 __metaclass__ = type
 
 
+#
+# Helpers for building wxWindows menus
+#
+
+def menubar(*items):
+    """Create a menu bar.
+
+    Example:
+      main_menu = menubar(menu(...), menu(...), menu(...))
+      frame.SetMenuBar(main_menu)
+    """
+    menubar = wxMenuBar()
+    for menu, title in items:
+        menubar.Append(menu, title)
+    return menubar
+
+
+def menu(title, *items):
+    """Create a submenu.
+
+    Use as an argument to menubar.
+
+    Example:
+      menu("&File",
+        item(...),
+        item(...),
+        separator(),
+        menu(...))
+    """
+    return popupmenu(*items), title
+
+
+def popupmenu(*items):
+    """Create a popup menu.
+
+    Example:
+      popup = popupmenu(item(...), separator(...), submenu(...))
+      control.PopupMenu(popup, wxPoint(10, 10))
+    """
+    menu = wxMenu()
+    for item in items:
+        getattr(menu, item[0])(*item[1:])
+    return menu
+
+
+def separator():
+    """Create a separator.
+
+    Use as an argument to menu, popupmenu or submenu,
+    """
+    return ('AppendSeparator', )
+
+
+def item(title, description='', action=None, id=None, window=None):
+    """Create a menu item.
+
+    Use as an argument to menu, popupmenu or submenu,
+    """
+    if not id:
+        id = wxNewId()
+    if action:
+        if window is None:
+            try:
+                window = action.im_self
+            except AttributeError:
+                raise TypeError("action argument should be a method"
+                                " of the window object if the window is"
+                                " not specified explicitly")
+        EVT_MENU(window, id, action)
+    return ('Append', id, title, description)
+
+
+def submenu(title, *items, **kw):
+    """Create a submenu.
+
+    Use as an argument to menu, popupmenu or submenu,
+    """
+    description = kw.get('description', '')
+    id = kw.get('id', None)
+    if not id:
+        id = wxNewId()
+    submenu, title = menu(title, items)
+    return ('AppendMenu', id, title, submenu, description)
+
+
 def setupPopupMenu(control, menu):
     """Hook up a popup menu to the control."""
 
@@ -88,6 +173,10 @@ def setupPopupMenu(control, menu):
     EVT_RIGHT_UP(control, mouse_up)
     EVT_COMMAND_RIGHT_CLICK(control, control.GetId(), click)
 
+
+#
+# Dialog windows
+#
 
 class ServerSettingsDlg(wxDialog):
     """Server Settings dialog."""
@@ -901,6 +990,10 @@ class BrowserFrame(wxDialog):
         self.Close(True)
 
 
+#
+# Main application window
+#
+
 class MainFrame(wxFrame):
     """Main frame.
 
@@ -937,41 +1030,6 @@ class MainFrame(wxFrame):
         self.relationshipListData = []
 
         self.CreateStatusBar()
-
-        # Menu bar
-
-        def menubar(*items):
-            menubar = wxMenuBar()
-            for menu, title in items:
-                menubar.Append(menu, title)
-            return menubar
-
-        def popupmenu(*items):
-            menu = wxMenu()
-            for item in items:
-                getattr(menu, item[0])(*item[1:])
-            return menu
-
-        def menu(title, *items):
-            return popupmenu(*items), title
-
-        def separator():
-            return ('AppendSeparator', )
-
-        def item(title, description='', action=None, id=None):
-            if not id:
-                id = wxNewId()
-            if action:
-                EVT_MENU(self, id, action)
-            return ('Append', id, title, description)
-
-        def submenu(title, *items, **kw):
-            description = kw.get('description', '')
-            id = kw.get('id', None)
-            if not id:
-                id = wxNewId()
-            submenu, title = menu(title, items)
-            return ('AppendMenu', id, title, submenu, description)
 
         self.SetMenuBar(menubar(
             menu("&File",
