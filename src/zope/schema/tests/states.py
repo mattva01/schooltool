@@ -116,9 +116,6 @@ class StateVocabulary(object):
     def __len__(self):
         return len(_states)
 
-    def getQuery(self):
-        return None
-
     def getTerm(self, value):
         return _states[value]
 

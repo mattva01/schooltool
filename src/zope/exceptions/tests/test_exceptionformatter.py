@@ -103,17 +103,6 @@ class Test(CleanUp, TestCase):
     def testTracebackInfoHTML(self):
         self.testTracebackInfo(1)
 
-    def testTracebackInfoTuple(self):
-        try:
-            __traceback_info__ = ("Adam", "Eve")
-            raise ExceptionForTesting
-        except ExceptionForTesting:
-            s = tb()
-            self.assert_(s.find('Adam') >= 0, s)
-            self.assert_(s.find('Eve') >= 0, s)
-        else:
-            self.fail('no exception occurred')
-
     def testMultipleLevels(self):
         # Makes sure many levels are shown in a traceback.
         def f(n):

@@ -33,7 +33,6 @@ _get_var_regex = re.compile(r'%(n)s' %({'n': NAME_RE}))
 def _translate(msgid, domain=None, mapping=None, context=None,
                target_language=None, default=None):
 
-
     if isinstance(msgid, MessageID):
         domain = msgid.domain
         default = msgid.default
@@ -56,9 +55,6 @@ def translate(*args, **kw):
         args = args[1:]
     return _translate(*args, **kw)
 
-    
-
-
 def interpolate(text, mapping):
     """Insert the data passed from mapping into the text"""
 
@@ -80,6 +76,3 @@ def interpolate(text, mapping):
         text = text.replace(string, unicode(mapping.get(var)))
 
     return text
-
-
-              

@@ -20,9 +20,13 @@ import os
 def patchTracebackModule():
     """Use the ExceptionFormatter to show more info in tracebacks.
     """
-    from zope.exceptions.exceptionformatter import format_exception
-    import traceback
-    traceback.format_exception = format_exception
+    try:
+        from zope.exceptions.exceptionformatter import format_exception
+    except ImportError:
+        pass
+    else:
+        import traceback
+        traceback.format_exception = format_exception
 
 # Don't use the new exception formatter by default, since it
 # doesn't show filenames.

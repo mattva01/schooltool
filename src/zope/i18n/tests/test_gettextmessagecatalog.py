@@ -24,7 +24,7 @@ class GettextMessageCatalogTest(TestIMessageCatalog):
 
     def _getMessageCatalog(self):
         from zope.i18n import tests
-        path = os.path.dirname(tests.__file__)
+        path = os.path.split(tests.__file__)[0]
         self._path = os.path.join(path, 'en-default.mo')
         catalog = GettextMessageCatalog('en', 'default', self._path)
         return catalog

@@ -53,7 +53,7 @@ class PageTemplate(object):
         engine.  This method is free to use the keyword arguments it
         receives.
 
-    pt_render(namespace, source=False, sourceAnnotations=False, showtal=False)
+    pt_render(namespace, source=0)
         Responsible the TAL interpreter to perform the rendering.  The
         namespace argument is a mapping which defines the top-level
         namespaces passed to the TALES expression engine.
@@ -104,8 +104,7 @@ class PageTemplate(object):
     def pt_getEngine(self):
         return Engine
 
-    def pt_render(self, namespace, source=False, sourceAnnotations=False,
-                  showtal=False):
+    def pt_render(self, namespace, source=False):
         """Render this Page Template"""
         self._cook_check()
         __traceback_supplement__ = (PageTemplateTracebackSupplement,
@@ -116,8 +115,7 @@ class PageTemplate(object):
         output = StringIO(u'')
         context = self.pt_getEngineContext(namespace)
         TALInterpreter(self._v_program, self._v_macros,
-                       context, output, tal=not source, showtal=showtal,
-                       strictinsert=0, sourceAnnotations=sourceAnnotations)()
+                       context, output, tal=not source, strictinsert=0)()
         return output.getvalue()
 
     def pt_errors(self, namespace):
@@ -149,8 +147,8 @@ class PageTemplate(object):
         if self._text != text:
             self._text = text
 
-        # Always cook on an update, even if the source is the same;
-        # the content-type might have changed.
+        # we always want to cook on an update, even if the source
+        # is the same.  Possibly because the content-type might have changed.
         self._cook()
 
     def read(self):

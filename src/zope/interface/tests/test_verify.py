@@ -15,6 +15,7 @@
 
 $Id$
 """
+
 from zope.interface import Interface, implements, classImplements, Attribute
 from zope.interface.verify import verifyClass, verifyObject
 from zope.interface.exceptions import DoesNotImplement, BrokenImplementation

@@ -254,6 +254,17 @@ class FunctionTests(ExpressionTestBase):
         else:
             self.fail('Engine accepted invalid namespace name')
 
+    def testInvalidFunctionName(self):
+        from zope.tales.tales import CompilerError
+        try:
+            self.engine.compile('adapterTest/foo:1bar')
+        except CompilerError,e:
+            self.assertEqual(e.args[0],
+                             'Invalid function name "1bar"')
+        else:
+            self.fail('Engine accepted invalid function name')
+
+
     def testBadFunction(self):
         from zope.tales.tales import CompilerError
         # namespace is fine, adapter is not defined

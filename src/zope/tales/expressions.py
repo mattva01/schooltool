@@ -72,6 +72,9 @@ class SubPathExpr(object):
                     if not _valid_name(namespace):
                         raise engine.getCompilerError()(
                             'Invalid namespace name "%s"' % namespace)
+                    if not _valid_name(functionname):
+                        raise engine.getCompilerError()(
+                            'Invalid function name "%s"' % functionname)
                     try:
                         compiledpath.append(
                             self._engine.getFunctionNamespace(namespace))

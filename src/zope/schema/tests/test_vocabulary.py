@@ -72,9 +72,6 @@ class SampleVocabulary(object):
     def __len__(self):
         return 10
 
-    def getQuery(self):
-        return None
-
     def getTerm(self, value):
         if value in self:
             t = SampleTerm()
@@ -133,9 +130,6 @@ class SimpleVocabularyTests(unittest.TestCase):
         for v in (self.list_vocab, self.items_vocab):
             self.assert_(1 in v and 2 in v and 3 in v)
             self.assert_(5 not in v)
-
-    def test_get_query(self):
-        self.assert_(self.list_vocab.getQuery() is None)
 
     def test_iter_and_get_term(self):
         for v in (self.list_vocab, self.items_vocab):

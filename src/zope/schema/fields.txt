@@ -28,8 +28,10 @@ uniqueness, In a schema, this might be written as follows::
   >>> from zope.schema import List, Float
   >>> class IInventoryItem(Interface):
   ...     pricePoints = List(
-  ...         Float(title=u"Price", min=0),
-  ...         unique=True, title=u"Price Points")
+  ...         title=u"Price Points",
+  ...         unique=True,
+  ...         value_type=Float(title=u"Price", min=0)
+  ...     )
 
 This indicates several things.
 
@@ -45,11 +47,11 @@ This declaration creates a field that implements a number of interfaces, among
 them these::
 
   >>> from zope.schema.interfaces import IList, ISequence, ICollection
-  >>> IList.providedBy(IInventoryItem.pricePoints)
+  >>> IList.providedBy(IInventoryItem['pricePoints'])
   True
-  >>> ISequence.providedBy(IInventoryItem.pricePoints)
+  >>> ISequence.providedBy(IInventoryItem['pricePoints'])
   True
-  >>> ICollection.providedBy(IInventoryItem.pricePoints)
+  >>> ICollection.providedBy(IInventoryItem['pricePoints'])
   True
 
 Creating a custom collection field

@@ -1,4 +1,3 @@
-src/zope/interface/*.so
 ./build
 src/schooltool/*.pyc
 src/schooltool/*~
@@ -120,13 +119,6 @@ src/zodb/zeo/zrpc/CVS/*.pyc
 src/zodb/zeo/zrpc/CVS/Data.fs*
 src/zodb/zeo/zrpc/CVS/*~
 src/zodb/zeo/zrpc/CVS/*.so
-src/zope/*.pyc
-src/zope/Data.fs*
-src/zope/*~
-src/zope/*.so
-src/zope/interface/*.pyc
-src/zope/interface/Data.fs*
-src/zope/interface/*~
 src/schooltool/views/www/*.pyc
 src/schooltool/views/www/Data.fs*
 src/schooltool/views/www/*~

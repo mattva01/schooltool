@@ -61,4 +61,4 @@ following::
   pt.write(template)
   pt(das_object=foo())
 
-See interfaces.py.
+See `interfaces.py`.

@@ -32,7 +32,7 @@ BOOLEAN_HTML_ATTRS = [
     # List of Boolean attributes in HTML that should be rendered in
     # minimized form (e.g. <img ismap> rather than <img ismap="">)
     # From http://www.w3.org/TR/xhtml1/#guidelines (C.10)
-    # TODO: The problem with this is that this is not valid XML and
+    # XXX The problem with this is that this is not valid XML and
     # can't be parsed back!
     "compact", "nowrap", "ismap", "declare", "noshade", "checked",
     "disabled", "readonly", "multiple", "selected", "noresize",
@@ -90,78 +90,14 @@ class AltTALGenerator(TALGenerator):
 
 
 class TALInterpreter(object):
-    """TAL interpreter.
-
-    Some notes on source annotations.  They are HTML/XML comments added to the
-    output whenever sourceFile is changed by a setSourceFile bytecode.  Source
-    annotations are disabled by default, but you can turn them on by passing a
-    sourceAnnotations argument to the constructor.  You can change the format
-    of the annotations by overriding formatSourceAnnotation in a subclass.
-
-    The output of the annotation is delayed until some actual text is output
-    for two reasons:
-
-        1. setPosition bytecode follows setSourceFile, and we need position
-           information to output the line number.
-        2. Comments are not allowed in XML documents before the <?xml?>
-           declaration.
-
-    For performance reasons (TODO: premature optimization?) instead of checking
-    the value of _pending_source_annotation on every write to the output
-    stream, the _stream_write attribute is changed to point to
-    _annotated_stream_write method whenever _pending_source_annotation is
-    set to True, and to _stream.write when it is False.  The following
-    invariant always holds:
-
-        if self._pending_source_annotation:
-            assert self._stream_write is self._annotated_stream_write
-        else:
-            assert self._stream_write is self.stream.write
-
-    """
 
     def __init__(self, program, macros, engine, stream=None,
                  debug=0, wrap=60, metal=1, tal=1, showtal=-1,
-                 strictinsert=1, stackLimit=100, i18nInterpolate=1,
-                 sourceAnnotations=0):
-        """Create a TAL interpreter.
-
-        Optional arguments:
-
-            stream -- output stream (defaults to sys.stdout).
-
-            debug -- enable debugging output to sys.stderr (off by default).
-
-            wrap -- try to wrap attributes on opening tags to this number of
-            column (default: 60).
-
-            metal -- enable METAL macro processing (on by default).
-
-            tal -- enable TAL processing (on by default).
-
-            showtal -- do not strip away TAL directives.  A special value of
-            -1 (which is the default setting) enables showtal when TAL
-            processing is disabled, and disables showtal when TAL processing is
-            enabled.  Note that you must use 0, 1, or -1; true boolean values
-            are not supported (TODO: why?).
-
-            strictinsert -- enable TAL processing and stricter HTML/XML
-            checking on text produced by structure inserts (on by default).
-            Note that Zope turns this value off by default.
-
-            stackLimit -- set macro nesting limit (default: 100).
-
-            i18nInterpolate -- enable i18n translations (default: on).
-
-            sourceAnnotations -- enable source annotations with HTML comments
-            (default: off).
-
-        """
+                 strictinsert=1, stackLimit=100, i18nInterpolate=1):
         self.program = program
         self.macros = macros
         self.engine = engine # Execution engine (aka context)
         self.Default = engine.getDefault()
-        self._pending_source_annotation = False
         self._stream_stack = [stream or sys.stdout]
         self.popStream()
         self.debug = debug
@@ -190,7 +126,6 @@ class TALInterpreter(object):
         self.i18nStack = []
         self.i18nInterpolate = i18nInterpolate
         self.i18nContext = TranslationContext()
-        self.sourceAnnotations = sourceAnnotations
 
     def saveState(self):
         return (self.position, self.col, self.stream, self._stream_stack,
@@ -199,10 +134,7 @@ class TALInterpreter(object):
     def restoreState(self, state):
         (self.position, self.col, self.stream,
          self._stream_stack, scopeLevel, level, i18n) = state
-        if self._pending_source_annotation:
-            self._stream_write = self._annotated_stream_write
-        else:
-            self._stream_write = self.stream.write
+        self._stream_write = self.stream.write
         assert self.level == level
         while self.scopeLevel > scopeLevel:
             self.engine.endScope()
@@ -213,10 +145,7 @@ class TALInterpreter(object):
     def restoreOutputState(self, state):
         (dummy, self.col, self.stream,
          self._stream_stack, scopeLevel, level, i18n) = state
-        if self._pending_source_annotation:
-            self._stream_write = self._annotated_stream_write
-        else:
-            self._stream_write = self.stream.write
+        self._stream_write = self.stream.write
         assert self.level == level
         assert self.scopeLevel == scopeLevel
 
@@ -244,43 +173,11 @@ class TALInterpreter(object):
     def pushStream(self, newstream):
         self._stream_stack.append(self.stream)
         self.stream = newstream
-        if self._pending_source_annotation:
-            self._stream_write = self._annotated_stream_write
-        else:
-            self._stream_write = self.stream.write
+        self._stream_write = newstream.write
 
     def popStream(self):
         self.stream = self._stream_stack.pop()
-        if self._pending_source_annotation:
-            self._stream_write = self._annotated_stream_write
-        else:
-            self._stream_write = self.stream.write
-
-    def _annotated_stream_write(self, s):
-        idx = s.find('<?xml')
-        if idx >= 0 or s.isspace():
-            # Do not preprend comments in front of the <?xml?> declaration.
-            end_of_doctype = s.find('?>', idx)
-            if end_of_doctype > idx:
-                self.stream.write(s[:end_of_doctype+2])
-                s = s[end_of_doctype+2:]
-                # continue
-            else:
-                self.stream.write(s)
-                return
-        self._pending_source_annotation = False
         self._stream_write = self.stream.write
-        self._stream_write(self.formatSourceAnnotation())
-        self._stream_write(s)
-
-    def formatSourceAnnotation(self):
-        lineno = self.position[0]
-        if lineno is None:
-            location = self.sourceFile
-        else:
-            location = '%s (line %s)' % (self.sourceFile, lineno)
-        sep = '=' * 78
-        return '<!--\n%s\n%s\n%s\n-->' % (sep, location, sep)
 
     def stream_write(self, s,
                      len=len):
@@ -329,10 +226,6 @@ class TALInterpreter(object):
     def do_setSourceFile(self, source_file):
         self.sourceFile = source_file
         self.engine.setSourceFile(source_file)
-        if self.sourceAnnotations:
-            self._pending_source_annotation = True
-            self._stream_write = self._annotated_stream_write
-
     bytecode_handlers["setSourceFile"] = do_setSourceFile
 
     def do_setPosition(self, position):
@@ -443,7 +336,7 @@ class TALInterpreter(object):
                 if evalue is None:
                     ok = 0
                 value = evalue
-
+                
         if ok:
             if xlat:
                 translated = self.translate(msgid or value, value, {})
@@ -599,7 +492,7 @@ class TALInterpreter(object):
             else:
                 value = self.engine.evaluate(expression)
 
-            # evaluate() does not do any I18n, so we do it here.
+            # evaluate() does not do any I18n, so we do it here. 
             if isinstance(value, MessageID):
                 # Translate this now.
                 value = self.engine.translate(value)
@@ -650,8 +543,8 @@ class TALInterpreter(object):
         if len(stuff) > 2:
             obj = self.engine.evaluate(stuff[2])
         xlated_msgid = self.translate(msgid, default, i18ndict, obj)
-        # TODO: I can't decide whether we want to cgi escape the translated
-        # string or not.  OTOH not doing this could introduce a cross-site
+        # XXX I can't decide whether we want to cgi escape the translated
+        # string or not.  OT1H not doing this could introduce a cross-site
         # scripting vector by allowing translators to sneak JavaScript into
         # translations.  OTOH, for implicit interpolation values, we don't
         # want to escape stuff like ${name} <= "<b>Timmy</b>".
@@ -713,7 +606,7 @@ class TALInterpreter(object):
             self.popStream()
         code = tmpstream.getvalue()
         output = self.engine.evaluateCode(lang, code)
-        self._stream_write(output)
+        self._stream_write(output)        
     bytecode_handlers["evaluateCode"] = do_evaluateCode
 
     def do_loop(self, (name, expr, block)):
@@ -730,7 +623,7 @@ class TALInterpreter(object):
             i18ndict.update(obj)
         if not self.i18nInterpolate:
             return msgid
-        # TODO: We need to pass in one of context or target_language
+        # XXX We need to pass in one of context or target_language
         return self.engine.translate(msgid, self.i18nContext.domain,
                                      i18ndict, default=default)
 
@@ -779,8 +672,8 @@ class TALInterpreter(object):
                 raise METALError("macro %s has incompatible mode %s" %
                                  (`macroName`, `mode`), self.position)
         self.pushMacro(macroName, compiledSlots)
-
-        # We want 'macroname' name to be always available as a variable
+        
+        # We want 'macroname' name to be always available as a variable 
         outer = self.engine.getValue('macroname')
         self.engine.setLocal('macroname', macroName.split('/')[-1])
 
@@ -830,7 +723,6 @@ class TALInterpreter(object):
         self._stream_write = stream.write
         try:
             self.interpret(block)
-        # TODO: this should not catch ZODB.POSException.ConflictError.
         except:
             exc = sys.exc_info()[1]
             self.restoreState(state)

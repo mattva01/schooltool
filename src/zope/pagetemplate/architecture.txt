@@ -2,13 +2,13 @@ ZPT Architecture
 ================
 
 There are a number of major components that make up the page-template
-architecture: 
+architecture:
 
-- The TAL *compiler* and *interpreter*.  This is responsible for
-  compiling source files and for executing compiled templates.  See
-  the `zope.tal` package for more information.
+- The TAL compiler and interpreter.  This is responsible for compiling
+  source files and for executing compiled templates. See the zope.tal
+  package for more information.
 
-- An *expression engine* is responsible for compiling expressions and
+- An expression engine is responsible for compiling expressions and
   for creating expression execution contexts.  It is common for
   applications to override expression engines to provide custom
   expression support or to change the way expressions are implemented.
@@ -18,14 +18,12 @@ architecture:
 
   Expression contexts support execution of expressions and provide
   APIs for setting up variable scopes and setting variables.  The
-  expression contexts are passed to the TAL interpreter at execution
+  expressions contexts are passed to the TAL interpreter at execution
   time.
-  
+
   The most commonly used expression implementation is that found in
   `zope.tales`.
 
-- Page templates tie everything together. They assemble an expression
+- Page templates tie everything together. The assemble an expression
   engine with the TAL interpreter and orchestrate management of source
-  and compiled template data.  See `zope.pagetemplate.interfaces`.
-
-  
+  and compiled template data.  See `interfaces.py`.

@@ -345,7 +345,7 @@ class IURI(IBytesLine):
 class IId(IBytesLine):
     """A field containing a unique identifier
 
-    A unique identifier is either an absolute URI ir a dotted name.
+    A unique identifier is either an absolute URI or a dotted name.
     If it's a dotted name, it should have a module/package name as a prefix.
     """
 
@@ -438,27 +438,6 @@ class IDict(IMinMaxLen, IIterable, IContainer):
            via a Field.
         """))
 
-class IVocabularyQuery(Interface):
-    """Query object for a vocabulary.
-
-    This is a marker interface for query objects; specific
-    implementations must derive a more specific interface and
-    implement that.  Widget views should be registered for the
-    specific interface.
-    """
-
-    vocabulary = Attribute("vocabulary",
-                           """The source vocabulary for this query object.
-
-                           This needs to be available for use by the
-                           query view.
-                           """)
-
-class IIterableVocabularyQuery(IVocabularyQuery):
-    """Marker interface for a query for a vocabulary that is iterable
-    but does not support a specialized query interface."""
-
-
 class ITerm(Interface):
     """Object representing a single value in a vocabulary."""
 
@@ -495,12 +474,6 @@ class IBaseVocabulary(Interface):
     def __contains__(value):
         """Returns True if the value is available in this vocabulary."""
 
-    def getQuery():
-        """Return an IVocabularyQuery object for this vocabulary.
-
-        Vocabularies which do not support query must return None.
-        """
-
     def getTerm(value):
         """Return the ITerm object for the term 'value'.
 
@@ -525,13 +498,13 @@ class IVocabulary(IIterableVocabulary, IBaseVocabulary):
     """Vocabulary which is iterable."""
 
 
-class IVocabularyTokenized(Interface):
+class IVocabularyTokenized(IVocabulary):
     """Vocabulary that provides support for tokenized representation.
 
     This interface must be used as a mix-in with IBaseVocabulary.
 
     Terms returned from getTerm() and provided by iteration must
-    conform to ITokenizedTerm.
+    conform to ITitledTokenizedTerm.
     """
 
     def getTermByToken(token):

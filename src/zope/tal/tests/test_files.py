@@ -43,9 +43,7 @@ class FileTestCase(unittest.TestCase):
         basename = os.path.basename(self.__file)
         #sys.stdout.write(basename + " ")
         sys.stdout.flush()
-        if basename.startswith('test_sa'):
-            sys.argv = ["", "-Q", "-a", self.__file]
-        elif basename.startswith('test_metal'):
+        if basename.startswith('test_metal'):
             sys.argv = ["", "-Q", "-m", self.__file]
         else:
             sys.argv = ["", "-Q", self.__file]

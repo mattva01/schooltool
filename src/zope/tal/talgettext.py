@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 ##############################################################################
 #
 # Copyright (c) 2002 Zope Corporation and Contributors.
@@ -114,7 +115,7 @@ class POEngine(DummyEngine):
         # text into a comment.
         if default is not None and normalize(default) != msgid:
             msgid = MessageID(msgid, default=default)
-
+        
         if domain not in self.catalog:
             self.catalog[domain] = {}
         domain = self.catalog[domain]

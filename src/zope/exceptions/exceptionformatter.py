@@ -218,7 +218,7 @@ class HTMLExceptionFormatter(TextExceptionFormatter):
     def formatTracebackInfo(self, tbi):
         s = self.escape(str(tbi))
         s = s.replace('\n', self.line_sep)
-        return '__traceback_info__: %s' % (s, )
+        return '__traceback_info__: %s' % s
 
     def formatLine(self, tb):
         line = TextExceptionFormatter.formatLine(self, tb)

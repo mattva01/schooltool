@@ -62,8 +62,7 @@ class TALParser(XMLParser):
         name, attrlist, taldict, metaldict, i18ndict \
               = self.process_ns(name, attrlist)
         attrlist = self.xmlnsattrs() + attrlist
-        self.gen.emitStartElement(name, attrlist, taldict, metaldict, i18ndict,
-                                  self.getpos())
+        self.gen.emitStartElement(name, attrlist, taldict, metaldict, i18ndict)
 
     def process_ns(self, name, attrlist):
         taldict = {}
@@ -73,7 +72,13 @@ class TALParser(XMLParser):
         name, namebase, namens = self.fixname(name)
         for key, value in attrlist:
             key, keybase, keyns = self.fixname(key)
-            ns = keyns or namens # default to tag namespace
+            # Default to tag namespace, even though this really only
+            # makes sense for elements in the TAL or METAL namespaces.
+            # This allows <tal:block replace="..."> to be mostly
+            # equivalent to <div tal:replace="...">; removal of the
+            # actual element start and end tags is handled elsewhere
+            # for elements in these namespaces.
+            ns = keyns or namens
             item = key, value
             if ns == 'metal':
                 metaldict[keybase] = value
@@ -90,6 +95,8 @@ class TALParser(XMLParser):
         return name, fixedattrlist, taldict, metaldict, i18ndict
 
     def xmlnsattrs(self):
+        # return [(qname, nsURI), ...] for the namespaces declared on
+        # this element; must be called during the start element handler
         newlist = []
         for prefix, uri in self.nsNew:
             if prefix:
@@ -105,6 +112,7 @@ class TALParser(XMLParser):
         return newlist
 
     def fixname(self, name):
+        # return (qname, localname, ns-indicator) for the attribute name `name`
         if ' ' in name:
             uri, name = name.split(' ')
             prefix = self.nsDict[uri]
@@ -123,7 +131,7 @@ class TALParser(XMLParser):
 
     def EndElementHandler(self, name):
         name = self.fixname(name)[0]
-        self.gen.emitEndElement(name,  position=self.getpos())
+        self.gen.emitEndElement(name)
 
     def DefaultHandler(self, text):
         self.gen.emitRawText(text)

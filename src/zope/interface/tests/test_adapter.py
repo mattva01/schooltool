@@ -35,6 +35,51 @@ class IR0(zope.interface.Interface):
 class IR1(IR0):
     pass
 
+
+def test_orderwith():
+    """
+    >>> Interface = zope.interface.Interface
+    >>> bywith = {(Interface, Interface): 'A0',
+    ...           (IF0,       Interface): 'A1', 
+    ...           (Interface, IB0):       'A2', 
+    ...           (IF0,       IB0):       'A3', 
+    ...           (IF1,       IB0):       'A4', 
+    ...           (IF0,       IB1):       'A5', 
+    ...           (IF1,       IB1):       'A6', 
+    ...          }
+
+    >>> [value for spec, value in zope.interface.adapter.orderwith(bywith)]
+    ['A6', 'A4', 'A5', 'A3', 'A1', 'A2', 'A0']
+    """
+
+
+def test_multi_adapter_get_best_match():
+    """
+    >>> registry = AdapterRegistry()
+
+    >>> class IB2(IB0):
+    ...     pass
+    >>> class IB3(IB2, IB1):
+    ...     pass
+    >>> class IB4(IB1, IB2):
+    ...     pass
+
+    >>> registry.register([None, IB1], IR0, '', 'A1')
+    >>> registry.register([None, IB0], IR0, '', 'A0')
+    >>> registry.register([None, IB2], IR0, '', 'A2')
+
+    >>> registry.lookup((IF1, IB1), IR0, '')
+    'A1'
+    >>> registry.lookup((IF1, IB2), IR0, '')
+    'A2'
+    >>> registry.lookup((IF1, IB0), IR0, '')
+    'A0'
+    >>> registry.lookup((IF1, IB3), IR0, '')
+    'A2'
+    >>> registry.lookup((IF1, IB4), IR0, '')
+    'A1'
+    """
+
 def test_multi_adapter_w_default():
     """
     >>> registry = AdapterRegistry()
@@ -136,9 +181,10 @@ def test_multi_adapter_check_non_default_dont_hide_default():
 def test_suite():
     from zope.testing.doctestunit import DocFileSuite
     return unittest.TestSuite((
-        DocFileSuite('../adapter.txt', 'foodforthought.txt',
+        DocFileSuite('../adapter.txt', '../human.txt', 'foodforthought.txt',
                      globs={'__name__': '__main__'}),
         doctest.DocTestSuite(),
         ))
 
-if __name__ == '__main__': unittest.main()
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')

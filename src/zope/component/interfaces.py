@@ -95,7 +95,7 @@ class IComponentArchitecture(Interface):
     def getAllUtilitiesRegisteredFor(interface, context=None):
         """Return all registered utilities for an interface
 
-        This includes overridden utilities.
+        This includes overwridden utilities.
 
         An iterable of utility instances is returned.  No names are
         returned.

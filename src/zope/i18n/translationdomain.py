@@ -19,6 +19,8 @@ from zope.i18n.negotiator import negotiator
 from zope.i18n.simpletranslationdomain import SimpleTranslationDomain
 from zope.i18n.messageid import MessageID
 from zope.i18n import interpolate
+from zope.component import getUtility
+from zope.i18n.interfaces import ITranslationDomain
 
 # The configuration should specify a list of fallback languages for the
 # site.  If a particular catalog for a negotiated language is not available,

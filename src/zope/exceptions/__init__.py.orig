@@ -16,7 +16,7 @@
 These exceptions are so general purpose that they don't belong in Zope
 application-specific packages.
 
-$Id$
+$Id: __init__.py 26796 2004-07-27 15:23:30Z jim $
 """
 
 from zope.exceptions._notfounderror import NotFoundError, INotFoundError
@@ -28,7 +28,7 @@ from zope.exceptions._duplicate import DuplicationError, IDuplicationError
 try:
     import zope.security
 except ImportError, v:
-    if not str(v).endswith(' security'):
+    if not str(v).endswith(' zope.security'):
         raise
 else:    
     from zope.security.interfaces import IUnauthorized, Unauthorized

@@ -48,9 +48,8 @@ KNOWN_TAL_ATTRIBUTES = [
     "attributes",
     "on-error",
     "omit-tag",
-    "script",
-    "tal tag",      # a pseudo attribute that holds the namespace of elements
-                    # like <tal:x>, <metal:y>, <i18n:z>
+    "tal tag",
+    "script"
     ]
 
 KNOWN_I18N_ATTRIBUTES = [
@@ -149,9 +148,17 @@ def isCurrentVersion(program):
     version = getProgramVersion(program)
     return version == TAL_VERSION
 
+def isinstance_(ob, type):
+    # Proxy-friendly and faster isinstance_ check for new-style objects
+    try:
+        return type in ob.__class__.__mro__
+    except AttributeError:
+        return False
+            
+
 def getProgramMode(program):
     version = getProgramVersion(program)
-    if (version == TAL_VERSION and isinstance(program[1], tuple) and
+    if (version == TAL_VERSION and isinstance_(program[1], tuple) and
         len(program[1]) == 2):
         opcode, mode = program[1]
         if opcode == "mode":
@@ -160,7 +167,7 @@ def getProgramMode(program):
 
 def getProgramVersion(program):
     if (len(program) >= 2 and
-        isinstance(program[0], tuple) and len(program[0]) == 2):
+        isinstance_(program[0], tuple) and len(program[0]) == 2):
         opcode, version = program[0]
         if opcode == "version":
             return version

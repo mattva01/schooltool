@@ -32,8 +32,7 @@ class PythonExpr(object):
         return compile(text, filename, 'eval')
 
     def _bind_used_names(self, econtext, builtins):
-        # Construct a dictionary of globals with which the Python
-        # expression should be evaluated.
+        # Bind template variables
         names = {}
         vars = econtext.vars
         marker = self

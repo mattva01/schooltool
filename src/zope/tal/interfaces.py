@@ -172,7 +172,7 @@ class ITALExpressionEngine(Interface):
         per-language basis. In Python this usually everything the print
         statement will return.
         """
-
+        
 
 class ITALIterator(Interface):
     """A TAL iterator

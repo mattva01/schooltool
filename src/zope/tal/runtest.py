@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 ##############################################################################
 #
 # Copyright (c) 2001, 2002 Zope Corporation and Contributors.
@@ -78,8 +79,6 @@ def main():
         locopts = []
         if arg.find("metal") >= 0 and "-m" not in opts:
             locopts.append("-m")
-        if arg.find("_sa") >= 0 and "-a" not in opts:
-            locopts.append("-a")
         if not unittesting:
             print arg,
             sys.stdout.flush()

@@ -203,9 +203,7 @@ class Specification(SpecificationBase):
     providedBy = SpecificationBase.providedBy
 
     #########################################################################
-    # BBB 2004-07-13: Backward compatabilty.  These methods have been
-    # deprecated in favour of providedBy and implementedBy.
-
+    # XXX Backward Compat
     def isImplementedByInstancesOf(self, cls):
         warnings.warn(
             "isImplementedByInstancesOf has been renamed to implementedBy",

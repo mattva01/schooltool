@@ -215,7 +215,7 @@ class DummyEngine(object):
         if self.useEngineAttrDicts:
             globals = self.globals.copy()
             locals = self.locals.copy()
-
+            
         assert lang == 'text/server-python'
         import sys, StringIO
 

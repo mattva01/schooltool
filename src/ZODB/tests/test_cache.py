@@ -134,10 +134,6 @@ class CacheTests:
         also return when it's looked at each item, regardless of whether
         it became a ghost.
 
-        Let's start with a clean transaction
-
-        >>> transaction.abort()
-
         >>> RecalcitrantObject.init()
         >>> db = databaseFromString("<zodb>\n"
         ...                         "cache-size 4\n"
@@ -174,10 +170,6 @@ class CacheTests:
 
     def test_cache_on_abort(self):
         r"""Test that the cache handles transaction abort correctly.
-
-        Let's start with a clean transaction
-
-        >>> transaction.abort()
 
         >>> RegularObject.init()
         >>> db = databaseFromString("<zodb>\n"

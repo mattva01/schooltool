@@ -23,7 +23,7 @@ from zope.component import createObject, getFactoryInterfaces, getFactoriesFor
 from zope.component import getService, servicenames
 from zope.component.interfaces import IFactory
 from zope.component.factory import Factory
-from zope.component.tests.placelesssetup import PlacelessSetup
+from placelesssetup import PlacelessSetup
 
 class IFunction(Interface):
     pass

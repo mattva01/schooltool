@@ -116,10 +116,6 @@ class SimpleVocabulary(object):
             # sometimes values are not hashable
             return False
 
-    def getQuery(self):
-        """See zope.schema.interfaces.IBaseVocabulary"""
-        return None
-
     def getTerm(self, value):
         """See zope.schema.interfaces.IBaseVocabulary"""
         try:

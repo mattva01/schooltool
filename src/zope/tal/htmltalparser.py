@@ -171,7 +171,7 @@ class HTMLTALParser(HTMLParser):
                     self.getpos())
             self.gen.emitStartElement(tag, attrlist, taldict, metaldict,
                                       i18ndict, self.getpos())
-            self.gen.emitEndElement(tag, implied=-1, position=self.getpos())
+            self.gen.emitEndElement(tag, implied=-1)
         else:
             self.gen.emitStartElement(tag, attrlist, taldict, metaldict,
                                       i18ndict, self.getpos(), isend=1)
@@ -182,7 +182,7 @@ class HTMLTALParser(HTMLParser):
             # </img> etc. in the source is an error
             raise EmptyTagError(tag, self.getpos())
         self.close_enclosed_tags(tag)
-        self.gen.emitEndElement(tag, position=self.getpos())
+        self.gen.emitEndElement(tag)
         self.pop_xmlns()
         self.tagstack.pop()
 
@@ -231,8 +231,7 @@ class HTMLTALParser(HTMLParser):
             white = self.gen.unEmitWhitespace()
         else:
             white = None
-        self.gen.emitEndElement(tag, isend=isend, implied=implied,
-                                position=self.getpos())
+        self.gen.emitEndElement(tag, isend=isend, implied=implied)
         if white:
             self.gen.emitRawText(white)
         self.tagstack.pop()

@@ -352,12 +352,30 @@ class AdapterLookup(object):
             if not bywith:
                 continue
 
+            # Selecting multi-adapters is not just a matter of matching the
+            # required interfaces of the adapter to the ones passed. Several
+            # adapters might match, but we only want the best one. We use a
+            # ranking algorithm to determine the best match.
+
+            # `best` carries the rank and value of the best found adapter.
+            best = None
             for rwith, value in bywith:
+                # the `rank` describes how well the found adapter matches.
+                rank = []
                 for rspec, spec in zip(rwith, with):
                     if not spec.isOrExtends(rspec):
                         break # This one is no good
+                    # Determine the rank of this particular specification.
+                    rank.append(list(spec.__sro__).index(rspec))
                 else:
-                    return value
+                    # If the new rank is better than the best previously
+                    # recorded one, make the new adapter the best one found. 
+                    rank = tuple(rank)
+                    if best is None or rank < best[0]:
+                        best = rank, value
+            # If any match was found, return the best one.
+            if best:
+                return best[1]
 
         return default
 

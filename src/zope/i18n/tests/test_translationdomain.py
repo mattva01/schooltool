@@ -21,6 +21,9 @@ from zope.i18n.gettextmessagecatalog import GettextMessageCatalog
 from zope.i18n.tests.test_itranslationdomain import \
      TestITranslationDomain, Environment
 from zope.i18n import MessageIDFactory
+from zope.i18n.interfaces import ITranslationDomain
+from zope.component.servicenames import Utilities
+from zope.component import getGlobalServices
 
 def testdir():
     from zope.i18n import tests
@@ -51,7 +54,6 @@ class TestGlobalTranslationDomain(unittest.TestCase, TestITranslationDomain):
 
     def testSimpleNoTranslate(self):
         translate = self._domain.translate
-        raises = self.assertRaises
         eq = self.assertEqual
         # Unset fallback translation languages
         self._domain.setLanguageFallbacks([])
@@ -79,19 +81,38 @@ class TestGlobalTranslationDomain(unittest.TestCase, TestITranslationDomain):
 
     def testStringTranslate(self):
         self.assertEqual(
-            self._domain.translate(u'short_greeting', 'default',
-                                   target_language='en'),
+            self._domain.translate(u'short_greeting', target_language='en'),
             u'Hello!')
 
     def testMessageIDTranslate(self):
+        factory = MessageIDFactory('default')
+        translate = self._domain.translate
+        msgid = factory(u'short_greeting', 'default')
+        self.assertEqual(translate(msgid, target_language='en'), u'Hello!')
+        # MessageID attributes override arguments
+        msgid = factory('43-not-there', 'this ${that} the other')
+        msgid.mapping["that"] = "THAT"
         self.assertEqual(
-            self._domain.translate(u'short_greeting', 'default',
-                                   target_language='en'),
-            u'Hello!')
+            translate(msgid, target_language='en', default="default",
+                         mapping={"that": "that"}), "this THAT the other")
+
+    def testMessageIDTranslateForDifferentDomain(self):
+        domain = TranslationDomain('other')
+        path = testdir()
+        en_catalog = GettextMessageCatalog('en', 'other',
+                                           os.path.join(path, 'en-default.mo'))
+        domain.addCatalog(en_catalog)
+
+        s = getGlobalServices().getService(Utilities)
+        s.provideUtility(ITranslationDomain, domain, 'other')
+
+        factory = MessageIDFactory('other')
+        msgid = factory(u'short_greeting', 'default')
+        self.assertEqual(
+            self._domain.translate(msgid, target_language='en'), u'Hello!')
 
     def testSimpleFallbackTranslation(self):
         translate = self._domain.translate
-        raises = self.assertRaises
         eq = self.assertEqual
         # Test that a translation in an unsupported language returns a
         # translation in the fallback language (by default, English)
@@ -109,7 +130,7 @@ class TestGlobalTranslationDomain(unittest.TestCase, TestITranslationDomain):
                       default="this ${that} the other",
                       mapping={"that": "THAT"}),
             "this THAT the other")
-        
+
 
 def test_suite():
     suite = unittest.TestSuite()

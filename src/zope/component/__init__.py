@@ -225,7 +225,7 @@ def getMultiView(objects, request, providing=Interface, name='', context=None):
         return view
 
     raise ComponentLookupError("Couldn't find view",
-                               name, objects, context, request)
+                               name, object, context, request)
 
 def queryMultiView(objects, request, providing=Interface, name='',
                    default=None, context=None):
