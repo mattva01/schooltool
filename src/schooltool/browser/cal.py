@@ -24,10 +24,10 @@ $Id$
 
 from datetime import datetime, date, time, timedelta
 from sets import Set
-
+from zope.interface import implements
 from schooltool.browser import View, Template, absoluteURL
 from schooltool.browser.auth import TeacherAccess, PrivateAccess
-from schooltool.cal import CalendarEvent, Period
+from schooltool.cal import Calendar, CalendarEvent, Period
 from schooltool.common import to_unicode, parse_datetime
 from schooltool.component import traverse, getPath
 from schooltool.interfaces import IResource, ICalendar
@@ -166,6 +166,14 @@ class CalendarViewBase(View):
         return absoluteURL(self.request, self.context,
                           '%s.html?date=%s' % (cal_type, cursor))
 
+    def iterEvents(self):
+        """Iterate over the events of the calendars displayed
+
+        This is a hook for subclasses that have to iterate over
+        several calendars.
+        """
+        return iter(self.context)
+
     def getDays(self, start, end):
         """Get a list of CalendarDay objects for a selected period of time.
 
@@ -178,7 +186,7 @@ class CalendarViewBase(View):
             events[dt] = []
             dt += timedelta(days=1)
 
-        for event in self.context:
+        for event in self.iterEvents():
             event_start = event.dtstart.date()
             if start <= event_start < end:
                 events[event_start].append(event)
@@ -265,7 +273,16 @@ class DailyCalendarView(CalendarViewBase):
         Events spanning several days and overlapping with this day
         are included.
         """
-        events = list(self.context.byDate(date))
+
+        # The following will be enough when getDays will include
+        # events spanning several days into all CalendarDays.
+        #
+        #day = self.getDays(date, date + timedelta(1))[0]
+        #return day.events
+
+        cal = Calendar()
+        cal.update(self.iterEvents())
+        events = list(cal.byDate(date))
         events.sort()
         return events
 
@@ -499,3 +516,65 @@ class EventAddView(View):
         suffix = 'daily.html?date=%s' % start.date()
         url = absoluteURL(request, self.context, suffix)
         return self.redirect(url, request)
+
+
+def EventSourceDecorator(e, source):
+    """A decorator for an ICalendarEvent that provides a 'source' attribute
+
+    Here we rely on the fact that CalendarEvents are immutable.
+    """
+    result = CalendarEvent(e.dtstart, e.duration, e.title, e.context, e.owner)
+    result.source = source
+    return result
+
+
+class CalendarComboMixin(View):
+    """Mixin for views over all calendars of a person.
+
+    The calendar events are decorated with a 'source' attribute, which
+    is a name of the calendar the event is from.
+    """
+
+    def iterEvents(self):
+        """Iterate over the events of the calendars displayed"""
+
+        for event in self.context:
+            decorated = EventSourceDecorator(event, 'calendar')
+            yield decorated
+
+        for event in self.context.__parent__.makeCalendar():
+            decorated = EventSourceDecorator(event, 'timetable-calendar')
+            yield decorated
+
+
+class ComboDailyCalendarView(CalendarComboMixin, DailyCalendarView):
+    pass
+
+
+class ComboWeeklyCalendarView(CalendarComboMixin, WeeklyCalendarView):
+    pass
+
+
+class ComboMonthlyCalendarView(CalendarComboMixin, MonthlyCalendarView):
+    pass
+
+
+class ComboCalendarView(CalendarView):
+    """A view combining several calendars.
+
+    This view will display events from both a private and timetable
+    calendars of an application object.
+    """
+
+    def _traverse(self, name, request):
+        if name == 'weekly.html':
+            return ComboWeeklyCalendarView(self.context)
+        elif name == 'daily.html':
+            return ComboDailyCalendarView(self.context)
+        elif name == 'monthly.html':
+            return ComboMonthlyCalendarView(self.context)
+        elif name == 'yearly.html':
+            return YearlyCalendarView(self.context)
+        elif name == 'add_event.html':
+            return EventAddView(self.context)
+        raise KeyError(name)

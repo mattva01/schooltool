@@ -52,7 +52,7 @@ class AppSetupMixin(RegistriesSetupMixin):
         from schooltool import membership
         self.setUpRegistries()
         membership.setUp()
-        app = Application()
+        self.app = app = Application()
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
         app['resources'] = ApplicationObjectContainer(Resource)

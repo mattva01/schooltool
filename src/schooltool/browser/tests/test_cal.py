@@ -716,6 +716,84 @@ class TestEventAddView(unittest.TestCase):
         self.assert_('Invalid duration' in content)
 
 
+class TestEventSourceDecorator(unittest.TestCase):
+
+    def test(self):
+        from schooltool.browser.cal import EventSourceDecorator
+        from schooltool.cal import CalendarEvent
+        from schooltool.interfaces import ICalendarEvent
+        from zope.interface.verify import verifyObject
+
+        event = CalendarEvent(datetime(2004, 8, 12, 12, 0),
+                              timedelta(hours=2), "Event")
+        decorated = EventSourceDecorator(event, 'src')
+        verifyObject(ICalendarEvent, decorated)
+
+        self.assertEquals(decorated.source, 'src')
+        self.assertEquals(decorated, event)
+        self.assertEquals(hash(event), hash(decorated))
+
+
+class TestCalendarComboMixin(unittest.TestCase):
+
+    def test(self):
+        from schooltool.browser.cal import CalendarComboMixin
+        from schooltool.cal import Calendar, CalendarEvent
+        from schooltool.model import Person
+
+        person = Person(title="Da Boss")
+        setPath(person, '/persons/boss')
+
+        cal = Calendar()
+        cal.__parent__ = person
+        cal.__name__ = 'calendar'
+
+        tcal = Calendar()
+        tcal.__parent__ = person
+        tcal.__name__ = 'timetable-calendar'
+
+        person.makeCalendar = lambda: tcal
+
+        view = CalendarComboMixin(cal)
+
+        result = list(view.iterEvents())
+        self.assertEquals(result, [])
+
+        ev1 = CalendarEvent(datetime(2004, 8, 12, 12, 0),
+                            timedelta(hours=1), "ev1")
+        ev2 = CalendarEvent(datetime(2004, 8, 12, 13, 0),
+                            timedelta(hours=1), "ev2")
+        cal.addEvent(ev1)
+        tcal.addEvent(ev2)
+
+        result = list(view.iterEvents())
+        self.assertEquals(result, [ev1, ev2])
+        self.assertEquals([e.source for e in result],
+                          ['calendar', 'timetable-calendar'])
+
+
+class TestComboCalendarView(unittest.TestCase, TraversalTestMixin):
+
+    def test_traverse(self):
+        from schooltool.cal import Calendar
+        from schooltool.browser.cal import ComboCalendarView
+        from schooltool.browser.cal import ComboDailyCalendarView
+        from schooltool.browser.cal import ComboWeeklyCalendarView
+        from schooltool.browser.cal import ComboMonthlyCalendarView
+        from schooltool.browser.cal import YearlyCalendarView
+        from schooltool.browser.cal import EventAddView
+        context = Calendar()
+        view = ComboCalendarView(context)
+        self.assertTraverses(view, 'daily.html', ComboDailyCalendarView,
+                             context)
+        self.assertTraverses(view, 'weekly.html', ComboWeeklyCalendarView,
+                             context)
+        self.assertTraverses(view, 'monthly.html', ComboMonthlyCalendarView,
+                             context)
+        self.assertTraverses(view, 'yearly.html', YearlyCalendarView, context)
+        self.assertTraverses(view, 'add_event.html', EventAddView, context)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestBookingView))
@@ -727,6 +805,9 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestYearlyCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarView))
     suite.addTest(unittest.makeSuite(TestEventAddView))
+    suite.addTest(unittest.makeSuite(TestEventSourceDecorator))
+    suite.addTest(unittest.makeSuite(TestCalendarComboMixin))
+    suite.addTest(unittest.makeSuite(TestComboCalendarView))
     suite.addTest(DocTestSuite('schooltool.browser.cal'))
     return suite
 

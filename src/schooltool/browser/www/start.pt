@@ -45,17 +45,24 @@
 	  tal:attributes="href string:${view/person_url}/password.html">Change
        your password</a></p>
     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar"
-          class="action"
+          class="action"  i18n:translate=""
           >Use your calendar</a>
+
+    <p><a tal:attributes="href
+          string:${context/@@absolute_url}/timetable-calendar"
+          class="action" i18n:translate=""
+          >Use your timetable calendar (read only)</a>
     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar.ics"
-          class="action"
+          class="action"  i18n:translate=""
           >Use your calendar in an iCal client</a>
     <p><a tal:attributes="href
 	             string:${context/@@absolute_url}/timetable-calendar.ics"
-          class="action">See your timetable calendar in an iCal client</a>
+          class="action" i18n:translate=""
+          >See your timetable calendar in an iCal client</a>
     <p><a tal:attributes="href
 	             string:${context/@@absolute_url}/timetable-calendar.ics"
-          class="action">See your timetable calendar in an iCal client</a>
+          class="action"  i18n:translate=""
+          >See your timetable calendar in an iCal client</a>
     <p><a class="action" href="/logout" i18n:translate="">Log out</a></p>
   </div>
 </div>

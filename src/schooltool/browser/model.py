@@ -37,7 +37,7 @@ from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import isManager
 from schooltool.browser.cal import BookingView
 from schooltool.browser.timetable import TimetableTraverseView
-from schooltool.browser.cal import CalendarView
+from schooltool.browser.cal import ComboCalendarView
 from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects, getPath, traverse
 from schooltool.interfaces import IPerson, IGroup, IResource
@@ -106,7 +106,7 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin):
         elif name == 'timetables':
             return TimetableTraverseView(self.context)
         elif name == 'calendar':
-            return CalendarView(self.context.calendar)
+            return ComboCalendarView(self.context.calendar)
         elif name == 'calendar.ics':
             return RestCalendarView(self.context.calendar)
         elif name == 'timetable-calendar.ics':
