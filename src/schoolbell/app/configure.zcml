@@ -72,7 +72,8 @@
 
   <content class="schoolbell.app.cal.ExpandedCalendarEvent">
     <require permission="zope.View"
-             interface="schoolbell.calendar.interfaces.ICalendarEvent" />
+             interface="schoolbell.calendar.interfaces.IExpandedCalendarEvent"
+             />
   </content>
 
   <content class="schoolbell.app.cal.ImmutableCalendar">
