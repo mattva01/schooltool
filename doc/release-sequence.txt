@@ -1,0 +1,59 @@
+How to do a release
+===================
+
+This is a sequence illustrated by commands for the Milestone 3
+release.  The two things you need to decide on are the name of the
+branch and the name of the directory in the tarball.  In this case,
+the branch is called milestone3 and the directory is schooltool-m3.
+
+If there are any problems on any step, you can delete the branch and
+start again. XXX explain how to delete the branch.
+
+1. Make sure the SERVER_VERSION in schooltool.main is updated.
+
+2. Tag the release:
+
+     svn cp svn+ssh://source.schooltool.org/svn/trunk/schooltool \
+            svn+ssh://source.schooltool.org/svn/branches/schooltool/milestone3
+
+3. Checkout the branch:
+
+     svn co svn+ssh://source.schooltool.org/svn/branches/schooltool/milestone3
+
+4. Export the release and tar it up:
+
+     svn export milestone3 schooltool-m3
+     tar zcvf schooltool-m3.tar.gz schooltool-m3
+
+5. Go into the export and make sure it's OK:
+
+     cd schooltool-m3
+     make test ftest
+
+   Run the thing and see that it works:
+
+     make sampledata
+     make sampleschool
+     make run
+
+   In a new window:
+
+     make runwxclient
+
+6. Write the page for the web.  Take screenshots.
+
+7. Upload the page, the screenshots, and the tarball.
+
+   These go in http://schooltool.org/releases/m3
+
+   Update the releases overview page.
+
+8. Upload to SourceForge.
+
+9. Write the announcement to the mailing list.
+
+10. Write the news item for the news box on the website.
+
+11. Maybe write a new front page headline and short announcement.
+
+12. Send announcement, update news and web pages.
