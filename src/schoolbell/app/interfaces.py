@@ -138,11 +138,20 @@ class IGroupContained(IGroup, IContained):
 class IResource(Interface):
     """Resource."""
 
+    title = TextLine(title=u"Title",
+        description=u"Title of the resource.")
+
 
 class IResourceContainer(IContainer):
     """Container of resources."""
 
     contains(IResource)
+
+
+class IResourceContained(IResource, IContained):
+    """Group contained in an IGroupContainer."""
+
+    containers(IResourceContainer)
 
 
 class ISchoolBellApplication(IReadContainer):

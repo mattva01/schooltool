@@ -75,4 +75,20 @@
       view="addSchoolBellGroup.html"
       />
 
+ <addform
+      label="Add a Resource"
+      name="addSchoolBellResource.html"
+      schema="schoolbell.app.interfaces.IResource"
+      content_factory="schoolbell.app.app.Resource"
+      permission="zope.ManageContent"
+      />
+
+  <addMenuItem
+      title="SchoolBell Resource"
+      description="A Resource"
+      class="schoolbell.app.app.Resource"
+      permission="zope.ManageContent"
+      view="addSchoolBellResource.html"
+      />
+
 </configure>

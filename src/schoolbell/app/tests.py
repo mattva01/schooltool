@@ -219,6 +219,18 @@ def doctest_Group():
     """
 
 
+def doctest_Resource():
+    r"""Tests for Resource
+
+        >>> from schoolbell.app.interfaces import IResourceContained
+        >>> from schoolbell.app.app import Resource
+        >>> resource = Resource()
+        >>> verifyObject(IResourceContained, resource)
+        True
+
+    """
+
+
 def run_unit_tests(testcase):
     r"""Hack to call into unittest from doctests.
 

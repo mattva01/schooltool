@@ -34,7 +34,7 @@ from zope.app.container.contained import Contained
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IPersonContainer, IPersonContained
 from schoolbell.app.interfaces import IGroupContainer, IGroupContained
-from schoolbell.app.interfaces import IResourceContainer
+from schoolbell.app.interfaces import IResourceContainer, IResourceContained
 
 
 class SchoolBellApplication(Persistent, SampleContainer):
@@ -134,5 +134,13 @@ class Group(Persistent, Contained):
     """Group."""
 
     implements(IGroupContained)
+
+    title = None
+
+
+class Resource(Persistent, Contained):
+    """Resource."""
+
+    implements(IResourceContained)
 
     title = None
