@@ -35,6 +35,7 @@ from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
 from schooltool.interfaces import ILocation, IDateRange
 from schooltool.interfaces import ICalendar, ICalendarWrite, ICalendarEvent
 from schooltool.interfaces import ICalendarOwner, IExpandedCalendarEvent
+from schooltool.interfaces import IInheritedCalendarEvent
 from schooltool.interfaces import IACLCalendar
 from schooltool.interfaces import ViewPermission
 from schooltool.interfaces import ModifyPermission, AddPermission
@@ -153,7 +154,7 @@ class Calendar(Persistent):
         return iter(self.events)
 
     def find(self, unique_id):
-        # We could speed it up by building and maintaining index
+        # We could speed this method up by building and maintaining an index.
         for event in self:
             if event.unique_id == unique_id:
                 return event
@@ -347,7 +348,7 @@ class CalendarEvent(Persistent):
 
 
 class ExpandedCalendarEvent(CalendarEvent):
-    """Event in an expanded calendar
+    """Event in an expanded calendar.
 
     Can be either a real event or a recurrence of some other event.  If it
     is a recurrence, the dtstart attribute will be different from the original
@@ -364,6 +365,22 @@ class ExpandedCalendarEvent(CalendarEvent):
                    privacy=ev.privacy)
 
     duplicate = classmethod(duplicate)
+
+
+class InheritedCalendarEvent(CalendarEvent):
+    """A calendar event that was inherited from a group by composition."""
+
+    implements(IInheritedCalendarEvent)
+
+    def __init__(self, ev):
+        """Create a clone of a given event."""
+        # XXX untested
+        assert ev.recurrence is None
+        CalendarEvent.__init__(self,
+                    ev.dtstart, ev.duration, ev.title, owner=ev.owner,
+                    context=ev.context, location=ev.location,
+                    unique_id=ev.unique_id, recurrence=ev.recurrence,
+                    privacy=ev.privacy)
 
 
 class ACLCalendar(Calendar):

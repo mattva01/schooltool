@@ -382,28 +382,33 @@ div.day {
   padding: 0.5ex 0.5em;
 }
 
-div.event {
-  border: 1px solid darkgreen;
-  background: #8f9;
+div.event,
+div.tt_event
+div.exc_event
+div.comp_event {
   margin: 1ex;
   padding: 0.5ex 0.5em;
   font-size: smaller;
+}
+
+div.event {
+  border: 1px solid darkgreen;
+  background: #8f9;
 }
 
 div.tt_event {
   border: 1px solid #007;
   background: #9af;
-  margin: 1ex;
-  padding: 0.5ex 0.5em;
-  font-size: smaller;
 }
 
 div.exc_event {
   border: 1px solid #007;
   background: #f66;
-  margin: 1ex;
-  padding: 0.5ex 0.5em;
-  font-size: smaller;
+}
+
+div.comp_event {
+  border: 1px solid #007;
+  background: yellow;
 }
 
 div.day h2,
@@ -515,7 +520,8 @@ div.event_weekly {
 
 .cal_monthly div.event,
 .cal_monthly div.tt_event
-.cal_monthly div.exc_event {
+.cal_monthly div.exc_event
+.cal_monthly div.comp_event {
   font-size: smaller;
   margin: 2px;
   border-width: 0.5px;
@@ -533,28 +539,33 @@ table.daycal td.empty {
   margin: 0;
 }
 
-table.daycal td.event{
-  border: 1px solid #070;
-  background: #af9;
+table.daycal td.event,
+table.daycal td.tt_event
+table.daycal td.exc_event
+table.daycal td.comp_event {
   padding: 1ex 0.5em;
   vertical-align: top;
   font-size: smaller;
+}
+
+table.daycal td.event{
+  border: 1px solid #070;
+  background: #af9;
 }
 
 table.daycal td.tt_event {
   border: 1px solid #007;
   background: #9af;
-  padding: 1ex 0.5em;
-  vertical-align: top;
-  font-size: smaller;
 }
 
 table.daycal td.exc_event {
   border: 1px solid #007;
   background: #f66;
-  padding: 1ex 0.5em;
-  vertical-align: top;
-  font-size: smaller;
+}
+
+table.daycal td.comp_event {
+  border: 1px solid #007;
+  background: yellow;
 }
 
 td.daycalhour {
@@ -564,11 +575,10 @@ td.daycalhour {
   width: 1%;
 }
 
-.event h2,
-.event h3,
-.tt_event h2,
-.tt_event h3,
-.exc_event h2, .exc_event h3 {
+.event h2, .event h3,
+.tt_event h2, .tt_event h3,
+.exc_event h2, .exc_event h3,
+.comp_event h2, .comp_event h3 {
   font-size: smaller;
   color: navy;
   margin: 0;

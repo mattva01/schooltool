@@ -2233,6 +2233,10 @@ class TestCalendarEventView(TraversalTestMixin, XMLCompareMixin,
                                             exception=exc)
         return exc_ev
 
+    def createInheritedEvent(self):
+        from schooltool.cal import InheritedCalendarEvent
+        return InheritedCalendarEvent(self.createOrdinaryEvent())
+
     # canEdit is tested in TestCalendarEventPermissionChecking
 
     def test_cssClass(self):
@@ -2242,6 +2246,7 @@ class TestCalendarEventView(TraversalTestMixin, XMLCompareMixin,
         self.assertEquals(class_of(self.createTimetableEvent()), 'tt_event')
         self.assertEquals(class_of(self.createTimetableExceptionEvent()),
                           'exc_event')
+        self.assertEquals(class_of(self.createInheritedEvent()), 'comp_event')
 
     def test_duration(self):
         view = self.createView()

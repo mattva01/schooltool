@@ -1236,6 +1236,14 @@ class IExpandedCalendarEvent(ICalendarEvent):
     """A calendar event that may be a recurrence of a recurrent event."""
 
 
+class IInheritedCalendarEvent(ICalendarEvent):
+    """A calendar event that was inherited from a group by composition.
+
+    A person may select several groups, whose calendar events she would like
+    to see in his personal calendar.  Such events implement this interface.
+    """
+
+
 class ICalendarOwner(Interface):
     """An object that has a calendar."""
 

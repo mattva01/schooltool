@@ -46,6 +46,7 @@ from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
 from schooltool.interfaces import IExpandedCalendarEvent
 from schooltool.interfaces import ITimetableCalendarEvent
 from schooltool.interfaces import IExceptionalTTCalendarEvent
+from schooltool.interfaces import IInheritedCalendarEvent
 from schooltool.interfaces import ModifyPermission, ViewPermission
 from schooltool.interfaces import IDailyRecurrenceRule, IWeeklyRecurrenceRule
 from schooltool.interfaces import IYearlyRecurrenceRule, IMonthlyRecurrenceRule
@@ -278,6 +279,20 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
             self.__url = absoluteURL(self.request, self.context)
         return  '%s/%s.html?date=%s' % (self.__url, cal_type, cursor)
 
+    def _markInherited(self, calendar):
+        """Return a duplicate of calendar with events marked as inherited.
+
+        calendar should not contain recurrent events (they should be already
+        expanded).
+        """
+        # XXX This is a hack and it doesn't belong here.
+        # XXX Untested
+        from schooltool.cal import Calendar, InheritedCalendarEvent
+        cal = Calendar()
+        for event in calendar:
+            cal.addEvent(InheritedCalendarEvent(event))
+        return cal
+
     def iterEvents(self, first, last):
         """Iterate over events of selected calendars.
 
@@ -287,9 +302,10 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         private_cal = self.context
         timetable_cal = self.context.__parent__.makeTimetableCalendar()
         composite_cal = self.context.__parent__.makeCompositeCalendar()
+        composite_cal = composite_cal.expand(first, last)
+        composite_cal = self._markInherited(composite_cal)
         return itertools.chain(private_cal.expand(first, last),
-                               timetable_cal,
-                               composite_cal.expand(first, last))
+                               timetable_cal, composite_cal)
 
     def getDays(self, start, end):
         """Get a list of CalendarDay objects for a selected period of time.
@@ -1465,6 +1481,8 @@ class CalendarEventView(View):
 
     def cssClass(self):
         """Choose a CSS class for the event."""
+        if IInheritedCalendarEvent.providedBy(self.context):
+            return 'comp_event'
         if IExceptionalTTCalendarEvent.providedBy(self.context):
             return 'exc_event'
         elif ITimetableCalendarEvent.providedBy(self.context):
