@@ -83,7 +83,7 @@ class PersistentKeysDict(Persistent, UserDict.DictMixin):
     def keys(self):
         # XXX returning a lazy sequence is one optimization we might make
         jar = self._p_jar
-        return ([jar.get(key) for key in self._data] + 
+        return ([jar.get(key) for key in self._data] +
                 [key for key, value in self._tmpdata.itervalues()])
 
     def __contains__(self, key):
@@ -298,6 +298,7 @@ class PersistentKeysSetWithNames(Persistent, UniqueNamesMixin):
 
 class PersistentPairKeysDictWithNames(PersistentPairKeysDict,
                                       UniqueNamesMixin):
+
     def __init__(self):
         PersistentPairKeysDict.__init__(self)
         UniqueNamesMixin.__init__(self, name_length=4)

@@ -91,11 +91,13 @@ class ServerSettingsDlg(wxDialog):
 
     def getServer(self):
         return self.serverTextCtrl.GetValue()
+
     def setServer(self, value):
         self.serverTextCtrl.SetValue(value)
 
     def getPort(self):
         return int(self.portTextCtrl.GetValue())
+
     def setPort(self, value):
         self.portTextCtrl.SetValue(str(value))
 
@@ -131,6 +133,7 @@ class MainFrame(wxFrame):
         self.CreateStatusBar()
 
         # Menu bar
+
         def menubar(*items):
             menubar = wxMenuBar()
             for menu, title in items:
@@ -140,7 +143,7 @@ class MainFrame(wxFrame):
         def menu(title, *items):
             menu = wxMenu()
             for item in items:
-                getattr(menu, item[0])(*item[1:]) 
+                getattr(menu, item[0])(*item[1:])
             return menu, title
 
         def separator():

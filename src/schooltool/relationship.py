@@ -298,7 +298,7 @@ class LinkSet:
     def addPlaceholder(self, for_link, placeholder):
         """Add a placeholder to the set to fill the place of the given link.
         """
-        if (ILink.isImplementedBy(for_link) and 
+        if (ILink.isImplementedBy(for_link) and
             IPlaceholder.isImplementedBy(placeholder)):
             key = (for_link.traverse(), (for_link.reltype, for_link.role))
             if key in self._data:

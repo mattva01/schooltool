@@ -49,8 +49,10 @@ class IEventLog(IEventTarget):
     def clear():
         """Clear the list of received events."""
 
+
 class IEventLogUtility(IEventLog, IUtility):
     """Event log that is a utility."""
+
 
 class IEventLogFacet(IEventLog, IEventConfigurable, IFacet):
     """Event log that is a facet."""

@@ -26,6 +26,7 @@ __metaclass__ = type
 
 from zope.interface import Interface, Attribute, moduleProvides
 
+
 #
 # Containment
 #
@@ -867,6 +868,7 @@ import copy_reg
 copy_reg.pickle(UnchangedClass, lambda obj: 'Unchanged', UnchangedClass)
 
 Unchanged = UnchangedClass()
+
 
 class IAbsenceComment(Interface):
 

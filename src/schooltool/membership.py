@@ -41,6 +41,7 @@ __metaclass__ = type
 Membership = RelationshipSchema(URIMembership,
                                 group=URIGroup, member=URIMember)
 
+
 def checkForPotentialCycles(group, potential_member):
     """Raises ValueError if adding potential_member would create a
     cycle in membership relationships.

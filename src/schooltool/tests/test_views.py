@@ -1929,7 +1929,6 @@ class TestAbsenceTrackerFacetView(TestAbsenceTrackerView):
         from schooltool.model import AbsenceComment
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.views import AbsenceTrackerFacetView
-        from schooltool.interfaces import IAttendanceEvent
         from schooltool.facet import FacetManager
 
         self.setUpRegistries()

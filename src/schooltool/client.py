@@ -38,7 +38,8 @@ class Client(Cmd):
     intro = """\
 SchoolTool client $Id$
 This is free software, covered by the GNU General Public License, and you are
-welcome to change it and/or distribute copies of it under certain conditions."""
+welcome to change it and/or distribute copies of it under certain conditions.
+"""
 
     prompt = "SchoolTool> "
     extra_prompt = "%(what)s> "

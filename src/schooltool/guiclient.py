@@ -34,8 +34,6 @@ the Free Software Foundation; either version 2 of the License, or
 import httplib
 import socket
 import libxml2
-from htmllib import HTMLParser
-from formatter import AbstractFormatter, NullWriter
 
 __metaclass__ = type
 
@@ -162,19 +160,24 @@ class SchoolToolClient:
         XXX the parser assumes xlink is the namespace used for xlinks in the
             document rather than parsing xmlns:... attributes
         """
+
         class Handler:
+
             def __init__(self):
                 self.level = 0
                 self.result = []
+
             def startElement(self, tag, attrs):
                 if tag == 'group':
                     title = attrs['xlink:title']
                     href = attrs['xlink:href']
                     self.result.append((self.level, title, href))
                     self.level += 1
+
             def endElement(self, tag):
                 if tag == 'group':
                     self.level -= 1
+
         try:
             handler = Handler()
             ctx = libxml2.createPushParser(handler, body, len(body), "")

@@ -119,7 +119,6 @@ class GroupMixin(Persistent):
         pass
 
 
-
 #
 # Some fake content
 #
@@ -131,6 +130,7 @@ def readFile(filename):
     data = f.read()
     f.close()
     return data
+
 
 class FakePhoto:
 
@@ -153,6 +153,7 @@ class FakeGroup(Group, GroupMixin, MemberMixin):
         Group.__init__(self, name)
         MemberMixin.__init__(self)
         GroupMixin.__init__(self)
+
 
 class FakeApplication(Persistent):
 

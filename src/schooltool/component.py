@@ -360,6 +360,7 @@ def getRelatedObjects(obj, role):
 view_registry = TypeRegistry()
 class_view_registry = {}
 
+
 def resetViewRegistry():
     """Replace the view registry with an empty one."""
     global view_registry

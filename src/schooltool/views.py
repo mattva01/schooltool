@@ -47,6 +47,7 @@ __metaclass__ = type
 
 moduleProvides(IModuleSetup)
 
+
 #
 # Helpers
 #
@@ -173,8 +174,8 @@ class View(Resource):
         template    Attribute that contains a Template instance for rendering.
         _traverse   Method that should return a view for a contained object
                     or raise a KeyError.
-        do_XXX      Method that processes HTTP requests XXX for various values
-                    of XXX.  Its signature should match render.
+        do_FOO      Method that processes HTTP requests FOO for various values
+                    of FOO.  Its signature should match render.
 
     """
 
@@ -344,7 +345,8 @@ class ApplicationObjectCreator(XMLPseudoParser):
         return "Object created: %s" % location
 
 
-class ApplicationObjectContainerView(TraversableView, ApplicationObjectCreator):
+class ApplicationObjectContainerView(TraversableView,
+                                     ApplicationObjectCreator):
     """The view for the application object containers"""
 
     template = Template("www/aoc.pt", content_type="text/xml")
@@ -749,11 +751,13 @@ class AbsenceView(View, AbsenceCommentParser):
     def listComments(self):
         endedness = {Unchanged: None, False: 'unended', True: 'ended'}
         resolvedness = {Unchanged: None, False: 'unresolved', True: 'resolved'}
+
         def format_presence(pr):
             if pr is not Unchanged:
                 return comment.expected_presence.isoformat(' ')
             else:
                 return None
+
         return [
             {'datetime': comment.datetime.isoformat(' '),
              'text': comment.text,
@@ -821,7 +825,6 @@ class RollcallView(View):
         try:
             doc = libxml2.parseDoc(body)
         except libxml2.parserError:
-            # XXX register error callbacks so that no errors are printed onscreen
             raise ValueError("Bad roll call representation")
         ctx = doc.xpathNewContext()
         xlink = "http://www.w3.org/1999/xlink"
@@ -903,7 +906,8 @@ class RollcallView(View):
                                                     ended=True,
                                                     resolved=resolved))
                 npresences += 1
-        return "%d absences and %d presences reported" % (nabsences, npresences)
+        return ("%d absences and %d presences reported"
+                % (nabsences, npresences))
 
 
 class AbsenceTrackerView(View):

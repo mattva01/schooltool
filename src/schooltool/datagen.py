@@ -44,8 +44,10 @@ surnames = ('Moore', 'McCullogh', 'Buckingham', 'Butler', 'Davies',
             'Jones', 'Smith', 'Smith', 'Smith', 'Smith', 'Smith',
             'Smith', 'Smith', 'Greenspun', 'Eastwood', 'Baggins')
 
+
 def random_name():
     return "%s %s" % (random.choice(names), random.choice(surnames))
+
 
 def createGroups():
     f = open("groups.csv", "w")
@@ -76,6 +78,7 @@ def createGroups():
     print >> f, '"biol3","Biology 3","/ biol year3","Subject Group"'
 
     f.close()
+
 
 def createPupils(nr=60):
 
@@ -111,6 +114,7 @@ def createTeachers():
     for groups in teachers:
         print >> f, '"%s","%s"' % (random_name(),  " ".join(groups))
     f.close()
+
 
 def main():
     if len(sys.argv) > 1:

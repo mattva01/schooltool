@@ -83,8 +83,7 @@ class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
 
     def testSubjectGroupFacet(self):
         from schooltool.example import SubjectGroupFacet
-        from schooltool.example import Teaching
-        from schooltool.example import URITeaching, URITeacher, URITaught
+        from schooltool.example import URITeaching, URITaught
         from schooltool.interfaces import IRelationshipValencies
 
         facet = SubjectGroupFacet()
