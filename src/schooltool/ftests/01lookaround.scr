@@ -238,21 +238,21 @@ Content-Type: text/xml; charset=UTF-8
           xlink:title="Steve"/>
     <item xlink:type="simple" xlink:href="/persons/Aiste"
           xlink:title="Aiste"/>
-    <item xlink:type="simple" xlink:href="/persons/Marius"
-          xlink:title="Marius"/>
-    <item xlink:type="simple" xlink:href="/persons/Albert"
-          xlink:title="Albert"/>
     <item xlink:type="simple" xlink:href="/persons/Mark"
           xlink:title="Mark"/>
+    <item xlink:type="simple" xlink:href="/persons/Albert"
+          xlink:title="Albert"/>
+    <item xlink:type="simple" xlink:href="/persons/Marius"
+          xlink:title="Marius"/>
   </items>
 </container>
 
 ==================================================
 1   Steve (/persons/Steve)
 2   Aiste (/persons/Aiste)
-3   Marius (/persons/Marius)
+3   Mark (/persons/Mark)
 4   Albert (/persons/Albert)
-5   Mark (/persons/Mark)
+5   Marius (/persons/Marius)
 
 SchoolTool> follow 4
 200 OK
