@@ -90,9 +90,15 @@ class XMLDocument(object):
         """
         self._doc = self._xpathctx = None # __del__ wants them
         if schema is not None:
-            if not validate_against_schema(schema, body):
-                raise XMLValidationError(
-                            _("Document not valid according to schema."))
+            try:
+                if not validate_against_schema(schema, body):
+                    raise XMLValidationError(
+                                _("Document not valid according to schema."))
+            except libxml2.parserError, e:
+                if 'xmlRelaxNGParse' in str(e):
+                    raise XMLSchemaError(_("Invalid RelaxNG schema."))
+                else:
+                    raise XMLParseError(_("Ill-formed document."))
         try:
             self._doc = libxml2.parseDoc(body)
         except libxml2.parserError:
@@ -403,6 +409,9 @@ class XMLError(UnicodeAwareException):
 
 class XMLParseError(XMLError):
     """Ill-formed XML document."""
+
+class XMLSchemaError(XMLError):
+    """Invalid RelaxNG schema."""
 
 class XMLValidationError(XMLError):
     """Invalid XML document."""

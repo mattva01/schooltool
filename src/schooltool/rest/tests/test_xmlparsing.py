@@ -110,6 +110,37 @@ def test_multilevel_query():
     """
 
 
+def test_validate_ill_formed_document():
+    """Regression test for a bug in XMLDocument.__init__.
+
+    validate_against_schema may raise a libxml2.parseError that was not
+    caught in XMLDocument.__init__.
+
+        >>> from schooltool.rest.xmlparsing import XMLDocument
+        >>> schema = '''
+        ...   <grammar xmlns="http://relaxng.org/ns/structure/1.0">
+        ...     <start>
+        ...       <element name="sample">
+        ...         <text/>
+        ...       </element>
+        ...     </start>
+        ...   </grammar>
+        ... '''
+        >>> XMLDocument("<ill></formed>", schema)
+        Traceback (most recent call last):
+          ...
+        XMLParseError: Ill-formed document.
+
+    Double-check that invalid schemas are caught.
+
+        >>> XMLDocument("<sample>Foo!</sample>", '<ill></formed>')
+        Traceback (most recent call last):
+          ...
+        XMLSchemaError: Invalid RelaxNG schema.
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     mixin = QuietLibxml2Mixin()
