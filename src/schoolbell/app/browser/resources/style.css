@@ -665,9 +665,9 @@ h2.calendar-view-title {
 }
 
 #calendar-view-day .event:hover {
-    height: auto !important;
     opacity: 1;
     z-index: 9;
+    overflow: visible;
 }
 
 #calendar-view-day .event h6 {
@@ -709,7 +709,11 @@ h2.calendar-view-title {
 }
 
 #calendar-view-day .event .description {
+    margin: 0.5ex;
     padding: 0.5ex;
+}
+
+#calendar-view-day .event:hover .description {
 }
 
 #calendar-view-day .hour a.event-new {
