@@ -53,6 +53,7 @@ class TestApplication(unittest.TestCase, EqualsSortedMixin):
         from schooltool.interfaces import IEventService, IUtilityService
         from schooltool.interfaces import ITimetableSchemaService
         from schooltool.interfaces import ITimePeriodService
+        from schooltool.interfaces import IDynamicFacetSchemaService
 
         a = Application()
         verifyObject(IApplication, a)
@@ -71,6 +72,14 @@ class TestApplication(unittest.TestCase, EqualsSortedMixin):
         verifyObject(ITimePeriodService, a.timePeriodService)
         self.assert_(a.timePeriodService.__parent__ is a)
         self.assertEqual(a.timePeriodService.__name__, 'time-periods')
+
+        verifyObject(IDynamicFacetSchemaService, a.dynamicFacetSchemaService)
+        self.assert_(a.dynamicFacetSchemaService.__parent__ is a)
+        self.assertEqual(a.dynamicFacetSchemaService.__name__, 'dfschemas')
+
+        ci = a.dynamicFacetSchemaService['contact-info']
+        self.assertEqual(ci['fax']['label'], 'Fax Number')
+        self.assertEqual(ci['email']['name'], 'email')
 
     def testTraversal(self):
         from schooltool.app import Application

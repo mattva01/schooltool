@@ -26,6 +26,7 @@ from zope.interface import implements
 from schooltool import model, absence
 from schooltool.auth import TicketService
 from schooltool.component import UtilityService, getFacetFactory, FacetManager
+from schooltool.component import getDynamicFacetSchemaService
 from schooltool.db import PersistentKeysSet
 from schooltool.event import EventService
 from schooltool.eventlog import EventLogUtility
@@ -82,6 +83,14 @@ class Application(Persistent):
         self.dynamicFacetSchemaService.__name__ = 'dfschemas'
         self._roots = PersistentKeysSet()
         self._appObjects = PersistentDict()
+
+        schema = DynamicFacet()
+        schema.addField('phone', 'Phone Number', 'text')
+        schema.addField('fax', 'Fax Number', 'text')
+        schema.addField('email', 'Email', 'text')
+
+        service = getDynamicFacetSchemaService(self)
+        service['contact-info'] = schema
 
     def addRoot(self, root):
         """Internal api"""
