@@ -393,80 +393,30 @@ class TestCSVImporter(NiceDiffsMixin, unittest.TestCase):
         self.assertEqual(results, expected,
                          diff(pformat(results), pformat(expected)))
 
-    def test_run_badData(self):
+    def test_import_badData(self):
         from schooltool.clients.csvclient import CSVImporter
         from schooltool.clients.csvclient import DataError
         im = CSVImporter()
         im.verbose = False
 
-        def file(name):
-            if name == 'groups.csv':
-                return StringIO('"year1","Year 1","root"')
-            if name == 'pupils.csv':
-                return StringIO('"Jay Hacker","group1 group2","1998-01-01",""')
-            if name == 'teachers.csv':
-                return StringIO('"Doc Doc","group1","1998-01-01",""')
-            if name == 'resources.csv':
-                return StringIO('"Hall","foo bar"')
-        im.file = file
-
         class ResponseStub:
             def getheader(self, header):
                 return 'foo://bar/baz/quux'
 
-        def process(method, resource, body):
-            pass
         im.process = lambda x, y, body=None: ResponseStub()
-        self.assertRaises(DataError, im.run)
 
-        def file(name):
-            if name == 'groups.csv':
-                return StringIO('"year1","Year 1","root",')
-            if name == 'pupils.csv':
-                return StringIO('"Jay Hacker","group1 group2","what is this"'
-                                ',"1998-01-01",""')
-            if name == 'teachers.csv':
-                return StringIO('"Doc Doc","group1","1998-01-01",""')
-            if name == 'resources.csv':
-                return StringIO('"Hall",""')
-        im.file = file
-        self.assertRaises(DataError, im.run)
+        im.file = lambda fn: StringIO('"year1","Year 1","root"')
+        self.assertRaises(DataError, im.importGroupsCsv, "fn")
 
-        def file(name):
-            if name == 'groups.csv':
-                return StringIO('"year1","Year 1","root",')
-            if name == 'pupils.csv':
-                return StringIO('"Jay Hacker","group1 group2","1998-01-01",""')
-            if name == 'teachers.csv':
-                return StringIO('kria kria')
-            if name == 'resources.csv':
-                return StringIO('"Hall",""')
-        im.file = file
-        self.assertRaises(DataError, im.run)
+        im.file = lambda fn: StringIO('1,"2')
+        self.assertRaises(DataError, im.importTeachersCsv, "fn")
 
-        def file(name):
-            if name == 'groups.csv':
-                return StringIO('"year1","Year 1","root",')
-            if name == 'pupils.csv':
-                return StringIO('"Jay Hacker","group1 group2","1998-01-01",""')
-            if name == 'teachers.csv':
-                return StringIO('1,"2')
-            if name == 'resources.csv':
-                return StringIO('"Hall",""')
-        im.file = file
-        self.assertRaises(DataError, im.run)
+        im.file = lambda fn: StringIO('"Jay Hacker","group1 group2",'
+                                      '"1998-12-01","')
+        self.assertRaises(DataError, im.importPupilsCsv, "fn")
 
-        def file(name):
-            if name == 'groups.csv':
-                return StringIO('"year1","Year 1","root",')
-            if name == 'pupils.csv':
-                return StringIO('"Jay Hacker","group1 group2","1998-01-01",""')
-            if name == 'teachers.csv':
-                return StringIO('"Doc Doc","group1","1998-01-01",""')
-            if name == 'resources.csv':
-                return StringIO('"Hall"')
-        im.file = file
-        self.assertRaises(DataError, im.run)
+        im.file = lambda fn: StringIO('"Hall"')
+        self.assertRaises(DataError, im.importResourcesCsv, "fn")
 
     def test_process(self):
         from schooltool.clients.csvclient import CSVImporter

@@ -282,9 +282,8 @@ class CSVImporter:
             sys.exit(1)
         return response
 
-    def run(self):
-        if self.verbose:
-            print _("Creating groups... ")
+    def importGroupsCsv(self, filename):
+        lineno = 0
         for resource, method, body in self.importGroup(
                 "teachers", _("Teachers"), "root", 'teacher_group'):
             self.process(method, resource, body=body)
@@ -294,29 +293,28 @@ class CSVImporter:
             self.process(method, resource, body=body)
 
         try:
-            line = 1
-            file = "groups.csv"
-            for row in csv.reader(self.file(file)):
+            for lineno, row in enumerate(csv.reader(self.file(filename))):
                 if len(row) != 4:
                     raise DataError(_("Error in %s line %d:"
                                       " expected 4 columns, got %d") %
-                                    (file, line, len(row)))
+                                    (file, lineno + 1, len(row)))
                 row = map(from_locale, row)
                 for resource, method, body in self.importGroup(*row):
                     self.process(method, resource, body=body)
-                line += 1
+        except DataError:
+            raise
+        except csv.Error, e:
+            raise DataError(_("Error in %s line %d: %s")
+                            % (file, lineno + 1, e))
 
-            if self.verbose:
-                print
-                print _("Creating teachers... ")
-
-            line = 1
-            file = "teachers.csv"
-            for row in csv.reader(self.file(file)):
+    def importTeachersCsv(self, filename):
+        lineno = 0
+        try:
+            for lineno, row in enumerate(csv.reader(self.file(filename))):
                 if len(row) != 4:
                     raise DataError(_("Error in %s line %d:"
                                       " expected 4 columns, got %d") %
-                                    (file, line, len(row)))
+                                    (file, lineno + 1, len(row)))
                 title, groups, dob, comment = map(from_locale, row)
                 for resource, method, body in self.importPerson(title):
                     response = self.process(method, resource, body=body)
@@ -328,19 +326,20 @@ class CSVImporter:
                 for path, meth, body in self.importPersonInfo(name, title,
                                                               dob, comment):
                     response = self.process(meth, path, body=body)
-                line += 1
+        except DataError:
+            raise
+        except csv.Error, e:
+            raise DataError(_("Error in %s line %d: %s")
+                            % (file, lineno + 1, e))
 
-            if self.verbose:
-                print
-                print _("Creating pupils... ")
-
-            line = 1
-            file = "pupils.csv"
-            for row in csv.reader(self.file(file)):
+    def importPupilsCsv(self, filename):
+        lineno = 0
+        try:
+            for lineno, row in enumerate(csv.reader(self.file(filename))):
                 if len(row) != 4:
                     raise DataError(_("Error in %s line %d:"
                                       " expected 4 columns, got %d") %
-                                    (file, line, len(row)))
+                                    (file, lineno + 1, len(row)))
                 title, groups, dob, comment = map(from_locale, row)
                 for resource, method, body in self.importPerson(title):
                     response = self.process(method, resource, body=body)
@@ -352,19 +351,20 @@ class CSVImporter:
                 for path, meth, body in self.importPersonInfo(name, title,
                                                               dob, comment):
                     response = self.process(meth, path, body=body)
-                line += 1
+        except DataError:
+            raise
+        except csv.Error, e:
+            raise DataError(_("Error in %s line %d: %s")
+                            % (file, lineno + 1, e))
 
-            if self.verbose:
-                print
-                print _("Creating resources... ")
-
-            line = 1
-            file = "resources.csv"
-            for row in csv.reader(self.file(file)):
+    def importResourcesCsv(self, filename):
+        lineno = 0
+        try:
+            for lineno, row in enumerate(csv.reader(self.file(filename))):
                 if len(row) != 2:
                     raise DataError(_("Error in %s line %d:"
                                       " expected 2 columns, got %d") %
-                                    (file, line, len(row)))
+                                    (file, lineno + 1, len(row)))
                 title, groups = map(from_locale, row)
                 for resource, method, body in self.importResource(title):
                     response = self.process(method, resource, body=body)
@@ -373,14 +373,30 @@ class CSVImporter:
                 for resource, method, body in \
                         self.addResourceToGroups(name, groups):
                     self.process(method, resource, body=body)
-                line += 1
-
-            if self.verbose:
-                print
         except DataError:
             raise
         except csv.Error, e:
-            raise DataError(_("Error in %s line %d: %s") % (file, line, e))
+            raise DataError(_("Error in %s line %d: %s")
+                            % (file, lineno + 1, e))
+
+    def blather(self, message):
+        if self.verbose:
+            print
+            print message
+
+    def run(self):
+        try:
+            self.blather(_("Creating groups... "))
+            self.importGroupsCsv('groups.csv')
+            self.blather(_("Creating teachers... "))
+            self.importTeachersCsv('teachers.csv')
+            self.blather(_("Creating pupils... "))
+            self.importPupilsCsv('pupils.csv')
+            self.blather(_("Creating resources... "))
+            self.importResourcesCsv('resources.csv')
+            self.blather(_("Import finished successfully"))
+        except DataError:
+            raise
 
 
 def to_xml(s):
@@ -398,5 +414,3 @@ def to_xml(s):
 
     """
     return cgi.escape(s.encode('UTF-8'), True)
-
-
