@@ -1061,6 +1061,15 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
             </booking>
         """)
 
+    def test_getApplicationLog(self):
+        client = self.newClient(ResponseStub(200, 'OK', 'pwn3d'))
+        self.assertEquals(client.getApplicationLog(), 'pwn3d')
+
+    def test_getApplicationLog_errors(self):
+        from schooltool.clients.guiclient import SchoolToolError
+        client = self.newClient(ResponseStub(500, 'not OK', 'abc'))
+        self.assertRaises(SchoolToolError, client.getApplicationLog)
+
 
 class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
                          QuietLibxml2Mixin, unittest.TestCase):

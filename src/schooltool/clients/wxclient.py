@@ -1768,6 +1768,9 @@ class MainFrame(wxFrame):
                  item(_("&School Timetable"),
                       _("Edit a timetable for the whole school"),
                       self.DoViewSchoolTimetable),
+                 item(_("A&pplication log"),
+                      _("View the application audit trail"),
+                      self.DoViewApplicationLog),
                  item(_("Search &for Available Resources"),
                       _("Search for available resources"),
                       self.DoAvailabilitySearch),
@@ -2528,6 +2531,25 @@ class MainFrame(wxFrame):
             window.Show()
         else:
             window.Destroy()
+
+    def DoViewApplicationLog(self, event=None):
+        """Open the application log window.
+
+        Accessible via View|Application Log
+        """
+        try:
+            log = self.client.getApplicationLog()
+        except SchoolToolError, e:
+            self.SetStatusText(to_wx(unicode(e)))
+        else:
+            dlg = wxDialog(None, -1, _("Application log"),
+                           style=(DEFAULT_DLG_STYLE | wxRESIZE_BORDER
+                                  | wxDIALOG_MODAL))
+            dlg.text_ctrl = wxTextCtrl(dlg, -1,
+                                       style=wxTE_MULTILINE | wxTE_READONLY)
+            dlg.text_ctrl.SetValue(to_wx(log))
+            dlg.ShowModal()
+            dlg.Destroy()
 
 
 class SchoolToolApp(wxApp):

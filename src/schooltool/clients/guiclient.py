@@ -577,6 +577,12 @@ class SchoolToolClient:
         if response.status != 200:
             raise ResponseStatusError(response)
 
+    def getApplicationLog(self):
+        response = self.get('/applog')
+        if response.status != 200:
+            raise ResponseStatusError(response)
+        return response.read()
+
 
 class Response:
     """HTTP response.
