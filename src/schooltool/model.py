@@ -142,8 +142,11 @@ class ApplicationObjectMixin(FacetedEventTargetMixin,
             day += one_day
 
     def __repr__(self):
+        nonneg_id = id(self)            # Cosmetic fix: avoids FutureWarnings
+        if nonneg_id < 0:               # of %x when id(self) returns a
+            nonneg_id += 1L << 32       # negative number.
         return "<%s object %s at 0x%x>" % (self.__class__.__name__,
-                                           self.title, id(self))
+                                           self.title, nonneg_id)
 
     def __hash__(self):
         if self.__name__ is None:
