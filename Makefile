@@ -16,6 +16,11 @@ build:
 	cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) remove-stale-bytecode.py
 
+.PHONY: clean
+clean:
+	find . \( -name '*.o' -o -name '*.py[co]' \) -exec rm -f {} \;
+	rm -rf build
+
 .PHONY: realclean
 realclean: clean
 	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;
@@ -40,10 +45,10 @@ schoolbelldist: realclean
 	rm -rf dist
 	find . -name '*.py[dco]' -exec rm -f {} \;
 	fakeroot ./debian/rules clean
-	./setup.py schoolbell sdist --formats=gztar,zip
+	./setup.py sdist --formats=gztar
 
 .PHONY: signtar
 signtar: dist
-	md5sum dist/school*.{tar.gz,zip} > dist/md5sum
+	md5sum dist/school*.tar.gz > dist/md5sum
 	gpg --clearsign dist/md5sum
 	mv dist/md5sum.asc dist/md5sum
