@@ -19,10 +19,10 @@
         <input type="checkbox" name="overlay:list"
                tal:attributes="value item/id; checked item/checked" />
         <span tal:content="item/title">Title</span>
-        <a class="go" tal:attributes="href item/calendar/@@absolute_url"
-        ><img alt="go" title="View only this calendar"
-              tal:attributes="src context/++resource++next.png" /></a>
       </label>
+      <a class="go" tal:attributes="href item/calendar/@@absolute_url"
+      ><img alt="go" title="View only this calendar"
+            tal:attributes="src context/++resource++next.png" /></a>
     </div>
 
     <div class="controls">
