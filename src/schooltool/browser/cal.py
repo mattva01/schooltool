@@ -1102,10 +1102,6 @@ class CalendarEventView(View):
     def _params(self):
         """Prepare query arguments for editLink and deleteLink."""
         event_id = self.context.unique_id
-        # XXX does not work until IExpandedCalendarEvent is refactored
-        #     so that IExpandedCalendarEvent.unique_id is the UID of the
-        #     "generator" event (currently unique_id is random and original
-        #     is the UID of the "generator" event).
         date = self.date.strftime('%Y-%m-%d')
         return 'date=%s&event_id=%s' % (date, urllib.quote(event_id))
 
