@@ -597,3 +597,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPersistentKeysSetWithNames))
     suite.addTest(unittest.makeSuite(TestPersistentPairKeysDictWithNames))
     return suite
+
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')

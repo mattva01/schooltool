@@ -747,3 +747,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestVEvent))
     suite.addTest(unittest.makeSuite(TestICalReader))
     return suite
+
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')

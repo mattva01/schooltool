@@ -1333,3 +1333,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestWeekSpan))
     suite.addTest(unittest.makeSuite(TestMonthIndex))
     return suite
+
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')

@@ -1667,3 +1667,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimePeriodService))
     suite.addTest(unittest.makeSuite(TestGetPeriodsForDay))
     return suite
+
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')
