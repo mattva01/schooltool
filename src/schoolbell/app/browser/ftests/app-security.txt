@@ -232,13 +232,14 @@ The user can edit his own info:
     ... 
     ... field.title=Toad&\
     ... field.photo=&\
-    ... field.password=&\
-    ... field.verify_password=&\
-    ... UPDATE_SUBMIT=Add
-    ... """)
+    ... field.new_password=newpwd&\
+    ... field.verify_password=newpwd&\
+    ... UPDATE_SUBMIT=Add""", handle_errors=False)
     HTTP/1.1 200 Ok
     ...
     ...Toad...
+    ...
+    ...Password was successfully changed!...
     ...
 
 But we can revoke that permission from him:
@@ -266,14 +267,14 @@ Now he can't edit the info:
 
     >>> print http("""
     ... POST /frogpond/persons/frog/edit.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
+    ... Authorization: Basic frog:newpwd
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... field.title=Mr.+Toad&\
     ... field.photo=&\
     ... field.clear_photo.used=&\
-    ... field.password=&\
-    ... field.verify_password=&\
+    ... field.new_password=whatever&\
+    ... field.verify_password=whatever&\
     ... UPDATE_SUBMIT=Add
     ... """)
     HTTP/1.1 303 See Other
@@ -285,7 +286,7 @@ The same goes for the groups and resources edit forms.  Not allowed:
 
     >>> print http("""
     ... POST /frogpond/groups/venerable-frogs/edit.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
+    ... Authorization: Basic frog:newpwd
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... field.title=Venerables&\
@@ -299,7 +300,7 @@ The same goes for the groups and resources edit forms.  Not allowed:
 
     >>> print http("""
     ... POST /frogpond/resources/mud/edit.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
+    ... Authorization: Basic frog:newpwd
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... field.title=Silt&\
@@ -332,7 +333,7 @@ Lo and behold:
 
     >>> print http("""
     ... POST /frogpond/groups/venerable-frogs/edit.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
+    ... Authorization: Basic frog:newpwd
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... field.title=Venerables&\
@@ -348,7 +349,7 @@ Lo and behold:
 
     >>> print http("""
     ... POST /frogpond/resources/mud/edit.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
+    ... Authorization: Basic frog:newpwd
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... field.title=Silt&\
@@ -370,7 +371,7 @@ permission on those groups.
 
     >>> print http("""
     ... POST /frogpond/groups/venerable-frogs/members_persons.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
+    ... Authorization: Basic frog:newpwd
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... group.venerable-frogs=checked&\
@@ -401,7 +402,7 @@ Now, the group join must succeed.
 
     >> print http("""
     ... POST /frogpond/groups/venerable-frogs/members_persons.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
+    ... Authorization: Basic frog:newpwd
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... group.venerable-frogs=checked&\

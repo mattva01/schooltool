@@ -266,7 +266,6 @@ class PersonEditView(BrowserView):
                     self.error = _("Passwords do not match.")
                     return
 
-                # XXX When we have security in place, this place needs an audit
                 self.context.setPassword(data['new_password'])
                 self.message = _("Password was successfully changed!")
 
