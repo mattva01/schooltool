@@ -413,7 +413,7 @@ class SchoolToolClient:
                 if presence not in ('present', 'absent'):
                     raise SchoolToolError("Unrecognized presence value: %s"
                                           % presence)
-                persons.append((title, href, presence))
+                persons.append(RollCallEntry(title, href, presence == 'present'))
             return persons
         finally:
             doc.freeDoc()
@@ -597,6 +597,30 @@ class GroupInfo:
 
     def __init__(self, members):
         self.members = members
+
+
+class RollCallEntry:
+    """Information about a person participating in a roll call"""
+
+    person_title = None         # Person (title)
+    person_href = None          # Person (href)
+    present = None              # Is the person present?
+
+    def __init__(self, title, href, present):
+        self.person_title = title
+        self.person_href = href
+        self.present = present
+
+    def __cmp__(self, other):
+        if not isinstance(other, RollCallEntry):
+            raise NotImplementedError("cannot compare %r with %r"
+                                      % (self, other))
+        return cmp((self.person_title, self.person_href, self.present),
+                   (other.person_title, other.person_href, other.present))
+
+    def __repr__(self):
+        return "%s(%r, %r, %r)" % (self.__class__.__name__, self.person_title,
+                                   self.person_href, self.present)
 
 
 class AbsenceInfo:

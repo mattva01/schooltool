@@ -358,17 +358,19 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                           group_id)
 
     def test_getRollCall(self):
+        from schooltool.guiclient import RollCallEntry
         body = dedent("""
             <rollcall xmlns:xlink="http://www.w3.org/1999/xlink">
               <person xlink:href="/persons/p1" xlink:title="person 1"
                       presence="present" />
             </rollcall>
         """)
-        expected = [('person 1', '/persons/p1', 'present')]
+        expected = [RollCallEntry('person 1', '/persons/p1', True)]
         client = self.newClient(ResponseStub(200, 'OK', body))
         group_id = '/groups/group1'
-        result = client.getRollCall(group_id)
-        self.assertEquals(list(result), expected)
+        results = client.getRollCall(group_id)
+        self.assertEquals(results, expected, "\n" +
+                          diff(pformat(expected), pformat(results)))
         self.checkConnPath(client, '%s/rollcall' % group_id)
 
     def test_getRollCall_with_errors(self):
@@ -650,7 +652,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(SchoolToolError, client._parseRelationships, body)
 
     def test__parseRollCall(self):
-        from schooltool.guiclient import SchoolToolClient, SchoolToolError
+        from schooltool.guiclient import SchoolToolClient, RollCallEntry
         body = dedent("""
             <rollcall xmlns:xlink="http://www.w3.org/1999/xlink">
               <person xlink:href="/persons/p1" xlink:title="person 1"
@@ -663,12 +665,13 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                       presence="absent" />
             </rollcall>
         """)
-        expected = [('person 1', '/persons/p1', 'present'),
-                    ('p2',       '/persons/p2', 'absent'),
-                    ('p4',       '/persons/p4', 'absent')]
+        expected = [RollCallEntry('person 1', '/persons/p1', True),
+                    RollCallEntry('p2',       '/persons/p2', False),
+                    RollCallEntry('p4',       '/persons/p4', False)]
         client = SchoolToolClient()
-        result = client._parseRollCall(body)
-        self.assertEquals(result, expected)
+        results = client._parseRollCall(body)
+        self.assertEquals(results, expected, "\n" +
+                          diff(pformat(expected), pformat(results)))
 
     def test__parseRollCall_errors(self):
         from schooltool.guiclient import SchoolToolClient, SchoolToolError
@@ -976,6 +979,26 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
 
 
+class TestRollCallEntry(unittest.TestCase):
+
+    def test_cmp(self):
+        from schooltool.guiclient import RollCallEntry
+        nargs = 3 # number of constructor arguments
+        ai = RollCallEntry(*range(nargs))
+        self.assertEquals(ai, ai)
+        for i in range(nargs):
+            args = range(nargs)
+            args[i] = -1
+            self.assertNotEquals(ai, RollCallEntry(*args))
+
+        a1 = RollCallEntry(*([1] * nargs))
+        a2 = RollCallEntry(*([2] * nargs))
+        self.assert_(a1 < a2)
+        a1.person_title = 2
+        a2.person_title = 1
+        self.assert_(a1 > a2)
+
+
 class TestAbsenceInfo(unittest.TestCase):
 
     def test_cmp(self):
@@ -1062,6 +1085,7 @@ class TestAbsenceInfo(unittest.TestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSchoolToolClient))
+    suite.addTest(unittest.makeSuite(TestRollCallEntry))
     suite.addTest(unittest.makeSuite(TestAbsenceInfo))
     return suite
 

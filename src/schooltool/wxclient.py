@@ -138,15 +138,13 @@ class RollCallDlg(wxDialog):
         scrolled_panel = wxScrolledPanel(self, -1)
         grid = wxFlexGridSizer(len(rollcall), 5, 4, 8)
         self.items = []
-        for title, href, presence in rollcall:
-            if presence == 'present':
-                was_absent = False
+        for entry in rollcall:
+            grid.Add(wxStaticText(scrolled_panel, -1, entry.person_title),
+                     0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4)
+            if entry.present:
                 presence = ""
             else:
-                was_absent = True
-                presence = 'reported\n%s' % presence
-            grid.Add(wxStaticText(scrolled_panel, -1, title),
-                     0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4)
+                presence = "reported\nabsent"
             grid.Add(wxStaticText(scrolled_panel, -1, presence),
                      0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4)
             radio_sizer = wxBoxSizer(wxVERTICAL)
@@ -155,7 +153,7 @@ class RollCallDlg(wxDialog):
             unknown_btn.Hide()
             present_btn = wxRadioButton(scrolled_panel, -1, "Present")
             absent_btn = wxRadioButton(scrolled_panel, -1, "Absent")
-            if was_absent:
+            if not entry.present:
                 EVT_RADIOBUTTON(self, absent_btn.GetId(),
                                 self.OnPresenceChanged)
                 EVT_RADIOBUTTON(self, present_btn.GetId(),
@@ -177,8 +175,9 @@ class RollCallDlg(wxDialog):
             radio_sizer.Add(resolve_btn)
             radio_sizer.Add(dont_resolve_btn)
             grid.Add(radio_sizer)
-            self.items.append((href, was_absent, absent_btn, present_btn,
-                               text_ctrl, resolve_btn, dont_resolve_btn))
+            self.items.append((entry.person_href, not entry.present,
+                               absent_btn, present_btn, text_ctrl,
+                               resolve_btn, dont_resolve_btn))
         scrolled_panel.SetSizer(grid)
         scrolled_panel.SetupScrolling(scroll_x=False)
         grid.AddGrowableCol(3)
