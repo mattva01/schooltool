@@ -504,7 +504,7 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 class TestWeekSpan(unittest.TestCase):
 
     def test_weekspan(self):
-        from schooltool.cal import weekspan
+        from schoolbell.calendar.recurrent import weekspan
 
         # The days are in the same week
         self.assertEqual(weekspan(date(2004, 10, 11), date(2004, 10, 17)), 0)
@@ -526,7 +526,7 @@ class TestWeekSpan(unittest.TestCase):
 class TestMonthIndex(unittest.TestCase):
 
     def test_monthindex(self):
-        from schooltool.cal import monthindex
+        from schoolbell.calendar.recurrent import monthindex
         # First Friday of October 2004
         self.assertEqual(monthindex(2004, 10, 1, 4), date(2004, 10, 1))
         self.assertEqual(monthindex(2004, 10, 1, 3), date(2004, 10, 7))
