@@ -1004,14 +1004,14 @@ class CalendarEvent(Persistent):
         return CalendarEvent(dtstart, duration, title, owner, context,
                              location, unique_id)
 
-    def __tuple_for_comparison(self):
+    def __tupleForComparison(self):
         return (self.dtstart, self.title, self.duration, self.owner,
                 self.context, self.location, self.unique_id)
 
     def __eq__(self, other):
         if not isinstance(other, CalendarEvent):
             return False
-        return self.__tuple_for_comparison() == other.__tuple_for_comparison()
+        return self.__tupleForComparison() == other.__tupleForComparison()
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -1019,22 +1019,22 @@ class CalendarEvent(Persistent):
     def __lt__(self, other):
         if not isinstance(other, CalendarEvent):
             raise TypeError('Cannot compare CalendarEvent with %r' % other)
-        return self.__tuple_for_comparison() < other.__tuple_for_comparison()
+        return self.__tupleForComparison() < other.__tupleForComparison()
 
     def __le__(self, other):
         if not isinstance(other, CalendarEvent):
             raise TypeError('Cannot compare CalendarEvent with %r' % other)
-        return self.__tuple_for_comparison() <= other.__tuple_for_comparison()
+        return self.__tupleForComparison() <= other.__tupleForComparison()
 
     def __gt__(self, other):
         if not isinstance(other, CalendarEvent):
             raise TypeError('Cannot compare CalendarEvent with %r' % other)
-        return self.__tuple_for_comparison() > other.__tuple_for_comparison()
+        return self.__tupleForComparison() > other.__tupleForComparison()
 
     def __ge__(self, other):
         if not isinstance(other, CalendarEvent):
             raise TypeError('Cannot compare CalendarEvent with %r' % other)
-        return self.__tuple_for_comparison() >= other.__tuple_for_comparison()
+        return self.__tupleForComparison() >= other.__tupleForComparison()
 
     def __hash__(self):
         # Technically speaking,
@@ -1106,13 +1106,13 @@ class RecurrenceRule:
             exceptions = tuple(self.exceptions)
         return self.__class__(interval, count, until, exceptions)
 
-    def _tupleForHash(self):
+    def _tupleForComparison(self):
         return (self.__class__.__name__, self.interval, self.count,
                 self.until, tuple(self.exceptions))
 
     def __eq__(self, other):
         """See if self == other."""
-        return hash(self) == hash(other)
+        return self._tupleForComparison() == other._tupleForComparison()
 
     def __ne__(self, other):
         """See if self != other."""
@@ -1124,7 +1124,7 @@ class RecurrenceRule:
         It is guaranteed that if recurrence rules compare equal, hash will
         return the same value.
         """
-        return hash(self._tupleForHash())
+        return hash(self._tupleForComparison())
 
 
 class DailyRecurrenceRule(RecurrenceRule):
@@ -1178,7 +1178,7 @@ class WeeklyRecurrenceRule(RecurrenceRule):
             weekdays = self.weekdays
         return self.__class__(interval, count, until, exceptions, weekdays)
 
-    def _tupleForHash(self):
+    def _tupleForComparison(self):
         return (self.__class__.__name__, self.interval, self.count,
                 self.until, self.exceptions, self.weekdays)
 
@@ -1220,6 +1220,6 @@ class MonthlyRecurrenceRule(RecurrenceRule):
             monthly = self.monthly
         return self.__class__(interval, count, until, exceptions, monthly)
 
-    def _tupleForHash(self):
+    def _tupleForComparison(self):
         return (self.__class__.__name__, self.interval, self.count,
                 self.until, self.exceptions, self.monthly)
