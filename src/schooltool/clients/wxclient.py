@@ -1726,18 +1726,15 @@ class AppLogFrame(wxDialog):
         size = page_ctrl.GetSize()
         size.width /= 2
         page_ctrl.SetSize(size)
-        sep_label = wxStaticText(self, -1, _("of"))
-        total_pages_ctrl = wxTextCtrl(self, -1, "99", # XXX
-                                      style=wxTE_READONLY|wxTE_CENTER)
-        total_pages_ctrl.SetSize(size)
+        total_label = self.total_label = wxStaticText(self, -1, _("of ????"))
+
         next_btn = wxButton(self, -1, _("&Next"))
         EVT_BUTTON(self, next_btn.GetId(), self.OnNext)
         close_btn = wxButton(self, wxID_CLOSE, _("Close"))
         EVT_BUTTON(self, wxID_CLOSE, self.OnClose)
         button_bar.Add(prev_btn)
         button_bar.Add(page_ctrl, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 16)
-        button_bar.Add(sep_label, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 8)
-        button_bar.Add(total_pages_ctrl, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 8)
+        button_bar.Add(total_label, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 8)
         button_bar.Add(next_btn, 0, wxLEFT, 16)
         button_bar.Add(wxPanel(self, -1), 1, wxEXPAND)
         button_bar.Add(close_btn, 0, wxLEFT, 16)
@@ -1750,7 +1747,7 @@ class AppLogFrame(wxDialog):
         self.Layout()
         self.CenterOnScreen(wxBOTH)
 
-        # TODO: Get the number of pages.
+        self.setTotalPages(321) # XXX
         self.OnFilter()
 
     def OnClose(self, event=None):
@@ -1780,6 +1777,10 @@ class AppLogFrame(wxDialog):
         except SchoolToolError, e:
             raise # XXX What do I do, what do I do?  We might want a statusbar.
         self.text_ctrl.SetValue(to_wx(log_data))
+
+    def setTotalPages(self, total_pages):
+        text = _("of %d") % total_pages
+        self.total_label.SetLabel(text)
 
 
 #
