@@ -958,7 +958,7 @@ class CalendarEventView(View):
     def cssClass(self):
         """Choose a CSS class for the event."""
         if ITimetableCalendarEvent.providedBy(self.context):
-            return 'ro_event' # TODO: rename
+            return 'tt_event'
         else:
             return 'event'
 

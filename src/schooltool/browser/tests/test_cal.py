@@ -1225,7 +1225,7 @@ class TestCalendarEventView(TraversalTestMixin, unittest.TestCase):
         self.assertEquals(content, expected,
                           "\n" + diff(content, expected))
 
-        self.assertEquals(view.cssClass(), 'ro_event')
+        self.assertEquals(view.cssClass(), 'tt_event')
 
     def test_location(self):
         from schooltool.cal import CalendarEvent
