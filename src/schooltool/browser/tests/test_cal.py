@@ -976,18 +976,20 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
     def test_getWeekDay(self):
         view = self.createView()
         self.assertEquals(view.getWeekDay(), "same weekday")
-        view.date_widget.value = date(2004, 10, 1)
-        self.assertEquals(view.getWeekDay(), "1st Friday")
-        view.date_widget.value = date(2004, 10, 13)
-        self.assertEquals(view.getWeekDay(), "2nd Wednesday")
-        view.date_widget.value = date(2004, 10, 16)
-        self.assertEquals(view.getWeekDay(), "3rd Saturday")
-        view.date_widget.value = date(2004, 10, 26)
-        self.assertEquals(view.getWeekDay(), "4th Tuesday")
-        view.date_widget.value = date(2004, 10, 31)
-        self.assertEquals(view.getWeekDay(), "5th Sunday")
 
-    def test_getWeekDay(self):
+        def test_date(dt, expected):
+            view.date_widget.value = dt
+            self.assertEquals(view.getWeekDay(), expected)
+
+        test_date(date(2004, 10, 1), "1st Friday")
+        test_date(date(2004, 10, 13), "2nd Wednesday")
+        test_date(date(2004, 10, 16), "3rd Saturday")
+        test_date(date(2004, 10, 26), "4th Tuesday")
+        test_date(date(2004, 10, 28), "4th Thursday")
+        test_date(date(2004, 10, 29), "5th Friday")
+        test_date(date(2004, 10, 31), "5th Sunday")
+
+    def test_getLastWeekDay(self):
         view = self.createView()
         self.assertEquals(view.getLastWeekDay(), "last weekday")
         view.date_widget.value = date(2004, 10, 24)
