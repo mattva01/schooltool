@@ -266,7 +266,6 @@ class TestAvailabilityQueryView(unittest.TestCase, XMLCompareMixin,
         addEvent(self.room1.calendar, 2, 11, 45, "English")
         addEvent(self.room2.calendar, 3, 12, 240, "Conference")
 
-
     def test_parseHours(self):
         from datetime import time, timedelta
         cases = [
@@ -366,7 +365,6 @@ class TestAvailabilityQueryView(unittest.TestCase, XMLCompareMixin,
             result = self.view.render(request)
             self.assertEquals(request.code, 400)
             self.assertEquals(result, error)
-
 
 
 def test_suite():

@@ -225,6 +225,7 @@ class AvailabilityQueryView(View):
                          'duration': mins})
         return results
 
+
 def setUp():
     """See IModuleSetup."""
     registerView(IApplication, ApplicationView)
