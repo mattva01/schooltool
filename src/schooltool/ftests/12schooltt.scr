@@ -3,6 +3,8 @@ Preconditions: /ttschemas/weekly and /time-periods/2003-fall exist.
                /persons/Mark and /persons/Steve are teachers
 Postconditions:
 
+SchoolTool> links off
+
 SchoolTool> get /schooltt/2003-fall/wekly
 404 Not Found
 Content-Type: text/html; charset=UTF-8
@@ -457,7 +459,9 @@ PUT>     <day id="Friday">
 PUT>       <period id="0">
 PUT>       </period>
 PUT>       <period id="1">
-PUT>         <activity group="/groups/students" title="Assembly"/>
+PUT>         <activity group="/groups/students" title="Assembly">
+PUT>           <resource xlink:type="simple" xlink:href="/resources/hall"/>
+PUT>         </activity>
 PUT>       </period>
 PUT>       <period id="2">
 PUT>       </period>
@@ -694,7 +698,10 @@ Content-Type: text/xml; charset=UTF-8
       <period id="0">
       </period>
       <period id="1">
-        <activity group="/groups/students" title="Assembly"/>
+        <activity group="/groups/students" title="Assembly">
+          <resource xlink:href="/resources/hall" xlink:title="Hall"
+                    xlink:type="simple"/>
+        </activity>
       </period>
       <period id="2">
       </period>

@@ -24,8 +24,9 @@ $Id: test_views.py 397 2003-11-21 11:38:01Z mg $
 
 import unittest
 from schooltool.tests.utils import RegistriesSetupMixin
-from schooltool.tests.utils import XMLCompareMixin
+from schooltool.tests.utils import XMLCompareMixin, EqualsSortedMixin
 from schooltool.views.tests import RequestStub, UtilityStub, XPathTestContext
+
 
 __metaclass__ = type
 
@@ -113,6 +114,7 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def test__traverse(self):
         from schooltool.views.app import ApplicationObjectContainerView
+        from schooltool.views.app import AvailabilityQueryView
         from schooltool.views.utility import UtilityServiceView
         from schooltool.views.timetable import SchoolTimetableTraverseView
         from schooltool.views.cal import AllCalendarsView
@@ -130,6 +132,10 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
         view = self.view._traverse('calendars.html', request)
         self.assert_(view.__class__ is AllCalendarsView)
+        self.assert_(view.context is self.view.context)
+
+        view = self.view._traverse('busysearch', request)
+        self.assert_(view.__class__ is AvailabilityQueryView)
         self.assert_(view.context is self.view.context)
 
 
@@ -229,10 +235,145 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(view.name, 'newchild')
 
 
+class TestAvailabilityQueryView(unittest.TestCase, XMLCompareMixin,
+                                EqualsSortedMixin):
+
+    def setUp(self):
+        from schooltool.views.app import AvailabilityQueryView
+        from schooltool.model import Resource, Person
+        from schooltool.app import Application, ApplicationObjectContainer
+        self.app = Application()
+        self.app['resources'] = ApplicationObjectContainer(Resource)
+        self.room1 = self.app['resources'].new('room1', title='Room 1')
+        self.room2 = self.app['resources'].new('room2', title='Room 2')
+        self.room3 = self.app['resources'].new('room3', title='Room 3')
+
+        self.app['persons'] = ApplicationObjectContainer(Person)
+        self.person = self.app['persons'].new('albert', title='Albert')
+
+        self.view = AvailabilityQueryView(self.app)
+
+        def addEvent(cal, day, hr, dur, title):
+            """A helper to avoid verbiage involved in adding events to
+            a calendar.
+            """
+            from schooltool.cal import CalendarEvent
+            from datetime import datetime, timedelta
+            ev = CalendarEvent(datetime(2004, 1, day, hr, 0),
+                               timedelta(minutes=dur), title)
+            cal.addEvent(ev)
+
+        addEvent(self.room1.calendar, 2, 11, 45, "English")
+        addEvent(self.room2.calendar, 3, 12, 240, "Conference")
+
+
+    def test_parseHours(self):
+        from datetime import time, timedelta
+        cases = [
+            (range(24), [(time(0,0), timedelta(hours=24))]),
+
+            (['11', '12'], [(time(11,0), timedelta(hours=2))]),
+
+            (['0', '1', '6', '22', '23'], [(time(0,0), timedelta(hours=2)),
+                                           (time(6,0), timedelta(hours=1)),
+                                           (time(22,0), timedelta(hours=2))]),
+            ]
+        for hours, expected in cases:
+            periods = self.view.parseHours(hours)
+            self.assertEquals(periods, expected)
+
+    def test_args(self):
+        from datetime import date, time, timedelta
+        expected = """
+            <availability>
+              <resource path="/resources/room1">
+                <slot duration="135" start="2004-01-02 11:45:00"/>
+                <slot duration="180" start="2004-01-03 11:00:00"/>
+              </resource>
+              <resource path="/resources/room2">
+                <slot duration="180" start="2004-01-02 11:00:00"/>
+                <slot duration="60" start="2004-01-03 11:00:00"/>
+              </resource>
+            </availability>
+            """
+        request = RequestStub('/availability', method="GET")
+        request.args.update({'first': ['2004-01-02'],
+                             'last': ['2004-01-03'],
+                             'duration': ['22'],
+                             'hours': ['12', '11', '13'],
+                             'resources': ['/resources/room1',
+                                           '/resources/room2',]})
+        result = self.view.render(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(self.view.first, date(2004, 1, 2))
+        self.assertEquals(self.view.last, date(2004, 1, 3))
+        self.assertEquals(self.view.duration, timedelta(minutes=22))
+        self.assertEquals(self.view.hours, [(time(11, 0), timedelta(hours=3))])
+        self.assertEquals(self.view.resources,
+                          [self.room1, self.room2])
+        self.assertEqualsXML(result, expected)
+
+    def testResourceArg(self):
+        request = RequestStub('/availability', method="GET")
+        request.args.update({'first': ['2004-01-02'],
+                             'last': ['2004-01-03'],
+                             'duration': ['22'],
+                             'hours': ['12', '11', '13']})
+        result = self.view.render(request)
+        self.assertEqualsSorted(self.view.resources,
+                                [self.room1, self.room2, self.room3])
+
+    def testErrors(self):
+        request = RequestStub('/availability', method="GET")
+        result = self.view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(result, "'first' argument must be provided")
+
+        request.args['first'] = ['2004-01-01']
+        result = self.view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(result, "'last' argument must be provided")
+
+        request.args['last'] = ['2004-01-01']
+        result = self.view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(result, "'duration' argument must be provided")
+
+        for arg, badvalue in [('first', ['2004-01-aa']),
+                              ('last', ['2004-01-aa']),
+                              ('duration', ['aa']),
+                              ('hours', [ 'hm']),]:
+            request.args['duration'] = ['90']
+            request.args['first'] = ['2004-01-01']
+            request.args['last'] = ['2004-01-01']
+
+            request.args[arg] = badvalue
+            result = self.view.render(request)
+            self.assertEquals(request.code, 400)
+            self.assertEquals(result, "'%s' argument is invalid" % arg)
+
+        del request.args['hours']
+        for value, error in [(['/persons/albert'],
+                              "'/persons/albert' is not a resource"),
+                             (['/resources/foo'],
+                              "Invalid resource: '/resources/foo'"),
+                             (['foo'], "Invalid resource: 'foo'")]:
+            request.args['duration'] = ['90']
+            request.args['first'] = ['2004-01-01']
+            request.args['last'] = ['2004-01-01']
+
+            request.args['resources'] = value
+            result = self.view.render(request)
+            self.assertEquals(request.code, 400)
+            self.assertEquals(result, error)
+
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAppView))
     suite.addTest(unittest.makeSuite(TestAppObjContainerView))
+    suite.addTest(unittest.makeSuite(TestAvailabilityQueryView))
     return suite
 
 if __name__ == '__main__':

@@ -60,6 +60,34 @@ class TestHelpers(unittest.TestCase):
             else:
                 self.fail("parse_datetime(%r) did not raise" % s)
 
+    def test_parse_date(self):
+        from schooltool.common import parse_date
+        d = datetime.date
+        valid_dates = (
+            ("2000-01-01", d(2000, 1, 1)),
+            ("2005-12-23", d(2005, 12, 23)),
+        )
+        for s, d in valid_dates:
+            result = parse_date(s)
+            self.assertEquals(result, d,
+                              "parse_date(%r) returned %r" % (s, result))
+        invalid_dates = (
+            "urk",
+            "20000101",
+            "2000-01",
+            "2000-01-aa",
+            "2000/01/01",
+            "2100-02-29",
+            "2005-13-23",
+        )
+        for s in invalid_dates:
+            try:
+                result = parse_date(s)
+            except ValueError:
+                pass
+            else:
+                self.fail("parse_date(%r) did not raise" % s)
+
 
 def test_suite():
     suite = unittest.TestSuite()

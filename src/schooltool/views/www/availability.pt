@@ -1,0 +1,8 @@
+<availability xmlns:tal="http://xml.zope.org/namespaces/tal">
+   <resource tal:repeat="res view/listResources"
+             tal:attributes="path res/path">
+     <slot  tal:repeat="slot res/slots"
+            tal:attributes="start    slot/start;
+			    duration slot/duration"/>
+   </resource>
+</availability>

@@ -22,14 +22,16 @@ The views for the schooltool.app objects.
 $Id$
 """
 
+import datetime
 from zope.interface import moduleProvides
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
-from schooltool.interfaces import IModuleSetup
-from schooltool.component import getPath
+from schooltool.interfaces import IModuleSetup, IResource
+from schooltool.component import getPath, traverse
 from schooltool.component import registerView
+from schooltool.common import parse_date
 from schooltool.views import View, Template
 from schooltool.views import TraversableView, XMLPseudoParser
-from schooltool.views import absoluteURL, notFoundPage
+from schooltool.views import absoluteURL, notFoundPage, textErrorPage
 from schooltool.views.timetable import SchoolTimetableTraverseView
 from schooltool.views.cal import AllCalendarsView
 
@@ -49,6 +51,8 @@ class ApplicationView(TraversableView):
             return SchoolTimetableTraverseView(self.context)
         elif name == 'calendars.html':
             return AllCalendarsView(self.context)
+        elif name == 'busysearch':
+            return AvailabilityQueryView(self.context)
         else:
             return TraversableView._traverse(self, name, request)
 
@@ -125,6 +129,101 @@ class ApplicationObjectCreatorView(View, ApplicationObjectCreator):
     def do_PUT(self, request):
         return self.create(request, self.context, self.name)
 
+
+class AvailabilityQueryView(View):
+
+    template = Template("www/availability.pt", content_type="text/xml")
+
+    def do_GET(self, request):
+        """Parse the query and call the template rengering.
+
+        Required arguments in the request query string:
+
+            ======== ============  ===========
+            Name     Type          Cardinality
+            ======== ============  ===========
+            first    'YYYY-MM-DD'  1
+            last     'YYYY-MM-DD'  1
+            duration int           1
+            ======== ============  ===========
+
+        Optional arguments (if not passed, 'all' assumed):
+
+            ========= ==========  ===========
+            Name      Type        Cardinality
+            ========= ==========  ===========
+            hours     int (0..23) many
+            resources str         many
+            ========= ==========  ===========
+
+        """
+        for arg in 'first', 'last', 'duration':
+            if arg not in request.args:
+                return textErrorPage(request,
+                                     "%r argument must be provided" % arg)
+        try:
+            arg = 'first'
+            self.first = parse_date(request.args['first'][0])
+            arg = 'last'
+            self.last = parse_date(request.args['last'][0])
+            arg = 'duration'
+            minutes = int(request.args['duration'][0])
+            self.duration = datetime.timedelta(minutes=minutes)
+            arg = 'hours'
+            if 'hours' not in request.args:
+                request.args['hours'] = range(24)
+            self.hours = self.parseHours(request.args['hours'])
+        except ValueError:
+            return textErrorPage(request,
+                                 "%r argument is invalid" % arg)
+        self.resources = []
+        if 'resources' not in request.args:
+            resource_container = traverse(self.context, 'resources')
+            request.args['resources'] = [getPath(obj) for obj in
+                                         resource_container.itervalues()]
+        for path in request.args['resources']:
+            try:
+                resource = traverse(self.context, path)
+            except KeyError:
+                return textErrorPage(request, "Invalid resource: %r" % path)
+            if not IResource.isImplementedBy(resource):
+                return textErrorPage(request, "%r is not a resource" % path)
+            self.resources.append(resource)
+        return View.do_GET(self, request)
+
+    def parseHours(self, hours):
+        hrs = map(int, hours)
+        start = None
+        results = []
+        for hour in range(24):
+            if hour in hrs:
+                if start is None:
+                    start = hour
+            else:
+                if start is not None:
+                    results.append((datetime.time(start, 0),
+                                    datetime.timedelta(hours=hour-start)))
+                    start = None
+        if start is not None:
+            results.append((datetime.time(start, 0),
+                            datetime.timedelta(hours=24-start)))
+        return results
+
+    def listResources(self):
+        """The logic for the template"""
+        results = []
+        for resource in self.resources:
+            slots = resource.getFreeIntervals(self.first, self.last,
+                                              self.hours, self.duration)
+            if slots:
+                res_dict = {'path': getPath(resource), 'slots': []}
+                results.append(res_dict)
+                for start, duration in slots:
+                    mins = duration.days * 60 * 24 + duration.seconds / 60
+                    res_dict['slots'].append(
+                        {'start': start.strftime("%Y-%m-%d %H:%M:%S"),
+                         'duration': mins})
+        return results
 
 def setUp():
     """See IModuleSetup."""

@@ -40,6 +40,7 @@ class RequestStub:
         self.path = ''
         self.content = StringIO(body)
         self.headers = {}
+        self.args = {}
         if body:
             self.request_headers = {'content-length': len(body)}
         else:

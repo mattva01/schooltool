@@ -1,0 +1,49 @@
+Search for resources
+
+SchoolTool> get /busysearch
+400 Bad Request
+Content-Type: text/plain
+'first' argument must be provided
+
+SchoolTool> get /busysearch?first=2004-01-01&last=2004-01-01&duration=60
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<availability>
+   <resource path="/resources/room2">
+     <slot duration="1440" start="2004-01-01 00:00:00"/>
+   </resource>
+   <resource path="/resources/hall">
+     <slot duration="1440" start="2004-01-01 00:00:00"/>
+   </resource>
+   <resource path="/resources/room1">
+     <slot duration="1440" start="2004-01-01 00:00:00"/>
+   </resource>
+</availability>
+
+
+SchoolTool> get /busysearch?first=2003-10-17&last=2003-10-17&duration=180&hours=9&hours=10&hours=11&hours=12
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<availability>
+   <resource path="/resources/room2">
+     <slot duration="240" start="2003-10-17 09:00:00"/>
+   </resource>
+   <resource path="/resources/hall">
+     <slot duration="180" start="2003-10-17 10:00:00"/>
+   </resource>
+   <resource path="/resources/room1">
+     <slot duration="240" start="2003-10-17 09:00:00"/>
+   </resource>
+</availability>
+
+
+SchoolTool> get /busysearch?first=2003-10-17&last=2003-10-17&duration=180&hours=9&hours=10&hours=11&hours=12&resources=/resources/hall
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<availability>
+   <resource path="/resources/hall">
+     <slot duration="180" start="2003-10-17 10:00:00"/>
+   </resource>
+</availability>
+
+
