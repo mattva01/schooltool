@@ -6,13 +6,54 @@ SchoolTool - common information systems platform for school administration.
 Website: http://www.schooltool.org/
 
 
+Overview
+--------
+
+SchoolTool is a distributed client/server system.  Clients communicate with
+the server by using an HTTP based protocol adhering to the REST architectural
+style (see http://conveyor.com/RESTwiki/moin.cgi).
+
+
 System requirements
 -------------------
 
-- Python 2.3 (on Debian you need both python2.3 and python2.3-xml)
-- libxml2 Python bindings
-- Twisted 1.1.0 (www.twistedmatrix.com)
-- wxPython 2.4
+- Python 2.3 (www.python.org)
+  Note for Debian users: you need both python2.3 and python2.3-xml packages
+
+- libxml2 Python bindings (http://xmlsoft.org/)
+
+- Twisted 1.1.0 or newer (www.twistedmatrix.com)
+  It is needed for the server only
+
+- wxPython 2.4 (www.wxpython.org)
+  It is needed for the wxWindows client only
+
+- Development environment and a C compiler
+
+
+Building SchoolTool
+-------------------
+
+Run 'make' to build the necessary extension modules.
+
+It is a good idea to run 'make test' and 'make ftest' to check if all the 
+essential unit and functional tests pass.
+
+
+Running SchoolTool
+------------------
+
+The Makefile contains several useful shortcuts:
+
+  make sampleschool     generates and imports sample data into the server
+
+  make run              starts the SchoolTool server
+  make runtestserver    starts the SchoolTool server using test.conf as the
+                        configuration file (this is used for running automated
+                        functional tests)
+
+  make runclient        starts the command line client
+  make runwxclient      starts the wxWindows GUI client
 
 
 Project structure
@@ -24,20 +65,26 @@ Project structure
   Makefile              makefile for building extension modules
   setup.py              distutils setup script for building extension modules
   test.py               test runner
+  test.conf             configuration file used for functional tests
   schooltool.conf.in    sample configuration file
+  runimport.py          script for importing sample data
+  ttconfig.data         sample timetable configuration used by runimport.py
 
   build/                temporary files are placed here during build process
   coverage/             unit test coverage reports are placed here
   src/                  source code
-    schooltool/         Python module 'schooltool'
-      main.py           executable prototype
-      client.py         executable command line client
-      wxclient.py       executable wxWindows client prototype
+    schooltool/         Python package 'schooltool'
+      main.py           the SchoolTool server
       *.py              other modules (see docstrings)
       schema.xml        ZConfig schema definition for the configuration file
-      views/www/        page templates
-      ftests/           functional tests for the schooltool module
-      tests/            unit tests for the schooltool module
+      tests/            unit tests for the schooltool package
+      ftests/           functional tests for the schooltool package
+      views/            views for the server
+        www/            page templates
+        tests/          unit tests for the schooltool.views package
+      clients/          SchoolTool clients
+        client.py       executable command line client
+        wxclient.py     executable wxWindows client
     other subdirs       packages taken from other sources (Zope 3 source tree)
 
 
@@ -57,10 +104,14 @@ To run all unit tests, do
 
   python2.3 test.py -pv
 
-To run all functional tests, start the SchoolTool server on port 8080 and then
-do
+To run all functional tests, start the SchoolTool server using the test.conf
+configuration file (hint: make runtestserver) and then do
 
   python2.3 test.py -fpv
+
+Note that unlike unit tests functional tests do not run in isolation, and
+therefore you need to stop and restart the SchoolTool server if you want to
+run them again.
 
 The test runner has more options and features.  To find out about them, do
 
