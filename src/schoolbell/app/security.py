@@ -34,6 +34,7 @@ from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILoginPassword
 from zope.app.session.interfaces import ISession
+from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.component.servicenames import Utilities
 from zope.interface import implements, directlyProvides, directlyProvidedBy
 from zope.security.interfaces import IGroupAwarePrincipal
@@ -41,7 +42,7 @@ from zope.security.interfaces import IGroupAwarePrincipal
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellAuthentication
-from schoolbell.app.interfaces import IPerson
+from schoolbell.app.interfaces import IPerson, IGroup
 
 
 class Principal(Contained):
@@ -184,3 +185,26 @@ def authSetUpSubscriber(event):
     if IObjectAddedEvent.providedBy(event):
         if ISchoolBellApplication.providedBy(event.object):
             setUpLocalAuth(event.object)
+
+def personPermissionsSubscriber(event):
+    """Grant default permissions to all new persons"""
+    if IObjectAddedEvent.providedBy(event):
+        if IPerson.providedBy(event.object):
+            map = IPrincipalPermissionManager(event.object)
+            principalid = 'sb.person.' + event.object.__name__
+            map.grantPermissionToPrincipal('schoolbell.view', principalid)
+            map.grantPermissionToPrincipal('schoolbell.edit', principalid)
+            map.grantPermissionToPrincipal('schoolbell.addEvent', principalid)
+            map.grantPermissionToPrincipal('schoolbell.modifyEvent',
+                                           principalid)
+            map.grantPermissionToPrincipal('schoolbell.controlAccess',
+                                           principalid)
+
+
+def groupPermissionsSubscriber(event):
+    """Grant default permissions to all new groups"""
+    if IObjectAddedEvent.providedBy(event):
+        if IGroup.providedBy(event.object):
+            map = IPrincipalPermissionManager(event.object)
+            principalid = 'sb.group.' + event.object.__name__
+            map.grantPermissionToPrincipal('schoolbell.view', principalid)

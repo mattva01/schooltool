@@ -151,6 +151,16 @@
       handler=".security.authSetUpSubscriber"
       />
 
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".security.personPermissionsSubscriber"
+      />
+
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".security.groupPermissionsSubscriber"
+      />
+
 <!-- Utilities -->
 
   <localUtility class=".security.SchoolBellAuthenticationUtility">
