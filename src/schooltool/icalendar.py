@@ -643,8 +643,11 @@ class VEvent:
                                                 self.all_day_event)
 
         self.rrule = self.getOne('RRULE', None)
-        if self.rrule is not None and self.exdates is not None:
-            exceptions = [dt.date() for dt in self.exdates]
+        if self.rrule is not None and self.exdates:
+            if self._getType('EXDATE') == 'DATE-TIME':
+                exceptions = [dt.date() for dt in self.exdates]
+            else:
+                exceptions = self.exdates
             self.rrule = self.rrule.replace(exceptions=exceptions)
 
     def _extractListOfDates(self, key, accepted_types, all_day_event):

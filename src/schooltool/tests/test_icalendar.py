@@ -341,17 +341,25 @@ class TestVEvent(unittest.TestCase):
         vevent = VEvent()
         vevent.add('dtstart', '20010203T010203')
         vevent.add('uid', 'unique', {})
-        vevent.add('dtend', '20010203T010202')
-        self.assertRaises(ICalParseError, vevent.validate)
-
-        vevent = VEvent()
-        vevent.add('dtstart', '20010203T010203')
-        vevent.add('uid', 'unique', {})
         vevent.add('rdate', '20010205T040506')
         vevent.add('exdate', '20010206T040506')
         vevent.validate()
         self.assertEquals(vevent.rdates, [datetime(2001, 2, 5, 4, 5, 6)])
         self.assertEquals(vevent.exdates, [datetime(2001, 2, 6, 4, 5, 6)])
+
+        vevent = VEvent()
+        vevent.add('dtstart', '20010203T010203')
+        vevent.add('uid', 'unique', {})
+        vevent.add('exdate', '20010206,20020307', {'VALUE': 'DATE'})
+        vevent.add('rrule', 'FREQ=DAILY')
+        vevent.validate()
+        self.assertEquals(vevent.exdates, [date(2001, 2, 6), date(2002, 3, 7)])
+
+        vevent = VEvent()
+        vevent.add('dtstart', '20010203T010203')
+        vevent.add('uid', 'unique', {})
+        vevent.add('dtend', '20010203T010202')
+        self.assertRaises(ICalParseError, vevent.validate)
 
     def test_validate_location(self):
         from schooltool.icalendar import VEvent
@@ -391,7 +399,8 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.rrule.until, None)
         self.assertEquals(vevent.rrule.monthly, 'weekday')
         self.assertEquals(vevent.rrule.exceptions,
-                          (date(1996, 04, 02), date(1996, 04, 04)))
+                          (date(1996, 4, 2), date(1996, 4, 4)))
+        self.assert_(not isinstance(vevent.rrule.exceptions[0], datetime))
 
     def test_extractListOfDates(self):
         from schooltool.icalendar import VEvent, Period, ICalParseError
