@@ -39,7 +39,7 @@ import urllib
 import base64
 import cgi
 from schooltool.interfaces import ComponentLookupError
-from schooltool.uris import strURI, getURI, nameURI, isURI, registerURI
+from schooltool.uris import strURI, getURI, isURI, registerURI
 from schooltool.uris import ISpecificURI, URITeaching, URITaught
 from schooltool.common import parse_datetime, parse_date
 from schooltool.translation import gettext as _
