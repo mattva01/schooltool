@@ -159,7 +159,7 @@
     </fieldset>
     <!-- monthly box -->
     <fieldset id="monthly_box" class="">
-      <legend>Monthly</legend>
+      <legend i18n:translate="">Monthly</legend>
       <p id="monthly_par" i18n:translate="">
         This section only applies when the monthly recurrence is selected.
       </p>
