@@ -73,8 +73,9 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
         # The empty import should have created basic groups.
         self.assert_('teachers' in self.app['groups'].keys())
         teachers = self.app['groups']['teachers']
-        facet = FacetManager(teachers).facetByName('001') # XXX Why 001?
-        self.assert_(isinstance(facet, TeacherGroupFacet))
+        facets = list(FacetManager(teachers).iterFacets())
+        self.assertEquals(len(facets), 1)
+        self.assert_(isinstance(facets[0], TeacherGroupFacet))
         self.assertEquals(request.applog, [(None, u'CSV data imported', INFO)])
 
     def test_POST_groups(self):
@@ -133,7 +134,7 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
 
     def test_importGroup(self):
         from schooltool.component import FacetManager
-        from schooltool.teaching import TeacherGroupFacet
+        from schooltool.teaching import TeacherGroupFacet, SubjectGroupFacet
         self.im.importGroup('gr0wl', 'A tiny group', 'group1 group2',
                             'teacher_group subject_group')
         group = self.groups['gr0wl']
@@ -144,8 +145,11 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(self.group1 in objs)
         self.assert_(self.group2 in objs)
 
-        facet = FacetManager(group).facetByName('001') # XXX Why 001?
-        self.assert_(isinstance(facet, TeacherGroupFacet))
+        facets = list(FacetManager(group).iterFacets())
+        self.assertEquals(len(facets), 2)
+        classes = [facet.__class__ for facet in facets]
+        self.assert_(TeacherGroupFacet in classes)
+        self.assert_(SubjectGroupFacet in classes)
 
     def test_importPerson(self):
         name = self.im.importPerson('Smith', 'group1', 'group2', '')
