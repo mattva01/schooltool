@@ -40,12 +40,41 @@ $Id$
 
 __metaclass__ = type
 
-from zope.interface import Interface
+import datetime
+
+from zope.interface import Interface, implements
 from zope.interface.interfaces import IInterface
 from zope.schema import Field, Object, Int, TextLine, Text, List, Set, Tuple
 from zope.schema import Bool, Dict, Choice, Date, Datetime, Bytes, BytesLine
 from zope.schema import URI as URIField
+from zope.schema.interfaces import IField
 from schooltool.unchanged import Unchanged  # reexport from here
+
+
+#
+# Custom fields
+#
+
+class ITime(IField):
+    u"""Field containing time."""
+
+
+class Time(Field):
+    __doc__ = ITime.__doc__
+    _type = datetime.time
+
+    implements(ITime)
+
+
+class ITimeDelta(IField):
+    u"""Field containing a timedelta."""
+
+
+class Timedelta(Field):
+    __doc__ = ITimeDelta.__doc__
+    _type = datetime.timedelta
+
+    implements(ITimeDelta)
 
 
 #
@@ -1237,8 +1266,8 @@ class ICalendarEvent(Interface):
     dtstart = Datetime(
         title=u"The datetime.datetime of the start of the event.")
 
-    duration = Field( # XXX: type
-        title=u"The duration of the event (datetime.timedelta).")
+    duration = Timedelta(
+        title=u"The duration of the event.")
 
     title = TextLine(
         title=u"The title of the event.")
@@ -1882,11 +1911,11 @@ class ISchooldayPeriod(Interface):
     title = TextLine(
         title=u"Period id of this event")
 
-    tstart = Field(
-        title=u"datetime.time of the start of the event") # XXX type
+    tstart = Time(
+        title=u"Time of the start of the event")
 
-    duration = Field(
-        title=u"datetime.timedelta of the duration of the event") # XXX type
+    duration = Timedelta(
+        title=u"Timedelta of the duration of the event")
 
     def __eq__(other):
         """SchooldayPeriods are equal if all three of their
