@@ -36,8 +36,11 @@ Example:
 $Id$
 """
 
+import sha
+import time
 import random
 import datetime
+
 from schooltool.interfaces import AuthenticationError
 from schooltool.rest.auth import isManager
 from schooltool.rest.auth import PrivateAccess      # reexport
@@ -112,8 +115,7 @@ class TicketService:
         the username and password.  Do not put persistent objects into the
         ticket service.
         """
-        c = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-        ticket = ''.join([random.choice(c) for n in range(64)])
+        ticket = sha.new('%s-%s' % (random.random(), time.time())).hexdigest()
         if duration is None:
             expires = datetime.datetime.max
         else:
