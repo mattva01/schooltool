@@ -151,6 +151,8 @@ class SchooldayModelCalendarView(View):
             self.context.reset(first, last - datetime.date.resolution)
             for day in days:
                 self.context.add(day)
+        request.site.logAppEvent(request.authenticated_user,
+                                 "Imported calendar (text)")
         request.setHeader('Content-Type', 'text/plain')
         return _("Calendar imported")
 
@@ -194,6 +196,8 @@ class SchooldayModelCalendarView(View):
         for holiday in holidays:
             if holiday in self.context and self.context.isSchoolday(holiday):
                 self.context.remove(holiday)
+        request.site.logAppEvent(request.authenticated_user,
+                                 "Imported calendar (XML)")
         request.setHeader('Content-Type', 'text/plain')
         return _("Calendar imported")
 
@@ -304,6 +308,8 @@ class CalendarView(CalendarReadView):
             for event in events:
                 # newly added  events
                 self.context.addEvent(event)
+            request.site.logAppEvent(request.authenticated_user,
+                                     "Imported calendar (text)")
             request.setHeader('Content-Type', 'text/plain')
             return _("Calendar imported")
 
@@ -369,6 +375,9 @@ class BookingView(View):
             ev = CalendarEvent(start, duration, title, owner, self.context)
             self.context.calendar.addEvent(ev)
             owner.calendar.addEvent(ev)
+            request.site.logAppEvent(request.authenticated_user,
+                                     '%s booked by %s' % (self.context.title,
+                                                          owner.title))
             request.setHeader('Content-Type', 'text/plain')
             return _("OK")
         finally:

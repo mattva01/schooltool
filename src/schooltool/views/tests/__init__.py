@@ -30,6 +30,15 @@ from schooltool.interfaces import ILocation
 __metaclass__ = type
 
 
+class SiteStub:
+
+    def __init__(self):
+        self.applog = []
+
+    def logAppEvent(self, user, message, level='INFO'):
+        self.applog.append((user, message, level))
+
+
 class RequestStub:
 
     code = 200
@@ -43,6 +52,7 @@ class RequestStub:
         self.content = StringIO(body)
         self.authenticated_user = authenticated_user
         self.headers = {}
+        self.site = SiteStub()
         self.args = {}
         if body:
             self.request_headers = {'content-length': len(body)}
