@@ -30,7 +30,7 @@ from zope.app.traversing.interfaces import TraversalError
 from zope.app.traversing.api import traverse, getPath
 
 from schooltool.app import create_application
-from schooltool.uris import URIOccupies
+from schooltool.uris import URIOccupies, URIMembership, URIGroup
 from schooltool.browser import ToplevelBreadcrumbsMixin
 from schooltool.browser import ContainerBreadcrumbsMixin
 from schooltool.browser import View, Template, StaticFile
@@ -500,11 +500,8 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
         """Add user to groups."""
         if groups is not None:
             for group in groups:
-                # XXX This will not work for SchoolTool
-                # Look how 
-                # schooltool.browser.model.GroupEditView.createRelationship
-                # does it.
-                Membership(group=group, member=person)
+                val = group.getValencies()[URIMembership, URIGroup]
+                val.schema(group=group, member=person)
                 self.request.appLog(
                         _("Relationship 'Membership' between %s and %s created")
                         % (getPath(person), getPath(group)))
