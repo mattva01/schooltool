@@ -35,40 +35,15 @@ class EqualsSortedMixin:
         self.assertEquals(x, y)
 
 
-class TestPersistentListSet(unittest.TestCase):
-
-    def test(self):
-        from schooltool.db import PersistentListSet
-        p = PersistentListSet()
-        self.assertEqual(len(p), 0)
-        a, b = object(), object()
-        p.add(a)
-        self.assertEquals(list(p), [a])
-        self.assertEqual(len(p), 1)
-        p.add(a)
-        self.assertEquals(list(p), [a])
-        self.assertEqual(len(p), 1)
-        p.add(b)
-        self.assertEquals(list(p), [a, b])
-        self.assertEqual(len(p), 2)
-        p.remove(a)
-        self.assertEquals(list(p), [b])
-        self.assertEqual(len(p), 1)
-        p.add(a)
-        self.assertEquals(list(p), [b, a])
-        self.assertEqual(len(p), 2)
-
-        from transaction import get_transaction
-        get_transaction().commit()
-
-
 class P(Persistent):
     pass
+
 
 class FalseP(Persistent):
 
     def __nonzero__(self):
         return False
+
 
 class BaseTestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
 
@@ -193,10 +168,67 @@ class TestPersistentKeysSet(unittest.TestCase, EqualsSortedMixin):
         get_transaction().commit()
 
 
+class TestPersistentPairKeysDict(unittest.TestCase, EqualsSortedMixin):
+
+    def test(self):
+        from schooltool.db import PersistentPairKeysDict
+
+        d = PersistentPairKeysDict()
+
+        value = object()
+        p = P()
+        d[(p, 1)] = value
+        self.assertEqual(d[(p, 1)], value)
+        value2 = object()
+        d[(p, 2)] = value2
+        self.assertEqual(d[(p, 1)], value)
+        self.assertEqual(d[(p, 2)], value2)
+        self.assert_((p, 2) in d)
+        self.assert_((p, 3) not in d)
+        del d[(p, 2)]
+        self.assertRaises(KeyError, d.__getitem__, (p, 2))
+
+    def testNoEmptyDicts(self):
+        from schooltool.db import PersistentPairKeysDict
+
+        d = PersistentPairKeysDict()
+
+        value = object()
+        p = P()
+        d[(p, 1)] = value
+        self.assertEqual(len(d._data), 1)
+        del d[(p, 1)]
+        self.assertEqual(len(d._data), 0)
+
+    def test_keys_len_iter_iteritems(self):
+        from schooltool.db import PersistentPairKeysDict
+
+        d = PersistentPairKeysDict()
+
+        p = P()
+        self.assertEqual(d.keys(), [])
+        self.assertEqual(len(d), 0)
+        self.assertEqualsSorted(list(iter(d)), [])
+        self.assertEqualsSorted(list(d.iteritems()), [])
+        d[(p, 1)] = 1
+        self.assertEqual(d.keys(), [(p, 1)])
+        self.assertEqual(len(d), 1)
+        self.assertEqualsSorted(list(iter(d)), [(p, 1)])
+        self.assertEqualsSorted(list(d.iteritems()),
+                                [((p, 1), 1)])
+        p2 = P()
+        d[(p2, 2)] = 2
+        self.assertEqualsSorted(d.keys(), [(p, 1), (p2, 2)])
+        self.assertEqual(len(d), 2)
+        self.assertEqualsSorted(list(iter(d)), [(p, 1), (p2, 2)])
+        self.assertEqualsSorted(list(d.iteritems()),
+                                [((p, 1), 1), ((p2, 2), 2)])
+
+
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestPersistentListSet))
     suite.addTest(unittest.makeSuite(TestPersistentKeysSet))
     suite.addTest(unittest.makeSuite(TestPersistentKeysDictBare))
     suite.addTest(unittest.makeSuite(TestPersistentKeysDictWithDataManager))
+    suite.addTest(unittest.makeSuite(TestPersistentPairKeysDict))
     return suite

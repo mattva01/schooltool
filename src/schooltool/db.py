@@ -29,32 +29,6 @@ from persistence.dict import PersistentDict
 __metaclass__ = type
 
 
-class PersistentListSet(Persistent):
-    """A set implemented with a PersistentList as a backend storage.
-
-    This approach is not most efficient, but avoids the need of having
-    a total ordering needed to employ OOSets
-    (http://zope.org/Wikis/ZODB/FrontPage/guide/node6.html) or
-    constant hashes (memory addresses) used for normal dicts.
-    """
-
-    def __init__(self):
-        self._data = PersistentList()
-
-    def add(self, item):
-        if item not in self._data:
-            self._data.append(item)
-
-    def __iter__(self):
-        return iter(self._data)
-
-    def remove(self, item):
-        self._data.remove(item)
-
-    def __len__(self):
-        return len(self._data)
-
-
 class PersistentKeysDict(Persistent, UserDict.DictMixin):
     """A PersistentDict which uses persistent objects as keys by
     relying on their _p_oids.
@@ -161,3 +135,54 @@ class PersistentKeysSet(Persistent):
 
     def __len__(self):
         return len(self._data)
+
+
+class PersistentPairKeysDict(Persistent, UserDict.DictMixin):
+    """A dict  indexed strictly by pairs (persistent, hashable)."""
+
+    def __init__(self):
+        self._data = PersistentKeysDict()
+
+    def __setitem__(self, (persistent, hashable), value):
+        if persistent not in self._data:
+            self._data[persistent] = {}
+        self._data[persistent][hashable] = value
+
+    def __getitem__(self, (persistent, hashable)):
+        return self._data[persistent][hashable]
+
+    def __delitem__(self, (persistent, hashable)):
+        del self._data[persistent][hashable]
+        if not self._data[persistent]:
+            del self._data[persistent]
+
+    def keys(self):
+        L = []
+        data = self._data
+        for persistent in data:
+            L += [(persistent, hashable)
+                  for hashable in data[persistent]]
+        return L
+
+    def __contains__(self, (persistent, hashable)):
+        return (persistent in self._data and
+                hashable in self._data[persistent])
+
+    def __len__(self):
+        count = 0
+        data = self._data
+        for persistent in data:
+            count += len(data[persistent])
+        return count
+
+    def __iter__(self):
+        data = self._data
+        for persistent in data:
+            for hashable in data[persistent]:
+                yield persistent, hashable
+
+    def iteritems(self):
+        data = self._data
+        for persistent in data:
+            for hashable, value in data[persistent].iteritems():
+                yield (persistent, hashable), value
