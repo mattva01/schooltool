@@ -148,7 +148,6 @@ def createTeachers():
             teacher.append("%s%d" % (dept, year))
 
     for groups in teachers:
-        groups.append("root")
         birthday = random_date(datetime.date(teacher_age_start, 1, 1),
                                datetime.date(teacher_age_end, 1, 1))
         print >> f, '"%s","%s","%s",""' % (random_name(),  " ".join(groups),
