@@ -232,7 +232,7 @@ class TestSpecificURI(unittest.TestCase):
         verifyObject(IURIAPI, component)
 
     def test_inspectSpecificURI(self):
-        from schooltool.component import inspectSpecificURI
+        from schooltool.component import inspectSpecificURI, strURI
         self.assertRaises(TypeError, inspectSpecificURI, object())
         self.assertRaises(TypeError, inspectSpecificURI, I1)
         self.assertRaises(TypeError, inspectSpecificURI, ISpecificURI)
@@ -243,12 +243,14 @@ class TestSpecificURI(unittest.TestCase):
             """
         uri, doc = inspectSpecificURI(IURI)
         self.assertEqual(uri, "http://example.com/foo")
+        self.assertEqual(uri, strURI(IURI))
         self.assertEqual(doc, """Doc text
             """)
 
         class IURI2(ISpecificURI): """http://example.com/foo"""
         uri, doc = inspectSpecificURI(IURI2)
         self.assertEqual(uri, "http://example.com/foo")
+        self.assertEqual(uri, strURI(IURI2))
         self.assertEqual(doc, "")
 
         class IURI3(ISpecificURI): """foo"""
@@ -260,6 +262,7 @@ class TestSpecificURI(unittest.TestCase):
             """
         uri, doc = inspectSpecificURI(IURI4)
         self.assertEqual(uri, "mailto:foo")
+        self.assertEqual(uri, strURI(IURI4))
         self.assertEqual(doc, "")
 
         class IURI5(ISpecificURI):

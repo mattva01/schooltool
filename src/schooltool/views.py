@@ -28,7 +28,7 @@ from schooltool.interfaces import IGroup, IPerson, URIMember, URIGroup
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IUtilityService, IUtility
 from schooltool.component import getPath, getRelatedObjects
-from schooltool.component import getView, registerView
+from schooltool.component import getView, registerView, strURI
 from schooltool.debug import IEventLog, IEventLogUtility
 
 __metaclass__ = type
@@ -280,6 +280,33 @@ class EventLogView(View):
             return "%d events cleared" % n
 
 
+class RelationshipsView(View):
+
+    """A view of relationships on IRelatable which is also
+    IRelationshipValencies.
+
+    Lets the client see the relationships and valencies (GET),
+    and create new relationships (POST).
+    """
+
+    template = Template("www/relationships.pt", content_type="text/xml")
+
+    def listLinks(self):
+        return [{'path': getPath(link.traverse()),
+                 'title': link.title,
+                 'type': strURI(link.reltype),
+                 'role': strURI(link.role)}
+                for link in self.context.listLinks()]
+
+    def getValencies(self):
+        return [{'type': strURI(type),
+                 'role': strURI(role)}
+                for type, role in self.context.getValencies()]
+
+    def do_POST(self, request):
+        # XXX -- do the actual processing
+        request.setResponseCode(201, 'Created')
+
 def setUp():
     registerView(IPerson, PersonView)
     registerView(IGroup, GroupView)
@@ -289,4 +316,3 @@ def setUp():
     registerView(IUtility, UtilityView)
     registerView(IEventLog, EventLogView)
     registerView(IEventLogUtility, EventLogView)
-

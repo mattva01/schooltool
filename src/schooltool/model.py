@@ -24,31 +24,34 @@ $Id$
 
 from zope.interface import implements
 from schooltool.interfaces import IPerson, IGroup
-from schooltool.relationship import RelatableMixin
+from schooltool.interfaces import URIMembership, URIMember, URIGroup
+from schooltool.relationship import RelationshipValenciesMixin
 from schooltool.facet import FacetedEventTargetMixin
 
 __metaclass__ = type
 
 
-class Person(FacetedEventTargetMixin, RelatableMixin):
+class Person(FacetedEventTargetMixin, RelationshipValenciesMixin):
 
     implements(IPerson)
 
     def __init__(self, title=None):
         FacetedEventTargetMixin.__init__(self)
-        RelatableMixin.__init__(self)
+        RelationshipValenciesMixin.__init__(self)
         self.title = title
         self.__name__ = None
         self.__parent__ = None
+        self._valencies.append((URIMembership, URIMember))
 
 
-class Group(FacetedEventTargetMixin, RelatableMixin):
+class Group(FacetedEventTargetMixin, RelationshipValenciesMixin):
 
     implements(IGroup)
 
     def __init__(self, title=None):
         FacetedEventTargetMixin.__init__(self)
-        RelatableMixin.__init__(self)
+        RelationshipValenciesMixin.__init__(self)
         self.title = title
         self.__name__ = None
         self.__parent__ = None
+        self._valencies.append((URIMembership, URIGroup))

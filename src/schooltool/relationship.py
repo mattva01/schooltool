@@ -324,11 +324,12 @@ class RelatableMixin(Persistent):
         return result
 
 
-class RelationshipValenciesMixin(Persistent):
+class RelationshipValenciesMixin(RelatableMixin):
 
     implements(IRelationshipValencies)
 
     def __init__(self):
+        RelatableMixin.__init__(self)
         self._valencies = PersistentList()
 
     def getValencies(self):

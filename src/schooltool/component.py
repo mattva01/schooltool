@@ -220,6 +220,10 @@ def isURI(uri):
     return uri_re.search(uri)
 
 
+def strURI(uri):
+    """Returns the URI of ISpecificURI as a string"""
+    return inspectSpecificURI(uri)[0]
+
 #
 # Relationships
 #

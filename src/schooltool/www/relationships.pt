@@ -1,0 +1,22 @@
+<relationships
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <existing>
+    <relationship
+      tal:repeat="r view/listLinks"
+      xlink:type="simple"
+      tal:attributes="xlink:role r/role;
+                      xlink:arcrole r/type;
+                      xlink:title r/title;
+                      xlink:href r/path"
+    />
+  </existing>
+  <valencies>
+    <relationship
+      tal:repeat="r view/getValencies"
+      xlink:type="simple"
+      tal:attributes="xlink:role r/role;
+                      xlink:arcrole r/type"
+    />
+  </valencies>
+</relationships>

@@ -591,6 +591,91 @@ class TestEventLogView(unittest.TestCase):
                 "Only PUT with an empty body is defined for event logs")
 
 
+class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.views import RelationshipsView
+        from schooltool.model import Group, Person
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership
+        from schooltool import membership 
+        self.setUpRegistries()
+        membership.setUp()
+        app = Application()
+        app['groups'] = ApplicationObjectContainer(Group)
+        app['persons'] = ApplicationObjectContainer(Person)
+        self.group = app['groups'].new("root", title="group")
+        self.sub = app['groups'].new("subgroup", title="subgroup")
+        self.new = app['groups'].new("new", title="New Group")
+        self.per = app['persons'].new("p", title="Pete")
+
+        Membership(group=self.group, member=self.sub)
+        Membership(group=self.group, member=self.per)
+        Membership(group=self.sub, member=self.per)
+
+        self.view = RelationshipsView(self.per)
+
+    def test_listLinks(self):
+        from pprint import pformat
+        request = RequestStub("http://localhost/persons/p/relationships/")
+        request.method = "GET"
+        result = self.view.listLinks()
+        self.assertEquals(len(result), 2)
+        self.assert_({'path': '/groups/subgroup',
+                      'role': 'http://schooltool.org/ns/membership/group',
+                      'type': 'http://schooltool.org/ns/membership',
+                      'title': 'http://schooltool.org/ns/membership'}
+                     in result, pformat(result))
+        self.assert_({'path': '/groups/root',
+                      'role': 'http://schooltool.org/ns/membership/group',
+                      'type': 'http://schooltool.org/ns/membership',
+                      'title': 'http://schooltool.org/ns/membership'}
+                     in result, pformat(result))
+
+    def test_getValencies(self):
+        request = RequestStub("http://localhost/persons/p/relationships/")
+        request.method = "GET"
+        result = self.view.getValencies()
+        self.assertEquals(result,
+                          [{'type':'http://schooltool.org/ns/membership',
+                            'role':'http://schooltool.org/ns/membership/member'
+                            }])
+
+    def testGET(self):
+        # from schooltool.component import getPath
+        request = RequestStub("http://localhost/persons/p/relationships/")
+        request.method = "GET"
+        result = self.view.render(request)
+        self.assert_('<valencies>' in result)
+        self.assert_('<existing>' in result)
+        self.assert_(
+            '<relationships xmlns:xlink="http://www.w3.org/1999/xlink">'
+            in result)
+        self.assert_(
+            'xlink:role="http://schooltool.org/ns/membership/group"' in result)
+        self.assert_(
+            'xlink:role="http://schooltool.org/ns/membership/member"'
+            in result)
+
+    def testPOST(self):
+        # from schooltool.component import getPath
+        request = RequestStub("http://localhost/persons/p/relationships/")
+        request.content = StringIO('''\
+            <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+                  xlink:type="simple"
+                  xlink:role="http://schooltool.org/ns/membership/group"
+                  xlink:title="http://schooltool.org/ns/membership"
+                  xlink:arcrole="http://schooltool.org/ns/membership"
+                  xlink:href="/groups/new"/>
+            ''')
+        request.content.seek(0, 0)
+        request.method = "POST"
+        result = self.view.render(request)
+        self.assertEquals(request.code, 201)
+        # XXX:  Check that the relationship got actually added
+
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTemplate))
@@ -603,6 +688,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestUtilityServiceView))
     suite.addTest(unittest.makeSuite(TestUtilityView))
     suite.addTest(unittest.makeSuite(TestEventLogView))
+    suite.addTest(unittest.makeSuite(TestRelationshipsView))
     return suite
 
 if __name__ == '__main__':

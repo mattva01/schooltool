@@ -120,6 +120,9 @@ class IURIAPI(Interface):
         Raises a ValueError if the URI's docstring does not conform.
         """
 
+    def strURI(uri):
+        """Returns the URI of ISpecificURI as a string"""
+
     def isURI(uri):
         """Checks if the argument looks like a URI.
 
