@@ -117,36 +117,34 @@ class TimetableView(View, AppObjectBreadcrumbsMixin):
         return format_timetable_for_presentation(self.context)
 
     def canEdit(self):
-        # XXX this is slightly bogus
-        #     who can add timetable exceptions?
-        #     that is a deep question!
-        #     a timetable is shared through composition!
-        user = self.request.authenticated_user
-        return isManager(user)
+        # RESTive timetable views only allow managers to change timetables
+        return self.isManager()
 
     def do_POST(self, request):
-        # TODO: permission checking
-        exceptions_to_remove = []
-        for arg in self.request.args:
-            if arg.startswith('REMOVE.'):
-                try:
-                    idx = int(arg[len('REMOVE.'):]) - 1
-                    exceptions_to_remove.append(self.context.exceptions[idx])
-                except (ValueError, IndexError):
-                    pass # ignore hacking attempts and obsolete forms
+        if not self.canEdit():
+            return self.do_GET(request)
         # TODO: synchronize with resource booking
-        for exc in exceptions_to_remove:
+        for exc in self._exceptionsToRemove(request):
             tt = exc.activity.timetable
-            try:
-                tt.exceptions.remove(exc)
-            except ValueError:
-                # This is most likely an attempt to remove the same exception
-                # more than once (e.g. by specifying REMOVE.-1 and REMOVE.4
-                # when there are 5 exceptions in the list).  Ignore it.
-                pass
+            tt.exceptions.remove(exc)
         # Cannot just call do_GET here, because self.context is most likely a
         # composite timetable that needs to be regenerated.
         return self.redirect(request.uri, request)
+
+    def _exceptionsToRemove(self, request):
+        """Generator for timetable exceptions that need to be removed.
+
+        Yields ITimetableException objects from self.context.exceptions
+        if the matching REMOVE.%d field is found in the request.
+        """
+        for arg in self.request.args:
+            if arg.startswith('REMOVE.'):
+                try:
+                    idx = int(arg[len('REMOVE.'):])
+                    if 1 <= idx <= len(self.context.exceptions):
+                        yield self.context.exceptions[idx - 1]
+                except (ValueError, IndexError):
+                    pass # Ignore hacking attempts and obsolete forms
 
 
 class TimetableSchemaView(TimetableView):

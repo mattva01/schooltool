@@ -121,7 +121,7 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
         raise KeyError(name)
 
     def canEdit(self):
-        return isManager(self.request.authenticated_user)
+        return self.isManager()
 
     def editURL(self):
         return absoluteURL(self.request, self.context, 'edit.html')

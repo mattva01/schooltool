@@ -178,7 +178,7 @@ class TestTimetableView(AppSetupMixin, unittest.TestCase):
         view = self.createView()
         self.createTimetableExceptions()
         request = RequestStub('http://localhost:7001/path/to/tt',
-                              authenticated_user=self.person,
+                              authenticated_user=self.manager,
                               method='POST',
                               args={'REMOVE.1': 'Remove'})
         result = view.render(request)
