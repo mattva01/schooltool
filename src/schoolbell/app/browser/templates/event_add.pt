@@ -108,6 +108,9 @@
       <div class="row" tal:define="widget nocall:view/location_widget">
         <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>
+      <div class="row" tal:define="widget nocall:view/description_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
 
       <div class="row" tal:define="widget nocall:view/recurrence_widget">
         <div metal:use-macro="context/@@standard_macros/checkbox_widget " />

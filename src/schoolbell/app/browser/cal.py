@@ -1021,6 +1021,10 @@ class ICalendarEventAddForm(Interface):
         title=_("Location"),
         required=False)
 
+    description = Text(
+        title=_("Description"),
+        required=False)
+
     # Recurrence
     recurrence = Bool(
         title=_("Recurring"),
@@ -1240,6 +1244,7 @@ class CalendarEventViewMixin(object):
                 errors.append(self.start_time_widget._error)
         duration = kwargs.pop('duration', None)
         location = kwargs.pop('location', None)
+        description = kwargs.pop('description', None)
         recurrence = kwargs.pop('recurrence', None)
 
         if recurrence:
@@ -1276,6 +1281,7 @@ class CalendarEventViewMixin(object):
         rrule = recurrence and makeRecurrenceRule(**kwargs) or None
         return {
             'location': location,
+            'description': description,
             'title': title,
             'start': start,
             'duration': duration,
@@ -1298,7 +1304,9 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
         """Create an event."""
         data = self.processRequest(kwargs)
         event = self._factory(data['start'], data['duration'], data['title'],
-                              recurrence=data['rrule'], location=data['location'])
+                              recurrence=data['rrule'],
+                              location=data['location'],
+                              description=data['description'])
         return event
 
     def add(self, event):
@@ -1366,6 +1374,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         initial["start_time"] = context.dtstart.strftime("%H:%M")
         initial["duration"] = context.duration.seconds / 60
         initial["location"] = context.location
+        initial["description"] = context.description
         recurrence = context.recurrence
         initial["recurrence"] = recurrence is not None
         if recurrence:
@@ -1421,6 +1430,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         self.context.duration = widget_data['duration']
         self.context.title = widget_data['title']
         self.context.location = widget_data['location']
+        self.context.description = widget_data['description']
         self.context.recurrence = widget_data['rrule']
         return True
 

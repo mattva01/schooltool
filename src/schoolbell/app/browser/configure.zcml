@@ -441,8 +441,9 @@
       schema=".cal.ICalendarEventAddForm"
       arguments=""
       keyword_arguments="title start_date start_time duration
-                         recurrence location recurrence_type interval
-                         range until count monthly exceptions weekdays"
+                         recurrence location description recurrence_type
+                         interval range until count monthly exceptions
+                         weekdays"
       content_factory="schoolbell.app.cal.CalendarEvent"
       permission="schoolbell.addEvent"
       template="templates/event_add.pt"
@@ -457,7 +458,7 @@
       label="Edit Event"
       schema=".cal.ICalendarEventEditForm"
       fields="title start_date start_time duration
-              recurrence location recurrence_type interval
+              recurrence location description recurrence_type interval
               range until count monthly exceptions weekdays"
       class=".cal.CalendarEventEditView"
       permission="schoolbell.modifyEvent"
