@@ -33,7 +33,6 @@ __metaclass__ = type
 class TestPersonInfo(RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.views.relationship import RelationshipsView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
@@ -51,7 +50,7 @@ class TestPersonInfo(RegistriesSetupMixin, unittest.TestCase):
     def test(self):
         from schooltool.browser.app import PersonView
         view = PersonView(self.person)
-        request = RequestStub()
+        request = RequestStub(authenticated_user='not None')
         result = view.render(request)
         self.assertEquals(request.headers['content-type'],
                           "text/html; charset=UTF-8")
@@ -90,8 +89,10 @@ class TestPersonInfo(RegistriesSetupMixin, unittest.TestCase):
         facet = FacetManager(person).facetByName('person_info')
         facet.photo = ';-)'
         view = PersonView(person)
+        view.request = RequestStub(authenticated_user='not None')
         markup = view.photo()
-        self.assertEquals(markup, '<img src="/persons/&gt;me/photo.jpg" />')
+        self.assertEquals(markup, '<img src="http://localhost:7001/persons/'
+                                                      '&gt;me/photo.jpg" />')
 
         facet.photo = None
         markup = view.photo()
@@ -101,7 +102,6 @@ class TestPersonInfo(RegistriesSetupMixin, unittest.TestCase):
 class TestMembershipViewMixin(RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.views.relationship import RelationshipsView
         from schooltool.model import Group, Person
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
@@ -123,7 +123,7 @@ class TestMembershipViewMixin(RegistriesSetupMixin, unittest.TestCase):
     def test(self):
         from schooltool.browser.model import GroupView
         view = GroupView(self.group)
-        request = RequestStub()
+        request = RequestStub(authenticated_user='not None')
         result = view.render(request)
         self.assertEquals(request.headers['content-type'],
                           "text/html; charset=UTF-8")
@@ -167,14 +167,14 @@ class TestPhotoView(unittest.TestCase):
 
     def test(self):
         view = self.createView(';-)')
-        request = RequestStub()
+        request = RequestStub(authenticated_user='not None')
         photo = view.render(request)
         self.assertEquals(request.headers['content-type'], 'image/jpeg')
         self.assertEquals(photo, ';-)')
 
     def test_nophoto(self):
         view = self.createView(None)
-        request = RequestStub()
+        request = RequestStub(authenticated_user='not None')
         self.assertRaises(ValueError, view.render, request)
 
 

@@ -60,16 +60,41 @@ class TestAppView(unittest.TestCase):
         view = RootView(app)
         return view
 
-    def test(self):
+    def test_render(self):
         view = self.createView()
         request = RequestStub()
         result = view.render(request)
         self.assert_('Username' in result)
         self.assert_('error' not in result)
+        self.assert_('expired' not in result)
+        self.assertEquals(request.headers['content-type'],
+                          "text/html; charset=UTF-8")
+
+    def test_render_expired(self):
+        view = self.createView()
+        request = RequestStub('/?expired=1', args={'expired': '1'})
+        result = view.render(request)
+        self.assert_('Username' in result)
+        self.assert_('error' not in result)
+        self.assert_('expired' in result)
+        self.assert_('action="/"' in result)
+        self.assertEquals(request.headers['content-type'],
+                          "text/html; charset=UTF-8")
+
+    def test_render_with_url(self):
+        view = self.createView()
+        request = RequestStub(args={'url': '/some/url'})
+        result = view.render(request)
+        self.assert_('Username' in result)
+        self.assert_('error' not in result)
+        self.assert_('expired' not in result)
+        self.assert_('<input type="hidden" name="url" value="/some/url" />'
+                     in result)
         self.assertEquals(request.headers['content-type'],
                           "text/html; charset=UTF-8")
 
     def test_post(self):
+        from schooltool.browser.auth import globalTicketService
         view = self.createView()
         request = RequestStub(method='POST',
                               args={'username': 'manager',
@@ -79,6 +104,27 @@ class TestAppView(unittest.TestCase):
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/manager')
+        ticket = request._outgoing_cookies['auth']
+        username, password = globalTicketService.verifyTicket(ticket)
+        self.assertEquals(username, 'manager')
+        self.assertEquals(password, 'schooltool')
+
+    def test_post_with_url(self):
+        from schooltool.browser.auth import globalTicketService
+        view = self.createView()
+        request = RequestStub(method='POST',
+                              args={'username': 'manager',
+                                    'password': 'schooltool',
+                                    'url': '/some/path'})
+        request.site = SiteStub()
+        result = view.render(request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/some/path')
+        ticket = request._outgoing_cookies['auth']
+        username, password = globalTicketService.verifyTicket(ticket)
+        self.assertEquals(username, 'manager')
+        self.assertEquals(password, 'schooltool')
 
     def test_post_failed(self):
         view = self.createView()

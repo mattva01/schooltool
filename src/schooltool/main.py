@@ -412,6 +412,7 @@ class Request(http.Request):
                             txn.abort()
                         else:
                             txn.note("%s %s" % (self.method, self.uri))
+                            # XXX getUser only uses HTTP auth
                             txn.setUser(self.getUser()) # anonymous is ""
                             txn.commit()
                     except ConflictError:
@@ -448,11 +449,8 @@ class Request(http.Request):
         self.authenticated_user = None
         if self.getUser():
             try:
-                self.authenticated_user = self.site.authenticate(app,
-                        self.getUser(), self.getPassword())
+                self.authenticate(self.getUser(), self.getPassword())
             except AuthenticationError:
-                self.applogger.warn(_("Failed login, username: %r")
-                                    % self.getUser())
                 body = textErrorPage(self, _("Bad username or password"),
                                      code=401)
                 self.setHeader('Content-Length', len(body))
@@ -463,6 +461,25 @@ class Request(http.Request):
         resrc = self.traverse(app)
         body = self.render(resrc)
         return body
+
+    def authenticate(self, username, password):
+        """Try to authenticate.
+
+        Sets the 'authenticated_user' attribute (to None if the authentication
+        is not successful).
+
+        Logs a message into the application log and raises AuthenticationError
+        if the authentication is not successful.
+        """
+        root = self.zodb_conn.root()
+        app = root[self.site.rootName]
+        try:
+            self.authenticated_user = self.site.authenticate(app, username,
+                                                             password)
+        except AuthenticationError:
+            self.authenticated_user = None
+            self.applogger.warn(_("Failed login, username: %r") % username)
+            raise
 
     def _printTraceback(self, reason):
         """Print a timestamp preceding a traceback to the site log."""
@@ -518,7 +535,7 @@ class Request(http.Request):
         """Log a hit into an access log in Apache combined log format."""
         self.hitlogger.info('%s - %s [%s] "%s" %s %s "%s" "%s"' %
                 (self.getClientIP() or '-',
-                self.getUser() or '-',
+                self.getUser() or '-', # XXX getUser only uses HTTP auth
                 self.hit_time,
                 '%s %s %s' % (self.method, self.uri, self.clientproto),
                 self.code,

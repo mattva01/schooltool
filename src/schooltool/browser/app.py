@@ -22,14 +22,21 @@ Web-application views for the schooltool.app objects.
 $Id$
 """
 
+import datetime
 from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import absoluteURL
+from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
+from schooltool.browser.auth import globalTicketService
 from schooltool.browser.model import PersonView, GroupView
 from schooltool.interfaces import IApplication
 from schooltool.interfaces import IApplicationObjectContainer
 from schooltool.interfaces import AuthenticationError
 
 __metaclass__ = type
+
+
+# Time limit for session expiration
+session_time_limit = datetime.timedelta(hours=5)
 
 
 class RootView(View):
@@ -40,6 +47,8 @@ class RootView(View):
     """
 
     __used_for__ = IApplication
+
+    authorization = PublicAccess
 
     template = Template("www/login.pt")
 
@@ -56,7 +65,14 @@ class RootView(View):
             self.username = username
             return self.do_GET(request)
         else:
-            return self.redirect(absoluteURL(request, user), request)
+            ticket = globalTicketService.newTicket((username, password),
+                                                   session_time_limit)
+            request.addCookie('auth', ticket)
+            if 'url' in request.args:
+                url = request.args['url'][0]
+            else:
+                url = absoluteURL(request, user)
+            return self.redirect(url, request)
 
     def _traverse(self, name, request):
         if name == 'persons':
@@ -71,6 +87,8 @@ class RootView(View):
 class PersonContainerView(View):
 
     __used_for__ = IApplicationObjectContainer
+
+    authorization = AuthenticatedAccess
 
     def _traverse(self, name, request):
         return PersonView(self.context[name])

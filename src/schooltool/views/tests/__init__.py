@@ -37,7 +37,7 @@ class RequestStub:
     reason = 'OK'
 
     def __init__(self, uri='', method='GET', body='', headers=None,
-                 authenticated_user=None, accept=(), args=None):
+                 authenticated_user=None, accept=(), args=None, cookies=None):
         self.uri = uri
         self.method = method
         self.path = ''
@@ -57,12 +57,18 @@ class RequestStub:
         if headers:
             for k, v in headers.items():
                 self.request_headers[k.lower()] = v
+        self._cookies = {}
+        if cookies:
+            self._cookies.update(cookies)
+        self._outgoing_cookies = {}
         self.accept = list(accept)
         self.path = uri
         self._secure = False
         self._hostname = 'localhost'
         self._port = 7001
         if '://' in uri:
+            # XXX This is bogus: twisted's request.uri does not contain http://
+            #     etc.
             start = uri.find('/', uri.find('://')+3)
             if start < 0:
                 start = len(uri)
@@ -75,6 +81,7 @@ class RequestStub:
             self._hostname, port = host_and_port.split(':')
             self._port = int(port)
         self.applog = []
+        self.path = self.path.split('?')[0]
 
     def getRequestHostname(self):
         return self._hostname
@@ -96,6 +103,13 @@ class RequestStub:
 
     def setHeader(self, header, value):
         self.headers[header.lower()] = value
+
+    def getCookie(self, key):
+        # Twisted's getCookie returns None when the cookie does not exist
+        return self._cookies.get(key)
+
+    def addCookie(self, key, value):
+        self._outgoing_cookies[key] = value
 
     def setResponseCode(self, code, reason=None):
         self.code = code

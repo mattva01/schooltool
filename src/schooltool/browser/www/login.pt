@@ -6,7 +6,13 @@
 <body>
 <h1>Welcome to SchoolTool</h1>
 
-<form action="." method="POST" tal:attributes="action request/uri">
+<form action="." method="POST" tal:attributes="action request/path">
+  <input type="hidden" name="url"
+         tal:condition="request/args/url | nothing"
+         tal:attributes="value python:request.args['url'][0]" />
+  <div class="info" tal:condition="request/args/expired | nothing">
+    Your session has expired.
+  </div>
   <div class="error" tal:condition="view/error">
     Incorrect username or password.
   </div>

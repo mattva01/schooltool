@@ -31,8 +31,20 @@ class TestView(unittest.TestCase):
 
     def createView(self):
         from schooltool.browser import View
-        view = View(None)
-        return view
+        return View(None)
+
+    def createConcreteView(self):
+        from schooltool.browser import View
+        from schooltool.browser.auth import PublicAccess
+
+        class ConcreteView(View):
+            authorization = PublicAccess
+
+            def do_GET(self, request):
+                request.setHeader('Content-Type', 'text/plain')
+                return "text"
+
+        return ConcreteView(None)
 
     def test_POST(self):
         view = self.createView()
@@ -41,10 +53,71 @@ class TestView(unittest.TestCase):
         result = view.do_POST(request)
         self.assertEquals(result, 'Something')
 
-    def test_authorization(self):
-        view = self.createView()
-        request = RequestStub(method='POST')
-        self.assert_(view.authorization(view.context, request))
+    def test_render_no_auth(self):
+        view = self.createConcreteView()
+        request = RequestStub()
+        result = view.render(request)
+        self.assert_(request.authenticated_user is None)
+
+    def test_render_auth(self):
+        from schooltool.browser.auth import globalTicketService
+        from schooltool.interfaces import AuthenticationError
+        view = self.createConcreteView()
+        ticket = globalTicketService.newTicket(('username', 'password'))
+        user = object()
+
+        request = RequestStub(cookies={'auth': ticket})
+        def authenticate(username, password):
+            if username == 'username' and password == 'password':
+                request.authenticated_user = user
+            else:
+                request.authenticated_user = None
+                raise AuthenticationError
+        request.authenticate = authenticate
+
+        result = view.render(request)
+        self.assert_(request.authenticated_user is user)
+
+    def test_render_bad_auth(self):
+        from schooltool.browser.auth import globalTicketService
+        from schooltool.interfaces import AuthenticationError
+        view = self.createConcreteView()
+        ticket = globalTicketService.newTicket(('username', 'password'))
+        user = object()
+
+        request = RequestStub(cookies={'auth': ticket})
+        def authenticate(username, password):
+            if username == 'username' and password == 'new':
+                request.authenticated_user = user
+            else:
+                request.authenticated_user = None
+                raise AuthenticationError
+        request.authenticate = authenticate
+
+        result = view.render(request)
+        self.assert_(request.authenticated_user is None)
+
+    def test_render_password_changed(self):
+        view = self.createConcreteView()
+
+        request = RequestStub(cookies={'auth': 'faketicket'})
+        def authenticate(username, password):
+            request.authenticated_user = None
+            raise AuthenticationError
+        request.authenticate = authenticate
+
+        result = view.render(request)
+        self.assert_(request.authenticated_user is None)
+
+    def test_unauthorized(self):
+        from schooltool.browser import View
+        view = View(None)
+        request = RequestStub('/path')
+        result = view.unauthorized(request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/?expired=1&url=/path')
+        self.assert_('www-authenticate' not in request.headers)
 
     def test_getChild(self):
         view = self.createView()
@@ -59,6 +132,26 @@ class TestView(unittest.TestCase):
         self.assertEquals(request.headers['content-type'],
                           'text/html; charset=UTF-8')
         self.assert_('http://example.com/' in result)
+
+    def test_redirect_not_absolute(self):
+        view = self.createView()
+        request = RequestStub()
+        result = view.redirect('/sublocation', request)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/sublocation')
+        self.assertEquals(request.headers['content-type'],
+                          'text/html; charset=UTF-8')
+        self.assert_('http://localhost:7001/sublocation' in result)
+
+    def test_redirect_no_slash(self):
+        view = self.createView()
+        request = RequestStub()
+        result = view.redirect('sublocation', request)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/sublocation')
+        self.assertEquals(request.headers['content-type'],
+                          'text/html; charset=UTF-8')
+        self.assert_('http://localhost:7001/sublocation' in result)
 
     def test_macros(self):
         view = self.createView()

@@ -38,13 +38,10 @@ $Id$
 
 import random
 import datetime
+from schooltool.interfaces import AuthenticationError
 
 
 __metaclass__ = type
-
-
-class AuthenticationError(Exception):
-    """Invalid or expired authentication token."""
 
 
 class TicketService:
@@ -173,3 +170,19 @@ class TicketService:
         except KeyError:
             pass
 
+
+globalTicketService = TicketService()
+
+
+def PublicAccess(context, request):
+    """Allows access for anyone."""
+    return True
+
+PublicAccess = staticmethod(PublicAccess)
+
+
+def AuthenticatedAccess(context, request):
+    """Allows access for authenticated users only."""
+    return request.authenticated_user is not None
+
+AuthenticatedAccess = staticmethod(AuthenticatedAccess)

@@ -241,6 +241,18 @@ class TestView(unittest.TestCase):
                           'text/plain; charset=UTF-8')
         self.assert_(view.request is None)
 
+    def test_unauthorized(self):
+        from schooltool.views import View
+        view = View(None)
+        request = RequestStub()
+        result = view.unauthorized(request)
+        self.assertEquals(request.code, 401)
+        self.assertEquals(result, "Bad username or password")
+        self.assertEquals(request.headers['www-authenticate'],
+                          'basic realm="SchoolTool"')
+        self.assertEquals(request.headers['content-type'],
+                          'text/plain; charset=UTF-8')
+
 
 def test_suite():
     suite = unittest.TestSuite()

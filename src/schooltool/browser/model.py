@@ -23,20 +23,22 @@ $Id$
 """
 
 import cgi
-
 from schooltool.browser import View, Template
-from schooltool.interfaces import IPerson, IGroup
-from schooltool.component import getRelatedObjects, FacetManager
-from schooltool.uris import URIMember, URIGroup
-from schooltool.views import absoluteURL
+from schooltool.browser import absoluteURL
+from schooltool.browser.auth import AuthenticatedAccess
+from schooltool.component import FacetManager
+from schooltool.component import getRelatedObjects
 from schooltool.interfaces import IPerson
-from schooltool.views import absolutePath
+from schooltool.interfaces import IGroup
+from schooltool.uris import URIMember, URIGroup
+
 
 __metaclass__ = type
 
 
 class GetParentsMixin:
     """A helper for Person and Group views"""
+
     def getParentGroups(self, request):
         """Return groups that context is a member of"""
         return [{'url': absoluteURL(request, g), 'title': g.title}
@@ -47,8 +49,9 @@ class PersonView(View, GetParentsMixin):
 
     __used_for__ = IPerson
 
-    template = Template("www/person.pt")
+    authorization = AuthenticatedAccess
 
+    template = Template("www/person.pt")
 
     def _traverse(self, name, request):
         if name == 'photo.jpg':
@@ -62,13 +65,15 @@ class PersonView(View, GetParentsMixin):
         if self.info().photo is None:
             return u'<i>N/A</i>' # XXX Should this be translated?
         else:
-            path = absolutePath(self.request, self.context)
+            path = absoluteURL(self.request, self.context)
             return '<img src="%s/photo.jpg" />' % cgi.escape(path)
 
 
 class GroupView(View, GetParentsMixin):
 
     __used_for__ = IGroup
+
+    authorization = AuthenticatedAccess
 
     template = Template("www/group.pt")
 
@@ -88,6 +93,8 @@ class GroupView(View, GetParentsMixin):
 class PhotoView(View):
 
     __used_for__ = IPerson
+
+    authorization = AuthenticatedAccess
 
     def do_GET(self, request):
         facet = FacetManager(self.context).facetByName('person_info')

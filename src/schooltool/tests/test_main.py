@@ -717,6 +717,24 @@ class TestRequest(unittest.TestCase):
                   [(logging.WARNING, "Failed login, username: 'fred'"),
                    (logging.WARNING, "Failed login, username: 'freq'")])
 
+    def test_authenticate_success(self):
+        rq = self.newRequest('/')
+        rq.applogger = AppLoggerStub()
+        rq.zodb_conn = ConnectionStub()
+        rq.authenticate('fred', 'wilma')
+        self.assert_(rq.authenticated_user is SiteStub.fred)
+
+    def test_authenticate_failure(self):
+        rq = self.newRequest('/')
+        rq.applogger = AppLoggerStub()
+        rq.zodb_conn = ConnectionStub()
+        self.assertRaises(AuthenticationError, rq.authenticate, 'fred', 'wima')
+        self.assertRaises(AuthenticationError, rq.authenticate, 'fed', 'wilma')
+        self.assert_(rq.authenticated_user is None)
+        self.assertEquals(rq.applogger.applog,
+                  [(logging.WARNING, "Failed login, username: 'fred'"),
+                   (logging.WARNING, "Failed login, username: 'fed'")])
+
     # _handle_exception is tested indirectly, in test__process_on_exception
     # and test__process_many_conflict_errors
 

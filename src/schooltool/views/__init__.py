@@ -293,15 +293,13 @@ class View(Resource):
             body = textErrorPage(request, _("Method Not Allowed"), code=405)
             culprit = 'textErrorPage'
         elif not self.authorization(self.context, request):
-            request.setHeader('WWW-Authenticate', 'basic realm="SchoolTool"')
-            body = textErrorPage(request, _("Bad username or password"),
-                                 code=401)
-            culprit = 'textErrorPage'
+            culprit = 'unauthorized'
+            body = self.unauthorized(request)
         else:
+            culprit = 'do_%s' % request.method
             self.request = request
             body = handler(request)
             self.request = None
-            culprit = 'do_%s' % request.method
 
         # Twisted's http.Request keeps outgoing headers in a dict keyed by
         # lower-cased header name.
@@ -327,6 +325,11 @@ class View(Resource):
             return body.encode('UTF-8')
         else:
             raise AssertionError("%s did not return a string" % culprit)
+
+    def unauthorized(self, request):
+        """Render an unauthorized page."""
+        request.setHeader('WWW-Authenticate', 'basic realm="SchoolTool"')
+        return textErrorPage(request, _("Bad username or password"), code=401)
 
     def allowedMethods(self):
         """Lists all allowed methods."""

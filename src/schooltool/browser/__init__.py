@@ -22,8 +22,13 @@ The schooltool.browser package.
 
 import os
 
+from schooltool.interfaces import AuthenticationError
 from schooltool.views import View as _View
-from schooltool.views import Template, read_file, absoluteURL   # reexport
+from schooltool.views import Template, read_file        # reexport
+from schooltool.views import absoluteURL, absolutePath  # reexport
+from schooltool.browser.auth import PublicAccess
+from schooltool.browser.auth import globalTicketService
+
 
 __metaclass__ = type
 
@@ -51,13 +56,25 @@ class View(_View):
 
     macros = property(lambda self: self.macros_template.macros)
 
-    def authorization(self, context, request):
-        """Check for HTTP-level authorization.
+    def render(self, request):
+        """Process the request.
 
-        In the web application, authentication and authorization are done with
-        cookies, so HTTP level authorization allows all requests.
+        Hooks in the usual request processing to perform cookie-based
+        authentication and override request.authenticated_user before
+        authorization takes place.
         """
-        return True
+        auth_cookie = request.getCookie('auth')
+        if auth_cookie:
+            try:
+                credentials = globalTicketService.verifyTicket(auth_cookie)
+                request.authenticate(*credentials)
+            except AuthenticationError:
+                pass
+        return _View.render(self, request)
+
+    def unauthorized(self, request):
+        """Render an unauthorized page."""
+        return self.redirect('/?expired=1&url=%s' % request.uri, request)
 
     def do_POST(self, request):
         """Process an HTTP POST.
@@ -76,12 +93,21 @@ class View(_View):
 
     def redirect(self, url, request):
         """Redirect to a URL and return a html page explaining the redirect."""
+        if '://' not in url:
+            if not url.startswith('/'):
+                url = '/' + url
+            scheme = request.isSecure() and 'https' or 'http'
+            hostname = request.getRequestHostname()
+            port = request.getHost().port
+            url = '%s://%s:%s%s' % (scheme, hostname, port, url)
         request.redirect(url)
         return self.redirect_template(request, destination=url)
 
 
 class StaticFile(View):
     """View that returns static content from a file."""
+
+    authorization = PublicAccess
 
     def __init__(self, filename, content_type):
         View.__init__(self, None)

@@ -19,6 +19,11 @@ label {
   color: #444422;
 }
 
+div.info {
+  margin: 0ex 0ex 2ex 0ex;
+  font-weight: bold;
+  color: green;
+}
 div.error {
   margin: 0ex 0ex 2ex 0ex;
   font-weight: bold;
