@@ -759,7 +759,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
     def test_createPerson(self):
         client = self.newClient(ResponseStub(201, 'OK', 'Created',
                                     location='http://localhost/persons/00004'))
-        result = client.createPerson('John "mad cat" Doe')
+        result = client.createPerson('John "mad cat" Doe', "")
         self.assertEquals(result, '/persons/00004')
         conn = self.oneConnection(client)
         self.assertEquals(conn.path, '/persons')

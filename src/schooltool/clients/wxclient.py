@@ -981,7 +981,7 @@ class NewPersonDlg(wxDialog):
         try:
             self.client.createPerson(name, username, password)
         except SchoolToolError, e:
-            wxMessageBox("Could create a new person: %s" % e,
+            wxMessageBox("Could not create a new person: %s" % e,
                          self.title, wxICON_ERROR|wxOK)
         else:
             self.EndModal(wxID_OK)

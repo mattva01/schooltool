@@ -372,7 +372,7 @@ class SchoolToolClient:
 
     def createPerson(self, person_title, name=None, password=None):
         body = '<person title="%s"/>' % cgi.escape(person_title, True)
-        if name is not None:
+        if name:
             path = '/persons/' + name
             response = self.put(path, body)
         else:
