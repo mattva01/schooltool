@@ -25,17 +25,10 @@ For bugfixes to a released version which are non-debian specific.
 
 3.  Check release notes in RELEASE.
 
-4.  Branch and tag releases.
+4.  Tag new schooltool version.
 
-    a.  Tag new schooltool package version.
-
-        svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/release-0.8.x \
-            svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool/release-0.8.1-1
-
-    b.  Tag new schoolbell package version
-
-        svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schoolbell/release-0.8.x \
-            svn+ssh://source.schooltool.org/svn/schooltool/tags/schoolbell/release-0.8.1-1
+    svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/release-0.8.x \
+        svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool/release-0.8.1-1
 
 4.  Goto step 5 of `Procedure for a 0.x Release`_ using the new tags.
 
@@ -44,22 +37,15 @@ New Debian Revision
 
 Create a new Debian Revision for Debian specific bugfixes.
 
-1.  Make sure the necessary changes are in both schooltool and schoolbell
-    branches.  Merge them from the trunk if necessary.
+1.  Make sure the necessary changes are in the schooltool-0.8.x branch.  Merge
+    them from the trunk if necessary.
 
 2.  Check release notes in RELEASE.
 
-3.  Branch and tag releases.
+3.  Tag new schooltool package revision.
 
-    a.  Tag new schooltool package version.
-
-        svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/release-0.8.x \
-            svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool/release-0.8-2
-
-    b.  Tag new schoolbell package version
-
-        svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schoolbell/release-0.8.x \
-            svn+ssh://source.schooltool.org/svn/schooltool/tags/schoolbell/release-0.8-2
+    svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/release-0.8.x \
+        svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool/release-0.8-2
 
 4.  Steps 5, 8, 9 of `Procedure for a 0.x Release`_ using the new tags.
 
@@ -85,17 +71,10 @@ This is the release procedure used for release 0.8.
 
 3.  Check release notes in RELEASE.
 
-4.  Branch and tag schooltool.
+4.  Branch and tag schooltool trunk.
 
-    a.  Branch schooltool trunk.
-
-        svn cp svn+ssh://source.schooltool.org/svn/schooltool/trunk/schooltool \
-            svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/release-0.8.x
-
-    b.  Tag schooltool package version.
-
-        svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/release-0.8.x \
-            svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool/release-0.8-1
+    svn cp svn+ssh://source.schooltool.org/svn/schooltool/trunk/schooltool \
+        svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/release-0.8.x
 
     Note: If changes to a debian package or a bugfix release are needed, they
     can be worked on in branches/schooltool/release-0.8 and then tagged as
@@ -105,55 +84,24 @@ This is the release procedure used for release 0.8.
     If there are any problems on any step, you can delete the branches by
     executing the following command:
         svn rm svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/release-0.8.x
-        svn rm svn+ssh://source.schooltool.org/svn/schooltool/branches/schoolbell/release-0.8.x
 
-5.  Create schoolbell branch.
-
-    a.  Create schoolbell branch from schooltool.
-
-        svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/release-0.8.x \
-            svn+ssh://source.schooltool.org/svn/schooltool/branches/schoolbell/release-0.8.x
-
-    b.  Re-brand SchoolTool to SchoolBell in schooltool/branches/schoolbell/release-0.8.x.
-
-        - Change default translation domain ('schoolbell' rather than
-        'schooltool') in the config file.
-
-        - Re-brand README.
-
-        - Re-name schooltool-server.py
-
-        - Re-brand debian/ directory
-
-          * Documentation.
-          * Change package/source package names.
-          * Create schoolbell-ssl and delete schooltool-server packages.
-          * Re-name and re-package maintainer scripts.
-          * Remove client packages (control, rules, scripts).
-
-      - XXX - more?
-
-    c. Tag schoolbell package version
-
-       svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schoolbell/release-0.8.x \
-          svn+ssh://source.schooltool.org/svn/schooltool/tags/schoolbell/release-0.8-1
-
-    Note: SchoolBell is re-branded on every major schooltool release as this is
-    much easier and less error prone.
-
-6.  Checkout the tags in different directories:
+5.  Checkout the tags in different directories:
 
     svn co svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool/release-0.8-1
 
-    svn co svn+ssh://source.schooltool.org/svn/schooltool/tags/schoolbell/release-0.8-1
-
-7.  Create tarballs from releases.
+6.  Create tarballs from releases.
 
     a.  Export from repository.
         e.g. svn export release-0.8-1 schooltool-0.8
 
     b.  Make tarballs.
-        e.g. tar -zcvf schooltool-0.8.tar.gz schooltool-0.8
+            cd schooltool-0.8
+            make schooltooltar
+            cd ..
+            mv schooltool-0.8 schoolbell-0.8
+            cd schoolbell-0.8
+            make schoolbelltar
+            cd ..
 
     c.  Make md5sum file of tarballs.
         md5sum school{tool,bell}-0.8.tar.gz > md5sum-release-0.8
@@ -164,22 +112,23 @@ This is the release procedure used for release 0.8.
 
     Note: always leave out the debian revision from the tarball.
 
-8.  Go into the exports and make sure they're OK:
+7.  Go into the export and make sure they're OK:
 
-     cd school{tool,bell}-0.8
+     cd schoolbell-0.8
      make test ftest
 
     Run the server and see that it works:
 
      ./generate-sampleschool.py
      ./schooltool-server.py
+     ./schoolbell-server.py
 
     In a new window:
 
      ./import-sampleschool.py
      ./wxschooltool.py
 
-9.  Build the Debian packages.
+8.  Build the Debian packages.
 
     a.  Build and sign the packages using a pbuilder chroot.
         (remeber to use --basetgz option)
@@ -205,22 +154,22 @@ This is the release procedure used for release 0.8.
 
     f.  Upload packages to debian unstable.
 
-10. Write a release page for the web.  Take screenshots.
+9. Write a release page for the web.  Take screenshots.
 
-11. Upload the page, the screenshots, and the archives.
+10. Upload the page, the screenshots, and the archives.
 
     These go in http://schooltool.org/releases/xxx
 
     Update the releases overview page.
 
-12. Write the announcement to the mailing list - include release notes.
+11. Write the announcement to the mailing list - include release notes.
 
-13. Write the news item for the news box on the website.
+12. Write the news item for the news box on the website.
 
-14. Maybe write a new front page headline and short announcement.
+13. Maybe write a new front page headline and short announcement.
 
-15. Send announcement, update news and web pages.
+14. Send announcement, update news and web pages.
 
-16. Send short announcement to interested outside parties.
+15. Send short announcement to interested outside parties.
 
     - Debian Edu (debian-edu@lists.debian.org)
