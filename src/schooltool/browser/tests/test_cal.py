@@ -346,8 +346,7 @@ class TestWeeklyCalendarView(unittest.TestCase):
 
         view = WeeklyCalendarView(cal)
         view.authorization = lambda x, y: True
-        view.cursor = date(2004, 8, 12)
-        request = RequestStub()
+        request = RequestStub(args={'date': '2004-08-12'})
         content = view.render(request)
         self.assert_("Da Boss" in content, content)
         self.assert_("Stuff happens" in content)
