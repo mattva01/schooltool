@@ -27,14 +27,12 @@ from zope.app.form.browser.add import AddView
 from schoolbell.app.interfaces import IHaveNotes, INotes, INote
 from schoolbell.app.notes import Note
 
+
 class NotesView(BrowserView):
 
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
         self.notes = INotes(context)
-
-    def notes(self):
-        return self.notes
 
 
 class NoteAddView(AddView):
