@@ -86,20 +86,24 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
         view = view_class(context)
         request = RequestStub()
 
+        result = view.render(request)
         if xml:
-            result = view.render(request)
             self.assertEquals(request.code, 200)
             self.assertEquals(request.headers['Content-Type'],
                               "text/xml; charset=UTF-8")
             self.assertEqualsXML(result, xml, recursively_sort=['timetables'])
+        else:
+            self.assertEquals(request.code, 404)
 
+        request.accept = [('1', 'text/html', {}, {})]
+        result = view.render(request)
         if html:
-            request.accept = [('1', 'text/html', {}, {})]
-            result = view.render(request)
             self.assertEquals(request.code, 200)
             self.assertEquals(request.headers['Content-Type'],
                               "text/html; charset=UTF-8")
             self.assertEqualsXML(result, html, recursively_sort=['ul'])
+        else:
+            self.assertEquals(request.code, 404)
 
         view2 = view._traverse('2003 fall', request)
         self.assert_(view2.__class__ is view_class,
@@ -190,8 +194,27 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
         from schooltool.views.timetable import SchoolTimetableTraverseView
         from schooltool.views.timetable import SchoolTimetableView
         view1, view2, view3, context, tt = (
-            self.do_test(SchoolTimetableTraverseView,
-                         SchoolTimetableView)
+            self.do_test(SchoolTimetableTraverseView, SchoolTimetableView,
+                """
+                <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <timetable period="2003 fall" schema="weekly"
+                    xlink:href="/...object/2003 fall/weekly"
+                    xlink:type="simple" />
+                </timetables>
+                """, """
+                <html>
+                <head>
+                  <title>School timetables</title>
+                </head>
+                <body>
+                  <h1>School timetables</h1>
+                  <ul>
+                    <li><a href="/...object/2003 fall/weekly"
+                        >2003 fall, weekly</a></li>
+                  </ul>
+                </body>
+                </html>
+                """)
             )
         self.assertEqual(view3.context, context)
 

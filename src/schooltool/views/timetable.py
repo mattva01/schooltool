@@ -320,7 +320,18 @@ class CompositeTimetableTraverseView(BaseTimetableTraverseView):
 
 
 class SchoolTimetableTraverseView(BaseTimetableTraverseView):
-    """View for obj/composite-timetable."""
+    """View for /schooltt."""
+
+    def title(self):
+        return "School timetables"
+
+    def timetables(self):
+        basepath = getPath(self.context)
+        periods = getTimePeriodService(self.context).keys()
+        schemas = getTimetableSchemaService(self.context).keys()
+        return [{'schema': schema_id, 'period': period_id,
+                 'path': '%s/%s/%s' % (basepath, period_id, schema_id)}
+                for period_id in periods for schema_id in schemas]
 
     def _traverse(self, name, request):
         if self.time_period is None:
