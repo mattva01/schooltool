@@ -174,13 +174,13 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
         im.importResourcesCsv(['"Hall","locations"'])
         self.assertEquals(resources, [(u'Hall', u'locations')])
 
-    def test_importPeopleCsv(self):
+    def test_importPersonsCsv(self):
         from schooltool.clients.csvclient import CSVImporterBase
         im = CSVImporterBase()
 
         persons = []
-        def importPersonStub(title, parent, groups, relation):
-            persons.append((title, parent, groups, relation))
+        def importPersonStub(title, parent, groups, teaching=False):
+            persons.append((title, parent, groups, teaching))
             return title
         im.importPerson = importPersonStub
 
@@ -189,12 +189,13 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
             personinfo.append((name, title, dob, comment))
         im.importPersonInfo = importPersonInfoStub
 
-        im.importPeopleCsv(['"Jay Hacker","group1 group2","1998-01-01",""'],
-                           'teachers', '<rel>')
+        im.importPersonsCsv(['"Jay Hacker","group1 group2","1998-01-01",'
+                             '"yay"'],
+                           'teachers', True)
         self.assertEquals(persons, [(u'Jay Hacker', 'teachers',
-                                     u'group1 group2', '<rel>')])
+                                     u'group1 group2', True)])
         self.assertEquals(personinfo, [(u'Jay Hacker', u'Jay Hacker',
-                                        u'1998-01-01', u'')])
+                                        u'1998-01-01', u'yay')])
 
     def test_import_badData(self):
         from schooltool.clients.csvclient import CSVImporterBase
@@ -209,7 +210,7 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
         im.process = lambda x, y, body=None: ResponseStub()
 
         im.importGroup = lambda name, title, parents, facets: None
-        im.importPerson = lambda title, parent, groups, relation: None
+        im.importPerson = lambda title, parent, groups, teaching: None
         im.importResource = lambda title, groups: None
 
         def raisesDataError(method, *args):
@@ -220,13 +221,13 @@ class TestCSVImporterBase(NiceDiffsMixin, unittest.TestCase):
                           ['"year1","Year 1","root"'])
         self.assertRaises(DataError, im.importResourcesCsv,
                           ['"year1","Year 1","root"'])
-        self.assertRaises(DataError, im.importPeopleCsv,
+        self.assertRaises(DataError, im.importPersonsCsv,
                           ['"Foo","bar","baz"'], 'pupils',
                           lambda group, member_path: None)
 
         self.assertRaises(DataError, im.importGroupsCsv, ['"invalid","csv'])
         self.assertRaises(DataError, im.importResourcesCsv, ['"b0rk","b0rk'])
-        self.assertRaises(DataError, im.importPeopleCsv, ['"invalid","csv'],
+        self.assertRaises(DataError, im.importPersonsCsv, ['"invalid","csv'],
                           'pupils', lambda group, member_path: None)
 
 
@@ -281,7 +282,7 @@ class TestCSVImporterHTTP(NiceDiffsMixin, unittest.TestCase):
         im.getName = lambda response: 'quux'
 
         im.process = processStub()
-        im.importPerson('Joe Hacker', 'pupils', 'foo bar', im.membership)
+        im.importPerson('Joe Hacker', 'pupils', 'foo bar', teaching=False)
         self.assertEqual(im.process.requests,
                          [('POST', '/persons',
                            '<object xmlns="http://schooltool.org/ns/model/0.1"'
@@ -294,7 +295,7 @@ class TestCSVImporterHTTP(NiceDiffsMixin, unittest.TestCase):
                            membership_pattern % "/persons/quux")])
 
         im.process = processStub()
-        im.importPerson('Prof. Whiz', 'teachers', 'group1', im.teaching)
+        im.importPerson('Prof. Whiz', 'teachers', 'group1', teaching=True)
         self.assertEqual(im.process.requests,
                          [('POST', '/persons',
                            '<object xmlns="http://schooltool.org/ns/model/0.1"'
@@ -367,10 +368,10 @@ class TestCSVImporterHTTP(NiceDiffsMixin, unittest.TestCase):
 
         calls = []
         im.importGroupsCsv = lambda f: calls.append('groups: %s' % f)
-        def importPeopleCsvStub(csvdata, parent_group, relation):
+        def importPersonsCsvStub(csvdata, parent_group, teaching=False):
             calls.append('people: %s %s %s'
-                         % (csvdata, parent_group, relation))
-        im.importPeopleCsv = importPeopleCsvStub
+                         % (csvdata, parent_group, teaching))
+        im.importPersonsCsv = importPersonsCsvStub
         im.importResourcesCsv = lambda f: calls.append('resources: %s' % f)
 
         im.run()
@@ -380,8 +381,8 @@ class TestCSVImporterHTTP(NiceDiffsMixin, unittest.TestCase):
                                      u'Creating resources... ',
                                      u'Import finished successfully'])
         self.assertEquals(calls, ['groups: groups.csv',
-                                  'people: teachers.csv teachers <teaching>',
-                                  'people: pupils.csv pupils <membership>',
+                                  'people: teachers.csv teachers True',
+                                  'people: pupils.csv pupils False',
                                   'resources: resources.csv'])
 
     def test_process(self):

@@ -174,7 +174,7 @@ class CSVImporterBase:
             raise DataError(_("Error in group data line %d: %s")
                             % (lineno + 1, e))
 
-    def importPeopleCsv(self, csvdata, parent_group, relation):
+    def importPersonsCsv(self, csvdata, parent_group, teaching=False):
         lineno = 0
         try:
             for lineno, row in enumerate(csv.reader(csvdata)):
@@ -184,7 +184,7 @@ class CSVImporterBase:
                                     (parent_group, lineno + 1, len(row)))
                 title, groups, dob, comment = map(from_locale, row)
                 name = self.importPerson(title, parent_group, groups,
-                                         relation=relation)
+                                         teaching=teaching)
                 self.importPersonInfo(name, title, dob, comment)
         except csv.Error, e:
             raise DataError(_("Error in %s parent_group data line %d: %s")
@@ -209,7 +209,7 @@ class CSVImporterBase:
     def importGroup(self, name, title, parents, facets):
         raise NotImplementedError()
 
-    def importPerson(self, title, parent, groups, relation):
+    def importPerson(self, title, parent, groups, teaching=False):
         raise NotImplementedError()
 
     def importResource(self, title, groups):
@@ -239,11 +239,11 @@ class CSVImporterHTTP(CSVImporterBase):
             self.blather(_("Creating groups... "))
             self.importGroupsCsv(self.fopen('groups.csv'))
             self.blather(_("Creating teachers... "))
-            self.importPeopleCsv(self.fopen('teachers.csv'), 'teachers',
-                                 self.teaching)
+            self.importPersonsCsv(self.fopen('teachers.csv'), 'teachers',
+                                 teaching=True)
             self.blather(_("Creating pupils... "))
-            self.importPeopleCsv(self.fopen('pupils.csv'), 'pupils',
-                                 self.membership)
+            self.importPersonsCsv(self.fopen('pupils.csv'), 'pupils',
+                                 teaching=False)
             self.blather(_("Creating resources... "))
             self.importResourcesCsv(self.fopen('resources.csv'))
             self.blather(_("Import finished successfully"))
@@ -291,16 +291,15 @@ class CSVImporterHTTP(CSVImporterBase):
         for method, resource, body in result:
             self.process(method, resource, body=body)
 
-    def importPerson(self, title, parent, groups, relation):
+    def importPerson(self, title, parent, groups, teaching=False):
         """Import a person.
 
         Returns the name of the created person object.
 
         parent is the parent group name (usually 'pupils' or 'teachers').
 
-        relation is a method that takes a group name and an object name,
-        and returns a tuple for process().  It is usually either
-        self.membership or self.teaching.
+        If teaching is True, then teaching relationships will be formed with
+        provided groups.
         """
         body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
                 ' title="%s"/>' % to_xml(title))
@@ -309,6 +308,12 @@ class CSVImporterHTTP(CSVImporterBase):
 
         result = []
         result.append(self.membership(parent, "/persons/%s" % name))
+
+        if not teaching:
+            relation = self.membership
+        else:
+            relation = self.teaching
+
         for group in groups.split():
             result.append(relation(group, "/persons/%s" % name))
 
@@ -394,7 +399,7 @@ class CSVImporterZODB(CSVImporterBase):
             # TODO: facets
         return group.__name__
 
-    def importPerson(self, title, parent, groups, relation):
+    def importPerson(self, title, parent, groups, teaching=False):
         person = self.persons.new(title=title)
         # TODO: process other arguments
         return person.__name__
