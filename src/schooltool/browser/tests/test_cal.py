@@ -1124,6 +1124,7 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
             request = RequestStub(args=args, method='POST',
                                   authenticated_user=self.manager)
             view.request = request
+            view.setUpWidgets()
             view.update()
             return view.getRecurrenceRule()
 
@@ -1212,6 +1213,7 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
 
     def test_getMonthDay(self):
         view = self.createView()
+        view.setUpWidgets()
         self.assertEquals(view.getMonthDay(), "??")
         view.date_widget.value = date(2004, 1, 1)
         self.assertEquals(view.getMonthDay(), "1")
@@ -1220,6 +1222,7 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
 
     def test_getWeekDay(self):
         view = self.createView()
+        view.setUpWidgets()
         self.assertEquals(view.getWeekDay(), "same weekday")
 
         def test_date(dt, expected):
@@ -1236,6 +1239,7 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
 
     def test_weekdayChecked(self):
         view = self.createView()
+        view.setUpWidgets()
 
         def check(nr, expected):
             self.assertEquals(view.weekdayChecked({'nr': nr}), expected)
@@ -1257,6 +1261,7 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
 
     def test_weekdayDisabled(self):
         view = self.createView()
+        view.setUpWidgets()
 
         def check(nr, expected):
             self.assertEquals(view.weekdayDisabled({'nr': nr}), expected)
@@ -1277,6 +1282,7 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
 
     def test_getLastWeekDay(self):
         view = self.createView()
+        view.setUpWidgets()
         self.assertEquals(view.getLastWeekDay(), "last weekday")
         view.date_widget.value = date(2004, 10, 24)
         self.assertEquals(view.getLastWeekDay(), None)
@@ -1804,7 +1810,6 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.assert_('Math' in content)
 
     def test_tt_getRecurrenceRule(self):
-
         view = self.createView()
         ttcal = self.initTTCalendar(view.context)
 
@@ -1814,6 +1819,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                                     'recurrence_type': 'daily',
                                     'date': '2004-11-05'})
         view.request = request
+        view.setUpWidgets()
         view.update()
         self.assertEqual(view.getRecurrenceRule(), None)
 
@@ -1902,6 +1908,7 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         view = self.createView()
         view.request = RequestStub(args={'event_id': '123',
                                          'date': '2004-11-05'})
+        view.setUpWidgets()
 
         event = createEvent('2004-08-16 13:45', '5 min', 'Anything',
                             unique_id='123')

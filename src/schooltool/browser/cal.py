@@ -989,7 +989,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
 
     Used by EventAddView and EventEditView.
     """
-    # XXX This class and its subclasses are begging for serious refactoring.
+    # XXX This class and its subclasses are a bit "heavy".
 
     __used_for__ = ICalendar
 
@@ -1000,10 +1000,10 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
     page_title = None # overridden by subclasses
     tt_event = False
     date = None
+    error = None
 
-    def __init__(self, context):
-        # XXX Do we really have to do all this in __init__?
-        View.__init__(self, context)
+    def setUpWidgets(self):
+        """Set up widgets used in this form."""
         self.title_widget = TextWidget('title', _('Title'))
         self.date_widget = TextWidget('start_date', _('Date'),
                                       parser=dateParser)
@@ -1015,6 +1015,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
                                           parser=intParser,
                                           validator=durationValidator,
                                           value=30)
+
         self.locations = self.getLocations()
         choices = [(l, l) for l in self.locations] + [('', _('Other'))]
         self.location_widget = SelectionWidget('location', _('Location'),
@@ -1030,7 +1031,10 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
                                                ('hidden', _('Hidden'))),
                                               value=default_privacy)
 
-        # Widgets for editing the recurrence
+        self._setUpRecurrenceWidgets()
+
+    def _setUpRecurrenceWidgets(self):
+        """Set up widgets for editing recurrence attributes."""
         self.recurrence_widget = CheckboxWidget('recurrence', _('Recurring'))
 
         self.recurrence_type_widget = SelectionWidget(
@@ -1056,7 +1060,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         self.until_widget = TextWidget('until', _('Repeat until'),
                                        parser=dateParser)
 
-        # The display is done manually, so no formatter is needed
+        # The display is done manually, so no formatter is needed.
         self.weekdays_widget = SequenceWidget('weekdays', _('Weekdays'),
                                               parser=intsParser,
                                               validator=weekdaysValidator)
@@ -1072,33 +1076,23 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
                                                 parser=datesParser,
                                                 formatter=datesFormatter)
 
-        self.error = None
-
     def update(self):
         """Parse arguments in request and put them into view attributes."""
-        request = self.request
-        self.title_widget.update(request)
-        self.date_widget.update(request)
-        self.time_widget.update(request)
-        self.duration_widget.update(request)
-        self.location_widget.update(request)
-        self.other_location_widget.update(request)
-        self.privacy_widget.update(request)
-        self.recurrence_widget.update(request)
-        self.recurrence_type_widget.update(request)
-        self.interval_widget.update(request)
-        self.range_widget.update(request)
-        self.count_widget.update(request)
-        self.until_widget.update(request)
-        self.exceptions_widget.update(request)
-        self.weekdays_widget.update(request)
-        self.monthly_widget.update(request)
+        for widget_name in ['title', 'date', 'time', 'duration',
+                            'location', 'other_location', 'privacy',
+                            'recurrence', 'recurrence_type', 'interval',
+                            'range', 'count', 'until', 'exceptions',
+                            'weekdays', 'monthly']:
+            widget = getattr(self, widget_name + '_widget')
+            widget.update(self.request)
 
     def do_GET(self, request):
+        self.setUpWidgets()
         self.update()
         return View.do_GET(self, request)
 
     def do_POST(self, request):
+        self.setUpWidgets()
         self.update()
         if self.title_widget.value == "":
             # Force a "field is required" error if value is ""
@@ -1152,50 +1146,42 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
 
         Must be called after update().
         """
-        if self.tt_event:
+        if self.tt_event or not self.recurrence_widget.value:
             return None
 
-        if self.recurrence_widget.value:
-            interval = self.interval_widget.value
-            until = self.until_widget.value
-            count = self.count_widget.value
-            range = self.range_widget.value
-            exceptions = self.exceptions_widget.value
+        interval = self.interval_widget.value
+        until = self.until_widget.value
+        count = self.count_widget.value
+        range = self.range_widget.value
+        exceptions = self.exceptions_widget.value
 
-            if interval is None:
-                interval = 1
+        if interval is None:
+            interval = 1
 
-            if range != 'until':
-                until = None
-            if range != 'count':
-                count = None
+        if range != 'until':
+            until = None
+        if range != 'count':
+            count = None
 
-            if exceptions is None:
-                exceptions = ()
+        if exceptions is None:
+            exceptions = ()
 
-            if self.recurrence_type_widget.value == 'daily':
-                return DailyRecurrenceRule(interval=interval,
-                                           count=count, until=until,
-                                           exceptions=exceptions)
-            elif self.recurrence_type_widget.value == 'weekly':
-                weekdays = self.weekdays_widget.value or ()
-                return WeeklyRecurrenceRule(interval=interval,
-                                            count=count, until=until,
-                                            exceptions=exceptions,
-                                            weekdays=tuple(weekdays))
-            elif self.recurrence_type_widget.value == 'monthly':
-                monthly = self.monthly_widget.value
-                return MonthlyRecurrenceRule(interval=interval,
-                                             count=count, until=until,
-                                             exceptions=exceptions,
-                                             monthly=monthly)
-            elif self.recurrence_type_widget.value == 'yearly':
-                return YearlyRecurrenceRule(interval=interval,
-                                            count=count, until=until,
-                                            exceptions=exceptions)
+        kwargs = {'interval': interval, 'count': count,
+                  'until': until, 'exceptions': exceptions}
 
+        recurrence_type = self.recurrence_type_widget.value
+        if recurrence_type == 'daily':
+            return DailyRecurrenceRule(**kwargs)
+        elif self.recurrence_type_widget.value == 'weekly':
+            weekdays = self.weekdays_widget.value or ()
+            return WeeklyRecurrenceRule(weekdays=tuple(weekdays), **kwargs)
+        elif self.recurrence_type_widget.value == 'monthly':
+            monthly = self.monthly_widget.value
+            return MonthlyRecurrenceRule(monthly=monthly, **kwargs)
+        elif self.recurrence_type_widget.value == 'yearly':
+            return YearlyRecurrenceRule(**kwargs)
         else:
-            return None
+            return None # Shouldn't happen
 
     def getLocations(self):
         """Get a list of titles for possible locations."""
@@ -1207,12 +1193,9 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         return locations
 
     def weekdays(self):
-        return ({'nr': 0, 'name': _("Mon")},
-                {'nr': 1, 'name': _("Tue")},
-                {'nr': 2, 'name': _("Wed")},
-                {'nr': 3, 'name': _("Thu")},
-                {'nr': 4, 'name': _("Fri")},
-                {'nr': 5, 'name': _("Sat")},
+        return ({'nr': 0, 'name': _("Mon")}, {'nr': 1, 'name': _("Tue")},
+                {'nr': 2, 'name': _("Wed")}, {'nr': 3, 'name': _("Thu")},
+                {'nr': 4, 'name': _("Fri")}, {'nr': 5, 'name': _("Sat")},
                 {'nr': 6, 'name': _("Sun")})
 
     def getMonthDay(self):
