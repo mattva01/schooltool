@@ -219,12 +219,18 @@ def doctest_setup():
         ...     web_access_log_file = ['STDOUT']
         >>> options.config = ConfigStub()
 
+    Workaround to fix a Windows failure:
+
+        >>> import logging
+        >>> del logging.getLogger(None).handlers[:]
+
+    And go!
+
         >>> setup(options)
         <ZODB.DB.DB object at ...>
 
     A web access logger has been set up:
 
-        >>> import logging
         >>> logger1 = logging.getLogger('accesslog')
         >>> logger1.propagate
         False
