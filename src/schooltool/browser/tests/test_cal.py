@@ -1078,6 +1078,48 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         self.assertEquals(exc.replacement.duration, timedelta(minutes=70))
         self.assertEquals(exc.replacement.unique_id, event.unique_id)
 
+    def test_edit_exceptional_event(self):
+        from schooltool.timetable import TimetableException
+        from schooltool.timetable import ExceptionalTTCalendarEvent
+        view = self.createView()
+        ttcal = self.initTTCalendar(view.context)
+        event = ttcal.find('uniq')
+        calendar = view.context.__parent__.makeCalendar()
+
+        exc = TimetableException(date=event.dtstart,
+                                 period_id=event.period_id,
+                                 activity=event.activity)
+        exc_ev = ExceptionalTTCalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                            timedelta(minutes=1), "A",
+                                            unique_id="uniq",
+                                            exception=exc)
+        exc.replacement = exc_ev
+        calendar.removeEvent(event)
+        calendar.addEvent(exc_ev)
+
+        request = RequestStub(args={'event_id': "uniq",
+                                    'title': 'Changed',
+                                    'location': 'Inbetween',
+                                    'start_date': '2004-08-16',
+                                    'start_time': '13:30',
+                                    'duration': '70'},
+                              method='POST')
+        content = view.render(request)
+
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/persons/johndoe/calendar/'
+                          'daily.html?date=2004-08-16')
+
+        self.assert_(exc.replacement is not exc_ev)
+        self.assert_(exc.replacement.exception is exc)
+        self.assertEquals(exc.replacement.title, 'Changed')
+        self.assertEquals(exc.replacement.location, 'Inbetween')
+        self.assertEquals(exc.replacement.dtstart,
+                          datetime(2004, 8, 16, 13, 30))
+        self.assertEquals(exc.replacement.duration, timedelta(minutes=70))
+        self.assertEquals(exc.replacement.unique_id, event.unique_id)
+
 
 class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
 
@@ -1191,13 +1233,13 @@ class TestEventDeleteView(unittest.TestCase, EventTimetableTestHelpers):
                                             unique_id="uniq",
                                             exception=exc)
         exc.replacement = exc_ev
-
+        calendar.removeEvent(event)
         calendar.addEvent(exc_ev)
 
         request = RequestStub(args={'event_id': "uniq", 'CONFIRM': 'Confirm'})
         content = view.render(request)
 
-        self.assertEquals(len(list(ttcal)), 4)
+        self.assertEquals(len(list(ttcal)), 3)
 
         self.assertEquals(exc.date, datetime(2004, 8, 12, 12, 0))
         self.assertEquals(exc.period_id, "P1")
