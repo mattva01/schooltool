@@ -491,7 +491,7 @@ class SchoolTimetableTraverseView(BaseTimetableTraverseView):
     """View for /schooltt."""
 
     def title(self):
-        return "School timetables"
+        return _("School timetables")
 
     def timetables(self):
         basepath = '/schooltt'
