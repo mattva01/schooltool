@@ -4,3 +4,9 @@ schooltool-debian/import-sampleschool
 schooltool-debian/schooltool.postrm.debhelper
 schooltool-debian/schooltool.prerm.debhelper
 schooltool-debian/files
+schoolbell-debian/schooltool.substvars
+schoolbell-debian/schooltool.postinst.debhelper
+schoolbell-debian/import-sampleschool
+schoolbell-debian/schooltool.postrm.debhelper
+schoolbell-debian/schooltool.prerm.debhelper
+schoolbell-debian/files
