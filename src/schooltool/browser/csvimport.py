@@ -289,7 +289,6 @@ class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
             return self.do_GET(request)
 
         try:
-            # TODO timetable_csv = unicode(timetable_csv, charset) ?
             unicode(timetable_csv, charset)
             roster_txt = unicode(roster_txt, charset)
         except UnicodeError:
@@ -298,7 +297,7 @@ class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
             return self.do_GET(request)
 
         ok = True
-        importer = TimetableCSVImporter(self.context)
+        importer = TimetableCSVImporter(self.context, charset)
         if timetable_csv:
             ok = importer.importTimetable(timetable_csv)
             if ok:
@@ -351,6 +350,9 @@ class ImportErrorCollection:
                     or self.persons or self.groups
                     or self.locations or self.records)
 
+    def __repr__(self):
+        return "<%s %r>" % (self.__class__.__name__, self.__dict__)
+
 
 class TimetableCSVImporter:
     """A timetable CSV parser and importer.
@@ -359,11 +361,12 @@ class TimetableCSVImporter:
     """
     # Perhaps this class should be moved to schooltool.csvimport
 
-    def __init__(self, app):
+    def __init__(self, app, charset=None):
         self.app = app
         self.groups = self.app['groups']
         self.persons = self.app['persons']
         self.errors = ImportErrorCollection()
+        self.charset = charset
 
     def importTimetable(self, timetable_csv):
         """Import timetables from CSV data.
@@ -373,8 +376,7 @@ class TimetableCSVImporter:
         one of attributes of self.errors have been set, and no changes to the
         database have been applied.
         """
-        rows = self.convertRowsToCSV(timetable_csv.splitlines(),
-                                     _("Error in timetable CSV data, line %d"))
+        rows = self.convertRowsToCSV(timetable_csv.splitlines())
         if rows is None:
             return False
 
@@ -422,15 +424,18 @@ class TimetableCSVImporter:
                                            day_ids, location, dry_run=dry_run)
             if self.errors.anyErrors():
                 assert dry_run, ("Something bad happened,"
-                                     " aborting transaction.")
+                                 " aborting transaction.")
                 return False
         return True
 
-    def convertRowsToCSV(self, rows, error_format):
+    def convertRowsToCSV(self, rows):
         """Convert rows (a list of strings) in CSV format to a list of lists.
 
+        rows must be in the encoding specified during construction of
+        TimetableCSVImportView; the returned values are in unicode.
+
         If the provided data is invalid, self.errors.generic will be updated
-        with `error_format % line`, and None will be returned.
+        and None will be returned.
         """
         result = []
         reader = csv.reader(rows)
@@ -438,11 +443,18 @@ class TimetableCSVImporter:
         try:
             while True:
                 line += 1
-                result.append(reader.next())
+                values = reader.next()
+                if self.charset:
+                    values = [unicode(v, self.charset) for v in values]
+                result.append(values)
         except StopIteration:
             return result
         except csv.Error:
-            self.errors.generic.append(error_format % line)
+            self.errors.generic.append(
+                    _("Error in timetable CSV data, line %d" % line))
+        except UnicodeError:
+            self.errors.generic.append(
+                    _("Conversion to unicode failed in line %d" % line))
 
     def parseRecordRow(self, records):
         """Parse records and return a list of tuples (subject, teacher).

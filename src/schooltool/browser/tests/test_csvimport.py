@@ -353,6 +353,15 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
 
 class TestTimetableCSVImportView(AppSetupMixin, unittest.TestCase):
 
+    def setUp(self):
+        from schooltool.timetable import Timetable, TimetableDay
+        self.setUpSampleApp()
+
+        ttschema = Timetable(["1","2","3"])
+        for day in range(1, 4):
+            ttschema[str(day)] = TimetableDay([str(day)])
+        self.app.timetableSchemaService['three-day'] = ttschema
+
     def createView(self):
         from schooltool.browser.csvimport import TimetableCSVImportView
         return TimetableCSVImportView(self.app)
@@ -371,13 +380,7 @@ class TestTimetableCSVImportView(AppSetupMixin, unittest.TestCase):
         self.assert_('forbidden' in result)
 
     def test_POST(self):
-        from schooltool.timetable import Timetable, TimetableDay
         view = self.createView()
-
-        ttschema = Timetable(["1","2","3"])
-        for day in range(1, 4):
-            ttschema[str(day)] = TimetableDay(str(day))
-        self.app.timetableSchemaService['three-day'] = ttschema
 
         request = RequestStub(authenticated_user=self.manager,
                               method='POST',
@@ -407,6 +410,17 @@ class TestTimetableCSVImportView(AppSetupMixin, unittest.TestCase):
         self.assert_('incorrect charset' in content)
         self.assertEquals(view.request.applog, [])
 
+    def test_POST_utf8(self):
+        view = self.createView()
+        ttschema = self.app.timetableSchemaService[u'three-day']
+        self.app.timetableSchemaService[u'three-day \u263b'] = ttschema
+        view.request = RequestStub(
+                args={'timetable.csv': '"whatever","three-day \xe2\x98\xbb"',
+                      'roster.txt': '', 'charset': 'UTF-8'})
+        result = view.do_POST(view.request)
+        self.assert_('timetable.csv imported successfully' in result, result)
+        self.assertEquals(view.request.applog, [])
+
 
 class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
 
@@ -433,9 +447,9 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                       'English1', 'English2', 'English3']:
             self.app['groups'].new(title.lower(), title=title)
 
-    def createImporter(self):
+    def createImporter(self, charset=None):
         from schooltool.browser.csvimport import TimetableCSVImporter
-        return TimetableCSVImporter(self.app)
+        return TimetableCSVImporter(self.app, charset=charset)
 
     def test_timetable_vacancies(self):
         from schooltool.timetable import Timetable, TimetableDay
@@ -484,6 +498,33 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         self.assert_(not list(tt['Wednesday']['A']))
         self.assert_(not list(tt['Wednesday']['B']))
         self.assert_(list(tt['Wednesday']['C']))
+
+    def test_convertRowsToCSV(self):
+        # simple case
+        imp = self.createImporter()
+        result = imp.convertRowsToCSV(['"some "," stuff"', '"here"'])
+        self.assertEquals(result, [["some ", " stuff"], ["here"]])
+        self.failIf(imp.errors.anyErrors(), imp.errors)
+
+        # invalid CSV
+        imp = self.createImporter()
+        result = imp.convertRowsToCSV(['"invalid"', '"csv"', '"follows'])
+        self.assertEquals(result, None)
+        self.assertEquals(imp.errors.generic[0],
+                          "Error in timetable CSV data, line 3")
+
+        # test conversion to unicode
+        imp = self.createImporter(charset='UTF-8')
+        result = imp.convertRowsToCSV(['"Weird stuff: \xe2\x98\xbb"'])
+        self.failIf(imp.errors.anyErrors(), imp.errors)
+        self.assertEquals(result, [[u"Weird stuff: \u263b"]])
+
+        # test invalid charset
+        imp = self.createImporter(charset='UTF-8')
+        result = imp.convertRowsToCSV(['"B0rken stuff: \xe2"'])
+        self.assertEquals(imp.errors.generic[0],
+                          "Conversion to unicode failed in line 1")
+        self.assertEquals(result, None)
 
     def test_timetable_invalid(self):
         imp = self.createImporter()
