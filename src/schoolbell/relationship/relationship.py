@@ -305,6 +305,9 @@ class BoundRelationshipProperty(object):
         else:
             return True
 
+    def __len__(self):
+        return len(list(self))
+
     def __iter__(self):
         for link in IRelationshipLinks(self.this):
             if link.role == self.other_role and link.rel_type == self.rel_type:

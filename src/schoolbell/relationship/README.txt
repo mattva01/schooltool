@@ -215,6 +215,8 @@ Usage example:
 
     >>> bool(fido.groups)
     True
+    >>> len(fido.groups)
+    1
 
     >>> fido.groups.remove(dogs)
 
