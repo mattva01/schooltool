@@ -359,10 +359,24 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(info.last_name, 'Anonymous')
 
 
+class TestTimetableCSVImportView(AppSetupMixin, unittest.TestCase):
+
+    def createView(self):
+        from schooltool.browser.csv import TimetableCSVImportView
+        return TimetableCSVImportView(self.app)
+
+    def test_render(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager)
+        result = view.render(request)
+        self.assertEquals(request.code, 200, result)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestCSVImportView))
     suite.addTest(unittest.makeSuite(TestCSVImporterZODB))
+    suite.addTest(unittest.makeSuite(TestTimetableCSVImportView))
     return suite
 
 

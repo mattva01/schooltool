@@ -35,16 +35,11 @@ from schooltool.translation import ugettext as _
 from schooltool.browser.widgets import SelectionWidget, TextWidget
 
 
-class CSVImportView(View, ToplevelBreadcrumbsMixin):
+class CSVImportViewBase(View):
 
     __used_for__ = IApplication
 
     authorization = ManagerAccess
-
-    template = Template('www/csvimport.pt')
-
-    error = u""
-    success = False
 
     charsets = [('UTF-8', _('Unicode (UTF-8)')),
                 ('ISO-8859-1', _('Western (ISO-8859-1)')),
@@ -68,6 +63,16 @@ class CSVImportView(View, ToplevelBreadcrumbsMixin):
             unicode(' ', charset)
         except LookupError:
             raise ValueError(_('Unknown charset'))
+
+
+class CSVImportView(CSVImportViewBase, ToplevelBreadcrumbsMixin):
+
+    __used_for__ = IApplication
+
+    template = Template('www/csvimport.pt')
+
+    error = u""
+    success = False
 
     def do_POST(self, request):
         self.charset_widget.update(request)
@@ -238,3 +243,19 @@ class CSVImporterZODB(CSVImporterBase):
         self.logs.append(_('Imported person info for %s (%s %s, %s)')
                          % (name, infofacet.first_name, infofacet.last_name,
                             infofacet.date_of_birth))
+
+
+class TimetableCSVImportView(CSVImportViewBase):
+    """View to upload the school timetable as CSV."""
+
+    __used_for__ = IApplication
+
+    authorization = ManagerAccess
+
+    template = Template("www/timetable-csvupload.pt")
+
+    error = None
+    success = None
+
+    def do_POST(self, request):
+        raise NotImplementedError() # TODO

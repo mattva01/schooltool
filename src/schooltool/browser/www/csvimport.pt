@@ -2,6 +2,8 @@
 <head>
   <title metal:fill-slot="title" i18n:translate="">Upload CSV data</title>
 </head>
+<!-- TODO: javascript magic to disable the 'other' field when an encoding is
+           chosen from the dropdown box -->
 <body>
 <h1 metal:fill-slot="h1" i18n:translate="">Upload CSV data</h1>
 <metal:block metal:fill-slot="content">
