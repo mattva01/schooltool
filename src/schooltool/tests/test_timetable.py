@@ -674,6 +674,7 @@ class TestWeeklyTimetableModel(unittest.TestCase, BaseTestTimetableModel):
         self.assertEqual(expected, result,
                          diff(pformat(expected), pformat(result)))
 
+
 class TimetabledStub(TimetabledMixin, RelatableMixin,
                      LocatableEventTargetMixin, FacetedMixin):
 
@@ -683,10 +684,12 @@ class TimetabledStub(TimetabledMixin, RelatableMixin,
         LocatableEventTargetMixin.__init__(self, parent)
         FacetedMixin.__init__(self)
 
+
 class LocatableStub:
     implements(ILocation)
     __name__ = None
     __parent__ = None
+
 
 class TestTimetableDict(unittest.TestCase):
 
@@ -726,6 +729,7 @@ class TestTimetableDict(unittest.TestCase):
 
         td['a', 'b'] = item
         self.assertEqual(getPath(item), '/a/b')
+
 
 class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
                           unittest.TestCase):

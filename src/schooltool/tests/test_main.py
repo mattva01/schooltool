@@ -49,6 +49,7 @@ http_date_rx = re.compile(r'(Sun|Mon|Tue|Wed|Thu|Fri|Sat), \d{2}'
 
 
 class ReactorStub:
+
     def __init__(self):
         self._called_in_thread = []
         self._called_from_thread = []
@@ -88,6 +89,7 @@ class ConnectionStub:
 
 
 class DbStub:
+
     def __init__(self):
         self._connections = []
 
@@ -98,6 +100,7 @@ class DbStub:
 
 
 class SiteStub:
+
     def __init__(self):
         self.conflictRetries = 5
         self.db = DbStub()
@@ -108,6 +111,7 @@ class ChannelStub:
 
 
 class TransactionStub:
+
     def __init__(self):
         self._note = None
         self._user = None
@@ -779,7 +783,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
 
         server = Server()
         class DummyDataManager:
-                pass
+            pass
         app = server.createApplication()
         root = app['groups']['root']
         anonymous = app['persons']['anonymous']

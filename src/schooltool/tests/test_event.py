@@ -99,6 +99,7 @@ class EventAStub:
 
 
 class EventActionStub:
+
     def __init__(self, evtype):
         self.eventType = evtype
         self.calls = []

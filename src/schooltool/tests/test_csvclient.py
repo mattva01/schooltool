@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
 #
 """
 Unit tests for schooltool.client
@@ -257,7 +256,8 @@ class TestCSVImporter(unittest.TestCase):
                      'arcrole="http://schooltool.org/ns/membership"\n'
                      'role="http://schooltool.org/ns/membership/group"\n'
                      'href="/groups/teachers"\n'),
-                    ('POST', '/groups/teachers/facets', 'factory="teacher_group"'),
+                    ('POST', '/groups/teachers/facets',
+                     'factory="teacher_group"'),
                     ('PUT', '/groups/pupils', 'title="Pupils"'),
                     ('POST', '/groups/root/relationships',
                      'arcrole="http://schooltool.org/ns/membership"\n'

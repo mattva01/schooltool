@@ -56,7 +56,6 @@ class TestUnchanged(unittest.TestCase):
         self.assert_(unchanged2 is Unchanged)
 
 
-
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestUnchanged))

@@ -135,8 +135,12 @@ class DummyRelationshipSchema:
         return d
 
 
-class URIDummy(ISpecificURI): """http://example.com/ns/dummy"""
-class URIDummy2(ISpecificURI): """http://example.com/ns/dummy2"""
+class URIDummy(ISpecificURI):
+    """http://example.com/ns/dummy"""
+
+
+class URIDummy2(ISpecificURI):
+    """http://example.com/ns/dummy2"""
 
 
 class LinkStub:

@@ -45,6 +45,7 @@ __metaclass__ = type
 
 
 class I1(Interface):
+
     def foo():
         pass
 
@@ -55,6 +56,7 @@ class I2(Interface):
 
 class C1:
     implements(I1)
+
     def __init__(self, context):
         self.context = context
 
