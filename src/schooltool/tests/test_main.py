@@ -498,6 +498,8 @@ class TestServer(RegistriesCleanupMixin, unittest.TestCase):
     def test_prepareDatabase_migrate(self):
         from schooltool.main import Server, SchoolToolError
         from schooltool.app import Application, create_application
+        from schooltool.component import getRelatedObjects
+        from schooltool.uris import URIGroup
         from schooltool import relationship, membership, teaching, component
         component.setUp()
         relationship.setUp()
@@ -513,8 +515,8 @@ class TestServer(RegistriesCleanupMixin, unittest.TestCase):
         server.root = {}
         server.root['schooltool'] = server.app
         self.assert_('root' in server.root['schooltool']['groups'].keys())
-        self.assert_('community' not in 
-                server.root['schooltool']['groups'].keys())
+        self.assert_('community' not in
+                                server.root['schooltool']['groups'].keys())
         server.migrate08to09(server.root)
         self.assert_('root' not in server.root['schooltool']['groups'].keys())
         self.assert_('community' in server.root['schooltool']['groups'].keys())

@@ -598,7 +598,6 @@ class Server:
                     if event.context:
                         event = event.replace(
                                         context = old_new_map[event.context])
-
                     new_resources[resource].calendar.addEvent(event)
 
         for person in old_persons.keys():
@@ -609,7 +608,6 @@ class Server:
                     if event.context:
                         event = event.replace(
                                         context = old_new_map[event.context])
-
                     new_persons[person].calendar.addEvent(event)
 
         root[self.appname] = new_app
