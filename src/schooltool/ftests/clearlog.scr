@@ -76,7 +76,7 @@ Content-Type: text/xml; charset=UTF-8
 SchoolTool> put /utils/eventlog
 SchoolTool> .
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 11 events cleared
 
 SchoolTool> get /utils/eventlog

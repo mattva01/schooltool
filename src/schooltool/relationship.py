@@ -209,6 +209,24 @@ class RelationshipEvent(EventMixin):
                      % (strURI(link.role), path))
         return "\n    ".join(s) + '\n'
 
+    def __unicode__(self):
+        event = self.__class__.__name__
+        s = [u"%s" % event]
+        reltype = self.links[0].reltype
+        if reltype is not None:
+            s.append(u"reltype='%s'" % strURI(reltype))
+        title = self.links[0].title
+        if title:
+            s.append(u"title='%s'" % title.replace("'", "''"))
+        for link in self.links:
+            try:
+                path = getPath(link.traverse())
+            except TypeError:
+                path = str(link.traverse())
+            s.append(u"link='%s', '%s'"
+                     % (strURI(link.role), path))
+        return u"\n    ".join(s) + u'\n'
+
 
 class RelationshipAddedEvent(RelationshipEvent):
     implements(IRelationshipAddedEvent)
