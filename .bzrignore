@@ -421,3 +421,14 @@ src/zodb-old/zeo/auth/CVS/*~
 src/zodb-old/zeo/auth/CVS/*.so
 ./Data.fs*
 ./*.csv
+./testserver.log
+./coverage
+./build-stamp
+./install-stamp
+debian/schooltool.substvars
+debian/schooltool.postinst.debhelper
+debian/import-sampleschool
+debian/schooltool.postrm.debhelper
+debian/schooltool.prerm.debhelper
+debian/files
+src/schooltool/translation/schooltool.pot
