@@ -259,8 +259,7 @@ welcome to change it and/or distribute copies of it under certain conditions.
                             if first:
                                 self.emit("=" * 50)
                                 first = False
-                            self.emit("%-3d %s (%s)"
-                                      % (nr + 1, to_unicode(title), href))
+                            self.emit("%-3d %s (%s)" % (nr + 1, title, href))
                         except (IndexError, ValueError):
                             pass
                 except SAXParseException, e:

@@ -73,16 +73,16 @@ class ResponseStub:
         elif self.request.resource == "/binfile":
             self._data = "(binary data)"
         elif self.request.resource == "/doc.xml":
-            self._data = dedent("""
+            self._data = dedent(u"""
                 <index xmlns:xlink="http://www.w3.org/1999/xlink">
                   <student xlink:type="simple"
                            xlink:href="student1"
-                           xlink:title="John"/>
+                           xlink:title="John \u263B"/>
                   <student xlink:type="simple"
                            xlink:href="student2"
                            xlink:title="Kate"/>
                 </index>
-                """)
+                """).encode('UTF-8')
         elif self.request.resource == "/place_to_put_things":
             self._data = ("%s %s %s\n%s"
                           % (self.request.method,
@@ -509,20 +509,20 @@ class TestClient(unittest.TestCase):
     def test_links_get(self):
         self.assertEqual(self.client.links, True)
         self.client.do_get("/doc.xml")
-        self.assertEmitted(dedent("""
+        self.assertEmitted(dedent(u"""
             200 OK
             Content-Type: text/xml; charset=UTF-8
             <index xmlns:xlink="http://www.w3.org/1999/xlink">
               <student xlink:type="simple"
                        xlink:href="student1"
-                       xlink:title="John"/>
+                       xlink:title="John \u263B"/>
               <student xlink:type="simple"
                        xlink:href="student2"
                        xlink:title="Kate"/>
             </index>
 
             ==================================================
-            1   John (student1)
+            1   John \u263B (student1)
             2   Kate (student2)"""))
         self.assertEqual(self.client.resources,
                          ['/student1', '/student2'])
@@ -541,13 +541,13 @@ class TestClient(unittest.TestCase):
         self.emitted = ""
         self.client.resources = ['/doc.xml']
         self.client.do_follow('1')
-        self.assertEmitted(dedent("""
+        self.assertEmitted(dedent(u"""
             200 OK
             Content-Type: text/xml; charset=UTF-8
             <index xmlns:xlink="http://www.w3.org/1999/xlink">
               <student xlink:type="simple"
                        xlink:href="student1"
-                       xlink:title="John"/>
+                       xlink:title="John \u263B"/>
               <student xlink:type="simple"
                        xlink:href="student2"
                        xlink:title="Kate"/>
