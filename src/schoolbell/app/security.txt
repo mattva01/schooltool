@@ -204,6 +204,29 @@ If there are no credentials set, clearing does not fail:
 
     >>> auth.clearCredentials(request)
 
+Also, if cookie based authentication fails, we support HTTP basic
+authentication (by trying to adapt the request to ILoginPassword):
+
+    >>> from zope.interface import Interface, directlyProvides, implements
+    >>> from zope.app.security.interfaces import ILoginPassword
+
+    >>> class Adapter:
+    ...     implements(ILoginPassword)
+    ...     def __init__(self, context):
+    ...         pass
+    ...     def getLogin(self):
+    ...         return "frog"
+    ...     def getPassword(self):
+    ...         return "pond"
+    ...
+    >>> class IFrogMarker(Interface): pass
+    >>> ztapi.provideAdapter(IFrogMarker, ILoginPassword, Adapter)
+    >>> request = TestRequest()
+    >>> directlyProvides(request, IFrogMarker)
+
+    >>> auth.authenticate(request).id
+    'sb.person.frog'
+
 
 unauthorized
 ------------

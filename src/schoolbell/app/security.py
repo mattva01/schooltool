@@ -23,20 +23,20 @@ $Id$
 """
 
 from persistent import Persistent
-from zope.interface import implements, directlyProvides, directlyProvidedBy
 from zope.app import zapi
-from zope.app.security.interfaces import IAuthentication
-from zope.app.container.contained import Contained
-from zope.app.location.interfaces import ILocation
-from zope.security.interfaces import IGroupAwarePrincipal
 from zope.app.component import getNextUtility
-from zope.app.session.interfaces import ISession
 from zope.app.component.interfaces import ISite
+from zope.app.component.interfaces.registration import ActiveStatus
 from zope.app.component.site import LocalSiteManager
 from zope.app.component.site import UtilityRegistration
-from zope.component.servicenames import Utilities
+from zope.app.container.contained import Contained
 from zope.app.container.interfaces import IObjectAddedEvent
-from zope.app.component.interfaces.registration import ActiveStatus
+from zope.app.location.interfaces import ILocation
+from zope.app.security.interfaces import IAuthentication, ILoginPassword
+from zope.app.session.interfaces import ISession
+from zope.component.servicenames import Utilities
+from zope.interface import implements, directlyProvides, directlyProvidedBy
+from zope.security.interfaces import IGroupAwarePrincipal
 
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellApplication
@@ -84,6 +84,13 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
         if 'username' in session and 'password' in session:
             if self._checkPassword(session['username'], session['password']):
                 return self.getPrincipal('sb.person.' + session['username'])
+
+        # Try HTTP basic too
+        creds = ILoginPassword(request, None)
+        if creds:
+            login = creds.getLogin()
+            if self._checkPassword(login, creds.getPassword()):
+                return self.getPrincipal('sb.person.' + login)
 
     def _checkPassword(self, username, password):
         app = getSchoolBellApplication(self)
