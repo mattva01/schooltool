@@ -11,8 +11,8 @@
 
 body {
     font-size: x-small; /* for IE5/Win */
-    voice-family: "\"}\"";   
-    voice-family: inherit;   
+    voice-family: "\"}\"";
+    voice-family: inherit;
     font-size: small; /* for IE6/Win */
 }
 
@@ -577,9 +577,9 @@ h2.calendar-view-title {
     background: #314e6c;
 }
 
-/* Day View 
+/* Day View
 * The height attribute is defined inline depending on the length of the visible
-* day 
+* day
 */
 #calendar-view-day {
   border: #aaaaaa 1px solid;
