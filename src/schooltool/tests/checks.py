@@ -103,6 +103,19 @@ class StdoutChecks:
         self.stdout_wrapper.written = False
         self.stderr_wrapper.written = False
 
+        # readline is disabled in PDB when our stdout hook is found instead of
+        # the real stdout.  We fix this with a monkey patch on pdb.set_trace().
+
+        import pdb
+
+        def set_trace_hook():
+            sys.stdout = self.old_stdout
+            self.old_pdb_set_trace()
+            sys.stdout = self.stdout_wrapper
+
+        self.old_pdb_set_trace = pdb.set_trace
+        pdb.set_trace = set_trace_hook
+
     def stopTest(self, test):
         import sys
         warn_stdout_replaced = sys.stdout is not self.stdout_wrapper
@@ -118,6 +131,8 @@ class StdoutChecks:
         if self.stderr_wrapper.written:
             warn("%s wrote to sys.stderr" % test)
 
+        import pdb
+        pdb.set_trace = self.old_pdb_set_trace
 
 class LibxmlChecks:
 
