@@ -326,7 +326,7 @@ class SchoolTimetableTraverseView(BaseTimetableTraverseView):
         return "School timetables"
 
     def timetables(self):
-        basepath = getPath(self.context)
+        basepath = '/schooltt'
         periods = getTimePeriodService(self.context).keys()
         schemas = getTimetableSchemaService(self.context).keys()
         return [{'schema': schema_id, 'period': period_id,

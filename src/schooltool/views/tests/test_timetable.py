@@ -78,9 +78,10 @@ class ServiceManagerStub:
 
 class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
 
-    def do_test(self, view_class, tt_view_class, xml=None, html=None):
+    def do_test(self, view_class, tt_view_class, xml=None, html=None,
+                path='/...object'):
         context = TimetabledStub()
-        setPath(context, '/...object', ServiceManagerStub(TimetableStub()))
+        setPath(context, path, ServiceManagerStub(TimetableStub()))
         tt = context.timetables['2003 fall', 'weekly'] = TimetableStub()
         context.overlay['2003 spring', 'weekly'] = TimetableStub()
         view = view_class(context)
@@ -198,7 +199,7 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
                 """
                 <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
                   <timetable period="2003 fall" schema="weekly"
-                    xlink:href="/...object/2003 fall/weekly"
+                    xlink:href="/schooltt/2003 fall/weekly"
                     xlink:type="simple" />
                 </timetables>
                 """, """
@@ -209,12 +210,13 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
                 <body>
                   <h1>School timetables</h1>
                   <ul>
-                    <li><a href="/...object/2003 fall/weekly"
+                    <li><a href="/schooltt/2003 fall/weekly"
                         >2003 fall, weekly</a></li>
                   </ul>
                 </body>
                 </html>
-                """)
+                """,
+                path='/')
             )
         self.assertEqual(view3.context, context)
 
