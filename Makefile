@@ -104,22 +104,22 @@ scripts/import-sampleschool: scripts/import-sampleschool.head
 	(cat $< && sed -ne '/^# -- Do not remove this line --$$/,$$p' \
 	    import-sampleschool.py) > $@
 
-.PHONY: schooltooltar
-schooltooltar: realclean build extract-translations \
+.PHONY: schooltooldist
+schooltooldist: realclean build extract-translations \
 	sampledata scripts/import-sampleschool clean
 	rm -rf dist
 	fakeroot ./debian/rules clean
-	./setup.py schooltool sdist
+	./setup.py schooltool sdist --formats=gztar,zip
 
-.PHONY: schoolbelltar
-schoolbelltar: realclean build extract-translations clean
+.PHONY: schoolbelldist
+schoolbelldist: realclean build extract-translations clean
 	rm -rf dist
 	fakeroot ./debian/rules clean
-	./setup.py schoolbell sdist
+	./setup.py schoolbell sdist --formats=gztar,zip
 
 .PHONY: signtar
-signtar:
-	md5sum dist/school*.tar.gz > dist/md5sum
+signtar: dist
+	md5sum dist/school*.{tar.gz,zip} > dist/md5sum
 	gpg --clearsign dist/md5sum
 	mv dist/md5sum.asc dist/md5sum
 
