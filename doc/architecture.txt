@@ -130,9 +130,9 @@ schooltool.interface.
 
 The relationships are implemented as three auxiliary objects:
 
-  +---+	   +---------+   +---------------+    +--------+   +---+
+  +---+    +---------+   +---------------+    +--------+   +---+
   | A |----| Link A  |---| Relationship  |----| Link B |---| B |
-  +---+    +---------+	 +---------------+    +--------+   +---+
+  +---+    +---------+   +---------------+    +--------+   +---+
 
 The link objects implement the public schooltool.interfaces.ILink API,
 and the Relationship object always remains behind the scenes.
