@@ -1209,6 +1209,31 @@ class WeeklyRecurrenceRule(RecurrenceRule):
         return (self.__class__.__name__, self.interval, self.count,
                 self.until, self.exceptions, self.weekdays)
 
+    def apply(self, ev, enddate=None):
+        """Generator that generates dates of recurrences"""
+        cur = start = ev.dtstart.date()
+        count = 0
+        weekdays = list(self.weekdays)
+        weekdays.append(ev.dtstart.weekday())
+        weekdays.sort()
+        while True:
+            if ((enddate and cur > enddate) or
+                (self.count is not None and count >= self.count) or
+                (self.until and cur > self.until)):
+                break
+            # Check that this is the correct week and
+            # the desired weekday
+            if (weekspan(start, cur) % self.interval == 0 and
+                cur.weekday() in weekdays):
+                if cur not in self.exceptions:
+                    yield cur
+                count += 1
+            cur = self._nextRecurrence(cur)
+
+    def _nextRecurrence(self, date):
+        """Adds the basic step of recurrence to the date"""
+        return date + date.resolution
+
 
 class MonthlyRecurrenceRule(RecurrenceRule):
     """Monthly recurrence rule.
@@ -1250,3 +1275,13 @@ class MonthlyRecurrenceRule(RecurrenceRule):
     def _tupleForComparison(self):
         return (self.__class__.__name__, self.interval, self.count,
                 self.until, self.exceptions, self.monthly)
+
+def weekspan(first, second):
+    """Returns the distance in weeks between dates.
+
+    For days in the same ISO week, the result is 0.
+    For days in adjacent weeks, it is 1, etc.
+    """
+    firstmonday = first - datetime.timedelta(first.weekday())
+    secondmonday = second - datetime.timedelta(second.weekday())
+    return (secondmonday - firstmonday).days / 7

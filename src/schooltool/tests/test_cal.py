@@ -1421,7 +1421,7 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
         assert rule == rule.replace()
         assert rule != rule.replace(weekdays=(1,))
 
-    def xtest_apply(self):
+    def test_apply(self):
         from schooltool.cal import CalendarEvent
         rule = self.createRule()
         ev = CalendarEvent(datetime(1978, 5, 17, 12, 0),
@@ -1460,7 +1460,7 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
         # With exceptions
         rule = self.createRule(interval=2, weekdays=(3,),
                                exceptions=[date(1978, 6, 29)])
-        result = list(rule.apply(ev, date(2004, 10, 20)))
+        result = list(rule.apply(ev, date(1978, 7, 12)))
         expected = [date(1978, 5, 17), date(1978, 5, 18),
                     date(1978, 5, 31), date(1978, 6, 1),
                     date(1978, 6, 14), date(1978, 6, 15),
@@ -1493,6 +1493,28 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
         assert rule != rule.replace(monthly=None)
 
 
+class TestWeekSpan(unittest.TestCase):
+
+    def test_weekspan(self):
+        from schooltool.cal import weekspan
+
+        # The days are in the same week
+        #                              Monday, w42         Sunday, w42
+        self.assertEqual(weekspan(date(2004, 10, 11), date(2004, 10, 17)), 0)
+
+        # The days are in the adjacent weeks
+        #                              Sunday, w42         Monday, w43
+        self.assertEqual(weekspan(date(2004, 10, 17), date(2004, 10, 18)), 1)
+
+        # The days span the end of year
+        #                              Thursday, w53       Friday, w1
+        self.assertEqual(weekspan(date(2004, 12, 30), date(2005, 01, 07)), 1)
+
+        # The days span the end of year, two weeks
+        #                              Thursday, w53       Friday, w2
+        self.assertEqual(weekspan(date(2004, 12, 30), date(2005, 01, 14)), 2)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.cal'))
@@ -1510,4 +1532,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestYearlyRecurrenceRule))
     suite.addTest(unittest.makeSuite(TestWeeklyRecurrenceRule))
     suite.addTest(unittest.makeSuite(TestMonthlyRecurrenceRule))
+    suite.addTest(unittest.makeSuite(TestWeekSpan))
     return suite
