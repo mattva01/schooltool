@@ -39,6 +39,7 @@ schooltool (0.8.99+0.9rc2-1) unstable; urgency=low
   * Fix the database versioning and keep database revision 0.8.
   * Change the default ports for SchoolBell to 7101 for the RESTive interface
     and 7180 for the web interface.
+  * Add *.js files to the list of files to install into the server package.
 
  -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
 

@@ -98,14 +98,14 @@ install-indep-stamp: $(scripts)
 	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
 	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo'  -o \
 	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
-		-name '*.xpm' -o -name '*.css' \) \
+		-name '*.xpm' -o -name '*.css' -o -name '*.js' \) \
 	     -exec install -m 644 -D -p {} \
 		../debian/$(package)/usr/lib/$(package)/{} \;
 	cd Zope3/src && \
 	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
 	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo'  -o \
 	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
-		-name '*.xpm' -o -name '*.css' \) \
+		-name '*.xpm' -o -name '*.css' -o -name '*.js' \) \
 	     -exec install -m 644 -D -p {} \
 		../../debian/$(package)/usr/lib/$(package)/{} \;
 	rm -f debian/$(package)/usr/lib/$(package)/trace.py
@@ -127,14 +127,14 @@ install-indep-stamp: $(scripts)
 	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
 	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo' -o \
 	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
-		-name '*.xpm' -o -name '*.css' \) \
+		-name '*.xpm' -o -name '*.css' -o -name '*.js' \) \
 	     -exec install -m 644 -D -p {} \
 		../debian/$(bellpackage)/usr/lib/$(package)/{} \;
 	cd Zope3/src && \
 	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
 	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo' -o \
 	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
-		-name '*.xpm' -o -name '*.css' \) \
+		-name '*.xpm' -o -name '*.css' -o -name '*.js' \) \
 	     -exec install -m 644 -D -p {} \
 		../../debian/$(bellpackage)/usr/lib/$(package)/{} \;
 	rm -f debian/$(bellpackage)/usr/lib/$(package)/trace.py
