@@ -119,8 +119,14 @@ class View(_View):
 
     macros = property(lambda self: self.macros_template.macros)
 
-    def breadcrumbs(self):
-        return []
+    def listBreadcrumbs(self):
+        # We use hasattr instead of defining a breadcrumbs method because this
+        # makes it easier to define breadcrumbs in mixins without worrying
+        # about method resolution order.
+        if not hasattr(self, 'breadcrumbs'):
+            return []
+        return [{'url': url, 'title': title}
+                for title, url in self.breadcrumbs()]
 
     def unauthorized(self, request):
         """Render an unauthorized page."""
