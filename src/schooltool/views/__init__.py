@@ -23,6 +23,7 @@ $Id$
 """
 
 import os
+import logging
 from zope.interface import moduleProvides
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
@@ -262,6 +263,8 @@ class View(Resource):
     __super = Resource
     __super_init = __super.__init__
 
+    logger = logging.getLogger('schooltool.app')
+
     def __init__(self, context):
         self.__super_init()
         self.context = context
@@ -337,6 +340,14 @@ class View(Resource):
         body = self.do_GET(request)
         request.setHeader('Content-Length', len(body))
         return ""
+
+    def log(self, message, level='LOG'):
+        """Add a log entry to the application log."""
+        if self.request is None or self.request.authenticated_user is None:
+            user = 'UNKNOWN'
+        else:
+            user = self.request.authenticated_user
+        self.logger.log(level, "(%s) %s" % (user, message))
 
 
 class NotFoundView(View):
