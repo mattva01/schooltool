@@ -411,8 +411,8 @@ class ResourceAddView(BaseAddView):
     """A view for adding a resource."""
 
 
-class GroupEditView(EditView):
-    """A view for adding a group."""
+class BaseEditView(EditView):
+    """An edit view for resources and groups"""
 
     def update(self):
         if 'CANCEL' in self.request:
@@ -425,4 +425,11 @@ class GroupEditView(EditView):
                 self.request.response.redirect(url)
             return status
 
+
+class GroupEditView(BaseEditView):
+    """A view for editing group info."""
+
+
+class ResourceEditView(BaseEditView):
+    """A view for editing resource info."""
 

@@ -144,7 +144,7 @@
       label="Edit Group Information"
       schema="schoolbell.app.interfaces.IGroup"
       permission="zope.ManageContent"
-      template="templates/group_edit.pt"
+      template="templates/simple_edit.pt"
       class=".app.GroupEditView"
       menu="schoolbell_actions"
       title="Edit info"
@@ -214,6 +214,18 @@
       template="templates/simple_add.pt"
       class=".app.ResourceAddView"
       permission="zope.ManageContent"
+      />
+
+  <editform
+      for="schoolbell.app.interfaces.IResource"
+      name="edit.html"
+      label="Edit Resource Information"
+      schema="schoolbell.app.interfaces.IResource"
+      permission="zope.ManageContent"
+      template="templates/simple_edit.pt"
+      class=".app.ResourceEditView"
+      menu="schoolbell_actions"
+      title="Edit info"
       />
 
   <menuItem

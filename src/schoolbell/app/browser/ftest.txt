@@ -767,6 +767,59 @@ Now the group info is indeed updated:
     ...
 
 
+Resource Edit view
+------------------
+
+If the Cancel button is hit, we get redirected to the resource info view:
+
+    >>> print http("""
+    ... GET /frogpond/resources/Resource/edit.html?\
+    ... field.title=Foo&CANCEL=Please HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/resources/Resource
+    ...
+
+But the context is unchanged:
+
+    >>> print http("""
+    ... GET /frogpond/resources/Resource/edit.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...<input ... name="field.title" size="20" type="text" value="resource"  />...
+    ...
+
+When the form is successfully submitted, we also get
+redirected to the info view:
+
+    >>> print http("""
+    ... GET /frogpond/resources/Resource/edit.html?\
+    ... field.title=Foo&UPDATE_SUBMIT=Please HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/resources/Resource
+    ...
+    ...<input ... name="field.title" size="20" type="text" value="Foo"  />...
+    ...
+
+Now the group info is indeed updated:
+
+    >>> print http("""
+    ... GET /frogpond/resources/Resource/edit.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...<input ... name="field.title" size="20" type="text" value="Foo"  />...
+    ...
+
+
 Navigation view
 ---------------
 
