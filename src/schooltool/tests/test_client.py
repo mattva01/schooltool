@@ -95,7 +95,10 @@ class TestClient(unittest.TestCase):
 
     def setUp(self):
         from schooltool.client import Client
+        class StdinStub:
+            isatty = lambda self: True
         self.client = Client()
+        self.client.stdin = StdinStub()
         self.emitted = ""
         def emit(*args):
             if self.emitted:
