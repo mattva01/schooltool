@@ -2,6 +2,7 @@
 #
 # Makefile for SchoolTool
 #
+# $Id$
 
 PYTHON=python2.3
 PYTHONDIR=/usr/lib/python2.3
@@ -48,6 +49,12 @@ runclient: build
 runwxclient: build
 	PYTHONPATH=src $(PYTHON) src/schooltool/wxclient.py
 
+sampledata:
+	PYTHONPATH=src $(PYTHON) $(PWD)/src/schooltool/datagen.py schooltool-m2
+
+sampleschool:
+	PYTHONPATH=src $(PYTHON) $(PWD)/runimport.py
+
 coverage: build
 	rm -rf coverage
 	$(PYTHON) test.py $(TESTFLAGS) --coverage schooltool
@@ -65,4 +72,4 @@ vi-coverage-reports:
 	@cd coverage && vi '+/^>>>>>>/' `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
 
 
-.PHONY: all build clean test ftest run coverage
+.PHONY: all build clean test ftest run coverage sampleschool
