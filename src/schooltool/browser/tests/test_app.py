@@ -306,23 +306,22 @@ class TestLoginView(unittest.TestCase, TraversalTestMixin):
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/start')
 
-# XXX 
-#    def test_post(self):
-#        from schooltool.component import getTicketService
-#        view = self.createView()
-#        request = self.createRequestWithAuthentication(method='POST',
-#                              args={'username': 'manager',
-#                                    'password': 'schooltool'})
-#        result = view.render(request)
-#        self.assertEquals(request.code, 302)
-#        self.assertEquals(request.headers['location'],
-#                          'http://localhost:7001/start')
-#        self.assertEquals(request._outgoing_cookies['auth']['path'], '/')
-#        ticket = request._outgoing_cookies['auth']['value']
-#        username, password = \
-#                  getTicketService(view.context).verifyTicket(ticket)
-#        self.assertEquals(username, 'manager')
-#        self.assertEquals(password, 'schooltool')
+    def test_post(self):
+        from schooltool.component import getTicketService
+        view = self.createView()
+        request = self.createRequestWithAuthentication(method='POST',
+                              args={'username': 'manager',
+                                    'password': 'schooltool'})
+        result = view.render(request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/start')
+        self.assertEquals(request._outgoing_cookies['auth']['path'], '/')
+        ticket = request._outgoing_cookies['auth']['value']
+        username, password = \
+                  getTicketService(view.context).verifyTicket(ticket)
+        self.assertEquals(username, 'manager')
+        self.assertEquals(password, 'schooltool')
 
     def test_post_with_url(self):
         from schooltool.component import getTicketService
