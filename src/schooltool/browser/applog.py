@@ -25,6 +25,9 @@ $Id$
 from schooltool.browser import View, Template
 from schooltool.browser.auth import ManagerAccess
 from schooltool.common import from_locale, to_unicode
+from schooltool.rest import absoluteURL
+from schooltool.rest.applog import ApplicationLogQuery
+from schooltool.translation import ugettext as _
 
 
 class ApplicationLogView(View):
@@ -35,21 +38,18 @@ class ApplicationLogView(View):
 
     error = u""
 
-    def do_GET(self, request):
-        # XXX copied with some changes without unittests from the
-        # ReST ApplicationLogView.
+    pagesize = 25
 
+    def do_GET(self, request):
         path = request.site.applog_path
         if path is None:
             self.error = _("Application log not configured")
             return View.do_GET(self, request)
 
-        filter = None
-        page = -1
-        pagesize = 30
-
         if 'filter' in request.args:
-            filter = to_unicode(request.args['filter'][0])
+            self.filter_str = to_unicode(request.args['filter'][0])
+        else:
+            self.filter_str = None
 
         if 'page' in request.args:
             try:
@@ -57,32 +57,34 @@ class ApplicationLogView(View):
             except ValueError:
                 self.error = _("Invalid value for 'page' parameter.")
                 return View.do_GET(self, request)
+        else:
+            page = -1
 
-        file = self.openLog(path)
-        result = map(from_locale, file.readlines())
-        file.close()
+        if 'prev_filter' in request.args and self.filter_str is not None:
+            prev_filter_str = to_unicode(request.args['prev_filter'][0])
+            if prev_filter_str != self.filter_str:
+                page = -1
 
-        if filter:
-            result = [line for line in result if filter in line]
-
-#       if page is not None:
-        page, total = self.getPageInRange(page, pagesize, len(result))
-        result = result[(page - 1) * pagesize:page * pagesize]
-
-        self.filter = filter or ""
-        self.page = page
-        self.total = total
-        self.log_contents = "".join(result)
-
+        applog = self.openLog(path)
+        self.query = ApplicationLogQuery(applog, filter_str=self.filter_str,
+                                         page=page, pagesize=self.pagesize)
         return View.do_GET(self, request)
 
-    def getPageInRange(self, page, pagesize, lines):
-        """A helper to cut out a page out of an array of lines."""
-        # XXX copied without unittests from the ReST ApplicationLogView.
-        totalpages = (lines + pagesize - 1) / pagesize
-        if page < 0:
-            page = totalpages + 1 + page
-        return max(1, min(page, totalpages)), totalpages
+    def nextPageURL(self):
+        if self.query.page < self.query.total:
+            url = absoluteURL(self.request, self.context, 'applog')
+            url += '?page=%d' % (self.query.page + 1)
+            return url
+        else:
+            return None
+
+    def prevPageURL(self):
+        if self.query.page > 1:
+            url = absoluteURL(self.request, self.context, 'applog')
+            url += '?page=%d' % (self.query.page - 1)
+            return url
+        else:
+            return None
 
     def openLog(self, filename):
-        return file(filename)
+        return open(filename)

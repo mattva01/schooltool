@@ -15,22 +15,32 @@
 
     <p>
     <label for="page">Page</label>
-    <input id="page" name="page" type="text" tal:attributes="value view/page">
-    (of <span tal:replace="view/total" />)
+    <input id="page" name="page" type="text"
+           tal:attributes="value view/query/page">
+    (of <span tal:replace="view/query/total" />)
     <br />
+    <input type="hidden" name="prev_filter"
+           tal:attributes="value view/filter_str">
     <label for="filter">Filter</label>
     <input id="filter" name="filter" type="text"
-           tal:attributes="value view/filter">
+           tal:attributes="value view/filter_str">
 
     <br />
-    <input type="submit" value="Go">
+    <input type="submit" value="Go" />
     </p>
 
-      <pre tal:content="view/log_contents">
+      <pre tal:content="python:'\n'.join(view.query.result)">
         Log
         contents
         here
       </pre>
+
+    <p>
+    <a tal:condition="view/prevPageURL"
+       tal:attributes="href view/prevPageURL">Previous page</a>
+    <a tal:condition="view/nextPageURL"
+       tal:attributes="href view/nextPageURL">Next page</a>
+    </p>
 
   </form>
   </tal:block>

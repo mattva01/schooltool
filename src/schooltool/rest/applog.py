@@ -81,10 +81,12 @@ class ApplicationLogQuery:
     """A query in the application log.
 
     After instantiation, the result (a list of strings) is available in
-    the attributes 'result'.  If the arguments 'page' and 'pagesize' were
+    the attribute 'result'.  If the arguments 'page' and 'pagesize' were
     provided, the returned page number is stored in the attribute 'page'
     and the total number of pages in 'total'.
     """
+
+    result = page = pagesize = total = None
 
     def __init__(self, logfile, page=None, pagesize=None, filter_str=None):
 
