@@ -139,12 +139,11 @@ def setUp(test=None):
         def __init__(self, request):
             pass
         def __call__(self):
-            return "a resource"
+            return "a dummy resource"
 
-    ztapi.browserResource('layout.css', ResourceStub)
-    ztapi.browserResource('style.css', ResourceStub)
-    ztapi.browserResource('schoolbell.js', ResourceStub)
-    ztapi.browserResource('logo.png', ResourceStub)
+    for name in ['layout.css', 'style.css', 'schoolbell.js', 'logo.png',
+                 'next.png', 'prev.png', ]:
+        ztapi.browserResource(name, ResourceStub)
 
     # menus
     ztapi.browserView(None, 'view_get_menu', MenuAccessView)
