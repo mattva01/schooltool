@@ -106,7 +106,7 @@ class CalendarMixin(object):
         for event in self:
             if event.recurrence is not None:
                 starttime = event.dtstart.time()
-                for recdate in event.recurrence.apply(event, last):
+                for recdate in event.recurrence.apply(event, last.date()):
                     dtstart = datetime.datetime.combine(recdate, starttime)
                     dtend = dtstart + event.duration
                     if dtend > first and dtstart < last:

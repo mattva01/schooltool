@@ -114,6 +114,10 @@ class RecurrenceRule(object):
 
     def apply(self, event, enddate=None):
         """Generator that generates dates of recurrences"""
+        if enddate:
+            assert isinstance(enddate, datetime.date), "enddate must be a date"
+            assert not isinstance(enddate, datetime.datetime), \
+                    "enddate must be a date, not a datetime"
         cur = event.dtstart.date()
         count = 0
         while True:
@@ -245,6 +249,10 @@ class WeeklyRecurrenceRule(RecurrenceRule):
 
     def apply(self, event, enddate=None):
         """Generate dates of recurrences."""
+        if enddate:
+            assert isinstance(enddate, datetime.date), "enddate must be a date"
+            assert not isinstance(enddate, datetime.datetime), \
+                    "enddate must be a date, not a datetime"
         cur = start = event.dtstart.date()
         count = 0
         weekdays = Set(self.weekdays)
@@ -336,6 +344,10 @@ class MonthlyRecurrenceRule(RecurrenceRule):
                 continue
 
     def apply(self, event, enddate=None):
+        if enddate:
+            assert isinstance(enddate, datetime.date), "enddate must be a date"
+            assert not isinstance(enddate, datetime.datetime), \
+                    "enddate must be a date, not a datetime"
         if self.monthly == 'monthday':
             for date in  RecurrenceRule.apply(self, event, enddate):
                 yield date
