@@ -10,13 +10,6 @@ sys.path.insert(0, '/usr/lib/schooltool')
 # as well (zope is in temporarily in schoolbell)
 sys.path.insert(0, '/usr/lib/schoolbell')
 
-# patch the locations of the data files
-import schooltool
-schooltool.rest_prefix = '/usr/share/schooltool/schooltool/rest'
-schooltool.browser_prefix = '/usr/share/schooltool/schooltool/browser'
-schooltool.translation_prefix = '/usr/share/schooltool/schooltool/translation'
-schooltool.config_schema_prefix = '/usr/share/schooltool/schooltool'
-
 # Change the default config file name by prepending a command-line argument
 sys.argv.insert(1, '--config=/etc/schooltool/schooltool.conf')
 

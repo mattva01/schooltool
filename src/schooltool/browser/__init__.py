@@ -33,15 +33,13 @@ from schooltool.interfaces import IApplicationObjectContainer, IRelatable
 from schooltool.component import getTicketService, getRelatedObjects
 from schooltool.rest import View as _View
 from schooltool.rest import Unauthorized               # reexport
-from schooltool.rest import Template as _Template
-from schooltool.rest import read_file as _read_file
+from schooltool.rest import Template, read_file        # reexport
 from schooltool.rest import absoluteURL, absolutePath  # reexport
 from schooltool.uris import URINotation
 from schooltool.http import Request
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import isManager, isTeacher
 from schooltool.translation import ugettext as _, TranslatableString
-from schooltool import browser_prefix
 
 
 __metaclass__ = type
@@ -59,19 +57,6 @@ session_time_limit = datetime.timedelta(hours=5)
 #     Note that group names must not have spaces, or CSV import/export will
 #     break.
 valid_name = re.compile("^[-a-zA-Z0-9.,'()]+$").match
-
-def read_file(fn, basedir=browser_prefix):
-    if basedir is None:
-        return _read_file(fn, os.path.dirname(__file__))
-    return _read_file(fn, basedir)
-
-
-class Template(_Template):
-
-    def __init__(self, filename, content_type='text/html', charset='UTF-8',
-            _prefix=browser_prefix):
-        _Template.__init__(self, filename, content_type=content_type,
-                charset=charset, _prefix=_prefix)
 
 
 class BrowserRequest(Request):
@@ -261,7 +246,7 @@ class StaticFile(View):
 
     def do_GET(self, request):
         request.setHeader('Content-Type', self.content_type)
-        return read_file(self.filename)
+        return read_file(self.filename, os.path.dirname(__file__))
 
 
 class InternalErrorView(View):

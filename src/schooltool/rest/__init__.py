@@ -40,7 +40,6 @@ from schooltool.component import getView, getRelatedObjects
 from schooltool.uris import URINotation
 from schooltool.common import UnicodeAwareException
 from schooltool.translation import ugettext as _
-from schooltool import rest_prefix
 
 __metaclass__ = type
 
@@ -184,7 +183,7 @@ def absolutePath(request, obj, suffix=''):
     return u'/' + '/'.join(filter(None, path))
 
 
-def read_file(fn, basedir=rest_prefix):
+def read_file(fn, basedir=None):
     """Return the contents of the specified file.
 
     Filename is relative to basedir.  If basedir is none, then filename is
@@ -272,7 +271,7 @@ class Template(PageTemplateFile):
     ugettext_hook = staticmethod(_)
 
     def __init__(self, filename, content_type='text/html', charset='UTF-8',
-                       _prefix=rest_prefix):
+                       _prefix=None):
         _prefix = self.get_path_from_prefix(_prefix)
         PageTemplateFile.__init__(self, filename, _prefix)
         self.content_type = content_type

@@ -54,7 +54,6 @@ from schooltool.uris import URICalendarSubscription, URICalendarProvider
 from schooltool.uris import URICalendarSubscriber
 from schooltool.membership import Membership
 from schooltool.component import getOptions, relate
-from schooltool import config_schema_prefix
 
 
 
@@ -318,9 +317,7 @@ class Server:
 
     def loadConfig(self, config_file):
         """Load configuration from a given config file."""
-        dirname = config_schema_prefix
-        if dirname is None:
-            dirname = os.path.dirname(__file__)
+        dirname = os.path.dirname(__file__)
         schema = ZConfig.loadSchema(os.path.join(dirname, 'schema.xml'))
         self.notifyConfigFile(config_file)
         config, handler = ZConfig.loadConfig(schema, config_file)
