@@ -1,3 +1,4 @@
+
 #
 # SchoolTool - common information systems platform for school administration
 # Copyright (c) 2004 Shuttleworth Foundation
@@ -94,7 +95,8 @@ class BookingView(View):
         return value.__name__
 
     def breadcrumbs(self):
-        return [(_('Start'), self.request.uri)]
+        app = traverse(self.context, '/')
+        return [(_('Start'), absoluteURL(self.request, app, 'start'))]
 
     def do_GET(self, request):
         self.update()
@@ -718,6 +720,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin):
                                                choices, value='')
         self.other_location_widget = TextWidget('location_other',
                                                 _('Specify other'))
+        self.error = None
 
     def update(self):
         """Parse arguments in request and put them into view attributes."""
@@ -803,9 +806,10 @@ class EventEditView(EventViewBase):
                 self.event = event
                 break
         else:
-            raise ValueError("Invalid event_id") # XXX Unfriendly? and not i18nized!
             # TODO: Create a traversal view for events
             # and refactor the event edit view to take the event as context
+            self.error = _("This event does not exist.")
+            return
 
         self.title_widget.setValue(self.event.title)
         self.date_widget.setValue(self.event.dtstart.date())
@@ -844,8 +848,6 @@ class EventDeleteView(View):
                 self.context.removeEvent(event)
                 url = absoluteURL(request, self.context, suffix)
                 return self.redirect(url, request)
-        else:
-            raise ValueError("Invalid event_id") # XXX Unfriendly? And not i18nized!
 
 
 def EventSourceDecorator(e, source):

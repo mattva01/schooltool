@@ -949,6 +949,13 @@ class TestEventEditView(AppSetupMixin, unittest.TestCase):
         self.assert_('"13:00"' in content)
         self.assert_('"120"' in content)
 
+    def test_render_nonexistent(self):
+        view = self.createView()
+        request = RequestStub(args={'event_id': "nonexistent"})
+        content = view.render(request)
+
+        self.assert_("This event does not exist." in content)
+
     def test(self):
         view = self.createView()
         request = RequestStub(args={'event_id': "pick me",

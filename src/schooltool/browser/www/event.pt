@@ -7,27 +7,30 @@
 <h1 metal:fill-slot="h1" tal:content="view/page_title" />
 
 <metal:block metal:fill-slot="content">
+<tal:block condition="view/error">
+  <div class="error" tal:content="view/error" />
+</tal:block>
+<tal:block condition="not: view/error">
+  <form method="POST" tal:attributes="action request/path">
 
-<form method="POST" tal:attributes="action request/path">
+    <input tal:condition="request/args/event_id|nothing"
+	   type="hidden" name="event_id"
+	   tal:attributes="value view/event_id" />
 
-  <input tal:condition="request/args/event_id|nothing"
-         type="hidden" name="event_id"
-         tal:attributes="value view/event_id" />
+    <div class="row" tal:replace="structure view/title_widget" />
+    <div class="row" tal:replace="structure view/date_widget" />
+    <div class="row" tal:replace="structure view/time_widget" />
+    <div class="row" tal:replace="structure view/location_widget" />
+    <div class="row" tal:replace="structure view/other_location_widget" />
+    <div class="row" tal:replace="structure view/duration_widget" />
 
-  <div class="row" tal:replace="structure view/title_widget" />
-  <div class="row" tal:replace="structure view/date_widget" />
-  <div class="row" tal:replace="structure view/time_widget" />
-  <div class="row" tal:replace="structure view/location_widget" />
-  <div class="row" tal:replace="structure view/other_location_widget" />
-  <div class="row" tal:replace="structure view/duration_widget" />
+    <div class="buttons">
+      <input class="button" name="CONFIRM_ADD" type="submit" value="Submit"
+	     i18n:attributes="value" />
+    </div>
 
-  <div class="buttons">
-    <input class="button" name="CONFIRM_ADD" type="submit" value="Submit"
-           i18n:attributes="value" />
-  </div>
-
-</form>
-
+  </form>
+</tal:block>
 </metal:block>
 </body>
 </html>
