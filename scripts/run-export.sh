@@ -7,8 +7,8 @@
 #
 # For this script to work, you need a number of things:
 #
-# 1- A SchoolTool 0.8 or 0.9 database (Data.fs)
-# 2- Python libraries that come with SchoolTool 0.8 or 0.9 .If you no longer
+# 1- A SchoolBell 0.8 or 0.9 database (Data.fs)
+# 2- Python libraries that come with SchoolBell 0.8 or 0.9 .If you no longer
 #    have the libraries installed see the next section for instructions.
 # 3- The ability to edit this script.
 # 
@@ -27,7 +27,7 @@
 # 
 # Edit this script:
 #
-# 1- Add colon-separated paths to your SchoolTool 0.8/0.9 python libs and the
+# 1- Add colon-separated paths to your SchoolBell 0.8/0.9 python libs and the
 #    Zope3 libs that came with it to the PYTHONPATH variable here.  If you are
 #    using a fresh download, this would be something like:
 #
@@ -36,21 +36,20 @@
 PYTHONPATH=
 
 # 2- Set the OLDDB variable to point to your old database (Data.fs).
-# FIXME By default, where is this?
+#
 #    OLDDB="/var/lib/schooltool/Data.fs"
 
 OLDDB=
 
 # 3- In some situations you may need to edit this setting.  It controls where
-#    the data from the database is dumped on the filesystem.  Usually leaving
-#    it alone is fine unless you don't have write permissions to /tmp.
+#    the data from the database is dumped on the filesystem.
 #
 #    NOTE: if you change this here, remember to make the same change to
 #          run-import.sh
 
-DUMPDIR="/var/schooltool"
+DUMPDIR="/var/schoolbell/dump"
 
-# 4- If you need to use a sepcific python binary, set it here
+# 4- If you need to use a specific python binary, set it here
 #
 
 PYTHON=/usr/bin/python2.3

@@ -16,11 +16,11 @@
 #
 # Edit this script
 #
-# 1- Add colon-separated paths to your SchoolTool 1.0 python libs and the
+# 1- Add colon-separated paths to your SchoolBell 1.0 python libs and the
 #    Zope3 libs that came with it to the PYTHONPATH variable here.  If you are
 #    using a fresh download, this would be something like:
 #
-#    PYTHONPATH="/path/to/schooltool-1.0/src:/path/to/schooltool-1.0/Zope3/src"
+#    PYTHONPATH="/path/to/schoolbell-1.0/src:/path/to/schoolbell-1.0/Zope3/src"
 
 PYTHONPATH=
 
@@ -34,9 +34,9 @@ NEWDB=
 # 3- If you needed to change DUMPDIR in run-export.sh, make the same change
 #    here.
 
-DUMPDIR="/var/schooltool"
+DUMPDIR="/var/schoolbell/dump"
 
-# 4- If you need to use a sepcific python binary, set it here
+# 4- If you need to use a specific python binary, set it here
 #
 
 PYTHON=/usr/bin/python2.3
