@@ -169,16 +169,16 @@ def walk_with_symlinks(top, func, arg):
 def get_test_files(cfg):
     """Return a list of test module filenames."""
     matcher = compile_matcher(cfg.pathname_regex)
-    results = []
+    allresults = []
     test_names = []
-    if cfg.unit_tests:
-        test_names.append('tests')
     if cfg.functional_tests:
         test_names.append('ftests')
+    if cfg.unit_tests:
+        test_names.append('tests')
     baselen = len(cfg.basedir) + 1
     def visit(ignored, dir, files):
         # Ignore files starting with a dot.
-        # Do not not descend into subdirs containing with a dot.
+        # Do not not descend into subdirs containing a dot.
         remove = []
         for idx, file in enumerate(files):
             if file.startswith('.'):
@@ -188,13 +188,12 @@ def get_test_files(cfg):
         remove.reverse()
         for idx in remove:
             del files[idx]
-        # Look for tests.py and/or ftests.py
-        if os.path.basename(dir) not in test_names:
-            for name in test_names:
-                if name + '.py' in files:
-                    path = os.path.join(dir, name + '.py')
-                    if matcher(path[baselen:]):
-                        results.append(path)
+        # Skip non-test directories, but look for tests.py and/or ftests.py
+        if os.path.basename(dir) != test_name:
+            if test_name + '.py' in files:
+                path = os.path.join(dir, test_name + '.py')
+                if matcher(path[baselen:]):
+                    results.append(path)
             return
         if '__init__.py' not in files:
             print >> sys.stderr, "%s is not a package" % dir
@@ -208,10 +207,15 @@ def get_test_files(cfg):
         walker = walk_with_symlinks
     else:
         walker = os.path.walk
-    for dir in cfg.search_in:
-        walker(dir, visit, None)
-    results.sort()
-    return results
+
+    for test_name in test_names:
+        results = []
+        for dir in cfg.search_in:
+            walker(dir, visit, None)
+        results.sort()
+        allresults += results
+
+    return allresults
 
 
 def import_module(filename, cfg, tracer=None):
