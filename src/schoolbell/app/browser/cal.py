@@ -53,6 +53,8 @@ from zope.security.proxy import removeSecurityProxy
 from zope.security.interfaces import ForbiddenAttribute
 from zope.security.checker import canWrite, canAccess
 
+from pytz import timezone
+
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ICalendarOwner, ISchoolBellCalendarEvent
@@ -68,7 +70,7 @@ from schoolbell.calendar.interfaces import IDailyRecurrenceRule
 from schoolbell.calendar.interfaces import IYearlyRecurrenceRule
 from schoolbell.calendar.interfaces import IMonthlyRecurrenceRule
 from schoolbell.calendar.interfaces import IWeeklyRecurrenceRule
-from schoolbell.calendar.utils import parse_date
+from schoolbell.calendar.utils import parse_date, parse_datetimetz
 from schoolbell.calendar.utils import parse_time, weeknum_bounds
 from schoolbell.calendar.utils import week_start, prev_month, next_month
 from schoolbell import SchoolBellMessageID as _
@@ -91,6 +93,8 @@ short_day_of_week_names = {
     0: _("Mon"), 1: _("Tue"), 2: _("Wed"), 3: _("Thu"),
     4: _("Fri"), 5: _("Sat"), 6: _("Sun"),
 }
+
+utc = timezone('UTC')
 
 #
 # Traversal
@@ -493,8 +497,8 @@ class CalendarViewBase(BrowserView):
             day += timedelta(1)
 
         # We have date objects, but ICalendar.expand needs datetime objects
-        start_dt = datetime.combine(start, time())
-        end_dt = datetime.combine(end, time())
+        start_dt = datetime.combine(start, time(tzinfo=utc))
+        end_dt = datetime.combine(end, time(tzinfo=utc))
         for event in self.getEvents(start_dt, end_dt):
             #  day1  day2  day3  day4  day5
             # |.....|.....|.....|.....|.....|
@@ -737,7 +741,7 @@ class DailyCalendarView(CalendarViewBase):
         boundaries before calculating overlaps.
         """
         width = [0] * 24
-        daystart = datetime.combine(self.cursor, time())
+        daystart = datetime.combine(self.cursor, time(tzinfo=utc))
         for event in self.dayEvents(self.cursor):
             t = daystart
             dtend = daystart + timedelta(1)
@@ -761,17 +765,17 @@ class DailyCalendarView(CalendarViewBase):
         list.
         """
         for event in events:
-            start = datetime.combine(self.cursor, time(self.starthour))
-            end = (datetime.combine(self.cursor, time()) +
+            start = datetime.combine(self.cursor, time(self.starthour,tzinfo=utc))
+            end = (datetime.combine(self.cursor, time(tzinfo=utc)) +
                    timedelta(hours=self.endhour)) # endhour may be 24
             if event.dtstart < start:
-                newstart = max(datetime.combine(self.cursor, time()),
+                newstart = max(datetime.combine(self.cursor, time(tzinfo=utc)),
                                event.dtstart)
                 self.starthour = newstart.hour
 
             if event.dtstart + event.duration > end:
                 newend = min(
-                    datetime.combine(self.cursor, time()) + timedelta(1),
+                    datetime.combine(self.cursor, time(tzinfo=utc)) + timedelta(1),
                     event.dtstart + event.duration + timedelta(0, 3599))
                 self.endhour = newend.hour
                 if self.endhour == 0:
@@ -786,7 +790,7 @@ class DailyCalendarView(CalendarViewBase):
         the daily calendar.
         """
         # XXX not tested
-        today = datetime.combine(self.cursor, time())
+        today = datetime.combine(self.cursor, time(tzinfo=utc))
         row_ends = [today + timedelta(hours=hour + 1)
                     for hour in range(self.starthour, self.endhour)]
 
@@ -865,10 +869,11 @@ class DailyCalendarView(CalendarViewBase):
 
         Clips dt so that it is never outside today's box.
         """
-        base = datetime.combine(self.cursor, time())
+        dtaware = dt.replace(tzinfo=utc)
+        base = datetime.combine(self.cursor, time(tzinfo=utc))
         display_start = base + timedelta(hours=self.starthour)
         display_end = base + timedelta(hours=self.endhour)
-        clipped_dt = max(display_start, min(dt, display_end))
+        clipped_dt = max(display_start, min(dtaware, display_end))
         td = clipped_dt - display_start
         offset_in_minutes = td.seconds / 60 + td.days * 24 * 60
         return offset_in_minutes / 15.
@@ -1505,9 +1510,9 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
 
         widget_data = self.processRequest(kw)
 
-        if self.context.dtstart != widget_data['start']:
+        if self.context.dtstart != parse_datetimetz(widget_data['start'].isoformat()):
             self._redirectToDate = widget_data['start'].strftime("%Y-%m-%d")
-        self.context.dtstart = widget_data['start']
+        self.context.dtstart = parse_datetimetz(widget_data['start'].isoformat())
         self.context.duration = widget_data['duration']
         self.context.title = widget_data['title']
         self.context.location = widget_data['location']

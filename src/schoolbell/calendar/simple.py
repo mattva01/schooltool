@@ -27,11 +27,13 @@ import random
 import itertools
 import email.Utils
 from zope.interface import implements
+from pytz import timezone
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 from schoolbell.calendar.mixins import CalendarEventMixin, CalendarMixin
 
 __metaclass__ = type
 
+utc = timezone('UTC')
 
 class SimpleCalendarEvent(CalendarEventMixin):
     """A simple implementation of ICalendarEvent.
@@ -64,6 +66,10 @@ class SimpleCalendarEvent(CalendarEventMixin):
         >>> e2.recurrence
         'FakeRecurrance'
 
+    We're going to store all datetime objects in UTC
+        >>> e2.dtstart.tzname()
+        'UTC'
+
     """
 
     implements(ICalendarEvent)
@@ -73,7 +79,11 @@ class SimpleCalendarEvent(CalendarEventMixin):
     def __init__(self, dtstart, duration, title, description=None,
                  location=None, unique_id=None, recurrence=None, allday=False):
         assert title is not None, 'title is required'
-        self.dtstart = dtstart
+
+        if dtstart.tzname() not in (None, 'UTC'):
+            raise ValueError, 'Can not store non UTC time info'
+        self.dtstart = dtstart.replace(tzinfo=utc)
+
         self.duration = duration
         self.title = title
         self.description = description

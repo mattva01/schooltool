@@ -32,6 +32,8 @@ from zope.app.tests import setup, ztapi
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.interfaces import IContainmentRoot
 
+from pytz import timezone
+
 # Used in defining CalendarEventAddTestView
 from schoolbell.app.browser.cal import CalendarEventAddView
 from schoolbell.app.browser.cal import ICalendarEventAddForm
@@ -46,6 +48,8 @@ from schoolbell.app.browser.tests.setup import setUp, tearDown
 # Used for the PrincipalStub
 from schoolbell.app.app import Person
 from schoolbell.app.interfaces import IPerson
+
+utc = timezone('UTC')
 
 def doctest_CalendarOwnerTraverser():
     """Tests for CalendarOwnerTraverser.
@@ -226,8 +230,12 @@ def doctest_EventForDisplay():
 
     EventForDisplay lets us access all the usual attributes
 
-        >>> e1.dtstart
-        datetime.datetime(2004, 1, 2, 14, 45, 50)
+        >>> e1.dtstart.date()
+        datetime.date(2004, 1, 2)
+        >>> e1.dtstart.time()
+        datetime.time(14, 45, 50)
+        >>> e1.dtstart.tzname()
+        'UTC'
         >>> e1.title
         'yawn'
         >>> e1.source_calendar is person.calendar
@@ -235,8 +243,12 @@ def doctest_EventForDisplay():
 
     It adds some additional attributes
 
-        >>> e1.dtend
-        datetime.datetime(2004, 1, 2, 14, 50, 50)
+        >>> e1.dtend.date()
+        datetime.date(2004, 1, 2)
+        >>> e1.dtend.time()
+        datetime.time(14, 50, 50)
+        >>> e1.dtend.tzname()
+        'UTC'
         >>> e1.color1
         'red'
         >>> e1.color2
@@ -298,15 +310,23 @@ def doctest_EventForBookingDisplay():
 
     EventForBookingDisplay lets us access all the usual attributes
 
-        >>> e1.dtstart
-        datetime.datetime(2004, 1, 2, 14, 45, 50)
+        >>> e1.dtend.date()
+        datetime.date(2004, 1, 2)
+        >>> e1.dtend.time()
+        datetime.time(14, 50, 50)
+        >>> e1.dtend.tzname()
+        'UTC'
         >>> e1.title
         'yawn'
 
     It adds some additional attributes
 
-        >>> e1.dtend
-        datetime.datetime(2004, 1, 2, 14, 50, 50)
+        >>> e1.dtend.date()
+        datetime.date(2004, 1, 2)
+        >>> e1.dtend.time()
+        datetime.time(14, 50, 50)
+        >>> e1.dtend.tzname()
+        'UTC'
         >>> e1.shortTitle
         'yawn'
 
@@ -384,13 +404,13 @@ def createEvent(dtstart, duration, title, **kw):
     error reporting, but it's OK, as it is only used in unit tests.
     """
     from schoolbell.app.cal import CalendarEvent
-    from schoolbell.calendar.utils import parse_datetime
+    from schoolbell.calendar.utils import parse_datetimetz
     if dtstart.count(':') == 0:         # YYYY-MM-DD
-        dtstart = parse_datetime(dtstart+' 00:00:00') # add hh:mm:ss
+        dtstart = parse_datetimetz(dtstart+' 00:00:00') # add hh:mm:ss
     elif dtstart.count(':') == 1:       # YYYY-MM-DD HH:MM
-        dtstart = parse_datetime(dtstart+':00') # add seconds
+        dtstart = parse_datetimetz(dtstart+':00') # add seconds
     else:                               # YYYY-MM-DD HH:MM:SS
-        dtstart = parse_datetime(dtstart)
+        dtstart = parse_datetimetz(dtstart)
     dur = timedelta(0)
     for part in duration.split('+'):
         part = part.strip()
@@ -857,8 +877,10 @@ def doctest_CalendarEventAddView_add():
         >>> event = list(calendar)[0]
         >>> event.title
         u'Hacking'
-        >>> event.dtstart
-        datetime.datetime(2004, 8, 13, 15, 30)
+        >>> event.dtstart.date()
+        datetime.date(2004, 8, 13)
+        >>> event.dtstart.time()
+        datetime.time(15, 30)
         >>> event.duration
         datetime.timedelta(0, 3000)
         >>> event.location is None
@@ -1104,8 +1126,12 @@ def doctest_CalendarEventAddView_add_recurrence():
         u'Hacking'
         >>> event.location
         u'Kitchen'
-        >>> event.dtstart
-        datetime.datetime(2004, 8, 13, 15, 30)
+        >>> event.dtstart.date()
+        datetime.date(2004, 8, 13)
+        >>> event.dtstart.time()
+        datetime.time(15, 30)
+        >>> event.dtstart.tzname()
+        'UTC'
         >>> event.duration
         datetime.timedelta(0, 3000)
 
@@ -1142,8 +1168,12 @@ def doctest_CalendarEventAddView_add_recurrence():
         u'Hacking'
         >>> event.location
         u'Kitchen'
-        >>> event.dtstart
-        datetime.datetime(2004, 8, 13, 15, 30)
+        >>> event.dtstart.date()
+        datetime.date(2004, 8, 13)
+        >>> event.dtstart.time()
+        datetime.time(15, 30)
+        >>> event.dtstart.tzname()
+        'UTC'
         >>> event.duration
         datetime.timedelta(0, 3000)
         >>> event.recurrence
@@ -1516,8 +1546,12 @@ def doctest_CalendarEventEditView_edit():
 
         >>> event.title
         u'NonHacking'
-        >>> event.dtstart
-        datetime.datetime(2004, 9, 13, 15, 30)
+        >>> event.dtstart.date()
+        datetime.date(2004, 9, 13)
+        >>> event.dtstart.time()
+        datetime.time(15, 30)
+        >>> event.dtstart.tzname()
+        'UTC'
         >>> event.duration
         datetime.timedelta(0, 3000)
         >>> event.location is None
@@ -1554,8 +1588,12 @@ def doctest_CalendarEventEditView_edit():
 
         >>> event.title
         u'NonHacking'
-        >>> event.dtstart
-        datetime.datetime(2004, 9, 19, 15, 35)
+        >>> event.dtstart.date()
+        datetime.date(2004, 9, 19)
+        >>> event.dtstart.time()
+        datetime.time(15, 35)
+        >>> event.dtstart.tzname()
+        'UTC'
         >>> event.duration
         datetime.timedelta(0, 3000)
         >>> event.location
@@ -1594,8 +1632,12 @@ def doctest_CalendarEventEditView_edit():
 
         >>> event.title
         u'NonHacking'
-        >>> event.dtstart
-        datetime.datetime(2004, 9, 19, 15, 35)
+        >>> event.dtstart.date()
+        datetime.date(2004, 9, 19)
+        >>> event.dtstart.time()
+        datetime.time(15, 35)
+        >>> event.dtstart.tzname()
+        'UTC'
         >>> event.duration
         datetime.timedelta(0, 3000)
         >>> event.location
@@ -1714,8 +1756,12 @@ def doctest_CalendarEventEditView_updateForm():
 
         >>> event.title
         u'Hacking'
-        >>> event.dtstart
-        datetime.datetime(2004, 8, 13, 20, 0)
+        >>> event.dtstart.date()
+        datetime.date(2004, 8, 13)
+        >>> event.dtstart.time()
+        datetime.time(20, 0)
+        >>> event.dtstart.tzname()
+        'UTC'
         >>> event.duration
         datetime.timedelta(0, 3600)
         >>> event.location is None
@@ -2311,15 +2357,15 @@ class TestDailyCalendarView(unittest.TestCase):
     def test_getColumns_periods(self):
         from schoolbell.app.browser.cal import DailyCalendarView
         from schoolbell.app.app import Person, Calendar
-        from schoolbell.calendar.utils import parse_datetime
+        from schoolbell.calendar.utils import parse_datetimetz
 
         person = Person(title="Da Boss")
         cal = person.calendar
         view = DailyCalendarView(cal, TestRequest())
-        view.cursor = date(2004, 8, 12)
+        view.cursor = datetime(2004, 8, 12, tzinfo=utc)
         view.calendarRows = lambda: iter([
-            ("B", parse_datetime('2004-08-12 10:00:00'), timedelta(hours=3)),
-            ("C", parse_datetime('2004-08-12 13:00:00'), timedelta(hours=2)),
+            ("B", parse_datetimetz('2004-08-12 10:00:00'), timedelta(hours=3)),
+            ("C", parse_datetimetz('2004-08-12 13:00:00'), timedelta(hours=2)),
              ])
         cal.addEvent(createEvent('2004-08-12 09:00', '2h', "Whatever"))
         cal.addEvent(createEvent('2004-08-12 11:00', '2m', "Phone call"))
@@ -2447,16 +2493,16 @@ class TestDailyCalendarView(unittest.TestCase):
     def test_rowspan_periods(self):
         from schoolbell.app.browser.cal import DailyCalendarView
         from schoolbell.app.app import Person
-        from schoolbell.calendar.utils import parse_datetime
+        from schoolbell.calendar.utils import parse_datetimetz
         view = DailyCalendarView(None, TestRequest())
         view.calendarRows = lambda: iter([
-            ("8", parse_datetime('2004-08-12 08:00:00'), timedelta(hours=1)),
-            ("A", parse_datetime('2004-08-12 09:00:00'), timedelta(hours=1)),
-            ("B", parse_datetime('2004-08-12 10:00:00'), timedelta(hours=3)),
-            ("C", parse_datetime('2004-08-12 13:00:00'), timedelta(hours=2)),
-            ("D", parse_datetime('2004-08-12 15:00:00'), timedelta(hours=1)),
-            ("16", parse_datetime('2004-08-12 16:00:00'), timedelta(hours=1)),
-            ("17", parse_datetime('2004-08-12 17:00:00'), timedelta(hours=1)),
+            ("8", parse_datetimetz('2004-08-12 08:00:00'), timedelta(hours=1)),
+            ("A", parse_datetimetz('2004-08-12 09:00:00'), timedelta(hours=1)),
+            ("B", parse_datetimetz('2004-08-12 10:00:00'), timedelta(hours=3)),
+            ("C", parse_datetimetz('2004-08-12 13:00:00'), timedelta(hours=2)),
+            ("D", parse_datetimetz('2004-08-12 15:00:00'), timedelta(hours=1)),
+            ("16", parse_datetimetz('2004-08-12 16:00:00'), timedelta(hours=1)),
+            ("17", parse_datetimetz('2004-08-12 17:00:00'), timedelta(hours=1)),
              ])
         view.cursor = date(2004, 8, 12)
         view.starthour = 8

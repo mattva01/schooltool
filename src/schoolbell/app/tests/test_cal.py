@@ -98,7 +98,7 @@ def doctest_CalendarEvent_resource_booking():
 
         >>> from schoolbell.app.cal import Calendar, CalendarEvent
         >>> c = Calendar()
-        >>> e = CalendarEvent(None, None, '')
+        >>> e = CalendarEvent(datetime(2005, 2, 28), None, '')
         >>> c.addEvent(e)
         >>> e.resources
         ()
@@ -135,7 +135,7 @@ def doctest_CalendarEvent_resource_booking():
 
         >>> a = ResourceStub()
         >>> b = ResourceStub()
-        >>> e = CalendarEvent(None, None, 'title', resources=[a, b])
+        >>> e = CalendarEvent(datetime(2005, 2, 28), None, 'title', resources=[a, b])
         >>> c.addEvent(e)
         >>> a in e.resources and b in e.resources
         True
@@ -190,7 +190,7 @@ def doctest_Calendar():
     We can add events by using addEvent():
 
         >>> from schoolbell.app.cal import CalendarEvent
-        >>> event = CalendarEvent(None, None, 'Example 1')
+        >>> event = CalendarEvent(datetime(2005, 2, 28), None, 'Example 1')
 
         >>> cal.addEvent(event)
         >>> len(cal)
@@ -216,14 +216,14 @@ def doctest_Calendar():
 
     Let's add a few more events:
 
-        >>> event2 = CalendarEvent(None, None, 'Example 2')
+        >>> event2 = CalendarEvent(datetime(2005, 2, 28), None, 'Example 2')
         >>> cal.addEvent(event2)
-        >>> event3 = CalendarEvent(None, None, 'Example 3')
+        >>> event3 = CalendarEvent(datetime(2005, 2, 28), None, 'Example 3')
         >>> cal.addEvent(event3)
 
     You can't, however, add multiple events with the same unique_id
 
-        >>> event3a = CalendarEvent(None, None, 'Example 3',
+        >>> event3a = CalendarEvent(datetime(2005, 2, 28), None, 'Example 3',
         ...                         unique_id=event3.unique_id)
         >>> cal.addEvent(event3a)
         Traceback (most recent call last):
@@ -303,7 +303,7 @@ def doctest_Calendar_addEvent_resource_booking():
 
         >>> from schoolbell.app.cal import Calendar, CalendarEvent
         >>> cal = Calendar()
-        >>> e = CalendarEvent(None, None, '')
+        >>> e = CalendarEvent(datetime(2005, 2, 28), None, '')
         >>> cal.addEvent(e)
         >>> e.__parent__ is cal
         True

@@ -23,9 +23,11 @@ $Id$
 """
 
 import datetime
+from pytz import timezone
 from zope.interface import implements
 from schoolbell.calendar.interfaces import IExpandedCalendarEvent
 
+utc = timezone('UTC')
 
 class CalendarMixin(object):
     """Mixin for implementing ICalendar methods.
@@ -103,11 +105,21 @@ class CalendarMixin(object):
 
         See ICalendar for more details.
         """
+
+        if first.tzname() not in (None, 'UTC'):
+            raise ValueError, 'Can not store non UTC time info'
+        first = first.replace(tzinfo=utc)
+
+        if last.tzname() not in (None, 'UTC'):
+            raise ValueError, 'Can not store non UTC time info'
+        last = last.replace(tzinfo=utc)
+
         zero = datetime.timedelta(0)
         epsilon = datetime.timedelta.resolution
         for event in self:
             if event.recurrence is not None:
-                starttime = event.dtstart.time()
+                naivetime = event.dtstart.time()
+                starttime = naivetime.replace(tzinfo=utc)
                 for recdate in event.recurrence.apply(event, last.date()):
                     dtstart = datetime.datetime.combine(recdate, starttime)
                     dtend = dtstart + event.duration
@@ -293,7 +305,7 @@ class CalendarEventMixin(object):
             ...             setattr(self, attr, value)
 
             >>> from datetime import datetime, timedelta
-            >>> e1 = Event(dtstart=datetime(2004, 12, 15, 18, 57),
+            >>> e1 = Event(dtstart=datetime(2004, 12, 15, 18, 57,tzinfo=utc),
             ...            duration=timedelta(minutes=15),
             ...            title='Work on schoolbell.calendar.simple',
             ...            location=None)
@@ -341,7 +353,13 @@ class ExpandedCalendarEvent(CalendarEventMixin):
         ...                                location="Out in the open",
         ...                                recurrence=recurrence)
 
-        >>> dtstart2 = datetime.datetime(2005, 2, 11, 1, 2)
+        >>> dtstart2 = datetime.datetime(2005, 2, 11, 1, 2,tzinfo=utc)
+        >>> dtstart2.date()
+        datetime.date(2005, 2, 11)
+        >>> dtstart2.time()
+        datetime.time(1, 2)
+        >>> dtstart2.tzname()
+        'UTC'
         >>> evt = ExpandedCalendarEvent(original, dtstart2)
 
         >>> from zope.interface.verify import verifyObject
@@ -350,8 +368,12 @@ class ExpandedCalendarEvent(CalendarEventMixin):
 
     The start date of the event will be the specified one:
 
-        >>> evt.dtstart
-        datetime.datetime(2005, 2, 11, 1, 2)
+        >>> evt.dtstart.date()
+        datetime.date(2005, 2, 11)
+        >>> evt.dtstart.time()
+        datetime.time(1, 2)
+        >>> evt.dtstart.tzname()
+        'UTC'
 
     Other attributes will be the same as in the original event:
 
@@ -389,6 +411,9 @@ class ExpandedCalendarEvent(CalendarEventMixin):
     def __init__(self, event, dtstart):
         self.__dict__["original"] = event
         self.__dict__["dtstart"] = dtstart
+        if self.dtstart.tzname() not in (None, 'UTC'):
+            raise ValueError, 'Can not store non UTC time info'
+        self.dtstart.replace(tzinfo=utc)
 
     def __getattr__(self, name):
         return getattr(self.original, name)

@@ -230,6 +230,60 @@ def parse_datetime(s):
     return datetime(y, m, d, hh, mm, ss, ssssss)
 
 
+def parse_datetimetz(s):
+    """Similar to parse_datetime, but sets the tzinfo to utc
+
+    Only a small subset of ISO 8601 is accepted:
+
+      YYYY-MM-DD HH:MM:SS
+      YYYY-MM-DD HH:MM:SS.ssssss
+      YYYY-MM-DDTHH:MM:SS
+      YYYY-MM-DDTHH:MM:SS.ssssss
+
+    Returns a datetime.datetime object without a time zone.
+
+    Examples:
+
+        >>> dt1 = parse_datetimetz('2003-04-05 11:22:33.456789')
+        >>> dt1.date()
+        datetime.date(2003, 4, 5)
+        >>> dt1.time()
+        datetime.time(11, 22, 33, 456789)
+        >>> dt1.tzname()
+        'UTC'
+
+        >>> dt2 = parse_datetimetz('2003-04-05 11:22:33.456')
+        >>> dt2.date()
+        datetime.date(2003, 4, 5)
+        >>> dt2.time()
+        datetime.time(11, 22, 33, 456000)
+
+        >>> dt3 = parse_datetimetz('2003-04-05 11:22:33.45678999')
+        >>> dt3.date()
+        datetime.date(2003, 4, 5)
+        >>> dt3.time()
+        datetime.time(11, 22, 33, 456789)
+        >>> dt3.tzname()
+        'UTC'
+
+        >>> dt4 = parse_datetimetz('01/02/03')
+        Traceback (most recent call last):
+          ...
+        ValueError: Bad datetime: 01/02/03
+
+    """
+    m = re.match(r"(\d+)-(\d+)-(\d+)[ T](\d+):(\d+):(\d+)([.](\d+))?$", s)
+    if not m:
+        raise ValueError("Bad datetime: %s" % s)
+    ssssss = m.groups()[7]
+    if ssssss:
+        ssssss = int((ssssss + "00000")[:6])
+    else:
+        ssssss = 0
+    y, m, d, hh, mm, ss = map(int, m.groups()[:6])
+    return datetime(y, m, d, hh, mm, ss, ssssss, tzinfo=utc)
+
+
 def parse_time(s):
     """Parse a ISO 8601 time value.
 
