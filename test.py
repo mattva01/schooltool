@@ -67,7 +67,6 @@ import os
 import sys
 import types
 import getopt
-import gettext
 import unittest
 import traceback
 from sets import Set
@@ -537,6 +536,5 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    gettext.install('schooltool')
     exitcode = main(sys.argv)
     sys.exit(exitcode)
