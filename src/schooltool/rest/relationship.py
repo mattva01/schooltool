@@ -51,6 +51,8 @@ class RelationshipsView(View):
     template = Template("www/relationships.pt", content_type="text/xml")
     schema = read_file("../schema/relationship.rng")
     authorization = ACLAccess(get=ViewPermission, post=ModifyPermission)
+    # It may be a bit counterintuitive that you need to have
+    # ModifyPermission to add members to groups.
 
     def listLinks(self):
         return [{'traverse': absolutePath(self.request, link.traverse()),
