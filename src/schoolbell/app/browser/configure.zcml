@@ -1,0 +1,18 @@
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schoolbell">
+
+  <addMenuItem
+      title="SchoolBell"
+      class="schoolbell.app.app.SchoolBellApplication"
+      permission="zope.ManageContent"
+      />
+
+  <page
+      name="index.html"
+      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      template="index.pt"
+      permission="zope.Public"
+      />
+
+</configure>

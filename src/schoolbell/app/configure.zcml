@@ -1,0 +1,9 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="schoolbell">
+
+  <content class=".app.SchoolBellApplication">
+  </content>
+
+  <include package=".browser" />
+
+</configure>

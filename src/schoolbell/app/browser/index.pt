@@ -1,0 +1,9 @@
+<html metal:use-macro="context/@@standard_macros/view"
+      i18n:domain="schoolbell">
+<body>
+<div metal:fill-slot="body">
+<h2 i18n:translate="">Welcome to SchoolBell</h2>
+</div>
+</body>
+
+</html>
