@@ -31,7 +31,6 @@ from zodb.btrees.IOBTree import IOBTree
 __metaclass__ = type
 
 
-
 class GroupMember:
     """A mixin providing the IGroupMember interface."""
 
@@ -60,6 +59,7 @@ class Person(Persistent, GroupMember):
     def __init__(self, name):
         self.name = name
         super(Person, self).__init__()
+
 
 class Group(Persistent, GroupMember):
 
@@ -101,3 +101,4 @@ class Group(Persistent, GroupMember):
         """See IGroup"""
         self._members[key].notifyRemove(self)
         del self._members[key]
+

@@ -20,6 +20,7 @@
 """
 Schooltool command line client.
 """
+
 import os
 import sys
 import socket
@@ -29,6 +30,9 @@ from cmd import Cmd
 from StringIO import StringIO
 from xml.sax import make_parser, SAXParseException
 from xml.sax.handler import ContentHandler, feature_namespaces
+
+__metaclass__ = type
+
 
 class Client(Cmd):
 
@@ -172,6 +176,7 @@ welcome to change it and/or distribute copies of it under certain conditions."""
         except (IndexError, ValueError):
             self.emit("Wrong link number")
 
+
 class XLinkHandler(ContentHandler):
 
     def __init__(self):
@@ -184,6 +189,7 @@ class XLinkHandler(ContentHandler):
                 link[attr] = attrs.get((namespace, attr))
         if link:
             self.links.append(link)
+
 
 def http_join(path, rel):
     """os.path.join for HTTP paths.
@@ -212,8 +218,10 @@ def http_join(path, rel):
     chunks.insert(0, '')
     return '/'.join(chunks)
 
+
 def main():
     Client().cmdloop()
+
 
 if __name__ == '__main__':
     main()
