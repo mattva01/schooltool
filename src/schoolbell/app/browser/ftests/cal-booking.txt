@@ -353,7 +353,7 @@ if Book Resources is checked:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... field.title=Sleeping&field.start_date=2005-02-03&\
-    ... field.start_time=01:00&field.duration=500&field.duration_type=minutes&\
+    ... field.start_time=01:00&field.duration=500&\
     ... field.recurrence.used=&field.recurrence_type=daily&field.book.used=&\
     ... field.book=1&UPDATE_SUBMIT=Add
     ... """)
