@@ -1189,6 +1189,18 @@ class TestTimetableDict(EventServiceTestMixin, unittest.TestCase):
         self.assert_(e.old_timetable is item2)
         self.assert_(e.new_timetable is None)
 
+    def test_clear(self):
+        from schooltool.timetable import TimetableDict
+        from schooltool.interfaces import ITimetableReplacedEvent
+        td = TimetableDict()
+        td.__parent__ = self.eventService
+        td['a', 'b'] = PersistentLocatableStub()
+        td['b', 'c'] = PersistentLocatableStub()
+        self.eventService.clearEvents()
+        td.clear()
+        self.assertEquals(td.keys(), [])
+        self.assertEquals(len(self.eventService.events), 2)
+
     def test_getRelativePath(self):
         from schooltool.timetable import TimetableDict
         from schooltool.interfaces import IContainmentRoot

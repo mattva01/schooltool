@@ -739,16 +739,32 @@ class TimetableDict(PersistentDict):
         if IEventTarget.providedBy(self.__parent__):
             e.dispatch(self.__parent__)
 
+    def clear(self):
+        for key, value in self.items():
+            del self[key]
+
     def getRelativePath(self, child):
         if self[child.__name__]  != child:
             raise TypeError("Cannot determine path of %r, because it does"
-                            " not appear to be a child of %r"  %
+                            " not appear to be a child of %r" %
                             (child, self))
         return "/".join(child.__name__)
 
     def notify(self, event):
         if IEventTarget.providedBy(self.__parent__):
             event.dispatch(self.__parent__)
+
+    def _not_implemented(self, *args, **kw):
+        raise NotImplementedError(
+                "This method is not implemented in TimetableDict.  Feel free"
+                " to implement it, if you need it, but make sure the semantics"
+                " of changes are preserved (i.e. update __parent__ and"
+                " __name__, and send out events when needed).")
+
+    update = _not_implemented
+    setdefault = _not_implemented
+    pop = _not_implemented
+    popitem = _not_implemented
 
 
 class TimetabledMixin:
