@@ -333,57 +333,66 @@ class TestGroupContainerView(unittest.TestCase, TraversalTestMixin):
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 
-class TestGroupAddView(unittest.TestCase):
+class TestObjectAddView(unittest.TestCase):
 
     def createView(self):
-        from schooltool.browser.app import GroupAddView
-        from schooltool.model import Group
+        from schooltool.browser.app import ObjectAddView
+        from schooltool.model import ApplicationObjectMixin
 
-        class GroupContainerStub:
+        class ObjContainerStub:
 
             def __init__(self):
-                self.groups = []
+                self.objs = []
 
-            def new(self, groupname, title):
-                group = Group(title=title)
-                group.__name__ = groupname
-                group.__parent__ = self
-                self.groups.append(group)
-                return group
+            def new(self, name, title):
+                obj = ApplicationObjectMixin(title=title)
+                obj.__name__ = name
+                obj.__parent__ = self
+                self.objs.append(obj)
+                return obj
 
-        self.group_container = GroupContainerStub()
-        setPath(self.group_container, '/groups')
-        return GroupAddView(self.group_container)
+        self.container = ObjContainerStub()
+        setPath(self.container, '/objects')
+        return ObjectAddView(self.container)
 
     def test_GET(self):
         view = self.createView()
         request = RequestStub()
         content = view.do_GET(request)
-        self.assert_('Add group' in content)
+        self.assert_('Add object' in content)
 
     def test_POST(self):
         view = self.createView()
-        request = RequestStub(args={'groupname': 'newgroup'})
+        request = RequestStub(args={'name': 'newobj'})
         content = view.do_POST(request)
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/groups/newgroup/edit.html')
+                          'http://localhost:7001/objects/newobj/edit.html')
         self.assertEquals(request.applog,
-                          [(None, 'Object created: /groups/newgroup', INFO)])
+                          [(None, 'Object created: /objects/newobj', INFO)])
 
-        self.assertEquals(len(self.group_container.groups), 1)
-        group = self.group_container.groups[0]
-        self.assertEquals(group.__name__, 'newgroup')
-        self.assertEquals(group.title, 'newgroup')
+        self.assertEquals(len(self.container.objs), 1)
+        obj = self.container.objs[0]
+        self.assertEquals(obj.__name__, 'newobj')
+        self.assertEquals(obj.title, 'newobj')
 
     def test_POST_errors(self):
         view = self.createView()
-        request = RequestStub(args={'groupname': 'new/group'})
+        request = RequestStub(args={'name': 'new/obj'})
         content = view.do_POST(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.applog, [])
-        self.assert_('Add group' in content)
-        self.assert_('Invalid group name' in content)
+        self.assert_('Add object' in content)
+        self.assert_('Invalid name' in content)
+
+
+class TestGroupAddView(unittest.TestCase):
+
+    def test(self):
+        from schooltool.browser.app import GroupAddView
+
+        view = GroupAddView({})
+        self.assertEquals(view.title, "Add group")
 
 
 def test_suite():
@@ -394,6 +403,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPersonContainerView))
     suite.addTest(unittest.makeSuite(TestPersonAddView))
     suite.addTest(unittest.makeSuite(TestGroupContainerView))
+    suite.addTest(unittest.makeSuite(TestObjectAddView))
     suite.addTest(unittest.makeSuite(TestGroupAddView))
     return suite
 

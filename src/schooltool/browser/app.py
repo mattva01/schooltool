@@ -225,26 +225,36 @@ class GroupContainerView(View):
             return GroupView(self.context[name])
 
 
-class GroupAddView(View):
-    """A view for adding a new group."""
+class ObjectAddView(View):
+    """A view for adding a new object (usually a group or a resource).
+
+    The object should have a view named 'edit.html'.
+    """
 
     __used_for__ = IApplicationObjectContainer
 
     authorization = ManagerAccess
 
-    template = Template('www/group_add.pt')
+    template = Template('www/object_add.pt')
 
-    error = ""
+    error = u""
+
+    title = _("Add object") # should be overridden by subclasses
 
     def do_POST(self, request):
-        groupname = request.args['groupname'][0]
+        name = request.args['name'][0]
 
-        if not valid_name.match(groupname):
-            self.error = _("Invalid group name")
+        if not valid_name.match(name):
+            self.error = _("Invalid name")
             return self.do_GET(request)
 
-        group = self.context.new(groupname, title=groupname)
-        request.appLog(_("Object created: %s") % getPath(group))
+        obj = self.context.new(name, title=name)
+        request.appLog(_("Object created: %s") % getPath(obj))
 
-        url = absoluteURL(request, group) + '/edit.html'
+        url = absoluteURL(request, obj) + '/edit.html'
         return self.redirect(url, request)
+
+
+class GroupAddView(ObjectAddView):
+
+    title = _("Add group")
