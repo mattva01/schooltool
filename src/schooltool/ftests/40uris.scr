@@ -1,0 +1,33 @@
+URI object list test
+
+SchoolTool> get /uris
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<uriobjects>
+  <uriobject uri="http://schooltool.org/ns/teaching/taught">
+    <name>Taught</name>
+    <description>A role of a group that has a teacher.</description>
+  </uriobject>
+  <uriobject uri="http://schooltool.org/ns/teaching">
+    <name>Teaching</name>
+    <description>The teaching relationship.</description>
+  </uriobject>
+  <uriobject uri="http://schooltool.org/ns/teaching/teacher">
+    <name>Teacher</name>
+    <description>A role of a teacher.</description>
+  </uriobject>
+  <uriobject uri="http://schooltool.org/ns/membership/member">
+    <name>Member</name>
+    <description>A group member role.</description>
+  </uriobject>
+  <uriobject uri="http://schooltool.org/ns/membership">
+    <name>Membership</name>
+    <description>The membership relationship.</description>
+  </uriobject>
+  <uriobject uri="http://schooltool.org/ns/membership/group">
+    <name>Group</name>
+    <description>A role of a containing group.</description>
+  </uriobject>
+</uriobjects>
+
+
