@@ -56,6 +56,17 @@ scripts:
   generate-sampleschool.py  generates sample school data
   import-sampleschool.py    imports sample data into the server
 
+The SchoolTool server automatically creates an empty database if it cannot find
+an existing one.  You can customize the location of the database and a few
+other parameters in a configuration file called schooltool.conf.  There's
+an example file called schooltool.conf.in, you can simply rename it and modify
+to suit your needs.
+
+By default a user with manager privileges is created in the new database.
+The username is 'manager', and the password is 'schooltool'.  The database
+is otherwise pretty empty, but you can run import-sampleschool.py to populate
+it with some sample data.
+
 The Makefile also contains several shortcuts, which are kept mainly for
 backwards-compatibility:
 
