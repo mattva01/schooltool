@@ -38,7 +38,7 @@ from schooltool.browser.auth import ManagerAccess
 from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.csvimport import CSVImportView, TimetableCSVImportView
 from schooltool.browser.model import PersonView, GroupView, ResourceView
-from schooltool.browser.model import NoteView
+from schooltool.browser.model import NoteView, AddressView
 from schooltool.browser.model import app_object_list
 from schooltool.browser.timetable import NewTimePeriodView
 from schooltool.browser.timetable import TimePeriodServiceView
@@ -59,6 +59,7 @@ from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IPerson, IResource, AuthenticationError
 from schooltool.interfaces import IApplicationObject
 from schooltool.membership import Membership
+from schooltool.occupies import Occupies
 from schooltool.noted import Noted
 from schooltool.rest.model import delete_app_object
 from schooltool.rest.infofacets import resize_photo, canonical_photo_size
@@ -149,6 +150,8 @@ class RootView(View):
             return ResourceContainerView(self.context['resources'])
         elif name == 'notes':
             return NoteContainerView(self.context['notes'])
+        elif name == 'addresses':
+            return AddressContainerView(self.context['addresses'])
         elif name == 'schooltool.css':
             return StaticFile('www/schooltool.css', 'text/css')
         elif name == 'logo.png':
@@ -575,6 +578,84 @@ class NoteAddView(View):
         return self.redirect(nexturl, request)
 
 
+class AddressAddView(ObjectAddView):
+    """View for adding addresses """
+
+    title = _("Add address")
+
+    error = u""
+
+    relname = _('Occupies')
+
+    template = Template('www/address_add.pt')
+
+    authorization = ManagerAccess
+
+    def __init__(self, context):
+        View.__init__(self, context)
+        self.title_widget = TextWidget('title', _('Title'))
+        self.country_widget = TextWidget('country', _('Country'))
+        self.postcode_widget = TextWidget('postcode', _('Postcode'))
+        self.district_widget = TextWidget('district', _('District'))
+        self.town_widget = TextWidget('town', _('Town'))
+        self.streetNr_widget = TextWidget('streetNr', _('Street No'))
+        self.thoroughfareName_widget = TextWidget('thoroughfareName',
+                _('Thoroughfare Name'))
+
+    def do_POST(self, request):
+        """"""
+        if 'CANCEL' in self.request.args:
+            # Just show the form without any data.
+            return self.do_GET(request)
+
+        widgets = [self.title_widget, self.country_widget,
+                   self.postcode_widget, self.district_widget,
+                   self.town_widget, self.streetNr_widget,
+                   self.thoroughfareName_widget]
+#        widgets = [self.title_widget, self.country_widget]
+
+        name = None
+
+        for widget in widgets:
+            widget.update(request)
+
+        for widget in widgets:
+            if widget.error:
+                return self.do_GET(request)
+
+        obj = self.context.new(name, 
+                title=self.title_widget.value, 
+                country=self.country_widget.value,
+                postcode=self.postcode_widget.value,
+                district=self.district_widget.value,
+                town=self.town_widget.value,
+                streetNr=self.streetNr_widget.value,
+                thoroughfareName=self.thoroughfareName_widget.value)
+
+#        obj = self.context.new(name, 
+#                title=self.title_widget.value, 
+#                country=self.country_widget.value)
+
+        request.appLog(_("Object %s of type %s created") %
+                       (getPath(obj), obj.__class__.__name__))
+
+        nexturl = absoluteURL(request, obj)
+
+        paths = filter(None, request.args.get("toadd", []))
+        for path in paths:
+            pobj = traverse(self.context, path)
+            try:
+                Occupies(residence=obj, resides=pobj)
+            except ValueError:
+                return self.errormessage % {'other': pobj.title,
+                                            'this': obj.title}
+            request.appLog(_("Relationship '%s' between %s and %s created")
+                           % (self.relname, getPath(obj),
+                              getPath(pobj)))
+
+        return self.redirect(nexturl, request)
+
+
 class ObjectContainerView(View, ContainerBreadcrumbsMixin):
     """View for an ApplicationObjectContainer.
 
@@ -648,6 +729,16 @@ class NoteContainerView(ObjectContainerView):
     obj_view = NoteView
     index_title = property(lambda self: _("Notes"))
     add_title = property(lambda self: _("Add a new note"))
+
+
+class AddressContainerView(ObjectContainerView):
+    """View for traversing to addresses (/addresses)."""
+
+    template = Template('www/address_container.pt')
+    add_view = AddressAddView
+    obj_view = AddressView
+    index_title = _("Addresses")
+    add_title = _("Add a new address")
 
 
 class BusySearchView(View, ToplevelBreadcrumbsMixin):

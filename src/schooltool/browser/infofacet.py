@@ -303,16 +303,15 @@ class PersonEditFacetView(View, AppObjectBreadcrumbsMixin):
         return View.do_GET(self, request)
 
     def do_POST(self, request):
-
         facet_name = self.request.args.get('facet', [None])[0]
         if 'SAVE' in request.args:
             facets = FacetManager(self.context).iterFacets()
 
             # Test for existance of the facet on this person
-            if [facet for facet in facets if facet.__name__ == facet_name]:
-                self.updateFacet()
-            else:
+            if not [facet for facet in facets if facet.__name__ == facet_name]:
                 self.createFacet(facet_name)
+
+            self.updateFacet(facet_name)
 
             url = absoluteURL(request, self.context)
             return self.redirect(url, request)
@@ -324,5 +323,8 @@ class PersonEditFacetView(View, AppObjectBreadcrumbsMixin):
         FacetManager(self.context).setFacet(facet, self.context, facet_name)
 
     def updateFacet(self, facet_name):
-        print "called update facet"
+        facet = FacetManager(self.context).facetByName(facet_name)
+        for field in facet.fields:
+            if field.name in self.request.args:
+                field.value = self.request.args[field.name][0]
 

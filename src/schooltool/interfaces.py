@@ -2264,7 +2264,7 @@ class INote(ILocation, IRelatable):
     created = Attribute("""The time the note was created.""")
 
 
-class IAddress(IRelatable, IFaceted):
+class IAddress(ILocation, IRelatable, IFaceted):
     """The base of a physical address.
 
     Participates in URIOccupies as occupiedBy.

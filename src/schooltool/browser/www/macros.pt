@@ -169,7 +169,7 @@
     <div class="dynamic-facet">
         <h3 tal:content="facet/__name__"></h3>
         <div class="row" tal:repeat="field facet/fields">
-            <label tal:content="field/name"></label>
+            <label tal:content="field/label"></label>
             <span tal:content="field/value"></span>
         </div>
     </div>

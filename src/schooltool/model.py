@@ -267,14 +267,14 @@ class Note(RelationshipValenciesMixin, EventTargetMixin):
         return getRelatedObjects(self, URINotandum)
 
 
-class Address(FacetedEventTargetMixin, RelationshipValenciesMixin):
+class Address(RelationshipValenciesMixin, FacetedEventTargetMixin):
 
     implements(IAddress)
 
     title = None
     country = None
 
-    def __init__(self, title=None, country=None):
+    def __init__(self, title=None, country=None, **kwargs):
         FacetedEventTargetMixin.__init__(self)
         RelationshipValenciesMixin.__init__(self)
         self.title = title

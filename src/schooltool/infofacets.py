@@ -53,27 +53,30 @@ class DynamicFacet(Persistent):
     def __init__(self):
         self.fields = PersistentList()
 
-    def hasField(self, field):
-        for f in self.fields:
-            if field == f:
+    def hasField(self, name):
+        for field in self.fields:
+            if field.name == name:
                 return True
         return False
 
     def getField(self, name):
         for f in self.fields:
-            if f['name'] == name:
+            if f.name == name:
                 return f
         return None
 
     def setField(self, name, value):
         """Set a field value."""
-        if name not in self.data.keys():
+        if not self.hasField(name):
             raise ValueError("Key %r not in fieldset")
-        self.data[name]['value'] = value
+
+        field = self.getField(name)
+        field['value'] = value
 
     def delField(self, name):
-        if self.data.has_key(name):
-            del self.data[name]
+        if self.hasField(name):
+            field = self.getField(name)
+            del field
 
     def addField(self, name, label, ftype, value=None, vocabulary=[]):
         """Add a new field"""
@@ -87,8 +90,8 @@ class DynamicFacet(Persistent):
                     field.value, field.vocabulary)
         return empty
 
-    def __getitem__(self, key):
-        return self.getField(key)
+    def __getitem__(self, name):
+        return self.getField(name)
 
 
 class DynamicFacetSchemaService(Persistent):
