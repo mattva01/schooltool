@@ -89,6 +89,12 @@ The facets are accessed using the schooltool.component.FacetManager
 adapter.  The facets must implement the schooltool.interfaces.IFacet
 interface.
 
+The facets which are registered to be available for addition to any
+application objects through the RESTive API are called Free Floating
+Facets.  For example, the schooltool.teaching.TeacherGroupFacet is a
+Free Floating Facet, but the facet that the Teacher group adds to all
+its members (the schooltool.teaching.TeacherFacet) is not.
+
 Examples:
   schooltool.teaching.TeacherFacet,
   schooltool.absence.AbsenceTrackerFacet
@@ -122,8 +128,19 @@ between objects.  The relationships are stored in the __links__
 attributes of objects, but are accessed using the API defined in
 schooltool.interface.
 
-The relationships are created by invoking a relationship schema, and
-passing the two related objects as arguments.  For example::
+The relationships are implemented as three auxillary objects:
+
+  +---+	   +---------+   +---------------+    +--------+   +---+
+  | A |----| Link A  |---| Relationship  |----| Link B |---| B |
+  +---+    +---------+	 +---------------+    +--------+   +---+
+
+The link objects implement the public schooltool.interfaces.ILink API,
+and the Relationship object always remains behind the scenes.
+
+To facilitate the creation of these complex structures, several levels
+of helpers are provided.  The relationships are normally created by
+invoking a relationship schema, and passing the two related objects as
+arguments.  For example::
 
     from schooltool.membership import Membership
     Membership(group=group1, member=person1)
@@ -134,6 +151,15 @@ membership, these are:
 
     from schooltool.uris import URIMembership, URIMember, URIGroup
 
+Objects that can participate with a certain role in a certain
+relationship can express that fact using the hints called valencies.
+For example, the schooltool.model.Group objects have a valency to
+participate in Membership as groups.  This makes it possibly to post
+to the relationships view of a group and create a membership
+relationship to another group, person, or resource from it.
+
+Only relationships advertised as valencies can be created via the
+RESTive interface.
 
 Events
 ------
@@ -147,7 +173,23 @@ get sent to the same object twice.
 
 Events are non persistent.
 
-XXX: need APIs and examples.
+The logic of event propagation is shared among the events and the
+event targets.  The events need to subclass the EventMixin, and the
+event targets need to subclass the EventTargetMixin.  The latter
+implements the IEventConfigurable interface.  Event targets need to
+provide an event table, which is a sequence of IEventActions.   There
+are several EventActions defined that take care of further event
+routing, provide a way to call some method, etc.
+
+The application objects subclass the
+schooltool.facet.FacetedEventTargetMixin, which generates the event
+table of an object by summing up the event tables provided by the
+object itself and all of its facets.  This way, the facets can handle
+certain kinds of events, or define the behaviour for certain kinds of
+events.
+
+All the events dispatched pass the global EventService.  It provides
+an API to subscribe to certain kinds of events. 
 
 Currently, events are used for logging modifications of relationships
 and absence tracking.
@@ -161,12 +203,26 @@ and absence tracking.
 Attendance tracking
 -------------------
 
-All persons can be tracked for absence.
+All persons can be tracked for attendance.  Usually it is done by
+running roll calls on groups.  When some person is not present, an
+absence is created on that person.  An absence has several attributes,
+such as the "resolved" status (whether an excuse has been presented),
+the expected presence date and so on (see
+schooltool.interfaces.IAbsence).  The absence contains several
+AbsenceComments.  There can be only one unended absence, so if a
+person is absent from several consecutive roll calls, several comments
+get added to the same Absence object.
 
-XXX: Absences, Absence Comments, when the absences are created,
-closed, etc.
+When the absence is registered (an AbsenceComment is added to the
+Absence), an AbsenceEvent gets sent to the system.  This event
+propagates up the membership hierarchy and gets registered in all the
+AbsenceTrackers along the way.  Finally, it arrives to the global
+AbsenceTrackerUtility, which can be used to track all the absences
+happening in the school.
 
-XXX: AbsenceTrackerFacet, AbsenceTrackerUtility
+Absence trackers can be added to the groups by sticking on the
+free floating AbsenceTrackerFacet.
+
 
 Timetabling
 -----------
@@ -189,12 +245,27 @@ lessons they need to attend.
 The objects having a timetable have to implement ITimetabled.  All of
 the application objects are timetabled.
 
+The model used for timetabling is that each set of pupils meeting
+regularly with the same teacher for the same subject should be
+represented by a separate group.  A group can have at most one
+teacher.  So, if the same group of pupils go to Math, English, and
+History, there will have to be three separate groups containing the
+same pupils.
+
+XXX: explain why?
+
+XXX: about the synch between tts of groups and resources
+
+
+
 Calendaring
 -----------
 
-Every group and person has two calendars: a private calendar which can
-be edited and a read-only calendar formed out of the group's or
+Every application object has two calendars: a private calendar which
+can be edited and a read-only calendar formed out of the group's or
 person's composite timetable.
 
 The calendar views publish and accept the calendars in the iCalendar
 representation (RFC 2445).
+
+XXX: resource booking
