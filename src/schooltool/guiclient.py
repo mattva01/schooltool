@@ -1095,7 +1095,7 @@ class SchoolTimetableInfo:
                         ctx.setContextNode(period_node)
                         for activity_node in ctx.xpathEval('st:activity'):
                             group_path = activity_node.nsProp('group', None)
-                            activity = activity_node.content.strip()
+                            activity = activity_node.nsProp('title', None)
                             activities.append((activity, group_path))
                         tt_row.append(activities)
                 assert len(tt_row) == len(self.periods)
@@ -1144,8 +1144,9 @@ class SchoolTimetableInfo:
                 try:
                     activities = self.tt[i][j]
                     for title, group in activities:
-                        result.append('        <activity group="%s">'
-                                      '%s</activity>' % (group, title))
+                        result.append('        '
+                                      '<activity group="%s" title="%s"/>'
+                                      % (group, title))
                 except (KeyError, TypeError):
                     pass
                 result.append('      </period>')

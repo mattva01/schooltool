@@ -511,36 +511,36 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
               <teacher path="/persons/0013">
                 <day id="A">
                   <period id="Green">
-                    <activity group="/groups/002">French</activity>
+                    <activity group="/groups/002" title="French"/>
                   </period>
                   <period id="Blue">
-                    <activity group="/groups/003">Math</activity>
+                    <activity group="/groups/003" title="Math"/>
                   </period>
                 </day>
                 <day id="B">
                   <period id="Green">
-                    <activity group="/groups/004">English</activity>
+                    <activity group="/groups/004" title="English"/>
                   </period>
                   <period id="Blue">
-                    <activity group="/groups/005">Biology</activity>
+                    <activity group="/groups/005" title="Biology"/>
                   </period>
                 </day>
               </teacher>
               <teacher path="/persons/0014">
                 <day id="A">
                   <period id="Green">
-                    <activity group="/groups/006">Geography</activity>
+                    <activity group="/groups/006" title="Geography"/>
                   </period>
                   <period id="Blue">
-                    <activity group="/groups/007">History</activity>
+                    <activity group="/groups/007" title="History"/>
                   </period>
                 </day>
                 <day id="B">
                   <period id="Green">
-                    <activity group="/groups/008">Physics</activity>
+                    <activity group="/groups/008" title="Physics"/>
                   </period>
                   <period id="Blue">
-                    <activity group="/groups/009">Chemistry</activity>
+                    <activity group="/groups/009" title="Chemistry"/>
                   </period>
                 </day>
               </teacher>
@@ -1469,39 +1469,37 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
               <teacher path="/persons/0013">
                 <day id="A">
                   <period id="Green">
-                    <activity group="/groups/002">French</activity>
+                    <activity group="/groups/002" title="French"/>
                   </period>
                   <period id="Blue">
-                    <activity group="/groups/003">Math</activity>
+                    <activity group="/groups/003" title="Math"/>
                   </period>
                 </day>
                 <day id="B">
                   <period id="Green">
-                    <activity group="/groups/004">English</activity>
-                    <activity group="/groups/005">English</activity>
+                    <activity group="/groups/004" title="English"/>
+                    <activity group="/groups/005" title="English"/>
                   </period>
                   <period id="Blue">
-                    <activity group="/groups/005">Biology</activity>
+                    <activity group="/groups/005" title="Biology"/>
                   </period>
                 </day>
               </teacher>
               <teacher path="/persons/0014">
                 <day id="A">
                   <period id="Green">
-                    <activity group="/groups/006">Geography</activity>
+                    <activity group="/groups/006" title="Geography"/>
                   </period>
                   <period id="Blue">
-                    <activity group="/groups/007">History</activity>
+                    <activity group="/groups/007" title="History"/>
                   </period>
                 </day>
                 <day id="B">
                   <period id="Green">
-                    <activity group="/groups/008">Physics</activity>
+                    <activity group="/groups/008" title="Physics"/>
                   </period>
                   <period id="Blue">
-                    <activity group="/groups/009">
-                      Chemistry
-                    </activity>
+                    <activity group="/groups/009" title="Chemistry"/>
                   </period>
                 </day>
               </teacher>
@@ -1617,37 +1615,37 @@ class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
               <teacher path="/persons/0013">
                 <day id="A">
                   <period id="Green">
-                    <activity group="/groups/002">French</activity>
+                    <activity group="/groups/002" title="French"/>
                   </period>
                   <period id="Blue">
-                    <activity group="/groups/003">Math</activity>
+                    <activity group="/groups/003" title="Math"/>
                   </period>
                 </day>
                 <day id="B">
                   <period id="Green">
-                    <activity group="/groups/004">English</activity>
-                    <activity group="/groups/005">English</activity>
+                    <activity group="/groups/004" title="English"/>
+                    <activity group="/groups/005" title="English"/>
                   </period>
                   <period id="Blue">
-                    <activity group="/groups/005">Biology</activity>
+                    <activity group="/groups/005" title="Biology"/>
                   </period>
                 </day>
               </teacher>
               <teacher path="/persons/0014">
                 <day id="A">
                   <period id="Green">
-                    <activity group="/groups/006">Geography</activity>
+                    <activity group="/groups/006" title="Geography"/>
                   </period>
                   <period id="Blue">
-                    <activity group="/groups/007">History</activity>
+                    <activity group="/groups/007" title="History"/>
                   </period>
                 </day>
                 <day id="B">
                   <period id="Green">
-                    <activity group="/groups/008">Physics</activity>
+                    <activity group="/groups/008" title="Physics"/>
                   </period>
                   <period id="Blue">
-                    <activity group="/groups/009">Chemistry</activity>
+                    <activity group="/groups/009" title="Chemistry"/>
                   </period>
                 </day>
               </teacher>
