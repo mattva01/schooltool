@@ -42,10 +42,10 @@ class MemberStub:
         self.added = None
         self.removed = None
 
-    def notifyAdd(self, group, name):
+    def notifyAdded(self, group, name):
         self.added = group
 
-    def notifyRemove(self, group):
+    def notifyRemoved(self, group):
         self.removed = group
 
 class GroupStub(Persistent):
@@ -56,7 +56,7 @@ class GroupStub(Persistent):
 
     def add(self, thing):
         self.added = thing
-        thing.notifyAdd(self, 'foo')
+        thing.notifyAdded(self, 'foo')
 
 class FacetStub:
     implements(IFacet)

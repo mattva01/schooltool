@@ -113,6 +113,10 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(self.klass.events, [e])
         self.assertEquals(self.tutor.events, [e])
 
+    def test_registerUnlinkCallback(self):
+        self.assertRaises(NotImplementedError,
+                          self.ltutor.registerUnlinkCallback, None)
+
 
 class TestRelationshipSchema(EventServiceTestMixin, unittest.TestCase):
 

@@ -99,6 +99,12 @@ class IFacet(Interface):
     active = Attribute("""The facet is active""")
 
 
+class IFacetFactory(Interface):
+
+    def __call__():
+        """Returns a new facet."""
+
+
 class IFaceted(Interface):
     """Denotes that the object can have facets.
     """
@@ -234,6 +240,18 @@ class IRemovableLink(ILink):
         Sends a IRelationshipRemovedEvent to both previous participants
         of the relationship after the relationship has been broken.
         """
+
+    def registerUnlinkCallback(callback):
+        """Register an object that is called after the link is unlinked.
+
+        The callback must conform to IUnlinkHook and be pickleable.
+        """
+
+
+class IUnlinkHook(Interface):
+
+    def notifyUnlinked(link):
+        """The given link was unlinked."""
 
 
 class IRelatable(Interface):
@@ -420,10 +438,10 @@ class IGroupMember(ILocation):
     def groups():
         """Returns a set for all groups this object is a member of."""
 
-    def notifyAdd(group, name):
+    def notifyAdded(group, name):
         """Notifies the member that it's added to a group."""
 
-    def notifyRemove(group):
+    def notifyRemoved(group):
         """Notifies the member that it's removed from a group."""
 
 

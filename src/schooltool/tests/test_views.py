@@ -51,9 +51,9 @@ class MemberStub:
     added = None
     removed = None
     implements(IGroupMember)
-    def notifyAdd(self, group, name):
+    def notifyAdded(self, group, name):
         self.added = group
-    def notifyRemove(self, group):
+    def notifyRemoved(self, group):
         self.removed = group
 
 

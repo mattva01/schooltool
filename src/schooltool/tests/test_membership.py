@@ -45,11 +45,15 @@ class MemberStub(LocatableEventTargetMixin):
         self.added = None
         self.removed = None
 
-    def notifyAdd(self, group, name):
+    def notifyAdded(self, group, name):
         self.added = group
+        if self not in group.values():
+            raise AssertionError("notifyAdded called too early")
 
-    def notifyRemove(self, group):
+    def notifyRemoved(self, group):
         self.removed = group
+        if self in group.values():
+            raise AssertionError("notifyRemoved called too early")
 
 class GroupStub(LocatableEventTargetMixin):
     deleted = None
@@ -76,19 +80,19 @@ class TestURIs(unittest.TestCase):
 
 class TestMemberMixin(unittest.TestCase):
 
-    def test_notifyAdd(self):
+    def test_notifyAdded(self):
         from schooltool.membership import MemberMixin
         member = MemberMixin()
         group = P()
-        member.notifyAdd(group, 1)
+        member.notifyAdded(group, 1)
         self.assertEqual(list(member.groups()), [group])
         self.assertEqual(member.__parent__, group)
         self.assertEqual(member.__name__, '1')
-        member.notifyAdd(P(), '2')
+        member.notifyAdded(P(), '2')
         self.assertEqual(member.__parent__, group)
         self.assertEqual(member.__name__, '1')
 
-    def test_notifyRemove(self):
+    def test_notifyRemoved(self):
         from schooltool.membership import MemberMixin
         member = MemberMixin()
         group = object()
@@ -97,9 +101,9 @@ class TestMemberMixin(unittest.TestCase):
             member.__parent__ = parent
             member.__name__ = 'spam'
             member._groups = {group: '1'}
-            member.notifyRemove(group)
+            member.notifyRemoved(group)
             self.assertEqual(list(member.groups()), [])
-            self.assertRaises(KeyError, member.notifyRemove, group)
+            self.assertRaises(KeyError, member.notifyRemoved, group)
             if parent == group:
                 self.assertEqual(member.__parent__, None)
                 self.assertEqual(member.__name__, None)
@@ -115,7 +119,7 @@ class TestMemberMixin(unittest.TestCase):
         verifyObject(IQueryLinks, member)
         self.assertEqual(member.listLinks(), [])
         group = P()
-        member.notifyAdd(group, 1)
+        member.notifyAdded(group, 1)
 
         for role in (URIGroup, ISpecificURI):
             links = member.listLinks(role)
@@ -253,6 +257,12 @@ class TestMemberLink(EventServiceTestMixin, unittest.TestCase):
         self.assert_(e.member is member)
         self.assert_(e.group is group)
 
+    def test_registerUnlinkCallback(self):
+        from schooltool.membership import MemberLink
+        link = MemberLink(None, None, 'name')
+        self.assertRaises(NotImplementedError,
+                          link.registerUnlinkCallback, None)
+
 
 class TestGroupLink(EventServiceTestMixin, unittest.TestCase):
 
@@ -286,6 +296,12 @@ class TestGroupLink(EventServiceTestMixin, unittest.TestCase):
         self.assert_(URIMembership.isImplementedBy(e))
         self.assert_(e.member is member)
         self.assert_(e.group is group)
+
+    def test_registerUnlinkCallback(self):
+        from schooltool.membership import GroupLink
+        link = GroupLink(None, None, 'name')
+        self.assertRaises(NotImplementedError,
+                          link.registerUnlinkCallback, None)
 
 
 class TestEvents(unittest.TestCase):

@@ -86,6 +86,9 @@ class Link(Persistent):
         event.dispatch(self.traverse())
         event.dispatch(otherlink.traverse())
 
+    def registerUnlinkCallback(self, callback):
+        raise NotImplementedError
+
 
 class _LinkRelationship(Persistent):
     """A central part of a relationship.

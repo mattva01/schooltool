@@ -76,6 +76,9 @@ class GroupLink:
         event.dispatch(self.traverse())
         event.dispatch(otherlink.traverse())
 
+    def registerUnlinkCallback(self, callback):
+        raise NotImplementedError
+
 
 class MemberLink:
     """An object that represents containment of a group member as a link."""
@@ -108,6 +111,9 @@ class MemberLink:
         event.dispatch(self.traverse())
         event.dispatch(otherlink.traverse())
 
+    def registerUnlinkCallback(self, callback):
+        raise NotImplementedError
+
 
 class MemberMixin(Persistent):
     """A mixin providing the IGroupMember interface.
@@ -128,14 +134,14 @@ class MemberMixin(Persistent):
         """See IGroupMember"""
         return self._groups.keys()
 
-    def notifyAdd(self, group, name):
+    def notifyAdded(self, group, name):
         """See IGroupMember"""
         self._groups[group] = name
         if self.__parent__ is None:
             self.__parent__ = group
             self.__name__ = str(name)
 
-    def notifyRemove(self, group):
+    def notifyRemoved(self, group):
         """See IGroupMember"""
         del self._groups[group]
         if group == self.__parent__:
@@ -186,15 +192,15 @@ class GroupMixin(Persistent):
         self._next_key += 1
         self._members[key] = member
         self._addhook(member)
-        member.notifyAdd(self, key)
+        member.notifyAdded(self, key)
         return key
 
     def __delitem__(self, key):
         """See IGroup"""
         member = self._members[key]
-        member.notifyRemove(self)
         self._deletehook(member)
         del self._members[key]
+        member.notifyRemoved(self)
 
     def listLinks(self, role=ISpecificURI):
         """See IQueryLinks"""
