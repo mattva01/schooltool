@@ -125,74 +125,254 @@ class VEvent(dict):
     pass
 
 
+class ICalParseError(Exception):
+    """Invalid syntax in an iCalendar file."""
+
+
 class ICalReader:
     """An object which reads in an iCal of public holidays and marks
     them off the schoolday calendar.
+
+    Short grammar of iCalendar files (RFC 2445 is the full spec):
+
+      contentline        = name *(";" param ) ":" value CRLF
+        ; content line first must be unfolded by replacing CRLF followed by a
+        ; single WSP with an empty string
+      name               = x-name / iana-token
+      x-name             = "X-" [vendorid "-"] 1*(ALPHA / DIGIT / "-")
+      iana-token         = 1*(ALPHA / DIGIT / "-")
+      vendorid           = 3*(ALPHA / DIGIT)
+      param              = param-name "=" param-value *("," param-value)
+      param-name         = iana-token / x-token
+      param-value        = paramtext / quoted-string
+      paramtext          = *SAFE-CHAR
+      value              = *VALUE-CHAR
+      quoted-string      = DQUOTE *QSAFE-CHAR DQUOTE
+
+      NON-US-ASCII       = %x80-F8
+      QSAFE-CHAR         = WSP / %x21 / %x23-7E / NON-US-ASCII
+                         ; Any character except CTLs and DQUOTE
+      SAFE-CHAR          = WSP / %x21 / %x23-2B / %x2D-39 / %x3C-7E
+                          / NON-US-ASCII
+                         ; Any character except CTLs, DQUOTE, ";", ":", ","
+      VALUE-CHAR         = WSP / %x21-7E / NON-US-ASCII  ; anything except CTLs
+      CR                 = %x0D
+      LF                 = %x0A
+      CRLF               = CR LF
+      CTL                = %x00-08 / %x0A-1F / %x7F
+      ALPHA              = %x41-5A / %x61-7A             ; A-Z / a-z
+      DIGIT              = %x30-39                       ; 0-9
+      DQUOTE             = %x22                          ; Quotation Mark
+      WSP                = SPACE / HTAB
+      SPACE              = %x20
+      HTAB               = %x09
     """
+
+    default_type = {
+        # Default value types for some properties
+        'DTSTAMP': 'DATE-TIME',
+        'DTSTART': 'DATE-TIME',
+        'CREATED': 'DATE-TIME',
+        'DTEND': 'DATE-TIME',
+        'LAST-MODIFIED': 'DATE-TIME',
+        'PRIORITY': 'INTEGER',
+        'RECURRENCE-ID': 'DATE-TIME',
+        'SEQUENCE': 'INTEGER',
+        'URL': 'URI',
+        'ATTACH': 'URI',
+        'EXDATE': 'DATE-TIME',
+        'EXRULE': 'RECUR',
+        'RDATE': 'DATE-TIME',
+        'RRULE': 'RECUR',
+    }
 
     def __init__(self, file):
         self.file = file
 
-    def markNonSchooldays(self, cal):
-        """Mark all the events in the iCal file as non-schooldays in a given
-        SchooldayCalendar.
+    def _parseRow(record_str):
+        """Parse a single content line.
+
+        A content line consists of a property name (optionally followed by a
+        number of parameters) and a value, separated by a colon.  Parameters
+        (if present) are separated from the property name and from each other
+        with semicolons.  Parameters are of the form name=value; value
+        can be double-quoted.
+
+        Returns a tuple (name, value, param_dict).  Case-insensitive values
+        (i.e. property names, parameter names, unquoted parameter values) are
+        uppercased.
+
+        Raises ICalParseError on syntax errors.
+
+        >>> ICalReader._parseRow('foo:bar')
+        ('FOO', 'bar', {})
+        >>> ICalReader._parseRow('foo;value=bar:BAZFOO')
+        ('FOO', 'BAZFOO', '{'VALUE': 'BAR'})
         """
-        for event in self.read():
-            if hasattr(event, 'dtstart'):
-                cal.remove(event.dtstart)
 
-    def readRecord(self):
+        it = iter(record_str)
+        getChar = it.next
+
+        def err(msg):
+            raise ICalParseError("%s in line:\n%s" % (msg, record_str))
+
+        try:
+            c = getChar()
+            # name
+            key = ''
+            while c.isalnum() or c == '-':
+                key += c
+                c = getChar()
+            if not key:
+                err("Missing property name")
+            key = key.upper()
+            # optional parameters
+            params = {}
+            while c == ';':
+                c = getChar()
+                # param name
+                param = ''
+                while c.isalnum() or c == '-':
+                    param += c
+                    c = getChar()
+                if not param:
+                    err("Missing parameter name")
+                param = param.upper()
+                # =
+                if c != '=':
+                    err("Expected '='")
+                # value (or rather a list of values)
+                pvalues = []
+                while True:
+                    c = getChar()
+                    if c == '"':
+                        c = getChar()
+                        pvalue = ''
+                        while c >= ' ' and c not in ('\177', '"'):
+                            pvalue += c
+                            c = getChar()
+                        # value is case-sensitive in this case
+                        if c != '"':
+                            err("Expected '\"'")
+                        c = getChar()
+                    else:
+                        # unquoted value
+                        pvalue = ''
+                        while c >= ' ' and c not in ('\177', '"', ';', ':',
+                                                     ','):
+                            pvalue += c
+                            c = getChar()
+                        pvalue = pvalue.upper()
+                    pvalues.append(pvalue)
+                    if c != ',':
+                        break
+                if len(pvalues) > 1:
+                    params[param] = pvalues
+                else:
+                    params[param] = pvalues[0]
+            # colon and value
+            if c != ':':
+                err("Expected ':'")
+            value = ''.join(it)
+        except StopIteration:
+            err("Syntax error")
+        else:
+            return (key, value, params)
+
+    _parseRow = staticmethod(_parseRow)
+
+    def _iterRow(self):
         """A generator that returns one record at a time, as a tuple of
-        (key, value, type).
-
-        type can be None if not specified as ;VALUE=type kind of thing.
+        (name, value, params).
         """
         record = []
-
-        def splitRecord():
-            """Unfortunately, this doctest is not run by the suite.
-
-            >>> record = ['FOO', ';VALUE=BAR', ':BAZ', 'FOO']
-            >>> splitRecord()
-            ('FOO', 'BAZFOO', 'BAR')
-            """
-            record_str = "".join(record)
-            key_opts_str, value = record_str.split(":")
-            # XXX -- the following works only by accident
-            key_type = key_opts_str.split(";VALUE=")
-            key = key_type[0]
-            if len(key_type) > 1:
-                type = key_type[1]
-            else:
-                type = None
-            return key, value, type
-
         for line in self.file.readlines():
-            if record and line[0] not in '\t ':
-                yield splitRecord()
-                record = [line.strip()]
+            if line[0] in '\t ':
+                line = line[1:]
+            elif record:
+                yield self._parseRow("".join(record))
+                record = []
+            if line.endswith('\r\n'):
+                record.append(line[:-2])
+            elif line.endswith('\n'):
+                # strictly speaking this is a violation of RFC 2445
+                record.append(line[:-1])
             else:
-                record.append(line.strip())
-        yield splitRecord()
+                # strictly speaking this is a violation of RFC 2445
+                record.append(line)
+        yield self._parseRow("".join(record))
 
-    def read(self):
-        result = []
+    def iterEvents(self):
+        """Iterate over all VEVENT objects in an ICalendar file."""
+        iterator = self._iterRow()
+
+        # Check that the stream begins with BEGIN:VCALENDAR
+        try:
+            key, value, params = iterator.next()
+            if (key, value, params) != ('BEGIN', 'VCALENDAR', {}):
+                raise ICalParseError('This is not iCalendar')
+        except StopIteration:
+            raise ICalParseError('This is not iCalendar')
+        component_stack = ['VCALENDAR']
+
+        # Extract all VEVENT components
         obj = None
-        for key, value, type in self.readRecord():
-            if key == "BEGIN" and value == "VEVENT":
-                obj = VEvent()
-            elif key == "END" and value == "VEVENT":
-                result.append(obj)
-                obj = None
-            elif type == 'DATE' and obj is not None:
-                key = key.lower()
-                y, m, d = int(value[0:4]), int(value[4:6]), int(value[6:8])
-                setattr(obj, key, datetime.date(y, m, d))
-                obj[key] = value
+        for key, value, params in iterator:
+            if key == "BEGIN":
+                if obj is not None:
+                    # Subcomponents terminate the processing of a VEVENT
+                    # component.  We can get away with this now, because we're
+                    # not interested in alarms and RFC 2445 specifies, that all
+                    # properties inside a VEVENT component ought to precede any
+                    # VALARM subcomponents.
+                    yield obj
+                    obj = None
+                if not component_stack and value != "VCALENDAR":
+                    raise ICalParseError("Text outside VCALENDAR component")
+                if value == "VEVENT":
+                    obj = VEvent()
+                component_stack.append(value)
+            elif key == "END":
+                if obj is not None and value == "VEVENT":
+                    yield obj
+                    obj = None
+                if not component_stack or component_stack[-1] != value:
+                    raise ICalParseError("Mismatched BEGIN/END")
+                component_stack.pop()
             elif obj is not None:
-                key = key.lower()
-                obj[key] = value
-        return result
+                # Some properties may occur more than once, and this trick will
+                # not work when we become interested in them.
+                obj[key.lower()] = value
+                default_type =  self.default_type.get(key, None)
+                value_type = params.get('VALUE', default_type)
+                if value_type == 'DATE':
+                    y, m, d = int(value[0:4]), int(value[4:6]), int(value[6:8])
+                    name = key.lower().replace('-', '_')
+                    value = datetime.date(y, m, d)
+                    setattr(obj, name, value)
+            elif not component_stack:
+                raise ICalParseError("Text outside VCALENDAR component")
+        if component_stack:
+            raise ICalParseError("Unterminated components")
+
+
+def markNonSchooldays(ical_reader, schoolday_model):
+    """Mark all all-day events in the iCal file as non-schooldays in a given
+    SchooldayModel.
+    """
+    for event in ical_reader.iterEvents():
+        if hasattr(event, 'dtstart'):
+            # We rely on the fact that ICalReader only sets dtstart/dtend
+            # attributes on VEvent instances when the value type is DATE,
+            # and does not do so when the value type is DATE-TIME.
+            dtend = getattr(event, 'dtend', event.dtstart)
+            for day in daterange(event.dtstart, dtend):
+                try:
+                    schoolday_model.remove(day)
+                except (KeyError, ValueError):
+                    # They day was already marked as non-schoolday or is
+                    # outside the school period.  This is not an error.
+                    pass
 
 
 class Timetable:

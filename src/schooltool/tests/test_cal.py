@@ -30,7 +30,7 @@ from zope.interface import implements
 from zope.testing.doctestunit import DocTestSuite
 from datetime import date, time, timedelta, datetime
 from StringIO import StringIO
-from schooltool.tests.helpers import diff
+from schooltool.tests.helpers import diff, dedent
 from schooltool.tests.utils import EqualsSortedMixin
 from schooltool.interfaces import ISchooldayModel
 
@@ -102,100 +102,181 @@ class TestSchooldayModel(unittest.TestCase):
         self.assertRaises(TypeError, cal.__contains__, 'some string')
 
 
-example_ical = """\
-BEGIN:VCALENDAR
-VERSION
- :2.0
-PRODID
- :-//Mozilla.org/NONSGML Mozilla Calendar V1.0//EN
-METHOD
- :PUBLISH
-BEGIN:VEVENT
-UID
- :956630271
-SUMMARY
- :Christmas Day
-CLASS
- :PUBLIC
-X-MOZILLA-ALARM-DEFAULT-UNITS
- :minutes
-X-MOZILLA-ALARM-DEFAULT-LENGTH
- :15
-X-MOZILLA-RECUR-DEFAULT-UNITS
- :weeks
-X-MOZILLA-RECUR-DEFAULT-INTERVAL
- :1
-DTSTART
- ;VALUE=DATE
- :20031225
-DTSTAMP
- :20020430T114937Z
-END:VEVENT
-END:VCALENDAR
-BEGIN:VCALENDAR
-VERSION
- :2.0
-PRODID
- :-//Mozilla.org/NONSGML Mozilla Calendar V1.0//EN
-METHOD
- :PUBLISH
-BEGIN:VEVENT
-UID
- :911737808
-SUMMARY
- :Boxing Day
-CLASS
- :PUBLIC
-X-MOZILLA-ALARM-DEFAULT-UNITS
- :minutes
-X-MOZILLA-ALARM-DEFAULT-LENGTH
- :15
-X-MOZILLA-RECUR-DEFAULT-UNITS
- :weeks
-X-MOZILLA-RECUR-DEFAULT-INTERVAL
- :1
-DTSTART
- ;VALUE=DATE
- :20031226
-DTSTAMP
- :20020430T114937Z
-END:VEVENT
-END:VCALENDAR
-"""
-
 
 class TestICalReader(unittest.TestCase):
 
+    example_ical = dedent("""
+        BEGIN:VCALENDAR
+        VERSION
+         :2.0
+        PRODID
+         :-//Mozilla.org/NONSGML Mozilla Calendar V1.0//EN
+        METHOD
+         :PUBLISH
+        BEGIN:VEVENT
+        UID
+         :956630271
+        SUMMARY
+         :Christmas Day
+        CLASS
+         :PUBLIC
+        X-MOZILLA-ALARM-DEFAULT-UNITS
+         :minutes
+        X-MOZILLA-ALARM-DEFAULT-LENGTH
+         :15
+        X-MOZILLA-RECUR-DEFAULT-UNITS
+         :weeks
+        X-MOZILLA-RECUR-DEFAULT-INTERVAL
+         :1
+        DTSTART
+         ;VALUE=DATE
+         :20031225
+        DTEND
+         ;VALUE=DATE
+         :20031226
+        DTSTAMP
+         :20020430T114937Z
+        END:VEVENT
+        END:VCALENDAR
+        BEGIN:VCALENDAR
+        VERSION
+         :2.0
+        PRODID
+         :-//Mozilla.org/NONSGML Mozilla Calendar V1.0//EN
+        METHOD
+         :PUBLISH
+        BEGIN:VEVENT
+        UID
+         :911737808
+        SUMMARY
+         :Boxing Day
+        CLASS
+         :PUBLIC
+        X-MOZILLA-ALARM-DEFAULT-UNITS
+         :minutes
+        X-MOZILLA-ALARM-DEFAULT-LENGTH
+         :15
+        X-MOZILLA-RECUR-DEFAULT-UNITS
+         :weeks
+        X-MOZILLA-RECUR-DEFAULT-INTERVAL
+         :1
+        DTSTART
+         ;VALUE=DATE
+         :20030501
+        DTSTAMP
+         :20020430T114937Z
+        END:VEVENT
+        BEGIN:VEVENT
+        DTSTART;VALUE=DATE:20031225
+        SUMMARY:Christmas again!
+        END:VEVENT
+        END:VCALENDAR
+        """)
+
     def test_markNonSchooldays(self):
         from schooltool.cal import ICalReader, SchooldayModel
+        from schooltool.cal import markNonSchooldays
         cal = SchooldayModel(date(2003, 9, 01), date(2004, 01, 01))
-        file = StringIO(example_ical)
+        file = StringIO(self.example_ical)
         reader = ICalReader(file)
         cal.addWeekdays(0, 1, 2, 3, 4)
         self.assert_(cal.isSchoolday(date(2003, 12, 24)))
         self.assert_(cal.isSchoolday(date(2003, 12, 25)))
         self.assert_(cal.isSchoolday(date(2003, 12, 26)))
-        reader.markNonSchooldays(cal)
+        markNonSchooldays(reader, cal)
         self.assert_(cal.isSchoolday(date(2003, 12, 24)))
         self.assert_(not cal.isSchoolday(date(2003, 12, 25)))
         self.assert_(not cal.isSchoolday(date(2003, 12, 26)))
 
-    def test_read(self):
-        from schooltool.cal import ICalReader, SchooldayModel
-        cal = SchooldayModel(date(2003, 9, 01), date(2004, 01, 01))
-        file = StringIO(example_ical)
+    def test_iterEvents(self):
+        from schooltool.cal import ICalReader, ICalParseError
+        file = StringIO(self.example_ical)
         reader = ICalReader(file)
-        result = reader.read()
-        self.assertEqual(len(result), 2)
+        result = list(reader.iterEvents())
+        self.assertEqual(len(result), 3)
         vevent = result[0]
         self.assertEqual(vevent['x-mozilla-recur-default-units'], 'weeks')
         self.assertEqual(vevent['dtstart'], '20031225')
         self.assertEqual(vevent.dtstart, date(2003, 12, 25))
+        self.assertEqual(vevent['dtend'], '20031226')
+        self.assertEqual(vevent.dtend, date(2003, 12, 26))
         vevent = result[1]
-        self.assertEqual(vevent['dtstart'], '20031226')
-        self.assertEqual(vevent.dtstart, date(2003, 12, 26))
+        self.assertEqual(vevent['dtstart'], '20030501')
+        self.assertEqual(vevent.dtstart, date(2003, 05, 01))
+        vevent = result[2]
+        self.assertEqual(vevent['dtstart'], '20031225')
+        self.assertEqual(vevent.dtstart, date(2003, 12, 25))
 
-    def test_readRecord(self):
+        reader = ICalReader(StringIO(dedent("""
+                    BEGIN:VCALENDAR
+                    BEGIN:VEVENT
+                    DTSTART;VALUE=DATE:20010203
+                    BEGIN:VALARM
+                    X-PROP:foo
+                    END:VALARM
+                    END:VEVENT
+                    END:VCALENDAR
+                    """)))
+        results = list(reader.iterEvents())
+        self.assertEquals(len(results), 1)
+        self.assert_('dtstart' in results[0])
+        self.assert_('x-prop' not in results[0])
+
+        reader = ICalReader(StringIO(dedent("""
+                    BEGIN:VCALENDAR
+                    BEGIN:VEVENT
+                    DTSTART;VALUE=DATE:20010203
+                    """)))
+        self.assertRaises(ICalParseError, list, reader.iterEvents())
+
+        reader = ICalReader(StringIO(dedent("""
+                    BEGIN:VCALENDAR
+                    BEGIN:VEVENT
+                    DTSTART;VALUE=DATE:20010203
+                    END:VCALENDAR
+                    END:VEVENT
+                    """)))
+        self.assertRaises(ICalParseError, list, reader.iterEvents())
+
+        reader = ICalReader(StringIO(dedent("""
+                    BEGIN:VCALENDAR
+                    END:VCALENDAR
+                    X-PROP:foo
+                    """)))
+        self.assertRaises(ICalParseError, list, reader.iterEvents())
+
+        reader = ICalReader(StringIO(dedent("""
+                    BEGIN:VCALENDAR
+                    END:VCALENDAR
+                    BEGIN:VEVENT
+                    END:VEVENT
+                    """)))
+        self.assertRaises(ICalParseError, list, reader.iterEvents())
+
+        reader = ICalReader(StringIO(dedent("""
+                    BEGIN:VCALENDAR
+                    BEGIN:VEVENT
+                    DTSTART;VALUE=DATE:20010203
+                    END:VEVENT
+                    END:VCALENDAR
+                    END:UNIVERSE
+                    """)))
+        self.assertRaises(ICalParseError, list, reader.iterEvents())
+
+        reader = ICalReader(StringIO(dedent("""
+                    DTSTART;VALUE=DATE:20010203
+                    """)))
+        self.assertRaises(ICalParseError, list, reader.iterEvents())
+
+        reader = ICalReader(StringIO(dedent("""
+                    This is just plain text
+                    """)))
+        self.assertRaises(ICalParseError, list, reader.iterEvents())
+
+        reader = ICalReader(StringIO(""))
+        self.assertRaises(ICalParseError, list, reader.iterEvents())
+
+    def test_iterRow(self):
         from schooltool.cal import ICalReader
         file = StringIO("key1\n"
                         " :value1\n"
@@ -204,19 +285,59 @@ class TestICalReader(unittest.TestCase):
                         " :value2\n"
                         "key3;VALUE=bar:value3\n")
         reader = ICalReader(file)
-        self.assertEqual(list(reader.readRecord()),
-                         [('key1', 'value1', None),
-                          ('key2', 'value2', 'foo'),
-                          ('key3', 'value3', 'bar')])
+        self.assertEqual(list(reader._iterRow()),
+                         [('KEY1', 'value1', {}),
+                          ('KEY2', 'value2', {'VALUE': 'FOO'}),
+                          ('KEY3', 'value3', {'VALUE': 'BAR'})])
 
         file = StringIO("key1:value1\n"
                         "key2;VALUE=foo:value2\n"
                         "key3;VALUE=bar:value3\n")
         reader = ICalReader(file)
-        self.assertEqual(list(reader.readRecord()),
-                         [('key1', 'value1', None),
-                          ('key2', 'value2', 'foo'),
-                          ('key3', 'value3', 'bar')])
+        self.assertEqual(list(reader._iterRow()),
+                         [('KEY1', 'value1', {}),
+                          ('KEY2', 'value2', {'VALUE': 'FOO'}),
+                          ('KEY3', 'value3', {'VALUE': 'BAR'})])
+
+        file = StringIO("key1:value:with:colons:in:it\n")
+        reader = ICalReader(file)
+        self.assertEqual(list(reader._iterRow()),
+                         [('KEY1', 'value:with:colons:in:it', {})])
+
+        reader = ICalReader(StringIO("ke\r\n y1\n\t:value\r\n  1 \r\n ."))
+        self.assertEqual(list(reader._iterRow()),
+                         [('KEY1', 'value 1 .', {})])
+
+    def test_parseRow(self):
+        from schooltool.cal import ICalReader, ICalParseError
+        parseRow = ICalReader._parseRow
+        self.assertEqual(parseRow("key:"), ("KEY", "", {}))
+        self.assertEqual(parseRow("key:value"), ("KEY", "value", {}))
+        self.assertEqual(parseRow("key:va:lu:e"), ("KEY", "va:lu:e", {}))
+        self.assertRaises(ICalParseError, parseRow, "key but no value")
+        self.assertRaises(ICalParseError, parseRow, ":value but no key")
+        self.assertRaises(ICalParseError, parseRow, "bad name:")
+
+        self.assertEqual(parseRow("key;param=:value"),
+                         ("KEY", "value", {'PARAM': ''}))
+        self.assertEqual(parseRow("key;param=pvalue:value"),
+                         ("KEY", "value", {'PARAM': 'PVALUE'}))
+        self.assertEqual(parseRow('key;param=pvalue;param2=value2:value'),
+                         ("KEY", "value", {'PARAM': 'PVALUE',
+                                           'PARAM2': 'VALUE2'}))
+        self.assertEqual(parseRow('key;param="pvalue":value'),
+                         ("KEY", "value", {'PARAM': 'pvalue'}))
+        self.assertEqual(parseRow('key;param=pvalue;param2="value2":value'),
+                         ("KEY", "value", {'PARAM': 'PVALUE',
+                                           'PARAM2': 'value2'}))
+        self.assertRaises(ICalParseError, parseRow, "k;:no param")
+        self.assertRaises(ICalParseError, parseRow, "k;a?=b:bad param")
+        self.assertRaises(ICalParseError, parseRow, "k;a=\":bad param")
+        self.assertRaises(ICalParseError, parseRow, "k;a=\001:bad char")
+        self.assertEqual(parseRow("key;param=a,b,c:value"),
+                         ("KEY", "value", {'PARAM': ['A', 'B', 'C']}))
+        self.assertEqual(parseRow('key;param=a,"b,c",d:value'),
+                         ("KEY", "value", {'PARAM': ['A', 'b,c', 'D']}))
 
 
 class TestTimetable(unittest.TestCase):

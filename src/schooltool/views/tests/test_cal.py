@@ -30,6 +30,12 @@ from schooltool.tests.helpers import dedent, diff
 __metaclass__ = type
 
 
+class DatetimeStub:
+
+    def utcnow(self):
+        return datetime.datetime(2004, 1, 2, 3, 4, 5)
+
+
 class TestSchooldayModelCalendarView(unittest.TestCase):
 
     def setUp(self):
@@ -39,6 +45,7 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
                                  datetime.date(2003, 9, 30))
         setPath(self.sm, '/calendar')
         self.view = SchooldayModelCalendarView(self.sm)
+        self.view.datetime_hook = DatetimeStub()
 
     def do_test(self, expected):
         request = RequestStub("http://localhost/calendar")
@@ -58,6 +65,7 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
             SUMMARY:School Period
             DTSTART;VALUE=DATE:20030901
             DTEND;VALUE=DATE:20030930
+            DTSTAMP:20040102T030405Z
             END:VEVENT
             END:VCALENDAR
         """))
@@ -74,6 +82,7 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
             SUMMARY:School Period
             DTSTART;VALUE=DATE:20030901
             DTEND;VALUE=DATE:20030930
+            DTSTAMP:20040102T030405Z
             END:VEVENT
         """)
         for date in daterange(self.sm.first, self.sm.last):
@@ -84,6 +93,7 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
                     UID:schoolday-%s-/calendar@localhost
                     SUMMARY:Schoolday
                     DTSTART;VALUE=DATE:%s
+                    DTSTAMP:20040102T030405Z
                     END:VEVENT
                 """ % (s, s))
         self.do_test(expected + "END:VCALENDAR")
@@ -110,6 +120,11 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
             SUMMARY:Schoolday
             DTSTART;VALUE=DATE:20040912
             END:VEVENT
+            BEGIN:VEVENT
+            UID:random2@example.com
+            SUMMARY:Schoolday
+            DTSTART;VALUE=DATE:20040912
+            END:VEVENT
             END:VCALENDAR
         """)
         calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
@@ -128,18 +143,138 @@ class TestSchooldayModelCalendarView(unittest.TestCase):
             else:
                 self.assert_(not self.sm.isSchoolday(date))
 
-    def test_put_not_a_calendar(self):
+    def _test_put_error(self, body, content_type='text/calendar', errmsg=None):
         self.sm.add(datetime.date(2003, 9, 15))
         request = RequestStub("http://localhost/calendar", method="PUT",
-                              headers={"Content-Type": "text/plain"},
-                              body="Hi, Mom!")
+                              headers={"Content-Type": content_type},
+                              body=body)
         result = self.view.render(request)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.headers['Content-Type'], "text/plain")
-        self.assertEquals(result, "Unsupported content type: text/plain")
+        if errmsg:
+            self.assertEquals(result, errmsg)
         self.assertEquals(self.sm.first, datetime.date(2003, 9, 1))
         self.assertEquals(self.sm.last, datetime.date(2003, 9, 30))
         self.assert_(self.sm.isSchoolday(datetime.date(2003, 9, 15)))
+
+    def test_put_errors(self):
+        self._test_put_error("Hi, Mom!", content_type="text/plain",
+                             errmsg="Unsupported content type: text/plain")
+        self._test_put_error("This is not iCalendar")
+        self._test_put_error("BEGIN:VCALENDAR\nEND:VCALENDAR\n",
+                             errmsg="School period not defined")
+
+        calendar = dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:school-period-/calendar@localhost
+            SUMMARY:School Period
+            DTSTART;VALUE=DATE:20040901
+            DTEND;VALUE=DATE:20040930
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:school-period-/calendar@localhost
+            SUMMARY:School Period
+            DTSTART;VALUE=DATE:20040901
+            DTEND;VALUE=DATE:20040929
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random@example.com
+            SUMMARY:Doctor's appointment
+            DTSTART;VALUE=DATE:20040911
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random2@example.com
+            SUMMARY:Schoolday
+            DTSTART;VALUE=DATE:20040912
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
+        self._test_put_error(calendar,
+                             errmsg="Multiple definitions of school period")
+
+        calendar = dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:school-period-/calendar@localhost
+            SUMMARY:School Period
+            DTSTART;VALUE=DATE:20040901
+            DTEND;VALUE=DATE:20040930
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random@example.com
+            SUMMARY:Doctor's appointment
+            DTSTART;VALUE=DATE:20040911
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random2@example.com
+            SUMMARY:Schoolday
+            DTSTART;VALUE=DATE:20040912
+            DTEND;VALUE=DATE:20040913
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
+        self._test_put_error(calendar,
+                             errmsg="Schoolday longer than one day")
+
+        calendar = dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:school-period-/calendar@localhost
+            SUMMARY:School Period
+            DTSTART;VALUE=DATE:20040901
+            DTEND;VALUE=DATE:20040930
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random@example.com
+            SUMMARY:Doctor's appointment
+            DTSTART;VALUE=DATE:20040911
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random2@example.com
+            SUMMARY:Schoolday
+            DTSTART;VALUE=DATE:20040912
+            RDATE;VALUE=DATE:20040915
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
+        self._test_put_error(calendar,
+                     errmsg="Repeating events/exceptions not yet supported")
+
+        calendar = dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:school-period-/calendar@localhost
+            SUMMARY:School Period
+            DTSTART;VALUE=DATE:20040901
+            DTEND;VALUE=DATE:20040930
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random@example.com
+            SUMMARY:Doctor's appointment
+            DTSTART;VALUE=DATE:20040911
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random2@example.com
+            SUMMARY:Schoolday
+            DTSTART;VALUE=DATE:20041001
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
+        self._test_put_error(calendar,
+                     errmsg="School day outside school period")
 
 
 def test_suite():
