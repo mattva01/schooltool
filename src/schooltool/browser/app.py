@@ -141,28 +141,6 @@ class StartView(View):
         return absoluteURL(self.request, self.context)
 
 
-class PersonContainerView(View):
-    """View for /persons.
-
-    Accessing this location returns a 404 Not Found response.
-
-    Traversing /persons with a person's id returns the person information page
-    for that person.
-    """
-
-    __used_for__ = IApplicationObjectContainer
-
-    authorization = PublicAccess
-
-    do_GET = staticmethod(notFoundPage)
-
-    def _traverse(self, name, request):
-        if name == 'add.html':
-            return PersonAddView(self.context)
-        else:
-            return PersonView(self.context[name])
-
-
 class PersonAddView(View):
     """A view for adding persons."""
 
@@ -268,6 +246,12 @@ class ObjectContainerView(View):
             return self.add_view(self.context)
         else:
             return self.obj_view(self.context[name])
+
+
+class PersonContainerView(ObjectContainerView):
+
+    add_view = PersonAddView
+    obj_view = PersonView
 
 
 class GroupContainerView(ObjectContainerView):

@@ -222,29 +222,6 @@ class TestStartView(unittest.TestCase):
         self.assertEquals(request.code, 200)
 
 
-class TestPersonContainerView(unittest.TestCase, TraversalTestMixin):
-
-    def createView(self):
-        from schooltool.model import Person
-        from schooltool.browser.app import PersonContainerView
-        return PersonContainerView({'person': Person()})
-
-    def test_render(self):
-        view = self.createView()
-        request = RequestStub()
-        result = view.render(request)
-        self.assertEquals(request.code, 404)
-
-    def test_traverse(self):
-        from schooltool.browser.model import PersonView
-        from schooltool.browser.app import PersonAddView
-        view = self.createView()
-        person = view.context['person']
-        self.assertTraverses(view, 'person', PersonView, person)
-        self.assertTraverses(view, 'add.html', PersonAddView, view.context)
-        self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
-
-
 class TestPersonAddView(unittest.TestCase):
 
     def createView(self):
@@ -353,6 +330,17 @@ class TestObjectContainerView(unittest.TestCase, TraversalTestMixin):
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 
+class TestPersonContainerView(TestObjectContainerView):
+
+    def setUp(self):
+        from schooltool.browser.app import PersonContainerView, PersonAddView
+        from schooltool.browser.model import PersonView
+        TestObjectContainerView.setUp(self)
+        self.view = PersonContainerView
+        self.add_view = PersonAddView
+        self.obj_view = PersonView
+
+
 class TestGroupContainerView(TestObjectContainerView):
 
     def setUp(self):
@@ -438,9 +426,9 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestAppView))
     suite.addTest(unittest.makeSuite(TestLogoutView))
     suite.addTest(unittest.makeSuite(TestStartView))
-    suite.addTest(unittest.makeSuite(TestPersonContainerView))
     suite.addTest(unittest.makeSuite(TestPersonAddView))
     suite.addTest(unittest.makeSuite(TestObjectContainerView))
+    suite.addTest(unittest.makeSuite(TestPersonContainerView))
     suite.addTest(unittest.makeSuite(TestGroupContainerView))
     #suite.addTest(unittest.makeSuite(TestResourceContainerView))
     suite.addTest(unittest.makeSuite(TestObjectAddView))
