@@ -759,6 +759,10 @@ class IACL(Interface):
         principal Everybody has the permission.
         """
 
+class IACLOwner(Interface):
+    """An object that has an ACL"""
+    acl = Attribute("""The ACL for this calendar.""")
+
 
 #
 # Calendaring
@@ -880,10 +884,8 @@ class ICalendarWrite(Interface):
         """Add all events from another calendar."""
 
 
-class IACLCalendar(ICalendarWrite):
+class IACLCalendar(ICalendarWrite, IACLOwner):
     """A calendar that has an ACL"""
-
-    acl = Attribute("""The ACL for this calendar.""")
 
 
 class ICalendarEvent(Interface):
@@ -1326,7 +1328,7 @@ class IAvailabilitySearch(Interface):
 
 class IApplicationObject(ILocation, IRelatable, IEventTarget,
                          IEventConfigurable, IFaceted, ICalendarOwner,
-                         ITimetabled, IAvailabilitySearch):
+                         ITimetabled, IAvailabilitySearch, IACLOwner):
     """A collection of interfaces common to all application objects."""
 
     title = Attribute("""Title of the application object""")

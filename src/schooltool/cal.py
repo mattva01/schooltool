@@ -24,13 +24,11 @@ $Id$
 
 import re
 import datetime
-import itertools
 import email.Utils
 from sets import Set
 from zope.interface import implements
 from persistent import Persistent
-from persistent.dict import PersistentDict
-from schooltool.db import PersistentPairKeysDict
+from schooltool.auth import ACL
 from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
 from schooltool.interfaces import ILocation, IDateRange
 from schooltool.interfaces import ICalendar, ICalendarWrite, ICalendarEvent
@@ -1042,66 +1040,8 @@ class CalendarOwnerMixin(Persistent):
         self.calendar = ACLCalendar()
         self.calendar.__parent__ = self
         self.calendar.__name__ = 'calendar'
+
+    def addSelfToCalACL(self):
         self.calendar.acl.add((self, ViewPermission))
         self.calendar.acl.add((self, AddPermission))
         self.calendar.acl.add((self, ModifyPermission))
-
-
-class ACL(Persistent):
-    """Access coltrol list
-
-    I'd like to put the 'Everybody' marker into _data, but our
-    principals have to be persistent.  So I'm going the simplest way
-    -- special case Everybody in this class.  The alternative would be
-    to create MaybePersistentPairKeysDict (see schooltool.db).
-    """
-
-    implements(IACL, ILocation)
-
-    def __init__(self):
-        self._data = PersistentPairKeysDict()
-        self._everybody = PersistentDict()
-        self.__name__ = 'acl'
-        self.__parent__ = None
-
-    def __iter__(self):
-        """Iterate over tuples of (principal, permission)"""
-        return itertools.chain(iter(self._data),
-                               iter([(Everybody, perm)
-                                     for perm in self._everybody]))
-
-    def __contains__(self, (principal,  permission)):
-        """Returns true iff the principal has the permission"""
-        if not permission in (ViewPermission, ModifyPermission, AddPermission):
-            raise ValueError("Bad permission: %r" % (permission,))
-        if principal == Everybody:
-            return permission in self._everybody
-        if principal is None:
-            return False
-        else:
-            return (principal, permission) in self._data
-
-    def add(self, (principal, permission)):
-        """Grants the permission to a principal"""
-        if not permission in (ViewPermission, ModifyPermission, AddPermission):
-            raise ValueError("Bad permission: %r" % (permission,))
-        if principal == Everybody:
-            self._everybody[permission] = 1
-        else:
-            self._data[(principal, permission)] = 1
-
-    def remove(self, (principal, permission)):
-        """Revokes the permission from a principal"""
-        if not permission in (ViewPermission, ModifyPermission, AddPermission):
-            raise ValueError("Bad permission: %r" % (permission,))
-        if principal == Everybody:
-            del self._everybody[permission]
-        else:
-            del self._data[(principal, permission)]
-
-    def allows(self, principal, permission):
-        """Return whether the principal has the permission"""
-        if permission in self._everybody:
-            return True
-        else:
-            return (principal, permission) in self
