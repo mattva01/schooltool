@@ -22,7 +22,7 @@ Browser views for ACLs.
 $Id$
 """
 
-from zope.app.traversing.api import traverse, getPath
+from zope.app.traversing.api import traverse, getPath, TraversalError
 
 from schooltool.browser import View, Template
 from schooltool.browser import AppObjectBreadcrumbsMixin
@@ -87,7 +87,10 @@ class ACLView(View, AppObjectBreadcrumbsMixin):
             return value
         elif value == Everybody:
             return Everybody
-       return traverse(self.context, value)
+        try:
+            return traverse(self.context, value)
+        except TraversalError:
+            pass
 
     def formatUser(self, value):
         if value in ('', None):

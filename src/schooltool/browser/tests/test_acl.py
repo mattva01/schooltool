@@ -158,6 +158,24 @@ class TestACLView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         assert view.context.allows(Everybody, ViewPermission), result
         assert view.context.allows(Everybody, AddPermission), result
 
+    def test_userParser(self):
+        view = self.createView()
+        # Initial form rendering: no 'user' field in form
+        self.assert_(view.userParser(None) is None)
+        # Empty form submission: 'user' field is empty
+        self.assertEquals(view.userParser(''), '')
+        # Special case: Everybody
+        from schooltool.interfaces import Everybody
+        self.assertEquals(view.userParser(Everybody), Everybody)
+        # A user or a group
+        self.assert_(view.userParser('/persons/johndoe') is self.person)
+        self.assert_(view.userParser('/groups/pupils') is self.pupils)
+        # A user or a group that does not exist
+        #   This could happen, for example, if manager A goes to the ACL view
+        #   and selects a person, while in the meantime manager B deletes that
+        #   person from the database.
+        self.assert_(view.userParser('/persons/nosuchperson') is None)
+
 
 def test_suite():
     suite = unittest.TestSuite()
