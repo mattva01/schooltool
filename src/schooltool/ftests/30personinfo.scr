@@ -1,0 +1,47 @@
+Person info facet tests
+
+SchoolTool> links off
+
+SchoolTool> get /persons/Aiste/facets/person_info
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<person_info xmlns="http://schooltool.org/ns/model/0.1"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
+  <first_name></first_name>
+  <last_name></last_name>
+  <date_of_birth></date_of_birth>
+  <comment></comment>
+  <photo xlink:type="simple" xlink:title="Photo"
+         xlink:href="/persons/Aiste/facets/person_info/photo"/>
+</person_info>
+
+
+SchoolTool> put /persons/Aiste/facets/person_info text/xml
+PUT> <person_info xmlns="http://schooltool.org/ns/model/0.1"
+PUT>              xmlns:xlink="http://www.w3.org/1999/xlink">
+PUT>   <first_name>Aiste</first_name>
+PUT>   <last_name>Kesminaite</last_name>
+PUT>   <date_of_birth>1978-04-26</date_of_birth>
+PUT>   <comment></comment>
+PUT>   <photo xlink:type="simple" xlink:title="Photo"
+PUT>          xlink:href="/persons/Aiste/facets/person_info/photo"/>
+PUT> </person_info>
+PUT> .
+200 OK
+Content-Type: text/plain
+Updated
+
+SchoolTool> get /persons/Aiste/facets/person_info
+200 OK
+Content-Type: text/xml; charset=UTF-8
+<person_info xmlns="http://schooltool.org/ns/model/0.1"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
+  <first_name>Aiste</first_name>
+  <last_name>Kesminaite</last_name>
+  <date_of_birth>1978-04-26</date_of_birth>
+  <comment></comment>
+  <photo xlink:type="simple" xlink:title="Photo"
+         xlink:href="/persons/Aiste/facets/person_info/photo"/>
+</person_info>
+
+
