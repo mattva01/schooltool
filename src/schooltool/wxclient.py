@@ -228,7 +228,9 @@ class MainFrame(wxFrame):
         self.SetStatusText(self.client.status)
         old_selection = self.peopleListBox.GetStringSelection()
         self.peopleListBox.Set(people)
-        self.peopleListBox.SetStringSelection(old_selection)
+        idx = self.peopleListBox.FindString(old_selection)
+        if idx != -1:
+            self.peopleListBox.SetSelection(idx)
         self.personInfoText.SetPage('')
         self.DoSelectPerson(None)
 
