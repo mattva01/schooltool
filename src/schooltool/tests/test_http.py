@@ -28,6 +28,9 @@ import os
 import time
 import logging
 
+import ZODB.DB
+import ZODB.MappingStorage
+import transaction
 from StringIO import StringIO
 from zope.interface import moduleProvides
 from zope.testing.doctestunit import DocTestSuite
@@ -935,6 +938,65 @@ class TestRequest(unittest.TestCase):
         self.assertEquals(test('text/html; charset=UTF-8'), 'text/html')
         self.assertEquals(test(None), None)
 
+    def test_load_snapshot(self):
+        from schooltool.http import Request
+        channel = ChannelStub()
+        channel.site = SiteStub()
+        channel.site.db = DbStub()
+        called = []
+        channel.site.db.restoreSnapshot = lambda snapshot: \
+                                             called.append(snapshot)
+        rq = Request(channel, True)
+        rq.reactor_hook = ReactorStub()
+        rq.received_headers['x-testing-load-snapshot'] = 'snap'
+        rq.path = '/'
+        rq.process()
+        self.assertEquals(called, ['snap'])
+
+    def test_load_snapshot_bad_snapshot(self):
+        from schooltool.http import Request
+        channel = ChannelStub()
+        channel.site = SiteStub()
+        channel.site.db = DbStub()
+        channel.site.db.restoreSnapshot = lambda snapshot: {}[snapshot]
+        rq = Request(channel, True)
+        rq.reactor_hook = ReactorStub()
+        rq.received_headers['x-testing-load-snapshot'] = 'nosuch'
+        rq.path = '/'
+        rq.client = IPv4Address("TCP", "192.193.194.195", 123, 'INET')
+        rq.hitlogger = LoggerStub()
+        rq.process()
+        self.assertEqual(rq.code, 400)
+
+    def test_load_snapshot_when_disabled(self):
+        from schooltool.http import Request
+        rq = Request(ChannelStub(), True)
+        rq.reactor_hook = ReactorStub()
+        rq.received_headers['x-testing-load-snapshot'] = 'snap'
+        rq.path = '/'
+        rq.process() # no AttributeError when db has no restoreSnapshot method
+        assert not hasattr(rq.site.db, 'restoreSnapshot')
+
+    def test_save_snapshot(self):
+        from schooltool.http import Request
+        rq = Request(None, True)
+        rq.site = SiteStub()
+        rq.site.db.makeSnapshot = lambda snapshot: None
+        rq.reactor_hook = ReactorStub()
+        rq.received_headers['x-testing-save-snapshot'] = 'snap'
+        rq._process()
+        called = rq.reactor_hook._called_from_thread
+        self.assertEquals(called[-1], (rq.site.db.makeSnapshot, 'snap'))
+
+    def test_save_snapshot_when_disabled(self):
+        from schooltool.http import Request
+        rq = Request(None, True)
+        rq.site = SiteStub()
+        rq.reactor_hook = ReactorStub()
+        rq.received_headers['x-testing-save-snapshot'] = 'snap'
+        rq._process() # no AttributeError when db has no makeSnapshot method
+        assert not hasattr(rq.site.db, 'makeSnapshot')
+
 
 class TestTimeFormatting(unittest.TestCase):
 
@@ -1022,6 +1084,75 @@ class TestTimeFormatting(unittest.TestCase):
                           '30/Jan/2004:10:05:24 -0500')
 
 
+class TestSnapshottableDB(unittest.TestCase):
+
+    def tearDown(self):
+        logger = logging.getLogger('schooltool.app')
+        del logger.handlers[:]
+        logger.propagate = True
+        logger.setLevel(0)
+
+    def test(self):
+        from schooltool.http import SnapshottableDB
+
+        # Create a logger
+        buffer = StringIO()
+        logger = logging.getLogger('schooltool.app')
+        logger.propagate = False
+        logger.setLevel(logging.INFO)
+        logger.addHandler(logging.StreamHandler(buffer))
+
+        # Create a database
+        db = ZODB.DB(ZODB.MappingStorage.MappingStorage())
+        snapshottable_db = SnapshottableDB(db)
+
+        # Sanity check: can we change the DB and see our changes?
+        self.setObject(snapshottable_db, 'name', 'some_value')
+        self.assertEquals(self.getObject(snapshottable_db, 'name'),
+                          'some_value')
+
+        # Make one snapshot, check that the DB is still accessible
+        snapshottable_db.makeSnapshot('snapshot1')
+        self.assertEquals(self.getObject(snapshottable_db, 'name'),
+                          'some_value')
+        self.assertEquals(buffer.getvalue(), "Saved snapshot 'snapshot1'\n")
+
+        # Make a change and verify that it worked
+        self.setObject(snapshottable_db, 'name', 'other_value')
+        self.assertEquals(self.getObject(snapshottable_db, 'name'),
+                          'other_value')
+
+        # Make another snapshot
+        snapshottable_db.makeSnapshot('snapshot2')
+        self.assertEquals(self.getObject(snapshottable_db, 'name'),
+                          'other_value')
+
+        # Load the first snapshot and see if we can see the old value
+        buffer.truncate(0)
+        snapshottable_db.restoreSnapshot('snapshot1')
+        self.assertEquals(self.getObject(snapshottable_db, 'name'),
+                          'some_value')
+        self.assertEquals(buffer.getvalue(), "Loaded snapshot 'snapshot1'\n")
+
+        # Load the second snapshot and see if we can see the new value
+        snapshottable_db.restoreSnapshot('snapshot2')
+        self.assertEquals(self.getObject(snapshottable_db, 'name'),
+                          'other_value')
+
+    def setObject(self, db, name, value):
+        conn = db.open()
+        conn.root()[name] = value
+        transaction.commit()
+        conn.close()
+
+    def getObject(self, db, name):
+        conn = db.open()
+        value = conn.root()[name]
+        transaction.commit()
+        conn.close()
+        return value
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.http'))
@@ -1029,6 +1160,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestAcceptParsing))
     suite.addTest(unittest.makeSuite(TestRequest))
     suite.addTest(unittest.makeSuite(TestTimeFormatting))
+    suite.addTest(unittest.makeSuite(TestSnapshottableDB))
     return suite
 
 

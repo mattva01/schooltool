@@ -28,6 +28,8 @@ import logging
 
 import transaction
 from ZODB.POSException import ConflictError
+from ZODB.DemoStorage import DemoStorage
+from ZODB.DB import DB
 from twisted.web import resource
 from twisted.internet import reactor
 from twisted.protocols import http
@@ -346,7 +348,10 @@ class Request(http.Request):
         try:
             self._handleVh()
             self.accept = parseAccept(self.getHeader('Accept'))
-        except ValueError, e:
+            snapshot = self.getHeader('X-Testing-Load-Snapshot')
+            if snapshot and hasattr(self.site.db, 'restoreSnapshot'):
+                self.site.db.restoreSnapshot(snapshot)
+        except (KeyError, ValueError), e:
             self.accept = []
             self.setResponseCode(400)
             body = self.renderRequestError(e)
@@ -433,6 +438,10 @@ class Request(http.Request):
             if self.zodb_conn:
                 self.zodb_conn.close()
                 self.zodb_conn = None
+        snapshot = self.getHeader('X-Testing-Save-Snapshot')
+        if snapshot and hasattr(self.site.db, 'makeSnapshot'):
+            self.reactor_hook.callFromThread(self.site.db.makeSnapshot,
+                                             snapshot)
 
     def _generate_response(self):
         """Generate the response.
@@ -628,7 +637,7 @@ class Site(http.HTTPFactory):
         """Create a site.
 
         Arguments:
-          db                ZODB database
+          db                ZODB database (or SnapshottableDB)
           rootName          name of the application object in the database
           viewFactory       factory for the application object views
           authenticate      authentication function (see IAuthenticator)
@@ -651,4 +660,46 @@ class Site(http.HTTPFactory):
         channel.requestFactory = self.requestFactory
         channel.site = self
         return channel
+
+
+class SnapshottableDB:
+    """A ZODB database wrapper that supports snapshots.
+
+    This is implemented by clever usage of DemoStorage.
+
+    It is only likely to work when ZODB MappingStorage is used for the
+    database that is wrapped.
+
+    makeSnapshot and restoreSnapshot are used for functional tests to present
+    a number of standard test fixtures and keep tests isolated.
+    """
+
+    def __init__(self, db):
+        self._db = db
+        self._snapshots = {}
+        self._logger = logging.getLogger('schooltool.app')
+
+    def __getattr__(self, name):
+        return getattr(self._db, name)
+
+    def makeSnapshot(self, name):
+        """Create a snapshot of the database state.
+
+        This method should only be called when the database is closed.
+
+        It is only likely to work when ZODB MappingStorage is used.
+        """
+        self._snapshots[name] = self._db._storage
+        self._db = DB(DemoStorage(name, self._db._storage))
+        self._logger.info(_("Saved snapshot %r") % name)
+
+    def restoreSnapshot(self, name):
+        """Restore a saved snapshot of the database state.
+
+        This method should only be called when the database is closed.
+
+        Any modifications to the database do not change the saved snapshot.
+        """
+        self._db = DB(DemoStorage(name, self._snapshots[name]))
+        self._logger.info(_("Loaded snapshot %r") % name)
 
