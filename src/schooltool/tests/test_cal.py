@@ -24,11 +24,15 @@ $Id$
 
 import unittest
 import calendar
+from pprint import pformat
 from zope.interface.verify import verifyObject
 from zope.interface import implements
 from zope.testing.doctestunit import DocTestSuite
-from datetime import date, time, timedelta
+from datetime import date, time, timedelta, datetime
 from StringIO import StringIO
+from schooltool.tests.helpers import diff
+from schooltool.tests.utils import EqualsSortedMixin
+from schooltool.interfaces import ISchooldayModel
 
 
 class TestSchooldayModel(unittest.TestCase):
@@ -415,6 +419,221 @@ class TestSchooldayTemplate(unittest.TestCase):
         self.assertEqual(list(iter(tmpl)), [lesson2])
 
 
+class SchooldayModelStub:
+
+    implements(ISchooldayModel)
+
+    #     November 2003
+    #  Su Mo Tu We Th Fr Sa
+    #                     1
+    #   2  3  4  5  6  7  8
+    #   9 10 11 12 13 14 15
+    #  16 17 18 19 20 21 22
+    #  23 24 25 26 27 28 29
+    #  30
+
+    first = date(2003, 11, 20)
+    last = date(2003, 11, 26)
+
+    def __iter__(self):
+        return iter((date(2003, 11, 20),
+                     date(2003, 11, 21),
+                     date(2003, 11, 22),
+                     date(2003, 11, 23),
+                     date(2003, 11, 24),
+                     date(2003, 11, 25),
+                     date(2003, 11, 26)))
+
+    def isSchoolday(self, day):
+        return day in (date(2003, 11, 20),
+                       date(2003, 11, 21),
+                       date(2003, 11, 24),
+                       date(2003, 11, 25),
+                       date(2003, 11, 26))
+
+    def __contains__(self, day):
+        return date(2003, 11, 20) <= day <= date(2003, 11, 26)
+
+
+class TestSequentialDaysTimetableModel(unittest.TestCase):
+
+    def test_interface(self):
+        from schooltool.cal import SequentialDaysTimetableModel
+        from schooltool.interfaces import ITimetableModel
+
+        model = SequentialDaysTimetableModel(("A","B"), ())
+        verifyObject(ITimetableModel, model)
+
+    def test_createCalendar(self):
+        from schooltool.cal import SequentialDaysTimetableModel, daterange
+        from schooltool.cal import SchooldayTemplate, SchooldayPeriodEvent
+        from schooltool.cal import Timetable, TimetableDay, TimetableActivity
+        from schooltool.interfaces import ICalendar
+
+        tt = Timetable(('A', 'B'))
+        periods = ('Green', 'Blue')
+        tt["A"] = TimetableDay(periods)
+        tt["B"] = TimetableDay(periods)
+        tt["A"]["Green"] = TimetableActivity("English")
+        tt["A"]["Blue"] = TimetableActivity("Math")
+        tt["B"]["Green"] = TimetableActivity("Biology")
+        tt["B"]["Blue"] = TimetableActivity("Geography")
+
+        t, td = time, timedelta
+        template1 = SchooldayTemplate()
+        template1.add(SchooldayPeriodEvent('Green', t(9, 0), td(minutes=90)))
+        template1.add(SchooldayPeriodEvent('Blue', t(11, 0), td(minutes=90)))
+
+        model = SequentialDaysTimetableModel(("A", "B"), (template1,))
+        schooldays = SchooldayModelStub()
+
+        cal = model.createCalendar(schooldays, tt)
+        verifyObject(ICalendar, cal)
+
+        self.assertEqual(cal.daterange.first, date(2003, 11, 20))
+        self.assertEqual(cal.daterange.last, date(2003, 11, 26))
+
+        result = []
+        for d in daterange(date(2003, 11, 20), date(2003, 11, 26)):
+            calday = cal.byDate(d)
+            events = []
+            for event in calday:
+                events.append(event)
+            result.append(dict([(event.dtstart, event.title)
+                           for event in events]))
+
+        dt = datetime
+        expected = [{dt(2003, 11, 20, 9, 0): "English",
+                     dt(2003, 11, 20, 11, 0): "Math"},
+                    {dt(2003, 11, 21, 9, 0): "Biology",
+                     dt(2003, 11, 21, 11, 0): "Geography"},
+                    {}, {},
+                    {dt(2003, 11, 24, 9, 0): "English",
+                     dt(2003, 11, 24, 11, 0): "Math"},
+                    {dt(2003, 11, 25, 9, 0): "Biology",
+                     dt(2003, 11, 25, 11, 0): "Geography"},
+                    {dt(2003, 11, 26, 9, 0): "English",
+                     dt(2003, 11, 26, 11, 0): "Math"}]
+
+        self.assertEqual(expected, result,
+                         diff(pformat(expected), pformat(result)))
+
+
+class TestDateRange(unittest.TestCase):
+
+    def test(self):
+        from schooltool.cal import DateRange
+        from schooltool.interfaces import IDateRange
+
+        dr = DateRange(date(2003, 1, 1), date(2003, 1, 31))
+        verifyObject(IDateRange, dr)
+
+        # __contains__
+        self.assert_(date(2002, 12, 31) not in dr)
+        self.assert_(date(2003, 2, 1) not in dr)
+        for day in range(1, 32):
+            self.assert_(date(2003, 1, day) in dr)
+
+        # __iter__
+        days = list(dr)
+        self.assertEqual(len(days), 31)
+        self.assertEqual(len(dr), 31)
+
+        days = DateRange(date(2003, 1, 1), date(2003, 1, 2))
+        self.assertEqual(list(days), [date(2003, 1, 1), date(2003, 1, 2)])
+
+        days = DateRange(date(2003, 1, 1), date(2003, 1, 1))
+        self.assertEqual(list(days), [date(2003, 1, 1)])
+
+        self.assertRaises(ValueError, DateRange,
+                          date(2003, 1, 2), date(2003, 1, 1))
+
+
+class TestCalendar(unittest.TestCase, EqualsSortedMixin):
+
+    def test(self):
+        from schooltool.cal import Calendar
+        from schooltool.interfaces import ICalendar
+
+        cal = Calendar(date(2003, 11, 25), date(2003, 11, 26))
+        verifyObject(ICalendar, cal)
+
+        self.assertRaises(ValueError, Calendar,
+                          date(2003, 11, 26), date(2003, 11, 25))
+
+    def test_iter(self):
+        from schooltool.cal import Calendar
+        from schooltool.cal import CalendarEvent
+        from schooltool.interfaces import ICalendar
+
+        cal = Calendar(date(2003, 11, 25), date(2003, 11, 26))
+        self.assertEqual(list(cal), [])
+
+        ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
+                            timedelta(minutes=10),
+                            "English")
+
+        cal.addEvent(ev1)
+        self.assertEqual(list(cal), [ev1])
+
+    def test_byDate(self):
+        from schooltool.cal import Calendar
+        from schooltool.cal import CalendarEvent
+        from schooltool.interfaces import ICalendar
+
+        cal = Calendar(date(2003, 11, 25), date(2003, 11, 26))
+
+        ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
+                            timedelta(minutes=10),
+                            "English")
+        ev2 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                            timedelta(minutes=10),
+                            "Latin")
+        ev3 = CalendarEvent(datetime(2003, 11, 26, 10, 0),
+                            timedelta(minutes=10),
+                            "German")
+        cal.addEvent(ev1)
+        cal.addEvent(ev2)
+        cal.addEvent(ev3)
+
+        self.assertEqual(list(cal.byDate(date(2003, 11, 26))), [ev3])
+
+        # event end date within the period
+        ev4 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
+                            timedelta(1),
+                            "Solar eclipse")
+        cal.addEvent(ev4)
+        self.assertEqualSorted(list(cal.byDate(date(2003, 11, 26))),
+                               [ev3, ev4])
+
+        # calendar daterange is within the event period
+        ev4.duration = timedelta(2)
+        self.assertEqualSorted(list(cal.byDate(date(2003, 11, 26))),
+                               [ev3, ev4])
+
+        # only the event start date falls within the period
+        ev4.dtstart = datetime(2003, 11, 26, 10, 0)
+        self.assertEqualSorted(list(cal.byDate(date(2003, 11, 26))),
+                               [ev3, ev4])
+
+        # the event is after the period
+        ev4.dtstart = datetime(2003, 11, 27, 10, 0)
+        self.assertEqualSorted(list(cal.byDate(date(2003, 11, 26))),
+                               [ev3])
+
+
+class TestCalendarEvent(unittest.TestCase):
+
+    def test(self):
+        from schooltool.cal import CalendarEvent
+        from schooltool.interfaces import ICalendarEvent
+
+        ce = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check")
+        verifyObject(ICalendarEvent, ce)
+
+
 def test_suite():
     import schooltool.cal
     suite = unittest.TestSuite()
@@ -426,5 +645,9 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetabling))
     suite.addTest(unittest.makeSuite(TestSchooldayPeriodEvent))
     suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
+    suite.addTest(unittest.makeSuite(TestSequentialDaysTimetableModel))
+    suite.addTest(unittest.makeSuite(TestDateRange))
+    suite.addTest(unittest.makeSuite(TestCalendar))
+    suite.addTest(unittest.makeSuite(TestCalendarEvent))
     suite.addTest(DocTestSuite(schooltool.cal))
     return suite

@@ -942,18 +942,29 @@ class IViewAPI(Interface):
 # Calendaring
 #
 
-class ISchooldayModel(Interface):
+class IDateRange(Interface):
+
+    first = Attribute("""The first day of the period of time covered.""")
+
+    last = Attribute("""The last day of the period covered.""")
+
+    def __iter__():
+        """Iterates over all dates in the range from the first to the last."""
+
+    def __contains__(date):
+        """Returns True if the date is within the range, otherwise False.
+
+        Raises a TypeError if date is not a datetime.date.
+        """
+
+    def __len__():
+        """Returns the number of dates covered by the range."""
+
+
+class ISchooldayModel(IDateRange):
     """A calendar which can tell whether a day is a school day or not
     for a certain period of time.
     """
-
-    # XXX this should be an IDateRange
-    first = Attribute("The date of the first day of the period")
-
-    last = Attribute("The date of the last day of the period")
-
-    def __contains__(date):
-        """Returns whether the date is within the period covered."""
 
     def isSchoolday(date):
         """Returns whether the date is a schoolday.
@@ -996,25 +1007,6 @@ class ISchooldayModelWrite(Interface):
 
     def clear():
         """Mark all days as holidays."""
-
-
-class IDateRange(Interface):
-
-    first = Attribute("""The first day of the period of time covered.""")
-
-    last = Attribute("""The last day of the period covered.""")
-
-    def __iter__():
-        """Iterates over all dates in the range from the first to the last."""
-
-    def __contains__(date):
-        """Returns True if the date is within the range, otherwise False.
-
-        Raises a TypeError if date is not a datetime.date.
-        """
-
-    def __len__():
-        """Returns the number of dates covered by the range."""
 
 
 class ICalendar(Interface):

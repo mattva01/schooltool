@@ -29,19 +29,61 @@ from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.interfaces import ITimetableActivity
 from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
+from schooltool.interfaces import ITimetableModel, IDateRange
+from schooltool.interfaces import ICalendar, ICalendarEvent
 import datetime
 
 
 __metaclass__ = type
 
 
-class SchooldayModel:
+def daterange(date1, date2):
+    """Returns a generator of the range of dates from date1 to date2.
 
-    implements(ISchooldayModel, ISchooldayModelWrite, ILocation)
+    >>> from datetime import date
+    >>> list(daterange(date(2003, 9, 1), date(2003, 9, 3)))
+    [datetime.date(2003, 9, 1), datetime.date(2003, 9, 2), datetime.date(2003, 9, 3)]
+    >>> list(daterange(date(2003, 9, 2), date(2003, 9, 1)))
+    []
+
+    """
+    date = date1
+    while date <= date2:
+        yield date
+        date += datetime.date.resolution
+
+
+class DateRange:
+
+    implements(IDateRange)
 
     def __init__(self, first, last):
         self.first = first
         self.last = last
+        if last < first:
+            # import timemachine
+            raise ValueError("Last date %r less than first date %r" %
+                             (last, first))
+
+    def __iter__(self):
+        date = self.first
+        while date <= self.last:
+            yield date
+            date += datetime.date.resolution
+
+    def __len__(self):
+        return (self.last - self.first).days + 1
+
+    def __contains__(self, date):
+        return self.first <= date <= self.last
+
+
+class SchooldayModel(DateRange):
+
+    implements(ISchooldayModel, ISchooldayModelWrite, ILocation)
+
+    def __init__(self, first, last):
+        DateRange.__init__(self, first, last)
         self._schooldays = Set()
         self.__parent__ = None
         self.__name__ = None
@@ -50,9 +92,6 @@ class SchooldayModel:
         if not date in self:
             raise ValueError("Date %r not in period [%r, %r]" %
                              (date, self.first, self.last))
-
-    def __contains__(self, date):
-        return self.first <= date <= self.last
 
     def isSchoolday(self, date):
         self._validate(date)
@@ -80,22 +119,6 @@ class SchooldayModel:
 
     def clear(self):
         self._schooldays.clear()
-
-
-def daterange(date1, date2):
-    """Returns a generator of the range of dates from date1 to date2.
-
-    >>> from datetime import date
-    >>> list(daterange(date(2003, 9, 1), date(2003, 9, 3)))
-    [datetime.date(2003, 9, 1), datetime.date(2003, 9, 2), datetime.date(2003, 9, 3)]
-    >>> list(daterange(date(2003, 9, 2), date(2003, 9, 1)))
-    []
-
-    """
-    date = date1
-    while date <= date2:
-        yield date
-        date += datetime.date.resolution
 
 
 class VEvent(dict):
@@ -135,6 +158,7 @@ class ICalReader:
             """
             record_str = "".join(record)
             key_opts_str, value = record_str.split(":")
+            # XXX -- the following works only by accident
             key_type = key_opts_str.split(";VALUE=")
             key = key_type[0]
             if len(key_type) > 1:
@@ -280,3 +304,103 @@ class SchooldayTemplate:
 
     def remove(self, obj):
         self.events.remove(obj)
+
+
+
+class SequentialDaysTimetableModel:
+
+    """A timetable model in which the school days go in sequence with
+    shifts over non-schooldays:
+
+    Mon     Day 1
+    Tue     Day 2
+    Wed     ----- National holiday!
+    Thu     Day 3
+    Fri     Day 4
+    Sat     ----- Weekend
+    Sun     -----
+    Mon     Day 1
+    Tue     Day 2
+    Wed     Day 3
+    Thu     Day 4
+    Fri     Day 1
+    Sat     ----- Weekend
+    Sun     -----
+    Mon     Day 2
+    """
+
+    implements(ITimetableModel)
+
+    def __init__(self, day_ids, day_templates):
+        self.timetableDayIds = day_ids
+        self.dayTemplates = day_templates
+
+    def createCalendar(self, schoolday_model, timetable):
+        cal = Calendar(schoolday_model.first, schoolday_model.last)
+        day_id_gen = self._nextDayId()
+        for date in schoolday_model:
+            if schoolday_model.isSchoolday(date):
+                day_id = day_id_gen.next()
+                day_template = self._getTeplateForDay(date)
+                for period in day_template:
+                    dt = datetime.datetime.combine(date, period.tstart)
+                    activity = timetable[day_id][period.title]
+                    event = CalendarEvent(dt, period.duration,
+                                          activity.title)
+                    cal.addEvent(event)
+        return cal
+
+    def _getTeplateForDay(self, date):
+        # XXX figure out how the templates are chosen
+        return self.dayTemplates[0]
+
+    def _nextDayId(self):
+        while True:
+            for day_id in self.timetableDayIds:
+                yield day_id
+
+class Calendar:
+    implements(ICalendar)
+
+    def __init__(self, first, last):
+        self.daterange = DateRange(first, last)
+        self.events = Set()
+
+    def __iter__(self):
+        return iter(self.events)
+
+    def byDate(self, date):
+        cal = Calendar(date, date)
+        for event in self:
+            if cal._overlaps(event):
+                cal.addEvent(event)
+        return cal
+
+    def addEvent(self, event):
+        self.events.add(event)
+
+    def _overlaps(self, event):
+        """Returns whether the event's timespan overlaps with the timespan
+        of this calendar.
+        """
+        event_end = (event.dtstart + event.duration).date()
+        event_start = event.dtstart.date()
+        cal_start = self.daterange.first
+        cal_end = self.daterange.last
+
+        if event_start in self.daterange:
+            return True
+        elif event_end in self.daterange:
+            return True
+        elif event_start <= cal_start <= cal_end <= event_end:
+            return True
+        else:
+            return False
+
+class CalendarEvent:
+    implements(ICalendarEvent)
+
+    def __init__(self, dt, duration, title):
+        self.dtstart = dt
+        self.duration = duration
+        self.title = title
