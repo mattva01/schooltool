@@ -31,14 +31,20 @@ Persons, as described by IPerson, are users of the system.
 $Id$
 """
 
-from zope.interface import Interface
+from zope.interface import Interface, Attribute
 from zope.schema import Object, TextLine, Text, Date, Bytes
 from zope.app.container.interfaces import IReadContainer, IContainer
 from zope.app.container.interfaces import IContained
 from zope.app.container.constraints import contains, containers
 
 
-class IReadPerson(Interface):
+class IGroupMember(Interface):
+    """An object that knows the groups it is a member of."""
+
+    groups = Attribute("""Groups (see IRelationshipProperty)""")
+
+
+class IReadPerson(IGroupMember):
     """Publically accessible part of IPerson."""
 
     title = TextLine(title=u"Full name",
@@ -103,11 +109,13 @@ class IPersonContained(IPerson, IContained):
     containers(IPersonContainer)
 
 
-class IGroup(Interface):
+class IGroup(IGroupMember):
     """Group."""
 
     title = TextLine(title=u"Title",
         description=u"Title of the group.")
+
+    members = Attribute("""Members of the group (see IRelationshipProperty""")
 
 
 class IGroupContainer(IContainer):
@@ -122,7 +130,7 @@ class IGroupContained(IGroup, IContained):
     containers(IGroupContainer)
 
 
-class IResource(Interface):
+class IResource(IGroupMember):
     """Resource."""
 
     title = TextLine(title=u"Title",

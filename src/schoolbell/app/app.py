@@ -36,6 +36,8 @@ from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IPersonContainer, IPersonContained
 from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
+from schoolbell.app.membership import URIMembership, URIMember, URIGroup
+from schoolbell.relationship import RelationshipProperty
 
 
 class SchoolBellApplication(Persistent, SampleContainer):
@@ -84,6 +86,8 @@ class Person(Persistent, Contained):
     photo = None
     username = None
     _hashed_password = None
+
+    groups = RelationshipProperty(URIMembership, URIMember, URIGroup)
 
     def setPassword(self, password):
         self._hashed_password = hash_password(password)
@@ -134,6 +138,10 @@ class Group(Persistent, Contained):
 
     title = None
 
+    members = RelationshipProperty(URIMembership, URIGroup, URIMember)
+
+    groups = RelationshipProperty(URIMembership, URIMember, URIGroup)
+
 
 class Resource(Persistent, Contained):
     """Resource."""
@@ -141,3 +149,5 @@ class Resource(Persistent, Contained):
     implements(IResourceContained, IAttributeAnnotatable)
 
     title = None
+
+    groups = RelationshipProperty(URIMembership, URIMember, URIGroup)
