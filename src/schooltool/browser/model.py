@@ -780,21 +780,26 @@ class ResidenceView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
 
     template = Template("www/residence.pt")
 
+    def _traverse(self, name, request):
+        if name == "edit.html":
+            return ResidenceEditView(self.context)
+        elif name == 'move.html':
+            return ResidenceMoveView(self.context)
+        else:
+            raise KeyError(name)
+
     def canEdit(self):
         return self.isManager()
 
     def editURL(self):
         return absoluteURL(self.request, self.context, 'edit.html')
 
-    def _traverse(self, name, request):
-        if name == "edit.html":
-            return ResidenceEditView(self.context)
-        else:
-            raise KeyError(name)
+    def moveURL(self):
+        return absoluteURL(self.request, self.context, 'move.html')
 
 
 class ResidenceEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
-    """Page for "editing" an Residence (/residences/id/edit.html)."""
+    """Page for "editing" a Residence (/residences/id/edit.html)."""
 
     __used_for__ = IResidence
 
@@ -869,6 +874,78 @@ class ResidenceEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
         request.appLog(_("Residence info updated on %s (%s)") %
                        (self.context.title, getPath(self.context)))
         
+        url = absoluteURL(request, self.context)
+        return self.redirect(url, request)
+
+
+class ResidenceMoveView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
+    """Page for "moving" a Residence (/residences/id/move.html)."""
+
+    __used_for__ = IResidence
+
+    authorization = ACLModifyAccess
+
+    template = Template('www/residence_move.pt')
+
+    linkrole = URICurrentResidence
+
+    relname = property(lambda self: _("Occupies"))
+
+    back = True
+
+    errormessage = property(lambda self: _("Cannot add %(person)s to %(this)s"))
+
+    def info(self):
+        return FacetManager(self.context).facetByName('address_info')
+
+    def createRelationship(self, person):
+        Occupies(residence=self.context, resides=person)
+
+    def do_POST(self, request):
+        if 'CANCEL' in request.args:
+            url = absoluteURL(request, self.context)
+            return self.redirect(url, request)
+
+        title = request.args.get('title', [None])[0]
+        country = request.args.get('country', [None])[0]
+        streetNr = request.args.get('streetNr', [None])[0]
+        thoroughfareName = request.args.get('thoroughfareName', [None])[0]
+        town = request.args.get('town', [None])[0]
+        district = request.args.get('district', [None])[0]
+        postcode = request.args.get('country', [None])[0]
+
+        residences = traverse(self.context, '/residences')
+
+        obj = residences.new(None, title=title, country=country)
+        info = obj.info()
+        info.postcode=postcode
+        info.district=district
+        info.town=town
+        info.streetNr=streetNr
+        info.thoroughfareName=thoroughfareName
+
+        ids = filter(None, request.args.get("tomove", []))
+        for id in ids:
+            path = "/persons/%s" % id
+            pobj = traverse(self.context, path)
+            try:
+                Occupies(residence=obj, resides=pobj)
+                for link in self.context.listLinks():
+                    if getPath(link.traverse()) == path:
+                        link.unlink()
+                        request.appLog(_("Relationship '%s' between %s and %s "
+                        "removed") % (self.relname, getPath(self.context),
+                                  getPath(pobj)))
+            except ValueError:
+                return self.errormessage % {'other': pobj.title,
+                                            'this': obj.title}
+            request.appLog(_("Relationship '%s' between %s and %s created")
+                           % (self.relname, getPath(obj),
+                              getPath(pobj)))
+
+        nexturl = absoluteURL(request, pobj)
+        return self.redirect(nexturl, request)
+
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)
 

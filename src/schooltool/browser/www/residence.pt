@@ -19,10 +19,14 @@
         <span tal:content="info/postcode"/>
       </address>
       <div class="actions">
-        <a class="action" 
+        <a class="action"
             tal:condition="view/canEdit"
             tal:attributes="href view/editURL"
             i18n:translate="">Edit</a>
+        <a class="action"
+            tal:condition="view/canEdit"
+            tal:attributes="href view/moveURL"
+            i18n:translate="">Move</a>
       </div>
       <h2>Associated People</h2>
       <ul>

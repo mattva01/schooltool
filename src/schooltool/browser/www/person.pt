@@ -128,7 +128,7 @@
       <ul>
         <tal:loop repeat="residence residences">
           <li>
-            <a href="residence/@@absolute_url"
+            <a href="" tal:attributes="href residence/@@absolute_url"
               tal:content="residence/title"></a>
               <address tal:define="address residence/info">
               <span tal:content="address/streetNr"/> <span tal:content="address/thoroughfareName"/><br/>

@@ -1237,6 +1237,40 @@ class TestNoteView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
         self.assert_("Note 1 Title" in content)
         self.assert_("Note 1 Body" in content)
 
+class TestResidenceMoveView(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.model import Residence, Person, Resource
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.occupies import Occupies
+        from schooltool import occupies
+        from schooltool import relationship
+        self.setUpRegistries()
+        occupies.setUp()
+        relationship.setUp()
+        app = Application()
+        self.app = app
+        app['persons'] = ApplicationObjectContainer(Person)
+        app['residences'] = ApplicationObjectContainer(Residence)
+        self.per = app['persons'].new("p", title="Pete")
+        self.per2 = app['persons'].new("j", title="John") 
+
+        self.res = app['residences'].new(None, title="Home")
+        self.res2 = app['residences'].new(None, title="Home2")
+
+        Occupies(residence=self.res, resides=self.per)
+        Occupies(residence=self.res2, resides=self.per2)
+
+    def test(self):
+        from schooltool.browser.model import ResidenceMoveView
+        view = ResidenceMoveView(self.res)
+        view.authorization = lambda x, y: True
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(request.headers['content-type'],
+                          "text/html; charset=UTF-8")
+        self.assert_('Home' in result, result)
+
 
 class TestHelpers(unittest.TestCase):
 
@@ -1285,6 +1319,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestResourceEditView))
     suite.addTest(unittest.makeSuite(TestPhotoView))
     suite.addTest(unittest.makeSuite(TestNoteView))
+    suite.addTest(unittest.makeSuite(TestResidenceMoveView))
     suite.addTest(unittest.makeSuite(TestHelpers))
     return suite
 

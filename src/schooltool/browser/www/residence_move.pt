@@ -1,0 +1,81 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+  <head>
+    <title metal:fill-slot="title" i18n:translate="">Move residence</title>
+  </head>
+  <body>
+    <h1 metal:fill-slot="h1" i18n:translate="">
+      Move residence
+    </h1>
+
+    <metal:block metal:fill-slot="content" tal:define="info view/info">
+      <div class="row" tal:define="info context/info">
+        <h3>Current Residence</h3>
+        <strong tal:content="context/title"/>
+        <address>
+          <span tal:content="info/streetNr"/>
+          <span tal:content="info/thoroughfareName"/><br/>
+          <span tal:content="info/town"/>
+          <span tal:content="info/district"/>,
+          <span tal:content="info/postcode"/>
+        </address>
+      </div>
+
+      <form method="POST" tal:attributes="action request/path">
+        <fieldset>
+          <legend>New Residence</legend>
+
+          <div class="row">
+            <label for="title">Title</label>
+            <input type="text" name="title" value=""
+              tal:attributes="value python:request.args.get('title', [None])[0]"/>
+          </div>
+          <div class="row">
+            <label for="country">Country</label>
+            <input type="text" name="country" value=""
+              tal:attributes="value request/args/country | nothing"/>
+          </div>
+          <div class="row">
+            <label for="streetNr">Street Number</label>
+            <input type="text" name="streetNr" value=""
+              tal:attributes="value request/args/streetNr | nothing"/>
+          </div>
+          <div class="row">
+            <label for="thoroughfareName">Street Name</label>
+            <input type="text" name="thoroughfareName" value=""
+              tal:attributes="value request/args/thoroughfareName | nothing"/>
+          </div>
+          <div class="row">
+            <label for="town">Town</label>
+            <input type="text" name="town" value=""
+              tal:attributes="value request/args/town | nothing"/>
+          </div>
+          <div class="row">
+            <label for="district">District</label>
+            <input type="text" name="district" value=""
+              tal:attributes="value request/args/district | nothing"/>
+          </div>
+          <div class="row">
+            <label for="postcode">Postal Code</label>
+            <input type="text" name="postcode" value=""
+              tal:attributes="value request/args/postcode | nothing"/>
+          </div>
+
+        </fieldset>
+        <fieldset>
+          <legend>People to Move</legend>
+          <div class="row" tal:repeat="link context/listLinks">
+            <input type="checkbox" name="tomove" value=""
+              tal:attributes="value python:link.traverse().__name__"/>
+            <b tal:content="link/_getTitle"/>
+          </div>
+        </fieldset>
+        <div class="buttons">
+          <input class="button" type="submit" name="SAVE" value="Save"
+            i18n:attributes="value" />
+          <input class="button" type="submit" name="CANCEL" value="Cancel"
+            i18n:attributes="value" />
+        </div>
+      </form>
+    </metal:block>
+  </body>
+</html>

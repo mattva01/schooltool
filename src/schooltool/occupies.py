@@ -29,6 +29,8 @@ from schooltool.interfaces import IOccupiesRemovedEvent
 from schooltool.relationship import RelationshipSchema, RelationshipEvent
 from schooltool.relationship import RelationshipValenciesMixin
 from schooltool.relationship import Valency
+from schooltool import relationship
+from schooltool.component import registerRelationship
 from schooltool.uris import URIOccupies, URICurrentlyResides
 from schooltool.uris import URICurrentResidence
 from schooltool.facet import FacetMixin
