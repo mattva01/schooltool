@@ -252,22 +252,6 @@ class TraversableView(View):
         return getView(self.context.traverse(name))
 
 
-class XMLPseudoParser:
-    """XXX This is a temporary stub for validating XML parsing."""
-
-    def extractKeyword(self, text, key):
-        """Extracts values of key="value" format from a string.
-
-        Throws a KeyError if key is not found.
-        """
-        pat = re.compile(r'\b%s="([^"]*)"' % key)
-        match = pat.search(text)
-        if match:
-            return match.group(1)
-        else:
-            raise KeyError("%r not in text" % (key,))
-
-
 def setUp():
     """See IModuleSetup."""
     import schooltool.views.app

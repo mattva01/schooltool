@@ -55,8 +55,10 @@ class TestAbsenceCommentParser(unittest.TestCase):
 
         # The very minimum
         request = RequestStub(body="""
+            <absencecomment xmlns="http://schooltool.org/ns/model/0.1"
                         text="Foo"
                         reporter="/persons/john"
+                        />
                     """)
         lower_limit = datetime.datetime.utcnow()
         comment = parser.parseComment(request)
@@ -71,13 +73,14 @@ class TestAbsenceCommentParser(unittest.TestCase):
 
         # Everything
         request = RequestStub(body="""
+            <absencecomment xmlns="http://schooltool.org/ns/model/0.1"
                         text="Foo"
                         reporter="/persons/john"
                         absent_from="/groups/aa"
                         ended="ended"
                         resolved="unresolved"
                         datetime="2004-04-04 04:04:04"
-                        expected_presence="2005-05-05 05:05:05"
+                        expected_presence="2005-05-05 05:05:05" />
                     """)
         comment = parser.parseComment(request)
         self.assertEquals(comment.text, "Foo")
@@ -92,9 +95,11 @@ class TestAbsenceCommentParser(unittest.TestCase):
 
         # Clearing Expected presence
         request = RequestStub(body="""
+            <absencecomment xmlns="http://schooltool.org/ns/model/0.1"
                         text="Foo"
                         reporter="/persons/john"
                         expected_presence=""
+                        />
                     """)
         comment = parser.parseComment(request)
         self.assert_(comment.expected_presence is None)
@@ -105,14 +110,22 @@ class TestAbsenceCommentParser(unittest.TestCase):
         parser.context = TraversableRoot(obj=object())
         bad_requests = (
             '',
-            'reporter="/obj"',
-            'text=""',
-            'text="" reporter="/does/not/exist"',
-            'text="" reporter="/obj" datetime="now"',
-            'text="" reporter="/obj" absent_from="/does/not/exist"',
-            'text="" reporter="/obj" ended="mu"',
-            'text="" reporter="/obj" resolved="mu"',
-            'text="" reporter="/obj" expected_presence="dunno"',
+            '<absencecomment xmlns="http://schooltool.org/ns/model/0.1"'
+            ' reporter="/obj"/>',
+            '<absencecomment xmlns="http://schooltool.org/ns/model/0.1"'
+            ' text=""/>',
+            '<absencecomment xmlns="http://schooltool.org/ns/model/0.1"'
+            ' text="" reporter="/does/not/exist"/>',
+            '<absencecomment xmlns="http://schooltool.org/ns/model/0.1"'
+            ' text="" reporter="/obj" datetime="now"/>',
+            '<absencecomment xmlns="http://schooltool.org/ns/model/0.1"'
+            ' text="" reporter="/obj" absent_from="/does/not/exist"/>',
+            '<absencecomment xmlns="http://schooltool.org/ns/model/0.1"'
+            ' text="" reporter="/obj" ended="mu"/>',
+            '<absencecomment xmlns="http://schooltool.org/ns/model/0.1"'
+            ' text="" reporter="/obj" resolved="mu"/>',
+            '<absencecomment xmlns="http://schooltool.org/ns/model/0.1"'
+            ' text="" reporter="/obj" expected_presence="dunno"/>',
         )
         for body in bad_requests:
             request = RequestStub(body=body)
@@ -177,8 +190,9 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         basepath = "/person/absences/"
         baseurl = "http://localhost:8080%s" % basepath
         view = AbsenceManagementView(context)
-        request = RequestStub(baseurl[:-1], method="POST",
-                    body='text="Foo" reporter="."')
+        xml = '''<absencecomment xmlns="http://schooltool.org/ns/model/0.1"
+                     text="Foo" reporter="." />'''
+        request = RequestStub(baseurl[:-1], method="POST", body=xml)
 
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
@@ -207,8 +221,10 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         basepath = "/person/absences/"
         baseurl = "http://localhost:8080%s" % basepath
         view = AbsenceManagementView(context)
-        request = RequestStub(baseurl[:-1], method="POST",
-                    body='text="Bar" reporter="."')
+
+        xml = '''<absencecomment xmlns="http://schooltool.org/ns/model/0.1"
+                     text="Bar" reporter="." />'''
+        request = RequestStub(baseurl[:-1], method="POST", body=xml)
 
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
@@ -244,7 +260,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(request.code, 400)
         self.assertEquals(request.reason, "Bad Request")
         self.assertEquals(request.headers['Content-Type'], "text/plain")
-        self.assertEquals(result, "Text attribute missing")
+        self.assertEquals(result, "Document not valid XML")
 
 
 class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
@@ -307,8 +323,9 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         view = AbsenceView(absence)
         basepath = "/person/absences/001/"
         baseurl = "http://localhost" + basepath
-        request = RequestStub(baseurl[:-1], method="POST",
-                    body='text="Foo" reporter="."')
+        body = '''<absencecomment xmlns="http://schooltool.org/ns/model/0.1"
+                     text="Foo" reporter="." />'''
+        request = RequestStub(baseurl[:-1], method="POST", body=body)
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 200)
@@ -325,8 +342,9 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         basepath = "/person/absences/001/"
         setPath(absence, basepath[:-1])
         baseurl = "http://localhost" + basepath
-        request = RequestStub(baseurl[:-1], method="POST",
-                    body='text="Foo" reporter="/does/not/exist"')
+        body = '''<absencecomment xmlns="http://schooltool.org/ns/model/0.1"
+                     text="Foo" reporter="/does/not/exist" />'''
+        request = RequestStub(baseurl[:-1], method="POST", body=body)
         view = AbsenceView(absence)
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
@@ -345,8 +363,9 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         basepath = "/person/absences/001/"
         setPath(absence, basepath[:-1])
         baseurl = "http://localhost" + basepath
-        request = RequestStub(baseurl[:-1], method="POST",
-                    body='text="Foo" reporter="." ended="unended"')
+        body = '''<absencecomment xmlns="http://schooltool.org/ns/model/0.1"
+                     text="Foo" reporter="." ended="unended"/>'''
+        request = RequestStub(baseurl[:-1], method="POST", body=body)
         view = AbsenceView(absence)
         view.authorization = lambda ctx, rq: True
         result = view.render(request)

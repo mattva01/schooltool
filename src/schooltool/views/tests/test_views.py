@@ -239,37 +239,12 @@ class TestView(unittest.TestCase):
         self.assert_(view.request is None)
 
 
-class TestXMLPseudoParser(unittest.TestCase):
-
-    def test_extractKeyword(self):
-        from schooltool.views import XMLPseudoParser
-        text = '''This is not even XML, it\'s just some random text.
-               xlink:type="simple"
-               xlink:title="http://schooltool.org/ns/membership"
-               xlink:arcrole="http://schooltool.org/ns/membership"
-               xlink:role="http://schooltool.org/ns/membership/group"
-               xlink:href="/groups/new"
-               '''
-        extr = XMLPseudoParser().extractKeyword
-        self.assertEquals(extr(text, 'type'), 'simple')
-        self.assertEquals(extr(text, 'xlink:role'),
-                          'http://schooltool.org/ns/membership/group')
-        self.assertEquals(extr(text, 'role'),
-                          'http://schooltool.org/ns/membership/group')
-        self.assertEquals(extr(text, 'xlink:arcrole'),
-                          'http://schooltool.org/ns/membership')
-        self.assertEquals(extr(text, 'href'),
-                          '/groups/new')
-        self.assertRaises(KeyError, extr, text, 'shmoo')
-
-
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestHelpers))
     suite.addTest(unittest.makeSuite(TestTemplate))
     suite.addTest(unittest.makeSuite(TestErrorViews))
     suite.addTest(unittest.makeSuite(TestView))
-    suite.addTest(unittest.makeSuite(TestXMLPseudoParser))
     return suite
 
 if __name__ == '__main__':

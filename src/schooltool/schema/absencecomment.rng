@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+RelaxNG grammar for absence comments
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         ns="http://schooltool.org/ns/model/0.1"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <start>
+  <element name="absencecomment">
+    <attribute name="text">
+      <text/>
+    </attribute>
+    <attribute name="reporter">
+      <text/>
+    </attribute>
+    <optional>
+      <attribute name="absent_from">
+	<text/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="ended">
+	<text/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="resolved">
+	<text/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="datetime">
+	<text/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="expected_presence">
+	<text/>
+      </attribute>
+    </optional>
+  </element>
+ </start>
+</grammar>

@@ -36,11 +36,12 @@ from schooltool.component import getPath, traverse
 from schooltool.component import getRelatedObjects
 from schooltool.absence import AbsenceComment
 from schooltool.views import View, Template
-from schooltool.views import XMLPseudoParser
+from schooltool.views import read_file
 from schooltool.views import absoluteURL, textErrorPage
 from schooltool.views.facet import FacetView
 from schooltool.views.auth import TeacherAccess, isManager
 from schooltool.common import parse_datetime
+from schooltool.schema.rng import validate_against_schema
 
 __metaclass__ = type
 
@@ -182,73 +183,82 @@ class RollCallView(View):
                 % (nabsences, npresences))
 
 
-class AbsenceCommentParser(XMLPseudoParser):
+class AbsenceCommentParser:
+
+    schema = read_file("../schema/absencecomment.rng")
 
     def parseComment(self, request):
         """Parse and create an AbsenceComment from a given request body"""
         body = request.content.read()
 
         try:
-            text = self.extractKeyword(body, 'text')
-        except KeyError:
-            raise ValueError("Text attribute missing")
+            if not validate_against_schema(self.schema, body):
+                raise ValueError("Document not valid according to schema")
+        except libxml2.parserError:
+            raise ValueError("Document not valid XML")
 
+        doc = libxml2.parseDoc(body)
+        xpathctx = doc.xpathNewContext()
         try:
-            reporter_path = self.extractKeyword(body, 'reporter')
-        except KeyError:
-            raise ValueError("Reporter attribute missing")
-        else:
+            ns = 'http://schooltool.org/ns/model/0.1'
+            xpathctx.xpathRegisterNs('m', ns)
+            node = xpathctx.xpathEval('/m:absencecomment')[0]
+
+            text = node.nsProp('text', None)
+            if text is None:
+                raise ValueError("Text attribute missing")
+
+            reporter_path = node.nsProp('reporter', None)
+            if reporter_path is None:
+                raise ValueError("Reporter attribute missing")
+
             try:
                 reporter = traverse(self.context, reporter_path)
             except KeyError:
                 raise ValueError("Reporter not found: %s" % reporter_path)
 
-        try:
-            dt = self.extractKeyword(body, 'datetime')
-        except KeyError:
-            dt = None
-        else:
-            dt = parse_datetime(dt)
+            dt = node.nsProp('datetime', None)
+            if dt is not None:
+                dt = parse_datetime(dt)
 
-        try:
-            absent_from_path = self.extractKeyword(body, 'absent_from')
-        except KeyError:
-            absent_from = None
-        else:
-            try:
-                absent_from = traverse(self.context, absent_from_path)
-            except KeyError:
-                raise ValueError("Object not found: %s" % reporter_path)
-
-        try:
-            ended = self.extractKeyword(body, 'ended')
-        except KeyError:
-            ended = Unchanged
-        else:
-            d = {'ended': True, 'unended': False}
-            if ended not in d:
-                raise ValueError("Bad value for ended", ended)
-            ended = d[ended]
-
-        try:
-            resolved = self.extractKeyword(body, 'resolved')
-        except KeyError:
-            resolved = Unchanged
-        else:
-            d = {'resolved': True, 'unresolved': False}
-            if resolved not in d:
-                raise ValueError("Bad value for resolved", resolved)
-            resolved = d[resolved]
-
-        try:
-            expected_presence = self.extractKeyword(body, 'expected_presence')
-        except KeyError:
-            expected_presence = Unchanged
-        else:
-            if expected_presence == '':
-                expected_presence = None
+            absent_from_path = node.nsProp('absent_from', None)
+            if absent_from_path is not None:
+                try:
+                    absent_from = traverse(self.context, absent_from_path)
+                except KeyError:
+                    raise ValueError("Object not found: %s" % reporter_path)
             else:
-                expected_presence = parse_datetime(expected_presence)
+                absent_from = None
+
+            ended = node.nsProp('ended', None)
+            if ended is None:
+                ended = Unchanged
+            else:
+                d = {'ended': True, 'unended': False}
+                if ended not in d:
+                    raise ValueError("Bad value for ended", ended)
+                ended = d[ended]
+
+            resolved = node.nsProp('resolved', None)
+            if resolved is None:
+                resolved = Unchanged
+            else:
+                d = {'resolved': True, 'unresolved': False}
+                if resolved not in d:
+                    raise ValueError("Bad value for resolved", resolved)
+                resolved = d[resolved]
+
+            expected_presence = node.nsProp('expected_presence', None)
+            if expected_presence is None:
+                expected_presence = Unchanged
+            else:
+                if expected_presence == '':
+                    expected_presence = None
+                else:
+                    expected_presence = parse_datetime(expected_presence)
+        finally:
+            doc.freeDoc()
+            xpathctx.xpathFreeContext()
 
         comment = AbsenceComment(reporter, text, absent_from=absent_from,
                                  dt=dt, ended=ended, resolved=resolved,
