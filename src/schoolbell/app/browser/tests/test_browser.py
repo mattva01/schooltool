@@ -57,6 +57,16 @@ def doctest_SchoolBellAPI():
         >>> SchoolBellAPI(adding).app is app
         True
 
+
+    'context/schoolbell:person' adapts the context to IPerson:
+
+        >>> from schoolbell.app.app import Person
+        >>> p = Person()
+        >>> SchoolBellAPI(p).person is p
+        True
+        >>> SchoolBellAPI(app).person is None
+        True
+
     """
 
 def doctest_SortBy():

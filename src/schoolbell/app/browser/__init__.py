@@ -32,7 +32,7 @@ from zope.app.traversing.interfaces import IPathAdapter, ITraversable
 from zope.tales.interfaces import ITALESFunctionNamespace
 
 from schoolbell import SchoolBellMessageID as _
-from schoolbell.app.interfaces import ISchoolBellApplication
+from schoolbell.app.interfaces import ISchoolBellApplication, IPerson
 from schoolbell.app.app import getSchoolBellApplication
 
 
@@ -77,6 +77,11 @@ class SchoolBellAPI(object):
         #return ISchoolBellApplication(self.context)
         return getSchoolBellApplication(self.context)
     app = property(app)
+
+    def person(self):
+        """Adapt context to IPerson, default to None"""
+        return IPerson(self.context, None)
+    person = property(person)
 
 
 class SortBy(object):
