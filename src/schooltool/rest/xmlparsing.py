@@ -391,7 +391,7 @@ class XMLNode(object):
         xpathctx = self._doc._xpathctx
         xpathctx.setContextNode(self._node)
         try:
-            return [XMLNode(node, self)
+            return [XMLNode(node, self._doc)
                     for node in xpathctx.xpathEval(xpath_query)]
         except libxml2.xpathError:
             raise XMLXPathError(_('Ill-formed XPath query (%r).')

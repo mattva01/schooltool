@@ -93,6 +93,23 @@ def test_xpath_namespace_sharing():
     """
 
 
+def test_multilevel_query():
+    """Regression test for a bug in XMLNode.query.
+
+    XMLNode.query would pass self instead of self._doc to XMLNodes
+    that it created.
+
+        >>> from schooltool.rest.xmlparsing import XMLDocument
+        >>> doc = XMLDocument('<a><b><c>d</c></b></a>')
+        >>> a = doc.query('a')[0]
+        >>> b = a.query('b')[0]
+        >>> c = b.query('c')[0]
+        >>> c.content
+        u'd'
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     mixin = QuietLibxml2Mixin()
