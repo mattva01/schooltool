@@ -442,18 +442,14 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         return next_month(self.cursor)
 
     def do_POST(self, request):
-
+        """Deal with overlay modification."""
         if 'OVERLAY' in request.args:
-
-            # This should never happen
             if not request.authenticated_user:
+                # This should never happen
                 self.request.appLog(_("Anonymous overlay change attempted"))
                 return self.do_GET(request)
-
             overlays = request.args.get('overlay', [])
-
             self._subscribeToCalendarProviders(overlays)
-
         return self.do_GET(request)
 
     def do_GET(self, request):
@@ -471,12 +467,13 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         return []
 
     def checkedOverlay(self, calendar):
+        # XXX could return a boolean
         if calendar in self.getMergedCalendarProviders():
             return "checked"
         return None
 
     def getPortletCalendars(self):
-        """Return a list of calendars that the user chooses
+        """Return a list of calendars that the user chooses.
 
         The list defaults to all the groups a user has Membership in and
         includes any additional calendars that a user chooses on their
@@ -523,7 +520,7 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         return "\n".join(result)
 
     def ellipsizeTitle(self, str):
-        """For labels with limited space replace the tail with '...'"""
+        """For labels with limited space replace the tail with '...'."""
         if len(str) < 17:
              return str
         else:
@@ -539,15 +536,16 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         """Return a list of months for the drop down in the jump portlet."""
         months = []
         for k, v in self.month_names.items():
-            months.append({'label': unicode(v),
-                           'value': k})
+            months.append({'label': unicode(v), 'value': k})
         return months
 
     def canChooseCalendars(self):
+        # XXX Docstring
         user = self.request.authenticated_user
         return isManager(user) or user is self.context.__parent__
 
     def getValue(self, obj):
+        # XXX Docstring
         return getPath(obj)
 
     def _subscribeToCalendarProviders(self, providers):

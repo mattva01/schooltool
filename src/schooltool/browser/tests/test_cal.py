@@ -588,9 +588,8 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
         cal = createCalendar()
         view = CalendarViewBase(cal)
 
-        self.assertEquals(view.ellipsizeTitle(under17),under17)
-        self.assertEquals(view.ellipsizeTitle(over17),
-                                              '012345678901234...')
+        self.assertEquals(view.ellipsizeTitle(under17), under17)
+        self.assertEquals(view.ellipsizeTitle(over17), '012345678901234...')
 
     def test_getJumpToYears(self):
         from schooltool.browser.cal import CalendarViewBase
