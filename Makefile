@@ -32,6 +32,7 @@ clean:
 
 realclean: clean
 	find . \( -name '*.so' -o -name '*.dll' \) -exec rm -f {} \;
+	rm -f Data.fs* *.csv
 
 test: build
 	LC_ALL="C" $(PYTHON) test.py $(TESTFLAGS) schooltool
