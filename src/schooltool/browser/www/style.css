@@ -361,7 +361,6 @@ input.button-cancel {
 
 #calendar-navigation-context-current {
   background: url('/current.png') top left no-repeat;
-  /* FIXME: This stinks */
 }
 
 #calendar-navigation-context-next {
