@@ -333,8 +333,7 @@ class PersonAddView(AddView):
         return ISchoolBellApplication(self.context)['groups'].values()
 
     def create(self, title, username, password, photo):
-        person = Person(title)
-        person.username = username
+        person = Person(username=username, title=title)
         person.setPassword(password)
         person.photo = photo
         return person

@@ -637,7 +637,7 @@ def doctest_PersonAddView():
         ...                             'field.username': u'jdoe',
         ...                             'field.password': u'secret',
         ...                             'field.verify_password': u'secret',
-        ...                             'field.photo': None,
+        ...                             'field.photo': u'',
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> view = PersonAddView(pc, request)
         >>> view.update()
@@ -647,6 +647,15 @@ def doctest_PersonAddView():
         >>> print view.error
         None
         >>> 'jdoe' in pc
+        True
+        >>> person = pc['jdoe']
+        >>> person.title
+        u'John Doe'
+        >>> person.username
+        u'jdoe'
+        >>> person.checkPassword('secret')
+        True
+        >>> person.photo is None
         True
 
     If we try to add a user with the same login, we get a nice error message:
