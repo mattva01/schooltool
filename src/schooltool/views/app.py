@@ -30,7 +30,7 @@ from schooltool.interfaces import IModuleSetup, IResource
 from schooltool.component import getPath, traverse
 from schooltool.component import registerView
 from schooltool.views import View, Template
-from schooltool.views import TraversableView, XMLPseudoParser
+from schooltool.views import TraversableView
 from schooltool.views import absoluteURL, notFoundPage, textErrorPage
 from schooltool.views.timetable import SchoolTimetableTraverseView
 from schooltool.views.cal import AllCalendarsView

@@ -22,18 +22,20 @@ The views for the schooltool.relationship objects.
 $Id: __init__.py 397 2003-11-21 11:38:01Z mg $
 """
 
+import libxml2
 from schooltool.interfaces import ComponentLookupError
 from schooltool.uris import strURI, getURI
 from schooltool.component import getPath, traverse
 from schooltool.views import View, Template, textErrorPage
-from schooltool.views import XMLPseudoParser
+from schooltool.views import read_file
 from schooltool.views import absoluteURL
 from schooltool.views.auth import PublicAccess
+from schooltool.schema.rng import validate_against_schema
 
 __metaclass__ = type
 
 
-class RelationshipsView(View, XMLPseudoParser):
+class RelationshipsView(View):
     """A view of relationships on IRelatable which is also
     IRelationshipValencies.
 
@@ -42,6 +44,7 @@ class RelationshipsView(View, XMLPseudoParser):
     """
 
     template = Template("www/relationships.pt", content_type="text/xml")
+    schema = read_file("../schema/relationship.rng")
     authorization = PublicAccess
 
     def listLinks(self):
@@ -65,12 +68,26 @@ class RelationshipsView(View, XMLPseudoParser):
         body = request.content.read()
 
         try:
-            type = self.extractKeyword(body, 'arcrole')
-            role = self.extractKeyword(body, 'role')
-            path = self.extractKeyword(body, 'href')
-        except KeyError, e:
-            return textErrorPage(request,
-                                 "Could not find a needed param: %s" % e)
+            if not validate_against_schema(self.schema, body):
+                return textErrorPage(request,
+                                     "Document not valid according to schema")
+        except libxml2.parserError:
+            return textErrorPage(request, "Document not valid XML")
+
+        doc = libxml2.parseDoc(body)
+        xpathctx = doc.xpathNewContext()
+        try:
+            ns = 'http://schooltool.org/ns/model/0.1'
+            xpathctx.xpathRegisterNs('m', ns)
+            xlink = 'http://www.w3.org/1999/xlink'
+            xpathctx.xpathRegisterNs('xlink', xlink)
+            node = xpathctx.xpathEval('/m:relationship')[0]
+            type = node.nsProp('arcrole', xlink)
+            role = node.nsProp('role', xlink)
+            path = node.nsProp('href', xlink)
+        finally:
+            doc.freeDoc()
+            xpathctx.xpathFreeContext()
 
         try:
             type = getURI(type)

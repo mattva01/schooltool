@@ -96,16 +96,22 @@ class CSVImporter:
     def membership(self, group, member_path):
         """A tuple (path, method, body) to add a member to a group"""
         return ('/groups/%s/relationships' % group, 'POST',
-                'arcrole="http://schooltool.org/ns/membership"\n'
-                'role="http://schooltool.org/ns/membership/group"\n'
-                'href="%s"\n' % member_path)
+                '<relationship xmlns:xlink="http://www.w3.org/1999/xlink"'
+                ' xmlns="http://schooltool.org/ns/model/0.1"'
+                ' xlink:type="simple"'
+                ' xlink:arcrole="http://schooltool.org/ns/membership"'
+                ' xlink:role="http://schooltool.org/ns/membership/group"'
+                ' xlink:href="%s"/>' % member_path)
 
     def teaching(self, teacher, taught):
         """A tuple (path, method, body) to add a teacher to a group"""
         return ('/groups/%s/relationships' % taught, 'POST',
-                'arcrole="http://schooltool.org/ns/teaching"\n'
-                'role="http://schooltool.org/ns/teaching/taught"\n'
-                'href="/persons/%s"\n' % teacher)
+                '<relationship xmlns:xlink="http://www.w3.org/1999/xlink"'
+                ' xmlns="http://schooltool.org/ns/model/0.1"'
+                ' xlink:type="simple"'
+                ' xlink:arcrole="http://schooltool.org/ns/teaching"'
+                ' xlink:role="http://schooltool.org/ns/teaching/taught"'
+                ' xlink:href="/persons/%s"/>' % teacher)
 
     def importGroup(self, name, title, parents, facet):
         """Returns a list of tuples of (path, method, body) to run

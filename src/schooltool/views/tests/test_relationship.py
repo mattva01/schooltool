@@ -106,7 +106,8 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
     def testPOST(self):
         request = RequestStub("http://localhost/groups/sub/relationships/",
             method='POST',
-            body='''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            body='''<relationship xmlns="http://schooltool.org/ns/model/0.1"
+                      xmlns:xlink="http://www.w3.org/1999/xlink"
                       xlink:type="simple"
                       xlink:role="http://schooltool.org/ns/membership/group"
                       xlink:arcrole="http://schooltool.org/ns/membership"
@@ -126,8 +127,17 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(location in result)
 
     def testBadPOSTs(self):
-        bad_requests = (
+        bad_requests = [
+            # No xmlns
             '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xlink:type="simple"
+            xlink:role="http://schooltool.org/ns/membership/group"
+            xlink:title="http://schooltool.org/ns/membership"
+            xlink:arcrole="http://schooltool.org/ns/membership"
+            xlink:href="/groups/new"/>''',
+
+            '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns="http://schooltool.org/ns/model/0.1"
             xlink:type="simple"
             xlink:role="http://schooltool.org/ns/membership/group"
             xlink:title="http://schooltool.org/ns/membership"
@@ -135,6 +145,7 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
             xlink:href="BADPATH"/>''',
 
             '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns="http://schooltool.org/ns/model/0.1"
             xlink:type="simple"
             xlink:role="BAD URI"
             xlink:title="http://schooltool.org/ns/membership"
@@ -142,6 +153,7 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
             xlink:href="/groups/new"/>''',
 
             '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns="http://schooltool.org/ns/model/0.1"
             xlink:type="simple"
             xlink:role="http://schooltool.org/ns/nonexistent"
             xlink:title="http://schooltool.org/ns/membership"
@@ -149,6 +161,7 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
             xlink:href="/groups/new"/>''',
 
             '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns="http://schooltool.org/ns/model/0.1"
             xlink:type="simple"
             xlink:role="http://schooltool.org/ns/membership/group"
             xlink:title="http://schooltool.org/ns/membership"
@@ -156,35 +169,48 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
             />''',
 
             '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns="http://schooltool.org/ns/model/0.1"
             xlink:type="simple"
             xlink:title="http://schooltool.org/ns/membership"
             xlink:arcrole="http://schooltool.org/ns/membership"
             xlink:href="/groups/new"/>''',
 
             '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns="http://schooltool.org/ns/model/0.1"
             xlink:type="simple"
             xlink:role="http://schooltool.org/ns/membership"
             xlink:href="/groups/new"/>''',
 
             '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns="http://schooltool.org/ns/model/0.1"
             xlink:type="simple"
             xlink:role="http://schooltool.org/ns/membership/member"
             xlink:arcrole="http://schooltool.org/ns/membership"
             xlink:href="/groups/new"/>''',
 
             '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns="http://schooltool.org/ns/model/0.1"
             xlink:type="simple"
             xlink:role="http://schooltool.org/ns/membership/group"
             xlink:arcrole="http://schooltool.org/ns/membership"
             xlink:href="/groups/root"/>''',
-            )
+
+            '''<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns="http://schooltool.org/ns/model/0.1"
+            xlink:type="simple"
+            xlink:role="http://schooltool.org/ns/membership/group"
+            xlink:arcrole="http://schooltool.org/ns/membership"
+            xlink:href="/groups/root" bad_xml>''',
+            ]
 
         for body in bad_requests:
             request = RequestStub("http://localhost/groups/sub/relationships",
                                   method="POST", body=body)
             self.assertEquals(len(self.sub.listLinks()), 2)
             result = self.view.render(request)
-            self.assertEquals(request.code, 400)
+            self.assertEquals(request.code, 400,
+                              "%d: %s\n%s" % (bad_requests.index(body),
+                                              result, body))
             self.assertEquals(request.headers['Content-Type'],
                               "text/plain")
             self.assertEquals(len(self.sub.listLinks()), 2)

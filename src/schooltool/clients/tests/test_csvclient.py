@@ -101,6 +101,21 @@ class TestHTTPClient(unittest.TestCase):
         result = h.request('GET', '/')
         self.assertEqual(result.read(), "Welcome")
 
+membership_pattern = (
+    '<relationship xmlns:xlink="http://www.w3.org/1999/xlink"'
+    ' xmlns="http://schooltool.org/ns/model/0.1"'
+    ' xlink:type="simple"'
+    ' xlink:arcrole="http://schooltool.org/ns/membership"'
+    ' xlink:role="http://schooltool.org/ns/membership/group"'
+    ' xlink:href="%s"/>')
+
+teaching_pattern = (
+    '<relationship xmlns:xlink="http://www.w3.org/1999/xlink"'
+    ' xmlns="http://schooltool.org/ns/model/0.1"'
+    ' xlink:type="simple"'
+    ' xlink:arcrole="http://schooltool.org/ns/teaching"'
+    ' xlink:role="http://schooltool.org/ns/teaching/taught"'
+    ' xlink:href="%s"/>')
 
 class TestCSVImporter(unittest.TestCase):
 
@@ -110,19 +125,15 @@ class TestCSVImporter(unittest.TestCase):
         im = CSVImporter()
 
         requests = im.importGroup('Name', 'Title', 'root foo', '')
-        self.assertEqual(requests,
-                         [('/groups/Name', 'PUT',
-                           '<object xmlns="http://schooltool.org/ns/model/0.1"'
-                           ' title="Title"/>'),
-                          ('/groups/root/relationships', 'POST',
-                           'arcrole="http://schooltool.org/ns/membership"\n'
-                           'role="http://schooltool.org/ns/membership/group"\n'
-                           'href="/groups/Name"\n'),
-                          ('/groups/foo/relationships', 'POST',
-                           'arcrole="http://schooltool.org/ns/membership"\n'
-                           'role="http://schooltool.org/ns/membership/group"\n'
-                           'href="/groups/Name"\n'),
-                          ])
+        self.assertEqual(requests,[
+            ('/groups/Name', 'PUT',
+             '<object xmlns="http://schooltool.org/ns/model/0.1"'
+             ' title="Title"/>'),
+            ('/groups/root/relationships', 'POST',
+             membership_pattern % "/groups/Name"),
+            ('/groups/foo/relationships', 'POST',
+              membership_pattern % "/groups/Name"),
+            ])
 
         requests = im.importGroup('Name', 'Title', '', 'Super Facet')
         self.assertEqual(requests,
@@ -159,17 +170,11 @@ class TestCSVImporter(unittest.TestCase):
         requests = im.importPupil('007', 'foo bar')
         self.assertEqual(requests,
                          [('/groups/pupils/relationships', 'POST',
-                           'arcrole="http://schooltool.org/ns/membership"\n'
-                           'role="http://schooltool.org/ns/membership/group"\n'
-                           'href="/persons/007"\n'),
+                           membership_pattern % "/persons/007"),
                           ('/groups/foo/relationships', 'POST',
-                           'arcrole="http://schooltool.org/ns/membership"\n'
-                           'role="http://schooltool.org/ns/membership/group"\n'
-                           'href="/persons/007"\n'),
+                           membership_pattern % "/persons/007"),
                           ('/groups/bar/relationships', 'POST',
-                           'arcrole="http://schooltool.org/ns/membership"\n'
-                           'role="http://schooltool.org/ns/membership/group"\n'
-                           'href="/persons/007"\n'),
+                           membership_pattern % "/persons/007"),
                           ])
 
     def test_importTeacher(self):
@@ -185,17 +190,11 @@ class TestCSVImporter(unittest.TestCase):
 
         requests = im.importTeacher('007', 'foo bar')
         expected = [('/groups/teachers/relationships', 'POST',
-                     'arcrole="http://schooltool.org/ns/membership"\n'
-                     'role="http://schooltool.org/ns/membership/group"\n'
-                     'href="/persons/007"\n'),
+                     membership_pattern % "/persons/007"),
                     ('/groups/foo/relationships', 'POST',
-                     'arcrole="http://schooltool.org/ns/teaching"\n'
-                     'role="http://schooltool.org/ns/teaching/taught"\n'
-                     'href="/persons/007"\n'),
+                     teaching_pattern % "/persons/007"),
                     ('/groups/bar/relationships', 'POST',
-                     'arcrole="http://schooltool.org/ns/teaching"\n'
-                     'role="http://schooltool.org/ns/teaching/taught"\n'
-                     'href="/persons/007"\n'),
+                     teaching_pattern % "/persons/007"),
                     ]
 
         self.assertEqual(requests, expected, "\n" +
@@ -237,9 +236,7 @@ class TestCSVImporter(unittest.TestCase):
              '<object xmlns="http://schooltool.org/ns/model/0.1" '
              'title="Teachers"/>'),
             ('POST', '/groups/root/relationships',
-             'arcrole="http://schooltool.org/ns/membership"\n'
-             'role="http://schooltool.org/ns/membership/group"\n'
-             'href="/groups/teachers"\n'),
+             membership_pattern % "/groups/teachers"),
             ('POST', '/groups/teachers/facets',
              '<facet xmlns="http://schooltool.org/ns/model/0.1"'
              ' factory="teacher_group"/>'),
@@ -247,9 +244,7 @@ class TestCSVImporter(unittest.TestCase):
              '<object xmlns="http://schooltool.org/ns/model/0.1"'
              ' title="Pupils"/>'),
             ('POST', '/groups/root/relationships',
-             'arcrole="http://schooltool.org/ns/membership"\n'
-             'role="http://schooltool.org/ns/membership/group"\n'
-             'href="/groups/pupils"\n')]
+             membership_pattern % "/groups/pupils")]
 
         self.assertEqual(results, expected, diff(pformat(results),
                                                  pformat(expected)))
@@ -283,9 +278,7 @@ class TestCSVImporter(unittest.TestCase):
                      '<object xmlns="http://schooltool.org/ns/model/0.1" '
                      'title="Teachers"/>'),
                     ('POST', '/groups/root/relationships',
-                     'arcrole="http://schooltool.org/ns/membership"\n'
-                     'role="http://schooltool.org/ns/membership/group"\n'
-                     'href="/groups/teachers"\n'),
+                     membership_pattern % "/groups/teachers"),
                     ('POST', '/groups/teachers/facets',
                      '<facet xmlns="http://schooltool.org/ns/model/0.1"'
                      ' factory="teacher_group"/>'),
@@ -293,42 +286,28 @@ class TestCSVImporter(unittest.TestCase):
                      '<object xmlns="http://schooltool.org/ns/model/0.1"'
                      ' title="Pupils"/>'),
                     ('POST', '/groups/root/relationships',
-                     'arcrole="http://schooltool.org/ns/membership"\n'
-                     'role="http://schooltool.org/ns/membership/group"\n'
-                     'href="/groups/pupils"\n'),
+                     membership_pattern % "/groups/pupils"),
                     ('PUT', '/groups/year1',
                      '<object xmlns="http://schooltool.org/ns/model/0.1"'
                      ' title="Year 1"/>'),
                     ('POST', '/groups/root/relationships',
-                     'arcrole="http://schooltool.org/ns/membership"\n'
-                     'role="http://schooltool.org/ns/membership/group"\n'
-                     'href="/groups/year1"\n'),
+                     membership_pattern % "/groups/year1"),
                     ('POST', '/persons',
                      '<object xmlns="http://schooltool.org/ns/model/0.1"'
                      ' title="Doc Doc"/>'),
                     ('POST', '/groups/teachers/relationships',
-                     'arcrole="http://schooltool.org/ns/membership"\n'
-                     'role="http://schooltool.org/ns/membership/group"\n'
-                     'href="/persons/quux"\n'),
+                     membership_pattern % "/persons/quux"),
                     ('POST', '/groups/group1/relationships',
-                     'arcrole="http://schooltool.org/ns/teaching"\n'
-                     'role="http://schooltool.org/ns/teaching/taught"\n'
-                     'href="/persons/quux"\n'),
+                     teaching_pattern % "/persons/quux"),
                     ('POST', '/persons',
                      '<object xmlns="http://schooltool.org/ns/model/0.1"'
                      ' title="Jay Hacker"/>'),
                     ('POST', '/groups/pupils/relationships',
-                     'arcrole="http://schooltool.org/ns/membership"\n'
-                     'role="http://schooltool.org/ns/membership/group"\n'
-                     'href="/persons/quux"\n'),
+                     membership_pattern % "/persons/quux"),
                     ('POST', '/groups/group1/relationships',
-                     'arcrole="http://schooltool.org/ns/membership"\n'
-                     'role="http://schooltool.org/ns/membership/group"\n'
-                     'href="/persons/quux"\n'),
+                     membership_pattern % "/persons/quux"),
                     ('POST', '/groups/group2/relationships',
-                     'arcrole="http://schooltool.org/ns/membership"\n'
-                     'role="http://schooltool.org/ns/membership/group"\n'
-                     'href="/persons/quux"\n'),
+                     membership_pattern % "/persons/quux"),
                     ('POST', '/resources',
                      '<object xmlns="http://schooltool.org/ns/model/0.1"'
                      ' title="Hall"/>')]

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+RelaxNG grammar for a relationships
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://schooltool.org/ns/model/0.1"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <!-- parts of a simple xlink -->
+
+  <define name="simplelinktype">
+    <attribute name="xlink:type">
+      <value>simple</value>
+    </attribute>
+  </define>
+
+  <define name="href">
+    <attribute name="xlink:href">
+      <data type="anyURI"/>
+    </attribute>
+  </define>
+
+  <define name="role">
+    <attribute name="xlink:role">
+      <data type="anyURI"/>
+    </attribute>
+  </define>
+
+  <define name="arcrole">
+    <attribute name="xlink:arcrole">
+      <data type="anyURI"/>
+    </attribute>
+  </define>
+
+  <define name="title">
+    <attribute name="xlink:title">
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="show">
+    <attribute name="xlink:show">
+      <choice>
+        <value>new</value>
+        <value>replace</value>
+        <value>embed</value>
+        <value>other</value>
+        <value>none</value>
+      </choice>
+    </attribute>
+  </define>
+
+  <define name="actuate">
+    <attribute name="xlink:actuate">
+      <choice>
+        <value>onLoad</value>
+        <value>onRequest</value>
+        <value>other</value>
+        <value>none</value>
+      </choice>
+    </attribute>
+  </define>
+
+  <start>
+  <element name="relationship">
+    <ref name="simplelinktype"/>
+    <ref name="href"/>
+    <ref name="role"/>
+    <ref name="arcrole"/>
+    <optional>
+      <ref name="title"/>
+    </optional>
+    <optional>
+      <ref name="show"/>
+    </optional>
+    <optional>
+      <ref name="actuate"/>
+    </optional>
+  </element>
+ </start>
+</grammar>
