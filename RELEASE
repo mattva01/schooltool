@@ -54,9 +54,12 @@ not migrated.
 
 Full upgrades will be maintained from this release onwards.
 
-For more information on migrating from 0.9 -> 1.0, refer to the
-schoolbell-export.py and schoolbell-import.py scripts in the scripts/
-directory.
+To upgrade your 0.8/0.9 instace to 1.0, follow the instructions in
+scripts/run-export.sh and scripts/run-import.sh.
+
+Note that these scripts require the libraries that come with SchoolTool 0.9.
+If you already installed SchoolBell 1.0 or removed your previous installation
+simply download and build (but do not install) the 0.9 release.
 
 Unimplemented features from SchoolBell 0.9
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
