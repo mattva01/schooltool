@@ -23,7 +23,7 @@ the public APIs of the database.
 The IDatabase, IConnection, and ITransactionAttrs interfaces describe
 private APIs used by the implementation.
 
-$Id: interfaces.py,v 1.18 2003/07/28 14:51:51 anthony Exp $
+$Id: interfaces.py,v 1.19 2003/10/08 08:20:28 alga Exp $
 """
 
 import zodb.utils

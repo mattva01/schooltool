@@ -34,7 +34,7 @@ application has more than one thread that uses the connection or the
 transaction the connection is registered with, the application should
 provide locking.
 
-$Id: connection.py,v 1.36 2003/09/21 17:29:58 jim Exp $
+$Id: connection.py,v 1.38 2003/10/09 18:04:58 alga Exp $
 """
 
 import logging
@@ -308,6 +308,13 @@ class Connection(ExportImport, object):
             obj._p_jar = self
             obj._p_oid = self.newObjectId()
             obj._p_changed = True
+            self._created.add(obj._p_oid)
+
+            # There is an 'invariant' that objects in the cache can be
+            # made into ghosts because they have _p_jar and _p_oid.
+            # We are breaking this invariant, but that's OK because
+            # it's not used anywhere.  The right solution is to have a
+            # separate cache of objects outside that invariant.
             self._cache.set(obj._p_oid, obj)
 
 

@@ -188,6 +188,15 @@ class ConnectionTests(IDataManagerTests):
         self.assert_(cn2.get(oid) is obj2, "cn2.get(oid) is not obj2")
         self.assert_(self.obj is not obj2, "self.obj is obj2")
 
+    def testAddingAborted(self):
+        # Check that object is dis-owned on abort.
+        self.datamgr.add(self.obj)
+        oid = self.obj._p_oid
+        get_transaction().abort()
+        self.assert_(self.obj._p_oid is None)
+        self.assert_(self.obj._p_jar is None)
+        self.assertRaises(KeyError, self.datamgr.get, oid)
+
     def tearDown(self):
         get_transaction().abort()
         self.datamgr.close()
