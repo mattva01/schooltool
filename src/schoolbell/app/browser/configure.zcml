@@ -164,6 +164,11 @@
       layer=".skin.ISchoolBellSkin"
       />
 
+  <icon name="zmi_icon"
+        for="schoolbell.app.interfaces.ISchoolBellApplication"
+        file="icon.png"
+        />
+
    <resource name="layout.css" file="layout.css" />
    <resource name="style.css" file="style.css" />
    <resource name="logo.png" file="schoolbell.png" />
