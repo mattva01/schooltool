@@ -61,7 +61,7 @@ Ok, it is there:
                          name="ids:list" id="frogpond"
                          value="frogpond" />
                 </td>
-                <td><a href="frogpond/@@SelectedManagementView.html"></a><span>
+                <td><a href="frogpond/@@SelectedManagementView.html"><img src="http://localhost/@@/schoolbell-app-interfaces-ISchoolBellApplication-zmi_icon.png" alt="SchoolBellApplication" width="16" height="16" border="0" /></a><span>
                       <a href="frogpond/@@SelectedManagementView.html">frogpond</a><a
         href="http://localhost/@@contents.html?rename_ids:list=frogpond">&nbsp;&nbsp;</a></span></td>
                 <td>
