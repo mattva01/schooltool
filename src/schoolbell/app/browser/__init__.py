@@ -27,29 +27,13 @@ import itertools
 from zope.interface import implements
 from zope.component import adapts
 from zope.app.publisher.browser import BrowserView
-from zope.app.location.interfaces import ILocation
 from zope.app.size.interfaces import ISized
 from zope.app.traversing.interfaces import IPathAdapter, ITraversable
 from zope.tales.interfaces import ITALESFunctionNamespace
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import ISchoolBellApplication
-
-
-def getSchoolBellApplication(obj):
-    """Return the nearest ISchoolBellApplication from ancestors of obj"""
-    cur = obj
-    while True:
-        if ISchoolBellApplication.providedBy(cur):
-            return cur
-
-        if ILocation.providedBy(cur):
-            cur = cur.__parent__
-        else:
-            cur = None
-
-        if cur is None:
-            raise ValueError("can't get a SchoolBellApplication from %r" % obj)
+from schoolbell.app.app import getSchoolBellApplication
 
 
 class NavigationView(BrowserView):

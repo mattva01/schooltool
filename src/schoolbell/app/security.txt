@@ -1,0 +1,92 @@
+==================================
+SchoolBell security infrastructure
+==================================
+
+General design
+--------------
+
+The security system of SchoolBell consists of:
+
+ * SchoolBellAuthenticationUtility
+ * views for login/logout (not done yet)
+ * a view for editing the ACL
+
+The login/logout views store/reset the authentication data in the
+session.  The authentication utility authenticates the request
+according to the data stored in the session.
+
+The ACL view is a facade for the local grants mechanism, allowing the
+admin to set permissions on individual objects for persons and groups.
+
+
+SchoolBell authentication utility
+---------------------------------
+
+(Handwaving...)
+    >>> from zope.app.tests import setup
+    >>> root = setup.placefulSetUp(True)
+
+SchoolBell is a site:
+
+    >>> from zope.interface.verify import verifyObject
+    >>> from zope.app.site.interfaces import IPossibleSite
+
+    >>> from schoolbell.app.app import SchoolBellApplication
+    >>> app = SchoolBellApplication()
+    >>> verifyObject(IPossibleSite, app)
+    True
+
+The SchoolBellAuthenticationUtility is an IAuthentication utility that
+lives in that site:
+
+    >>> from schoolbell.app.security import SchoolBellAuthenticationUtility
+    >>> auth = SchoolBellAuthenticationUtility()
+    >>> from zope.app.security.interfaces import IAuthentication
+    >>> verifyObject(IAuthentication, auth)
+    True
+
+Let's provide the location of auth:
+
+    >>> root['frogpond'] = app
+    >>> app.__parent__ = root
+    >>> app.__name__ = 'frogpond'
+    >>> from zope.app.traversing.interfaces import IContainmentRoot
+    >>> from zope.interface import directlyProvides
+    >>> directlyProvides(app, IContainmentRoot)
+    >>> sm = setup.createServiceManager(app)
+    >>> from zope.app import zapi
+    >>> pkg = zapi.traverse(sm, 'default')
+    >>> auth.__parent__ = None
+    >>> auth.__name__ = 'auth'
+    >>> pkg['auth'] = auth
+
+The utility knows about the users of the application:
+
+    >>> from schoolbell.app.app import Person
+    >>> from zope.app.security.interfaces import IPrincipal
+    >>> person = Person()
+    >>> person.title = "Frog"
+    >>> app['persons']['frog'] = person
+
+    >>> principal = auth.getPrincipal('frog')
+    >>> verifyObject(IPrincipal, principal)
+    True
+    >>> principal.title
+    'Frog'
+
+The utility delegates to the next service if the principal is not
+found:
+
+    >>> from zope.app.security.principalregistry import principalRegistry
+    >>> p = principalRegistry.definePrincipal('zope.manager', 'Mgmt', '',
+    ...                                       'gandalf', '123')
+    >>> from zope.app.tests import ztapi
+    >>> ztapi.provideUtility(IAuthentication, principalRegistry)
+
+    >>> p1 = auth.getPrincipal('zope.manager')
+    >>> p == p1
+    True
+    >>> p.title
+    'Mgmt'
+
+    >>> root = setup.placefulTearDown()

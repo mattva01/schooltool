@@ -31,6 +31,8 @@ from zope.app.container.btree import BTreeContainer
 from zope.app.container.sample import SampleContainer
 from zope.app.container.contained import Contained
 from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.app.site.servicecontainer import ServiceManagerContainer
+from zope.app.location.interfaces import ILocation
 
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IPersonContainer, IPersonContained
@@ -41,7 +43,8 @@ from schoolbell.app.membership import URIMembership, URIMember, URIGroup
 from schoolbell.relationship import RelationshipProperty
 
 
-class SchoolBellApplication(Persistent, SampleContainer):
+class SchoolBellApplication(Persistent, SampleContainer,
+                            ServiceManagerContainer):
     """The main application object.
 
     This object can be added as a regular content object to a folder,
@@ -181,3 +184,19 @@ class Resource(Persistent, Contained):
     def __conform__(self, protocol):
         if protocol is ISchoolBellApplication:
             return self.__parent__.__parent__
+
+
+def getSchoolBellApplication(obj):
+    """Return the nearest ISchoolBellApplication from ancestors of obj"""
+    cur = obj
+    while True:
+        if ISchoolBellApplication.providedBy(cur):
+            return cur
+
+        if ILocation.providedBy(cur):
+            cur = cur.__parent__
+        else:
+            cur = None
+
+        if cur is None:
+            raise ValueError("can't get a SchoolBellApplication from %r" % obj)
