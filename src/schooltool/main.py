@@ -36,6 +36,7 @@ import ZConfig
 import urllib
 import copy
 import getopt
+from zope.interface import moduleProvides
 from transaction import get_transaction
 from zodb.interfaces import ConflictError
 from twisted.web import server, resource
@@ -52,10 +53,12 @@ from schooltool.membership import Membership
 from schooltool.component import getView
 from schooltool.component import FacetManager
 from schooltool.debug import EventLogUtility, EventLogFacet
-from schooltool.interfaces import IEvent
+from schooltool.interfaces import IEvent, IModuleSetup
 
 __metaclass__ = type
 
+
+moduleProvides(IModuleSetup)
 
 #
 # HTTP server
@@ -384,7 +387,6 @@ class Server:
                             listen
                             database
         """
-
         # Defaults
         config_file = self.findDefaultConfigFile()
         self.appname = 'schooltool'
@@ -407,6 +409,9 @@ class Server:
             if k in ('-c', '--config'):
                 config_file = v
         self.config = self.loadConfig(config_file)
+
+        # Insert the metadefault for 'modules'
+        self.config.module.insert(0, 'schooltool.main')
 
         # Process any command line arguments that may override config file
         # settings here.
@@ -449,17 +454,7 @@ class Server:
         for dir in path:
             sys.path.insert(0, dir)
 
-        import schooltool.relationship
-        import schooltool.membership
-        import schooltool.views
-        import schooltool.debug
-        import schooltool.interfaces
-
-        schooltool.relationship.setUp()
-        schooltool.membership.setUp()
-        schooltool.views.setUp()
-        schooltool.debug.setUp()
-        schooltool.interfaces.setUp()
+        setUpModules(self.config.module)
 
         db_configuration = self.config.database
         self.db = db_configuration.open()
@@ -529,6 +524,29 @@ class Server:
         print >> self.stdout, ("Started HTTP server on %s:%s"
                                % (network_interface or "*", port))
 
+def setUpModules(module_names):
+    """Set up the modules named in the given list."""
+    for module_name in module_names:
+        assert isinstance(module_name, basestring)
+        module = __import__(module_name, globals(),  locals(), [])
+        components = module_name.split('.')
+        for comp in components[1:]:
+            module = getattr(module, comp)
+        if IModuleSetup.isImplementedBy(module):
+            module.setUp()
+        else:
+            raise TypeError('Cannot set up module because it does not'
+                            ' provide IModuleSetup', module)
+
+def setUp():
+    """Set up the schooltool application."""
+    setUpModules([
+        'schooltool.relationship',
+        'schooltool.membership',
+        'schooltool.views',
+        'schooltool.debug',
+        'schooltool.interfaces'
+        ])
 
 def main():
     """Starts the SchoolTool HTTP server."""

@@ -9,6 +9,15 @@
 #
 
 #
+# module dotted.module.name
+# module another.dotted.module.name
+#
+#  Lists modules to be set up when the server is started. The modules must
+#  provide IModuleSetup. The module 'schooltool.main' is implicitly listed
+#  first.
+#
+
+#
 # listen port
 # listen interface:port
 #

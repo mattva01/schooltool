@@ -33,6 +33,16 @@
     </description>
   </multikey>
 
+  <multikey name="module" datatype="string">
+    <description>
+      This specifies additional modules to be set up when the server starts.
+      Modules must provide the interface IModuleSetup.
+
+      XXX: The datatype should really be a dotted name.
+    </description>
+    <metadefault>schooltool.main</metadefault>
+  </multikey>
+
   <multikey name="listen" datatype="inet-address">
     <description>
       Network interface and port number the HTTP server should listen on.

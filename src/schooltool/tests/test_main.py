@@ -27,9 +27,17 @@ import re
 import os
 import sys
 from StringIO import StringIO
+from zope.interface import moduleProvides
+from zope.interface import directlyProvides, directlyProvidedBy
 from schooltool.tests.utils import RegistriesSetupMixin
+from schooltool.interfaces import IModuleSetup
 
 __metaclass__ = type
+
+moduleProvides(IModuleSetup)
+
+def setUp():
+    """Empty setUp. This is replaced by a unit test below."""
 
 
 # RFC 2616, section 3.3
@@ -532,6 +540,9 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(config.listen, [('', 123), ('10.20.30.40', 9999)])
         self.assert_(config.database is not None)
         self.assertEquals(config.path, ['/xxxxx', '/yyyyy/zzzzz'])
+        self.assertEquals(config.module, ['schooltool.tests.test_main'])
+
+        # Check that loadConfig hasn't messed with sys.path.
         self.assertEquals(sys.path, self.original_path)
 
     def test_findDefaultConfigFile(self):
@@ -551,6 +562,10 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(server.config.listen,
                           [('', 123), ('10.20.30.40', 9999)])
         self.assert_(server.config.database is not None)
+        self.assertEquals(server.config.path, ['/xxxxx', '/yyyyy/zzzzz'])
+        # Check that module schooltool.main is added. This is the metadefault.
+        self.assertEquals(server.config.module,
+                          ['schooltool.main', 'schooltool.tests.test_main'])
         self.assertEquals(server.appname, 'schooltool')
         self.assertEquals(server.viewFactory, getView)
         self.assertEquals(server.appFactory, server.createApplication)
@@ -594,6 +609,21 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         server.main(['--invalid-arg'])
         self.assert_(stderr.getvalue() != '')
 
+    def testNoIModuleSetup_run(self):
+        from schooltool.main import Server
+        server = Server()
+        config_file = self.getConfigFileName()
+        server.configure(['-c', config_file])
+        import schooltool.tests.test_main as thismodule
+        thismodule_provides = directlyProvidedBy(thismodule)
+        directlyProvides(thismodule, thismodule_provides - IModuleSetup)
+        self.assert_(not IModuleSetup.isImplementedBy(thismodule))
+        # Cannot set up module because it does not provide IModuleSetup
+        try:
+            self.assertRaises(TypeError, server.run)
+        finally:
+            directlyProvides(thismodule, thismodule_provides)
+
     def test_run(self):
         # make sure we have a clean fresh transaction
         from transaction import get_transaction
@@ -613,7 +643,19 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         server.notifyServerStarted = lambda x, y: None
         config_file = self.getConfigFileName()
         server.configure(['-c', config_file])
-        server.run()
+
+        # cleanly replace the setUp function in this module
+        was_set_up = []
+        def setUpThisModule():
+            was_set_up.append(True)
+        global setUp
+        old_setUp = setUp
+        setUp = setUpThisModule
+        try:
+            server.run()
+        finally:
+            setUp = old_setUp
+        self.assert_(was_set_up)
 
         self.assert_(threadable._initialized)
         self.assert_(reactor._main_loop_running)
@@ -687,11 +729,46 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assert_((event_log, IEvent) in event_service.listSubscriptions())
 
 
+class TestSetUpModules(unittest.TestCase):
+
+    def testDoesNotImplementIModuleSetup(self):
+        from schooltool.main import setUpModules
+        import schooltool.tests.test_main as thismodule
+        thismodule_provides = directlyProvidedBy(thismodule)
+        directlyProvides(thismodule, thismodule_provides - IModuleSetup)
+        self.assert_(not IModuleSetup.isImplementedBy(thismodule))
+        # Cannot set up module because it does not provide IModuleSetup
+        try:
+            self.assertRaises(TypeError, setUpModules,
+                              ['schooltool.tests.test_main'])
+        finally:
+            directlyProvides(thismodule, thismodule_provides)
+
+    def test(self):
+        from schooltool.main import setUpModules
+        import schooltool.tests.test_main as thismodule
+        self.assert_(IModuleSetup.isImplementedBy(thismodule))
+
+        # cleanly replace the setUp function in this module
+        was_set_up = []
+        def setUpThisModule():
+            was_set_up.append(True)
+        global setUp
+        old_setUp = setUp
+        setUp = setUpThisModule
+        try:
+            setUpModules(['schooltool.tests.test_main'])
+        finally:
+            setUp = old_setUp
+        self.assert_(was_set_up)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSite))
     suite.addTest(unittest.makeSuite(TestRequest))
     suite.addTest(unittest.makeSuite(TestServer))
+    suite.addTest(unittest.makeSuite(TestSetUpModules))
     return suite
 
 if __name__ == '__main__':
