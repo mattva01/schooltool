@@ -56,12 +56,22 @@ and have their own copyright notices:
 """
 
 import os
+import sys
+import sets
 import gettext as _gettext
 from schooltool.common import to_locale
 
 
 localedir = os.path.dirname(__file__)
 catalog = _gettext.translation('schooltool', localedir, fallback=True)
+
+debug_overeager_translations = False
+    # If set to True, ugettext will remember which places in the source code
+    # called ugettext before setCatalog was called, and setCatalog will print
+    # a list of those places to stderr.  Calling setCatalog turns this switch
+    # off.
+
+_overeager_translations = sets.Set()
 
 
 def ugettext(str):
@@ -75,6 +85,14 @@ def ugettext(str):
     take effect on strings defined in these scopes, use TranslatableString
     instead.
     """
+    if debug_overeager_translations:
+        import sys
+        frame = sys._getframe(1)
+        filename = frame.f_globals['__file__']
+        if filename.endswith('.pyc') or filename.endswith('.pyo'):
+            filename = filename[:-1]
+        lineno = frame.f_lineno
+        _overeager_translations.add((filename, lineno))
     global catalog
     # Uncomment the following line to decorate all translatable strings -- then
     # all untranslated strings will stand out:
@@ -106,6 +124,16 @@ def setCatalog(domain, languages=None):
     global catalog
     catalog = _gettext.translation(domain, localedir, languages,
                                    fallback=True)
+    global debug_overeager_translations
+    if debug_overeager_translations:
+        debug_overeager_translations = False
+        offenders = list(_overeager_translations)
+        if offenders:
+            print >> sys.stderr, "DEBUG: ugettext called too early in"
+            offenders.sort()
+            for filename, lineno in offenders:
+                print >> sys.stderr, "  %s:%d" % (filename, lineno)
+            _overeager_translations.clear()
 
 
 class TranslatableString(object):
