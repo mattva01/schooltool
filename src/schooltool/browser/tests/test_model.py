@@ -692,7 +692,7 @@ class TestGroupTeachersView(RegistriesSetupMixin, unittest.TestCase):
                   "/persons/josh and /groups/new created", INFO)])
 
 
-class TestResourceView(unittest.TestCase):
+class TestResourceView(unittest.TestCase, TraversalTestMixin,):
 
     def test(self):
         from schooltool.model import Resource
@@ -716,6 +716,14 @@ class TestResourceView(unittest.TestCase):
         view.request = RequestStub()
         self.assertEquals(view.editURL(),
                           'http://localhost:7001/resources/foo/edit.html')
+
+    def test_traverse(self):
+        from schooltool.model import Resource
+        from schooltool.browser.model import ResourceView, ResourceEditView
+        resource = Resource()
+        view = ResourceView(resource)
+        self.assertTraverses(view, 'edit.html', ResourceEditView, resource)
+        self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
 
 class TestResourceEditView(unittest.TestCase):

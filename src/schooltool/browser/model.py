@@ -404,6 +404,12 @@ class ResourceView(View):
     def editURL(self):
         return absoluteURL(self.request, self.context) + '/edit.html'
 
+    def _traverse(self, name, request):
+        if name == "edit.html":
+            return ResourceEditView(self.context)
+        else:
+            raise KeyError(name)
+
 
 class ResourceEditView(View):
     """View for displaying a resource."""
