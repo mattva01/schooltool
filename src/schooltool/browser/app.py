@@ -24,6 +24,7 @@ $Id$
 
 from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import absoluteURL
+from schooltool.browser.model import PersonInfoPage
 from schooltool.interfaces import IApplication, IPerson
 from schooltool.interfaces import IApplicationObjectContainer
 from schooltool.interfaces import AuthenticationError
@@ -66,14 +67,6 @@ class RootView(View):
         elif name == 'schooltool.css':
             return StaticFile('www/schooltool.css', 'text/css')
         raise KeyError(name)
-
-
-# XXX Will be moved to a separate module.
-class PersonInfoPage(View):
-
-    __used_for__ = IPerson
-
-    template = Template("www/person.pt")
 
 
 class PersonContainerView(View):
