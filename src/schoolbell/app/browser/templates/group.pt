@@ -7,14 +7,11 @@
 
 <div class="portlet" metal:fill-slot="column-left-extra">
   <h4 i18n:translate="">Access control</h4>
-  <ul>
-    <li><a tal:attributes="href string:${context/@@absolute_url}/acl.html"
-           i18n:translate="">Set who can add/remove members<br/>and
-           teachers of this group.</a></li>
-    <li><a tal:attributes="href
-           string:${context/@@absolute_url}/calendar/acl.html"
-           i18n:translate="">Set who can view, edit, and add<br/>
-           events to the calendar of this group.</a></li>
+  <ul tal:define="base context/@@absolute_url">
+    <li><a tal:attributes="href string:$base/acl.html"
+           i18n:translate="">Membership access control</a></li>
+    <li><a tal:attributes="href string:$base/calendar/acl.html"
+           i18n:translate="">Calendar access control</a></li>
   </ul>
 </div>
 
@@ -22,9 +19,8 @@
 
   <div>
     <h3 i18n:translate="">Calendar</h3>
-     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar"
-           i18n:translate="">Use calendar for this group</a></p>
-
+    <p><a tal:attributes="href string:${context/@@absolute_url}/calendar"
+          i18n:translate="">Use calendar for this group</a></p>
   </div>
 
   <div class="members">
@@ -36,7 +32,8 @@
         </li>
       </ul>
       <p tal:condition="not:members" i18n:translate="">
-        This group has no members.</p>
+        This group has no members.
+      </p>
     </div>
     <div tal:define="resources view/getResources"
          tal:condition="resources">
@@ -46,13 +43,12 @@
              have resources as members. -->
       </tal:comment>
       <h3 i18n:translate="">Resources</h3>
-      <div tal:repeat="resource resources/sortby:title">
-        <a tal:attributes="href resource/@@absolute_url"
-           tal:content="resource/title" />
-      </div>
+      <ul>
+        <li tal:repeat="obj resources/sortby:title">
+          <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
+        </li>
+      </ul>
     </div>
-
-    <br />
   </div>
 
 </metal:block>
