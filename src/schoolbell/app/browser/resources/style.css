@@ -264,12 +264,14 @@ input.button-cancel {
 
 #column-left .portlet li {
     list-style: none;
-    padding: 0;
+    padding: 1px;
     margin-top: 1px;
+    margin-bottom: 0;
 }
 
 #column-left .portlet li a {
     display: block;
+    margin: 0;
     padding: 0.5em 1em;
     color: #304D6B;
     font-weight: bold;
