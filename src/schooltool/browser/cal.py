@@ -516,31 +516,25 @@ class DailyCalendarView(CalendarViewBase):
         if periods:
             row_ends.sort()
 
-        def periodIsOverlapping(dt):
+        def periodIsStarting(dt):
             if not periods:
                 return False
             pstart = datetime.combine(self.cursor, periods[0].tstart)
-            pend = pstart + periods[0].duration
-            if pstart <= dt < pend:
+            if pstart == dt:
                 return True
 
         period = None
         start = today + timedelta(hours=self.starthour)
         for end in row_ends:
-            if period:
+            if periodIsStarting(start):
+                period = periods.pop(0)
                 pstart = datetime.combine(self.cursor, period.tstart)
                 pend = pstart + period.duration
-                if end == pend:
-                    continue
-                else:
-                    yield (period.title, start, period.duration)
-                    start = pend
-                    period = None
-            if periodIsOverlapping(end):
-                period = periods.pop(0)
-                end = datetime.combine(self.cursor, period.tstart)
-            duration =  end - start
-            yield ('%d:%02d' % (start.hour, start.minute), start, duration)
+                yield (period.title, start, period.duration)
+                period = None
+            else:
+                duration =  end - start
+                yield ('%d:%02d' % (start.hour, start.minute), start, duration)
             start = end
 
     def getHours(self):

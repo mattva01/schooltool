@@ -873,13 +873,14 @@ class TestDailyCalendarViewPeriods(AppSetupMixin, NiceDiffsMixin,
         AppSetupMixin.setUp(self)
         days = ['A', 'B', 'C']
         schema = self.createSchema(days,
-                                   ['1', '2', '3',],
-                                   ['1', '2', '3',],
-                                   ['1', '2', '3',])
+                                   ['1', '2', '3', '4'],
+                                   ['1', '2', '3', '4'],
+                                   ['1', '2', '3', '4'])
         template = SchooldayTemplate()
         template.add(SchooldayPeriod('1', time(9, 0), timedelta(hours=1)))
         template.add(SchooldayPeriod('2', time(10, 15), timedelta(hours=1)))
         template.add(SchooldayPeriod('3', time(11, 30), timedelta(hours=1)))
+        template.add(SchooldayPeriod('4', time(12, 30), timedelta(hours=1)))
         schema.model = SequentialDaysTimetableModel(days, {None: template})
 
         getTimetableSchemaService(self.app)['default'] = schema
@@ -912,8 +913,8 @@ class TestDailyCalendarViewPeriods(AppSetupMixin, NiceDiffsMixin,
              ("2", dt('10:15'), timedelta(hours=1)),
              ("11:15", dt('11:15'), timedelta(minutes=15)),
              ("3", dt('11:30'), timedelta(hours=1)),
-             ("12:30", dt('12:30'), timedelta(minutes=30)),
-             ("13:00", dt('13:00'), timedelta(hours=1)),
+             ("4", dt('12:30'), timedelta(hours=1)),
+             ("13:30", dt('13:30'), timedelta(minutes=30)),
              ("14:00", dt('14:00'), timedelta(hours=1)),
              ("15:00", dt('15:00'), timedelta(hours=1)),
              ("16:00", dt('16:00'), timedelta(hours=1)),
