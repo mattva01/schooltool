@@ -111,10 +111,20 @@ class Calendar(Persistent, CalendarMixin):
         self.events[event.unique_id] = event
 
     def removeEvent(self, event):
-        del self.events[event.unique_id]
+        if self.__parent__ in event.resources:
+            event.unbookResource(self.__parent__)
+        else:
+            del self.events[event.unique_id]
+            if self is event.__parent__:
+                event.__parent__ = None
+                for resource in event.resources:
+                    event.unbookResource(resource)
 
     def clear(self):
-        self.events.clear()
+        # clear is not actually used anywhere in schoolbell.app (except tests),
+        # so it doesn't have to be efficient.
+        for e in list(self):
+            self.removeEvent(e)
 
     def find(self, unique_id):
         return self.events[unique_id]

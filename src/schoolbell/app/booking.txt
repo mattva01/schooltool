@@ -10,6 +10,7 @@ rooms) are needed for this event.  We call this "resource booking" in
 SchoolBell.  When a resource is booked, the calendar event is automatically
 added to the resource's calendar, and is kept in sync.
 
+
 Set up
 ------
 
@@ -24,6 +25,10 @@ You have a person and a resource
     >>> person = Person('froggy')
     >>> resource = Resource('lily')
     >>> resource2 = Resource('mud')
+
+
+Resource booking and unbooking
+------------------------------
 
 You want to create a calendar event and book a resource.  You can specify the
 resource when you're creating an event.
@@ -55,5 +60,57 @@ or you may book a different resource
     >>> resource2.calendar.find(e.unique_id) is e
     True
 
-XXX What happens when I remove the event from the resource's calendar directly?
-XXX What happens when I remove the event from the original calendar?
+
+Deleting events
+---------------
+
+So, you have an event in two calendars:
+
+    >>> e in resource2.calendar and e in person.calendar
+    True
+
+If you remove it from the person's calendar, it gets removed from the
+resource's calendar too.
+
+    >>> person.calendar.removeEvent(e)
+
+    >>> e not in resource2.calendar
+    True
+
+If you remove an event from a resource's calendar, it loses that booking.
+
+    >>> e = CalendarEvent(title="Big presentation",
+    ...                   dtstart=datetime(2005, 3, 4, 12, 45),
+    ...                   duration=timedelta(minutes=45),
+    ...                   resources=[resource, resource2])
+    >>> person.calendar.addEvent(e)
+    >>> [e in x.calendar for x in [person, resource, resource2]]
+    [True, True, True]
+
+    >>> resource.calendar.removeEvent(e)
+    >>> [e in x.calendar for x in [person, resource, resource2]]
+    [True, False, True]
+    >>> list(e.resources) == [resource2]
+    True
+
+Clearing a calendar is equivalent to removing all its events:
+
+    >>> resource2.calendar.clear()
+    >>> [e in x.calendar for x in [person, resource, resource2]]
+    [True, False, False]
+    >>> list(e.resources) == []
+    True
+
+
+Tear down
+---------
+
+    >>> tearDown()
+
+
+Remaining issues
+----------------
+
+XXX What happens if I create an event, call bookResource on it, and then drop the event on the floor?
+XXX What happens if I do resource.addEvent(CalendarEvent(..., resources=[resource]))
+

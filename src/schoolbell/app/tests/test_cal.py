@@ -195,9 +195,6 @@ def doctest_Calendar():
         >>> list(cal) == [event]
         True
 
-        >>> event.__parent__ is cal
-        True
-
     Added events acquire a parent:
 
         >>> event.__parent__ is cal
@@ -249,11 +246,25 @@ def doctest_Calendar():
         ...
         KeyError: 'nonexistent'
 
+    You can remove an event by calling removeEvent()
+
+        >>> cal.removeEvent(event)
+
+    When an event is removed, its __parent__ becomes None
+
+        >>> event.__parent__ is None
+        True
+
     All events can be removed from a calendar by using clear():
 
         >>> cal.clear()
         >>> list(cal)
         []
+
+    It also clears __parent__ attributes
+
+        >>> event3.__parent__ is None
+        True
 
     By the way, you can specify the calendar's owner in the constructor:
 
