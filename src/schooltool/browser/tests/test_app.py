@@ -1328,6 +1328,17 @@ class TestBusySearchView(SchoolToolSetup, EqualsSortedMixin):
         self.assertEquals(request._outgoing_cookies['cal_periods'],
                           {'value': 'yes', 'expires': None, 'path': '/'})
 
+    def test_parseResources(self):
+        pr = self.view._parseResources
+        self.assertEquals(pr([]), [])
+        self.assertEquals(pr(['r1']), [self.r1])
+        self.assertEquals(pr(['/resources/r2']), [self.r2])
+        # Random junk is ignored
+        self.assertEquals(pr(['random junk', 'r1']), [self.r1])
+        self.assertEquals(pr(['non-utf-8 junk: \xff', 'r1']), [self.r1])
+        self.assertEquals(pr(['/resources', 'r1']), [self.r1])
+        self.assertEquals(pr(['/', 'r1']), [self.r1])
+
 
 class TestDatabaseResetView(AppSetupMixin, unittest.TestCase):
 

@@ -28,6 +28,7 @@ import datetime
 import itertools
 
 from zope.component import getUtility
+from zope.app.traversing.interfaces import TraversalError
 from zope.app.traversing.api import traverse, getPath
 
 from schooltool.browser import AppObjectBreadcrumbsMixin
@@ -311,7 +312,7 @@ class TimetableSetupView(View, AppObjectBreadcrumbsMixin):
         if raw_value:
             try:
                 group = traverse(self.context, '/groups/%s' % raw_value)
-            except KeyError: # XXX use TraversalError
+            except TraversalError:
                 pass
             else:
                 if group in self.all_groups:

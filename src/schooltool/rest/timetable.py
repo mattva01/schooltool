@@ -27,6 +27,7 @@ import datetime
 
 from zope.interface import moduleProvides
 from zope.component import getUtility
+from zope.app.traversing.interfaces import TraversalError
 from zope.app.traversing.api import traverse, getPath
 
 from schooltool.interfaces import IModuleSetup
@@ -352,7 +353,7 @@ class TimetableReadWriteView(TimetableReadView):
             path = resource['xlink:href']
             try:
                 res = traverse(self.timetabled, path)
-            except KeyError: # XXX use TraversalError
+            except TraversalError:
                 raise ViewError(_("Invalid path: %s") % path)
             resources.append(res)
         return TimetableActivity(title, self.timetabled, resources)
@@ -750,7 +751,7 @@ class SchoolTimetableView(View):
                 teacher_path = teacher_node['xlink:href']
                 try:
                     teacher = traverse(self.context, teacher_path)
-                except KeyError: # XXX use TraversalError
+                except TraversalError:
                     return textErrorPage(request,
                                          _("Invalid path: %s") % teacher_path)
                 groups_taught = list(getRelatedObjects(teacher, URITaught))
@@ -758,6 +759,9 @@ class SchoolTimetableView(View):
                 for group in groups_taught:
                     group_path = absolutePath(self.request, group)
                     if group_path in timetables:
+                        # This test will be true if two teachers teach the
+                        # same group (for example).  This group already has
+                        # an empty timetable, so we don't need to create it.
                         continue
                     tt = schema.cloneEmpty()
                     group.timetables[self.key] = tt
@@ -768,6 +772,8 @@ class SchoolTimetableView(View):
                 for tt, day_id, period_id, activity in iterator:
                     tt[day_id].add(period_id, activity)
             except ViewError, e:
+                # XXX unless I am mistaken, errorneous timetables *will* modify
+                #     the database because we do not abort the transaction
                 return textErrorPage(request, e)
 
             request.appLog(_("School timetable updated"))
@@ -782,11 +788,11 @@ class SchoolTimetableView(View):
             for day in teacher_node.query('st:day'):
                 day_id = day['id']
                 if day_id not in schema.keys():
-                    raise ViewError(_("Unknown day id: %r") % day_id)
+                    raise ViewError(_("Unknown day id: %s") % day_id)
                 for period in day.query('st:period'):
                     period_id = period['id']
                     if period_id not in schema[day_id].periods:
-                        raise ViewError(_("Unknown period id: %r") % period_id)
+                        raise ViewError(_("Unknown period id: %s") % period_id)
                     for activity in period.query('st:activity'):
                         path = activity['group']
                         title = activity['title']
@@ -804,7 +810,7 @@ class SchoolTimetableView(View):
                             rpath = resource['xlink:href']
                             try:
                                 res = traverse(self.context, rpath)
-                            except KeyError: # XXX use TraversalError
+                            except TraversalError:
                                 raise ViewError(_("Invalid path: %s") % rpath)
                             resources.append(res)
                         act = TimetableActivity(title, group, resources)

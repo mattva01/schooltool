@@ -24,6 +24,7 @@ $Id$
 
 import datetime
 
+from zope.app.traversing.interfaces import TraversalError
 from zope.app.traversing.api import traverse, getPath
 
 from zope.interface import moduleProvides
@@ -252,7 +253,7 @@ class AvailabilityQueryView(View):
             for path in request.args['resources']:
                 try:
                     resource = traverse(self.context, path)
-                except KeyError: # XXX use TraversalError
+                except TraversalError:
                     return _("Invalid resource: %r") % path
                 if not IResource.providedBy(resource):
                     return _("%r is not a resource") % path

@@ -25,7 +25,6 @@ $Id$
 import unittest
 
 from persistent import Persistent
-from zope.interface import implements
 from zope.interface.verify import verifyObject
 from zope.app.traversing.api import TraversalError
 

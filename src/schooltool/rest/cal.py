@@ -28,6 +28,7 @@ import datetime
 import operator
 
 from zope.interface import moduleProvides
+from zope.app.traversing.interfaces import TraversalError
 from zope.app.traversing.api import getPath, traverse
 
 from schooltool.interfaces import IModuleSetup
@@ -424,7 +425,7 @@ class BookingView(View):
             owner_path = to_unicode(owner_node.nsProp('path', None))
             try:
                 owner = traverse(self.context, owner_path)
-            except KeyError: # XXX use TraversalError
+            except TraversalError:
                 return textErrorPage(request,
                                      _("Invalid path: %r") % owner_path)
             if not IApplicationObject.providedBy(owner):

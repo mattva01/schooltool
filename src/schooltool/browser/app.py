@@ -26,6 +26,7 @@ import sets
 import datetime
 from cStringIO import StringIO
 
+from zope.app.traversing.interfaces import TraversalError
 from zope.app.traversing.api import traverse, getPath
 
 from schooltool.app import create_application
@@ -726,7 +727,7 @@ class ObjectContainerView(View, ContainerBreadcrumbsMixin):
     traversing with an object's id returns an instance of obj_view on
     the object.
 
-    XXX this implies that an object with the id 'add.html' is inaccessible.
+    Note: this implies that an object with the id 'add.html' is inaccessible.
     """
 
     __used_for__ = IApplicationObjectContainer
@@ -862,7 +863,7 @@ class BusySearchView(View, ToplevelBreadcrumbsMixin):
         for path in raw_value:
             try:
                 resource = traverse(resource_container, path)
-            except (KeyError, UnicodeError): # XXX use TraversalError
+            except (TraversalError, UnicodeError):
                 pass
             else:
                 if IResource.providedBy(resource):

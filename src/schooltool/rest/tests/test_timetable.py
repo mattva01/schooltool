@@ -1692,67 +1692,109 @@ class TestSchoolTimetableView(XMLCompareMixin, SchoolToolSetup,
                           [])
 
     def test_PUT_badxml(self):
-        nonxml = "<schooltt parse error>"
-        badxml = """
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2">
+        # Format of testcases:
+        #   TESTCASE: expected error message
+        #     xml document that should produce the error message
+        #   TESTCASE: ...
+        #     ...
+        testcases = """
+
+          TESTCASE: Timetable not valid XML
+
+            <schooltt parse error>
+
+          TESTCASE: Timetable not valid according to schema
+
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
+                      xmlns:xlink="http://www.w3.org/1999/xlink">
               <coach xlink:type="simple" xlink:href="/persons/p2">
               </coach>
             </schooltt>
-            """
-        bad_path_xml = """
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2">
+
+          TESTCASE: Invalid path: /persons/p3
+
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
+                      xmlns:xlink="http://www.w3.org/1999/xlink">
               <teacher xlink:type="simple" xlink:href="/persons/p3">
               </teacher>
               <teacher xlink:type="simple" xlink:href="/persons/p1">
               </teacher>
             </schooltt>
-            """
-        bad_day_xml = """
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2">
+
+          TESTCASE: Unknown day id: bad
+
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
+                      xmlns:xlink="http://www.w3.org/1999/xlink">
               <teacher xlink:type="simple" xlink:href="/persons/p1">
                 <day id="bad"/>
               </teacher>
             </schooltt>
-            """
-        bad_period_xml = """
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2">
+
+          TESTCASE: Unknown period id: bad
+
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
+                      xmlns:xlink="http://www.w3.org/1999/xlink">
               <teacher xlink:type="simple" xlink:href="/persons/p1">
                 <day id="A">
                   <period id="bad"/>
                 </day>
               </teacher>
             </schooltt>
-            """
-        bad_group_xml = """
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2">
+
+          TESTCASE: /persons/p1 is not a teacher of /persons/p2
+
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
+                      xmlns:xlink="http://www.w3.org/1999/xlink">
               <teacher xlink:type="simple" xlink:href="/persons/p1">
                 <day id="A">
                   <period id="Blue">
-                    <activity group="/persons/p1">Haxoring</activity>
+                    <activity group="/persons/p2" title="Haxoring" />
                   </period>
                 </day>
               </teacher>
             </schooltt>
-            """
-        bad_teacher_xml = """
-            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2">
+
+          TESTCASE: /persons/p1 is not a teacher of /groups/sg3
+
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
+                      xmlns:xlink="http://www.w3.org/1999/xlink">
               <teacher xlink:type="simple" xlink:href="/persons/p1">
                 <day id="A">
                   <period id="Blue">
-                    <activity group="/groups/sg3">Instead of p2</activity>
+                    <activity group="/groups/sg3" title="Haxoring" />
                   </period>
                 </day>
               </teacher>
               <teacher xlink:type="simple" xlink:href="/persons/p2" />
             </schooltt>
-            """
-        for body in (nonxml, badxml, bad_path_xml, bad_day_xml, bad_period_xml,
-                     bad_group_xml, bad_teacher_xml):
+
+          TESTCASE: Invalid path: /resources/bfg9k
+
+            <schooltt xmlns="http://schooltool.org/ns/schooltt/0.2"
+                      xmlns:xlink="http://www.w3.org/1999/xlink">
+              <teacher xlink:type="simple" xlink:href="/persons/p2">
+                <day id="A">
+                  <period id="Blue">
+                    <activity group="/groups/sg3" title="Email">
+                      <resource xlink:type="simple"
+                                xlink:href="/resources/bfg9k"
+                                xlink:title="BFG 9000"/>
+                    </activity>
+                  </period>
+                </day>
+              </teacher>
+            </schooltt>
+
+        """
+        for testcase in testcases.split('TESTCASE:')[1:]:
+            errmsg, body = testcase.split('\n', 1)
+            errmsg = errmsg.strip()
             request = RequestStub(method="PUT", body=body,
                                   headers={'Content-Type': 'text/xml'})
             result = self.view.render(request)
             self.assertEquals(request.code, 400)
             self.assertEquals(request.applog, [])
+            self.assertEquals(result, errmsg)
 
 
 class TestTimePeriodServiceView(XMLCompareMixin, SchoolToolSetup):

@@ -27,6 +27,7 @@ import datetime
 import libxml2
 
 from zope.interface import moduleProvides
+from zope.app.traversing.interfaces import TraversalError
 from zope.app.traversing.api import traverse, getPath
 
 from schooltool.interfaces import IModuleSetup
@@ -109,7 +110,7 @@ class RollCallView(View):
             if res:
                 dt = parse_datetime(to_unicode(res[0].content))
             else:
-                dt = None
+                dt = None # XXX this branch is not unit tested
 
             res = ctx.xpathEval("/rollcall/reporter/@xlink:href")
             if not res:
@@ -118,7 +119,7 @@ class RollCallView(View):
                 path = to_unicode(res[0].content)
                 try:
                     reporter = traverse(self.context, path)
-                except KeyError: # XXX use TraversalError
+                except TraversalError:
                     raise ValueError("Reporter not found: %s" % path)
                 if (reporter is not request.authenticated_user
                         and not isManager(request.authenticated_user)):
@@ -142,8 +143,8 @@ class RollCallView(View):
                 if path not in members:
                     raise ValueError("Person %s is not a member of %s"
                                      % (path, getPath(self.context)))
+                # traverse will succeed because path is in members.
                 person = traverse(self.context, path)
-                # XXX traverse might raise TraversalError
                 try:
                     presence_attr = to_unicode(node.nsProp('presence', None))
                     present = presence[presence_attr]
@@ -222,15 +223,17 @@ class AbsenceCommentParser:
 
             text = to_unicode(node.nsProp('text', None))
             if text is None:
+                # XXX this branch is not unit tested
                 raise ValueError("Text attribute missing")
 
             reporter_path = to_unicode(node.nsProp('reporter', None))
             if reporter_path is None:
+                # XXX this branch is not unit tested
                 raise ValueError("Reporter attribute missing")
 
             try:
                 reporter = traverse(self.context, reporter_path)
-            except KeyError: # XXX use TraversalError
+            except TraversalError:
                 raise ValueError("Reporter not found: %s" % reporter_path)
 
             dt = to_unicode(node.nsProp('datetime', None))
@@ -241,7 +244,7 @@ class AbsenceCommentParser:
             if absent_from_path is not None:
                 try:
                     absent_from = traverse(self.context, absent_from_path)
-                except KeyError: # XXX use TraversalError
+                except TraversalError:
                     raise ValueError("Object not found: %s" % reporter_path)
             else:
                 absent_from = None
