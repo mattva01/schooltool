@@ -881,8 +881,10 @@ class TestSequentialDaysTimetableModel(NiceDiffsMixin, unittest.TestCase,
         """
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
+        from schooltool.component import getRoot
         tt = Timetable(('A', 'B'))
         setPath(tt, '/path/to/tt')
+        getRoot(tt).timetable_privacy = 'public'
         periods = ('Green', 'Blue')
         tt["A"] = TimetableDay(periods)
         tt["B"] = TimetableDay(periods)
@@ -1005,10 +1007,13 @@ class TestWeeklyTimetableModel(unittest.TestCase, BaseTestTimetableModel):
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
         from schooltool.interfaces import ITimetableModel
+        from schooltool.component import getRoot
 
         days = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
         tt = Timetable(days)
         setPath(tt, '/path/to/tt')
+        getRoot(tt).timetable_privacy = 'private'
+
         periods = ('1', '2', '3', '4')
         for day_id in days:
             tt[day_id] = TimetableDay(periods)
@@ -1048,6 +1053,9 @@ class TestWeeklyTimetableModel(unittest.TestCase, BaseTestTimetableModel):
         verifyObject(ITimetableModel, model)
 
         cal = model.createCalendar(SchooldayModelStub(), tt)
+
+        for event in cal:
+            self.assertEqual(event.privacy, "private", event)
 
         result = self.extractCalendarEvents(cal, SchooldayModelStub())
 
