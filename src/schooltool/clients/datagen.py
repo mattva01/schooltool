@@ -60,6 +60,7 @@ pupil_age_end = 1994        # Which year the youngest pupils will be
 teacher_age_start = 1950    # Oldest teachers
 teacher_age_end = 1980      # Youngest teachers
 
+
 def random_name():
     return "%s %s" % (random.choice(names), random.choice(surnames))
 

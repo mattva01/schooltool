@@ -149,7 +149,7 @@ def splitQuoted(s, sep):
 
 
 def validToken(s):
-    """Checks wheter s is a syntactically valid token."""
+    """Checks whether s is a syntactically valid token."""
     invalid_chars = list('()<>@,;:\\"/[]?={}\177') + map(chr, range(33))
     for c in s:
         if c in invalid_chars:
@@ -158,7 +158,7 @@ def validToken(s):
 
 
 def validMediaType(s):
-    """Checks wheter s is a syntactically valid media type."""
+    """Checks whether s is a syntactically valid media type."""
     if s.count('/') != 1:
         return False
     type, subtype = s.split('/')
@@ -401,7 +401,7 @@ class Request(http.Request):
 
         'reason' is a twisted.python.failure.Failure object.
 
-        twisted.web.server.Request.processFailure is very similair in purpose.
+        twisted.web.server.Request.processFailure is very similar in purpose.
 
         This is called in a separate thread.
         """
@@ -513,6 +513,7 @@ No storage defined in the configuration file.  Unable to start the server.
 If you're using the default configuration file, please edit it now and
 uncomment one of the ZODB storage sections.
 """
+
 
 class Server:
     """SchoolTool HTTP server."""
@@ -767,7 +768,7 @@ def setUpModules(module_names):
 
 
 def setUp():
-    """Set up the schooltool application."""
+    """Set up the SchoolTool application."""
     setUpModules([
         'schooltool.relationship',
         'schooltool.membership',
