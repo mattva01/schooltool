@@ -23,10 +23,10 @@ $Id$
 """
 
 from zope.interface import Interface, implements
-from zope.schema import Password, TextLine, Bytes, getFieldNamesInOrder
+from zope.schema import Password, TextLine, Bytes, Bool, getFieldNamesInOrder
 from zope.schema.interfaces import ValidationError
 from zope.app import zapi
-from zope.app.form.utility import setUpWidgets, getWidgetsData
+from zope.app.form.utility import getWidgetsData, setUpEditWidgets
 from zope.app.form.browser.add import AddView
 from zope.app.form.interfaces import IInputWidget, WidgetsError
 from zope.publisher.interfaces import NotFound
@@ -226,62 +226,63 @@ class ResourceView(BrowserView):
         pass
 
 
-class IPasswordChangeForm(Interface):
-    """Schema for a password change form."""
+class IPersonEditForm(Interface):
+    """Schema for a person's edit form."""
 
-    old_password = Password(title=u"Old password")
-    new_password = Password(title=u"New password")
-    verify_password = Password(title=u"Verify password")
+    title = TextLine(title=u"Full name",
+                     description=u"Name that should be displayed")
+
+    photo = Bytes(title=u"New photo",
+                  required=False,
+                  description=u"""Photo (in JPEG format)""")
+
+    clear_photo = Bool(title=u'Clear photo',
+                       required=False,
+                       description=u"""Check this to clear the photo""")
+
+    new_password = Password(title=u"New password",
+                            required=False)
+
+    verify_password = Password(title=u"Verify password",
+                               required=False)
 
 
-class PersonChangePasswordView(BrowserView):
-    """A view for changing password."""
+class PersonEditView(BrowserView):
+    """A view for editing a person."""
 
     error = None
     message = None
 
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
-        self.fieldNames = ['new_password', 'verify_password']
-
-        if not self.isZopeManager():
-            self.fieldNames = ['old_password'] + self.fieldNames
-
-        setUpWidgets(self, IPasswordChangeForm, IInputWidget,
-                     names=self.fieldNames)
-
-    def isZopeManager(self):
-        return checkPermission("zope.ManageContent", self.context)
-
-    def widgets(self):
-        return [getattr(self, name + '_widget') for name in self.fieldNames]
+        setUpEditWidgets(self, IPersonEditForm, self.context)
 
     def update(self):
         if 'UPDATE_SUBMIT' in self.request:
             try:
-                data = getWidgetsData(self, IPasswordChangeForm,
-                                      names=self.fieldNames)
+                data = getWidgetsData(self, IPersonEditForm)
             except WidgetsError:
                 return # Errors will be displayed next to widgets
 
-            if data['new_password'] != data['verify_password']:
-                self.error = _("Passwords do not match.")
-                return
+            # If any of the password fields is set
+            if (('new_password' in data and data['new_password']) or
+                ('verify_password' in data and data['verify_password'])):
+                # We compare them
+                if data['new_password'] != data['verify_password']:
+                    self.error = _("Passwords do not match.")
+                    return
 
-            if (not self.isZopeManager() and
-                not self.context.checkPassword(data['old_password'])):
-                self.error = _("Wrong password!")
-                return
+                self.context.setPassword(data['new_password'])
+                self.message = _("Password was successfully changed!")
 
-            self.context.setPassword(data['new_password'])
-            self.message = _("Password was successfully changed!")
+            self.context.title = data['title']
+            if 'photo' in data and data['photo']:
+                self.context.photo = data['photo']
 
-        if 'UPDATE_DISABLE' in self.request:
-            if not self.isZopeManager():
-                self.error = _("You are not a manager!")
-                return
-
-            self.context.setPassword(None)
+            if 'clear_photo' in data and data['clear_photo']:
+                self.context.photo = None
+                # Unset the field after clearing the photo
+                self.clear_photo_widget.setRenderedValue(False)
 
 
 class IPersonAddForm(Interface):

@@ -71,10 +71,10 @@
       />
 
   <page
-      name="password.html"
+      name="edit.html"
       for="schoolbell.app.interfaces.IPerson"
-      class="schoolbell.app.browser.app.PersonChangePasswordView"
-      template="templates/change_person_password.pt"
+      class="schoolbell.app.browser.app.PersonEditView"
+      template="templates/person_edit.pt"
       permission="zope.View" />
 
   <page

@@ -373,125 +373,70 @@ def doctest_ResourceView():
     """
 
 
-def doctest_PersonChangePasswordView():
-    r"""Test for PersonChangePasswordView
+def doctest_PersonEditView():
+    r"""Test for PersonEditView
 
-    PersonChangePasswordView is a view on IPerson.
+    PersonEditView is a view on IPerson.
 
+        >>> from schoolbell.app.browser.app import PersonEditView
         >>> from schoolbell.app.app import Person
         >>> person = Person()
 
-    We will define a subclass because supplying principals to the Zope
-    3 security mechanism is a pain.
-
-        >>> from schoolbell.app.browser.app import PersonChangePasswordView
-        >>> class TestPersonChangePasswordView(PersonChangePasswordView):
-        ...    def __init__(self, context, request,
-        ...                 pretend_to_be_manager=False):
-        ...         self._pretend_to_be_manager = pretend_to_be_manager
-        ...         PersonChangePasswordView.__init__(self, context, request)
-        ...    def isZopeManager(self):
-        ...         return self._pretend_to_be_manager
-
-    Anonymous user:
+    Let's try creating one
 
         >>> request = TestRequest()
-        >>> view = TestPersonChangePasswordView(person, request, False)
+        >>> view = PersonEditView(person, request)
 
-    Anonymous user can see all the fields in the form
+    You can change person's title and photo
 
-       >>> [widget.name for widget in view.widgets()]
-       ['field.old_password', 'field.new_password', 'field.verify_password']
-
-    Anonymous user can't disable user accounts
-
-        >>> request = TestRequest(form={'UPDATE_DISABLE': True})
-        >>> view = TestPersonChangePasswordView(person, request)
+        >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
+        ...                             'field.title':u'newTitle',
+        ...                             'field.photo':'PHOTO'})
+        >>> view = PersonEditView(person, request)
 
         >>> view.update()
-        >>> view.error
-        u'You are not a manager!'
+        >>> view.message
+        >>> person.title
+        u'newTitle'
+        >>> person.photo
+        'PHOTO'
 
-    Anonymous user can't set a person's password without providing a valid
-    old password (XXX this will change when we implement Zope-level
-    authentication; see also the next test snippet)
+    You can clear person's photo
+        >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
+        ...                             'field.title':u'newTitle',
+        ...                             'field.clear_photo':'on'})
+        >>> view = PersonEditView(person, request)
+
+        >>> view.update()
+        >>> view.message
+        >>> person.title
+        u'newTitle'
+        >>> print person.photo
+        None
+
+    You can set a person's password
 
         >>> person.setPassword('lala')
         >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
-        ...                             'field.old_password': 'foo',
+        ...                             'field.title':person.title,
         ...                             'field.new_password': 'bar',
         ...                             'field.verify_password': 'bar'})
-        >>> view = TestPersonChangePasswordView(person, request)
-
-        >>> view.update()
-        >>> view.error
-        u'Wrong password!'
-
-    Anonymous user can set a person's password when a valid password
-    is provided (XXX see the XXX above)
-
-        >>> person.setPassword('lala')
-        >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
-        ...                             'field.old_password': 'lala',
-        ...                             'field.new_password': 'bar',
-        ...                             'field.verify_password': 'bar'})
-        >>> view = TestPersonChangePasswordView(person, request)
+        >>> view = PersonEditView(person, request)
 
         >>> view.update()
         >>> view.message
         u'Password was successfully changed!'
-
-    That is, unless new password and confirm password do not match
-
-        >>> person.setPassword('lala')
-        >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
-        ...                             'field.old_password': 'lala',
-        ...                             'field.new_password': 'bara',
-        ...                             'field.verify_password': 'bar'})
-        >>> view = TestPersonChangePasswordView(person, request)
-
-        >>> view.update()
-        >>> view.error
-        u'Passwords do not match.'
-
-    Manager user:
-
-        >>> request = TestRequest()
-        >>> view = TestPersonChangePasswordView(person, request, True)
-
-    Manager should not see the 'old_password' field
-
-       >>> [widget.name for widget in view.widgets()]
-       ['field.new_password', 'field.verify_password']
-
-    Manager can disable user accounts
-
-        >>> request = TestRequest(form={'UPDATE_DISABLE': True})
-        >>> view = TestPersonChangePasswordView(person, request, True)
-
-        >>> view.update()
-        >>> view.error
-
-    Manager can set a person's password without having to provide the
-    old password
-
-        >>> person.setPassword('lala')
-        >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
-        ...                             'field.new_password': 'bar',
-        ...                             'field.verify_password': 'bar'})
-        >>> view = TestPersonChangePasswordView(person, request, True)
-
-        >>> view.update()
-        >>> view.message
-        u'Password was successfully changed!'
+        >>> person.checkPassword('bar')
+        True
 
     Unless new password and confirm password do not match
 
         >>> person.setPassword('lala')
         >>> request = TestRequest(form={'UPDATE_SUBMIT': True,
+        ...                             'field.title':person.title,
         ...                             'field.new_password': 'bara',
         ...                             'field.verify_password': 'bar'})
-        >>> view = TestPersonChangePasswordView(person, request, True)
+        >>> view = PersonEditView(person, request)
 
         >>> view.update()
         >>> view.error
@@ -654,8 +599,9 @@ def setUp(test):
     schema fields.
     """
     from zope.app.form.browser import PasswordWidget, TextWidget, BytesWidget
+    from zope.app.form.browser import CheckBoxWidget
     from zope.app.form.interfaces import IInputWidget
-    from zope.schema.interfaces import IPassword, ITextLine, IBytes
+    from zope.schema.interfaces import IPassword, ITextLine, IBytes, IBool
     setup.placelessSetUp()
     setup.setUpAnnotations()
     setup.setUpTraversal()
@@ -666,6 +612,7 @@ def setUp(test):
     ztapi.browserViewProviding(IPassword, PasswordWidget, IInputWidget)
     ztapi.browserViewProviding(ITextLine, TextWidget, IInputWidget)
     ztapi.browserViewProviding(IBytes, BytesWidget, IInputWidget)
+    ztapi.browserViewProviding(IBool, CheckBoxWidget, IInputWidget)
 
 
 def tearDown(test):
