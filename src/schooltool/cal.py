@@ -383,7 +383,7 @@ class CalendarOwnerMixin(Persistent):
         self.calendar = ACLCalendar()
         self.calendar.__parent__ = self
         self.calendar.__name__ = 'calendar'
-        self.composite_cal_groups = PersistentList()
+        self.composite_cal_groups = PersistentList() # XXX Use relationships.
 
     def makeCompositeCalendar(self):
         result = Calendar()

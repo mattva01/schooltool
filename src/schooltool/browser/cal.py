@@ -279,12 +279,21 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
         return  '%s/%s.html?date=%s' % (self.__url, cal_type, cursor)
 
     def iterEvents(self, first, last):
-        """Iterate over the events of the calendars displayed
+        """Iterate over all events of selected calendars.
 
-        This is a hook for subclasses that have to iterate over
-        several calendars.
+        Currently the personal calendar, the timetable calendar (TODO: the
+        composite calendar) is scanned.
         """
-        return iter(self.context)
+        # TODO: Composite events.
+        return itertools.chain(self.context.expand(first, last),
+                               self.context.__parent__.makeTimetableCalendar())
+
+#    def iterEvents(self, first, last):
+#        """Iterate over the events of the calendars displayed."""
+#        private_cal = self.context
+#        composite_cal = self.context.__parent__.makeCompositeCalendar()
+#        return itertools.chain(private_cal.expand(first, last),
+#                               composite_cal.expand(first, last))
 
     def getDays(self, start, end):
         """Get a list of CalendarDay objects for a selected period of time.
@@ -686,20 +695,15 @@ class CalendarView(View):
 
     authorization = ACLViewAccess
 
-    daily_view_class = DailyCalendarView
-    weekly_view_class = WeeklyCalendarView
-    monthly_view_class = MonthlyCalendarView
-    yearly_view_class = YearlyCalendarView
-
     def _traverse(self, name, request):
         if name == 'daily.html':
-            return self.daily_view_class(self.context)
+            return DailyCalendarView(self.context)
         elif name == 'weekly.html':
-            return self.weekly_view_class(self.context)
+            return WeeklyCalendarView(self.context)
         elif name == 'monthly.html':
-            return self.monthly_view_class(self.context)
+            return MonthlyCalendarView(self.context)
         elif name == 'yearly.html':
-            return self.yearly_view_class(self.context)
+            return YearlyCalendarView(self.context)
         elif name == 'add_event.html':
             return EventAddView(self.context)
         elif name == 'edit_event.html':
@@ -1322,6 +1326,8 @@ class EventDeleteView(View, EventViewHelpers):
         if event is not None:
             return self._deleteTimetableEvent(event, date)
 
+        # TODO: Handle events from composite calendar
+
         # Dangling event ID
         return self._redirectToDailyView(date)
 
@@ -1402,88 +1408,6 @@ class EventDeleteView(View, EventViewHelpers):
         """
         return self.tt_confirm_template(self.request, view=self,
                                         context=self.context, event=event)
-
-
-class CalendarComboMixin(View):
-    """Mixin for views over the combined calendar of a person.
-
-    Provides iteration over the private calendar and the timetable calendar.
-    """
-
-    def iterEvents(self, first, last):
-        """Iterate over the events of the calendars displayed."""
-        return itertools.chain(self.context.expand(first, last),
-                               self.context.__parent__.makeTimetableCalendar())
-
-
-class ComboDailyCalendarView(CalendarComboMixin, DailyCalendarView):
-    pass
-
-
-class ComboWeeklyCalendarView(CalendarComboMixin, WeeklyCalendarView):
-    pass
-
-
-class ComboMonthlyCalendarView(CalendarComboMixin, MonthlyCalendarView):
-    pass
-
-
-class ComboCalendarView(CalendarView):
-    """A view combining the personal calendar and the timetable calendar.
-
-    This view will display events from both a private and timetable
-    calendars of an application object.
-    """
-
-    daily_view_class = ComboDailyCalendarView
-    weekly_view_class = ComboWeeklyCalendarView
-    monthly_view_class = ComboMonthlyCalendarView
-    yearly_view_class = YearlyCalendarView
-
-
-class CompositeCalendarMixin(View):
-    """Mixin for views over the composite calendar of a person.
-
-    Provides iteration over the private calendar and the calendars
-    of selected groups.
-    """
-
-    def iterEvents(self, first, last):
-        """Iterate over the events of the calendars displayed."""
-        private_cal = self.context
-        composite_cal = self.context.__parent__.makeCompositeCalendar()
-        return itertools.chain(private_cal.expand(first, last),
-                               composite_cal.expand(first, last))
-
-
-class CompositeDailyCalendarView(CompositeCalendarMixin, DailyCalendarView):
-    pass
-
-
-class CompositeWeeklyCalendarView(CompositeCalendarMixin, WeeklyCalendarView):
-    pass
-
-
-class CompositeMonthlyCalendarView(CompositeCalendarMixin,
-                                   MonthlyCalendarView):
-    pass
-
-
-class CompositeCalendarView(CalendarView):
-    """A view combining the personal calendar and the personal calendars of
-    selected groups."""
-
-    daily_view_class = CompositeDailyCalendarView
-    weekly_view_class = CompositeWeeklyCalendarView
-    monthly_view_class = CompositeMonthlyCalendarView
-    yearly_view_class = YearlyCalendarView
-
-    def do_GET(self, request):
-        # XXX A hack to get redirection working right.  This will go away ASAP.
-        #     There are other instances of redirection which I haven't touched.
-        url = absoluteURL(request, self.context.__parent__,
-                          'composite-calendar/daily.html')
-        return self.redirect(url, request)
 
 
 class CalendarEventView(View):

@@ -341,6 +341,73 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
 
         self.assertEqualEventLists(days[0].events, [e5, e2])            # 11
 
+    def test_iterEvents(self):
+        from schooltool.browser.cal import CalendarViewBase
+        from schooltool.model import Person
+        from schooltool.cal import DailyRecurrenceRule
+
+        person = Person(title="Da Boss")
+        setPath(person, '/persons/boss')
+
+        cal = createCalendar()
+        cal.__parent__ = person
+        cal.__name__ = 'calendar'
+
+        tcal = createCalendar()
+        tcal.__parent__ = person
+        tcal.__name__ = 'timetable-calendar'
+
+        person.makeTimetableCalendar = lambda: tcal
+
+        view = CalendarViewBase(cal)
+
+        result = list(view.iterEvents(date(2004, 8, 12), date(2004, 8, 13)))
+        self.assertEquals(result, [])
+
+        ev1 = createEvent('2004-08-12 12:00', '1h', 'ev1')
+        ev2 = createEvent('2004-08-12 13:00', '1h', 'ev2')
+        ev3 = createEvent('2004-01-01 9:00', '1h', 'coffee',
+                          recurrence=DailyRecurrenceRule(), unique_id="42")
+        ev3_1 = ev3.replace(dtstart=datetime(2004, 8, 12, 9, 0))
+        ev3_2 = ev3.replace(dtstart=datetime(2004, 8, 13, 9, 0))
+        cal.addEvent(ev1)
+        cal.addEvent(ev3)
+        tcal.addEvent(ev2)
+
+        result = list(view.iterEvents(date(2004, 8, 12), date(2004, 8, 13)))
+        result.sort()
+        expected = [ev3_1, ev1, ev2, ev3_2]
+        self.assertEquals(result, expected,
+                          diff(pformat(result), pformat(expected)))
+
+##    def test_iterEvents_composite(self):
+##        from schooltool.browser.cal import CompositeCalendarMixin
+##        from schooltool.model import Person
+##
+##        class CalendarStub:
+##
+##            first = None
+##            last = None
+##
+##            def __init__(self, values):
+##                self.values = values
+##
+##            def expand(self, first, last):
+##                self.first = first
+##                self.last = last
+##                return self.values
+##
+##        person = Person(title="Wise Guy")
+##        person.calendar = CalendarStub([0, 1, 2])
+##        person.calendar.__parent__ = person
+##        composite_calendar = CalendarStub([3, 4, 5])
+##        person.makeCompositeCalendar = lambda: composite_calendar
+##        view = CompositeCalendarMixin(person.calendar)
+##        self.assertEquals(list(view.iterEvents('start', 'end')), range(6))
+##        self.assertEquals(person.calendar.first, 'start')
+##        self.assertEquals(person.calendar.last, 'end')
+##        self.assertEquals(composite_calendar.first, 'start')
+##        self.assertEquals(composite_calendar.last, 'end')
 
     def test_getWeek(self):
         from schooltool.browser.cal import CalendarViewBase, CalendarDay
@@ -569,6 +636,7 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
 
         cal = createCalendar()
         cal.__parent__ = Person(title="Da Boss")
+        cal.__parent__.makeTimetableCalendar = lambda: []
         view = DailyCalendarView(cal)
         view.request = RequestStub()
         view.cursor = date(2004, 8, 12)
@@ -629,6 +697,7 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
 
         cal = createCalendar()
         cal.__parent__ = Person(title="Da Boss")
+        cal.__parent__.makeTimetableCalendar = lambda: []
         view = DailyCalendarView(cal)
         view.request = RequestStub()
         view.cursor = date(2004, 8, 12)
@@ -2093,109 +2162,6 @@ class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
         return result, request
 
 
-class TestCalendarComboMixin(unittest.TestCase):
-
-    def test(self):
-        from schooltool.browser.cal import CalendarComboMixin
-        from schooltool.model import Person
-        from schooltool.cal import DailyRecurrenceRule
-
-        person = Person(title="Da Boss")
-        setPath(person, '/persons/boss')
-
-        cal = createCalendar()
-        cal.__parent__ = person
-        cal.__name__ = 'calendar'
-
-        tcal = createCalendar()
-        tcal.__parent__ = person
-        tcal.__name__ = 'timetable-calendar'
-
-        person.makeTimetableCalendar = lambda: tcal
-
-        view = CalendarComboMixin(cal)
-
-        result = list(view.iterEvents(date(2004, 8, 12), date(2004, 8, 13)))
-        self.assertEquals(result, [])
-
-        ev1 = createEvent('2004-08-12 12:00', '1h', 'ev1')
-        ev2 = createEvent('2004-08-12 13:00', '1h', 'ev2')
-        ev3 = createEvent('2004-01-01 9:00', '1h', 'coffee',
-                          recurrence=DailyRecurrenceRule(), unique_id="42")
-        ev3_1 = ev3.replace(dtstart=datetime(2004, 8, 12, 9, 0))
-        ev3_2 = ev3.replace(dtstart=datetime(2004, 8, 13, 9, 0))
-        cal.addEvent(ev1)
-        cal.addEvent(ev3)
-        tcal.addEvent(ev2)
-
-        result = list(view.iterEvents(date(2004, 8, 12), date(2004, 8, 13)))
-        result.sort()
-        expected = [ev3_1, ev1, ev2, ev3_2]
-        self.assertEquals(result, expected,
-                          diff(pformat(result), pformat(expected)))
-
-
-class TestCompositeCalendarMixin(unittest.TestCase):
-
-    def test(self):
-        from schooltool.browser.cal import CompositeCalendarMixin
-        from schooltool.model import Person
-
-        class CalendarStub:
-
-            first = None
-            last = None
-
-            def __init__(self, values):
-                self.values = values
-
-            def expand(self, first, last):
-                self.first = first
-                self.last = last
-                return self.values
-
-        person = Person(title="Wise Guy")
-        person.calendar = CalendarStub([0, 1, 2])
-        person.calendar.__parent__ = person
-        composite_calendar = CalendarStub([3, 4, 5])
-        person.makeCompositeCalendar = lambda: composite_calendar
-        view = CompositeCalendarMixin(person.calendar)
-        self.assertEquals(list(view.iterEvents('start', 'end')), range(6))
-        self.assertEquals(person.calendar.first, 'start')
-        self.assertEquals(person.calendar.last, 'end')
-        self.assertEquals(composite_calendar.first, 'start')
-        self.assertEquals(composite_calendar.last, 'end')
-
-
-class TestComboCalendarView(AppSetupMixin, unittest.TestCase,
-                            TraversalTestMixin):
-
-    def test_traverse(self):
-        from schooltool.browser.cal import ComboCalendarView
-        from schooltool.browser.cal import ComboDailyCalendarView
-        from schooltool.browser.cal import ComboWeeklyCalendarView
-        from schooltool.browser.cal import ComboMonthlyCalendarView
-        from schooltool.browser.cal import YearlyCalendarView
-        from schooltool.browser.cal import EventAddView
-        from schooltool.browser.cal import EventEditView
-        from schooltool.browser.cal import EventDeleteView
-        from schooltool.browser.acl import ACLView
-        context = self.person.calendar
-        view = ComboCalendarView(context)
-        self.assertTraverses(view, 'daily.html', ComboDailyCalendarView,
-                             context)
-        self.assertTraverses(view, 'weekly.html', ComboWeeklyCalendarView,
-                             context)
-        self.assertTraverses(view, 'monthly.html', ComboMonthlyCalendarView,
-                             context)
-        self.assertTraverses(view, 'yearly.html', YearlyCalendarView, context)
-        self.assertTraverses(view, 'add_event.html', EventAddView, context)
-        self.assertTraverses(view, 'edit_event.html', EventEditView, context)
-        self.assertTraverses(view, 'delete_event.html', EventDeleteView,
-                             context)
-        self.assertTraverses(view, 'acl.html', ACLView, context.acl)
-
-
 class TestCalendarEventView(TraversalTestMixin, XMLCompareMixin,
                             unittest.TestCase):
 
@@ -2432,9 +2398,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestEventDeleteView))
     suite.addTest(unittest.makeSuite(TestEventDeleteViewWithRepeatingEvents))
     suite.addTest(unittest.makeSuite(TestEventDeleteViewPermissionChecking))
-    suite.addTest(unittest.makeSuite(TestCalendarComboMixin))
-    suite.addTest(unittest.makeSuite(TestComboCalendarView))
-    suite.addTest(unittest.makeSuite(TestCompositeCalendarMixin))
     suite.addTest(unittest.makeSuite(TestCalendarEventView))
     suite.addTest(unittest.makeSuite(TestCalendarEventPermissionChecking))
     suite.addTest(DocTestSuite('schooltool.browser.cal'))

@@ -60,11 +60,6 @@
     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar"
           class="sitemap"  i18n:translate=""
           >Browse your calendar</a>
-    <p><a tal:attributes="href
-                        string:${context/@@absolute_url}/composite-calendar"
-          class="sitemap"  i18n:translate=""
-          >Browse the composite calendar</a>
-
     <p><a tal:attributes="href string:${context/@@absolute_url}/calendar.ics"
           class="sitemap"  i18n:translate=""
           >Open your calendar in an iCal client</a>

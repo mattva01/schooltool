@@ -98,8 +98,7 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
         from schooltool.browser.model import PersonView, PhotoView
         from schooltool.browser.model import PersonEditView, PersonPasswordView
         from schooltool.browser.timetable import TimetableTraverseView
-        from schooltool.browser.cal import ComboCalendarView
-        from schooltool.browser.cal import CompositeCalendarView
+        from schooltool.browser.cal import CalendarView
         from schooltool.rest.cal import CalendarView as RestCalendarView
         from schooltool.rest.cal import CalendarReadView as RestCalReadView
         view = PersonView(self.person)
@@ -109,9 +108,7 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
                              self.person)
         self.assertTraverses(view, 'timetables', TimetableTraverseView,
                              self.person)
-        self.assertTraverses(view, 'calendar', ComboCalendarView,
-                             self.person.calendar)
-        self.assertTraverses(view, 'composite-calendar', CompositeCalendarView,
+        self.assertTraverses(view, 'calendar', CalendarView,
                              self.person.calendar)
         self.assertTraverses(view, 'calendar.ics',
                              RestCalendarView, self.person.calendar)
@@ -585,7 +582,7 @@ class TestGroupView(RegistriesSetupMixin, TraversalTestMixin, NiceDiffsMixin,
         from schooltool.browser.model import GroupView, GroupEditView
         from schooltool.browser.model import GroupTeachersView
         from schooltool.browser.timetable import TimetableTraverseView
-        from schooltool.browser.cal import ComboCalendarView
+        from schooltool.browser.cal import CalendarView
         from schooltool.browser.acl import ACLView
         request = RequestStub()
         view = GroupView(self.group)
@@ -595,7 +592,7 @@ class TestGroupView(RegistriesSetupMixin, TraversalTestMixin, NiceDiffsMixin,
         self.assertTraverses(view, 'acl.html',
                              ACLView, self.group.acl)
         self.assertTraverses(view, 'calendar',
-                             ComboCalendarView, self.group.calendar)
+                             CalendarView, self.group.calendar)
         self.assertTraverses(view, 'timetables', TimetableTraverseView,
                              self.group)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
@@ -912,7 +909,7 @@ class TestResourceView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.model import ResourceView, ResourceEditView
         from schooltool.browser.cal import BookingView
         from schooltool.browser.timetable import TimetableTraverseView
-        from schooltool.browser.cal import ComboCalendarView
+        from schooltool.browser.cal import CalendarView
         from schooltool.browser.acl import ACLView
         resource = self.resource
         view = ResourceView(resource)
@@ -920,7 +917,7 @@ class TestResourceView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'book', BookingView, resource)
         self.assertTraverses(view, 'acl.html', ACLView, self.resource.acl)
         self.assertTraverses(view, 'calendar',
-                             ComboCalendarView, self.resource.calendar)
+                             CalendarView, self.resource.calendar)
         self.assertTraverses(view, 'timetables', TimetableTraverseView,
                              self.resource)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
