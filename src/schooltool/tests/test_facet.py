@@ -189,12 +189,12 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         from schooltool.facet import FacetedMixin
         from schooltool.relationship import RelatableMixin
 
-        class FacetedRelatable(FacetedMixin, RelatableMixin):
+        class FacetedRelatableStub(FacetedMixin, RelatableMixin):
             def __init__(self):
                 FacetedMixin.__init__(self)
                 RelatableMixin.__init__(self)
 
-        child = FacetedRelatable()
+        child = FacetedRelatableStub()
         self.assertEqual(list(FacetManager(child).iterFacets()), [])
         links = f(parent=parent, child=child)
         self.assertEqual(len(links), 2)
@@ -229,12 +229,12 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         from schooltool.facet import FacetedMixin
         from schooltool.relationship import RelatableMixin
 
-        class FacetedRelatable(FacetedMixin, RelatableMixin):
+        class FacetedRelatableStub(FacetedMixin, RelatableMixin):
             def __init__(self):
                 FacetedMixin.__init__(self)
                 RelatableMixin.__init__(self)
 
-        child = FacetedRelatable()
+        child = FacetedRelatableStub()
         facet = FacetStub()
         parent = Persistent()
         link = LinkStub(child)
@@ -276,12 +276,12 @@ class TestFacetDeactivation(unittest.TestCase, EqualsSortedMixin):
         from schooltool.facet import FacetedMixin
         from schooltool.relationship import RelatableMixin
 
-        class FacetedRelatable(FacetedMixin, RelatableMixin):
+        class FacetedRelatableStub(FacetedMixin, RelatableMixin):
             def __init__(self):
                 FacetedMixin.__init__(self)
                 RelatableMixin.__init__(self)
 
-        target = FacetedRelatable()
+        target = FacetedRelatableStub()
         facet = FacetStub()
         another_facet = FacetStub()
         link = LinkStub(target)
@@ -311,7 +311,7 @@ class TestFacetDeactivation(unittest.TestCase, EqualsSortedMixin):
 
         # Now, check that a link that has no facets will not be replaced
         # by a placeholder. After all, there's just no need for it.
-        target = FacetedRelatable()
+        target = FacetedRelatableStub()
         link3 = LinkStub(target, URIDummy2)
         facetDeactivator(link3)
         linkset = target.__links__

@@ -527,6 +527,35 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
         self.assertEqualsSorted(list(rvm.getValencies()),
                                 [(URIMembership, URIMember)])
 
+    def test_getValencies_conflict(self):
+        from schooltool.facet import FacetMixin, FacetedMixin, membersGetFacet
+        from schooltool.relationship import RelationshipValenciesMixin
+        from schooltool.component import FacetManager
+
+        class FooFacet(FacetMixin):
+            pass
+
+        class FooGroupFacet(FacetMixin, RelationshipValenciesMixin):
+            membersGetFacet(FooFacet)
+
+        class BarFacet(FacetMixin):
+            pass
+
+        class BarGroupFacet(FacetMixin, RelationshipValenciesMixin):
+            membersGetFacet(BarFacet)
+
+        class FacetedRelatableStub(FacetedMixin, RelationshipValenciesMixin):
+            def __init__(self):
+                FacetedMixin.__init__(self)
+                RelationshipValenciesMixin.__init__(self)
+
+        obj = FacetedRelatableStub()
+        fm = FacetManager(obj)
+        fm.setFacet(FooGroupFacet())
+        obj.getValencies()
+        fm.setFacet(BarGroupFacet())
+        self.assertRaises(TypeError, obj.getValencies)
+
     def test__valency2invocation(self):
         from schooltool.relationship import RelationshipValenciesMixin
         from schooltool.uris import URIMembership, URIMember, URIGroup

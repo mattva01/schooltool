@@ -22,6 +22,7 @@ The schooltool relationships.
 $Id$
 """
 
+import sets
 from persistence import Persistent
 from zope.interface import implements, classProvides, moduleProvides
 from zope.interface import directlyProvides
@@ -374,10 +375,18 @@ class RelationshipValenciesMixin(RelatableMixin):
         for valency in valencies:
             result.update(self._valency2invocation(valency))
         if IFaceted.isImplementedBy(self):
+            all_facet_valencies = sets.Set()
+            conflict = sets.Set()
             for facet in component.FacetManager(self).iterFacets():
                 if (IRelationshipValencies.isImplementedBy(facet)
                     and facet.active):
-                    result.update(facet.getValencies())
+                    valencies = facet.getValencies()
+                    facet_valencies = sets.Set(valencies.keys())
+                    conflict |= all_facet_valencies & facet_valencies
+                    all_facet_valencies |= facet_valencies
+                    result.update(valencies)
+            if conflict:
+                raise TypeError("Conflicting facet valencies: %r" % conflict)
         return result
 
 
