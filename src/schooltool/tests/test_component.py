@@ -185,6 +185,8 @@ class TestFacetManager(unittest.TestCase, EqualsSortedMixin):
         self.assert_(self.facet in self.ob.__facets__)
         fm.removeFacet(self.facet)
         self.assert_(self.facet not in self.ob.__facets__)
+        self.assert_(not self.facet.active)
+        self.assert_(self.facet.__parent__ is None)
 
         owner = object()
 

@@ -134,6 +134,8 @@ class FacetManager:
         """Set a facet on a faceted object."""
         ob = self.__parent__
         ob.__facets__.remove(facet)  # This leaves facet.__name__ intact
+        facet.active = False
+        facet.__parent__ = None
 
     def iterFacets(self):
         """Returns an iterator all facets of an object."""
