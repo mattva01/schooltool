@@ -460,7 +460,7 @@
               recurrence location recurrence_type interval
               range until count monthly exceptions weekdays"
       class=".cal.CalendarEventEditView"
-      permission="zope.ManageContent"
+      permission="schoolbell.modifyEvent"
       template="templates/event_add.pt">
 
     <widget field="exceptions" width="20" height="5" />
