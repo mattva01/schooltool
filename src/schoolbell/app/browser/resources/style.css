@@ -769,3 +769,35 @@ body#path-login form.standalone {
 #portlet-calendar-overlay input {
     margin-left: 0.5em;
 }
+
+/** Specific Page Styling **/
+
+.person-info {
+    /* XXX: We want person-info to expand to fit person-photo.. by default the
+    * float on person-photo causes person-info to ignore it and only expand to
+    * contain whatever other contents there are, but for some reason adding
+    * 'overflow: auto' or 'overflow: hidden' causes person-info to expand to
+    * the height of person-photo.  This is what we want, but I have no idea why
+    * auto/hidden would cause this. 
+    */ 
+    overflow: auto;
+    width: 45%;
+}
+
+.person-info .person-photo {
+    float: left;
+    margin: 0.5em;
+    background: #d6d6d6;
+    padding: 2px;
+    border: 1px #999 solid;
+}
+
+.person-info .person-details {
+    margin: 0.5em;
+    padding: 0.5em;
+    float: left;
+}
+
+.person-groups {
+    margin: 0.5em 0;
+}
