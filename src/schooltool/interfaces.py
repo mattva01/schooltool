@@ -800,6 +800,7 @@ class INotedRemovedEvent(IRelationshipRemovedEvent, INotedEvent):
     """Event that gets sent out after a note has been removed from an object
     """
 
+
 class IGuardianEvent(IRelationshipEvent):
     """Base interface for noted events.
 
@@ -2265,14 +2266,6 @@ class IDynamicFacetSchemaService(IDynamicSchemaService):
 
 
 class IDynamicFacet(IDynamicSchema, IFacet):
-    """Dynamic schema for generating custom facets"""
-
-
-class IDynamicRelationshipSchemaService(IDynamicSchemaService):
-    """Dynamic service for Facets"""
-
-
-class IDynamicRelationship(IDynamicSchema, IRelationshipSchema):
     """Dynamic schema for generating custom facets"""
 
 
