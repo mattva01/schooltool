@@ -1,30 +1,9 @@
-<!-- <html metal:use-macro="view/macros/calendarpage" i18n:domain="schooltool"> -->
-<tal:defs define="status view/update" />
-<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
-<head>
-  <title metal:fill-slot="title" i18n:translate="">Calendar</title>
-</head>
-<body>
-  <h1 metal:fill-slot="h1" i18n:translate="">
-    Calendar for <span tal:replace="context/__parent__/title"
-    i18n:name="title" />
-  </h1>
-
-  <!--
-  <metal:block fill-slot="column-left-extra">
-    <metal:macro use-macro="view/macros/common-calendar-portlets"/>
-  </metal:block>
-  -->
-
-<metal:block metal:fill-slot="body">
-
-  <h2 class="calendar-view-title" tal:content="view/title" />
-
-  <div metal:use-macro="view/@@standard_macros/calendar-navigation" />
-
-      <table id="calendar-view-month" cellpadding="0" cellspacing="0"
-        tal:define="weeks view/getCurrentMonth">
-        <tr>
+<tal:defs define="status view/update"/>
+<html metal:use-macro="view/@@standard_macros/calendar-page" i18n:domain="schooltool">
+  <metal:block metal:fill-slot="body">
+    <table id="calendar-view-month" cellpadding="0" cellspacing="0"
+           tal:define="weeks view/getCurrentMonth">
+      <tr>
           <th>&nbsp;</th>
           <th class="weekday"
               tal:repeat="weekday python:weeks[0]"
@@ -33,8 +12,7 @@
         <tr tal:repeat="week weeks">
           <td class="weekno" width="30">
             <a tal:content="python:week[0].date.isocalendar()[1]"
-                tal:attributes="href python:view.calURL('weekly', 
-                                                        week[0].date)" />
+                tal:attributes="href python:view.calURL('weekly', week[0].date)"/>
           </td>
           <tal:block tal:repeat="day week">
             <td class="day" width="70" valign="top"
@@ -45,14 +23,12 @@
                 <tal:loop repeat="event day/events">
                   <span tal:content="structure python:view.eventShort(event)"
                       tal:attributes="class python:view.eventClass(event);
-                      style python:'background: %s;;' % view.eventColors(event)[0]" />
+                      style python:'background: %s;;' % view.eventColors(event)[0]"/>
                 </tal:loop>
               </a>
             </td>
           </tal:block>
         </tr>
-      </table>
-
-</metal:block>
-</body>
+    </table>
+  </metal:block>
 </html>

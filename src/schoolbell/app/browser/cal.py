@@ -452,6 +452,9 @@ class YearlyCalendarView(CalendarViewBase):
     current_title = _("Current year")
     prev_title = _("Previous year")
 
+    def title(self):
+        return self.cursor.strftime('%Y')
+
     def prev(self):
         """Return the link for the previous year."""
         return self.calURL('yearly', date(self.cursor.year - 1, 1, 1))

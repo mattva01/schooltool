@@ -383,6 +383,11 @@
   <resource name="current.png" file="resources/current.png" />
   <resource name="next.png" file="resources/next.png" />
 
+  <resource name="day.png" file="resources/day.png" />
+  <resource name="week.png" file="resources/week.png" />
+  <resource name="month.png" file="resources/month.png" />
+  <resource name="year.png" file="resources/year.png" />
+
 <!-- Navigation -->
 
   <page

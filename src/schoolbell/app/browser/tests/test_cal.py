@@ -1424,6 +1424,12 @@ def doctest_YearlyCalendarView():
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = YearlyCalendarView(calendar, TestRequest())
 
+    title() forms a nice title for the calendar:
+
+        >>> view.cursor = date(2005, 2, 3)
+        >>> view.title()
+        '2005'
+
     monthTitle() returns names of months:
 
         >>> view.monthTitle(date(2005, 2, 3))
