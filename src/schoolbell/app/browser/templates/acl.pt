@@ -1,0 +1,51 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Access control</title>
+</head>
+<body>
+<h1 metal:fill-slot="content-header">Access control</h1>
+<metal:block metal:fill-slot="body">
+
+<form tal:attributes="action request/URL" method="POST" class="standalone">
+  <fieldset>
+    <legend i18n:translate="">Permissions</legend>
+    <table class="acl">
+      <tr>
+         <th i18n:translate="">User/Group</th>
+         <th tal:repeat="perm view/permissions"
+             tal:content="perm" />
+      </tr>
+      <tr tal:repeat="prin view/getGroups">
+         <th tal:content="prin/title">Group foo</th>
+         <td tal:repeat="perm view/permissions">
+            <input
+                type="checkbox"
+                tal:attributes="name prin/id;
+                                value perm;
+                                checked python: perm in prin['perms']" />
+         </td>
+      </tr>
+      <tr tal:repeat="prin view/getPersons">
+         <th tal:content="prin/title">User foo</th>
+         <td tal:repeat="perm view/permissions">
+            <input
+                type="checkbox"
+                tal:attributes="name prin/id;
+                                value perm;
+                                checked python: perm in prin['perms']" />
+         </td>
+      </tr>
+    </table>
+
+  </fieldset>
+  <div class="controls">
+    <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Set"
+           i18n:attributes="value" />
+    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+           i18n:attributes="value cancel-button" />
+  </div>
+</form>
+
+</metal:block>
+</body>
+</html>

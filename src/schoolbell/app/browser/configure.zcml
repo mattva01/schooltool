@@ -47,18 +47,31 @@
       />
 
   <page
+      for="*"
       name="login.html"
-      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      layer=".skin.ISchoolBellLayer"
       template="templates/login.pt"
       class=".app.LoginView"
       permission="zope.Public"
       />
 
   <page
+      for="*"
       name="logout.html"
-      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      layer=".skin.ISchoolBellLayer"
       class=".app.LogoutView"
       permission="zope.Public"
+      />
+
+  <page
+      for="zope.app.annotation.interfaces.IAnnotatable"
+      name="acl.html"
+      layer=".skin.ISchoolBellLayer"
+      class=".app.ACLView"
+      template="templates/acl.pt"
+      permission="zope.Security"
+      title="Set up access"
+      menu="schoolbell_actions"
       />
 
   <!-- Make index.html the default ZMI view for ISchoolBellApplication -->
@@ -433,6 +446,7 @@
   <page
       for="*"
       name="schoolbell_navigation"
+      layer=".skin.ISchoolBellLayer"
       template="templates/navigation.pt"
       class=".NavigationView"
       permission="zope.View"

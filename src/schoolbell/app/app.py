@@ -53,7 +53,7 @@ class SchoolBellApplication(Persistent, SampleContainer,
     TODO: or it can be used as the application root object.
     """
 
-    implements(ISchoolBellApplication)
+    implements(ISchoolBellApplication, IAttributeAnnotatable)
 
     def __init__(self):
         SampleContainer.__init__(self)

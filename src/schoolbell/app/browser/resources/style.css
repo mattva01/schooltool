@@ -801,3 +801,21 @@ body#path-login form.standalone {
 .person-groups {
     margin: 0.5em 0;
 }
+
+table.acl {
+    background: #eae8e3;
+    border: 1px #bab5ab solid;
+    border-collapse: collapse;
+}
+
+table.acl td, table.acl th {
+    border: 1px #bab5ab solid;
+}
+
+table.acl td {
+    text-align: center;
+}
+
+table.acl th {
+    text-align: left;
+}

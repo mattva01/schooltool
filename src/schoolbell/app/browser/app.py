@@ -35,6 +35,8 @@ from zope.publisher.interfaces import NotFound
 from zope.app.publisher.browser import BrowserView
 from zope.security.proxy import removeSecurityProxy
 from zope.app.security.interfaces import IAuthentication
+from zope.app.security.settings import Allow
+from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import IGroupMember, IPerson, IResource
@@ -42,7 +44,7 @@ from schoolbell.app.interfaces import IPersonContainer, IPersonContained
 from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
 from schoolbell.app.interfaces import ISchoolBellApplication
-from schoolbell.app.app import Person
+from schoolbell.app.app import Person, getSchoolBellApplication
 
 
 class ContainerView(BrowserView):
@@ -450,3 +452,58 @@ class LogoutView(BrowserView):
         auth.clearCredentials(self.request)
         url = zapi.absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
+
+
+class ACLView(BrowserView):
+    """A view for editing SchoolBell-relevant local grants"""
+
+    permissions = 'zope.View', 'zope.ManageContent', 'zope.ManageSite'
+
+    def getPersons(self):
+        app = getSchoolBellApplication(self.context)
+        map = IPrincipalPermissionManager(self.context)
+        auth = zapi.getUtility(IAuthentication)
+        result = []
+        for person in app['persons'].values():
+            pid = auth.person_prefix + person.__name__
+            result.append({'title': person.title,
+                           'id': pid,
+                           'perms': [perm
+                                     for perm, setting
+                                     in map.getPermissionsForPrincipal(pid)
+                                     if setting == Allow]})
+        return result
+
+    def getGroups(self):
+        app = getSchoolBellApplication(self.context)
+        auth = zapi.getUtility(IAuthentication)
+        map = IPrincipalPermissionManager(self.context)
+        result = []
+        for group in app['groups'].values():
+            pid = auth.group_prefix + group.__name__
+            result.append({'title': group.title,
+                           'id': pid,
+                           'perms': [perm
+                                     for perm, setting
+                                     in map.getPermissionsForPrincipal(pid)
+                                     if setting == Allow]})
+        return result
+
+    def update(self):
+        if 'UPDATE_SUBMIT' in self.request:
+            map = IPrincipalPermissionManager(self.context)
+            auth = zapi.getUtility(IAuthentication)
+            for info in self.getPersons() + self.getGroups():
+                principalid = info['id']
+                for perm in self.permissions:
+                    if (principalid in self.request and
+                        (perm in self.request[principalid] or
+                         perm == self.request[principalid])):
+                        map.grantPermissionToPrincipal(perm, principalid)
+                    else:
+                        map.unsetPermissionForPrincipal(perm, principalid)
+
+
+    def __call__(self):
+        self.update()
+        return self.index()

@@ -74,14 +74,13 @@ it.
     </ul>
     </div>
 
-This view will break, though, if the context is not a descendant of
-ISchoolBellApplication:
+This view is only available in the SchoolBell skin:
 
     >>> print http(r"""
     ... GET /schoolbell_navigation HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
-    HTTP/1.1 500 Internal Server Error
+    HTTP/1.1 404 Not Found
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>

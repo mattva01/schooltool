@@ -23,12 +23,14 @@ $Id$
 """
 
 import unittest
+from pprint import pprint
 from zope.testing import doctest
 from zope.app import zapi
-from zope.app.tests import setup, ztapi
+from zope.app.testing import setup, ztapi
 from zope.interface import directlyProvides
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.publisher.browser import TestRequest
+from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 
 
 def doctest_PersonView():
@@ -752,7 +754,6 @@ def doctest_LoginView():
     We create our view:
 
         >>> from schoolbell.app.browser.app import LoginView
-        >>> from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
         >>> request = TestRequest()
         >>> class StubPrincipal:
         ...     title = "Some user"
@@ -898,6 +899,222 @@ def doctest_LogoutView():
 
     """
 
+def doctest_ACLView():
+    r"""
+    Set up for local grants:
+
+        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.app.securitypolicy.interfaces import \
+        ...                         IPrincipalPermissionManager
+        >>> from zope.app.securitypolicy.principalpermission import \
+        ...                         AnnotationPrincipalPermissionManager
+        >>> setup.setUpAnnotations()
+        >>> setup.setUpTraversal()
+        >>> ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
+        ...                      AnnotationPrincipalPermissionManager)
+
+    Suppose we have a SchoolBell app:
+
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> persons = app['persons']
+        >>> from schoolbell.app.security import setUpLocalAuth
+        >>> setUpLocalAuth(app)
+        >>> from zope.app.component.hooks import setSite
+        >>> setSite(app)
+
+    We have a couple of persons and groups:
+
+        >>> from schoolbell.app.app import Person, Group
+        >>> app['persons']['1'] = Person('albert', title='Albert')
+        >>> app['persons']['2'] = Person('marius', title='Marius')
+        >>> app['groups']['3'] = Group('office')
+        >>> app['groups']['4'] = Group('mgmt')
+
+    We create an ACLView:
+
+        >>> from schoolbell.app.browser.app import ACLView
+        >>> View = SimpleViewClass("../templates/acl.pt", bases=(ACLView, ))
+        >>> request = TestRequest()
+        >>> class StubPrincipal:
+        ...     title = "Some user"
+        ...
+        >>> request.setPrincipal(StubPrincipal())
+        >>> view = View(app, request)
+
+    The view has methods to list persons and groups:
+
+        >>> pprint(view.getPersons())
+        [{'perms': [], 'id': u'sb.person.albert', 'title': 'Albert'},
+         {'perms': [], 'id': u'sb.person.marius', 'title': 'Marius'}]
+        >>> pprint(view.getGroups())
+        [{'perms': [], 'id': u'sb.group.3', 'title': 'office'},
+         {'perms': [], 'id': u'sb.group.4', 'title': 'mgmt'}]
+
+    Also it knows a list of permissions to display:
+
+        >>> view.permissions
+        ('zope.View', 'zope.ManageContent', 'zope.ManageSite')
+
+    The view displays a matrix with groups and persons as rows and
+    permisssions as columns:
+
+        >>> print view()
+        <BLANKLINE>
+        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        <html>
+        ...
+        <form method="POST" class="standalone"
+              action="http://127.0.0.1">
+          <fieldset>
+            <legend>Permissions</legend>
+            <table class="acl">
+              <tr>
+                 <th>User/Group</th>
+                 <th>zope.View</th>
+                 <th>zope.ManageContent</th>
+                 <th>zope.ManageSite</th>
+              </tr>
+              <tr>
+                 <th>office</th>
+                 <td>
+                    <input type="checkbox" name="sb.group.3"
+                           value="zope.View" />
+                 </td>
+                 <td>
+                    <input type="checkbox" name="sb.group.3"
+                           value="zope.ManageContent" />
+                 </td>
+                 <td>
+                    <input type="checkbox" name="sb.group.3"
+                           value="zope.ManageSite" />
+                 </td>
+              </tr>
+              ...
+              <tr>
+                 <th>Albert</th>
+                 <td>
+                    <input type="checkbox" name="sb.person.albert"
+                           value="zope.View" />
+                 </td>
+                 <td>
+                    <input type="checkbox" name="sb.person.albert"
+                           value="zope.ManageContent" />
+                 </td>
+                 <td>
+                    <input type="checkbox" name="sb.person.albert"
+                           value="zope.ManageSite" />
+                 </td>
+              </tr>
+        ...
+
+    If we submit a form with a checkbox marked, a user gets a grant:
+
+        >>> request = TestRequest(form={
+        ...     'sb.person.albert': ['zope.ManageSite',
+        ...                          'zope.ManageContent'],
+        ...     'sb.person.marius': 'zope.ManageContent',
+        ...     'sb.group.3': 'zope.ManageSite',
+        ...     'UPDATE_SUBMIT': 'Set'})
+        >>> view = View(app, request)
+        >>> result = view.update()
+
+    Now the users should have permissions on app:
+
+        >>> grants = IPrincipalPermissionManager(app)
+        >>> grants.getPermissionsForPrincipal('sb.person.marius')
+        [('zope.ManageContent', PermissionSetting: Allow)]
+        >>> pprint(grants.getPermissionsForPrincipal('sb.person.albert'))
+        [('zope.ManageContent', PermissionSetting: Allow),
+         ('zope.ManageSite', PermissionSetting: Allow)]
+        >>> grants.getPermissionsForPrincipal('sb.group.3')
+        [('zope.ManageSite', PermissionSetting: Allow)]
+
+        >>> pprint(view.getPersons())
+        [{'id': u'sb.person.albert',
+          'perms': ['zope.ManageContent', 'zope.ManageSite'],
+          'title': 'Albert'},
+         {'id': u'sb.person.marius',
+          'perms': ['zope.ManageContent'],
+          'title': 'Marius'}]
+        >>> pprint(view.getGroups())
+        [{'perms': ['zope.ManageSite'], 'id': u'sb.group.3', 'title': 'office'},
+         {'perms': [], 'id': u'sb.group.4', 'title': 'mgmt'}]
+
+    If we render the form, we see the appropriate checkboxes checked:
+
+        >>> request.setPrincipal(StubPrincipal())
+        >>> print view()
+        <BLANKLINE>
+        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        <html>
+        ...
+              <tr>
+                 <th>office</th>
+                 <td>
+                    <input type="checkbox" name="sb.group.3"
+                           value="zope.View" />
+                 </td>
+                 <td>
+                    <input type="checkbox" name="sb.group.3"
+                           value="zope.ManageContent" />
+                 </td>
+                 <td>
+                    <input type="checkbox" checked="checked"
+                           name="sb.group.3" value="zope.ManageSite" />
+                 </td>
+              </tr>
+        ...
+              <tr>
+                 <th>Albert</th>
+                 <td>
+                    <input type="checkbox" name="sb.person.albert"
+                           value="zope.View" />
+                 </td>
+                 <td>
+                    <input type="checkbox" checked="checked"
+                           name="sb.person.albert"
+                           value="zope.ManageContent" />
+                 </td>
+                 <td>
+                    <input type="checkbox" checked="checked"
+                           name="sb.person.albert"
+                           value="zope.ManageSite" />
+                 </td>
+              </tr>
+        ...
+
+
+    If we submit a form without a submit button, nothing is changed:
+
+        >>> request = TestRequest(form={
+        ...     'sb.group.4': 'zope.ManageSite',})
+        >>> request.setPrincipal(StubPrincipal())
+        >>> view = View(app, request)
+        >>> result = view.update()
+
+        >>> grants.getPermissionsForPrincipal('sb.person.marius')
+        [('zope.ManageContent', PermissionSetting: Allow)]
+
+    However, if submit was clicked, unchecked permissions are revoked,
+    and new ones granted:
+
+        >>> request = TestRequest(form={
+        ...     'sb.group.4': 'zope.ManageSite',
+        ...     'UPDATE_SUBMIT': 'Set'})
+        >>> request.setPrincipal(StubPrincipal())
+        >>> view = View(app, request)
+        >>> result = view.update()
+
+        >>> grants.getPermissionsForPrincipal('sb.person.marius')
+        []
+        >>> grants.getPermissionsForPrincipal('sb.group.4')
+        [('zope.ManageSite', PermissionSetting: Allow)]
+
+    """
 
 def setUpSession():
     """Set up the session machinery."""
@@ -931,7 +1148,7 @@ def setUp(test):
     from zope.publisher.interfaces.browser import IBrowserRequest
     from zope.schema.interfaces import IPassword, ITextLine, IText, IBytes, IBool, ISet
     from zope.schema.interfaces import IDate, IInt, IChoice, IIterableVocabulary
-    setup.placelessSetUp()
+    setup.placefulSetUp()
     setup.setUpAnnotations()
     setup.setUpTraversal()
     # relationships
@@ -1011,7 +1228,7 @@ def setUp(test):
 
 def tearDown(test):
     """Tear down the test fixture for doctests in this module."""
-    setup.placelessTearDown()
+    setup.placefulTearDown()
 
 
 def test_suite():
