@@ -30,6 +30,7 @@ from pprint import pformat
 
 __metaclass__ = type
 
+
 class HTTPStub:
 
     def __init__(self, host, port=8080):
@@ -58,6 +59,7 @@ class HTTPStub:
 
     def send(self, s):
         self.sent_data += s
+
 
 class ResponseStub:
 
@@ -179,7 +181,6 @@ class TestCSVImporter(unittest.TestCase):
         self.assertEqual(requests, expected, "\n" +
                          diff(pformat(expected), pformat(requests)))
 
-
     def test_getPersonName(self):
         from schooltool.csvclient import CSVImporter
 
@@ -225,7 +226,6 @@ class TestCSVImporter(unittest.TestCase):
 
         self.assertEqual(results, expected, diff(pformat(results),
                                                  pformat(expected)))
-
 
     def test_run(self):
         from schooltool.csvclient import CSVImporter

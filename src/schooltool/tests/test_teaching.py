@@ -45,6 +45,7 @@ class Relatable(LocatableEventTargetMixin, RelatableMixin):
 
 class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
                    unittest.TestCase):
+
     def setUp(self):
         self.setUpEventService()
         self.setUpRegistries()

@@ -31,8 +31,10 @@ from schooltool.interfaces import IApplicationObjectContainer
 from schooltool.interfaces import ILocation
 from schooltool.tests.utils import EqualsSortedMixin
 
+
 class P(Persistent):
     pass
+
 
 class Location(Persistent):
 
@@ -43,6 +45,7 @@ class Location(Persistent):
         self.__parent__ = None
         self.__name__ = None
         self.optional = optional
+
 
 class TestApplication(unittest.TestCase, EqualsSortedMixin):
 
@@ -103,11 +106,14 @@ class TestApplicationObjectContainer(unittest.TestCase):
         from schooltool.app import ApplicationObjectContainer
         factory = Location
         a = ApplicationObjectContainer(factory)
+
         def case1():
             return None, a.new(), None
+
         def case2():
             name = 'whatever something'
             return name, a.new(name), None
+
         def case3():
             name = 'whatever something 2'
             return name, a.new(name, optional='yes'), 'yes'

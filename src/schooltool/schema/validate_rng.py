@@ -35,6 +35,7 @@ $Id$
 import libxml2
 import sys
 
+
 def validate_against_schema(schema, xml):
     rngp = libxml2.relaxNGNewMemParserCtxt(schema, len(schema))
     try:
@@ -50,6 +51,7 @@ def validate_against_schema(schema, xml):
         # what does this do?
         libxml2.relaxNGCleanupTypes()
 
+
 def load_schema(schema):
     rngp = libxml2.relaxNGNewMemParserCtxt(schema, len(schema))
     try:
@@ -59,16 +61,19 @@ def load_schema(schema):
         # what does this do?
         libxml2.relaxNGCleanupTypes()
 
+
 def on_error_callback(ctx, str):
     print "error: %s:%s" % (ctx, str)
 
+
 def print_usage():
-    print >>sys.stderr, 'usage: validate_rng schema [xmlfile]'
+    print >> sys.stderr, 'usage: validate_rng schema [xmlfile]'
+
 
 def main():
     if len(sys.argv) == 1:
         print_usage()
-        return -1
+        return 1
     argiter = iter(sys.argv)
     pyfile = argiter.next()
     xmlfile = None
@@ -80,7 +85,7 @@ def main():
         pass
     else:
         print_usage()
-        return -1
+        return 1
 
     libxml2.registerErrorHandler(on_error_callback, "-->")
     schema = file(schemafile).read()
@@ -91,14 +96,15 @@ def main():
             validates_ok = validate_against_schema(schema, xml)
             if not validates_ok:
                 print "Invalid"
-                return -1
+                return 1
         else:
             load_schema(schema)
     except libxml2.parserError, e:
-        print >>sys.stderr, e.msg
-        return -1
+        print >> sys.stderr, e.msg
+        return 1
     print "OK"
     return 0
+
 
 if __name__ == '__main__':
     sys.exit(main())

@@ -119,7 +119,7 @@ class TestEventSystem(RegistriesSetupMixin, unittest.TestCase):
         root.eventTable.append(RouteToMembersAction(IStudentEvent))
 
         students = Group(title="students")
-        students.eventTable.append(RouteToRelationshipsAction(URIGroup, IEvent))
+        students.eventTable.append(RouteToRelationshipsAction(URIGroup))
         Membership(group=root, member=students)
 
         student1 = Person(title="Fred")
@@ -129,8 +129,7 @@ class TestEventSystem(RegistriesSetupMixin, unittest.TestCase):
         FacetManager(student1).setFacet(event_log_facet)
 
         misc_group = Group(title="misc")
-        misc_group.eventTable.append(
-            RouteToRelationshipsAction(URIMember, IEvent))
+        misc_group.eventTable.append(RouteToRelationshipsAction(URIMember))
         Membership(group=root, member=misc_group)
 
         another_listener = EventCatcherFactory()

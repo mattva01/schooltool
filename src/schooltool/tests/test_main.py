@@ -36,6 +36,7 @@ __metaclass__ = type
 
 moduleProvides(IModuleSetup)
 
+
 def setUp():
     """Empty setUp. This is replaced by a unit test below."""
 
@@ -84,6 +85,7 @@ class ConnectionStub:
     def close(self):
         self.closed = True
 
+
 class DbStub:
     def __init__(self):
         self._connections = []
@@ -93,10 +95,12 @@ class DbStub:
         self._connections.append(conn)
         return conn
 
+
 class SiteStub:
     def __init__(self):
         self.conflictRetries = 5
         self.db = DbStub()
+
 
 class ChannelStub:
     site = SiteStub()

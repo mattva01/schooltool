@@ -36,6 +36,7 @@ class TargetStub:
     def notify(self, event):
         self.events += (event, )
 
+
 class TestEventMixin(unittest.TestCase):
 
     def setUp(self):
@@ -82,8 +83,10 @@ class TestEventMixin(unittest.TestCase):
 class IEventA(IEvent):
     pass
 
+
 class IEventB(IEvent):
     pass
+
 
 class EventAStub:
     implements(IEventA)
@@ -94,6 +97,7 @@ class EventAStub:
     def dispatch(self, target):
         self.dispatched_to.append(target)
 
+
 class EventActionStub:
     def __init__(self, evtype):
         self.eventType = evtype
@@ -101,6 +105,7 @@ class EventActionStub:
 
     def handle(self, event, target):
         self.calls.append((event, target))
+
 
 class TestEventTargetMixin(unittest.TestCase):
 

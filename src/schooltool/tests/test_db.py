@@ -566,7 +566,6 @@ class TestPersistentKeysSetWithNames(unittest.TestCase, EqualsSortedMixin):
         self.assert_(b not in p)
 
 
-
 class TestPersistentPairKeysDictWithNames(unittest.TestCase,
                                           EqualsSortedMixin):
 

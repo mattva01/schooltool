@@ -8,6 +8,7 @@ from schooltool.interfaces import IGroupMember, IFaceted
 class BasicRelatable(Relatable, RelatableMixin):
     pass
 
+
 class MemberStub(LocatableEventTargetMixin, BasicRelatable):
     implements(IGroupMember, IFaceted)
 

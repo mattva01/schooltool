@@ -24,6 +24,7 @@ import difflib
 import cgi
 import libxml2
 
+
 def dedent(text):
     """Remove leading indentation from tripple quoted strings.
 
@@ -130,6 +131,7 @@ def normalize_xml(xml, recursively_sort=()):
     """
 
     class Document:
+
         def __init__(self):
             self.children = []
             self.sort_recursively = False
@@ -141,6 +143,7 @@ def normalize_xml(xml, recursively_sort=()):
             return ''.join(result)
 
     class Element:
+
         def __init__(self, parent, tag, attrlist, sort=False,
                      sort_recursively=False):
             self.parent = parent
@@ -176,6 +179,7 @@ def normalize_xml(xml, recursively_sort=()):
             self.key = self.render(0)
 
     class Text:
+
         def __init__(self, data):
             self.data = data
             self.key = None
@@ -190,6 +194,7 @@ def normalize_xml(xml, recursively_sort=()):
                 return ''
 
     class Handler:
+
         def __init__(self):
             self.level = 0
             self.result = []

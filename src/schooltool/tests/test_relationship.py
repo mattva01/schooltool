@@ -34,23 +34,30 @@ from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin, EqualsSortedMixin
 from schooltool.tests.utils import RegistriesSetupMixin
 
+
 class URITutor(ISpecificURI):
     """http://schooltool.org/ns/tutor"""
+
 
 class URIRegClass(ISpecificURI):
     """http://schooltool.org/ns/regclass"""
 
+
 class URIClassTutor(ISpecificURI):
     """http://schooltool.org/ns/classtutor"""
+
 
 class URICommand(ISpecificURI):
     """http://army.gov/ns/command"""
 
+
 class URISuperior(ISpecificURI):
     """http://army.gov/ns/superior"""
 
+
 class URIReport(ISpecificURI):
     """http://army.gov/ns/report"""
+
 
 class Relatable(LocatableEventTargetMixin):
     implements(IRelatable)
@@ -58,6 +65,7 @@ class Relatable(LocatableEventTargetMixin):
     def __init__(self, parent=None, name='does not matter'):
         LocatableEventTargetMixin.__init__(self, parent, name)
         self.__links__ = Set()
+
 
 class LinkStub(Persistent):
     implements(ILink)
@@ -71,6 +79,7 @@ class LinkStub(Persistent):
 
     def traverse(self):
         return self._target
+
 
 class TestRelationship(EventServiceTestMixin, unittest.TestCase):
     """Conceptual relationships are really represented by three
@@ -119,6 +128,7 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
             implements(IUnlinkHook)
             notify_link = None
             callable_link = None
+
             def notifyUnlinked(self, link):
                 self.notify_link = link
 
@@ -428,6 +438,7 @@ class TestLinkSet(unittest.TestCase):
 
 
 class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
+
     def test(self):
         from schooltool.relationship import RelationshipValenciesMixin
         from schooltool.interfaces import IRelationshipValencies
@@ -520,10 +531,12 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
         from schooltool.relationship import RelationshipValenciesMixin
         from schooltool.interfaces import URIMembership, URIMember, URIGroup
         from schooltool.relationship import Valency
+
         class SchemaStub:
             def __init__(self, type, **roles):
                 self.type = type
                 self.roles = roles
+
         schema = SchemaStub(URIMembership, member=URIMember, group=URIGroup)
         valency = Valency(schema, 'member')
         r = RelationshipValenciesMixin()

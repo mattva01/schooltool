@@ -32,8 +32,10 @@ from schooltool.relationship import RelatableMixin
 
 __metaclass__ = type
 
+
 class P(Persistent):
     pass
+
 
 class BasicRelatable(Relatable, RelatableMixin):
     pass

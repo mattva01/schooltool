@@ -174,6 +174,7 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         from schooltool.component import FacetManager
         from schooltool.facet import FacetedMixin
         from schooltool.relationship import RelatableMixin
+
         class FacetedRelatable(FacetedMixin, RelatableMixin):
             def __init__(self):
                 FacetedMixin.__init__(self)
@@ -212,6 +213,7 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         from schooltool.component import FacetManager
         from schooltool.facet import FacetedMixin
         from schooltool.relationship import RelatableMixin
+
         class FacetedRelatable(FacetedMixin, RelatableMixin):
             def __init__(self):
                 FacetedMixin.__init__(self)
@@ -257,6 +259,7 @@ class TestFacetDeactivation(unittest.TestCase, EqualsSortedMixin):
 
         from schooltool.facet import FacetedMixin
         from schooltool.relationship import RelatableMixin
+
         class FacetedRelatable(FacetedMixin, RelatableMixin):
             def __init__(self):
                 FacetedMixin.__init__(self)

@@ -48,8 +48,10 @@ class I1(Interface):
     def foo():
         pass
 
+
 class I2(Interface):
     pass
+
 
 class C1:
     implements(I1)
@@ -58,6 +60,7 @@ class C1:
 
     def foo(self):
         return "foo"
+
 
 class LocationStub:
     implements(ILocation)
@@ -69,11 +72,13 @@ class LocationStub:
     def __repr__(self):
         return "LocationStub(%r, %r)" % (self.__parent__, self.__name__)
 
+
 class MulticontainerStub(LocationStub):
     implements(IMultiContainer)
 
     def getRelativePath(self, obj):
         return 'magic/' + obj.__name__
+
 
 class TraversableStub:
     implements(ITraversable)
@@ -159,6 +164,7 @@ class TestCanonicalPath(unittest.TestCase):
 class TestFacetManager(unittest.TestCase, EqualsSortedMixin):
 
     def setUp(self):
+
         class Stub:
             implements(IFaceted)
             __facets__ = PersistentKeysSetWithNames()
@@ -297,6 +303,7 @@ class TestServiceAPI(unittest.TestCase):
         verifyObject(IServiceAPI, component)
 
     def setUpTree(self):
+
         class RootStub:
             implements(IServiceManager)
             eventService = object()
@@ -348,11 +355,13 @@ class TestSpecificURI(RegistriesSetupMixin, unittest.TestCase):
         self.assertRaises(TypeError, inspectSpecificURI, object())
         self.assertRaises(TypeError, inspectSpecificURI, I1)
         self.assertRaises(TypeError, inspectSpecificURI, ISpecificURI)
+
         class IURI(ISpecificURI):
             """http://example.com/foo
 
             Doc text
             """
+
         uri, doc = inspectSpecificURI(IURI)
         self.assertEqual(uri, "http://example.com/foo")
         self.assertEqual(uri, strURI(IURI))
@@ -400,7 +409,6 @@ class TestSpecificURI(RegistriesSetupMixin, unittest.TestCase):
         for string in bad:
             self.assert_(not isURI(string), string)
 
-
     def testURIRegistry(self):
         from schooltool.component import getURI, registerURI
         class IURI1(ISpecificURI): """http://example.com/foobar"""
@@ -440,14 +448,18 @@ class Relatable(LocatableEventTargetMixin):
         return [link for link in self.__links__
                      if link.role.extends(role, False)]
 
+
 class URISuperior(ISpecificURI):
     """http://army.gov/ns/superior"""
+
 
 class URICommand(ISpecificURI):
     """http://army.gov/ns/command"""
 
+
 class URIReport(ISpecificURI):
     """http://army.gov/ns/report"""
+
 
 class TestRelationships(EventServiceTestMixin, RegistriesSetupMixin,
                         unittest.TestCase):

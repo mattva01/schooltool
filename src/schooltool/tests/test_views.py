@@ -151,7 +151,6 @@ class RequestStub:
         self._hostname = 'localhost'
         self.accept = []
 
-
     def getRequestHostname(self):
         return self._hostname
 
@@ -228,7 +227,8 @@ class TestHelpers(unittest.TestCase):
             ("2005-12-23 11:22:33", dt(2005, 12, 23, 11, 22, 33)),
             ("2005-12-23T11:22:33", dt(2005, 12, 23, 11, 22, 33)),
             ("2005-12-23T11:22:33.4", dt(2005, 12, 23, 11, 22, 33, 400000)),
-            ("2005-12-23T11:22:33.456789", dt(2005, 12, 23, 11, 22, 33, 456789)),
+            ("2005-12-23T11:22:33.456789", dt(2005, 12, 23, 11, 22, 33,
+                                              456789)),
         )
         for s, d in valid_dates:
             result = parse_datetime(s)
@@ -804,7 +804,8 @@ class TestUtilityServiceView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertRaises(KeyError, view._traverse, 'moot', request)
 
 
-class TestUtilityView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
+class TestUtilityView(XMLCompareMixin, RegistriesSetupMixin,
+                      unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import UtilityView
@@ -920,12 +921,14 @@ class TestEventLogView(XMLCompareMixin, unittest.TestCase):
 
         class EventLogStub:
             received = []
+
             def getReceived(self):
                 return self.received
 
         class EventStub:
             def __str__(self):
                 return "Fake event"
+
             def __repr__(self):
                 return "EventStub()"
 
@@ -948,8 +951,10 @@ class TestEventLogView(XMLCompareMixin, unittest.TestCase):
 
         class EventLogStub:
             received = []
+
             def clear(self):
                 self.received = []
+
             def getReceived(self):
                 return self.received
 
@@ -1788,7 +1793,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
                       xlink:type="simple" xlink:title="group"
                       xlink:href="/groups/root"
                       datetime="2001-02-03 04:05:06">
-              <comment>XXX</comment>
+              <comment>A comment</comment>
               <person xlink:type="simple" xlink:href="/persons/a"
                       xlink:title="a" presence="present"/>
               <person xlink:type="simple" xlink:href="/persons/b"
@@ -1805,7 +1810,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
                       xlink:href="/groups/root"
                       datetime="2001-02-03 04:05:06">
               <reporter xlink:type="simple" xlink:href="/persons/a" />
-              <comment>XXX</comment>
+              <comment>A comment</comment>
               <person xlink:type="simple" xlink:href="/persons/a"
                       xlink:title="a" presence="present"/>
               <person xlink:type="simple"
@@ -1822,7 +1827,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
                       xlink:href="/groups/root"
                       datetime="2001-02-03 04:05:06">
               <reporter xlink:type="simple" xlink:href="/persons/a" />
-              <comment>XXX</comment>
+              <comment>A comment</comment>
               <person xlink:type="simple" xlink:href="/persons/a"
                       xlink:title="a"/>
               <person xlink:type="simple" xlink:href="/persons/b"
@@ -1839,7 +1844,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
                       xlink:href="/groups/root"
                       datetime="2001-02-03 04:05:06">
               <reporter xlink:type="simple" xlink:href="/persons/a" />
-              <comment>XXX</comment>
+              <comment>A comment</comment>
               <person xlink:type="simple" xlink:href="/persons/a"
                       xlink:title="a" presence="present"/>
               <person xlink:type="simple" xlink:href="/persons/b"
@@ -1858,7 +1863,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
                       xlink:href="/groups/root"
                       datetime="2001-02-03 04:05:06">
               <reporter xlink:type="simple" xlink:href="/persons/x" />
-              <comment>XXX</comment>
+              <comment>A comment</comment>
               <person xlink:type="simple" xlink:href="/persons/a"
                       xlink:title="a" presence="present"/>
               <person xlink:type="simple" xlink:href="/persons/b"
@@ -1875,7 +1880,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
                       xlink:href="/groups/root"
                       datetime="2001-02-03 04:05:06">
               <reporter xlink:type="simple" xlink:href="/persons/a" />
-              <comment>XXX</comment>
+              <comment>A comment</comment>
               <person xlink:type="simple" xlink:href="/persons/a"
                       xlink:title="a" presence="present"/>
               <person xlink:type="simple" xlink:href="/persons/a"
@@ -1894,7 +1899,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
                       xlink:href="/groups/root"
                       datetime="2001-02-03 04:05:06">
               <reporter xlink:type="simple" xlink:href="/persons/a" />
-              <comment>XXX</comment>
+              <comment>A comment</comment>
               <person xlink:type="simple" xlink:href="/persons/a"
                       xlink:title="a" presence="present"/>
               <person xlink:type="simple" xlink:href="/persons/b"
@@ -1913,7 +1918,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
                       xlink:href="/groups/root"
                       datetime="2001-02-03 04:05:06">
               <reporter xlink:type="simple" xlink:href="/persons/a" />
-              <comment>XXX</comment>
+              <comment>A comment</comment>
               <person xlink:type="simple" xlink:href="/persons/b"
                       xlink:title="b" presence="absent"/>
               <person xlink:type="simple" xlink:href="/persons/d"
@@ -1926,7 +1931,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
                       xlink:href="/groups/root"
                       datetime="2001-02-03 04:05:06">
               <reporter xlink:type="simple" xlink:href="/persons/a" />
-              <comment>XXX</comment>
+              <comment>A comment</comment>
               <person xlink:type="simple" xlink:href="/persons/a"
                       xlink:title="a" presence="present"/>
               <person xlink:type="simple" xlink:href="/persons/b"

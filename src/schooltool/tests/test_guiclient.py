@@ -488,7 +488,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               <items>
                 <item xlink:href="/persons/fred">Fred</item>
                 <item xlink:href="/persons/barney">Barney</item>
-                <item xlink:href="/persons/barney/facets">Barney's facets</item>
+                <item xlink:href="/persons/barney/facets">My facets</item>
                 <item xlink:href="http://example.com/buy/stuff">Click!</item>
                </items>
             </container>
@@ -524,7 +524,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               <items>
                 <item xlink:href="/persons/fred">Fred</item>
                 <item xlink:href="/persons/barney">Barney</item>
-                <item xlink:href="/persons/barney/facets">Barney's facets</item>
+                <item xlink:href="/persons/barney/facets">My facets</item>
                 <item xlink:href="http://example.com/buy/stuff">Click!</item>
             </container>
         """)
@@ -794,8 +794,8 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                                    "", "", False, True, None, ""),
                     AbsenceComment(datetime.datetime(2001, 2, 28, 1, 1, 1),
                                    "supervisor003", "/persons/supervisor003",
-                                   "Group", "/groups/003", Unchanged, Unchanged,
-                                   Unchanged,
+                                   "Group", "/groups/003", Unchanged,
+                                   Unchanged, Unchanged,
                                    "Comment\n      Three")]
         client = SchoolToolClient()
         results = client._parseAbsenceComments(body)

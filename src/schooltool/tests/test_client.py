@@ -30,6 +30,7 @@ from schooltool.tests.helpers import dedent, diff
 
 __metaclass__ = type
 
+
 class HTTPStub:
 
     def __init__(self, host, port=8080):
@@ -58,6 +59,7 @@ class HTTPStub:
 
     def send(self, s):
         self.sent_data += s
+
 
 class ResponseStub:
 
