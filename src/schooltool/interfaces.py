@@ -321,6 +321,7 @@ class ILinkSet(Interface):
     def getLink(name):
         """Returns a link by a name"""
 
+
 class IRelatable(Interface):
     """An object which can take part in relationships."""
 
