@@ -482,12 +482,15 @@ h2.calendar-view-title {
 #calendar-view-month td.weekno a {
     margin: auto;
     display: block;
+    height: 100%;
 }
 
 #calendar-view-month td.weekno a {
     height: 100%;
     width: 100%;
     color: #7590AE;
+    padding-left: 0.5ex;
+    padding-right: 0.5ex;
 }
 
 #calendar-view-month td.day-other {
