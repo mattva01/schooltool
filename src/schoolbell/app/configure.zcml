@@ -23,7 +23,7 @@
   <utility
       name="schoolbell.app"
       provides="zope.app.generations.interfaces.ISchemaManager"
-      factory="zope.app.generations.generations.SchemaManager"
+      component=".generations.schemaManager"
       />
 
 <!-- Core content objects -->
