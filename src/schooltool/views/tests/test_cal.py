@@ -167,9 +167,9 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(result, "Calendar imported")
-        self.assertEquals(request.site.applog,
-                          [(None, '/person/calendar',
-                            'Calendar updated', INFO)])
+        self.assertEquals(request.applog,
+                          [(None, 'Schoolday Calendar /person/calendar updated',
+                            INFO)])
         self.assertEquals(self.sm.first, datetime.date(2004, 9, 1))
         self.assertEquals(self.sm.last, datetime.date(2004, 9, 30))
         for date in self.sm:
@@ -187,7 +187,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
         self.assertEquals(request.code, 400)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(request.site.applog, [])
+        self.assertEquals(request.applog, [])
         if errmsg:
             self.assertEquals(result, errmsg)
         self.assertEquals(self.sm.first, datetime.date(2003, 9, 1))
@@ -328,9 +328,9 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
                               body=body)
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
-        self.assertEquals(request.site.applog,
-                          [(None, '/person/calendar',
-                            'Calendar updated', INFO)])
+        self.assertEquals(request.applog,
+                          [(None,
+                            'Schoolday Calendar /person/calendar updated', INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
@@ -454,9 +454,10 @@ class TestCalendarView(TestCalendarReadView):
                                    "Delete me"))
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
-        self.assertEquals(request.site.applog,
-                          [(None, '/person/calendar',
-                            'Calendar for A Person imported', INFO)])
+        self.assertEquals(request.applog,
+                          [(None,
+                            'Calendar /person/calendar for A Person imported',
+                            INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
@@ -518,9 +519,10 @@ class TestCalendarView(TestCalendarReadView):
                                    "Delete me"))
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
-        self.assertEquals(request.site.applog,
-                          [(None, '/person/calendar',
-                            'Calendar for A Person imported', INFO)])
+        self.assertEquals(request.applog,
+                          [(None,
+                            'Calendar /person/calendar for A Person imported',
+                            INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
@@ -545,7 +547,7 @@ class TestCalendarView(TestCalendarReadView):
         result = self.view.render(request)
         if errmsg:
             self.assertEquals(result, errmsg)
-        self.assertEquals(request.site.applog, [])
+        self.assertEquals(request.applog, [])
         self.assertEquals(request.code, 400)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
@@ -702,9 +704,10 @@ class TestBookingView(RegistriesSetupMixin, QuietLibxml2Mixin,
                               authenticated_user=self.manager)
         result = self.view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.site.applog,
-                          [(self.manager, '/resources/hall',
-                            'Hall booked by John', INFO)])
+        self.assertEquals(request.applog,
+                          [(self.manager,
+                            'Hall booked by John at 2004-01-01 10:00:00 for 1:30:00',
+                            INFO)])
         self.assertEquals(len(list(self.person.calendar)), 1)
         self.assertEquals(len(list(self.resource.calendar)), 1)
         ev1 = iter(self.person.calendar).next()
@@ -741,7 +744,7 @@ class TestBookingView(RegistriesSetupMixin, QuietLibxml2Mixin,
                                   authenticated_user=self.manager)
             result = self.view.render(request)
             self.assertEquals(request.code, 400)
-            self.assertEquals(request.site.applog, [])
+            self.assertEquals(request.applog, [])
             self.assertEquals(result, "The resource is busy at specified time")
             self.assertEquals(len(list(self.person.calendar)), 0)
             self.assertEquals(len(list(self.resource.calendar)), 1)
@@ -820,7 +823,7 @@ class TestBookingView(RegistriesSetupMixin, QuietLibxml2Mixin,
                               authenticated_user=self.person)
         result = self.view.render(request)
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.site.applog, [])
+        self.assertEquals(request.applog, [])
         self.assertEquals(result, "You can only book resources for yourself")
 
 

@@ -24,7 +24,7 @@ $Id: __init__.py 397 2003-11-21 11:38:01Z mg $
 
 import libxml2
 from schooltool.interfaces import ComponentLookupError
-from schooltool.uris import strURI, getURI
+from schooltool.uris import strURI, getURI, nameURI
 from schooltool.component import traverse, getPath
 from schooltool.views import View, Template, textErrorPage
 from schooltool.views import read_file
@@ -116,9 +116,9 @@ class RelationshipsView(View):
 
         link = links[val.other]
         location = absoluteURL(request, link)
-        request.site.logAppEvent(request.authenticated_user, getPath(link),
-                                 _("Relationship between %s and %s created")
-                                   % (getPath(self.context), getPath(other)))
+        request.appLog(_("Relationship '%s' between %s and %s created")
+                       % (nameURI(link.reltype), getPath(self.context),
+                          getPath(other)))
         request.setHeader('Location', location)
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
@@ -138,11 +138,11 @@ class LinkView(View):
                 'href': absolutePath(self.request, self.context.traverse())}
 
     def do_DELETE(self, request):
-        msg = _("Link '%s' with %s removed") % (self.context.title,
-                                            getPath(self.context.__parent__))
+        msg = (_("Relationship '%s' between %s and %s removed") %
+               (nameURI(self.context.reltype), getPath(self.context.__parent__),
+                getPath(self.context.traverse())))
         self.context.unlink()
-        request.site.logAppEvent(request.authenticated_user,
-                                 getPath(self.context), msg)
+        request.appLog(msg)
         request.setHeader('Content-Type', 'text/plain')
         return _("Link removed")
 

@@ -647,9 +647,10 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(request.site.applog,
-                [(None, '/john/timetables/2003 fall/weekly',
-                  "Timetable of John Smith for 2003 fall, weekly, updated",
+        self.assertEquals(request.applog,
+                [(None, 
+                  "Timetable of John Smith (/john) for"
+                  " 2003 fall, weekly, updated",
                   INFO)])
         self.assertEquals(timetabled.timetables[key], expected)
 
@@ -670,7 +671,7 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         self.assertEquals(request.code, 400)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(request.site.applog, [])
+        self.assertEquals(request.applog, [])
         self.assert_(key not in timetabled.timetables)
 
     def test_put_bad_period(self):
@@ -684,7 +685,7 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         self.assertEquals(request.code, 400)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(request.site.applog, [])
+        self.assertEquals(request.applog, [])
         self.assert_(key not in timetabled.timetables)
 
     def do_test_error(self, xml=None, ctype='text/xml', message=None):
@@ -701,7 +702,7 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         self.assertEquals(request.code, 400)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(request.site.applog, [])
+        self.assertEquals(request.applog, [])
         self.assertEquals(context, self.createEmpty())
 
     def test_put_error_handling(self):
@@ -730,9 +731,10 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(request.site.applog,
-                [(None, '/john/timetables/2003 fall/weekly',
-                  "Timetable of John Smith for 2003 fall, weekly, deleted",
+        self.assertEquals(request.applog,
+                [(None,
+                  "Timetable of John Smith (/john) for"
+                  " 2003 fall, weekly, deleted",
                   INFO)])
         self.assert_(key not in timetabled.timetables)
 
@@ -742,7 +744,7 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         request = RequestStub(method="DELETE")
         result = view.render(request)
         self.assertEquals(request.code, 404)
-        self.assertEquals(request.site.applog, [])
+        self.assertEquals(request.applog, [])
 
 
 class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
@@ -1019,8 +1021,9 @@ class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(request.site.applog,
-                [(None, '/ttservice/weekly', "Timetable schema deleted", INFO)])
+        self.assertEquals(request.applog,
+                [(None, "Timetable schema"
+                  " /ttservice/weekly deleted", INFO)])
 
         self.assertRaises(KeyError, lambda: service[key])
 
@@ -1030,7 +1033,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
         request = RequestStub(method="DELETE")
         result = view.render(request)
         self.assertEquals(request.code, 404)
-        self.assertEquals(request.site.applog, [])
+        self.assertEquals(request.applog, [])
 
     def createEmpty(self):
         from schooltool.timetable import SequentialDaysTimetableModel
@@ -1072,9 +1075,9 @@ class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(request.site.applog, [(None, '/ttservice/weekly',
-                                                 'Timetable schema updated',
-                                                 INFO)])
+        self.assertEquals(request.applog, [(None,
+                                            'Timetable schema /ttservice/weekly updated',
+                                            INFO)])
         self.assertEquals(service[key], self.createEmpty())
 
     def test_roundtrip(self):
@@ -1114,7 +1117,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
         self.assertEquals(request.code, 400)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(request.site.applog, [])
+        self.assertEquals(request.applog, [])
         self.assertRaises(KeyError, lambda: service[key])
 
     def test_put_error_handling(self):
@@ -1383,8 +1386,8 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(request.site.applog,
-                [(None, '', 'School timetable updated', INFO)])
+        self.assertEquals(request.applog,
+                          [(None, 'School timetable updated', INFO)])
 
         self.assertEquals(self.sg4.timetables[self.key],
                           self.sg4.timetables[self.key].cloneEmpty())
@@ -1433,8 +1436,8 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(request.site.applog,
-                [(None, '', 'School timetable updated', INFO)])
+        self.assertEquals(request.applog,
+                [(None,  'School timetable updated', INFO)])
         self.assertEquals(self.sg1.timetables[self.key],
                           self.sg1.timetables[self.key].cloneEmpty())
         self.assertEquals(self.sg2.timetables[self.key],
@@ -1508,7 +1511,7 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
                                   headers={'Content-Type': 'text/xml'})
             result = self.view.render(request)
             self.assertEquals(request.code, 400)
-            self.assertEquals(request.site.applog, [])
+            self.assertEquals(request.applog, [])
 
 
 class TestTimePeriodServiceView(XMLCompareMixin, unittest.TestCase):
@@ -1607,14 +1610,15 @@ class TestTimePeriodCreatorView(unittest.TestCase):
             END:VEVENT
             END:VCALENDAR
         """)
-        request = RequestStub(method='PUT', body=body,
+        request = RequestStub('/time-periods/2003 fall',
+                              method='PUT', body=body,
                               headers={"Content-Type": "text/calendar"})
         result = view.render(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(request.site.applog,
-                [(None, '/time-periods/2003 fall', 'Calendar created', INFO)])
+        self.assertEquals(request.applog,
+                [(None, 'Calendar /time-periods/2003 fall created', INFO)])
         self.assert_(key in service)
         self.assertEquals(service[key].first, datetime.date(2004, 9, 1))
         self.assertEquals(getPath(service[key]), '/time-periods/%s' % key)
@@ -1633,8 +1637,8 @@ class TestTimePeriodCreatorView(unittest.TestCase):
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(request.site.applog,
-                [(None, '/tpservice/2003 fall', 'Calendar deleted', INFO)])
+        self.assertEquals(request.applog,
+                [(None, 'Calendar /tpservice/2003 fall deleted', INFO)])
         self.assert_(key not in service)
 
     def test_delete_nonexistent(self):

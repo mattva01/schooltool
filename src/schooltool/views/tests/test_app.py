@@ -27,7 +27,7 @@ from logging import INFO
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin, EqualsSortedMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
-from schooltool.views.tests import RequestStub, UtilityStub, SiteStub
+from schooltool.views.tests import RequestStub, UtilityStub
 from schooltool.views.tests import XPathTestContext
 
 
@@ -195,15 +195,10 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
 
         request = RequestStub("http://localhost:7001/groups" + suffix,
                               method=method, body=body)
-        request.site = SiteStub()
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
-        if suffix:
-            self.assertEquals(view.obj_path, '/groups' + suffix)
-        self.assertEquals(request.site.applog,
-                          [(None, view.obj_path, "Object created", INFO)])
         location = request.headers['location']
         base = "http://localhost:7001/groups/"
         self.assert_(location.startswith(base),
@@ -225,10 +220,8 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         request = RequestStub("http://localhost:7001/groups", method="POST",
                               body='<element title="New Group">')
         self.view.authorization = lambda ctx, rq: True
-        request.site = SiteStub()
         result = self.view.render(request)
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.site.applog, [])
 
     def test_get_child(self, method="GET"):
         from schooltool.views.app import ApplicationObjectCreatorView

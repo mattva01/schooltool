@@ -1,4 +1,3 @@
-#
 # SchoolTool - common information systems platform for school administration
 # Copyright (c) 2003 Shuttleworth Foundation
 #

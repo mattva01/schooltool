@@ -58,10 +58,10 @@ class EventLogView(View):
         n = len(self.context.getReceived())
         self.context.clear()
         if n == 1:
-            msg = _("1 event cleared")
+            msg = _("1 event cleared in %s") % request.path
         else:
-            msg = _("%d events cleared") % n
-        request.site.logAppEvent(request.authenticated_user, "", msg)
+            msg = _("%d events cleared in %s") % (n, request.path)
+        request.appLog(msg)
         request.setHeader('Content-Type', 'text/plain')
         return msg
 

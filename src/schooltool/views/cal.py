@@ -204,9 +204,8 @@ class SchooldayModelCalendarView(View):
 
         This method is overriden by subclasses of SchooldayModelCalendarView.
         """
-        request.site.logAppEvent(request.authenticated_user,
-                                 getPath(self.context),
-                                 _("Calendar updated"))
+        request.appLog(_("Schoolday Calendar %s updated")
+                       % getPath(self.context))
 
 
 class CalendarReadView(View):
@@ -315,9 +314,9 @@ class CalendarView(CalendarReadView):
             for event in events:
                 # newly added events
                 self.context.addEvent(event)
-            request.site.logAppEvent(request.authenticated_user,
-                    getPath(self.context), _("Calendar for %s imported")
-                                           % self.context.__parent__.title)
+            request.appLog(
+                _("Calendar %s for %s imported")
+                % (getPath(self.context), self.context.__parent__.title))
             request.setHeader('Content-Type', 'text/plain')
             return _("Calendar imported")
 
@@ -383,11 +382,8 @@ class BookingView(View):
             ev = CalendarEvent(start, duration, title, owner, self.context)
             self.context.calendar.addEvent(ev)
             owner.calendar.addEvent(ev)
-
-            request.site.logAppEvent(request.authenticated_user,
-                                     getPath(self.context),
-                                     _('%s booked by %s')
-                                     % (self.context.title, owner.title))
+            request.appLog(_("%s booked by %s at %s for %s") %
+                           (self.context.title, owner.title, start, duration))
             request.setHeader('Content-Type', 'text/plain')
             return _("OK")
         finally:

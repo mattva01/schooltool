@@ -92,8 +92,10 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
                               headers={'Content-Type': 'text/xml'})
         result = view.render(request)
         self.assertEquals(result, "Updated")
-        self.assertEquals(request.site.applog,
-                          [(None, '/persons/007/info', 'Facet updated', INFO)])
+        self.assertEquals(request.applog,
+                          [(None,
+                            u'Person info updated on John '
+                            u'\u263b Smith \u263b (/persons/007)', INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(context.first_name, u'John \u263B')
         self.assertEquals(context.last_name, u'Smith \u263B')
@@ -117,8 +119,9 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
         result = view.render(request)
         self.assertEquals(result, "Updated")
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.site.applog,
-                          [(None, '/persons/007/info', 'Facet updated', INFO)])
+        self.assertEquals(request.applog,
+                          [(None, u'Person info updated on '
+                            u'Smith \u263b (/persons/007)', INFO)])
         self.assertEquals(context.first_name, '')
         self.assertEquals(context.last_name, '')
         self.assert_(context.date_of_birth is None)
@@ -175,8 +178,8 @@ class TestPhotoView(unittest.TestCase):
                               headers={'Content-Type': ctype})
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.site.applog,
-                          [(None, "/my/dog's/photo", 'Photo added', INFO)])
+        self.assertEquals(request.applog,
+                          [(None, 'Photo added on None (/)', INFO)])
         self.assert_(context.photo is not None)
 
     def test_put_errors(self):
@@ -195,12 +198,13 @@ class TestPhotoView(unittest.TestCase):
         result = view.render(request)
         self.assertEquals(result, 'cannot identify image file')
         self.assertEquals(request.code, 400)
-        self.assertEquals(request.site.applog, [])
+        self.assertEquals(request.applog, [])
 
     def test_delete(self):
         from schooltool.views.infofacets import PhotoView
         from schooltool.infofacets import PersonInfoFacet
         context = PersonInfoFacet()
+        
         context.photo = '8-)'
         setPath(context, "/my/dog's/photo")
         view = PhotoView(context)
@@ -208,8 +212,8 @@ class TestPhotoView(unittest.TestCase):
         request = RequestStub(method='DELETE')
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assertEquals(request.site.applog,
-                          [(None, "/my/dog's/photo", 'Photo removed', INFO)])
+        self.assertEquals(request.applog,
+                          [(None, 'Photo removed from None (/)', INFO)])
         self.assert_(context.photo is None)
 
 

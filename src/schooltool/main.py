@@ -308,6 +308,7 @@ class Request(http.Request):
     def __init__(self, *args, **kwargs):
         self.get_transaction_hook = get_transaction
         self.hitlogger = logging.getLogger('schooltool.access')
+        self.applogger = logging.getLogger('schooltool.app')
         self.hit_time = formatHitTime()
         http.Request.__init__(self, *args, **kwargs)
 
@@ -448,9 +449,9 @@ class Request(http.Request):
                 self.authenticated_user = self.site.authenticate(app,
                         self.getUser(), self.getPassword())
             except AuthenticationError:
-                self.site.logAppEvent(None, "",
-                                      _("Failed login, username: %r")
-                                      % self.getUser(), logging.WARNING)
+                logging.getLogger('schooltool.app').warn(
+                    _("Failed login, username: %r")
+                    % self.getUser(), logging.WARNING)
                 body = textErrorPage(self, _("Bad username or password"),
                                      code=401)
                 self.setHeader('Content-Length', len(body))
@@ -524,6 +525,13 @@ class Request(http.Request):
                 self.getHeader("referer") or "-",
                 self.getHeader("user-agent") or "-"))
 
+    def appLog(self, message, level=logging.INFO):
+        """Add a log entry to the application log."""
+        if self.authenticated_user is None:
+            username = 'UNKNOWN'
+        else:
+            username = self.authenticated_user.username
+        self.applogger.log(level, "(%s) %s" % (username, message))
 
 class Site(http.HTTPFactory):
     """Site for serving requests based on ZODB"""
@@ -557,14 +565,6 @@ class Site(http.HTTPFactory):
         channel.requestFactory = Request
         channel.site = self
         return channel
-
-    def logAppEvent(self, user, path, message, level=logging.INFO):
-        """Add a log entry to the application log."""
-        if user is None:
-            username = 'UNKNOWN'
-        else:
-            username = user.username
-        self.applogger.log(level, "(%s) [%s] %s" % (username, path, message))
 
 
 #

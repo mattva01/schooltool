@@ -349,8 +349,8 @@ class TestPersonPasswordView(unittest.TestCase):
         request = RequestStub(method="PUT", body=passwd)
         result = v.render(request)
         self.assertEqual(request.code, 200)
-        self.assertEquals(request.site.applog,
-                [(None, '/persons/001', "Password changed for John", INFO)])
+        self.assertEquals(request.applog,
+                [(None,  "Password changed for John (/persons/001)", INFO)])
         self.assertEqual(result, "Password changed")
         self.assert_(p.checkPassword("Foo bar"))
 
@@ -365,8 +365,8 @@ class TestPersonPasswordView(unittest.TestCase):
         request = RequestStub(method="DELETE")
         result = v.render(request)
         self.assertEqual(request.code, 200)
-        self.assertEquals(request.site.applog,
-                [(None, '/persons/002', "Account disabled for John", INFO)])
+        self.assertEquals(request.applog,
+                [(None, "Account disabled for John (/persons/002)", INFO)])
         self.assertEqual(result, "Account disabled")
         self.assert_(not p.checkPassword("foo"))
 

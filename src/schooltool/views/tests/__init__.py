@@ -31,15 +31,6 @@ from schooltool.interfaces import ILocation
 __metaclass__ = type
 
 
-class SiteStub:
-
-    def __init__(self):
-        self.applog = []
-
-    def logAppEvent(self, user, path, message, level=logging.INFO):
-        self.applog.append((user, path, message, level))
-
-
 class RequestStub:
 
     code = 200
@@ -53,7 +44,6 @@ class RequestStub:
         self.content = StringIO(body)
         self.authenticated_user = authenticated_user
         self.headers = {}
-        self.site = SiteStub()
         self.args = {}
         if body:
             self.request_headers = {'content-length': len(body)}
@@ -79,6 +69,7 @@ class RequestStub:
                 host_and_port += ':7001'
             self._hostname, port = host_and_port.split(':')
             self._port = int(port)
+        self.applog = []
 
     def getRequestHostname(self):
         return self._hostname
@@ -112,6 +103,9 @@ class RequestStub:
         from schooltool.main import chooseMediaType
         return chooseMediaType(supported_types, self.accept)
 
+    def appLog(self, message, level=logging.INFO):
+        self.applog.append((self.authenticated_user, message, level))
+
 
 class TraversableStub:
 
@@ -128,6 +122,7 @@ class TraversableRoot(TraversableStub):
 
     implements(IContainmentRoot)
 
+    title = None
 
 class LocatableStub:
     pass

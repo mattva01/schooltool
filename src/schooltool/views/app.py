@@ -130,10 +130,11 @@ class ApplicationObjectCreator:
             xpathctx.xpathFreeContext()
         obj = container.new(**kw)
         location = absoluteURL(request, obj)
-        self.obj_path = getPath(obj)
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
         request.setHeader('Location', location)
+        request.appLog(_("Object %s of type %s created") %
+                       (getPath(obj), obj.__class__.__name__))
         return _("Object created: %s") % location
 
 
@@ -160,13 +161,7 @@ class ApplicationObjectContainerView(TraversableView,
             return ApplicationObjectCreatorView(self.context, name)
 
     def do_POST(self, request):
-        msg = self.create(request, self.context)
-        if request.code == 201:
-            # XXX It would be nice if the log message would denote the
-            #     type of the object created (e.g., 'Person created').
-            request.site.logAppEvent(request.authenticated_user, self.obj_path,
-                                     _('Object created'))
-        return msg
+        return self.create(request, self.context)
 
 
 class ApplicationObjectCreatorView(View, ApplicationObjectCreator):
@@ -182,11 +177,7 @@ class ApplicationObjectCreatorView(View, ApplicationObjectCreator):
     do_DELETE = staticmethod(notFoundPage)
 
     def do_PUT(self, request):
-        msg = self.create(request, self.context, self.name)
-        if request.code == 201:
-            request.site.logAppEvent(request.authenticated_user, self.obj_path,
-                                     _('Object created'))
-        return msg
+        return self.create(request, self.context, self.name)
 
 
 class AvailabilityQueryView(View):

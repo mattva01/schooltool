@@ -233,9 +233,9 @@ class TimetableReadWriteView(TimetableReadView):
                     resource.timetables[self.key] = tt.cloneEmpty()
                 resource.timetables[self.key][day_id].add(period_id, activity)
         path = getPath(self.timetabled.timetables[self.key])
-        msg = _("Timetable of %s for %s, updated") % (self.timetabled.title,
-                                                      ", ".join(self.key))
-        request.site.logAppEvent(request.authenticated_user, path, msg)
+        request.appLog(_("Timetable of %s (%s) for %s, updated") %
+                       (self.timetabled.title, getPath(self.timetabled),
+                        ", ".join(self.key)))
         request.setHeader('Content-Type', 'text/plain')
         return _("OK")
 
@@ -244,10 +244,10 @@ class TimetableReadWriteView(TimetableReadView):
             return notFoundPage(request)
         path = getPath(self.context)
         timetabled = self.context.__parent__.__parent__
-        msg = _("Timetable of %s for %s, deleted") % (timetabled.title,
-                                                     ", ".join(self.key))
+        msg = (_("Timetable of %s (%s) for %s, deleted") %
+               (timetabled.title, getPath(self.timetabled), ", ".join(self.key)))
         del self.timetabled.timetables[self.key]
-        request.site.logAppEvent(request.authenticated_user, path, msg)
+        request.appLog(msg)
         request.setHeader('Content-Type', 'text/plain')
         return _("Deleted timetable")
 
@@ -311,10 +311,9 @@ class TimetableSchemaView(TimetableReadView):
         if self.context is None:
             return notFoundPage(request)
         else:
-            path = getPath(self.context)
             del self.service[self.key]
-            request.site.logAppEvent(request.authenticated_user, path,
-                                     _("Timetable schema deleted"))
+            request.appLog(_("Timetable schema %s deleted") %
+                           getPath(self.context))
             request.setHeader('Content-Type', 'text/plain')
             return _("Deleted timetable schema")
 
@@ -393,9 +392,8 @@ class TimetableSchemaView(TimetableReadView):
                                          _("Duplicate periods in schema"))
                 timetable[day_id] = TimetableDay(period_ids)
             self.service[self.key] = timetable
-            path = getPath(self.service[self.key])
-            request.site.logAppEvent(request.authenticated_user, path,
-                                     _("Timetable schema updated"))
+            request.appLog(_("Timetable schema %s updated") %
+                           getPath(self.service[self.key]))
             request.setHeader('Content-Type', 'text/plain')
             return _("OK")
         finally:
@@ -629,8 +627,7 @@ class SchoolTimetableView(View):
             except ViewError, e:
                 return textErrorPage(request, e)
 
-            request.site.logAppEvent(request.authenticated_user, "",
-                                     _("School timetable updated"))
+            request.appLog(_("School timetable updated"))
             request.setHeader('Content-Type', 'text/plain')
             return _("OK")
         finally:
@@ -733,15 +730,13 @@ class TimePeriodCreatorView(SchooldayModelCalendarView):
         return SchooldayModelCalendarView.do_PUT(self, request)
 
     def log_PUT(self, request):
-        request.site.logAppEvent(request.authenticated_user,
-                                 getPath(self.context), _("Calendar created"))
+        request.appLog(_("Calendar %s created") % getPath(self.context))
 
     def do_DELETE(self, request):
         try:
             path = getPath(self.service[self.key])
             del self.service[self.key]
-            request.site.logAppEvent(request.authenticated_user, path,
-                                     _("Calendar deleted"))
+            request.appLog(_("Calendar %s deleted") % getPath(self.context))
         except KeyError:
             return notFoundPage(request)
         else:

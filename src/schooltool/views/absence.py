@@ -178,9 +178,8 @@ class RollCallView(View):
                         AbsenceComment(reporter,text, dt=dt,
                                        absent_from=self.context))
                 nabsences += 1
-                request.site.logAppEvent(request.authenticated_user,
-                        getPath(absence), _("Absence of %s reported")
-                                          % person.title)
+                request.appLog(_("Absence %s of %s reported") %
+                               (getPath(absence), person.title))
             if present and person.getCurrentAbsence() is not None:
                 absence = person.reportAbsence(
                         AbsenceComment(reporter, text, dt=dt,
@@ -188,9 +187,8 @@ class RollCallView(View):
                                        ended=True,
                                        resolved=resolved))
                 npresences += 1
-                request.site.logAppEvent(request.authenticated_user,
-                        getPath(absence), _("Presence of %s reported")
-                                          % person.title)
+                request.appLog(_("Presence %s of %s reported") %
+                               (getPath(absence), person.title))
 
         return (_("%d absences and %d presences reported")
                 % (nabsences, npresences))
@@ -326,14 +324,14 @@ class AbsenceManagementView(View, AbsenceCommentParser, AbsenceListViewMixin):
         request.setHeader('Content-Type', 'text/plain')
         if len(absence.comments) == 1:
             path = getPath(absence)
-            request.site.logAppEvent(request.authenticated_user, path,
-                    _("Absence of %s created") % absence.person.title)
+            request.appLog(_("Absence %s of %s created") %
+                           (getPath(absence), absence.person.title))
             request.setResponseCode(201, 'Created')
             return _("Absence created: %s") % path
         else:
             path = getPath(absence)
-            request.site.logAppEvent(request.authenticated_user, path,
-                    _("Absence of %s updated") % absence.person.title)
+            request.appLog(_("Absence %s of %s updated") %
+                           (getPath(absence), absence.person.title))
             request.setResponseCode(201, 'Created')
             request.setResponseCode(200, 'OK')
             return _("Absence updated: %s") % path
@@ -404,9 +402,8 @@ class AbsenceView(View, AbsenceCommentParser):
         except ValueError:
             return textErrorPage(request, _("Cannot reopen an absence"
                                             " when another one has not ended"))
-        request.site.logAppEvent(request.authenticated_user,
-                getPath(self.context), _("Comment for absence of %s added")
-                                       % self.context.person.title)
+        request.appLog(_("Comment for absence %s of %s added")
+                       % (getPath(self.context), self.context.person.title))
         request.setHeader('Content-Type', 'text/plain')
         return _("Comment added")
 

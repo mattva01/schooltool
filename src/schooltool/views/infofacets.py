@@ -122,8 +122,9 @@ class PersonInfoFacetView(FacetView):
         finally:
             doc.freeDoc()
             xpathctx.xpathFreeContext()
-        request.site.logAppEvent(request.authenticated_user,
-                                 getPath(self.context), _("Facet updated"))
+        request.appLog(_("Person info updated on %s (%s)") %
+                       (self.context.__parent__.title,
+                        getPath(self.context.__parent__)))
         request.setHeader('Content-Type', 'text/plain')
         return _("Updated")
 
@@ -151,19 +152,19 @@ class PhotoView(View):
         buf = StringIO()
         img2.save(buf, 'JPEG')
         self.context.photo = buf.getvalue()
-        msg = _("Photo added")
-        request.site.logAppEvent(request.authenticated_user,
-                                 getPath(self.context), msg)
+        request.appLog(_("Photo added on %s (%s)") %
+                       (self.context.__parent__.title,
+                        getPath(self.context.__parent__)))
         request.setHeader('Content-Type', 'text/plain')
-        return msg
+        return _("Photo added")
 
     def do_DELETE(self, request):
         self.context.photo = None
-        msg = _("Photo removed")
-        request.site.logAppEvent(request.authenticated_user,
-                                 getPath(self.context), msg)
+        request.appLog(_("Photo removed from %s (%s)") %
+                       (self.context.__parent__.title,
+                        getPath(self.context.__parent__)))
         request.setHeader('Content-Type', 'text/plain')
-        return msg
+        return _("Photo removed")
 
 
 def maxspect(size, limits):

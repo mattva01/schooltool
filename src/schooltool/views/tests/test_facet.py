@@ -113,7 +113,7 @@ class TestFacetView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         result = self.view.render(request)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.reason, "Bad Request")
-        self.assertEquals(request.site.applog, [])
+        self.assertEquals(request.applog, [])
         self.assertEquals(result, "Owned facets may not be deleted manually")
 
     def test_delete_unowned(self):
@@ -123,10 +123,10 @@ class TestFacetView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         request = RequestStub("http://localhost/some/object/facets/001",
                               method="DELETE")
         result = self.view.render(request)
-        expected = "Facet removed"
+        expected = "Facet /person/001 (FacetStub) removed"
         self.assertEquals(result, expected, "\n" + diff(expected, result))
-        self.assertEquals(request.site.applog,
-                          [(None, '/person/001', "Facet removed", INFO)])
+        self.assertEquals(request.applog,
+                          [(None, "Facet /person/001 (FacetStub) removed", INFO)])
 
 
 class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
@@ -212,8 +212,8 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(len(list(context.iterFacets())), 1)
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
-        self.assertEquals(request.site.applog,
-              [(None, '/p1/facets/eventlog', "Facet created", INFO)])
+        self.assertEquals(request.applog,
+              [(None, "Facet EventLogFacet created on /p1", INFO)])
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
         baseurl = "http://localhost:7001/p1/facets/"
@@ -248,7 +248,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
                                   method="POST",
                                   body=body)
             result = view.render(request)
-            self.assertEquals(request.site.applog, [])
+            self.assertEquals(request.applog, [])
             self.assertEquals(request.code, 400,
                               "%s != 400 for %s" % (request.code, body))
             self.assertEquals(request.headers['content-type'],
@@ -270,7 +270,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
                               method="POST",
                               body='facet factory="eventlog"')
         result = view.render(request)
-        self.assertEquals(request.site.applog, [])
+        self.assertEquals(request.applog, [])
         self.assertEquals(request.code, 400)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
