@@ -684,7 +684,6 @@ h2.calendar-view-title {
     background: #c1665a;
 }
 
-
 #calendar-view-day .event h6 a {
     color: #fff;
     text-decoration: none;
@@ -708,9 +707,13 @@ h2.calendar-view-title {
     cursor: pointer;
 }
 
-#calendar-view-day .event .description {
+#calendar-view-day .event .body {
     margin: 0.5ex;
     padding: 0.5ex;
+}
+
+#calendar-view-day .event .body .title {
+    font-style: italic;
 }
 
 #calendar-view-day .hour a.event-new {
@@ -718,7 +721,6 @@ h2.calendar-view-title {
     cursor: pointer;
     text-decoration: none;
 }
-
 
 /*
 * Content specific styling
