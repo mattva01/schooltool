@@ -51,11 +51,15 @@ def test_suite():
         # is perfectly fine -- the user might be running Zope 3 tests.
         if str(e) != 'Already configured with a different config file':
             raise
+    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
+                   doctest.NORMALIZE_WHITESPACE |
+                   doctest.REPORT_ONLY_FIRST_FAILURE)
     return unittest.TestSuite([
-                FunctionalDocFileSuite('app.txt',
-                    optionflags=(doctest.ELLIPSIS | doctest.REPORT_NDIFF |
-                                 doctest.NORMALIZE_WHITESPACE |
-                                 doctest.REPORT_ONLY_FIRST_FAILURE)),
+                FunctionalDocFileSuite('app.txt', optionflags=optionflags),
+                FunctionalDocFileSuite('deletion.txt',
+                                       optionflags=optionflags),
+                FunctionalDocFileSuite('copypaste.txt',
+                                       optionflags=optionflags),
            ])
 
 if __name__ == '__main__':
