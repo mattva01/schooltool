@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.3
 #Boa:App:BoaApp
 
 # SchoolTool - common information systems platform for school administration
@@ -26,6 +26,7 @@ Requires the Graphviz application
 http://www.research.att.com/sw/tools/graphviz/download.html
 with the "dot" application in your command path.
 """
+
 import sys
 if sys.version_info < (2, 3):
     print >> sys.stderr, '%s: need Python 2.3 or later.' % sys.argv[0]
@@ -51,7 +52,7 @@ class BoaApp(wxApp):
         self.main = schooltool.clients.wxgraph.create(None)
         # needed when running from Boa under Windows 9X
         self.SetTopWindow(self.main)
-        self.main.Show();self.main.Hide();self.main.Show()
+        self.main.Show(); self.main.Hide(); self.main.Show()
         return True
 
 def main():
