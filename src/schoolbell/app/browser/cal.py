@@ -553,10 +553,12 @@ class DailyCalendarView(CalendarViewBase):
         return self.dayTitle(self.cursor)
 
     def prev(self):
-        return self.cursor - timedelta(1)
+        """Return the link for the next day."""
+        return self.calURL('yearly', self.cursor - timedelta(1))
 
     def next(self):
-        return self.cursor + timedelta(1)
+        """Return the link for the previous year."""
+        return self.calURL('yearly', self.cursor + timedelta(1))
 
     def getColumns(self):
         """Return the maximum number of events that are overlapping.

@@ -1,4 +1,3 @@
-<!-- <html metal:use-macro="view/macros/calendarpage" i18n:domain="schooltool"> -->
 <tal:defs define="status view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 
@@ -21,33 +20,11 @@
 
   <metal:block fill-slot="body">
 
-    <h2 class="calendar-view-title" 
-        tal:content="view/title" />
+    <h2 class="calendar-view-title" tal:content="view/title" />
 
-    <div id="calendar-navigation-context">
-      <table cellpadding="0" cellspacing="0" width="100%">
-        <tr>
-          <td align="left" width="33%">
-            <a id="calendar-navigation-context-previous"
-                tal:attributes="href string:${request/URL}?date=${view/prev}"
-                i18n:translate="">Previous day</a>
-          </td>
-          <td align="center">
-            <a id="calendar-navigation-context-current"
-                tal:attributes="href request/URL"
-                i18n:translate="">Today</a>
-          </td>
-          <td align="right" width="33%">
-            <a id="calendar-navigation-context-next"
-                tal:attributes="href string:${request/URL}?date=${view/next}" 
-                i18n:translate="">Next day</a>
-          </td>
-          <td>
-        </tr>
-      </table>
-    </div>
+    <div metal:use-macro="view/@@standard_macros/calendar-navigation" />
 
-    <div id="calendar-view-day" 
+    <div id="calendar-view-day"
         tal:attributes="style python:'height: ' + str(view.visiblehours * 4 + 1) + 'em'">
 
       <!-- Day grid -->
@@ -103,8 +80,7 @@
                     <span tal:content="python:dtend.strftime('%H:%M')"/>)
                     <span>
                 </h6>
-                <a title="Delete this event"
-                    i18n:attributes="title"
+                <a title="Delete this event" i18n:attributes="title"
                     class="delete"
                     tal:attributes="href string:${context/@@absolute_url}/delete_event.html?date=${evdate}&amp;event_id=${ev/unique_id}" >
                   delete
