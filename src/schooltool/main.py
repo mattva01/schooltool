@@ -297,7 +297,6 @@ class Request(server.Request):
         This is called in a separate thread.
         """
         body = resrc.render(self)
-
         assert isinstance(body, str), "render did not return a string"
 
         if self.method == "HEAD":
@@ -307,6 +306,29 @@ class Request(server.Request):
         else:
             self.setHeader('Content-Length', len(body))
             return body
+
+def profile(fn, extension='prof'):
+    """Profiling hook.
+
+    To profile a function call, wrap it in a call to this function.
+    For example, to profile
+      self.foo(bar, baz)
+    write
+      profile(lambda: self.foo(bar, baz)
+
+    The 'extension' argument gives the extension of the filename to use for
+    saving the profiling data.
+    """
+    import hotshot, random, time
+    filename = '%s_%03d' % (time.strftime('%DT%T'), random.randint(0, 1000))
+    filename = filename.replace('/', '-').replace(':', '-')
+    prof = hotshot.Profile('%s.%s' % (filename, extension))
+    B = []
+    def doit():
+        B.append(fn())
+    prof.runcall(doit)
+    prof.close()
+    return B[0]
 
 
 class Site(server.Site):
