@@ -29,6 +29,18 @@ Content-Type: text/xml; charset=UTF-8
     <name>Group</name>
     <description>A role of a containing group.</description>
   </uriobject>
+  <uriobject uri="http://schooltool.org/ns/occupies">
+    <name>Occupies</name>
+    <description>The occupation relationship</description>
+  </uriobject>
+  <uriobject uri="http://schooltool.org/ns/occupies/currentlyresides">
+    <name>Resides</name>
+    <description>The role of a person in Occupies</description>
+  </uriobject>
+  <uriobject uri="http://schooltool.org/ns/occupies/currentresidence">
+    <name>Residence</name>
+    <description>The role of an Address in Occupies</description>
+  </uriobject>
 </uriobjects>
 %% END XML
 
