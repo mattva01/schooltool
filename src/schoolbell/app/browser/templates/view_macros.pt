@@ -201,7 +201,8 @@
     <metal:block fill-slot="content-header">
       <h1 i18n:translate="">
         Calendar for <span tal:replace="context/title"
-                           i18n:name="title" />
+          i18n:name="title" /> - <span 
+          tal:replace="view/title"/>
       </h1>
     </metal:block>
 
@@ -215,7 +216,6 @@
     <metal:block fill-slot="body">
         <div metal:use-macro="view/@@standard_macros/calendar-mode"/>
         <div class="calcontent">
-          <h2 class="calendar-view-title" tal:content="view/title" />
           <div metal:use-macro="view/@@standard_macros/calendar-navigation" />
           <div metal:define-slot="calendar-body"/>
         </div>

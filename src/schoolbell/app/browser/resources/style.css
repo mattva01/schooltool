@@ -249,6 +249,7 @@ input.button-cancel {
     margin: 0;
     padding: 0 1em;
     border-bottom: 1px #bab5ab solid;
+    font-size: small;
 }
 
 #column-left .portlet ul {
@@ -397,16 +398,6 @@ input.button-cancel {
 #calendar-navigation-context-current:hover,
 #calendar-navigation-context-next:hover {
     background: #f9f1fa;
-}
-
-h2.calendar-view-title {
-    font-size: larger;
-    text-align: center;
-    border-bottom: 1px #4B6983 dotted;
-    margin: 1em;
-    margin-top: 0;
-    margin: 0;
-    clear: right;
 }
 
 #calendar-view-year td.month {
