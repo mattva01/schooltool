@@ -1,7 +1,9 @@
 <metal:block define-macro="page" i18n:domain="schooltool">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-  <meta http-equiv="Content-Type" value="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title metal:define-slot="title">[Title]</title>
   <link rel="stylesheet" href="/schooltool.css" />
   <metal:block metal:define-slot="extrahead" />
