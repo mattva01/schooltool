@@ -23,26 +23,25 @@ $Id$
 """
 
 import unittest
+
 from persistent import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject
-from schooltool.interfaces import ILocation
+from zope.app.traversing.api import TraversalError
+
 from schooltool.tests.utils import EqualsSortedMixin, RegistriesSetupMixin
+from schooltool.tests.utils import LocationStub
 
 
 class P(Persistent):
     pass
 
 
-class Location(Persistent):
+class ApplicationObjectStub(LocationStub):
 
-    __slots__ = '__parent__', '__name__', 'optional'
-    implements(ILocation)
-
-    def __init__(self, optional=None):
-        self.__parent__ = None
-        self.__name__ = None
-        self.optional = optional
+    def __init__(self, random_attr=None):
+        LocationStub.__init__(self)
+        self.random_attr = random_attr
 
 
 class TestApplication(unittest.TestCase, EqualsSortedMixin):
@@ -85,7 +84,7 @@ class TestApplication(unittest.TestCase, EqualsSortedMixin):
         from schooltool.app import Application
         a = Application()
         self.assertEqual(a.traverse('utils', []), a.utilityService)
-        marker = Location()
+        marker = LocationStub()
         a['foo'] = marker
         self.assertEqual(a.traverse('foo'), marker)
         a['utils'] = marker
@@ -94,6 +93,7 @@ class TestApplication(unittest.TestCase, EqualsSortedMixin):
         self.assertEqual(a.traverse('ttschemas'), a.timetableSchemaService)
         a['time-periods'] = marker
         self.assertEqual(a.traverse('time-periods'), a.timePeriodService)
+        self.assertRaises(TraversalError, a.traverse, 'no-such-thingy')
 
     def testRoots(self):
         from schooltool.app import Application
@@ -112,7 +112,7 @@ class TestApplication(unittest.TestCase, EqualsSortedMixin):
         self.assertEqual(a.keys(), [])
         self.assertRaises(KeyError, a.__getitem__, 'people')
         self.assertRaises(TypeError, a.__setitem__, 'people', P())
-        location = Location()
+        location = LocationStub()
         a['people'] = location
         self.assertEqual(a.keys(), ['people'])
         self.assertEqual(a['people'], location)
@@ -125,13 +125,13 @@ class TestApplicationObjectContainer(unittest.TestCase):
     def test(self):
         from schooltool.app import ApplicationObjectContainer
         from schooltool.interfaces import IApplicationObjectContainer
-        factory = Location
+        factory = LocationStub
         a = ApplicationObjectContainer(factory)
         verifyObject(IApplicationObjectContainer, a)
 
     def testDoingStuffToContents(self):
         from schooltool.app import ApplicationObjectContainer
-        factory = Location
+        factory = ApplicationObjectStub
         a = ApplicationObjectContainer(factory)
 
         def case1():
@@ -143,14 +143,14 @@ class TestApplicationObjectContainer(unittest.TestCase):
 
         def case3():
             name = 'whatever something 2'
-            return name, a.new(name, optional='yes'), 'yes'
+            return name, a.new(name, random_attr='yes'), 'yes'
 
         for case in case1, case2, case3:
-            desiredname, obj, optional = case()
+            desiredname, obj, random_attr = case()
             name = obj.__name__
             if desiredname:
                 self.assertEqual(name, desiredname)
-            self.assertEqual(obj.optional, optional)
+            self.assertEqual(obj.random_attr, random_attr)
             self.assert_(obj.__parent__ is a, 'obj.__parent__ is a')
             self.assert_(a[name] is obj, 'a[name] is obj')
             self.assertEqual(a.keys(), [name])
@@ -162,7 +162,7 @@ class TestApplicationObjectContainer(unittest.TestCase):
 
     def testNameCollision(self):
         from schooltool.app import ApplicationObjectContainer
-        factory = Location
+        factory = LocationStub
         a = ApplicationObjectContainer(factory)
         a.new('foo')
         self.assertRaises(KeyError, a.new, 'foo')
@@ -173,7 +173,7 @@ class TestApplicationObjectContainer(unittest.TestCase):
 
     def testAnotherContainerTakesResponsibility(self):
         from schooltool.app import ApplicationObjectContainer
-        factory = Location
+        factory = LocationStub
         a = ApplicationObjectContainer(factory)
         obj = a.new()
         name = obj.__name__
@@ -183,6 +183,15 @@ class TestApplicationObjectContainer(unittest.TestCase):
         del a[name]
         self.assert_(obj.__parent__ is parent)
         self.assertEqual(obj.__name__, name)
+
+    def testTraversal(self):
+        from schooltool.app import ApplicationObjectContainer
+        a = ApplicationObjectContainer(LocationStub)
+        obj1 = a.new('name1')
+        obj2 = a.new('name2')
+        self.assert_(a.traverse('name1') is obj1)
+        self.assert_(a.traverse('name2') is obj2)
+        self.assertRaises(TraversalError, a.traverse, 'name42')
 
 
 class TestCreateApplication(RegistriesSetupMixin, unittest.TestCase):

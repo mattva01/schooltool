@@ -27,13 +27,16 @@ import sets
 import sys
 import time
 import unittest
-import zope.event
 from pprint import pformat
+
+import zope.event
 from zope.interface import implements, directlyProvides
+from zope.app.traversing.interfaces import ITraversable, TraversalError
+from zope.testing.cleanup import CleanUp
+
 from schooltool.interfaces import ILocation, IContainmentRoot, ITraversable
 from schooltool.interfaces import IServiceManager, IEventTarget
 from schooltool.tests.helpers import normalize_xml, diff
-from zope.testing.cleanup import CleanUp
 
 __metaclass__ = type
 
@@ -61,7 +64,10 @@ class TraversableStub:
         self.children = kw
 
     def traverse(self, name, path=None):
-        return self.children[name]
+        try:
+            return self.children[name]
+        except KeyError:
+            raise TraversalError(name)
 
 
 class LocationStub(object):

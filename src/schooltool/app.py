@@ -24,6 +24,8 @@ from persistent import Persistent
 from persistent.dict import PersistentDict
 from zope.interface import implements
 from zope.component import getUtility
+from zope.app.traversing.api import TraversalError
+
 from schooltool import model, absence
 from schooltool.auth import TicketService
 from schooltool.component import UtilityService, FacetManager
@@ -118,7 +120,10 @@ class Application(Persistent):
             return self.timePeriodService
         elif name == 'dfschemas':
             return self.dynamicFacetSchemaService
-        return self[name]
+        try:
+            return self[name]
+        except KeyError:
+            raise TraversalError(name)
 
     def keys(self):
         """See IApplication"""
@@ -141,7 +146,10 @@ class ApplicationObjectContainer(Persistent):
         return self._contents[name]
 
     def traverse(self, name, furtherPath=None):
-        return self._contents[name]
+        try:
+            return self._contents[name]
+        except KeyError:
+            raise TraversalError, name
 
     def _newName(self):
         thisid = self._nextid

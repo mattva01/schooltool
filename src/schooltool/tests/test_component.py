@@ -24,17 +24,19 @@ $Id$
 
 import unittest
 from sets import Set
+
 from persistent import Persistent
 from zope.interface import Interface, implements
 from zope.interface import directlyProvides, classProvides
 from zope.interface.verify import verifyObject
 from zope.component.exceptions import ComponentLookupError, Invalid
 from zope.testing.cleanup import CleanUp
+
 from schooltool.uris import URIObject
 from schooltool.interfaces import IFacet, IFaceted, IFacetAPI, IFacetManager
 from schooltool.interfaces import IUtility, IUtilityService, IViewAPI
 from schooltool.interfaces import IServiceAPI, IServiceManager
-from schooltool.interfaces import ILocation, ITraversable
+from schooltool.interfaces import ILocation
 from schooltool.interfaces import IRelationshipAPI, IRelatable, IQueryLinks
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
@@ -73,16 +75,6 @@ class LocationStub:
 
     def __repr__(self):
         return "LocationStub(%r, %r)" % (self.__parent__, self.__name__)
-
-
-class TraversableStub:
-    implements(ITraversable)
-
-    def __init__(self):
-        self.children = {}
-
-    def traverse(self, name):
-        return self.children[name]
 
 
 class TestFacetManager(unittest.TestCase, EqualsSortedMixin):
