@@ -81,7 +81,6 @@ def doctest_CalendarOwnerTraverser():
 
     If we try to look up a nonexistent view, we should get a NotFound error:
 
-        >>> 
         >>> traverser.publishTraverse(request,
         ...                           'nonexistent.html') # doctest: +ELLIPSIS
         Traceback (most recent call last):
