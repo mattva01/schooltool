@@ -293,13 +293,9 @@ input.button-cancel {
 
 #footer {
     font-size: xx-small;
-    margin: 2em 0;
-    padding: 0.25em;
     background: #eae8e3;
-    border-color: #bab5ab;
-    border-style: solid;
-    border-width: 1px 0;
-    line-height:1em;
+    border-top: 1px solid #bab5ab;
+    line-height: 1em;
 }
 
 /*
