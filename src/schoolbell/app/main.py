@@ -27,6 +27,7 @@ import os
 import sys
 import time
 import getopt
+import locale
 import logging
 
 import ZConfig
@@ -49,6 +50,9 @@ from schoolbell.app.security import setUpLocalAuth
 
 
 ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__), 'config-schema.xml')
+
+
+locale_charset = locale.getpreferredencoding()
 
 
 usage_message = """
@@ -189,11 +193,7 @@ def setup(options):
     return db
 
 
-import locale
-locale_charset = locale.getpreferredencoding()
-
-
-class StreamWrapper:
+class StreamWrapper(object):
     r"""Unicode-friendly wrapper for writable file-like objects.
 
     Here the terms 'encoding' and 'charset' are used interchangeably.
@@ -286,7 +286,6 @@ class StreamWrapper:
 
 
 class UnicodeFileHandler(logging.StreamHandler):
-    # XXX UNTESTED ;(
     """A handler class which writes records to disk files.
 
     This class differs from logging.FileHandler in that it can handle Unicode
