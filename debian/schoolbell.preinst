@@ -27,7 +27,7 @@ package=schoolbell
 # which will dissapear when schoolbell can automatically upgrade
 # its own database.
 
-db_version=0.9.1
+db_version=0.8
 
 try_db_delete () {
     db_fset $package/incompatible_database seen false
