@@ -55,18 +55,17 @@ from schooltool.translation import gettext as _
 __metaclass__ = type
 
 
-about_text = _("""SchoolTool GUI client.
-
-SchoolTool is a common information systems platform for school administration
-Visit http://www.schooltool.org/
-
-Copyright (c) 2003 Shuttleworth Foundation
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-""")
+about_text = _("SchoolTool GUI client.\n"
+"\n"
+"SchoolTool is a common information systems platform for school administration"
+"\nVisit http://www.schooltool.org/\n"
+"\n"
+"Copyright (c) 2003 Shuttleworth Foundation\n"
+"\n"
+"This program is free software; you can redistribute it and/or modify\n"
+"it under the terms of the GNU General Public License as published by\n"
+"the Free Software Foundation; either version 2 of the License, or\n"
+"(at your option) any later version.")
 
 #
 # Common sets of window style flags
