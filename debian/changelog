@@ -9,6 +9,7 @@ schooltool (0.8+svn) unstable; urgency=low
   * Remove un-needed build dependency on python2.3.
   * Make debconf questions for interface setup more clear.
     (Closes: Bug#280698)
+  * On first installation, set default locale from default system locale.
 
  -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
 
