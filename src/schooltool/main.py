@@ -41,7 +41,7 @@ from schooltool.component import getView, traverse
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import AuthenticationError
 from schooltool.common import StreamWrapper, UnicodeAwareException
-from schooltool.translation import ugettext as _
+from schooltool.translation import setCatalog, ugettext as _
 from schooltool.browser import BrowserRequest
 from schooltool.browser.app import RootView
 from schooltool.http import Site
@@ -120,6 +120,7 @@ class Server:
 
     threadable_hook = threadable
     reactor_hook = reactor
+    setCatalog_hook = staticmethod(setCatalog)
 
     def __init__(self, stdout=sys.stdout, stderr=sys.stderr):
         self.stdout = StreamWrapper(stdout)
@@ -221,6 +222,9 @@ class Server:
                          self.config.web_access_log_file)
         self.setUpLogger('schooltool.app', self.config.app_log_file,
                          "%(asctime)s %(levelname)s %(message)s")
+
+        # Set up the message catalog
+        self.setCatalog_hook(self.config.domain, self.config.lang)
 
         # Shut up ZODB lock_file, because it logs tracebacks when unable
         # to lock the database file, and we don't want that.

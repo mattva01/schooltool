@@ -190,6 +190,16 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.component import getView
         from schooltool.app import create_application
         server = Server()
+
+        # Set up the setCatalog hook
+        hook = server.setCatalog_hook
+        catalog = []
+        def setCatalog(domain, languages, catalog=catalog):
+            catalog.append(domain)
+            catalog.append(languages)
+            hook(domain, languages)
+        server.setCatalog_hook = setCatalog
+
         server.notifyConfigFile = lambda x: None
         server.findDefaultConfigFile = lambda: self.getConfigFileName()
         server.configure([])
@@ -219,6 +229,9 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(len(hitlogger.handlers), 1)
         self.assert_(isinstance(hitlogger.handlers[0], logging.StreamHandler))
         self.assertEquals(hitlogger.handlers[0].stream, server.stdout)
+
+        # Make sure the translations have been set up
+        self.assertEqual(catalog, ['schoolbell', ['en_US', 'lt_LT']])
 
     def test_configure_with_args(self):
         from schooltool.main import Server

@@ -155,6 +155,30 @@ web-access-log-file web-access.log
 app-log-file app.log
 
 #
+# lang
+#
+#   Specifies the locale of the messages to be used on the server.
+#   Several languages can be specified.
+#
+# Default:
+#   lang en_US
+#
+# Examples:
+#   lang en_UK
+#   lang en_US
+
+#
+# domain
+#
+#   Specifies the name of the message catalog to be used on the server.
+#
+# Default:
+#   domain schooltool
+#
+# Examples:
+#   domain schoolbell
+
+#
 # <zodb>
 #   ...
 # </zodb>
