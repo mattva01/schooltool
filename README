@@ -31,48 +31,6 @@ System requirements
 - wxPython 2.4 (http://www.wxpython.org/)
   (needed for the wxWindows client only)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 - Development environment and a C compiler
   (precompiled binaries are available for Windows users)
 
@@ -106,7 +64,7 @@ to suit your needs.
 
 By default a user with manager privileges is created in the new database.
 The username is 'manager', and the password is 'schooltool'.  The database
-is otherwise pretty empty, but you can run import-sampleschool.py to populate
+is otherwise mostly empty, but you can run import-sampleschool.py to populate
 it with some sample data.
 
 The Makefile also contains several shortcuts, which are kept mainly for
@@ -162,7 +120,7 @@ Testing
 There are two sets of automated tests: unit tests and functional tests.
 Unit tests (sometimes also called programmer tests) test individual components
 of the system.  Functional tests (also called customer or acceptance tests)
-test only externally visible behavior of the whole system.
+test only externally visible behaviour of the whole system.
 
 Tests themselves are scattered through the whole source tree.  Subdirectories
 named 'tests' contain unit tests, while subdirectories named 'ftests' contain
