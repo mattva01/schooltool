@@ -271,8 +271,7 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(conn.path, path)
         self.assertEquals(conn.headers,
                           {'X-Foo': 'Foo!',
-                           'Content-Type': 'text/xml',
-                           'Content-Length': len('body body body')})
+                           'Content-Type': 'text/xml'})
         self.assertEquals(conn.body, 'body body body')
         self.assertEquals(result.status, 200)
         self.assertEquals(result.reason, 'OK')

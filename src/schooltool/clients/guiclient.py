@@ -206,7 +206,11 @@ class SchoolToolClient:
             hdrs = {}
             if body:
                 hdrs['Content-Type'] = 'text/xml'
-                hdrs['Content-Length'] = len(body)
+                # Do *not* specify a Content-Length header here.  It will
+                # be provided by httplib automatically.  In fact, if you do
+                # specify it here, httplib will happily send out a request
+                # with two Content-Type headers and confuse proxies such as
+                # Apache.
             if self.user is not None:
                 creds = make_basic_auth(self.user, self.password)
                 hdrs['Authorization'] = creds
