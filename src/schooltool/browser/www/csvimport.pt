@@ -113,12 +113,14 @@
              (YYYY-MM-DD).</li>
       <li i18n:translate=""><strong>comment</strong>  -- A comment
              (a free form string).</li>
+    </ul>
+             
+    <p i18n:translate=""><strong>Note</strong> that teachers and pupils must be explicitly added 
+    to the teachers or pupils group at this point for them to have full 
+    functionality.
+    </p>
 
-
-    <p i18n:translate="">Pupils are automatically added to the pupils group
-             (/groups/pupils).</p>
-
-    <p i18n:translate="">Sample pupils.csv:</p>
+    <p i18n:translate="">Sample persons.csv:</p>
 
     <code i18n:translate="">"jcox","Cox","James","year1 math1 ling1",
              "1994-03-10","Transfer, fall of 2003."<br />

@@ -59,8 +59,49 @@
 
     <p style="clear:both" i18n:translate="">
       <strong>timetable.csv</strong> contains lines of comma-separated values
-      as in the following example:</p>
-
+      in the following format.</p>
+      
+    <p style="clear:both" i18n:translate="">
+    First row:</p>
+    <ul>
+    <li i18n:translate="">
+    Time period (as you've <a href="/time-periods"
+           i18n:translate="">defined</a> in SchoolTool already).
+    </li>
+    <li i18n:translate="">
+    Timetable schema (also, as you've <a href="/ttschemas"
+           i18n:translate="">already defined</a>).
+    </li>
+    </ul>
+    
+    <p style="clear:both" i18n:translate="">
+    Second row: blank
+    </p>
+    
+    <p style="clear:both" i18n:translate="">
+    Day tables.  Repeat as necessary, separated by a blank line:
+    </p>
+    
+    <ul>    
+    <li i18n:translate="">
+    A comma separated list of days in the schema that apply the table.
+    </li>
+    
+    <li i18n:translate="">
+    The top row of the table:  a blank column, 
+    followed by columns for each period in the day(s).</li>
+    
+    <li i18n:translate="">
+    The first column designnates a location.
+    The following columns contain the title of a course and
+    the name of a teacher, separated by a pipe "|".  
+    The columns correspond to the periods listed in the top row.
+    </li>
+    </ul>
+    
+    <p style="clear:both" i18n:translate="">
+    Example:
+    </p>
     <pre>
 "2004-fall","default"
 ""
@@ -74,8 +115,23 @@
     </pre>
 
     <p style="clear:both" i18n:translate="">
-      <strong>roster.txt</strong> contains plain text
-      as in the following example:</p>
+      <strong>roster.txt</strong> contains plain text rosters in the
+      following format.  Each section is separated by a blank line.  
+      For each section, provide the following:
+      </p>
+      
+      <ul>
+      <li i18n:translate="">
+      The title of the course and the name of 
+      the relevant teacher, separated by a dash "-".
+      </li>
+      <li i18n:translate="">
+      The title (name) of each student in the class, each on a separate line.
+      </li>
+      </ul>
+    <p style="clear:both" i18n:translate="">
+    Example:
+    </p>
 
     <pre>
 Mathematics 1 - Nicola Oakley
