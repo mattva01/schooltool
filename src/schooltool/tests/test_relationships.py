@@ -21,15 +21,22 @@ Unit tests for the relationships.
 
 $Id$
 """
+from sets import Set
 import unittest
+from zope.interface import implements
 from zope.interface.verify import verifyObject
-from schooltool.interfaces import ISpecificURI
+from schooltool.interfaces import ISpecificURI, IRelatable
 
 class IMyTutor(ISpecificURI):
     """http://schooltool.org/ns/tutor"""
 
 class IMyRegClass(ISpecificURI):
     """http://schooltool.org/ns/regclass"""
+
+class Relatable:
+    implements(IRelatable)
+    def __init__(self):
+        self.__links__ = Set()
 
 class TestRelationship(unittest.TestCase):
     """Conceptual relationships are really represented by three
@@ -39,8 +46,8 @@ class TestRelationship(unittest.TestCase):
     def setUp(self):
         from schooltool.relationships import Relationship
         from schooltool.relationships import Link
-        self.klass = object()
-        self.tutor = object()
+        self.klass = Relatable()
+        self.tutor = Relatable()
         self.lklass = Link(self.klass, IMyTutor)
         self.ltutor = Link(self.tutor, IMyRegClass)
         self.rel = Relationship("Tutor of a class", self.ltutor, self.lklass)
@@ -52,7 +59,11 @@ class TestRelationship(unittest.TestCase):
 
     def testLinkChecksURIs(self):
         from schooltool.relationships import Link
-        self.assertRaises(TypeError, Link, object(), "my tutor")
+        self.assertRaises(TypeError, Link, Relatable(), "my tutor")
+
+    def testLinkChecksParent(self):
+        from schooltool.relationships import Link
+        self.assertRaises(TypeError, Link, object(), IMyTutor)
 
     def test(self):
         from schooltool.relationships import Relationship
@@ -64,6 +75,8 @@ class TestRelationship(unittest.TestCase):
         self.assertEquals(self.ltutor.role, IMyRegClass)
         self.assert_(self.ltutor.traverse() is self.klass)
         self.assert_(self.lklass.traverse() is self.tutor)
+        self.assertEquals(list(self.klass.__links__), [self.lklass])
+        self.assertEquals(list(self.tutor.__links__), [self.ltutor])
 
 
 def test_suite():

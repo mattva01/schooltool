@@ -134,14 +134,17 @@ class ISpecificURI(Interface):
     """All interfaces derived from this must have the URI they map on
     to as the first line of their docstring. Examples::
 
-        class ITutor(ISpecificURI):
+        class URITutor(ISpecificURI):
             '''http://schooltool.org/ns/tutor'''
 
-        class ITutor(ISpecificURI):
+        class URITutor(ISpecificURI):
             '''http://schooltool.org/ns/tutor
 
             A person who is responsible for a registration class.
             '''
+
+    The suggested naming convention for URIs is to prefix the
+    interface names with 'URI'.
     """
 
 class IURIAPI(Interface):
@@ -159,6 +162,18 @@ class IURIAPI(Interface):
         Refer to http://www.ietf.org/rfc/rfc2396.txt for details.
         We're only approximating to the spec.
         """
+
+class URIGroup(ISpecificURI):
+    """http://schooltool.org/ns/membership/group
+
+    A role of a containing group.
+    """
+
+class URIMember(ISpecificURI):
+    """http://schooltool.org/ns/membership/member
+
+    A group member role.
+    """
 
 #
 # Relationships
@@ -195,7 +210,7 @@ class IRelatable(Interface):
     """An object which can take part in relationships."""
 
     __links__ = Attribute(
-        """A dictionary of links of relationships indexed by serial numbers."""
+        """A set of links of relationships indexed by serial numbers."""
         )
 
 class IQueryLinks(Interface):
@@ -209,7 +224,28 @@ class IQueryLinks(Interface):
         argument of ISpecificURI therefore means 'all roles'.
         """
 
+class IRelationshipAPI(Interface):
 
+    def relate(title, a, role_a, b, role_b):
+        """Relate a and b via the roles and title.
+
+        Returns a tuple of links attached to a and b respectively.
+
+        Example::
+                 my report
+             /---------------->
+          officer 'command'  soldier
+            <-----------------/
+                 my superior
+
+        relate('command',
+                 officer, IMySuperiorURI,
+                 soldier, IMyReportURI)
+
+        Returns a two-tuple of:
+          * The link traversable from the officer, role is IMyReportURI
+          * The link traversable from the soldier, role is IMySuperiorURI
+        """
 #
 # Groups and membership
 #

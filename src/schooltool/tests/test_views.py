@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 from helpers import dedent, diff
+from test_model import MemberSetup
 
 __metaclass__ = type
 
@@ -190,12 +191,13 @@ class TestView(unittest.TestCase):
         self.assertEquals(request.headers['Allow'], 'GET, HEAD')
 
 
-class TestGroupView(unittest.TestCase):
+class TestGroupView(MemberSetup, unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import GroupView
         from schooltool.model import RootGroup, Group, Person
 
+        MemberSetup.setUp(self)
         self.group = RootGroup("group")
         self.sub = Group("subgroup")
         self.per = Person("p")
@@ -243,7 +245,7 @@ class TestGroupView(unittest.TestCase):
                           "text/xml; charset=UTF-8")
 
 
-class TestPersonView(unittest.TestCase):
+class TestPersonView(MemberSetup, unittest.TestCase):
 
     def setUp(self):
         from schooltool.views import PersonView
@@ -251,6 +253,7 @@ class TestPersonView(unittest.TestCase):
         from schooltool.interfaces import IContainmentRoot
         from zope.interface import directlyProvides
 
+        MemberSetup.setUp(self)
         self.group = Group("group")
         directlyProvides(self.group, IContainmentRoot)
         self.sub = Group("subgroup")

@@ -24,13 +24,13 @@ $Id$
 from persistence import Persistent
 from persistence.dict import PersistentDict
 from zope.interface import implements
-from schooltool.interfaces import ILink
+from schooltool.interfaces import ILink, IRelatable
 from schooltool.component import inspectSpecificURI
 
 __metaclass__ = type
 
 class Link(Persistent):
-    """A side (view) of a relationship beelonging to one of the two
+    """A side (view) of a relationship belonging to one of the two
     ends of a relationship.
 
     An object of this class is in an invalid state until it is passed
@@ -41,23 +41,23 @@ class Link(Persistent):
 
     def __init__(self, parent, role):
         inspectSpecificURI(role)
+        if not IRelatable.isImplementedBy(parent):
+            raise TypeError("Parent must be IRelatable (got %r)" % (parent,))
         self.__parent__ = parent
         self.role = role
-
-    # These attributes are set when being added to a relationship
-    rel = None
-    other = None
+        # self.relationship is set when this link becomes part of a
+        # Relationship
 
     def _getTitle(self):
-        return self.rel.title
+        return self.relationship.title
 
     def _setTitle(self, name):
-        self.rel.title = unicode(title)
+        self.relationship.title = unicode(title)
 
     title = property(_getTitle, _setTitle)
 
     def traverse(self):
-        return getattr(self.rel, self.other).__parent__
+        return self.relationship.traverse(self).__parent__
 
 class Relationship(Persistent):
     """A central part of a relationship.
@@ -69,7 +69,20 @@ class Relationship(Persistent):
         self.title = unicode(title)
         self.a = a
         self.b = b
-        a.rel = self
-        b.rel = self
-        a.other = 'b'
-        b.other = 'a'
+        a.relationship = self
+        b.relationship = self
+        assert IRelatable.isImplementedBy(a.__parent__)
+        a.__parent__.__links__.add(a)
+        assert IRelatable.isImplementedBy(b.__parent__)
+        b.__parent__.__links__.add(b)
+
+    def traverse(self, link):
+        """Returns the link that is at the other end to the link passed in."""
+        # Note that this will not work if link is proxied.
+        if link is self.a:
+            return self.b
+        elif link is self.b:
+            return self.a
+        else:
+            raise ValueError("Not one of my links: %r" % (link,))
+

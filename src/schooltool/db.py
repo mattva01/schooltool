@@ -50,6 +50,9 @@ class PersistentListSet(Persistent):
     def remove(self, item):
         self._data.remove(item)
 
+    def __len__(self):
+        return len(self._data)
+
 
 class PersistentKeysDict(Persistent, UserDict.DictMixin):
     """A PersistentDict which uses persistent objects as keys by
@@ -210,3 +213,49 @@ class PersistentTuplesDict(PersistentKeysDict):
         for idx in self._pindexes:
             if key[idx]._p_oid is None:
                 self._p_jar.add(key[idx])
+
+class HookablePJar:
+    """A descriptor that proxies Persistent._p_jar with a callback on __set__.
+    """
+    def __init__(self, afterSet=None):
+        self._afterSet = afterSet
+
+    def __get__(self, inst, cls=None):
+        return Persistent._p_jar.__get__(inst, cls)
+
+    def __set__(self, inst, value):
+        Persistent._p_jar.__set__(inst, value)
+        if self._afterSet is not None:
+            self._afterSet(inst, value)
+
+    def __delete__(self, inst):
+        Persistent._p_jar.__delete__(inst)
+
+    def __doc__(self, inst):
+        return Persistent._p_jar.__doc__(inst)
+
+class PersistentKeysSet(Persistent):
+    """A set for persistent objects that uses PersistentKeysSet as a
+    backend.
+    """
+
+    def __init__(self):
+        self._data = PersistentKeysDict()
+
+    def add(self, item):
+        if item not in self._data:
+            self._data[item] = None
+
+    def __iter__(self):
+        return iter(self._data)
+
+    def remove(self, item):
+        del self._data[item]
+
+    def __len__(self):
+        return len(self._data)
+
+    def setDataManager(self, datamanager):
+        datamanager.add(self._data)
+
+    _p_jar = HookablePJar(setDataManager)

@@ -31,6 +31,20 @@ from schooltool.interfaces import IEventConfigurable
 
 __metaclass__ = type
 
+class MemberSetup:
+    def setUp(self):
+        import schooltool.model
+        from schooltool.db import PersistentListSet
+        self.__save = schooltool.model._setFactory
+        # PersistentListSet is used so that the order of items in the sets
+        # is preserved, so that we can compare output to a fixed string.
+        # This is a stricter requirement than the actual contract.
+        schooltool.model._setFactory = PersistentListSet
+
+    def tearDown(self):
+        import schooltool.model
+        schooltool.model._setFactory = self.__save
+
 class MemberStub:
     added = None
     removed = None
@@ -70,7 +84,18 @@ class TestPerson(unittest.TestCase):
         verifyObject(IEventConfigurable, person)
 
 
-class TestGroupMember(unittest.TestCase):
+class TestURIs(unittest.TestCase):
+    def testURIGroup(self):
+        from schooltool.interfaces import URIGroup
+        from schooltool.component import inspectSpecificURI
+        inspectSpecificURI(URIGroup)
+
+    def testURIMember(self):
+        from schooltool.interfaces import URIMember
+        from schooltool.component import inspectSpecificURI
+        inspectSpecificURI(URIMember)
+
+class TestGroupMember(MemberSetup, unittest.TestCase):
 
     def test_notifyAdd(self):
         from schooltool.model import GroupMember
@@ -103,8 +128,32 @@ class TestGroupMember(unittest.TestCase):
                 self.assertEqual(member.__parent__, other)
                 self.assertEqual(member.__name__, 'spam')
 
+    def testQueryLinks(self):
+        from schooltool.model import GroupMember
+        from schooltool.interfaces import IQueryLinks, URIGroup, URIMember
+        from schooltool.interfaces import ISpecificURI
+        member = GroupMember()
+        verifyObject(IQueryLinks, member)
+        self.assertEqual(member.listLinks(), [])
+        group = object()
+        member.notifyAdd(group, 1)
 
-class TestGroup(unittest.TestCase):
+        for role in (URIGroup, ISpecificURI):
+            links = member.listLinks(role)
+            self.assertEqual(len(links), 1, str(role))
+            self.assertEqual(links[0].role, URIGroup)
+            self.assertEqual(links[0].title, "Membership")
+            self.assert_(links[0].traverse() is group)
+
+        class URIFoo(URIGroup): "http://example.com/ns/foo"
+
+        for role in (URIMember, URIFoo):
+            links = member.listLinks(role)
+            self.assertEqual(links, [], str(role))
+
+
+
+class TestGroup(MemberSetup, unittest.TestCase):
 
     def test(self):
         from schooltool.interfaces import IGroup, IEventTarget
@@ -173,6 +222,47 @@ class TestGroup(unittest.TestCase):
         self.assertEquals(list(group.values()), [member])
         self.assertEquals(list(group.items()), [(key, member)])
 
+    def testQueryLinks(self):
+        from schooltool.model import Group
+        from schooltool.interfaces import IQueryLinks, URIGroup, URIMember
+        from schooltool.interfaces import ISpecificURI
+        group = Group("foo")
+        verifyObject(IQueryLinks, group)
+        self.assertEqual(group.listLinks(), [])
+        member = MemberStub()
+        key = group.add(member)
+
+        for role in (URIMember, ISpecificURI):
+            links = group.listLinks(role)
+            self.assertEqual(len(links), 1, str(role))
+            self.assertEqual(links[0].role, URIMember)
+            self.assertEqual(links[0].title, "Membership")
+            self.assert_(links[0].traverse() is member)
+
+        class URIFoo(URIMember): "http://example.com/ns/foo"
+
+        for role in (URIGroup, URIFoo):
+            links = group.listLinks(role)
+            self.assertEqual(links, [], str(role))
+
+        root = Group("root")
+        root.add(group)
+
+        links = group.listLinks()
+        self.assertEqual(len(links), 2)
+
+        links = group.listLinks(URIMember)
+        self.assertEqual(len(links), 1)
+
+        class URIFoo(URIMember): "http://example.com/ns/foo"
+
+        links = group.listLinks(URIFoo)
+        self.assertEqual(links, [])
+
+        links = group.listLinks(URIGroup)
+        self.assertEqual([link.traverse() for link in links], [root])
+        self.assertEqual([link.role for link in links], [URIGroup])
+        self.assertEqual([link.title for link in links], ["Membership"])
 
 class TestRootGroup(unittest.TestCase):
 
@@ -224,6 +314,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestGroupMember))
     suite.addTest(unittest.makeSuite(TestFacetedMixin))
     suite.addTest(unittest.makeSuite(TestFacetedEventTargetMixin))
+    suite.addTest(unittest.makeSuite(TestURIs))
     return suite
 
 if __name__ == '__main__':

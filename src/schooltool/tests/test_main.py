@@ -26,6 +26,7 @@ import unittest
 import re
 import os
 from StringIO import StringIO
+from test_model import MemberSetup
 
 __metaclass__ = type
 
@@ -507,7 +508,7 @@ class TestRequest(unittest.TestCase):
         self.assertRaises(AssertionError, rq.render, resource)
 
 
-class TestServer(unittest.TestCase):
+class TestServer(MemberSetup, unittest.TestCase):
 
     def getConfigFileName(self):
         dirname = os.path.dirname(__file__)

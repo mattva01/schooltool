@@ -25,22 +25,38 @@ import unittest
 from persistence import Persistent
 
 
+class EqualsSortedMixin:
+    def assertEqualsSorted(self, a, b):
+        x = a[:]
+        y = b[:]
+        x.sort()
+        y.sort()
+        self.assertEquals(x, y)
+
+
 class TestPersistentListSet(unittest.TestCase):
 
     def test(self):
         from schooltool.db import PersistentListSet
         p = PersistentListSet()
+        self.assertEqual(len(p), 0)
         a, b = object(), object()
         p.add(a)
         self.assertEquals(list(p), [a])
+        self.assertEqual(len(p), 1)
         p.add(a)
         self.assertEquals(list(p), [a])
+        self.assertEqual(len(p), 1)
         p.add(b)
         self.assertEquals(list(p), [a, b])
+        self.assertEqual(len(p), 2)
         p.remove(a)
         self.assertEquals(list(p), [b])
+        self.assertEqual(len(p), 1)
         p.add(a)
         self.assertEquals(list(p), [b, a])
+        self.assertEqual(len(p), 2)
+
 
 
 class P(Persistent):
@@ -51,7 +67,7 @@ class FalseP(Persistent):
     def __nonzero__(self):
         return False
 
-class TestPersistentKeysDict(unittest.TestCase):
+class TestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
 
     def setUp(self):
         from zodb.db import DB
@@ -106,12 +122,8 @@ class TestPersistentKeysDict(unittest.TestCase):
         self.datamgr.add(d)
         d[p] = 2
         d[p2] = 3
-        keys = d.keys()
-        keys.sort()
-        self.assertEqual(keys, [p, p2])
-        keys = list(d)
-        keys.sort()
-        self.assertEqual(keys, [p, p2])
+        self.assertEqualsSorted(d.keys(), [p, p2])
+        self.assertEqualsSorted(list(d), [p, p2])
         self.assertEqual(len(d), 2)
 
     def test_contains(self):
@@ -125,7 +137,7 @@ class TestPersistentKeysDict(unittest.TestCase):
         self.assertRaises(TypeError, d.__contains__, object())
         self.assert_(P() not in d)
 
-class TestPersistentTuplesDict(unittest.TestCase):
+class TestPersistentTuplesDict(unittest.TestCase, EqualsSortedMixin):
 
     def setUp(self):
         from zodb.db import DB
@@ -245,12 +257,8 @@ class TestPersistentTuplesDict(unittest.TestCase):
         self.datamgr.add(d)
         d[key1] = 2
         d[key2] = 3
-        keys = d.keys()
-        keys.sort()
-        self.assertEqual(keys, [key1, key2])
-        keys = list(d)
-        keys.sort()
-        self.assertEqual(keys, [key1, key2])
+        self.assertEqualsSorted(d.keys(), [key1, key2])
+        self.assertEqualsSorted(list(d), [key1, key2])
         self.assertEqual(len(d), 2)
 
     def test_contains(self):
@@ -269,10 +277,41 @@ class TestPersistentTuplesDict(unittest.TestCase):
         self.assertRaises(ValueError, d.__contains__, (ob, ob, p, p))
         self.assert_((object(), ob2, p) not in d)
 
+class TestPersistentKeysSet(unittest.TestCase, EqualsSortedMixin):
+
+    def setUp(self):
+        from zodb.db import DB
+        from zodb.storage.mapping import MappingStorage
+        self.db = DB(MappingStorage())
+        self.datamgr = self.db.open()
+
+    def test(self):
+        from schooltool.db import PersistentKeysSet
+        p = PersistentKeysSet()
+        self.datamgr.add(p)
+        a, b = P(), P()
+        self.assertEqual(len(p), 0)
+        p.add(a)
+        self.assertEquals(list(p), [a])
+        self.assertEqual(len(p), 1)
+        p.add(a)
+        self.assertEquals(list(p), [a])
+        self.assertEqual(len(p), 1)
+        p.add(b)
+        self.assertEqualsSorted(list(p), [a, b])
+        self.assertEqual(len(p), 2)
+        p.remove(a)
+        self.assertEquals(list(p), [b])
+        self.assertEqual(len(p), 1)
+        p.add(a)
+        self.assertEqualsSorted(list(p), [a, b])
+        self.assertEqual(len(p), 2)
+
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPersistentListSet))
+    suite.addTest(unittest.makeSuite(TestPersistentKeysSet))
     suite.addTest(unittest.makeSuite(TestPersistentKeysDict))
     suite.addTest(unittest.makeSuite(TestPersistentTuplesDict))
     return suite

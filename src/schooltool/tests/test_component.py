@@ -23,8 +23,10 @@ $Id$
 """
 
 import unittest
+from sets import Set
 from zope.interface import Interface, implements, directlyProvides
 from zope.interface.verify import verifyObject
+from schooltool.interfaces import ISpecificURI, IRelatable
 
 __metaclass__ = type
 
@@ -243,6 +245,34 @@ class TestSpecificURI(unittest.TestCase):
         for string in bad:
             self.assert_(not isURI(string), string)
 
+class Relatable:
+    implements(IRelatable)
+    def __init__(self):
+        self.__links__ = Set()
+
+class URISuperior(ISpecificURI): """http://army.gov/ns/superior"""
+class URIReport(ISpecificURI): """http://army.gov/ns/report"""
+
+class TestRelate(unittest.TestCase):
+    def test_relate(self):
+        from schooltool.component import relate
+        officer = Relatable()
+        soldier = Relatable()
+
+        links = relate("Command",
+                       officer, URISuperior,
+                       soldier, URIReport)
+        self.assertEqual(len(links), 2)
+        linka, linkb = links
+        for a, b, role, alink in ((officer, soldier, URIReport, linka),
+                                 (soldier, officer, URISuperior, linkb)):
+            self.assertEqual(len(a.__links__), 1)
+            link = list(a.__links__)[0]
+            self.assert_(link is alink)
+            self.assert_(link.traverse() is b)
+            self.assert_(link.role is role)
+            self.assertEqual(link.title, "Command")
+
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -251,6 +281,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestFacetFunctions))
     suite.addTest(unittest.makeSuite(TestServiceAPI))
     suite.addTest(unittest.makeSuite(TestSpecificURI))
+    suite.addTest(unittest.makeSuite(TestRelate))
     return suite
 
 if __name__ == '__main__':

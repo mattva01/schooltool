@@ -25,14 +25,41 @@ $Id$
 from zope.interface import implements
 from persistence import Persistent
 from zodb.btrees.IOBTree import IOBTree
-from schooltool.interfaces import IFaceted, IEventConfigurable
+from schooltool.interfaces import IFaceted, IEventConfigurable, IQueryLinks
 from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
+from schooltool.interfaces import ISpecificURI, URIGroup, URIMember
 from schooltool.component import queryFacet, setFacet, getFacetItems
-from schooltool.db import PersistentListSet, PersistentKeysDict
+from schooltool.db import PersistentKeysSet, PersistentKeysDict
 from schooltool.event import EventTargetMixin, EventService
 
 __metaclass__ = type
 
+# A hook for tests
+_setFactory = PersistentKeysSet
+
+class GroupLink:
+    __slots__ = '_group'
+
+    def __init__(self, group):
+        self._group = group
+
+    def traverse(self):
+        return self._group
+
+    role = URIGroup
+    title = "Membership"
+
+class MemberLink:
+    __slots__ = '_member'
+
+    def __init__(self, member):
+        self._member = member
+
+    def traverse(self):
+        return self._member
+
+    role = URIMember
+    title = "Membership"
 
 class GroupMember:
     """A mixin providing the IGroupMember interface.
@@ -42,10 +69,10 @@ class GroupMember:
     removed from it.
     """
 
-    implements(IGroupMember)
+    implements(IGroupMember, IQueryLinks)
 
     def __init__(self):
-        self._groups = PersistentListSet()
+        self._groups = _setFactory()
         self.__name__ = None
         self.__parent__ = None
 
@@ -67,6 +94,11 @@ class GroupMember:
             self.__parent__ = None
             self.__name__ = None
 
+    def listLinks(self, role=ISpecificURI):
+        if URIGroup.extends(role, False):
+            return [GroupLink(group) for group in self.groups()]
+        else:
+            return []
 
 class FacetedMixin:
 
@@ -155,6 +187,11 @@ class Group(Persistent, GroupMember, FacetedEventTargetMixin):
             facet.active = False
         del self._members[key]
 
+    def listLinks(self, role=ISpecificURI):
+        l = GroupMember.listLinks(self, role)
+        if URIMember.extends(role, False):
+            l += [MemberLink(member) for member in self.values()]
+        return l
 
 class RootGroup(Group):
     """A persistent application root object"""
