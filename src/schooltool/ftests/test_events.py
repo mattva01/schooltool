@@ -24,7 +24,7 @@ import unittest
 from zope.interface import implements, Attribute
 from schooltool.interfaces import IEvent, IEventTarget
 from schooltool.event import EventMixin
-from schooltool.model import GroupMember
+from schooltool.membership import MemberMixin
 from transaction import get_transaction
 
 __metaclass__ = type
@@ -53,11 +53,11 @@ class ArbitraryEvent(ContextEvent):
     implements(IArbitraryEvent)
 
 
-class EventCatcher(GroupMember):
+class EventCatcher(MemberMixin):
     implements(IEventTarget)
 
     def __init__(self):
-        GroupMember.__init__(self)
+        MemberMixin.__init__(self)
         self.received = []
 
     def notify(self, event):

@@ -189,7 +189,7 @@ from schooltool.relationships import relate as relate3
 def relate(relationship_type, (a, role_a), (b, role_b), title=None):
     """See IRelationshipAPI"""
     # XXX This is to avoid a circular import
-    from schooltool.model import MemberLink, GroupLink
+    from schooltool.membership import MemberLink, GroupLink
     from schooltool.event import RelationshipAddedEvent, MemberAddedEvent
 
     if relationship_type is URIMembership:

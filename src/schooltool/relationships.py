@@ -105,16 +105,6 @@ class _LinkRelationship(Persistent):
             raise ValueError("Not one of my links: %r" % (link,))
 
 
-def relate(reltype, (a, role_of_a), (b, role_of_b), title=None):
-    """See IRelationshipAPI"""
-    if title is None:
-        title, doc = inspectSpecificURI(reltype)
-    link_a = Link(a, role_of_b)
-    link_b = Link(b, role_of_a)
-    _LinkRelationship(reltype, title, link_a, link_b)
-    return link_a, link_b
-
-
 class RelationshipSchema:
     classProvides(IRelationshipSchemaFactory)
     implements(IRelationshipSchema)
@@ -147,3 +137,12 @@ class RelationshipSchema:
             L.append((party, uri))
         return relate(self.type, L[0], L[1], title=self.title)
 
+
+def relate(reltype, (a, role_of_a), (b, role_of_b), title=None):
+    """See IRelationshipAPI"""
+    if title is None:
+        title, doc = inspectSpecificURI(reltype)
+    link_a = Link(a, role_of_b)
+    link_b = Link(b, role_of_a)
+    _LinkRelationship(reltype, title, link_a, link_b)
+    return link_a, link_b

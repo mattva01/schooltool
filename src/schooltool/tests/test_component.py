@@ -353,7 +353,7 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         from schooltool.component import relate
         from schooltool.interfaces import URIGroup, URIMember, URIMembership
         from schooltool.interfaces import IMemberAddedEvent
-        from schooltool.model import GroupLink, MemberLink
+        from schooltool.membership import GroupLink, MemberLink
 
         m = MemberStub(self.serviceManager)
         g = GroupStub(self.serviceManager)
@@ -373,7 +373,7 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         from schooltool.component import relate
         from schooltool.interfaces import URIGroup, URIMember, URIMembership
         from schooltool.interfaces import IMemberAddedEvent
-        from schooltool.model import GroupLink, MemberLink
+        from schooltool.membership import GroupLink, MemberLink
 
         m = MemberStub(self.serviceManager)
         g = GroupStub(self.serviceManager)
@@ -394,7 +394,7 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         from schooltool.component import relate
         from schooltool.interfaces import URIGroup, URIMember, URIMembership
         from schooltool.interfaces import IMemberAddedEvent
-        from schooltool.model import GroupLink, MemberLink
+        from schooltool.membership import GroupLink, MemberLink
 
         m = MemberStub(self.serviceManager)
         g = GroupStub(self.serviceManager)
@@ -415,7 +415,7 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         from schooltool.interfaces import URIGroup, URIMember, URIMembership
         from schooltool.interfaces import IRelationshipAddedEvent
         from schooltool.interfaces import IMemberAddedEvent
-        from schooltool.model import GroupLink, MemberLink
+        from schooltool.membership import GroupLink, MemberLink
 
         m = MemberStub(self.serviceManager)
         g = GroupStub(self.serviceManager)

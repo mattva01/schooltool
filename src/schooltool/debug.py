@@ -23,7 +23,7 @@ Utilities for debugging SchoolTool
 import logging
 from persistence.list import PersistentList
 from zope.interface import implements, Attribute
-from schooltool.model import GroupMember
+from schooltool.membership import MemberMixin
 from schooltool.interfaces import IEventTarget
 
 __metaclass__ = type
@@ -37,12 +37,12 @@ class IEventLog(IEventTarget):
         """Clear received events list"""
 
 
-class EventLog(GroupMember):
+class EventLog(MemberMixin):
 
     implements(IEventLog)
 
     def __init__(self):
-        GroupMember.__init__(self)
+        MemberMixin.__init__(self)
         self.received = PersistentList()
 
     def notify(self, event):
@@ -52,7 +52,7 @@ class EventLog(GroupMember):
         del self.received[:]
 
 
-class EventLogger(GroupMember):
+class EventLogger(MemberMixin):
 
     implements(IEventTarget)
 

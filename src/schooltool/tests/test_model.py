@@ -85,78 +85,6 @@ class TestPerson(unittest.TestCase):
         verifyObject(IEventConfigurable, person)
 
 
-class TestURIs(unittest.TestCase):
-
-    def testURIGroup(self):
-        from schooltool.interfaces import URIGroup
-        from schooltool.component import inspectSpecificURI
-        inspectSpecificURI(URIGroup)
-
-    def testURIMember(self):
-        from schooltool.interfaces import URIMember
-        from schooltool.component import inspectSpecificURI
-        inspectSpecificURI(URIMember)
-
-
-class TestGroupMember(unittest.TestCase):
-
-    def test_notifyAdd(self):
-        from schooltool.model import GroupMember
-        member = GroupMember()
-        group = P()
-        member.notifyAdd(group, 1)
-        self.assertEqual(list(member.groups()), [group])
-        self.assertEqual(member.__parent__, group)
-        self.assertEqual(member.__name__, '1')
-        member.notifyAdd(P(), '2')
-        self.assertEqual(member.__parent__, group)
-        self.assertEqual(member.__name__, '1')
-
-    def test_notifyRemove(self):
-        from schooltool.model import GroupMember
-        member = GroupMember()
-        group = object()
-        other = object()
-        for parent in (group, other):
-            member.__parent__ = parent
-            member.__name__ = 'spam'
-            member._groups = {group: '1'}
-            member.notifyRemove(group)
-            self.assertEqual(list(member.groups()), [])
-            self.assertRaises(KeyError, member.notifyRemove, group)
-            if parent == group:
-                self.assertEqual(member.__parent__, None)
-                self.assertEqual(member.__name__, None)
-            else:
-                self.assertEqual(member.__parent__, other)
-                self.assertEqual(member.__name__, 'spam')
-
-    def testQueryLinks(self):
-        from schooltool.model import GroupMember
-        from schooltool.interfaces import IQueryLinks, URIGroup, URIMember
-        from schooltool.interfaces import ISpecificURI
-        member = GroupMember()
-        verifyObject(IQueryLinks, member)
-        self.assertEqual(member.listLinks(), [])
-        group = P()
-        member.notifyAdd(group, 1)
-
-        for role in (URIGroup, ISpecificURI):
-            links = member.listLinks(role)
-            self.assertEqual(len(links), 1, str(role))
-            self.assertEqual(links[0].role, URIGroup)
-            self.assertEqual(links[0].title, "Membership")
-            self.assertEqual(links[0].name, 1)
-            self.assert_(links[0].traverse() is group)
-
-        class URIFoo(URIGroup):
-            "http://example.com/ns/foo"
-
-        for role in (URIMember, URIFoo):
-            links = member.listLinks(role)
-            self.assertEqual(links, [], str(role))
-
-
 class TestGroup(unittest.TestCase):
 
     def test(self):
@@ -168,15 +96,6 @@ class TestGroup(unittest.TestCase):
         verifyObject(IFaceted, group)
         verifyObject(IEventTarget, group)
         verifyObject(IEventConfigurable, group)
-
-    def test_add(self):
-        from schooltool.model import Group
-        group = Group("root")
-        member = MemberStub()
-        key = group.add(member)
-        self.assertEqual(member, group[key])
-        self.assertEqual(member.added, group)
-        self.assertRaises(TypeError, group.add, "not a member")
 
     def test_add_group(self):
         from schooltool.model import Group
@@ -204,33 +123,11 @@ class TestGroup(unittest.TestCase):
         self.assert_(getFacet(member, group) is facet)
         self.assert_(facet.active)
 
-    def test_remove(self):
-        from schooltool.model import Group
-        group = Group("root")
-        member = MemberStub()
-        key = group.add(member)
-        del group[key]
-        self.assertRaises(KeyError, group.__getitem__, key)
-        self.assertRaises(KeyError, group.__delitem__, key)
-        self.assertEqual(member.removed, group)
-
-    def test_items(self):
-        from schooltool.model import Group
-        group = Group("root")
-        self.assertEquals(list(group.keys()), [])
-        self.assertEquals(list(group.values()), [])
-        self.assertEquals(list(group.items()), [])
-        member = MemberStub()
-        key = group.add(member)
-        self.assertEquals(list(group.keys()), [key])
-        self.assertEquals(list(group.values()), [member])
-        self.assertEquals(list(group.items()), [(key, member)])
-
     def testQueryLinks(self):
         from schooltool.model import Group
         from schooltool.interfaces import IQueryLinks, URIGroup, URIMember
         from schooltool.interfaces import ISpecificURI
-        group = Group("foo")
+        group = Group("group")
         verifyObject(IQueryLinks, group)
         self.assertEqual(group.listLinks(), [])
         member = MemberStub()
@@ -310,83 +207,13 @@ class TestFacetedEventTargetMixin(unittest.TestCase):
         self.assertEquals(et.getEventTable(), [0, 2])
 
 
-class TestMemberLink(EventServiceTestMixin, unittest.TestCase):
-
-    def test(self):
-        from schooltool.model import MemberLink
-        from schooltool.interfaces import URIMember, IRemovableLink
-
-        member = object()
-        parent = object()
-        link = MemberLink(parent, member, 'name')
-        self.assertEqual(link.title, 'Membership')
-        self.assertEqual(link.name, 'name')
-        self.assert_(link.traverse() is member)
-        self.assert_(link.role is URIMember)
-        self.assert_(link.__parent__ is parent)
-        verifyObject(IRemovableLink, link)
-
-    def test_unlink(self):
-        from schooltool.model import MemberLink
-        from schooltool.interfaces import IMemberRemovedEvent
-        member = MemberStub(self.serviceManager)
-        group = GroupStub(self.serviceManager)
-        link = MemberLink(group, member, 'foo')
-        link.unlink()
-        self.assertEqual(group.deleted, 'foo')
-        self.assertEquals(len(self.eventService.events), 1)
-        e = self.eventService.events[0]
-        self.assert_(group.events, [e])
-        self.assert_(member.events, [e])
-        self.assert_(IMemberRemovedEvent.isImplementedBy(e))
-        self.assert_(e.member is member)
-        self.assert_(e.group is group)
-
-
-class TestGroupLink(EventServiceTestMixin, unittest.TestCase):
-
-    def test(self):
-        from schooltool.model import GroupLink
-        from schooltool.interfaces import URIGroup, IRemovableLink
-
-        group = object()
-        parent = object()
-        link = GroupLink(parent, group, 'name')
-        self.assertEqual(link.title, 'Membership')
-        self.assertEqual(link.name, 'name')
-        self.assert_(link.traverse() is group)
-        self.assert_(link.role is URIGroup)
-        self.assert_(link.__parent__ is parent)
-        verifyObject(IRemovableLink, link)
-
-    def test_unlink(self):
-        from schooltool.model import GroupLink
-        from schooltool.interfaces import IMemberRemovedEvent
-        member = MemberStub(self.serviceManager)
-        group = GroupStub(self.serviceManager)
-        link = GroupLink(member, group, 'foo')
-        link.unlink()
-        self.assertEqual(group.deleted, 'foo')
-        self.assertEquals(len(self.eventService.events), 1)
-        e = self.eventService.events[0]
-        self.assert_(group.events, [e])
-        self.assert_(member.events, [e])
-        self.assert_(IMemberRemovedEvent.isImplementedBy(e))
-        self.assert_(e.member is member)
-        self.assert_(e.group is group)
-
-
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPerson))
     suite.addTest(unittest.makeSuite(TestGroup))
     suite.addTest(unittest.makeSuite(TestRootGroup))
-    suite.addTest(unittest.makeSuite(TestGroupMember))
     suite.addTest(unittest.makeSuite(TestFacetedMixin))
     suite.addTest(unittest.makeSuite(TestFacetedEventTargetMixin))
-    suite.addTest(unittest.makeSuite(TestURIs))
-    suite.addTest(unittest.makeSuite(TestMemberLink))
-    suite.addTest(unittest.makeSuite(TestGroupLink))
     return suite
 
 if __name__ == '__main__':
