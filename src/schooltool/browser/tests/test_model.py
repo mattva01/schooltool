@@ -282,11 +282,12 @@ class TestPersonEditView(unittest.TestCase):
     def createView(self):
         from schooltool.browser.model import PersonEditView
         from schooltool.component import FacetManager
+        from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.model import Person
 
-        self.person = Person()
-        self.person.title = "Mr. Wise Guy"
-        setPath(self.person, '/persons/somebody')
+        app = Application()
+        persons = app['persons'] = ApplicationObjectContainer(Person)
+        self.person = persons.new('somebody', title="Mr. Wise Guy")
         self.info = FacetManager(self.person).facetByName('person_info')
         return PersonEditView(self.person)
 
@@ -815,10 +816,13 @@ class TestResourceEditView(unittest.TestCase):
 
     def createView(self):
         from schooltool.browser.model import ResourceEditView
+        from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.model import Resource
-        resource = self.resource = Resource(title=u"Foo resource bar")
-        setPath(resource, '/resources/foo')
-        view = ResourceEditView(resource)
+
+        app = Application()
+        resources = app['resources'] = ApplicationObjectContainer(Resource)
+        self.resource = resources.new('foo', title=u"Foo resource bar")
+        view = ResourceEditView(self.resource)
         view.authorization = lambda x, y: True
         return view
 

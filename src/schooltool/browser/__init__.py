@@ -26,6 +26,7 @@ import datetime
 import logging
 
 from schooltool.interfaces import AuthenticationError
+from schooltool.interfaces import IApplicationObjectContainer
 from schooltool.component import getTicketService, traverse
 from schooltool.rest import View as _View
 from schooltool.rest import Template, read_file        # reexport
@@ -284,3 +285,37 @@ class ToplevelBreadcrumbsMixin:
             return [(_('Start'), absoluteURL(self.request, app, 'start'))]
         else:
             return []
+
+
+class ContainerBreadcrumbsMixin(ToplevelBreadcrumbsMixin):
+    """Breadcrumbs for application object container views."""
+
+    _container_translations = {'groups': _('Groups'),
+                               'persons': _('Persons'),
+                               'resources': _('Resources')}
+
+    def breadcrumbs(self):
+        breadcrumbs = ToplevelBreadcrumbsMixin.breadcrumbs(self)
+        container = self.context
+        while not IApplicationObjectContainer.providedBy(container):
+            container = container.__parent__
+        # XXX Exceptions?
+        breadcrumbs.append((self._container_translations[container.__name__],
+                            absoluteURL(self.request, container)))
+        return breadcrumbs
+
+
+class AppObjectBreadcrumbsMixin(ContainerBreadcrumbsMixin):
+    """Mixin for application object views."""
+
+    def breadcrumbs(self, context=None):
+        breadcrumbs = ContainerBreadcrumbsMixin.breadcrumbs(self)
+        if context is None:
+            context = self.context
+
+        obj = context
+        while not IApplicationObjectContainer.providedBy(obj.__parent__):
+            obj = obj.__parent__
+
+        breadcrumbs.append((context.title, absoluteURL(self.request, context)))
+        return breadcrumbs

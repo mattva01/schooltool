@@ -27,6 +27,7 @@ import urllib
 from datetime import datetime, date, time, timedelta
 
 from schooltool.browser import View, Template, absoluteURL, absolutePath
+from schooltool.browser import AppObjectBreadcrumbsMixin
 from schooltool.browser.auth import TeacherAccess, PublicAccess
 from schooltool.browser.auth import ACLViewAccess, ACLModifyAccess
 from schooltool.browser.auth import ACLAddAccess
@@ -44,7 +45,7 @@ from schooltool.browser.widgets import timeFormatter
 __metaclass__ = type
 
 
-class BookingView(View):
+class BookingView(View, AppObjectBreadcrumbsMixin):
 
     __used_for__ = IResource
 
@@ -93,10 +94,6 @@ class BookingView(View):
         if value is None:
             return None
         return value.__name__
-
-    def breadcrumbs(self):
-        app = traverse(self.context, '/')
-        return [(_('Start'), absoluteURL(self.request, app, 'start'))]
 
     def do_GET(self, request):
         self.update()
@@ -176,15 +173,15 @@ class CalendarDay:
         return cmp(self.date, other.date)
 
 
-class CalendarBreadcrumbsMixin:
+class CalendarBreadcrumbsMixin(AppObjectBreadcrumbsMixin):
 
     def breadcrumbs(self):
-        app = traverse(self.context, '/')
         owner = self.context.__parent__
-        return [
-            (_('Start'), absoluteURL(self.request, app, 'start')),
-            ((owner.title), absoluteURL(self.request, owner)),
-            (_('Calendar'), absoluteURL(self.request, owner, 'calendar'))]
+        breadcrumbs = AppObjectBreadcrumbsMixin.breadcrumbs(self,
+                                                            context=owner)
+        breadcrumbs.append((_('Calendar'),
+                            absoluteURL(self.request, owner, 'calendar')))
+        return breadcrumbs
 
 
 class CalendarViewBase(View, CalendarBreadcrumbsMixin):

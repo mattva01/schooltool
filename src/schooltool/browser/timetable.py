@@ -29,6 +29,7 @@ import datetime
 from schooltool.browser import View, Template
 from schooltool.browser import notFoundPage, ToplevelBreadcrumbsMixin
 from schooltool.browser import valid_name
+from schooltool.browser import AppObjectBreadcrumbsMixin
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import ManagerAccess
@@ -81,7 +82,7 @@ class TimetableTraverseView(View):
             return TimetableView(tt, (self.period, name))
 
 
-class TimetableView(View):
+class TimetableView(View, AppObjectBreadcrumbsMixin):
     """View for a timetable.
 
     Can be accessed at /persons/$id/timetables/$period/$schema.
@@ -98,13 +99,13 @@ class TimetableView(View):
         self.key = key
 
     def breadcrumbs(self):
-        app = traverse(self.context, '/')
         owner = self.context.__parent__.__parent__
+        breadcrumbs = AppObjectBreadcrumbsMixin.breadcrumbs(self,
+                                                            context=owner)
         name = self.context.__name__
-        return [
-            (_('Start'), absoluteURL(self.request, app, 'start')),
-            ((owner.title), absoluteURL(self.request, owner)),
-            (_('Timetable for %s, %s') % name, self.request.uri)]
+        breadcrumbs.append((_('Timetable for %s, %s') % name,
+                            self.request.uri))
+        return breadcrumbs
 
     def title(self):
         timetabled = self.context.__parent__.__parent__

@@ -289,12 +289,64 @@ class TestNotFound(unittest.TestCase):
         self.assert_("Not found: /path" in result)
 
 
+class TestBreadcrumbsMixins(unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.model import Person
+        self.app = Application()
+        self.app['persons'] = ApplicationObjectContainer(Person)
+        self.persons = self.app['persons']
+        self.person = self.persons.new('person', title="Some person")
+
+    def test_ToplevelBreadcrumbsMixin(self):
+        from schooltool.browser import ToplevelBreadcrumbsMixin
+
+        m = ToplevelBreadcrumbsMixin()
+        m.context = None
+        m.request = RequestStub()
+        self.assertEquals(m.breadcrumbs(), [])
+
+        m.context = self.app
+        self.assertEquals(m.breadcrumbs(),
+                          [(u'Start', 'http://localhost:7001/start')])
+
+    def test_ContainerBreadcrumbsMixin(self):
+        from schooltool.browser import ContainerBreadcrumbsMixin
+
+        m = ContainerBreadcrumbsMixin()
+        m.request = RequestStub()
+
+        expected = [(u'Start', 'http://localhost:7001/start'),
+                    (u'Persons', 'http://localhost:7001/persons')]
+
+        m.context = self.persons
+        self.assertEquals(m.breadcrumbs(), expected)
+
+        m.context = self.person
+        self.assertEquals(m.breadcrumbs(), expected)
+
+    def test_AppBreadcrumbsMixin(self):
+        from schooltool.browser import AppObjectBreadcrumbsMixin
+
+        m = AppObjectBreadcrumbsMixin()
+        m.context = self.person
+        m.request = RequestStub()
+
+        self.assertEquals(m.breadcrumbs(),
+                          [(u'Start', 'http://localhost:7001/start'),
+                           (u'Persons', 'http://localhost:7001/persons'),
+                           (u'Some person',
+                            'http://localhost:7001/persons/person')])
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestBrowserRequest))
     suite.addTest(unittest.makeSuite(TestView))
     suite.addTest(unittest.makeSuite(TestStaticFile))
     suite.addTest(unittest.makeSuite(TestNotFound))
+    suite.addTest(unittest.makeSuite(TestBreadcrumbsMixins))
     return suite
 
 

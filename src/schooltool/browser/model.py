@@ -31,6 +31,7 @@ from schooltool.rest.infofacets import resize_photo
 from schooltool.browser import View, Template
 from schooltool.browser import absoluteURL
 from schooltool.browser import notFoundPage
+from schooltool.browser import AppObjectBreadcrumbsMixin
 from schooltool.browser.auth import AuthenticatedAccess, ManagerAccess
 from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import ACLModifyAccess, ACLViewAccess
@@ -92,19 +93,8 @@ class TimetabledViewMixin:
                 for period, schema in keys]
 
 
-class AppObjectViewMixin:
-    """Mixin for views that are top-level objects."""
-
-    def breadcrumbs(self):
-        return [(_('Start'),
-                 absoluteURL(self.request, traverse(self.context, '/'),
-                             'start')),
-                (self.context.title,
-                 absoluteURL(self.request, self.context))]
-
-
 class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
-                 AppObjectViewMixin):
+                 AppObjectBreadcrumbsMixin):
     """Person information view (/persons/id)."""
 
     __used_for__ = IPerson
@@ -146,7 +136,7 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin, TimetabledViewMixin,
     canViewCalendar = canChangePassword
 
 
-class PersonPasswordView(View, AppObjectViewMixin):
+class PersonPasswordView(View, AppObjectBreadcrumbsMixin):
     """Page for changing a person's password (/persons/id/password.html)."""
 
     __used_for__ = IPerson
@@ -185,7 +175,7 @@ class PersonPasswordView(View, AppObjectViewMixin):
         return self.do_GET(request)
 
 
-class PersonEditView(View, PersonInfoMixin, AppObjectViewMixin):
+class PersonEditView(View, PersonInfoMixin, AppObjectBreadcrumbsMixin):
     """Page for changing information about a person.
 
     Can be accessed at /persons/$id/edit.html.
@@ -264,7 +254,7 @@ class PersonEditView(View, PersonInfoMixin, AppObjectViewMixin):
 
 
 class GroupView(View, GetParentsMixin, TimetabledViewMixin,
-                AppObjectViewMixin):
+                AppObjectBreadcrumbsMixin):
     """Group information view (/group/id)."""
 
     __used_for__ = IGroup
@@ -380,7 +370,7 @@ class RelationshipViewMixin:
                                   getPath(self.context)))
 
 
-class GroupEditView(View, RelationshipViewMixin, AppObjectViewMixin):
+class GroupEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
     """Page for "editing" a Group (/group/id/edit.html)."""
 
     __used_for__ = IGroup
@@ -417,7 +407,7 @@ class GroupEditView(View, RelationshipViewMixin, AppObjectViewMixin):
         Membership(group=self.context, member=other)
 
 
-class GroupTeachersView(View, RelationshipViewMixin, AppObjectViewMixin):
+class GroupTeachersView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
 
     __used_for__ = IGroup
 
@@ -445,7 +435,7 @@ class GroupTeachersView(View, RelationshipViewMixin, AppObjectViewMixin):
         Teaching(taught=self.context, teacher=other)
 
 
-class ResourceView(View, AppObjectViewMixin):
+class ResourceView(View, AppObjectBreadcrumbsMixin):
     """View for displaying a resource."""
 
     __used_for__ = IResource
@@ -469,7 +459,7 @@ class ResourceView(View, AppObjectViewMixin):
             raise KeyError(name)
 
 
-class ResourceEditView(View, AppObjectViewMixin):
+class ResourceEditView(View, AppObjectBreadcrumbsMixin):
     """View for displaying a resource."""
 
     __used_for__ = IResource

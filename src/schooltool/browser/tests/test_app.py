@@ -402,11 +402,11 @@ class TestObjectContainerView(unittest.TestCase, TraversalTestMixin):
         from schooltool.app import ApplicationObjectContainer
         from schooltool.model import Person
         app = Application()
-        app['container'] = ApplicationObjectContainer(Person)
-        app['container'].new('obj', title='Some Object')
-        self.obj = app['container']['obj']
+        app['persons'] = ApplicationObjectContainer(Person)
+        app['persons'].new('obj', title='Some Object')
+        self.obj = app['persons']['obj']
 
-        view = self.view(app['container'])
+        view = self.view(app['persons'])
         view.add_view = self.add_view
         view.obj_view = self.obj_view
         return view
@@ -417,9 +417,9 @@ class TestObjectContainerView(unittest.TestCase, TraversalTestMixin):
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        for s in ['href="http://localhost:7001/container/obj"',
+        for s in ['href="http://localhost:7001/persons/obj"',
                   'Some Object',
-                  'href="http://localhost:7001/container/add.html"',
+                  'href="http://localhost:7001/persons/add.html"',
                   view.index_title,
                   view.add_title]:
             self.assert_(s in result, s)

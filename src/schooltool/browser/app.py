@@ -26,6 +26,7 @@ import datetime
 
 from schooltool.app import create_application
 from schooltool.browser import ToplevelBreadcrumbsMixin
+from schooltool.browser import ContainerBreadcrumbsMixin
 from schooltool.browser import View, Template, StaticFile
 from schooltool.browser import absoluteURL
 from schooltool.browser import notFoundPage
@@ -339,7 +340,7 @@ class ResourceAddView(ObjectAddView):
     title = _("Add resource")
 
 
-class ObjectContainerView(View):
+class ObjectContainerView(View, ContainerBreadcrumbsMixin):
     """View for an ApplicationObjectContainer.
 
     Accessing this location returns a 404 Not Found response.

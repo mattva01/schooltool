@@ -28,7 +28,7 @@ from schooltool.component import traverse, getPath, traverse
 from schooltool.translation import ugettext as _
 from schooltool.interfaces import Everybody, ViewPermission
 from schooltool.interfaces import AddPermission, ModifyPermission
-from schooltool.interfaces import IPerson, IGroup, ICalendar
+from schooltool.interfaces import IACL, IPerson, IGroup, ICalendar
 from schooltool.browser.widgets import SelectionWidget
 from schooltool.browser import absoluteURL
 
@@ -38,11 +38,14 @@ __metaclass__ = type
 class ACLView(View):
     """Calendar access list view."""
 
+    __used_for__ = IACL
+
     authorization = PrivateAccess
 
     template = Template("www/acl.pt")
 
     def breadcrumbs(self):
+        # TODO: show Persons
         result = []
         app = traverse(self.context, '/')
         result.append((_('Start'), absoluteURL(self.request, app, 'start')))

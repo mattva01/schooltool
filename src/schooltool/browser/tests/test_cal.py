@@ -229,7 +229,7 @@ class TestCalendarDay(unittest.TestCase):
         self.assertEquals(day2, CalendarDay(date(2004, 7, 15)))
 
 
-class TestCalendarViewBase(unittest.TestCase):
+class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
 
     def assertEqualEventLists(self, result, expected):
         fmt = lambda x: '[%s]' % ', '.join([e.title for e in x])
@@ -253,9 +253,8 @@ class TestCalendarViewBase(unittest.TestCase):
         from schooltool.browser.cal import CalendarViewBase
         from schooltool.model import Person
 
+        person = self.app['persons'].new('boss', title="Da Boss")
         cal = createCalendar()
-        person = Person(title="Da Boss")
-        setPath(person, '/persons/boss')
         cal.__parent__ = person
         cal.__name__ = 'calendar'
 
@@ -427,7 +426,7 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assert_(isinstance(result, unicode))
 
 
-class TestWeeklyCalendarView(unittest.TestCase):
+class TestWeeklyCalendarView(AppSetupMixin, unittest.TestCase):
 
     def test_prev_next(self):
         from schooltool.browser.cal import WeeklyCalendarView
@@ -438,12 +437,10 @@ class TestWeeklyCalendarView(unittest.TestCase):
 
     def test_render(self):
         from schooltool.browser.cal import WeeklyCalendarView
-        from schooltool.model import Person
 
+        person = self.app['persons'].new('boss', title="Da Boss")
         cal = createCalendar([createEvent('2004-08-11 12:00', '1h',
                                           "Stuff happens")])
-        person = Person(title="Da Boss")
-        setPath(person, '/persons/boss')
         cal.__parent__ = person
         cal.__name__ = 'calendar'
 
@@ -463,7 +460,7 @@ class TestWeeklyCalendarView(unittest.TestCase):
         self.assertEquals(view.getCurrentWeek(), "really works")
 
 
-class TestDailyCalendarView(NiceDiffsMixin, unittest.TestCase):
+class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
 
     def test_update(self):
         from schooltool.browser.cal import DailyCalendarView
@@ -683,12 +680,10 @@ class TestDailyCalendarView(NiceDiffsMixin, unittest.TestCase):
 
     def test_render(self):
         from schooltool.browser.cal import DailyCalendarView
-        from schooltool.model import Person
 
         cal = createCalendar([createEvent('2004-08-12 12:00', '1h',
                                           "Stuff happens")])
-        person = Person(title="Da Boss")
-        setPath(person, '/persons/boss')
+        person = self.app['persons'].new('boss', title="Da Boss")
         cal.__parent__ = person
         cal.__name__ = 'calendar'
 
@@ -700,16 +695,14 @@ class TestDailyCalendarView(NiceDiffsMixin, unittest.TestCase):
         self.assert_("Stuff happens" in content)
 
 
-class TestMonthlyCalendarView(unittest.TestCase):
+class TestMonthlyCalendarView(AppSetupMixin, unittest.TestCase):
 
     def test_render(self):
         from schooltool.browser.cal import MonthlyCalendarView
-        from schooltool.model import Person
 
         cal = createCalendar([createEvent('2004-08-11 12:00', '1h',
                                           "Stuff happens")])
-        person = Person(title="Da Boss")
-        setPath(person, '/persons/boss')
+        person = self.app['persons'].new('boss', title="Da Boss")
         cal.__parent__ = person
         cal.__name__ = 'calendar'
 
@@ -736,16 +729,14 @@ class TestMonthlyCalendarView(unittest.TestCase):
         self.assertEquals(view.getCurrentMonth(), "really works")
 
 
-class TestYearlyCalendarView(unittest.TestCase):
+class TestYearlyCalendarView(AppSetupMixin, unittest.TestCase):
 
     def test_render(self):
         from schooltool.browser.cal import YearlyCalendarView
-        from schooltool.model import Person
 
+        person = self.app['persons'].new('boss', title="Da Boss")
         cal = createCalendar([createEvent('2004-08-11 12:00', '1h',
                                           "Stuff happens")])
-        person = Person(title="Da Boss")
-        setPath(person, '/persons/boss')
         cal.__parent__ = person
         cal.__name__ = 'calendar'
 
