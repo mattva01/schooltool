@@ -109,10 +109,8 @@ class ACLView(View):
                 title = user.title
                 value = '%s:%s' % (permission, getPath(user))
                 url = absoluteURL(self.request, user)
-            # XXX: i18nize the permission name.  The tricky part is to make
-            # i18nextractor see the set of allowed values.
             grants.append((stone, title, {'title': title, 'url': url,
-                                          'permission': permission,
+                                          'permission': _(permission),
                                           'value': value}))
         grants.sort()
         return [item for heavy_stone, title, item in grants]
@@ -149,10 +147,9 @@ class ACLView(View):
                 else:
                     self.request.appLog(
                         _("Revoked permission %s on %s from %s") %
-                        (perm, getPath(self.context),
-                         self.printUser(obj)))
+                        (perm, getPath(self.context), self.printUser(obj)))
                     result.append(_("Revoked permission %s from %s") %
-                                  (perm, self.printUser(obj)))
+                                  (_(perm), self.printUser(obj)))
             return "; ".join(result)
 
         if 'ADD' in self.request.args:
@@ -165,17 +162,17 @@ class ACLView(View):
                 permission = self.permission_widget.value
                 if (user, permission) in self.context:
                     return _("%s already has permission %s") % \
-                           (user.title, permission)
+                           (self.printUser(user), _(permission))
                 self.context.add((user, permission))
                 self.request.appLog(
                     _("Granted permission %s on %s to %s") %
                     (permission, getPath(self.context),
                      self.printUser(user)))
                 return _("Granted permission %s to %s") % \
-                       (permission, self.printUser(user))
+                       (_(permission), self.printUser(user))
 
     def printUser(self, user):
         if user == Everybody:
-            return Everybody
+            return _('Everybody')
         else:
             return "%s (%s)" % (getPath(user), user.title)

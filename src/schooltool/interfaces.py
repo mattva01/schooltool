@@ -724,10 +724,16 @@ class IFacetAPI(Interface):
 # Access control
 #
 
-ViewPermission = 'View'
-AddPermission = 'Add'
-ModifyPermission = 'Modify'
-Everybody = 'Everybody'
+# Tell i18nextractor that permission names are translatable
+_ = lambda s: s
+
+ViewPermission = _('View')
+AddPermission = _('Add')
+ModifyPermission = _('Modify')
+
+Everybody = _('Everybody')
+
+del _
 
 
 class IACL(Interface):
