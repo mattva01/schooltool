@@ -22,8 +22,8 @@
     <table class="daycal">
       <tr tal:repeat="row view/getHours">
         <td class="daycalhour">
-          <a tal:content="row/time"
-             tal:attributes="href string:${context/@@absolute_url}/add_event.html?start_date=${view/cursor}&start_time=${row/time}" />
+          <a tal:content="row/title"
+             tal:attributes="href string:${context/@@absolute_url}/add_event.html?start_date=${view/cursor}&start_time=${row/time}&duration=${row/duration}" />
         </td>
         <tal:block repeat="ev row/cols">
           <td tal:condition="python:ev is None" class="empty">&nbsp;</td>

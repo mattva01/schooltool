@@ -712,23 +712,36 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         view.endhour = 16
         result = list(view.getHours())
         self.assertEquals(result,
-                          [{'time': '10:00', 'cols': (None,)},
-                           {'time': '11:00', 'cols': (None,)},
-                           {'time': '12:00', 'cols': (None,)},
-                           {'time': '13:00', 'cols': (None,)},
-                           {'time': '14:00', 'cols': (None,)},
-                           {'time': '15:00', 'cols': (None,)},])
+                          [{'duration': 60, 'time': '10:00',
+                            'title': '10:00', 'cols': (None,)},
+                           {'duration': 60, 'time': '11:00',
+                            'title': '11:00', 'cols': (None,)},
+                           {'duration': 60, 'time': '12:00',
+                            'title': '12:00', 'cols': (None,)},
+                           {'duration': 60, 'time': '13:00',
+                            'title': '13:00', 'cols': (None,)},
+                           {'duration': 60, 'time': '14:00',
+                            'title': '14:00', 'cols': (None,)},
+                           {'duration': 60, 'time': '15:00',
+                            'title': '15:00', 'cols': (None,)},])
 
         ev1 = createEvent('2004-08-12 12:00', '2h', "Meeting")
         cal.addEvent(ev1)
         result = list(view.getHours())
-        self.assertEquals(result,
-                          [{'time': '10:00', 'cols': (None,)},
-                           {'time': '11:00', 'cols': (None,)},
-                           {'time': '12:00', 'cols': (ev1,)},
-                           {'time': '13:00', 'cols': ('',)},
-                           {'time': '14:00', 'cols': (None,)},
-                           {'time': '15:00', 'cols': (None,)},])
+
+        def clearTimeAndDuration(l):
+            for d in l:
+                del d['time']
+                del d['duration']
+            return l
+
+        self.assertEquals(clearTimeAndDuration(result),
+                          [{'title': '10:00', 'cols': (None,)},
+                           {'title': '11:00', 'cols': (None,)},
+                           {'title': '12:00', 'cols': (ev1,)},
+                           {'title': '13:00', 'cols': ('',)},
+                           {'title': '14:00', 'cols': (None,)},
+                           {'title': '15:00', 'cols': (None,)},])
 
         #
         #  12 +--+
@@ -744,43 +757,43 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         cal.addEvent(ev3)
 
         result = list(view.getHours())
-        self.assertEquals(result,
-                          [{'time': '10:00', 'cols': (None, None)},
-                           {'time': '11:00', 'cols': (None, None)},
-                           {'time': '12:00', 'cols': (ev1, None)},
-                           {'time': '13:00', 'cols': ('', ev2)},
-                           {'time': '14:00', 'cols': (ev3, '')},
-                           {'time': '15:00', 'cols': ('', None)},])
+        self.assertEquals(clearTimeAndDuration(result),
+                          [{'title': '10:00', 'cols': (None, None)},
+                           {'title': '11:00', 'cols': (None, None)},
+                           {'title': '12:00', 'cols': (ev1, None)},
+                           {'title': '13:00', 'cols': ('', ev2)},
+                           {'title': '14:00', 'cols': (ev3, '')},
+                           {'title': '15:00', 'cols': ('', None)},])
 
         ev4 = createEvent('2004-08-11 14:00', '3d', "Visit")
         cal.addEvent(ev4)
 
         result = list(view.getHours())
-        self.assertEquals(result,
-                          [{'time': '0:00', 'cols': (ev4, None, None)},
-                           {'time': '1:00', 'cols': ('', None, None)},
-                           {'time': '2:00', 'cols': ('', None, None)},
-                           {'time': '3:00', 'cols': ('', None, None)},
-                           {'time': '4:00', 'cols': ('', None, None)},
-                           {'time': '5:00', 'cols': ('', None, None)},
-                           {'time': '6:00', 'cols': ('', None, None)},
-                           {'time': '7:00', 'cols': ('', None, None)},
-                           {'time': '8:00', 'cols': ('', None, None)},
-                           {'time': '9:00', 'cols': ('', None, None)},
-                           {'time': '10:00', 'cols': ('', None, None)},
-                           {'time': '11:00', 'cols': ('', None, None)},
-                           {'time': '12:00', 'cols': ('', ev1, None)},
-                           {'time': '13:00', 'cols': ('', '', ev2)},
-                           {'time': '14:00', 'cols': ('', ev3, '')},
-                           {'time': '15:00', 'cols': ('', '', None)},
-                           {'time': '16:00', 'cols': ('', None, None)},
-                           {'time': '17:00', 'cols': ('', None, None)},
-                           {'time': '18:00', 'cols': ('', None, None)},
-                           {'time': '19:00', 'cols': ('', None, None)},
-                           {'time': '20:00', 'cols': ('', None, None)},
-                           {'time': '21:00', 'cols': ('', None, None)},
-                           {'time': '22:00', 'cols': ('', None, None)},
-                           {'time': '23:00', 'cols': ('', None, None)}])
+        self.assertEquals(clearTimeAndDuration(result),
+                          [{'title': '0:00', 'cols': (ev4, None, None)},
+                           {'title': '1:00', 'cols': ('', None, None)},
+                           {'title': '2:00', 'cols': ('', None, None)},
+                           {'title': '3:00', 'cols': ('', None, None)},
+                           {'title': '4:00', 'cols': ('', None, None)},
+                           {'title': '5:00', 'cols': ('', None, None)},
+                           {'title': '6:00', 'cols': ('', None, None)},
+                           {'title': '7:00', 'cols': ('', None, None)},
+                           {'title': '8:00', 'cols': ('', None, None)},
+                           {'title': '9:00', 'cols': ('', None, None)},
+                           {'title': '10:00', 'cols': ('', None, None)},
+                           {'title': '11:00', 'cols': ('', None, None)},
+                           {'title': '12:00', 'cols': ('', ev1, None)},
+                           {'title': '13:00', 'cols': ('', '', ev2)},
+                           {'title': '14:00', 'cols': ('', ev3, '')},
+                           {'title': '15:00', 'cols': ('', '', None)},
+                           {'title': '16:00', 'cols': ('', None, None)},
+                           {'title': '17:00', 'cols': ('', None, None)},
+                           {'title': '18:00', 'cols': ('', None, None)},
+                           {'title': '19:00', 'cols': ('', None, None)},
+                           {'title': '20:00', 'cols': ('', None, None)},
+                           {'title': '21:00', 'cols': ('', None, None)},
+                           {'title': '22:00', 'cols': ('', None, None)},
+                           {'title': '23:00', 'cols': ('', None, None)}])
 
     def test_rowspan(self):
         from schooltool.browser.cal import DailyCalendarView

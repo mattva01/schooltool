@@ -588,7 +588,10 @@ class DailyCalendarView(CalendarViewBase):
                     # Either None, or new event
                     cols.append(ev)
 
-            yield {'time': title, 'cols': tuple(cols)}
+            yield {'title': title, 'cols': tuple(cols),
+                   'time': start.strftime("%H:%M"),
+                   # We can trust no period will be longer than a day
+                   'duration': duration.seconds // 60}
 
     def rowspan(self, event):
         """Calculate how many calendar rows the event will take today."""
