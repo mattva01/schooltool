@@ -21,6 +21,7 @@ Things common to the SchoolTool server and clients.
 """
 
 import re
+import locale
 import datetime
 
 __metaclass__ = type
@@ -175,4 +176,22 @@ def to_unicode(s):
         return None
     else:
         return unicode(s, 'UTF-8')
+
+
+locale_charset = locale.getpreferredencoding()
+
+
+def to_locale(us):
+    r"""Convert a Unicode string to the current locale encoding.
+
+    Example (assuming LC_CTYPE=C):
+
+        >>> import locale
+        >>> locale.getpreferredencoding()
+        'ANSI_X3.4-1968'
+        >>> to_locale(u'Unrepresentable: \u263B')
+        'Unrepresentable: ?'
+
+    """
+    return us.encode(locale_charset, 'replace')
 
