@@ -30,7 +30,7 @@
     <div class="row">
       <label for="date_of_birth">Birth date</label>
       <input id="date_of_birth" name="date_of_birth" type="text"
-             tal:attributes="value info/date_of_birth" />
+             tal:attributes="value info/date_of_birth" /> (YYYY-MM-DD)
     </div>
     <div class="row">
       <label for="comment">Comment</label>
