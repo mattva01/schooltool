@@ -49,9 +49,6 @@
 
       Network interface can be omitted and just the port number specified.
     </description>
-    <default>
-      7001
-    </default>
     <example>
       listen 8080
       listen 127.0.0.1:80
@@ -64,9 +61,6 @@
 
       Network interface can be omitted and just the port number specified.
     </description>
-    <default>
-      7080
-    </default>
     <example>
       web 80
       web 127.0.0.1:80

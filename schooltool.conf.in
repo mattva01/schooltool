@@ -24,16 +24,31 @@
 # listen port
 # listen interface:port
 #
-#   Specifies the port number and optionaly a network interface to listen on
-#   There can be one or more 'listen' directives
-#
-# Default:
-#   listen 7001
+#   Specifies the port number and optionaly a network interface for
+#   the RESTive server to listen on. There can be one or more 'listen'
+#   directives.
 #
 # Examples:
 #   listen 8080
 #   listen 127.0.0.1:80
 #
+
+listen 7001
+
+#
+# web port
+# web interface:port
+#
+#   Specifies the port number and optionaly a network interface for
+#   the web application server to listen on. There can be one or more
+#   'listen' directives.
+#
+# Examples:
+#   web 8080
+#   web 127.0.0.1:80
+#
+
+web 7080
 
 #
 # thread-pool-size n
