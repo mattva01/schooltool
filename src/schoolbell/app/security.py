@@ -136,8 +136,11 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
 
     def clearCredentials(self, request):
         session = ISession(request)[self.session_name]
-        del session['username']
-        del session['password']
+        try:
+            del session['password']
+            del session['username']
+        except KeyError:
+            pass
 
 
 def setUpLocalAuth(site, auth=None):

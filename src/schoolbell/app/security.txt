@@ -197,10 +197,14 @@ Our principal is adaptable to IPerson:
     >>> IPerson(principal) is  app['persons']['frog']
     True
 
-If the password is incorrect, authentication does not work:
+The credentials can be cleared from the session:
 
     >>> auth.clearCredentials(request)
     >>> auth.authenticate(request)
+
+If there are no credentials set, clearing does not fail:
+
+    >>> auth.clearCredentials(request)
 
 
 unauthorized
