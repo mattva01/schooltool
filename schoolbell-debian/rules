@@ -7,8 +7,7 @@ PYTHON=python$(PYTHON_VERSION)
 
 # Server Packages
 package=schoolbell
-library=python2.3-schoolbell
-deplibrary=libschoolbell
+library=libschoolbell
 
 #
 # Rules to build tree
@@ -27,7 +26,7 @@ clean::
 	dh_testdir
 	dh_testroot
 	-$(MAKE) clean
-	rm -f garbage
+	rm -rf debian/garbage
 	rm -f install-arch-stamp
 	rm -f install-indep-stamp
 	dh_clean
@@ -44,21 +43,12 @@ install-indep-stamp:
 	dh_clean -k -i
 	dh_installdirs -i
 
-	################## python2.3-schoolbell ################
-	$(PYTHON) setup.py $(package) install --no-compile\
-	    --install-purelib=debian/$(library)/usr/lib/$(package)\
-	    --install-data=debian/$(library)/usr/share/$(package) \
-	    --install-scripts=debian/$(library)/usr/bin
-
-	cd Zope3 && $(PYTHON) setup.py install --no-compile\
-	    --install-purelib=../debian/$(library)/usr/lib/$(package)\
-	    --install-platlib=../debian/garbage\
-	    --install-headers=../debian/garbage\
-	    --install-scripts=../debian/garbage\
-	    --install-data=../debian/garbage
-
 	################## schoolbell ########################
-	# configuration
+	: # configuration for a standalone schoolbell server
+	$(PYTHON) setup.py $(package) install_scripts\
+	    --install-dir=debian/$(package)/usr/bin\
+	    --default-config=/etc/$(package)/$(package)\
+	    --paths=/usr/lib/$(package)
 	install -m 644 -D -p debian/$(package).logrotate \
 		debian/$(package)/etc/logrotate.d/$(package)
 	install -m 644 -D -p debian/ssl-cert.cnf \
@@ -76,17 +66,22 @@ install-arch-stamp: build
 	dh_clean -k -s
 	dh_installdirs -s
 
-	# what about ZConfig/doc/schema.dtd? zconfig.pdf?
+	: # what about ZConfig/doc/schema.dtd? zconfig.pdf?
+
+	################## schoolbell python libs ################
+	: # These are not really arch-dep, but zope is and is large in
+	: # comparison. When Zope3 is removed from the packages, these
+	: # will go in their own arch-indep library.
+	$(PYTHON) setup.py $(package) install --no-compile\
+	    --install-lib=debian/$(library)/usr/lib/$(package)\
+	    --install-data=debian/$(library)/usr/lib/$(package) \
+	    --install-scripts=debian/garbage\
+	    --datafile-dir=/usr/lib/$(package)
 
 	################ libschoolbell ###################
-	# make server library package (Only zope3 has python extensions)
-	# arch-dep files
-	cd Zope3 && $(PYTHON) setup.py install --no-compile\
-	    --install-purelib=../debian/garbage\
-	    --install-platlib=../debian/$(deplibrary)/usr/lib/$(package)\
-	    --install-headers=../debian/garbage\
-	    --install-scripts=../debian/garbage\
-	    --install-data=../debian/garbage
+	: # copy parts of Zope3 included in the tarball to libschoolbell
+	cd Zope3 && $(PYTHON) setup.py install_lib --no-compile\
+	    --install-dir=../debian/$(library)/usr/lib/$(package)\
 
 	touch install-arch-stamp
 
