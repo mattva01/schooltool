@@ -318,13 +318,20 @@ div.day h3  {
 table.cal_monthly {
   table-layout: fixed;
   width: 90%;
-  border: 1px solid blue;
+  border: 2px solid #40f;
   empty-cells: show;
   border-collapse: collapse;
 }
 
-td.cal_monthly {
+td.cal_monthly_weekno {
   border: 1px solid blue;
+  font-weight: bold;
+  color: #777;
+}
+
+td.cal_monthly_day {
+  border: 1px solid blue;
+  vertical-align: top;
 }
 
 th.cal_monthly_weekday {
@@ -332,6 +339,14 @@ th.cal_monthly_weekday {
   font-weight: bold;
 }
 
-p.event_weekly {
+div.cal_weekly_dayno {
   font-size: smaller;
+  color: #777;
+}
+
+div.event_weekly {
+  font-size: smaller;
+  background: #ff7;
+  margin: 2px;
+  border: 1px solid #447;
 }
