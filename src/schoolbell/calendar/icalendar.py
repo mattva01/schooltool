@@ -36,7 +36,8 @@ If you have a calendar, you can convert it to an iCalendar file like this:
     ...                             unique_id="12345678-5432@example.com")
     >>> calendar = ImmutableCalendar([event])
 
-    >>> ical_file_as_string = "\r\n".join(convert_calendar_to_ical(calendar))
+    >>> ical_file_as_string = "\r\n".join(
+    ...         convert_calendar_to_ical(calendar)) + "\r\n"
 
 The returned string is in UTF-8.
 

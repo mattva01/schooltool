@@ -55,10 +55,9 @@ CalendarICalendarView can export calendars in iCalendar format
      'DURATION:PT1H\r\n',
      'DTSTAMP:...\r\n',
      'END:VEVENT\r\n',
-     'END:VCALENDAR']
+     'END:VCALENDAR\r\n']
 
-XXX: Should the last line also end in '\r\n'?  Go read RFC 2445 and experiment
-with calendaring clients.
+     The last line mkust end in '\r\n' see RFC 2445 4.4.
 
 Register the iCalendar read view in ZCML as
 
@@ -81,7 +80,7 @@ class CalendarICalendarView:
     """RFC 2445 (ICalendar) view for calendars."""
 
     def show(self):
-        data = "\r\n".join(convert_calendar_to_ical(self.context))
+        data = "\r\n".join(convert_calendar_to_ical(self.context)) + "\r\n"
         request = self.request
         if request is not None:
             request.response.setHeader('Content-Type',
