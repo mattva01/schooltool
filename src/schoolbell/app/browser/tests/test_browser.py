@@ -25,13 +25,13 @@ $Id$
 import unittest
 from zope.testing import doctest
 from zope.interface import implements
+from zope.interface.verify import verifyObject
 from zope.app.location.interfaces import ILocation
 
 
 def doctest_SchoolBellAPI():
     r"""Tests for SchoolBellAPI.
 
-        >>> from zope.interface.verify import verifyObject
         >>> from zope.tales.interfaces import ITALESFunctionNamespace
         >>> from schoolbell.app.browser import SchoolBellAPI
         >>> context = object()
@@ -94,7 +94,6 @@ def doctest_SortBy():
     """Tests for SortBy adapter.
 
         >>> from schoolbell.app.browser import SortBy
-        >>> from zope.interface.verify import verifyObject
         >>> adapter = SortBy([])
 
         >>> from zope.app.traversing.interfaces import IPathAdapter
