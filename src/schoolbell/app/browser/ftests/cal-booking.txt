@@ -510,10 +510,10 @@ We should see the conflicts when booking the for the events overlaping Test even
                   <legend>Conflicting events</legend>
                   <div>
                     <div>
-                      <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid2">Test event2</a>
+                      <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid2/edit.html">Test event2</a>
                         (10:00 -
                         11:00)
-                         <a href="http://localhost/frogpond/persons/frog/calendar/">Frog</a>
+                         <a href="http://localhost/frogpond/persons/frog/calendar/2005-02-04/">Frog</a>
                     </div>
                   </div>
                 </fieldset>
@@ -527,10 +527,10 @@ We should see the conflicts when booking the for the events overlaping Test even
                   <legend>Conflicting events</legend>
                   <div>
                     <div>
-                      <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid2">Test event2</a>
+                      <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid2/edit.html">Test event2</a>
                         (10:00 -
                         11:00)
-                         <a href="http://localhost/frogpond/persons/frog/calendar/">Frog</a>
+                         <a href="http://localhost/frogpond/persons/frog/calendar/2005-02-04/">Frog</a>
                     </div>
                   </div>
                 </fieldset>
