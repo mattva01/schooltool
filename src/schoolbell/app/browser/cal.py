@@ -24,6 +24,10 @@ $Id$
 
 from datetime import datetime, date, timedelta
 
+from zope.interface import implements
+from zope.component import queryView
+from zope.publisher.interfaces import NotFound
+from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.browser.absoluteurl import absoluteURL
 
@@ -32,6 +36,30 @@ from schoolbell.calendar.interfaces import ICalendar
 from schoolbell.calendar.simple import SimpleCalendarEvent
 from schoolbell.calendar.utils import week_start
 from schoolbell.app.interfaces import ICalendarOwner
+
+
+class CalendarOwnerTraverser(object):
+
+    implements(IBrowserPublisher)
+
+    __used_for__ = ICalendarOwner
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        if name == 'calendar':
+            return self.context.calendar
+
+        view = queryView(self.context, name, request)
+        if view is not None:
+            return view
+
+        raise NotFound(self.context, name, request)
+
+    def browserDefault(self, request):
+        return self.context, ('index.html', )
 
 
 class CalendarDay:
@@ -59,13 +87,13 @@ class CalendarDay:
 class PlainCalendarView(BrowserView):
     """A calendar view purely for testing purposes."""
 
-    __used_for__ = ICalendarOwner
+    __used_for__ = ICalendar
 
     num_events = 5
     evt_range = 60*24*14 # two weeks
 
     def iterEvents(self):
-        events = list(self.context.calendar)
+        events = list(self.context)
         events.sort()
         return events
 
@@ -78,7 +106,7 @@ class PlainCalendarView(BrowserView):
                 length = timedelta(minutes=random.randint(1, 60*12))
                 title = 'Event %d' % random.randint(1, 999)
                 event = SimpleCalendarEvent(dtstart, length, title)
-                self.context.calendar.addEvent(event)
+                self.context.addEvent(event)
 
 
 class CalendarViewBase(BrowserView):
@@ -87,7 +115,7 @@ class CalendarViewBase(BrowserView):
     This class provides functionality that is useful to several calendar views.
     """
 
-    __used_for__ = ICalendarOwner # XXX Should probably be for ICalendar.
+    __used_for__ = ICalendar
 
     # XXX I'd rather these constants would go somewhere in schoolbell.calendar.
     day_of_week_names = {
@@ -116,7 +144,7 @@ class CalendarViewBase(BrowserView):
             cursor = self.cursor
         if self.__url is None:
             self.__url = absoluteURL(self.context, self.request)
-        return  '%s/cal_%s.html?date=%s' % (self.__url, cal_type, cursor)
+        return  '%s/%s.html?date=%s' % (self.__url, cal_type, cursor)
 
     def ellipsizeTitle(self, title):
         """For labels with limited space replace the tail with '...'."""
@@ -205,13 +233,13 @@ class CalendarViewBase(BrowserView):
         return days
 
     def iterEvents(self, first, last):
-        return self.context.calendar.expand(first, last)
+        return self.context.expand(first, last)
 
 
 class WeeklyCalendarView(CalendarViewBase):
     """A view that shows one week of the calendar."""
 
-    __used_for__ = ICalendarOwner # XXX Should probably be for ICalendar.
+    __used_for__ = ICalendar
 
     def title(self):
         # XXX Not tested.

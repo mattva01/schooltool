@@ -106,7 +106,7 @@ class Person(Persistent, Contained):
 
     def __init__(self, title=None):
         self.title = title
-        self.calendar = Calendar()
+        self.calendar = Calendar(self)
 
     def setPassword(self, password):
         self._hashed_password = hash_password(password)

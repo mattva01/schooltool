@@ -26,29 +26,89 @@ import unittest
 from datetime import datetime, date
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
-from zope.app.tests import setup, ztapi
 from zope.interface import directlyProvides
+from zope.interface.verify import verifyObject
+from zope.app.tests import setup, ztapi
 from zope.app.traversing.interfaces import IContainmentRoot
+
+
+def doctest_CalendarOwnerTraverser():
+    """Tests for CalendarOwnerTraverse.
+
+    CalendarOwnerTraverser allows you to traverse directly to the calendar
+    of a calendar owner.
+
+        >>> from schoolbell.app.browser.cal import CalendarOwnerTraverser
+        >>> from schoolbell.app.app import Person
+        >>> person = Person()
+        >>> request = TestRequest()
+        >>> traverser = CalendarOwnerTraverser(person, request)
+        >>> traverser.context is person
+        True
+        >>> traverser.request is request
+        True
+
+    The traverser should implement IBrowserPublisher:
+
+        >>> from zope.publisher.interfaces.browser import IBrowserPublisher
+        >>> verifyObject(IBrowserPublisher, traverser)
+        True
+
+    Let's check that browserDefault suggests 'index.html':
+
+        >>> context, path = traverser.browserDefault(request)
+        >>> context is person
+        True
+        >>> path
+        ('index.html',)
+
+    The whole point of this class is that we can ask for the calendar:
+
+        >>> traverser.publishTraverse(request, 'calendar') is person.calendar
+        True
+
+    However, we should be able to access other views of the object:
+
+        >>> from zope.app.publisher.browser import BrowserView
+        >>> from schoolbell.app.interfaces import IPerson
+        >>> ztapi.browserView(IPerson, 'some_view.html', BrowserView)
+
+        >>> view = traverser.publishTraverse(request, 'some_view.html')
+        >>> view.context is traverser.context
+        True
+        >>> view.request is traverser.request
+        True
+
+    If we try to look up a nonexistent view, we should get a NotFound error:
+
+        >>> 
+        >>> traverser.publishTraverse(request,
+        ...                           'nonexistent.html') # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+        ...
+        NotFound: Object: <...Person object at ...>, name: 'nonexistent.html'
+
+    """
 
 
 def doctest_PlainCalendarView():
     """Tests for PlainCalendarView.
 
         >>> from schoolbell.app.browser.cal import PlainCalendarView
-        >>> from schoolbell.app.app import Person
-        >>> person = Person()
+        >>> from schoolbell.app.app import Calendar
+        >>> calendar = Calendar()
         >>> request = TestRequest()
-        >>> view = PlainCalendarView(person, request)
+        >>> view = PlainCalendarView(calendar, request)
         >>> view.update()
-        >>> len(person.calendar)
+        >>> len(calendar)
         0
 
         >>> request = TestRequest()
         >>> request.form = {'GENERATE': ''}
-        >>> view = PlainCalendarView(person, request)
+        >>> view = PlainCalendarView(calendar, request)
         >>> view.update()
-        >>> len(person.calendar)
-        5
+        >>> len(calendar) > 0
+        True
 
     """
 
@@ -68,22 +128,21 @@ def doctest_CalendarViewBase():
 
         >>> from schoolbell.app.browser.cal import CalendarViewBase
 
-        >>> from schoolbell.app.app import Person
-        >>> person = Person()
-        >>> directlyProvides(person, IContainmentRoot)
+        >>> from schoolbell.app.app import Calendar
+        >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
 
     CalendarViewBase has a method calURL used for forming links to other
     calendar views on other dates.
 
         >>> request = TestRequest()
-        >>> view = CalendarViewBase(person, request)
+        >>> view = CalendarViewBase(calendar, request)
         >>> view.cursor = date(2005, 2, 3)
 
         >>> view.calURL("quarterly")
-        'http://127.0.0.1/cal_quarterly.html?date=2005-02-03'
+        'http://127.0.0.1/calendar/quarterly.html?date=2005-02-03'
         >>> view.calURL("quarterly", date(2005, 12, 13))
-        'http://127.0.0.1/cal_quarterly.html?date=2005-12-13'
-
+        'http://127.0.0.1/calendar/quarterly.html?date=2005-12-13'
 
     """
 

@@ -266,10 +266,22 @@
 
 <!-- Calendar views -->
 
-  <page
-      name="cal_plain.html"
+  <zope:view
       for="schoolbell.app.interfaces.ICalendarOwner"
-      class="schoolbell.app.browser.cal.PlainCalendarView"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".cal.CalendarOwnerTraverser"
+      permission="zope.Public"
+      />
+
+  <defaultView
+      for="schoolbell.calendar.interfaces.ICalendar"
+      name="weekly.html" />
+
+  <page
+      name="plain.html"
+      for="schoolbell.calendar.interfaces.ICalendar"
+      class=".cal.PlainCalendarView"
       template="templates/cal_plain.pt"
       permission="zope.View"
       menu="zmi_views"
@@ -277,9 +289,9 @@
       />
 
   <page
-      name="cal_weekly.html"
-      for="schoolbell.app.interfaces.ICalendarOwner"
-      class="schoolbell.app.browser.cal.WeeklyCalendarView"
+      name="weekly.html"
+      for="schoolbell.calendar.interfaces.ICalendar"
+      class=".cal.WeeklyCalendarView"
       template="templates/cal_weekly.pt"
       permission="zope.View"
       menu="zmi_views"
