@@ -77,6 +77,9 @@ class CalendarTraverser(object):
         self.context = context
         self.request = request
 
+    def browserDefault(self, request):
+        return self.context, ('daily.html', )
+
     def publishTraverse(self, request, name):
         view_name = self.getViewByDate(request, name)
         if view_name:
@@ -90,6 +93,17 @@ class CalendarTraverser(object):
 
     def getViewByDate(self, request, name):
         parts = name.split('-')
+
+        if len(parts) == 2 and parts[1].startswith('w'): # a week was given
+            try:
+                year = int(parts[0])
+                week = int(parts[1][1:])
+            except ValueError:
+                return
+            request.form['date'] = self.getWeek(year, week).isoformat()
+            return 'weekly.html'
+
+        # a year, month or day might have been given
         try:
             parts = [int(part) for part in parts]
         except ValueError:
@@ -107,10 +121,23 @@ class CalendarTraverser(object):
         elif len(parts) == 3:
             request.form['date'] = "%d-%02d-%02d" % parts
             return 'daily.html'
-        # TODO: weekly
 
-    def browserDefault(self, request):
-        return self.context, ('daily.html', )
+    def getWeek(self, year, week):
+        """Get the start of a week by week number.
+
+        The function does not return the first day of the week, but that
+        is good enough for our views.
+
+            >>> traverser = CalendarTraverser(None, None)
+            >>> traverser.getWeek(2002, 11)
+            datetime.date(2002, 3, 15)
+            >>> traverser.getWeek(2005, 1)
+            datetime.date(2005, 1, 4)
+            >>> traverser.getWeek(2005, 52)
+            datetime.date(2005, 12, 27)
+
+        """
+        return date(year, 1, 4) + timedelta(weeks=(week-1))
 
 
 class CalendarDay(object):

@@ -148,6 +148,13 @@ def doctest_CalendarTraverser():
         >>> request['date']
         '2002-07-01'
 
+    The weekly view can be accessed by adding 'w' in front of the week number:
+
+      >>> traverser.getViewByDate(request, '2002-w11')
+      'weekly.html'
+      >>> request['date']
+      '2002-03-15'
+
     The daily view is supported too:
 
         >>> traverser.getViewByDate(request, '2002-07-03')
@@ -158,7 +165,7 @@ def doctest_CalendarTraverser():
     Invalid dates are not touched:
 
         >>> for name in ['', 'abc', 'index.html', '', '200a', '2004-1a',
-        ...              '2001-02-03-04', '2001/02/03']:
+        ...              '2001-02-03-04', '2001/02/03', '2001-w3a', 'a-w2']:
         ...     assert traverser.getViewByDate(request, name) is None
 
     If we try to look up a nonexistent view, we should get a NotFound error:
