@@ -28,55 +28,6 @@ from zope.testing import doctest
 from zope.app.tests import setup
 from zope.interface import implements
 from zope.app.annotation.interfaces import IAttributeAnnotatable
-from zope.app.container.contained import Contained
-
-
-class SomeObject(object):
-    """A simple annotatable object for tests."""
-
-    implements(IAttributeAnnotatable)
-
-    def __init__(self, name):
-        self._name = name
-
-    def __repr__(self):
-        return self._name
-
-
-class SomeContained(SomeObject, Contained):
-    """A simple annotatable contained object for tests."""
-
-
-def setUp():
-    """Set up for schoolbell.relationship doctests.
-
-    Calls Zope's placelessSetUp, sets up annotations and relationships.
-    """
-    setup.placelessSetUp()
-    setup.setUpAnnotations()
-    setUpRelationships()
-
-
-def tearDown():
-    """Tear down for schoolbell.relationshp doctests."""
-    setup.placelessTearDown()
-
-
-def setUpRelationships():
-    """Set up the adapter from IAnnotatable to IRelationshipLinks.
-
-    This function is created for use in unit tests.  You should call
-    zope.app.tests.setup.placelessSetUp before calling this function
-    (and don't forget to call zope.app.tests.setup.placelessTearDown after
-    you're done).  You should also call zope.app.tests.setup.setUpAnnotations
-    to get a complete test fixture.
-    """
-    from zope.app.tests import ztapi
-    from zope.app.annotation.interfaces import IAnnotatable
-    from schoolbell.relationship.interfaces import IRelationshipLinks
-    from schoolbell.relationship.annotatable import getRelationshipLinks
-    ztapi.provideAdapter(IAnnotatable, IRelationshipLinks,
-                         getRelationshipLinks)
 
 
 def doctest_URIObject():
@@ -311,6 +262,7 @@ def doctest_RelationshipSchema():
 
     You can call relationship schemas
 
+        >>> from schoolbell.relationship.tests import SomeObject
         >>> a, b = map(SomeObject, ['a', 'b'])
         >>> Management(manager=a, report=b)
 
@@ -368,6 +320,7 @@ def doctest_unrelateAll():
 
     Nothing happens if the object has no relationships.
 
+        >>> from schoolbell.relationship.tests import SomeObject
         >>> a = SomeObject('a')
         >>> from schoolbell.relationship import unrelateAll
         >>> unrelateAll(a)
@@ -548,7 +501,7 @@ def doctest_copy_breaks_relationships():
 
 def test_suite():
     return unittest.TestSuite([
-                doctest.DocFileSuite('README.txt'),
+                doctest.DocFileSuite('../README.txt'),
                 doctest.DocTestSuite('schoolbell.relationship.uri'),
                 doctest.DocTestSuite('schoolbell.relationship.relationship'),
                 doctest.DocTestSuite(),
