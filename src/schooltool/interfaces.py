@@ -991,6 +991,35 @@ class ISchooldayModel(Interface):
         """
 
 
+class ICalendar(Interface):
+    """A calendar, containing days which in turn contain events.
+    """
+
+    start = Attribute(
+        """The start of the period of time covered by the calendar""")
+    end = Attribute("""The end of the period covered by the calendar""")
+
+    def __getitem__(date):
+        """Returns an ICalendarDay for a given date"""
+
+
+class ICalendarDay(Interface):
+    """A set of events for a day"""
+
+    date = Attribute("""The datetime.date of this calendar day.""")
+
+    def __iter__():
+        """Returns an iterator over IEvents of this day."""
+
+
+class ICalendarEvent(Interface):
+    """A calendar event."""
+
+    dtstart = Attribute("""The datetime.datetime of the start of the event.""")
+    duration = Attribute("""The duration of the event (datetime.timedelta)""")
+    title = Attribute("""The title of the event""")
+
+
 # Exceptions
 
 class ComponentLookupError(Exception):
