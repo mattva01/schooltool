@@ -149,7 +149,10 @@ def load_options(argv):
 
 def setup(options):
     """Configure SchoolBell."""
-    setUpLogger(None, options.config.error_log_file) # XXX unit test this line
+    if options.daemon:
+        daemonize()
+
+    setUpLogger(None, options.config.error_log_file)
     setUpLogger('accesslog', options.config.web_access_log_file)
 
     # Process ZCML
@@ -178,9 +181,6 @@ def setup(options):
         http.create('HTTP', task_dispatcher, db, port=port, ip=ip)
 
     notify(ProcessStarting())
-
-    if options.daemon:
-        daemonize()
 
     if options.config.pid_file:
         pidfile = file(options.config.pid_file, "w")
