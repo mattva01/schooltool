@@ -337,7 +337,6 @@ class PersonPreferencesView(BrowserView):
                 return # Errors will be displayed next to widgets
 
             prefs = IPersonPreferences(self.context)
-            prefs.timezone = data['timezone']
             prefs.timeformat = data['timeformat']
             prefs.dateformat = data['dateformat']
             prefs.weekstart = data['weekstart']
