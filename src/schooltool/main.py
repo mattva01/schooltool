@@ -707,6 +707,14 @@ class Server:
                          "--\n%(asctime)s\n%(message)s")
         self.setUpLogger('schooltool.access', self.config.access_log_file)
 
+        # Shut up ZODB lock_file, because it logs tracebacks when unable
+        # to lock the database file, and we don't want that.
+        logging.getLogger('ZODB.lock_file').disabled = True
+
+        # ZODB should have a way to complain in case of trouble
+        self.setUpLogger('ZODB', self.config.error_log_file,
+                         "%(asctime)s [%(name)s] %(message)s")
+
         # Process any command line arguments that may override config file
         # settings here.
 
