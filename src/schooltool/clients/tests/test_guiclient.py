@@ -175,7 +175,6 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         dummy_uris = "<uriobjects></uriobjects>"
         response = ResponseStub(200, 'OK', dummy_uris, server=version)
         client = self.newClient(response)
-        client.getListOfURIs = lambda: None
         client.setServer(server, port)
         self.assertEquals(client.status, '200 OK')
         self.assertEquals(client.version, version)
@@ -194,7 +193,6 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         version = 'UnitTest/0.0'
         response = ResponseStub(200, 'OK', 'doesnotmatter', server=version)
         client = self.newClient(response)
-        client.getListOfURIs = lambda: None
         client.setServer(server, port, ssl=True)
         self.assertEquals(client.status, '200 OK')
         self.assertEquals(client.version, version)
@@ -221,21 +219,19 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         version = 'UnitTest/0.0'
         response = ResponseStub(200, 'OK', 'doesnotmatter', server=version)
         client = self.newClient(response)
-        client.getListOfURIs = lambda: "pretend that I'm a mapping"
         client.tryToConnect()
         self.assertEquals(client.status, '200 OK')
         self.assertEquals(client.version, version)
-        self.assertEquals(client.uriobjects, "pretend that I'm a mapping")
 
         e = socket.error(23, 'out of spam')
         client = self.newClient(error=e)
-        client.getListOfURIs = lambda: None
         client.tryToConnect()
         self.assertEquals(client.status, 'out of spam (23)')
         self.assertEquals(client.version, '')
 
-    def test_getListOfURIs(self):
+    def test_updateListOfURIs(self):
         from schooltool.clients.guiclient import SchoolToolClient
+        from schooltool.clients.guiclient import SchoolToolError
         body = ('<uriobjects>'
                 '<uriobject uri="http://foo.bar/baz"><name>Noname</name>'
                 '  <description>Desc</description></uriobject>'
@@ -244,16 +240,15 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
                 '</uriobjects>')
         response = ResponseStub(200, 'OK', body)
         client = self.newClient(response)
-        uris = client.getListOfURIs()
+        client.updateListOfURIs()
+        uris = client.uriobjects
         self.assertEquals(len(uris), 2)
         self.assertEquals(uris['http://foo.bar/baz'].name, 'Noname')
         self.assertEquals(uris['http://foo.bar/quux'].description, 'Desc2')
 
         e = socket.error(23, 'out of spam')
         client = self.newClient(error=e)
-        client.tryToConnect()
-        self.assertEquals(client.status, 'out of spam (23)')
-        self.assertEquals(client.version, '')
+        self.assertRaises(SchoolToolError, client.updateListOfURIs)
 
     def test_request(self):
         from schooltool.clients.guiclient import SchoolToolClient
@@ -1313,7 +1308,9 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
                       URIGroup_uri: URIGroup}
         result = _parseRelationships(body, uriobjects)
         role3 = uriobjects['test://role3']
+        self.assertEquals(role3.uri, role3.name)
         arcrole3 = uriobjects['test://arcrole3']
+        self.assertEquals(arcrole3.uri, arcrole3.name)
 
         expected = [RelationshipInfo(*args) for args in [
                 (arcrole1, role1, u'title1 \u2730', 'href1', 'mhref1'),
@@ -1975,6 +1972,7 @@ class TestInfoClasses(unittest.TestCase, InfoClassTestMixin):
         from schooltool.clients.guiclient import URIObject
         uriobj = URIObject('http://foo')
         self.assertEquals(uriobj.uri, 'http://foo')
+        self.assertEquals(uriobj.name, 'http://foo')
         uriobj = URIObject('http://foo', "name", "desc")
         self.assertEquals(uriobj.uri, 'http://foo')
         self.assertEquals(uriobj.name, 'name')

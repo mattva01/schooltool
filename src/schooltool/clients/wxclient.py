@@ -2349,6 +2349,12 @@ class MainFrame(wxFrame):
             self.refresh_lock.release()
 
     def _refresh(self):
+        # Update the URI information
+        try:
+            self.client.updateListOfURIs()
+        except SchoolToolError, e:
+            self.SetStatusText(to_wx(unicode(e)))
+
         # Get the tree from the server
         try:
             group_tree = self.client.getGroupTree()

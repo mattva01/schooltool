@@ -132,7 +132,6 @@ class SchoolToolClient:
         If connection is successful, try to update the URI list."""
         try:
             self.get('/')
-            self.uriobjects = self.getListOfURIs()
         except SchoolToolError, e:
             # self.status has been set and will be shown on the status bar
             pass
@@ -590,10 +589,10 @@ class SchoolToolClient:
         text = to_unicode(response.read())
         return ApplicationLogPage(text, page, total_pages)
 
-    def getListOfURIs(self):
+    def updateListOfURIs(self):
         """Fetch URI list from the server.
 
-        Returns a mapping from URIs to URIObjects.
+        Sets the 'uriobjects' attribute.
         """
         response = self.get('/uris')
         if response.status != 200:
@@ -602,7 +601,7 @@ class SchoolToolClient:
         mapping = {}
         for uriobject in uriobjects:
             mapping[uriobject.uri] = uriobject
-        return mapping
+        self.uriobjects = mapping
 
 
 class Response:
@@ -1113,6 +1112,8 @@ class URIObject:
     def __init__(self, uri, name=None, description=''):
         assert looks_like_a_uri(uri)
         self.uri = uri
+        if name is None:
+            name = uri
         self.name = name
         self.description = description
 
