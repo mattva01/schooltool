@@ -28,35 +28,19 @@ from zope.interface import implements, directlyProvides
 from zope.interface.verify import verifyObject, verifyClass
 from schooltool.interfaces import IRelatable, ILink, IUnlinkHook
 from schooltool.interfaces import ILinkSet, IPlaceholder, IContainmentRoot
-from schooltool.uris import ISpecificURI, inspectSpecificURI
+from schooltool.uris import URIObject, verifyURI
 from schooltool.tests.helpers import sorted
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin, EqualsSortedMixin
 from schooltool.tests.utils import RegistriesSetupMixin
 
 
-class URITutor(ISpecificURI):
-    """http://schooltool.org/ns/tutor"""
-
-
-class URIRegClass(ISpecificURI):
-    """http://schooltool.org/ns/regclass"""
-
-
-class URIClassTutor(ISpecificURI):
-    """http://schooltool.org/ns/classtutor"""
-
-
-class URICommand(ISpecificURI):
-    """http://army.gov/ns/command"""
-
-
-class URISuperior(ISpecificURI):
-    """http://army.gov/ns/superior"""
-
-
-class URIReport(ISpecificURI):
-    """http://army.gov/ns/report"""
+URITutor = URIObject("http://schooltool.org/ns/tutor")
+URIRegClass = URIObject("http://schooltool.org/ns/regclass")
+URIClassTutor = URIObject("http://schooltool.org/ns/classtutor")
+URICommand = URIObject("http://army.gov/ns/command")
+URISuperior = URIObject("http://army.gov/ns/superior")
+URIReport = URIObject("http://army.gov/ns/report")
 
 
 class Relatable(LocatableEventTargetMixin):
@@ -163,7 +147,6 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(len(self.eventService.events), 1)
         e = self.eventService.events[0]
         self.assert_(IRelationshipRemovedEvent.providedBy(e))
-        self.assert_(URIClassTutor.providedBy(e))
         self.assert_(self.ltutor in e.links)
         self.assert_(self.lklass in e.links)
         self.assertEquals(self.klass.events, [e])
@@ -217,7 +200,7 @@ class TestRelationshipSchema(EventServiceTestMixin, RegistriesSetupMixin,
         from schooltool import relationship
         relationship.setUp()
 
-        uri, title, doc = inspectSpecificURI(URICommand)
+        verifyURI(URICommand)
         schema = RelationshipSchema(URICommand,
                                     superior=URISuperior, report=URIReport)
 
@@ -281,7 +264,6 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
 
         e = self.checkOneEventReceived([a, b])
         self.assert_(IRelationshipAddedEvent.providedBy(e))
-        self.assert_(URICommand.providedBy(e))
         self.assert_(e.links is links)
 
     def doChecks(self, relate):
@@ -340,9 +322,9 @@ class TestRelatableMixin(unittest.TestCase):
         from schooltool.relationship import RelatableMixin
         a = RelatableMixin()
 
-        class URIEmployee(ISpecificURI): "foo:employee"
-        class URIJanitor(URIEmployee): "foo:janitor"
-        class URIWindowWasher(URIJanitor): "foo:windowman"
+        URIEmployee = URIObject("foo:employee")
+        URIJanitor = URIObject("foo:janitor")
+        URIWindowWasher = URIObject("foo:windowman")
 
         j = LinkStub(role=URIJanitor)
         e = LinkStub(role=URIEmployee)
@@ -350,7 +332,7 @@ class TestRelatableMixin(unittest.TestCase):
         a.__links__ = [e, j]
 
         self.assertEqual(a.listLinks(), [e, j])
-        self.assertEqual(a.listLinks(URIEmployee), [e, j])
+        self.assertEqual(a.listLinks(URIEmployee), [e])
         self.assertEqual(a.listLinks(URIJanitor), [j])
         self.assertEqual(a.listLinks(URIWindowWasher), [])
 
@@ -474,7 +456,7 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
 
     def test_getValencies_faceted(self):
         from schooltool.relationship import RelationshipValenciesMixin
-        from schooltool.uris import ISpecificURI
+        from schooltool.uris import URIObject
         from schooltool.uris import URIMembership, URIMember, URIGroup
         from schooltool.interfaces import IFacet
         from schooltool.relationship import Valency
@@ -486,10 +468,10 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
                 RelationshipValenciesMixin.__init__(self)
                 FacetedMixin.__init__(self)
 
-        class URIA(ISpecificURI): "uri:a"
-        class URIB(ISpecificURI): "uri:b"
-        class URIC(ISpecificURI): "uri:c"
-        class URID(ISpecificURI): "uri:d"
+        URIA = URIObject("uri:a")
+        URIB = URIObject("uri:b")
+        URIC = URIObject("uri:c")
+        URID = URIObject("uri:d")
 
         class FacetStub(RelationshipValenciesMixin):
             implements(IFacet)

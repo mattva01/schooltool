@@ -49,10 +49,7 @@ class ComponentChecks:
         from schooltool import component, uris
         self.facet_factory_registry = dict(component.facet_factory_registry)
         self.uri_registry = dict(uris._uri_registry)
-        self.relationship_registry = \
-                adapter_registry_contents(component.relationship_registry)
-        self.relationship_registry_shadow = \
-                dict(component.relationship_registry_shadow)
+        self.relationship_registry = dict(component.relationship_registry)
         self.view_registry = adapter_registry_contents(component.view_registry)
         self.class_view_registry = dict(component.class_view_registry)
         self.timetable_model_registry = dict(
@@ -64,12 +61,8 @@ class ComponentChecks:
             warn("%s changed facet factory registry" % test)
         if self.uri_registry != uris._uri_registry:
             warn("%s changed URI registry" % test)
-        if (self.relationship_registry !=
-                adapter_registry_contents(component.relationship_registry)):
+        if self.relationship_registry != component.relationship_registry:
             warn("%s changed relationship registry" % test)
-        if (self.relationship_registry_shadow !=
-                component.relationship_registry_shadow):
-            warn("%s changed relationship registry (shadow)" % test)
         if (self.view_registry !=
                 adapter_registry_contents(component.view_registry)):
             warn("%s changed view registry" % test)

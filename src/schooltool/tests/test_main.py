@@ -344,9 +344,9 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(site.requestFactory is BrowserRequest)
 
         from schooltool.component import getRelationshipHandlerFor
-        from schooltool.uris import ISpecificURI, URIMembership
+        from schooltool.uris import URIMembership
         # make sure relationships.setUp was called
-        x = getRelationshipHandlerFor(ISpecificURI)
+        x = getRelationshipHandlerFor(None)
         y = getRelationshipHandlerFor(URIMembership)
         self.assertNotEquals(x, y, "schooltool.membership.setUp not called")
 

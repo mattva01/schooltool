@@ -26,7 +26,7 @@ import unittest
 from sets import Set
 from zope.interface import Interface, implements, directlyProvides
 from zope.interface.verify import verifyObject
-from schooltool.uris import ISpecificURI
+from schooltool.uris import URIObject
 from schooltool.interfaces import IFacet, IFaceted, IFacetAPI, IFacetManager
 from schooltool.interfaces import IUtility, IUtilityService
 from schooltool.interfaces import IServiceAPI, IServiceManager
@@ -368,19 +368,12 @@ class Relatable(LocatableEventTargetMixin):
 
     def listLinks(self, role):
         return [link for link in self.__links__
-                     if link.role.extends(role, False)]
+                     if role is None or role == link.role]
 
 
-class URISuperior(ISpecificURI):
-    """http://army.gov/ns/superior"""
-
-
-class URICommand(ISpecificURI):
-    """http://army.gov/ns/command"""
-
-
-class URIReport(ISpecificURI):
-    """http://army.gov/ns/report"""
+URISuperior = URIObject("http://army.gov/ns/superior")
+URICommand = URIObject("http://army.gov/ns/command")
+URIReport = URIObject("http://army.gov/ns/report")
 
 
 class TestRelationships(EventServiceTestMixin, RegistriesSetupMixin,
@@ -416,8 +409,7 @@ class TestRelationships(EventServiceTestMixin, RegistriesSetupMixin,
         from schooltool.component import getRelationshipHandlerFor
         from schooltool.component import relate
 
-        class URISomething(ISpecificURI):
-            """http://ns.example.com/something"""
+        URISomething = URIObject("http://ns.example.com/something")
 
         def stub(*args, **kw):
             return ('stub', args, kw)
@@ -427,28 +419,28 @@ class TestRelationships(EventServiceTestMixin, RegistriesSetupMixin,
 
         resetRelationshipRegistry()
         self.assertRaises(ComponentLookupError,
-                          getRelationshipHandlerFor, ISpecificURI)
+                          getRelationshipHandlerFor, None)
         self.assertRaises(ComponentLookupError,
                           getRelationshipHandlerFor, URISomething)
 
-        registerRelationship(ISpecificURI, stub)
-        self.assertEquals(getRelationshipHandlerFor(ISpecificURI), stub)
+        registerRelationship(None, stub)
+        self.assertEquals(getRelationshipHandlerFor(None), stub)
         self.assertEquals(getRelationshipHandlerFor(URISomething), stub)
 
         registerRelationship(URISomething, stub2)
-        self.assertEquals(getRelationshipHandlerFor(ISpecificURI), stub)
+        self.assertEquals(getRelationshipHandlerFor(None), stub)
         self.assertEquals(getRelationshipHandlerFor(URISomething), stub2)
 
         # Idempotent
         self.assertRaises(ValueError,
-                          registerRelationship, ISpecificURI, stub2)
-        registerRelationship(ISpecificURI, stub)
+                          registerRelationship, None, stub2)
+        registerRelationship(None, stub)
 
         m, g = object(), object()
         args = (URISomething, (m, URISomething), (g, URISomething))
         self.assertEquals(relate(*args), ('stub2', args, {}))
         title = 'foo'
-        args = (ISpecificURI, (m, URISomething), (g, URISomething))
+        args = (None, (m, URISomething), (g, URISomething))
         self.assertEquals(relate(*args), ('stub', args, {}))
 
 

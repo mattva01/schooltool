@@ -45,13 +45,13 @@ class TestURIs(unittest.TestCase):
 
     def testURIGroup(self):
         from schooltool.uris import URIGroup
-        from schooltool.uris import inspectSpecificURI
-        inspectSpecificURI(URIGroup)
+        from schooltool.uris import verifyURI
+        verifyURI(URIGroup)
 
     def testURIMember(self):
         from schooltool.uris import URIMember
-        from schooltool.uris import inspectSpecificURI
-        inspectSpecificURI(URIMember)
+        from schooltool.uris import verifyURI
+        verifyURI(URIMember)
 
 
 class TestMembershipRelationship(RegistriesSetupMixin, EventServiceTestMixin,
@@ -91,9 +91,8 @@ class TestCyclicConstraint(RegistriesSetupMixin, EventServiceTestMixin,
         # Standard relationships will do.
         from schooltool.membership import Membership, checkForPotentialCycles
         from schooltool.component import registerRelationship
-        from schooltool.uris import ISpecificURI
         from schooltool.relationship import defaultRelate
-        registerRelationship(ISpecificURI, defaultRelate)
+        registerRelationship(None, defaultRelate)
         Relatable = lambda: BasicRelatable(self.serviceManager)
         g = Relatable()
 
@@ -119,10 +118,9 @@ class TestEvents(unittest.TestCase):
         from schooltool.membership import MemberRemovedEvent
         from schooltool.interfaces import IMemberAddedEvent
         from schooltool.interfaces import IMemberRemovedEvent
-        from schooltool.uris import URIGroup, URIMember, ISpecificURI
+        from schooltool.uris import URIGroup, URIMember, URIObject
 
-        class URIUnrelated(ISpecificURI):
-            """http://ns.example.org/role/unrelated"""
+        URIUnrelated = URIObject("http://ns.example.org/role/unrelated")
 
         class LinkStub:
             def __init__(self, friend, role):

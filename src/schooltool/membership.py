@@ -66,19 +66,19 @@ def checkForPotentialCycles(group, potential_member):
 
 class MembershipEvent(RelationshipEvent):
 
-    implements(IMembershipEvent, URIMembership)
+    implements(IMembershipEvent)
 
     def __init__(self, links):
         RelationshipEvent.__init__(self, links)
         self.member = None
         self.group = None
         for link in links:
-            if link.role.extends(URIMember, False):
+            if link.role == URIMember:
                 if self.member is not None:
                     raise TypeError("only one URIMember must be present"
                                     " among links", links)
                 self.member = link.traverse()
-            if link.role.extends(URIGroup, False):
+            if link.role == URIGroup:
                 if self.group is not None:
                     raise TypeError("only one URIGroup must be present"
                                     " among links", links)

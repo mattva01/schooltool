@@ -250,35 +250,34 @@ def getTicketService(context):
 # Relationships
 #
 
-relationship_registry = AdapterRegistry()
-relationship_registry_shadow = {}
+relationship_registry = {}
 
 
 def resetRelationshipRegistry():
     """Replace the relationship registry with an empty one."""
     global relationship_registry
-    global relationship_registry_shadow
-    relationship_registry = AdapterRegistry()
-    relationship_registry_shadow = {}
+    relationship_registry = {}
 
 
 def registerRelationship(rel_type, handler):
     """See IRelationshipAPI"""
-    reghandler = relationship_registry_shadow.get(rel_type)
+    reghandler = relationship_registry.get(rel_type)
     if reghandler is handler:
         return
     elif reghandler is not None:
         raise ValueError("Handler for %s already registered" % rel_type)
     else:
-        relationship_registry.register([rel_type], Interface, '', handler)
-        relationship_registry_shadow[rel_type] = handler
+        relationship_registry[rel_type] = handler
 
 
 def getRelationshipHandlerFor(rel_type):
     """Returns the registered handler for relationship_type."""
-    handler = relationship_registry.lookup([rel_type], Interface, '')
+    handler = relationship_registry.get(rel_type)
     if handler is None:
-        raise ComponentLookupError("No handler registered for %s" % rel_type)
+        handler = relationship_registry.get(None)
+        if handler is None:
+            raise ComponentLookupError("No handler registered for %s"
+                                       % rel_type)
     return handler
 
 

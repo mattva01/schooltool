@@ -101,23 +101,18 @@ Examples:
 
 
 URIs
-------
+----
 
-Relationships, roles, and other things are uniquely identified by
-URIs.  URIs are really Interfaces (so we can use the TypeRegistry to
-lookup things identified by URIs).
-
-URIs have to be derived from the schooltool.interfaces.ISpecificURI
-interface.
-
-There is a special convention about the docstring of URIs.  The first
-line of the docstring is the URI, followed by an empty line, followed
-by a description of the URI.
+Relationships and roles (and possibly other things in the future) are uniquely
+identified by URIs represented in the application as objects providing
+schooltool.interfaces.IURIObject.  They are represented in XML data as simple
+URIs.  There is a global registry that lets us get a corresponding URI object
+(that has a human-friendly name) from a URI string.
 
 Conventionally, the names of URIs have a URI prefix:  URIMembership,
 URITeaching, etc.
 
-The URIs are defined in the schooltool.uris module.
+A set of "standard" URIs is defined in the schooltool.uris module.
 
 
 Relationships and valencies

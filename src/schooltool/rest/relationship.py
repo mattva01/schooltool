@@ -26,7 +26,7 @@ import libxml2
 from schooltool.interfaces import ComponentLookupError
 from schooltool.interfaces import ViewPermission
 from schooltool.interfaces import ModifyPermission
-from schooltool.uris import strURI, getURI, nameURI
+from schooltool.uris import getURI
 from schooltool.component import traverse, getPath
 from schooltool.rest import View, Template, textErrorPage
 from schooltool.rest import read_file
@@ -56,14 +56,14 @@ class RelationshipsView(View):
     def listLinks(self):
         return [{'traverse': absolutePath(self.request, link.traverse()),
                  'title': link.title,
-                 'type': strURI(link.reltype),
-                 'role': strURI(link.role),
+                 'type': link.reltype.uri,
+                 'role': link.role.uri,
                  'href': absolutePath(self.request, link)}
                 for link in self.context.listLinks()]
 
     def getValencies(self):
-        return [{'type': strURI(type),
-                 'role': strURI(role)}
+        return [{'type': type.uri,
+                 'role': role.uri}
                 for type, role in self.context.getValencies()]
 
     def _traverse(self, name, request):
@@ -121,7 +121,7 @@ class RelationshipsView(View):
         link = links[val.other]
         location = absoluteURL(request, link)
         request.appLog(_("Relationship '%s' between %s and %s created")
-                       % (nameURI(link.reltype), getPath(self.context),
+                       % (link.reltype.name, getPath(self.context),
                           getPath(other)))
         request.setHeader('Location', location)
         request.setResponseCode(201, 'Created')
@@ -136,14 +136,14 @@ class LinkView(View):
     authorization = ACLAccess(get=ViewPermission, delete=ModifyPermission)
 
     def info(self):
-        return {'role': strURI(self.context.role),
-                'arcrole': strURI(self.context.reltype),
+        return {'role': self.context.role.uri,
+                'arcrole': self.context.reltype.uri,
                 'title': self.context.title,
                 'href': absolutePath(self.request, self.context.traverse())}
 
     def do_DELETE(self, request):
         msg = (_("Relationship '%s' between %s and %s removed") %
-               (nameURI(self.context.reltype),
+               (self.context.reltype.name,
                 getPath(self.context.__parent__),
                 getPath(self.context.traverse())))
         self.context.unlink()

@@ -272,6 +272,46 @@ class IUtilityService(ILocation):
 
 
 #
+# URIs
+#
+
+class IURIObject(Interface):
+    """An opaque identifier of a role or a relationship type.
+
+    Roles and relationships are identified by URIs in XML representation.
+    URI objects let the application assign human-readable names to roles
+    and relationship types.
+
+    URI objects are equal iff their uri attributes are equal.
+    """
+
+    uri = Attribute("""URI (as a string).""")
+
+    name = Attribute("""Human-readable name.""")
+
+    description = Attribute("""Human-readable description.""")
+
+
+class IURIAPI(Interface):
+
+    def registerURI(uri):
+        """Add a URI to the registry so it can be queried by the URI string."""
+
+    def getURI(str):
+        """Return an URI object for a given URI string."""
+
+    def verifyURI(uri):
+        """Raise TypeError if the argument is not an IURIObject."""
+
+    def isURI(str):
+        """Check if the argument looks like a URI string.
+
+        Refer to http://www.ietf.org/rfc/rfc2396.txt for details.
+        We're only approximating the spec.
+        """
+
+
+#
 # Relationships
 #
 
@@ -295,7 +335,7 @@ class ILink(ILocation):
 
         This is how the object got by traverse() relates to my __parent__.
 
-        This attribute's value is an ISpecificURI.
+        This attribute's value is an IURIObject.
         """)
 
     __parent__ = Attribute("""The object at this end of the relationship.""")
@@ -403,11 +443,7 @@ class IQueryLinks(Interface):
     """
 
     def listLinks(role=None):
-        """Return all the links matching a specified role.
-
-        Roles are matched by hierarchy (as interfaces).  The default
-        argument of ISpecificURI therefore means 'all roles'.
-        """
+        """Return all the links (matching a specified role, if specified)."""
 
 
 class IRelationshipValencies(Interface):
@@ -421,8 +457,8 @@ class IRelationshipValencies(Interface):
         """Return a mapping of valencies.
 
         The return value is a dictionary with tuples containing the
-        relationship type (as an ISpecificURI) and the role of this
-        object (also an ISpecificURI) as keys, and ISchemaInvocation
+        relationship type (as an IURIObject) and the role of this
+        object (also an IURIObject) as keys, and ISchemaInvocation
         objects as values.
         """
 
@@ -466,7 +502,7 @@ class IRelationshipSchemaFactory(Interface):
 class IRelationshipSchema(Interface):
     """Object that represents a relationship."""
 
-    type = Attribute("An ISpecificURI for the type of this relationship.")
+    type = Attribute("An IURIObject for the type of this relationship.")
 
     roles = Attribute(
         """A mapping of symbolic parameter names this schema expects
@@ -539,14 +575,17 @@ class IRelationshipAPI(Interface):
     def registerRelationship(relationship_type, factory):
         """Register a relationship type.
 
-        relationship_type is an ISpecificURI.
+        relationship_type is an IURIObject (or None if you're registering the
+        default handler).
+
         factory is an IRelationshipFactory.
 
-        This function does nothing if the same registration is
-        attempted the second time.
+        This function does nothing if the same registration is attempted the
+        second time.
 
         When IRelationshipAPI.relate is called, it will find the handler for
-        the most specific relationship type and defer to that.
+        the relationship type (falling back to the default handler) and defer
+        to that.
         """
 
 

@@ -25,7 +25,6 @@ with the "dot" application in your command path.
 """
 
 import os
-from schooltool.uris import strURI
 from schooltool.clients.guiclient import SchoolToolClient
 
 
@@ -119,11 +118,11 @@ class GraphGenerator(SchoolToolClient):
                              'xlink:href'))
             self.DOT.append('"%s" -> "%s" [label="%s"]' %
                             (relationship.link_path,
-                             strURI(relationship.arcrole),
+                             relationship.arcrole.uri,
                              'xlink:arcrole'))
             self.DOT.append('"%s" -> "%s" [label="%s"]' %
                             (relationship.link_path,
-                             strURI(relationship.role),
+                             relationship.role.uri,
                              'xlink:role'))
 
 

@@ -234,10 +234,9 @@ class TestEventActionMixins(unittest.TestCase):
     def testRouteToRelationshipsAction(self):
         from schooltool.event import RouteToRelationshipsAction
         from schooltool.interfaces import IRouteToRelationshipsAction
-        from schooltool.uris import ISpecificURI
+        from schooltool.uris import URIObject
 
-        class URIFriend(ISpecificURI):
-            """http://ns.example.org/role/friend"""
+        URIFriend = URIObject("http://ns.example.org/role/friend")
 
         class LinkStub:
             def __init__(self, friend):

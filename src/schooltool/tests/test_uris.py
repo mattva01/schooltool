@@ -29,71 +29,51 @@ from schooltool.tests.utils import RegistriesSetupMixin
 __metaclass__ = type
 
 
-class TestSpecificURI(RegistriesSetupMixin, unittest.TestCase):
+class TestURIObjects(RegistriesSetupMixin, unittest.TestCase):
 
     def test_api(self):
         import schooltool.uris
-        from schooltool.uris import IURIAPI
+        from schooltool.interfaces import IURIAPI
         verifyObject(IURIAPI, schooltool.uris)
 
-    def test_inspectSpecificURI(self):
-        from zope.interface import Interface
-        from schooltool.uris import ISpecificURI
-        from schooltool.uris import inspectSpecificURI, strURI, nameURI
+    def test_URIObject(self):
+        from schooltool.uris import URIObject
+        from schooltool.interfaces import IURIObject
+        uri = URIObject('http://example.com', 'Example', 'An example')
+        verifyObject(IURIObject, uri)
+        self.assertEquals(uri.uri, 'http://example.com')
+        self.assertEquals(uri.name, 'Example')
+        self.assertEquals(uri.description, 'An example')
 
-        class I1(Interface):
-            pass
+        uri = URIObject('http://example.com', 'Example')
+        self.assertEquals(uri.description, '')
 
-        self.assertRaises(TypeError, inspectSpecificURI, object())
-        self.assertRaises(TypeError, inspectSpecificURI, I1)
-        self.assertRaises(TypeError, inspectSpecificURI, ISpecificURI)
+        uri = URIObject('http://example.com')
+        self.assertEquals(uri.name, None)
 
-        class IURI(ISpecificURI):
-            """http://example.com/foo
+        self.assertRaises(ValueError, URIObject, 'not a uri', 'Bad Example')
 
-            Title
+    def test_equality(self):
+        from schooltool.uris import URIObject
+        uri1 = URIObject('http://example.com')
+        uri2 = URIObject('http://example.com')
+        uri3 = URIObject('http://example.org')
+        assert uri1 == uri2
+        assert uri1 != uri3
+        assert not (uri1 != uri2)
+        assert not (uri1 == uri3)
+        assert hash(uri1) == hash(uri2)
+        assert hash(uri1) != hash(uri3)
 
-            Doc text
-            with newlines in it
-            """
+    def test_verifyURI(self):
+        from schooltool.uris import URIObject, verifyURI
+        uri = URIObject('http://example.com')
+        verifyURI(uri)
 
-        uri, title, doc = inspectSpecificURI(IURI)
-        self.assertEqual(uri, "http://example.com/foo")
-        self.assertEqual(uri, strURI(IURI))
-        self.assertEqual(title, "Title")
-        self.assertEqual(title, nameURI(IURI))
-        self.assertEqual(doc, "Doc text\nwith newlines in it")
+        self.assertRaises(TypeError, verifyURI, 'http://example.com')
+        self.assertRaises(TypeError, verifyURI, 'Just a name')
 
-        class IURI2(ISpecificURI): """http://example.com/foo"""
-        uri, title, doc = inspectSpecificURI(IURI2)
-        self.assertEqual(uri, "http://example.com/foo")
-        self.assertEqual(uri, strURI(IURI2))
-        self.assertEqual(title, None)
-        self.assertEqual(title, nameURI(IURI2))
-        self.assertEqual(doc, "")
-
-        class IURI3(ISpecificURI): """foo"""
-        self.assertRaises(ValueError, inspectSpecificURI, IURI3)
-
-        class IURI4(ISpecificURI):
-            """\
-            mailto:foo
-            """
-        uri, title, doc = inspectSpecificURI(IURI4)
-        self.assertEqual(uri, "mailto:foo")
-        self.assertEqual(uri, strURI(IURI4))
-        self.assertEqual(title, None)
-        self.assertEqual(title, nameURI(IURI2))
-        self.assertEqual(doc, "")
-
-        class IURI5(ISpecificURI):
-            """
-
-            mailto:foo
-            """
-        self.assertRaises(ValueError, inspectSpecificURI, IURI5)
-
-    def test__isURI(self):
+    def test_isURI(self):
         from schooltool.uris import isURI
         good = ["http://foo/bar?baz#quux",
                 "HTTP://foo/bar?baz#quux",
@@ -113,21 +93,21 @@ class TestSpecificURI(RegistriesSetupMixin, unittest.TestCase):
 
     def testURIRegistry(self):
         from schooltool.interfaces import ComponentLookupError
-        from schooltool.uris import ISpecificURI, getURI, registerURI
-        class IURI1(ISpecificURI): """http://example.com/foobar"""
-        class IURI2(ISpecificURI): """http://example.com/foo"""
-        class IURI2Dupe(ISpecificURI): """http://example.com/foo"""
+        from schooltool.uris import URIObject, getURI, registerURI
+        URI1 = URIObject("http://example.com/foobar")
+        URI2 = URIObject("http://example.com/foo")
+        URI2Dupe = URIObject("http://example.com/foo")
 
         self.assertRaises(ComponentLookupError, getURI,
-                          """http://example.com/foobar""")
-        registerURI(IURI1)
-        self.assert_(getURI("http://example.com/foobar") is IURI1)
+                          "http://example.com/foobar")
+        registerURI(URI1)
+        self.assert_(getURI("http://example.com/foobar") is URI1)
 
-        registerURI(IURI2)
-        registerURI(IURI2)
-        self.assert_(getURI("http://example.com/foo") is IURI2)
-        self.assertRaises(ValueError, registerURI, IURI2Dupe)
-        self.assert_(getURI("http://example.com/foo") is IURI2)
+        registerURI(URI2)
+        registerURI(URI2)
+        self.assert_(getURI("http://example.com/foo") is URI2)
+        self.assertRaises(ValueError, registerURI, URI2Dupe)
+        self.assert_(getURI("http://example.com/foo") is URI2)
 
     def testURISetup(self):
         import schooltool.uris
@@ -145,7 +125,7 @@ class TestSpecificURI(RegistriesSetupMixin, unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestSpecificURI))
+    suite.addTest(unittest.makeSuite(TestURIObjects))
     return suite
 
 if __name__ == '__main__':

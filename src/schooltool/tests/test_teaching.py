@@ -58,11 +58,11 @@ class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
 
     def testURIs(self):
         from schooltool.uris import URITeaching, URITeacher, URITaught
-        from schooltool.uris import inspectSpecificURI
+        from schooltool.uris import verifyURI
 
-        inspectSpecificURI(URITeaching)
-        inspectSpecificURI(URITeacher)
-        inspectSpecificURI(URITaught)
+        verifyURI(URITeaching)
+        verifyURI(URITeacher)
+        verifyURI(URITaught)
 
     def testRelationshipSchema(self):
         from schooltool.teaching import Teaching

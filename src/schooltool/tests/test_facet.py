@@ -31,7 +31,7 @@ from schooltool.interfaces import IFacet, IFaceted, IPlaceholder, ILink
 from schooltool.interfaces import IFacetFactory
 from schooltool.interfaces import IEventConfigurable
 from schooltool.interfaces import IFacetedRelationshipSchema, IUnlinkHook
-from schooltool.uris import ISpecificURI
+from schooltool.uris import URIObject
 from schooltool.tests.utils import EqualsSortedMixin
 
 __metaclass__ = type
@@ -135,12 +135,8 @@ class DummyRelationshipSchema:
         return d
 
 
-class URIDummy(ISpecificURI):
-    """http://example.com/ns/dummy"""
-
-
-class URIDummy2(ISpecificURI):
-    """http://example.com/ns/dummy2"""
+URIDummy = URIObject("http://example.com/ns/dummy")
+URIDummy2 = URIObject("http://example.com/ns/dummy2")
 
 
 class LinkStub:

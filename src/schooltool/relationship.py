@@ -25,7 +25,6 @@ $Id$
 import sets
 from persistence import Persistent
 from zope.interface import implements, classProvides, moduleProvides
-from zope.interface import directlyProvides
 from schooltool.db import PersistentPairKeysDictWithNames
 from schooltool.db import MaybePersistentKeysSet
 from schooltool.interfaces import IRemovableLink, IRelatable, IQueryLinks
@@ -39,7 +38,7 @@ from schooltool.interfaces import IRelationshipValencies
 from schooltool.interfaces import IFaceted, ISchemaInvocation
 from schooltool.interfaces import IModuleSetup, IValency
 from schooltool.interfaces import IUnlinkHook, IMultiContainer
-from schooltool.uris import ISpecificURI, inspectSpecificURI, strURI
+from schooltool.uris import verifyURI
 from schooltool.component import getPath, registerRelationship
 from schooltool import component
 from schooltool.event import EventMixin
@@ -60,7 +59,7 @@ class Link(Persistent):
     implements(IRemovableLink)
 
     def __init__(self, parent, role):
-        inspectSpecificURI(role)
+        verifyURI(role)
         if not IRelatable.providedBy(parent):
             raise TypeError("Parent must be IRelatable (got %r)" % (parent,))
         self.__parent__ = parent
@@ -90,7 +89,6 @@ class Link(Persistent):
         otherlink = self.relationship.traverse(self)
         self.traverse().__links__.remove(otherlink)
         event = RelationshipRemovedEvent((self, otherlink))
-        directlyProvides(event, self.reltype)
         event.dispatch(self.traverse())
         event.dispatch(otherlink.traverse())
         self._notifyCallbacks()
@@ -196,7 +194,7 @@ class RelationshipEvent(EventMixin):
         s = ["%s" % event]
         reltype = self.links[0].reltype
         if reltype is not None:
-            s.append("reltype=%r" % strURI(reltype))
+            s.append("reltype=%r" % reltype.uri)
         title = self.links[0].title
         if title:
             s.append("title=%r" % title)
@@ -205,8 +203,7 @@ class RelationshipEvent(EventMixin):
                 path = getPath(link.traverse())
             except TypeError:
                 path = str(link.traverse())
-            s.append("link=%r, %r"
-                     % (strURI(link.role), path))
+            s.append("link=%r, %r" % (link.role.uri, path))
         return "\n    ".join(s) + '\n'
 
     def __unicode__(self):
@@ -214,7 +211,7 @@ class RelationshipEvent(EventMixin):
         s = [u"%s" % event]
         reltype = self.links[0].reltype
         if reltype is not None:
-            s.append(u"reltype='%s'" % strURI(reltype))
+            s.append(u"reltype='%s'" % reltype.uri)
         title = self.links[0].title
         if title:
             s.append(u"title='%s'" % title.replace("'", "''"))
@@ -223,8 +220,7 @@ class RelationshipEvent(EventMixin):
                 path = getPath(link.traverse())
             except TypeError:
                 path = str(link.traverse())
-            s.append(u"link='%s', '%s'"
-                     % (strURI(link.role), path))
+            s.append(u"link='%s', '%s'" % (link.role.uri, path))
         return u"\n    ".join(s) + u'\n'
 
 
@@ -240,7 +236,6 @@ def defaultRelate(reltype, (a, role_of_a), (b, role_of_b)):
     """See IRelationshipFactory"""
     links = relate(reltype, (a, role_of_a), (b, role_of_b))
     event = RelationshipAddedEvent(links)
-    directlyProvides(event, reltype)
     event.dispatch(a)
     event.dispatch(b)
     return links
@@ -346,13 +341,12 @@ class RelatableMixin(Persistent):
     def __init__(self):
         self.__links__ = LinkSet()
 
-    def listLinks(self, role=ISpecificURI):
+    def listLinks(self, role=None):
         """See IQueryLinks"""
-        result = []
-        for link in self.__links__:
-            if link.role.extends(role, False):
-                result.append(link)
-        return result
+        if role is None:
+            return list(self.__links__)
+        else:
+            return [link for link in self.__links__ if link.role == role]
 
     def getRelativePath(self, obj):
         """See IMultiContainer"""
@@ -429,5 +423,5 @@ class Valency:
 
 def setUp():
     """Register the default relationship handler."""
-    registerRelationship(ISpecificURI, defaultRelate)
+    registerRelationship(None, defaultRelate)
 

@@ -23,11 +23,10 @@ $Id$
 """
 
 import re
-from zope.interface import Interface, moduleProvides
-from zope.interface.interfaces import IInterface
+from zope.interface import moduleProvides, implements
 from schooltool.interfaces import IModuleSetup, ComponentLookupError
-from schooltool.common import dedent
-from schooltool.translation import ugettext
+from schooltool.interfaces import IURIAPI, IURIObject
+from schooltool.translation import ugettext as _
 
 __metaclass__ = type
 
@@ -36,123 +35,50 @@ __metaclass__ = type
 # URIs
 #
 
-class ISpecificURI(Interface):
-    """Base interface for URIs.
-
-    All interfaces derived from this must have the URI they map on
-    to as the first line of their docstring.  The second paragraph
-    should contain just a short user-visible name.
-
-    Examples::
-
-        class URITutor(ISpecificURI):
-            '''http://schooltool.org/ns/tutor
-
-            Tutor
-            '''
-
-        class URITutor(ISpecificURI):
-            '''http://schooltool.org/ns/tutor
-
-            Tutor
-
-            A person who is responsible for a registration class.
-            '''
+class URIObject:
+    """See IURIObject.
 
     The suggested naming convention for URIs is to prefix the
     interface names with 'URI'.
     """
 
+    implements(IURIObject)
 
-class IURIAPI(Interface):
+    def __init__(self, uri, name=None, description=''):
+        self.uri = uri
+        self.name = name
+        self.description = description
+        if not isURI(uri):
+            raise ValueError("This does not look like a URI: %r" % uri)
 
-    def inspectSpecificURI(uri, translate=True):
-        """Return a tuple of a URI, title and the description of an
-        ISpecificURI.
+    def __eq__(self, other):
+        return self.uri == other.uri
 
-        If translate is True, the title and the description are
-        returned translated.
+    def __ne__(self, other):
+        return self.uri != other.uri
 
-        Raises a TypeError if the argument is not ISpecificURI.
-        Raises a ValueError if the URI's docstring does not conform.
-        """
-
-    def strURI(uri):
-        """Return the URI of ISpecificURI as a string."""
-
-    def nameURI(uri):
-        """Return the user-visible title of ISpecificURI as a string.
-
-        Returns None if the URI does not have a title.
-        """
-
-    def isURI(uri):
-        """Check if the argument looks like a URI.
-
-        Refer to http://www.ietf.org/rfc/rfc2396.txt for details.
-        We're only approximating to the spec.
-        """
-
-    def registerURI(uri):
-        """Add a URI to the registry so it can be queried by the URI string."""
-
-    def getURI(str):
-        """Return an ISpecificURI for a given URI string."""
+    def __hash__(self):
+        return hash(self.uri)
 
 
 #
 # URI API
 #
 
-def inspectSpecificURI(uri, translate=True):
-    """See IURIAPI."""
-    if not IInterface.providedBy(uri):
-        raise TypeError("URI must be an interface (got %r)" % (uri,))
-
-    if not uri.extends(ISpecificURI, True):
-        raise TypeError("URI must strictly extend ISpecificURI (got %r)" %
-                        (uri,))
-
-    segments = uri.__doc__.split("\n\n", 2)
-    uri = segments[0].strip()
-    if not isURI(uri):
-        raise ValueError("This does not look like a URI: %r" % uri)
-
-    if len(segments) > 1:
-        title = segments[1].strip()
-    else:
-        title = None
-
-    if len(segments) > 2:
-        doc = dedent(segments[2]).strip()
-    else:
-        doc = ""
-
-    if translate:
-        title = title and ugettext(title)
-        doc = ugettext(doc)
-
-    return uri, title, doc
+def verifyURI(uri):
+    """Raise TypeError if uri is not an IURIObject."""
+    if not IURIObject.providedBy(uri):
+        raise TypeError("URI must be an IURIObject (got %r)" % (uri,))
 
 
 def isURI(uri):
-    """Checks if the argument looks like a URI.
+    """Check if the argument looks like a URI string.
 
     Refer to http://www.ietf.org/rfc/rfc2396.txt for details.
     We're only approximating to the spec.
     """
     uri_re = re.compile(r"^[A-Za-z][A-Za-z0-9+-.]*:\S\S*$")
     return uri and uri_re.match(uri) is not None
-
-
-def strURI(uri):
-    """See IURIAPI."""
-    return inspectSpecificURI(uri)[0]
-
-
-def nameURI(uri):
-    """See IURIAPI."""
-    return inspectSpecificURI(uri)[1]
 
 
 _uri_registry = {}
@@ -164,22 +90,17 @@ def resetURIRegistry():
     _uri_registry = {}
 
 
-def registerURI(uri):
-    """Adds an ISpecificURI to the registry so it can be queried by
-    the URI string."""
-    str_uri = strURI(uri)
-    if str_uri in _uri_registry:
-        if _uri_registry[str_uri] is not uri:
-            raise ValueError("Two interfaces with one URI:  "
-                             "%r, %r" % (_uri_registry[str_uri], uri))
-        else:
-            return
-    else:
-        _uri_registry[str_uri] = uri
+def registerURI(uriobject):
+    """Add a URI to the registry so it can be queried by the URI string."""
+    if uriobject.uri not in _uri_registry:
+        _uri_registry[uriobject.uri] = uriobject
+    elif _uri_registry[uriobject.uri] is not uriobject:
+        raise ValueError("Two objects with one URI:  "
+                         "%r, %r" % (_uri_registry[uriobject.uri], uriobject))
 
 
 def getURI(str):
-    """Returns and ISpecificURI with a given URI string."""
+    """Return an URI object for a given URI string."""
     try:
         return _uri_registry[str]
     except KeyError:
@@ -190,52 +111,34 @@ def getURI(str):
 # Concrete URIs
 #
 
-class URIGroup(ISpecificURI):
-    """http://schooltool.org/ns/membership/group
-
-    Group
-
-    A role of a containing group.
-    """
+URIMembership = URIObject("http://schooltool.org/ns/membership",
+                          _("Membership"),
+                          _("The membership relationship."))
 
 
-class URIMember(ISpecificURI):
-    """http://schooltool.org/ns/membership/member
-
-    Member
-
-    A group member role.
-    """
+URIGroup = URIObject("http://schooltool.org/ns/membership/group",
+                     _("Group"),
+                     _("A role of a containing group."))
 
 
-class URIMembership(ISpecificURI):
-    """http://schooltool.org/ns/membership
-
-    Membership
-
-    The membership relationship.
-    """
+URIMember = URIObject("http://schooltool.org/ns/membership/member",
+                      _("Member"),
+                      _("A group member role."))
 
 
-class URITeaching(ISpecificURI):
-    """http://schooltool.org/ns/teaching
-
-    Teaching
-    """
+URITeaching = URIObject("http://schooltool.org/ns/teaching",
+                        _("Teaching"),
+                        _("The teaching relationship."))
 
 
-class URITeacher(ISpecificURI):
-    """http://schooltool.org/ns/teaching/teacher
-
-    Teacher
-    """
+URITeacher = URIObject("http://schooltool.org/ns/teaching/teacher",
+                       _("Teacher"),
+                       _("A role of a teacher."))
 
 
-class URITaught(ISpecificURI):
-    """http://schooltool.org/ns/teaching/taught
-
-    Taught
-    """
+URITaught = URIObject("http://schooltool.org/ns/teaching/taught",
+                      _("Taught"),
+                      _("A role of a group that has a teacher."))
 
 
 #

@@ -106,8 +106,6 @@ class RegistriesSetupMixin:
     def setUpRegistries(self):
         from schooltool import component, rest, uris, timetable
         self.old_relationship_registry = component.relationship_registry
-        self.old_relationship_registry_shadow = \
-                component.relationship_registry_shadow
         self.old_view_registry = component.view_registry
         self.old_class_view_registry = component.class_view_registry
         self.old_facet_factory_registry = component.facet_factory_registry
@@ -125,8 +123,6 @@ class RegistriesSetupMixin:
     def tearDownRegistries(self):
         from schooltool import component, uris
         component.relationship_registry = self.old_relationship_registry
-        component.relationship_registry_shadow = \
-                self.old_relationship_registry_shadow
         component.view_registry = self.old_view_registry
         component.class_view_registry = self.old_class_view_registry
         component.facet_factory_registry = self.old_facet_factory_registry

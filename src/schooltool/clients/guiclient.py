@@ -32,8 +32,8 @@ import urllib
 import base64
 import cgi
 from schooltool.interfaces import ComponentLookupError
-from schooltool.uris import strURI, getURI, isURI, registerURI
-from schooltool.uris import ISpecificURI, URITeaching, URITaught
+from schooltool.uris import getURI, isURI, registerURI
+from schooltool.uris import URIObject, URITeaching, URITaught
 from schooltool.common import parse_datetime, parse_date, to_unicode
 from schooltool.common import UnicodeAwareException
 from schooltool.translation import ugettext as _
@@ -46,15 +46,8 @@ __metaclass__ = type
 #
 
 def stubURI(uri):
-    """Create a stub ISpecificURI, register and return it"""
-
-    class URIStub(ISpecificURI):
-        __doc__ = """%s
-
-        %s
-        """ % (uri, uri)
-
-    uri_obj = URIStub
+    """Create a stub IURIObject, register and return it."""
+    uri_obj = URIObject(uri)
     registerURI(uri_obj)
     return uri_obj
 
@@ -528,8 +521,8 @@ class SchoolToolClient:
                 ' xmlns:xlink="http://www.w3.org/1999/xlink"'
                 ' xlink:type="simple"'
                 ' xlink:href="%s" xlink:arcrole="%s" xlink:role="%s"/>'
-                % tuple(map(to_xml, [obj2_path, strURI(reltype),
-                                     strURI(obj1_role)])))
+                % tuple(map(to_xml, [obj2_path, reltype.uri,
+                                     obj1_role.uri])))
         response = self.post('%s/relationships' % obj1_path, body)
         if response.status != 201:
             raise ResponseStatusError(response)
@@ -1119,8 +1112,8 @@ class MemberInfo:
 class RelationshipInfo:
     """Information about a relationship."""
 
-    arcrole = None              # Role of the target (ISpecificURI)
-    role = None                 # Role of the relationship (ISpecificURI)
+    arcrole = None              # Role of the target (IURIObject)
+    role = None                 # Role of the relationship (IURIObject)
     target_title = None         # Title of the target
     target_path = None          # Path of the target
     link_path = None            # Path of the link
@@ -1405,8 +1398,7 @@ class SchoolTimetableInfo:
         """
         activities = []
         for rel in relationships:
-            if (rel.arcrole.extends(URITeaching, False) and
-                rel.role.extends(URITaught, False)):
+            if rel.arcrole == URITeaching and rel.role == URITaught:
                 activities.append((rel.target_title, rel.target_path))
         (path, title, old_activities) = self.teachers[idx]
         self.teachers[idx] = (path, title, activities)
