@@ -193,31 +193,30 @@ class PersistentKeysDict(Persistent, UserDict.DictMixin):
         """
         self.checkJar()
         self.checkKey(key)
-        if key._p_oid is None:
-            self._p_jar.add(key)
-        self._data[key._p_oid] = value
+        self._prepareExternalKey(key)
+        self._data[self._toInternalKey(key)] = value
 
     def __getitem__(self, key):
         self.checkKey(key)
-        return self._data[key._p_oid]
+        return self._data[self._toInternalKey(key)]
 
     def __delitem__(self, key):
         self.checkKey(key)
-        del self._data[key._p_oid]
+        del self._data[self._toInternalKey(key)]
 
     def keys(self):
         self.checkJar()
         # XXX returning a lazy sequence is one optimization we might make
-        return [self._p_jar.get(oid) for oid in self._data]
+        return [self._toExternalKey(key) for key in self._data]
 
     def __contains__(self, key):
         self.checkKey(key)
-        return key._p_oid in self._data
+        return self._toInternalKey(key) in self._data
 
     def __iter__(self):
         self.checkJar()
-        for oid in self._data:
-            yield self._p_jar.get(oid)
+        for key in self._data:
+            yield self._toExternalKey(key)
 
     def __len__(self):
         return len(self._data)
@@ -231,3 +230,14 @@ class PersistentKeysDict(Persistent, UserDict.DictMixin):
         if not hasattr(key, '_p_oid'):
             raise TypeError("the key must be persistent (got %r)" % (key, ))
 
+    # Override the next three methods in a subclass if you need to support
+    # keys more complex than a single persistent object.
+    def _toExternalKey(self, key):
+        return self._p_jar.get(key)
+
+    def _toInternalKey(self, key):
+        return key._p_oid
+
+    def _prepareExternalKey(self, key):
+        if key._p_oid is None:
+            self._p_jar.add(key)
