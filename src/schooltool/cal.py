@@ -40,7 +40,7 @@ from schooltool.interfaces import Unchanged
 from schooltool.interfaces import IRecurrenceRule
 from schooltool.interfaces import IDailyRecurrenceRule, IYearlyRecurrenceRule
 from schooltool.interfaces import IWeeklyRecurrenceRule, IMonthlyRecurrenceRule
-from icalendar import ical_weekdays, ical_date_time
+from icalendar import ical_weekdays, ical_date, ical_date_time
 
 __metaclass__ = type
 
@@ -491,9 +491,6 @@ class RecurrenceRule:
 
         result = ['RRULE:FREQ=%s;%sINTERVAL=%d'
                   % (self.ical_freq, args, self.interval)]
-
-        def ical_date(dt):
-            return dt.strftime("%Y%m%d")
 
         if self.exceptions:
             # Exceptions should include the exact time portion as well

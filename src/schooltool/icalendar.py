@@ -256,8 +256,17 @@ def parse_date_time(value):
                              int(hh), int(mm), int(ss))
 
 
-def ical_date_time(dt):
+def ical_date(dt):
     """Return a date in iCalendar format as a string.
+
+    >>> ical_date(datetime.date(2004, 3, 4))
+    '20040304'
+    """
+    return dt.strftime("%Y%m%d")
+
+
+def ical_date_time(dt):
+    """Return a date-time in iCalendar format as a string.
 
     >>> ical_date_time(datetime.datetime(2004, 10, 26, 13, 07, 16))
     '20041026T130716'
