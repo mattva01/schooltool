@@ -22,9 +22,19 @@ SchoolTool test runner.
 
 Syntax: test.py [options] [pathname-regexp [test-regexp]]
 
+There are two kinds of tests:
+  - unit tests (or programmer tests) test the internal workings of various
+    components of the system
+  - functional tests (acceptance tests, customer tests) test only externaly
+    visible system behaviour
+
+You can choose to run unit tests (this is the default mode), functional tests
+(by giving a -f option to test.py) or both (by giving both -u and -f options).
+
 Test cases are located in the directory tree starting at the location of this
-script, in subdirectories named 'tests', files named 'test*.py'.  They are then
-filtered according to pathname and test regexes.
+script, in subdirectories named 'tests' for unit tests and 'ftests' for
+functional tests, in Python modules named 'test*.py'.  They are then filtered
+according to pathname and test regexes.
 
 A leading "!" in a regexp is stripped and negates the regexp.  Pathname
 regexp is applied to the whole path (package/package/module.py). Test regexp
@@ -35,6 +45,8 @@ Options:
   -v            verbose (print dots for each test run)
   -vv           very verbose (print test names)
   -p            show progress bar (can be combined with -v or -vv)
+  -u            run unit tests (default)
+  -f            run functional tests
   --list-files  list all files that match pathname-regexp
   --list-tests  list all tests that match test-regexp
 """
@@ -63,6 +75,8 @@ class Options:
     list_files = False
     list_tests = False
     run_tests = True
+    unit_tests = False
+    functional_tests = False
 
     # these are hardcoded for the moment
     basedir = ''
@@ -112,8 +126,13 @@ def get_test_files(cfg):
     """Returns a list of test module filenames."""
     matcher = compile_matcher(cfg.pathname_regex)
     results = []
+    test_dirs = []
+    if cfg.unit_tests:
+        test_dirs.append('tests')
+    if cfg.functional_tests:
+        test_dirs.append('ftests')
     def visit(ignored, dir, files):
-        if os.path.basename(dir) != 'tests':
+        if os.path.basename(dir) not in test_dirs:
             return
         if '__init__.py' not in files:
             print >> sys.stderr, "%s is not a package" % dir
@@ -288,7 +307,7 @@ def main(argv):
         cfg.basedir = '.'
 
     # Option processing
-    opts, args = getopt.getopt(argv[1:], 'hvp', ['list-files', 'list-tests'])
+    opts, args = getopt.getopt(argv[1:], 'hvpuf', ['list-files', 'list-tests'])
     for k, v in opts:
         if k == '-h':
             print __doc__
@@ -297,6 +316,10 @@ def main(argv):
             cfg.verbosity += 1
         elif k == '-p':
             cfg.progress = True
+        elif k == '-u':
+            cfg.unit_tests = True
+        elif k == '-f':
+            cfg.functional_tests = True
         elif k == '--list-files':
             cfg.list_files = True
             cfg.run_tests = False
@@ -315,6 +338,8 @@ def main(argv):
         print >> sys.stderr, '%s: too many arguments: %s' % (argv[0], args[2])
         print >> sys.stderr, 'run %s -h for help'
         return 1
+    if not cfg.unit_tests and not cfg.functional_tests:
+        cfg.unit_tests = True
 
     # Environment
     if sys.version_info < (2, 3):
