@@ -328,48 +328,56 @@ class TestClient(unittest.TestCase):
         self.assertEqual(self.emitted, FileStub.msg)
 
     def test_put(self):
+        self.do_test_put_or_post('put')
+
+    def test_post(self):
+        self.do_test_put_or_post('post')
+
+    def do_test_put_or_post(self, what):
+        doit = getattr(self.client, 'do_%s' % what)
         self.client.input_hook = lambda: '.'
-        self.client.do_put('   ')
+        doit('   ')
         self.assertEqual(self.emitted, "Resource not provided")
 
         self.emitted = ""
-        self.client.do_put('x y z')
+        doit('x y z')
         self.assertEqual(self.emitted, "Extra arguments provided")
 
         self.emitted = ""
         self.client.resources = ['x']
-        self.client.do_put('/place_to_put_things')
+        doit('/place_to_put_things')
         expected = ("End data with a line containing just a single period.\n"
-                    "PUT text/plain 0\n")
+                    "%s text/plain 0\n" % what.upper())
         self.assertEqual(self.emitted, expected,
                          "\n" + diff(expected, self.emitted))
         self.assertEqual(self.client.resources, [])
-        self.assertEqual(self.client.last_data, 'PUT text/plain 0\n')
+        self.assertEqual(self.client.last_data,
+                         '%s text/plain 0\n' % what.upper())
 
         self.emitted = ""
         self.client.input_hook = ['.', '..', '...', 'foo'].pop
-        self.client.do_put('/place_to_put_things text/x-plain')
+        doit('/place_to_put_things text/x-plain')
         self.assertEqual(self.emitted,
                          "End data with a line containing just a single"
                            " period.\n"
-                         "PUT text/x-plain 9\n"
+                         "%s text/x-plain 9\n"
                          "foo\n"
                          "..\n"
-                         ".\n")
+                         ".\n" % what.upper())
 
         def raise_eof():
             raise EOFError
         self.emitted = ""
         self.client.input_hook = raise_eof
-        self.client.do_put('/place_to_put_things')
+        doit('/place_to_put_things')
         self.assertEqual(self.emitted,
                          "End data with a line containing just a single"
                            " period.\n"
-                         "Unexpected EOF -- PUT aborted")
+                         "Unexpected EOF -- %s aborted" % what.upper())
 
         self.emitted = ""
         self.client.input_hook = lambda: '.'
-        self.client.do_put('/binfile')
+        doit('/binfile')
         self.assertEqual(self.emitted,
                          "End data with a line containing just a single"
                            " period.\n"

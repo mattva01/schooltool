@@ -215,16 +215,9 @@ welcome to change it and/or distribute copies of it under certain conditions."""
         resource = args[0]
         self._request('GET', resource, [('Accept', self.accept)])
 
-    def do_put(self, line):
-        """Put a resource on the server.
-
-        put <resource> [<content-type>]
-
-        Content-type defaults to text/plain.  The new representation of the
-        resource should be terminated with a line containing just a single
-        period.  If the data contains a line consisting of just periods,
-        prepend it with an additional one that will be stripped automatically.
-        """
+    def _do_put_or_post(self, what, line):
+        """Common implementation of do_put and do_post."""
+        assert what in ('PUT', 'POST')
         args = line.split()
         if len(args) < 1:
             self.emit("Resource not provided")
@@ -243,7 +236,7 @@ welcome to change it and/or distribute copies of it under certain conditions."""
             try:
                 row = self.input_hook()
             except EOFError:
-                self.emit('Unexpected EOF -- PUT aborted')
+                self.emit('Unexpected EOF -- %s aborted' % what)
                 return
             if row.startswith('.'):
                 if row == '.':
@@ -253,10 +246,34 @@ welcome to change it and/or distribute copies of it under certain conditions."""
             data.append(row)
         data.append('')
         data = '\n'.join(data)
-        self._request('PUT', resource,
+        self._request(what, resource,
                       [('Content-Type', content_type),
                        ('Content-Length', len(data))],
                       data)
+
+    def do_put(self, line):
+        """Put a resource on the server.
+
+        put <resource> [<content-type>]
+
+        Content-type defaults to text/plain.  The new representation of the
+        resource should be terminated with a line containing just a single
+        period.  If the data contains a line consisting of just periods,
+        prepend it with an additional one that will be stripped automatically.
+        """
+        self._do_put_or_post('PUT', line)
+
+    def do_post(self, line):
+        """Post a resource to the server.
+
+        post <resource> [<content-type>]
+
+        Content-type defaults to text/plain.  The representation of the new
+        resource should be terminated with a line containing just a single
+        period.  If the data contains a line consisting of just periods,
+        prepend it with an additional one that will be stripped automatically.
+        """
+        self._do_put_or_post('POST', line)
 
     def do_delete(self, line):
         """Delete a resource from the server.
