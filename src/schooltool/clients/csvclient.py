@@ -112,7 +112,9 @@ class CSVImporter:
         through the server to import this group.
         """
         result = []
-        result.append(('/groups/%s' % name, 'PUT', 'title="%s"' % title))
+        result.append(('/groups/%s' % name, 'PUT',
+                       '<object xmlns="http://schooltool.org/ns/model/0.1" '
+                       'title="%s"/>' % title))
         for parent in parents.split():
             result.append(self.membership(parent, "/groups/%s" % name))
         if facet:
@@ -124,13 +126,17 @@ class CSVImporter:
         """Returns a list of tuples of (path, method, body) to run
         through the server to import this person.
         """
-        return [('/persons', 'POST', 'title="%s"' % title)]
+        return [('/persons', 'POST',
+                 '<object xmlns="http://schooltool.org/ns/model/0.1" '
+                 'title="%s"/>' % title)]
 
     def importResource(self, title):
         """Returns a list of tuples of (path, method, body) to run
         through the server to import this resource.
         """
-        return [('/resources', 'POST', 'title="%s"' % title)]
+        return [('/resources', 'POST',
+                 '<object xmlns="http://schooltool.org/ns/model/0.1" '
+                 'title="%s"/>' % title)]
 
     def importPupil(self, name, parents):
         """Adds a pupil to the groups.  Need a name (generated path

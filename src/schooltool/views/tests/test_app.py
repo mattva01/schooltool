@@ -180,7 +180,8 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
             </container>
             """)
 
-    def test_post(self, suffix="", method="POST", body=None, view=None):
+    def test_post(self, suffix="", method="POST", view=None,
+                  body="<object xmlns='http://schooltool.org/ns/model/0.1'/>"):
         if view is None:
             view = self.view
         request = RequestStub("http://localhost:8080/groups" + suffix,
@@ -200,8 +201,17 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         return name
 
     def test_post_with_a_title(self):
-        name = self.test_post(body='title="New Group"')
+        name = self.test_post(body='''
+            <object title="New Group"
+                    xmlns='http://schooltool.org/ns/model/0.1'/>''')
         self.assert_(self.app['groups'][name].title == 'New Group')
+
+    def test_post_error(self):
+        request = RequestStub("http://localhost:8080/groups", method="POST",
+                              body='<element title="New Group">')
+        self.view.authorization = lambda ctx, rq: True
+        result = self.view.render(request)
+        self.assertEquals(request.code, 400)
 
     def test_get_child(self, method="GET"):
         from schooltool.views.app import ApplicationObjectCreatorView
@@ -222,8 +232,10 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(name, 'foo')
 
         view = ApplicationObjectCreatorView(self.app['groups'], 'bar')
+        xml = '''<object title="Bar Bar"
+                         xmlns='http://schooltool.org/ns/model/0.1'/>'''
         name = self.test_post(method="PUT", suffix="/bar", view=view,
-                              body='title="Bar Bar"')
+                              body=xml)
         self.assertEquals(name, 'bar')
         self.assert_(self.app['groups'][name].title == 'Bar Bar')
 

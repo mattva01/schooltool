@@ -23,6 +23,7 @@ $Id$
 """
 
 import datetime
+import libxml2
 from zope.interface import moduleProvides
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IModuleSetup, IResource
@@ -35,6 +36,7 @@ from schooltool.views.timetable import SchoolTimetableTraverseView
 from schooltool.views.cal import AllCalendarsView
 from schooltool.views.auth import PublicAccess
 from schooltool.common import parse_date
+from schooltool.schema.rng import validate_against_schema
 
 __metaclass__ = type
 
@@ -74,8 +76,24 @@ class ApplicationView(TraversableView):
                 for utility in self.context.utilityService.values()]
 
 
-class ApplicationObjectCreator(XMLPseudoParser):
+class ApplicationObjectCreator:
     """Mixin for adding new application objects"""
+
+    schema = '''<?xml version="1.0" encoding="UTF-8"?>
+        <grammar xmlns="http://relaxng.org/ns/structure/1.0"
+                 ns="http://schooltool.org/ns/model/0.1"
+                 datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+          <start>
+            <element name="object">
+              <optional>
+                <attribute name="title">
+                  <text/>
+                </attribute>
+              </optional>
+            </element>
+          </start>
+        </grammar>
+        '''
 
     def create(self, request, container, name=None):
         body = request.content.read()
@@ -83,9 +101,23 @@ class ApplicationObjectCreator(XMLPseudoParser):
         if name is not None:
             kw['__name__'] = name
         try:
-            kw['title'] = self.extractKeyword(body, 'title')
-        except KeyError:
-            pass
+            if not validate_against_schema(self.schema, body):
+                return textErrorPage(request,
+                                     "Document not valid according to schema")
+        except libxml2.parserError:
+            return textErrorPage(request, "Document not valid XML")
+
+        doc = libxml2.parseDoc(body)
+        xpathctx = doc.xpathNewContext()
+        try:
+            ns = 'http://schooltool.org/ns/model/0.1'
+            xpathctx.xpathRegisterNs('m', ns)
+            nodes = xpathctx.xpathEval('/*/@title')
+            if nodes:
+                kw['title'] = nodes[0].content
+        finally:
+            doc.freeDoc()
+            xpathctx.xpathFreeContext()
         obj = container.new(**kw)
         location = absoluteURL(request, getPath(obj))
         request.setResponseCode(201, 'Created')

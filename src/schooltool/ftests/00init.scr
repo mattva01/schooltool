@@ -2,7 +2,7 @@ Creates some sample persons and groups.
 Make sure you start with a clean Data.fs.
 
 SchoolTool> put /groups/teachers
-PUT> title="Teachers"
+PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Teachers"/>
 PUT> .
 201 Created
 Content-Type: text/plain
@@ -16,14 +16,14 @@ Content-Type: text/plain
 Facet created: http://localhost:8813/groups/teachers/facets/001
 
 SchoolTool> put /groups/students
-PUT> title="Students"
+PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Students"/>
 PUT> .
 201 Created
 Content-Type: text/plain
 Object created: http://localhost:8813/groups/students
 
 SchoolTool> put /groups/cleaners
-PUT> title="Cleaners"
+PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Cleaners"/>
 PUT> .
 201 Created
 Content-Type: text/plain
@@ -57,35 +57,35 @@ Content-Type: text/plain
 Relationship created: http://localhost:8813/groups/root/relationships/0004
 
 SchoolTool> put /persons/Mark
-PUT> title="Mark"
+PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Mark"/>
 PUT> .
 201 Created
 Content-Type: text/plain
 Object created: http://localhost:8813/persons/Mark
 
 SchoolTool> put /persons/Steve
-PUT> title="Steve"
+PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Steve"/>
 PUT> .
 201 Created
 Content-Type: text/plain
 Object created: http://localhost:8813/persons/Steve
 
 SchoolTool> put /persons/Aiste
-PUT> title="Aiste"
+PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Aiste" />
 PUT> .
 201 Created
 Content-Type: text/plain
 Object created: http://localhost:8813/persons/Aiste
 
 SchoolTool> put /persons/Albert
-PUT> title="Albert"
+PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Albert" />
 PUT> .
 201 Created
 Content-Type: text/plain
 Object created: http://localhost:8813/persons/Albert
 
 SchoolTool> put /persons/Marius
-PUT> title="Marius"
+PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Marius" />
 PUT> .
 201 Created
 Content-Type: text/plain
@@ -153,21 +153,21 @@ Content-Type: text/plain
 Relationship created: http://localhost:8813/persons/Steve/relationships/0002
 
 SchoolTool> put /resources/hall
-PUT> title="Hall"
+PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Hall"/>
 PUT> .
 201 Created
 Content-Type: text/plain
 Object created: http://localhost:8813/resources/hall
 
 SchoolTool> put /resources/room1
-PUT> title="Room 1"
+PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Room 1"/>
 PUT> .
 201 Created
 Content-Type: text/plain
 Object created: http://localhost:8813/resources/room1
 
 SchoolTool> put /resources/room2
-PUT> title="Room 2"
+PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Room 2"/>
 PUT> .
 201 Created
 Content-Type: text/plain
