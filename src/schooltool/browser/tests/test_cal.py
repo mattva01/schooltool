@@ -26,32 +26,15 @@ import unittest
 import datetime
 from logging import INFO
 
-from schooltool.browser.tests import RequestStub, setPath
+from schooltool.browser.tests import AppSetupMixin, RequestStub, setPath
 
 __metaclass__ = type
 
 
-class TestBookingView(unittest.TestCase):
+class TestBookingView(AppSetupMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.model import Person, Group, Resource
-        from schooltool.app import Application, ApplicationObjectContainer
-        from schooltool import membership
-
-        membership.setUp()
-
-        self.app = Application()
-        self.app['persons'] = ApplicationObjectContainer(Person)
-        self.app['groups'] = ApplicationObjectContainer(Group)
-        resrc = self.app['resources'] = ApplicationObjectContainer(Resource)
-
-        self.person = self.app['persons'].new("me", title="Me")
-        self.resource = resrc.new("sink", title="Kitchen sink")
-
-        managers = self.app['groups'].new("managers", title="managers")
-        self.manager = self.app['persons'].new("manager", title="Manager")
-        membership.Membership(group=managers, member=self.manager)
-
+        self.setUpSampleApp()
 
     def createView(self):
         from schooltool.browser.cal import BookingView
@@ -81,14 +64,14 @@ class TestBookingView(unittest.TestCase):
     def test_owner(self):
         view = self.createView()
         request = RequestStub(authenticated_user=self.manager,
-                              args={'owner': 'me',
+                              args={'owner': 'johndoe',
                                     'start_date': '2004-08-10',
                                     'start_time': '19:01',
                                     'duration': '61',
                                     'CONFIRM_BOOK': 'Book'})
         content = view.render(request)
         self.assert_("Only managers can set the owner" not in content)
-        self.assert_("Invalid owner: me" not in content)
+        self.assert_("Invalid owner: johndoe" not in content)
 
         ev1 = iter(self.person.calendar).next()
         self.assert_(ev1.owner is self.person,
@@ -135,9 +118,9 @@ class TestBookingView(unittest.TestCase):
         self.assertEquals(view.error, "")
         self.assertEquals(request.applog,
                 [(self.person,
-                  u'/resources/sink (Kitchen sink) booked by'
-                  ' /persons/me (Me) at 2004-08-10 19:01:00 for 1:01:00',
-                  INFO)])
+                  u'/resources/resource (Kitchen sink) booked by'
+                  u' /persons/johndoe (John Doe) at 2004-08-10 19:01:00'
+                  u' for 1:01:00', INFO)])
 
         self.assertEquals(len(list(self.person.calendar)), 1)
         self.assertEquals(len(list(self.resource.calendar)), 1)
