@@ -1,0 +1,70 @@
+include RELEASE
+include *schoolbell*
+include GPL
+include Makefile
+include test.py
+include ftesting.zcml
+include remove-stale-bytecode.py
+
+include debian/rules debian/changelog debian/compat debian/control
+include debian/copyright debian/README.Debian debian/TODO
+include debian/*schoolbell* debian/ssl-cert.cnf
+include debian/po/*.po debian/po/templates.pot debian/po/POTFILES.in
+
+include images/schoolbell.svg
+include scripts/schoolbell
+include scripts/schoolbell-export.py
+include scripts/schoolbell-import.py
+include scripts/run-export.sh
+include scripts/run-import.sh
+
+recursive-include src/schoolbell *.py *.pt *.css *.png *.txt
+recursive-include src/schoolbell *.js *.xml *.conf *.zcml *.ics
+include doc/release-policy.txt doc/release-checklist.txt
+
+include Zope3/setup.py
+include Zope3/test.py
+include Zope3/Makefile
+include Zope3/ftesting.zcml
+include Zope3/securitypolicy.zcml
+include Zope3/securitypolicy-ftesting.zcml
+include Zope3/ZopePublicLicense.txt
+include Zope3/overrides_ftesting.zcml.in
+
+recursive-include Zope3/src/BTrees *
+recursive-include Zope3/src/persistent *
+recursive-include Zope3/src/pytz *
+recursive-include Zope3/src/RestrictedPython *
+recursive-include Zope3/src/transaction *
+recursive-include Zope3/src/ZConfig *
+recursive-include Zope3/src/ZODB *
+recursive-include Zope3/src/zodbcode *
+
+include Zope3/src/zope/__init__.py
+recursive-include Zope3/src/zope/app *
+include Zope3/package-includes/zope.app.session-configure.zcml
+recursive-include Zope3/src/zope/cachedescriptors *
+recursive-include Zope3/src/zope/configuration *
+recursive-include Zope3/src/zope/component *
+recursive-include Zope3/src/zope/deprecation *
+recursive-include Zope3/src/zope/exceptions *
+recursive-include Zope3/src/zope/event *
+recursive-include Zope3/src/zope/i18n *
+recursive-include Zope3/src/zope/i18nmessageid *
+recursive-include Zope3/src/zope/interface *
+recursive-include Zope3/src/zope/hookable *
+recursive-include Zope3/src/zope/modulealias *
+recursive-include Zope3/src/zope/pagetemplate *
+recursive-include Zope3/src/zope/proxy *
+recursive-include Zope3/src/zope/publisher *
+recursive-include Zope3/src/zope/schema *
+include Zope3/package-includes/securitypolicy-meta.zcml
+recursive-include Zope3/src/zope/security *
+recursive-include Zope3/src/zope/server *
+recursive-include Zope3/src/zope/tales *
+recursive-include Zope3/src/zope/tal *
+recursive-include Zope3/src/zope/testing *
+recursive-include Zope3/src/zope/thread *
+
+recursive-include Zope3/src/ThreadedAsync *
+recursive-include Zope3/src/zdaemon *
