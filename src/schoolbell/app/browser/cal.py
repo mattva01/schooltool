@@ -306,9 +306,13 @@ class CalendarViewBase(BrowserView):
                 self.time_fmt = '%I:%M %p'
             else:
                 self.time_fmt = '%H:%M'
+
+            self.dateformat = prefs.dateformat
+
         else:
             self.first_day_of_week = 0
             self.time_fmt = '%H:%M'
+            self.dateformat = 'YYYY-MM-DD'
 
     def internationalDate(self, day):
         day_of_week = day_of_week_names[day.weekday()]
@@ -323,15 +327,10 @@ class CalendarViewBase(BrowserView):
         return _('%s, %s') % (day_of_week, day.strftime('%d %B, %Y'))
 
     def dayTitle(self, day):
-        person = IPerson(self.request.principal, None)
-        if person is not None:
-            prefs = IPersonPreferences(person)
-            if prefs.dateformat == "MM/DD/YY":
-                return self.usDate(day)
-            elif prefs.dateformat == "Day Month, Year":
-                return self.longDate(day)
-            else:
-                return self.internationalDate(day)
+        if self.dateformat == "MM/DD/YY":
+            return self.usDate(day)
+        elif self.dateformat == "Day Month, Year":
+            return self.longDate(day)
         else:
             return self.internationalDate(day)
 

@@ -374,17 +374,22 @@ class TestCalendarViewBase(unittest.TestCase):
         ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
                              getPersonPreferences)
 
-        request = TestRequest()
-        request.setPrincipal(PrincipalStub())
-        view = CalendarViewBase(None, request)
+        request1 = TestRequest()
+        request1.setPrincipal(PrincipalStub())
+        view1 = CalendarViewBase(None, request1)
         dt = datetime(2004, 7, 1)
-        self.assertEquals(view.dayTitle(dt), "Thursday, 2004-07-01")
+        self.assertEquals(view1.dayTitle(dt), "Thursday, 2004-07-01")
+
+        request2 = TestRequest()
+        request2.setPrincipal(PrincipalStub())
 
         # set the dateformat preference to the long format
-        prefs = IPersonPreferences(request.principal._person)
+        prefs = IPersonPreferences(request2.principal._person)
         prefs.dateformat = "Day Month, Year"
 
-        self.assertEquals(view.dayTitle(dt), "Thursday, 01 July, 2004")
+        view2 = CalendarViewBase(None, request2)
+
+        self.assertEquals(view2.dayTitle(dt), "Thursday, 01 July, 2004")
 
     def test_prev_next(self):
         from schoolbell.app.browser.cal import CalendarViewBase
@@ -597,6 +602,7 @@ class TestCalendarViewBase(unittest.TestCase):
             ...     def __init__(self):
             ...         self.weekstart = "Monday"
             ...         self.timeformat = "%H:%M"
+            ...         self.dateformat = "YYYY-MM-DD"
             >>> from schoolbell.app.interfaces import IPersonPreferences
             >>> class PersonStub:
             ...     def __conform__(self, interface):
