@@ -1,14 +1,13 @@
-<!-- <html metal:use-macro="view/macros/calendarpage" i18n:domain="schooltool"> -->
 <tal:defs define="status view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
-  <head>
-    <title metal:fill-slot="title" i18n:translate="">Calendar (weekly)</title>
-  </head>
-  <body>
-    <h1 metal:fill-slot="h1" i18n:translate="">
-      Weekly calendar for <span tal:replace="context/__parent__/title"
-                                i18n:name="title" />
-    </h1>
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Calendar (weekly)</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" i18n:translate="">
+    Weekly calendar for <span tal:replace="context/__parent__/title"
+                              i18n:name="title" />
+  </h1>
 
   <!--
   <metal:block fill-slot="column-left-extra">
@@ -16,69 +15,68 @@
   </metal:block>
   -->
 
-    <metal:block metal:fill-slot="body">
+<metal:block metal:fill-slot="body">
 
-      <h2 class="calendar-view-title" tal:content="view/title" />
+  <h2 class="calendar-view-title" tal:content="view/title" />
 
-      <div id="calendar-navigation-context">
-        <table cellpadding="0" cellspacing="0" width="100%">
-          <tr>
-            <td align="left" width="33%">
-              <a id="calendar-navigation-context-previous"
-                  tal:attributes="href python:view.calURL('weekly',
-                                                           view.prevWeek())"
-                  i18n:translate="">Previous week</a>
-            </td>
-            <td align="center">
-              <a id="calendar-navigation-context-current"
-                  tal:attributes="href request/URL"
-                  i18n:translate="">Current week</a>
-            </td>
-            <td align="right" width="33%">
-              <a id="calendar-navigation-context-next"
-                  tal:attributes="href python:view.calURL('weekly',
-                                                          view.nextWeek())"
-                  i18n:translate="">Next week</a>
-            </td>
-          </tr>
-        </table>
-      </div>
+  <div id="calendar-navigation-context">
+    <table cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td align="left" width="33%">
+          <a id="calendar-navigation-context-previous"
+             tal:attributes="href python:view.calURL('weekly',
+                                                      view.prevWeek())"
+             i18n:translate="">Previous week</a>
+        </td>
+        <td align="center">
+          <a id="calendar-navigation-context-current"
+             tal:attributes="href request/URL"
+             i18n:translate="">Current week</a>
+        </td>
+        <td align="right" width="33%">
+          <a id="calendar-navigation-context-next"
+             tal:attributes="href python:view.calURL('weekly',
+                                                     view.nextWeek())"
+             i18n:translate="">Next week</a>
+        </td>
+      </tr>
+    </table>
+  </div>
 
-      <table id="calendar-view-week" cellpadding="0"
-             cellspacing="0" width="100%">
-        <tr>
-          <tal:loop repeat="day view/getCurrentWeek">
-            <th class="day-title"
-              tal:define="start repeat/day/start"
-              tal:attributes="class python:start and 'day-title first' or 'day-title'">
-              <a tal:content="python:view.dayTitle(day.date)"
-                 tal:attributes="href python:view.calURL('daily', day.date)"/>
-            </th>
-          </tal:loop>
-        </tr>
-        <tr>
-          <tal:loop repeat="day view/getCurrentWeek">
-            <td valign="top" height="100"
-                tal:define="start repeat/day/start"
-                tal:attributes="class python:start and 'first' or 'dummy'">
-              <div tal:repeat="event day/events">
-                <a href=""
-                    tal:define="start repeat/event/start;
-                              dtend python:event.dtstart + event.duration;
-                              evdate python:event.dtstart.strftime('%Y-%m-%d');"
-      tal:attributes="class python:start and 'first' or 'dummy';
-          href string:${context/@@absolute_url}/edit_event.html?date=${evdate}&amp;event_id=${event/unique_id};
-          style python:'background: %s;; margin: 2px;;' % view.eventColors(event)[0];
-          title event/title"> <!-- XXX ICK!! -->
-                  <span tal:content="python:view.ellipsizeTitle(event.title)"/>
-                  (<span tal:content="python:event.dtstart.strftime('%H:%M')"/> - <span tal:content="python:dtend.strftime('%H:%M')"/>)
-                </a>
-              </div>
-            </td>
-          </tal:loop>
-        </tr>
-      </table>
+  <table id="calendar-view-week" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <tal:loop repeat="day view/getCurrentWeek">
+        <th class="day-title"
+            tal:define="start repeat/day/start"
+            tal:attributes="class python:start and 'day-title first'
+                                                or 'day-title'">
+          <a tal:content="python:view.dayTitle(day.date)"
+             tal:attributes="href python:view.calURL('daily', day.date)" />
+        </th>
+      </tal:loop>
+    </tr>
+    <tr>
+      <tal:loop repeat="day view/getCurrentWeek">
+        <td valign="top" height="100"
+            tal:define="start repeat/day/start"
+            tal:attributes="class python:start and 'first' or 'dummy'">
+          <div tal:repeat="event day/events">
+            <a tal:define="start repeat/event/start;
+                           dtend python:event.dtstart + event.duration;
+                           evdate python:event.dtstart.strftime('%Y-%m-%d')"
+               tal:attributes="class python:start and 'first' or 'dummy';
+                               href string:${context/@@absolute_url}/edit_event.html?date=${evdate}&amp;event_id=${event/unique_id};
+                               style python:'background: %s;; margin: 2px;;' % view.eventColors(event)[0];
+                               title event/title"> <!-- XXX ICK!! -->
+              <span tal:content="python:view.ellipsizeTitle(event.title)"/>
+              (<span tal:content="python:event.dtstart.strftime('%H:%M')"/> - <span tal:content="python:dtend.strftime('%H:%M')"/>)
+            </a>
+          </div>
+        </td>
+      </tal:loop>
+    </tr>
+  </table>
 
-    </metal:block>
-  </body>
+</metal:block>
+</body>
 </html>
