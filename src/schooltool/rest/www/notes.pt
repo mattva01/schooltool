@@ -1,0 +1,12 @@
+<notes xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:tal="http://xml.zope.org/namespaces/tal"
+          xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+          i18n:domain="schooltool">
+  <title><span tal:replace="context/title"/> Notes</title>
+  <tal:loop repeat="note python:view.getNotes(request)">
+      <item xlink:type="simple"
+          xlink:title="" xlink:href=""
+          i18n:attributes="xlink:title note/title"
+          tal:attributes="xlink:href string:/notes/${note/__name__}" />
+  </tal:loop>
+</notes>

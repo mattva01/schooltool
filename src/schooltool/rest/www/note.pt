@@ -1,0 +1,8 @@
+<note xmlns="http://schooltool.org/ns/model/0.1"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="schooltool">
+  <title tal:content="context/title"/>
+  <body tal:content="context/body"/>
+</note>
