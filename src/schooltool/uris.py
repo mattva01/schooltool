@@ -24,6 +24,7 @@ $Id$
 
 import re
 from zope.interface import moduleProvides, implements
+from schooltool.common import looks_like_a_uri
 from schooltool.interfaces import IModuleSetup, ComponentLookupError
 from schooltool.interfaces import IURIAPI, IURIObject
 from schooltool.translation import ugettext as _
@@ -48,7 +49,7 @@ class URIObject:
         self.uri = uri
         self.name = name
         self.description = description
-        if not isURI(uri):
+        if not looks_like_a_uri(uri):
             raise ValueError("This does not look like a URI: %r" % uri)
 
     def __eq__(self, other):
@@ -69,16 +70,6 @@ def verifyURI(uri):
     """Raise TypeError if uri is not an IURIObject."""
     if not IURIObject.providedBy(uri):
         raise TypeError("URI must be an IURIObject (got %r)" % (uri,))
-
-
-def isURI(uri):
-    """Check if the argument looks like a URI string.
-
-    Refer to http://www.ietf.org/rfc/rfc2396.txt for details.
-    We're only approximating to the spec.
-    """
-    uri_re = re.compile(r"^[A-Za-z][A-Za-z0-9+-.]*:\S\S*$")
-    return uri and uri_re.match(uri) is not None
 
 
 _uri_registry = {}

@@ -346,3 +346,38 @@ class UnicodeAwareException(Exception):
 
     def __unicode__(self):
         return u" ".join(map(unicode, self.args))
+
+
+def looks_like_a_uri(uri):
+    r"""Check if the argument looks like a URI string.
+
+    Refer to http://www.ietf.org/rfc/rfc2396.txt for details.
+    We're only approximating to the spec.
+
+    Some examples of valid URI strings:
+
+        >>> looks_like_a_uri('http://foo/bar?baz#quux')
+        True
+        >>> looks_like_a_uri('HTTP://foo/bar?baz#quux')
+        True
+        >>> looks_like_a_uri('mailto:root')
+        True
+
+    These strings are all invalid URIs:
+
+        >>> looks_like_a_uri('2HTTP://foo/bar?baz#quux')
+        False
+        >>> looks_like_a_uri('\nHTTP://foo/bar?baz#quux')
+        False
+        >>> looks_like_a_uri('mailto:postmaster ')
+        False
+        >>> looks_like_a_uri('mailto:postmaster text')
+        False
+        >>> looks_like_a_uri('nocolon')
+        False
+        >>> looks_like_a_uri(None)
+        False
+
+    """
+    uri_re = re.compile(r"^[A-Za-z][A-Za-z0-9+-.]*:\S\S*$")
+    return bool(uri and uri_re.match(uri) is not None)

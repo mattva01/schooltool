@@ -34,9 +34,10 @@ import cgi
 
 from schooltool.interfaces import ComponentLookupError
 # TODO: Remove dependency on schooltool.uris.
-from schooltool.uris import URITeaching, URITaught, isURI
+from schooltool.uris import URITeaching, URITaught
 from schooltool.common import parse_datetime, parse_date, to_unicode
 from schooltool.common import UnicodeAwareException
+from schooltool.common import looks_like_a_uri
 from schooltool.translation import ugettext as _
 
 __metaclass__ = type
@@ -754,7 +755,9 @@ def _parseRelationships(body, uriobjects):
             href = to_unicode(node.nsProp('href', xlink))
             role_uri = to_unicode(node.nsProp('role', xlink))
             arcrole_uri = to_unicode(node.nsProp('arcrole', xlink))
-            if not href or not isURI(role_uri) or not isURI(arcrole_uri):
+            if (not href
+                or not looks_like_a_uri(role_uri)
+                or not looks_like_a_uri(arcrole_uri)):
                 continue
             title = to_unicode(node.nsProp('title', xlink))
             if title is None:

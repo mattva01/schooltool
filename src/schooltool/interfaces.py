@@ -303,13 +303,6 @@ class IURIAPI(Interface):
     def verifyURI(uri):
         """Raise TypeError if the argument is not an IURIObject."""
 
-    def isURI(str):
-        """Check if the argument looks like a URI string.
-
-        Refer to http://www.ietf.org/rfc/rfc2396.txt for details.
-        We're only approximating the spec.
-        """
-
     def listURIs():
         """Return a list of all registered URIObjects."""
 

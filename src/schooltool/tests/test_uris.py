@@ -73,24 +73,6 @@ class TestURIObjects(RegistriesSetupMixin, unittest.TestCase):
         self.assertRaises(TypeError, verifyURI, 'http://example.com')
         self.assertRaises(TypeError, verifyURI, 'Just a name')
 
-    def test_isURI(self):
-        from schooltool.uris import isURI
-        good = ["http://foo/bar?baz#quux",
-                "HTTP://foo/bar?baz#quux",
-                "mailto:root",
-                ]
-        bad = ["2HTTP://foo/bar?baz#quux",
-               "\nHTTP://foo/bar?baz#quux",
-               "mailto:postmaster ",
-               "mailto:postmaster text"
-               "nocolon",
-               None,
-               ]
-        for string in good:
-            self.assert_(isURI(string), string)
-        for string in bad:
-            self.assert_(not isURI(string), string)
-
     def testURIRegistry(self):
         from schooltool.interfaces import ComponentLookupError
         from schooltool.uris import URIObject, getURI, registerURI, listURIs
