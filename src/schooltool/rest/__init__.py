@@ -78,20 +78,25 @@ def absoluteURL(request, obj, suffix=''):
     Virtual hosting is supported:
 
       >>> request.setHost('example.com', 443, ssl=True)
-
       >>> absoluteURL(request, root)
       'https://example.com:443/'
       >>> absoluteURL(request, obj)
       'https://example.com:443/obj'
 
     Sometimes you want to construct references to subobjects that are not
-    traversible or do not exist as application objects.  This is best done
+    traversable or do not exist as application objects.  This is best done
     by passing the suffix argument:
 
       >>> absoluteURL(request, root, 'subobject/or/two')
       'https://example.com:443/subobject/or/two'
       >>> absoluteURL(request, obj, 'subobject')
       'https://example.com:443/obj/subobject'
+
+    Unicode paths in URLs are converted to UTF-8 and escaped properly.
+
+      >>> obj.__name__ = u"Hi \\u362B"
+      >>> absoluteURL(request, obj, 'hey!')
+      'https://example.com:443/Hi%20%E3%98%AB/hey%21'
 
     Let's clean up after ourselves.
 
@@ -105,6 +110,7 @@ def absoluteURL(request, obj, suffix=''):
     hostname = request.getRequestHostname()
     port = request.getHost().port
     url = absolutePath(request, obj, suffix)
+    url = urllib.quote(url.encode('UTF-8'))
     return '%s://%s:%s%s' % (scheme, hostname, port, url)
 
 
@@ -138,32 +144,30 @@ def absolutePath(request, obj, suffix=''):
     Some simple examples:
 
       >>> absolutePath(request, root)
-      '/'
+      u'/'
       >>> absolutePath(request, obj)
-      '/obj'
+      u'/obj'
 
     Sometimes you want to construct references to subobjects that are not
     traversible or do not exist as application objects.  This is best done
     by passing the suffix argument:
 
       >>> absolutePath(request, root, 'subobject')
-      '/subobject'
+      u'/subobject'
       >>> absolutePath(request, obj, 'subobject/subsubobject')
-      '/obj/subobject/subsubobject'
+      u'/obj/subobject/subsubobject'
 
-    There should be no funny characters in paths, but they are escaped
-    as a precaution:
+    The returned paths are proper unicode:
 
       >>> obj.__name__ = u"Hi \\u362B"
-      >>> absolutePath(request, obj)
-      '/Hi%20%E3%98%AB'
+      >>> absolutePath(request, obj, u'Yay \\u362A')
+      u'/Hi \\u362b/Yay \\u362a'
 
     """
     path = getPath(obj)
-    path = urllib.quote(path.encode('UTF-8'))
-    path = str(path).split('/')
+    path = path.split('/')
     path += suffix.split('/')
-    return '/' + '/'.join(filter(None, path))
+    return u'/' + '/'.join(filter(None, path))
 
 
 def read_file(fn, basedir=None):

@@ -2568,7 +2568,8 @@ class TestEventDeleteViewPermissionChecking(AppSetupMixin, unittest.TestCase):
     def assertCanDelete(self, user, event_id):
         from schooltool.browser import absoluteURL
         result, request = self.tryToDelete(user, event_id)
-        url = absoluteURL(request, self.calendar, 'daily.html?date=2004-08-14')
+        suffix = '/daily.html?date=2004-08-14'
+        url = absoluteURL(request, self.calendar) + suffix
         self.assertRedirectedTo(request, url)
         # If the event was deleted, calendar.find will raise KeyError
         calendar = self.combinedCalendar()

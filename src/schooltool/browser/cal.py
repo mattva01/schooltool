@@ -861,10 +861,10 @@ class EventViewHelpers:
     def _redirectToDailyView(self, date=None):
         """Redirect to the daily calendar view for a given date (or today)."""
         if date is not None:
-            suffix = 'daily.html?date=%s' % date.strftime('%Y-%m-%d')
+            suffix = '/daily.html?date=%s' % date.strftime('%Y-%m-%d')
         else:
-            suffix = 'daily.html'
-        url = absoluteURL(self.request, self.context, suffix)
+            suffix = '/daily.html'
+        url = absoluteURL(self.request, self.context) + suffix
         return self.redirect(url, self.request)
 
 
