@@ -23,7 +23,7 @@
             <a tal:define="start repeat/event/start;
                            evdate python:event.dtstart.strftime('%Y-%m-%d')"
                tal:attributes="class python:start and 'first' or '';
-                               href string:${context/@@absolute_url}/edit_event.html?date=${evdate}&amp;event_id=${event/unique_id};
+                               href string:${event/@@absolute_url}/edit.html?date=${evdate}
                                style string:background: ${event/color1};;
                                             border-color: ${event/color2};
                                title event/title">
