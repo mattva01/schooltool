@@ -1,50 +1,59 @@
 How to do a release
 ===================
 
-This is a sequence illustrated by commands for the Milestone 3
+This is a sequence illustrated by commands for the Milestone 4
 release.  The two things you need to decide on are the name of the
 branch and the name of the directory in the tarball.  In this case,
-the branch is called milestone3 and the directory is schooltool-m3.
+the branch is called milestone4 and the directory is schooltool-m4.
 
 If there are any problems on any step, you can delete the branch and
 start again. XXX explain how to delete the branch.
 
 1. Make sure the SERVER_VERSION in schooltool.main is updated.
 
+1a. Write a new Changelog entry in debian/changelog.
+
 2. Tag the release:
 
      svn cp svn+ssh://source.schooltool.org/svn/trunk/schooltool \
-            svn+ssh://source.schooltool.org/svn/branches/schooltool/milestone3
+            svn+ssh://source.schooltool.org/svn/branches/schooltool/milestone4
 
 3. Checkout the branch:
 
-     svn co svn+ssh://source.schooltool.org/svn/branches/schooltool/milestone3
+     svn co svn+ssh://source.schooltool.org/svn/branches/schooltool/milestone4
 
-4. Export the release and tar it up:
+4. Export the release and tar it up.
 
-     svn export milestone3 schooltool-m3
-     tar zcvf schooltool-m3.tar.gz schooltool-m3
+     svn export milestone4 schooltool-m4
+     tar zcvf schooltool-m4.tar.gz schooltool-m4
+     zip -r schooltool-m4.zip schooltool-m4
+
+4a. Make a Debian package.  You'll need dpkg-dev, fakeroot and
+    debhelper packages.
+
+     cd schooltool-m4
+     make deb
 
 5. Go into the export and make sure it's OK:
 
-     cd schooltool-m3
+     cd schooltool-m4
      make test ftest
 
    Run the thing and see that it works:
 
-     make sampledata
-     make sampleschool
-     make run
+     ./generate-sampleschool.py
+     ./import-sampleschool.py
+     ./schooltool-server.py
 
    In a new window:
 
-     make runwxclient
+     ./wxschooltool.py
 
 6. Write the page for the web.  Take screenshots.
 
 7. Upload the page, the screenshots, and the tarball.
 
-   These go in http://schooltool.org/releases/m3
+   These go in http://schooltool.org/releases/m4
 
    Update the releases overview page.
 
