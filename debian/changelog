@@ -1,6 +1,7 @@
-schooltool (0.7.2-1svn1665) unstable; urgency=low
+schooltool (0.7.2-1svn1685) unstable; urgency=low
 
-  * Moved configuration file template to /usr/share (Policy 10.7.3)
+  * Moved configuration file template to /usr/share (Policy 10.7.3).
+  * Try to remove configuration file on purge (10.7.3).
 
  -- Brian Sutherland <jinty@web.de>  Wed, 13 Oct 2004 23:23:13 +0200
 

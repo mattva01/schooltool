@@ -32,6 +32,7 @@ package=schooltool
 
 case "$1" in
     purge)
+        rm /etc/$package/$package.conf || true
         for i in error rest-access web-access app;do
             [ -e /var/log/$package/$i.log ] && rm -f /var/log/$package/$i.log* || true
         done
