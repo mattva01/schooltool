@@ -51,7 +51,7 @@
   </content>
 
   <subscriber
-      factory=".membership.enforceMembershipConstraints"
+      handler=".membership.enforceMembershipConstraints"
       for="schoolbell.relationship.interfaces.IBeforeRelationshipEvent"
       />
 

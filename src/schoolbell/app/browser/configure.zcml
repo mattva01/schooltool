@@ -179,7 +179,7 @@
 <!-- Skin and resources -->
 
   <zope:subscriber
-      factory=".skin.schoolBellTraverseSubscriber"
+      handler=".skin.schoolBellTraverseSubscriber"
       for="zope.app.publication.interfaces.IBeforeTraverseEvent"
       />
 
