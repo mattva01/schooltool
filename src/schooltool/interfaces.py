@@ -1031,6 +1031,98 @@ class IACLCalendar(ICalendarWrite, IACLOwner):
     """A calendar that has an ACL"""
 
 
+class IRecurrenceRule(Interface):
+    """Base interface of the recurrence rules"""
+
+    interval = Attribute(
+        """Interval of recurrence (a positive integer).
+
+        For example, for yearly recurrence the interval equal to 2
+        will indicate that the event will recur once in two years.
+        """)
+
+    count = Attribute(
+        """Number of times the event is repeated.
+
+        Can be None or an integer value.  If count is not None then
+        until must be None.  If both count and until are None the
+        event repeats forever.
+        """)
+
+    until = Attribute(
+        """The date of the last recurrence of the event.
+
+        Can be None or a datetime.date instance.  If until is not None
+        then count must be None.  If both count and until are None the
+        event repeats forever.
+        """)
+
+    exceptions = Attribute(
+        """A list of days when this event does not occur.
+
+        Values in this list must be instances of datetime.date.
+        """)
+
+    def replace(interval=Unchanged, count=Unchanged, until=Unchanged,
+                exceptions=Unchanged, weekdays=Unchanged, monthly=Unchanged):
+        """Return a copy of this recurrence rule with new specified fields."""
+
+    def __eq__(other):
+        """See if self == other."""
+
+    def __ne__(other):
+        """See if self != other."""
+
+    def __hash__():
+        """Return the hash value of this recurrence rule
+
+        It is guaranteed that if recurrence rules compare equal, hash will
+        return the same value.
+        """
+
+
+class IDailyRecurrenceRule(IRecurrenceRule):
+    """Daily recurrence"""
+
+
+class IYearlyRecurrenceRule(IRecurrenceRule):
+    """Yearly recurrence"""
+
+
+class IWeeklyRecurrenceRule(IRecurrenceRule):
+
+    weekdays = Attribute(
+        """A set of weekdays when this event occurs.
+
+        Meaningful only when frequency == 'weekly'.  Weekdays are
+        represented as integers from 0 (Monday) to 6 (Sunday).
+
+        The event repeats on the weekday of the first occurence even
+        if that weekday is not in this set.
+        """)
+
+
+class IMonthlyRecurrenceRule(IRecurrenceRule):
+
+    monthly = Attribute(
+        """Specification of a monthly occurence.
+
+        Can be one of three values: 'monthday', 'weekday', 'lastweekday',
+        or None.  Meaningful only when frequency == 'monthly'.
+
+        'monthday'    specifies that the event recurs on the same
+                      monthday.
+
+        'weekday'     specifies that the event recurs on the same week
+                      within a month on the same weekday, indexed from the
+                      first (e.g. 3rd friday of a month).
+
+        'lastweekday' specifies that the event recurs on the same week
+                      within a month on the same weekday, indexed from the
+                      end of month (e.g. 2nd last friday of a month).
+        """)
+
+
 class ICalendarEvent(Interface):
     """A calendar event.
 
@@ -1055,6 +1147,12 @@ class ICalendarEvent(Interface):
         """)
     location = Attribute(
           """The title of the location where this event takes place.""")
+    recurrence = Attribute(
+        """The recurrence rule.
+
+        A value providing IRecurrenceRule.  None if the event is not
+        recurrent.
+        """)
 
     def replace(dtstart=Unchanged, duration=Unchanged, title=Unchanged,
                 owner=Unchanged, context=Unchanged, location=Unchanged,
