@@ -617,6 +617,32 @@ class TestTimetableSchemaView(TestTimetableReadView):
         </html>
         """
 
+    schema_xml = """
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <model factory="schooltool.timetable.SequentialDaysTimetableModel">
+            <daytemplate id="Normal">
+              <used when="default" />
+              <period id="A" tstart="9:00" duration="60" />
+              <period id="C" tstart="9:00" duration="60" />
+              <period id="B" tstart="10:00" duration="60" />
+              <period id="D" tstart="10:00" duration="60" />
+            </daytemplate>
+          </model>
+          <day id="Day 1">
+            <period id="A">
+            </period>
+            <period id="B">
+            </period>
+          </day>
+          <day id="Day 2">
+            <period id="C">
+            </period>
+            <period id="D">
+            </period>
+          </day>
+        </timetable>
+        """
+
     def createView(self, context, service=None, key='weekly'):
         from schooltool.timetable import TimetableSchemaService
         from schooltool.views.timetable import TimetableSchemaView
@@ -665,7 +691,7 @@ class TestTimetableSchemaView(TestTimetableReadView):
         key = 'weekly'
         service = TimetableSchemaService()
         view = self.createView(None, service, key)
-        request = RequestStub(method="PUT", body=self.empty_xml,
+        request = RequestStub(method="PUT", body=self.schema_xml,
                               headers={'Content-Type': 'text/xml'})
         result = view.render(request)
         self.assertEquals(request.code, 200)

@@ -104,18 +104,21 @@ class RegistriesSetupMixin:
     """Mixin for substituting a temporary relationship and view registry."""
 
     def setUpRegistries(self):
-        from schooltool import component, views, uris
+        from schooltool import component, views, uris, timetable
         self.old_relationship_registry = component.relationship_registry
         self.old_view_registry = component.view_registry
         self.old_class_view_registry = component.class_view_registry
         self.old_facet_factory_registry = component.facet_factory_registry
         self.old_uri_registry = uris._uri_registry
+        self.old_timetable_model_registry = component.timetable_model_registry
         component.resetRelationshipRegistry()
         component.resetViewRegistry()
         component.resetFacetFactoryRegistry()
+        component.resetTimetableModelRegistry()
         uris.resetURIRegistry()
         uris.setUp()
         views.setUp()
+        timetable.setUp()
 
     def tearDownRegistries(self):
         from schooltool import component, uris
@@ -123,6 +126,7 @@ class RegistriesSetupMixin:
         component.view_registry = self.old_view_registry
         component.class_view_registry = self.old_class_view_registry
         component.facet_factory_registry = self.old_facet_factory_registry
+        component.timetable_model_registry = self.old_timetable_model_registry
         uris._uri_registry = self.old_uri_registry
 
     setUp = setUpRegistries

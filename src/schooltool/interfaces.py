@@ -1123,6 +1123,24 @@ class ITimetableModel(Interface):
         """
 
 
+class ITimetableModelRegistry(Interface):
+    """A registry of timetable model classes present in the system.
+
+    The timetable model classes are identified by the dotted class
+    names.
+    """
+
+    def getTimetableModel(id):
+        """Returns a timetable schema identified by a given id."""
+
+    def registerTimetableModel(id, factory):
+        """Registers a timetable schema identified by a given id."""
+
+    def listTimetableModels():
+        """Returns a sequence of keys of the timetable models in the
+        registry."""
+
+
 class ITimetableSchemaService(ILocation):
     """Service for creating timetables of a certain schema.
 

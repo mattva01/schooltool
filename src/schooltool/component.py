@@ -34,9 +34,10 @@ from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import IRelationshipAPI, IViewAPI
 from schooltool.interfaces import ComponentLookupError
 from schooltool.interfaces import IUtilityService
+from schooltool.interfaces import ITimetableModelRegistry
 
 moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI,
-               IRelationshipAPI, IViewAPI)
+               IRelationshipAPI, IViewAPI, ITimetableModelRegistry)
 
 __metaclass__ = type
 
@@ -349,3 +350,34 @@ class UtilityService:
 
     def values(self):
         return self._utils.values()
+
+#
+# ITimetableModelRegistry methods
+#
+
+timetable_model_registry = {}
+
+def resetTimetableModelRegistry():
+    global timetable_model_registry
+    timetable_model_registry = {}
+
+def getTimetableModel(id):
+    """Returns a timetable schema identified by a given id."""
+    global timetable_model_registry
+    return timetable_model_registry[id]
+
+def registerTimetableModel(id, factory):
+    """Registers a timetable schema identified by a given id."""
+    global timetable_model_registry
+    if id not in timetable_model_registry:
+        timetable_model_registry[id] = factory
+    elif timetable_model_registry[id] is factory:
+        pass
+    else:
+        raise ValueError("%s already in the timetable model" % (id,))
+
+def listTimetableModels():
+    """Returns a sequence of keys of the timetable models in the
+    registry."""
+    global timetable_model_registry
+    return timetable_model_registry.keys()

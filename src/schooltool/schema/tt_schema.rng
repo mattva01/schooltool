@@ -12,6 +12,11 @@ RelaxNG grammar for a timetable.
      </attribute>
   </define>
 
+  <define name="daysofweek">
+    <!-- space separated list of weekdays -->
+    <text/>
+  </define>
+
   <start>
     <ref name="timetable"/>
   </start>
@@ -19,6 +24,34 @@ RelaxNG grammar for a timetable.
   <define name="timetable">
 
     <element name="timetable">
+      <element name="model">
+        <attribute name="factory">
+          <text/>
+        </attribute>
+        <oneOrMore>
+          <element name="daytemplate">
+            <ref name="idattr"/>
+            <element name="used">
+              <attribute name="when">
+                <ref name="daysofweek"/>
+              </attribute>
+            </element>
+            <zeroOrMore>
+              <element name="period">
+                <ref name="idattr"/>
+                <attribute name="tstart">
+                  <!-- XXX  d?d:dd -->
+                  <text/>
+                </attribute>
+                <attribute name="duration">
+                  <!-- a natural number (of minutes)-->
+                  <text/>
+                </attribute>
+              </element>
+            </zeroOrMore>
+          </element>
+        </oneOrMore>
+      </element>
       <oneOrMore>
         <element name="day">
           <ref name="idattr"/>

@@ -25,13 +25,13 @@ import datetime
 from sets import Set
 from persistence import Persistent
 from persistence.dict import PersistentDict
-from zope.interface import implements
+from zope.interface import implements, moduleProvides
 from schooltool.db import MaybePersistentKeysSet
 from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.interfaces import ITimetableActivity, ISchooldayPeriod
 from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
-from schooltool.interfaces import ITimetableModel
+from schooltool.interfaces import ITimetableModel, IModuleSetup
 from schooltool.interfaces import ITimetabled, ICompositeTimetableProvider
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
@@ -42,6 +42,7 @@ from schooltool.uris import URIGroup
 
 __metaclass__ = type
 
+moduleProvides(IModuleSetup)
 
 #
 # Timetabling
@@ -475,3 +476,7 @@ class TimePeriodService(Persistent):
     def __delitem__(self, period_id):
         del self.periods[period_id]
 
+
+def setUp():
+    # Register timetable models here
+    pass

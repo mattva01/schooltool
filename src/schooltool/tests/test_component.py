@@ -543,6 +543,36 @@ class TestUtilityService(unittest.TestCase):
         self.assert_(foo.__name__ is None)
 
 
+class TestTimetableModelRegistry(RegistriesSetupMixin, unittest.TestCase):
+
+    def test_interface(self):
+        from schooltool.interfaces import ITimetableModelRegistry
+        from schooltool import component
+        verifyObject(ITimetableModelRegistry, component)
+
+    def test(self):
+        from schooltool.component import getTimetableModel
+        from schooltool.component import registerTimetableModel
+        from schooltool.component import listTimetableModels
+        from schooltool.interfaces import ITimetableModel
+
+        self.assertEqual(listTimetableModels(), [])
+
+        class TMStub:
+            implements(ITimetableModel)
+
+        registerTimetableModel("Foo.Bar.Baz", TMStub)
+        registerTimetableModel("Foo.Bar.Baz", TMStub)
+        self.assertEqual(listTimetableModels(), ["Foo.Bar.Baz"])
+        self.assertRaises(ValueError, registerTimetableModel,
+                          "Foo.Bar.Baz", object)
+        self.assertEqual(getTimetableModel("Foo.Bar.Baz"), TMStub)
+        registerTimetableModel("Moo.Spoo", TMStub)
+        self.assertEqual(Set(listTimetableModels()),
+                         Set(["Foo.Bar.Baz", "Moo.Spoo"]))
+        self.assertEqual(getTimetableModel("Moo.Spoo"), TMStub)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestCanonicalPath))
@@ -552,6 +582,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestRelationships))
     suite.addTest(unittest.makeSuite(TestViewRegistry))
     suite.addTest(unittest.makeSuite(TestUtilityService))
+    suite.addTest(unittest.makeSuite(TestTimetableModelRegistry))
     return suite
 
 if __name__ == '__main__':
