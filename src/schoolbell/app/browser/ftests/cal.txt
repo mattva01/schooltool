@@ -64,6 +64,7 @@ calendar is empty:
     True
 
 We can generate some fictitious events:
+XXX this ability *will* go away before the release -- mg
 
     >>> response = http(r"""
     ... GET /frogpond/persons/frog/calendar/plain.html?GENERATE=more HTTP/1.1
@@ -79,7 +80,7 @@ Let's render the weekly calendar view:
     >>> print http(r"""
     ... GET /frogpond/persons/frog/calendar/weekly.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... """)
+    ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     ...
 
@@ -188,3 +189,31 @@ let's use an aliased URL (directly on the person rather than on the calendar):
     END:VEVENT...
     END:VCALENDAR
     <BLANKLINE>
+
+
+Calendar overlaying
+-------------------
+
+SchoolBell lets users overlay calendars of other users and groups, and see all
+calendar events in one view.  When you are logged in, and you look at your own
+calendar, you will see a new portlet on the left:
+
+XXX This test is disabled for now, because regular user's can't even access
+    their own calendars yet -- mg
+
+##  >>> print http(r"""
+##  ... GET /frogpond/persons/frog/calendar HTTP/1.1
+##  ... Authorization: Basic frog:pwd
+##  ... """, handle_errors=False)
+##  HTTP/1.1 200 Ok
+##  Content-Type: text/html;charset=utf-8
+##  <BLANKLINE>
+##  ...
+##  <div id="portlet-calendar-overlay" class="portlet">
+##    <h4>Calendars</h4>
+##    ...
+##    <form ...>
+##    </form>
+##  </div>
+##  ...
+

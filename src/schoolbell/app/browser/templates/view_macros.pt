@@ -1,4 +1,4 @@
-<metal:block define-macro="page" i18n:domain="schooltool">
+<metal:block define-macro="page" i18n:domain="schoolbell">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
@@ -122,7 +122,7 @@
 </html>
 </metal:block>
 
-<metal:block define-macro="calendar-navigation" i18n:domain="schooltool">
+<metal:block define-macro="calendar-navigation" i18n:domain="schoolbell">
   <div id="calendar-navigation-context">
     <table cellpadding="0" cellspacing="0" width="100%">
       <tr>
@@ -152,7 +152,7 @@
   </div>
 </metal:block>
 
-<metal:block define-macro="calendar-mode" i18n:domain="schooltool">
+<metal:block define-macro="calendar-mode" i18n:domain="schoolbell">
   <div id="calendar-navigation">
     <a id="calendar-navigation-day"
        tal:attributes="href python:view.calURL('daily')"
@@ -185,8 +185,8 @@
   </div>
 </metal:block>
 
-<metal:block define-macro="calendar-page">
-  <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<metal:block define-macro="calendar-page" i18n:domain="schoolbell">
+  <html metal:use-macro="view/@@standard_macros/page">
 
     <metal:block fill-slot="title">
       <title i18n:translate="">Calendar</title>
@@ -216,8 +216,42 @@
 
 <!-- BEGIN CALENDAR MACROS -->
 
-<metal:block define-macro="portlet-calendar-jumpto" 
-    i18n:domain="schooltool">
+<metal:block define-macro="portlet-calendar-overlay" i18n:domain="schoolbell">
+
+  <div id="portlet-calendar-overlay" class="portlet"
+       tal:define="overlay nocall:context/@@calendar_overlay|nothing"
+       tal:condition="nocall:overlay">
+    <h4>Calendars</h4>
+
+    <form method="POST" action="@@calendar_overlay">
+
+      <input type="hidden" name="url" tal:attributes="value request/URL" />
+
+      <div class="row" style="background: #9db8d2">
+        <input type="checkbox" checked="checked" disabled="disabled" />
+            <label i18n:translate="">My Calendar</label>
+      </div>
+
+      <div class="row" tal:repeat="item overlay/items"
+           tal:attributes="style string:background: ${item/color}">
+        <label>
+          <input type="checkbox" name="overlay"
+                 tal:attributes="value item/id; checked item/checked" />
+          <span tal:content="item/title">Title</span>
+        </label>
+      </div>
+
+      <div class="controls">
+        <input name="OVERLAY" type="submit" value="Apply"
+              i18n:attributes="value"/>
+        <input name="MORE" type="submit" value="More..."
+              i18n:attributes="value"/>
+      </div>
+    </form>
+  </div>
+</metal:block>
+
+<metal:block define-macro="portlet-calendar-jumpto" i18n:domain="schoolbell">
   <div id="portlet-jumpto" class="portlet">
 
     <h4 i18n:translate="">Jump To ...</h4>
@@ -271,31 +305,27 @@
 </metal:block>
 
 <metal:block define-macro="portlet-calendar-view-month"
-    i18n:domain="schoolbell">
+             i18n:domain="schoolbell">
 
   <div id="portlet-calendar-view-month" class="portlet">
 
       <tal:block define="month python:view.getMonth(view.prevMonth());">
-          <metal:block use-macro="view/@@standard_macros/brief-month-view"
-              i18n:domain="schooltool" />
+          <metal:block use-macro="view/@@standard_macros/brief-month-view" />
       </tal:block>
 
       <tal:block define="month python:view.getMonth(view.cursor);">
-          <metal:block use-macro="view/@@standard_macros/brief-month-view"
-              i18n:domain="schooltool" />
+          <metal:block use-macro="view/@@standard_macros/brief-month-view" />
       </tal:block>
 
       <tal:block define="month python:view.getMonth(view.nextMonth());">
-          <metal:block use-macro="view/@@standard_macros/brief-month-view"
-              i18n:domain="schooltool" />
+          <metal:block use-macro="view/@@standard_macros/brief-month-view" />
       </tal:block>
 
   </div>
 
 </metal:block>
 
-<metal:block define-macro="portlet-tomorrow-events" 
-    i18n:domain="schoolbell">
+<metal:block define-macro="portlet-tomorrow-events" i18n:domain="schoolbell">
 
   <tal:block define="next view/nextDay; nevents python:view.dayEvents(next)">
     <div id="portlet-next-day-events" class="portlet" tal:condition="nevents">
@@ -313,11 +343,9 @@
 
 </metal:block>
 
-
-
-<!-- END CALENDAR MACROS -->
-
 <metal:block define-macro="calendar-portlets">
+
+  <metal:macro use-macro="view/@@standard_macros/portlet-calendar-overlay"/>
 
   <metal:block use-macro="view/@@standard_macros/portlet-tomorrow-events"/>
 
@@ -326,3 +354,6 @@
   <metal:block use-macro="view/@@standard_macros/portlet-calendar-view-month"/>
 
 </metal:block>
+
+<!-- END CALENDAR MACROS -->
+

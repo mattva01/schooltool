@@ -396,6 +396,14 @@
       menu="schoolbell_actions" title="Open in iCal"
       action="../calendar.ics" permission="zope.View" />
 
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      name="calendar_overlay"
+      layer=".skin.ISchoolBellLayer"
+      class=".overlay.CalendarOverlayView"
+      permission="zope.View"
+      />
+
 <!-- Calendar event views -->
 
   <addform

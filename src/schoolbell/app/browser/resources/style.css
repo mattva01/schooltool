@@ -251,6 +251,15 @@ input.button-cancel {
     color: #fff;
 }
 
+#column-left .portlet .controls {
+    margin: 1ex 1ex 1ex 1ex;
+    text-align: right;
+}
+
+#column-left .portlet .controls input {
+    font-size: x-small;
+}
+
 /*
 * Center Column and Content
 */
