@@ -102,14 +102,14 @@ class PersonEditView(View, PersonInfoMixin):
             date_elements = [int(el) for el in dob_string.split('-')]
             dob = datetime.date(*date_elements)
         except (TypeError, ValueError):
-            self.error = 'Invalid date'
+            self.error = _('Invalid date')
             return self.do_GET(request)
 
         if photo:
             try:
                 photo = self.processPhoto(photo)
             except IOError:
-                self.error = 'Invalid photo'
+                self.error = _('Invalid photo')
                 return self.do_GET(request)
             else:
                 request.appLog(_("Photo added on %s (%s)") %
