@@ -22,12 +22,36 @@ Unit tests for the schooltool.calendar module.
 $Id$
 """
 
+import os
+import time
 import unittest
+
 from pprint import pformat
 from datetime import date, timedelta, datetime
 from StringIO import StringIO
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.tests.helpers import diff, dedent
+from schooltool.tests.utils import TimezoneTestMixin
+
+
+class TestParseDateTime(TimezoneTestMixin, unittest.TestCase):
+
+    def test_timezones(self):
+        # The simple tests are in the doctest of parse_date_time.
+        from schooltool.icalendar import parse_date_time
+
+        if not self.have_tzset:
+            return # Do not run this test on Windows
+
+        self.setTZ('UTC')
+        dt = parse_date_time('20041029T125031Z')
+        self.assertEquals(dt, datetime(2004, 10, 29, 12, 50, 31))
+
+        self.setTZ('EET-2EEST')
+        dt = parse_date_time('20041029T095031Z') # daylight savings
+        self.assertEquals(dt, datetime(2004, 10, 29, 12, 50, 31))
+        dt = parse_date_time('20041129T095031Z') # no daylight savings
+        self.assertEquals(dt, datetime(2004, 11, 29, 11, 50, 31))
 
 
 class TestPeriod(unittest.TestCase):
@@ -154,7 +178,7 @@ class TestVEvent(unittest.TestCase):
         self.assertRaises(ValueError, vevent.getOne, 'date-bad3')
 
         vevent.add('datetime-foo1', '20030405T060708', {'VALUE': 'DATE-TIME'})
-        vevent.add('datetime-foo2', '20030405T060708Z', {'VALUE': 'DATE-TIME'})
+        vevent.add('datetime-foo2', '20030405T060708', {'VALUE': 'DATE-TIME'})
         vevent.add('datetime-bad1', '20030405T010203444444',
                                                         {'VALUE': 'DATE-TIME'})
         vevent.add('datetime-bad2', '2003', {'VALUE': 'DATE-TIME'})
@@ -407,7 +431,7 @@ class TestVEvent(unittest.TestCase):
 
         vevent = VEvent()
         vevent.add('rdate', '20010205T040506')
-        vevent.add('rdate', '20010206T040506,20010207T000000Z')
+        vevent.add('rdate', '20010206T040506,20010207T000000')
         vevent.add('rdate', '20010208', {'VALUE': 'DATE'})
         vevent.add('rdate', '20010209T000000/20010210T000000',
                    {'VALUE': 'PERIOD'})
@@ -720,6 +744,7 @@ class TestICalReader(unittest.TestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.icalendar'))
+    suite.addTest(unittest.makeSuite(TestParseDateTime))
     suite.addTest(unittest.makeSuite(TestPeriod))
     suite.addTest(unittest.makeSuite(TestVEvent))
     suite.addTest(unittest.makeSuite(TestICalReader))

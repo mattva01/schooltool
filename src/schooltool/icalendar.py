@@ -22,8 +22,10 @@ SchoolTool iCalendar (RFC 2445) parser.
 $Id$
 """
 
-import re
+import calendar
 import datetime
+import re
+import time
 from sets import Set
 
 __metaclass__ = type
@@ -232,10 +234,13 @@ def parse_date(value):
 def parse_date_time(value):
     """Parse iCalendar DATE-TIME value.  Returns a datetime instance.
 
+    A simple usage example:
+
     >>> parse_date_time('20030405T060708')
     datetime.datetime(2003, 4, 5, 6, 7, 8)
-    >>> parse_date_time('20030405T060708Z')
-    datetime.datetime(2003, 4, 5, 6, 7, 8)
+
+    Examples of invalid arguments:
+
     >>> parse_date_time('20030405T060708A')
     Traceback (most recent call last):
       ...
@@ -244,16 +249,27 @@ def parse_date_time(value):
     Traceback (most recent call last):
       ...
     ValueError: Invalid iCalendar date-time: ''
+
+    For timezone tests see tests.test_icalendar.TestParseDateTime.
+
     """
-    # XXX Bug: UTC time treated the same as local time.
     datetime_rx = re.compile(r'(\d{4})(\d{2})(\d{2})'
                              r'T(\d{2})(\d{2})(\d{2})(Z?)$')
     match = datetime_rx.match(value)
     if match is None:
         raise ValueError('Invalid iCalendar date-time: %r' % value)
     y, m, d, hh, mm, ss, utc = match.groups()
-    return datetime.datetime(int(y), int(m), int(d),
-                             int(hh), int(mm), int(ss))
+    dt = datetime.datetime(int(y), int(m), int(d),
+                           int(hh), int(mm), int(ss))
+    if utc:
+        # In the future we might want to get the timezone from the iCalendar
+        # file, but for now using the local timezone of the server should
+        # be adequate.
+        timetuple = dt.timetuple()
+        ticks = calendar.timegm(timetuple)
+        dt = datetime.datetime.fromtimestamp(ticks)
+
+    return dt
 
 
 def ical_date(dt):
@@ -378,7 +394,7 @@ def parse_recurrence_rule(value):
 
     An example that includes use of UNTIL:
 
-    >>> parse_recurrence_rule('FREQ=DAILY;UNTIL=20041008T000000Z')
+    >>> parse_recurrence_rule('FREQ=DAILY;UNTIL=20041008T000000')
     DailyRecurrenceRule(1, None, datetime.datetime(2004, 10, 8, 0, 0), ())
     >>> parse_recurrence_rule('FREQ=DAILY;UNTIL=20041008')
     DailyRecurrenceRule(1, None, datetime.datetime(2004, 10, 8, 0, 0), ())

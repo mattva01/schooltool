@@ -24,7 +24,6 @@ $Id$
 
 import unittest
 import re
-import os
 import time
 import logging
 
@@ -35,6 +34,7 @@ from StringIO import StringIO
 from zope.interface import moduleProvides
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.interfaces import IModuleSetup, AuthenticationError
+from schooltool.tests.utils import TimezoneTestMixin
 from twisted.internet.address import IPv4Address
 from twisted.python.failure import Failure
 
@@ -998,24 +998,7 @@ class TestRequest(unittest.TestCase):
         assert not hasattr(rq.site.db, 'makeSnapshot')
 
 
-class TestTimeFormatting(unittest.TestCase):
-
-    def setUp(self):
-        self.have_tzset = hasattr(time, 'tzset')
-        self.touched_tz = False
-        self.old_tz = os.getenv('TZ')
-
-    def tearDown(self):
-        if self.touched_tz:
-            self.setTZ(self.old_tz)
-
-    def setTZ(self, tz):
-        self.touched_tz = True
-        if tz is None:
-            os.unsetenv('TZ')
-        else:
-            os.putenv('TZ', tz)
-        time.tzset()
+class TestTimeFormatting(TimezoneTestMixin, unittest.TestCase):
 
     def test_with_regex(self):
         from schooltool.http import formatHitTime

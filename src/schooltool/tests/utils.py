@@ -22,8 +22,10 @@ Common utilities (stubs, mixins) for schooltool unit tests.
 $Id$
 """
 
-import sys
+import os
 import sets
+import sys
+import time
 import unittest
 from pprint import pformat
 from zope.interface import implements
@@ -284,3 +286,23 @@ class QuietLibxml2Mixin:
             sys.stderr.write(msg)
         libxml2.registerErrorHandler(on_error_callback, None)
 
+
+class TimezoneTestMixin:
+    """A mixin for tests that fiddle with timezones."""
+
+    def setUp(self):
+        self.have_tzset = hasattr(time, 'tzset')
+        self.touched_tz = False
+        self.old_tz = os.getenv('TZ')
+
+    def tearDown(self):
+        if self.touched_tz:
+            self.setTZ(self.old_tz)
+
+    def setTZ(self, tz):
+        self.touched_tz = True
+        if tz is None:
+            os.unsetenv('TZ')
+        else:
+            os.putenv('TZ', tz)
+        time.tzset()
