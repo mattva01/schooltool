@@ -6,8 +6,10 @@ schooltool (0.4+svn20040505-0.1) unstable; urgency=low
     /etc/init.d/schooltool was renamed to /etc/init.d/schooltool-server).
     They have now been renamed back.  Hopefully no one used debs built during
     that period, as we have no migration logic in postinst scripts.
+  * Added /etc/default/schooltool so that the schooltool server could be
+    specified not to load on startup.
 
- -- Marius Gedminas <mgedmin@b4net.lt>  Wed,  5 May 2004 19:13:04 +0300
+ -- Gintautas Miliauskas <gintas@pov.lt>  Thu,  6 May 2004 15:13:40 +0300
 
 schooltool (0.4+svn20040413-0.1) unstable; urgency=low
 

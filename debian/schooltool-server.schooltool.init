@@ -13,10 +13,17 @@ PNAME=schooltool-serv # truncated to 15 chars by the kernel
 PIDFILE=/var/run/$NAME/schooltool.pid
 SCRIPTNAME=/etc/init.d/$NAME
 CONFIGFILE=/etc/schooltool.conf
+DEFAULTFILE=/etc/default/schooltool
 
 # Gracefully exit if the package has been removed or is not configured.
 test -x $DAEMON || exit 0
 test -f $CONFIGFILE || exit 0
+
+# Exit if the server has been disabled in /etc/default/schooltool
+if [ -r $DEFAULTFILE ]; then
+    . $DEFAULTFILE
+    [ "$SCHOOLTOOL_ENABLE" != "yes" ] && exit 0
+fi
 
 case "$1" in
   start)

@@ -67,6 +67,8 @@ install-stamp: build
 
 	install -m 644 -D -p debian/schooltool.conf \
 	    debian/schooltool-server/etc/schooltool.conf
+	install -m 644 -D -p debian/schooltool-server.default \
+	    debian/schooltool-server/etc/default/schooltool
 	install -m 644 -D -p debian/example.conf \
 	    debian/schooltool-server/usr/share/doc/schooltool-server/examples/schooltool.conf
 
