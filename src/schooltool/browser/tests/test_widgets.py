@@ -441,6 +441,73 @@ class TestSelectionWidget(XMLCompareMixin, unittest.TestCase):
         self.assertEquals(widget.value, 'a')
 
 
+class TestMultiselectionWidget(XMLCompareMixin, unittest.TestCase):
+
+    def createWidget(self):
+        from schooltool.browser.widgets import MultiselectionWidget
+        widget = MultiselectionWidget('field', 'Label',
+                                      [('a', 'Aa'), ('b', 'Bb'), ('c', 'Cc')])
+        return widget
+
+    def test(self):
+        from schooltool.browser.widgets import IWidget
+        verifyObject(IWidget, self.createWidget())
+
+    def test_call(self):
+        widget = self.createWidget()
+        widget.setValue(['a', 'c'])
+        expected = """
+            <div class="row">
+              <label for="field">Label</label>
+              <select name="field" id="field" multiple="multiple">
+                <option value="a" selected="selected">Aa</option>
+                <option value="b">Bb</option>
+                <option value="c" selected="selected">Cc</option>
+              </select>
+            </div>
+            """
+        self.assertEqualsXML(widget(), expected)
+
+    def test_call_with_everything(self):
+        widget = self.createWidget()
+        widget.error = u"An error!"
+        widget.unit = u"(blah blah blah)"
+        widget.css_class = u"extra"
+        widget.tabindex = 11
+        expected = """
+            <div class="row row_error">
+              <label for="field">Label</label>
+              <select class="extra" name="field" id="field" tabindex="11"
+                      multiple="multiple">
+                <option value="a">Aa</option>
+                <option value="b">Bb</option>
+                <option value="c">Cc</option>
+              </select>
+              <span class="unit">(blah blah blah)</span>
+              <div class="error">An error!</div>
+            </div>
+            """
+        self.assertEqualsXML(widget(), expected)
+
+    def test_update_nodata(self):
+        widget = self.createWidget()
+        request = RequestStub(args={})
+        widget.update(request)
+        self.assertEquals(widget.value, None)
+
+    def test_update_data(self):
+        widget = self.createWidget()
+        request = RequestStub(args={'field': 'a'})
+        widget.update(request)
+        self.assertEquals(widget.value, ['a'])
+
+    def test_update_more_data(self):
+        widget = self.createWidget()
+        request = RequestStub(args={'field': ['a', 'b']})
+        widget.update(request)
+        self.assertEquals(widget.value, ['a', 'b'])
+
+
 class TestCheckboxWidget(XMLCompareMixin, unittest.TestCase):
 
     def createWidget(self):
@@ -501,6 +568,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPasswordWidget))
     suite.addTest(unittest.makeSuite(TestTextAreaWidget))
     suite.addTest(unittest.makeSuite(TestSelectionWidget))
+    suite.addTest(unittest.makeSuite(TestMultiselectionWidget))
     suite.addTest(unittest.makeSuite(TestCheckboxWidget))
     return suite
 

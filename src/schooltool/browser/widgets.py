@@ -34,6 +34,10 @@ from schooltool.translation import ugettext as _
 __metaclass__ = type
 
 
+#
+# Documentation
+#
+
 class IWidget(Interface):
     """A widget for data entry.
 
@@ -131,6 +135,10 @@ class IWidget(Interface):
         """
 
 
+#
+# Parsers, formatters and validators
+#
+
 def defaultParser(raw_value):
     """Default parser for widgets.
 
@@ -171,23 +179,6 @@ def defaultFormatter(value):
     if value is None:
         return None
     return unicode(value)
-
-
-def sequenceFormatter(value):
-    """Default formatter for sequence widgets.
-
-    Converts all values to unicode.
-
-      >>> sequenceFormatter(None)
-      >>> sequenceFormatter([u'foo', 'bar'])
-      [u'foo', u'bar']
-      >>> sequenceFormatter([123])
-      [u'123']
-
-    """
-    if value is None:
-        return None
-    return [unicode(v) for v in value]
 
 
 def dateParser(raw_date):
@@ -303,6 +294,48 @@ def passwordValidator(password):
         raise ValueError(_("Password can only contain ASCII characters."))
 
 
+def sequenceParser(value_parser):
+    """Construct a sequence parser from a single value parser.
+
+      >>> parser = sequenceParser(intParser)
+      >>> parser(['1', '2'])
+      [1, 2]
+      >>> parser([])
+      []
+      >>> parser(None)
+
+    """
+    assert callable(value_parser)
+    def parser(raw_value):
+        if raw_value is None:
+            return None
+        return [value_parser(item) for item in raw_value]
+    return parser
+
+
+def sequenceFormatter(value_formatter):
+    """Construct a sequence fromatter from a single value formatter.
+
+      >>> formatter = sequenceFormatter(unicode)
+      >>> formatter(None)
+      >>> formatter([u'foo', 'bar'])
+      [u'foo', u'bar']
+      >>> formatter([123])
+      [u'123']
+
+    """
+    assert callable(value_formatter)
+    def formatter(value):
+        if value is None:
+            return None
+        return [value_formatter(v) for v in value]
+    return formatter
+
+
+#
+# Widgets
+#
+
 class Widget:
     """Base class for widgets."""
 
@@ -384,10 +417,11 @@ class Widget:
             self.raw_value = self.formatter(self.value)
 
     def require(self):
-        # XXX It would be best to get rid of require and just add a
-        #     keyword argument to the constructor.  Then, if 'required'
-        #     has been specified, check for the empty field somewhere,
-        #     perhaps in update()?
+        # Perhaps it makes sense to replace the require method by an
+        # attribute (required) and check for missing values in update.
+        # However there are views that call update on every request, but
+        # call require only on the final form submission step, so the scheme
+        # proposed above would not work for them.
         if not self.error and not self.raw_value:
             self.error = _("This field is required.")
 
@@ -400,17 +434,26 @@ class Widget:
 
 
 class SequenceWidget(Widget):
-    """A widget that is interested in multiple values of args."""
+    """A widget that is interested in multiple values of args.
+
+    The `value` attribute is a list of values (or None).
+    The `raw_value` attribute is a list of unicode strings (or None).
+
+    SequenceWidget can be used for storing values of multi-selection lists or
+    sets of checkboxes.
+
+    SequenceWidget cannot be rendered.
+    """
 
     def __init__(self, *args, **kw):
+        kw.setdefault('formatter', sequenceFormatter(unicode))
         Widget.__init__(self, *args, **kw)
-        if 'formatter' not in kw:
-            self.formatter = sequenceFormatter
 
     def getRawValue(self, request):
         if self.name in request.args:
             return [to_unicode(arg) for arg in request.args.get(self.name)]
         else:
+            # Perhaps it would be better to return []
             return None
 
     def setRawValue(self, raw_value):
@@ -497,8 +540,33 @@ class SelectionWidget(Widget):
         self.choices = choices
 
 
+class MultiselectionWidget(SequenceWidget):
+    """Multiselection list box widget.
+
+    The constructor accepts an additional argument `choices`, which is a
+    sequence of tuples (value, display_text).
+
+    Values should be comparable with ==.
+
+    It is up to self.validator and/or self.parser to ensure that all the values
+    in the `raw_value` list received from the request corresponds to one of the
+    values in choices.
+    """
+
+    implements(IWidget)
+
+    template = Template('www/multiselection_widget.pt', charset=None)
+
+    def __init__(self, name, label, choices, **kw):
+        SequenceWidget.__init__(self, name, label, **kw)
+        self.choices = choices
+
+
 class CheckboxWidget(Widget):
-    """Checkbox widget."""
+    """Checkbox widget.
+
+    `value` can be True (checked), False (unchecked) or None (missing).
+    """
 
     implements(IWidget)
 
