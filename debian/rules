@@ -1,5 +1,6 @@
 #!/usr/bin/make -f
 
+# If you change the seed, you will have to recreate ttconfig.data as well.
 datagen_seed = schooltool-m4
 
 build: build-stamp

@@ -14,4 +14,6 @@ basedir = os.path.abspath(os.path.dirname(sys.argv[0]))
 sys.path.insert(0, os.path.join(basedir, 'src'))
 
 import schooltool.clients.datagen
-schooltool.clients.datagen.main(['datagen', 'schooltool-m4'])
+# If you change the seed, you will also have to recreate ttconfig.data
+seed = 'schooltool-m4'
+schooltool.clients.datagen.main(['datagen', seed])
