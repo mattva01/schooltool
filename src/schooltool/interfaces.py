@@ -1356,6 +1356,9 @@ class IApplicationObjectContainer(ILocation, ITraversable):
     def keys():
         """Return a list of the names of contained objects."""
 
+    def itervalues():
+        """Iterate over all contained objects."""
+
 
 #
 # Modules

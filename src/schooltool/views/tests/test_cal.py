@@ -27,6 +27,7 @@ import datetime
 from zope.interface import directlyProvides
 from schooltool.views.tests import RequestStub, setPath
 from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
+from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.helpers import dedent, diff, sorted
 
 __metaclass__ = type
@@ -445,6 +446,56 @@ class TestCalendarView(NiceDiffsMixin, CalendarTestBase):
                      errmsg="Repeating events/exceptions not yet supported")
 
 
+class TestAllCalendarsView(XMLCompareMixin, unittest.TestCase):
+
+    def createApp(self):
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.model import Group, Person
+        app = Application()
+        app['groups'] = ApplicationObjectContainer(Group)
+        app['persons'] = ApplicationObjectContainer(Person)
+        app['groups'].new("students", title="Students")
+        app['groups'].new("teachers", title="Teachers")
+        app['persons'].new("john", title="John")
+        app['persons'].new("smith", title="Smith")
+        return app
+
+    def test(self):
+        from schooltool.views.cal import AllCalendarsView
+        context = self.createApp()
+        view = AllCalendarsView(context)
+        request = RequestStub()
+        result = view.render(request)
+        expected = """
+            <html>
+            <head>
+              <title>Calendars</title>
+            </head>
+            <body>
+              <h1>Calendars</h1>
+              <h2>Groups</h2>
+              <ul>
+                <li><a href="webcal://localhost:8080/groups/students/calendar">
+                    Students</a></li>
+                <li><a href="webcal://localhost:8080/groups/teachers/calendar">
+                    Teachers</a></li>
+              </ul>
+              <h2>Persons</h2>
+              <ul>
+                <li><a href="webcal://localhost:8080/persons/john/calendar">
+                    John</a></li>
+                <li><a href="webcal://localhost:8080/persons/smith/calendar">
+                    Smith</a></li>
+              </ul>
+            </body>
+            </html>
+        """
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/html; charset=UTF-8")
+        self.assertEqualsXML(result, expected)
+
+
 class TestModuleSetup(RegistriesSetupMixin, unittest.TestCase):
 
     def test(self):
@@ -470,6 +521,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSchooldayModelCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarView))
+    suite.addTest(unittest.makeSuite(TestAllCalendarsView))
     suite.addTest(unittest.makeSuite(TestModuleSetup))
     return suite
 

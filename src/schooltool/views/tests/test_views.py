@@ -50,6 +50,8 @@ class TestHelpers(unittest.TestCase):
         request = RequestStub("http://locahost:8080/foo/bar")
         self.assertEquals(absoluteURL(request, '/moo/spoo'),
                           "http://localhost:8080/moo/spoo")
+        self.assertEquals(absoluteURL(request, '/moo/spoo', scheme='ftp'),
+                          "ftp://localhost:8080/moo/spoo")
         self.assertRaises(ValueError, absoluteURL, request, 'relative/path')
 
 
@@ -202,8 +204,14 @@ class TestView(unittest.TestCase):
     def test_render(self):
         from schooltool.views import View
         context = object()
-        view = View(context)
-        view.do_FOO = lambda request: "Foo"
+
+        class ViewSubclass(View):
+
+            def do_FOO(self, request, testcase=self):
+                testcase.assert_(request is self.request)
+                return "Foo"
+
+        view = ViewSubclass(context)
 
         request = RequestStub(method='PUT')
         self.assertNotEquals(view.render(request), '')
@@ -212,9 +220,11 @@ class TestView(unittest.TestCase):
         self.assertEquals(request.headers['Allow'], 'FOO, GET, HEAD')
 
         request = RequestStub(method='FOO')
+        self.assert_(view.request is None)
         self.assertEquals(view.render(request), 'Foo')
         self.assertEquals(request.code, 200)
         self.assertEquals(request.reason, 'OK')
+        self.assert_(view.request is None)
 
 
 class TestXMLPseudoParser(unittest.TestCase):

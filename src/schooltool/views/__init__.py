@@ -39,13 +39,13 @@ moduleProvides(IModuleSetup)
 # Helpers
 #
 
-def absoluteURL(request, path):
+def absoluteURL(request, path, scheme='http'):
     """Returns the absulute URL of the object adddressed with path"""
     if not path.startswith('/'):
         raise ValueError("Path must be absolute")
     hostname = request.getRequestHostname()
     port = request.getHost()[2]
-    return 'http://%s:%s%s' % (hostname, port, path)
+    return '%s://%s:%s%s' % (scheme, hostname, port, path)
 
 
 #
@@ -170,6 +170,7 @@ class View(Resource):
     def __init__(self, context):
         self.__super_init()
         self.context = context
+        self.request = None
 
     def getChild(self, name, request):
         if name == '': # trailing slash in the URL
@@ -189,7 +190,9 @@ class View(Resource):
         request.setHeader('Allow', ', '.join(self.allowedMethods()))
         handler = getattr(self, 'do_%s' % request.method, None)
         if handler is not None:
+            self.request = request
             body = handler(request)
+            self.request = None
             assert isinstance(body, str), \
                    "do_%s did not return a string" % request.method
             return body

@@ -147,6 +147,67 @@ Content-Type: text/xml; charset=UTF-8
 %% END XML
 
 
+SchoolTool> get /calendars.html
+200 OK
+Content-Type: text/html; charset=UTF-8
+%% XML
+<html>
+<head>
+  <title>Calendars</title>
+</head>
+<body>
+  <h1>Calendars</h1>
+  <h2>Groups</h2>
+  <ul>
+    <li><a href="webcal://localhost:8080/groups/cleaners/calendar">
+        Cleaners</a></li>
+    <li><a href="webcal://localhost:8080/groups/root/calendar">
+        Root Group</a></li>
+    <li><a href="webcal://localhost:8080/groups/students/calendar">
+        Students</a></li>
+    <li><a href="webcal://localhost:8080/groups/teachers/calendar">
+        Teachers</a></li>
+  </ul>
+  <h2>Persons</h2>
+  <ul>
+    <li><a href="webcal://localhost:8080/persons/Aiste/calendar">
+        Aiste</a></li>
+    <li><a href="webcal://localhost:8080/persons/Albert/calendar">
+        Albert</a></li>
+    <li><a href="webcal://localhost:8080/persons/anonymous/calendar">
+        Anonymous</a></li>
+    <li><a href="webcal://localhost:8080/persons/Marius/calendar">
+        Marius</a></li>
+    <li><a href="webcal://localhost:8080/persons/Mark/calendar">
+        Mark</a></li>
+    <li><a href="webcal://localhost:8080/persons/Steve/calendar">
+        Steve</a></li>
+  </ul>
+</body>
+</html>
+%% END XML
+
+
+SchoolTool> get /groups
+200 OK
+Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=container
+<container xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>groups</name>
+  <items>
+    <item xlink:href="/groups/root" xlink:title="Root Group"
+          xlink:type="simple"/>
+    <item xlink:href="/groups/cleaners" xlink:title="Cleaners"
+          xlink:type="simple"/>
+    <item xlink:href="/groups/students" xlink:title="Students"
+          xlink:type="simple"/>
+    <item xlink:href="/groups/teachers" xlink:title="Teachers"
+          xlink:type="simple"/>
+  </items>
+</container>
+%% END XML
+
+
 SchoolTool> get /groups/root
 200 OK
 Content-Type: text/xml; charset=UTF-8

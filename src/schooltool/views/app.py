@@ -31,6 +31,7 @@ from schooltool.views import View, Template
 from schooltool.views import TraversableView, XMLPseudoParser
 from schooltool.views import absoluteURL, notFoundPage
 from schooltool.views.timetable import SchoolTimetableTraverseView
+from schooltool.views.cal import AllCalendarsView
 
 __metaclass__ = type
 
@@ -46,6 +47,8 @@ class ApplicationView(TraversableView):
     def _traverse(self, name, request):
         if name == 'schooltt':
             return SchoolTimetableTraverseView(self.context)
+        elif name == 'calendars.html':
+            return AllCalendarsView(self.context)
         else:
             return TraversableView._traverse(self, name, request)
 

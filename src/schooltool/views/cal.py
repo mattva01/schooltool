@@ -27,7 +27,7 @@ import operator
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ISchooldayModel, ICalendar
-from schooltool.views import View, textErrorPage
+from schooltool.views import View, Template, textErrorPage, absoluteURL
 from schooltool.cal import ICalReader, ICalParseError, CalendarEvent
 from schooltool.cal import ical_text, ical_duration
 from schooltool.component import getPath
@@ -186,6 +186,31 @@ class CalendarView(View):
         else:
             request.setHeader('Content-Type', 'text/plain')
             return "Calendar imported"
+
+
+class AllCalendarsView(View):
+    """List of all calendars.
+
+    This is a  view on the top-level application object that generates an HTML
+    page with webcal:// links to the private calendars of all groups and
+    persons.
+    """
+
+    template = Template("www/all_calendars.pt")
+
+    def groups(self):
+        return self._list('groups')
+
+    def persons(self):
+        return self._list('persons')
+
+    def _list(self, name):
+        items = [(item.title, getPath(item.calendar))
+                 for item in self.context[name].itervalues()]
+        items.sort()
+        return [{'title': title,
+                 'href': absoluteURL(self.request, path, 'webcal'),
+                } for title, path in items]
 
 
 def setUp():

@@ -145,6 +145,7 @@ class TestApplicationObjectContainer(unittest.TestCase):
             self.assert_(obj.__parent__ is a, 'obj.__parent__ is a')
             self.assert_(a[name] is obj, 'a[name] is obj')
             self.assertEqual(a.keys(), [name])
+            self.assertEqual(list(a.itervalues()), [obj])
             del a[name]
             self.assertRaises(KeyError, a.__getitem__, name)
             self.assertEqual(obj.__name__, None)

@@ -1,0 +1,18 @@
+<html>
+<head>
+  <title>Calendars</title>
+</head>
+<body>
+  <h1>Calendars</h1>
+  <h2>Groups</h2>
+  <ul>
+    <li tal:repeat="group view/groups">
+      <a tal:attributes="href group/href" tal:content="group/title" /></li>
+  </ul>
+  <h2>Persons</h2>
+  <ul>
+    <li tal:repeat="person view/persons">
+      <a tal:attributes="href person/href" tal:content="person/title" /></li>
+  </ul>
+</body>
+</html>

@@ -315,18 +315,13 @@ class BaseTimetableTraverseView(View, TimetableContentNegotiation):
     def __init__(self, context, time_period=None):
         View.__init__(self, context)
         self.time_period = time_period
-        self.request = None
 
     def do_GET(self, request):
         if self.time_period is not None:
             return notFoundPage(request)
         else:
             template = self.chooseRepresentation(request)
-            try:
-                self.request = request
-                return template(request, view=self, context=self.context)
-            finally:
-                self.request = None
+            return template(request, view=self, context=self.context)
 
 
 class TimetableTraverseView(BaseTimetableTraverseView):

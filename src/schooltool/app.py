@@ -139,3 +139,7 @@ class ApplicationObjectContainer(Persistent):
 
     def keys(self):
         return self._contents.keys()
+
+    def itervalues(self):
+        return self._contents.itervalues()
+
