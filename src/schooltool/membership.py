@@ -251,7 +251,9 @@ class MemberRemovedEvent(MembershipEvent):
 def relate_membership(relationship_type, (a, role_a), (b, role_b), title=None):
     """See IRelationshipAPI.relate"""
 
-    assert relationship_type is URIMembership
+    if relationship_type is not URIMembership:
+        raise TypeError("Membership relationship must be of type"
+                        " URIMembership.", relationship_type)
     if title is not None and title != "Membership":
         raise TypeError(
             "A relationship of type URIMembership must have roles"

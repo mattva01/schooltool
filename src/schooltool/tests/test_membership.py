@@ -426,6 +426,19 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
                           URIMembership,  (m, URIMember), (g, URIUnrelated),
                           title="foo")
 
+    def test_relate_membership_subtype(self):
+        from schooltool.interfaces import URIMember, URIGroup, URIMembership
+        from schooltool.membership import relate_membership as relate
+
+        class URIBetterMembership(URIMembership):
+            """http://ns.example.org/cult"""
+
+        m = MemberStub(self.serviceManager)
+        g = GroupStub(self.serviceManager)
+
+        self.assertRaises(TypeError, relate,
+                          URIBetterMembership, (m, URIMember), (g, URIGroup))
+
 
 def test_suite():
     suite = unittest.TestSuite()
