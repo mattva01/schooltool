@@ -345,12 +345,11 @@ class TimetableCSVImporter:
                 continue
 
             location, records = row[0], row[1:]
-            # TODO: deal with location
             subjects = [record.split(" ", 1)[0] for record in records]
             teachers = [record.split(" ", 1)[1] for record in records]
 
             for period, subject, teacher in zip(periods, subjects, teachers):
-                self.scheduleClass(period, subject, teacher, day_ids)
+                self.scheduleClass(period, subject, teacher, day_ids, location)
 
     def findByTitle(self, container, title):
         """Find an object with provided title in a container.
@@ -362,7 +361,7 @@ class TimetableCSVImporter:
             if obj.title == title:
                 return obj
         else:
-            raise KeyError("Object %r not found" % subject)
+            raise KeyError("Object %r not found" % title)
 
     def clearTimetables(self):
         """Delete timetables of the period and schema we are dealing with."""
@@ -370,10 +369,11 @@ class TimetableCSVImporter:
             if (self.period_id, self.ttschema) in group.timetables.keys():
                 del group.timetables[self.period_id, self.ttschema]
 
-    def scheduleClass(self, period, subject, teacher, day_ids):
+    def scheduleClass(self, period, subject, teacher, day_ids, location):
         """Schedule a class of subject during a given period."""
         group = self.findByTitle(self.groups, subject)
         teacher = self.findByTitle(self.persons, teacher)
+        location = self.findByTitle(self.app['resources'], location)
 
         # Create the timetable if it does not exist yet.
         if (self.period_id, self.ttschema) not in group.timetables.keys():
@@ -383,8 +383,8 @@ class TimetableCSVImporter:
             tt = group.timetables[self.period_id, self.ttschema]
 
         # Add a new activity to the timetable
-        act = TimetableActivity(title=subject, owner=teacher)
-        # TODO: resources
+        act = TimetableActivity(title=subject, owner=teacher,
+                                resources=(location,))
         for day_id in day_ids:
             tt[day_id].add(period, act)
 

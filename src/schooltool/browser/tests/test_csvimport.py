@@ -434,13 +434,13 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                 ""
                 "Monday","Tuesday"
                 "","A","B","C"
-                "105","Math1 Curtin","Math2 Guzman","Math3 Curtin"
-                "129","English1 Lorch","English2 Lorch","English3 Lorch"
+                "Inside","Math1 Curtin","Math2 Guzman","Math3 Curtin"
+                "Outside","English1 Lorch","English2 Lorch","English3 Lorch"
 
                 "Wednesday"
                 "","A","B","C"
-                "105","Math1 Curtin","Math3 Guzman","Math2 Curtin"
-                "129","English3 Lorch","English2 Lorch","English1 Lorch"
+                "Outside","Math1 Curtin","Math3 Guzman","Math2 Curtin"
+                "Inside","English3 Lorch","English2 Lorch","English1 Lorch"
                 """)
         imp.importTimetable(csv)
 
@@ -501,7 +501,8 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         ttschema["day2"] = TimetableDay(("A", "B"))
         self.app.timetableSchemaService['two_day'] = ttschema
 
-        imp.scheduleClass('A', 'Math 101', 'Prof. Bar', ['day1', 'day2'])
+        imp.scheduleClass('A', 'Math 101', 'Prof. Bar',
+                          day_ids=['day1', 'day2'], location='Inside')
 
         tt = math101.timetables['period1', 'two_day']
         activities = list(tt.itercontent())
@@ -509,7 +510,7 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
         for day_id, period_id, activity in activities:
             self.assertEquals(activity.title, 'Math 101')
             self.assert_(activity.owner is self.teacher)
-            # self.assert_(activity.resources, ...) TODO
+            self.assertEquals(list(activity.resources), [self.location])
             self.assert_(activity.timetable is tt)
 
 
