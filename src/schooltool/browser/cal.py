@@ -147,7 +147,8 @@ class WeeklyCalendarView(View):
         return [start + datetime.timedelta(i) for i in range(7)]
 
     def dayEvents(self, date):
-        """Return events for a day sorted by start time"""
+        """Return events for a day sorted by start time."""
+        # XXX If an event spans several days, it will be shown multiple times.
         daycal = self.context.byDate(date)
         events = [(e.dtstart, e) for e in daycal]
         events.sort()
