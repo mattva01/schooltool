@@ -326,13 +326,11 @@ class DynamicSchemaService(Persistent):
             self.default_id = schema_id
 
     def __delitem__(self, schema_id):
-        raise NotImplementedError() # XXX This method is not tested.
         del self.schemas[schema_id]
         if schema_id == self.default_id:
             self.default_id = None
 
     def getDefault(self):
-        raise NotImplementedError() # XXX This method is not tested.
         return self[self.default_id]
 
 
