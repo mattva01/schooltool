@@ -398,18 +398,27 @@ class TestObjectContainerView(unittest.TestCase, TraversalTestMixin):
         self.obj_view = AddViewStub
 
     def createView(self):
-        self.obj = object()
+
+        class ContentStub:
+
+            def __init__(self, name, title):
+                self.__name__ = name
+                self.title = title
+
+        self.obj = ContentStub('obj', 'Some Object')
         self.context = {'obj': self.obj}
         view = self.view(self.context)
         view.add_view = self.add_view
         view.obj_view = self.obj_view
         return view
 
-    def test_render(self):
+    def test_render_index(self):
         view = self.createView()
         request = RequestStub()
         result = view.render(request)
-        self.assertEquals(request.code, 404)
+        self.assertEquals(request.code, 200)
+        self.assert_('href="obj"' in result)
+        self.assert_('Some Object' in result)
 
     def test_traverse(self):
         view = self.createView()

@@ -1,0 +1,23 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="view/index_title">Contents</title>
+</head>
+<body>
+
+<h1 metal:fill-slot="h1" tal:content="view/index_title">Contents</h1>
+
+<metal:block metal:fill-slot="content">
+
+  <!-- TODO: breadcrumbs -->
+
+  <ul>
+    <li tal:repeat="obj context/itervalues">
+      <a tal:content="obj/title"
+         tal:attributes="href obj/__name__">Some Object</a>
+         <!-- TODO: sorting, absolute URLs? -->
+    </li>
+  </ul>
+
+</metal:block>
+</body>
+</html>

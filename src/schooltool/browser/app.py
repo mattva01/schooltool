@@ -352,11 +352,12 @@ class ObjectContainerView(View):
 
     authorization = PublicAccess
 
-    do_GET = staticmethod(notFoundPage)
+    template = Template('www/container.pt')
 
     # Must be overridden by actual subclasses.
     add_view = None     # The add view class
     obj_view = None     # The object view class
+    index_title = None  # The title of the container index view
 
     def _traverse(self, name, request):
         if name == 'add.html':
