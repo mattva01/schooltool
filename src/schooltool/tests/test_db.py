@@ -46,6 +46,11 @@ class TestPersistentListSet(unittest.TestCase):
 class P(Persistent):
     pass
 
+class FalseP(Persistent):
+
+    def __nonzero__(self):
+        return False
+
 class TestPersistentKeysDict(unittest.TestCase):
 
     def setUp(self):
@@ -180,6 +185,16 @@ class TestPersistentTuplesDict(unittest.TestCase):
         d[(p, p, p2)] = 23
         self.assertRaises(TypeError, d.__setitem__, (ob, p, p), 1)
         self.assertRaises(ValueError, d.__setitem__, (p, ob, p, ob), 1)
+
+    def testFalsePersistentObject(self):
+        from schooltool.db import PersistentTuplesDict
+        ob = object()
+        p = FalseP()
+        d = PersistentTuplesDict('po')
+        self.datamgr.add(d)
+        key = (p, ob)
+        d[key] = 23
+        self.assertEquals(d.keys(), [key])
 
     def test_getitem(self):
         from schooltool.db import PersistentTuplesDict

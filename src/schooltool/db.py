@@ -113,7 +113,7 @@ class PersistentKeysDict(Persistent, UserDict.DictMixin):
 
     def checkKey(self, key):
         if not hasattr(key, '_p_oid'):
-            raise TypeError("the key must be persistent (got %r)" % (key, ))
+            raise TypeError("The key must be persistent (got %r)" % (key, ))
 
     def _toExternalKey(self, key):
         return self._p_jar.get(key)
@@ -188,13 +188,23 @@ class PersistentTuplesDict(PersistentKeysDict):
     def _toExternalKey(self, key):
         get = self._p_jar.get
         pindexes = self._pindexes
-        return tuple([idx in pindexes and get(K) or K
-                      for idx, K in enumerate(key)])
+        L = []
+        for idx, K in enumerate(key):
+            if idx in pindexes:
+                L.append(get(K))
+            else:
+                L.append(K)
+        return tuple(L)
 
     def _toInternalKey(self, key):
         pindexes = self._pindexes
-        return tuple([idx in pindexes and K._p_oid or K
-                      for idx, K in enumerate(key)])
+        L = []
+        for idx, K in enumerate(key):
+            if idx in pindexes:
+                L.append(K._p_oid)
+            else:
+                L.append(K)
+        return tuple(L)
 
     def _prepareExternalKey(self, key):
         for idx in self._pindexes:
