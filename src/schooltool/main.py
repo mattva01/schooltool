@@ -610,6 +610,14 @@ class Server:
                                         context = old_new_map[event.context])
                     new_persons[person].calendar.addEvent(event)
 
+        # XXX: Anytime you access a link.source here it kills this whole
+        # method, nothing prints or gets assigned.  The next step in the
+        # method, assigning new_app to root[self.appname] never happens
+        #
+        #for person in new_persons.keys():
+        #    for link in old_persons[person].listLinks():
+        #        print link.source
+
         root[self.appname] = new_app
 
 class UnicodeFileHandler(logging.StreamHandler):
