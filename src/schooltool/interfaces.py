@@ -1009,6 +1009,15 @@ class ICalendar(Interface):
         the events is not modified even if it falls outside the given date.
         """
 
+    def expand(first, last):
+       """Expand recurring events.
+
+       Returns an ICalendar with all the IExpandedCalendarEvents in
+       that occur in the given date range. If there are recurrences of
+       an event in the specified range, the original event is included
+       as well, even if it falls out of the specified range.
+       """
+
 
 class ICalendarWrite(Interface):
     """Writable calendar."""
@@ -1192,6 +1201,14 @@ class ICalendarEvent(Interface):
         return the same value.
         """
 
+class IExpandedCalendarEvent(ICalendarEvent):
+   """A calendar event that may be a recurrence of a recurrent event"""
+
+   original = Attribute(
+      """The unique_id of the original event if this event is a recurrence.
+
+      None if this event is not a recurrence of another event.
+      """)
 
 class ICalendarOwner(Interface):
     """An object that has a calendar."""

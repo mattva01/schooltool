@@ -923,6 +923,9 @@ class Calendar(Persistent):
                 cal.addEvent(event)
         return cal
 
+    def expand(self, first, last):
+        raise NotImplementedError
+
     def addEvent(self, event):
         self.events.add(event)
         self.events = self.events  # make persistence work
