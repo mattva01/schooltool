@@ -26,8 +26,8 @@ import os
 import unittest
 
 from zope.testing import doctest
-from zope.app.tests.functional import FunctionalTestSetup
-from zope.app.tests.functional import FunctionalDocFileSuite
+from zope.app.testing.functional import FunctionalTestSetup
+from zope.app.testing.functional import FunctionalDocFileSuite
 
 
 def find_ftesting_zcml():
