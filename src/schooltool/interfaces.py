@@ -658,16 +658,13 @@ class IApplication(IContainmentRoot, IServiceManager):
     """
 
     def getRoots():
-        """Returns the set of root application objects."""
+        """Returns a sequence of root application objects."""
 
     def __getitem__(name):
         """Get the named application object container."""
 
     def keys():
         """List the names of application object containers."""
-
-    # __setitem__ is used to set app object containers, but it is not in this
-    # interface, as this is a reading-only interface.
 
 
 class IApplicationObjectContainer(ILocation):

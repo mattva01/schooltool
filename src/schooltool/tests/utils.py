@@ -89,3 +89,12 @@ class RelationshipTestMixin:
     setUp = setUpRelationshipRegistry
     tearDown = tearDownRelationshipRegistry
 
+
+class EqualsSortedMixin:
+
+    def assertEqualsSorted(self, a, b):
+        x = a[:]
+        y = b[:]
+        x.sort()
+        y.sort()
+        self.assertEquals(x, y)

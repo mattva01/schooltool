@@ -23,16 +23,7 @@ $Id$
 """
 import unittest
 from persistence import Persistent
-
-
-class EqualsSortedMixin:
-
-    def assertEqualsSorted(self, a, b):
-        x = a[:]
-        y = b[:]
-        x.sort()
-        y.sort()
-        self.assertEquals(x, y)
+from schooltool.tests.utils import EqualsSortedMixin
 
 
 class P(Persistent):
