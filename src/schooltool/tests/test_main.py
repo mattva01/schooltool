@@ -851,15 +851,22 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
 
     def test_createApplication(self):
         from schooltool.interfaces import IEvent, IAttendanceEvent
+        from schooltool.uris import URIGroup
         from schooltool.main import Server
         from schooltool.model import Person, Group, Resource
-        from schooltool import relationship
+        from schooltool.component import getRelatedObjects
+        from schooltool import relationship, membership
         relationship.setUp()
+        membership.setUp()
 
         server = Server()
         app = server.createApplication()
         root = app['groups']['root']
-        anonymous = app['persons']['anonymous']
+        managers = app['groups']['managers']
+        manager = app['persons']['manager']
+        self.assert_(manager.checkPassword('schooltool'))
+        self.assertEquals(getRelatedObjects(manager, URIGroup), [managers])
+        self.assertEquals(getRelatedObjects(managers, URIGroup), [root])
 
         person = app['persons'].new()
         self.assert_(isinstance(person, Person))
@@ -880,6 +887,9 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
 
     def test_authenticate(self):
         from schooltool.main import Server
+        from schooltool import relationship, membership
+        relationship.setUp()
+        membership.setUp()
         app = Server.createApplication()
         john = app['persons'].new("john", title="John Smith")
         john.setPassword('secret')

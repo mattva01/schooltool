@@ -46,8 +46,9 @@ from twisted.python import failure
 
 from schooltool.app import Application, ApplicationObjectContainer
 from schooltool import model, absence
-from schooltool.views import errorPage
+from schooltool.views import textErrorPage
 from schooltool.component import getView, traverse
+from schooltool.membership import Membership
 from schooltool.eventlog import EventLogUtility
 from schooltool.interfaces import IEvent, IAttendanceEvent, IModuleSetup
 from schooltool.interfaces import AuthenticationError
@@ -318,7 +319,7 @@ class Request(http.Request):
             self.accept = parseAccept(self.getHeader('Accept'))
         except ValueError, e:
             self.accept = []
-            body = errorPage(self, 400, str(e))
+            body = textErrorPage(self, str(e))
             self.setHeader('Content-Length', len(body))
             self.write(body)
             self.finish()
@@ -683,7 +684,11 @@ class Server:
         root = Group("root", title="Root Group")
         app.addRoot(root)
 
-        anonymous = Person("anonymous", title="Anonymous")
+        managers = Group("managers", title="System Managers")
+        manager = Person("manager", title="Manager")
+        manager.setPassword('schooltool')
+        Membership(group=managers, member=manager)
+        Membership(group=root, member=managers)
 
         return app
 

@@ -189,6 +189,7 @@ class TestView(unittest.TestCase):
         view = View(context)
         request = RequestStub()
         view.template = TemplateStub(request, view, context, body)
+        view.authorization = lambda ctx, rq: True
         self.assertEquals(view.render(request), body)
 
     def test_do_HEAD(self):
@@ -198,6 +199,7 @@ class TestView(unittest.TestCase):
         view = View(context)
         request = RequestStub(method='HEAD')
         view.template = TemplateStub(request, view, context, body)
+        view.authorization = lambda ctx, rq: True
         self.assertEquals(view.render(request), '')
         self.assertEquals(request.headers['Content-Length'], len(body))
 
@@ -212,6 +214,7 @@ class TestView(unittest.TestCase):
                 return "Foo"
 
         view = ViewSubclass(context)
+        view.authorization = lambda ctx, rq: True
 
         request = RequestStub(method='PUT')
         self.assertNotEquals(view.render(request), '')
@@ -224,6 +227,15 @@ class TestView(unittest.TestCase):
         self.assertEquals(view.render(request), 'Foo')
         self.assertEquals(request.code, 200)
         self.assertEquals(request.reason, 'OK')
+        self.assert_(view.request is None)
+
+        view.authorization = lambda ctx, rq: False
+        request = RequestStub(method='FOO')
+        result = view.render(request)
+        self.assertEquals(request.code, 401)
+        self.assertEquals(result, "Bad username or password")
+        self.assertEquals(request.headers['WWW-Authenticate'],
+                          'basic realm="SchoolTool"')
         self.assert_(view.request is None)
 
 

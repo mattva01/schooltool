@@ -50,6 +50,7 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         self.app.utilityService["foo"] = UtilityStub("Foo utility")
 
         self.view = ApplicationView(self.app)
+        self.view.authorization = lambda ctx, rq: True
 
     def tearDown(self):
         from schooltool.component import resetViewRegistry
@@ -157,6 +158,7 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         self.app.addRoot(self.group)
 
         self.view = ApplicationObjectContainerView(self.app['groups'])
+        self.view.authorization = lambda ctx, rq: True
 
     def tearDown(self):
         from schooltool.component import resetViewRegistry
@@ -183,6 +185,7 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
             view = self.view
         request = RequestStub("http://localhost:8080/groups" + suffix,
                               method=method, body=body)
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
@@ -204,6 +207,7 @@ class TestAppObjContainerView(XMLCompareMixin, RegistriesSetupMixin,
         from schooltool.views.app import ApplicationObjectCreatorView
         view = ApplicationObjectCreatorView(self.app['groups'], 'foo')
         request = RequestStub("http://localhost/groups/foo", method=method)
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 404)
         self.assertEquals(request.reason, "Not Found")
@@ -252,6 +256,7 @@ class TestAvailabilityQueryView(unittest.TestCase, XMLCompareMixin,
         self.person = self.app['persons'].new('albert', title='Albert')
 
         self.view = AvailabilityQueryView(self.app)
+        self.view.authorization = lambda ctx, rq: True
 
         def addEvent(cal, day, hr, dur, title):
             """A helper to avoid verbiage involved in adding events to

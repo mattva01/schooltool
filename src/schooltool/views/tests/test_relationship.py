@@ -53,6 +53,7 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
         Membership(group=self.sub, member=self.per)
 
         self.view = RelationshipsView(self.sub)
+        self.view.authorization = lambda ctx, rq: True
 
     def test_listLinks(self):
         from pprint import pformat
@@ -208,6 +209,7 @@ class TestLinkView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
         self.link = links['member']
         self.view = LinkView(self.link)
+        self.view.authorization = lambda ctx, rq: True
 
     def testGET(self):
         from schooltool.component import getPath

@@ -39,6 +39,7 @@ from schooltool.views import View, Template
 from schooltool.views import XMLPseudoParser
 from schooltool.views import absoluteURL, textErrorPage
 from schooltool.views.facet import FacetView
+from schooltool.views.auth import TeacherAccess
 from schooltool.common import parse_datetime
 
 __metaclass__ = type
@@ -51,6 +52,7 @@ class RollcallView(View):
     """This is a view for doing roll calls on groups."""
 
     template = Template('www/rollcall.pt', content_type="text/xml")
+    authorization = TeacherAccess
 
     def groupPath(self):
         return getPath(self.context)
@@ -275,6 +277,7 @@ class AbsenceListViewMixin:
 class AbsenceManagementView(View, AbsenceCommentParser, AbsenceListViewMixin):
 
     template = Template('www/absences.pt', content_type="text/xml")
+    authorization = TeacherAccess
 
     def _traverse(self, name, request):
         absence = self.context.getAbsence(name)
@@ -303,6 +306,7 @@ class AbsenceManagementView(View, AbsenceCommentParser, AbsenceListViewMixin):
 class AbsenceView(View, AbsenceCommentParser):
 
     template = Template('www/absence.pt', content_type="text/xml")
+    authorization = TeacherAccess
 
     def ended(self):
         if self.context.ended:
@@ -369,6 +373,7 @@ class AbsenceView(View, AbsenceCommentParser):
 class AbsenceTrackerView(View, AbsenceListViewMixin):
 
     template = Template('www/absences.pt', content_type='text/xml')
+    authorization = TeacherAccess
 
     utcnow = datetime.datetime.utcnow
 

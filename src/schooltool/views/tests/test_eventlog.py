@@ -57,6 +57,7 @@ class TestEventLogView(XMLCompareMixin, unittest.TestCase):
         from schooltool.views.eventlog import EventLogView
         context = EventLogStub()
         view = EventLogView(context)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub("http://localhost/foo/eventlog")
         result = view.render(request)
         self.assertEquals(request.headers['Content-Type'],
@@ -72,6 +73,7 @@ class TestEventLogView(XMLCompareMixin, unittest.TestCase):
         context.received = [(datetime.datetime(2003, 10, 01, 11, 12, 13),
                              EventStub())]
         view = EventLogView(context)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub("http://localhost/foo/eventlog")
         result = view.render(request)
         self.assertEquals(request.headers['Content-Type'],
@@ -88,6 +90,7 @@ class TestEventLogView(XMLCompareMixin, unittest.TestCase):
         context.received = [(datetime.datetime(2003, 10, 01, 11, 12, 13),
                              EventStub())]
         view = EventLogView(context)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub("http://localhost/foo/eventlog", "PUT")
         result = view.render(request)
         expected = "1 event cleared"

@@ -38,6 +38,7 @@ from schooltool.views.timetable import TimetableTraverseView
 from schooltool.views.timetable import CompositeTimetableTraverseView
 from schooltool.views.cal import CalendarView, CalendarReadView, BookingView
 from schooltool.views.absence import RollcallView, AbsenceManagementView
+from schooltool.views.auth import PublicAccess, PrivateAccess
 
 __metaclass__ = type
 
@@ -71,6 +72,7 @@ class GroupView(ApplicationObjectTraverserView):
     """The view for a group"""
 
     template = Template("www/group.pt", content_type="text/xml")
+    authorization = PublicAccess
 
     def _traverse(self, name, request):
         if name == 'rollcall':
@@ -88,6 +90,7 @@ class TreeView(View):
 
     template = Template('www/tree.pt', content_type='text/xml')
     node_template = Template('www/tree_node.pt', content_type='text/xml')
+    authorization = PublicAccess
 
     def generate(self, node, request):
         children = [child for child in getRelatedObjects(node, URIMember)
@@ -101,6 +104,7 @@ class PersonView(ApplicationObjectTraverserView):
     """The view for a person object"""
 
     template = Template("www/person.pt", content_type="text/xml")
+    authorization = PublicAccess
 
     def _traverse(self, name, request):
         if name == 'absences':
@@ -117,6 +121,7 @@ class PersonView(ApplicationObjectTraverserView):
 class PersonPasswordView(View):
 
     do_GET = staticmethod(notFoundPage)
+    authorization = PrivateAccess
 
     def do_PUT(self, request):
         password = request.content.read()
@@ -133,6 +138,7 @@ class ResourceView(ApplicationObjectTraverserView):
     """A view on a resource"""
 
     template = Template("www/resource.pt", content_type="text/xml")
+    authorization = PublicAccess
 
     def _traverse(self, name, request):
         if name == 'timetables':

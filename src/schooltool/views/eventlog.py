@@ -27,6 +27,7 @@ from schooltool.interfaces import IModuleSetup
 from schooltool.component import registerView
 from schooltool.views import View, Template, errorPage
 from schooltool.views.facet import FacetView
+from schooltool.views.auth import SystemAccess
 from schooltool.eventlog import IEventLog, IEventLogUtility, IEventLogFacet
 
 __metaclass__ = type
@@ -39,6 +40,7 @@ class EventLogView(View):
     """View for EventLogFacet."""
 
     template = Template("www/eventlog.pt", content_type="text/xml")
+    authorization = SystemAccess
 
     def items(self):
         return [{'timestamp': ts.isoformat(' '), 'event': event}

@@ -81,6 +81,7 @@ class TestSchooldayModelCalendarView(CalendarTestBase):
         setPath(self.sm, '/calendar')
         self.view = SchooldayModelCalendarView(self.sm)
         self.view.datetime_hook = DatetimeStub()
+        self.view.authorization = lambda ctx, rq: True
         libxml2.registerErrorHandler(lambda ctx, error: None, None)
 
     def test_get_empty(self):
@@ -372,6 +373,7 @@ class TestCalendarReadView(NiceDiffsMixin, CalendarTestBase):
         setPath(context, '/calendar')
         self.view = self._newView(context)
         self.view.datetime_hook = DatetimeStub()
+        self.view.authorization = lambda ctx, rq: True
         return context
 
     def test_get_empty(self):
@@ -571,6 +573,7 @@ class TestCalendarViewBookingEvents(unittest.TestCase):
         self.person = app['persons'].new("john", title="John")
         self.resource = app['resources'].new("hall", title="Hall")
         self.view = CalendarView(self.person.calendar)
+        self.view.authorization = lambda ctx, rq: True
 
         e = CalendarEvent(datetime.datetime(2004, 1, 1, 10, 0, 0),
                           datetime.timedelta(minutes=60),
@@ -645,6 +648,7 @@ class TestBookingView(unittest.TestCase):
         self.person = app['persons'].new("john", title="John")
         self.resource = app['resources'].new("hall", title="Hall")
         self.view = BookingView(self.resource)
+        self.view.authorization = lambda ctx, rq: True
 
     def test(self):
         xml = """
@@ -780,6 +784,7 @@ class TestAllCalendarsView(XMLCompareMixin, unittest.TestCase):
         from schooltool.views.cal import AllCalendarsView
         context = self.createApp()
         view = AllCalendarsView(context)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub()
         result = view.render(request)
         expected = """

@@ -56,6 +56,8 @@ class ScriptTestCase(unittest.TestCase):
 
     prefix = re.compile('^SchoolTool> |^PUT> |^POST> ')
     client_args = '-p 8813'
+    child_startup = 'user manager schooltool\n'
+    child_startup_expected = ['User manager\n', '\n']
 
     def __init__(self, script):
         unittest.TestCase.__init__(self)
@@ -76,8 +78,9 @@ class ScriptTestCase(unittest.TestCase):
         child = Popen4(cmd)
         reader = Reader(child.fromchild)
         reader.start()
-        expected = []
-        orig_lineno = []
+        child.tochild.write(self.child_startup)
+        expected = list(self.child_startup_expected)
+        orig_lineno = [0] * len(expected)
         f = open(self.filename)
         skipping_intro = True
         magic = False

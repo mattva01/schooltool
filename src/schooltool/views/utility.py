@@ -29,6 +29,7 @@ from schooltool.component import getPath
 from schooltool.component import registerView
 from schooltool.views import View, Template
 from schooltool.views import ItemTraverseView
+from schooltool.views.auth import PublicAccess
 
 __metaclass__ = type
 
@@ -40,6 +41,7 @@ class UtilityServiceView(ItemTraverseView):
     """The view for the utility service"""
 
     template = Template("www/utilservice.pt", content_type="text/xml")
+    authorization = PublicAccess
 
     def getName(self):
         return self.context.__name__
@@ -57,6 +59,7 @@ class UtilityView(View):
     """
 
     template = Template('www/utility.pt', content_type="text/xml")
+    authorization = PublicAccess
 
 
 def setUp():

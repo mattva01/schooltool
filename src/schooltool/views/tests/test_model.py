@@ -52,6 +52,7 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
         app['persons'] = ApplicationObjectContainer(Person)
         self.per = app['persons'].new("p", title="Pete")
         self.view = ApplicationObjectTraverserView(self.per)
+        self.view.authorization = lambda ctx, rq: True
 
     def test_traverse(self):
         from schooltool.views.facet import FacetManagementView
@@ -109,6 +110,7 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         Membership(group=self.group, member=self.per)
 
         self.view = GroupView(self.group)
+        self.view.authorization = lambda ctx, rq: True
 
     def tearDown(self):
         self.tearDownRegistries()
@@ -210,6 +212,7 @@ class TestTreeView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
     def test(self):
         from schooltool.views.model import TreeView
         view = TreeView(self.group)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub("http://localhost/groups/root/tree")
         result = view.render(request)
         self.assertEquals(request.headers['Content-Type'],
@@ -257,6 +260,7 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         Membership(group=self.sub, member=self.per)
 
         self.view = PersonView(self.per)
+        self.view.authorization = lambda ctx, rq: True
 
     def test_traverse(self):
         from schooltool.views.model import PersonPasswordView
@@ -329,6 +333,7 @@ class TestPersonPasswordView(unittest.TestCase):
         from schooltool.views.model import PersonPasswordView
         p = Person("John")
         v = PersonPasswordView(p)
+        v.authorization = lambda ctx, rq: True
 
         passwd = """
         Foo bar
@@ -346,6 +351,7 @@ class TestPersonPasswordView(unittest.TestCase):
         p = Person("John")
         p.setPassword("foo")
         v = PersonPasswordView(p)
+        v.authorization = lambda ctx, rq: True
         request = RequestStub(method="DELETE")
         result = v.render(request)
         self.assertEqual(request.code, 200)
@@ -364,6 +370,7 @@ class TestResourceView(XMLCompareMixin, unittest.TestCase):
         self.resource = app['resources'].new('room3', title='Room 3')
 
         self.view = ResourceView(self.resource)
+        self.view.authorization = lambda ctx, rq: True
 
     def test_traverse(self):
         from schooltool.views.facet import FacetManagementView

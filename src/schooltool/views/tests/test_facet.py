@@ -75,6 +75,7 @@ class TestFacetView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         views.setUp()
         self.facet = FacetStub(name="001")
         self.view = FacetView(self.facet)
+        self.view.authorization = lambda ctx, rq: True
 
     def tearDown(self):
         self.tearDownRegistries()
@@ -157,6 +158,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         facet.active = False
         context.setFacet(EventLogFacet(), owner=owner)
         view = FacetManagementView(context)
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
@@ -186,6 +188,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         facetable = Person()
         context = FacetManager(facetable)
         view = FacetManagementView(context)
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
@@ -208,6 +211,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         facetable = Person()
         context = FacetManager(facetable)
         view = FacetManagementView(context)
+        view.authorization = lambda ctx, rq: True
         for body in ("", "foo", "facet factory=\"nosuchfactory\""):
             request = RequestStub("http://localhost/group/facets",
                                   method="POST",
@@ -227,6 +231,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         facetable = Person()
         context = FacetManager(facetable)
         view = FacetManagementView(context)
+        view.authorization = lambda ctx, rq: True
         context.setFacet(EventLogFacet(), name='eventlog')
         request = RequestStub("http://localhost/group/facets",
                               method="POST",

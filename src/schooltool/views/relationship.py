@@ -28,6 +28,7 @@ from schooltool.component import getPath, traverse
 from schooltool.views import View, Template, textErrorPage
 from schooltool.views import XMLPseudoParser
 from schooltool.views import absoluteURL
+from schooltool.views.auth import PublicAccess
 
 __metaclass__ = type
 
@@ -41,6 +42,7 @@ class RelationshipsView(View, XMLPseudoParser):
     """
 
     template = Template("www/relationships.pt", content_type="text/xml")
+    authorization = PublicAccess
 
     def listLinks(self):
         return [{'traverse': getPath(link.traverse()),
@@ -105,6 +107,7 @@ class LinkView(View):
     """A view on relationship links."""
 
     template = Template("www/link.pt", content_type="text/xml")
+    authorization = PublicAccess
 
     def info(self):
         return {'role': strURI(self.context.role),

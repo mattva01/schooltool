@@ -32,6 +32,7 @@ from schooltool.interfaces import ITimePeriodService
 from schooltool.views import View, Template, textErrorPage, notFoundPage
 from schooltool.views import absoluteURL, read_file
 from schooltool.views.cal import SchooldayModelCalendarView
+from schooltool.views.auth import PublicAccess
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.component import getTimetableSchemaService
@@ -89,6 +90,7 @@ class TimetableReadView(View, TimetableContentNegotiation):
     html_template = Template("www/timetable_html.pt")
     # wxWindows has problems with UTF-8
     wxhtml_template = Template("www/timetable_html.pt", charset='ISO-8859-1')
+    authorization = PublicAccess
 
     def __init__(self, context, key):
         View.__init__(self, context)
@@ -246,6 +248,7 @@ class TimetableSchemaView(TimetableReadView):
     schema = read_file("../schema/tt_schema.rng")
 
     template = Template("www/timetable_schema.pt", content_type="text/xml")
+    authorization = PublicAccess
 
     dows = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
             'Friday', 'Saturday', 'Sunday']
@@ -410,6 +413,7 @@ class BaseTimetableTraverseView(View, TimetableContentNegotiation):
     html_template = Template("www/timetables_html.pt")
     # wxWindows has problems with UTF-8
     wxhtml_template = Template("www/timetables_html.pt", charset='ISO-8859-1')
+    authorization = PublicAccess
 
     def __init__(self, context, time_period=None):
         View.__init__(self, context)
@@ -518,6 +522,7 @@ class TimetableSchemaServiceView(View):
     """View for the timetable schema service"""
 
     template = Template("www/tt_service.pt", content_type="text/xml")
+    authorization = PublicAccess
 
     def schemas(self):
         base = getPath(self.context)
@@ -534,6 +539,7 @@ class SchoolTimetableView(View):
     group = '/groups/teachers'
 
     template = Template("www/schooltt.pt", content_type="text/xml")
+    authorization = PublicAccess
 
     schema = read_file("../schema/schooltt.rng")
 
@@ -661,6 +667,7 @@ class TimePeriodServiceView(View):
     """View for the time period service"""
 
     template = Template("www/time_service.pt", content_type="text/xml")
+    authorization = PublicAccess
 
     def periods(self):
         base = getPath(self.context)
@@ -673,6 +680,8 @@ class TimePeriodServiceView(View):
 
 class TimePeriodCreatorView(SchooldayModelCalendarView):
     """View for the time period service items"""
+
+    authorization = PublicAccess
 
     def __init__(self, service, key):
         if key in service:

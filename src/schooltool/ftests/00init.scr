@@ -36,7 +36,7 @@ POST> href="/groups/teachers"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created: http://localhost:8813/groups/root/relationships/0001
+Relationship created: http://localhost:8813/groups/root/relationships/0002
 
 SchoolTool> post /groups/root/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -45,7 +45,7 @@ POST> href="/groups/students"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created: http://localhost:8813/groups/root/relationships/0002
+Relationship created: http://localhost:8813/groups/root/relationships/0003
 
 SchoolTool> post /groups/root/relationships
 POST> arcrole="http://schooltool.org/ns/membership"
@@ -54,7 +54,7 @@ POST> href="/groups/cleaners"
 POST> .
 201 Created
 Content-Type: text/plain
-Relationship created: http://localhost:8813/groups/root/relationships/0003
+Relationship created: http://localhost:8813/groups/root/relationships/0004
 
 SchoolTool> put /persons/Mark
 PUT> title="Mark"

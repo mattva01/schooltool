@@ -131,6 +131,7 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
         tt = context.timetables['2003 fall', 'weekly'] = TimetableStub()
         context.overlay['2003 spring', 'weekly'] = TimetableStub()
         view = view_class(context, **kwargs)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub()
 
         result = view.render(request)
@@ -158,10 +159,12 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
         self.assert_(view2.context is context)
         self.assertEquals(view2.time_period, '2003 fall')
 
+        view2.authorization = lambda ctx, rq: True
         result = view2.render(request)
         self.assertEquals(request.code, 404)
 
         view3 = view2._traverse('weekly', request)
+        view3.authorization = lambda ctx, rq: True
         self.assert_(view3.__class__ is tt_view_class,
                      '%r is not %r' % (view3.__class__, tt_view_class))
 
@@ -465,7 +468,9 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     def do_test_get(self, context, expected, ctype="text/xml", accept=()):
         request = RequestStub('...object/timetables/x/y')
         request.accept = accept
-        result = self.createView(context).render(request)
+        view = self.createView(context)
+        view.authorization = lambda ctx, rq: True
+        result = view.render(request)
         self.assertEquals(request.headers['Content-Type'],
                           "%s; charset=UTF-8" % ctype)
         self.assertEqualsXML(result, expected, recursively_sort=['timetable'])
@@ -568,6 +573,7 @@ class TestTimetableReadWriteView(TestTimetableReadView):
 
     def test_get_nonexistent(self):
         view = self.createView(None)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 404)
@@ -601,6 +607,7 @@ class TestTimetableReadWriteView(TestTimetableReadView):
 
     def do_test_put(self, timetabled, key, xml, expected):
         view = self.createView(timetabled=timetabled, key=key)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub(method="PUT", body=xml,
                               headers={'Content-Type': 'text/xml'})
         result = view.render(request)
@@ -618,6 +625,7 @@ class TestTimetableReadWriteView(TestTimetableReadView):
         key = ('2003 fall', 'wekly')
         timetabled = self.createTimetabled()
         view = self.createView(None, timetabled, key)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub(method="PUT", body=self.full_xml,
                               headers={'Content-Type': 'text/xml'})
         result = view.render(request)
@@ -629,6 +637,7 @@ class TestTimetableReadWriteView(TestTimetableReadView):
         key = ('2003 faal', 'weekly')
         timetabled = self.createTimetabled()
         view = self.createView(None, timetabled, key)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub(method="PUT", body=self.full_xml,
                               headers={'Content-Type': 'text/xml'})
         result = view.render(request)
@@ -641,6 +650,7 @@ class TestTimetableReadWriteView(TestTimetableReadView):
             xml = self.empty_xml
         context = self.createEmpty()
         view = self.createView(context)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub(method="PUT", body=xml,
                               headers={'Content-Type': ctype})
         result = view.render(request)
@@ -669,6 +679,7 @@ class TestTimetableReadWriteView(TestTimetableReadView):
         timetabled = self.createTimetabled()
         context = timetabled.timetables[key] = self.createEmpty()
         view = self.createView(context, timetabled, key)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub(method="DELETE")
         result = view.render(request)
         self.assertEquals(request.code, 200)
@@ -677,6 +688,7 @@ class TestTimetableReadWriteView(TestTimetableReadView):
 
     def test_delete_nonexistent(self):
         view = self.createView(None)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub(method="DELETE")
         result = view.render(request)
         self.assertEquals(request.code, 404)
@@ -928,6 +940,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
 
     def test_get_nonexistent(self):
         view = self.createView(None)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 404)
@@ -938,6 +951,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
         service = TimetableSchemaService()
         context = service[key] = self.createEmpty()
         view = self.createView(context, service, key)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub(method="DELETE")
         result = view.render(request)
         self.assertEquals(request.code, 200)
@@ -946,6 +960,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
 
     def test_delete_nonexistent(self):
         view = self.createView(None)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub(method="DELETE")
         result = view.render(request)
         self.assertEquals(request.code, 404)
@@ -982,6 +997,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
         key = 'weekly'
         service = TimetableSchemaService()
         view = self.createView(None, service, key)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub(method="PUT", body=self.schema_xml,
                               headers={'Content-Type': 'text/xml'})
         result = view.render(request)
@@ -996,11 +1012,13 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
         key = 'weekly'
         service = TimetableSchemaService()
         view = self.createView(None, service, key)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub(method="PUT", body=self.schema_xml,
                               headers={'Content-Type': 'text/xml'})
         view.render(request)
 
         view2 = self.createView(service[key], service, key)
+        view2.authorization = lambda ctx, rq: True
 
         request = RequestStub()
         result = view2.render(request)
@@ -1015,6 +1033,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
         key = 'weekly'
         service = TimetableSchemaService()
         view = self.createView(None, service, key)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub(method="PUT", body=xml,
                               headers={'Content-Type': ctype})
         result = view.render(request)
@@ -1043,6 +1062,7 @@ class TestTimetableSchemaServiceView(XMLCompareMixin, unittest.TestCase):
         context = TimetableSchemaService()
         setPath(context, '/ttservice')
         view = TimetableSchemaServiceView(context)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 200)
@@ -1179,6 +1199,7 @@ class TestSchoolTimetableView(XMLCompareMixin, RegistriesSetupMixin,
 
         self.key = ('2003-spring', '2day')
         self.view = SchoolTimetableView(app, key=self.key)
+        self.view.authorization = lambda ctx, rq: True
 
         service = getTimetableSchemaService(self.app)
 
@@ -1404,6 +1425,7 @@ class TestTimePeriodServiceView(XMLCompareMixin, unittest.TestCase):
         context = TimePeriodService()
         setPath(context, '/time-periods')
         view = TimePeriodServiceView(context)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 200)
@@ -1458,6 +1480,7 @@ class TestTimePeriodCreatorView(unittest.TestCase):
         service = TimePeriodService()
         key = '2003 fall'
         view = TimePeriodCreatorView(service, key)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 404)
@@ -1465,6 +1488,7 @@ class TestTimePeriodCreatorView(unittest.TestCase):
         sm = service[key] = SchooldayModelStub()
         setPath(sm, '/time-periods/%s' % key)
         view = TimePeriodCreatorView(service, key)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 200)
@@ -1479,6 +1503,7 @@ class TestTimePeriodCreatorView(unittest.TestCase):
         setPath(service, '/time-periods')
         key = '2003 fall'
         view = TimePeriodCreatorView(service, key)
+        view.authorization = lambda ctx, rq: True
         body = dedent("""
             BEGIN:VCALENDAR
             BEGIN:VEVENT
@@ -1504,6 +1529,7 @@ class TestTimePeriodCreatorView(unittest.TestCase):
         key = '2003 fall'
         service[key] = SchooldayModelStub()
         view = TimePeriodCreatorView(service, key)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub(method='DELETE')
         result = view.render(request)
         self.assertEquals(request.code, 200)
@@ -1516,6 +1542,7 @@ class TestTimePeriodCreatorView(unittest.TestCase):
         service = TimePeriodService()
         key = '2003 fall'
         view = TimePeriodCreatorView(service, key)
+        view.authorization = lambda ctx, rq: True
         request = RequestStub(method='DELETE')
         result = view.render(request)
         self.assertEquals(request.code, 404)

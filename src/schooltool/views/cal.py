@@ -32,6 +32,7 @@ from schooltool.interfaces import IApplicationObject
 from schooltool.views import View, Template, absoluteURL
 from schooltool.views import textErrorPage, notFoundPage
 from schooltool.views import read_file
+from schooltool.views.auth import PublicAccess, PrivateAccess, TeacherAccess
 from schooltool.cal import ICalReader, ICalParseError, CalendarEvent
 from schooltool.cal import ical_text, ical_duration, Period
 from schooltool.common import parse_date, parse_datetime
@@ -50,6 +51,8 @@ complex_prop_names = ('RRULE', 'RDATE', 'EXRULE', 'EXDATE')
 
 class SchooldayModelCalendarView(View):
     """iCalendar view for ISchooldayModel."""
+
+    authorization = PublicAccess
 
     datetime_hook = datetime.datetime
 
@@ -192,6 +195,8 @@ class SchooldayModelCalendarView(View):
 class CalendarReadView(View):
     """iCalendar read only view for ICalendar."""
 
+    authorization = PublicAccess
+
     datetime_hook = datetime.datetime
 
     def do_GET(self, request):
@@ -239,6 +244,8 @@ class CalendarReadView(View):
 
 class CalendarView(CalendarReadView):
     """iCalendar r/w view for ICalendar."""
+
+    authorization = PrivateAccess
 
     def do_PUT(self, request):
         ctype = request.getHeader('Content-Type')
@@ -296,8 +303,10 @@ class CalendarView(CalendarReadView):
 
 
 class BookingView(View):
+    """Resource booking (...object/booking)"""
 
     schema = read_file("../schema/booking.rng")
+    authorization = TeacherAccess
 
     do_GET = staticmethod(notFoundPage)
 
@@ -357,13 +366,14 @@ class BookingView(View):
 
 
 class AllCalendarsView(View):
-    """List of all calendars.
+    """List of all calendars (/calendars.html).
 
     This is a  view on the top-level application object that generates an HTML
     page with links to the calendars of all groups, persons and resources.
     """
 
     template = Template("www/all_calendars.pt")
+    authorization = PublicAccess
 
     def groups(self):
         return self._list('groups')

@@ -32,6 +32,7 @@ from schooltool.component import getFacetFactory, iterFacetFactories
 from schooltool.views import View, Template, textErrorPage
 from schooltool.views import XMLPseudoParser
 from schooltool.views import absoluteURL
+from schooltool.views.auth import PublicAccess
 
 __metaclass__ = type
 
@@ -46,6 +47,7 @@ class FacetView(View):
     """
 
     template = Template('www/facet.pt', content_type="text/xml")
+    authorization = PublicAccess
 
     def active(self):
         if self.context.active:
@@ -72,6 +74,7 @@ class FacetManagementView(View, XMLPseudoParser):
     """A view of IFacetManager."""
 
     template = Template("www/facets.pt", content_type="text/xml")
+    authorization = PublicAccess
 
     def _traverse(self, name, request):
         return getView(self.context.facetByName(name))

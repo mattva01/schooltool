@@ -42,6 +42,7 @@ class TestUtilityServiceView(XMLCompareMixin, RegistriesSetupMixin,
         self.app = Application()
         self.app.utilityService["foo"] = UtilityStub("Foo utility")
         self.view = UtilityServiceView(self.app.utilityService)
+        self.view.authorization = lambda ctx, rq: True
 
     def test_render(self):
         request = RequestStub("http://localhost/groups")
@@ -78,6 +79,7 @@ class TestUtilityView(XMLCompareMixin, RegistriesSetupMixin,
         self.app = Application()
         self.app.utilityService["foo"] = UtilityStub("Foo utility")
         self.view = UtilityView(self.app.utilityService['foo'])
+        self.view.authorization = lambda ctx, rq: True
 
     def test_render(self):
         request = RequestStub("http://localhost/groups")

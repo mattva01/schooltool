@@ -238,7 +238,6 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assert_(conn.closed)
 
     def test_request_auth(self):
-        from schooltool.clients.guiclient import SchoolToolClient
         response = ResponseStub(200, 'OK')
         client = self.newClient(response)
         result = client._request('GET', '/')
@@ -253,7 +252,6 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         result = client._request('GET', '/')
         conn = self.oneConnection(client)
         self.assertEquals(conn.headers['Authorization'], "Basic " + data)
-
 
     def test_request_with_errors(self):
         from schooltool.clients.guiclient import SchoolToolError

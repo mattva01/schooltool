@@ -175,6 +175,10 @@ class View(Resource):
                     or raise a KeyError.
         do_FOO      Method that processes HTTP requests FOO for various values
                     of FOO.  Its signature should match render.
+        authorization
+                    Callable that takes a context and a request and returns
+                    True if that request is authorized.  See also,
+                    schooltool.views.auth
 
     """
 
@@ -204,6 +208,11 @@ class View(Resource):
         request.setHeader('Allow', ', '.join(self.allowedMethods()))
         handler = getattr(self, 'do_%s' % request.method, None)
         if handler is not None:
+            if not self.authorization(self.context, request):
+                request.setHeader('WWW-Authenticate',
+                                  'basic realm="SchoolTool"')
+                return textErrorPage(request, "Bad username or password",
+                                     code=401)
             self.request = request
             body = handler(request)
             self.request = None
@@ -211,7 +220,7 @@ class View(Resource):
                    "do_%s did not return a string" % request.method
             return body
         else:
-            return errorPage(request, 405, "Method Not Allowed")
+            return textErrorPage(request, "Method Not Allowed", code=405)
 
     def allowedMethods(self):
         """Lists all allowed methods."""

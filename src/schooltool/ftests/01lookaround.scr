@@ -60,6 +60,18 @@ Content-Type: text/xml; charset=UTF-8
 <eventLog>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
+    title='System Managers'
+    link='http://schooltool.org/ns/membership/group', '/groups/managers'
+    link='http://schooltool.org/ns/membership/member', '/persons/manager'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
+    title='Root Group'
+    link='http://schooltool.org/ns/membership/group', '/groups/root'
+    link='http://schooltool.org/ns/membership/member', '/groups/managers'
+</event>
+  <event ts="*">MemberAddedEvent
+    reltype='http://schooltool.org/ns/membership'
     title='Root Group'
     link='http://schooltool.org/ns/membership/group', '/groups/root'
     link='http://schooltool.org/ns/membership/member', '/groups/teachers'
@@ -177,13 +189,17 @@ Content-Type: text/html; charset=UTF-8
         Teachers (private calendar)</a>,
         <a href="http://localhost:8813/groups/teachers/timetable-calendar">
         Teachers (timetable)</a></li>
+    <li><a href="http://localhost:8813/groups/managers/calendar">
+        System Managers (private calendar)</a>,
+        <a href="http://localhost:8813/groups/managers/timetable-calendar">
+        System Managers (timetable)</a></li>
   </ul>
   <h2>Persons</h2>
   <ul>
-    <li><a href="http://localhost:8813/persons/anonymous/calendar">
-        Anonymous (private calendar)</a>,
-        <a href="http://localhost:8813/persons/anonymous/timetable-calendar">
-        Anonymous (timetable)</a></li>
+    <li><a href="http://localhost:8813/persons/manager/calendar">
+        Manager (private calendar)</a>,
+        <a href="http://localhost:8813/persons/manager/timetable-calendar">
+        Manager (timetable)</a></li>
     <li><a href="http://localhost:8813/persons/Aiste/calendar">
         Aiste (private calendar)</a>,
         <a href="http://localhost:8813/persons/Aiste/timetable-calendar">
@@ -240,6 +256,8 @@ Content-Type: text/xml; charset=UTF-8
           xlink:type="simple"/>
     <item xlink:href="/groups/teachers" xlink:title="Teachers"
           xlink:type="simple"/>
+    <item xlink:href="/groups/managers" xlink:title="System Managers"
+          xlink:type="simple"/>
   </items>
 </container>
 %% END XML
@@ -257,6 +275,8 @@ Content-Type: text/xml; charset=UTF-8
         xlink:href="/groups/students"/>
   <item xlink:type="simple" xlink:title="Cleaners"
         xlink:href="/groups/cleaners"/>
+  <item xlink:type="simple" xlink:title="System Managers"
+        xlink:href="/groups/managers"/>
   <relationships xlink:type="simple"
                  xlink:title="Relationships"
                  xlink:href="/groups/root/relationships"/>
@@ -376,6 +396,9 @@ Content-Type: text/xml; charset=UTF-8
     <group xlink:href="/groups/students" xlink:title="Students"
            xlink:type="simple">
     </group>
+    <group xlink:href="/groups/managers" xlink:title="System Managers"
+           xlink:type="simple">
+    </group>
   </group>
 </tree>
 %% END XML
@@ -410,8 +433,8 @@ Content-Type: text/xml; charset=UTF-8
           xlink:title="Albert"/>
     <item xlink:type="simple" xlink:href="/persons/Marius"
           xlink:title="Marius"/>
-    <item xlink:type="simple" xlink:href="/persons/anonymous"
-          xlink:title="Anonymous"/>
+    <item xlink:type="simple" xlink:href="/persons/manager"
+          xlink:title="Manager"/>
   </items>
 </container>
 %% END XML

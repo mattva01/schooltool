@@ -154,6 +154,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(len(list(context.iterAbsences())), 2)
         view = AbsenceManagementView(context)
         request = RequestStub("http://localhost/person/absences")
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
@@ -179,6 +180,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         request = RequestStub(baseurl[:-1], method="POST",
                     body='text="Foo" reporter="."')
 
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
 
         self.assertEquals(request.code, 201)
@@ -208,6 +210,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         request = RequestStub(baseurl[:-1], method="POST",
                     body='text="Bar" reporter="."')
 
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
 
         self.assertEquals(request.code, 200)
@@ -235,6 +238,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         request = RequestStub(baseurl[:-1], method="POST",
                     body='')
 
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
 
         self.assertEquals(request.code, 400)
@@ -270,6 +274,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         absence = self.createAbsence()
         view = AbsenceView(absence)
         request = RequestStub("http://localhost/person/absences/001")
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
@@ -304,6 +309,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         baseurl = "http://localhost" + basepath
         request = RequestStub(baseurl[:-1], method="POST",
                     body='text="Foo" reporter="."')
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.reason, "OK")
@@ -322,6 +328,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         request = RequestStub(baseurl[:-1], method="POST",
                     body='text="Foo" reporter="/does/not/exist"')
         view = AbsenceView(absence)
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.reason, "Bad Request")
@@ -341,6 +348,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         request = RequestStub(baseurl[:-1], method="POST",
                     body='text="Foo" reporter="." ended="unended"')
         view = AbsenceView(absence)
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.reason, "Bad Request")
@@ -393,6 +401,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
                 expected_presence=datetime.datetime(2001, 1, 1, 2, 2, 2)))
         view = RollcallView(self.group)
         request = RequestStub("http://localhost/group/rollcall")
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.headers['Content-Type'],
                           "text/xml; charset=UTF-8")
@@ -438,6 +447,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
                       xlink:title="d" presence="absent"/>
             </rollcall>
                               """ % text)
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.reason, "OK")
@@ -483,6 +493,7 @@ class TestRollcallView(XMLCompareMixin, RegistriesSetupMixin,
         view = RollcallView(self.group)
         request = RequestStub("http://localhost/group/rollcall",
                               method="POST", body=body)
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.reason, "Bad Request")
@@ -671,6 +682,7 @@ class TestAbsenceTrackerView(XMLCompareMixin, RegistriesSetupMixin,
         dt = datetime.datetime(2001, 2, 3, 4, 5, 6)
         self.person.reportAbsence(AbsenceComment(dt=dt))
         self.view = AbsenceTrackerView(self.tracker)
+        self.view.authorization = lambda ctx, rq: True
 
     def test_get(self):
         request = RequestStub("http://localhost/utils/absences/")
@@ -699,6 +711,7 @@ class TestAbsenceTrackerTextView(XMLCompareMixin, RegistriesSetupMixin,
         request = RequestStub("http://localhost/utils/absences/")
         request.accept = [(1, 'text/plain', {}, {}),
                           (0.5, 'text/html', {}, {})]
+        view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.headers['Content-Type'],
                           "text/plain; charset=UTF-8")
@@ -725,12 +738,13 @@ class TestAbsenceTrackerTextView(XMLCompareMixin, RegistriesSetupMixin,
         app.utilityService['absences'] = self.tracker
         app.eventService.subscribe(self.tracker, IAttendanceEvent)
         self.persons = app['persons'] = ApplicationObjectContainer(Person)
-        self.view = AbsenceTrackerView(self.tracker)
-        self.view.utcnow = lambda: datetime.datetime(2003, 11, 3, 12, 35)
+        view = AbsenceTrackerView(self.tracker)
+        view.utcnow = lambda: datetime.datetime(2003, 11, 3, 12, 35)
+        view.authorization = lambda ctx, rq: True
 
         request = RequestStub("http://localhost/utils/absences/")
         request.accept = [('1', 'text/plain', {}, {})]
-        result = self.view.render(request)
+        result = view.render(request)
         self.assertEquals(request.headers['Content-Type'],
                           "text/plain; charset=UTF-8")
 
@@ -777,7 +791,7 @@ class TestAbsenceTrackerTextView(XMLCompareMixin, RegistriesSetupMixin,
         dt = datetime.datetime(2003, 11, 1, 9, 0, 0)
         vika.reportAbsence(AbsenceComment(dt=dt, expected_presence=exp,
                                           text='vacation'))
-        result = self.view.render(request)
+        result = view.render(request)
         expected = dedent(r"""
             Absences at 12:35pm 2003-11-03 UTC
             ==================================
@@ -820,6 +834,7 @@ class TestAbsenceTrackerFacetView(TestAbsenceTrackerView):
         dt = datetime.datetime(2001, 2, 3, 4, 5, 6)
         self.person.reportAbsence(AbsenceComment(dt=dt))
         self.view = AbsenceTrackerFacetView(self.facet)
+        self.view.authorization = lambda ctx, rq: True
 
     def testDelete(self):
         request = RequestStub("http://localhost/persons/a/facets/001",

@@ -33,6 +33,7 @@ from schooltool.views import TraversableView, XMLPseudoParser
 from schooltool.views import absoluteURL, notFoundPage, textErrorPage
 from schooltool.views.timetable import SchoolTimetableTraverseView
 from schooltool.views.cal import AllCalendarsView
+from schooltool.views.auth import PublicAccess
 from schooltool.common import parse_date
 
 __metaclass__ = type
@@ -45,6 +46,7 @@ class ApplicationView(TraversableView):
     """The root view for the application"""
 
     template = Template("www/app.pt", content_type="text/xml")
+    authorization = PublicAccess
 
     def _traverse(self, name, request):
         if name == 'schooltt':
@@ -97,6 +99,7 @@ class ApplicationObjectContainerView(TraversableView,
     """The view for the application object containers"""
 
     template = Template("www/aoc.pt", content_type="text/xml")
+    authorization = PublicAccess
 
     def getName(self):
         return self.context.__name__
@@ -119,6 +122,8 @@ class ApplicationObjectContainerView(TraversableView,
 class ApplicationObjectCreatorView(View, ApplicationObjectCreator):
     """View for non-existing application objects"""
 
+    authorization = PublicAccess
+
     def __init__(self, container, name):
         View.__init__(self, container)
         self.name = name
@@ -131,8 +136,10 @@ class ApplicationObjectCreatorView(View, ApplicationObjectCreator):
 
 
 class AvailabilityQueryView(View):
+    """Busy search"""
 
     template = Template("www/availability.pt", content_type="text/xml")
+    authorization = PublicAccess
 
     def do_GET(self, request):
         """Parse the query and call the template rengering.

@@ -34,11 +34,13 @@ class RequestStub:
     code = 200
     reason = 'OK'
 
-    def __init__(self, uri='', method='GET', body='', headers=None):
+    def __init__(self, uri='', method='GET', body='', headers=None,
+                 authenticated_user=None):
         self.uri = uri
         self.method = method
         self.path = ''
         self.content = StringIO(body)
+        self.authenticated_user = authenticated_user
         self.headers = {}
         self.args = {}
         if body:
