@@ -148,6 +148,7 @@ class CalendarView(View):
             "PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN",
             "VERSION:2.0",
         ]
+        uid_hash = None
         for event in self.context:
             uid_hash = hash((event.title, event.dtstart, event.duration))
             result += [
@@ -160,6 +161,13 @@ class CalendarView(View):
                 "END:VEVENT",
             ]
         result.append("END:VCALENDAR")
+        if uid_hash is None:
+            # There were no events.  Mozilla Calendar produces a 0-length
+            # file when publishing empty calendars.  Sadly it does not then
+            # accept them (http://bugzilla.mozilla.org/show_bug.cgi?id=229266).
+            # XXX I'm not sure if a 0-length file is a valid text/calendar
+            # object according to RFC 2445.
+            result = []
         request.setHeader('Content-Type', 'text/calendar; charset=UTF-8')
         return "\r\n".join(result)
 
@@ -170,6 +178,7 @@ class CalendarView(View):
         if ctype != 'text/calendar':
             return textErrorPage(request,
                                  "Unsupported content type: %s" % ctype)
+        events = []
         reader = ICalReader(request.content)
         try:
             for event in reader.iterEvents():
@@ -178,12 +187,14 @@ class CalendarView(View):
                 if has_complex_props:
                     return textErrorPage(request,
                              "Repeating events/exceptions not yet supported")
-                self.context.addEvent(
-                        CalendarEvent(event.dtstart, event.duration,
-                                      event.summary))
+                events.append(CalendarEvent(event.dtstart, event.duration,
+                                            event.summary))
         except ICalParseError, e:
             return textErrorPage(request, str(e))
         else:
+            self.context.clear()
+            for event in events:
+                self.context.addEvent(event)
             request.setHeader('Content-Type', 'text/plain')
             return "Calendar imported"
 
@@ -192,8 +203,7 @@ class AllCalendarsView(View):
     """List of all calendars.
 
     This is a  view on the top-level application object that generates an HTML
-    page with webcal:// links to the private calendars of all groups and
-    persons.
+    page with links to the private calendars of all groups and persons.
     """
 
     template = Template("www/all_calendars.pt")

@@ -813,6 +813,16 @@ class ICalendar(Interface):
         """
 
 
+class ICalendarWrite(Interface):
+    """Writable calendar."""
+
+    def clear():
+        """Removes all events."""
+
+    def addEvent(event):
+        """Adds an event to the calendar."""
+
+
 class ICalendarEvent(Interface):
     """A calendar event."""
 

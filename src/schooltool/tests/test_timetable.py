@@ -466,7 +466,6 @@ class TestSchooldayTemplate(unittest.TestCase):
 
     def test_add_remove_iter(self):
         from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
-        from schooltool.interfaces import ISchooldayPeriod
 
         tmpl = SchooldayTemplate()
         self.assertEqual(list(iter(tmpl)), [])
@@ -489,7 +488,6 @@ class TestSchooldayTemplate(unittest.TestCase):
 
     def test_eq(self):
         from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
-        from schooltool.interfaces import ISchooldayPeriod
 
         tmpl = SchooldayTemplate()
         tmpl.add(SchooldayPeriod("1", time(9, 0), timedelta(minutes=45)))

@@ -622,7 +622,7 @@ class TestICalReader(unittest.TestCase):
         self.assertRaises(ICalParseError, list, reader.iterEvents())
 
         reader = ICalReader(StringIO(""))
-        self.assertRaises(ICalParseError, list, reader.iterEvents())
+        self.assertEquals(list(reader.iterEvents()), [])
 
     def test_iterRow(self):
         from schooltool.cal import ICalReader
@@ -722,9 +722,10 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
 
     def test(self):
         from schooltool.cal import Calendar
-        from schooltool.interfaces import ICalendar, ILocation
+        from schooltool.interfaces import ICalendar, ICalendarWrite, ILocation
         cal = Calendar()
         verifyObject(ICalendar, cal)
+        verifyObject(ICalendarWrite, cal)
         verifyObject(ILocation, cal)
 
     def test_iter(self):
@@ -795,6 +796,18 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
         cal = self.makeCal([ev1, ev2, ev3, ev4])
         self.assertEqualSorted(list(cal.byDate(date(2003, 11, 26))),
                                [ev3])
+
+    def test_clear(self):
+        from schooltool.cal import CalendarEvent
+        ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
+                            timedelta(minutes=10),
+                            "English")
+        ev2 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                            timedelta(minutes=10),
+                            "Latin")
+        cal = self.makeCal([ev1, ev2])
+        cal.clear()
+        self.assertEquals(list(cal), [])
 
 
 class TestCalendarPersistence(unittest.TestCase):
@@ -867,6 +880,17 @@ class TestCalendarPersistence(unittest.TestCase):
             datamgr = self.db.open()
             cal2 = datamgr.root()['cal']
             self.assertEquals(list(cal2), [e])
+        finally:
+            get_transaction().abort()
+            datamgr.close()
+
+        cal.clear()
+        get_transaction().commit()
+
+        try:
+            datamgr = self.db.open()
+            cal2 = datamgr.root()['cal']
+            self.assertEquals(list(cal2), [])
         finally:
             get_transaction().abort()
             datamgr.close()

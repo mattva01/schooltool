@@ -309,6 +309,7 @@ class BaseTimetableModel:
     def __ne__(self, other):
         return not self == other
 
+
 class SequentialDaysTimetableModel(BaseTimetableModel):
     """A timetable model in which the school days go in sequence with
     shifts over non-schooldays:

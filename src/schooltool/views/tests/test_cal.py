@@ -65,6 +65,7 @@ class CalendarTestBase(unittest.TestCase):
         expected = "\r\n".join(expected.splitlines()) # normalize line endings
         result = reorder_vcal(result)
         expected = reorder_vcal(expected)
+        self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['Content-Type'],
                           "text/calendar; charset=UTF-8")
         self.assertEquals(result, expected, "\n" + diff(expected, result))
@@ -314,12 +315,7 @@ class TestCalendarView(NiceDiffsMixin, CalendarTestBase):
 
     def test_get_empty(self):
         self._create()
-        self.do_test_get(dedent("""
-            BEGIN:VCALENDAR
-            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
-            VERSION:2.0
-            END:VCALENDAR
-        """))
+        self.do_test_get("")
 
     def test_get_empty(self):
         from schooltool.cal import CalendarEvent
@@ -350,6 +346,23 @@ class TestCalendarView(NiceDiffsMixin, CalendarTestBase):
             END:VEVENT
             END:VCALENDAR
         """))
+
+    def test_put_empty(self):
+        from schooltool.cal import CalendarEvent
+        request = RequestStub("http://localhost/calendar", method="PUT",
+                              headers={"Content-Type": "text/calendar"},
+                              body="")
+        cal = self._create()
+        cal.addEvent(CalendarEvent(datetime.date(2003, 9, 1),
+                                   datetime.timedelta(1),
+                                   "Delete me"))
+        result = self.view.render(request)
+        self.assertEquals(result, "Calendar imported")
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        events = list(cal)
+        expected = []
+        self.assertEquals(sorted(events), sorted(expected))
 
     def test_put(self):
         from schooltool.cal import CalendarEvent
@@ -384,6 +397,9 @@ class TestCalendarView(NiceDiffsMixin, CalendarTestBase):
                               headers={"Content-Type": "text/calendar"},
                               body=calendar)
         cal = self._create()
+        cal.addEvent(CalendarEvent(datetime.date(2003, 9, 1),
+                                   datetime.timedelta(1),
+                                   "Delete me"))
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.code, 200)

@@ -29,7 +29,8 @@ from zope.interface import implements
 from persistence import Persistent
 from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
 from schooltool.interfaces import ILocation, IDateRange
-from schooltool.interfaces import ICalendar, ICalendarEvent, ICalendarOwner
+from schooltool.interfaces import ICalendar, ICalendarWrite, ICalendarEvent
+from schooltool.interfaces import ICalendarOwner
 
 __metaclass__ = type
 
@@ -784,7 +785,8 @@ class ICalReader:
             else:
                 # strictly speaking this is a violation of RFC 2445
                 record.append(line)
-        yield self._parseRow("".join(record))
+        if record:
+            yield self._parseRow("".join(record))
 
     def iterEvents(self):
         """Iterate over all VEVENT objects in an ICalendar file."""
@@ -796,7 +798,11 @@ class ICalReader:
             if (key, value, params) != ('BEGIN', 'VCALENDAR', {}):
                 raise ICalParseError('This is not iCalendar')
         except StopIteration:
-            raise ICalParseError('This is not iCalendar')
+            # The file is empty.  Mozilla produces a 0-length file when
+            # publishing an empty calendar.  Let's accept it as a valid
+            # calendar that has no events.  XXX I'm not sure if a 0-length
+            # file is a valid text/calendar object according to RFC 2445.
+            raise
         component_stack = ['VCALENDAR']
 
         # Extract all VEVENT components
@@ -854,7 +860,7 @@ def markNonSchooldays(ical_reader, schoolday_model):
 
 class Calendar(Persistent):
 
-    implements(ICalendar, ILocation)
+    implements(ICalendar, ICalendarWrite, ILocation)
 
     def __init__(self):
         self.events = Set()
@@ -875,6 +881,10 @@ class Calendar(Persistent):
 
     def addEvent(self, event):
         self.events.add(event)
+        self.events = self.events  # make persistence work
+
+    def clear(self):
+        self.events.clear()
         self.events = self.events  # make persistence work
 
 
