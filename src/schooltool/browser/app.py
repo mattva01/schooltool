@@ -388,8 +388,11 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
     prev_title = u""
     duplicate_warning = False
 
-    title = _("Add object") # should be overridden by subclasses
-    parent = None           # can be set by subclasses
+    # Subclasses should override the title attribute
+    title = property(lambda self: _("Add object"))
+
+    # Subclasses can set the parent attribute
+    parent = None
 
     def do_GET(self, request):
         self._processExtraFormFields(request)
@@ -464,9 +467,11 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
 class GroupAddView(ObjectAddView):
     """View for adding groups (/groups/add.html)."""
 
-    title = _("Add group")
+    title = property(lambda self: self._title)
+    _title = "Add group" # translation happens in _processExtraFormFields
 
     def _processExtraFormFields(self, request):
+        self._title = _("Add group")
         self.parent = None
         parent_id = request.args.get('parentgroup', [None])[0]
         if parent_id:
@@ -475,14 +480,14 @@ class GroupAddView(ObjectAddView):
             except KeyError:
                 pass
             else:
-                self.title = (_("Add group (a subgroup of %s)")
-                              % self.parent.title)
+                self._title = (_("Add group (a subgroup of %s)")
+                               % self.parent.title)
 
 
 class ResourceAddView(ObjectAddView):
     """View for adding resources (/resources/add.html)."""
 
-    title = _("Add resource")
+    title = property(lambda self: _("Add resource"))
 
     template = Template('www/resource_add.pt')
 
@@ -499,17 +504,17 @@ class ResourceAddView(ObjectAddView):
 class NoteAddView(View):
     """View for adding notes."""
 
-    title = _("Add note")
+    title = property(lambda self: _("Add note"))
 
     error = u""
 
-    relname = _('Noted')
+    relname = property(lambda self: _('Noted'))
 
     template = Template('www/note_add.pt')
 
     authorization = AuthenticatedAccess
 
-    errormessage = _("Cannot add %(note)s to %(this)s")
+    errormessage = property(lambda self: _("Cannot add %(note)s to %(this)s"))
 
     def __init__(self, context):
         View.__init__(self, context)
@@ -602,8 +607,8 @@ class PersonContainerView(ObjectContainerView):
 
     add_view = PersonAddView
     obj_view = PersonView
-    index_title = _("Person index")
-    add_title = _("Add a new person")
+    index_title = property(lambda self: _("Person index"))
+    add_title = property(lambda self: _("Add a new person"))
 
 
 class GroupContainerView(ObjectContainerView):
@@ -611,8 +616,8 @@ class GroupContainerView(ObjectContainerView):
 
     add_view = GroupAddView
     obj_view = GroupView
-    index_title = _("Group index")
-    add_title = _("Add a new group")
+    index_title = property(lambda self: _("Group index"))
+    add_title = property(lambda self: _("Add a new group"))
 
 
 class ResourceContainerView(ObjectContainerView):
@@ -620,8 +625,8 @@ class ResourceContainerView(ObjectContainerView):
 
     add_view = ResourceAddView
     obj_view = ResourceView
-    index_title = _("Resource index")
-    add_title = _("Add a new resource")
+    index_title = property(lambda self: _("Resource index"))
+    add_title = property(lambda self: _("Add a new resource"))
 
 
 class NoteContainerView(ObjectContainerView):
@@ -631,8 +636,8 @@ class NoteContainerView(ObjectContainerView):
 
     add_view = NoteAddView
     obj_view = NoteView
-    index_title = _("Notes")
-    add_title = _("Add a new note")
+    index_title = property(lambda self: _("Notes"))
+    add_title = property(lambda self: _("Add a new note"))
 
 
 class BusySearchView(View, ToplevelBreadcrumbsMixin):
@@ -863,7 +868,7 @@ class OptionsView(View, ToplevelBreadcrumbsMixin):
 
     authorization = ManagerAccess
 
-    title = _("System options")
+    title = property(lambda self: _("System options"))
 
     template = Template('www/options.pt')
 
