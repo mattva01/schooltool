@@ -30,11 +30,11 @@ from StringIO import StringIO
 from schooltool.browser import View, Template
 from schooltool.browser import absoluteURL
 from schooltool.browser.auth import AuthenticatedAccess, ManagerAccess
-from schooltool.component import FacetManager
-from schooltool.component import getRelatedObjects
+from schooltool.component import FacetManager, getRelatedObjects, getPath
 from schooltool.interfaces import IPerson
 from schooltool.interfaces import IGroup
 from schooltool.rest.infofacets import maxspect
+from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember, URIGroup
 
 __metaclass__ = type
@@ -111,6 +111,9 @@ class PersonEditView(View, PersonInfoMixin):
             except IOError:
                 self.error = 'Invalid photo'
                 return self.do_GET(request)
+            else:
+                request.appLog(_("Photo added on %s (%s)") %
+                               (self.context.title, getPath(self.context)))
 
         infofacet = self.info()
         infofacet.first_name = first_name
@@ -119,6 +122,9 @@ class PersonEditView(View, PersonInfoMixin):
         infofacet.comment = comment
         if photo:
             infofacet.photo = photo
+
+        request.appLog(_("Person info updated on %s (%s)") %
+                       (self.context.title, getPath(self.context)))
 
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)

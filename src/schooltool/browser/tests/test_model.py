@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 import datetime
+from logging import INFO
 
 from schooltool.browser.tests import RequestStub, setPath, TraversalTestMixin
 from schooltool.tests.utils import RegistriesSetupMixin
@@ -85,6 +86,7 @@ class TestPersonEditView(unittest.TestCase):
         from schooltool.model import Person
 
         self.person = Person()
+        self.person.title = "Mr. Wise Guy"
         setPath(self.person, '/persons/somebody')
         self.info = FacetManager(self.person).facetByName('person_info')
         return PersonEditView(self.person)
@@ -97,6 +99,11 @@ class TestPersonEditView(unittest.TestCase):
                                     'comment': 'For some \xc4\x99 reason.',
                                     'photo': 'P6\n1 1\n255\n\xff\xff\xff'})
         view.do_POST(request)
+
+        self.assertEquals(request.applog,
+            [(None, u'Photo added on Mr. Wise Guy (/persons/somebody)', INFO),
+             (None, u'Person info updated on I Changed \u0105'
+                    u' My Name \u010d Recently (/persons/somebody)', INFO)])
 
         self.assertEquals(self.info.first_name, u'I Changed \u0105')
         self.assertEquals(self.info.last_name, u'My Name \u010d Recently')
@@ -115,6 +122,9 @@ class TestPersonEditView(unittest.TestCase):
                                     'comment': 'For various reasons.',
                                     'photo': ''})
         view.do_POST(request)
+        self.assertEquals(request.applog,
+            [(None, u'Person info updated on I Changed'
+                    u' My Name Recently (/persons/somebody)', INFO)])
         self.assertEquals(self.info.date_of_birth, datetime.date(2004, 8, 6))
         self.assert_('JFIF' in self.info.photo)
 
