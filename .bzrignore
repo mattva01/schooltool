@@ -260,3 +260,4 @@ src/schooltool/rest/www/*~
 src/schooltool/rest/www/*.so
 ./*.log
 ./roster.txt
+./schoolbell-data.fs*
