@@ -157,6 +157,8 @@ class TestTimetableSchemaWizard(AppSetupMixin, unittest.TestCase):
         request = view.request
         result = view.render(request)
         self.assertEquals(request.code, 200)
+        self.assertEquals(view.name, 'default')
+        self.assertEquals(view.name_error, None)
 
     def test_with_data(self):
         view = self.createView()

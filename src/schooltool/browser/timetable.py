@@ -127,22 +127,28 @@ class TimetableSchemaWizard(View):
     template = Template("www/ttwizard.pt")
 
     def do_GET(self, request):
-        self.ttschema = self._buildSchema()
-        self.name = self.request.args.get('name', ['default'])[0].strip()
-        if not self.name:
-            self.name_error = _("Timetable schema name must not be empty")
-        elif not valid_name(self.name):
-            self.name_error = _("Timetable schema name can only contain"
-                                " English letters, numbers, and the following"
-                                " punctuation characters: . , ' ( )")
-        elif self.name in self.context.keys():
-            self.name_error = _("Timetable schema with this name"
-                                " already exists.")
+        self.name_error = None
+        if 'name' not in self.request.args:
+            self.name = 'default'
         else:
-            self.name_error = None
-        self.model_name = self.request.args.get('model', [None])[0]
+            self.name = to_unicode(self.request.args.get('name')[0]).strip()
+            if not self.name:
+                self.name_error = _("Timetable schema name must not be empty")
+            elif not valid_name(self.name):
+                self.name_error = _("Timetable schema name can only contain"
+                                    " English letters, numbers, and the"
+                                    " following punctuation characters:"
+                                    " . , ' ( )")
+            elif self.name in self.context.keys():
+                self.name_error = _("Timetable schema with this name"
+                                    " already exists.")
+
         self.model_error = None
+        self.model_name = to_unicode(self.request.args.get('model', [None])[0])
+
+        self.ttschema = self._buildSchema()
         self.day_templates = self._buildDayTemplates()
+
         if 'CREATE' in request.args:
             try:
                 factory = getTimetableModel(self.model_name)
@@ -287,8 +293,7 @@ class ContainerServiceViewBase(View):
     authorization = ManagerAccess
 
     def list(self):
-        for key in self.context.keys():
-            yield self.context[key]
+        return map(self.context.__getitem__, self.context.keys())
 
     def _traverse(self, name, request):
         return self.subview(self.context[name])
