@@ -107,15 +107,29 @@
     </example>
   </multikey>
 
-  <multikey name="access-log-file" datatype="string">
+  <multikey name="rest-access-log-file" datatype="string">
     <description>
-      Specifies the path of a file used for an Apache combined format access
-      log.  Special values STDERR and STDOUT mean standard error and standard
-      output respectively.
+      Specifies the path of a file used for an Apache combined format
+      access log for the RESTive API server.  Special values STDERR
+      and STDOUT mean standard error and standard output respectively.
     </description>
     <default>STDOUT</default>
     <example>
-      access-log-file /var/log/schooltool/access.log
+      access-log-file /var/log/schooltool/rest-access.log
+      access-log-file STDOUT
+    </example>
+  </multikey>
+
+  <multikey name="web-access-log-file" datatype="string">
+    <description>
+      Specifies the path of a file used for an Apache combined format
+      access log for the web application interface.  Special values
+      STDERR and STDOUT mean standard error and standard output
+      respectively.
+    </description>
+    <default>STDOUT</default>
+    <example>
+      access-log-file /var/log/schooltool/web-access.log
       access-log-file STDOUT
     </example>
   </multikey>

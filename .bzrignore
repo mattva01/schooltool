@@ -306,11 +306,13 @@ debian/files
 src/schooltool/translation/schooltool.pot
 ./*.pid
 ./schooltool.log
-./access.log
-./testserver_access.log
 ./app.log
 ./testserver_app.log
 src/schooltool/rest/www/*.pyc
 src/schooltool/rest/www/Data.fs*
 src/schooltool/rest/www/*~
 src/schooltool/rest/www/*.so
+./web-access.log
+./rest-access.log
+./testserver_rest_access.log
+./testserver_web_access.log

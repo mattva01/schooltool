@@ -23,11 +23,14 @@ $Id$
 """
 
 import unittest
+import logging
+from StringIO import StringIO
 
 from twisted.python.failure import Failure
 from zope.interface import directlyProvides
 from schooltool.browser.tests import RequestStub
 from schooltool.tests.utils import AppSetupMixin
+from twisted.internet.address import IPv4Address
 
 __metaclass__ = type
 
@@ -41,6 +44,12 @@ class ApplicationStub:
 
 
 class TestBrowserRequest(unittest.TestCase):
+
+    def tearDown(self):
+        hitlogger = logging.getLogger('schooltool.web_access')
+        del hitlogger.handlers[:]
+        hitlogger.propagate = True
+        hitlogger.setLevel(0)
 
     def createRequest(self):
         from schooltool.browser import BrowserRequest
@@ -103,6 +112,28 @@ class TestBrowserRequest(unittest.TestCase):
         self.assert_(rq.code, 500)
         self.assertEqual(rq.headers['content-type'],
                          'text/html; charset=UTF-8')
+
+    def test_logHit(self):
+        buffer = StringIO()
+        hitlogger = logging.getLogger('schooltool.web_access')
+        hitlogger.propagate = False
+        hitlogger.setLevel(logging.INFO)
+        hitlogger.addHandler(logging.StreamHandler(buffer))
+
+        rq = self.createRequest()
+        rq.user = 'manager'
+        rq.uri = '/foo/bar'
+        rq.client = IPv4Address("TCP", "192.193.194.195", 123, 'INET')
+        rq.method = 'FOO'
+        rq.clientproto = 'bar/1.2'
+        rq.received_headers['referer'] = 'http://example.com'
+        rq.received_headers['user-agent'] = 'Godzilla/115.0'
+        rq.sentLength = 42
+        rq.logHit()
+        self.assertEquals(buffer.getvalue(),
+                '192.193.194.195 - manager [%s]'
+                ' "FOO /foo/bar bar/1.2" 200 42 "http://example.com"'
+                ' "Godzilla/115.0"\n' % rq.hit_time)
 
 
 class TestView(AppSetupMixin, unittest.TestCase):

@@ -23,6 +23,7 @@ The schooltool.browser package.
 import re
 import os
 import datetime
+import logging
 
 from schooltool.interfaces import AuthenticationError
 from schooltool.component import getTicketService
@@ -59,6 +60,10 @@ class BrowserRequest(Request):
     """
 
     error_template = Template('www/error.pt')
+
+    def __init__(self, *args, **kwargs):
+        Request.__init__(self, *args, **kwargs)
+        self.hitlogger = logging.getLogger('schooltool.web_access')
 
     def maybeAuthenticate(self):
         """Try to authenticate if the authentication cookie is there."""

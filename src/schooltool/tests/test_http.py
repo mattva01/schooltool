@@ -391,7 +391,7 @@ class TestAcceptParsing(unittest.TestCase):
 class TestRequest(unittest.TestCase):
 
     def tearDown(self):
-        hitlogger = logging.getLogger('schooltool.access')
+        hitlogger = logging.getLogger('schooltool.rest_access')
         del hitlogger.handlers[:]
         hitlogger.propagate = True
         hitlogger.setLevel(0)
@@ -852,7 +852,7 @@ class TestRequest(unittest.TestCase):
     def test_logHit(self):
         from schooltool.http import Request
         buffer = StringIO()
-        hitlogger = logging.getLogger('schooltool.access')
+        hitlogger = logging.getLogger('schooltool.rest_access')
         hitlogger.propagate = False
         hitlogger.setLevel(logging.INFO)
         hitlogger.addHandler(logging.StreamHandler(buffer))

@@ -290,7 +290,7 @@ class Request(http.Request):
 
     def __init__(self, *args, **kwargs):
         self.get_transaction_hook = get_transaction
-        self.hitlogger = logging.getLogger('schooltool.access')
+        self.hitlogger = logging.getLogger('schooltool.rest_access')
         self.applogger = logging.getLogger('schooltool.app')
         self.hit_time = formatHitTime()
         self.authenticated_user = None

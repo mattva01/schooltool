@@ -215,7 +215,10 @@ class Server:
                          "%(asctime)s %(message)s")
         self.setUpLogger('schooltool.error', self.config.error_log_file,
                          "--\n%(asctime)s\n%(message)s")
-        self.setUpLogger('schooltool.access', self.config.access_log_file)
+        self.setUpLogger('schooltool.rest_access',
+                         self.config.rest_access_log_file)
+        self.setUpLogger('schooltool.web_access',
+                         self.config.web_access_log_file)
         self.setUpLogger('schooltool.app', self.config.app_log_file,
                          "%(asctime)s %(levelname)s %(message)s")
 

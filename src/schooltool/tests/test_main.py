@@ -148,9 +148,10 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
     def tearDown(self):
         sys.path[:] = self.original_path
         self.tearDownRegistries()
+
         for name in ['ZODB', 'ZODB.lock_file', 'txn', 'libxml2',
-                     'schooltool.access', 'schooltool.app', 'schooltool.error',
-                     'schooltool.server']:
+                     'schooltool.rest_access', 'schooltool.web_access',
+                     'schooltool.app', 'schooltool.error', 'schooltool.server']:
             logger = logging.getLogger(name)
             del logger.handlers[:]
             logger.propagate = True
@@ -206,7 +207,13 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         # Check that configure does not change sys.path
         self.assertEquals(sys.path, self.original_path)
 
-        hitlogger = logging.getLogger('schooltool.access')
+        hitlogger = logging.getLogger('schooltool.rest_access')
+        self.assertEquals(hitlogger.propagate, False)
+        self.assertEquals(len(hitlogger.handlers), 1)
+        self.assert_(isinstance(hitlogger.handlers[0], logging.StreamHandler))
+        self.assertEquals(hitlogger.handlers[0].stream, server.stdout)
+
+        hitlogger = logging.getLogger('schooltool.web_access')
         self.assertEquals(hitlogger.propagate, False)
         self.assertEquals(len(hitlogger.handlers), 1)
         self.assert_(isinstance(hitlogger.handlers[0], logging.StreamHandler))
