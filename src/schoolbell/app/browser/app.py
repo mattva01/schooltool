@@ -458,9 +458,12 @@ class ACLView(BrowserView):
     """A view for editing SchoolBell-relevant local grants"""
 
     permissions = [
-        ('zope.View', _('View')),
-        ('zope.ManageContent', _('Manage')),
-        ('zope.ManageSite', _('Manage Site')),
+        ('schoolbell.view', _('View')),
+        ('schoolbell.edit', _('Edit')),
+        ('schoolbell.create', _('Create new objects')),
+        ('schoolbell.addEvent', _('Add events')),
+        ('schoolbell.modifyEvent', _('Modify/delete events')),
+        ('schoolbell.controlAccess', _('Control access')),
         ]
 
     def getPersons(self):

@@ -957,9 +957,12 @@ def doctest_ACLView():
     Also it knows a list of permissions to display:
 
         >>> pprint(view.permissions)
-        [('zope.View', u'View'),
-         ('zope.ManageContent', u'Manage'),
-         ('zope.ManageSite', u'Manage Site')]
+        [('schoolbell.view', u'View'),
+         ('schoolbell.edit', u'Edit'),
+         ('schoolbell.create', u'Create new objects'),
+         ('schoolbell.addEvent', u'Add events'),
+         ('schoolbell.modifyEvent', u'Modify/delete events'),
+         ('schoolbell.controlAccess', u'Control access')]
 
     The view displays a matrix with groups and persons as rows and
     permisssions as columns:
@@ -982,22 +985,37 @@ def doctest_ACLView():
               <tr class="header">
                  <th class="principal">Group</th>
                  <th class="permission">View</th>
-                 <th class="permission">Manage</th>
-                 <th class="permission">Manage Site</th>
+                 <th class="permission">Edit</th>
+                 <th class="permission">Create new objects</th>
+                 <th class="permission">Add events</th>
+                 <th class="permission">Modify/delete events</th>
+                 <th class="permission">Control access</th>
               </tr>
               <tr class="odd">
                  <th class="principal">office</th>
                  <td class="permission">
                     <input type="checkbox" name="sb.group.3"
-                           value="zope.View" />
+                           value="schoolbell.view" />
                  </td>
                  <td class="permission">
                     <input type="checkbox" name="sb.group.3"
-                           value="zope.ManageContent" />
+                           value="schoolbell.edit" />
                  </td>
                  <td class="permission">
                     <input type="checkbox" name="sb.group.3"
-                           value="zope.ManageSite" />
+                           value="schoolbell.create" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.group.3"
+                           value="schoolbell.addEvent" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.group.3"
+                           value="schoolbell.modifyEvent" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.group.3"
+                           value="schoolbell.controlAccess" />
                  </td>
               </tr>
               ...
@@ -1005,15 +1023,27 @@ def doctest_ACLView():
                  <th class="principal">Albert</th>
                  <td class="permission">
                     <input type="checkbox" name="sb.person.albert"
-                           value="zope.View" />
+                           value="schoolbell.view" />
                  </td>
                  <td class="permission">
                     <input type="checkbox" name="sb.person.albert"
-                           value="zope.ManageContent" />
+                           value="schoolbell.edit" />
                  </td>
                  <td class="permission">
                     <input type="checkbox" name="sb.person.albert"
-                           value="zope.ManageSite" />
+                           value="schoolbell.create" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.person.albert"
+                           value="schoolbell.addEvent" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.person.albert"
+                           value="schoolbell.modifyEvent" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.person.albert"
+                           value="schoolbell.controlAccess" />
                  </td>
               </tr>
         ...
@@ -1021,10 +1051,10 @@ def doctest_ACLView():
     If we submit a form with a checkbox marked, a user gets a grant:
 
         >>> request = TestRequest(form={
-        ...     'sb.person.albert': ['zope.ManageSite',
-        ...                          'zope.ManageContent'],
-        ...     'sb.person.marius': 'zope.ManageContent',
-        ...     'sb.group.3': 'zope.ManageSite',
+        ...     'sb.person.albert': ['schoolbell.view',
+        ...                          'schoolbell.edit'],
+        ...     'sb.person.marius': 'schoolbell.create',
+        ...     'sb.group.3': 'schoolbell.create',
         ...     'UPDATE_SUBMIT': 'Set'})
         >>> view = View(app, request)
         >>> result = view.update()
@@ -1033,22 +1063,22 @@ def doctest_ACLView():
 
         >>> grants = IPrincipalPermissionManager(app)
         >>> grants.getPermissionsForPrincipal('sb.person.marius')
-        [('zope.ManageContent', PermissionSetting: Allow)]
+        [('schoolbell.create', PermissionSetting: Allow)]
         >>> pprint(grants.getPermissionsForPrincipal('sb.person.albert'))
-        [('zope.ManageContent', PermissionSetting: Allow),
-         ('zope.ManageSite', PermissionSetting: Allow)]
+        [('schoolbell.edit', PermissionSetting: Allow),
+         ('schoolbell.view', PermissionSetting: Allow)]
         >>> grants.getPermissionsForPrincipal('sb.group.3')
-        [('zope.ManageSite', PermissionSetting: Allow)]
+        [('schoolbell.create', PermissionSetting: Allow)]
 
         >>> pprint(view.getPersons())
         [{'id': u'sb.person.albert',
-          'perms': ['zope.ManageContent', 'zope.ManageSite'],
+          'perms': ['schoolbell.edit', 'schoolbell.view'],
           'title': 'Albert'},
          {'id': u'sb.person.marius',
-          'perms': ['zope.ManageContent'],
+          'perms': ['schoolbell.create'],
           'title': 'Marius'}]
         >>> pprint(view.getGroups())
-        [{'perms': ['zope.ManageSite'], 'id': u'sb.group.3', 'title': 'office'},
+        [{'perms': ['schoolbell.create'], 'id': u'sb.group.3', 'title': 'office'},
          {'perms': [], 'id': u'sb.group.4', 'title': 'mgmt'}]
 
     The view redirects to the context's default view:
@@ -1072,33 +1102,58 @@ def doctest_ACLView():
                  <th class="principal">office</th>
                  <td class="permission">
                     <input type="checkbox" name="sb.group.3"
-                           value="zope.View" />
+                           value="schoolbell.view" />
                  </td>
                  <td class="permission">
                     <input type="checkbox" name="sb.group.3"
-                           value="zope.ManageContent" />
+                           value="schoolbell.edit" />
                  </td>
                  <td class="permission">
                     <input type="checkbox" checked="checked"
-                           name="sb.group.3" value="zope.ManageSite" />
+                           name="sb.group.3"
+                           value="schoolbell.create" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.group.3"
+                           value="schoolbell.addEvent" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.group.3"
+                           value="schoolbell.modifyEvent" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.group.3"
+                           value="schoolbell.controlAccess" />
                  </td>
               </tr>
         ...
               <tr class="odd">
                  <th class="principal">Albert</th>
                  <td class="permission">
+                    <input type="checkbox" checked="checked"
+                           name="sb.person.albert"
+                           value="schoolbell.view" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" checked="checked"
+                           name="sb.person.albert"
+                           value="schoolbell.edit" />
+                 </td>
+                 <td class="permission">
                     <input type="checkbox" name="sb.person.albert"
-                           value="zope.View" />
+                           value="schoolbell.create" />
                  </td>
                  <td class="permission">
-                    <input type="checkbox" checked="checked"
-                           name="sb.person.albert"
-                           value="zope.ManageContent" />
+                    <input type="checkbox" name="sb.person.albert"
+                           value="schoolbell.addEvent" />
                  </td>
                  <td class="permission">
-                    <input type="checkbox" checked="checked"
-                           name="sb.person.albert"
-                           value="zope.ManageSite" />
+                    <input type="checkbox" name="sb.person.albert"
+                           value="schoolbell.modifyEvent" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.person.albert"
+                           value="schoolbell.controlAccess" />
                  </td>
               </tr>
         ...
@@ -1107,13 +1162,13 @@ def doctest_ACLView():
     If we submit a form without a submit button, nothing is changed:
 
         >>> request = TestRequest(form={
-        ...     'sb.group.4': 'zope.ManageSite',})
+        ...     'sb.group.4': 'schoolbell.addEvent',})
         >>> request.setPrincipal(StubPrincipal())
         >>> view = View(app, request)
         >>> result = view.update()
 
         >>> grants.getPermissionsForPrincipal('sb.person.marius')
-        [('zope.ManageContent', PermissionSetting: Allow)]
+        [('schoolbell.create', PermissionSetting: Allow)]
 
     The user does not get redirected:
 
@@ -1127,7 +1182,7 @@ def doctest_ACLView():
     and new ones granted:
 
         >>> request = TestRequest(form={
-        ...     'sb.group.4': 'zope.ManageSite',
+        ...     'sb.group.4': 'schoolbell.addEvent',
         ...     'UPDATE_SUBMIT': 'Set'})
         >>> view = View(app, request)
         >>> result = view.update()
@@ -1135,13 +1190,13 @@ def doctest_ACLView():
         >>> grants.getPermissionsForPrincipal('sb.person.marius')
         []
         >>> grants.getPermissionsForPrincipal('sb.group.4')
-        [('zope.ManageSite', PermissionSetting: Allow)]
+        [('schoolbell.addEvent', PermissionSetting: Allow)]
 
     If the cancel button is hit, the changes are not applied, but the
     browser is redirected to the default view for context:
 
         >>> request = TestRequest(form={
-        ...     'sb.group.4': 'zope.ManageContent',
+        ...     'sb.person.marius': 'schoolbell.editEvent',
         ...     'CANCEL': 'Cancel'})
         >>> view = View(app, request)
         >>> result = view.update()
@@ -1149,7 +1204,7 @@ def doctest_ACLView():
         >>> grants.getPermissionsForPrincipal('sb.person.marius')
         []
         >>> grants.getPermissionsForPrincipal('sb.group.4')
-        [('zope.ManageSite', PermissionSetting: Allow)]
+        [('schoolbell.addEvent', PermissionSetting: Allow)]
 
         >>> request.response.getStatus()
         302
@@ -1286,8 +1341,7 @@ def tearDown(test):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
-                                       optionflags=doctest.ELLIPSIS
-                                                  |doctest.REPORT_NDIFF))
+                                       optionflags=doctest.ELLIPSIS))
     return suite
 
 
