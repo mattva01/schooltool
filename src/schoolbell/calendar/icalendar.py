@@ -84,6 +84,22 @@ def convert_event_to_ical(event):
         DTSTAMP:...
         END:VEVENT
 
+        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> event = SimpleCalendarEvent(datetime(2005, 2, 11, 22, 42, 50),
+        ...                             timedelta(minutes=15), "iCal tests",
+        ...                             recurrence=DailyRecurrenceRule(),
+        ...                             unique_id="12345678-9876@example.com")
+        >>> lines = convert_event_to_ical(event)
+        >>> print "\n".join(lines)
+        BEGIN:VEVENT
+        UID:12345678-9876@example.com
+        SUMMARY:iCal tests
+        RRULE:FREQ=DAILY;INTERVAL=1
+        DTSTART:20050211T224250
+        DURATION:PT15M
+        DTSTAMP:...
+        END:VEVENT
+
     """
     dtstamp = datetime.datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
     result = [
@@ -92,10 +108,10 @@ def convert_event_to_ical(event):
         "SUMMARY:%s" % ical_text(event.title)]
     if event.location:
         result.append("LOCATION:%s" % ical_text(event.location))
-### TODO: event description
-### if event.recurrence is not None:   # TODO
-###     start = event.dtstart
-###     result.extend(event.recurrence.iCalRepresentation(start))
+    # TODO: event description
+    if event.recurrence is not None:
+        start = event.dtstart
+        result.extend(event.recurrence.iCalRepresentation(start))
     result += [
         "DTSTART:%s" % ical_datetime(event.dtstart),
         "DURATION:%s" % ical_duration(event.duration),
@@ -717,151 +733,145 @@ def parse_period(value):
         return Period(start, end_or_duration)
 
 
-## TODO: implement recurrences
+def _parse_recurrence_weekly(args):
+    """Parse iCalendar weekly recurrence rule.
 
-## def _parse_recurrence_weekly(args):
-##     """Parse iCalendar weekly recurrence rule.
-## 
-##     args is a mapping from attribute names in RRULE to their string values.
-## 
-##     >>> _parse_recurrence_weekly({})
-##     WeeklyRecurrenceRule(1, None, None, (), ())
-##     >>> _parse_recurrence_weekly({'BYDAY': 'WE'})
-##     WeeklyRecurrenceRule(1, None, None, (), (2,))
-##     >>> _parse_recurrence_weekly({'BYDAY': 'MO,WE,SU'})
-##     WeeklyRecurrenceRule(1, None, None, (), (0, 2, 6))
-## 
-##     """
-##     from schooltool.cal import WeeklyRecurrenceRule
-##     weekdays = []
-##     days = args.get('BYDAY', None)
-##     if days is not None:
-##         for day in days.split(','):
-##             weekdays.append(ical_weekdays.index(day))
-##     return WeeklyRecurrenceRule(weekdays=weekdays)
-## 
-## 
-## def _parse_recurrence_monthly(args):
-##     """Parse iCalendar monthly recurrence rule.
-## 
-##     args is a mapping from attribute names in RRULE to their string values.
-## 
-##     Month-day recurrency is the default:
-## 
-##     >>> _parse_recurrence_monthly({})
-##     MonthlyRecurrenceRule(1, None, None, (), 'monthday')
-## 
-##     3rd Tuesday in a month:
-## 
-##     >>> _parse_recurrence_monthly({'BYDAY': '3TU'})
-##     MonthlyRecurrenceRule(1, None, None, (), 'weekday')
-## 
-##     Last Wednesday:
-## 
-##     >>> _parse_recurrence_monthly({'BYDAY': '-1WE'})
-##     MonthlyRecurrenceRule(1, None, None, (), 'lastweekday')
-##     """
-##     from schooltool.cal import MonthlyRecurrenceRule
-##     if 'BYDAY' in args:
-##         if args['BYDAY'][0] == '-':
-##             monthly = 'lastweekday'
-##         else:
-##             monthly = 'weekday'
-##     else:
-##         monthly = 'monthday'
-##     return MonthlyRecurrenceRule(monthly=monthly)
-## 
-## 
-## def parse_recurrence_rule(value):
-##     """Parse iCalendar RRULE entry.
-## 
-##     Returns the corresponding subclass of RecurrenceRule.
-## 
-##     params is a mapping from attribute names in RRULE to their string values,
-## 
-##     A trivial example of a daily recurrence:
-## 
-##     >>> parse_recurrence_rule('FREQ=DAILY')
-##     DailyRecurrenceRule(1, None, None, ())
-## 
-##     A slightly more complex example:
-## 
-##     >>> parse_recurrence_rule('FREQ=DAILY;INTERVAL=5;COUNT=7')
-##     DailyRecurrenceRule(5, 7, None, ())
-## 
-##     An example that includes use of UNTIL:
-## 
-##     >>> parse_recurrence_rule('FREQ=DAILY;UNTIL=20041008T000000')
-##     DailyRecurrenceRule(1, None, datetime.datetime(2004, 10, 8, 0, 0), ())
-##     >>> parse_recurrence_rule('FREQ=DAILY;UNTIL=20041008')
-##     DailyRecurrenceRule(1, None, datetime.datetime(2004, 10, 8, 0, 0), ())
-## 
-##     Of course, other recurrence frequencies may be used:
-## 
-##     >>> parse_recurrence_rule('FREQ=WEEKLY;BYDAY=MO,WE,SU')
-##     WeeklyRecurrenceRule(1, None, None, (), (0, 2, 6))
-##     >>> parse_recurrence_rule('FREQ=MONTHLY')
-##     MonthlyRecurrenceRule(1, None, None, (), 'monthday')
-##     >>> parse_recurrence_rule('FREQ=YEARLY')
-##     YearlyRecurrenceRule(1, None, None, ())
-## 
-##     You have to provide a valid recurrence frequency, or you will get an error:
-## 
-##     >>> parse_recurrence_rule('')
-##     Traceback (most recent call last):
-##       ...
-##     ValueError: Invalid frequency of recurrence: None
-##     >>> parse_recurrence_rule('FREQ=bogus')
-##     Traceback (most recent call last):
-##       ...
-##     ValueError: Invalid frequency of recurrence: 'bogus'
-## 
-##     Unknown keys in params are ignored silently:
-## 
-##     >>> parse_recurrence_rule('FREQ=DAILY;WHATEVER=IGNORED')
-##     DailyRecurrenceRule(1, None, None, ())
-## 
-##     """
-##     from schooltool.cal import DailyRecurrenceRule, YearlyRecurrenceRule
-## 
-##     # split up the given value into parameters
-##     params = {}
-##     if value:
-##         for pair in value.split(';'):
-##             k, v = pair.split('=', 1)
-##             params[k] = v
-## 
-##     # parse common recurrency attributes
-##     interval = int(params.pop('INTERVAL', '1'))
-##     count = params.pop('COUNT', None)
-##     if count is not None:
-##         count = int(count)
-##     until = params.pop('UNTIL', None)
-##     if until is not None:
-##         if len(until) == 8:
-##             until = datetime.datetime.combine(parse_date(until),
-##                                               datetime.time(0, 0))
-##         else:
-##             until = parse_date_time(until)
-## 
-##     # instantiate the corresponding recurrence rule
-##     freq = params.pop('FREQ', None)
-##     if freq == 'DAILY':
-##         rule = DailyRecurrenceRule()
-##     elif freq == 'WEEKLY':
-##         rule = _parse_recurrence_weekly(params)
-##     elif freq == 'MONTHLY':
-##         rule = _parse_recurrence_monthly(params)
-##     elif freq == 'YEARLY':
-##         rule = YearlyRecurrenceRule()
-##     else:
-##         raise ValueError('Invalid frequency of recurrence: %r' % freq)
-## 
-##     return rule.replace(interval=interval, count=count, until=until)
-## 
+    args is a mapping from attribute names in RRULE to their string values.
+
+    >>> _parse_recurrence_weekly({})
+    WeeklyRecurrenceRule(1, None, None, (), ())
+    >>> _parse_recurrence_weekly({'BYDAY': 'WE'})
+    WeeklyRecurrenceRule(1, None, None, (), (2,))
+    >>> _parse_recurrence_weekly({'BYDAY': 'MO,WE,SU'})
+    WeeklyRecurrenceRule(1, None, None, (), (0, 2, 6))
+
+    """
+    from schooltool.cal import WeeklyRecurrenceRule
+    weekdays = []
+    days = args.get('BYDAY', None)
+    if days is not None:
+        for day in days.split(','):
+            weekdays.append(ical_weekdays.index(day))
+    return WeeklyRecurrenceRule(weekdays=weekdays)
+
+
+def _parse_recurrence_monthly(args):
+    """Parse iCalendar monthly recurrence rule.
+
+    args is a mapping from attribute names in RRULE to their string values.
+
+    Month-day recurrency is the default:
+
+    >>> _parse_recurrence_monthly({})
+    MonthlyRecurrenceRule(1, None, None, (), 'monthday')
+
+    3rd Tuesday in a month:
+
+    >>> _parse_recurrence_monthly({'BYDAY': '3TU'})
+    MonthlyRecurrenceRule(1, None, None, (), 'weekday')
+
+    Last Wednesday:
+
+    >>> _parse_recurrence_monthly({'BYDAY': '-1WE'})
+    MonthlyRecurrenceRule(1, None, None, (), 'lastweekday')
+    """
+    from schooltool.cal import MonthlyRecurrenceRule
+    if 'BYDAY' in args:
+        if args['BYDAY'][0] == '-':
+            monthly = 'lastweekday'
+        else:
+            monthly = 'weekday'
+    else:
+        monthly = 'monthday'
+    return MonthlyRecurrenceRule(monthly=monthly)
+
 
 def parse_recurrence_rule(value):
-    return None # XXX
+    """Parse iCalendar RRULE entry.
+
+    Returns the corresponding subclass of RecurrenceRule.
+
+    params is a mapping from attribute names in RRULE to their string values,
+
+    A trivial example of a daily recurrence:
+
+    >>> parse_recurrence_rule('FREQ=DAILY')
+    DailyRecurrenceRule(1, None, None, ())
+
+    A slightly more complex example:
+
+    >>> parse_recurrence_rule('FREQ=DAILY;INTERVAL=5;COUNT=7')
+    DailyRecurrenceRule(5, 7, None, ())
+
+    An example that includes use of UNTIL:
+
+    >>> parse_recurrence_rule('FREQ=DAILY;UNTIL=20041008T000000')
+    DailyRecurrenceRule(1, None, datetime.datetime(2004, 10, 8, 0, 0), ())
+    >>> parse_recurrence_rule('FREQ=DAILY;UNTIL=20041008')
+    DailyRecurrenceRule(1, None, datetime.datetime(2004, 10, 8, 0, 0), ())
+
+    Of course, other recurrence frequencies may be used:
+
+    >>> parse_recurrence_rule('FREQ=WEEKLY;BYDAY=MO,WE,SU')
+    WeeklyRecurrenceRule(1, None, None, (), (0, 2, 6))
+    >>> parse_recurrence_rule('FREQ=MONTHLY')
+    MonthlyRecurrenceRule(1, None, None, (), 'monthday')
+    >>> parse_recurrence_rule('FREQ=YEARLY')
+    YearlyRecurrenceRule(1, None, None, ())
+
+    You have to provide a valid recurrence frequency, or you will get an error:
+
+    >>> parse_recurrence_rule('')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid frequency of recurrence: None
+    >>> parse_recurrence_rule('FREQ=bogus')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid frequency of recurrence: 'bogus'
+
+    Unknown keys in params are ignored silently:
+
+    >>> parse_recurrence_rule('FREQ=DAILY;WHATEVER=IGNORED')
+    DailyRecurrenceRule(1, None, None, ())
+
+    """
+    from schooltool.cal import DailyRecurrenceRule, YearlyRecurrenceRule
+
+    # split up the given value into parameters
+    params = {}
+    if value:
+        for pair in value.split(';'):
+            k, v = pair.split('=', 1)
+            params[k] = v
+
+    # parse common recurrency attributes
+    interval = int(params.pop('INTERVAL', '1'))
+    count = params.pop('COUNT', None)
+    if count is not None:
+        count = int(count)
+    until = params.pop('UNTIL', None)
+    if until is not None:
+        if len(until) == 8:
+            until = datetime.datetime.combine(parse_date(until),
+                                              datetime.time(0, 0))
+        else:
+            until = parse_date_time(until)
+
+    # instantiate the corresponding recurrence rule
+    freq = params.pop('FREQ', None)
+    if freq == 'DAILY':
+        rule = DailyRecurrenceRule()
+    elif freq == 'WEEKLY':
+        rule = _parse_recurrence_weekly(params)
+    elif freq == 'MONTHLY':
+        rule = _parse_recurrence_monthly(params)
+    elif freq == 'YEARLY':
+        rule = YearlyRecurrenceRule()
+    else:
+        raise ValueError('Invalid frequency of recurrence: %r' % freq)
+
+    return rule.replace(interval=interval, count=count, until=until)
 
 
 class VEvent:
@@ -1148,6 +1158,7 @@ class Period:
         if self.start <= other.start < self.end:
             return True
         return False
+
 
 class ICalParseError(Exception):
     """Invalid syntax in an iCalendar file."""

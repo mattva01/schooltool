@@ -437,38 +437,37 @@ class TestVEvent(unittest.TestCase):
         vevent.validate()
         self.assertEquals(vevent.location, 'Somewhere')
 
-# TODO: recurring events
-##  def test_validate_rrule(self):
-##      from schoolbell.calendar.icalendar import VEvent
-##      vevent = VEvent()
-##      vevent.add('dtstart', '20010203T040506')
-##      vevent.add('uid', 'unique5', {})
-##      vevent.add('location', 'Somewhere')
-##      vevent.add('rrule', 'FREQ=DAILY;COUNT=3')
-##      vevent.validate()
-##
-##      self.assertEquals(vevent.rrule.interval, 1)
-##      self.assertEquals(vevent.rrule.count, 3)
-##      self.assertEquals(vevent.rrule.until, None)
-##      self.assertEquals(vevent.rrule.exceptions, ())
-##
-##  def test_validate_rrule_exceptions(self):
-##      from schoolbell.calendar.icalendar import VEvent
-##      vevent = VEvent()
-##      vevent.add('dtstart', '20010203T040506')
-##      vevent.add('uid', 'unique5', {})
-##      vevent.add('location', 'Somewhere')
-##      vevent.add('rrule', 'FREQ=MONTHLY;BYDAY=3MO')
-##      vevent.add('exdate', '19960402T010000,19960404T010000',)
-##      vevent.validate()
-##
-##      self.assertEquals(vevent.rrule.interval, 1)
-##      self.assertEquals(vevent.rrule.count, None)
-##      self.assertEquals(vevent.rrule.until, None)
-##      self.assertEquals(vevent.rrule.monthly, 'weekday')
-##      self.assertEquals(vevent.rrule.exceptions,
-##                        (date(1996, 4, 2), date(1996, 4, 4)))
-##      self.assert_(not isinstance(vevent.rrule.exceptions[0], datetime))
+    def test_validate_rrule(self):
+        from schoolbell.calendar.icalendar import VEvent
+        vevent = VEvent()
+        vevent.add('dtstart', '20010203T040506')
+        vevent.add('uid', 'unique5', {})
+        vevent.add('location', 'Somewhere')
+        vevent.add('rrule', 'FREQ=DAILY;COUNT=3')
+        vevent.validate()
+  
+        self.assertEquals(vevent.rrule.interval, 1)
+        self.assertEquals(vevent.rrule.count, 3)
+        self.assertEquals(vevent.rrule.until, None)
+        self.assertEquals(vevent.rrule.exceptions, ())
+  
+    def test_validate_rrule_exceptions(self):
+        from schoolbell.calendar.icalendar import VEvent
+        vevent = VEvent()
+        vevent.add('dtstart', '20010203T040506')
+        vevent.add('uid', 'unique5', {})
+        vevent.add('location', 'Somewhere')
+        vevent.add('rrule', 'FREQ=MONTHLY;BYDAY=3MO')
+        vevent.add('exdate', '19960402T010000,19960404T010000',)
+        vevent.validate()
+  
+        self.assertEquals(vevent.rrule.interval, 1)
+        self.assertEquals(vevent.rrule.count, None)
+        self.assertEquals(vevent.rrule.until, None)
+        self.assertEquals(vevent.rrule.monthly, 'weekday')
+        self.assertEquals(vevent.rrule.exceptions,
+                          (date(1996, 4, 2), date(1996, 4, 4)))
+        self.assert_(not isinstance(vevent.rrule.exceptions[0], datetime))
 
     def test_extractListOfDates(self):
         from schoolbell.calendar.icalendar import VEvent, Period, ICalParseError
@@ -760,32 +759,6 @@ class TestICalReader(unittest.TestCase):
                          ("KEY", "value", {'PARAM': ['A', 'B', 'C']}))
         self.assertEqual(parseRow('key;param=a,"b,c",d:value'),
                          ("KEY", "value", {'PARAM': ['A', 'b,c', 'D']}))
-def diff(old, new, oldlabel="expected output", newlabel="actual output"):
-    """Display a unified diff between old text and new text."""
-    old = old.splitlines()
-    new = new.splitlines()
-
-    diff = ['--- %s' % oldlabel, '+++ %s' % newlabel]
-
-    def dump(tag, x, lo, hi):
-        for i in xrange(lo, hi):
-            diff.append(tag + x[i])
-
-    differ = difflib.SequenceMatcher(a=old, b=new)
-    for tag, alo, ahi, blo, bhi in differ.get_opcodes():
-        if tag == 'replace':
-            dump('-', old, alo, ahi)
-            dump('+', new, blo, bhi)
-        elif tag == 'delete':
-            dump('-', old, alo, ahi)
-        elif tag == 'insert':
-            dump('+', new, blo, bhi)
-        elif tag == 'equal':
-            dump(' ', old, alo, ahi)
-        else:
-            raise AssertionError('unknown tag %r' % tag)
-    return "\n".join(diff)
-
 
 
 def test_suite():
