@@ -962,6 +962,7 @@ class TestNewTimePeriodView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
     def test_start_date_missing(self):
         view = self.createView()
         view.request.args['start'] = ['']
+        view.request.args['NEXT'] = ['Next']
         view.render(view.request)
         self.assertEquals(view.start_widget.error, "This field is required.")
 
@@ -982,6 +983,7 @@ class TestNewTimePeriodView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
     def test_end_date_missing(self):
         view = self.createView()
         view.request.args['end'] = ['']
+        view.request.args['NEXT'] = ['Next']
         view.render(view.request)
         self.assertEquals(view.end_widget.error, "This field is required.")
 

@@ -32,7 +32,7 @@ from schooltool.browser import valid_name
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import PrivateAccess
 from schooltool.browser.auth import ManagerAccess
-from schooltool.browser.widgets import TextWidget
+from schooltool.browser.widgets import TextWidget, dateParser
 from schooltool.browser.cal import next_month, week_start
 from schooltool.interfaces import ITimetabled
 from schooltool.interfaces import ITimetable
@@ -307,18 +307,9 @@ class TimePeriodViewBase(View):
 
     def __init__(self, context):
         View.__init__(self, context)
-        self.start_widget = TextWidget('start', _('Start date'),
-                                       self.date_parser)
-        self.end_widget = TextWidget('end', _('End date'),
-                                     self.date_parser, self.end_date_validator)
-
-    def date_parser(self, date):
-        if date is None or not date.strip():
-            return None
-        try:
-            return parse_date(date)
-        except ValueError:
-            raise ValueError(_("Invalid date.  Please specify YYYY-MM-DD."))
+        self.start_widget = TextWidget('start', _('Start date'), dateParser)
+        self.end_widget = TextWidget('end', _('End date'), dateParser,
+                                     self.end_date_validator)
 
     def end_date_validator(self, date):
         if date is None or self.start_widget.value is None:
@@ -468,10 +459,11 @@ class NewTimePeriodView(TimePeriodViewBase):
         self.start_widget.update(request)
         self.end_widget.update(request)
         self.model = self._buildModel(request)
-        if 'CREATE' in request.args:
+        if 'NEXT' in request.args or 'CREATE' in request.args:
             self.name_widget.require()
             self.start_widget.require()
             self.end_widget.require()
+        if 'CREATE' in request.args:
             if not (self.name_widget.error or self.start_widget.error or
                     self.end_widget.error) and self.model is not None:
                 key = self.name_widget.value
@@ -480,16 +472,6 @@ class NewTimePeriodView(TimePeriodViewBase):
                                getPath(self.service[key]))
                 return self.redirect("/time-periods", request)
         return View.do_GET(self, request)
-
-    def date_parser(self, date):
-        if date is None:
-            return None
-        if not date.strip():
-            raise ValueError(_("This field is required."))
-        try:
-            return parse_date(date)
-        except ValueError:
-            raise ValueError(_("Invalid date.  Please specify YYYY-MM-DD."))
 
 
 class ContainerServiceViewBase(View):
