@@ -30,181 +30,31 @@ from zope.app.traversing.interfaces import IContainmentRoot
 from zope.publisher.browser import TestRequest
 
 
-def test_personContainerView():
-    r"""Test for PersonContainerView
+def doctest_ContainerView():
+    """Tests for ContainerView.
 
-    We will need to set up the environment for the test:
+    It is a generic class for containers that contain objects with a `title`
+    attribute.
 
-        >>> setup.placelessSetUp()
+        >>> class SomeObject:
+        ...     def __init__(self, title):
+        ...         self.title = title
+        ...     def __repr__(self):
+        ...         return '<SomeObject %r>' % self.title
 
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> schoolBellApplication = SchoolBellApplication()
-        >>> directlyProvides(schoolBellApplication, IContainmentRoot)
+        >>> from schoolbell.app.browser.app import ContainerView
+        >>> context = {'id1': SomeObject('orange'),
+        ...            'id2': SomeObject('apple'),
+        ...            'id3': SomeObject('banana')}
+        >>> request = TestRequest()
+        >>> view = ContainerView(context, request)
 
-    Let's create a new person:
+    The view defines a method called `sortedObject` so that page templates
+    can display the items in alphabetical order.
 
-        >>> from schoolbell.app.app import Person
-        >>> person = Person()
-        >>> person.__name__ = "Jonas"
-        >>> person.title = "Jonas Petraitis"
+        >>> view.sortedObjects()
+        [<SomeObject 'apple'>, <SomeObject 'banana'>, <SomeObject 'orange'>]
 
-    Let's add him to the container
-
-        >>> person.__parent__ = schoolBellApplication
-        >>> schoolBellApplication['persons'][person.__name__] = person
-
-    Let's add another person to the container
-
-        >>> person = Person()
-        >>> person.__name__ = "Petras"
-        >>> person.title = "Abdul Petras"
-        >>> person.__parent__ = schoolBellApplication
-        >>> schoolBellApplication['persons'][person.__name__] = person
-
-    Let's create a view
-
-        >>> from schoolbell.app.browser.app import PersonContainerView
-        >>> view = PersonContainerView(schoolBellApplication['persons'],
-        ...                            TestRequest())
-
-    Let's get a sorted by title object list
-
-        >>> sortedObjects = view.sortedObjects()
-
-        >>> sortedObjects[0].title
-        'Abdul Petras'
-
-        >>> sortedObjects[1].title
-        'Jonas Petraitis'
-
-        >>> view.index_title
-        u'Person index'
-
-        >>> view.add_title
-        u'Add a new person'
-
-        >>> view.add_url
-        'addSchoolBellPerson.html'
-
-        >>> setup.placelessTearDown()
-    """
-
-
-def test_groupContainerView():
-    r"""Test for GroupContainerView
-
-    We will need to set up the environment for the test:
-
-        >>> setup.placelessSetUp()
-
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> schoolBellApplication = SchoolBellApplication()
-        >>> directlyProvides(schoolBellApplication, IContainmentRoot)
-
-    Let's create a new group:
-
-        >>> from schoolbell.app.app import Group
-        >>> group = Group()
-        >>> group.__name__ = "Group B"
-        >>> group.title = "Group B"
-
-    Let's add it to the container
-
-        >>> group.__parent__ = schoolBellApplication
-        >>> schoolBellApplication['groups'][group.__name__] = group
-
-    Let's add another group to the container
-
-        >>> group = Group()
-        >>> group.__name__ = "Group A"
-        >>> group.title = "Group A"
-        >>> group.__parent__ = schoolBellApplication
-        >>> schoolBellApplication['groups'][group.__name__] = group
-
-    Let's create a view
-
-        >>> from schoolbell.app.browser.app import GroupContainerView
-        >>> view = GroupContainerView(schoolBellApplication['groups'],
-        ...                            TestRequest())
-
-    Let's get a sorted by title object list
-
-        >>> sortedObjects = view.sortedObjects()
-
-        >>> sortedObjects[0].title
-        'Group A'
-
-        >>> sortedObjects[1].title
-        'Group B'
-
-        >>> view.index_title
-        u'Group index'
-
-        >>> view.add_title
-        u'Add a new group'
-
-        >>> view.add_url
-        'addSchoolBellGroup.html'
-
-        >>> setup.placelessTearDown()
-    """
-
-
-def test_resourceContainerView():
-    r"""Test for ResourceContainerView
-
-    We will need to set up the environment for the test:
-
-        >>> setup.placelessSetUp()
-
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> schoolBellApplication = SchoolBellApplication()
-        >>> directlyProvides(schoolBellApplication, IContainmentRoot)
-
-    Let's create a new resource:
-
-        >>> from schoolbell.app.app import Resource
-        >>> resource = Resource()
-        >>> resource.__name__ = "Resource B"
-        >>> resource.title = "Resource B"
-
-    Let's add it to the container
-
-        >>> resource.__parent__ = schoolBellApplication
-        >>> schoolBellApplication['resources'][resource.__name__] = resource
-
-    Let's add another resource to the container
-
-        >>> resource = Resource()
-        >>> resource.__name__ = "Resource A"
-        >>> resource.title = "Resource A"
-        >>> resource.__parent__ = schoolBellApplication
-        >>> schoolBellApplication['resources'][resource.__name__] = resource
-
-    Let's create a view
-
-        >>> from schoolbell.app.browser.app import ResourceContainerView
-        >>> view = ResourceContainerView(schoolBellApplication['resources'],
-        ...                            TestRequest())
-
-    Let's get a sorted by title object list
-
-        >>> sortedObjects = view.sortedObjects()
-
-        >>> sortedObjects[0].title
-        'Resource A'
-
-        >>> sortedObjects[1].title
-        'Resource B'
-
-        >>> view.index_title
-        u'Resource index'
-
-        >>> view.add_title
-        u'Add a new resource'
-
-        >>> view.add_url
-        'addSchoolBellResource.html'
     """
 
 

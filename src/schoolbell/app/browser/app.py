@@ -29,7 +29,8 @@ from schoolbell import SchoolBellMessageID as _
 class ContainerView(object):
     """A base view for all containers.
 
-    Subclasses must provide the follwing attributes:
+    Subclasses must provide the following attributes that are used in the
+    page template:
 
         `index_title` -- Title of the index page.
         `add_title` -- Title for the adding link.
