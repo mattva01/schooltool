@@ -7,23 +7,63 @@
     <h1 metal:fill-slot="h1" tal:content="view/title">Add object</h1>
 
     <metal:block metal:fill-slot="content">
-      <form method="POST" enctype="multipart/form-data"
-          tal:attributes="action request/path">
+      <form method="POST" 
+        tal:attributes="action request/path">
         <input type="hidden" name="toadd" value=""
-            tal:attributes="value python:'/persons/' + request.args.get('pid', [''])[0]"/>
-
-                <div class="error" tal:condition="view/error"
-                    tal:content="view/error" />
-                <div class="row" tal:replace="structure view/title_widget" />
-                <div class="row" tal:replace="structure view/country_widget" />
-                <div class="row" tal:replace="structure view/postcode_widget" />
-                <div class="row" tal:replace="structure view/district_widget" />
-                <div class="row" tal:replace="structure view/town_widget" />
-                <div class="row" tal:replace="structure view/streetNr_widget" />
-                <div class="row" tal:replace="structure view/thoroughfareName_widget" />
+          tal:attributes="value python:'/persons/' + request.args.get('pid', [''])[0]"
+          tal:condition="request/args/pid|nothing"/>
+        <input type="hidden" name="toadd" value=""
+          tal:attributes="value view/related_person"
+          tal:condition="view/related_person"/>
+        <div class="row" tal:replace="structure view/search_widget" />
+        <input class="button" type="submit" name="SEARCH" value="Search"
+          i18n:attributes="value" />
+        <tal:if condition="view/search_results">
+          <div class="row">
+            <dl>
+              <tal:loop repeat="res view/search_results">
+                <dt>
+                  <input type="radio" name="residence"
+                    value="" tal:attributes="value res/__name__"/>
+                  <b for="residence" tal:content="res/title"/>
+                </dt>
+                <dd>
+                  <address tal:define="info res/info">
+                    <span tal:content="info/streetNr"/>
+                    <span tal:content="info/thoroughfareName"/><br/>
+                    <span tal:content="info/town"/>
+                    <span tal:content="info/district"/>,
+                    <span tal:content="info/postcode"/>
+                  </address>
+                </dd>
+              </tal:loop>
+            </dl>
+          </div>
+          <input class="button" type="submit" name="RELATE"
+            value="Choose Selected"
+            i18n:attributes="value" />
+        </tal:if>
+      </form>
+      <form method="POST" enctype="multipart/form-data"
+        tal:attributes="action request/path">
+        <input type="hidden" name="toadd" value=""
+          tal:attributes="value python:'/persons/' + request.args.get('pid', [''])[0]"
+          tal:condition="request/args/pid|nothing"/>
+        <input type="hidden" name="toadd" value=""
+          tal:attributes="value view/related_person"
+          tal:condition="view/related_person"/>
+        <div class="error" tal:condition="view/error"
+          tal:content="view/error" />
+        <div class="row" tal:replace="structure view/title_widget" />
+        <div class="row" tal:replace="structure view/country_widget" />
+        <div class="row" tal:replace="structure view/postcode_widget" />
+        <div class="row" tal:replace="structure view/district_widget" />
+        <div class="row" tal:replace="structure view/town_widget" />
+        <div class="row" tal:replace="structure view/streetNr_widget" />
+        <div class="row" tal:replace="structure view/thoroughfareName_widget" />
 
         <input class="button" type="submit" name="ADD" value="Add"
-            i18n:attributes="value" />
+          i18n:attributes="value" />
       </form>
 
     </metal:block>

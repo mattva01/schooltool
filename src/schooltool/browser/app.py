@@ -27,6 +27,7 @@ import datetime
 from cStringIO import StringIO
 
 from schooltool.app import create_application
+from schooltool.uris import URIOccupies
 from schooltool.browser import ToplevelBreadcrumbsMixin
 from schooltool.browser import ContainerBreadcrumbsMixin
 from schooltool.browser import View, Template, StaticFile
@@ -53,7 +54,7 @@ from schooltool.browser.widgets import dateParser, intParser
 from schooltool.browser.widgets import sequenceParser, sequenceFormatter
 from schooltool.common import to_unicode
 from schooltool.component import FacetManager
-from schooltool.component import getPath, traverse
+from schooltool.component import getPath, traverse, getRelatedObjects
 from schooltool.component import getTicketService, getTimetableSchemaService
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IPerson, IResource, AuthenticationError
@@ -591,8 +592,12 @@ class ResidenceAddView(ObjectAddView):
 
     authorization = ManagerAccess
 
+    search_results = []
+    related_person = []
+
     def __init__(self, context):
         View.__init__(self, context)
+        self.search_widget = TextWidget('search', _('Search'))
         self.title_widget = TextWidget('title', _('Title'))
         self.country_widget = TextWidget('country', _('Country'))
         self.postcode_widget = TextWidget('postcode', _('Postcode'))
@@ -604,15 +609,40 @@ class ResidenceAddView(ObjectAddView):
 
     def do_POST(self, request):
         """"""
-        if 'CANCEL' in self.request.args:
+        self.related_person = request.args.get('toadd', [None])[0]
+
+        if 'CANCEL' in request.args:
             # Just show the form without any data.
             return self.do_GET(request)
+
+        if 'SEARCH' in request.args:
+            self.search_widget.update(request)
+            self.search_results = self.doSearch(request)
+            return self.do_GET(request)
+
+        if 'RELATE' in request.args:
+            rpath = request.args.get('residence', [None])[0]
+            residence = traverse(self.context, rpath)
+
+            paths = filter(None, request.args.get("toadd", []))
+            for path in paths:
+                pobj = traverse(self.context, path)
+                try:
+                    Occupies(residence=residence, resides=pobj)
+                except ValueError:
+                    return self.errormessage % {'other': pobj.title,
+                                                'this': residence.title}
+                request.appLog(_("Relationship '%s' between %s and %s created")
+                               % (self.relname, getPath(residence),
+                                  getPath(pobj)))
+
+            nexturl = absoluteURL(request, pobj)
+            return self.redirect(nexturl, request)
 
         widgets = [self.title_widget, self.country_widget,
                    self.postcode_widget, self.district_widget,
                    self.town_widget, self.streetNr_widget,
                    self.thoroughfareName_widget]
-#        widgets = [self.title_widget, self.country_widget]
 
         name = None
 
@@ -623,7 +653,7 @@ class ResidenceAddView(ObjectAddView):
             if widget.error:
                 return self.do_GET(request)
 
-        obj = self.context.new(name, title=self.title_widget.value, 
+        obj = self.context.new(name, title=self.title_widget.value,
                 country=self.country_widget.value)
 
         info = obj.info()
@@ -634,9 +664,11 @@ class ResidenceAddView(ObjectAddView):
         info.streetNr=self.streetNr_widget.value
         info.thoroughfareName=self.thoroughfareName_widget.value
 
-#        obj = self.context.new(name, 
-#                title=self.title_widget.value, 
-#                country=self.country_widget.value)
+        for residence in getRelatedObjects(obj, URIOccupies):
+            if obj == residence:
+                self.error = _("This residence already exists in the system")
+                return self.do_GET(request)
+
 
         request.appLog(_("Object %s of type %s created") %
                        (getPath(obj), obj.__class__.__name__))
@@ -655,6 +687,17 @@ class ResidenceAddView(ObjectAddView):
 
         nexturl = absoluteURL(request, pobj)
         return self.redirect(nexturl, request)
+
+    def doSearch(self, request):
+        results = []
+        val = self.search_widget.value
+        for residence in self.context.keys():
+            # This could be a little less ugly
+            if self.context[residence].contains(val):
+                results.append(self.context[residence])
+
+        return results
+
 
 
 class ObjectContainerView(View, ContainerBreadcrumbsMixin):

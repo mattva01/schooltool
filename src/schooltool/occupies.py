@@ -71,11 +71,11 @@ class OccupiesEvent(RelationshipEvent):
                             "must be present among links", links)
 
 
-class  OccupiesAddedEvent(OccupiesEvent):
+class OccupiesAddedEvent(OccupiesEvent):
     implements(IOccupiesAddedEvent)
 
 
-class  OccupiesRemovedEvent(OccupiesEvent):
+class OccupiesRemovedEvent(OccupiesEvent):
     implements(IOccupiesRemovedEvent)
 
 

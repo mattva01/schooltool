@@ -293,6 +293,25 @@ class Residence(RelationshipValenciesMixin, FacetedEventTargetMixin):
     def info(self):
         return FacetManager(self).facetByName('address_info')
 
+    def __eq__(self, other):
+        try:
+            if self.title == other.title and self.country == other.country \
+                    and self.info() == other.info():
+                return True
+        except:
+            pass
+
+        return False
+
+    def contains(self, s):
+        if self.title.find(s) >= 0:
+            return True
+        if self.country.find(s) >= 0:
+            return True
+        if self.info().contains(s):
+            return True
+        return False
+
 
 class IntervalSet:
     """An ordered set of disjoint intervals [a, b).

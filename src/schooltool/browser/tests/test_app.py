@@ -1040,6 +1040,8 @@ class TestResidenceAddView(AppSetupMixin, unittest.TestCase):
     def test(self):
         view = self.createView()
         self.assertEquals(view.title, "Add residence")
+        self.assertEquals(view.search_results, [])
+        self.assertEquals(view.related_person, [])
 
 
 class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):

@@ -125,7 +125,6 @@ class AddressFacet(Persistent):
     thoroughfareName = None
     #country = property(lambda self: self._country)
     #postcode = property(lambda self: self._postcode)
-
     #district = property(lambda self: self._district)
     #town = property(lambda self: self._town)
     #streetNr = property(lambda self: self._streetNr)
@@ -139,4 +138,30 @@ class AddressFacet(Persistent):
         self.town = None
         self.streetNr = None
         self.thoroughfareName = None
+
+    def __eq__(self, other):
+        try:
+            if self.postcode == other.postcode and \
+                    self.district == other.district and \
+                    self.town == other.town and \
+                    self.streetNr == other.streetNr and \
+                    self.thoroughfareName == other.thoroughfareName:
+                        return True
+        except:
+            pass
+
+        return False
+
+    def contains(self, s):
+        if str(self.postcode).find(s) >= 0:
+            return True
+        if str(self.district).find(s) >= 0:
+            return True
+        if str(self.town).find(s) >= 0:
+            return True
+        if str(self.streetNr).find(s) >= 0:
+            return True
+        if str(self.thoroughfareName).find(s) >= 0:
+            return True
+        return False
 
