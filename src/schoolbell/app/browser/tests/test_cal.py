@@ -2199,32 +2199,23 @@ class TestDailyCalendarView(unittest.TestCase):
         view.cursor = date(2004, 8, 12)
         view.request = TestRequest()
 
-        self.assertEquals(view.eventHeight(
-                            createEvent('2004-08-12 09:00', '0', "")), 1)
-        self.assertEquals(view.eventHeight(
-                            createEvent('2004-08-12 09:00', '14m', "")), 1)
-        self.assertEquals(view.eventHeight(
-                            createEvent('2004-08-12 09:00', '1h', "")), 4)
-        self.assertEquals(view.eventHeight(
-                            createEvent('2004-08-12 10:00', '2h', "")), 8)
-        self.assertEquals(view.eventHeight(
-                            createEvent('2004-08-12 10:00', '2h+15m', "")), 9)
-        self.assertEquals(view.eventHeight(
-                            createEvent('2004-08-12 10:00', '2h+30m', "")), 10)
-        self.assertEquals(view.eventHeight(
-                            createEvent('2004-08-12 10:00', '2h+45m', "")), 11)
-        self.assertEquals(view.eventHeight(
-                            createEvent('2004-08-12 10:00', '2h+46m', "")), 11)
-        self.assertEquals(view.eventHeight(
-                            createEvent('2004-08-12 10:00', '2h+44m', "")), 11)
-        self.assertEquals(view.eventHeight(
-                            createEvent('2004-08-12 10:02', '2h+44m', "")), 11)
-        self.assertEquals(view.eventHeight(
-                            createEvent('2004-08-12 10:00', '24h+44m', "")), 32)
-        self.assertEquals(view.eventHeight(
-                            createEvent('2004-08-11 10:00', '48h+44m', "")), 40)
-        self.assertEquals(view.eventHeight(
-                            createEvent('2004-08-11 10:00', '24h', "")), 8)
+        def check(dt, duration, expected):
+            height = view.eventHeight(createEvent(dt, duration, ""))
+            self.assertEquals(height, expected)
+
+        check('2004-08-12 09:00', '0', 1)
+        check('2004-08-12 09:00', '14m', 1)
+        check('2004-08-12 09:00', '1h', 4)
+        check('2004-08-12 10:00', '2h', 8)
+        check('2004-08-12 10:00', '2h+15m', 9)
+        check('2004-08-12 10:00', '2h+30m', 10)
+        check('2004-08-12 10:00', '2h+45m', 11)
+        check('2004-08-12 10:00', '2h+46m', 11)
+        check('2004-08-12 10:00', '2h+44m', 11)
+        check('2004-08-12 10:02', '2h+44m', 11)
+        check('2004-08-12 10:00', '24h+44m', 32)
+        check('2004-08-11 10:00', '48h+44m', 40)
+        check('2004-08-11 10:00', '24h', 8)
 
 
 def doctest_CalendarViewBase():
