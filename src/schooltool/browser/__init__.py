@@ -270,6 +270,8 @@ def notFoundPage(request):
 
 
 class ToplevelBreadcrumbsMixin:
+    """Mixin that produces a single breadcrumb pointing to the start page."""
+
     def breadcrumbs(self):
         if self.context is not None:
             app = traverse(self.context, '/')

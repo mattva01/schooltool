@@ -655,7 +655,6 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
     def test_update_ADD_loop(self):
         from schooltool.browser.model import GroupEditView
         from schooltool.component import getRelatedObjects
-        from schooltool.uris import URIMember
         view = GroupEditView(self.group)
         request = RequestStub(args={"FINISH_ADD":"Add selected",
                                     "toadd": ['/groups/new']})

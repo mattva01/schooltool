@@ -91,8 +91,10 @@ class TimetabledViewMixin:
                  'url': '%s/timetables/%s/%s' % (path, period, schema)}
                 for period, schema in keys]
 
+
 class AppObjectViewMixin:
-    """Mixin for views that are top-level objects"""
+    """Mixin for views that are top-level objects."""
+
     def breadcrumbs(self):
         return [(_('Start'),
                  absoluteURL(self.request, traverse(self.context, '/'),

@@ -108,7 +108,9 @@ class ACLView(View):
             raise ValueError(_("Please select a user"))
 
     def permissionValidator(self, value):
-        if value not in (ViewPermission, AddPermission, ModifyPermission, None):
+        if value is None:
+            return
+        if value not in (ViewPermission, AddPermission, ModifyPermission):
             raise ValueError(_("Please select a permission"))
 
     def list(self):

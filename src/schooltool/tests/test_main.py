@@ -151,7 +151,8 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
 
         for name in ['ZODB', 'ZODB.lock_file', 'txn', 'libxml2',
                      'schooltool.rest_access', 'schooltool.web_access',
-                     'schooltool.app', 'schooltool.error', 'schooltool.server']:
+                     'schooltool.app', 'schooltool.error',
+                     'schooltool.server']:
             logger = logging.getLogger(name)
             del logger.handlers[:]
             logger.propagate = True

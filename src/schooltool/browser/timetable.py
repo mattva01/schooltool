@@ -510,9 +510,8 @@ class TimePeriodViewBase(View):
         index = 0
         while start_of_month < limit:
             month_title = _('%(month)s %(year)s') % {
-                                'month': self.month_names[start_of_month.month],
-                                'year': start_of_month.year,
-                            }
+                              'month': self.month_names[start_of_month.month],
+                              'year': start_of_month.year}
             weeks = []
             start_of_week = week_start(start_of_month, self.first_day_of_week)
             start_of_next_month = min(next_month(start_of_month), limit)
@@ -612,7 +611,6 @@ class NewTimePeriodView(TimePeriodViewBase):
             (_('Start'), absoluteURL(self.request, app, 'start')),
             (_('Timetable periods'), absoluteURL(self.request, self.service))]
 
-
     def name_parser(self, name):
         if name is None:
             return None
@@ -694,6 +692,7 @@ class ContainerServiceViewBase(View, ToplevelBreadcrumbsMixin):
 
 
 class TimetableSchemaServiceView(ContainerServiceViewBase):
+    """View for the timetable schema service."""
 
     template = Template("www/ttschemas.pt")
 
@@ -713,6 +712,7 @@ class TimetableSchemaServiceView(ContainerServiceViewBase):
 
 
 class TimePeriodServiceView(ContainerServiceViewBase):
+    """View for the time period service."""
 
     template = Template("www/time-periods.pt")
 
@@ -725,9 +725,9 @@ class TimePeriodServiceView(ContainerServiceViewBase):
     def breadcrumbs(self):
         app = traverse(self.context, '/')
         name = self.context.__name__
-        return [
-            (_('Start'), absoluteURL(self.request, app, 'start')),
-            (_('Time periods'), absoluteURL(self.request, app, 'time-periods'))]
+        return [(_('Start'), absoluteURL(self.request, app, 'start')),
+                (_('Time periods'), absoluteURL(self.request, app,
+                                                'time-periods'))]
 
 
 def fix_duplicates(names):
