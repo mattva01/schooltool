@@ -23,6 +23,7 @@ $Id$
 """
 
 from datetime import datetime, date, time, timedelta
+from sets import Set
 
 from schooltool.browser import View, Template, absoluteURL
 from schooltool.browser.auth import TeacherAccess, PrivateAccess
@@ -184,13 +185,135 @@ class CalendarViewBase(View):
             event_start = event.dtstart.date()
             if event_start >= start and event_start < end:
                 events[event_start].append(event)
-
         days = []
         for day in events.keys():
             events[day].sort()
             days.append(CalendarDay(day, events[day]))
         days.sort()
         return days
+
+
+class DailyCalendarView(View):
+    """Daily calendar view.
+
+    The events are presented as boxes on a 'sheet' with rows
+    representing hours.
+
+    The challenge here is to present the events as a table, so that
+    the overlapping events are displayed side by side, and the size of
+    the boxes illustrates the duration of the events.
+    """
+
+    __used_for__ = ICalendar
+
+    authorization = PrivateAccess
+
+    template = Template("www/cal_daily.pt")
+
+    starthour = 0
+
+    endhour = 24
+
+    def update(self):
+        if 'date' not in self.request.args:
+            self.cursor = date.today()
+        else:
+            self.cursor = parse_date(self.request.args['date'][0])
+
+        self.prev = self.cursor - timedelta(1)
+        self.next = self.cursor + timedelta(1)
+
+    def dayEvents(self, date):
+        """Return events for a day sorted by start time."""
+        # XXX If an event spans several days, it will be shown multiple times.
+        # XXX copied and pasted, not tested.
+        events = list(self.context.byDate(date))
+        events.sort()
+        return events
+
+    def getColumns(self):
+        """Return the maximum number of events overlapping"""
+        spanning = Set()
+        overlap = 1
+        for event in self.dayEvents(self.cursor):
+            for oldevent in spanning.copy():
+                if oldevent.dtstart + oldevent.duration <= event.dtstart:
+                    spanning.remove(oldevent)
+            spanning.add(event)
+            if len(spanning) > overlap:
+                overlap = len(spanning)
+        return overlap
+
+    def getHours(self):
+        """Return an iterator over columns of the table"""
+        nr_cols = self.getColumns()
+        events = self.dayEvents(self.cursor)
+        slots = Slots()
+        for hour in range(self.starthour, self.endhour):
+            start = datetime.combine(self.cursor, time(hour, 0))
+            end = start + timedelta(hours=1)
+
+            # Remove the events that have already ended
+            for i in range(nr_cols):
+                ev = slots.get(i, None)
+                if ev is not None and ev.dtstart + ev.duration <= start:
+                    del slots[i]
+
+            # Add events that start during this hour
+            while (events and start <= events[0].dtstart < end):
+                event = events.pop(0)
+                slots.add(event)
+            cols = []
+
+            # Format the row
+            for i in range(nr_cols):
+                ev = slots.get(i, None)
+                if ev is not None and ev.dtstart < start:
+                    # The event started before this hour
+                    cols.append('')
+                else:
+                    # Either None, or new event
+                    cols.append(ev)
+
+            yield {'time': "%d:00" % hour, 'cols': tuple(cols)}
+
+    def rowspan(self, event):
+        return (event.duration.seconds - 1)/3600 + 1
+
+
+class Slots(dict):
+    """A dict with integer indices which assigns the lowest unused index
+
+    Add the first value:
+
+    >>> s = Slots()
+    >>> s.add("first")
+    >>> s
+    {0: 'first'}
+
+    Add second value, it gets and index 1.
+
+    >>> s.add("second")
+    >>> s
+    {0: 'first', 1: 'second'}
+
+    Remove first, add third.  It should get the index 0.
+
+    >>> del s[0]
+    >>> s.add("third")
+    >>> s
+    {0: 'third', 1: 'second'}
+    """
+
+    def add(self, obj):
+        i = 0
+        while True:
+            if i in self:
+                i += 1
+                continue
+            else:
+                self[i] = obj
+                break
 
 
 class WeeklyCalendarView(CalendarViewBase):

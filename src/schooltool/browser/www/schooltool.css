@@ -302,15 +302,13 @@ div.event {
   background: #8f9;
   margin: 1ex;
   padding: 1ex 0.5em;
-}
-
-div.day h2,
-div.day h3 {
-  margin: 0;
+  border-bottom-width: 3px;
+  border-right-width: 3	px;
 }
 
 div.day h2,
 div.day h3  {
+  margin: 0;
   font-size: smaller;
   color: navy;
 }
@@ -353,4 +351,40 @@ div.event_weekly {
   background: #ff7;
   margin: 2px;
   border: 1px solid #447;
+}
+
+table.daycal {
+  border-collapse: collapse;
+  border: 2px solid lightgray;
+  width: 80%;
+}
+
+table.daycal td{
+  border-bottom: 1px solid #ddd;
+  border-right-width: 3px;
+  padding: 0;
+}
+
+table.daycal td.event{
+  border: 1px solid darkgreen;
+  background: #8f9;
+  padding: 1ex 0.5em;
+  border-bottom-width: 3px;
+  border-right-width: 3	px;
+  margin: 0;
+  vertical-align: top;
+}
+
+td.daycalhour {
+  padding: 1px;
+  background: #8af;
+  text-align: right;
+  width: 1%;
+}
+
+.event h2,
+.event h3 {
+  font-size: smaller;
+  color: navy;
+  margin: 0;
 }

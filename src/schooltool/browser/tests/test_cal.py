@@ -23,7 +23,10 @@ $Id$
 """
 
 import unittest
+from zope.testing.doctestunit import DocTestSuite
+
 from logging import INFO
+from pprint import pformat
 from datetime import datetime, date, time, timedelta
 
 from schooltool.browser.tests import AppSetupMixin, RequestStub, setPath
@@ -283,6 +286,133 @@ class TestWeeklyCalendarView(unittest.TestCase):
                               [(date(2004, 8, 9), date(2004, 8, 15))])
 
 
+class TestDailyCalendarView(unittest.TestCase):
+
+    def test_update(self):
+        from schooltool.browser.cal import DailyCalendarView
+
+        view = DailyCalendarView(None)
+        view.request = RequestStub()
+        view.update()
+        self.assertEquals(view.cursor, date.today())
+
+        view.request = RequestStub(args={'date': '2004-08-18'})
+        view.update()
+        self.assertEquals(view.cursor, date(2004, 8, 18))
+
+    def test_getColumns(self):
+        from schooltool.browser.cal import DailyCalendarView
+        from schooltool.cal import CalendarEvent, Calendar
+        from schooltool.model import Person
+
+        cal = Calendar()
+        cal.__parent__ = Person(title="Da Boss")
+        view = DailyCalendarView(cal)
+        view.request = RequestStub()
+        view.cursor = date(2004, 8, 12)
+
+        self.assertEquals(view.getColumns(), 1)
+        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 12, 0),
+                                   timedelta(hours=2),
+                                   "Meeting"))
+        self.assertEquals(view.getColumns(), 1)
+
+        #
+        #  Three events:
+        #
+        #  12 +--+
+        #  13 |Me|+--+    <--- overlap
+        #  14 +--+|Lu|+--+
+        #  15     +--+|An|
+        #  16         +--+
+        #
+        #  Expected result: 2
+
+        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 13, 0),
+                                   timedelta(hours=2),
+                                   "Lunch"))
+        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 14, 0),
+                                   timedelta(hours=2),
+                                   "Another meeting"))
+
+        self.assertEquals(view.getColumns(), 2)
+
+        #
+        #  Four events:
+        #
+        #  12 +--+
+        #  13 |Me|+--+    +--+ <--- overlap
+        #  14 +--+|Lu|+--+|Ca|
+        #  15     +--+|An|+--+
+        #  16         +--+
+        #
+        #  Expected result: 3
+        cal.addEvent(CalendarEvent(datetime(2004, 8, 12, 13, 0),
+                                   timedelta(hours=2),
+                                   "Call Mark during lunch"))
+        self.assertEquals(view.getColumns(), 3)
+
+    def test_getHours(self):
+        from schooltool.browser.cal import DailyCalendarView
+        from schooltool.cal import CalendarEvent, Calendar
+        from schooltool.model import Person
+
+        cal = Calendar()
+        cal.__parent__ = Person(title="Da Boss")
+        view = DailyCalendarView(cal)
+        view.request = RequestStub()
+        view.cursor = date(2004, 8, 12)
+        view.starthour = 10
+        view.endhour = 16
+        result = list(view.getHours())
+        self.assertEquals(result,
+                          [{'time': '10:00', 'cols': (None,)},
+                           {'time': '11:00', 'cols': (None,)},
+                           {'time': '12:00', 'cols': (None,)},
+                           {'time': '13:00', 'cols': (None,)},
+                           {'time': '14:00', 'cols': (None,)},
+                           {'time': '15:00', 'cols': (None,)},],
+                          pformat(result))
+
+        ev1 = CalendarEvent(datetime(2004, 8, 12, 12, 0), timedelta(hours=2),
+                            "Meeting")
+        cal.addEvent(ev1)
+        result = list(view.getHours())
+        self.assertEquals(result,
+                          [{'time': '10:00', 'cols': (None,)},
+                           {'time': '11:00', 'cols': (None,)},
+                           {'time': '12:00', 'cols': (ev1,)},
+                           {'time': '13:00', 'cols': ('',)},
+                           {'time': '14:00', 'cols': (None,)},
+                           {'time': '15:00', 'cols': (None,)},],
+                          pformat(result))
+
+        #
+        #  12 +--+
+        #  13 |Me|+--+
+        #  14 +--+|Lu|
+        #  15 |An|+--+
+        #  16 +--+
+        #
+
+        ev2 = CalendarEvent(datetime(2004, 8, 12, 13, 0),
+                            timedelta(hours=2), "Lunch")
+        ev3 = CalendarEvent(datetime(2004, 8, 12, 14, 0),
+                            timedelta(hours=2), "Another meeting")
+
+        cal.addEvent(ev2)
+        cal.addEvent(ev3)
+
+        result = list(view.getHours())
+        self.assertEquals(result,
+                          [{'time': '10:00', 'cols': (None, None)},
+                           {'time': '11:00', 'cols': (None, None)},
+                           {'time': '12:00', 'cols': (ev1, None)},
+                           {'time': '13:00', 'cols': ('', ev2)},
+                           {'time': '14:00', 'cols': (ev3,'')},
+                           {'time': '15:00', 'cols': ('', None)},],
+                          pformat(result))
+
 class TestMonthlyCalendarView(NiceDiffsMixin, unittest.TestCase):
 
     def test_render(self):
@@ -366,7 +496,9 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCalendarDay))
     suite.addTest(unittest.makeSuite(TestCalendarViewBase))
     suite.addTest(unittest.makeSuite(TestWeeklyCalendarView))
+    suite.addTest(unittest.makeSuite(TestDailyCalendarView))
     suite.addTest(unittest.makeSuite(TestMonthlyCalendarView))
+    suite.addTest(DocTestSuite('schooltool.browser.cal'))
     return suite
 
 
