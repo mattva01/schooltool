@@ -269,15 +269,19 @@ class ServerSettingsDlg(wxDialog):
         # begin wxGlade: ServerSettingsDlg.__do_layout
         rootSizer = wxBoxSizer(wxVERTICAL)
         btnSizer = wxBoxSizer(wxHORIZONTAL)
-        mainSizer = wxFlexGridSizer(2, 2, 16, 16)
-        mainSizer.Add(self.serverLabel, 2, 0, 0)
-        mainSizer.Add(self.serverTextCtrl, 0, wxEXPAND, 0)
-        mainSizer.Add(self.portLabel, 2, 0, 0)
-        mainSizer.Add(self.portTextCtrl, 0, wxEXPAND, 0)
-        mainSizer.Add(self.userLabel, 2, 0, 0)
-        mainSizer.Add(self.userTextCtrl, 0, wxEXPAND, 0)
-        mainSizer.Add(self.passwordLabel, 2, 0, 0)
-        mainSizer.Add(self.passwordTextCtrl, 0, wxEXPAND, 0)
+        mainSizer = wxFlexGridSizer(4, 2, 4, 16)
+        mainSizer.Add(self.serverLabel, 2, wxALIGN_CENTER_VERTICAL, 0)
+        mainSizer.Add(self.serverTextCtrl, 0,
+                      wxALIGN_CENTER_VERTICAL|wxEXPAND, 0)
+        mainSizer.Add(self.portLabel, 2, wxALIGN_CENTER_VERTICAL, 0)
+        mainSizer.Add(self.portTextCtrl, 0,
+                      wxALIGN_CENTER_VERTICAL|wxEXPAND, 0)
+        mainSizer.Add(self.userLabel, 2, wxALIGN_CENTER_VERTICAL, 0)
+        mainSizer.Add(self.userTextCtrl, 0,
+                      wxALIGN_CENTER_VERTICAL|wxEXPAND, 0)
+        mainSizer.Add(self.passwordLabel, 2, wxALIGN_CENTER_VERTICAL, 0)
+        mainSizer.Add(self.passwordTextCtrl, 0,
+                      wxEXPAND|wxALIGN_CENTER_VERTICAL, 0)
         mainSizer.AddGrowableCol(1)
         rootSizer.Add(mainSizer, 1, wxALL|wxEXPAND, 16)
         btnSizer.Add(self.okBtn, 0, 0, 0)
@@ -911,6 +915,78 @@ class ActivitySelectionDlg(wxDialog):
         return selection
 
 
+class NewPersonDlg(wxDialog):
+    """A dialog to enter the name, login, and password of a new user."""
+
+    def __init__(self, parent):
+        self.title = "New Person"
+        wxDialog.__init__(self, parent, -1, self.title,
+                          style=wxDIALOG_MODAL|wxCAPTION)
+        self.client = parent.client
+
+        nameLabel = wxStaticText(self, -1, "Name")
+        userLabel = wxStaticText(self, -1, "Username")
+        passwdLabel = wxStaticText(self, -1, "Password")
+        passwd2Label = wxStaticText(self, -1, "Password (again)")
+
+        self.nameTextCtrl = wxTextCtrl(self, -1, "")
+        self.userTextCtrl = wxTextCtrl(self, -1, "")
+        self.passwdTextCtrl = wxTextCtrl(self, -1, "", style=wxTE_PASSWORD)
+        self.passwd2TextCtrl = wxTextCtrl(self, -1, "", style=wxTE_PASSWORD)
+
+        sizer = wxFlexGridSizer(4, 2, 4, 16)
+
+        sizer.Add(nameLabel, 2, wxALIGN_CENTER_VERTICAL, 0)
+        sizer.Add(self.nameTextCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 0)
+
+        sizer.Add(userLabel, 2, wxALIGN_CENTER_VERTICAL, 0)
+        sizer.Add(self.userTextCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 0)
+
+        sizer.Add(passwdLabel, 2, wxALIGN_CENTER_VERTICAL, 0)
+        sizer.Add(self.passwdTextCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 0)
+
+        sizer.Add(passwd2Label, 2, wxALIGN_CENTER_VERTICAL, 0)
+        sizer.Add(self.passwd2TextCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 0)
+
+        vsizer = wxBoxSizer(wxVERTICAL)
+        vsizer.Add(sizer, 0, wxEXPAND|wxALL, 8)
+
+        static_line = wxStaticLine(self, -1)
+        vsizer.Add(static_line, 0, wxEXPAND, 0)
+
+        button_bar = wxBoxSizer(wxHORIZONTAL)
+        ok_btn = wxButton(self, wxID_OK, "OK")
+        EVT_BUTTON(self, wxID_OK, self.OnOk)
+        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        ok_btn.SetDefault()
+        button_bar.Add(ok_btn, 0, wxLEFT|wxRIGHT, 16)
+        button_bar.Add(cancel_btn, 0, 0, 0)
+        vsizer.Add(button_bar, 0, wxEXPAND|wxALL, 16)
+
+        self.SetSizer(vsizer)
+        vsizer.SetSizeHints(self)
+        self.Layout()
+        self.CenterOnScreen(wx.wxBOTH)
+
+    def OnOk(self, event):
+        """Verify that all data is entered before closing the dialog."""
+        if self.passwdTextCtrl.GetValue() != self.passwd2TextCtrl.GetValue():
+            wxMessageBox("Passwords do not match", self.title,
+                         wxICON_ERROR|wxOK)
+            return
+        name = self.nameTextCtrl.GetValue()
+        username = self.userTextCtrl.GetValue()
+        password = self.passwdTextCtrl.GetValue()
+
+        try:
+            self.client.createPerson(name, username, password)
+        except SchoolToolError, e:
+            wxMessageBox("Could create a new person: %s" % e,
+                         self.title, wxICON_ERROR|wxOK)
+        else:
+            self.EndModal(wxID_OK)
+
+
 class SchoolTimetableGrid(wxGrid):
 
     def __init__(self, parent, tt, resources):
@@ -1504,15 +1580,10 @@ class MainFrame(wxFrame):
 
         Accessible from File|New Person.
         """
-        name = wxGetTextFromUser("Full name", "New Person")
-        if name == "":
-            return
-        try:
-            self.client.createPerson(name)
-        except SchoolToolError, e:
-            wxMessageBox("Could not create a person: %s" % e,
-                         "New Person", wxICON_ERROR|wxOK)
-            return
+        dlg = NewPersonDlg(self)
+        if dlg.ShowModal()  == wxID_OK:
+            self.DoRefresh()
+        dlg.Destroy()
 
     def DoNewGroup(self, event):
         """Create a new group.

@@ -759,6 +759,24 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertEqualsXML(conn.body,
                              '<person title="John &quot;mad cat&quot; Doe"/>')
 
+        client = self.newClientMulti([
+            ResponseStub(201, 'OK', 'Created',
+                         location=('http://localhost/persons/root')),
+            ResponseStub(200, 'OK', 'Password set')])
+        result = client.createPerson('John "mad cat" Doe', "root", "foo")
+        self.assertEquals(result, '/persons/root')
+        self.assertEquals(len(client.connectionFactory.connections), 2)
+        conn = client.connectionFactory.connections[0]
+        self.assertEquals(conn.path, '/persons/root')
+        self.assertEquals(conn.method, 'PUT')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                             '<person title="John &quot;mad cat&quot; Doe"/>')
+        conn = client.connectionFactory.connections[1]
+        self.assertEquals(conn.path, '/persons/root/password')
+        self.assertEquals(conn.method, 'PUT')
+        self.assertEqualsXML(conn.body, 'foo')
+
     def test_createPerson_with_errors(self):
         from schooltool.clients.guiclient import SchoolToolError
         client = self.newClient(ResponseStub(400, 'Bad Request'))

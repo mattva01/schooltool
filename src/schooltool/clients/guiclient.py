@@ -369,12 +369,21 @@ class SchoolToolClient:
             raise ResponseStatusError(response)
         return self._pathFromResponse(response)
 
-    def createPerson(self, person_title):
+    def createPerson(self, person_title, name=None, password=None):
         body = '<person title="%s"/>' % cgi.escape(person_title, True)
-        response = self.post('/persons', body)
+        if name is not None:
+            path = '/persons/' + name
+            response = self.put(path, body)
+        else:
+            response = self.post('/persons', body)
         if response.status != 201:
             raise ResponseStatusError(response)
-        return self._pathFromResponse(response)
+        path = self._pathFromResponse(response)
+        if password is not None:
+            response = self.put(path + '/password', password)
+            if response.status != 200:
+                raise ResponseStatusError(response)
+        return path
 
     def createGroup(self, group_title):
         body = '<group title="%s"/>' % cgi.escape(group_title, True)
