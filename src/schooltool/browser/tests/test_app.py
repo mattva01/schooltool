@@ -153,6 +153,8 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         self.assertTraverses(view, 'groups', GroupContainerView, app['groups'])
         css = self.assertTraverses(view, 'schooltool.css', StaticFile)
         self.assertEquals(css.content_type, 'text/css')
+        css = self.assertTraverses(view, 'logo.png', StaticFile)
+        self.assertEquals(css.content_type, 'image/png')
         user = object()
         request = RequestStub(authenticated_user=user)
         self.assertTraverses(view, 'start', StartView, user, request=request)

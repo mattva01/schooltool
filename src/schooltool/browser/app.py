@@ -92,6 +92,8 @@ class RootView(View):
             return GroupContainerView(self.context['groups'])
         elif name == 'schooltool.css':
             return StaticFile('www/schooltool.css', 'text/css')
+        elif name == 'logo.png':
+            return StaticFile('www/logo.png', 'image/png')
         elif name == 'logout':
             return LogoutView(self.context)
         elif name == 'start':

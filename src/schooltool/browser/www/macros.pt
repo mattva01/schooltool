@@ -6,16 +6,23 @@
   <link rel="stylesheet" href="/schooltool.css" />
 </head>
 <body metal:define-slot="body">
-  <h1 metal:define-slot="h1">Welcome to SchoolTool</h1>
-  <div class="login" tal:condition="not:request/authenticated_user">
-    Not logged in.
+  <div class="header">
+    <div class="logo">
+      <img src="/logo.png" alt="SchoolTool" class="logo"/>
+    </div>
+    <h1 metal:define-slot="h1">Welcome to SchoolTool</h1>
+    <div class="login" tal:condition="not:request/authenticated_user">
+      Not logged in.
+    </div>
+    <div class="login" tal:condition="request/authenticated_user">
+      User: <a href="/start" tal:content="request/authenticated_user/title" />.
+      <a href="/logout"
+	 tal:attributes="href string:/logout?url=${request/path}">Log out</a>.
+    </div>
   </div>
-  <div class="login" tal:condition="request/authenticated_user">
-    User: <a href="/start" tal:content="request/authenticated_user/title" />.
-    <a href="/logout"
-       tal:attributes="href string:/logout?url=${request/path}">Log out</a>.
-  </div>
+  <div class="content">
   <p metal:define-slot="content">Content</p>
+  </div>
 </body>
 </html>
 </metal:block>

@@ -1,7 +1,12 @@
 /* Stylesheet for SchoolTool */
+body {
+  margin: 0;
+}
 
 h1, h2, h3, h4 {
-  color: #44d344;
+  /* color: #44d344; */
+  color: maroon;
+  margin-top: 15px;
 }
 
 h2 {
@@ -162,4 +167,20 @@ a.action:active {
   background: white;
   color: black;
   text-decoration: none
+}
+
+div.logo {
+  float: left;
+  margin: 1ex;
+  margin-right: 1em;
+}
+
+div.header {
+  border: 1px solid white;
+  border-bottom: 1px solid brown;
+}
+
+div.content {
+  clear: both;
+  margin: 4ex 2em 4ex 2em;
 }
