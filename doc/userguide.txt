@@ -1,0 +1,127 @@
+SCHOOLTOOL GUI GUIDE
+====================
+
+Server Settings (login) dialog pops up on start, you can choose the
+server, port to connect to and the user/password to use.  This dialog
+can be accessed via Setting->Server menu item.
+
+What you see after logging in is the main SchoolTool window it is
+divided into three panes: the group tree, members pane for a selected
+group, and the relationships pane.
+
+
+ORG STRUCTURE
+-------------
+
+You can create new persons and groups using the File->New Person and
+File->New Group menu items.
+
+A group or person can be added to a parent group by selecting the
+parent group in the tree, then right-clicking in its relationships
+pane, choosing Add Member or Add Subgroup, and choosing a new member
+from the appearing list of persons or groups respectively.
+
+The member can be removed by breaking the membership relationship from
+either side by choosing the "Remove Relationship" from the context
+menu of a relationship.
+
+
+ABSENCE TRACKING
+----------------
+
+Roll calls can be run on all the groups by right-clicking on a group
+in the tree and choosing "Roll Call" in the context menu.  The roll
+call dialog lists all persons in a group and presents a choice present
+or absent, and a facility to add a comment.
+
+Absences of persons can be viewed by right-clicking on a person in the
+Members pane and choosing "View Absences".  Every absence can consist
+of several absence comments.
+
+Every group can have an absence tracker, to receive and collect all
+the absence events of its members.  In order to create an absence
+tracker for a group, right click on a group in the tree and choose
+"Absence Tracker".  Later, you can use the same menu item to view the
+absences collected in the tracker.
+
+
+TIMETABLES
+----------
+
+Every group or person can have a number of timetables.  First, the
+timetables can vary in the timetable schema.  For instance, in a
+school with a 4-day rotating timetable there might be some events
+recurring weekly.  Second, there are separate timetables for different
+time periods, such as semesters.
+
+Every group or person can have a number of own timetables and a number
+of composite timetables.  Own timetables consist of the events private
+to a group or person, and composite timetables consist of all events
+related to a group or person.  For example, a composite timetable for
+a teacher will contain all the lessons they are teaching, and a
+composite timetable of a pupil will contain all the events from the
+private timetables of the groups the're in, in other words -- all the
+lessons they need to attend.
+
+The private and composite timetables of persons and groups can be
+viewed by choosing the "View timetables" and "View composite
+timetables" in the context menus for groups and persons.
+
+The timetable can be edited by the school administrator by choosing
+"View->School Timetable" menu item.  The user will be presented with a
+list of possible timetables.  After choosing one, the user will be
+presented with a grid listing all teachers as rows and all timetable
+periods as colums.  When a cell of the timetable is double-clicked, a
+dialog for editing that cell appears.  The dialog contains a
+selectable list of all the groups a given teacher is teaching, and a
+button for booking of resources, including venue, for a given
+timetable activity.  Conflicts in a timetable (such as booking the
+same resource for two activities at the same time) are represented and
+no attempt is given to trying to resolve them.
+
+
+CALENDARS
+---------
+
+Every group and person has two calendars: a private calendar which can
+be edited and a read-only calendar formed out of the group's or
+person's composite timetable.
+
+Mozilla Calendar or a similar calendaring application has to be used
+to access the calendars.  A list of all calendars, available at
+http://localhost:8080/calendars.html (if the SchoolTool server is
+running on localhost port 8080) can be a help in adding the calendar
+to the calendaring application.
+
+
+RESOURCE SEARCH AND BOOKING
+---------------------------
+
+The resource availability search dialog is accessable via the
+"View->Search for Available Resources" menu item.  In that dialog, the
+user can choose the resources they are interested in, the range of
+dates, the hours within a day, and a minimum duration of a free period
+of time.
+
+Then, a resource can be booked by choosing the free period of time and
+clicking the Book Resource button.  In the resource booking dialog,
+the user has to choose the exact time and duration, the resource being
+booked, and the person who is booking the resource.  Only the managers
+can choose other users, teachers can choose only themselves.
+
+When the resource is booked, an event is added to both the calendars
+of the resource and of the person booking.  The booking is cancelled
+if the booking event is deleted in the person's private calendar.
+
+
+SECURITY
+--------
+
+There are three kinds of users:  Pupils, Teachers, and Managers.
+Mostly, pupils can only view the information on the server, teachers
+can additionaly run roll calls and book resources, and the managers
+can edit all information.
+
+The username for a user is set when the user is created and cannot be
+changed.  The password can be changed by the user themselves or a
+manager by right-clicking on a user and choosing "Change Password".
