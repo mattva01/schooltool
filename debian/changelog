@@ -9,6 +9,7 @@ schooltool (0.8-1) unstable; urgency=low
     to the configuration file if the certificate existed before installation.
   * Moved the persistent, zope, BTrees and ZDOB modules to /usr/lib and
     removed all links from /usr/share to /usr/lib.
+  * Changed priority to extra.
 
  -- Brian Sutherland <jinty@web.de>  Wed, 13 Oct 2004 23:23:13 +0200
 
