@@ -23,6 +23,7 @@ $Id$
 """
 
 import datetime
+import sha
 from zope.interface import implements
 from schooltool.interfaces import IPerson, IGroup, IResource
 from schooltool.interfaces import IAbsenceComment
@@ -191,6 +192,7 @@ class Person(ApplicationObjectMixin):
         self.valencies = Valency(Membership, 'member')
         self._absences = PersistentKeysSetWithNames()
         self._current_absence = None
+        self._pwhash = None
 
     def iterAbsences(self):
         return iter(self._absences)
@@ -222,10 +224,17 @@ class Person(ApplicationObjectMixin):
 
 
     def setPassword(self, password):
-        pass
+        if password is None:
+            self._pwhash = None
+        else:
+            self._pwhash = sha.sha(password).digest()
 
     def checkPassword(self, password):
-        pass
+        if self._pwhash is None or password is None:
+            return False
+        else:
+            return sha.sha(password).digest() == self._pwhash
+
 
 
 class Group(ApplicationObjectMixin):
