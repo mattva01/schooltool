@@ -44,57 +44,54 @@ class ApplicationLogView(View):
         if 'filter' in request.args:
             filter = request.args['filter'][0]
 
-        try:
-            if 'page' in request.args and 'pagesize' in request.args:
+        if 'page' in request.args and 'pagesize' in request.args:
+            try:
                 page = int(request.args['page'][0])
+            except ValueError:
+                return textErrorPage(request,
+                            _("Invalid value for 'page' parameter."))
+            try:
                 pagesize = int(request.args['pagesize'][0])
-                if page == 0 or pagesize == 0:
-                    raise ValueError("page and pagesize cannot be zero")
-        except ValueError:
-            return textErrorPage(request, _("'page' or 'pagesize' parameters"
-                                            " are invalid."))
+                if pagesize <= 0:
+                    raise ValueError("page size must be positive")
+            except ValueError:
+                return textErrorPage(request,
+                            _("Invalid value for 'pagesize' parameter."))
 
         file = self.openLog(path)
         result = file.readlines()
         file.close()
 
         if filter:
-            filter_str = request.args['filter'][0]
-            result = [line for line in result
-                      if filter_str in line]
+            result = [line for line in result if filter in line]
 
         if page is not None:
-            page = int(request.args['page'][0])
-            pagesize = int(request.args['pagesize'][0])
-            i, j = self.getPageRange(page, pagesize, len(result))
-            request.setHeader('X-Page', str(j / pagesize))
-            request.setHeader(
-                'X-Total-Pages',
-                str((len(result) + pagesize - 1) / pagesize))
-            result = result[i:j]
+            page, total_pages = self.getPageInRange(page, pagesize, len(result))
+            request.setHeader('X-Page', str(page))
+            request.setHeader('X-Total-Pages', str(total_pages))
+            result = result[(page - 1) * pagesize:page * pagesize]
         return "".join(result)
 
-    def getPageRange(self, page, pagesize, lines):
+    def getPageInRange(self, page, pagesize, lines):
         """A helper to cut out a page out of an array of lines.
 
-        For a given page nr, page size in lines, and total length
-        in lines, returns the start and end indexes which can be used
-        for slicing the page out of the range of lines.
+        For a given page nr, page size in lines, and total length in lines,
+        returns the normalized page number and total number of pages.  If the
+        client requests a page after the last, she gets the last page.  If the
+        client requests a page before the first, she gets the first page.
 
-        If the client requests a page after the last, he gets the last
-        page.
+        You can easily calculate the start and end indexes in the following
+        fashion:
+
+          page, total = getPageInRange(page, pagesize, lines)
+          start_idx = (page - 1) * pagesize
+          end_idx = page * pagesize
+
         """
         totalpages = (lines + pagesize - 1) / pagesize
-
-        if page > totalpages:
-            page = totalpages
-
         if page < 0:
             page = totalpages + 1 + page
-            if page < 1:
-                page = 1
-
-        return ((page - 1) * pagesize, page * pagesize)
+        return max(1, min(page, totalpages)), totalpages
 
     def openLog(self, filename):
         return file(filename)

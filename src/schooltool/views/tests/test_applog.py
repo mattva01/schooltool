@@ -75,24 +75,30 @@ class TestApplicationLogView(unittest.TestCase):
         self.assertEquals(self.request.headers['x-total-pages'], "3")
         self.assertEquals(result, 'kite\n')
 
-    def test_getPageRange(self):
-        self.assertEquals(self.view.getPageRange(1, 10, 100), (0, 10))
-        self.assertEquals(self.view.getPageRange(2, 10, 100), (10, 20))
+    def test_getPageInRange(self):
+        self.assertEquals(self.view.getPageInRange(1, 10, 100), (1, 10))
+        self.assertEquals(self.view.getPageInRange(2, 10, 100), (2, 10))
 
         # If the last page is incomplete, slice does the right thing
-        self.assertEquals(self.view.getPageRange(2, 10, 12), (10, 20))
+        self.assertEquals(self.view.getPageInRange(2, 10, 12), (2, 2))
 
         # Negative indices mean counting from the end
-        self.assertEquals(self.view.getPageRange(-1, 10, 12), (10, 20))
-        self.assertEquals(self.view.getPageRange(-2, 10, 12), (0, 10))
+        self.assertEquals(self.view.getPageInRange(-1, 10, 12), (2, 2))
+        self.assertEquals(self.view.getPageInRange(-2, 10, 12), (1, 2))
 
         # Out of range gets the last page
-        self.assertEquals(self.view.getPageRange(3, 10, 12), (10, 20))
-        self.assertEquals(self.view.getPageRange(-3, 10, 12), (0, 10))
+        self.assertEquals(self.view.getPageInRange(3, 10, 12), (2, 2))
+        self.assertEquals(self.view.getPageInRange(-3, 10, 12), (1, 2))
 
-    def testErrorZero(self):
+    def testBadPageSize(self):
         self.request.args.update({'filter': [''],
                                   'pagesize': ["0"], 'page': ["1"]})
+        result = self.view.render(self.request)
+        self.assertEquals(self.request.code, 400)
+
+        self.request.code = 200
+        self.request.args.update({'filter': [''],
+                                  'pagesize': ["-2"], 'page': ["1"]})
         result = self.view.render(self.request)
         self.assertEquals(self.request.code, 400)
 
@@ -100,6 +106,12 @@ class TestApplicationLogView(unittest.TestCase):
         self.request.args.update({'pagesize': ["1"], 'page': ["one"]})
         result = self.view.render(self.request)
         self.assertEquals(self.request.code, 400)
+
+        self.request.code = 200
+        self.request.args.update({'pagesize': ["two"], 'page': ["1"]})
+        result = self.view.render(self.request)
+        self.assertEquals(self.request.code, 400)
+
 
 def test_suite():
     suite = unittest.TestSuite()
