@@ -48,6 +48,16 @@ class HTTPStub:
 
         self.open_connections.append(self)
 
+    def request(self, method, url, body=None, headers={}):
+        self.putrequest(method, url)
+        if body:
+            self.putheader('Content-Length', str(len(body)))
+        for k, v in headers.items():
+            self.putheader(k, v)
+        self.endheaders()
+        if body:
+            self.send(body)
+
     def putrequest(self, method, resource, *args, **kw):
         self.method = method
         self.resource = resource
@@ -62,7 +72,8 @@ class HTTPStub:
         return ResponseStub(self)
 
     def send(self, s):
-        assert s != "", "sending empty strings breaks when SSL is used"
+        if s == "":
+            raise AssertionError("send('') breaks when SSL is used")
         self.sent_data += s
 
     def close(self):
@@ -83,6 +94,8 @@ class ResponseStub:
             self._data = "404 :-)"
 
     def read(self):
+        if self.request not in HTTPStub.open_connections:
+            raise AssertionError("read() called after connection was closed.")
         return self._data
 
     def getheader(self, name, default=None):
@@ -108,8 +121,8 @@ class TestHTTPClient(unittest.TestCase):
 
         h.connectionFactory = HTTPStub
         h.secureConnectionFactory = None
-        result = h.request('GET', '/')
-        self.assertEqual(result.read(), "Welcome")
+        result, text = h.request('GET', '/')
+        self.assertEqual(text, "Welcome")
 
         self.assertEqual(HTTPStub.open_connections, [])
 
@@ -122,8 +135,8 @@ class TestHTTPClient(unittest.TestCase):
 
         h.connectionFactory = None
         h.secureConnectionFactory = HTTPStub
-        result = h.request('GET', '/')
-        self.assertEqual(result.read(), "Welcome")
+        result, text = h.request('GET', '/')
+        self.assertEqual(text, "Welcome")
 
         self.assertEqual(HTTPStub.open_connections, [])
 

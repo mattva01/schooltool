@@ -136,18 +136,12 @@ class HTTPClient:
         else:
             factory = self.connectionFactory
         conn = factory(self.host, self.port)
-        self.lastconn = conn
-        conn.putrequest(method, resource)
-        if body is not None:
-            conn.putheader('Content-Length', len(body))
-        for header, value in headers.items():
-            conn.putheader(header, value)
-        conn.endheaders()
-        if body is not None:
-            conn.send(body)
+        self.lastconn = conn # for unit tests
+        conn.request(method, resource, body, headers)
         response = conn.getresponse()
+        text = response.read()
         conn.close()
-        return response
+        return response, text
 
 
 class CSVImporterHTTP(CSVImporterBase):
@@ -302,8 +296,8 @@ class CSVImporterHTTP(CSVImporterBase):
         creds = "%s:%s" % (self.user, self.password)
         auth = "Basic " + base64.encodestring(creds.encode('UTF-8')).strip()
         headers = {'Authorization': auth}
-        response = self.server.request(method, resource,
-                                       body=body, headers=headers)
+        response, text = self.server.request(method, resource,
+                                             body=body, headers=headers)
         if response.status == 200:
             sys.stdout.write('.')
         if response.status == 201:
@@ -317,7 +311,7 @@ class CSVImporterHTTP(CSVImporterBase):
             print '-' * 70
             print response.status, response.reason
             print
-            print to_unicode(response.read())
+            print to_unicode(text)
             sys.exit(1)
         return response
 
