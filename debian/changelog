@@ -36,7 +36,9 @@ schooltool (0.8.99+0.9rc2-1) unstable; urgency=low
   * General cleanup:
     - Removed debdirclean makefile target called from top level directory.
     - Removed dependency references to old schooltool-server package.
-  * Fix the database versioning and update to 0.9.1.
+  * Remove the database versioning code and add code ro remove the crufty
+    database versioning stamps. Database upgrades will be handled within
+    schooltool from this point on.
 
  -- Brian Sutherland <jinty@web.de>  Thu, 25 Nov 2004 21:26:40 +0100
 
