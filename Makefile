@@ -19,7 +19,8 @@ PYTHONPATH=src:Zope3/src
 all: build
 
 build: build-translations
-	$(PYTHON) setup.py build_ext -i
+	$(PYTHON) setup.py schoolbell build_ext -i
+	$(PYTHON) setup.py schooltool build_ext -i
 	cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) remove-stale-bytecode.py
 
@@ -47,6 +48,10 @@ clean:
 realclean: clean
 	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;
 	rm -f Data.fs* *.csv tags ID *.log
+	rm -f scripts/import-sampleschool
+	rm -f MANIFEST.schoolbell
+	rm -f MANIFEST.schooltool
+	rm -rf dist
 
 test: build
 	LC_ALL="C" $(PYTHON) test.py $(TESTFLAGS) schooltool
@@ -94,5 +99,28 @@ edit-coverage-reports:
 
 vi-coverage-reports:
 	@cd coverage && vi '+/^>>>>>>/' `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
+
+scripts/import-sampleschool: scripts/import-sampleschool.head
+	(cat $< && sed -ne '/^# -- Do not remove this line --$$/,$$p' \
+	    import-sampleschool.py) > $@
+
+.PHONY: schooltooltar
+schooltooltar: realclean build extract-translations \
+	sampledata scripts/import-sampleschool clean
+	rm -rf dist
+	fakeroot ./debian/rules clean
+	./setup.py schooltool sdist
+
+.PHONY: schoolbelltar
+schoolbelltar: realclean build extract-translations clean
+	rm -rf dist
+	fakeroot ./debian/rules clean
+	./setup.py schoolbell sdist
+
+.PHONY: signtar
+signtar:
+	md5sum dist/school*.tar.gz > dist/md5sum
+	gpg --clearsign dist/md5sum
+	mv dist/md5sum.asc dist/md5sum
 
 .PHONY: all build clean test ftest run coverage sampleschool

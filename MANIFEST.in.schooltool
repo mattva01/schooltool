@@ -1,0 +1,28 @@
+include RELEASE
+include GPL
+include Makefile
+include MANIFEST*schooltool
+include test.conf test.py testserver.pem
+include ttconfig.data
+include schooltool.conf.in
+include ftesting.zcml
+include schooltool-*.py
+include remove-stale-bytecode.py
+include *sampleschool.py
+include *.csv
+include scripts/schooltool scripts/import-sampleschool
+include scripts/schooltool-client
+
+recursive-include src/schooltool *.py *.scr *.pt *.css *.png *.pot
+recursive-include src/schooltool *.js *.xml *.rng *.ico *.conf
+recursive-include doc *.txt *.rst
+recursive-include db-conversion-tests Data.fs-* test_*.py
+
+include debian/rules debian/changelog debian/compat debian/control
+include debian/copyright debian/README.Debian debian/TODO
+include debian/*.1 debian/schooltool.* debian/ssl-cert.cnf
+include debian/python*schooltool.*
+include debian/po/*.po debian/po/templates.pot debian/po/POTFILES.in
+
+recursive-include Zope3 *
+recursive-include src/schooltool/schema/protege *

@@ -1,0 +1,26 @@
+include RELEASE
+include GPL
+include Makefile
+include MANIFEST*schoolbell
+include test.conf test.py testserver.pem
+include ttconfig.data
+include schoolbell.conf.in
+include ftesting.zcml
+include schoolbell-*.py
+include remove-stale-bytecode.py
+include images/schoolbell.svg
+include scripts/schoolbell
+include scripts/schooltool-client
+
+recursive-include src/schoolbell *.py *.scr *.pt *.css *.png *.pot
+recursive-include src/schoolbell *.js *.xml *.rng *.ico *.conf
+recursive-include doc *.txt *.rst
+recursive-include db-conversion-tests Data.fs-* test_*.py
+
+include debian/rules debian/changelog debian/compat debian/control
+include debian/copyright debian/README.Debian debian/TODO
+include debian/*.1 debian/schoolbell.* debian/ssl-cert.cnf
+include debian/python*schoolbell.*
+include debian/po/*.po debian/po/templates.pot debian/po/POTFILES.in
+
+recursive-include Zope3 *

@@ -60,9 +60,10 @@ import sys
 import sets
 import gettext as _gettext
 from schooltool.common import to_locale
+from schooltool.pathconfig import DATADIR
 
 
-localedir = os.path.dirname(__file__)
+localedir = os.path.join(DATADIR, 'translation')
 catalog = _gettext.translation('schooltool', localedir, fallback=True)
 
 debug_overeager_translations = False

@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+import os.path
 
 from zope.testing.doctest import DocTestSuite
 from zope.interface.declarations import implements, directlyProvides
@@ -75,7 +76,7 @@ class TestTemplate(SchoolToolSetup):
 
     def test_call(self):
         from schooltool.rest import Template
-        templ = Template('sample.pt')
+        templ = Template('tests/sample.pt')
         request = RequestStub()
         result = templ(request, foo='Foo', bar='Bar')
         self.assertEquals(request.headers['content-type'],
@@ -84,7 +85,7 @@ class TestTemplate(SchoolToolSetup):
 
     def test_content_type(self):
         from schooltool.rest import Template
-        templ = Template('sample_xml.pt', content_type='text/plain')
+        templ = Template('tests/sample_xml.pt', content_type='text/plain')
         request = RequestStub()
         result = templ(request, foo='Foo', bar='Bar')
         self.assertEquals(request.headers['content-type'],
@@ -93,7 +94,7 @@ class TestTemplate(SchoolToolSetup):
 
     def test_no_content_type(self):
         from schooltool.rest import Template
-        templ = Template('sample_xml.pt', content_type=None)
+        templ = Template('tests/sample_xml.pt', content_type=None)
         request = RequestStub()
         result = templ(request, foo='Foo', bar='Bar')
         self.assert_('content-type' not in request.headers)
@@ -101,7 +102,7 @@ class TestTemplate(SchoolToolSetup):
 
     def test_no_charset(self):
         from schooltool.rest import Template
-        templ = Template('sample_xml.pt', content_type='text/plain',
+        templ = Template('tests/sample_xml.pt', content_type='text/plain',
                          charset=None)
         request = RequestStub()
         result = templ(request, foo='Foo', bar='Bar')
@@ -110,13 +111,13 @@ class TestTemplate(SchoolToolSetup):
 
     def test_no_request(self):
         from schooltool.rest import Template
-        templ = Template('sample_no_request.pt')
+        templ = Template('tests/sample_no_request.pt')
         result = templ(None, foo='Foo', bar='Bar')
         self.assertEquals(result, "foo: Foo\nbar: Bar\n")
 
     def test_translate(self):
         from schooltool.rest import Template
-        templ = Template('sample_i18n.pt')
+        templ = Template('tests/sample_i18n.pt')
 
         def fake_ugettext(msgid):
             return unicode({'Hello': 'Labas'}.get(msgid, msgid))
@@ -134,7 +135,7 @@ class TestTemplate(SchoolToolSetup):
 
     def test_absoluteURL(self):
         from schooltool.rest import Template
-        templ = Template('sample_url.pt')
+        templ = Template('tests/sample_url.pt')
         context = self.buildTree()[2]
         result = templ(RequestStub(), context=context)
         self.assertEquals(result,
