@@ -16,32 +16,34 @@
     <div class="person-info">
       <tal:if condition="context/photo">
         <img src="photo" class="person-photo"
-            tal:attributes="src string:${context/@@absolute_url}/photo" />
+          tal:attributes="src string:${context/@@absolute_url}/photo" />
       </tal:if>
 
       <div class="person-details">
         <strong i18n:translate="">Username:</strong>
         <span tal:replace="context/zope:name">not_doe</span>
       </div>
-    </div>
 
-    <div class="person-groups"
-      tal:define="groups context/groups/sortby:title">
-      <h3 i18n:translate="">Groups</h3>
-      <ul>
-        <tal:loop repeat="group groups">
-          <li>
-            <a title=""
-              tal:attributes="href group/@@absolute_url;
-              title group/description|group/title"
-              tal:content="group/title"></a>
-          </li>
-        </tal:loop>
-      </ul>
-      <div tal:condition="not:groups" i18n:translate="">
-        This person does not belong to any groups.
+      <div class="person-groups"
+        tal:define="groups context/groups/sortby:title">
+        <h3 i18n:translate="">Groups</h3>
+        <ul>
+          <tal:loop repeat="group groups">
+            <li>
+              <a title=""
+                tal:attributes="href group/@@absolute_url;
+                title group/description|group/title"
+                tal:content="group/title"></a>
+            </li>
+          </tal:loop>
+        </ul>
+        <div tal:condition="not:groups" i18n:translate="">
+          This person does not belong to any groups.
+        </div>
       </div>
     </div>
+
+    <tal:block replace="structure context/@@notes|nothing"/>
 
   </metal:block>
 

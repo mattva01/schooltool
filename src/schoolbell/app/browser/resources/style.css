@@ -804,6 +804,16 @@ body#path-login form.standalone {
 
 /** Specific Page Styling **/
 
+.resource-info {
+    width: 55%;
+    float: left;
+}
+
+.group-info {
+    width: 55%;
+    float: left;
+}
+
 .person-info {
     /* XXX: We want person-info to expand to fit person-photo.. by default the
     * float on person-photo causes person-info to ignore it and only expand to
@@ -813,7 +823,8 @@ body#path-login form.standalone {
     * auto/hidden would cause this. 
     */ 
     overflow: auto;
-    width: 45%;
+    width: 55%;
+    float: left;
 }
 
 .person-info .person-photo {
@@ -832,6 +843,7 @@ body#path-login form.standalone {
 
 .person-groups {
     margin: 0.5em 0;
+    float: left;
 }
 
 table.acl {
@@ -890,4 +902,33 @@ table.event_booking th.permission {
 table.event_booking td.booked {
     width: 2em;
     text-align: center;
+}
+
+#notes {
+  float: right;
+  width: 18em;
+  top: 1ex !important;
+}
+
+#notes h5 {
+  display: none; /* XXX Hide this here, but keep it in the template for */
+                 /* accessibility (or should we just remove from template? */
+}
+
+.note {
+  background: #eed680;
+  border: 1px #d1940c solid;
+  padding: 1ex;
+  margin-top: 1ex;
+}
+
+.note h6 {
+  margin: 0;
+  font-size: small;
+  text-decoration: underline;
+}
+
+.note p {
+  margin: 0;
+  font-size: small;
 }
