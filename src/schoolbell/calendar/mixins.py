@@ -316,6 +316,9 @@ class CalendarEventMixin:
 
         """
         # The import is here to avoid cyclic dependencies
+        # XXX Why does this mixin refer to SimpleCalendarEvent?  That kind of
+        #     defeats the whole purpose.  Maybe this method should be moved
+        #     into SimpleCalendarEvent itself.
         from schoolbell.calendar.simple import SimpleCalendarEvent
         for attr in ['dtstart', 'duration', 'title', 'description', 'location',
                      'unique_id', 'recurrence']:
