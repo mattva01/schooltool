@@ -587,6 +587,34 @@ class TestCalendarView(TestCalendarReadView):
         for ev in events:
             assert isinstance(ev.dtstart, datetime.datetime)
 
+    def test_put_recurrent(self):
+        from schooltool.cal import CalendarEvent
+        calendar = dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:uid1
+            SUMMARY:Quick Lunch
+            RRULE:FREQ=DAILY;INTERVAL=3
+            DTSTART:20030902T154000
+            DURATION:PT20M
+            DTSTAMP:20040102T030405Z
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
+        request = RequestStub("http://localhost/person/calendar", method="PUT",
+                              headers={"Content-Type": "text/calendar"},
+                              body=calendar, authenticated_user=self.manager)
+        cal = self._create()
+        result = self.view.render(request)
+        self.assertEquals(result, "Calendar imported")
+        self.assertEquals(request.code, 200)
+
+        recurrence = list(cal)[0].recurrence
+        self.assertEquals(recurrence.interval, 3)
+
     def _test_put_error(self, body, content_type='text/calendar', errmsg=None):
         request = RequestStub("http://localhost/calendar", method="PUT",
                               headers={"Content-Type": content_type},
@@ -604,33 +632,6 @@ class TestCalendarView(TestCalendarReadView):
         self._test_put_error("Hi, Mom!", content_type="text/plain",
                              errmsg="Unsupported content type: text/plain")
         self._test_put_error("This is not iCalendar")
-
-        calendar = dedent("""
-            BEGIN:VCALENDAR
-            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
-            VERSION:2.0
-            BEGIN:VEVENT
-            UID:school-period-/person/calendar@localhost
-            SUMMARY:School Period
-            DTSTART;VALUE=DATE:20040901
-            DTEND;VALUE=DATE:20040930
-            END:VEVENT
-            BEGIN:VEVENT
-            UID:random@example.com
-            SUMMARY:Doctor's appointment
-            DTSTART;VALUE=DATE:20040911
-            END:VEVENT
-            BEGIN:VEVENT
-            UID:random2@example.com
-            SUMMARY:Schoolday
-            DTSTART;VALUE=DATE:20040912
-            RDATE;VALUE=DATE:20040915
-            END:VEVENT
-            END:VCALENDAR
-        """)
-        calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
-        self._test_put_error(calendar,
-                     errmsg="Repeating events/exceptions not yet supported")
 
     def test_traverse(self):
         from schooltool.rest.acl import ACLView

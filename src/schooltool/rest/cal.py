@@ -288,11 +288,7 @@ class CalendarView(CalendarReadView):
                 if (event.summary == 'Empty calendar'
                     and event.getOne('UID').startswith('placeholder')):
                     continue
-                has_complex_props = reduce(operator.or_,
-                                      map(event.hasProp, complex_prop_names))
-                if has_complex_props:
-                    return textErrorPage(request,
-                         _("Repeating events/exceptions not yet supported"))
+
                 # ICalendarEvent.dtstart must be datetime.datetime
                 # ICalReader may return events where dtstart is datetime.date
                 dtstart = event.dtstart
@@ -302,7 +298,8 @@ class CalendarView(CalendarReadView):
                 events.append(CalendarEvent(dtstart, event.duration,
                                             event.summary,
                                             location=event.location,
-                                            unique_id=event.uid))
+                                            unique_id=event.uid,
+                                            recurrence=event.rrule))
         except ICalParseError, e:
             return textErrorPage(request, str(e))
 
