@@ -52,7 +52,7 @@ from schooltool import model
 from schooltool.views import errorPage
 from schooltool.component import getView
 from schooltool.debug import EventLogUtility
-from schooltool.interfaces import IEvent, IModuleSetup
+from schooltool.interfaces import IEvent, IAttendanceEvent, IModuleSetup
 
 __metaclass__ = type
 
@@ -497,6 +497,10 @@ class Server:
         event_log = EventLogUtility()
         app.utilityService['eventlog'] = event_log
         app.eventService.subscribe(event_log, IEvent)
+
+        absence_tracker = model.AbsenceTrackerUtility()
+        app.utilityService['absences'] = absence_tracker
+        app.eventService.subscribe(absence_tracker, IAttendanceEvent)
 
         app['groups'] = ApplicationObjectContainer(model.Group)
         app['persons'] = ApplicationObjectContainer(model.Person)

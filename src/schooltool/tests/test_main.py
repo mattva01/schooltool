@@ -716,7 +716,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(transaction.history, 'C')
 
     def test_createApplication(self):
-        from schooltool.interfaces import IEvent
+        from schooltool.interfaces import IEvent, IAttendanceEvent
         from schooltool.main import Server
         from schooltool import relationship
         relationship.setUp()
@@ -730,6 +730,10 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         event_log = app.utilityService['eventlog']
         event_service = app.eventService
         self.assert_((event_log, IEvent) in event_service.listSubscriptions())
+
+        absence_tracker = app.utilityService['absences']
+        self.assert_((absence_tracker, IAttendanceEvent)
+                     in event_service.listSubscriptions())
 
 
 class TestSetUpModules(unittest.TestCase):
