@@ -25,14 +25,13 @@ $Id: __init__.py 397 2003-11-21 11:38:01Z mg $
 import libxml2
 from schooltool.interfaces import ComponentLookupError
 from schooltool.interfaces import ViewPermission
-from schooltool.interfaces import AddPermission
 from schooltool.interfaces import ModifyPermission
 from schooltool.uris import strURI, getURI, nameURI
 from schooltool.component import traverse, getPath
 from schooltool.rest import View, Template, textErrorPage
 from schooltool.rest import read_file
 from schooltool.rest import absoluteURL, absolutePath
-from schooltool.rest.auth import PublicAccess, ACLAccess
+from schooltool.rest.auth import ACLAccess
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _
 from schooltool.common import to_unicode

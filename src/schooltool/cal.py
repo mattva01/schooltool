@@ -33,8 +33,8 @@ from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
 from schooltool.interfaces import ILocation, IDateRange
 from schooltool.interfaces import ICalendar, ICalendarWrite, ICalendarEvent
 from schooltool.interfaces import ICalendarOwner
-from schooltool.interfaces import IACL, IACLCalendar
-from schooltool.interfaces import Everybody, ViewPermission
+from schooltool.interfaces import IACLCalendar
+from schooltool.interfaces import ViewPermission
 from schooltool.interfaces import ModifyPermission, AddPermission
 from schooltool.interfaces import Unchanged
 

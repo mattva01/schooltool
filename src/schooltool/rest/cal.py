@@ -36,7 +36,7 @@ from schooltool.rest import View, Template, absoluteURL
 from schooltool.rest import textErrorPage, notFoundPage
 from schooltool.rest import read_file
 from schooltool.rest.acl import ACLView
-from schooltool.rest.auth import PublicAccess, PrivateAccess, TeacherAccess
+from schooltool.rest.auth import PublicAccess, TeacherAccess
 from schooltool.rest.auth import isManager, CalendarACLAccess
 from schooltool.cal import ICalReader, ICalParseError, CalendarEvent
 from schooltool.cal import ical_text, ical_duration, Period

@@ -46,7 +46,6 @@ from schooltool.membership import Membership
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember, URIGroup, URITeacher
 from schooltool.teaching import Teaching
-from schooltool.common import parse_date
 from schooltool.common import to_unicode
 from schooltool.browser.widgets import TextWidget, TextAreaWidget, dateParser
 

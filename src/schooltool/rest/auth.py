@@ -39,7 +39,6 @@ from schooltool.uris import URIGroup
 from schooltool.interfaces import ILocation, IApplicationObject
 from schooltool.interfaces import ViewPermission, ModifyPermission
 from schooltool.interfaces import AddPermission, IACLOwner
-from schooltool.auth import getAncestorGroups
 
 __metaclass__ = type
 

@@ -22,12 +22,10 @@ Unit tests for schooltool.browser.acl
 $Id$
 """
 
-import re
 import unittest
 from logging import INFO
-from datetime import datetime, date, timedelta
 
-from schooltool.browser.tests import RequestStub, setPath
+from schooltool.browser.tests import RequestStub
 from schooltool.tests.utils import AppSetupMixin
 
 __metaclass__ = type

@@ -25,7 +25,6 @@ $Id$
 import unittest
 import datetime
 from zope.testing.doctestunit import DocTestSuite
-from schooltool.tests.utils import NiceDiffsMixin
 
 __metaclass__ = type
 

@@ -64,7 +64,7 @@ class ComponentChecks:
             warn("%s changed facet factory registry" % test)
         if self.uri_registry != uris._uri_registry:
             warn("%s changed URI registry" % test)
-        if (self.relationship_registry != 
+        if (self.relationship_registry !=
                 adapter_registry_contents(component.relationship_registry)):
             warn("%s changed relationship registry" % test)
         if (self.relationship_registry_shadow !=

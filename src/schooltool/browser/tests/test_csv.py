@@ -176,7 +176,6 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                        (None, u'Imported resource: Stool', INFO),
                        (None, u'CSV data import finished successfully', INFO)])
 
-
     def test_POST_pupils(self):
         request = RequestStub(args={'pupils.csv':'"A B","","1922-11-22",""',
                                     'groups.csv': '',
@@ -267,7 +266,6 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         classes = [facet.__class__ for facet in facets]
         self.assert_(TeacherGroupFacet in classes)
         self.assert_(SubjectGroupFacet in classes)
-
 
     def test_importGroup_errors(self):
         from schooltool.browser.csv import DataError

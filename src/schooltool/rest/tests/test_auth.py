@@ -235,7 +235,7 @@ class TestAccessPolicies(RegistriesSetupMixin, unittest.TestCase):
 
     def test_CalendarACLAccess(self):
         from schooltool.rest.auth import CalendarACLAccess
-        from schooltool.interfaces import ViewPermission, AddPermission
+        from schooltool.interfaces import AddPermission
         from schooltool.interfaces import ModifyPermission
         access = """
                     GET     HEAD    PUT     POST    DELETE  OTHER

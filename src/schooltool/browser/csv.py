@@ -26,8 +26,8 @@ $Id$
 from schooltool.browser import View, Template
 from schooltool.browser.auth import ManagerAccess
 from schooltool.csvimport import CSVImporterBase, DataError
-from schooltool.common import to_unicode, parse_date
-from schooltool.component import traverse, FacetManager, getFacetFactory
+from schooltool.common import parse_date
+from schooltool.component import FacetManager, getFacetFactory
 from schooltool.interfaces import IApplication
 from schooltool.membership import Membership
 from schooltool.teaching import Teaching

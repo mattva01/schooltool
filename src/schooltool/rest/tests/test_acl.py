@@ -22,9 +22,8 @@ Unit tests for schooltool.rest.relationship
 $Id$
 """
 
-from logging import INFO
 import unittest
-from schooltool.tests.utils import RegistriesSetupMixin, XMLCompareMixin
+from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import QuietLibxml2Mixin, AppSetupMixin
 from schooltool.tests.utils import EqualsSortedMixin, XMLCompareMixin
 from schooltool.rest.tests import RequestStub
@@ -109,8 +108,6 @@ class TestACLView(AppSetupMixin, QuietLibxml2Mixin,
                                  (self.teachers, ModifyPermission)])
 
     def test_do_POST_errors(self):
-        from schooltool.interfaces import ViewPermission, ModifyPermission
-        from schooltool.interfaces import Everybody
         view = self.createView()
         bodies = ("""<acl xmlns="http://schooltool.org/ns/model/0.1">
                        <allow principal="Some guy"  permission="View"/>

@@ -476,7 +476,7 @@ class TestViewRegistry(RegistriesSetupMixin, unittest.TestCase):
         self.assertRaises(ComponentLookupError, getView, object())
 
     def testViewRegistry(self):
-        from schooltool.component import registerView, getView, view_registry
+        from schooltool.component import registerView, getView
         from schooltool.component import registerViewForClass
 
         class SomeView:

@@ -34,14 +34,11 @@ Example:
 $Id$
 """
 
-from sets import Set
 from schooltool.rest.auth import isManager, isTeacher
 from schooltool.rest.auth import PrivateAccess      # reexport
-from schooltool.component import getRelatedObjects
-from schooltool.uris import URIGroup
 from schooltool.interfaces import ViewPermission, ModifyPermission
-from schooltool.interfaces import AddPermission, IACLOwner, ILocation
-from schooltool.auth import getACL, getAncestorGroups
+from schooltool.interfaces import AddPermission
+from schooltool.auth import getACL
 
 __metaclass__ = type
 

@@ -22,19 +22,13 @@ Browser views for ACLs.
 $Id$
 """
 
-import urllib
-from datetime import datetime, date, time, timedelta
-
-from schooltool.browser import View, Template, absoluteURL, absolutePath
+from schooltool.browser import View, Template
 from schooltool.browser.auth import PrivateAccess
-from schooltool.common import to_unicode, parse_datetime, parse_date
-from schooltool.component import traverse, getPath, getRelatedObjects, traverse
+from schooltool.component import traverse, getPath, traverse
 from schooltool.translation import ugettext as _
 from schooltool.interfaces import Everybody, ViewPermission
 from schooltool.interfaces import AddPermission, ModifyPermission
 from schooltool.interfaces import IPerson, IGroup
-from schooltool.browser.widgets import SelectionWidget
-from schooltool.uris import URIMember
 from schooltool.browser.widgets import SelectionWidget
 
 __metaclass__ = type

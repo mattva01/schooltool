@@ -23,11 +23,11 @@ $Id$
 """
 
 import unittest
-from sets import Set
 from zope.interface import directlyProvides
 from schooltool.browser.tests import RequestStub
 from schooltool.browser.tests import LocatableStub
 from schooltool.tests.utils import AppSetupMixin
+
 
 class AuthPolicyTestMixin(object):
 

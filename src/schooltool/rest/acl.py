@@ -23,14 +23,10 @@ $Id$
 """
 
 import libxml2
-from schooltool.interfaces import ComponentLookupError
-from schooltool.interfaces import ViewPermission, ModifyPermission
-from schooltool.interfaces import Everybody, AddPermission
-from schooltool.uris import strURI, getURI, nameURI
+from schooltool.interfaces import Everybody
 from schooltool.component import traverse, getPath
 from schooltool.rest import View, Template, textErrorPage
 from schooltool.rest import read_file
-from schooltool.rest import absoluteURL, absolutePath
 from schooltool.rest.auth import SystemAccess
 from schooltool.schema.rng import validate_against_schema
 from schooltool.translation import ugettext as _

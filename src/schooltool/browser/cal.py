@@ -26,7 +26,7 @@ import urllib
 from datetime import datetime, date, time, timedelta
 
 from schooltool.browser import View, Template, absoluteURL, absolutePath
-from schooltool.browser.auth import TeacherAccess, PrivateAccess, PublicAccess
+from schooltool.browser.auth import TeacherAccess, PublicAccess
 from schooltool.browser.auth import ACLViewAccess, ACLModifyAccess
 from schooltool.browser.auth import ACLAddAccess
 from schooltool.browser.acl import ACLView
@@ -34,10 +34,9 @@ from schooltool.cal import CalendarEvent, Period
 from schooltool.common import to_unicode, parse_datetime, parse_date
 from schooltool.component import traverse, getPath, getRelatedObjects, traverse
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
-from schooltool.interfaces import IContainmentRoot, IPerson, IGroup
+from schooltool.interfaces import IContainmentRoot
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember
-from schooltool.browser.widgets import SelectionWidget
 
 __metaclass__ = type
 

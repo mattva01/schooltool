@@ -22,7 +22,7 @@ Unit tests for the schooltool.browser package.
 
 from schooltool.rest.tests import RequestStub              # reexport
 from schooltool.rest.tests import LocatableStub, setPath   # reexport
-from schooltool.tests.utils import RegistriesSetupMixin
+
 
 class TraversalTestMixin:
 

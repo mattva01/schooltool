@@ -24,7 +24,6 @@ $Id$
 
 import unittest
 import socket
-from StringIO import StringIO
 
 from schooltool.tests.utils import NiceDiffsMixin
 from zope.testing.doctestunit import DocTestSuite
