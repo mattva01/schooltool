@@ -902,7 +902,7 @@ def doctest_CalendarEventAddView_add():
         ...                             'field.recurrence.used': '',
         ...                             'field.recurrence_type': 'daily',
         ...                             'field.location': 'Moon',
-        ...                             'XXXfield.weekdays-empty-marker': '1',
+        ...                             'field.weekdays-empty-marker': '1',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
         >>> calendar = Calendar()

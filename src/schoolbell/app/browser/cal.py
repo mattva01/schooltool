@@ -39,7 +39,7 @@ from zope.component import queryView, queryMultiAdapter, adapts
 from zope.interface import implements, Interface
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
-from zope.schema import Date, TextLine, Choice, Int, Bool, Set, Text
+from zope.schema import Date, TextLine, Choice, Int, Bool, List, Text
 from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
@@ -1009,7 +1009,7 @@ class ICalendarEventAddForm(Interface):
         title=_("Repeat until"),
         required=False)
 
-    weekdays = Set(
+    weekdays = List(
         title=_("Weekdays"),
         required=False,
         value_type=Choice(
