@@ -8,6 +8,11 @@ RelaxNG grammar for a resource booking
   <start>
 
     <element name="booking">
+      <optional>
+        <attribute name="conflicts">
+          <text/>
+        </attribute>
+      </optional>
       <element name="resource">
         <attribute name="path">
           <text/>

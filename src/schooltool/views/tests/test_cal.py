@@ -588,6 +588,54 @@ class TestBookingView(unittest.TestCase):
         self.assertEquals(iter(self.person.calendar).next(),
                           iter(self.resource.calendar).next())
 
+    def test_conflict(self):
+        from schooltool.cal import CalendarEvent
+        from schooltool.common import parse_datetime
+        xml1 = """
+            <booking xmlns="http://schooltool.org/ns/calendar/0.1">
+              <resource path="/resources/hall"/>
+              <owner path="/persons/john"/>
+              <slot start="2004-01-01 10:00:00" duration="90"/>
+            </booking>
+            """
+        xml2 = """
+            <booking xmlns="http://schooltool.org/ns/calendar/0.1"
+                     conflicts="error">
+              <resource path="/resources/hall"/>
+              <owner path="/persons/john"/>
+              <slot start="2004-01-01 10:00:00" duration="90"/>
+            </booking>
+            """
+        ev = CalendarEvent(parse_datetime('2004-01-01 10:10:00'),
+                           datetime.timedelta(hours=1), "Some event")
+        self.resource.calendar.addEvent(ev)
+        self.assertEquals(len(list(self.person.calendar)), 0)
+        self.assertEquals(len(list(self.resource.calendar)), 1)
+        for xml in xml1, xml2:
+            request = RequestStub(method="POST", body=xml)
+            result = self.view.render(request)
+            self.assertEquals(request.code, 400)
+            self.assertEquals(result, "The resource is busy at specified time")
+            self.assertEquals(len(list(self.person.calendar)), 0)
+            self.assertEquals(len(list(self.resource.calendar)), 1)
+
+        xml3 = """
+            <booking xmlns="http://schooltool.org/ns/calendar/0.1"
+                     conflicts="ignore">
+              <resource path="/resources/hall"/>
+              <owner path="/persons/john"/>
+              <slot start="2004-01-01 10:00:00" duration="90"/>
+            </booking>
+            """
+        request = RequestStub(method="POST", body=xml3)
+        result = self.view.render(request)
+        self.assertEquals(request.code, 200)
+        pevs = list(self.person.calendar)
+        revs = list(self.resource.calendar)
+        self.assertEquals(len(pevs), 1)
+        self.assertEquals(len(revs), 2)
+        self.assert_(pevs[0] in revs)
+
     def test_errors(self):
         nonxml = "Where am I?"
         bad_xml = "<booking />"
@@ -619,6 +667,20 @@ class TestBookingView(unittest.TestCase):
               <slot start="2004-01-01 10:00:00" duration="1h"/>
             </booking>
             """
+        bad_res_xml = """
+            <booking xmlns="http://schooltool.org/ns/calendar/0.1">
+              <resource path="/persons/john"/>
+              <owner path="/persons/john"/>
+              <slot start="2004-01-01 10:00:00" duration="10"/>
+            </booking>
+            """
+        bad_owner_xml = """
+            <booking xmlns="http://schooltool.org/ns/calendar/0.1">
+              <resource path="/resources/hall"/>
+              <owner path="/"/>
+              <slot start="2004-01-01 10:00:00" duration="10"/>
+            </booking>
+            """
         cases = [
             (nonxml, "Not valid XML"),
             (bad_xml, "Input not valid according to schema"),
@@ -626,12 +688,18 @@ class TestBookingView(unittest.TestCase):
             (bad_path2_xml, "Invalid path: '/persons/000001'"),
             (bad_date_xml, "'start' argument incorrect"),
             (bad_dur_xml, "'duration' argument incorrect"),
+            (bad_res_xml, "'resource' in not a Resource."),
+            (bad_owner_xml, "'owner' in not an ApplicationObject."),
             ]
         for xml, error in cases:
             request = RequestStub(method="POST", body=xml)
             result = self.view.render(request)
             self.assertEquals(request.code, 400)
             self.assertEquals(result, error)
+
+        request = RequestStub()
+        result = self.view.render(request)
+        self.assertEquals(request.code, 404)
 
 
 class TestAllCalendarsView(XMLCompareMixin, unittest.TestCase):

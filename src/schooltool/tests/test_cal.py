@@ -135,6 +135,32 @@ class TestPeriod(unittest.TestCase):
         self.assertRaises(ValueError, Period, dt2, dt1)
         self.assertRaises(ValueError, Period, dt1, -td)
 
+    def test_overlap(self):
+        from schooltool.cal import Period
+        from schooltool.common import parse_datetime
+        p1 = Period(parse_datetime("2004-01-01 12:00:00"),
+                    timedelta(hours=1))
+        p2 = Period(parse_datetime("2004-01-01 11:30:00"),
+                    timedelta(hours=1))
+        p3 = Period(parse_datetime("2004-01-01 12:30:00"),
+                    timedelta(hours=1))
+        p4 = Period(parse_datetime("2004-01-01 11:00:00"),
+                    timedelta(hours=3))
+
+        self.assert_(p1.overlaps(p2))
+        self.assert_(p2.overlaps(p1))
+
+        self.assert_(p1.overlaps(p3))
+        self.assert_(p3.overlaps(p1))
+
+        self.assert_(not p2.overlaps(p3))
+        self.assert_(not p3.overlaps(p2))
+
+        self.assert_(p1.overlaps(p4))
+        self.assert_(p4.overlaps(p1))
+
+        self.assert_(p1.overlaps(p1))
+
 
 class TestVEvent(unittest.TestCase):
 

@@ -395,6 +395,12 @@ class Period:
             raise NotImplementedError('Cannot compare Period with %r' % other)
         return cmp((self.start, self.end), (other.start, other.end))
 
+    def overlaps(self, other):
+        if self.start > other.start:
+            return other.overlaps(self)
+        if self.start <= other.start < self.end:
+            return True
+        return False
 
 class VEvent:
     """iCalendar event.
