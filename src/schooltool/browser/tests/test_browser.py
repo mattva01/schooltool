@@ -60,6 +60,10 @@ class TestView(unittest.TestCase):
                           'text/html; charset=UTF-8')
         self.assert_('http://example.com/' in result)
 
+    def test_macros(self):
+        view = self.createView()
+        self.assert_('page' in view.macros)
+
 
 class TestStaticFile(unittest.TestCase):
 

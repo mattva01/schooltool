@@ -46,6 +46,7 @@ class View(_View):
 
     """
 
+    macros_template = Template('www/macros.pt')
     redirect_template = Template('www/redirect.pt')
 
     def authorization(self, context, request):
@@ -75,6 +76,8 @@ class View(_View):
         """Redirect to a URL and return a html page explaining the redirect."""
         request.redirect(url)
         return self.redirect_template(request, destination=url)
+
+    macros = property(lambda self: self.macros_template.macros)
 
 
 class StaticFile(View):

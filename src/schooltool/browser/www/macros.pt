@@ -1,0 +1,13 @@
+<metal:block define-macro="page">
+<html>
+<head>
+  <meta http-equiv="Content-Type" value="text/html; charset=UTF-8" />
+  <title metal:define-slot="title">Title</title>
+  <link rel="stylesheet" href="/schooltool.css" />
+</head>
+<body metal:define-slot="body">
+  <h1 metal:define-slot="h1">Welcome to SchoolTool</h1>
+  <p metal:define-slot="content">Content</p>
+</body>
+</html>
+</metal:block>
