@@ -127,3 +127,16 @@ Let's add an ordinary event that takes place on 3rd February, 2005:
     ... """)
     HTTP/1.1 303 See Other
     ...
+
+The event should be visible in the daily calendar view:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar/2005-02-03 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...calendar-view-day...
+    ...
+    Sleeping
+    ...
