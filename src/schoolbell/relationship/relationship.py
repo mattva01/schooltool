@@ -28,17 +28,65 @@ all IAnnotatable objects that uses Zope 3 annotations.
 from persistent import Persistent
 from persistent.list import PersistentList
 from zope.interface import implements
+import zope.event
 
 from schoolbell.relationship.interfaces import IRelationshipLinks
 from schoolbell.relationship.interfaces import IRelationshipLink
+from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
+from schoolbell.relationship.interfaces import IRelationshipAddedEvent
 
 
 def relate(rel_type, (a, role_of_a), (b, role_of_b)):
     """Establish a relationship between objects `a` and `b`."""
-    # TODO: BeforeRelationshipEvent
+    zope.event.notify(BeforeRelationshipEvent(rel_type,
+                                              (a, role_of_a),
+                                              (b, role_of_b)))
     IRelationshipLinks(a).add(Link(b, role_of_b, rel_type))
     IRelationshipLinks(b).add(Link(a, role_of_a, rel_type))
-    # TODO: AfterRelationshipEvent
+    zope.event.notify(RelationshipAddedEvent(rel_type,
+                                             (a, role_of_a),
+                                             (b, role_of_b)))
+
+
+class RelationshipEvent(object):
+    """Base class for relationship events."""
+
+    def __init__(self, rel_type, (a, role_of_a), (b, role_of_b)):
+        self.rel_type = rel_type
+        self.participant1 = a
+        self.role1 = role_of_a
+        self.participant2 = b
+        self.role2 = role_of_b
+
+
+class BeforeRelationshipEvent(RelationshipEvent):
+    """A relationship is about to be established.
+
+        >>> from zope.interface.verify import verifyObject
+        >>> event = BeforeRelationshipEvent('example:Membership',
+        ...                                 ('a', 'example:Member'),
+        ...                                 ('letters', 'example:Group'))
+        >>> verifyObject(IBeforeRelationshipEvent, event)
+        True
+
+    """
+
+    implements(IBeforeRelationshipEvent)
+
+
+class RelationshipAddedEvent(RelationshipEvent):
+    """A relationship has been established.
+
+        >>> from zope.interface.verify import verifyObject
+        >>> event = RelationshipAddedEvent('example:Membership',
+        ...                                ('a', 'example:Member'),
+        ...                                ('letters', 'example:Group'))
+        >>> verifyObject(IRelationshipAddedEvent, event)
+        True
+
+    """
+
+    implements(IRelationshipAddedEvent)
 
 
 def getRelatedObjects(obj, role):

@@ -5,9 +5,9 @@ schoolbell.relationship is a library for managing arbitrary many-to-many binary
 relationships.
 
 Relationship types and roles are identified by URIs (the idea was borrowed
-from XLink and RDF).  Instead of dealing with strings directly,
-schoolbell.relationship uses introspectable URI objects that also have an
-optional short name and a description in addition to the URI itself.
+from XLink and RDF).  You can use strings containing those URIs directly,
+or you can use introspectable URI objects that also have an optional short name
+and a description in addition to the URI itself.
 
     >>> from schoolbell.relationship import URIObject
 
@@ -16,7 +16,7 @@ following URIs:
 
     >>> URIMembership = URIObject('http://schooltool.org/ns/membership',
     ...                           'Membership', 'The membership relationship.')
-    >>> URIGroup = URIObject('http://schooltool.org/ns/membership/group')
+    >>> URIGroup = URIObject('http://schooltool.org/ns/membership/group',
     ...                      'Group', 'A role of a containing group.')
     >>> URIMember = URIObject('http://schooltool.org/ns/membership/member',
     ...                       'Member', 'A group member role.')
@@ -58,6 +58,7 @@ shortcut:
     >>> from schoolbell.relationship import RelationshipSchema
     >>> Membership = RelationshipSchema(URIMembership, group=URIGroup,
     ...                                 member=URIMember)
+
     >>> lilfroggy = SomeObject('lilfroggy')
     >>> Membership(member=lilfroggy, group=frogs)
 
@@ -76,12 +77,52 @@ belongs to
     [frogs]
 
 
+Events
+------
+
+    >>> import zope.event
+    >>> old_subscribers = zope.event.subscribers
+    >>> zope.event.subscribers = []
+
+Before you establis a relationship, a BeforeRelationshipEvent is sent out.
+You can implement constraints by raising an exception in an event subscriber.
+
+    >>> from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
+    >>> def no_duplicate_relationships(event):
+    ...     if IBeforeRelationshipEvent.providedBy(event):
+    ...         # This check assumes you will not mix-and-match roles for
+    ...         # different relationship types
+    ...         if event.participant1 in getRelatedObjects(event.participant2,
+    ...                                                    event.role1):
+    ...             raise Exception("Relationship already exists")
+    >>> zope.event.subscribers.append(no_duplicate_relationships)
+
+    >>> Membership(member=lilfroggy, group=frogs)
+    Traceback (most recent call last):
+      ...
+    Exception: Relationship already exists
+
+When you establish a relationship, a RelationshipAddedEvent is sent out.
+
+    >>> from schoolbell.relationship.interfaces import IRelationshipAddedEvent
+    >>> def my_subscriber(event):
+    ...     if IRelationshipAddedEvent.providedBy(event):
+    ...         print 'Relationship %s added between %s (%s) and %s (%s)' % (
+    ...                     event.rel_type.name,
+    ...                     event.participant1, event.role1.name,
+    ...                     event.participant2, event.role2.name)
+    >>> zope.event.subscribers.append(my_subscriber)
+
+    >>> kermit = SomeObject('kermit')
+    >>> Membership(member=kermit, group=frogs)
+    Relationship Membership added between kermit (Member) and frogs (Group)
+
 
 TODO: API to remove relationships
 TODO: API to list all relationships?
-TODO: events
 
 Cleaning up:
 
+    >>> zope.event.subscribers = old_subscribers
     >>> setup.placelessTearDown()
 

@@ -26,7 +26,13 @@ from zope.interface import Interface, Attribute
 
 
 class IRelationshipLinks(Interface):
-    """A set of relationship links."""
+    """A set of relationship links.
+
+    Objects that can be used in relationships are those that have an adapter to
+    IRelationshipLinks.
+
+    See also `IRelationshipLink`.
+    """
 
     def __iter__():
         """Iterate over all links."""
@@ -36,9 +42,34 @@ class IRelationshipLinks(Interface):
 
 
 class IRelationshipLink(Interface):
-    """One half of a relationship."""
+    """One half of a relationship.
+
+    When a relationship between `a` and `b` is established, two links are
+    created and placed into link sets of `a` and `b` respectively.
+    """
 
     rel_type = Attribute("""Relationship type.""")
     target = Attribute("""The other member of the relationship.""")
     role = Attribute("""Role of `target`.""")
+
+
+class IRelationshipEvent(Interface):
+    """Common attributes for relationship events."""
+
+    rel_type = Attribute("""Relationship type.""")
+    participant1 = Attribute("""One of the participants.""")
+    role1 = Attribute("""Role of `participant1`.""")
+    participant2 = Attribute("""One of the participants.""")
+    role2 = Attribute("""Role of `participant2`.""")
+
+
+class IBeforeRelationshipEvent(IRelationshipEvent):
+    """A relationship is about to be established.
+
+    You can register subscribers for this event to implement constraints.
+    """
+
+
+class IRelationshipAddedEvent(IRelationshipEvent):
+    """A relationship has been established."""
 
