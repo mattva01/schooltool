@@ -19,6 +19,9 @@ realclean: clean
 	find . \( -name '*.so' -o -name '*.dll' \) -exec rm -f {} \;
 
 test: build
+	$(PYTHON) test.py $(TESTFLAGS) schooltool
+
+testall: build
 	$(PYTHON) test.py $(TESTFLAGS)
 
 ftest: build
