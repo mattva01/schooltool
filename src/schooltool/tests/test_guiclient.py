@@ -22,6 +22,7 @@ Unit tests for guiclient.py
 
 import unittest
 import socket
+from schooltool.tests.helpers import dedent
 
 __metaclass__ = type
 
@@ -152,39 +153,45 @@ class TestSchoolToolClient(unittest.TestCase):
         self.assertEquals(client.server, server)
         self.assertEquals(client.port, port)
 
-    def test_parsePeopleList(self):
+    def test__parsePeopleList(self):
         from schooltool.guiclient import SchoolToolClient
-        body = (
-            '<html>\n'
-            '  <a href="/people/fred">Fred</a>\n'
-            '  <a href="/people/barney">Barney</a>\n'
-            '  <a href="http://example.com/buy/our/stuff">Click this!</a>\n'
-            '</html>\n'
-            )
+        body = dedent("""
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <items>
+                <item xlink:href="/persons/fred">Fred</item>
+                <item xlink:href="/persons/barney">Barney</item>
+                <item xlink:href="http://example.com/buy/stuff">Click!</item>
+               </items>
+            </container>
+        """)
         client = SchoolToolClient()
-        result = client.parsePeopleList(body)
+        result = client._parsePeopleList(body)
         self.assertEquals(result, ['fred', 'barney'])
 
-    def test_parsePeopleListEmpty(self):
+    def test__parsePeopleListEmpty(self):
         from schooltool.guiclient import SchoolToolClient
-        body = (
-            '<html>\n'
-            '  <a href="http://example.com/buy/our/stuff">Click this!</a>\n'
-            '</html>\n'
-            )
+        body = dedent("""
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <items>
+                <item xlink:href="http://example.com/buy/stuff">Click!</item>
+               </items>
+            </container>
+        """)
         client = SchoolToolClient()
-        result = client.parsePeopleList(body)
+        result = client._parsePeopleList(body)
         self.assertEquals(result, [])
 
     def test_getListOfPersons(self):
         from schooltool.guiclient import SchoolToolClient
-        body = (
-            '<html>\n'
-            '  <a href="/people/fred">Fred</a>\n'
-            '  <a href="/people/barney">Barney</a>\n'
-            '  <a href="http://example.com/buy/our/stuff">Click this!</a>\n'
-            '</html>\n'
-            )
+        body = dedent("""
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <items>
+                <item xlink:href="/persons/fred">Fred</item>
+                <item xlink:href="/persons/barney">Barney</item>
+                <item xlink:href="http://example.com/buy/stuff">Click!</item>
+               </items>
+            </container>
+        """)
         version = 'UnitTest/0.0'
         response = ResponseStub(200, 'OK', body, server=version)
         factory = ConnectionFactory(response)
@@ -194,7 +201,7 @@ class TestSchoolToolClient(unittest.TestCase):
         self.assertEquals(result, ['fred', 'barney'])
         self.assertEquals(len(factory.connections), 1)
         conn = factory.connections[0]
-        self.assertEquals(conn.path, '/people')
+        self.assertEquals(conn.path, '/persons')
 
     def test_getListOfPersons_with_errors(self):
         from schooltool.guiclient import SchoolToolClient
@@ -208,11 +215,11 @@ class TestSchoolToolClient(unittest.TestCase):
 
     def test_getPersonInfo(self):
         from schooltool.guiclient import SchoolToolClient
-        body = (
-            '<html>\n'
-            '  <h1>Foo!</h1>\n'
-            '</html>\n'
-            )
+        body = dedent("""
+            <html>
+              <h1>Foo!</h1>
+            </html>
+        """)
         version = 'UnitTest/0.0'
         person_id = 'foo'
         response = ResponseStub(200, 'OK', body, server=version)
@@ -223,7 +230,86 @@ class TestSchoolToolClient(unittest.TestCase):
         self.assertEquals(result, body)
         self.assertEquals(len(factory.connections), 1)
         conn = factory.connections[0]
-        self.assertEquals(conn.path, '/people/foo')
+        self.assertEquals(conn.path, '/persons/foo')
+
+    def test_getGroupTree(self):
+        from schooltool.guiclient import SchoolToolClient
+        body = dedent("""
+            <tree xmlns:xlink="http://www.w3.org/1999/xlink">
+              <group xlink:type="simple" xlink:href="/groups/root"
+                     xlink:title="root group">
+                <group xlink:type="simple" xlink:href="/groups/group2"
+                       xlink:title="group2">
+                </group>
+                <group xlink:type="simple" xlink:href="/groups/group1"
+                       xlink:title="group1">
+                  <group xlink:type="simple" xlink:href="/groups/group1a"
+                         xlink:title="group1a">
+                  </group>
+                  <group xlink:type="simple" xlink:href="/groups/group1b"
+                         xlink:title="group1b">
+                  </group>
+                </group>
+              </group>
+            </tree>
+        """)
+        expected = [(0, 'root group', '/groups/root'),
+                    (1, 'group2',     '/groups/group2'),
+                    (1, 'group1',     '/groups/group1'),
+                    (2, 'group1a',    '/groups/group1a'),
+                    (2, 'group1b',    '/groups/group1b'),
+                   ]
+        version = 'UnitTest/0.0'
+        response = ResponseStub(200, 'OK', body, server=version)
+        factory = ConnectionFactory(response)
+        client = SchoolToolClient()
+        client.connectionFactory = factory
+        result = client.getGroupTree()
+        self.assertEquals(list(result), expected)
+        self.assertEquals(len(factory.connections), 1)
+        conn = factory.connections[0]
+        self.assertEquals(conn.path, '/groups/root/tree')
+
+    def test_getGroupTree_with_errors(self):
+        from schooltool.guiclient import SchoolToolClient
+        version = 'UnitTest/0.0'
+        e = socket.error(23, 'out of trees')
+        factory = ConnectionFactory(None, error=e)
+        client = SchoolToolClient()
+        client.connectionFactory = factory
+        result = client.getGroupTree()
+        self.assertEquals(result, [])
+
+    def test__parseGroupTree(self):
+        from schooltool.guiclient import SchoolToolClient
+        body = dedent("""
+            <tree xmlns:xlink="http://www.w3.org/1999/xlink">
+              <group xlink:type="simple" xlink:href="/groups/root"
+                     xlink:title="root group">
+                <group xlink:type="simple" xlink:href="/groups/group2"
+                       xlink:title="group2">
+                </group>
+                <group xlink:type="simple" xlink:href="/groups/group1"
+                       xlink:title="group1">
+                  <group xlink:type="simple" xlink:href="/groups/group1a"
+                         xlink:title="group1a">
+                  </group>
+                  <group xlink:type="simple" xlink:href="/groups/group1b"
+                         xlink:title="group1b">
+                  </group>
+                </group>
+              </group>
+            </tree>
+        """)
+        client = SchoolToolClient()
+        result = client._parseGroupTree(body)
+        expected = [(0, 'root group', '/groups/root'),
+                    (1, 'group2',     '/groups/group2'),
+                    (1, 'group1',     '/groups/group1'),
+                    (2, 'group1a',    '/groups/group1a'),
+                    (2, 'group1b',    '/groups/group1b'),
+                   ]
+        self.assertEquals(list(result), expected)
 
 
 def test_suite():

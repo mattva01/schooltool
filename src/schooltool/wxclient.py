@@ -31,6 +31,7 @@ the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
 """
 
+import sets
 from wxPython.wx import *
 from wxPython.html import wxHtmlWindow
 from guiclient import SchoolToolClient
@@ -116,7 +117,7 @@ class ServerSettingsDlg(wxDialog):
 
 ID_EXIT = wxNewId()
 ID_SERVER = wxNewId()
-ID_PEOPLE_LIST = wxNewId()
+ID_GROUP_TREE = wxNewId()
 
 
 class MainFrame(wxFrame):
@@ -178,12 +179,13 @@ class MainFrame(wxFrame):
 
         # client area
         splitter = wxSplitterWindow(self, -1)
-        self.peopleListBox = wxListBox(splitter, ID_PEOPLE_LIST)
+        self.groupTreeCtrl = wxTreeCtrl(splitter, ID_GROUP_TREE,
+                                        style=wxTR_HAS_BUTTONS|wxTR_HIDE_ROOT)
         self.personInfoText = wxHtmlWindow(splitter, -1)
         splitter.SetMinimumPaneSize(20)
-        splitter.SplitVertically(self.peopleListBox, self.personInfoText, 100)
+        splitter.SplitVertically(self.groupTreeCtrl, self.personInfoText, 150)
 
-        EVT_LISTBOX(self, ID_PEOPLE_LIST, self.DoSelectPerson)
+##        EVT_LISTBOX(self, ID_GROUP_TREE, self.DoSelectPerson)
 
         self.SetSizeHints(minW=100, minH=100)
         self.refresh()
@@ -205,34 +207,69 @@ class MainFrame(wxFrame):
         dlg.ShowModal()
         dlg.Destroy()
 
-    def DoSelectPerson(self, event):
-        person_id = self.peopleListBox.GetStringSelection()
-        if not person_id:
-            return
-        info = self.client.getPersonInfo(person_id)
-        if info is None:
-            info = 'Could not connect to server'
-        else:
-            # XXX: horrible, but good enough for a proof-of-concept prototype
-            info = info.replace('<img src="/people',
-                                '<img src="http://%s:%s/people'
-                                % (self.client.server, self.client.port))
-        self.personInfoText.SetPage(info)
-        self.SetStatusText(self.client.status)
+##  def DoSelectPerson(self, event):
+##      person_id = self.peopleListBox.GetStringSelection()
+##      if not person_id:
+##          return
+##      info = self.client.getPersonInfo(person_id)
+##      if info is None:
+##          info = 'Could not connect to server'
+##      else:
+##          # XXX: horrible, but good enough for a proof-of-concept prototype
+##          info = info.replace('<img src="/people',
+##                              '<img src="http://%s:%s/people'
+##                              % (self.client.server, self.client.port))
+##      self.personInfoText.SetPage(info)
+##      self.SetStatusText(self.client.status)
 
     def DoRefresh(self, event):
         self.refresh()
 
     def refresh(self):
-        people = self.client.getListOfPersons()
+        group_tree = self.client.getGroupTree()
         self.SetStatusText(self.client.status)
-        old_selection = self.peopleListBox.GetStringSelection()
-        self.peopleListBox.Set(people)
-        idx = self.peopleListBox.FindString(old_selection)
-        if idx != -1:
-            self.peopleListBox.SetSelection(idx)
-        self.personInfoText.SetPage('')
-        self.DoSelectPerson(None)
+
+        # Remember current selection
+        old_selection = None
+        item = self.groupTreeCtrl.GetSelection()
+        if item.IsOk():
+            old_selection = self.groupTreeCtrl.GetPyData(item)
+
+        # Remember which items were expanded
+        expanded = sets.Set()
+        stack = []
+        root = self.groupTreeCtrl.GetRootItem()
+        stack = [root]
+        while stack:
+            item = stack.pop()
+            if item is not root and self.groupTreeCtrl.IsExpanded(item):
+                expanded.add(self.groupTreeCtrl.GetPyData(item))
+            next, cookie = self.groupTreeCtrl.GetFirstChild(item, 0)
+            if next.IsOk():
+                stack.append(next)
+            next = self.groupTreeCtrl.GetNextSibling(item)
+            if next.IsOk():
+                stack.append(next)
+
+        # Reload tree
+        self.groupTreeCtrl.DeleteAllItems()
+        root = self.groupTreeCtrl.AddRoot("Roots")
+        self.groupTreeCtrl.Expand(root)
+        stack = [(root, None)]
+        for level, title, href in group_tree:
+            del stack[level+1:]
+            assert len(stack) == level+1
+            item = self.groupTreeCtrl.AppendItem(stack[-1][0], title)
+            if level == 1 or stack[-1][1] in expanded:
+                self.groupTreeCtrl.Expand(stack[-1][0])
+            self.groupTreeCtrl.SetPyData(item, href)
+            if href == old_selection:
+                self.groupTreeCtrl.SelectItem(item)
+            stack.append((item, href))
+
+## XXX
+##      self.personInfoText.SetPage('')
+##      self.DoSelectPerson(None)
 
 
 class SchoolToolApp(wxApp):
