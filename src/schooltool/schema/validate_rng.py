@@ -35,12 +35,11 @@ $Id$
 import libxml2
 import sys
 
-def validateAgainstSchema(schema, xml):
+def validate_against_schema(schema, xml):
     rngp = libxml2.relaxNGNewMemParserCtxt(schema, len(schema))
     try:
         rngs = rngp.relaxNGParse()
         ctxt = rngs.relaxNGNewValidCtxt()
-        ctxt.setErrorHandler(callback2, "-->")
         doc = libxml2.parseDoc(xml)
         try:
             result = doc.relaxNGValidateDoc(ctxt)
@@ -51,7 +50,7 @@ def validateAgainstSchema(schema, xml):
         # what does this do?
         libxml2.relaxNGCleanupTypes()
 
-def loadSchema(schema):
+def load_schema(schema):
     rngp = libxml2.relaxNGNewMemParserCtxt(schema, len(schema))
     try:
         rngs = rngp.relaxNGParse()
@@ -60,18 +59,15 @@ def loadSchema(schema):
         # what does this do?
         libxml2.relaxNGCleanupTypes()
 
-def callback1(ctx, str):
-    print "c1: %s:%s" % (ctx, str)
+def on_error_callback(ctx, str):
+    print "error: %s:%s" % (ctx, str)
 
-def callback2(arg, msg, severity, reserved):
-    print "c2: %s:%s:%s:%s" % (arg, msg, severity, reserved)
-
-def printusage():
+def print_usage():
     print >>sys.stderr, 'usage: validate_rng schema [xmlfile]'
 
 def main():
     if len(sys.argv) == 1:
-        printusage()
+        print_usage()
         return -1
     argiter = iter(sys.argv)
     pyfile = argiter.next()
@@ -83,21 +79,21 @@ def main():
     except StopIteration:
         pass
     else:
-        printusage()
+        print_usage()
         return -1
 
-    libxml2.registerErrorHandler(callback1, "-->")
+    libxml2.registerErrorHandler(on_error_callback, "-->")
     schema = file(schemafile).read()
 
     try:
         if xmlfile:
             xml = file(xmlfile).read()
-            validates_ok = validateAgainstSchema(schema, xml)
+            validates_ok = validate_against_schema(schema, xml)
             if not validates_ok:
                 print "Invalid"
                 return -1
         else:
-            loadSchema(schema)
+            load_schema(schema)
     except libxml2.parserError, e:
         print >>sys.stderr, e.msg
         return -1
