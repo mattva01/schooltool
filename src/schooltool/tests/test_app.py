@@ -188,10 +188,13 @@ class TestCreateApplication(RegistriesSetupMixin, unittest.TestCase):
 
     def test(self):
         from schooltool.interfaces import IEvent, IAttendanceEvent
+        from schooltool.interfaces import ITimetableReplacedEvent
+        from schooltool.interfaces import ITimetableExceptionEvent
         from schooltool.uris import URIGroup
         from schooltool.app import create_application
         from schooltool.model import Person, Group, Resource
         from schooltool.component import getRelatedObjects
+        from schooltool.booking import TimetableExceptionSynchronizer
 
         app = create_application()
         root = app['groups']['root']
@@ -214,11 +217,16 @@ class TestCreateApplication(RegistriesSetupMixin, unittest.TestCase):
 
         event_log = app.utilityService['eventlog']
         event_service = app.eventService
-        self.assert_((event_log, IEvent) in event_service.listSubscriptions())
+        subscriptions = event_service.listSubscriptions()
+        self.assert_((event_log, IEvent) in subscriptions)
 
         absence_tracker = app.utilityService['absences']
-        self.assert_((absence_tracker, IAttendanceEvent)
-                     in event_service.listSubscriptions())
+        self.assert_((absence_tracker, IAttendanceEvent) in subscriptions)
+
+        tt_subscriptions = [iface for target, iface in subscriptions
+                if isinstance(target, TimetableExceptionSynchronizer)]
+        self.assert_(ITimetableReplacedEvent in tt_subscriptions)
+        self.assert_(ITimetableExceptionEvent in tt_subscriptions)
 
 
 def test_suite():
