@@ -175,6 +175,17 @@ class AppLoggerStub:
         self.log(logging.WARN, msg)
 
 
+class TCPWrapStub:
+        
+        def __init__(self, servicename, clientname, clientip):
+            self.ip = clientip
+            
+        def Deny(self):
+            if self.ip == '192.16.4.2':
+                return True
+            return False
+
+
 class TestSite(unittest.TestCase):
 
     def test(self):
@@ -198,10 +209,13 @@ class TestSite(unittest.TestCase):
         viewFactory = object()
         authenticator = lambda c, u, p: None
         site = Site(db, rootName, viewFactory, authenticator, None)
-        addr = None
+        site.tcpwrapper_hook = TCPWrapStub
+        addr = IPv4Address("TCP", "192.123.243.1", 123, 'INET')
         channel = site.buildProtocol(addr)
         self.assert_(channel.requestFactory is Request)
         self.assert_(channel.site is site)
+        addr = IPv4Address("TCP", "192.16.4.2", 123, 'INET')
+        self.assertEqual(site.buildProtocol(addr),None)
 
     def test_buildProtocol_custom_request(self):
         from schooltool.http import Site, Request
@@ -215,7 +229,8 @@ class TestSite(unittest.TestCase):
         authenticator = lambda c, u, p: None
         site = Site(db, rootName, viewFactory, authenticator, None,
                     requestFactory=MyRequest)
-        addr = None
+        site.tcpwrapper_hook = TCPWrapStub
+        addr = IPv4Address("TCP", "192.123.243.1", 123, 'INET')
         channel = site.buildProtocol(addr)
         self.assert_(channel.requestFactory is MyRequest)
         self.assert_(channel.site is site)

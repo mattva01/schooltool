@@ -13,6 +13,7 @@ schooltool (0.7.2) unstable; urgency=low
     independent.
   * Attempt to remove logs and other files on purge (but NOT database).
   * Updated schooltool-client manpage.
+  * Added suggests for python-tcpwrap as we support TCP wrappers natively now.
 
  -- Brian Sutherland <jinty@web.de>  Sat, 18 Sep 2004 13:05:48 +0200
 

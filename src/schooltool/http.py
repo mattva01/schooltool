@@ -37,6 +37,18 @@ from schooltool.rest import textErrorPage
 from schooltool.interfaces import AuthenticationError
 from schooltool.translation import ugettext as _
 
+try:
+    from pytcpwrap.tcpwrap import TCPWrap
+except ImportError:
+    #if TCPWrap is not available
+    class TCPWrap:
+        """Stub for TCP wrappers allowing all connections."""
+        
+        def __init__(self, *args):
+            pass
+            
+        def Deny(self):
+            return False
 
 __metaclass__ = type
 
@@ -605,6 +617,7 @@ class Site(http.HTTPFactory):
     __super = http.HTTPFactory
     __super___init__ = __super.__init__
     __super_buildProtocol = __super.buildProtocol
+    tcpwrapper_hook = TCPWrap
 
     conflictRetries = 5     # retry up to 5 times on ZODB ConflictErrors
 
@@ -630,6 +643,8 @@ class Site(http.HTTPFactory):
         self.requestFactory = requestFactory
 
     def buildProtocol(self, addr):
+        if self.tcpwrapper_hook(self.rootName, None, addr.host).Deny():
+            return None
         channel = self.__super_buildProtocol(addr)
         channel.requestFactory = self.requestFactory
         channel.site = self
