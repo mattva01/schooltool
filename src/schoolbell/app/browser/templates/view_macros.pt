@@ -239,7 +239,7 @@
           <option value="" i18n:translate="">Month</option>
           <tal:loop repeat="month view/getJumpToMonths">
             <option
-              tal:attributes="value string:monthly.html?date=2004-${month/value}-01"
+              tal:attributes="value string:monthly.html?date=2005-${month/value}-01"
               tal:content="month/label" />
           </tal:loop>
         </select>
