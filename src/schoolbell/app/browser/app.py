@@ -39,6 +39,7 @@ from schoolbell.app.interfaces import IGroupMember, IPerson, IResource
 from schoolbell.app.interfaces import IPersonContainer, IPersonContained
 from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
+from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.app import Person
 
 
@@ -118,8 +119,7 @@ class GroupListView(BrowserView):
 
     def getGroupList(self):
         """Return a sorted list of all groups in the system."""
-        groups = self.context.__parent__.__parent__['groups'] # XXX ugly
-        return groups.values()
+        return ISchoolBellApplication(self.context)['groups'].values()
 
     def update(self):
         context_url = zapi.absoluteURL(self.context, self.request)
@@ -169,8 +169,7 @@ class MemberViewBase(BrowserView):
 
     def getMemberList(self):
         """Return a sorted list of all possible members."""
-        # XXX Ugly.  Maybe we could use adaptation here.
-        container = self.context.__parent__.__parent__[self.container_name]
+        container = ISchoolBellApplication(self.context)[self.container_name]
         return container.values()
 
     def update(self):
@@ -326,8 +325,7 @@ class PersonAddView(AddView):
 
     def getGroupList(self):
         """Return a sorted list of all groups in the system."""
-        groups = self.context.__parent__['groups']
-        return groups.values()
+        return ISchoolBellApplication(self.context)['groups'].values()
 
     def create(self, title, username, password, photo):
         person = Person(title)
