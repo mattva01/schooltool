@@ -33,11 +33,12 @@ If you have a calendar, you can convert it to an iCalendar file like this:
     >>> event = SimpleCalendarEvent(datetime(2004, 12, 16, 10, 58, 47),
     ...                             timedelta(hours=1), "doctests",
     ...                             location=u"Matar\u00f3",
+    ...                             description=u"Writing doctests",
     ...                             unique_id="12345678-5432@example.com")
     >>> calendar = ImmutableCalendar([event])
 
     >>> ical_file_as_string = "\r\n".join(
-    ...         convert_calendar_to_ical(calendar)) + "\r\n"
+    ...         convert_calendar_to_ical(calendar) + [''])
 
 The returned string is in UTF-8.
 
@@ -50,6 +51,17 @@ You can also parse iCalendar files back into calendars:
     >>> new_calendar = ImmutableCalendar(event_iterator)
     >>> [e.title for e in new_calendar]
     [u'doctests']
+    >>> e == event
+    True
+
+There is some trickery to make empty calendars work:
+
+    >>> empty_calendar = ImmutableCalendar([])
+    >>> ical_file_as_string = "\r\n".join(
+    ...         convert_calendar_to_ical(empty_calendar) + [''])
+
+    >>> list(read_icalendar(ical_file_as_string))
+    []
 
 
 $Id$
@@ -63,6 +75,9 @@ from sets import Set
 from schoolbell.calendar.simple import SimpleCalendarEvent
 
 
+EMPTY_CALENDAR_PLACEHOLDER = 'empty-calendar-placeholder@schooltool.org'
+
+
 def convert_event_to_ical(event):
     r"""Convert an ICalendarEvent to iCalendar VEVENT component.
 
@@ -72,6 +87,7 @@ def convert_event_to_ical(event):
         >>> event = SimpleCalendarEvent(datetime(2004, 12, 16, 10, 7, 29),
         ...                             timedelta(hours=1), "iCal rendering",
         ...                             location="Big room",
+        ...                             description="Blah blah\nblah!",
         ...                             unique_id="12345678-5432@example.com")
         >>> lines = convert_event_to_ical(event)
         >>> print "\n".join(lines)
@@ -79,6 +95,7 @@ def convert_event_to_ical(event):
         UID:12345678-5432@example.com
         SUMMARY:iCal rendering
         LOCATION:Big room
+        DESCRIPTION:Blah blah\nblah!
         DTSTART:20041216T100729
         DURATION:PT1H
         DTSTAMP:...
@@ -108,7 +125,8 @@ def convert_event_to_ical(event):
         "SUMMARY:%s" % ical_text(event.title)]
     if event.location:
         result.append("LOCATION:%s" % ical_text(event.location))
-    # TODO: event description
+    if event.description:
+        result.append("DESCRIPTION:%s" % ical_text(event.description))
     if event.recurrence is not None:
         start = event.dtstart
         result.extend(event.recurrence.iCalRepresentation(start))
@@ -182,7 +200,8 @@ def convert_calendar_to_ical(calendar):
     if not events:
         placeholder = SimpleCalendarEvent(datetime.datetime(1970, 1, 1),
                                           datetime.timedelta(0),
-                                          "Empty calendar")
+                                          "Empty calendar",
+                                          unique_id=EMPTY_CALENDAR_PLACEHOLDER)
         events += convert_event_to_ical(placeholder)
     return header + events + footer
 
@@ -293,7 +312,8 @@ def read_icalendar(icalendar_text):
         icalendar_text = StringIO(icalendar_text)
     reader = ICalReader(icalendar_text)
     for vevent in reader.iterEvents():
-        # TODO: ignore empty calendar placeholder
+        if vevent.uid == EMPTY_CALENDAR_PLACEHOLDER:
+            continue # Ignore empty calendar placeholder "event"
 
         # Currently SchoolBell does not support all-day events, so we must
         # convert them into ordinary events that last 24 hours
@@ -304,6 +324,7 @@ def read_icalendar(icalendar_text):
 
         yield SimpleCalendarEvent(dtstart, vevent.duration, vevent.summary,
                                   location=vevent.location,
+                                  description=vevent.description,
                                   unique_id=vevent.uid,
                                   recurrence=vevent.rrule)
 
@@ -987,6 +1008,7 @@ class VEvent:
           dtend             end of the event (not inclusive)
           duration          length of the event
           location          location of the event
+          description       description of the event
           rrule             recurrency rule
           rdates            a list of recurrence dates or periods
           exdates           a list of exception dates
@@ -1027,6 +1049,7 @@ class VEvent:
             self.duration = self.dtend - self.dtstart
 
         self.location = self.getOne('LOCATION', None)
+        self.description = self.getOne('DESCRIPTION', None)
 
         if self.dtstart > self.dtend:
             raise ICalParseError("Event start time should precede end time")

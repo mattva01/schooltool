@@ -437,6 +437,15 @@ class TestVEvent(unittest.TestCase):
         vevent.validate()
         self.assertEquals(vevent.location, 'Somewhere')
 
+    def test_validate_description(self):
+        from schoolbell.calendar.icalendar import VEvent
+        vevent = VEvent()
+        vevent.add('dtstart', '20010203T040506')
+        vevent.add('uid', 'unique5', {})
+        vevent.add('description', 'Some long text')
+        vevent.validate()
+        self.assertEquals(vevent.description, 'Some long text')
+
     def test_validate_rrule(self):
         from schoolbell.calendar.icalendar import VEvent
         vevent = VEvent()
