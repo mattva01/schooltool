@@ -312,12 +312,16 @@ class TimetableCSVImportView(View, CharsetMixin, ToplevelBreadcrumbsMixin):
 class TimetableCSVImporter:
     """A timetable CSV parser and importer."""
 
+    def __init__(self, app):
+        self.app = app
+        self.groups = self.app['groups']
+
     def importTimetable(self, timetable_csv):
         lines = timetable_csv.splitlines()
         reader = csv.reader(lines)
         periods = reader.next()[1:]
         for period in periods:
-            pass # TODO: add timetable period
+            pass # TODO: check existence of periods
 
         for row in reader:
             location, row = row[0], row[1:]
@@ -327,6 +331,11 @@ class TimetableCSVImporter:
 
             for period, subject, teacher in zip(periods, subjects, teachers):
                 pass # TODO: register
+
+    def _clearTimetables(self, ttname, ttschema):
+        for group in self.groups.itervalues():
+            if (ttname, ttschema) in group.timetables.keys():
+                group.timetables[ttname, ttschema].clear()
 
     def importRoster(self, timetable_csv):
         pass # TODO

@@ -393,7 +393,18 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
 
     def createImporter(self):
         from schooltool.browser.csvimport import TimetableCSVImporter
-        return TimetableCSVImporter()
+        return TimetableCSVImporter(self.app)
+
+#    def test_timetable_empty(self):
+#        imp = self.createImporter()
+#        imp.importTimetable('')
+#        # TODO
+#
+#    def test_timetable_invalid(self):
+#        imp = self.createImporter()
+#        imp.importTimetable('"Some","invalid","csv')
+#        # TODO
+
 
     def test_timetable(self):
         imp = self.createImporter()
@@ -402,6 +413,29 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                 '"105","Math1 Curtin","Math2 Guzman","Math3 Curtin"\n'
                 '"129","English1 Lorch","English2 Lorch","English3 Lorch"\n')
         # TODO
+
+    def test__clearTimetables(self):
+        from schooltool.timetable import Timetable, TimetableDay
+        from schooltool.timetable import TimetableActivity
+        tt = Timetable(['day1'])
+        ttday = tt['day1'] = TimetableDay(['A', 'B'])
+        ttday.add('A', TimetableActivity(title="Sleeping"))
+        ttday.add('B', TimetableActivity(title="Snoring"))
+        self.pupils.timetables[('period1', 'some_schema')] = tt
+        tt_blank = self.pupils.timetables['period1', 'some_schema'] # XXX
+
+        tt2 = Timetable(['day2'])
+        tt2day = tt2['day2'] = TimetableDay(['A', 'B'])
+        tt2day.add('A', TimetableActivity(title="Working"))
+        self.pupils.timetables['period2', 'some_schema'] = tt2
+
+        imp = self.createImporter()
+        imp._clearTimetables('period1', 'some_schema')
+
+        tt_blank = self.pupils.timetables['period1', 'some_schema']
+        tt_notblank = self.pupils.timetables['period2', 'some_schema']
+        self.assertEquals(len(list(tt_blank.itercontent())), 0)
+        self.assertEquals(len(list(tt_notblank.itercontent())), 1)
 
 
 def test_suite():

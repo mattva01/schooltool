@@ -196,7 +196,7 @@ class Timetable(Persistent):
         day_ids is a sequence of the day ids of this timetable.
 
         The caller must then assign a TimetableDay for each day ID and
-        set model before trying to use the timetable.
+        set the model before trying to use the timetable.
         """
         self.day_ids = day_ids
         self.days = PersistentDict()
