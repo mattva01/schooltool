@@ -54,10 +54,15 @@ def doctest_CalendarOverlayView():
     If you are an authenticated user looking at your own calendar, this view
     renders a calendar selection portlet.
 
-        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.app import Person, Group
         >>> from schoolbell.app.security import Principal
         >>> app = setUpSchoolBellSite()
         >>> person = app['persons']['whatever'] = Person('fred')
+        >>> group1 = app['groups']['g1'] = Group(title="Group 1")
+        >>> group2 = app['groups']['g2'] = Group(title="Group 2")
+        >>> person.overlaid_calendars.add(group1.calendar)
+        >>> person.overlaid_calendars.add(group2.calendar, show=False)
+
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('id', 'title', person))
         >>> view = View(person.calendar, request)
@@ -65,12 +70,37 @@ def doctest_CalendarOverlayView():
         >>> print view()
         <div id="portlet-calendar-overlay" class="portlet">
         ...
+        <input type="checkbox" name="overlay:list"
+               checked="checked" value="/groups/g1" />
+        ...
+        <input type="checkbox" name="overlay:list"
+               value="/groups/g2" />
+        ...
+        </div>
+
+    If the request has 'OVERLAY_APPLY', CalendarOverlayView applies your
+    changes
+
+        >>> request.form['overlay'] = [u'/groups/g2']
+        >>> request.form['OVERLAY_APPLY'] = u"Apply"
+        >>> print view()
+        <div id="portlet-calendar-overlay" class="portlet">
+        ...
+        <input type="checkbox" name="overlay:list"
+               value="/groups/g1" />
+        ...
+        <input type="checkbox" name="overlay:list"
+               checked="checked" value="/groups/g2" />
+        ...
         </div>
 
     If the request has 'OVERLAY_MORE', CalendarOverlayView redirects to
     calendar_selection.html
 
+        >>> request = TestRequest()
+        >>> request.setPrincipal(Principal('id', 'title', person))
         >>> request.form['OVERLAY_MORE'] = u"More..."
+        >>> view = View(person.calendar, request)
         >>> content = view()
         >>> request.response.getStatus()
         302

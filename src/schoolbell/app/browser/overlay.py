@@ -119,6 +119,11 @@ class CalendarOverlayView(BrowserView):
             url += '/calendar_selection.html'
             url += '?nexturl=%s' % urllib.quote(str(self.request.URL))
             self.request.response.redirect(url)
+        if 'OVERLAY_APPLY' in self.request:
+            person = IPerson(self.request.principal)
+            selected = Set(self.request.get('overlay', []))
+            for item in person.overlaid_calendars:
+                item.show = getPath(item.calendar.__parent__) in selected
 
 
 class CalendarSelectionView(BrowserView):

@@ -16,7 +16,7 @@
     <div class="row" tal:repeat="item view/items"
          tal:attributes="style string:background: ${item/color1}">
       <label>
-        <input type="checkbox" name="overlay"
+        <input type="checkbox" name="overlay:list"
                tal:attributes="value item/id; checked item/checked" />
         <span tal:content="item/title">Title</span>
       </label>
