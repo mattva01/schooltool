@@ -25,4 +25,7 @@
   <calendar xlink:type="simple" xlink:title="Calendar derived from timetables"
       i18n:attributes="xlink:title Calendar_derived_from_timetables"
       tal:attributes="xlink:href string:${view/href}/timetable-calendar" />
+  <notes xlink:type="simple" xlink:title="Notes"
+      i18n:attributes="xlink:title Notes"
+      tal:attributes="xlink:href string:${view/href}/notes" />
 </person>

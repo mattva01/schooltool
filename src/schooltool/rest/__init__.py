@@ -32,7 +32,8 @@ from zope.tales.pythonexpr import PythonExpr
 from zope.i18n import interpolate
 from twisted.web.resource import Resource
 from schooltool.interfaces import IModuleSetup
-from schooltool.component import getView, getPath
+from schooltool.component import getView, getPath, getRelatedObjects
+from schooltool.uris import URINotation
 from schooltool.common import UnicodeAwareException
 from schooltool.translation import ugettext as _
 
@@ -427,6 +428,18 @@ class View(Resource):
         request.setHeader('Content-Length', len(body))
         return ""
 
+    def getNotes(self, request):
+        user = request.authenticated_user
+        # We should really just check to see if the object implements
+        # IRelatable
+        try:
+            list = [(obj.title, obj)
+                    for obj in getRelatedObjects(self.context, URINotation)]
+            list.sort()
+            return [obj for title, obj in list if obj.owner == user]
+            #return [obj for title, obj in list]
+        except AttributeError:
+            return []
 
 class NotFoundView(View):
     """View that always returns a 404 error page."""

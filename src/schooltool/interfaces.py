@@ -754,6 +754,27 @@ class IRouteToGroupsAction(IEventAction):
     """
 
 
+class INotedEvent(IRelationshipEvent):
+    """Base interface for noted events.
+
+    This is a special case of IRelationshipEvent where one side has
+    the role of URIGroup, and the other side has the role of URIMember.
+    """
+
+    notandum = Attribute("""The noted object""")
+    notation = Attribute("""The note""")
+
+
+class INotedAddedEvent(IRelationshipAddedEvent, INotedEvent):
+    """Event that gets sent out after a note is associated with an object.
+    """
+
+
+class INotedRemovedEvent(IRelationshipRemovedEvent, INotedEvent):
+    """Event that gets sent out after a note has been removed from an object
+    """
+
+
 #
 # Facets
 #
@@ -2108,13 +2129,13 @@ class IPersonInfoFacet(IFacet):
     )
 
 
-class INote(ILocation):
+class INote(ILocation, IRelatable):
     """An abitrary notation on an IApplication Object."""
 
     title = Attribute("""The title of the note.""")
     body = Attribute("""The body of the note.""")
     owner = Attribute("""The object that created this note.""")
-    url = Attribute("""The path of the object this note refers to.""")
+    created = Attribute("""The time the note was created.""")
 
 
 class IAddress(IRelatable, IFaceted):

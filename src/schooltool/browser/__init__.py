@@ -27,12 +27,13 @@ import logging
 import urllib
 
 from schooltool.interfaces import AuthenticationError
-from schooltool.interfaces import IApplicationObjectContainer
-from schooltool.component import getTicketService, traverse
+from schooltool.interfaces import IApplicationObjectContainer, IRelatable
+from schooltool.component import getTicketService, traverse, getRelatedObjects
 from schooltool.rest import View as _View
 from schooltool.rest import Unauthorized               # reexport
 from schooltool.rest import Template, read_file        # reexport
 from schooltool.rest import absoluteURL, absolutePath  # reexport
+from schooltool.uris import URINotation
 from schooltool.http import Request
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import isManager, isTeacher
@@ -185,6 +186,31 @@ class View(_View):
         To be used from page templates (e.g. tal:condition="view/isTeacher").
         """
         return isTeacher(self.request.authenticated_user)
+     
+    def isRelatable(self):
+        """Return True/False if the current context is relatable.
+
+        This is a utility for use in tal, primarily for the note system
+        """
+
+        return IRelatable.providedBy(self.context)
+
+    def getNotations(self, request):
+        """Return a list of related notes
+
+        XXX: refactor, remove passed request
+        """
+
+        user = request.authenticated_user
+        # We should really just check to see if the object implements
+        # IRelatable
+        try:
+            list = [(obj.title, obj)
+                    for obj in getRelatedObjects(self.context, URINotation)]
+            list.sort()
+            return [obj for title, obj in list if obj.owner == user]
+        except AttributeError:
+            return []
 
 
 class StaticFile(View):

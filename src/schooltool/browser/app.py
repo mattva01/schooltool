@@ -55,6 +55,7 @@ from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IPerson, AuthenticationError
 from schooltool.interfaces import IApplicationObject
 from schooltool.membership import Membership
+from schooltool.noted import Noted
 from schooltool.rest.app import AvailabilityQueryView
 from schooltool.rest.model import delete_app_object
 from schooltool.rest.infofacets import resize_photo, canonical_photo_size
@@ -501,9 +502,13 @@ class NoteAddView(View):
 
     error = u""
 
+    relname = _('Noted')
+
     template = Template('www/note_add.pt')
 
-    authorization = ManagerAccess
+    authorization = AuthenticatedAccess
+
+    errormessage = _("Cannot add %(note)s to %(this)s")
 
     def __init__(self, context):
         View.__init__(self, context)
@@ -516,29 +521,40 @@ class NoteAddView(View):
             # Just show the form without any data.
             return self.do_GET(request)
 
-        name = None
-        #title = request.args['title'][0]
-        #name = request.args['name'][0]
-        #body = request.args['body'][0]
-        url = request.args['url'][0]
+        widgets = [self.title_widget, self.body_widget]
 
-        self.title_widget.update(request)
-        self.title_widget.require()
-        self.body_widget.update(request)
-        self.body_widget.require()
+        name = None
+
+        for widget in widgets:
+            widget.update(request)
+
+        for widget in widgets:
+            widget.require()
 
         if self.title_widget.error or self.body_widget.error:
             return self.do_GET(request)
 
-        obj = self.context.new(name,
-                title=self.title_widget.value,
+        obj = self.context.new(name, 
+                title=self.title_widget.value, 
                 body=self.body_widget.value,
-                url=url)
+                owner=request.authenticated_user)
 
         request.appLog(_("Object %s of type %s created") %
                        (getPath(obj), obj.__class__.__name__))
 
         nexturl = absoluteURL(request, obj)
+
+        paths = filter(None, request.args.get("toadd", []))
+        for path in paths:
+            pobj = traverse(self.context, path)
+            try:
+                Noted(notation=obj, notandum=pobj)
+            except:
+                return self.errormessage % {'note': pobj.title,
+                                            'this': obj.title}
+            request.appLog(_("Relationship '%s' between %s and %s created")
+                           % (self.relname, getPath(obj),
+                              getPath(pobj)))
 
         return self.redirect(nexturl, request)
 
@@ -609,6 +625,8 @@ class ResourceContainerView(ObjectContainerView):
 
 class NoteContainerView(ObjectContainerView):
     """View for traversing to notes (/notes)."""
+
+    template = Template('www/note_container.pt')
 
     add_view = NoteAddView
     obj_view = NoteView

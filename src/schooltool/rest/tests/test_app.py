@@ -43,7 +43,7 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.rest.app import ApplicationView
-        from schooltool.model import Group, Person
+        from schooltool.model import Group, Person, Note
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool import membership, rest
         self.setUpRegistries()
@@ -52,6 +52,7 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         self.app = Application()
         self.app['groups'] = ApplicationObjectContainer(Group)
         self.app['persons'] = ApplicationObjectContainer(Person)
+        self.app['notes'] = ApplicationObjectContainer(Note)
         self.group = self.app['groups'].new("root", title="Root group")
         self.app.addRoot(self.group)
 
@@ -72,17 +73,23 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         context = XPathTestContext(self, result)
         try:
             containers = context.oneNode('/schooltool/containers')
-            context.assertNumNodes(2, '/schooltool/containers/container')
+            context.assertNumNodes(3, '/schooltool/containers/container')
             persons = context.oneNode(
                 '/schooltool/containers/container[@xlink:href="/persons"]')
             groups = context.oneNode(
                 '/schooltool/containers/container[@xlink:href="/groups"]')
+
+            notes = context.oneNode(
+                '/schooltool/containers/container[@xlink:href="/notes"]')
 
             context.assertAttrEquals(persons, 'xlink:type', 'simple')
             context.assertAttrEquals(persons, 'xlink:title', 'persons')
 
             context.assertAttrEquals(groups, 'xlink:type', 'simple')
             context.assertAttrEquals(groups, 'xlink:title', 'groups')
+
+            context.assertAttrEquals(notes, 'xlink:type', 'simple')
+            context.assertAttrEquals(notes, 'xlink:title', 'notes')
         finally:
             context.free()
         context.assertNoErrors()
@@ -102,6 +109,8 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
               <containers>
                 <container xlink:type="simple" xlink:href="/persons"
                            xlink:title="persons"/>
+                <container xlink:href="/notes" xlink:title="notes"
+                           xlink:type="simple"/>
                 <container xlink:type="simple" xlink:href="/groups"
                            xlink:title="groups"/>
               </containers>

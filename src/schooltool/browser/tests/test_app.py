@@ -681,6 +681,7 @@ class TestResourceContainerView(TestObjectContainerView):
 
 class TestNoteContainerView(TestObjectContainerView):
 
+
     def setUp(self):
         from schooltool.browser.app import NoteContainerView
         from schooltool.browser.app import NoteAddView
@@ -689,6 +690,34 @@ class TestNoteContainerView(TestObjectContainerView):
         self.view = NoteContainerView
         self.add_view = NoteAddView
         self.obj_view = NoteView
+
+    def createView(self):
+        from schooltool.app import Application
+        from schooltool.app import ApplicationObjectContainer
+        from schooltool.model import Note
+        app = Application()
+        app['notes'] = ApplicationObjectContainer(Note)
+        app['notes'].new('obj', title='Some Object', body='Some Body')
+        self.obj = app['notes']['obj']
+
+        view = self.view(app['notes'])
+        view.add_view = self.add_view
+        view.obj_view = self.obj_view
+        return view
+
+    def test_render_index(self):
+        view = self.createView()
+        view.isManager = lambda: True
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
+        for s in ['href="http://localhost:7001/notes/obj"',
+                  'Some Object',
+                  view.index_title]:
+            self.assert_(s in result, s)
+
+        view.isManager = lambda: False
+        self.assert_('add.html' not in view.render(request))
 
 
 class TestObjectAddView(AppSetupMixin, unittest.TestCase):

@@ -24,7 +24,7 @@ $Id$
 
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
-from schooltool.interfaces import IGroup, IPerson, IResource
+from schooltool.interfaces import IGroup, IPerson, IResource, INote
 from schooltool.interfaces import IApplicationObject
 from schooltool.uris import URIMember, URIGroup
 from schooltool.component import registerView
@@ -131,6 +131,8 @@ class PersonView(ApplicationObjectTraverserView, ApplicationObjectDeleteMixin):
             return AbsenceManagementView(self.context)
         if name == 'password':
             return PersonPasswordView(self.context)
+        if name == 'notes':
+            return NotesView(self.context)
         return ApplicationObjectTraverserView._traverse(self, name, request)
 
     def getGroups(self):
@@ -176,6 +178,21 @@ class ResourceView(ApplicationObjectTraverserView,
             return BookingView(self.context)
         return ApplicationObjectTraverserView._traverse(self, name, request)
 
+
+class NoteView(View):
+    """A view on a single note"""
+
+    authorization = PublicAccess
+
+    template = Template("www/note.pt", content_type="text/xml")
+
+
+class NotesView(ApplicationObjectTraverserView):
+    """A users view on their notes of a relatable object."""
+
+    authorization = PublicAccess
+
+    template = Template("www/notes.pt", content_type="text/xml")
 
 #
 # Helpers
@@ -227,3 +244,4 @@ def setUp():
     registerView(IPerson, PersonView)
     registerView(IGroup, GroupView)
     registerView(IResource, ResourceView)
+    registerView(INote, NoteView)

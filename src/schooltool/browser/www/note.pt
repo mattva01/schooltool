@@ -1,25 +1,39 @@
 <html metal:use-macro="view/macros/page" i18n:domain="schooltool">
-    <head>
-        <title metal:fill-slot="title" i18n:translate="">
-            Note: <span tal:replace="context/title" i18n:name="title"/>
-        </title>
-    </head>
 
-    <body>
-        <h1 metal:fill-slot="h1" i18n:translate="">
-            Note: <span tal:replace="context/title" i18n:name="title"/>
-        </h1>
+  <head>
+    <title metal:fill-slot="title" i18n:translate="">
+      Note: <span tal:replace="context/title" i18n:name="title"/>
+    </title>
+  </head>
 
-        <metal:block metal:fill-slot="content">
+  <body>
 
-            <div class="note">
-                <div class="content"
-                    tal:content="context/body">Note Body</div>
+    <h1 metal:fill-slot="h1" i18n:translate="">
+      Note: <span tal:replace="context/title" i18n:name="title"/>
+    </h1>
 
-                <a href="" tal:attributes="href context/url"
-                    i18n:translate="">Refers to...</a>
-            </div>
+    <metal:block metal:fill-slot="content">
 
-        </metal:block>
-    </body>
+      <div class="note">
+        <div class="content"
+          tal:content="context/body">Note Body</div>
+      </div>
+
+      <div class="relates">
+        Notation on:
+        <ul>
+          <tal:loop repeat="notated context/getRelated">
+            <li>
+              <a href=""
+                tal:attributes="href notated/@@absolute_url"
+                tal:content="notated/title"></a>
+            </li>
+          </tal:loop>
+        </ul>
+      </div>
+
+    </metal:block>
+
+  </body>
+
 </html>

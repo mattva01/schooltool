@@ -321,7 +321,7 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.rest.model import PersonView
-        from schooltool.model import Group, Person
+        from schooltool.model import Group, Person, Note
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
         from schooltool import membership
@@ -330,6 +330,7 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         app = Application()
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
+        app['notes'] = ApplicationObjectContainer(Note)
         self.group = app['groups'].new("root", title="group")
         self.sub = app['groups'].new("subgroup", title="subgroup")
         self.per = app['persons'].new("p", title="Pete")
@@ -401,6 +402,8 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
               <calendar xlink:type="simple"
                         xlink:title="Calendar derived from timetables"
                         xlink:href="/persons/p/timetable-calendar"/>
+              <notes xlink:href="/persons/p/notes" xlink:title="Notes"
+                     xlink:type="simple"/>
             </person>
             """, recursively_sort=['groups'])
 

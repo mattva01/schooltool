@@ -1,0 +1,25 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+  <head>
+    <title metal:fill-slot="title"
+      tal:content="view/index_title">Contents</title>
+  </head>
+  <body>
+
+    <h1 metal:fill-slot="h1" tal:content="view/index_title">Contents</h1>
+
+    <metal:block metal:fill-slot="content">
+
+      <tal:block define="notes view/sortedObjects">
+        <ul>
+          <tal:loop repeat="note notes">
+            <li tal:condition="python:note.owner == request.authenticated_user">
+              <a tal:content="note/title"
+                tal:attributes="href note/@@absolute_url">Some Object</a>
+            </li>
+          </tal:loop>
+        </ul>
+      </tal:block>
+
+    </metal:block>
+  </body>
+</html>

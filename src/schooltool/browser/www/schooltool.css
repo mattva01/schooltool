@@ -701,6 +701,40 @@ div.note .content {
     width: 20em;
 }
 
+div.notes {
+  margin: 1em;
+  border: 1px #a52a2a solid;
+  background: #e2e2e2;
+  width: 50%;
+}
+
+div.notes h3 {
+  margin: 0;
+  background: #ebe9bf;
+  padding: 0.5em;
+  border-bottom: 1px #a52a2a solid;
+}
+
+div.notes dl {
+  margin: 1em;
+}
+
+div.notes dl dt {
+  font-weight: bold;
+}
+
+div.notes dl dd {
+  margin-left: 0;
+  margin-bottom: 1em;
+  border-left: 10px #999999 solid;
+  padding-left: 0.5em;
+}
+
+div.notes div.byline {
+  font-size: smaller;
+}
+
+
 /* Timetable setup form */
 
 table.timetable_setup {

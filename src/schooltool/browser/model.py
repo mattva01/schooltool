@@ -46,10 +46,11 @@ from schooltool.component import getTimePeriodService
 from schooltool.component import getTimetableSchemaService
 from schooltool.interfaces import IPerson, IGroup, IResource, INote
 from schooltool.membership import Membership
+from schooltool.noted import Noted
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember, URIGroup, URITeacher
 from schooltool.uris import URICalendarSubscription, URICalendarSubscriber
-from schooltool.uris import URICalendarProvider
+from schooltool.uris import URICalendarProvider, URINotation
 from schooltool.teaching import Teaching
 from schooltool.common import to_unicode
 from schooltool.browser.widgets import TextWidget, TextAreaWidget, dateParser
@@ -564,8 +565,10 @@ class NoteView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
 
     template = Template("www/note.pt")
 
+    # Right now we only want to be editible by the owner
     def canEdit(self):
-        return self.isManager()
+        user = request.authenticated_user
+        return user == context.owner
 
     def editURL(self):
         return absoluteURL(self.request, self.context, 'edit.html')
@@ -575,6 +578,57 @@ class NoteView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
             return NoteEditView(self.context)
         else:
             raise KeyError(name)
+
+
+class NoteEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
+    """Page for "editing" a Note (/notes/id/edit.html)."""
+
+    authorization = AuthenticatedAccess
+
+    template = Template('www/note_edit.pt')
+
+    linkrole = URINotation
+
+    relname = _('Noted')
+
+    back = True
+
+    errormessage = _("Cannot edit %(note)s to %(this)s")
+
+    def createRelationship(self, other):
+        Noted(notation=self.context, notandum=other)
+
+    def __init__(self, context):
+        View.__init__(self, context)
+        self.title_widget = TextWidget('title', _('Title'), value=context.title)
+        self.body_widget = TextAreaWidget('body', _('Note'), value=info.body)
+
+    def do_POST(self, request):
+        if 'CANCEL' in request.args:
+            return self.do_GET(request)
+
+        widgets = [self.title_widget, self.body_widget]
+        
+        for widget in widgets:
+            widget.update(request)
+            
+        # This is how to require a field.  Do we want any required here?
+        #self.country_widget.require()
+        
+        allow_duplicates = 'CONFIRM' in request.args
+        
+        for widget in widgets:
+            if widget.error:
+                return self.do_GET(request)
+            
+        title = self.title_widget.value
+        body = self.body_widget.value
+                
+        request.appLog(_("Note info updated on %s (%s)") %
+                       (self.context.title, getPath(self.context)))
+        
+        url = absoluteURL(request, self.context)
+        return self.redirect(url, request)
 
 
 class PhotoView(View):

@@ -27,8 +27,11 @@
       <span class="userlabel" i18n:translate="">User:</span>
       <span class="username" tal:content="request/authenticated_user/title" />.
 
-      <a href="" i18n:translate=""
-          tal:attributes="href string:/notes/add.html?url=${request/path}">Add note</a>.
+      <tal:if condition="view/isRelatable">
+        <a href="" i18n:translate=""
+          tal:attributes="href string:/notes/add.html?toadd=${request/path}"
+          >Add note</a>.
+      </tal:if>
 
       <a href="/logout" i18n:translate=""
          tal:attributes="href string:/logout?url=${request/path}">Log out</a>.
@@ -48,6 +51,7 @@
     <p metal:define-slot="content">[Content]</p>
 
   </div>
+  <metal:macro use-macro="view/macros/notes"/>
 </body>
 </html>
 </metal:block>
@@ -86,4 +90,30 @@
   </div>
 </body>
 </html>
+</metal:block>
+
+<metal:block define-macro="notes">
+  <tal:block define="notes python:view.getNotations(request)">
+    <tal:if condition="notes">
+      <div class="notes">
+        <h3>Notes</h3>
+        <dl>
+          <tal:loop repeat="note notes">
+            <dt>
+              <a href="" 
+                tal:attributes="href note/@@absolute_url"
+                tal:content="note/title"></a>
+            </dt>
+            <dd>
+              <div tal:content="note/body"></div>
+              <div class="byline"
+                  tal:define="owner note/owner">
+                  By: <span tal:content="owner/title"/>
+              </div>
+            </dd>
+          </tal:loop>
+        </dl>
+      </div>
+    </tal:if>
+  </tal:block>
 </metal:block>

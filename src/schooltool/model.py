@@ -34,15 +34,17 @@ from schooltool.interfaces import IApplicationObject
 from schooltool.interfaces import Everybody, ViewPermission
 from schooltool.relationship import RelationshipValenciesMixin, Valency
 from schooltool.facet import FacetedEventTargetMixin
+from schooltool.event import EventTargetMixin
 from schooltool.membership import Membership
 from schooltool.db import PersistentKeysSetWithNames
 from schooltool.cal import CalendarOwnerMixin
 from schooltool.timetable import TimetabledMixin
 from schooltool.timetable import getPeriodsForDay
 from schooltool.absence import Absence
-from schooltool.component import FacetManager
+from schooltool.component import FacetManager, getRelatedObjects
 from schooltool.infofacets import PersonInfoFacet, AddressInfoFacet
 from schooltool.auth import ACL
+from schooltool.uris import URINotandum, URINotation
 
 __metaclass__ = type
 
@@ -230,22 +232,27 @@ class Resource(ApplicationObjectMixin):
     implements(IResource)
 
 
-class Note:
+class Note(RelationshipValenciesMixin, EventTargetMixin):
 
     implements(INote)
 
-    title = property(lambda self: self._title)
-    body = property(lambda self: self._body)
-    owner = property(lambda self: self._owner)
-    url = property(lambda self: self._url)
+    title = None
+    body = None
+    owner = None
+    created = None
 
-    def __init__(self, title, body=None, owner=None, url=None):
-        self._title = title
-        self._body = body
-        self._owner = owner
-        self._url = url
+    def __init__(self, title, body=None, owner=None):
+        RelationshipValenciesMixin.__init__(self)
+        EventTargetMixin.__init__(self)
+        self.title = title
+        self.body = body
+        self.owner = owner
         self.__name__ = None
         self.__parent__ = None
+        self.created = datetime.datetime.today()
+
+    def getRelated(self):
+        return getRelatedObjects(self, URINotandum)
 
 
 class Address(FacetedEventTargetMixin,

@@ -458,13 +458,14 @@ class TestNote(unittest.TestCase):
 
     def newObject(self):
         from schooltool.model import Note
-        return Note("Test Note", "Test Body", "", "/start")
+        return Note("Test Note", "Test Body", "/start")
 
     def test(self):
-        from schooltool.interfaces import INote, ILocation
+        from schooltool.interfaces import INote, ILocation, IRelatable
         note = self.newObject()
         verifyObject(INote, note)
         verifyObject(ILocation, note)
+        verifyObject(IRelatable, note)
 
 
 class TestAddress(unittest.TestCase):
