@@ -1019,12 +1019,21 @@ class TestCalendarEvent(unittest.TestCase):
                             timedelta(minutes=10),
                             "reality check", owner=owner,
                             context=context)
+        ce7 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", location="Somewhere")
+        ce8 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id="Chair")
+
         self.assertEquals(ce, ce1)
         self.assertNotEquals(ce, ce2)
         self.assertNotEquals(ce, ce3)
         self.assertNotEquals(ce, ce4)
         self.assertNotEquals(ce, ce5)
         self.assertNotEquals(ce5, ce6)
+        self.assertNotEquals(ce, ce6)
+        self.assertNotEquals(ce, ce7)
         self.assertRaises(AttributeError, setattr, ce, 'dtstart', 'not-ro')
         self.assertRaises(AttributeError, setattr, ce, 'duration', 'not-ro')
         self.assertRaises(AttributeError, setattr, ce, 'title', 'not-ro')

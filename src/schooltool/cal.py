@@ -945,7 +945,7 @@ class CalendarEvent(Persistent):
                     self.location, self.unique_id),
                    (other.dtstart, other.title, other.duration,
                     hash(other.owner), hash(other.context),
-                    self.location, self.unique_id))
+                    other.location, other.unique_id))
 
     def __hash__(self):
         return hash((self.dtstart, self.title, self.duration,
