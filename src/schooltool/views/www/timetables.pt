@@ -1,0 +1,6 @@
+<timetables xmlns:xlink="http://www.w3.org/1999/xlink"
+                  xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <timetable tal:repeat="tt view/timetables" xlink:type="simple"
+             tal:attributes="period tt/period; schema tt/schema;
+                             xlink:href tt/path" />
+</timetables>

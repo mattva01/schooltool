@@ -354,15 +354,16 @@ class TimetabledMixin:
     def __init__(self):
         self.timetables = PersistentDict()
 
-    def getCompositeTimetable(self, period_id, schema_id):
+    def _sources(self):
         sources = list(self.timetableSource)
-
         for facet in FacetManager(self).iterFacets():
             if ICompositeTimetableProvider.isImplementedBy(facet):
                 sources += facet.timetableSource
+        return sources
 
+    def getCompositeTimetable(self, period_id, schema_id):
         timetables = []
-        for role, composite in sources:
+        for role, composite in self._sources():
             for related in getRelatedObjects(self, role):
                 if composite:
                     tt = related.getCompositeTimetable(period_id, schema_id)
@@ -383,6 +384,16 @@ class TimetabledMixin:
             result.update(tt)
 
         return result
+
+    def listCompositeTimetables(self):
+        keys = Set(self.timetables.keys())
+        for role, composite in self._sources():
+            for related in getRelatedObjects(self, role):
+                if composite:
+                    keys |= related.listCompositeTimetables()
+                else:
+                    keys.update(related.timetables.keys())
+        return keys
 
 
 class TimetableSchemaService(Persistent):

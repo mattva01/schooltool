@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 import libxml2
+import sets
 from zope.interface import implements
 from schooltool.interfaces import IServiceManager, ILocation
 from schooltool.views.tests import RequestStub, setPath
@@ -44,6 +45,7 @@ class TimetabledStub:
 
     def __init__(self):
         self.timetables = {}
+        self.overlay = {}
 
     def getCompositeTimetable(self, period_id, schema_id):
         try:
@@ -53,25 +55,38 @@ class TimetabledStub:
         else:
             copy = tt.cloneEmpty()
             copy.update(tt)
+            if (period_id, schema_id) in self.overlay:
+                copy.update(self.overlay[period_id, schema_id])
             return copy
 
+    def listCompositeTimetables(self):
+        return sets.Set(self.timetables.keys() + self.overlay.keys())
 
-class TestTimetableTraverseViews(unittest.TestCase):
 
-    def do_test(self, view_class, tt_view_class):
+class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
+
+    def do_test(self, view_class, tt_view_class, xml):
         context = TimetabledStub()
+        setPath(context, '/...object')
         tt = context.timetables['2003 fall', 'weekly'] = TimetableStub()
+        context.overlay['2003 spring', 'weekly'] = TimetableStub()
         view = view_class(context)
         request = RequestStub()
 
         result = view.render(request)
-        self.assertEquals(request.code, 404)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.headers['Content-Type'],
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, xml, recursively_sort=['timetables'])
 
         view2 = view._traverse('2003 fall', request)
         self.assert_(view2.__class__ is view_class,
                      '%r is not %r' % (view2.__class__, view_class))
         self.assert_(view2.context is context)
         self.assertEquals(view2.time_period, '2003 fall')
+
+        result = view2.render(request)
+        self.assertEquals(request.code, 404)
 
         view3 = view2._traverse('weekly', request)
         self.assert_(view3.__class__ is tt_view_class,
@@ -83,7 +98,12 @@ class TestTimetableTraverseViews(unittest.TestCase):
         from schooltool.views.timetable import TimetableTraverseView
         from schooltool.views.timetable import TimetableReadWriteView
         view2, view, context, tt = self.do_test(TimetableTraverseView,
-                                                TimetableReadWriteView)
+            TimetableReadWriteView, """
+            <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
+              <timetable period="2003 fall" schema="weekly" xlink:type="simple"
+                         xlink:href="/...object/timetable/2003 fall/weekly" />
+            </timetables>
+            """)
         self.assert_(view.timetabled is context)
         self.assertEquals(view.key, ('2003 fall', 'weekly'))
         self.assert_(view.context is tt, '%r is not %r' % (view.context, tt))
@@ -99,7 +119,15 @@ class TestTimetableTraverseViews(unittest.TestCase):
         from schooltool.views.timetable import CompositeTimetableTraverseView
         from schooltool.views.timetable import TimetableReadView
         view2, view, context, tt = self.do_test(CompositeTimetableTraverseView,
-                                                TimetableReadView)
+            TimetableReadView, """
+            <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
+              <timetable period="2003 fall" schema="weekly" xlink:type="simple"
+                xlink:href="/...object/composite-timetable/2003 fall/weekly" />
+              <timetable period="2003 spring" schema="weekly"
+                 xlink:href="/...object/composite-timetable/2003 spring/weekly"
+                 xlink:type="simple" />
+            </timetables>
+            """)
         self.assertEqual(view.context, tt)
         self.assert_(view.context is not tt)
 
@@ -294,12 +322,16 @@ class TestTimetableReadWriteView(TestTimetableReadView):
 
     def createTimetabled(self):
         from schooltool.timetable import TimetableSchemaService
+        from schooltool.timetable import TimePeriodService
 
         class ServiceManagerStub:
             implements(IServiceManager)
 
             timetableSchemaService = TimetableSchemaService()
             timetableSchemaService['weekly'] = self.createEmpty()
+
+            timePeriodService = TimePeriodService()
+            timePeriodService.register('2003 fall')
 
         timetabled = TimetabledStub()
         timetabled.__parent__ = ServiceManagerStub()
@@ -349,6 +381,17 @@ class TestTimetableReadWriteView(TestTimetableReadView):
 
     def test_put_bad_schema(self):
         key = ('2003 fall', 'wekly')
+        timetabled = self.createTimetabled()
+        view = self.createView(None, timetabled, key)
+        request = RequestStub(method="PUT", body=self.full_xml,
+                              headers={'Content-Type': 'text/xml'})
+        result = view.render(request)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assert_(key not in timetabled.timetables)
+
+    def test_put_bad_period(self):
+        key = ('2003 faal', 'weekly')
         timetabled = self.createTimetabled()
         view = self.createView(None, timetabled, key)
         request = RequestStub(method="PUT", body=self.full_xml,

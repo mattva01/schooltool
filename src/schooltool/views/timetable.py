@@ -31,8 +31,9 @@ from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
 from schooltool.views import View, Template, textErrorPage, notFoundPage
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
-from schooltool.component import getTimetableSchemaService, getPath
-from schooltool.component import registerView
+from schooltool.component import getTimetableSchemaService
+from schooltool.component import getTimePeriodService
+from schooltool.component import registerView, getPath
 from schooltool.schema.rng import validate_against_schema
 
 __metaclass__ = type
@@ -120,6 +121,9 @@ class TimetableReadWriteView(TimetableReadView):
         xpathctx.xpathRegisterNs('tt', ns)
 
         time_period_id, schema_id = self.key
+        if time_period_id not in getTimePeriodService(self.timetabled):
+            return textErrorPage(request, "Time period not defined: %s"
+                                 % time_period_id)
         try:
             tt = getTimetableSchemaService(self.timetabled)[schema_id]
         except KeyError:
@@ -238,15 +242,27 @@ class BaseTimetableTraverseView(View):
 
     """
 
+    template = Template("www/timetables.pt", content_type="text/xml")
+
     def __init__(self, context, time_period=None):
         View.__init__(self, context)
         self.time_period = time_period
 
-    do_GET = staticmethod(notFoundPage)
+    def do_GET(self, request):
+        if self.time_period is not None:
+            return notFoundPage(request)
+        else:
+            return View.do_GET(self, request)
 
 
 class TimetableTraverseView(BaseTimetableTraverseView):
     """View for obj/timetable."""
+
+    def timetables(self):
+        basepath = getPath(self.context) + '/timetable'
+        return [{'schema': schema_id, 'period': period_id,
+                 'path': '%s/%s/%s' % (basepath, period_id, schema_id)}
+                for period_id, schema_id in self.context.timetables]
 
     def _traverse(self, name, request):
         if self.time_period is None:
@@ -258,6 +274,13 @@ class TimetableTraverseView(BaseTimetableTraverseView):
 
 class CompositeTimetableTraverseView(BaseTimetableTraverseView):
     """View for obj/composite-timetable."""
+
+    def timetables(self):
+        basepath = getPath(self.context) + '/composite-timetable'
+        return [{'schema': schema_id, 'period': period_id,
+                 'path': '%s/%s/%s' % (basepath, period_id, schema_id)}
+                for period_id, schema_id in
+                                    self.context.listCompositeTimetables()]
 
     def _traverse(self, name, request):
         if self.time_period is None:

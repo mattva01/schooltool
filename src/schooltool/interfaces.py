@@ -1175,6 +1175,7 @@ class ITimetableActivity(Interface):
         The activity lives in the owner's timetable.
         """)
 
+
 class ICompositeTimetableProvider(Interface):
     """An object which knows how to get the timetables for composition
     """
@@ -1209,13 +1210,18 @@ class ITimetabled(Interface):
         """)
 
     def getCompositeTimetable(time_period_id, tt_schema_id):
-        """Returns a composite timetable for a given object with a
+        """Return a composite timetable for a given object with a
         given timetable schema for a given time period id.
 
         The timetable returned includes the events from the timetables
         of parent groups, groups taught, etc.
 
         This function can return None if the object has no timetable.
+        """
+
+    def listCompositeTimetables():
+        """Return a sequence of (time_period_id, tt_schema_id) for all
+        available composite timetables.
         """
 
 

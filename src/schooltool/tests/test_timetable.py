@@ -708,10 +708,11 @@ class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
         tt["B"] = TimetableDay(("Green", "Blue"))
         return tt
 
-    def test_getCompositeTable_own(self):
+    def test_composite_table_own(self):
         tm = TimetabledStub(self.eventService)
         self.assertEqual(tm.timetables, {})
         self.assertEqual(tm.getCompositeTimetable("a", "b"), None)
+        self.assertEqual(tm.listCompositeTimetables(), Set())
 
         tt = tm.timetables["2003 fall", "sequential"] = self.newTimetable()
 
@@ -719,7 +720,10 @@ class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
         self.assertEqual(result, tt)
         self.assert_(result is not tt)
 
-    def test_getCompositeTable_related(self):
+        self.assertEqual(tm.listCompositeTimetables(),
+                         Set([("2003 fall", "sequential")]))
+
+    def test_composite_table_related(self):
         from schooltool.timetable import TimetableActivity
         from schooltool.membership import Membership
         from schooltool.uris import URIGroup
@@ -741,11 +745,23 @@ class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
             else:
                 return None
 
-        parent.getCompositeTimetable = newComposite
+        def listComposites():
+            return Set([("2003 fall", "sequential")])
 
+        parent.getCompositeTimetable = newComposite
+        parent.listCompositeTimetables = listComposites
+
+        tm.timetableSource = ((URIGroup, False), )
+        result = tm.getCompositeTimetable("2003 fall", "sequential")
+        self.assert_(result is None)
+        self.assertEqual(tm.listCompositeTimetables(), Set())
+
+        tm.timetableSource = ((URIGroup, True), )
         result = tm.getCompositeTimetable("2003 fall", "sequential")
         self.assertEqual(result, composite)
         self.assert_(result is not composite)
+        self.assertEqual(tm.listCompositeTimetables(),
+                         Set([("2003 fall", "sequential")]))
 
         # Now test with our object having a private timetable
         private = self.newTimetable()
@@ -758,6 +774,8 @@ class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
         expected.update(composite)
         expected.update(private)
         self.assertEqual(result, expected)
+        self.assertEqual(tm.listCompositeTimetables(),
+                         Set([("2003 fall", "sequential")]))
 
         # Now test things with a table which says (URIGroup, False)
         tm.timetableSource = ((URIGroup, False), )
@@ -772,9 +790,10 @@ class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
         expected.update(private)
         expected.update(parent_private)
         self.assertEqual(result, expected)
-
         self.assertEqual(Set(result["B"]["Blue"]), Set([math]))
         self.assertEqual(Set(result["A"]["Green"]), Set([french]))
+        self.assertEqual(tm.listCompositeTimetables(),
+                         Set([("2003 fall", "sequential")]))
 
     def test_getCompositeTable_facets(self):
         from schooltool.timetable import TimetableActivity
