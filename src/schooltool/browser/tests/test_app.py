@@ -28,6 +28,7 @@ from datetime import date, time, timedelta
 
 from zope.testing.doctest import DocTestSuite
 from schooltool.browser.tests import TraversalTestMixin, RequestStub, setPath
+from schooltool.browser.tests import HTMLDocument
 from schooltool.tests.utils import EqualsSortedMixin
 from schooltool.tests.utils import AppSetupMixin
 
@@ -185,6 +186,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.app import ResourceContainerView
         from schooltool.browser.app import NoteContainerView
         from schooltool.browser.app import BusySearchView
+        from schooltool.browser.app import OptionsView
         from schooltool.browser.applog import ApplicationLogView
         from schooltool.browser.timetable import TimetableSchemaWizard
         from schooltool.browser.timetable import TimetableSchemaServiceView
@@ -196,6 +198,7 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         app = view.context
         self.assertTraverses(view, 'logout', LogoutView, app)
         self.assertTraverses(view, 'reset_db.html', DatabaseResetView, app)
+        self.assertTraverses(view, 'options.html', OptionsView, app)
         self.assertTraverses(view, 'applog', ApplicationLogView, app)
         self.assertTraverses(view, 'persons', PersonContainerView,
                              app['persons'])
@@ -1092,6 +1095,66 @@ class TestDatabaseResetView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(password, '123')
 
 
+class TestOptionsView(AppSetupMixin, unittest.TestCase):
+
+    def createView(self):
+        from schooltool.browser.app import OptionsView
+        return OptionsView(self.app)
+
+    def assertSelected(self, doc, name, value):
+        op = doc.query('//select[@name="%s"]'
+                       '//option[@value="%s" and @selected="selected"]'
+                       % (name, value))
+        assert len(op) == 1, '%s=%s not selected' % (name, value)
+
+    def test_render(self):
+        self.app.new_event_privacy = 'hidden'
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager)
+        result = view.render(request)
+
+        doc = HTMLDocument(result)
+
+        self.assertSelected(doc, 'new_event_privacy', 'hidden')
+        self.assertSelected(doc, 'timetable_privacy', 'public')
+
+    def test_do_POST(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager,
+                              method="POST",
+                              args={'new_event_privacy': 'hidden',
+                                    'timetable_privacy': 'private'})
+        result = view.render(request)
+        self.assertEqual(self.app.new_event_privacy, 'hidden')
+        self.assertEqual(self.app.timetable_privacy, 'private')
+        self.assertEqual(request.code, 302)
+        self.assertEqual(request.headers['location'],
+                         'http://localhost:7001/')
+
+
+    def test_do_POST_errors(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager,
+                              method="POST",
+                              args={'new_event_privacy': 'nonconformant',
+                                    'timetable_privacy': 'public'})
+        result = view.render(request)
+        self.assertEqual(self.app.new_event_privacy, 'public')
+        self.assertEqual(self.app.timetable_privacy, 'public')
+
+        doc = HTMLDocument(result)
+
+        self.assertSelected(doc, 'timetable_privacy', 'public')
+
+        request = RequestStub(authenticated_user=self.manager,
+                              method="POST",
+                              args={'new_event_privacy': 'nonconformant',
+                                    'timetable_privacy': 'public'})
+        result = view.render(request)
+        self.assertEqual(self.app.new_event_privacy, 'public')
+        self.assertEqual(self.app.timetable_privacy, 'public')
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAppView))
@@ -1109,6 +1172,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestNoteAddView))
     suite.addTest(unittest.makeSuite(TestBusySearchView))
     suite.addTest(unittest.makeSuite(TestDatabaseResetView))
+    suite.addTest(unittest.makeSuite(TestOptionsView))
     suite.addTest(DocTestSuite('schooltool.browser.app'))
     return suite
 

@@ -40,6 +40,8 @@
           i18n:translate="">Import CSV data</a></p>
     <p><a class="sitemap" href="/reset_db.html"
           i18n:translate="">Reset the database</a></p>
+    <p><a class="sitemap" href="/options.html"
+          i18n:translate="">Edit system options</a></p>
   </div>
 
   <div tal:condition="view/isTeacher" class="section">

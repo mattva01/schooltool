@@ -42,7 +42,7 @@ from schooltool.browser.timetable import TimePeriodServiceView
 from schooltool.browser.timetable import TimetableSchemaServiceView
 from schooltool.browser.timetable import TimetableSchemaWizard
 from schooltool.browser.widgets import TextWidget, PasswordWidget
-from schooltool.browser.widgets import TextAreaWidget
+from schooltool.browser.widgets import TextAreaWidget, SelectionWidget
 from schooltool.browser.widgets import dateParser, intParser
 from schooltool.common import to_unicode
 from schooltool.component import FacetManager
@@ -134,6 +134,8 @@ class RootView(View):
             return LogoutView(self.context)
         elif name == 'reset_db.html':
             return DatabaseResetView(self.context)
+        elif name == 'options.html':
+            return OptionsView(self.context)
         elif name == 'start':
             return StartView(request.authenticated_user)
         elif name == 'applog':
@@ -706,3 +708,61 @@ class DatabaseResetView(View, ToplevelBreadcrumbsMixin):
             self.context.ticketService = old_ticket_service
         return self.redirect('/', request)
 
+
+class OptionsView(View, ToplevelBreadcrumbsMixin):
+
+    __used_for__ = IApplication
+
+    authorization = ManagerAccess
+
+    title = _("System options")
+
+    template = Template('www/options.pt')
+
+    def __init__(self, context):
+        View.__init__(self, context)
+
+        def privacy_validator(value):
+            if value not in ('private', 'public', 'hidden'):
+                raise ValueError('Invalid value')
+
+        self.new_event_privacy_widget = SelectionWidget(
+            'new_event_privacy',
+            _('Default visibility of new events to other users'),
+            (('public', _('Public')),
+             ('private',  _('Busy block')),
+             ('hidden', _('Hidden'))),
+            value=self.context.new_event_privacy,
+            validator=privacy_validator)
+
+        self.timetable_privacy_widget = SelectionWidget(
+            'timetable_privacy',
+            _('Visibility of timetable events to other users'),
+            (('public', _('Public')),
+             ('private',  _('Busy block')),
+             ('hidden', _('Hidden'))),
+            value=self.context.timetable_privacy,
+            validator=privacy_validator)
+
+    def update(self, request):
+        self.new_event_privacy_widget.update(request)
+        self.timetable_privacy_widget.update(request)
+
+    def do_POST(self, request):
+        self.update(request)
+        self.new_event_privacy_widget.require()
+        self.timetable_privacy_widget.require()
+
+        if (self.new_event_privacy_widget.error or
+            self.timetable_privacy_widget.error):
+            self.error = "There were errors"
+            return self.do_GET(request)
+
+        newpriv = self.new_event_privacy_widget.value
+        ttpriv = self.timetable_privacy_widget.value
+        if newpriv is not None:
+            self.context.new_event_privacy = newpriv
+        if ttpriv is not None:
+            self.context.timetable_privacy = ttpriv
+
+        return self.redirect('/', request)
