@@ -144,6 +144,27 @@ def doctest_SortBy():
     """
 
 
+def doctest_NavigationView():
+    """Unit tests for NavigationView.
+
+    This view works for any ILocatable object within a SchoolBell instance.
+
+      >>> from schoolbell.app.app import SchoolBellApplication, Person
+
+      >>> p = Person()
+      >>> app = SchoolBellApplication()
+      >>> app['persons']['1'] = p
+
+    It makes the application available as `view.app`:
+
+      >>> from schoolbell.app.browser import NavigationView
+      >>> view = NavigationView(p, None)
+      >>> view.app is app
+      True
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite())

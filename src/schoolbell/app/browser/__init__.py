@@ -51,7 +51,17 @@ def getSchoolBellApplication(obj):
 
 
 class NavigationView(BrowserView):
-    """XXX I want a docstring"""
+    """View for the navigation portlet.
+
+    A separate view lets us vary the content of the navigation portlet
+    according to the currently logged in user and/or context.  Currently
+    we do not make use of this flexibility, though.
+
+    This view finds the schoolbell application from context and makes it
+    available to the page template as view/app.  Rendering this view on
+    an object that is not a part of a SchoolBell instance will raise an error,
+    so don't do that.
+    """
 
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
