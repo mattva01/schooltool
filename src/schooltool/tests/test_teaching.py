@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.model
+Unit tests for schooltool.teaching
 
 $Id$
 """
@@ -34,12 +34,14 @@ from schooltool.relationship import RelatableMixin
 
 __metaclass__ = type
 
+
 class Relatable(LocatableEventTargetMixin, RelatableMixin):
     implements(IRelatable)
 
     def __init__(self, parent=None, name='does not matter'):
         LocatableEventTargetMixin.__init__(self, parent, name)
         self.__links__ = Set()
+
 
 class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
                    unittest.TestCase):
@@ -54,7 +56,7 @@ class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
         self.tearDownRegistries()
 
     def testURIs(self):
-        from schooltool.example import URITeaching, URITeacher, URITaught
+        from schooltool.teaching import URITeaching, URITeacher, URITaught
         from schooltool.component import inspectSpecificURI
 
         inspectSpecificURI(URITeaching)
@@ -62,8 +64,8 @@ class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
         inspectSpecificURI(URITaught)
 
     def testRelationshipSchema(self):
-        from schooltool.example import Teaching
-        from schooltool.example import URITeaching, URITeacher, URITaught
+        from schooltool.teaching import Teaching
+        from schooltool.teaching import URITeaching, URITeacher, URITaught
 
         teacher = Relatable(self.serviceManager)
         student = Relatable(self.serviceManager)
@@ -74,16 +76,16 @@ class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
         self.assert_(student.listLinks(URITeacher)[0].traverse() is teacher)
 
     def testModuleSetup(self):
-        from schooltool import example
+        from schooltool import teaching
         from schooltool.interfaces import IModuleSetup
         from schooltool.component import getFacetFactory
-        verifyObject(IModuleSetup, example)
-        example.setUp()
+        verifyObject(IModuleSetup, teaching)
+        teaching.setUp()
         getFacetFactory('Subject Group')
 
     def testSubjectGroupFacet(self):
-        from schooltool.example import SubjectGroupFacet
-        from schooltool.example import URITeaching, URITaught
+        from schooltool.teaching import SubjectGroupFacet
+        from schooltool.teaching import URITeaching, URITaught
         from schooltool.interfaces import IRelationshipValencies
 
         facet = SubjectGroupFacet()
