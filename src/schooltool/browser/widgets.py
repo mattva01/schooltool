@@ -251,3 +251,44 @@ class TextWidget(Widget):
                             'row_class': cgi.escape(row_class, True),
                             'error': error})
 
+
+
+class SelectionWidget(Widget):
+    """Selection field widget."""
+
+    implements(IWidget)
+
+    def __init__(self, name, label, values, parser=None, validator=None,
+                 formatter=None):
+        self._values = values
+        Widget.__init__(self, name, label, parser=parser, validator=validator,
+                        formatter=formatter)
+
+    def __call__(self):
+        if self.error:
+            row_class = 'row error'
+            error = '<div class="error">%s</div>\n' % cgi.escape(self.error)
+        else:
+            row_class = 'row'
+            error = ''
+
+        result = []
+        result.append('<div class="%(row_class)s">\n'
+                      '  <label for="%(name)s">%(label)s</label>\n'
+                      '  <select name="%(name)s" id="%(name)s">' %
+                      {'name': cgi.escape(self.name, True),
+                       'label': cgi.escape(self.label, True),
+                       'row_class': cgi.escape(row_class, True),
+                       'error': error})
+
+        for value, display in self._values:
+            result.append('    <option value="%(value)s"%(selected)s>'
+                          '%(display)s</option>' %
+                          {'value': cgi.escape(self.formatter(value), True),
+                           'display': cgi.escape(display, True),
+                           'selected': (value == self.value
+                                        and " selected=\"selected\""
+                                        or "")})
+
+        result.append('  </select>\n  </div>\n%s'% error)
+        return "\n".join(result)

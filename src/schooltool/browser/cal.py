@@ -35,7 +35,7 @@ from schooltool.translation import ugettext as _
 from schooltool.interfaces import ViewPermission
 from schooltool.interfaces import AddPermission, ModifyPermission
 from schooltool.uris import URIMember
-
+from schooltool.browser.widgets import SelectionWidget
 
 __metaclass__ = type
 
@@ -826,10 +826,54 @@ class ACLView(View):
 
     template = Template("www/acl.pt")
 
-    def allPermissions(self):
-        return [{'id':ViewPermission, 'title':_('View')},
-                {'id':AddPermission, 'title':_('Add')},
-                {'id':ModifyPermission, 'title':_('Modify')}]
+    def __init__(self, context):
+        View.__init__(self, context)
+
+        self.principal_widget = SelectionWidget(
+            'principal', _('Principal'),
+            [(None, _('Select principal'))] +
+            [(obj, obj.title) for obj in self.allPrincipals()],
+            parser=self.principalParser,
+            formatter=self.formatPrincipal,
+            validator=self.principalValidator)
+
+        self.permission_widget = SelectionWidget(
+            'permission', _('Permission'),
+            [(None, _('Select permission'))] +
+            [(ViewPermission, _('View')),
+             (AddPermission, _('Add')),
+             (ModifyPermission, _('Modify'))],
+            validator=self.permissionValidator,
+            formatter=self.formatPermission
+            )
+
+    def principalParser(self, value):
+        try:
+            if value in (None, ''):
+                return value
+            return traverse(self.context, value)
+        except TypeError:
+            return None
+
+    def formatPrincipal(self, value):
+        if value not in ('', None):
+            return getPath(value)
+        else:
+            return ''
+
+    def formatPermission(self,  value):
+        if not value:
+            return ''
+        return value
+
+    def principalValidator(self, value):
+        if (not IPerson.providedBy(value) and
+            not IGroup.providedBy(value) and value is not None):
+            raise ValueError("Please select a principal")
+
+    def permissionValidator(self, value):
+        if value not in (ViewPermission, AddPermission, ModifyPermission, None):
+            raise ValueError("Please select a permission")
 
     def allPrincipals(self):
         """Return a list of objects available for addition"""
@@ -843,6 +887,8 @@ class ACLView(View):
 
     def update(self):
         result = []
+        self.principal_widget.update(self.request)
+        self.permission_widget.update(self.request)
         if 'DELETE' in self.request.args:
             for checkbox in self.request.args.get('CHECK', []):
                 perm, path = checkbox.split(':', 1)
@@ -859,23 +905,21 @@ class ACLView(View):
             return "; ".join(result)
 
         if 'ADD' in self.request.args:
-            # XXX: This begs to be rewritten with widgets.
-            if not self.request.args.get('principal', [''])[0]:
-                return _("Please select a principal")
-            if not self.request.args.get('permission', [''])[0]:
-                return _("Please select a permission")
-            try:
-                principal = traverse(self.context,
-                                     self.request.args['principal'][0])
-                if (not IPerson.providedBy(principal) and
-                    not IGroup.providedBy(principal)):
-                    raise TypeError("Groups or persons please!")
-                permission = self.request.args['permission'][0]
-            except (KeyError, IndexError, TypeError):
-                return _("Incorrect arguments.")
-            self.context.add((principal, permission))
-            self.request.appLog(
-                _("Granted permission %s on %s to %s (%s)") %
-                (permission, getPath(self.context),
-                 getPath(principal), principal.title))
-            return _("Permission added.")
+            self.permission_widget.require()
+            self.principal_widget.require()
+
+            if not (self.principal_widget.error or
+                    self.permission_widget.error):
+                principal = self.principal_widget.value
+                permission = self.permission_widget.value
+                if (principal, permission) in self.context:
+                    return _("%s already has permission %s") % \
+                           (principal.title, permission)
+                self.context.add((principal, permission))
+                self.request.appLog(
+                    _("Granted permission %s on %s to %s (%s)") %
+                    (permission, getPath(self.context),
+                     getPath(principal), principal.title))
+                return _("Granted permission %s to %s") % (permission,
+                                                           principal.title)
+

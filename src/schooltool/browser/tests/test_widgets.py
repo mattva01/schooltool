@@ -192,6 +192,30 @@ class TestTextWidget(XMLCompareMixin, unittest.TestCase):
         self.assertEqualsXML(widget().encode('UTF-8'),
                              expected.encode('UTF-8'))
 
+class TestSelectionWidget(XMLCompareMixin, unittest.TestCase):
+
+    def createWidget(self):
+        from schooltool.browser.widgets import SelectionWidget
+        widget = SelectionWidget('field', 'Label', (('a', 'Aa'), ('b', 'Bb')))
+        return widget
+
+    def test(self):
+        from schooltool.browser.widgets import IWidget
+        verifyObject(IWidget, self.createWidget())
+
+    def test_call(self):
+        widget = self.createWidget()
+        widget.setValue(u'a')
+        expected = """<div class="row">
+                        <label for="field">Label</label>
+                        <select name="field" id="field">
+                          <option value="a" selected="selected">Aa</option>
+                          <option value="b">Bb</option>
+                        </select>
+                      </div>
+                      """
+        self.assertEqualsXML(widget(), expected)
+
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -199,6 +223,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestWidget))
     suite.addTest(unittest.makeSuite(TestWidgetWithConverters))
     suite.addTest(unittest.makeSuite(TestTextWidget))
+    suite.addTest(unittest.makeSuite(TestSelectionWidget))
     return suite
 
 

@@ -728,7 +728,7 @@ class TestYearlyCalendarView(unittest.TestCase):
         self.assertEquals(view.nextYear(), date(2005, 1, 1))
 
 
-class TestCalendarView(unittest.TestCase, TraversalTestMixin):
+class TestCalendarView(AppSetupMixin, unittest.TestCase, TraversalTestMixin):
 
     def test_traverse(self):
         from schooltool.cal import ACLCalendar
@@ -741,7 +741,7 @@ class TestCalendarView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.cal import EventEditView
         from schooltool.browser.cal import EventDeleteView
         from schooltool.browser.cal import ACLView
-        context = ACLCalendar()
+        context = self.person.calendar
         view = CalendarView(context)
         self.assertTraverses(view, 'daily.html', DailyCalendarView, context)
         self.assertTraverses(view, 'weekly.html', WeeklyCalendarView, context)
@@ -1053,7 +1053,8 @@ class TestCalendarComboMixin(unittest.TestCase):
                           ['calendar', 'timetable-calendar'])
 
 
-class TestComboCalendarView(unittest.TestCase, TraversalTestMixin):
+class TestComboCalendarView(AppSetupMixin, unittest.TestCase,
+                            TraversalTestMixin):
 
     def test_traverse(self):
         from schooltool.cal import ACLCalendar
@@ -1066,7 +1067,7 @@ class TestComboCalendarView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.cal import EventEditView
         from schooltool.browser.cal import EventDeleteView
         from schooltool.browser.cal import ACLView
-        context = ACLCalendar()
+        context = self.person.calendar
         view = ComboCalendarView(context)
         self.assertTraverses(view, 'daily.html', ComboDailyCalendarView,
                              context)
@@ -1234,26 +1235,24 @@ class TestACLView(AppSetupMixin, unittest.TestCase):
                            'Granted permission View on'
                            ' /persons/johndoe/calendar/acl to'
                            ' /persons/johndoe (John Doe)', INFO)])
+        self.assertEquals(result, 'Granted permission View to John Doe')
+        result = view.update()
+        self.assertEquals(result, 'John Doe already has permission View')
 
         view.request = RequestStub(authenticated_user=self.person,
                                    args={'ADD': 'grant permission',
                                          'principal': ''})
         result = view.update()
-        self.assertEquals(result, "Please select a principal")
+        self.assertEquals(view.principal_widget.error,
+                          "Please select a principal")
         self.assertEquals(view.request.applog, [])
 
         view.request = RequestStub(authenticated_user=self.person,
                                    args={'ADD': 'grant permission',
                                          'principal':'foo', 'permission': ''})
         result = view.update()
-        self.assertEquals(result, "Please select a permission")
-
-        view.request = RequestStub(authenticated_user=self.person,
-                                   args={'ADD': 'grant permission',
-                                         'principal':'foo',
-                                         'permission': 'bar'})
-        result = view.update()
-        self.assertEquals(result, "Incorrect arguments.")
+        self.assertEquals(view.permission_widget.error,
+                          "Please select a permission")
 
 
 def test_suite():
