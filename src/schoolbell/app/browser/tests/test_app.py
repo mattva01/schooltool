@@ -1183,15 +1183,17 @@ def setUp(test):
     sets up annotations, relationships, and registers widgets as views for some
     schema fields.
     """
-    from zope.app.form.browser import PasswordWidget, TextWidget, BytesWidget
-    from zope.app.form.browser import CheckBoxWidget, DateWidget, IntWidget
-    from zope.app.form.browser import ChoiceInputWidget, DropdownWidget, TextAreaWidget
-    from zope.app.form.browser import ChoiceCollectionInputWidget, CollectionInputWidget
-    from zope.app.form.browser import MultiSelectWidget
     from zope.app.form.interfaces import IInputWidget
     from zope.publisher.interfaces.browser import IBrowserRequest
-    from zope.schema.interfaces import IPassword, ITextLine, IText, IBytes, IBool, ISet
-    from zope.schema.interfaces import IDate, IInt, IChoice, IIterableVocabulary
+    from zope.schema.interfaces import \
+            IPassword, ITextLine, IText, IBytes, IBool, ISet, IList, IDate, \
+            IInt, IChoice, IIterableVocabulary, IVocabularyTokenized, \
+            ICollection
+    from zope.app.form.browser import \
+            PasswordWidget, TextWidget, BytesWidget, CheckBoxWidget, \
+            DateWidget, IntWidget, ChoiceInputWidget, DropdownWidget, \
+            TextAreaWidget, ChoiceCollectionInputWidget, \
+            CollectionInputWidget, MultiSelectWidget, OrderedMultiSelectWidget
     setup.placefulSetUp()
     setup.setUpAnnotations()
     setup.setUpTraversal()
@@ -1207,13 +1209,19 @@ def setUp(test):
     ztapi.browserViewProviding(IDate, DateWidget, IInputWidget)
     ztapi.browserViewProviding(IInt, IntWidget, IInputWidget)
     ztapi.browserViewProviding(IChoice, ChoiceInputWidget, IInputWidget)
-    ztapi.browserViewProviding(ISet, CollectionInputWidget, IInputWidget)
+    ztapi.browserViewProviding(ICollection, CollectionInputWidget, IInputWidget)
 
     ztapi.provideMultiView((IChoice, IIterableVocabulary), IBrowserRequest,
                            IInputWidget, '', DropdownWidget)
 
     ztapi.provideMultiView((ISet, IChoice), IBrowserRequest,
                            IInputWidget, '', ChoiceCollectionInputWidget)
+    ztapi.provideMultiView((IList, IChoice), IBrowserRequest,
+                           IInputWidget, '', ChoiceCollectionInputWidget)
+    ztapi.provideMultiView((IList, IVocabularyTokenized), IBrowserRequest,
+                           IInputWidget, '', OrderedMultiSelectWidget)
+    # XXX MultiSelectWidget doesn't work with sets :/
+    #     http://www.zope.org/Collectors/Zope3-dev/360
     ztapi.provideMultiView((ISet, IIterableVocabulary), IBrowserRequest,
                            IInputWidget, '', MultiSelectWidget)
 
