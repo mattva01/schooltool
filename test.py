@@ -271,10 +271,18 @@ def get_test_cases(test_files, cfg, tracer=None):
     results = []
     for file in test_files:
         module = import_module(file, cfg, tracer=tracer)
+        try:
+            func = module.test_suite
+        except AttributeError:
+            print >> sys.stderr
+            print >> sys.stderr, ("%s: WARNING: there is no test_suite"
+                                  " function" % file)
+            print >> sys.stderr
+            continue
         if tracer is not None:
-            test_suite = tracer.runfunc(module.test_suite)
+            test_suite = tracer.runfunc(func)
         else:
-            test_suite = module.test_suite()
+            test_suite = func()
         if test_suite is None:
             continue
         if cfg.warn_omitted:
