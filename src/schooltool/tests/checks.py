@@ -47,14 +47,11 @@ class ComponentChecks:
 
     def startTest(self, test):
         from schooltool import component, uris
-        self.relationship_registry = dict(component.relationship_registry)
         self.view_registry = adapter_registry_contents(component.view_registry)
         self.class_view_registry = dict(component.class_view_registry)
 
     def stopTest(self, test):
         from schooltool import component
-        if self.relationship_registry != component.relationship_registry:
-            warn("%s changed relationship registry" % test)
         if (self.view_registry !=
                 adapter_registry_contents(component.view_registry)):
             warn("%s changed view registry" % test)

@@ -412,12 +412,14 @@ URICommand = URIObject("http://army.gov/ns/command")
 URIReport = URIObject("http://army.gov/ns/report")
 
 
-class TestRelationships(EventServiceTestMixin, RegistriesSetupMixin,
+class TestRelationships(EventServiceTestMixin, RegistriesCleanupMixin,
                         unittest.TestCase):
 
     def setUp(self):
         import schooltool.relationship
-        self.setUpRegistries()
+        import schooltool.component
+        self.saveRegistries()
+        schooltool.component.setUp()
         schooltool.relationship.setUp()
         self.setUpEventService()
 
@@ -426,7 +428,7 @@ class TestRelationships(EventServiceTestMixin, RegistriesSetupMixin,
         verifyObject(IRelationshipAPI, component)
 
     def tearDown(self):
-        self.tearDownRegistries()
+        self.restoreRegistries()
 
     def test_getRelatedObjects(self):
         from schooltool.component import getRelatedObjects, relate
@@ -439,11 +441,19 @@ class TestRelationships(EventServiceTestMixin, RegistriesSetupMixin,
                          [soldier])
         self.assertEqual(list(getRelatedObjects(officer, URISuperior)), [])
 
+class TestRelationshipsNoSetup(EventServiceTestMixin, RegistriesCleanupMixin,
+                               unittest.TestCase):
+
+    def setUp(self):
+        import schooltool.component
+        self.saveRegistries()
+        schooltool.component.setUp()
+        self.setUpEventService()
+
     def test_relate_and_registry(self):
         from schooltool.component import registerRelationship
-        from schooltool.component import resetRelationshipRegistry
         from schooltool.component import getRelationshipHandlerFor
-        from schooltool.component import relate
+        from schooltool.component import relate, setUp
 
         URISomething = URIObject("http://ns.example.com/something")
 
@@ -453,7 +463,6 @@ class TestRelationships(EventServiceTestMixin, RegistriesSetupMixin,
         def stub2(*args, **kw):
             return ('stub2', args, kw)
 
-        resetRelationshipRegistry()
         self.assertRaises(ComponentLookupError,
                           getRelationshipHandlerFor, None)
         self.assertRaises(ComponentLookupError,
@@ -467,9 +476,6 @@ class TestRelationships(EventServiceTestMixin, RegistriesSetupMixin,
         self.assertEquals(getRelationshipHandlerFor(None), stub)
         self.assertEquals(getRelationshipHandlerFor(URISomething), stub2)
 
-        # Idempotent
-        self.assertRaises(ValueError,
-                          registerRelationship, None, stub2)
         registerRelationship(None, stub)
 
         m, g = object(), object()
@@ -622,6 +628,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestFacetFunctions))
     suite.addTest(unittest.makeSuite(TestServiceAPI))
     suite.addTest(unittest.makeSuite(TestRelationships))
+    suite.addTest(unittest.makeSuite(TestRelationshipsNoSetup))
     suite.addTest(unittest.makeSuite(TestViewRegistry))
     suite.addTest(unittest.makeSuite(TestUtilityService))
     suite.addTest(unittest.makeSuite(TestTimetableModelRegistry))

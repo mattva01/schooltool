@@ -502,7 +502,7 @@ class IRelationshipSchemaFactory(Interface):
         """
 
 
-class IRelationshipFactory:
+class IRelationshipFactory(Interface):
     """Factory that establishes relationships of a certain type."""
 
     def __call__(relationship_type, (a, role_a), (b, role_b), title=None):

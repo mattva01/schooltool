@@ -23,9 +23,10 @@ $Id$
 """
 
 from zope.interface import moduleProvides, implements, providedBy, Interface
+from zope.interface import directlyProvides
 from zope.interface.adapter import AdapterRegistry
 from zope.component import serviceManager, getService
-from zope.component import getUtility, getUtilitiesFor
+from zope.component import getUtility, queryUtility, getUtilitiesFor
 from zope.component.utility import IGlobalUtilityService
 from zope.component.utility import GlobalUtilityService
 from zope.component.exceptions import ComponentLookupError
@@ -39,6 +40,7 @@ from schooltool.interfaces import IFacet, IFaceted, IFacetFactory
 from schooltool.interfaces import IFacetManager
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import IRelationshipAPI, IViewAPI
+from schooltool.interfaces import IRelationshipFactory
 from schooltool.interfaces import IUtilityService
 from schooltool.interfaces import ITimetableModelRegistry
 from schooltool.interfaces import ITimetableModelFactory
@@ -384,35 +386,26 @@ def getOptions(obj):
 # Relationships
 #
 
-relationship_registry = {}
-
-
-def resetRelationshipRegistry():
-    """Replace the relationship registry with an empty one."""
-    global relationship_registry
-    relationship_registry = {}
-
-
 def registerRelationship(rel_type, handler):
     """See IRelationshipAPI"""
-    reghandler = relationship_registry.get(rel_type)
-    if reghandler is handler:
-        return
-    elif reghandler is not None:
-        raise ValueError("Handler for %s already registered" % rel_type)
-    else:
-        relationship_registry[rel_type] = handler
+    name = ''
+    if rel_type is not None:
+        name = rel_type.uri
+
+    utilities = getService('Utilities')
+    directlyProvides(handler, IRelationshipFactory)
+    utilities.provideUtility(IRelationshipFactory, handler, name)
 
 
 def getRelationshipHandlerFor(rel_type):
     """Returns the registered handler for relationship_type."""
-    handler = relationship_registry.get(rel_type)
-    if handler is None:
-        handler = relationship_registry.get(None)
-        if handler is None:
-            raise ComponentLookupError("No handler registered for %s"
-                                       % rel_type)
-    return handler
+    name = ''
+    if rel_type is not None:
+        name = rel_type.uri
+    handler = queryUtility(IRelationshipFactory, name)
+    if handler is not None:
+        return handler
+    return getUtility(IRelationshipFactory)
 
 
 def relate(relationship_type, (a, role_a), (b, role_b)):
