@@ -28,7 +28,7 @@ import datetime
 from schooltool.browser import View, Template
 from schooltool.browser.auth import ManagerAccess
 from schooltool.clients.csvclient import CSVImporterBase, DataError
-from schooltool.common import to_unicode
+from schooltool.common import to_unicode, parse_date
 from schooltool.component import traverse, FacetManager, getFacetFactory
 from schooltool.interfaces import IApplication
 from schooltool.membership import Membership
@@ -124,9 +124,8 @@ class CSVImporterZODB(CSVImporterBase):
         person = self.persons[name]
         infofacet = FacetManager(person).facetByName('person_info')
 
+        # XXX B0rks when title is one word.
         infofacet.first_name, infofacet.last_name = title.split(None, 1)
 
-        # XXX error checking
-        date_elements = [int(el) for el in dob.split('-')]
-        infofacet.dob = datetime.date(*date_elements)
+        infofacet.dob = parse_date(dob)
         infofacet.comment = comment
