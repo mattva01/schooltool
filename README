@@ -56,7 +56,8 @@ To run all unit tests, do
 
   python2.3 test.py -pv
 
-To run all functional tests, do
+To run all functional tests, start the SchoolTool server on port 8080 and then
+do
 
   python2.3 test.py -fpv
 
@@ -84,7 +85,7 @@ the individual files and directories for details of the licences.
   src/ZConfig
   src/persistence
   src/transaction
-  src/zdaemon,
+  src/zdaemon
   src/zodb
   src/zope
 
