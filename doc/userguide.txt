@@ -10,18 +10,18 @@ Then,
 * On a Debian system, run 'wxschooltool'.
 
 When you have run the GUI client, a Server Settings (login) dialog pops up.
-Here you can choose the server, port to connect to and the user/password to
+There you can choose a server, a port to connect to and a user/password to
 use.  The Server Settings dialog can be accessed at any time via the
-Setting->Server menu item.
+Settings->Server menu item.
 
-What you see after logging in is the main SchoolTool window.  It is divided
+The window that you see after logging in is the main SchoolTool window.  It is divided
 into three panes:
 
-* The group tree, which shows you groups, subgroups and their members.
+* The group pane, which shows you groups, subgroups and their members.
 
-* The members pane, showing the members of the selected group.
+* The members pane, showing the members of a selected group.
 
-* The relationships pane, showing all relationships of the selected
+* The relationships pane, showing all the relationships of a selected
   member.
 
 In this document, we use the following conventions:
@@ -39,7 +39,7 @@ SchoolTool represents a school's organisational structure as a tree of groups,
 subgroups, and persons. The tree structure shows the relationship between
 groups and their members. In addition to the relationship 'Membership', there
 are other relationships for specific cases. For example, there is a 'Teaching'
-relationship beteen a teacher and the class that is taught.
+relationship between a teacher and a class that is taught.
 
 You can create new persons and groups using the File->New Person and
 File->New Group menu items.
@@ -49,7 +49,7 @@ in the tree, then right-clicking in its relationships pane, choosing Add Member
 or Add Subgroup, and choosing a new member from the appearing list of persons
 or groups respectively.
 
-The member can be removed by breaking the membership relationship from either
+A member can be removed by breaking the membership relationship from either
 side by choosing the "Remove Relationship" from the context menu of a
 relationship.
 
@@ -57,7 +57,7 @@ relationship.
 ABSENCE TRACKING
 ----------------
 
-A roll-call is the act of finding out which members of a group are absent
+A roll-call is an act of finding out which members of a group are absent
 by checking either "present" or "absent" against each group member.
 
 The group membership as used for roll calls works transitively.  That is, a
@@ -74,7 +74,7 @@ Members pane and choosing "View Absences".  Every absence can consist
 of several absence comments.
 
 An absense tracker is an object in the database that listens for absense
-events, and keeps track people who are marked as absent. An absense
+events, and keeps track of people who are marked as absent. An absense
 tracker can be added onto any group to track absenses for that group.
 
 To create an absence tracker for a group, right click on a group in the tree
@@ -100,8 +100,8 @@ are separate timetables for different time periods, such as semesters.
 
 Every group or person can have a number of own timetables and a number of
 composite timetables.  Own timetables consist of the events private to a group
-or person, and composite timetables consist of all events related to a group or
-person.  For example, a composite timetable for a teacher will contain all the
+or a person, and composite timetables consist of all events related to a group or
+a person.  For example, a composite timetable for a teacher will contain all the
 lessons they are teaching, and a composite timetable of a pupil will contain
 all the events from the private timetables of the groups the're in, in other
 words -- all the lessons they need to attend.  In general, a composite
@@ -120,7 +120,7 @@ appears.  The dialog contains a selectable list of all the groups a given
 teacher is teaching, and a button for booking of resources, including venue,
 for a given timetable activity.  Conflicts in a timetable (such as booking the
 same resource for two activities at the same time) are represented and no
-attempt is given to trying to resolve them.
+attempt is given to try to resolve them.
 
 
 CALENDARS
@@ -136,7 +136,7 @@ person's composite timetable.
 Mozilla Calendar or a similar calendaring application has to be used
 to access the calendars.  A list of all calendars, available at
 http://localhost:8080/calendars.html (if the SchoolTool server is
-running on localhost port 8080) can be a help in adding the calendar
+running on localhost port 8080) can be helpfull in adding a calendar
 to the calendaring application.
 
 
@@ -147,13 +147,13 @@ A resource is something that is not a person or a group that can have its
 own timetables and calendars. For example, overhead projectors, meeting
 rooms, portable computers, sports fields, changing rooms, minibuses.
 
-The resource availability search dialog is accessable via the
-"View->Search for Available Resources" menu item.  In that dialog, the
+The resource availability search dialog is accessible via the
+"View->Search for Available Resources" menu item.  In this dialog, a
 user can choose the resources they are interested in, the range of
 dates, the hours within a day, and a minimum duration of a free period
 of time.
 
-Then, a resource can be booked by choosing the free period of time and
+Then, a resource can be booked by choosing a free period of time and
 clicking the Book Resource button.  In the resource booking dialog,
 the user has to choose the exact time and duration, the resource being
 booked, and the person who is booking the resource.  Only the managers

@@ -1,7 +1,7 @@
 SchoolTool
 ==========
 
-SchoolTool - common information systems platform for school administration.
+SchoolTool - a common information systems platform for school administration.
 
 Website: http://www.schooltool.org/
 
@@ -30,6 +30,48 @@ System requirements
 
 - wxPython 2.4 (http://www.wxpython.org/)
   (needed for the wxWindows client only)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 - Development environment and a C compiler
   (precompiled binaries are available for Windows users)
