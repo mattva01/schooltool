@@ -16,6 +16,7 @@ schooltool (0.9.99+1.0rc1) unstable; urgency=low
   * Depend on python2.3-libxml2 rather than libxml2-python2.3 as
     libxml2-python2.3 is a dummy package and will be removed from the archive
     sometime.
+   * Added a note that generating SSL certificates might take a while.
 
  -- Brian Sutherland <jinty@web.de>  Fri, 28 Jan 2005 19:48:56 +0100
 

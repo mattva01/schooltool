@@ -130,6 +130,7 @@ case "$1" in
                 cp $TMPFILE2 $TMPFILE1
             done
             export RANDFILE=/dev/random
+            echo Generating SSL Certificate... (might take a while)
             openssl req -config $TMPFILE1 -new -x509 -nodes -out $sslcert \
                 -keyout $sslkey
             cat $sslcert >> $sslkey
