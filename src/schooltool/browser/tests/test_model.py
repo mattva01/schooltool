@@ -66,13 +66,6 @@ class TestPersonView(TraversalTestMixin, RegistriesSetupMixin,
         self.assertTraverses(view, 'edit.html', PersonEditView, self.person)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
-    def test_info(self):
-        from schooltool.browser.model import PersonView
-        from schooltool.component import FacetManager
-        facet = FacetManager(self.person).facetByName('person_info')
-        view = PersonView(self.person)
-        self.assert_(view.info() is facet)
-
     def test_getParentGroups(self):
         from schooltool.browser.model import PersonView
         request = RequestStub()
@@ -81,23 +74,6 @@ class TestPersonView(TraversalTestMixin, RegistriesSetupMixin,
                           [{'url': 'http://localhost:7001/groups/root',
                             'title': 'root'}])
 
-    def test_photo(self):
-        from schooltool.model import Person
-        from schooltool.browser.model import PersonView
-        from schooltool.component import FacetManager
-        person = Person()
-        setPath(person, '/persons/>me')
-        facet = FacetManager(person).facetByName('person_info')
-        facet.photo = ';-)'
-        view = PersonView(person)
-        view.request = RequestStub(authenticated_user='not None')
-        markup = view.photo()
-        self.assertEquals(markup, '<img src="http://localhost:7001/persons/'
-                                                      '&gt;me/photo.jpg" />')
-
-        facet.photo = None
-        markup = view.photo()
-        self.assertEquals(markup, '<i>N/A</i>')
 
 
 class TestPersonEditView(unittest.TestCase):
@@ -111,10 +87,6 @@ class TestPersonEditView(unittest.TestCase):
         setPath(self.person, '/persons/somebody')
         self.info = FacetManager(self.person).facetByName('person_info')
         return PersonEditView(self.person)
-
-    def test_info(self):
-        view = self.createView()
-        self.assert_(view.info() is self.info)
 
     def test_post(self):
         view = self.createView()
@@ -133,13 +105,45 @@ class TestPersonEditView(unittest.TestCase):
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/somebody')
 
-        # Check that the photo isn't removed.
+        # Check that the photo doesn't get removed.
         request = RequestStub(args={'first_name': u'I Changed',
                                     'last_name': u'My Name Recently',
                                     'comment': u'For various reasons.',
                                     'photo': ''})
         view.do_POST(request)
         self.assertEquals(self.info.photo, 'P6\n1 1\n255\n\xff\xff\xff')
+
+
+class TestPersonInfoMixin(unittest.TestCase):
+
+    def test_info(self):
+        from schooltool.browser.model import PersonInfoMixin
+        from schooltool.component import FacetManager
+        from schooltool.model import Person
+
+        mixin = PersonInfoMixin()
+        mixin.context = Person()
+        self.assert_(mixin.info() is
+                     FacetManager(mixin.context).facetByName('person_info'))
+
+    def test_photoURL(self):
+        from schooltool.browser.model import PersonInfoMixin
+        from schooltool.component import FacetManager
+        from schooltool.model import Person
+
+        person = Person()
+        setPath(person, '/persons/>me')
+        facet = FacetManager(person).facetByName('person_info')
+        facet.photo = ';-)'
+        mixin = PersonInfoMixin()
+        mixin.context = person
+        mixin.request = RequestStub()
+        self.assertEquals(mixin.photoURL(),
+                          'http://localhost:7001/persons/&gt;me/photo.jpg')
+
+        facet.photo = None
+        self.assertEquals(mixin.photoURL(), '')
+
 
 
 class TestMembershipViewMixin(RegistriesSetupMixin, unittest.TestCase):
@@ -223,6 +227,7 @@ class TestPhotoView(unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestPersonInfoMixin))
     suite.addTest(unittest.makeSuite(TestPersonView))
     suite.addTest(unittest.makeSuite(TestPersonEditView))
     suite.addTest(unittest.makeSuite(TestMembershipViewMixin))

@@ -35,9 +35,13 @@
                 tal:content="info/comment">Comment...</textarea>
     </div>
     <div class="row">
-      <b>Photo:</b>
-      <input type="file" name="photo" />
-      <!-- <tal:block replace="structure view/photo" /> -->
+      <label for="photo">Photo</label>
+      <input id="photo" type="file" name="photo" />
+      <p tal:condition="not:view/photoURL">No photo currently set</p>
+      <p tal:condition="view/photoURL">
+        <img src="photo.jpg" tal:attributes="src view/photoURL" />
+        <!-- TODO: remove photo -->
+      </p>
     </div>
   <div class="buttons">
     <input class="button" type="submit" value="Submit" />

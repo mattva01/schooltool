@@ -45,7 +45,20 @@ class GetParentsMixin:
                 for g in getRelatedObjects(self.context, URIGroup)]
 
 
-class PersonView(View, GetParentsMixin):
+class PersonInfoMixin:
+
+    def info(self):
+        return FacetManager(self.context).facetByName('person_info')
+
+    def photoURL(self):
+        if self.info().photo is None:
+            return u''
+        else:
+            path = absoluteURL(self.request, self.context) + '/photo.jpg'
+            return cgi.escape(path)
+
+
+class PersonView(View, GetParentsMixin, PersonInfoMixin):
 
     __used_for__ = IPerson
 
@@ -60,28 +73,15 @@ class PersonView(View, GetParentsMixin):
             return PersonEditView(self.context)
         raise KeyError(name)
 
-    def info(self):
-        return FacetManager(self.context).facetByName('person_info')
-
-    def photo(self):
-        # TODO: change to return just the path and refactor into PersonBaseView
-        if self.info().photo is None:
-            return u'<i>N/A</i>' # XXX Should this be translated?
-        else:
-            path = absoluteURL(self.request, self.context)
-            return '<img src="%s/photo.jpg" />' % cgi.escape(path)
 
 
-class PersonEditView(View):
+class PersonEditView(View, PersonInfoMixin):
 
     __used_for__ = IPerson
 
     authorization = ManagerAccess
 
     template = Template('www/person_edit.pt')
-
-    def info(self):
-        return FacetManager(self.context).facetByName('person_info')
 
     def do_POST(self, request):
         first_name = request.args['first_name'][0]

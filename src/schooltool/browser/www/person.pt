@@ -33,7 +33,10 @@
     </div>
     <div class="row">
       <b>Photo:</b>
-      <tal:block replace="structure view/photo" />
+      <tal:block condition="not:view/photoURL">N/A</tal:block>
+      <p tal:condition="view/photoURL">
+        <img src="photo.jpg" tal:attributes="src view/photoURL" />
+      </p>
     </div>
   </metal:block>
 </body>
