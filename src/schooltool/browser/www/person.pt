@@ -21,9 +21,9 @@
           tal:attributes="href string:/residences/add.html?pid=${context/__name__}"
          i18n:translate="">Add residence</a>
     </div>
-    <div class="actions">
+    <div class="actions" tal:condition="view/canEdit">
         <tal:loop repeat="facet view/getAvailableDynamicFacets">
-            <a class="action" tal:condition="view/canEdit"
+            <a class="action"
                 tal:attributes="href string:${view/editDynamicFacetURL}?facet=${facet}"
                 tal:content="facet"></a>
         </tal:loop>
@@ -100,7 +100,7 @@
       tal:define="custodians context/getCustodians|nothing;
       children context/getWards|nothing">
       <tal:if condition="children">
-        <h3>Children</h3>
+        <h3 i18n:translate="">Children</h3>
         <ul>
           <tal:loop repeat="child children">
             <li>
@@ -112,7 +112,7 @@
         </ul>
       </tal:if>
       <tal:if condition="custodians">
-        <h3>Guardians</h3>
+        <h3 i18n:translate="">Guardians</h3>
         <ul>
           <tal:loop repeat="custodian custodians">
             <li>
@@ -137,15 +137,18 @@
     <div class="residences"
         tal:define="residences context/getResidences"
         tal:condition="residences">
-      <h3>Residences</h3>
+      <h3 i18n:translate="">Residences</h3>
       <ul>
         <tal:loop repeat="residence residences">
           <li>
             <a href="" tal:attributes="href residence/@@absolute_url"
               tal:content="residence/title"></a>
               <address tal:define="address residence/info">
-              <span tal:content="address/streetNr"/> <span tal:content="address/thoroughfareName"/><br/>
-              <span tal:content="address/town"/> <span tal:content="address/district"/>, <span tal:content="address/postcode"/>
+                  <span tal:content="address/streetNr"
+                      /> <span tal:content="address/thoroughfareName"/><br/>
+                  <span tal:content="address/town"
+                      /> <span tal:content="address/district"
+                      />, <span tal:content="address/postcode"/>
               </address>
           </li>
         </tal:loop>

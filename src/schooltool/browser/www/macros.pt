@@ -119,12 +119,14 @@
 </metal:block>
 
 <metal:block define-macro="render-infowidget">
-    <!-- Render dynamicfacet fields:
-    
-    Parameters:
+    <tal:comment condition="nothing">
+        <!-- Render dynamicfacet fields:
+
+        Parameters:
         field: a DynamicSchemaField
         isSchema: boolean, true if we are creating a schemata.
-    -->
+        -->
+    </tal:comment>
     <label tal:content="field/label"></label>
     <tal:if condition="python:field['ftype'] == 'textarea'">
         <textarea name="" value=""

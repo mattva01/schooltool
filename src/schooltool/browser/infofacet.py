@@ -22,6 +22,7 @@ Web-application views for the schooltool.infofacets.
 $Id$
 """
 
+from schooltool.common import to_unicode
 from schooltool.component import getPath, traverse, getDynamicFacetSchemaService
 from schooltool.component import FacetManager
 from schooltool.interfaces import IDynamicFacet, IDynamicFacetSchemaService
@@ -67,28 +68,12 @@ class DynamicFacetView(View, AppObjectBreadcrumbsMixin):
         return _("%s's infofacet for %s") % (infofacetd.title,
                                              ", ".join(self.key))
 
-    def canEdit(self):
-        # RESTive timetable views only allow managers to change timetables
-        return self.isManager()
-
-    def do_POST(self, request):
-        if not self.canEdit():
-            return self.do_GET(request)
-        for exc in self._exceptionsToRemove(request):
-            tt = exc.activity.timetable
-            tt.exceptions.remove(exc)
-        # Cannot just call do_GET here, because self.context is most likely a
-        # composite timetable that needs to be regenerated.
-        return self.redirect(request.uri, request)
-
     def _traverse(self, name, request):
-        print "GOT TO THE TRAVERSE"
         schema = self.context.__parent__.__parent__
         if name == 'setup.html' and IPerson.providedBy(schema):
             return DynamicFacetSetupView(schema, self.key)
         else:
             raise KeyError(name)
-        print "er, no setup..."
 
 
 class DynamicFacetSchemaView(DynamicFacetView):
@@ -159,9 +144,9 @@ class DynamicFacetSchemaWizard(View):
                     )
                 )
 
-        self.name_widget = TextWidget('name', _('Dynamic Facet Name'))
         self.name_widget = TextWidget('name', _('Name'), self.name_parser,
                                       self.name_validator)
+        self.dfschema = None
 
     def name_parser(name):
         """Strip whitespace from names.
@@ -194,9 +179,7 @@ class DynamicFacetSchemaWizard(View):
             raise ValueError(_("Schema with this name already exists."))
 
     def schema(self):
-        if hasattr(self, 'dfschema'):
-            return self.dfschema
-        return None
+        return self.dfschema
 
     def do_POST(self, request):
         self.name_widget.update(request)
@@ -231,8 +214,8 @@ class DynamicFacetSchemaWizard(View):
         else:
             schema = DynamicFacet()
 
-        labels = self.request.args.get('newlabel', [])
-        ftypes = self.request.args.get('newfield', [])
+        labels = to_unicode(self.request.args.get('newlabel', []))
+        ftypes = to_unicode(self.request.args.get('newfield', []))
 
         for i in range(len(labels)):
             if labels[i]:
@@ -241,12 +224,12 @@ class DynamicFacetSchemaWizard(View):
                 vocabulary = []
 
                 if name in self.request.args:
-                    value = self.request.args[name][0]
+                    value = to_unicode(self.request.args[name][0])
 
                 if ftypes[i] in ('selection', 'multiselection'):
                     vocab_field = '%s_vocabulary' % name
                     if vocab_field in self.request.args:
-                        vocabulary = self.request.args[vocab_field][0].split('\n')
+                        vocabulary = to_unicode(self.request.args[vocab_field][0]).split('\n')
 
                 schema.addField(name, labels[i], ftypes[i], value, vocabulary)
 
@@ -272,7 +255,7 @@ class PersonEditFacetView(View, AppObjectBreadcrumbsMixin):
 
     def do_GET(self, request):
         try:
-            facet_name = self.request.args.get('facet', [None])[0]
+            facet_name = to_unicode(self.request.args.get('facet', [None])[0])
             self.facet = self.service[facet_name]
             self.title = facet_name
         except KeyError:
@@ -280,7 +263,7 @@ class PersonEditFacetView(View, AppObjectBreadcrumbsMixin):
         return View.do_GET(self, request)
 
     def do_POST(self, request):
-        facet_name = self.request.args.get('facet', [None])[0]
+        facet_name = to_unicode(self.request.args.get('facet', [None])[0])
         if 'SAVE' in request.args:
             facets = FacetManager(self.context).iterFacets()
 
@@ -303,5 +286,5 @@ class PersonEditFacetView(View, AppObjectBreadcrumbsMixin):
         facet = FacetManager(self.context).facetByName(facet_name)
         for field in facet.fields:
             if field.name in self.request.args:
-                field.value = self.request.args[field.name][0]
+                field.value = to_unicode(self.request.args[field.name][0])
 

@@ -337,9 +337,9 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
         if request.args.get('ward',[None])[0]:
             # When we create a person to be part of the guardian relationship
             # we pass a 'ward' request varible to link it to.
-            wid = request.args.get('ward',[None])[0]
+            wid = to_unicode(request.args.get('ward',[None])[0])
             new_guardian = traverse(self.context, '/persons/' + wid)
-            Guardian(custodian=new_guardian, ward=person)
+            Guardian(custodian = new_guardian, ward = person)
 
         if person is None:
             # Unlikely, but possible
@@ -564,9 +564,9 @@ class NoteAddView(View):
             return self.do_GET(request)
 
         obj = self.context.new(name,
-                title=self.title_widget.value,
-                body=self.body_widget.value,
-                owner=request.authenticated_user)
+                title = self.title_widget.value,
+                body = self.body_widget.value,
+                owner = request.authenticated_user)
 
         request.appLog(_("Object %s of type %s created") %
                        (getPath(obj), obj.__class__.__name__))
@@ -618,7 +618,7 @@ class ResidenceAddView(ObjectAddView):
 
     def do_POST(self, request):
         """"""
-        self.related_person = request.args.get('toadd', [None])[0]
+        self.related_person = to_unicode(request.args.get('toadd', [None])[0])
 
         if 'CANCEL' in request.args:
             # Just show the form without any data.
@@ -630,10 +630,10 @@ class ResidenceAddView(ObjectAddView):
             return self.do_GET(request)
 
         if 'RELATE' in request.args:
-            rpath = request.args.get('residence', [None])[0]
+            rpath = to_unicode(request.args.get('residence', [None])[0])
             residence = traverse(self.context, rpath)
 
-            paths = filter(None, request.args.get("toadd", []))
+            paths = filter(None, to_unicode(request.args.get("toadd", [])))
             for path in paths:
                 pobj = traverse(self.context, path)
                 try:
@@ -667,11 +667,11 @@ class ResidenceAddView(ObjectAddView):
 
         info = obj.info()
 
-        info.postcode=self.postcode_widget.value
-        info.district=self.district_widget.value
-        info.town=self.town_widget.value
-        info.streetNr=self.streetNr_widget.value
-        info.thoroughfareName=self.thoroughfareName_widget.value
+        info.postcode = self.postcode_widget.value
+        info.district = self.district_widget.value
+        info.town = self.town_widget.value
+        info.streetNr = self.streetNr_widget.value
+        info.thoroughfareName = self.thoroughfareName_widget.value
 
         for residence in getRelatedObjects(obj, URIOccupies):
             if obj == residence:
