@@ -63,11 +63,11 @@ The package has several public modules:
 
 See the module doc strings for more information.
 
-There is also a script, pyself.py in the package that can be used to
-create interface skeletins. Run it without arguments to get documentation.
+There is also a script, pyskel.py in the package that can be used to
+create interface skeletons. Run it without arguments to get documentation.
 
 Revision information:
-$Id: __init__.py,v 1.8 2003/06/13 14:52:11 stevea Exp $
+$Id: __init__.py,v 1.9 2003/10/07 17:27:03 alga Exp $
 """
 
 from zope.interface.interface import Interface, _wire

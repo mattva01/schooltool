@@ -1,15 +1,16 @@
 D/tests////
-/exceptions.py/1.2/Mon Feb 24 17:43:14 2003//
-/document.py/1.4/Wed Apr 16 17:34:06 2003//
-/verify.py/1.6/Wed May  7 10:29:30 2003//
-/_flatten.py/1.6/Fri Jun  6 14:30:16 2003//
-/advice.py/1.1/Tue Jun  3 19:52:39 2003//
-/type.py/1.10/Tue Jun 10 13:31:14 2003//
-/__init__.py/1.8/Tue Jun 17 15:08:24 2003//
-/_zope_interface_ospec.c/1.8/Sun Jun 22 08:03:46 2003//
-/adapter.py/1.6/Tue Jun 24 08:08:21 2003//
-/interface.py/1.12/Thu Jul 31 10:38:17 2003//
-/implementor.py/1.6/Thu Aug  7 16:37:47 2003//
-/declarations.py/1.17/Mon Aug 25 17:56:48 2003//
-/pyskel.py/1.4/Mon Aug 25 17:56:48 2003//
-/interfaces.py/1.15/Mon Sep  8 10:31:52 2003//
+/__init__.py/1.9/Fri Oct 17 08:11:26 2003//
+/_flatten.py/1.6/Fri Oct  3 14:58:38 2003//
+/_zope_interface_ospec.c/1.8/Fri Oct  3 14:58:39 2003//
+/adapter.py/1.6/Fri Oct  3 14:58:39 2003//
+/advice.py/1.1/Fri Oct  3 14:58:38 2003//
+/declarations.py/1.17/Fri Oct  3 14:58:38 2003//
+/document.py/1.4/Fri Oct  3 14:58:39 2003//
+/exceptions.py/1.2/Fri Oct  3 14:58:39 2003//
+/implementor.py/1.6/Fri Oct  3 14:58:38 2003//
+/interface.py/1.13/Fri Oct 17 08:11:26 2003//
+/interfaces.py/1.16/Fri Oct 17 08:11:26 2003//
+/pyskel.py/1.4/Fri Oct  3 14:58:38 2003//
+/type.py/1.10/Fri Oct  3 14:58:39 2003//
+/verify.py/1.6/Fri Oct  3 14:58:38 2003//
+D/common////

@@ -13,7 +13,7 @@
 ##############################################################################
 """
 
-$Id: interfaces.py,v 1.15 2003/09/08 09:15:54 anthony Exp $
+$Id: interfaces.py,v 1.16 2003/10/17 08:05:53 stevea Exp $
 """
 
 from zope.interface import Interface
@@ -254,8 +254,6 @@ class IInterface(IElement):
 
     The identifier is not allowed to contain tab characters.
     """)
-                               
-    
 
 
 class ITypeRegistry(Interface):
@@ -289,6 +287,10 @@ class ITypeRegistry(Interface):
         that are extended by or equal to one or more interfaces in the
         given interface specification.
 
+        Objects that match more specific interfaces of the specification
+        come before those that match less specific interfaces, as per
+        the interface resolution order described in the flattened() operation
+        of IInterfaceSpecification.
         """
 
     def getAllForObject(object):
@@ -306,7 +308,7 @@ class ITypeRegistry(Interface):
         """Returns the number of distinct interfaces registered.
         """
 
-  
+
 class IAdapterRegistry(Interface):
     """Adapter-style registry
 

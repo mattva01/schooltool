@@ -14,7 +14,7 @@
 """Interface object implementation
 
 Revision information:
-$Id: interface.py,v 1.12 2003/07/30 18:35:18 jim Exp $
+$Id: interface.py,v 1.13 2003/10/03 20:36:30 sidnei Exp $
 """
 
 import sys
@@ -289,7 +289,7 @@ class InterfaceClass(Element):
 
         XXX For now, sort on interface and module name.
 
-        None is treated as a psuedo interface that implies the loosest
+        None is treated as a pseudo interface that implies the loosest
         contact possible, no contract. For that reason, all interfaces
         sort before None.
 

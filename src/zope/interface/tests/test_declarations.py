@@ -14,7 +14,7 @@
 """Test the new API for making and checking interface declarations
 
 
-$Id: test_declarations.py,v 1.8 2003/08/16 00:44:48 srichter Exp $
+$Id: test_declarations.py,v 1.9 2003/09/23 19:12:36 jim Exp $
 """
 
 import unittest
@@ -130,6 +130,13 @@ class Test(unittest.TestCase):
                          )
 
     def test_builtins(self):
+        # Setup
+        from zope.interface.declarations import _implements_reg
+        oldint = _implements_reg.get(int)
+        if oldint:
+            del _implements_reg[int]
+        
+        
         classImplements(int, I1)
         class myint(int):
             implements(I2)
@@ -144,12 +151,15 @@ class Test(unittest.TestCase):
                          ['I3', 'I2', 'I1'])
 
         # cleanup
-        from zope.interface.declarations import _implements_reg
-        _implements_reg.clear()
+        del _implements_reg[int]
 
         x = 42
         self.assertEqual([i.getName() for i in providedBy(x)],
                          [])
+
+        # cleanup
+        if oldint is not None:
+            _implements_reg[int] = oldint
         
 
 def test_signature_w_no_class_interfaces():
