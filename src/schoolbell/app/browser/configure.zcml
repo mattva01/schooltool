@@ -541,8 +541,6 @@
 
   <resource name="previous.png" file="resources/previous.png"
             layer=".skin.ISchoolBellLayer" />
-  <resource name="current.png" file="resources/current.png"
-            layer=".skin.ISchoolBellLayer" />
   <resource name="next.png" file="resources/next.png"
             layer=".skin.ISchoolBellLayer" />
 
