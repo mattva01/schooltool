@@ -333,6 +333,9 @@ Files in the same directory as this README file are (c) Shuttleworth
 Foundation, with the exception of GPL, which is a copy of the Free Software
 Foundation's General Public License, and is (c) FSF.
 
+Files in the debian/ subdirectory are (c) Shuttleworth Foundation and
+contributors.
+
 
 SchoolTool is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
