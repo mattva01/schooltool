@@ -41,6 +41,9 @@ __metaclass__ = type
 # Time limit for session expiration
 session_time_limit = datetime.timedelta(hours=5)
 
+# Person username / group name validation
+# XXX Perhaps this constraint is a bit too strict.
+valid_name = re.compile("^[a-zA-Z0-9.,'()]+$")
 
 class RootView(View):
     """View for the web application root.
@@ -159,15 +162,13 @@ class PersonContainerView(View):
 
 
 class PersonAddView(View):
+    """A view for adding persons."""
 
     __used_for__ = IApplicationObjectContainer
 
     authorization = ManagerAccess
 
     template = Template('www/person_add.pt')
-
-    # XXX Perhaps this constraint is a bit too strict.
-    valid_usernames = re.compile("^[a-zA-Z0-9.,'()]+$")
 
     prev_username = ''
     error = None
@@ -177,7 +178,7 @@ class PersonAddView(View):
         password = request.args['password'][0]
         verify_password = request.args['verify_password'][0]
 
-        if not self.valid_usernames.match(username):
+        if not valid_name.match(username):
             self.error = _('Invalid username')
             return self.do_GET(request)
 
@@ -215,5 +216,32 @@ class GroupContainerView(View):
     do_GET = staticmethod(notFoundPage)
 
     def _traverse(self, name, request):
-        return GroupView(self.context[name])
+        if name == 'add.html':
+            return GroupAddView(self.context)
+        else:
+            return GroupView(self.context[name])
 
+
+class GroupAddView(View):
+    """A view for adding a new group."""
+
+    __used_for__ = IApplicationObjectContainer
+
+    authorization = ManagerAccess
+
+    template = Template('www/group_add.pt')
+
+    error = ""
+
+    def do_POST(self, request):
+        groupname = request.args['groupname'][0]
+
+        if not valid_name.match(groupname):
+            self.error = _("Invalid group name")
+            return self.do_GET(request)
+
+        group = self.context.new(groupname, title=groupname)
+        request.appLog(_("Object created: %s") % getPath(group))
+
+        url = absoluteURL(request, group) + '/edit.html'
+        return self.redirect(url, request)

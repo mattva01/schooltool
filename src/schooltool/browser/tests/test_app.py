@@ -313,10 +313,65 @@ class TestGroupContainerView(unittest.TestCase, TraversalTestMixin):
 
     def test_traverse(self):
         from schooltool.browser.model import GroupView
+        from schooltool.browser.app import GroupAddView
         view = self.createView()
         group = view.context['group']
         self.assertTraverses(view, 'group', GroupView, group)
+        self.assertTraverses(view, 'add.html', GroupAddView, view.context)
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
+
+
+class TestGroupAddView(unittest.TestCase):
+
+    def createView(self):
+        from schooltool.browser.app import GroupAddView
+        from schooltool.model import Group
+
+        class GroupContainerStub:
+
+            def __init__(self):
+                self.groups = []
+
+            def new(self, groupname, title):
+                group = Group(title=title)
+                group.__name__ = groupname
+                group.__parent__ = self
+                self.groups.append(group)
+                return group
+
+        self.group_container = GroupContainerStub()
+        setPath(self.group_container, '/groups')
+        return GroupAddView(self.group_container)
+
+    def test_GET(self):
+        view = self.createView()
+        request = RequestStub()
+        content = view.do_GET(request)
+        self.assert_('Add group' in content)
+
+    def test_POST(self):
+        view = self.createView()
+        request = RequestStub(args={'groupname': 'newgroup'})
+        content = view.do_POST(request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/groups/newgroup/edit.html')
+        self.assertEquals(request.applog,
+                          [(None, 'Object created: /groups/newgroup', INFO)])
+
+        self.assertEquals(len(self.group_container.groups), 1)
+        group = self.group_container.groups[0]
+        self.assertEquals(group.__name__, 'newgroup')
+        self.assertEquals(group.title, 'newgroup')
+
+    def test_POST_errors(self):
+        view = self.createView()
+        request = RequestStub(args={'groupname': 'new/group'})
+        content = view.do_POST(request)
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.applog, [])
+        self.assert_('Add group' in content)
+        self.assert_('Invalid group name' in content)
 
 
 def test_suite():
@@ -327,6 +382,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPersonContainerView))
     suite.addTest(unittest.makeSuite(TestPersonAddView))
     suite.addTest(unittest.makeSuite(TestGroupContainerView))
+    suite.addTest(unittest.makeSuite(TestGroupAddView))
     return suite
 
 

@@ -1,0 +1,25 @@
+<html metal:use-macro="view/macros/page">
+<head>
+  <title metal:fill-slot="title">Add group</title>
+</head>
+<body>
+
+  <h1 metal:fill-slot="h1">
+    Add group
+  </h1>
+
+  <metal:block metal:fill-slot="content">
+  <form method="POST" tal:attributes="action request/path">
+    <div class="error" tal:condition="view/error" tal:content="view/error" />
+    <div class="row">
+      <label class="wide" for="username">Group name</label>
+      <input id="groupname" name="groupname" type="text">
+    </div>
+    <div class="buttons">
+      <input class="button" type="submit" value="Add" />
+    </div>
+  </form>
+  </metal:block>
+
+</body>
+</html>

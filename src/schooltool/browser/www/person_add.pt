@@ -3,6 +3,7 @@
   <title metal:fill-slot="title">Add person</title>
 </head>
 <body>
+
   <h1 metal:fill-slot="h1">
     Add person
   </h1>
