@@ -75,10 +75,11 @@ class IGroupMember(Interface):
         """Returns a set for all groups this object is a member of."""
 
     def notifyAdd(group):
-        """Notifies a member that it's added to a group."""
+        """Notifies the member that it's added to a group."""
 
     def notifyRemove(group):
-        """Notifies a member that it's removed from a group."""
+        """Notifies the member that it's removed from a group."""
+
 
 class IPerson(IGroupMember):
 
