@@ -569,8 +569,8 @@ class YearlyRecurrenceRule(RecurrenceRule):
 
     def _iCalArgs(self, dtstart):
         """Return iCalendar parameters specific to monthly reccurence."""
-        # XXX KOrganizer wants explicit BYMONTH and BYMONTHDAY arguments.
-        #     Maybe it is a good idea to add them for the sake of explicitness.
+        # KOrganizer wants explicit BYMONTH and BYMONTHDAY arguments.
+        # Maybe it is a good idea to add them for the sake of explicitness.
         pass
 
 
