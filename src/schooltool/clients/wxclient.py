@@ -246,6 +246,10 @@ class ServerSettingsDlg(wxDialog):
         self.serverTextCtrl = wxTextCtrl(self, -1, "localhost")
         self.portLabel = wxStaticText(self, -1, "Port")
         self.portTextCtrl = wxTextCtrl(self, -1, "8080")
+        self.userLabel = wxStaticText(self, -1, "Username")
+        self.userTextCtrl = wxTextCtrl(self, -1, "")
+        self.passwordLabel = wxStaticText(self, -1, "Password")
+        self.passwordTextCtrl = wxTextCtrl(self, -1, "", style=wxTE_PASSWORD)
         self.okBtn = wxButton(self, wxID_OK, "Ok")
         self.cancelBtn = wxButton(self, wxID_CANCEL, "Cancel")
 
@@ -270,6 +274,10 @@ class ServerSettingsDlg(wxDialog):
         mainSizer.Add(self.serverTextCtrl, 0, wxEXPAND, 0)
         mainSizer.Add(self.portLabel, 2, 0, 0)
         mainSizer.Add(self.portTextCtrl, 0, wxEXPAND, 0)
+        mainSizer.Add(self.userLabel, 2, 0, 0)
+        mainSizer.Add(self.userTextCtrl, 0, wxEXPAND, 0)
+        mainSizer.Add(self.passwordLabel, 2, 0, 0)
+        mainSizer.Add(self.passwordTextCtrl, 0, wxEXPAND, 0)
         mainSizer.AddGrowableCol(1)
         rootSizer.Add(mainSizer, 1, wxALL|wxEXPAND, 16)
         btnSizer.Add(self.okBtn, 0, 0, 0)
@@ -293,6 +301,18 @@ class ServerSettingsDlg(wxDialog):
 
     def setPort(self, value):
         self.portTextCtrl.SetValue(str(value))
+
+    def getUser(self):
+        return self.userTextCtrl.GetValue()
+
+    def setUser(self, value):
+        self.userTextCtrl.SetValue(value)
+
+    def getPassword(self):
+        return self.passwordTextCtrl.GetValue()
+
+    def setPassword(self, value):
+        self.passwordTextCtrl.SetValue(value)
 
     def OnOk(self, event):
         if not self.getServer().strip():
@@ -1724,6 +1744,7 @@ class MainFrame(wxFrame):
         dlg.setPort(self.client.port)
         if dlg.ShowModal() == wxID_OK:
             self.client.setServer(dlg.getServer(), dlg.getPort())
+            self.client.setUser(dlg.getUser(), dlg.getPassword())
             self.DoRefresh()
         dlg.Destroy()
 

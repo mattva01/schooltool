@@ -25,6 +25,7 @@ import socket
 import datetime
 import libxml2
 import urllib
+import base64
 from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import XMLCompareMixin, RegistriesSetupMixin
 from schooltool.tests.utils import NiceDiffsMixin
@@ -161,6 +162,17 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(client.server, server)
         self.assertEquals(client.port, port)
 
+    def test_setUser(self):
+        from schooltool.clients.guiclient import SchoolToolClient
+        client = self.newClient()
+        client.setUser("gandalf", "123")
+        self.assertEquals(client.user, "gandalf")
+        self.assertEquals(client.password, "123")
+
+        client.setUser("", "123")
+        self.assertEquals(client.user, None)
+        self.assertEquals(client.password, "")
+
     def test_tryToConnect(self):
         version = 'UnitTest/0.0'
         response = ResponseStub(200, 'OK', 'doesnotmatter', server=version)
@@ -224,6 +236,24 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(client.status, '200 OK')
         self.assertEquals(client.version, version)
         self.assert_(conn.closed)
+
+    def test_request_auth(self):
+        from schooltool.clients.guiclient import SchoolToolClient
+        response = ResponseStub(200, 'OK')
+        client = self.newClient(response)
+        result = client._request('GET', '/')
+        conn = self.oneConnection(client)
+        self.assert_('Authorization' not in conn.headers)
+
+        response = ResponseStub(200, 'OK')
+        client = self.newClient(response)
+        client.user = 'foo'
+        client.password = 'bar'
+        data = base64.encodestring("foo:bar").strip()
+        result = client._request('GET', '/')
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.headers['Authorization'], "Basic " + data)
+
 
     def test_request_with_errors(self):
         from schooltool.clients.guiclient import SchoolToolError

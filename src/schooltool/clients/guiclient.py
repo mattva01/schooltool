@@ -36,6 +36,7 @@ import socket
 import libxml2
 import datetime
 import urllib
+import base64
 import cgi
 from schooltool.interfaces import ComponentLookupError
 from schooltool.uris import strURI, getURI, nameURI
@@ -62,6 +63,8 @@ class SchoolToolClient:
 
     server = 'localhost'
     port = 8080
+    user = None
+    password = ''
     status = ''
     version = ''
 
@@ -75,6 +78,18 @@ class SchoolToolClient:
         self.server = server
         self.port = port
         self.tryToConnect()
+
+    def setUser(self, user, password):
+        """Set the server name and port number.
+
+        Tries to connect to the server and sets the status message.
+        """
+        if user:
+            self.user = user
+            self.password = password
+        else:
+            self.user = None
+            self.password = ""
 
     def tryToConnect(self):
         """Try to connect to the server and set the status message."""
@@ -137,6 +152,9 @@ class SchoolToolClient:
             if body:
                 hdrs['Content-Type'] = 'text/xml'
                 hdrs['Content-Length'] = len(body)
+            if self.user is not None:
+                data = "Basic " + base64.encodestring("foo:bar").strip()
+                hdrs['Authorization'] = data
             if headers:
                 hdrs.update(headers)
             conn.request(method, path, body, hdrs)
