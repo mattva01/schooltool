@@ -183,7 +183,7 @@ class CalendarViewBase(View):
 
         for event in self.context:
             event_start = event.dtstart.date()
-            if event_start >= start and event_start < end:
+            if start <= event_start < end:
                 events[event_start].append(event)
         days = []
         for day in events.keys():
@@ -193,7 +193,7 @@ class CalendarViewBase(View):
         return days
 
 
-class DailyCalendarView(View):
+class DailyCalendarView(CalendarViewBase):
     """Daily calendar view.
 
     The events are presented as boxes on a 'sheet' with rows
@@ -211,22 +211,20 @@ class DailyCalendarView(View):
     template = Template("www/cal_daily.pt")
 
     starthour = 0
-
     endhour = 23
 
-    def update(self):
-        if 'date' not in self.request.args:
-            self.cursor = date.today()
-        else:
-            self.cursor = parse_date(self.request.args['date'][0])
+    def prev(self):
+        return self.cursor - timedelta(1)
 
-        self.prev = self.cursor - timedelta(1)
-        self.next = self.cursor + timedelta(1)
+    def next(self):
+        return self.cursor + timedelta(1)
 
     def dayEvents(self, date):
-        """Return events for a day sorted by start time."""
-        # XXX If an event spans several days, it will be shown multiple times.
-        # XXX copied and pasted, not tested.
+        """Return events for a day sorted by start time.
+
+        Events spanning several days and overlapping with this day
+        are included.
+        """
         events = list(self.context.byDate(date))
         events.sort()
         return events
@@ -392,3 +390,12 @@ class MonthlyCalendarView(CalendarViewBase):
             weeks.append(week)
             last = end
         return weeks
+
+class CalendarView(View):
+    """The main calendar view.
+
+    Switches daily, weekly, monthly calendar presentations.
+    """
+
+    authorization = PrivateAccess
+    template = Template("www/calendar.pt")
