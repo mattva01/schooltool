@@ -252,6 +252,17 @@ class CalendarViewBase(View):
         Ouch!
         """
         # XXX This is probably going to be *really* slow :((
+
+        # alga 2004-08-16:  I ran benchmarks by measuring time.clock()
+        # in request.render.
+        # On a populated calendar (/person/000001/calendar in 2003)
+        # with a warm cache this gets rendered in 1.5..2.0 seconds.
+        #
+        # The manager's calendar (empty) gets rendered in 1.4..1.8 seconds.
+        #
+        # Measuring execution time of this function results in times
+        # in order of 0.1 second, that is most time is spent loops in
+        # the page template.
         quarters = []
         for q in range(4):
             quarter = [self.getMonth(date(dt.year, month + (q * 3), 1))
