@@ -1,8 +1,8 @@
-schooltool (0.6-1) unstable; urgency=low
+schooltool (0.6-0.1) unstable; urgency=low
 
   * Released SchoolTool Milestone 6.
 
- -- Gintautas Miliauskas <gintas@pov.lt>  Tue, 20 Jul 2004 10:53:43 +0300
+ -- Albertas Agejevas <alga@pov.lt>  Thu, 22 Jul 2004 21:19:43 +0300
 
 schooltool (0.5+svn20040518-0.1) unstable; urgency=low
 
