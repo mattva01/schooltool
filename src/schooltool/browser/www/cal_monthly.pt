@@ -8,7 +8,7 @@
   </h1>
   <metal:block metal:fill-slot="content">
     <div class="error" tal:content="view/update" />
-    <h2 tal:content="python:view.cursor.strftime('%B')" />
+    <h2 tal:content="python:view.cursor.strftime('%B, %Y')" />
     <div>
       <a tal:attributes="href python:view.calURL('weekly')"
          i18n:translate="">Weekly calendar</a>
