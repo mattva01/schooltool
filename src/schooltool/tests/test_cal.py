@@ -1333,6 +1333,16 @@ class TestDailyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
         result = list(rule.apply(ev, date(2004, 10, 20)))
         self.assertEqual(result, [date(2004, 10, d) for d in range(13, 16)])
 
+        # With exceptions and count -- exceptions are excluded after
+        # counting
+        rule = self.createRule(exceptions=[date(2004, 10, d)
+                                           for d in range(16, 21)],
+                               count=6)
+        result = list(rule.apply(ev, date(2004, 10, 20)))
+        self.assertEqual(result, [date(2004, 10, 13), date(2004, 10, 14),
+                                  date(2004, 10, 15)])
+
+
 class TestYearlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
 
     def createRule(self, *args, **kwargs):
@@ -1383,6 +1393,13 @@ class TestYearlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
                          [date(y, 5, 17)
                           for y in [1978, 1979] + range(1981, 2005)])
 
+        # With exceptions and count -- the total nr. of events is less
+        # that count.
+        rule = self.createRule(exceptions=[date(1980, 5, 17)], count=4)
+        result = list(rule.apply(ev, date(2004, 10, 20)))
+        self.assertEqual(result,
+                         [date(1978, 5, 17), date(1979, 5, 17),
+                          date(1981, 5, 17)])
 
 class TestWeeklyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
 

@@ -1142,7 +1142,7 @@ class RecurrenceRule:
                 break
             if cur not in self.exceptions:
                 yield cur
-                count += 1
+            count += 1
             cur = self._nextRecurrence(cur)
 
     def _nextRecurrence(self, date):
