@@ -295,9 +295,11 @@ class IPersonAddForm(Interface):
     username = TextLine(title=u"Username",
         description=u"Username")
 
-    password = Password(title=u"Password")
+    password = Password(title=u"Password",
+        required=False)
 
-    verify_password = Password(title=u"Verify password")
+    verify_password = Password(title=u"Verify password",
+        required=False)
 
     photo = Bytes(title=u"Photo",
         required=False,
