@@ -190,6 +190,39 @@ let's use an aliased URL (directly on the person rather than on the calendar):
     END:VCALENDAR
     <BLANKLINE>
 
+We can try and put an updated calendar:
+
+    >>> print http(r"""
+    ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
+    ... Host: localhost:7080
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 244
+    ... Content-Type: text/calendar
+    ...
+    ... BEGIN:VCALENDAR
+    ... VERSION:2.0
+    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    ... BEGIN:VEVENT
+    ... UID:empty-calendar-placeholder@schooltool.org
+    ... SUMMARY:Empty calendar
+    ... DTSTART:20050204T100000
+    ... DURATION:PT1H
+    ... DTSTAMP:20050203T150000
+    ... END:VEVENT
+    ... END:VCALENDAR
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+This should have cleared the calendar.
+
+    >>> 'Sleeping' not in str(http(r"""
+    ... GET /frogpond/persons/frog/calendar/2005-02-03 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """))
+    True
+
 
 Calendar overlaying
 -------------------

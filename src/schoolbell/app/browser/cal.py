@@ -35,6 +35,7 @@ from zope.app.form.utility import getWidgetsData
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.browser.absoluteurl import absoluteURL
+from zope.app.filerepresentation.interfaces import IWriteFile
 from zope.component import queryView, queryMultiAdapter, adapts
 from zope.interface import implements, Interface
 from zope.publisher.interfaces.browser import IBrowserPublisher
@@ -1346,3 +1347,54 @@ def datesParser(raw_dates):
             if isinstance(d, date):
                 results.append(d)
     return tuple(results)
+
+
+def enableICalendarUpload(ical_view):
+    """An adapter that enables HTTP PUT for calendars.
+
+    When the user performs an HTTP PUT request on /path/to/calendar.ics,
+    Zope 3 traverses to a view named 'icalendar.ics' (which is most likely
+    a schoolbell.calendar.browser.CalendarICalendarView).  Then Zope 3 finds an
+    IHTTPrequest view named 'PUT'.  There is a standard one, that adapts
+    its context (which happens to be the view named 'icalendar.ics' in this
+    case) to IWriteFile, and calls `write` on it.
+
+    So, to hook up iCalendar uploads, the simplest way is to register an
+    adapter for CalendarICalendarView that provides IWriteFile.
+
+        >>> from zope.app.testing import setup, ztapi
+        >>> setup.placelessSetUp()
+
+    We have a calendar that provides IEditCalendar.
+
+        >>> from schoolbell.calendar.interfaces import IEditCalendar
+        >>> from schoolbell.app.cal import Calendar
+        >>> calendar = Calendar()
+
+    We have a fake "real adapter" for IEditCalendar
+
+        >>> class RealAdapter:
+        ...     implements(IWriteFile)
+        ...     def __init__(self, context):
+        ...         pass
+        ...     def write(self, data):
+        ...         print 'real adapter got %r' % data
+        >>> ztapi.provideAdapter(IEditCalendar, IWriteFile, RealAdapter)
+
+    We have a fake view on that calendar
+
+        >>> from zope.app.publisher.browser import BrowserView
+        >>> from zope.publisher.browser import TestRequest
+        >>> view = BrowserView(calendar, TestRequest())
+
+    And now we can hook things up together
+
+        >>> adapter = enableICalendarUpload(view)
+        >>> adapter.write('iCalendar data')
+        real adapter got 'iCalendar data'
+
+        >>> setup.placelessTearDown()
+
+    """
+    return IWriteFile(ical_view.context)
+

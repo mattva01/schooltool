@@ -59,6 +59,16 @@
       factory=".app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
+  <adapter
+      for=".interfaces.ISchoolBellCalendar"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      factory=".cal.WriteCalendar"
+      />
+
+  <class class=".cal.WriteCalendar">
+    <allow interface="zope.app.filerepresentation.interfaces.IWriteFile" />
+  </class>
+
 <!-- Domain content objects -->
 
   <content class=".app.Person">

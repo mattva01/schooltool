@@ -27,6 +27,13 @@
       factory=".SchoolBellSized"
       />
 
+  <zope:adapter
+      for="schoolbell.calendar.browser.CalendarICalendarView"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      factory=".cal.enableICalendarUpload"
+      trusted="yes"
+      />
+
 <!-- Actions menu -->
 
   <menu id="schoolbell_actions" title="Actions" />
