@@ -119,7 +119,7 @@ class TestWidgetWithConverters(unittest.TestCase):
 
     def validator(self, value):
         if value is not None and value < 0:
-            raise ValueError('negative value')
+            raise ValueError(u'negative value \u2639')
 
     def formatter(self, value):
         if value is None:
@@ -152,7 +152,7 @@ class TestWidgetWithConverters(unittest.TestCase):
         widget.setRawValue(' -12 ')
         self.assertEquals(widget.raw_value, ' -12 ')
         self.assertEquals(widget.value, None)
-        self.assertEquals(widget.error, "negative value")
+        self.assertEquals(widget.error, u"negative value \u2639")
 
     def test_setValue(self):
         widget = self.createWidget()
@@ -169,7 +169,7 @@ class TestWidgetWithConverters(unittest.TestCase):
         widget.setValue(-12)
         self.assertEquals(widget.raw_value, None)
         self.assertEquals(widget.value, -12)
-        self.assertEquals(widget.error, "negative value")
+        self.assertEquals(widget.error, u"negative value \u2639")
 
 
 class TestTextWidget(XMLCompareMixin, unittest.TestCase):

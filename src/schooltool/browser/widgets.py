@@ -203,7 +203,7 @@ class Widget:
             self.validator(self.value)
         except ValueError, e:
             self.value = None
-            self.error = unicode(e)
+            self.error = unicode(': '.join(e.args))
             self.raw_value = raw_value
         else:
             self.error = None
@@ -214,7 +214,7 @@ class Widget:
         try:
             self.validator(value)
         except ValueError, e:
-            self.error = unicode(e)
+            self.error = unicode(': '.join(e.args))
             self.raw_value = None
         else:
             self.error = None
