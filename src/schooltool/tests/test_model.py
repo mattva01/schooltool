@@ -383,6 +383,81 @@ class TestAbsence(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(comment2.expected_presence, dt2)
 
 
+class TestAbsenceTrackerMixin(EventServiceTestMixin, EqualsSortedMixin,
+                              unittest.TestCase):
+
+    def setUp(self):
+        self.setUpEventService()
+
+    def test_interface(self):
+        from schooltool.model import AbsenceTrackerMixin
+        from schooltool.interfaces import IAbsenceTracker
+
+        tr = AbsenceTrackerMixin()
+        verifyObject(IAbsenceTracker, tr)
+
+    def test_notify(self):
+        from schooltool.interfaces import IAbsenceTracker
+        from schooltool.event import EventMixin
+        from schooltool.model import AbsenceTrackerMixin, ResolvedAbsenceEvent
+        from schooltool.model import Absence, AbsenceEvent
+
+        tr = AbsenceTrackerMixin()
+
+        person1 = LocatableEventTargetMixin(self.eventService)
+        absence1 = Absence(person1)
+        event1 = AbsenceEvent(absence1, "wasn't me")
+
+        self.assertEquals(list(tr.absences), [])
+
+        tr.notify(event1)
+
+        self.assertEquals(list(tr.absences), [absence1])
+
+        person2 = LocatableEventTargetMixin(self.eventService)
+        absence2 = Absence(person1)
+        event2 = AbsenceEvent(absence2, "wasn't me")
+
+        tr.notify(event2)
+        self.assertEqualsSorted(list(tr.absences), [absence1, absence2])
+
+        event3 = EventMixin()
+        tr.notify(event3)
+        self.assertEqualsSorted(list(tr.absences), [absence1, absence2])
+
+        absence1.resolved = True
+        event4 = ResolvedAbsenceEvent(absence1, "here again")
+        tr.notify(event4)
+        self.assertEquals(list(tr.absences), [absence2])
+
+
+class TestAbsenceTrackerUtility(unittest.TestCase):
+
+    def test_interface(self):
+        from schooltool.model import AbsenceTrackerUtility
+        from schooltool.interfaces import IAbsenceTrackerUtility
+
+        util = AbsenceTrackerUtility()
+        verifyObject(IAbsenceTrackerUtility, util)
+
+
+class TestAbsenceTrackerFacet(unittest.TestCase):
+
+    def test_interface(self):
+        from schooltool.model import AbsenceTrackerFacet
+        from schooltool.interfaces import IAbsenceTrackerFacet
+        from schooltool.interfaces import IEvent, ICallAction
+
+        facet = AbsenceTrackerFacet()
+        verifyObject(IAbsenceTrackerFacet, facet)
+
+        self.assertEquals(len(facet.eventTable), 1)
+        ea = facet.eventTable[0]
+        self.assert_(ICallAction.isImplementedBy(ea))
+        self.assertEquals(ea.eventType, IEvent)
+        self.assertEquals(ea.callback, facet.notify)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPerson))
@@ -390,6 +465,9 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestUnchanged))
     suite.addTest(unittest.makeSuite(TestAbsencePersistence))
     suite.addTest(unittest.makeSuite(TestAbsence))
+    suite.addTest(unittest.makeSuite(TestAbsenceTrackerMixin))
+    suite.addTest(unittest.makeSuite(TestAbsenceTrackerUtility))
+    suite.addTest(unittest.makeSuite(TestAbsenceTrackerFacet))
     return suite
 
 if __name__ == '__main__':

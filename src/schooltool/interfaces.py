@@ -137,6 +137,33 @@ class IServiceManager(Interface):
 
 
 #
+# Utilities
+#
+
+class IUtility(ILocation):
+    """Utilities do stuff. They are managed by the utility service."""
+
+    title = Attribute("Short descriptive text")
+
+
+class IUtilityService(ILocation):
+    """The utility service manages utilities."""
+
+    def __getitem__(name):
+        """Return the named utility."""
+
+    def __setitem__(name, utility):
+        """Add a new utility.
+
+        The utility must provide IUtility, and will have the utility service
+        set as its __parent__, and the name as its __name__.
+        """
+
+    def values():
+        """Return a list of utilities."""
+
+
+#
 # URIs
 #
 
@@ -864,6 +891,20 @@ class IResolvedAbsenceEvent(IAttendanceEvent):
     """An event that gets sent when an absence is resolved."""
 
 
+class IAbsenceTracker(IEventTarget):
+    """An object which listens to the AttendanceEvents and keeps a set
+    of unresolved absences."""
+
+    absences = Attribute(
+        """A set of unresolved absences this object has been notified
+        of.""")
+
+class IAbsenceTrackerUtility(IUtility, IAbsenceTracker):
+    pass
+
+class IAbsenceTrackerFacet(IFacet, IEventConfigurable, IAbsenceTracker):
+    pass
+
 class IApplication(IContainmentRoot, IServiceManager, ITraversable):
     """The application object.
 
@@ -945,33 +986,6 @@ class IViewAPI(Interface):
 
     def registerViewForClass(cls, factory):
         """Register a view for a content class."""
-
-
-#
-# Utilities
-#
-
-class IUtility(ILocation):
-    """Utilities do stuff. They are managed by the utility service."""
-
-    title = Attribute("Short descriptive text")
-
-
-class IUtilityService(ILocation):
-    """The utility service manages utilities."""
-
-    def __getitem__(name):
-        """Return the named utility."""
-
-    def __setitem__(name, utility):
-        """Add a new utility.
-
-        The utility must provide IUtility, and will have the utility service
-        set as its __parent__, and the name as its __name__.
-        """
-
-    def values():
-        """Return a list of utilities."""
 
 
 #

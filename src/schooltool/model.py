@@ -29,11 +29,13 @@ from schooltool.interfaces import IPerson, IGroup, Unchanged
 from schooltool.interfaces import IAbsence, IAbsenceComment
 from schooltool.interfaces import IAttendanceEvent, IEventTarget
 from schooltool.interfaces import IAbsenceEvent, IResolvedAbsenceEvent
+from schooltool.interfaces import IAbsenceTracker, IAbsenceTrackerUtility
+from schooltool.interfaces import IAbsenceTrackerFacet
 from schooltool.relationship import RelationshipValenciesMixin, Valency
 from schooltool.facet import FacetedEventTargetMixin
 from schooltool.membership import Membership
-from schooltool.db import PersistentKeysSetWithNames
-from schooltool.event import EventMixin
+from schooltool.db import PersistentKeysSetWithNames, PersistentKeysSet
+from schooltool.event import EventMixin, CallAction
 
 __metaclass__ = type
 
@@ -138,6 +140,7 @@ class Absence(Persistent):
                     if IEventTarget.isImplementedBy(comment.absent_from):
                         event.dispatch(comment.absent_from)
 
+
 class AbsenceComment:
 
     implements(IAbsenceComment)
@@ -174,3 +177,42 @@ class AbsenceEvent(AttendanceEvent):
 class ResolvedAbsenceEvent(AttendanceEvent):
     implements(IResolvedAbsenceEvent)
 
+
+class AbsenceTrackerMixin:
+
+    implements(IAbsenceTracker)
+
+    def  __init__(self):
+        self.absences = PersistentKeysSet()
+
+    def notify(self, event):
+        """See IEventTarget"""
+        if IAbsenceEvent.isImplementedBy(event):
+            self.absences.add(event.absence)
+        if IResolvedAbsenceEvent.isImplementedBy(event):
+            if event.absence in self.absences:
+                self.absences.remove(event.absence)
+
+
+class AbsenceTrackerUtility(AbsenceTrackerMixin):
+
+    implements(IAbsenceTrackerUtility)
+
+    def __init__(self):
+        AbsenceTrackerMixin.__init__(self)
+        self.__parent__ = None
+        self.__name__ = None
+        self.title = "Absence Tracker"
+
+
+class AbsenceTrackerFacet(AbsenceTrackerMixin):
+
+    implements(IAbsenceTrackerFacet)
+
+    def __init__(self):
+        AbsenceTrackerMixin.__init__(self)
+        self.__parent__ = None
+        self.__name__ = None
+        self.active = False
+        self.owner = None
+        self.eventTable = (CallAction(self.notify), )
