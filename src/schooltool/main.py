@@ -653,7 +653,8 @@ def setUp():
         'schooltool.views',
         'schooltool.eventlog',
         'schooltool.uris',
-        'schooltool.teaching'
+        'schooltool.teaching',
+        'schooltool.timetable',
         ])
 
 

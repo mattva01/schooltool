@@ -38,6 +38,7 @@ from schooltool.interfaces import ITimePeriodService
 from schooltool.interfaces import ILocation, IMultiContainer
 from schooltool.cal import Calendar, CalendarEvent
 from schooltool.component import getRelatedObjects, FacetManager
+from schooltool.component import registerTimetableModel
 from schooltool.uris import URIGroup
 
 __metaclass__ = type
@@ -53,12 +54,13 @@ class Timetable(Persistent):
 
     implements(ITimetable, ITimetableWrite, ILocation)
 
-    def __init__(self, day_ids=()):
+    def __init__(self, day_ids):
         """day_ids is a sequence of the day ids of this timetable."""
         self.day_ids = day_ids
         self.days = PersistentDict()
         self.__parent__ = None
         self.__name__ = None
+        self.model = None
 
     def keys(self):
         return list(self.day_ids)
@@ -97,21 +99,19 @@ class Timetable(Persistent):
 
     def cloneEmpty(self):
         other = Timetable(self.day_ids)
+        other.model = self.model
         for day_id in self.day_ids:
             other[day_id] = TimetableDay(self[day_id].periods)
         return other
 
     def __eq__(self, other):
         if isinstance(other, Timetable):
-            return self.items() == other.items()
+            return self.items() == other.items() and self.model == other.model
         else:
             return False
 
     def __ne__(self, other):
-        if isinstance(other, Timetable):
-            return self.items() != other.items()
-        else:
-            return True
+        return not self == other
 
 
 class TimetableDay(Persistent):
@@ -245,6 +245,15 @@ class SchooldayTemplate:
     def remove(self, obj):
         self.events.remove(obj)
 
+    def __eq__(self, other):
+        if isinstance(other, SchooldayTemplate):
+            return self.events == other.events
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self == other
+
 
 class BaseTimetableModel:
     """An abstract base class for timetable models.
@@ -290,6 +299,15 @@ class BaseTimetableModel:
     def _dayGenerator(self):
         raise NotImplementedError
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return (self.timetableDayIds == other.timetableDayIds and
+                    self.dayTemplates == other.dayTemplates)
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self == other
 
 class SequentialDaysTimetableModel(BaseTimetableModel):
     """A timetable model in which the school days go in sequence with
@@ -482,5 +500,7 @@ class TimePeriodService(Persistent):
 
 
 def setUp():
-    # Register timetable models here
-    pass
+    registerTimetableModel('schooltool.timetable.SequentialDaysTimetableModel',
+                           SequentialDaysTimetableModel)
+    registerTimetableModel('schooltool.timetable.WeeklyTimetableModel',
+                           WeeklyTimetableModel)

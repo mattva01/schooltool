@@ -25,6 +25,7 @@ $Id$
 import os
 import sets
 import libxml2
+import datetime
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ITimetableSchemaService
@@ -33,10 +34,12 @@ from schooltool.views import View, Template, textErrorPage, notFoundPage
 from schooltool.views import absoluteURL
 from schooltool.views.cal import SchooldayModelCalendarView
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
+from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import getTimePeriodService
 from schooltool.component import registerView, getPath, traverse
 from schooltool.component import getRelatedObjects
+from schooltool.component import getTimetableModel
 from schooltool.schema.rng import validate_against_schema
 from schooltool.uris import URIMember, URITaught
 from schooltool.cal import SchooldayModel
@@ -246,6 +249,9 @@ class TimetableSchemaView(TimetableReadView):
             request.setHeader('Content-Type', 'text/plain')
             return "Deleted timetable schema"
 
+    dow_map = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3,
+               "Friday": 4, "Saturday": 5, "Sunday": 6}
+
     def do_PUT(self, request):
         ctype = request.getHeader('Content-Type')
         if ';' in ctype:
@@ -259,7 +265,7 @@ class TimetableSchemaView(TimetableReadView):
                 return textErrorPage(request,
                                      "Timetable not valid according to schema")
         except libxml2.parserError:
-            return textErrorPage(request, "Timetable not valid XML")
+            return textErrorPage(request, "Not valid XML")
         try:
             doc = libxml2.parseDoc(xml)
             ns = 'http://schooltool.org/ns/timetable/0.1'
@@ -267,9 +273,49 @@ class TimetableSchemaView(TimetableReadView):
             xpathctx.xpathRegisterNs('tt', ns)
             days = xpathctx.xpathEval('/tt:timetable/tt:day')
             day_ids = [day.nsProp('id', None) for day in days]
+
+            templates = xpathctx.xpathEval(
+                '/tt:timetable/tt:model/tt:daytemplate')
+            template_dict = {}
+            model_node = xpathctx.xpathEval('/tt:timetable/tt:model')[0]
+            factory_id = model_node.nsProp('factory', None)
+            try:
+                factory = getTimetableModel(factory_id)
+            except KeyError:
+                return textErrorPage(request,
+                                     "Incorrect timetable model factory")
+            for template in templates:
+                dayid = template.nsProp('id', None)
+                xpathctx.setContextNode(template)
+                day = SchooldayTemplate()
+                for period in xpathctx.xpathEval('tt:period'):
+                    pid = period.nsProp('id', None)
+                    tstart_str = period.nsProp('tstart', None)
+                    dur_str = period.nsProp('duration', None)
+                    try:
+                        h, m = [int(s) for s in tstart_str.split(":")]
+                        dur = int(dur_str)
+                        day.add(SchooldayPeriod(
+                            pid, datetime.time(h, m),
+                            datetime.timedelta(minutes=dur)))
+                    except ValueError:
+                        return textErrorPage(request, "Bad period")
+                used = xpathctx.xpathEval('tt:used')[0].nsProp('when', None)
+                if used == 'default':
+                    template_dict[None] = day
+                else:
+                    try:
+                        for dow in used.split():
+                            template_dict[self.dow_map[dow]] = day
+                    except (KeyError, ValueError):
+                        return textErrorPage(request,
+                                             "Bad used element")
+            model = factory(day_ids, template_dict)
+
             if len(sets.Set(day_ids)) != len(day_ids):
                 return textErrorPage(request, "Duplicate days in schema")
             timetable = Timetable(day_ids)
+            timetable.model = model
             for day in days:
                 day_id = day.nsProp('id', None)
                 xpathctx.setContextNode(day)

@@ -565,7 +565,7 @@ class TestTimetableReadWriteView(TestTimetableReadView):
         self.assertEquals(request.code, 404)
 
 
-class TestTimetableSchemaView(TestTimetableReadView):
+class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
 
     illformed_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
@@ -583,6 +583,15 @@ class TestTimetableSchemaView(TestTimetableReadView):
 
     duplicate_day_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <model factory="schooltool.timetable.SequentialDaysTimetableModel">
+            <daytemplate id="Normal">
+              <used when="default" />
+              <period id="A" tstart="9:00" duration="60" />
+              <period id="C" tstart="9:00" duration="60" />
+              <period id="B" tstart="10:00" duration="60" />
+              <period id="D" tstart="10:00" duration="60" />
+            </daytemplate>
+          </model>
           <day id="Day 1">
             <period id="A">
             </period>
@@ -596,10 +605,87 @@ class TestTimetableSchemaView(TestTimetableReadView):
 
     duplicate_period_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <model factory="schooltool.timetable.SequentialDaysTimetableModel">
+            <daytemplate id="Normal">
+              <used when="default" />
+              <period id="A" tstart="9:00" duration="60" />
+              <period id="C" tstart="9:00" duration="60" />
+              <period id="B" tstart="10:00" duration="60" />
+              <period id="D" tstart="10:00" duration="60" />
+            </daytemplate>
+          </model>
           <day id="Day 1">
             <period id="A">
             </period>
             <period id="A">
+            </period>
+          </day>
+        </timetable>
+        """
+
+    bad_time_xml = """
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <model factory="schooltool.timetable.SequentialDaysTimetableModel">
+            <daytemplate id="Normal">
+              <used when="default" />
+              <period id="A" tstart="9:00:00" duration="60" />
+            </daytemplate>
+          </model>
+          <day id="Day 1">
+            <period id="A">
+            </period>
+            <period id="B">
+            </period>
+          </day>
+        </timetable>
+        """
+
+    bad_model_xml = """
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <model factory="schooltool.timetable.Nonexistent">
+            <daytemplate id="Normal">
+              <used when="default" />
+              <period id="A" tstart="9:00" duration="60" />
+            </daytemplate>
+          </model>
+          <day id="Day 1">
+            <period id="A">
+            </period>
+            <period id="B">
+            </period>
+          </day>
+        </timetable>
+        """
+
+    bad_dur_xml = """
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <model factory="schooltool.timetable.SequentialDaysTimetableModel">
+            <daytemplate id="Normal">
+              <used when="default" />
+              <period id="A" tstart="9:00" duration="1h" />
+            </daytemplate>
+          </model>
+          <day id="Day 1">
+            <period id="A">
+            </period>
+            <period id="B">
+            </period>
+          </day>
+        </timetable>
+        """
+
+    bad_weekday_xml = """
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <model factory="schooltool.timetable.SequentialDaysTimetableModel">
+            <daytemplate id="Normal">
+              <used when="froday" />
+              <period id="A" tstart="9:00" duration="1h" />
+            </daytemplate>
+          </model>
+          <day id="Day 1">
+            <period id="A">
+            </period>
+            <period id="B">
             </period>
           </day>
         </timetable>
@@ -647,6 +733,13 @@ class TestTimetableSchemaView(TestTimetableReadView):
               <period id="C" tstart="9:00" duration="60" />
               <period id="B" tstart="10:00" duration="60" />
               <period id="D" tstart="10:00" duration="60" />
+            </daytemplate>
+            <daytemplate id="Friday">
+              <used when="Friday Thursday" />
+              <period id="A" tstart="8:00" duration="60" />
+              <period id="C" tstart="8:00" duration="60" />
+              <period id="B" tstart="11:00" duration="60" />
+              <period id="D" tstart="11:00" duration="60" />
             </daytemplate>
           </model>
           <day id="Day 1">
@@ -707,8 +800,35 @@ class TestTimetableSchemaView(TestTimetableReadView):
         result = view.render(request)
         self.assertEquals(request.code, 404)
 
+    def createEmpty(self):
+        from schooltool.timetable import SequentialDaysTimetableModel
+        from schooltool.timetable import SchooldayPeriod, SchooldayTemplate
+        from datetime import time, timedelta
+        tt = TestTimetableReadView.createEmpty(self)
+        day_template1 = SchooldayTemplate()
+        hour = timedelta(minutes=60)
+        day_template1.add(SchooldayPeriod('A', time(9, 0), hour))
+        day_template1.add(SchooldayPeriod('B', time(10, 0), hour))
+        day_template1.add(SchooldayPeriod('C', time(9, 0), hour))
+        day_template1.add(SchooldayPeriod('D', time(10, 0), hour))
+
+        day_template2 = SchooldayTemplate()
+        hour = timedelta(minutes=60)
+        day_template2.add(SchooldayPeriod('A', time(8, 0), hour))
+        day_template2.add(SchooldayPeriod('B', time(11, 0), hour))
+        day_template2.add(SchooldayPeriod('C', time(8, 0), hour))
+        day_template2.add(SchooldayPeriod('D', time(11, 0), hour))
+        tm = SequentialDaysTimetableModel(['Day 1', 'Day 2'],
+                                          {None: day_template1,
+                                           3: day_template2,
+                                           4: day_template2})
+        tt.model = tm
+        return tt
+
     def test_put(self):
         from schooltool.timetable import TimetableSchemaService
+        from schooltool.timetable import setUp
+        setUp()
         key = 'weekly'
         service = TimetableSchemaService()
         view = self.createView(None, service, key)
@@ -740,6 +860,10 @@ class TestTimetableSchemaView(TestTimetableReadView):
         self.do_test_error(xml=self.full_xml)
         self.do_test_error(xml=self.duplicate_day_xml)
         self.do_test_error(xml=self.duplicate_period_xml)
+        self.do_test_error(xml=self.bad_dur_xml)
+        self.do_test_error(xml=self.bad_time_xml)
+        self.do_test_error(xml=self.bad_model_xml)
+        self.do_test_error(xml=self.bad_weekday_xml)
 
 
 class TestTimetableSchemaServiceView(XMLCompareMixin, unittest.TestCase):
@@ -760,8 +884,8 @@ class TestTimetableSchemaServiceView(XMLCompareMixin, unittest.TestCase):
             </timetableSchemas>
             """)
 
-        context['weekly'] = Timetable()
-        context['4day'] = Timetable()
+        context['weekly'] = Timetable(())
+        context['4day'] = Timetable(())
         request = RequestStub()
         result = view.render(request)
         self.assertEquals(request.code, 200)
@@ -781,7 +905,7 @@ class TestTimetableSchemaServiceView(XMLCompareMixin, unittest.TestCase):
         from schooltool.views.timetable import TimetableSchemaServiceView
         from schooltool.views.timetable import TimetableSchemaView
         context = TimetableSchemaService()
-        tt = context['weekly'] = Timetable()
+        tt = context['weekly'] = Timetable(())
         view = TimetableSchemaServiceView(context)
         request = RequestStub()
 

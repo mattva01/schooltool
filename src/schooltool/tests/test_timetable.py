@@ -48,7 +48,7 @@ class TestTimetable(unittest.TestCase):
         from schooltool.interfaces import ITimetable, ITimetableWrite
         from schooltool.interfaces import ILocation
 
-        t = Timetable()
+        t = Timetable(('1', '2'))
         verifyObject(ITimetable, t)
         verifyObject(ITimetableWrite, t)
         verifyObject(ILocation, t)
@@ -166,10 +166,12 @@ class TestTimetable(unittest.TestCase):
         tt["A"].add("Green", english)
         tt["A"].add("Blue", math)
         tt["B"].add("Green", bio)
+        tt.model = object()
 
         tt2 = tt.cloneEmpty()
         self.assert_(tt2 is not tt)
         self.assertEquals(tt.day_ids, tt2.day_ids)
+        self.assert_(tt.model is tt2.model)
         for day_id in tt2.day_ids:
             day = tt[day_id]
             day2 = tt2[day_id]
@@ -181,6 +183,7 @@ class TestTimetable(unittest.TestCase):
     def testComparison(self):
         from schooltool.timetable import TimetableActivity
 
+        model = object()
         tt = self.createTimetable()
         english = TimetableActivity("English")
         math = TimetableActivity("Math")
@@ -198,6 +201,10 @@ class TestTimetable(unittest.TestCase):
         tt2["A"].add("Green", english)
         tt2["A"].add("Blue", math)
         tt2["B"].add("Green", bio)
+        self.assertEquals(tt, tt2)
+        tt2.model = model
+        self.assertNotEquals(tt, tt2)
+        tt.model = model
         self.assertEquals(tt, tt2)
 
         tt2["B"].remove("Green", bio)
@@ -461,9 +468,6 @@ class TestSchooldayTemplate(unittest.TestCase):
         from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
         from schooltool.interfaces import ISchooldayPeriod
 
-        class SPEStub:
-            implements(ISchooldayPeriod)
-
         tmpl = SchooldayTemplate()
         self.assertEqual(list(iter(tmpl)), [])
         self.assertRaises(TypeError, tmpl.add, object())
@@ -482,6 +486,22 @@ class TestSchooldayTemplate(unittest.TestCase):
         self.assertEqual(len(list(iter(tmpl))), 2)
         tmpl.remove(lesson1)
         self.assertEqual(list(iter(tmpl)), [lesson2])
+
+    def test_eq(self):
+        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+        from schooltool.interfaces import ISchooldayPeriod
+
+        tmpl = SchooldayTemplate()
+        tmpl.add(SchooldayPeriod("1", time(9, 0), timedelta(minutes=45)))
+        tmpl.add(SchooldayPeriod("2", time(10, 0), timedelta(minutes=45)))
+
+        tmpl2 = SchooldayTemplate()
+        tmpl2.add(SchooldayPeriod("1", time(9, 0), timedelta(minutes=45)))
+        tmpl2.add(SchooldayPeriod("2", time(10, 0), timedelta(minutes=45)))
+
+        self.assertEqual(tmpl, tmpl)
+        self.assertEqual(tmpl, tmpl2)
+        self.assert_(not tmpl != tmpl2)
 
 
 class SchooldayModelStub:
@@ -543,6 +563,19 @@ class TestSequentialDaysTimetableModel(unittest.TestCase,
 
         model = SequentialDaysTimetableModel(("A","B"), {})
         verifyObject(ITimetableModel, model)
+
+    def test_eq(self):
+        from schooltool.timetable import SequentialDaysTimetableModel
+        from schooltool.timetable import WeeklyTimetableModel
+        model = SequentialDaysTimetableModel(("A","B"), {1: 2})
+        model2 = SequentialDaysTimetableModel(("A","B"), {1: 2})
+        model3 = WeeklyTimetableModel(("A","B"), {1: 2})
+        model4 = SequentialDaysTimetableModel(("A"), {1: 2})
+
+        self.assertEqual(model, model2)
+        self.assertNotEqual(model2, model3)
+        self.assertNotEqual(model2, model4)
+        self.assert_(not model2 != model)
 
     def test_createCalendar(self):
         from schooltool.timetable import SequentialDaysTimetableModel

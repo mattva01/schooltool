@@ -854,6 +854,9 @@ class ITimetable(Interface):
     pupil, or one teacher, or one bookable resource.
     """
 
+    model = Attribute(
+        """A timetable model this timetable should be used with""")
+
     def keys():
         """Returns a sequence of identifiers for days within the timetable"""
 

@@ -556,8 +556,10 @@ class TestTimetableModelRegistry(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.component import getTimetableModel
         from schooltool.component import registerTimetableModel
         from schooltool.component import listTimetableModels
+        from schooltool.component import resetTimetableModelRegistry
         from schooltool.interfaces import ITimetableModel
 
+        resetTimetableModelRegistry()
         self.assertEqual(listTimetableModels(), [])
 
         class TMStub:
