@@ -283,10 +283,10 @@ class Address(FacetedEventTargetMixin, RelationshipValenciesMixin):
         FacetManager(self).setFacet(facet, self, "address_info")
         self.__name__ = None
         self.__parent__ = None
-        
+
     def getPeople(self):
         return getRelatedObjects(self, URICurrentlyResides)
-    
+
     def info(self):
         return FacetManager(self).facetByName('address_info')
 

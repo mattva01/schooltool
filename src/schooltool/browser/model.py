@@ -784,7 +784,6 @@ class AddressEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
         self.streetNr_widget = TextWidget('streetNr', _('Street Number'), value=info.streetNr)
         self.thoroughfareName_widget = TextWidget('thoroughfareName', _('Thoroughfare Name'), value=info.thoroughfareName)
 
-
     def do_POST(self, request):
         if 'CANCEL' in request.args:
             return self.do_GET(request)
@@ -825,7 +824,7 @@ class AddressEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
         
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)
-    
+
 
 class PhotoView(View):
     """View for displaying a person's photo (/persons/id/photo.jpg)."""

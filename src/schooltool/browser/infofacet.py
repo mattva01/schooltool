@@ -66,6 +66,7 @@ class DynamicFacetView(View, AppObjectBreadcrumbsMixin):
         infofacetd = self.context.__parent__.__parent__
         return _("%s's infofacet for %s") % (infofacetd.title,
                                              ", ".join(self.key))
+
     def canEdit(self):
         # RESTive timetable views only allow managers to change timetables
         return self.isManager()

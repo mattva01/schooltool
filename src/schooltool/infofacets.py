@@ -105,7 +105,7 @@ class DynamicFacet(Persistent):
     def delField(self, name):
         if self.data.has_key(name):
             del self.data[name]
-        
+
     def addField(self, name, label, ftype, value=None, vocabulary=[]):
         """Add a new field"""
         field = DynamicFacetField(name, label, ftype, value, vocabulary)
@@ -120,6 +120,7 @@ class DynamicFacet(Persistent):
 
     def __getitem__(self, key):
         return self.getField(key)
+
 
 class DynamicFacetSchemaService(Persistent):
 
@@ -165,6 +166,7 @@ class DynamicFacetSchemaService(Persistent):
 
 
 class PersonInfoFacet(Persistent):
+
     implements(IPersonInfoFacet)
 
     __parent__ = None
@@ -216,6 +218,7 @@ class PersonInfoFacet(Persistent):
 
 
 class AddressInfoFacet(Persistent):
+
     implements(IAddressInfoFacet)
 
     __parent__ = None
@@ -230,7 +233,7 @@ class AddressInfoFacet(Persistent):
     thoroughfareName = None
     #country = property(lambda self: self._country)
     #postcode = property(lambda self: self._postcode)
-    
+
     #district = property(lambda self: self._district)
     #town = property(lambda self: self._town)
     #streetNr = property(lambda self: self._streetNr)
