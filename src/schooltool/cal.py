@@ -1182,3 +1182,44 @@ class WeeklyRecurrenceRule(RecurrenceRule):
         return (self.__class__.__name__, self.interval, self.count,
                 self.until, self.exceptions, self.weekdays)
 
+
+class MonthlyRecurrenceRule(RecurrenceRule):
+    """Monthly recurrence rule.
+
+    Immutable hashable object.
+    """
+    implements(IMonthlyRecurrenceRule)
+
+    def __init__(self, interval=None, count=None, until=None, exceptions=(),
+                 monthly=None):
+        self.interval = interval
+        self.count = count
+        self.until = until
+        self.exceptions = exceptions
+        self.monthly = monthly
+        self._validate()
+
+    def _validate(self):
+        RecurrenceRule._validate(self)
+        if self.monthly not in (None, "monthday", "weekday", "lastweekday"):
+                raise ValueError("monthly must be one of None, 'monthday',"
+                                 " 'weekday', 'lastweekday'. Got %r"
+                                 % (self.monthly, ))
+
+    def replace(self, interval=Unchanged, count=Unchanged, until=Unchanged,
+                exceptions=Unchanged, weekdays=Unchanged, monthly=Unchanged):
+        if interval is Unchanged:
+            interval = self.interval
+        if count is Unchanged:
+            count = self.count
+        if until is Unchanged:
+            until = self.until
+        if exceptions is Unchanged:
+            exceptions = tuple(self.exceptions)
+        if monthly is Unchanged:
+            monthly = self.monthly
+        return self.__class__(interval, count, until, exceptions, monthly)
+
+    def _tupleForHash(self):
+        return (self.__class__.__name__, self.interval, self.count,
+                self.until, self.exceptions, self.monthly)

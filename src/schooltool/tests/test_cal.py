@@ -1323,6 +1323,31 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
         assert rule != rule.replace(weekdays=(1,))
 
 
+class TestMonthlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
+
+    def createRule(self, *args, **kwargs):
+        from schooltool.cal import MonthlyRecurrenceRule
+        return MonthlyRecurrenceRule(*args, **kwargs)
+
+    def test(self):
+        from schooltool.interfaces import IMonthlyRecurrenceRule
+        rule = self.createRule()
+        verifyObject(IMonthlyRecurrenceRule, rule)
+
+    def test_monthly_validation(self):
+        self.assertRaises(ValueError, self.createRule, monthly="whenever")
+        self.assertRaises(ValueError, self.createRule, monthly=date.today())
+        self.createRule(monthly=None)
+        self.createRule(monthly="lastweekday")
+        self.createRule(monthly="monthday")
+        self.createRule(monthly="weekday")
+
+    def test_replace_(self):
+        rule = self.createRule(monthly="lastweekday")
+        assert rule == rule.replace()
+        assert rule != rule.replace(monthly=None)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.cal'))
@@ -1339,4 +1364,5 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestDailyRecurrenceRule))
     suite.addTest(unittest.makeSuite(TestYearlyRecurrenceRule))
     suite.addTest(unittest.makeSuite(TestWeeklyRecurrenceRule))
+    suite.addTest(unittest.makeSuite(TestMonthlyRecurrenceRule))
     return suite

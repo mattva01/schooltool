@@ -1063,7 +1063,7 @@ class IRecurrenceRule(Interface):
         """)
 
     def replace(interval=Unchanged, count=Unchanged, until=Unchanged,
-                exceptions=Unchanged, weekdays=Unchanged, monthly=Unchanged):
+                exceptions=Unchanged):
         """Return a copy of this recurrence rule with new specified fields."""
 
     def __eq__(other):
@@ -1099,6 +1099,11 @@ class IWeeklyRecurrenceRule(IRecurrenceRule):
         if that weekday is not in this set.
         """)
 
+    def replace(interval=Unchanged, count=Unchanged, until=Unchanged,
+                exceptions=Unchanged, weekdays=Unchanged):
+        """Return a copy of this recurrence rule with new specified fields."""
+
+
 
 class IMonthlyRecurrenceRule(IRecurrenceRule):
 
@@ -1119,6 +1124,10 @@ class IMonthlyRecurrenceRule(IRecurrenceRule):
                       within a month on the same weekday, indexed from the
                       end of month (e.g. 2nd last friday of a month).
         """)
+
+    def replace(interval=Unchanged, count=Unchanged, until=Unchanged,
+                exceptions=Unchanged, monthly=Unchanged):
+        """Return a copy of this recurrence rule with new specified fields."""
 
 
 class ICalendarEvent(Interface):
