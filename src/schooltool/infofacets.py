@@ -63,6 +63,7 @@ class PersonInfoFacet(Persistent):
     last_name = property(_getLastName, _setLastName)
 
     def _updateTitle(self):
-        if self._last_name and self._first_name:
-            self.__parent__.title = "%s %s" % (self._first_name,
-                                               self._last_name)
+        if self._first_name or self._last_name:
+            title = "%s %s" % (self._first_name or '', self._last_name or '')
+            self.__parent__.title = title.strip()
+

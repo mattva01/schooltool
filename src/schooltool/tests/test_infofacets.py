@@ -43,11 +43,17 @@ class TestPersonInfoFacet(unittest.TestCase):
 
         facet.first_name = "John"
         self.assertEqual(facet.first_name, "John")
-        self.assertEqual(person.title, "Steve Alexander")
+        self.assertEqual(person.title, "John")
 
         facet.last_name = "Smith"
         self.assertEqual(facet.last_name, "Smith")
         self.assertEqual(person.title, "John Smith")
+
+        facet.first_name = ""
+        self.assertEqual(person.title, "Smith")
+
+        facet.last_name = ""
+        self.assertEqual(person.title, "Smith")
 
 
 def test_suite():
