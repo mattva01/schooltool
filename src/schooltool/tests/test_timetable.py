@@ -1002,6 +1002,31 @@ class TestSequentialDaysTimetableModel(NiceDiffsMixin, unittest.TestCase,
         self.assertEqual(expected, result,
                          diff(pformat(expected), pformat(result)))
 
+    def test_periodsInDay(self):
+        from schooltool.interfaces import ICalendar
+        from schooltool.timetable import SchooldayPeriod
+
+        tt = self.createTimetable()
+        model = self.createModel()
+        schooldays = SchooldayModelStub()
+
+        cal = model.createCalendar(schooldays, tt)
+        verifyObject(ICalendar, cal)
+
+        self.assertEqual(
+            model.periodsInDay(schooldays, tt, date(2003, 11, 20)),
+            [SchooldayPeriod("Green", time(9, 0), timedelta(minutes=90)),
+             SchooldayPeriod("Blue", time(11, 0), timedelta(minutes=90))])
+
+        self.assertEqual(
+            model.periodsInDay(schooldays, tt, date(2003, 11, 21)),
+            [SchooldayPeriod("Green", time(9, 0), timedelta(minutes=90)),
+             SchooldayPeriod("Blue", time(10, 30), timedelta(minutes=90))])
+
+        self.assertEqual(
+            model.periodsInDay(schooldays, tt, date(2003, 11, 22)),
+            [])
+
 
 class TestWeeklyTimetableModel(unittest.TestCase, BaseTestTimetableModel):
 

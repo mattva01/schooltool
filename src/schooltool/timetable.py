@@ -552,6 +552,11 @@ class SchooldayPeriod:
 
 class SchooldayTemplate:
 
+    # TODO: ideally, schoolday template should be an object that takes
+    # a date and a period id and returns a schoolday period.  This way
+    # we would get rid of the bizzare weekday -> schoolday template
+    # mapping in the timetable model.
+
     implements(ISchooldayTemplate, ISchooldayTemplateWrite)
 
     def __init__(self):
@@ -610,17 +615,14 @@ class BaseTimetableModel(Persistent):
         cal = Calendar()
         day_id_gen = self._dayGenerator()
         privacy = getOptions(timetable).timetable_privacy
+
         for date in schoolday_model:
-            if not schoolday_model.isSchoolday(date):
-                continue
-            day_id = self.schooldayStrategy(date, day_id_gen)
-            day_template = self._getTemplateForDay(date)
-            for period in day_template:
+            day_id, periods = self._periodsInDay(schoolday_model, timetable,
+                                                 date, day_id_gen)
+            for period in periods:
                 dt = datetime.datetime.combine(date, period.tstart)
-                if period.title not in timetable[day_id].keys():
-                    continue
                 for activity in timetable[day_id][period.title]:
-                    key = (dt.date(), period.title, activity)
+                    key = (date, period.title, activity)
                     exception = exceptions.get(key)
                     if exception is None:
                         # IDs for functionally derived calendars should be
@@ -636,6 +638,45 @@ class BaseTimetableModel(Persistent):
                     elif exception.replacement is not None:
                         cal.addEvent(exception.replacement)
         return cal
+
+    def _periodsInDay(self, schoolday_model, timetable, day, day_id_gen=None):
+        """Return a timetable day_id and a list of periods for a given day.
+
+        if day_id_gen is not provided, a new generator is created and
+        scrolled to the date requested.  If day_id_gen is provided, it
+        is called once to gain a day_id.
+        """
+        if day_id_gen is None:
+            # Scroll to the required day
+            day_id_gen = self._dayGenerator()
+            privacy = getOptions(timetable).timetable_privacy
+            for date in schoolday_model:
+                if not schoolday_model.isSchoolday(date):
+                    continue
+                day_id = self.schooldayStrategy(date, day_id_gen)
+                if date == day:
+                    break
+            else:
+                return None, []
+        else:
+            if not schoolday_model.isSchoolday(day):
+                return None, []
+            day_id = self.schooldayStrategy(day, day_id_gen)
+
+        # Now choose the periods that are in this day
+        result = []
+        day_template = self._getTemplateForDay(day)
+        for period in day_template:
+            dt = datetime.datetime.combine(day, period.tstart)
+            if period.title in timetable[day_id].keys():
+                result.append(period)
+
+        result.sort(lambda x, y: cmp(x.tstart, y.tstart))
+        return day_id, result
+
+    def periodsInDay(self, schoolday_model, timetable, day):
+        """See ITimetableModel.periodsInDay"""
+        return self._periodsInDay(schoolday_model, timetable, day)[1]
 
     def _getTemplateForDay(self, date):
         try:

@@ -1732,6 +1732,9 @@ class ITimetableModel(Interface):
         onto the real-world calendar.
         """
 
+    def periodsInDay(schoolday_model, timetable, date):
+        """Return a sequence of periods defined in this day"""
+
 
 class ITimetableModelRegistry(Interface):
     """A registry of timetable model classes present in the system.
