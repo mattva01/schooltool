@@ -44,7 +44,7 @@
                              top: ${top}em;
                              class python:mine and 'event' or 'event other'">
           <h6 tal:attributes="style string:background: ${ev/color2}">
-            <a tal:attributes="href string:${context/@@absolute_url}/${ev/unique_id}/edit.html?date=${evdate};
+            <a tal:attributes="href string:${ev/@@absolute_url}/edit.html?date=${evdate};
                                title ev/title">
               <span tal:replace="ev/shortTitle" />
               <span class="start-end">
