@@ -1,0 +1,35 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Calendar</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" i18n:translate="">
+    Calendar for <span tal:replace="context/__parent__/title" />
+  </h1>
+  <metal:block metal:fill-slot="content">
+    <div class="error" tal:content="view/update" />
+    <a tal:attributes="href string:${request/path}?date=${view/prev}"
+       i18n:translate="">Previous month</a> |
+    <a tal:attributes="href request/path"
+       i18n:translate="">Current month</a> |
+    <a tal:attributes="href string:${request/path}?date=${view/next}"
+       i18n:translate="">Next month</a>
+
+    <table class="cal_monthly">
+    <!-- TODO: <th></th> weekday names -->
+    <tr tal:repeat="week view/getWeeks">
+      <!-- XXX not translatable -->
+      <td class="cal_monthly"
+          tal:content="python:'Week ' + week[0].strftime('%V')" />
+      <td class="cal_monthly"
+          tal:repeat="day week">
+        <p class="event_weekly"
+           tal:repeat="event python:context.byDate(day)"
+           tal:content="python:event.title+event.dtstart.strftime(' (%H:%M)')"
+           />
+      </td>
+    </tr>
+    </table>
+  </metal:block>
+</body>
+</html>

@@ -22,7 +22,7 @@ Browser views for calendaring.
 $Id$
 """
 
-import datetime
+from datetime import datetime, date, time, timedelta
 
 from schooltool.browser import View, Template
 from schooltool.browser.auth import TeacherAccess, PrivateAccess
@@ -91,15 +91,15 @@ class BookingView(View):
         try:
             arg = 'start_date'
             year, month, day = map(int, start_date_str.split('-'))
-            datetime.date(year, month, day) # validation
+            date(year, month, day) # validation
             arg = 'start_time'
             hours, seconds = map(int, start_time_str.split(':'))
-            datetime.time(hours, seconds)   # validation
+            time(hours, seconds)   # validation
 
-            start = datetime.datetime(year, month, day, hours, seconds)
+            start = datetime(year, month, day, hours, seconds)
 
             arg = 'duration'
-            duration = datetime.timedelta(minutes=int(duration_str))
+            duration = timedelta(minutes=int(duration_str))
         except (ValueError, TypeError):
             self.error = _("%r argument incorrect") % arg
             return
@@ -134,17 +134,17 @@ class WeeklyCalendarView(View):
 
     def update(self):
         if 'date' not in self.request.args:
-            self.cursor = datetime.date.today()
+            self.cursor = date.today()
         else:
             self.cursor = parse_date(self.request.args['date'][0])
 
-        self.prev = self.cursor - datetime.timedelta(7)
-        self.next = self.cursor + datetime.timedelta(7)
+        self.prev = self.cursor - timedelta(7)
+        self.next = self.cursor + timedelta(7)
 
     def getDays(self):
         # For now, we're Monday based
-        start = self.cursor - datetime.timedelta(self.cursor.weekday())
-        return [start + datetime.timedelta(i) for i in range(7)]
+        start = self.cursor - timedelta(self.cursor.weekday())
+        return [start + timedelta(i) for i in range(7)]
 
     def dayEvents(self, date):
         """Return events for a day sorted by start time."""
@@ -153,3 +153,50 @@ class WeeklyCalendarView(View):
         events = [(e.dtstart, e) for e in daycal]
         events.sort()
         return [e for start, e in events]
+
+
+class MonthlyCalendarView(View):
+
+    __used_for__ = ICalendar
+
+    authorization = PrivateAccess
+
+    template = Template("www/cal_monthly.pt")
+
+    def update(self):
+        if 'date' not in self.request.args:
+            cursor = date.today()
+        else:
+            cursor = parse_date(self.request.args['date'][0])
+        self.cursor = cursor
+
+        prev_lastday = (date(cursor.year, cursor.month, 1) - timedelta(days=1))
+        self.prev = date(prev_lastday.year, prev_lastday.month, 1)
+
+        next_someday = (date(cursor.year, cursor.month, 28) + timedelta(7))
+        self.next = date(next_someday.year, next_someday.month, 1)
+
+    def getWeeks(self):
+        """Return a nested list of days in a month.
+
+        Returns a list of lists of date objects.  Days in neighbouring
+        months are included if they fall into a week that contains days in
+        the current month.
+        """
+        # XXX Monday-based weeks.
+        prev_lastday = (date(self.cursor.year, self.cursor.month, 1)
+                        - timedelta(days=1))
+        weekday = prev_lastday.weekday()
+        if weekday != 6:
+            start = prev_lastday - timedelta(days=weekday)
+        else:
+            start = date(self.cursor.year, self.cursor.month, 1)
+        weeks = []
+
+        last = start
+        while last.month in [start.month, self.cursor.month]:
+            week = [last + timedelta(days=i) for i in range(7)]
+            weeks.append(week)
+            last = last + timedelta(days=7)
+        return weeks
+
