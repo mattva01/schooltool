@@ -619,8 +619,75 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
         self.assertEquals(displayed_months[0]['value'], 01)
         self.assertEquals(displayed_months[-1]['value'], 12)
 
+    def test_subscribeToCalendarProviders(self):
+        from schooltool.browser.cal import CalendarViewBase
+        from schooltool.component import getRelatedObjects
+        from zope.app.traversing.api import traverse
+        from schooltool.uris import URICalendarProvider
+        from schooltool import relationship
+        relationship.setUp()
+
+        person = self.app['persons'].new("lafcadio", title="Mr. Lafcadio")
+
+        view = CalendarViewBase(person)
+        view.request = RequestStub(authenticated_user=person)
+        view.context = person
+        providers = ['/groups/managers', '/groups/teachers']
+        view._subscribeToCalendarProviders(providers)
+
+        result = getRelatedObjects(person, URICalendarProvider)
+
+        self.assertEquals(result, [self.teachers, self.managers])
+
     def test_eventColors(self):
-        pass
+        from schooltool.cal import InheritedCalendarEvent
+        from schooltool.browser.cal import CalendarViewBase
+
+        person = self.app['persons'].new("cap", title="Captain Fantastic")
+        group = self.app['groups'].new("clowns", title="Clowns")
+
+        iev = InheritedCalendarEvent(
+                createEvent('2004-08-16 13:45',
+                    '5 min', 'Die', unique_id='uniq'),
+                group.calendar)
+        ev = createEvent('2004-01-02 14:45:50', '5min', 'title')
+
+        person.calendar.addEvent(ev)
+        person.calendar.addEvent(iev)
+        person.cal_colors['/groups/clowns'] = ('red', 'blue')
+
+        view = CalendarViewBase(person)
+        view.request = RequestStub(authenticated_user=person)
+        result = view.eventColors(ev)
+        self.assertEquals(result, ('#9db8d2', '#7590ae'))
+
+        result = view.eventColors(iev)
+        self.assertEquals(result, ('red', 'blue'))
+
+    def test_calendarColors(self):
+        from schooltool.cal import InheritedCalendarEvent
+        from schooltool.browser.cal import CalendarViewBase
+
+        person = self.app['persons'].new("cap", title="Captain Fantastic")
+        group = self.app['groups'].new("clowns", title="Clowns")
+        group2 = self.app['groups'].new("monks", title="Monks")
+
+        person.cal_colors['/groups/clowns'] = ('red', 'blue')
+
+        view = CalendarViewBase(person)
+        view.request = RequestStub(authenticated_user=person)
+
+        result = view.calendarColors(group)
+        self.assertEquals(result, ('red', 'blue'))
+
+        result = view.calendarColors(group2)
+        self.assertEquals(result, ('transparent', 'transparent'))
+
+        view = CalendarViewBase(person)
+        view.request = RequestStub(authenticated_user=None)
+
+        result = view.calendarColors(group)
+        self.assertEquals(result, ('transparent', 'transparent'))
 
     def test_getMergedCalendarProviders(self):
         from schooltool.browser.cal import CalendarViewBase
