@@ -936,6 +936,11 @@ def setUp(test):
     ztapi.provideView(None, None, ITraversable, 'view', view)
     ztapi.provideView(None, None, ITraversable, 'resource', resource)
 
+    # schoolbell: namespace in tal
+    from zope.app.traversing.interfaces import IPathAdapter
+    from schoolbell.app.browser import SchoolBellAPI
+    ztapi.provideAdapter(None, IPathAdapter, SchoolBellAPI, 'schoolbell')
+
     # standard_macros and schoolbell_navigation
     from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
     from schoolbell.app.browser import NavigationView

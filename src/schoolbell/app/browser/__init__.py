@@ -74,7 +74,8 @@ class SchoolBellAPI(object):
 
     def app(self):
         """Adapt context to ISchoolBellApplication."""
-        return ISchoolBellApplication(self.context)
+        #return ISchoolBellApplication(self.context)
+        return getSchoolBellApplication(self.context)
     app = property(app)
 
 

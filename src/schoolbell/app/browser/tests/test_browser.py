@@ -25,6 +25,7 @@ $Id$
 import unittest
 from zope.testing import doctest
 from zope.interface import implements
+from zope.app.location.interfaces import ILocation
 
 
 def doctest_SchoolBellAPI():
@@ -38,11 +39,22 @@ def doctest_SchoolBellAPI():
         >>> verifyObject(ITALESFunctionNamespace, ns)
         True
 
-    'context/schoolbell:app' adapts context to ISchoolBellApplication
+    'context/schoolbell:app' returns the nearest ISchoolBellApplication
 
         >>> from schoolbell.app.app import SchoolBellApplication
         >>> app = SchoolBellApplication()
         >>> SchoolBellAPI(app['persons']).app is app
+        True
+
+    It does so even for objects that do not adapt to
+    ISchoolBellApplication, but are sublocations ofr SchoolBellApplication:
+
+        >>> class Adding:
+        ...     implements(ILocation)
+        ...     __parent__ = app['persons']
+        ...
+        >>> adding = Adding()
+        >>> SchoolBellAPI(adding).app is app
         True
 
     """
