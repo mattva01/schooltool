@@ -33,6 +33,7 @@ class SampleSchoolImporter:
 
     host = 'localhost'
     port = 7001
+    interactive = False
 
     expected_version = 'SchoolTool/0.5'
 
@@ -46,12 +47,17 @@ class SampleSchoolImporter:
         try:
             self.process_args(argv)
             self.check_data_files()
+            if self.interactive:
+                self.input_settings()
             self.check_server_running()
             self.check_server_empty()
             self.import_csv_files()
             self.import_timetable_data()
         except Error, e:
             print >> sys.stderr, unicode(e)
+            if self.interactive:
+                print 'Press <Enter> to continue.'
+                raw_input()
             return 1
         else:
             return 0
@@ -59,7 +65,8 @@ class SampleSchoolImporter:
     def process_args(self, argv):
         """Process command line arguments."""
         try:
-            opts, args = getopt.getopt(argv[1:], 'h:p:', ['host=', 'port='])
+            opts, args = getopt.getopt(argv[1:], 'h:p:i',
+                                       ['host=', 'port=', 'interactive'])
         except getopt.error, e:
             raise Error(e)
 
@@ -71,6 +78,29 @@ class SampleSchoolImporter:
                     self.port = int(v)
                 except ValueError, e:
                     raise Error(_("Invalid port number: %s") % v)
+            elif k in ('-i', '--interactive'):
+                self.interactive = True
+
+    def input_settings(self):
+        """Interactively ask to type in the host and port."""
+        while True:
+            print _("Please enter the hostname of the server:"),
+            host = raw_input().strip()
+            if host:
+                break
+        self.host = host
+
+        while True:
+            print _("Please enter the port number:"),
+            port = raw_input().strip()
+            try:
+                port = int(port)
+            except ValueError:
+                pass
+            else:
+                if port > 0 and port < 65536:
+                    break
+        self.port = port
 
     def check_data_files(self):
         """Check that the data files exist."""
