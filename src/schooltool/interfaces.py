@@ -727,7 +727,7 @@ class IFacetAPI(Interface):
 ViewPermission = 'View'
 AddPermission = 'Add'
 ModifyPermission = 'Modify'
-
+Everybody = 'Everybody'
 
 class IACL(Interface):
     """Access control list.
@@ -740,7 +740,7 @@ class IACL(Interface):
         """Iterate over tuples of (principal, permission)"""
 
     def __contains__((principal,  permission)):
-        """Returns true iff the principal has the permission"""
+        """Returns whether the principal, permission pair is in ACL."""
 
     def add((principal, permission)):
         """Grants the permission to a principal"""
@@ -754,7 +754,8 @@ class IACL(Interface):
     def allows(principal, permission):
         """Return whether the principal has the permission.
 
-        Syntactic sugar.
+        Contrary to __contains__, also returns True if the special
+        principal Everybody has the permission.
         """
 
 

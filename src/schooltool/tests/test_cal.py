@@ -1145,7 +1145,7 @@ class TestACL(unittest.TestCase):
 
     def test_allows_contains(self):
         from schooltool.interfaces import ViewPermission, AddPermission
-        from schooltool.interfaces import ModifyPermission
+        from schooltool.interfaces import ModifyPermission, Everybody
         assert (self.person, ViewPermission) not in self.acl
         assert not self.acl.allows(self.person, ViewPermission)
         self.acl.add((self.person, ViewPermission))
@@ -1161,6 +1161,26 @@ class TestACL(unittest.TestCase):
         self.assertRaises(ValueError, self.acl.allows, self.person, "Delete")
         self.assertRaises(ValueError, self.acl.__contains__,
                           (self.person, "Delete"))
+
+    def testEverybody(self):
+        from schooltool.interfaces import ViewPermission, AddPermission
+        from schooltool.interfaces import ModifyPermission, Everybody
+        assert not self.acl.allows(self.person, ViewPermission)
+
+        self.acl.add((Everybody, ViewPermission))
+
+        assert self.acl.allows(self.person, ViewPermission)
+        assert (self.person, ViewPermission) not in self.acl
+        assert (Everybody, ViewPermission) in self.acl
+        assert self.acl.allows(Everybody, ViewPermission)
+        self.assertEquals(list(iter(self.acl)),
+                          [(Everybody, ViewPermission)])
+
+        self.acl.remove((Everybody, ViewPermission))
+
+        assert (Everybody, ViewPermission) not in self.acl
+        self.assertEquals(list(iter(self.acl)), [])
+        assert not self.acl.allows(Everybody, ViewPermission)
 
     def test_iter(self):
         from schooltool.interfaces import ViewPermission
