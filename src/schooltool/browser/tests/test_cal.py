@@ -320,9 +320,8 @@ class TestMonthlyCalendarView(NiceDiffsMixin, unittest.TestCase):
         cal = Calendar()
         view = MonthlyCalendarView(cal)
 
-        view.getDays = GetDaysStub()
         view.cursor = date(2004, 8, 11)
-
+        view.getDays = GetDaysStub()
         weeks = view.getMonth()
         self.assertEquals(weeks, [None] * 6)
         self.assertEquals(view.getDays.bounds,
@@ -333,34 +332,23 @@ class TestMonthlyCalendarView(NiceDiffsMixin, unittest.TestCase):
                            (date(2004, 8, 23), date(2004, 8, 30)),
                            (date(2004, 8, 30), date(2004, 9, 6))])
 
-##    def test_getMonth(self):
-##        from schooltool.browser.cal import MonthlyCalendarView
-##
-##        view = MonthlyCalendarView(None)
-##        view.request = RequestStub()
-##        view.update()
-##
-##        weeks = view.getMonth()
-##        self.assertEquals(weeks,
-##                          [[date(2004, 7, d) for d in range(26, 32)]
-##                           + [date(2004, 8, 1)],
-##                           [date(2004, 8, d) for d in range(2, 9)],
-##                           [date(2004, 8, d) for d in range(9, 16)],
-##                           [date(2004, 8, d) for d in range(16, 23)],
-##                           [date(2004, 8, d) for d in range(23, 30)],
-##                           [date(2004, 8, d) for d in range(30, 32)]
-##                           + [date(2004, 9, d) for d in range(1, 6)]])
-##
-##        # October 2004 ends with a Sunday, so we use it to check that
-##        # no days from the next month are included.
-##        view.cursor = date(2004, 10, 1)
-##        weeks = view.getMonth()
-##        self.assertEquals(weeks[-1][-1].month, 10)
-##
-##        # Same here, just check the previous month.
-##        view.cursor = date(2004, 11, 1)
-##        weeks = view.getMonth()
-##        self.assertEquals(weeks[0][0].month, 11)
+        # October 2004 ends with a Sunday, so we use it to check that
+        # no days from the next month are included.
+        view.cursor = date(2004, 10, 1)
+        view.getDays = GetDaysStub()
+        weeks = view.getMonth()
+        self.assertEquals(weeks, [None] * 5)
+        self.assertEquals(view.getDays.bounds[4],
+                          (date(2004, 10, 25), date(2004, 11, 1)))
+
+        # Same here, just check the previous month.
+        view.cursor = date(2004, 11, 1)
+        view.getDays = GetDaysStub()
+        weeks = view.getMonth()
+        self.assertEquals(weeks, [None] * 5)
+        self.assertEquals(view.getDays.bounds[0],
+                          (date(2004, 11, 1), date(2004, 11, 8)))
+        weeks = view.getMonth()
 
 
 class GetDaysStub:
