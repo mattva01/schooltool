@@ -42,6 +42,7 @@ clean:
 realclean: clean
 	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;
 	rm -f Data.fs* *.csv tags
+	rm -f schooltool.log testserver.log testserver_access.log
 
 test: build
 	LC_ALL="C" $(PYTHON) test.py $(TESTFLAGS) schooltool
