@@ -35,7 +35,7 @@ import os
 import re
 from popen2 import Popen4
 from threading import Thread
-from schooltool.tests.helpers import unidiff
+from schooltool.tests.helpers import unidiff, normalize_xml
 
 __metaclass__ = type
 
@@ -88,7 +88,7 @@ class ScriptTestCase(unittest.TestCase):
             if m is not None:
                 child.tochild.write(line[m.end():])
             else:
-                if '*' in line:
+                if '*' in line or line.startswith('%% XML'):
                     magic = True
                 expected.append(line)
                 orig_lineno.append(lineno + 1)
@@ -99,22 +99,63 @@ class ScriptTestCase(unittest.TestCase):
         exitcode = child.wait()
         self.assertEqual(exitcode, 0, "child returned exit code %d" % exitcode)
         if magic:
-            # cannot use SequenceMatcher here, wildcards do not hash the same
-            # as the lines they match
+            # cannot use SequenceMatcher here
             result = result.splitlines(True)
-            for idx, (e, r) in enumerate(zip(expected, result)):
-                if e == r:
-                    continue
-                if '*' in e:
+            eidx = ridx = 0
+            while eidx < len(expected) and ridx < len(result):
+                e = expected[eidx]
+                r = result[ridx]
+                if e.startswith('%% XML'):
+                    recursively_sort = []
+                    prefix = '%% XML recursively_sort='
+                    if e.startswith(prefix):
+                        recursively_sort = e[len(prefix):].split()
+                    eidx += 1
+                    orig_start = orig_lineno[eidx]
+                    start_idx = eidx
+                    while (eidx < len(expected) and
+                           not expected[eidx].startswith('%% END XML')):
+                        eidx += 1
+                    expected_xml = ''.join(expected[start_idx:eidx])
+                    expected_xml = normalize_xml(expected_xml,
+                                      recursively_sort=recursively_sort)
+                    eidx += 1
+
+                    if eidx < len(expected):
+                        e = expected[eidx]
+                    else:
+                        e = None
+                    start_idx = ridx
+                    while ridx < len(result) and result[ridx] != e:
+                        ridx += 1
+                    result_xml = ''.join(result[start_idx:ridx])
+                    result_xml = normalize_xml(result_xml,
+                                      recursively_sort=recursively_sort)
+                    self.assertEqual(expected_xml, result_xml,
+                                     "%s, near line %d\n%s"
+                                     % (self.script, orig_start,
+                                        unidiff(expected_xml, result_xml)))
+                elif '*' in e:
                     rx = re.escape(e).replace(r'\*', '.*') + '$'
-                    if re.match(rx, r) is not None:
-                        continue
-                context_start = max(0, idx-5)
+                    if re.match(rx, r) is None:
+                        break
+                    eidx += 1
+                    ridx += 1
+                elif e == r:
+                    eidx += 1
+                    ridx += 1
+                else:
+                    break
+            if eidx < len(expected) or ridx < len(result):
+                # difference found
+                context_start = max(0, eidx-5)
                 orig_start = orig_lineno[context_start]
                 diffs = ["@@ -%d..%d @@\n"
-                         % (orig_start, orig_lineno[idx])]
-                context = result[context_start:idx]
-                diffs += [" " + s for s in context] + ["-" + e, "+" + r]
+                         % (orig_start, orig_lineno[eidx])]
+                context = expected[context_start:eidx]
+                diffs += [" " + s for s in context]
+                diffs += ["-" + s for s in expected[eidx:eidx+2]]
+                diffs += ["+" + s for s in result[ridx:ridx+2]]
                 self.fail("Output does not match expectations\n%s..."
                           % "".join(diffs))
         else:

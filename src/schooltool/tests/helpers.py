@@ -95,7 +95,7 @@ def sorted(l):
     return l
 
 
-def normalize_xml(xml):
+def normalize_xml(xml, recursively_sort=()):
     """Normalizes an XML document.
 
     The idea is that two semantically equivalent XML documents should be
@@ -115,6 +115,11 @@ def normalize_xml(xml):
     removed and its immediate child nodes are sorted textually.  If the
     attribute value is test:sort="recursively", the sorting happens at
     all levels (unless specifically prohibited with test:sort="not").
+
+    If recursively_sort is given, it is a sequence of tags that will have
+    test:sort="recursively" automatically appended to their attribute lists in
+    the text.  Use it when you cannot or do not want to modify the XML document
+    itself.
 
     Caveats:
      - normalize_xml does not deal well with text nodes
@@ -230,12 +235,15 @@ def normalize_xml(xml):
         def render(self):
             return self.root.render()
 
+    for tag in recursively_sort:
+        xml = xml.replace('<%s' % tag,
+                          '<%s test:sort="recursively"' % tag)
     try:
         handler = Handler()
         ctx = libxml2.createPushParser(handler, "", 0, "")
         ret = ctx.parseChunk(xml, len(xml), True)
         if ret:
-            return "PARSE ERROR: %r" % ret
+            return "PARSE ERROR: %r\n%s" % (ret, xml)
         return ''.join(handler.render())
     except libxml2.parserError, e:
         return "ERROR: %s" % e

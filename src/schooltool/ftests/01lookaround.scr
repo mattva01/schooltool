@@ -1,8 +1,11 @@
 Generic look-around.
 
+SchoolTool> links off
+
 SchoolTool> get /
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=schooltool
 <schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
   <message>Welcome to the SchoolTool server</message>
   <roots>
@@ -24,17 +27,13 @@ Content-Type: text/xml; charset=UTF-8
              xlink:title="Event Log"/>
   </utilities>
 </schooltool>
+%% END XML
 
-==================================================
-1   Root Group (/groups/root)
-2   persons (/persons)
-3   groups (/groups)
-4   Absence Tracker (/utils/absences)
-5   Event Log (/utils/eventlog)
 
-SchoolTool> follow 1
+SchoolTool> get /groups/root
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=group
 <group xmlns:xlink="http://www.w3.org/1999/xlink">
   <name>Root Group</name>
   <item xlink:type="simple" xlink:title="Teachers"
@@ -49,17 +48,13 @@ Content-Type: text/xml; charset=UTF-8
   <facets xlink:type="simple" xlink:title="Facets"
           xlink:href="root/facets"/>
 </group>
+%% END XML
 
-==================================================
-1   Teachers (/groups/teachers)
-2   Students (/groups/students)
-3   Cleaners (/groups/cleaners)
-4   Relationships (root/relationships)
-5   Facets (root/facets)
 
-SchoolTool> follow 3
+SchoolTool> get /groups/cleaners
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=group
 <group xmlns:xlink="http://www.w3.org/1999/xlink">
   <name>Cleaners</name>
   <item xlink:type="simple" xlink:title="Marius"
@@ -72,16 +67,13 @@ Content-Type: text/xml; charset=UTF-8
   <facets xlink:type="simple" xlink:title="Facets"
           xlink:href="cleaners/facets"/>
 </group>
+%% END XML
 
-==================================================
-1   Marius (/persons/Marius)
-2   Albert (/persons/Albert)
-3   Relationships (cleaners/relationships)
-4   Facets (cleaners/facets)
 
-SchoolTool> follow 1
+SchoolTool> get /persons/Marius
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=person
 <person xmlns:xlink="http://www.w3.org/1999/xlink">
   <name>Marius</name>
   <groups>
@@ -94,15 +86,13 @@ Content-Type: text/xml; charset=UTF-8
   <facets xlink:type="simple" xlink:title="Facets"
           xlink:href="Marius/facets"/>
 </person>
+%% END XML
 
-==================================================
-1   Cleaners (/groups/cleaners)
-2   Relationships (Marius/relationships)
-3   Facets (Marius/facets)
 
-SchoolTool> follow 3
+SchoolTool> get /persons/Marius/facets
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=facets
 <facets xmlns:xlink="http://www.w3.org/1999/xlink">
   <facet xlink:type="simple" active="active"
          xlink:title="001" class="EventLogFacet"
@@ -110,20 +100,22 @@ Content-Type: text/xml; charset=UTF-8
          xlink:href="/persons/Marius/facets/001"/>
   <facetFactory name="eventlog" title="Event Log Factory"/>
 </facets>
+%% END XML
 
-==================================================
-1   001 (/persons/Marius/facets/001)
 
-SchoolTool> follow 1
+SchoolTool> get /persons/Marius/facets/001
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML
 <eventLog>
 </eventLog>
+%% END XML
 
 
 SchoolTool> get /
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=schooltool
 <schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
   <message>Welcome to the SchoolTool server</message>
   <roots>
@@ -140,16 +132,15 @@ Content-Type: text/xml; charset=UTF-8
     <utility xlink:type="simple"
              xlink:href="/utils/eventlog"
              xlink:title="Event Log"/>
+    <utility xlink:type="simple"
+             xlink:href="/utils/absences"
+             xlink:title="Absence Tracker"/>
   </utilities>
 </schooltool>
+%% END XML
 
-==================================================
-1   Root Group (/groups/root)
-2   persons (/persons)
-3   groups (/groups)
-4   Event Log (/utils/eventlog)
 
-SchoolTool> follow 4
+SchoolTool> get /utils/eventlog
 200 OK
 Content-Type: text/xml; charset=UTF-8
 <eventLog>
@@ -207,6 +198,7 @@ Content-Type: text/xml; charset=UTF-8
 SchoolTool> get /
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=schooltool
 <schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
   <message>Welcome to the SchoolTool server</message>
   <roots>
@@ -223,18 +215,18 @@ Content-Type: text/xml; charset=UTF-8
     <utility xlink:type="simple"
              xlink:href="/utils/eventlog"
              xlink:title="Event Log"/>
+    <utility xlink:type="simple"
+             xlink:href="/utils/absences"
+             xlink:title="Absence Tracker"/>
   </utilities>
 </schooltool>
+%% END XML
 
-==================================================
-1   Root Group (/groups/root)
-2   persons (/persons)
-3   groups (/groups)
-4   Event Log (/utils/eventlog)
 
-SchoolTool> follow 2
+SchoolTool> get /persons
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=container
 <container xmlns:xlink="http://www.w3.org/1999/xlink">
   <name>persons</name>
   <items>
@@ -250,17 +242,13 @@ Content-Type: text/xml; charset=UTF-8
           xlink:title="Marius"/>
   </items>
 </container>
+%% END XML
 
-==================================================
-1   Steve (/persons/Steve)
-2   Aiste (/persons/Aiste)
-3   Mark (/persons/Mark)
-4   Albert (/persons/Albert)
-5   Marius (/persons/Marius)
 
-SchoolTool> follow 4
+SchoolTool> get /persons/Albert
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=person
 <person xmlns:xlink="http://www.w3.org/1999/xlink">
   <name>Albert</name>
   <groups>
@@ -273,15 +261,13 @@ Content-Type: text/xml; charset=UTF-8
   <facets xlink:type="simple" xlink:title="Facets"
           xlink:href="Albert/facets"/>
 </person>
+%% END XML
 
-==================================================
-1   Cleaners (/groups/cleaners)
-2   Relationships (Albert/relationships)
-3   Facets (Albert/facets)
 
-SchoolTool> follow 2
+SchoolTool> get /persons/Albert/relationships
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=relationships
 <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
   <existing>
     <relationship xlink:type="simple"
@@ -300,28 +286,26 @@ Content-Type: text/xml; charset=UTF-8
                   xlink:arcrole="http://schooltool.org/ns/membership"/>
   </valencies>
 </relationships>
+%% END XML
 
-==================================================
-1   Cleaners (/groups/cleaners)
-2   Cleaners (/persons/Albert/relationships/0001)
-3    (no href)
 
-SchoolTool> follow 2
+SchoolTool> get /persons/Albert/relationships/0001
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML
 <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
               xlink:type="simple"
               xlink:role="http://schooltool.org/ns/membership/group"
               xlink:title="Cleaners"
               xlink:arcrole="http://schooltool.org/ns/membership"
               xlink:href="/groups/cleaners"/>
+%% END XML
 
-==================================================
-1   Cleaners (/groups/cleaners)
 
-SchoolTool> follow 1
+SchoolTool> get /groups/cleaners
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=group
 <group xmlns:xlink="http://www.w3.org/1999/xlink">
   <name>Cleaners</name>
   <item xlink:type="simple" xlink:title="Marius"
@@ -334,16 +318,13 @@ Content-Type: text/xml; charset=UTF-8
   <facets xlink:type="simple" xlink:title="Facets"
           xlink:href="cleaners/facets"/>
 </group>
+%% END XML
 
-==================================================
-1   Marius (/persons/Marius)
-2   Albert (/persons/Albert)
-3   Relationships (cleaners/relationships)
-4   Facets (cleaners/facets)
 
-SchoolTool> follow 3
+SchoolTool> get /groups/cleaners/relationships
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=relationships
 <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
   <existing>
     <relationship xlink:type="simple"
@@ -380,32 +361,26 @@ Content-Type: text/xml; charset=UTF-8
                   xlink:arcrole="http://schooltool.org/ns/membership"/>
   </valencies>
 </relationships>
+%% END XML
 
-==================================================
-1   Marius (/persons/Marius)
-2   Marius (/groups/cleaners/relationships/0003)
-3   Albert (/persons/Albert)
-4   Albert (/groups/cleaners/relationships/0002)
-5   Root Group (/groups/root)
-6   Root Group (/groups/cleaners/relationships/0001)
-7    (no href)
 
-SchoolTool> follow 4
+SchoolTool> get /groups/cleaners/relationships/0002
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=relationship
 <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
               xlink:type="simple"
               xlink:role="http://schooltool.org/ns/membership/member"
               xlink:title="Albert"
               xlink:arcrole="http://schooltool.org/ns/membership"
               xlink:href="/persons/Albert"/>
+%% END XML
 
-==================================================
-1   Albert (/persons/Albert)
 
-SchoolTool> follow 1
+SchoolTool> get /persons/Albert
 200 OK
 Content-Type: text/xml; charset=UTF-8
+%% XML recursively_sort=person
 <person xmlns:xlink="http://www.w3.org/1999/xlink">
   <name>Albert</name>
   <groups>
@@ -418,10 +393,7 @@ Content-Type: text/xml; charset=UTF-8
   <facets xlink:type="simple" xlink:title="Facets"
           xlink:href="Albert/facets"/>
 </person>
+%% END XML
 
-==================================================
-1   Cleaners (/groups/cleaners)
-2   Relationships (Albert/relationships)
-3   Facets (Albert/facets)
 
 SchoolTool> quit
