@@ -58,7 +58,7 @@ from the Zope3/ directory included with the SchoolBell distribution.  From the
 top level directory of an unpacked SchoolBell tarball/zipfile SchoolBell can be
 installed with:
 
-python setup.py schoolbell install
+python setup.py install
 
 Finally, to setup a SchoolBell instance, copy the installed script into a
 separate directory and create a config file with the name of the script and an
