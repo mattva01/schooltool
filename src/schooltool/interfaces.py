@@ -1336,20 +1336,14 @@ class ITimetableDay(Interface):
     periods = Attribute("""A list of periods IDs for this day.""")
 
     def keys():
-        """Return a sequence of period_ids which have activities
-        assigned to them within this day.
-        """
+        """Return self.periods."""
 
     def items():
-        """Return a sequence of tuples (period_id, iter(ITimetableActivities)).
-
-        If there is no activity for a certain period, the timetable an
-        empty set is given.
+        """Return a sequence of tuples (period_id, set_of_ITimetableActivity).
         """
 
     def __getitem__(key):
-        """Get an iterator over ITimetableActivities for a given period
-        identifier.
+        """Return the set of ITimetableActivities for a given period.
 
         If there is no activity for the period, an empty set is returned.
         """
