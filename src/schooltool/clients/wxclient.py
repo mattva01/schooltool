@@ -1722,25 +1722,30 @@ class AppLogFrame(wxDialog):
         main_sizer.Add(static_line, 0, wxEXPAND, 0)
 
         button_bar = wxBoxSizer(wxHORIZONTAL)
+
         prev_btn = wxButton(self, -1, _("&Previous"))
         EVT_BUTTON(self, prev_btn.GetId(), self.OnPrev)
+        next_btn = wxButton(self, -1, _("&Next"))
+        EVT_BUTTON(self, next_btn.GetId(), self.OnNext)
+
+        page_label = wxStaticText(self, -1, _("Page"))
         page_ctrl = self.page_ctrl = wxTextCtrl(self, -1, "",
                                         style=wxTE_CENTER | wxTE_PROCESS_ENTER)
         EVT_TEXT_ENTER(self, page_ctrl.GetId(), self.OnGotoPage)
         size = page_ctrl.GetSize()
         size.width /= 2
         page_ctrl.SetSize(size)
-        total_label = self.total_label = wxStaticText(self, -1,
-                                                      _("of ?????")) # XXX
+        # The repeated question marks are to make the label wide enough
+        total_label = self.total_label = wxStaticText(self, -1, _("of ?????"))
 
-        next_btn = wxButton(self, -1, _("&Next"))
-        EVT_BUTTON(self, next_btn.GetId(), self.OnNext)
         close_btn = wxButton(self, wxID_CLOSE, _("Close"))
         EVT_BUTTON(self, wxID_CLOSE, self.OnClose)
+
         button_bar.Add(prev_btn)
-        button_bar.Add(page_ctrl, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 16)
-        button_bar.Add(total_label, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 8)
         button_bar.Add(next_btn, 0, wxLEFT, 16)
+        button_bar.Add(page_label, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 16)
+        button_bar.Add(page_ctrl, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 8)
+        button_bar.Add(total_label, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 8)
         button_bar.Add(wxPanel(self, -1), 1, wxEXPAND)
         button_bar.Add(close_btn, 0, wxLEFT, 16)
         main_sizer.Add(button_bar, 0, wxEXPAND|wxALL, 16)
@@ -1782,6 +1787,7 @@ class AppLogFrame(wxDialog):
             # Restore the original page number if the user-specified one
             # is not valid.
             self.page_ctrl.SetValue(str(self.page))
+            self.page_ctrl.SetSelection(-1, -1)
         else:
             self.refresh()
 
@@ -1809,6 +1815,7 @@ class AppLogFrame(wxDialog):
         self.page = log_page.page
 
         self.page_ctrl.SetValue(str(log_page.page))
+        self.page_ctrl.SetSelection(-1, -1)
         self.total_label.SetLabel(_("of %d") % log_page.total_pages)
         self.text_ctrl.SetValue(to_wx(log_page.text))
         return True
