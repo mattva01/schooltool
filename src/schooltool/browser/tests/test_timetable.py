@@ -288,8 +288,9 @@ class TestTimetableSchemaWizard(AppSetupMixin, NiceDiffsMixin,
 
     def test_buildDayTemplates_simple(self):
         view = self.createView()
+        view.duration_widget.setValue(45)
         view.request.args['time1.period'] = ['Period 1']
-        view.request.args['time1.day0'] = ['9:00-9:45']
+        view.request.args['time1.day0'] = ['9:00']
         view.request.args['time2.period'] = ['Period 2']
         view.request.args['time2.day0'] = ['10:00-10:45']
         view.request.args['time2.day6'] = ['10:30-11:10']
@@ -299,6 +300,7 @@ class TestTimetableSchemaWizard(AppSetupMixin, NiceDiffsMixin,
                            0: createDayTemplate([('Period 1', 9, 0, 45),
                                                  ('Period 2', 10, 0, 45)]),
                            6: createDayTemplate([('Period 2', 10, 30, 40)])})
+        self.assert_(not view.discarded_some_periods)
 
     def test_buildDayTemplates_copy_day(self):
         view = self.createView()
@@ -366,8 +368,11 @@ class TestTimetableSchemaWizard(AppSetupMixin, NiceDiffsMixin,
         view = self.createView()
         view.request.args['time1.period'] = ['Period 1']
         view.request.args['time1.day0'] = ['foo']
+        # When duration_widget.value is None, both endpoints are required
+        view.request.args['time1.day1'] = ['9:00']
         dt = view._buildDayTemplates()
         self.assertEquals(dt, {None: createDayTemplate([])})
+        self.assert_(view.discarded_some_periods)
 
     def test_buildSchema_empty(self):
         view = self.createView()

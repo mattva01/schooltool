@@ -76,8 +76,11 @@ class IWidget(Interface):
 
     # Methods
 
-    def __call__():
+    def __call__(tabindex=None):
         """Render the widget into HTML.
+
+        Allows you to override tabindex, if you need it.  (See the page
+        template of TimetableSchemaWizard for an example.)
 
         Returns a unicode string.
         """
@@ -194,7 +197,8 @@ class Widget:
     css_class = None
 
     def __init__(self, name, label, parser=None, validator=None,
-                 formatter=None, unit=None, value=None, tabindex=None):
+                 formatter=None, unit=None, value=None, tabindex=None,
+                 css_class=None):
         if parser is None:
             parser = defaultParser
         if validator is None:
@@ -211,10 +215,12 @@ class Widget:
         self.raw_value = None
         self.value = None
         self.error = None
+        if css_class is not None: # otherwise inherit class attribute
+            self.css_class = css_class
         if value is not None:
             self.setValue(value)
 
-    def __call__(self):
+    def __call__(self, tabindex=None):
         raise NotImplementedError('%s did not override Widget.__call__'
                                   % self.__class__.__name__)
 
@@ -282,10 +288,12 @@ class Widget:
         else:
             return ''
 
-    def _tabindex_html(self):
+    def _tabindex_html(self, tabindex=None):
         """Helper for subclasses."""
-        if self.tabindex:
-            return ' tabindex="%d"' % self.tabindex
+        if tabindex is None:
+            tabindex = self.tabindex
+        if tabindex:
+            return ' tabindex="%d"' % tabindex
         else:
             return ''
 
@@ -297,7 +305,7 @@ class TextWidget(Widget):
 
     css_class = 'text'
 
-    def __call__(self):
+    def __call__(self, tabindex=None):
         return ('<div%(row_class)s>\n'
                 '  <label for="%(name)s">%(label)s</label>\n'
                 '  <input%(css_class)s type="text" name="%(name)s"'
@@ -310,7 +318,7 @@ class TextWidget(Widget):
                             'row_class': self._row_class(),
                             'value': cgi.escape(self.raw_value or '', True),
                             'unit': self._unit_html(),
-                            'tabindex': self._tabindex_html(),
+                            'tabindex': self._tabindex_html(tabindex),
                             'error': self._error_html()})
 
 
@@ -324,7 +332,7 @@ class TextAreaWidget(Widget):
 
     css_class = 'text'
 
-    def __call__(self):
+    def __call__(self, tabindex=None):
         return ('<div%(row_class)s>\n'
                 '  <label for="%(name)s">%(label)s</label>\n'
                 '  <textarea%(css_class)s name="%(name)s"'
@@ -335,7 +343,7 @@ class TextAreaWidget(Widget):
                             'css_class': self._css_class(),
                             'row_class': self._row_class(),
                             'value': cgi.escape(self.raw_value or ''),
-                            'tabindex': self._tabindex_html(),
+                            'tabindex': self._tabindex_html(tabindex),
                             'error': self._error_html()})
 
 
@@ -362,7 +370,7 @@ class SelectionWidget(Widget):
                         formatter=formatter)
         self.choices = choices
 
-    def __call__(self):
+    def __call__(self, tabindex=None):
         options = []
         for value, display in self.choices:
             options.append('    <option value="%(value)s"%(selected)s>'
@@ -382,7 +390,7 @@ class SelectionWidget(Widget):
                 '%(error)s'
                 '</div>' % {'name': cgi.escape(self.name, True),
                             'label': cgi.escape(self.label, True),
-                            'tabindex': self._tabindex_html(),
+                            'tabindex': self._tabindex_html(tabindex),
                             'css_class': self._css_class(),
                             'row_class': self._row_class(),
                             'options': ''.join(options),

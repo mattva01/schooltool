@@ -206,11 +206,29 @@ class TimetableSchemaWizard(View, TabindexMixin):
         self.name_widget = TextWidget('name', _('Name'), self.name_parser,
                                       self.name_validator,
                                       tabindex=self.next_tabindex())
+        self.duration_widget = TextWidget('duration', _('Duration'),
+                                          unit=_('minutes (used if you do not'
+                                                 ' specify the ending time'
+                                                 ' explicitly)'),
+                                          css_class='narrow',
+                                          parser=self.duration_parser,
+                                          validator=self.duration_validator)
 
-    def name_parser(self, name):
+    def name_parser(name):
+        """Strip whitespace from names.
+
+          >>> name_parser = TimetableSchemaWizard.name_parser
+          >>> name_parser(None)
+          >>> name_parser('  ')
+          ''
+          >>> name_parser(' default ')
+          'default'
+
+        """
         if name is None:
             return None
         return name.strip()
+    name_parser = staticmethod(name_parser)
 
     def name_validator(self, name):
         if name is None:
@@ -226,11 +244,64 @@ class TimetableSchemaWizard(View, TabindexMixin):
             raise ValueError(_("Timetable schema with this name already"
                                " exists."))
 
+    def duration_parser(raw_value):
+        """Parse the default duration.
+
+          >>> duration_parser = TimetableSchemaWizard.duration_parser
+          >>> duration_parser(None)
+          >>> duration_parser('  ')
+          >>> duration_parser('0')
+          0
+          >>> duration_parser('-1')
+          -1
+          >>> duration_parser('1441')
+          1441
+          >>> duration_parser('a')
+          Traceback (most recent call last):
+            ...
+          ValueError: Invalid duration.
+
+        """
+        if raw_value is None or not raw_value.strip():
+            return None
+        try:
+            return int(raw_value)
+        except ValueError:
+            raise ValueError(_("Invalid duration"))
+    duration_parser = staticmethod(duration_parser)
+
+    def duration_validator(value):
+        """Check if duration is acceptable.
+
+          >>> duration_validator = TimetableSchemaWizard.duration_validator
+          >>> duration_validator(None)
+          >>> duration_validator(42)
+          >>> duration_validator(0)
+          >>> duration_validator(1440)
+          >>> duration_validator(-1)
+          Traceback (most recent call last):
+            ...
+          ValueError: Duration cannot be negative
+          >>> duration_validator(1441)
+          Traceback (most recent call last):
+            ...
+          ValueError: Duration cannot be longer than 24 hours
+
+        """
+        if value is None:
+            return
+        if value < 0:
+            raise ValueError(_("Duration cannot be negative"))
+        if value > 24 * 60:
+            raise ValueError(_("Duration cannot be longer than 24 hours"))
+    duration_validator = staticmethod(duration_validator)
+
     def do_GET(self, request):
         self.name_widget.update(request)
         if self.name_widget.value is None and self.name_widget.error is None:
             self.name_widget.raw_value = 'default'
             self.name_widget.value = 'default'
+        self.duration_widget.update(request)
 
         # We could build a custom widget for the model radio buttons, but I do
         # not think it is worth the trouble.
@@ -315,8 +386,10 @@ class TimetableSchemaWizard(View, TabindexMixin):
         The dict is suitable to be passed as the second argument to the
         timetable model factory.
         """
+        default_duration = self.duration_widget.value
         result = {None: SchooldayTemplate()}
         n = 1
+        self.discarded_some_periods = False
         while 'time%d.period' % n in self.request.args:
             raw_value = self.request.args['time%d.period' % n][0]
             period = to_unicode(raw_value).strip()
@@ -327,9 +400,10 @@ class TimetableSchemaWizard(View, TabindexMixin):
                 if not value:
                     continue
                 try:
-                    start, duration = parse_time_range(value)
+                    start, duration = parse_time_range(value, default_duration)
                 except ValueError:
-                    # ignore invalid values for now
+                    # ignore invalid values for now, but tell the user
+                    self.discarded_some_periods = True
                     continue
                 if day not in result:
                     result[day] = SchooldayTemplate()
@@ -650,7 +724,7 @@ def fix_duplicates(names):
     return result
 
 
-def parse_time_range(value):
+def parse_time_range(value, default_duration=None):
     """Parse a range of times (e.g. 9:45-14:20).
 
     Example:
@@ -669,12 +743,22 @@ def parse_time_range(value):
         >>> parse_time_range('23:00-02:00')
         (datetime.time(23, 0), datetime.timedelta(0, 10800))
 
+    When the default duration is specified, you may omit the second time
+
+        >>> parse_time_range('23:00', 45)
+        (datetime.time(23, 0), datetime.timedelta(0, 2700))
+
     Invalid values cause a ValueError
 
         >>> parse_time_range('something else')
         Traceback (most recent call last):
           ...
         ValueError: bad time range: something else
+
+        >>> parse_time_range('9:00')
+        Traceback (most recent call last):
+          ...
+        ValueError: duration is not specified
 
         >>> parse_time_range('9:00-9:75')
         Traceback (most recent call last):
@@ -704,15 +788,21 @@ def parse_time_range(value):
         ValueError: bad time range: 9: 45-14:20
 
     """
-    m = re.match(r'\s*(\d+):(\d+)\s*-\s*(\d+):(\d+)\s*$', value)
+    m = re.match(r'\s*(\d+):(\d+)\s*(?:-\s*(\d+):(\d+)\s*)?$', value)
     if not m:
         raise ValueError('bad time range: %s' % value)
-    h1, m1, h2, m2 = map(int, m.groups())
-    if (h2, m2) != (24, 0):   # 24:00 is expressly allowed here
-        datetime.time(h2, m2) # validate the second time
-    duration = (h2*60+m2) - (h1*60+m1)
-    if duration < 0:
-        duration += 1440
+    h1, m1 = int(m.group(1)), int(m.group(2))
+    if not m.group(3):
+        if default_duration is None:
+            raise ValueError('duration is not specified')
+        duration = default_duration
+    else:
+        h2, m2 = int(m.group(3)), int(m.group(4))
+        if (h2, m2) != (24, 0):   # 24:00 is expressly allowed here
+            datetime.time(h2, m2) # validate the second time
+        duration = (h2*60+m2) - (h1*60+m1)
+        if duration < 0:
+            duration += 1440
     return datetime.time(h1, m1), datetime.timedelta(minutes=duration)
 
 

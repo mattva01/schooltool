@@ -160,6 +160,9 @@ class TestWidget(unittest.TestCase):
         self.assertEquals(widget._tabindex_html(), '')
         widget.tabindex = 42
         self.assertEquals(widget._tabindex_html(), ' tabindex="42"')
+        self.assertEquals(widget._tabindex_html(None), ' tabindex="42"')
+        self.assertEquals(widget._tabindex_html(55), ' tabindex="55"')
+        self.assertEquals(widget._tabindex_html(0), '')
 
 
 class TestWidgetWithConverters(unittest.TestCase):
@@ -277,6 +280,19 @@ class TestTextWidget(XMLCompareMixin, unittest.TestCase):
             </div>
             """
         self.assertEqualsXML(widget().encode('UTF-8'),
+                             expected.encode('UTF-8'))
+
+    def test_call_with_tabindex(self):
+        widget = self.createWidget()
+        widget.tabindex = 16
+        expected = u"""
+            <div class="row">
+              <label for="field">Label</label>
+              <input class="text" type="text" name="field" id="field"
+                     tabindex="42" value="" />
+            </div>
+            """
+        self.assertEqualsXML(widget(tabindex=42).encode('UTF-8'),
                              expected.encode('UTF-8'))
 
 
