@@ -110,6 +110,12 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
         if not IBrowserRequest.providedBy(request) or request.method == 'PUT':
             next = getNextUtility(self, IAuthentication)
             return next.unauthorized(id, request)
+        if str(request.URL).endswith('.ics'):
+            # Special case: testing shows that Mozilla Calendar does not send
+            # the Authorization header unless challenged.  It is pointless
+            # to redirect an iCalendar client to an HTML login form.
+            next = getNextUtility(self, IAuthentication)
+            return next.unauthorized(id, request)
         app = getSchoolBellApplication()
         url = zapi.absoluteURL(app, request)
         request.response.redirect("%s/@@login.html?forbidden=yes&nexturl=%s"

@@ -282,6 +282,19 @@ HTTP PUT, does so likewise, even though it uses a real BrowserRequest.
     >>> request.response.getStatus()
     401
 
+And, since this is not a perfect world, we need a workaround for Mozilla
+Calendar -- HTTP GET requests for .ics files also issue the HTTP Basic
+authentication challenge.
+
+    >>> request = TestRequest()
+    >>> request.getURL = lambda *a: '/dir/calendar.ics'
+    >>> str(request.URL)
+    '...calendar.ics'
+    >>> directlyProvides(request, IFrogMarker)
+    >>> auth.unauthorized(None, request)
+    >>> request.response.getStatus()
+    401
+
 
 Clean up:
 
