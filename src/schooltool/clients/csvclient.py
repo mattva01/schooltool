@@ -176,11 +176,9 @@ class CSVImporterHTTP(CSVImporterBase):
             self.blather(_("Creating groups... "))
             self.importGroupsCsv(self.fopen('groups.csv'))
             self.blather(_("Creating teachers... "))
-            self.importPersonsCsv(self.fopen('teachers.csv'), 'teachers',
-                                 teaching=True)
+            self.importPersonsCsv(self.fopen('teachers.csv'), 'teachers')
             self.blather(_("Creating pupils... "))
-            self.importPersonsCsv(self.fopen('pupils.csv'), 'pupils',
-                                 teaching=False)
+            self.importPersonsCsv(self.fopen('pupils.csv'), 'pupils')
             self.blather(_("Creating resources... "))
             self.importResourcesCsv(self.fopen('resources.csv'))
             self.blather(_("Import finished successfully"))
