@@ -128,7 +128,7 @@ class Options:
 
 
 def compile_matcher(regex):
-    """Returns a function that takes one argument and returns True or False.
+    """Return a function that takes one argument and returns True or False.
 
     Regex is a regular expression.  Empty regex matches everything.  There
     is one expression: if the regex starts with "!", the meaning of it is
@@ -165,7 +165,7 @@ def walk_with_symlinks(top, func, arg):
 
 
 def get_test_files(cfg):
-    """Returns a list of test module filenames."""
+    """Return a list of test module filenames."""
     matcher = compile_matcher(cfg.pathname_regex)
     results = []
     test_names = []
@@ -213,7 +213,7 @@ def get_test_files(cfg):
 
 
 def import_module(filename, cfg, tracer=None):
-    """Imports and returns a module."""
+    """Import and return a module."""
     filename = os.path.splitext(filename)[0]
     modname = filename[len(cfg.basedir):].replace(os.path.sep, '.')
     if modname.startswith('.'):
@@ -229,7 +229,7 @@ def import_module(filename, cfg, tracer=None):
 
 
 def filter_testsuite(suite, matcher, level=None):
-    """Returns a flattened list of test cases that match the given matcher."""
+    """Return a flattened list of test cases that match the given matcher."""
     if not isinstance(suite, unittest.TestSuite):
         raise TypeError('not a TestSuite', suite)
     results = []
@@ -247,7 +247,7 @@ def filter_testsuite(suite, matcher, level=None):
 
 
 def get_all_test_cases(module):
-    """Returns a list of all test case classes defined in a given module."""
+    """Return a list of all test case classes defined in a given module."""
     results = []
     for name in dir(module):
         if not name.startswith('Test'):
@@ -260,7 +260,7 @@ def get_all_test_cases(module):
 
 
 def get_test_classes_from_testsuite(suite):
-    """Returns a set of test case classes used in a test suite."""
+    """Return a set of test case classes used in a test suite."""
     if not isinstance(suite, unittest.TestSuite):
         raise TypeError('not a TestSuite', suite)
     results = Set()
@@ -274,7 +274,7 @@ def get_test_classes_from_testsuite(suite):
 
 
 def get_test_cases(test_files, cfg, tracer=None):
-    """Returns a list of test cases from a given list of test modules."""
+    """Return a list of test cases from a given list of test modules."""
     matcher = compile_matcher(cfg.test_regex)
     results = []
     startTime = time.time()
@@ -320,7 +320,7 @@ def get_test_cases(test_files, cfg, tracer=None):
 
 
 def get_test_hooks(test_files, cfg, tracer=None):
-    """Returns a list of test hooks from a given list of test modules."""
+    """Return a list of test hooks from a given list of test modules."""
     results = []
     dirs = Set(map(os.path.dirname, test_files))
     for dir in list(dirs):
@@ -677,7 +677,7 @@ def main(argv):
     if not cfg.search_in:
         cfg.search_in = (cfg.basedir, )
 
-    # Do not print "Imported %d modules in %.3fs" if --list-XXX was specified
+    # Do not print "Imported %d modules in %.3fs" if --list-* was specified
     if cfg.list_tests or cfg.list_hooks or cfg.list_files:
         cfg.print_import_time = False
 
