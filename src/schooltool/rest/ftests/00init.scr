@@ -15,7 +15,7 @@ PUT> .
 Content-Type: text/plain; charset=UTF-8
 Object created: http://localhost:8813/groups/cleaners
 
-SchoolTool> post /groups/root/relationships text/xml
+SchoolTool> post /groups/community/relationships text/xml
 POST> <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
 POST>               xmlns="http://schooltool.org/ns/model/0.1"
 POST>               xlink:type="simple"
@@ -25,9 +25,9 @@ POST>               xlink:href="/groups/students"/>
 POST> .
 201 Created
 Content-Type: text/plain; charset=UTF-8
-Relationship created: http://localhost:8813/groups/root/relationships/0004
+Relationship created: http://localhost:8813/groups/community/relationships/0004
 
-SchoolTool> post /groups/root/relationships text/xml
+SchoolTool> post /groups/community/relationships text/xml
 POST> <relationship xmlns:xlink="http://www.w3.org/1999/xlink"
 POST>               xmlns="http://schooltool.org/ns/model/0.1"
 POST>               xlink:type="simple"
@@ -37,7 +37,7 @@ POST>               xlink:href="/groups/cleaners"/>
 POST> .
 201 Created
 Content-Type: text/plain; charset=UTF-8
-Relationship created: http://localhost:8813/groups/root/relationships/0005
+Relationship created: http://localhost:8813/groups/community/relationships/0005
 
 SchoolTool> put /persons/Mark
 PUT> <object xmlns='http://schooltool.org/ns/model/0.1' title="Mark"/>

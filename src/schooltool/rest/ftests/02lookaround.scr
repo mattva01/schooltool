@@ -12,8 +12,8 @@ Content-Type: text/xml; charset=UTF-8
 <schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
   <message>Welcome to the SchoolTool server</message>
   <roots>
-    <root xlink:type="simple" xlink:href="/groups/root"
-          xlink:title="Root Group"/>
+    <root xlink:type="simple" xlink:href="/groups/community"
+          xlink:title="Community"/>
   </roots>
   <containers>
     <container xlink:type="simple" xlink:href="/persons"
@@ -76,53 +76,53 @@ Content-Type: text/xml; charset=UTF-8
     link='http://schooltool.org/ns/membership/member', '/persons/manager'
 </event>
   <event ts="*">BeforeMembershipEvent
-    group='/groups/root'
+    group='/groups/community'
     member='/groups/managers'
 </event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
-    title='Root Group'
-    link='http://schooltool.org/ns/membership/group', '/groups/root'
+    title='Community'
+    link='http://schooltool.org/ns/membership/group', '/groups/community'
     link='http://schooltool.org/ns/membership/member', '/groups/managers'
 </event>
   <event ts="*">BeforeMembershipEvent
-    group='/groups/root'
+    group='/groups/community'
     member='/groups/teachers'
 </event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
-    title='Root Group'
-    link='http://schooltool.org/ns/membership/group', '/groups/root'
+    title='Community'
+    link='http://schooltool.org/ns/membership/group', '/groups/community'
     link='http://schooltool.org/ns/membership/member', '/groups/teachers'
 </event>
   <event ts="*">BeforeMembershipEvent
-    group='/groups/root'
+    group='/groups/community'
     member='/groups/pupils'
 </event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
-    title='Root Group'
-    link='http://schooltool.org/ns/membership/group', '/groups/root'
+    title='Community'
+    link='http://schooltool.org/ns/membership/group', '/groups/community'
     link='http://schooltool.org/ns/membership/member', '/groups/pupils'
 </event>
   <event ts="*">BeforeMembershipEvent
-    group='/groups/root'
+    group='/groups/community'
     member='/groups/students'
 </event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
-    title='Root Group'
-    link='http://schooltool.org/ns/membership/group', '/groups/root'
+    title='Community'
+    link='http://schooltool.org/ns/membership/group', '/groups/community'
     link='http://schooltool.org/ns/membership/member', '/groups/students'
 </event>
   <event ts="*">BeforeMembershipEvent
-    group='/groups/root'
+    group='/groups/community'
     member='/groups/cleaners'
 </event>
   <event ts="*">MemberAddedEvent
     reltype='http://schooltool.org/ns/membership'
-    title='Root Group'
-    link='http://schooltool.org/ns/membership/group', '/groups/root'
+    title='Community'
+    link='http://schooltool.org/ns/membership/group', '/groups/community'
     link='http://schooltool.org/ns/membership/member', '/groups/cleaners'
 </event>
   <event ts="*">BeforeMembershipEvent
@@ -230,10 +230,10 @@ Content-Type: text/html; charset=UTF-8
   <h1>Calendars</h1>
   <h2>Groups</h2>
   <ul>
-    <li><a href="http://localhost:8813/groups/root/calendar">
-        Root Group (private calendar)</a>,
-        <a href="http://localhost:8813/groups/root/timetable-calendar">
-        Root Group (timetable)</a></li>
+    <li><a href="http://localhost:8813/groups/community/calendar">
+        Community (private calendar)</a>,
+        <a href="http://localhost:8813/groups/community/timetable-calendar">
+        Community (timetable)</a></li>
     <li><a href="http://localhost:8813/groups/cleaners/calendar">
         Cleaners (private calendar)</a>,
         <a href="http://localhost:8813/groups/cleaners/timetable-calendar">
@@ -318,10 +318,10 @@ Content-Type: text/html; charset=UTF-8
   <h1>Calendars</h1>
   <h2>Groups</h2>
   <ul>
-    <li><a href="https://www.example.com:443/groups/root/calendar">
-        Root Group (private calendar)</a>,
-        <a href="https://www.example.com:443/groups/root/timetable-calendar">
-        Root Group (timetable)</a></li>
+    <li><a href="https://www.example.com:443/groups/community/calendar">
+        Community (private calendar)</a>,
+        <a href="https://www.example.com:443/groups/community/timetable-calendar">
+        Community (timetable)</a></li>
     <li><a href="https://www.example.com:443/groups/cleaners/calendar">
         Cleaners (private calendar)</a>,
         <a href="https://www.example.com:443/groups/cleaners/timetable-calendar">
@@ -401,7 +401,7 @@ Content-Type: text/xml; charset=UTF-8
 <container xmlns:xlink="http://www.w3.org/1999/xlink">
   <name>groups</name>
   <items>
-    <item xlink:href="/groups/root" xlink:title="Root Group"
+    <item xlink:href="/groups/community" xlink:title="Community"
           xlink:type="simple"/>
     <item xlink:href="/groups/cleaners" xlink:title="Cleaners"
           xlink:type="simple"/>
@@ -420,12 +420,12 @@ Content-Type: text/xml; charset=UTF-8
 %% END XML
 
 
-SchoolTool> get /groups/root
+SchoolTool> get /groups/community
 200 OK
 Content-Type: text/xml; charset=UTF-8
 %% XML recursively_sort=group
 <group xmlns:xlink="http://www.w3.org/1999/xlink">
-  <name>Root Group</name>
+  <name>Community</name>
   <item xlink:type="simple" xlink:title="Teachers"
         xlink:href="/groups/teachers"/>
   <item xlink:type="simple" xlink:title="Pupils"
@@ -438,16 +438,16 @@ Content-Type: text/xml; charset=UTF-8
         xlink:href="/groups/managers"/>
   <relationships xlink:type="simple"
                  xlink:title="Relationships"
-                 xlink:href="/groups/root/relationships"/>
+                 xlink:href="/groups/community/relationships"/>
   <facets xlink:type="simple" xlink:title="Facets"
-          xlink:href="/groups/root/facets"/>
-  <timetables xlink:href="/groups/root/timetables" xlink:title="Own timetables"
+          xlink:href="/groups/community/facets"/>
+  <timetables xlink:href="/groups/community/timetables" xlink:title="Own timetables"
               xlink:type="simple"/>
-  <timetables xlink:href="/groups/root/composite-timetables"
+  <timetables xlink:href="/groups/community/composite-timetables"
               xlink:title="Composite timetables" xlink:type="simple"/>
-  <calendar xlink:href="/groups/root/calendar" xlink:title="Private calendar"
+  <calendar xlink:href="/groups/community/calendar" xlink:title="Private calendar"
             xlink:type="simple"/>
-  <calendar xlink:href="/groups/root/timetable-calendar"
+  <calendar xlink:href="/groups/community/timetable-calendar"
             xlink:title="Calendar derived from timetables"
             xlink:type="simple"/>
 </group>
@@ -509,12 +509,12 @@ Content-Type: text/xml; charset=UTF-8
     </relationship>
     <relationship xlink:type="simple"
                   xlink:role="http://schooltool.org/ns/membership/group"
-                  xlink:title="Root Group"
+                  xlink:title="Community"
                   xlink:arcrole="http://schooltool.org/ns/membership"
-                  xlink:href="/groups/root">
+                  xlink:href="/groups/community">
       <manage xlink:type="simple"
               xlink:href="/groups/cleaners/relationships/0001"
-              xlink:title="Root Group"/>
+              xlink:title="Community"/>
     </relationship>
   </existing>
   <valencies>
@@ -539,12 +539,12 @@ Content-Type: text/xml; charset=UTF-8
 %% END XML
 
 
-SchoolTool> get /groups/root/tree
+SchoolTool> get /groups/community/tree
 200 OK
 Content-Type: text/xml; charset=UTF-8
 %% XML recursively_sort=tree
 <tree xmlns:xlink="http://www.w3.org/1999/xlink">
-  <group xlink:href="/groups/root" xlink:title="Root Group"
+  <group xlink:href="/groups/community" xlink:title="Community"
          xlink:type="simple">
     <group xlink:href="/groups/teachers" xlink:title="Teachers"
            xlink:type="simple">

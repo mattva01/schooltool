@@ -12,8 +12,8 @@ Content-Type: text/xml; charset=UTF-8
 <schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
   <message>Welcome to the SchoolTool server</message>
   <roots>
-    <root xlink:type="simple" xlink:href="/groups/root"
-          xlink:title="Root Group"/>
+    <root xlink:type="simple" xlink:href="/groups/community"
+          xlink:title="Community"/>
   </roots>
   <containers>
     <container xlink:type="simple" xlink:href="/persons"
@@ -72,10 +72,10 @@ Content-Type: text/html; charset=UTF-8
   <h1>Calendars</h1>
   <h2>Groups</h2>
   <ul>
-    <li><a href="https://localhost:8815/groups/root/calendar">
-        Root Group (private calendar)</a>,
-        <a href="https://localhost:8815/groups/root/timetable-calendar">
-        Root Group (timetable)</a></li>
+    <li><a href="https://localhost:8815/groups/community/calendar">
+        Community (private calendar)</a>,
+        <a href="https://localhost:8815/groups/community/timetable-calendar">
+        Community (timetable)</a></li>
     <li><a href="https://localhost:8815/groups/cleaners/calendar">
         Cleaners (private calendar)</a>,
         <a href="https://localhost:8815/groups/cleaners/timetable-calendar">
