@@ -1,0 +1,47 @@
+<ttconfig xmlns="http://schooltool.org/ns/ttconfig/0.1">
+  <timetablemodel class="schooltool.cal.SequentialDaysTimetableModel" />
+  <!-- days>1A 2E 3A 4E</days -->
+  <!-- periods>P1 P2 P3 P4</periods -->
+  <timetable>
+    <day id="1A">
+      <period id="P1">Science</period>
+      <period id="P2">Mathematics</period>
+    </day>
+    <day id="2E">
+      <period id="P1">Science</period>
+      <period id="P2">Mathematics</period>
+    </day>
+    <day id="3A">
+      <period id="P1">Science</period>
+      <period id="P2">Mathematics</period>
+    </day>
+    <day id="4E">
+      <period id="P1">Science</period>
+      <period id="P2">Mathematics</period>
+    </day>
+  </timetable>
+  <daytemplate id="Long">
+    <used when="default" />
+    <!-- 24 h clock notation for tstart
+         number of minutes for duration  -->
+    <period id="P1" tstart="9:00" duration="60" />
+    <period id="P2" tstart="10:15" duration="60" />
+    <period id="P3" tstart="11:30" duration="60" />
+    <period id="P4" tstart="12:45" duration="60" />
+  </daytemplate>
+  <daytemplate id="Short">
+    <used when="Wednesday Thursday" />
+    <!-- 24 h clock notation for tstart
+         number of minutes for duration  -->
+    <period id="P1" tstart="9:00" duration="50" />
+    <period id="P2" tstart="10:05" duration="50" />
+    <period id="P3" tstart="11:10" duration="50" />
+    <period id="P4" tstart="12:15" duration="50" />
+  </daytemplate>
+  <schooldays first="2003-09-01" last="2003-12-19">
+    <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
+    <holiday date="2003-10-13">Columbus day</holiday>
+    <holiday date="2003-11-11">Veterans' day</holiday>
+    <holiday date="2003-11-27">Thanksgiving day</holiday>
+  </schooldays>
+</ttconfig>
