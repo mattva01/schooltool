@@ -21,6 +21,7 @@
 
   <content class=".app.SchoolBellApplication">
     <allow interface=".interfaces.ISchoolBellApplication" />
+    <allow attributes="getSiteManager" />
   </content>
 
   <content class=".app.PersonContainer">
