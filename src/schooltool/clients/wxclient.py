@@ -1802,7 +1802,7 @@ class AppLogFrame(wxDialog):
                                                  pagesize=self.pagesize,
                                                  filter=self.filter_str)
         except SchoolToolError, e:
-            wxMessageBox(_("Could not retrieve application log data"),
+            wxMessageBox(_("Could not retrieve application log data: %s") % e,
                          _("Error"), wxICON_ERROR|wxOK)
             return False
 
