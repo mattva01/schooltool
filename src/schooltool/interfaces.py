@@ -131,9 +131,14 @@ class IURIObject(Interface):
 
 
 class IURIAPI(Interface):
+    """Helper functions for handling URIs.
+
+    URI objects are named utilities implementing the IURIObject
+    interface.  The utility names are URI strings.
+    """
 
     def registerURI(uri):
-        """Add a URI to the registry so it can be queried by the URI string."""
+        """Register a URIObject as a named utility"""
 
 
 #
@@ -786,7 +791,10 @@ class IFacetManager(Interface):
 
 
 class IFacetAPI(Interface):
-    """Facet API"""
+    """Facet API
+
+    Facet factories are named utilities implementing IFacetFactory.
+    """
 
     def FacetManager(obj):
         """Return an IFacetManager for the given object.
