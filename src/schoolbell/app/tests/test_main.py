@@ -340,7 +340,21 @@ def doctest_bootstrapSchoolBell():
         >>> bootstrapSchoolBell(db)
         Traceback (most recent call last):
           ...
-        TypeError: incompatible database
+        IncompatibleDatabase: incompatible database
+
+    It also checks for the presence of an old data.
+
+        >>> connection = db.open()
+        >>> root = connection.root()
+        >>> del root[ZopePublication.root_name]
+        >>> root['schooltool'] = object()
+        >>> transaction.commit()
+        >>> connection.close()
+
+        >>> bootstrapSchoolBell(db)
+        Traceback (most recent call last):
+          ...
+        OldDatabase: old database
 
     Clean up
 

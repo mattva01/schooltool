@@ -78,6 +78,21 @@ This is not a SchoolBell 1.0 database file, aborting.
 """.strip()
 
 
+old_db_error_msg = """
+This is not a SchoolBell 1.0 database file, aborting.
+
+Please run the standalone database upgrade script.
+""".strip()
+
+
+class OldDatabase(Exception):
+    pass
+
+
+class IncompatibleDatabase(Exception):
+    pass
+
+
 class Options(object):
     """SchoolBell process options."""
 
@@ -178,8 +193,11 @@ def setup(options):
 
     try:
         bootstrapSchoolBell(db)
-    except TypeError:
+    except IncompatibleDatabase:
         print >> sys.stderr, incompatible_db_error_msg
+        sys.exit(1)
+    except OldDatabase:
+        print >> sys.stderr, old_db_error_msg
         sys.exit(1)
 
     notify(DatabaseOpened(db))
@@ -355,6 +373,10 @@ def bootstrapSchoolBell(db):
     """Bootstrap SchoolBell database."""
     connection = db.open()
     root = connection.root()
+    if root.get('schooltool'):
+        transaction.abort()
+        connection.close()
+        raise OldDatabase('old database')
     app_obj = root.get(ZopePublication.root_name)
     if app_obj is None:
         app = SchoolBellApplication()
@@ -369,7 +391,7 @@ def bootstrapSchoolBell(db):
     elif not ISchoolBellApplication.providedBy(app_obj):
         transaction.abort()
         connection.close()
-        raise TypeError('incompatible database')
+        raise IncompatibleDatabase('incompatible database')
     transaction.commit()
     connection.close()
 
