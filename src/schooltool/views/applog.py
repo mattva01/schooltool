@@ -41,9 +41,9 @@ class ApplicationLogView(View):
             file = self.openLog(path)
             try:
                 if 'filter' in request.args:
-                    filter = request.args['filter']
+                    filter_str = request.args['filter']
                     result = [line for line in file.readlines()
-                              if filter in line]
+                              if filter_str in line]
                     # set the size of result in some header
                     if 'page' in request.args and 'pagesize' in request.args:
                         page = int(request.args['page'])
