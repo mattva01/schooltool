@@ -697,6 +697,9 @@ class TestCalendarView(unittest.TestCase, TraversalTestMixin):
 
 class TestEventAddView(unittest.TestCase):
 
+    # XXX This class should be split into TestEventViewBase
+    #     and TestEventAddView, as was done with the original code.
+
     def setUp(self):
         from schooltool.browser.cal import EventAddView
         from schooltool.cal import Calendar
@@ -744,7 +747,7 @@ class TestEventAddView(unittest.TestCase):
 
     def test_post_errors(self):
         request = RequestStub(args={'title': '',
-                                    'start_date': '2004-31-13',
+                                    'start_date': '2004-12-13',
                                     'start_time': '15:30',
                                     'duration': '50'})
         self.view.request = request
@@ -766,6 +769,45 @@ class TestEventAddView(unittest.TestCase):
         self.view.request = request
         content = self.view.do_POST(request)
         self.assert_('Invalid duration' in content)
+
+
+class TestEventEditView(unittest.TestCase):
+
+    def test(self):
+        from schooltool.browser.cal import EventEditView
+        from schooltool.cal import Calendar, CalendarEvent
+
+        cal = Calendar()
+        setPath(cal, '/persons/somebody/calendar')
+
+        view = EventEditView(cal)
+        view.authorization = lambda x, y: True
+        ev1 = CalendarEvent(datetime(2004, 8, 12, 12, 0),
+                            timedelta(hours=1), "ev1")
+        ev2 = CalendarEvent(datetime(2004, 8, 12, 13, 0),
+                            timedelta(hours=1), "ev2",
+                            unique_id="pick me")
+        cal.addEvent(ev1)
+        cal.addEvent(ev2)
+
+        request = RequestStub(args={'event_id': "pick me",
+                                    'title': 'Changed',
+                                    'start_date': '2004-8-16',
+                                    'start_time': '13:30',
+                                    'duration': '70'})
+        view.request = request
+        content = view.do_POST(request)
+
+        self.assertEquals(len(list(cal)), 2)
+        self.assert_(ev1 in list(cal))
+        self.assert_(ev2 not in list(cal))
+
+        cal.removeEvent(ev1)
+        new_ev = list(cal)[0]
+        self.assertEquals(new_ev.title, 'Changed')
+        self.assertEquals(new_ev.dtstart, datetime(2004, 8, 16, 13, 30))
+        self.assertEquals(new_ev.duration, timedelta(minutes=70))
+        self.assert_(new_ev.duration, timedelta(minutes=70))
 
 
 class TestEventSourceDecorator(unittest.TestCase):
@@ -834,6 +876,7 @@ class TestComboCalendarView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.cal import ComboMonthlyCalendarView
         from schooltool.browser.cal import YearlyCalendarView
         from schooltool.browser.cal import EventAddView
+        from schooltool.browser.cal import EventEditView
         context = Calendar()
         view = ComboCalendarView(context)
         self.assertTraverses(view, 'daily.html', ComboDailyCalendarView,
@@ -844,6 +887,7 @@ class TestComboCalendarView(unittest.TestCase, TraversalTestMixin):
                              context)
         self.assertTraverses(view, 'yearly.html', YearlyCalendarView, context)
         self.assertTraverses(view, 'add_event.html', EventAddView, context)
+        self.assertTraverses(view, 'edit_event.html', EventEditView, context)
 
 
 class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
@@ -852,13 +896,16 @@ class TestCalendarEventView(unittest.TestCase, TraversalTestMixin):
         from schooltool.cal import CalendarEvent
         from schooltool.browser.cal import CalendarEventView
         ev = CalendarEvent(datetime(2004, 12, 01, 12, 01),
-                           timedelta(hours=1), "Main event")
+                           timedelta(hours=1), "Main event",
+                           unique_id="id")
         view = CalendarEventView(ev)
         request = RequestStub()
 
         self.assertEquals(view.render(request),
                           '<div class="calevent">\n'
-                          '  <h3>Main event</h3>\n'
+                          '  <a href="edit_event.html?event_id=id">\n'
+                          '    <h3>Main event</h3>\n'
+                          '  </a>\n'
                           '  12:01&ndash;13:01\n'
                           '</div>\n')
 
@@ -893,6 +940,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestYearlyCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarView))
     suite.addTest(unittest.makeSuite(TestEventAddView))
+    suite.addTest(unittest.makeSuite(TestEventEditView))
     suite.addTest(unittest.makeSuite(TestEventSourceDecorator))
     suite.addTest(unittest.makeSuite(TestCalendarComboMixin))
     suite.addTest(unittest.makeSuite(TestComboCalendarView))

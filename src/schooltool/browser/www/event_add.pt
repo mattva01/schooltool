@@ -12,6 +12,10 @@
   <form method="POST" tal:attributes="action request/path">
     <div class="error" tal:condition="view/error" tal:content="view/error" />
 
+    <input tal:condition="request/args/event_id|nothing"
+           type="hidden" name="event_id"
+           tal:attributes="value view/event_id" />
+
     <div class="row">
       <label for="title">Title</label>
       <input id="title" name="title" type="text"
@@ -32,7 +36,7 @@
       <input id="duration" name="duration" type="text"
              tal:attributes="value view/duration" />
     </div>
-    <input name="CONFIRM_ADD" type="submit" value="Add" />
+    <input name="CONFIRM_ADD" type="submit" value="Submit" />
 
   </form>
   </metal:block>

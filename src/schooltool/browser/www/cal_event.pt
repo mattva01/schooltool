@@ -1,4 +1,6 @@
 <div class="calevent">
-  <h3 tal:content="context/title" />
+  <a tal:attributes="href string:edit_event.html?event_id=${context/unique_id}">
+    <h3 tal:content="context/title" />
+  </a>
   <span tal:replace="structure view/duration" />
 </div>

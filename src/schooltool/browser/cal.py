@@ -480,6 +480,8 @@ class CalendarView(View):
 class EventViewBase(View):
     """A base class for event adding and editing views."""
 
+    __used_for__ = ICalendar
+
     authorization = PrivateAccess
 
     template = Template('www/event_add.pt')
@@ -537,8 +539,6 @@ class EventViewBase(View):
 class EventAddView(EventViewBase):
     """A view for adding events."""
 
-    __used_for__ = ICalendar
-
     def process(self, dtstart, duration, title):
         ev = CalendarEvent(dtstart, duration, title,
                            self.context.__parent__, self.context.__parent__)
@@ -548,17 +548,26 @@ class EventAddView(EventViewBase):
 class EventEditView(EventViewBase):
     """A view for editing events."""
 
-    # __used_for__ = ICalendar
-
     def update(self):
-        # self.title = 
-        # self.start_date = 
-        # self.start_time = 
-        # self.duration = 
+        self.event_id = to_unicode(self.request.args['event_id'][0])
+        for event in self.context:
+            if event.unique_id == self.event_id:
+                self.event = event
+                break
+        else:
+            raise ValueError("Invalid event_id") # XXX Unfriendly?
+
+        self.title = self.event.title
+        self.start_date = str(self.event.dtstart.date())
+        self.start_time = str(self.event.dtstart.strftime("%H:%M"))
+        self.duration = str(self.event.duration)
         EventViewBase.update(self)
 
     def process(self, dtstart, duration, title):
-        pass
+        self.context.removeEvent(self.event)
+        ev = CalendarEvent(dtstart, duration, title,
+                           self.context.__parent__, self.context.__parent__)
+        self.context.addEvent(ev)
 
 
 def EventSourceDecorator(e, source):
@@ -620,6 +629,8 @@ class ComboCalendarView(CalendarView):
             return YearlyCalendarView(self.context)
         elif name == 'add_event.html':
             return EventAddView(self.context)
+        elif name == 'edit_event.html':
+            return EventEditView(self.context)
         raise KeyError(name)
 
 
