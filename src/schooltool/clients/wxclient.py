@@ -1734,7 +1734,7 @@ class MainFrame(wxFrame):
         """
         self.Close(True)
 
-    def DoServerSettings(self, event):
+    def DoServerSettings(self, event=None):
         """Show the Server Settings dialog.
 
         Accessible from Settings|Server settings.
@@ -2125,6 +2125,7 @@ class SchoolToolApp(wxApp):
         self.frame = MainFrame(self.client)
         self.frame.Show(True)
         self.SetTopWindow(self.frame)
+        self.frame.DoServerSettings()
         return True
 
 
