@@ -109,7 +109,7 @@ class DynamicFacetSchemaView(DynamicFacetView):
             (_('Start'), absoluteURL(self.request, app, 'start')),
             (_('Dynamic facet schemas'),
              absoluteURL(self.request, app, 'dfschemas')),
-            (name, absoluteURL(self.request, app, 'dfschemas', name))]
+            (name, absoluteURL(self.request, app, 'dfschemas/%s' % name))]
 
     def title(self):
         return "Dynamic facet schema %s" % self.context.__name__
