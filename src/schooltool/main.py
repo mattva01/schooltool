@@ -52,6 +52,7 @@ from schooltool.membership import Membership
 from schooltool.eventlog import EventLogUtility
 from schooltool.interfaces import IEvent, IAttendanceEvent, IModuleSetup
 from schooltool.interfaces import AuthenticationError
+from schooltool.translation import _
 
 __metaclass__ = type
 
@@ -387,7 +388,7 @@ class Request(http.Request):
                 self.authenticated_user = self.site.authenticate(app,
                         self.getUser(), self.getPassword())
             except AuthenticationError:
-                body = "Bad username or password"
+                body = _("Bad username or password")
                 self.setResponseCode(401)
                 self.setHeader('Content-Type', 'text/plain')
                 self.setHeader('Content-Length', len(body))
@@ -541,7 +542,7 @@ class Server:
             self.configure(args)
         except getopt.GetoptError, e:
             print >> self.stderr, "schooltool: %s" % e
-            print >> self.stderr, "run schooltool -h for help"
+            print >> self.stderr, _("run schooltool -h for help")
             return 1
         except SystemExit, e:
             return e.args[0]
@@ -583,7 +584,7 @@ class Server:
                 raise SystemExit(0)
 
         if args:
-            raise getopt.GetoptError("too many arguments")
+            raise getopt.GetoptError(_("too many arguments"))
 
         # Read configuration file
         for k, v in opts:
@@ -715,11 +716,11 @@ class Server:
         Person = app['persons'].new
         Group = app['groups'].new
 
-        root = Group("root", title="Root Group")
+        root = Group("root", title=_("Root Group"))
         app.addRoot(root)
 
-        managers = Group("managers", title="System Managers")
-        manager = Person("manager", title="Manager")
+        managers = Group("managers", title=_("System Managers"))
+        manager = Person("manager", title=_("Manager"))
         manager.setPassword('schooltool')
         Membership(group=managers, member=manager)
         Membership(group=root, member=managers)
@@ -735,7 +736,7 @@ class Server:
         except (TypeError, KeyError):
             # Perhaps log somewhere that authentication is not possible in
             # this context, otherwise it might be hard to debug
-            raise AuthenticationError("Invalid login")
+            raise AuthenticationError(_("Invalid login"))
         try:
             person = persons[username]
         except KeyError:
@@ -743,15 +744,15 @@ class Server:
         else:
             if person.checkPassword(password):
                 return person
-        raise AuthenticationError("Invalid login")
+        raise AuthenticationError(_("Invalid login"))
 
     authenticate = staticmethod(authenticate)
 
     def notifyConfigFile(self, config_file):
-        print >> self.stdout, "Reading configuration from %s" % config_file
+        print >> self.stdout, _("Reading configuration from %s") % config_file
 
     def notifyServerStarted(self, network_interface, port):
-        print >> self.stdout, ("Started HTTP server on %s:%s"
+        print >> self.stdout, (_("Started HTTP server on %s:%s")
                                % (network_interface or "*", port))
 
 
@@ -786,6 +787,8 @@ def setUp():
 
 def main():
     """Starts the SchoolTool HTTP server."""
+    import schooltool.translation
+    schooltool.translation.setUp()
     sys.exit(Server().main(sys.argv[1:]))
 
 

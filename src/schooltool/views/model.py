@@ -127,11 +127,11 @@ class PersonPasswordView(View):
         password = request.content.read()
         password = password.strip()
         self.context.setPassword(password)
-        return "Password changed"
+        return _("Password changed")
 
     def do_DELETE(self, request):
         self.context.setPassword(None)
-        return "Account disabled"
+        return _("Account disabled")
 
 
 class ResourceView(ApplicationObjectTraverserView):

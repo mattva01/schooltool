@@ -93,7 +93,7 @@ class PersonInfoFacetView(FacetView):
         try:
             if not validate_against_schema(self.schema, xml):
                 return textErrorPage(request,
-                            "XML not valid according to schema")
+                            _("XML not valid according to schema"))
         except libxml2.parserError:
             return textErrorPage(request, "Invalid XML")
         doc = libxml2.parseDoc(xml)
@@ -120,7 +120,7 @@ class PersonInfoFacetView(FacetView):
         finally:
             doc.freeDoc()
             xpathctx.xpathFreeContext()
-        return "Updated"
+        return _("Updated")
 
 
 class PhotoView(View):
@@ -146,11 +146,11 @@ class PhotoView(View):
         buf = StringIO()
         img2.save(buf, 'JPEG')
         self.context.photo = buf.getvalue()
-        return "Photo added"
+        return _("Photo added")
 
     def do_DELETE(self, request):
         self.context.photo = None
-        return "Photo removed"
+        return _("Photo removed")
 
 
 def maxspect(size, limits):

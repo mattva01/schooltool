@@ -126,7 +126,7 @@ class ApplicationObjectCreator:
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
         request.setHeader('Location', location)
-        return "Object created: %s" % location
+        return _("Object created: %s") % location
 
 
 class ApplicationObjectContainerView(TraversableView,
@@ -181,44 +181,44 @@ class AvailabilityQueryView(View):
 
         Required arguments in the request query string:
 
-            ======== ============  ===========
-            Name     Type          Cardinality
-            ======== ============  ===========
-            first    'YYYY-MM-DD'  1
-            last     'YYYY-MM-DD'  1
-            duration int           1
-            ======== ============  ===========
+            ======== ============ ===========
+            Name     Type         Cardinality
+            ======== ============ ===========
+            first    'YYYY-MM-DD' 1
+            last     'YYYY-MM-DD' 1
+            duration int          1
+            ======== ============ ===========
 
         Optional arguments (if not passed, 'all' assumed):
 
-            ========= ===========  ===========
-            Name      Type         Cardinality
-            ========= ===========  ===========
-            hours     int (0..23)  many
-            resources str          many
-            ========= ===========  ===========
+            ========= =========== ===========
+            Name      Type        Cardinality
+            ========= =========== ===========
+            hours     int (0..23) many
+            resources str         many
+            ========= =========== ===========
 
         """
         for arg in 'first', 'last', 'duration':
             if arg not in request.args:
                 return textErrorPage(request,
-                                     "%r argument must be provided" % arg)
+                                     _("%r argument must be provided") % _(arg))
         try:
-            arg = 'first'
+            arg = _('first')
             self.first = parse_date(request.args['first'][0])
-            arg = 'last'
+            arg = _('last')
             self.last = parse_date(request.args['last'][0])
-            arg = 'duration'
+            arg = _('duration')
             minutes = int(request.args['duration'][0])
             self.duration = datetime.timedelta(minutes=minutes)
-            arg = 'hours'
+            arg = _('hours')
             if 'hours' not in request.args:
                 self.hours = [(datetime.time(0), datetime.timedelta(hours=24))]
             else:
                 self.hours = self.parseHours(request.args['hours'])
         except ValueError:
             return textErrorPage(request,
-                                 "%r argument is invalid" % arg)
+                                 _("%r argument is invalid") % arg)
         self.resources = []
         if 'resources' not in request.args:
             resource_container = traverse(self.context, 'resources')
@@ -229,10 +229,10 @@ class AvailabilityQueryView(View):
                     resource = traverse(self.context, path)
                 except KeyError:
                     return textErrorPage(request,
-                                         "Invalid resource: %r" % path)
+                                         _("Invalid resource: %r") % path)
                 if not IResource.providedBy(resource):
                     return textErrorPage(request,
-                                         "%r is not a resource" % path)
+                                         _("%r is not a resource") % path)
                 self.resources.append(resource)
         return View.do_GET(self, request)
 

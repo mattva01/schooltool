@@ -103,7 +103,7 @@ class SchooldayModelCalendarView(View):
             return self.do_PUT_text_xml(request)
         else:
             return textErrorPage(request,
-                                 "Unsupported content type: %s" % ctype)
+                                 _("Unsupported content type: %s") % ctype)
 
     def do_PUT_text_calendar(self, request):
         first = last = None
@@ -117,50 +117,50 @@ class SchooldayModelCalendarView(View):
 
                 if not event.all_day_event:
                     return textErrorPage(request,
-                             "All-day event should be used")
+                             _("All-day event should be used"))
 
                 has_complex_props = reduce(operator.or_,
                                       map(event.hasProp, complex_prop_names))
 
                 if has_complex_props:
                     return textErrorPage(request,
-                             "Repeating events/exceptions not yet supported")
+                             _("Repeating events/exceptions not yet supported"))
 
                 if summary == 'school period':
                     if (first is not None and
                         (first, last) != (event.dtstart, event.dtend)):
                         return textErrorPage(request,
-                                    "Multiple definitions of school period")
+                                    _("Multiple definitions of school period"))
                     else:
                         first, last = event.dtstart, event.dtend
                 elif summary == 'schoolday':
                     if event.duration != datetime.date.resolution:
                         return textErrorPage(request,
-                                    "Schoolday longer than one day")
+                                    _("Schoolday longer than one day"))
                     days.append(event.dtstart)
         except ICalParseError, e:
             return textErrorPage(request, str(e))
         else:
             if first is None:
-                return textErrorPage(request, "School period not defined")
+                return textErrorPage(request, _("School period not defined"))
             for day in days:
                 if not first <= day < last:
                     return textErrorPage(request,
-                                         "Schoolday outside school period")
+                                         _("Schoolday outside school period"))
             self.context.reset(first, last - datetime.date.resolution)
             for day in days:
                 self.context.add(day)
         request.setHeader('Content-Type', 'text/plain')
-        return "Calendar imported"
+        return _("Calendar imported")
 
     def do_PUT_text_xml(self, request):
         xml = request.content.read()
         try:
             if not validate_against_schema(self.schema, xml):
                 return textErrorPage(request,
-                            "Schoolday model not valid according to schema")
+                            _("Schoolday model not valid according to schema"))
         except libxml2.parserError:
-            return textErrorPage(request, "Schoolday model is not valid XML")
+            return textErrorPage(request, _("Schoolday model is not valid XML"))
         doc = libxml2.parseDoc(xml)
         xpathctx = doc.xpathNewContext()
         try:
@@ -190,7 +190,7 @@ class SchooldayModelCalendarView(View):
             if holiday in self.context and self.context.isSchoolday(holiday):
                 self.context.remove(holiday)
         request.setHeader('Content-Type', 'text/plain')
-        return "Calendar imported"
+        return _("Calendar imported")
 
 
 class CalendarReadView(View):
@@ -254,7 +254,7 @@ class CalendarView(CalendarReadView):
             ctype = ctype[:ctype.index(';')]
         if ctype != 'text/calendar':
             return textErrorPage(request,
-                                 "Unsupported content type: %s" % ctype)
+                                 _("Unsupported content type: %s") % ctype)
         events = []
         reader = ICalReader(request.content)
         try:
@@ -266,7 +266,7 @@ class CalendarView(CalendarReadView):
                                       map(event.hasProp, complex_prop_names))
                 if has_complex_props:
                     return textErrorPage(request,
-                             "Repeating events/exceptions not yet supported")
+                             _("Repeating events/exceptions not yet supported"))
                 events.append(CalendarEvent(event.dtstart, event.duration,
                                             event.summary))
         except ICalParseError, e:
@@ -300,7 +300,7 @@ class CalendarView(CalendarReadView):
                 # newly added  events
                 self.context.addEvent(event)
             request.setHeader('Content-Type', 'text/plain')
-            return "Calendar imported"
+            return _("Calendar imported")
 
 
 class BookingView(View):
@@ -316,9 +316,9 @@ class BookingView(View):
         try:
             if not validate_against_schema(self.schema, xml):
                 return textErrorPage(request,
-                                     "Input not valid according to schema")
+                                     _("Input not valid according to schema"))
         except libxml2.parserError:
-            return textErrorPage(request, "Not valid XML")
+            return textErrorPage(request, _("Not valid XML"))
         doc = libxml2.parseDoc(xml)
         xpathctx = doc.xpathNewContext()
         try:
@@ -330,25 +330,25 @@ class BookingView(View):
             try:
                 owner = traverse(self.context, owner_path)
             except KeyError:
-                return textErrorPage(request, "Invalid path: %r" % owner_path)
+                return textErrorPage(request, _("Invalid path: %r") % owner_path)
             if not IApplicationObject.providedBy(owner):
                 return textErrorPage(request,
-                                     "'owner' in not an ApplicationObject.")
+                                     _("'owner' in not an ApplicationObject."))
             if (owner is not request.authenticated_user
                     and not isManager(request.authenticated_user)):
-                return textErrorPage(request, "You can only book resources "
-                                     "for yourself")
+                return textErrorPage(request, _("You can only book resources "
+                                     "for yourself"))
 
             resource_node = xpathctx.xpathEval('/cal:booking/cal:slot')[0]
             start_str = resource_node.nsProp('start', None)
             dur_str = resource_node.nsProp('duration', None)
             try:
-                arg = 'start'
+                arg = _('start')
                 start = parse_datetime(start_str)
-                arg = 'duration'
+                arg = _('duration')
                 duration = datetime.timedelta(minutes=int(dur_str))
             except ValueError:
-                return textErrorPage(request, "%r argument incorrect" % arg)
+                return textErrorPage(request, _("%r argument incorrect") % arg)
             force = False
             booking_node = xpathctx.xpathEval('/cal:booking')[0]
             if booking_node.nsProp('conflicts', None) == 'ignore':
@@ -357,14 +357,14 @@ class BookingView(View):
                 p = Period(start, duration)
                 for e in self.context.calendar:
                     if p.overlaps(Period(e.dtstart, e.duration)):
-                        return textErrorPage(request, "The resource is "
-                                             "busy at specified time")
-            title = '%s booked by %s' % (self.context.title, owner.title)
+                        return textErrorPage(request, _("The resource is "
+                                             "busy at specified time"))
+            title = _('%s booked by %s') % (self.context.title, owner.title)
             ev = CalendarEvent(start, duration, title, owner, self.context)
             self.context.calendar.addEvent(ev)
             owner.calendar.addEvent(ev)
             request.setHeader('Content-Type', 'text/plain')
-            return "OK"
+            return _("OK")
         finally:
             doc.freeDoc()
             xpathctx.xpathFreeContext()

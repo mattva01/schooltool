@@ -52,15 +52,15 @@ class EventLogView(View):
         #   Content-Range) headers that it does not understand or implement
         #   and MUST return a 501 (Not Implemented) response in such cases.
         if request.content.read(1):
-            return textErrorPage(request, "Only PUT with an empty body"
-                                          " is defined for event logs")
+            return textErrorPage(request, _("Only PUT with an empty body"
+                                            " is defined for event logs"))
         n = len(self.context.getReceived())
         self.context.clear()
         request.setHeader('Content-Type', 'text/plain')
         if n == 1:
-            return "1 event cleared"
+            return _("1 event cleared")
         else:
-            return "%d events cleared" % n
+            return _("%d events cleared") % n
 
 
 class EventLogFacetView(EventLogView, FacetView):

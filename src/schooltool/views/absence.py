@@ -42,9 +42,9 @@ from schooltool.views.facet import FacetView
 from schooltool.views.auth import TeacherAccess, isManager
 from schooltool.common import parse_datetime
 from schooltool.schema.rng import validate_against_schema
+from schooltool.translation import _
 
 __metaclass__ = type
-
 
 moduleProvides(IModuleSetup)
 
@@ -179,7 +179,7 @@ class RollCallView(View):
                                                     ended=True,
                                                     resolved=resolved))
                 npresences += 1
-        return ("%d absences and %d presences reported"
+        return (_("%d absences and %d presences reported")
                 % (nabsences, npresences))
 
 
@@ -312,10 +312,10 @@ class AbsenceManagementView(View, AbsenceCommentParser, AbsenceListViewMixin):
         request.setHeader('Content-Type', 'text/plain')
         if len(absence.comments) == 1:
             request.setResponseCode(201, 'Created')
-            return "Absence created: %s" % getPath(absence)
+            return _("Absence created: %s") % getPath(absence)
         else:
             request.setResponseCode(200, 'OK')
-            return "Absence updated: %s" % getPath(absence)
+            return _("Absence updated: %s") % getPath(absence)
 
 
 class AbsenceView(View, AbsenceCommentParser):
@@ -382,7 +382,7 @@ class AbsenceView(View, AbsenceCommentParser):
             return textErrorPage(request,
                     "Cannot reopen an absence when another one is not ended")
         request.setHeader('Content-Type', 'text/plain')
-        return "Comment added"
+        return _("Comment added")
 
 
 class AbsenceTrackerView(View, AbsenceListViewMixin):
@@ -400,7 +400,7 @@ class AbsenceTrackerView(View, AbsenceListViewMixin):
 
     def format_date(self, date, now):
         if date.date() == now.date():
-            return 'today'
+            return _('today')
         else:
             return date.strftime('%Y-%m-%d')
 
@@ -410,23 +410,24 @@ class AbsenceTrackerView(View, AbsenceListViewMixin):
         now = self.utcnow()
         format_reason = self.format_reason
         format_date = self.format_date
-        header = "Absences at %s" % (now.strftime("%H:%M%P %Y-%m-%d UTC"))
+        header = _("Absences at %s") % (now.strftime("%H:%M%P %Y-%m-%d UTC"))
         result.append("%s\n%s\n" % (header, "=" * len(header)))
-        result.append("Unexpected absences\n"
-                      "-------------------\n")
+        unexp = _("Unexpected absences")
+        result.append(unexp)
+        result.append("-" * len(unexp) + "\n")
         unexpected = self.unexpected(now)
         if not unexpected:
-            result.append("None")
+            result.append(_("None"))
         else:
             for absence in unexpected:
                 if absence.expected_presence:
                     when_expected = absence.expected_presence
                     age = now - when_expected
                     seconds_in_day = 86400
-                    agestring = '%dh%dm' % divmod(
+                    agestring = _('%dh%dm') % divmod(
                         (age.days * seconds_in_day + age.seconds) / 60, 60)
                     reason = absence.comments[-1].text
-                    result.append("%s expected %s ago, at %s %s%s" %
+                    result.append(_("%s expected %s ago, at %s %s%s") %
                                   (absence.person.title,
                                    agestring,
                                    when_expected.strftime("%I:%M%P"),
@@ -437,22 +438,23 @@ class AbsenceTrackerView(View, AbsenceListViewMixin):
                     start = absence.comments[0].datetime
                     age = now - start
                     seconds_in_day = 86400
-                    agestring = '%dh%dm' % divmod(
+                    agestring = _('%dh%dm') % divmod(
                         (age.days * seconds_in_day + age.seconds) / 60, 60)
                     reason = absence.comments[-1].text
-                    result.append("%s absent for %s, since %s %s%s" %
+                    result.append(_("%s absent for %s, since %s %s%s") %
                                   (absence.person.title,
                                    agestring,
                                    start.strftime("%I:%M%P"),
                                    format_date(start, now),
                                    format_reason(reason)
                                    ))
-        result.append("\n"
-                      "Expected absences\n"
-                      "-----------------\n")
+        result.append("")
+        exp = _("Expected absences")
+        result.append(exp)
+        result.append('-' * len(exp) + "\n")
         expected = self.expected(now)
         if not expected:
-            result.append("None")
+            result.append(_("None"))
         else:
             for absence in expected:
                 when_expected = absence.expected_presence
@@ -461,7 +463,7 @@ class AbsenceTrackerView(View, AbsenceListViewMixin):
                 agestring = '%dh%dm' % divmod(
                     (age.days * seconds_in_day + age.seconds) / 60, 60)
                 reason = absence.comments[-1].text
-                result.append("%s expected in %s, at %s %s%s" %
+                result.append(_("%s expected in %s, at %s %s%s") %
                               (absence.person.title,
                                agestring,
                                when_expected.strftime("%I:%M%P"),

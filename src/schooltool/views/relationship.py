@@ -69,10 +69,11 @@ class RelationshipsView(View):
 
         try:
             if not validate_against_schema(self.schema, body):
-                return textErrorPage(request,
-                                     "Document not valid according to schema")
+                return textErrorPage(
+                    request,
+                    _("Document not valid according to schema"))
         except libxml2.parserError:
-            return textErrorPage(request, "Document not valid XML")
+            return textErrorPage(request, _("Document not valid XML"))
 
         doc = libxml2.parseDoc(body)
         xpathctx = doc.xpathNewContext()
@@ -93,31 +94,31 @@ class RelationshipsView(View):
             type = getURI(type)
             role = getURI(role)
         except ComponentLookupError, e:
-            return textErrorPage(request, "Bad URI: %s" % e)
+            return textErrorPage(request, _("Bad URI: %s") % e)
 
         try:
             other = traverse(self.context, path)
         except TypeError, e:
-            return textErrorPage(request, "Nontraversable path: %s" % e)
+            return textErrorPage(request, _("Nontraversable path: %s") % e)
 
         try:
             val = self.context.getValencies()[type, role]
         except KeyError, e:
-            return textErrorPage(request, "Valency does not exist")
+            return textErrorPage(request, _("Valency does not exist"))
 
         kw = {val.this: self.context, val.other: other}
         try:
             links = val.schema(**kw)
         except ValueError, e:
             return textErrorPage(request,
-                                 "Cannot establish relationship: %s" % e)
+                                 _("Cannot establish relationship: %s") % e)
 
         link = links[val.other]
         location = absoluteURL(request, getPath(link))
         request.setHeader('Location', location)
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
-        return "Relationship created: %s" % location
+        return _("Relationship created: %s") % location
 
 
 class LinkView(View):
@@ -135,5 +136,5 @@ class LinkView(View):
     def do_DELETE(self, request):
         self.context.unlink()
         request.setHeader('Content-Type', 'text/plain')
-        return "Link removed"
+        return _("Link removed")
 

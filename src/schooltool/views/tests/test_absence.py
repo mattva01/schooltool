@@ -195,6 +195,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         request = RequestStub(baseurl[:-1], method="POST", body=xml)
 
         view.authorization = lambda ctx, rq: True
+
         result = view.render(request)
 
         self.assertEquals(request.code, 201)

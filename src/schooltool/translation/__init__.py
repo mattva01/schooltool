@@ -32,7 +32,12 @@ and have their own copyright notices:
 import os
 import gettext
 
+
 localedir = os.path.dirname(__file__)
+
+gettext.bindtextdomain('schooltool', localedir)
+gettext.textdomain('schooltool')
+_ = gettext.gettext
 
 def setUp():
     """Initialize SchoolTool translations.
@@ -40,3 +45,4 @@ def setUp():
     Note that this function installs _ into the built-in namespace.
     """
     gettext.install('schooltool', localedir)
+

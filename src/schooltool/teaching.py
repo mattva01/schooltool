@@ -64,7 +64,7 @@ class TeacherGroupFacet(FacetMixin, RelationshipValenciesMixin):
 def setUp():
     """See IModuleSetup"""
     registerFacetFactory(FacetFactory(SubjectGroupFacet,
-        name='subject_group', title='Subject Group'))
+        name='subject_group', title=_('Subject Group')))
     registerFacetFactory(FacetFactory(TeacherGroupFacet,
-        name='teacher_group', title='Teacher Group'))
+        name='teacher_group', title=_('Teacher Group')))
 

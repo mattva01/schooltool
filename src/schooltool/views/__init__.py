@@ -134,7 +134,7 @@ def textErrorPage(request, message, code=400, reason=None):
 
 def notFoundPage(request):
     """Renders a simple 'not found' error page."""
-    return textErrorPage(request, 'Not found: %s' % request.uri, code=404)
+    return textErrorPage(request, _('Not found: %s') % request.uri, code=404)
 
 
 class View(Resource):
@@ -192,7 +192,7 @@ class View(Resource):
             if not self.authorization(self.context, request):
                 request.setHeader('WWW-Authenticate',
                                   'basic realm="SchoolTool"')
-                return textErrorPage(request, "Bad username or password",
+                return textErrorPage(request, _("Bad username or password"),
                                      code=401)
             self.request = request
             body = handler(request)
@@ -201,7 +201,7 @@ class View(Resource):
                    "do_%s did not return a string" % request.method
             return body
         else:
-            return textErrorPage(request, "Method Not Allowed", code=405)
+            return textErrorPage(request, _("Method Not Allowed"), code=405)
 
     def allowedMethods(self):
         """Lists all allowed methods."""

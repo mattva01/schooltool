@@ -66,10 +66,10 @@ class FacetView(View):
     def do_DELETE(self, request):
         if self.context.owner is not None:
             return textErrorPage(request,
-                                 "Owned facets may not be deleted manually")
+                                 _("Owned facets may not be deleted manually"))
         FacetManager(self.context.__parent__).removeFacet(self.context)
         request.setHeader('Content-Type', 'text/plain')
-        return "Facet removed"
+        return _("Facet removed")
 
 
 class FacetManagementView(View):
@@ -83,9 +83,9 @@ class FacetManagementView(View):
         return getView(self.context.facetByName(name))
 
     def listFacets(self):
-        activness = {False: 'inactive', True: 'active'}
+        activeness = {False: 'inactive', True: 'active'}
         ownedness = {False: 'unowned', True: 'owned'}
-        return [{'active': activness[bool(facet.active)],
+        return [{'active': activeness[bool(facet.active)],
                  'owned': ownedness[facet.owner is not None],
                  'title': facet.__name__,
                  'path': getPath(facet)}
@@ -99,8 +99,9 @@ class FacetManagementView(View):
 
         try:
             if not validate_against_schema(self.schema, body):
-                return textErrorPage(request,
-                                     "Document not valid according to schema")
+                return textErrorPage(
+                    request,
+                    _("Document not valid according to schema"))
         except libxml2.parserError:
             return textErrorPage(request, "Document not valid XML")
 
@@ -119,7 +120,7 @@ class FacetManagementView(View):
         try:
             factory = getFacetFactory(factory_name)
         except KeyError, e:
-            return textErrorPage(request, "Factory does not exist: %s" % e)
+            return textErrorPage(request, _("Factory does not exist: %s") % e)
 
         facet = factory()
         try:
@@ -127,17 +128,17 @@ class FacetManagementView(View):
         except ValueError, e:
             if factory.facet_name is not None:
                 return textErrorPage(request,
-                           "Facet '%s' already exists" % factory.facet_name)
+                           _("Facet '%s' already exists") % factory.facet_name)
             else:
                 return textErrorPage(request,
-                           "Could not create facet: %s" % e)
+                           _("Could not create facet: %s") % e)
 
         location = absoluteURL(request,
                                '%s/%s' % (request.path, facet.__name__))
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
         request.setHeader('Location', location)
-        return "Facet created: %s" % location
+        return _("Facet created: %s") % location
 
 
 def setUp():

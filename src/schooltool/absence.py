@@ -163,7 +163,7 @@ class AbsenceTrackerUtility(AbsenceTrackerMixin):
         AbsenceTrackerMixin.__init__(self)
         self.__parent__ = None
         self.__name__ = None
-        self.title = "Absence Tracker"
+        self.title = _("Absence Tracker")
 
 
 class AbsenceTrackerFacet(AbsenceTrackerMixin, FacetMixin):
@@ -178,7 +178,7 @@ class AbsenceTrackerFacet(AbsenceTrackerMixin, FacetMixin):
 def setUp():
     """Register the AbsenceTrackerFacet factory."""
     registerFacetFactory(FacetFactory(AbsenceTrackerFacet,
-        name='absence_tracker', title='Absence Tracker',
+        name='absence_tracker', title=_('Absence Tracker'),
         facet_name='absences'))
 
 

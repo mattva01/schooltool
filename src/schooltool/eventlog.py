@@ -96,7 +96,7 @@ class EventLogUtility(EventLog):
         EventLog.__init__(self)
         self.__parent__ = None
         self.__name__ = None
-        self.title = "Event Log"
+        self.title = _("Event Log")
 
 
 class EventLogFacet(EventLog, FacetMixin):
@@ -125,5 +125,5 @@ class EventLogger(Persistent):
 def setUp():
     """Register the EventLogFacet factory."""
     registerFacetFactory(FacetFactory(EventLogFacet,
-        name='eventlog', title='Event Log', facet_name='eventlog'))
+        name='eventlog', title=_('Event Log'), facet_name='eventlog'))
 
