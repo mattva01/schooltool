@@ -172,7 +172,7 @@ class MemberViewBase(BrowserView):
         """Return a sorted list of all possible members."""
         # XXX Ugly.  Maybe we could use adaptation here.
         container = self.context.__parent__.__parent__[self.container_name]
-        return sorted_by_title(container.values())
+        return container.values()
 
     def update(self):
         # XXX This method is rather similar to GroupListView.update().

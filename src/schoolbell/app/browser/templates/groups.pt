@@ -27,6 +27,7 @@
       </fieldset>
 <div class="controls">
   <input class="button-ok" type="submit" name="APPLY"
+         tal:condition="all_groups"
          value="Apply" title="Shortcut: Alt-A" accesskey="A"
          i18n:attributes="value; title; accesskey" />
   <input class="button-cancel" type="submit" name="CANCEL"

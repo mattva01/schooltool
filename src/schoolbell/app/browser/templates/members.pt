@@ -1,3 +1,4 @@
+<tal:defs define="update view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title" tal:content="context/title" />
@@ -6,12 +7,16 @@
 <h1 metal:fill-slot="h1" i18n:translate="">
   Members of <span i18n:name="title" tal:replace="context/title" />
 </h1>
-<metal:block metal:fill-slot="body">
-<tal:defs define="update view/update" />
+<metal:block metal:fill-slot="body"
+             tal:define="possible_members view/getMemberList">
 
 <form method="POST" tal:attributes="action request/URL">
-<div class="member_list"> <!-- TODO: nice CSS -->
-  <div tal:repeat="member view/getMemberList">
+<p tal:condition="not:possible_members">
+  There are none.
+</p>
+<div class="member_list" tal:condition="possible_members">
+  <!-- TODO: nice CSS -->
+  <div tal:repeat="member possible_members/sortby:title">
     <label>
       <input tal:attributes="name string:member.${member/__name__};
                              checked python:member in context.members"
@@ -23,6 +28,7 @@
 
 <div class="controls">
   <input class="button-ok" type="submit" name="APPLY"
+         tal:condition="possible_members"
          value="Apply" title="Shortcut: Alt-A" accesskey="A"
          i18n:attributes="value; title; accesskey" />
   <input class="button-cancel" type="submit" name="CANCEL"
