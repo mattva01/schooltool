@@ -32,11 +32,12 @@ We should find just a placeholder there.
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/calendar; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     BEGIN:VCALENDAR
     VERSION:2.0
@@ -56,7 +57,7 @@ calendar is empty:
 
     >>> response = http(r"""
     ... GET /frogpond/persons/frog/calendar/plain.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... """)
     >>> response.getStatus()
     200
@@ -79,7 +80,7 @@ Let's render the weekly calendar view:
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/calendar/weekly.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     ...
@@ -88,7 +89,7 @@ Now let's render the monthly calendar view:
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/calendar/monthly.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -97,7 +98,7 @@ The yearly calendar view should also be rendered just fine:
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/calendar/yearly.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -106,7 +107,7 @@ The daily calendar view works too:
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/calendar/daily.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     ...
@@ -115,7 +116,7 @@ The daily view should be the default:
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/calendar/ HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -125,7 +126,7 @@ You can also use nice URLs for the calendar views:
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/calendar/2004-07-15 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -133,7 +134,7 @@ You can also use nice URLs for the calendar views:
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/calendar/2004-07 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -144,7 +145,7 @@ Let's add an ordinary event that takes place on 3rd February, 2005:
 
     >>> print http(r"""
     ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... Content-Length: 159
     ... Content-Type: application/x-www-form-urlencoded
     ...
@@ -157,7 +158,7 @@ The event should be visible in the daily calendar view:
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/calendar/2005-02-03 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -171,11 +172,12 @@ let's use an aliased URL (directly on the person rather than on the calendar):
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/calendar.ics HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/calendar; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     BEGIN:VCALENDAR
     VERSION:2.0
@@ -195,7 +197,7 @@ We can try and put an updated calendar:
     >>> print http(r"""
     ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
     ... Host: localhost:7080
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... Content-Length: 244
     ... Content-Type: text/calendar
     ...
@@ -213,13 +215,14 @@ We can try and put an updated calendar:
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: 0
+    Set-Cookie: ...
     <BLANKLINE>
 
 This should have cleared the calendar.
 
     >>> 'Sleeping' not in str(http(r"""
     ... GET /frogpond/persons/frog/calendar/2005-02-03 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... Authorization: Basic frog:pwd
     ... """))
     True
 
