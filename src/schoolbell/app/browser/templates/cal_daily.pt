@@ -57,6 +57,7 @@
              tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${ev/unique_id}&date=${evdate}"
              ><img alt="[X]" border="0"
                    tal:attributes="src context/++resource++delete.png"/></a>
+          <div class="description" tal:content="ev/title" tal:condition="python: ev.title != ev.shortTitle" />
           <div class="description" tal:content="ev/description" />
         </div>
       </tal:if>
