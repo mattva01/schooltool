@@ -279,33 +279,17 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
             self.__url = absoluteURL(self.request, self.context)
         return  '%s/%s.html?date=%s' % (self.__url, cal_type, cursor)
 
-    def _markInherited(self, calendar):
-        """Return a duplicate of calendar with events marked as inherited.
-
-        calendar should not contain recurrent events (they should be already
-        expanded).
-        """
-        # XXX This is a hack and it doesn't belong here.
-        # XXX Untested
-        from schooltool.cal import Calendar, InheritedCalendarEvent
-        cal = Calendar()
-        for event in calendar:
-            cal.addEvent(InheritedCalendarEvent(event))
-        return cal
-
     def iterEvents(self, first, last):
         """Iterate over events of selected calendars.
 
         Currently the personal calendar, the timetable calendar and the
         composite calendar is scanned.
         """
-        private_cal = self.context
-        timetable_cal = self.context.__parent__.makeTimetableCalendar()
-        composite_cal = self.context.__parent__.makeCompositeCalendar()
-        composite_cal = composite_cal.expand(first, last)
-        composite_cal = self._markInherited(composite_cal)
-        return itertools.chain(private_cal.expand(first, last),
-                               timetable_cal, composite_cal)
+        private_cal = self.context.expand(first, last)
+        owner = self.context.__parent__
+        timetable_cal = owner.makeTimetableCalendar()
+        composite_cal = owner.makeCompositeCalendar(first, last)
+        return itertools.chain(private_cal, timetable_cal, composite_cal)
 
     def getDays(self, start, end):
         """Get a list of CalendarDay objects for a selected period of time.

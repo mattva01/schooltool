@@ -373,7 +373,6 @@ class InheritedCalendarEvent(CalendarEvent):
 
     def __init__(self, ev):
         """Create a clone of a given event that says that it is inherited."""
-        assert ev.recurrence is None, ev
         CalendarEvent.__init__(self,
                     ev.dtstart, ev.duration, ev.title, owner=ev.owner,
                     context=ev.context, location=ev.location,
@@ -401,12 +400,13 @@ class CalendarOwnerMixin(Persistent):
         self.calendar.__parent__ = self
         self.calendar.__name__ = 'calendar'
 
-    def makeCompositeCalendar(self):
+    def makeCompositeCalendar(self, start, end):
         result = Calendar()
         result.__parent__ = self
         result.__name__ = 'composite-calendar'
-        for group in getRelatedObjects(self, URICalendarProvider):
-            result.update(group.calendar)
+        for obj in getRelatedObjects(self, URICalendarProvider):
+            for event in obj.calendar.expand(start, end):
+                result.addEvent(InheritedCalendarEvent(event))
         return result
 
     def addSelfToCalACL(self):

@@ -680,9 +680,6 @@ class TestInheritedCalendarEvent(TestCalendarEvent):
         self.assertEquals(ev, iev)
         self.assertEquals(ev.dtstart, iev.dtstart)
 
-        self.assertRaises(AssertionError,
-                          InheritedCalendarEvent, ev.replace(recurrence="foo"))
-
 
 class TestACLCalendar(unittest.TestCase):
 
@@ -726,17 +723,22 @@ class TestCalendarOwnerMixin(RegistriesSetupMixin, unittest.TestCase):
 
     def test_makeCompositeCalendar(self):
         from schooltool.cal import CalendarOwnerMixin, Calendar, CalendarEvent
+        from schooltool.cal import DailyRecurrenceRule
         from schooltool.model import Group
         from schooltool.relationship import RelatableMixin
         from schooltool.uris import URICalendarProvider
+        from schooltool.interfaces import IInheritedCalendarEvent
 
+        ev1 = CalendarEvent(datetime(2003, 11, 26, 20, 00),
+                            timedelta(minutes=30), "AG")
         gr1 = Group("Little")
-        gr1.calendar.addEvent(CalendarEvent(datetime(2003, 11, 26, 12, 00),
-                                            timedelta(minutes=30), "AG"))
+        gr1.calendar.addEvent(ev1)
 
+        rr = DailyRecurrenceRule()
+        ev2 = CalendarEvent(datetime(2003, 11, 26, 13, 00),
+                            timedelta(minutes=30), "AB", recurrence=rr)
         gr2 = Group("Big")
-        gr2.calendar.addEvent(CalendarEvent(datetime(2003, 11, 26, 13, 00),
-                                            timedelta(minutes=30), "AB"))
+        gr2.calendar.addEvent(ev2)
 
         class AppObjectStub(CalendarOwnerMixin, RelatableMixin):
 
@@ -752,14 +754,27 @@ class TestCalendarOwnerMixin(RegistriesSetupMixin, unittest.TestCase):
 
         com = AppObjectStub()
 
-        result = com.makeCompositeCalendar()
-        self.assertEquals(result.events,
-                          gr1.calendar.events | gr2.calendar.events)
+        result = com.makeCompositeCalendar(date(2003, 11, 26),
+                                           date(2003, 11, 28))
+
+        rec1 = CalendarEvent(datetime(2003, 11, 27, 13, 00),
+                             timedelta(minutes=30), "AB", recurrence=rr,
+                             unique_id=ev2.unique_id)
+        rec2 = CalendarEvent(datetime(2003, 11, 28, 13, 00),
+                             timedelta(minutes=30), "AB", recurrence=rr,
+                             unique_id=ev2.unique_id)
+        expected = sets.Set([ev1, ev2, rec1, rec2])
+
+        self.assertEquals(result.events, expected)
+
+        for event in result.events:
+            verifyObject(IInheritedCalendarEvent, event)
+
         self.assert_(result.__parent__ is com)
         self.assertEquals(result.__name__, 'composite-calendar')
 
 
-class TestRecurrenceRule:
+class RecurrenceRuleTestBase:
     """Base tests for the recurrence rules"""
 
     def test_comparison(self):
@@ -822,7 +837,7 @@ class TestRecurrenceRule:
             self.assertRaises(AttributeError, setattr, r, attrname, 'not-ro')
 
 
-class TestDailyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
+class TestDailyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
     def createRule(self, *args, **kwargs):
         from schooltool.cal import DailyRecurrenceRule
@@ -880,7 +895,7 @@ class TestDailyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
 
 
 
-class TestYearlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
+class TestYearlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
     def createRule(self, *args, **kwargs):
         from schooltool.cal import YearlyRecurrenceRule
@@ -939,7 +954,7 @@ class TestYearlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
                           date(1981, 5, 17)])
 
 
-class TestWeeklyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
+class TestWeeklyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
     def createRule(self, *args, **kwargs):
         from schooltool.cal import WeeklyRecurrenceRule
@@ -1011,7 +1026,7 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
                           ['RRULE:FREQ=WEEKLY;BYDAY=MO,TH,SA,SU;INTERVAL=1'])
 
 
-class TestMonthlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
+class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
     def createRule(self, *args, **kwargs):
         from schooltool.cal import MonthlyRecurrenceRule

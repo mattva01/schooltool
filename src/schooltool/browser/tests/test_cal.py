@@ -362,7 +362,7 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
         ccal.__name__ = 'composite-calendar'
 
         person.makeTimetableCalendar = lambda: tcal
-        person.makeCompositeCalendar = lambda: ccal
+        person.makeCompositeCalendar = lambda start, end: ccal
 
         view = CalendarViewBase(cal)
 
