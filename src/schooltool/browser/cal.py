@@ -880,10 +880,8 @@ class MonthlyCalendarView(CalendarViewBase):
 
     def title(self):
         month_name = unicode(self.month_names[self.cursor.month])
-        return _('%(month)s, %(year)s') % {
-                                'month': month_name,
-                                'year': self.cursor.year,
-                            }
+        args = {'month': month_name, 'year': self.cursor.year}
+        return _('%(month)s, %(year)s') % args
 
     def dayOfWeek(self, date):
         return unicode(self.day_of_week_names[date.weekday()])
