@@ -52,6 +52,9 @@ class SchoolToolClient:
 
     Every method that communicates with the server sets the status and version
     attributes.
+
+    All URIs used to identify objects are relative and contain the absolute
+    path within the server.
     """
 
     connectionFactory = httplib.HTTPConnection
@@ -138,24 +141,10 @@ class SchoolToolClient:
 
     # SchoolTool specific methods
 
-    def getListOfPersons(self):
-        """Return a list of person IDs."""
-        response = self.get('/persons')
-        if response.status != 200:
-            raise ResponseStatusError(response)
-        return self._parsePeopleList(response.read())
-
-    def getPersonInfo(self, person_id):
-        """Return information page about a person."""
-        response = self.get(person_id)
-        if response.status != 200:
-            raise ResponseStatusError(response)
-        return response.read()
-
     def getGroupTree(self):
         """Return the tree of groups.
 
-        Return value is a sequence of tuples (level, title, path)
+        Returns a sequence of tuples (level, title, path).
 
         Example: the following group tree
 
@@ -175,46 +164,55 @@ class SchoolToolClient:
           (3, 'group1bb', '/groups/group1bb'),
           (1, 'group2',   '/groups/group2'),
         """
-        # XXX this url is hardcoded, we could instead find out all roots
-        # by getting /
+        # XXX instead of hardcoding a single root we could find out all
+        #     actual roots by getting and parsing /
         response = self.get('/groups/root/tree')
         if response.status != 200:
             raise ResponseStatusError(response)
         return self._parseGroupTree(response.read())
 
-    def getGroupInfo(self, group_id):
-        """Return information page about a group."""
-        response = self.get(group_id)
+    def getGroupInfo(self, group_path):
+        """Return information page about a group.
+
+        Returns a GroupInfo object.
+        """
+        response = self.get(group_path)
         if response.status != 200:
             raise ResponseStatusError(response)
-        persons = self._parseMemberList(response.read())
-        return GroupInfo(persons)
+        members = self._parseMemberList(response.read())
+        return GroupInfo(members)
 
-    def getObjectRelationships(self, object_id):
+    def getObjectRelationships(self, object_path):
         """Return relationships of an application object (group or person).
 
-        Returns a list of tuples (arcrole, role, title, href_of_target).
+        Returns a list of RelationshipInfo objects.
         """
-        response = self.get('%s/relationships' % object_id)
+        response = self.get('%s/relationships' % object_path)
         if response.status != 200:
             raise ResponseStatusError(response)
         return self._parseRelationships(response.read())
 
-    def getRollCall(self, group_id):
-        """Return a roll call template for a group."""
-        response = self.get('%s/rollcall' % group_id)
+    def getRollCall(self, group_path):
+        """Return a roll call template for a group.
+
+        Returns a list of RollCallInfo objects.
+        """
+        response = self.get('%s/rollcall' % group_path)
         if response.status != 200:
             raise ResponseStatusError(response)
         return self._parseRollCall(response.read())
 
-    def submitRollCall(self, group_id, rollcall,
-                       reporter_id='/persons/anonymous'):
-        """Post a roll call for a group."""
+    def submitRollCall(self, group_path, roll_call,
+                       reporter_path='/persons/anonymous'):
+        """Post a roll call for a group.
+
+        Expects roll_call to be a list of RollCallEntry objects.
+        """
         body = ['<rollcall xmlns:xlink="http://www.w3.org/1999/xlink">\n'
                 '<reporter xlink:type="simple" xlink:href="%s"/>\n'
-                % cgi.escape(reporter_id, True)]
-        for entry in rollcall:
-            href = cgi.escape(entry.person_href, True)
+                % cgi.escape(reporter_path, True)]
+        for entry in roll_call:
+            href = cgi.escape(entry.person_path, True)
             if entry.presence is Unchanged: presence = ''
             elif entry.presence: presence = ' presence="present"'
             else: presence = ' presence="absent"'
@@ -227,32 +225,42 @@ class SchoolToolClient:
                         % (href, presence, comment, resolved))
         body += ['</rollcall>\n']
         body = ''.join(body)
-        response = self.post('%s/rollcall' % group_id, body)
+        response = self.post('%s/rollcall' % group_path, body)
         if response.status != 200:
             raise ResponseStatusError(response)
 
-    def getAbsences(self, uri):
+    def getAbsences(self, path):
         """Return a list of absences for an object.
 
-        uri can point to /persons/person_name/absences, to /utils/absences,
-        or to /some/object/facets/absence_tracker_facet_id.
+        Returns a list of AbsenceInfo objects.
+
+        The path can point to the following places:
+        - an absence view for a person (/persons/person_name/absences)
+        - the global absence utility (/utils/absences)
+        - an absence tracker facet (/some/object/facets/absences)
         """
-        response = self.get(uri)
+        response = self.get(path)
         if response.status != 200:
             raise ResponseStatusError(response)
         return self._parseAbsences(response.read())
 
-    def getAbsenceComments(self, absence_id):
-        """Return a list of absence comments."""
-        response = self.get('%s' % absence_id)
+    def getAbsenceComments(self, absence_path):
+        """Return a list of comments for a given absence.
+
+        Returns a list of AbsenceComment objects.
+        """
+        response = self.get(absence_path)
         if response.status != 200:
             raise ResponseStatusError(response)
         return self._parseAbsenceComments(response.read())
 
-    def createFacet(self, object_href, factory_name):
-        """Create a facet using a given factory an place it on an object."""
+    def createFacet(self, object_path, factory_name):
+        """Create a facet using a given factory an place it on an object.
+
+        Returns the URI of the new facet.
+        """
         body = '<facet factory="%s"/>' % cgi.escape(factory_name, True)
-        response = self.post('%s/facets' % object_href, body)
+        response = self.post('%s/facets' % object_path, body)
         if response.status != 201:
             raise ResponseStatusError(response)
 
@@ -266,27 +274,6 @@ class SchoolToolClient:
         return location[slash:]
 
     # Parsing
-
-    def _parsePeopleList(self, body):
-        """Parse the list of persons returned from the server."""
-        try:
-            doc = libxml2.parseDoc(body)
-        except libxml2.parserError:
-            raise SchoolToolError("Could not parse people list")
-        ctx = doc.xpathNewContext()
-        try:
-            xlink = "http://www.w3.org/1999/xlink"
-            ctx.xpathRegisterNs("xlink", xlink)
-            res = ctx.xpathEval("/container/items/item/@xlink:href")
-            people = []
-            for anchor in [node.content for node in res]:
-                if anchor.startswith('/persons/'):
-                    if '/' not in anchor[len('/persons/'):]:
-                        people.append(anchor)
-            return people
-        finally:
-            doc.freeDoc()
-            ctx.xpathFreeContext()
 
     def _parseGroupTree(self, body):
         """Parse the tree of groups returned from the server.
@@ -355,7 +342,7 @@ class SchoolToolClient:
                         title = node.nsProp('title', xlink)
                         if title is None:
                             title = name
-                        people.append((title, anchor))
+                        people.append(MemberInfo(title, anchor))
             return people
         finally:
             doc.freeDoc()
@@ -384,7 +371,7 @@ class SchoolToolClient:
                     title = href.split('/')[-1]
                 role = self.role_names.get(role, role)
                 arcrole = self.role_names.get(arcrole, arcrole)
-                relationships.append((arcrole, role, title, href))
+                relationships.append(RelationshipInfo(arcrole, role, title, href))
             return relationships
         finally:
             doc.freeDoc()
@@ -435,10 +422,10 @@ class SchoolToolClient:
                 href = node.nsProp('href', xlink)
                 if not href:
                     continue
-                person_href = '/'.join(href.split('/')[:-2])
+                person_path = '/'.join(href.split('/')[:-2])
                 person_title = node.nsProp('person_title', None)
                 if not person_title:
-                    person_title = person_href.split('/')[-1]
+                    person_title = person_path.split('/')[-1]
                 dt = node.nsProp('datetime', None)
                 if dt is None:
                     raise SchoolToolError("Datetime not given")
@@ -463,7 +450,7 @@ class SchoolToolClient:
                         raise SchoolToolError(str(e))
                 last_comment = node.content.strip()
                 absences.append(AbsenceInfo(href, dt, person_title,
-                                            person_href,
+                                            person_path,
                                             ended == "ended",
                                             resolved == "resolved",
                                             expected_presence, last_comment))
@@ -571,6 +558,8 @@ class Response:
     """HTTP response.
 
     Wraps httplib.HTTPResponse and stores the response body as a string.
+    The whole point of this class is that you can get the response body
+    after the connection has been closed.
     """
 
     def __init__(self, response):
@@ -603,48 +592,99 @@ class GroupInfo:
         self.members = members
 
 
+class MemberInfo:
+    """Information about a group member."""
+
+    person_title = None
+    person_path = None
+
+    def __init__(self, title, path):
+        self.person_title = title
+        self.person_path = path
+
+    def __cmp__(self, other):
+        if not isinstance(other, MemberInfo):
+            raise NotImplementedError("cannot compare %r with %r"
+                                      % (self, other))
+        return cmp((self.person_title, self.person_path),
+                   (other.person_title, other.person_path))
+
+    def __repr__(self):
+        return "%s(%r, %r)" % (self.__class__.__name__, self.person_title,
+                               self.person_path)
+
+
+class RelationshipInfo:
+    """Information about a relationship."""
+
+    arcrole = None              # Role of the target (user friendly string)
+    role = None                 # Role of the relationship (user friendly)
+    target_title = None         # Title of the target
+    target_path = None          # Path of the target
+
+    def __init__(self, arcrole, role, title, path):
+        self.arcrole = arcrole
+        self.role = role
+        self.target_title = title
+        self.target_path = path
+
+    def __cmp__(self, other):
+        if not isinstance(other, RelationshipInfo):
+            raise NotImplementedError("cannot compare %r with %r"
+                                      % (self, other))
+        return cmp((self.arcrole, self.role, self.target_title,
+                    self.target_path),
+                   (other.arcrole, other.role, other.target_title,
+                    other.target_path))
+
+    def __repr__(self):
+        return "%s(%r, %r, %r, %r)" % (self.__class__.__name__, self.arcrole,
+                   self.role, self.target_title, self.target_path)
+
+
 class RollCallInfo:
     """Information about a person participating in a roll call"""
 
     person_title = None         # Person (title)
-    person_href = None          # Person (href)
+    person_path = None          # Person (path)
     present = None              # Is the person present?
 
-    def __init__(self, title, href, present):
+    def __init__(self, title, path, present):
         self.person_title = title
-        self.person_href = href
+        self.person_path = path
         self.present = present
 
     def __cmp__(self, other):
         if not isinstance(other, RollCallInfo):
             raise NotImplementedError("cannot compare %r with %r"
                                       % (self, other))
-        return cmp((self.person_title, self.person_href, self.present),
-                   (other.person_title, other.person_href, other.present))
+        return cmp((self.person_title, self.person_path, self.present),
+                   (other.person_title, other.person_path, other.present))
 
     def __repr__(self):
         return "%s(%r, %r, %r)" % (self.__class__.__name__, self.person_title,
-                                   self.person_href, self.present)
+                                   self.person_path, self.present)
 
 
 class RollCallEntry:
     """Information about a person participating in a roll call"""
 
-    person_href = None          # Person (href)
+    person_path = None          # Person (path)
     presence = Unchanged        # Present (True/False/Unchanged)?
     comment = None              # Comment (or None)
     resolved = Unchanged        # Resolved (True/False/Unchanged)?
 
-    def __init__(self, href, presence=Unchanged, comment=None,
+    def __init__(self, path, presence=Unchanged, comment=None,
                  resolved=Unchanged):
-        self.person_href = href
+        self.person_path = path
         self.presence = presence
         self.comment = comment
         self.resolved = resolved
 
     def __repr__(self):
-        return "%s(%r, %r, %r)" % (self.__class__.__name__, self.person_href,
-                                   self.present, self.comment, self.resolved)
+        return "%s(%r, %r, %r, %r)" % (self.__class__.__name__,
+                    self.person_path, self.presence, self.comment,
+                    self.resolved)
 
 
 class AbsenceInfo:
@@ -652,21 +692,21 @@ class AbsenceInfo:
 
     now = datetime.datetime.utcnow       # Hook for unit tests
 
-    uri = None                  # URI of this absence
+    absence_path = None         # URI of this absence
     datetime = None             # Date and time of first report
     person_title = None         # Person (title)
-    person_href = None          # Person (href)
+    person_path = None          # Person (path)
     ended = None                # Is the absence ended? (bool)
     resolved = None             # Is the absence resolved? (bool)
     expected_presence = None    # Expected presence or None
     last_comment = None         # Last comment text
 
-    def __init__(self, uri, datetime, person_title, person_href, ended,
+    def __init__(self, absence_path, datetime, person_title, person_path, ended,
                  resolved, expected_presence, last_comment):
-        self.uri = uri
+        self.absence_path = absence_path
         self.datetime = datetime
         self.person_title = person_title
-        self.person_href = person_href
+        self.person_path = person_path
         self.ended = ended
         self.resolved = resolved
         self.expected_presence = expected_presence
@@ -681,11 +721,11 @@ class AbsenceInfo:
         if not isinstance(other, AbsenceInfo):
             raise NotImplementedError("cannot compare %r with %r"
                                       % (self, other))
-        return cmp((self.datetime, self.uri, self.person_title,
-                    self.person_href, self.ended, self.resolved,
+        return cmp((self.datetime, self.absence_path, self.person_title,
+                    self.person_path, self.ended, self.resolved,
                     self.expected_presence, self.last_comment),
-                   (other.datetime, other.uri, other.person_title,
-                    other.person_href, other.ended, other.resolved,
+                   (other.datetime, other.absence_path, other.person_title,
+                    other.person_path, other.ended, other.resolved,
                     other.expected_presence, other.last_comment))
 
     def __str__(self):
@@ -745,8 +785,8 @@ class AbsenceInfo:
 
     def __repr__(self):
         return "%s(%r, %r, %r, %r, %r, %r, %r)" % (self.__class__.__name__,
-                    self.uri, self.datetime, self.person_title,
-                    self.person_href, self.ended, self.resolved,
+                    self.absence_path, self.datetime, self.person_title,
+                    self.person_path, self.ended, self.resolved,
                     self.expected_presence)
 
 
@@ -755,22 +795,22 @@ class AbsenceComment:
 
     datetime = None             # Date and time of the comment
     reporter_title = None       # Reporter (title)
-    reporter_uri = None         # Reporter (uri)
+    reporter_path = None        # Reporter (path)
     absent_from_title = None    # Absent from (title)
-    absent_from_uri = None      # Absent from (uri)
+    absent_from_path = None     # Absent from (path)
     ended = None                # Is the absence ended? (bool or Unchanged)
     resolved = None             # Is the absence resolved? (bool or Unchanged)
     expected_presence = None    # Expected presence or None (or Unchanged)
     text = None                 # Text of the comment
 
-    def __init__(self, datetime, reporter_title, reporter_uri,
-                 absent_from_title, absent_from_uri, ended, resolved,
+    def __init__(self, datetime, reporter_title, reporter_path,
+                 absent_from_title, absent_from_path, ended, resolved,
                  expected_presence, text):
         self.datetime = datetime
         self.reporter_title = reporter_title
-        self.reporter_uri = reporter_uri
+        self.reporter_path = reporter_path
         self.absent_from_title = absent_from_title
-        self.absent_from_uri = absent_from_uri
+        self.absent_from_path = absent_from_path
         self.ended = ended
         self.resolved = resolved
         self.expected_presence = expected_presence
@@ -780,20 +820,20 @@ class AbsenceComment:
         if not isinstance(other, AbsenceComment):
             raise NotImplementedError("cannot compare %r with %r"
                                       % (self, other))
-        return cmp((self.datetime, self.reporter_title, self.reporter_uri,
-                    self.absent_from_title, self.absent_from_uri,
+        return cmp((self.datetime, self.reporter_title, self.reporter_path,
+                    self.absent_from_title, self.absent_from_path,
                     self.ended, self.resolved, self.expected_presence,
                     self.text),
-                   (other.datetime, other.reporter_title, other.reporter_uri,
-                    other.absent_from_title, other.absent_from_uri,
+                   (other.datetime, other.reporter_title, other.reporter_path,
+                    other.absent_from_title, other.absent_from_path,
                     other.ended, other.resolved, other.expected_presence,
                     other.text))
 
     def __repr__(self):
         return "%s(%r, %r, %r, %r, %r, %r, %r, %r, %r)" % (
                     self.__class__.__name__,
-                    self.datetime, self.reporter_title, self.reporter_uri,
-                    self.absent_from_title, self.absent_from_uri,
+                    self.datetime, self.reporter_title, self.reporter_path,
+                    self.absent_from_title, self.absent_from_path,
                     self.ended, self.resolved, self.expected_presence,
                     self.text)
 

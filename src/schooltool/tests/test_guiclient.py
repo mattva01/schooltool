@@ -80,7 +80,8 @@ class ResponseStub:
         self.status = status
         self.reason = reason
         self._body = body
-        self._headers = {'server': 'UnitTest/0.0'}
+        self._headers = {'server': 'UnitTest/0.0',
+                         'content-type': 'text/plain'}
         for k, v in kw.items():
             self._headers[k.lower()] = v
         self._read_called = False
@@ -210,50 +211,6 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertEquals(client.version, '')
         self.assert_(conn.closed)
 
-    def test_getListOfPersons(self):
-        body = dedent("""
-            <container xmlns:xlink="http://www.w3.org/1999/xlink">
-              <items>
-                <item xlink:href="/persons/fred">Fred</item>
-                <item xlink:href="/persons/barney">Barney</item>
-                <item xlink:href="http://example.com/buy/stuff">Click!</item>
-               </items>
-            </container>
-        """)
-        client = self.newClient(ResponseStub(200, 'OK', body))
-        result = client.getListOfPersons()
-        self.assertEquals(result, ['/persons/fred', '/persons/barney'])
-        self.checkConnPath(client, '/persons')
-
-    def test_getListOfPersons_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
-        client = self.newClient(error=socket.error(23, 'out of persons'))
-        self.assertRaises(SchoolToolError, client.getListOfPersons)
-
-        client = self.newClient(ResponseStub(500, 'Internal Error'))
-        self.assertRaises(SchoolToolError, client.getListOfPersons)
-
-    def test_getPersonInfo(self):
-        person_id = '/persons/foo'
-        body = dedent("""
-            <html>
-              <h1>Foo!</h1>
-            </html>
-        """)
-        client = self.newClient(ResponseStub(200, 'OK', body))
-        result = client.getPersonInfo(person_id)
-        self.assertEquals(result, body)
-        self.checkConnPath(client, person_id)
-
-    def test_getPersonInfo_with_errors(self):
-        from schooltool.guiclient import SchoolToolError
-        person_id = '/persons/bar'
-        client = self.newClient(error=socket.error(23, 'out of persons'))
-        self.assertRaises(SchoolToolError, client.getPersonInfo, person_id)
-
-        client = self.newClient(ResponseStub(404, 'Not Found'))
-        self.assertRaises(SchoolToolError, client.getPersonInfo, person_id)
-
     def test_getGroupTree(self):
         body = dedent("""
             <tree xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -295,6 +252,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(SchoolToolError, client.getGroupTree)
 
     def test_getGroupInfo(self):
+        from schooltool.guiclient import MemberInfo
         body = dedent("""
             <group xmlns:xlink="http://www.w3.org/1999/xlink">
               <item xlink:type="simple" xlink:href="/groups/group2"
@@ -305,7 +263,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                      xlink:title="person1 facets" />
             </group>
         """)
-        expected = [('person1', '/persons/person1')]
+        expected = [MemberInfo('person1', '/persons/person1')]
         client = self.newClient(ResponseStub(200, 'OK', body))
         group_id = '/groups/group1'
         result = client.getGroupInfo(group_id)
@@ -322,6 +280,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(SchoolToolError, client.getGroupInfo, group_id)
 
     def test_getObjectRelationships(self):
+        from schooltool.guiclient import RelationshipInfo
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
@@ -337,8 +296,8 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </valencies>
             </relationships>
         """)
-        expected = [('arcrole1', 'role1', 'title1', 'href1'),
-                    ('Membership', 'Group', 'title2', 'href2')]
+        expected = [RelationshipInfo('arcrole1', 'role1', 'title1', 'href1'),
+                    RelationshipInfo('Membership', 'Group', 'title2', 'href2')]
         client = self.newClient(ResponseStub(200, 'OK', body))
         group_id = '/groups/group1'
         results = list(client.getObjectRelationships(group_id))
@@ -484,56 +443,6 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         client = self.newClient(ResponseStub(404, 'Not Found'))
         self.assertRaises(SchoolToolError, client.createFacet, '/p', 'foo')
 
-    def test__parsePeopleList(self):
-        from schooltool.guiclient import SchoolToolClient
-        client = SchoolToolClient()
-        body = dedent("""
-            <container xmlns:xlink="http://www.w3.org/1999/xlink">
-              <items>
-                <item xlink:href="/persons/fred">Fred</item>
-                <item xlink:href="/persons/barney">Barney</item>
-                <item xlink:href="/persons/barney/facets">My facets</item>
-                <item xlink:href="http://example.com/buy/stuff">Click!</item>
-               </items>
-            </container>
-        """)
-        result = client._parsePeopleList(body)
-        self.assertEquals(result, ['/persons/fred', '/persons/barney'])
-
-        body = dedent("""
-            <container xmlns:xlink="http://www.w3.org/1999/xlink">
-              <items>
-                <item xlink:href="http://example.com/buy/stuff">Click!</item>
-               </items>
-            </container>
-        """)
-        result = client._parsePeopleList(body)
-        self.assertEquals(result, [])
-
-        body = """<xml>but not schooltoolish</xml>"""
-        result = client._parsePeopleList(body)
-        self.assertEquals(result, []) # or should it raise an error?
-
-    def test__parsePeopleList_errors(self):
-        from schooltool.guiclient import SchoolToolClient, SchoolToolError
-        client = SchoolToolClient()
-        body = "This is not XML"
-        self.assertRaises(SchoolToolError, client._parsePeopleList, body)
-
-        body = """<xml>but not well-formed</mlx>"""
-        self.assertRaises(SchoolToolError, client._parsePeopleList, body)
-
-        body = dedent("""
-            <container xmlns:xlink="http://www.w3.org/1999/xlink">
-              <items>
-                <item xlink:href="/persons/fred">Fred</item>
-                <item xlink:href="/persons/barney">Barney</item>
-                <item xlink:href="/persons/barney/facets">My facets</item>
-                <item xlink:href="http://example.com/buy/stuff">Click!</item>
-            </container>
-        """)
-        self.assertRaises(SchoolToolError, client._parsePeopleList, body)
-
     def test__parseGroupTree(self):
         from schooltool.guiclient import SchoolToolClient
         body = dedent("""
@@ -580,7 +489,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(SchoolToolError, client._parseGroupTree, body)
 
     def test__parseMemberList(self):
-        from schooltool.guiclient import SchoolToolClient
+        from schooltool.guiclient import SchoolToolClient, MemberInfo
         body = dedent("""
             <group xmlns:xlink="http://www.w3.org/1999/xlink">
               <item xlink:type="simple" xlink:href="/groups/group2"
@@ -595,9 +504,9 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               <item xlink:type="simple" xlink:href="/persons/person4" />
             </group>
         """)
-        expected = [('person1 title', '/persons/person1'),
-                    ('person2 title', '/persons/person2'),
-                    ('person4', '/persons/person4')]
+        expected = [MemberInfo('person1 title', '/persons/person1'),
+                    MemberInfo('person2 title', '/persons/person2'),
+                    MemberInfo('person4', '/persons/person4')]
         client = SchoolToolClient()
         result = client._parseMemberList(body)
         self.assertEquals(list(result), expected)
@@ -610,6 +519,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
 
     def test__parseRelationships(self):
         from schooltool.guiclient import SchoolToolClient
+        from schooltool.guiclient import RelationshipInfo
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
               <existing>
@@ -639,9 +549,10 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </valencies>
             </relationships>
         """)
-        expected = [('arcrole1', 'role1', 'title1', 'href1'),
-                    ('Membership', 'Group', 'title2', 'href2'),
-                    ('arcrole3', 'role3', 'href3', '/objects/href3')]
+        expected = [RelationshipInfo('arcrole1', 'role1', 'title1', 'href1'),
+                    RelationshipInfo('Membership', 'Group', 'title2', 'href2'),
+                    RelationshipInfo('arcrole3', 'role3', 'href3',
+                                     '/objects/href3')]
         client = SchoolToolClient()
         result = client._parseRelationships(body)
         self.assertEquals(list(result), expected)
@@ -980,44 +891,85 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
 
 
-class TestRollCallInfo(unittest.TestCase):
+class InfoClassTestMixin:
+    """Mixin for testing classes that are tuple replacements."""
 
-    def test_cmp(self):
+    def _test_repr(self, cls, nargs):
+        """Test the __repr__ method of a class."""
+        obj = cls(*range(nargs))
+        result = repr(obj)
+        expected = "%s(%s)" % (cls.__name__, ', '.join(map(str, range(nargs))))
+        self.assertEquals(result, expected)
+
+    def _test_cmp(self, cls, nargs, attrs=()):
+        """Test the __cmp__ method of a class.
+
+        nargs is the number of arguments the constructor takes
+
+        attrs is a sequence of attributes that should be more important for
+        ordering.
+        """
+        clsname = cls.__name__
+        obj1 = cls(*range(nargs))
+        self.assertEquals(obj1, obj1,
+                          "%s does not compare equal to itself:\n  %r != %r"
+                          % (clsname, obj1, obj1))
+
+        for i in range(nargs):
+            args = range(nargs)
+            args[i] = -1
+            obj2 = cls(*args)
+            self.assertNotEquals(obj1, obj2,
+                          "%s does not notice changes in the %dth argument:\n"
+                          "  %r == %r" % (clsname, i + 1, obj1, obj2))
+
+        obj1 = cls(*([1] * nargs))
+        obj2 = cls(*([2] * nargs))
+        self.assert_(obj1 < obj2, "%r >= %r" % (obj1, obj2))
+
+        for attrname in attrs:
+            setattr(obj1, attrname, 2)
+            setattr(obj2, attrname, 1)
+            self.assert_(obj1 > obj2,
+                         "%s is not sorted by %s:\n  %r <= %r"
+                         % (clsname, attrname, obj1, obj2))
+            setattr(obj1, attrname, 3)
+            setattr(obj2, attrname, 3)
+
+
+class TestInfoClasses(unittest.TestCase, InfoClassTestMixin):
+
+    def test_MemberInfo(self):
+        from schooltool.guiclient import MemberInfo
+        self._test_repr(MemberInfo, 2)
+        self._test_cmp(MemberInfo, 2, ('person_title', ))
+
+    def test_RelationshipInfo(self):
+        from schooltool.guiclient import RelationshipInfo
+        self._test_repr(RelationshipInfo, 4)
+        self._test_cmp(RelationshipInfo, 4,
+                       ('arcrole', 'role', 'target_title'))
+
+    def test_RollCallInfo(self):
         from schooltool.guiclient import RollCallInfo
-        nargs = 3 # number of constructor arguments
-        ai = RollCallInfo(*range(nargs))
-        self.assertEquals(ai, ai)
-        for i in range(nargs):
-            args = range(nargs)
-            args[i] = -1
-            self.assertNotEquals(ai, RollCallInfo(*args))
+        self._test_repr(RollCallInfo, 3)
+        self._test_cmp(RollCallInfo, 3, ('person_title', ))
 
-        a1 = RollCallInfo(*([1] * nargs))
-        a2 = RollCallInfo(*([2] * nargs))
-        self.assert_(a1 < a2)
-        a1.person_title = 2
-        a2.person_title = 1
-        self.assert_(a1 > a2)
+    def test_RollCallEntry(self):
+        from schooltool.guiclient import RollCallEntry
+        self._test_repr(RollCallEntry, 4)
+
+    def test_AbsenceComment(self):
+        from schooltool.guiclient import AbsenceComment
+        self._test_repr(AbsenceComment, 9)
+        self._test_cmp(AbsenceComment, 9, ('datetime', ))
 
 
-class TestAbsenceInfo(unittest.TestCase):
+class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):
 
-    def test_cmp(self):
+    def test(self):
         from schooltool.guiclient import AbsenceInfo
-        nargs = 8 # number of constructor arguments
-        ai = AbsenceInfo(*range(nargs))
-        self.assertEquals(ai, ai)
-        for i in range(nargs):
-            args = range(nargs)
-            args[i] = -1
-            self.assertNotEquals(ai, AbsenceInfo(*args))
-
-        a1 = AbsenceInfo(*([1] * nargs))
-        a2 = AbsenceInfo(*([2] * nargs))
-        self.assert_(a1 < a2)
-        a1.datetime = 2
-        a2.datetime = 1
-        self.assert_(a1 > a2)
+        self._test_cmp(AbsenceInfo, 8, ('datetime', ))
 
     def test_expected(self):
         from schooltool.guiclient import AbsenceInfo
@@ -1086,7 +1038,7 @@ class TestAbsenceInfo(unittest.TestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSchoolToolClient))
-    suite.addTest(unittest.makeSuite(TestRollCallInfo))
+    suite.addTest(unittest.makeSuite(TestInfoClasses))
     suite.addTest(unittest.makeSuite(TestAbsenceInfo))
     return suite
 

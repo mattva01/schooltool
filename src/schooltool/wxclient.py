@@ -209,13 +209,13 @@ class RollCallInfoDlg(wxDialog):
 class RollCallDlg(wxDialog):
     """Roll call dialog."""
 
-    def __init__(self, parent, group_title, group_href, rollcall, client):
+    def __init__(self, parent, group_title, group_path, rollcall, client):
         title = "Roll Call for %s" % group_title
         wxDialog.__init__(self, parent, -1, title,
               style=wxDIALOG_MODAL|wxCAPTION|wxRESIZE_BORDER|wxTHICK_FRAME)
         self.title = title
         self.group_title = group_title
-        self.group_href = group_href
+        self.group_path = group_path
         self.client = client
 
         vsizer = wxBoxSizer(wxVERTICAL)
@@ -225,7 +225,7 @@ class RollCallDlg(wxDialog):
         self.items = []
         self.entries_by_id = {}
         for item in rollcall:
-            entry = RollCallEntry(item.person_href)
+            entry = RollCallEntry(item.person_path)
             entry.item = item
             grid.Add(wxStaticText(scrolled_panel, -1, item.person_title),
                      0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4)
@@ -324,7 +324,7 @@ class RollCallDlg(wxDialog):
                 entry.resolved = Unchanged
             rollcall.append(entry)
         try:
-            self.client.submitRollCall(self.group_href, rollcall)
+            self.client.submitRollCall(self.group_path, rollcall)
         except SchoolToolError, e:
             wxMessageBox("Could not submit the roll call: %s" % e,
                          self.title, wxICON_ERROR|wxOK)
@@ -335,7 +335,7 @@ class RollCallDlg(wxDialog):
 class AbsenceFrame(wxFrame):
     """Window showing the list of person's absences."""
 
-    def __init__(self, client, href, title, parent=None, id=-1,
+    def __init__(self, client, path, title, parent=None, id=-1,
                  detailed=True, persons=True, absence_data=None):
         """Create an absence list window.
 
@@ -351,7 +351,7 @@ class AbsenceFrame(wxFrame):
         wxFrame.__init__(self, parent, id, title, size=wxSize(600, 400))
         self.client = client
         self.title = title
-        self.href = href
+        self.path = path
         self.absence_data = []
         self.persons = persons
         self.detailed = detailed
@@ -427,7 +427,7 @@ class AbsenceFrame(wxFrame):
             self.absence_data = data
         else:
             try:
-                self.absence_data = self.client.getAbsences(self.href)
+                self.absence_data = self.client.getAbsences(self.path)
             except SchoolToolError, e:
                 wxMessageBox("Could not get the list of absences: %s" % e,
                              self.title, wxICON_ERROR|wxOK)
@@ -485,7 +485,8 @@ class AbsenceFrame(wxFrame):
         key = self.absence_list.GetItemData(event.m_itemIndex)
         absence = self.absence_data[key]
         try:
-            self.comment_data = self.client.getAbsenceComments(absence.uri)
+            self.comment_data = self.client.getAbsenceComments(
+                                    absence.absence_path)
         except SchoolToolError, e:
             return
         # sort newest comments first
@@ -522,21 +523,21 @@ class MainFrame(wxFrame):
       refresh_lock          A Lock to protect against reentrancy of _refresh.
 
       groupTreeCtrl         Group tree control.  The PyData object of every
-                            tree item is a tuple (group_href, id) where
+                            tree item is a tuple (group_path, id) where
                             id is a unique identifier of this tree item that
                             is invariant to tree changes.  The id of an item is
-                            actually a tuple of group_hrefs of itself and all
+                            actually a tuple of group_paths of itself and all
                             its parents.
       treePopupMenu         Popup menu for the group tree.
 
       personListCtrl        Person (member) list control.  The item data of
                             every item is an integer index to personListData.
-      personListData        A list of tuples (title, person_href).
+      personListData        A list of MemberInfo objects.
       personPopupMenu       Popup menu for the person list control.
 
       relationshipListCtrl  Relationship tree control.  The item data of every
                             item is an integer index to relationshipListData.
-      relationshipListData  A list of tuples (arcrole, role, title, href).
+      relationshipListData  A list of RelationshipInfo objects.
     """
 
     def __init__(self, client, parent=None, id=-1, title="SchoolTool"):
@@ -717,11 +718,11 @@ class MainFrame(wxFrame):
             self.personListCtrl.Thaw()
             self.relationshipListCtrl.Thaw()
             return
-        group_href = self.groupTreeCtrl.GetPyData(item)[0]
+        group_path = self.groupTreeCtrl.GetPyData(item)[0]
 
         # Fill in group member list
         try:
-            info = self.client.getGroupInfo(group_href)
+            info = self.client.getGroupInfo(group_path)
         except SchoolToolError, e:
             self.SetStatusText(str(e))
             self.personListCtrl.Thaw()
@@ -729,32 +730,27 @@ class MainFrame(wxFrame):
             return
         self.SetStatusText(self.client.status)
         self.personListData = info.members
-        for idx, (title, person_id) in enumerate(self.personListData):
-            self.personListCtrl.InsertStringItem(idx, title)
+        self.personListData.sort()
+        for idx, item in enumerate(self.personListData):
+            self.personListCtrl.InsertStringItem(idx, item.person_title)
             self.personListCtrl.SetItemData(idx, idx)
-
-        def compare(x, y):
-            return cmp(self.personListData[x], self.personListData[y])
-
-        self.personListCtrl.SortItems(compare)
         self.personListCtrl.Thaw()
 
         # Fill in group relationship list
         try:
             self.relationshipListData = self.client.getObjectRelationships(
-                                                                    group_href)
+                                                                    group_path)
         except SchoolToolError, e:
             self.SetStatusText(str(e))
             self.relationshipListCtrl.Thaw()
             return
         self.SetStatusText(self.client.status)
         self.relationshipListData.sort()
-        for idx, (arcrole, role, title, href) in enumerate(
-                                                    self.relationshipListData):
-            self.relationshipListCtrl.InsertStringItem(idx, title)
+        for idx, item in enumerate(self.relationshipListData):
+            self.relationshipListCtrl.InsertStringItem(idx, item.target_title)
             self.relationshipListCtrl.SetItemData(idx, idx)
-            self.relationshipListCtrl.SetStringItem(idx, 1, role)
-            self.relationshipListCtrl.SetStringItem(idx, 2, arcrole)
+            self.relationshipListCtrl.SetStringItem(idx, 1, item.role)
+            self.relationshipListCtrl.SetStringItem(idx, 2, item.arcrole)
         self.relationshipListCtrl.Thaw()
 
     def DoTreeRightDown(self, event):
@@ -849,7 +845,7 @@ class MainFrame(wxFrame):
 
         stack = [(root, None)]  # (item, id)
         item_to_select = None
-        for level, title, href in group_tree:
+        for level, title, path in group_tree:
             while len(stack) > level + 1:
                 last = stack.pop()[0]
                 self.groupTreeCtrl.SortChildren(last)
@@ -857,8 +853,8 @@ class MainFrame(wxFrame):
             item = self.groupTreeCtrl.AppendItem(stack[-1][0], title)
             if level == 1 or stack[-1][1] in expanded:
                 self.groupTreeCtrl.Expand(stack[-1][0])
-            id = tuple([parent[1] for parent in stack[1:]] + [href])
-            self.groupTreeCtrl.SetPyData(item, (href, id))
+            id = tuple([parent[1] for parent in stack[1:]] + [path])
+            self.groupTreeCtrl.SetPyData(item, (path, id))
             if id == old_selection:
                 item_to_select = item
             stack.append((item, id))
@@ -883,15 +879,15 @@ class MainFrame(wxFrame):
         if not item.IsOk():
             self.SetStatusText("No group selected")
             return
-        group_href = self.groupTreeCtrl.GetPyData(item)[0]
+        group_path = self.groupTreeCtrl.GetPyData(item)[0]
         group_title = self.groupTreeCtrl.GetItemText(item)
         try:
-            rollcall = self.client.getRollCall(group_href)
+            rollcall = self.client.getRollCall(group_path)
         except SchoolToolError, e:
             self.SetStatusText(str(e))
             return
         rollcall.sort()
-        dlg = RollCallDlg(self, group_title, group_href, rollcall, self.client)
+        dlg = RollCallDlg(self, group_title, group_path, rollcall, self.client)
         if dlg.ShowModal() == wxID_OK:
             self.SetStatusText(self.client.status)
         dlg.Destroy()
@@ -906,10 +902,10 @@ class MainFrame(wxFrame):
             self.SetStatusText("No person selected")
             return
         key = self.personListCtrl.GetItemData(item)
-        title, person_id = self.personListData[key]
-        window = AbsenceFrame(self.client, "%s/absences" % person_id,
-                              parent=self, title="%s's absences" % title,
-                              persons=False)
+        member = self.personListData[key]
+        window = AbsenceFrame(self.client, "%s/absences" % member.person_path,
+                              parent=self, persons=False,
+                              title="%s's absences" % member.person_title)
         window.Show()
 
     def DoViewAllAbsences(self, event=None):
@@ -930,13 +926,13 @@ class MainFrame(wxFrame):
         if not item.IsOk():
             self.SetStatusText("No group selected")
             return
-        group_href = self.groupTreeCtrl.GetPyData(item)[0]
+        group_path = self.groupTreeCtrl.GetPyData(item)[0]
         group_title = self.groupTreeCtrl.GetItemText(item)
-        href = "%s/facets/absences" % group_href
+        path = "%s/facets/absences" % group_path
         title = "Absences of %s" % group_title
         try:
             try:
-                absence_data = self.client.getAbsences(href)
+                absence_data = self.client.getAbsences(path)
             except ResponseStatusError, e:
                 if e.status != 404:
                     raise
@@ -945,19 +941,19 @@ class MainFrame(wxFrame):
                                 % group_title, title, wxYES_NO) != wxYES:
                     return
                 try:
-                    self.client.createFacet(group_href, 'absence_tracker')
+                    self.client.createFacet(group_path, 'absence_tracker')
                 except SchoolToolError, e:
                     wxMessageBox("Could not create an absence tracker: %s" % e,
                                  title, wxICON_ERROR|wxOK)
                     return
                 else:
-                    absence_data = self.client.getAbsences(href)
+                    absence_data = self.client.getAbsences(path)
         except SchoolToolError, e:
             wxMessageBox("Could not get the list of absences: %s" % e,
                          title, wxICON_ERROR|wxOK)
             return
         window = AbsenceFrame(parent=self, title=title, detailed=False,
-                              client=self.client, href=href,
+                              client=self.client, path=path,
                               absence_data=absence_data)
         window.Show()
 
