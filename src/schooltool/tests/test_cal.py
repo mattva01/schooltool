@@ -678,6 +678,7 @@ class TestRecurrenceRule:
         self.assertRaises(ValueError, self.createRule, count=3,
                           until=date.today())
         self.assertRaises(ValueError, self.createRule, exceptions=(1,))
+        self.assertRaises(ValueError, self.createRule, interval=-1)
         self.createRule(exceptions=(date.today(),))
         self.createRule(until=date.today())
         self.createRule(count=42)

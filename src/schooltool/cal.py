@@ -374,6 +374,9 @@ class RecurrenceRule:
         if self.count is not None and self.until is not None:
             raise ValueError("count and until cannot be both set (%s, %s)"
                              % (self.count, self.until))
+        if not self.interval >= 1:
+            raise ValueError("interval must be a positive integer (got %r)"
+                             % (self.interval, ))
         for ex in self.exceptions:
             if not isinstance(ex, datetime.date):
                 raise ValueError("Exceptions must be a sequence of"
