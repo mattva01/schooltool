@@ -457,21 +457,6 @@ class CalendarViewBase(BrowserView):
         day = self.getDays(date, date + timedelta(1))[0]
         return day.events
 
-    def _eventView(self, event):
-        return CalendarEventView(event, self.request, calendar=self.context)
-
-    def eventClass(self, event):
-        return self._eventView(event).cssClass()
-
-    def renderEvent(self, event, date):
-        return self._eventView(event).full(self.request, date)
-
-    def eventShort(self, event):
-        return self._eventView(event).short(self.request)
-
-    def eventColors(self, event):
-        return ('#9db8d2', '#7590ae') # XXX TODO
-
     def getCalendars(self):
         """Get a list of calendars to display.
 
@@ -704,94 +689,6 @@ class YearlyCalendarView(CalendarViewBase):
 
     def shortDayOfWeek(self, date):
         return short_day_of_week_names[date.weekday()]
-
-
-class CalendarEventView(object):
-    """Renders the inside of the event box in various calendar views."""
-
-    # Note: this view is *not* rendered for events in the daily view.
-
-    __used_for__ = ICalendarEvent
-
-    template = ViewPageTemplateFile('templates/cal_event.pt')
-
-    def __init__(self, event, request, calendar=None):
-        """Create a view for event.
-
-        Since ordinary calendar events do not know which calendar they come
-        from, we have to explicitly provide the access control list (acl)
-        that governs access to this calendar.
-        """
-        self.context = event
-        self.request = request
-        self.calendar = calendar
-        self.date = None
-
-    def canEdit(self):
-        """Can the current user edit this calendar event?"""
-        return canWrite(self.context, 'description')
-
-    def canView(self):
-        return canAccess(self.context, 'description')
-
-    def cssClass(self):
-        """Choose a CSS class for the event."""
-        return 'event' # TODO: for now we do not have any other CSS classes.
-
-    def duration(self):
-        """Format the time span of the event."""
-        dtstart = self.context.dtstart
-        dtend = dtstart + self.context.duration
-        if dtstart.date() == dtend.date():
-            span = "%s&ndash;%s" % (dtstart.strftime('%H:%M'),
-                                    dtend.strftime('%H:%M'))
-        else:
-            span = "%s&ndash;%s" % (dtstart.strftime('%Y-%m-%d %H:%M'),
-                                    dtend.strftime('%Y-%m-%d %H:%M'))
-
-        return span
-
-    def full(self, request, date):
-        """Full representation of the event for daily/weekly views."""
-        try:
-            self.request = request
-            self.date = date
-            return self.template(request)
-        finally:
-            self.request = None
-            self.date = None
-
-    def short(self, request):
-        """Short representation of the event for the monthly view."""
-        self.request = request
-        ev = self.context
-        end = ev.dtstart + ev.duration
-        if self.canView():
-            title = ev.title
-        else:
-            title = _("Busy")
-        if ev.dtstart.date() == end.date():
-            duration =  "%s&ndash;%s" % (ev.dtstart.strftime('%H:%M'),
-                                         end.strftime('%H:%M'))
-        else:
-            duration =  "%s&ndash;%s" % (ev.dtstart.strftime('%b&nbsp;%d'),
-                                         end.strftime('%b&nbsp;%d'))
-        return "%s (%s)" % (title, duration)
-
-    def editLink(self):
-        """Return the link for editing this event."""
-        return 'edit_event.html?' + self._params()
-
-    def deleteLink(self):
-        """Return the link for deleting this event."""
-        # XXX TODO: not used any more
-        return 'delete_event.html?' + self._params()
-
-    def _params(self):
-        """Prepare query arguments for editLink and deleteLink."""
-        event_id = self.context.unique_id
-        date = self.date.strftime('%Y-%m-%d')
-        return 'date=%s&event_id=%s' % (date, urllib.quote(event_id))
 
 
 class DailyCalendarView(CalendarViewBase):
