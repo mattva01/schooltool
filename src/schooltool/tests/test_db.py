@@ -30,6 +30,10 @@ class P(Persistent):
     pass
 
 
+class N(Persistent):
+    __name__ = None
+
+
 class FalseP(Persistent):
 
     def __nonzero__(self):
@@ -360,6 +364,124 @@ class TestPersistentPairKeysDict(unittest.TestCase, EqualsSortedMixin):
                                 [((p, 1), 1), ((p2, 2), 2)])
 
 
+class NamedObject:
+
+    __name__ = None
+
+
+class TestUniqueNamesMixin(unittest.TestCase, EqualsSortedMixin):
+
+    def test(self):
+        from schooltool.db import UniqueNamesMixin
+        u = UniqueNamesMixin(name_length=5)
+        self.assertEqual(u.getNames(), [])
+        named_object = NamedObject()
+        u.newName(named_object)
+        self.assertNotEqual(named_object.__name__, None)
+        self.assertEqual(len(named_object.__name__), 5)
+        self.assertEqual(named_object.__name__, '00001')
+        self.assertRaises(ValueError, u.newName, named_object)
+        named_object2 = NamedObject()
+        value = object()
+        u.newName(named_object2, value)
+        self.assertNotEqual(named_object2.__name__, None)
+        self.assertNotEqual(named_object2.__name__, named_object.__name__)
+        self.assertEqual(len(named_object2.__name__), 5)
+        self.assertEqual(named_object2.__name__, '00002')
+        self.assert_(u.valueForName(named_object2.__name__) is value)
+
+        self.assertEqualSorted(list(u.getNames()), ['00001', '00002'])
+
+        u.removeName('00001')
+        self.assertRaises(KeyError, u.removeName, '00001')
+        self.assertEqual(list(u.getNames()), ['00002'])
+        u.clearNames()
+        self.assertEqual(list(u.getNames()), [])
+        named_object3 = NamedObject()
+        u.newName(named_object3)
+        self.assertEqual(named_object3.__name__, '00003')
+
+
+class TestPersistentKeysSetWithNames(unittest.TestCase, EqualsSortedMixin):
+
+    def newInstance(self):
+        from schooltool.db import PersistentKeysSetWithNames
+        return PersistentKeysSetWithNames()
+
+    def setUp(self):
+        from zodb.db import DB
+        from zodb.storage.mapping import MappingStorage
+        self.db = DB(MappingStorage())
+        self.datamgr = self.db.open()
+
+    def tearDown(self):
+        from transaction import get_transaction
+        get_transaction().abort()
+        self.datamgr.close()
+
+    def testPersistentKeys(self):
+        p = self.newInstance()
+        self.datamgr.root()['p'] = p
+        a, b = N(), N()
+        self.assertEqual(len(p), 0)
+        p.add(a)
+        self.assertEquals(list(p), [a])
+        self.assertEqual(len(p), 1)
+        self.assertEquals(a.__name__, '001')
+        self.assertEquals(list(p.getNames()), ['001'])
+        self.assertEquals(p.valueForName('001'), a)
+        p.add(a)
+        self.assertEquals(list(p), [a])
+        self.assertEqual(len(p), 1)
+        self.assertEquals(a.__name__, '001')
+        self.assertEquals(list(p.getNames()), ['001'])
+        p.add(b)
+        self.assertEqualsSorted(list(p), [a, b])
+        self.assertEqual(len(p), 2)
+        self.assertEquals(b.__name__, '002')
+        self.assertEqualSorted(list(p.getNames()), ['001', '002'])
+        self.assertEquals(p.valueForName('002'), b)
+        p.remove(a)
+        self.assertEquals(list(p), [b])
+        self.assertEqual(len(p), 1)
+        self.assertEquals(a.__name__, '001')  # a.__name__ not cleared
+        self.assertEquals(list(p.getNames()), ['002'])
+        self.assertRaises(KeyError, p.valueForName, '001')
+
+        self.assertRaises(ValueError, p.add, a)  # a.__name__ is not None
+        a.__name__ = None
+        p.add(a)
+        self.assertEqualsSorted(list(p), [a, b])
+        self.assertEqual(len(p), 2)
+        self.assertEquals(a.__name__, '003')  # a.__name__ not cleared
+        self.assertEqualSorted(list(p.getNames()), ['002', '003'])
+
+        from transaction import get_transaction
+        get_transaction().commit()
+
+    def testValueNotPersistent(self):
+        p = self.newInstance()
+        self.assertRaises(TypeError, p.add, object())
+
+    def test_clear(self):
+        p = self.newInstance()
+        self.datamgr.root()['p'] = p
+        a, b = N(), N()
+        p.add(a)
+        p.add(b)
+        self.assertEqualsSorted(list(p), [a, b])
+        self.assertEqual(len(p), 2)
+        self.assertEqualSorted(list(p.getNames()), ['001', '002'])
+        p.clear()
+        self.assertEqual(list(p), [])
+        self.assertEqual(len(p), 0)
+        self.assertEqual(list(p.getNames()), [])
+        c = N()
+        p.add(c)
+        self.assertEqual(c.__name__, '003')
+        self.assertEquals(list(p.getNames()), ['003'])
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPersistentKeysSet))
@@ -367,4 +489,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPersistentKeysDictBare))
     suite.addTest(unittest.makeSuite(TestPersistentKeysDictWithDataManager))
     suite.addTest(unittest.makeSuite(TestPersistentPairKeysDict))
+    suite.addTest(unittest.makeSuite(TestUniqueNamesMixin))
+    suite.addTest(unittest.makeSuite(TestPersistentKeysSetWithNames))
     return suite

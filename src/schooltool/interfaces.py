@@ -570,6 +570,7 @@ class IFacet(Interface):
 
     active = Attribute("""The facet is active""")
     __parent__ = Attribute("""The object this facet is augmenting""")
+    __name__ = Attribute("""Unique name within the parent's facets""")
     owner = Attribute(
         """The agent responsible for adding this facet to its __parent__""")
 
@@ -589,7 +590,7 @@ class IFaceted(Interface):
     """Denotes that the object can have facets.
     """
 
-    __facets__ = Attribute("""A set of facets.""")
+    __facets__ = Attribute("""A set of facets that manages unique names.""")
 
 
 class IFacetFactory(Interface):
@@ -610,6 +611,9 @@ class IFacetManager(Interface):
 
         Owner is the agent responsible for adding the facet.
         If owner is None, the ownership of the facet is not changed.
+
+        facet.__name__ must be None before setting the facet.
+        facet.__name__ will be set to a name unique within the set of facets.
         """
 
     def removeFacet(facet):
@@ -620,6 +624,12 @@ class IFacetManager(Interface):
 
     def facetsByOwner(owner):
         """Returns a sequence of all facets that are owned by owner."""
+
+    def facetByName(name):
+        """Returns the facet with the given name.
+
+        Raises KeyError if there is no facet with that name.
+        """
 
 
 class IFacetAPI(Interface):

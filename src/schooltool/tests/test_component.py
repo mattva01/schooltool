@@ -38,6 +38,7 @@ from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import EqualsSortedMixin
+from schooltool.db import PersistentKeysSetWithNames
 
 __metaclass__ = type
 
@@ -89,12 +90,14 @@ class TestFacetManager(unittest.TestCase, EqualsSortedMixin):
     def setUp(self):
         class Stub:
             implements(IFaceted)
-            __facets__ = Set()
+            __facets__ = PersistentKeysSetWithNames()
+            __facets__._data = {}
 
         class FacetStub:
             implements(IFacet)
             active = False
             owner = None
+            __name__ = None
             __parent__ = None
 
         self.ob = Stub()
@@ -123,8 +126,32 @@ class TestFacetManager(unittest.TestCase, EqualsSortedMixin):
         self.assert_(self.facet not in self.ob.__facets__)
 
         owner = object()
+
+        # We get a ValueError here because the facet has a __name__ already.
+        self.assertRaises(ValueError, fm.setFacet, self.facet, owner=owner)
+        self.facet.__name__ = None
         fm.setFacet(self.facet, owner=owner)
         self.assert_(self.facet.owner is owner)
+
+    def testFacetNames(self):
+        # On setting a facet, the facet is given a __name__ that is unique
+        # within its parent's __facets__ collection.
+        # We could use an oid, but that would be too long.
+        from schooltool.component import FacetManager
+        fm = FacetManager(self.ob)
+        facet1 = self.facetclass()
+        facet2 = self.facetclass()
+        facet3 = self.facetclass()
+
+        self.assertEquals(facet1.__name__, None)
+        fm.setFacet(facet1)
+        self.assertNotEquals(facet1.__name__, None)
+        self.assertEquals(fm.facetByName(facet1.__name__), facet1)
+
+        self.assertEquals(facet2.__name__, None)
+        fm.setFacet(facet2)
+        self.assertNotEquals(facet2.__name__, None)
+        self.assertNotEquals(facet2.__name__, facet1.__name__)
 
     def test_iterFacets(self):
         from schooltool.component import FacetManager
@@ -142,9 +169,9 @@ class TestFacetManager(unittest.TestCase, EqualsSortedMixin):
         facet2 = self.facetclass()
         facet3 = self.facetclass()
         facet3.owner = owner_marker
-        self.ob.__facets__.add(facet1)
-        self.ob.__facets__.add(facet2)
-        self.ob.__facets__.add(facet3)
+        fm.setFacet(facet1)
+        fm.setFacet(facet2)
+        fm.setFacet(facet3)
         self.assertEqualSorted(list(fm.facetsByOwner(owner_marker)),
                                [facet1, facet3])
 

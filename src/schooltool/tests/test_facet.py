@@ -40,6 +40,7 @@ class FacetStub(Persistent):
     implements(IFacet)
 
     __parent__ = None
+    __name__ = None
     owner = None
     active = False
 

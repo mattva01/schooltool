@@ -231,3 +231,65 @@ class PersistentPairKeysDict(Persistent, UserDict.DictMixin):
         for persistent in data:
             for hashable, value in data[persistent].iteritems():
                 yield (persistent, hashable), value
+
+
+class UniqueNamesMixin:
+
+    def __init__(self, name_length=3):
+        self._names = PersistentDict()
+        self._names['__next'] = 1
+        self._format = '%%0%dd' % name_length
+
+    def getNames(self):
+        return [name for name in self._names if name != '__next']
+
+    def _newName(self):
+        next = self._names['__next']
+        self._names['__next'] = next + 1
+        return self._format % next
+
+    def newName(self, ob, value=None):
+        if ob.__name__ is None:
+            name = self._newName()
+            self._names[name] = value
+            ob.__name__ = name
+        else:
+            raise ValueError('object already has a name', ob.__name__, ob)
+
+    def valueForName(self, name):
+        return self._names[name]
+
+    def removeName(self, name):
+        del self._names[name]
+
+    def clearNames(self):
+        next = self._names['__next']
+        self._names.clear()
+        self._names['__next'] = next
+
+
+class PersistentKeysSetWithNames(UniqueNamesMixin):
+
+    def __init__(self, name_length=3):
+        self._data = PersistentKeysDict()
+        UniqueNamesMixin.__init__(self, name_length)
+
+    def add(self, item):
+        if item not in self._data:
+            self.newName(item, item)
+            self._data[item] = None
+
+    def __iter__(self):
+        return iter(self._data)
+
+    def remove(self, item):
+        assert item.__name__ in self.getNames()
+        del self._data[item]
+        self.removeName(item.__name__)
+
+    def __len__(self):
+        return len(self._data)
+
+    def clear(self):
+        self._data.clear()
+        self.clearNames()

@@ -76,16 +76,19 @@ class FacetManager:
         if IFaceted.isImplementedBy(context):
             self.__parent__ = context
         else:
-            raise TypeError('FacetManager must be IFaceted', context)
+            raise TypeError(
+                "FacetManager's context must be IFaceted", context)
 
     def setFacet(self, facet, owner=None):
         """Set a facet on a faceted object."""
         ob = self.__parent__
-        if not IFaceted.isImplementedBy(ob):
-            raise TypeError("%r does not implement IFaceted" % ob)
         if not IFacet.isImplementedBy(facet):
             raise TypeError("%r does not implement IFacet" % facet)
-        ob.__facets__.add(facet)
+        ob.__facets__.add(facet)  # This sets facet.__name__
+        # XXX Check that facet doesn't already have a parent.
+        #     An assert will do for now.
+        assert (facet.__parent__ is None,
+                "Trying to add a facet that already has a parent")
         facet.__parent__ = ob
         if owner is not None:
             facet.owner = owner
@@ -94,21 +97,21 @@ class FacetManager:
     def removeFacet(self, facet):
         """Set a facet on a faceted object."""
         ob = self.__parent__
-        if not IFaceted.isImplementedBy(ob):
-            raise TypeError("%r does not implement IFaceted" % ob)
-        ob.__facets__.remove(facet)
+        ob.__facets__.remove(facet)  # This leaves facet.__name__ intact
 
     def iterFacets(self):
         """Returns an iterator all facets of an object."""
         ob = self.__parent__
-        if not IFaceted.isImplementedBy(ob):
-            raise TypeError("%r does not implement IFaceted" % ob)
         return iter(ob.__facets__)
 
     def facetsByOwner(self, owner):
         """Returns a sequence of all facets of ob that are owned by owner."""
-        ob = self.__parent__
         return [facet for facet in self.iterFacets() if facet.owner is owner]
+
+    def facetByName(self, name):
+        """Returns the facet with the given name."""
+        ob = self.__parent__
+        return ob.__facets__.valueForName(name)
 
 
 facet_factory_registry = {}

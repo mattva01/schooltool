@@ -452,9 +452,13 @@ class TestRelationshipValenciesMixin(unittest.TestCase, EqualsSortedMixin):
 
         class Facet(RelationshipValenciesMixin):
             implements(IFacet)
+            __parent__ = None
+            __name__ = None
 
         class SimpleFacet(Persistent):
             implements(IFacet)
+            __parent__ = None
+            __name__ = None
 
         # A facet with valencies
         rvm = MyValent()

@@ -35,7 +35,7 @@ from schooltool.interfaces import IFacetedRelationshipSchema, IFacetFactory
 from schooltool.interfaces import IPlaceholder
 from schooltool.event import EventTargetMixin
 from schooltool.component import FacetManager
-from schooltool.db import PersistentKeysSet
+from schooltool.db import PersistentKeysSetWithNames
 
 __metaclass__ = type
 
@@ -62,7 +62,7 @@ class FacetedMixin:
     implements(IFaceted)
 
     def __init__(self):
-        self.__facets__ = PersistentKeysSet()
+        self.__facets__ = PersistentKeysSetWithNames()
 
 
 class FacetedEventTargetMixin(FacetedMixin, EventTargetMixin):

@@ -93,6 +93,7 @@ class EventLogFacet(EventLog):
     def __init__(self):
         EventLog.__init__(self)
         self.__parent__ = None
+        self.__name__ = None
         self.active = False
         self.owner = None
         self.eventTable = (CallAction(self.notify), )
