@@ -128,6 +128,7 @@ form {
 
 form.plain {
   padding: 0;
+  background: none; /* workaround for MSIE */
   background: inherit;
   border: none;
   float: none;
@@ -694,4 +695,20 @@ div.note .content {
     margin: 1em;
     padding: 1em;
     width: 20em;
+}
+
+/* Timetable setup form */
+
+table.timetable_setup {
+    border-collapse: collapse;
+}
+table.timetable_setup tr.conflict {
+    background: yellow;
+}
+table.timetable_setup th,
+table.timetable_setup td {
+    padding: 1ex;
+}
+table.timetable_setup th {
+    text-align: left;
 }

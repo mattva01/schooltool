@@ -8,11 +8,18 @@
 
   <form tal:attributes="action request/uri" class="plain" method="POST">
 
+  <p i18n:translate="">
+  This form lets you set up the timetable of a person by adding and removing
+  the person to and from groups that have classes in their timetables.
+  </p>
+
   <tal:block repeat="day view/days">
     <h2 tal:content="day/title">Day N</h2>
 
     <table class="timetable_setup">
-      <tr tal:repeat="period day/periods">
+      <tal:block tal:repeat="period day/periods">
+      <tr tal:define="conflict python: len(period['widgets']) > 1"
+          tal:attributes="class python: conflict and 'conflict' or ''">
         <th tal:content="period/title">Period N</th>
         <td tal:repeat="widget period/widgets">
           <select tal:attributes="name widget/name">
@@ -22,9 +29,18 @@
           </select>
           <div tal:replace="structure widget/_error_html">Error</div>
         </td>
+        <td class="conflict" tal:condition="conflict" i18n:translate="">
+        Scheduling conflict.
+        </td>
       </tr>
+      </tal:block>
     </table>
   </tal:block>
+
+  <p i18n:translate="">
+  Note: if a class appears in more than one period, all of them have
+  to be set to none to remove it.
+  </p>
 
   <div class="buttons">
     <input class="button" type="submit" name="SAVE" value="Save"
