@@ -52,6 +52,7 @@ from schooltool.interfaces import ModifyPermission
 from schooltool.interfaces import IDailyRecurrenceRule, IWeeklyRecurrenceRule
 from schooltool.interfaces import IYearlyRecurrenceRule, IMonthlyRecurrenceRule
 from schooltool.timetable import TimetableException, ExceptionalTTCalendarEvent
+from schooltool.timetable import getPeriodsForDay
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember
 from schooltool.browser.widgets import TextWidget, SelectionWidget
@@ -61,31 +62,6 @@ from schooltool.browser.widgets import dateParser, timeParser, intParser
 from schooltool.browser.widgets import timeFormatter
 
 __metaclass__ = type
-
-
-def getPeriodsForDay(request, context, date):
-    """Returns a list of timetable periods defined for today.
-
-    Empty list is returned when it is impossible to get timetable
-    data for today.
-    """
-
-    schooldays = ttschema = None
-    day_periods = []
-    if request.getCookie('cal_periods'):
-        # Get a period date is in and a default timetable schema
-        periodservice = getTimePeriodService(context)
-        for periodid in periodservice.keys():
-            if date in periodservice[periodid]:
-                schooldays = periodservice[periodid]
-                break
-        ttservice = getTimetableSchemaService(context)
-        if ttservice.default_id is not None:
-            ttschema = ttservice.getDefault()
-        if schooldays is not None and ttschema is not None:
-            day_periods = ttschema.model.periodsInDay(
-                schooldays, ttschema, date)
-    return day_periods
 
 
 class BookingView(View, AppObjectBreadcrumbsMixin):
@@ -503,7 +479,10 @@ class DailyCalendarView(CalendarViewBase):
         """Iterates over (title, start, duration) of time slots that make up
         the daily calendar.
         """
-        periods = getPeriodsForDay(self.request, self.context, self.cursor)
+        if self.request.getCookie('cal_periods'):
+            periods = getPeriodsForDay(self.cursor, self.context)
+        else:
+            periods = []
         today = datetime.combine(self.cursor, time())
         row_ends = [today + timedelta(hours=hour + 1)
                     for hour in range(self.starthour, self.endhour)]
@@ -1642,16 +1621,18 @@ class CalendarEventView(View):
             return 'event'
 
     def getPeriod(self):
-        """Returns the title of the period this event coincides with.
+        """Returns the title of the timetable period this event coincides with.
 
-        Or None.
+        Returns None if there is no such period.
         """
-        periods = getPeriodsForDay(self.request, self.calendar,
-                                   self.context.dtstart.date())
-        for period in periods:
-            if (period.tstart == self.context.dtstart.time() and
-                period.duration == self.context.duration):
-                return period.title
+        if self.request.getCookie('cal_periods'):
+            periods = getPeriodsForDay(self.context.dtstart.date(),
+                                       self.calendar)
+            for period in periods:
+                if (period.tstart == self.context.dtstart.time() and
+                    period.duration == self.context.duration):
+                    return period.title
+        return None
 
     def duration(self):
         """Format the time span of the event."""
