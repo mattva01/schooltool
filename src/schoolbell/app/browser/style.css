@@ -131,6 +131,12 @@ p.error {
     color: #990000;
 }
 
+div.error {
+    margin: 0.5em;
+    font-weight: bold;
+    color: #990000;
+}
+
 .error label {
     font-weight: bold;
     color: #990000;
