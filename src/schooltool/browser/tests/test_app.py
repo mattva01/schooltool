@@ -280,17 +280,23 @@ class TestPersonAddView(unittest.TestCase):
         class PersonContainerStub:
 
             def __init__(self):
-                self.persons = []
+                self.persons = {}
+
+            def keys(self):
+                return self.persons.keys()
+
+            def itervalues(self):
+                return self.persons.itervalues()
 
             def new(self, username, title):
-                if username == 'conflict':
-                    raise KeyError(username)
-                elif username is None:
+                if username is None:
                     username = 'auto'
+                if username in self.persons:
+                    raise KeyError(username)
                 person = Person(title=title)
                 person.__name__ = username
                 person.__parent__ = self
-                self.persons.append(person)
+                self.persons[username] = person
                 return person
 
         self.person_container = PersonContainerStub()
@@ -300,81 +306,213 @@ class TestPersonAddView(unittest.TestCase):
 
     def test(self):
         view = self.createView()
+        view.request = RequestStub()
+        result = view.do_GET(view.request)
+        assert 'Add person' in result
 
-        request = RequestStub()
-        view.request = request
-        result = view.do_GET(request)
-        self.assert_('Add person' in result)
-
-        request = RequestStub(args={'username': 'newbie',
-                                    'password': 'foo',
-                                    'verify_password': 'foo'})
-        result = view.do_POST(request)
-        self.assertEquals(request.applog,
-                          [(None, u'Object /persons/newbie of type'
-                            ' Person created', INFO)])
-        self.assertEquals(request.code, 302)
-        self.assertEquals(request.headers['location'],
-                          'http://localhost:7001/persons/newbie/edit.html')
-
-        persons = self.person_container.persons
-        self.assertEquals(len(persons), 1)
-        self.assertEquals(persons[0].__name__, 'newbie')
-        self.assertEquals(persons[0].title, 'newbie')
-
-    def test_nousername(self):
+    def test_name_validator(self):
         view = self.createView()
-        request = RequestStub(args={'username': '',
-                                    'password': 'foo',
-                                    'verify_password': 'foo'})
-        view.request = request
-        result = view.do_POST(request)
-        self.assertEquals(request.applog,
-                          [(None, u'Object /persons/auto of type'
-                            ' Person created', INFO)])
+        view.name_validator(None)
+        view.name_validator('')
+        view.name_validator('xyzzy')
+        self.assertRaises(ValueError, view.name_validator, 'xy zzy')
+        self.assertRaises(ValueError, view.name_validator, u'\u00ff')
+        view.context.new('existing', 'Some Title')
+        self.assertRaises(ValueError, view.name_validator, 'existing')
+
+    def test_processForm_no_input(self):
+        view = self.createView()
+        request = RequestStub()
+        assert not view._processForm(request)
+        assert 'required' in view.first_name_widget.error
+        assert 'required' in view.last_name_widget.error
+
+    def test_processForm_just_required_fields(self):
+        view = self.createView()
+        request = RequestStub(args={'first_name': 'First',
+                                    'last_name': 'Last'})
+        assert view._processForm(request)
+        self.assertEquals(view.first_name_widget.value, u'First')
+        self.assertEquals(view.last_name_widget.value, u'Last')
+
+    def test_processForm_password_mismatch(self):
+        view = self.createView()
+        request = RequestStub(args={'first_name': 'First',
+                                    'last_name': 'Last',
+                                    'optional_password': 'pwd',
+                                    'confirm_password': 'badpwd'})
+        assert not view._processForm(request)
+        assert 'do not match' in view.confirm_password_widget.error
+
+    def test_processForm_all_fields(self):
+        view = self.createView()
+        request = RequestStub(args={'first_name': 'First',
+                                    'last_name': 'Last',
+                                    'optional_username': 'usrnm',
+                                    'optional_password': 'pwd',
+                                    'confirm_password': 'pwd',
+                                    'date_of_birth': '1975-01-02',
+                                    'comment': 'It was a long day.'})
+        assert view._processForm(request)
+        self.assertEquals(view.first_name_widget.value, u'First')
+        self.assertEquals(view.last_name_widget.value, u'Last')
+        self.assertEquals(view.username_widget.value, u'usrnm')
+        self.assertEquals(view.password_widget.value, u'pwd')
+        self.assertEquals(view.dob_widget.value, date(1975, 1, 2))
+        self.assertEquals(view.comment_widget.value, u'It was a long day.')
+
+    def test_processForm_with_an_error(self):
+        view = self.createView()
+        request = RequestStub(args={'first_name': 'First',
+                                    'last_name': 'Last',
+                                    'optional_username': 'usrnm',
+                                    'optional_password': 'pwd',
+                                    'confirm_password': 'pwd',
+                                    'date_of_birth': '1975-I-02',
+                                    'comment': 'It was a long day.'})
+        assert not view._processForm(request)
+        assert view.dob_widget.error
+
+    def test_processPhoto_no_photo(self):
+        view = self.createView()
+        request = RequestStub()
+        assert view._processPhoto(request) is None
+        assert not view.error
+
+    def test_processPhoto_photo(self):
+        view = self.createView()
+        request = RequestStub(args={'photo': 'P6\n1 1\n255\n\xff\xff\xff'})
+        assert view._processPhoto(request) is not None
+        assert not view.error
+
+    def test_processPhoto_bad_photo(self):
+        view = self.createView()
+        request = RequestStub(args={'photo': 'This is not an image'})
+        assert view._processPhoto(request) is None
+        assert 'Invalid photo' in view.error
+
+    def do_test_addUser(self, username, password,
+                        expect_username, expect_password):
+        view = self.createView()
+        view.request = RequestStub()
+        person = view._addUser(username, password)
+        assert person is not None
+        self.assertEquals(person.__name__, expect_username)
+        self.assertEquals(person.title, expect_username)
+        if expect_password:
+            assert person.hasPassword()
+        else:
+            assert not person.hasPassword()
+        self.assertEquals(view.request.applog,
+                          [(None, u'Object /persons/%s of type Person created'
+                                  % expect_username, INFO)])
+
+    def test_addUser_no_credentials(self):
+        for username, password in [(None, None), ('', '')]:
+            self.do_test_addUser(username, password, "auto", False)
+
+    def test_addUser_no_password(self):
+        username = 'someone'
+        for password in [None, '']:
+            self.do_test_addUser(username, password, username, False)
+
+    def test_addUser_no_username(self):
+        password = 'pwd'
+        for username in [None, '']:
+            self.do_test_addUser(username, password, 'auto', True)
+
+    def test_addUser_with_credentials(self):
+        username = 'someone'
+        password = 'pwd'
+        self.do_test_addUser(username, password, username, True)
+
+    def test_addUser_conflict(self):
+        view = self.createView()
+        view.context.new('existing', 'Existing User')
+        view.request = RequestStub()
+        person = view._addUser('existing', 'doesnotmatter')
+        assert person is None
+        self.assertEquals(view.request.applog, [])
+
+    def test_setUserInfo(self):
+        from schooltool.component import FacetManager
+        view = self.createView()
+        view.request = RequestStub()
+        person = view.context.new('person', 'Some Person')
+        view._setUserInfo(person, 'John', 'Major', date(1980, 4, 13),
+                          'No comment.')
+        self.assertEquals(person.title, 'John Major')
+        info = FacetManager(person).facetByName('person_info')
+        self.assertEquals(info.first_name, u'John')
+        self.assertEquals(info.last_name, u'Major')
+        self.assertEquals(info.date_of_birth, date(1980, 4, 13))
+        self.assertEquals(info.comment, u'No comment.')
+        self.assertEquals(view.request.applog,
+                          [(None, u'Person info updated on John Major'
+                                   ' (/persons/person)', INFO)])
+
+    def test_setUserPhoto_no_photo(self):
+        from schooltool.component import FacetManager
+        view = self.createView()
+        view.request = RequestStub()
+        person = view.context.new('person', 'Some Person')
+        info = FacetManager(person).facetByName('person_info')
+        view._setUserPhoto(person, None)
+        assert info.photo is None
+        self.assertEquals(view.request.applog, [])
+
+    def test_setUserPhoto_photo(self):
+        from schooltool.component import FacetManager
+        view = self.createView()
+        view.request = RequestStub()
+        person = view.context.new('person', 'Some Person')
+        info = FacetManager(person).facetByName('person_info')
+        view._setUserPhoto(person, 'pretend jpeg')
+        self.assertEquals(info.photo, 'pretend jpeg')
+        self.assertEquals(view.request.applog,
+                          [(None, u'Photo added on Some Person'
+                                   ' (/persons/person)', INFO)])
+
+    def test_POST_no_data(self):
+        view = self.createView()
+        view.request = RequestStub()
+        result = view.do_POST(view.request)
+        assert 'error' in result
+        self.assertEquals(view.request.applog, [])
+
+    def test_POST_username_conflict(self):
+        view = self.createView()
+        view.context.new('existing', 'doesnotmatter')
+        view.request = RequestStub(args={'first_name': 'First',
+                                         'last_name': 'Last',
+                                         'optional_username': 'existing'})
+        result = view.do_POST(view.request)
+        assert 'User with this username already exists' in result
+        self.assertEquals(view.request.applog, [])
+
+    def test_POST_bad_photo(self):
+        view = self.createView()
+        view.request = RequestStub(args={'first_name': 'First',
+                                         'last_name': 'Last',
+                                         'photo': 'bad image data'})
+        result = view.do_POST(view.request)
+        assert 'error' in result
+        self.assertEquals(view.request.applog, [])
+
+    def test_POST_success(self):
+        view = self.createView()
+        view.request = RequestStub(args={'first_name': 'First',
+                                         'last_name': 'Last'})
+        result = view.do_POST(view.request)
+        request = view.request
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
                           'http://localhost:7001/persons/auto/edit.html')
-
-        persons = self.person_container.persons
-        self.assertEquals(len(persons), 1)
-        self.assertEquals(persons[0].__name__, 'auto')
-        self.assertEquals(persons[0].title, 'auto')
-
-    def test_errors_invalidnames(self):
-        # We're not very i18n friendly by not allowing international
-        # symbols in user names.
-        for username in ('newbie \xc4\x85', 'new/bie', 'foo\000bar'):
-            view = self.createView()
-            request = RequestStub(args={'username': username,
-                                        'password': 'bar',
-                                        'verify_password': 'bar'})
-            view.request = request
-            content = view.do_POST(request)
-            self.assert_('Add person' in content)
-            self.assert_('Invalid username' in content)
-
-    def test_errors_badpass(self):
-        view = self.createView()
-        request = RequestStub(args={'username': 'badpass',
-                                    'password': 'foo',
-                                    'verify_password': 'bar'})
-        view.request = request
-        content = view.do_POST(request)
-        self.assert_('Add person' in content)
-        self.assert_('Passwords do not match' in content)
-        self.assert_('badpass' in content)
-
-    def test_errors_conflict(self):
-        view = self.createView()
-        request = RequestStub(args={'username': 'conflict',
-                                    'password': 'foo',
-                                    'verify_password': 'foo'})
-        view.request = request
-        content = view.do_POST(request)
-        self.assert_('Add person' in content)
-        self.assert_('Username already registered' in content)
-        self.assert_('conflict' in content)
+        self.assertEquals(request.applog,
+                          [(None, u'Object /persons/auto of type'
+                                   ' Person created', INFO),
+                           (None, u'Person info updated on First Last'
+                                   ' (/persons/auto)', INFO)])
 
 
 class TestObjectContainerView(unittest.TestCase, TraversalTestMixin):

@@ -23,6 +23,7 @@ $Id$
 """
 
 import datetime
+from cStringIO import StringIO
 
 from schooltool.app import create_application
 from schooltool.browser import ToplevelBreadcrumbsMixin
@@ -41,14 +42,18 @@ from schooltool.browser.timetable import NewTimePeriodView
 from schooltool.browser.timetable import TimePeriodServiceView
 from schooltool.browser.timetable import TimetableSchemaServiceView
 from schooltool.browser.timetable import TimetableSchemaWizard
-from schooltool.browser.widgets import TextWidget, dateParser, intParser
+from schooltool.browser.widgets import TextWidget, PasswordWidget
+from schooltool.browser.widgets import TextAreaWidget
+from schooltool.browser.widgets import dateParser, intParser
 from schooltool.common import to_unicode
-from schooltool.component import getPath
-from schooltool.component import getTicketService, traverse
+from schooltool.component import FacetManager
+from schooltool.component import getPath, traverse
+from schooltool.component import getTicketService
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IPerson, AuthenticationError
 from schooltool.membership import Membership
 from schooltool.rest.app import AvailabilityQueryView
+from schooltool.rest.infofacets import resize_photo, canonical_photo_size
 from schooltool.translation import ugettext as _
 
 __metaclass__ = type
@@ -191,48 +196,130 @@ class PersonAddView(View, ToplevelBreadcrumbsMixin):
 
     template = Template('www/person_add.pt')
 
-    prev_username = ''
     error = None
 
+    def __init__(self, context):
+        View.__init__(self, context)
+        self.first_name_widget = TextWidget('first_name', _('First name'))
+        self.last_name_widget = TextWidget('last_name', _('Last name'))
+        self.username_widget = TextWidget('optional_username', _('Username'),
+                                          validator=self.name_validator)
+        self.password_widget = PasswordWidget('optional_password',
+                                              _('Password'))
+        self.confirm_password_widget = PasswordWidget('confirm_password',
+                                                      _('Confirm password'))
+        self.dob_widget = TextWidget('date_of_birth', _('Birth date'),
+                                     unit=_('(YYYY-MM-DD)'), parser=dateParser)
+        self.comment_widget = TextAreaWidget('comment', _('Comment'))
+
+    def name_validator(self, username):
+        """Validate username and raise ValueError if it is invalid."""
+        if not username:
+            return
+        if not valid_name(username):
+            raise ValueError(_("Username can only contain English letters,"
+                               " numbers, and the following punctuation"
+                               " characters: - . , ' ( )"))
+        elif username in self.context.keys():
+            # This check is racy, but that is fixed in _addUser
+            raise ValueError(_("User with this username already exists."))
+
+    def _processForm(self, request):
+        """Process and form data, return True if there were no errors."""
+        widgets = [self.first_name_widget, self.last_name_widget,
+                   self.username_widget, self.password_widget,
+                   self.confirm_password_widget, self.dob_widget,
+                   self.comment_widget]
+        for widget in widgets:
+            widget.update(request)
+
+        self.first_name_widget.require()
+        self.last_name_widget.require()
+
+        if (not self.password_widget.error and
+            not self.confirm_password_widget.error and
+            self.password_widget.value != self.confirm_password_widget.value):
+            self.confirm_password_widget.error = _("Passwords do not match.")
+
+        for widget in widgets:
+            if widget.error:
+                return False
+        return True
+
+    def _processPhoto(self, request):
+        """Extract and resize photo, if uploaded.
+
+        May set self.error.
+        """
+        photo = request.args.get('photo', [None])[0]
+        if photo:
+            try:
+                photo = resize_photo(StringIO(photo), canonical_photo_size)
+            except IOError:
+                self.error = _('Invalid photo')
+                photo = None
+        return photo
+
     def do_POST(self, request):
-        username = request.args['username'][0]
-        password = request.args['password'][0]
-        verify_password = request.args['verify_password'][0]
-
-        if username == '':
-            username = None
-        else:
-            if not valid_name(username):
-                self.error = _('Invalid username')
-                return self.do_GET(request)
-            self.prev_username = username
-
-        if password != verify_password:
-            self.error = _('Passwords do not match')
+        """Process form submission."""
+        if not self._processForm(request):
             return self.do_GET(request)
 
-        # XXX Do we really want to allow empty passwords?
-        # XXX Should we care about Unicode vs. UTF-8 passwords?
-        #     (see http://issues.schooltool.org/issue96)
+        photo = self._processPhoto(request)
+        if self.error:
+            return self.do_GET(request)
 
+        # TODO: ensure uniqueness of (first_name, last_name)
+
+        person = self._addUser(self.username_widget.value,
+                               self.password_widget.value)
+        if person is None:
+            # Unlikely, but possible
+            self.username_widget.error = _("User with this username "
+                                           " already exists.")
+            return self.do_GET(request)
+        self._setUserInfo(person, self.first_name_widget.value,
+                          self.last_name_widget.value, self.dob_widget.value,
+                          self.comment_widget.value)
+        self._setUserPhoto(person, photo)
+        url = absoluteURL(request, person, 'edit.html')
+        return self.redirect(url, request)
+
+    def _addUser(self, username=None, password=None):
+        """Add a new user."""
+        username = username and str(username) or None
+        password = password and str(password) or None
         try:
             person = self.context.new(username, title=username)
         except KeyError:
-            self.error = _('Username already registered')
-            return self.do_GET(request)
-
-        if username is None:
+            return None
+        if not username:
             person.title = person.__name__
-
         person.setPassword(password)
-
         # We could say 'Person created', but we want consistency
         # (wart-compatibility in this case).
-        request.appLog(_("Object %s of type %s created") %
-                       (getPath(person), person.__class__.__name__))
+        self.request.appLog(_("Object %s of type %s created") %
+                            (getPath(person), person.__class__.__name__))
+        return person
 
-        url = absoluteURL(request, person) + '/edit.html'
-        return self.redirect(url, request)
+    def _setUserInfo(self, person, first_name, last_name, dob, comment):
+        """Update user's personal information."""
+        infofacet = FacetManager(person).facetByName('person_info')
+        infofacet.first_name = first_name
+        infofacet.last_name = last_name
+        infofacet.date_of_birth = dob
+        infofacet.comment = comment
+        self.request.appLog(_("Person info updated on %s (%s)") %
+                            (person.title, getPath(person)))
+
+    def _setUserPhoto(self, person, photo=None):
+        """Update user's photo."""
+        if not photo:
+            return
+        infofacet = FacetManager(person).facetByName('person_info')
+        infofacet.photo = photo
+        self.request.appLog(_("Photo added on %s (%s)") %
+                            (person.title, getPath(person)))
 
 
 class ObjectAddView(View, ToplevelBreadcrumbsMixin):
