@@ -1137,13 +1137,20 @@ def doctest_CalendarViewBase():
 def doctest_DailyCalendarView():
     r"""Tests for DailyCalendarView.
 
+        >>> from schoolbell.app.browser.cal import DailyCalendarView
+
+        >>> from schoolbell.app.app import Calendar
+        >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
+        >>> view = DailyCalendarView(calendar, TestRequest())
+
     prev() and next() return links for adjacent weeks:
 
         >>> view.cursor = date(2004, 8, 18)
         >>> view.prev()
-        'http://127.0.0.1/calendar/weekly.html?date=2004-08-17'
+        'http://127.0.0.1/calendar/daily.html?date=2004-08-17'
         >>> view.next()
-        'http://127.0.0.1/calendar/weekly.html?date=2004-08-19'
+        'http://127.0.0.1/calendar/daily.html?date=2004-08-19'
 
     """
 
