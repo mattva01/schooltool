@@ -44,6 +44,15 @@ surnames = ('Moore', 'McCullogh', 'Buckingham', 'Butler', 'Davies',
             'Jones', 'Smith', 'Smith', 'Smith', 'Smith', 'Smith',
             'Smith', 'Smith', 'Greenspun', 'Eastwood', 'Baggins')
 
+years = 3
+nr_teachers = 10
+nr_pupils = 60
+subjects = {
+    'ling': 'Linguistics',
+    'phys': 'Physics',
+    'math': 'Mathematics',
+    'biol': 'Biology'
+    }
 
 def random_name():
     return "%s %s" % (random.choice(names), random.choice(surnames))
@@ -53,44 +62,31 @@ def createGroups():
     f = open("groups.csv", "w")
 
     # name, title, parents, facet
-    print >> f, '"year1","Year 1","/",'
-    print >> f, '"year2","Year 2","/",'
-    print >> f, '"year3","Year 3","/",'
-    print >> f, '"ling","Department of Linguistics","/",'
-    print >> f, '"phys","Department of Physics","/",'
-    print >> f, '"math","Department of Maths","/",'
-    print >> f, '"biol","Department of Biology","/",'
 
-    print >> f, '"ling1","Linguistics 1","/ ling year1","Subject Group"'
-    print >> f, '"ling2","Linguistics 2","/ ling year2","Subject Group"'
-    print >> f, '"ling3","Linguistics 3","/ ling year3","Subject Group"'
+    for subj, subject in subjects.items():
+        print >> f, '"%s","Department of %s","root",' % (subj, subject)
 
-    print >> f, '"phys1","Physics 1","/ phys year1","Subject Group"'
-    print >> f, '"phys2","Physics 2","/ phys year2","Subject Group"'
-    print >> f, '"phys3","Physics 3","/ phys year3","Subject Group"'
-
-    print >> f, '"math1","Mathematics 1","/ math year1","Subject Group"'
-    print >> f, '"math2","Mathematics 2","/ math year2","Subject Group"'
-    print >> f, '"math3","Mathematics 3","/ math year3","Subject Group"'
-
-    print >> f, '"biol1","Biology 1","/ biol year1","Subject Group"'
-    print >> f, '"biol2","Biology 2","/ biol year2","Subject Group"'
-    print >> f, '"biol3","Biology 3","/ biol year3","Subject Group"'
-
+    for year in range (1, years + 1):
+        print >> f, '"year%d","Year %d","root",' % (year, year)
+        for subj, subject in subjects.items():
+            print >> f, ('"%s%d","%s %d","%s year%d","Subject Group"' %
+                         (subj, year, subject, year, subj, year))
     f.close()
 
 
-def createPupils(nr=60):
+
+def createPupils(nr=nr_pupils):
 
     f = open("pupils.csv", "w")
 
+    # title, groups
+
     for i in range(nr):
-        year = i / (nr/3) + 1
-        subjects = [format % year
-                    for format in ("ling%d", "phys%d", "math%d", "biol%d")]
-        subject1 = random.choice(subjects)
-        subjects.remove(subject1)
-        subject2 = random.choice(subjects)
+        year = i / (nr/years) + 1
+        groups = ["%s%d" % (subj, year) for subj in subjects.keys()]
+        subject1 = random.choice(groups)
+        groups.remove(subject1)
+        subject2 = random.choice(groups)
 
         print >> f, '"%s","%s"' % (random_name(),
                                    " ".join(("year%d" % year,
@@ -102,12 +98,14 @@ def createTeachers():
 
     f = open("teachers.csv", "w")
 
+    # title, taught
+
     teachers = []
-    for i in range(10):
+    for i in range(nr_teachers):
         teachers.append([])
 
-    for dept in ("ling", "phys", "math", "biol"):
-        for year in range(1,4):
+    for dept in subjects.keys():
+        for year in range(1,years + 1):
             teacher = random.choice(teachers)
             teacher.append("%s%d" % (dept, year))
 
