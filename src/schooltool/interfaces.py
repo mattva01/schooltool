@@ -40,7 +40,10 @@ $Id$
 
 __metaclass__ = type
 
-from zope.interface import Interface, Attribute
+from zope.interface import Interface
+from zope.schema import Field, Object, Int, TextLine, Text, List, Set, Tuple
+from zope.schema import Bool, Dict, Choice, Date, Datetime, Bytes
+from zope.schema import URI as URIField
 from schooltool.unchanged import Unchanged  # reexport from here
 
 
@@ -124,18 +127,17 @@ class ILocation(Interface):
     a hierarchy.
     """
 
-    __parent__ = Attribute(
-        """The parent of an object.
-
+    __parent__ = Field(
+        title=u"The parent of an object.",
+        description=u"""
         This value is None when the object is not attached to the hierarchy.
         Otherwise parent must implement either ILocation or IContainmentRoot.
-        """)
+        """) # XXX Object; schema=...
 
-    __name__ = Attribute(
-        """The name of the object within the parent.
-
-        This is a name that the parent can be traversed with to get
-        the child.
+    __name__ = TextLine(
+        title=u"The name of the object within the parent.",
+        description=u"""
+        This is a name that the parent can be traversed with to get the child.
         """)
 
 
@@ -163,12 +165,12 @@ class IMultiContainer(Interface):
     imagin ea hyphotetical LunchBox object located at /lunchbox that has
     two kinds of children:
 
-      - food items (e.g. sandwitch), stored in an dict LunchBox.food
+      - food items (e.g. sandwich), stored in an dict LunchBox.food
       - insects (e.g. ant), stored in a dict LunchBox.insects
 
-    We want the foot items to have paths like /lunchbox/food/sandwitch, and
+    We want the foot items to have paths like /lunchbox/food/sandwich, and
     insects to have paths like /lunchbox/insects/ant.  To achieve this we
-    can set the __parent__ of both the sandwitch and the ant to refer directly
+    can set the __parent__ of both the sandwich and the ant to refer directly
     to the lunchbox, and then make the LunchBox a multi-container:
 
         class LunchBox:
@@ -239,17 +241,25 @@ class IServiceAPI(Interface):
 class IServiceManager(Interface):
     """Container of services"""
 
-    eventService = Attribute("""Event service for this application""")
+    # TODO: Object()s
 
-    utilityService = Attribute("""Utility service for this application""")
+    eventService = Field(
+        title=u"Event service for this application")
 
-    timetableSchemaService = Attribute("""Timetable schema service""")
+    utilityService = Field(
+        title=u"Utility service for this application")
 
-    timePeriodService = Attribute("""Time period service""")
+    timetableSchemaService = Field(
+        title=u"Timetable schema service")
 
-    ticketService = Attribute("""Ticket service""")
+    timePeriodService = Field(
+        title=u"Time period service")
 
-    dynamicFacetSchemaService = Attribute("""Info Facet schema service""")
+    ticketService = Field(
+        title=u"Ticket service")
+
+    dynamicFacetSchemaService = Field(
+        title=u"Info Facet schema service")
 
 
 #
@@ -259,7 +269,8 @@ class IServiceManager(Interface):
 class IUtility(ILocation):
     """Utilities do stuff. They are managed by the utility service."""
 
-    title = Attribute("Short descriptive text")
+    title = TextLine(
+        title=u"Short descriptive text")
 
 
 class IUtilityService(ILocation):
@@ -293,11 +304,14 @@ class IURIObject(Interface):
     URI objects are equal iff their uri attributes are equal.
     """
 
-    uri = Attribute("""URI (as a string).""")
+    uri = URIField(
+        title=u"URI (as a string).")
 
-    name = Attribute("""Human-readable name.""")
+    name = TextLine(
+        title=u"Human-readable name.")
 
-    description = Attribute("""Human-readable description.""")
+    description = Text(
+        title=u"Human-readable description.")
 
 
 class IURIAPI(Interface):
@@ -326,25 +340,25 @@ class ILink(ILocation):
 
     """
 
-    reltype = Attribute(
-        """The SpecificURI of the relationship type.
+    reltype = URIField(
+        title=u"The SpecificURI of the relationship type.",
+        required=False)
 
-        The value of reltype may be None.
-        """)
+    title = TextLine(
+        title=u"The title of the target of the link.")
 
-    title = Attribute("""A title of the target of the link.""")
-
-    role = Attribute(
-        """The role implied by traversing this link.
-
+    role = Object(
+        title=u"The role implied by traversing this link.",
+        schema=IURIObject,
+        description=u"""
         This is how the object got by traverse() relates to my __parent__.
+        """) # XXX Fix description
 
-        This attribute's value is an IURIObject.
-        """)
+    __parent__ = Field(
+        title=u"The object at this end of the relationship.")
 
-    __parent__ = Attribute("""The object at this end of the relationship.""")
-
-    __name__ = Attribute("""Unique name within the parent's links.""")
+    __name__ = TextLine(
+        title=u"Unique name within the parent's links.")
 
     def traverse():
         """Return the object at the other end of the relationship.
@@ -435,10 +449,12 @@ class ILinkSet(Interface):
 class IRelatable(Interface):
     """An object which can take part in relationships."""
 
-    __links__ = Attribute("""An object implementing ILinkSet.""")
+    __links__ = Set(
+        title=u"A set of objects implementing ILinkSet.", # TODO: fix title
+        value_type=Object(schema=ILinkSet)) # TODO: title
 
     def getLink(name):
-        """Returns a link by a name within this relatable"""
+        """Return a link by a name within this relatable."""
 
 
 class IQueryLinks(Interface):
@@ -450,12 +466,53 @@ class IQueryLinks(Interface):
         """Return all the links (matching a specified role, if specified)."""
 
 
+class IRelationshipSchema(Interface):
+    """Object that represents a relationship."""
+
+    type = Object(
+        title=u"An IURIObject for the type of this relationship.", # XXX title
+        schema=IURIObject)
+
+    roles = Dict(
+        title=u"Roles", # TODO clarify
+        key_type=TextLine(title=u"Symbolic parameter name"), # XXX title
+        value_type=Object(schema=IURIObject),
+        description=u"""
+        A mapping of symbolic parameter names which this schema expects
+        to respective URIs.
+        """)
+
+    def __call__(**parties):
+        """Relate the parties to the relationship.
+
+        The objects are related according to the roles indicated
+        by the keyword arguments.
+
+        Returns a dict of {role_name: link}.
+        """
+
+
+class IValency(Interface):
+    """An object signifying that the owner can participate in a
+    certain relationship schema in a certain role.
+    """
+
+    schema = Object(
+        title=u"A relationship schema",
+        schema=IRelationshipSchema)
+
+    keyword = Field( # XXX What is this?
+        title=u"A keyword argument the schema takes for this object")
+
+
 class IRelationshipValencies(Interface):
     """Gives information on what relationships are pertinent to this
     object.
     """
 
-    valencies = Attribute("""A tuple of IValency objects""")
+    valencies = Tuple(
+        title=u"A tuple of IValency objects",
+        value_type=Object(schema=IValency))
 
     def getValencies():
         """Return a mapping of valencies.
@@ -470,24 +527,15 @@ class IRelationshipValencies(Interface):
 class ISchemaInvocation(Interface):
     """An object describing how to call a relationship schema for a valency"""
 
-    schema = Attribute("""A relationship schema (IRelationshipSchema)""")
+    schema = Object(
+        title=u"A relationship schema",
+        schema=IRelationshipSchema)
 
-    this = Attribute(
-        """A keyword argument the schema takes for this object""")
+    this = Field( # XXX What is this?
+        title=u"A keyword argument the schema takes for this object")
 
-    other = Attribute(
-        """A keyword argument the schema takes for the other object""")
-
-
-class IValency(Interface):
-    """An object signifying that the owner can participate in a
-    certain relationship schema in a certain role.
-    """
-
-    schema = Attribute("""A relationship schema (IRelationshipSchema)""")
-
-    keyword = Attribute(
-        """A keyword argument the schema takes for this object""")
+    other = Field( # XXX What is this?
+        title=u"A keyword argument the schema takes for the other object")
 
 
 class IRelationshipSchemaFactory(Interface):
@@ -500,25 +548,6 @@ class IRelationshipSchemaFactory(Interface):
 
         The relationship type must be given. However, the title is
         optional, and defaults to the URI of the relationship type.
-        """
-
-
-class IRelationshipSchema(Interface):
-    """Object that represents a relationship."""
-
-    type = Attribute("An IURIObject for the type of this relationship.")
-
-    roles = Attribute(
-        """A mapping of symbolic parameter names this schema expects
-        to respective URIs""")
-
-    def __call__(**parties):
-        """Relate the parties to the relationship.
-
-        The objects are related according to the roles indicated
-        by the keyword arguments.
-
-        Returns a dict of {role_name: link}.
         """
 
 
@@ -616,7 +645,9 @@ class IEvent(Interface):
 class IRelationshipEvent(IEvent):
     """Base interface for relationship events"""
 
-    links = Attribute("""Tuple containing the links of the relationship""")
+    links = Tuple(
+        title=u"Tuple containing the links of the relationship")
+        # TODO value_type
 
 
 class IRelationshipAddedEvent(IRelationshipEvent):
@@ -634,8 +665,13 @@ class IMembershipEvent(IRelationshipEvent):
     the role of URIGroup, and the other side has the role of URIMember.
     """
 
-    group = Attribute("""The group""")
-    member = Attribute("""The member""")
+    group = Field(
+        title=u"The group")
+
+    member = Field(
+        title=u"The member")
+
+    # TODO fix titles
 
 
 class IBeforeMembershipEvent(IMembershipEvent):
@@ -647,12 +683,11 @@ class IBeforeMembershipEvent(IMembershipEvent):
 
 
 class IMemberAddedEvent(IRelationshipAddedEvent, IMembershipEvent):
-    """Event that gets sent out after a member has been added to a group."""
+    """Event that is sent after a member has been added to a group."""
 
 
 class IMemberRemovedEvent(IRelationshipRemovedEvent, IMembershipEvent):
-    """Event that gets sent out after a member has been removed from a group.
-    """
+    """Event that is sent after a member has been removed from a group."""
 
 
 class IEventTarget(Interface):
@@ -703,17 +738,12 @@ class IEventService(IEventTarget):
         """Return a list of all subscribers as (target, event_type) tuples."""
 
 
-class IEventConfigurable(Interface):
-    """An object that has a configurable event table."""
-
-    eventTable = Attribute(
-        """Sequence of event table rows, each implementing IEventAction""")
-
-
 class IEventAction(Interface):
     """Represents an action to be taken for certain types of events."""
 
-    eventType = Attribute("""Interface of an event this action pertains to""")
+    eventType = Field(
+        title=u"Interface of an event this action pertains to")
+    # XXX Object(schema=Interface)?
 
     def handle(event, target):
         """Handle the event for a given target.
@@ -722,11 +752,19 @@ class IEventAction(Interface):
         """
 
 
+class IEventConfigurable(Interface):
+    """An object that has a configurable event table."""
+
+    eventTable = List(
+        title=u"Sequence of event table rows",
+        value_type=Object(schema=IEventAction))
+
+
 class ICallAction(IEventAction):
     """Event action that calls a callable."""
 
-    callback = Attribute(
-        """Callback that will be called with an event as its argument.""")
+    callback = Field(
+        title=u"Callback that will be called with an event as its argument.")
 
 
 class ILookupAction(IEventAction):
@@ -734,14 +772,16 @@ class ILookupAction(IEventAction):
     table.
     """
 
-    eventTable = Attribute(
-        """Sequence of event table rows, each implementing IEventAction""")
+    # XXX Same as in IEventConfigurable?
+    eventTable = List(
+        title=u"Sequence of event table rows",
+        value_type=Object(schema=IEventAction))
 
 
 class IRouteToRelationshipsAction(IEventAction):
     """Event action that routes this event to relationships of this object."""
 
-    role = Attribute("""Role of the relationship""")
+    role = Field(title=u"Role of the relationship") # TODO Object()
 
 
 class IRouteToMembersAction(IEventAction):
@@ -765,18 +805,21 @@ class IOccupiesEvent(IRelationshipEvent):
     the role of URIGroup, and the other side has the role of URIMember.
     """
 
-    resides = Attribute("""The person""")
-    residence = Attribute("""The address""")
+    resides = Field(
+        title=u"The person")
+
+    residence = Field(
+        title=u"The address")
+
+    # XXX fix titles
 
 
 class IOccupiesAddedEvent(IRelationshipAddedEvent, IOccupiesEvent):
-    """Event that gets sent out after a person is associated with an address.
-    """
+    """Event that is sent after a person is associated with an address."""
 
 
 class IOccupiesRemovedEvent(IRelationshipRemovedEvent, IOccupiesEvent):
-    """Event that gets sent out after a person has been removed from an address
-    """
+    """Event that is sent after a person has been removed from an address."""
 
 
 class INotedEvent(IRelationshipEvent):
@@ -786,18 +829,19 @@ class INotedEvent(IRelationshipEvent):
     the role of URIGroup, and the other side has the role of URIMember.
     """
 
-    notandum = Attribute("""The noted object""")
-    notation = Attribute("""The note""")
+    notandum = Field(
+        title=u"The noted object")
+
+    notation = Field(
+        title=u"The note")
 
 
 class INotedAddedEvent(IRelationshipAddedEvent, INotedEvent):
-    """Event that gets sent out after a note is associated with an object.
-    """
+    """Event that is sent after a note is associated with an object."""
 
 
 class INotedRemovedEvent(IRelationshipRemovedEvent, INotedEvent):
-    """Event that gets sent out after a note has been removed from an object
-    """
+    """Event that is sent after a note has been removed from an object."""
 
 
 class IGuardianEvent(IRelationshipEvent):
@@ -807,19 +851,21 @@ class IGuardianEvent(IRelationshipEvent):
     the role of URIGroup, and the other side has the role of URIMember.
     """
 
-    notandum = Attribute("""The noted object""")
-    notation = Attribute("""The note""")
+    notandum = Field(
+        title=u"The noted object")
+
+    notation = Field(
+        title=u"The note")
+
+    # XXX Clone of IOccupiesEvent
 
 
 class IGuardianAddedEvent(IRelationshipAddedEvent, IGuardianEvent):
-    """Event that gets sent out after a note is associated with an object.
-    """
+    """Event that is sent after a note is associated with an object."""
 
 
 class IGuardianRemovedEvent(IRelationshipRemovedEvent, IGuardianEvent):
-    """Event that gets sent out after a note has been removed from an object
-    """
-
+    """Event that is sent after a note has been removed from an object."""
 
 
 #
@@ -829,16 +875,21 @@ class IGuardianRemovedEvent(IRelationshipRemovedEvent, IGuardianEvent):
 class IFacet(ILocation):
     """A facet.
 
-    A facet is a persistent adapter (a smart annotation) which
-    implements some additional functionality and/or stores additional
-    data.
+    A facet is a persistent adapter (a smart annotation) which implements
+    some additional functionality / stores additional data.
     """
 
-    active = Attribute("""The facet is active""")
-    __parent__ = Attribute("""The object this facet is augmenting""")
-    __name__ = Attribute("""Unique name within the parent's facets""")
-    owner = Attribute(
-        """The agent responsible for adding this facet to its __parent__""")
+    __name__ = TextLine(
+        title=u"Unique name within the parent's facets")
+
+    __parent__ = Field(
+        title=u"The object this facet is augmenting")
+
+    active = Bool(
+        title=u"The facet is active")
+
+    owner = Field(
+        title=u"The agent responsible for adding this facet to its __parent__")
 
 
 class IFacetedRelationshipSchemaFactory(Interface):
@@ -848,24 +899,32 @@ class IFacetedRelationshipSchemaFactory(Interface):
 
 
 class IFacetedRelationshipSchema(IRelationshipSchema):
-    """A relationship schema that sets facets on the parties after relating.
-    """
+    """A relationship schema that sets facets on the parties after relating."""
 
 
 class IFaceted(Interface):
     """Denotes that the object can have facets."""
 
-    __facets__ = Attribute("""A set of facets that manages unique names.""")
+    __facets__ = Set(
+        title=u"A set of facets that manages unique names.")
+        # TODO: value_type
 
 
 class IFacetFactory(Interface):
     """An inspectable object that creates facets."""
 
-    name = Attribute("The name of this factory")
-    title = Attribute("Short description of this factory")
-    facet_name = Attribute(
-        """The __name__ the facet will get if it is a singleton facet.
-        None if the facet is not a singleton facet.""")
+    name = TextLine(
+        title=u"The name of this factory")
+
+    title = TextLine(
+        title=u"Short description of this factory")
+
+    facet_name = TextLine(
+        title=u"The __name__ the facet will get if it is a singleton facet.",
+        required=False,
+        description=u"""
+        The singleton facet name.  None if the facet is not a singleton facet.
+        """)
 
     def __call__():
         """Return a facet."""
@@ -949,16 +1008,16 @@ class IACL(Interface):
     """
 
     def __iter__():
-        """Iterate over tuples of (principal, permission)"""
+        """Iterate over tuples of (principal, permission)."""
 
     def __contains__((principal,  permission)):
-        """Returns whether the principal, permission pair is in ACL."""
+        """Return whether the principal, permission pair is in ACL."""
 
     def add((principal, permission)):
-        """Grants the permission to a principal"""
+        """Grant the permission to a principal."""
 
     def remove((principal, permission)):
-        """Revokes the permission from a principal.
+        """Revoke the permission from a principal.
 
         Raises KeyError if the principal does not have the permission.
         """
@@ -975,9 +1034,11 @@ class IACL(Interface):
 
 
 class IACLOwner(Interface):
-    """An object that has an ACL"""
+    """An object that has an ACL."""
 
-    acl = Attribute("""The ACL for this calendar.""")
+    acl = Object(
+        title=u"The ACL for this calendar.",
+        schema=IACL)
 
 
 #
@@ -993,9 +1054,11 @@ class IDateRange(Interface):
     Note that empty date ranges cannot be represented.
     """
 
-    first = Attribute("""The first day of the period of time covered.""")
+    first = Date(
+        title=u"The first day of the period of time covered.")
 
-    last = Attribute("""The last day of the period covered.""")
+    last = Date(
+        title=u"The last day of the period covered.")
 
     def __iter__():
         """Iterate over all dates in the range from the first to the last."""
@@ -1070,7 +1133,7 @@ class ISchooldayModelWrite(Interface):
 
 
 class ICalendar(Interface):
-    """A calendar, containing days which in turn contain events."""
+    """A calendar containing days, which in turn contain events."""
 
     def __iter__():
         """Return an iterator over the events in this calendar."""
@@ -1121,34 +1184,33 @@ class IACLCalendar(ICalendarWrite, IACLOwner):
 class IRecurrenceRule(Interface):
     """Base interface of the recurrence rules."""
 
-    interval = Attribute(
-        """Interval of recurrence (a positive integer).
-
+    interval = Int(
+        title=u"Interval of recurrence (a positive integer).",
+        description=u"""
         For example, for yearly recurrence the interval equal to 2
         will indicate that the event will recur once in two years.
-        """)
+        """) # TODO fix description
 
-    count = Attribute(
-        """Number of times the event is repeated.
-
+    count = Int(
+        title=u"Number of times the event is repeated.",
+        required=False,
+        description=u"""
         Can be None or an integer value.  If count is not None then
         until must be None.  If both count and until are None the
         event repeats forever.
-        """)
+        """) # TODO fix description
 
-    until = Attribute(
-        """The date of the last recurrence of the event.
+    until = Date(
+        title=u"The date of the last recurrence of the event.",
+        required=False,
+        description=u"""
+        If until is not None then count must be None.  If both count and until
+        are None the event repeats forever.
+        """) # TODO fix description
 
-        Can be None or a datetime.date instance.  If until is not None
-        then count must be None.  If both count and until are None the
-        event repeats forever.
-        """)
-
-    exceptions = Attribute(
-        """A list of days when this event does not occur.
-
-        Values in this list must be instances of datetime.date.
-        """)
+    exceptions = List(
+        title=u"A list of days when this event does not occur.",
+        value_type=Date(title=u"A day when an event does not occur"))
 
     def replace(interval=Unchanged, count=Unchanged, until=Unchanged,
                 exceptions=Unchanged):
@@ -1199,9 +1261,10 @@ class IYearlyRecurrenceRule(IRecurrenceRule):
 
 class IWeeklyRecurrenceRule(IRecurrenceRule):
 
-    weekdays = Attribute(
-        """A set of weekdays when this event occurs.
-
+    weekdays = Set(
+        title=u"A set of weekdays when this event occurs.",
+        value_type=Int(),
+        description=u"""
         Weekdays are represented as integers from 0 (Monday) to 6 (Sunday).
 
         The event repeats on the weekday of the first occurence even
@@ -1215,9 +1278,9 @@ class IWeeklyRecurrenceRule(IRecurrenceRule):
 
 class IMonthlyRecurrenceRule(IRecurrenceRule):
 
-    monthly = Attribute(
-        """Specification of a monthly occurence.
-
+    monthly = TextLine( # XXX fix type
+        title=u"Specification of a monthly occurence.",
+        description=u"""
         Can be one of three values: 'monthday', 'weekday', 'lastweekday',
         or None.
 
@@ -1248,38 +1311,53 @@ class ICalendarEvent(Interface):
     their titles.
     """
 
-    unique_id = Attribute("""A globally unique id for this calendar event.""")
-    dtstart = Attribute("""The datetime.datetime of the start of the event.""")
-    duration = Attribute("""The duration of the event (datetime.timedelta).""")
-    title = Attribute("""The title of the event.""")
-    owner = Attribute("""The object that created this event.""")
-    context = Attribute(
-        """The object in whose calendar this event lives.
+    unique_id = TextLine(
+        title=u"A globally unique id for this calendar event.")
 
+    dtstart = Datetime(
+        title=u"The datetime.datetime of the start of the event.")
+
+    duration = Field( # TODO: type
+        title=u"The duration of the event (datetime.timedelta).")
+
+    title = TextLine(
+        title=u"The title of the event.")
+
+    owner = Field(
+        title=u"The object that created this event.")
+
+    context = Field(
+        title=u"The object in whose calendar this event lives.",
+        description=u"""
         For example, when booking resources, the person who's booking
         will be the owner of the booking event, and the resource will
         be the context.
         """)
-    location = Attribute(
-        """The title of the location where this event takes place.""")
-    recurrence = Attribute(
-        """The recurrence rule.
 
-        A value providing IRecurrenceRule.  None if the event is not
-        recurrent.
+    location = TextLine(
+        title=u"The title of the location where this event takes place.")
+
+    recurrence = Object(
+        title=u"The recurrence rule.",
+        schema=IRecurrenceRule,
+        required=False,
+        description=u"""
+        None if the event is not recurrent.
         """)
-    privacy = Attribute(
-        """One of "public", "private", or "hidden".
 
-        Event that are "private" will be rendered as busy blocks to
+    privacy = Choice(
+        title=u"Privacy", # TODO fix title
+        values=['public', 'private', 'hidden'],
+        default=u"public",
+        description=u"""
+        Events that are "private" will be rendered as busy blocks to
         other users, and events that are "hidden" will not be shown to
         other users at all.
+        """) # TODO fix description
 
-        "public" is the default.
-        """)
-
-    replace_kw = Attribute(
-        """A sequence of keywords that can be passed to replace()""")
+    replace_kw = List(
+        title=u"A sequence of keywords that can be passed to replace()")
+        # TODO value_type
 
     def replace(**kw):
         """Return a calendar event with new specified fields."""
@@ -1319,15 +1397,17 @@ class IInheritedCalendarEvent(ICalendarEvent):
     to see in his personal calendar.  Such events implement this interface.
     """
 
-    calendar = Attribute(
-        """The calendar in which this event resides.""")
+    calendar = Object(
+        title=u"The calendar in which this event resides.",
+        schema=ICalendar)
 
 
 class ICalendarOwner(Interface):
     """An object that has a calendar."""
 
-    calendar = Attribute(
-        """The object's calendar.""")
+    calendar = Object(
+        title=u"The object's calendar.",
+        schema=ICalendar)
 
     def makeCompositeCalendar(start, end):
         """Return the composite calendar for this person.
@@ -1345,6 +1425,140 @@ class ICalendarOwner(Interface):
 # Timetabling
 #
 
+class ITimetableModel(Interface):
+    """A timetable model knows how to create an ICalendar object when
+    it is given a School-day model and a Timetable.
+
+    The implementation of the timetable model knows how to arrange
+    timetable days within the available school days.
+
+    For example, a school with four timetable days 1, 2, 3, 4 has its
+    timetable days laid out in sequence across consecutive school
+    days. A school with a timetable days for Monday through Friday has
+    its timetable days laid out to match the day of the week that a
+    school day occurs on.
+
+    The ICalendar produced will use an appropriate school-day template
+    for each day, depending on (for example) what day of the week that
+    day occurs on, or whatever other rules the implementation of the
+    timetable model is coded to use.
+    """
+
+    timetableDayIds = List(
+        title=u"A sequence of day_ids which can be used in the timetable.",
+        value_type=TextLine(title=u"Day id"))
+
+    dayTemplates = Dict(
+        key_type=Int(title=u"Weekday", required=False),
+        value_type=Field(title=u"Schoolday template"),
+                         # XXX schema=ISchooldayTemplate),
+        description=u"""
+        The template with the key of None is used if there is no template
+        for a particular weekday.
+        """) # XXX fix description
+
+    def createCalendar(schoolday_model, timetable):
+        """Return an ICalendar composed out of schoolday_model and timetable.
+
+        This method has model-specific knowledge as to how the schooldays,
+        weekends and holidays map affects the mapping of the timetable
+        onto the real-world calendar.
+        """ # XXX fix description
+
+    def periodsInDay(schoolday_model, timetable, date):
+        """Return a sequence of periods defined in this day"""
+
+
+class ITimetableActivity(Interface):
+    """An event in a timetable.
+
+    Something that happens on a certain period_id in a certain day_id.
+
+    Timetable activities are immutable and can be hashed or compared for
+    equality.
+    """
+
+    title = TextLine(
+        title=u"The title of the activity.")
+
+    owner = Field(
+        title=u"The group or person or other object that owns the activity.",
+        description=u"""
+        The activity lives in the owner's timetable.
+        """) # TODO fix description, use Object()?
+
+    resources = Set(
+        title=u"A set of resources assigned to this activity.",
+        value_type=Field(title=u"A resource"), # XXX, schema=IResource),
+        description=u"""
+        The activity is also present in the timetables of all resources
+        assigned to this activity.
+        """) # TODO fix description
+
+    timetable = Field(
+        title=u"The timetable that contains this activity.",
+        # XXX schema=ITimetable,
+        description=u"""
+        This attribute refers to the timetable of `owner`.  It never refers
+        to a composite timetable or a timetable of a resource.
+        """) # TODO fix description
+
+    def replace(title=Unchanged, owner=Unchanged, resources=Unchanged,
+                timetable=Unchanged):
+        """Return a copy of this activity with some fields changed."""
+
+    def __eq__(other):
+        """Is this timetable activity equal to `other`?
+
+        Timetable activities are equal iff their title, owner and resources
+        attributes are equal.
+
+        Returns false if other is not a timetable activity.
+        """
+
+    def __ne__(other):
+        """Is this timetable activity different from `other`?
+
+        The opposite of __eq__.
+        """
+
+    def __hash__():
+        """Calculate the hash value of a timetable activity."""
+
+
+class ITimetableException(Interface):
+    """An exception in a timetable.
+
+    An exception specifies that on a particular day a particular activity
+    either does not occur, or occurs but at a different time, or is replaced
+    by a different activity.
+    """
+
+    date = Date(
+        title=u"Date of the exception")
+
+    period_id = TextLine(
+        title=u"ID of the period that is exceptional.")
+
+    activity = Object(
+        title=u"The activity that does not occur.",
+        schema=ITimetableActivity)
+
+    replacement = Field(
+        title=u"Calendar event that should replace the exceptional activity.",
+        # XXX schema=IExceptionalTTCalendarEvent,
+        required=False,
+        description=u"""
+        If None, then the activity is simply removed.
+        """) # TODO fix description
+
+    def __eq__(other):
+        """See if self == other."""
+
+    def __ne__(other):
+        """See if self != other."""
+
+
 class ITimetable(Interface):
     """A timetable.
 
@@ -1355,11 +1569,13 @@ class ITimetable(Interface):
     pupil, or one teacher, or one bookable resource.
     """
 
-    model = Attribute(
-        """A timetable model this timetable should be used with.""")
+    model = Object(
+        title=u"A timetable model this timetable should be used with.",
+        schema=ITimetableModel)
 
-    exceptions = Attribute(
-        """A list of timetable exceptions (ITimetableExceptionList).""")
+    exceptions = Object(
+        title=u"A list of timetable exceptions.",
+        schema=ITimetableException)
 
     def keys():
         """Return a sequence of identifiers for days within the timetable.
@@ -1406,6 +1622,7 @@ class ITimetable(Interface):
 
 
 class ITimetableWrite(Interface):
+    # XXX docstring
 
     def __setitem__(key, value):
         """Set an ITimetableDay for a given day id.
@@ -1439,18 +1656,22 @@ class ITimetableDay(Interface):
     Different days within the same timetable may have different periods.
     """
 
-    timetable = Attribute("""The timetable that contains this day.""")
+    timetable = Object(
+        title=u"The timetable that contains this day.",
+        schema=ITimetable)
 
-    day_id = Attribute("""The day id of this timetable day.""")
+    day_id = TextLine(
+        title=u"The day id of this timetable day.")
 
-    periods = Attribute("""A list of periods IDs for this day.""")
+    periods = List(
+        title=u"A list of period IDs for this day.",
+        value_type=TextLine(title=u"A period id"))
 
     def keys():
         """Return self.periods."""
 
     def items():
-        """Return a sequence of tuples (period_id, set_of_ITimetableActivity).
-        """
+        """Return a sequence of (period_id, set_of_ITimetableActivity)."""
 
     def __getitem__(key):
         """Return the set of ITimetableActivities for a given period.
@@ -1500,64 +1721,18 @@ class ITimetableDayWrite(Interface):
         """
 
 
-class ITimetableActivity(Interface):
-    """An event in a timetable.
-
-    Something that happens on a certain period_id in a certain day_id.
-
-    Timetable activities are immutable and can be hashed or compared for
-    equality.
-    """
-
-    title = Attribute("""The title of the activity.""")
-
-    owner = Attribute(
-        """The group or person or other object that owns the activity.
-
-        The activity lives in the owner's timetable.
-        """)
-
-    resources = Attribute("""A set of resources assigned to this activity.
-
-        The activity is also present in the timetables of all resources
-        assigned to this activity.
-        """)
-
-    timetable = Attribute("""The timetable that contains this activity.
-
-        This attribute refers to the timetable of `owner`.  It never refers
-        to a composite timetable or a timetable of a resource.
-        """)
-
-    def replace(title=Unchanged, owner=Unchanged, resources=Unchanged,
-                timetable=Unchanged):
-        """Return a copy of this activity with some fields changed."""
-
-    def __eq__(other):
-        """Is this timetable activity equal to `other`?
-
-        Timetable activities are equal iff their title, owner and resources
-        attributes are equal.
-
-        Returns false if other is not a timetable activity.
-        """
-
-    def __ne__(other):
-        """Is this timetable activity different from `other`?
-
-        The opposite of __eq__.
-        """
-
-    def __hash__():
-        """Calculate the hash value of a timetable activity."""
-
-
 class ITimetableActivityEvent(IEvent):
     """Event that gets sent when an activity is added to a timetable day."""
 
-    activity = Attribute("""The timetable activity.""")
-    day_id = Attribute("""The day_id of the containing timetable day.""")
-    period_id = Attribute("""The period_id of the containing period.""")
+    activity = Object(
+        title=u"The timetable activity.",
+        schema=ITimetableActivity)
+
+    day_id = TextLine(
+        title=u"The day_id of the containing timetable day.")
+
+    period_id = TextLine(
+        title=u"The period_id of the containing period.")
 
 
 class ITimetableActivityAddedEvent(ITimetableActivityEvent):
@@ -1613,41 +1788,16 @@ class ITimetableExceptionList(Interface):
         """
 
 
-class ITimetableException(Interface):
-    """An exception in a timetable.
-
-    An exception specifies that on a particular day a particular activity
-    either does not occur, or occurs but at a different time, or is replaced
-    by a different activity.
-    """
-
-    date = Attribute("""Date of the exception (a datetime.date instance).""")
-
-    period_id = Attribute("""ID of the period that is exceptional.""")
-
-    activity = Attribute(
-        """The activity that does not occur (ITimetableActivity).""")
-
-    replacement = Attribute(
-        """Calendar event that should replace the exceptional activity.
-
-        If None, then the activity is simply removed.
-
-        If not None, then replacement is a IExceptionalTTCalendarEvent.
-        """)
-
-    def __eq__(other):
-        """See if self == other."""
-
-    def __ne__(other):
-        """See if self != other."""
-
-
 class ITimetableExceptionEvent(IEvent):
     """Base interface for timetable exception events."""
 
-    timetable = Attribute("""The timetable.""")
-    exception = Attribute("""The timetable exception.""")
+    timetable = Object(
+        title=u"The timetable.",
+        schema=ITimetable)
+
+    exception = Object(
+        title=u"The timetable exception.",
+        schema=ITimetableException)
 
 
 class ITimetableExceptionAddedEvent(ITimetableExceptionEvent):
@@ -1661,29 +1811,30 @@ class ITimetableExceptionRemovedEvent(ITimetableExceptionEvent):
 class ITimetableCalendarEvent(ICalendarEvent):
     """A calendar event that has been created from a timetable."""
 
-    period_id = Attribute(
-        """The period id of the corresponding timetable event.""")
+    period_id = TextLine(
+        title=u"The period id of the corresponding timetable event.")
 
-    activity = Attribute(
-        """The activity from which this event was created.""")
+    activity = Object(
+        title=u"The activity from which this event was created.",
+        schema=ITimetableActivity)
 
 
 class IExceptionalTTCalendarEvent(ICalendarEvent):
     """A calendar event that replaces a particular timetable event."""
 
-    exception = Attribute(
-        """The exception in which this event is stored.
-
-        An ITimetableException.
-        """)
+    exception = Object(
+        title=u"The exception in which this event is stored.",
+        schema=ITimetableException)
 
 
 class ICompositeTimetableProvider(Interface):
     """An object which knows how to get the timetables for composition
     """
 
-    timetableSource = Attribute(
-        """A specification of how the timetables of related object
+    timetableSource = List(
+        title=u"Timetable source", # XXX fix title
+        description=u"""
+        A specification of how the timetables of related object
         should be composed together to provide a composed timetable of
         this object.
 
@@ -1692,7 +1843,8 @@ class ICompositeTimetableProvider(Interface):
                link_role    The role URI of a link to traverse
                composed     A boolean value specifying whether to use
                             the composed timetable, otherwise private.
-        """)
+        """,
+        value_type=Tuple()) # TODO tuple contents?
 
 
 class ITimetabled(Interface):
@@ -1700,9 +1852,11 @@ class ITimetabled(Interface):
     either its own, or composed of the timetables of related objects.
     """
 
-    timetables = Attribute(
-        """A mapping of private timetables of this object.
-
+    timetables = Dict(
+        title=u"A mapping of private timetables of this object.",
+        key_type=Tuple(), # TODO describe tuple contents
+        value_type=Object(schema=ITimetable),
+        description=u"""
         The keys of this mapping are tuples of
         (time_period_id, timetable_schema_id), e.g.
         ('2004-autumn-semester', 'weekly')
@@ -1738,10 +1892,24 @@ class ITimetabled(Interface):
 class ITimetableReplacedEvent(IEvent):
     """Event that gets sent when a timetable is replaced."""
 
-    object = Attribute("""ITimetabled.""")
-    key = Attribute("""Tuple (time_period_id, schema_id).""")
-    old_timetable = Attribute("""The old timetable (can be None).""")
-    new_timetable = Attribute("""The new timetable (can be None).""")
+    object = Field(
+        title=u"The owner of the timetable.") # XXX is this right? Object()
+
+    key = Tuple(
+        title=u"Tuple (time_period_id, schema_id).",
+        value_type=TextLine(),
+        min_length=2,
+        max_length=2)
+
+    old_timetable = Object(
+        title=u"The old timetable (can be None).",
+        schema=ITimetable,
+        required=False)
+
+    new_timetable = Object(
+        title=u"The new timetable (can be None).",
+        schema=ITimetable,
+        required=False)
 
 
 class ISchooldayTemplate(Interface):
@@ -1783,9 +1951,14 @@ class ISchooldayPeriod(Interface):
     interval within a schoolday template.
     """
 
-    title = Attribute("Period id of this event")
-    tstart = Attribute("datetime.time of the start of the event")
-    duration = Attribute("datetime.timedelta of the duration of the event")
+    title = TextLine(
+        title=u"Period id of this event")
+
+    tstart = Field(
+        title=u"datetime.time of the start of the event") # XXX type
+
+    duration = Field(
+        title=u"datetime.timedelta of the duration of the event") # XXX type
 
     def __eq__(other):
         """SchooldayPeriods are equal if all three of their
@@ -1805,47 +1978,6 @@ class ISchooldayPeriod(Interface):
         """Hashes of ISchooldayPeriods are equal iff those
         ISchooldayPeriods are equal.
         """
-
-
-class ITimetableModel(Interface):
-    """A timetable model knows how to create an ICalendar object when
-    it is given a School-day model and a Timetable.
-
-    The implementation of the timetable model knows how to arrange
-    timetable days within the available school days.
-
-    For example, a school with four timetable days 1, 2, 3, 4 has its
-    timetable days laid out in sequence across consecutive school
-    days. A school with a timetable days for Monday through Friday has
-    its timetable days laid out to match the day of the week that a
-    school day occurs on.
-
-    The ICalendar produced will use an appropriate school-day template
-    for each day, depending on (for example) what day of the week that
-    day occurs on, or whatever other rules the implementation of the
-    timetable model is coded to use.
-    """
-
-    timetableDayIds = Attribute(
-        """Return a sequence of day_ids which can be used in the timetable.""")
-
-    dayTemplates = Attribute(
-        """A mapping of weekdays (calendar.MONDAY,...) to ISchooldayTemplates.
-
-        The template with the key of None is used if there is no template
-        for a particular weekday.
-        """)
-
-    def createCalendar(schoolday_model, timetable):
-        """Return an ICalendar composed out of schoolday_model and timetable.
-
-        This method has model-specific knowledge as to how schooldays,
-        weekends and holidays map affect the mapping of the timetable
-        onto the real-world calendar.
-        """
-
-    def periodsInDay(schoolday_model, timetable, date):
-        """Return a sequence of periods defined in this day"""
 
 
 class ITimetableModelRegistry(Interface):
@@ -1872,7 +2004,8 @@ class ITimetableSchemaService(ILocation):
     can return a new timetable of a certain schema on request.
     """
 
-    default_id = Attribute("""Schema id of the default schema""")
+    default_id = TextLine(
+        title=u"Schema id of the default schema")
 
     def getDefault():
         """Return the default schema for the school"""
@@ -1956,7 +2089,8 @@ class IApplicationObject(ILocation, IRelatable, IEventTarget,
                          ITimetabled, IAvailabilitySearch, IACLOwner):
     """A collection of interfaces common to all application objects."""
 
-    title = Attribute("""Title of the application object""")
+    title = TextLine(
+        title=u"Title of the application object")
 
 
 class IGroup(IApplicationObject):
@@ -1972,9 +2106,11 @@ class IPerson(IApplicationObject):
     Participates in URIMembership as URIMember.
     """
 
-    title = Attribute("""Person's full name""")
+    title = TextLine(
+        title=u"Person's full name""")
 
-    username = Attribute("""The username of this person""")
+    username = TextLine(
+        title=u"The username of this person")
 
     def iterAbsences():
         """Iterate over all absences."""
@@ -2020,6 +2156,37 @@ class IResource(IApplicationObject):
     """A bookable resource used in."""
 
 
+class IAbsenceComment(Interface):
+    # XXX docstring
+
+    __parent__ = Field(
+        title=u"The absence this comment belongs to")
+
+    datetime = Datetime(
+        title=u"Date and time of the comment")
+
+    reporter = Object(
+        title=u"Person that made this comment",
+        schema=IPerson)
+
+    text = Text(
+        title=u"Text of the comment")
+
+    absent_from = Object(
+        title=u"Application object the person was absent from.",
+        required=False,
+        schema=IApplicationObject)
+
+    ended = Field( # XXX type
+        title=u"New value of ended (True, False or Unchanged)")
+
+    resolved = Field( # XXX type
+        title=u"New value of resolved (True, False or Unchanged)")
+
+    expected_presence = Field( # XXX type
+        title=u"New value of expected_presence (datetime, None, or Unchanged)")
+
+
 class IAbsence(ILocation):
     """Absence object.
 
@@ -2030,12 +2197,22 @@ class IAbsence(ILocation):
     comments, therefore the list of comments also doubles as an audit log.
     """
 
-    person = Attribute("""Person that was absent""")
-    comments = Attribute("""Comments (a sequence of IAbsenceComment)""")
-    ended = Attribute("""Has this absence been ended?""")
-    resolved = Attribute("""Has this absence been resolved?""")
-    expected_presence = Attribute(
-        """Date and time after which the person is expected to be present""")
+    person = Object(
+        title=u"Person that was absent",
+        schema=IPerson)
+
+    comments = List(
+        title=u"Comments",
+        value_type=Object(title=u"Absence comment", schema=IAbsenceComment))
+
+    ended = Bool(
+        title=u"Has this absence been ended?")
+
+    resolved = Bool(
+        title=u"Has this absence been resolved?")
+
+    expected_presence = Datetime(
+        title=u"Date and time after which a person is expected to be present")
 
     def addComment(comment):
         """Add a comment.
@@ -2046,28 +2223,15 @@ class IAbsence(ILocation):
         """
 
 
-class IAbsenceComment(Interface):
-
-    __parent__ = Attribute("""The absence this comment belongs to""")
-    datetime = Attribute("""Date and time of the comment""")
-    reporter = Attribute("""Person that made this comment""")
-    text = Attribute("""Text of the comment""")
-    absent_from = Attribute(
-        """Application object (group or whatever) the person was absent
-        from (can be None)""")
-    ended = Attribute(
-        """New value of ended (True, False or Unchanged)""")
-    resolved = Attribute(
-        """New value of resolved (True, False or Unchanged)""")
-    expected_presence = Attribute(
-        """New value of expected_presence (datetime, None, or Unchanged)""")
-
-
 class IAttendanceEvent(IEvent):
     """Event that gets sent out when an absence is recorded or updated."""
 
-    absence = Attribute("""IAbsence""")
-    comment = Attribute("""IAbsenceComment that describes the change""")
+    absence = Object(
+        schema=IAbsence) # XXX title
+
+    comment = Object(
+        title=u"The absence comment that describes the change",
+        schema=IAbsenceComment)
 
 
 class IAbsenceEvent(IAttendanceEvent):
@@ -2082,8 +2246,9 @@ class IAbsenceTracker(IEventTarget):
     """An object which listens to the AttendanceEvents and keeps a set
     of unended absences."""
 
-    absences = Attribute(
-        """A set of unended absences this object has been notified of.""")
+    absences = Set(
+        title=u"A set of unended absences this object has been notified of.",
+        value_type=Object(title=u"Absence", schema=IAbsence))
 
 
 class IAbsenceTrackerUtility(IUtility, IAbsenceTracker):
@@ -2097,21 +2262,17 @@ class IAbsenceTrackerFacet(IFacet, IEventConfigurable, IAbsenceTracker):
 class IOptions(Interface):
     """User-selectable options of the system."""
 
-    new_event_privacy = Attribute(
-        """The default privacy setting of newly created calendar events.
+    new_event_privacy = Choice(
+        title=u"The default privacy setting of newly created calendar events.",
+        values=['public', 'private', 'hidden'])
 
-        Allowed values are 'public', 'private' and 'hidden'.
-        """)
+    timetable_privacy = Choice(
+        title=u"The value of the privacy attribute for timetable events.",
+        values=['public', 'private', 'hidden'])
 
-    timetable_privacy = Attribute(
-        """The value of the privacy attribute for timetable events.
-
-        Allowed values are 'public', 'private' and 'hidden'.
-        """)
-
-    restrict_membership = Attribute(
-        """Restricted group membership mode.
-
+    restrict_membership = Bool(
+        title=u"Restricted group membership mode.",
+        description=u"""
         If True, membership in every group is restricted to the members of
         immediate parent groups.  If False, any object can be added to any
         group.
@@ -2189,50 +2350,50 @@ class IAuthenticator(Interface):
 
 
 class IDynamicSchemaField(Interface):
-    """A display-agnostic field definition
+    """A display-agnostic field definition.
 
-    Stores custom form fields where browser and rest can access them
+    Stores custom form fields where browser and ReSTive views can access them.
     """
 
     def __getitem__(key):
-        pass
+        """Get a custom field by name."""
 
     def __setitem__(key, value):
-        pass
+        """Set a custom field."""
 
     def __eq__(other):
-        """Equality test for Field.
+        """Equality test for custom fields.
 
         Only compares name and label.
         """
-        pass
 
 
 class IDynamicSchema(Interface):
     """General informational attributes for person and address objects"""
 
-    fields = Attribute("Dict of field data")
+    fields = Dict(
+        title=u"Dict of field data") # XXX key_type, value_type
 
     def hasField(name):
-        """Test for the existance of a field."""
+        """Test for the existence of a field."""
 
     def getField(name):
-        """Return field value"""
+        """Return field value."""
 
     def setField(name, value):
-        """Set field value"""
+        """Set field value."""
 
     def delField(name):
-        """Remove a field"""
+        """Remove a field."""
 
     def addField(name, label, type, value=None, vocabulary=[]):
-        """Add a field to the fields dict"""
+        """Add a field to the fields dict."""
 
     def cloneEmpty():
-        """Create a copy of this facet and it's fields."""
+        """Create a copy of this facet and its fields."""
 
     def __getitem__(key):
-        """Return a field from the fields list based on it's name."""
+        """Return a field from the fields list based on its name."""
 
 
 class IDynamicSchemaService(ILocation):
@@ -2242,7 +2403,8 @@ class IDynamicSchemaService(ILocation):
     DynamicRelationshipService
     """
 
-    default_id = Attribute("""Schema id of the default schema""")
+    default_id = TextLine(
+        title=u"Schema id of the default schema")
 
     def getDefault():
         """Return the default schema for the school"""
@@ -2271,26 +2433,36 @@ class IDynamicFacet(IDynamicSchema, IFacet):
 class IPersonInfoFacet(IFacet):
     """Some attributes for a person object"""
 
-    first_name = Attribute("First name")
-    last_name = Attribute("Last name")
-    date_of_birth = Attribute("Date of birth")
-    comment = Attribute("A free form text comment")
+    first_name = TextLine(
+        title=u"First name")
 
-    photo = Attribute(
-        """Photo.
+    last_name = TextLine(
+        title=u"Last name")
 
-        A byte string with a small JPEG image of a person.
-        """
-    )
+    date_of_birth = Date(
+        title=u"Date of birth")
+
+    comment = Bytes(
+        title=u"A free form text comment")
+
+    photo = Bytes(
+        title=u"Photo (JPEG)")
 
 
 class INote(ILocation, IRelatable):
     """An abitrary notation on an IApplication Object."""
 
-    title = Attribute("""The title of the note.""")
-    body = Attribute("""The body of the note.""")
-    owner = Attribute("""The object that created this note.""")
-    created = Attribute("""The time the note was created.""")
+    title = TextLine(
+        title=u"The title of the note.")
+
+    body = Text(
+        title=u"The body of the note.")
+
+    owner = Field(
+        title=u"The object that created this note.") # XXX Object()
+
+    created = Datetime(
+        title=u"The time the note was created.")
 
 
 class IResidence(ILocation, IRelatable, IFaceted):
@@ -2299,7 +2471,8 @@ class IResidence(ILocation, IRelatable, IFaceted):
     Participates in URIOccupies as occupiedBy.
     """
 
-    country = Attribute("""ISO Country code""")
+    country = TextLine(
+        title=u"ISO Country code")
 
 
 class IAddressFacet(IFacet):
@@ -2315,12 +2488,21 @@ class IAddressFacet(IFacet):
     enough to build relationships on.  The full standard should be implemented
     later.
     """
-    postcode = Attribute("""Postal service sorting code
-                         Ex. Zip in the US, DX in the UK""")
-    district = Attribute("""District, Ex. US State""")
-    town = Attribute("""Town, Ex. US City""")
-    streetNr = Attribute("""Street number""")
-    thoroughfareName = Attribute("""Street name""")
+
+    postcode = TextLine(
+        title=u"Postal service sorting code (Ex. Zip in the US, DX in the UK)")
+
+    district = TextLine(
+        title=u"District, Ex. US State")
+
+    town = TextLine(
+        title=u"Town, Ex. US City")
+
+    streetNr = TextLine(
+        title=u"Street number")
+
+    thoroughfareName = TextLine(
+        title=u"Street name")
 
 
 #
