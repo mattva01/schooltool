@@ -35,6 +35,7 @@ from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.interfaces import ISchooldayModel
+from schooltool.interfaces import ILocation
 from schooltool.facet import FacetedMixin
 from schooltool.timetable import TimetabledMixin
 from schooltool.relationship import RelatableMixin
@@ -45,10 +46,12 @@ class TestTimetable(unittest.TestCase):
     def test_interface(self):
         from schooltool.timetable import Timetable
         from schooltool.interfaces import ITimetable, ITimetableWrite
+        from schooltool.interfaces import ILocation
 
         t = Timetable()
         verifyObject(ITimetable, t)
         verifyObject(ITimetableWrite, t)
+        verifyObject(ILocation, t)
 
     def test_keys(self):
         from schooltool.timetable import Timetable
@@ -683,8 +686,51 @@ class TimetabledStub(TimetabledMixin, RelatableMixin,
         LocatableEventTargetMixin.__init__(self, parent)
         FacetedMixin.__init__(self)
 
+class LocatableStub:
+    implements(ILocation)
+    __name__ = None
+    __parent__ = None
 
-class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
+class TestTimetableDict(unittest.TestCase):
+
+    def test(self):
+        from schooltool.timetable import TimetableDict
+        from persistence.dict import PersistentDict
+        from schooltool.interfaces import ILocation, IMultiContainer
+
+        timetables = TimetableDict()
+        self.assert_(isinstance(timetables, PersistentDict))
+        verifyObject(ILocation, timetables)
+        verifyObject(IMultiContainer, timetables)
+
+    def test_setitem_delitem(self):
+        from schooltool.timetable import TimetableDict
+
+        td = TimetableDict()
+        item = LocatableStub()
+        td['aa', 'bb'] = item
+        self.assertEqual(item.__name__, ('aa', 'bb'))
+        self.assertEqual(item.__parent__, td)
+        self.assertEqual(item, td['aa', 'bb'])
+        del td['aa', 'bb']
+        self.assertRaises(KeyError, td.__getitem__, ('aa', 'bb'))
+        self.assertEqual(item.__parent__, None)
+        self.assertEqual(item.__name__, None)
+
+    def test_getRelativePath(self):
+        from schooltool.timetable import TimetableDict
+        from schooltool.interfaces import IContainmentRoot
+        from schooltool.component import getPath
+        from zope.interface import directlyProvides
+
+        td = TimetableDict()
+        item = LocatableStub()
+        directlyProvides(td, IContainmentRoot)
+
+        td['a', 'b'] = item
+        self.assertEqual(getPath(item), '/a/b')
+
+class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
                           unittest.TestCase):
 
     def setUp(self):
@@ -696,10 +742,12 @@ class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
 
     def test_interface(self):
         from schooltool.interfaces import ITimetabled
-        from schooltool.timetable import TimetabledMixin
+        from schooltool.timetable import TimetabledMixin, TimetableDict
 
         tm = TimetabledMixin()
         verifyObject(ITimetabled, tm)
+        self.assert_(isinstance(tm.timetables, TimetableDict))
+        self.assertEqual(tm.timetables.__parent__, tm)
 
     def newTimetable(self):
         from schooltool.timetable import Timetable, TimetableDay
@@ -828,6 +876,21 @@ class TestTimetabledFacet(RegistriesSetupMixin, EventServiceTestMixin,
         result = teacher.getCompositeTimetable('2003 fall', 'sequential')
         self.assertEqual(result, tt)
 
+    def test_paths(self):
+        from schooltool.interfaces import IContainmentRoot
+        from schooltool.component import getPath
+        from zope.interface import directlyProvides
+
+        tm = TimetabledStub(self.eventService)
+        tm.__name__ = 'stub'
+        tt = tm.timetables["2003-fall", "sequential"] = self.newTimetable()
+        tt1 = tm.getCompositeTimetable("2003-fall", "sequential")
+
+        self.assertEqual(getPath(tt),
+                         '/stub/timetables/2003-fall/sequential')
+        self.assertEqual(getPath(tt1),
+                         '/stub/composite-timetables/2003-fall/sequential')
+
 
 class TestTimetableSchemaService(unittest.TestCase):
 
@@ -919,7 +982,8 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
     suite.addTest(unittest.makeSuite(TestSequentialDaysTimetableModel))
     suite.addTest(unittest.makeSuite(TestWeeklyTimetableModel))
-    suite.addTest(unittest.makeSuite(TestTimetabledFacet))
+    suite.addTest(unittest.makeSuite(TestTimetableDict))
+    suite.addTest(unittest.makeSuite(TestTimetabledMixin))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaService))
     suite.addTest(unittest.makeSuite(TestTimePeriodService))
     return suite

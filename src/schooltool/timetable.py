@@ -35,6 +35,7 @@ from schooltool.interfaces import ITimetableModel
 from schooltool.interfaces import ITimetabled, ICompositeTimetableProvider
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
+from schooltool.interfaces import ILocation, IMultiContainer
 from schooltool.cal import Calendar, CalendarEvent
 from schooltool.component import getRelatedObjects, FacetManager
 from schooltool.uris import URIGroup
@@ -48,12 +49,14 @@ __metaclass__ = type
 
 class Timetable(Persistent):
 
-    implements(ITimetable, ITimetableWrite)
+    implements(ITimetable, ITimetableWrite, ILocation)
 
     def __init__(self, day_ids=()):
         """day_ids is a sequence of the day ids of this timetable."""
         self.day_ids = day_ids
         self.days = PersistentDict()
+        self.__parent__ = None
+        self.__name__ = None
 
     def keys(self):
         return list(self.day_ids)
@@ -341,6 +344,32 @@ class WeeklyTimetableModel(BaseTimetableModel):
 #  Things for integrating timetabling into the core code.
 #
 
+class TimetableDict(PersistentDict):
+
+    implements(ILocation, IMultiContainer)
+
+    __name__ = 'timetables'
+    __parent__ = None
+
+    def __setitem__(self, key, value):
+        value.__parent__ = self
+        value.__name__ = key
+        PersistentDict.__setitem__(self, key, value)
+
+    def __delitem__(self, key):
+        value = self[key]
+        value.__parent__ = None
+        value.__name__ = None
+        PersistentDict.__delitem__(self, key)
+
+    def getRelativePath(self, child):
+        if self[child.__name__]  != child:
+            raise TypeError("Cannot determine path of  %r, because it does"
+                            " not appear to be a child of %r"  %
+                            (child, self))
+        return "/".join(child.__name__)
+
+
 class TimetabledMixin:
     """A mixin providing ITimetabled with the default semantics of
     timetable composition by membership and logic for searching for
@@ -352,7 +381,8 @@ class TimetabledMixin:
     timetableSource = ((URIGroup, True), )
 
     def __init__(self):
-        self.timetables = PersistentDict()
+        self.timetables = TimetableDict()
+        self.timetables.__parent__ = self
 
     def _sources(self):
         sources = list(self.timetableSource)
@@ -382,6 +412,11 @@ class TimetabledMixin:
         result = timetables[0].cloneEmpty()
         for tt in timetables:
             result.update(tt)
+
+        parent = TimetableDict()
+        parent.__parent__ = self
+        parent.__name__ = 'composite-timetables'
+        parent[period_id, schema_id] = result
 
         return result
 
