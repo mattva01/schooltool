@@ -425,6 +425,23 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         </timetable>
         """
 
+    full_xml_with_exceptions = full_xml.replace('</timetable>', '') + """
+        <exception date="2004-10-24" period="C">
+          <activity title="CompSci">
+            <resource xlink:type="simple" xlink:href="/resources/lab1"
+                      xlink:title="CS Lab 1"/>
+            <resource xlink:type="simple" xlink:href="/resources/lab2"
+                      xlink:title="CS Lab 2"/>
+          </activity>
+        </exception>
+        <exception date="2004-11-25" period="B">
+          <activity title="English" />
+          <replacement date="2004-11-25" time="12:45" duration="30">
+            English (short)
+          </replacement>
+        </exception>
+        """ + "</timetable>"
+
     full_html_template = """
         <html>
         <head>
@@ -493,6 +510,22 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         tt['Day 2'].add('C', TimetableActivity('CompSci', owner, [lab1, lab2]))
         return tt
 
+    def createFullWithExceptions(self, owner=None):
+        from schooltool.timetable import TimetableException
+        from schooltool.cal import CalendarEvent
+        tt = self.createFull(owner)
+        english = list(tt['Day 1']['B'])[0]
+        compsci = list(tt['Day 2']['C'])[0]
+        tt.exceptions.append(TimetableException(datetime.date(2004, 10, 24),
+                                                'C', compsci, None))
+        replacement = CalendarEvent(datetime.datetime(2004, 11, 25, 12, 45),
+                                    datetime.timedelta(minutes=30),
+                                    "English (short)")
+        tt.exceptions.append(TimetableException(datetime.date(2004, 11, 25),
+                                                'B', english,
+                                                replacement))
+        return tt
+
     def createView(self, context, key=('2003 fall', 'weekly')):
         from schooltool.rest.timetable import TimetableReadView
         return TimetableReadView(context, key)
@@ -510,6 +543,8 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     def test_get(self):
         self.do_test_get(self.createEmpty(), self.empty_xml)
         self.do_test_get(self.createFull(), self.full_xml)
+        self.do_test_get(self.createFullWithExceptions(),
+                         self.full_xml_with_exceptions)
 
     def test_get_html(self):
         self.do_test_get(self.createEmpty(), self.empty_html,

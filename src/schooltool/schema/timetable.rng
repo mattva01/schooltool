@@ -13,6 +13,21 @@ RelaxNG grammar for a timetable.
     </attribute>
   </define>
 
+  <define name="datetext">
+    <!-- date in YYYY-MM-DD format -->
+    <text/>
+  </define>
+
+  <define name="timetext">
+    <!-- time in HH:MM format -->
+    <text/>
+  </define>
+
+  <define name="duration">
+    <!-- duration (minutes) -->
+    <text/>
+  </define>
+
   <define name="xlinkattr">
     <attribute name="xlink:type">
       <value>simple</value>
@@ -31,6 +46,19 @@ RelaxNG grammar for a timetable.
     <ref name="timetable"/>
   </start>
 
+  <define name="activity">
+    <element name="activity">
+      <attribute name="title">
+        <text/>
+      </attribute>
+      <zeroOrMore>
+        <element name="resource">
+          <ref name="xlinkattr"/>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+
   <define name="timetable">
     <element name="timetable">
       <oneOrMore>
@@ -40,21 +68,39 @@ RelaxNG grammar for a timetable.
             <element name="period">
               <ref name="idattr"/>
               <zeroOrMore>
-                <element name="activity">
-                  <attribute name="title">
-                    <text/>
-                  </attribute>
-                  <zeroOrMore>
-                    <element name="resource">
-                      <ref name="xlinkattr"/>
-                    </element>
-                  </zeroOrMore>
-                </element>
+                <ref name="activity"/>
               </zeroOrMore>
             </element>
           </zeroOrMore>
         </element>
       </oneOrMore>
+      <zeroOrMore>
+        <element name="exception">
+          <attribute name="date">
+            <ref name="datetext"/>
+          </attribute>
+          <attribute name="period">
+            <text/>
+          </attribute>
+          <ref name="activity"/>
+          <optional>
+            <element name="replacement">
+              <optional>
+                <attribute name="date">
+                  <ref name="datetext"/>
+                </attribute>
+              </optional>
+              <attribute name="time">
+                <ref name="timetext"/>
+              </attribute>
+              <attribute name="duration">
+                <ref name="duration"/>
+              </attribute>
+              <text/>
+            </element>
+          </optional>
+        </element>
+      </zeroOrMore>
     </element>
   </define>
 
