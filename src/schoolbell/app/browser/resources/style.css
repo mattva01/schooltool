@@ -697,45 +697,14 @@ h2.calendar-view-title {
     cursor: pointer;
 }
 
-#calendar-view-day .event .privacy {
-}
-
-#calendar-view-day .hour a.event-new,
-#calendar-view-day .hour a.booking-new {
-    position: absolute;
-    display: block;
-    text-decoration: none;
-    overflow: hidden;
-    border: 0;
-    margin: 2px;
-    padding: 0;
-    padding-top: 16px;
-    height: 0px !important;
-    height /**/: 16px;
-    width: 16px;
-    cursor: pointer;
+#calendar-view-day .event .description {
+    padding: 0.5ex;
 }
 
 #calendar-view-day .hour a.event-new {
-    bottom: 2px;
-    left:2px;
-    background: url(/meeting.png) no-repeat top left;
-    float: left;
-}
-
-#calendar-view-day .hour a.booking-new {
-    bottom: 2px;
-    left:22px;
-    background: url(/booking.png) no-repeat top left;
-    float: left;
-}
-
-#calendar-view-day .hour a.event-new:hover {
-    background: url(/meeting.png) no-repeat top left;
-}
-
-#calendar-view-day .hour a.booking-new:hover {
-    background: url(/booking.png) no-repeat top left;
+    padding: 0.5ex;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 
