@@ -11,7 +11,9 @@ Overview
 
 SchoolTool is a distributed client/server system.  Clients communicate with
 the server by using an HTTP based protocol adhering to the REST architectural
-style (see http://conveyor.com/RESTwiki/moin.cgi).
+style (see http://conveyor.com/RESTwiki/moin.cgi).  There is also a more
+traditional web application interface that people can use with an ordinary
+browser.
 
 
 System requirements
@@ -67,6 +69,9 @@ The username is 'manager', and the password is 'schooltool'.  The database
 is otherwise mostly empty, but you can run import-sampleschool.py to populate
 it with some sample data.
 
+The default web application port is 7080.  Once the server is running, you can
+connect to it with a web browser.
+
 The Makefile also contains several shortcuts, which are kept mainly for
 backwards-compatibility:
 
@@ -108,6 +113,7 @@ Project structure
       tests/            unit tests for the schooltool package
       ftests/           functional tests for the schooltool package
       browser/          web application views for the server
+        www/            page templates
         tests/          unit tests for the schooltool.browser package
       rest/             RESTive views for the server
         www/            page templates
@@ -189,6 +195,10 @@ following to your Apache configuration file:
   </VirtualHost>
 
 Also, enable mod_proxy and mod_rewrite.
+
+The web application interface also supports virtual hosting in this manner,
+the only differing thing would be the local port number.
+
 
 Copyright information
 ---------------------
