@@ -26,6 +26,8 @@ import unittest
 import re
 import os
 import sys
+import time
+import logging
 from StringIO import StringIO
 from zope.interface import moduleProvides
 from zope.interface import directlyProvides, directlyProvidedBy
@@ -723,6 +725,29 @@ class TestRequest(unittest.TestCase):
         resource = ResourceStub()
         self.assertRaises(AssertionError, rq.render, resource)
 
+    def test_logHit(self):
+        from schooltool.main import Request
+        buffer = StringIO()
+        hitlogger = logging.getLogger('access')
+        hitlogger.addHandler(logging.StreamHandler(buffer))
+        hitlogger.setLevel(logging.INFO)
+        hitlogger.propagate = 0
+
+        rq = Request(None, True)
+        rq.user = 'manager'
+        rq.uri = '/foo/bar'
+        rq.client = ("INET", "192.193.194.195", 123)
+        rq.method = 'FOO'
+        rq.clientproto = 'bar/1.2'
+        rq.received_headers['referer'] = 'http://example.com'
+        rq.received_headers['user-agent'] = 'Godzilla/115.0'
+        rq.sentLength = 42
+        rq.logHit()
+        self.assertEquals(buffer.getvalue(),
+                '192.193.194.195 - manager [%s]'
+                ' "FOO /foo/bar bar/1.2" 200 42 "http://example.com"'
+                ' "Godzilla/115.0"\n' % rq.hit_time)
+
 
 class TestServer(RegistriesSetupMixin, unittest.TestCase):
 
@@ -786,6 +811,12 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(server.appFactory, server.createApplication)
         # Check that configure does not change sys.path
         self.assertEquals(sys.path, self.original_path)
+
+        hitlogger = logging.getLogger('access')
+        self.assertEquals(hitlogger.propagate, False)
+        # handlers[0] is implicitly created by the logging module
+        self.assert_(isinstance(hitlogger.handlers[1], logging.StreamHandler))
+        self.assertEquals(hitlogger.handlers[1].stream, sys.stdout)
 
     def test_configure_with_args(self):
         from schooltool.main import Server

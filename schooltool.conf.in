@@ -83,6 +83,25 @@ log-file schooltool.log
 log-file STDERR
 
 #
+# access-log-file
+#
+#   Specifies the path of a file used for an Apache combined format access
+#   log.  Special values STDERR and STDOUT mean standard error and standard
+#   output respectively.
+#
+#   You can specify more than one log file.  All messages will be duplicated
+#   to all the log files.
+#
+# Default:
+#    access-log-file STDOUT
+#
+# Examples:
+#    access-log-file /var/log/schooltool/access.log
+#    access-log-file STDOUT
+#
+access-log-file access.log
+
+#
 # <zodb>
 #   ...
 # </zodb>

@@ -25,11 +25,13 @@ $Id$
 
 import os
 import sys
-import ZConfig
+import time
 import urllib
 import getopt
 import libxml2
 import datetime
+import logging
+import ZConfig
 from zope.interface import moduleProvides
 from transaction import get_transaction
 from ZODB.POSException import ConflictError
@@ -280,6 +282,8 @@ class Request(http.Request):
 
     def __init__(self, *args, **kwargs):
         self.get_transaction_hook = get_transaction
+        self.hitlogger = logging.getLogger('access')
+        self.hit_time = time.strftime('%d/%b/%I:%H:%M:%S %z')
         http.Request.__init__(self, *args, **kwargs)
 
     def reset(self):
@@ -397,6 +401,7 @@ class Request(http.Request):
                 body = self._handle_exception(failure.Failure())
             self.reactor_hook.callFromThread(self.write, body)
             self.reactor_hook.callFromThread(self.finish)
+            # self.reactor_hook.callFromThread(self.logHit)
         finally:
             if self.zodb_conn:
                 self.zodb_conn.close()
@@ -480,6 +485,18 @@ class Request(http.Request):
     def chooseMediaType(self, supported_types):
         """Choose a media type for presentation according to Accept: header."""
         return chooseMediaType(supported_types, self.accept)
+
+    def logHit(self):
+        """Log a hit into an access log in Apache combined log format."""
+        self.hitlogger.info('%s - %s [%s] "%s" %s %s "%s" "%s"' %
+                (self.getClientIP() or '-',
+                self.getUser() or '-',
+                self.hit_time,
+                '%s %s %s' % (self.method, self.uri, self.clientproto),
+                self.code,
+                self.sentLength or "-",
+                self.getHeader("referer") or "-",
+                self.getHeader("user-agent") or "-"))
 
 
 class Site(http.HTTPFactory):
@@ -668,6 +685,19 @@ class Server:
             else:
                 f = file(filename, "a")
                 self.logfiles.append(f)
+
+        self.hitlogfiles = []
+        logger = logging.getLogger('access')
+        logger.propagate = False
+        for filename in self.config.access_log_file:
+            if filename == 'STDOUT':
+                handler = logging.StreamHandler(sys.stdout)
+            elif filename == 'STDERR':
+                handler = logging.StreamHandler(sys.stderr)
+            else:
+                handler = logging.FileHandler(filename)
+            handler.setFormatter(logging.Formatter())
+            logger.addHandler(handler)
 
         # Process any command line arguments that may override config file
         # settings here.
