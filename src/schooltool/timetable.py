@@ -152,6 +152,7 @@ from schooltool.db import MaybePersistentKeysSet
 from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.interfaces import ITimetableActivity, ITimetableException
+from schooltool.interfaces import ITimetableActivityAddedEvent
 from schooltool.interfaces import ITimetableExceptionList
 from schooltool.interfaces import ITimetableExceptionEvent
 from schooltool.interfaces import ITimetableExceptionAddedEvent
@@ -299,13 +300,36 @@ class TimetableDay(Persistent):
     def add(self, period, activity):
         if period not in self.periods:
             raise ValueError("Key %r not in periods %r" % (period,
-                                                            self.periods))
+                                                           self.periods))
         if not ITimetableActivity.providedBy(activity):
             raise TypeError("TimetableDay can only contain ITimetableActivity"
                             " objects (got %r)" % (activity, ))
+        # I think the next statement depends on the fact that events are
+        # added to their owner timetables before being added to resource
+        # timetables.  That doesn't seem to be very clean.
         if activity.timetable is None:
+            original = True # protect from infinite recursion
             activity = activity.replace(timetable=self.timetable)
+        else:
+            original = False
         self.activities[period].add(activity)
+
+        if original and IEventTarget.providedBy(self.timetable.__parent__):
+            key, day_id = self._getTTDayInfo()
+            event = TimetableActivityAddedEvent(activity, key, day_id, period)
+            event.dispatch(self.timetable.__parent__)
+
+    def _getTTDayInfo(self):
+        # XXX A temporary workaround, to be removed ASAP.
+        for k, td in self.timetable.items():
+            if td is self:
+                day_id = k
+                break
+        for k, tt in self.timetable.__parent__.items():
+            if tt is self.timetable:
+                key = k
+                break
+        return key, day_id
 
     def remove(self, period, value):
         if period not in self.periods:
@@ -433,6 +457,22 @@ class TimetableReplacedEvent(EventMixin):
 
     def __unicode__(self):
         return ("TimetableReplacedEvent object=%s (%s) key=%s"
+                % (getPath(self.object), self.object.title, self.key))
+
+
+class TimetableActivityAddedEvent(EventMixin):
+
+    implements(ITimetableActivityAddedEvent)
+
+    def __init__(self, activity, key, day_id, period_id):
+        EventMixin.__init__(self)
+        self.activity = activity
+        self.key = key
+        self.day_id = day_id
+        self.period_id = period_id
+
+    def __unicode__(self):
+        return ("TimetableActivityAddedEvent object=%s (%s) key=%s"
                 % (getPath(self.object), self.object.title, self.key))
 
 
@@ -770,18 +810,15 @@ class TimetableDict(PersistentDict):
         value.__parent__ = self
         value.__name__ = key
         PersistentDict.__setitem__(self, key, value)
-        e = TimetableReplacedEvent(self.__parent__, key, old_value, value)
-        if IEventTarget.providedBy(self.__parent__):
-            e.dispatch(self.__parent__)
+        self.notify(TimetableReplacedEvent(self.__parent__, key,
+                                           old_value, value))
 
     def __delitem__(self, key):
         value = self[key]
         value.__parent__ = None
         value.__name__ = None
         PersistentDict.__delitem__(self, key)
-        e = TimetableReplacedEvent(self.__parent__, key, value, None)
-        if IEventTarget.providedBy(self.__parent__):
-            e.dispatch(self.__parent__)
+        self.notify(TimetableReplacedEvent(self.__parent__, key, value, None))
 
     def clear(self):
         for key, value in self.items():

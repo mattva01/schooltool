@@ -276,7 +276,10 @@ class TestTimetable(unittest.TestCase):
         self.assertEquals(result, expected)
 
 
-class TestTimetableDay(unittest.TestCase):
+class TestTimetableDay(EventServiceTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpEventService()
 
     def test_interface(self):
         from schooltool.timetable import TimetableDay
@@ -294,11 +297,15 @@ class TestTimetableDay(unittest.TestCase):
         self.assertEqual(td.keys(), periods)
 
     def testComparison(self):
-        from schooltool.timetable import TimetableDay
+        from schooltool.timetable import TimetableDay, Timetable
 
         periods = ('A', 'B')
         td1 = TimetableDay(periods)
         td2 = TimetableDay(periods)
+        tt = Timetable(['td1', 'td2'])
+        tt['td1'] = td1
+        tt['td2'] = td2
+
         self.assertEquals(td1, td2)
         self.assertNotEquals(td1, None)
         self.failIf(td1 != td2)
@@ -313,17 +320,30 @@ class TestTimetableDay(unittest.TestCase):
         self.assertNotEquals(td1, td3)
 
     def test_getitem_add_items_clear_remove(self):
-        from schooltool.timetable import TimetableDay
+        from schooltool.timetable import TimetableDay, Timetable, TimetableDict
+        from schooltool.interfaces import ITimetableActivityAddedEvent
 
         periods = ('1', '2', '3', '4')
-        td = TimetableDay(periods)
+        timetable = Timetable(['td'])
+        ttd = TimetableDict()
+        ttd['a', 'key'] = timetable
+        ttd.__parent__ = self.eventService
+        td = timetable['td'] = TimetableDay(periods)
+
         self.assertRaises(KeyError, td.__getitem__, "Mo")
         self.assertEqual(len(list(td["1"])), 0)
 
         self.assertRaises(TypeError, td.add, "1", object())
         math = ActivityStub()
         self.assertRaises(ValueError, td.add, "Mo", math)
+
         td.add("1", math)
+        e1 = self.checkOneEventReceived()
+        self.assert_(ITimetableActivityAddedEvent.providedBy(e1))
+        self.assertEquals(e1.key, ('a', 'key'))
+        self.assertEquals(e1.day_id, 'td')
+        self.assertEquals(e1.period_id, '1')
+
         self.assertEqual(list(td["1"]), [math])
         self.assert_(list(td["1"])[0].replaced)
 
@@ -332,7 +352,11 @@ class TestTimetableDay(unittest.TestCase):
         self.assertEqual(result, [('1', Set([math])), ('2', Set([])),
                                   ('3', Set([])), ('4', Set([]))])
         english = ActivityStub()
+        self.eventService.clearEvents()
         td.add("2", english)
+        e2 = self.checkOneEventReceived()
+        self.assertEquals(e2.period_id, '2')
+
         result = [(p, Set(i)) for p, i in td.items()]
         self.assertEqual(result, [('1', Set([math])), ('2', Set([english])),
                                   ('3', Set([])), ('4', Set([]))])
@@ -501,7 +525,7 @@ class TestTimetableExceptionList(EventServiceTestMixin, unittest.TestCase):
 
 class TestTimetableEvents(unittest.TestCase):
 
-    def test_exception_events(self):
+    def test_tt_exception_events(self):
         from schooltool.timetable import TimetableExceptionAddedEvent
         from schooltool.timetable import TimetableExceptionRemovedEvent
         from schooltool.interfaces import ITimetableExceptionAddedEvent
@@ -513,7 +537,7 @@ class TestTimetableEvents(unittest.TestCase):
         e2 = TimetableExceptionRemovedEvent(timetable, exception)
         verifyObject(ITimetableExceptionRemovedEvent, e2)
 
-    def test_replaced_event(self):
+    def test_tt_replaced_event(self):
         from schooltool.timetable import TimetableReplacedEvent
         from schooltool.interfaces import ITimetableReplacedEvent
         obj = object()
@@ -522,6 +546,16 @@ class TestTimetableEvents(unittest.TestCase):
         new_timetable = object()
         e = TimetableReplacedEvent(obj, key, old_timetable, new_timetable)
         verifyObject(ITimetableReplacedEvent, e)
+
+    def test_activity_added_event(self):
+        from schooltool.timetable import TimetableActivityAddedEvent
+        from schooltool.interfaces import ITimetableActivityAddedEvent
+        obj = object()
+        key = ('a', 'b')
+        day_id = 'Monday'
+        period_id = 'autumn'
+        e = TimetableActivityAddedEvent(obj, key, day_id, period_id)
+        verifyObject(ITimetableActivityAddedEvent, e)
 
 
 class TestTimetableException(unittest.TestCase):

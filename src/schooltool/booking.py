@@ -17,15 +17,16 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
+==============================
 Resource booking in SchoolTool
 ==============================
 
 Resources are things like projectors, and also locations (e.g. classrooms).  In
 SchoolTool, resources are represented as application objects, and therefore can
-be organized in groups, can participate in relationships with other object, and
-have timetables and calendars.
+be organized in groups, can participate in relationships with other objects,
+and have timetables and calendars.
 
-Resource timetables and calendars indicate when the resource is busy.  When a
+Resource timetables and calendars indicate when a resource is busy.  When a
 person books a resource, a calendar event is added to both the person's
 calendar and the resource's calendar to indicate that the resource is busy
 during that time.  When a timetable activity with possibly several resources
@@ -58,7 +59,7 @@ broken invariants.
 
 The event handler is hooked up in schooltool.app.create_application.
 
-TODO: events for activity addition and removal.
+TODO: event for activity removal.
 
 
 Calendaring
@@ -89,6 +90,7 @@ $Id$
 
 from zope.interface import implements
 from schooltool.interfaces import IEventTarget
+from schooltool.interfaces import ITimetableActivityAddedEvent
 from schooltool.interfaces import ITimetableReplacedEvent
 from schooltool.interfaces import ITimetableExceptionAddedEvent
 from schooltool.interfaces import ITimetableExceptionRemovedEvent
@@ -102,12 +104,20 @@ class TimetableResourceSynchronizer:
     implements(IEventTarget)
 
     def notify(self, event):
-        if ITimetableReplacedEvent.providedBy(event):
+        if ITimetableActivityAddedEvent.providedBy(event):
+            self.notifyActivityAdded(event)
+        elif ITimetableReplacedEvent.providedBy(event):
             self.notifyTimetableReplaced(event)
         elif ITimetableExceptionAddedEvent.providedBy(event):
             self.notifyTimetableExceptionAdded(event)
         elif ITimetableExceptionRemovedEvent.providedBy(event):
             self.notifyTimetableExceptionRemoved(event)
+        else:
+            raise TypeError("Unknown event: %r" % event)
+
+    def notifyActivityAdded(self, event):
+        self._activityAdded(event.activity, event.key, event.day_id,
+                            event.period_id, event.activity.timetable)
 
     def notifyTimetableReplaced(self, event):
         if event.old_timetable is not None:
@@ -133,8 +143,7 @@ class TimetableResourceSynchronizer:
 
     def _activityAdded(self, activity, key, day_id, period_id, timetable):
         if activity.owner is None:
-            # Make life easier for unit tests.
-            return
+            return # Make life easier for unit tests.
         for obj in [activity.owner] + list(activity.resources):
             if key not in obj.timetables:
                 obj.timetables[key] = timetable.cloneEmpty()

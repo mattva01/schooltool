@@ -1487,6 +1487,15 @@ class ITimetableActivity(Interface):
         """Calculate the hash value of a timetable activity."""
 
 
+class ITimetableActivityAddedEvent(IEvent):
+    """Event that gets sent when an activity is added to a timetable day."""
+
+    activity = Attribute("""A timetable activity.""")
+    key = Attribute("""Tuple (time_period_id, schema_id).""")
+    day_id = Attribute("""The day_id of the containing timetable day.""")
+    period_id = Attribute("""The period_id of the activity.""")
+
+
 class ITimetableExceptionList(Interface):
     """A list of timetable exceptions.
 

@@ -50,6 +50,29 @@ class TestTimetableResourceSynchronizer(AppSetupMixin,
         for obj in (self.person, self.resource, self.location):
             obj.timetables['2004-fall', 'simple']['Day 1'].add('A', act)
 
+    def test_activity_added(self):
+        from schooltool.booking import TimetableResourceSynchronizer
+        from schooltool.timetable import TimetableActivity
+        from schooltool.interfaces import IEvent
+        ttes = TimetableResourceSynchronizer()
+        self.app.eventService.subscribe(ttes, IEvent)
+
+        activity = TimetableActivity(title="New", owner=self.person,
+                                     resources=(self.location, ))
+
+        ttday = self.person.timetables['2004-fall', 'simple']['Day 1']
+        ttday.add('B', activity) # should fire ActivityAddedEvent
+
+        loc_ttday = self.location.timetables['2004-fall', 'simple']['Day 1']
+        self.assert_(list(loc_ttday['B']))
+
+        act = list(ttday['B'])[0]
+        act2 = list(loc_ttday['B'])[0]
+        self.assert_(act2 is act)
+        self.assertEquals(act2, activity)
+
+        # TODO: ActivityRemovedEvent
+
     def test_exception_added_then_removed(self):
         from schooltool.booking import TimetableResourceSynchronizer
         from schooltool.timetable import TimetableException
