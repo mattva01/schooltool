@@ -55,18 +55,7 @@
                 <li>
                   <a href="" id="portlet-navigation-information"
                       tal:attributes="href string:/persons/${request/authenticated_user/__name__}"
-                      i18n:translate="">My Information</a></li>
-                <li>
-                  <a tal:attributes="href string:/persons/${request/authenticated_user/__name__}/calendar.ics"
-                      i18n:translate="">
-                    Open your calendar in an iCal client
-                  </a>
-                </li>
-                <li>
-                  <a tal:attributes="href string:/persons/${request/authenticated_user/__name__}/timetable-calendar.ics"
-                      i18n:translate="">
-                    Open your timetable calendar in an iCal client
-                  </a>
+                      i18n:translate="">My Information</a>
                 </li>
               </ul>
             </div>
@@ -163,7 +152,7 @@
 <!-- START 'portlet' macros -->
   <metal:block define-macro="calendar-navigation">
 
-    <div id="calendar-navigation">
+    <div id="calendar-navigation" style="text-align:center;">
       <tal:if tal:condition="view/isManager">
         <div>
           <a href="/start" i18n:translate="">
@@ -171,7 +160,17 @@
           </a>
         </div>
       </tal:if>
-
+      <tal:comment condition="nothing">
+        <!--
+          XXX: this needs to be checked with /groups/foo
+        -->
+      </tal:comment>
+      <a tal:attributes="href string:${context/@@absolute_url}.ics"
+          title="Open this calendar in an iCal client."
+          i18n:attributes="title"
+          i18n:translate="">
+        Open in iCal
+      </a>
       <a id="calendar-navigation-day"
         tal:attributes="href python:view.calURL('daily')"
         title="View daily calendar"
