@@ -895,6 +895,7 @@ class TestFacetManagementView(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.component import FacetManager
         from schooltool.model import Person
         from schooltool.debug import EventLogFacet
+
         request = RequestStub("http://localhost/group/facets")
         facetable = Person()
         owner = Person()
@@ -915,6 +916,9 @@ class TestFacetManagementView(RegistriesSetupMixin, unittest.TestCase):
               <facet xlink:type="simple" active="active"
                      xlink:title="002" class="EventLogFacet"
                      owned="owned" xlink:href="facets/002"/>
+            ---8<---
+              <facetFactory name="Event Log Factory"
+                            title="Event Log Factory"/>
             ---8<---
             </facets>
             """)

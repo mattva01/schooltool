@@ -178,9 +178,9 @@ def registerFacetFactory(factory):
     facet_factory_registry[factory.name] = factory
 
 
-def facetFactories(ob):
-    """Returns a sequence of facet factories for the given object."""
-    return facet_factory_registry.values()
+def iterFacetFactories():
+    """Iterates over all registered facet factories."""
+    return facet_factory_registry.itervalues()
 
 
 def getFacetFactory(name):

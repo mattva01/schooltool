@@ -10,4 +10,7 @@
                     xlink:title item/title;
                     xlink:href item/path"
   />
+  <facetFactory
+    tal:repeat="item view/listFacetFactories"
+    tal:attributes="name item/name; title item/title"/>
 </facets>

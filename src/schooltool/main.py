@@ -447,11 +447,13 @@ class Server:
         import schooltool.membership
         import schooltool.views
         import schooltool.debug
+        import schooltool.interfaces
 
         schooltool.relationship.setUp()
         schooltool.membership.setUp()
         schooltool.views.setUp()
         schooltool.debug.setUp()
+        schooltool.interfaces.setUp()
 
         db_configuration = self.config.database
         self.db = db_configuration.open()

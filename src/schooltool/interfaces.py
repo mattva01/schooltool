@@ -692,6 +692,9 @@ class IFacetAPI(Interface):
         factory must implement IFacetFactory
         """
 
+    def iterFacetFactories():
+        """Iterate over all registered facet factories."""
+
 #
 # Application objects
 #

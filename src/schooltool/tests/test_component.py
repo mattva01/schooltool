@@ -245,27 +245,27 @@ class TestFacetFunctions(unittest.TestCase):
         from schooltool import component
         verifyObject(IFacetAPI, component)
 
-    def test_facetFactories(self):
-        from schooltool.component import facetFactories, registerFacetFactory
+    def test_iterFacetFactories(self):
+        from schooltool.component import iterFacetFactories
+        from schooltool.component import registerFacetFactory
         from schooltool.component import resetFacetFactoryRegistry
         from schooltool.component import getFacetFactory
         from schooltool.facet import FacetFactory
-        ob = object()
         name = "some facet"
         title = "some title"
         factory = FacetFactory(object, name, title)
-        self.assertEqual(len(facetFactories(ob)), 0)
+        self.assertEqual(len(list(iterFacetFactories())), 0)
         self.assertRaises(TypeError, registerFacetFactory, object)
         self.assertRaises(KeyError, getFacetFactory, name)
         registerFacetFactory(factory)
-        self.assertEqual(list(facetFactories(ob)), [factory])
+        self.assertEqual(list(iterFacetFactories()), [factory])
         self.assertEqual(getFacetFactory(name), factory)
         registerFacetFactory(factory)  # no-op, already registered
         factory2 = FacetFactory(lambda: None, name, "another title")
         self.assertRaises(ValueError, registerFacetFactory, factory2)
-        self.assertEqual(list(facetFactories(ob)), [factory])
+        self.assertEqual(list(iterFacetFactories()), [factory])
         resetFacetFactoryRegistry()
-        self.assertEqual(len(facetFactories(ob)), 0)
+        self.assertEqual(len(list(iterFacetFactories())), 0)
 
 
 class TestServiceAPI(unittest.TestCase):

@@ -31,7 +31,7 @@ from schooltool.interfaces import IUtilityService, IUtility, IFacet
 from schooltool.interfaces import ComponentLookupError
 from schooltool.component import getPath, traverse, getRelatedObjects
 from schooltool.component import getView, registerView, strURI, getURI
-from schooltool.component import FacetManager
+from schooltool.component import FacetManager, iterFacetFactories
 from schooltool.debug import IEventLog, IEventLogUtility, IEventLogFacet
 
 __metaclass__ = type
@@ -355,6 +355,9 @@ class FacetManagementView(View):
                  'class_name': facet.__class__.__name__,
                  'path': 'facets/%s' % facet.__name__}
                 for facet in self.context.iterFacets()]
+
+    def listFacetFactories(self):
+        return iterFacetFactories()
 
 
 class RelationshipsView(View):
