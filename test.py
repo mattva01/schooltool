@@ -60,9 +60,11 @@ Options:
 import re
 import os
 import sys
+import types
 import getopt
 import unittest
 import traceback
+from sets import Set
 
 __metaclass__ = type
 
@@ -93,6 +95,8 @@ class Options:
 
     # output verbosity
     verbosity = 0               # verbosity level (-p)
+    warn_omitted = True         # produce warnings when a test case is
+                                # not included in a test suite (hardcoded)
     progress = False            # show running progress (-v)
     immediate_errors = True     # show tracebacks twice (currently hardcoded)
     screen_width = 80           # screen width (currently hardcoded)
@@ -194,6 +198,33 @@ def filter_testsuite(suite, matcher, level=None):
     return results
 
 
+def get_all_test_cases(module):
+    """Returns a list of all test case classes defined in a given module."""
+    results = []
+    for name in dir(module):
+        if not name.startswith('Test'):
+            continue
+        item = getattr(module, name)
+        if (isinstance(item, (type, types.ClassType)) and
+            issubclass(item, unittest.TestCase)):
+            results.append(item)
+    return results
+
+
+def get_test_classes_from_testsuite(suite):
+    """Returns a set of test case classes used in a test suite."""
+    if not isinstance(suite, unittest.TestSuite):
+        raise TypeError('not a TestSuite', suite)
+    results = Set()
+    for test in suite._tests:
+        if isinstance(test, unittest.TestCase):
+            results.add(test.__class__)
+        else:
+            classes = get_test_classes_from_testsuite(test)
+            results.update(classes)
+    return results
+
+
 def get_test_cases(test_files, cfg):
     """Returns a list of test cases from a given list of test modules."""
     matcher = compile_matcher(cfg.test_regex)
@@ -201,6 +232,13 @@ def get_test_cases(test_files, cfg):
     for file in test_files:
         module = import_module(file, cfg)
         test_suite = module.test_suite()
+        if cfg.warn_omitted:
+            all_classes = Set(get_all_test_cases(module))
+            classes_in_suite = get_test_classes_from_testsuite(test_suite)
+            difference = all_classes - classes_in_suite
+            for test_class in difference:
+                print >> sys.stderr, ("%s: WARNING: %s is not test suite"
+                                      % (file, test_class.__name__))
         if (cfg.level is not None and
             getattr(test_suite, 'level', 0) > cfg.level):
             continue
