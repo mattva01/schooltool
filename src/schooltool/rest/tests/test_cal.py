@@ -598,6 +598,7 @@ class TestCalendarView(TestCalendarReadView):
         result = self.view._traverse('acl', request)
         self.assert_(isinstance(result, ACLView))
         self.assert_(result.context is cal.acl)
+        self.assertRaises(KeyError, self.view._traverse, 'keyerror', request)
 
 
 class TestCalendarViewBookingEvents(NiceDiffsMixin, unittest.TestCase):

@@ -22,9 +22,11 @@ Views for calendaring.
 $Id$
 """
 
+import sets
 import libxml2
 import datetime
 import operator
+
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ISchooldayModel, ICalendar
@@ -258,13 +260,14 @@ class CalendarReadView(View):
 
 
 class CalendarView(CalendarReadView):
-    """iCalendar r/w view for ICalendar."""
+    """iCalendar r/w view for IACLCalendar."""
 
     authorization = PrivateACLAccess
 
     def _traverse(self, name, request):
         if name == 'acl':
             return ACLView(self.context.acl)
+        raise KeyError(name)
 
     def do_PUT(self, request):
         ctype = request.getContentType()
@@ -304,12 +307,13 @@ class CalendarView(CalendarReadView):
         #   events_to_delete -- a list of deleted events
         #
         # Note that when an event is changed, it will look as if the old
-        # event was deleted and a new event added in its place.  We could
-        # see that this is actually a modification by comparing unique_id,
-        # but currently that is just not interesting.
+        # event was deleted and a new event added in its place.  We can
+        # tell that this is actually a modification by comparing unique_id.
         events_to_add = events # alias
         events_to_delete = []
+        old_event_ids = sets.Set()
         for event in list(self.context):
+            old_event_ids.add(event.unique_id)
             # owner and context are not represented in the iCalendar
             # representation.  We do not want every upload to discard
             # those attributes, so we ignore them when checking for changes.
@@ -320,7 +324,22 @@ class CalendarView(CalendarReadView):
             else:
                 events_to_delete.append(event)
 
-        # TODO: check for permissions in the calendar ACL
+        # See which permissions are necessary to perform these additions,
+        # deletions and modifications.
+        need_add_perm = False
+        need_modify_perm = bool(events_to_delete)
+        for event in events_to_add:
+            if event.unique_id in old_event_ids:
+                need_modify_perm = True
+            else:
+                need_add_perm = True
+
+##      acl = self.context.acl
+##      user = request.authenticated_user
+##      if need_add_perm and not acl.allows(user, AddPermission):
+##          ...
+##      if need_modify_perm and not acl.allows(user, ModifyPermission):
+##          ...
 
         for event in events_to_delete:
             if event.owner or event.context:

@@ -115,7 +115,7 @@ def SystemAccess(context, request):
 SystemAccess = staticmethod(SystemAccess)
 
 
-def PrivateACLAccess(context,  request):
+def PrivateACLAccess(context, request):
     """Allows access to the owner of the object, and to the users in ACL"""
     owner = getOwner(context)
     if isManager(request.authenticated_user):

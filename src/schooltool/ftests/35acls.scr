@@ -21,7 +21,7 @@ PUT> <acl xmlns='http://schooltool.org/ns/model/0.1'>
 PUT>  <allow principal="/groups/teachers" permission="Modify" />
 PUT> </acl>
 PUT> .
-201 Created
+200 OK
 Content-Type: text/plain; charset=UTF-8
 ACL saved
 
@@ -47,7 +47,7 @@ SchoolTool> put /groups/pupils/acl
 PUT> <acl xmlns='http://schooltool.org/ns/model/0.1'>
 PUT> </acl>
 PUT> .
-201 Created
+200 OK
 Content-Type: text/plain; charset=UTF-8
 ACL saved
 

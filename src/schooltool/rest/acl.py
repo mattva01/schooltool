@@ -41,6 +41,7 @@ __metaclass__ = type
 
 class ACLView(View):
     """A view on ACLs"""
+
     authorization = SystemAccess
     template = Template("www/acl.pt", content_type="text/xml")
     schema = read_file("../schema/acl.rng")
@@ -79,20 +80,20 @@ class ACLView(View):
             self.context.clear()
             for perm in perms:
                 path = to_unicode(perm.nsProp('principal', None))
-                title = to_unicode(perm.nsProp('title', None))
                 permission = perm.nsProp('permission', None)
-                if path != Everybody:
+                if path == Everybody:
+                    principal = path
+                else:
                     try:
                         principal = traverse(self.context, path)
                     except TypeError:
                         return textErrorPage(request, _("Bad path %r") % path)
-                else:
-                    principal = path
                 self.context.add((principal, permission))
         finally:
             doc.freeDoc()
             xpathctx.xpathFreeContext()
 
-        request.setResponseCode(201, 'Created')
+        request.setResponseCode(200)
         request.setHeader('Content-Type', 'text/plain')
         return _("ACL saved")
+

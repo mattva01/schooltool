@@ -765,6 +765,7 @@ class IACL(Interface):
 
 class IACLOwner(Interface):
     """An object that has an ACL"""
+
     acl = Attribute("""The ACL for this calendar.""")
 
 

@@ -83,8 +83,10 @@ class TestACLView(AppSetupMixin, QuietLibxml2Mixin,
     def test_do_POST_empty(self):
         view = self.createView()
         body = "<acl xmlns='http://schooltool.org/ns/model/0.1'/>"
-        result = view.render(RequestStub(authenticated_user=self.manager,
-                                         method="PUT", body=body))
+        request = RequestStub(authenticated_user=self.manager,
+                              method="PUT", body=body)
+        result = view.render(request)
+        self.assertEquals(request.code, 200)
         self.assertEquals(list(view.context), [])
 
     def test_do_POST(self):
@@ -97,9 +99,11 @@ class TestACLView(AppSetupMixin, QuietLibxml2Mixin,
                  <allow principal="/groups/teachers" permission="Modify"/>
                </acl>
                """
-        result = view.render(RequestStub(authenticated_user=self.manager,
-                                         method="PUT", body=body))
+        request = RequestStub(authenticated_user=self.manager,
+                              method="PUT", body=body)
+        result = view.render(request)
 
+        self.assertEquals(request.code, 200)
         self.assertEqualsSorted(list(view.context),
                                 [(Everybody, ViewPermission),
                                  (self.teachers, ModifyPermission)])
