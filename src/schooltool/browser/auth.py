@@ -82,6 +82,10 @@ class TicketService:
         ...
       AuthenticationError
 
+    (If you see test failures here, make sure that your clock does not go
+    backwards.  It has happened to some people!  Note that ZODB is known to be
+    unhappy with nonmonotonic clocks.)
+
     Note that we did not specify a duration in the first example -- in that
     case the ticket will never expire automatically.
 
