@@ -202,11 +202,13 @@ class Calendar(Persistent):
         #   2. That event is added to both the owner's calendar and the
         #      resource's calendar.
         # When that event is removed from either the owner's or the resource's
-        # calendar, it should be removed from the other one as well.
-        owner_calendar = event.owner is not None and event.owner.calendar
-        context_calendar = event.context is not None and event.context.calendar
-        # XXX fragile code: say, owner_calendar is not None,
-        #                   but context_calendar is.
+        # calendar, it should be removed from the other one as well.  It would
+        # be nice to move the extra logic into schooltool.booking, if possible.
+        owner_calendar = context_calendar = None
+        if event.owner is not None:
+            owner_calendar = event.owner.calendar
+        if event.context is not None:
+            context_calendar = event.context.calendar
         if self is owner_calendar or self is context_calendar:
             if owner_calendar is not None and owner_calendar is not self:
                 owner_calendar._removeEvent(event)
