@@ -2,8 +2,7 @@ include RELEASE
 include *schoolbell*
 include GPL
 include Makefile
-include test.conf test.py testserver.pem
-include ttconfig.data
+include test.py
 include ftesting.zcml
 include remove-stale-bytecode.py
 
@@ -21,8 +20,7 @@ include scripts/run-import.sh
 
 recursive-include src/schoolbell *.py *.pt *.css *.png *.txt
 recursive-include src/schoolbell *.js *.xml *.conf *.zcml *.ics
-recursive-include doc *.txt *.rst
-recursive-include db-conversion-tests Data.fs-* test_*.py
+include doc/release-policy.txt doc/release-checklist.txt
 
 include Zope3/setup.py
 include Zope3/test.py
