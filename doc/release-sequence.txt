@@ -9,14 +9,14 @@ Minor Release
 
 For bugfixes to a released version which are non-debian specific.
 
-1.  Make sure the necessary changes are in both schooltool and schoolbell branches.
+1.  Make sure the necessary changes are in both SchoolTool and SchoolBell branches.
     Merge them from the trunk if necessary.
 
 2.  Set version in 0.8.x branches.
 
     a.  Make sure the SERVER_VERSION in src/schooltool/http.py is updated.
 
-    b.  Update the version number in setup.py.
+    b.  Update the version number in setup.py and import-sampleschool.py.
 
     c.  Write a new Changelog entry in debian/changelog.
 
@@ -25,10 +25,10 @@ For bugfixes to a released version which are non-debian specific.
 
 3.  Check release notes in RELEASE.
 
-4.  Tag new schooltool version.
+4.  Tag new SchoolTool version.
 
-    svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/release-0.8.x \
-        svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool/release-0.8.1-1
+    svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool-0.8.x \
+        svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool-0.8.1
 
 4.  Goto step 5 of `Procedure for a 0.x Release`_ using the new tags.
 
@@ -40,12 +40,12 @@ Create a new Debian Revision for Debian specific bugfixes.
 1.  Make sure the necessary changes are in the schooltool-0.8.x branch.  Merge
     them from the trunk if necessary.
 
-2.  Check release notes in RELEASE.
+2.  Check debian/changelog.
 
-3.  Tag new schooltool package revision.
+3.  Tag new SchoolTool package revision.
 
-    svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/release-0.8.x \
-        svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool/release-0.8-2
+    svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool-0.8.x \
+        svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool-0.8-2
 
 4.  Steps 5, 8, 9 of `Procedure for a 0.x Release`_ using the new tags.
 
@@ -64,37 +64,38 @@ This is the release procedure used for release 0.8.
 
     b.  Update the version number in setup.py.
 
-    c.  Write a new Changelog entry in debian/changelog.
+    c.  Write a new changelog entry in debian/changelog.
 
-    d.  Make sure that db_version in debian/school{bell,tool}.preinst and
-        debian/rules are correct and the same.
+    d.  Make sure that db_version in debian pre/post installation scripts is
+        correct and is the same.
 
 3.  Check release notes in RELEASE.
 
-4.  Branch and tag schooltool trunk.
+4.  Branch and tag SchoolTool trunk.
 
     svn cp svn+ssh://source.schooltool.org/svn/schooltool/trunk/schooltool \
-        svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/release-0.8.x
+        svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool-0.8.x
+
+    svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool-0.8.x \
+        svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool-0.8
 
     Note: If changes to a debian package or a bugfix release are needed, they
-    can be worked on in branches/schooltool/release-0.8 and then tagged as
-    release-0.8-2 or 0.8.1-1. Depending on weather the changes were debian
+    can be worked on in branches/schooltool-0.8.x and then tagged as
+    schooltool-0.8-2 or 0.8.1-1. Depending on weather the changes were debian
     specific or not. See `Minor Release`_ and `New Debian Revision`_
 
     If there are any problems on any step, you can delete the branches by
-    executing the following command:
-        svn rm svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/release-0.8.x
+    executing the following commands:
+        svn rm svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool-0.8.x
+        svn rm svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool-0.8
 
-5.  Checkout the tags in different directories:
+5.  Export the tag:
 
-    svn co svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool/release-0.8-1
+    svn export svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool-0.8
 
 6.  Create tarballs from releases.
 
-    a.  Export from repository.
-        e.g. svn export release-0.8-1 schooltool-0.8
-
-    b.  Make tarballs.
+    a.  Make tarballs.
             cd schooltool-0.8
             make schooltooltar
             cd ..
@@ -103,12 +104,13 @@ This is the release procedure used for release 0.8.
             make schoolbelltar
             cd ..
 
-    c.  Make md5sum file of tarballs.
+    b.  Make md5sum file of tarballs.
         md5sum school{tool,bell}-0.8.tar.gz > md5sum-release-0.8
 
-    d.  Sign the md5sum with your gpg private key.
+    c.  Sign the md5sum with your gpg private key.
+
         gpg --clearsign md5sum-release-0.8
-        mv md5sum-release-0.8.gpg md5sum-release-0.8
+        mv md5sum-release-0.8.asc md5sum-release-0.8
 
     Note: always leave out the debian revision from the tarball.
 
@@ -130,29 +132,32 @@ This is the release procedure used for release 0.8.
 
 8.  Build the Debian packages.
 
-    a.  Build and sign the packages using a pbuilder chroot.
+    a.  Copy debconf translations to debian/po
+
+    b.  Build and sign the packages using a pbuilder chroot.
         (remeber to use --basetgz option)
 
-    b.  Check the packages by installing/de-installing them in a clean
+    c.  Check the packages by installing/de-installing them in a clean
         sarge chroot.
 
-    c.  Run the funtional tests against the server installed in the chroot.
+    d.  Run the funtional tests against the server installed in the chroot.
 
         - Purge the server in the chroot,
         - Pre-seed the chroot with testserver ports.
         - Install the server.
         - Stop the server.
-        - Add 'event-logging on' to the server config.
-        - Copy testserver_app.log to chroot/var/log/school{tool,bell}/app.log
+        - Change storage type to <mappingstorage/>
+        - Add 'event-logging on' and 'test-mode on' to the server config.
+        - Copy testserver_app.log to chroot/var/log/schooltool/app.log
         - Start the server.
         - Run the functional tests - 'python $sourcedir/test.py -f'
 
-    d.  Run lintian on the .changes file. Make sure there are no warnings
+    e.  Run lintian on the .changes file. Make sure there are no warnings
         or errors.
 
-    e.  Manually check .diff.tar.gz and .changes
+    f.  Manually check .diff.tar.gz and .changes
 
-    f.  Upload packages to debian unstable.
+    g.  Upload packages to debian unstable.
 
 9. Write a release page for the web.  Take screenshots.
 
@@ -173,3 +178,4 @@ This is the release procedure used for release 0.8.
 15. Send short announcement to interested outside parties.
 
     - Debian Edu (debian-edu@lists.debian.org)
+    - SchoolForge (schoolforge-discuss@schoolforge.net)

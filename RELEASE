@@ -8,7 +8,7 @@ Upgrade Issues
 Database Incompatibilities
 --------------------------
 
-The schooltool database in 0.8 is incompatible with earlier databases and the
+The SchoolTool database in 0.8 is incompatible with earlier databases and the
 server will not be able to start with an old database. Currently there is no
 way to upgrade a database, so the only possibility is to delete the old one and
 re-create it.
@@ -32,8 +32,6 @@ Community Contributed Features
 
 * Debconf configuration for Debian packages including SSL certificate
   generation and server ports. - Brian Sutherland
-
-* Czech translation of Debconf templates - Miroslav Kure
 
 Second SchoolBell Milestone (Programmers of Vilnius)
 ----------------------------------------------------
@@ -72,14 +70,14 @@ Calendaring functionality
 +++++++++++++++++++++++++
 
 * Handling recurring events in the calendar. Each event will support the full
-  iCalendar specs recurring event model. iCal vie%s/\s\+$// will support
-  retrieving and creating recurring events, so will web vie%s/\s\+$//.
+  iCalendar specs recurring event model. iCal views will support retrieving and
+  creating recurring events, so will web views.
 
 * A user can choose groups whose calendars will be merged onto his web calendar
   view. This is intended a device for communication between group members.
 
 * The manager can set the global policy whether publicly available personal
-  calendars will be displayed as freebusy calendars or if all the events will
+  calendars will be displayed as free/busy calendars or if all the events will
   be visible.
 
 * A user can select, on per-event basis, whether the event is publicly
@@ -134,12 +132,12 @@ Student Information, Address and Relationship Tracking - (Etria)
 
 * The comments should be integrated into the author's view of the object.
 
-* In order to make schooltool applicable across diverse school districts and
+* In order to make SchoolTool applicable across diverse school districts and
   educational systems, the personal information stored for each person
   (Student, Teacher, Administrator, Staff, Parents, etc.) has to be fully
   flexible. Starting from the example of the SIF data standard we see how
   complex this data can be, rather than shoe horn every school into the SIF
-  model, schooltool will provide layers of extensibility for what information
+  model, SchoolTool will provide layers of extensibility for what information
   it stores about people. In order to do this effectively Schooltool
   administrators will be able to create custom schema through the web for
   storing Person information.
