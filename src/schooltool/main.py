@@ -323,7 +323,7 @@ class Request(http.Request):
             self.accept = parseAccept(self.getHeader('Accept'))
         except ValueError, e:
             self.accept = []
-            body = textErrorPage(self, str(e))
+            body = textErrorPage(self, e)
             self.setHeader('Content-Length', len(body))
             self.write(body)
             self.finish()
@@ -388,9 +388,8 @@ class Request(http.Request):
                 self.authenticated_user = self.site.authenticate(app,
                         self.getUser(), self.getPassword())
             except AuthenticationError:
-                body = _("Bad username or password")
-                self.setResponseCode(401)
-                self.setHeader('Content-Type', 'text/plain')
+                body = textErrorPage(self, _("Bad username or password"),
+                                     code=401)
                 self.setHeader('Content-Length', len(body))
                 self.setHeader('WWW-Authenticate', 'basic realm="SchoolTool"')
                 return body

@@ -110,17 +110,19 @@ class TestErrorViews(unittest.TestCase):
     def test_textErrorPage(self):
         from schooltool.views import textErrorPage
         request = RequestStub()
-        result = textErrorPage(request, "Not ready to take off", 747, "Wait")
+        result = textErrorPage(request, u"Not ready to take off \u2639",
+                               747, "Wait")
         self.assertEquals(request.code, 747)
         self.assertEquals(request.reason, "Wait")
-        self.assertEquals(request.headers['content-type'], "text/plain")
-        self.assertEquals(result, u"Not ready to take off")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
+        self.assertEquals(result, "Not ready to take off \xe2\x98\xb9")
 
         request = RequestStub()
         result = textErrorPage(request, 42)
         self.assertEquals(request.code, 400)
         self.assertEquals(request.reason, "Bad Request")
-        self.assertEquals(result, u"42")
+        self.assertEquals(result, "42")
 
     def test_notFoundPage(self):
         from schooltool.views import notFoundPage
@@ -128,8 +130,9 @@ class TestErrorViews(unittest.TestCase):
         result = notFoundPage(request)
         self.assertEquals(request.code, 404)
         self.assertEquals(request.reason, "Not Found")
-        self.assertEquals(request.headers['content-type'], "text/plain")
-        self.assertEquals(result, u"Not found: /path")
+        self.assertEquals(request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
+        self.assertEquals(result, "Not found: /path")
 
     def test_NotFoundView(self):
         from schooltool.views import NotFoundView
