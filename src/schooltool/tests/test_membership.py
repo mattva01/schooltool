@@ -23,10 +23,12 @@ $Id: test_model.py 153 2003-10-16 12:33:50Z mg $
 """
 
 import unittest
+
 from persistent import Persistent
 from zope.interface.verify import verifyObject
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import EventServiceTestMixin
+from schooltool.tests.utils import AppSetupMixin
 from schooltool.tests.test_relationship import Relatable
 from schooltool.relationship import RelatableMixin
 
@@ -188,6 +190,14 @@ class TestMembershipRelate(RegistriesSetupMixin, EventServiceTestMixin,
                           group=g2, member=g1)
 
 
+class TestHelpers(AppSetupMixin, unittest.TestCase):
+
+    def test(self):
+        from schooltool.browser.timetable import memberOf
+        self.assert_(memberOf(self.person, self.root))
+        self.assert_(not memberOf(self.person, self.teachers))
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestMembershipRelationship))
@@ -195,6 +205,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCyclicConstraint))
     suite.addTest(unittest.makeSuite(TestEvents))
     suite.addTest(unittest.makeSuite(TestMembershipRelate))
+    suite.addTest(unittest.makeSuite(TestHelpers))
     return suite
 
 if __name__ == '__main__':

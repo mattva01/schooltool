@@ -33,6 +33,7 @@ from schooltool.uris import URIMembership, URIGroup, URIMember
 from schooltool.relationship import RelationshipSchema, RelationshipEvent
 from schooltool import relationship
 from schooltool.component import registerRelationship
+from schooltool.component import getRelatedObjects
 
 moduleProvides(IModuleSetup)
 
@@ -106,6 +107,11 @@ def membershipRelate(relationship_type, (a, role_a), (b, role_b)):
     event.dispatch(a)
     event.dispatch(b)
     return links
+
+
+def memberOf(member, group):
+    """Is `member` a member of `group`?"""
+    return group in getRelatedObjects(member, URIGroup)
 
 
 def setUp():
