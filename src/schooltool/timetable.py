@@ -38,6 +38,8 @@ from schooltool.interfaces import ITimePeriodService
 from schooltool.interfaces import ILocation, IMultiContainer
 from schooltool.cal import Calendar, CalendarEvent
 from schooltool.component import getRelatedObjects, FacetManager
+from schooltool.component import getTimePeriodService
+from schooltool.component import getTimetableSchemaService
 from schooltool.component import registerTimetableModel
 from schooltool.uris import URIGroup
 
@@ -457,6 +459,16 @@ class TimetabledMixin:
                 else:
                     keys.update(related.timetables.keys())
         return keys
+
+    def makeCalendar(self, period_id):
+        schoolday_model = getTimePeriodService(self)[period_id]
+        result = Calendar()
+        for schema_id in getTimetableSchemaService(self).keys():
+            tt = self.getCompositeTimetable(period_id, schema_id)
+            if tt is not None:
+                cal = tt.model.createCalendar(schoolday_model, tt)
+                result.update(cal)
+        return result
 
 
 class TimetableSchemaService(Persistent):

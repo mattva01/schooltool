@@ -883,6 +883,11 @@ class Calendar(Persistent):
         self.events.add(event)
         self.events = self.events  # make persistence work
 
+    def update(self, calendar):
+        for event in calendar:
+            self.events.add(event)
+        self.events = self.events  # make persistence work
+
     def clear(self):
         self.events.clear()
         self.events = self.events  # make persistence work

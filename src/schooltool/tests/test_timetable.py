@@ -29,7 +29,7 @@ from datetime import date, time, timedelta, datetime
 from persistence import Persistent
 
 from zope.interface.verify import verifyObject
-from zope.interface import implements
+from zope.interface import implements, directlyProvides
 from schooltool.tests.helpers import diff, sorted
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import EventServiceTestMixin
@@ -920,6 +920,56 @@ class TestTimetabledMixin(RegistriesSetupMixin, EventServiceTestMixin,
                          '/stub/timetables/2003-fall/sequential')
         self.assertEqual(getPath(tt1),
                          '/stub/composite-timetables/2003-fall/sequential')
+
+    def test_makeCalendar(self):
+        from schooltool.timetable import TimetableActivity
+        from schooltool.cal import Calendar, CalendarEvent
+        tps = self.serviceManager.timePeriodService = {}
+        sms = tps['2003 fall'] = SchooldayModelStub()
+        tss = self.serviceManager.timetableSchemaService = {}
+        tss['sequential'] = None
+        tss['other'] = None
+        tss['and another'] = None
+        tm = TimetabledStub(self.serviceManager)
+
+        tt1 = self.newTimetable()
+        tt1["A"].add("Green", TimetableActivity("AG"))
+        cal1 = Calendar()
+        ev1 = CalendarEvent(datetime(2003, 11, 26, 12, 00),
+                            timedelta(minutes=30), "AG")
+        cal1.addEvent(ev1)
+
+        tt2 = self.newTimetable()
+        tt2["A"].add("Blue", TimetableActivity("AB"))
+        cal2 = Calendar()
+        ev2 = CalendarEvent(datetime(2003, 11, 26, 13, 00),
+                            timedelta(minutes=30), "AB")
+        cal2.addEvent(ev2)
+
+        def newComposite(period_id, schema_id):
+            if (period_id, schema_id) == ("2003 fall", "sequential"):
+                return tt1
+            elif (period_id, schema_id) == ("2003 fall", "other"):
+                return tt2
+            else:
+                return None
+
+        tm.getCompositeTimetable = newComposite
+
+        class TimetableModelStub:
+            def createCalendar(this_self, schoolday_model, tt):
+                self.assert_(schoolday_model is sms)
+                if tt is tt1:
+                    return cal1
+                elif tt is tt2:
+                    return cal2
+                else:
+                    self.fail("what is %r?" % tt)
+
+        tt1.model = TimetableModelStub()
+        tt2.model = TimetableModelStub()
+        cal = tm.makeCalendar("2003 fall")
+        self.assertEquals(cal.events, cal1.events | cal2.events)
 
 
 class TestTimetableSchemaService(unittest.TestCase):

@@ -29,7 +29,7 @@ from datetime import date, timedelta, datetime
 from StringIO import StringIO
 from zope.interface.verify import verifyObject
 from zope.testing.doctestunit import DocTestSuite
-from schooltool.tests.helpers import diff, dedent
+from schooltool.tests.helpers import diff, dedent, sorted
 from schooltool.tests.utils import EqualsSortedMixin
 from schooltool.interfaces import ISchooldayModel
 
@@ -809,6 +809,21 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
         cal.clear()
         self.assertEquals(list(cal), [])
 
+    def test_update(self):
+        from schooltool.cal import CalendarEvent
+        ev1 = CalendarEvent(datetime(2003, 11, 25, 10, 0),
+                            timedelta(minutes=10),
+                            "English")
+        ev2 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                            timedelta(minutes=10),
+                            "Latin")
+        ev3 = CalendarEvent(datetime(2003, 11, 26, 10, 0),
+                            timedelta(minutes=10),
+                            "German")
+        cal = self.makeCal([ev1, ev2])
+        cal.update(self.makeCal([ev2, ev3]))
+        self.assertEquals(sorted(list(cal)), sorted([ev1, ev2, ev3]))
+
 
 class TestCalendarPersistence(unittest.TestCase):
     """A functional test for timetables persistence."""
@@ -891,6 +906,19 @@ class TestCalendarPersistence(unittest.TestCase):
             datamgr = self.db.open()
             cal2 = datamgr.root()['cal']
             self.assertEquals(list(cal2), [])
+        finally:
+            get_transaction().abort()
+            datamgr.close()
+
+        cal3 = Calendar()
+        cal3.addEvent(e)
+        cal.update(cal3)
+        get_transaction().commit()
+
+        try:
+            datamgr = self.db.open()
+            cal2 = datamgr.root()['cal']
+            self.assertEquals(list(cal2), [e])
         finally:
             get_transaction().abort()
             datamgr.close()

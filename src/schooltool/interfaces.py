@@ -817,10 +817,13 @@ class ICalendarWrite(Interface):
     """Writable calendar."""
 
     def clear():
-        """Removes all events."""
+        """Remove all events."""
 
     def addEvent(event):
-        """Adds an event to the calendar."""
+        """Add an event to the calendar."""
+
+    def update(calendar):
+        """Add all events from another calendar."""
 
 
 class ICalendarEvent(Interface):
@@ -1024,10 +1027,13 @@ class ITimetabled(Interface):
         available composite timetables.
         """
 
+    def makeCalendar(period_id):
+        """Generate and return a calendar for a given period of time.
 
-#
-# Integration of timetabling and calendaring
-#
+        The generated calendar contains activities from all object's composite
+        timetables valid for a given period of time.
+        """
+
 
 class ISchooldayTemplate(Interface):
     """A school-day template represents the times that periods are
