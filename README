@@ -8,7 +8,7 @@ projectors, etc, via a web interface, or using an iCalendar compliant client
 such as Mozilla calendar or iCal.
 
 SchoolBell is written in Python, and is a Zope 3 component as well as a
-standalone calendaring server .  It is part of the SchoolTool project, funded
+standalone calendaring server.  It is part of the SchoolTool project, funded
 by the Shuttleworth Foundation.
 
 Website: http://www.schooltool.org/schoolbell
@@ -16,6 +16,7 @@ Website: http://www.schooltool.org/schoolbell
 Mailing list: http://lists.schooltool.org/mailman/listinfo/schooltool
 
 Bug tracker: http://issues.schooltool.org/
+
 
 System requirements
 -------------------
@@ -30,7 +31,7 @@ System requirements
 - Python Imaging library (http://www.pythonware.com/products/pil/index.htm)
 
 - Development environment and a C compiler
-  (precompiled binaries are available for Windows users)
+  (pre-compiled binaries are available for Windows users)
 
 
 Building SchoolBell
@@ -47,21 +48,21 @@ Installing and Configuring with Distutils
 
 It is possible to install SchoolBell using python distutils.  To do this, you
 have to use one of the distributed tarballs/zipfiles, which you unpack in a
-directory with the tools appropriate to your OS. First, it is necessary to
+directory with the tools appropriate to your OS.  First, it is necessary to
 install the version of Zope included with the tarballs, this can be done by
 running
 
 python setup.py install
 
-from the Zope3/ directory included with the SchoolBell distribution. From the
-top level directory of an unpacked schoolbell tarball/zipfile SchoolBell can be
+from the Zope3/ directory included with the SchoolBell distribution.  From the
+top level directory of an unpacked SchoolBell tarball/zipfile SchoolBell can be
 installed with:
 
 python setup.py schoolbell install
 
 Finally, to setup a SchoolBell instance, copy the installed script into a
 separate directory and create a config file with the name of the script and an
-extension .conf. A good template can be found in the top level of the tarball
+extension .conf.  A good template can be found in the top level of the tarball
 (.conf.in). Running this script will then run an instance in that directory.
 
 Those interested in installing into a non-standard location should investigate
@@ -123,7 +124,11 @@ Project structure
   debian/               Debian packaging support
   doc/                  documentation
   src/                  source code
-    XXX --- XXX --- XXX
+    schoolbell/         Python 'schoolbell' package
+      app/              The SchoolBell application
+      calendar/         SchoolBell calendaring library for Zope 3
+      relationship/     The SchoolBell relationship library.
+
 
 Testing
 -------
@@ -161,11 +166,9 @@ saved snapshots will be gone.
 Virtual hosting
 ---------------
 
-XXX check this
-
-SchoolBell provides support for virtual hosting with Apache's mod_rewrite.
-For example, let's say you have two SchoolBell instances running on ports
-7001 and 7002, and you want to make them available as school1.example.org
+SchoolBell provides support for virtual hosting with Apache's mod_rewrite and
+libproxy.  For example, let's say you have two SchoolBell instances running on
+ports 7001 and 7002, and you want to make them available as school1.example.org
 and school2.example.org, both on port 80.  In order to do that, add the
 following to your Apache configuration file:
 
@@ -174,13 +177,13 @@ following to your Apache configuration file:
   <VirtualHost *:80>
     ServerName school1.example.org
     RewriteEngine On
-    RewriteRule ^/(.*) http://localhost:7001/++vh++http:school1.example.org:80/$1 [P]
+    RewriteRule ^/(.*) http://localhost:7001/++vh++http:school1.example.org:80/++/$1 [P]
   </VirtualHost>
 
   <VirtualHost *:80>
     ServerName school2.example.org
     RewriteEngine On
-    RewriteRule ^/(.*) http://localhost:7002/++vh++http:school2.example.org:80/$1 [P]
+    RewriteRule ^/(.*) http://localhost:7002/++vh++http:school2.example.org:80/++/$1 [P]
   </VirtualHost>
 
 Also, enable mod_proxy and mod_rewrite.
@@ -196,7 +199,7 @@ SSL support:
     SSLEnable          # Apache 1.3
     # SSLEngine On     # Apache 2.0
     RewriteEngine On
-    RewriteRule ^/(.*) http://localhost:7001/++vh++https:school1.example.org:443/$1 [P]
+    RewriteRule ^/(.*) http://localhost:7001/++vh++https:school1.example.org:443/++/$1 [P]
   </VirtualHost>
 
 The web application interface also supports virtual hosting in this manner,
