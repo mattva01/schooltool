@@ -21,6 +21,8 @@ Main SchoolBell script.
 
 This module is not necessary if you use SchoolBell as a Zope 3 content object.
 It is only used by the standalone SchoolBell executable.
+
+$Id$
 """
 
 import os
