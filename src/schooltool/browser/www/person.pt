@@ -7,8 +7,11 @@
     Person info for <span tal:replace="context/title"/>
   </h1>
   <metal:block metal:fill-slot="content" tal:define="info view/info">
-    <div class="parentgroups">
-      <h3 i18n:translate="">Parent groups</h3>
+    <div class="actions" tal:condition="view/canEdit">
+      <a class="action" tal:attributes="href view/editURL">Edit</a>
+    </div>
+    <div class="groups">
+      <h3 i18n:translate="">Groups</h3>
       <p tal:repeat="sub python: view.getParentGroups(request)">
        <a tal:attributes="href sub/url" tal:content="sub/title"/>
       </p>

@@ -46,19 +46,34 @@ class TestPersonView(TraversalTestMixin, RegistriesSetupMixin,
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
         self.root = app['groups'].new("root", title="root")
+        self.managers = app['groups'].new("managers", title="managers")
         self.person = app['persons'].new("johndoe", title="John Doe")
+        self.manager = app['persons'].new("manager", title="Manager")
 
         Membership(group=self.root, member=self.person)
+        Membership(group=self.managers, member=self.manager)
 
     def test(self):
         from schooltool.browser.app import PersonView
         view = PersonView(self.person)
-        request = RequestStub(authenticated_user='not None')
+        request = RequestStub(authenticated_user=self.person)
         result = view.render(request)
         self.assertEquals(request.headers['content-type'],
                           "text/html; charset=UTF-8")
         self.assert_('johndoe' in result)
         self.assert_('John Doe' in result)
+        self.assert_('edit.html' not in result)
+
+    def test_manager(self):
+        from schooltool.browser.app import PersonView
+        view = PersonView(self.person)
+        request = RequestStub(authenticated_user=self.manager)
+        result = view.render(request)
+        self.assertEquals(request.headers['content-type'],
+                          "text/html; charset=UTF-8")
+        self.assert_('johndoe' in result)
+        self.assert_('John Doe' in result)
+        self.assert_('edit.html' in result)
 
     def test_traverse(self):
         from schooltool.browser.model import PersonView, PhotoView

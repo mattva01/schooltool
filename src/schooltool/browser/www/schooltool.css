@@ -100,7 +100,11 @@ div.groups {
   float: right;
 }
 
-h3 {
+div.members h3,
+div.subgroups h3,
+div.groups h3,
+div.parentgroups h3 {
+  color: black;
   margin: 0px;
   margin-bottom: 0.5ex;
 }
@@ -137,4 +141,25 @@ pre.traceback span.expr {
 }
 pre.traceback span.source {
   color: black;
+}
+
+div.actions {
+  margin: 1ex 2ex 2ex 2ex;
+}
+
+a.action:link,
+a.action:visited {
+  border: 1px solid #cccc88;
+  background: #ffffd3;
+  color: #888844;
+  font-weight: bold;
+  padding: 2px 4px;
+  text-decoration: none
+}
+
+a.action:hover,
+a.action:active {
+  background: white;
+  color: black;
+  text-decoration: none
 }

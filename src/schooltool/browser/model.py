@@ -30,6 +30,7 @@ from StringIO import StringIO
 from schooltool.browser import View, Template
 from schooltool.browser import absoluteURL
 from schooltool.browser.auth import AuthenticatedAccess, ManagerAccess
+from schooltool.browser.auth import isManager
 from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects, getPath, traverse
 from schooltool.interfaces import IPerson
@@ -79,6 +80,11 @@ class PersonView(View, GetParentsMixin, PersonInfoMixin):
             return PersonEditView(self.context)
         raise KeyError(name)
 
+    def canEdit(self):
+        return isManager(self.request.authenticated_user)
+
+    def editURL(self):
+        return absoluteURL(self.request, self.context) + '/edit.html'
 
 
 class PersonEditView(View, PersonInfoMixin):
