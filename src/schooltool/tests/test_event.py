@@ -176,11 +176,68 @@ class TestEventActionMixins(unittest.TestCase):
         self.assertEquals(dispatched_to, groups)
 
 
+class TestEventService(unittest.TestCase):
+
+    def test(self):
+        from schooltool.event import EventService
+        from schooltool.interfaces import IEventService
+        es = EventService()
+        verifyObject(IEventService, es)
+
+    def test_subscribe(self):
+        from schooltool.event import EventService
+        es = EventService()
+        target = object()
+        es.subscribe(target, IEventA)
+        self.assertEquals(list(es.listSubscriptions()), [(target, IEventA)])
+        es.subscribe(target, IEventA)
+        self.assertEquals(list(es.listSubscriptions()),
+                          [(target, IEventA), (target, IEventA)])
+
+    def test_unsubscribe(self):
+        from schooltool.event import EventService
+        es = EventService()
+        target = object()
+        es.subscribe(target, IEventA)
+        es.subscribe(target, IEventA)
+        self.assertRaises(ValueError, es.unsubscribe, target, IEvent)
+        es.unsubscribe(target, IEventA)
+        self.assertEquals(list(es.listSubscriptions()), [(target, IEventA)])
+        es.unsubscribe(target, IEventA)
+        self.assertEquals(list(es.listSubscriptions()), [])
+
+    def test_unsubscribeAll(self):
+        from schooltool.event import EventService
+        es = EventService()
+        target1 = object()
+        target2 = object()
+        es.subscribe(target1, IEventA)
+        es.subscribe(target1, IEventB)
+        es.subscribe(target2, IEvent)
+        es.unsubscribeAll(target1)
+        self.assertEquals(list(es.listSubscriptions()), [(target2, IEvent)])
+        es.unsubscribeAll(target1)
+        self.assertEquals(list(es.listSubscriptions()), [(target2, IEvent)])
+
+    def test_notify(self):
+        from schooltool.event import EventService
+        es = EventService()
+        target1 = TargetStub()
+        target2 = TargetStub()
+        es.subscribe(target1, IEventB)
+        es.subscribe(target2, IEvent)
+        es.subscribe(target2, IEventA)
+        event = EventAStub()
+        es.notify(event)
+        self.assertEquals(event.dispatched_to, [target2, target2])
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestEventMixin))
     suite.addTest(unittest.makeSuite(TestEventTargetMixin))
     suite.addTest(unittest.makeSuite(TestEventActionMixins))
+    suite.addTest(unittest.makeSuite(TestEventService))
     return suite
 
 if __name__ == '__main__':

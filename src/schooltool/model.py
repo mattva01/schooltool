@@ -90,7 +90,7 @@ class FacetedEventTargetMixin(FacetedMixin, EventTargetMixin):
         return sum(tables, [])
 
 
-class Person(Persistent, GroupMember,  FacetedEventTargetMixin):
+class Person(Persistent, GroupMember, FacetedEventTargetMixin):
 
     implements(IPerson)
 

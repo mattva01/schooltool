@@ -66,6 +66,18 @@ class IContainmentAPI(Interface):
         reach None).
         """
 
+
+#
+# Services
+#
+
+class IServiceAPI(Interface):
+    """Service API"""
+
+    def getEventService():
+        """Returns the global event service."""
+
+
 #
 # Facets
 #
@@ -201,6 +213,9 @@ class IEvent(Interface):
 
         Target must implement IEventTarget.
 
+        On the first dispatch the event will also be sent to the global event
+        service.
+
         It is guaranteed that no object will see the same event more than
         once, even if dispatch is called multiple times with the same target.
         """
@@ -214,6 +229,45 @@ class IEventTarget(Interface):
 
         Event routing can be achieved by calling event.dispatch(other_target).
         """
+
+
+class IEventService(IEventTarget):
+    """Global event service.
+
+    The global event service receives all events in the system and forwards
+    them to the appropriate subscribers.
+    """
+
+    def subscribe(target, event_type):
+        """Subscribe a target to receive events for a given event type.
+
+        A target can be subscribed more than once for any given event_type, but
+        in any case it will receive each event only once.
+        """
+
+    def unsubscribe(target, event_type):
+        """Unsubscribe a target from receiving events for a given event
+        type.
+
+        event_type is treated as an exact type rather than the root of a
+        hierarchy.  In other words, unsubscribing from IEvent will not remove
+        any subscriptions for more specific event types.
+
+        Raises ValueError if (target, event_type) is not subscribed.
+
+        If target was subscribed multiple times for the same event type, it
+        will need the same number of unsubscriptions in order to stop receiving
+        that type of events.
+        """
+
+    def unsubscribeAll(target):
+        """Unsubscribe all subscriptions for this target.
+
+        Does nothing if target had no subscriptions.
+        """
+
+    def listSubscriptions():
+        """Returns a list of all subscribers as (target, event_type) tuples."""
 
 
 class IEventConfigurable(Interface):

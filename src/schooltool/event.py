@@ -23,10 +23,11 @@ $Id$
 """
 
 from sets import Set
+from persistence import Persistent
 from persistence.list import PersistentList
 from zope.interface import implements
 from schooltool.interfaces import IEvent, IEventTarget, IEventConfigurable
-from schooltool.interfaces import IEventAction, ILookupAction
+from schooltool.interfaces import IEventService, IEventAction, ILookupAction
 from schooltool.interfaces import IRouteToMembersAction, IRouteToGroupsAction
 
 __metaclass__ = type
@@ -105,4 +106,38 @@ class RouteToGroupsAction(EventActionMixin):
     def handle(self, event, target):
         for group in target.groups():
             event.dispatch(group)
+
+
+class EventService(Persistent):
+
+    implements(IEventService)
+
+    def __init__(self):
+        self._subscriptions = PersistentList()
+
+    def subscribe(self, target, event_type):
+        '''See IEventService'''
+        self._subscriptions.append((target, event_type))
+
+    def unsubscribe(self, target, event_type):
+        '''See IEventService'''
+        self._subscriptions.remove((target, event_type))
+
+    def unsubscribeAll(self, target):
+        '''See IEventService'''
+        new_subscriptions = PersistentList()
+        for t, e in self._subscriptions:
+            if t != target:
+                new_subscriptions.append((t, e))
+        self._subscriptions = new_subscriptions
+
+    def listSubscriptions(self):
+        '''See IEventService'''
+        return tuple(self._subscriptions)
+
+    def notify(self, event):
+        '''See IEventTarget'''
+        for t, e in self._subscriptions:
+            if e.isImplementedBy(event):
+                event.dispatch(t)
 
