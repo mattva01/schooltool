@@ -160,7 +160,7 @@ class SchoolToolClient:
         response = self.get('/persons')
         if response.status != 200:
             raise ResponseStatusError(response)
-        return self._parseContainer(response.read())
+        return _parseContainer(response.read())
 
     def getListOfGroups(self):
         """Return the list of all groups.
@@ -170,7 +170,7 @@ class SchoolToolClient:
         response = self.get('/groups')
         if response.status != 200:
             raise ResponseStatusError(response)
-        return self._parseContainer(response.read())
+        return _parseContainer(response.read())
 
     def getGroupTree(self):
         """Return the tree of groups.
@@ -200,7 +200,7 @@ class SchoolToolClient:
         response = self.get('/groups/root/tree')
         if response.status != 200:
             raise ResponseStatusError(response)
-        return self._parseGroupTree(response.read())
+        return _parseGroupTree(response.read())
 
     def getGroupInfo(self, group_path):
         """Return information page about a group.
@@ -210,7 +210,7 @@ class SchoolToolClient:
         response = self.get(group_path)
         if response.status != 200:
             raise ResponseStatusError(response)
-        members = self._parseMemberList(response.read())
+        members = _parseMemberList(response.read())
         return GroupInfo(members)
 
     def getObjectRelationships(self, object_path):
@@ -221,7 +221,7 @@ class SchoolToolClient:
         response = self.get('%s/relationships' % object_path)
         if response.status != 200:
             raise ResponseStatusError(response)
-        return self._parseRelationships(response.read())
+        return _parseRelationships(response.read(), self.role_names)
 
     def getRollCall(self, group_path):
         """Return a roll call template for a group.
@@ -231,7 +231,7 @@ class SchoolToolClient:
         response = self.get('%s/rollcall' % group_path)
         if response.status != 200:
             raise ResponseStatusError(response)
-        return self._parseRollCall(response.read())
+        return _parseRollCall(response.read())
 
     def submitRollCall(self, group_path, roll_call,
                        reporter_path='/persons/anonymous'):
@@ -273,7 +273,7 @@ class SchoolToolClient:
         response = self.get(path)
         if response.status != 200:
             raise ResponseStatusError(response)
-        return self._parseAbsences(response.read())
+        return _parseAbsences(response.read())
 
     def getAbsenceComments(self, absence_path):
         """Return a list of comments for a given absence.
@@ -283,7 +283,7 @@ class SchoolToolClient:
         response = self.get(absence_path)
         if response.status != 200:
             raise ResponseStatusError(response)
-        return self._parseAbsenceComments(response.read())
+        return _parseAbsenceComments(response.read())
 
     def createFacet(self, object_path, factory_name):
         """Create a facet using a given factory an place it on an object.
@@ -339,318 +339,320 @@ class SchoolToolClient:
         if response.status != 200:
             raise ResponseStatusError(response)
 
-    # Parsing
+#
+# Parsing utilities
+#
 
-    def _parseContainer(self, body):
-        """Parse the contents of a container.
+def _parseContainer(body):
+    """Parse the contents of a container.
 
-        Returns a list of tuples (object_title, object_href).
-        """
-        try:
-            doc = libxml2.parseDoc(body)
-        except libxml2.parserError:
-            raise SchoolToolError("Could not parse item list")
-        ctx = doc.xpathNewContext()
-        try:
-            xlink = "http://www.w3.org/1999/xlink"
-            ctx.xpathRegisterNs("xlink", xlink)
-            res = ctx.xpathEval("/container/items/item[@xlink:href]")
-            items = []
-            for node in res:
-                href = node.nsProp('href', xlink)
-                title = node.nsProp('title', xlink)
+    Returns a list of tuples (object_title, object_href).
+    """
+    try:
+        doc = libxml2.parseDoc(body)
+    except libxml2.parserError:
+        raise SchoolToolError("Could not parse item list")
+    ctx = doc.xpathNewContext()
+    try:
+        xlink = "http://www.w3.org/1999/xlink"
+        ctx.xpathRegisterNs("xlink", xlink)
+        res = ctx.xpathEval("/container/items/item[@xlink:href]")
+        items = []
+        for node in res:
+            href = node.nsProp('href', xlink)
+            title = node.nsProp('title', xlink)
+            if title is None:
+                title = href.split('/')[-1]
+            items.append((title, href))
+        return items
+    finally:
+        doc.freeDoc()
+        ctx.xpathFreeContext()
+
+def _parseGroupTree(body):
+    """Parse the tree of groups returned from the server.
+
+    XXX the parser assumes xlink is the namespace used for xlinks in the
+        document rather than parsing xmlns:... attributes
+    """
+
+    class Handler:
+
+        def __init__(self):
+            self.level = 0
+            self.result = []
+            self.exception = None
+
+        def startElement(self, tag, attrs):
+            if self.exception:
+                return
+            if tag == 'group':
+                href = attrs and attrs.get('xlink:href', None)
+                if not href:
+                    self.exception = SchoolToolError("Group tag does not"
+                                                     " have xlink:href")
+                    return
+                title = attrs.get('xlink:title', None)
                 if title is None:
                     title = href.split('/')[-1]
-                items.append((title, href))
-            return items
-        finally:
-            doc.freeDoc()
-            ctx.xpathFreeContext()
+                self.result.append((self.level, title, href))
+                self.level += 1
 
-    def _parseGroupTree(self, body):
-        """Parse the tree of groups returned from the server.
+        def endElement(self, tag):
+            if self.exception:
+                return
+            if tag == 'group':
+                self.level -= 1
 
-        XXX the parser assumes xlink is the namespace used for xlinks in the
-            document rather than parsing xmlns:... attributes
-        """
-
-        class Handler:
-
-            def __init__(self):
-                self.level = 0
-                self.result = []
-                self.exception = None
-
-            def startElement(self, tag, attrs):
-                if self.exception:
-                    return
-                if tag == 'group':
-                    href = attrs and attrs.get('xlink:href', None)
-                    if not href:
-                        self.exception = SchoolToolError("Group tag does not"
-                                                         " have xlink:href")
-                        return
-                    title = attrs.get('xlink:title', None)
-                    if title is None:
-                        title = href.split('/')[-1]
-                    self.result.append((self.level, title, href))
-                    self.level += 1
-
-            def endElement(self, tag):
-                if self.exception:
-                    return
-                if tag == 'group':
-                    self.level -= 1
-
-        try:
-            handler = Handler()
-            ctx = libxml2.createPushParser(handler, body, len(body), "")
-            retval = ctx.parseChunk("", 0, True)
-            if handler.exception:
-                raise handler.exception
-            if retval:
-                raise SchoolToolError("Could not parse group tree")
-            return handler.result
-        except libxml2.parserError:
+    try:
+        handler = Handler()
+        ctx = libxml2.createPushParser(handler, body, len(body), "")
+        retval = ctx.parseChunk("", 0, True)
+        if handler.exception:
+            raise handler.exception
+        if retval:
             raise SchoolToolError("Could not parse group tree")
+        return handler.result
+    except libxml2.parserError:
+        raise SchoolToolError("Could not parse group tree")
 
-    def _parseMemberList(self, body):
-        """Parse the list of group members (persons only)."""
-        try:
-            doc = libxml2.parseDoc(body)
-        except libxml2.parserError:
-            raise SchoolToolError("Could not parse member list")
-        ctx = doc.xpathNewContext()
-        try:
-            xlink = "http://www.w3.org/1999/xlink"
-            ctx.xpathRegisterNs("xlink", xlink)
-            res = ctx.xpathEval("/group/item[@xlink:href]")
-            people = []
-            for node in res:
-                anchor = node.nsProp('href', xlink)
-                if anchor.startswith('/persons/'):
-                    name =  anchor[len('/persons/'):]
-                    if '/' not in name:
-                        title = node.nsProp('title', xlink)
-                        if title is None:
-                            title = name
-                        people.append(MemberInfo(title, anchor))
-            return people
-        finally:
-            doc.freeDoc()
-            ctx.xpathFreeContext()
+def _parseMemberList(body):
+    """Parse the list of group members (persons only)."""
+    try:
+        doc = libxml2.parseDoc(body)
+    except libxml2.parserError:
+        raise SchoolToolError("Could not parse member list")
+    ctx = doc.xpathNewContext()
+    try:
+        xlink = "http://www.w3.org/1999/xlink"
+        ctx.xpathRegisterNs("xlink", xlink)
+        res = ctx.xpathEval("/group/item[@xlink:href]")
+        people = []
+        for node in res:
+            anchor = node.nsProp('href', xlink)
+            if anchor.startswith('/persons/'):
+                name =  anchor[len('/persons/'):]
+                if '/' not in name:
+                    title = node.nsProp('title', xlink)
+                    if title is None:
+                        title = name
+                    people.append(MemberInfo(title, anchor))
+        return people
+    finally:
+        doc.freeDoc()
+        ctx.xpathFreeContext()
 
-    def _parseRelationships(self, body):
-        """Parse the list of relationships."""
-        try:
-            doc = libxml2.parseDoc(body)
-        except libxml2.parserError:
-            raise SchoolToolError("Could not parse relationship list")
-        ctx = doc.xpathNewContext()
-        try:
-            xlink = "http://www.w3.org/1999/xlink"
-            ctx.xpathRegisterNs("xlink", xlink)
-            res = ctx.xpathEval("/relationships/existing/relationship")
-            relationships = []
-            for node in res:
-                href = node.nsProp('href', xlink)
-                role = node.nsProp('role', xlink)
-                arcrole = node.nsProp('arcrole', xlink)
-                if not href or not role or not arcrole:
-                    continue
-                title = node.nsProp('title', xlink)
-                if title is None:
-                    title = href.split('/')[-1]
-                role = self.role_names.get(role, role)
-                arcrole = self.role_names.get(arcrole, arcrole)
-                ctx.setContextNode(node)
-                manage_nodes = ctx.xpathEval("manage/@xlink:href")
-                if len(manage_nodes) != 1:
-                    raise SchoolToolError("Could not parse relationship list")
-                link_href = manage_nodes[0].content
-                relationships.append(RelationshipInfo(arcrole, role, title,
-                                                      href, link_href))
-            return relationships
-        finally:
-            doc.freeDoc()
-            ctx.xpathFreeContext()
+def _parseRelationships(body, role_names):
+    """Parse the list of relationships."""
+    try:
+        doc = libxml2.parseDoc(body)
+    except libxml2.parserError:
+        raise SchoolToolError("Could not parse relationship list")
+    ctx = doc.xpathNewContext()
+    try:
+        xlink = "http://www.w3.org/1999/xlink"
+        ctx.xpathRegisterNs("xlink", xlink)
+        res = ctx.xpathEval("/relationships/existing/relationship")
+        relationships = []
+        for node in res:
+            href = node.nsProp('href', xlink)
+            role = node.nsProp('role', xlink)
+            arcrole = node.nsProp('arcrole', xlink)
+            if not href or not role or not arcrole:
+                continue
+            title = node.nsProp('title', xlink)
+            if title is None:
+                title = href.split('/')[-1]
+            role = role_names.get(role, role)
+            arcrole = role_names.get(arcrole, arcrole)
+            ctx.setContextNode(node)
+            manage_nodes = ctx.xpathEval("manage/@xlink:href")
+            if len(manage_nodes) != 1:
+                raise SchoolToolError("Could not parse relationship list")
+            link_href = manage_nodes[0].content
+            relationships.append(RelationshipInfo(arcrole, role, title,
+                                                  href, link_href))
+        return relationships
+    finally:
+        doc.freeDoc()
+        ctx.xpathFreeContext()
 
-    def _parseRollCall(self, body):
-        """Parse a roll call template."""
-        try:
-            doc = libxml2.parseDoc(body)
-        except libxml2.parserError:
-            raise SchoolToolError("Could not parse roll call")
-        ctx = doc.xpathNewContext()
-        try:
-            xlink = "http://www.w3.org/1999/xlink"
-            ctx.xpathRegisterNs("xlink", xlink)
-            res = ctx.xpathEval("/rollcall/person")
-            persons = []
-            for node in res:
-                href = node.nsProp('href', xlink)
-                if not href:
-                    continue
-                title = node.nsProp('title', xlink)
-                if not title:
-                    title = href.split('/')[-1]
-                presence = node.nsProp('presence', None)
-                if presence not in ('present', 'absent'):
-                    raise SchoolToolError("Unrecognized presence value: %s"
-                                          % presence)
-                presence = (presence == 'present')
-                persons.append(RollCallInfo(title, href, presence))
-            return persons
-        finally:
-            doc.freeDoc()
-            ctx.xpathFreeContext()
+def _parseRollCall(body):
+    """Parse a roll call template."""
+    try:
+        doc = libxml2.parseDoc(body)
+    except libxml2.parserError:
+        raise SchoolToolError("Could not parse roll call")
+    ctx = doc.xpathNewContext()
+    try:
+        xlink = "http://www.w3.org/1999/xlink"
+        ctx.xpathRegisterNs("xlink", xlink)
+        res = ctx.xpathEval("/rollcall/person")
+        persons = []
+        for node in res:
+            href = node.nsProp('href', xlink)
+            if not href:
+                continue
+            title = node.nsProp('title', xlink)
+            if not title:
+                title = href.split('/')[-1]
+            presence = node.nsProp('presence', None)
+            if presence not in ('present', 'absent'):
+                raise SchoolToolError("Unrecognized presence value: %s"
+                                      % presence)
+            presence = (presence == 'present')
+            persons.append(RollCallInfo(title, href, presence))
+        return persons
+    finally:
+        doc.freeDoc()
+        ctx.xpathFreeContext()
 
-    def _parseAbsences(self, body):
-        """Parse a list of absences."""
-        try:
-            doc = libxml2.parseDoc(body)
-        except libxml2.parserError:
-            raise SchoolToolError("Could not parse absences")
-        ctx = doc.xpathNewContext()
-        try:
-            xlink = "http://www.w3.org/1999/xlink"
-            ctx.xpathRegisterNs("xlink", xlink)
-            res = ctx.xpathEval("/absences/absence")
-            absences = []
-            for node in res:
-                href = node.nsProp('href', xlink)
-                if not href:
-                    continue
-                person_path = '/'.join(href.split('/')[:-2])
-                person_title = node.nsProp('person_title', None)
-                if not person_title:
-                    person_title = person_path.split('/')[-1]
-                dt = node.nsProp('datetime', None)
-                if dt is None:
-                    raise SchoolToolError("Datetime not given")
-                else:
-                    try:
-                        dt = parse_datetime(dt)
-                    except ValueError, e:
-                        raise SchoolToolError(str(e))
-                ended = node.nsProp('ended', None)
-                if ended not in ('ended', 'unended'):
-                    raise SchoolToolError("Unrecognized ended value: %s"
-                                          % ended)
-                resolved = node.nsProp('resolved', None)
-                if resolved not in ('resolved', 'unresolved'):
-                    raise SchoolToolError("Unrecognized resolved value: %s"
-                                          % resolved)
-                expected_presence = node.nsProp('expected_presence', None)
-                if expected_presence is not None:
-                    try:
-                        expected_presence = parse_datetime(expected_presence)
-                    except ValueError, e:
-                        raise SchoolToolError(str(e))
-                last_comment = node.content.strip()
-                absences.append(AbsenceInfo(href, dt, person_title,
-                                            person_path,
-                                            ended == "ended",
-                                            resolved == "resolved",
-                                            expected_presence, last_comment))
-            return absences
-        finally:
-            doc.freeDoc()
-            ctx.xpathFreeContext()
+def _parseAbsences(body):
+    """Parse a list of absences."""
+    try:
+        doc = libxml2.parseDoc(body)
+    except libxml2.parserError:
+        raise SchoolToolError("Could not parse absences")
+    ctx = doc.xpathNewContext()
+    try:
+        xlink = "http://www.w3.org/1999/xlink"
+        ctx.xpathRegisterNs("xlink", xlink)
+        res = ctx.xpathEval("/absences/absence")
+        absences = []
+        for node in res:
+            href = node.nsProp('href', xlink)
+            if not href:
+                continue
+            person_path = '/'.join(href.split('/')[:-2])
+            person_title = node.nsProp('person_title', None)
+            if not person_title:
+                person_title = person_path.split('/')[-1]
+            dt = node.nsProp('datetime', None)
+            if dt is None:
+                raise SchoolToolError("Datetime not given")
+            else:
+                try:
+                    dt = parse_datetime(dt)
+                except ValueError, e:
+                    raise SchoolToolError(str(e))
+            ended = node.nsProp('ended', None)
+            if ended not in ('ended', 'unended'):
+                raise SchoolToolError("Unrecognized ended value: %s"
+                                      % ended)
+            resolved = node.nsProp('resolved', None)
+            if resolved not in ('resolved', 'unresolved'):
+                raise SchoolToolError("Unrecognized resolved value: %s"
+                                      % resolved)
+            expected_presence = node.nsProp('expected_presence', None)
+            if expected_presence is not None:
+                try:
+                    expected_presence = parse_datetime(expected_presence)
+                except ValueError, e:
+                    raise SchoolToolError(str(e))
+            last_comment = node.content.strip()
+            absences.append(AbsenceInfo(href, dt, person_title,
+                                        person_path,
+                                        ended == "ended",
+                                        resolved == "resolved",
+                                        expected_presence, last_comment))
+        return absences
+    finally:
+        doc.freeDoc()
+        ctx.xpathFreeContext()
 
-    def _parseAbsenceComments(self, body):
-        """Parse a list of absence comments."""
-        try:
-            doc = libxml2.parseDoc(body)
-        except libxml2.parserError:
-            raise SchoolToolError("Could not parse absence comments")
-        ctx = doc.xpathNewContext()
-        try:
-            xlink = "http://www.w3.org/1999/xlink"
-            ctx.xpathRegisterNs("xlink", xlink)
-            res = ctx.xpathEval("/absence/comment")
-            comments = []
-            for node in res:
-                ctx.setContextNode(node)
-                res = ctx.xpathEval("reporter")
-                if len(res) < 1:
-                    raise SchoolToolError("Reporter not given")
-                elif len(res) > 1:
-                    raise SchoolToolError("More than one reporter given")
-                reporter = res[0]
-                reporter_href = reporter.nsProp('href', xlink)
-                if not reporter_href:
-                    raise SchoolToolError("Reporter does not have xlink:href")
-                reporter_title = reporter.nsProp('title', xlink)
-                if not reporter_title:
-                    reporter_title = reporter_href.split('/')[-1]
+def _parseAbsenceComments(body):
+    """Parse a list of absence comments."""
+    try:
+        doc = libxml2.parseDoc(body)
+    except libxml2.parserError:
+        raise SchoolToolError("Could not parse absence comments")
+    ctx = doc.xpathNewContext()
+    try:
+        xlink = "http://www.w3.org/1999/xlink"
+        ctx.xpathRegisterNs("xlink", xlink)
+        res = ctx.xpathEval("/absence/comment")
+        comments = []
+        for node in res:
+            ctx.setContextNode(node)
+            res = ctx.xpathEval("reporter")
+            if len(res) < 1:
+                raise SchoolToolError("Reporter not given")
+            elif len(res) > 1:
+                raise SchoolToolError("More than one reporter given")
+            reporter = res[0]
+            reporter_href = reporter.nsProp('href', xlink)
+            if not reporter_href:
+                raise SchoolToolError("Reporter does not have xlink:href")
+            reporter_title = reporter.nsProp('title', xlink)
+            if not reporter_title:
+                reporter_title = reporter_href.split('/')[-1]
 
-                res = ctx.xpathEval("absentfrom")
-                if len(res) > 1:
-                    raise SchoolToolError("More than one absentfrom given")
-                absent_from_href = absent_from_title = ""
-                if res:
-                    absent_from_href = res[0].nsProp('href', xlink)
-                    if not absent_from_href:
-                        raise SchoolToolError("absentfrom does not have"
-                                              " xlink:href")
-                    absent_from_title = res[0].nsProp('title', xlink)
-                    if not absent_from_title:
-                        absent_from_title = absent_from_href.split('/')[-1]
+            res = ctx.xpathEval("absentfrom")
+            if len(res) > 1:
+                raise SchoolToolError("More than one absentfrom given")
+            absent_from_href = absent_from_title = ""
+            if res:
+                absent_from_href = res[0].nsProp('href', xlink)
+                if not absent_from_href:
+                    raise SchoolToolError("absentfrom does not have"
+                                          " xlink:href")
+                absent_from_title = res[0].nsProp('title', xlink)
+                if not absent_from_title:
+                    absent_from_title = absent_from_href.split('/')[-1]
 
-                dt = node.nsProp('datetime', None)
-                if dt is None:
-                    raise SchoolToolError("Datetime not given")
-                else:
-                    try:
-                        dt = parse_datetime(dt)
-                    except ValueError, e:
-                        raise SchoolToolError(str(e))
+            dt = node.nsProp('datetime', None)
+            if dt is None:
+                raise SchoolToolError("Datetime not given")
+            else:
+                try:
+                    dt = parse_datetime(dt)
+                except ValueError, e:
+                    raise SchoolToolError(str(e))
 
-                ended = node.nsProp('ended', None)
-                if ended is None:
-                    ended = Unchanged
-                elif ended in ('ended', 'unended'):
-                    ended = (ended == 'ended')
-                else:
-                    raise SchoolToolError("Unrecognized ended value: %s"
-                                          % ended)
+            ended = node.nsProp('ended', None)
+            if ended is None:
+                ended = Unchanged
+            elif ended in ('ended', 'unended'):
+                ended = (ended == 'ended')
+            else:
+                raise SchoolToolError("Unrecognized ended value: %s"
+                                      % ended)
 
-                resolved = node.nsProp('resolved', None)
-                if resolved is None:
-                    resolved = Unchanged
-                elif resolved in ('resolved', 'unresolved'):
-                    resolved = (resolved == 'resolved')
-                else:
-                    raise SchoolToolError("Unrecognized resolved value: %s"
-                                          % resolved)
+            resolved = node.nsProp('resolved', None)
+            if resolved is None:
+                resolved = Unchanged
+            elif resolved in ('resolved', 'unresolved'):
+                resolved = (resolved == 'resolved')
+            else:
+                raise SchoolToolError("Unrecognized resolved value: %s"
+                                      % resolved)
 
-                expected_presence = node.nsProp('expected_presence', None)
-                if expected_presence is None:
-                    expected_presence = Unchanged
-                elif expected_presence == "":
-                    expected_presence = None
-                else:
-                    try:
-                        expected_presence = parse_datetime(expected_presence)
-                    except ValueError, e:
-                        raise SchoolToolError(str(e))
+            expected_presence = node.nsProp('expected_presence', None)
+            if expected_presence is None:
+                expected_presence = Unchanged
+            elif expected_presence == "":
+                expected_presence = None
+            else:
+                try:
+                    expected_presence = parse_datetime(expected_presence)
+                except ValueError, e:
+                    raise SchoolToolError(str(e))
 
-                text = ""
-                res = ctx.xpathEval("text")
-                if len(res) > 1:
-                    raise SchoolToolError("More than one text node")
-                if res:
-                    text = res[0].content.strip()
+            text = ""
+            res = ctx.xpathEval("text")
+            if len(res) > 1:
+                raise SchoolToolError("More than one text node")
+            if res:
+                text = res[0].content.strip()
 
-                comments.append(AbsenceComment(dt, reporter_title,
-                                    reporter_href, absent_from_title,
-                                    absent_from_href, ended, resolved,
-                                    expected_presence, text))
-            return comments
-        finally:
-            doc.freeDoc()
-            ctx.xpathFreeContext()
+            comments.append(AbsenceComment(dt, reporter_title,
+                                reporter_href, absent_from_title,
+                                absent_from_href, ended, resolved,
+                                expected_presence, text))
+        return comments
+    finally:
+        doc.freeDoc()
+        ctx.xpathFreeContext()
 
 
 class Response:

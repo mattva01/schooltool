@@ -580,9 +580,14 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         #     unexpected like 'mailto:jonas@example.com' or 'http://webserver'
         #     without a trailing slash?
 
+
+class TestParseFunctions(unittest.TestCase):
+
+    def setUp(self):
+        libxml2.registerErrorHandler(lambda ctx, error: None, None)
+
     def test__parseContainer(self):
-        from schooltool.guiclient import SchoolToolClient
-        client = SchoolToolClient()
+        from schooltool.guiclient import _parseContainer
         body = dedent("""
             <container xmlns:xlink="http://www.w3.org/1999/xlink">
               <items>
@@ -591,14 +596,14 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                </items>
             </container>
         """)
-        results = client._parseContainer(body)
+        results = _parseContainer(body)
         expected = [('Fred', '/persons/fred'),
                     ('barney', '/persons/barney')]
         self.assertEquals(results, expected, "\n" +
                           diff(pformat(expected), pformat(results)))
 
     def test__parseGroupTree(self):
-        from schooltool.guiclient import SchoolToolClient
+        from schooltool.guiclient import _parseGroupTree
         body = dedent("""
             <tree xmlns:xlink="http://www.w3.org/1999/xlink">
               <group xlink:type="simple" xlink:href="/groups/root"
@@ -617,8 +622,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </group>
             </tree>
         """)
-        client = SchoolToolClient()
-        result = client._parseGroupTree(body)
+        result = _parseGroupTree(body)
         expected = [(0, 'root group', '/groups/root'),
                     (1, 'group2',     '/groups/group2'),
                     (1, 'group1',     '/groups/group1'),
@@ -628,22 +632,21 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertEquals(list(result), expected)
 
     def test__parseGroupTree_errors(self):
-        from schooltool.guiclient import SchoolToolClient, SchoolToolError
-        client = SchoolToolClient()
+        from schooltool.guiclient import _parseGroupTree, SchoolToolError
         body = "This is not XML"
-        self.assertRaises(SchoolToolError, client._parseGroupTree, body)
+        self.assertRaises(SchoolToolError, _parseGroupTree, body)
 
         body = "<tree>ill-formed</tere>"
-        self.assertRaises(SchoolToolError, client._parseGroupTree, body)
+        self.assertRaises(SchoolToolError, _parseGroupTree, body)
 
         body = "<tree><group>without href</group></tree>"
-        self.assertRaises(SchoolToolError, client._parseGroupTree, body)
+        self.assertRaises(SchoolToolError, _parseGroupTree, body)
 
         body = "<tree><group xlink:href=''>without href</group></tree>"
-        self.assertRaises(SchoolToolError, client._parseGroupTree, body)
+        self.assertRaises(SchoolToolError, _parseGroupTree, body)
 
     def test__parseMemberList(self):
-        from schooltool.guiclient import SchoolToolClient, MemberInfo
+        from schooltool.guiclient import _parseMemberList, MemberInfo
         body = dedent("""
             <group xmlns:xlink="http://www.w3.org/1999/xlink">
               <item xlink:type="simple" xlink:href="/groups/group2"
@@ -661,18 +664,16 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         expected = [MemberInfo('person1 title', '/persons/person1'),
                     MemberInfo('person2 title', '/persons/person2'),
                     MemberInfo('person4', '/persons/person4')]
-        client = SchoolToolClient()
-        result = client._parseMemberList(body)
+        result = _parseMemberList(body)
         self.assertEquals(list(result), expected)
 
     def test__parseMemberList_errors(self):
-        from schooltool.guiclient import SchoolToolClient, SchoolToolError
-        client = SchoolToolClient()
+        from schooltool.guiclient import _parseMemberList, SchoolToolError
         body = "<This is not XML"
-        self.assertRaises(SchoolToolError, client._parseMemberList, body)
+        self.assertRaises(SchoolToolError, _parseMemberList, body)
 
     def test__parseRelationships(self):
-        from schooltool.guiclient import SchoolToolClient
+        from schooltool.guiclient import _parseRelationships
         from schooltool.guiclient import RelationshipInfo
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -728,15 +729,15 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                 ('Membership', 'Group', 'title2', 'href2', 'mhref2'),
                 ('arcrole3', 'role3', 'href3', '/objects/href3', 'mhref3')
             ]]
-        client = SchoolToolClient()
-        result = client._parseRelationships(body)
+        rels = {'http://schooltool.org/ns/membership/group': 'Group',
+                'http://schooltool.org/ns/membership': 'Membership'}
+        result = _parseRelationships(body, rels)
         self.assertEquals(list(result), expected)
 
     def test__parseRelationships_errors(self):
-        from schooltool.guiclient import SchoolToolClient, SchoolToolError
-        client = SchoolToolClient()
+        from schooltool.guiclient import _parseRelationships, SchoolToolError
         body = "<This is not XML"
-        self.assertRaises(SchoolToolError, client._parseRelationships, body)
+        self.assertRaises(SchoolToolError, _parseRelationships, body, {})
 
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -749,7 +750,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </existing>
             </relationships>
         """)
-        self.assertRaises(SchoolToolError, client._parseRelationships, body)
+        self.assertRaises(SchoolToolError, _parseRelationships, body, {})
 
         body = dedent("""
             <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -759,10 +760,10 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </existing>
             </relationships>
         """)
-        self.assertRaises(SchoolToolError, client._parseRelationships, body)
+        self.assertRaises(SchoolToolError, _parseRelationships, body, {})
 
     def test__parseRollCall(self):
-        from schooltool.guiclient import SchoolToolClient, RollCallInfo
+        from schooltool.guiclient import _parseRollCall, RollCallInfo
         body = dedent("""
             <rollcall xmlns:xlink="http://www.w3.org/1999/xlink">
               <person xlink:href="/persons/p1" xlink:title="person 1"
@@ -778,16 +779,14 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         expected = [RollCallInfo('person 1', '/persons/p1', True),
                     RollCallInfo('p2',       '/persons/p2', False),
                     RollCallInfo('p4',       '/persons/p4', False)]
-        client = SchoolToolClient()
-        results = client._parseRollCall(body)
+        results = _parseRollCall(body)
         self.assertEquals(results, expected, "\n" +
                           diff(pformat(expected), pformat(results)))
 
     def test__parseRollCall_errors(self):
-        from schooltool.guiclient import SchoolToolClient, SchoolToolError
-        client = SchoolToolClient()
+        from schooltool.guiclient import _parseRollCall, SchoolToolError
         body = "<This is not XML"
-        self.assertRaises(SchoolToolError, client._parseRollCall, body)
+        self.assertRaises(SchoolToolError, _parseRollCall, body)
 
         body = dedent("""
             <rollcall xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -795,10 +794,10 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                       presence="dunno" />
             </rollcall>
         """)
-        self.assertRaises(SchoolToolError, client._parseRollCall, body)
+        self.assertRaises(SchoolToolError, _parseRollCall, body)
 
     def test__parseAbsences(self):
-        from schooltool.guiclient import SchoolToolClient, AbsenceInfo
+        from schooltool.guiclient import _parseAbsences, AbsenceInfo
         body = dedent("""
             <absences xmlns:xlink="http://www.w3.org/1999/xlink">
               <absence xlink:type="simple" href="/p/absences/000"
@@ -834,16 +833,14 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                                 datetime.datetime(2001, 2, 28, 1, 1, 1),
                                 'p', '/p', True, False,
                                 datetime.datetime(2001, 2, 3, 4, 5, 6), '')]
-        client = SchoolToolClient()
-        results = client._parseAbsences(body)
+        results = _parseAbsences(body)
         self.assertEquals(results, expected, "\n" +
                           diff(pformat(expected), pformat(results)))
 
     def test__parseAbsences_errors(self):
-        from schooltool.guiclient import SchoolToolClient, SchoolToolError
-        client = SchoolToolClient()
+        from schooltool.guiclient import _parseAbsences, SchoolToolError
         body = "<This is not XML"
-        self.assertRaises(SchoolToolError, client._parseAbsences, body)
+        self.assertRaises(SchoolToolError, _parseAbsences, body)
 
         for incorrectness in ('ended="ended" resolved="resolved"',
             'datetime="2001-02-30 01:01:01" ended="ended" resolved="resolved"',
@@ -860,14 +857,14 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                 </absences>
             """ % incorrectness)
             try:
-                client._parseAbsences(body)
+                _parseAbsences(body)
             except SchoolToolError, e:
                 pass
             else:
                 self.fail("did not raise with <absence %s ..." % incorrectness)
 
     def test__parseAbsenceComments(self):
-        from schooltool.guiclient import SchoolToolClient, AbsenceComment
+        from schooltool.guiclient import _parseAbsenceComments, AbsenceComment
         from schooltool.guiclient import Unchanged
         body = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -911,16 +908,14 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                                    "Group", "/groups/003", Unchanged,
                                    Unchanged, Unchanged,
                                    "Comment\n      Three")]
-        client = SchoolToolClient()
-        results = client._parseAbsenceComments(body)
+        results = _parseAbsenceComments(body)
         self.assertEquals(results, expected, "\n" +
                           diff(pformat(expected), pformat(results)))
 
     def test__parseAbsenceComments_errors(self):
-        from schooltool.guiclient import SchoolToolClient, SchoolToolError
-        client = SchoolToolClient()
+        from schooltool.guiclient import _parseAbsenceComments, SchoolToolError
         body = "<This is not XML"
-        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+        self.assertRaises(SchoolToolError, _parseAbsenceComments, body)
 
         body = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -933,7 +928,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </comment>
             </absence>
         """)
-        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+        self.assertRaises(SchoolToolError, _parseAbsenceComments, body)
 
         body = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -950,7 +945,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </comment>
             </absence>
         """)
-        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+        self.assertRaises(SchoolToolError, _parseAbsenceComments, body)
 
         body = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -965,7 +960,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </comment>
             </absence>
         """)
-        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+        self.assertRaises(SchoolToolError, _parseAbsenceComments, body)
 
         body = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -981,7 +976,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </comment>
             </absence>
         """)
-        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+        self.assertRaises(SchoolToolError, _parseAbsenceComments, body)
 
         body = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -996,7 +991,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </comment>
             </absence>
         """)
-        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+        self.assertRaises(SchoolToolError, _parseAbsenceComments, body)
 
         body = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1010,7 +1005,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </comment>
             </absence>
         """)
-        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+        self.assertRaises(SchoolToolError, _parseAbsenceComments, body)
 
         body = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1025,7 +1020,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </comment>
             </absence>
         """)
-        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+        self.assertRaises(SchoolToolError, _parseAbsenceComments, body)
 
         body = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1040,7 +1035,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </comment>
             </absence>
         """)
-        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+        self.assertRaises(SchoolToolError, _parseAbsenceComments, body)
 
         body = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1055,7 +1050,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </comment>
             </absence>
         """)
-        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+        self.assertRaises(SchoolToolError, _parseAbsenceComments, body)
 
         body = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1070,7 +1065,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </comment>
             </absence>
         """)
-        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+        self.assertRaises(SchoolToolError, _parseAbsenceComments, body)
 
         body = dedent("""
             <absence xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1086,7 +1081,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </comment>
             </absence>
         """)
-        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+        self.assertRaises(SchoolToolError, _parseAbsenceComments, body)
 
 
 class InfoClassTestMixin:
@@ -1236,6 +1231,7 @@ class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSchoolToolClient))
+    suite.addTest(unittest.makeSuite(TestParseFunctions))
     suite.addTest(unittest.makeSuite(TestInfoClasses))
     suite.addTest(unittest.makeSuite(TestAbsenceInfo))
     return suite
