@@ -23,6 +23,7 @@ $Id$
 """
 
 import sets
+import itertools
 from cStringIO import StringIO
 
 from schooltool.rest.cal import CalendarView as RestCalendarView
@@ -44,6 +45,7 @@ from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects, relate, getPath, traverse
 from schooltool.component import getTimePeriodService
 from schooltool.component import getTimetableSchemaService
+from schooltool.component import getOptions
 from schooltool.interfaces import IPerson, IGroup, IResource, INote
 from schooltool.membership import Membership
 from schooltool.noted import Noted
@@ -443,10 +445,22 @@ class GroupEditView(View, RelationshipViewMixin, AppObjectBreadcrumbsMixin):
             return []
         members = sets.Set(getRelatedObjects(self.context, URIMember))
         addable = []
-        for path in ('/groups', '/persons', '/resources'):
-            for obj in traverse(self.context, path).itervalues():
-                if (searchstr in obj.title.lower() and obj not in members):
-                    addable.append(obj)
+        if getOptions(self.context).restrict_membership:
+            parents = getRelatedObjects(self.context, URIGroup)
+            siblings = itertools.chain(*[getRelatedObjects(parent, URIMember)
+                                         for parent in parents])
+            source = itertools.chain(
+                traverse(self.context, '/groups').itervalues(),
+                [member for member in siblings if IPerson.providedBy(member)]
+                 )
+        else:
+            source = itertools.chain(
+                traverse(self.context, '/groups').itervalues(),
+                traverse(self.context, '/persons').itervalues(),
+                traverse(self.context, '/resources').itervalues())
+        for obj in source:
+            if (searchstr in obj.title.lower() and obj not in members):
+                addable.append(obj)
         # 'obj not in members' is not strong enough; we should check for
         # transitive membership as well
         return self._list(addable)

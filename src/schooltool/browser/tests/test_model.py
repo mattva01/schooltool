@@ -803,6 +803,46 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
                             'path': '/persons/lj',
                             'url': 'http://localhost:7001/persons/lj'}])
 
+    def test_addList_restricted(self):
+        from schooltool.browser.model import GroupEditView
+        from schooltool.component import getPath
+        from schooltool.rest import absoluteURL
+        from schooltool.membership import Membership
+
+        Person = self.app['persons'].new
+
+        john = Person('john', title='John')
+        pete = Person('pete', title='Pete')
+        Membership(group=self.root, member=john)
+        Membership(group=self.root, member=pete)
+
+        self.app.restrict_membership = True
+
+        view = GroupEditView(self.group)
+        view.request = RequestStub(args={'SEARCH': ''})
+        list = view.addList()
+        expected = [self.group2, self.group, self.root, john, pete]
+        self.assertEquals([item['title'] for item in list],
+                          [item.title for item in expected])
+        self.assertEquals([item['path'] for item in list],
+                          [getPath(item) for item in expected])
+        self.assertEquals([item['url'] for item in list],
+                          [absoluteURL(view.request, item)
+                           for item in expected])
+        self.assertEquals([item['icon_url'] for item in list],
+                          ['/group.png', '/group.png', '/group.png',
+                           '/person.png', '/person.png'])
+        self.assertEquals([item['icon_text'] for item in list],
+                          ['Group', 'Group', 'Group', 'Person', 'Person'])
+
+        view.request = RequestStub(args={'SEARCH': 'et'})
+        self.assertEquals(view.addList(),
+                          [{'title': pete.title,
+                            'icon_text': 'Person',
+                            'icon_url': '/person.png',
+                            'path': '/persons/pete',
+                            'url': 'http://localhost:7001/persons/pete'}])
+
     def test_update_DELETE(self):
         from schooltool.browser.model import GroupEditView
         from schooltool.component import getRelatedObjects
