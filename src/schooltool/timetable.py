@@ -156,6 +156,7 @@ from schooltool.interfaces import ITimetableExceptionList
 from schooltool.interfaces import ITimetableExceptionEvent
 from schooltool.interfaces import ITimetableExceptionAddedEvent
 from schooltool.interfaces import ITimetableExceptionRemovedEvent
+from schooltool.interfaces import ITimetableReplacedEvent
 from schooltool.interfaces import ITimetableCalendarEvent
 from schooltool.interfaces import IExceptionalTTCalendarEvent
 from schooltool.interfaces import ISchooldayPeriod
@@ -416,6 +417,18 @@ class TimetableExceptionList:
         if ILocation.providedBy(tt) and IEventTarget.providedBy(tt.__parent__):
             event = TimetableExceptionRemovedEvent(self._timetable, exception)
             event.dispatch(tt.__parent__)
+
+
+class TimetableReplacedEvent(EventMixin):
+
+    implements(ITimetableReplacedEvent)
+
+    def __init__(self, object, key, old_timetable, new_timetable):
+        EventMixin.__init__(self)
+        self.object = object
+        self.key = key
+        self.old_timetable = old_timetable
+        self.new_timetable = new_timetable
 
 
 class TimetableExceptionEvent(EventMixin):
@@ -705,15 +718,25 @@ class TimetableDict(PersistentDict):
     __parent__ = None
 
     def __setitem__(self, key, value):
+        old_value = self.get(key)
+        if old_value is not None:
+            old_value.__parent__ = None
+            old_value.__name__ = None
         value.__parent__ = self
         value.__name__ = key
         PersistentDict.__setitem__(self, key, value)
+        e = TimetableReplacedEvent(self.__parent__, key, old_value, value)
+        if IEventTarget.providedBy(self.__parent__):
+            e.dispatch(self.__parent__)
 
     def __delitem__(self, key):
         value = self[key]
         value.__parent__ = None
         value.__name__ = None
         PersistentDict.__delitem__(self, key)
+        e = TimetableReplacedEvent(self.__parent__, key, value, None)
+        if IEventTarget.providedBy(self.__parent__):
+            e.dispatch(self.__parent__)
 
     def getRelativePath(self, child):
         if self[child.__name__]  != child:

@@ -491,9 +491,9 @@ class TestTimetableExceptionList(EventServiceTestMixin, unittest.TestCase):
         self.assertRaises(ValueError, l.remove, ex1)
 
 
-class TestTimetableExceptionEvents(unittest.TestCase):
+class TestTimetableEvents(unittest.TestCase):
 
-    def test(self):
+    def test_exception_events(self):
         from schooltool.timetable import TimetableExceptionAddedEvent
         from schooltool.timetable import TimetableExceptionRemovedEvent
         from schooltool.interfaces import ITimetableExceptionAddedEvent
@@ -504,6 +504,17 @@ class TestTimetableExceptionEvents(unittest.TestCase):
         verifyObject(ITimetableExceptionAddedEvent, e1)
         e2 = TimetableExceptionRemovedEvent(timetable, exception)
         verifyObject(ITimetableExceptionRemovedEvent, e2)
+
+    def test_replaced_event(self):
+        from schooltool.timetable import TimetableReplacedEvent
+        from schooltool.interfaces import ITimetableReplacedEvent
+        obj = object()
+        key = ('a', 'b')
+        old_timetable = object()
+        new_timetable = object()
+        e = TimetableReplacedEvent(obj, key, old_timetable, new_timetable)
+        verifyObject(ITimetableReplacedEvent, e)
+
 
 class TestTimetableException(unittest.TestCase):
 
@@ -1078,7 +1089,10 @@ class PersistentLocatableStub(Persistent):
     __parent__ = None
 
 
-class TestTimetableDict(unittest.TestCase):
+class TestTimetableDict(EventServiceTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpEventService()
 
     def test(self):
         from schooltool.timetable import TimetableDict
@@ -1123,10 +1137,51 @@ class TestTimetableDict(unittest.TestCase):
         self.assertEqual(item.__name__, ('aa', 'bb'))
         self.assertEqual(item.__parent__, td)
         self.assertEqual(item, td['aa', 'bb'])
-        del td['aa', 'bb']
-        self.assertRaises(KeyError, td.__getitem__, ('aa', 'bb'))
+
+        item2 = PersistentLocatableStub()
+        td['aa', 'bb'] = item2
+        self.assertEqual(item2, td['aa', 'bb'])
         self.assertEqual(item.__parent__, None)
         self.assertEqual(item.__name__, None)
+
+        del td['aa', 'bb']
+        self.assertRaises(KeyError, td.__getitem__, ('aa', 'bb'))
+        self.assertEqual(item2.__parent__, None)
+        self.assertEqual(item2.__name__, None)
+
+    def test_setitem_delitem_events(self):
+        from schooltool.timetable import TimetableDict
+        from schooltool.interfaces import ITimetableReplacedEvent
+
+        td = TimetableDict()
+        td.__parent__ = self.eventService
+        item = PersistentLocatableStub()
+        td['aa', 'bb'] = item
+        e = self.checkOneEventReceived()
+        self.assert_(ITimetableReplacedEvent.providedBy(e))
+        self.assert_(e.object is td.__parent__)
+        self.assertEquals(e.key, ('aa', 'bb'))
+        self.assert_(e.old_timetable is None)
+        self.assert_(e.new_timetable is item)
+
+        self.eventService.clearEvents()
+        item2 = PersistentLocatableStub()
+        td['aa', 'bb'] = item2
+        e = self.checkOneEventReceived()
+        self.assert_(ITimetableReplacedEvent.providedBy(e))
+        self.assert_(e.object is td.__parent__)
+        self.assertEquals(e.key, ('aa', 'bb'))
+        self.assert_(e.old_timetable is item)
+        self.assert_(e.new_timetable is item2)
+
+        self.eventService.clearEvents()
+        del td['aa', 'bb']
+        e = self.checkOneEventReceived()
+        self.assert_(ITimetableReplacedEvent.providedBy(e))
+        self.assert_(e.object is td.__parent__)
+        self.assertEquals(e.key, ('aa', 'bb'))
+        self.assert_(e.old_timetable is item2)
+        self.assert_(e.new_timetable is None)
 
     def test_getRelativePath(self):
         from schooltool.timetable import TimetableDict
@@ -1447,7 +1502,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableDay))
     suite.addTest(unittest.makeSuite(TestTimetableActivity))
     suite.addTest(unittest.makeSuite(TestTimetableExceptionList))
-    suite.addTest(unittest.makeSuite(TestTimetableExceptionEvents))
+    suite.addTest(unittest.makeSuite(TestTimetableEvents))
     suite.addTest(unittest.makeSuite(TestTimetableException))
     suite.addTest(unittest.makeSuite(TestTimetablingPersistence))
     suite.addTest(unittest.makeSuite(TestTimetableCalendarEvent))

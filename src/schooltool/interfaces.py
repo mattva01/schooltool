@@ -639,21 +639,6 @@ class IMemberRemovedEvent(IRelationshipRemovedEvent, IMembershipEvent):
     """
 
 
-class ITimetableExceptionEvent(IEvent):
-    """Base interface for timetable exception events."""
-
-    timetable = Attribute("""The timetable.""")
-    exception = Attribute("""The timetable exception.""")
-
-
-class ITimetableExceptionAddedEvent(ITimetableExceptionEvent):
-    """Event that gets sent when an exception is added to a timetable."""
-
-
-class ITimetableExceptionRemovedEvent(ITimetableExceptionEvent):
-    """Event that gets sent when an exception is removed from a timetable."""
-
-
 class IEventTarget(Interface):
     """An object that can receive events."""
 
@@ -1511,6 +1496,21 @@ class ITimetableException(Interface):
         """See if self != other."""
 
 
+class ITimetableExceptionEvent(IEvent):
+    """Base interface for timetable exception events."""
+
+    timetable = Attribute("""The timetable.""")
+    exception = Attribute("""The timetable exception.""")
+
+
+class ITimetableExceptionAddedEvent(ITimetableExceptionEvent):
+    """Event that gets sent when an exception is added to a timetable."""
+
+
+class ITimetableExceptionRemovedEvent(ITimetableExceptionEvent):
+    """Event that gets sent when an exception is removed from a timetable."""
+
+
 class ITimetableCalendarEvent(ICalendarEvent):
     """A calendar event that has been created from a timetable."""
 
@@ -1558,10 +1558,15 @@ class ITimetabled(Interface):
 
         The keys of this mapping are tuples of
         (time_period_id, timetable_schema_id), e.g.
-        ('2003 autumn semester', 'Weekly')
+        ('2004-autumn-semester', 'weekly')
 
-        These timetables can be directly manipulated.  For a lot of
-        objects this mapping will be empty.
+        These timetables can be directly manipulated.  Adding, changing
+        or removing a timetable will result in a ITimetableReplacedEvent
+        being sent.
+
+        For a lot of objects this mapping will be empty.  Instead, they
+        will inherit timetable events through composition (see
+        getCompositeTimetable).
         """)
 
     def getCompositeTimetable(time_period_id, tt_schema_id):
@@ -1581,6 +1586,15 @@ class ITimetabled(Interface):
 
     def makeCalendar():
         """Generate and return a calendar from all composite timetables."""
+
+
+class ITimetableReplacedEvent(IEvent):
+    """Event that gets sent when a timetable is replaced."""
+
+    object = Attribute("""ITimetabled.""")
+    key = Attribute("""Tuple (time_period_id, schema_id).""")
+    old_timetable = Attribute("""The old timetable (can be None).""")
+    new_timetable = Attribute("""The new timetable (can be None).""")
 
 
 class ISchooldayTemplate(Interface):
