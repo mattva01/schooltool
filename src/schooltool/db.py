@@ -56,6 +56,7 @@ class PersistentKeysDict(Persistent, UserDict.DictMixin):
         self.checkKey(key)
         if key._p_oid is None or self._p_jar is None:
             self._tmpdata[id(key)] = (key, value)
+            self._p_changed = True
         else:
             self._data[key._p_oid] = value
 
@@ -268,7 +269,7 @@ class UniqueNamesMixin:
         self._names['__next'] = next
 
 
-class PersistentKeysSetWithNames(UniqueNamesMixin):
+class PersistentKeysSetWithNames(Persistent, UniqueNamesMixin):
 
     def __init__(self, name_length=3):
         self._data = PersistentKeysDict()

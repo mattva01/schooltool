@@ -112,6 +112,7 @@ class BaseTestPersistentKeysDict(unittest.TestCase, EqualsSortedMixin):
         from transaction import get_transaction
         get_transaction().commit()
 
+
 class TestPersistentKeysDictWithDataManager(BaseTestPersistentKeysDict):
 
     def setUp(self):
@@ -119,6 +120,27 @@ class TestPersistentKeysDictWithDataManager(BaseTestPersistentKeysDict):
         from zodb.storage.mapping import MappingStorage
         self.db = DB(MappingStorage())
         self.datamgr = self.db.open()
+
+    def testDifferentConnection(self):
+        from transaction import get_transaction
+        d, p1, p2 = self.doSet()
+        self.datamgr.root()['p'] = d
+        get_transaction().commit()
+        p3 = P()
+        d[p3] = 3
+        self.datamgr.root()['p3'] = p3
+        self.assertEqual(d[p3], 3)
+        get_transaction().commit()
+        try:
+            datamgr = self.db.open()
+            p = datamgr.root()['p']
+            p3 = datamgr.root()['p3']
+            self.assert_(p3 in d, 'p3 not in d')
+            self.assertEqual(d[p3], 3)
+        finally:
+            get_transaction().abort()
+            datamgr.close()
+
 
 class TestPersistentKeysDictBare(BaseTestPersistentKeysDict):
 
@@ -480,6 +502,35 @@ class TestPersistentKeysSetWithNames(unittest.TestCase, EqualsSortedMixin):
         p.add(c)
         self.assertEqual(c.__name__, '003')
         self.assertEquals(list(p.getNames()), ['003'])
+
+    def testDifferentConnection(self):
+        from transaction import get_transaction
+
+        p = self.newInstance()
+        self.datamgr.root()['p'] = p
+        a, b = N(), N()
+        self.assertEqual(len(p), 0)
+        get_transaction().commit()
+        #import pdb; pdb.set_trace()
+        p.add(a)
+        self.assertEquals(list(p), [a])
+        self.assertEqual(len(p), 1)
+        self.assertEquals(a.__name__, '001')
+        self.assertEquals(list(p.getNames()), ['001'])
+        self.assertEquals(p.valueForName('001'), a)
+        get_transaction().commit()
+        try:
+            datamgr = self.db.open()
+            p = datamgr.root()['p']
+            len(p._data._data)
+            self.assertEqual(len(p), 1)
+            self.assertEquals(a.__name__, '001')
+            self.assertEquals(list(p)[0].__name__, a.__name__)
+            self.assertEquals(list(p.getNames()), ['001'])
+            self.assertEquals(p.valueForName('001').__name__, a.__name__)
+        finally:
+            get_transaction().abort()
+            datamgr.close()
 
 
 class TestPersistentPairKeysDictWithNames(unittest.TestCase,
