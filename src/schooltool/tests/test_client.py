@@ -131,9 +131,11 @@ class TestClient(unittest.TestCase):
             isatty = lambda self: False
         self.client.stdin = StdinStub()
         self.client.prompt = "# "
+        self.client.extra_prompt = "> "
         self.client.intro = "Hello"
         self.client._setupPrompt()
         self.assertEquals(self.client.prompt, "")
+        self.assertEquals(self.client.extra_prompt, "")
         self.assertEquals(self.client.intro, "")
 
     def test_setupPrompt_no_curses(self):
@@ -147,9 +149,11 @@ class TestClient(unittest.TestCase):
             sys.modules['curses'] = CursesStub()
             self.client.stdin = StdinStub()
             self.client.prompt = "# "
+            self.client.extra_prompt = "> "
             self.client.intro = "Hello"
             self.client._setupPrompt()
             self.assertEquals(self.client.prompt, "# ")
+            self.assertEquals(self.client.extra_prompt, "> ")
             self.assertEquals(self.client.intro, "Hello")
         finally:
             try:
@@ -171,9 +175,11 @@ class TestClient(unittest.TestCase):
             sys.modules['curses'] = CursesStub()
             self.client.stdin = StdinStub()
             self.client.prompt = "# "
+            self.client.extra_prompt = "> "
             self.client.intro = "Hello"
             self.client._setupPrompt()
             self.assertEquals(self.client.prompt, "# ")
+            self.assertEquals(self.client.extra_prompt, "> ")
             self.assertEquals(self.client.intro, "Hello")
         finally:
             try:
@@ -195,10 +201,13 @@ class TestClient(unittest.TestCase):
             sys.modules['curses'] = CursesStub()
             self.client.stdin = StdinStub()
             self.client.prompt = "# "
+            self.client.extra_prompt = "> "
             self.client.intro = "Hello"
             self.client._setupPrompt()
             self.assertEquals(self.client.prompt,
                               "\001<B>\002SchoolTool>\001<N>\002 ")
+            self.assertEquals(self.client.extra_prompt,
+                              "\001<B>\002%(what)s>\001<N>\002 ")
             self.assertEquals(self.client.intro, "Hello")
         finally:
             try:
@@ -341,7 +350,7 @@ class TestClient(unittest.TestCase):
 
     def do_test_put_or_post(self, what):
         doit = getattr(self.client, 'do_%s' % what)
-        self.client.input_hook = lambda: '.'
+        self.client.input_hook = lambda prompt: '.'
         doit('   ')
         self.assertEmitted("Resource not provided")
 
@@ -363,7 +372,8 @@ class TestClient(unittest.TestCase):
                          '%s text/plain 0\n' % what.upper())
 
         self.emitted = ""
-        self.client.input_hook = ['.', '..', '...', 'foo'].pop
+        lines = ['.', '..', '...', 'foo']
+        self.client.input_hook = lambda prompt: lines.pop()
         doit('/place_to_put_things text/x-plain')
         self.assertEmitted(dedent("""
             End data with a line containing just a single period.
@@ -375,7 +385,7 @@ class TestClient(unittest.TestCase):
             .
             """) % what.upper())
 
-        def raise_eof():
+        def raise_eof(prompt):
             raise EOFError
         self.emitted = ""
         self.client.input_hook = raise_eof
@@ -385,7 +395,7 @@ class TestClient(unittest.TestCase):
             Unexpected EOF -- %s aborted""") % what.upper())
 
         self.emitted = ""
-        self.client.input_hook = lambda: '.'
+        self.client.input_hook = lambda prompt: '.'
         doit('/binfile')
         self.assertEmitted(dedent("""
             End data with a line containing just a single period.

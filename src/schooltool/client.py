@@ -41,6 +41,7 @@ This is free software, covered by the GNU General Public License, and you are
 welcome to change it and/or distribute copies of it under certain conditions."""
 
     prompt = "SchoolTool> "
+    extra_prompt = "%(what)s> "
 
     doc_header = "Available commands:"
     ruler = ""
@@ -70,6 +71,7 @@ welcome to change it and/or distribute copies of it under certain conditions."""
         """
         if not self.stdin.isatty():
             self.prompt = ""
+            self.extra_prompt = ""
             self.intro = ""
         else:
             try:
@@ -85,12 +87,20 @@ welcome to change it and/or distribute copies of it under certain conditions."""
                     if bold:
                         self.prompt = ("\001%s\002SchoolTool>\001%s\002 "
                                        % (bold, normal))
+                        self.extra_prompt = ("\001%s\002%%(what)s>\001%s\002 "
+                                             % (bold, normal))
                 except curses.error:
                     pass
 
     def emit(self, *args):
         """Output the arguments.  A hook for tests"""
         print >> self.stdout, ' '.join(args)
+
+    def postcmd(self, stop, line):
+        """Hook method executed just after a command dispatch is finished."""
+        if not stop:
+            self.emit("")   # make sure there's an empty line between commands
+        return stop
 
     def default(self, line):
         """This is called when a nonexistent command is invoked."""
@@ -234,9 +244,10 @@ welcome to change it and/or distribute copies of it under certain conditions."""
         if self.stdin.isatty():
             self.emit("End data with a line containing just a single period.")
         data = []
+        prompt = self.extra_prompt % {'what': what}
         while 1:
             try:
-                row = self.input_hook()
+                row = self.input_hook(prompt)
             except EOFError:
                 self.emit('Unexpected EOF -- %s aborted' % what)
                 return
