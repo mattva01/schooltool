@@ -159,7 +159,7 @@ div.error {
 
 div.row {
   margin: 1ex 0ex;
-  clear: both;
+  clear: left;
 }
 
 div.row div.error {
@@ -213,16 +213,6 @@ span.accountdisabled {
   color: red;
 }
 
-div.members {
-  background: #aee5ac;
-  border: 1px solid #036d00;
-}
-
-div.parentgroups {
-  background: #e2e2e2;
-  border: 1px solid #b34848;
-}
-
 div.groups {
   background: #e2e2e2;
   border: 1px solid #b34848;
@@ -233,17 +223,10 @@ div.timetables {
   border: 1px solid #b34848;
 }
 
-div.members,
-div.parentgroups,
 div.groups,
 div.timetables {
   padding: 1ex;
   margin: 1ex 1em;
-}
-
-div.members,
-div.parentgroups {
-  float: left;
 }
 
 div.groups,
@@ -253,8 +236,6 @@ div.timetables {
 
 form h3,
 div.form h3,
-div.members h3,
-div.parentgroups h3,
 div.groups h3,
 div.timetables h3 {
   color: black;

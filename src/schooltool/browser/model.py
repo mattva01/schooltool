@@ -57,7 +57,10 @@ class GetParentsMixin:
 
     def getParentGroups(self):
         """Return groups that context is a member of."""
-        return getRelatedObjects(self.context, URIGroup)
+        list = [(obj.title, obj)
+                for obj in getRelatedObjects(self.context, URIGroup)]
+        list.sort()
+        return [obj for title, obj in list]
 
 
 class PersonInfoMixin:
@@ -272,20 +275,26 @@ class GroupView(View, GetParentsMixin, TimetabledViewMixin):
 
     def getOtherMembers(self):
         """Return members that are not groups."""
-        return [g for g in getRelatedObjects(self.context, URIMember)
-                if not IGroup.providedBy(g)]
+        list = [(obj.title, obj)
+                for obj in getRelatedObjects(self.context, URIMember)
+                    if not IGroup.providedBy(obj)]
+        list.sort()
+        return [obj for title, obj in list]
 
     def getSubGroups(self):
         """Return members that are groups."""
-        return [g for g in getRelatedObjects(self.context, URIMember)
-                if IGroup.providedBy(g)]
+        list = [(obj.title, obj)
+                for obj in getRelatedObjects(self.context, URIMember)
+                    if IGroup.providedBy(obj)]
+        list.sort()
+        return [obj for title, obj in list]
 
     def teachersList(self):
         """Lists teachers of this group"""
-        result = [(obj.title, obj)
-                  for obj in getRelatedObjects(self.context, URITeacher)]
-        result.sort()
-        return [obj for title, obj in result]
+        list = [(obj.title, obj)
+                for obj in getRelatedObjects(self.context, URITeacher)]
+        list.sort()
+        return [obj for title, obj in list]
 
     def canEdit(self):
         return isManager(self.request.authenticated_user)

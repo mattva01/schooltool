@@ -32,11 +32,14 @@
     </div>
   </div>
 
-  <div class="parentgroups">
+  <div class="parentgroups" tal:define="supergroups view/getParentGroups">
     <h3 i18n:translate="">Super-groups</h3>
-    <p tal:repeat="parent view/getParentGroups">
+    <p tal:repeat="parent supergroups">
      <a tal:attributes="href parent/@@absolute_url"
         tal:content="parent/title"/>
+    </p>
+    <p tal:condition="not:supergroups" i18n:translate="">
+      This group has no super-groups.
     </p>
   </div>
 
