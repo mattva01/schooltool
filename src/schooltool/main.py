@@ -507,6 +507,13 @@ def profile(fn, extension='prof'):
 # Main loop
 #
 
+no_storage_error_msg = """
+No storage defined in the configuration file.  Unable to start the server.
+
+If you're using the default configuration file, please edit it now and
+uncomment one of the ZODB storage sections.
+"""
+
 class Server:
     """SchoolTool HTTP server."""
 
@@ -548,6 +555,7 @@ class Server:
           appname       name of the application instance in ZODB
           viewFactory   root view class
           appFactory    application object factory
+          config_file   file name of the config file
           config        configuration loaded from a config file, contains the
                         following attributes (see schema.xml for the definitive
                         list):
@@ -577,7 +585,13 @@ class Server:
         for k, v in opts:
             if k in ('-c', '--config'):
                 config_file = v
+        self.config_file = config_file
         self.config = self.loadConfig(config_file)
+
+        db_configuration = self.config.database
+        if db_configuration.config.storage is None:
+            self.noStorage()
+            raise SystemExit(1)
 
         # Insert the metadefault for 'modules'
         self.config.module.insert(0, 'schooltool.main')
@@ -589,6 +603,11 @@ class Server:
         """Prints a help message."""
         message = __doc__.strip().splitlines()[:-1]
         print >> sys.stdout, "\n".join(message)
+
+    def noStorage(self):
+        """Prints an informative message when the config file does not define a
+        storage."""
+        print >> sys.stderr, no_storage_error_msg
 
     def findDefaultConfigFile(self):
         """Returns the default config file pathname.

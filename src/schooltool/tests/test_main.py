@@ -673,9 +673,9 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         sys.path[:] = self.original_path
         self.tearDownRegistries()
 
-    def getConfigFileName(self):
+    def getConfigFileName(self, filename='sample.conf'):
         dirname = os.path.dirname(__file__)
-        return os.path.join(dirname, 'sample.conf')
+        return os.path.join(dirname, filename)
 
     def test_loadConfig(self):
         from schooltool.main import Server
@@ -746,6 +746,15 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         server = Server()
         self.assertRaises(getopt.GetoptError, server.configure, ['-x'])
         self.assertRaises(getopt.GetoptError, server.configure, ['xyzzy'])
+
+    def test_configure_no_storage(self):
+        from schooltool.main import Server
+        server = Server()
+        server.noStorage = lambda: None
+        config_file = self.getConfigFileName('empty.conf')
+        server.findDefaultConfigFile = lambda: config_file
+        server.notifyConfigFile = lambda x: None
+        self.assertRaises(SystemExit, server.configure, ['-c', config_file])
 
     def test_main(self):
         from schooltool.main import Server
