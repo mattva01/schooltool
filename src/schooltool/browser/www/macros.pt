@@ -23,7 +23,7 @@
   <div class="navigation">
     <div class="login" tal:condition="request/authenticated_user">
       <span class="userlabel" i18n:translate="">User:</span>
-      <a href="/start" tal:content="request/authenticated_user/title" />.
+      <span class="username" tal:content="request/authenticated_user/title" />.
       <a href="/logout" i18n:translate=""
          tal:attributes="href string:/logout?url=${request/path}">Log out</a>.
     </div>
