@@ -854,8 +854,7 @@ def EventSourceDecorator(e, source):
     can substitute an event instance with a (decorated) copy and not worry
     about editing views making modifications to copies.
     """
-    result = CalendarEvent(e.dtstart, e.duration, e.title, e.context,
-                           e.owner, location=e.location, unique_id=e.unique_id)
+    result = e.replace()
     result.source = source
     return result
 
