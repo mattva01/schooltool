@@ -717,18 +717,7 @@ class Server:
                 f = file(filename, "a")
                 self.logfiles.append(f)
 
-        logger = logging.getLogger('access')
-        logger.propagate = False
-        logger.setLevel(logging.INFO)
-        for filename in self.config.access_log_file:
-            if filename == 'STDOUT':
-                handler = logging.StreamHandler(sys.stdout)
-            elif filename == 'STDERR':
-                handler = logging.StreamHandler(sys.stderr)
-            else:
-                handler = logging.FileHandler(filename)
-            handler.setFormatter(logging.Formatter())
-            logger.addHandler(handler)
+        self.setUpLogger('access', self.config.access_log_file)
 
         # Process any command line arguments that may override config file
         # settings here.
@@ -740,6 +729,22 @@ class Server:
                 else:
                     sys.exit(_("Daemon mode not supported on your "
                              "operating system"))
+
+    def setUpLogger(self, name, filenames):
+        """Set up a named logger."""
+        logger = logging.getLogger(name)
+        logger.propagate = False
+        logger.setLevel(logging.INFO)
+        for filename in filenames:
+            if filename == 'STDOUT':
+                handler = logging.StreamHandler(sys.stdout)
+            elif filename == 'STDERR':
+                handler = logging.StreamHandler(sys.stderr)
+            else:
+                handler = logging.FileHandler(filename)
+            handler.setFormatter(logging.Formatter())
+            logger.addHandler(handler)
+
 
     def help(self):
         """Print a help message."""
