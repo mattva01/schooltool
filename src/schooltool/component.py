@@ -237,7 +237,7 @@ class DynamicSchemaField(Persistent):
 
 
 class DynamicSchema(Persistent):
-    """Facet template for dynamic information storage"""
+    """Facet template for dynamic information storage."""
 
     implements(IDynamicSchema)
 
@@ -270,6 +270,7 @@ class DynamicSchema(Persistent):
 
     def delField(self, name):
         if self.hasField(name):
+            # XXX This is completely bogus.
             field = self.getField(name)
             del field
 
@@ -281,8 +282,8 @@ class DynamicSchema(Persistent):
     def cloneEmpty(self):
         pass
 
-    def __getitem__(self, name):
-        return self.getField(name)
+    # TODO Decide whether we want to use __getitem__ or getField.
+    __getitem__ = getField
 
 
 class DynamicSchemaService(Persistent):
