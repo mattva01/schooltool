@@ -100,6 +100,8 @@ class Group(FacetedEventTargetMixin, RelationshipValenciesMixin):
             return 'facets/%s' % obj.__name__
         return RelationshipValenciesMixin.getRelativePath(self, obj)
 
+    def __repr__(self):
+        return "<Group object %s at 0x%x>" % (self.title, id(self))
 
 class Absence(Persistent):
 
