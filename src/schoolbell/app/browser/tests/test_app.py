@@ -78,10 +78,10 @@ def test_personContainerView():
         'Jonas Petraitis'
 
         >>> view.index_title
-    'Person index'
+        u'Person index'
 
         >>> view.add_title
-        'Add a new person'
+        u'Add a new person'
 
         >>> view.add_url
         'addSchoolBellPerson.html'
@@ -138,10 +138,10 @@ def test_groupContainerView():
         'Group B'
 
         >>> view.index_title
-        'Group index'
+        u'Group index'
 
         >>> view.add_title
-        'Add a new group'
+        u'Add a new group'
 
         >>> view.add_url
         'addSchoolBellGroup.html'
@@ -198,10 +198,10 @@ def test_resourceContainerView():
         'Resource B'
 
         >>> view.index_title
-        'Resource index'
+        u'Resource index'
 
         >>> view.add_title
-        'Add a new resource'
+        u'Add a new resource'
 
         >>> view.add_url
         'addSchoolBellResource.html'
