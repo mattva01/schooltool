@@ -1054,6 +1054,14 @@ class ICalendarEvent(Interface):
     duration = Attribute("""The duration of the event (datetime.timedelta)""")
     title = Attribute("""The title of the event""")
 
+    def __cmp__(other):
+        """Compare calendar events in chronological order.
+
+        Events that occur at the same time are compared by their titles.
+
+        Events are considered equal only if all three attributes are equal.
+        """
+
 
 #
 # Timetabling

@@ -23,10 +23,10 @@ Unit tests for guiclient.py
 import unittest
 import socket
 import datetime
-from pprint import pformat
 import libxml2
 from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import XMLCompareMixin, RegistriesSetupMixin
+from schooltool.tests.utils import NiceDiffsMixin
 
 __metaclass__ = type
 
@@ -107,14 +107,6 @@ class ResponseStub:
 
     def getheader(self, name):
         return self._headers[name.lower()]
-
-
-class NiceDiffsMixin:
-
-    def assertEquals(self, results, expected, msg=None):
-        if msg is None:
-            msg = "\n" + diff(pformat(expected), pformat(results))
-        unittest.TestCase.assertEquals(self, results, expected, msg)
 
 
 class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
@@ -261,8 +253,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         results = client.getListOfPersons()
         expected = [('Fred', '/persons/fred'),
                     ('Barney', '/persons/barney')]
-        self.assertEquals(results, expected, "\n" +
-                          diff(pformat(expected), pformat(results)))
+        self.assertEquals(results, expected)
         self.checkConnPath(client, '/persons')
 
     def test_getListOfPersons_with_errors(self):
@@ -286,8 +277,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         results = client.getListOfGroups()
         expected = [('Fred', '/groups/fred'),
                     ('Barney', '/groups/barney')]
-        self.assertEquals(results, expected, "\n" +
-                          diff(pformat(expected), pformat(results)))
+        self.assertEquals(results, expected)
         self.checkConnPath(client, '/groups')
 
     def test_getListOfGroups_with_errors(self):
@@ -326,8 +316,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
                    ]
         client = self.newClient(ResponseStub(200, 'OK', body))
         results = list(client.getGroupTree())
-        self.assertEquals(results, expected, "\n" +
-                          diff(pformat(expected), pformat(results)))
+        self.assertEquals(results, expected)
         self.checkConnPath(client, '/groups/root/tree')
 
     def test_getGroupTree_with_errors(self):
@@ -394,8 +383,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         client = self.newClient(ResponseStub(200, 'OK', body))
         group_id = '/groups/group1'
         results = list(client.getObjectRelationships(group_id))
-        self.assertEquals(results, expected, "\n" +
-                          diff(pformat(expected), pformat(results)))
+        self.assertEquals(results, expected)
         self.checkConnPath(client, '%s/relationships' % group_id)
 
     def test_getObjectRelationships_with_errors(self):
@@ -421,8 +409,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
         client = self.newClient(ResponseStub(200, 'OK', body))
         group_id = '/groups/group1'
         results = client.getRollCall(group_id)
-        self.assertEquals(results, expected, "\n" +
-                          diff(pformat(expected), pformat(results)))
+        self.assertEquals(results, expected)
         self.checkConnPath(client, '%s/rollcall' % group_id)
 
     def test_getRollCall_with_errors(self):
@@ -481,8 +468,7 @@ class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin,
                                 datetime.datetime(2001, 2, 3, 4, 5, 6), '')]
         client = self.newClient(ResponseStub(200, 'OK', body))
         results = client.getAbsences('/p/absences')
-        self.assertEquals(results, expected, "\n" +
-                          diff(pformat(expected), pformat(results)))
+        self.assertEquals(results, expected)
         self.checkConnPath(client, '/p/absences')
 
     def test_getAbsences_with_errors(self):
@@ -808,8 +794,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
         results = _parseContainer(body)
         expected = [('Fred', '/persons/fred'),
                     ('barney', '/persons/barney')]
-        self.assertEquals(results, expected, "\n" +
-                          diff(pformat(expected), pformat(results)))
+        self.assertEquals(results, expected)
 
     def test__parseGroupTree(self):
         from schooltool.guiclient import _parseGroupTree
@@ -987,8 +972,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
                     RollCallInfo('p2',       '/persons/p2', False),
                     RollCallInfo('p4',       '/persons/p4', False)]
         results = _parseRollCall(body)
-        self.assertEquals(results, expected, "\n" +
-                          diff(pformat(expected), pformat(results)))
+        self.assertEquals(results, expected)
 
     def test__parseRollCall_errors(self):
         from schooltool.guiclient import _parseRollCall, SchoolToolError
@@ -1041,8 +1025,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
                                 'p', '/p', True, False,
                                 datetime.datetime(2001, 2, 3, 4, 5, 6), '')]
         results = _parseAbsences(body)
-        self.assertEquals(results, expected, "\n" +
-                          diff(pformat(expected), pformat(results)))
+        self.assertEquals(results, expected)
 
     def test__parseAbsences_errors(self):
         from schooltool.guiclient import _parseAbsences, SchoolToolError
@@ -1116,8 +1099,7 @@ class TestParseFunctions(NiceDiffsMixin, RegistriesSetupMixin,
                                    Unchanged, Unchanged,
                                    "Comment\n      Three")]
         results = _parseAbsenceComments(body)
-        self.assertEquals(results, expected, "\n" +
-                          diff(pformat(expected), pformat(results)))
+        self.assertEquals(results, expected)
 
     def test__parseAbsenceComments_errors(self):
         from schooltool.guiclient import _parseAbsenceComments, SchoolToolError

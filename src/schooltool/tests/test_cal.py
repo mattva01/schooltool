@@ -305,17 +305,20 @@ class TestVEvent(unittest.TestCase):
         from schooltool.cal import VEvent, ICalParseError
 
         vevent = VEvent()
+        vevent.add('summary', 'An event', {})
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
         vevent.validate()
         self.assert_(vevent.all_day_event)
-        self.assertEquals(vevent.dtstart, date(2001, 2, 3))
+        self.assertEquals(vevent.summary, 'An event')
         self.assertEquals(vevent.dtend, date(2001, 2, 4))
         self.assertEquals(vevent.duration, timedelta(days=1))
 
         vevent = VEvent()
+        vevent.add('summary', 'An\\nevent\\; with backslashes', {})
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
         vevent.add('dtend', '20010205', {'VALUE': 'DATE'})
         vevent.validate()
+        self.assertEquals(vevent.summary, 'An\nevent; with backslashes')
         self.assert_(vevent.all_day_event)
         self.assertEquals(vevent.dtstart, date(2001, 2, 3))
         self.assertEquals(vevent.dtend, date(2001, 2, 5))
@@ -325,6 +328,7 @@ class TestVEvent(unittest.TestCase):
         vevent.add('dtstart', '20010203', {'VALUE': 'DATE'})
         vevent.add('duration', 'P2D')
         vevent.validate()
+        self.assertEquals(vevent.summary, None)
         self.assert_(vevent.all_day_event)
         self.assertEquals(vevent.dtstart, date(2001, 2, 3))
         self.assertEquals(vevent.dtend, date(2001, 2, 5))
@@ -795,6 +799,23 @@ class TestCalendarEvent(unittest.TestCase):
                            timedelta(minutes=10),
                            "reality check")
         verifyObject(ICalendarEvent, ce)
+
+        ce1 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                            timedelta(minutes=10),
+                            "reality check")
+        ce2 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                            timedelta(minutes=10),
+                            "realty check")
+        ce3 = CalendarEvent(datetime(2003, 11, 25, 12, 1),
+                            timedelta(minutes=10),
+                            "reality check")
+        ce4 = CalendarEvent(datetime(2003, 11, 25, 12, 0),
+                            timedelta(minutes=11),
+                            "reality check")
+        self.assertEquals(ce, ce1)
+        self.assertNotEquals(ce, ce2)
+        self.assertNotEquals(ce, ce3)
+        self.assertNotEquals(ce, ce4)
 
 
 def test_suite():

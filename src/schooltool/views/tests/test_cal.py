@@ -26,8 +26,8 @@ import unittest
 import datetime
 from zope.interface import implements
 from schooltool.views.tests import RequestStub, setPath
-from schooltool.tests.utils import RegistriesSetupMixin
-from schooltool.tests.helpers import dedent, diff
+from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
+from schooltool.tests.helpers import dedent, diff, sorted
 
 __metaclass__ = type
 
@@ -300,7 +300,7 @@ class TestSchooldayModelCalendarView(CalendarTestBase):
                      errmsg="Schoolday outside school period")
 
 
-class TestCalendarView(CalendarTestBase):
+class TestCalendarView(NiceDiffsMixin, CalendarTestBase):
 
     def _create(self):
         from schooltool.views.cal import CalendarView
@@ -350,6 +350,102 @@ class TestCalendarView(CalendarTestBase):
             END:VEVENT
             END:VCALENDAR
         """))
+
+    def test_put(self):
+        from schooltool.cal import CalendarEvent
+        calendar = dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:1668453774-/calendar@localhost
+            SUMMARY:Quick Lunch
+            DTSTART:20030902T154000
+            DURATION:PT20M
+            DTSTAMP:20040102T030405Z
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:-1822792810-/calendar@localhost
+            SUMMARY:Long\\nLunch
+            DTSTART:20030903T120000
+            DURATION:PT1H
+            DTSTAMP:20040102T030405Z
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:1234idontcare-/calendar@localhost
+            SUMMARY:Something else
+            DTSTART;VALUE=DATE:20030904
+            DTSTAMP:20040102T030405Z
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
+        request = RequestStub("http://localhost/calendar", method="PUT",
+                              headers={"Content-Type": "text/calendar"},
+                              body=calendar)
+        cal = self._create()
+        result = self.view.render(request)
+        self.assertEquals(result, "Calendar imported")
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(cal.daterange.first, datetime.date(2003, 9, 2))
+        self.assertEquals(cal.daterange.last, datetime.date(2003, 9, 4))
+        events = list(cal)
+        expected = [
+            CalendarEvent(datetime.datetime(2003, 9, 2, 15, 40),
+                          datetime.timedelta(minutes=20),
+                          "Quick Lunch"),
+            CalendarEvent(datetime.datetime(2003, 9, 3, 12, 00),
+                          datetime.timedelta(minutes=60),
+                          "Long\nLunch"),
+            CalendarEvent(datetime.date(2003, 9, 4),
+                          datetime.timedelta(days=1),
+                          "Something else"),
+        ]
+        self.assertEquals(sorted(events), sorted(expected))
+
+    def _test_put_error(self, body, content_type='text/calendar', errmsg=None):
+        request = RequestStub("http://localhost/calendar", method="PUT",
+                              headers={"Content-Type": content_type},
+                              body=body)
+        result = self.view.render(request)
+        if errmsg:
+            self.assertEquals(result, errmsg)
+        self.assertEquals(request.code, 400)
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+
+    def test_put_errors(self):
+        self._create()
+        self._test_put_error("Hi, Mom!", content_type="text/plain",
+                             errmsg="Unsupported content type: text/plain")
+        self._test_put_error("This is not iCalendar")
+
+        calendar = dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:school-period-/calendar@localhost
+            SUMMARY:School Period
+            DTSTART;VALUE=DATE:20040901
+            DTEND;VALUE=DATE:20040930
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random@example.com
+            SUMMARY:Doctor's appointment
+            DTSTART;VALUE=DATE:20040911
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random2@example.com
+            SUMMARY:Schoolday
+            DTSTART;VALUE=DATE:20040912
+            RDATE;VALUE=DATE:20040915
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
+        self._test_put_error(calendar,
+                     errmsg="Repeating events/exceptions not yet supported")
 
 
 class TestModuleSetup(RegistriesSetupMixin, unittest.TestCase):

@@ -22,6 +22,8 @@ Common utilities (stubs, mixins) for schooltool unit tests.
 $Id$
 """
 
+import unittest
+from pprint import pformat
 from zope.interface import implements
 from schooltool.interfaces import ILocation, IContainmentRoot
 from schooltool.interfaces import IServiceManager, IEventTarget
@@ -130,13 +132,23 @@ class RegistriesSetupMixin:
 class EqualsSortedMixin:
 
     def assertEqualsSorted(self, a, b):
-        x = a[:]
-        y = b[:]
+        x = list(a)
+        y = list(b)
         x.sort()
         y.sort()
         self.assertEquals(x, y)
 
     assertEqualSorted = assertEqualsSorted
+
+
+class NiceDiffsMixin:
+
+    def assertEquals(self, results, expected, msg=None):
+        if msg is None:
+            msg = "\n" + diff(pformat(expected), pformat(results))
+        unittest.TestCase.assertEquals(self, results, expected, msg)
+
+    assertEqual = assertEquals
 
 
 class XMLCompareMixin:

@@ -28,7 +28,7 @@ from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ISchooldayModel, ICalendar
 from schooltool.views import View, textErrorPage
-from schooltool.cal import ICalReader, ICalParseError
+from schooltool.cal import ICalReader, ICalParseError, DateRange, CalendarEvent
 from schooltool.cal import ical_text, ical_duration
 from schooltool.component import getPath
 from schooltool.component import registerView
@@ -37,6 +37,9 @@ __metaclass__ = type
 
 
 moduleProvides(IModuleSetup)
+
+
+complex_prop_names = ('RRULE', 'RDATE', 'EXRULE', 'EXDATE')
 
 
 class SchooldayModelCalendarView(View):
@@ -87,7 +90,6 @@ class SchooldayModelCalendarView(View):
         days = []
         reader = ICalReader(request.content)
         try:
-            complex_prop_names = ('RRULE', 'RDATE', 'EXRULE', 'EXDATE')
             for event in reader.iterEvents():
                 summary = event.getOne('SUMMARY', '').lower()
                 if summary not in ('school period', 'schoolday'):
@@ -160,6 +162,41 @@ class CalendarView(View):
         result.append("END:VCALENDAR")
         request.setHeader('Content-Type', 'text/calendar; charset=UTF-8')
         return "\r\n".join(result)
+
+    def do_PUT(self, request):
+        ctype = request.getHeader('Content-Type')
+        if ';' in ctype:
+            ctype = ctype[:ctype.index(';')]
+        if ctype != 'text/calendar':
+            return textErrorPage(request,
+                                 "Unsupported content type: %s" % ctype)
+        min_date = max_date = None
+        reader = ICalReader(request.content)
+        try:
+            for event in reader.iterEvents():
+                has_complex_props = reduce(operator.or_,
+                                      map(event.hasProp, complex_prop_names))
+                if has_complex_props:
+                    return textErrorPage(request,
+                             "Repeating events/exceptions not yet supported")
+                self.context.addEvent(
+                        CalendarEvent(event.dtstart, event.duration,
+                                      event.summary))
+                if min_date is None or event.dtstart < min_date:
+                    min_date = event.dtstart
+                if max_date is None or event.dtstart > max_date:
+                    max_date = event.dtstart
+        except ICalParseError, e:
+            return textErrorPage(request, str(e))
+        else:
+            if min_date is not None:
+                if not isinstance(min_date, datetime.date):
+                    min_date = min_date.date()
+                if not isinstance(max_date, datetime.date):
+                    max_date = max_date.date()
+                self.context.daterange = DateRange(min_date, max_date)
+            request.setHeader('Content-Type', 'text/plain')
+            return "Calendar imported"
 
 
 def setUp():

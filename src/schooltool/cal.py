@@ -120,6 +120,44 @@ class ICalParseError(Exception):
     """Invalid syntax in an iCalendar file."""
 
 
+def parse_text(value):
+    r"""Parse iCalendar TEXT value.
+
+    >>> parse_text('Foo')
+    'Foo'
+    >>> parse_text('\\\\')
+    '\\'
+    >>> parse_text('\\;')
+    ';'
+    >>> parse_text('\\,')
+    ','
+    >>> parse_text('\\n')
+    '\n'
+    >>> parse_text('A string with\\; some\\\\ characters\\nin\\Nit')
+    'A string with; some\\ characters\nin\nit'
+    >>> parse_text('Unterminated \\')
+    Traceback (most recent call last):
+      ...
+    IndexError: string index out of range
+    """
+    if '\\' not in value:
+        return value
+    out = []
+    prev = 0
+    while True:
+        idx = value.find('\\', prev)
+        if idx == -1:
+            break
+        out.append(value[prev:idx])
+        if value[idx + 1] in 'nN':
+            out.append('\n')
+        else:
+            out.append(value[idx + 1])
+        prev = idx + 2
+    out.append(value[prev:])
+    return "".join(out)
+
+
 def ical_text(value):
     r"""Format value according to iCalendar TEXT escaping rules.
 
@@ -401,6 +439,7 @@ class VEvent:
         'DATE-TIME': parse_date_time,
         'DURATION': parse_duration,
         'PERIOD': parse_period,
+        'TEXT': parse_text,
     }
 
     singleton_properties = Set([
@@ -456,6 +495,7 @@ class VEvent:
         """Check that this VEvent has all the necessary properties.
 
         Also sets the following attributes:
+          summary           Textual summary of this event
           all_day_event     True if this is an all-day event
           dtstart           start of the event (inclusive)
           dtend             end of the event (not inclusive)
@@ -479,6 +519,8 @@ class VEvent:
             if self._getType('DURATION') != 'DURATION':
                 raise ICalParseError("DURATION property should have type"
                                      " DURATION")
+
+        self.summary = self.getOne('SUMMARY')
 
         self.all_day_event = self._getType('DTSTART') == 'DATE'
         self.dtstart = self.getOne('DTSTART')
@@ -853,5 +895,16 @@ class CalendarEvent:
         self.dtstart = dt
         self.duration = duration
         self.title = title
+
+    def __cmp__(self, other):
+        if not isinstance(other, CalendarEvent):
+            raise NotImplementedError('Cannot compare CalendarEvent with %r'
+                                      % other)
+        return cmp((self.dtstart, self.title, self.duration),
+                   (other.dtstart, other.title, other.duration))
+
+    def __repr__(self):
+        return ("CalendarEvent%r"
+                % ((self.dtstart, self.duration, self.title), ))
 
 
