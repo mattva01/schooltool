@@ -95,7 +95,7 @@ class CSVImporter:
                 'href="%s"\n' % member_path)
 
     def teaching(self, teacher, taught):
-        """A tuple (path, method, body) to add a me"""
+        """A tuple (path, method, body) to add a teacher to a group"""
         return ('/groups/%s/relationships' % taught, 'POST',
                 'arcrole="http://schooltool.org/ns/teaching"\n'
                 'role="http://schooltool.org/ns/teaching/taught"\n'
