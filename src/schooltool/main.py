@@ -427,6 +427,8 @@ class Server:
         Membership(group=managers, member=manager)
         Membership(group=root, member=managers)
 
+        locations = Group("locations", title=_("Locations"))
+
         return app
 
     createApplication = staticmethod(createApplication)

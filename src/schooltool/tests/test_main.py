@@ -394,10 +394,12 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         app = server.createApplication()
         root = app['groups']['root']
         managers = app['groups']['managers']
+        locations = app['groups']['locations']
         manager = app['persons']['manager']
         self.assert_(manager.checkPassword('schooltool'))
         self.assertEquals(getRelatedObjects(manager, URIGroup), [managers])
         self.assertEquals(getRelatedObjects(managers, URIGroup), [root])
+        self.assertEquals(getRelatedObjects(locations, URIGroup), [])
 
         person = app['persons'].new()
         self.assert_(isinstance(person, Person))
