@@ -1,0 +1,14 @@
+<div tal:attributes="class widget/row_class">
+  <input type="checkbox"
+         tal:attributes="class widget/css_class; name widget/name;
+                         id widget/name; tabindex widget/tabindex;
+                         checked python:bool(widget.value)" />
+  <label tal:attributes="class widget/label_class; for widget/name"
+         tal:content="widget/label">[label]</label>
+  <input type="hidden" value="yes"
+         tal:attributes="name string:${widget/name}_shown" />
+  <span class="unit" tal:condition="widget/unit"
+        tal:content="widget/unit">[unit]</span>
+  <div class="error" tal:condition="widget/error"
+       tal:content="widget/error">[error message]</div>
+</div>

@@ -135,60 +135,13 @@ class TestWidget(unittest.TestCase):
         widget.require()
         self.assertEquals(widget.error, 'Other error')
 
-    def test_css_class(self):
-        from schooltool.browser.widgets import Widget
-        widget = Widget('field', 'Field Label')
-        widget.css_class = None
-        self.assertEquals(widget._css_class(), '')
-        widget.css_class = 'foo'
-        self.assertEquals(widget._css_class(), ' class="foo"')
-        widget.css_class = '"'
-        self.assertEquals(widget._css_class(), ' class="&quot;"')
-
     def test_row_class(self):
         from schooltool.browser.widgets import Widget
         widget = Widget('field', 'Field Label')
         widget.error = None
         self.assertEquals(widget.row_class(), 'row')
-        self.assertEquals(widget._row_class(), ' class="row"')
         widget.error = 'Error!'
         self.assertEquals(widget.row_class(), 'row row_error')
-        self.assertEquals(widget._row_class(), ' class="row row_error"')
-
-    def test_error_html(self):
-        from schooltool.browser.widgets import Widget
-        widget = Widget('field', 'Field Label')
-        widget.error = None
-        self.assertEquals(widget._error_html(), '')
-        widget.error = 'Error!'
-        self.assertEquals(widget._error_html(),
-                          '<div class="error">Error!</div>\n')
-        widget.error = '&'
-        self.assertEquals(widget._error_html(),
-                          '<div class="error">&amp;</div>\n')
-
-    def test_unit_html(self):
-        from schooltool.browser.widgets import Widget
-        widget = Widget('field', 'Field Label')
-        widget.unit = None
-        self.assertEquals(widget._unit_html(), '')
-        widget.unit = 'seconds'
-        self.assertEquals(widget._unit_html(),
-                          '<span class="unit">seconds</span>\n')
-        widget.unit = '&'
-        self.assertEquals(widget._unit_html(),
-                          '<span class="unit">&amp;</span>\n')
-
-    def test_tabindex_html(self):
-        from schooltool.browser.widgets import Widget
-        widget = Widget('field', 'Field Label')
-        widget.tabindex = None
-        self.assertEquals(widget._tabindex_html(), '')
-        widget.tabindex = 42
-        self.assertEquals(widget._tabindex_html(), ' tabindex="42"')
-        self.assertEquals(widget._tabindex_html(None), ' tabindex="42"')
-        self.assertEquals(widget._tabindex_html(55), ' tabindex="55"')
-        self.assertEquals(widget._tabindex_html(0), '')
 
 
 class TestSequenceWidget(unittest.TestCase):

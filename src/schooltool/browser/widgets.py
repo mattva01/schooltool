@@ -339,8 +339,12 @@ class Widget:
             self.setValue(value)
 
     def __call__(self, tabindex=None):
-        raise NotImplementedError('%s did not override Widget.__call__'
-                                  % self.__class__.__name__)
+        if not hasattr(self, 'template'):
+            raise NotImplementedError('%s did not override Widget.__call__'
+                                      % self.__class__.__name__)
+        if tabindex is not None:
+            self.tabindex = tabindex
+        return self.template(None, widget=self)
 
     def update(self, request):
         try:
@@ -388,13 +392,6 @@ class Widget:
         if not self.error and not self.raw_value:
             self.error = _("This field is required.")
 
-    def _css_class(self):
-        """Helper for subclasses."""
-        if self.css_class:
-            return ' class="%s"' % cgi.escape(self.css_class, True)
-        else:
-            return ''
-
     def row_class(self):
         """Return the CSS class for the row."""
         if self.error:
@@ -402,36 +399,9 @@ class Widget:
         else:
             return 'row'
 
-    def _row_class(self):
-        """Helper for subclasses."""
-        return ' class="%s"' % self.row_class()
-
-    def _error_html(self):
-        """Helper for subclasses."""
-        if self.error:
-            return '<div class="error">%s</div>\n' % cgi.escape(self.error)
-        else:
-            return ''
-
-    def _unit_html(self):
-        """Helper for subclasses."""
-        if self.unit:
-            return '<span class="unit">%s</span>\n' % cgi.escape(self.unit)
-        else:
-            return ''
-
-    def _tabindex_html(self, tabindex=None):
-        """Helper for subclasses."""
-        if tabindex is None:
-            tabindex = self.tabindex
-        if tabindex:
-            return ' tabindex="%d"' % tabindex
-        else:
-            return ''
-
 
 class SequenceWidget(Widget):
-    """A widget that is interested in multiple values of args"""
+    """A widget that is interested in multiple values of args."""
 
     def __init__(self, *args, **kw):
         Widget.__init__(self, *args, **kw)
@@ -478,11 +448,6 @@ class TextWidget(Widget):
 
     template = Template('www/text_widget.pt', charset=None)
 
-    def __call__(self, tabindex=None):
-        if tabindex is not None:
-            self.tabindex = tabindex
-        return self.template(None, widget=self)
-
 
 class PasswordWidget(TextWidget):
     """Password field widget."""
@@ -497,6 +462,8 @@ class PasswordWidget(TextWidget):
 class TextAreaWidget(Widget):
     """Text area widget.
 
+    The default CSS class of TextAreaWidgets is "text".
+
     Note that TextAreaWidget ignores its 'unit' attribute.
     """
 
@@ -504,19 +471,7 @@ class TextAreaWidget(Widget):
 
     css_class = 'text'
 
-    def __call__(self, tabindex=None):
-        return ('<div%(row_class)s>\n'
-                '  <label for="%(name)s">%(label)s</label>\n'
-                '  <textarea%(css_class)s name="%(name)s"'
-                        ' id="%(name)s"%(tabindex)s>%(value)s</textarea>\n'
-                '%(error)s'
-                '</div>' % {'name': cgi.escape(self.name, True),
-                            'label': cgi.escape(self.label, True),
-                            'css_class': self._css_class(),
-                            'row_class': self._row_class(),
-                            'value': cgi.escape(self.raw_value or ''),
-                            'tabindex': self._tabindex_html(tabindex),
-                            'error': self._error_html()})
+    template = Template('www/text_area_widget.pt', charset=None)
 
 
 class SelectionWidget(Widget):
@@ -536,53 +491,21 @@ class SelectionWidget(Widget):
 
     implements(IWidget)
 
-    def __init__(self, name, label, choices, parser=None, validator=None,
-                 formatter=None, value=None):
-        Widget.__init__(self, name, label, parser=parser, validator=validator,
-                        formatter=formatter, value=value)
+    template = Template('www/selection_widget.pt', charset=None)
+
+    def __init__(self, name, label, choices, **kw):
+        Widget.__init__(self, name, label, **kw)
         self.choices = choices
-
-    def _options_html(self):
-        options = []
-        for value, display in self.choices:
-            options.append('    <option value="%(value)s"%(selected)s>'
-                           '%(display)s</option>\n'
-                           % {'value': cgi.escape(self.formatter(value), True),
-                              'display': cgi.escape(display, True),
-                              'selected': (value == self.value
-                                           and ' selected="selected"'
-                                           or '')})
-        return ''.join(options)
-
-    def __call__(self, tabindex=None):
-        return ('<div%(row_class)s>\n'
-                '  <label for="%(name)s">%(label)s</label>\n'
-                '  <select%(css_class)s name="%(name)s"'
-                         ' id="%(name)s"%(tabindex)s>\n'
-                '%(options)s'
-                '  </select>\n'
-                '%(unit)s'
-                '%(error)s'
-                '</div>' % {'name': cgi.escape(self.name, True),
-                            'label': cgi.escape(self.label, True),
-                            'tabindex': self._tabindex_html(tabindex),
-                            'css_class': self._css_class(),
-                            'row_class': self._row_class(),
-                            'options': self._options_html(),
-                            'unit': self._unit_html(),
-                            'error': self._error_html()})
 
 
 class CheckboxWidget(Widget):
-    """A checkbox"""
+    """Checkbox widget."""
 
     implements(IWidget)
 
-    def _checked_html(self):
-        if self.value:
-            return ' checked="checked"'
-        else:
-            return ''
+    label_class = "plain"
+
+    template = Template('www/checkbox_widget.pt', charset=None)
 
     def update(self, request):
         if ("%s_shown" % self.name) in request.args:
@@ -590,20 +513,3 @@ class CheckboxWidget(Widget):
                 self.setValue(True)
             else:
                 self.setValue(False)
-
-    def __call__(self, tabindex=None):
-        return ('<div%(row_class)s>\n'
-                '  <input %(css_class)s type="checkbox" name="%(name)s"'
-                '         id="%(name)s" %(tabindex)s %(checked)s/>\n'
-                '  <label class="plain" for="%(name)s">%(label)s</label>\n'
-                '  <input type="hidden" name="%(name)s_shown" value="yes"/>\n'
-                '%(unit)s'
-                '%(error)s'
-                '</div>' % {'name': cgi.escape(self.name, True),
-                            'label': cgi.escape(self.label, True),
-                            'tabindex': self._tabindex_html(tabindex),
-                            'css_class': self._css_class(),
-                            'row_class': self._row_class(),
-                            'unit': self._unit_html(),
-                            'error': self._error_html(),
-                            'checked': self._checked_html()})

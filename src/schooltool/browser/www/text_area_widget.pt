@@ -1,0 +1,9 @@
+<div tal:attributes="class widget/row_class">
+  <label tal:attributes="class widget/label_class; for widget/name"
+         tal:content="widget/label">[label]</label>
+  <textarea tal:attributes="class widget/css_class; name widget/name;
+                         id widget/name; tabindex widget/tabindex"
+            tal:content="widget/raw_value" />
+  <div class="error" tal:condition="widget/error"
+       tal:content="widget/error">[error message]</div>
+</div>

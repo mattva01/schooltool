@@ -1035,7 +1035,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
              ('monthly', 'Month'), ('yearly', 'Year')))
 
 
-        self.interval_widget = TextWidget('interval', 'Repeat every',
+        self.interval_widget = TextWidget('interval', _('Repeat every'),
                                           parser=intParser,
                                           validator=positiveIntValidator,
                                           value=1)

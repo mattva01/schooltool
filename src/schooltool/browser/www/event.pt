@@ -122,14 +122,19 @@
     </div>
     <!-- Repeat every [count] [freq [v]] -->
     <div class="row">
-      <label for="interval">Repeat every</label>
-      <input type="text" name="interval" id="interval" size="3"
-             tal:attributes="value view/interval_widget/raw_value" />
-      <select name="recurrence_type" id="recurrence_type">
-        <option tal:replace="structure
-                             view/recurrence_type_widget/_options_html"/>
-      </select>
-      <div tal:replace="structure view/interval_widget/_error_html"/>
+     <tal:block tal:define="widget nocall:view/interval_widget">
+      <label metal:use-macro="widget/template/macros/label" />
+      <input tal:attributes="class widget/css_class; name widget/name;
+                             id widget/name; type widget/input_type;
+                             tabindex widget/tabindex; value widget/raw_value"
+             size="3" />
+     </tal:block>
+     <tal:block tal:define="widget nocall:view/recurrence_type_widget">
+      <label metal:use-macro="widget/template/macros/select" />
+     </tal:block>
+     <tal:block tal:define="widget nocall:view/interval_widget">
+      <div metal:use-macro="widget/template/macros/error" />
+     </tal:block>
     </div>
     <!-- weekly box -->
     <fieldset id="weekly_row">
@@ -186,7 +191,9 @@
       <label for="range_c" class="plain">Repeat</label>
       <input type="text" name="count" id="count" size="3"
              tal:attributes="value view/count_widget/raw_value" /> times.
-      <div tal:replace="structure view/count_widget/_error_html" />
+     <tal:block tal:define="widget nocall:view/count_widget">
+      <div metal:use-macro="widget/template/macros/error" />
+     </tal:block>
     </div>
 
     <div class="row">
@@ -196,7 +203,9 @@
       <label for="range_u" class="plain">Repeat until</label>
       <input type="text" name="until" id="until"
              tal:attributes="value view/until_widget/raw_value"/>
-      <div tal:replace="structure view/until_widget/_error_html" />
+     <tal:block tal:define="widget nocall:view/until_widget">
+      <div metal:use-macro="widget/template/macros/error" />
+     </tal:block>
     </div>
 
     <div class="row">

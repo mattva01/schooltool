@@ -759,6 +759,7 @@ class OptionsView(View, ToplevelBreadcrumbsMixin):
             (('public', _('Public')),
              ('private',  _('Busy block')),
              ('hidden', _('Hidden'))),
+            label_class="wide",
             value=self.context.new_event_privacy,
             validator=privacy_validator)
 
@@ -768,6 +769,7 @@ class OptionsView(View, ToplevelBreadcrumbsMixin):
             (('public', _('Public')),
              ('private',  _('Busy block')),
              ('hidden', _('Hidden'))),
+            label_class="wide",
             value=self.context.timetable_privacy,
             validator=privacy_validator)
 
@@ -776,6 +778,7 @@ class OptionsView(View, ToplevelBreadcrumbsMixin):
             'default_tts',
             _('The default timetable schema'),
             [(k, k) for k in tts_service.keys()],
+            label_class="wide",
             value=tts_service.default_id)
 
     def update(self, request):

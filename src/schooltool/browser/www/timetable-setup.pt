@@ -22,12 +22,8 @@
           tal:attributes="class python: conflict and 'conflict' or ''">
         <th tal:content="period/title">Period N</th>
         <td tal:repeat="widget period/widgets">
-          <select tal:attributes="name widget/name">
-            <option tal:replace="structure widget/_options_html">
-              Options
-            </option>
-          </select>
-          <div tal:replace="structure widget/_error_html">Error</div>
+          <select metal:use-macro="widget/template/macros/select" />
+          <div metal:use-macro="widget/template/macros/error" />
         </td>
         <td class="conflict" tal:condition="conflict" i18n:translate="">
         Scheduling conflict.

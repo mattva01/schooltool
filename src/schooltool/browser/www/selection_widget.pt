@@ -2,10 +2,14 @@
   <label metal:define-macro="label"
          tal:attributes="class widget/label_class; for widget/name"
          tal:content="widget/label">[label]</label>
-  <input metal:define-macro="input"
-         tal:attributes="class widget/css_class; name widget/name;
-                         id widget/name; type widget/input_type;
-                         tabindex widget/tabindex; value widget/raw_value" />
+  <select metal:define-macro="select"
+          tal:attributes="class widget/css_class; name widget/name;
+                         id widget/name; tabindex widget/tabindex">
+    <option tal:repeat="choice widget/choices"
+            tal:attributes="value python:widget.formatter(choice[0]);
+                            selected python:widget.value == choice[0]"
+            tal:content="python:choice[1]" />
+  </select>
   <span metal:define-macro="unit"
         class="unit" tal:condition="widget/unit"
         tal:content="widget/unit">[unit]</span>

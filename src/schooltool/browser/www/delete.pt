@@ -31,13 +31,11 @@ gone forever.
 
 <form action="#" method="POST" tal:attributes="action request/uri">
   <div class="row" tal:define="widget nocall:view/search_widget">
-    <label tal:attributes="for widget/name" tal:content="widget/label" />
-    <input class="text" type="text"
-           tal:attributes="name widget/name; id widget/name;
-                           value widget/raw_value;" />
+    <label metal:use-macro="widget/template/macros/label" />
+    <input metal:use-macro="widget/template/macros/input" />
     <input class="button" type="submit" name="SEARCH" value="Search"
            i18n:attributes="value" />
-    <tal:block tal:replace="structure widget/_error_html" />
+    <div metal:use-macro="widget/template/macros/error" />
   </div>
 </form>
 
