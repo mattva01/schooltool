@@ -260,6 +260,30 @@ def intParser(raw_value):
         raise ValueError(_("Invalid value."))
 
 
+def passwordValidator(password):
+    r"""Validator for passwords.
+
+    Accepts only ASCII strings.
+
+      >>> passwordValidator(None)
+      >>> passwordValidator(u'')
+      >>> passwordValidator(u'abc def')
+      >>> passwordValidator(u'!@#$%^&*()_+[]{},./<>?;:"|')
+
+      >>> passwordValidator(u'\u00ff')
+      Traceback (most recent call last):
+        ...
+      ValueError: Password can only contain ASCII characters.
+
+    """
+    if not password:
+        return
+    try:
+        unicode(password).encode('ascii')
+    except UnicodeError:
+        raise ValueError(_("Password can only contain ASCII characters."))
+
+
 class Widget:
     """Base class for widgets."""
 
@@ -382,21 +406,34 @@ class TextWidget(Widget):
 
     css_class = 'text'
 
+    input_type = 'text'
+
     def __call__(self, tabindex=None):
         return ('<div%(row_class)s>\n'
                 '  <label for="%(name)s">%(label)s</label>\n'
-                '  <input%(css_class)s type="text" name="%(name)s"'
+                '  <input%(css_class)s type="%(input_type)s" name="%(name)s"'
                         ' id="%(name)s"%(tabindex)s value="%(value)s" />\n'
                 '%(unit)s'
                 '%(error)s'
                 '</div>' % {'name': cgi.escape(self.name, True),
                             'label': cgi.escape(self.label, True),
+                            'input_type': cgi.escape(self.input_type, True),
                             'css_class': self._css_class(),
                             'row_class': self._row_class(),
                             'value': cgi.escape(self.raw_value or '', True),
                             'unit': self._unit_html(),
                             'tabindex': self._tabindex_html(tabindex),
                             'error': self._error_html()})
+
+
+class PasswordWidget(TextWidget):
+    """Password field widget."""
+
+    input_type = 'password'
+
+    def __init__(self, *args, **kw):
+        kw.setdefault('validator', passwordValidator)
+        TextWidget.__init__(self, *args, **kw)
 
 
 class TextAreaWidget(Widget):

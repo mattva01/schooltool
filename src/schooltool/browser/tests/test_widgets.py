@@ -309,6 +309,34 @@ class TestTextWidget(XMLCompareMixin, unittest.TestCase):
                              expected.encode('UTF-8'))
 
 
+class TestPasswordWidget(XMLCompareMixin, unittest.TestCase):
+
+    def createWidget(self, field="field", label="Label", **kw):
+        from schooltool.browser.widgets import PasswordWidget
+        widget = PasswordWidget(field, label, **kw)
+        return widget
+
+    def test(self):
+        from schooltool.browser.widgets import IWidget
+        from schooltool.browser.widgets import passwordValidator
+        widget = self.createWidget()
+        verifyObject(IWidget, widget)
+        assert widget.validator is passwordValidator
+
+    def test_call(self):
+        widget = self.createWidget()
+        widget.setValue(u'some <text> \u263B')
+        expected = u"""
+            <div class="row">
+              <label for="field">Label</label>
+              <input class="text" type="password" name="field" id="field"
+                     value="some &lt;text&gt; \u263B" />
+            </div>
+            """
+        self.assertEqualsXML(widget().encode('UTF-8'),
+                             expected.encode('UTF-8'))
+
+
 class TestTextAreaWidget(XMLCompareMixin, unittest.TestCase):
 
     def createWidget(self, field="field", label="Label"):
