@@ -113,12 +113,14 @@ class ApplicationObjectMixin(FacetedEventTargetMixin,
         return list(self._getFreePeriods(first, last, timetable_periods))
 
     def _getFreePeriods(self, first, last, timetable_periods):
-        # XXX The following code is inefficient:
+        # The following code is inefficient:
         #  - SequentialDaysTimetableModel needs to iterate from the
         #    beginning of the semester (or whatever) to day, thus leading
         #    to quadratic behaviour.
         #  - There are repeated lookups of the time-related services within
         #    getPeriodsForDay.
+        # Fix this if profiling indicates _getFreePeriods takes too long in
+        # real life.
         one_day = datetime.timedelta(days=1)
         dtfirst = datetime.datetime.combine(first, datetime.time(0))
         dtlast = datetime.datetime.combine(last, datetime.time(0)) + one_day
