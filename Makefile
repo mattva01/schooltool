@@ -43,7 +43,7 @@ clean:
 	find . \( -path './src/schooltool/*.mo' -o -name '*.o' \
 	         -o -name '*.py[co]' \) -exec rm -f {} \;
 	rm -rf build
-	[ -x debian/rules ] && debian/rules debdirclean
+	[ ! -d debian ] || debian/rules debdirclean
 
 realclean: clean
 	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;
@@ -98,34 +98,5 @@ vi-coverage-reports:
 
 deb:
 	dpkg-buildpackage -uc -b -rfakeroot
-
-schooltooltar: realclean
-	[ ! -d .svn ] || { echo Error: This is a working copy, export it first; exit 1;}
-	builddir=`echo "$$PWD" | sed 's/.*\///'` 			&&\
-	[ ztool == z`echo "$$builddir"| grep -o tool` ]		  	||\
-	{ echo Error: The directory has the wrong name; exit 1;}	&&\
-	cd .. 								&&\
-	tar -czf "$$builddir.tar.gz" 					\
-		    --exclude=CVS 					\
-		    "$$builddir"
-
-schoolbelltar: realclean
-	[ ! -d .svn ] || { echo Error: This is a working copy, export it first; exit 1;}
-	builddir=`echo "$$PWD" | sed 's/.*\///'` 			&&\
-	[ zbell == z`echo "$$builddir"| grep -o bell` ]		  	||\
-	{ echo Error: The directory has the wrong name; exit 1;}	&&\
-	cd .. 								&&\
-	tar -czf "$$builddir.tar.gz"					\
-		    --exclude=schooltool.conf.in			\
-		    --exclude=schooltool-grapher.py			\
-		    --exclude=schooltool-client.py			\
-		    --exclude=schooltool-server.py			\
-		    --exclude=wxschooltool.py				\
-		    --exclude=import-sampleschool.py			\
-		    --exclude=generate-sampleschool.py			\
-		    --exclude=clients					\
-		    --exclude=debian 					\
-		    --exclude=CVS 					\
-		    "$$builddir"
 
 .PHONY: all build clean test ftest run coverage sampleschool deb
