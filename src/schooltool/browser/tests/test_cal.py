@@ -594,9 +594,6 @@ class TestYearlyCalendarView(NiceDiffsMixin, unittest.TestCase):
         view.authorization = lambda x, y: True
         request = RequestStub(args={'date': '2004-08-12'})
         content = view.render(request)
-        # TODO
-##        self.assert_("Da Boss" in content)
-##        self.assert_("Stuff happens" in content)
 
     def test_prev_next(self):
         from schooltool.browser.cal import YearlyCalendarView
