@@ -2749,7 +2749,7 @@ def doctest_EventDeleteView():
 
         >>> request = TestRequest(form={'event_id': 'idontexist',
         ...                             'date': '2005-02-03'})
-        >>> request.setPrincipal(ConformantStub(object()))
+        >>> request.setPrincipal(ConformantStub(person))
         >>> view = EventDeleteView(cal, request)
         >>> view.handleEvent()
 
