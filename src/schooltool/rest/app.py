@@ -49,7 +49,7 @@ moduleProvides(IModuleSetup)
 
 
 class ApplicationView(TraversableView):
-    """The root view for the application"""
+    """The root view for the application."""
 
     template = Template("www/app.pt", content_type="text/xml")
     authorization = PublicAccess

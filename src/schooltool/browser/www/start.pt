@@ -23,6 +23,8 @@
           i18n:translate="">Add a group</a></p>
     <p><a class="action" href="/resources/add.html"
           i18n:translate="">Add a resource</a></p>
+    <p><a class="action" href="/applog"
+          i18n:translate="">View the application log</a></p>
   </tal:block>
   <p><a class="action" tal:attributes="href view/person_url"
         i18n:translate="">View your information page</a></p>

@@ -30,6 +30,7 @@ from schooltool.browser import absoluteURL
 from schooltool.browser.auth import PublicAccess, AuthenticatedAccess
 from schooltool.browser.auth import ManagerAccess, globalTicketService
 from schooltool.browser.model import PersonView, GroupView, ResourceView
+from schooltool.browser.applog import ApplicationLogView
 from schooltool.component import getPath
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
 from schooltool.interfaces import IPerson, AuthenticationError
@@ -106,6 +107,8 @@ class RootView(View):
             return LogoutView(self.context)
         elif name == 'start':
             return StartView(request.authenticated_user)
+        elif name == 'applog':
+            return ApplicationLogView(self.context)
         raise KeyError(name)
 
 

@@ -160,9 +160,11 @@ class TestAppView(unittest.TestCase, TraversalTestMixin):
         from schooltool.browser.app import PersonContainerView
         from schooltool.browser.app import GroupContainerView
         from schooltool.browser.app import ResourceContainerView
+        from schooltool.browser.applog import ApplicationLogView
         view = self.createView()
         app = view.context
         self.assertTraverses(view, 'logout', LogoutView, app)
+        self.assertTraverses(view, 'applog', ApplicationLogView, app)
         self.assertTraverses(view, 'persons', PersonContainerView,
                              app['persons'])
         self.assertTraverses(view, 'groups', GroupContainerView, app['groups'])
