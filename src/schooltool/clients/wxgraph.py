@@ -1,4 +1,3 @@
-#!/usr/bin/env python2.3
 #Boa:Frame:wxFrame1
 #
 # SchoolTool - common information systems platform for school administration

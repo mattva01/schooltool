@@ -1,4 +1,3 @@
-#!/usr/bin/env python2.3
 ##############################################################################
 #
 # Loosely based on i18nextract.py from Zope 3.  Portions of extract.py were

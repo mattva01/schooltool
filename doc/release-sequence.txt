@@ -7,11 +7,11 @@ SchoolBell releases.
 Minor Release
 =============
 
-For bugfixes to a released version which are non-debian specific. 
+For bugfixes to a released version which are non-debian specific.
 
 1.  Make sure the necessary changes are in both schooltool and schoolbell branches.
     Merge them from the trunk if necessary.
-    
+
 2.  Set version in 0.8.x branches.
 
     a.  Make sure the SERVER_VERSION in src/schooltool/http.py is updated.
@@ -23,12 +23,12 @@ For bugfixes to a released version which are non-debian specific.
 3.  Check release notes in RELEASE.
 
 4.  Branch and tag releases.
-    
+
     a.  Tag new schooltool package version.
 
         svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/release-0.8.x \
             svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool/release-0.8.1-1
-    
+
     b.  Tag new schoolbell package version
 
         svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schoolbell/release-0.8.x \
@@ -47,12 +47,12 @@ Create a new Debian Revision for Debian specific bugfixes.
 2.  Check release notes in RELEASE.
 
 3.  Branch and tag releases.
-    
+
     a.  Tag new schooltool package version.
 
         svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/release-0.8.x \
             svn+ssh://source.schooltool.org/svn/schooltool/tags/schooltool/release-0.8-2
-    
+
     b.  Tag new schoolbell package version
 
         svn cp svn+ssh://source.schooltool.org/svn/schooltool/branches/schoolbell/release-0.8.x \
@@ -145,7 +145,7 @@ This is the release procedure used for release 0.8.
 
     a.  Export from repository.
         e.g. svn export release-0.8-1 schooltool-0.8
-    
+
     b.  Make tarballs.
         e.g. tar -zcvf schooltool-0.8.tar.gz schooltool-0.8
 
@@ -175,32 +175,14 @@ This is the release procedure used for release 0.8.
 
 9.  Build the Debian packages.
 
-    a.  Remove hash-bangs (normally #!/usr/bin/env python2.3) from:
-            src/zope/tal/talgettext.py
-            src/zope/tal/driver.py
-            src/zope/tal/ndiff.py
-            src/zope/tal/runtest.py
-            src/zope/tal/timer.py
-            src/schooltool/main.py
-            src/schooltool/schema/validate_rng.py
-            src/schooltool/translation/extract.py
-            src/schooltool/translation/pygettext.py
-            src/schooltool/translation/i18nextract.py
-            src/schooltool/clients/wxgraph.py
-            src/schooltool/clients/graphclient.py
-            src/schooltool/clients/datagen.py
-            src/schooltool/clients/client.py
-            src/schooltool/clients/wxclient.py
-            src/schooltool/clients/guiclient.py
-
-    b.  Build and sign the packages using a pbuilder chroot.
+    a.  Build and sign the packages using a pbuilder chroot.
         (remeber to use --basetgz option)
 
-    c.  Check the packages by installing/de-installing them in a clean
+    b.  Check the packages by installing/de-installing them in a clean
         sarge chroot.
 
-    d.  Run the funtional tests against the server installed in the chroot.
-        
+    c.  Run the funtional tests against the server installed in the chroot.
+
         - Purge the server in the chroot,
         - Pre-seed the chroot with testserver ports.
         - Install the server.
@@ -209,13 +191,13 @@ This is the release procedure used for release 0.8.
         - Copy testserver_app.log to chroot/var/log/school{tool,bell}/app.log
         - Start the server.
         - Run the functional tests - 'python $sourcedir/test.py -f'
-    
-    e.  Run lintian on the .changes file. Make sure there are no warnings
+
+    d.  Run lintian on the .changes file. Make sure there are no warnings
         or errors.
 
-    f.  Manually check .diff.tar.gz
+    e.  Manually check .diff.tar.gz and .changes
 
-    g.  Upload packages to debian unstable.
+    f.  Upload packages to debian unstable.
 
 10. Write a release page for the web.  Take screenshots.
 
@@ -234,5 +216,5 @@ This is the release procedure used for release 0.8.
 15. Send announcement, update news and web pages.
 
 16. Send short announcement to interested outside parties.
-    
+
     - Debian Edu (debian-edu@lists.debian.org)
