@@ -221,40 +221,8 @@
 <!-- BEGIN CALENDAR MACROS -->
 
 <metal:block define-macro="portlet-calendar-overlay" i18n:domain="schoolbell">
-
-  <div id="portlet-calendar-overlay" class="portlet"
-       tal:define="overlay nocall:context/@@calendar_overlay|nothing"
-       tal:condition="nocall:overlay">
-    <h4>Calendars</h4>
-
-    <form method="POST" action="@@calendar_overlay">
-
-      <input type="hidden" name="url" tal:attributes="value request/URL" />
-
-      <div class="row" style="background: #9db8d2">
-        <label class="disabled">
-          <input type="checkbox" checked="checked" disabled="disabled" />
-          <tal:translate i18n:translate="">My Calendar</tal:translate>
-        </label>
-      </div>
-
-      <div class="row" tal:repeat="item overlay/items"
-           tal:attributes="style string:background: ${item/color1}">
-        <label>
-          <input type="checkbox" name="overlay"
-                 tal:attributes="value item/id; checked item/checked" />
-          <span tal:content="item/title">Title</span>
-        </label>
-      </div>
-
-      <div class="controls">
-        <input name="OVERLAY" type="submit" value="Apply"
-              i18n:attributes="value"/>
-        <input name="MORE" type="submit" value="More..."
-              i18n:attributes="value"/>
-      </div>
-    </form>
-  </div>
+  <div tal:replace="structure context/@@calendar_overlay"
+       tal:on-error="nothing"/>
 </metal:block>
 
 <metal:block define-macro="portlet-calendar-jumpto" i18n:domain="schoolbell">

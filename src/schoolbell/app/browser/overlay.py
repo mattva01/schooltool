@@ -22,12 +22,13 @@ Calendar overlay views for the SchoolBell application.
 $Id$
 """
 
+import urllib
 from sets import Set
 
-from zope.interface import Interface, implements
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.api import getPath
 from zope.app.traversing.browser.absoluteurl import absoluteURL
+from zope.app.location.interfaces import ILocation
 from zope.security.proxy import removeSecurityProxy
 
 from schoolbell import SchoolBellMessageID as _
@@ -35,13 +36,51 @@ from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
 from schoolbell.app.app import getSchoolBellApplication
 
 
-class ICalendarOverlayView(Interface):
-    """A view for the calendar overlay portlet."""
+class CalendarOverlayView(BrowserView):
+    """View for the calendar overlay portlet.
 
-    def __nonzero__():
-        """Check whether the calendar overlay box should be displayed."""
+    Note that this view contains a self-posting form and handles submits that
+    contain 'OVERLAY_APPLY' or 'OVERLAY_MORE' in the request.
+    """
 
-    def items():
+    def show_overlay(self):
+        """Check whether the calendar overlay portlet needs to be rendered.
+
+        The portlet is only shown when an authenticated user is looking
+        at his/her calendar.
+
+        Anonymous user:
+
+            >>> from zope.publisher.browser import TestRequest
+            >>> from schoolbell.app.app import Person
+            >>> request = TestRequest()
+            >>> person = Person()
+            >>> context = person.calendar
+            >>> view = CalendarOverlayView(context, request)
+            >>> view.show_overlay()
+            False
+
+        Person that we're looking at
+
+            >>> from schoolbell.app.security import Principal
+            >>> request.setPrincipal(Principal('id', 'title', person))
+            >>> view.show_overlay()
+            True
+
+        A different person:
+
+            >>> request.setPrincipal(Principal('id', 'title', Person()))
+            >>> view.show_overlay()
+            False
+
+        """
+        if not ILocation.providedBy(self.context):
+            return False
+        logged_in = IPerson(self.request.principal, None)
+        calendar_owner = removeSecurityProxy(self.context.__parent__)
+        return logged_in is calendar_owner
+
+    def items(self):
         """Return items to be shown in the calendar overlay.
 
         Does not include "my calendar".
@@ -60,113 +99,6 @@ class ICalendarOverlayView(Interface):
             None)?
 
         """
-
-
-class CalendarOverlayView(BrowserView):
-    """@@calendar_overlay view
-
-    This view provides information for the calendar overlay portlet rendered
-    in the calendar_page macro.  It also handles form submissions for that
-    portlet.
-
-    Note that page templates should be careful to use nocall: when they only
-    want to access attributes or check whether the overlay needs to be shown.
-    If nocall: is omitted, the form processing code will get called.
-    """
-
-    __used_for__ = ISchoolBellCalendar
-
-    implements(ICalendarOverlayView)
-
-    def __nonzero__(self):
-        """Check whether the calendar overlay portlet needs to be rendered.
-
-        The portlet is only shown when an authenticated user is looking
-        at his/her calendar.
-
-        Anonymous user:
-
-            >>> from zope.publisher.browser import TestRequest
-            >>> from schoolbell.app.app import Person
-            >>> request = TestRequest()
-            >>> person = Person()
-            >>> context = person.calendar
-            >>> view = CalendarOverlayView(context, request)
-            >>> bool(view)
-            False
-
-        Person that we're looking at
-
-            >>> from schoolbell.app.security import Principal
-            >>> request.setPrincipal(Principal('id', 'title', person))
-            >>> bool(view)
-            True
-
-        A different person:
-
-            >>> request.setPrincipal(Principal('id', 'title', Person()))
-            >>> bool(view)
-            False
-
-        """
-        logged_in = IPerson(self.request.principal, None)
-        calendar_owner = removeSecurityProxy(self.context.__parent__)
-        return logged_in is calendar_owner
-
-    def items(self):
-        """Return items to be shown in the calendar overlay.
-
-        This is a short wrapper around Person's overlaid_calendars property.
-
-            >>> from schoolbell.relationship.tests import setUp, tearDown
-            >>> from zope.app.testing.setup import setUpTraversal
-            >>> setUp()
-            >>> setUpTraversal()
-
-            >>> from zope.app.traversing.interfaces import IContainmentRoot
-            >>> from zope.interface import directlyProvides
-            >>> from schoolbell.app.app import SchoolBellApplication
-            >>> app = SchoolBellApplication()
-            >>> directlyProvides(app, IContainmentRoot)
-
-            >>> from schoolbell.app.app import Person, Group
-            >>> from schoolbell.app.security import Principal
-            >>> person = Person('p1')
-            >>> app['persons']['p1'] = person
-
-            >>> from zope.publisher.browser import TestRequest
-            >>> request = TestRequest()
-            >>> request.setPrincipal(Principal('', '', person))
-            >>> context = person.calendar
-            >>> view = CalendarOverlayView(context, request)
-            >>> view.items()
-            []
-
-            >>> group1 = Group(title="Group 1")
-            >>> group2 = Group(title="Group 2")
-            >>> app['groups']['g1'] = group1
-            >>> app['groups']['g2'] = group2
-            >>> person.overlaid_calendars.add(group2.calendar)
-            >>> person.overlaid_calendars.add(group1.calendar, show=False)
-
-            >>> from zope.testing.doctestunit import pprint
-            >>> pprint(view.items())    # doctest: +ELLIPSIS
-            [{'calendar': <schoolbell.app.cal.Calendar object at ...>,
-              'checked': '',
-              'color1': '#eed680',
-              'color2': '#d1940c',
-              'id': u'/groups/g1',
-              'title': 'Group 1'},
-             {'calendar': <schoolbell.app.cal.Calendar object at ...>,
-              'checked': 'checked',
-              'color1': '#e0b6af',
-              'color2': '#c1665a',
-              'id': u'/groups/g2',
-              'title': 'Group 2'}]
-
-            >>> tearDown()
-
-        """
         person = IPerson(self.request.principal)
         items = [(item.calendar.__parent__.title,
                   {'title': item.calendar.__parent__.title,
@@ -179,14 +111,14 @@ class CalendarOverlayView(BrowserView):
         items.sort()
         return [i[-1] for i in items]
 
-    def __call__(self):
+    def update(self):
         """Process form submission."""
-        if 'MORE' in self.request:
-            # TODO: unit test
+        if 'OVERLAY_MORE' in self.request:
             person = IPerson(self.request.principal)
-            url = absoluteURL(person)
-            self.request.response.redirect(url + '/calendar_selection.html')
-        raise NotImplementedError("TODO")
+            url = absoluteURL(person, self.request)
+            url += '/calendar_selection.html'
+            url += '?nexturl=%s' % urllib.quote(str(self.request.URL))
+            self.request.response.redirect(url)
 
 
 class CalendarSelectionView(BrowserView):

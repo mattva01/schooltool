@@ -405,11 +405,12 @@
       action="../calendar.ics" permission="schoolbell.viewCalendar" />
 
   <page
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="*"
       name="calendar_overlay"
       layer=".skin.ISchoolBellLayer"
       class=".overlay.CalendarOverlayView"
-      permission="schoolbell.viewCalendar"
+      template="templates/calendar_overlay.pt"
+      permission="zope.View"
       />
 
   <page

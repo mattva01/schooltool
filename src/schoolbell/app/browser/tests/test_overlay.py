@@ -32,6 +32,101 @@ from schoolbell.app.browser.tests.setup import setUp, tearDown
 from schoolbell.app.browser.tests.setup import setUpSchoolBellSite
 
 
+def doctest_CalendarOverlayView():
+    r"""Tests for CalendarOverlayView
+
+        >>> from schoolbell.app.browser.overlay import CalendarOverlayView
+        >>> View = SimpleViewClass('../templates/calendar_overlay.pt',
+        ...                        bases=(CalendarOverlayView,))
+
+    CalendarOverlayView is a view on anything.
+
+        >>> context = object()
+        >>> request = TestRequest()
+        >>> view = View(context, request)
+
+    It renders to an empty string unless its context is the calendar of the
+    authenticated user
+
+        >>> view()
+        u'\n'
+
+    If you are an authenticated user looking at your own calendar, this view
+    renders a calendar selection portlet.
+
+        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.security import Principal
+        >>> app = setUpSchoolBellSite()
+        >>> person = app['persons']['whatever'] = Person('fred')
+        >>> request = TestRequest()
+        >>> request.setPrincipal(Principal('id', 'title', person))
+        >>> view = View(person.calendar, request)
+
+        >>> print view()
+        <div id="portlet-calendar-overlay" class="portlet">
+        ...
+        </div>
+
+    If the request has 'OVERLAY_MORE', CalendarOverlayView redirects to
+    calendar_selection.html
+
+        >>> request.form['OVERLAY_MORE'] = u"More..."
+        >>> content = view()
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('Location')
+        'http://127.0.0.1/persons/fred/calendar_selection.html?nexturl=http%3A//127.0.0.1'
+
+    """
+
+
+def doctest_CalendarOverlayView_items():
+    """Tests for CalendarOverlayView.items().
+
+        >>> from schoolbell.app.browser.overlay import CalendarOverlayView
+
+    We will need some persons and groups for the demonstration.
+
+        >>> from schoolbell.app.app import Person, Group
+        >>> app = setUpSchoolBellSite()
+        >>> person = app['persons']['p1'] = Person('p1', title="Person")
+        >>> group1 = app['groups']['g1'] = Group(title="Group 1")
+        >>> group2 = app['groups']['g2'] = Group(title="Group 2")
+
+    When the person has no calendars in his overlay list, items returns
+    an empty list
+
+        >>> from zope.publisher.browser import TestRequest
+        >>> from schoolbell.app.security import Principal
+        >>> request = TestRequest()
+        >>> request.setPrincipal(Principal('', '', person))
+        >>> context = person.calendar
+        >>> view = CalendarOverlayView(context, request)
+        >>> view.items()
+        []
+
+    When the person has calendars in his overlay list
+
+        >>> person.overlaid_calendars.add(group2.calendar)
+        >>> person.overlaid_calendars.add(group1.calendar, show=False)
+
+        >>> from zope.testing.doctestunit import pprint
+        >>> pprint(view.items())
+        [{'calendar': <schoolbell.app.cal.Calendar object at ...>,
+          'checked': '',
+          'color1': '#eed680',
+          'color2': '#d1940c',
+          'id': u'/groups/g1',
+          'title': 'Group 1'},
+         {'calendar': <schoolbell.app.cal.Calendar object at ...>,
+          'checked': 'checked',
+          'color1': '#e0b6af',
+          'color2': '#c1665a',
+          'id': u'/groups/g2',
+          'title': 'Group 2'}]
+
+    """
+
 def doctest_CalendarSelectionView():
     """Tests for CalendarSelectionView
 
