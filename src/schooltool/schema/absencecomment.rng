@@ -15,27 +15,27 @@ RelaxNG grammar for absence comments
     </attribute>
     <optional>
       <attribute name="absent_from">
-	<text/>
+        <text/>
       </attribute>
     </optional>
     <optional>
       <attribute name="ended">
-	<text/>
+        <text/>
       </attribute>
     </optional>
     <optional>
       <attribute name="resolved">
-	<text/>
+        <text/>
       </attribute>
     </optional>
     <optional>
       <attribute name="datetime">
-	<text/>
+        <text/>
       </attribute>
     </optional>
     <optional>
       <attribute name="expected_presence">
-	<text/>
+        <text/>
       </attribute>
     </optional>
   </element>

@@ -1454,7 +1454,7 @@ class CalendarEventView(View):
         """
         View.__init__(self, event)
         self.acl = getACL(calendar)
-	self.calendar = calendar
+        self.calendar = calendar
         self.date = None
 
     def canEdit(self):
@@ -1471,10 +1471,10 @@ class CalendarEventView(View):
     def canView(self):
         """Can the current user view this calendar event?"""
         user = self.request.authenticated_user
-	if self.context.privacy == 'public':
-	    return True
-	else:
-	    return self.isManager() or user is self.calendar.__parent__
+        if self.context.privacy == 'public':
+            return True
+        else:
+            return self.isManager() or user is self.calendar.__parent__
 
     def cssClass(self):
         """Choose a CSS class for the event."""
@@ -1508,13 +1508,13 @@ class CalendarEventView(View):
 
     def short(self, request):
         """Short representation of the event for the monthly view."""
-	self.request = request
+        self.request = request
         ev = self.context
         end = ev.dtstart + ev.duration
-	if self.canView():
-	    title = ev.title
-	else:
-	    title = _("Busy")
+        if self.canView():
+            title = ev.title
+        else:
+            title = _("Busy")
         if ev.dtstart.date() == end.date():
             return "%s (%s&ndash;%s)" % (title,
                                          ev.dtstart.strftime('%H:%M'),
@@ -1539,12 +1539,12 @@ class CalendarEventView(View):
         return 'date=%s&event_id=%s' % (date, urllib.quote(event_id))
 
     def privacy(self):
-	if self.context.privacy == "public":
-	    return _("Public")
-	elif self.context.privacy == "private":
-	    return _("Busy block")
-	elif self.context.privacy == "hidden":
-	    return _("Hidden")
+        if self.context.privacy == "public":
+            return _("Public")
+        elif self.context.privacy == "private":
+            return _("Busy block")
+        elif self.context.privacy == "hidden":
+            return _("Hidden")
 
 def durationValidator(value):
     """Check if duration is acceptable.

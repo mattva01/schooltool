@@ -253,7 +253,7 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
         ev2 = CalendarEvent(datetime(2004, 10, 11, 11, 0),
                             timedelta(minutes=10),
                             "Coffee", unique_id="124",
-			    privacy="private")
+                            privacy="private")
         ev3 = CalendarEvent(datetime(2004, 10, 13, 11, 0),
                             timedelta(minutes=10),
                             "Coffee 2", unique_id="125")
@@ -622,25 +622,25 @@ class TestCalendarEvent(unittest.TestCase):
 
     def test_privacy(self):
         ce1 = self.createEvent(datetime(2004, 11, 25, 12, 0),
-			       timedelta(minutes=10), "whatever",
-			       unique_id="123")
+                               timedelta(minutes=10), "whatever",
+                               unique_id="123")
         ce2 = self.createEvent(datetime(2004, 11, 25, 12, 0),
-			       timedelta(minutes=10), "whatever",
-			       privacy="hidden", unique_id="123")
-	self.assertNotEqual(ce1, ce2)
-	self.assertNotEqual(hash(ce1), hash(ce2))
+                               timedelta(minutes=10), "whatever",
+                               privacy="hidden", unique_id="123")
+        self.assertNotEqual(ce1, ce2)
+        self.assertNotEqual(hash(ce1), hash(ce2))
 
-	self.assertRaises(ValueError, self.createEvent,
-			  datetime(2004, 11, 25, 12, 0),
-			  timedelta(minutes=10), "whatever",
-			  privacy="other", unique_id="123")
+        self.assertRaises(ValueError, self.createEvent,
+                          datetime(2004, 11, 25, 12, 0),
+                          timedelta(minutes=10), "whatever",
+                          privacy="other", unique_id="123")
 
-	for p in ('private', 'public', 'hidden'):
-	    self.createEvent(datetime(2004, 11, 25, 12, 0),
-			       timedelta(minutes=10), "whatever",
-			       privacy=p, unique_id="123")
-	self.assertEqual(ce1.replace(privacy="hidden"), ce2)
-	self.assertEqual(ce2, ce2.replace())
+        for p in ('private', 'public', 'hidden'):
+            self.createEvent(datetime(2004, 11, 25, 12, 0),
+                             timedelta(minutes=10), "whatever",
+                             privacy=p, unique_id="123")
+        self.assertEqual(ce1.replace(privacy="hidden"), ce2)
+        self.assertEqual(ce2, ce2.replace())
 
 
 class TestExpandedCalendarEvent(TestCalendarEvent):
@@ -663,7 +663,7 @@ class TestExpandedCalendarEvent(TestCalendarEvent):
         ev = CalendarEvent(datetime(2003, 11, 25, 12, 0),
                            timedelta(minutes=10),
                            "reality check", unique_id='uid',
-			   privacy="hidden")
+                           privacy="hidden")
         eev = ExpandedCalendarEvent.duplicate(ev)
         self.assertEqual(ev, eev)
         assert IExpandedCalendarEvent.providedBy(eev)

@@ -5,7 +5,7 @@
   </div>
   <h3 tal:condition="view/canView">
     <a tal:attributes="href view/editLink" tal:omit-tag="not:view/canEdit"
-  	 tal:content="context/title">event_title</a>
+       tal:content="context/title">event_title</a>
   </h3><h3 tal:condition="not:view/canView">Busy</h3>
   <span tal:replace="structure view/duration" />
   <span tal:condition="python: context.location and view.canView()"

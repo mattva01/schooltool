@@ -51,7 +51,7 @@ RelaxNG grammar for a relationships
     <zeroOrMore>
       <element name="allow">
         <ref name="principal"/>
-	<ref name="permattr"/>
+        <ref name="permattr"/>
         <optional>
           <attribute name="title">
             <text/>

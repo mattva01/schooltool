@@ -724,12 +724,12 @@ class TestMonthlyCalendarView(AppSetupMixin, unittest.TestCase):
         from schooltool.browser.cal import MonthlyCalendarView
 
         person = self.app['persons'].new('boss', title="Da Boss")
-	person.calendar.addEvent(createEvent('2004-08-11 12:00', '1h',
-					     "Stuff happens"))
+        person.calendar.addEvent(createEvent('2004-08-11 12:00', '1h',
+                                             "Stuff happens"))
 
         view = MonthlyCalendarView(person.calendar)
         request = RequestStub(authenticated_user=person,
-			      args={'date': '2004-08-12'})
+                              args={'date': '2004-08-12'})
         content = view.render(request)
         self.assert_("Da Boss" in content)
         self.assert_("Stuff happens" in content)
@@ -2132,7 +2132,7 @@ class TestCalendarEventView(TraversalTestMixin, XMLCompareMixin,
                             unittest.TestCase):
 
     def createView(self, ev=None):
-	from schooltool.cal import ACLCalendar
+        from schooltool.cal import ACLCalendar
         from schooltool.browser.cal import CalendarEventView
         if ev is None:
             ev = self.createOrdinaryEvent()
@@ -2244,20 +2244,20 @@ class TestCalendarEventView(TraversalTestMixin, XMLCompareMixin,
             """)
 
     def test_short(self):
-	request = RequestStub()
+        request = RequestStub()
         view = self.createView()
-	view.canView = lambda: True
+        view.canView = lambda: True
         self.assertEquals(view.short(request),
                           'Main event (12:01&ndash;13:01)')
 
         ev = createEvent('2004-12-01 12:01', '1d', 'Long event')
         view = self.createView(ev)
-	view.canView = lambda: True
+        view.canView = lambda: True
         self.assertEquals(view.short(request),
                           'Long event (Dec&nbsp;01&ndash;Dec&nbsp;02)')
 
         view = self.createView()
-	view.canView = lambda: False
+        view.canView = lambda: False
         self.assertEquals(view.short(request),
                           'Busy (12:01&ndash;13:01)')
 
@@ -2278,8 +2278,8 @@ class TestCalendarEventPermissionChecking(AppSetupMixin, unittest.TestCase):
         from schooltool.interfaces import ModifyPermission
         from schooltool.browser.cal import CalendarEventView
         ev = createEvent('2004-11-03 14:32', '1h', 'Nothing of importance')
-	cal = self.person.calendar
-	cal.addEvent(ev)
+        cal = self.person.calendar
+        cal.addEvent(ev)
         cal.acl.add((self.person, ModifyPermission))
         view = CalendarEventView(ev, cal)
 
@@ -2298,9 +2298,9 @@ class TestCalendarEventPermissionChecking(AppSetupMixin, unittest.TestCase):
         from schooltool.browser.cal import CalendarEventView
         ev = createEvent('2004-11-03 14:32', '1h', 'Nothing of importance',
                          privacy="private")
-	self.person.calendar.addEvent(ev)
+        self.person.calendar.addEvent(ev)
         self.person.calendar.acl.add((self.person, ViewPermission))
-	self.person.calendar.acl.add((self.person2, ViewPermission))
+        self.person.calendar.acl.add((self.person2, ViewPermission))
         view = CalendarEventView(ev, self.person.calendar)
 
         anonymous = None
