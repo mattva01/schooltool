@@ -197,7 +197,6 @@ class CalendarViewBase(BrowserView):
         This returns a list of quarters, each quarter is a list of months,
         each month is a list of weeks, and each week is a list of CalendarDays.
         """
-        # XXX Not tested.
         quarters = []
         for q in range(4):
             quarter = [self.getMonth(date(dt.year, month + (q * 3), 1))
@@ -206,23 +205,19 @@ class CalendarViewBase(BrowserView):
         return quarters
 
     def _eventView(self, event):
-        # XXX Not tested
         return CalendarEventView(event, self.request, calendar=self.context)
 
     def eventClass(self, event):
-        # XXX Not tested
         return self._eventView(event).cssClass()
 
     def renderEvent(self, event, date):
-        # XXX Not tested
         return self._eventView(event).full(self.request, date)
 
     def eventShort(self, event):
-        # XXX Not tested
         return self._eventView(event).short(self.request)
 
     def eventHidden(self, event):
-        return False # XXX TODO
+        return False # TODO We don't have hidden events yet.
 
     def eventColors(self, event):
         return ('#9db8d2', '#7590ae') # XXX TODO
@@ -375,7 +370,6 @@ class YearlyCalendarView(CalendarViewBase):
                                            or  'cal_yearly_day')"/>
          </td>
         """
-        # XXX Not tested.
         result = []
 
         for day in week:
@@ -393,16 +387,6 @@ class YearlyCalendarView(CalendarViewBase):
                                day.date.day))
             result.append('</td>')
         return "\n".join(result)
-
-#    __url = None
-#
-#    def calURL(self, cal_type, cursor=None):
-#        # XXX Is there a reason why CalendarViewBase.calURL doesn't work here?
-#        if cursor is None:
-#            cursor = self.cursor
-#        if self.__url is None:
-#            self.__url = absolutePath(self.request, self.context)
-#        return  '%s/%s.html?date=%s' % (self.__url, cal_type, cursor)
 
 
 class CalendarEventView(object):

@@ -297,6 +297,26 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(bounds[0],
                           (date(2004, 11, 1), date(2004, 11, 8)))
 
+    def test_getYear(self):
+        from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
+        from schoolbell.app.app import Calendar
+
+        cal = Calendar()
+        view = CalendarViewBase(cal, None)
+
+        def getMonthStub(dt):
+            return dt
+        view.getMonth = getMonthStub
+
+        year = view.getYear(date(2004, 03, 04))
+        self.assertEquals(len(year), 4)
+        months = []
+        for quarter in year:
+            self.assertEquals(len(quarter), 3)
+            months.extend(quarter)
+        for i, month in enumerate(months):
+            self.assertEquals(month, date(2004, i+1, 1))
+
     def assertEqualEventLists(self, result, expected):
         fmt = lambda x: '[%s]' % ', '.join([e.title for e in x])
         self.assertEquals(result, expected,
@@ -728,7 +748,23 @@ def doctest_CalendarViewBase():
         >>> view.cursor
         datetime.date(2005, 1, 2)
 
+    Some convenience methods are available for getting info from
+    the view of an individual event:
+
+        >>> event = createEvent('2005-02-04 16:42', '15min', 'Coding session')
+        >>> view.eventClass(event)
+        'event'
+        >>> view.renderEvent(event, date(2005, 2, 4)) # doctest: +ELLIPSIS
+        u'<div class="calevent">...Coding session...
+
+        >>> view.eventShort(event)
+        'Coding session (16:42&ndash;16:57)'
+
+        >>> view.eventHidden(event)
+        False
+
     """
+
 
 def doctest_WeeklyCalendarView():
     """Tests for WeeklyCalendarView.
@@ -760,6 +796,7 @@ def doctest_WeeklyCalendarView():
         'really works'
 
     """
+
 
 def doctest_MonthlyCalendarView():
     """Tests for MonthlyCalendarView.
@@ -796,7 +833,7 @@ def doctest_MonthlyCalendarView():
 
 
 def doctest_YearlyCalendarView():
-    """Tests for YearlyCalendarView.
+    r"""Tests for YearlyCalendarView.
 
         >>> from schoolbell.app.browser.cal import YearlyCalendarView
 
@@ -826,6 +863,18 @@ def doctest_YearlyCalendarView():
         datetime.date(2003, 1, 1)
         >>> view.nextYear()
         datetime.date(2005, 1, 1)
+
+    renderRow() renders HTML for one week of events.  It is implemented
+    in python for performance reasons.
+
+        >>> week = view.getWeek(date(2004, 2, 4))[2:4]
+        >>> print view.renderRow(week, 2)
+        <td class="cal_yearly_day">
+        <a href="http://127.0.0.1/calendar/daily.html?date=2004-02-04" class="cal_yearly_day">4</a>
+        </td>
+        <td class="cal_yearly_day">
+        <a href="http://127.0.0.1/calendar/daily.html?date=2004-02-05" class="cal_yearly_day">5</a>
+        </td>
 
     """
 
