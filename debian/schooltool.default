@@ -1,6 +1,0 @@
-# This is a configuration file for /etc/init.d/schooltool.
-
-# Comment out the line below or change the value to something else than "yes"
-# if you don't want to start the schooltool server on system startup. The
-# init script will effectively be disabled.
-SCHOOLTOOL_ENABLE="yes"
