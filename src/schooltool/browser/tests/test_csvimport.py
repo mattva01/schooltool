@@ -467,7 +467,7 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                 "","A","B","C"
                 "Inside","Math1|Curtin","Math2|Guzman","Math3|Curtin"
                 "Outside","English1|Lorch","English2|Lorch","English3|Lorch"
-                ""
+
                 "Wednesday"
                 "","A","B","C"
                 "Outside","Math1|Curtin","Math3|Guzman","Math2|Curtin"

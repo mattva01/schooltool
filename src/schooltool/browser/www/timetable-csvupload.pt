@@ -59,7 +59,44 @@
 
     <p style="clear:both" i18n:translate="">
       <strong>timetable.csv</strong> contains lines of comma-separated values
-      TODO TODO TODO</p>
+      as in the following example:</p>
+
+    <pre>
+"2004-fall","default"
+""
+"Day 1"
+"","A","B"
+"Room 1","Mathematics 1 | Nicola Oakley","Mathematics 2 | Heather Hall"
+""
+"Day 2"
+"","C","D"
+"Room 2","Mathematics 3 | Heather Hall","Mathematics 1 | Nicola Oakley"
+    </pre>
+
+    <p style="clear:both" i18n:translate="">
+      <strong>roster.txt</strong> contains plain text
+      as in the following example:</p>
+
+    <pre>
+Mathematics 1 - Nicola Oakley
+Courtney Bisset
+Geoffrey Smith
+James Cox
+James Smith
+Jeff Clarks
+John Ford
+
+Mathematics 2 - Heather Hall
+Carol Smith
+Deb Price
+Denise Batchelor
+Jeff Cooper
+    <pre>
+
+    <p style="clear:both" i18n:translate>
+      The data provided in these examples should work with the
+      sample school provided with SchoolTool.
+    </p>
 
 </metal:block>
 </body>

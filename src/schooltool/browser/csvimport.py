@@ -394,7 +394,7 @@ class TimetableCSVImporter:
         for dry_run in [True, False]:
             state = 'day_ids'
             for row_no, row in enumerate(rows[2:]):
-                if len(row) == 1 and row[0] == '':
+                if row == [] or (len(row) == 1 and row[0] == ''):
                     state = 'day_ids'
                     continue
                 elif state == 'day_ids':
