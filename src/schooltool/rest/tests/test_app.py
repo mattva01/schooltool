@@ -28,7 +28,7 @@ from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin, EqualsSortedMixin
 from schooltool.tests.utils import QuietLibxml2Mixin, NiceDiffsMixin
 from schooltool.rest.tests import RequestStub, UtilityStub
-from schooltool.rest.tests import XPathTestContext
+from schooltool.rest.xmlparsing import XMLDocument
 
 
 __metaclass__ = type
@@ -71,29 +71,37 @@ class TestAppView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         request = RequestStub("http://localhost/")
         result = self.view.render(request)
 
-        context = XPathTestContext(self, result)
+        doc = XMLDocument(result)
+        doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
+
+        def oneNode(expr):
+            nodes = doc.query(expr)
+            self.assertEquals(len(nodes), 1,
+                              "%s matched %d nodes" % (expr, len(nodes)))
+            return nodes[0]
+
         try:
-            containers = context.oneNode('/schooltool/containers')
-            context.assertNumNodes(3, '/schooltool/containers/container')
-            persons = context.oneNode(
+            nodes = doc.query('/schooltool/containers')
+            self.assertEquals(len(nodes), 1)
+            nodes = doc.query('/schooltool/containers/container')
+            self.assertEquals(len(nodes), 3)
+
+            persons = oneNode(
                 '/schooltool/containers/container[@xlink:href="/persons"]')
-            groups = context.oneNode(
+            self.assertEquals(persons['xlink:type'], 'simple')
+            self.assertEquals(persons['xlink:title'], 'persons')
+
+            groups = oneNode(
                 '/schooltool/containers/container[@xlink:href="/groups"]')
+            self.assertEquals(groups['xlink:type'], 'simple')
+            self.assertEquals(groups['xlink:title'], 'groups')
 
-            notes = context.oneNode(
+            notes = oneNode(
                 '/schooltool/containers/container[@xlink:href="/notes"]')
-
-            context.assertAttrEquals(persons, 'xlink:type', 'simple')
-            context.assertAttrEquals(persons, 'xlink:title', 'persons')
-
-            context.assertAttrEquals(groups, 'xlink:type', 'simple')
-            context.assertAttrEquals(groups, 'xlink:title', 'groups')
-
-            context.assertAttrEquals(notes, 'xlink:type', 'simple')
-            context.assertAttrEquals(notes, 'xlink:title', 'notes')
+            self.assertEquals(notes['xlink:type'], 'simple')
+            self.assertEquals(notes['xlink:title'], 'notes')
         finally:
-            context.free()
-        context.assertNoErrors()
+            doc.free()
 
     def test_render(self):
         request = RequestStub("http://localhost/")
