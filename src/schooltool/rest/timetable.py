@@ -799,12 +799,12 @@ class SchoolTimetableView(View):
                         path = activity['group']
                         title = activity['title']
                         if path not in timetables:
-                            raise ViewError(_("Invalid group: %s") % path)
+                            raise ViewError(_("%s is not a teacher of %s")
+                                            % (teacher_path, path))
                         group = traverse(self.context, path)
                         if group not in groups[teacher_path]:
-                            raise ViewError(_("Invalid group %s"
-                                              " for teacher %s")
-                                            % (path, teacher_path))
+                            raise ViewError(_("%s is not a teacher of %s")
+                                            % (teacher_path, path))
                         resources = []
                         for resource in activity.query('st:resource'):
                             rpath = resource['xlink:href']
