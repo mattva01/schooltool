@@ -28,6 +28,16 @@
         </a>
       </div>
       <div class="tools">
+        <div class="breadcrumbs">
+        <tal:for tal:repeat="breadcrumb context/@@absolute_url/breadcrumbs">
+          <a tal:condition="repeat/breadcrumb/start"
+             tal:attributes="href breadcrumb/url">top</a>
+          <tal:if condition="not:repeat/breadcrumb/start">&#187;</tal:if>
+          <a tal:condition="not:repeat/breadcrumb/start"
+             tal:attributes="href breadcrumb/url"
+             tal:content="breadcrumb/name|string:top">Breadcrumb</a>
+        </tal:for>
+        </div>
         <div
           tal:define="user request/principal;
                       url context/schoolbell:app/@@absolute_url"

@@ -100,7 +100,11 @@ form.standalone .controls {
 
 #header .tools {
     text-align: right;
-    padding: 4px;
+    padding: 0.6ex 1ex 1ex 1ex;
+}
+
+#header .breadcrumbs {
+    float: left;
 }
 
 #column-left {
