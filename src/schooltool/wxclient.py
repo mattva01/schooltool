@@ -34,7 +34,7 @@ the Free Software Foundation; either version 2 of the License, or
 import sets
 from wxPython.wx import *
 from wxPython.lib.scrolledpanel import wxScrolledPanel
-from guiclient import SchoolToolClient, SchoolToolError
+from guiclient import SchoolToolClient, SchoolToolError, Unchanged
 
 __metaclass__ = type
 
@@ -132,8 +132,10 @@ class RollCallDlg(wxDialog):
         self.items = []
         for title, href, presence in rollcall:
             if presence == 'present':
+                was_absent = False
                 presence = ""
             else:
+                was_absent = True
                 presence = 'reported\n%s' % presence
             grid.Add(wxStaticText(scrolled_panel, -1, title),
                      0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4)
@@ -145,8 +147,11 @@ class RollCallDlg(wxDialog):
             abutton0.Hide()
             abutton1 = wxRadioButton(scrolled_panel, -1, "Absent")
             abutton2 = wxRadioButton(scrolled_panel, -1, "Present")
-            radio_sizer.Add(abutton1)
+            if was_absent:
+                EVT_RADIOBUTTON(self, abutton1.GetId(), self.OnPresenceChanged)
+                EVT_RADIOBUTTON(self, abutton2.GetId(), self.OnPresenceChanged)
             radio_sizer.Add(abutton2)
+            radio_sizer.Add(abutton1)
             grid.Add(radio_sizer)
             text_ctrl = wxTextCtrl(scrolled_panel, -1, style=wxTE_MULTILINE)
             grid.Add(text_ctrl, 1, wxEXPAND)
@@ -156,11 +161,13 @@ class RollCallDlg(wxDialog):
             rbutton0.Hide()
             rbutton1 = wxRadioButton(scrolled_panel, -1, "Resolve")
             rbutton2 = wxRadioButton(scrolled_panel, -1, "Do not resolve")
+            rbutton1.Disable()
+            rbutton2.Disable()
             radio_sizer.Add(rbutton1)
             radio_sizer.Add(rbutton2)
             grid.Add(radio_sizer)
-            self.items.append((href, abutton1, abutton2, text_ctrl, rbutton1,
-                               rbutton2))
+            self.items.append((href, was_absent, abutton1, abutton2, text_ctrl,
+                               rbutton1, rbutton2))
         scrolled_panel.SetSizer(grid)
         scrolled_panel.SetupScrolling(scroll_x=False)
         grid.AddGrowableCol(3)
@@ -174,6 +181,7 @@ class RollCallDlg(wxDialog):
         ok_btn = wxButton(self, wxID_OK, "OK")
         cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
         ok_btn.SetDefault()
+        EVT_BUTTON(self, wxID_OK, self.OnOk)
         button_bar.Add(ok_btn, 0, wxRIGHT, 16)
         button_bar.Add(cancel_btn, 0, 0, 0)
         vsizer.Add(button_bar, 0, wxALIGN_RIGHT|wxALL, 16)
@@ -182,15 +190,41 @@ class RollCallDlg(wxDialog):
         vsizer.SetSizeHints(self)
         self.Layout()
 
-    def getRollCall(self):
-        rollcall = []
-        for href, absent, present, comment, resolve, dontresolve in self.items:
+    def OnPresenceChanged(self, event):
+        """Enable/disable resolved radio buttons when presence is set."""
+        for (href, was_absent, absent, present, comment,
+             resolve, dontresolve) in self.items:
+             if was_absent:
+                 enabled = present.GetValue()
+                 resolve.Enable(enabled)
+                 dontresolve.Enable(enabled)
+
+    def OnOk(self, event):
+        """Verify that all required data is entered before closing the dialog."""
+        for (href, was_absent, absent, present, comment,
+             resolve, dontresolve) in self.items:
             if absent.GetValue() == present.GetValue():
-                presence = None   # XXX both unchecked, raise havoc
+                absent.SetFocus()
+                wxBell()
+                return
+            if (present.GetValue() and was_absent
+                and resolve.GetValue() == dontresolve.GetValue()):
+                resolve.SetFocus()
+                wxBell()
+                return
+        self.EndModal(wxID_OK)
+
+    def getRollCall(self):
+        """Collect the data for sending a roll call."""
+        rollcall = []
+        for (href, was_absent, absent, present, comment,
+             resolve, dontresolve) in self.items:
+            if absent.GetValue() == present.GetValue():
+                presence = None
             else:
                 presence = present.GetValue()
             if resolve.GetValue() == dontresolve.GetValue():
-                resolved = None   # XXX both unchecked, raise havoc
+                resolved = None
             else:
                 resolved = resolve.GetValue()
             comment = comment.GetValue()
@@ -198,15 +232,127 @@ class RollCallDlg(wxDialog):
         return rollcall
 
 
+class AbsenceFrame(wxFrame):
+    """Window showing the list of person's absences."""
+
+    def __init__(self, client, person_id, title, parent=None, id=-1):
+        """Create an absence list window."""
+        wxFrame.__init__(self, parent, id, title, size=wxSize(400, 300))
+        self.client = client
+        self.title = title
+        self.person_id = person_id
+        self.absence_data = []
+
+        main_sizer = wxBoxSizer(wxVERTICAL)
+        splitter = wxSplitterWindow(self, -1, style=wxSP_NOBORDER)
+        ID_ABSENCE_LIST = wxNewId()
+        self.absence_list = wxListCtrl(splitter, ID_ABSENCE_LIST,
+                style=wxLC_REPORT|wxSUNKEN_BORDER|wxLC_SINGLE_SEL)
+        self.absence_list.InsertColumn(0, "Date", width=110)
+        self.absence_list.InsertColumn(1, "Ended?", width=110)
+        self.absence_list.InsertColumn(2, "Resolved?", width=110)
+        self.absence_list.InsertColumn(3, "Expected Presence", width=150)
+        EVT_LIST_ITEM_SELECTED(self, ID_ABSENCE_LIST, self.DoSelectAbsence)
+        self.comment_list = wxListCtrl(splitter, -1,
+                style=wxLC_REPORT|wxSUNKEN_BORDER|wxLC_SINGLE_SEL)
+        self.comment_list.InsertColumn(0, "Date", width=110)
+        self.comment_list.InsertColumn(1, "Reporter", width=110)
+        self.comment_list.InsertColumn(2, "Absent From", width=110)
+        self.comment_list.InsertColumn(3, "Ended?", width=110)
+        self.comment_list.InsertColumn(4, "Resolved?", width=110)
+        self.comment_list.InsertColumn(5, "Expected Presence", width=150)
+        self.comment_list.InsertColumn(6, "Comment", width=200)
+        splitter.SetMinimumPaneSize(50)
+        splitter.SplitHorizontally(self.absence_list, self.comment_list, 100)
+        main_sizer.Add(splitter, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8)
+
+        button_bar = wxBoxSizer(wxHORIZONTAL)
+        close_btn = wxButton(self, wxID_CLOSE, "Close")
+        EVT_BUTTON(self, wxID_CLOSE, self.OnClose)
+        close_btn.SetDefault()
+        button_bar.Add(close_btn)
+        main_sizer.Add(button_bar, 0, wxALIGN_RIGHT|wxALL, 16)
+
+        self.SetSizer(main_sizer)
+        self.SetSizeHints(minW=200, minH=200)
+        self.Layout()
+
+        self.DoRefresh()
+
+    def OnClose(self, event=None):
+        """Close the absence window."""
+        self.Close(True)
+
+    def DoRefresh(self, event=None):
+        """Refresh the absence list."""
+        self.absence_list.DeleteAllItems()
+        self.absence_data = []
+        self.comment_list.DeleteAllItems()
+        self.comment_data = []
+        try:
+            self.absence_data = self.client.getAbsences(self.person_id)
+        except SchoolToolError, e:
+            wxMessageBox("Could not get list of absences: %s" % e, self.title,
+                         wxICON_ERROR|wxOK)
+            return
+        for idx, absence in enumerate(self.absence_data):
+            self.absence_list.InsertStringItem(idx,
+                    absence.datetime.isoformat(' '))
+            self.absence_list.SetItemData(idx, idx)
+            self.absence_list.SetStringItem(idx, 1,
+                    absence.ended and "Yes" or "No")
+            self.absence_list.SetStringItem(idx, 2,
+                    absence.resolved and "Yes" or "No")
+            if absence.expected_presence is not None:
+                self.absence_list.SetStringItem(idx, 1,
+                        absence.expected_presence.isoformat(' '))
+            if not absence.ended:
+                item = self.absence_list.GetItem(idx)
+                item.SetTextColour(wxRED)
+                self.absence_list.SetItem(item)
+            elif not absence.resolved:
+                item = self.absence_list.GetItem(idx)
+                item.SetTextColour(wxBLUE)
+                self.absence_list.SetItem(item)
+
+    def DoSelectAbsence(self, event):
+        """Refresh the absence comment list."""
+        self.comment_list.DeleteAllItems()
+        self.comment_data = []
+
+        key = self.absence_list.GetItemData(event.m_itemIndex)
+        absence = self.absence_data[key]
+        try:
+            self.comment_data = self.client.getAbsenceComments(absence.uri)
+        except SchoolToolError, e:
+            return
+        for idx, comment in enumerate(self.comment_data):
+            self.comment_list.InsertStringItem(idx,
+                    comment.datetime.isoformat(' '))
+            self.comment_list.SetItemData(idx, idx)
+            self.comment_list.SetStringItem(idx, 1, comment.reporter_title)
+            self.comment_list.SetStringItem(idx, 2, comment.absent_from_title)
+            if comment.ended is not Unchanged:
+                self.comment_list.SetStringItem(idx, 3,
+                        comment.ended and "Yes" or "No")
+            if comment.resolved is not Unchanged:
+                self.comment_list.SetStringItem(idx, 4,
+                        comment.resolved and "Yes" or "No")
+            if comment.expected_presence is not Unchanged:
+                if comment.expected_presence is not None:
+                    self.comment_list.SetStringItem(idx, 5,
+                            comment.expected_presence.isoformat(' '))
+                else:
+                    self.comment_list.SetStringItem(idx, 5, "-")
+            self.comment_list.SetStringItem(idx, 6, comment.text)
+
+
 class MainFrame(wxFrame):
     """Main frame."""
 
-    __super = wxFrame
-    __super___init__ = __super.__init__
-
     def __init__(self, client, parent=None, id=-1, title="SchoolTool"):
         """Create the main application window."""
-        self.__super___init__(parent, id, title, size=wxSize(500, 400))
+        wxFrame.__init__(self, parent, id, title, size=wxSize(500, 400))
         self.client = client
         self.CreateStatusBar()
 
@@ -287,7 +433,17 @@ class MainFrame(wxFrame):
         # top pane of the second splitter: member list
         panel2a = wxPanel(splitter2, -1)
         label2a = wxStaticText(panel2a, -1, "Members")
-        self.personListCtrl = wxListCtrl(panel2a, style=wxSUNKEN_BORDER)
+        self.personListCtrl = wxListCtrl(panel2a,
+                                         style=wxSUNKEN_BORDER|wxLC_SINGLE_SEL)
+        self.personPopupMenu = popupmenu(
+                item("View &Absences", "View a list of person's absences",
+                     self.DoViewPersonAbsences)
+            )
+        EVT_RIGHT_DOWN(self.personListCtrl, self.DoPersonRightDown)
+        # looks like I need both for this to work on Gtk and MSW
+        EVT_RIGHT_UP(self.personListCtrl, self.DoPersonPopup)
+        EVT_COMMAND_RIGHT_CLICK(self.personListCtrl, ID_GROUP_TREE,
+                                self.DoPersonPopup)
         sizer2a = wxBoxSizer(wxVERTICAL)
         sizer2a.Add(label2a)
         sizer2a.Add(self.personListCtrl, 1, wxEXPAND)
@@ -414,7 +570,27 @@ class MainFrame(wxFrame):
         Called when the right mouse buton released on the group tree
         control.
         """
-        self.PopupMenu(self.treePopupMenu, event.GetPosition())
+        self.groupTreeCtrl.PopupMenu(self.treePopupMenu, event.GetPosition())
+
+    def DoPersonRightDown(self, event):
+        """Select the person under mouse cursor.
+
+        Called when the right mouse buton is pressed on the person list
+        control.
+        """
+        item, flags = self.personListCtrl.HitTest(event.GetPosition())
+        if flags & wxLIST_HITTEST_ONITEM:
+            self.personListCtrl.Select(item)
+        event.Skip()
+
+    def DoPersonPopup(self, event):
+        """Show the popup menu for the person list control.
+
+        Called when the right mouse buton released on the person list
+        control.
+        """
+        self.personListCtrl.PopupMenu(self.personPopupMenu,
+                                      event.GetPosition())
 
     def DoRefresh(self, event=None):
         """Refresh data from the server.
@@ -459,11 +635,12 @@ class MainFrame(wxFrame):
                 stack.append(next)
 
         # Reload tree
+        self.groupTreeCtrl.Freeze()
         self.groupTreeCtrl.DeleteAllItems()
         root = self.groupTreeCtrl.AddRoot("Roots")
         self.groupTreeCtrl.Expand(root)
         stack = [(root, None)]
-        selected_anything = False
+        selected_item = None
         for level, title, href in group_tree:
             while len(stack) > level + 1:
                 last = stack.pop()[0]
@@ -473,17 +650,20 @@ class MainFrame(wxFrame):
             if level == 1 or stack[-1][1] in expanded:
                 self.groupTreeCtrl.Expand(stack[-1][0])
             self.groupTreeCtrl.SetPyData(item, href)
-            if href == old_selection and not selected_anything:
-                selected_anything = True
+            if href == old_selection and selected_item is None:
+                selected_item = item
                 self.groupTreeCtrl.SelectItem(item)
             stack.append((item, href))
         while stack:
             last = stack.pop()[0]
             self.groupTreeCtrl.SortChildren(last)
 
-        if not selected_anything:
+        if selected_item is None:
             self.groupTreeCtrl.Unselect()
             self.DoSelectGroup(None)
+        else:
+            self.groupTreeCtrl.EnsureVisible(selected_item)
+        self.groupTreeCtrl.Thaw()
 
     def DoRollCall(self, event=None):
         """Open the roll call dialog.
@@ -512,6 +692,21 @@ class MainFrame(wxFrame):
             else:
                 self.SetStatusText(self.client.status)
         dlg.Destroy()
+
+    def DoViewPersonAbsences(self, event=None):
+        """Open the absences window for the currently selected person.
+
+        Accessible from person list popup menu.
+        """
+        item = self.personListCtrl.GetFirstSelected()
+        if item == -1:
+            self.SetStatusText("No person selected")
+            return
+        key = self.personListCtrl.GetItemData(item)
+        title, person_id = self.personListData[key]
+        window = AbsenceFrame(self.client, person_id, parent=self,
+                              title="%s's absences" % title)
+        window.Show()
 
 
 class SchoolToolApp(wxApp):

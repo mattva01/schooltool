@@ -22,8 +22,10 @@ Unit tests for guiclient.py
 
 import unittest
 import socket
+import datetime
+from pprint import pformat
 import libxml2
-from schooltool.tests.helpers import dedent
+from schooltool.tests.helpers import dedent, diff
 from schooltool.tests.utils import XMLCompareMixin
 
 __metaclass__ = type
@@ -405,6 +407,57 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         self.assertRaises(SchoolToolError,
                           client.submitRollCall, group_id, rollcall)
 
+    def test_getAbsences(self):
+        from schooltool.guiclient import AbsenceInfo
+        body = dedent("""
+            <absences xmlns:xlink="http://www.w3.org/1999/xlink">
+              <absence xlink:type="simple" xlink:href="/p/absences/003"
+                       datetime="2001-02-28 01:01:01"
+                       ended="ended" resolved="unresolved"
+                       expected_presence="2001-02-03 04:05:06" />
+            </absences>
+        """)
+        expected = [AbsenceInfo('/p/absences/003',
+                                datetime.datetime(2001, 2, 28, 1, 1, 1), True,
+                                False, datetime.datetime(2001, 2, 3, 4, 5, 6))]
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        results = client.getAbsences('/p')
+        self.assertEquals(results, expected)
+        self.checkConnPath(client, '/p/absences')
+
+    def test_getAbsences_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        client = self.newClient(ResponseStub(404, 'Not Found'))
+        self.assertRaises(SchoolToolError, client.getAbsences, '/p')
+
+    def test_getAbsenceComments(self):
+        from schooltool.guiclient import AbsenceComment
+        body = dedent("""
+            <absence xmlns:xlink="http://www.w3.org/1999/xlink">
+              <comment datetime="2001-02-28 01:01:01"
+                       ended="ended" resolved="unresolved"
+                       expected_presence="2001-02-03 04:05:06">
+                <reporter xlink:type="simple" xlink:title="reporter"
+                          xlink:href="/persons/supervisor001"/>
+                <text>foo</text>
+              </comment>
+            </absence>
+        """)
+        expected = [AbsenceComment(datetime.datetime(2001, 2, 28, 1, 1, 1),
+                                   "reporter", "/persons/supervisor001",
+                                   "", "", True, False,
+                                   datetime.datetime(2001, 2, 3, 4, 5, 6),
+                                   "foo")]
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        results = client.getAbsenceComments('/persons/john/absences/002')
+        self.assertEquals(results, expected)
+        self.checkConnPath(client, '/persons/john/absences/002')
+
+    def test_getAbsences_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        client = self.newClient(ResponseStub(404, 'Not Found'))
+        self.assertRaises(SchoolToolError, client.getAbsenceComments, '/p')
+
     def test__parsePeopleList(self):
         from schooltool.guiclient import SchoolToolClient
         client = SchoolToolClient()
@@ -607,6 +660,287 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
             </rollcall>
         """)
         self.assertRaises(SchoolToolError, client._parseRollCall, body)
+
+    def test__parseAbsences(self):
+        from schooltool.guiclient import SchoolToolClient, AbsenceInfo
+        body = dedent("""
+            <absences xmlns:xlink="http://www.w3.org/1999/xlink">
+              <absence xlink:type="simple" href="/p/absences/000"
+                       datetime="2001-02-28 01:01:01"
+                       ended="ended" resolved="resolved" />
+              <absence xlink:type="simple" xlink:href="/p/absences/001"
+                       datetime="2001-02-28 01:01:01"
+                       ended="ended" resolved="resolved" />
+              <absence xlink:type="simple" xlink:href="/p/absences/002"
+                       datetime="2001-02-28 01:01:01"
+                       ended="unended" resolved="unresolved" />
+              <absence xlink:type="simple" xlink:href="/p/absences/003"
+                       datetime="2001-02-28 01:01:01"
+                       ended="ended" resolved="unresolved"
+                       expected_presence="2001-02-03 04:05:06" />
+            </absences>
+        """)
+        expected = [AbsenceInfo('/p/absences/001',
+                                datetime.datetime(2001, 2, 28, 1, 1, 1),
+                                True, True, None),
+                    AbsenceInfo('/p/absences/002',
+                                datetime.datetime(2001, 2, 28, 1, 1, 1),
+                                False, False, None),
+                    AbsenceInfo('/p/absences/003',
+                                datetime.datetime(2001, 2, 28, 1, 1, 1), True,
+                                False, datetime.datetime(2001, 2, 3, 4, 5, 6))]
+        client = SchoolToolClient()
+        result = client._parseAbsences(body)
+        self.assertEquals(result, expected)
+
+    def test__parseAbsences_errors(self):
+        from schooltool.guiclient import SchoolToolClient, SchoolToolError
+        client = SchoolToolClient()
+        body = "<This is not XML"
+        self.assertRaises(SchoolToolError, client._parseAbsences, body)
+
+        for incorrectness in ('ended="ended" resolved="resolved"',
+            'datetime="2001-02-30 01:01:01" ended="ended" resolved="resolved"',
+            'datetime="2001-02-28 01:01:01" ended="wha" resolved="resolved"',
+            'datetime="2001-02-28 01:01:01" resolved="resolved"',
+            'datetime="2001-02-28 01:01:01" ended="ended" resolved="whatever"',
+            'datetime="2001-02-28 01:01:01" ended="ended"',
+            'datetime="2001-02-28 01:01:01" ended="ended" resolved="resolved"'
+              ' expected_presence="not a date time"'):
+            body = dedent("""
+                <absences xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <absence xlink:type="simple" xlink:href="/p/absences/001"
+                           %s />
+                </absences>
+            """ % incorrectness)
+            try:
+                client._parseAbsences(body)
+            except SchoolToolError, e:
+                pass
+            else:
+                self.fail("did not raise with <absence %s ..." % incorrectness)
+
+    def test__parseAbsenceComments(self):
+        from schooltool.guiclient import SchoolToolClient, AbsenceComment
+        from schooltool.guiclient import Unchanged
+        body = dedent("""
+            <absence xmlns:xlink="http://www.w3.org/1999/xlink">
+              <person xlink:type="simple" xlink:href="/persons/a" />
+              <comment datetime="2001-02-28 01:01:01"
+                       ended="ended" resolved="unresolved"
+                       expected_presence="2001-02-03 04:05:06">
+                <reporter xlink:type="simple" xlink:title="Reporter"
+                          xlink:href="/persons/supervisor001" />
+                <absentfrom xlink:type="simple" xlink:href="/groups/001" />
+                <text>Comment One</text>
+              </comment>
+              <comment datetime="2001-02-28 01:01:01"
+                       ended="unended" resolved="resolved"
+                       expected_presence="">
+                <reporter xlink:type="simple" xlink:title="Supervisor 2"
+                          xlink:href="/persons/supervisor002" />
+              </comment>
+              <comment datetime="2001-02-28 01:01:01">
+                <reporter xlink:type="simple"
+                          xlink:href="/persons/supervisor003" />
+                <absentfrom xlink:type="simple" xlink:href="/groups/003"
+                            xlink:title="Group"/>
+                <text>
+                  Comment
+                  Three
+                </text>
+              </comment>
+            </absence>
+        """)
+        expected = [AbsenceComment(datetime.datetime(2001, 2, 28, 1, 1, 1),
+                                   "Reporter", "/persons/supervisor001",
+                                   "001", "/groups/001", True, False,
+                                   datetime.datetime(2001, 2, 3, 4, 5, 6),
+                                   "Comment One"),
+                    AbsenceComment(datetime.datetime(2001, 2, 28, 1, 1, 1),
+                                   "Supervisor 2", "/persons/supervisor002",
+                                   "", "", False, True, None, ""),
+                    AbsenceComment(datetime.datetime(2001, 2, 28, 1, 1, 1),
+                                   "supervisor003", "/persons/supervisor003",
+                                   "Group", "/groups/003", Unchanged, Unchanged,
+                                   Unchanged,
+                                   "Comment\n      Three")]
+        client = SchoolToolClient()
+        results = client._parseAbsenceComments(body)
+        self.assertEquals(results, expected, "\n" + 
+                          diff(pformat(expected), pformat(results)))
+
+    def test__parseAbsenceComments_errors(self):
+        from schooltool.guiclient import SchoolToolClient, SchoolToolError
+        client = SchoolToolClient()
+        body = "<This is not XML"
+        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+
+        body = dedent("""
+            <absence xmlns:xlink="http://www.w3.org/1999/xlink">
+              <person xlink:type="simple" xlink:href="/persons/a" />
+              <comment datetime="2001-02-28 01:01:01"
+                       ended="ended" resolved="unresolved"
+                       expected_presence="2001-02-03 04:05:06">
+                <absentfrom xlink:type="simple" xlink:href="/groups/001" />
+                <text>Comment One</text>
+              </comment>
+            </absence>
+        """)
+        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+
+        body = dedent("""
+            <absence xmlns:xlink="http://www.w3.org/1999/xlink">
+              <person xlink:type="simple" xlink:href="/persons/a" />
+              <comment datetime="2001-02-28 01:01:01"
+                       ended="ended" resolved="unresolved"
+                       expected_presence="2001-02-03 04:05:06">
+                <reporter xlink:type="simple" xlink:title="Reporter"
+                          xlink:href="/persons/supervisor001" />
+                <reporter xlink:type="simple" xlink:title="Reporter"
+                          xlink:href="/persons/supervisor001" />
+                <absentfrom xlink:type="simple" xlink:href="/groups/001" />
+                <text>Comment One</text>
+              </comment>
+            </absence>
+        """)
+        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+
+        body = dedent("""
+            <absence xmlns:xlink="http://www.w3.org/1999/xlink">
+              <person xlink:type="simple" xlink:href="/persons/a" />
+              <comment datetime="2001-02-28 01:01:01"
+                       ended="ended" resolved="unresolved"
+                       expected_presence="2001-02-03 04:05:06">
+                <reporter xlink:type="simple" xlink:title="Reporter"
+                          href="/persons/supervisor001" />
+                <absentfrom xlink:type="simple" xlink:href="/groups/001" />
+                <text>Comment One</text>
+              </comment>
+            </absence>
+        """)
+        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+
+        body = dedent("""
+            <absence xmlns:xlink="http://www.w3.org/1999/xlink">
+              <person xlink:type="simple" xlink:href="/persons/a" />
+              <comment datetime="2001-02-28 01:01:01"
+                       ended="ended" resolved="unresolved"
+                       expected_presence="2001-02-03 04:05:06">
+                <reporter xlink:type="simple" xlink:title="Reporter"
+                          xlink:href="/persons/supervisor001" />
+                <absentfrom xlink:type="simple" xlink:href="/groups/001" />
+                <absentfrom xlink:type="simple" xlink:href="/groups/001" />
+                <text>Comment One</text>
+              </comment>
+            </absence>
+        """)
+        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+
+        body = dedent("""
+            <absence xmlns:xlink="http://www.w3.org/1999/xlink">
+              <person xlink:type="simple" xlink:href="/persons/a" />
+              <comment datetime="2001-02-28 01:01:01"
+                       ended="ended" resolved="unresolved"
+                       expected_presence="2001-02-03 04:05:06">
+                <reporter xlink:type="simple" xlink:title="Reporter"
+                          xlink:href="/persons/supervisor001" />
+                <absentfrom xlink:type="simple" href="/groups/001" />
+                <text>Comment One</text>
+              </comment>
+            </absence>
+        """)
+        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+
+        body = dedent("""
+            <absence xmlns:xlink="http://www.w3.org/1999/xlink">
+              <person xlink:type="simple" xlink:href="/persons/a" />
+              <comment ended="ended" resolved="unresolved"
+                       expected_presence="2001-02-03 04:05:06">
+                <reporter xlink:type="simple" xlink:title="Reporter"
+                          xlink:href="/persons/supervisor001" />
+                <absentfrom xlink:type="simple" xlink:href="/groups/001" />
+                <text>Comment One</text>
+              </comment>
+            </absence>
+        """)
+        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+
+        body = dedent("""
+            <absence xmlns:xlink="http://www.w3.org/1999/xlink">
+              <person xlink:type="simple" xlink:href="/persons/a" />
+              <comment datetime="around noonish"
+                       ended="ended" resolved="unresolved"
+                       expected_presence="2001-02-03 04:05:06">
+                <reporter xlink:type="simple" xlink:title="Reporter"
+                          xlink:href="/persons/supervisor001" />
+                <absentfrom xlink:type="simple" xlink:href="/groups/001" />
+                <text>Comment One</text>
+              </comment>
+            </absence>
+        """)
+        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+
+        body = dedent("""
+            <absence xmlns:xlink="http://www.w3.org/1999/xlink">
+              <person xlink:type="simple" xlink:href="/persons/a" />
+              <comment datetime="2001-02-28 01:01:01"
+                       ended="maybe" resolved="unresolved"
+                       expected_presence="2001-02-03 04:05:06">
+                <reporter xlink:type="simple" xlink:title="Reporter"
+                          xlink:href="/persons/supervisor001" />
+                <absentfrom xlink:type="simple" xlink:href="/groups/001" />
+                <text>Comment One</text>
+              </comment>
+            </absence>
+        """)
+        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+
+        body = dedent("""
+            <absence xmlns:xlink="http://www.w3.org/1999/xlink">
+              <person xlink:type="simple" xlink:href="/persons/a" />
+              <comment datetime="2001-02-28 01:01:01"
+                       ended="ended" resolved="perhaps"
+                       expected_presence="2001-02-03 04:05:06">
+                <reporter xlink:type="simple" xlink:title="Reporter"
+                          xlink:href="/persons/supervisor001" />
+                <absentfrom xlink:type="simple" xlink:href="/groups/001" />
+                <text>Comment One</text>
+              </comment>
+            </absence>
+        """)
+        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+
+        body = dedent("""
+            <absence xmlns:xlink="http://www.w3.org/1999/xlink">
+              <person xlink:type="simple" xlink:href="/persons/a" />
+              <comment datetime="2001-02-28 01:01:01"
+                       ended="ended" resolved="unresolved"
+                       expected_presence="next Tuesday">
+                <reporter xlink:type="simple" xlink:title="Reporter"
+                          xlink:href="/persons/supervisor001" />
+                <absentfrom xlink:type="simple" xlink:href="/groups/001" />
+                <text>Comment One</text>
+              </comment>
+            </absence>
+        """)
+        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
+
+        body = dedent("""
+            <absence xmlns:xlink="http://www.w3.org/1999/xlink">
+              <person xlink:type="simple" xlink:href="/persons/a" />
+              <comment datetime="2001-02-28 01:01:01"
+                       ended="ended" resolved="unresolved"
+                       expected_presence="2001-02-03 04:05:06">
+                <reporter xlink:type="simple" xlink:title="Reporter"
+                          xlink:href="/persons/supervisor001" />
+                <absentfrom xlink:type="simple" xlink:href="/groups/001" />
+                <text>Comment One</text>
+                <text>Comment and two</text>
+              </comment>
+            </absence>
+        """)
+        self.assertRaises(SchoolToolError, client._parseAbsenceComments, body)
 
 
 def test_suite():

@@ -35,6 +35,9 @@ import httplib
 import socket
 import libxml2
 import cgi
+# XXX: parse_datetime should be split into a separate common module shared by
+# both the client and the server
+from schooltool.views import parse_datetime
 
 __metaclass__ = type
 
@@ -223,6 +226,20 @@ class SchoolToolClient:
         if response.status != 200:
             raise SchoolToolError("%d %s" % (response.status, response.reason))
 
+    def getAbsences(self, person_id):
+        """Return a list of absences for a person."""
+        response = self.get('%s/absences' % person_id)
+        if response.status != 200:
+            raise SchoolToolError("%d %s" % (response.status, response.reason))
+        return self._parseAbsences(response.read())
+
+    def getAbsenceComments(self, absence_id):
+        """Return a list of absence comments."""
+        response = self.get('%s' % absence_id)
+        if response.status != 200:
+            raise SchoolToolError("%d %s" % (response.status, response.reason))
+        return self._parseAbsenceComments(response.read())
+
     # Parsing
 
     def _parsePeopleList(self, body):
@@ -377,6 +394,146 @@ class SchoolToolClient:
             doc.freeDoc()
             ctx.xpathFreeContext()
 
+    def _parseAbsences(self, body):
+        """Parse a list of absences."""
+        try:
+            doc = libxml2.parseDoc(body)
+        except libxml2.parserError:
+            raise SchoolToolError("Could not parse absences")
+        ctx = doc.xpathNewContext()
+        try:
+            xlink = "http://www.w3.org/1999/xlink"
+            ctx.xpathRegisterNs("xlink", xlink)
+            res = ctx.xpathEval("/absences/absence")
+            absences = []
+            for node in res:
+                href = node.nsProp('href', xlink)
+                if not href:
+                    continue
+                dt = node.nsProp('datetime', None)
+                if dt is None:
+                    raise SchoolToolError("Datetime not given")
+                else:
+                    try:
+                        dt = parse_datetime(dt)
+                    except ValueError, e:
+                        raise SchoolToolError(str(e))
+                ended = node.nsProp('ended', None)
+                if ended not in ('ended', 'unended'):
+                    raise SchoolToolError("Unrecognized ended value: %s"
+                                          % ended)
+                resolved = node.nsProp('resolved', None)
+                if resolved not in ('resolved', 'unresolved'):
+                    raise SchoolToolError("Unrecognized resolved value: %s"
+                                          % resolved)
+                expected_presence = node.nsProp('expected_presence', None)
+                if expected_presence is not None:
+                    try:
+                        expected_presence = parse_datetime(expected_presence)
+                    except ValueError, e:
+                        raise SchoolToolError(str(e))
+                absences.append(AbsenceInfo(href, dt, ended == "ended",
+                                            resolved == "resolved",
+                                            expected_presence))
+            return absences
+        finally:
+            doc.freeDoc()
+            ctx.xpathFreeContext()
+
+    def _parseAbsenceComments(self, body):
+        """Parse a list of absence comments."""
+        try:
+            doc = libxml2.parseDoc(body)
+        except libxml2.parserError:
+            raise SchoolToolError("Could not parse absence comments")
+        ctx = doc.xpathNewContext()
+        try:
+            xlink = "http://www.w3.org/1999/xlink"
+            ctx.xpathRegisterNs("xlink", xlink)
+            res = ctx.xpathEval("/absence/comment")
+            comments = []
+            for node in res:
+                ctx.setContextNode(node)
+                res = ctx.xpathEval("reporter")
+                if len(res) < 1:
+                    raise SchoolToolError("Reporter not given")
+                elif len(res) > 1:
+                    raise SchoolToolError("More than one reporter given")
+                reporter = res[0]
+                reporter_href = reporter.nsProp('href', xlink)
+                if not reporter_href:
+                    raise SchoolToolError("Reporter does not have xlink:href")
+                reporter_title = reporter.nsProp('title', xlink)
+                if not reporter_title:
+                    reporter_title = reporter_href.split('/')[-1]
+
+                res = ctx.xpathEval("absentfrom")
+                if len(res) > 1:
+                    raise SchoolToolError("More than one absentfrom given")
+                absent_from_href = absent_from_title = ""
+                if res:
+                    absent_from_href = res[0].nsProp('href', xlink)
+                    if not absent_from_href:
+                        raise SchoolToolError("absentfrom does not have"
+                                              " xlink:href")
+                    absent_from_title = res[0].nsProp('title', xlink)
+                    if not absent_from_title:
+                        absent_from_title = absent_from_href.split('/')[-1]
+
+                dt = node.nsProp('datetime', None)
+                if dt is None:
+                    raise SchoolToolError("Datetime not given")
+                else:
+                    try:
+                        dt = parse_datetime(dt)
+                    except ValueError, e:
+                        raise SchoolToolError(str(e))
+
+                ended = node.nsProp('ended', None)
+                if ended is None:
+                    ended = Unchanged
+                elif ended in ('ended', 'unended'):
+                    ended = (ended == 'ended')
+                else:
+                    raise SchoolToolError("Unrecognized ended value: %s"
+                                          % ended)
+
+                resolved = node.nsProp('resolved', None)
+                if resolved is None:
+                    resolved = Unchanged
+                elif resolved in ('resolved', 'unresolved'):
+                    resolved = (resolved == 'resolved')
+                else:
+                    raise SchoolToolError("Unrecognized resolved value: %s"
+                                          % resolved)
+
+                expected_presence = node.nsProp('expected_presence', None)
+                if expected_presence is None:
+                    expected_presence = Unchanged
+                elif expected_presence == "":
+                    expected_presence = None
+                else:
+                    try:
+                        expected_presence = parse_datetime(expected_presence)
+                    except ValueError, e:
+                        raise SchoolToolError(str(e))
+
+                text = ""
+                res = ctx.xpathEval("text")
+                if len(res) > 1:
+                    raise SchoolToolError("More than one text node")
+                if res:
+                    text = res[0].content.strip()
+
+                comments.append(AbsenceComment(dt, reporter_title,
+                                    reporter_href, absent_from_title,
+                                    absent_from_href, ended, resolved,
+                                    expected_presence, text))
+            return comments
+        finally:
+            doc.freeDoc()
+            ctx.xpathFreeContext()
+
 
 class Response:
     """HTTP response.
@@ -400,8 +557,92 @@ class Response:
 class GroupInfo:
     """Information about a group."""
 
+    members = None              # List of group members
+
     def __init__(self, members):
         self.members = members
+
+
+class AbsenceInfo:
+    """Information about an absence."""
+
+    uri = None                  # URI of this absence
+    datetime = None             # Date and time of first report
+    ended = None                # Is the absence ended? (bool)
+    resolved = None             # Is the absence resolved? (bool)
+    expected_presence = None    # Expected presence or None
+
+    def __init__(self, uri, datetime, ended, resolved, expected_presence):
+        self.uri = uri
+        self.datetime = datetime
+        self.ended = ended
+        self.resolved = resolved
+        self.expected_presence = expected_presence
+
+    def __cmp__(self, other):
+        if not isinstance(other, AbsenceInfo):
+            raise NotImplementedError("cannot compare %r with %r"
+                                      % (self, other))
+        return cmp((self.uri, self.datetime, self.ended, self.resolved,
+                    self.expected_presence),
+                   (other.uri, other.datetime, other.ended, other.resolved,
+                    other.expected_presence))
+
+    def __repr__(self):
+        return "%s(%r, %r, %r, %r, %r)" % (self.__class__.__name__,
+                    self.uri, self.datetime, self.ended, self.resolved,
+                    self.expected_presence)
+
+
+Unchanged = "Unchanged"
+
+
+class AbsenceComment:
+    """Information about an absence comment."""
+
+    datetime = None             # Date and time of the comment
+    reporter_title = None       # Reporter (title)
+    reporter_uri = None         # Reporter (uri)
+    absent_from_title = None    # Absent from (title)
+    absent_from_uri = None      # Absent from (uri)
+    ended = None                # Is the absence ended? (bool or Unchanged)
+    resolved = None             # Is the absence resolved? (bool or Unchanged)
+    expected_presence = None    # Expected presence or None (or Unchanged)
+    text = None                 # Text of the comment
+
+    def __init__(self, datetime, reporter_title, reporter_uri,
+                 absent_from_title, absent_from_uri, ended, resolved,
+                 expected_presence, text):
+        self.datetime = datetime
+        self.reporter_title = reporter_title
+        self.reporter_uri = reporter_uri
+        self.absent_from_title = absent_from_title
+        self.absent_from_uri = absent_from_uri
+        self.ended = ended
+        self.resolved = resolved
+        self.expected_presence = expected_presence
+        self.text = text
+
+    def __cmp__(self, other):
+        if not isinstance(other, AbsenceComment):
+            raise NotImplementedError("cannot compare %r with %r"
+                                      % (self, other))
+        return cmp((self.datetime, self.reporter_title, self.reporter_uri,
+                    self.absent_from_title, self.absent_from_uri,
+                    self.ended, self.resolved, self.expected_presence,
+                    self.text),
+                   (other.datetime, other.reporter_title, other.reporter_uri,
+                    other.absent_from_title, other.absent_from_uri,
+                    other.ended, other.resolved, other.expected_presence,
+                    other.text))
+
+    def __repr__(self):
+        return "%s(%r, %r, %r, %r, %r, %r, %r, %r, %r)" % (
+                    self.__class__.__name__,
+                    self.datetime, self.reporter_title, self.reporter_uri,
+                    self.absent_from_title, self.absent_from_uri,
+                    self.ended, self.resolved, self.expected_presence,
+                    self.text)
 
 
 class SchoolToolError(Exception):
