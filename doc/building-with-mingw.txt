@@ -10,7 +10,7 @@ non-Microsoft compilers on Windows: GNU C / Cygwin / MinGW):
   http://www.python.org/doc/current/inst/tweak-flags.html#SECTION000622000000000000000
 
 Add mingw32 to your %PATH% if needed (e.g. `set PATH=%PATH%;c:\mingw\bin`)
-before executing `python setup.py build --compiler=mingw32)`.
+before executing `setup.py build --compiler=mingw32`.
 
 You should now have a bunch of .pyd files in the build\lib.win32-2.3 directory.
 Copy the contents of this directory on top of the src directory to get a
