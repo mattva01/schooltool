@@ -1,6 +1,18 @@
 schoolbell (0.9.99+1.0rc1) unstable; urgency=low
 
-  * Split the schoolbell and schooltool packages.
+  * Split the schoolbell and schooltool packages. Schoolbell is now spilt into
+    3 packages, a configuration package, a python module and a arch dependent
+    library package containing the zope extensions. The library package is a
+    temporary package as schoolbell needs to contain its own version of Zope
+    until zope 3.1 is packaged.
+  * Hack upstreams build process until it does everything debian/rules used to
+    do, then reduce and simplify the debian rules. Also the application startup
+    scripts are moved to the upstream scripts directory as they will be usefull
+    for the RPM packages.
+  * Use the Zope3 setup.py script to install the Zope libraries rather than
+    finding and copying individual files.
+  * Remove the dependencies on twisted and pyopenssl as schoolbell 1.0 has
+    been rewritten as a pure Zope 3.1 component.
 
  -- Brian Sutherland <jinty@web.de>  Fri, 28 Jan 2005 19:48:56 +0100
 

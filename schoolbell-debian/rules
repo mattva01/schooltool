@@ -1,8 +1,5 @@
 #!/usr/bin/make -f
 
-# If you change the seed, you will have to recreate ttconfig.data as well.
-datagen_seed = schooltool-m4
-
 # This number and the dependencies should be the only thing needed to change
 # the python version
 PYTHON_VERSION=2.3
@@ -10,11 +7,8 @@ PYTHON=python$(PYTHON_VERSION)
 
 # Server Packages
 package=schoolbell
-module=zope3.1-pyhton2.3-schoolbell
-libpkg=libschoolbell
-
-# Executable Scripts
-scripts=debian/schoolbell.py
+library=python2.3-schoolbell
+deplibrary=libschoolbell
 
 #
 # Rules to build tree
@@ -22,13 +16,6 @@ scripts=debian/schoolbell.py
 
 .PHONY: build
 build: build-stamp
-
-debian/import-sampleschool.py.template: debian/import-sampleschool.head
-	(cat $< && sed -ne '/^# -- Do not remove this line --$$/,$$p' \
-	    import-sampleschool.py) > $@
-
-$(scripts): %: %.template
-	cat $< | sed s/@PYTHON@/$(PYTHON)/ > $@
 
 build-stamp:
 	dh_testdir
@@ -40,11 +27,7 @@ clean::
 	dh_testdir
 	dh_testroot
 	-$(MAKE) realclean
-	rm -f debian/import-sampleschool.py
-	rm -f debian/schooltool.py
-	rm -f debian/schoolbell.py
-	rm -f debian/schooltool-client.py
-	rm -f debian/import-sampleschool.py.template
+	rm -f garbage
 	rm -f install-arch-stamp
 	rm -f install-indep-stamp
 	dh_clean
@@ -55,33 +38,26 @@ install: install-arch install-indep
 
 .PHONY: install-indep
 install-indep: install-indep-stamp
-install-indep-stamp: $(scripts)
+install-indep-stamp:
 	dh_testdir
 	dh_testroot
 	dh_clean -k -i
 	dh_installdirs -i
 
 	################## python2.3-schoolbell ################
-	cd src && \
-	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
-	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo'  -o \
-	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
-		-name '*.xpm' -o -name '*.css' -o -name '*.js' \) \
-	     -exec install -m 644 -D -p {} \
-		../debian/$(module)/usr/lib/$(module)/{} \;
-	cd Zope3/src && \
-	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
-	     \( -name '*.py'  -o -name '*.pt'  -o -name '*.mo'  -o \
-	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
-		-name '*.xpm' -o -name '*.css' -o -name '*.js' \) \
-	     -exec install -m 644 -D -p {} \
-		../../debian/$(module)/usr/lib/$(module)/{} \;
-	rm -f debian/$(module)/usr/lib/$(module)/trace.py
-	
+	$(PYTHON) setup.py $(package) install --no-compile\
+	    --install-purelib=debian/$(library)/usr/lib/$(package)\
+	    --install-data=debian/$(library)/usr/share/$(package) \
+	    --install-scripts=debian/$(library)/usr/bin
+
+	cd Zope3 && $(PYTHON) setup.py install --no-compile\
+	    --install-purelib=../debian/$(library)/usr/lib/$(package)\
+	    --install-platlib=../debian/garbage\
+	    --install-headers=../debian/garbage\
+	    --install-scripts=../debian/garbage\
+	    --install-data=../debian/garbage
+
 	################## schoolbell ########################
-	# executables
-	install -m 755 -D -p debian/$(package).py \
-		debian/$(package)/usr/bin/$(package); \
 	# configuration
 	install -m 644 -D -p debian/$(package).logrotate \
 		debian/$(package)/etc/logrotate.d/$(package)
@@ -105,12 +81,12 @@ install-arch-stamp: build
 	################ libschoolbell ###################
 	# make server library package (Only zope3 has python extensions)
 	# arch-dep files
-	cd Zope3/src && \
-	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
-		-name '*.so'  \
-		$(archdep)\
-	     -exec install -m 644 -D -p {} \
-		../../debian/$(libpkg)/usr/lib/$(package)/{} \;
+	cd Zope3 && $(PYTHON) setup.py install --no-compile\
+	    --install-purelib=../debian/garbage\
+	    --install-platlib=../debian/$(deplibrary)/usr/lib/$(package)\
+	    --install-headers=../debian/garbage\
+	    --install-scripts=../debian/garbage\
+	    --install-data=../debian/garbage
 
 	touch install-arch-stamp
 
