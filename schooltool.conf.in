@@ -42,8 +42,8 @@ listen 7001
 #
 #   Specifies the port number and optionaly a network interface for
 #   the web application server to listen on. There can be one or more
-#   'listen' directives. If _ssl is used the server will accept only 
-#   SSL connctions on that port and a ssl_certificate configuration 
+#   'listen' directives. If _ssl is used the server will accept only
+#   SSL connctions on that port and a ssl_certificate configuration
 #   line is required.
 #
 # Examples:
@@ -55,7 +55,7 @@ listen 7001
 web 7080
 
 #
-# 
+#
 # ssl_certificate certificate
 #
 #   Specifies a certificate in PEM format which contains a certificate and
