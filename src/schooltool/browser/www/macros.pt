@@ -27,9 +27,9 @@
       <span class="userlabel" i18n:translate="">User:</span>
       <span class="username" tal:content="request/authenticated_user/title" />.
 
-      <tal:if condition="view/isRelatable">
+      <tal:if condition="view/isNotable">
         <a href="" i18n:translate=""
-          tal:attributes="href string:/notes/add.html?toadd=${request/path}"
+          tal:attributes="href string:/notes/add.html?toadd=${context/@@path}"
           >Add note</a>.
       </tal:if>
 

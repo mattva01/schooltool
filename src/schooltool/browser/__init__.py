@@ -187,7 +187,7 @@ class View(_View):
         """
         return isTeacher(self.request.authenticated_user)
 
-    def isRelatable(self):
+    def isNotable(self):
         """Return True/False if the current context is relatable.
 
         This is a utility for use in tal, primarily for the note system

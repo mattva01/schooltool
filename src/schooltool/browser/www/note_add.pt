@@ -19,6 +19,8 @@
 
                 <input class="button" type="submit" name="ADD" value="Add"
                     i18n:attributes="value" />
+                <input class="button" type="submit" name="CANCEL"
+                    value="Cancel" i18n:attributes="value" />
             </form>
 
         </metal:block>

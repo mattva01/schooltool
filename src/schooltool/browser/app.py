@@ -525,7 +525,10 @@ class NoteAddView(View):
 
         if 'CANCEL' in self.request.args:
             # Just show the form without any data.
-            return self.do_GET(request)
+            cancelpath = self.request.args['toadd'][0]
+            nobj = traverse(self.context, cancelpath)
+            url = absoluteURL(request, nobj)
+            return self.redirect(url, request)
 
         widgets = [self.title_widget, self.body_widget]
 
@@ -548,8 +551,6 @@ class NoteAddView(View):
         request.appLog(_("Object %s of type %s created") %
                        (getPath(obj), obj.__class__.__name__))
 
-        nexturl = absoluteURL(request, obj)
-
         paths = filter(None, request.args.get("toadd", []))
         for path in paths:
             pobj = traverse(self.context, path)
@@ -561,6 +562,8 @@ class NoteAddView(View):
             request.appLog(_("Relationship '%s' between %s and %s created")
                            % (self.relname, getPath(obj),
                               getPath(pobj)))
+
+        nexturl = absoluteURL(request, pobj)
 
         return self.redirect(nexturl, request)
 
