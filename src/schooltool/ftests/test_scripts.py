@@ -33,6 +33,7 @@ compared with what the command line client outputs.
 import unittest
 import os
 import re
+import sys
 from threading import Thread
 from schooltool.tests.helpers import unidiff, normalize_xml
 
@@ -88,7 +89,7 @@ class ScriptTestCase(unittest.TestCase):
         return 'script %s' % self.script
 
     def runTest(self):
-        cmd = "python2.3 %s %s" % (self.client, self.client_args)
+        cmd = "%s %s %s" % (sys.executable, self.client, self.client_args)
         child = Popen4(cmd)
         reader = Reader(child.fromchild)
         reader.start()
