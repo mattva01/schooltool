@@ -7,8 +7,8 @@
 #
 # For this script to work, you need a number of things:
 #
-# 1- A SchoolTool 0.8 or 0.9 database (Data.fs)
-# 2- Python libraries that come with SchoolTool 0.8 or 0.9 .If you no longer
+# 1- A SchoolBell 0.8 or 0.9 database (Data.fs)
+# 2- Python libraries that come with SchoolBell 0.8 or 0.9 .If you no longer
 #    have the libraries installed see the next section for instructions.
 # 3- The ability to edit this script.
 # 
@@ -27,7 +27,7 @@
 # 
 # Edit this script:
 #
-# 1- Add colon-separated paths to your SchoolTool 0.8/0.9 python libs and the
+# 1- Add colon-separated paths to your SchoolBell 0.8/0.9 python libs and the
 #    Zope3 libs that came with it to the PYTHONPATH variable here.  If you are
 #    using a fresh download, this would be something like:
 #
