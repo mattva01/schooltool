@@ -25,7 +25,7 @@ $Id$
 from schooltool.views import View, textErrorPage
 from schooltool.views.auth import SystemAccess
 from schooltool.translation import ugettext as _
-from schooltool.common import from_locale
+from schooltool.common import from_locale, to_unicode
 
 __metaclass__ = type
 
@@ -42,7 +42,7 @@ class ApplicationLogView(View):
 
         filter = page = pagesize = None
         if 'filter' in request.args:
-            filter = request.args['filter'][0]
+            filter = to_unicode(request.args['filter'][0])
 
         if 'page' in request.args and 'pagesize' in request.args:
             try:
@@ -59,7 +59,7 @@ class ApplicationLogView(View):
                             _("Invalid value for 'pagesize' parameter."))
 
         file = self.openLog(path)
-        result = file.readlines()
+        result = map(from_locale, file.readlines())
         file.close()
 
         if filter:
@@ -72,7 +72,7 @@ class ApplicationLogView(View):
             result = result[(page - 1) * pagesize:page * pagesize]
 
         request.setHeader('Content-Type', 'text/plain; charset=UTF-8')
-        return from_locale("".join(result))
+        return "".join(result)
 
     def getPageInRange(self, page, pagesize, lines):
         """A helper to cut out a page out of an array of lines.

@@ -70,6 +70,19 @@ class TestApplicationLogView(unittest.TestCase):
                           "text/plain; charset=UTF-8")
         self.assertEquals(result, 'fit\nbit\nkite')
 
+    def testFilterUnicode(self):
+        import schooltool.common
+        schooltool.common.locale_charset = 'latin-1'
+        self.view.openLog = lambda f: StringIO("assume latin-1\n\xFF\n")
+        self.request.args.update({'filter': ['\xC3\xBF']})
+
+        result = self.view.render(self.request)
+
+        self.assertEquals(self.request.code, 200)
+        self.assertEquals(self.request.headers['content-type'],
+                          "text/plain; charset=UTF-8")
+        self.assertEquals(result, '\xC3\xBF\n')
+
     def testPaging(self):
         self.view.openLog = lambda f: StringIO("cut\nfit\ndog\nbit\nkite\n")
         self.request.args.update({'filter': [''],
