@@ -185,13 +185,15 @@ Adding new events
 
 Let's add an ordinary event that takes place on 3rd February, 2005:
 
-    >>> print http(r"""
+    >>> print http("""
     ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
     ... Authorization: Basic frog:pwd
     ... Content-Length: 159
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=Sleeping&field.start_date=2005-02-03&field.start_time=01:00&field.duration=500&field.recurrence.used=&field.recurrence_type=daily&UPDATE_SUBMIT=Add
+    ... field.title=Sleeping&field.start_date=2005-02-03&\
+    ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
+    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
     ... """)
     HTTP/1.1 303 See Other
     ...
