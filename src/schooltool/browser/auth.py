@@ -36,7 +36,7 @@ Example:
 $Id$
 """
 
-from schooltool.rest.auth import isManager
+from schooltool.rest.auth import isManager, isTeacher
 from schooltool.rest.auth import PrivateAccess      # reexport
 
 __metaclass__ = type
@@ -61,3 +61,10 @@ def ManagerAccess(context, request):
     return isManager(request.authenticated_user)
 
 ManagerAccess = staticmethod(ManagerAccess)
+
+
+def TeacherAccess(context, request):
+    """Allows access for managers and teachers only."""
+    return isTeacher(request.authenticated_user)
+
+TeacherAccess = staticmethod(TeacherAccess)
