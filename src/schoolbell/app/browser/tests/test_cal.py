@@ -1926,6 +1926,59 @@ def doctest_CalendarEventEditView_getInitialData():
               </select>
         ...
 
+
+    Let's create another recurrent event:
+
+        >>> from schoolbell.app.browser.cal import makeRecurrenceRule
+        >>> rule = makeRecurrenceRule(recurrence_type='daily', interval=2,
+        ...                           range="count",
+        ...                           count=5)
+        >>> event = CalendarEvent(title="Hacking",
+        ...                       dtstart=datetime.datetime(2004, 8, 13, 20, 0),
+        ...                       duration=datetime.timedelta(minutes=61),
+        ...                       location="Kitchen", recurrence=rule)
+
+    And a view for the event:
+
+        >>> request = TestRequest()
+        >>> view = CalendarEventEditTestView(event, request)
+
+
+    The count should be set:
+
+        >>> print view.count_widget() # doctest: +ELLIPSIS
+        <input...value="5"...
+
+    As well as the range:
+
+        >>> print view.range_widget()
+        <div>
+        <div class="value">
+        <select name="field.range" size="1" >
+        <option value="">(no value)</option>
+        <option selected="selected" value="count">Count</option>
+        <option value="until">Until</option>
+        <option value="forever">forever</option>
+        </select>
+        </div>
+        <input name="field.range-empty-marker" type="hidden" value="1" />
+        </div>
+
+    Now one more event:
+
+        >>> rule = makeRecurrenceRule(recurrence_type='monthly', interval=2,
+        ...                           range="count", count=5, monthly="weekday")
+
+        >>> event = CalendarEvent(title="Hacking",
+        ...                       dtstart=datetime.datetime(2004, 8, 13, 20, 0),
+        ...                       duration=datetime.timedelta(minutes=61),
+        ...                       location="Kitchen", recurrence=rule)
+
+    And a view for the event:
+
+        >>> request = TestRequest()
+        >>> view = CalendarEventEditTestView(event, request)
+
     """
 
 

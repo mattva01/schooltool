@@ -1412,7 +1412,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
                     initial["weekdays"] = list(recurrence.weekdays)
 
             if recurrence_type == "monthly":
-                if recurrence.weekdays:
+                if recurrence.monthly:
                     initial["monthly"] = recurrence.monthly
 
         return initial
