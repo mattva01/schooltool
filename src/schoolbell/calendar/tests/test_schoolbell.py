@@ -54,13 +54,25 @@ def doctest_CalendarMixin_expand():
         ...                            timedelta(hours=1), 'c'),
         ...                      Event(datetime(2004, 12, 15, 14, 30,tzinfo=utc),
         ...                            timedelta(hours=1), 'b'),
-        ...                      Event(datetime(2004, 12, 16, 17, 30,tzinfo=utc),
+        ...                      Event(datetime(2004, 12, 16, 17, 30,
+        ...                                     tzinfo=utc),
         ...                            timedelta(hours=1), 'd'),
-        ...                      Event(datetime(2005,  2,  3,  4,  5,tzinfo=utc),
+        ...                      Event(datetime(2005,  2,  3,  4,  5,
+        ...                                     tzinfo=utc),
         ...                            timedelta(hours=4), 'simple'),
-        ...                      Event(datetime(2005,  2,  4,  4,  5,tzinfo=utc),
+        ...                      Event(datetime(2005,  2,  4,  4,  5,
+        ...                                     tzinfo=utc),
         ...                            timedelta(hours=4), 'recurring',
         ...                            recurrence=DailyRecurrenceRule()),
+        ...                      Event(datetime(2005, 6, 16, 23, 30,
+        ...                                     tzinfo=utc),
+        ...                            timedelta(hours=1), 'e'),
+        ...                      Event(datetime(2005, 6, 17, 5, 30,
+        ...                                     tzinfo=utc),
+        ...                            timedelta(hours=1), 'f'),
+        ...                      Event(datetime(2005, 6, 18, 1, 0,
+        ...                                     tzinfo=utc),
+        ...                            timedelta(hours=1), 'g'),
         ...                     ])
 
         >>> cal = MyCalendar()
@@ -71,15 +83,19 @@ def doctest_CalendarMixin_expand():
         >>> from pytz import timezone
         >>> utc = timezone('UTC')
         >>> def show(first, last):
-        ...     first.replace(tzinfo=utc)
-        ...     last.replace(tzinfo=utc)
+        ...     if first.tzinfo is None:
+        ...         first.replace(tzinfo=utc)
+        ...     if last.tzinfo is None:
+        ...         last.replace(tzinfo=utc)
         ...     events = list(cal.expand(first, last))
         ...     events.sort()
         ...     print '[%s]' % ', '.join([e.title for e in events])
 
         >>> def show_long(first, last):
-        ...     first.replace(tzinfo=utc)
-        ...     last.replace(tzinfo=utc)
+        ...     if first.tzinfo is None:
+        ...         first.replace(tzinfo=utc)
+        ...     if last.tzinfo is None:
+        ...         last.replace(tzinfo=utc)
         ...     events = list(cal.expand(first, last))
         ...     events.sort()
         ...     for e in events:
@@ -132,6 +148,32 @@ def doctest_CalendarMixin_expand():
         [False, True, True]
         >>> events[1].original is events[2].original
         True
+
+    When we ask for a date with UTC or no timezone we get just the events as
+    they are stored
+
+        >>> show(datetime(2005, 6, 17), datetime(2005, 6, 17))
+        [e]
+        >>> show(datetime(2005, 6, 17, tzinfo=utc), datetime(2005, 6, 17))
+        [e]
+        >>> show(datetime(2005, 6, 17, tzinfo=utc),
+        ...     datetime(2005, 6, 17, tzinfo=utc))
+        [e]
+        >>> show(datetime(2005, 6, 17), datetime(2005, 6, 17, tzinfo=utc))
+        [e]
+
+    when we expand with a different timezone, we see the events that occur on
+    that date in the given timezone.
+
+        >>> eastern = timezone('US/Eastern')
+        >>> show(datetime(2005, 6, 17, tzinfo=eastern),
+        ...     datetime(2005, 6, 18, tzinfo=eastern))
+        [recurring, f, g, recurring]
+
+        >>> vilnius= timezone('Europe/Vilnius')
+        >>> show(datetime(2005, 6, 17, tzinfo=vilnius),
+        ...     datetime(2005, 6, 18, tzinfo=vilnius))
+        [e, recurring, f]
 
     """
 

@@ -106,13 +106,20 @@ class CalendarMixin(object):
         See ICalendar for more details.
         """
 
-        if first.tzname() not in (None, 'UTC'):
-            raise ValueError, 'Can not store non UTC time info'
-        first = first.replace(tzinfo=utc)
+        if first.tzname() is None:
+            if last.tzname() not in (None, 'UTC'):
+                first = last.tzinfo.localize(first)
+            else:
+                first = first.replace(tzinfo=utc)
 
-        if last.tzname() not in (None, 'UTC'):
-            raise ValueError, 'Can not store non UTC time info'
-        last = last.replace(tzinfo=utc)
+        if last.tzname() is None:
+            if first.tzname() == 'UTC':
+                last = last.replace(tzinfo=utc)
+            else:
+                last = first.tzinfo.localize(last)
+
+        if first.tzname() != last.tzname():
+            raise ValueError('Cannot expand mixed TimeZones: %s and %s', first.tzname(), last.tzname())
 
         zero = datetime.timedelta(0)
         epsilon = datetime.timedelta.resolution
