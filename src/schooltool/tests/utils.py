@@ -32,6 +32,7 @@ from zope.interface import implements
 from schooltool.interfaces import ILocation, IContainmentRoot
 from schooltool.interfaces import IServiceManager, IEventTarget
 from schooltool.tests.helpers import normalize_xml, diff
+from zope.testing.cleanup import CleanUp
 
 __metaclass__ = type
 
@@ -122,38 +123,50 @@ class EventServiceTestMixin:
             self.assert_(receiver.events[0] is e)
         return e
 
+class RegistriesCleanupMixin:
+    """Saves the values of registries in setUp and restores them in tearDown.
 
-class RegistriesSetupMixin:
-    """Mixin for substituting temporary global registries."""
+    Only Zope Component Architecture is reset with the CleanUp facility.
+    """
 
-    def setUpRegistries(self):
-        from schooltool import component, rest, uris, timetable
+    def saveRegistries(self):
+        from schooltool import component
         self.old_relationship_registry = component.relationship_registry
         self.old_view_registry = component.view_registry
         self.old_class_view_registry = component.class_view_registry
         self.old_facet_factory_registry = component.facet_factory_registry
-        self.old_uri_registry = uris._uri_registry
         self.old_timetable_model_registry = component.timetable_model_registry
         component.resetRelationshipRegistry()
         component.resetViewRegistry()
         component.resetFacetFactoryRegistry()
         component.resetTimetableModelRegistry()
-        uris.resetURIRegistry()
-        uris.setUp()
-        rest.setUp()
-        timetable.setUp()
+        CleanUp().cleanUp()
 
-    def tearDownRegistries(self):
-        from schooltool import component, uris
+    def restoreRegistries(self):
+        from schooltool import component
         component.relationship_registry = self.old_relationship_registry
         component.view_registry = self.old_view_registry
         component.class_view_registry = self.old_class_view_registry
         component.facet_factory_registry = self.old_facet_factory_registry
         component.timetable_model_registry = self.old_timetable_model_registry
-        uris._uri_registry = self.old_uri_registry
-
-        from zope.testing.cleanup import CleanUp
         CleanUp().cleanUp()
+
+    setUp = saveRegistries
+    tearDown = restoreRegistries
+
+class RegistriesSetupMixin(RegistriesCleanupMixin):
+    """Mixin for substituting temporary global registries."""
+
+    def setUpRegistries(self):
+        from schooltool import component, rest, uris, timetable
+        self.saveRegistries()
+        component.setUp()
+        uris.setUp()
+        rest.setUp()
+        timetable.setUp()
+
+    def tearDownRegistries(self):
+        self.restoreRegistries()
 
     setUp = setUpRegistries
     tearDown = tearDownRegistries

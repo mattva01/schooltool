@@ -26,6 +26,7 @@ import unittest
 from sets import Set
 from zope.interface import Interface, implements, directlyProvides
 from zope.interface.verify import verifyObject
+from zope.component.exceptions import ComponentLookupError
 from schooltool.uris import URIObject
 from schooltool.interfaces import IFacet, IFaceted, IFacetAPI, IFacetManager
 from schooltool.interfaces import IUtility, IUtilityService
@@ -34,7 +35,6 @@ from schooltool.interfaces import IContainmentAPI, IContainmentRoot, ILocation
 from schooltool.interfaces import ITraversable, IMultiContainer
 from schooltool.interfaces import IRelationshipAPI, IRelatable, IQueryLinks
 from schooltool.interfaces import IViewAPI
-from schooltool.interfaces import ComponentLookupError
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin
 from schooltool.tests.utils import RegistriesSetupMixin

@@ -27,6 +27,7 @@ from zope.interface.adapter import AdapterRegistry
 from zope.component import serviceManager
 from zope.component.utility import IGlobalUtilityService
 from zope.component.utility import GlobalUtilityService
+from zope.component.exceptions import ComponentLookupError
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
@@ -37,7 +38,6 @@ from schooltool.interfaces import IFacet, IFaceted, IFacetFactory
 from schooltool.interfaces import IFacetManager
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import IRelationshipAPI, IViewAPI
-from schooltool.interfaces import ComponentLookupError
 from schooltool.interfaces import IUtilityService
 from schooltool.interfaces import ITimetableModelRegistry
 from schooltool.interfaces import IOptions

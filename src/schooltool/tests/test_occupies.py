@@ -59,11 +59,11 @@ class TestOccupies(RegistriesSetupMixin, EventServiceTestMixin,
     def testURIs(self):
         from schooltool.uris import URIOccupies, URICurrentlyResides
         from schooltool.uris import URICurrentResidence
-        from schooltool.uris import verifyURI
+        from schooltool.interfaces import IURIObject
 
-        verifyURI(URIOccupies)
-        verifyURI(URICurrentlyResides)
-        verifyURI(URICurrentResidence)
+        verifyObject(IURIObject, URIOccupies)
+        verifyObject(IURIObject, URICurrentlyResides)
+        verifyObject(IURIObject, URICurrentResidence)
 
     def testRelationshipSchema(self):
         from schooltool.occupies import Occupies

@@ -30,7 +30,7 @@ from StringIO import StringIO
 
 from zope.interface import moduleProvides
 from zope.interface import directlyProvides, directlyProvidedBy
-from schooltool.tests.utils import RegistriesSetupMixin
+from schooltool.tests.utils import RegistriesSetupMixin, RegistriesCleanupMixin
 from schooltool.interfaces import IModuleSetup, AuthenticationError
 
 __metaclass__ = type
@@ -155,10 +155,10 @@ class OpenSSLContextFactoryStub:
         self.cert = cert
 
 
-class TestServer(RegistriesSetupMixin, unittest.TestCase):
+class TestServer(RegistriesCleanupMixin, unittest.TestCase):
 
     def setUp(self):
-        self.setUpRegistries()
+        self.saveRegistries()
         self.original_path = sys.path[:]
         if sys.platform[:3] == 'win': # ZConfig does this
             self.defaulthost = 'localhost'
@@ -167,7 +167,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
 
     def tearDown(self):
         sys.path[:] = self.original_path
-        self.tearDownRegistries()
+        self.restoreRegistries()
 
         for name in ['ZODB', 'ZODB.lock_file', 'txn', 'libxml2',
                      'schooltool.rest_access', 'schooltool.web_access',

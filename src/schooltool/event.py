@@ -30,8 +30,8 @@ from schooltool.interfaces import IEvent, IEventTarget, IEventConfigurable
 from schooltool.interfaces import IEventService, IEventAction, ILookupAction
 from schooltool.interfaces import IRouteToMembersAction, IRouteToGroupsAction
 from schooltool.interfaces import IRouteToRelationshipsAction, ICallAction
+from schooltool.interfaces import IURIObject
 from schooltool.uris import URIMember, URIGroup
-from schooltool.uris import verifyURI
 from schooltool.component import getEventService
 from schooltool.component import getRelatedObjects
 
@@ -140,7 +140,8 @@ class RouteToRelationshipsAction(EventActionMixin):
 
     def __init__(self, role=None, eventType=IEvent):
         EventActionMixin.__init__(self, eventType)
-        verifyURI(role)
+        if not IURIObject.providedBy(role):
+            raise TypeError("Role must be a URIObject (got %r)" % (role,))
         self.role = role
 
     def handle(self, event, target):

@@ -38,7 +38,7 @@ from schooltool.interfaces import IRelationshipValencies
 from schooltool.interfaces import IFaceted, ISchemaInvocation
 from schooltool.interfaces import IModuleSetup, IValency
 from schooltool.interfaces import IUnlinkHook, IMultiContainer
-from schooltool.uris import verifyURI
+from schooltool.interfaces import IURIObject
 from schooltool.component import getPath, registerRelationship
 from schooltool import component
 from schooltool.event import EventMixin
@@ -59,7 +59,8 @@ class Link(Persistent):
     implements(IRemovableLink)
 
     def __init__(self, parent, role):
-        verifyURI(role)
+        if not IURIObject.providedBy(role):
+            raise TypeError("Role must be a URIObject (got %r)" % (role,))
         if not IRelatable.providedBy(parent):
             raise TypeError("Parent must be IRelatable (got %r)" % (parent,))
         self.__parent__ = parent

@@ -23,9 +23,10 @@ $Id$
 """
 
 from zope.interface import moduleProvides, implements
+from zope.component import getService
 from schooltool.common import looks_like_a_uri
-from schooltool.interfaces import IModuleSetup, ComponentLookupError
-from schooltool.interfaces import IURIAPI, IURIObject
+from schooltool.interfaces import IModuleSetup
+from schooltool.interfaces import IURIObject
 from schooltool.translation import TranslatableString as _
 
 __metaclass__ = type
@@ -74,44 +75,12 @@ class URIObject:
 
 
 #
-# URI API
+#  API
 #
 
-def verifyURI(uri):
-    """Raise TypeError if uri is not an IURIObject."""
-    if not IURIObject.providedBy(uri):
-        raise TypeError("URI must be an IURIObject (got %r)" % (uri,))
-
-
-_uri_registry = {}
-
-
-def resetURIRegistry():
-    """Replace the URI registry with an empty one."""
-    global _uri_registry
-    _uri_registry = {}
-
-
-def registerURI(uriobject):
-    """Add a URI to the registry so it can be queried by the URI string."""
-    if uriobject.uri not in _uri_registry:
-        _uri_registry[uriobject.uri] = uriobject
-    elif _uri_registry[uriobject.uri] is not uriobject:
-        raise ValueError("Two objects with one URI:  "
-                         "%r, %r" % (_uri_registry[uriobject.uri], uriobject))
-
-
-def getURI(str):
-    """Return an URI object for a given URI string."""
-    try:
-        return _uri_registry[str]
-    except KeyError:
-        raise ComponentLookupError(str)
-
-
-def listURIs():
-    """Return a list of all registered URIs."""
-    return _uri_registry.values()
+def registerURI(uri):
+    utilities = getService('Utilities')
+    utilities.provideUtility(IURIObject, uri, uri.uri)
 
 
 #
@@ -238,4 +207,5 @@ def setUp():
     registerURI(URICustodian)
     registerURI(URIWard)
 
-moduleProvides(IModuleSetup, IURIAPI)
+
+moduleProvides(IModuleSetup)

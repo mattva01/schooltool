@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+from zope.testing.cleanup import CleanUp
 from schooltool.common import dedent
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin, EqualsSortedMixin
@@ -446,7 +447,8 @@ class TestUriObjectListView(NiceDiffsMixin, XMLCompareMixin,
     def setUp(self):
         from schooltool.rest.app import UriObjectListView
         from schooltool.app import Application
-        from schooltool.uris import URIObject, registerURI, resetURIRegistry
+        from schooltool.uris import URIObject, registerURI
+        import schooltool.component
         self.setUpRegistries()
         URI1 = URIObject("http://example.com/foobar",
                          name="da name",
@@ -454,7 +456,8 @@ class TestUriObjectListView(NiceDiffsMixin, XMLCompareMixin,
         URI2 = URIObject("http://example.com/foo",
                          name="da name",
                          description="Another long\ndescription")
-        resetURIRegistry()
+        CleanUp().cleanUp()
+        schooltool.component.setUp()
         registerURI(URI1)
         registerURI(URI2)
         self.app = Application()

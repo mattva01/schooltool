@@ -29,7 +29,8 @@ from zope.interface import implements, directlyProvides
 from zope.interface.verify import verifyObject, verifyClass
 from schooltool.interfaces import IRelatable, ILink, IUnlinkHook
 from schooltool.interfaces import ILinkSet, IPlaceholder, IContainmentRoot
-from schooltool.uris import URIObject, verifyURI
+from schooltool.interfaces import IURIObject
+from schooltool.uris import URIObject
 from schooltool.tests.helpers import sorted
 from schooltool.tests.utils import LocatableEventTargetMixin
 from schooltool.tests.utils import EventServiceTestMixin, EqualsSortedMixin
@@ -201,7 +202,7 @@ class TestRelationshipSchema(EventServiceTestMixin, RegistriesSetupMixin,
         from schooltool import relationship
         relationship.setUp()
 
-        verifyURI(URICommand)
+        verifyObject(IURIObject, URICommand)
         schema = RelationshipSchema(URICommand,
                                     superior=URISuperior, report=URIReport)
 

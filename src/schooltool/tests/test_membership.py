@@ -47,13 +47,13 @@ class TestURIs(unittest.TestCase):
 
     def testURIGroup(self):
         from schooltool.uris import URIGroup
-        from schooltool.uris import verifyURI
-        verifyURI(URIGroup)
+        from schooltool.interfaces import IURIObject
+        verifyObject(IURIObject, URIGroup)
 
     def testURIMember(self):
         from schooltool.uris import URIMember
-        from schooltool.uris import verifyURI
-        verifyURI(URIMember)
+        from schooltool.interfaces import IURIObject
+        verifyObject(IURIObject, URIMember)
 
 
 class TestMembershipRelationship(RegistriesSetupMixin, EventServiceTestMixin,

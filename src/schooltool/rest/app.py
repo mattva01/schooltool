@@ -25,8 +25,9 @@ $Id$
 import datetime
 
 from zope.interface import moduleProvides
+from zope.component import getUtilitiesFor
 from schooltool.interfaces import IApplication, IApplicationObjectContainer
-from schooltool.interfaces import IModuleSetup, IResource
+from schooltool.interfaces import IModuleSetup, IResource, IURIObject
 from schooltool.component import traverse, getPath
 from schooltool.component import registerView
 from schooltool.rest import View, Template
@@ -42,7 +43,6 @@ from schooltool.rest.auth import PublicAccess
 from schooltool.rest.applog import ApplicationLogView
 from schooltool.common import parse_date
 from schooltool.translation import ugettext as _
-from schooltool.uris import listURIs
 from schooltool.rest.xmlparsing import XMLDocument
 from schooltool.rest.xmlparsing import XMLParseError, XMLValidationError
 
@@ -304,7 +304,7 @@ class UriObjectListView(View):
     authorization = PublicAccess
 
     def uriobjects(self):
-        return listURIs()
+        return [uriobj for uristr, uriobj in getUtilitiesFor(IURIObject)]
 
 
 class OptionsView(View):

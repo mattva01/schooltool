@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+from zope.component import queryUtility
 from zope.interface.verify import verifyObject
 from schooltool.tests.utils import RegistriesSetupMixin
 
@@ -30,11 +31,6 @@ __metaclass__ = type
 
 
 class TestURIObjects(RegistriesSetupMixin, unittest.TestCase):
-
-    def test_api(self):
-        import schooltool.uris
-        from schooltool.interfaces import IURIAPI
-        verifyObject(IURIAPI, schooltool.uris)
 
     def test_URIObject(self):
         from schooltool.uris import URIObject
@@ -65,54 +61,53 @@ class TestURIObjects(RegistriesSetupMixin, unittest.TestCase):
         assert hash(uri1) == hash(uri2)
         assert hash(uri1) != hash(uri3)
 
-    def test_verifyURI(self):
-        from schooltool.uris import URIObject, verifyURI
-        uri = URIObject('http://example.com')
-        verifyURI(uri)
-
-        self.assertRaises(TypeError, verifyURI, 'http://example.com')
-        self.assertRaises(TypeError, verifyURI, 'Just a name')
-
     def testURIRegistry(self):
-        from schooltool.interfaces import ComponentLookupError
-        from schooltool.uris import URIObject, getURI, registerURI, listURIs
+        from schooltool.interfaces import IURIObject
+        from schooltool.uris import URIObject
+        from zope.component.exceptions import ComponentLookupError
+        from schooltool.uris import registerURI
+        from zope.component import getUtility
+
         URI1 = URIObject("http://example.com/foobar")
         URI2 = URIObject("http://example.com/foo")
         URI2Dupe = URIObject("http://example.com/foo")
 
-        self.assert_(URI1 not in listURIs())
-        self.assert_(URI2 not in listURIs())
-        self.assertRaises(ComponentLookupError, getURI,
-                          "http://example.com/foobar")
+        self.assert_(queryUtility(IURIObject, "http://example.com/foobar")
+                     is None)
+        self.assert_(queryUtility(IURIObject, "http://example.com/foo")
+                     is None)
+
         registerURI(URI1)
-        self.assert_(getURI("http://example.com/foobar") is URI1)
-        self.assert_(URI1 in listURIs())
+        self.assert_(getUtility(IURIObject, "http://example.com/foobar")
+                     is URI1)
 
         registerURI(URI2)
         registerURI(URI2)
-        self.assert_(URI2 in listURIs())
-        self.assert_(getURI("http://example.com/foo") is URI2)
-        self.assertRaises(ValueError, registerURI, URI2Dupe)
-        self.assert_(getURI("http://example.com/foo") is URI2)
+        self.assert_(getUtility(IURIObject, "http://example.com/foo") is URI2)
+        registerURI(URI2Dupe)
+        self.assert_(getUtility(IURIObject, "http://example.com/foo")
+                     is URI2Dupe)
 
     def testURISetup(self):
         import schooltool.uris
-        from schooltool.uris import getURI
-        from schooltool.interfaces import IModuleSetup
+        from zope.component import getUtility
+        from schooltool.interfaces import IModuleSetup, IURIObject
         verifyObject(IModuleSetup, schooltool.uris)
         schooltool.uris.setUp()
-        getURI("http://schooltool.org/ns/membership")
-        getURI("http://schooltool.org/ns/membership/member")
-        getURI("http://schooltool.org/ns/membership/group")
-        getURI("http://schooltool.org/ns/teaching")
-        getURI("http://schooltool.org/ns/teaching/teacher")
-        getURI("http://schooltool.org/ns/teaching/taught")
-        getURI("http://schooltool.org/ns/occupies")
-        getURI("http://schooltool.org/ns/occupies/currentlyresides")
-        getURI("http://schooltool.org/ns/occupies/currentresidence")
-        getURI("http://schooltool.org/ns/guardian")
-        getURI("http://schooltool.org/ns/guardian/custodian")
-        getURI("http://schooltool.org/ns/guardian/ward")
+        getUtility(IURIObject, "http://schooltool.org/ns/membership")
+        getUtility(IURIObject, "http://schooltool.org/ns/membership/member")
+        getUtility(IURIObject, "http://schooltool.org/ns/membership/group")
+        getUtility(IURIObject, "http://schooltool.org/ns/teaching")
+        getUtility(IURIObject, "http://schooltool.org/ns/teaching/teacher")
+        getUtility(IURIObject, "http://schooltool.org/ns/teaching/taught")
+        getUtility(IURIObject, "http://schooltool.org/ns/occupies")
+        getUtility(IURIObject,
+                   "http://schooltool.org/ns/occupies/currentlyresides")
+        getUtility(IURIObject,
+                   "http://schooltool.org/ns/occupies/currentresidence")
+        getUtility(IURIObject, "http://schooltool.org/ns/guardian")
+        getUtility(IURIObject, "http://schooltool.org/ns/guardian/custodian")
+        getUtility(IURIObject, "http://schooltool.org/ns/guardian/ward")
 
 
 def test_suite():

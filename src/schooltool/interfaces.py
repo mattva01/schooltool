@@ -281,21 +281,6 @@ class IURIObject(Interface):
         title=u"Human-readable description.")
 
 
-class IURIAPI(Interface):
-
-    def registerURI(uri):
-        """Add a URI to the registry so it can be queried by the URI string."""
-
-    def getURI(str):
-        """Return an URI object for a given URI string."""
-
-    def verifyURI(uri):
-        """Raise TypeError if the argument is not an IURIObject."""
-
-    def listURIs():
-        """Return a list of all registered URIObjects."""
-
-
 #
 # Relationships
 #
@@ -2513,10 +2498,6 @@ class IViewAPI(Interface):
 #
 # Exceptions
 #
-
-class ComponentLookupError(Exception):
-    """An exception used by the component architecture."""
-
 
 class AuthenticationError(Exception):
     """Bad username or password."""

@@ -48,7 +48,6 @@ class ComponentChecks:
     def startTest(self, test):
         from schooltool import component, uris
         self.facet_factory_registry = dict(component.facet_factory_registry)
-        self.uri_registry = dict(uris._uri_registry)
         self.relationship_registry = dict(component.relationship_registry)
         self.view_registry = adapter_registry_contents(component.view_registry)
         self.class_view_registry = dict(component.class_view_registry)
@@ -56,11 +55,9 @@ class ComponentChecks:
             component.timetable_model_registry)
 
     def stopTest(self, test):
-        from schooltool import component, uris
+        from schooltool import component
         if self.facet_factory_registry != component.facet_factory_registry:
             warn("%s changed facet factory registry" % test)
-        if self.uri_registry != uris._uri_registry:
-            warn("%s changed URI registry" % test)
         if self.relationship_registry != component.relationship_registry:
             warn("%s changed relationship registry" % test)
         if (self.view_registry !=

@@ -23,10 +23,11 @@ $Id: __init__.py 397 2003-11-21 11:38:01Z mg $
 """
 
 import libxml2
-from schooltool.interfaces import ComponentLookupError
+from zope.component import getUtility
+from zope.component.exceptions import ComponentLookupError
 from schooltool.interfaces import ViewPermission
 from schooltool.interfaces import ModifyPermission
-from schooltool.uris import getURI
+from schooltool.interfaces import IURIObject
 from schooltool.component import traverse, getPath
 from schooltool.rest import View, Template, textErrorPage
 from schooltool.rest import read_file
@@ -97,10 +98,10 @@ class RelationshipsView(View):
             xpathctx.xpathFreeContext()
 
         try:
-            type = getURI(type)
-            role = getURI(role)
+            type = getUtility(IURIObject, type)
+            role = getUtility(IURIObject, role)
         except ComponentLookupError, e:
-            return textErrorPage(request, _("Bad URI: %s") % e)
+            return textErrorPage(request, _("Bad URI: %s") % e[1])
 
         try:
             other = traverse(self.context, path)

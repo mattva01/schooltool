@@ -58,11 +58,11 @@ class TestGuardian(RegistriesSetupMixin, EventServiceTestMixin,
 
     def testURIs(self):
         from schooltool.uris import URIGuardian, URICustodian, URIWard
-        from schooltool.uris import verifyURI
+        from schooltool.interfaces import IURIObject
 
-        verifyURI(URIGuardian)
-        verifyURI(URICustodian)
-        verifyURI(URIWard)
+        verifyObject(IURIObject, URIGuardian)
+        verifyObject(IURIObject, URICustodian)
+        verifyObject(IURIObject, URIWard)
 
     def testRelationshipSchema(self):
         from schooltool.guardian import Guardian
