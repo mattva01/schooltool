@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+RelaxNG grammar for creating facets
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         ns="http://schooltool.org/ns/model/0.1"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <start>
+  <element name="facet">
+    <attribute name="factory">
+      <text/>
+    </attribute>
+  </element>
+ </start>
+</grammar>
