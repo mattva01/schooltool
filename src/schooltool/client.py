@@ -113,12 +113,21 @@ welcome to change it and/or distribute copies of it under certain conditions."""
 
         server [server [port]]
         """
-        if line.strip():
-            pieces = line.split()
-            self.server = pieces[0]
-            self.port = 80
-            if len(pieces) > 1:
-                self.port = int(pieces[1])
+        args = line.split()
+        if args:
+            if len(args) > 2:
+                self.emit("Extra arguments provided")
+                return
+            if len(args) > 1:
+                try:
+                    port = int(args[1])
+                except ValueError:
+                    self.emit("Invalid port number")
+                    return
+            else:
+                port = 80
+            self.server = args[0]
+            self.port = port
             self.do_get("/")
         else:
             self.emit(self.server)
@@ -133,18 +142,23 @@ welcome to change it and/or distribute copies of it under certain conditions."""
             self.accept = line
         self.emit(self.accept)
 
-    def do_get(self, line):
-        """Get and display a resource from the server.
+    def _request(self, method, resource, headers=(), body=None):
+        """Perform an HTTP request.
 
-        get <resource>
+        Displays the response (if it is text/*), stores it for later
+        perusal (see do_save), parses xlinks if the response is text/xml
+        and link parsing is enabled.
         """
         self.last_data = None
+        self.resources = []
         try:
             conn = self.http(self.server, self.port)
-            resource = line.split()[0]
-            conn.putrequest('GET', resource)
-            conn.putheader('Accept', self.accept)
+            conn.putrequest(method, resource)
+            for header, value in headers:
+                conn.putheader(header, value)
             conn.endheaders()
+            if body is not None:
+                conn.send(body)
             response = conn.getresponse()
             self.last_data = data = response.read()
             ctype = response.getheader('Content-Type',
@@ -154,15 +168,14 @@ welcome to change it and/or distribute copies of it under certain conditions."""
                 self.emit("use save <filename> to save it")
                 return
             self.emit(data)
-            if self.links:
-                self.emit("=" * 50)
+            if self.links and ctype == 'text/xml':
                 try:
                     parser = make_parser()
                     handler = XLinkHandler()
                     parser.setContentHandler(handler)
                     parser.setFeature(feature_namespaces, 1)
                     parser.parse(StringIO(data))
-                    self.resources = []
+                    first = True
                     for nr, link in enumerate(handler.links):
                         if 'title' in link:
                             title = link['title']
@@ -175,34 +188,32 @@ welcome to change it and/or distribute copies of it under certain conditions."""
                             href = "no href"
                         try:
                             self.resources.append(http_join(resource, href))
+                            if first:
+                                self.emit("=" * 50)
+                                first = False
                             self.emit("%-3d %s (%s)" % (nr + 1, title, href))
                         except (IndexError, ValueError):
                             pass
                 except SAXParseException, e:
+                    self.emit("=" * 50)
                     self.emit("Could not extract links: %s" % e)
         except socket.error:
             self.emit('Error: could not connect to %s' % self.server)
 
-    def do_save(self, line):
-        """Save the last downloaded resource to a file.
+    def do_get(self, line):
+        """Get and display a resource from the server.
 
-        save <filename>
+        get <resource>
         """
-        if not line:
-            self.emit("No filename")
+        args = line.split()
+        if len(args) < 1:
+            self.emit("Resource not provided")
             return
-        filename = line
-        if not self.last_data:
-            self.emit("Perform a get first")
+        if len(args) > 1:
+            self.emit("Extra arguments provided")
             return
-        try:
-            f = self.file_hook(filename, 'wb')
-            f.write(self.last_data)
-            f.close()
-        except EnvironmentError, e:
-            self.emit(str(e))
-        else:
-            self.emit("Saved %s: %d bytes" % (filename, len(self.last_data)))
+        resource = args[0]
+        self._request('GET', resource, [('Accept', self.accept)])
 
     def do_put(self, line):
         """Put a resource on the server.
@@ -242,25 +253,46 @@ welcome to change it and/or distribute copies of it under certain conditions."""
             data.append(row)
         data.append('')
         data = '\n'.join(data)
+        self._request('PUT', resource,
+                      [('Content-Type', content_type),
+                       ('Content-Length', len(data))],
+                      data)
+
+    def do_delete(self, line):
+        """Delete a resource from the server.
+
+        delete <resource>
+        """
+        args = line.split()
+        if len(args) < 1:
+            self.emit("Resource not provided")
+            return
+        if len(args) > 1:
+            self.emit("Extra arguments provided")
+            return
+        resource = args[0]
+        self._request('DELETE', resource)
+
+    def do_save(self, line):
+        """Save the last downloaded resource to a file.
+
+        save <filename>
+        """
+        if not line:
+            self.emit("No filename")
+            return
+        filename = line
+        if not self.last_data:
+            self.emit("Perform a get first")
+            return
         try:
-            conn = self.http(self.server, self.port)
-            conn.putrequest('PUT', resource)
-            conn.putheader('Content-Type', content_type)
-            conn.putheader('Content-Length', len(data))
-            conn.endheaders()
-            conn.send(data)
-            response = conn.getresponse()
-            self.last_data = data = response.read()
-            self.resources = []
-            ctype = response.getheader('Content-Type',
-                                       'application/octet-stream')
-            if not ctype.startswith('text/'):
-                self.emit("Resource is not text: %s" % ctype)
-                self.emit("use save <filename> to save it")
-                return
-            self.emit(data)
-        except socket.error:
-            self.emit('Error: could not connect to %s' % self.server)
+            f = self.file_hook(filename, 'wb')
+            f.write(self.last_data)
+            f.close()
+        except EnvironmentError, e:
+            self.emit(str(e))
+        else:
+            self.emit("Saved %s: %d bytes" % (filename, len(self.last_data)))
 
     def do_links(self, line):
         """Toggle the display of xlinks found in the response.

@@ -901,11 +901,11 @@ class TestFacetManagementView(RegistriesSetupMixin, unittest.TestCase):
             ---8<---
               <facet xlink:type="simple" active="inactive"
                      xlink:title="001" class="EventLogFacet"
-                     owned="unowned" xlink:href="001"/>
+                     owned="unowned" xlink:href="facets/001"/>
             ---8<---
               <facet xlink:type="simple" active="active"
                      xlink:title="002" class="EventLogFacet"
-                     owned="owned" xlink:href="002"/>
+                     owned="owned" xlink:href="facets/002"/>
             ---8<---
             </facets>
             """)

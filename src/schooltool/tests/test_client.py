@@ -26,7 +26,7 @@ import sys
 from StringIO import StringIO
 from xml.sax import make_parser
 from xml.sax.handler import feature_namespaces
-from schooltool.tests.helpers import dedent
+from schooltool.tests.helpers import dedent, diff
 
 __metaclass__ = type
 
@@ -86,6 +86,8 @@ class ResponseStub:
                        self.request.sent_headers['content-type'],
                        self.request.sent_headers['content-length'],
                        self.request.sent_data))
+        elif self.request.resource == "/delete_me":
+            return ("%s" % (self.request.method, ))
         else:
             return "404 :-)"
 
@@ -204,6 +206,10 @@ class TestClient(unittest.TestCase):
         self.assertEqual(self.emitted, "This help.")
 
     def test_server(self):
+        self.client.do_get('x y z')
+        self.assertEqual(self.emitted, "Extra arguments provided")
+
+        self.emitted = ""
         self.client.do_server("server.example.com")
         self.assertEqual(self.client.server, "server.example.com")
         self.assertEqual(self.emitted,
@@ -230,6 +236,12 @@ class TestClient(unittest.TestCase):
         self.assertEqual(self.client.server, "server")
         self.assertEqual(self.client.port, 80)
 
+        self.emitted = ""
+        self.client.do_server("other www")
+        self.assertEqual(self.client.server, "server")
+        self.assertEqual(self.client.port, 80)
+        self.assertEqual(self.emitted, "Invalid port number")
+
     def test_accept(self):
         self.client.do_accept(" ")
         self.assertEqual(self.emitted, 'text/xml')
@@ -243,6 +255,14 @@ class TestClient(unittest.TestCase):
         self.assertEqual(self.emitted, 'text/xml, text/plain, text/*')
 
     def test_get(self):
+        self.client.do_get('   ')
+        self.assertEqual(self.emitted, "Resource not provided")
+
+        self.emitted = ""
+        self.client.do_get('x y')
+        self.assertEqual(self.emitted, "Extra arguments provided")
+
+        self.emitted = ""
         self.client.server = 'localhost'
         self.client.links = False
         self.client.do_get("/")
@@ -319,10 +339,10 @@ class TestClient(unittest.TestCase):
         self.emitted = ""
         self.client.resources = ['x']
         self.client.do_put('/place_to_put_things')
-        self.assertEqual(self.emitted,
-                         "End data with a line containing just a single"
-                           " period.\n"
-                         "PUT text/plain 0\n")
+        expected = ("End data with a line containing just a single period.\n"
+                    "PUT text/plain 0\n")
+        self.assertEqual(self.emitted, expected,
+                         "\n" + diff(expected, self.emitted))
         self.assertEqual(self.client.resources, [])
         self.assertEqual(self.client.last_data, 'PUT text/plain 0\n')
 
@@ -356,6 +376,21 @@ class TestClient(unittest.TestCase):
                          "Resource is not text: application/octet-stream\n"
                          "use save <filename> to save it")
         self.assertEqual(self.client.last_data, "(binary data)")
+
+    def test_delete(self):
+        self.client.do_delete('   ')
+        self.assertEqual(self.emitted, "Resource not provided")
+
+        self.emitted = ""
+        self.client.do_delete('x y')
+        self.assertEqual(self.emitted, "Extra arguments provided")
+
+        self.emitted = ""
+        self.client.resources = ['x']
+        self.client.do_delete('/delete_me')
+        self.assertEqual(self.emitted, "DELETE")
+        self.assertEqual(self.client.resources, [])
+        self.assertEqual(self.client.last_data, 'DELETE')
 
     def test_links(self):
         self.assertEqual(self.client.links, True)
@@ -460,6 +495,8 @@ class TestUtilities(unittest.TestCase):
         self.assertEqual(http_join('/foo', 'bar'), '/bar')
         self.assertEqual(http_join('/foo/bar', '../baz'), '/baz')
         self.assertEqual(http_join('/foo/bar', '/baz'), '/baz')
+        self.assertEqual(http_join('/foo/bar', './baz'), '/foo/baz')
+        self.assertEqual(http_join('/foo/bar/', './baz'), '/foo/bar/baz')
         self.assertRaises(IndexError, http_join, '/foo/bar', '../../baz')
         self.assertRaises(ValueError, http_join, 'foo/bar', '../baz')
         self.assertRaises(ValueError, http_join, '/foo/bar', 'baz//quux')

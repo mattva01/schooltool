@@ -350,7 +350,7 @@ class FacetManagementView(View):
                  'owned': ownedness[facet.owner is not None],
                  'title': facet.__name__,
                  'class_name': facet.__class__.__name__,
-                 'path': facet.__name__}
+                 'path': 'facets/%s' % facet.__name__}
                 for facet in self.context.iterFacets()]
 
 
