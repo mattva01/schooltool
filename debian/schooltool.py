@@ -1,6 +1,6 @@
 #!/usr/bin/python2.3
 """
-A script to start the schooltool server in a Debian system.
+A script to start the SchoolTool server in a Debian system.
 """
 
 import sys

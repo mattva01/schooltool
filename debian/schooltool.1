@@ -19,7 +19,7 @@ Use the given configuration file.
 Go to background after starting.
 .SH FILES
 .TP
-.B /etc/schooltool.conf
+.B /etc/schooltool/schooltool.conf
 The default server configuration file
 .TP
 .B /var/lib/schooltool/
@@ -28,7 +28,9 @@ The default directory for data files (Debian).
 .B /var/log/schooltool/error.log
 The default location for the error log file (Debian).
 .TP
-.B /var/log/schooltool/access.log
-The default location for the access log file (Debian).
+.B /var/log/schooltool/web-access.log
+The default location for the web access log file (Debian).
+.B /var/log/schooltool/rest-access.log
+The default location for the REST access log file (Debian).
 .SH "SEE ALSO"
 schooltool-client(1), wxschooltool(1), import-sampledata(1).

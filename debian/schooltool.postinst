@@ -1,5 +1,5 @@
 #!/bin/bash
-# postinst script for -common package
+# postinst script for server package
 
 set -e
 

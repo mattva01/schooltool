@@ -31,7 +31,7 @@ automatically generate an SSL certificate. You can choose to:
 * (default) - Create a self signed certificate. The public certificate is in
   PEM format and found at /etc/schooltool/schooltool.cert.pem. It should be
   possible to import this file into web browsers as a root certificate.
-  schoolbell.privkey.pem is, of course, the private key an should never be made
+  schooltool.privkey.pem is, of course, the private key an should never be made
   publicly available.
 
 * Import a certificate from a file in PEM format. The file must also include
