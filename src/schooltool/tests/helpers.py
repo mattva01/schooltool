@@ -83,7 +83,7 @@ def normalize_xml(xml, recursively_sort=()):
 
     This function normalizes indentation, whitespace and newlines (except
     inside text nodes), element attribute order, expands character references,
-    expands shorthand notation of empty XML elements ("<br/> becomes
+    expands shorthand notation of empty XML elements ("<br/>" becomes
     "<br></br>").
 
     If an element has an attribute test:sort="children", the attribute is
