@@ -1,1 +1,1 @@
-"""Unit tests for SchoolBell"""
+"""Unit tests for SchoolBell calendaring"""

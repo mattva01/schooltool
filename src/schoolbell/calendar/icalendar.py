@@ -28,7 +28,8 @@ Mozilla Calendar, Evolution and KOrganizer.
 If you have a calendar, you can convert it to an iCalendar file like this:
 
     >>> from datetime import datetime, timedelta
-    >>> from schoolbell.simple import ImmutableCalendar, SimpleCalendarEvent
+    >>> from schoolbell.calendar.simple import ImmutableCalendar
+    >>> from schoolbell.calendar.simple import SimpleCalendarEvent
     >>> event = SimpleCalendarEvent(datetime(2004, 12, 16, 10, 58, 47),
     ...                             timedelta(hours=1), "doctests",
     ...                             location=u"Matar\u00f3",
@@ -58,7 +59,7 @@ import calendar
 import re
 from cStringIO import StringIO
 from sets import Set
-from schoolbell.simple import SimpleCalendarEvent
+from schoolbell.calendar.simple import SimpleCalendarEvent
 
 
 def convert_event_to_ical(event):
@@ -108,8 +109,8 @@ def convert_calendar_to_ical(calendar):
     Returns a list of strings (without newlines) in UTF-8.  They should be
     joined with '\r\n' to get a valid iCalendar file.
 
-        >>> from schoolbell.simple import ImmutableCalendar
-        >>> from schoolbell.simple import SimpleCalendarEvent
+        >>> from schoolbell.calendar.simple import ImmutableCalendar
+        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
         >>> from datetime import datetime, timedelta
         >>> event = SimpleCalendarEvent(datetime(2004, 12, 16, 10, 7, 29),
         ...                             timedelta(hours=1), "iCal rendering",

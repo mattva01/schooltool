@@ -33,7 +33,7 @@ class CalendarMixin:
 
     A class that uses this mixin must already implement ICalendar.__iter__.
 
-        >>> from schoolbell.interfaces import ICalendar
+        >>> from schoolbell.calendar.interfaces import ICalendar
         >>> from zope.interface import implements
         >>> class MyCalendar(CalendarMixin):
         ...     implements(ICalendar)
@@ -51,7 +51,7 @@ class CalendarMixin:
         This particular implementation simply performs a linear search by
         iterating over all events and looking at their UIDs.
 
-            >>> from schoolbell.interfaces import ICalendar
+            >>> from schoolbell.calendar.interfaces import ICalendar
             >>> from zope.interface import implements
 
             >>> class Event:
@@ -85,7 +85,7 @@ class CalendarMixin:
         See ICalendar for more details.
 
             >>> from datetime import datetime, timedelta
-            >>> from schoolbell.interfaces import ICalendar
+            >>> from schoolbell.calendar.interfaces import ICalendar
             >>> from zope.interface import implements
 
             >>> class Event:
@@ -202,7 +202,7 @@ class CalendarEventMixin:
     Calendar events are equal iff all their attributes are equal.  We can get a
     list of those attributes easily because ICalendarEvent is a schema.
 
-        >>> from schoolbell.interfaces import ICalendarEvent
+        >>> from schoolbell.calendar.interfaces import ICalendarEvent
         >>> from zope.schema import getFieldNames
         >>> all_attrs = getFieldNames(ICalendarEvent)
         >>> 'unique_id' in all_attrs
@@ -297,7 +297,7 @@ class CalendarEventMixin:
     def replace(self, **kw):
         r"""Return a copy of this event with some attributes replaced.
 
-            >>> from schoolbell.interfaces import ICalendarEvent
+            >>> from schoolbell.calendar.interfaces import ICalendarEvent
             >>> from zope.schema import getFieldNames
             >>> all_attrs = getFieldNames(ICalendarEvent)
             >>> class Event(CalendarEventMixin):
@@ -310,7 +310,7 @@ class CalendarEventMixin:
             >>> from datetime import datetime, timedelta
             >>> e1 = Event(dtstart=datetime(2004, 12, 15, 18, 57),
             ...            duration=timedelta(minutes=15),
-            ...            title='Work on schoolbell.simple',
+            ...            title='Work on schoolbell.calendar.simple',
             ...            location=None)
 
             >>> e2 = e1.replace(location=u'Matar\u00f3')
@@ -327,7 +327,7 @@ class CalendarEventMixin:
 
         """
         # The import is here to avoid cyclic dependencies
-        from schoolbell.simple import SimpleCalendarEvent
+        from schoolbell.calendar.simple import SimpleCalendarEvent
         for attr in ['dtstart', 'duration', 'title', 'location', 'unique_id',
                      'recurrence']:
             kw.setdefault(attr, getattr(self, attr))

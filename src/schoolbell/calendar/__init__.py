@@ -19,7 +19,7 @@
 """
 Calendaring for Zope 3 applications.
 
-SchoolBell is a calendaring library for Zope 3.  Its main features are
+SchoolBell Calendar is a calendaring library for Zope 3.  Its main features are
 (currently most of these features are science fiction):
 
 - It can parse and generate iCalendar files.  Only a subset of the iCalendar
@@ -54,6 +54,3 @@ Things that are not currently supported:
   supported by SchoolBell.
 
 """
-
-from zope.i18n import MessageIDFactory
-SchoolBellMessageID = MessageIDFactory("schoolbell")

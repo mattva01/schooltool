@@ -26,8 +26,8 @@ import datetime
 import random
 import email.Utils
 from zope.interface import implements
-from schoolbell.interfaces import ICalendar, ICalendarEvent
-from schoolbell.mixins import CalendarEventMixin, CalendarMixin
+from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
+from schoolbell.calendar.mixins import CalendarEventMixin, CalendarMixin
 
 __metaclass__ = type
 
@@ -39,7 +39,7 @@ class SimpleCalendarEvent(CalendarEventMixin):
         >>> from zope.interface.verify import verifyObject
         >>> e = SimpleCalendarEvent(datetime(2004, 12, 15, 18, 57),
         ...                         timedelta(minutes=15),
-        ...                         'Work on schoolbell.simple')
+        ...                         'Work on schoolbell.calendar.simple')
         >>> verifyObject(ICalendarEvent, e)
         True
 
@@ -71,13 +71,13 @@ class ImmutableCalendar(CalendarMixin):
         >>> from zope.interface.verify import verifyObject
         >>> e = SimpleCalendarEvent(datetime(2004, 12, 15, 18, 57),
         ...                         timedelta(minutes=15),
-        ...                         'Work on schoolbell.simple')
+        ...                         'Work on schoolbell.calendar.simple')
         >>> calendar = ImmutableCalendar([e])
         >>> verifyObject(ICalendar, calendar)
         True
 
         >>> [e.title for e in calendar]
-        ['Work on schoolbell.simple']
+        ['Work on schoolbell.calendar.simple']
 
     """
 

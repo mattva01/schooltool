@@ -17,11 +17,11 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell
+Unit tests for schoolbell.calendar
 
 When this module grows too big, it will be split into a number of modules in
 a package called tests.  Each of those new modules will be named test_foo.py
-and will test schoolbell.foo.
+and will test schoolbell.calendar.foo.
 
 $Id$
 """
@@ -33,7 +33,7 @@ from zope.testing import doctest
 def doctest_interfaces():
     """Look for syntax errors in interfaces.py
 
-        >>> import schoolbell.interfaces
+        >>> import schoolbell.calendar.interfaces
 
     """
 
@@ -41,7 +41,7 @@ def doctest_interfaces():
 def doctest_simple_CalendarEventMixin_replace():
     """Make sure CalendarEventMixin.replace does not forget any attributes.
 
-        >>> from schoolbell.interfaces import ICalendarEvent
+        >>> from schoolbell.calendar.interfaces import ICalendarEvent
         >>> from zope.schema import getFieldNames
         >>> all_attrs = getFieldNames(ICalendarEvent)
 
@@ -49,10 +49,10 @@ def doctest_simple_CalendarEventMixin_replace():
     CalendarEventMixin
 
         >>> from datetime import datetime, timedelta
-        >>> from schoolbell.simple import SimpleCalendarEvent
+        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
         >>> e1 = SimpleCalendarEvent(datetime(2004, 12, 15, 18, 57),
         ...                          timedelta(minutes=15),
-        ...                          'Work on schoolbell.simple')
+        ...                          'Work on schoolbell.calendar.simple')
 
         >>> for attr in all_attrs:
         ...     e2 = e1.replace(**{attr: 'new value'})
@@ -64,12 +64,12 @@ def doctest_simple_CalendarEventMixin_replace():
 
 
 def doctest_weeknum_bounds():
-    """Unit test for schoolbell.utils.weeknum_bounds.
+    """Unit test for schoolbell.calendar.utils.weeknum_bounds.
 
     Check that weeknum_bounds is the reverse of datetime.isocalendar().
 
         >>> from datetime import date
-        >>> from schoolbell.utils import weeknum_bounds
+        >>> from schoolbell.calendar.utils import weeknum_bounds
         >>> d = date(2000, 1, 1)
         >>> while d < date(2010, 1, 1):
         ...     year, weeknum, weekday = d.isocalendar()
@@ -83,10 +83,10 @@ def doctest_weeknum_bounds():
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite())
-    suite.addTest(doctest.DocTestSuite('schoolbell.mixins'))
-    suite.addTest(doctest.DocTestSuite('schoolbell.simple'))
-    suite.addTest(doctest.DocTestSuite('schoolbell.utils'))
-    suite.addTest(doctest.DocTestSuite('schoolbell.browser',
+    suite.addTest(doctest.DocTestSuite('schoolbell.calendar.mixins'))
+    suite.addTest(doctest.DocTestSuite('schoolbell.calendar.simple'))
+    suite.addTest(doctest.DocTestSuite('schoolbell.calendar.utils'))
+    suite.addTest(doctest.DocTestSuite('schoolbell.calendar.browser',
                         optionflags=doctest.ELLIPSIS | doctest.REPORT_UDIFF))
     return suite
 
