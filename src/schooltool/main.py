@@ -664,7 +664,8 @@ class Server:
                             database
                             event_logging
                             pid_file
-                            log_file
+                            error_log_file
+                            access_log_file
         """
         # Defaults
         config_file = self.findDefaultConfigFile()
