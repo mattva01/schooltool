@@ -939,7 +939,6 @@ class EventDeleteView(BrowserView):
         elif 'ALL' in self.request:
             ICalendar(event).removeEvent(event)
         elif 'FUTURE' in self.request:
-            # XXX We are being a bit rude discarding `count` just like that.
             self._modifyRecurrenceRule(event, until=(date - timedelta(1)),
                                        count=None)
         elif 'CURRENT' in self.request:
