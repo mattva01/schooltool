@@ -531,12 +531,6 @@ class Server:
         relationships, copy PersonInfoFacets from old Person objects to new ones.
         """
 
-        def list08Links(obj, role=None):
-            if role is None:
-                return list(obj.__links__)
-            else:
-                return [link for link in obj.__links__ if link.role == role]
-
         def get08RelatedObjects(obj, role):
             return [link.relationship.traverse(link).__parent__ for link \
                     in obj.listLinks(role) if IApplicationObject.providedBy(
@@ -650,12 +644,9 @@ class Server:
                                member=old_new_map[member])
 
             for provider in get08RelatedObjects(old, URICalendarProvider):
-                try:
-                    relate(URICalendarSubscription,
-                       (old_new_map[old], URICalendarSubscriber),
-                       (old_new_map[provider], URICalendarProvider))
-                except Exception, e:
-                    print "INFO", e
+                relate(URICalendarSubscription,
+                   (old_new_map[old], URICalendarSubscriber),
+                   (old_new_map[provider], URICalendarProvider))
 
         root[self.appname] = new_app
 
