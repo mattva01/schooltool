@@ -16,10 +16,14 @@
 <div class="actions">
   <p><a class="action" href="/groups/root" i18n:translate="">Browse groups and
      persons</a></p>
-  <p><a class="action" tal:condition="view/isManager"
-        href="/persons/add.html" i18n:translate="">Add a person</a></p>
-  <p><a class="action" tal:condition="view/isManager"
-        href="/groups/add.html" i18n:translate="">Add a group</a></p>
+  <tal:block condition="view/isManager">
+    <p><a class="action" href="/persons/add.html"
+          i18n:translate="">Add a person</a></p>
+    <p><a class="action" href="/groups/add.html"
+          i18n:translate="">Add a group</a></p>
+    <p><a class="action" href="/resources/add.html"
+          i18n:translate="">Add a resource</a></p>
+  </tal:block>
   <p><a class="action" tal:attributes="href view/person_url"
         i18n:translate="">View your information page</a></p>
   <p><a class="action" i18n:translate=""
