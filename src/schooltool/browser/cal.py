@@ -1115,7 +1115,6 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
             start = self.date_widget.value
             until = self.until_widget.value
             if start and until and start > until:
-                # Is it good manners to set widget.error?
                 self.until_widget.error = _("End date is earlier"
                                             " than start date")
 
@@ -1682,7 +1681,7 @@ class CalendarEventView(View):
         if ev.dtstart.date() == end.date():
             period = self.getPeriod()
             if period:
-                duration = "Period %s" % period # XXX Don't we need _() here?
+                duration = _("Period %s") % period
             else:
                 duration =  "%s&ndash;%s" % (ev.dtstart.strftime('%H:%M'),
                                              end.strftime('%H:%M'))

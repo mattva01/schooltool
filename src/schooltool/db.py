@@ -21,7 +21,7 @@ Dicts and sets with persistent objects as keys.
 
 Normally you cannot use arbitrary persistent objects as keys for dicts and
 sets.  This module defines a PersistentKeysDict that allows you to use
-arbitrary persistent object as keys for a dict without adding a requirements
+arbitrary persistent object as keys for a dict without adding a requirement
 for those persistent objects to have a well-defined __hash__ method.
 
 Then there are a number of classes that build on top of PersistentKeysDict:
