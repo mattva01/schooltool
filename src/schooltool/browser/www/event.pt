@@ -33,6 +33,33 @@
   <div style="border: 1px solid blue">
     <div class="row" tal:replace="structure view/interval_widget" />
     <div class="row" tal:replace="structure view/recurrence_type_widget" />
+
+    <!-- Range selection -->
+    <div class="row">
+      <input type="radio" name="range" value="count" id="range_c"
+             tal:attributes="checked
+                             python:view.range_widget.value == 'count'"/>
+      <label for="range_c" class="plain">Repeat</label>
+      <input type="text" name="count" size="3"
+             tal:attributes="value view/count_widget/value" /> times.
+    </div>
+
+    <div class="row">
+      <input type="radio" name="range" value="until" id="range_u"
+             tal:attributes="checked
+                             python:view.range_widget.value == 'until'"/>
+      <label for="range_y" class="plain">Repeat until</label>
+      <input type="text" name="until"
+             tal:attributes="value view/until_widget/value"/>
+    </div>
+
+    <div class="row">
+      <input type="radio" name="range" value="forever" id="range_f"
+             tal:attributes="checked
+                             python:view.range_widget.value == 'forever'"/>
+      <label for="range_f" class="plain">Repeat forever</label>
+    </div>
+
     <!--
     <div class="row" tal:replace="structure view/count_widget" />
     <div class="row" tal:replace="structure view/until_widget" />

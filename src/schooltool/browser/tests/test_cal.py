@@ -889,6 +889,28 @@ class TestEventViewBase(AppSetupMixin, unittest.TestCase):
                         interval="", recurrence_shown="yes",)
         self.assertEquals(rule, YearlyRecurrenceRule(interval=1))
 
+        rule = makeRule(recurrence='checked', recurrence_type='yearly',
+                        interval="1", recurrence_shown="yes",
+                        until='2004-01-02', count="3", range="until")
+        self.assertEquals(rule, YearlyRecurrenceRule(interval=1,
+                                                     until=date(2004, 1, 2)))
+
+        rule = makeRule(recurrence='checked', recurrence_type='yearly',
+                        interval="1", recurrence_shown="yes",
+                        until='2004-01-02', count="3", range="count")
+        self.assertEquals(rule, YearlyRecurrenceRule(interval=1, count=3),
+                          rule.__dict__)
+
+        rule = makeRule(recurrence='checked', recurrence_type='yearly',
+                        interval="1", recurrence_shown="yes",
+                        until='2004-01-02', count="3", range="forever")
+        self.assertEquals(rule, YearlyRecurrenceRule(interval=1))
+
+        rule = makeRule(recurrence='checked', recurrence_type='yearly',
+                        interval="1", recurrence_shown="yes",
+                        until='2004-01-02', count="3")
+        self.assertEquals(rule, YearlyRecurrenceRule(interval=1))
+
 
 class TestEventAddView(AppSetupMixin, unittest.TestCase):
 
@@ -1043,6 +1065,32 @@ class EventTimetableTestHelpers:
         return ttcal
 
 
+def assertField(doc, name, value, more=""):
+    """Assert that a field has a value.
+
+    Raises an error unless the document contains an input element with
+    a given name and value.
+
+    An additional xpath attribute query can be passed as optional arg.
+    """
+    r = doc.query('//form//input[@name="%s" and @value="%s" %s]' %
+                  (name, value, more))
+    assert len(r) == 1, "%s != %s" % (name, value)
+
+
+def assertNoField(doc, name, value, more=""):
+    """Assert that there is no field with a given name and value.
+
+    Raises an error if the document contains an input element with
+    a given name and value.
+
+    An additional xpath attribute query can be passed as optional arg.
+    """
+    r = doc.query('//form//input[@name="%s" and @value="%s" %s]' %
+                  (name, value, more))
+    assert len(r) == 0, "%s == %s" % (name, value)
+
+
 class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                         unittest.TestCase):
 
@@ -1069,30 +1117,91 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
         request = RequestStub(args={'event_id': "pick me"})
         content = view.render(request)
 
-        self.assert_('"2004-08-15"' not in content)
-        self.assert_('"ev1"' not in content)
+        doc = HTMLDocument(content)
 
-        self.assert_('"ev2"' in content)
-        self.assert_('"2004-08-12"' in content)
-        self.assert_('"Heaven"' in content)
-        self.assert_('"13:00"' in content)
-        self.assert_('"120"' in content)
-        self.assert_('checked' in content, content)
-        self.assert_('"daily" selected' in content)
-        self.assert_('"2"' in content)
+        assertNoField(doc, 'start_date', '2004-08-15')
+        assertNoField(doc, 'title', 'ev1')
+
+        assertField(doc, 'title', 'ev2')
+        assertField(doc, 'start_date', '2004-08-12')
+        assertField(doc, 'start_time', '13:00')
+        assertField(doc, 'location_other', 'Heaven')
+        assertField(doc, 'duration', '120')
+
+        ch = doc.query('//input[@name="recurrence" and @checked="checked"]')
+        assert len(ch) == 1, 'recurrence not checked'
+        op = doc.query('//select[@name="recurrence_type"]'
+                       '//option[@value="daily" and @selected="selected"]')
+        assert len(op) == 1, 'daily not selected'
+
+        assertField(doc, 'interval', '2')
+
+    def test_render_range_forever(self):
+        from schooltool.cal import DailyRecurrenceRule
+        event = createEvent('2004-10-21 21:00', '2h', "ev3",
+                            unique_id="123",
+                            recurrence=DailyRecurrenceRule())
+        self.person.calendar.addEvent(event)
+
+        view = self.createView()
+        request = RequestStub(args={'event_id': "123"})
+        content = view.render(request)
+
+        doc = HTMLDocument(content)
+
+        assertField(doc, 'range', 'forever', 'and @checked="checked"')
+
+    def test_render_range_count(self):
+        from schooltool.cal import DailyRecurrenceRule
+        event = createEvent('2004-10-21 21:00', '2h', "ev3",
+                            unique_id="123",
+                            recurrence=DailyRecurrenceRule(count=3))
+        self.person.calendar.addEvent(event)
+
+        view = self.createView()
+        request = RequestStub(args={'event_id': "123"})
+        content = view.render(request)
+
+        doc = HTMLDocument(content)
+
+        assertField(doc, 'range', 'count', 'and @checked="checked"')
+        assertField(doc, 'count', '3')
+
+
+    def test_render_range_until(self):
+        from schooltool.cal import DailyRecurrenceRule
+        event = createEvent(
+            '2004-10-21 21:00', '2h', "ev3", unique_id="123",
+            recurrence=DailyRecurrenceRule(until=date(2004, 10, 22)))
+        self.person.calendar.addEvent(event)
+
+        view = self.createView()
+        request = RequestStub(args={'event_id': "123"})
+        content = view.render(request)
+
+        doc = HTMLDocument(content)
+
+        assertField(doc, 'range', 'until', 'and @checked="checked"')
+        assertField(doc, 'until', '2004-10-22')
 
     def test_render_norecur(self):
         view = self.createView()
         request = RequestStub(args={'event_id': "other"})
         content = view.render(request)
 
-        self.assert_('"2004-08-15"' in content)
-        self.assert_('"ev1"' in content)
+        doc = HTMLDocument(content)
 
-        self.assert_('"ev2"' not in content)
-        self.assert_('"2004-08-12"' not in content)
-        self.assert_('checked' not in content, content)
-        self.assert_('"daily" selected' not in content)
+        assertField(doc, 'start_date', '2004-08-15')
+        assertField(doc, 'title', 'ev1')
+
+        assertNoField(doc, 'title', 'ev2')
+        assertNoField(doc, 'start_date', '2004-08-12')
+        assertNoField(doc, 'start_time', '13:00')
+        assertNoField(doc, 'location_other', 'Heaven')
+        assertNoField(doc, 'duration', '120')
+
+        ch = doc.query('//input[@name="recurrence" and @checked="checked"]')
+        assert len(ch) == 0, 'recurrence checked'
 
     def test_render_nonexistent(self):
         view = self.createView()

@@ -808,10 +808,16 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         self.interval_widget = TextWidget('interval', 'Repeat every',
                                           parser=intParser, value=1)
 
+        self.range_widget = SelectionWidget('range', 'Range',
+                                            (('count', 'Count'),
+                                             ('until', 'Until'),
+                                             ('forever', 'forever')),
+                                            value='forever')
 
-##         self.count_widget = TextWidget('count', 'Number of events')
-##         self.until_widget = TextWidget('until', 'Repeat until',
-##                                        parser=dateParser)
+        self.count_widget = TextWidget('count', 'Number of events',
+                                       parser=intParser)
+        self.until_widget = TextWidget('until', 'Repeat until',
+                                       parser=dateParser)
 
 ##         self.weekdays_widget = TextWidget('weekdays', 'Weekdays')
 ##         self.monthly_widget = TextWidget('monthly', 'Monthly')
@@ -833,6 +839,9 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         self.recurrence_widget.update(request)
         self.recurrence_type_widget.update(request)
         self.interval_widget.update(request)
+        self.range_widget.update(request)
+        self.count_widget.update(request)
+        self.until_widget.update(request)
 
     def do_GET(self, request):
         self.update()
@@ -876,16 +885,30 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
        """
        if self.recurrence_widget.value:
           interval = self.interval_widget.value
+          until = self.until_widget.value
+          count = self.count_widget.value
+          range = self.range_widget.value
+
           if interval is None:
              interval = 1
+
+          if range != 'until':
+              until = None
+          if range != 'count':
+              count = None
+
           if self.recurrence_type_widget.value == 'daily':
-             return DailyRecurrenceRule(interval=interval)
+             return DailyRecurrenceRule(interval=interval,
+                                        count=count, until=until)
           elif self.recurrence_type_widget.value == 'weekly':
-             return WeeklyRecurrenceRule(interval=interval)
+             return WeeklyRecurrenceRule(interval=interval,
+                                         count=count, until=until)
           elif self.recurrence_type_widget.value == 'monthly':
-             return MonthlyRecurrenceRule(interval=interval)
+             return MonthlyRecurrenceRule(interval=interval,
+                                          count=count, until=until)
           elif self.recurrence_type_widget.value == 'yearly':
-             return YearlyRecurrenceRule(interval=interval)
+             return YearlyRecurrenceRule(interval=interval,
+                                         count=count, until=until)
        else:
           return None
 
@@ -960,6 +983,15 @@ class EventEditView(EventViewBase):
               self.recurrence_type_widget.setValue('yearly')
 
            self.interval_widget.setValue(event.recurrence.interval)
+
+           if event.recurrence.count:
+              self.range_widget.setValue('count')
+              self.count_widget.setValue(event.recurrence.count)
+           elif event.recurrence.until:
+              self.range_widget.setValue('until')
+              self.until_widget.setValue(event.recurrence.until)
+           else:
+              self.range_widget.setValue('forever')
 
         else:
            self.recurrence_widget.setValue(False)
