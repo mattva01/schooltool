@@ -28,6 +28,7 @@ from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
 from schooltool.interfaces import ILocation, IContainmentRoot, IFaceted
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import ComponentLookupError, ISpecificURI
+from schooltool.interfaces import URIGroup, URIMember
 
 moduleProvides(IContainmentAPI, IFacetAPI, IServiceAPI, IURIAPI)
 
@@ -185,8 +186,22 @@ from schooltool.relationships import relate as relate3
 
 def relate(title, a, role_a, b, role_b):
     """See IRelationshipAPI"""
-    return relate3(title, a, role_a, b, role_b)
+    from schooltool.model import MemberLink, GroupLink # XXX
+    group, member = None, None
+    if role_a is URIGroup and role_b is URIMember:
+        group = a
+        member = b
+        name = group.add(member)
+        return MemberLink(group, member, name), GroupLink(member, group, name)
+    elif role_a is URIMember and role_b is URIGroup:
+        group = b
+        member = a
+        name = group.add(member)
+        return GroupLink(member, group, name), MemberLink(group, member, name)
+    else:
+        return relate3(title, a, role_a, b, role_b)
 
 def getRelatedObjects(obj, role):
     """See IRelationshipAPI"""
     return [link.traverse() for link in obj.listLinks(role)]
+

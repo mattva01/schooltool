@@ -272,25 +272,54 @@ class TestRelationships(unittest.TestCase):
                          [soldier])
         self.assertEqual(list(getRelatedObjects(officer, URISuperior)), [])
 
-    def test_relate(self):
+class TestRelate(unittest.TestCase):
+    def setUp(self):
         from schooltool import component
-        real_relate3 = component.relate3
-        component.relate3 = stub = Stub_relate3()
-        try:
-            from schooltool.component import relate
-            title = 'a title'
-            a = object()
-            role_a = URISuperior
-            b = object()
-            role_b = URIReport
-            relate('a title', a, role_a, b, role_b)
-            self.assertEquals(stub.title, title)
-            self.assert_(stub.a is a)
-            self.assert_(stub.role_a is role_a)
-            self.assert_(stub.b is b)
-            self.assert_(stub.role_b is role_b)
-        finally:
-            component.relate3 = real_relate3
+        self.real_relate3 = component.relate3
+        component.relate3 = self.stub = Stub_relate3()
+
+    def tearDown(self):
+        from schooltool import component
+        component.relate3 = self.real_relate3
+
+    def test_relate(self):
+        from schooltool.component import relate
+        title = 'a title'
+        a = object()
+        role_a = URISuperior
+        b = object()
+        role_b = URIReport
+        links = relate('a title', a, role_a, b, role_b)
+        self.assertEqual(len(links), 2)
+        self.assertEquals(self.stub.title, title)
+        self.assert_(self.stub.a is a)
+        self.assert_(self.stub.role_a is role_a)
+        self.assert_(self.stub.b is b)
+        self.assert_(self.stub.role_b is role_b)
+
+    def test_relate_membership(self):
+        from schooltool.component import relate
+        from schooltool.interfaces import URIGroup, URIMember
+        from schooltool.model import GroupLink, MemberLink
+
+        m = MemberStub()
+        g = GroupStub()
+
+        links = relate("Membership", g, URIGroup, m, URIMember)
+        self.assertEqual(len(links), 2)
+        self.assertEqual(type(links[0]), MemberLink)
+        self.assertEqual(type(links[1]), GroupLink)
+
+        links = relate("Membership",  m, URIMember, g, URIGroup)
+        self.assertEqual(len(links), 2)
+        self.assertEqual(type(links[0]), GroupLink)
+        self.assertEqual(type(links[1]), MemberLink)
+
+        links = relate("Membership",  m, URIMember, g, URISuperior) # ?
+        self.assertEqual(len(links), 2)
+        self.assertNotEqual(type(links[0]), GroupLink)
+        self.assertNotEqual(type(links[1]), MemberLink)
+
 
 class Stub_relate3:
     title = None
@@ -304,6 +333,16 @@ class Stub_relate3:
         self.role_a = role_a
         self.b = b
         self.role_b = role_b
+        return object(), object()
+
+
+class MemberStub:
+    pass
+
+class GroupStub:
+    def add(self, value):
+        return "name"
+
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -313,6 +352,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestServiceAPI))
     suite.addTest(unittest.makeSuite(TestSpecificURI))
     suite.addTest(unittest.makeSuite(TestRelationships))
+    suite.addTest(unittest.makeSuite(TestRelate))
     return suite
 
 if __name__ == '__main__':
