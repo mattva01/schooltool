@@ -770,10 +770,30 @@ class TestDailyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
                                   date(2004, 10, 15)])
 
     def test_iCalRepresentation(self):
+        # simple case
         rule = self.createRule(interval=2)
         self.assertEquals(rule.iCalRepresentation(None),
                           ['RRULE:FREQ=DAILY;INTERVAL=2'])
 
+        # count
+        rule = self.createRule(interval=3, count=5)
+        self.assertEquals(rule.iCalRepresentation(None),
+                          ['RRULE:FREQ=DAILY;COUNT=5;INTERVAL=3'])
+
+        # until
+        rule = self.createRule(until=date(2004, 10, 20))
+        self.assertEquals(rule.iCalRepresentation(None),
+                          ['RRULE:FREQ=DAILY;UNTIL=20041020T000000Z;'
+                                 'INTERVAL=1'])
+
+        # exceptions
+        rule = self.createRule(exceptions=[date(2004, 10, 2*d)
+                                           for d in range(3, 6)])
+        self.assertEquals(rule.iCalRepresentation(None),
+                          ['RRULE:FREQ=DAILY;INTERVAL=1',
+                           'EXDATE:20041006T000000Z,'
+                                  '20041008T000000Z,'
+                                  '20041010T000000Z'])
 
 class TestYearlyRecurrenceRule(unittest.TestCase, TestRecurrenceRule):
 

@@ -458,11 +458,21 @@ class RecurrenceRule:
             cur = self._nextRecurrence(cur)
 
     def _nextRecurrence(self, date):
-        """Adds the basic step of recurrence to the date"""
+        """Add the basic step of recurrence to the date."""
         return date + self.interval * date.resolution
+
+    def _iCalExceptions(self):
+        """Return exceptions for this event in iCal format as a string."""
+        return ''
 
     def iCalRepresentation(self, dtstart):
         raise NotImplementedError()
+
+
+def ical_date(dt):
+    """Return a date in iCalendar format."""
+    # TODO: tests?
+    return dt.strftime("%Y%m%dT%H%M%SZ")
 
 
 class DailyRecurrenceRule(RecurrenceRule):
@@ -474,8 +484,17 @@ class DailyRecurrenceRule(RecurrenceRule):
 
     def iCalRepresentation(self, dtstart):
         """See IRecurrenceRule"""
-        return ['RRULE:FREQ=DAILY;INTERVAL=%d' % self.interval]
-        # TODO: exceptions
+        if self.count:
+            args = 'COUNT=%d;' % self.count
+        elif self.until:
+            args = 'UNTIL=%s;' % ical_date(self.until)
+        else:
+            args = ''
+        result = ['RRULE:FREQ=DAILY;%sINTERVAL=%d' % (args, self.interval)]
+        if self.exceptions:
+            row = 'EXDATE:' + ','.join([ical_date(d) for d in self.exceptions])
+            result.append(row)
+        return result
 
 
 class YearlyRecurrenceRule(RecurrenceRule):
