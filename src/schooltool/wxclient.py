@@ -295,6 +295,9 @@ class AbsenceFrame(wxFrame):
             wxMessageBox("Could not get list of absences: %s" % e, self.title,
                          wxICON_ERROR|wxOK)
             return
+        # sort newest absences first
+        self.absence_data.sort()
+        self.absence_data.reverse()
         for idx, absence in enumerate(self.absence_data):
             self.absence_list.InsertStringItem(idx,
                     absence.datetime.isoformat(' '))
@@ -326,6 +329,9 @@ class AbsenceFrame(wxFrame):
             self.comment_data = self.client.getAbsenceComments(absence.uri)
         except SchoolToolError, e:
             return
+        # sort newest comments first
+        self.comment_data.sort()
+        self.comment_data.reverse()
         for idx, comment in enumerate(self.comment_data):
             self.comment_list.InsertStringItem(idx,
                     comment.datetime.isoformat(' '))

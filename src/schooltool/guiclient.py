@@ -583,9 +583,9 @@ class AbsenceInfo:
         if not isinstance(other, AbsenceInfo):
             raise NotImplementedError("cannot compare %r with %r"
                                       % (self, other))
-        return cmp((self.uri, self.datetime, self.ended, self.resolved,
+        return cmp((self.datetime, self.uri, self.ended, self.resolved,
                     self.expected_presence),
-                   (other.uri, other.datetime, other.ended, other.resolved,
+                   (other.datetime, other.uri, other.ended, other.resolved,
                     other.expected_presence))
 
     def __repr__(self):
