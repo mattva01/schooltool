@@ -549,6 +549,10 @@ class DailyCalendarView(CalendarViewBase):
     starthour = 8
     endhour = 19
 
+    next_title = _("The next day")
+    current_title = _("The current day")
+    prev_title = _("The previous day")
+
     def title(self):
         return self.dayTitle(self.cursor)
 
