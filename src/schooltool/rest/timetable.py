@@ -324,21 +324,8 @@ class TimetableReadWriteView(TimetableReadView):
             doc.free()
             return textErrorPage(request, e)
 
-        if self.context is None:
-            self.timetabled.timetables[self.key] = tt
-        else:
-            for day_id, period_id, activity in self.context.itercontent():
-                for resource in activity.resources:
-                    resource.timetables[self.key][day_id].remove(period_id,
-                                                                 activity)
-            self.context.clear()
-            self.context.update(tt)
-        for day_id, period_id, activity in tt.itercontent():
-            for resource in activity.resources:
-                if self.key not in resource.timetables:
-                    resource.timetables[self.key] = tt.cloneEmpty()
-                resource.timetables[self.key][day_id].add(period_id, activity)
-        path = getPath(self.timetabled.timetables[self.key])
+        self.timetabled.timetables[self.key] = tt
+        path = getPath(tt)
         request.appLog(_("Timetable of %s (%s) for %s, updated") %
                        (self.timetabled.title, getPath(self.timetabled),
                         ", ".join(self.key)))

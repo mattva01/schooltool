@@ -34,7 +34,7 @@ from schooltool.interfaces import ILocation, IEvent, IAttendanceEvent
 from schooltool.membership import Membership
 from schooltool.timetable import TimetableSchemaService, TimePeriodService
 from schooltool.translation import ugettext as _
-from schooltool.booking import TimetableExceptionSynchronizer
+from schooltool.booking import TimetableResourceSynchronizer
 from schooltool.interfaces import ITimetableReplacedEvent
 from schooltool.interfaces import ITimetableExceptionEvent
 
@@ -163,10 +163,10 @@ def create_application():
     """Instantiate a new application."""
     app = Application()
 
-    timetable_exception_synchronizer = TimetableExceptionSynchronizer()
-    app.eventService.subscribe(timetable_exception_synchronizer,
+    timetable_resource_synchronizer = TimetableResourceSynchronizer()
+    app.eventService.subscribe(timetable_resource_synchronizer,
                                ITimetableReplacedEvent)
-    app.eventService.subscribe(timetable_exception_synchronizer,
+    app.eventService.subscribe(timetable_resource_synchronizer,
                                ITimetableExceptionEvent)
 
     event_log = EventLogUtility()

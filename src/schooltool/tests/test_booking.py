@@ -28,9 +28,9 @@ import datetime
 from schooltool.tests.utils import AppSetupMixin
 
 
-class TestTimetableExceptionSynchronizer(AppSetupMixin,
+class TestTimetableResourceSynchronizer(AppSetupMixin,
                                          unittest.TestCase):
-    """Tests for TimetableExceptionSynchronizer.
+    """Tests for TimetableResourceSynchronizer.
 
     The text fixture for this class 
     """
@@ -49,17 +49,18 @@ class TestTimetableExceptionSynchronizer(AppSetupMixin,
         self.location.timetables['2004-fall', 'simple'] = tt.cloneEmpty()
         act = TimetableActivity('Math', owner=self.person,
                                 resources=[self.resource, self.location])
+        # Events are not hooked up at this point
         for obj in (self.person, self.resource, self.location):
             obj.timetables['2004-fall', 'simple']['Day 1'].add('A', act)
 
     def test_exception_added_then_removed(self):
-        from schooltool.booking import TimetableExceptionSynchronizer
+        from schooltool.booking import TimetableResourceSynchronizer
         from schooltool.timetable import TimetableException
         from schooltool.timetable import ExceptionalTTCalendarEvent
         from schooltool.interfaces import IEvent
 
         # Prepare test fixture
-        ttes = TimetableExceptionSynchronizer()
+        ttes = TimetableResourceSynchronizer()
         self.app.eventService.subscribe(ttes, IEvent)
         tt = self.person.timetables['2004-fall', 'simple']
         rtt = self.resource.timetables['2004-fall', 'simple']
@@ -70,7 +71,7 @@ class TestTimetableExceptionSynchronizer(AppSetupMixin,
         exc = TimetableException(datetime.date(2004, 11, 02), 'A', act)
         rtt.exceptions.append(exc)       # Sends out an event
 
-        # TimetableExceptionSynchronizer notices the event and adds the
+        # TimetableResourceSynchronizer notices the event and adds the
         # exception to the timetables of all resources and persons.  It
         # takes care not to add the exception to a list if it is already
         # in the list.
@@ -89,20 +90,20 @@ class TestTimetableExceptionSynchronizer(AppSetupMixin,
         # Part 2: remove the exception
         ltt.exceptions.remove(exc)      # Sends out the event
 
-        # TimetableExceptionSynchronizer notices the event and adds the
+        # TimetableResourceSynchronizer notices the event and adds the
         # exception to the timetables of all resources and persons.
         self.assertEquals(tt.exceptions, [])
         self.assertEquals(rtt.exceptions, [])
         self.assertEquals(ltt.exceptions, [])
 
     def test_timetable_replaced(self):
-        from schooltool.booking import TimetableExceptionSynchronizer
+        from schooltool.booking import TimetableResourceSynchronizer
         from schooltool.timetable import TimetableActivity
         from schooltool.timetable import TimetableException
         from schooltool.interfaces import IEvent
 
         # Prepare test fixture
-        ttes = TimetableExceptionSynchronizer()
+        ttes = TimetableResourceSynchronizer()
         self.app.eventService.subscribe(ttes, IEvent)
         tt = self.person.timetables['2004-fall', 'simple']
         act = tt.itercontent().next()[-1]
@@ -133,6 +134,8 @@ class TestTimetableExceptionSynchronizer(AppSetupMixin,
         self.assertEquals(tt.exceptions, [new_exc])
         self.assertEquals(rtt.exceptions, [new_exc])
         self.assertEquals(ltt.exceptions, [])
+        self.assert_(new_act in tt['Day 2']['C'])
+        self.assert_(new_act in rtt['Day 2']['C'])
 
         # Remove the timetable (sends out an event)
         #   Catches two bugs:
@@ -141,14 +144,27 @@ class TestTimetableExceptionSynchronizer(AppSetupMixin,
         del self.person.timetables['2004-fall', 'simple']
         self.assertEquals(rtt.exceptions, [])
         self.assertEquals(ltt.exceptions, [])
+        self.assertEquals(list(rtt['Day 2']['C']), [])
 
         # Add a timetable (sends out an event)
         #   Catches a bug:
         #     - the code did not check for a event.old_timetable being None
         self.person.timetables['2004-fall', 'simple'] = self.tt.cloneEmpty()
 
+        # Test activity replication:
+        #    changing the timetable of a resource must change owner's timetable
+        #    self.person has no timetable -- it must be created
+        del self.person.timetables['2004-fall', 'simple']
+        new_tt = tt.cloneEmpty()
+        new_act = TimetableActivity('Supper', owner=self.person,
+                                    resources=[self.resource])
+        new_tt['Day 1'].add('A', new_act)
+        self.resource.timetables['2004-fall', 'simple'] = new_tt
+        tt = self.person.timetables['2004-fall', 'simple']
+        self.assert_(new_act in tt['Day 1']['A'])
+
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestTimetableExceptionSynchronizer))
+    suite.addTest(unittest.makeSuite(TestTimetableResourceSynchronizer))
     return suite

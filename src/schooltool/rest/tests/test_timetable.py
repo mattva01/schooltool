@@ -27,10 +27,10 @@ import datetime
 from logging import INFO
 from sets import Set
 
-from zope.interface import implements
+from zope.interface import implements, directlyProvides
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.interfaces import IServiceManager, ILocation, IContainmentRoot
-from schooltool.interfaces import ITraversable
+from schooltool.interfaces import ITraversable, IEventTarget
 from schooltool.rest.tests import RequestStub, TraversableRoot, setPath
 from schooltool.tests.helpers import dedent
 from schooltool.tests.utils import XMLCompareMixin
@@ -73,14 +73,20 @@ class TimetabledStub:
     def listCompositeTimetables(self):
         return Set(self.timetables.keys() + self.overlay.keys())
 
+    def notify(self, event):
+        pass
+
 
 class ResourceStub(TimetabledStub):
 
-    def __init__(self, name, title):
+    def __init__(self, name, title, parent=None):
         TimetabledStub.__init__(self)
         self.title = title
         self.__name__ = 'resources/%s' % name
-        self.__parent__ = TraversableRoot()
+        if parent is None:
+            self.__parent__ = TraversableRoot()
+        else:
+            self.__parent__ = parent
 
 
 class ResourceContainer(dict):
@@ -109,7 +115,7 @@ class SchooldayModelStub:
 class ServiceManagerStub:
     implements(IServiceManager, IContainmentRoot, ITraversable)
 
-    def __init__(self, weekly_tt=None):
+    def __init__(self, weekly_tt=None, eventService=None):
         from schooltool.timetable import TimetableSchemaService
         from schooltool.timetable import TimePeriodService
         self.timetableSchemaService = TimetableSchemaService()
@@ -117,10 +123,14 @@ class ServiceManagerStub:
             self.timetableSchemaService['weekly'] = weekly_tt
         self.timePeriodService = TimePeriodService()
         self.timePeriodService['2003 fall'] = SchooldayModelStub()
+        self.eventService = eventService
         self.resources = ResourceContainer()
-        self.resources['room1'] = ResourceStub('room1', 'Room 1')
-        self.resources['lab1'] = ResourceStub('lab1', 'CS Lab 1')
-        self.resources['lab2'] = ResourceStub('lab2', 'CS Lab 2')
+        self.resources['room1'] = ResourceStub('room1', 'Room 1',
+                                               self.eventService)
+        self.resources['lab1'] = ResourceStub('lab1', 'CS Lab 1',
+                                               self.eventService)
+        self.resources['lab2'] = ResourceStub('lab2', 'CS Lab 2',
+                                               self.eventService)
 
     def traverse(self, name):
         return {'resources': self.resources}[name]
@@ -507,8 +517,8 @@ class TestTimetableReadView(XMLCompareMixin, EventServiceTestMixin,
                                     'exceptions': exceptions_html}
 
     def setUp(self):
-        self.root = ServiceManagerStub()
         self.setUpEventService()
+        self.root = ServiceManagerStub(eventService=self.eventService)
 
     def createTimetabled(self):
         timetabled = TimetabledStub()
@@ -667,10 +677,12 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         'tt_type': "own", 'exceptions': TestTimetableReadView.exceptions_html}
 
     def setUp(self):
+        from schooltool.booking import TimetableResourceSynchronizer
         TestTimetableReadView.setUp(self)
         self.setUpLibxml2()
-        self.root = ServiceManagerStub(self.createEmpty())
-        self.root.eventService = self.eventService
+        self.root = ServiceManagerStub(self.createEmpty(),
+                                       eventService=self.eventService)
+        self.eventService.register(TimetableResourceSynchronizer())
 
     def tearDown(self):
         self.tearDownLibxml2()
@@ -680,6 +692,7 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         timetabled.__parent__ = self.root
         timetabled.__name__ = 'john'
         timetabled.title = "John Smith"
+        directlyProvides(timetabled, IEventTarget)
         return timetabled
 
     def createView(self, context=None, timetabled=None,
@@ -730,7 +743,11 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
     def test_put_with_exceptions(self):
         key = ('2003 fall', 'weekly')
         ttd = self.createTimetabled()
+        # Temporarily disable resource timetable synchronization
+        old_targets = self.eventService.targets
+        self.eventService.targets = []
         expected = self.createFullWithExceptions(ttd)
+        self.eventService.targets = old_targets
         self.do_test_put(ttd, key, self.full_xml_with_exceptions, expected)
 
     def do_test_put(self, timetabled, key, xml, expected):

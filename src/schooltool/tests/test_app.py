@@ -194,7 +194,7 @@ class TestCreateApplication(RegistriesSetupMixin, unittest.TestCase):
         from schooltool.app import create_application
         from schooltool.model import Person, Group, Resource
         from schooltool.component import getRelatedObjects
-        from schooltool.booking import TimetableExceptionSynchronizer
+        from schooltool.booking import TimetableResourceSynchronizer
 
         app = create_application()
         root = app['groups']['root']
@@ -224,7 +224,7 @@ class TestCreateApplication(RegistriesSetupMixin, unittest.TestCase):
         self.assert_((absence_tracker, IAttendanceEvent) in subscriptions)
 
         tt_subscriptions = [iface for target, iface in subscriptions
-                if isinstance(target, TimetableExceptionSynchronizer)]
+                if isinstance(target, TimetableResourceSynchronizer)]
         self.assert_(ITimetableReplacedEvent in tt_subscriptions)
         self.assert_(ITimetableExceptionEvent in tt_subscriptions)
 

@@ -51,11 +51,14 @@ For every timetable activity `act` the following is true:
     exceptions that pertain to act is exactly the same.
 
 This module is responsible for maintaining these invariants.  The invariants
-can be broken when an activity is added or removed from a timetable, or when
-a timetable exception is added/removed/modified, therefore we have event
-handlers watching for those changes and fixing broken invariants.
+can be broken when an activity is added or removed from a timetable, when
+a timetable exception is added/removed/modified, and when a timetable is
+replaced.  We have event handlers watching for some of those changes and fixing
+broken invariants.
 
 The event handler is hooked up in schooltool.app.create_application.
+
+TODO: events for activity addition and removal.
 
 
 Calendaring
@@ -93,8 +96,8 @@ from schooltool.interfaces import ITimetableExceptionRemovedEvent
 __metaclass__ = type
 
 
-class TimetableExceptionSynchronizer:
-    """Event handler that synchronizes timetable exceptions."""
+class TimetableResourceSynchronizer:
+    """Event handler that synchronizes person/group and resource timetables."""
 
     implements(IEventTarget)
 
@@ -110,7 +113,15 @@ class TimetableExceptionSynchronizer:
         if event.old_timetable is not None:
             for exception in event.old_timetable.exceptions:
                 self._exceptionRemoved(exception, event.key)
+            for day_id, period_id, act in event.old_timetable.itercontent():
+                if act.resources:
+                    self._activityRemoved(act, event.key, day_id, period_id,
+                                          event.new_timetable)
         if event.new_timetable is not None:
+            for day_id, period_id, act in event.new_timetable.itercontent():
+                if act.resources:
+                    self._activityAdded(act, event.key, day_id, period_id,
+                                        event.new_timetable)
             for exception in event.new_timetable.exceptions:
                 self._exceptionAdded(exception, event.key)
 
@@ -120,8 +131,30 @@ class TimetableExceptionSynchronizer:
     def notifyTimetableExceptionRemoved(self, event):
         self._exceptionRemoved(event.exception, event.timetable.__name__)
 
+    def _activityAdded(self, activity, key, day_id, period_id, timetable):
+        if activity.owner is None:
+            # Make life easier for unit tests.
+            return
+        for obj in [activity.owner] + list(activity.resources):
+            if key not in obj.timetables:
+                obj.timetables[key] = timetable.cloneEmpty()
+            tt = obj.timetables[key]
+            if tt is not timetable:
+                tt[day_id].add(period_id, activity)
+
+    def _activityRemoved(self, activity, key, day_id, period_id, timetable):
+        if activity.owner is None:
+            # Make life easier for unit tests.
+            return
+        for obj in [activity.owner] + list(activity.resources):
+            tt = obj.timetables.get(key)
+            if tt is not timetable:
+                tt[day_id].remove(period_id, activity)
+
     def _exceptionAdded(self, exception, key):
         activity = exception.activity
+        if activity.owner is None:
+            return # this must be a unit test
         for obj in [activity.owner] + list(activity.resources):
             tt = obj.timetables[key]
             if exception not in tt.exceptions:
@@ -130,6 +163,8 @@ class TimetableExceptionSynchronizer:
 
     def _exceptionRemoved(self, exception, key):
         activity = exception.activity
+        if activity.owner is None:
+            return # this must be a unit test
         for obj in [activity.owner] + list(activity.resources):
             tt = obj.timetables.get(key)
             if tt is not None and exception in tt.exceptions:
@@ -138,7 +173,7 @@ class TimetableExceptionSynchronizer:
                 tt.exceptions.remove(exception)
 
 
-# TODO: synchronize timetable activites via event handlers
-#       (move synchronization code from TimetableReadWriteView and
-#       SchoolTimetableView to this module).
+# TODO: Synchronize timetable activites via event handlers when they are
+#       added/removed one-by-one.  Move synchronization code from
+#       SchoolTimetableView to this module.
 
