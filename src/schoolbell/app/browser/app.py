@@ -390,8 +390,8 @@ class PersonAddView(AddView):
         return zapi.absoluteURL(self.context, self.request)
 
 
-class GroupAddView(AddView):
-    """A view for adding a group."""
+class BaseAddView(AddView):
+    """Common functionality for adding groups and resources"""
 
     def nextURL(self):
         return zapi.absoluteURL(self.context.context, self.request)
@@ -401,6 +401,14 @@ class GroupAddView(AddView):
             self.request.response.redirect(self.nextURL())
         else:
             return AddView.update(self)
+
+
+class GroupAddView(BaseAddView):
+    """A view for adding a group."""
+
+
+class ResourceAddView(BaseAddView):
+    """A view for adding a resource."""
 
 
 class GroupEditView(EditView):
@@ -416,3 +424,5 @@ class GroupEditView(EditView):
                 url = zapi.absoluteURL(self.context, self.request)
                 self.request.response.redirect(url)
             return status
+
+

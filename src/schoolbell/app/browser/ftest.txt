@@ -599,9 +599,8 @@ We can click on it and get a form:
 
 
     >>> print http(r"""
-    ... GET /frogpond/resources/+/addSchoolBellResource.html= HTTP/1.1
+    ... GET /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Referer: http://localhost/frogpond/resources/@@contents.html
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -609,8 +608,9 @@ We can click on it and get a form:
     <BLANKLINE>
     <!DOCTYPE html ...
     ...
-      <form action="http://localhost/frogpond/resources/+/addSchoolBellResource.html%3D"
-              method="post" enctype="multipart/form-data">
+      <form action="http://localhost/frogpond/resources/+/addSchoolBellResource.html"
+              method="post" enctype="multipart/form-data"
+              class="standalone">
     ...
            <div class="field"><input class="textType" id="field.title" name="field.title" size="20" type="text" value=""  /></div>
     ...
@@ -621,27 +621,12 @@ We can click on it and get a form:
 After submiting the form
 
     >>> print http(r"""
-    ... POST /frogpond/resources/+/addSchoolBellResource.html%3D HTTP/1.1
+    ... GET /frogpond/resources/+/addSchoolBellResource.html?field.title=resource&UPDATE_SUBMIT=Add&add_input_name= HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 423
-    ... Content-Type: multipart/form-data; boundary=---------------------------68355286210571712431437723486
-    ... Referer: http://localhost/frogpond/resources/+/addSchoolBellResource.html=
-    ...
-    ... -----------------------------68355286210571712431437723486
-    ... Content-Disposition: form-data; name="field.title"
-    ... 
-    ... resource
-    ... -----------------------------68355286210571712431437723486
-    ... Content-Disposition: form-data; name="UPDATE_SUBMIT"
-    ... 
-    ... Add
-    ... -----------------------------68355286210571712431437723486
-    ... Content-Disposition: form-data; name="add_input_name"
-    ... 
-    ... 
-    ... -----------------------------68355286210571712431437723486--
     ... """)
     HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/resources
     ...
 
 We should see a new resource in the resource table:
@@ -715,6 +700,17 @@ The supergroup list works for resources too:
     ...
     <input type="checkbox" name="group.Group" />
     group
+    ...
+
+Cancelling the resource addition redirects us to the resource index:
+
+    >>> print http(r"""
+    ... GET /frogpond/resources/+/addSchoolBellResource.html?field.title=resource&CANCEL=Cancel&add_input_name= HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/resources
     ...
 
 
@@ -823,7 +819,6 @@ ISchoolBellApplication:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-
 
 Appendix: Tips and tricks for writing functional doctests
 ---------------------------------------------------------

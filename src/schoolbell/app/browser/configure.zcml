@@ -127,7 +127,7 @@
       schema="schoolbell.app.interfaces.IGroup"
       content_factory="schoolbell.app.app.Group"
       permission="zope.ManageContent"
-      template="templates/group_add.pt"
+      template="templates/simple_add.pt"
       class=".app.GroupAddView"
       />
 
@@ -211,6 +211,8 @@
       name="addSchoolBellResource.html"
       schema="schoolbell.app.interfaces.IResource"
       content_factory="schoolbell.app.app.Resource"
+      template="templates/simple_add.pt"
+      class=".app.ResourceAddView"
       permission="zope.ManageContent"
       />
 
