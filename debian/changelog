@@ -40,6 +40,7 @@ schoolbell (0.9.99+1.0rc1-1) unstable; urgency=low
   * Added a note that generating SSL certificates might take a while
     (Closes: Bug#297146). (Even though SSL is not available in this release,
     it might be in the future)
+  * Remove README.schoolbell from docs as it was removed upstream.
 
  -- Brian Sutherland <jinty@web.de>  Fri, 28 Jan 2005 19:48:56 +0100
 
