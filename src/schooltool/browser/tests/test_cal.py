@@ -23,10 +23,10 @@ $Id$
 """
 
 import unittest
-import datetime
 from logging import INFO
 
 from schooltool.browser.tests import AppSetupMixin, RequestStub, setPath
+from datetime import datetime, date, time, timedelta
 
 __metaclass__ = type
 
@@ -136,7 +136,7 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
         from schooltool.cal import CalendarEvent
         from schooltool.common import parse_datetime
         ev = CalendarEvent(parse_datetime('2004-08-10 19:00:00'),
-                           datetime.timedelta(hours=1), "Some event")
+                           timedelta(hours=1), "Some event")
         self.resource.calendar.addEvent(ev)
         self.assertEquals(len(list(self.teacher.calendar)), 0)
         self.assertEquals(len(list(self.resource.calendar)), 1)
@@ -151,10 +151,55 @@ class TestBookingView(AppSetupMixin, unittest.TestCase):
         self.assertEquals(request.applog, [])
         self.assertEquals(view.error, "The resource is busy at specified time")
 
+class TestWeeklyCalendarView(unittest.TestCase):
+
+    def test_update(self):
+        from schooltool.browser.cal import WeeklyCalendarView
+
+        view = WeeklyCalendarView(None)
+        view.request = RequestStub()
+        view.update()
+        self.assertEquals(view.cursor, date.today())
+
+        view.request = RequestStub(args={'date': '2004-08-18'})
+        view.update()
+        self.assertEquals(view.cursor, date(2004, 8, 18))
+
+    def test_getDays(self):
+        from schooltool.browser.cal import WeeklyCalendarView
+
+        view = WeeklyCalendarView(None)
+        view.request = RequestStub()
+        view.cursor = date(2004, 8, 11)
+
+        self.assertEquals(view.getDays(),
+                          [date(2004, 8, d) for d in range(9, 16)])
+
+    def test_dayEvents(self):
+        from schooltool.browser.cal import WeeklyCalendarView
+        from schooltool.cal import CalendarEvent, Calendar
+
+        cal = Calendar()
+        view = WeeklyCalendarView(cal)
+        view.request = RequestStub()
+        view.cursor = date(2004, 8, 11)
+        e1 = CalendarEvent(datetime(2004, 8, 11, 12, 0),
+                           timedelta(hours=1),
+                           "first event")
+        cal.addEvent(e1)
+        e2 = CalendarEvent(datetime(2004, 8, 11, 11, 0),
+                           timedelta(hours=1),
+                           "second event")
+        cal.addEvent(e2)
+
+        self.assertEquals(view.dayEvents(view.cursor),
+                          [e2, e1])
+
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestBookingView))
+    suite.addTest(unittest.makeSuite(TestWeeklyCalendarView))
     return suite
 
 

@@ -292,3 +292,28 @@ table.available td {
 div.available {
   clear: both;
 }
+
+div.day {
+  border: 1px solid blue;
+  background: white; /* #8af; */
+  margin: 1ex;
+  padding: 1ex 0.5em;
+}
+
+div.event {
+  border: 1px solid darkgreen;
+  background: #8f9;
+  margin: 1ex;
+  padding: 1ex 0.5em;
+}
+
+div.day h2,
+div.day h3 {
+  margin: 0;
+}
+
+div.day h2,
+div.day h3  {
+  font-size: smaller;
+  color: navy;
+}

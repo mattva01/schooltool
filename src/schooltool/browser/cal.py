@@ -25,13 +25,13 @@ $Id$
 import datetime
 
 from schooltool.browser import View, Template
-from schooltool.browser.auth import TeacherAccess
+from schooltool.browser.auth import TeacherAccess, PrivateAccess
 from schooltool.cal import CalendarEvent, Period
 from schooltool.common import to_unicode, parse_datetime
 from schooltool.component import traverse, getPath
-from schooltool.interfaces import IResource
+from schooltool.interfaces import IResource, ICalendar
 from schooltool.translation import ugettext as _
-
+from schooltool.common import parse_date
 
 class BookingView(View):
 
@@ -122,3 +122,33 @@ class BookingView(View):
                             (getPath(self.context), self.context.title,
                              getPath(owner), owner.title, start, duration))
         return True
+
+
+class WeeklyCalendarView(View):
+
+    __used_for__ = ICalendar
+
+    authorization = PrivateAccess
+
+    template = Template("www/cal_weekly.pt")
+
+    def update(self):
+        if 'date' not in self.request.args:
+            self.cursor = datetime.date.today()
+        else:
+            self.cursor = parse_date(self.request.args['date'][0])
+
+        self.prev = self.cursor - datetime.timedelta(7)
+        self.next = self.cursor + datetime.timedelta(7)
+
+    def getDays(self):
+        # For now, we're Monday based
+        start = self.cursor - datetime.timedelta(self.cursor.weekday())
+        return [start + datetime.timedelta(i) for i in range(7)]
+
+    def dayEvents(self, date):
+        """Return events for a day sorted by start time"""
+        daycal = self.context.byDate(date)
+        events = [(e.dtstart, e) for e in daycal]
+        events.sort()
+        return [e for start, e in events]

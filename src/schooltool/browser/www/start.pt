@@ -37,6 +37,12 @@
   <p><a class="action" i18n:translate=""
         tal:attributes="href string:${view/person_url}/password.html">Change
      your password</a></p>
+  <p><a tal:attributes="href
+    string:http://localhost:7001${context/@@absolute_path}/calendar">
+    Your private calendar (iCal)</a>
+  <p><a tal:attributes="href
+    string:http://localhost:7001${context/@@absolute_path}/timetable-calendar">
+    Your read-only timetable calendar (iCal)</a>
   <p><a class="action" href="/logout" i18n:translate="">Log out</a></p>
 </div>
 
