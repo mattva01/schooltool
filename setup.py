@@ -372,6 +372,7 @@ elif package == 'schoolbell':
             'install_lib': install_lib},
         package_dir={'': 'src'},
         packages=['schoolbell', 'schoolbell.relationship',
-            'schoolbell.calendar', 'schoolbell.app', 'schoolbell.app.browser'],
+            'schoolbell.calendar', 'schoolbell.app', 'schoolbell.app.browser',
+            'schoolbell.app.generations'],
         data_files=data_files + [('', ['schoolbell.conf.in'])],
         scripts=['scripts/schoolbell'])
