@@ -1,0 +1,7 @@
+<html>
+<head><title tal:content="context/name">Person Name</title></head>
+<body>
+<h1 tal:content="context/name">Person Name</h1>
+<p>Information page for <span tal:replace="context/name">Person Name</span></p>
+</body>
+</html>

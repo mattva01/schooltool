@@ -30,6 +30,8 @@ class TestMiscFunctions(unittest.TestCase):
     def test_errorPage(self):
         from schooltool.main import errorPage
         class RequestStub:
+            def setHeader(self, header, value):
+                pass
             def setResponseCode(self, code, message):
                 self.code = code
                 self.message = message

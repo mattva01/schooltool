@@ -1,0 +1,11 @@
+<html>
+<head><title>People</title></head>
+<body>
+<h1>People</h1>
+<ul>
+  <li tal:repeat="person view/listNames"
+    ><a href="/people/person_name" tal:attributes="href string:/people/$person"
+       tal:content="person">person_name</a></li>
+</ul>
+</body>
+</html>

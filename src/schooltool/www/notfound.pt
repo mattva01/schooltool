@@ -1,0 +1,8 @@
+<html tal:define="title string:${code} - ${reason}">
+<head><title tal:content="title">404 - Not found</title></head>
+<body>
+  <h1 tal:content="title">404 - Not found</h1>
+  <p>The following resource does not exist: <span
+  tal:replace="request/uri">http://example.com/quux/</span></p>
+</body>
+</html>

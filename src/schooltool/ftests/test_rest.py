@@ -152,11 +152,22 @@ class TestPerson(ConnectionMixin, unittest.TestCase):
         self.assertEqual(response.status, 405)
 
 
+class TestNotFoundPage(ConnectionMixin, unittest.TestCase):
+    """Tests the 404 page."""
+
+    def test_get(self):
+        response = self.make_request("GET", "/nonexisting")
+        self.assertEqual(response.status, 404)
+        ctype = response.getheader("Content-Type")
+        self.assert_(ctype == "text/html" or ctype.startswith("text/html;"))
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestRootPage))
     suite.addTest(unittest.makeSuite(TestPeople))
     suite.addTest(unittest.makeSuite(TestPerson))
+    suite.addTest(unittest.makeSuite(TestNotFoundPage))
     return suite
 
 if __name__ == '__main__':

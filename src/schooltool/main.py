@@ -23,8 +23,10 @@ Schooltool HTTP server.
 
 from twisted.web import server, resource
 from twisted.internet import reactor
+from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 
 __metaclass__ = type
+
 
 #
 # Some fake content
@@ -41,9 +43,76 @@ class FakeApplication:
               'smith': FakePerson('smith'),
               'george': FakePerson('george')}
 
+
 #
-# HTTP views
+# Page templates
 #
+
+class Template(PageTemplateFile):
+    """Page template file.
+
+    Character set for rendered pages can be set by changing the 'charset'
+    attribute.  You should not change the default (UTF-8) without a good
+    reason.  If the page template contains characters not representable
+    in the output charset, a UnicodeError will be raised when rendering.
+    """
+
+    charset = 'UTF-8'
+
+    def __call__(self, request, **kw):
+        """Renders the page template.
+
+        Any keyword arguments passed to this function will be accessible
+        in the page template namespace.
+        """
+        request.setHeader('Content-Type',
+                          'text/html; charset=%s' % self.charset)
+        context = self.pt_getContext()
+        context['request'] = request
+        context.update(kw)
+        return self.pt_render(context).encode(self.charset)
+
+
+#
+# HTTP view infrastructure
+#
+
+class ErrorView(resource.Resource):
+    """View for an error.
+
+    Rendering this view will set the appropriate HTTP status code and reason.
+    """
+
+    __super = resource.Resource
+    __super___init__ = __super.__init__
+
+    isLeaf = True
+
+    template = Template('www/error.pt')
+
+    def __init__(self, code, reason):
+        self.__super___init__()
+        self.code = code
+        self.reason = reason
+
+    def render(self, request):
+        request.setResponseCode(self.code, self.reason)
+        return self.template(request, code=self.code, reason=self.reason)
+
+
+class NotFoundView(ErrorView):
+    """View for a not found error.
+
+    This view should be used for HTTP status code 404.
+    """
+
+    template = Template('www/notfound.pt')
+
+
+def errorPage(request, code, reason):
+    """Renders a simple error page and sets the HTTP status code and reason."""
+    return ErrorView(code, reason).render(request)
+
 
 class View(resource.Resource):
     """View for a content component.
@@ -51,100 +120,92 @@ class View(resource.Resource):
     A View is a kind of a Resource in twisted.web sense, but it is really just
     a view for the actual resource, which is a content component.
 
-    Subclasses should override getChild for traversal and render for rendering.
+    Subclasses could provide the following methods and attributes:
+
+        template    attribute that contains a Template instance for rendering
+        _traverse   method that should return a view for a contained object
+                    or raise a KeyError
+
     """
 
     __super = resource.Resource
     __super___init__ = __super.__init__
+    __super_getChild = __super.getChild
 
     def __init__(self, context):
         self.__super___init__()
         self.context = context
 
-
-class RootView(View):
-
-    __super_getChild = View.getChild
-
     def getChild(self, name, request):
-        if name == '':
+        if name == '': # trailing slash in the URL?
             return self
-        if name == 'people':
-            return PeopleView(self.context)
+        try:
+            return self._traverse(name, request)
+        except KeyError:
+            return NotFoundView(404, "Not found")
         return self.__super_getChild(name, request)
+
+    def _traverse(self, name, request):
+        raise KeyError(name)
 
     def render(self, request):
         if request.method == 'GET':
-            # XXX use a page template
-            result = ["<html><head><title>SchoolTool prototype</title></head>"
-                      "<body><h1>Prototype</h1>"
-                      "<p>This is a very early prototype of a SchoolTool HTTP server.</p>"
-                      "<p>See a <a href=\"people\">list of persons</a></p>"
-                      "</body></html>"]
-            return "".join(result)
+            return self.template(request, view=self, context=self.context)
         else:
             return errorPage(request, 405, "Method not allowed")
 
 
-class PeopleView(View):
+#
+# Actual views
+#
 
-    __super_getChild = View.getChild
+class RootView(View):
+    """View for the application root."""
+
+    template = Template('www/root.pt')
+
+    def _traverse(self, name, request):
+        if name == 'people':
+            return PeopleView(self.context)
+        raise KeyError(name)
+
+
+class PeopleView(View):
+    """View for /people"""
+
+    template = Template('www/people.pt')
 
     def listNames(self):
+        """Lists the names of all persons known to the system.
+
+        Names are sorted in alphabetical order.
+        """
         people = self.context.people.items()
         people.sort()
         return [k for k, v in people]
 
-    def getChild(self, name, request):
-        if name == '':
-            return self
-        if name in self.context.people:
-            return PersonView(self.context.people[name])
-        return self.__super_getChild(name, request)
-
-    def render(self, request):
-        if request.method == 'GET':
-            # XXX use a page template
-            result = ["<html><head><title>People</title></head>"
-                      "<body><h1>People</h1><ul>"
-                     ] + ["<li><a href=\"/people/%s\">%s</li>" % (person, person)
-                          for person in self.listNames()
-                     ] + ["</ul></body></html>"]
-            return "".join(result)
-        else:
-            return errorPage(request, 405, "Method not allowed")
+    def _traverse(self, name, request):
+        person = self.context.people[name]
+        return PersonView(person)
 
 
 class PersonView(View):
+    """View for /people/person_name"""
 
-    def render(self, request):
-        if request.method == 'GET':
-            # XXX use a page template
-            name = self.context.name
-            result = ["<html><head><title>%s</title></head>" % name,
-                      "<body><h1>%s</h1>" % name,
-                      "<p>This is an informative page about %s</p>" % name,
-                      "</body></html>"]
-            return "".join(result)
-        else:
-            return errorPage(request, 405, "Method not allowed")
+    template = Template('www/person.pt')
 
 
-def errorPage(request, code, message):
-    """Convenience function for setting HTTP response code and formatting a
-    simple error page."""
-    # XXX use a page template
-    request.setResponseCode(code, message)
-    s = "%d - %s" % (code, message)
-    return ("<html><head><title>%s</title></head>"
-            "<body><h1>%s</h1></body></html>" % (s, s))
-
+#
+# Main loop
+#
 
 def main():
+    """Starts the SchoolTool mockup HTTP server on port 8080."""
     # XXX: hook up zconfig
     site = server.Site(RootView(FakeApplication()))
     reactor.listenTCP(8080, site)
     reactor.run()
+
 
 if __name__ == '__main__':
     main()
