@@ -45,7 +45,7 @@ class TraversalTestMixin:
 class AppSetupMixin(RegistriesSetupMixin):
 
     def setUpSampleApp(self):
-        from schooltool.model import Group, Person
+        from schooltool.model import Group, Person, Resource
         from schooltool.app import Application, ApplicationObjectContainer
         from schooltool.membership import Membership
         from schooltool import membership
@@ -54,12 +54,17 @@ class AppSetupMixin(RegistriesSetupMixin):
         app = Application()
         app['groups'] = ApplicationObjectContainer(Group)
         app['persons'] = ApplicationObjectContainer(Person)
+        app['resources'] = ApplicationObjectContainer(Resource)
         self.root = app['groups'].new("root", title="root")
         self.managers = app['groups'].new("managers", title="managers")
+        self.teachers = app['groups'].new("teachers", title="teachers")
         self.person = app['persons'].new("johndoe", title="John Doe")
         self.person2 = app['persons'].new("notjohn", title="Not John Doe")
         self.manager = app['persons'].new("manager", title="Manager")
+        self.teacher = app['persons'].new("teacher", title="Prof. Bar")
+        self.resource = app['resources'].new("resource", title="Kitchen sink")
 
         Membership(group=self.root, member=self.person)
         Membership(group=self.managers, member=self.manager)
+        Membership(group=self.teachers, member=self.teacher)
 
