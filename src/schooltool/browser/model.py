@@ -23,6 +23,9 @@ $Id$
 """
 
 import cgi
+import PIL.Image
+from StringIO import StringIO
+
 from schooltool.browser import View, Template
 from schooltool.browser import absoluteURL
 from schooltool.browser.auth import AuthenticatedAccess, ManagerAccess
@@ -30,8 +33,8 @@ from schooltool.component import FacetManager
 from schooltool.component import getRelatedObjects
 from schooltool.interfaces import IPerson
 from schooltool.interfaces import IGroup
+from schooltool.rest.infofacets import maxspect
 from schooltool.uris import URIMember, URIGroup
-
 
 __metaclass__ = type
 
@@ -83,6 +86,8 @@ class PersonEditView(View, PersonInfoMixin):
 
     template = Template('www/person_edit.pt')
 
+    canonical_photo_size = (240, 240)
+
     def do_POST(self, request):
         first_name = request.args['first_name'][0]
         last_name = request.args['last_name'][0]
@@ -94,10 +99,22 @@ class PersonEditView(View, PersonInfoMixin):
         infofacet.last_name = last_name
         infofacet.comment = comment
         if photo:
-            infofacet.photo = photo
+            infofacet.photo = self.processPhoto(photo)
 
         url = absoluteURL(request, self.context)
         return self.redirect(url, request)
+
+    def processPhoto(self, photo):
+        # XXX The code has been copy&pasted from
+        #     schooltool.rest.infofacets.PhotoView.do_PUT().
+        #     It does not have tests.
+        photo_file = StringIO(photo)
+        img = PIL.Image.open(photo_file)
+        size = maxspect(img.size, self.canonical_photo_size)
+        img2 = img.resize(size, PIL.Image.ANTIALIAS)
+        buf = StringIO()
+        img2.save(buf, 'JPEG')
+        return buf.getvalue()
 
 
 class GroupView(View, GetParentsMixin):

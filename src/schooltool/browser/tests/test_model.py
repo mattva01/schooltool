@@ -99,7 +99,7 @@ class TestPersonEditView(unittest.TestCase):
         self.assertEquals(self.info.first_name, u'I Changed')
         self.assertEquals(self.info.last_name, u'My Name Recently')
         self.assertEquals(self.info.comment, u'For various reasons.')
-        self.assertEquals(self.info.photo, 'P6\n1 1\n255\n\xff\xff\xff')
+        self.assert_('JFIF' in self.info.photo)
 
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
@@ -111,7 +111,7 @@ class TestPersonEditView(unittest.TestCase):
                                     'comment': u'For various reasons.',
                                     'photo': ''})
         view.do_POST(request)
-        self.assertEquals(self.info.photo, 'P6\n1 1\n255\n\xff\xff\xff')
+        self.assert_('JFIF' in self.info.photo)
 
 
 class TestPersonInfoMixin(unittest.TestCase):
