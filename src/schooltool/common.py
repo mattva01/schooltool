@@ -133,7 +133,7 @@ def parse_datetime(s):
 
 
 def dedent(text):
-    r"""Remove leading indentation from tripple quoted strings.
+    r"""Remove leading indentation from triple-quoted strings.
 
     Example:
 
