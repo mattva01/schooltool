@@ -119,6 +119,8 @@
       schema="schoolbell.app.interfaces.IGroup"
       content_factory="schoolbell.app.app.Group"
       permission="zope.ManageContent"
+      template="templates/group_add.pt"
+      class=".app.GroupAddView"
       />
 
   <addMenuItem

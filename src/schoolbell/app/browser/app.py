@@ -385,3 +385,9 @@ class PersonAddView(AddView):
         """See zope.app.container.interfaces.IAdding"""
         return zapi.absoluteURL(self.context, self.request)
 
+
+class GroupAddView(AddView):
+    """A view for adding a group."""
+
+    def nextURL(self):
+        return zapi.absoluteURL(self.context.context, self.request)
