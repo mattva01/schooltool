@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for wxWindows client
+Unit tests for guiclient.py
 """
 
 import unittest
@@ -88,7 +88,7 @@ class ResponseStub:
 class TestSchoolToolClient(unittest.TestCase):
 
     def test_get(self):
-        from schooltool.wxclient import SchoolToolClient
+        from schooltool.guiclient import SchoolToolClient
         path = '/path'
         body = 'spam'
         version = 'UnitTest/0.0'
@@ -109,7 +109,7 @@ class TestSchoolToolClient(unittest.TestCase):
         self.assert_(conn.closed)
 
     def test_get_with_errors(self):
-        from schooltool.wxclient import SchoolToolClient
+        from schooltool.guiclient import SchoolToolClient
         path = '/path'
         e = socket.error(23, 'out of spam')
         factory = ConnectionFactory(None, error=e)
@@ -124,7 +124,7 @@ class TestSchoolToolClient(unittest.TestCase):
         self.assert_(conn.closed)
 
     def test_tryToConnect(self):
-        from schooltool.wxclient import SchoolToolClient
+        from schooltool.guiclient import SchoolToolClient
         version = 'UnitTest/0.0'
         response = ResponseStub(200, 'OK', 'doesnotmatter', server=version)
         factory = ConnectionFactory(response)
@@ -135,7 +135,7 @@ class TestSchoolToolClient(unittest.TestCase):
         self.assertEquals(client.version, version)
 
     def test_setServer(self):
-        from schooltool.wxclient import SchoolToolClient
+        from schooltool.guiclient import SchoolToolClient
         server = 'example.com'
         port = 8081
         version = 'UnitTest/0.0'
@@ -153,7 +153,7 @@ class TestSchoolToolClient(unittest.TestCase):
         self.assertEquals(client.port, port)
 
     def test_parsePeopleList(self):
-        from schooltool.wxclient import SchoolToolClient
+        from schooltool.guiclient import SchoolToolClient
         body = (
             '<html>\n'
             '  <a href="/people/fred">Fred</a>\n'
@@ -166,7 +166,7 @@ class TestSchoolToolClient(unittest.TestCase):
         self.assertEquals(result, ['fred', 'barney'])
 
     def test_parsePeopleListEmpty(self):
-        from schooltool.wxclient import SchoolToolClient
+        from schooltool.guiclient import SchoolToolClient
         body = (
             '<html>\n'
             '  <a href="http://example.com/buy/our/stuff">Click this!</a>\n'
@@ -177,7 +177,7 @@ class TestSchoolToolClient(unittest.TestCase):
         self.assertEquals(result, [])
 
     def test_getListOfPersons(self):
-        from schooltool.wxclient import SchoolToolClient
+        from schooltool.guiclient import SchoolToolClient
         body = (
             '<html>\n'
             '  <a href="/people/fred">Fred</a>\n'
@@ -197,7 +197,7 @@ class TestSchoolToolClient(unittest.TestCase):
         self.assertEquals(conn.path, '/people')
 
     def test_getListOfPersons_with_errors(self):
-        from schooltool.wxclient import SchoolToolClient
+        from schooltool.guiclient import SchoolToolClient
         version = 'UnitTest/0.0'
         e = socket.error(23, 'out of persons')
         factory = ConnectionFactory(None, error=e)
@@ -207,7 +207,7 @@ class TestSchoolToolClient(unittest.TestCase):
         self.assertEquals(result, [])
 
     def test_getPersonInfo(self):
-        from schooltool.wxclient import SchoolToolClient
+        from schooltool.guiclient import SchoolToolClient
         body = (
             '<html>\n'
             '  <h1>Foo!</h1>\n'

@@ -33,68 +33,9 @@ the Free Software Foundation; either version 2 of the License, or
 
 from wxPython.wx import *
 from wxPython.html import wxHtmlWindow
-import httplib
-import socket
-from htmllib import HTMLParser
-from formatter import AbstractFormatter, NullWriter
+from guiclient import SchoolToolClient
 
 __metaclass__ = type
-
-
-class SchoolToolClient:
-
-    connectionFactory = httplib.HTTPConnection
-
-    server = 'localhost'
-    port = 8080
-    status = ''
-
-    def setServer(self, server, port):
-        self.server = server
-        self.port = port
-        self.tryToConnect()
-
-    def tryToConnect(self):
-        self.get('/')
-
-    def get(self, path):
-        conn = self.connectionFactory(self.server, self.port)
-        try:
-            conn.request("GET", path)
-            response = conn.getresponse()
-            body = response.read()
-            conn.close()
-            self.status = "%d %s" % (response.status, response.reason)
-            self.version = response.getheader('Server')
-            return body
-        except socket.error, e:
-            conn.close()
-            self.status = str(e)
-            self.version = ''
-            return None
-
-    def getListOfPersons(self):
-        people = self.get('/people')
-        if people is not None:
-            return self.parsePeopleList(people)
-        else:
-            return []
-
-    def parsePeopleList(self, body):
-        people = []
-        parser = HTMLParser(AbstractFormatter(NullWriter()))
-        parser.feed(body)
-        parser.close()
-        for anchor in parser.anchorlist:
-            if anchor.startswith('/people/'):
-                person = anchor[len('/people/'):]
-                if '/' not in person:
-                    people.append(person)
-        return people
-
-    def getPersonInfo(self, person_id):
-        person = self.get('/people/%s' % person_id)
-        return person
 
 
 class ServerSettingsDlg(wxDialog):
