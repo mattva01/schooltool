@@ -335,10 +335,17 @@
       file="resources/icon.png"
       />
 
+  <!-- XXX resources are global for all Zope 3, we should use more specific
+       names -->
+
   <resource name="layout.css" file="resources/layout.css" />
   <resource name="style.css" file="resources/style.css" />
   <resource name="logo.png" file="resources/schoolbell.png" />
   <resource name="schoolbell.js" file="resources/schoolbell.js" />
+
+  <resource name="previous.png" file="resources/previous.png" />
+  <resource name="current.png" file="resources/current.png" />
+  <resource name="next.png" file="resources/next.png" />
 
 <!-- Navigation -->
 

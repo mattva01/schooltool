@@ -26,18 +26,23 @@
           <a id="calendar-navigation-context-previous"
              tal:attributes="href python:view.calURL('weekly',
                                                       view.prevWeek())"
-             i18n:translate="">Previous week</a>
+             ><img border="0" src="previous.png" alt="<<"
+                   tal:attributes="src context/++resource++previous.png" />
+              Previous week</a>
         </td>
         <td align="center">
           <a id="calendar-navigation-context-current"
              tal:attributes="href request/URL"
-             i18n:translate="">Current week</a>
+             ><img border="0" src="current.png" alt=""
+                   tal:attributes="src context/++resource++current.png" />
+              Current week</a>
         </td>
         <td align="right" width="33%">
           <a id="calendar-navigation-context-next"
              tal:attributes="href python:view.calURL('weekly',
                                                      view.nextWeek())"
-             i18n:translate="">Next week</a>
+             >Next week <img border="0" src="next.png" alt=">>"
+                   tal:attributes="src context/++resource++next.png" /></a>
         </td>
       </tr>
     </table>
