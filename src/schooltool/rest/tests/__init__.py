@@ -27,9 +27,8 @@ from twisted.protocols import http
 from twisted.internet.address import IPv4Address
 from schooltool.interfaces import IUtility
 from schooltool.security import SecurityPolicy
-# XXX reexport?
-from schooltool.tests.utils import setPath, TraversableRoot
-from schooltool.tests.utils import TraversableStub, LocationStub
+from schooltool.tests.utils import setPath, TraversableRoot       # reexport
+from schooltool.tests.utils import TraversableStub, LocationStub  # reexport
 
 
 __metaclass__ = type
