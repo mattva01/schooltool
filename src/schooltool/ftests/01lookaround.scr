@@ -759,13 +759,13 @@ Content-Type: text/xml; charset=UTF-8
 
 SchoolTool> get /applog?filter=log+line+12
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Ftest log line 12
 
 
 SchoolTool> get /applog?pagesize=10&page=1
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Ftest log line 1
 Ftest log line 2
 Ftest log line 3
@@ -780,7 +780,7 @@ Ftest log line 10
 
 SchoolTool> get /applog?pagesize=10&page=2
 200 OK
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Ftest log line 11
 Ftest log line 12
 Ftest log line 13
