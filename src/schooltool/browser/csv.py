@@ -91,29 +91,41 @@ class CSVImporterZODB(CSVImporterBase):
             other = self.groups[parent]
             Membership(group=other, member=group)
         for facet_name in facets.split():
-            factory = getFacetFactory(facet_name)
-            facet = factory() # XXX exceptions
+            try:
+                factory = getFacetFactory(facet_name)
+            except KeyError:
+                raise DataError(_("Unknown facet type: %s") % facet_name)
+            facet = factory()
             FacetManager(group).setFacet(facet, name=factory.facet_name)
         return group.__name__
 
     def importPerson(self, title, parent, groups, teaching=False):
         person = self.persons.new(title=title)
         if parent:
-            Membership(group=self.groups[parent], member=person)
+            try:
+                Membership(group=self.groups[parent], member=person)
+            except KeyError:
+                raise DataError(_("Invalid group: %s") % parent)
 
-        if not teaching:
-            for group in groups.split():
-                Membership(group=self.groups[group], member=person)
-        else:
-            for group in groups.split():
-                Teaching(teacher=person, taught=self.groups[group])
+        try:
+            if not teaching:
+                for group in groups.split():
+                    Membership(group=self.groups[group], member=person)
+            else:
+                for group in groups.split():
+                    Teaching(teacher=person, taught=self.groups[group])
+        except KeyError:
+            raise DataError(_("Invalid group: %s") % group)
 
         return person.__name__
 
     def importResource(self, title, groups):
         resource = self.resources.new(title=title)
         for group in groups.split():
-            other = traverse(self.groups, group) # XXX exceptions
+            try:
+                other = self.groups[group]
+            except KeyError:
+                raise DataError(_("Invalid group: %s") % group)
             Membership(group=other, member=resource)
         return resource.__name__
 
@@ -121,8 +133,11 @@ class CSVImporterZODB(CSVImporterBase):
         person = self.persons[name]
         infofacet = FacetManager(person).facetByName('person_info')
 
-        # XXX B0rks when title is one word.
-        infofacet.first_name, infofacet.last_name = title.split(None, 1)
+        try:
+            infofacet.first_name, infofacet.last_name = title.split(None, 1)
+        except ValueError:
+            infofacet.first_name = ''
+            infofacet.last_name = title
 
         infofacet.dob = parse_date(dob)
         infofacet.comment = comment

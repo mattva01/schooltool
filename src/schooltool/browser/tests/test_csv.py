@@ -173,6 +173,12 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(TeacherGroupFacet in classes)
         self.assert_(SubjectGroupFacet in classes)
 
+    def test_importGroup_errors(self):
+        from schooltool.browser.csv import DataError
+        self.assertRaises(DataError, self.im.importGroup,
+                          'gr1', 'A tiny group', 'group1 group2', 'b0rk')
+
+
     def test_importPerson(self):
         name = self.im.importPerson('Smith', 'group1', 'group2')
         person = self.persons[name]
@@ -194,6 +200,17 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assert_(self.group1 in objs)
         self.assert_(self.group2 in objs)
 
+    def test_importPerson_errors(self):
+        from schooltool.browser.csv import DataError
+        self.assertRaises(DataError, self.im.importPerson,
+                          'Smith', 'invalid_group', 'group2')
+        self.assertRaises(DataError, self.im.importPerson,
+                          'Smith', 'group1', 'invalid_group')
+        self.assertRaises(DataError, self.im.importPerson,
+                          'Smith', 'invalid_group', 'group2', True)
+        self.assertRaises(DataError, self.im.importPerson,
+                          'Smith', 'group1', 'invalid_group', True)
+
     def test_importResource(self):
         name = self.im.importResource('Stool', 'group1 group2')
         resource = self.resources[name]
@@ -203,6 +220,11 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(len(objs), 2)
         self.assert_(self.group1 in objs)
         self.assert_(self.group2 in objs)
+
+    def test_importResource_errors(self):
+        from schooltool.browser.csv import DataError
+        self.assertRaises(DataError, self.im.importResource,
+                          'Resource', 'group1 invalid_group group2')
 
     def test_importPersonInfo(self):
         from schooltool.component import FacetManager
@@ -214,6 +236,14 @@ class TestCSVImporterZODB(RegistriesSetupMixin, unittest.TestCase):
         self.assertEquals(info.last_name, 'Bayer')
         self.assertEquals(info.dob, datetime.date(1922, 12, 12))
         self.assertEquals(info.comment, 'Wazzup?')
+
+    def test_importPersonInfo2(self):
+        from schooltool.component import FacetManager
+        self.im.importPersonInfo('person1', 'Anonymous',
+                                 '1922-12-12', 'Wazzup?')
+        info = FacetManager(self.person1).facetByName('person_info')
+        self.assertEquals(info.first_name, '')
+        self.assertEquals(info.last_name, 'Anonymous')
 
 
 def test_suite():
