@@ -1,4 +1,4 @@
-SCHOOLTOOL GUI GUIDE
+SchoolTool GUI Guide
 ====================
 
 To start the SchoolTool GUI client, first install or unpack the software.
@@ -32,7 +32,7 @@ In this document, we use the following conventions:
   to select.
 
 
-ORGANISATIONAL STRUCTURE
+Organisational Structure
 ------------------------
 
 SchoolTool represents a school's organisational structure as a tree of groups,
@@ -54,7 +54,7 @@ side by choosing the "Remove Relationship" from the context menu of a
 relationship.
 
 
-ABSENCE TRACKING
+Absence Tracking
 ----------------
 
 A roll-call is an act of finding out which members of a group are absent
@@ -82,7 +82,7 @@ and choose "Absence Tracker".  Later, you can use the same menu item to view
 the absences collected in the tracker.
 
 
-TIMETABLES
+Timetables
 ----------
 
 A timetable is a matrix describing the activities that occur during the periods
@@ -123,7 +123,7 @@ same resource for two activities at the same time) are represented and no
 attempt is given to try to resolve them.
 
 
-CALENDARS
+Calendars
 ---------
 
 A calendar applies to a particular range of dates, and describes the events
@@ -135,12 +135,12 @@ person's composite timetable.
 
 Mozilla Calendar or a similar calendaring application has to be used
 to access the calendars.  A list of all calendars, available at
-http://localhost:8080/calendars.html (if the SchoolTool server is
-running on localhost port 8080) can be helpful in adding a calendar
+http://localhost:7001/calendars.html (if the SchoolTool server is
+running on localhost port 7001) can be helpful in adding a calendar
 to the calendaring application.
 
 
-RESOURCE SEARCH AND BOOKING
+Resource Search and Booking
 ---------------------------
 
 A resource is something that is not a person or a group that can have its
@@ -164,7 +164,7 @@ of the resource and of the person booking.  The booking is cancelled
 if the booking event is deleted in the person's private calendar.
 
 
-SECURITY
+Security
 --------
 
 There are three kinds of users:  Pupils, Teachers, and Managers.
