@@ -508,7 +508,6 @@ class TimePeriodService(Persistent):
 
 
 def setUp():
-    registerTimetableModel('schooltool.timetable.SequentialDaysTimetableModel',
+    registerTimetableModel('SequentialDaysTimetableModel',
                            SequentialDaysTimetableModel)
-    registerTimetableModel('schooltool.timetable.WeeklyTimetableModel',
-                           WeeklyTimetableModel)
+    registerTimetableModel('WeeklyTimetableModel', WeeklyTimetableModel)

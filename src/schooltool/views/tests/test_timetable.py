@@ -616,7 +616,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
 
     duplicate_day_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-          <model factory="schooltool.timetable.SequentialDaysTimetableModel">
+          <model factory="SequentialDaysTimetableModel">
             <daytemplate id="Normal">
               <used when="default" />
               <period id="A" tstart="9:00" duration="60" />
@@ -638,7 +638,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
 
     duplicate_period_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-          <model factory="schooltool.timetable.SequentialDaysTimetableModel">
+          <model factory="SequentialDaysTimetableModel">
             <daytemplate id="Normal">
               <used when="default" />
               <period id="A" tstart="9:00" duration="60" />
@@ -658,7 +658,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
 
     bad_time_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-          <model factory="schooltool.timetable.SequentialDaysTimetableModel">
+          <model factory="SequentialDaysTimetableModel">
             <daytemplate id="Normal">
               <used when="default" />
               <period id="A" tstart="9:00:00" duration="60" />
@@ -675,7 +675,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
 
     bad_model_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-          <model factory="schooltool.timetable.Nonexistent">
+          <model factory="Nonexistent">
             <daytemplate id="Normal">
               <used when="default" />
               <period id="A" tstart="9:00" duration="60" />
@@ -692,7 +692,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
 
     bad_dur_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-          <model factory="schooltool.timetable.SequentialDaysTimetableModel">
+          <model factory="SequentialDaysTimetableModel">
             <daytemplate id="Normal">
               <used when="default" />
               <period id="A" tstart="9:00" duration="1h" />
@@ -709,7 +709,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
 
     bad_weekday_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-          <model factory="schooltool.timetable.SequentialDaysTimetableModel">
+          <model factory="SequentialDaysTimetableModel">
             <daytemplate id="Normal">
               <used when="froday" />
               <period id="A" tstart="9:00" duration="1h" />
@@ -759,7 +759,7 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
 
     schema_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-          <model factory="schooltool.timetable.SequentialDaysTimetableModel">
+          <model factory="SequentialDaysTimetableModel">
             <daytemplate>
               <used when="default" />
               <period id="A" tstart="9:00" duration="60" />
@@ -871,6 +871,25 @@ class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['Content-Type'], "text/plain")
         self.assertEquals(service[key], self.createEmpty())
+
+    def test_roundtrip(self):
+        from schooltool.timetable import TimetableSchemaService
+        from schooltool.timetable import setUp
+        setUp()
+        key = 'weekly'
+        service = TimetableSchemaService()
+        view = self.createView(None, service, key)
+        request = RequestStub(method="PUT", body=self.schema_xml,
+                              headers={'Content-Type': 'text/xml'})
+        view.render(request)
+
+        view2 = self.createView(service[key], service, key)
+
+        request = RequestStub()
+        result = view2.render(request)
+        request = RequestStub(method="PUT", body=result,
+                              headers={'Content-Type': 'text/xml'})
+        self.assertEquals(request.code, 200)
 
     def do_test_error(self, xml=None, ctype='text/xml'):
         from schooltool.timetable import TimetableSchemaService
