@@ -568,15 +568,18 @@ class Server:
                             listen
                             database
                             event_logging
+                            pid_file
         """
         # Defaults
         config_file = self.findDefaultConfigFile()
         self.appname = 'schooltool'
         self.viewFactory = getView
         self.appFactory = self.createApplication
+        self.daemon = False
 
         # Process command line arguments
-        opts, args = getopt.getopt(args, 'c:hm', ['config=', 'help'])
+        opts, args = getopt.getopt(args, 'c:hmd',
+                                   ['config=', 'help', 'daemon'])
 
         for k, v in opts:
             if k in ('-h', '--help'):
@@ -603,6 +606,10 @@ class Server:
 
         # Process any command line arguments that may override config file
         # settings here.
+
+        for k, v in opts:
+            if k in ('-d', '--daemon'):
+                self.daemon = True
 
     def help(self):
         """Prints a help message."""
@@ -667,11 +674,43 @@ class Server:
             self.reactor_hook.listenTCP(port, site, interface=interface)
             self.notifyServerStarted(interface, port)
 
+
+        if self.daemon:
+            # Do the double fork
+            pid = os.fork()
+            if pid:
+                sys.exit(0)
+            os.setsid()
+            os.umask(077)
+
+            pid = os.fork()
+            if pid:
+                self.notifyDaemonized(pid)
+                sys.exit(0)
+
+            # Close standard I/O
+            os.close(0)
+            os.close(1)
+            os.close(2)
+            os.open('/dev/null', os.O_RDWR)
+            os.dup(0)
+            os.dup(0)
+
+        if self.config.pid_file:
+            pidfile = file(self.config.pid_file, "w")
+            print >> pidfile, os.getpid()
+            pidfile.close()
+
         # Call suggestThreadPoolSize at the last possible moment, because it
         # will create a number of non-daemon threads and will prevent the
         # application from exitting on errors.
         self.reactor_hook.suggestThreadPoolSize(self.config.thread_pool_size)
         self.reactor_hook.run()
+
+        self.notifyShutdown()
+        # Cleanup on signals TERM, INT and BREAK
+        if self.config.pid_file:
+            os.unlink(self.config.pid_file)
 
     def prepareDatabase(self):
         """Prepare the database.
@@ -754,6 +793,13 @@ class Server:
     def notifyServerStarted(self, network_interface, port):
         print >> self.stdout, (_("Started HTTP server on %s:%s")
                                % (network_interface or "*", port))
+
+    def notifyDaemonized(self, pid):
+        print >> self.stdout, (_("Going background, daemon pid %d")
+                               % pid)
+
+    def notifyShutdown(self):
+        print >> self.stdout, (_("Shutting down"))
 
 
 def setUpModules(module_names):

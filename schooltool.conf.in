@@ -54,6 +54,15 @@
 #
 
 #
+# pid-file
+#
+#   Specifies the path of a pid file.
+#
+# Default: None
+
+pid-file schooltool.pid
+
+#
 # <zodb>
 #   ...
 # </zodb>
