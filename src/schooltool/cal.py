@@ -801,9 +801,12 @@ class MonthlyRecurrenceRule(RecurrenceRule):
             raise NotImplementedError(self.monthly)
 
 
+#
+# Calendaring functions
+#
 
 def weekspan(first, second):
-    """Returns the distance in weeks between dates.
+    """Return the distance in weeks between dates.
 
     For days in the same ISO week, the result is 0.
     For days in adjacent weeks, it is 1, etc.
@@ -814,7 +817,7 @@ def weekspan(first, second):
 
 
 def monthindex(year, month, index, weekday):
-    """Returns the index-th weekday of the month in a year.
+    """Return the (index)th weekday of the month in a year.
 
     May return a date beyond month if index is too big.
     """

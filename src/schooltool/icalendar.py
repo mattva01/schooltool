@@ -343,6 +343,7 @@ def _parse_recurrence_weekly(args):
             weekdays.append(ical_weekdays.index(day))
     return WeeklyRecurrenceRule(weekdays=weekdays)
 
+
 def _parse_recurrence_monthly(args):
     """Parse iCalendar monthly recurrence rule.
 

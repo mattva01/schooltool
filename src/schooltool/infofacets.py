@@ -24,7 +24,7 @@ $Id$
 
 from persistent import Persistent
 from zope.interface import implements
-from schooltool.interfaces import IPersonInfoFacet, IAddressInfoFacet 
+from schooltool.interfaces import IPersonInfoFacet, IAddressInfoFacet
 
 
 __metaclass__ = type

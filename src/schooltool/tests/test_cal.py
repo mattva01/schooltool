@@ -28,7 +28,7 @@ import calendar
 from datetime import date, timedelta, datetime
 from zope.interface.verify import verifyObject
 from schooltool.tests.utils import EqualsSortedMixin, LinkStub
-from schooltool.tests.utils import RegistriesSetupMixin, EventServiceTestMixin
+from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.interfaces import ISchooldayModel
 
 
@@ -724,7 +724,7 @@ class TestCalendarOwnerMixin(RegistriesSetupMixin, unittest.TestCase):
         assert com.calendar.acl.allows(com, AddPermission)
 
     def test_makeCompositeCalendar(self):
-        from schooltool.cal import CalendarOwnerMixin, Calendar, CalendarEvent
+        from schooltool.cal import CalendarOwnerMixin, CalendarEvent
         from schooltool.cal import DailyRecurrenceRule
         from schooltool.model import Group
         from schooltool.relationship import RelatableMixin
@@ -896,7 +896,6 @@ class TestDailyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         result = list(rule.apply(ev, date(2004, 10, 20)))
         self.assertEqual(result, [date(2004, 10, 13), date(2004, 10, 14),
                                   date(2004, 10, 15)])
-
 
 
 class TestYearlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):

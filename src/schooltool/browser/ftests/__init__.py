@@ -22,6 +22,7 @@ The schooltool.browser.ftests package.
 
 import urllib
 
+
 #
 # Helper classes and functions
 #

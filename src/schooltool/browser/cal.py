@@ -45,11 +45,10 @@ from schooltool.component import getOptions
 from schooltool.component import getTimePeriodService
 from schooltool.component import getTimetableSchemaService
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
-from schooltool.interfaces import IExpandedCalendarEvent
 from schooltool.interfaces import ITimetableCalendarEvent
 from schooltool.interfaces import IExceptionalTTCalendarEvent
 from schooltool.interfaces import IInheritedCalendarEvent
-from schooltool.interfaces import ModifyPermission, ViewPermission
+from schooltool.interfaces import ModifyPermission
 from schooltool.interfaces import IDailyRecurrenceRule, IWeeklyRecurrenceRule
 from schooltool.interfaces import IYearlyRecurrenceRule, IMonthlyRecurrenceRule
 from schooltool.timetable import TimetableException, ExceptionalTTCalendarEvent
@@ -1694,6 +1693,7 @@ class CalendarEventView(View):
             return _("Busy block")
         elif self.context.privacy == "hidden":
             return _("Hidden")
+
 
 def durationValidator(value):
     """Check if duration is acceptable.

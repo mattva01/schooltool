@@ -527,9 +527,9 @@ class NoteAddView(View):
         if self.title_widget.error or self.body_widget.error:
             return self.do_GET(request)
 
-        obj = self.context.new(name, 
-                title=self.title_widget.value, 
-                body=self.body_widget.value, 
+        obj = self.context.new(name,
+                title=self.title_widget.value,
+                body=self.body_widget.value,
                 url=url)
 
         request.appLog(_("Object %s of type %s created") %

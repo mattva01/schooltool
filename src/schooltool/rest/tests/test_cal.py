@@ -57,7 +57,9 @@ def reorder_vcal(body):
     events.sort()
     return head + marker.join(events) + tail
 
+
 manager_marker = object()
+
 
 class CalendarTestBase(AppSetupMixin, unittest.TestCase):
 

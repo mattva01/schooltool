@@ -67,19 +67,22 @@ class TestOccupies(RegistriesSetupMixin, EventServiceTestMixin,
 
     def testRelationshipSchema(self):
         from schooltool.occupies import Occupies
-        from schooltool.uris import URIOccupies, URICurrentlyResides, URICurrentResidence
+        from schooltool.uris import URIOccupies
+        from schooltool.uris import URICurrentlyResides, URICurrentResidence
 
         address = Relatable(self.serviceManager)
         student = Relatable(self.serviceManager)
 
         Occupies(resides=address, residence=student)
 
-        self.assert_(address.listLinks(URICurrentResidence)[0].traverse() is student)
-        self.assert_(student.listLinks(URICurrentlyResides)[0].traverse() is address)
+        self.assert_(address.listLinks(URICurrentResidence)[0].traverse()
+                        is student)
+        self.assert_(student.listLinks(URICurrentlyResides)[0].traverse()
+                        is address)
 
     def testResidenceFacet(self):
         from schooltool.occupies import ResidenceFacet
-        from schooltool.uris import URIOccupies, URICurrentlyResides, URICurrentResidence
+        from schooltool.uris import URIOccupies, URICurrentResidence
         from schooltool.interfaces import IFacet, IRelationshipValencies
 
         facet = ResidenceFacet()

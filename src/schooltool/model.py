@@ -214,6 +214,7 @@ class Note:
         self.__name__ = None
         self.__parent__ = None
 
+
 class Address(FacetedEventTargetMixin,
               RelationshipValenciesMixin):
 

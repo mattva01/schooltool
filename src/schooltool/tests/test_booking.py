@@ -30,10 +30,7 @@ from schooltool.tests.utils import AppSetupMixin
 
 class TestTimetableResourceSynchronizer(AppSetupMixin,
                                          unittest.TestCase):
-    """Tests for TimetableResourceSynchronizer.
-
-    The text fixture for this class 
-    """
+    """Tests for TimetableResourceSynchronizer."""
 
     def setUp(self):
         from schooltool.timetable import Timetable

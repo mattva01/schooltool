@@ -90,7 +90,6 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
         self.app.timetableSchemaService['default'] = Timetable([])
         self.app.timetableSchemaService['another'] = Timetable([])
 
-
     def test(self):
         from schooltool.browser.app import PersonView
         view = PersonView(self.person)

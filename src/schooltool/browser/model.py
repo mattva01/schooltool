@@ -577,7 +577,6 @@ class NoteView(View, GetParentsMixin, AppObjectBreadcrumbsMixin):
             raise KeyError(name)
 
 
-
 class PhotoView(View):
     """View for displaying a person's photo (/persons/id/photo.jpg)."""
 

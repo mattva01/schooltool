@@ -22,7 +22,6 @@ Data entry widgets for SchoolTool web application views.
 $Id$
 """
 
-import cgi
 import datetime
 
 from zope.interface import Interface, Attribute, implements

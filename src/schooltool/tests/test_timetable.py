@@ -1228,7 +1228,6 @@ class TestTimetableDict(EventServiceTestMixin, unittest.TestCase):
 
     def test_clear(self):
         from schooltool.timetable import TimetableDict
-        from schooltool.interfaces import ITimetableReplacedEvent
         td = TimetableDict()
         td.__parent__ = self.eventService
         td['a', 'b'] = PersistentLocatableStub()

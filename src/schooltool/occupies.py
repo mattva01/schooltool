@@ -31,7 +31,8 @@ from schooltool.facet import FacetMixin
 __metaclass__ = type
 
 Occupies = RelationshipSchema(URIOccupies,
-                              resides=URICurrentlyResides, residence=URICurrentResidence)
+                              resides=URICurrentlyResides,
+                              residence=URICurrentResidence)
 
 
 class ResidenceFacet(FacetMixin, RelationshipValenciesMixin):

@@ -256,7 +256,6 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
 
     def test_update(self):
         from schooltool.browser.cal import CalendarViewBase
-        from schooltool.model import Person
 
         view = CalendarViewBase(None)
         view.request = RequestStub()
@@ -269,7 +268,6 @@ class TestCalendarViewBase(AppSetupMixin, unittest.TestCase):
 
     def test_urls(self):
         from schooltool.browser.cal import CalendarViewBase
-        from schooltool.model import Person
 
         person = self.app['persons'].new('boss', title="Da Boss")
         cal = createCalendar()
@@ -860,6 +858,7 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         self.assert_("Da Boss" in content)
         self.assert_("Stuff happens" in content)
 
+
 class DefaultTimetableSetup(AppSetupMixin):
 
     def setUp(self):
@@ -897,12 +896,10 @@ class DefaultTimetableSetup(AppSetupMixin):
 
         from schooltool.timetable import Timetable
         from schooltool.timetable import TimetableDay
-        from schooltool.timetable import SequentialDaysTimetableModel
         schema = Timetable(days)
         for day, periods in zip(days, periods_for_each_day):
             schema[day] = TimetableDay(list(periods))
         return schema
-
 
 
 class TestDailyCalendarViewPeriods(DefaultTimetableSetup, NiceDiffsMixin,
@@ -937,6 +934,7 @@ class TestDailyCalendarViewPeriods(DefaultTimetableSetup, NiceDiffsMixin,
              ("17:00", dt('17:00'), timedelta(hours=1)),
              ("18:00", dt('18:00'), timedelta(hours=1)),
              ])
+
 
 class TestMonthlyCalendarView(AppSetupMixin, unittest.TestCase):
 
@@ -1658,7 +1656,6 @@ class TestEventEditView(AppSetupMixin, EventTimetableTestHelpers,
                           'daily.html?date=2004-08-16')
 
     def test_nosubmit(self):
-        from schooltool.cal import WeeklyRecurrenceRule
         view = self.createView()
         request = RequestStub(args={'event_id': "pick me",
                                     'title': 'Changed',
@@ -2189,7 +2186,7 @@ class TestEventDeleteViewWithRepeatingEvents(unittest.TestCase):
 
     def createCompositeView(self):
         from schooltool.cal import InheritedCalendarEvent
-        from schooltool.model import Group, Person
+        from schooltool.model import Group
         from schooltool.cal import DailyRecurrenceRule
 
         group = self.group = Group("A group")
@@ -2660,7 +2657,6 @@ class TestCalendarEventView(TraversalTestMixin, XMLCompareMixin,
         view.canView = lambda: False
         self.assertEquals(view.short(request),
                           'Busy (12:01&ndash;13:01)')
-
 
     def test_editLink_and_deleteLink(self):
         ev = createEvent('2004-12-01 12:01', '1h', 'Repeating event',

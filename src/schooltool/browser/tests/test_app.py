@@ -944,12 +944,12 @@ class TestResourceAddView(AppSetupMixin, unittest.TestCase):
 
 
 class TestNoteAddView(AppSetupMixin, unittest.TestCase):
-      
+
     def createView(self):
         from schooltool.browser.app import NoteAddView
         view = NoteAddView(self.app['notes'])
         return view
-    
+
     def test(self):
         view = self.createView()
         self.assertEquals(view.title, "Add note")
@@ -1150,7 +1150,6 @@ class TestOptionsView(AppSetupMixin, unittest.TestCase):
         self.assertEqual(request.code, 302)
         self.assertEqual(request.headers['location'],
                          'http://localhost:7001/')
-
 
     def test_do_POST_errors(self):
         view = self.createView()
