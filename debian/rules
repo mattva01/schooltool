@@ -98,6 +98,9 @@ install-stamp: build
 
 	install -m 755 -D -p debian/schooltool-server.py \
 		debian/$(common)/usr/bin/schooltool-server; \
+	install -m 644 -D -p debian/schooltool.logrotate \
+		debian/$(common)/etc/logrotate.d/schooltool
+	
 	for p in schooltool-client wxschooltool import-sampleschool; do \
 	    install -m 755 -D -p debian/$$p \
 		    debian/schooltool-clients/usr/bin/$$p; \
