@@ -15,7 +15,7 @@
     </div>
     <div class="groups">
       <h3 i18n:translate="">Groups</h3>
-      <p tal:repeat="sub python: view.getParentGroups(request)">
+      <p tal:repeat="sub view/getParentGroups">
        <a tal:attributes="href sub/url" tal:content="sub/title"/>
       </p>
     </div>

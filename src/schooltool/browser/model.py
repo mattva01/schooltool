@@ -49,9 +49,9 @@ __metaclass__ = type
 class GetParentsMixin:
     """A helper for Person and Group views."""
 
-    def getParentGroups(self, request):
+    def getParentGroups(self):
         """Return groups that context is a member of."""
-        return [{'url': absoluteURL(request, g), 'title': g.title}
+        return [{'url': absoluteURL(self.request, g), 'title': g.title}
                 for g in getRelatedObjects(self.context, URIGroup)]
 
 
@@ -233,15 +233,15 @@ class GroupView(View, GetParentsMixin):
             return GroupTeachersView(self.context)
         raise KeyError(name)
 
-    def getOtherMembers(self, request):
+    def getOtherMembers(self):
         """Return members that are not groups."""
-        return [{'url': absoluteURL(request, g), 'title': g.title}
+        return [{'url': absoluteURL(self.request, g), 'title': g.title}
                 for g in getRelatedObjects(self.context, URIMember)
                 if not IGroup.providedBy(g)]
 
-    def getSubGroups(self, request):
+    def getSubGroups(self):
         """Return members that are groups."""
-        return [{'url': absoluteURL(request, g), 'title': g.title}
+        return [{'url': absoluteURL(self.request, g), 'title': g.title}
                 for g in getRelatedObjects(self.context, URIMember)
                 if IGroup.providedBy(g)]
 
@@ -271,25 +271,25 @@ class GroupEditView(View):
 
     template = Template('www/group_edit.pt')
 
-    def list(self, request):
+    def list(self):
         """Return a list of member data as tuples
 
         (type, title, path, URL)
         """
         result = [(obj.__class__.__name__, obj.title, getPath(obj),
-                   absoluteURL(request, obj))
+                   absoluteURL(self.request, obj))
                   for obj in getRelatedObjects(self.context, URIMember)]
         result.sort()
         return result
 
-    def addList(self, request):
+    def addList(self):
         """Return a list of member data as tuples
 
         (type, title, path, URL)
         """
         result = []
 
-        searchstr = request.args['SEARCH'][0].lower()
+        searchstr = self.request.args['SEARCH'][0].lower()
         members = getRelatedObjects(self.context, URIMember)
 
         for path in ('/groups', '/persons', '/resources'):
@@ -297,11 +297,13 @@ class GroupEditView(View):
                 if (searchstr in obj.title.lower() and
                     obj not in members):
                     result.append((obj.__class__.__name__, obj.title,
-                                   getPath(obj), absoluteURL(request, obj)))
+                                   getPath(obj),
+                                   absoluteURL(self.request, obj)))
         result.sort()
         return result
 
-    def update(self, request):
+    def update(self):
+        request = self.request
         if "DELETE" in request.args:
             paths = []
             if "CHECK" in request.args:

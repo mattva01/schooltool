@@ -98,9 +98,9 @@ class TestPersonView(TraversalTestMixin, AppSetupMixin, NiceDiffsMixin,
 
     def test_getParentGroups(self):
         from schooltool.browser.model import PersonView
-        request = RequestStub()
         view = PersonView(self.person)
-        self.assertEquals(view.getParentGroups(request),
+        view.request = RequestStub()
+        self.assertEquals(view.getParentGroups(),
                           [{'url': 'http://localhost:7001/groups/root',
                             'title': 'root'}])
 
@@ -416,25 +416,25 @@ class TestGroupView(RegistriesSetupMixin, TraversalTestMixin,
 
     def test_getOtherMembers(self):
         from schooltool.browser.model import GroupView
-        request = RequestStub()
         view = GroupView(self.group)
-        self.assertEquals(view.getOtherMembers(request),
+        view.request = RequestStub()
+        self.assertEquals(view.getOtherMembers(),
                           [{'url': 'http://localhost:7001/persons/p',
                             'title': 'Pete'}])
 
     def test_getSubGroups(self):
         from schooltool.browser.model import GroupView
-        request = RequestStub()
         view = GroupView(self.group)
-        self.assertEquals(view.getSubGroups(request),
+        view.request = RequestStub()
+        self.assertEquals(view.getSubGroups(),
                           [{'url': 'http://localhost:7001/groups/sub',
                             'title': 'subgroup'}])
 
     def test_getParentGroups(self):
         from schooltool.browser.model import GroupView
-        request = RequestStub()
         view = GroupView(self.group)
-        self.assertEquals(view.getParentGroups(request),
+        view.request = RequestStub()
+        self.assertEquals(view.getParentGroups(),
                           [{'url': 'http://localhost:7001/groups/root',
                             'title': 'root'}])
 
@@ -504,40 +504,37 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
     def test_list(self):
         from schooltool.browser.model import GroupEditView
         view = GroupEditView(self.group)
-        request = RequestStub()
-        self.assertEquals(
-            view.list(request),
-            [('Group', 'subgroup', '/groups/sub',
-              'http://localhost:7001/groups/sub'),
-             ('Person', 'John', '/persons/j',
-              'http://localhost:7001/persons/j'),
-             ('Person', 'Pete', '/persons/p',
-              'http://localhost:7001/persons/p'),
-             ])
+        view.request = RequestStub()
+        self.assertEquals(view.list(),
+                          [('Group', 'subgroup', '/groups/sub',
+                            'http://localhost:7001/groups/sub'),
+                           ('Person', 'John', '/persons/j',
+                            'http://localhost:7001/persons/j'),
+                           ('Person', 'Pete', '/persons/p',
+                            'http://localhost:7001/persons/p'),
+                          ])
 
     def test_addList(self):
         from schooltool.browser.model import GroupEditView
         view = GroupEditView(self.group)
-        request = RequestStub(args={'SEARCH': ''})
-        self.assertEquals(
-            view.addList(request),
-            [('Group', 'Random group', '/groups/group2',
-              'http://localhost:7001/groups/group2'),
-             ('Group', 'Teachers', '/groups/new',
-              'http://localhost:7001/groups/new'),
-             ('Group', 'root', '/groups/root',
-              'http://localhost:7001/groups/root'),
-             ('Person', 'Longjohn', '/persons/lj',
-              'http://localhost:7001/persons/lj'),
-             ('Resource', 'Hall', '/resources/hall',
-              'http://localhost:7001/resources/hall')
-             ])
+        view.request = RequestStub(args={'SEARCH': ''})
+        self.assertEquals(view.addList(),
+                          [('Group', 'Random group', '/groups/group2',
+                            'http://localhost:7001/groups/group2'),
+                           ('Group', 'Teachers', '/groups/new',
+                            'http://localhost:7001/groups/new'),
+                           ('Group', 'root', '/groups/root',
+                            'http://localhost:7001/groups/root'),
+                           ('Person', 'Longjohn', '/persons/lj',
+                            'http://localhost:7001/persons/lj'),
+                           ('Resource', 'Hall', '/resources/hall',
+                            'http://localhost:7001/resources/hall')
+                          ])
 
-        request = RequestStub(args={'SEARCH': 'john'})
-        self.assertEquals(
-            view.addList(request),
-            [('Person', 'Longjohn', '/persons/lj',
-            'http://localhost:7001/persons/lj')])
+        view.request = RequestStub(args={'SEARCH': 'john'})
+        self.assertEquals(view.addList(),
+                          [('Person', 'Longjohn', '/persons/lj',
+                            'http://localhost:7001/persons/lj')])
 
     def test_update_DELETE(self):
         from schooltool.browser.model import GroupEditView
@@ -546,7 +543,8 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         view = GroupEditView(self.group)
         request = RequestStub(args={"DELETE":"Remove them",
                                     "CHECK": ['/groups/sub', '/persons/p']})
-        view.update(request)
+        view.request = request
+        view.update()
         self.assertEquals(getRelatedObjects(self.group, URIMember),
                           [self.per2])
         self.assertEquals(sorted(request.applog),
@@ -565,7 +563,8 @@ class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
         request = RequestStub(args={"FINISH_ADD":"Add selected",
                                     "CHECK": ['/groups/group2',
                                               '/persons/lj']})
-        view.update(request)
+        view.request = request
+        view.update()
         members = getRelatedObjects(self.group, URIMember)
         assert self.group2 in members
         assert self.per3 in members

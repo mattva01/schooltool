@@ -1,9 +1,9 @@
-<html metal:use-macro="view/macros/page">
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title">Edit person info</title>
+  <title metal:fill-slot="title" i18n:translate="">Edit person info</title>
 </head>
 <body>
-  <h1 metal:fill-slot="h1">
+  <h1 metal:fill-slot="h1" i18n:translate="">
     Edit person info for <span tal:replace="context/title"/>
   </h1>
   <metal:block metal:fill-slot="content" tal:define="info view/info">

@@ -1,21 +1,21 @@
-<html metal:use-macro="view/macros/page">
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title">Server Error</title>
+  <title metal:fill-slot="title" i18n:translate="">Server Error</title>
 </head>
 <body>
-<h1 metal:fill-slot="h1">Server Error</h1>
+<h1 metal:fill-slot="h1" i18n:translate="">Server Error</h1>
 <metal:block metal:fill-slot="content">
 
-<p>An internal server error has occurred.  This most likely means that you have
-found a bug in SchoolTool.  Please report it on <a
+<p i18n:translate="">An internal server error has occurred.  This most likely
+means that you have found a bug in SchoolTool.  Please report it on <a
 href="http://issues.schooltool.org">the issue tracker</a>.</p>
 
-<h2>Exception</h2>
+<h2 i18n:translate="">Exception</h2>
 
 <p><span class="exc_type" tal:content="context/value/__class__/__name__" />:
    <span class="exc_value" tal:content="context/value" /></p>
 
-<h2>Traceback</h2>
+<h2 i18n:translate="">Traceback</h2>
 
 <pre class="traceback" tal:content="structure view/traceback">
 </pre>
