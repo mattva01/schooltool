@@ -648,7 +648,7 @@ class TestTimetableReadWriteView(QuietLibxml2Mixin, TestTimetableReadView):
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.applog,
-                [(None, 
+                [(None,
                   "Timetable of John Smith (/john) for"
                   " 2003 fall, weekly, updated",
                   INFO)])
@@ -1075,9 +1075,8 @@ class TestTimetableSchemaView(RegistriesSetupMixin, QuietLibxml2Mixin,
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
-        self.assertEquals(request.applog, [(None,
-                                            'Timetable schema /ttservice/weekly updated',
-                                            INFO)])
+        self.assertEquals(request.applog,
+                [(None, 'Timetable schema /ttservice/weekly updated', INFO)])
         self.assertEquals(service[key], self.createEmpty())
 
     def test_roundtrip(self):

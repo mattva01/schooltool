@@ -168,6 +168,18 @@ class LoggerStub:
         self.log.append(msg)
 
 
+class AppLoggerStub:
+
+    def __init__(self):
+        self.applog = []
+
+    def log(self, level, msg):
+        self.applog.append((level, msg))
+
+    def warn(self, msg):
+        self.log(logging.WARN, msg)
+
+
 class TestSite(unittest.TestCase):
 
     def test(self):
@@ -195,7 +207,6 @@ class TestSite(unittest.TestCase):
         channel = site.buildProtocol(addr)
         self.assert_(channel.requestFactory is Request)
         self.assert_(channel.site is site)
-
 
 
 class TestAcceptParsing(unittest.TestCase):
@@ -550,14 +561,6 @@ class TestRequest(unittest.TestCase):
         request = Request('bla', 'bla')
         request.authenticated_user = None
 
-        class AppLoggerStub:
-
-            def __init__(self):
-                self.applog = []
-
-            def log(self, level, msg):
-                self.applog.append((level, msg))
-
         class UserStub:
             def __init__(self, username):
                 self.username = username
@@ -682,6 +685,7 @@ class TestRequest(unittest.TestCase):
             assert resource is path
             return body
         rq = self.newRequest(path, render_stub)
+        rq.applogger = AppLoggerStub()
         rq.zodb_conn = ConnectionStub()
         result = rq._generate_response()
         self.assertEquals(result, body)
@@ -709,10 +713,9 @@ class TestRequest(unittest.TestCase):
         self.assertEquals(rq.headers['www-authenticate'],
                           'basic realm="SchoolTool"')
 
-
-        #self.assertEquals(rq.applog,
-        #                  [(None, "", "Failed login, username: 'fred'", logging.WARNING),
-        #         (None, "", "Failed login, username: 'freq'", logging.WARNING)])
+        self.assertEquals(rq.applogger.applog,
+                  [(logging.WARNING, "Failed login, username: 'fred'"),
+                   (logging.WARNING, "Failed login, username: 'freq'")])
 
     # _handle_exception is tested indirectly, in test__process_on_exception
     # and test__process_many_conflict_errors

@@ -449,9 +449,8 @@ class Request(http.Request):
                 self.authenticated_user = self.site.authenticate(app,
                         self.getUser(), self.getPassword())
             except AuthenticationError:
-                logging.getLogger('schooltool.app').warn(
-                    _("Failed login, username: %r")
-                    % self.getUser(), logging.WARNING)
+                self.applogger.warn(_("Failed login, username: %r")
+                                    % self.getUser())
                 body = textErrorPage(self, _("Bad username or password"),
                                      code=401)
                 self.setHeader('Content-Length', len(body))
@@ -533,6 +532,7 @@ class Request(http.Request):
             username = self.authenticated_user.username
         self.applogger.log(level, "(%s) %s" % (username, message))
 
+
 class Site(http.HTTPFactory):
     """Site for serving requests based on ZODB"""
 
@@ -558,7 +558,6 @@ class Site(http.HTTPFactory):
         self.authenticate = authenticate
         self.applog_path = applog_path
         self.logger = logging.getLogger('schooltool.error')
-        self.applogger = logging.getLogger('schooltool.app')
 
     def buildProtocol(self, addr):
         channel = self.__super_buildProtocol(addr)

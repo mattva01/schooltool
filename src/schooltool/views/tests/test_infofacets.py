@@ -172,6 +172,7 @@ class TestPhotoView(unittest.TestCase):
 
         context = PersonInfoFacet()
         setPath(context, "/my/dog's/photo")
+        context.__parent__.title = 'Fido'
         view = PhotoView(context)
         view.authorization = lambda ct, rq: True
         request = RequestStub(method='PUT', body=photo,
@@ -179,7 +180,7 @@ class TestPhotoView(unittest.TestCase):
         result = view.render(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.applog,
-                          [(None, 'Photo added on None (/)', INFO)])
+                          [(None, 'Photo added on Fido (/)', INFO)])
         self.assert_(context.photo is not None)
 
     def test_put_errors(self):
@@ -204,16 +205,17 @@ class TestPhotoView(unittest.TestCase):
         from schooltool.views.infofacets import PhotoView
         from schooltool.infofacets import PersonInfoFacet
         context = PersonInfoFacet()
-        
+
         context.photo = '8-)'
         setPath(context, "/my/dog's/photo")
+        context.__parent__.title = 'Fido'
         view = PhotoView(context)
         view.authorization = lambda ct, rq: True
         request = RequestStub(method='DELETE')
         result = view.render(request)
         self.assertEquals(request.code, 200)
         self.assertEquals(request.applog,
-                          [(None, 'Photo removed from None (/)', INFO)])
+                          [(None, 'Photo removed from Fido (/)', INFO)])
         self.assert_(context.photo is None)
 
 

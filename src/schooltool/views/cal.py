@@ -382,8 +382,9 @@ class BookingView(View):
             ev = CalendarEvent(start, duration, title, owner, self.context)
             self.context.calendar.addEvent(ev)
             owner.calendar.addEvent(ev)
-            request.appLog(_("%s booked by %s at %s for %s") %
-                           (self.context.title, owner.title, start, duration))
+            request.appLog(_("%s (%s) booked by %s (%s) at %s for %s") %
+                           (getPath(self.context), self.context.title,
+                            getPath(owner), owner.title, start, duration))
             request.setHeader('Content-Type', 'text/plain')
             return _("OK")
         finally:

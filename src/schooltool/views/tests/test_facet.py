@@ -126,7 +126,7 @@ class TestFacetView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
         expected = "Facet /person/001 (FacetStub) removed"
         self.assertEquals(result, expected, "\n" + diff(expected, result))
         self.assertEquals(request.applog,
-                          [(None, "Facet /person/001 (FacetStub) removed", INFO)])
+                  [(None, "Facet /person/001 (FacetStub) removed", INFO)])
 
 
 class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
@@ -213,7 +213,8 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
         self.assertEquals(request.applog,
-              [(None, "Facet EventLogFacet created on /p1", INFO)])
+              [(None, "Facet /p1/facets/eventlog (EventLogFacet) created",
+                INFO)])
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
         baseurl = "http://localhost:7001/p1/facets/"

@@ -244,10 +244,10 @@ class TimetableReadWriteView(TimetableReadView):
             return notFoundPage(request)
         path = getPath(self.context)
         timetabled = self.context.__parent__.__parent__
-        msg = (_("Timetable of %s (%s) for %s, deleted") %
-               (timetabled.title, getPath(self.timetabled), ", ".join(self.key)))
         del self.timetabled.timetables[self.key]
-        request.appLog(msg)
+        request.appLog(_("Timetable of %s (%s) for %s, deleted") %
+                       (timetabled.title, getPath(self.timetabled),
+                        ", ".join(self.key)))
         request.setHeader('Content-Type', 'text/plain')
         return _("Deleted timetable")
 

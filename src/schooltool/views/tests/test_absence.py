@@ -212,7 +212,8 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
         self.assertEquals(request.applog,
-                [(None, 'Absence /person/absences/001 of Mr. Foo created', INFO)])
+                [(None, 'Absence /person/absences/001 of Mr. Foo created',
+                  INFO)])
         location = request.headers['location']
         self.assert_(location.startswith(baseurl),
                      "%r.startswith(%r) failed" % (location, baseurl))
@@ -246,7 +247,8 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         result = view.render(request)
 
         self.assertEquals(request.applog,
-                [(None, 'Absence /person/absences/001 of Mr. Foo updated', INFO)])
+                [(None, 'Absence /person/absences/001 of Mr. Foo updated',
+                  INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.reason, "OK")
         location = request.headers['location']
@@ -358,7 +360,8 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
         self.assertEquals(request.applog,
-                [(None,'Comment for absence /person/absences/001 of A Person added', INFO)])
+                [(None, 'Comment for absence /person/absences/001 of A Person'
+                        ' added', INFO)])
         self.assertEquals(result, "Comment added")
         comment = absence.comments[-1]
         self.assertEquals(comment.text, u"Foo \u2730")

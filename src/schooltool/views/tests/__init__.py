@@ -122,7 +122,6 @@ class TraversableRoot(TraversableStub):
 
     implements(IContainmentRoot)
 
-    title = None
 
 class LocatableStub:
     pass

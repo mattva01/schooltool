@@ -139,10 +139,8 @@ class FacetManagementView(View):
                            _("Could not create facet: %s") % e)
 
         location = absoluteURL(request, facet)
-        path = getPath(facet)
-        request.appLog(_("Facet %s created on %s") %
-                       (facet.__class__.__name__,
-                        getPath(self.context.__parent__)))
+        request.appLog(_("Facet %s (%s) created") %
+                       (getPath(facet), facet.__class__.__name__))
         request.setResponseCode(201, 'Created')
         request.setHeader('Content-Type', 'text/plain')
         request.setHeader('Location', location)

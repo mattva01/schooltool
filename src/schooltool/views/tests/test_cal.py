@@ -329,8 +329,7 @@ class TestSchooldayModelCalendarView(QuietLibxml2Mixin, CalendarTestBase):
         result = self.view.render(request)
         self.assertEquals(result, "Calendar imported")
         self.assertEquals(request.applog,
-                          [(None,
-                            'Schoolday Calendar /person/calendar updated', INFO)])
+                [(None, 'Schoolday Calendar /person/calendar updated', INFO)])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
@@ -706,7 +705,8 @@ class TestBookingView(RegistriesSetupMixin, QuietLibxml2Mixin,
         self.assertEquals(request.code, 200)
         self.assertEquals(request.applog,
                           [(self.manager,
-                            'Hall booked by John at 2004-01-01 10:00:00 for 1:30:00',
+                            "/resources/hall (Hall) booked by /persons/john"
+                            " (John) at 2004-01-01 10:00:00 for 1:30:00",
                             INFO)])
         self.assertEquals(len(list(self.person.calendar)), 1)
         self.assertEquals(len(list(self.resource.calendar)), 1)
