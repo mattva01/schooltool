@@ -99,25 +99,11 @@ class LookupAction(EventActionMixin):
                 action.handle(event, target)
 
 
-class DefinitelyAnAttributeDescriptor:
-
-    def __init__(self, attr):
-        self.attr = attr
-
-    def __get__(self, inst, cls=None):
-        if inst is None:
-            return self
-        else:
-            return self.attr
-
-    def __set__(self, inst, value):
-        self.attr = value
-
 class RouteToMembersAction(EventActionMixin):
 
     implements(IRouteToMembersAction)
 
-    getRelatedObjects = DefinitelyAnAttributeDescriptor(getRelatedObjects)
+    getRelatedObjects = staticmethod(getRelatedObjects)
 
     def handle(self, event, target):
         for member in self.getRelatedObjects(target, URIMember):
@@ -128,7 +114,7 @@ class RouteToGroupsAction(EventActionMixin):
 
     implements(IRouteToGroupsAction)
 
-    getRelatedObjects = DefinitelyAnAttributeDescriptor(getRelatedObjects)
+    getRelatedObjects = staticmethod(getRelatedObjects)
 
     def handle(self, event, target):
         for group in self.getRelatedObjects(target, URIGroup):
