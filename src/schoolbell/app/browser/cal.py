@@ -1258,7 +1258,8 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
         """Create an event.
 
         This method performs additional validation, because Zope 3 forms aren't
-        powerful enough.  If any errors are encountered, raises a WidgetsError.
+        powerful enough.  If any errors are encountered, a WidgetsError is
+        raised.
         """
         errors = []
         self._requireField("title", errors)
@@ -1320,6 +1321,7 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
     def add(self, event):
         """Add the event to a calendar."""
         self.context.addEvent(event)
+        self._redirectToDate = event.dtstart.date()
         return event
 
     def update(self):
@@ -1344,12 +1346,24 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
             # AddView.update() sets self.update_status and returns it.  Weird,
             # but let's copy that behavior.
             return self.update_status
+        elif 'CANCEL' in self.request:
+            self.update_status = ''
+            self.request.response.redirect(self.nextURL(date.today()))
+            return self.update_status
         else:
             return AddView.update(self)
 
-    def nextURL(self):
-        """Return the URL to be displayed after the add operation."""
-        return absoluteURL(self.context, self.request)
+    def nextURL(self, date=None):
+        """Return the URL to be displayed after the add operation.
+
+        If the date argument is specified, the user is redirected to that
+        particular day in the calendar.  Otherwise, the date is taken from
+        self._redirectToDate, which is set by add(). # XXX A bit hacky...
+        """
+        if date is None:
+            date = self._redirectToDate
+        url = absoluteURL(self.context, self.request)
+        return '%s/%s' % (url, date)
 
 
 class ICalendarEventEditForm(ICalendarEventAddForm):

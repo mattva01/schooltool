@@ -743,7 +743,7 @@ class CalendarEventAddTestView(CalendarEventAddView):
 def doctest_CalendarEventAddView_add():
     r"""Tests for CalendarEventAddView adding of new event.
 
-    Let's create a CalendarEventAddTestView
+    First, let's simply render the CalendarEventAddTestView.
 
         >>> view = CalendarEventAddTestView(Calendar(), TestRequest())
         >>> view.update()
@@ -786,7 +786,25 @@ def doctest_CalendarEventAddView_add():
         >>> view.request.response.getStatus()
         302
         >>> view.request.response.getHeaders()['Location']
-        'http://127.0.0.1/calendar'
+        'http://127.0.0.1/calendar/2004-08-13'
+
+    We can cowardly run away if we decide so, i.e., cancel our request.
+    In that case we are redirected to today's calendar.
+    # TODO: it would be better to redirect to the date the user was on
+    #       before he decided to add an event.
+
+        >>> request = TestRequest(form={'CANCEL': 'Cancel'})
+        >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
+        >>> view = CalendarEventAddTestView(calendar, request)
+        >>> view.update()
+        ''
+        >>> view.request.response.getStatus()
+        302
+        >>> location = view.request.response.getHeaders()['Location']
+        >>> expected = 'http://127.0.0.1/calendar/%s' % date.today()
+        >>> (location == expected) or location
+        True
 
     Let's try to add an event with an optional location field:
 
