@@ -22,16 +22,20 @@ Views for facets.
 $Id$
 """
 
+import libxml2
 import PIL.Image
 from cStringIO import StringIO
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IPersonInfoFacet
 from schooltool.component import registerView
+from schooltool.component import getPath
 from schooltool.views import View, Template
-from schooltool.views import notFoundPage
+from schooltool.views import notFoundPage, textErrorPage
 from schooltool.views.facet import FacetView
 from schooltool.views.auth import PublicAccess
+from schooltool.common import parse_date
+from schooltool.schema.rng import validate_against_schema
 
 __metaclass__ = type
 
@@ -44,11 +48,79 @@ class PersonInfoFacetView(FacetView):
     template = Template("www/infofacets.pt", content_type="text/xml")
     authorization = PublicAccess
 
+    schema = """<?xml version="1.0" encoding="UTF-8"?>
+        <grammar xmlns="http://relaxng.org/ns/structure/1.0"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 ns="http://schooltool.org/ns/model/0.1"
+                 datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+          <start>
+            <element name="person_info">
+              <element name="first_name"><text/></element>
+              <element name="last_name"><text/></element>
+              <element name="date_of_birth"><text/></element>
+              <element name="comment"><text/></element>
+              <optional>
+                <element name="photo">
+                  <attribute name="xlink:type">
+                    <value>simple</value>
+                  </attribute>
+                  <attribute name="xlink:href">
+                    <data type="anyURI"/>
+                  </attribute>
+                  <optional>
+                    <attribute name="xlink:title">
+                      <text/>
+                    </attribute>
+                  </optional>
+                </element>
+              </optional>
+            </element>
+          </start>
+        </grammar>
+    """
+
+    def path(self):
+        return getPath(self.context)
+
     def _traverse(self, name, request):
         if name == 'photo':
             return PhotoView(self.context)
         else:
             return FacetView._traverse(self, name, request)
+
+    def do_PUT(self, request):
+        xml = request.content.read()
+        try:
+            if not validate_against_schema(self.schema, xml):
+                return textErrorPage(request,
+                            "XML not valid according to schema")
+        except libxml2.parserError:
+            return textErrorPage(request, "Invalid XML")
+        doc = libxml2.parseDoc(xml)
+        xpathctx = doc.xpathNewContext()
+        try:
+            ns = 'http://schooltool.org/ns/model/0.1'
+            xpathctx.xpathRegisterNs('st', ns)
+
+            def extract(attr):
+                node = xpathctx.xpathEval('/st:person_info/st:%s' % attr)[0]
+                return node.content.strip()
+
+            self.context.first_name = extract('first_name')
+            self.context.last_name = extract('last_name')
+            self.context.comment = extract('comment')
+            date_of_birth = extract('date_of_birth')
+            if date_of_birth:
+                try:
+                    self.context.date_of_birth = parse_date(date_of_birth)
+                except ValueError, e:
+                    return textErrorPage(request, str(e))
+            else:
+                self.context.date_of_birth = None
+        finally:
+            doc.freeDoc()
+            xpathctx.xpathFreeContext()
+        return "Updated"
 
 
 class PhotoView(View):

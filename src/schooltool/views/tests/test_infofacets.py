@@ -23,8 +23,10 @@ $Id$
 """
 
 import unittest
+import datetime
 from zope.testing.doctestunit import DocTestSuite
 from schooltool.views.tests import RequestStub
+from schooltool.views.tests import setPath
 from schooltool.tests.utils import XMLCompareMixin
 
 __metaclass__ = type
@@ -42,11 +44,17 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
 
     def test(self):
         view = self.createView()
+        setPath(view.context, '/persons/007/facets/person_info')
         empty_xml = """
-            <facet active="active" owned="unowned">
-              <class>PersonInfoFacet</class>
-              <name></name>
-            </facet>
+            <person_info xmlns="http://schooltool.org/ns/model/0.1"
+                         xmlns:xlink="http://www.w3.org/1999/xlink">
+              <first_name/>
+              <last_name/>
+              <date_of_birth/>
+              <comment/>
+              <photo xlink:type="simple" xlink:title="Photo"
+                     xlink:href="/persons/007/facets/person_info/photo"/>
+            </person_info>
             """
         request = RequestStub('/person/000001/facets/person_info')
         result = view.render(request)
@@ -55,6 +63,54 @@ class TestPersonInfoFacetView(unittest.TestCase, XMLCompareMixin):
         self.assertEquals(request.headers['Content-Type'],
                           'text/xml; charset=UTF-8')
         self.assertEqualsXML(result, empty_xml)
+
+    def test_put(self):
+        from schooltool.infofacets import PersonInfoFacet
+        from schooltool.model import Person
+        body = """
+            <person_info xmlns="http://schooltool.org/ns/model/0.1">
+              <first_name>John</first_name>
+              <last_name>Smith</last_name>
+              <date_of_birth>1970-04-21</date_of_birth>
+              <comment>...</comment>
+            </person_info>
+            """
+        person = Person()
+        context = PersonInfoFacet()
+        context.__parent__ = person
+        view = self.createView(context)
+        view.authorization = lambda ct, rq: True
+        request = RequestStub(method='PUT', body=body,
+                              headers={'Content-Type': 'text/xml'})
+        result = view.render(request)
+        self.assertEquals(result, "Updated")
+        self.assertEquals(request.code, 200)
+        self.assertEquals(context.first_name, 'John')
+        self.assertEquals(context.last_name, 'Smith')
+        self.assertEquals(person.title, 'John Smith')
+        self.assertEquals(context.date_of_birth, datetime.date(1970, 4, 21))
+        self.assertEquals(context.comment, '...')
+
+        body2 = """
+            <person_info xmlns="http://schooltool.org/ns/model/0.1"
+                         xmlns:xlink="http://www.w3.org/1999/xlink">
+              <first_name/>
+              <last_name/>
+              <date_of_birth/>
+              <comment/>
+              <photo xlink:type="simple" xlink:title="Photo"
+                     xlink:href="/persons/007/facets/person_info/photo"/>
+            </person_info>
+            """
+        request = RequestStub(method='PUT', body=body2,
+                              headers={'Content-Type': 'text/xml'})
+        result = view.render(request)
+        self.assertEquals(result, "Updated")
+        self.assertEquals(request.code, 200)
+        self.assertEquals(context.first_name, '')
+        self.assertEquals(context.last_name, '')
+        self.assert_(context.date_of_birth is None)
+        self.assertEquals(context.comment, '')
 
     def test_traverse(self):
         from schooltool.infofacets import PersonInfoFacet
