@@ -1,11 +1,14 @@
-<html>
+<html xmlns:xlinks="http://www.w3.org/1999/xlink">
 <head>
   <title>SchoolTool prototype</title>
 </head>
 <body>
   <h1>Prototype</h1>
   <p>This is a very early prototype of a SchoolTool HTTP server.</p>
-  <p>See a <a href="people">list of persons</a></p>
+  <p>See a <a href="people"
+              xlinks:type="simple"
+              xlinks:title="List of persons"
+              xlinks:href="people">list of persons</a></p>
   <p>You are visitor #<span tal:replace="view/counter">0</span> here.</p>
 </body>
 </html>

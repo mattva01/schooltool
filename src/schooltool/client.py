@@ -25,6 +25,9 @@ from cmd import Cmd
 import sys
 import httplib
 import socket
+from xml.sax.handler import ContentHandler, feature_namespaces
+from xml.sax import make_parser, SAXParseException
+from StringIO import StringIO
 
 class Client(Cmd):
 
@@ -40,6 +43,7 @@ welcome to change it and/or distribute copies of it under certain conditions."""
 
     server = 'localhost'
     accept = 'text/xml'
+    links = False
 
     http = httplib.HTTPConnection
     port = 80
@@ -79,7 +83,10 @@ welcome to change it and/or distribute copies of it under certain conditions."""
             self.emit(self.server)
 
     def do_accept(self, line):
-        """Set the accepted content type."""
+        """Set the accepted content type.
+
+        accept [type]
+        """
         if line.strip():
             line = ' '.join(line.split())
             self.accept = line
@@ -96,9 +103,58 @@ welcome to change it and/or distribute copies of it under certain conditions."""
             conn.putheader('Accept', self.accept)
             conn.endheaders()
             response = conn.getresponse()
-            self.emit(response.read())
+            data = response.read()
+            self.emit(data)
+            if self.links:
+                self.emit("=" * 50)
+                try:
+                    parser = make_parser()
+                    handler = XLinkHandler()
+                    parser.setContentHandler(handler)
+                    parser.setFeature(feature_namespaces, 1)
+                    parser.parse(StringIO(data))
+                    nr = 0
+                    for link in handler.links:
+                        nr += 1
+                        if 'title' in link:
+                            title = link['title']
+                        else:
+                            title = ""
+
+                        if 'href' in link:
+                            href = link['href']
+                        else:
+                            href = "no href"
+                        self.emit("%-3d %s (%s)" % (nr, title, href))
+                except SAXParseException, e:
+                    self.emit("Could not extract links: %s" % e)
         except socket.error:
             self.emit('Error: could not connect to %s' % self.server)
+
+
+    def do_links(self, line):
+        """Toggle the display of xlinks found in the response.
+
+        links [on|off]
+        """
+        if not line:
+            self.emit(self.links and "on" or "off")
+        if line.lower() == "on":
+            self.links = True
+        if line.lower() == "off":
+            self.links = False
+
+class XLinkHandler(ContentHandler):
+
+    def __init__(self):
+        self.links = []
+
+    def startElementNS(self, name, qname, attrs):
+        link = {}
+        for namespace, attr in attrs.getNames():
+            link[attr] = attrs.get((namespace, attr))
+        if link:
+            self.links.append(link)
 
 def main():
     Client().cmdloop()

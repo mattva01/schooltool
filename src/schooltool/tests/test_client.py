@@ -24,6 +24,8 @@ import unittest
 import httplib
 import socket
 from StringIO import StringIO
+from xml.sax import make_parser
+from xml.sax.handler import feature_namespaces
 
 __metaclass__ = type
 
@@ -59,6 +61,17 @@ class ResponseStub:
     def read(self):
         if self.request.resource == "/":
             return "Welcome"
+        if self.request.resource == "/doc.xml":
+            return """\
+<index xmlns:xlink="http://www.w3.org/1999/xlink">
+  <student xlink:type="simple"
+           xlink:href="student1"
+           xlink:title="John"/>
+  <student xlink:type="simple"
+           xlink:href="student2"
+           xlink:title="Kate"/>
+</index>
+"""
         else:
             return "404 :-)"
 
@@ -69,7 +82,10 @@ class TestClient(unittest.TestCase):
         self.client = Client()
         self.emitted = ""
         def emit(*args):
-            self.emitted += ' '.join(args)
+            if self.emitted:
+                self.emitted = "%s\n%s" % (self.emitted, ' '.join(args))
+            else:
+                self.emitted = ' '.join(args)
         self.client.emit = emit
         self.client.http = HTTPStub
 
@@ -124,9 +140,74 @@ class TestClient(unittest.TestCase):
         self.client.do_get("/")
         self.assertEqual(self.emitted, "Error: could not connect to badhost")
 
+    def test_links(self):
+        self.assertEqual(self.client.links, False)
+        data = (('on', True), ('off', False), ('ON', True), ('OFf', False))
+        for set, result in data:
+            self.client.do_links(set)
+            self.assertEqual(self.client.links, result)
+        self.assertEqual(self.emitted, "")
+
+        self.client.do_links("")
+        self.assertEqual(self.emitted, "off")
+        self.client.do_links("on")
+        self.emitted = ""
+        self.client.do_links("")
+        self.assertEqual(self.emitted, "on")
+
+    def test_links_get(self):
+        self.assertEqual(self.client.links, False)
+        self.client.do_links("on")
+        self.assertEqual(self.client.links, True)
+        self.client.do_get("/doc.xml")
+        self.assertEqual(self.emitted, """\
+<index xmlns:xlink="http://www.w3.org/1999/xlink">
+  <student xlink:type="simple"
+           xlink:href="student1"
+           xlink:title="John"/>
+  <student xlink:type="simple"
+           xlink:href="student2"
+           xlink:title="Kate"/>
+</index>
+
+==================================================
+1   John (student1)
+2   Kate (student2)""")
+
+class TestXLinkHandler(unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.client import XLinkHandler
+        self.parser = make_parser()
+        self.handler = XLinkHandler()
+        self.parser.setContentHandler(self.handler)
+        self.parser.setFeature(feature_namespaces, 1)
+
+    def test_simple(self):
+        link = ("""<top xmlns:xlink="http://www.w3.org/1999/xlink">
+                     <tag xlink:type="simple"
+                          xlink:title="foo"
+                          xlink:href="bar" />
+
+                     <noxlinks />
+                     <tag xlink:type="simple"
+                          xlink:title="moo"
+                          xlink:href="spoo"
+                          xlink:role="http://www.example.com/role"/>
+                   </top>
+                   """)
+        self.parser.parse(StringIO(link))
+        self.assertEqual(self.handler.links,
+                         [{'type':'simple', 'title': 'foo', 'href': 'bar'},
+                          {'type':'simple', 'title': 'moo', 'href': 'spoo',
+                           'role': "http://www.example.com/role"}])
+
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestClient))
+    suite.addTest(unittest.makeSuite(TestXLinkHandler))
     return suite
 
 if __name__ == '__main__':
