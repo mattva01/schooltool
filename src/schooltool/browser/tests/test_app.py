@@ -1166,6 +1166,25 @@ class TestOptionsView(AppSetupMixin, unittest.TestCase):
         self.assertEqual(request.headers['location'],
                          'http://localhost:7001/')
 
+    def test_do_POST_no_schema(self):
+        view = self.createView()
+        request = RequestStub(authenticated_user=self.manager,
+                              method="POST",
+                              args={'new_event_privacy': 'hidden',
+                                    'timetable_privacy': 'private',
+                                    'default_tts' : '',
+                                    'restrict_membership': 'on',
+                                    'restrict_membership_shown': 'yes'})
+        self.assertEqual(self.app.restrict_membership, False)
+        result = view.render(request)
+        self.assertEqual(self.app.new_event_privacy, 'hidden')
+        self.assertEqual(self.app.timetable_privacy, 'private')
+        self.assertEqual(self.app.timetableSchemaService.default_id, 'super')
+        self.assertEqual(self.app.restrict_membership, True)
+        self.assertEqual(request.code, 302)
+        self.assertEqual(request.headers['location'],
+                         'http://localhost:7001/')
+
     def test_do_POST_errors(self):
         view = self.createView()
         request = RequestStub(authenticated_user=self.manager,

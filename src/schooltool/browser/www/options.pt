@@ -4,12 +4,15 @@
 </head>
 <body>
 
+<h1 metal:fill-slot="h1" tal:content="view/title">Options</h1>
+
 <metal:block metal:fill-slot="content">
   <!-- XXX Looks ugly and confusing -->
-  <form method="POST" tal:attributes="action request/path">
+  <form method="POST" tal:attributes="action request/path" class="wider">
     <div class="row" tal:replace="structure view/new_event_privacy_widget" />
     <div class="row" tal:replace="structure view/timetable_privacy_widget" />
-    <div class="row" tal:replace="structure view/default_tts_widget" />
+    <div class="row" tal:replace="structure view/default_tts_widget"
+         tal:condition="view/ttschemas"/>
     <div class="row" tal:replace="structure view/restrict_membership_widget" />
     <div class="buttons">
       <input class="button" name="SUBMIT" type="submit" value="Save"

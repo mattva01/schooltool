@@ -147,6 +147,10 @@ label.wide {
   width: 12em;
 }
 
+form.wider label {
+  width: 24em;
+}
+
 label.block {
   display: block;
   width: auto;

@@ -777,10 +777,11 @@ class OptionsView(View, ToplevelBreadcrumbsMixin):
             validator=privacy_validator)
 
         tts_service = getTimetableSchemaService(self.context)
+        self.ttschemas = tts_service.keys()
         self.default_tts_widget = SelectionWidget(
             'default_tts',
             _('The default timetable schema'),
-            [(k, k) for k in tts_service.keys()],
+            [(k, k) for k in self.ttschemas],
             label_class="wide",
             value=tts_service.default_id)
 
@@ -799,7 +800,6 @@ class OptionsView(View, ToplevelBreadcrumbsMixin):
         self.update(request)
         self.new_event_privacy_widget.require()
         self.timetable_privacy_widget.require()
-        self.default_tts_widget.require()
         self.restrict_membership_widget.require()
 
         if (self.new_event_privacy_widget.error or
@@ -811,13 +811,15 @@ class OptionsView(View, ToplevelBreadcrumbsMixin):
         newpriv = self.new_event_privacy_widget.value
         ttpriv = self.timetable_privacy_widget.value
         restrict = self.restrict_membership_widget.value
+        default_tts = self.default_tts_widget.value
         if newpriv is not None:
             self.context.new_event_privacy = newpriv
         if ttpriv is not None:
             self.context.timetable_privacy = ttpriv
         self.context.restrict_membership = restrict
         service = getTimetableSchemaService(self.context)
-        service.default_id = self.default_tts_widget.value
+        if default_tts:
+            service.default_id = default_tts
 
         return self.redirect('/', request)
 
