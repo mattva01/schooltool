@@ -28,6 +28,7 @@ from sets import Set
 from zope.interface import implements
 from schooltool.interfaces import IServiceManager, ILocation, IContainmentRoot
 from schooltool.views.tests import RequestStub, setPath
+from schooltool.tests.helpers import dedent
 from schooltool.tests.utils import XMLCompareMixin
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.schema.rng import validate_against_schema
@@ -131,7 +132,7 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
               <timetable period="2003 fall" schema="weekly" xlink:type="simple"
                          xlink:href="/..object/timetables/2003 fall/weekly" />
             </timetables>
-            """, """
+            """, dedent("""
             <html>
             <head>
               <title>Timetables for /..object</title>
@@ -139,12 +140,13 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             <body>
               <h1>Timetables for /..object</h1>
               <ul>
-                <li><a href="/..object/timetables/2003 fall/weekly"
+                <li><a href="http://localhost:8080/..object/timetables/\\
+            2003 fall/weekly"
                     >2003 fall, weekly</a></li>
               </ul>
             </body>
             </html>
-            """)
+            """).replace("\\\n", ""))
         self.assert_(view3.timetabled is context)
         self.assertEquals(view3.key, ('2003 fall', 'weekly'))
         self.assert_(view3.context is tt, '%r is not %r' % (view3.context, tt))
@@ -170,7 +172,7 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
                  xlink:href="/..object/composite-timetables/2003 spring/weekly"
                  xlink:type="simple" />
             </timetables>
-            """, """
+            """, dedent("""
             <html>
             <head>
               <title>Composite timetables for /..object</title>
@@ -178,14 +180,16 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             <body>
               <h1>Composite timetables for /..object</h1>
               <ul>
-                <li><a href="/..object/composite-timetables/2003 fall/weekly"
+                <li><a href="http://localhost:8080/..object/\\
+            composite-timetables/2003 fall/weekly"
                     >2003 fall, weekly</a></li>
-                <li><a href="/..object/composite-timetables/2003 spring/weekly"
+                <li><a href="http://localhost:8080/..object/\\
+            composite-timetables/2003 spring/weekly"
                     >2003 spring, weekly</a></li>
               </ul>
             </body>
             </html>
-            """)
+            """).replace("\\\n", ""))
         self.assertEqual(view3.context, tt)
         self.assert_(view3.context is not tt)
 
@@ -211,7 +215,8 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
                 <body>
                   <h1>School timetables</h1>
                   <ul>
-                    <li><a href="/schooltt/2003 fall/weekly"
+                    <li><a
+                         href="http://localhost:8080/schooltt/2003 fall/weekly"
                         >2003 fall, weekly</a></li>
                   </ul>
                 </body>
@@ -256,7 +261,7 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         </head>
         <body>
           <h1>Timetable ...object/timetables/x/y</h1>
-          <table>
+          <table border="1">
             <tr>
               <th colspan="2">Day 1</th>
               <th colspan="2">Day 2</th>
@@ -310,7 +315,7 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         </head>
         <body>
           <h1>Timetable ...object/timetables/x/y</h1>
-          <table>
+          <table border="1">
             <tr>
               <th colspan="2">Day 1</th>
               <th colspan="2">Day 2</th>

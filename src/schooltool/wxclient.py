@@ -37,6 +37,7 @@ import threading
 from wxPython.wx import *
 from wxPython.grid import *
 from wxPython.lib.scrolledpanel import wxScrolledPanel
+from wxPython.html import wxHtmlWindow
 from schooltool.guiclient import SchoolToolClient, Unchanged, RollCallEntry
 from schooltool.guiclient import SchoolToolError, ResponseStatusError
 from schooltool.uris import URIMembership, URIGroup
@@ -688,6 +689,54 @@ class SchoolTimetableFrame(wxDialog):
         self.grid.AutoSizeColumns()
 
 
+class BrowserFrame(wxDialog):
+    """Window showing a web page."""
+
+    def __init__(self, title, url, parent=None, id=-1):
+        wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
+              style=wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxTHICK_FRAME)
+
+        main_sizer = wxBoxSizer(wxVERTICAL)
+        self.htmlwin = wxHtmlWindow(self, -1)
+        self.htmlwin.LoadPage(url)
+        main_sizer.Add(self.htmlwin, 1, wxEXPAND|wxALL, 8)
+
+        static_line = wxStaticLine(self, -1)
+        main_sizer.Add(static_line, 0, wxEXPAND, 0)
+
+        button_bar = wxBoxSizer(wxHORIZONTAL)
+        back_btn = wxButton(self, -1, "&Back")
+        EVT_BUTTON(self, back_btn.GetId(), self.OnBack)
+        forward_btn = wxButton(self, -1, "&Forward")
+        EVT_BUTTON(self, forward_btn.GetId(), self.OnForward)
+        close_btn = wxButton(self, wxID_CLOSE, "Close")
+        EVT_BUTTON(self, wxID_CLOSE, self.OnClose)
+        close_btn.SetDefault()
+        button_bar.Add(back_btn)
+        button_bar.Add(forward_btn, 0, wxLEFT, 16)
+        button_bar.Add(wxPanel(self, -1), 1, wxEXPAND)
+        button_bar.Add(close_btn, 0, wxLEFT, 16)
+        main_sizer.Add(button_bar, 0, wxEXPAND|wxALL, 16)
+
+        self.SetSizer(main_sizer)
+        min_size = main_sizer.GetMinSize()
+        self.SetSizeHints(minW=max(200, min_size.width),
+                          minH=max(200, min_size.height))
+        self.Layout()
+
+    def OnBack(self, event=None):
+        """Go back in histrory."""
+        self.htmlwin.HistoryBack()
+
+    def OnForward(self, event=None):
+        """Go forward in histrory."""
+        self.htmlwin.HistoryForward()
+
+    def OnClose(self, event=None):
+        """Close the window."""
+        self.Close(True)
+
+
 class MainFrame(wxFrame):
     """Main frame.
 
@@ -787,11 +836,14 @@ class MainFrame(wxFrame):
 
         def setupPopupMenu(control, menu):
 
-            def handler(event):
-                mouse_pos = wxGetMousePosition()
-                control.PopupMenu(menu, control.ScreenToClient(mouse_pos))
+            def mouse_handler(event):
+                control.PopupMenu(menu, event.GetPosition())
 
-            EVT_RIGHT_UP(control, handler)
+            def handler(event):
+                pos = control.ScreenToClient(wxGetMousePosition())
+                control.PopupMenu(menu, pos)
+
+            EVT_RIGHT_UP(control, mouse_handler)
             EVT_COMMAND_RIGHT_CLICK(control, control.GetId(), handler)
             if isinstance(control, wxTreeCtrl):
                 EVT_TREE_ITEM_RIGHT_CLICK(control, control.GetId(), handler)
@@ -809,6 +861,11 @@ class MainFrame(wxFrame):
                 item("&Absence Tracker",
                      "Inspect the absence tracker for this group",
                      self.DoGroupAbsenceTracker),
+                item("View &Timetables", "View a list of groups's timetables",
+                     self.DoViewGroupTimetables),
+                item("View C&omposite Timetables",
+                     "View a list of group's composite timetables",
+                     self.DoViewGroupCompositeTimetables),
                 separator(),
                 item("&Refresh", "Refresh", self.DoRefresh)
             )
@@ -827,8 +884,13 @@ class MainFrame(wxFrame):
         self.personPopupMenu = popupmenu(
                 item("View &Absences", "View a list of person's absences",
                      self.DoViewPersonAbsences),
+                item("View &Timetables", "View a list of person's timetables",
+                     self.DoViewPersonTimetables),
+                item("View &Composite Timetables",
+                     "View a list of person's composite timetables",
+                     self.DoViewPersonCompositeTimetables),
                 separator(),
-                item("&Add Member", "Add a person to this group",
+                item("Add &Member", "Add a person to this group",
                      self.DoAddMember),
                 item("&Remove Member", "Remove a person from this group",
                      self.DoRemoveMember),
@@ -852,9 +914,9 @@ class MainFrame(wxFrame):
         self.relationshipPopupMenu = popupmenu(
                 item("&Add Member", "Add a person to this group",
                      self.DoAddMember),
-                item("&Add Teacher", "Add a teacher to this group",
+                item("Add &Teacher", "Add a teacher to this group",
                      self.DoAddTeacher),
-                item("&Add Subgroup", "Add a group to this group",
+                item("Add &Subgroup", "Add a group to this group",
                      self.DoAddSubgroup),
                 item("&Remove Relationship", "Remove selected relationship",
                      self.DoRemoveRelationship),
@@ -1337,6 +1399,44 @@ class MainFrame(wxFrame):
                               title="%s's absences" % member.person_title)
         window.Show()
 
+    def DoViewPersonTimetables(self, event=None):
+        """Open the timetables window for the currently selected person.
+
+        Accessible from person list popup menu.
+        """
+        item = self.personListCtrl.GetFirstSelected()
+        if item == -1:
+            self.SetStatusText("No person selected")
+            return
+        key = self.personListCtrl.GetItemData(item)
+        member = self.personListData[key]
+        window = BrowserFrame("%s's timetables" % member.person_title,
+                              "http://%s:%s%s/timetables"
+                                  % (self.client.server, self.client.port,
+                                     member.person_path),
+                              parent=self)
+        window.Show()
+
+    def DoViewPersonCompositeTimetables(self, event=None):
+        """Open the composite timetables window for the currently selected
+        person.
+
+        Accessible from person list popup menu.
+        """
+        item = self.personListCtrl.GetFirstSelected()
+        if item == -1:
+            self.SetStatusText("No person selected")
+            return
+        key = self.personListCtrl.GetItemData(item)
+        member = self.personListData[key]
+        window = BrowserFrame("%s's composite timetables"
+                                  % member.person_title,
+                              "http://%s:%s%s/composite-timetables"
+                                  % (self.client.server, self.client.port,
+                                     member.person_path),
+                              parent=self)
+        window.Show()
+
     def DoViewAllAbsences(self, event=None):
         """Open the absences window for the whole system person.
 
@@ -1384,6 +1484,43 @@ class MainFrame(wxFrame):
         window = AbsenceFrame(parent=self, title=title, detailed=False,
                               client=self.client, path=path,
                               absence_data=absence_data)
+        window.Show()
+
+    def DoViewGroupTimetables(self, event=None):
+        """Open the timetables window for the currently selected group.
+
+        Accessible from group tree popup menu.
+        """
+        item = self.groupTreeCtrl.GetSelection()
+        if not item.IsOk():
+            self.SetStatusText("No group selected")
+            return
+        group_path = self.groupTreeCtrl.GetPyData(item)[0]
+        group_title = self.groupTreeCtrl.GetItemText(item)
+        window = BrowserFrame("%s's timetables" % group_title,
+                              "http://%s:%s%s/timetables"
+                                  % (self.client.server, self.client.port,
+                                     group_path),
+                              parent=self)
+        window.Show()
+
+    def DoViewGroupCompositeTimetables(self, event=None):
+        """Open the composite timetables window for the currently selected
+        group.
+
+        Accessible from group list popup menu.
+        """
+        item = self.groupTreeCtrl.GetSelection()
+        if not item.IsOk():
+            self.SetStatusText("No group selected")
+            return
+        group_path = self.groupTreeCtrl.GetPyData(item)[0]
+        group_title = self.groupTreeCtrl.GetItemText(item)
+        window = BrowserFrame("%s's timetables" % group_title,
+                              "http://%s:%s%s/composite-timetables"
+                                  % (self.client.server, self.client.port,
+                                     group_path),
+                              parent=self)
         window.Show()
 
     def DoViewSchoolTimetable(self, event=None):

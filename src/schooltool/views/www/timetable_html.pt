@@ -8,7 +8,7 @@
 </head>
 <body>
   <h1>Timetable <em tal:replace="request/uri">path</em></h1>
-  <table>
+  <table border="1">
     <tr>
       <th tal:repeat="day context/day_ids" tal:content="day"
           colspan="2">Day N</th>

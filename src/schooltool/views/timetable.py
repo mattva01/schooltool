@@ -30,6 +30,7 @@ from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
 from schooltool.views import View, Template, textErrorPage, notFoundPage
+from schooltool.views import absoluteURL
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
 from schooltool.component import getTimetableSchemaService
 from schooltool.component import getTimePeriodService
@@ -64,15 +65,26 @@ class TimetableContentNegotiation:
         """Choose the appropriate timetable representation.
 
         Looks at user-provided Accept and User-Agent headers.  Returns a
-        MIME content type string.
+        page template to use.
+
+        Subclasses should provide the following attributes:
+          - template
+          - html_template
+          - wxhtml_template
         """
-        mtype = request.chooseMediaType(['text/xml', 'text/html'])
         user_agent = request.getHeader('User-Agent') or ''
+        if 'wxWindows' in user_agent:
+            # wxHTML is an extremely ill-behaved HTTP client
+            return self.wxhtml_template
         if 'Mozilla' in user_agent:
             # A hack to override content negotiation for Mozilla, IE and
             # other common browsers that won't know what to do with XML
-            mtype = 'text/html'
-        return mtype
+            return self.html_template
+        mtype = request.chooseMediaType(['text/xml', 'text/html'])
+        if mtype == 'text/html':
+            return self.html_template
+        else:
+            return self.template
 
 
 class TimetableReadView(View, TimetableContentNegotiation):
@@ -80,13 +92,12 @@ class TimetableReadView(View, TimetableContentNegotiation):
 
     template = Template("www/timetable.pt", content_type="text/xml")
     html_template = Template("www/timetable_html.pt")
+    # wxWindows has problems with UTF-8
+    wxhtml_template = Template("www/timetable_html.pt", charset='ISO-8859-1')
 
     def do_GET(self, request):
-        mtype = self.chooseRepresentation(request)
-        if mtype == 'text/html':
-            return self.html_template(request, view=self, context=self.context)
-        else:
-            return self.template(request, view=self, context=self.context)
+        template = self.chooseRepresentation(request)
+        return template(request, view=self, context=self.context)
 
     def rows(self):
         rows = []
@@ -276,26 +287,31 @@ class BaseTimetableTraverseView(View, TimetableContentNegotiation):
     Subclasses should provide the following methods:
      - title
      - template
+     - html_template
+     - wxhtml_template
      - _traverse
     """
 
     template = Template("www/timetables.pt", content_type="text/xml")
     html_template = Template("www/timetables_html.pt")
+    # wxWindows has problems with UTF-8
+    wxhtml_template = Template("www/timetables_html.pt", charset='ISO-8859-1')
 
     def __init__(self, context, time_period=None):
         View.__init__(self, context)
         self.time_period = time_period
+        self.request = None
 
     def do_GET(self, request):
         if self.time_period is not None:
             return notFoundPage(request)
         else:
-            mtype = self.chooseRepresentation(request)
-            if mtype == 'text/html':
-                return self.html_template(request, view=self,
-                                          context=self.context)
-            else:
-                return self.template(request, view=self, context=self.context)
+            template = self.chooseRepresentation(request)
+            try:
+                self.request = request
+                return template(request, view=self, context=self.context)
+            finally:
+                self.request = None
 
 
 class TimetableTraverseView(BaseTimetableTraverseView):
@@ -306,9 +322,14 @@ class TimetableTraverseView(BaseTimetableTraverseView):
 
     def timetables(self):
         basepath = getPath(self.context) + '/timetables'
-        return [{'schema': schema_id, 'period': period_id,
-                 'path': '%s/%s/%s' % (basepath, period_id, schema_id)}
-                for period_id, schema_id in self.context.timetables]
+        results = []
+        for period_id, schema_id in self.context.timetables:
+            path = '%s/%s/%s' % (basepath, period_id, schema_id)
+            results.append({'schema': schema_id,
+                            'period': period_id,
+                            'path': path,
+                            'uri': absoluteURL(self.request, path)})
+        return results
 
     def _traverse(self, name, request):
         if self.time_period is None:
@@ -326,10 +347,14 @@ class CompositeTimetableTraverseView(BaseTimetableTraverseView):
 
     def timetables(self):
         basepath = getPath(self.context) + '/composite-timetables'
-        return [{'schema': schema_id, 'period': period_id,
-                 'path': '%s/%s/%s' % (basepath, period_id, schema_id)}
-                for period_id, schema_id in
-                                    self.context.listCompositeTimetables()]
+        results = []
+        for period_id, schema_id in self.context.listCompositeTimetables():
+            path = '%s/%s/%s' % (basepath, period_id, schema_id)
+            results.append({'schema': schema_id,
+                            'period': period_id,
+                            'path': path,
+                            'uri': absoluteURL(self.request, path)})
+        return results
 
     def _traverse(self, name, request):
         if self.time_period is None:
@@ -351,9 +376,15 @@ class SchoolTimetableTraverseView(BaseTimetableTraverseView):
         basepath = '/schooltt'
         periods = getTimePeriodService(self.context).keys()
         schemas = getTimetableSchemaService(self.context).keys()
-        return [{'schema': schema_id, 'period': period_id,
-                 'path': '%s/%s/%s' % (basepath, period_id, schema_id)}
-                for period_id in periods for schema_id in schemas]
+        results = []
+        for period_id in periods:
+            for schema_id in schemas:
+                path = '%s/%s/%s' % (basepath, period_id, schema_id)
+                results.append({'schema': schema_id,
+                                'period': period_id,
+                                'path': path,
+                                'uri': absoluteURL(self.request, path)})
+        return results
 
     def _traverse(self, name, request):
         if self.time_period is None:

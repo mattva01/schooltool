@@ -79,7 +79,8 @@ class Template(PageTemplateFile):
         context = self.pt_getContext()
         context['request'] = request
         context.update(kw)
-        return self.pt_render(context).encode(self.charset)
+        body = self.pt_render(context)
+        return body.encode(self.charset, 'xmlcharrefreplace')
 
 
 #
