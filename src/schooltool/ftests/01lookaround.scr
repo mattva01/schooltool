@@ -181,6 +181,10 @@ Content-Type: text/html; charset=UTF-8
         Cleaners (private calendar)</a>,
         <a href="http://localhost:8813/groups/cleaners/timetable-calendar">
         Cleaners (timetable)</a></li>
+    <li><a href="http://localhost:8813/groups/locations/calendar">
+        Locations (private calendar)</a>,
+        <a href="http://localhost:8813/groups/locations/timetable-calendar">
+        Locations (timetable)</a></li>
     <li><a href="http://localhost:8813/groups/students/calendar">
         Students (private calendar)</a>,
         <a href="http://localhost:8813/groups/students/timetable-calendar">
@@ -261,6 +265,10 @@ Content-Type: text/html; charset=UTF-8
         Cleaners (private calendar)</a>,
         <a href="https://www.example.com:443/groups/cleaners/timetable-calendar">
         Cleaners (timetable)</a></li>
+    <li><a href="https://www.example.com:443/groups/locations/calendar">
+        Locations (private calendar)</a>,
+        <a href="https://www.example.com:443/groups/locations/timetable-calendar">
+        Locations (timetable)</a></li>
     <li><a href="https://www.example.com:443/groups/students/calendar">
         Students (private calendar)</a>,
         <a href="https://www.example.com:443/groups/students/timetable-calendar">
@@ -335,6 +343,8 @@ Content-Type: text/xml; charset=UTF-8
     <item xlink:href="/groups/students" xlink:title="Students"
           xlink:type="simple"/>
     <item xlink:href="/groups/teachers" xlink:title="Teachers"
+          xlink:type="simple"/>
+    <item xlink:href="/groups/locations" xlink:title="Locations"
           xlink:type="simple"/>
     <item xlink:href="/groups/managers" xlink:title="System Managers"
           xlink:type="simple"/>

@@ -538,6 +538,7 @@ class EventViewBase(View):
     title = u""
     start_date = u""
     start_time = u""
+    location = u""
     duration = u"30" # default
 
     def update(self):

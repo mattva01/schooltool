@@ -780,10 +780,12 @@ class TestEventAddView(unittest.TestCase):
         request = RequestStub(args={'title': 'Hacking',
                                     'start_date': '2004-08-13',
                                     'start_time': '15:30',
+                                    'location': 'Kitchen',
                                     'duration': '50'})
         content = self.view.render(request)
         self.assert_('Add event' in content)
         self.assert_('Hacking' in content)
+        self.assert_('Kitchen' in content)
         self.assert_('2004-08-13' in content)
         self.assert_('15:30' in content)
         self.assert_('50' in content)
@@ -792,6 +794,7 @@ class TestEventAddView(unittest.TestCase):
         request = RequestStub(args={'title': 'Hacking',
                                     'start_date': '2004-08-13',
                                     'start_time': '15:30',
+                                    'location': 'Kitchen',
                                     'duration': '50'})
         self.view.request = request
         content = self.view.do_POST(request)
@@ -804,8 +807,18 @@ class TestEventAddView(unittest.TestCase):
         events = list(self.cal)
         self.assertEquals(len(events), 1)
         self.assertEquals(events[0].title, 'Hacking')
+        self.assertEquals(events[0].location, 'Kitchen')
         self.assertEquals(events[0].dtstart, datetime(2004, 8, 13, 15, 30))
         self.assertEquals(events[0].duration, timedelta(minutes=50))
+
+    def test_post_nolocation(self):
+        request = RequestStub(args={'title': 'Hacking',
+                                    'start_date': '2004-08-13',
+                                    'start_time': '15:30',
+                                    'location': '',
+                                    'duration': '50'})
+        self.view.request = request
+        content = self.view.do_POST(request)
 
     def test_post_errors(self):
         request = RequestStub(args={'title': '',
@@ -843,10 +856,12 @@ class TestEventEditView(unittest.TestCase):
         setPath(self.cal, '/persons/somebody/calendar')
 
         self.ev1 = CalendarEvent(datetime(2004, 8, 15, 12, 0),
-                            timedelta(hours=1), "ev1")
+                                 timedelta(hours=1), "ev1",
+                                 location="Hell")
         self.ev2 = CalendarEvent(datetime(2004, 8, 12, 13, 0),
-                            timedelta(hours=2), "ev2",
-                            unique_id="pick me")
+                                 timedelta(hours=2), "ev2",
+                                 unique_id="pick me",
+                                 location="Heaven")
         self.cal.addEvent(self.ev1)
         self.cal.addEvent(self.ev2)
 
@@ -856,16 +871,20 @@ class TestEventEditView(unittest.TestCase):
     def test_render(self):
         request = RequestStub(args={'event_id': "pick me"})
         content = self.view.render(request)
+
         self.assert_('"2004-08-15"' not in content)
         self.assert_('"ev1"' not in content)
+
         self.assert_('"ev2"' in content)
         self.assert_('"2004-08-12"' in content)
+        self.assert_('"Heaven"' in content)
         self.assert_('"13:00"' in content)
         self.assert_('"120"' in content)
 
     def test(self):
         request = RequestStub(args={'event_id': "pick me",
                                     'title': 'Changed',
+                                    'location': 'Inbetween',
                                     'start_date': '2004-08-16',
                                     'start_time': '13:30',
                                     'duration': '70'})
@@ -881,9 +900,9 @@ class TestEventEditView(unittest.TestCase):
         self.cal.removeEvent(self.ev1)
         new_ev = list(self.cal)[0]
         self.assertEquals(new_ev.title, 'Changed')
+        self.assertEquals(new_ev.location, 'Inbetween')
         self.assertEquals(new_ev.dtstart, datetime(2004, 8, 16, 13, 30))
         self.assertEquals(new_ev.duration, timedelta(minutes=70))
-        self.assert_(new_ev.duration, timedelta(minutes=70))
 
         self.assertEquals(request.code, 302)
         self.assertEquals(request.headers['location'],
