@@ -45,10 +45,12 @@ Options:
   -v            verbose (print dots for each test run)
   -vv           very verbose (print test names)
   -p            show progress bar (can be combined with -v or -vv)
-  -u            run unit tests (default)
-  -f            run functional tests
-  --list-files  list all files that match pathname-regexp
-  --list-tests  list all tests that match test-regexp
+  -u            select unit tests (default)
+  -f            select functional tests
+  --level n     select only tests at level n or lower
+  --all-levels  select all tests
+  --list-files  list all selected test files
+  --list-tests  list all selected test cases
 """
 #
 # This script borrows ideas from Zope 3's test runner heavily.  It is smaller
@@ -68,21 +70,32 @@ __metaclass__ = type
 class Options:
     """Configurable properties of the test runner."""
 
-    verbosity = 0
-    progress = False
-    pathname_regex = ''
-    test_regex = ''
-    list_files = False
-    list_tests = False
-    run_tests = True
-    unit_tests = False
-    functional_tests = False
+    # test location
+    basedir = ''                # base directory for tests (defaults to
+                                # basedir of argv[0] + 'src')
+    follow_symlinks = True      # should symlinks to subdirectories be
+                                # followed? (hardcoded, may cause loops)
 
-    # these are hardcoded for the moment
-    basedir = ''
-    follow_symlinks = True
-    immediate_errors = True
-    screen_width = 80
+    # which tests to run
+    unit_tests = False          # unit tests (default if both are false)
+    functional_tests = False    # functional tests
+
+    # test filtering
+    level = 1                   # run only tests at this or lower level
+                                # (if None, runs all tests)
+    pathname_regex = ''         # regexp for filtering filenames
+    test_regex = ''             # regexp for filtering test cases
+
+    # actions to take
+    list_files = False          # --list-files
+    list_tests = False          # --list-tests
+    run_tests = True            # run tests (disabled by --list-foo)
+
+    # output verbosity
+    verbosity = 0               # verbosity level (-p)
+    progress = False            # show running progress (-v)
+    immediate_errors = True     # show tracebacks twice (currently hardcoded)
+    screen_width = 80           # screen width (currently hardcoded)
 
 
 def compile_matcher(regex):
@@ -163,18 +176,20 @@ def import_module(filename, cfg):
     return mod
 
 
-def filter_testsuite(suite, matcher):
+def filter_testsuite(suite, matcher, level=None):
     """Returns a flattened list of test cases that match the given matcher."""
     if not isinstance(suite, unittest.TestSuite):
         raise TypeError('not a TestSuite', suite)
     results = []
     for test in suite._tests:
+        if level is not None and getattr(test, 'level', 0) > level:
+            continue
         if isinstance(test, unittest.TestCase):
             testname = test.id() # package.module.class.method
             if matcher(testname):
                 results.append(test)
         else:
-            filtered = filter_testsuite(test, matcher)
+            filtered = filter_testsuite(test, matcher, level)
             results.extend(filtered)
     return results
 
@@ -186,7 +201,10 @@ def get_test_cases(test_files, cfg):
     for file in test_files:
         module = import_module(file, cfg)
         test_suite = module.test_suite()
-        filtered = filter_testsuite(test_suite, matcher)
+        if (cfg.level is not None and
+            getattr(test_suite, 'level', 0) > cfg.level):
+            continue
+        filtered = filter_testsuite(test_suite, matcher, cfg.level)
         results.extend(filtered)
     return results
 
@@ -305,7 +323,9 @@ def main(argv):
     cfg.basedir = os.path.join(os.path.dirname(argv[0]), 'src')
 
     # Option processing
-    opts, args = getopt.getopt(argv[1:], 'hvpuf', ['list-files', 'list-tests'])
+    opts, args = getopt.getopt(argv[1:], 'hvpuf',
+                               ['list-files', 'list-tests', 'level=',
+                                'all-levels'])
     for k, v in opts:
         if k == '-h':
             print __doc__
@@ -324,6 +344,15 @@ def main(argv):
         elif k == '--list-tests':
             cfg.list_tests = True
             cfg.run_tests = False
+        elif k == '--level':
+            try:
+                cfg.level = int(v)
+            except ValueError:
+                print >> sys.stderr, '%s: invalid level: %s' % (argv[0], v)
+                print >> sys.stderr, 'run %s -h for help'
+                return 1
+        elif k == '--all-levels':
+            cfg.level = None
         else:
             print >> sys.stderr, '%s: invalid option: %s' % (argv[0], k)
             print >> sys.stderr, 'run %s -h for help'
