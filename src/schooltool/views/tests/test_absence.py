@@ -209,6 +209,8 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
 
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
+        self.assertEquals(request.site.applog,
+                [(None, 'Absence created: /person/absences/001', 'INFO')])
         location = request.headers['location']
         self.assert_(location.startswith(baseurl),
                      "%r.startswith(%r) failed" % (location, baseurl))
@@ -240,6 +242,8 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
 
+        self.assertEquals(request.site.applog,
+                [(None, 'Absence updated: /person/absences/001', 'INFO')])
         self.assertEquals(request.code, 200)
         self.assertEquals(request.reason, "OK")
         location = request.headers['location']
@@ -265,6 +269,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         view = AbsenceManagementView(context)
         request = RequestStub(baseurl[:-1], method="POST",
                     body='')
+        self.assertEquals(request.site.applog, [])
 
         view.authorization = lambda ctx, rq: True
         result = view.render(request)
@@ -273,6 +278,7 @@ class TestAbsenceManagementView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(request.reason, "Bad Request")
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
+        self.assertEquals(request.site.applog, [])
         self.assertEquals(result, "Document not valid XML")
 
 
@@ -348,6 +354,8 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(request.reason, "OK")
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
+        self.assertEquals(request.site.applog,
+                [(None, 'Comment added to /person/absences/001', 'INFO')])
         self.assertEquals(result, "Comment added")
         comment = absence.comments[-1]
         self.assertEquals(comment.text, u"Foo \u2730")
@@ -369,6 +377,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(request.reason, "Bad Request")
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
+        self.assertEquals(request.site.applog, [])
         self.assertEquals(result, "Reporter not found: /does/not/exist")
         self.assertEquals(len(absence.comments), 2)
 
@@ -391,6 +400,7 @@ class TestAbsenceView(XMLCompareMixin, EventServiceTestMixin,
         self.assertEquals(request.reason, "Bad Request")
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
+        self.assertEquals(request.site.applog, [])
         self.assertEquals(result,
             "Cannot reopen an absence when another one is not ended")
         self.assertEquals(len(absence.comments), 2)
@@ -500,6 +510,12 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
                           "text/plain; charset=UTF-8")
         self.assertEquals(result, "2 absences and 1 presences reported")
 
+        self.assertEquals(request.site.applog,
+                [(self.manager, msg, 'INFO')
+                 for msg in ['Reported absence: /persons/b/absences/001',
+                             'Reported presence: /persons/c/absences/001',
+                             'Reported absence: /persons/d/absences/001']])
+
         # persona was present and is present, no comments should be added.
         self.assertEqual(len(list(self.persona.iterAbsences())), 0)
 
@@ -556,6 +572,11 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
             """, authenticated_user=self.personb)
         # when reporter is not explicitly specified, take authenticated_user
         result = view.render(request)
+        self.assertEquals(request.site.applog,
+                [(self.personb, msg, 'INFO')
+                 for msg in ['Reported absence: /persons/a/absences/001',
+                             'Reported absence: /persons/c/absences/001',
+                             'Reported absence: /persons/d/absences/001']])
         self.assertEquals(request.code, 200, 'request failed:\n' + result)
         absence = self.persona.getCurrentAbsence()
         comment = absence.comments[-1]
@@ -588,6 +609,7 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(request.reason, "Bad Request")
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
+        self.assertEquals(request.site.applog, [])
         self.assertEquals(result, "Reporter does not match the authenticated"
                                   " user")
 
@@ -603,6 +625,7 @@ class TestRollCallView(XMLCompareMixin, RegistriesSetupMixin,
         self.assertEquals(request.reason, "Bad Request")
         self.assertEquals(request.headers['content-type'],
                           "text/plain; charset=UTF-8")
+        self.assertEquals(request.site.applog, [])
         self.assertEquals(result, errmsg)
 
     def test_post_syntax_errors(self):
