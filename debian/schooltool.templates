@@ -1,52 +1,53 @@
 Template: schooltool/listen
 Type: string
 Default: 7001
-Description: Interfaces for the RESTive interface over HTTP
+_Description: Interfaces for the RESTive interface over HTTP
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
 
 Template: schooltool/web
 Type: string
 Default: 7080
-Description: Interfaces for the web interface over HTTP
+_Description: Interfaces for the web interface over HTTP
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
 
 Template: schooltool/listen_ssl
 Type: string
 Default:
-Description: Interfaces for the RESTive interface over HTTPS
+_Description: Interfaces for the RESTive interface over HTTPS
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
 
 Template: schooltool/web_ssl
 Type: string
 Default:
-Description: Interfaces for the web interface over HTTPS
+_Description: Interfaces for the web interface over HTTPS
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
 
 Template: schooltool/cert-type
 Type: select
+__Choices: Create Self-Signed Certificate, Import Certificate
 Default: Create Self-Signed Certificate
-Choices: Create Self-Signed Certificate, Import Certificate
-Description: How would you like to set up the SSL certificate:
+_Description: How would you like to set up the SSL certificate:
  Please select how you would like to set up the SSL certificate for your
  schooltool-ssl server.
  .
- You can create a self signed root certificate that can be imported into web
- browsers. The certificate can be copied from /etc/schooltool-ssl/cert.pem.
+ You can create a self signed root certificate that can be imported into
+ web browsers. The certificate can be copied from
+ /etc/schooltool-ssl/cert.pem.
  .
- Or, you can import a certificate. For instance a certificate signed by a CA.
- The certificate must be in PEM format and contain the private key.
+ Or, you can import a certificate. For instance a certificate signed by a
+ CA. The certificate must be in PEM format and contain the private key.
 
 Template: schooltool/create-cert
 Type: boolean
 Default: false
-Description: Would you like to re-create the SSL certificate?
+_Description: Would you like to re-create the SSL certificate?
  You already have an SSL certificate.
 
 Template: schooltool/import-cert
 Type: string
 Default: /
-Description: Enter the filename of the SSL certificate (in PEM format) to import.
+_Description: Enter the filename of the SSL certificate (in PEM format) to import.
