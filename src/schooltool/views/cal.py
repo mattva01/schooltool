@@ -22,16 +22,19 @@ Views for calendaring.
 $Id$
 """
 
+import libxml2
 import datetime
 import operator
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ISchooldayModel, ICalendar
 from schooltool.views import View, Template, textErrorPage, absoluteURL
+from schooltool.views import read_file
 from schooltool.cal import ICalReader, ICalParseError, CalendarEvent
 from schooltool.cal import ical_text, ical_duration
 from schooltool.component import getPath
 from schooltool.component import registerView
+from schooltool.schema.rng import validate_against_schema
 
 __metaclass__ = type
 
@@ -42,10 +45,43 @@ moduleProvides(IModuleSetup)
 complex_prop_names = ('RRULE', 'RDATE', 'EXRULE', 'EXDATE')
 
 
+def parse_date(value):
+    """Parse a ISO-8601 date value.
+
+    >>> parse_date('2003-09-01')
+    datetime.date(2003, 9, 1)
+    >>> parse_date('20030901')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid date: '20030901'
+    >>> parse_date('2003-IX-01')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid date: '2003-IX-01'
+    >>> parse_date('2003-09-31')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid date: '2003-09-31'
+    >>> parse_date('2003-09-30-15-42')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid date: '2003-09-30-15-42'
+    """
+    try:
+        y, m, d = map(int, value.split('-'))
+        return datetime.date(y, m, d)
+    except ValueError:
+        raise ValueError("Invalid date: %r" % value)
+
+
 class SchooldayModelCalendarView(View):
     """iCalendar view for ISchooldayModel."""
 
     datetime_hook = datetime.datetime
+
+    schema = read_file("../schema/schooldays.rng")
+    _dow_map = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3,
+                "Friday": 4, "Saturday": 5, "Sunday": 6}
 
     def do_GET(self, request):
         end_date = self.context.last + datetime.date.resolution
@@ -83,9 +119,15 @@ class SchooldayModelCalendarView(View):
         ctype = request.getHeader('Content-Type')
         if ';' in ctype:
             ctype = ctype[:ctype.index(';')]
-        if ctype != 'text/calendar':
+        if ctype == 'text/calendar':
+            return self.do_PUT_text_calendar(request)
+        elif ctype == 'text/xml':
+            return self.do_PUT_text_xml(request)
+        else:
             return textErrorPage(request,
                                  "Unsupported content type: %s" % ctype)
+
+    def do_PUT_text_calendar(self, request):
         first = last = None
         days = []
         reader = ICalReader(request.content)
@@ -130,6 +172,45 @@ class SchooldayModelCalendarView(View):
             self.context.reset(first, last - datetime.date.resolution)
             for day in days:
                 self.context.add(day)
+        request.setHeader('Content-Type', 'text/plain')
+        return "Calendar imported"
+
+    def do_PUT_text_xml(self, request):
+        xml = request.content.read()
+        try:
+            if not validate_against_schema(self.schema, xml):
+                return textErrorPage(request,
+                            "Schoolday model not valid according to schema")
+        except libxml2.parserError:
+            return textErrorPage(request, "Schoolday model is not valid XML")
+        doc = libxml2.parseDoc(xml)
+        xpathctx = doc.xpathNewContext()
+        try:
+            ns = 'http://schooltool.org/ns/schooldays/0.1'
+            xpathctx.xpathRegisterNs('tt', ns)
+            schooldays = xpathctx.xpathEval('/tt:schooldays')[0]
+            try:
+                first = parse_date(schooldays.nsProp('first', None))
+                last = parse_date(schooldays.nsProp('last', None))
+                holidays = [parse_date(node.content)
+                            for node in xpathctx.xpathEval(
+                                            '/tt:schooldays/tt:holiday/@date')]
+            except ValueError, e:
+                return textErrorPage(request, str(e))
+            try:
+                node = xpathctx.xpathEval('/tt:schooldays/tt:daysofweek')[0]
+                dows = [self._dow_map[d] for d in node.content.split()]
+            except KeyError, e:
+                return textErrorPage(request, str(e))
+        finally:
+            doc.freeDoc()
+            xpathctx.xpathFreeContext()
+
+        self.context.reset(first, last)
+        self.context.addWeekdays(*dows)
+        for holiday in holidays:
+            if holiday in self.context and self.context.isSchoolday(holiday):
+                self.context.remove(holiday)
         request.setHeader('Content-Type', 'text/plain')
         return "Calendar imported"
 

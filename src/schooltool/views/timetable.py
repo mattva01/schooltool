@@ -22,7 +22,6 @@ Views for timetabling.
 $Id$
 """
 
-import os
 import sets
 import libxml2
 import datetime
@@ -31,7 +30,7 @@ from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
 from schooltool.views import View, Template, textErrorPage, notFoundPage
-from schooltool.views import absoluteURL
+from schooltool.views import absoluteURL, read_file
 from schooltool.views.cal import SchooldayModelCalendarView
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
@@ -48,19 +47,6 @@ __metaclass__ = type
 
 
 moduleProvides(IModuleSetup)
-
-
-def read_file(fn):
-    """Return the contents of the specified file.
-
-    Filename is relative to the directory this module is placed in.
-    """
-    basedir = os.path.dirname(__file__)
-    f = file(os.path.join(basedir, fn))
-    try:
-        return f.read()
-    finally:
-        f.close()
 
 
 class TimetableContentNegotiation:
@@ -164,10 +150,10 @@ class TimetableReadWriteView(TimetableReadView):
                                      "Timetable not valid according to schema")
         except libxml2.parserError:
             return textErrorPage(request, "Timetable not valid XML")
+        doc = libxml2.parseDoc(xml)
+        xpathctx = doc.xpathNewContext()
         try:
-            doc = libxml2.parseDoc(xml)
             ns = 'http://schooltool.org/ns/timetable/0.1'
-            xpathctx = doc.xpathNewContext()
             xpathctx.xpathRegisterNs('tt', ns)
 
             time_period_id, schema_id = self.key
@@ -266,10 +252,10 @@ class TimetableSchemaView(TimetableReadView):
                                      "Timetable not valid according to schema")
         except libxml2.parserError:
             return textErrorPage(request, "Not valid XML")
+        doc = libxml2.parseDoc(xml)
+        xpathctx = doc.xpathNewContext()
         try:
-            doc = libxml2.parseDoc(xml)
             ns = 'http://schooltool.org/ns/timetable/0.1'
-            xpathctx = doc.xpathNewContext()
             xpathctx.xpathRegisterNs('tt', ns)
             days = xpathctx.xpathEval('/tt:timetable/tt:day')
             day_ids = [day.nsProp('id', None) for day in days]

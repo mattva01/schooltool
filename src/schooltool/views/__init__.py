@@ -23,6 +23,7 @@ $Id$
 """
 
 import re
+import os
 from zope.interface import moduleProvides
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
@@ -46,6 +47,19 @@ def absoluteURL(request, path, scheme='http'):
     hostname = request.getRequestHostname()
     port = request.getHost()[2]
     return '%s://%s:%s%s' % (scheme, hostname, port, path)
+
+
+def read_file(fn):
+    """Return the contents of the specified file.
+
+    Filename is relative to the directory this module is placed in.
+    """
+    basedir = os.path.dirname(__file__)
+    f = file(os.path.join(basedir, fn))
+    try:
+        return f.read()
+    finally:
+        f.close()
 
 
 #

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+RelaxNG grammar for a representation of SchooldayModel
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         ns="http://schooltool.org/ns/schooldays/0.1"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <define name="idattr">
+     <attribute name="id">
+        <text/>
+     </attribute>
+  </define>
+
+  <define name="datetext">
+    <!-- date in YYYY-MM-DD format -->
+    <text/>
+  </define>
+
+  <define name="daysofweek">
+    <!-- space separated list of weekdays -->
+    <text/>
+  </define>
+
+  <start>
+    <ref name="schooldays"/>
+  </start>
+
+  <define name="schooldays">
+    <element name="schooldays">
+      <attribute name="first">
+        <text/>
+      </attribute>
+      <attribute name="last">
+        <ref name="datetext"/>
+      </attribute>
+      <element name="daysofweek">
+        <ref name="daysofweek"/>
+      </element>
+      <zeroOrMore>
+        <element name="holiday">
+          <attribute name="date">
+            <ref name="datetext"/>
+          </attribute>
+          <text/>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+
+</grammar>

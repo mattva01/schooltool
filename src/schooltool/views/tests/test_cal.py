@@ -24,7 +24,9 @@ $Id$
 
 import unittest
 import datetime
+import libxml2
 from zope.interface import directlyProvides
+from zope.testing.doctestunit import DocTestSuite
 from schooltool.views.tests import RequestStub, setPath
 from schooltool.tests.utils import RegistriesSetupMixin, NiceDiffsMixin
 from schooltool.tests.utils import XMLCompareMixin
@@ -81,6 +83,7 @@ class TestSchooldayModelCalendarView(CalendarTestBase):
         setPath(self.sm, '/calendar')
         self.view = SchooldayModelCalendarView(self.sm)
         self.view.datetime_hook = DatetimeStub()
+        libxml2.registerErrorHandler(lambda ctx, error: None, None)
 
     def test_get_empty(self):
         self.do_test_get(dedent("""
@@ -300,6 +303,63 @@ class TestSchooldayModelCalendarView(CalendarTestBase):
         calendar = "\r\n".join(calendar.splitlines()) # normalize line endings
         self._test_put_error(calendar,
                      errmsg="Schoolday outside school period")
+
+    def test_put_xml(self):
+        body = dedent("""
+            <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
+                        first="2003-09-01" last="2003-09-07">
+              <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
+              <holiday date="2003-09-03">Holiday</holiday>
+              <holiday date="2003-09-06">Holiday</holiday>
+              <holiday date="2003-09-23">Holiday</holiday>
+            </schooldays>
+        """)
+        request = RequestStub("http://localhost/calendar", method="PUT",
+                              headers={"Content-Type": "text/xml"},
+                              body=body)
+        result = self.view.render(request)
+        self.assertEquals(result, "Calendar imported")
+        self.assertEquals(request.code, 200)
+        self.assertEquals(request.headers['Content-Type'], "text/plain")
+        self.assertEquals(self.sm.first, datetime.date(2003, 9, 1))
+        self.assertEquals(self.sm.last, datetime.date(2003, 9, 7))
+        schooldays = []
+        for date in self.sm:
+            if self.sm.isSchoolday(date):
+                schooldays.append(date)
+        expected = [datetime.date(2003, 9, d) for d in 1, 2, 4, 5]
+        self.assertEquals(schooldays, expected)
+
+    def test_put_xml_errors(self):
+        self._test_put_error("This is not XML", content_type="text/xml")
+        self._test_put_error("<foo>Wrong XML</foo>", content_type="text/xml")
+        self._test_put_error("""
+            <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
+                        first="20030901" last="2003-09-07">
+              <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
+              <holiday date="2003-09-03">Holiday</holiday>
+              <holiday date="2003-09-06">Holiday</holiday>
+              <holiday date="2003-09-23">Holiday</holiday>
+            </schooldays>
+            """, content_type="text/xml")
+        self._test_put_error("""
+            <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
+                        first="2003-09-01" last="2003-09-07">
+              <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
+              <holiday date="2003-09-03">Holiday</holiday>
+              <holiday date="2003-09-06">Holiday</holiday>
+              <holiday date="2003-09-31">Holiday</holiday>
+            </schooldays>
+            """, content_type="text/xml")
+        self._test_put_error("""
+            <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
+                        first="2003-09-01" last="2003-09-07">
+              <daysofweek>Monday tuesday Wednesday Thursday Friday</daysofweek>
+              <holiday date="2003-09-03">Holiday</holiday>
+              <holiday date="2003-09-06">Holiday</holiday>
+              <holiday date="2003-09-23">Holiday</holiday>
+            </schooldays>
+            """, content_type="text/xml")
 
 
 class TestCalendarView(NiceDiffsMixin, CalendarTestBase):
@@ -534,7 +594,9 @@ class TestModuleSetup(RegistriesSetupMixin, unittest.TestCase):
 
 
 def test_suite():
+    import schooltool.views.cal
     suite = unittest.TestSuite()
+    suite.addTest(DocTestSuite(schooltool.views.cal))
     suite.addTest(unittest.makeSuite(TestSchooldayModelCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarView))
     suite.addTest(unittest.makeSuite(TestAllCalendarsView))
