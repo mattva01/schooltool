@@ -135,11 +135,12 @@
               TODO: follow it up in Zope 3.
               </tal:comment>
               <select name="field.recurrence_type" size="1"
-                      id="field.recurrence_type">
-              <option selected="selected" value="daily">day</option>
-              <option value="weekly">week</option>
-              <option value="monthly">month</option>
-              <option value="yearly">year</option>
+                      id="field.recurrence_type"
+                      tal:define="recurrence_type python: view.recurrence_type_widget._getFormValue() or 'daily'">
+                <option tal:attributes="selected python: recurrence_type == 'daily'" value="daily">day</option>
+                <option tal:attributes="selected python: recurrence_type == 'weekly'" value="weekly">week</option>
+                <option tal:attributes="selected python: recurrence_type == 'monthly'" value="monthly">month</option>
+                <option tal:attributes="selected python: recurrence_type == 'yearly'" value="yearly">year</option>
               </select>
               </metal:block>
             </div>
@@ -195,13 +196,13 @@
         </fieldset>
         <!-- Range selection -->
         <fieldset tal:define="range_value
-                  python:view.range_widget.hasInput() and view.range_widget.getInputValue() or 'forever'">
+                  python:view.range_widget._getFormValue() or 'forever'">
           <div class="row">
             <input type="radio" name="field.range" value="count" id="field.range_c"
                    tal:attributes="checked python:range_value == 'count'"/>
             <label for="field.range_c" class="plain" i18n:translate="">Repeat</label>
             <input type="text" name="field.count" id="field.count" size="3"
-                   tal:attributes="value view/count_widget/_getFormInput" />
+                   tal:attributes="value view/count_widget/_getFormValue" />
             <tal:block i18n:translate="">times</tal:block>
             <tal:block tal:define="widget nocall:view/count_widget">
               <div class="error" tal:define="error widget/error"
@@ -216,7 +217,7 @@
                    tal:attributes="checked python:range_value == 'until'"/>
             <label for="field.range_u" class="plain" i18n:translate="">Repeat until</label>
             <input type="text" name="field.until" id="field.until"
-                   tal:attributes="value view/until_widget/_getFormInput"/>
+                   tal:attributes="value view/until_widget/_getFormValue"/>
             <tal:block tal:define="widget nocall:view/until_widget">
               <div class="error" tal:define="error widget/error"
                    tal:condition="error" tal:content="structure error">

@@ -322,6 +322,55 @@ If we cancel the form - we should be redirected to the day "date" tells us:
     Location: http://localhost/frogpond/persons/frog/calendar/2005-02-07
     ...
 
+Let's change the recurrence of the event a bit more this time:
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04 HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 264
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Sleeping&field.start_date=2005-02-03&\
+    ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
+    ... field.interval=1&\
+    ... field.recurrence=on&field.recurrence_type=monthly&\
+    ... field.monthly=weekday&field.range=until&field.until=2005-12-01&\
+    ... UPDATE_SUBMIT=Update
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons/frog/calendar/2005-02-03...
+    ...
+
+Let's check the new values:
+
+    >>> print http("""
+    ... GET /frogpond/persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04 HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...
+    <input type="hidden" name="date" value="2005-02-04" />
+    ...
+    <input class="textType" id="field.title" name="field.title" size="20" type="text" value="Sleeping"  />
+    ...
+    <input class="textType" id="field.start_date" name="field.start_date" size="20" type="text" value="2005-02-03"  />
+    ...
+    <input class="textType" id="field.start_time" name="field.start_time" size="20" type="text" value="01:00"  />
+    ...
+    <input class="textType" id="field.duration" name="field.duration" size="10" type="text" value="500"  />
+    ...
+    <option value="monthly" selected="selected">month</option>
+    ...
+    <input type="radio" name="field.range"
+           value="until" id="field.range_u"
+           checked="checked" />
+    ...
+    <input type="text" name="field.until"
+           id="field.until" value="2005-12-01" />
+    ...
+
 
 Uploading iCalendar files
 -------------------------
