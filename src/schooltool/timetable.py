@@ -252,11 +252,22 @@ class TimetableException(Persistent):
 
     implements(ITimetableException)
 
-    def __init__(self, date, period_id, activity, replacement):
+    _replacement = None
+
+    def _getReplacement(self):
+        return self._replacement
+
+    def _setReplacement(self, replacement):
+        if not IExceptionalTTCalendarEvent.providedBy(replacement):
+            raise ValueError("%r is not an exceptional TT event" % replacement)
+        self._replacement = replacement
+
+    replacement = property(_getReplacement, _setReplacement)
+
+    def __init__(self, date, period_id, activity):
         self.date = date
         self.period_id = period_id
         self.activity = activity
-        self.replacement = replacement
 
 
 #
@@ -288,9 +299,6 @@ class ExceptionalTTCalendarEvent(CalendarEvent):
 
     def __init__(self, *args, **kwargs):
         self._exception = kwargs.pop('exception')
-        if not ITimetableException.providedBy(self._exception):
-            raise ValueError('%r is not a timetable exception'
-                             % self._exception)
         CalendarEvent.__init__(self, *args, **kwargs)
 
     def replace(self, *args, **kwargs):

@@ -199,7 +199,7 @@ class TestTimetable(unittest.TestCase):
         tt["B"].add("Green", bio)
         tt.model = object()
         tt.exceptions.append(TimetableException(date(2005, 1, 4),
-                                                'Green', bio, None))
+                                                'Green', bio))
 
         tt2 = tt.cloneEmpty()
         self.assert_(tt2 is not tt)
@@ -442,15 +442,20 @@ class TestTimetableException(unittest.TestCase):
 
     def test(self):
         from schooltool.timetable import TimetableException
+        from schooltool.timetable import ExceptionalTTCalendarEvent
         from schooltool.interfaces import ITimetableException
         activity = object()
-        replacement = None
-        e = TimetableException(date(2004, 10, 12), 123, activity, replacement)
+        e = TimetableException(date(2004, 10, 12), 123, activity)
+        e.replacement = ExceptionalTTCalendarEvent(date(2004, 10, 13),
+                                                 timedelta(45),
+                                                 "Math",
+                                                 exception=e)
         verifyObject(ITimetableException, e)
         self.assertEquals(e.date, date(2004, 10, 12))
         self.assertEquals(e.period_id, 123)
         assert e.activity is activity
-        assert e.replacement is replacement
+
+        self.assertRaises(ValueError, setattr, e, 'replacement', object())
 
 
 class TestTimetablingPersistence(unittest.TestCase):
@@ -580,12 +585,11 @@ class TestExceptionalTTCalendarEvent(unittest.TestCase):
 
     def test(self):
         from schooltool.timetable import ExceptionalTTCalendarEvent
-        from schooltool.timetable import TimetableException
         from schooltool.interfaces import IExceptionalTTCalendarEvent
 
         period_id = 'Mathematics'
         activity = object()
-        exc = TimetableException(date(2004, 10, 12), None, None, None)
+        exc = object()
 
         ev = ExceptionalTTCalendarEvent(date(2004, 10, 13), timedelta(45),
                                         "Math", exception=exc)
@@ -593,9 +597,6 @@ class TestExceptionalTTCalendarEvent(unittest.TestCase):
         self.assert_(ev.exception is exc)
 
         self.assertRaises(AttributeError, setattr, ev, 'exception', object())
-        self.assertRaises(ValueError, ExceptionalTTCalendarEvent,
-                          date(2004, 10, 13), timedelta(45), "Math",
-                          exception=object())
 
 
 class TestSchooldayPeriod(unittest.TestCase):
@@ -836,22 +837,24 @@ class TestSequentialDaysTimetableModel(NiceDiffsMixin, unittest.TestCase,
 
     def test_createCalendar_with_exceptions(self):
         from schooltool.timetable import TimetableException
+        from schooltool.timetable import ExceptionalTTCalendarEvent
         from schooltool.timetable import TimetableActivity
-        from schooltool.cal import CalendarEvent
         tt = self.createTimetable()
         tt.exceptions.append(
                 TimetableException(date=date(2003, 11, 24),
                                    period_id='Blue',
-                                   activity=TimetableActivity("Math"),
-                                   replacement=None))
-        tt.exceptions.append(
-                TimetableException(date=date(2003, 11, 26),
-                                   period_id='Green',
-                                   activity=TimetableActivity("English"),
-                                   replacement=CalendarEvent(
-                                        datetime(2003, 11, 26, 9, 30),
-                                        timedelta(minutes=60),
-                                        "English (short)")))
+                                   activity=TimetableActivity("Math")))
+
+        exc = TimetableException(date=date(2003, 11, 26),
+                                 period_id='Green',
+                                 activity=TimetableActivity("English"))
+        exc.replacement = ExceptionalTTCalendarEvent(
+                                      datetime(2003, 11, 26, 9, 30),
+                                      timedelta(minutes=60),
+                                      "English (short)",
+                                      exception=exc)
+        tt.exceptions.append(exc)
+
         model = self.createModel()
         schooldays = SchooldayModelStub()
         cal = model.createCalendar(schooldays, tt)

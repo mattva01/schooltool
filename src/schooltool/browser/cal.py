@@ -37,7 +37,7 @@ from schooltool.common import to_unicode, parse_date
 from schooltool.component import traverse, getPath, getRelatedObjects, traverse
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
 from schooltool.interfaces import ITimetableCalendarEvent
-from schooltool.timetable import TimetableException
+from schooltool.timetable import TimetableException, ExceptionalTTCalendarEvent
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember
 from schooltool.browser.widgets import TextWidget, SelectionWidget
@@ -723,7 +723,18 @@ class EventViewHelpers:
         """Add a timetable exception replaces or removes this event."""
         exception = TimetableException(event.dtstart.date(),
                                        event.period_id,
-                                       event.activity, replacement)
+                                       event.activity)
+        if replacement is not None:
+            exceptional_event = ExceptionalTTCalendarEvent(
+                    replacement.dtstart,
+                    replacement.duration,
+                    replacement.title,
+                    replacement.owner,
+                    context=replacement.context,
+                    location=replacement.location,
+                    unique_id=replacement.unique_id,
+                    exception=exception)
+            exception.replacement = exceptional_event
         tt = event.activity.timetable
         tt.exceptions.append(exception)
         # TODO: add the same exception to the timetables of

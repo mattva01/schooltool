@@ -512,18 +512,19 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
 
     def createFullWithExceptions(self, owner=None):
         from schooltool.timetable import TimetableException
-        from schooltool.cal import CalendarEvent
+        from schooltool.timetable import ExceptionalTTCalendarEvent
         tt = self.createFull(owner)
         english = list(tt['Day 1']['B'])[0]
         compsci = list(tt['Day 2']['C'])[0]
         tt.exceptions.append(TimetableException(datetime.date(2004, 10, 24),
-                                                'C', compsci, None))
-        replacement = CalendarEvent(datetime.datetime(2004, 11, 25, 12, 45),
-                                    datetime.timedelta(minutes=30),
-                                    "English (short)")
-        tt.exceptions.append(TimetableException(datetime.date(2004, 11, 25),
-                                                'B', english,
-                                                replacement))
+                                                'C', compsci))
+        exc = TimetableException(datetime.date(2004, 11, 25), 'B', english)
+        exc.replacement = ExceptionalTTCalendarEvent(
+                                       datetime.datetime(2004, 11, 25, 12, 45),
+                                       datetime.timedelta(minutes=30),
+                                       "English (short)",
+                                       exception=exc)
+        tt.exceptions.append(exc)
         return tt
 
     def createView(self, context, key=('2003 fall', 'weekly')):
