@@ -1040,7 +1040,7 @@ class IACLCalendar(ICalendarWrite, IACLOwner):
 
 
 class IRecurrenceRule(Interface):
-    """Base interface of the recurrence rules"""
+    """Base interface of the recurrence rules."""
 
     interval = Attribute(
         """Interval of recurrence (a positive integer).

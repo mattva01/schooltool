@@ -297,6 +297,136 @@ def parse_period(value):
         return Period(start, end_or_duration)
 
 
+def _parse_recurrence_weekly(args):
+    """Parse iCalendar weekly recurrence rule.
+
+    args is a mapping from attribute names in RRULE to their string values.
+
+    >>> _parse_recurrence_weekly({})
+    WeeklyRecurrenceRule(1, None, None, (), [])
+    >>> _parse_recurrence_weekly({'BYDAY': 'WE'})
+    WeeklyRecurrenceRule(1, None, None, (), [2])
+    >>> _parse_recurrence_weekly({'BYDAY': 'MO,WE,SU'})
+    WeeklyRecurrenceRule(1, None, None, (), [0, 2, 6])
+
+    """
+    # XXX Circular import!
+    from schooltool.cal import WeeklyRecurrenceRule
+    weekdays = []
+    days = args.get('BYDAY', None)
+    if days is not None:
+        for day in days.split(','):
+            weekdays.append(ical_weekdays.index(day))
+    return WeeklyRecurrenceRule(weekdays=weekdays)
+
+def _parse_recurrence_monthly(args):
+    """Parse iCalendar monthly recurrence rule.
+
+    args is a mapping from attribute names in RRULE to their string values.
+    """
+    # XXX Circular import!
+    from schooltool.cal import MonthlyRecurrenceRule
+    # XXX TODO
+    return MonthlyRecurrenceRule()
+
+
+def parse_recurrence_rule(args, exdate=None):
+    """Parse iCalendar RRULE and EXDATE entries.
+
+    Returns the corresponding subclass of RecurrenceRule.
+
+    args is a mapping from attribute names in RRULE to their string values,
+    exdate is a string value of EXDATE, or None if EXDATE was not provided.
+
+    A trivial example of a daily recurrence:
+
+    >>> parse_recurrence_rule({'FREQ': 'DAILY'})
+    DailyRecurrenceRule(1, None, None, ())
+
+    A slightly more complex example with an exception:
+
+    >>> parse_recurrence_rule({'FREQ': 'DAILY', 'INTERVAL': '5', 'COUNT': '7'},
+    ...                       '20041006T000000Z')
+    DailyRecurrenceRule(5, 7, None, (datetime.date(2004, 10, 6),))
+
+    An example that includes use of UNTIL:
+
+    >>> parse_recurrence_rule({'FREQ': 'DAILY', 'UNTIL': '20041008T000000Z'})
+    DailyRecurrenceRule(1, None, datetime.datetime(2004, 10, 8, 0, 0), ())
+
+    You may specify multiple exceptions:
+    >>> rule = parse_recurrence_rule({'FREQ': 'DAILY'},
+    ...              '20041006T000000Z,20041008T000000Z,20041010T000000Z')
+    >>> len(rule.exceptions)
+    3
+    >>> rule.exceptions[0]
+    datetime.date(2004, 10, 6)
+    >>> rule.exceptions[1]
+    datetime.date(2004, 10, 8)
+    >>> rule.exceptions[2]
+    datetime.date(2004, 10, 10)
+
+    Of course, other recurrence frequencies may be used:
+
+    >>> parse_recurrence_rule({'FREQ': 'WEEKLY', 'BYDAY': 'MO,WE,SU'})
+    WeeklyRecurrenceRule(1, None, None, [], [0, 2, 6])
+    >>> parse_recurrence_rule({'FREQ': 'MONTHLY'})
+    MonthlyRecurrenceRule(1, None, None, [], 'monthday')
+    >>> parse_recurrence_rule({'FREQ': 'YEARLY'})
+    YearlyRecurrenceRule(1, None, None, ())
+
+    You have to provide a valid recurrence frequency, or you will get an error:
+
+    >>> parse_recurrence_rule({})
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid frequency of recurrence: None
+    >>> parse_recurrence_rule({'FREQ': 'bogus'})
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid frequency of recurrence: 'bogus'
+
+    Unknown keys in args are ignored silently:
+
+    >>> parse_recurrence_rule({'FREQ': 'DAILY', 'WHATEVER': 'IGNORED'})
+    DailyRecurrenceRule(1, None, None, ())
+
+    """
+    # XXX Circular import!
+    from schooltool.cal import DailyRecurrenceRule, YearlyRecurrenceRule
+
+    # parse the list of exceptions
+    exceptions = []
+    if exdate is not None:
+        for dt in exdate.split(','):
+            exceptions.append(parse_date_time(dt).date())
+
+    # parse common recurrency attributes
+    interval = int(args.pop('INTERVAL', '1'))
+    count = args.pop('COUNT', None)
+    if count is not None:
+        count = int(count)
+    until = args.pop('UNTIL', None)
+    if until is not None:
+        until = parse_date_time(until)
+
+    # instantiate the corresponding recurrence rule
+    freq = args.pop('FREQ', None)
+    if freq == 'DAILY':
+        rule = DailyRecurrenceRule()
+    elif freq == 'WEEKLY':
+        rule = _parse_recurrence_weekly(args)
+    elif freq == 'MONTHLY':
+        rule = _parse_recurrence_monthly(args)
+    elif freq == 'YEARLY':
+        rule = YearlyRecurrenceRule()
+    else:
+        raise ValueError('Invalid frequency of recurrence: %r' % freq)
+
+    return rule.replace(interval=interval, count=count, until=until,
+                        exceptions=exceptions)
+
+
 class Period:
     """A period of time"""
 
