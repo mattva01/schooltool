@@ -167,7 +167,8 @@ class ImmutableCalendar:
         for event in self:
             if event.unique_id == unique_id:
                 return event
-        raise KeyError(unique_id)
+        else:
+            raise KeyError(unique_id)
 
     def byDate(self, date):
         events = []
@@ -360,7 +361,7 @@ class CalendarEvent(Persistent):
 
     def hasOccurrences(self):
         if self.recurrence is None:
-            # No recurrence rule implies one and only one occurrence
+            # No recurrence rule implies one and only one occurrence.
             return True
         if self.recurrence.until is None and self.recurrence.count is None:
             # Events that repeat forever always have occurrences because
@@ -369,10 +370,10 @@ class CalendarEvent(Persistent):
         try:
             self.recurrence.apply(self).next()
         except StopIteration:
-            # No occurrences
+            # No occurrences.
             return False
         else:
-            # At least ne occurrence exists
+            # At least one occurrence exists.
             return True
 
 
