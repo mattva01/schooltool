@@ -30,9 +30,11 @@ from StringIO import StringIO
 from schooltool.browser import View, Template
 from schooltool.browser import absoluteURL
 from schooltool.browser.auth import AuthenticatedAccess, ManagerAccess
-from schooltool.component import FacetManager, getRelatedObjects, getPath
+from schooltool.component import FacetManager
+from schooltool.component import getRelatedObjects, getPath, traverse
 from schooltool.interfaces import IPerson
 from schooltool.interfaces import IGroup
+from schooltool.membership import Membership
 from schooltool.rest.infofacets import maxspect
 from schooltool.translation import ugettext as _
 from schooltool.uris import URIMember, URIGroup
@@ -153,6 +155,11 @@ class GroupView(View, GetParentsMixin):
 
     template = Template("www/group.pt")
 
+    def _traverse(self, name, request):
+        if name == "edit":
+            return GroupEditView(self.context)
+        raise KeyError(name)
+
     def getOtherMembers(self, request):
         """Return members that are not groups."""
         return [{'url': absoluteURL(request, g), 'title': g.title}
@@ -164,6 +171,61 @@ class GroupView(View, GetParentsMixin):
         return [{'url': absoluteURL(request, g), 'title': g.title}
                 for g in getRelatedObjects(self.context, URIMember)
                 if IGroup.providedBy(g)]
+
+
+class GroupEditView(View):
+
+    __used_for__ = IGroup
+
+    authorization = ManagerAccess
+
+    template = Template('www/group_edit.pt')
+
+    def list(self, request):
+        """Return a list of member data as tuples
+
+        (type, title, path, URL)
+        """
+        result = [(obj.__class__.__name__, obj.title, getPath(obj),
+                   absoluteURL(request, obj))
+                  for obj in getRelatedObjects(self.context, URIMember)]
+        result.sort()
+        return result
+
+    def addList(self, request):
+        """Return a list of member data as tuples
+
+        (type, title, path, URL)
+        """
+        result = []
+
+        searchstr = request.args['SEARCH'][0].lower()
+        members = getRelatedObjects(self.context, URIMember)
+
+        for path in ('/groups', '/persons', '/resources'):
+            for obj in traverse(self.context, path).itervalues():
+                if (searchstr in obj.title.lower() and
+                    obj not in members):
+                    result.append((obj.__class__.__name__, obj.title,
+                                   getPath(obj), absoluteURL(request, obj)))
+        result.sort()
+        return result
+
+    def update(self, request):
+        if "DELETE" in request.args:
+            paths = []
+            if "CHECK" in request.args:
+                paths += request.args["CHECK"]
+            for link in self.context.listLinks(URIMember):
+                if getPath(link.traverse()) in paths:
+                    link.unlink()
+        if "FINISH_ADD" in request.args:
+            paths = []
+            if "CHECK" in request.args:
+                paths += request.args["CHECK"]
+            for path in paths:
+                obj = traverse(self.context, path)
+                Membership(group=self.context, member=obj)
 
 
 class PhotoView(View):

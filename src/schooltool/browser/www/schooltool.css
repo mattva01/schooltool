@@ -57,6 +57,13 @@ input.button:hover {
   color: black;
 }
 
+input.field {
+  border: 1px solid #cccc88;
+  background: white;
+  color: #888844;
+  padding: 2px 4px;
+}
+
 div.subgroups {
   background: #aee5ac;
   border: 1px solid #036d00;

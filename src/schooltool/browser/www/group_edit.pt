@@ -1,0 +1,89 @@
+<html metal:use-macro="view/macros/page">
+<head>
+  <title metal:fill-slot="title">
+    Edit <span tal:replace="context/title"/>
+  </title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1">
+    Edit <span tal:replace="context/title"/>
+  </h1>
+  <metal:block metal:fill-slot="content">
+
+  <div tal:define="status python:view.update(request)" 
+       tal:condition="status" tal:content="status" class="status"/>
+
+  <tal:block condition="not:request/args/ADD|nothing">
+  <tal:block condition="not:request/args/ADD2|nothing">
+  <form method="POST"
+        tal:attributes="action request/uri">
+  <table>
+    <tr>
+      <th>Icon</th>
+      <th>&nbsp;</th>
+      <th>Name</th>
+    </tr>
+
+    <tr tal:repeat="item python: view.list(request)">
+      <td tal:content="python:item[0]">Icon</td>
+      <td><input
+              type="checkbox" name="CHECK"
+              tal:attributes="value python:item[2]">
+      </td>
+      <td><a tal:attributes="href python:item[3]"
+             tal:content="python:item[1]"/></td>
+    </tr>
+  </table>
+  <input type="submit" class="button" name="DELETE"
+         value="Remove selected members"/>
+  <input type="submit" class="button" name="ADD"
+         value="Add members"/>
+  </form>
+  </tal:block>
+  </tal:block>
+
+  <tal:block condition="request/args/ADD|nothing">
+  <form method="POST"
+        tal:attributes="action request/uri">
+
+  <p i18n:translate="">Enter the name of a member you want to add:</p>
+
+  <input type="text" class="field" name="SEARCH"/>
+  <input type="submit" class="button" name="ADD2"
+         value="Next"/>
+  </form>
+  </tal:block>
+
+  <tal:block condition="request/args/SEARCH|nothing">
+  <form method="POST"
+        tal:attributes="action request/uri">
+
+  <p i18n:translate="">Select a member you want to add:</p>
+
+  <table>
+    <tr>
+      <th>Icon</th>
+      <th>&nbsp;</th>
+      <th>Name</th>
+    </tr>
+
+    <tr tal:repeat="item python: view.addList(request)">
+      <td tal:content="python:item[0]">Icon</td>
+      <td><input
+              type="checkbox" name="CHECK"
+              tal:attributes="value python:item[2];
+                              id string:check_${repeat/item/number}">
+      </td>
+      <td><label tal:attributes="for string:check_${repeat/item/number}"
+                 tal:content="python:item[1]"/></td>
+    </tr>
+  </table>
+
+  <input type="submit" class="button" name="FINISH_ADD"
+         value="Add selected"/>
+  </form>
+  </tal:block>
+
+  </metal:block>
+</body>
+</html>

@@ -193,7 +193,7 @@ class TestPersonInfoMixin(unittest.TestCase):
 
 
 
-class TestMembershipViewMixin(RegistriesSetupMixin, unittest.TestCase):
+class TestGroupView(RegistriesSetupMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.model import Group, Person
@@ -248,6 +248,106 @@ class TestMembershipViewMixin(RegistriesSetupMixin, unittest.TestCase):
                             'title': 'root'}])
 
 
+class TestGroupEditView(RegistriesSetupMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.model import Group, Person, Resource
+        from schooltool.app import Application, ApplicationObjectContainer
+        from schooltool.membership import Membership
+        from schooltool import membership
+        self.setUpRegistries()
+        membership.setUp()
+        app = Application()
+        app['groups'] = ApplicationObjectContainer(Group)
+        app['persons'] = ApplicationObjectContainer(Person)
+        app['resources'] = ApplicationObjectContainer(Resource)
+        self.root = app['groups'].new("root", title="root")
+        self.group = app['groups'].new("new", title="Teachers")
+        self.sub = app['groups'].new("sub", title="subgroup")
+        self.group2 = app['groups'].new("group2", title="Random group")
+        self.per = app['persons'].new("p", title="Pete")
+        self.per2 = app['persons'].new("j", title="John")
+        self.per3 = app['persons'].new("lj", title="Longjohn")
+        self.res = app['resources'].new("hall", title="Hall")
+
+        Membership(group=self.root, member=self.group)
+        Membership(group=self.group, member=self.sub)
+        Membership(group=self.group, member=self.per)
+        Membership(group=self.group, member=self.per2)
+
+    def test(self):
+        from schooltool.browser.model import GroupEditView
+        view = GroupEditView(self.group)
+        view.authorization = lambda x, y: True
+        request = RequestStub()
+        result = view.render(request)
+        self.assertEquals(request.headers['content-type'],
+                          "text/html; charset=UTF-8")
+        self.assert_('Pete' in result, result)
+
+    def test_list(self):
+        from schooltool.browser.model import GroupEditView
+        view = GroupEditView(self.group)
+        request = RequestStub()
+        self.assertEquals(
+            view.list(request),
+            [('Group', 'subgroup', '/groups/sub',
+              'http://localhost:7001/groups/sub'),
+             ('Person', 'John', '/persons/j',
+              'http://localhost:7001/persons/j'),
+             ('Person', 'Pete', '/persons/p',
+              'http://localhost:7001/persons/p'),
+             ])
+
+    def test_addList(self):
+        from schooltool.browser.model import GroupEditView
+        view = GroupEditView(self.group)
+        request = RequestStub(args={'SEARCH': ''})
+        self.assertEquals(
+            view.addList(request),
+            [('Group', 'Random group', '/groups/group2',
+              'http://localhost:7001/groups/group2'),
+             ('Group', 'Teachers', '/groups/new',
+              'http://localhost:7001/groups/new'),
+             ('Group', 'root', '/groups/root',
+              'http://localhost:7001/groups/root'),
+             ('Person', 'Longjohn', '/persons/lj',
+              'http://localhost:7001/persons/lj'),
+             ('Resource', 'Hall', '/resources/hall',
+              'http://localhost:7001/resources/hall')
+             ])
+
+        request = RequestStub(args={'SEARCH': 'john'})
+        self.assertEquals(
+            view.addList(request),
+            [('Person', 'Longjohn', '/persons/lj',
+            'http://localhost:7001/persons/lj')])
+
+    def test_update_DELETE(self):
+        from schooltool.browser.model import GroupEditView
+        from schooltool.component import getRelatedObjects
+        from schooltool.uris import URIMember
+        view = GroupEditView(self.group)
+        request = RequestStub(args={"DELETE":"Remove them",
+                                    "CHECK": ['/groups/sub', '/persons/p']})
+        view.update(request)
+        self.assertEquals(getRelatedObjects(self.group, URIMember),
+                          [self.per2])
+
+    def test_update_ADD(self):
+        from schooltool.browser.model import GroupEditView
+        from schooltool.component import getRelatedObjects
+        from schooltool.uris import URIMember
+        view = GroupEditView(self.group)
+        request = RequestStub(args={"FINISH_ADD":"Add selected",
+                                    "CHECK": ['/groups/group2',
+                                              '/persons/lj']})
+        view.update(request)
+        members = getRelatedObjects(self.group, URIMember)
+        assert self.group2 in members
+        assert self.per3 in members
+
+
 class TestPhotoView(unittest.TestCase):
 
     def createView(self, photo):
@@ -277,7 +377,8 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestPersonInfoMixin))
     suite.addTest(unittest.makeSuite(TestPersonView))
     suite.addTest(unittest.makeSuite(TestPersonEditView))
-    suite.addTest(unittest.makeSuite(TestMembershipViewMixin))
+    suite.addTest(unittest.makeSuite(TestGroupView))
+    suite.addTest(unittest.makeSuite(TestGroupEditView))
     suite.addTest(unittest.makeSuite(TestPhotoView))
     return suite
 
