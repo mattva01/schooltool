@@ -35,6 +35,7 @@ import sets
 import libxml2
 import threading
 from wxPython.wx import *
+from wxPython.grid import *
 from wxPython.lib.scrolledpanel import wxScrolledPanel
 from schooltool.guiclient import SchoolToolClient, Unchanged, RollCallEntry
 from schooltool.guiclient import SchoolToolError, ResponseStatusError
@@ -130,6 +131,7 @@ class RollCallInfoDlg(wxDialog):
         wxDialog.__init__(self, parent, -1, title,
                           style=wxDIALOG_MODAL|wxCAPTION|wxSYSTEM_MENU)
         self.show_resolved = show_resolved
+        self.CenterOnScreen(wx.wxBOTH)
 
         vsizer = wxBoxSizer(wxVERTICAL)
         hsizer = wxBoxSizer(wxHORIZONTAL)
@@ -517,6 +519,163 @@ class AbsenceFrame(wxDialog):
             self.comment_list.SetStringItem(idx, 6, comment.text)
 
 
+class SchoolTimetableGridTable(wxPyGridTableBase):
+    """Back-end for the school time table grid."""
+
+    def __init__(self, tt):
+        wxPyGridTableBase.__init__(self)
+        self.tt = tt
+
+    def GetNumberCols(self):
+        return len(self.tt.periods)
+
+    def GetColLabelValue(self, col):
+        return "%s, %s" % self.tt.periods[col]
+
+    def GetNumberRows(self):
+        return len(self.tt.teachers)
+
+    def GetRowLabelValue(self, row):
+        return self.tt.teachers[row][1]
+
+    def IsEmptyCell(self, row, col):
+        return len(self.tt.tt[row][col]) == 0
+
+    def GetValue(self, row, col):
+        return "\n".join([title for title, path in self.tt.tt[row][col]])
+
+    def SetValue(self, row, col, value):
+        pass
+
+
+class ActivitySelectionDlg(wxDialog):
+    """Activity selection popup of the school timetable grid"""
+
+    def __init__(self, parent, teacher_title, period_key, choices):
+        title = "%s, %s, %s" % (teacher_title, period_key[0], period_key[1])
+        wxDialog.__init__(self, parent, -1, title,
+                          style=wxDIALOG_MODAL|wxCAPTION|wxSYSTEM_MENU)
+        self.CenterOnScreen(wx.wxBOTH)
+
+        self.choices = list(choices)
+        self.choices.sort()
+
+        vsizer = wxBoxSizer(wxVERTICAL)
+        # wxLB_EXTENDED would be nicer, but then SetSelection stops working
+        # for completely obscure reasons
+        self.listbox = wxListBox(self, -1, style=wxLB_MULTIPLE,
+                            choices=[title for title, value in self.choices])
+        vsizer.Add(self.listbox, 1, wxEXPAND|wxALL, 8)
+
+        static_line = wxStaticLine(self, -1)
+        vsizer.Add(static_line, 0, wxEXPAND, 0)
+
+        button_bar = wxBoxSizer(wxHORIZONTAL)
+        ok_btn = wxButton(self, wxID_OK, "OK")
+        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        ok_btn.SetDefault()
+        button_bar.Add(ok_btn, 0, wxRIGHT, 16)
+        button_bar.Add(cancel_btn, 0, 0, 0)
+        vsizer.Add(button_bar, 0, wxALIGN_RIGHT|wxALL, 16)
+
+        self.SetSizer(vsizer)
+        vsizer.SetSizeHints(self)
+        self.Layout()
+
+    def setSelection(self, selection):
+        selected = sets.Set()
+        for title, path in selection:
+            selected.add(path)
+        for idx, (title, path) in enumerate(self.choices):
+            if path in selected:
+                self.listbox.SetSelection(idx)
+            else:
+                self.listbox.Deselect(idx)
+
+    def getSelection(self):
+        return [self.choices[idx] for idx in self.listbox.GetSelections()]
+
+
+class SchoolTimetableGrid(wxGrid):
+
+    def __init__(self, parent, tt):
+        wxGrid.__init__(self, parent, -1)
+        self.tt = tt
+        self.SetTable(SchoolTimetableGridTable(tt), True)
+        # There is no way to auto-size row labels.
+
+        EVT_GRID_EDITOR_SHOWN(self, self.OnEditorShown)
+        EVT_GRID_CELL_LEFT_DCLICK(self, self.OnLeftDClick)
+
+    def OnLeftDClick(self, event):
+        if self.CanEnableCellControl():
+            self.EnableCellEditControl()
+
+    def OnEditorShown(self, event):
+        row = event.GetRow()
+        col = event.GetCol()
+        event.Veto()
+
+        teacher_path, teacher_title, choices = self.tt.teachers[row]
+        dlg = ActivitySelectionDlg(self, teacher_title, self.tt.periods[col],
+                                   choices)
+        dlg.setSelection(self.tt.tt[row][col])
+        if dlg.ShowModal() == wxID_OK:
+            self.tt.tt[row][col] = dlg.getSelection()
+            msg = wxGridTableMessage(self.GetTable(),
+                                     wxGRIDTABLE_REQUEST_VIEW_GET_VALUES)
+            self.ProcessTableMessage(msg)
+        dlg.Destroy()
+
+
+class SchoolTimetableFrame(wxDialog):
+    """Window showing a timetable for the whole school."""
+
+    def __init__(self, client, key, tt, parent=None, id=-1):
+        title = "School Timetable (%s, %s)" % key
+        wxDialog.__init__(self, parent, id, title, size=wxSize(600, 400),
+              style=wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxTHICK_FRAME)
+        self.title = title
+        self.client = client
+        self.key = key
+        self.tt = tt
+
+        main_sizer = wxBoxSizer(wxVERTICAL)
+        grid = SchoolTimetableGrid(self, tt)
+        main_sizer.Add(grid, 1, wxEXPAND|wxALL, 8)
+
+        static_line = wxStaticLine(self, -1)
+        main_sizer.Add(static_line, 0, wxEXPAND, 0)
+
+        button_bar = wxBoxSizer(wxHORIZONTAL)
+        ok_btn = wxButton(self, wxID_OK, "OK")
+        cancel_btn = wxButton(self, wxID_CANCEL, "Cancel")
+        ok_btn.SetDefault()
+        EVT_BUTTON(self, wxID_OK, self.OnOk)
+        button_bar.Add(ok_btn, 0, wxRIGHT, 16)
+        button_bar.Add(cancel_btn, 0, 0, 0)
+        main_sizer.Add(button_bar, 0, wxALIGN_RIGHT|wxALL, 16)
+
+        self.SetSizer(main_sizer)
+        self.SetSizeHints(minW=200, minH=200)
+        self.Layout()
+
+    def OnClose(self, event=None):
+        """Close the window."""
+        self.Close(True)
+
+    def OnOk(self, event=None):
+        """Save the edited timetable to the server."""
+        try:
+            period, schema = self.key
+            self.client.putSchooltoolTimetable(period, schema, self.tt)
+        except SchoolToolError, e:
+            wxMessageBox("Could not submit the roll call: %s" % e,
+                         self.title, wxICON_ERROR|wxOK)
+        else:
+            self.Close(True)
+
+
 class MainFrame(wxFrame):
     """Main frame.
 
@@ -599,6 +758,9 @@ class MainFrame(wxFrame):
             menu("&View",
                 item("All &Absences", "List all absences in the system",
                      self.DoViewAllAbsences),
+                item("&School Timetable",
+                     "Edit a timetable for the whole school",
+                     self.DoViewSchoolTimetable),
                 separator(),
                 item("&Refresh\tCtrl+R", "Refresh data from the server",
                      self.DoRefresh),
@@ -1210,6 +1372,43 @@ class MainFrame(wxFrame):
         window = AbsenceFrame(parent=self, title=title, detailed=False,
                               client=self.client, path=path,
                               absence_data=absence_data)
+        window.Show()
+
+    def DoViewSchoolTimetable(self, event=None):
+        """Open a school timetable window for a selected timetable.
+
+        Accessible from View|School Timetable
+        """
+        try:
+            periods = self.client.getTimePeriods()
+        except SchoolToolError, e:
+            wxMessageBox("Could not get the list of time periods: %s" % e,
+                         "School Timetable", wxICON_ERROR|wxOK)
+            return
+        else:
+            periods.sort()
+        try:
+            schemas = self.client.getTimetableSchemas()
+        except SchoolToolError, e:
+            wxMessageBox("Could not get the list of timetable schemas: %s" % e,
+                         "School Timetable", wxICON_ERROR|wxOK)
+            return
+        else:
+            schemas.sort()
+        choices = [(p, s) for p in periods for s in schemas]
+        choice = wxGetSingleChoiceIndex(
+                        "Select a timetable to edit",
+                        "School Timetable", ["%s, %s" % c for c in choices])
+        if choice == -1:
+            return
+        key = choices[choice]
+        try:
+            tt = self.client.getSchoolTimetable(*key)
+        except SchoolToolError, e:
+            wxMessageBox("Could not get the school timetable: %s" % e,
+                         "School Timetable", wxICON_ERROR|wxOK)
+            return
+        window = SchoolTimetableFrame(self.client, key, tt, parent=self)
         window.Show()
 
 

@@ -44,6 +44,19 @@ class ConnectionFactory:
         return c
 
 
+class MultiConnectionFactory:
+
+    def __init__(self, responses):
+        self.responses = responses
+        self.connections = []
+
+    def __call__(self, server, port):
+        n = len(self.connections)
+        c = ConnectionStub(server, port, self.responses[n], None)
+        self.connections.append(c)
+        return c
+
+
 class ConnectionStub:
 
     def __init__(self, server, port, response, error):
@@ -96,7 +109,15 @@ class ResponseStub:
         return self._headers[name.lower()]
 
 
-class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
+class NiceDiffsMixin:
+
+    def assertEquals(self, results, expected, msg=None):
+        if msg is None:
+            msg = "\n" + diff(pformat(expected), pformat(results))
+        unittest.TestCase.assertEquals(self, results, expected, msg)
+
+
+class TestSchoolToolClient(XMLCompareMixin, NiceDiffsMixin, unittest.TestCase):
 
     def setUp(self):
         libxml2.registerErrorHandler(lambda ctx, error: None, None)
@@ -107,6 +128,12 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
         client.connectionFactory = ConnectionFactory(response, error)
         return client
 
+    def newClientMulti(self, responses):
+        from schooltool.guiclient import SchoolToolClient
+        client = SchoolToolClient()
+        client.connectionFactory = MultiConnectionFactory(responses)
+        return client
+
     def oneConnection(self, client):
         self.assertEquals(len(client.connectionFactory.connections), 1)
         return client.connectionFactory.connections[0]
@@ -114,6 +141,12 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
     def checkConnPath(self, client, path):
         conn = self.oneConnection(client)
         self.assertEquals(conn.path, path)
+
+    def checkConnPaths(self, client, paths):
+        self.assertEquals(len(client.connectionFactory.connections),
+                          len(paths))
+        for conn, path in zip(client.connectionFactory.connections, paths):
+            self.assertEquals(conn.path, path)
 
     def test_setServer(self):
         from schooltool.guiclient import SchoolToolClient
@@ -473,8 +506,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                                    "foo")]
         client = self.newClient(ResponseStub(200, 'OK', body))
         results = client.getAbsenceComments('/persons/john/absences/002')
-        self.assertEquals(results, expected, "\n" +
-                          diff(pformat(expected), pformat(results)))
+        self.assertEquals(results, expected)
         self.checkConnPath(client, '/persons/john/absences/002')
 
     def test_getAbsences_with_errors(self):
@@ -484,9 +516,9 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
 
     def test_getSchoolTimetable(self):
         from schooltool.guiclient import SchoolTimetableInfo
-        body = dedent("""
+        body1 = dedent("""
             <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
-              <teacher path="/people/0013">
+              <teacher path="/persons/0013">
                 <day id="A">
                   <period id="Green">
                     <activity group="/groups/002">French</activity>
@@ -504,7 +536,7 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
                   </period>
                 </day>
               </teacher>
-              <teacher path="/people/0014">
+              <teacher path="/persons/0014">
                 <day id="A">
                   <period id="Green">
                     <activity group="/groups/006">Geography</activity>
@@ -524,27 +556,132 @@ class TestSchoolToolClient(XMLCompareMixin, unittest.TestCase):
               </teacher>
             </schooltt>
             """)
+        body2 = dedent("""
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <items>
+                <item xlink:href="/persons/0013" xlink:title="Fred" />
+                <item xlink:href="/persons/0014" xlink:title="Barney"/>
+               </items>
+            </container>
+        """)
+        body3 = dedent("""
+            <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
+              <existing>
+                <relationship xlink:title="Maths" xlink:href="/groups/maths"
+                    xlink:role="http://schooltool.org/ns/teaching/taught"
+                    xlink:arcrole="http://schooltool.org/ns/teaching">
+                    <manage xlink:href="not interesting"/>
+                </relationship>
+              </existing>
+            </relationships>
+        """)
+        body4 = dedent("""
+            <relationships xmlns:xlink="http://www.w3.org/1999/xlink">
+              <existing>
+              </existing>
+            </relationships>
+        """)
 
         expected = SchoolTimetableInfo(
-            ['/people/0013', '/people/0014'],
+            [('/persons/0013', 'Fred', [('Maths', '/groups/maths')]),
+             ('/persons/0014', 'Barney', [])],
             [("A", "Green"),
              ("A", "Blue"),
              ("B", "Green"),
              ("B", "Blue")],
-            [[[('/groups/002', 'French')],
-              [('/groups/003', 'Math')],
-              [('/groups/004', 'English')],
-              [('/groups/005', 'Biology')]],
-             [[('/groups/006', 'Geography')],
-              [('/groups/007', 'History')],
-              [('/groups/008', 'Physics')],
-              [('/groups/009', 'Chemistry')]]]
+            [[[('French', '/groups/002')],
+              [('Math', '/groups/003')],
+              [('English', '/groups/004')],
+              [('Biology', '/groups/005')]],
+             [[('Geography', '/groups/006')],
+              [('History', '/groups/007')],
+              [('Physics', '/groups/008')],
+              [('Chemistry', '/groups/009')]]]
             )
 
-        client = self.newClient(ResponseStub(200, 'OK', body))
+        client = self.newClientMulti([ResponseStub(200, 'OK', body1),
+                                      ResponseStub(200, 'OK', body2),
+                                      ResponseStub(200, 'OK', body3),
+                                      ResponseStub(200, 'OK', body4)])
         results = client.getSchoolTimetable('2003-fall', 'weekly')
-        self.assertEquals(results, expected, "\n" +
-                          diff(pformat(expected), pformat(results)))
+        self.checkConnPaths(client, ['/schooltt/2003-fall/weekly',
+                                     '/persons',
+                                     '/persons/0013/relationships',
+                                     '/persons/0014/relationships'])
+        self.assertEquals(results, expected)
+
+    def test_putSchooltoolTimetable(self):
+        from schooltool.guiclient import SchoolTimetableInfo, SchoolToolError
+        tt = SchoolTimetableInfo(
+            [('/persons/0013', 'Fred', [('Maths', '/groups/maths')]),
+             ('/persons/0014', 'Barney', [])],
+            [("A", "Green"),
+             ("A", "Blue"),
+             ("B", "Green"),
+             ("B", "Blue")],
+            [[[('French', '/groups/002')],
+              [('Math', '/groups/003')],
+              [('English', '/groups/004')],
+              [('Biology', '/groups/005')]],
+             [[('Geography', '/groups/006')],
+              [('History', '/groups/007')],
+              [('Physics', '/groups/008')],
+              [('Chemistry', '/groups/009')]]]
+            )
+        client = self.newClient(ResponseStub(200, 'OK'))
+        client.putSchooltoolTimetable('2003-fall', '4-day', tt)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/schooltt/2003-fall/4-day')
+        self.assertEquals(conn.method, 'PUT')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEquals(conn.body, tt.toXML())
+
+        client = self.newClient(ResponseStub(400, 'Bad'))
+        self.assertRaises(SchoolToolError, client.putSchooltoolTimetable,
+                          '2003-all', '4-day', tt)
+
+    def test_getTimePeriods(self):
+        body = """
+            <timePeriods xmlns:xlink="http://www.w3.org/1999/xlink">
+              <period xlink:type="simple"
+                      xlink:href="/time-periods/2003-fall"
+                      xlink:title="2003-fall"/>
+              <period xlink:type="simple"
+                      xlink:href="/time-periods/2004-spring"
+                      xlink:title="2004-spring"/>
+            </timePeriods>
+        """
+        expected = ["2003-fall", "2004-spring"]
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        results = client.getTimePeriods()
+        self.assertEquals(results, expected)
+        self.checkConnPath(client, '/time-periods')
+
+    def test_getTimePeriods_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        client = self.newClient(ResponseStub(500, 'BSOD', "<xml>Error!</xml>"))
+        self.assertRaises(SchoolToolError, client.getTimePeriods)
+
+    def test_getTimetableSchemas(self):
+        body = """
+            <timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink">
+              <schema xlink:type="simple"
+                      xlink:href="/ttschemas/six-day"
+                      xlink:title="six-day"/>
+              <schema xlink:type="simple" xlink:href="/ttschemas/weekly"
+                      xlink:title="weekly"/>
+            </timetableSchemas>
+        """
+        expected = ["six-day", "weekly"]
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        results = client.getTimetableSchemas()
+        self.assertEquals(results, expected)
+        self.checkConnPath(client, '/ttschemas')
+
+    def test_getTimetableSchemas_with_errors(self):
+        from schooltool.guiclient import SchoolToolError
+        client = self.newClient(ResponseStub(500, 'BSOD', "<xml>Error!</xml>"))
+        self.assertRaises(SchoolToolError, client.getTimetableSchemas)
 
     def test_createFacet(self):
         client = self.newClient(ResponseStub(201, 'OK', 'Created',
@@ -1147,6 +1284,48 @@ class TestParseFunctions(unittest.TestCase):
         """)
         self.assertRaises(SchoolToolError, _parseAbsenceComments, body)
 
+    def test__parseTimePeriods(self):
+        from schooltool.guiclient import _parseTimePeriods
+        body = """
+            <timePeriods xmlns:xlink="http://www.w3.org/1999/xlink">
+              <period xlink:type="simple"
+                      xlink:href="/time-periods/2003-fall"
+                      xlink:title="2003-fall"/>
+              <period xlink:type="simple"
+                      xlink:href="/time-periods/2004-spring"
+                      xlink:title="2004-spring"/>
+            </timePeriods>
+        """
+        expected = ["2003-fall", "2004-spring"]
+        results = _parseTimePeriods(body)
+        self.assertEquals(results, expected)
+
+    def test__parseTimePeriods_errors(self):
+        from schooltool.guiclient import _parseTimePeriods, SchoolToolError
+        body = "<This is not XML"
+        self.assertRaises(SchoolToolError, _parseTimePeriods, body)
+
+    def test__parseTimetableSchemas(self):
+        from schooltool.guiclient import _parseTimetableSchemas
+        body = """
+            <timetableSchemas xmlns:xlink="http://www.w3.org/1999/xlink">
+              <schema xlink:type="simple"
+                      xlink:href="/ttschemas/six-day"
+                      xlink:title="six-day"/>
+              <schema xlink:type="simple" xlink:href="/ttschemas/weekly"
+                      xlink:title="weekly"/>
+            </timetableSchemas>
+        """
+        expected = ["six-day", "weekly"]
+        results = _parseTimetableSchemas(body)
+        self.assertEquals(results, expected)
+
+    def test__parseTimetableSchemas_errors(self):
+        from schooltool.guiclient import _parseTimetableSchemas
+        from schooltool.guiclient import SchoolToolError
+        body = "<This is not XML"
+        self.assertRaises(SchoolToolError, _parseTimetableSchemas, body)
+
 
 class InfoClassTestMixin:
     """Mixin for testing classes that are tuple replacements."""
@@ -1292,14 +1471,14 @@ class TestAbsenceInfo(unittest.TestCase, InfoClassTestMixin):
                           'in %s', '%s ago'), '2h15m ago')
 
 
-class TestSchoolTimetableInfo(unittest.TestCase):
+class TestSchoolTimetableInfo(NiceDiffsMixin, unittest.TestCase):
 
     def test_loadData(self):
         from schooltool.guiclient import SchoolTimetableInfo
         st = SchoolTimetableInfo()
         data = dedent("""
             <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
-              <teacher path="/people/0013">
+              <teacher path="/persons/0013">
                 <day id="A">
                   <period id="Green">
                     <activity group="/groups/002">French</activity>
@@ -1318,7 +1497,7 @@ class TestSchoolTimetableInfo(unittest.TestCase):
                   </period>
                 </day>
               </teacher>
-              <teacher path="/people/0014">
+              <teacher path="/persons/0014">
                 <day id="A">
                   <period id="Green">
                     <activity group="/groups/006">Geography</activity>
@@ -1342,20 +1521,21 @@ class TestSchoolTimetableInfo(unittest.TestCase):
             """)
         st.loadData(data)
 
-        self.assertEquals(st.teachers, ['/people/0013', '/people/0014'])
+        self.assertEquals(st.teachers, [('/persons/0013', None, None),
+                                        ('/persons/0014', None, None)])
         self.assertEquals(st.periods, [("A", "Green"),
                                        ("A", "Blue"),
                                        ("B", "Green"),
                                        ("B", "Blue")])
-        self.assertEquals(st.tt, [[[('/groups/002', 'French')],
-                                   [('/groups/003', 'Math')],
-                                   [('/groups/004', 'English'),
-                                    ('/groups/005', 'English')],
-                                   [('/groups/005', 'Biology')]],
-                                  [[('/groups/006', 'Geography')],
-                                   [('/groups/007', 'History')],
-                                   [('/groups/008', 'Physics')],
-                                   [('/groups/009', 'Chemistry')]]])
+        self.assertEquals(st.tt, [[[('French', '/groups/002')],
+                                   [('Math', '/groups/003')],
+                                   [('English', '/groups/004'),
+                                    ('English', '/groups/005')],
+                                   [('Biology', '/groups/005')]],
+                                  [[('Geography', '/groups/006')],
+                                   [('History', '/groups/007')],
+                                   [('Physics', '/groups/008')],
+                                   [('Chemistry', '/groups/009')]]])
 
     def test_loadData_breakage(self):
         from schooltool.guiclient import SchoolTimetableInfo, SchoolToolError
@@ -1379,7 +1559,7 @@ class TestSchoolTimetableInfo(unittest.TestCase):
 
     def test_toXML_empty(self):
         from schooltool.guiclient import SchoolTimetableInfo
-        st = SchoolTimetableInfo(['a', 'b'],
+        st = SchoolTimetableInfo([('a', None), ('b', None)],
                                  [("1", "A"), ("1", "B"),
                                   ("2", "A"), ("2", "B")])
         result = st.toXML()
@@ -1417,12 +1597,36 @@ class TestSchoolTimetableInfo(unittest.TestCase):
             """)
         self.assertEquals(result, expected, "\n" + diff(expected, result))
 
+    def test_setTeacherNames(self):
+        from schooltool.guiclient import SchoolTimetableInfo, RelationshipInfo
+        st = SchoolTimetableInfo([('/path1', None, None),
+                                  ('/path2', None, None)])
+        st.setTeacherNames({'/path1': 'John', '/path3': 'Smith'})
+        self.assertEquals(st.teachers, [('/path1', 'John', None),
+                                        ('/path2', None, None)])
+
+    def test_setTeacherRelationships(self):
+        from schooltool.guiclient import SchoolTimetableInfo, RelationshipInfo
+        st = SchoolTimetableInfo([('/path1', None, None),
+                                  ('/path2', None, None)])
+        st.setTeacherRelationships(0, [
+                RelationshipInfo('Teaching', 'Taught', 'Maths',
+                                 '/groups/maths', None),
+                RelationshipInfo('Teaching', 'Teacher', 'Foo',
+                                 '/groups/foo', None),
+                RelationshipInfo('Membership', 'Taught', 'Bar',
+                                 '/groups/bar', None),
+            ])
+        self.assertEquals(st.teachers, [('/path1', None,
+                                         [('Maths', '/groups/maths')]),
+                                        ('/path2', None, None)])
+
     def test_loadData_toXML_roundtrip(self):
         from schooltool.guiclient import SchoolTimetableInfo
         st = SchoolTimetableInfo()
         data = dedent("""
             <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
-              <teacher path="/people/0013">
+              <teacher path="/persons/0013">
                 <day id="A">
                   <period id="Green">
                     <activity group="/groups/002">French</activity>
@@ -1441,7 +1645,7 @@ class TestSchoolTimetableInfo(unittest.TestCase):
                   </period>
                 </day>
               </teacher>
-              <teacher path="/people/0014">
+              <teacher path="/persons/0014">
                 <day id="A">
                   <period id="Green">
                     <activity group="/groups/006">Geography</activity>
@@ -1464,11 +1668,6 @@ class TestSchoolTimetableInfo(unittest.TestCase):
         st.loadData(data)
         output = st.toXML()
         self.assertEquals(data, output, "\n" + diff(data, output))
-
-    def assertEquals(self, results, expected, msg=None):
-        if msg is None:
-            msg = "\n" + diff(pformat(expected), pformat(results))
-        unittest.TestCase.assertEquals(self, results, expected, msg)
 
 
 def test_suite():

@@ -109,6 +109,16 @@ class SchoolToolClient:
         """
         return self._request('POST', path, body)
 
+    def put(self, path, body):
+        """Perform an HTTP PUT request for a given path.
+
+        Returns the response object.
+
+        Sets status and version attributes if the communication succeeds.
+        Raises SchoolToolError if the communication fails.
+        """
+        return self._request('PUT', path, body)
+
     def delete(self, path):
         """Perform an HTTP DELETE request for a given path.
 
@@ -284,19 +294,47 @@ class SchoolToolClient:
         return _parseAbsenceComments(response.read())
 
     def getSchoolTimetable(self, period, schema):
-        """Returns a SchoolTimetableInfo object.
-
-        Each activity is a tuple of (group_path, title).
-        The matrix of activities has teachers as rows and periods as
-        columns.
-        """
+        """Return a SchoolTimetableInfo object."""
         timetable_path = '/schooltt/%s/%s' % (period, schema)
         response = self.get(timetable_path)
         if response.status != 200:
             raise ResponseStatusError(response)
         result = SchoolTimetableInfo()
         result.loadData(response.read())
+
+        # XXX this could be expensive
+        name_dict = {}
+        for title, path in self.getListOfPersons():
+            name_dict[path] = title
+        result.setTeacherNames(name_dict)
+
+        # XXX and this even more so
+        for idx, (teacher_path, title, acts) in enumerate(result.teachers):
+            relationships = self.getObjectRelationships(teacher_path)
+            result.setTeacherRelationships(idx, relationships)
+
         return result
+
+    def putSchooltoolTimetable(self, period, schema, tt):
+        """Upload a SchoolTimetableInfo object."""
+        timetable_path = '/schooltt/%s/%s' % (period, schema)
+        response = self.put(timetable_path, tt.toXML())
+        if response.status != 200:
+            raise ResponseStatusError(response)
+
+    def getTimePeriods(self):
+        """Return a list of time period IDs."""
+        response = self.get("/time-periods")
+        if response.status != 200:
+            raise ResponseStatusError(response)
+        return _parseTimePeriods(response.read())
+
+    def getTimetableSchemas(self):
+        """Return a list of timetable schema IDs."""
+        response = self.get("/ttschemas")
+        if response.status != 200:
+            raise ResponseStatusError(response)
+        return _parseTimetableSchemas(response.read())
 
     def createFacet(self, object_path, factory_name):
         """Create a facet using a given factory an place it on an object.
@@ -351,6 +389,27 @@ class SchoolToolClient:
         response = self.delete(object_path)
         if response.status != 200:
             raise ResponseStatusError(response)
+
+
+class Response:
+    """HTTP response.
+
+    Wraps httplib.HTTPResponse and stores the response body as a string.
+    The whole point of this class is that you can get the response body
+    after the connection has been closed.
+    """
+
+    def __init__(self, response):
+        self.status = response.status
+        self.reason = response.reason
+        self.body = response.read()
+        self._response = response
+
+    def getheader(self, header):
+        return self._response.getheader(header)
+
+    def read(self):
+        return self.body
 
 
 #
@@ -675,25 +734,44 @@ def _parseAbsenceComments(body):
         ctx.xpathFreeContext()
 
 
-class Response:
-    """HTTP response.
+def _parseTimePeriods(body):
+    """Parse a list of time periods."""
+    try:
+        doc = libxml2.parseDoc(body)
+    except libxml2.parserError:
+        raise SchoolToolError("Could not parse time period list")
+    ctx = doc.xpathNewContext()
+    try:
+        xlink = "http://www.w3.org/1999/xlink"
+        ctx.xpathRegisterNs("xlink", xlink)
+        periods = []
+        for period_node in ctx.xpathEval("/timePeriods/period"):
+            title = period_node.nsProp('title', xlink)
+            periods.append(title)
+        return periods
+    finally:
+        doc.freeDoc()
+        ctx.xpathFreeContext()
 
-    Wraps httplib.HTTPResponse and stores the response body as a string.
-    The whole point of this class is that you can get the response body
-    after the connection has been closed.
-    """
 
-    def __init__(self, response):
-        self.status = response.status
-        self.reason = response.reason
-        self.body = response.read()
-        self._response = response
-
-    def getheader(self, header):
-        return self._response.getheader(header)
-
-    def read(self):
-        return self.body
+def _parseTimetableSchemas(body):
+    """Parse a list of timetable schemas."""
+    try:
+        doc = libxml2.parseDoc(body)
+    except libxml2.parserError:
+        raise SchoolToolError("Could not parse timetable schema list")
+    ctx = doc.xpathNewContext()
+    try:
+        xlink = "http://www.w3.org/1999/xlink"
+        ctx.xpathRegisterNs("xlink", xlink)
+        schemas = []
+        for schema_node in ctx.xpathEval("/timetableSchemas/schema"):
+            title = schema_node.nsProp('title', xlink)
+            schemas.append(title)
+        return schemas
+    finally:
+        doc.freeDoc()
+        ctx.xpathFreeContext()
 
 
 #
@@ -738,6 +816,7 @@ class MemberInfo:
 class RelationshipInfo:
     """Information about a relationship."""
 
+    # XXX arcrole and role should hold ISpecificURIs
     arcrole = None              # Role of the target (user friendly string)
     role = None                 # Role of the relationship (user friendly)
     target_title = None         # Title of the target
@@ -967,10 +1046,13 @@ class SchoolTimetableInfo:
 
     The data is stored in these attributes:
 
-        * teachers -- a sequence of teacher paths
+        * teachers -- a sequence of (teacher_path, teacher_title, activities)
+                      tuples, where activities is a list of tuples (title,
+                      group_path) containing all possible activities for this
+                      teacher.
         * periods -- a sequence of (day_id, period_id) tuples
         * tt -- a matrix ([[]]) of lists of activities, which are
-                tuples of (group_path, title)
+                tuples of (title, group_path)
     """
 
     def __init__(self, teachers=None, periods=None, tt=None):
@@ -1002,7 +1084,7 @@ class SchoolTimetableInfo:
                     self.periods.append((day_id, period_id))
             for teacher_node in teacher_nodes:
                 teacher_path = teacher_node.nsProp('path', None)
-                self.teachers.append(teacher_path)
+                self.teachers.append((teacher_path, None, None))
                 tt_row = []
                 ctx.setContextNode(teacher_node)
                 for day_node in ctx.xpathEval('st:day'):
@@ -1015,7 +1097,7 @@ class SchoolTimetableInfo:
                         for activity_node in ctx.xpathEval('st:activity'):
                             group_path = activity_node.nsProp('group', None)
                             activity = activity_node.content.strip()
-                            activities.append((group_path, activity))
+                            activities.append((activity, group_path))
                         tt_row.append(activities)
                 assert len(tt_row) == len(self.periods)
                 self.tt.append(tt_row)
@@ -1023,12 +1105,35 @@ class SchoolTimetableInfo:
             doc.freeDoc()
             ctx.xpathFreeContext()
 
+    def setTeacherNames(self, name_dict):
+        """Set teacher names.
+
+        name_dict is a mapping from paths to names.
+        """
+        for n, (path, old_name, activities) in enumerate(self.teachers):
+            self.teachers[n] = (path, name_dict.get(path), activities)
+
+    def setTeacherRelationships(self, idx, relationships):
+        """Set teacher activities from relationships.
+
+        idx is an index in self.teachers.
+        relationships is a sequence of RelationshipInfo instances.
+        """
+        activities = []
+        for rel in relationships:
+            # Comparing strings is not nice, but this will be fixed when
+            # RelationshipInfo will store ISpecificURIs instead of strings
+            if (rel.arcrole, rel.role) == ('Teaching', 'Taught'):
+                activities.append((rel.target_title, rel.target_path))
+        (path, title, old_activities) = self.teachers[idx]
+        self.teachers[idx] = (path, title, activities)
+
     def toXML(self):
         result = []
         result.append(
             '<schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">')
         for i, teacher in enumerate(self.teachers):
-            result.append('  <teacher path="%s">' % teacher)
+            result.append('  <teacher path="%s">' % teacher[0])
             last_day = None
             for j, (day, period) in enumerate(self.periods):
                 if last_day != day:
@@ -1039,7 +1144,7 @@ class SchoolTimetableInfo:
                 result.append('      <period id="%s">' % period)
                 try:
                     activities = self.tt[i][j]
-                    for group, title in activities:
+                    for title, group in activities:
                         result.append('        <activity group="%s">'
                                       '%s</activity>' % (group, title))
                 except (KeyError, TypeError):
