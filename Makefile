@@ -12,6 +12,7 @@ all: build
 
 build:
 	$(PYTHON) setup.py build_ext -i
+	$(PYTHON) remove-stale-bytecode.py
 
 extract-translations:
 	PYTHONPATH=src $(PYTHON) src/schooltool/translation/i18nextract.py \
