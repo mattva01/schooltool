@@ -259,9 +259,9 @@ def ical_date_time(dt):
     """Return a date in iCalendar format as a string.
 
     >>> ical_date_time(datetime.datetime(2004, 10, 26, 13, 07, 16))
-    '20041026T130716Z'
+    '20041026T130716'
     """
-    return dt.strftime("%Y%m%dT%H%M%SZ")
+    return dt.strftime("%Y%m%dT%H%M%S")
 
 
 def parse_period(value):
