@@ -23,14 +23,18 @@ $Id$
 """
 
 import UserDict
+from sets import Set
 from zope.interface import implements
 from persistence import Persistent
 from persistence.list import PersistentList
 from persistence.dict import PersistentDict
 from zodb.btrees.IOBTree import IOBTree
-from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
 from schooltool.interfaces import IFaceted
-from schooltool.adapters import queryFacet, setFacet
+from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
+from schooltool.interfaces import IEvent, IEventTarget, IEventConfigurable
+from schooltool.interfaces import IEventAction, ILookupAction
+from schooltool.interfaces import IRouteToMembersAction, IRouteToGroupsAction
+from schooltool.adapters import queryFacet, setFacet, getFacetItems
 
 __metaclass__ = type
 
@@ -77,25 +81,117 @@ class FacetedMixin:
         self.__facets__ = PersistentKeysDict()
 
 
-class Person(Persistent, GroupMember, FacetedMixin):
+class EventMixin:
+
+    implements(IEvent)
+
+    def __init__(self, context=None):
+        self.context = context
+        self.__seen = Set()
+
+    def dispatch(self, target=None):
+        if target is None:
+            target = self.context
+        if target not in self.__seen:
+            self.__seen.add(target)
+            target.handle(self)
+
+
+class EventTargetMixin:
+
+    implements(IEventTarget, IEventConfigurable)
+
+    def __init__(self):
+        self.eventTable = PersistentList()
+
+    def getEventTable(self):
+        # this method can be overriden in subclasses
+        return self.eventTable
+
+    def handle(self, event):
+        for action in self.getEventTable():
+            if action.eventType.isImplementedBy(event):
+                action.handle(event, self)
+
+
+class FacetedEventTargetMixin(FacetedMixin, EventTargetMixin):
+
+    def __init__(self):
+        FacetedMixin.__init__(self)
+        EventTargetMixin.__init__(self)
+
+    def getEventTable(self):
+        tables = [self.eventTable]
+        for key, facet in getFacetItems(self):
+            if facet.active and IEventConfigurable.isImplementedBy(facet):
+                tables.append(facet.eventTable)
+        return sum(tables, [])
+
+
+class EventActionMixin:
+
+    implements(IEventAction)
+
+    def __init__(self, eventType):
+        self.eventType = eventType
+
+    def handle(self, event, target):
+        raise NotImplementedError('Subclasses must override this method')
+
+
+class LookupAction(EventActionMixin):
+
+    implements(ILookupAction)
+
+    def __init__(self, eventTable=None, eventType=IEvent):
+        EventActionMixin.__init__(self, eventType)
+        if eventTable is None:
+            eventTable = PersistentList()
+        self.eventTable = eventTable
+
+    def handle(self, event, target):
+        for action in self.eventTable:
+            if action.eventType.isImplementedBy(event):
+                action.handle(event, target)
+
+
+class RouteToMembersAction(EventActionMixin):
+
+    implements(IRouteToMembersAction)
+
+    def handle(self, event, target):
+        for member in target.values():
+            event.dispatch(member)
+
+
+class RouteToGroupsAction(EventActionMixin):
+
+    implements(IRouteToGroupsAction)
+
+    def handle(self, event, target):
+        for group in target.groups():
+            event.dispatch(group)
+
+
+class Person(Persistent, GroupMember,  FacetedEventTargetMixin):
 
     implements(IPerson)
 
     def __init__(self, name):
         Persistent.__init__(self)
         GroupMember.__init__(self)
-        FacetedMixin.__init__(self)
+        FacetedEventTargetMixin.__init__(self)
         self.name = name
 
 
-class Group(Persistent, GroupMember, FacetedMixin):
+class Group(Persistent, GroupMember, FacetedEventTargetMixin):
 
     implements(IGroup, IGroupMember)
 
     def __init__(self, name, facetFactory=None):
         Persistent.__init__(self)
         GroupMember.__init__(self)
-        FacetedMixin.__init__(self)
+        FacetedEventTargetMixin.__init__(self)
         self._next_key = 0
         self._members = IOBTree()
         self.name = name
@@ -147,6 +243,8 @@ class RootGroup(Group):
     """A persistent application root object"""
     implements(IRootGroup)
 
+
+#XXX the following generic things should be moved into a separate module
 
 class PersistentListSet(Persistent):
     """A set implemented with a PersistentList as a backend storage.

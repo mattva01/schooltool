@@ -190,6 +190,72 @@ class IGroupMember(ILocation):
 
 
 #
+# Events
+#
+
+class IEvent(Interface):
+    """Base interface for events."""
+
+    context = Attribute("""Default target for this event.""")
+
+    def dispatch(target=None):
+        """Dispatches the event to target (which can propagate it further).
+
+        Target must implement IEventTarget.  If target is None, context is
+        used.
+
+        It is guaranteed that no object will see the same event more than
+        once, even if dispatch is called multiple times with the same target.
+        """
+
+
+class IEventTarget(Interface):
+    """An object that can receive events."""
+
+    def handle(event):
+        """Handles the event.
+
+        Event routing can be achieved by calling event.dispatch(other_target).
+        """
+
+
+class IEventConfigurable(Interface):
+    """An object that has a configurable event table."""
+
+    eventTable = Attribute(
+        """Sequence of event table rows, each implementing IEventAction""")
+
+
+class IEventAction(Interface):
+    """Represents an action to be taken for certain types of events."""
+
+    eventType = Attribute("""Interface of an event this action pertains to""")
+
+    def handle(event, target):
+        """Handles the event for a given target.
+
+        Should be called only if event is of an appropriate type.
+        """
+
+
+class ILookupAction(IEventAction):
+    """Event action that looks up actions to be performed in another event
+    table.
+    """
+
+    eventTable = Attribute(
+        """Sequence of event table rows, each implementing IEventAction""")
+
+
+class IRouteToMembersAction(IEventAction):
+    """Event action that routes this event to members of this object."""
+
+
+class IRouteToGroupsAction(IEventAction):
+    """Event action that routes this event to groups of this object."""
+
+
+#
 # Application objects
 #
 
