@@ -17,7 +17,7 @@
         }
     }
     function recurrence_type_changed() {
-        form = document.getElementById('form');
+        var form = document.getElementById('form');
         var recurrence = document.getElementById('field.recurrence_type');
         var weekly_row = document.getElementById('weekly_row');
         var monthly_box = document.getElementById('monthly_box');
@@ -57,7 +57,7 @@
         addEvent(range_f, "click", range_changed);
 
         recurrence_type_changed();
-        form = document.getElementById('form');
+        var form = document.getElementById('form');
         var recurrence_type = form['field.recurrence_type'];
         addEvent(recurrence_type, "change", recurrence_type_changed);
         addEvent(recurrence_type, "keyup", recurrence_type_changed);
