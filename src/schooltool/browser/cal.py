@@ -946,7 +946,7 @@ class EventDeleteView(View, EventViewHelpers):
         if event is not None:
             # Only managers can edit timetable events
             if not self.isManager():
-                return self.unauthorized(request)
+                raise Unauthorized
             if 'CONFIRM' in request.args:
                 self._addTimetableException(event, replacement=None)
             elif 'CANCEL' not in request.args:
