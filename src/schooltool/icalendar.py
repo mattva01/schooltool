@@ -898,7 +898,7 @@ class ICalReader:
         except StopIteration:
             # The file is empty.  Mozilla produces a 0-length file when
             # publishing an empty calendar.  Let's accept it as a valid
-            # calendar that has no events.  XXX I'm not sure if a 0-length
+            # calendar that has no events.  I'm not sure if a 0-length
             # file is a valid text/calendar object according to RFC 2445.
             raise
         component_stack = ['VCALENDAR']
