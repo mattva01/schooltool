@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Sodipodi ("http://www.sodipodi.com/") -->
+<svg
+   id="svg559"
+   sodipodi:version="0.33"
+   width="210mm"
+   height="297mm"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   sodipodi:docname="/home/alga/schoolbell.svg"
+   sodipodi:docbase="/home/alga">
+  <defs
+     id="defs561">
+    <linearGradient
+       id="linearGradient566">
+      <stop
+         style="stop-color:#000;stop-opacity:1;"
+         offset="0"
+         id="stop567" />
+      <stop
+         style="stop-color:#fff;stop-opacity:1;"
+         offset="1"
+         id="stop568" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#linearGradient566"
+       id="linearGradient569"
+       x1="2.726057e-8"
+       y1="-1.272857e-6"
+       x2="1"
+       y2="-1.272857e-6" />
+    <radialGradient
+       xlink:href="#linearGradient566"
+       id="radialGradient570"
+       cx="0.500000"
+       cy="0.499999"
+       r="0.500000"
+       fx="0.500000"
+       fy="0.499999" />
+  </defs>
+  <sodipodi:namedview
+     id="base" />
+  <path
+     style="font-size:12.000;fill:#81001a;fill-rule:evenodd;stroke:#000000;stroke-width:7.375000;"
+     d="M 279.1592 408.8087 C 451.9369 334.2084 460.2993 700.8441 658.2581 670.9023 C 604.1138 687.0998 286.3796 834.2725 223.8574 867.5725 C 386.8867 739.1613 121.7043 481.0817 279.1592 408.8087 z "
+     id="path563"
+     sodipodi:nodetypes="cccc" />
+  <rect
+     style="font-size:12.000;fill:#80000e;fill-rule:evenodd;stroke:#000000;stroke-width:7.499999;stroke-dashoffset:0;"
+     id="rect565"
+     width="95.35967"
+     height="95.35967"
+     x="-4.012432"
+     y="888.2112"
+     ry="47.6798373"
+     rx="47.6798335"
+     transform="matrix(0.905001,-0.425409,0.425409,0.905001,0,0)" />
+</svg>
