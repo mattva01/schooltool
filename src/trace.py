@@ -132,7 +132,7 @@ class Ignore:
             # (will not overflow since if the first n characters are the
             # same and the name has not already occured, then the size
             # of "name" is greater than that of "mod")
-            if mod == modulename[:n] and modulename[n] == '.':
+            if modulename.startswith(mod) and modulename[n] == '.':
                 self._ignore[modulename] = 1
                 return 1
 
@@ -174,8 +174,10 @@ def fullmodname(path):
     # looking in sys.path for the longest matching prefix.  We'll
     # assume that the rest is the package name.
 
+    path = os.path.abspath(path)
     longest = ""
     for dir in sys.path:
+        dir = os.path.abspath(dir)
         if path.startswith(dir) and path[len(dir)] == os.path.sep:
             if len(dir) > len(longest):
                 longest = dir
@@ -186,7 +188,7 @@ def fullmodname(path):
 
 class CoverageResults:
     def __init__(self, counts=None, calledfuncs=None, infile=None,
-                 outfile=None):
+                 outfile=None, ignore=None):
         self.counts = counts
         if self.counts is None:
             self.counts = {}
@@ -207,6 +209,7 @@ class CoverageResults:
                                       % (self.infile, err))
             except pickle.UnpicklingError:
                 self.update(self.__class__(marshal.load(open(self.infile))))
+        self.ignore = ignore
 
     def update(self, other):
         """Merge in the data from another CoverageResults"""
@@ -255,6 +258,10 @@ class CoverageResults:
                 if not os.path.exists(dir):
                     os.makedirs(dir)
                 modulename = fullmodname(filename)
+
+            if self.ignore.names(filename, modulename):
+                # XXX why wasn't it ignored earlier?
+                continue
 
             # If desired, get a list of the line numbers which represent
             # executable content (returned as a dict for better lookup speed)
@@ -503,6 +510,7 @@ class Trace:
                             print (" --- modulename: %s, funcname: %s"
                                    % (modulename, code.co_name))
                         return self.localtrace
+
             else:
                 return None
 
@@ -541,7 +549,8 @@ class Trace:
     def results(self):
         return CoverageResults(self.counts, infile=self.infile,
                                outfile=self.outfile,
-                               calledfuncs=self._calledfuncs)
+                               calledfuncs=self._calledfuncs,
+                               ignore=self.ignore)
 
 def _err_exit(msg):
     sys.stderr.write("%s: %s\n" % (sys.argv[0], msg))

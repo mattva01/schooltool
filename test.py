@@ -465,11 +465,12 @@ def main(argv):
             tracer.runfunc(runner.run, suite)
             results = tracer.results()
             results.write_results(show_missing=True, coverdir=cfg.coverdir)
-            # XXX trace.py in Python 2.3.1 is buggy:
+            # trace.py in Python 2.3.1 is buggy:
             # 1) despite sys.prefix being in ignoredirs, a lot of system-wide
             #    modules are included in the coverage reports
             # 2) some module file names do not have the first two characters,
             #    and in general the prefix used seems to be arbitrary
+            # these bugs are fixed in src/trace.py
         else:
             runner.run(suite)
 
