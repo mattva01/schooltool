@@ -40,6 +40,7 @@ import twisted.python.runtime
 
 from schooltool.app import create_application
 from schooltool.component import getView
+from schooltool.component import FacetManager, getRelatedObjects
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import AuthenticationError
 from schooltool.common import StreamWrapper, UnicodeAwareException
@@ -47,6 +48,8 @@ from schooltool.translation import setCatalog, ugettext, TranslatableString
 from schooltool.browser import BrowserRequest
 from schooltool.browser.app import RootView
 from schooltool.http import Site, SnapshottableDB
+from schooltool.uris import URIMembership, URIMember, URIGroup
+
 
 
 __metaclass__ = type
@@ -441,10 +444,21 @@ class Server:
         app = root[self.appname]
 
         # Database schema change from 0.6 to 0.7
+        # TODO: this should really check for version 0.7
         if not hasattr(app, 'ticketService'):
             self.transaction_hook.abort()
             conn.close()
             raise SchoolToolError(unicode(incompatible_version_msg))
+
+        # Database schema change from 0.8 to 0.9
+        # FIXME: this try is here just because the testStub needs some more
+        # work
+        try:
+            if not 'community' in app['groups'].keys():
+                self.notifyUpgrade('0.8', '0.9')
+                self.migrate08to09(root)
+        except:
+            pass
 
         # Enable or disable global event logging
         eventlog = app.utilityService['eventlog']
@@ -505,6 +519,100 @@ class Server:
                 return name
         return None
 
+    def notifyUpgrade(self, v1, v2):
+        self.logger.info(_("Upgrading Data.fs from version %s to version %s"),
+                            v1, v2)
+
+    def migrate08to09(self, root):
+        """Partial database migration from 0.8 to 0.9
+
+        Create a new application and new IApplicationObjects, copy calendars and
+        relationships, copy PersonInfoFacets from old Person objects to new ones.
+        """
+
+        old_app = root[self.appname]
+        new_app = self.appFactory()
+
+
+        old_groups = old_app['groups']
+        old_persons = old_app['persons']
+        old_resources = old_app['resources']
+
+        new_groups = new_app['groups']
+        new_persons = new_app['persons']
+        new_resources = new_app['resources']
+
+        # probably shouldn't assume that manager still exists
+        old_new_map = {old_groups['root']: new_groups['community'],
+                       old_persons['manager']: new_persons['manager']}
+
+        for group in old_groups.keys():
+            if group not in new_groups.keys() and group != 'root':
+                g = new_groups.new(old_groups[group].__name__,
+                                    title = old_groups[group].title)
+                old_new_map[old_groups[group]] = g
+
+        for person in old_persons.keys():
+            if person not in new_persons.keys():
+                p = new_persons.new(old_persons[person].__name__,
+                                    title = old_persons[person].title)
+                old_new_map[old_persons[person]] = p
+
+                if old_persons[person].hasPassword():
+                    p._pwhash = old_persons[person]._pwhash
+
+        for person in new_persons.keys():
+            old_info = FacetManager(old_persons[person]).facetByName(
+                                                            'person_info')
+            new_info = FacetManager(new_persons[person]).facetByName(
+                                                            'person_info')
+            new_info.first_name = old_info.first_name
+            new_info.last_name = old_info.last_name
+            new_info.date_of_birth = old_info.date_of_birth
+            new_info.comment = old_info.comment
+            new_info.photo = old_info.photo
+
+        for resource in old_resources.keys():
+            if resource not in new_resources.keys():
+                r = new_resources.new(old_resources[resource].__name__,
+                                    title = old_resources[resource].title)
+                old_new_map[old_resources[resource]] = r
+
+        for group in old_groups.keys():
+            if group in new_groups.keys() and group != 'root':
+                for event in old_groups[group].calendar:
+                    if event.owner:
+                        event = event.replace(
+                                        owner = old_new_map[event.owner])
+                    if event.context:
+                        event = event.replace(
+                                        context = old_new_map[event.context])
+                    new_groups[group].calendar.addEvent(event)
+
+        for resource in old_resources.keys():
+            if resource in new_resources.keys():
+                for event in old_resources[resource].calendar:
+                    if event.owner:
+                        event = event.replace(
+                                        owner = old_new_map[event.owner])
+                    if event.context:
+                        event = event.replace(
+                                        context = old_new_map[event.context])
+
+                    new_resources[resource].calendar.addEvent(event)
+
+        for person in old_persons.keys():
+            if person in new_persons.keys():
+                for event in old_persons[person].calendar:
+                    if event.owner:
+                        event = event.replace(owner = old_new_map[event.owner])
+                    if event.context:
+                        event = event.replace(
+                                        context = old_new_map[event.context])
+
+                    new_persons[person].calendar.addEvent(event)
+
+        root[self.appname] = new_app
 
 class UnicodeFileHandler(logging.StreamHandler):
     """A handler class which writes records to disk files.

@@ -80,12 +80,21 @@ class EventLogStub:
     enabled = False
 
 
+class Application08:
+    pass
+
 class AppStub:
 
     def __init__(self, old_version=False):
         self.utilityService = {'eventlog': EventLogStub()}
         if not old_version:
             self.ticketService = None
+
+    def keys(self):
+        pass
+
+    def __getitem__(self, name):
+        pass
 
 
 class ConnectionStub:
@@ -485,6 +494,30 @@ class TestServer(RegistriesCleanupMixin, unittest.TestCase):
         self.assert_(conn.closed)
         self.assert_(conn.root()['app'] is ConnectionStub.old_app)
         self.assertEquals(transaction.history, 'A')
+
+    def test_prepareDatabase_migrate(self):
+        from schooltool.main import Server, SchoolToolError
+        from schooltool.app import Application, create_application
+        from schooltool import relationship, membership, teaching, component
+        component.setUp()
+        relationship.setUp()
+        membership.setUp()
+        teaching.setUp()
+        server = Server()
+        server.appname = 'schooltool'
+        server.appFactory = create_application
+        server.app = server.appFactory()
+        del server.app['groups']['community']
+        root_group = server.app['groups'].new("root", title="Root Group")
+        server.app.addRoot(root_group)
+        server.root = {}
+        server.root['schooltool'] = server.app
+        self.assert_('root' in server.root['schooltool']['groups'].keys())
+        self.assert_('community' not in 
+                server.root['schooltool']['groups'].keys())
+        server.migrate08to09(server.root)
+        self.assert_('root' not in server.root['schooltool']['groups'].keys())
+        self.assert_('community' in server.root['schooltool']['groups'].keys())
 
     def test_authenticate(self):
         from schooltool.main import Server
