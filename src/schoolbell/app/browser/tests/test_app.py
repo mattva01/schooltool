@@ -132,7 +132,7 @@ def doctest_GroupListView():
     Let's tell the person to join PoV:
 
         >>> request = TestRequest()
-        >>> request.form = {'group.pov': 'on', 'APPLY': 'Apply'}
+        >>> request.form = {'group.pov': 'on', 'UPDATE_SUBMIT': 'Apply'}
         >>> view = GroupListView(person, request)
         >>> view.update()
 
@@ -172,7 +172,7 @@ def doctest_GroupListView():
     to The World.
 
         >>> request = TestRequest()
-        >>> request.form = {'group.the_world': 'on', 'APPLY': 'Apply'}
+        >>> request.form = {'group.the_world': 'on', 'UPDATE_SUBMIT': 'Apply'}
         >>> view = GroupListView(person, request)
         >>> view.update()
 
@@ -232,7 +232,7 @@ def doctest_MemberListView():
     Let's make Ignas a member of PoV:
 
         >>> request = TestRequest()
-        >>> request.form = {'member.ignas': 'on', 'APPLY': 'Apply'}
+        >>> request.form = {'member.ignas': 'on', 'UPDATE_SUBMIT': 'Apply'}
         >>> view = MemberViewPersons(pov, request)
         >>> view.update()
 
@@ -265,11 +265,11 @@ def doctest_MemberListView():
     and add Albert, who came in late and has to work after-hours:
 
         >>> request = TestRequest()
-        >>> request.form = {'member.alga': 'on', 'APPLY': 'Apply'}
+        >>> request.form = {'member.alga': 'on', 'UPDATE_SUBMIT': 'Apply'}
         >>> view = MemberViewPersons(pov, request)
         >>> view.update()
 
-    Mission successful:
+    Mission accomplished:
 
         >>> [person.title for person in pov.members]
         ['Albertas']
@@ -590,6 +590,18 @@ def doctest_PersonEditView():
         >>> bool(view.title_widget.error())
         True
 
+    We can cancel an action if we want to:
+
+        >>> directlyProvides(person, IContainmentRoot)
+        >>> request = TestRequest()
+        >>> request.form = {'CANCEL': 'Cancel'}
+        >>> view = PersonEditView(person, request)
+        >>> view.update()
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1'
+
     """
 
 
@@ -702,6 +714,18 @@ def doctest_PersonAddView():
 
         >>> list(pc['gintas'].groups) == [pov]
         True
+
+    We can cancel an action if we want to:
+
+        >>> directlyProvides(pc, IContainmentRoot)
+        >>> request = TestRequest()
+        >>> request.form = {'CANCEL': 'Cancel'}
+        >>> view = PersonAddView(pc, request)
+        >>> view.update()
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1/persons'
 
     """
 

@@ -123,7 +123,7 @@ class GroupListView(BrowserView):
 
     def update(self):
         context_url = zapi.absoluteURL(self.context, self.request)
-        if 'APPLY' in self.request:
+        if 'UPDATE_SUBMIT' in self.request:
             context_groups = removeSecurityProxy(self.context.groups)
             for group in self.getGroupList():
                 want = bool('group.' + group.__name__ in self.request)
@@ -175,7 +175,7 @@ class MemberViewBase(BrowserView):
     def update(self):
         # XXX This method is rather similar to GroupListView.update().
         context_url = zapi.absoluteURL(self.context, self.request)
-        if 'APPLY' in self.request:
+        if 'UPDATE_SUBMIT' in self.request:
             context_members = removeSecurityProxy(self.context.members)
             for member in self.getMemberList():
                 want = bool('member.' + member.__name__ in self.request)
@@ -275,6 +275,11 @@ class PersonEditView(BrowserView):
                 # Uncheck the checkbox before rendering the form
                 self.clear_photo_widget.setRenderedValue(False)
 
+        if 'CANCEL' in self.request:
+            url = zapi.absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
+
+
 
 class IPersonAddForm(Interface):
     """Schema for person adding form."""
@@ -346,6 +351,13 @@ class PersonAddView(AddView):
         name = person.username
         self.context[name] = person
         return person
+
+    def update(self):
+        if 'CANCEL' in self.request:
+            url = zapi.absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
+
+        return AddView.update(self)
 
     def nextURL(self):
         """See zope.app.container.interfaces.IAdding"""

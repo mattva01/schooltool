@@ -27,12 +27,12 @@
 </div>
 
 <div class="controls">
-  <input class="button-ok" type="submit" name="APPLY"
+  <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Apply"
          tal:condition="possible_members"
-         value="Apply" title="Shortcut: Alt-A" accesskey="A"
-         i18n:attributes="value; title; accesskey" />
-  <input class="button-cancel" type="submit" name="CANCEL"
-         value="Cancel" i18n:attributes="value" />
+         title="Shortcut: Alt-A" accesskey="A"
+         i18n:attributes="value submit-button; accesskey" />
+  <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+         i18n:attributes="value cancel-button" />
 </div>
 </form>
 

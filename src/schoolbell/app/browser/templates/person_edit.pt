@@ -57,8 +57,11 @@
     </fieldset>
 
     <div class="controls">
-      <input class="button-ok" type="submit" name="UPDATE_SUBMIT" value="Apply"
-             i18n:attributes="value" />
+        <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Apply"
+               title="Shortcut: Alt-A" accesskey="A"
+               i18n:attributes="value submit-button; accesskey" />
+        <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+               i18n:attributes="value cancel-button" />
     </div>
   </form>
 

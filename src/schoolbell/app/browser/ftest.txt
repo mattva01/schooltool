@@ -513,7 +513,7 @@ We should see the group in this person's possible super group list.
 Let's add the person to the group.
 
     >>> print http(r"""
-    ... GET /frogpond/persons/frog/groups.html?APPLY=Apply&group.Group=on HTTP/1.1
+    ... GET /frogpond/persons/frog/groups.html?UPDATE_SUBMIT=Apply&group.Group=on HTTP/1.1
     ... """)
     HTTP/1.1 303 See Other
     Content-Length: ...
