@@ -58,7 +58,7 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase, EqualsSortedMixin):
 
     def test(self):
         from schooltool.interfaces import IPerson, IEventTarget, IRelatable
-        from schooltool.interfaces import IEventConfigurable
+        from schooltool.interfaces import IEventConfigurable, ITimetabled
         from schooltool.interfaces import IMultiContainer
         from schooltool.model import Person
         person = Person('John Smith')
@@ -67,6 +67,7 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase, EqualsSortedMixin):
         verifyObject(IEventConfigurable, person)
         verifyObject(IRelatable, person)
         verifyObject(IMultiContainer, person)
+        verifyObject(ITimetabled, person)
 
     def test_getRelativePath(self):
         from schooltool.model import Person, AbsenceComment
@@ -215,6 +216,7 @@ class TestGroup(unittest.TestCase):
     def test(self):
         from schooltool.interfaces import IGroup, IFaceted, IRelatable
         from schooltool.interfaces import IEventConfigurable, IEventTarget
+        from schooltool.interfaces import ITimetabled
         from schooltool.model import Group
         group = Group("root")
         verifyObject(IGroup, group)
@@ -222,6 +224,7 @@ class TestGroup(unittest.TestCase):
         verifyObject(IEventTarget, group)
         verifyObject(IEventConfigurable, group)
         verifyObject(IRelatable, group)
+        verifyObject(ITimetabled, group)
 
     def test_getRelativePath(self):
         from schooltool.model import Group
