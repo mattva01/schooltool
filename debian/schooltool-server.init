@@ -21,22 +21,22 @@ test -f $CONFIGFILE || exit 0
 case "$1" in
   start)
 	echo -n "Starting $DESC: $NAME"
-	start-stop-daemon --start --quiet --pidfile $PIDFILE \
-		--chuid schooltool --exec $DAEMON -- -d >/dev/null
+	start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE \
+		--chuid schooltool --startas $DAEMON -- -d >/dev/null
 	echo "."
 	;;
   stop)
 	echo -n "Stopping $DESC: $NAME"
-	start-stop-daemon --stop --quiet --pidfile $PIDFILE \
-		--name $PNAME && echo "." || echo "... failed"
+	start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE \
+		--name $PNAME
+	echo "."
 	;;
   restart|force-reload)
 	echo -n "Restarting $DESC: $NAME"
-	start-stop-daemon --stop --quiet --oknodo --pidfile \
-		$PIDFILE --name $PNAME
-	sleep 1
+	start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE \
+		--name $PNAME
 	start-stop-daemon --start --quiet --pidfile $PIDFILE \
-		--chuid schooltool --exec $DAEMON -- -d >/dev/null
+		--chuid schooltool --startas $DAEMON -- -d >/dev/null
 	echo "."
 	;;
   *)
