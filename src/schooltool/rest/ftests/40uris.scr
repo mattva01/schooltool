@@ -41,6 +41,30 @@ Content-Type: text/xml; charset=UTF-8
     <name>Residence</name>
     <description>The role of an Address in Occupies</description>
   </uriobject>
+  <uriobject uri="http://schooltool.org/ns/calendar_subscription">
+    <description>
+      The calendar subscription relationship.
+    </description>
+    <name>
+      Calendar subscription
+    </name>
+  </uriobject>
+  <uriobject uri="http://schooltool.org/ns/calendar_subscription/provider">
+    <description>
+      A role of an object providing a calendar.
+    </description>
+    <name>
+      Calendar provider
+    </name>
+  </uriobject>
+  <uriobject uri="http://schooltool.org/ns/calendar_subscription/subscriber">
+    <description>
+      A role of an object that subscribes to a calendar.
+    </description>
+    <name>
+      Calendar subscriber
+    </name>
+  </uriobject>
 </uriobjects>
 %% END XML
 
