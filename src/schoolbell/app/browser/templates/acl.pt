@@ -104,7 +104,8 @@ can set the View Calendar permission for that user on that resource.<p>
 
   <dt>Manage membership</dt> <dd>Allows the user to add persons,
   groups and resources to groups.  In order to add something to a
-  group, the user needs this permission only on the group.</dd>
+  group, the user needs this permission only on the group.  Keep in
+  mind that joining groups has security implications.</dd>
 
 </dl>
 
