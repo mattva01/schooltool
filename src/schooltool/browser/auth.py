@@ -34,7 +34,7 @@ Example:
 $Id$
 """
 
-from schooltool.rest.auth import isManager, isTeacher
+from schooltool.security import isManager, isTeacher
 from schooltool.rest.auth import PrivateAccess      # reexport
 from schooltool.interfaces import ViewPermission, ModifyPermission
 from schooltool.interfaces import AddPermission

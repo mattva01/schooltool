@@ -39,38 +39,9 @@ from schooltool.uris import URIGroup
 from schooltool.interfaces import ILocation, IApplicationObject
 from schooltool.interfaces import ViewPermission, ModifyPermission
 from schooltool.interfaces import AddPermission, IACLOwner
+from schooltool.security import isManager, isTeacher, getOwner
 
 __metaclass__ = type
-
-
-def isManager(user):
-    """Return True iff user is a manager."""
-    if user is None:
-        return False
-    for group in getRelatedObjects(user, URIGroup):
-        if getPath(group) == '/groups/managers':
-            return True
-    return False
-
-
-def isTeacher(user):
-    """Return True iff user is a teacher or a manager."""
-    if user is None:
-        return False
-    for group in getRelatedObjects(user, URIGroup):
-        if getPath(group) in ('/groups/managers', '/groups/teachers'):
-            return True
-    return False
-
-
-def getOwner(obj):
-    """Returns the owner of an object."""
-    owner = obj
-    while owner is not None and not IApplicationObject.providedBy(owner):
-        if not ILocation.providedBy(owner):
-            return None
-        owner = owner.__parent__
-    return owner
 
 
 def PublicAccess(context, request):

@@ -55,44 +55,6 @@ class TestAccessPolicies(RegistriesSetupMixin, unittest.TestCase):
         Membership(group=self.teachers_group, member=self.teacher)
         Membership(group=self.managers_group, member=self.manager)
 
-    def test_isManager(self):
-        from schooltool.rest.auth import isManager
-        self.assertEquals(isManager(None), False)
-        self.assertEquals(isManager(self.simpleuser), False)
-        self.assertEquals(isManager(self.teacher), False)
-        self.assertEquals(isManager(self.manager), True)
-
-    def test_isTeacher(self):
-        from schooltool.rest.auth import isTeacher
-        self.assertEquals(isTeacher(None), False)
-        self.assertEquals(isTeacher(self.simpleuser), False)
-        self.assertEquals(isTeacher(self.teacher), True)
-        self.assertEquals(isTeacher(self.manager), True)
-
-    def test_getOwner(self):
-        from schooltool.rest.auth import getOwner
-        from schooltool.interfaces import ILocation, IApplicationObject
-
-        class ObjectStub:
-            implements(ILocation)
-
-            def __init__(self, parent, name='foo'):
-                self.__parent__ = parent
-                self.__name__ = name
-
-        class PersonStub(ObjectStub):
-            implements(IApplicationObject)
-
-        a = ObjectStub(None)
-        b = PersonStub(a)
-        c = ObjectStub(b)
-
-        self.assertEquals(getOwner(None), None)
-        self.assertEquals(getOwner(a), None)
-        self.assertEquals(getOwner(b), b)
-        self.assertEquals(getOwner(c), b)
-        self.assertEquals(getOwner('foo'), None)
-
     def do_test_access(self, auth, matrix, context=None):
 
         class ViewStub:
