@@ -122,14 +122,20 @@ class DataError(UnicodeAwareException):
 
 class HTTPClient:
 
-    http = httplib.HTTPConnection
+    connectionFactory = httplib.HTTPConnection
+    secureConnectionFactory = httplib.HTTPSConnection
 
-    def __init__(self, host='localhost', port=7001):
+    def __init__(self, host='localhost', port=7001, ssl=False):
         self.host = host
         self.port = port
+        self.ssl = ssl
 
     def request(self, method, resource, body=None, headers={}):
-        conn = self.http(self.host, self.port)
+        if self.ssl:
+            factory = self.secureConnectionFactory
+        else:
+            factory = self.connectionFactory
+        conn = factory(self.host, self.port)
         self.lastconn = conn
         conn.putrequest(method, resource)
         if body is not None:
@@ -149,8 +155,8 @@ class CSVImporter:
     user = 'manager'
     password = 'schooltool'
 
-    def  __init__(self,  host='localhost', port=7001):
-        self.server = HTTPClient(host, port)
+    def  __init__(self,  host='localhost', port=7001, ssl=False):
+        self.server = HTTPClient(host, port, ssl)
 
     def membership(self, group, member_path):
         """A tuple (path, method, body) to add a member to a group"""

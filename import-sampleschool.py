@@ -33,6 +33,7 @@ class SampleSchoolImporter:
 
     host = 'localhost'
     port = 7001
+    ssl = False
     interactive = False
 
     expected_version = 'SchoolTool/0.5'
@@ -70,19 +71,21 @@ class SampleSchoolImporter:
     def process_args(self, argv):
         """Process command line arguments."""
         try:
-            opts, args = getopt.getopt(argv[1:], 'h:p:i',
-                                       ['host=', 'port=', 'interactive'])
+            opts, args = getopt.getopt(argv[1:], 'h:p:si',
+                                       ['host=', 'port=', 'ssl', 'interactive'])
         except getopt.error, e:
             raise Error(e)
 
         for k, v in opts:
             if k in ('-h', '--host'):
                 self.host = v
-            if k in ('-p', '--port'):
+            elif k in ('-p', '--port'):
                 try:
                     self.port = int(v)
                 except ValueError, e:
                     raise Error(_("Invalid port number: %s") % v)
+            elif k in ('-s', '--ssl'):
+                self.ssl = True
             elif k in ('-i', '--interactive'):
                 self.interactive = True
 
@@ -92,8 +95,8 @@ class SampleSchoolImporter:
             print _("Please enter the hostname of the server:"),
             host = raw_input().strip()
             if host:
+                self.host = host
                 break
-        self.host = host
 
         while True:
             print _("Please enter the port number:"),
@@ -104,8 +107,18 @@ class SampleSchoolImporter:
                 pass
             else:
                 if port > 0 and port < 65536:
+                    self.port = port
                     break
-        self.port = port
+
+        while True:
+            print _("Use SSL? (y/n)"),
+            s = raw_input().strip().upper()
+            if s == _('y').upper():
+                self.ssl = True
+                break
+            elif s == _('n').upper():
+                self.ssl = False
+                break
 
     def check_data_files(self):
         """Check that the data files exist."""
@@ -118,10 +131,14 @@ class SampleSchoolImporter:
 
     def check_server_running(self):
         """Check that the server is running, and it is the correct version."""
+        if self.ssl:
+            proto = 'https'
+        else:
+            proto = 'http'
         try:
             # urllib.urlopen uses FancyURLopener which is too fancy
-            f = urllib.URLopener().open("http://%s:%s"
-                                        % (self.host, self.port))
+            f = urllib.URLopener().open("%s://%s:%s"
+                                        % (proto, self.host, self.port))
         except IOError:
             raise Error(_("SchoolTool server not listening on %s:%s")
                         % (self.host, self.port))
@@ -150,7 +167,7 @@ class SampleSchoolImporter:
         """Import data from CSV files."""
         from schooltool.clients.csvclient import CSVImporter, DataError
         os.chdir(self.datadir)
-        importer = CSVImporter(host=self.host, port=self.port)
+        importer = CSVImporter(host=self.host, port=self.port, ssl=self.ssl)
         try:
             importer.run()
         except DataError, e:

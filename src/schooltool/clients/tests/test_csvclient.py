@@ -97,8 +97,22 @@ class TestHTTPClient(unittest.TestCase):
         h = HTTPClient('localhost', 7001)
         self.assertEqual(h.host, 'localhost')
         self.assertEqual(h.port, 7001)
+        self.assertEqual(h.ssl, False)
 
-        h.http = HTTPStub
+        h.connectionFactory = HTTPStub
+        h.secureConnectionFactory = None
+        result = h.request('GET', '/')
+        self.assertEqual(result.read(), "Welcome")
+
+    def test_ssl(self):
+        from schooltool.clients.csvclient import HTTPClient
+        h = HTTPClient('localhost', 7001, ssl=True)
+        self.assertEqual(h.host, 'localhost')
+        self.assertEqual(h.port, 7001)
+        self.assertEqual(h.ssl, True)
+
+        h.connectionFactory = None
+        h.secureConnectionFactory = HTTPStub
         result = h.request('GET', '/')
         self.assertEqual(result.read(), "Welcome")
 
@@ -442,10 +456,15 @@ class TestCSVImporter(unittest.TestCase):
     def test_process(self):
         from schooltool.clients.csvclient import CSVImporter
         im = CSVImporter()
-        im.server.http = HTTPStub
+        im.server.connectionFactory = HTTPStub
         im.process("POST", "/people/001/password", "foo")
         self.assertEqual(im.server.lastconn.sent_headers['authorization'],
                          'Basic bWFuYWdlcjpzY2hvb2x0b29s')
+
+    def test_ssl(self):
+        from schooltool.clients.csvclient import CSVImporter
+        im = CSVImporter(ssl=True)
+        self.assert_(im.server.ssl)
 
 
 def test_suite():
