@@ -458,6 +458,37 @@ class TestTimetableException(unittest.TestCase):
 
         self.assertRaises(ValueError, setattr, e, 'replacement', object())
 
+    def test_comparison(self):
+        from schooltool.timetable import TimetableException
+        from schooltool.timetable import ExceptionalTTCalendarEvent
+        activity1 = object()
+        activity2 = object()
+
+        e1 = TimetableException(date(2004, 10, 14), 'period 1', activity1)
+        e2 = TimetableException(date(2004, 10, 14), 'period 1', activity1)
+        assert e1 == e2
+        assert not (e1 != e2)
+
+        e3 = TimetableException(date(2004, 10, 15), 'period 1', activity1)
+        assert e1 != e3
+        assert not (e1 == e3)
+
+        e4 = TimetableException(date(2004, 10, 14), 'period 2', activity1)
+        assert e1 != e4
+        assert not (e1 == e4)
+
+        e5 = TimetableException(date(2004, 10, 14), 'period 1', activity2)
+        assert e1 != e5
+        assert not (e1 == e5)
+
+        e6 = TimetableException(date(2004, 10, 14), 'period 1', activity1)
+        e6.replacement = ExceptionalTTCalendarEvent(date(2004, 10, 14),
+                                                    timedelta(45),
+                                                    "Math",
+                                                    exception=e6)
+        assert e1 != e6
+        assert not (e1 == e6)
+
 
 class TestTimetablingPersistence(unittest.TestCase):
     """A functional test for timetables persistence."""

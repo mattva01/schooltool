@@ -270,6 +270,21 @@ class TimetableException(Persistent):
         self.period_id = period_id
         self.activity = activity
 
+    def __eq__(self, other):
+        if ITimetableException.providedBy(other):
+            return ((self.date, self.period_id, self.activity,
+                     self.replacement) == (other.date, other.period_id,
+                                           other.activity, other.replacement))
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __repr__(self):
+        return ('TimetableException(%r, %r, %r, %r)'
+                % (self.date, self.period_id, self.activity, self.replacement))
+
 
 #
 #  Timetable model stuff
