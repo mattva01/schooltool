@@ -26,7 +26,7 @@ from datetime import datetime
 from zope.interface import implements
 from persistence import Persistent
 from schooltool.interfaces import IPerson, IGroup
-from schooltool.interfaces import IAbsence, IAbsenceComment, IAbsenteeismEvent
+from schooltool.interfaces import IAbsence, IAbsenceComment, IAbsenceEvent
 from schooltool.relationship import RelationshipValenciesMixin, Valency
 from schooltool.facet import FacetedEventTargetMixin
 from schooltool.membership import Membership
@@ -125,7 +125,7 @@ class Absence(Persistent):
             self.expected_presence = comment.expected_presence_change
         self.comments.append(comment)
         self.comments = self.comments
-        event = AbsenteeismEvent(self, comment)
+        event = AbsenceEvent(self, comment)
         event.dispatch(self.person)
 
 
@@ -145,9 +145,9 @@ class AbsenceComment:
         self.resolution_change = resolution_change
 
 
-class AbsenteeismEvent(EventMixin):
+class AbsenceEvent(EventMixin):
 
-    implements(IAbsenteeismEvent)
+    implements(IAbsenceEvent)
 
     def __init__(self, absence, comment):
         EventMixin.__init__(self)

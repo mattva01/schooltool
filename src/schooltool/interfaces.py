@@ -794,7 +794,7 @@ class IAbsence(ILocation):
     def addComment(comment):
         """Add a comment.
 
-        Sends out an IAbsenteeismEvent after the comment has been added.  The
+        Sends out an IAbsenceEvent after the comment has been added.  The
         event is sent to the person and all application objects that the person
         was absent from.
         """
@@ -814,7 +814,7 @@ class IAbsenceComment(Interface):
         """New value of expected_presence (datetime or None)""")
 
 
-class IAbsenteeismEvent(IEvent):
+class IAbsenceEvent(IEvent):
     """Event that gets sent out when an absence is recorded or updated."""
 
     absence = Attribute("""IAbsence""")

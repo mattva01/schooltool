@@ -86,7 +86,7 @@ class TestPerson(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(person.getRelativePath(facet),
                           'facets/%s' % facet.__name__)
 
-    def test_absenteeism(self):
+    def test_absence(self):
         from schooltool.interfaces import IAbsence
         from schooltool.model import Person, AbsenceComment
         person = Person('John Smith')
@@ -179,7 +179,7 @@ class TestGroup(unittest.TestCase):
                           'facets/%s' % facet.__name__)
 
 
-class TestAbsenteeism(EventServiceTestMixin, unittest.TestCase):
+class TestAbsence(EventServiceTestMixin, unittest.TestCase):
 
     def setUp(self):
         from zodb.db import DB
@@ -198,8 +198,8 @@ class TestAbsenteeism(EventServiceTestMixin, unittest.TestCase):
 
     def test(self):
         from schooltool.interfaces import IAbsence, IAbsenceComment
-        from schooltool.interfaces import IAbsenteeismEvent
-        from schooltool.model import Absence, AbsenceComment, AbsenteeismEvent
+        from schooltool.interfaces import IAbsenceEvent
+        from schooltool.model import Absence, AbsenceComment, AbsenceEvent
 
         person = LocatableEventTargetMixin(self.eventService)
         absence = Absence(person)
@@ -237,7 +237,7 @@ class TestAbsenteeism(EventServiceTestMixin, unittest.TestCase):
         absence.addComment(comment1)
         self.assertEquals(absence.comments, [comment1])
         e = self.check_one_event_received([person])
-        self.assert_(IAbsenteeismEvent.isImplementedBy(e))
+        self.assert_(IAbsenceEvent.isImplementedBy(e))
         self.assert_(e.absence, absence)
         self.assert_(e.comment, comment1)
 
@@ -252,8 +252,8 @@ class TestAbsenteeism(EventServiceTestMixin, unittest.TestCase):
         self.assertEquals(absence.comments, [comment1, comment2])
         self.assert_(absence._p_changed)
 
-        event = AbsenteeismEvent(absence, comment1)
-        verifyObject(IAbsenteeismEvent, event)
+        event = AbsenceEvent(absence, comment1)
+        verifyObject(IAbsenceEvent, event)
         self.assert_(event.absence is absence)
         self.assert_(event.comment is comment1)
 
@@ -262,7 +262,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPerson))
     suite.addTest(unittest.makeSuite(TestGroup))
-    suite.addTest(unittest.makeSuite(TestAbsenteeism))
+    suite.addTest(unittest.makeSuite(TestAbsence))
     return suite
 
 if __name__ == '__main__':
