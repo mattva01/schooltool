@@ -124,6 +124,30 @@ class TimetableView(View, AppObjectBreadcrumbsMixin):
         user = self.request.authenticated_user
         return isManager(user)
 
+    def do_POST(self, request):
+        # TODO: permission checking
+        exceptions_to_remove = []
+        for arg in self.request.args:
+            if arg.startswith('REMOVE.'):
+                try:
+                    idx = int(arg[len('REMOVE.'):]) - 1
+                    exceptions_to_remove.append(self.context.exceptions[idx])
+                except (ValueError, IndexError):
+                    pass # ignore hacking attempts and obsolete forms
+        # TODO: synchronize with resource booking
+        for exc in exceptions_to_remove:
+            tt = exc.activity.timetable
+            try:
+                tt.exceptions.remove(exc)
+            except ValueError:
+                # This is most likely an attempt to remove the same exception
+                # more than once (e.g. by specifying REMOVE.-1 and REMOVE.4
+                # when there are 5 exceptions in the list).  Ignore it.
+                pass
+        # Cannot just call do_GET here, because self.context is most likely a
+        # composite timetable that needs to be regenerated.
+        return self.redirect(request.uri, request)
+
 
 class TimetableSchemaView(TimetableView):
     """View for a timetable schema

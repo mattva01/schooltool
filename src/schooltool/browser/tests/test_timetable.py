@@ -141,10 +141,20 @@ class TestTimetableView(AppSetupMixin, unittest.TestCase):
     def createView(self):
         from schooltool.timetable import Timetable
         from schooltool.browser.timetable import TimetableView
-        key = ('2004 fall', 'default')
+        key = ('2004-fall', 'default')
         self.person.timetables[key] = Timetable([])
         self.person.title = 'John Smith'
         return TimetableView(self.person.timetables[key], key)
+
+    def createTimetableExceptions(self):
+        from schooltool.timetable import TimetableActivity
+        from schooltool.timetable import TimetableException
+        key = ('2004-fall', 'default')
+        tt = self.person.timetables[key]
+        english = TimetableActivity('English', timetable=tt)
+        ex1 = TimetableException(datetime.date(2004, 11, 03), 'P1',
+                                 english)
+        tt.exceptions.append(ex1)
 
     def test_render(self):
         view = self.createView()
@@ -152,12 +162,36 @@ class TestTimetableView(AppSetupMixin, unittest.TestCase):
         result = view.render(request)
         self.assertEquals(request.code, 200, result)
 
-    # XXX test rendering when there are timetable exceptions
+    def test_render_with_exceptions(self):
+        view = self.createView()
+        self.createTimetableExceptions()
+        request = RequestStub(authenticated_user=self.person)
+        result = view.render(request)
+        self.assertEquals(request.code, 200, result)
+
+        assert 'Timetable exceptions' in result
+        assert '2004-11-03' in result
+        assert 'English' in result
+        assert 'is canceled' in result
+
+    def test_post(self):
+        view = self.createView()
+        self.createTimetableExceptions()
+        request = RequestStub('http://localhost:7001/path/to/tt',
+                              authenticated_user=self.person,
+                              method='POST',
+                              args={'REMOVE.1': 'Remove'})
+        result = view.render(request)
+        self.assertEquals(request.code, 302)
+        self.assertEquals(request.headers['location'],
+                          'http://localhost:7001/path/to/tt')
+        tt = self.person.timetables['2004-fall', 'default']
+        self.assertEquals(tt.exceptions, [])
 
     def test_title(self):
         view = self.createView()
         self.assertEquals(view.title(),
-                          "John Smith's timetable for 2004 fall, default")
+                          "John Smith's timetable for 2004-fall, default")
 
 
 class TestTimetableSchemaView(AppSetupMixin, unittest.TestCase):
