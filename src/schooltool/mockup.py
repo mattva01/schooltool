@@ -135,7 +135,7 @@ def readFile(filename):
 class FakePhoto:
 
     format = 'image/jpeg'
-    data = readFile('photo.jpg')
+    data = readFile('www/mockup_photo.jpg')
 
 
 class FakePerson(Person, MemberMixin):
@@ -174,7 +174,7 @@ class FakeApplication(Persistent):
 class RootView(View):
     """View for the application root."""
 
-    template = Template('www/root.pt')
+    template = Template('www/mockup_root.pt')
 
     def counter(self):
         self.context.counter += 1
@@ -189,7 +189,7 @@ class RootView(View):
 class PeopleView(View):
     """View for /people"""
 
-    template = Template('www/people.pt')
+    template = Template('www/mockup_people.pt')
 
     def _traverse(self, name, request):
         try:
@@ -202,7 +202,7 @@ class PeopleView(View):
 class PersonView(View):
     """View for /people/person_name"""
 
-    template = Template('www/person.pt')
+    template = Template('www/mockup_person.pt')
 
     def _traverse(self, name, request):
         if name == 'photo':

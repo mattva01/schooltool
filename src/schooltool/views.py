@@ -173,6 +173,25 @@ class View(Resource):
         return ""
 
 
+class ItemTraverseView(View):
+    """A view that supports traversing with __getitem__."""
+
+    def _traverse(self, name, request):
+        return getView(self.context[name])
+
+
+class TraversableView(View):
+    """A view that supports traversing of ITraversable contexts."""
+
+    def _traverse(self, name, request):
+        return getView(self.context.traverse(name))
+
+
+#
+# Concrete views
+#
+
+
 class GroupView(View):
     """The view for a group"""
 
@@ -191,18 +210,6 @@ class PersonView(View):
     def getGroups(self):
         return [{'title': group.title, 'path': getPath(group)}
                 for group in getRelatedObjects(self.context, URIGroup)]
-
-
-class ItemTraverseView(View):
-
-    def _traverse(self, name, request):
-        return getView(self.context[name])
-
-
-class TraversableView(View):
-
-    def _traverse(self, name, request):
-        return getView(self.context.traverse(name))
 
 
 class ApplicationView(TraversableView):
@@ -307,6 +314,7 @@ class RelationshipsView(View):
     def do_POST(self, request):
         # XXX -- do the actual processing
         request.setResponseCode(201, 'Created')
+
 
 def setUp():
     registerView(IPerson, PersonView)
