@@ -72,8 +72,12 @@ class CSVImportView(View):
             self.error = unicode(e)
             return self.do_GET(request)
 
-        request.appLog(_("CSV data imported")) # TODO: More verbose logging.
         self.success = True
+        request.appLog(_("CSV data import started"))
+        for log_entry in importer.logs:
+            request.appLog(log_entry)
+        request.appLog(_("CSV data import finished successfully"))
+
         return self.do_GET(request)
 
 
@@ -84,6 +88,7 @@ class CSVImporterZODB(CSVImporterBase):
         self.groups = app['groups']
         self.persons = app['persons']
         self.resources = app['resources']
+        self.logs = []
 
     def importGroup(self, name, title, parents, facets):
         group = self.groups.new(__name__=name, title=title)
@@ -97,6 +102,7 @@ class CSVImporterZODB(CSVImporterBase):
                 raise DataError(_("Unknown facet type: %s") % facet_name)
             facet = factory()
             FacetManager(group).setFacet(facet, name=factory.facet_name)
+        self.logs.append(_('Imported group: %s') % name)
         return group.__name__
 
     def importPerson(self, title, parent, groups, teaching=False):
@@ -111,9 +117,11 @@ class CSVImporterZODB(CSVImporterBase):
             if not teaching:
                 for group in groups.split():
                     Membership(group=self.groups[group], member=person)
+                self.logs.append(_('Imported person: %s') % title)
             else:
                 for group in groups.split():
                     Teaching(teacher=person, taught=self.groups[group])
+                self.logs.append(_('Imported person (teacher): %s') % title)
         except KeyError:
             raise DataError(_("Invalid group: %s") % group)
 
@@ -127,6 +135,7 @@ class CSVImporterZODB(CSVImporterBase):
             except KeyError:
                 raise DataError(_("Invalid group: %s") % group)
             Membership(group=other, member=resource)
+        self.logs.append(_('Imported resource: %s') % title)
         return resource.__name__
 
     def importPersonInfo(self, name, title, dob, comment):
@@ -139,6 +148,11 @@ class CSVImporterZODB(CSVImporterBase):
             infofacet.first_name = ''
             infofacet.last_name = title
 
-        infofacet.dob = parse_date(dob)
+        if dob:
+            infofacet.date_of_birth = parse_date(dob)
+        else:
+            infofacet.date_of_birth = None
         infofacet.comment = comment
-
+        self.logs.append(_('Imported person info for %s (%s %s, %s)')
+                         % (name, infofacet.first_name, infofacet.last_name,
+                            infofacet.date_of_birth))
