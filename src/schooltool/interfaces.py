@@ -1386,6 +1386,8 @@ class ITimetableException(Interface):
         """Calendar event that should replace the exceptional activity.
 
         If None, then the activity is simply removed.
+
+        If not None, then replacement is a IExceptionalTTCalendarEvent.
         """)
 
     def __eq__(other):
@@ -1409,7 +1411,10 @@ class IExceptionalTTCalendarEvent(ICalendarEvent):
     """A calendar event that replaces a particular timetable event."""
 
     exception = Attribute(
-        """The exception in which this event is stored.""")
+        """The exception in which this event is stored.
+
+        An ITimetableException.
+        """)
 
 
 class ICompositeTimetableProvider(Interface):
