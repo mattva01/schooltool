@@ -21,6 +21,7 @@ set -e
 #     installation fails and the `postinst' is called with `abort-upgrade',
 #     `abort-remove' or `abort-deconfigure'.
 
+PYTHON=python2.3
 package=schoolbell
 sslcert=/etc/$package/$package.cert.pem
 sslkey=/etc/$package/$package.privkey.pem
@@ -136,6 +137,9 @@ case "$1" in
     db_reset $package/auto_upgrade_db
     [ "$ans" == false ] || db_upgrade ${2}
 
+    # reset the no_compat_libs question
+    db_fset $package/no_compat_libs seen false
+    db_reset $package/no_compat_libs
 
     #Make the config file
     #Put the default template there if none exists

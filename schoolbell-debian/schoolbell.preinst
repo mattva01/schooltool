@@ -43,10 +43,11 @@ try_db_delete () { # This code must go in 1.1
 
 db_get $package/no_compat_libs
 ans="$RET"
-db_fset $package/no_compat_libs seen false
-db_reset $package/no_compat_libs
 case "$ans" in
-    abort*) exit 1;;
+    abort*) 
+    db_fset $package/no_compat_libs seen false
+    db_reset $package/no_compat_libs
+    exit 1;;
     delete*) rm -rf /var/lib/$package;;
 esac
 
