@@ -72,7 +72,7 @@ runwxclient: build
 sampledata persons.csv groups.csv resources.csv:
 	$(PYTHON) generate-sampleschool.py
 
-sampleschool: build groups.csv persons.csv resources.csv
+sampleschool: build groups.csv persons.csv resources.csv timetable.csv
 	@$(PYTHON) schooltool-server.py -d \
 	&& ($(PYTHON) import-sampleschool.py ; \
 	kill `cat schooltool.pid`)

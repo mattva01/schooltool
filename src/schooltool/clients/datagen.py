@@ -44,19 +44,31 @@ surnames = _('Moore McCullogh Buckingham Butler Davies Clark Cooper '
              'Smith Smith Smith Smith Smith Smith Smith Greenspun '
              'Eastwood Baggins').split()
 
-years = 3
+# The number of years, teachers and subjects are wired in at this point.
+
+years = 2
 nr_pupils = 60
-nr_teachers = 10
+nr_teachers = 8
 subjects = {
     'ling': _('Linguistics'),
-    'phys': _('Physics'),
     'math': _('Mathematics'),
-    'biol': _('Biology')
+    'biol': _('Biology'),
+    'hist': _('History')
     }
 pupil_age_end = 1994        # Which year the youngest pupils will be
 teacher_age_start = 1950    # Oldest teachers
 teacher_age_end = 1980      # Youngest teachers
 
+timetable = [['','','',''],
+             ['','','',''],
+             ['','','',''],
+             ['','','',''],
+             ['','','',''],
+             ['','','',''],
+             ['','','',''],
+             ['','','','']]
+
+rosters = ['','','','','','','','']
 
 def random_name():
     return (random.choice(surnames), random.choice(names))
@@ -100,51 +112,63 @@ def createPersons():
       groups is a space separated list of groups this pupils is a member of
     """
     f = open("persons.csv", "w")
+    r = open("roster.txt", "w")
     names = sets.Set()
+    subNames = subjects.keys()
+    subNames.extend(subjects.keys())
+    team = 1
+    kids = []
+    
     for i in range(nr_pupils):
         year = i / (nr_pupils/years) + 1
         groups = ["%s%d" % (subj, year) for subj in subjects.keys()]
         birthday = random_date(datetime.date(pupil_age_end - year + 1, 1, 1),
                                datetime.date(pupil_age_end - year + 2, 1, 1))
-        
-        #subject1 = random.choice(groups)
-        #groups.remove(subject1)
-        #subject2 = random.choice(groups)
-        
+
         for counter in range(20):
             surname, name = random_name()
-            if name not in names:
+            full = "%s %s" % (name, surname)
+            if full not in names:
                 break
 
-        names.add(name)
+        names.add(full)
+        kids.append(full)
+        
         groups_str = 'year%s %s' % (year, 'pupils')
         print >> f, '"","%s","%s","%s","%s",""' % (surname, name, 
                                                    groups_str, birthday)
-
-    teachers = []
-    for i in range(nr_teachers):
-        teachers.append([])
-
-    poolsize = len(subjects) * years
-    pool = []
-    while len(pool) < poolsize:
-        pool.extend(teachers)
-    pool = pool[:poolsize]
-    random.shuffle(pool)
-
-    for dept in subjects.keys():
-        for year in range(1, years + 1):
-            teacher = pool.pop()
+    
+    
+    for count in range(0, nr_teachers):
+        period = count
+        if count > 3: 
+            team = 2
+            period = period - 4
+            students = kids[31:]
+        else:
+            students = kids[:30]
+        for counter in range(20):
             surname, name = random_name()
-            #teacher.append("%s %s" % (dept, 'teachers'))
-            birthday = random_date(datetime.date(teacher_age_start, 1, 1),
-                                   datetime.date(teacher_age_end, 1, 1))
-            print >> f, '"","%s","%s","%s teachers","%s",""' % (surname, name, 
-                                                           dept, birthday)
-        surname, name = random_name()
-        #print >> f, '"", "%s","%s","%s"' % (surname, name," ".join(groups))
-    f.close()
+            full = "%s %s" % (name, surname)
+            if full not in names:
+                break
 
+        names.add(full)        
+        birthday = random_date(datetime.date(teacher_age_start, 1, 1),
+                               datetime.date(teacher_age_end, 1, 1))
+        print >> f, '"","%s","%s","%s teachers","%s",""' % (surname, name, 
+                                                            subNames[count], 
+                                                            birthday)
+        timetable[count][period] = '%s %s | %s %s' % (\
+            subjects[subNames[count]], team, name, surname)
+        print >> r, '%s %s' % (\
+            subjects[subNames[count]], team)
+        for kid in students:
+            print >> r, kid
+        print >> r, ""
+    
+    r.close()
+    f.close()
 
 def createResources():
     """Create a generated resources.csv in the current directory.
@@ -160,13 +184,32 @@ def createResources():
        print >> f, '"%s",""' % (_('Projector %d') % i)
     f.close()
 
+def createTimetable():
+    f = open("timetable.csv", "w")
+    print >> f, '''"2004-fall","default"
+""
+"Day 1"
+"","A","B"'''
+    for count in range(1,9):
+        print >> f, '"Room %i","%s","%s"' % (count, timetable[count-1][0],
+                                       timetable[count-1][1])
+    print >> f, '''""
+"Day 2"
+"","C","D"'''
+    for count in range(1,9):
+        print >> f, '"Room %i","%s","%s"' % (count, timetable[count-1][2],
+                                       timetable[count-1][3])
+    f.close()
+    
 
+    
 def main(argv):
     if len(argv) > 1:
         random.seed(argv[1])
     createGroups()
     createPersons()
     createResources()
+    createTimetable()
 
 if __name__ == '__main__':
     main(sys.argv)

@@ -52,8 +52,8 @@ class SampleSchoolImporter:
             if self.interactive:
                 self.input_settings()
             self.check_server_running()
-            self.import_csv_files()
             self.import_timetable_data()
+            self.import_csv_files()
         except Error, e:
             print _("An error occured!")
             print >> sys.stderr, unicode(e)
@@ -123,7 +123,7 @@ class SampleSchoolImporter:
     def check_data_files(self):
         """Check that the data files exist."""
         for filename in ('groups.csv', 'persons.csv',
-                         'resources.csv'):
+                         'resources.csv', 'timetable.csv'):
             if not os.path.exists(os.path.join(self.datadir, filename)):
                 raise Error(_("%s does not exist.  "
                               "Please run generate-sampleschool.py")

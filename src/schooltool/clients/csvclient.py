@@ -159,6 +159,7 @@ class CSVImporterHTTP(CSVImporterBase):
             self.importPersonsCsv(self.fopen('persons.csv'))
             self.blather(_("Creating resources... "))
             self.importResourcesCsv(self.fopen('resources.csv'))
+            # need to import timetables and rosters here.
             self.blather(_("Import finished successfully"))
         except DataError:
             raise
