@@ -37,7 +37,7 @@ from schooltool.uris import URINotation
 from schooltool.http import Request
 from schooltool.browser.auth import PublicAccess
 from schooltool.browser.auth import isManager, isTeacher
-from schooltool.translation import ugettext as _
+from schooltool.translation import ugettext as _, TranslatableString
 
 
 __metaclass__ = type
@@ -319,18 +319,22 @@ class ToplevelBreadcrumbsMixin:
 class ContainerBreadcrumbsMixin(ToplevelBreadcrumbsMixin):
     """Breadcrumbs for application object container views."""
 
+    _ = TranslatableString  # postpone translations
+
     _container_translations = {'groups': _('Groups'),
                                'persons': _('Persons'),
                                'resources': _('Resources'),
                                'notes': _('Notes')}
+
+    del _ # go back to immediate translations
 
     def breadcrumbs(self):
         breadcrumbs = ToplevelBreadcrumbsMixin.breadcrumbs(self)
         container = self.context
         while not IApplicationObjectContainer.providedBy(container):
             container = container.__parent__
-        breadcrumbs.append((self._container_translations[container.__name__],
-                            absoluteURL(self.request, container)))
+        title = unicode(self._container_translations[container.__name__])
+        breadcrumbs.append((title, absoluteURL(self.request, container)))
         return breadcrumbs
 
 
