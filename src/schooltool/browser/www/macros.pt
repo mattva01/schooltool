@@ -11,7 +11,7 @@
     Not logged in.
   </div>
   <div class="login" tal:condition="request/authenticated_user">
-    User: <tal:x replace="request/authenticated_user/title" />.
+    User: <a href="/start" tal:content="request/authenticated_user/title" />.
     <a href="/logout"
        tal:attributes="href string:/logout?url=${request/path}">Log out</a>.
   </div>
