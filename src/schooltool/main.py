@@ -45,6 +45,7 @@ from twisted.internet import reactor
 from twisted.protocols import http
 from twisted.python import threadable
 from twisted.python import failure
+import twisted.python.runtime
 
 from schooltool.app import Application, ApplicationObjectContainer
 from schooltool import model, absence
@@ -633,7 +634,11 @@ class Server:
 
         for k, v in opts:
             if k in ('-d', '--daemon'):
-                self.daemon = True
+                if twisted.python.runtime.platformType == 'posix':
+                    self.daemon = True
+                else:
+                    sys.exit(_("Daemon mode not supported on your "
+                             "operating system"))
 
     def help(self):
         """Prints a help message."""
