@@ -302,40 +302,40 @@ input.button-cancel {
 */
 
 #calendar-navigation {
-  float: right;
+    float: right;
 }
 
 #calendar-navigation-day,
 #calendar-navigation-week,
 #calendar-navigation-month,
 #calendar-navigation-year {
-  display: block;
-  margin: 2px;
-  float: left;
-  text-decoration: none;
-  overflow: hidden;
-  border: 0;
-  padding: 0;
-  padding-top: 24px;
-  height: 0px !important;
-  height /**/: 24px;
-  width: 24px;
+    display: block;
+    margin: 2px;
+    float: left;
+    text-decoration: none;
+    overflow: hidden;
+    border: 0;
+    padding: 0;
+    padding-top: 24px;
+    height: 0px !important;
+    height /**/: 24px;
+    width: 24px;
 }
 
 #calendar-navigation-day {
-  background: url('/day.png') no-repeat top left;
+    background: url('/day.png') no-repeat top left;
 }
 
 #calendar-navigation-week {
-  background: url('/week.png') no-repeat top left;
+    background: url('/week.png') no-repeat top left;
 }
 
 #calendar-navigation-month {
-  background: url('/month.png') no-repeat top left;
+    background: url('/month.png') no-repeat top left;
 }
 
 #calendar-navigation-year {
-  background: url('/year.png') no-repeat top left;
+    background: url('/year.png') no-repeat top left;
 }
 
 /* FIXME: Currently uses tables in the layout */
@@ -515,7 +515,7 @@ h2.calendar-view-title {
 }
 
 #calendar-view-week {
-  border-top: 1px #4B6983 solid;
+    border-top: 1px #4B6983 solid;
 }
 
 #calendar-view-week td {
@@ -577,32 +577,32 @@ h2.calendar-view-title {
 * day
 */
 #calendar-view-day {
-  border: #aaaaaa 1px solid;
-  border-top: none;
-  position: relative;
-  padding: 0;
+    border: #aaaaaa 1px solid;
+    border-top: none;
+    position: relative;
+    padding: 0;
 }
 
 #calendar-view-day .hour {
-  border-top: #4b6983 1px solid;
-  border-top: 1px #bab5ab solid;
-  width: 100%;
-  position: absolute;
-  height: 4em;
-  margin: 0 !important;
-  padding: 0 !important;
+    border-top: #4b6983 1px solid;
+    border-top: 1px #bab5ab solid;
+    width: 100%;
+    position: absolute;
+    height: 4em;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 #calendar-view-day .even {
-  background: #eae8e3;
+    background: #eae8e3;
 }
 
 #calendar-view-day .hour .title {
-  position: absolute;
-  top: 0;
-  left: 0;
-  font-weight: bold;
-  margin-left: 0.5em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: bold;
+    margin-left: 0.5em;
 }
 
 #calendar-view-day .events {
@@ -614,67 +614,67 @@ h2.calendar-view-title {
 }
 
 #calendar-view-day .event {
-  display: block;
-  position: absolute;
-  margin-left: 5em;
-  width: 20em;
-  min-width: 20em;
-  border: 1px #4b6983 solid;
-  background: #9db8d2;
-  opacity: 0.85;
-  z-index: 1;
+    display: block;
+    position: absolute;
+    margin-left: 5em;
+    width: 20em;
+    min-width: 20em;
+    border: 1px #4b6983 solid;
+    background: #9db8d2;
+    opacity: 0.85;
+    z-index: 1;
 }
 
 #calendar-view-day .other {
-  background: #e0b6af;
-  border: 1px #884631 solid;
+    background: #e0b6af;
+    border: 1px #884631 solid;
 }
 
 #calendar-view-day .event:hover {
-  opacity: 1;
-  z-index: 9;
+    opacity: 1;
+    z-index: 9;
 }
 
 #calendar-view-day .event h6 {
-  font-size: small;
-  margin: 0;
-  padding: 2px;
-  background: #7590ae;
-  font-weight: bold;
-  line-height: 1em;
-  opacity: 1 !important;
+    font-size: small;
+    margin: 0;
+    padding: 2px;
+    background: #7590ae;
+    font-weight: bold;
+    line-height: 1em;
+    opacity: 1 !important;
 }
 
 #calendar-view-day .other h6 {
-  background: #c1665a;
+    background: #c1665a;
 }
 
 
 #calendar-view-day .event h6 a {
-  color: #fff;
-  text-decoration: none;
+    color: #fff;
+    text-decoration: none;
 }
 
 #calendar-view-day .event h6 .start-end {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 #calendar-view-day .event a.delete {
-  position: absolute;
-  top: 1px;
-  right: 1px;
-  display: block;
-  text-decoration: none;
-  overflow: hidden;
-  border: 0;
-  margin: 2px;
-  padding: 0;
-  padding-top: 10px;
-  height: 0px !important;
-  height /**/: 10px;
-  width: 10px;
-  cursor: pointer;
-  background: url(/delete.png) no-repeat top left;
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+    border: 0;
+    margin: 2px;
+    padding: 0;
+    padding-top: 10px;
+    height: 0px !important;
+    height /**/: 10px;
+    width: 10px;
+    cursor: pointer;
+    background: url(/delete.png) no-repeat top left;
 }
 
 #calendar-view-day .event .privacy {
@@ -682,40 +682,40 @@ h2.calendar-view-title {
 
 #calendar-view-day .hour a.event-new,
 #calendar-view-day .hour a.booking-new {
-  position: absolute;
-  display: block;
-  text-decoration: none;
-  overflow: hidden;
-  border: 0;
-  margin: 2px;
-  padding: 0;
-  padding-top: 16px;
-  height: 0px !important;
-  height /**/: 16px;
-  width: 16px;
-  cursor: pointer;
+    position: absolute;
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+    border: 0;
+    margin: 2px;
+    padding: 0;
+    padding-top: 16px;
+    height: 0px !important;
+    height /**/: 16px;
+    width: 16px;
+    cursor: pointer;
 }
 
 #calendar-view-day .hour a.event-new {
-  bottom: 2px;
-  left:2px;
-  background: url(/meeting.png) no-repeat top left;
-  float: left;
+    bottom: 2px;
+    left:2px;
+    background: url(/meeting.png) no-repeat top left;
+    float: left;
 }
 
 #calendar-view-day .hour a.booking-new {
-  bottom: 2px;
-  left:22px;
-  background: url(/booking.png) no-repeat top left;
-  float: left;
+    bottom: 2px;
+    left:22px;
+    background: url(/booking.png) no-repeat top left;
+    float: left;
 }
 
 #calendar-view-day .hour a.event-new:hover {
-  background: url(/meeting.png) no-repeat top left;
+    background: url(/meeting.png) no-repeat top left;
 }
 
 #calendar-view-day .hour a.booking-new:hover {
-  background: url(/booking.png) no-repeat top left;
+    background: url(/booking.png) no-repeat top left;
 }
 
 
@@ -738,23 +738,23 @@ body#path-login form.standalone {
 }
 
 #portlet-navigation-calendar {
-  padding-left: 3em !important;
-  background: url("/calendar.png") left no-repeat;
+    padding-left: 3em !important;
+    background: url("/calendar.png") left no-repeat;
 }
 
 #portlet-navigation-calendar:hover {
-  padding-left: 3em !important;
-  background: #748fad url("/calendar.png") left no-repeat !important;
+    padding-left: 3em !important;
+    background: #748fad url("/calendar.png") left no-repeat !important;
 }
 
 #portlet-navigation-information {
-  padding-left: 3em !important;
-  background: url("/information.png") left no-repeat;
+    padding-left: 3em !important;
+    background: url("/information.png") left no-repeat;
 }
 
 #portlet-navigation-information:hover {
-  padding-left: 3em !important;
-  background: #748fad url("/information.png") left no-repeat !important;
+    padding-left: 3em !important;
+    background: #748fad url("/information.png") left no-repeat !important;
 }
 
 #portlet-calendar-view-month {
