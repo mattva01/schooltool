@@ -134,7 +134,7 @@ The test runner has more options and features.  To find out about them, do
 Copyright information
 ---------------------
 
-SchoolTool is copyright (c) 2003 Shuttleworth Foundation
+SchoolTool is copyright (c) 2003, 2004 Shuttleworth Foundation
 
 All files in the src/schooltool directory are part of SchoolTool, and
 are (c) Shuttleworth Foundation.
@@ -147,11 +147,14 @@ any later version.
 Files in the following directories are (c) their respective owners. See
 the individual files and directories for details of the licences.
 
+  src/BTrees
   src/ZConfig
+  src/ZODB
   src/persistence
+  src/persistent
   src/transaction
+  src/zLOG
   src/zdaemon
-  src/zodb
   src/zope
 
 Files in the same directory as this README file are (c) Shuttleworth
