@@ -98,6 +98,8 @@ Project structure
   build/                temporary files are placed here during build process
   coverage/             unit test coverage reports
   debian/               Debian packaging support
+  doc/                  documentation
+    userguide.txt       documentation for users
   src/                  source code
     schooltool/         Python package 'schooltool'
       main.py           the SchoolTool server
