@@ -1226,7 +1226,8 @@ class TestACLView(AppSetupMixin, unittest.TestCase):
         assert view.context.allows(self.person, ViewPermission)
         view.request = RequestStub(authenticated_user=self.manager,
                                    args={'DELETE': 'revoke',
-                                         'CHECK': 'View:/persons/johndoe'})
+                                         'CHECK': ['View:/persons/johndoe',
+                                                   'Edit:/no/such/thing']})
         result = view.update()
         assert not view.context.allows(self.person, ViewPermission)
         self.assertEquals(view.request.applog,

@@ -931,11 +931,13 @@ class ACLView(View):
         if 'DELETE' in self.request.args:
             for checkbox in self.request.args.get('CHECK', []):
                 perm, path = checkbox.split(':', 1)
-                # XXX handle traversal failures!
-                if path != Everybody:
-                    obj = traverse(self.context, path)
-                else:
+                if path == Everybody:
                     obj = Everybody
+                else:
+                    try:
+                        obj = traverse(self.context, path)
+                    except KeyError:
+                        continue
                 try:
                     self.context.remove((obj, perm))
                 except KeyError:
