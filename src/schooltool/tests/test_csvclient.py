@@ -176,8 +176,8 @@ class TestCSVImporter(unittest.TestCase):
                      'href="/persons/007"\n'),
                     ]
 
-        self.assertEqual(requests, expected,
-                         diff(pformat(requests), pformat(expected)))
+        self.assertEqual(requests, expected, "\n" +
+                         diff(pformat(expected), pformat(requests)))
 
 
     def test_getPersonName(self):
