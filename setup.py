@@ -179,7 +179,6 @@ class install_lib(_install_lib):
                 '# pathconf end'])
         datafile_regex = re.compile(r'# pathconf begin\n.*# pathconf end', re.S)
         pathconfig_str = re.sub(datafile_regex, datafile_str, pathconfig_str)
-        print pathconfig_str
         try:
             path_file = open(pathconfig, 'w')
             path_file.write(pathconfig_str)
