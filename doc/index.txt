@@ -24,8 +24,8 @@ Some information about relationships in SchoolTool.
 -- release-policy.txt --
 The release policy for SchoolTool and SchoolBell.
 
--- release-sequence.txt --
-The release policy for SchoolTool and SchoolBell.
+-- release-checklist.txt --
+The release checklist for SchoolTool and SchoolBell.
 
 -- restive-interface.txt --
 A brief list of actions available through the SchoolTool ReSTive interface.
