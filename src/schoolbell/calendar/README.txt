@@ -55,6 +55,8 @@ You can easily construct a SchoolBell calendar from an iCalendar file
 
     >>> from schoolbell.calendar.simple import ImmutableCalendar
     >>> calendar = ImmutableCalendar(read_icalendar(open(filename)))
+    >>> len(calendar)
+    3
 
 iCalendar is a large specification, and schoolbell.calendar supports only a
 subset of it.  This subset should be enough to interoperate with most open

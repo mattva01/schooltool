@@ -45,6 +45,23 @@ class CalendarMixin:
 
     """
 
+    def __len__(self):
+        """Return the number of events in this calendar.
+
+        This implementation just returns len(list(self)), which is not very
+        efficient.
+
+            >>> class MyCalendar(CalendarMixin):
+            ...     def __iter__(self):
+            ...         return iter(['event' for n in range(3)])
+
+            >>> cal = MyCalendar()
+            >>> len(cal)
+            3
+
+        """
+        return len(list(self))
+
     def find(self, unique_id):
         """Find a calendar event with a given UID.
 

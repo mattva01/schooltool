@@ -52,6 +52,9 @@ class ICalendar(Interface):
     events are listed only once.
     """
 
+    def __len__():
+        """Return the number of events in this calendar."""
+
     def __iter__():
         """Return an iterator over all events in this calendar.
 

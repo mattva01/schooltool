@@ -96,6 +96,9 @@ class ImmutableCalendar(CalendarMixin):
         >>> [e.title for e in calendar]
         ['Work on schoolbell.calendar.simple']
 
+        >>> len(calendar)
+        1
+
     """
 
     implements(ICalendar)
@@ -105,6 +108,9 @@ class ImmutableCalendar(CalendarMixin):
 
     def __iter__(self):
         return iter(self._events)
+
+    def __len__(self):
+        return len(self._events)
 
 
 def combine_calendars(*calendars):
