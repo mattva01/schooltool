@@ -107,7 +107,9 @@ Project structure
       schema.xml        ZConfig schema definition for the configuration file
       tests/            unit tests for the schooltool package
       ftests/           functional tests for the schooltool package
-      views/            views for the server
+      browser/          web application views for the server
+        tests/          unit tests for the schooltool.browser package
+      views/            RESTive views for the server
         www/            page templates
         tests/          unit tests for the schooltool.views package
       clients/          SchoolTool clients

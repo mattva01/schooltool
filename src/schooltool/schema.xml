@@ -58,6 +58,18 @@
     </example>
   </multikey>
 
+  <multikey name="web" datatype="inet-address">
+    <description>
+      Network interface and port number the web server should listen on.
+
+      Network interface can be omitted and just the port number specified.
+    </description>
+    <example>
+      web 80
+      web 127.0.0.1:80
+    </example>
+  </multikey>
+
   <key name="thread-pool-size" datatype="integer" default="10">
     <description>
       Suggested thread pool size.

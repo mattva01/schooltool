@@ -51,6 +51,8 @@ from schooltool.interfaces import IEvent, IAttendanceEvent, IModuleSetup
 from schooltool.interfaces import AuthenticationError
 from schooltool.common import StreamWrapper, UnicodeAwareException
 from schooltool.translation import ugettext as _
+from schooltool.browser.app import LoginPage
+
 
 __metaclass__ = type
 
@@ -840,6 +842,12 @@ class Server:
             self.reactor_hook.listenTCP(port, site, interface=interface)
             self.notifyServerStarted(interface, port)
 
+        site = Site(self.db, self.appname, LoginPage, self.authenticate,
+                    self.getApplicationLogPath())
+        for interface, port in self.config.web:
+            self.reactor_hook.listenTCP(port, site, interface=interface)
+            self.notifyWebServerStarted(interface, port)
+
         if self.daemon:
             self.daemonize()
 
@@ -959,6 +967,10 @@ class Server:
 
     def notifyServerStarted(self, network_interface, port):
         self.logger.info(_("Started HTTP server on %s:%s"),
+                         network_interface or "*", port)
+
+    def notifyWebServerStarted(self, network_interface, port):
+        self.logger.info(_("Started web server on %s:%s"),
                          network_interface or "*", port)
 
     def notifyDaemonized(self, pid):
