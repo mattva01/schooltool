@@ -9,7 +9,7 @@ the branch is called milestone4 and the directory is schooltool-m4.
 If there are any problems on any step, you can delete the branch by
 executing the following command:
 
-    svn rm svn+ssh://source.schooltool.org/svn/branches/schooltool/milestone4
+    svn rm svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/milestone4
 
 and start again.
 
@@ -20,12 +20,12 @@ and start again.
 
 2. Tag the release:
 
-     svn cp svn+ssh://source.schooltool.org/svn/trunk/schooltool \
-            svn+ssh://source.schooltool.org/svn/branches/schooltool/milestone4
+     svn cp svn+ssh://source.schooltool.org/svn/schooltool/trunk/schooltool \
+            svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/milestone4
 
 3. Checkout the branch:
 
-     svn co svn+ssh://source.schooltool.org/svn/branches/schooltool/milestone4
+     svn co svn+ssh://source.schooltool.org/svn/schooltool/branches/schooltool/milestone4
 
 4. Export the release and tar it up.
 
