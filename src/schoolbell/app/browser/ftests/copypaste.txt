@@ -102,15 +102,17 @@ We paste the person
 
 We now have a second person
 
-    >>> print http(r"""
+    >>> r = http(r"""
     ... GET /frogpond/persons HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
+    >>> print r
     HTTP/1.1 200 Ok
     ...
-    ...person1...
-    ...person-2...
-    ...
+    >>> 'person1' in str(r)
+    True
+    >>> 'person-2' in str(r)
+    True
 
 The group has only one member, though
 
@@ -142,5 +144,71 @@ The new person has no groups
 'group1' is not there
 
     >>> 'group1' not in str(r)
+    True
+
+Copying the whole SchoolBell instance
+-------------------------------------
+
+If you copy the whole SchoolBell instance, relationships within it are
+preserved.
+
+    >>> print http(r"""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ... Content-Length: 44
+    ...
+    ... ids:list=frogpond&container_copy_button=Copy
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+    >>> print http(r"""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ... Content-Length: 28
+    ...
+    ... container_paste_button=Paste
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+The group in the new instance has one member
+
+    >>> r = http(r"""
+    ... GET /frogpond-2/groups/Group HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    >>> print r
+    HTTP/1.1 200 Ok
+    ...
+    ...person1...
+
+And it is the right 'person1' (the one in /frogpond-2/ rather than the one
+in /frogpond/)
+
+    >>> '/frogpond-2/persons/person' in str(r)
+    True
+    >>> '/frogpond/' not in str(r)
+    True
+
+The person in the new instance has one group
+
+    >>> r = http(r"""
+    ... GET /frogpond-2/persons/person HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    >>> print r
+    HTTP/1.1 200 Ok
+    ...
+    ...group1...
+
+And it is the right 'group1' (the one in /frogpond-2/ rather than the one
+in /frogpond/)
+
+    >>> '/frogpond-2/groups/Group' in str(r)
+    True
+    >>> '/frogpond/' not in str(r)
     True
 
