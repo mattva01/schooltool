@@ -1,0 +1,21 @@
+<html metal:use-macro="view/macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="view/title">Add object</title>
+</head>
+<body>
+
+<h1 metal:fill-slot="h1" tal:content="view/title">Add object</h1>
+
+<metal:block metal:fill-slot="content">
+
+  <form metal:use-macro="view/object_add_template/macros/object_add_form">
+    <div class="row" metal:fill-slot="extra_fields">
+      <input id="location" name="location" type="checkbox"
+             tal:attributes="checked view/prev_location"/>
+      <label class="invisible" for="location" i18n:translate="">This resource is a venue</label>
+    </div>
+  </form>
+
+</metal:block>
+</body>
+</html>

@@ -8,7 +8,8 @@
 
 <metal:block metal:fill-slot="content">
 
-  <form method="POST" tal:attributes="action request/path">
+  <form method="POST" tal:attributes="action request/path"
+        metal:define-macro="object_add_form">
     <input tal:condition="view/parent" type="hidden" name="parentgroup"
            tal:attributes="value view/parent/__name__" />
     <div class="error" tal:condition="view/error" tal:content="view/error" />
@@ -22,6 +23,7 @@
       <input id="name" name="name" type="text"
              tal:attributes="value view/prev_name">
     </div>
+    <metal:block define-slot="extra_fields" />
     <div class="buttons" tal:condition="view/duplicate_warning">
       <input class="button" type="submit" name="CONFIRM" value="Add anyway"
              i18n:attributes="value" />

@@ -684,34 +684,52 @@ class TestGroupAddView(AppSetupMixin, unittest.TestCase):
         newgrp = self.app["groups"]["newgrp"]
         assert newgrp in getRelatedObjects(self.teachers, URIMember)
 
-    def test_extractParentFromRequest_no_parent_specified(self):
+    def test_processExtraFormFields_no_parent_specified(self):
         view = self.createView()
         request = RequestStub()
-        view._extractParentFromRequest(request)
+        view._processExtraFormFields(request)
         assert view.parent is None
         self.assertEquals(view.title, "Add group")
 
-    def test_extractParentFromRequest_parent_specified(self):
+    def test_processExtraFormFields_parent_specified(self):
         view = self.createView()
         request = RequestStub(args={'parentgroup': 'teachers'})
-        view._extractParentFromRequest(request)
+        view._processExtraFormFields(request)
         assert view.parent is self.teachers
         self.assertEquals(view.title, "Add group (a subgroup of Teachers)")
 
-    def test_extractParentFromRequest_parent_does_not_exist(self):
+    def test_processExtraFormFields_parent_does_not_exist(self):
         view = self.createView()
         request = RequestStub(args={'parentgroup': 'no such group'})
-        view._extractParentFromRequest(request)
+        view._processExtraFormFields(request)
         assert view.parent is None
         self.assertEquals(view.title, "Add group")
 
 
-class TestResourceAddView(unittest.TestCase):
+class TestResourceAddView(AppSetupMixin, unittest.TestCase):
+
+    def createView(self):
+        from schooltool.browser.app import ResourceAddView
+        view = ResourceAddView(self.app['resources'])
+        return view
 
     def test(self):
-        from schooltool.browser.app import ResourceAddView
-        view = ResourceAddView({})
+        view = self.createView()
         self.assertEquals(view.title, "Add resource")
+
+    def test_processExtraFormFields_not_location(self):
+        view = self.createView()
+        request = RequestStub(args={})
+        view._processExtraFormFields(request)
+        assert view.parent is None
+        assert not view.prev_location
+
+    def test_processExtraFormFields_parent_does_not_exist(self):
+        view = self.createView()
+        request = RequestStub(args={'location': ''})
+        view._processExtraFormFields(request)
+        assert view.parent is self.locations
+        assert view.prev_location
 
 
 class TestBusySearchView(unittest.TestCase, EqualsSortedMixin):

@@ -242,7 +242,11 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
 
     authorization = ManagerAccess
 
-    template = Template('www/object_add.pt')
+    # Subclasses can override the template attribute and still access the
+    # original one as object_add_template if they want to use METAL macros
+    # defined therein.
+    object_add_template = Template('www/object_add.pt')
+    template = object_add_template
 
     error = u""
     prev_name = u""
@@ -252,7 +256,13 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
     title = _("Add object") # should be overridden by subclasses
     parent = None           # can be set by subclasses
 
+    def do_GET(self, request):
+        self._processExtraFormFields(request)
+        return View.do_GET(self, request)
+
     def do_POST(self, request):
+        self._processExtraFormFields(request)
+
         if 'CANCEL' in self.request.args:
             # Just show the form without any data.
             return self.do_GET(request)
@@ -307,13 +317,20 @@ class ObjectAddView(View, ToplevelBreadcrumbsMixin):
                 return True
         return False
 
+    def _processExtraFormFields(self, request):
+        """Process additional form fields (a hook for subclasses).
+
+        It is assumed that no errors will occur during the extra processing.
+        """
+        pass
+
 
 class GroupAddView(ObjectAddView):
     """View for adding groups (/groups/add.html)."""
 
     title = _("Add group")
 
-    def _extractParentFromRequest(self, request):
+    def _processExtraFormFields(self, request):
         self.parent = None
         parent_id = request.args.get('parentgroup', [None])[0]
         if parent_id:
@@ -325,19 +342,22 @@ class GroupAddView(ObjectAddView):
                 self.title = (_("Add group (a subgroup of %s)")
                               % self.parent.title)
 
-    def do_GET(self, request):
-        self._extractParentFromRequest(request)
-        return ObjectAddView.do_GET(self, request)
-
-    def do_POST(self, request):
-        self._extractParentFromRequest(request)
-        return ObjectAddView.do_POST(self, request)
-
 
 class ResourceAddView(ObjectAddView):
     """View for adding resources (/resources/add.html)."""
 
     title = _("Add resource")
+
+    template = Template('www/resource_add.pt')
+
+    prev_location = False
+
+    def _processExtraFormFields(self, request):
+        self.parent = None
+        self.prev_location = False
+        if 'location' in request.args:
+            self.prev_location = True
+            self.parent = traverse(self.context, '/groups/locations')
 
 
 class ObjectContainerView(View, ContainerBreadcrumbsMixin):
