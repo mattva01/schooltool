@@ -18,19 +18,33 @@ put /time-periods/2003-fall
 .
 put /schooltt/2003-fall/default text/xml
 <schooltt xmlns="http://schooltool.org/ns/schooltt/0.1">
-  <teacher path="/persons/000009">
+  <teacher path="/persons/000005">
     <day id="Day 1">
       <period id="A">
-        <activity group="/groups/ling2">Linguistics 2</activity>
+      </period>
+      <period id="B">
+        <activity group="/groups/biol2">Biology 2</activity>
+      </period>
+    </day>
+    <day id="Day 2">
+      <period id="C">
+      </period>
+      <period id="D">
+      </period>
+    </day>
+  </teacher>
+  <teacher path="/persons/000008">
+    <day id="Day 1">
+      <period id="A">
       </period>
       <period id="B">
       </period>
     </day>
     <day id="Day 2">
       <period id="C">
-        <activity group="/groups/ling2">Linguistics 2</activity>
       </period>
       <period id="D">
+        <activity group="/groups/phys2">Physics 2</activity>
       </period>
     </day>
   </teacher>
@@ -39,10 +53,75 @@ put /schooltt/2003-fall/default text/xml
       <period id="A">
       </period>
       <period id="B">
+        <activity group="/groups/biol1">Biology 1</activity>
       </period>
     </day>
     <day id="Day 2">
       <period id="C">
+        <activity group="/groups/math3">Mathematics 3</activity>
+      </period>
+      <period id="D">
+        <activity group="/groups/biol1">Biology 1</activity>
+      </period>
+    </day>
+  </teacher>
+  <teacher path="/persons/000009">
+    <day id="Day 1">
+      <period id="A">
+      </period>
+      <period id="B">
+        <activity group="/groups/math2">Mathematics 2</activity>
+      </period>
+    </day>
+    <day id="Day 2">
+      <period id="C">
+      </period>
+      <period id="D">
+      </period>
+    </day>
+  </teacher>
+  <teacher path="/persons/000006">
+    <day id="Day 1">
+      <period id="A">
+        <activity group="/groups/phys3">Physics 3</activity>
+      </period>
+      <period id="B">
+      </period>
+    </day>
+    <day id="Day 2">
+      <period id="C">
+      </period>
+      <period id="D">
+        <activity group="/groups/phys3">Physics 3</activity>
+      </period>
+    </day>
+  </teacher>
+  <teacher path="/persons/000003">
+    <day id="Day 1">
+      <period id="A">
+        <activity group="/groups/math1">Mathematics 1</activity>
+      </period>
+      <period id="B">
+      </period>
+    </day>
+    <day id="Day 2">
+      <period id="C">
+      </period>
+      <period id="D">
+      </period>
+    </day>
+  </teacher>
+  <teacher path="/persons/000010">
+    <day id="Day 1">
+      <period id="A">
+        <activity group="/groups/ling2">Linguistics 2</activity>
+      </period>
+      <period id="B">
+      </period>
+    </day>
+    <day id="Day 2">
+      <period id="C">
+        <activity group="/groups/ling2">Linguistics 2</activity>
       </period>
       <period id="D">
       </period>
@@ -51,28 +130,14 @@ put /schooltt/2003-fall/default text/xml
   <teacher path="/persons/000002">
     <day id="Day 1">
       <period id="A">
-      </period>
-      <period id="B">
-        <activity group="/groups/biol1">Biology 1</activity>
-      </period>
-    </day>
-    <day id="Day 2">
-      <period id="C">
-      </period>
-      <period id="D">
-        <activity group="/groups/biol1">Biology 1</activity>
-      </period>
-    </day>
-  </teacher>
-  <teacher path="/persons/000006">
-    <day id="Day 1">
-      <period id="A">
+        <activity group="/groups/biol3">Biology 3</activity>
       </period>
       <period id="B">
       </period>
     </day>
     <day id="Day 2">
       <period id="C">
+        <activity group="/groups/phys1">Physics 1</activity>
       </period>
       <period id="D">
       </period>
@@ -94,84 +159,19 @@ put /schooltt/2003-fall/default text/xml
       </period>
     </day>
   </teacher>
-  <teacher path="/persons/000003">
-    <day id="Day 1">
-      <period id="A">
-        <activity group="/groups/ling1">Linguistics 1</activity>
-      </period>
-      <period id="B">
-      </period>
-    </day>
-    <day id="Day 2">
-      <period id="C">
-        <activity group="/groups/ling1">Linguistics 1</activity>
-      </period>
-      <period id="D">
-      </period>
-    </day>
-  </teacher>
-  <teacher path="/persons/000005">
-    <day id="Day 1">
-      <period id="A">
-      </period>
-      <period id="B">
-      </period>
-    </day>
-    <day id="Day 2">
-      <period id="C">
-      </period>
-      <period id="D">
-      </period>
-    </day>
-  </teacher>
-  <teacher path="/persons/000008">
-    <day id="Day 1">
-      <period id="A">
-        <activity group="/groups/phys3">Physics 3</activity>
-      </period>
-      <period id="B">
-      </period>
-    </day>
-    <day id="Day 2">
-      <period id="C">
-      </period>
-      <period id="D">
-        <activity group="/groups/phys3">Physics 3</activity>
-      </period>
-    </day>
-  </teacher>
   <teacher path="/persons/000004">
     <day id="Day 1">
       <period id="A">
-        <activity group="/groups/biol3">Biology 3</activity>
+        <activity group="/groups/ling1">Linguistics 1</activity>
       </period>
       <period id="B">
       </period>
     </day>
     <day id="Day 2">
       <period id="C">
-        <activity group="/groups/phys1">Physics 1</activity>
+        <activity group="/groups/ling1">Linguistics 1</activity>
       </period>
       <period id="D">
-      </period>
-    </day>
-  </teacher>
-  <teacher path="/persons/000010">
-    <day id="Day 1">
-      <period id="A">
-        <activity group="/groups/math1">Mathematics 1</activity>
-      </period>
-      <period id="B">
-        <activity group="/groups/math2">Mathematics 2</activity>
-        <activity group="/groups/biol2">Biology 2</activity>
-      </period>
-    </day>
-    <day id="Day 2">
-      <period id="C">
-        <activity group="/groups/math3">Mathematics 3</activity>
-      </period>
-      <period id="D">
-        <activity group="/groups/phys2">Physics 2</activity>
       </period>
     </day>
   </teacher>

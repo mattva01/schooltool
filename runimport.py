@@ -20,7 +20,7 @@ for file in ('groups.csv',  'teachers.csv', 'pupils.csv'):
     if not os.path.exists(file):
         print "%s not found." %  file
         print ("Please create the sample data files by running "
-               "schooltool/datagen.py")
+               "src/schooltool/datagen.py")
         sys.exit(1)
 
 

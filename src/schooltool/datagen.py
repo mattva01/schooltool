@@ -61,9 +61,15 @@ def random_name():
 
 
 def createGroups():
-    f = open("groups.csv", "w")
+    """Create a randomly generated groups.csv in the current directory.
 
-    # name, title, parents, facet
+    Format of the file:
+      group_name, group_title, parents, facets
+    where
+      parents is a space separated list of parent group names
+      facets is a space separated list of facet factory names
+    """
+    f = open("groups.csv", "w")
 
     for subj, subject in subjects.items():
         print >> f, '"%s","%s Department","root",' % (subj, subject)
@@ -77,10 +83,14 @@ def createGroups():
 
 
 def createPupils(nr=nr_pupils):
+    """Create a randomly generated pupils.csv in the current directory.
 
+    Format of the file:
+      pupil_title, groups
+    where
+      groups is a space separated list of groups this pupils is a member of
+    """
     f = open("pupils.csv", "w")
-
-    # title, groups
     names = sets.Set()
     for i in range(nr):
         year = i / (nr/years) + 1
@@ -101,18 +111,29 @@ def createPupils(nr=nr_pupils):
 
 
 def createTeachers():
+    """Create a randomly generated teachers.csv in the current directory.
 
+    Format of the file:
+      title, groups
+    where
+      groups is a space separated list of groups this teacher teaches
+    """
     f = open("teachers.csv", "w")
-
-    # title, taught
 
     teachers = []
     for i in range(nr_teachers):
         teachers.append([])
 
+    poolsize = len(subjects) * years
+    pool = []
+    while len(pool) < poolsize:
+        pool.extend(teachers)
+    pool = pool[:poolsize]
+    random.shuffle(pool)
+
     for dept in subjects.keys():
-        for year in range(1,years + 1):
-            teacher = random.choice(teachers)
+        for year in range(1, years + 1):
+            teacher = pool.pop()
             teacher.append("%s%d" % (dept, year))
 
     for groups in teachers:
