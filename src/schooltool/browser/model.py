@@ -43,16 +43,15 @@ class PersonView(View):
             return PhotoView(self.context)
         raise KeyError(name)
 
+    def info(self):
+        return FacetManager(self.context).facetByName('person_info')
+
     def photo(self):
-        try:
-            facet = FacetManager(self.context).facetByName('person_info')
-            if facet.photo is None:
-                raise KeyError
-            else:
-                path = absolutePath(self.request, self.context)
-                return '<img src="%s/photo.jpg" />' % cgi.escape(path)
-        except KeyError:
+        if self.info().photo is None:
             return u'<i>N/A</i>' # XXX Should this be translated?
+        else:
+            path = absolutePath(self.request, self.context)
+            return '<img src="%s/photo.jpg" />' % cgi.escape(path)
 
 
 class PhotoView(View):

@@ -54,6 +54,15 @@ class TestPersonInfo(unittest.TestCase):
         self.assert_(isinstance(photoview, PhotoView))
         self.assertRaises(KeyError, view._traverse, 'missing', RequestStub())
 
+    def test_info(self):
+        from schooltool.model import Person
+        from schooltool.browser.model import PersonView
+        from schooltool.component import FacetManager
+        person = Person()
+        facet = FacetManager(person).facetByName('person_info')
+        view = PersonView(person)
+        self.assert_(view.info() is facet)
+
     def test_photo(self):
         from schooltool.model import Person
         from schooltool.browser.model import PersonView
