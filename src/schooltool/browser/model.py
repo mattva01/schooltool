@@ -116,7 +116,7 @@ class PersonPasswordView(View):
         old_password = request.args['old_password'][0]
         user = request.authenticated_user
         if not user.checkPassword(old_password):
-            self.error = _('Incorrect password.')
+            self.error = _("Incorrect password for %s." % user.title)
         else:
             if 'DISABLE' in request.args:
                 self.message = _('Account disabled.')

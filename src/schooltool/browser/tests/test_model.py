@@ -231,7 +231,7 @@ class TestPersonPasswordView(AppSetupMixin, unittest.TestCase):
                               authenticated_user=self.person)
         result = view.render(request)
         self.assertEquals(request.code, 200)
-        self.assert_('Incorrect password' in result)
+        self.assert_('Incorrect password for' in result)
         self.assert_(self.person.checkPassword('oldpw'))
 
     def test_POST_disable_account(self):
