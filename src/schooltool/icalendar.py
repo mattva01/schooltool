@@ -245,6 +245,7 @@ def parse_date_time(value):
       ...
     ValueError: Invalid iCalendar date-time: ''
     """
+    # XXX Bug: UTC time treated the same as local time.
     datetime_rx = re.compile(r'(\d{4})(\d{2})(\d{2})'
                              r'T(\d{2})(\d{2})(\d{2})(Z?)$')
     match = datetime_rx.match(value)
