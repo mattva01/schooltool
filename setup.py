@@ -69,22 +69,22 @@ from distutils.core import setup, Extension
 
 # Set up dependencies for the BTrees package
 base_btrees_depends = [
-    "src/persistent/cPersistence.h",
-    "src/BTrees/BTreeItemsTemplate.c",
-    "src/BTrees/BTreeModuleTemplate.c",
-    "src/BTrees/BTreeTemplate.c",
-    "src/BTrees/BucketTemplate.c",
-    "src/BTrees/MergeTemplate.c",
-    "src/BTrees/SetOpTemplate.c",
-    "src/BTrees/SetTemplate.c",
-    "src/BTrees/TreeSetTemplate.c",
-    "src/BTrees/sorters.c",
+    "Zope3/src/persistent/cPersistence.h",
+    "Zope3/src/BTrees/BTreeItemsTemplate.c",
+    "Zope3/src/BTrees/BTreeModuleTemplate.c",
+    "Zope3/src/BTrees/BTreeTemplate.c",
+    "Zope3/src/BTrees/BucketTemplate.c",
+    "Zope3/src/BTrees/MergeTemplate.c",
+    "Zope3/src/BTrees/SetOpTemplate.c",
+    "Zope3/src/BTrees/SetTemplate.c",
+    "Zope3/src/BTrees/TreeSetTemplate.c",
+    "Zope3/src/BTrees/sorters.c",
     ]
 
 _flavors = {"O": "object", "I": "int"}
 
-KEY_H = "src/BTrees/%skeymacros.h"
-VALUE_H = "src/BTrees/%svaluemacros.h"
+KEY_H = "Zope3/src/BTrees/%skeymacros.h"
+VALUE_H = "Zope3/src/BTrees/%svaluemacros.h"
 
 include_dirs = ['src']
 
@@ -93,8 +93,8 @@ def BTreeExtension(flavor):
     key = flavor[0]
     value = flavor[1]
     name = "BTrees._%sBTree" % flavor
-    sources = ["src/BTrees/_%sBTree.c" % flavor]
-    kwargs = {"include_dirs": ['src/persistent']}
+    sources = ["Zope3/src/BTrees/_%sBTree.c" % flavor]
+    kwargs = {"include_dirs": ['Zope3/src/persistent']}
     if flavor != "fs":
         kwargs["depends"] = (base_btrees_depends + [KEY_H % _flavors[key],
                                                     VALUE_H % _flavors[value]])
@@ -108,34 +108,34 @@ ext_modules = [
     BTreeExtension("II"),
     BTreeExtension("fs"),
     Extension(name = 'persistent.cPersistence',
-              include_dirs = ['src/persistent'],
-              sources= ['src/persistent/cPersistence.c',
-                        'src/persistent/ring.c'],
-              depends = ['src/persistent/cPersistence.h',
-                         'src/persistent/ring.h',
-                         'src/persistent/ring.c']
+              include_dirs = ['Zope3/src/persistent'],
+              sources= ['Zope3/src/persistent/cPersistence.c',
+                        'Zope3/src/persistent/ring.c'],
+              depends = ['Zope3/src/persistent/cPersistence.h',
+                         'Zope3/src/persistent/ring.h',
+                         'Zope3/src/persistent/ring.c']
               ),
     Extension(name = 'persistent.cPickleCache',
-              include_dirs = ['src/persistent'],
-              sources= ['src/persistent/cPickleCache.c',
-                        'src/persistent/ring.c'],
-               depends = ['src/persistent/cPersistence.h',
-                         'src/persistent/ring.h',
-                         'src/persistent/ring.c']
+              include_dirs = ['Zope3/src/persistent'],
+              sources= ['Zope3/src/persistent/cPickleCache.c',
+                        'Zope3/src/persistent/ring.c'],
+               depends = ['Zope3/src/persistent/cPersistence.h',
+                         'Zope3/src/persistent/ring.h',
+                         'Zope3/src/persistent/ring.c']
               ),
     Extension(name = 'persistent.TimeStamp',
-              include_dirs = ['src/persistent'],
-              sources= ['src/persistent/TimeStamp.c']
+              include_dirs = ['Zope3/src/persistent'],
+              sources= ['Zope3/src/persistent/TimeStamp.c']
               ),
     Extension(name = 'ZODB.winlock',
-              include_dirs = ['src/persistent'],
-              sources = ['src/ZODB/winlock.c']
+              include_dirs = ['Zope3/src/persistent'],
+              sources = ['Zope3/src/ZODB/winlock.c']
               ),
     Extension("zope.interface._zope_interface_coptimizations",
-              ["src/zope/interface/_zope_interface_coptimizations.c"]),
+              ["Zope3/src/zope/interface/_zope_interface_coptimizations.c"]),
 ]
 
 setup(name="schooltool",
-      version="0.8",
-      package_dir={'': 'src'},
+      version="0.9",
+      package_dir={'': 'Zope3/src'},
       ext_modules=ext_modules)

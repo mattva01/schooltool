@@ -18,13 +18,8 @@ PYTHONPATH=src:Zope3/src
 
 all: build
 
-get-zope:
-	if [ ! -d Zope3 ]; then \
-		svn co svn://svn.zope.org/repos/main/Zope3/trunk Zope3;\
-	fi
-	cd Zope3 && $(PYTHON) setup.py build_ext -i
-
-build: get-zope build-translations
+build: build-translations
+	$(PYTHON) setup.py build_ext -i
 	$(PYTHON) remove-stale-bytecode.py
 
 extract-translations:
