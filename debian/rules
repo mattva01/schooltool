@@ -55,11 +55,11 @@ debdirclean:
 	rm -f debian/*.debhelper
 	rm -f debian/import-sampleschool
 	rm -f debian/files
+	rm -f build-stamp install-arch-stamp install-indep-stamp
 
 clean::
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp install-arch-stamp install-indep-stamp debian/import-sampleschool
 	-$(MAKE) realclean
 	dh_clean
 

@@ -38,7 +38,6 @@ clean:
 	         -o -name '*.py[co]' \) -exec rm -f {} \;
 	rm -rf build
 	[ -x debian/rules ] && debian/rules debdirclean	
-	rm -f build-stamp install-stamp
 
 realclean: clean
 	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;
