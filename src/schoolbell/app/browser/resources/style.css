@@ -262,7 +262,7 @@ input.button-cancel {
   margin: 0;
 }
 
-#content-header {
+#content-header h1 {
   border-bottom: 1px #d6d6d6 solid;
 }
 #breadcrumbs {
