@@ -567,6 +567,39 @@ class TestTimetableReadWriteView(TestTimetableReadView):
 
 class TestTimetableSchemaView(RegistriesSetupMixin, TestTimetableReadView):
 
+    empty_xml = """
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <model factory="SequentialDaysTimetableModel">
+            <daytemplate>
+              <used for="Friday Thursday"/>
+              <period duration="60" id="A" tstart="08:00"/>
+              <period duration="60" id="B" tstart="11:00"/>
+              <period duration="60" id="C" tstart="08:00"/>
+              <period duration="60" id="D" tstart="11:00"/>
+            </daytemplate>
+            <daytemplate>
+              <used for="default"/>
+              <period duration="60" id="A" tstart="09:00"/>
+              <period duration="60" id="B" tstart="10:00"/>
+              <period duration="60" id="C" tstart="09:00"/>
+              <period duration="60" id="D" tstart="10:00"/>
+            </daytemplate>
+          </model>
+          <day id="Day 1">
+            <period id="A">
+            </period>
+            <period id="B">
+            </period>
+          </day>
+          <day id="Day 2">
+            <period id="C">
+            </period>
+            <period id="D">
+            </period>
+          </day>
+        </timetable>
+        """
+
     illformed_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
           <day id="Day 1"

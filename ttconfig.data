@@ -1,5 +1,14 @@
 put /ttschemas/default text/xml
 <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+  <model factory="schooltool.timetable.SequentialDaysTimetableModel">
+    <daytemplate id="Normal">
+      <used when="default" />
+      <period id="A" tstart="9:00" duration="60" />
+      <period id="C" tstart="9:00" duration="60" />
+      <period id="B" tstart="10:00" duration="60" />
+      <period id="D" tstart="10:00" duration="60" />
+    </daytemplate>
+  </model>
   <day id="Day 1">
     <period id="A">
     </period>

@@ -210,6 +210,11 @@ class TimetableSchemaView(TimetableReadView):
 
     schema = read_file("../schema/tt_schema.rng")
 
+    template = Template("www/timetable_schema.pt", content_type="text/xml")
+
+    dows = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
+            'Friday', 'Saturday', 'Sunday']
+
     def __init__(self, service, key):
         try:
             timetable = service[key]
@@ -220,6 +225,33 @@ class TimetableSchemaView(TimetableReadView):
 
     def title(self):
         return "Timetable schema: %s" % self.key
+
+    def daytemplates(self):
+        result = []
+        for id, day in self.context.model.dayTemplates.items():
+            if id is None:
+                used = "default"
+            else:
+                used = self.dows[id]
+            periods = []
+            for period in day:
+                periods.append(
+                    {'id': period.title,
+                     'tstart': period.tstart.strftime("%H:%M"),
+                     'duration': period.duration.seconds / 60})
+            for template in result:
+                L1 = list(template['periods'])
+                L1.sort()
+                periods.sort()
+                if L1 == periods:
+                    days = template['used'].split()
+                    days.append(used)
+                    days.sort()
+                    template['used'] = " ".join(days)
+                    break
+            else:
+                result.append({'used': used, 'periods': periods})
+        return result
 
     def do_GET(self, request):
         if self.context is None:
@@ -234,9 +266,6 @@ class TimetableSchemaView(TimetableReadView):
             del self.service[self.key]
             request.setHeader('Content-Type', 'text/plain')
             return "Deleted timetable schema"
-
-    dow_map = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3,
-               "Friday": 4, "Saturday": 5, "Sunday": 6}
 
     def do_PUT(self, request):
         ctype = request.getHeader('Content-Type')
@@ -290,12 +319,13 @@ class TimetableSchemaView(TimetableReadView):
                 if used == 'default':
                     template_dict[None] = day
                 else:
-                    try:
-                        for dow in used.split():
-                            template_dict[self.dow_map[dow]] = day
-                    except (KeyError, ValueError):
-                        return textErrorPage(request,
-                                             "Bad used element")
+                    for dow in used.split():
+                        try:
+                            template_dict[self.dows.index(dow)] = day
+                        except ValueError:
+                            return textErrorPage(
+                                request,
+                                "Unrecognised day of week %r" % (dow,))
             model = factory(day_ids, template_dict)
 
             if len(sets.Set(day_ids)) != len(day_ids):
