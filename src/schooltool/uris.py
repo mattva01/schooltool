@@ -61,6 +61,9 @@ class URIObject:
     def __hash__(self):
         return hash(self.uri)
 
+    def __repr__(self):
+        return '<URIObject %s>' % (self.name or self.uri)
+
 
 #
 # URI API
