@@ -206,6 +206,8 @@ class DynamicSchemaField(Persistent):
 
     implements(IDynamicSchemaField)
 
+    _keys = 'name', 'label', 'value', 'ftype', 'vocabulary'
+
     def __init__(self, name, label, ftype=None, value=None, vocabulary=[]):
         # XXX Mutable default argument!
         self.name = name
@@ -215,13 +217,13 @@ class DynamicSchemaField(Persistent):
         self.vocabulary = vocabulary
 
     def __getitem__(self, key):
-        if key in ('name', 'label', 'value', 'ftype', 'vocabulary'):
+        if key in self._keys:
             return getattr(self, key)
         else:
             raise ValueError("Invalid field value request.")
 
     def __setitem__(self, key, value):
-        if key in ('name', 'label', 'value', 'ftype', 'vocabulary'):
+        if key in self._keys:
             field = getattr(self, key)
         else:
             raise ValueError("Invalid field value")
@@ -229,12 +231,8 @@ class DynamicSchemaField(Persistent):
         field = value
 
     def __eq__(self, other):
-        if self['name'] != other['name']:
-            return False
-        if self['label'] != other['label']:
-            return False
-
-        return True
+        return (self['name'] == other['name']
+                and self['label'] == other['label'])
 
 
 class DynamicSchema(Persistent):
@@ -323,11 +321,13 @@ class DynamicSchemaService(Persistent):
             self.default_id = schema_id
 
     def __delitem__(self, schema_id):
+        raise NotImplementedError() # XXX This method is not tested.
         del self.schemas[schema_id]
         if schema_id == self.default_id:
             self.default_id = None
 
     def getDefault(self):
+        raise NotImplementedError() # XXX This method is not tested.
         return self[self.default_id]
 
 
@@ -485,7 +485,7 @@ def registerViewForClass(cls, factory):
 
 
 #
-#  Utillities
+#  Utilities
 #
 
 class UtilityService:
