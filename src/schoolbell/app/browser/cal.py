@@ -22,7 +22,10 @@ SchoolBell calendar views.
 $Id$
 """
 
+from zope.app.publisher.browser import BrowserView
+
 
 class PlainCalendarView(BrowserView):
 
-    # TODO
+    pass # TODO
+

@@ -25,10 +25,11 @@ $Id$
 import unittest
 from zope.testing import doctest
 
+
 def doctest_PlainCalendarView():
     """Tests for PlainCalendarView.
 
-        >>> from schoolbell.app.browser.app import PlainCalendarView
+        >>> from schoolbell.app.browser.cal import PlainCalendarView
         >>> from schoolbell.app.app import Calendar
         >>> from zope.publisher.browser import TestRequest
         >>> cal = Calendar()
@@ -36,6 +37,7 @@ def doctest_PlainCalendarView():
         >>> view = PlainCalendarView(cal, request)
 
     """
+
 
 def test_suite():
     suite = unittest.TestSuite()
