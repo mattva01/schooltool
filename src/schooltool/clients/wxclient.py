@@ -196,7 +196,14 @@ def setupPopupMenu(control, menu):
 #
 
 class DateCtrl(wxPopupControl):
-    """A text control with a popup for calendars."""
+    """A text control with a popup for calendars.
+
+    wxPopupControl has bugs:
+     - DateCtrl is ugly, especially on Windows.
+     - You cannot close the popup calendar by clicking outside it.
+     - And automatic sizing work, you need to call SetSize manually before
+       adding a DateCtrl into a sizer.
+    """
 
     def __init__(self, *args, **kw):
         wxPopupControl.__init__(self, *args, **kw)
@@ -1189,24 +1196,29 @@ class AvailabilitySearchFrame(wxDialog):
         sizer1b.Add(self.hour_list, 1, wxEXPAND)
 
         sizer1c = wxBoxSizer(wxVERTICAL)
-        grid_sizer = wxFlexGridSizer(2, 3, 8, 8)
-        grid_sizer.Add(wxStaticText(panel1, -1, "First date"))
+
         self.first_date_ctrl = DateCtrl(panel1, -1)
+        self.last_date_ctrl = DateCtrl(panel1, -1)
+        self.duration_ctrl = wxTextCtrl(panel1, -1, str(self.default_duration))
+        minute_label = wxStaticText(panel1, -1, "min")
+        date_size = self.duration_ctrl.GetSize()
+        date_size.width += 8 + minute_label.GetSize().GetWidth()
+
+        grid_sizer = wxFlexGridSizer(cols=2, hgap=8, vgap=8)
+        grid_sizer.Add(wxStaticText(panel1, -1, "First date"))
         today = datetime.date.today().strftime('%Y-%m-%d')
         self.first_date_ctrl.SetValue(today)
-        self.first_date_ctrl.SetSizeHints(minW=110, minH=22) # XXX wrong
+        self.first_date_ctrl.SetSize(date_size)
         grid_sizer.Add(self.first_date_ctrl, 1)
-        grid_sizer.Add(wxStaticText(panel1, -1, ""))
         grid_sizer.Add(wxStaticText(panel1, -1, "Last date"))
-        self.last_date_ctrl = DateCtrl(panel1, -1)
         self.last_date_ctrl.SetValue(today)
-        self.last_date_ctrl.SetSizeHints(minW=110, minH=22) # XXX wrong
+        self.last_date_ctrl.SetSize(date_size)
         grid_sizer.Add(self.last_date_ctrl, 1)
-        grid_sizer.Add(wxStaticText(panel1, -1, ""))
         grid_sizer.Add(wxStaticText(panel1, -1, "Duration"))
-        self.duration_ctrl = wxTextCtrl(panel1, -1, str(self.default_duration))
-        grid_sizer.Add(self.duration_ctrl, 1)
-        grid_sizer.Add(wxStaticText(panel1, -1, "min"))
+        hsizer = wxBoxSizer(wxHORIZONTAL)
+        hsizer.Add(self.duration_ctrl)
+        hsizer.Add(minute_label, 0, wxLEFT, 8)
+        grid_sizer.Add(hsizer)
         find_btn = wxButton(self, -1, "&Find")
         find_btn.SetDefault()
         EVT_BUTTON(self, find_btn.GetId(), self.OnFind)
@@ -1215,7 +1227,7 @@ class AvailabilitySearchFrame(wxDialog):
         sizer1c.Add(find_btn, 0, wxALIGN_RIGHT|wxTOP, 16)
 
         sizer1.Add(sizer1a, 1, wxEXPAND)
-        sizer1.Add(sizer1b, 0, wxEXPAND|wxLEFT, 16)
+        sizer1.Add(sizer1b, 1, wxEXPAND|wxLEFT, 16)
         sizer1.Add(sizer1c, 0, wxEXPAND|wxLEFT, 16)
         panel1.SetSizer(sizer1)
 
@@ -1347,7 +1359,7 @@ class ResourceBookingDlg(wxDialog):
         self.date_ctrl = DateCtrl(self, -1)
         today = datetime.date.today().strftime('%Y-%m-%d')
         self.date_ctrl.SetValue(today)
-        self.date_ctrl.SetSizeHints(minW=110, minH=22) # XXX wrong
+        self.date_ctrl.SetSize(self.person_ctrl.GetSize())
         grid_sizer.Add(self.date_ctrl)
         grid_sizer.Add(wxStaticText(self, -1, "Time"))
         now = datetime.datetime.now().strftime('%H:%M')
@@ -1531,6 +1543,7 @@ class PersonInfoDlg(wxDialog):
         if person_info.date_of_birth is not None:
             date_of_birth = person_info.date_of_birth.strftime('%Y-%m-%d')
             self.date_of_birth_ctrl.SetValue(date_of_birth)
+        self.date_of_birth_ctrl.SetSize(self.last_name_ctrl.GetSize())
         grid_sizer.Add(wxStaticText(self, -1, "Date of Birth"), 0,
                        wxALIGN_CENTER_VERTICAL)
         grid_sizer.Add(self.date_of_birth_ctrl, 1, wxEXPAND)
