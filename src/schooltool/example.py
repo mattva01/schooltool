@@ -18,14 +18,38 @@
 #
 """
 SchoolTool example school.
+
+$Id$
 """
-from schooltool.interfaces import ISpecificURI
+from zope.interface import moduleProvides, implements
+from schooltool.interfaces import ISpecificURI, IModuleSetup, IFacet
 from schooltool.relationship import RelationshipSchema
+from schooltool.relationship import RelationshipValenciesMixin
+from schooltool.relationship import Valency
+from schooltool.component import registerFacetFactory
+from schooltool.facet import FacetFactory
+
+moduleProvides(IModuleSetup)
 
 class URITeaching(ISpecificURI): "http://schooltool.org/ns/teaching"
 class URITeacher(ISpecificURI): "http://schooltool.org/ns/teaching/teacher"
 class URITaught(ISpecificURI): "http://schooltool.org/ns/teaching/taught"
 
+
 Teaching = RelationshipSchema(URITeaching,
                               teacher=URITeacher, taught=URITaught)
 
+
+class SubjectGroupFacet(RelationshipValenciesMixin):
+
+    implements(IFacet)
+
+    __parent__ = None
+    __name__ = None
+    active = False
+    owner = None
+    valencies = Valency(Teaching, 'taught')
+
+
+def setUp():
+    registerFacetFactory(FacetFactory(SubjectGroupFacet, 'Subject Group'))

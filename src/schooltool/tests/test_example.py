@@ -73,11 +73,25 @@ class TestTeaching(RegistriesSetupMixin, EventServiceTestMixin,
         self.assert_(teacher.listLinks(URITaught)[0].traverse() is student)
         self.assert_(student.listLinks(URITeacher)[0].traverse() is teacher)
 
-    def xtestModuleSetup(self):
+    def testModuleSetup(self):
         from schooltool import example
         from schooltool.interfaces import IModuleSetup
+        from schooltool.component import getFacetFactory
         verifyObject(IModuleSetup, example)
         example.setUp()
+        getFacetFactory('Subject Group')
+
+    def testSubjectGroupFacet(self):
+        from schooltool.example import SubjectGroupFacet
+        from schooltool.example import Teaching
+        from schooltool.example import URITeaching, URITeacher, URITaught
+        from schooltool.interfaces import IRelationshipValencies
+
+        facet = SubjectGroupFacet()
+
+        verifyObject(IRelationshipValencies, facet)
+        self.assertEquals(facet.getValencies().keys(),
+                          [(URITeaching, URITaught)])
 
 
 def test_suite():
