@@ -22,15 +22,12 @@ Web-application views for the schooltool.app objects.
 $Id$
 """
 
-# XXX should schooltool.browser depend on schooltool.views?
-from schooltool.views import View, Template, absoluteURL
-from schooltool.interfaces import IApplication, IPerson, AuthenticationError
+from schooltool.browser import View, Template, absoluteURL
+from schooltool.interfaces import IApplication, IPerson
+from schooltool.interfaces import IApplicationObjectContainer
+from schooltool.interfaces import AuthenticationError
 
 __metaclass__ = type
-
-
-def Anybody(self, context, request):
-    return True
 
 
 class LoginPage(View):
@@ -38,7 +35,6 @@ class LoginPage(View):
     __used_for__ = IApplication
 
     template = Template("www/login.pt")
-    authorization = Anybody
 
     def do_POST(self, request):
         request.setHeader('Content-Type', 'text/html')
@@ -63,13 +59,12 @@ class PersonInfoPage(View):
 
     __used_for__ = IPerson
 
-    authorization = Anybody
     template = Template("www/person.pt")
 
 
 class PersonContainerView(View):
 
-    authorization = Anybody
+    __used_for__ = IApplicationObjectContainer
 
     def _traverse(self, name, request):
         return PersonInfoPage(self.context[name])

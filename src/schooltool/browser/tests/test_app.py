@@ -23,10 +23,9 @@ $Id$
 """
 
 import unittest
-from schooltool.interfaces import AuthenticationError
 
-# XXX should schooltool.browser depend on schooltool.views?
-from schooltool.views.tests import RequestStub, setPath
+from schooltool.interfaces import AuthenticationError
+from schooltool.browser.tests import RequestStub, setPath
 
 
 __metaclass__ = type
@@ -116,6 +115,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestAppView))
     suite.addTest(unittest.makeSuite(TestPersonInfo))
     return suite
+
 
 if __name__ == '__main__':
     unittest.main()

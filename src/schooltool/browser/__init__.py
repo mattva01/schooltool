@@ -19,3 +19,43 @@
 """
 The schooltool.browser package.
 """
+
+from schooltool.views import View as _View, Template, absoluteURL
+
+__metaclass__ = type
+
+
+class View(_View):
+    """View for the web application.
+
+    Subclasses can provide the following methods and attributes:
+
+        template    Attribute that contains a Template instance for rendering.
+                    It will be used by the default do_GET implementation.
+                    Subclasses that override do_GET do not need this attribute.
+        _traverse   Method that should return a view for a contained object
+                    or raise a KeyError.
+        do_FOO      Method that processes HTTP requests FOO for various values
+                    of FOO.  Its signature should match render.  It can return
+                    either an 8-bit string or a Unicode object (which will be
+                    converted to UTF-8 by render).  It must set the
+                    Content-Type header in the request.
+
+    """
+
+    def authorization(self, context, request):
+        """Check for HTTP-level authorization.
+
+        In the web application, authentication and authorization are done with
+        cookies, so HTTP level authorization allows all requests.
+        """
+        return True
+
+    def do_POST(self, request):
+        """Process an HTTP POST.
+
+        The default implementation simply delegates the processing to the
+        do_GET method.
+        """
+        return self.do_GET(request)
+
