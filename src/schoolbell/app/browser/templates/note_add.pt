@@ -19,6 +19,20 @@
         <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>
 
+      <div class="row">
+        <div class="label">
+          <label for="field.privacy"
+            i18n:translate="" i18n:attributes="title"
+            title="Who can view the note">Privacy</label>
+        </div>
+        <div class="field">
+          <select name="field.privacy" id="field.privacy" size="1">
+            <option value="private" i18n:translate="">Private</option>
+            <option value="public" i18n:translate="">Public</option>
+          </select>
+        </div>
+      </div>
+
       <div class="row" tal:define="widget nocall:view/body_widget">
         <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>

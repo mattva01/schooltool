@@ -941,20 +941,32 @@ table.event_booking td.booked {
                  /* accessibility (or should we just remove from template? */
 }
 
+
+/* Rounded corners for notes, taken from:
+* http://www.vertexwerks.com/tests/sidebox/
+*/
+
 .note {
-  background: #eed680;
-  border: 1px #d1940c solid;
-  padding: 1ex;
   margin-top: 1ex;
+  background: #eed680 url(++resource++note-body-r.gif) no-repeat bottom right;
+}
+.note .header {
+  background: #d1940c url(++resource++note-head-r.gif) no-repeat top right;
+  margin: 0;
+  padding: 0;
+}
+.note .header h6 {
+  background: url(++resource++note-head-l.gif) no-repeat top left;
+  margin: 0;
+  padding: 0.5ex;
+  font-weight: bold; 
+  font-size: small;
+}
+.note .body {
+  background: url(++resource++note-body-l.gif) no-repeat bottom left;
+  margin: 0;
+  padding: 1ex;
+  font-size: small;
 }
 
-.note h6 {
-  margin: 0;
-  font-size: small;
-  text-decoration: underline;
-}
 
-.note p {
-  margin: 0;
-  font-size: small;
-}

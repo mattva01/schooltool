@@ -90,6 +90,22 @@ class INote(Interface):
     body = Text(title=u"Body",
         description=u"Body of the note.")
 
+    privacy = Choice(
+        title=u"Privacy",
+        values=('private', 'public'),
+        description=u"""
+        Determines who can view the note.
+
+        Can be one of two values: 'private', 'public'
+
+        'private'  the note can only be viewed by the creator of the note.
+
+        'public'   anyone can view the note, including anonymous users.
+
+        """)
+
+    owner = Attribute("""IPerson who owns this note""")
+
 
 class INotes(Interface):
     """A set of notes.

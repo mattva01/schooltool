@@ -44,10 +44,12 @@ def doctest_NoteAddView():
         >>> ztapi.browserViewProviding(IHaveNotes, FakeURL, \
         ...                            providing=IAbsoluteURL)
 
-    Let's create a Person for our note
+    Let's create a Person for our note.  We need an id for our person to test
+    the AddView later on:
 
         >>> from schoolbell.app.app import Person
         >>> person = Person()
+        >>> person.id = 'someone'
 
     Now let's create a NoteAddView for the person
 
@@ -67,7 +69,9 @@ def doctest_NoteAddView():
 
         >>> request = TestRequest(form={'field.title': u'Red Stapler',
         ...                             'field.body': u"He won't give it back",
+        ...                             'field.privacy': u"public",
         ...                             'UPDATE_SUBMIT': 'Add'})
+        >>> request.setPrincipal(person)
         >>> view = NoteAddView(person, request)
         >>> view.update()
         ''

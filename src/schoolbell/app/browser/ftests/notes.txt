@@ -43,7 +43,7 @@ Add a note to the person
     ... Content-Length: 4348
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=My%20Note&field.body=This%20is%20the%20note&UPDATE_SUBMIT=Add
+    ... field.title=My%20Note&field.body=This%20is%20the%20note&field.privacy=public&UPDATE_SUBMIT=Add
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -63,8 +63,92 @@ We should see the note now:
     ...<h5>Notes</h5>
     <BLANKLINE>
     ...<div class="note">
+    ...<div class="header">
     ...<h6>My Note</h6>
-    ...<p>This is the note</p>
+    ...</div>
+    ...<div class="body">This is the note</div>
+    ...</div>
+    <BLANKLINE>
+    </div>
+    ...
+
+Notes can also be private (viewable only to the person who added them):
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/person/@@addNote.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 4348
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=My%20Private%20Note&field.body=This%20is%20a%20private%20note&field.privacy=private&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+Make sure the note is there when we view it:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/person HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    ...<div id="notes">
+    ...<h5>Notes</h5>
+    <BLANKLINE>
+    ...<div class="note">
+    ...<div class="header">
+    ...<h6>My Note</h6>
+    ...</div>
+    ...<div class="body">This is the note</div>
+    ...</div>
+    ...<div class="note">
+    ...<div class="header">
+    ...<h6>My Private Note</h6>
+    ...</div>
+    ...<div class="body">This is a private note</div>
+    ...</div>
+    <BLANKLINE>
+    </div>
+    ...
+
+Add a user who won't be able to see the note:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 112
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Frog&field.username=frog&field.password=pwd&field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+View the page as our new user and we will only see the first (public) note:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/person HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    ...<div id="notes">
+    ...<h5>Notes</h5>
+    <BLANKLINE>
+    ...<div class="note">
+    ...<div class="header">
+    ...<h6>My Note</h6>
+    ...</div>
+    ...<div class="body">This is the note</div>
     ...</div>
     <BLANKLINE>
     </div>

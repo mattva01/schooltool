@@ -2,8 +2,10 @@
   <h5 i18n:translate="">Notes</h5>
   <tal:loop repeat="note context/@@notes/notes">
     <div class="note">
-      <h6 tal:content="note/title"></h6>
-      <p tal:content="note/body"></p>
+      <div class="header">
+        <h6 tal:content="note/title"></h6>
+      </div>
+      <div class="body" tal:content="note/body"></div>
     </div>
   </tal:loop>
 </div>

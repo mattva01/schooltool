@@ -556,6 +556,15 @@
   <resource name="delete.png" file="resources/delete.png"
             layer=".skin.ISchoolBellLayer" />
 
+  <resource name="note-head-l.gif" file="resources/note-head-l.gif"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="note-head-r.gif" file="resources/note-head-r.gif"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="note-body-r.gif" file="resources/note-body-r.gif"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="note-body-l.gif" file="resources/note-body-l.gif"
+            layer=".skin.ISchoolBellLayer" />
+
 <!-- Navigation -->
 
   <page

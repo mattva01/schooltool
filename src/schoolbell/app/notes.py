@@ -114,7 +114,8 @@ class Note(Persistent):
     Your basic simple content ojbect:
 
     >>> note = Note(title='Potluck Theme!',
-    ...             body="We're going Mexican! Bring tequila and tacos!")
+    ...             body="We're going Mexican! Bring tequila and tacos!",
+    ...             privacy="private")
     >>> note.title
     'Potluck Theme!'
     >>> note.body
@@ -124,8 +125,10 @@ class Note(Persistent):
 
     implements(INote)
 
-    def __init__(self, title=None, body=None):
+    def __init__(self, title=None, body=None, privacy=None, owner=None):
         self.title = title
         self.body = body
+        self.privacy = privacy
+        self.owner = owner
 
 

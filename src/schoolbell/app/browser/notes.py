@@ -32,7 +32,9 @@ class NotesView(BrowserView):
 
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
-        self.notes = INotes(context)
+        notes = INotes(context)
+        self.notes = [note for note in notes if note.privacy == 'public' \
+                or note.owner == request.principal.id]
 
 
 class NoteAddView(AddView):
@@ -46,13 +48,15 @@ class NoteAddView(AddView):
     # Override some fields of AddView
     schema = INote
     _factory = Note
-    _arguments = ['title', 'body']
+    _arguments = ['title', 'body', 'privacy']
     _keyword_arguments = []
     _set_before_add = []
     _set_after_add = []
 
-    def create(self, title, body):
-        note = self._factory(title=title, body=body)
+    def create(self, title, body, privacy):
+        owner = self.request.principal.id
+        note = self._factory(title=title, body=body, privacy=privacy,
+                owner=owner)
         return note
 
     def add(self, note):
