@@ -32,6 +32,7 @@ import zope.event
 
 from schoolbell.relationship.interfaces import IRelationshipLinks
 from schoolbell.relationship.interfaces import IRelationshipLink
+from schoolbell.relationship.interfaces import IRelationshipProperty
 from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
 from schoolbell.relationship.interfaces import IRelationshipAddedEvent
 from schoolbell.relationship.interfaces import DuplicateRelationship
@@ -198,6 +199,14 @@ class RelationshipProperty(object):
         >>> SomeClass.friends.other_role
         'example:Friend'
 
+    IRelationshipProperty defines things you can do with a relationship
+    property.
+
+        >>> from zope.interface.verify import verifyObject
+        >>> someinstance = SomeClass()
+        >>> verifyObject(IRelationshipProperty, someinstance.friends)
+        True
+
     """
 
     def __init__(self, rel_type, my_role, other_role):
@@ -216,6 +225,8 @@ class RelationshipProperty(object):
 
 class BoundRelationshipProperty(object):
     """Relationship property bound to an object."""
+
+    implements(IRelationshipProperty)
 
     def __init__(self, this, rel_type, my_role, other_role):
         self.this = this

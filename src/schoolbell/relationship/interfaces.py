@@ -25,6 +25,21 @@ $Id$
 from zope.interface import Interface, Attribute
 
 
+class IRelationshipProperty(Interface):
+    """A property tied to a relationship."""
+
+    rel_type = Attribute("""Relationship type""")
+    my_role = Attribute("""Role of the object with this property""")
+    other_role = Attribute("""Role of other objects in this relationship""")
+    this = Attribute("""The object that this property is bound to.""")
+
+    def __iter__():
+        """Iterate over all related objects."""
+
+    def add(other):
+        """Establish a relationship with `other`."""
+
+
 class IRelationshipLinks(Interface):
     """A set of relationship links.
 
