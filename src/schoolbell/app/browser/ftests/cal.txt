@@ -277,7 +277,7 @@ Let's check the new values:
 Let's enter some invalid values:
 
     >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04 HTTP/1.1
+    ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html HTTP/1.1
     ... Authorization: Basic frog:pwd
     ... Content-Length: 159
     ... Content-Type: application/x-www-form-urlencoded
@@ -285,16 +285,37 @@ Let's enter some invalid values:
     ... field.title=Lalalla&field.start_date=20050203&\
     ... field.start_time=0100&field.duration=500h&field.recurrence.used=&\
     ... field.recurrence=on&\
+    ... date=2005-02-04&\
     ... field.recurrence_type=daily&\
     ... UPDATE_SUBMIT=Add
     ... """)
     HTTP/1.1 200 Ok
     ...
+    <input type="hidden" name="date" value="2005-02-04" />
+    ...
     <div class="field"><input class="textType" id="field.start_date" name="field.start_date" size="20" type="text" value="20050203"  /></div>
     <div class="error"><span class="error">Invalid datetime data</span></div>
     ...
-    <div class="field"><input class="textType" id="field.duration" name="field.duration" size="10" type="text" value="500h"  /></div>
+    <input class="textType" id="field.duration" name="field.duration" size="10" type="text" value="500h"  />
+       minutes
+    </div>
     <div class="error"><span class="error">Invalid integer data</span></div>
+    ...
+
+If we cancel the form - we should be redirected to the day "date" tells us:
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 159
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... date=2005-02-07&\
+    ... CANCEL=Cancel
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons/frog/calendar/2005-02-07
     ...
 
 

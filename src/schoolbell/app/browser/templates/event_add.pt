@@ -87,6 +87,9 @@
     <h3 i18n:translate="">Event information</h3>
 
     <div class="error" tal:condition="view/error" tal:content="view/error" />
+    <input tal:condition="view/_redirectToDate"
+           tal:attributes="value view/_redirectToDate"
+           type="hidden" name="date"/>
 
     <fieldset>
       <legend i18n:translate="">Event details</legend>
