@@ -1,16 +1,24 @@
-/* Stylesheet for SchoolTool */
+/*
+ * Stylesheet for SchoolTool
+ */
+
+/* Page layout */
+
 body {
   margin: 0;
 }
 
-h1, h2, h3, h4 {
-  /* color: #44d344; */
-  color: 800000;
-  margin-top: 15px;
+div.header {
+  /* The top border is here to keep the logo aligned to the top of the header,
+     rather than to the top of the title text. */
+  border: 1px solid white;
+  border-bottom: 1px solid brown;
 }
 
-h2 {
-  margin: 1ex 0 0.5ex 0;
+div.logo {
+  float: left;
+  margin: 1ex;
+  margin-right: 1em;
 }
 
 div.login {
@@ -19,6 +27,47 @@ div.login {
   top: 1ex;
   color: #888888;
 }
+
+div.content {
+  clear: both;
+  margin: 4ex 2em 4ex 2em;
+}
+
+/* Regular page elements */
+
+h1, h2, h3, h4 {
+  color: #800000;
+  margin-top: 15px;
+}
+
+h2 {
+  margin: 1ex 0 0.5ex 0;
+}
+
+/* Action buttons */
+
+div.actions {
+  margin: 1ex 2ex 2ex 2ex;
+}
+
+a.action:link,
+a.action:visited {
+  border: 1px solid #b34848;
+  background: #e2e2e2;
+  color: black;
+  font-weight: bold;
+  padding: 2px 4px;
+  text-decoration: none
+}
+
+a.action:hover,
+a.action:active {
+  background: #dedede;
+  color: black;
+  text-decoration: none
+}
+
+/* Forms */
 
 form {
   padding: 1ex;
@@ -34,6 +83,7 @@ label {
   font-weight: bold;
   color: black;
 }
+
 label.wide {
   width: 12em;
 }
@@ -43,11 +93,13 @@ div.info {
   font-weight: bold;
   color: green;
 }
+
 div.error {
   margin: 0ex 0ex 2ex 0ex;
   font-weight: bold;
   color: red;
 }
+
 div.row {
   margin: 1ex 0ex;
 }
@@ -76,33 +128,57 @@ input.field {
   padding: 2px 4px;
 }
 
+/* Informational boxes */
+
+span.accountenabled {
+  color: green;
+}
+span.accountdisabled {
+  color: red;
+}
+
 div.members {
   background: #aee5ac;
   border: 1px solid #036d00;
-  padding: 1ex;
-  margin: 1ex 1em;
-  float: left;
 }
 
 div.parentgroups {
   background: #e2e2e2;
   border: 1px solid #b34848;
-  padding: 1ex;
-  margin: 1ex 1em;
-  float: left;
 }
 
 div.groups {
   background: #e2e2e2;
   border: 1px solid #b34848;
+}
+
+div.timetables {
+  background: #e2e2e2;
+  border: 1px solid #b34848;
+}
+
+div.members,
+div.parentgroups,
+div.groups,
+div.timetables {
   padding: 1ex;
   margin: 1ex 1em;
+}
+
+div.members,
+div.parentgroups {
+  float: left;
+}
+
+div.groups,
+div.timetables {
   float: right;
 }
 
 div.members h3,
+div.parentgroups h3,
 div.groups h3,
-div.parentgroups h3 {
+div.timetables h3 {
   color: black;
   margin: 0px;
   margin-bottom: 0.5ex;
@@ -110,9 +186,12 @@ div.parentgroups h3 {
 
 div.members p,
 div.groups p,
-div.parentgroups p {
+div.parentgroups p,
+div.timetables p {
   margin: 0 0 0.5ex 0;
 }
+
+/* Internal error pages */
 
 pre.traceback {
 /*
@@ -139,48 +218,4 @@ pre.traceback span.expr {
 }
 pre.traceback span.source {
   color: black;
-}
-
-div.actions {
-  margin: 1ex 2ex 2ex 2ex;
-}
-
-a.action:link,
-a.action:visited {
-  border: 1px solid #b34848;
-  background: #e2e2e2;
-  color: black;
-  font-weight: bold;
-  padding: 2px 4px;
-  text-decoration: none
-}
-
-a.action:hover,
-a.action:active {
-  background: #dedede;
-  color: black;
-  text-decoration: none
-}
-
-span.accountenabled {
-  color: green;
-}
-span.accountdisabled {
-  color: red;
-}
-
-div.logo {
-  float: left;
-  margin: 1ex;
-  margin-right: 1em;
-}
-
-div.header {
-  border: 1px solid white;
-  border-bottom: 1px solid brown;
-}
-
-div.content {
-  clear: both;
-  margin: 4ex 2em 4ex 2em;
 }
