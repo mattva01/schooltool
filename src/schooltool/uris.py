@@ -100,7 +100,7 @@ class IURIAPI(Interface):
 
 def inspectSpecificURI(uri):
     """See IURIAPI."""
-    if not IInterface.isImplementedBy(uri):
+    if not IInterface.providedBy(uri):
         raise TypeError("URI must be an interface (got %r)" % (uri,))
 
     if not uri.extends(ISpecificURI, True):

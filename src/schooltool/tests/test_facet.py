@@ -218,7 +218,7 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         self.assert_(links['child'].callbacks,
                      'callbacks were not registered for the child link')
         for callback in links['child'].callbacks:
-            if IUnlinkHook.isImplementedBy(callback):
+            if IUnlinkHook.providedBy(callback):
                 callback.notifyUnlinked(links['child'])
             else:
                 callback(links['child'])

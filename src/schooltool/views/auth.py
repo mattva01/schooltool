@@ -64,8 +64,8 @@ def isTeacher(user):
 def getOwner(obj):
     """Returns the owner of an object."""
     owner = obj
-    while owner is not None and not IApplicationObject.isImplementedBy(owner):
-        if not ILocation.isImplementedBy(owner):
+    while owner is not None and not IApplicationObject.providedBy(owner):
+        if not ILocation.providedBy(owner):
             return None
         owner = owner.__parent__
     return owner

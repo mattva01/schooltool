@@ -775,7 +775,7 @@ class TestServer(RegistriesSetupMixin, unittest.TestCase):
         import schooltool.tests.test_main as thismodule
         thismodule_provides = directlyProvidedBy(thismodule)
         directlyProvides(thismodule, thismodule_provides - IModuleSetup)
-        self.assert_(not IModuleSetup.isImplementedBy(thismodule))
+        self.assert_(not IModuleSetup.providedBy(thismodule))
         # Cannot set up module because it does not provide IModuleSetup
         try:
             self.assertRaises(TypeError, server.run)
@@ -945,7 +945,7 @@ class TestSetUpModules(unittest.TestCase):
         import schooltool.tests.test_main as thismodule
         thismodule_provides = directlyProvidedBy(thismodule)
         directlyProvides(thismodule, thismodule_provides - IModuleSetup)
-        self.assert_(not IModuleSetup.isImplementedBy(thismodule))
+        self.assert_(not IModuleSetup.providedBy(thismodule))
         # Cannot set up module because it does not provide IModuleSetup
         try:
             self.assertRaises(TypeError, setUpModules,
@@ -956,7 +956,7 @@ class TestSetUpModules(unittest.TestCase):
     def test(self):
         from schooltool.main import setUpModules
         import schooltool.tests.test_main as thismodule
-        self.assert_(IModuleSetup.isImplementedBy(thismodule))
+        self.assert_(IModuleSetup.providedBy(thismodule))
 
         # cleanly replace the setUp function in this module
         was_set_up = []

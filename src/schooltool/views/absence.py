@@ -65,7 +65,7 @@ class RollCallView(View):
             _already_added = sets.Set()
         results = []
         for member in getRelatedObjects(group, URIMember):
-            if (IPerson.isImplementedBy(member)
+            if (IPerson.providedBy(member)
                 and member not in _already_added):
                 absence = member.getCurrentAbsence()
                 if absence is None:
@@ -80,7 +80,7 @@ class RollCallView(View):
                 results.append({'title': member.title, 'href': getPath(member),
                                 'presence': presence,
                                 'expected_presence': expected_presence})
-            if IGroup.isImplementedBy(member):
+            if IGroup.providedBy(member):
                 results.extend(self.listPersons(member, _already_added))
         return results
 

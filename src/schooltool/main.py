@@ -763,7 +763,7 @@ def setUpModules(module_names):
         components = name.split('.')
         for component in components[1:]:
             module = getattr(module, component)
-        if IModuleSetup.isImplementedBy(module):
+        if IModuleSetup.providedBy(module):
             module.setUp()
         else:
             raise TypeError('Cannot set up module because it does not'

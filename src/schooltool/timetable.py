@@ -74,7 +74,7 @@ class Timetable(Persistent):
         return self.days[key]
 
     def __setitem__(self, key, value):
-        if not ITimetableDay.isImplementedBy(value):
+        if not ITimetableDay.providedBy(value):
             raise TypeError("Timetable cannot set a non-ITimetableDay "
                             "(got %r)" % (value,))
         if key not in self.day_ids:
@@ -149,7 +149,7 @@ class TimetableDay(Persistent):
     def add(self, key, value):
         if key not in self.periods:
             raise ValueError("Key %r not in periods %r" % (key, self.periods))
-        if not ITimetableActivity.isImplementedBy(value):
+        if not ITimetableActivity.providedBy(value):
             raise TypeError("TimetableDay cannot set a "
                             "non-ITimetableActivity (got %r)" % (value,))
         self.activities[key].add(value)
@@ -225,7 +225,7 @@ class SchooldayPeriod:
         self.duration = duration
 
     def __eq__(self, other):
-        if not ISchooldayPeriod.isImplementedBy(other):
+        if not ISchooldayPeriod.providedBy(other):
             return False
         return (self.title == other.title and
                 self.tstart == other.tstart and
@@ -249,7 +249,7 @@ class SchooldayTemplate:
         return iter(self.events)
 
     def add(self, obj):
-        if not ISchooldayPeriod.isImplementedBy(obj):
+        if not ISchooldayPeriod.providedBy(obj):
             raise TypeError("SchooldayTemplate can only contain "
                             "ISchooldayPeriods (got %r)" % (obj,))
         self.events.add(obj)
@@ -427,7 +427,7 @@ class TimetabledMixin:
     def _sources(self):
         sources = list(self.timetableSource)
         for facet in FacetManager(self).iterFacets():
-            if ICompositeTimetableProvider.isImplementedBy(facet):
+            if ICompositeTimetableProvider.providedBy(facet):
                 sources += facet.timetableSource
         return sources
 

@@ -69,7 +69,7 @@ class EventTargetMixin:
 
     def notify(self, event):
         for action in self.getEventTable():
-            if action.eventType.isImplementedBy(event):
+            if action.eventType.providedBy(event):
                 action.handle(event, self)
 
 
@@ -108,7 +108,7 @@ class LookupAction(EventActionMixin):
 
     def handle(self, event, target):
         for action in self.eventTable:
-            if action.eventType.isImplementedBy(event):
+            if action.eventType.providedBy(event):
                 action.handle(event, target)
 
 
@@ -178,6 +178,6 @@ class EventService(Persistent):
     def notify(self, event):
         '''See IEventTarget'''
         for t, e in self._subscriptions:
-            if e.isImplementedBy(event):
+            if e.providedBy(event):
                 event.dispatch(t)
 

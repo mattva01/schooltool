@@ -57,7 +57,7 @@ def checkForPotentialCycles(group, potential_member):
             seen |= last
             new_last = Set()
             for obj in last:
-                if IQueryLinks.isImplementedBy(obj):
+                if IQueryLinks.providedBy(obj):
                     links = obj.listLinks(URIGroup)
                     new_last |= Set([link.traverse() for link in links])
             new_last.difference_update(seen)

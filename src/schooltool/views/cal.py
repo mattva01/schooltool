@@ -331,7 +331,7 @@ class BookingView(View):
                 owner = traverse(self.context, owner_path)
             except KeyError:
                 return textErrorPage(request, "Invalid path: %r" % owner_path)
-            if not IApplicationObject.isImplementedBy(owner):
+            if not IApplicationObject.providedBy(owner):
                 return textErrorPage(request,
                                      "'owner' in not an ApplicationObject.")
             if (owner is not request.authenticated_user

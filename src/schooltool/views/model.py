@@ -94,7 +94,7 @@ class TreeView(View):
 
     def generate(self, node, request):
         children = [child for child in getRelatedObjects(node, URIMember)
-                    if IGroup.isImplementedBy(child)]
+                    if IGroup.providedBy(child)]
         res = self.node_template(request, title=node.title, href=getPath(node),
                                  children=children, generate=self.generate)
         return res.strip().replace('\n', '\n  ')

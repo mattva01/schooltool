@@ -57,7 +57,7 @@ class Absence(Persistent):
         self.__parent__ = None
 
     def addComment(self, comment):
-        if not IAbsenceComment.isImplementedBy(comment):
+        if not IAbsenceComment.providedBy(comment):
             raise TypeError("comment is not IAbsenceComment", comment)
         if comment.__parent__ is not None:
             raise ValueError("comment is already added to an absence", comment)
@@ -85,11 +85,11 @@ class Absence(Persistent):
         self.comments = self.comments
         if event is not None:
             event.dispatch(self.person)
-            if IEventTarget.isImplementedBy(comment.absent_from):
+            if IEventTarget.providedBy(comment.absent_from):
                 event.dispatch(comment.absent_from)
-            if IAbsenceEndedEvent.isImplementedBy(event):
+            if IAbsenceEndedEvent.providedBy(event):
                 for comment in self.comments:
-                    if IEventTarget.isImplementedBy(comment.absent_from):
+                    if IEventTarget.providedBy(comment.absent_from):
                         event.dispatch(comment.absent_from)
 
 
@@ -148,9 +148,9 @@ class AbsenceTrackerMixin(Persistent):
 
     def notify(self, event):
         """See IEventTarget"""
-        if IAbsenceEvent.isImplementedBy(event):
+        if IAbsenceEvent.providedBy(event):
             self.absences.add(event.absence)
-        if IAbsenceEndedEvent.isImplementedBy(event):
+        if IAbsenceEndedEvent.providedBy(event):
             if event.absence in self.absences:
                 self.absences.remove(event.absence)
 

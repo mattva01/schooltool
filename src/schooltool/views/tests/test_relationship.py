@@ -87,7 +87,7 @@ class TestRelationshipsView(RegistriesSetupMixin, unittest.TestCase):
         request = RequestStub("http://localhost/groups/sub/relationships/0001")
         result = self.view._traverse('0001', request)
         self.assert_(isinstance(result, LinkView), "is LinkView")
-        self.assert_(ILink.isImplementedBy(result.context), "is ILink")
+        self.assert_(ILink.providedBy(result.context), "is ILink")
 
     def testGET(self):
         request = RequestStub("http://localhost/groups/sub/relationships/")

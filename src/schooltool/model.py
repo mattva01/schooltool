@@ -208,7 +208,7 @@ class Person(ApplicationObjectMixin):
         return self._current_absence
 
     def reportAbsence(self, comment):
-        if not IAbsenceComment.isImplementedBy(comment):
+        if not IAbsenceComment.providedBy(comment):
             raise TypeError("comment is not IAbsenceComment", comment)
         absence = self.getCurrentAbsence()
         if absence is None:

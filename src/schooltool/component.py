@@ -49,18 +49,18 @@ __metaclass__ = type
 def getPath(obj):
     """See IContainmentAPI."""
 
-    if IContainmentRoot.isImplementedBy(obj):
+    if IContainmentRoot.providedBy(obj):
         return '/'
     cur = obj
     segments = []
     while True:
-        if IContainmentRoot.isImplementedBy(cur):
+        if IContainmentRoot.providedBy(cur):
             segments.append('')
             segments.reverse()
             return '/'.join(segments)
-        elif ILocation.isImplementedBy(cur):
+        elif ILocation.providedBy(cur):
             parent = cur.__parent__
-            if IMultiContainer.isImplementedBy(parent):
+            if IMultiContainer.providedBy(parent):
                 segments.append(parent.getRelativePath(cur))
             else:
                 segments.append(cur.__name__)
@@ -73,8 +73,8 @@ def getPath(obj):
 def getRoot(obj):
     """See IContainmentAPI."""
     cur = obj
-    while not IContainmentRoot.isImplementedBy(cur):
-        if ILocation.isImplementedBy(cur):
+    while not IContainmentRoot.providedBy(cur):
+        if ILocation.providedBy(cur):
             cur = cur.__parent__
         else:
             raise TypeError("Cannot determine path for %s" % obj)
@@ -91,14 +91,14 @@ def traverse(obj, path):
         if name in ('', '.'):
             continue
         if name == '..':
-            if IContainmentRoot.isImplementedBy(cur):
+            if IContainmentRoot.providedBy(cur):
                 continue
-            elif ILocation.isImplementedBy(cur):
+            elif ILocation.providedBy(cur):
                 cur = cur.__parent__
                 continue
             else:
                 raise TypeError('Could not traverse', cur, name)
-        if ITraversable.isImplementedBy(cur):
+        if ITraversable.providedBy(cur):
             cur = cur.traverse(name)
         else:
             raise TypeError('Could not traverse', cur, name)
@@ -114,7 +114,7 @@ class FacetManager:
     implements(IFacetManager)
 
     def __init__(self, context):
-        if IFaceted.isImplementedBy(context):
+        if IFaceted.providedBy(context):
             self.__parent__ = context
         else:
             raise TypeError(
@@ -123,7 +123,7 @@ class FacetManager:
     def setFacet(self, facet, owner=None, name=None):
         """Set a facet on a faceted object."""
         ob = self.__parent__
-        if not IFacet.isImplementedBy(facet):
+        if not IFacet.providedBy(facet):
             raise TypeError("%r does not implement IFacet" % facet)
         # XXX Check that facet doesn't already have a parent.
         #     An assert will do for now.
@@ -171,7 +171,7 @@ def registerFacetFactory(factory):
 
     factory must implement IFacetFactory
     """
-    if not IFacetFactory.isImplementedBy(factory):
+    if not IFacetFactory.providedBy(factory):
         raise TypeError("factory must provide IFacetFactory", factory)
 
     if factory.name in facet_factory_registry:
@@ -215,8 +215,8 @@ def _getServiceManager(context):
     # option 3 proves to be non-viable.
 
     place = context
-    while not IServiceManager.isImplementedBy(place):
-        if not ILocation.isImplementedBy(place):
+    while not IServiceManager.providedBy(place):
+        if not ILocation.providedBy(place):
             raise ComponentLookupError(
                     "Could not find the service manager for ", context)
         place = place.__parent__

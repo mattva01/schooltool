@@ -107,7 +107,7 @@ def setPath(obj, path, root=None):
         directlyProvides(obj, ILocation)
         obj.__parent__ = TraversableRoot()
     else:
-        assert IContainmentRoot.isImplementedBy(root)
+        assert IContainmentRoot.providedBy(root)
         obj.__parent__ = root
 
 

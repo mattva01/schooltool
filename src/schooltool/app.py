@@ -69,7 +69,7 @@ class Application(Persistent):
 
     def __setitem__(self, name, value):
         """Internal api"""
-        if not ILocation.isImplementedBy(value):
+        if not ILocation.providedBy(value):
             raise TypeError("An application object must provide ILocatable")
         self._appObjects[name] = value
         value.__name__ = name

@@ -151,7 +151,7 @@ class TestEventActionMixins(unittest.TestCase):
         # XXX cannot use verifyObject here due to incorrect assumtions it makes
         #     verifyObject(ICallAction, ca)
         verifyObject(IEventAction, ca)
-        self.assert_(IEventAction.isImplementedBy(ca))
+        self.assert_(IEventAction.providedBy(ca))
 
         self.assertEquals(ca.eventType, IEvent)
         self.assertEquals(ca.callback, callback)

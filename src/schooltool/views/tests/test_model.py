@@ -69,7 +69,7 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
 
         result = self.view._traverse('facets', request)
         self.assert_(isinstance(result, FacetManagementView))
-        self.assert_(IFacetManager.isImplementedBy(result.context))
+        self.assert_(IFacetManager.providedBy(result.context))
 
         result = self.view._traverse('calendar', request)
         self.assert_(isinstance(result, CalendarView))
@@ -163,7 +163,7 @@ class TestGroupView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
         result = self.view._traverse('facets', request)
         self.assert_(isinstance(result, FacetManagementView))
-        self.assert_(IFacetManager.isImplementedBy(result.context))
+        self.assert_(IFacetManager.providedBy(result.context))
 
         result = self.view._traverse("rollcall", request)
         self.assert_(isinstance(result, RollCallView))
@@ -277,7 +277,7 @@ class TestPersonView(XMLCompareMixin, RegistriesSetupMixin, unittest.TestCase):
 
         result = self.view._traverse('facets', request)
         self.assert_(isinstance(result, FacetManagementView))
-        self.assert_(IFacetManager.isImplementedBy(result.context))
+        self.assert_(IFacetManager.providedBy(result.context))
 
         result = self.view._traverse('absences', request)
         self.assert_(isinstance(result, AbsenceManagementView))
@@ -386,7 +386,7 @@ class TestResourceView(XMLCompareMixin, unittest.TestCase):
 
         result = self.view._traverse('facets', request)
         self.assert_(isinstance(result, FacetManagementView))
-        self.assert_(IFacetManager.isImplementedBy(result.context))
+        self.assert_(IFacetManager.providedBy(result.context))
 
         result = self.view._traverse('timetables', request)
         self.assert_(isinstance(result, TimetableTraverseView))

@@ -61,7 +61,7 @@ class Link(Persistent):
 
     def __init__(self, parent, role):
         inspectSpecificURI(role)
-        if not IRelatable.isImplementedBy(parent):
+        if not IRelatable.providedBy(parent):
             raise TypeError("Parent must be IRelatable (got %r)" % (parent,))
         self.__parent__ = parent
         self.__name__ = None
@@ -98,14 +98,14 @@ class Link(Persistent):
 
     def _notifyCallbacks(self):
         for callback in self.callbacks:
-            if IUnlinkHook.isImplementedBy(callback):
+            if IUnlinkHook.providedBy(callback):
                 callback.notifyUnlinked(self)
             else:
                 callback(self)
         self.callbacks.clear()
 
     def registerUnlinkCallback(self, callback):
-        if IUnlinkHook.isImplementedBy(callback) or callable(callback):
+        if IUnlinkHook.providedBy(callback) or callable(callback):
             # this also has the nice side effect of notifying persistence that
             # self has changed
             self.callbacks.add(callback)
@@ -127,9 +127,9 @@ class _LinkRelationship(Persistent):
         self.b = b
         a.relationship = self
         b.relationship = self
-        assert IRelatable.isImplementedBy(a.__parent__)
+        assert IRelatable.providedBy(a.__parent__)
         a.__parent__.__links__.add(a)
-        assert IRelatable.isImplementedBy(b.__parent__)
+        assert IRelatable.providedBy(b.__parent__)
         b.__parent__.__links__.add(b)
 
     def traverse(self, link):
@@ -244,16 +244,16 @@ class LinkSet:
         If an equivalent link (with the same reltype, role and target)
         already exists in the set, raises a ValueError.
         """
-        if ILink.isImplementedBy(link):
+        if ILink.providedBy(link):
             key = (link.traverse(), (link.reltype, link.role))
             value = self._data.get(key)
             if value is None:
                 self._data[key] = link
-            elif IPlaceholder.isImplementedBy(value):
+            elif IPlaceholder.providedBy(value):
                 self._data[key] = link
                 value.replacedBy(link)
             else:
-                assert ILink.isImplementedBy(value)
+                assert ILink.providedBy(value)
                 raise ValueError('duplicate link', link)
         else:
             raise TypeError('link must provide ILink', link)
@@ -283,9 +283,9 @@ class LinkSet:
 
         If an equivalent link does not exist in the set, raises a ValueError.
         """
-        if ILink.isImplementedBy(link_or_placeholder):
+        if ILink.providedBy(link_or_placeholder):
             self._removeLink(link_or_placeholder)
-        elif IPlaceholder.isImplementedBy(link_or_placeholder):
+        elif IPlaceholder.providedBy(link_or_placeholder):
             self._removePlaceholder(link_or_placeholder)
         else:
             raise TypeError('remove must be called with a link or a'
@@ -293,14 +293,14 @@ class LinkSet:
 
     def __iter__(self):
         for value in self._data.itervalues():
-            if ILink.isImplementedBy(value):
+            if ILink.providedBy(value):
                 yield value
 
     def addPlaceholder(self, for_link, placeholder):
         """Add a placeholder to the set to fill the place of the given link.
         """
-        if (ILink.isImplementedBy(for_link) and
-            IPlaceholder.isImplementedBy(placeholder)):
+        if (ILink.providedBy(for_link) and
+            IPlaceholder.providedBy(placeholder)):
             key = (for_link.traverse(), (for_link.reltype, for_link.role))
             if key in self._data:
                 raise ValueError(
@@ -314,7 +314,7 @@ class LinkSet:
     def iterPlaceholders(self):
         """Returns an iterator over the placeholders in the set."""
         for value in self._data.itervalues():
-            if IPlaceholder.isImplementedBy(value):
+            if IPlaceholder.providedBy(value):
                 yield value
 
     def getLink(self, name):
@@ -374,11 +374,11 @@ class RelationshipValenciesMixin(RelatableMixin):
             valencies = (valencies,)
         for valency in valencies:
             result.update(self._valency2invocation(valency))
-        if IFaceted.isImplementedBy(self):
+        if IFaceted.providedBy(self):
             all_facet_valencies = sets.Set()
             conflict = sets.Set()
             for facet in component.FacetManager(self).iterFacets():
-                if (IRelationshipValencies.isImplementedBy(facet)
+                if (IRelationshipValencies.providedBy(facet)
                     and facet.active):
                     valencies = facet.getValencies()
                     facet_valencies = sets.Set(valencies.keys())

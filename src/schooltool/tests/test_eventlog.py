@@ -79,7 +79,7 @@ class TestEventLogFacet(unittest.TestCase):
 
         self.assertEquals(len(event_log.eventTable), 1)
         ea = event_log.eventTable[0]
-        self.assert_(ICallAction.isImplementedBy(ea))
+        self.assert_(ICallAction.providedBy(ea))
         self.assertEquals(ea.eventType, IEvent)
         self.assertEquals(ea.callback, event_log.notify)
 

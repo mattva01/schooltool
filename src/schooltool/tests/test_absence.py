@@ -110,7 +110,7 @@ class TestAbsence(EventServiceTestMixin, unittest.TestCase):
         self.absence.addComment(comment1)
         self.assertEquals(self.absence.comments, [comment1])
         e = self.checkOneEventReceived([self.person, group1])
-        self.assert_(IAbsenceEvent.isImplementedBy(e))
+        self.assert_(IAbsenceEvent.providedBy(e))
         self.assert_(e.absence, self.absence)
         self.assert_(e.comment, comment1)
 
@@ -123,7 +123,7 @@ class TestAbsence(EventServiceTestMixin, unittest.TestCase):
         self.absence.addComment(comment2)
         e = self.checkOneEventReceived([self.person, group2])
         self.assertEquals(len(group1.events), 0)
-        self.assert_(IAbsenceEvent.isImplementedBy(e))
+        self.assert_(IAbsenceEvent.providedBy(e))
 
         self.eventService.clearEvents()
         self.person.clearEvents()
@@ -137,7 +137,7 @@ class TestAbsence(EventServiceTestMixin, unittest.TestCase):
                                   ended=True, absent_from=group3)
         self.absence.addComment(comment3)
         e = self.checkOneEventReceived([self.person, group1, group2, group3])
-        self.assert_(IAbsenceEndedEvent.isImplementedBy(e))
+        self.assert_(IAbsenceEndedEvent.providedBy(e))
 
     def test_addComment_resolves(self):
         from schooltool.absence import AbsenceComment
@@ -294,7 +294,7 @@ class TestAbsenceTrackerFacet(unittest.TestCase):
 
         self.assertEquals(len(facet.eventTable), 1)
         ea = facet.eventTable[0]
-        self.assert_(ICallAction.isImplementedBy(ea))
+        self.assert_(ICallAction.providedBy(ea))
         self.assertEquals(ea.eventType, IEvent)
         self.assertEquals(ea.callback, facet.notify)
 

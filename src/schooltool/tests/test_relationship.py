@@ -162,8 +162,8 @@ class TestRelationship(EventServiceTestMixin, unittest.TestCase):
 
         self.assertEquals(len(self.eventService.events), 1)
         e = self.eventService.events[0]
-        self.assert_(IRelationshipRemovedEvent.isImplementedBy(e))
-        self.assert_(URIClassTutor.isImplementedBy(e))
+        self.assert_(IRelationshipRemovedEvent.providedBy(e))
+        self.assert_(URIClassTutor.providedBy(e))
         self.assert_(self.ltutor in e.links)
         self.assert_(self.lklass in e.links)
         self.assertEquals(self.klass.events, [e])
@@ -277,8 +277,8 @@ class TestRelate(EventServiceTestMixin, unittest.TestCase):
         a, b, links  = self.doChecks(defaultRelate)
 
         e = self.checkOneEventReceived([a, b])
-        self.assert_(IRelationshipAddedEvent.isImplementedBy(e))
-        self.assert_(URICommand.isImplementedBy(e))
+        self.assert_(IRelationshipAddedEvent.providedBy(e))
+        self.assert_(URICommand.providedBy(e))
         self.assert_(e.links is links)
 
     def doChecks(self, relate):

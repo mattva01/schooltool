@@ -223,7 +223,7 @@ class TestPerson(EventServiceTestMixin, ApplicationObjectsTestMixin,
         # Adding an IAbsenceComment to a person creates an IAbsence
         comment1 = AbsenceComment(object(), "some text")
         absence = person.reportAbsence(comment1)
-        self.assert_(IAbsence.isImplementedBy(absence))
+        self.assert_(IAbsence.providedBy(absence))
         self.assert_(comment1 in absence.comments)
         self.assert_(absence.person is person)
         self.assert_(absence.__parent__ is person)

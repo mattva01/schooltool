@@ -90,7 +90,7 @@ class FacetedEventTargetMixin(FacetedMixin, EventTargetMixin):
     def getEventTable(self):
         tables = [self.eventTable]
         for facet in FacetManager(self).iterFacets():
-            if facet.active and IEventConfigurable.isImplementedBy(facet):
+            if facet.active and IEventConfigurable.providedBy(facet):
                 tables.append(facet.eventTable)
         return sum(tables, [])
 
@@ -107,7 +107,7 @@ class FacetedRelationshipSchema:
         self.type = relationship_schema.type
         self.roles = relationship_schema.roles
         for factory in self._factories.itervalues():
-            if not IFacetFactory.isImplementedBy(factory):
+            if not IFacetFactory.providedBy(factory):
                 raise TypeError(
                         "Facet factory does not implement IFacetFactory")
 
@@ -122,7 +122,7 @@ class FacetedRelationshipSchema:
             if role_name in links:
                 link = links[role_name]
                 target = link.traverse()
-                if IFaceted.isImplementedBy(target):
+                if IFaceted.providedBy(target):
                     fm = FacetManager(target)
                     my_facets = fm.facetsByOwner(link)
                     if my_facets:
@@ -201,9 +201,9 @@ def membersGetFacet(facet_class, facet_name=None, factory_name=None):
         factory_name = facet_class.__name__
 
     def setValencies(cls):
-        if not IFacet.isImplementedByInstancesOf(cls):
+        if not IFacet.implementedBy(cls):
             raise TypeError("membersGetFacet should only be used for facets")
-        if not IRelationshipValencies.isImplementedByInstancesOf(cls):
+        if not IRelationshipValencies.implementedBy(cls):
             raise TypeError("membersGetFacet should only be used for facets"
                             " that implement IRelationshipValencies")
         factory = FacetFactory(facet_class, factory_name,

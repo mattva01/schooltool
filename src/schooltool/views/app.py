@@ -230,7 +230,7 @@ class AvailabilityQueryView(View):
                 except KeyError:
                     return textErrorPage(request,
                                          "Invalid resource: %r" % path)
-                if not IResource.isImplementedBy(resource):
+                if not IResource.providedBy(resource):
                     return textErrorPage(request,
                                          "%r is not a resource" % path)
                 self.resources.append(resource)
