@@ -14,9 +14,18 @@ Show summary of options
 .TP
 .B \-c FILENAME, \-\-config=FILENAME
 Use the given configuration file.
+.TP
+.B \-d, \-\-daemon
+Go to background after starting.
 .SH FILES
 .TP
 .B /etc/schooltool.conf
 The default server configuration file
+.TP
+.B /var/lib/schooltool/
+The default directory for data files (Debian).
+.TP
+.B /var/log/schooltool/schooltool.log
+The default location for the log file (Debian).
 .SH "SEE ALSO"
 schooltool-client(1), wxschooltool(1), import-sampledata(1).

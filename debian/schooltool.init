@@ -1,0 +1,48 @@
+#! /bin/sh
+#
+# schooltool	Start the SchoolTool server.
+#
+
+set -e
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/bin/schooltool-server
+NAME=schooltool
+DESC="SchoolTool"
+PNAME=schooltool-serv
+PIDFILE=/var/run/schooltool/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+CONFIGFILE=/etc/schooltool.conf
+
+# Gracefully exit if the package has been removed or is not configured.
+test -x $DAEMON || exit 0
+test -f $CONFIGFILE || exit 0
+
+case "$1" in
+  start)
+	echo -n "Starting $DESC: $NAME"
+	start-stop-daemon --start --quiet --pidfile $PIDFILE \
+		--chuid schooltool --exec $DAEMON -- -d >/dev/null
+	echo "."
+	;;
+  stop)
+	echo -n "Stopping $DESC: $NAME"
+	start-stop-daemon --stop --quiet --pidfile $PIDFILE \
+		--name $PNAME && echo "." || echo "... failed"
+	;;
+  restart|force-reload)
+	echo -n "Restarting $DESC: $NAME"
+	start-stop-daemon --stop --quiet --oknodo --pidfile \
+		$PIDFILE --name $PNAME
+	sleep 1
+	start-stop-daemon --start --quiet --pidfile $PIDFILE \
+		--chuid schooltool --exec $DAEMON -- -d >/dev/null
+	echo "."
+	;;
+  *)
+	echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0

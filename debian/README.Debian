@@ -1,29 +1,18 @@
 SchoolTool for Debian
 ---------------------
 
-This is an early testing version of SchoolTool.  The server does not yet
-have facilities for running in background, using a dedicated user account or
-logging to a file.
-
-You must edit the configuration file (/etc/schooltool.conf) before you can
-start the server.  Uncomment one of the provided example storage sections
-there.  Mapping storage requires no additional setup, but it is only suitable
-for testing, as any changes to the SchoolTool data will be lost when the
-server is stopped.  File storage is persistent, but you'll have to create
-a directory (/var/lib/schooltool is suggested) with appropriate access
-permissions for the user which is going to start the server.
+This is an early testing version of SchoolTool.  The configuration file is
+/etc/schooltool.conf.
 
 Look at /usr/share/doc/schooltool/examples/schooltool.conf for a full list
 of SchoolTool server configuration options.
 
 The simplest way to start playing with SchoolTool is as follows:
 
-  1. edit /etc/schooltool.conf as described above
-  2. run schooltool-server
-  3. in a different terminal run import-sampledata
-  4. run wxschooltool or schooltool-client and play around
+  1. run import-sampledata to populate the database
+  2. run wxschooltool or schooltool-client and play around
 
 By default a user 'manager' with password 'schooltool' is created with full
 access and modification privileges.
 
- -- Marius Gedminas <marius@pov.lt>, Fri, 30 Jan 2004 17:08:48 +0200
+ -- Marius Gedminas <marius@pov.lt>, Tue, 13 Apr 2004 19:58:14 +0300

@@ -1,3 +1,16 @@
+schooltool (0.4+svn20040413-0.1) unstable; urgency=low
+
+  * Packaged subversion snapshot as of 2004-04-13.
+  * Postinst script now creates a system user for schooltool.
+  * Added /etc/init.d/schooltool.
+  * Changed /etc/schooltool.conf to use /var/lib/schooltool/Data.fs for
+    data files, /var/log/schooltool/schooltool.log for event log, and
+    /var/run/schooltool/schooltool.pid as a pidfile.
+  * Updated manual pages.
+  * Note that this is an unofficial package, that is not part of Debian.
+
+ -- Marius Gedminas <marius@pov.lt>  Tue, 13 Apr 2004 19:59:06 +0300
+
 schooltool (0.4-0.1) unstable; urgency=low
 
   * Released SchoolTool Milestone 4.
