@@ -23,7 +23,7 @@ $Id$
 """
 
 from zope.interface import implements
-from schooltool.interfaces import IFaceted, IEventConfigurable
+from schooltool.interfaces import IEventConfigurable
 from schooltool.interfaces import IPerson, IGroup, IRootGroup
 from schooltool.interfaces import ISpecificURI
 from schooltool.component import queryFacet, setFacet, getFacetItems
@@ -31,30 +31,9 @@ from schooltool.db import PersistentKeysDict
 from schooltool.event import EventTargetMixin, EventService
 from schooltool.membership import MemberMixin, GroupMixin
 from schooltool.relationship import RelatableMixin
+from schooltool.facet import FacetedMixin, FacetedEventTargetMixin
 
 __metaclass__ = type
-
-
-class FacetedMixin:
-
-    implements(IFaceted)
-
-    def __init__(self):
-        self.__facets__ = PersistentKeysDict()
-
-
-class FacetedEventTargetMixin(FacetedMixin, EventTargetMixin):
-
-    def __init__(self):
-        FacetedMixin.__init__(self)
-        EventTargetMixin.__init__(self)
-
-    def getEventTable(self):
-        tables = [self.eventTable]
-        for key, facet in getFacetItems(self):
-            if facet.active and IEventConfigurable.isImplementedBy(facet):
-                tables.append(facet.eventTable)
-        return sum(tables, [])
 
 
 class Person(MemberMixin, FacetedEventTargetMixin, RelatableMixin):

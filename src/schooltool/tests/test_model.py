@@ -65,15 +65,6 @@ class FacetStub:
         self.context = context
         self.active = active
 
-class FacetWithEventsStub(FacetStub):
-    implements(IEventConfigurable)
-
-    def __init__(self, context=None, active=False, eventTable=None):
-        FacetStub.__init__(self, context, active)
-        if eventTable is None:
-            eventTable = []
-        self.eventTable = eventTable
-
 
 class TestPerson(unittest.TestCase):
 
@@ -231,47 +222,11 @@ class TestRootGroup(unittest.TestCase):
         group = RootGroup("root")
         verifyObject(IRootGroup, group)
 
-
-class TestFacetedMixin(unittest.TestCase):
-
-    def test(self):
-        from schooltool.model import FacetedMixin
-        from schooltool.interfaces import IFaceted
-        m = FacetedMixin()
-        verifyObject(IFaceted, m)
-
-
-class TestFacetedEventTargetMixin(unittest.TestCase):
-
-    def test(self):
-        from schooltool.model import FacetedEventTargetMixin
-        from schooltool.interfaces import IFaceted, IEventTarget
-        from schooltool.interfaces import IEventConfigurable
-        et = FacetedEventTargetMixin()
-        verifyObject(IFaceted, et)
-        verifyObject(IEventTarget, et)
-        verifyObject(IEventConfigurable, et)
-
-    def test_getEventTable(self):
-        from schooltool.model import FacetedEventTargetMixin
-        from schooltool.component import setFacet
-        et = FacetedEventTargetMixin()
-        et.__facets__ = {} # use a simple dict instead of PersistentKeysDict
-        et.eventTable.append(0)
-        setFacet(et, 1, FacetStub())
-        setFacet(et, 2, FacetStub(active=True))
-        setFacet(et, 3, FacetWithEventsStub(eventTable=[1]))
-        setFacet(et, 4, FacetWithEventsStub(active=True, eventTable=[2]))
-        self.assertEquals(et.getEventTable(), [0, 2])
-
-
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestPerson))
     suite.addTest(unittest.makeSuite(TestGroup))
     suite.addTest(unittest.makeSuite(TestRootGroup))
-    suite.addTest(unittest.makeSuite(TestFacetedMixin))
-    suite.addTest(unittest.makeSuite(TestFacetedEventTargetMixin))
     return suite
 
 if __name__ == '__main__':
