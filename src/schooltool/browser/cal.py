@@ -51,6 +51,7 @@ class BookingView(View):
     booked = False
 
     def update(self):
+        # XXX This method is too large and needs to be cleaned up.
         request = self.request
         if 'CONFIRM_BOOK' not in request.args:
             if 'start' in request.args:
@@ -64,6 +65,14 @@ class BookingView(View):
 
         force = 'conflicts' in request.args
 
+        start_date_str = to_unicode(request.args['start_date'][0])
+        start_time_str = to_unicode(request.args['start_time'][0])
+        duration_str = to_unicode(request.args['duration'][0])
+
+        self.start_date = start_date_str
+        self.start_time = start_time_str
+        self.duration = duration_str
+
         if 'owner' in request.args:
             if not self.isManager():
                 self.error = _("Only managers can set the owner")
@@ -75,12 +84,9 @@ class BookingView(View):
             except KeyError:
                 self.error = _("Invalid owner: %s") % owner_name
                 return
+            self.owner = owner
         else:
             owner = request.authenticated_user
-
-        start_date_str = to_unicode(request.args['start_date'][0])
-        start_time_str = to_unicode(request.args['start_time'][0])
-        duration_str = to_unicode(request.args['duration'][0])
 
         try:
             arg = 'start_date'

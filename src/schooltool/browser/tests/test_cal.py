@@ -104,6 +104,9 @@ class TestBookingView(unittest.TestCase):
                                     'CONFIRM_BOOK': 'Book'})
         content = view.render(request)
         self.assert_("Only managers can set the owner" in content)
+        self.assert_("2004-08-10" in content)
+        self.assert_("19:01" in content)
+        self.assert_("61" in content)
 
     def test_owner_wrong_name(self):
         view = self.createView()
@@ -115,6 +118,9 @@ class TestBookingView(unittest.TestCase):
                                     'CONFIRM_BOOK': 'Book'})
         content = view.render(request)
         self.assert_("Invalid owner: whatever" in content)
+        self.assert_("2004-08-10" in content)
+        self.assert_("19:01" in content)
+        self.assert_("61" in content)
 
     def test_confirm_book(self):
         view = self.createView()
