@@ -263,7 +263,9 @@ class TestPersonAddView(unittest.TestCase):
         result = view.do_GET(request)
         self.assert_('Add person' in result)
 
-        request = RequestStub(args={'username': 'newbie'})
+        request = RequestStub(args={'username': 'newbie',
+                                    'password': 'foo',
+                                    'verify_password': 'foo'})
         result = view.do_POST(request)
         self.assertEquals(request.applog,
                           [(None, u'Object created: /persons/newbie', INFO)])
@@ -279,11 +281,21 @@ class TestPersonAddView(unittest.TestCase):
     def test_errors(self):
         # We're not very i18n friendly by not allowing international
         # symbols in user names.
-        view = self.createView()
         for username in ('newbie \xc4\x85', 'new/bie', 'foo\000bar'):
-            request = RequestStub(args={'username': username})
+            view = self.createView()
+            request = RequestStub(args={'username': username,
+                                        'password': 'bar',
+                                        'verify_password': 'bar'})
             view.do_POST(request)
             self.assertEquals(view.error, u'Invalid username')
+
+        view = self.createView()
+        request = RequestStub(args={'username': 'badpass',
+                                    'password': 'foo',
+                                    'verify_password': 'bar'})
+        view.do_POST(request)
+        self.assertEquals(view.error, u'Passwords do not match')
+        self.assertEquals(view.prev_username, 'badpass')
 
 
 class TestGroupContainerView(unittest.TestCase, TraversalTestMixin):

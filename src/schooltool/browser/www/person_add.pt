@@ -9,9 +9,19 @@
 
   <metal:block metal:fill-slot="content">
   <form method="POST" tal:attributes="action request/path">
+    <div class="error" tal:condition="view/error" tal:content="view/error" />
     <div class="row">
-      <label for="username">User name</label>
-      <input id="username" name="username" type="text">
+      <label class="wide" for="username">User name</label>
+      <input id="username" name="username" type="text"
+             tal:attributes="value view/prev_username">
+    </div>
+    <div class="row">
+      <label class="wide" for="password">Password</label>
+      <input id="password" name="password" type="password" />
+    </div>
+    <div class="row">
+      <label class="wide" for="verify_password">Verify password</label>
+      <input id="verify_password" name="verify_password" type="password" />
     </div>
     <div class="buttons">
       <input class="button" type="submit" value="Add" />

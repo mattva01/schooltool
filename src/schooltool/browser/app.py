@@ -169,15 +169,28 @@ class PersonAddView(View):
     # XXX Perhaps this constraint is a bit too strict.
     valid_usernames = re.compile("^[a-zA-Z0-9.,'()]+$")
 
+    prev_username = ''
     error = None
 
     def do_POST(self, request):
         username = request.args['username'][0]
+        password = request.args['password'][0]
+        verify_password = request.args['verify_password'][0]
+
         if not self.valid_usernames.match(username):
             self.error = _('Invalid username')
             return self.do_GET(request)
 
+        self.prev_username = username
+        if password != verify_password:
+            self.error = _('Passwords do not match')
+            return self.do_GET(request)
+
+        # XXX Do we really want to allow empty passwords?
+        # XXX Should we care about Unicode vs. UTF-8 passwords?
+
         person = self.context.new(username, title=username)
+        person.setPassword(password)
 
         # We could say 'Person created', but we want consistency
         # (AKA wart-compatibility).
