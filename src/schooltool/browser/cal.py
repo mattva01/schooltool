@@ -888,6 +888,7 @@ def datesParser(raw_dates):
         try:
             d = dateParser(dstr)
         except ValueError:
+            # XXX: translate
             raise ValueError('Invalid date.  Please specify YYYY-MM-DD,'
                              ' one per line.')
         if isinstance(d, date):
@@ -914,6 +915,7 @@ def positiveIntValidator(value):
     if value is None:
         return
     if value < 1:
+        # XXX translate
         raise ValueError("Invalid value (must be not less than 1).")
 
 
@@ -932,10 +934,12 @@ def intsParser(raw):
             for s in raw:
                 result.append(intParser(s))
         else:
+            # XXX this is overkill, raw will never be a single string
             if intParser(raw) is None:
                 return None
             result.append(intParser(raw))
     except ValueError:
+        # XXX translate and make understandable
         raise ValueError('weekdays must be a tuple of ints between 0 and 6.')
     return tuple(result)
 
@@ -963,8 +967,10 @@ def weekdaysValidator(value):
     try:
         for i in value:
             if i < 0 or i > 6:
+                # XXX: translate
                 raise ValueError('weekdays must be ints between 0 and 6.')
     except TypeError:
+        # XXX: translate
         raise ValueError('weekdays must be a tuple of ints between 0 and 6.')
 
 
@@ -1157,9 +1163,7 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
                                            count=count, until=until,
                                            exceptions=exceptions)
             elif self.recurrence_type_widget.value == 'weekly':
-                weekdays = self.weekdays_widget.value
-                if weekdays is None:
-                    weekdays = ()
+                weekdays = self.weekdays_widget.value or ()
                 return WeeklyRecurrenceRule(interval=interval,
                                             count=count, until=until,
                                             exceptions=exceptions,
@@ -1225,7 +1229,9 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         """
         # TODO: unit tests.
         day = self.date_widget.value
-        checked = day and day.weekday() == weekday['nr']
+        checked = (day and day.weekday() == weekday['nr']
+                   or (self.weekdays_widget.value and
+                       weekday['nr'] in self.weekdays_widget.value))
         if checked:
             return 'checked'
         else:
@@ -1238,14 +1244,11 @@ class EventViewBase(View, CalendarBreadcrumbsMixin, EventViewHelpers):
         """
         # TODO: unit tests.
         day = self.date_widget.value
-        disabled = (day and day.weekday() == weekday['nr']
-                    or (self.weekdays_widget.value and
-                        weekday['nr'] in self.weekdays_widget.value))
+        disabled = day and day.weekday() == weekday['nr']
         if disabled:
             return 'disabled'
         else:
             return None
-
 
     def getLastWeekDay(self):
         """Return a description like 'Last Friday' or None."""

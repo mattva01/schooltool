@@ -147,8 +147,8 @@
                tal:attributes="
                    id string:weekday_${weekday/nr};
                    value weekday/nr;
-                   disabled python:view.weekdayChecked(weekday);
-                   checked python:view.weekdayDisabled(weekday)"
+                   disabled python:view.weekdayDisabled(weekday);
+                   checked python:view.weekdayChecked(weekday)"
                />
         <label tal:attributes="for string:weekday_${weekday/nr}"
                tal:content="weekday/name" class="plain" />
