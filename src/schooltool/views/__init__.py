@@ -27,7 +27,7 @@ from zope.interface import moduleProvides
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
 from twisted.web.resource import Resource
 from schooltool.interfaces import IModuleSetup
-from schooltool.component import getView
+from schooltool.component import getView, getPath
 from schooltool.translation import ugettext as _
 
 __metaclass__ = type
@@ -40,13 +40,20 @@ moduleProvides(IModuleSetup)
 # Helpers
 #
 
-def absoluteURL(request, path, scheme='http'):
-    """Returns the absulute URL of the object adddressed with path"""
-    if not path.startswith('/'):
-        raise ValueError("Path must be absolute")
+def getURL(request, obj, suffix='', absolute=True):
+    """Returns the URL of an object."""
+    scheme = 'http'
     hostname = request.getRequestHostname()
     port = request.getHost()[2]
-    return '%s://%s:%s%s' % (scheme, hostname, port, path)
+    url = getPath(obj)
+    if suffix:
+        if not url.endswith('/'):
+            url += '/'
+        url += suffix
+    if absolute:
+        return '%s://%s:%s%s' % (scheme, hostname, port, url)
+    else:
+        return url
 
 
 def read_file(fn):

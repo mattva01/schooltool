@@ -23,7 +23,7 @@ $Id$
 """
 
 import unittest
-from schooltool.views.tests import RequestStub
+from schooltool.views.tests import RequestStub, setPath
 
 __metaclass__ = type
 
@@ -44,16 +44,33 @@ class TemplateStub:
         return self.body
 
 
+class LocatableStub:
+    pass
+
+
 class TestHelpers(unittest.TestCase):
 
-    def test_absoluteURL(self):
-        from schooltool.views import absoluteURL
+    def test_getURL(self):
+        from schooltool.views import getURL
+        root = LocatableStub()
+        setPath(root, '/')
+        obj = LocatableStub()
+        setPath(obj, '/foo/bar')
         request = RequestStub("http://locahost:7001/foo/bar")
-        self.assertEquals(absoluteURL(request, '/moo/spoo'),
-                          "http://localhost:7001/moo/spoo")
-        self.assertEquals(absoluteURL(request, '/moo/spoo', scheme='ftp'),
-                          "ftp://localhost:7001/moo/spoo")
-        self.assertRaises(ValueError, absoluteURL, request, 'relative/path')
+
+        self.assertEquals(getURL(request, root),
+                          "http://localhost:7001/")
+        self.assertEquals(getURL(request, root, absolute=False),
+                          "/")
+        self.assertEquals(getURL(request, root, 'baz/123'),
+                          "http://localhost:7001/baz/123")
+
+        self.assertEquals(getURL(request, obj),
+                          "http://localhost:7001/foo/bar")
+        self.assertEquals(getURL(request, obj, absolute=False),
+                          "/foo/bar")
+        self.assertEquals(getURL(request, obj, 'baz/123'),
+                          "http://localhost:7001/foo/bar/baz/123")
 
 
 class TestTemplate(unittest.TestCase):

@@ -197,9 +197,10 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
 
         xml = '''<facet xmlns="http://schooltool.org/ns/model/0.1"
                         factory="eventlog"/>'''
-        request = RequestStub("http://localhost/group/facets",
+        request = RequestStub("http://localhost/p1/facets",
                               method="POST", body=xml)
         facetable = Person()
+        setPath(facetable, '/p1')
         context = FacetManager(facetable)
         view = FacetManagementView(context)
         self.assertEquals(len(list(context.iterFacets())), 1)
@@ -207,7 +208,7 @@ class TestFacetManagementView(XMLCompareMixin, RegistriesSetupMixin,
         result = view.render(request)
         self.assertEquals(request.code, 201)
         self.assertEquals(request.reason, "Created")
-        baseurl = "http://localhost:7001/group/facets/"
+        baseurl = "http://localhost:7001/p1/facets/"
         location = request.headers['location']
         self.assert_(location.startswith(baseurl),
                      "%r.startswith(%r) failed" % (location, baseurl))

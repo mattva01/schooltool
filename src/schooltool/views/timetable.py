@@ -30,7 +30,7 @@ from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITimePeriodService
 from schooltool.views import View, Template, textErrorPage, notFoundPage
-from schooltool.views import absoluteURL, read_file
+from schooltool.views import getURL, read_file
 from schooltool.views.cal import SchooldayModelCalendarView
 from schooltool.views.auth import PublicAccess
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
@@ -440,14 +440,17 @@ class TimetableTraverseView(BaseTimetableTraverseView):
         return _("Timetables for %s") % self.context.title
 
     def timetables(self):
-        basepath = getPath(self.context) + '/timetables'
+        baseuri = getURL(self.request, self.context, 'timetables')
+        basepath = getURL(self.request, self.context, 'timetables',
+                          absolute=False)
         results = []
         for period_id, schema_id in self.context.timetables:
             path = '%s/%s/%s' % (basepath, period_id, schema_id)
+            uri = '%s/%s/%s' % (baseuri, period_id, schema_id)
             results.append({'schema': schema_id,
                             'period': period_id,
                             'path': path,
-                            'uri': absoluteURL(self.request, path)})
+                            'uri': uri})
         return results
 
     def _traverse(self, name, request):
@@ -468,14 +471,17 @@ class CompositeTimetableTraverseView(BaseTimetableTraverseView):
         return _("Composite timetables for %s") % self.context.title
 
     def timetables(self):
-        basepath = getPath(self.context) + '/composite-timetables'
+        baseuri = getURL(self.request, self.context, 'composite-timetables')
+        basepath = getURL(self.request, self.context, 'composite-timetables',
+                          absolute=False)
         results = []
         for period_id, schema_id in self.context.listCompositeTimetables():
             path = '%s/%s/%s' % (basepath, period_id, schema_id)
+            uri = '%s/%s/%s' % (baseuri, period_id, schema_id)
             results.append({'schema': schema_id,
                             'period': period_id,
                             'path': path,
-                            'uri': absoluteURL(self.request, path)})
+                            'uri': uri})
         return results
 
     def _traverse(self, name, request):
@@ -496,17 +502,20 @@ class SchoolTimetableTraverseView(BaseTimetableTraverseView):
         return _("School timetables")
 
     def timetables(self):
-        basepath = '/schooltt'
+        baseuri = getURL(self.request, self.context, 'schooltt')
+        basepath = getURL(self.request, self.context, 'schooltt',
+                          absolute=False)
         periods = getTimePeriodService(self.context).keys()
         schemas = getTimetableSchemaService(self.context).keys()
         results = []
         for period_id in periods:
             for schema_id in schemas:
                 path = '%s/%s/%s' % (basepath, period_id, schema_id)
+                uri = '%s/%s/%s' % (baseuri, period_id, schema_id)
                 results.append({'schema': schema_id,
                                 'period': period_id,
                                 'path': path,
-                                'uri': absoluteURL(self.request, path)})
+                                'uri': uri})
         return results
 
     def _traverse(self, name, request):
