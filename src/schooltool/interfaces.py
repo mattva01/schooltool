@@ -1079,7 +1079,7 @@ class ITimetableDay(Interface):
     def __getitem__(key):
         """Get the ITimetableActivity for a given period identifier.
 
-        If there is no activity for the period, returns None.
+        If there is no activity for the period, KeyError ir raised.
         """
 
 
