@@ -16,13 +16,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-30 19:23+0100\n"
+"POT-Creation-Date: 2004-12-01 16:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#. Type: string
+#. Description
+#: ../schooltool.templates:4
+msgid "Network interfaces for SchoolTool XML web services"
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../schooltool.templates:16 ../schoolbell.templates:16
+msgid "Network interfaces for the HTML browser interface"
+msgstr ""
 
 #. Type: string
 #. Description
@@ -35,7 +47,7 @@ msgstr ""
 #. Type: string
 #. Description
 #: ../schooltool.templates:25
-msgid "Interfaces for SchoolTool XML web services"
+msgid "Network interfaces for SchoolTool XML web services (SSL)"
 msgstr ""
 
 #. Type: string
@@ -51,7 +63,7 @@ msgstr ""
 #. Type: string
 #. Description
 #: ../schooltool.templates:40 ../schoolbell.templates:40
-msgid "Interfaces for the HTML browser interface"
+msgid "Network interfaces for the HTML browser interface (SSL)"
 msgstr ""
 
 #. Type: string
@@ -155,6 +167,12 @@ msgstr ""
 
 #. Type: string
 #. Description
+#: ../schoolbell.templates:4
+msgid "Network interfaces for SchoolBell XML web services"
+msgstr ""
+
+#. Type: string
+#. Description
 #: ../schoolbell.templates:16
 msgid ""
 "The HTML interface provides access to SchoolBell via any standard web "
@@ -164,7 +182,7 @@ msgstr ""
 #. Type: string
 #. Description
 #: ../schoolbell.templates:25
-msgid "Interfaces for SchoolBell XML web services"
+msgid "Network interfaces for SchoolBell XML web services (SSL)"
 msgstr ""
 
 #. Type: string

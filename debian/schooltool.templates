@@ -1,7 +1,7 @@
 Template: schooltool/listen
 Type: string
 Default: 7001
-_Description: Interfaces for SchoolTool XML web services
+_Description: Network interfaces for SchoolTool XML web services
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
  .
@@ -13,7 +13,7 @@ _Description: Interfaces for SchoolTool XML web services
 Template: schooltool/web
 Type: string
 Default: 7080
-_Description: Interfaces for the HTML browser interface
+_Description: Network interfaces for the HTML browser interface
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
  .
@@ -22,7 +22,7 @@ _Description: Interfaces for the HTML browser interface
 Template: schooltool/listen_ssl
 Type: string
 Default:
-_Description: Interfaces for SchoolTool XML web services
+_Description: Network interfaces for SchoolTool XML web services (SSL)
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
  .
@@ -37,7 +37,7 @@ _Description: Interfaces for SchoolTool XML web services
 Template: schooltool/web_ssl
 Type: string
 Default:
-_Description: Interfaces for the HTML browser interface
+_Description: Network interfaces for the HTML browser interface (SSL)
  Please type in a space separated list of [address:]port values that you
  would like the server to listen on.
  .
