@@ -357,7 +357,8 @@ class ExpandedCalendarEvent(CalendarEvent):
         """Create an expanded event which is equal to the event passed."""
         return cls(ev.dtstart, ev.duration, ev.title, owner=ev.owner,
                    context=ev.context, location=ev.location,
-                   unique_id=ev.unique_id, recurrence=ev.recurrence)
+                   unique_id=ev.unique_id, recurrence=ev.recurrence,
+		   privacy=ev.privacy)
 
     duplicate = classmethod(duplicate)
 

@@ -252,7 +252,8 @@ class TestCalendar(unittest.TestCase, EqualsSortedMixin):
                             "English", recurrence=daily, unique_id="123")
         ev2 = CalendarEvent(datetime(2004, 10, 11, 11, 0),
                             timedelta(minutes=10),
-                            "Coffee", unique_id="124")
+                            "Coffee", unique_id="124",
+			    privacy="private")
         ev3 = CalendarEvent(datetime(2004, 10, 13, 11, 0),
                             timedelta(minutes=10),
                             "Coffee 2", unique_id="125")
@@ -661,7 +662,8 @@ class TestExpandedCalendarEvent(TestCalendarEvent):
         from schooltool.interfaces import IExpandedCalendarEvent
         ev = CalendarEvent(datetime(2003, 11, 25, 12, 0),
                            timedelta(minutes=10),
-                           "reality check", unique_id='uid')
+                           "reality check", unique_id='uid',
+			   privacy="hidden")
         eev = ExpandedCalendarEvent.duplicate(ev)
         self.assertEqual(ev, eev)
         assert IExpandedCalendarEvent.providedBy(eev)
