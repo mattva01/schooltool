@@ -7,8 +7,8 @@ This is an early testing version of SchoolTool.  The configuration file is
 If you don't want schooltool to start automatically on system boot, edit
 /etc/default/schooltool.
 
-Look at /usr/share/doc/schooltool-server/examples/schooltool.conf for a full
-list of SchoolTool server configuration options.
+Look at /usr/share/doc/schooltool-server/examples/schooltool.conf.example
+for a full list of SchoolTool server configuration options.
 
 The simplest way to start playing with SchoolTool is as follows:
 

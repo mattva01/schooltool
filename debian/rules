@@ -105,9 +105,6 @@ install-stamp: build
 
 	install -m 644 -D -p debian/schooltool.conf \
 	    debian/schooltool-server/etc/schooltool.conf
-	# the following are soon to disapear
-	install -m 644 -D -p debian/example.conf \
-	    debian/schooltool-server/usr/share/doc/schooltool-server/examples/schooltool.conf
 
 	install -m 644 -D -p ttconfig.data \
 	    debian/schooltool-clients/usr/share/schooltool-clients/sampleschool/ttconfig.data
@@ -126,6 +123,7 @@ binary-arch: build install
 	dh_testroot
 	dh_installdocs
 	dh_installinit --name=schooltool
+	dh_installexamples
 	dh_installman
 	dh_installchangelogs
 	dh_strip

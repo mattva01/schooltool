@@ -7,6 +7,7 @@ schooltool (0.6+svn20040918) unstable; urgency=low
   * Added Zope Public License 2.0 and 2.1 to copyright files and merged
     them into one.
   * Use dh_installinit to install /etc/default/schooltool.
+  * Use dh_installexamples to install example config file.
 
  -- Brian Sutherland <jinty@web.de>  Sat, 18 Sep 2004 13:05:48 +0200
 
