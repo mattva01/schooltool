@@ -35,14 +35,8 @@
                   tal:content="python:weekday.date.strftime('%a')" />
           </tr>
           <tr tal:repeat="week month">
-            <td class="cal_yearly_day" tal:repeat="day week">
-             <a tal:condition="python:day.date.month == month[1][0].date.month"
-                tal:content="day/date/day"
-                tal:attributes="href python:view.calURL('daily', day.date);
-                                class python:(len(day.events) > 0
-                                              and 'cal_yearly_day_busy'
-                                              or  'cal_yearly_day')"/>
-            </td> 
+            <td tal:replace="structure
+                      python:view.renderRow(week, month[1][0].date.month)" />
           </tr>
         </table>
       </td>

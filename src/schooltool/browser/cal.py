@@ -26,7 +26,7 @@ import urllib
 from datetime import datetime, date, time, timedelta
 from sets import Set
 from zope.interface import implements
-from schooltool.browser import View, Template, absoluteURL
+from schooltool.browser import View, Template, absoluteURL, absolutePath
 from schooltool.browser.auth import TeacherAccess, PrivateAccess, PublicAccess
 from schooltool.cal import Calendar, CalendarEvent, Period
 from schooltool.common import to_unicode, parse_datetime
@@ -154,6 +154,8 @@ class CalendarViewBase(View):
 
     first_day_of_week = 0
 
+    __url = None
+
     def renderEvent(self, event):
         view = CalendarEventView(event)
         return view.render(self.request)
@@ -175,8 +177,9 @@ class CalendarViewBase(View):
     def calURL(self, cal_type, cursor=None):
         if cursor is None:
             cursor = self.cursor
-        return absoluteURL(self.request, self.context,
-                          '%s.html?date=%s' % (cal_type, cursor))
+        if self.__url is None:
+            self.__url = absoluteURL(self.request, self.context)
+        return  '%s/%s.html?date=%s' % (self.__url, cal_type, cursor)
 
     def iterEvents(self):
         """Iterate over the events of the calendars displayed
@@ -250,20 +253,7 @@ class CalendarViewBase(View):
 
         This returns a list of quarters, each quarter is a list of months,
         each month is a list of weeks, and each week is a list of CalendarDays.
-        Ouch!
         """
-        # XXX This is probably going to be *really* slow :((
-
-        # alga 2004-08-16:  I ran benchmarks by measuring time.clock()
-        # in request.render.
-        # On a populated calendar (/person/000001/calendar in 2003)
-        # with a warm cache this gets rendered in 1.5..2.0 seconds.
-        #
-        # The manager's calendar (empty) gets rendered in 1.4..1.8 seconds.
-        #
-        # Measuring execution time of this function results in times
-        # in order of 0.1 second, that is most time is spent loops in
-        # the page template.
         quarters = []
         for q in range(4):
             quarter = [self.getMonth(date(dt.year, month + (q * 3), 1))
@@ -494,6 +484,45 @@ class YearlyCalendarView(CalendarViewBase):
     def nextYear(self):
         """Return the first day of the previous year."""
         return date(self.cursor.year + 1, 1, 1)
+
+    __url = None
+
+    def calURL(self, cal_type, cursor=None):
+        if cursor is None:
+            cursor = self.cursor
+        if self.__url is None:
+            self.__url = absolutePath(self.request, self.context)
+        return  '%s/%s.html?date=%s' % (self.__url, cal_type, cursor)
+
+    def renderRow(self, week, month):
+        """Do some HTML rendering in Python for performance.
+
+        This gains us 0.4 seconds out of 0.6 on my machine.
+        Here is the original piece of ZPT:
+
+         <td class="cal_yearly_day" tal:repeat="day week">
+          <a tal:condition="python:day.date.month == month[1][0].date.month"
+             tal:content="day/date/day"
+             tal:attributes="href python:view.calURL('daily', day.date);
+                             class python:(len(day.events) > 0
+                                           and 'cal_yearly_day_busy'
+                                           or  'cal_yearly_day')"/>
+         </td>
+        """
+        result = []
+
+        for day in week:
+            result.append('<td class="cal_yearly_day">')
+            if day.date.month == month:
+                if len(day.events):
+                    cssClass = 'cal_yearly_day_busy'
+                else:
+                    cssClass = 'cal_yearly_day'
+                result.append('<a href="%s" class="%s">%s</a>' %
+                              (self.calURL('daily', day.date), cssClass,
+                               day.date.day))
+                result.append('</td>')
+        return "\n".join(result)
 
 
 class CalendarView(View):
