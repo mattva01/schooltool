@@ -38,6 +38,8 @@ from schoolbell.app.browser.cal import ICalendarEventAddForm
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.app import Calendar
 
+from schoolbell.app.browser.tests.setup import setUp, tearDown
+
 
 def doctest_CalendarOwnerTraverser():
     """Tests for CalendarOwnerTraverser.
@@ -2277,8 +2279,6 @@ def doctest_EventDeleteView():
 
     """
 
-
-from schoolbell.app.browser.tests.test_app import setUp, tearDown
 
 def test_suite():
     suite = unittest.TestSuite()
