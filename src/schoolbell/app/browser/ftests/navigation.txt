@@ -51,7 +51,9 @@ a portlet with the navigation links depending on the authorized user.
     <div class="portlet">
     <h4>Navigation</h4>
     <ul>
-       <li><a href="http://localhost/frogpond">Top</a></li>
+       <li><a href="http://localhost/frogpond/persons">Persons</a></li>
+       <li><a href="http://localhost/frogpond/groups">Groups</a></li>
+       <li><a href="http://localhost/frogpond/resources">Resources</a></li>
     </ul>
     </div>
 
@@ -70,7 +72,9 @@ it.
     <div class="portlet">
     <h4>Navigation</h4>
     <ul>
-       <li><a href="http://localhost/frogpond">Top</a></li>
+       <li><a href="http://localhost/frogpond/persons">Persons</a></li>
+       <li><a href="http://localhost/frogpond/groups">Groups</a></li>
+       <li><a href="http://localhost/frogpond/resources">Resources</a></li>
     </ul>
     </div>
 

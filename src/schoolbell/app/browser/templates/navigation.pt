@@ -1,7 +1,11 @@
 <div class="portlet">
 <h4 i18n:translate="">Navigation</h4>
 <ul>
-   <li><a tal:attributes="href view/app/@@absolute_url"
-          i18n:translate="">Top</a></li>
+   <li><a tal:attributes="href view/app/persons/@@absolute_url"
+          i18n:translate="">Persons</a></li>
+   <li><a tal:attributes="href view/app/groups/@@absolute_url"
+          i18n:translate="">Groups</a></li>
+   <li><a tal:attributes="href view/app/resources/@@absolute_url"
+          i18n:translate="">Resources</a></li>
 </ul>
 </div>
