@@ -5,9 +5,7 @@
 <!-- TODO: javascript magic to disable the 'other' field when an encoding is
            chosen from the dropdown box -->
 <body>
-  <h1 metal:fill-slot="h1" i18n:translate="" style="display:none">
-    Upload CSV data
-  </h1>
+ <metal:nothing metal:fill-slot="h1" />
 <metal:block metal:fill-slot="content">
 
   <form method="POST" enctype="multipart/form-data" class="standalone"

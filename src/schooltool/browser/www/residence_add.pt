@@ -4,9 +4,7 @@
   </head>
   <body>
 
-    <h1 metal:fill-slot="h1" tal:content="view/title" style="display:none">
-      Add object
-    </h1>
+    <metal:nothing metal:fill-slot="h1" />
 
     <metal:block metal:fill-slot="content">
       <form method="POST" 

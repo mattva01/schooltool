@@ -3,9 +3,7 @@
     <title metal:fill-slot="title" i18n:translate="">Move residence</title>
   </head>
   <body>
-    <h1 metal:fill-slot="h1" i18n:translate="" style="display:none">
-      Move residence
-    </h1>
+    <metal:nothing metal:fill-slot="h1" />
 
     <metal:block metal:fill-slot="content" tal:define="info view/info">
       <div class="row" tal:define="info context/info">

@@ -3,8 +3,7 @@
     <title metal:fill-slot="title" i18n:translate="">Edit address info</title>
   </head>
   <body>
-    <h1 metal:fill-slot="h1" i18n:translate="" style="display:none">
-    </h1>
+    <metal:nothing metal:fill-slot="h1" />
 
     <metal:block metal:fill-slot="content" tal:define="info view/info">
 

@@ -5,7 +5,7 @@
 
   <body>
 
-    <h1 metal:fill-slot="h1" i18n:translate="">Add person</h1>
+    <metal:nothing metal:fill-slot="h1" />
 
     <metal:block metal:fill-slot="content"
       tal:define="ward python:request.args.get('ward',[None])[0]">

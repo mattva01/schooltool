@@ -87,7 +87,7 @@
 </head>
 <body>
 
-<h1 style="display:none" metal:fill-slot="h1" tal:content="view/page_title" />
+    <metal:nothing metal:fill-slot="h1" />
 
 <metal:block metal:fill-slot="content">
 
