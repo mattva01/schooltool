@@ -115,7 +115,7 @@ class IGroup(Interface):
     title = TextLine(title=u"Title",
         description=u"Title of the group.")
 
-    members = Attribute("""Members of the group (see IRelationshipProperty""")
+    members = Attribute("""Members of the group (see IRelationshipProperty)""")
 
 
 class IGroupContainer(IContainer):
