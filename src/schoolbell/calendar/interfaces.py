@@ -171,8 +171,9 @@ class IRecurrenceRule(Interface):
         Values in this list must be instances of datetime.date.
         """)
 
-    def replace(**kw):
-        """Return a copy of this recurrence rule with new specified fields."""
+##  XXX
+##  def replace(**kw):
+##      """Return a copy of this recurrence rule with new specified fields."""
 
     def __eq__(other):
         """See if self == other."""

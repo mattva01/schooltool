@@ -195,11 +195,19 @@ def ical_text(value):
                  .replace('\n', '\\n'))
 
 
+def ical_date(value):
+    """Format a date as an iCalendar DATE value.
+
+        >>> ical_date(datetime.date(2004, 3, 4))
+        '20040304'
+    """
+    return value.strftime("%Y%m%d")
+
+
 def ical_datetime(value):
     """Format a datetime as an iCalendar DATETIME value.
 
-        >>> from datetime import datetime
-        >>> ical_datetime(datetime(2004, 12, 16, 10, 45, 07))
+        >>> ical_datetime(datetime.datetime(2004, 12, 16, 10, 45, 07))
         '20041216T104507'
 
     """
@@ -285,6 +293,10 @@ def read_icalendar(icalendar_text):
 #
 # The rest of this module could use some review and refactoring
 #
+
+
+ical_weekdays = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
+
 
 class ICalReader:
     """An object which reads in an iCalendar file.

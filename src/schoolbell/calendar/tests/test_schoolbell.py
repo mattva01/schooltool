@@ -85,6 +85,7 @@ def test_suite():
     suite.addTest(doctest.DocTestSuite())
     suite.addTest(doctest.DocTestSuite('schoolbell.calendar.mixins'))
     suite.addTest(doctest.DocTestSuite('schoolbell.calendar.simple'))
+    suite.addTest(doctest.DocTestSuite('schoolbell.calendar.recurrent'))
     suite.addTest(doctest.DocTestSuite('schoolbell.calendar.utils'))
     suite.addTest(doctest.DocTestSuite('schoolbell.calendar.browser',
                         optionflags=doctest.ELLIPSIS | doctest.REPORT_UDIFF))
