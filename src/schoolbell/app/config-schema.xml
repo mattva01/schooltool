@@ -30,6 +30,8 @@
       this directive may happen too late under some circumstances; it is
       recommended that you use the PYTHONPATH environment variable if
       using this directive doesn't work for you.
+
+      This option is obsolete.
     </description>
   </multikey>
 
@@ -38,7 +40,7 @@
       This specifies additional modules to be set up when the server starts.
       Modules must provide the interface IModuleSetup.
 
-      XXX: The datatype should really be a dotted name.
+      This option is obsolete.
     </description>
     <metadefault>schooltool.main</metadefault>
   </multikey>
@@ -121,6 +123,8 @@
       for functional testing.  Do not use for live servers.  This option
       is not guaranteed to work if you use ZODB storage other than
       MappingStorage.
+
+      This option is obsolete.
     </description>
     <example>
       test-mode off
@@ -182,8 +186,9 @@
       Specifies the path of a file used for the application log.
       Special values STDERR and STDOUT mean standard error and standard
       output respectively.
+
+      This option is obsolete.
     </description>
-    <default>STDOUT</default>
     <example>
       app-log-file /var/log/schooltool/app.log
     </example>
@@ -192,16 +197,19 @@
   <multikey name="lang" datatype="string">
     <description>
       Specifies the locale of the messages to be used on the server.
+
+      This option is obsolete.
     </description>
-    <default>en_US</default>
     <example>
       lang en_US
     </example>
   </multikey>
 
-  <key name="domain" datatype="string" default="schooltool">
+  <key name="domain" datatype="string">
     <description>
       Specifies the name of the message catalog to be used on the server.
+
+      This option is obsolete.
     </description>
     <example>
       domain schoolbell
