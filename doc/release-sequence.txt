@@ -28,11 +28,12 @@ start again. XXX explain how to delete the branch.
      tar zcvf schooltool-m4.tar.gz schooltool-m4
      zip -r schooltool-m4.zip schooltool-m4
 
-4a. Make a Debian package.  You'll need dpkg-dev, fakeroot and
+4a. Optionally, build a Debian package.  You'll need dpkg-dev, fakeroot and
     debhelper packages.
 
      cd schooltool-m4
      make deb
+     cd ..
 
 5. Go into the export and make sure it's OK:
 
@@ -42,11 +43,11 @@ start again. XXX explain how to delete the branch.
    Run the thing and see that it works:
 
      ./generate-sampleschool.py
-     ./import-sampleschool.py
      ./schooltool-server.py
 
    In a new window:
 
+     ./import-sampleschool.py
      ./wxschooltool.py
 
 6. Write the page for the web.  Take screenshots.
