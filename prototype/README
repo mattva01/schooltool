@@ -1,0 +1,15 @@
+This directory contains an experimental prototype of a standalone script
+that later become schoolbell-server.py.
+
+The following features were not ported:
+
+  1. The ability to run functional tests over HTTP (testz3sb.py,
+     doctesthttp.py, ftests/*.txt)
+
+  2. Database reset view in z3schoolbell.py (@@resetdb.html).
+
+Because some of these features might be useful later, I have not removed this
+prototype from subversion.
+
+I am not sure (2) should be ported -- perhaps a better way would be to hook up
+DemoStorage with named snapshots, like I did in SchoolTool 0.8.
