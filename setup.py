@@ -275,7 +275,7 @@ if package == 'schooltool':
             'schooltool.clients'],
         data_files=[('sampleschool', ['persons.csv', 'groups.csv',
                 'resources.csv', 'timetable.csv', 'ttconfig.data'])]
-            + data_files,
+            + data_files + [('', ['schooltool.conf.in'])],
         scripts=['scripts/import-sampleschool', 'scripts/schooltool',
             'scripts/schooltool-client'])
 elif package == 'schoolbell':
@@ -298,5 +298,5 @@ elif package == 'schoolbell':
         package_dir={'': 'src'},
         packages=['schoolbell', 'schoolbell.relationship',
             'schoolbell.calendar', 'schoolbell.app', 'schoolbell.app.browser'],
-        data_files=data_files,
+        data_files=data_files + [('', ['schoolbell.conf.in'])],
         scripts=['scripts/schoolbell'])
