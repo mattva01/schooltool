@@ -377,7 +377,7 @@ class TestRequest(unittest.TestCase):
         self.assertEqual(rq.postpath, ['foo', 'bar'])
         self.assertEqual(rq.headers['server'], SERVER_VERSION)
         self.assert_(http_date_rx.match(rq.headers['date']))
-        self.assertEqual(rq.headers['content-type'], 'text/html')
+        self.assertEqual(rq.headers['content-type'], 'text/plain')
         self.assertEqual(rq.reactor_hook._called_in_thread, [rq._process])
         self.assertEqual(rq.accept, [])
 
@@ -542,12 +542,16 @@ class TestRequest(unittest.TestCase):
         result = rq._generate_response()
         self.assertEquals(result, "Bad username or password")
         self.assertEquals(rq.code, 401)
+        self.assertEquals(rq.headers['www-authenticate'],
+                          'basic realm="SchoolTool"')
 
         rq.user = 'freq'
         rq.password = 'wilma'
         result = rq._generate_response()
         self.assertEquals(result, "Bad username or password")
         self.assertEquals(rq.code, 401)
+        self.assertEquals(rq.headers['www-authenticate'],
+                          'basic realm="SchoolTool"')
 
     # _handle_exception is tested indirectly, in test__process_on_exception
     # and test__process_many_conflict_errors

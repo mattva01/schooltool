@@ -22,7 +22,6 @@ The views for the schooltool.model objects.
 $Id$
 """
 
-import libxml2
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IGroup, IPerson, IResource
@@ -39,7 +38,6 @@ from schooltool.views.timetable import TimetableTraverseView
 from schooltool.views.timetable import CompositeTimetableTraverseView
 from schooltool.views.cal import CalendarView, CalendarReadView, BookingView
 from schooltool.views.absence import RollcallView, AbsenceManagementView
-from schooltool.schema.rng import validate_against_schema
 
 __metaclass__ = type
 

@@ -309,7 +309,7 @@ class Request(http.Request):
         self.site = self.channel.site
         self.setHeader('Server', SERVER_VERSION)
         self.setHeader('Date', http.datetimeToString())
-        self.setHeader('Content-Type', "text/html")
+        self.setHeader('Content-Type', "text/plain")
         self.prepath = []
         self.postpath = map(urllib.unquote, self.path[1:].split('/'))
 
@@ -384,6 +384,7 @@ class Request(http.Request):
                 self.setResponseCode(401)
                 self.setHeader('Content-Type', 'text/plain')
                 self.setHeader('Content-Length', len(body))
+                self.setHeader('WWW-Authenticate', 'basic realm="SchoolTool"')
                 return body
 
         # Traverse and render the resource
