@@ -291,10 +291,8 @@ class TimePeriodViewBase(View):
                                      self.date_parser, self.end_date_validator)
 
     def date_parser(self, date):
-        if date is None:
+        if date is None or not date.strip():
             return None
-        if not date.strip():
-            raise ValueError(_("This field is required."))
         try:
             return parse_date(date)
         except ValueError:
@@ -389,9 +387,9 @@ class TimePeriodView(TimePeriodViewBase):
         self.model = self._buildModel(request)
         if self.model is None:
             self.model = self.context
-        if self.start_widget.value is None:
+        if self.start_widget.value is None and self.start_widget.error is None:
             self.start_widget.setValue(self.context.first)
-        if self.end_widget.value is None:
+        if self.end_widget.value is None and self.end_widget.error is None:
             self.end_widget.setValue(self.context.last)
         if 'UPDATE' in request.args:
             self.start_widget.require()
@@ -454,6 +452,16 @@ class NewTimePeriodView(TimePeriodViewBase):
                 self.service[self.name_widget.value] = self.model
                 return self.redirect("/time-periods", request)
         return View.do_GET(self, request)
+
+    def date_parser(self, date):
+        if date is None:
+            return None
+        if not date.strip():
+            raise ValueError(_("This field is required."))
+        try:
+            return parse_date(date)
+        except ValueError:
+            raise ValueError(_("Invalid date.  Please specify YYYY-MM-DD."))
 
 
 class ContainerServiceViewBase(View):

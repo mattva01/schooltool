@@ -777,6 +777,56 @@ class TestTimePeriodView(AppSetupMixin, unittest.TestCase):
         self.assert_(not model.isSchoolday(datetime.date(2005, 5, 30)))
         self.assertEquals(view.status, "Saved changes.")
 
+    def test_start_date_missing(self):
+        view = self.createView()
+        view.request.args['start'] = ['']
+        view.render(view.request)
+        self.assertEquals(view.start_widget.value, view.context.first)
+        self.assertEquals(view.start_widget.error, None)
+
+    def test_start_date_error(self):
+        view = self.createView()
+        view.request.args['start'] = ['xyzzy']
+        view.render(view.request)
+        self.assertEquals(view.start_widget.error,
+                          "Invalid date.  Please specify YYYY-MM-DD.")
+
+    def test_start_date_ok(self):
+        view = self.createView()
+        view.request.args['start'] = ['2004-01-02']
+        view.render(view.request)
+        self.assertEquals(view.start_widget.value, datetime.date(2004, 1, 2))
+        self.assertEquals(view.start_widget.error, None)
+
+    def test_end_date_missing(self):
+        view = self.createView()
+        view.request.args['end'] = ['']
+        view.render(view.request)
+        self.assertEquals(view.end_widget.value, view.context.last)
+        self.assertEquals(view.end_widget.error, None)
+
+    def test_end_date_error(self):
+        view = self.createView()
+        view.request.args['end'] = ['xyzzy']
+        view.render(view.request)
+        self.assertEquals(view.end_widget.error,
+                          "Invalid date.  Please specify YYYY-MM-DD.")
+
+    def test_end_date_early(self):
+        view = self.createView()
+        view.request.args['start'] = ['2004-01-02']
+        view.request.args['end'] = ['2004-01-01']
+        view.render(view.request)
+        self.assertEquals(view.end_widget.error,
+                          "End date cannot be earlier than start date.")
+
+    def test_end_date_ok(self):
+        view = self.createView()
+        view.request.args['end'] = ['2004-01-02']
+        view.render(view.request)
+        self.assertEquals(view.end_widget.value, datetime.date(2004, 1, 2))
+        self.assertEquals(view.end_widget.error, None)
+
 
 class TestNewTimePeriodView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
 
