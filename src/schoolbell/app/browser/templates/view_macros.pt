@@ -8,8 +8,8 @@
           tal:attributes="href context/++resource++layout.css"/>
     <link rel="stylesheet" type="text/css" href="style.css"
           tal:attributes="href context/++resource++style.css"/>
-    <script type="text/javascript" href="schoolbell.js"
-            tal:attributes="href context/++resource++schoolbell.js">
+    <script type="text/javascript" src="schoolbell.js"
+            tal:attributes="src context/++resource++schoolbell.js">
     </script>
     <metal:block define-slot="title">
       <title i18n:translate="">SchoolBell</title>
