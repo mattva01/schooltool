@@ -582,9 +582,8 @@ class TimetableCSVImporter:
                     person = self.findByTitle('persons', line,
                                               self.errors.persons)
                     if group is not invalid and person is not None:
-                        # XXX BUG: the following check should only be performed
-                        # when app.restrict_membership is True.
-                        if not belongsToParentGroup(person, group):
+                        if (self.app.restrict_membership
+                            and not belongsToParentGroup(person, group)):
                             msg = _("%s does not belong to a parent group"
                                     " of %s") % (person.title, group.title)
                             self.errors.generic.append(msg)
