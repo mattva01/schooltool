@@ -86,7 +86,7 @@ def createGroups():
     for year in range(1, years + 1):
         print >> f, '"year%d","%s","root",' % (year, _("Year %d") % year)
         for subj, subject in subjects.items():
-            print >> f, ('"%s%d","%s %d","%s year%d root","subject_group"' %
+            print >> f, ('"%s%d","%s %d","%s year%d","subject_group"' %
                          (subj, year, subject, year, subj, year))
     f.close()
 
