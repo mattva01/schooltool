@@ -446,12 +446,13 @@ class CalendarOwnerMixin(Persistent):
         self.calendar.__name__ = 'calendar'
 
     def makeCompositeCalendar(self, start, end):
-        result = Calendar()
-        result.__parent__ = self
-        result.__name__ = 'composite-calendar'
+        events = []
         for obj in getRelatedObjects(self, URICalendarProvider):
             for event in obj.calendar.expand(start, end):
-                result.addEvent(InheritedCalendarEvent(event, obj.calendar))
+                events.append(InheritedCalendarEvent(event, obj.calendar))
+        result = ImmutableCalendar(events)
+        result.__parent__ = self
+        result.__name__ = 'composite-calendar'
         return result
 
     def addSelfToCalACL(self):
@@ -614,7 +615,6 @@ class YearlyRecurrenceRule(RecurrenceRule):
         """Return iCalendar parameters specific to monthly reccurence."""
         # KOrganizer wants explicit BYMONTH and BYMONTHDAY arguments.
         # Maybe it is a good idea to add them for the sake of explicitness.
-        pass
 
 
 class WeeklyRecurrenceRule(RecurrenceRule):

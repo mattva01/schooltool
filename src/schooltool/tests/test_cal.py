@@ -771,19 +771,16 @@ class TestCalendarOwnerMixin(RegistriesSetupMixin, unittest.TestCase):
 
         com = AppObjectStub()
 
-        result = com.makeCompositeCalendar(date(2003, 11, 26),
-                                           date(2003, 11, 28))
-
         rec1 = CalendarEvent(datetime(2003, 11, 27, 13, 00),
                              timedelta(minutes=30), "AB", recurrence=rr,
                              unique_id=ev2.unique_id)
         rec2 = CalendarEvent(datetime(2003, 11, 28, 13, 00),
                              timedelta(minutes=30), "AB", recurrence=rr,
                              unique_id=ev2.unique_id)
-        expected = {ev1.unique_id: ev1, ev2.unique_id: ev2,
-                    rec1.unique_id: rec1, rec2.unique_id: rec2}
+        result = com.makeCompositeCalendar(date(2003, 11, 26),
+                                           date(2003, 11, 28))
 
-        self.assertEquals(result.events, expected)
+        self.assertEquals(list(result), [ev1, ev2, rec1, rec2])
 
         for event in result:
             verifyObject(IInheritedCalendarEvent, event)
