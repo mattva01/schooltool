@@ -164,6 +164,29 @@ class TestFacetFunctions(unittest.TestCase, EqualsSortedMixin):
         self.assertEqualSorted(list(facetsByOwner(self.ob, owner_marker)),
                                [facet1, facet3])
 
+    def test_facetFactories(self):
+        from schooltool.component import facetFactories, registerFacetFactory
+        from schooltool.component import resetFacetFactoryRegistry
+        from schooltool.component import getFacetFactory
+        from schooltool.facet import FacetFactory
+        ob = object()
+        name = "some facet"
+        title = "some title"
+        factory = FacetFactory(object, name, title)
+        self.assertEqual(len(facetFactories(ob)), 0)
+        self.assertRaises(TypeError, registerFacetFactory, object)
+        self.assertRaises(KeyError, getFacetFactory, name)
+        registerFacetFactory(factory)
+        self.assertEqual(list(facetFactories(ob)), [factory])
+        self.assertEqual(getFacetFactory(name), factory)
+        registerFacetFactory(factory)  # no-op, already registered
+        factory2 = FacetFactory(lambda: None, name, "another title")
+        self.assertRaises(ValueError, registerFacetFactory, factory2)
+        self.assertEqual(list(facetFactories(ob)), [factory])
+        resetFacetFactoryRegistry()
+        self.assertEqual(len(facetFactories(ob)), 0)
+
+
 class TestServiceAPI(unittest.TestCase):
 
     def test_api(self):

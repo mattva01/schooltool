@@ -28,6 +28,7 @@ from persistence import Persistent
 from zope.interface import implements
 from zope.interface.verify import verifyObject, verifyClass
 from schooltool.interfaces import IFacet, IFaceted, IPlaceholder, ILink
+from schooltool.interfaces import IFacetFactory
 from schooltool.interfaces import IEventConfigurable, ISpecificURI
 from schooltool.interfaces import IFacetedRelationshipSchema, IUnlinkHook
 from schooltool.tests.utils import EqualsSortedMixin
@@ -52,11 +53,29 @@ class FacetWithEventsStub(FacetStub):
         self.eventTable = eventTable
 
 
+class TestFacetFactory(unittest.TestCase):
+
+    def test(self):
+        from schooltool.facet import FacetFactory
+        result = object()
+        factory = lambda: result
+        ff = FacetFactory(factory, 'name', 'title')
+        verifyObject(IFacetFactory, ff)
+        self.assertEqual(ff.name, 'name')
+        self.assertEqual(ff.title, 'title')
+        self.assert_(ff(), result)
+
+    def testNoTitle(self):
+        from schooltool.facet import FacetFactory
+        ff = FacetFactory(object, 'name')
+        self.assertEqual(ff.name, 'name')
+        self.assertEqual(ff.title, 'name')
+
+
 class TestFacetedMixin(unittest.TestCase):
 
     def test(self):
         from schooltool.facet import FacetedMixin
-        from schooltool.interfaces import IFaceted
         m = FacetedMixin()
         verifyObject(IFaceted, m)
 
@@ -65,7 +84,7 @@ class TestFacetedEventTargetMixin(unittest.TestCase):
 
     def test(self):
         from schooltool.facet import FacetedEventTargetMixin
-        from schooltool.interfaces import IFaceted, IEventTarget
+        from schooltool.interfaces import IEventTarget
         from schooltool.interfaces import IEventConfigurable
         et = FacetedEventTargetMixin()
         verifyObject(IFaceted, et)
@@ -282,6 +301,7 @@ class TestFacetDeactivation(unittest.TestCase, EqualsSortedMixin):
 
 def test_suite():
     suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestFacetFactory))
     suite.addTest(unittest.makeSuite(TestFacetedMixin))
     suite.addTest(unittest.makeSuite(TestFacetedEventTargetMixin))
     suite.addTest(unittest.makeSuite(TestFacetedRelationshipSchema))

@@ -570,6 +570,16 @@ class IFaceted(Interface):
     __facets__ = Attribute("""A set of facets.""")
 
 
+class IFacetFactory(Interface):
+    """An inspectible object that creates facets."""
+
+    name = Attribute("The name of this factory")
+    title = Attribute("Short description of this factory")
+
+    def __call__():
+        """Returns a facet."""
+
+
 class IFacetAPI(Interface):
     """Facet API"""
 
@@ -588,6 +598,21 @@ class IFacetAPI(Interface):
 
     def facetsByOwner(ob, owner):
         """Returns a sequence of all facets of ob that are owned by owner."""
+
+    def facetFactories(ob):
+        """Returns a sequence of facet factories for the given object.
+
+        Each factory will be an IFacetFactory.
+        """
+
+    def getFacetFactory(name):
+        """Returns the factory with the given name."""
+
+    def registerFacetFactory(factory):
+        """Register the facet factory.
+
+        factory must implement IFacetFactory
+        """
 
 #
 # Application objects

@@ -31,13 +31,30 @@ from zope.interface import implements, classProvides
 from persistence import Persistent
 from schooltool.interfaces import IFaceted, IEventConfigurable
 from schooltool.interfaces import IFacetedRelationshipSchemaFactory
-from schooltool.interfaces import IFacetedRelationshipSchema
+from schooltool.interfaces import IFacetedRelationshipSchema, IFacetFactory
 from schooltool.interfaces import IPlaceholder
 from schooltool.event import EventTargetMixin
 from schooltool.component import setFacet, iterFacets, facetsByOwner
 from schooltool.db import PersistentKeysSet
 
 __metaclass__ = type
+
+
+class FacetFactory:
+    """Class that provides metadata for a callable that produced facets."""
+
+    implements(IFacetFactory)
+
+    def __init__(self, factory, name, title=None):
+        self.factory = factory
+        self.name = name
+        if title is None:
+            self.title = name
+        else:
+            self.title = title
+
+    def __call__(self):
+        return self.factory()
 
 
 class FacetedMixin:

@@ -28,7 +28,7 @@ from zope.interface.interfaces import IInterface
 from zope.interface.type import TypeRegistry
 from schooltool.interfaces import IContainmentAPI, IFacetAPI, IURIAPI
 from schooltool.interfaces import ILocation, IContainmentRoot
-from schooltool.interfaces import IFacet, IFaceted
+from schooltool.interfaces import IFacet, IFaceted, IFacetFactory
 from schooltool.interfaces import IServiceAPI, IServiceManager
 from schooltool.interfaces import IRelationshipAPI
 from schooltool.interfaces import ComponentLookupError, ISpecificURI
@@ -119,6 +119,39 @@ def iterFacets(ob):
 def facetsByOwner(ob, owner):
     """Returns a sequence of all facets of ob that are owned by owner."""
     return [facet for facet in iterFacets(ob) if facet.owner is owner]
+
+facet_factory_registry = {}
+
+def resetFacetFactoryRegistry():
+    """Clears the facet factory registry."""
+    facet_factory_registry.clear()
+
+def registerFacetFactory(factory):
+    """Register the given facet factory by the given name.
+
+    factory must implement IFacetFactory
+    """
+    if not IFacetFactory.isImplementedBy(factory):
+        raise TypeError("factory must provide IFacetFactory", factory)
+
+    if factory.name in facet_factory_registry:
+        if facet_factory_registry[factory.name] is factory:
+            # Registering the same factory more than once. Ignore this.
+            return
+        else:
+            raise ValueError(
+                'Another factory with that name is registered already.',
+                factory.name, factory)
+    facet_factory_registry[factory.name] = factory
+
+def facetFactories(ob):
+    """Returns a sequence of facet factories for the given object."""
+    return facet_factory_registry.values()
+
+def getFacetFactory(name):
+    """Returns the named facet factory."""
+    return facet_factory_registry[name]
+
 
 #
 # IServiceAPI
