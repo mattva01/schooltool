@@ -436,3 +436,5 @@ src/schooltool/translation/schooltool.pot
 ./schooltool.log
 ./access.log
 ./testserver_access.log
+./app.log
+./testserver_app.log
