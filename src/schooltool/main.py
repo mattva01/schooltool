@@ -283,7 +283,7 @@ class Request(http.Request):
     def __init__(self, *args, **kwargs):
         self.get_transaction_hook = get_transaction
         self.hitlogger = logging.getLogger('access')
-        self.hit_time = time.strftime('%d/%b/%I:%H:%M:%S %z')
+        self.hit_time = time.strftime('%d/%b/%Y:%H:%M:%S %z')
         http.Request.__init__(self, *args, **kwargs)
 
     def reset(self):
