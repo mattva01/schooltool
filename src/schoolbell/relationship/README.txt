@@ -31,6 +31,16 @@ rewrite the example above as
         print group
 
 
+Dependencies
+------------
+
+- zope.interface
+- zope.schema
+- zope.event
+- ZODB (persistent and persistent.list)
+- zope.app (only if you want to use the provided adapter for IAnnotatable)
+
+
 Details
 -------
 
@@ -71,6 +81,12 @@ We need some setup to make Zope 3 annotations work.
     >>> from zope.app.tests import setup
     >>> setup.placelessSetUp()
     >>> setup.setUpAnnotations()
+
+We need to define the adapter from IAnnotatable to IRelationshipLinks.
+In real life you would include the ZCML configuration of the
+'schoolbell.relationship' package via Zope 3 package includes.  In a test
+you can use setUpRelationships from schoolbell.relationship.tests.
+
     >>> from schoolbell.relationship.tests import setUpRelationships
     >>> setUpRelationships()
 

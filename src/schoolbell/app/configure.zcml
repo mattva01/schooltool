@@ -50,6 +50,15 @@
              set_schema="schoolbell.app.interfaces.IResource" />
   </content>
 
+  <subscriber
+      factory=".membership.enforceMembershipConstraints"
+      for="schoolbell.relationship.interfaces.IBeforeRelationshipEvent"
+      />
+
   <include package=".browser" />
+
+  <!-- XXX it feels wrong to include configure.zcml of a sibling -->
+
+  <include package="schoolbell.relationship" />
 
 </configure>

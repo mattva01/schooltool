@@ -1,0 +1,10 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="schoolbell">
+
+  <adapter
+      for="zope.app.annotation.interfaces.IAnnotatable"
+      provides="schoolbell.relationship.interfaces.IRelationshipLinks"
+      factory="schoolbell.relationship.annotatable.getRelationshipLinks"
+      />
+
+</configure>
