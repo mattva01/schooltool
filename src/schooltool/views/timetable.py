@@ -242,11 +242,11 @@ class TimetableSchemaView(TimetableReadView):
 
 
 class BaseTimetableTraverseView(View):
-    """View for obj/timetable and obj/composite-timetable.
+    """Base class for timetable traversal views.
 
-    context is an ITimetabled.
+    context is usually an ITimetabled.
 
-    .../obj/timetable/2003-fall/weekly
+    .../obj/timetables/2003-fall/weekly
          ^      ^      ^         ^
          |      |      |         |
          |      |      |   TimetableReadWriteView(obj, ('2003-fall, 'weekly'))
@@ -255,6 +255,10 @@ class BaseTimetableTraverseView(View):
                 |
               TimetableTraverseView(obj, None)
 
+    Subclasses should provide the following methods:
+     - title
+     - template
+     - _traverse
     """
 
     template = Template("www/timetables.pt", content_type="text/xml")
@@ -277,13 +281,13 @@ class BaseTimetableTraverseView(View):
 
 
 class TimetableTraverseView(BaseTimetableTraverseView):
-    """View for obj/timetable."""
+    """View for obj/timetables."""
 
     def title(self):
         return "Timetables for %s" % getPath(self.context)
 
     def timetables(self):
-        basepath = getPath(self.context) + '/timetable'
+        basepath = getPath(self.context) + '/timetables'
         return [{'schema': schema_id, 'period': period_id,
                  'path': '%s/%s/%s' % (basepath, period_id, schema_id)}
                 for period_id, schema_id in self.context.timetables]
@@ -297,13 +301,13 @@ class TimetableTraverseView(BaseTimetableTraverseView):
 
 
 class CompositeTimetableTraverseView(BaseTimetableTraverseView):
-    """View for obj/composite-timetable."""
+    """View for obj/composite-timetables."""
 
     def title(self):
         return "Composite timetables for %s" % getPath(self.context)
 
     def timetables(self):
-        basepath = getPath(self.context) + '/composite-timetable'
+        basepath = getPath(self.context) + '/composite-timetables'
         return [{'schema': schema_id, 'period': period_id,
                  'path': '%s/%s/%s' % (basepath, period_id, schema_id)}
                 for period_id, schema_id in

@@ -40,13 +40,17 @@ SchoolTool server RESTive interface
   POST /persons/person_id/absences/id
     add a comment to an absence
 
-  GET /persons/person_id/timetable/time_period/schema
+  GET /persons/person_id/timetables
+    shows the list of existing timetables
+  GET /persons/person_id/timetables/time_period/schema
     shows the specific timetable
-  PUT /persons/person_id/timetable/time_period/schema
+  PUT /persons/person_id/timetables/time_period/schema
     creates or replaces the specific timetable
-  DELETE /persons/person_id/timetable/time_period/schema
+  DELETE /persons/person_id/timetables/time_period/schema
     removes the specific timetable
-  GET /persons/person_id/composite-timetable/time_period/schema
+  GET /persons/person_id/composite-timetables
+    shows the list of existing composite timetables
+  GET /persons/person_id/composite-timetables/time_period/schema
     shows the specific composite timetable
 
   GET ...object/facets

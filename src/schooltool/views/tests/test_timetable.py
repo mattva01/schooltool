@@ -79,7 +79,7 @@ class ServiceManagerStub:
 class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
 
     def do_test(self, view_class, tt_view_class, xml=None, html=None,
-                path='/...object'):
+                path='/..object'):
         context = TimetabledStub()
         setPath(context, path, ServiceManagerStub(TimetableStub()))
         tt = context.timetables['2003 fall', 'weekly'] = TimetableStub()
@@ -129,17 +129,17 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             """
             <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
               <timetable period="2003 fall" schema="weekly" xlink:type="simple"
-                         xlink:href="/...object/timetable/2003 fall/weekly" />
+                         xlink:href="/..object/timetables/2003 fall/weekly" />
             </timetables>
             """, """
             <html>
             <head>
-              <title>Timetables for /...object</title>
+              <title>Timetables for /..object</title>
             </head>
             <body>
-              <h1>Timetables for /...object</h1>
+              <h1>Timetables for /..object</h1>
               <ul>
-                <li><a href="/...object/timetable/2003 fall/weekly"
+                <li><a href="/..object/timetables/2003 fall/weekly"
                     >2003 fall, weekly</a></li>
               </ul>
             </body>
@@ -163,23 +163,24 @@ class TestTimetableTraverseViews(XMLCompareMixin, unittest.TestCase):
             CompositeTimetableTraverseView, TimetableReadView,
             """
             <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
-              <timetable period="2003 fall" schema="weekly" xlink:type="simple"
-                xlink:href="/...object/composite-timetable/2003 fall/weekly" />
+              <timetable period="2003 fall" schema="weekly"
+                 xlink:href="/..object/composite-timetables/2003 fall/weekly"
+                 xlink:type="simple" />
               <timetable period="2003 spring" schema="weekly"
-                 xlink:href="/...object/composite-timetable/2003 spring/weekly"
+                 xlink:href="/..object/composite-timetables/2003 spring/weekly"
                  xlink:type="simple" />
             </timetables>
             """, """
             <html>
             <head>
-              <title>Composite timetables for /...object</title>
+              <title>Composite timetables for /..object</title>
             </head>
             <body>
-              <h1>Composite timetables for /...object</h1>
+              <h1>Composite timetables for /..object</h1>
               <ul>
-                <li><a href="/...object/composite-timetable/2003 fall/weekly"
+                <li><a href="/..object/composite-timetables/2003 fall/weekly"
                     >2003 fall, weekly</a></li>
-                <li><a href="/...object/composite-timetable/2003 spring/weekly"
+                <li><a href="/..object/composite-timetables/2003 spring/weekly"
                     >2003 spring, weekly</a></li>
               </ul>
             </body>
@@ -247,10 +248,10 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     empty_html = """
         <html>
         <head>
-          <title>Timetable ...object/timetable/x/y</title>
+          <title>Timetable ...object/timetables/x/y</title>
         </head>
         <body>
-          <h1>Timetable ...object/timetable/x/y</h1>
+          <h1>Timetable ...object/timetables/x/y</h1>
           <table>
             <tr>
               <th colspan="2">Day 1</th>
@@ -297,10 +298,10 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
     full_html = """
         <html>
         <head>
-          <title>Timetable ...object/timetable/x/y</title>
+          <title>Timetable ...object/timetables/x/y</title>
         </head>
         <body>
-          <h1>Timetable ...object/timetable/x/y</h1>
+          <h1>Timetable ...object/timetables/x/y</h1>
           <table>
             <tr>
               <th colspan="2">Day 1</th>
@@ -344,7 +345,7 @@ class TestTimetableReadView(XMLCompareMixin, unittest.TestCase):
         return TimetableReadView(context)
 
     def do_test_get(self, context, expected, ctype="text/xml", accept=()):
-        request = RequestStub('...object/timetable/x/y')
+        request = RequestStub('...object/timetables/x/y')
         request.accept = accept
         result = self.createView(context).render(request)
         self.assertEquals(request.headers['Content-Type'],

@@ -74,8 +74,12 @@ class GroupView(ApplicationObjectTraverserView):
     def _traverse(self, name, request):
         if name == 'rollcall':
             return RollcallView(self.context)
-        if name == 'tree':
+        elif name == 'tree':
             return TreeView(self.context)
+        elif name == 'timetables':
+            return TimetableTraverseView(self.context)
+        elif name == 'composite-timetables':
+            return CompositeTimetableTraverseView(self.context)
         return ApplicationObjectTraverserView._traverse(self, name, request)
 
     def listItems(self):
@@ -235,9 +239,9 @@ class PersonView(ApplicationObjectTraverserView):
     def _traverse(self, name, request):
         if name == 'absences':
             return AbsenceManagementView(self.context)
-        elif name == 'timetable':
+        elif name == 'timetables':
             return TimetableTraverseView(self.context)
-        elif name == 'composite-timetable':
+        elif name == 'composite-timetables':
             return CompositeTimetableTraverseView(self.context)
         return ApplicationObjectTraverserView._traverse(self, name, request)
 
