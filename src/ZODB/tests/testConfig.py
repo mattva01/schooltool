@@ -115,7 +115,8 @@ class ZEOConfigTest(ConfigTestBase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(ZODBConfigTest))
-    suite.addTest(unittest.makeSuite(ZEOConfigTest))
+## disable ZEO tests for SchoolTool
+##  suite.addTest(unittest.makeSuite(ZEOConfigTest))
     return suite
 
 
