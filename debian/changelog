@@ -3,6 +3,8 @@ schooltool (0.6+svn20040825-0.1) unstable; urgency=low
   * Not released.
   * debian/README.Debian: mention the new web frontend.
   * debian/schooltool.conf: added web 7080 and app-log-path.
+  * debian/rules: added schooltool.css to the server package
+  * debian/rules: added csvimport.py to the clients package (Gintas)
 
  -- Marius Gedminas <marius@pov.lt>  Wed, 25 Aug 2004 15:16:16 +0300
 

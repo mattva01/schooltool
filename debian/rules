@@ -34,7 +34,7 @@ install-stamp: build
 	find \( -name tests -o -name ftests -o -name clients \) -prune -o \
 	     \( -name '*.py' -o -name '*.so' -o -name '*.pt' -o \
 	        -name '*.xml' -o -name '*.rng' -o -name '*.png' -o \
-		-name '*.xpm' \) \
+		-name '*.xpm' -o -name '*.css' \) \
 	     -exec install -m 644 -D -p {} \
 		../debian/schooltool-server/usr/lib/schooltool-server/{} \;
 
