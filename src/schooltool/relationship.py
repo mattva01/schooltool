@@ -354,7 +354,6 @@ class RelationshipValenciesMixin(RelatableMixin):
 
     def __init__(self):
         RelatableMixin.__init__(self)
-        self._valencies = PersistentDict()
 
     def _valency2invocation(self, valency):
         schema = valency.schema

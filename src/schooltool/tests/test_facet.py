@@ -111,8 +111,7 @@ class TestFacetedEventTargetMixin(unittest.TestCase):
 
 class DummyRelationshipSchema:
 
-    def __init__(self, title, type, **links_to_return):
-        self.title = title
+    def __init__(self, type, **links_to_return):
         self.type = type
         self.links_to_return = links_to_return
         self.roles = {}
@@ -160,11 +159,10 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         ##verifyObject(IFacetedRelationshipSchemaFactory, f)
 
         verifyClass(IFacetedRelationshipSchema, FacetedRelationshipSchema)
-        schema = DummyRelationshipSchema('foo', URIDummy)
+        schema = DummyRelationshipSchema(URIDummy)
         f = FacetedRelationshipSchema(schema, child=FacetStub)
         verifyObject(IFacetedRelationshipSchema, f)
 
-        self.assertEqual(f.title, schema.title)
         self.assertEqual(f.type, schema.type)
 
         parent = object()
@@ -226,7 +224,7 @@ class TestFacetedRelationshipSchema(unittest.TestCase):
         link = LinkStub(child)
         FacetManager(child).setFacet(facet, owner=link)
         facet.active = False
-        schema = DummyRelationshipSchema('foo', URIDummy, child=link)
+        schema = DummyRelationshipSchema(URIDummy, child=link)
         # We now have contrived a relationship schema that will return a
         # link for the 'child' rolename that is the owner of a facet in
         # child. The facet should remain, desipte making a faceted
