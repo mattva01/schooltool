@@ -416,13 +416,3 @@ class ICalendarOwner(Interface):
 
         All recurrent events are already expanded in the returned calendar.
         """
-    def makeCompositeCalendar(start, end):
-        """Return the composite calendar for this person.
-
-        start, end are dates denoting the period we are interested in.
-
-        Returns a calendar that contains all events from every group
-        that is related to this calendar as URICalendarProvider.
-
-        All recurrent events are already expanded in the returned calendar.
-        """
