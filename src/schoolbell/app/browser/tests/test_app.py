@@ -820,6 +820,22 @@ def doctest_LoginView():
         >>> principal.id
         'sb.person.frog'
 
+    We can specify the URL we want to go to after being authenticated:
+
+        >>> request = TestRequest(form={'username': 'frog',
+        ...                             'password': 'pond',
+        ...                             'nexturl': 'http://host/path',
+        ...                             'LOGIN': 'Log in'})
+        >>> request.setPrincipal(StubPrincipal())
+        >>> view = View(app, request)
+        >>> content = view()
+        >>> view.error
+        >>> request.response.getStatus()
+        302
+        >>> url = zapi.absoluteURL(app, request)
+        >>> request.response.getHeader('Location')
+        'http://host/path'
+
     """
 
 def doctest_LogoutView():

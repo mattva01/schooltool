@@ -53,7 +53,6 @@ SchoolBell authentication utility
     >>> ztapi.provideUtility(ISessionDataContainer, sdc, 'schoolbell.auth')
 
 
-
 SchoolBell is a possible site:
 
     >>> from zope.interface.verify import verifyObject
@@ -159,7 +158,6 @@ to.  This list is used by the Zope Security Policy:
 authenticate
 ------------
 
-
 When no credentials are provided in the session, authenticate returns None:
 
     >>> from zope.publisher.browser import TestRequest
@@ -219,7 +217,7 @@ login page:
     >>> request.response.getStatus()
     302
     >>> request.response.getHeader('Location')
-    'http://127.0.0.1/frogpond/@@login.html'
+    'http://127.0.0.1/frogpond/@@login.html?forbidden=yes&nexturl=http://127.0.0.1'
 
 
 Clean up:
