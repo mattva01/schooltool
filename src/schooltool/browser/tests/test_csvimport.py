@@ -138,7 +138,7 @@ class TestCSVImportView(AppSetupMixin, unittest.TestCase):
                        (None, u'Imported group: year1', INFO),
                        (None, u'CSV data import finished successfully', INFO)])
 
-    def test_POST_groups_wrong_charset(self):
+    def test_POST_groups_invalid_charset(self):
         request = RequestStub(args={'groups.csv':'"year1","\xff","root",""',
                                     'resources.csv': '',
                                     'teachers.csv': '',
@@ -391,7 +391,7 @@ class TestTimetableCSVImportView(AppSetupMixin, unittest.TestCase):
 
         self.assertEquals(view.request.applog, [])
 
-    def test_POST_wrong_charset(self):
+    def test_POST_invalid_charset(self):
         view = self.createView()
         view.request = RequestStub(args={'timetable.csv':'"A","\xff","C","D"',
                                          'roster.txt': '',
@@ -441,7 +441,8 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                 "","A","B","C"
                 "Inside","Math1|Curtin","","Math1|Curtin"
                 """)
-        imp.importTimetable(csv)
+        ok = imp.importTimetable(csv)
+        self.assert_(ok)
         group = imp.findByTitle(self.app['groups'], 'Math1 - Curtin')
         tt = group.timetables['summer', 'three-day']
         self.assert_(list(tt['Monday']['A']))
@@ -466,6 +467,7 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                 "Inside","English3|Lorch","English2|Lorch","English1|Lorch"
                 """)
         imp.importTimetable(csv)
+        self.assert_(not imp.anyErrors())
 
         # A little poking around.  We could be more comprehensive...
         group = imp.findByTitle(self.app['groups'], 'English1 - Lorch')
@@ -479,24 +481,60 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
 
     def test_timetable_invalid(self):
         imp = self.createImporter()
-        imp.importTimetable('"Some"\n"invalid"\n"csv"\n"follows')
-        self.assertEquals(imp.error, "Error in timetable CSV data, line 4")
+        ok = imp.importTimetable('"Some"\n"invalid"\n"csv"\n"follows')
+        self.assertEquals(imp.errors[0],
+                          "Error in timetable CSV data, line 4")
+        self.failIf(ok)
+        self.assert_(imp.anyErrors())
 
-        imp.importTimetable('"too","many","fields"')
-        self.assert_(imp.error.startswith("The first row of"), imp.error)
+        imp = self.createImporter()
+        ok = imp.importTimetable('"too","many","fields"')
+        self.failIf(ok)
+        self.assert_(imp.errors[0].startswith("The first row of"), imp.errors)
 
-        imp.importTimetable('"summer","four-day"')
-        self.assert_(imp.error.startswith("The timetable schema 'four-day'"),
-                     imp.error)
+        imp = self.createImporter()
+        ok = imp.importTimetable('"summer","four-day"')
+        self.failIf(ok)
+        self.assert_(imp.errors[0].startswith("The timetable schema 'four"),
+                     imp.errors)
+
+        csv = dedent("""
+                "summer","three-day"
+                ""
+                "Monday","Bogus","Tuesday","Bogus","Junk"
+                "","A","B","C"
+                """)
+        imp = self.createImporter()
+        ok = imp.importTimetable(csv)
+        self.failIf(ok)
+        self.assertEquals(imp.invalid_day_ids, ["Bogus", "Junk"])
+        self.assert_(imp.anyErrors())
 
         csv = dedent("""
                 "summer","three-day"
                 ""
                 "Monday","Tuesday"
-                "","No","such","period","No","No","No"
+                "","No","A","such","B","period","No","No","No"
                 """)
-        imp.importTimetable(csv)
-        self.assertEquals(imp.wrong_periods, ["No", "such", "period"])
+        imp = self.createImporter()
+        ok = imp.importTimetable(csv)
+        self.failIf(ok)
+        self.assertEquals(imp.invalid_periods, ["No", "such", "period"])
+        self.assert_(imp.anyErrors())
+
+        csv = dedent("""
+                "summer","three-day"
+                ""
+                "Monday","Tuesday"
+                "","A","B","C"
+                "too","few","values"
+                """)
+        imp = self.createImporter()
+        self.failIf(imp.importTimetable(csv))
+        self.assertEquals(imp.errors[0],
+                "The number of cells ['few', 'values'] (line 5)"
+                " does not match the number of periods ['A', 'B', 'C'].")
+
 
     def test_clearTimetables(self):
         from schooltool.timetable import Timetable, TimetableDay
@@ -573,9 +611,10 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
 
         imp.scheduleClass('A', 'Invalid subject', 'Dumb professor',
                           day_ids=['day1', 'day2'], location='Nowhere')
-        self.assertEquals(list(imp.wrong_persons), ['Dumb professor'])
-        self.assertEquals(list(imp.wrong_groups), ['Invalid subject'])
-        self.assertEquals(list(imp.wrong_locations), ['Nowhere'])
+        self.assertEquals(list(imp.invalid_persons), ['Dumb professor'])
+        self.assertEquals(list(imp.invalid_groups), ['Invalid subject'])
+        self.assertEquals(list(imp.invalid_locations), ['Nowhere'])
+        self.assert_(imp.anyErrors())
 
     def test_parseRecordRow(self):
         imp = self.createImporter()
@@ -589,6 +628,12 @@ class TestTimetableCSVImporter(AppSetupMixin, unittest.TestCase):
                  (["Biology|Nut", "", "Chemistry|Nerd"],
                   [("Biology", "Nut"), None, ("Chemistry", "Nerd")])]:
             self.assertEquals(imp.parseRecordRow(row), expected)
+
+        self.assertEquals(imp.parseRecordRow(
+                ["B0rk", "Good | guy", "Wank", "B0rk"]),
+                [None, ("Good", "guy"), None, None])
+        self.assertEquals(imp.invalid_records, ["B0rk", "Wank"])
+        self.assert_(imp.anyErrors())
 
     def assertIsRelated(self, obj, group, expected=True, rel=uris.URIMember):
         from schooltool.component import getRelatedObjects

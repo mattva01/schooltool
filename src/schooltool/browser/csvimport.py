@@ -321,17 +321,19 @@ class TimetableCSVImporter:
         self.app = app
         self.groups = self.app['groups']
         self.persons = self.app['persons']
-        self.wrong_periods = []
-        self.wrong_persons = []
-        self.wrong_groups = []
-        self.wrong_locations = []
-        self.error = None
+        self.invalid_day_ids = []
+        self.invalid_periods = []
+        self.invalid_persons = []
+        self.invalid_groups = []
+        self.invalid_locations = []
+        self.invalid_records = []
+        self.errors = []
 
     def convertRowsToCSV(self, rows, error_format):
         """Convert rows (a list of strings) in CSV format to a list of lists.
 
-        If the data is invalid, self.error will be set to error_format % line,
-        and None will be returned.
+        If the provided data is invalid, self.error will be updated with
+        `error_format % line`, and None will be returned.
         """
         result = []
         reader = csv.reader(rows)
@@ -343,34 +345,36 @@ class TimetableCSVImporter:
         except StopIteration:
             return result
         except csv.Error:
-            self.error = error_format % line
+            self.errors.append(error_format % line)
 
     def importTimetable(self, timetable_csv):
         """Import timetables from CSV data.
 
         Should not throw exceptions, but will set self.*error attributes.
-        If any of these attributes have been set, it means that no changes
-        were applied in the database.
+        Returns True on success.  If False is returned, it means that at least
+        one of self.*error attributes have been set, and no changes to the
+        database have been applied.
         """
         rows = self.convertRowsToCSV(timetable_csv.splitlines(),
                                      _("Error in timetable CSV data, line %d"))
         if rows is None:
-            return
+            return False
 
         if len(rows[0]) != 2:
-            self.error = _("The first row of the CSV file should contain"
-                           " the period id and the schema of the timetable.")
-            return
+            self.errors.append(_("The first row of the CSV file should"
+                                 " contain the period id and the schema"
+                                 " of the timetable."))
+            return False
 
         self.period_id, self.ttschema = rows[0]
         if self.ttschema not in self.app.timetableSchemaService.keys():
-            self.error = _("The timetable schema %r does not exist."
-                           % self.ttschema)
-            return
+            self.errors.append(_("The timetable schema %r does not exist."
+                                 % self.ttschema))
+            return False
 
         for dry_run in [False, True]:
             state = 'day_ids'
-            for row in rows[2:]:
+            for row_no, row in enumerate(rows[2:]):
                 if len(row) == 1 and row[0] == '':
                     state = 'day_ids'
                     continue
@@ -380,11 +384,16 @@ class TimetableCSVImporter:
                     continue
                 elif state == 'periods':
                     periods = row[1:]
-                    self.validatePeriods(periods)
+                    self.validatePeriods(day_ids, periods)
                     state = 'content'
                     continue
 
                 location, records = row[0], self.parseRecordRow(row[1:])
+                if len(records) != len(periods):
+                    self.errors = [_("The number of cells %r (line %d) does"
+                                     " not match the number of periods %r."
+                                     % (row[1:], row_no + 3, periods))]
+                    continue
 
                 for period, record in zip(periods, records):
                     if record is not None:
@@ -393,12 +402,14 @@ class TimetableCSVImporter:
                                            day_ids, location, dry_run=dry_run)
             if self.anyErrors():
                 assert not dry_run, ("Something bad happened,"
-                                     "aborting transaction.")
-                return
+                                     " aborting transaction.")
+                return False
+        return True
 
     def anyErrors(self):
-        return bool(self.error or self.wrong_periods or self.wrong_persons
-                    or self.wrong_groups or self.wrong_locations)
+        return bool(self.errors or self.invalid_day_ids or self.invalid_periods
+                    or self.invalid_persons or self.invalid_groups
+                    or self.invalid_locations or self.invalid_records)
 
     def parseRecordRow(self, records):
         """Parse records and return a list of tuples (subject, teacher).
@@ -406,26 +417,37 @@ class TimetableCSVImporter:
         records is a list of strings.  If a string is empty, the result list
         contains None instead of a tuple in the corresponding place.
 
-        Raises ValueError if an invalid record is encountered.
+        If invalid entries are encountered, self.invalid_records is modified
+        and None is put in place of the malformed record.
         """
         result = []
         for record in records:
-            if record:
+            if record.strip():
                 parts = record.split("|", 1)
                 if len(parts) != 2:
-                    raise ValueError("Invalid record: %r" % record)
+                    if record not in self.invalid_records:
+                        self.invalid_records.append(record)
+                    result.append(None)
+                    continue
                 subject, teacher = parts[0].strip(), parts[1].strip()
                 result.append((subject, teacher))
             else:
                 result.append(None)
         return result
 
-    def validatePeriods(self, periods):
+    def validatePeriods(self, day_ids, periods):
         """Check if all periods are defined in the timetable schema."""
         tt = self.app.timetableSchemaService[self.ttschema]
-        for period in periods:
-            if period not in tt.keys() and period not in self.wrong_periods:
-                self.wrong_periods.append(period)
+        for day_id in day_ids:
+            if day_id not in tt.keys():
+                if day_id not in self.invalid_day_ids:
+                    self.invalid_day_ids.append(day_id)
+            else:
+                valid_periods = tt[day_id].keys()
+                for period in periods:
+                    if (period not in valid_periods
+                        and period not in self.invalid_periods):
+                        self.invalid_periods.append(period)
 
     def findByTitle(self, container, title, error_list=None):
         """Find an object with provided title in a container.
@@ -458,10 +480,10 @@ class TimetableCSVImporter:
         If dry_run is set, no objects are changed.
         """
         errors = False
-        subject = self.findByTitle(self.groups, subject, self.wrong_groups)
-        teacher = self.findByTitle(self.persons, teacher, self.wrong_persons)
+        subject = self.findByTitle(self.groups, subject, self.invalid_groups)
+        teacher = self.findByTitle(self.persons, teacher, self.invalid_persons)
         location = self.findByTitle(self.app['resources'], location,
-                                    self.wrong_locations)
+                                    self.invalid_locations)
         if dry_run or not (subject and teacher and location):
             return # some objects were not found; do not process
 
@@ -491,6 +513,7 @@ class TimetableCSVImporter:
 
     def importRoster(self, roster_txt):
         """Import timetables from provided unicode data."""
+        # TODO: error handling
         group = None
         for line in roster_txt.splitlines():
             line = line.strip()
