@@ -320,6 +320,7 @@ def main(argv):
     if sys.version_info < (2, 3):
         print >> sys.stderr, '%s: need Python 2.3 or later' % argv[0]
         print >> sys.stderr, 'your python is %s' % sys.version
+        return 1
 
     # Finding and importing
     test_files = get_test_files(cfg)
