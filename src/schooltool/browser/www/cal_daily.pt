@@ -31,7 +31,7 @@
               tal:attributes="rowspan python:view.rowspan(ev);
                               class python:view.eventClass(ev)">
              <div class="daycalevent"
-                  tal:content="structure python:view.renderEvent(ev)" />
+                  tal:content="structure python:view.renderEvent(ev, view.cursor)" />
           </td>
         </tal:block>
       </tr>

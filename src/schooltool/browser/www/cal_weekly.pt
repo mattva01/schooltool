@@ -25,7 +25,7 @@
         </h2>
         <div tal:repeat="event day/events"
              tal:attributes="class python:view.eventClass(event)"
-             tal:content="structure python:view.renderEvent(event)"/>
+             tal:content="structure python:view.renderEvent(event, day.date)"/>
       </div>
     </div>
   </metal:block>

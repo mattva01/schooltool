@@ -243,11 +243,11 @@ class CalendarViewBase(View, CalendarBreadcrumbsMixin):
     def _eventView(self, event):
         return CalendarEventView(event, getACL(self.context))
 
-    def renderEvent(self, event):
-        return self._eventView(event).full(self.request)
-
     def eventClass(self, event):
         return self._eventView(event).cssClass()
+
+    def renderEvent(self, event, date):
+        return self._eventView(event).full(self.request, date)
 
     def eventShort(self, event):
         return self._eventView(event).short()
@@ -1035,6 +1035,7 @@ class CalendarEventView(View):
         """
         View.__init__(self, event)
         self.acl = acl
+        self.date = None
 
     def canEdit(self):
         """Can the current user edit this calendar event?
@@ -1047,6 +1048,15 @@ class CalendarEventView(View):
         user = self.request.authenticated_user
         return self.isManager() or self.acl.allows(user, ModifyPermission)
 
+    def cssClass(self):
+        """Choose a CSS class for the event."""
+        if IExceptionalTTCalendarEvent.providedBy(self.context):
+            return 'exc_event'
+        elif ITimetableCalendarEvent.providedBy(self.context):
+            return 'tt_event'
+        else:
+            return 'event'
+
     def duration(self):
         """Format the time span of the event."""
         dtstart = self.context.dtstart
@@ -1058,22 +1068,15 @@ class CalendarEventView(View):
             return "%s&ndash;%s" % (dtstart.strftime('%Y-%m-%d %H:%M'),
                                     dtend.strftime('%Y-%m-%d %H:%M'))
 
-    def cssClass(self):
-        """Choose a CSS class for the event."""
-        if ITimetableCalendarEvent.providedBy(self.context):
-            return 'tt_event'
-        elif IExceptionalTTCalendarEvent.providedBy(self.context):
-            return 'exc_event'
-        else:
-            return 'event'
-
-    def full(self, request):
+    def full(self, request, date):
         """Full representation of the event for daily/weekly views."""
         try:
             self.request = request
+            self.date = date
             return self.do_GET(request)
         finally:
             self.request = None
+            self.date = None
 
     def short(self):
         """Short representation of the event for the monthly view."""
@@ -1088,17 +1091,23 @@ class CalendarEventView(View):
                                          ev.dtstart.strftime('%b&nbsp;%d'),
                                          end.strftime('%b&nbsp;%d'))
 
-    def uniqueId(self):
-        """Format the event ID for inclusion in a URL."""
-        return urllib.quote(self.context.unique_id)
+    def editLink(self):
+        """Return the link for editing this event."""
+        return 'edit_event.html?' + self._params()
 
-    def editId(self):
-        """Format the id of the event to edit when this one is clicked"""
-        if (IExpandedCalendarEvent.providedBy(self.context)
-            and self.context.original):
-            return urllib.quote(self.context.original)
-        else:
-            return self.uniqueId()
+    def deleteLink(self):
+        """Return the link for deleting this event."""
+        return 'delete_event.html?' + self._params()
+
+    def _params(self):
+        """Prepare query arguments for editLink and deleteLink."""
+        event_id = self.context.unique_id
+        # XXX does not work until IExpandedCalendarEvent is refactored
+        #     so that IExpandedCalendarEvent.unique_id is the UID of the
+        #     "generator" event (currently unique_id is random and original
+        #     is the UID of the "generator" event).
+        date = self.date.strftime('%Y-%m-%d')
+        return 'date=%s&event_id=%s' % (date, urllib.quote(event_id))
 
 
 def durationValidator(value):
