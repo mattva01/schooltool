@@ -91,8 +91,11 @@ class TestApplicationObjectTraverserView(RegistriesSetupMixin,
         self.assertRaises(KeyError, self.view._traverse, 'anything', request)
 
 
-class TestApplicationObjectDeleteMixin(RegistriesSetupMixin,
-                                       unittest.TestCase):
+class TestApplicationObjectDeletion(RegistriesSetupMixin, unittest.TestCase):
+    """Test both ApplicationObjectDeleteMixin and delete_app_object.
+
+    The former is a very thin wrapper around the latter.
+    """
 
     def setUp(self):
         from schooltool.app import create_application

@@ -25,6 +25,7 @@ $Id$
 from zope.interface import moduleProvides
 from schooltool.interfaces import IModuleSetup
 from schooltool.interfaces import IGroup, IPerson, IResource
+from schooltool.interfaces import IApplicationObject
 from schooltool.uris import URIMember, URIGroup
 from schooltool.component import registerView
 from schooltool.component import getRelatedObjects
@@ -75,35 +76,8 @@ class ApplicationObjectDeleteMixin:
     """A mixin that implements HTTP DELETE for application objects."""
 
     def do_DELETE(self, request):
-        """Delete self.context from the system.
-
-        Removes self.context from the application object container that it
-        resides in.  Breaks all relationships that self.context participates
-        in.  Unbooks any resources that were booked by self.context.  Adds
-        a note to the application audit log.
-        """
-        # Remove all relationships
-        while self.context.listLinks():
-            # If you have a loop (i.e. self.context is in a relationship with
-            # itself), unlink() will remove two links.  That's why a simple
-            #     for link in self.context.listLinks():
-            #         link.unlink()
-            # won't work.
-            self.context.listLinks()[0].unlink()
-        # Remove calendar events that book resources
-        events_to_remove = [e for e in self.context.calendar
-                            if e.context is not None]
-        for e in events_to_remove:
-            self.context.calendar.removeEvent(e)
-        # Remove all timetables (to unbook resources)
-        self.context.timetables.clear()
-        # Remove the object from its container
-        path = getPath(self.context)
-        container = self.context.__parent__
-        del container[self.context.__name__]
-        # Tell the world what we've done
-        request.appLog(_("Object deleted: %s (%s)") %
-                       (path, self.context.title))
+        """Delete self.context from the system."""
+        delete_app_object(self.context, request.appLog)
         request.setHeader('Content-Type', 'text/plain')
         return _("Object deleted.")
 
@@ -201,6 +175,47 @@ class ResourceView(ApplicationObjectTraverserView,
         if name == 'booking':
             return BookingView(self.context)
         return ApplicationObjectTraverserView._traverse(self, name, request)
+
+
+#
+# Helpers
+#
+
+def delete_app_object(obj, appLog):
+    """Delete an application object from the system.
+
+    Removes `obj` from the application object container that it resides in.
+    Breaks all relationships that `obj` participates in.  Unbooks any
+    resources that were booked by `obj`.  Adds a note to the application
+    audit log.
+
+    `appLog` is a function that logs a message (its only argument) to the
+    application audit log.  Usually it is bound to request.appLog.
+    """
+    assert IApplicationObject.providedBy(obj)
+    assert obj.__parent__ is not None
+    assert callable(appLog)
+
+    # Remove all relationships
+    while obj.listLinks():
+        # If you have a loop (i.e. obj is in a relationship with itself),
+        # unlink() will remove two links.  That's why a simple
+        #     for link in obj.listLinks():
+        #         link.unlink()
+        # won't work.
+        obj.listLinks()[0].unlink()
+    # Remove calendar events that book resources (to unbook resources)
+    events_to_remove = [e for e in obj.calendar if e.context is not None]
+    for e in events_to_remove:
+        obj.calendar.removeEvent(e)
+    # Remove all timetables (to unbook resources)
+    obj.timetables.clear()
+    # Remove the object from its container
+    path = getPath(obj)
+    container = obj.__parent__
+    del container[obj.__name__]
+    # Tell the world what we've done
+    appLog(_("Object deleted: %s (%s)") % (path, obj.title))
 
 
 #
