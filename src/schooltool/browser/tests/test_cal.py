@@ -206,7 +206,9 @@ class TestMonthlyCalendarView(NiceDiffsMixin, unittest.TestCase):
         from schooltool.model import Person
 
         cal = Calendar()
-        cal.__parent__ = Person(title="Da Boss")
+        person = Person(title="Da Boss")
+        setPath(person, '/persons/boss')
+        cal.__parent__ = person
         cal.addEvent(CalendarEvent(datetime(2004, 8, 11, 12, 0),
                                    timedelta(hours=1),
                                    "Stuff happens"))
