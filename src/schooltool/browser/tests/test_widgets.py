@@ -78,6 +78,12 @@ class TestWidget(unittest.TestCase):
         self.assertEquals(widget.value, u'\u263B')
         self.assertEquals(widget.error, None)
 
+        widget.update(RequestStub(args={'field': '\xff'}))
+        self.assertEquals(widget.raw_value, u'\u263B')
+        self.assertEquals(widget.value, u'\u263B')
+        self.assertEquals(widget.error, "Invalid UTF-8 data.")
+
+
     def test_setRawValue(self):
         from schooltool.browser.widgets import Widget
         widget = Widget('field', 'Field Label')

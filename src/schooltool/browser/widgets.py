@@ -296,9 +296,13 @@ class Widget:
                                   % self.__class__.__name__)
 
     def update(self, request):
-        raw_value = self.getRawValue(request)
-        if raw_value is not None:
-            self.setRawValue(raw_value)
+        try:
+            raw_value = self.getRawValue(request)
+        except UnicodeError:
+            self.error = _("Invalid UTF-8 data.")
+        else:
+            if raw_value is not None:
+                self.setRawValue(raw_value)
 
     def getRawValue(self, request):
         if self.name in request.args:
