@@ -94,6 +94,19 @@ def doctest_CalendarOverlayView():
         ...
         </div>
 
+    It also redirects you to request.URL:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('Location')
+        'http://127.0.0.1'
+
+    There are two reasons for the redirect: first, part of the page template
+    just rendered might have become invalid when calendar overlay selection
+    changed, second, this lets the user refresh the page without having to
+    experience confirmations dialogs that say "Do you want to POST this form
+    again?".
+
     If the request has 'OVERLAY_MORE', CalendarOverlayView redirects to
     calendar_selection.html
 

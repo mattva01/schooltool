@@ -128,6 +128,8 @@ class CalendarOverlayView(BrowserView):
             selected = Set(self.request.get('overlay', []))
             for item in person.overlaid_calendars:
                 item.show = getPath(item.calendar.__parent__) in selected
+            url = str(self.request.URL)
+            self.request.response.redirect(url)
 
 
 class CalendarSelectionView(BrowserView):
