@@ -115,7 +115,7 @@
       for="schoolbell.app.interfaces.IGroupMember"
       class="schoolbell.app.browser.app.GroupListView"
       template="templates/groups.pt"
-      permission="zope.View"
+      permission="schoolbell.manageMembership"
       menu="schoolbell_actions"
       title="Change membership"
       />
@@ -217,7 +217,7 @@
       for="schoolbell.app.interfaces.IGroup"
       class="schoolbell.app.browser.app.MemberViewPersons"
       template="templates/members.pt"
-      permission="schoolbell.edit"
+      permission="schoolbell.manageMembership"
       menu="schoolbell_actions"
       title="Add/remove members"
       />
@@ -227,7 +227,7 @@
       for="schoolbell.app.interfaces.IGroup"
       class="schoolbell.app.browser.app.MemberViewResources"
       template="templates/members.pt"
-      permission="schoolbell.edit"
+      permission="schoolbell.manageMembership"
       menu="schoolbell_actions"
       title="Add/remove resources"
       />
@@ -322,7 +322,7 @@
       menu="schoolbell_actions"
       title="View calendar"
       for="schoolbell.app.interfaces.ICalendarOwner"
-      permission="zope.Public"
+      permission="schoolbell.viewCalendar"
       action="calendar"
       />
 
@@ -331,7 +331,7 @@
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.PlainCalendarView"
       template="templates/cal_plain.pt"
-      permission="schoolbell.view"
+      permission="schoolbell.viewCalendar"
       menu="zmi_views"
       title="Calendar (plain)"
       />
@@ -341,7 +341,7 @@
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.DailyCalendarView"
       template="templates/cal_daily.pt"
-      permission="schoolbell.view"
+      permission="schoolbell.viewCalendar"
       menu="zmi_views"
       title="Calendar (daily)"
       />
@@ -351,7 +351,7 @@
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.WeeklyCalendarView"
       template="templates/cal_weekly.pt"
-      permission="schoolbell.view"
+      permission="schoolbell.viewCalendar"
       menu="zmi_views"
       title="Calendar (weekly)"
       />
@@ -361,7 +361,7 @@
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.MonthlyCalendarView"
       template="templates/cal_monthly.pt"
-      permission="schoolbell.view"
+      permission="schoolbell.viewCalendar"
       menu="zmi_views"
       title="Calendar (monthly)"
       />
@@ -371,7 +371,7 @@
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.YearlyCalendarView"
       template="templates/cal_yearly.pt"
-      permission="schoolbell.view"
+      permission="schoolbell.viewCalendar"
       menu="zmi_views"
       title="Calendar (yearly)"
       />
@@ -379,7 +379,7 @@
   <page
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       name="calendar.ics"
-      permission="schoolbell.view"
+      permission="schoolbell.viewCalendar"
       class="schoolbell.calendar.browser.CalendarICalendarView"
       attribute="show"
       menu="zmi_views"
@@ -389,7 +389,7 @@
   <menuItem
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       menu="schoolbell_actions" title="New event"
-      action="add.html" permission="schoolbell.view" />
+      action="add.html" permission="schoolbell.addEvent" />
 
   <page
       name="delete.html"
@@ -402,14 +402,14 @@
   <menuItem
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       menu="schoolbell_actions" title="Open in iCal"
-      action="../calendar.ics" permission="schoolbell.view" />
+      action="../calendar.ics" permission="schoolbell.viewCalendar" />
 
   <page
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       name="calendar_overlay"
       layer=".skin.ISchoolBellLayer"
       class=".overlay.CalendarOverlayView"
-      permission="schoolbell.view"
+      permission="schoolbell.viewCalendar"
       />
 
   <page
@@ -433,7 +433,7 @@
                          recurrence location recurrence_type interval
                          range until count monthly exceptions weekdays"
       content_factory="schoolbell.app.cal.CalendarEvent"
-      permission="zope.ManageContent"
+      permission="schoolbell.addEvent"
       template="templates/event_add.pt"
       class=".cal.CalendarEventAddView">
 

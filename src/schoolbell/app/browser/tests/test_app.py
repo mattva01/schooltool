@@ -970,9 +970,11 @@ def doctest_ACLView():
         [('schoolbell.view', u'View'),
          ('schoolbell.edit', u'Edit'),
          ('schoolbell.create', u'Create new objects'),
+         ('schoolbell.viewCalendar', u'View calendar'),
          ('schoolbell.addEvent', u'Add events'),
          ('schoolbell.modifyEvent', u'Modify/delete events'),
-         ('schoolbell.controlAccess', u'Control access')]
+         ('schoolbell.controlAccess', u'Control access'),
+         ('schoolbell.manageMembership', u'Manage membership')]
 
     The view displays a matrix with groups and persons as rows and
     permisssions as columns:
@@ -983,8 +985,7 @@ def doctest_ACLView():
                   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
         <html>
         ...
-        <form method="POST" class="standalone"
-              action="http://127.0.0.1">
+        <form method="POST" action="http://127.0.0.1">
           <h3>
               Access control
           </h3>
@@ -997,9 +998,11 @@ def doctest_ACLView():
                  <th class="permission">View</th>
                  <th class="permission">Edit</th>
                  <th class="permission">Create new objects</th>
+                 <th class="permission">View calendar</th>
                  <th class="permission">Add events</th>
                  <th class="permission">Modify/delete events</th>
                  <th class="permission">Control access</th>
+                 <th class="permission">Manage membership</th>
               </tr>
         ...
               <tr class="even">
@@ -1018,6 +1021,10 @@ def doctest_ACLView():
                  </td>
                  <td class="permission">
                     <input type="checkbox" name="sb.group.3"
+                           value="schoolbell.viewCalendar" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.group.3"
                            value="schoolbell.addEvent" />
                  </td>
                  <td class="permission">
@@ -1027,6 +1034,10 @@ def doctest_ACLView():
                  <td class="permission">
                     <input type="checkbox" name="sb.group.3"
                            value="schoolbell.controlAccess" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.group.3"
+                           value="schoolbell.manageMembership" />
                  </td>
               </tr>
         ...
@@ -1046,6 +1057,10 @@ def doctest_ACLView():
                  </td>
                  <td class="permission">
                     <input type="checkbox" name="sb.person.albert"
+                           value="schoolbell.viewCalendar" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.person.albert"
                            value="schoolbell.addEvent" />
                  </td>
                  <td class="permission">
@@ -1055,6 +1070,10 @@ def doctest_ACLView():
                  <td class="permission">
                     <input type="checkbox" name="sb.person.albert"
                            value="schoolbell.controlAccess" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.person.albert"
+                           value="schoolbell.manageMembership" />
                  </td>
               </tr>
         ...
@@ -1126,6 +1145,10 @@ def doctest_ACLView():
                  </td>
                  <td class="permission">
                     <input type="checkbox" name="sb.group.3"
+                           value="schoolbell.viewCalendar" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.group.3"
                            value="schoolbell.addEvent" />
                  </td>
                  <td class="permission">
@@ -1135,6 +1158,10 @@ def doctest_ACLView():
                  <td class="permission">
                     <input type="checkbox" name="sb.group.3"
                            value="schoolbell.controlAccess" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.group.3"
+                           value="schoolbell.manageMembership" />
                  </td>
               </tr>
         ...
@@ -1156,6 +1183,10 @@ def doctest_ACLView():
                  </td>
                  <td class="permission">
                     <input type="checkbox" name="sb.person.albert"
+                           value="schoolbell.viewCalendar" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.person.albert"
                            value="schoolbell.addEvent" />
                  </td>
                  <td class="permission">
@@ -1165,6 +1196,10 @@ def doctest_ACLView():
                  <td class="permission">
                     <input type="checkbox" name="sb.person.albert"
                            value="schoolbell.controlAccess" />
+                 </td>
+                 <td class="permission">
+                    <input type="checkbox" name="sb.person.albert"
+                           value="schoolbell.manageMembership" />
                  </td>
               </tr>
         ...

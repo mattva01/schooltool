@@ -117,7 +117,8 @@ def doctest_personPermissionsSubscriber():
          ('schoolbell.controlAccess', PermissionSetting: Allow),
          ('schoolbell.edit', PermissionSetting: Allow),
          ('schoolbell.modifyEvent', PermissionSetting: Allow),
-         ('schoolbell.view', PermissionSetting: Allow)]
+         ('schoolbell.view', PermissionSetting: Allow),
+         ('schoolbell.viewCalendar', PermissionSetting: Allow)]
 
     Check that no permissions are set if the object added is not a person:
 
@@ -156,8 +157,11 @@ def doctest_personPermissionsSubscriber():
         >>> from zope.app.securitypolicy.interfaces import \
         ...     IPrincipalPermissionManager
         >>> map = IPrincipalPermissionManager(group)
-        >>> map.getPermissionsForPrincipal('sb.group.slackers')
-        [('schoolbell.view', PermissionSetting: Allow)]
+        >>> perms = map.getPermissionsForPrincipal('sb.group.slackers')
+        >>> perms.sort()
+        >>> pprint(perms)
+        [('schoolbell.view', PermissionSetting: Allow),
+         ('schoolbell.viewCalendar', PermissionSetting: Allow)]
 
     Check that no permissions are set if the object added is not a group:
 

@@ -197,6 +197,8 @@ def personPermissionsSubscriber(event):
             map.grantPermissionToPrincipal('schoolbell.addEvent', principalid)
             map.grantPermissionToPrincipal('schoolbell.modifyEvent',
                                            principalid)
+            map.grantPermissionToPrincipal('schoolbell.viewCalendar',
+                                           principalid)
             map.grantPermissionToPrincipal('schoolbell.controlAccess',
                                            principalid)
 
@@ -208,3 +210,5 @@ def groupPermissionsSubscriber(event):
             map = IPrincipalPermissionManager(event.object)
             principalid = 'sb.group.' + event.object.__name__
             map.grantPermissionToPrincipal('schoolbell.view', principalid)
+            map.grantPermissionToPrincipal('schoolbell.viewCalendar',
+                                           principalid)

@@ -460,9 +460,11 @@ class ACLView(BrowserView):
         ('schoolbell.view', _('View')),
         ('schoolbell.edit', _('Edit')),
         ('schoolbell.create', _('Create new objects')),
+        ('schoolbell.viewCalendar', _('View calendar')),
         ('schoolbell.addEvent', _('Add events')),
         ('schoolbell.modifyEvent', _('Modify/delete events')),
         ('schoolbell.controlAccess', _('Control access')),
+        ('schoolbell.manageMembership', _('Manage membership')),
         ]
 
     def persons(self):

@@ -10,10 +10,12 @@
 
   <permission id="schoolbell.view" title="View" />
   <permission id="schoolbell.edit" title="Edit Info" />
+  <permission id="schoolbell.viewCalendar"  title="View calendar" />
   <permission id="schoolbell.addEvent"  title="Add Event" />
   <permission id="schoolbell.modifyEvent"  title="Modify Event" />
   <permission id="schoolbell.controlAccess"  title="Set up access" />
   <permission id="schoolbell.create"  title="Create new objects" />
+  <permission id="schoolbell.manageMembership"  title="Manage membership" />
 
 <!-- Core content objects -->
 
@@ -86,7 +88,7 @@
   </content>
 
   <content class=".app.Calendar">
-    <require permission="schoolbell.view"
+    <require permission="schoolbell.viewCalendar"
              interface="schoolbell.calendar.interfaces.ICalendar" />
     <require permission="schoolbell.addEvent"
              attributes="addEvent" />
@@ -95,7 +97,7 @@
   </content>
 
   <content class=".cal.CalendarEvent">
-    <require permission="schoolbell.view"
+    <require permission="schoolbell.viewCalendar"
              interface="schoolbell.calendar.interfaces.ICalendarEvent" />
 
     <!-- XXX Temporary hack to make the delete view work. -->
