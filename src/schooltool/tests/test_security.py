@@ -40,8 +40,7 @@ class TestSecurity(AppSetupMixin, unittest.TestCase):
 
     def test_canBook(self):
         from schooltool.security import SecurityPolicy
-        from schooltool.interfaces import AddPermission, ModifyPermission
-        from schooltool.interfaces import ViewPermission
+        from schooltool.interfaces import AddPermission
 
         # The manager can book anything
         policy =  SecurityPolicy(self.manager)
@@ -65,8 +64,7 @@ class TestSecurity(AppSetupMixin, unittest.TestCase):
 
     def test_canModifyBooking(self):
         from schooltool.security import SecurityPolicy
-        from schooltool.interfaces import AddPermission, ModifyPermission
-        from schooltool.interfaces import ViewPermission
+        from schooltool.interfaces import ModifyPermission
 
         # The manager can modify anything
         policy =  SecurityPolicy(self.manager)

@@ -23,7 +23,6 @@ $Id$
 """
 
 import unittest
-from zope.interface import implements
 from schooltool.rest.tests import RequestStub
 from schooltool.tests.utils import RegistriesSetupMixin
 

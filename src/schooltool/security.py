@@ -31,8 +31,8 @@ from zope.interface import Interface, implements
 from schooltool.component import getRelatedObjects, getPath
 from schooltool.uris import URIGroup
 from schooltool.interfaces import ILocation, IApplicationObject
-from schooltool.interfaces import ViewPermission, ModifyPermission
-from schooltool.interfaces import AddPermission, IACLOwner
+from schooltool.interfaces import ModifyPermission
+from schooltool.interfaces import AddPermission
 
 
 __metaclass__ = type

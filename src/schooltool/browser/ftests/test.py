@@ -23,7 +23,6 @@ Functional tests for SchoolTool web application
 import unittest
 import urllib
 
-from schooltool.common import dedent
 from schooltool.ftests import setup
 
 

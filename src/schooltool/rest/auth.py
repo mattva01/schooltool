@@ -34,9 +34,6 @@ Example:
 $Id: __init__.py 525 2004-01-02 20:21:50Z alga $
 """
 
-from schooltool.component import getRelatedObjects, getPath
-from schooltool.uris import URIGroup
-from schooltool.interfaces import ILocation, IApplicationObject
 from schooltool.interfaces import ViewPermission, ModifyPermission
 from schooltool.interfaces import AddPermission, IACLOwner
 from schooltool.security import isManager, isTeacher, getOwner
