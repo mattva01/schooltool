@@ -23,7 +23,6 @@ $Id: test_views.py 397 2003-11-21 11:38:01Z mg $
 """
 
 import unittest
-from logging import INFO
 from schooltool.tests.utils import RegistriesSetupMixin
 from schooltool.tests.utils import XMLCompareMixin, EqualsSortedMixin
 from schooltool.tests.utils import QuietLibxml2Mixin
