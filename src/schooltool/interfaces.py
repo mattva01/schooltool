@@ -47,6 +47,16 @@ class ILocation(Interface):
         """)
 
 
+class IFaceted(Interface):
+    """Denotes that the object has facets.
+
+    A facet is a persistent adapter which implements some additional
+    functionality implied by marker interfaces an object has on it.
+    """
+
+    __facets__ = Attribute("""A dictionary of facets.""")
+
+
 class IGroupRead(Interface):
     """A set of group members.
 
@@ -85,7 +95,7 @@ class IGroupWrite(Interface):
         """
 
 
-class IGroup(IGroupWrite, IGroupRead):
+class IGroup(IGroupWrite, IGroupRead, IFaceted):
     __doc__ = IGroupRead.__doc__
 
 class IContainmentRoot(Interface):
@@ -115,12 +125,17 @@ class IGroupMember(ILocation):
         """Notifies the member that it's removed from a group."""
 
 
-class IPerson(IGroupMember):
+class IPerson(IGroupMember, IFaceted):
 
     name = Attribute("Person's name")
+
 
 class ITeacher(Interface):
     """A marker interface for teachers."""
 
 class IStudent(Interface):
     """A marker interface for students."""
+
+
+class ComponentLookupError(Exception):
+    """An exception for component architecture."""

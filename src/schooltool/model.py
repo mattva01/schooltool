@@ -26,9 +26,10 @@ from sets import Set
 import logging
 from zope.interface import implements, directlyProvidedBy, directlyProvides
 from schooltool.interfaces import IPerson, IGroup, IGroupMember, IRootGroup
-from schooltool.interfaces import IMarkingGroup
+from schooltool.interfaces import IMarkingGroup, IFaceted
 from persistence import Persistent
 from persistence.list import PersistentList
+from persistence.dict import PersistentDict
 from zodb.btrees.OOBTree import OOSet
 from zodb.btrees.IOBTree import IOBTree
 
@@ -68,24 +69,37 @@ class GroupMember:
             self.__parent__ = None
             self.__name__ = None
 
-class Person(Persistent, GroupMember):
+
+class FacetedMixin:
+
+    implements(IFaceted)
+
+    def __init__(self):
+        self.__facets__ = PersistentDict()
+
+
+class Person(Persistent, GroupMember, FacetedMixin):
 
     implements(IPerson)
 
     def __init__(self, name):
+        Persistent.__init__(self)
+        GroupMember.__init__(self)
+        FacetedMixin.__init__(self)
         self.name = name
-        super(Person, self).__init__()
 
 
-class Group(Persistent, GroupMember):
+class Group(Persistent, GroupMember, FacetedMixin):
 
     implements(IGroup, IGroupMember)
 
     def __init__(self, name):
+        Persistent.__init__(self)
+        GroupMember.__init__(self)
+        FacetedMixin.__init__(self)
         self._next_key = 0
         self._members = IOBTree()
         self.name = name
-        super(Group, self).__init__()
 
     def keys(self):
         """See IGroup"""

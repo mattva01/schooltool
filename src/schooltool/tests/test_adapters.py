@@ -54,7 +54,7 @@ class TestGetAdapter(unittest.TestCase):
 
     def test_getAdapter(self):
         from schooltool.adapters import getAdapter, provideAdapter
-        from schooltool.adapters import ComponentLookupError
+        from schooltool.interfaces import ComponentLookupError
         provideAdapter(I1, C1)
         self.assertEqual(getAdapter(object(), I1).foo(), "foo")
         self.assertRaises(ComponentLookupError, getAdapter, object(), I2)
@@ -87,10 +87,51 @@ class TestCanonicalPath(unittest.TestCase):
         c = Stub(b, 'bar')
         self.assertEqual(getPath(c), '/foo/bar')
 
+class TestFacetFunctions(unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.interfaces import IFaceted
+        class Stub:
+            implements(IFaceted)
+            __facets__ = {}
+
+        self.ob = Stub()
+        self.marker = object()
+        self.facet = object()
+
+    def test_setFacet(self):
+        from schooltool.adapters import setFacet
+        setFacet(self.ob, self.marker, self.facet)
+        self.assert_(self.ob.__facets__[self.marker] is self.facet)
+        self.assertRaises(TypeError,
+                          setFacet, object(), self.marker, self.facet)
+
+    def test_getFacet(self):
+        from schooltool.adapters import getFacet
+        self.ob.__facets__[self.marker] = self.facet
+        result = getFacet(self.ob, self.marker)
+        self.assertEqual(result, self.facet)
+        self.assertRaises(KeyError, getFacet, self.ob, object())
+        self.assertRaises(TypeError, getFacet, object(), self.marker)
+
+    def test_queryFacet(self):
+        from schooltool.adapters import queryFacet
+        self.ob.__facets__[self.marker] = self.facet
+        result = queryFacet(self.ob, self.marker)
+        self.assertEqual(result, self.facet)
+        result = queryFacet(self.ob, object())
+        self.assertEqual(result, None)
+        cookie = object()
+        result = queryFacet(self.ob, object(), cookie)
+        self.assertEqual(result, cookie)
+        self.assertRaises(TypeError, queryFacet, object(), self.marker)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestGetAdapter))
     suite.addTest(unittest.makeSuite(TestCanonicalPath))
+    suite.addTest(unittest.makeSuite(TestFacetFunctions))
     return suite
 
 if __name__ == '__main__':

@@ -21,7 +21,8 @@ The schooltool adapters.
 
 $Id$
 """
-from schooltool.interfaces import ILocation, IContainmentRoot
+from schooltool.interfaces import ILocation, IContainmentRoot, IFaceted
+from schooltool.interfaces import ComponentLookupError
 
 adapterRegistry = {}
 
@@ -44,9 +45,6 @@ def getAdapter(object, interface):
                                    % (object, interface))
     return factory(object)
 
-class ComponentLookupError(Exception):
-    """An exception for component architecture."""
-
 def getPath(obj):
     """Returns the path of an object implementing ILocation"""
 
@@ -64,3 +62,25 @@ def getPath(obj):
             cur = cur.__parent__
         else:
             raise TypeError("Cannot determine path for %s" % obj)
+
+
+def setFacet(ob, key, facet):
+    """Set a facet marked with a key on a faceted object."""
+    if not IFaceted.isImplementedBy(ob):
+        raise TypeError("%r does not implement IFaceted" % ob)
+    ob.__facets__[key] = facet
+
+def getFacet(ob, key):
+    """Get a facet of an object"""
+    if not IFaceted.isImplementedBy(ob):
+        raise TypeError("%r does not implement IFaceted" % ob)
+    return ob.__facets__[key]
+
+def queryFacet(ob, key, default=None):
+    """Get a facet of an object, return the default value if there is
+    none.
+    """
+    try:
+        return getFacet(ob, key)
+    except KeyError:
+        return default

@@ -197,7 +197,7 @@ class TestGroupView(unittest.TestCase):
 
     def test_traverse(self):
         from schooltool.views import GroupView, PersonView
-        from schooltool.adapters import ComponentLookupError
+        from schooltool.interfaces import ComponentLookupError
 
         subview = self.view._traverse(str(self.subkey), RequestStub())
         self.assertEqual(subview.__class__, GroupView)

@@ -199,6 +199,14 @@ class TestMarkingGroup(unittest.TestCase):
         self.failIf(ITeacher.isImplementedBy(a))
         self.assert_(ITeacher.isImplementedBy(b))
 
+class TestFacetedMixin(unittest.TestCase):
+
+    def test(self):
+        from schooltool.model import FacetedMixin
+        from schooltool.interfaces import IFaceted
+        m = FacetedMixin()
+        verifyObject(IFaceted, m)
+
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -208,6 +216,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestGroupMember))
     suite.addTest(unittest.makeSuite(TestMarkingGroup))
     suite.addTest(unittest.makeSuite(TestPersistentListSet))
+    suite.addTest(unittest.makeSuite(TestFacetedMixin))
     return suite
 
 if __name__ == '__main__':
