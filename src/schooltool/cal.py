@@ -726,7 +726,7 @@ class ICalReader:
         >>> ICalReader._parseRow('foo:bar')
         ('FOO', 'bar', {})
         >>> ICalReader._parseRow('foo;value=bar:BAZFOO')
-        ('FOO', 'BAZFOO', '{'VALUE': 'BAR'})
+        ('FOO', 'BAZFOO', {'VALUE': 'BAR'})
         """
 
         it = iter(record_str)

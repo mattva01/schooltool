@@ -267,7 +267,7 @@ class TimetableSchemaWizard(View, TabindexMixin):
         try:
             return int(raw_value)
         except ValueError:
-            raise ValueError(_("Invalid duration"))
+            raise ValueError(_("Invalid duration."))
     duration_parser = staticmethod(duration_parser)
 
     def duration_validator(value):
