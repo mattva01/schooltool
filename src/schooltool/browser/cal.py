@@ -42,6 +42,8 @@ from schooltool.icalendar import Period
 from schooltool.common import to_unicode, parse_date
 from schooltool.component import traverse, getPath, getRelatedObjects, traverse
 from schooltool.component import getOptions
+from schooltool.component import getTimePeriodService
+from schooltool.component import getTimetableSchemaService
 from schooltool.interfaces import IResource, ICalendar, ICalendarEvent
 from schooltool.interfaces import IExpandedCalendarEvent
 from schooltool.interfaces import ITimetableCalendarEvent
@@ -466,14 +468,80 @@ class DailyCalendarView(CalendarViewBase):
                 if self.endhour == 0:
                     self.endhour = 24
 
+    def getPeriodsForDay(self, date):
+        """Returns a list of timetable periods defined for today.
+
+        Empty list is returned when it is impossible to get timetable
+        data for today.
+        """
+
+        schooldays = ttschema = None
+        day_periods = []
+        if self.request.getCookie('cal_periods'):
+            # Get a period self.cursor is in and a default timetable schema
+            periodservice = getTimePeriodService(self.context)
+            for periodid in periodservice.keys():
+                if self.cursor in periodservice[periodid]:
+                    schooldays = periodservice[periodid]
+                    break
+            ttservice = getTimetableSchemaService(self.context)
+            if ttservice.default_id is not None:
+                ttschema = ttservice.getDefault()
+            if schooldays is not None and ttschema is not None:
+                day_periods = ttschema.model.periodsInDay(
+                    schooldays, ttschema, date)
+        return day_periods
+
     def calendarRows(self):
         """Iterates over (title, start, duration) of time slots that make up
         the daily calendar.
         """
-        for hour in range(self.starthour, self.endhour):
-            start = datetime.combine(self.cursor, time(hour, 0))
-            duration = timedelta(hours=1)
-            yield ("%d:00" % start.hour, start, duration)
+        periods = self.getPeriodsForDay(self.cursor)
+        today = datetime.combine(self.cursor, time())
+        row_ends = [today + timedelta(hours=hour + 1)
+                    for hour in range(self.starthour, self.endhour)]
+
+        # Put starts and ends of periods into row_ends
+        for period in periods:
+            pstart = datetime.combine(self.cursor, period.tstart)
+            pend = pstart + period.duration
+            for point in row_ends:
+                if pstart < point < pend:
+                    row_ends.remove(point)
+                if pstart not in row_ends:
+                    row_ends.append(pstart)
+                if pend not in row_ends:
+                    row_ends.append(pend)
+
+        if periods:
+            row_ends.sort()
+
+        def periodIsOverlapping(dt):
+            if not periods:
+                return False
+            pstart = datetime.combine(self.cursor, periods[0].tstart)
+            pend = pstart + periods[0].duration
+            if pstart <= dt < pend:
+                return True
+
+        period = None
+        start = today + timedelta(hours=self.starthour)
+        for end in row_ends:
+            if period:
+                pstart = datetime.combine(self.cursor, period.tstart)
+                pend = pstart + period.duration
+                if end == pend:
+                    continue
+                else:
+                    yield (period.title, start, period.duration)
+                    start = pend
+                    period = None
+            if periodIsOverlapping(end):
+                period = periods.pop(0)
+                end = datetime.combine(self.cursor, period.tstart)
+            duration =  end - start
+            yield ('%d:%02d' % (start.hour, start.minute), start, duration)
+            start = end
 
     def getHours(self):
         """Return an iterator over the rows of the table.

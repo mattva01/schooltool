@@ -25,7 +25,7 @@ $Id$
 import urllib
 import unittest
 from logging import INFO
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta, time
 from pprint import pformat
 
 from zope.testing.doctestunit import DocTestSuite
@@ -788,6 +788,7 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         view.starthour = 10
         view.endhour = 18
         view.cursor = date(2004, 8, 12)
+        view.request = RequestStub()
 
         self.assertEquals(view.rowspan(
                             createEvent('2004-08-12 12:00', '1d', "Long")), 6)
@@ -846,6 +847,79 @@ class TestDailyCalendarView(AppSetupMixin, NiceDiffsMixin, unittest.TestCase):
         self.assert_("Da Boss" in content)
         self.assert_("Stuff happens" in content)
 
+
+class TestDailyCalendarViewPeriods(AppSetupMixin, NiceDiffsMixin,
+                                   unittest.TestCase):
+
+    def createSchema(self, days, *periods_for_each_day):
+        """Create a timetable schema.
+        """
+
+        from schooltool.timetable import Timetable
+        from schooltool.timetable import TimetableDay
+        from schooltool.timetable import SequentialDaysTimetableModel
+        schema = Timetable(days)
+        for day, periods in zip(days, periods_for_each_day):
+            schema[day] = TimetableDay(list(periods))
+        return schema
+
+    def setUp(self):
+        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+        from schooltool.timetable import SequentialDaysTimetableModel
+        from schooltool.cal import SchooldayModel
+        from schooltool.component import getTimetableSchemaService
+        from schooltool.component import getTimePeriodService
+
+        AppSetupMixin.setUp(self)
+        days = ['A', 'B', 'C']
+        schema = self.createSchema(days,
+                                   ['1', '2', '3',],
+                                   ['1', '2', '3',],
+                                   ['1', '2', '3',])
+        template = SchooldayTemplate()
+        template.add(SchooldayPeriod('1', time(9, 0), timedelta(hours=1)))
+        template.add(SchooldayPeriod('2', time(10, 15), timedelta(hours=1)))
+        template.add(SchooldayPeriod('3', time(11, 30), timedelta(hours=1)))
+        schema.model = SequentialDaysTimetableModel(days, {None: template})
+
+        getTimetableSchemaService(self.app)['default'] = schema
+        calendar = SchooldayModel(date(2004, 11, 4), date(2004, 11, 10))
+        calendar.addWeekdays(0, 1, 2, 3, 4)
+        getTimePeriodService(self.app)['now'] = calendar
+
+        calendar = SchooldayModel(date(2005, 11, 4), date(2005, 11, 10))
+        calendar.addWeekdays(0, 1, 2, 3, 4)
+        getTimePeriodService(self.app)['nextyear'] = calendar
+
+    def test_calendarRows(self):
+        from schooltool.browser.cal import DailyCalendarView
+        from schooltool.common import parse_datetime
+
+        view = DailyCalendarView(self.person.calendar)
+        view.request = RequestStub(cookies={'cal_periods': 'yes'})
+        view.cursor = date(2004, 11, 5)
+
+        result = list(view.calendarRows())
+
+        def dt(timestr):
+            return parse_datetime('2004-11-05 %s:00' % timestr)
+
+        self.assertEquals(
+            result,
+            [("8:00", dt('08:00'), timedelta(hours=1)),
+             ("1", dt('09:00'), timedelta(hours=1)),
+             ("10:00", dt('10:00'), timedelta(minutes=15)),
+             ("2", dt('10:15'), timedelta(hours=1)),
+             ("11:15", dt('11:15'), timedelta(minutes=15)),
+             ("3", dt('11:30'), timedelta(hours=1)),
+             ("12:30", dt('12:30'), timedelta(minutes=30)),
+             ("13:00", dt('13:00'), timedelta(hours=1)),
+             ("14:00", dt('14:00'), timedelta(hours=1)),
+             ("15:00", dt('15:00'), timedelta(hours=1)),
+             ("16:00", dt('16:00'), timedelta(hours=1)),
+             ("17:00", dt('17:00'), timedelta(hours=1)),
+             ("18:00", dt('18:00'), timedelta(hours=1)),
+             ])
 
 class TestMonthlyCalendarView(AppSetupMixin, unittest.TestCase):
 
@@ -2565,6 +2639,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestCalendarViewBase))
     suite.addTest(unittest.makeSuite(TestWeeklyCalendarView))
     suite.addTest(unittest.makeSuite(TestDailyCalendarView))
+    suite.addTest(unittest.makeSuite(TestDailyCalendarViewPeriods))
     suite.addTest(unittest.makeSuite(TestMonthlyCalendarView))
     suite.addTest(unittest.makeSuite(TestYearlyCalendarView))
     suite.addTest(unittest.makeSuite(TestCalendarView))
