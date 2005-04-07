@@ -287,6 +287,7 @@ class PersonContainerView(GenericContainerView):
 
     factory = PersonFileFactory
 
+
 class ApplicationObjectView(View):
     """RESTive view for application objects."""
 
