@@ -2,11 +2,27 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            i18n_domain="schoolbell">
 
+  <content class=".app.PersonPasswordWriter">
+    <allow interface="schoolbell.app.rest.interfaces.IPasswordWriter" />
+  </content>
+
+  <content class=".app.PersonPhotoAdapter">
+    <allow interface="schoolbell.app.rest.interfaces.IPersonPhoto" />
+  </content>
+
   <view
       for="schoolbell.app.interfaces.ISchoolBellApplication"
       name="GET"
       factory=".app.ApplicationView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IPerson"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".app.PersonHTTPTraverser"
       permission="zope.Public"
       />
 
@@ -18,9 +34,23 @@
       />
 
   <adapter
+      for="schoolbell.app.interfaces.IGroup"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      factory=".app.GroupFile"
+      permission="zope.Public"
+      />
+
+  <adapter
       for="schoolbell.app.interfaces.IResourceContainer"
       provides="zope.app.filerepresentation.interfaces.IFileFactory"
       factory=".app.ResourceFileFactory"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="schoolbell.app.interfaces.IResource"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      factory=".app.ResourceFile"
       permission="zope.Public"
       />
 
@@ -31,6 +61,13 @@
       permission="zope.Public"
       />
 
+  <adapter
+      for="schoolbell.app.interfaces.IPerson"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      factory=".app.PersonFile"
+      permission="zope.Public"
+      />
+
   <view
       for="schoolbell.app.interfaces.IGroupContainer"
       name="GET"
@@ -119,7 +156,103 @@
       permission="zope.Public"
       />
 
-   <!-- Error views -->
+  <view
+      for="schoolbell.app.interfaces.IGroup"
+      name="GET"
+      factory=".app.GroupView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IGroup"
+      name="POST"
+      factory=".app.GroupView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IResource"
+      name="GET"
+      factory=".app.ResourceView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IResource"
+      name="POST"
+      factory=".app.ResourceView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IPerson"
+      name="GET"
+      factory=".app.PersonView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IPerson"
+      name="POST"
+      factory=".app.PersonView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      name="GET"
+      factory=".app.CalendarView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      name="PUT"
+      factory=".app.CalendarView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.rest.interfaces.IPasswordWriter"
+      name="PUT"
+      factory=".app.PasswordWriterView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.rest.interfaces.IPersonPhoto"
+      name="PUT"
+      factory=".app.PersonPhotoView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.rest.interfaces.IPersonPhoto"
+      name="GET"
+      factory=".app.PersonPhotoView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.rest.interfaces.IPersonPhoto"
+      name="DELETE"
+      factory=".app.PersonPhotoView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <!-- Error views -->
 
   <defaultView
       for="zope.interface.common.interfaces.IException"
@@ -158,5 +291,4 @@
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />
-
 </configure>

@@ -11,7 +11,7 @@ the web ZMI:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&\
-    ... new_value=frogpond""", handle_errors=False)
+    ... new_value=frogpond""")
     HTTP/1.1 303 See Other
     ...
     Location: http://localhost/@@contents.html
@@ -254,7 +254,7 @@ The id of the user is same as his username:
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="John"/>
-    ... """, handle_errors=False)
+    ... """)
     HTTP/1.1 201 Created
     ...
 
@@ -319,3 +319,423 @@ Only one person is left:
     </container>
     <BLANKLINE>
 
+Let's look how our group looks now:
+
+    >>> print rest("""
+    ... GET /frogpond/groups/a-group HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <group xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>A Group</title>
+      <description></description>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/groups/a-group/calendar"/>
+    </group>
+    <BLANKLINE>
+
+
+We can change the title of the group that we just created:
+
+    >>> print rest("""
+    ... PUT /frogpond/groups/a-group HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="The group"/>
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+
+Now the title of the group should be different:
+
+    >>> print rest("""
+    ... GET /frogpond/groups/a-group HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <group xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>The group</title>
+      <description></description>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/groups/a-group/calendar"/>
+    </group>
+    <BLANKLINE>
+
+We can change the title by POSTing too:
+
+    >>> print rest("""
+    ... POST /frogpond/groups/a-group HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1"
+    ...         title="Ze group" description="Zryly Zryly"/>
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+
+Now the title of the group should be different:
+
+    >>> print rest("""
+    ... GET /frogpond/groups/a-group HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <group xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>Ze group</title>
+      <description>Zryly Zryly</description>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/groups/a-group/calendar"/>
+    </group>
+    <BLANKLINE>
+
+Resource:
+
+    >>> print rest("""
+    ... GET /frogpond/resources/a-resource HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <resource xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>A Resource</title>
+      <description></description>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/resources/a-resource/calendar"/>
+    </resource>
+    <BLANKLINE>
+
+
+We can change the title of the resource that we just created:
+
+    >>> print rest("""
+    ... PUT /frogpond/resources/a-resource HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="The resource"/>
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+
+Now the title of the resource should be different:
+
+    >>> print rest("""
+    ... GET /frogpond/resources/a-resource HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <resource xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>The resource</title>
+      <description></description>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/resources/a-resource/calendar"/>
+    </resource>
+    <BLANKLINE>
+
+We can change the title by POSTing too:
+
+    >>> print rest("""
+    ... POST /frogpond/resources/a-resource HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Ze resource"/>
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+
+Now the title of the resource should be different:
+
+    >>> print rest("""
+    ... GET /frogpond/resources/a-resource HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <resource xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>Ze resource</title>
+      <description></description>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/resources/a-resource/calendar"/>
+    </resource>
+    <BLANKLINE>
+
+Person:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/john HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <person xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>John</title>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/persons/john/calendar"/>
+    </person>
+    <BLANKLINE>
+
+
+We can change the title of the person that we just created:
+
+    >>> print rest("""
+    ... PUT /frogpond/persons/john HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="The person"/>
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+
+Now the title of the person should be different:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/john HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <person xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>The person</title>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/persons/john/calendar"/>
+    </person>
+    <BLANKLINE>
+
+We can change the title by POSTing too:
+
+    >>> print rest("""
+    ... POST /frogpond/persons/john HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Ze person"/>
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+
+Now the title of the person should be different:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/john HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <person xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>Ze person</title>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/persons/john/calendar"/>
+    </person>
+    <BLANKLINE>
+
+We should be capable of viewing his calendar:
+
+    >>> print str(rest("""
+    ... GET /frogpond/persons/john/calendar HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)).replace("\r\n", "\n")
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+    BEGIN:VCALENDAR
+    VERSION:2.0
+    PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    BEGIN:VEVENT
+    UID:empty-calendar-placeholder@schooltool.org
+    SUMMARY:Empty calendar
+    ...
+    DURATION:P0D
+    ...
+    END:VEVENT
+    END:VCALENDAR
+    <BLANKLINE>
+
+We can access group and resource calendars too:
+
+    >>> print str(rest("""
+    ... GET /frogpond/groups/a-group/calendar HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)).replace("\r\n", "\n")
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+    BEGIN:VCALENDAR
+    VERSION:2.0
+    PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    BEGIN:VEVENT
+    UID:empty-calendar-placeholder@schooltool.org
+    SUMMARY:Empty calendar
+    ...
+    DURATION:P0D
+    ...
+    END:VEVENT
+    END:VCALENDAR
+    <BLANKLINE>
+
+    >>> print str(rest("""
+    ... GET /frogpond/resources/a-resource/calendar HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)).replace("\r\n", "\n")
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+    BEGIN:VCALENDAR
+    VERSION:2.0
+    PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    BEGIN:VEVENT
+    UID:empty-calendar-placeholder@schooltool.org
+    SUMMARY:Empty calendar
+    ...
+    DURATION:P0D
+    ...
+    END:VEVENT
+    END:VCALENDAR
+    <BLANKLINE>
+
+Let's put a new calendar in there:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/resources/a-resource/calendar HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 244
+    ... Content-Type: text/calendar
+    ...
+    ... BEGIN:VCALENDAR
+    ... VERSION:2.0
+    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    ... BEGIN:VEVENT
+    ... UID:some-uid@example.com
+    ... SUMMARY:Sample event (modified)
+    ... DTSTART:20050204T100000
+    ... DURATION:PT2H
+    ... DTSTAMP:20050203T150000
+    ... END:VEVENT
+    ... BEGIN:VEVENT
+    ... UID:some-uid2@example.com
+    ... SUMMARY:New event
+    ... DTSTART:20050204T120000
+    ... DURATION:PT1H
+    ... DTSTAMP:20050203T150000
+    ... END:VEVENT
+    ... END:VCALENDAR
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+Let's get it back:
+
+    >>> print str(rest("""
+    ... GET /frogpond/resources/a-resource/calendar HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)).replace("\r\n", "\n")
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+    BEGIN:VCALENDAR
+    VERSION:2.0
+    PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    BEGIN:VEVENT
+    UID:some-uid@example.com
+    SUMMARY:Sample event (modified)
+    DTSTART:20050204T100000
+    DURATION:PT2H
+    ...
+    END:VEVENT
+    BEGIN:VEVENT
+    UID:some-uid2@example.com
+    SUMMARY:New event
+    DTSTART:20050204T120000
+    DURATION:PT1H
+    ...
+    END:VEVENT
+    END:VCALENDAR
+    <BLANKLINE>
+
+
+We should be capable of giving a password to a person:
+
+    >>> print rest("""
+    ... PUT /frogpond/persons/john/password HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ...
+    ... super-secret-password
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+He should be capable of logging in with this password now:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/john HTTP/1.1
+    ... Authorization: Basic john:super-secret-password
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+    <person xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>Ze person</title>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/persons/john/calendar"/>
+    </person>
+    <BLANKLINE>
+
+We can give our user a new photo if we want to:
+
+    >>> print rest("""
+    ... PUT /frogpond/persons/john/photo HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ...
+    ... really-nice-photo
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+Get it back:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/john/photo HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    Content-Type: image/jpeg
+    <BLANKLINE>
+    really-nice-photo
+    <BLANKLINE>
+
+Delete it:
+
+    >>> print rest("""
+    ... DELETE /frogpond/persons/john/photo HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+
+And it should raise a not found if the photo is missing:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/john/photo HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 404 Not Found
+    Content-Length: 0
+    <BLANKLINE>

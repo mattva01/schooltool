@@ -25,20 +25,23 @@ from zope.app import zapi
 from zope.interface import implements
 from zope.component import adapts
 from zope.app.container.interfaces import INameChooser
-from zope.app.filerepresentation.interfaces import IFileFactory
+from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
+from zope.app.http.put import FilePUT
+from zope.publisher.interfaces import NotFound
+from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from schoolbell.app.rest import View, Template, textErrorPage
 from schoolbell.app.rest.xmlparsing import XMLValidationError, XMLParseError
 from schoolbell.app.rest.xmlparsing import XMLDocument
+from schoolbell.calendar.icalendar import convert_calendar_to_ical
 
-from schoolbell.app.app import Group
-from schoolbell.app.interfaces import IGroupContainer
+from schoolbell.app.app import Group, Resource, Person
+from schoolbell.app.interfaces import IGroupContainer, IGroup
+from schoolbell.app.interfaces import IResourceContainer, IResource
+from schoolbell.app.interfaces import IPersonContainer, IPerson
+from schoolbell.app.browser.cal import CalendarOwnerHTTPTraverser
 
-from schoolbell.app.app import Resource
-from schoolbell.app.interfaces import IResourceContainer
-
-from schoolbell.app.app import Person
-from schoolbell.app.interfaces import IPersonContainer
+from schoolbell.app.rest.interfaces import IPasswordWriter, IPersonPhoto
 
 from schoolbell import SchoolBellMessageID as _
 
@@ -51,15 +54,17 @@ class ApplicationObjectFileFactory(object):
     def __init__(self, container):
         self.context = container
 
-    def __call__(self, name, content_type, data):
+    def parseXML(self, data):
+        """Gets values from document, and puts them into a dict"""
         doc = XMLDocument(data, self.schema)
         try:
             doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
-            obj = self.create(doc, name)
+            return self.parseDoc(doc)
         finally:
             doc.free()
 
-        return obj
+    def __call__(self, name, content_type, data):
+        return self.factory(**self.parseXML(data))
 
 
 class GroupFileFactory(ApplicationObjectFileFactory):
@@ -86,12 +91,14 @@ class GroupFileFactory(ApplicationObjectFileFactory):
         </grammar>
         '''
 
-    def create(self, doc, name=None):
-        """Extract data from an XMLDocument and create a Group."""
+    factory = Group
+
+    def parseDoc(self, doc):
+        kwargs = {}
         node = doc.query('/m:object')[0]
-        title = node['title']
-        description = node.get('description')
-        return Group(title=title, description=description)
+        kwargs['title'] = node['title']
+        kwargs['description'] = node.get('description')
+        return kwargs
 
 
 class ResourceFileFactory(ApplicationObjectFileFactory):
@@ -118,12 +125,15 @@ class ResourceFileFactory(ApplicationObjectFileFactory):
         </grammar>
         '''
 
-    def create(self, doc, name=None):
-        """Extract data from an XMLDocument and create a Resource."""
+    factory = Resource
+
+    def parseDoc(self, doc):
+        """Gets values from document, and puts them into a dict"""
+        kwargs = {}
         node = doc.query('/m:object')[0]
-        title = node['title']
-        description = node.get('description')
-        return Resource(title=title, description=description)
+        kwargs['title'] = node['title']
+        kwargs['description'] = node.get('description')
+        return kwargs
 
 
 class PersonFileFactory(ApplicationObjectFileFactory):
@@ -145,11 +155,70 @@ class PersonFileFactory(ApplicationObjectFileFactory):
         </grammar>
         '''
 
-    def create(self, doc, name):
-        """Extract data from an XMLDocument and create a Person."""
+    factory = Person
+
+    def parseDoc(self, doc):
+        """Gets values from document, and puts them into a dict"""
+        kwargs = {}
         node = doc.query('/m:object')[0]
-        title = node['title']
-        return Person(title=title, username=name)
+        kwargs['title'] = node['title']
+        return kwargs
+
+    def __call__(self, name, content_type, data):
+        #Call is overrided in here so we could pass the name to
+        #Persons __init__
+        return self.factory(username=name, **self.parseXML(data))
+
+
+class ApplicationObjectFile(object):
+    """Adapter adapting Application Objects to IWriteFile"""
+
+    implements(IWriteFile)
+
+    def __init__(self, context):
+        self.context = context
+
+    def write(self, data):
+        """See IWriteFile"""
+        container = self.context.__parent__
+        factory = self.factory(container)
+        kwargs = factory.parseXML(data)
+        self.modify(**kwargs)
+
+
+class GroupFile(ApplicationObjectFile):
+    """Adapter that adapts IGroup to IWriteFile"""
+
+    adapts(IGroup)
+    factory = GroupFileFactory
+
+    def modify(self, title=None, description=None):
+        """Modifies underlying schema."""
+        self.context.title = title
+        self.context.description = description
+
+
+class ResourceFile(ApplicationObjectFile):
+    """Adapter that adapts IResource to IWriteFile"""
+
+    adapts(IResource)
+    factory = ResourceFileFactory
+
+    def modify(self, title=None, description=None):
+        """Modifies underlying object."""
+        self.context.title = title
+        self.context.description = description
+
+
+class PersonFile(ApplicationObjectFile):
+    """Adapter that adapts IPerson to IWriteFile"""
+
+    adapts(IPerson)
+    factory = PersonFileFactory
+
+    def modify(self, title=None):
+        """Modifies underlying object."""
+        self.context.title = title
 
 
 class ApplicationView(View):
@@ -189,7 +258,7 @@ class GenericContainerView(View):
         response = self.request.response
         body = self.request.bodyFile.read()
 
-        factory = self._factory(self.context)
+        factory = self.factory(self.context)
         item = factory(None, None, body)
         self.add(item)
         location = zapi.absoluteURL(item, self.request)
@@ -204,17 +273,159 @@ class GenericContainerView(View):
 class GroupContainerView(GenericContainerView):
     """RESTive view of a group container."""
 
-    _factory = GroupFileFactory
+    factory = GroupFileFactory
 
 
 class ResourceContainerView(GenericContainerView):
     """RESTive view of a resource container."""
 
-    _factory = ResourceFileFactory
+    factory = ResourceFileFactory
 
 
 class PersonContainerView(GenericContainerView):
     """RESTive view of a person container."""
 
-    _factory = PersonFileFactory
+    factory = PersonFileFactory
 
+class ApplicationObjectView(View):
+    """RESTive view for application objects."""
+
+    def POST(self):
+        file = self.factory(self.context)
+        file.write(self.request.bodyFile.read())
+
+
+class GroupView(ApplicationObjectView):
+    """RESTive view for groups"""
+
+    template = Template("www/group.pt", content_type="text/xml; charset=UTF-8")
+    factory = GroupFile
+
+
+class ResourceView(ApplicationObjectView):
+    """RESTive view for resources"""
+
+    template = Template("www/resource.pt",
+                        content_type="text/xml; charset=UTF-8")
+    factory = ResourceFile
+
+
+class PersonView(ApplicationObjectView):
+    """RESTive view for persons"""
+
+    template = Template("www/person.pt", content_type="text/xml; charset=UTF-8")
+    factory = PersonFile
+
+
+class CalendarView(View, FilePUT):
+    """Restive view for calendars"""
+
+    def GET(self):
+        data = "\r\n".join(convert_calendar_to_ical(self.context)) + "\r\n"
+        request = self.request
+        request.response.setHeader('Content-Type',
+                                   'text/calendar; charset=UTF-8')
+        request.response.setHeader('Content-Length', len(data))
+
+        return data
+
+
+class PersonHTTPTraverser(CalendarOwnerHTTPTraverser):
+    """A traverser that allows to traverse to a persons password or photo."""
+
+    adapts(IPerson)
+    implements(IBrowserPublisher)
+
+    def publishTraverse(self, request, name):
+        if name == 'password':
+            return PersonPasswordWriter(self.context)
+        elif name == 'photo':
+            return PersonPhotoAdapter(self.context)
+
+        return CalendarOwnerHTTPTraverser.publishTraverse(self, request, name)
+
+
+class PersonPasswordWriter(object):
+    """Adapter of person to IPasswordWriter."""
+
+    implements(IPasswordWriter)
+
+    def __init__(self, person):
+        self.person = person
+
+    def setPassword(self, password):
+        """See IPasswordWriter."""
+
+        self.person.setPassword(password)
+
+
+class PasswordWriterView(View):
+    """A view that enables setting password of a Person."""
+
+    def PUT(self):
+        request = self.request
+
+        for name in request:
+            if name.startswith('HTTP_CONTENT_'):
+                # Unimplemented content header
+                request.response.setStatus(501)
+                return ''
+
+        body = self.request.bodyFile
+        password = body.read().split("\n")[0]
+        self.context.setPassword(password)
+        return ''
+
+
+class PersonPhotoAdapter(object):
+    """Adapts a Person to PersonPhoto."""
+
+    implements(IPersonPhoto)
+
+    def __init__(self, person):
+        self.person = person
+
+    def writePhoto(self, data):
+        """See IPersonPhoto."""
+
+        self.person.photo = data
+
+    def deletePhoto(self):
+        """See IPersonPhoto."""
+
+        self.person.photo = None
+
+    def getPhoto(self):
+        """See IPersonPhoto."""
+
+        return self.person.photo
+
+
+class PersonPhotoView(View):
+    """A view for Persons photo."""
+
+    def GET(self):
+        photo = self.context.getPhoto()
+
+        if photo is None:
+            raise NotFound(self.context, u'photo', self.request)
+
+        self.request.response.setHeader('Content-Type', "image/jpeg")
+        return photo
+
+    def DELETE(self):
+        self.context.deletePhoto()
+        return ''
+
+    def PUT(self):
+        request = self.request
+
+        for name in request:
+            if name.startswith('HTTP_CONTENT_'):
+                # Unimplemented content header
+                request.response.setStatus(501)
+                return ''
+
+        body = self.request.bodyFile
+        self.context.writePhoto(body.read())
+        return ''

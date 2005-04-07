@@ -33,8 +33,11 @@ from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.container.interfaces import INameChooser
 
 from schoolbell.app.app import SimpleNameChooser
-from schoolbell.app.rest.app import GroupContainerView
-from schoolbell.app.interfaces import IGroupContainer
+from schoolbell.app.rest.app import GroupContainerView, ResourceContainerView
+from schoolbell.app.rest.app import PersonContainerView
+
+from schoolbell.app.interfaces import IGroupContainer, IResourceContainer
+from schoolbell.app.interfaces import IPersonContainer
 
 
 from schoolbell.app.rest.tests.utils import XMLCompareMixin, QuietLibxml2Mixin
@@ -200,6 +203,104 @@ class TestGroupContainerView(ContainerViewTestMixin,
         self.assertRaises(XMLParseError, view.POST)
 
 
+class TestResourceContainerView(ContainerViewTestMixin,
+                             unittest.TestCase):
+    """Test for ResourceContainerView"""
+
+    def setUp(self):
+        ContainerViewTestMixin.setUp(self)
+        from schoolbell.app.app import Resource
+
+        self.resource = self.app['resources']['root'] = Resource("Root resource")
+        self.resourceContainer = self.app['resources']
+
+    def test_render(self):
+        view = ResourceContainerView(self.resourceContainer,
+                                  TestRequest())
+        result = view.GET()
+        response = view.request.response
+
+        self.assertEquals(response.getHeader('content-type'),
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <name>resources</name>
+              <items>
+                <item xlink:href="http://127.0.0.1/resources/root"
+                      xlink:type="simple" xlink:title="Root resource"/>
+              </items>
+            </container>
+            """)
+
+    def test_post(self, suffix="", view=None,
+                  body="""<object xmlns="http://schooltool.org/ns/model/0.1"
+                                  title="New Resource"/>"""):
+        view = ResourceContainerView(self.resourceContainer,
+                                  TestRequest(StringIO(body)))
+        result = view.POST()
+        response = view.request.response
+
+        self.assertEquals(response.getStatus(), 201)
+        self.assertEquals(response._reason, "Created")
+
+        location = response.getHeader('location')
+        base = "http://127.0.0.1/resources/"
+        self.assert_(location.startswith(base),
+                     "%r.startswith(%r) failed" % (location, base))
+        name = location[len(base):]
+        self.assert_(name in self.app['resources'].keys())
+        self.assertEquals(response.getHeader('content-type'),
+                          "text/plain; charset=UTF-8")
+        self.assert_(location in result)
+        return name
+
+    def test_post_with_a_description(self):
+        name = self.test_post(body='''
+            <object title="New Resource"
+                    description="A new resource"
+                    xmlns='http://schooltool.org/ns/model/0.1'/>''')
+        self.assertEquals(self.app['resources'][name].title, 'New Resource')
+        self.assertEquals(self.app['resources'][name].description, 'A new resource')
+        self.assertEquals(name, 'new-resource')
+
+    def test_post_error(self):
+        view = ResourceContainerView(
+            self.resourceContainer,
+            TestRequest(StringIO('<element title="New Resource">')))
+        self.assertRaises(XMLParseError, view.POST)
+
+
+class TestPersonContainerView(ContainerViewTestMixin,
+                             unittest.TestCase):
+    """Test for PersonContainerView"""
+
+    def setUp(self):
+        ContainerViewTestMixin.setUp(self)
+        from schoolbell.app.app import Person
+
+        self.person = self.app['persons']['root'] = Person("root",
+                                                           "Root person")
+        self.personContainer = self.app['persons']
+
+    def test_render(self):
+        view = PersonContainerView(self.personContainer,
+                                  TestRequest())
+        result = view.GET()
+        response = view.request.response
+
+        self.assertEquals(response.getHeader('content-type'),
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, """
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <name>persons</name>
+              <items>
+                <item xlink:href="http://127.0.0.1/persons/root"
+                      xlink:type="simple" xlink:title="Root person"/>
+              </items>
+            </container>
+            """)
+
+
 class TestGroupFileFactory(unittest.TestCase):
 
     def setUp(self):
@@ -226,12 +327,79 @@ class TestGroupFileFactory(unittest.TestCase):
         self.assertEquals(group.description, "Boo")
 
 
+class TestResourceFileFactory(unittest.TestCase):
+
+    def setUp(self):
+        from schoolbell.app.app import ResourceContainer
+        from schoolbell.app.rest.app import ResourceFileFactory
+
+        self.resourceContainer = ResourceContainer()
+        self.factory = ResourceFileFactory(self.resourceContainer)
+
+    def test_title(self):
+        resource = self.factory("new_resource", None,
+                     '''<object xmlns="http://schooltool.org/ns/model/0.1"
+                                title="New Resource"/>''')
+
+        self.assertEquals(resource.title, "New Resource")
+
+    def test_description(self):
+        resource = self.factory("new_resource", None,
+                     '''<object xmlns="http://schooltool.org/ns/model/0.1"
+                                title="New Resource"
+                                description="Boo"/>''')
+
+        self.assertEquals(resource.title, "New Resource")
+        self.assertEquals(resource.description, "Boo")
+
+
+class TestPersonFileFactory(unittest.TestCase):
+
+    def setUp(self):
+        from schoolbell.app.app import PersonContainer
+        from schoolbell.app.rest.app import PersonFileFactory
+
+        self.personContainer = PersonContainer()
+        self.factory = PersonFileFactory(self.personContainer)
+
+    def test_title(self):
+        person = self.factory("new_person", None,
+                     '''<object xmlns="http://schooltool.org/ns/model/0.1"
+                                title="New Person"/>''')
+
+        self.assertEquals(person.title, "New Person")
+
+
+# def TestGroupFile(unittest.TestCase):
+#     """A test for IGroup IWriteFile adapter"""
+
+#     def setUp(self):
+#         from schoolbell.app.app import SchoolBellApplication
+
+#         setup.placefulSetUp()
+#         self.setUpLibxml2()
+
+#         ztapi.provideAdapter(IGroupContainer,
+#                              INameChooser,
+#                              SimpleNameChooser)
+
+#         self.app = SchoolBellApplication()
+#         directlyProvides(self.app, IContainmentRoot)
+
+#     def tearDown(self):
+#         self.tearDownLibxml2()
+#         setup.placefulTearDown()
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTests([unittest.makeSuite(test) for test in
                     (TestAppView,
                      TestGroupContainerView,
-                     TestGroupFileFactory)])
+                     TestPersonContainerView,
+                     TestGroupFileFactory,
+                     TestResourceFileFactory,
+                     TestPersonFileFactory)])
     return suite
 
 if __name__ == '__main__':
