@@ -185,6 +185,10 @@ def doctest_CalendarMixin_expand():
         ...
         ValueError: ('Cannot expand mixed TimeZones: %s and %s', 'UTC', 'WMT')
 
+        >>> show(datetime(2005, 6, 17, tzinfo=vilnius),
+        ...     datetime(2005, 6, 18))
+        [e, recurring, f]
+
     """
 
 

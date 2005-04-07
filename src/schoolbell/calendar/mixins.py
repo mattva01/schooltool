@@ -113,10 +113,7 @@ class CalendarMixin(object):
                 first = first.replace(tzinfo=utc)
 
         if last.tzname() is None:
-            if first.tzname() == 'UTC':
-                last = last.replace(tzinfo=utc)
-            else:
-                last = las.replace(tzinfo=first.tzinfo)
+            last = last.replace(tzinfo=first.tzinfo)
 
         if first.tzname() != last.tzname():
             raise ValueError('Cannot expand mixed TimeZones: %s and %s',
