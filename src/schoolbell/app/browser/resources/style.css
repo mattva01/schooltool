@@ -254,7 +254,9 @@ input.button-cancel {
 #column-left .portlet h4 {
     margin: 0;
     padding: 0 1em;
+    border-top: 1px #bab5ab solid;
     border-bottom: 1px #bab5ab solid;
+    background: #d6d6d6;
     font-size: small;
 }
 
@@ -270,15 +272,15 @@ input.button-cancel {
 
 #column-left .portlet li {
     list-style: none;
-    padding: 1px;
+    padding: 1px 0;
     margin-top: 1px;
     margin-bottom: 0;
 }
 
 #column-left .portlet li a {
     display: block;
-    margin: 0;
-    padding: 0.5em 1em;
+    margin: 1px 0;
+    padding: 2px 1em;
     color: #304D6B;
     font-weight: bold;
     text-decoration: none;
@@ -286,6 +288,10 @@ input.button-cancel {
 
 #column-left .portlet li a:hover {
     background: #748FAD;
+    background: #7590ae;
+    margin: 0;
+    border-top: 1px #314e6c solid;
+    border-bottom: 1px #314e6c solid;
     color: #fff;
 }
 
@@ -381,29 +387,49 @@ input.button-cancel {
     width: 24px;
 }
 
-/* FIXME: Currently uses tables in the layout */
 #calendar-navigation-context {
-    background: #eae3eb;
-    border: 1px #aaa solid;
-    margin: 1em;
+    background: #eae8e3;
+    border: 1px #bab5ab solid;
+    margin: 1ex auto;
     vertical-align: middle;
+    overflow: auto;
 }
 
 #calendar-navigation-context-previous,
 #calendar-navigation-context-current,
 #calendar-navigation-context-next {
     display: block;
-    margin: 2px;
     text-decoration: none;
-    overflow: hidden;
-    border: 0;
-    padding: 0;
+    width: 33.33%;
+    float: left;
+}
+
+#calendar-navigation-context-previous {
+    text-align: left;
+}
+
+#calendar-navigation-context-previous span {
+    padding-left: 24px;
+    background: url("++resource++previous.png") left center no-repeat;
+}
+
+#calendar-navigation-context-current {
+    text-align: center;
+}
+
+#calendar-navigation-context-next {
+    text-align: right;
+}
+
+#calendar-navigation-context-next span {
+    padding-right: 24px;
+    background: url("++resource++next.png") right center no-repeat;
 }
 
 #calendar-navigation-context-previous:hover,
 #calendar-navigation-context-current:hover,
 #calendar-navigation-context-next:hover {
-    background: #f9f1fa;
+    background: #cfc9bc;
 }
 
 #calendar-view-year td.month {
@@ -560,6 +586,7 @@ input.button-cancel {
 #calendar-view-week td {
     width: 20em;
     background: #eae8e3;
+    font-size: smaller;
 }
 #calendar-view-week th {
     border-right: 1px #4B6983 solid;
@@ -623,7 +650,7 @@ input.button-cancel {
 }
 
 #events-allday {
-  margin-bottom: 1ex;
+  margin-bottom: 1px;
 }
 
 #events-allday .event-allday {
