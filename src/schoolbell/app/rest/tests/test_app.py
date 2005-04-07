@@ -32,9 +32,11 @@ from zope.app.testing import setup
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.container.interfaces import INameChooser
 
-from schoolbell.app.app import SimpleNameChooser
+from schoolbell.app.app import SimpleNameChooser, Group, Person, Resource
 from schoolbell.app.rest.app import GroupContainerView, ResourceContainerView
 from schoolbell.app.rest.app import PersonContainerView
+
+from schoolbell.app.rest.app import GroupFile, PersonFile, ResourceFile
 
 from schoolbell.app.interfaces import IGroupContainer, IResourceContainer
 from schoolbell.app.interfaces import IPersonContainer
@@ -370,25 +372,47 @@ class TestPersonFileFactory(unittest.TestCase):
         self.assertEquals(person.title, "New Person")
 
 
-# def TestGroupFile(unittest.TestCase):
-#     """A test for IGroup IWriteFile adapter"""
+class TestGroupFile(unittest.TestCase):
+    """A test for IGroup IWriteFile adapter"""
 
-#     def setUp(self):
-#         from schoolbell.app.app import SchoolBellApplication
+    def testWrite(self):
+        group = Group("Lillies")
 
-#         setup.placefulSetUp()
-#         self.setUpLibxml2()
+        file = GroupFile(group)
+        file.write('''<object xmlns="http://schooltool.org/ns/model/0.1"
+                              title="New Group"
+                              description="Boo"/>''')
 
-#         ztapi.provideAdapter(IGroupContainer,
-#                              INameChooser,
-#                              SimpleNameChooser)
+        self.assertEquals(group.title, "New Group")
+        self.assertEquals(group.description, "Boo")
 
-#         self.app = SchoolBellApplication()
-#         directlyProvides(self.app, IContainmentRoot)
 
-#     def tearDown(self):
-#         self.tearDownLibxml2()
-#         setup.placefulTearDown()
+class TestResourceFile(unittest.TestCase):
+    """A test for IResource IWriteFile adapter"""
+
+    def testWrite(self):
+        resource = Resource("Mud")
+
+        file = ResourceFile(resource)
+        file.write('''<object xmlns="http://schooltool.org/ns/model/0.1"
+                              title="New Mud"
+                              description="Baa"/>''')
+
+        self.assertEquals(resource.title, "New Mud")
+        self.assertEquals(resource.description, "Baa")
+
+
+class TestPersonFile(unittest.TestCase):
+    """A test for IPerson IWriteFile adapter"""
+
+    def testWrite(self):
+        person = Person("Frog")
+
+        file = PersonFile(person)
+        file.write('''<object xmlns="http://schooltool.org/ns/model/0.1"
+                              title="Frogsworth"/>''')
+
+        self.assertEquals(person.title, "Frogsworth")
 
 
 def test_suite():
@@ -399,7 +423,10 @@ def test_suite():
                      TestPersonContainerView,
                      TestGroupFileFactory,
                      TestResourceFileFactory,
-                     TestPersonFileFactory)])
+                     TestPersonFileFactory,
+                     TestGroupFile,
+                     TestPersonFile,
+                     TestResourceFile)])
     return suite
 
 if __name__ == '__main__':
