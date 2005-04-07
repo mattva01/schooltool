@@ -128,17 +128,17 @@
       />
 
   <view
-      for="schoolbell.app.rest.xmlparsing.IXMLValidationError"
+      for="schoolbell.app.rest.xmlparsing.IXMLError"
       name="GET"
-      factory=".errors.XMLValidationErrorView"
+      factory=".errors.XMLErrorView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />
 
   <view
-      for="schoolbell.app.rest.xmlparsing.IXMLParseError"
+      for="schoolbell.app.rest.errors.ICalParseError"
       name="GET"
-      factory=".errors.XMLParseErrorView"
+      factory=".errors.ICalParseErrorView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />
@@ -147,6 +147,14 @@
       for="zope.interface.common.interfaces.IException"
       name="GET"
       factory=".errors.SystemErrorView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.rest.errors.RestError"
+      name="GET"
+      factory=".errors.TextErrorView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />

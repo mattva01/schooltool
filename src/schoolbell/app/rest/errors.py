@@ -21,8 +21,13 @@ RESTive views for errors in SchoolBellApplication
 
 $Id$
 """
+from zope.interface.common.interfaces import IException
+from zope.interface import classImplements
+
 from schoolbell.app.rest import View
 from schoolbell import SchoolBellMessageID as _
+from schoolbell.calendar.icalendar import ICalParseError
+
 
 class TextErrorView(View):
     """A base class for error views
@@ -37,16 +42,22 @@ class TextErrorView(View):
         request.response.setHeader('Content-Type', 'text/plain; charset=utf-8')
 
 
-class XMLValidationErrorView(TextErrorView):
+    def __call__(self):
+        return str(self.context)
+
+
+class XMLErrorView(TextErrorView):
+    """A view for IXMLErrors"""
+
+class ICalParseErrorView(TextErrorView):
 
     def __call__(self):
-        return _("XML not valid according to schema.")
+        return 'Error parsing iCalendar data: ' + str(self.context)
 
 
-class XMLParseErrorView(TextErrorView):
+class IICalParseError(IException): pass
 
-    def __call__(self):
-        return _("Ill-formed XML document.")
+classImplements(ICalParseError, IICalParseError)
 
 
 class SystemErrorView(TextErrorView):
@@ -55,3 +66,10 @@ class SystemErrorView(TextErrorView):
     def __call__(self):
         self.request.response.setStatus(500)
         return _("A system error has occured.")
+
+
+class IRestError(IException): pass
+
+
+class RestError(Exception):
+    """A catch-all error for ReST views that should produce a 400 response."""
