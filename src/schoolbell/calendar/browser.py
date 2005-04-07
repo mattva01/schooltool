@@ -120,6 +120,7 @@ class CalendarICalendarView(object):
     def show(self):
         data = "\r\n".join(convert_calendar_to_ical(self.context)) + "\r\n"
         request = self.request
+        # XXX why check ?
         if request is not None:
             request.response.setHeader('Content-Type',
                                        'text/calendar; charset=UTF-8')
@@ -134,6 +135,7 @@ class CalendarVfbView(object):
     def show(self):
         data = "\r\n".join(convert_calendar_to_vfb(self.context)) + "\r\n"
         request = self.request
+        # XXX why check ?
         if request is not None:
             request.response.setHeader('Content-Type',
                                        'text/calendar; charset=UTF-8')
