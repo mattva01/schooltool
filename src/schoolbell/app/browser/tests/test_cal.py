@@ -462,7 +462,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
         request2 = TestRequest()
         request2.setPrincipal(PrincipalStub())
-        self.assertEquals(view1.timezone, 'UTC')
+        self.assertEquals(view1.timezone.tzname(datetime.now()), 'UTC')
 
         # set the dateformat preference to the long format and change the
         # timezone preference
@@ -474,8 +474,8 @@ class TestCalendarViewBase(unittest.TestCase):
         view2 = CalendarViewBase(None, request2)
 
         self.assertEquals(view2.dayTitle(dt), "Thursday, 01 July, 2004")
-        self.assertEquals(timezone(view2.timezone).tzname(datetime.now()),
-                          'EST')
+        self.assertEquals(view2.timezone.zone,
+                          'US/Eastern')
 
     def test_prev_next(self):
         from schoolbell.app.browser.cal import CalendarViewBase
@@ -749,7 +749,7 @@ class TestCalendarViewBase(unittest.TestCase):
             code (r)
             rest (b)
 
-            >>> timezone(view.timezone).tzname(datetime.now())
+            >>> view.timezone.tzname(datetime.now())
             'UTC'
 
             >>> from schoolbell.app.cal import CalendarEvent
@@ -797,9 +797,9 @@ class TestCalendarViewBase(unittest.TestCase):
 
         Now lets change the timezone to something with a negative utcoffset.
 
-            >>> view.timezone = 'US/Eastern'
+            >>> view.timezone = timezone('US/Eastern')
             >>> view.update()
-            >>> timezone(view.timezone).tzname(datetime.now())
+            >>> view.timezone.tzname(datetime.now())
             'EST'
 
             >>> titles = []
@@ -836,9 +836,9 @@ class TestCalendarViewBase(unittest.TestCase):
 
         And something with a positive offset
 
-            >>> view.timezone = 'Africa/Cairo'
+            >>> view.timezone = timezone('Africa/Cairo')
             >>> view.update()
-            >>> timezone(view.timezone).tzname(datetime.now())
+            >>> view.timezone.tzname(datetime.now())
             'EET'
 
             >>> titles = []

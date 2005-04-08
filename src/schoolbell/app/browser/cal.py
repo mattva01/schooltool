@@ -389,9 +389,9 @@ class CalendarViewBase(BrowserView):
                 self.time_fmt = '%H:%M'
 
             if prefs.timezone is not None:
-                self.timezone = prefs.timezone
+                self.timezone = timezone(prefs.timezone)
             else:
-                self.timezone = 'UTC'
+                self.timezone = utc
 
             self.dateformat = prefs.dateformat
 
@@ -399,7 +399,7 @@ class CalendarViewBase(BrowserView):
             self.first_day_of_week = 0
             self.time_fmt = '%H:%M'
             self.dateformat = 'YYYY-MM-DD'
-            self.timezone = 'UTC'
+            self.timezone = utc
 
     def internationalDate(self, day):
         day_of_week = day_of_week_names[day.weekday()]
@@ -518,9 +518,8 @@ class CalendarViewBase(BrowserView):
         the result.
         """
         my_events = []
-        tz = timezone(self.timezone)
-        start_dt = start_dt.replace(tzinfo=tz)
-        end_dt = end_dt.replace(tzinfo=tz)
+        start_dt = start_dt.replace(tzinfo=self.timezone)
+        end_dt = end_dt.replace(tzinfo=self.timezone)
         for calendar, color1, color2 in self.getCalendars():
             for event in calendar.expand(start_dt, end_dt):
                 if (removeSecurityProxy(event.__parent__) is removeSecurityProxy(self.context) and
@@ -542,11 +541,10 @@ class CalendarViewBase(BrowserView):
         """
         if not date:
             date = self.cursor
-        tz = timezone(self.timezone)
         start = datetime(date.year, date.month, date.day,
-                         tzinfo=tz)
+                         tzinfo=self.timezone)
         end = datetime(date.year, date.month, date.day, 23, 59,
-                       tzinfo=tz)
+                       tzinfo=self.timezone)
         for calendar, color1, color2 in self.getCalendars():
             for event in calendar.expand(start, end):
                 if event.__parent__ is self.context and calendar is not \
@@ -955,14 +953,14 @@ class DailyCalendarView(CalendarViewBase):
 
         Clips dt so that it is never outside today's box.
         """
-        dtaware = dt.replace(tzinfo=timezone(self.timezone))
+        dtaware = dt.replace(tzinfo=self.timezone)
         base = datetime.combine(self.cursor,
-                time(tzinfo=timezone(self.timezone)))
+                time(tzinfo=self.timezone))
         display_start = base + timedelta(hours=self.starthour)
         display_end = base + timedelta(hours=self.endhour)
         clipped_dt = max(display_start, min(dtaware, display_end))
         td = clipped_dt - display_start
-        td = td + base.tzinfo.utcoffset(timezone(self.timezone))
+        td = td + base.tzinfo.utcoffset(self.timezone)
         offset_in_minutes = td.seconds / 60 + td.days * 24 * 60
         return offset_in_minutes / 15.
 
