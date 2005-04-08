@@ -267,12 +267,14 @@ class EventForDisplay(object):
         color1, color2 -- colors used for display
         shortTitle -- title truncated to ~15 characters
         cssClass - 'class' attribute for styles
+        dtstarttz -- dtstart renderred in the view's timezone
+        dtendtz -- dtend renderred in the view's timezone
 
     """
 
     cssClass = 'event'  # at the moment no other classes are used
 
-    def __init__(self, event, color1, color2, source_calendar):
+    def __init__(self, event, color1, color2, source_calendar, timezone=utc):
         self.source_calendar = source_calendar
         if canAccess(source_calendar, '__iter__'):
             # Due to limitations in the default Zope 3 security policy, a
@@ -291,6 +293,8 @@ class EventForDisplay(object):
         self.shortTitle = self.title
         if len(self.title) > 16:
             self.shortTitle = self.title[:15] + '...'
+        self.dtstarttz = event.dtstart.astimezone(timezone)
+        self.dtendtz = self.dtend.astimezone(timezone)
 
     def __cmp__(self, other):
         return cmp(self.context.dtstart, other.context.dtstart)

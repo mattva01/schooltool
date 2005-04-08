@@ -298,6 +298,27 @@ def doctest_EventForDisplay():
        >>> [resource.title for resource in  e1.getBookedResources()]
        ['r1']
 
+    By default events display their time in UTC, the way it's stored.
+
+        >>> e3 = createEvent('2004-01-02 12:00:00', '15min',
+        ...                  'sleeping for a little while because I was tired')
+        >>> e3utc = EventForDisplay(e3, 'blue', 'yellow', person.calendar)
+        >>> print e3utc.dtstarttz
+        2004-01-02 12:00:00+00:00
+        >>> print e3utc.dtendtz
+        2004-01-02 12:15:00+00:00
+        >>> e3cairo = EventForDisplay(e3, 'blue', 'yellow', person.calendar,
+        ...                           timezone('Africa/Cairo'))
+        >>> print e3cairo.dtstarttz
+        2004-01-02 14:00:00+02:00
+        >>> print e3cairo.dtendtz
+        2004-01-02 14:15:00+02:00
+
+    this is how we display it
+
+        >>> print e3cairo.dtstarttz.strftime('%Y-%m-%d')
+        2004-01-02
+
     """
 
 
