@@ -26,16 +26,19 @@ import unittest
 from StringIO import StringIO
 
 from zope.app.testing import ztapi
-from zope.interface import directlyProvides
+from zope.interface import directlyProvides, Interface
+from zope.app.traversing.interfaces import ITraversable
 from zope.publisher.browser import TestRequest
 from zope.app.testing import setup
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.container.interfaces import INameChooser
+import zope
 
 from schoolbell.app.app import SimpleNameChooser, Group, Person, Resource
 from schoolbell.app.rest.app import GroupContainerView, ResourceContainerView
 from schoolbell.app.rest.app import PersonContainerView
 
+from schoolbell.app.rest.app import GroupView, ResourceView, PersonView
 from schoolbell.app.rest.app import GroupFile, PersonFile, ResourceFile
 
 from schoolbell.app.interfaces import IGroupContainer, IResourceContainer
@@ -126,6 +129,8 @@ class ContainerViewTestMixin(XMLCompareMixin, QuietLibxml2Mixin):
         setup.placefulSetUp()
         self.setUpLibxml2()
 
+        ztapi.provideView(Interface, Interface, ITraversable, 'view',
+                          zope.app.traversing.namespace.view)
         ztapi.provideAdapter(IGroupContainer,
                              INameChooser,
                              SimpleNameChooser)
@@ -415,6 +420,127 @@ class TestPersonFile(unittest.TestCase):
         self.assertEquals(person.title, "Frogsworth")
 
 
+class ApplicationObjectViewTestMixin(ContainerViewTestMixin):
+
+    def setUp(self):
+        ContainerViewTestMixin.setUp(self)
+
+    def get(self):
+        """Perform a GET of the view being tested."""
+        view = self.makeTestView(self.testObject, TestRequest())
+        result = view.GET()
+
+        return result, view.request.response
+
+
+class TestGroupView(ApplicationObjectViewTestMixin, unittest.TestCase):
+    """A test for the RESTive view of a group."""
+
+    def setUp(self):
+        ApplicationObjectViewTestMixin.setUp(self)
+
+        self.testObject = self.app['groups']['root'] = Group("Root group")
+
+    def makeTestView(self, object, request):
+        return GroupView(object, request)
+
+    def testGET(self):
+
+        result, response = self.get()
+        self.assertEquals(response.getHeader('content-type'),
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result,
+            """<group xmlns:xlink="http://www.w3.org/1999/xlink">
+                   <title>Root group</title>
+                   <description/>
+                   <calendar xlink:href="http://127.0.0.1/groups/root/calendar"
+                             xlink:title="Calendar" xlink:type="simple"/>
+               </group>""")
+
+    def testGETDescription(self):
+
+        self.testObject.description = "Foo"
+
+        result, response = self.get()
+
+        self.assertEquals(response.getHeader('content-type'),
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result,
+            """<group xmlns:xlink="http://www.w3.org/1999/xlink">
+                   <title>Root group</title>
+                   <description>Foo</description>
+                   <calendar xlink:href="http://127.0.0.1/groups/root/calendar"
+                             xlink:title="Calendar" xlink:type="simple"/>
+               </group>""")
+
+class TestResourceView(ApplicationObjectViewTestMixin, unittest.TestCase):
+    """A test for the RESTive view of a resource."""
+
+    def setUp(self):
+        ApplicationObjectViewTestMixin.setUp(self)
+
+        self.testObject = self.app['resources']['root'] = Resource("Root resource")
+
+    def makeTestView(self, object, request):
+        return ResourceView(object, request)
+
+    def testGET(self):
+        """Tests the GET method of the view."""
+
+        result, response = self.get()
+        self.assertEquals(response.getHeader('content-type'),
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result,
+            """<resource xmlns:xlink="http://www.w3.org/1999/xlink">
+                   <title>Root resource</title>
+                   <description/>
+                   <calendar xlink:href="http://127.0.0.1/resources/root/calendar"
+                             xlink:title="Calendar" xlink:type="simple"/>
+               </resource>""")
+
+    def testGETDescription(self):
+
+        self.testObject.description = "Foo"
+
+        result, response = self.get()
+
+        self.assertEquals(response.getHeader('content-type'),
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result,
+            """<resource xmlns:xlink="http://www.w3.org/1999/xlink">
+                   <title>Root resource</title>
+                   <description>Foo</description>
+                   <calendar xlink:href="http://127.0.0.1/resources/root/calendar"
+                             xlink:title="Calendar" xlink:type="simple"/>
+               </resource>""")
+
+
+class TestPersonView(ApplicationObjectViewTestMixin, unittest.TestCase):
+    """A test for the RESTive view of a person."""
+
+    def setUp(self):
+        ApplicationObjectViewTestMixin.setUp(self)
+
+        self.testObject = self.app['persons']['root'] = Person("root",
+            title="Root person")
+
+    def makeTestView(self, object, request):
+        return PersonView(object, request)
+
+    def testGET(self):
+        """Tests the GET method of the view."""
+
+        result, response = self.get()
+        self.assertEquals(response.getHeader('content-type'),
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result,
+            """<person xmlns:xlink="http://www.w3.org/1999/xlink">
+                   <title>Root person</title>
+                   <calendar xlink:href="http://127.0.0.1/persons/root/calendar"
+                             xlink:title="Calendar" xlink:type="simple"/>
+               </person>""")
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTests([unittest.makeSuite(test) for test in
@@ -426,7 +552,10 @@ def test_suite():
                      TestPersonFileFactory,
                      TestGroupFile,
                      TestPersonFile,
-                     TestResourceFile)])
+                     TestResourceFile,
+                     TestGroupView,
+                     TestResourceView,
+                     TestPersonView)])
     return suite
 
 if __name__ == '__main__':

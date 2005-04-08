@@ -365,36 +365,6 @@ Now the title of the group should be different:
     </group>
     <BLANKLINE>
 
-We can change the title by POSTing too:
-
-    >>> print rest("""
-    ... POST /frogpond/groups/a-group HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: text/xml
-    ...
-    ... <object xmlns="http://schooltool.org/ns/model/0.1"
-    ...         title="Ze group" description="Zryly Zryly"/>
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    <BLANKLINE>
-
-Now the title of the group should be different:
-
-    >>> print rest("""
-    ... GET /frogpond/groups/a-group HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    <group xmlns:xlink="http://www.w3.org/1999/xlink">
-      <title>Ze group</title>
-      <description>Zryly Zryly</description>
-      <calendar xlink:type="simple" xlink:title="Calendar"
-                xlink:href="http://localhost/frogpond/groups/a-group/calendar"/>
-    </group>
-    <BLANKLINE>
-
 Resource:
 
     >>> print rest("""
@@ -435,35 +405,6 @@ Now the title of the resource should be different:
     ...
     <resource xmlns:xlink="http://www.w3.org/1999/xlink">
       <title>The resource</title>
-      <description></description>
-      <calendar xlink:type="simple" xlink:title="Calendar"
-                xlink:href="http://localhost/frogpond/resources/a-resource/calendar"/>
-    </resource>
-    <BLANKLINE>
-
-We can change the title by POSTing too:
-
-    >>> print rest("""
-    ... POST /frogpond/resources/a-resource HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: text/xml
-    ...
-    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Ze resource"/>
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    <BLANKLINE>
-
-Now the title of the resource should be different:
-
-    >>> print rest("""
-    ... GET /frogpond/resources/a-resource HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    <resource xmlns:xlink="http://www.w3.org/1999/xlink">
-      <title>Ze resource</title>
       <description></description>
       <calendar xlink:type="simple" xlink:title="Calendar"
                 xlink:href="http://localhost/frogpond/resources/a-resource/calendar"/>
@@ -514,33 +455,6 @@ Now the title of the person should be different:
     </person>
     <BLANKLINE>
 
-We can change the title by POSTing too:
-
-    >>> print rest("""
-    ... POST /frogpond/persons/john HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: text/xml
-    ...
-    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Ze person"/>
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    <BLANKLINE>
-
-Now the title of the person should be different:
-
-    >>> print rest("""
-    ... GET /frogpond/persons/john HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    <person xmlns:xlink="http://www.w3.org/1999/xlink">
-      <title>Ze person</title>
-      <calendar xlink:type="simple" xlink:title="Calendar"
-                xlink:href="http://localhost/frogpond/persons/john/calendar"/>
-    </person>
-    <BLANKLINE>
 
 We should be capable of viewing his calendar:
 
@@ -689,7 +603,7 @@ He should be capable of logging in with this password now:
     ...
     <BLANKLINE>
     <person xmlns:xlink="http://www.w3.org/1999/xlink">
-      <title>Ze person</title>
+      <title>The person</title>
       <calendar xlink:type="simple" xlink:title="Calendar"
                 xlink:href="http://localhost/frogpond/persons/john/calendar"/>
     </person>

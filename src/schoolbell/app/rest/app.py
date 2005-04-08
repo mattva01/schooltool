@@ -288,22 +288,14 @@ class PersonContainerView(GenericContainerView):
     factory = PersonFileFactory
 
 
-class ApplicationObjectView(View):
-    """RESTive view for application objects."""
-
-    def POST(self):
-        file = self.factory(self.context)
-        file.write(self.request.bodyFile.read())
-
-
-class GroupView(ApplicationObjectView):
+class GroupView(View):
     """RESTive view for groups"""
 
     template = Template("www/group.pt", content_type="text/xml; charset=UTF-8")
     factory = GroupFile
 
 
-class ResourceView(ApplicationObjectView):
+class ResourceView(View):
     """RESTive view for resources"""
 
     template = Template("www/resource.pt",
@@ -311,7 +303,7 @@ class ResourceView(ApplicationObjectView):
     factory = ResourceFile
 
 
-class PersonView(ApplicationObjectView):
+class PersonView(View):
     """RESTive view for persons"""
 
     template = Template("www/person.pt", content_type="text/xml; charset=UTF-8")
