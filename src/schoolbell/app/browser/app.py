@@ -511,8 +511,8 @@ class LogoutView(BrowserView):
         self.request.response.redirect(url)
 
 
-class ACLView(BrowserView):
-    """A view for editing SchoolBell-relevant local grants"""
+class ACLViewBase(object):
+    """A base view for both browser and restive access control views"""
 
     permissions = [
         ('schoolbell.view', _('View')),
@@ -525,7 +525,7 @@ class ACLView(BrowserView):
         ('schoolbell.manageMembership', _('Manage membership')),
         ]
 
-    def persons(self):
+    def getPersons(self):
         app = getSchoolBellApplication()
         map = IPrincipalPermissionManager(self.context)
         auth = zapi.getUtility(IAuthentication)
@@ -535,7 +535,7 @@ class ACLView(BrowserView):
             result.append({'title': person.title, 'id': pid,
                            'perms': self.permsForPrincipal(pid)})
         return result
-    persons = property(persons)
+    persons = property(getPersons)
 
     def permsForPrincipal(self, principalid):
         """Return a list of permissions allowed for principal"""
@@ -543,7 +543,7 @@ class ACLView(BrowserView):
                 for perm, title in self.permissions
                 if hasPermission(perm, self.context, principalid)]
 
-    def groups(self):
+    def getGroups(self):
         app = getSchoolBellApplication()
         auth = zapi.getUtility(IAuthentication)
         map = IPrincipalPermissionManager(self.context)
@@ -562,7 +562,11 @@ class ACLView(BrowserView):
                            'id': pid,
                            'perms': self.permsForPrincipal(pid)})
         return result
-    groups = property(groups)
+    groups = property(getGroups)
+
+
+class ACLView(BrowserView, ACLViewBase):
+    """A view for editing SchoolBell-relevant local grants"""
 
     def update(self):
         if 'UPDATE_SUBMIT' in self.request or 'CANCEL' in self.request:
