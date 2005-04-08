@@ -469,12 +469,13 @@ class TestCalendarViewBase(unittest.TestCase):
 
         prefs = IPersonPreferences(request2.principal._person)
         prefs.dateformat = "Day Month, Year"
-        prefs.timezone = timezone("US/Eastern")
+        prefs.timezone = "US/Eastern"
 
         view2 = CalendarViewBase(None, request2)
 
         self.assertEquals(view2.dayTitle(dt), "Thursday, 01 July, 2004")
-        self.assertEquals(view2.timezone.tzname(datetime.now()), 'EST')
+        self.assertEquals(timezone(view2.timezone).tzname(datetime.now()),
+                          'EST')
 
     def test_prev_next(self):
         from schoolbell.app.browser.cal import CalendarViewBase
@@ -688,7 +689,7 @@ class TestCalendarViewBase(unittest.TestCase):
             ...         self.weekstart = "Monday"
             ...         self.timeformat = "%H:%M"
             ...         self.dateformat = "YYYY-MM-DD"
-            ...         self.timezone = utc
+            ...         self.timezone = 'UTC'
             >>> from schoolbell.app.interfaces import IPersonPreferences
             >>> class PersonStub:
             ...     def __conform__(self, interface):
@@ -747,6 +748,130 @@ class TestCalendarViewBase(unittest.TestCase):
             ...     print e.title, '(%s)' % e.color1
             code (r)
             rest (b)
+
+            >>> timezone(view.timezone).tzname(datetime.now())
+            'UTC'
+
+            >>> from schoolbell.app.cal import CalendarEvent
+            >>> for i in range(0, 24):
+            ...     cal1.addEvent(CalendarEvent(datetime(2002, 2, 1, i),
+            ...                       timedelta(minutes=59), "day1-" + str(i)))
+            ...     cal1.addEvent(CalendarEvent(datetime(2002, 2, 2, i),
+            ...                       timedelta(minutes=59), "day2-" + str(i)))
+            ...     cal1.addEvent(CalendarEvent(datetime(2002, 2, 3, i),
+            ...                       timedelta(minutes=59), "day3-" + str(i)))
+
+        The default timezone for a CalendarView is UTC.
+
+            >>> titles = []
+            >>> for e in view.getEvents(datetime(2002, 2, 2),
+            ...                         datetime(2002, 2, 3)):
+            ...     titles.append(e.title)
+            >>> titles.sort()
+            >>> for title in  titles:
+            ...     print title
+            day2-0
+            day2-1
+            day2-10
+            day2-11
+            day2-12
+            day2-13
+            day2-14
+            day2-15
+            day2-16
+            day2-17
+            day2-18
+            day2-19
+            day2-2
+            day2-20
+            day2-21
+            day2-22
+            day2-23
+            day2-3
+            day2-4
+            day2-5
+            day2-6
+            day2-7
+            day2-8
+            day2-9
+
+        Now lets change the timezone to something with a negative utcoffset.
+
+            >>> view.timezone = 'US/Eastern'
+            >>> view.update()
+            >>> timezone(view.timezone).tzname(datetime.now())
+            'EST'
+
+            >>> titles = []
+            >>> for e in view.getEvents(datetime(2002, 2, 2),
+            ...                         datetime(2002, 2, 3)):
+            ...     titles.append(e.title)
+            >>> titles.sort()
+            >>> for title in  titles:
+            ...     print title
+            day2-10
+            day2-11
+            day2-12
+            day2-13
+            day2-14
+            day2-15
+            day2-16
+            day2-17
+            day2-18
+            day2-19
+            day2-20
+            day2-21
+            day2-22
+            day2-23
+            day2-5
+            day2-6
+            day2-7
+            day2-8
+            day2-9
+            day3-0
+            day3-1
+            day3-2
+            day3-3
+            day3-4
+
+        And something with a positive offset
+
+            >>> view.timezone = 'Africa/Cairo'
+            >>> view.update()
+            >>> timezone(view.timezone).tzname(datetime.now())
+            'EET'
+
+            >>> titles = []
+            >>> for e in view.getEvents(datetime(2002, 2, 2),
+            ...                         datetime(2002, 2, 3)):
+            ...     titles.append(e.title)
+            >>> titles.sort()
+            >>> for title in  titles:
+            ...     print title
+            day1-22
+            day1-23
+            day2-0
+            day2-1
+            day2-10
+            day2-11
+            day2-12
+            day2-13
+            day2-14
+            day2-15
+            day2-16
+            day2-17
+            day2-18
+            day2-19
+            day2-2
+            day2-20
+            day2-21
+            day2-3
+            day2-4
+            day2-5
+            day2-6
+            day2-7
+            day2-8
+            day2-9
 
         """
 
