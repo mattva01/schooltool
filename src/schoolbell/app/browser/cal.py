@@ -535,7 +535,8 @@ class CalendarViewBase(BrowserView):
                     # removeSecurityProxy(self.context), needed so we
                     # could compare them.
                     continue
-                yield EventForDisplay(event, color1, color2, calendar)
+                yield EventForDisplay(event, color1, color2, calendar,
+                                      self.timezone)
 
     def getAllDayEvents(self, date=None):
         """Get a list of EventForDisplay objects for the all-day events at the
@@ -554,7 +555,8 @@ class CalendarViewBase(BrowserView):
                 if event.__parent__ is self.context and calendar is not \
                         self.context or not event.allday:
                     continue
-                yield EventForDisplay(event, color1, color2, calendar)
+                yield EventForDisplay(event, color1, color2, calendar,
+                                      self.timezone)
 
     def getDays(self, start, end):
         """Get a list of CalendarDay objects for a selected period of time.

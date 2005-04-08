@@ -757,7 +757,23 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> for e in view.getEvents(datetime(2005, 2, 21),
             ...                         datetime(2005, 3, 1)):
             ...     print e.title
+            ...     print e.dtstarttz
             code
+            2005-02-26 19:39:00+00:00
+
+        Changes in the view's timezone are reflected in the events dtstarttz
+
+            >>> view.timezone = timezone('US/Eastern')
+            >>> view.update()
+            >>> for e in view.getEvents(datetime(2005, 2, 21),
+            ...                         datetime(2005, 3, 1)):
+            ...     print e.title
+            ...     print e.dtstarttz
+            code
+            2005-02-26 14:39:00-05:00
+
+            >>> view.timezone = timezone('UTC')
+            >>> view.update()
 
         We will stub view.getCalendars to simulate overlayed calendars
 
