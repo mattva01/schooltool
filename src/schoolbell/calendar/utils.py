@@ -266,13 +266,21 @@ def parse_datetimetz(s):
         >>> dt3.tzname()
         'UTC'
 
-        >>> dt4 = parse_datetimetz('01/02/03')
+        >>> dt4 = parse_datetimetz('2003-04-05 11:22:33+00:00')
+        >>> dt4.date()
+        datetime.date(2003, 4, 5)
+
+        >>> dt5 = parse_datetimetz('2003-04-05 11:22:33.45678999-09:00')
+        >>> dt5.time()
+        datetime.time(11, 22, 33, 456789)
+
+        >>> dt6 = parse_datetimetz('01/02/03')
         Traceback (most recent call last):
           ...
         ValueError: Bad datetime: 01/02/03
 
     """
-    m = re.match(r"(\d+)-(\d+)-(\d+)[ T](\d+):(\d+):(\d+)([.](\d+))?$", s)
+    m = re.match(r"(\d+)-(\d+)-(\d+)[ T](\d+):(\d+):(\d+)([.](\d+))?([-+](\d+):(\d+))?$", s)
     if not m:
         raise ValueError("Bad datetime: %s" % s)
     ssssss = m.groups()[7]
