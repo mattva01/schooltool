@@ -225,9 +225,7 @@ class CalendarOwnerHTTPTraverser(object):
         self.request = request
 
     def publishTraverse(self, request, name):
-        if name in ('calendar.ics', 'calendar.vfb'):
-            return self.context.calendar
-        elif name == 'calendar':
+        if name in ('calendar.ics', 'calendar.vfb', 'calendar'):
             return self.context.calendar
 
         raise NotFound(self.context, name, request)
