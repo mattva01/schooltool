@@ -295,6 +295,34 @@ class IResourceContained(IResource, IContained,
     containers(IResourceContainer)
 
 
+class ICourse(Interface):
+    """Course. TODO should use the definition in the glossary"""
+
+    title = TextLine(title=u"Title",
+        description=u"Title of the course.")
+
+    description = Text(title=u"Description",
+        required=False,
+        description=u"Description of the course.")
+
+    section = Attribute(
+            """Sections that cover this course (see ICourseSection)""")
+
+
+class ICourseContainer(IContainer, IAdaptableToSchoolBellApplication):
+    """Container of Courses."""
+
+    contains(ICourse)
+
+
+class ICourseContained(ICourse, IContained, IAdaptableToSchoolBellApplication):
+    """Course contained in an ICourseContainer."""
+
+    #XXX Why should this adapt to ISchoolBellApplication?
+
+    containers(ICourseContainer)
+
+
 class ISchoolBellApplication(IReadContainer):
     """The main SchoolBell application object.
 

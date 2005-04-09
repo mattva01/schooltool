@@ -71,7 +71,7 @@ from schoolbell.calendar.interfaces import IYearlyRecurrenceRule
 from schoolbell.calendar.interfaces import IMonthlyRecurrenceRule
 from schoolbell.calendar.interfaces import IWeeklyRecurrenceRule
 from schoolbell.calendar.utils import parse_date, parse_datetimetz
-from schoolbell.calendar.utils import parse_time, weeknum_bounds
+from schoolbell.calendar.utils import parse_timetz, weeknum_bounds
 from schoolbell.calendar.utils import week_start, prev_month, next_month
 from schoolbell.calendar.icalendar import ical_datetime
 from schoolbell import SchoolBellMessageID as _
@@ -1240,6 +1240,8 @@ class ICalendarEventAddForm(Interface):
 class CalendarEventViewMixin(object):
     """A mixin that holds the code common to CalendarEventAdd and Edit Views."""
 
+    timezone = utc
+
     def _setError(self, name, error=RequiredMissing()):
         """Set an error on a widget."""
         # XXX Touching widget._error is bad, see
@@ -1392,7 +1394,7 @@ class CalendarEventViewMixin(object):
         start_time = kwargs.pop('start_time', None)
         if start_time:
             try:
-                start_time = parse_time(start_time)
+                start_time = parse_timetz(start_time, self.timezone)
             except ValueError:
                 self._setError("start_time", ConversionError(_(
                             "Invalid time")))
@@ -1402,17 +1404,6 @@ class CalendarEventViewMixin(object):
         location = kwargs.pop('location', None)
         description = kwargs.pop('description', None)
         recurrence = kwargs.pop('recurrence', None)
-
-        # Some fake data for allday events.
-        # XXX We need to do something special with allday events when TZ
-        # support comes in (we can't have the date changing because of a tz
-        # adjustment)
-        if allday:
-            # iCalendar has no spec for describing all-day events, but it seems
-            # to be the de facto standard to give them a 1d duration.
-            duration = 1
-            duration_type = "days"
-            start_time = time(0, 0)
 
         if recurrence:
             self._requireField("interval", errors)
@@ -1442,7 +1433,20 @@ class CalendarEventViewMixin(object):
         if errors:
             raise WidgetsError(errors)
 
-        start = datetime.combine(start_date, start_time)
+        # Some fake data for allday events.
+        # XXX We need to do something special with allday events when TZ
+        # support comes in (we can't have the date changing because of a tz
+        # adjustment)
+        if allday is True:
+            # iCalendar has no spec for describing all-day events, but it seems
+            # to be the de facto standard to give them a 1d duration.
+            duration = 1
+            duration_type = "days"
+            start_time = time(0, 0, tzinfo=utc)
+            start = datetime.combine(start_date, start_time)
+        else:
+            start = datetime.combine(start_date, start_time).astimezone(utc)
+
         dargs = {duration_type : duration}
         duration = timedelta(**dargs)
 
@@ -1474,6 +1478,14 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
     error = None
 
     def __init__(self, context, request):
+
+        # the default timezone 'UTC' is inherited from Mixin
+        person = IPerson(request.principal, None)
+        if person is not None:
+            prefs = IPersonPreferences(person)
+            if prefs.timezone is not None:
+                self.timezone = timezone(prefs.timezone)
+
         if "field.start_date" not in request:
             request.form["field.start_date"] = date.today().strftime("%Y-%m-%d")
         super(AddView, self).__init__(context, request)

@@ -1127,6 +1127,44 @@ def doctest_CalendarEventAddView_add():
         >>> view.duration_widget.getInputValue()
         50
 
+
+   Lets change our timezone to US/Eastern.
+
+        >>> request = TestRequest(form={'field.title': 'East Coast',
+        ...                             'field.start_date': '2004-08-13',
+        ...                             'field.start_time': '15:30',
+        ...                             'field.duration': '50',
+        ...                             'field.recurrence.used': '',
+        ...                             'field.recurrence_type': 'daily',
+        ...                             'field.location': 'East Coast',
+        ...                             'field.weekdays-empty-marker': '1',
+        ...                             'UPDATE_SUBMIT': 'Add'})
+
+        >>> calendar = Calendar()
+        >>> directlyProvides(calendar, IContainmentRoot)
+        >>> view = CalendarEventAddTestView(calendar, request)
+        >>> view.timezone = timezone('US/Eastern')
+        >>> view.update()
+        ''
+
+        >>> print view.errors
+        ()
+        >>> print view.error
+        None
+        >>> len(calendar)
+        1
+        >>> event = list(calendar)[0]
+        >>> event.location
+        u'East Coast'
+        >>> event.dtstart.date()
+        datetime.date(2004, 8, 13)
+
+    Since we added the event from US/Eastern (-05:00), the 15:00 start time got
+    stored in UTC as 20:30.
+
+        >>> event.dtstart.time()
+        datetime.time(20, 30)
+
     """
 
 
