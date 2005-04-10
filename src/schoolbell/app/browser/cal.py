@@ -1433,10 +1433,8 @@ class CalendarEventViewMixin(object):
         if errors:
             raise WidgetsError(errors)
 
-        # Some fake data for allday events.
-        # XXX We need to do something special with allday events when TZ
-        # support comes in (we can't have the date changing because of a tz
-        # adjustment)
+        # Some fake data for allday events, based on what iCalendar seems to
+        # expect
         if allday is True:
             # iCalendar has no spec for describing all-day events, but it seems
             # to be the de facto standard to give them a 1d duration.
