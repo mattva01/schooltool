@@ -1143,25 +1143,49 @@ def doctest_CalendarEventAddView_add():
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
-        >>> view.timezone = timezone('US/Eastern')
+        >>> eastern = timezone('US/Eastern')
+        >>> view.timezone = eastern
         >>> view.update()
         ''
 
-        >>> print view.errors
-        ()
-        >>> print view.error
-        None
-        >>> len(calendar)
-        1
+   We handle this by taking the date and time the user enters,
+
+        >>> request.form['field.start_date']
+        '2004-08-13'
+        >>> request.form['field.start_time']
+        '15:30'
+
+   We use parsetimetz to create a time object with the user's preferred tz
+
+        >>> from schoolbell.calendar.utils import parse_timetz
+        >>> st = parse_timetz(request.form['field.start_time'], eastern)
+        >>> st.isoformat()
+        '15:30:00-05:00'
+        >>> sdt = datetime.combine(date(2004, 8, 13), st)
+        >>> sdt.tzname()
+        'EST'
+        >>> sdt.time()
+        datetime.time(15, 30)
+
+    then we replace the start time with the same time in UTC, and create the
+    event with the UTC version of the start time.
+
+        >>> sdt = sdt.astimezone(utc)
+        >>> sdt.tzname()
+        'UTC'
+
+    EST is -05:00 so our time stored is 5 hours greater.
+
+        >>> sdt.time()
+        datetime.time(20, 30)
+
+    This is what it looks like in a request.
+
         >>> event = list(calendar)[0]
         >>> event.location
         u'East Coast'
         >>> event.dtstart.date()
         datetime.date(2004, 8, 13)
-
-    Since we added the event from US/Eastern (-05:00), the 15:00 start time got
-    stored in UTC as 20:30.
-
         >>> event.dtstart.time()
         datetime.time(20, 30)
 
