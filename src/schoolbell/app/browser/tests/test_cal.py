@@ -277,6 +277,14 @@ def doctest_EventForDisplay():
         >>> print e2.renderShort().replace('&ndash;', '--')
         sleeping for a ... (12:00--12:15)
 
+    The same CalendarEvent can be renderered for display in a particular
+    timezone.
+
+        >>> e2east = EventForDisplay(e2, 'blue', 'yellow', person.calendar,
+        ...                      timezone=timezone('US/Eastern'))
+        >>> print e2east.renderShort().replace('&ndash;', '--')
+        sleeping for a ... (07:00--07:15)
+
     If the event is a booking event and the source calendar is a calendar of the
     resource we should get the booker of the event:
 

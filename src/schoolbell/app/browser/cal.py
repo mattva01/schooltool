@@ -325,11 +325,13 @@ class EventForDisplay(object):
     def renderShort(self):
         """Short representation of the event for the monthly view."""
         if self.dtstart.date() == self.dtend.date():
-            duration =  "%s&ndash;%s" % (self.dtstart.strftime('%H:%M'),
-                                         self.dtend.strftime('%H:%M'))
+            duration =  "%s&ndash;%s" % \
+                    (self.dtstarttz.strftime('%H:%M'),
+                     self.dtendtz.strftime('%H:%M'))
         else:
-            duration =  "%s&ndash;%s" % (self.dtstart.strftime('%b&nbsp;%d'),
-                                         self.dtend.strftime('%b&nbsp;%d'))
+            duration =  "%s&ndash;%s" % \
+                (self.dtstarttz.strftime('%b&nbsp;%d'),
+                 self.dtendtz.strftime('%b&nbsp;%d'))
         return "%s (%s)" % (self.shortTitle, duration)
 
 

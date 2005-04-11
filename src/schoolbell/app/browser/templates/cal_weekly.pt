@@ -42,9 +42,9 @@
                                             border-color: ${event/color2};
                                title event/title">
               <span tal:content="event/shortTitle"/>
-              (<span tal:content="python:event.dtstart.strftime(view.time_fmt)"
+              (<span tal:content="python:event.dtstart.astimezone(view.timezone).strftime(view.time_fmt)"
                /> - <span
-                   tal:content="python:event.dtend.strftime(view.time_fmt)"/>)
+                   tal:content="python:event.dtend.astimezone(view.timezone).strftime(view.time_fmt)"/>)
             </a>
           </div>
         </td>
