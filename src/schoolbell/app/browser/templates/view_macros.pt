@@ -304,7 +304,7 @@
       <tal:loop tal:repeat="event tevents">
         <li tal:condition="python: event.dtstart.date() == tomorrow"
             tal:attributes="style string:color: ${event/color2}">
-          <b tal:content="python:event.dtstart.strftime('%H:%M')" />
+          <b tal:content="python:event.dtstart.astimezone(view.timezone).strftime('%H:%M')" />
           <span tal:replace="event/shortTitle">Event</span>
         </li>
       </tal:loop>
