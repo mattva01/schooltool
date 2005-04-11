@@ -22,14 +22,97 @@ RESTive views for access control
 $Id$
 """
 from schoolbell.app.rest import View, Template
-from schoolbell.app.browser.app import ACLViewBase
+from schoolbell.app.rest.errors import RestError
+from schoolbell.app.browser.app import ACLViewBase, hasPermission
+from schoolbell.app.rest.xmlparsing import XMLDocument
+from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
+from schoolbell import SchoolBellMessageID as _
+
 
 class ACLView(View, ACLViewBase):
     """A RESTive view for access control setup"""
 
     template = Template('www/acl.pt')
 
+    schema = """<?xml version="1.0" encoding="UTF-8"?>
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://schooltool.org/ns/model/0.1"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+      <start>
+        <element name="acl">
+          <zeroOrMore>
+            <element name="principal">
+              <attribute name="id"><text/></attribute>
+              <zeroOrMore>
+                <element name="permission">
+                  <attribute name="id"><text/></attribute>
+                  <optional>
+                    <attribute name="setting">
+                      <choice>
+                        <value>on</value>
+                        <value>off</value>
+                      </choice>
+                    </attribute>
+                  </optional>
+                </element>
+              </zeroOrMore>
+            </element>
+          </zeroOrMore>
+        </element>
+      </start>
+    </grammar>
+    """
+
     def getPrincipals(self):
         personids = [prin['id'] for prin in self.getPersons()]
         groupids = [prin['id'] for prin in self.getGroups()]
         return groupids + personids
+
+    def POST(self):
+        settings = self.parseData(self.request.bodyFile.read())
+        manager = IPrincipalPermissionManager(self.context)
+        for principal in settings:
+            for permission, title in self.permissions:
+                parent = self.context.__parent__
+                requested = permission in settings[principal]
+                in_parent = hasPermission(permission, parent, principal)
+                if requested and not in_parent:
+                    manager.grantPermissionToPrincipal(permission, principal)
+                elif not requested and in_parent:
+                    manager.denyPermissionToPrincipal(permission, principal)
+                else:
+                    manager.unsetPermissionForPrincipal(permission, principal)
+
+        return _("Permissions updated")
+
+    def parseData(self, body):
+        """Extracts the data and validates it.
+
+        Raises a RestError if a principal or permission id is not from
+        the allowed set.
+        """
+
+        doc = XMLDocument(body, self.schema)
+        allowed_principals = self.getPrincipals()
+        allowed_permissions = [perm for perm, descritpion in self.permissions]
+        try:
+            result = {}
+            doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
+
+            for principal in doc.query('/m:acl/m:principal'):
+                principalid = principal['id']
+                result[principalid] = []
+                if principalid not in allowed_principals:
+                    raise RestError('Principal "%s" unklown' % principalid)
+                for perm in principal.query('m:permission[@setting="on"]'):
+                    permission = perm['id']
+                    if permission not in allowed_permissions:
+                        raise RestError('Permission "%s" not allowed' %
+                                        permission)
+                    result[principalid].append(permission)
+
+            return result
+
+        finally:
+            doc.free()
