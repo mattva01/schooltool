@@ -966,7 +966,6 @@ class DailyCalendarView(CalendarViewBase):
         display_end = base + timedelta(hours=self.endhour)
         clipped_dt = max(display_start, min(dtaware, display_end))
         td = clipped_dt - display_start
-        td = td + base.tzinfo.utcoffset(self.timezone)
         offset_in_minutes = td.seconds / 60 + td.days * 24 * 60
         return offset_in_minutes / 15.
 
@@ -975,7 +974,7 @@ class DailyCalendarView(CalendarViewBase):
 
         See `snapToGrid`.
         """
-        return self.snapToGrid(event.dtstart)
+        return self.snapToGrid(event.dtstart.astimezone(self.timezone))
 
     def eventHeight(self, event, minheight=3):
         """Calculate the height of the event block in the display.

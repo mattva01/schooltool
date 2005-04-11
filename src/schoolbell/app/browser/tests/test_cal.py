@@ -2823,6 +2823,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_eventTop(self):
         from schoolbell.app.browser.cal import DailyCalendarView
+        from pytz import timezone
         view = DailyCalendarView(None, TestRequest())
         view.starthour = 8
         view.endhour = 18
@@ -2843,6 +2844,15 @@ class TestDailyCalendarView(unittest.TestCase):
         check('2004-08-12 10:46', '1h', 11+1/15.)
         check('2004-08-12 10:44', '1h', 11-1/15.)
         check('2004-08-11 10:00', '24h', 0)
+        check('2004-08-12 14:30', '1h', 26)
+        check('2004-08-12 16:30', '1h', 34)
+
+        #If we change the view timezone, we shif the event's on the page.
+        view.timezone = timezone('US/Eastern')
+        check('2004-08-12 14:30', '1h', 10)
+        check('2004-08-12 16:30', '1h', 18)
+
+
 
     def test_eventHeight(self):
         from schoolbell.app.browser.cal import DailyCalendarView
