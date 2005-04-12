@@ -21,11 +21,19 @@
               <a tal:attributes="href python:view.calURL('daily', day.date)">
                 <span tal:content="day/date/day"
                       tal:attributes="class day/today" />
+                <tal:loop repeat="event python:view.getAllDayEvents(date=day.date)">
+                  <span tal:attributes="class event/cssClass;
+                      style string:background: ${event/color1};;
+                      border-color: ${event/color2}">
+                    <span tal:content="event/shortTitle"/>
+                    (<span i18n:translate="">All day</span>)
+                  </span>
+                </tal:loop>
                 <tal:loop repeat="event day/events">
                   <span tal:content="structure event/renderShort"
-                      tal:attributes="class event/cssClass;
-                               style string:background: ${event/color1};;
-                                            border-color: ${event/color2}" />
+                    tal:attributes="class event/cssClass;
+                    style string:background: ${event/color1};;
+                    border-color: ${event/color2}" />
                 </tal:loop>
               </a>
             </td>

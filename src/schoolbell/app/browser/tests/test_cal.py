@@ -832,6 +832,23 @@ class TestCalendarViewBase(unittest.TestCase):
             code
             2005-02-26 19:39:00+00:00
 
+        Note that all-day events are ignored, so adding one does not change the
+        output.
+
+            >>> cal1.addEvent(createEvent('2005-02-20 16:00', '1h', 
+            ...      'A Birthday', allday=True))
+
+        Verify that the all-day event is in the calendar
+
+            >>> 'A Birthday' in [e.title for e in cal1]
+            True
+
+        Now verify that it is not included in the output
+
+            >>> 'A Birthday' in [e.title for e in 
+            ...   view.getEvents(datetime(2005, 2, 19), datetime(2005, 3, 1))]
+            False
+
         Changes in the view's timezone are reflected in the events dtstarttz
 
             >>> view.timezone = timezone('US/Eastern')
@@ -980,6 +997,40 @@ class TestCalendarViewBase(unittest.TestCase):
             day2-7
             day2-8
             day2-9
+
+        """
+
+    def test_getAllDayEvents(self):
+        """Test for CalendarViewBase.getAllDayEvents
+
+        CalendarViewBase.getAllDayEvents returns a list of wrapped all-day
+        calendar events for a specified date or the date of the view cursor if
+        a date is not specified.
+
+            >>> from schoolbell.app.browser.cal import CalendarViewBase
+            >>> from schoolbell.app.cal import Calendar
+            >>> cal = Calendar()
+            >>> cal.addEvent(createEvent('2005-02-20 16:00', '1h', 
+            ...      'A Birthday', allday=True))
+            >>> cal.addEvent(createEvent('2005-02-20 16:00', '1h', 'walk'))
+            >>> view = CalendarViewBase(cal, TestRequest())
+
+        Only all-day events are returned
+
+            >>> for e in view.getAllDayEvents(datetime(2005, 2, 20)):
+            ...     print e.title
+            ...     print e.dtstarttz
+            A Birthday
+            2005-02-20 16:00:00+00:00
+
+        If no date is specified, the view cursor is used
+
+            >>> view.cursor = datetime(2005, 2, 22)
+            >>> [e for e in view.getAllDayEvents()]
+            []
+            >>> view.cursor = datetime(2005, 2, 20)
+            >>> [e.title for e in view.getAllDayEvents()]
+            ['A Birthday']
 
         """
 

@@ -672,7 +672,8 @@ class CalendarViewBase(BrowserView):
         for day in week:
             result.append('<td class="cal_yearly_day">')
             if day.date.month == month:
-                if len(day.events):
+                if len(day.events + 
+                        [e for e in self.getAllDayEvents(day.date)]):
                     cssClass = 'cal_yearly_day_busy'
                 else:
                     cssClass = 'cal_yearly_day'
