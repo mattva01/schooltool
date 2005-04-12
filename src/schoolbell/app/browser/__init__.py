@@ -34,10 +34,14 @@ from zope.app.security.interfaces import IUnauthenticatedPrincipal
 from zope.tales.interfaces import ITALESFunctionNamespace
 from zope.security.proxy import removeSecurityProxy
 
+from pytz import timezone
+
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import ISchoolBellApplication, IPerson
+from schoolbell.app.interfaces import IPersonPreferences
 from schoolbell.app.app import getSchoolBellApplication
 
+utc = timezone('UTC')
 
 class NavigationView(BrowserView):
     """View for the navigation portlet.
@@ -186,3 +190,34 @@ class SchoolBellSized(object):
             return _("1 person")
         else:
             return _("%d persons" % num)
+
+
+class ViewPreferences(object):
+    """Preference class to attach to views."""
+
+    def __init__(self, request):
+        person = IPerson(request.principal, None)
+        if person is not None:
+            prefs = IPersonPreferences(person)
+            if prefs.weekstart == "Sunday":
+                self.first_day_of_week = 6
+            else:
+                self.first_day_of_week = 0
+
+            if prefs.timeformat == "H:MM am/pm":
+                self.timeformat = '%I:%M %p'
+            else:
+                self.timeformat = '%H:%M'
+
+            if prefs.timezone is not None:
+                self.timezone = timezone(prefs.timezone)
+            else:
+                self.timezone = utc
+
+            self.dateformat = prefs.dateformat
+
+        else:
+            self.first_day_of_week = 0
+            self.timeformat = '%H:%M'
+            self.dateformat = 'YYYY-MM-DD'
+            self.timezone = utc

@@ -55,6 +55,7 @@ from zope.security.checker import canWrite, canAccess
 
 from pytz import timezone
 
+from schoolbell.app.browser import ViewPreferences
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ICalendarOwner, ISchoolBellCalendarEvent
@@ -1153,24 +1154,12 @@ class CalendarEventView(BrowserView):
         self.context = context
         self.request = request
 
-        person = IPerson(self.request.principal, None)
-        if person is not None:
-            prefs = IPersonPreferences(person)
-            if prefs.timezone is not None:
-                self.timezone = timezone(prefs.timezone)
-            if prefs.timeformat == "H:MM am/pm":
-                self.time_fmt = '%I:%M %p'
-            else:
-                self.time_fmt = '%H:%M'
-        else:
-            self.time_fmt = '%H:%M'
-            self.dateformat = 'YYYY-MM-DD'
-            self.timezone = utc
+        self.preferences = ViewPreferences(request)
 
-        self.dtstart = context.dtstart.astimezone(self.timezone)
+        self.dtstart = context.dtstart.astimezone(self.preferences.timezone)
         self.dtend = self.dtstart + context.duration
-        self.start = self.dtstart.strftime(self.time_fmt)
-        self.end = self.dtend.strftime(self.time_fmt)
+        self.start = self.dtstart.strftime(self.preferences.timeformat)
+        self.end = self.dtend.strftime(self.preferences.timeformat)
 
 
 class ICalendarEventAddForm(Interface):

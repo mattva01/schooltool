@@ -245,6 +245,44 @@ def doctest_SchoolBellSized():
     """
 
 
+def doctest_ViewPrefences():
+    r"""Unit tests for ViewPreferences.
+
+        >>> from zope.publisher.browser import TestRequest
+
+        >>> from schoolbell.app.browser import ViewPreferences
+        >>> from schoolbell.app.interfaces import IPerson
+        >>> from schoolbell.app.interfaces import IPersonPreferences
+        >>> from schoolbell.app.app import Person
+
+        >>> class PreferenceStub:
+        ...     def __init__(self):
+        ...         self.weekstart = "Monday"
+        ...         self.timeformat = "%H:%M"
+        ...         self.dateformat = "YYYY-MM-DD"
+        ...         self.timezone = 'UTC'
+        >>> class PersonStub:
+        ...     def __conform__(self, interface):
+        ...         if interface is IPersonPreferences:
+        ...             return PreferenceStub()
+        >>> class PrincipalStub:
+        ...     def __conform__(self, interface):
+        ...         if interface is IPerson:
+        ...             return PersonStub()
+        >>> request = TestRequest()
+        >>> request.setPrincipal(PrincipalStub())
+        >>> prefs = ViewPreferences(request)
+        >>> from datetime import datetime
+        >>> prefs.timezone.tzname(datetime.now())
+        'UTC'
+        >>> prefs.timeformat
+        '%H:%M'
+        >>> prefs.dateformat
+        'YYYY-MM-DD'
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite())
