@@ -498,7 +498,7 @@
 <!-- Calendar event views -->
 
   <page
-      name="view.html"
+      name="index.html"
       for="schoolbell.app.interfaces.ICalendarEvent"
       class="schoolbell.app.browser.cal.CalendarEventView"
       template="templates/event.pt"
