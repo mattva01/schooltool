@@ -151,7 +151,7 @@
   <content class=".notes.Notes">
     <require permission="zope.Public"
              attributes="__iter__" />
-    <require permission="schoolbell.create"
+    <require permission="schoolbell.view"
              attributes="add remove clear" />
   </content>
 

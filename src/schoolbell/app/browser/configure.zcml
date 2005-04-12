@@ -112,7 +112,7 @@
       for="schoolbell.app.interfaces.IHaveNotes"
       class="schoolbell.app.browser.notes.NoteAddView"
       template="templates/note_add.pt"
-      permission="schoolbell.create"
+      permission="schoolbell.view"
       menu="schoolbell_actions"
       title="New note" />
 

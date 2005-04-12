@@ -215,6 +215,7 @@ def authSetUpSubscriber(event):
                 perms.grantPermissionToPrincipal('schoolbell.view',
                                                  allusers.id)
 
+
 def personPermissionsSubscriber(event):
     """Grant default permissions to all new persons"""
     if IObjectAddedEvent.providedBy(event):
