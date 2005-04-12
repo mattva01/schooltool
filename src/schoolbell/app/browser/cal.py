@@ -1146,6 +1146,33 @@ def vocabulary(choices):
     return SimpleVocabulary([SimpleTerm(v, title=t) for v, t in choices])
 
 
+class CalendarEventView(BrowserView):
+    """View for single events."""
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+        person = IPerson(self.request.principal, None)
+        if person is not None:
+            prefs = IPersonPreferences(person)
+            if prefs.timezone is not None:
+                self.timezone = timezone(prefs.timezone)
+            if prefs.timeformat == "H:MM am/pm":
+                self.time_fmt = '%I:%M %p'
+            else:
+                self.time_fmt = '%H:%M'
+        else:
+            self.time_fmt = '%H:%M'
+            self.dateformat = 'YYYY-MM-DD'
+            self.timezone = utc
+
+        self.dtstart = context.dtstart.astimezone(self.timezone)
+        self.dtend = self.dtstart + context.duration
+        self.start = self.dtstart.strftime(self.time_fmt)
+        self.end = self.dtend.strftime(self.time_fmt)
+
+
 class ICalendarEventAddForm(Interface):
     """Schema for event adding form."""
 

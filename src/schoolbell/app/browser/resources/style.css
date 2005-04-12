@@ -188,14 +188,22 @@ div.error {
     margin-top: 1ex;
 }
 
-input.button-ok {
+a.button-cancel,
+a.button-ok {
+  color: white;
+  text-decoration: none;
+  margin: 5px;
+  padding: 2px 5px;
+}
+
+.button-ok {
     background: #83A67F !important;
     border: 1px #445632 solid !important;
     color: #fff;
     font-weight: bold;
 }
 
-input.button-cancel {
+.button-cancel {
     background: #C1665A !important;
     border: 1px #663822 solid !important;
     color: #fff;

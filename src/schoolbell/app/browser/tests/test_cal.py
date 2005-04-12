@@ -1082,6 +1082,28 @@ class CalendarEventAddTestView(CalendarEventAddView):
     _set_before_add = []
     _set_after_add = []
 
+def doctest_CalendarEventView():
+    r"""Tests for CalendarEventView.
+
+    We'll create a simple event view.
+
+        >>> from schoolbell.app.cal import CalendarEvent
+        >>> from schoolbell.app.cal import Calendar
+        >>> from schoolbell.app.browser.cal import CalendarEventView
+        >>> cal = Calendar()
+        >>> event = CalendarEvent(datetime(2002, 2, 3, 12, 30),
+        ...                       timedelta(minutes=59), "Event")
+        >>> cal.addEvent(event)
+        >>> request = TestRequest()
+        >>> view = CalendarEventView(event, request)
+
+        >>> view.start
+        '12:30'
+        >>> view.end
+        '13:29'
+
+    """
+
 
 def doctest_CalendarEventAddView_add():
     r"""Tests for CalendarEventAddView adding of new event.
@@ -1197,7 +1219,6 @@ def doctest_CalendarEventAddView_add():
         u'15:30'
         >>> view.duration_widget.getInputValue()
         50
-
 
    Lets change our timezone to US/Eastern.
 

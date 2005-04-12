@@ -1,0 +1,42 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate=""
+         tal:content="context/title">Add/edit event</title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header"><span tal:replace="context/title" /></h1>
+<metal:block metal:fill-slot="body" 
+             tal:define="evdate python:context.dtstart.strftime('%Y-%m-%d')">
+
+  <tal:if condition="not:context/allday">
+    <div>
+      <strong i18n:translate="">Starts:</strong>
+      <span tal:content="view/start" />
+    </div>
+    <div>
+      <strong i18n:translate="">Ends:</strong>
+      <span tal:content="view/end" />
+    </div>
+  </tal:if>
+  <tal:if condition="context/allday">
+    <div><strong>All day event</strong></div>
+  </tal:if>
+  <div tal:condition="context/location|nothing">
+    <strong i18n:translate="">Location:</strong>
+    <span tal:content="context/location" />
+  </div>
+  <p tal:content="context/description|nothing" />
+  <div class="controls">
+    <a class="button-ok" href="" title="Edit this event"
+      tal:attributes="href string:${context/@@absolute_url}/edit.html?event_id=${context/unique_id}&date=${evdate}">
+      Edit
+    </a>
+    <a href="" class="button-cancel" title="Delete this event"
+      tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${context/unique_id}&date=${evdate}">
+      Delete
+    </a>
+  </div>
+
+</metal:block>
+</html>

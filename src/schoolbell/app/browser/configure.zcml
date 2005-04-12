@@ -497,6 +497,16 @@
 
 <!-- Calendar event views -->
 
+  <page
+      name="view.html"
+      for="schoolbell.app.interfaces.ICalendarEvent"
+      class="schoolbell.app.browser.cal.CalendarEventView"
+      template="templates/event.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
   <addform
       label="Add Event"
       name="add.html"
