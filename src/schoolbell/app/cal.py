@@ -40,12 +40,13 @@ from schoolbell.calendar.mixins import CalendarMixin
 from schoolbell.calendar.simple import SimpleCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar
+from schoolbell.app.interfaces import IHaveNotes
 
 
 class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
     """A persistent calendar event contained in a persistent calendar."""
 
-    implements(ISchoolBellCalendarEvent)
+    implements(ISchoolBellCalendarEvent, IHaveNotes, IAttributeAnnotatable)
 
     __parent__ = None
 

@@ -37,6 +37,7 @@
       Delete
     </a>
   </div>
+  <tal:block replace="structure context/@@notes|nothing"/>
 
 </metal:block>
 </html>

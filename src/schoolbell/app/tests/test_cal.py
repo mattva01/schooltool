@@ -58,7 +58,10 @@ def doctest_CalendarEvent():
     The event implements ISchoolBellCalendarEvent:
 
         >>> from schoolbell.app.interfaces import ISchoolBellCalendarEvent
+        >>> from schoolbell.app.interfaces import IHaveNotes
         >>> verifyObject(ISchoolBellCalendarEvent, event)
+        True
+        >>> verifyObject(IHaveNotes, event)
         True
 
     It has a name, which is equal to its unique id, and can have a parent:
