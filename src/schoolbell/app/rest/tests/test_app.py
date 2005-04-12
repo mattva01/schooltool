@@ -272,7 +272,7 @@ class TestResourceContainerView(ContainerViewTestMixin,
                     xmlns='http://schooltool.org/ns/model/0.1'/>''')
         self.assertEquals(self.app['resources'][name].title, 'New Resource')
         self.assertEquals(self.app['resources'][name].description, 'A new resource')
-        self.assertEquals(name, 'new-resource')
+        self.assertEquals(name, 'Resource')
 
     def test_post_error(self):
         view = ResourceContainerView(
@@ -476,6 +476,7 @@ class TestGroupView(ApplicationObjectViewTestMixin, unittest.TestCase):
                    <calendar xlink:href="http://127.0.0.1/groups/root/calendar"
                              xlink:title="Calendar" xlink:type="simple"/>
                </group>""")
+
 
 class TestResourceView(ApplicationObjectViewTestMixin, unittest.TestCase):
     """A test for the RESTive view of a resource."""
@@ -719,6 +720,7 @@ def test_suite():
     suite.addTests([unittest.makeSuite(test) for test in
                     (TestAppView,
                      TestGroupContainerView,
+                     TestResourceContainerView,
                      TestPersonContainerView,
                      TestGroupFileFactory,
                      TestResourceFileFactory,
