@@ -117,7 +117,6 @@ def doctest_CalendarOwnerTraverser():
 
     """
 
-
 def doctest_CalendarTraverser():
     """Tests for CalendarTraverser.
 
@@ -217,6 +216,70 @@ def doctest_CalendarTraverser():
 
     """
 
+def doctest_CalendarOwnerHttpTraverser():
+    """Tests for CalendarOwnerHttpTraverser.
+
+    CalendarOwnerHttpTraverser allows you to traverse directly to the calendar
+    of a calendar owner.
+
+        >>> from schoolbell.app.browser.cal import CalendarOwnerHTTPTraverser
+        >>> from schoolbell.app.app import Person
+        >>> person = Person()
+        >>> request = TestRequest()
+        >>> traverser = CalendarOwnerHTTPTraverser(person, request)
+        >>> traverser.context is person
+        True
+        >>> traverser.request is request
+        True
+
+    The traverser should implement IBrowserPublisher:
+
+        >>> from zope.publisher.interfaces.browser import IBrowserPublisher
+        >>> verifyObject(IBrowserPublisher, traverser)
+        True
+
+    The whole point of this class is that we can ask for the calendar:
+
+        >>> traverser.publishTraverse(request, 'calendar') is person.calendar
+        True
+        >>> traverser.publishTraverse(request, 'calendar.ics') is person.calendar
+        True
+        >>> traverser.publishTraverse(request, 'calendar.vfb') is person.calendar
+        True
+
+    """
+
+def doctest_CalendarHttpTraverser():
+    """Tests for CalendarHttpTraverser.
+
+    CalendarHttpTraverser allows you to traverse directly to the calendar
+    of a calendar .
+
+        >>> from schoolbell.app.browser.cal import CalendarHTTPTraverser
+        >>> from schoolbell.app.app import Person
+        >>> person = Person()
+        >>> request = TestRequest()
+        >>> calendar = person.calendar
+        >>> traverser = CalendarHTTPTraverser(calendar, request)
+        >>> traverser.context is calendar
+        True
+        >>> traverser.request is request
+        True
+
+    The traverser should implement IBrowserPublisher:
+
+        >>> from zope.publisher.interfaces.browser import IBrowserPublisher
+        >>> verifyObject(IBrowserPublisher, traverser)
+        True
+
+    The whole point of this class is that we can ask for the calendar:
+
+        >>> traverser.publishTraverse(request, 'calendar.ics') is calendar
+        True
+        >>> traverser.publishTraverse(request, 'calendar.vfb') is calendar
+        True
+
+    """
 
 def doctest_EventForDisplay():
     """A wrapper for calendar events.

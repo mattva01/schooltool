@@ -367,6 +367,7 @@ class PasswordWriterView(View):
         body = self.request.bodyFile
         password = body.read().split("\n")[0]
         self.context.setPassword(password)
+        self.request.response.setStatus("200")
         return ''
 
 
@@ -404,6 +405,7 @@ class PersonPhotoView(View):
             raise NotFound(self.context, u'photo', self.request)
 
         self.request.response.setHeader('Content-Type', "image/jpeg")
+        self.request.response.setStatus("200")
         return photo
 
     def DELETE(self):
@@ -421,4 +423,5 @@ class PersonPhotoView(View):
 
         body = self.request.bodyFile
         self.context.writePhoto(body.read())
+        self.request.response.setStatus("200")
         return ''

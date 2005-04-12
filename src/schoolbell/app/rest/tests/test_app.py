@@ -23,9 +23,13 @@ $Id$
 """
 
 import unittest
+import doctest
 from StringIO import StringIO
 
 from zope.app.testing import ztapi
+from zope.testing import doctest
+from zope.publisher.interfaces import NotFound
+from zope.interface.verify import verifyObject
 from zope.interface import directlyProvides, Interface
 from zope.app.traversing.interfaces import ITraversable
 from zope.publisher.browser import TestRequest
@@ -528,7 +532,6 @@ class TestPersonView(ApplicationObjectViewTestMixin, unittest.TestCase):
         return PersonView(object, request)
 
     def testGET(self):
-        """Tests the GET method of the view."""
 
         result, response = self.get()
         self.assertEquals(response.getHeader('content-type'),
@@ -540,6 +543,176 @@ class TestPersonView(ApplicationObjectViewTestMixin, unittest.TestCase):
                              xlink:title="Calendar" xlink:type="simple"/>
                </person>""")
 
+
+class TestPersonPasswordWriter(unittest.TestCase):
+
+    def testSetPassword(self):
+        from schoolbell.app.rest.app import PersonPasswordWriter
+        person =  Person("Frog")
+        passwordWriter = PersonPasswordWriter(person)
+        passwordWriter.setPassword("gorf")
+        self.assert_(person.checkPassword("gorf"))
+
+    def testConformance(self):
+        from schoolbell.app.rest.app import PersonPasswordWriter
+        from schoolbell.app.rest.interfaces import IPasswordWriter
+        person =  Person("Frog")
+        passwordWriter = PersonPasswordWriter(person)
+        self.assert_(verifyObject(IPasswordWriter, passwordWriter))
+
+
+class TestPersonPasswordWriterView(ApplicationObjectViewTestMixin,
+                                   unittest.TestCase):
+
+    def setUp(self):
+        from schoolbell.app.rest.app import PersonPasswordWriter
+        ApplicationObjectViewTestMixin.setUp(self)
+        self.person = self.app['persons']['root'] = Person("root",
+                                                           title="Root person")
+
+        self.testObject = PersonPasswordWriter(self.person)
+
+    def makeTestView(self, object, request):
+        from schoolbell.app.rest.app import PasswordWriterView
+        return PasswordWriterView(object, request)
+
+    def testPUT(self):
+
+        request = TestRequest(StringIO("super-secret-password"))
+        view = self.makeTestView(self.testObject, request)
+        result = view.PUT()
+        response = request.response
+
+        self.assertEquals(response.getStatus(), 200)
+        self.assertEqualsXML(result, "")
+        self.assert_(self.person.checkPassword("super-secret-password"))
+
+
+class TestPersonPhotoAdapter(unittest.TestCase):
+
+    def makeTestObject(self):
+
+        from schoolbell.app.rest.app import PersonPhotoAdapter
+        return PersonPhotoAdapter(Person("Frog"))
+
+    def testConformance(self):
+
+        from schoolbell.app.rest.interfaces import IPersonPhoto
+        personPhoto = self.makeTestObject()
+        self.assert_(verifyObject(IPersonPhoto, personPhoto))
+
+    def testSetDeletePhoto(self):
+
+        personPhoto = self.makeTestObject()
+        personPhoto.writePhoto("lalala")
+        self.assertEquals(personPhoto.person.photo, "lalala")
+
+        personPhoto.deletePhoto()
+        self.assert_(personPhoto.person.photo is None)
+
+    def testGetPhoto(self):
+
+        personPhoto = self.makeTestObject()
+        personPhoto.writePhoto("lalala")
+        self.assertEquals(personPhoto.getPhoto(), "lalala")
+
+        personPhoto.deletePhoto()
+        self.assert_(personPhoto.getPhoto() is None)
+
+
+class TestPersonPhotoView(ApplicationObjectViewTestMixin,
+                          unittest.TestCase):
+
+    def setUp(self):
+
+        from schoolbell.app.rest.app import PersonPhotoAdapter
+        ApplicationObjectViewTestMixin.setUp(self)
+        self.person = self.app['persons']['root'] = Person("root",
+                                                           title="Root person")
+
+        self.testObject = PersonPhotoAdapter(self.person)
+
+    def makeTestView(self):
+
+        from schoolbell.app.rest.app import PersonPhotoView
+        return PersonPhotoView(self.testObject,
+                               TestRequest(StringIO("Icky Picky")))
+
+    def testGETNotFound(self):
+
+        view = self.makeTestView()
+        self.assertRaises(NotFound, view.GET)
+
+    def testGET(self):
+
+        view = self.makeTestView()
+        view.PUT()
+        result = view.GET()
+        response = view.request.response
+
+        self.assertEquals(response.getStatus(), 200)
+        self.assertEquals(result, "Icky Picky")
+
+    def testPUT(self):
+
+        view = self.makeTestView()
+        result = view.PUT()
+        response = view.request.response
+
+        self.assertEquals(response.getStatus(), 200)
+        self.assertEquals(result, "")
+
+    def testDelete(self):
+
+        view = self.makeTestView()
+        view.DELETE()
+
+        self.assertRaises(NotFound, view.GET)
+
+
+def doctest_PersonHttpTraverser():
+    """Tests for PersonHttpTraverser.
+
+    PersonHttpTraverser allows you to access photo and password of the
+    person:
+
+        >>> from schoolbell.app.rest.app import PersonHTTPTraverser
+        >>> from schoolbell.app.app import Person
+        >>> person = Person()
+        >>> request = TestRequest()
+        >>> traverser = PersonHTTPTraverser(person, request)
+        >>> traverser.context is person
+        True
+        >>> traverser.request is request
+        True
+
+    The traverser should implement IBrowserPublisher:
+
+        >>> from zope.publisher.interfaces.browser import IBrowserPublisher
+        >>> verifyObject(IBrowserPublisher, traverser)
+        True
+
+    The traverser inherits from CalendarOwnerHttpTraverser so we
+    should be able to access the calendar of his:
+
+        >>> traverser.publishTraverse(request, 'calendar') is person.calendar
+        True
+        >>> traverser.publishTraverse(request, 'calendar.ics') is person.calendar
+        True
+        >>> traverser.publishTraverse(request, 'calendar.vfb') is person.calendar
+        True
+
+    As well as password:
+
+        >>> traverser.publishTraverse(request, 'password')
+        <schoolbell.app.rest.app.PersonPasswordWriter object at ...>
+
+    and photo:
+
+        >>> traverser.publishTraverse(request, 'photo')
+        <schoolbell.app.rest.app.PersonPhotoAdapter object at ...>
+
+    """
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -555,7 +728,14 @@ def test_suite():
                      TestResourceFile,
                      TestGroupView,
                      TestResourceView,
-                     TestPersonView)])
+                     TestPersonView,
+                     TestPersonPasswordWriter,
+                     TestPersonPasswordWriterView,
+                     TestPersonPhotoAdapter,
+                     TestPersonPhotoView)])
+
+    suite.addTest(doctest.DocTestSuite(optionflags=doctest.ELLIPSIS|
+                                                   doctest.REPORT_NDIFF))
     return suite
 
 if __name__ == '__main__':

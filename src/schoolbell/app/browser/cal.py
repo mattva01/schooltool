@@ -230,6 +230,9 @@ class CalendarOwnerHTTPTraverser(object):
 
         raise NotFound(self.context, name, request)
 
+    def browserDefault(self, request):
+        return self.context, ('GET', )
+
 
 class CalendarHTTPTraverser(object):
     """Traverser that allows different ways of accessing ones calendar.
@@ -249,6 +252,9 @@ class CalendarHTTPTraverser(object):
             return self.context
 
         raise NotFound(self.context, name, request)
+
+    def browserDefault(self, request):
+        return self.context, ('GET', )
 
 
 #
