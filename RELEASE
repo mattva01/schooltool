@@ -1,0 +1,103 @@
+Release Notes - SchoolBell 1.0
+==============================
+
+This is the first release of SchoolBell separately from SchoolTool. It also
+marks the completion of the transition of SchoolBell to being a component in
+the Zope3 framework and the start of full forward database compatibility.
+
+The application was basically re-written and a number of features have not yet
+been ported from SchoolBell 0.9, however, the integration with Zope 3 provides
+a good basis going forward.
+
+SchoolBell can now be used as a stand alone server as well as a Zope 3
+component integrated with the ZMI.
+
+Major Changes from 0.9
+----------------------
+
+Contributions by POV_:
+
+* Porting large portions of the old SchoolBell to the Zope 3 framework and ZMI.
+  SchoolBell is now a collection of re-usable Zope 3 components that can be
+  used in other Zope 3 applications.
+* iCalender Parser
+* Don't worry, SchoolBell can still be run as a stand alone server
+
+Contributions by Brian Sutherland:
+
+* Simplified packaging
+* Distutils build system:
+
+  * Installation
+  * Tarball and zipfile generation
+
+Contributions by `Etria, LLP`_:
+
+* UI improvements
+* User Preferences
+* Partial SchoolTool / SchoolBell 0.8 and 0.9 database upgrade script.
+
+.. _`Etria, LLP`: http://etria.com/
+.. _POV: http://pov.lt/
+
+Known Issues
+------------
+
+Database Upgrades
+~~~~~~~~~~~~~~~~~
+
+This release will do a *partial* import of a database from the previous version
+of SchoolTool or SchoolBell. Only all persons and resources and their calendars
+are migrated, along with groups, their calendars and membership information.
+Other data, including school-related data like timetables and time periods is
+not migrated.
+
+Full upgrades will be maintained from this release onwards.
+
+To upgrade your 0.8/0.9 instace to 1.0, follow the instructions in
+scripts/run-export.sh and scripts/run-import.sh.
+
+Note that these scripts require the libraries that come with SchoolTool 0.9.
+If you already installed SchoolBell 1.0 or removed your previous installation
+simply download and build (but do not install) the 0.9 release.
+
+Unimplemented features from SchoolBell 0.9
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Some features were unable to make the transition from the twisted framework to
+the Zope 3 framework, or were un-implemented at the time of the release due to
+the time based release method. Those which make sense will be implemented later
+and those which don't, will be dropped.
+
+* native server SSL
+* ReST interface
+* i18n
+* Resource Booking
+* TCPWrapper integration
+
+Planned Features
+----------------
+
+* Timezone support
+* Start of week selection
+* AllDayEvents
+* exporting FreeBusy
+
+Download and Installation
+-------------------------
+
+Distributed Files:
+
+* `Tarball`_
+* `Zip File`_
+* `GPG signed md5sums`_
+* Packages will be distributed with Ubuntu_ universe (Keep your fingers crossed
+  for Hoary) and in Debian_ unstable.
+* A Live CD based on the Ubuntu_ Hoary distribution will be available from
+  Brian Sutherland on request after Hoary is released.
+
+.. _`Tarball`: http://www.schooltool.org/releases/schoolbell1.0/final/schoolbell-1.0.tar.gz
+.. _`Zip File`: http://www.schooltool.org/releases/schoolbell1.0/final/schoolbell-1.0.zip
+.. _`GPG signed md5sums`: http://www.schooltool.org/releases/schoolbell1.0/final/md5sum
+.. _`Ubuntu`: http://www.ubuntulinux.org
+.. _`Debian`: http://www.debian.org
