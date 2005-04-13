@@ -302,10 +302,14 @@
       <h4 i18n:translate="">Tomorrow's Events</h4>
       <ul>
       <tal:loop tal:repeat="event tevents">
-        <li tal:condition="python: event.dtstart.date() == tomorrow"
-            tal:attributes="style string:color: ${event/color2}">
-          <b tal:content="python:event.dtstart.astimezone(view.timezone).strftime('%H:%M')" />
-          <span tal:replace="event/shortTitle">Event</span>
+        <li tal:condition="python: event.dtstart.date() == tomorrow">
+          <a href="" title=""
+             tal:attributes="title event/title;
+                             style string:color: ${event/color2};
+                             href event/@@absolute_url">
+            <strong tal:content="python:event.dtstart.astimezone(view.timezone).strftime('%H:%M')" />
+            <span tal:replace="event/shortTitle">Event</span>
+          </a>
         </li>
       </tal:loop>
       </ul>
