@@ -738,9 +738,13 @@ We should see it in the calendar for today:
            <h4>Tomorrow's Events</h4>
            <ul>
     <BLANKLINE>
-             <li style="color: #7590ae">
-               <b>12:00</b>
-               Important meeti...
+             <li>
+               <a href="...
+                  title="Important meeting"
+                  style="color: #7590ae">
+                 <strong>12:00</strong>
+                 Important meeti...
+               </a>
              </li>
     <BLANKLINE>
            </ul>
@@ -761,9 +765,13 @@ should have the event we have just created in the Tomorrow's events box.
            <h4>Tomorrow's Events</h4>
            <ul>
     <BLANKLINE>
-             <li style="color: #7590ae">
-               <b>12:00</b>
-               Important meeti...
+             <li>
+               <a href="...
+                  title="Important meeting"
+                  style="color: #7590ae">
+                 <strong>12:00</strong>
+                 Important meeti...
+               </a>
              </li>
     <BLANKLINE>
            </ul>
