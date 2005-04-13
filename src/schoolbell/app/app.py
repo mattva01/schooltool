@@ -258,8 +258,6 @@ class Group(Persistent, Contained):
 
     members = RelationshipProperty(URIMembership, URIGroup, URIMember)
 
-    groups = RelationshipProperty(URIMembership, URIMember, URIGroup)
-
     def __init__(self, title=None, description=None):
         self.title = title
         self.description = description
