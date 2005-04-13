@@ -165,7 +165,7 @@
       template="templates/person_preferences.pt"
       permission="zope.View"
       menu="schoolbell_actions" 
-      title="Change Preferences" />
+      title="Change preferences" />
 
   <page
       name="edit.html"
