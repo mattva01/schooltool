@@ -107,8 +107,8 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
         principalRegistry.registerGroup(authenticated)
 
     def test_GET(self):
-        from schoolbell.app.rest.acl import ACLView
-        view = ACLView(self.person, TestRequest())
+        from schoolbell.app.rest.acl import ACLView, ACLAdapter
+        view = ACLView(ACLAdapter(self.person), TestRequest())
 
         # Let's limit the list of permissions so the output is shorter
         view.permissions = [('schoolbell.view', 'View'),
@@ -142,7 +142,7 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
         self.assertEqualsXML(result, expected)
 
     def test_POST(self):
-        from schoolbell.app.rest.acl import ACLView
+        from schoolbell.app.rest.acl import ACLView, ACLAdapter
         from zope.app.securitypolicy.interfaces import \
              IPrincipalPermissionManager
 
@@ -197,7 +197,7 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
               <!--   5. sb.groups.admins is not mentioned -->
             </acl>
         """
-        view = ACLView(self.person, TestRequest(StringIO(body)))
+        view = ACLView(ACLAdapter(self.person), TestRequest(StringIO(body)))
 
         # Let's limit the list of permissions so the output is shorter
         view.permissions = [('schoolbell.view', 'View'),
@@ -240,7 +240,7 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
                          Deny)
 
     def test_parseData(self):
-        from schoolbell.app.rest.acl import ACLView
+        from schoolbell.app.rest.acl import ACLView, ACLAdapter
         body = """
             <acl xmlns="http://schooltool.org/ns/model/0.1">
               <principal id="sb.person.ann">
@@ -254,7 +254,7 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
               </principal>
             </acl>
         """
-        view = ACLView(self.person, TestRequest())
+        view = ACLView(ACLAdapter(self.person), TestRequest())
 
         data = view.parseData(body)
         self.assertEquals(data, {'sb.person.ann': ['schoolbell.view'],
@@ -263,9 +263,9 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
                                                    'schoolbell.create']})
 
     def test_parseData_errors(self):
-        from schoolbell.app.rest.acl import ACLView
+        from schoolbell.app.rest.acl import ACLView, ACLAdapter
         from schoolbell.app.rest.errors import RestError
-        view = ACLView(self.person, TestRequest())
+        view = ACLView(ACLAdapter(self.person), TestRequest())
 
         body = """<acl xmlns="http://schooltool.org/ns/model/0.1">
                    <principal id="zope.anonymous">

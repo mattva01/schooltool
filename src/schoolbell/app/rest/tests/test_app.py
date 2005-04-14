@@ -738,6 +738,7 @@ def test_suite():
 
     suite.addTest(doctest.DocTestSuite(optionflags=doctest.ELLIPSIS|
                                                    doctest.REPORT_NDIFF))
+    suite.addTest(doctest.DocTestSuite('schoolbell.app.rest.app'))
     return suite
 
 if __name__ == '__main__':

@@ -1,0 +1,361 @@
+Functional tests for SchoolBell ACL ReSTive view
+================================================
+
+First of all, we will need a schoolbell instance.  We will add it via
+the web ZMI:
+
+    >>> print http("""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&\
+    ... new_value=frogpond""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+    >>> from schoolbell.app.rest.ftests import rest
+
+    >>> print rest("""
+    ... GET /frogpond/persons/acl HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <acl xmlns="http://schooltool.org/ns/model/0.1">
+      <principal id="zope.Authenticated">
+    <BLANKLINE>
+          <permission setting="on" id="schoolbell.view" />
+          <permission id="schoolbell.edit" />
+          <permission id="schoolbell.create" />
+          <permission id="schoolbell.viewCalendar" />
+          <permission id="schoolbell.addEvent" />
+          <permission id="schoolbell.modifyEvent" />
+          <permission id="schoolbell.controlAccess" />
+          <permission id="schoolbell.manageMembership" />
+    <BLANKLINE>
+      </principal>
+      <principal id="zope.Anybody">
+    <BLANKLINE>
+          <permission id="schoolbell.view" />
+          <permission id="schoolbell.edit" />
+          <permission id="schoolbell.create" />
+          <permission id="schoolbell.viewCalendar" />
+          <permission id="schoolbell.addEvent" />
+          <permission id="schoolbell.modifyEvent" />
+          <permission id="schoolbell.controlAccess" />
+          <permission id="schoolbell.manageMembership" />
+    <BLANKLINE>
+      </principal>
+    </acl>
+    <BLANKLINE>
+
+
+Now, let's create some groups and persons:
+
+    >>> print rest("""
+    ... POST /frogpond/groups/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="A Group"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+    Location: http://localhost/frogpond/groups/a-group
+    <BLANKLINE>
+    Object created: http://localhost/frogpond/groups/a-group
+
+    >>> print rest("""
+    ... PUT /frogpond/persons/john HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="John"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... PUT /frogpond/persons/john/password HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ...
+    ... ann
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+Now, the ACL view should include those new principals as well:
+
+    >>> print rest("""
+    ... GET /frogpond/acl HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <acl xmlns="http://schooltool.org/ns/model/0.1">
+      <principal id="zope.Authenticated">
+    <BLANKLINE>
+          <permission setting="on" id="schoolbell.view" />
+          <permission id="schoolbell.edit" />
+          <permission id="schoolbell.create" />
+          <permission id="schoolbell.viewCalendar" />
+          <permission id="schoolbell.addEvent" />
+          <permission id="schoolbell.modifyEvent" />
+          <permission id="schoolbell.controlAccess" />
+          <permission id="schoolbell.manageMembership" />
+    <BLANKLINE>
+      </principal>
+      <principal id="zope.Anybody">
+    <BLANKLINE>
+          <permission id="schoolbell.view" />
+          <permission id="schoolbell.edit" />
+          <permission id="schoolbell.create" />
+          <permission id="schoolbell.viewCalendar" />
+          <permission id="schoolbell.addEvent" />
+          <permission id="schoolbell.modifyEvent" />
+          <permission id="schoolbell.controlAccess" />
+          <permission id="schoolbell.manageMembership" />
+    <BLANKLINE>
+      </principal>
+      <principal id="sb.group.a-group">
+    <BLANKLINE>
+          <permission id="schoolbell.view" />
+          <permission id="schoolbell.edit" />
+          <permission id="schoolbell.create" />
+          <permission id="schoolbell.viewCalendar" />
+          <permission id="schoolbell.addEvent" />
+          <permission id="schoolbell.modifyEvent" />
+          <permission id="schoolbell.controlAccess" />
+          <permission id="schoolbell.manageMembership" />
+    <BLANKLINE>
+      </principal>
+      <principal id="sb.person.john">
+    <BLANKLINE>
+          <permission setting="on" id="schoolbell.view" />
+          <permission id="schoolbell.edit" />
+          <permission id="schoolbell.create" />
+          <permission id="schoolbell.viewCalendar" />
+          <permission id="schoolbell.addEvent" />
+          <permission id="schoolbell.modifyEvent" />
+          <permission id="schoolbell.controlAccess" />
+          <permission id="schoolbell.manageMembership" />
+    <BLANKLINE>
+      </principal>
+    </acl>
+    <BLANKLINE>
+
+
+# John cannot see the permissions, though:
+# 
+#     >>> print rest("""
+#     ... GET /frogpond/persons/acl HTTP/1.1
+#     ... """)
+#     HTTP/1.1 401 Unauthorized
+#     ...
+# 
+
+John can not set the permissions, though:
+
+    >>> print rest("""
+    ... POST /frogpond/persons/acl HTTP/1.1
+    ... Authorization: Basic john:ann
+    ...
+    ... <acl xmlns="http://schooltool.org/ns/model/0.1">
+    ...   <principal id="sb.group.a-group">
+    ...     <permission id="schoolbell.view" />
+    ...     <permission id="schoolbell.edit" />
+    ...     <permission id="schoolbell.create" />
+    ...     <permission id="schoolbell.viewCalendar" />
+    ...     <permission id="schoolbell.addEvent" />
+    ...     <permission id="schoolbell.modifyEvent" />
+    ...     <permission id="schoolbell.controlAccess" />
+    ...     <permission id="schoolbell.manageMembership" />
+    ...   </principal>
+    ... </acl>
+    ... """)
+    HTTP/1.1 401 Unauthorized
+    ...
+
+
+Let's change some permissions and grant John the right to manage
+permissions:
+
+    >>> print rest("""
+    ... POST /frogpond/persons/acl HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ...
+    ... <acl xmlns="http://schooltool.org/ns/model/0.1">
+    ...   <principal id="sb.group.a-group">
+    ...     <permission id="schoolbell.view" />
+    ...     <permission id="schoolbell.edit" />
+    ...     <permission id="schoolbell.create" />
+    ...     <permission id="schoolbell.viewCalendar" setting="on" />
+    ...     <permission id="schoolbell.addEvent" />
+    ...     <permission id="schoolbell.modifyEvent" />
+    ...     <permission id="schoolbell.controlAccess" />
+    ...     <permission id="schoolbell.manageMembership" />
+    ...   </principal>
+    ...   <principal id="sb.person.john">
+    ...     <permission id="schoolbell.view" />
+    ...     <permission id="schoolbell.edit" />
+    ...     <permission id="schoolbell.create" />
+    ...     <permission id="schoolbell.viewCalendar" />
+    ...     <permission id="schoolbell.addEvent" />
+    ...     <permission id="schoolbell.modifyEvent" />
+    ...     <permission id="schoolbell.controlAccess" setting="on" />
+    ...     <permission id="schoolbell.manageMembership" />
+    ...   </principal>
+    ... </acl>
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 19
+    <BLANKLINE>
+    Permissions updated
+
+Now, the permissions are changed and John can see them:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/acl HTTP/1.1
+    ... Authorization: Basic john:ann
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    ...
+    <BLANKLINE>
+    <acl xmlns="http://schooltool.org/ns/model/0.1">
+      <principal id="zope.Authenticated">
+    <BLANKLINE>
+          <permission setting="on" id="schoolbell.view" />
+          <permission id="schoolbell.edit" />
+          <permission id="schoolbell.create" />
+          <permission id="schoolbell.viewCalendar" />
+          <permission id="schoolbell.addEvent" />
+          <permission id="schoolbell.modifyEvent" />
+          <permission id="schoolbell.controlAccess" />
+          <permission id="schoolbell.manageMembership" />
+    <BLANKLINE>
+      </principal>
+      <principal id="zope.Anybody">
+    <BLANKLINE>
+          <permission id="schoolbell.view" />
+          <permission id="schoolbell.edit" />
+          <permission id="schoolbell.create" />
+          <permission id="schoolbell.viewCalendar" />
+          <permission id="schoolbell.addEvent" />
+          <permission id="schoolbell.modifyEvent" />
+          <permission id="schoolbell.controlAccess" />
+          <permission id="schoolbell.manageMembership" />
+    <BLANKLINE>
+      </principal>
+      <principal id="sb.group.a-group">
+    <BLANKLINE>
+          <permission id="schoolbell.view" />
+          <permission id="schoolbell.edit" />
+          <permission id="schoolbell.create" />
+          <permission setting="on" id="schoolbell.viewCalendar" />
+          <permission id="schoolbell.addEvent" />
+          <permission id="schoolbell.modifyEvent" />
+          <permission id="schoolbell.controlAccess" />
+          <permission id="schoolbell.manageMembership" />
+    <BLANKLINE>
+      </principal>
+      <principal id="sb.person.john">
+    <BLANKLINE>
+          <permission id="schoolbell.view" />
+          <permission id="schoolbell.edit" />
+          <permission id="schoolbell.create" />
+          <permission id="schoolbell.viewCalendar" />
+          <permission id="schoolbell.addEvent" />
+          <permission id="schoolbell.modifyEvent" />
+          <permission setting="on" id="schoolbell.controlAccess" />
+          <permission id="schoolbell.manageMembership" />
+    <BLANKLINE>
+      </principal>
+    </acl>
+    <BLANKLINE>
+
+# And John can modify the permissions:
+#
+#     >>> print rest("""
+#     ... POST /frogpond/persons/acl HTTP/1.1
+#     ... Authorization: Basic john:ann
+#     ...
+#     ... <acl xmlns="http://schooltool.org/ns/model/0.1">
+#     ...   <principal id="sb.group.a-group">
+#     ...     <permission id="schoolbell.view" />
+#     ...     <permission id="schoolbell.edit" />
+#     ...     <permission id="schoolbell.create" />
+#     ...     <permission id="schoolbell.viewCalendar" />
+#     ...     <permission id="schoolbell.addEvent" />
+#     ...     <permission id="schoolbell.modifyEvent" />
+#     ...     <permission id="schoolbell.controlAccess" />
+#     ...     <permission id="schoolbell.manageMembership" />
+#     ...   </principal>
+#     ... </acl>
+#     ... """)
+#     HTTP/1.1 200 Ok
+#     Content-Length: 19
+#     <BLANKLINE>
+#     Permissions updated
+
+The ACL views work everywhere:
+
+    >>> print rest("""
+    ... GET /frogpond/acl HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+    >>> print rest("""
+    ... GET /frogpond/persons/acl HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+    >>> print rest("""
+    ... GET /frogpond/groups/acl HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+    >>> print rest("""
+    ... GET /frogpond/groups/a-group/acl HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+    >>> print rest("""
+    ... GET /frogpond/groups/a-group/calendar/acl HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+    >>> print rest("""
+    ... GET /frogpond/persons/john/acl HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+    >>> print rest("""
+    ... GET /frogpond/persons/john/calendar/acl HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+

@@ -351,22 +351,6 @@
 
   <zope:view
       for="schoolbell.app.interfaces.ICalendarOwner"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-      factory=".cal.CalendarOwnerHTTPTraverser"
-      permission="zope.Public"
-      />
-
-  <zope:view
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-      factory=".cal.CalendarHTTPTraverser"
-      permission="zope.Public"
-      />
-
-  <zope:view
-      for="schoolbell.app.interfaces.ICalendarOwner"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       provides="zope.publisher.interfaces.browser.IBrowserPublisher"
       factory=".cal.CalendarOwnerTraverser"

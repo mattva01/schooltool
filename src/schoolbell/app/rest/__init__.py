@@ -22,7 +22,8 @@ Infrastructure for the RESTive views.
 $Id$
 """
 
-from zope.interface import implements
+from zope.interface import implements, Interface
+from zope.app import zapi
 from zope.app.publication.interfaces import IPublicationRequestFactory
 from zope.app.publication.http import HTTPPublication
 from zope.publisher.http import HTTPRequest
@@ -31,6 +32,10 @@ from zope.server.http.commonaccesslogger import CommonAccessLogger
 from zope.server.http.publisherhttpserver import PublisherHTTPServer
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile \
                                                 as Template
+from zope.publisher.interfaces import IPublishTraverse
+from zope.app.container.interfaces import ISimpleReadContainer
+from zope.publisher.interfaces import NotFound
+from zope.app.http.traversal import ContainerTraverser
 
 
 class RestPublicationRequestFactory(object):
@@ -89,3 +94,30 @@ def textErrorPage(response, message, code=400, reason=None):
     response.setStatus(code, reason)
     response.setHeader('Content-Type', 'text/plain; charset=UTF-8')
     return unicode(message).encode('UTF-8')
+
+
+class IRestTraverser(IPublishTraverse):
+    """A named traverser for ReSTive views."""
+
+
+class RestPublishTraverse(object):
+    """A 'multiplexer' traverser for ReSTive views"""
+
+    implements(IPublishTraverse)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        traverser = zapi.queryMultiAdapter((self.context, request),
+                                           IRestTraverser, name=name)
+
+        if traverser is not None:
+            return traverser.publishTraverse(request, name)
+        elif ISimpleReadContainer.providedBy(self.context):
+            traverser = ContainerTraverser(self.context, self.request)
+            return traverser.publishTraverse(request, name)
+
+        raise NotFound(self.context, name, request)
+

@@ -21,12 +21,14 @@ RESTive views for access control
 
 $Id$
 """
+from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
+from zope.interface import Interface, implements
 from schoolbell.app.rest import View, Template
 from schoolbell.app.rest.errors import RestError
 from schoolbell.app.browser.app import ACLViewBase, hasPermission
 from schoolbell.app.rest.xmlparsing import XMLDocument
-from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from schoolbell import SchoolBellMessageID as _
+from zope.security.proxy import removeSecurityProxy
 
 
 class ACLView(View, ACLViewBase):
@@ -64,6 +66,10 @@ class ACLView(View, ACLViewBase):
     </grammar>
     """
 
+    def __init__(self, adapter, request):
+        self.context = adapter.context
+        self.request = request
+
     def getPrincipals(self):
         personids = [prin['id'] for prin in self.getPersons()]
         groupids = [prin['id'] for prin in self.getGroups()]
@@ -72,6 +78,10 @@ class ACLView(View, ACLViewBase):
     def POST(self):
         settings = self.parseData(self.request.bodyFile.read())
         manager = IPrincipalPermissionManager(self.context)
+        # XXX: alga: the view permission checking does not work!
+        # I'll rely on the IPrincipalPermissionManager security for now.
+        # # this view is protected by schooltool.controlAccess
+        # manager = removeSecurityProxy(manager)
         for principal in settings:
             for permission, title in self.permissions:
                 parent = self.context.__parent__
@@ -116,3 +126,25 @@ class ACLView(View, ACLViewBase):
 
         finally:
             doc.free()
+
+
+class IACLAdapter(Interface):
+    """A proxy to which the ACL view is hooked up"""
+
+
+class ACLAdapter:
+    """A proxy to which the ACL view is hooked up"""
+    implements(IACLAdapter)
+
+    def __init__(self, context):
+        self.context = context
+
+
+class ACLTraverser(object):
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        return ACLAdapter(self.context)

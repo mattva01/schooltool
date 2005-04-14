@@ -30,7 +30,7 @@ from zope.app.http.put import FilePUT
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
-from schoolbell.app.rest import View, Template, textErrorPage
+from schoolbell.app.rest import View, Template, textErrorPage, IRestTraverser
 from schoolbell.app.rest.xmlparsing import XMLValidationError, XMLParseError
 from schoolbell.app.rest.xmlparsing import XMLDocument
 from schoolbell.calendar.icalendar import convert_calendar_to_ical
@@ -327,7 +327,7 @@ class PersonHTTPTraverser(CalendarOwnerHTTPTraverser):
     """A traverser that allows to traverse to a persons password or photo."""
 
     adapts(IPerson)
-    implements(IBrowserPublisher)
+    implements(IRestTraverser)
 
     def publishTraverse(self, request, name):
         if name == 'password':
@@ -425,3 +425,25 @@ class PersonPhotoView(View):
         self.context.writePhoto(body.read())
         self.request.response.setStatus("200")
         return ''
+
+
+class CalendarNullTraverser(object):
+    """A null traverser for calendars
+
+    It allows to access .../calendar/calendar.ics and similar.
+
+    >>> calendar = object()
+    >>> request = object()
+    >>> trav = CalendarNullTraverser(calendar, request)
+    >>> trav.publishTraverse(request, 'calendar.ics') is calendar
+    True
+    >>> trav.publishTraverse(request, 'calendar.vfb') is calendar
+    True
+    """
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        return self.context

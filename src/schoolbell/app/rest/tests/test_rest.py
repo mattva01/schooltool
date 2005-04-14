@@ -25,7 +25,9 @@ $Id$
 import unittest
 from StringIO import StringIO
 
+from zope.interface import Interface, implements
 from zope.app.testing.placelesssetup import PlacelessSetup
+from zope.app.testing import ztapi
 from zope.app.publication.http import HTTPPublication
 from zope.publisher.http import HTTPRequest
 
@@ -54,9 +56,65 @@ class Test(PlacelessSetup, unittest.TestCase):
             self.assertEqual(request.publication.__class__, HTTPPublication)
 
 
+class TestRestPublishTraverse(PlacelessSetup, unittest.TestCase):
+
+    def setUp(self):
+        from zope.publisher.interfaces.http import IHTTPRequest
+        from schoolbell.app.rest import IRestTraverser
+
+        PlacelessSetup.setUp(self)
+
+        class StubTraverser:
+            implements(IRestTraverser)
+            def __init__(self, context, request):
+                pass
+            def publishTraverse(self, request, name):
+                return 42
+
+        ztapi.provideAdapter((Interface, IHTTPRequest),
+                             IRestTraverser, StubTraverser, name='acl')
+
+    def create(self, context=None):
+        from schoolbell.app.rest import RestPublishTraverse
+        from zope.publisher.browser import TestRequest
+
+        class StubContext:
+            implements(Interface)
+
+        if context is None:
+            context = StubContext()
+
+        return RestPublishTraverse(context, TestRequest('/path'))
+
+    def testNotFound(self):
+        from zope.publisher.interfaces import NotFound
+        traverser = self.create()
+        self.assertRaises(NotFound,
+                          traverser.publishTraverse,
+                          traverser.request, 'whatever')
+
+    def testNamedTraverse(self):
+        traverser = self.create()
+        request = traverser.request
+        self.assertEqual(traverser.publishTraverse(request, 'acl'), 42)
+
+    def testContainerTraverse(self):
+        from zope.app.container.interfaces import ISimpleReadContainer
+
+        class Container:
+            implements(ISimpleReadContainer)
+            def get(self, key, default):
+                return {'item2': 69}.get(key, default)
+
+        traverser = self.create(Container())
+        request = traverser.request
+        self.assertEqual(traverser.publishTraverse(request, 'item2'), 69)
+
+
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(Test),
+        unittest.makeSuite(TestRestPublishTraverse),
         ))
 
 if __name__=='__main__':

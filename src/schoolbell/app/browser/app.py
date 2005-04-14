@@ -577,7 +577,6 @@ class ACLView(BrowserView, ACLViewBase):
             map = IPrincipalPermissionManager(self.context)
             # this view is protected by schooltool.controlAccess
             map = removeSecurityProxy(map)
-            auth = zapi.getUtility(IAuthentication)
 
             def permChecked(perm, principalid):
                 """Returns if a checkbox for (perm, principalid) is checked"""
