@@ -37,7 +37,6 @@ def getRelationshipLinks(context):
         return annotations[key]
     except KeyError:
         annotations[key] = LinkSet()
-        # TODO do we need to make LinkSets ILocations and set __parent__
-        #      to make local security grants work?
+        annotations[key].__parent__ = context
+        annotations[key].__name__ = "relationships"
         return annotations[key]
-

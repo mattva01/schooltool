@@ -25,10 +25,13 @@ an IRelationshipLinks adapter.  There is a default adapter registered for
 all IAnnotatable objects that uses Zope 3 annotations.
 """
 
+from BTrees.OOBTree import OOBTree
 from persistent import Persistent
-from persistent.list import PersistentList
+from zope.app.container.btree import BTreeContainer
+from zope.app.container.contained import Contained
 from zope.interface import implements
 import zope.event
+from zope.app.location.interfaces import ILocation
 
 from schoolbell.relationship.interfaces import IRelationshipLinks
 from schoolbell.relationship.interfaces import IRelationshipLink
@@ -351,7 +354,7 @@ class BoundRelationshipProperty(object):
                                 (other, self.other_role))
 
 
-class Link(Persistent):
+class Link(Persistent, Contained):
     """One half of a relationship.
 
     A link is a simple class that holds information about one side of the
@@ -389,7 +392,7 @@ class Link(Persistent):
         self.extra_info = extra_info
 
 
-class LinkSet(Persistent):
+class LinkSet(Persistent, Contained):
     """Set of links.
 
     This class is used internally to represent relationships.  Initially it
@@ -407,6 +410,28 @@ class LinkSet(Persistent):
         ...              'example:Friendship')
         >>> linkset.add(link1)
         >>> linkset.add(link2)
+
+    Links should get named:
+
+        >>> link1.__name__
+        '1'
+        >>> link2.__name__
+        '2'
+
+    We can access our links through their names:
+
+        >>> linkset['1'] is link1
+        True
+        >>> linkset['2'] is link2
+        True
+
+    And get parents set:
+
+        >>> link1.__parent__ is linkset
+        True
+
+    We got them in the container now:
+
         >>> from sets import Set
         >>> Set(linkset) == Set([link1, link2]) # order is not preserved
         True
@@ -416,6 +441,13 @@ class LinkSet(Persistent):
         >>> linkset.find('example:Group', link1.target, 'example:Member',
         ...              'example:Membership') is link1
         True
+
+    We can't add same link into the container twice:
+
+        >>> linkset.add(link1)                      # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+          ...
+        ValueError: ...
 
     If find fails, it raises ValueError, just like list.index.
 
@@ -456,19 +488,31 @@ class LinkSet(Persistent):
     implements(IRelationshipLinks)
 
     def __init__(self):
-        self._links = PersistentList()
+        self._links = OOBTree()
 
     def add(self, link):
-        self._links.append(link)
+        if link.__parent__ == self:
+            raise ValueError("You are adding same link twice.")
+
+        i = 1
+        while "%s" % i in self._links:
+            i += 1
+        link.__name__ = "%s" % i
+        self._links[link.__name__] = link
+        link.__parent__ = self
 
     def remove(self, link):
-        self._links.remove(link)
+        if link is self._links.get(link.__name__):
+            del self._links[link.__name__]
+        else:
+            raise ValueError("This link does not belong to this container!")
 
     def clear(self):
-        del self._links[:]
+        for key in list(self._links.keys()):
+            del self._links[key]
 
     def __iter__(self):
-        return iter(self._links)
+        return iter(self._links.values())
 
     def find(self, my_role, target, role, rel_type):
         for link in self:
@@ -476,3 +520,6 @@ class LinkSet(Persistent):
                 and link.my_role == my_role and link.role == role):
                 return link
         raise ValueError(my_role, target, role, rel_type)
+
+    def __getitem__(self, id):
+        return self._links[id]
