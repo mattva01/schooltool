@@ -21,6 +21,7 @@ RESTive views for access control
 
 $Id$
 """
+from zope.interface import Interface, Attribute
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.interface import Interface, implements
 from schoolbell.app.rest import View, Template
@@ -28,7 +29,51 @@ from schoolbell.app.rest.errors import RestError
 from schoolbell.app.browser.app import ACLViewBase, hasPermission
 from schoolbell.app.rest.xmlparsing import XMLDocument
 from schoolbell import SchoolBellMessageID as _
-from zope.security.proxy import removeSecurityProxy
+from zope.security.proxy import removeSecurityProxy, ProxyFactory
+
+
+class IACLView(Interface):
+    """The ACL ReSTive view.
+
+    This interface is meant for security checking, as the view has to be
+    trusted (and security proxied).
+    """
+
+    permissions = Attribute("A list of (permission_id, title) pairs")
+
+    schema = Attribute("A RNG schema for the accepted XML document")
+
+    template = Attribute("The template of the generated XML document")
+
+    def GET():
+        """The GET handler"""
+
+    def POST():
+        """The POST handler"""
+
+    def getPersons():
+        """Return a list of tuples with information for all persons"""
+
+    def getGroups():
+        """Return a list of tuples with group information
+
+        This list includes the special Unauthenticated and
+        Authenticated groups.
+        """
+
+    def permsForPrincipal(principalid):
+        """Return a list of permissions the principal has on context"""
+
+    def parseData(body):
+        """Extract the data and validate it.
+
+        Raise a RestError if a principal or permission id is not from
+        the allowed set.
+        """
+
+
+def ACLViewFactory(context, request):
+    return ProxyFactory(ACLView(context, request))
 
 
 class ACLView(View, ACLViewBase):
@@ -68,6 +113,7 @@ class ACLView(View, ACLViewBase):
 
     def __init__(self, adapter, request):
         self.context = adapter.context
+        self.__parent__ = self.context
         self.request = request
 
     def getPrincipals(self):
@@ -78,10 +124,8 @@ class ACLView(View, ACLViewBase):
     def POST(self):
         settings = self.parseData(self.request.bodyFile.read())
         manager = IPrincipalPermissionManager(self.context)
-        # XXX: alga: the view permission checking does not work!
-        # I'll rely on the IPrincipalPermissionManager security for now.
-        # # this view is protected by schooltool.controlAccess
-        # manager = removeSecurityProxy(manager)
+        # this view is protected by schooltool.controlAccess
+        manager = removeSecurityProxy(manager)
         for principal in settings:
             for permission, title in self.permissions:
                 parent = self.context.__parent__
@@ -94,7 +138,7 @@ class ACLView(View, ACLViewBase):
                 else:
                     manager.unsetPermissionForPrincipal(permission, principal)
 
-        return _("Permissions updated")
+        return unicode(_("Permissions updated"))
 
     def parseData(self, body):
         """Extracts the data and validates it.

@@ -22,7 +22,7 @@ the web ZMI:
     >>> print rest("""
     ... GET /frogpond/persons/acl HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... """)
+    ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
@@ -154,16 +154,16 @@ Now, the ACL view should include those new principals as well:
     <BLANKLINE>
 
 
-# John cannot see the permissions, though:
-# 
-#     >>> print rest("""
-#     ... GET /frogpond/persons/acl HTTP/1.1
-#     ... """)
-#     HTTP/1.1 401 Unauthorized
-#     ...
-# 
+John cannot see the permissions, though:
 
-John can not set the permissions, though:
+    >>> print rest("""
+    ... GET /frogpond/persons/acl HTTP/1.1
+    ... """)
+    HTTP/1.1 401 Unauthorized
+    ...
+
+
+John can not set the permissions as well:
 
     >>> print rest("""
     ... POST /frogpond/persons/acl HTTP/1.1
@@ -284,29 +284,29 @@ Now, the permissions are changed and John can see them:
     </acl>
     <BLANKLINE>
 
-# And John can modify the permissions:
-#
-#     >>> print rest("""
-#     ... POST /frogpond/persons/acl HTTP/1.1
-#     ... Authorization: Basic john:ann
-#     ...
-#     ... <acl xmlns="http://schooltool.org/ns/model/0.1">
-#     ...   <principal id="sb.group.a-group">
-#     ...     <permission id="schoolbell.view" />
-#     ...     <permission id="schoolbell.edit" />
-#     ...     <permission id="schoolbell.create" />
-#     ...     <permission id="schoolbell.viewCalendar" />
-#     ...     <permission id="schoolbell.addEvent" />
-#     ...     <permission id="schoolbell.modifyEvent" />
-#     ...     <permission id="schoolbell.controlAccess" />
-#     ...     <permission id="schoolbell.manageMembership" />
-#     ...   </principal>
-#     ... </acl>
-#     ... """)
-#     HTTP/1.1 200 Ok
-#     Content-Length: 19
-#     <BLANKLINE>
-#     Permissions updated
+And John can modify the permissions:
+
+    >>> print rest("""
+    ... POST /frogpond/persons/acl HTTP/1.1
+    ... Authorization: Basic john:ann
+    ...
+    ... <acl xmlns="http://schooltool.org/ns/model/0.1">
+    ...   <principal id="sb.group.a-group">
+    ...     <permission id="schoolbell.view" />
+    ...     <permission id="schoolbell.edit" />
+    ...     <permission id="schoolbell.create" />
+    ...     <permission id="schoolbell.viewCalendar" />
+    ...     <permission id="schoolbell.addEvent" />
+    ...     <permission id="schoolbell.modifyEvent" />
+    ...     <permission id="schoolbell.controlAccess" />
+    ...     <permission id="schoolbell.manageMembership" />
+    ...   </principal>
+    ... </acl>
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+    Permissions updated
 
 The ACL views work everywhere:
 

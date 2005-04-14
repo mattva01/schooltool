@@ -348,19 +348,25 @@
       permission="zope.Public"
       />
 
+  <class class="schoolbell.app.rest.acl.ACLView">
+      <allow interface="schoolbell.app.rest.acl.IACLView" />
+  </class>
+
   <view
       for="schoolbell.app.rest.acl.IACLAdapter"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
-      factory="schoolbell.app.rest.acl.ACLView"
+      factory="schoolbell.app.rest.acl.ACLViewFactory"
       permission="schoolbell.controlAccess"
+      allowed_interface="schoolbell.app.rest.acl.IACLView"
       name="GET"
       />
 
   <view
       for="schoolbell.app.rest.acl.IACLAdapter"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
-      factory="schoolbell.app.rest.acl.ACLView"
+      factory="schoolbell.app.rest.acl.ACLViewFactory"
       permission="schoolbell.controlAccess"
+      allowed_interface="schoolbell.app.rest.acl.IACLView"
       name="POST"
       />
 
