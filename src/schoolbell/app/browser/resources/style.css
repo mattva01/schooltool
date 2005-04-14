@@ -1025,11 +1025,14 @@ table.event_booking td.booked {
   margin-top: 1ex;
   background: #eed680 url(++resource++note-body-r.gif) no-repeat bottom right;
 }
+
 .note .header {
   background: #d1940c url(++resource++note-head-r.gif) no-repeat top right;
   margin: 0;
   padding: 0;
+  position: relative;
 }
+
 .note .header h6 {
   background: url(++resource++note-head-l.gif) no-repeat top left;
   margin: 0;
@@ -1037,11 +1040,25 @@ table.event_booking td.booked {
   font-weight: bold; 
   font-size: small;
 }
+
+.note .header a.delete {
+  background: url(++resource++delete.png) no-repeat top left;
+  display: block;
+  width: 10px;
+  height: 0px;
+  padding-top: 10px;
+  height/**/: 0px;
+  overflow: hidden;
+  float: right;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+}
+
 .note .body {
   background: url(++resource++note-body-l.gif) no-repeat bottom left;
   margin: 0;
   padding: 1ex;
   font-size: small;
 }
-
 

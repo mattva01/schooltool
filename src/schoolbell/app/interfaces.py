@@ -106,6 +106,10 @@ class INote(Interface):
 
     owner = Attribute("""IPerson who owns this note""")
 
+    unique_id = TextLine(
+        title=u"UID",
+        required=False,
+        description=u"""A globally unique id for this note.""")
 
 class INotes(Interface):
     """A set of notes.

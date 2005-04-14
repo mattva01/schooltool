@@ -17,14 +17,24 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
+Upgrade to generation 2.
+
+The first incompatible change from 1 was introduced in rev .
 
 $Id$
 """
+from zope.app.publication.zopepublication import ZopePublication
+from zope.app.generations.utility import findObjectsProviding
+from schoolbell.app.interfaces import ISchoolBellApplication, IHaveNotes
+from schoolbell.app.notes import getNotes
+import datetime
+import random
 
-from zope.app.generations.generations import SchemaManager
+def evolve(context):
+    root = context.connection.root().get(ZopePublication.root_name, None)
+    for app in findObjectsProviding(root, ISchoolBellApplication):
+        for noted in findObjectsProviding(root, IHaveNotes):
+            for note in getNotes(noted):
+                note.unique_id = '%d.%d' % (datetime.datetime.now().microsecond,
+                                         random.randrange(10 ** 6, 10 ** 7))
 
-schemaManager = SchemaManager(
-    minimum_generation=2,
-    generation=2,
-    package_name='schoolbell.app.generations')

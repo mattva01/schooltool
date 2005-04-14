@@ -41,6 +41,8 @@ from persistent import Persistent
 from persistent.list import PersistentList
 from zope.interface import implements
 from zope.app.annotation.interfaces import IAnnotations
+import datetime
+import random
 
 from schoolbell.app.interfaces import INotes, INote
 
@@ -78,7 +80,7 @@ class Notes(Persistent):
 
     Remove a note
 
-    >>> notes.remove(note1)
+    >>> notes.remove(note1.unique_id)
     >>> [n.title for n in notes]
     ['note2']
 
@@ -101,8 +103,10 @@ class Notes(Persistent):
     def add(self, note):
         self._notes.append(note)
 
-    def remove(self, note):
-        self._notes.remove(note)
+    def remove(self, unique_id):
+        for note in self._notes:
+            if note.unique_id == unique_id:
+                self._notes.remove(note)
 
     def clear(self):
         del self._notes[:]
@@ -130,5 +134,7 @@ class Note(Persistent):
         self.body = body
         self.privacy = privacy
         self.owner = owner
+        self.unique_id = '%d.%d' % (datetime.datetime.now().microsecond,
+                                 random.randrange(10 ** 6, 10 ** 7))
 
 

@@ -33,9 +33,11 @@ class NotesView(BrowserView):
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
         notes = INotes(context)
-        self.notes = [note for note in notes if note.privacy == 'public' \
+        self.notes = [note for note in notes if note.privacy == 'public'
                 or note.owner == request.principal.id]
 
+        if 'DELETE_NOTE' in request:
+            notes.remove(request['uid'])
 
 class NoteAddView(AddView):
     """A view for adding a note."""

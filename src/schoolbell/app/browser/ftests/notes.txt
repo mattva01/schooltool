@@ -154,3 +154,67 @@ View the page as our new user and we will only see the first (public) note:
     </div>
     ...
 
+Notes can also be deleted, but only by the person who created the note:
+
+    >>> result = http(r"""
+    ... GET /frogpond/persons/person HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    >>> print result
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    ...<div id="notes">
+    ...<h5>Notes</h5>
+    <BLANKLINE>
+    ...<div class="note">
+    ...<div class="header">
+    ...<h6>My Note</h6>
+    ...</div>
+    ...<div class="body">This is the note</div>
+    ...</div>
+    ...<div class="note">
+    ...<div class="header">
+    ...<h6>My Private Note</h6>
+    ...</div>
+    ...<div class="body">This is a private note</div>
+    ...</div>
+    <BLANKLINE>
+    </div>
+    ...
+
+Store the id of a note we can delete:
+
+    >>> import re
+    >>> uid_result = re.search('uid=([0-9]*\.[0-9]*)', result.getBody())
+    >>> uid = uid_result.group(1)
+
+Now delete the note:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/person/index.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 112
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... DELETE_NOTE=1&uid=%s""" % uid)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    ...<div id="notes">
+    ...<h5>Notes</h5>
+    <BLANKLINE>
+    ...<div class="note">
+    ...<div class="header">
+    ...<h6>My Private Note</h6>
+    ...</div>
+    ...<div class="body">This is a private note</div>
+    ...</div>
+    <BLANKLINE>
+    </div>
+    ...
+
