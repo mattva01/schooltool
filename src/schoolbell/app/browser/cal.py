@@ -1216,7 +1216,7 @@ class ICalendarEventAddForm(Interface):
                                ("yearly", _("Year"))]))
 
     interval = Int(
-        title=u"Repeat every",
+        title=_("Repeat every"),
         required=False,
         default=1)
 

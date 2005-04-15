@@ -165,7 +165,7 @@
           <input class="hiddenType" id="field.book.used" name="field.book.used" type="hidden" value="" />
           <input class="checkboxType" id="field.book" name="field.book" type="checkbox" value="on"
                  tal:attributes="checked request/field.book|nothing" />
-          <label for="field.book">Book Resources</label>
+          <label for="field.book" i18n:translate="">Book Resources</label>
         </div>
       </div>
 
@@ -184,18 +184,18 @@
             <div metal:use-macro="context/@@form_macros/widget_row">
               <metal:block fill-slot="extra">
               <tal:comment condition="nothing">
-              Sadly, the Zope 3 SelectWidget is brain-dead:
-                - no "id" attribute on the select element
-                - renders two divs for no reason
-              TODO: follow it up in Zope 3.
+              <!-- Sadly, the Zope 3 SelectWidget is brain-dead:
+                   - no "id" attribute on the select element
+                   - renders two divs for no reason
+                   TODO: follow it up in Zope 3. -->
               </tal:comment>
               <select name="field.recurrence_type" size="1"
                       id="field.recurrence_type"
                       tal:define="recurrence_type python: view.recurrence_type_widget._getFormValue() or 'daily'">
-                <option tal:attributes="selected python: recurrence_type == 'daily'" value="daily">day</option>
-                <option tal:attributes="selected python: recurrence_type == 'weekly'" value="weekly">week</option>
-                <option tal:attributes="selected python: recurrence_type == 'monthly'" value="monthly">month</option>
-                <option tal:attributes="selected python: recurrence_type == 'yearly'" value="yearly">year</option>
+                <option i18n:translate="" tal:attributes="selected python:recurrence_type == 'daily'" value="daily">day</option>
+                <option i18n:translate="" tal:attributes="selected python:recurrence_type == 'weekly'" value="weekly">week</option>
+                <option i18n:translate="" tal:attributes="selected python:recurrence_type == 'monthly'" value="monthly">month</option>
+                <option i18n:translate="" tal:attributes="selected python:recurrence_type == 'yearly'" value="yearly">year</option>
               </select>
               </metal:block>
             </div>
@@ -301,8 +301,7 @@
     <div class="controls">
       <input type="submit" class="button-ok" name="UPDATE_SUBMIT"
              tal:attributes="value view/submit_button_title"
-             title="Shortcut: Alt-A" accesskey="A"
-             i18n:attributes="accesskey" />
+             i18n:attributes="value" title="Shortcut: Alt-A" accesskey="A" />
       <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
              i18n:attributes="value cancel-button" />
       <a tal:condition="view/show_book_link"
