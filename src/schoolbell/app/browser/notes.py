@@ -30,14 +30,18 @@ from schoolbell.app.notes import Note
 
 class NotesView(BrowserView):
 
+    # __used_for__ = ?
+
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
         notes = INotes(context)
-        self.notes = [note for note in notes if note.privacy == 'public'
-                or note.owner == request.principal.id]
+        self.notes = [note for note in notes
+                      if note.privacy == 'public'
+                         or note.owner == request.principal.id]
 
         if 'DELETE_NOTE' in request:
             notes.remove(request['uid'])
+
 
 class NoteAddView(AddView):
     """A view for adding a note."""
@@ -58,7 +62,7 @@ class NoteAddView(AddView):
     def create(self, title, body, privacy):
         owner = self.request.principal.id
         note = self._factory(title=title, body=body, privacy=privacy,
-                owner=owner)
+                             owner=owner)
         return note
 
     def add(self, note):
@@ -71,11 +75,8 @@ class NoteAddView(AddView):
         if 'CANCEL' in self.request:
             url = zapi.absoluteURL(self.context, self.request)
             self.request.response.redirect(url)
-
         return AddView.update(self)
 
     def nextURL(self):
         """See zope.app.container.interfaces.IAdding"""
         return zapi.absoluteURL(self.context, self.request)
-
-

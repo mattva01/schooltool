@@ -5,9 +5,9 @@
       <div class="header">
         <h6 tal:content="note/title"></h6>
         <tal:comment condition="nothing">
-          Notes can technically be deleted by anyone who can view them, however
-          when rendering the notes we only provide the delete link to the owner
-          of the note.
+          <!-- Notes can technically be deleted by anyone who can view them,
+               however when rendering the notes we only provide the delete link
+               to the owner of the note. -->
         </tal:comment>
         <tal:if condition="python:note.owner == request.principal.id">
           <a class="delete" href="" alt="[x]"
