@@ -1,10 +1,11 @@
-<html metal:use-macro="context/@@standard_macros/page">
+<html metal:use-macro="context/@@standard_macros/page"
+      i18n:domain="schoolbell">
 <body>
 <div metal:fill-slot="body">
 
 <div metal:define-macro="addform">
 
-  <form action="." tal:attributes="action request/URL"
+  <form tal:attributes="action request/URL"
         method="post" enctype="multipart/form-data" class="standalone">
 
     <fieldset metal:define-macro="formbody">

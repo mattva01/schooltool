@@ -1,11 +1,12 @@
 <tal:tag condition="view/update"/>
-<html metal:use-macro="context/@@standard_macros/view">
+<html metal:use-macro="context/@@standard_macros/view"
+      i18n:domain="schoolbell">
 <body>
 <div metal:fill-slot="body">
 
 <div metal:define-macro="body">
 
-  <form action="." tal:attributes="action request/URL" method="post"
+  <form tal:attributes="action request/URL" method="post"
         enctype="multipart/form-data" class="standalone">
 
     <div metal:define-macro="formbody">
@@ -16,8 +17,7 @@
           >Edit something</h3>
 
       <p tal:define="status view/update"
-         tal:condition="status"
-         tal:content="status" />
+         tal:condition="status" tal:content="status" />
 
       <p tal:condition="view/errors" i18n:translate="">
         There are <strong tal:content="python:len(view.errors)"

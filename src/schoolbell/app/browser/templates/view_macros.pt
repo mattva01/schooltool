@@ -149,25 +149,25 @@
        title="View daily calendar"
        i18n:attributes="title"
        i18n:translate=""><img tal:attributes="src context/++resource++day.png"
-                              alt="Daily"/></a>
+                              alt="Daily" i18n:attributes="alt" /></a>
     <a id="calendar-navigation-week"
        tal:attributes="href python:view.calURL('weekly')"
        title="View weekly calendar"
        i18n:attributes="title"
        i18n:translate=""><img tal:attributes="src context/++resource++week.png"
-                              alt="Weekly"/></a>
+                              alt="Weekly" i18n:attributes="alt" /></a>
     <a id="calendar-navigation-month"
        tal:attributes="href python:view.calURL('monthly')"
        title="View monthly calendar"
        i18n:attributes="title"
        i18n:translate=""><img tal:attributes="src context/++resource++month.png"
-                              alt="Monthly"/></a>
+                              alt="Monthly" i18n:attributes="alt" /></a>
     <a id="calendar-navigation-year"
        tal:attributes="href python:view.calURL('yearly')"
        title="View yearly calendar"
        i18n:attributes="title"
        i18n:translate=""><img tal:attributes="src context/++resource++year.png"
-                              alt="Yearly"/></a>
+                              alt="Yearly" i18n:attributes="alt" /></a>
   </div>
 </metal:block>
 
@@ -177,8 +177,8 @@
     <metal:block fill-slot="title">
       <title i18n:translate="">
         Calendar for <span tal:replace="context/title"
-          i18n:name="title" /> - <span 
-          tal:replace="view/title"/>
+            i18n:name="title" /> - <span i18n:name="calendar_title"
+                                         tal:replace="view/title"/>
       </title>
     </metal:block>
 
@@ -191,8 +191,8 @@
     <metal:block fill-slot="content-header">
       <h1 i18n:translate="">
         Calendar for <span tal:replace="context/title"
-          i18n:name="title" /> - <span 
-          tal:replace="view/title"/>
+            i18n:name="title" /> - <span i18n:name="calendar_title"
+                                         tal:replace="view/title"/>
       </h1>
     </metal:block>
 
