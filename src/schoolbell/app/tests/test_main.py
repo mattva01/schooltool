@@ -24,6 +24,8 @@ $Id$
 
 import unittest
 from zope.testing import doctest
+from zope.app import zapi
+from zope.interface.verify import verifyObject
 
 
 def doctest_Options():
@@ -113,7 +115,6 @@ def doctest_load_options():
         Reading configuration from ...sample.conf
         sb.py: warning: ignored configuration option 'module'
         sb.py: warning: ignored configuration option 'domain'
-        sb.py: warning: ignored configuration option 'lang'
         sb.py: warning: ignored configuration option 'path'
         sb.py: warning: ignored configuration option 'app_log_file'
 
@@ -194,6 +195,53 @@ def doctest_load_options():
     """
 
 
+def doctest_StubburnNegotiator():
+    """Tests for StubbornNegotiator.
+
+        >>> from schoolbell.app.main import StubbornNegotiator
+        >>> negotiator = StubbornNegotiator('lt_LT')
+        >>> from zope.i18n.interfaces import INegotiator
+        >>> verifyObject(INegotiator, negotiator)
+        True
+        >>> negotiator.getLanguage(None, None)
+        'lt_LT'
+
+    """
+
+
+def doctest_setLanguage():
+    """Tests for StubbornNegotiator.
+
+        >>> from zope.app.testing import setup
+        >>> setup.placelessSetUp()
+
+    First, the 'automatic mode':
+
+        >>> from schoolbell.app.main import setLanguage
+        >>> setLanguage('auto')
+
+    The negotiator shouldn't have been installed:
+
+        >>> from zope.i18n.interfaces import INegotiator
+        >>> zapi.getUtility(INegotiator).getLanguage(None, None)
+        Traceback (most recent call last):
+        ,,,
+        ComponentLookupError: (<InterfaceClass zope.i18n.interfaces.INegotiator>, '')
+
+    Now, if we specify a language, a custom negotiator should be set up:
+
+        >>> setLanguage('lt')
+        >>> zapi.getUtility(INegotiator).getLanguage(None, None)
+        'lt'
+
+    We're done.
+
+        >>> setup.placelessTearDown()
+
+    """
+
+
+
 def doctest_setup():
     """Tests for setup()
 
@@ -222,6 +270,7 @@ def doctest_setup():
         ...     path = []
         ...     error_log_file = ['STDERR']
         ...     web_access_log_file = ['STDOUT']
+        ...     lang = 'lt'
         >>> options.config = ConfigStub()
 
     Workaround to fix a Windows failure:
@@ -247,6 +296,12 @@ def doctest_setup():
         >>> logger2 = logging.getLogger(None)
         >>> logger2.handlers
         [<logging.StreamHandler instance at 0x...>]
+
+    A custom language negotiator has been installed:
+
+        >>> from zope.i18n.interfaces import INegotiator
+        >>> zapi.getUtility(INegotiator).getLanguage(None, None)
+        'lt'
 
     ZODB.lock_file has been shut up:
 
@@ -310,7 +365,6 @@ def doctest_bootstrapSchoolBell():
 
     It has a local authentication utility
 
-        >>> from zope.app import zapi
         >>> from zope.app.security.interfaces import IAuthentication
         >>> zapi.getUtility(IAuthentication, context=app)
         <schoolbell.app.security.SchoolBellAuthenticationUtility object at ...>

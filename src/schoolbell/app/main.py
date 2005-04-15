@@ -36,10 +36,12 @@ import errno
 import ZConfig
 import transaction
 import zope.app.component.hooks
-from zope.interface import directlyProvides
+from zope.interface import directlyProvides, implements
+from zope.component import provideUtility
 from zope.event import notify
 from zope.configuration import xmlconfig
 from zope.server.taskthreads import ThreadedTaskDispatcher
+from zope.i18n.interfaces import INegotiator
 from zope.app.server.main import run
 from zope.app.server.http import http
 from zope.app.appsetup import DatabaseOpened, ProcessStarting
@@ -168,13 +170,36 @@ def load_options(argv):
 
     # Complain about obsolete options.  This section should be removed
     # in later SchoolBell versions.
-    deprecated = ['module', 'test_mode', 'domain', 'lang',
-                  'path', 'app_log_file']
+    deprecated = ['module', 'test_mode', 'domain', 'path', 'app_log_file']
     for setting in deprecated:
         if getattr(options.config, setting):
             print >> sys.stderr, ("%s: warning: ignored configuration option"
                                   " '%s'" % (progname, setting))
     return options
+
+
+class StubbornNegotiator(object):
+    """A language negotiator.
+
+    This negotiator is hopeless at negotiating: it will not give a single
+    inch of ground and will stick to its initial choice till the bitter end.
+    """
+
+    implements(INegotiator)
+
+    def __init__(self, lang):
+        self._lang = lang
+
+    def getLanguage(self, langs, env):
+        return self._lang
+
+
+def setLanguage(lang):
+    """Set the language for the user interface."""
+    if lang == 'auto':
+        return # language is negotiated at runtime through Accept-Language.
+    negotiator = StubbornNegotiator(lang)
+    provideUtility(negotiator)
 
 
 def setup(options):
@@ -189,6 +214,9 @@ def setup(options):
 
     # Process ZCML
     configure()
+
+    # Set language specified in the configuration
+    setLanguage(options.config.lang)
 
     # Open the database
     db_configuration = options.config.database

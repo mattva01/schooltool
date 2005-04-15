@@ -206,16 +206,17 @@
     </example>
   </multikey>
 
-  <multikey name="lang" datatype="string">
+  <key name="lang" datatype="string" default="auto">
     <description>
       Specifies the locale of the messages to be used on the server.
 
-      This option is obsolete.
+      If 'auto' is set, the language is chosen according to the user's
+      preference specified in the web browser configuration.
     </description>
     <example>
       lang en_US
     </example>
-  </multikey>
+  </key>
 
   <key name="domain" datatype="string">
     <description>

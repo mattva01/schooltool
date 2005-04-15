@@ -86,6 +86,23 @@ error-log-file STDERR
 web-access-log-file web-access.log
 
 #
+#
+# lang
+#
+#    Specifies the locale of the messages to be used on the server.
+#
+#    If 'auto' is set, the language is chosen according to the user's
+#    preference specified in the web browser configuration.
+#
+# Default:
+#    lang auto
+#
+# Examples:
+#    lang de_DE
+#    lang fr
+lang lt
+
+#
 # <zodb>
 #   ...
 # </zodb>
