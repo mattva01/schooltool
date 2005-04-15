@@ -381,9 +381,9 @@ We can click on it and get a form:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-      <form action="http://localhost/frogpond/groups/+/addSchoolBellGroup.html"
-            method="post" enctype="multipart/form-data"
-            class="standalone">
+      <form method="post" enctype="multipart/form-data"
+          class="standalone"
+          action="http://localhost/frogpond/groups/+/addSchoolBellGroup.html">
     ...
            <input class="textType" id="field.title" name="field.title" size="20" type="text" value=""  />
     ...
@@ -549,9 +549,9 @@ We can click on it and get a form:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-      <form action="http://localhost/frogpond/resources/+/addSchoolBellResource.html"
-              method="post" enctype="multipart/form-data"
-              class="standalone">
+      <form method="post" enctype="multipart/form-data"
+            class="standalone"
+            action="http://localhost/frogpond/resources/+/addSchoolBellResource.html">
     ...<input class="textType" id="field.title" name="field.title" size="20" type="text" value=""  />...
       </form>
     ...
@@ -648,9 +648,9 @@ Groups have an edit page
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-       <form action="http://localhost/frogpond/groups/venerable-frogs/edit.html"
-             method="post" enctype="multipart/form-data"
-             class="standalone">
+       <form method="post" enctype="multipart/form-data"
+             class="standalone"
+             action="http://localhost/frogpond/groups/venerable-frogs/edit.html">
     ...
            <h3>Edit Group Information</h3>
     ...
@@ -730,9 +730,9 @@ Resources have an edit page
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-       <form action="http://localhost/frogpond/resources/lily/edit.html"
-             method="post" enctype="multipart/form-data"
-             class="standalone">
+       <form method="post" enctype="multipart/form-data"
+             class="standalone"
+             action="http://localhost/frogpond/resources/lily/edit.html">
     ...
            <h3>Edit Resource Information</h3>
     ...
