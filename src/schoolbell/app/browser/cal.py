@@ -47,7 +47,6 @@ from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
 from zope.schema import Date, TextLine, Choice, Int, Bool, List, Text
 from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.security.proxy import removeSecurityProxy
 from zope.security.interfaces import ForbiddenAttribute
@@ -62,6 +61,7 @@ from schoolbell.app.interfaces import ICalendarOwner, ISchoolBellCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IPersonPreferences, IResource
+from schoolbell.app.interfaces import vocabulary
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 from schoolbell.calendar.recurrent import DailyRecurrenceRule
 from schoolbell.calendar.recurrent import YearlyRecurrenceRule
@@ -1133,20 +1133,6 @@ class Slots(dict):
         while i in self:
             i += 1
         self[i] = obj
-
-
-def vocabulary(choices):
-    """Create a SimpleVocabulary from a list of values and titles.
-
-    >>> v = vocabulary([('value1', u"Title for value1"),
-    ...                 ('value2', u"Title for value2")])
-    >>> for term in v:
-    ...   print term.value, '|', term.token, '|', term.title
-    value1 | value1 | Title for value1
-    value2 | value2 | Title for value2
-
-    """
-    return SimpleVocabulary([SimpleTerm(v, title=t) for v, t in choices])
 
 
 class CalendarEventView(BrowserView):

@@ -1823,7 +1823,7 @@ def doctest_CalendarEventAddView_cross_validation():
         >>> view.update()
         u'An error occured.'
         >>> view.errors
-        WidgetInputError: ('interval', u'Repeat every', )
+        WidgetInputError: ('interval', 'Repeat every', )
         >>> view.error is None
         True
 
@@ -1862,7 +1862,7 @@ def doctest_CalendarEventAddView_cross_validation():
         >>> view.update()
         u'An error occured.'
         >>> view.errors
-        MissingInputError: ('field.interval', u'Repeat every', None)
+        MissingInputError: ('field.interval', 'Repeat every', None)
         MissingInputError: ('field.until', 'Repeat until', None)
         >>> view.error is None
         True

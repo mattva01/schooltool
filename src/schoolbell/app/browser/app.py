@@ -51,6 +51,7 @@ from schoolbell.app.interfaces import IPersonContainer, IPersonContained
 from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
 from schoolbell.app.interfaces import ISchoolBellApplication
+from schoolbell.app.interfaces import vocabulary
 from schoolbell.app.app import Person
 from schoolbell.app.app import getSchoolBellApplication
 
@@ -298,17 +299,21 @@ class IPersonPreferencesForm(Interface):
     timeformat = Choice(
         title=_("Time Format"),
         description=_("Time Format"),
-        values=("HH:MM", "H:MM am/pm")) # XXX what about i18n here? -- gintas
+        vocabulary=vocabulary([("HH:MM", _("HH:MM")),
+                               ("H:MM am/pm", _("H:MM am/pm"))]))
 
     dateformat = Choice(
         title=_("Date Format"),
         description=_("Date Format"),
-        values=("MM/DD/YY", "YYYY-DD-MM", "Day Month, Year")) # XXX i18n?
+        vocabulary=vocabulary([("MM/DD/YY", _("MM/DD/YY")),
+                               ("YYYY-DD-MM", _("YYYY-DD-MM")),
+                               ("Day Month, Year", _("Day Month, Year"))]))
 
     weekstart = Choice(
         title=_("Week starts on:"),
         description=_("Start display of weeks on Sunday or Monday"),
-        values=("Sunday", "Monday")) # XXX i18n?
+        vocabulary=vocabulary([("Sunday", _("Sunday")),
+                               ("Monday", _("Monday"))]))
 
 
 class PersonPreferencesView(BrowserView):

@@ -40,6 +40,7 @@ $Id$
 
 from zope.interface import Interface, Attribute
 from zope.schema import Text, TextLine, Bytes, Object, Choice
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.app.container.interfaces import IReadContainer, IContainer
 from zope.app.container.interfaces import IContained
 from zope.app.container.constraints import contains, containers
@@ -51,6 +52,20 @@ import pytz
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.calendar.interfaces import IEditCalendar, ICalendarEvent
+
+
+def vocabulary(choices):
+    """Create a SimpleVocabulary from a list of values and titles.
+
+    >>> v = vocabulary([('value1', u"Title for value1"),
+    ...                 ('value2', u"Title for value2")])
+    >>> for term in v:
+    ...   print term.value, '|', term.token, '|', term.title
+    value1 | value1 | Title for value1
+    value2 | value2 | Title for value2
+
+    """
+    return SimpleVocabulary([SimpleTerm(v, title=t) for v, t in choices])
 
 
 class ISchoolBellCalendar(IEditCalendar, ILocation):
