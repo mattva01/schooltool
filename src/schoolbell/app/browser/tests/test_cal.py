@@ -1886,6 +1886,7 @@ class CalendarEventEditTestView(CalendarEventEditView):
     _set_before_add = []
     _set_after_add = []
 
+
 def doctest_CalendarEventEditView_edit():
     r"""Tests for CalendarEventEditView editing of an event.
 

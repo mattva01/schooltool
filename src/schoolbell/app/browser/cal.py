@@ -512,7 +512,8 @@ class CalendarViewBase(BrowserView):
     def getCalendars(self):
         """Get a list of calendars to display.
 
-        Yields tuples (calendar, color1, color2)"""
+        Yields tuples (calendar, color1, color2).
+        """
         yield (self.context, '#9db8d2', '#7590ae')
         user = IPerson(self.request.principal, None)
         if (user and
@@ -1371,9 +1372,7 @@ class CalendarEventViewMixin(object):
         """If a start_date is set returns the value of the widget."""
         try:
             return self.start_date_widget.getInputValue()
-        except WidgetInputError:
-            return None
-        except ConversionError:
+        except (WidgetInputError, ConversionError):
             return None
 
     def updateForm(self):
@@ -1420,8 +1419,8 @@ class CalendarEventViewMixin(object):
             try:
                 start_time = parse_timetz(start_time, self.timezone)
             except ValueError:
-                self._setError("start_time", ConversionError(_(
-                            "Invalid time")))
+                self._setError("start_time",
+                               ConversionError(_("Invalid time")))
                 errors.append(self.start_time_widget._error)
         duration = kwargs.pop('duration', None)
         duration_type = kwargs.pop('duration_type', 'minutes')
@@ -1441,8 +1440,8 @@ class CalendarEventViewMixin(object):
                 self._requireField("until", errors)
                 if start_date and kwargs.get('until'):
                     if kwargs['until'] < start_date:
-                        self._setError("until", ConstraintNotSatisfied(_(
-                                    "End date is earlier than start date")))
+                        self._setError("until", ConstraintNotSatisfied(
+                                    _("End date is earlier than start date")))
                         errors.append(self.until_widget._error)
 
         exceptions = kwargs.pop("exceptions", None)
@@ -1450,8 +1449,8 @@ class CalendarEventViewMixin(object):
             try:
                 kwargs["exceptions"] = datesParser(exceptions)
             except ValueError:
-                self._setError("exceptions", ConversionError(_(
-                  "Invalid date.  Please specify YYYY-MM-DD, one per line.")))
+                self._setError("exceptions", ConversionError(
+                 _("Invalid date.  Please specify YYYY-MM-DD, one per line.")))
                 errors.append(self.exceptions_widget._error)
 
         if errors:
@@ -1473,15 +1472,13 @@ class CalendarEventViewMixin(object):
         duration = timedelta(**dargs)
 
         rrule = recurrence and makeRecurrenceRule(**kwargs) or None
-        return {
-            'location': location,
-            'description': description,
-            'title': title,
-            'allday': allday,
-            'start': start,
-            'duration': duration,
-            'rrule': rrule,
-            }
+        return {'location': location,
+                'description': description,
+                'title': title,
+                'allday': allday,
+                'start': start,
+                'duration': duration,
+                'rrule': rrule}
 
 
 class CalendarEventAddView(CalendarEventViewMixin, AddView):
@@ -1509,7 +1506,8 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
                 self.timezone = timezone(prefs.timezone)
 
         if "field.start_date" not in request:
-            request.form["field.start_date"] = date.today().strftime("%Y-%m-%d")
+            today = date.today().strftime("%Y-%m-%d")
+            request.form["field.start_date"] = today
         super(AddView, self).__init__(context, request)
 
     def create(self, **kwargs):
@@ -1655,15 +1653,14 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
 
         widget_data = self.processRequest(kw)
 
-        self.context.allday = widget_data['allday']
-        if self.context.dtstart != parse_datetimetz(widget_data['start'].isoformat()):
+        parsed_date = parse_datetimetz(widget_data['start'].isoformat())
+        if self.context.dtstart != parsed_date:
             self._redirectToDate = widget_data['start'].strftime("%Y-%m-%d")
-        self.context.dtstart = parse_datetimetz(widget_data['start'].isoformat())
-        self.context.duration = widget_data['duration']
-        self.context.title = widget_data['title']
-        self.context.location = widget_data['location']
-        self.context.description = widget_data['description']
+        self.context.dtstart = parsed_date
         self.context.recurrence = widget_data['rrule']
+        for attrname in ['allday', 'duration', 'title',
+                         'location', 'description']:
+            setattr(self.context, attrname, widget_data[attrname])
         return True
 
     def update(self):
@@ -1674,9 +1671,8 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
 
         status = ''
 
-        self._redirectToDate = self.request.get(
-            'date',
-            self.context.dtstart.strftime("%Y-%m-%d"))
+        start_date = self.context.dtstart.strftime("%Y-%m-%d")
+        self._redirectToDate = self.request.get('date', start_date)
 
         if "UPDATE" in self.request:
             return self.updateForm()
@@ -1720,9 +1716,9 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
 
         if "field.book" in self.request:
             return self.bookingURL(date)
-
-        url = absoluteURL(self.context.__parent__, self.request)
-        return '%s/%s' % (url, date)
+        else:
+            url = absoluteURL(self.context.__parent__, self.request)
+            return '%s/%s' % (url, date)
 
     def bookingURL(self, date=None):
         """Returns link to the booking view of the newly created event.
@@ -1730,10 +1726,8 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         If a date is supplied passes it as a redirect date to the booking view
         else - passes the date that was supplied in the request.
         """
-
         if date is None:
             date = self._redirectToDate
-
         url = absoluteURL(self.context, self.request)
         return '%s/booking.html?date=%s' % (url, date)
 
@@ -1756,9 +1750,11 @@ class EventForBookingDisplay(object):
         self.dtstart = self.context.dtstart
         self.dtend = self.context.dtstart + self.context.duration
         self.title = self.context.title
-        self.shortTitle = self.title
         if len(self.title) > 16:
+            # Title needs truncation.
             self.shortTitle = self.title[:15] + '...'
+        else:
+            self.shortTitle = self.title
 
 
 class CalendarEventBookingView(BrowserView):
@@ -1770,10 +1766,8 @@ class CalendarEventBookingView(BrowserView):
 
     def update(self):
         """Books and unbooks resources according to the request."""
-
-        self._redirectToDate = self.request.get(
-            'date',
-            self.context.dtstart.strftime("%Y-%m-%d"))
+        start_date = self.context.dtstart.strftime("%Y-%m-%d")
+        self._redirectToDate = self.request.get('date', start_date)
 
         if "UPDATE_SUBMIT" in self.request and not self.update_status:
             self.update_status = ''
@@ -1943,13 +1937,10 @@ def enableICalendarUpload(ical_view):
 class CalendarEventAbsoluteURL(AbsoluteURL):
 
     def breadcrumbs(self):
-        context = self.context
-        request = self.request
-        container = getattr(context, '__parent__', None)
-        base = tuple(zapi.getMultiAdapter((container, request),
+        # XXX Doesn't seem to be tested.
+        container = getattr(self.context, '__parent__', None)
+        base = tuple(zapi.getMultiAdapter((container, self.request),
                                           name='absolute_url').breadcrumbs())
-        name = urllib.quote(context.__name__.encode('utf-8'), "@+")
-        return base + ({
-            'name': context.title,
-            'url': "%s/%s/edit.html" % (base[-1]['url'], name)
-            }, )
+        name = urllib.quote(self.context.__name__.encode('utf-8'), "@+")
+        return base + ({'name': self.context.title,
+                        'url': "%s/%s/edit.html" % (base[-1]['url'], name)}, )
