@@ -95,7 +95,7 @@ class INote(Interface):
 
     privacy = Choice(
         title=_("Privacy"),
-        values=('private stuff', 'public stuff'),
+        values=('private', 'public'),
         description=u"""
         Determines who can view the note.
 
@@ -246,13 +246,16 @@ class IPersonPreferences(Interface):
 
     timezone = Attribute("""Timezone to display""")
 
-    timeformat = TextLine(title=u"Time Format preference",
+    timeformat = TextLine(
+        title=u"Time Format preference",
         description=u"strftime format string to display time.")
 
-    dateformat = TextLine(title=u"Date Format preference",
+    dateformat = TextLine(
+        title=u"Date Format preference",
         description=u"strftime format string to display date.")
 
-    weekstart = TextLine(title=u"Start week Sunday or Monday",
+    weekstart = TextLine(
+        title=u"Start week Sunday or Monday",
         description=u"Day of week name to start calendar display weeks.")
 
 
@@ -334,4 +337,3 @@ class ISchoolBellAuthentication(IAuthentication, ILogout):
 
     def clearCredentials(request):
         """Forget the username and password stored in a session"""
-

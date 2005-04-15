@@ -35,7 +35,7 @@
       />
 
     <!--
-    XXX why is this commented out? -- gintas
+    XXX why is this commented out? - gintas
   <zope:adapter
       for="schoolbell.calendar.browser.CalendarVfbView"
       provides="zope.app.filerepresentation.interfaces.IReadFile"
