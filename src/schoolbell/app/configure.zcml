@@ -257,6 +257,21 @@
         />
   </localUtility>
 
+  <utility
+      provides="schoolbell.relationship.interfaces.IRelationshipSchema"
+      component=".membership.Membership"
+      name="http://schooltool.org/ns/membership" />
+
+  <utility
+      provides="schoolbell.relationship.interfaces.IURIObject"
+      component=".membership.URIMember"
+      name="http://schooltool.org/ns/membership/member" />
+
+  <utility
+      provides="schoolbell.relationship.interfaces.IURIObject"
+      component=".membership.URIGroup"
+      name="http://schooltool.org/ns/membership/group" />
+
 <!-- Subpackages -->
 
   <include package=".browser" />

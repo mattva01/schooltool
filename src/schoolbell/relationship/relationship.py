@@ -42,6 +42,7 @@ from schoolbell.relationship.interfaces import IBeforeRemovingRelationshipEvent
 from schoolbell.relationship.interfaces import IRelationshipRemovedEvent
 from schoolbell.relationship.interfaces import DuplicateRelationship
 from schoolbell.relationship.interfaces import NoSuchRelationship
+from schoolbell.relationship.interfaces import IRelationshipSchema
 
 
 def relate(rel_type, (a, role_of_a), (b, role_of_b), extra_info=None):
@@ -239,6 +240,8 @@ class RelationshipSchema(object):
         >>> tearDown()
 
     """
+
+    implements(IRelationshipSchema)
 
     def __init__(self, rel_type, **roles):
         if len(roles) != 2:

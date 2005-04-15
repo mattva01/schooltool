@@ -158,3 +158,15 @@ class DuplicateRelationship(InvalidRelationship):
 class NoSuchRelationship(Exception):
     """Relationship does not exist"""
 
+class IRelationshipSchema(Interface):
+    """Relationship schema."""
+
+    roles = Attribute("""Roles of members of the relationship.""")
+    rel_type = Attribute("""Type of the relationship.""")
+
+    def __call__(**parties):
+        """Establish a relationship."""
+
+    def unlink(**parties):
+        """Break a relationship."""
+
