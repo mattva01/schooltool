@@ -178,7 +178,7 @@ class IReadPerson(IGroupMember):
             A user may select a number of calendars that should be displayed in
             the calendar view, in addition to the user's calendar.
 
-            This is a relationship property.""")
+            This is a relationship property.""") # XXX Please use a Field.
 
     def checkPassword(password):
         """Check if the provided password is the same as the one set
