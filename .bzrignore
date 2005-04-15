@@ -6,3 +6,4 @@ debian/schooltool.prerm.debhelper
 debian/files
 ./*.log
 ./Data.fs*
+src/schoolbell/app/locales/schoolbell.pot

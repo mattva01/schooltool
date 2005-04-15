@@ -1,10 +1,15 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schoolbell">
 
 <!-- Dependencies -->
 
   <include package="schoolbell.relationship" />
+
+<!-- Translations -->
+
+  <i18n:registerTranslations directory="locales" />
 
 <!-- Permissions -->
 
@@ -19,7 +24,6 @@
 
 <!-- Generations -->
 
-  <!-- We are at generation 0 -->
   <utility
       name="schoolbell.app"
       provides="zope.app.generations.interfaces.ISchemaManager"

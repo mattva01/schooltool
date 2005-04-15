@@ -6,6 +6,9 @@
 
 PYTHON=python2.3
 TESTFLAGS=-w1
+POT=src/schoolbell/app/locales/schoolbell.pot
+PO=$(wildcard src/schoolbell/app/locales/*/LC_MESSAGES/*.po)
+MO=$(PO:.po=.mo)
 PYTHONPATH=src:Zope3/src
 
 .PHONY: all
@@ -52,3 +55,16 @@ signtar: dist
 	md5sum dist/school*.tar.gz > dist/md5sum
 	gpg --clearsign dist/md5sum
 	mv dist/md5sum.asc dist/md5sum
+
+.PHONY: extract-translations
+extract-translations:
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) \
+		Zope3/utilities/i18nextract.py -d schoolbell \
+			-o app/locales -p src/schoolbell schoolbell
+
+.PHONY: update-translations
+update-translations:
+	for f in $(PO); do			\
+	     msgmerge -U $$f $(POT);		\
+	     msgfmt -o $${f%.po}.mo $$f;	\
+	done
