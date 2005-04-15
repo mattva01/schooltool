@@ -101,6 +101,9 @@ class IRelationshipLinks(Interface):
         Raises ValueError if a matching link is not found.
         """
 
+    def __getitem__(id):
+        """Return the link with a given id."""
+
 
 class IRelationshipEvent(Interface):
     """Common attributes for relationship events."""
