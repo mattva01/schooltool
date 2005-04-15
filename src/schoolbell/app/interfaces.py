@@ -167,14 +167,17 @@ class IHavePreferences(IAnnotatable):
 class IReadPerson(IGroupMember):
     """Publically accessible part of IPerson."""
 
-    title = TextLine(title=u"Full name",
-        description=u"Name that should be displayed")
+    title = TextLine(
+        title=_("Full name"),
+        description=_("Name that should be displayed"))
 
-    photo = Bytes(title=u"Photo",
+    photo = Bytes(
+        title=_("Photo"),
         required=False,
-        description=u"""Photo (in JPEG format)""")
+        description=_("""Photo (in JPEG format)"""))
 
-    username = TextLine(title=u"Username")
+    username = TextLine(
+        title=_("Username"))
 
     overlaid_calendars = Attribute("""Additional calendars to overlay.
 
@@ -256,12 +259,14 @@ class IPersonPreferences(Interface):
 class IGroup(ICalendarOwner):
     """Group."""
 
-    title = TextLine(title=u"Title",
-        description=u"Title of the group.")
+    title = TextLine(
+        title=_("Title"),
+        description=_("Title of the group."))
 
-    description = Text(title=u"Description",
+    description = Text(
+        title=_("Description"),
         required=False,
-        description=u"Description of the group.")
+        description=_("Description of the group."))
 
     members = Attribute("""Members of the group (see IRelationshipProperty)""")
 
@@ -281,12 +286,14 @@ class IGroupContained(IGroup, IContained, IAdaptableToSchoolBellApplication):
 class IResource(IGroupMember, ICalendarOwner):
     """Resource."""
 
-    title = TextLine(title=u"Title",
-        description=u"Title of the resource.")
+    title = TextLine(
+        title=_("Title"),
+        description=_("Title of the resource."))
 
-    description = Text(title=u"Description",
+    description = Text(
+        title=_("Description"),
         required=False,
-        description=u"Description of the resource.")
+        description=_("Description of the resource."))
 
 
 class IResourceContainer(IContainer, IAdaptableToSchoolBellApplication):
