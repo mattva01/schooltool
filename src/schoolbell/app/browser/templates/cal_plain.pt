@@ -1,5 +1,5 @@
 <tal:defs define="update view/update" />
-<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
 <head>
   <title metal:fill-slot="title" i18n:translate="">Calendar (plain)</title>
 </head>

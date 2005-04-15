@@ -1,5 +1,5 @@
 <tal:defs define="dummy view/update" />
-<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
 <head>
   <title metal:fill-slot="title" i18n:translate=""
          tal:content="view/title">Add/edit event</title>
