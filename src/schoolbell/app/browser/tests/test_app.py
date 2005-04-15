@@ -1024,8 +1024,10 @@ def doctest_ACLView():
         >>> principalRegistry.registerGroup(authenticated)
 
         >>> pprint(view.groups)
-        [{'perms': [], 'id': 'zope.authenticated', 'title': 'Authenticated users'},
-         {'perms': [], 'id': 'zope.unauthenticated', 'title': 'Unauthenticated users'},
+        [{'perms': [], 'id': 'zope.authenticated', 'title': u'Authenticated users'},
+         {'id': 'zope.unauthenticated',
+          'perms': [],
+          'title': u'Unauthenticated users'},
          {'perms': [], 'id': u'sb.group.3', 'title': 'office'},
          {'perms': [], 'id': u'sb.group.4', 'title': 'mgmt'}]
 
@@ -1184,8 +1186,10 @@ def doctest_ACLView():
           'perms': ['schoolbell.create'],
           'title': 'Marius'}]
         >>> pprint(view.groups)
-        [{'perms': [], 'id': 'zope.authenticated', 'title': 'Authenticated users'},
-         {'perms': [], 'id': 'zope.unauthenticated', 'title': 'Unauthenticated users'},
+        [{'perms': [], 'id': 'zope.authenticated', 'title': u'Authenticated users'},
+         {'id': 'zope.unauthenticated',
+          'perms': [],
+          'title': u'Unauthenticated users'},
          {'perms': ['schoolbell.create'], 'id': u'sb.group.3', 'title': 'office'},
          {'perms': [], 'id': u'sb.group.4', 'title': 'mgmt'}]
 
