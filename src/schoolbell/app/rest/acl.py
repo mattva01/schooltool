@@ -21,6 +21,7 @@ RESTive views for access control
 
 $Id$
 """
+
 from zope.interface import Interface, Attribute
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.interface import Interface, implements
