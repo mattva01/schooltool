@@ -220,22 +220,27 @@ class ResourceView(BrowserView):
 class IPersonEditForm(Interface):
     """Schema for a person's edit form."""
 
-    title = TextLine(title=u"Full name",
-                     description=u"Name that should be displayed")
+    title = TextLine(
+        title=_("Full name"),
+        description=_("Name that should be displayed"))
 
-    photo = Bytes(title=u"New photo",
-                  required=False,
-                  description=u"""Photo (in JPEG format)""")
+    photo = Bytes(
+        title=_("New photo"),
+        required=False,
+        description=_("""Photo (in JPEG format)"""))
 
-    clear_photo = Bool(title=u'Clear photo',
-                       required=False,
-                       description=u"""Check this to clear the photo""")
+    clear_photo = Bool(
+        title=_("Clear photo"),
+        required=False,
+        description=_("""Check this to clear the photo"""))
 
-    new_password = Password(title=u"New password",
-                            required=False)
+    new_password = Password(
+        title=_("New password"),
+        required=False)
 
-    verify_password = Password(title=u"Verify password",
-                               required=False)
+    verify_password = Password(
+        title=_("Verify password"),
+        required=False)
 
 
 class PersonEditView(BrowserView):
@@ -285,21 +290,25 @@ class PersonEditView(BrowserView):
 
 class IPersonPreferencesForm(Interface):
 
-    timezone = Choice(title=u"Time Zone",
-                    description=u"Time Zone used to display your calendar",
-                    values=common_timezones)
+    timezone = Choice(
+        title=_("Time Zone"),
+        description=_("Time Zone used to display your calendar"),
+        values=common_timezones)
 
-    timeformat = Choice(title=u"Time Format",
-                    description=u"Time Format",
-                    values=("HH:MM", "H:MM am/pm"))
+    timeformat = Choice(
+        title=_("Time Format"),
+        description=_("Time Format"),
+        values=("HH:MM", "H:MM am/pm")) # XXX what about i18n here? -- gintas
 
-    dateformat = Choice(title=u"Date Format",
-                    description=u"Date Format",
-                    values=("MM/DD/YY", "YYYY-DD-MM", "Day Month, Year"))
+    dateformat = Choice(
+        title=_("Date Format"),
+        description=_("Date Format"),
+        values=("MM/DD/YY", "YYYY-DD-MM", "Day Month, Year")) # XXX i18n?
 
-    weekstart = Choice(title=u"Week starts on:",
-                    description=u"Start display of weeks on Sunday or Monday",
-                    values=("Sunday", "Monday"))
+    weekstart = Choice(
+        title=_("Week starts on:"),
+        description=_("Start display of weeks on Sunday or Monday"),
+        values=("Sunday", "Monday")) # XXX i18n?
 
 
 class PersonPreferencesView(BrowserView):
@@ -344,21 +353,26 @@ class PersonPreferencesView(BrowserView):
 class IPersonAddForm(Interface):
     """Schema for person adding form."""
 
-    title = TextLine(title=u"Full name",
-        description=u"Name that should be displayed")
+    title = TextLine(
+        title=_("Full name"),
+        description=_("Name that should be displayed"))
 
-    username = TextLine(title=u"Username",
-        description=u"Username")
+    username = TextLine(
+        title=_("Username"),
+        description=_("Username"))
 
-    password = Password(title=u"Password",
+    password = Password(
+        title=_("Password"),
         required=False)
 
-    verify_password = Password(title=u"Verify password",
+    verify_password = Password(
+        title=_("Verify password"),
         required=False)
 
-    photo = Bytes(title=u"Photo",
+    photo = Bytes(
+        title=_("Photo"),
         required=False,
-        description=u"""Photo (in JPEG format)""")
+        description=_("""Photo (in JPEG format)"""))
 
 
 class PersonAddView(AddView):
@@ -379,13 +393,13 @@ class PersonAddView(AddView):
 
     def createAndAdd(self, data):
         """Create a Person from form data and add it to the container."""
+        # TODO: i18n
         if data['password'] != data['verify_password']:
-            self.error = u'Passwords do not match!'
-            raise WidgetsError([ValidationError('Passwords do not match!')])
+            self.error = _("Passwords do not match!")
+            raise WidgetsError([ValidationError(self.error)])
         elif data['username'] in self.context:
-            self.error = u'This username is already used!'
-            raise WidgetsError(
-                [ValidationError('This username is already used!')])
+            self.error = _('This username is already used!')
+            raise WidgetsError([ValidationError(self.error)])
         return AddView.createAndAdd(self, data)
 
     def getAllGroups(self):
@@ -512,7 +526,7 @@ class LogoutView(BrowserView):
 
 
 class ACLViewBase(object):
-    """A base view for both browser and restive access control views"""
+    """A base view for both browser and restive access control views."""
 
     permissions = [
         ('schoolbell.view', _('View')),
@@ -550,11 +564,13 @@ class ACLViewBase(object):
         result = []
         all = zapi.queryUtility(IAuthenticatedGroup)
         if all is not None:
-            result.append({'title': 'Authenticated users', 'id': all.id,
+            result.append({'title': _('Authenticated users'),
+                           'id': all.id,
                            'perms': self.permsForPrincipal(all.id)})
         unauth = zapi.queryUtility(IUnauthenticatedGroup)
         if unauth is not None:
-            result.append({'title': 'Unauthenticated users', 'id': unauth.id,
+            result.append({'title': _('Unauthenticated users'),
+                           'id': unauth.id,
                            'perms': self.permsForPrincipal(unauth.id)})
         for group in app['groups'].values():
             pid = auth.group_prefix + group.__name__
@@ -579,7 +595,7 @@ class ACLView(BrowserView, ACLViewBase):
             map = removeSecurityProxy(map)
 
             def permChecked(perm, principalid):
-                """Returns if a checkbox for (perm, principalid) is checked"""
+                """Test if a checkbox for (perm, principalid) is checked."""
                 if principalid in self.request:
                     return (perm in self.request[principalid] or
                             perm == self.request[principalid])
@@ -606,7 +622,7 @@ class ACLView(BrowserView, ACLViewBase):
 
 
 class ProbeParticipation:
-    """A stub participation for use in hasPermission"""
+    """A stub participation for use in hasPermission."""
     implements(IParticipation)
     def __init__(self, principal):
         self.principal = principal
@@ -614,8 +630,7 @@ class ProbeParticipation:
 
 
 def hasPermission(permission, object, principalid):
-    """Returns if the principal has access according to the security policy"""
-
+    """Test if the principal has access according to the security policy."""
     principal = zapi.getUtility(IAuthentication).getPrincipal(principalid)
     participation = ProbeParticipation(principal)
     interaction = getSecurityPolicy()(participation)
