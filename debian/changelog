@@ -1,16 +1,15 @@
-schooltool (0.9.99+1.0rc1) unstable; urgency=low
+schooltool (1.0-1) unstable; urgency=low
 
   * Split the schoolbell and schooltool source packages. (Closes: Bug#301277)
+  * Remove the conflicts on the schoolbell package as other changes have made
+    this un-necessary.
   * Hack upstreams build process until it does everything debian/rules used to
     do, then reduce the rules file to less than 75 lines. Also the application
     startup scripts are moved to the upstream scripts directory as they will
     be usefull for the RPM packages.
-  * Create a python2.3-schooltool library package, this contains the
-    schooltool python module and the clients. The schooltool package is only
-    now only a configuration package.
   * Fold the clients (command line and import-sampleschool) into the library
     package as they would otherwise have been 2 lonely scripts in one big
-    package.
+    package. Add conflicts/replaces on these packages.
   * Add `mkdir -p /var/run/schooltool` to initscript because some people like
     to mount tmpfs on /var/run.
   * Depend on python2.3-libxml2 rather than libxml2-python2.3 as
@@ -19,6 +18,8 @@ schooltool (0.9.99+1.0rc1) unstable; urgency=low
   * Added a note that generating SSL certificates might take a while.
   * Add --retry 30 to start-stop-daemon calls and a small sleep afterwards to
     try to prevent race conditions when the server takes a while to shut down.
+  * Do not listen on the RESTive/XML interface by default. See:
+    http://lists.schooltool.org/pipermail/schooltool/2005-April/001173.html
 
  -- Brian Sutherland <jinty@web.de>  Fri, 28 Jan 2005 19:48:56 +0100
 

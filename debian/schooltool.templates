@@ -1,6 +1,6 @@
 Template: schooltool/listen
 Type: string
-Default: 7001
+Default:
 _Description: Network interfaces for SchoolTool XML web services:
  Please enter a space separated list of [address:]port values that you
  would like the server to listen on.
