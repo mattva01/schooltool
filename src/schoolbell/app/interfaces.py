@@ -49,6 +49,7 @@ from zope.app.annotation.interfaces import IAnnotatable
 
 import pytz
 
+from schoolbell import SchoolBellMessageID as _
 from schoolbell.calendar.interfaces import IEditCalendar, ICalendarEvent
 
 
@@ -84,15 +85,17 @@ class IHaveNotes(IAnnotatable):
 class INote(Interface):
     """A note."""
 
-    title = TextLine(title=u"Title",
-        description=u"Title of the note.")
+    title = TextLine(
+        title=_("Title"),
+        description=_("Title of the note."))
 
-    body = Text(title=u"Body",
-        description=u"Body of the note.")
+    body = Text(
+        title=_("Body"),
+        description=_("Body of the note."))
 
     privacy = Choice(
-        title=u"Privacy",
-        values=('private', 'public'),
+        title=_("Privacy"),
+        values=('private stuff', 'public stuff'),
         description=u"""
         Determines who can view the note.
 
