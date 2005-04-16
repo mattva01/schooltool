@@ -129,6 +129,7 @@ class INote(Interface):
         required=False,
         description=u"""A globally unique id for this note.""")
 
+
 class INotes(Interface):
     """A set of notes.
 
