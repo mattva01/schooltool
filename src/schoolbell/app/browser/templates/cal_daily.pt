@@ -12,8 +12,9 @@
         <a tal:attributes="href string:${allday/@@absolute_url}/edit.html?date=${evdate};
           title allday/description" tal:content="allday/title"/>
       </h6>
-          <a title="Delete this event" i18n:attributes="title" class="delete"
-            tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${allday/unique_id}&date=${evdate}"
+          <a title="" i18n:attributes="title" class="delete"
+            tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${allday/unique_id}&date=${evdate};
+                            title string:Delete ${allday/title}"
             ><img alt="[X]"
               tal:attributes="src context/++resource++delete.png"/></a>
       <tal:if condition="allday/description">
@@ -36,8 +37,10 @@
          tal:attributes="onclick string:parent.location='${context/@@absolute_url}/add.html?field.start_date=${view/cursor}&amp;field.start_time=${hour/time}&amp;field.duration=${hour/duration}';
                          style string:top: ${top}em;
                          class string:hour ${repeat/hour/parity}">
-      <a class="event-new" style="width:100%;height:100%;" title="Add new event" i18n:attributes="title"
-         tal:attributes="href string:${context/@@absolute_url}/add.html?field.start_date=${view/cursor}&amp;field.start_time=${hour/time}&amp;field.duration=${hour/duration}"
+      <a class="event-new" style="width:100%;height:100%;" title=""
+         i18n:attributes="title"
+         tal:attributes="href string:${context/@@absolute_url}/add.html?field.start_date=${view/cursor}&amp;field.start_time=${hour/time}&amp;field.duration=${hour/duration};
+                         title string:Add new event starting at ${hour/title}"
          tal:content="hour/title">HH:MM</a>
     </div>
   </tal:block>
@@ -80,8 +83,9 @@
               </span>
             </a>
           </h6>
-          <a title="Delete this event" i18n:attributes="title" class="delete"
-            tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${ev/unique_id}&date=${evdate}"
+          <a title="" i18n:attributes="title" class="delete"
+            tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${ev/unique_id}&date=${evdate};
+                            title string:Delete ${ev/title}"
             ><img alt="[X]"
               tal:attributes="src context/++resource++delete.png"/></a>
           <div class="body"
