@@ -158,6 +158,7 @@ class DuplicateRelationship(InvalidRelationship):
 class NoSuchRelationship(Exception):
     """Relationship does not exist"""
 
+
 class IRelationshipSchema(Interface):
     """Relationship schema."""
 
