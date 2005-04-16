@@ -263,12 +263,12 @@
       name="http://schooltool.org/ns/membership" />
 
   <utility
-      provides="schoolbell.relationship.interfaces.IURIObject"
+      provides="schoolbell.relationship.uri.IURIObject"
       component=".membership.URIMember"
       name="http://schooltool.org/ns/membership/member" />
 
   <utility
-      provides="schoolbell.relationship.interfaces.IURIObject"
+      provides="schoolbell.relationship.uri.IURIObject"
       component=".membership.URIGroup"
       name="http://schooltool.org/ns/membership/group" />
 
