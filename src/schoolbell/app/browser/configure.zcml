@@ -34,16 +34,6 @@
       trusted="yes"
       />
 
-    <!--
-    XXX why is this commented out? - gintas
-  <zope:adapter
-      for="schoolbell.calendar.browser.CalendarVfbView"
-      provides="zope.app.filerepresentation.interfaces.IReadFile"
-      factory=".cal.enableVfbView"
-      trusted="yes"
-      />
-    -->
-
 <!-- Actions menu -->
 
   <menu id="schoolbell_actions" title="Actions" />
