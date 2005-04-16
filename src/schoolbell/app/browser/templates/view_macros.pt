@@ -130,15 +130,27 @@
 
 <metal:block define-macro="calendar-navigation" i18n:domain="schoolbell">
   <div id="calendar-navigation-context">
-    <a id="calendar-navigation-context-previous"
-      tal:attributes="href view/prev"
-      ><span tal:content="view/prev_title">Previous</span></a>
-    <a id="calendar-navigation-context-current"
-      tal:attributes="href view/current"
-      ><span tal:content="view/current_title">Current</span></a>
-    <a id="calendar-navigation-context-next"
-      tal:attributes="href view/next"
-      ><span tal:content="view/next_title">Next</span></a>
+    <a id="calendar-navigation-context-previous" i18n:attributes="title"
+       tal:attributes="href view/prev;
+                       title string:Go to ${view/prev_title}">
+      <span tal:content="view/prev_title">
+        Previous
+      </span>
+    </a>
+    <a id="calendar-navigation-context-current" i18n:attributes="title"
+       tal:attributes="href view/current;
+                       title string:Go to ${view/current_title}">
+      <span tal:content="view/current_title">
+        Current
+      </span>
+    </a>
+    <a id="calendar-navigation-context-next" i18n:attributes="title"
+       tal:attributes="href view/next;
+                       title string:Go to ${view/next_title}">
+      <span tal:content="view/next_title">
+        Next
+      </span>
+    </a>
   </div>
 </metal:block>
 
