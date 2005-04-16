@@ -100,7 +100,7 @@ web-access-log-file web-access.log
 # Examples:
 #    lang de_DE
 #    lang fr
-lang lt
+lang auto
 
 #
 # <zodb>
