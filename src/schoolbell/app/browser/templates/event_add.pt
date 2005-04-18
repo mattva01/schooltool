@@ -33,7 +33,7 @@
         }
     }
     function allday_changed() {
-        /// FIXME: No effect in IE
+        /// XXX: No effect in IE
         form = document.getElementById('form');
         var allday = document.getElementById('field.allday');
         var start_time = document.getElementById('field.start_time');
