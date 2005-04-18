@@ -209,8 +209,9 @@
       content_factory="schoolbell.app.app.Group"
       permission="schoolbell.create"
       template="templates/simple_add.pt"
-      class=".app.GroupAddView"
-      />
+      class=".app.GroupAddView">
+    <widget field="description" height="5" />
+  </addform>
 
   <menuItem
       menu="schoolbell_actions"
@@ -297,8 +298,9 @@
       content_factory="schoolbell.app.app.Resource"
       template="templates/simple_add.pt"
       class=".app.ResourceAddView"
-      permission="schoolbell.create"
-      />
+      permission="schoolbell.create">
+    <widget field="description" height="5" />
+  </addform>
 
   <editform
       for="schoolbell.app.interfaces.IResource"
