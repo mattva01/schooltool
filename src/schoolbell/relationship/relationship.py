@@ -526,3 +526,6 @@ class LinkSet(Persistent, Contained):
 
     def __getitem__(self, id):
         return self._links[id]
+
+    def get(self, key, default=None):
+        return self._links.get(key, default)

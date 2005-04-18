@@ -104,6 +104,11 @@ class IRelationshipLinks(Interface):
     def __getitem__(id):
         """Return the link with a given id."""
 
+    def get(key, default=None):
+        """Get a link for a key
+
+        The default is returned if there is no value for the key.
+        """
 
 class IRelationshipEvent(Interface):
     """Common attributes for relationship events."""

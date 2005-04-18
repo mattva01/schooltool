@@ -14,6 +14,24 @@
     <allow attributes="context" />
   </content>
 
+  <content class="schoolbell.relationship.relationship.LinkSet">
+    <allow
+       interface="schoolbell.relationship.interfaces.IRelationshipLinks"
+       />
+  </content>
+
+  <content class="schoolbell.relationship.relationship.Link">
+    <allow
+       interface="schoolbell.relationship.interfaces.IRelationshipLink"
+       />
+  </content>
+
+  <content class="schoolbell.relationship.uri.URIObject">
+    <allow
+       interface="schoolbell.relationship.uri.IURIObject"
+       />
+  </content>
+
   <view
       for="schoolbell.app.interfaces.ISchoolBellApplication"
       name="GET"
@@ -47,6 +65,16 @@
       factory=".RestPublishTraverse"
       permission="zope.Public"
       />
+
+
+  <view
+      for="schoolbell.relationship.interfaces.IRelationshipLinks"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory=".relationships.LinkTraverser"
+      permission="zope.Public"
+      />
+
 
   <!-- traversers for persons -->
   <view
@@ -101,6 +129,15 @@
       factory=".acl.ACLTraverser"
       permission="schoolbell.controlAccess"
       name="acl"
+      />
+
+  <view
+      for="zope.app.annotation.interfaces.IAnnotatable"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides=".IRestTraverser"
+      factory=".relationships.RelationshipsTraverser"
+      permission="zope.Public"
+      name="relationships"
       />
 
   <!-- the following are used by PUT requests on the normal web server -->
@@ -368,6 +405,46 @@
       permission="schoolbell.controlAccess"
       allowed_interface="schoolbell.app.rest.acl.IACLView"
       name="POST"
+      />
+
+  <class class="schoolbell.app.rest.relationships.RelationshipsView">
+    <allow attributes="GET" />
+    <require permission="schoolbell.manageMembership"
+             attributes="POST" />
+  </class>
+
+  <view
+      for="schoolbell.relationship.interfaces.IRelationshipLinks"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      factory="schoolbell.app.rest.relationships.RelationshipsViewFactory"
+      name="GET"
+      />
+
+  <view
+      for="schoolbell.relationship.interfaces.IRelationshipLinks"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      factory="schoolbell.app.rest.relationships.RelationshipsViewFactory"
+      name="POST"
+      />
+
+  <class class="schoolbell.app.rest.relationships.LinkView">
+    <allow attributes="GET info" />
+    <require permission="schoolbell.manageMembership"
+             attributes="DELETE" />
+  </class>
+
+  <view
+      for="schoolbell.relationship.interfaces.IRelationshipLink"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      factory="schoolbell.app.rest.relationships.LinkViewFactory"
+      name="GET"
+      />
+
+  <view
+      for="schoolbell.relationship.interfaces.IRelationshipLink"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      factory="schoolbell.app.rest.relationships.LinkViewFactory"
+      name="DELETE"
       />
 
   <!-- Error views -->

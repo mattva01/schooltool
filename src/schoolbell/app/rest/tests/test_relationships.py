@@ -35,8 +35,11 @@ from zope.publisher.browser import TestRequest
 from zope.publisher.http import HTTPRequest
 from zope.app.testing import setup, ztapi
 from zope.app.traversing.interfaces import IContainmentRoot
+from zope.app.component.hooks import setSite
+from schoolbell.app.security import setUpLocalAuth
 
 from schoolbell.app.rest.errors import RestError
+from schoolbell.relationship.interfaces import IRelationshipLinks
 from schoolbell.relationship.interfaces import IRelationshipSchema
 from schoolbell.relationship.uri import IURIObject
 from schoolbell.app.membership import Membership
@@ -75,6 +78,8 @@ class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
                              SimpleNameChooser)
 
         self.app = SchoolBellApplication()
+        setUpLocalAuth(self.app)
+        setSite(self.app)
         directlyProvides(self.app, IContainmentRoot)
         self.group = self.app['groups']["root"] = Group("group")
         self.new = self.app['groups']["new"] = Group("New Group")
@@ -94,7 +99,7 @@ class TestRelationshipsView(CommonSetupMixin, unittest.TestCase):
         from schoolbell.app.rest.relationships import RelationshipsView
         CommonSetupMixin.setUp(self)
         self.request = TestRequest()
-        self.view = RelationshipsView(self.new, self.request)
+        self.view = RelationshipsView(IRelationshipLinks(self.new), self.request)
 
     def tearDown(self):
         self.tearDownLibxml2()
@@ -103,15 +108,15 @@ class TestRelationshipsView(CommonSetupMixin, unittest.TestCase):
         from pprint import pformat
         result = self.view.listLinks()
         self.assertEquals(len(result), 2)
-        self.assert_({'traverse': '/persons/pete',
-                      'role': 'http://schooltool.org/ns/membership/group',
+        self.assert_({'traverse': 'http://127.0.0.1/persons/pete',
+                      'role': 'http://schooltool.org/ns/membership/member',
                       'type': 'http://schooltool.org/ns/membership',
-                      'href': '/groups/new/relationships/1'}
+                      'href': 'http://127.0.0.1/groups/new/relationships/1'}
                      in result, pformat(result))
-        self.assert_({'traverse': '/persons/john',
-                      'role': 'http://schooltool.org/ns/membership/group',
+        self.assert_({'traverse': 'http://127.0.0.1/persons/john',
+                      'role': 'http://schooltool.org/ns/membership/member',
                       'type': 'http://schooltool.org/ns/membership',
-                      'href': '/groups/new/relationships/2'}
+                      'href': 'http://127.0.0.1/groups/new/relationships/2'}
                      in result, pformat(result))
 
     def testGET(self):
@@ -126,17 +131,17 @@ class TestRelationshipsView(CommonSetupMixin, unittest.TestCase):
                               xmlns:xlink="http://www.w3.org/1999/xlink">
                  <existing>
                    <relationship xlink:arcrole="http://schooltool.org/ns/membership"
-                                 xlink:href="/persons/pete"
-                                 xlink:role="http://schooltool.org/ns/membership/group"
+                                 xlink:href="http://127.0.0.1/persons/pete"
+                                 xlink:role="http://schooltool.org/ns/membership/member"
                                  xlink:type="simple">
-                     <manage xlink:href="/groups/new/relationships/1"
+                     <manage xlink:href="http://127.0.0.1/groups/new/relationships/1"
                              xlink:type="simple"/>
                    </relationship>
                    <relationship xlink:arcrole="http://schooltool.org/ns/membership"
-                                 xlink:href="/persons/john"
-                                 xlink:role="http://schooltool.org/ns/membership/group"
+                                 xlink:href="http://127.0.0.1/persons/john"
+                                 xlink:role="http://schooltool.org/ns/membership/member"
                                  xlink:type="simple">
-                     <manage xlink:href="/groups/new/relationships/2"
+                     <manage xlink:href="http://127.0.0.1/groups/new/relationships/2"
                              xlink:type="simple"/>
                    </relationship>
                  </existing>
@@ -148,12 +153,12 @@ class TestRelationshipsView(CommonSetupMixin, unittest.TestCase):
         body = """<relationship xmlns="http://schooltool.org/ns/model/0.1"
                                      xmlns:xlink="http://www.w3.org/1999/xlink"
                                      xlink:type="simple"
-                                     xlink:role="http://schooltool.org/ns/membership/group"
+                                     xlink:role="http://schooltool.org/ns/membership/member"
                                      xlink:arcrole="http://schooltool.org/ns/membership"
-                                     xlink:href="/persons/john"/>"""
+                                     xlink:href="http://127.0.0.1/persons/john"/>"""
 
         request = TestRequest(StringIO(body))
-        view = RelationshipsView(self.group, request)
+        view = RelationshipsView(IRelationshipLinks(self.group), request)
 
         self.assertEquals(len(view.listLinks()), 1)
         self.assert_(self.person2 not in
@@ -166,7 +171,7 @@ class TestRelationshipsView(CommonSetupMixin, unittest.TestCase):
                      [l.target for l in getRelationshipLinks(self.group)])
         self.assertEquals(response.getHeader('content-type'),
                           "text/plain; charset=UTF-8")
-        location = "/groups/root/relationships/2"
+        location = "http://127.0.0.1/groups/root/relationships/2"
         self.assertEquals(response.getHeader('location'), location)
         self.assert_(location in result)
 
@@ -239,7 +244,7 @@ class TestRelationshipsView(CommonSetupMixin, unittest.TestCase):
         for exception, body in bad_requests:
             body = StringIO(body)
             request = TestRequest(body)
-            view = RelationshipsView(self.new, request)
+            view = RelationshipsView(IRelationshipLinks(self.new), request)
 
             self.assertEquals(len(view.listLinks()), 2)
             self.assertRaises(exception, view.POST)
@@ -263,7 +268,7 @@ class TestLinkView(CommonSetupMixin, unittest.TestCase):
                       xlink:type="simple"
                       xlink:role="http://schooltool.org/ns/membership/member"
                       xlink:arcrole="http://schooltool.org/ns/membership"
-                      xlink:href="/persons/pete"/>
+                      xlink:href="http://127.0.0.1/persons/pete"/>
         """)
 
     def testDELETE(self):
