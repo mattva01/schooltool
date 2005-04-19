@@ -8,7 +8,6 @@ PYTHON=python2.3
 TESTFLAGS=-w1
 POT=src/schoolbell/app/locales/schoolbell.pot
 PO=$(wildcard src/schoolbell/app/locales/*/LC_MESSAGES/*.po)
-MO=$(PO:.po=.mo)
 PYTHONPATH=src:Zope3/src
 
 .PHONY: all
