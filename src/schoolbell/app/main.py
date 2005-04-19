@@ -100,7 +100,7 @@ class IncompatibleDatabase(Exception):
 class Options(object):
     """SchoolBell process options."""
 
-    config_file = 'schoolbell.conf'
+    config_filename = 'schoolbell.conf'
     daemon = False
     quiet = False
     config = None
@@ -108,9 +108,10 @@ class Options(object):
     def __init__(self):
         dirname = os.path.dirname(__file__)
         dirname = os.path.normpath(os.path.join(dirname, '..', '..', '..'))
-        self.config_file = os.path.join(dirname, 'schoolbell.conf')
+        self.config_file = os.path.join(dirname, self.config_filename)
         if not os.path.exists(self.config_file):
-            self.config_file = os.path.join(dirname, 'schoolbell.conf.in')
+            self.config_file = os.path.join(dirname,
+                                            self.config_filename + '.in')
 
 
 class StubbornNegotiator(object):
@@ -330,6 +331,10 @@ class StandaloneServer(object):
     incompatible_db_error_msg = sb_incompatible_db_error_msg
     old_db_error_msg = sb_old_db_error_msg
 
+    system_name = "SchoolBell"
+
+    Options = Options
+
     def configure(self):
         """Configure Zope 3 components."""
         # Hook up custom component architecture calls
@@ -338,7 +343,7 @@ class StandaloneServer(object):
 
     def load_options(self, argv):
         """Parse the command line and read the configuration file."""
-        options = Options()
+        options = self.Options()
 
         # Parse command line
         progname = os.path.basename(argv[0])
@@ -357,8 +362,8 @@ class StandaloneServer(object):
                 options.config_file = v
             if k in ('-d', '--daemon'):
                 if not hasattr(os, 'fork'):
-                    print >> sys.stderr, ("%s: daemon mode not supported on your"
-                                          " operating system.")
+                    print >> sys.stderr, ("%s: daemon mode not supported on"
+                                          " your operating system.")
                     sys.exit(1)
                 else:
                     options.daemon = True
@@ -382,8 +387,8 @@ class StandaloneServer(object):
         deprecated = ['module', 'test_mode', 'domain', 'path', 'app_log_file']
         for setting in deprecated:
             if getattr(options.config, setting):
-                print >> sys.stderr, ("%s: warning: ignored configuration option"
-                                      " '%s'" % (progname, setting))
+                print >> sys.stderr, ("%s: warning: ignored configuration"
+                                      " option '%s'" % (progname, setting))
         return options
 
     def bootstrapSchoolBell(self, db):
@@ -400,8 +405,8 @@ class StandaloneServer(object):
             directlyProvides(app, IContainmentRoot)
             root[ZopePublication.root_name] = app
             notify(ObjectAddedEvent(app))
-            manager = Person('manager', 'SchoolBell Manager')
-            manager.setPassword('schoolbell')
+            manager = Person('manager', '%s Manager' % self.system_name)
+            manager.setPassword(self.system_name.lower())
             app['persons']['manager'] = manager
             roles = IPrincipalRoleManager(app)
             roles.assignRoleToPrincipal('zope.Manager', 'sb.person.manager')
@@ -445,10 +450,11 @@ class StandaloneServer(object):
         try:
            db = db_configuration.open()
         except IOError, e:
-            print >> sys.stderr, ("Could not initialize the database:\n%s" % (e, ))
+            print >> sys.stderr, ("Could not initialize the database:\n%s" %
+                                  (e, ))
             if e.errno == errno.EAGAIN: # Resource temporarily unavailable
-                print >> sys.stderr, ("\nPerhaps another SchoolBell instance"
-                                      " is using it?")
+                print >> sys.stderr, ("\nPerhaps another %s instance"
+                                      " is using it?" % self.system_name)
             sys.exit(1)
 
         try:
@@ -472,7 +478,8 @@ class StandaloneServer(object):
             http.create('HTTP', task_dispatcher, db, port=port, ip=ip)
 
         for ip, port in options.config.rest:
-            restServerType.create('REST', task_dispatcher, db, port=port, ip=ip)
+            restServerType.create('REST', task_dispatcher, db,
+                                  port=port, ip=ip)
 
         notify(ProcessStarting())
 
