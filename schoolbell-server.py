@@ -26,4 +26,4 @@ sys.path.insert(0, os.path.join(basedir, 'src'))
 sys.path.insert(0, os.path.join(basedir, 'Zope3', 'src'))
 
 import schoolbell.app.main
-schoolbell.app.main.main()
+schoolbell.app.main.StandaloneServer().main()

@@ -57,13 +57,10 @@ from schoolbell.app.security import setUpLocalAuth
 from schoolbell.app.rest import restServerType
 
 
-ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__), 'config-schema.xml')
-
-
 locale_charset = locale.getpreferredencoding()
 
 
-usage_message = """
+sb_usage_message = """
 Usage: %s [options]
 Options:
   -c, --config xxx  use this configuration file instead of the default
@@ -72,7 +69,7 @@ Options:
 """.strip()
 
 
-no_storage_error_msg = """
+sb_no_storage_error_msg = """
 No storage defined in the configuration file.
 
 If you're using the default configuration file, please edit it now and
@@ -80,12 +77,12 @@ uncomment one of the ZODB storage sections.
 """.strip()
 
 
-incompatible_db_error_msg = """
+sb_incompatible_db_error_msg = """
 This is not a SchoolBell 1.0 database file, aborting.
 """.strip()
 
 
-old_db_error_msg = """
+sb_old_db_error_msg = """
 This is not a SchoolBell 1.0 database file, aborting.
 
 Please run the standalone database upgrade script.
@@ -116,68 +113,6 @@ class Options(object):
             self.config_file = os.path.join(dirname, 'schoolbell.conf.in')
 
 
-def main(argv=sys.argv):
-    """Start the SchoolBell server."""
-    t0, c0 = time.time(), time.clock()
-    options = load_options(argv)
-    setup(options)
-    t1, c1 = time.time(), time.clock()
-    print "Startup time: %.3f sec real, %.3f sec CPU" % (t1-t0, c1-c0)
-    run()
-    if options.config.pid_file:
-        os.unlink(options.config.pid_file)
-
-
-def load_options(argv):
-    """Parse the command line and read the configuration file."""
-    options = Options()
-
-    # Parse command line
-    progname = os.path.basename(argv[0])
-    try:
-        opts, args = getopt.gnu_getopt(argv[1:], 'c:hd',
-                                       ['config=', 'help', 'daemon'])
-    except getopt.error, e:
-        print >> sys.stderr, "%s: %s" % (progname, e)
-        print >> sys.stderr, "Run %s -h for help." % progname
-        sys.exit(1)
-    for k, v in opts:
-        if k in ('-h', '--help'):
-            print usage_message % progname
-            sys.exit(0)
-        if k in ('-c', '--config'):
-            options.config_file = v
-        if k in ('-d', '--daemon'):
-            if not hasattr(os, 'fork'):
-                print >> sys.stderr, ("%s: daemon mode not supported on your"
-                                      " operating system.")
-                sys.exit(1)
-            else:
-                options.daemon = True
-
-    # Read configuration file
-    schema = ZConfig.loadSchema(ZCONFIG_SCHEMA)
-    print "Reading configuration from %s" % options.config_file
-    try:
-        options.config, handler = ZConfig.loadConfig(schema,
-                                                     options.config_file)
-    except ZConfig.ConfigurationError, e:
-        print >> sys.stderr, "%s: %s" % (progname, e)
-        sys.exit(1)
-    if options.config.database.config.storage is None:
-        print >> sys.stderr, "%s: %s" % (progname, no_storage_error_msg)
-        sys.exit(1)
-
-    # Complain about obsolete options.  This section should be removed
-    # in later SchoolBell versions.
-    deprecated = ['module', 'test_mode', 'domain', 'path', 'app_log_file']
-    for setting in deprecated:
-        if getattr(options.config, setting):
-            print >> sys.stderr, ("%s: warning: ignored configuration option"
-                                  " '%s'" % (progname, setting))
-    return options
-
-
 class StubbornNegotiator(object):
     """A language negotiator.
 
@@ -200,66 +135,6 @@ def setLanguage(lang):
         return # language is negotiated at runtime through Accept-Language.
     negotiator = StubbornNegotiator(lang)
     provideUtility(negotiator)
-
-
-def setup(options):
-    """Configure SchoolBell."""
-    setUpLogger(None, options.config.error_log_file,
-                "%(asctime)s %(message)s")
-    setUpLogger('accesslog', options.config.web_access_log_file)
-
-    # Shut up ZODB lock_file, because it logs tracebacks when unable
-    # to lock the database file, and we don't want that.
-    logging.getLogger('ZODB.lock_file').disabled = True
-
-    # Process ZCML
-    configure()
-
-    # Set language specified in the configuration
-    setLanguage(options.config.lang)
-
-    # Open the database
-    db_configuration = options.config.database
-    try:
-       db = db_configuration.open()
-    except IOError, e:
-        print >> sys.stderr, ("Could not initialize the database:\n%s" % (e, ))
-        if e.errno == errno.EAGAIN: # Resource temporarily unavailable
-            print >> sys.stderr, ("\nPerhaps another SchoolBell instance"
-                                  " is using it?")
-        sys.exit(1)
-
-    try:
-        bootstrapSchoolBell(db)
-    except IncompatibleDatabase:
-        print >> sys.stderr, incompatible_db_error_msg
-        sys.exit(1)
-    except OldDatabase:
-        print >> sys.stderr, old_db_error_msg
-        sys.exit(1)
-
-    notify(DatabaseOpened(db))
-
-    if options.daemon:
-        daemonize()
-
-    task_dispatcher = ThreadedTaskDispatcher()
-    task_dispatcher.setThreadCount(options.config.thread_pool_size)
-
-    for ip, port in options.config.web:
-        http.create('HTTP', task_dispatcher, db, port=port, ip=ip)
-
-    for ip, port in options.config.rest:
-        restServerType.create('REST', task_dispatcher, db, port=port, ip=ip)
-
-    notify(ProcessStarting())
-
-    if options.config.pid_file:
-        pidfile = file(options.config.pid_file, "w")
-        print >> pidfile, os.getpid()
-        pidfile.close()
-
-    return db
 
 
 class StreamWrapper(object):
@@ -415,41 +290,7 @@ def daemonize():
     os.dup(0)
 
 
-def bootstrapSchoolBell(db):
-    """Bootstrap SchoolBell database."""
-    connection = db.open()
-    root = connection.root()
-    if root.get('schooltool'):
-        transaction.abort()
-        connection.close()
-        raise OldDatabase('old database')
-    app_obj = root.get(ZopePublication.root_name)
-    if app_obj is None:
-        app = SchoolBellApplication()
-        directlyProvides(app, IContainmentRoot)
-        root[ZopePublication.root_name] = app
-        notify(ObjectAddedEvent(app))
-        manager = Person('manager', 'SchoolBell Manager')
-        manager.setPassword('schoolbell')
-        app['persons']['manager'] = manager
-        IPrincipalRoleManager(app).assignRoleToPrincipal('zope.Manager',
-                                                         'sb.person.manager')
-    elif not ISchoolBellApplication.providedBy(app_obj):
-        transaction.abort()
-        connection.close()
-        raise IncompatibleDatabase('incompatible database')
-    transaction.commit()
-    connection.close()
-
-
-def configure():
-    """Configure Zope 3 components."""
-    # Hook up custom component architecture calls
-    zope.app.component.hooks.setHooks()
-    xmlconfig.string(SITE_DEFINITION)
-
-
-SITE_DEFINITION = """
+SCHOOLBELL_SITE_DEFINITION = """
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser">
 
@@ -477,6 +318,172 @@ SITE_DEFINITION = """
 </configure>
 """
 
+class StandaloneServer(object):
+
+    ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__),
+                                  'config-schema.xml')
+
+    SITE_DEFINITION = SCHOOLBELL_SITE_DEFINITION
+
+    usage_message = sb_usage_message
+    no_storage_error_msg = sb_no_storage_error_msg
+    incompatible_db_error_msg = sb_incompatible_db_error_msg
+    old_db_error_msg = sb_old_db_error_msg
+
+    def configure(self):
+        """Configure Zope 3 components."""
+        # Hook up custom component architecture calls
+        zope.app.component.hooks.setHooks()
+        xmlconfig.string(self.SITE_DEFINITION)
+
+    def load_options(self, argv):
+        """Parse the command line and read the configuration file."""
+        options = Options()
+
+        # Parse command line
+        progname = os.path.basename(argv[0])
+        try:
+            opts, args = getopt.gnu_getopt(argv[1:], 'c:hd',
+                                           ['config=', 'help', 'daemon'])
+        except getopt.error, e:
+            print >> sys.stderr, "%s: %s" % (progname, e)
+            print >> sys.stderr, "Run %s -h for help." % progname
+            sys.exit(1)
+        for k, v in opts:
+            if k in ('-h', '--help'):
+                print self.usage_message % progname
+                sys.exit(0)
+            if k in ('-c', '--config'):
+                options.config_file = v
+            if k in ('-d', '--daemon'):
+                if not hasattr(os, 'fork'):
+                    print >> sys.stderr, ("%s: daemon mode not supported on your"
+                                          " operating system.")
+                    sys.exit(1)
+                else:
+                    options.daemon = True
+
+        # Read configuration file
+        schema = ZConfig.loadSchema(self.ZCONFIG_SCHEMA)
+        print "Reading configuration from %s" % options.config_file
+        try:
+            options.config, handler = ZConfig.loadConfig(schema,
+                                                         options.config_file)
+        except ZConfig.ConfigurationError, e:
+            print >> sys.stderr, "%s: %s" % (progname, e)
+            sys.exit(1)
+        if options.config.database.config.storage is None:
+            print >> sys.stderr, "%s: %s" % (progname,
+                                             self.no_storage_error_msg)
+            sys.exit(1)
+
+        # Complain about obsolete options.  This section should be removed
+        # in later SchoolBell versions.
+        deprecated = ['module', 'test_mode', 'domain', 'path', 'app_log_file']
+        for setting in deprecated:
+            if getattr(options.config, setting):
+                print >> sys.stderr, ("%s: warning: ignored configuration option"
+                                      " '%s'" % (progname, setting))
+        return options
+
+    def bootstrapSchoolBell(self, db):
+        """Bootstrap SchoolBell database."""
+        connection = db.open()
+        root = connection.root()
+        if root.get('schooltool'):
+            transaction.abort()
+            connection.close()
+            raise OldDatabase('old database')
+        app_obj = root.get(ZopePublication.root_name)
+        if app_obj is None:
+            app = SchoolBellApplication()
+            directlyProvides(app, IContainmentRoot)
+            root[ZopePublication.root_name] = app
+            notify(ObjectAddedEvent(app))
+            manager = Person('manager', 'SchoolBell Manager')
+            manager.setPassword('schoolbell')
+            app['persons']['manager'] = manager
+            roles = IPrincipalRoleManager(app)
+            roles.assignRoleToPrincipal('zope.Manager', 'sb.person.manager')
+        elif not ISchoolBellApplication.providedBy(app_obj):
+            transaction.abort()
+            connection.close()
+            raise IncompatibleDatabase('incompatible database')
+        transaction.commit()
+        connection.close()
+
+
+    def main(self, argv=sys.argv):
+        """Start the SchoolBell server."""
+        t0, c0 = time.time(), time.clock()
+        options = self.load_options(argv)
+        self.setup(options)
+        t1, c1 = time.time(), time.clock()
+        print "Startup time: %.3f sec real, %.3f sec CPU" % (t1-t0, c1-c0)
+        run()
+        if options.config.pid_file:
+            os.unlink(options.config.pid_file)
+
+    def setup(self, options):
+        """Configure SchoolBell."""
+        setUpLogger(None, options.config.error_log_file,
+                    "%(asctime)s %(message)s")
+        setUpLogger('accesslog', options.config.web_access_log_file)
+
+        # Shut up ZODB lock_file, because it logs tracebacks when unable
+        # to lock the database file, and we don't want that.
+        logging.getLogger('ZODB.lock_file').disabled = True
+
+        # Process ZCML
+        self.configure()
+
+        # Set language specified in the configuration
+        setLanguage(options.config.lang)
+
+        # Open the database
+        db_configuration = options.config.database
+        try:
+           db = db_configuration.open()
+        except IOError, e:
+            print >> sys.stderr, ("Could not initialize the database:\n%s" % (e, ))
+            if e.errno == errno.EAGAIN: # Resource temporarily unavailable
+                print >> sys.stderr, ("\nPerhaps another SchoolBell instance"
+                                      " is using it?")
+            sys.exit(1)
+
+        try:
+            self.bootstrapSchoolBell(db)
+        except IncompatibleDatabase:
+            print >> sys.stderr, self.incompatible_db_error_msg
+            sys.exit(1)
+        except OldDatabase:
+            print >> sys.stderr, self.old_db_error_msg
+            sys.exit(1)
+
+        notify(DatabaseOpened(db))
+
+        if options.daemon:
+            daemonize()
+
+        task_dispatcher = ThreadedTaskDispatcher()
+        task_dispatcher.setThreadCount(options.config.thread_pool_size)
+
+        for ip, port in options.config.web:
+            http.create('HTTP', task_dispatcher, db, port=port, ip=ip)
+
+        for ip, port in options.config.rest:
+            restServerType.create('REST', task_dispatcher, db, port=port, ip=ip)
+
+        notify(ProcessStarting())
+
+        if options.config.pid_file:
+            pidfile = file(options.config.pid_file, "w")
+            print >> pidfile, os.getpid()
+            pidfile.close()
+
+        return db
+
 
 if __name__ == '__main__':
-    main()
+    StandaloneServer().main()
+

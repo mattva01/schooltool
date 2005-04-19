@@ -65,24 +65,21 @@ def doctest_main():
         >>> def run_stub():
         ...     print "Running..."
         >>> from schoolbell.app import main
-        >>> old_load_options = main.load_options
-        >>> old_setup = main.setup
+        >>> server = main.StandaloneServer()
         >>> old_run = main.run
-        >>> main.load_options = load_options_stub
-        >>> main.setup = setup_stub
+        >>> server.load_options = load_options_stub
+        >>> server.setup = setup_stub
         >>> main.run = run_stub
 
     Now we will run main().
 
-        >>> main.main(['sb.py', '-d'])
+        >>> server.main(['sb.py', '-d'])
         Performing setup...
         Startup time: ... sec real, ... sec CPU
         Running...
 
     Clean up
 
-        >>> main.load_options = old_load_options
-        >>> main.setup = old_setup
         >>> main.run = old_run
 
     """
@@ -110,8 +107,9 @@ def doctest_load_options():
     Load options parses command line arguments and the configuration file.
     Warnings about obsolete options are shown.
 
-        >>> from schoolbell.app.main import load_options
-        >>> o = load_options(['sb.py', '-c', sample_config_file])
+        >>> from schoolbell.app.main import StandaloneServer
+        >>> server = StandaloneServer()
+        >>> o = server.load_options(['sb.py', '-c', sample_config_file])
         Reading configuration from ...sample.conf
         sb.py: warning: ignored configuration option 'module'
         sb.py: warning: ignored configuration option 'domain'
@@ -144,7 +142,7 @@ def doctest_load_options():
     code 0.
 
         >>> try:
-        ...     o = load_options(['sb.py', '-h'])
+        ...     o = server.load_options(['sb.py', '-h'])
         ... except SystemExit, e:
         ...     print '[exited with status %s]' % e
         Usage: sb.py [options]
@@ -157,7 +155,7 @@ def doctest_load_options():
     Here's what happens, when you use an unknown command line option.
 
         >>> try:
-        ...     o = load_options(['sb.py', '-q'])
+        ...     o = server.load_options(['sb.py', '-q'])
         ... except SystemExit, e:
         ...     print '[exited with status %s]' % e
         sb.py: option -q not recognized
@@ -167,7 +165,7 @@ def doctest_load_options():
     Here's what happens when the configuration file cannot be found
 
         >>> try:
-        ...     o = load_options(['sb.py', '-c', 'nosuchfile'])
+        ...     o = server.load_options(['sb.py', '-c', 'nosuchfile'])
         ... except SystemExit, e:
         ...     print '[exited with status %s]' % e
         Reading configuration from nosuchfile
@@ -178,7 +176,7 @@ def doctest_load_options():
     configuration file.
 
         >>> try:
-        ...     o = load_options(['sb.py', '-c', empty_config_file])
+        ...     o = server.load_options(['sb.py', '-c', empty_config_file])
         ... except SystemExit, e:
         ...     print '[exited with status %s]' % e
         Reading configuration from ...empty.conf
@@ -254,7 +252,7 @@ def doctest_setup():
 
     It is difficult to unit test, but we'll try.
 
-        >>> from schoolbell.app.main import Options, setup
+        >>> from schoolbell.app.main import Options, StandaloneServer
         >>> from ZODB.MappingStorage import MappingStorage
         >>> from ZODB.DB import DB
         >>> options = Options()
@@ -280,7 +278,8 @@ def doctest_setup():
 
     And go!
 
-        >>> setup(options)
+        >>> server = StandaloneServer()
+        >>> server.setup(options)
         <ZODB.DB.DB object at ...>
 
     A web access logger has been set up:
@@ -328,8 +327,9 @@ def doctest_bootstrapSchoolBell():
 
     Normally, bootstrapSchoolBell is called when Zope 3 is fully configured
 
-        >>> from schoolbell.app.main import configure
-        >>> configure()
+        >>> from schoolbell.app.main import StandaloneServer
+        >>> server = StandaloneServer()
+        >>> server.configure()
 
     When we start with an empty database, bootstrapSchoolBell creates a
     SchoolBell application in it.
@@ -339,8 +339,7 @@ def doctest_bootstrapSchoolBell():
         >>> from ZODB.MappingStorage import MappingStorage
         >>> db = DB(MappingStorage())
 
-        >>> from schoolbell.app.main import bootstrapSchoolBell
-        >>> bootstrapSchoolBell(db)
+        >>> server.bootstrapSchoolBell(db)
 
     Let's take a look...
 
@@ -399,7 +398,7 @@ def doctest_bootstrapSchoolBell():
         >>> transaction.commit()
         >>> connection.close()
 
-        >>> bootstrapSchoolBell(db)
+        >>> server.bootstrapSchoolBell(db)
 
         >>> connection = db.open()
         >>> root = connection.root()
@@ -412,7 +411,7 @@ def doctest_bootstrapSchoolBell():
         >>> transaction.commit()
         >>> connection.close()
 
-        >>> bootstrapSchoolBell(db)
+        >>> server.bootstrapSchoolBell(db)
         Traceback (most recent call last):
           ...
         IncompatibleDatabase: incompatible database
@@ -426,7 +425,7 @@ def doctest_bootstrapSchoolBell():
         >>> transaction.commit()
         >>> connection.close()
 
-        >>> bootstrapSchoolBell(db)
+        >>> server.bootstrapSchoolBell(db)
         Traceback (most recent call last):
           ...
         OldDatabase: old database
