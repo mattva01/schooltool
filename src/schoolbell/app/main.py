@@ -446,7 +446,7 @@ def configure():
     """Configure Zope 3 components."""
     # Hook up custom component architecture calls
     zope.app.component.hooks.setHooks()
-    context = xmlconfig.string(SITE_DEFINITION)
+    xmlconfig.string(SITE_DEFINITION)
 
 
 SITE_DEFINITION = """
