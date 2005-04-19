@@ -25,15 +25,33 @@ It is only used by the standalone SchoolTool executable.
 $Id$
 """
 
-from schoolbell.app.main import main
+from schoolbell.app.main import StandaloneServer as SchoolBellServer
+from schoolbell.app.main import Options as SchoolBellOptions
 
-# TODO:
-#   1. Refactor schoolbell.app.main so that it has a StandaloneServer class
-#      with overridable methods
-#   2. Subclass StandaloneServer and override things that need to be overriden
-#      (change all mentions of 'schoolbell' with 'schooltool', change DB
-#      bootstrapping code to create a SchoolToolApplication, once it appears,
-#      etc.)
+
+st_incompatible_db_error_msg = """
+This is not a SchoolTool 0.10 database file, aborting.
+""".strip()
+
+
+st_old_db_error_msg = """
+This is not a SchoolTool 0.10 database file, aborting.
+
+Please run the standalone database upgrade script.
+""".strip()
+
+
+class Options(SchoolBellOptions):
+    config_filename = 'schooltool.conf'
+
+
+class StandaloneServer(SchoolBellServer):
+
+    incompatible_db_error_msg = st_incompatible_db_error_msg
+    old_db_error_msg = st_old_db_error_msg
+    Options = Options
+    system_name = 'SchoolTool'
+
 
 if __name__ == '__main__':
-    main()
+    StandaloneServer().main()
