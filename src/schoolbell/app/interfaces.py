@@ -54,6 +54,27 @@ from schoolbell import SchoolBellMessageID as _
 from schoolbell.calendar.interfaces import IEditCalendar, ICalendarEvent
 
 
+# Dirty hacks that provide sensible i10n for widget error messages.
+# See issue #221 (http://issues.schooltool.org/issue221).
+from zope.schema.interfaces import RequiredMissing
+RequiredMissing.__doc__ = _("""Required input is missing.""")
+
+import zope.app.form.browser.textwidgets
+zope.app.form.browser.textwidgets._ = _
+# Here we do a particulary evil thing: we override the translation (_) function
+# in the textwidgets module.  This means that all the messages in that module
+# are now in the 'schoolbell' domain.  This is the list of the messages
+# (don't remove the list, it is used in localizable string extraction).
+textwidgets_strings=[_('Form input is not a file object'),
+                     _("Invalid integer data"),
+                     _("Invalid text data"),
+                     _("Invalid textual data"),
+                     _("Invalid unicode data"),
+                     _("Invalid integer data"),
+                     _("Invalid floating point data"),
+                     _("Invalid datetime data")]
+
+
 def vocabulary(choices):
     """Create a SimpleVocabulary from a list of values and titles.
 
