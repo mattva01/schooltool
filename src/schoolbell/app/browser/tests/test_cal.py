@@ -2736,7 +2736,7 @@ class TestDailyCalendarView(unittest.TestCase):
         person = Person(title="Da Boss")
         cal = person.calendar
         view = DailyCalendarView(cal, TestRequest())
-        view.cursor = datetime(2004, 8, 12, tzinfo=utc)
+        view.cursor = date(2004, 8, 12)
         view.calendarRows = lambda: iter([
             ("B", parse_datetimetz('2004-08-12 10:00:00'), timedelta(hours=3)),
             ("C", parse_datetimetz('2004-08-12 13:00:00'), timedelta(hours=2)),
