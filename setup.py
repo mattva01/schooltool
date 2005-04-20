@@ -30,54 +30,11 @@ import sys
 import os
 import re
 
-# which package are we setting up
-if sys.argv[1] == 'schooltool':
-    package = 'schooltool'
-    sys.argv[1:2] = []
-elif sys.argv[1] == 'schoolbell':
-    package = 'schoolbell'
-    sys.argv[1:2] = []
-else:
-    print >> sys.stderr, ("You must specify the package to build as the first"
-                        " command line option, either schooltool or schoolbell")
-    sys.exit(1)
-
 # Check python version
 if sys.version_info < (2, 3):
     print >> sys.stderr, '%s: need Python 2.3 or later.' % sys.argv[0]
     print >> sys.stderr, 'Your python is %s' % sys.version
     sys.exit(1)
-
-# For SchoolTool, check if twisted is installed
-if package == 'schooltool':
-    try:
-        import twisted.copyright
-    except ImportError:
-        print >> sys.stderr, ("%s: apparently you do not have Twisted installed."
-                              % sys.argv[0])
-        print >> sys.stderr, "You will not be able to run the SchoolTool server."
-        print >> sys.stderr
-    else:
-        m = re.match(r"(\d+)[.](\d+)[.](\d+)(?:[a-z]+\d*)?$",
-                     twisted.copyright.version)
-        if not m:
-            print >> sys.stderr, ("%s: you have Twisted version %s."
-                                  % (sys.argv[0], twisted.copyright.version))
-            print >> sys.stderr, ("I was unable to parse the version number."
-                                  "  You will not be able to run")
-            print >> sys.stderr, ("the SchoolTool server if this version is"
-                                  " older than 1.3.0.")
-            print >> sys.stderr
-        else:
-            ver = tuple(map(int, m.groups()))
-            if ver < (1, 3, 0):
-                print >> sys.stderr, ("%s: you have Twisted version %s."
-                                      % (sys.argv[0], twisted.copyright.version))
-                print >> sys.stderr, ("You need at least version 1.3.0 in order to"
-                                      " be able to run the SchoolTool")
-                print >> sys.stderr, "server."
-                print >> sys.stderr
-
 
 # Subclass some distutils commands so that we can set up the server on install
 from distutils.command.install import install as _install
