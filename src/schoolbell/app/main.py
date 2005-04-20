@@ -335,6 +335,9 @@ class StandaloneServer(object):
 
     Options = Options
 
+    AppFactory = SchoolBellApplication
+    AppInterface = ISchoolBellApplication
+
     def configure(self):
         """Configure Zope 3 components."""
         # Hook up custom component architecture calls
@@ -401,7 +404,7 @@ class StandaloneServer(object):
             raise OldDatabase('old database')
         app_obj = root.get(ZopePublication.root_name)
         if app_obj is None:
-            app = SchoolBellApplication()
+            app = self.AppFactory()
             directlyProvides(app, IContainmentRoot)
             root[ZopePublication.root_name] = app
             notify(ObjectAddedEvent(app))
@@ -410,7 +413,7 @@ class StandaloneServer(object):
             app['persons']['manager'] = manager
             roles = IPrincipalRoleManager(app)
             roles.assignRoleToPrincipal('zope.Manager', 'sb.person.manager')
-        elif not ISchoolBellApplication.providedBy(app_obj):
+        elif not self.AppInterface.providedBy(app_obj):
             transaction.abort()
             connection.close()
             raise IncompatibleDatabase('incompatible database')
