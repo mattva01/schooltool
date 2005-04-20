@@ -235,11 +235,6 @@ if sys.version_info < (2, 3):
             del kwargs["classifiers"]
         _setup(**kwargs)
 
-# Set a default manifest
-if sys.argv[1] == 'sdist':
-    sys.argv[2:2] = ['-t', 'MANIFEST.in.' + package,
-            '-m', 'MANIFEST.' + package]
-
 # regex for finding data files
 datafile_re = re.compile('.*\.(pt|js|png|css|mo|rng|xml|pot|zcml)\Z')
 
