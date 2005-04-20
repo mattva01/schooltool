@@ -91,8 +91,8 @@ python setup.py install
 from the Zope3/ directory included with the SchoolBell distribution. From the
 top level directory, the commands
 
-python setup.py schoolbell install (inside the unpacked schoolbell tarball/zip)
-python setup.py schooltool install (inside the unpacked schooltool tarball/zip)
+python setup.py install (inside the unpacked schoolbell tarball/zip)
+python setup.py install (inside the unpacked schooltool tarball/zip)
 
 will install SchoolBell and SchoolTool respectively. Note that SchoolTool
 depends on SchoolBell, so you will have to install both if you want to run
