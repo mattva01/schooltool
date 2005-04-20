@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <content class=".app.SchoolToolApplication">
+    <allow interface=".interfaces.ISchoolToolApplication" />
+    <allow attributes="getSiteManager" />
+  </content>
+
+</configure>

@@ -28,6 +28,9 @@ $Id$
 from schoolbell.app.main import StandaloneServer as SchoolBellServer
 from schoolbell.app.main import Options as SchoolBellOptions
 
+from schooltool.app import SchoolToolApplication
+from schooltool.interfaces import ISchoolToolApplication
+
 
 st_incompatible_db_error_msg = """
 This is not a SchoolTool 0.10 database file, aborting.
@@ -45,12 +48,45 @@ class Options(SchoolBellOptions):
     config_filename = 'schooltool.conf'
 
 
+SCHOOLTOOL_SITE_DEFINITION = """
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser">
+
+  <include package="zope.app" />
+  <include package="zope.app.securitypolicy" file="meta.zcml" />
+
+  <include package="zope.app.session" />
+  <include package="zope.app.server" />
+  <include package="zope.app.http" />
+
+  <!-- Workaround to shut down a DeprecationWarning that appears because we do
+       not include zope.app.onlinehelp and the rotterdam skin tries to look for
+       this menu -->
+  <browser:menu id="help_actions" />
+
+  <include package="schoolbell.app" />
+  <include package="schooltool" />
+
+  <include package="zope.app.securitypolicy" file="securitypolicy.zcml" />
+
+  <unauthenticatedPrincipal id="zope.anybody" title="Unauthenticated User" />
+  <unauthenticatedGroup id="zope.Anybody" title="Unauthenticated Users" />
+  <authenticatedGroup id="zope.Authenticated" title="Authenticated Users" />
+  <everybodyGroup id="zope.Everybody" title="All Users" />
+
+</configure>
+"""
+
+
 class StandaloneServer(SchoolBellServer):
 
     incompatible_db_error_msg = st_incompatible_db_error_msg
     old_db_error_msg = st_old_db_error_msg
     Options = Options
     system_name = 'SchoolTool'
+    AppFactory = SchoolToolApplication
+    AppInterface = ISchoolToolApplication
+    SITE_DEFINITION = SCHOOLTOOL_SITE_DEFINITION
 
 
 if __name__ == '__main__':

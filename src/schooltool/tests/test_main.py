@@ -232,8 +232,18 @@ def doctest_setup():
     And go!
 
         >>> server = StandaloneServer()
-        >>> server.setup(options)
+        >>> db = server.setup(options)
+        >>> print db
         <ZODB.DB.DB object at ...>
+
+    The root object is SchoolToolApplication:
+
+        >>> connection = db.open()
+        >>> root = connection.root()
+        >>> from zope.app.publication.zopepublication import ZopePublication
+        >>> app = root.get(ZopePublication.root_name)
+        >>> app
+        <schooltool.app.SchoolToolApplication object at ...>
 
     A web access logger has been set up:
 
