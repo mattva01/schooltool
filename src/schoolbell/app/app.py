@@ -62,6 +62,7 @@ class SchoolBellApplication(Persistent, SampleContainer,
 
     def __init__(self):
         SampleContainer.__init__(self)
+        # XXX Do we want to localize the container names?
         self['persons'] = PersonContainer()
         self['groups'] = GroupContainer()
         self['resources'] = ResourceContainer()

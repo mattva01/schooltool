@@ -30,6 +30,7 @@ import sys
 import time
 import getopt
 import locale
+import gettext
 import logging
 import errno
 
@@ -41,6 +42,7 @@ from zope.component import provideUtility
 from zope.event import notify
 from zope.configuration import xmlconfig
 from zope.server.taskthreads import ThreadedTaskDispatcher
+from zope.i18n import translate
 from zope.i18n.interfaces import INegotiator
 from zope.app.server.main import run
 from zope.app.server.http import http
@@ -59,34 +61,37 @@ from schoolbell.app.rest import restServerType
 
 locale_charset = locale.getpreferredencoding()
 
+localedir = os.path.join(os.path.dirname(__file__), 'locales')
+catalog = gettext.translation('schoolbell', localedir, fallback=True)
+_ = lambda us: catalog.ugettext(us).encode(locale_charset, 'replace')
 
-sb_usage_message = """
+sb_usage_message = _("""
 Usage: %s [options]
 Options:
   -c, --config xxx  use this configuration file instead of the default
   -h, --help        show this help message
   -d, --daemon      go to background after starting
-""".strip()
+""").strip()
 
 
-sb_no_storage_error_msg = """
+sb_no_storage_error_msg = _("""
 No storage defined in the configuration file.
 
 If you're using the default configuration file, please edit it now and
 uncomment one of the ZODB storage sections.
-""".strip()
+""").strip()
 
 
-sb_incompatible_db_error_msg = """
+sb_incompatible_db_error_msg = _("""
 This is not a SchoolBell 1.0 database file, aborting.
-""".strip()
+""").strip()
 
 
-sb_old_db_error_msg = """
+sb_old_db_error_msg = _("""
 This is not a SchoolBell 1.0 database file, aborting.
 
 Please run the standalone database upgrade script.
-""".strip()
+""").strip()
 
 
 class OldDatabase(Exception):
@@ -128,6 +133,10 @@ class StubbornNegotiator(object):
 
     def getLanguage(self, langs, env):
         return self._lang
+
+    # TODO: the negotiator should be a bit smarter, e.g., it should return
+    #       lt when the user asks for lt_LT.  And it would be better to return
+    #       None if self._lang not in langs.
 
 
 def setLanguage(lang):
@@ -280,7 +289,7 @@ def daemonize():
 
     pid = os.fork()
     if pid:
-        print "Going to background, daemon pid %d" % pid
+        print _("Going to background, daemon pid %d" % pid)
         sys.exit(0)
 
     os.close(0)
@@ -311,13 +320,17 @@ SCHOOLBELL_SITE_DEFINITION = """
 
   <include package="zope.app.securitypolicy" file="securitypolicy.zcml" />
 
-  <unauthenticatedPrincipal id="zope.anybody" title="Unauthenticated User" />
-  <unauthenticatedGroup id="zope.Anybody" title="Unauthenticated Users" />
-  <authenticatedGroup id="zope.Authenticated" title="Authenticated Users" />
-  <everybodyGroup id="zope.Everybody" title="All Users" />
+  <unauthenticatedPrincipal id="zope.anybody" title="%(unauth_user)s" />
+  <unauthenticatedGroup id="zope.Anybody" title="%(unauth_users)s" />
+  <authenticatedGroup id="zope.Authenticated" title="%(auth_users)s" />
+  <everybodyGroup id="zope.Everybody" title="%(all_users)s" />
 
 </configure>
-"""
+""" % {'unauth_user': _("Unauthenticated User"),
+       'unauth_users': _("Unauthenticated Users"),
+       'auth_users': _("Unauthenticated Users"),
+       'all_users': _("All Users")}
+
 
 class StandaloneServer(object):
 
@@ -354,8 +367,8 @@ class StandaloneServer(object):
             opts, args = getopt.gnu_getopt(argv[1:], 'c:hd',
                                            ['config=', 'help', 'daemon'])
         except getopt.error, e:
-            print >> sys.stderr, "%s: %s" % (progname, e)
-            print >> sys.stderr, "Run %s -h for help." % progname
+            print >> sys.stderr, _("%s: %s") % (progname, e)
+            print >> sys.stderr, _("Run %s -h for help.") % progname
             sys.exit(1)
         for k, v in opts:
             if k in ('-h', '--help'):
@@ -365,24 +378,24 @@ class StandaloneServer(object):
                 options.config_file = v
             if k in ('-d', '--daemon'):
                 if not hasattr(os, 'fork'):
-                    print >> sys.stderr, ("%s: daemon mode not supported on"
-                                          " your operating system.")
+                    print >> sys.stderr, _("%s: daemon mode not supported on"
+                                           " your operating system.")
                     sys.exit(1)
                 else:
                     options.daemon = True
 
         # Read configuration file
         schema = ZConfig.loadSchema(self.ZCONFIG_SCHEMA)
-        print "Reading configuration from %s" % options.config_file
+        print _("Reading configuration from %s") % options.config_file
         try:
             options.config, handler = ZConfig.loadConfig(schema,
                                                          options.config_file)
         except ZConfig.ConfigurationError, e:
-            print >> sys.stderr, "%s: %s" % (progname, e)
+            print >> sys.stderr, _("%s: %s") % (progname, e)
             sys.exit(1)
         if options.config.database.config.storage is None:
-            print >> sys.stderr, "%s: %s" % (progname,
-                                             self.no_storage_error_msg)
+            print >> sys.stderr, _("%s: %s") % (progname,
+                                                self.no_storage_error_msg)
             sys.exit(1)
 
         # Complain about obsolete options.  This section should be removed
@@ -390,8 +403,8 @@ class StandaloneServer(object):
         deprecated = ['module', 'test_mode', 'domain', 'path', 'app_log_file']
         for setting in deprecated:
             if getattr(options.config, setting):
-                print >> sys.stderr, ("%s: warning: ignored configuration"
-                                      " option '%s'" % (progname, setting))
+                print >> sys.stderr, _("%s: warning: ignored configuration"
+                                       " option '%s'" % (progname, setting))
         return options
 
     def bootstrapSchoolBell(self, db):
@@ -408,7 +421,9 @@ class StandaloneServer(object):
             directlyProvides(app, IContainmentRoot)
             root[ZopePublication.root_name] = app
             notify(ObjectAddedEvent(app))
-            manager = Person('manager', '%s Manager' % self.system_name)
+            _('%s Manager') # mark for l10n
+            manager_title = catalog.ugettext('%s Manager') % self.system_name
+            manager = Person('manager', manager_title)
             manager.setPassword(self.system_name.lower())
             app['persons']['manager'] = manager
             roles = IPrincipalRoleManager(app)
@@ -420,14 +435,14 @@ class StandaloneServer(object):
         transaction.commit()
         connection.close()
 
-
     def main(self, argv=sys.argv):
         """Start the SchoolBell server."""
         t0, c0 = time.time(), time.clock()
         options = self.load_options(argv)
         self.setup(options)
         t1, c1 = time.time(), time.clock()
-        print "Startup time: %.3f sec real, %.3f sec CPU" % (t1-t0, c1-c0)
+        print _("Startup time: %.3f sec real, %.3f sec CPU") % (t1 - t0,
+                                                                c1 - c0)
         run()
         if options.config.pid_file:
             os.unlink(options.config.pid_file)
@@ -453,11 +468,11 @@ class StandaloneServer(object):
         try:
            db = db_configuration.open()
         except IOError, e:
-            print >> sys.stderr, ("Could not initialize the database:\n%s" %
-                                  (e, ))
+            print >> sys.stderr, _("Could not initialize the database:\n%s" %
+                                   (e, ))
             if e.errno == errno.EAGAIN: # Resource temporarily unavailable
-                print >> sys.stderr, ("\nPerhaps another %s instance"
-                                      " is using it?" % self.system_name)
+                print >> sys.stderr, _("\nPerhaps another %s instance"
+                                       " is using it?" % self.system_name)
             sys.exit(1)
 
         try:
