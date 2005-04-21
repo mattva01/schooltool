@@ -76,6 +76,20 @@ def doctest_Course():
 
     """
 
+def doctest_Section():
+    r"""Tests for course section groups.
+
+        >>> from schooltool.app import Section
+        >>> section = Section()
+        >>> from schooltool.interfaces import ISection
+        >>> verifyObject(ISection, section)
+        True
+        >>> from schoolbell.app.interfaces import IGroup
+        >>> verifyObject(IGroup, section)
+        True
+
+    """
+
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),

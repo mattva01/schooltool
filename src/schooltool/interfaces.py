@@ -22,6 +22,8 @@ SchoolTool application interfaces
 $Id$
 """
 
+from zope.interface import Attribute
+
 from schooltool import SchoolToolMessageID as _
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IGroup
@@ -36,3 +38,16 @@ class ICourse(IGroup):
 
 class ISection(IGroup):
     """Sections are groups of users in a particular meeting of a Course."""
+
+    teachers = Attribute(
+               """XXX A list of Person objects in the role of instructor""")
+
+    students = Attribute(
+               """XXX A list of Person objects in the role of learner""")
+
+    schedule = Attribute("""
+                   a representation of the calendar events and recurrences \
+                   that make up this section's meetings """)
+
+    courses = Attribute(
+               """XXX A list of courses this section is a member of.""")

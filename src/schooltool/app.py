@@ -48,3 +48,11 @@ class Course(Group):
 class Section(Group):
 
     implements(ISection)
+
+    def __init__(self, title=None, description=None, teachers=None,
+                 students=None, schedule=None, courses=None):
+        Group.__init__(self)
+        self.teachers = teachers
+        self.students = students
+        self.schedule = schedule
+        self.courses = courses
