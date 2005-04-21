@@ -259,11 +259,13 @@ def doctest_setup():
         >>> logger2.handlers
         [<logging.StreamHandler instance at 0x...>]
 
-    A custom language negotiator has been installed:
+    The language adapter shouldn't have been installed:
 
-        >>> from zope.i18n.interfaces import INegotiator
-        >>> zapi.getUtility(INegotiator).getLanguage(None, None)
-        'lt'
+        >>> from zope.i18n.interfaces import IUserPreferredLanguages
+        >>> from zope.publisher.browser import TestRequest
+        >>> request = TestRequest()
+        >>> IUserPreferredLanguages(request).getPreferredLanguages()
+        ('lt',)
 
     ZODB.lock_file has been shut up:
 
