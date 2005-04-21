@@ -4,3 +4,4 @@ debian/import-sampleschool
 debian/schooltool.postrm.debhelper
 debian/schooltool.prerm.debhelper
 debian/files
+src/schooltool/locales/schooltool.pot
