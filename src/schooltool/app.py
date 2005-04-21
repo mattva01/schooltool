@@ -22,11 +22,22 @@ SchoolTool application
 $Id$
 """
 
+import os.path
+import gettext
+import locale
+import locale
 from zope.interface import implements
 
 from schooltool.interfaces import ISchoolToolApplication
 from schooltool.interfaces import ICourse, ISection
 from schoolbell.app.app import SchoolBellApplication, Group
+
+
+# XXX Should we use the Zope 3 translation service here?
+localedir = os.path.join(os.path.dirname(__file__), 'locales')
+catalog = gettext.translation('schooltool', localedir, fallback=True)
+_ = lambda us: catalog.ugettext(us)
+
 
 class SchoolToolApplication(SchoolBellApplication):
     """The main SchoolTool application object"""
@@ -35,10 +46,11 @@ class SchoolToolApplication(SchoolBellApplication):
 
     def __init__(self):
         SchoolBellApplication.__init__(self)
-        self['groups']['teachers'] = Group('teachers', 'Teaching Staff')
-        self['groups']['students'] = Group('students', 'Students')
+        # XXX Do we want to localize the container names?
+        self['groups']['teachers'] = Group('teachers', _('Teaching Staff'))
+        self['groups']['students'] = Group('students', _('Students'))
         self['groups']['courses'] = Group('courses',
-                                          'Courses currently offered')
+                                          _('Courses currently offered'))
 
 
 class Course(Group):

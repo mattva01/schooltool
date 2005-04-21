@@ -7,13 +7,8 @@
 PYTHON=python2.3
 PYTHONDIR=/usr/lib/python2.3
 TESTFLAGS=-w
-PO=$(wildcard src/schooltool/translation/*/LC_MESSAGES/*.po)
-MO=$(PO:.po=.mo)
+PO=$(wildcard src/schooltool/locales/*/LC_MESSAGES/*.po)
 PYTHONPATH=src:Zope3/src
-
-
-%.mo : %.po
-	msgfmt -o $@ $<
 
 
 all: build
@@ -124,3 +119,16 @@ signtar: dist
 	mv dist/md5sum.asc dist/md5sum
 
 .PHONY: all build clean test ftest run coverage sampleschool
+
+.PHONY: extract-translations
+extract-translations:
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) \
+		Zope3/utilities/i18nextract.py -d schooltool \
+			-o locales -p src/schooltool schooltool
+
+.PHONY: update-translations
+update-translations:
+	for f in $(PO); do			\
+	     msgmerge -U $$f $(POT);		\
+	     msgfmt -o $${f%.po}.mo $$f;	\
+	done

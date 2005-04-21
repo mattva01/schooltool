@@ -25,6 +25,10 @@ It is only used by the standalone SchoolTool executable.
 $Id$
 """
 
+import locale
+import gettext
+import os.path
+
 from schoolbell.app.main import StandaloneServer as SchoolBellServer
 from schoolbell.app.main import Options as SchoolBellOptions
 
@@ -32,16 +36,23 @@ from schooltool.app import SchoolToolApplication
 from schooltool.interfaces import ISchoolToolApplication
 
 
-st_incompatible_db_error_msg = """
+locale_charset = locale.getpreferredencoding()
+
+localedir = os.path.join(os.path.dirname(__file__), 'locales')
+catalog = gettext.translation('schooltool', localedir, fallback=True)
+_ = lambda us: catalog.ugettext(us).encode(locale_charset, 'replace')
+
+
+st_incompatible_db_error_msg = _("""
 This is not a SchoolTool 0.10 database file, aborting.
-""".strip()
+""").strip()
 
 
-st_old_db_error_msg = """
+st_old_db_error_msg = _("""
 This is not a SchoolTool 0.10 database file, aborting.
 
 Please run the standalone database upgrade script.
-""".strip()
+""").strip()
 
 
 class Options(SchoolBellOptions):
@@ -69,13 +80,17 @@ SCHOOLTOOL_SITE_DEFINITION = """
 
   <include package="zope.app.securitypolicy" file="securitypolicy.zcml" />
 
-  <unauthenticatedPrincipal id="zope.anybody" title="Unauthenticated User" />
-  <unauthenticatedGroup id="zope.Anybody" title="Unauthenticated Users" />
-  <authenticatedGroup id="zope.Authenticated" title="Authenticated Users" />
-  <everybodyGroup id="zope.Everybody" title="All Users" />
+  <unauthenticatedPrincipal id="zope.anybody" title="%(unauth_user)s" />
+  <unauthenticatedGroup id="zope.Anybody" title="%(unauth_users)s" />
+  <authenticatedGroup id="zope.Authenticated" title="%(auth_users)s" />
+  <everybodyGroup id="zope.Everybody" title="%(all_users)s" />
 
 </configure>
-"""
+""" % {'unauth_user': _("Unauthenticated User"),
+       'unauth_users': _("Unauthenticated Users"),
+       'auth_users': _("Unauthenticated Users"),
+       'all_users': _("All Users")}
+# XXX Possible bug: maybe we should use Unicode rather than UTF-8 here?
 
 
 class StandaloneServer(SchoolBellServer):
