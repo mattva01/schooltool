@@ -25,10 +25,15 @@ $Id$
 from zope.interface import implements
 
 from schooltool.interfaces import ISchoolToolApplication
-from schoolbell.app.app import SchoolBellApplication
-
+from schoolbell.app.app import SchoolBellApplication, Group, Resource
 
 class SchoolToolApplication(SchoolBellApplication):
     """The main SchoolTool application object"""
 
     implements(ISchoolToolApplication)
+
+    def __init__(self):
+        SchoolBellApplication.__init__(self)
+        self['groups']['teachers'] = Group('teachers', 'Teaching Staff')
+        self['groups']['students'] = Group('students', 'Students')
+        self['resources']['school'] = Resource('school', 'School')
