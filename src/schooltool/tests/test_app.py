@@ -49,19 +49,32 @@ def doctest_SchoolToolApplication():
 
     Make sure the default groups and resources are created
 
-        >>> from schoolbell.app.interfaces import IGroup, IResource
+        >>> from schoolbell.app.interfaces import IGroup
         >>> teachers = app['groups']['teachers']
         >>> verifyObject(IGroup, teachers)
         True
         >>> students = app['groups']['students']
         >>> verifyObject(IGroup, students)
         True
-        >>> school = app['resources']['school']
-        >>> verifyObject(IResource, school)
+        >>> courses = app['groups']['courses']
+        >>> verifyObject(IGroup, courses)
         True
 
     """
 
+def doctest_Course():
+    r"""Tests for course groups.
+
+        >>> from schooltool.app import Course
+        >>> algebraI= Course("Algebra I", "First year math.")
+        >>> from schooltool.interfaces import ICourse
+        >>> verifyObject(ICourse, algebraI)
+        True
+        >>> from schoolbell.app.interfaces import IGroup
+        >>> verifyObject(IGroup, algebraI)
+        True
+
+    """
 
 def test_suite():
     return unittest.TestSuite([

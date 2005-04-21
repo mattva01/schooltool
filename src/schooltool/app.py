@@ -25,7 +25,8 @@ $Id$
 from zope.interface import implements
 
 from schooltool.interfaces import ISchoolToolApplication
-from schoolbell.app.app import SchoolBellApplication, Group, Resource
+from schooltool.interfaces import ICourse, ISection
+from schoolbell.app.app import SchoolBellApplication, Group
 
 class SchoolToolApplication(SchoolBellApplication):
     """The main SchoolTool application object"""
@@ -36,4 +37,14 @@ class SchoolToolApplication(SchoolBellApplication):
         SchoolBellApplication.__init__(self)
         self['groups']['teachers'] = Group('teachers', 'Teaching Staff')
         self['groups']['students'] = Group('students', 'Students')
-        self['resources']['school'] = Resource('school', 'School')
+        self['groups']['courses'] = Group('courses',
+                                          'Courses currently offered')
+
+
+class Course(Group):
+
+    implements(ICourse)
+
+class Section(Group):
+
+    implements(ISection)

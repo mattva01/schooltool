@@ -24,7 +24,15 @@ $Id$
 
 from schooltool import SchoolToolMessageID as _
 from schoolbell.app.interfaces import ISchoolBellApplication
-
+from schoolbell.app.interfaces import IGroup
 
 class ISchoolToolApplication(ISchoolBellApplication):
     """The main SchoolTool application object"""
+
+
+class ICourse(IGroup):
+    """Courses are groups of Sections."""
+
+
+class ISection(IGroup):
+    """Sections are groups of users in a particular meeting of a Course."""
