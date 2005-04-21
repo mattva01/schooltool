@@ -46,7 +46,7 @@ from zope.security.management import getSecurityPolicy
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import IGroupMember, IPerson, IResource
-from schoolbell.app.interfaces import IPersonPreferences
+from schoolbell.app.interfaces import IPersonPreferences, IPersonDetails
 from schoolbell.app.interfaces import IPersonContainer, IPersonContained
 from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
@@ -104,6 +104,10 @@ class PersonView(BrowserView):
     """A Person info view."""
 
     __used_for__ = IPersonContained
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+        self.details = IPersonDetails(self.context)
 
 
 class PersonPhotoView(BrowserView):
@@ -353,6 +357,52 @@ class PersonPreferencesView(BrowserView):
             prefs.timeformat = data['timeformat']
             prefs.dateformat = data['dateformat']
             prefs.weekstart = data['weekstart']
+
+
+class PersonDetailsView(BrowserView):
+    """View used for editing person preferences."""
+
+    __used_for__ = IPersonDetails
+
+    error = None
+    message = None
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+
+        details = IPersonDetails(self.context)
+        initial = {'nickname': details.nickname,
+                   'primary_email': details.primary_email,
+                   'secondary_email': details.secondary_email,
+                   'primary_phone': details.primary_phone,
+                   'secondary_phone': details.secondary_phone,
+                   'mailing_address': details.mailing_address,
+                   'home_page': details.home_page}
+
+        setUpWidgets(self, IPersonDetails, IInputWidget,
+                     initial=initial)
+
+
+
+    def update(self):
+        if 'CANCEL' in self.request:
+            url = zapi.absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
+
+        if 'UPDATE_SUBMIT' in self.request:
+            try:
+                data = getWidgetsData(self, IPersonDetails)
+            except WidgetsError:
+                return # Errors will be displayed next to widgets
+
+            details = IPersonDetails(self.context)
+            details.nickname = data['nickname']
+            details.primary_email = data['primary_email']
+            details.secondary_email = data['secondary_email']
+            details.primary_phone = data['primary_phone']
+            details.secondary_phone = data['secondary_phone']
+            details.mailing_address = data['mailing_address']
+            details.home_page = data['home_page']
 
 
 class IPersonAddForm(Interface):

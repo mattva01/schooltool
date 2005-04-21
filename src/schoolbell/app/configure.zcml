@@ -81,6 +81,13 @@
       />
 
   <adapter
+      for=".interfaces.IPerson"
+      provides=".interfaces.IPersonDetails"
+      factory=".app.getPersonDetails"
+      trusted="true"
+      />
+
+  <adapter
       for=".interfaces.ISchoolBellCalendar"
       provides="zope.app.filerepresentation.interfaces.IWriteFile"
       factory=".cal.WriteCalendar"
@@ -115,6 +122,13 @@
     <require permission="schoolbell.edit"
         interface="schoolbell.app.interfaces.IPersonPreferences"
         set_schema="schoolbell.app.browser.app.IPersonPreferencesForm" />
+  </content>
+
+  <content class=".app.PersonDetails">
+    <require permission="schoolbell.view"
+      interface="schoolbell.app.interfaces.IPersonDetails" />
+    <require permission="schoolbell.edit"
+      set_schema="schoolbell.app.interfaces.IPersonDetails" />
   </content>
 
   <content class=".app.Group">

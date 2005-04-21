@@ -44,6 +44,11 @@ def doctest_PersonView():
 
         >>> from schoolbell.app.browser.app import PersonView
         >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.app import getPersonDetails
+        >>> from schoolbell.app.interfaces import IPersonDetails
+        >>> from schoolbell.app.interfaces import IPerson
+        >>> setup.setUpAnnotations()
+        >>> ztapi.provideAdapter(IPerson, IPersonDetails, getPersonDetails)
         >>> person = Person()
         >>> request = TestRequest()
         >>> view = PersonView(person, request)
@@ -765,6 +770,32 @@ def doctest_PersonPreferencesView():
     XXX this should test post
 
     """
+
+def doctest_PersonDetailsView():
+    """
+
+        >>> from schoolbell.app.browser.app import PersonDetailsView
+        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.app import getPersonDetails
+        >>> from schoolbell.app.interfaces import IPersonDetails
+        >>> from schoolbell.app.interfaces import IPerson
+
+        >>> setup.setUpAnnotations()
+        >>> ztapi.provideAdapter(IPerson, IPersonDetails, \
+                                 getPersonDetails)
+
+        >>> person = Person()
+        >>> request = TestRequest()
+
+        >>> view = PersonDetailsView(person, request)
+
+    Cancel a change TODO: set view.message
+
+        >>> request.form = {'CANCEL': 'Cancel'}
+        >>> view = PersonDetailsView(person, request)
+
+    """
+
 
 def doctest_LoginView():
     """

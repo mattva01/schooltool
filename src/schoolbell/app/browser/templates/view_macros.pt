@@ -342,4 +342,40 @@
 
 </metal:block>
 
+<metal:block define-macro="person-details">
+
+  <div condition="view/details/nickname">
+    <strong i18n:translate="">Nickname:</strong>
+    <span tal:content="view/details/nickname" />
+  </div>
+
+  <div condition="view/details/primary_email">
+    <strong i18n:translate="">Primary email:</strong>
+    <a href="string:mailto:${view/details/primary_email}"
+       tal:content="view/details/primary_email" />
+  </div>
+
+  <div condition="view/details/secondary_email|nothing">
+    <strong i18n:translate="">Secondary email:</strong>
+    <a href="string:mailto:${view/details/secondary_email}"
+       tal:content="view/details/secondary_email" />
+  </div>
+
+  <div condition="view/details/primary_phone">
+    <strong i18n:translate="">Primary phone:</strong>
+    <span tal:content="view/details/primary_phone" />
+  </div>
+
+  <div condition="view/details/secondary_phone">
+    <strong i18n:translate="">Secondary phone:</strong>
+    <span tal:content="view/details/secondary_phone" />
+  </div>
+
+  <div condition="view/details/mailing_address">
+    <strong i18n:translate="">Mailing Address:</strong>
+    <span tal:content="structure view/details/mailing_address" />
+  </div>
+
+</metal:block>
+
 <!-- END CALENDAR MACROS -->

@@ -40,7 +40,7 @@ from zope.app.component.hooks import setSite, getSite
 
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IPersonContainer, IPersonContained
-from schoolbell.app.interfaces import IPersonPreferences
+from schoolbell.app.interfaces import IPersonPreferences, IPersonDetails
 from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
 from schoolbell.app.interfaces import IHavePreferences, IHaveNotes
@@ -217,6 +217,37 @@ def getPersonPreferences(person):
         return annotations[key]
     except KeyError:
         annotations[key] = PersonPreferences()
+        annotations[key].__parent__ = person
+        return annotations[key]
+
+
+class PersonDetails(Persistent):
+
+    implements(IPersonDetails)
+
+    def __init__(self, nickname = None, primary_email=None,
+            secondary_email=None, primary_phone=None, secondary_phone=None,
+            mailing_address=None,home_page=None):
+
+        self.__name__ = 'details'
+
+        self.nickname = nickname
+        self.primary_email = primary_email
+        self.secondary_email = secondary_email
+        self.primary_phone = primary_phone
+        self.secondary_phone = secondary_phone
+        self.mailing_address = mailing_address
+        self.home_page = home_page
+
+
+def getPersonDetails(person):
+    """Adapt an IPerson object to IPersonDetails."""
+    annotations = IAnnotations(person)
+    key = 'schoolbell.app.PersonDetails'
+    try:
+        return annotations[key]
+    except KeyError:
+        annotations[key] = PersonDetails()
         annotations[key].__parent__ = person
         return annotations[key]
 

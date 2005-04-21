@@ -269,6 +269,37 @@ def doctest_PersonPreferences():
 
     """
 
+def doctest_PersonDetails():
+    r"""Tests for the contact information Details adapter
+
+        >>> from zope.app.tests import setup
+        >>> from zope.interface.verify import verifyObject
+        >>> setup.placelessSetUp()
+        >>> setup.setUpAnnotations()
+        >>> from schoolbell.app.app import Person
+
+        >>> person = Person('person')
+
+    Make sure the attribute stores the correct interface
+
+        >>> from schoolbell.app.app import IPersonDetails
+        >>> from schoolbell.app.app import getPersonDetails
+        >>> details = getPersonDetails(person)
+        >>> verifyObject(IPersonDetails, details)
+        True
+
+        >>> from zope.app.location.interfaces import ILocation
+        >>> verifyObject(ILocation, details)
+        True
+
+    Need to have prefs.__parent__ refer to the person its attached to
+
+        >>> details.__parent__ == person
+        True
+
+    """
+
+
 def doctest_Group():
     r"""Tests for Group
 

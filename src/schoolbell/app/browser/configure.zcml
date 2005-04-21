@@ -159,6 +159,15 @@
       title="Change preferences" />
 
   <page
+      name="details.html"
+      for="schoolbell.app.interfaces.IPerson"
+      class="schoolbell.app.browser.app.PersonDetailsView"
+      template="templates/person_details.pt"
+      permission="zope.View"
+      menu="schoolbell_actions" 
+      title="Change Details" />
+
+  <page
       name="edit.html"
       for="schoolbell.app.interfaces.IPerson"
       class="schoolbell.app.browser.app.PersonEditView"

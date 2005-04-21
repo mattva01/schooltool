@@ -22,6 +22,8 @@
       <div class="person-details">
         <strong i18n:translate="">Username:</strong>
         <span tal:replace="context/zope:name">not_doe</span>
+        <metal:block use-macro="view/@@standard_macros/person-details" />
+
       </div>
 
       <div class="person-groups"

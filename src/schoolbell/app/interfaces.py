@@ -296,6 +296,50 @@ class IPersonPreferences(Interface):
         description=u"Day of week name to start calendar display weeks.")
 
 
+class IPersonDetails(Interface, ILocation):
+    """Contacts details stored as an annotation on a Person."""
+
+    nickname = TextLine(
+        title=u"Nickname",
+        required=False,
+        description=u"A short nickname for this person.")
+
+    primary_email = TextLine(
+        title=u"Primary Email Address",
+        required=False,
+        description=u"Email address.")
+
+    secondary_email = TextLine(
+        title=u"Secondary Email Address",
+        required=False,
+        description=u"Email address.")
+
+    primary_phone = TextLine(
+        title=u"Primary phone number",
+        required=False,
+        description=u"Phone number.")
+
+    secondary_phone = TextLine(
+        title=u"Secondary phone number",
+        required=False,
+        description=u"Phone number.")
+
+    secondary_phone = TextLine(
+        title=u"Secondary phone number",
+        required=False,
+        description=u"Phone number.")
+
+    mailing_address = Text(
+        title=u"Mailing address",
+        required=False,
+        description=u"Mailing address.")
+
+    home_page = TextLine(
+        title=u"Website",
+        required=False,
+        description=u"Website or weblog.")
+
+
 class IGroup(ICalendarOwner):
     """Group."""
 
