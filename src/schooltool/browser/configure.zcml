@@ -3,4 +3,29 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+  <page
+      name="index.html"
+      for="schooltool.interfaces.ICourse"
+      class="schooltool.browser.app.CourseView"
+      template="templates/course.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+<!-- Skin and resources -->
+
+  <zope:subscriber
+      handler=".skin.schoolToolTraverseSubscriber"
+      for="zope.app.publication.interfaces.IBeforeTraverseEvent"
+      />
+
+  <layer
+      name="SchoolTool"
+      interface=".skin.ISchoolToolLayer" />
+
+  <skin
+      name="SchoolTool"
+      interface=".skin.ISchoolToolSkin" />
+
 </configure>
