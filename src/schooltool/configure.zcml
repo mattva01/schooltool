@@ -8,4 +8,6 @@
     <allow attributes="getSiteManager" />
   </content>
 
+  <include package=".browser" />
+
 </configure>

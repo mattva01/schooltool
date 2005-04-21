@@ -3,6 +3,14 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+  <!-- Add SchoolTool to the Zope menu -->
+
+  <addMenuItem
+      title="SchoolTool"
+      class="schooltool.app.SchoolToolApplication"
+      permission="zope.ManageContent"
+      />
+
   <page
       name="index.html"
       for="schooltool.interfaces.ICourse"
@@ -16,10 +24,12 @@
 
 <!-- Skin and resources -->
 
+<!-- XXX this is killing all the skins for some reason
   <zope:subscriber
       handler=".skin.schoolToolTraverseSubscriber"
       for="zope.app.publication.interfaces.IBeforeTraverseEvent"
       />
+-->
 
   <layer
       name="SchoolTool"
@@ -27,7 +37,8 @@
 
   <skin
       name="SchoolTool"
-      interface=".skin.ISchoolToolSkin" />
+      interface=".skin.ISchoolToolSkin"
+      layers="SchoolTool SchoolBell default" />
 
   <resource name="logo.png" file="resources/schooltool.png"
             layer=".skin.ISchoolToolLayer" />

@@ -1,0 +1,42 @@
+Functional doctest for schooltool
+=====================================
+
+This is a functional doctest for schooltool.  To find out more about
+functional doctests, read Zope3/src/zope/app/ftests/doctest.txt
+
+
+SchoolTool as a Zope 3 content object
+-------------------------------------
+
+First, we'll go to the Zope 3 management interface and verify that you can add
+SchoolBell instances from the add menu.
+
+    >>> print http(r"""
+    ... GET /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <h4>Add:</h4>
+    ...
+    <a href="http://localhost/@@contents.html?type_name=BrowserAdd__schooltool.app.SchoolToolApplication"
+       class="">SchoolTool</a>
+    ...
+
+Let's add one!
+
+    >>> print http(r"""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ... 
+    ... type_name=BrowserAdd__schooltool.app.SchoolToolApplication&new_value=frogpond""")
+    HTTP/1.1 303 See Other
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    Location: http://localhost/@@contents.html
+    ...

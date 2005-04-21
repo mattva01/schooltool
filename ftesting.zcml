@@ -23,6 +23,7 @@
   <browser:menu id="help_actions" />
 
   <include package="schoolbell.app" />
+  <include package="schooltool" />
 
   <include package="zope.app.securitypolicy" file="securitypolicy.zcml" />
   <include package="zope.app.securitypolicy.tests" file="functional.zcml" />
