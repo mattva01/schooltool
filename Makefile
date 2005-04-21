@@ -19,20 +19,6 @@ build: build-translations
 	cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) remove-stale-bytecode.py
 
-extract-translations:
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) \
-                        src/schooltool/translation/i18nextract.py \
-			-d schooltool -o src/schooltool/translation/ \
-			src/schooltool *.py
-	$(MAKE) update-translations
-
-update-translations:
-	for f in `find src/schooltool/translation/ -name '*.po'`; \
-	do								   \
-	     msgmerge -U $$f src/schooltool/translation/schooltool.pot;	   \
-	     msgfmt -o $${f%.po}.mo $$f;				   \
-	done
-
 build-translations: $(MO)
 
 clean:
