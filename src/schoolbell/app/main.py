@@ -38,12 +38,13 @@ import ZConfig
 import transaction
 import zope.app.component.hooks
 from zope.interface import directlyProvides, implements
-from zope.component import provideUtility
+from zope.component import provideAdapter, adapts
 from zope.event import notify
 from zope.configuration import xmlconfig
 from zope.server.taskthreads import ThreadedTaskDispatcher
 from zope.i18n import translate
-from zope.i18n.interfaces import INegotiator
+from zope.publisher.interfaces.http import IHTTPRequest
+from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.app.server.main import run
 from zope.app.server.http import http
 from zope.app.appsetup import DatabaseOpened, ProcessStarting
@@ -119,32 +120,25 @@ class Options(object):
                                             self.config_filename + '.in')
 
 
-class StubbornNegotiator(object):
-    """A language negotiator.
-
-    This negotiator is hopeless at negotiating: it will not give a single
-    inch of ground and will stick to its initial choice till the bitter end.
-    """
-
-    implements(INegotiator)
-
-    def __init__(self, lang):
-        self._lang = lang
-
-    def getLanguage(self, langs, env):
-        return self._lang
-
-    # TODO: the negotiator should be a bit smarter, e.g., it should return
-    #       lt when the user asks for lt_LT.  And it would be better to return
-    #       None if self._lang not in langs.
-
-
 def setLanguage(lang):
     """Set the language for the user interface."""
     if lang == 'auto':
         return # language is negotiated at runtime through Accept-Language.
-    negotiator = StubbornNegotiator(lang)
-    provideUtility(negotiator)
+
+    class SinglePreferredLanguage(object):
+
+        adapts(IHTTPRequest)
+        implements(IUserPreferredLanguages)
+
+        def __init__(self, context):
+            pass
+
+        def getPreferredLanguages(self):
+            return (lang, )
+
+    # Replace the default adapter with one that always asks for the language
+    # specified in the configuration file.
+    provideAdapter(SinglePreferredLanguage)
 
 
 class StreamWrapper(object):

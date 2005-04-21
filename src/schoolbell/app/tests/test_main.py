@@ -193,22 +193,8 @@ def doctest_load_options():
     """
 
 
-def doctest_StubburnNegotiator():
-    """Tests for StubbornNegotiator.
-
-        >>> from schoolbell.app.main import StubbornNegotiator
-        >>> negotiator = StubbornNegotiator('lt_LT')
-        >>> from zope.i18n.interfaces import INegotiator
-        >>> verifyObject(INegotiator, negotiator)
-        True
-        >>> negotiator.getLanguage(None, None)
-        'lt_LT'
-
-    """
-
-
 def doctest_setLanguage():
-    """Tests for StubbornNegotiator.
+    """Tests for setLanguage.
 
         >>> from zope.app.testing import setup
         >>> setup.placelessSetUp()
@@ -218,19 +204,19 @@ def doctest_setLanguage():
         >>> from schoolbell.app.main import setLanguage
         >>> setLanguage('auto')
 
-    The negotiator shouldn't have been installed:
+    The language adapter shouldn't have been installed:
 
-        >>> from zope.i18n.interfaces import INegotiator
-        >>> zapi.getUtility(INegotiator).getLanguage(None, None)
-        Traceback (most recent call last):
-        ,,,
-        ComponentLookupError: (<InterfaceClass zope.i18n.interfaces.INegotiator>, '')
+        >>> from zope.i18n.interfaces import IUserPreferredLanguages
+        >>> from zope.publisher.browser import TestRequest
+        >>> request = TestRequest()
+        >>> IUserPreferredLanguages(request).getPreferredLanguages()
+        []
 
-    Now, if we specify a language, a custom negotiator should be set up:
+    Now, if we specify a language, a language adapter should be set up:
 
         >>> setLanguage('lt')
-        >>> zapi.getUtility(INegotiator).getLanguage(None, None)
-        'lt'
+        >>> IUserPreferredLanguages(request).getPreferredLanguages()
+        ('lt',)
 
     We're done.
 
@@ -296,11 +282,13 @@ def doctest_setup():
         >>> logger2.handlers
         [<logging.StreamHandler instance at 0x...>]
 
-    A custom language negotiator has been installed:
+    A custom language adapter has been installed:
 
-        >>> from zope.i18n.interfaces import INegotiator
-        >>> zapi.getUtility(INegotiator).getLanguage(None, None)
-        'lt'
+        >>> from zope.i18n.interfaces import IUserPreferredLanguages
+        >>> from zope.publisher.browser import TestRequest
+        >>> request = TestRequest()
+        >>> IUserPreferredLanguages(request).getPreferredLanguages()
+        ('lt',)
 
     ZODB.lock_file has been shut up:
 
