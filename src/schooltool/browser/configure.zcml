@@ -11,6 +11,7 @@
       permission="zope.View"
       menu="zmi_views"
       title="View"
+      layer=".skin.ISchoolToolLayer"
       />
 
 <!-- Skin and resources -->
@@ -27,5 +28,8 @@
   <skin
       name="SchoolTool"
       interface=".skin.ISchoolToolSkin" />
+
+  <resource name="logo.png" file="resources/schooltool.png"
+            layer=".skin.ISchoolToolLayer" />
 
 </configure>
