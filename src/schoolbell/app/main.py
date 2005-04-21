@@ -324,6 +324,7 @@ SCHOOLBELL_SITE_DEFINITION = """
        'unauth_users': _("Unauthenticated Users"),
        'auth_users': _("Unauthenticated Users"),
        'all_users': _("All Users")}
+# XXX Possible bug: maybe we should use Unicode rather than UTF-8 here?
 
 
 class StandaloneServer(object):
