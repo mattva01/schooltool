@@ -17,24 +17,17 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Tests for schoolbell views.
+Tests for schooltool views.
 
 $Id: test_app.py 3481 2005-04-21 15:28:29Z bskahan $
 """
 
 import unittest
-from pprint import pprint
+
 from zope.testing import doctest
-from zope.app import zapi
-from zope.app.testing import setup, ztapi
-from zope.interface import directlyProvides
-from zope.app.traversing.interfaces import IContainmentRoot
 from zope.publisher.browser import TestRequest
-from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
-from zope.app.component.hooks import setSite
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
-from schoolbell.app.browser.tests.setup import setUpSessions
 
 
 def doctest_CourseView():
