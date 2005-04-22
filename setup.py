@@ -22,26 +22,25 @@
 SchoolTool setup script.
 """
 
-#
-# Check requisite version numbers
-#
-
-import sys
-import os
-import re
 
 # Check python version
+import sys
 if sys.version_info < (2, 3):
     print >> sys.stderr, '%s: need Python 2.3 or later.' % sys.argv[0]
     print >> sys.stderr, 'Your python is %s' % sys.version
     sys.exit(1)
 
-# Subclass some distutils commands so that we can set up the server on install
+import os
+import re
+from distutils.core import setup
 from distutils.command.install import install as _install
 from distutils.command.install_data import install_data as _install_data
-from distutils.command.install_scripts import \
-        install_scripts as _install_scripts
+from distutils.command.install_scripts \
+        import install_scripts as _install_scripts
 
+#
+# Distutils Customization
+#
 
 class install_data(_install_data):
     """Specialized Python installer for schooltool.
@@ -145,12 +144,9 @@ class install_scripts(_install_scripts):
         self.update_scripts()
         return ans
 
-
 #
 # Do the setup
 #
-
-from distutils.core import setup
 
 # Patch the setup command so that python 2.3 distutils can deal with the
 # classifiers option
