@@ -26,17 +26,70 @@ SchoolBell instances from the add menu.
        class="">SchoolTool</a>
     ...
 
-Let's add one!
+We will obviously need a SchoolTool instance.
 
     >>> print http(r"""
     ... POST /@@contents.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 81
     ... Content-Type: application/x-www-form-urlencoded
-    ... 
+    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schooltool.app.SchoolToolApplication
+    ...
     ... type_name=BrowserAdd__schooltool.app.SchoolToolApplication&new_value=frogpond""")
     HTTP/1.1 303 See Other
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
+    ...
     Location: http://localhost/@@contents.html
     ...
+
+Let's create a person so that we can fool around with his calendar:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 112
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Frog&field.username=frog&field.password=pwd&field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+Let's create a second person so that we can test access control.
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 114
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Toad&field.username=toad&field.password=doat&field.verify_password=doat&field.photo=&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+Also, let's create a group:
+
+    >>> print http(r"""
+    ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Animals&UPDATE_SUBMIT=Add&add_input_name=""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/groups
+    ...
+
+The daily view should be the default for a persons calendar:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar/ HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...calendar-view-day...
