@@ -26,11 +26,16 @@ import os.path
 import gettext
 import locale
 import locale
+
 from zope.interface import implements
+from zope.app.container.sample import SampleContainer
 
 from schooltool.interfaces import ISchoolToolApplication
+from schooltool.interfaces import ISchoolToolGroupContainer
 from schooltool.interfaces import ICourse, ISection
-from schoolbell.app.app import SchoolBellApplication, Group
+from schoolbell.app.app import SchoolBellApplication
+from schoolbell.app.app import Group, GroupContainer
+from schoolbell.app.app import PersonContainer, ResourceContainer
 
 
 # XXX Should we use the Zope 3 translation service here?
@@ -45,7 +50,10 @@ class SchoolToolApplication(SchoolBellApplication):
     implements(ISchoolToolApplication)
 
     def __init__(self):
-        SchoolBellApplication.__init__(self)
+        SampleContainer.__init__(self)
+        self['persons'] = PersonContainer()
+        self['groups'] = SchoolToolGroupContainer()
+        self['resources'] = ResourceContainer()
         # XXX Do we want to localize the container names?
         self['groups']['teachers'] = Group('teachers', _('Teaching Staff'))
         self['groups']['students'] = Group('students', _('Students'))
@@ -68,3 +76,9 @@ class Section(Group):
         self.students = students
         self.schedule = schedule
         self.courses = courses
+
+
+class SchoolToolGroupContainer(GroupContainer):
+    """Extend the schoolbell group container to support subclasses."""
+
+    implements(ISchoolToolGroupContainer)

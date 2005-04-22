@@ -3,9 +3,41 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schooltool">
 
+  <!-- adapters -->
+
+  <adapter
+      for=".interfaces.ISchoolToolGroupContainer"
+      factory="schoolbell.app.app.SimpleNameChooser"
+      provides="zope.app.container.interfaces.INameChooser" />
+
+  <!-- Content -->
   <content class=".app.SchoolToolApplication">
     <allow interface=".interfaces.ISchoolToolApplication" />
     <allow attributes="getSiteManager" />
+  </content>
+
+  <content class=".app.SchoolToolGroupContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schoolbell.view"
+             attributes="keys values __iter__ __len__" />
+    <require permission="schoolbell.create"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </content>
+
+  <content class=".app.Course">
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
+    <require permission="schoolbell.view"
+             attributes="title description members" />
+    <require permission="schoolbell.edit"
+             set_schema="schooltool.interfaces.ICourse" />
+  </content>
+
+  <content class=".app.Section">
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
+    <require permission="schoolbell.view"
+             attributes="title description members" />
+    <require permission="schoolbell.edit"
+             set_schema="schooltool.interfaces.ISection" />
   </content>
 
   <include package=".browser" />

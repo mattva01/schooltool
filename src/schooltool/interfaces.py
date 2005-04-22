@@ -23,20 +23,21 @@ $Id$
 """
 
 from zope.interface import Attribute
+from zope.app.container.constraints import contains
 
 from schooltool import SchoolToolMessageID as _
 from schoolbell.app.interfaces import ISchoolBellApplication
-from schoolbell.app.interfaces import IGroup
+from schoolbell.app.interfaces import IGroup, IGroupContainer, IGroupContained
 
 class ISchoolToolApplication(ISchoolBellApplication):
     """The main SchoolTool application object"""
 
 
-class ICourse(IGroup):
+class ICourse(IGroupContained):
     """Courses are groups of Sections."""
 
 
-class ISection(IGroup):
+class ISection(IGroupContained):
     """Sections are groups of users in a particular meeting of a Course."""
 
     teachers = Attribute(
@@ -51,3 +52,9 @@ class ISection(IGroup):
 
     courses = Attribute(
                """XXX A list of courses this section is a member of.""")
+
+
+class ISchoolToolGroupContainer(IGroupContainer):
+    """SchoolTool's group container contains Groups and subclasses."""
+
+    contains(IGroup, ICourse, ISection)
