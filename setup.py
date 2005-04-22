@@ -71,15 +71,12 @@ class install(_install):
     user_options = _install.user_options + [
             ('paths=', None, "a semi-colon separated list of paths that should"
                 " be added to the python path on script startup"),
-            ('datafile-dir=', None, "override where the python libraries think"
-                    " their data files are"),
             ('default-config=', None, "location of the default server config"
                     " file")]
 
     def initialize_options(self):
         self.paths = None
         self.default_config = None
-        self.datafile_dir = None
         return _install.initialize_options(self)
 
 
@@ -164,19 +161,22 @@ if sys.version_info < (2, 3):
             del kwargs["classifiers"]
         _setup(**kwargs)
 
-# regex for finding data files
-datafile_re = re.compile('.*\.(pt|js|png|css|mo|rng|xml|pot|zcml)\Z')
-
-# TODO: ask distutils to build Zope 3 extension modules somehow
 # find the data files
+# this regex should be similar to the MANIFEST.in recursive includes
+datafile_re = re.compile('.*\.(pt|js|png|gif|css|mo|rng|xml|zcml)\Z')
 data_files = []
-os.chdir('src')
-for root, dirs, files in os.walk('schooltool'):
-    tmp = [os.path.join('src', root, file) for file in files \
+for root, dirs, files in os.walk(os.path.join('src', 'schoolbell')):
+    # Ignore testing directories
+    if 'ftests' in dirs:
+        dirs.remove('ftests')
+    if 'tests' in dirs:
+        dirs.remove('tests')
+    # Find the data files
+    tmp = [os.path.join(root, file) for file in files \
             if datafile_re.match(file, 1)]
+    # If any, add them to the files to be copied
     if tmp:
-        data_files.append((root, tmp))
-os.chdir('..')
+        data_files.append((root[4:], tmp))
 
 # Setup SchoolTool
 setup(name="schooltool",
