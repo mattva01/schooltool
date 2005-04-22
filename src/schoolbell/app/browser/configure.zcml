@@ -557,7 +557,7 @@
       for="*"
       permission="zope.View"
       template="templates/view_macros.pt"
-      layer=".skin.ISchoolBellSkin"
+      layer=".skin.ISchoolBellLayer"
       />
 
   <page
@@ -565,7 +565,7 @@
       for="*"
       permission="zope.View"
       template="templates/widget_macros.pt"
-      layer=".skin.ISchoolBellSkin"
+      layer=".skin.ISchoolBellLayer"
       />
 
   <icon
