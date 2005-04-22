@@ -3,6 +3,26 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+<!-- Skin and resources -->
+
+  <zope:subscriber
+      handler=".skin.schoolToolTraverseSubscriber"
+      for="zope.app.publication.interfaces.IBeforeTraverseEvent"
+      />
+
+  <layer
+      name="SchoolToolLayer"
+      interface=".skin.ISchoolToolLayer" />
+
+  <skin
+      name="SchoolTool"
+      interface=".skin.ISchoolToolSkin"
+      layers="SchoolToolLayer SchoolBell default" />
+
+  <resource name="logo.png" file="resources/schooltool.png"
+            layer=".skin.ISchoolToolLayer" />
+
+
   <!-- Add SchoolTool to the Zope menu -->
 
   <addMenuItem
@@ -19,28 +39,7 @@
       permission="zope.View"
       menu="zmi_views"
       title="View"
-      layer=".skin.ISchoolToolLayer"
+      layer="SchoolToolLayer"
       />
-
-<!-- Skin and resources -->
-
-<!-- XXX this is killing all the skins for some reason
-  <zope:subscriber
-      handler=".skin.schoolToolTraverseSubscriber"
-      for="zope.app.publication.interfaces.IBeforeTraverseEvent"
-      />
--->
-
-  <layer
-      name="SchoolTool"
-      interface=".skin.ISchoolToolLayer" />
-
-  <skin
-      name="SchoolTool"
-      interface=".skin.ISchoolToolSkin"
-      layers="SchoolTool SchoolBell default" />
-
-  <resource name="logo.png" file="resources/schooltool.png"
-            layer=".skin.ISchoolToolLayer" />
 
 </configure>
