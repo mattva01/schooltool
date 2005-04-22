@@ -23,7 +23,10 @@ $Id: test_skin.py 2643 2005-02-01 11:13:58Z mg $
 """
 
 import unittest
+import pprint
+
 from zope.testing import doctest
+from zope.interface import Interface, providedBy
 
 
 def doctest_schoolToolTraverseSubscriber():
@@ -37,6 +40,7 @@ def doctest_schoolToolTraverseSubscriber():
         >>> from schooltool.browser.skin import schoolToolTraverseSubscriber
         >>> from schooltool.browser.skin import ISchoolToolSkin
         >>> from schooltool.app import SchoolToolApplication
+        >>> from schoolbell.app.browser.skin import ISchoolBellSkin
 
         >>> ob = SchoolToolApplication()
         >>> request = TestRequest()
@@ -44,6 +48,16 @@ def doctest_schoolToolTraverseSubscriber():
         >>> schoolToolTraverseSubscriber(ev)
         >>> ISchoolToolSkin.providedBy(request)
         True
+        >>> ISchoolBellSkin.providedBy(request)
+        False
+        >>> skin = list(providedBy(request).interfaces())[1]
+        >>> skin
+        <InterfaceClass schooltool.browser.skin.ISchoolToolSkin>
+        >>> pprint.pprint(skin.getBases())
+        (<InterfaceClass schooltool.browser.skin.ISchoolToolLayer>,
+         <InterfaceClass schoolbell.app.browser.skin.ISchoolBellLayer>,
+         <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)
+
 
     The skin is, obviously, not applied if you traverse some other object
 
