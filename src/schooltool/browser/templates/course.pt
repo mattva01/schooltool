@@ -6,9 +6,25 @@
 <h1 metal:fill-slot="content-header"><span tal:replace="context/title" /></h1>
 
 <metal:block metal:fill-slot="body">
-  XXX COURSE
+  <div id="course-view">
+    <p class="description" tal:content="context/description"/>
 
-   <tal:block replace="structure context/@@notes|nothing"/>
+    <div class="sections">
+      <div tal:define="sections view/getSections">
+        <h3 i18n:translate="">Sections</h3>
+        <ul>
+          <li tal:repeat="obj sections/sortby:title">
+            <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
+          </li>
+        </ul>
+        <p tal:condition="not:sections" i18n:translate="">
+          There are no sections for this course.
+        </p>
+      </div>
+    </div>
+  </div>
+  <tal:block replace="structure context/@@notes|nothing"/>
+
 
 </metal:block>
 </body>

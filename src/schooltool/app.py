@@ -30,12 +30,14 @@ import locale
 from zope.interface import implements
 from zope.app.container.sample import SampleContainer
 
-from schooltool.interfaces import ISchoolToolApplication
-from schooltool.interfaces import ISchoolToolGroupContainer
-from schooltool.interfaces import ICourse, ISection
 from schoolbell.app.app import SchoolBellApplication
 from schoolbell.app.app import Group, GroupContainer
 from schoolbell.app.app import PersonContainer, ResourceContainer
+from schoolbell.app.cal import Calendar
+
+from schooltool.interfaces import ISchoolToolApplication
+from schooltool.interfaces import ISchoolToolGroupContainer
+from schooltool.interfaces import ICourse, ISection
 
 
 # XXX Should we use the Zope 3 translation service here?
@@ -55,8 +57,8 @@ class SchoolToolApplication(SchoolBellApplication):
         self['groups'] = SchoolToolGroupContainer()
         self['resources'] = ResourceContainer()
         # XXX Do we want to localize the container names?
-        self['groups']['teachers'] = Group('teachers', _('Teaching Staff'))
-        self['groups']['students'] = Group('students', _('Students'))
+        self['groups']['staff'] = Group('staff', _('Staff'))
+        self['groups']['learners'] = Group('learners', _('Learners'))
         self['groups']['courses'] = Group('courses',
                                           _('Courses currently offered'))
 
@@ -69,13 +71,15 @@ class Section(Group):
 
     implements(ISection)
 
-    def __init__(self, title=None, description=None, teachers=None,
-                 students=None, schedule=None, courses=None):
-        Group.__init__(self)
-        self.teachers = teachers
-        self.students = students
+    def __init__(self, title=None, description=None, instructors=None,
+                 learners=None, schedule=None, courses=None):
+        self.title = title
+        self.description = description
+        self.instructors = instructors
+        self.learners = learners
         self.schedule = schedule
         self.courses = courses
+        self.calendar = Calendar(self)
 
 
 class SchoolToolGroupContainer(GroupContainer):

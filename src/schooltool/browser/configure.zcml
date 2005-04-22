@@ -42,4 +42,15 @@
       layer="SchoolToolLayer"
       />
 
+  <page
+      name="index.html"
+      for="schooltool.interfaces.ISection"
+      class="schooltool.browser.app.SectionView"
+      template="templates/section.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      layer="SchoolToolLayer"
+      />
+
 </configure>

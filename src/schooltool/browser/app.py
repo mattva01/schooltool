@@ -34,8 +34,17 @@ class CourseView(GroupView):
 
     __used_for__ = ICourse
 
+    def getSections(self):
+        return self.context.members
+
 
 class SectionView(GroupView):
     """A view for courses providing a list of sections."""
 
     __used_for__ = ISection
+
+    def getInstructors(self):
+        return self.context.members
+
+    def getLearners(self):
+        return self.context.members

@@ -40,10 +40,10 @@ class ICourse(IGroupContained):
 class ISection(IGroupContained):
     """Sections are groups of users in a particular meeting of a Course."""
 
-    teachers = Attribute(
+    instructors = Attribute(
                """XXX A list of Person objects in the role of instructor""")
 
-    students = Attribute(
+    learners = Attribute(
                """XXX A list of Person objects in the role of learner""")
 
     schedule = Attribute("""

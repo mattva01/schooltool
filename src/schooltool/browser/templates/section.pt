@@ -1,0 +1,47 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<head>
+  <title metal:fill-slot="title" tal:content="context/title" />
+</head>
+<body>
+<h1 metal:fill-slot="content-header"><span tal:replace="context/title" /></h1>
+
+<metal:block metal:fill-slot="body">
+  <div id="section-view">
+    <p class="description" tal:content="context/description"/>
+
+    <div class="instructors">
+      <div tal:define="instructors view/getInstructors">
+        <h3 i18n:translate="">Instructors</h3>
+        <ul>
+          <li tal:repeat="obj instructors/sortby:title">
+            <a tal:attributes="href obj/@@absolute_url" 
+               tal:content="obj/title" />
+          </li>
+        </ul>
+        <p tal:condition="not:instructors" i18n:translate="">
+          There are no instructors for this section.
+        </p>
+      </div>
+    </div>
+
+    <div class="learners">
+      <div tal:define="learners view/getLearners">
+        <h3 i18n:translate="">Learners</h3>
+        <ul>
+          <li tal:repeat="obj learners/sortby:title">
+            <a tal:attributes="href obj/@@absolute_url"
+               tal:content="obj/title" />
+          </li>
+        </ul>
+        <p tal:condition="not:learners" i18n:translate="">
+          There are no learners for this section.
+        </p>
+      </div>
+    </div>
+
+  </div>
+  <tal:block replace="structure context/@@notes|nothing"/>
+
+</metal:block>
+</body>
+</html>

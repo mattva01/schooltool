@@ -41,6 +41,19 @@ def doctest_CourseView():
         >>> request = TestRequest()
         >>> view = CourseView(course, request)
 
+        >>> from schooltool.app import Section
+        >>> course.members.add(Section(title='First'))
+        >>> course.members.add(Section(title='Last'))
+        >>> course.members.add(Section(title='Intermediate'))
+
+    get sections returns all the members of the course, we'll restrict
+    membership to Sections later.
+
+        >>> titles = [person.title for person in view.getSections()]
+        >>> titles.sort()
+        >>> titles
+        ['First', 'Intermediate', 'Last']
+
     """
 
 
@@ -54,6 +67,23 @@ def doctest_SectionView():
         >>> section = Section()
         >>> request = TestRequest()
         >>> view = SectionView(section, request)
+
+        >>> from schoolbell.app.app import Person, Resource
+        >>> section.members.add(Person(title='First'))
+        >>> section.members.add(Person(title='Last'))
+        >>> section.members.add(Person(title='Intermediate'))
+
+    for the moment we just return all the members of the section
+
+        >>> titles = [person.title for person in view.getLearners()]
+        >>> titles.sort()
+        >>> titles
+        ['First', 'Intermediate', 'Last']
+
+        >>> titles = [person.title for person in view.getInstructors()]
+        >>> titles.sort()
+        >>> titles
+        ['First', 'Intermediate', 'Last']
 
     """
 
