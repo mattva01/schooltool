@@ -38,28 +38,27 @@ if sys.version_info < (2, 3):
 
 # Subclass some distutils commands so that we can set up the server on install
 from distutils.command.install import install as _install
-from distutils.command.install_lib import install_lib as _install_lib
+from distutils.command.install_data import install_data as _install_data
 from distutils.command.install_scripts import \
         install_scripts as _install_scripts
 
 
-#### Begin Dirty hack
-from distutils.command.install_data import install_data as _install_data
 class install_data(_install_data):
-    """Specialized Python installer for schoolbell.
+    """Specialized Python installer for schooltool.
 
-    This install data command is for schoolbell only, it changes the default
-    schoolbell data install directory to be the same as the directory for
-    install_lib.
+    It changes the default schoolbell data install directory to be the same as
+    the directory for install_lib.
 
     It also makes the --install-data option to the install command a no-op.
+
+    The right way to go about this is package_data, but that is only in
+    python 2.4.
     """
 
     def finalize_options(self):
         self.set_undefined_options('install',
                 ('install_lib', 'install_dir'))
         return _install_data.finalize_options(self)
-#### End dirty hack
 
 
 class install(_install):
@@ -84,82 +83,12 @@ class install(_install):
         return _install.initialize_options(self)
 
 
-class install_lib(_install_lib):
-    """Specialized Python installer for schooltool and schoolbell.
-
-    The primary purpose of this sub class it to make sure SchoolTool will
-    know where it's data files are on installation.
-    """
-
-    package = package
-
-    user_options = _install_lib.user_options + [
-            ('datafile-dir=', None, "override where the python libraries think"
-                    " their data files are")]
-
-    def initialize_options(self):
-        self.datafile_dir = None
-        self.build_lib = None
-        return _install_lib.initialize_options(self)
-
-    def finalize_options(self):
-        self.set_undefined_options('install',
-                ('datafile_dir', 'datafile_dir'),
-                ('build_lib', 'build_lib'))
-        # datafile_dir not set in install, get it from install_data
-        self.set_undefined_options('install_data',
-                ('install_dir', 'datafile_dir'))
-        return _install_lib.finalize_options(self)
-
-    def update_pathconfig(self):
-        # Write the new location to the pathconfig.py file.
-        pathconfig = os.path.join(self.build_lib, self.package, 'pathconfig.py')
-        ##### Begin dirty hack
-        # schoolbell does not support installing data files and modules
-        # separately so this hack prevents people from doing so
-        if self.package == 'schoolbell':
-            if os.path.abspath(self.datafile_dir) \
-                    != os.path.abspath(self.install_dir):
-                print >> sys.stderr, ("WARNING: You are probably trying to "
-                        "install schoolbell data files and modules in "
-                        "different locations, this is not implemented and "
-                        "probably won't work.")
-        ##### End dirty hack
-        try:
-            path_file = open(pathconfig, 'r')
-            pathconfig_str = path_file.read()
-        finally:
-            path_file.close()
-        # Update the pathconfig string file
-        path_to_data = os.path.abspath(
-                os.path.join(self.datafile_dir, self.package))
-        datafile_str = '\n'.join(['# pathconf begin', 'DATADIR = %s'
-                % repr(path_to_data),
-                '# pathconf end'])
-        datafile_regex = re.compile(r'# pathconf begin\n.*# pathconf end', re.S)
-        pathconfig_str = re.sub(datafile_regex, datafile_str, pathconfig_str)
-        try:
-            path_file = open(pathconfig, 'w')
-            path_file.write(pathconfig_str)
-        finally:
-            path_file.close()
-
-    def run(self):
-        self.build()
-        self.update_pathconfig()
-        outfiles = self.install()
-        if outfiles is not None and self.distribution.has_pure_modules():
-            self.byte_compile(outfiles)
-
-
 class install_scripts(_install_scripts):
     """Specialized Python installer for schooltool and schoolbell.
 
     The primary purpose of this sub class it to configure the scripts on
     installation.
     """
-
-    package = package
 
     user_options = _install_scripts.user_options + [
             ('paths=', None, "a semi-colon separated list of paths that should"
@@ -239,91 +168,36 @@ if sys.version_info < (2, 3):
 datafile_re = re.compile('.*\.(pt|js|png|css|mo|rng|xml|pot|zcml)\Z')
 
 # TODO: ask distutils to build Zope 3 extension modules somehow
-if package == 'schooltool':
-    # find the data files
-    data_files = []
-    os.chdir('src')
-    for root, dirs, files in os.walk('schooltool'):
-        tmp = [os.path.join('src', root, file) for file in files \
-                if datafile_re.match(file, 1)]
-        if tmp:
-            data_files.append((root, tmp))
-    os.chdir('..')
-    # Setup SchoolTool
-    setup(name="schooltool",
-        version="0.10rc1",
-        url='http://www.schooltool.org',
-        cmdclass={'install': install,
-            'install_scripts': install_scripts,
-            'install_lib': install_lib},
-        package_dir={'': 'src'},
-        packages=['schooltool', 'schooltool.interfaces',
-            'schooltool.schema', 'schooltool.translation',
-            'schooltool.rest', 'schooltool.browser',
-            'schooltool.clients'],
-        data_files=[('sampleschool', ['persons.csv', 'groups.csv',
-                'resources.csv', 'timetable.csv', 'ttconfig.data'])]
-            + data_files + [('', ['schooltool.conf.in'])],
-        scripts=['scripts/import-sampleschool', 'scripts/schooltool',
-            'scripts/schooltool-client'])
-elif package == 'schoolbell':
-    # find the data files
-    data_files = []
-    os.chdir('src')
-    for root, dirs, files in os.walk('schoolbell'):
-        tmp = [os.path.join('src', root, file) for file in files \
-                if datafile_re.match(file, 1)]
-        if tmp:
-            data_files.append((root, tmp))
-    os.chdir('..')
-    # Setup SchoolBell
-    setup(name="schoolbell",
-        description="A standalone or Zope 3 component calendaring server",
-        long_description="""A calendaring server which can be used as a
-            standalone server or a Zope 3 component. This server allows for
-            people and resources to have individual and group calendars.
-            The calendars are:
-            * Shareable
-            * Overlayable
-            * Access controllable
-            * Importable and exportable to iCal clients
-                (e.g. Apple's iCal or Mozilla Sunbird)
+# find the data files
+data_files = []
+os.chdir('src')
+for root, dirs, files in os.walk('schooltool'):
+    tmp = [os.path.join('src', root, file) for file in files \
+            if datafile_re.match(file, 1)]
+    if tmp:
+        data_files.append((root, tmp))
+os.chdir('..')
 
-            And will:
-            * Time zone aware
-            * Provide resource rooking
-            * Do anything else that makes sense
-
-            All of this is accessible through a web interface which is simple,
-            powerful and beautiful.
-
-            For developers SchoolBell offers:
-            * Re-usable calendaring Zope 3 components.
-            * iCal parser.
-            * Rigourous functional and unit testing.
-
-            Enjoy!""",
-        version="1.0rc1",
-        url='http://www.schooltool.org/schoolbell',
-        license="GPL",
-        maintainer="SchoolTool development team",
-        maintainer_email="schooltool-dev@schooltool.org",
-        platforms=["any"],
-        classifiers=["Development Status :: 5 - Production/Stable",
-        "Intended Audience :: Developers",
-        "Intended Audience :: End Users/Desktop",
-        "License :: OSI Approved :: GNU General Public License (GPL)",
-        "Operating System :: OS Independent",
-        "Programming Language :: Python",
-        "Programming Language :: Zope",
-#        "Topic :: Office/Business :: Groupware", TODO are we groupware?
-        "Topic :: Office/Business :: Scheduling"],
-        cmdclass={'install': install,
-            'install_data': install_data,
-            'install_scripts': install_scripts,
-            'install_lib': install_lib},
-        package_dir={'': 'src'},
-        packages=['schoolbell', 'schoolbell.relationship',
-            'schoolbell.calendar', 'schoolbell.app', 'schoolbell.app.browser'],
-        data_files=data_files + [('', ['schoolbell.conf.in'])],
-        scripts=['scripts/schoolbell'])
+# Setup SchoolTool
+setup(name="schooltool",
+    version="0.10rc1",
+    url='http://www.schooltool.org',
+    cmdclass={'install': install,
+        'install_scripts': install_scripts,
+        'install_data': install_data},
+    package_dir={'': 'src'},
+    packages=['schooltool'],
+    ## XXX - these comments represent features from the twisted schooltool,
+    ## which may still appear in the new schooltool, so keep them around for
+    ## reference
+    #    'schooltool.interfaces',
+    #    'schooltool.schema', 'schooltool.translation',
+    #    'schooltool.rest', 'schooltool.browser',
+    #    'schooltool.clients'],
+    #data_files=[('sampleschool', ['persons.csv', 'groups.csv',
+    #        'resources.csv', 'timetable.csv', 'ttconfig.data'])]
+    #    + data_files + [('', ['schooltool.conf.in'])],
+    #scripts=['scripts/import-sampleschool', 'scripts/schooltool',
+    #    'scripts/schooltool-client']
+    scripts=['scripts/schooltool']
+    )
