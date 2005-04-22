@@ -37,6 +37,90 @@ from schoolbell.app.browser.tests.setup import setUp, tearDown
 from schoolbell.app.browser.tests.setup import setUpSessions
 
 
+def doctest_ContainerDeleteView():
+    r"""Test for ContainerDeleteView
+
+    Let's create some persons to delete from a person container:
+
+        >>> from schoolbell.app.browser.app import ContainerDeleteView
+        >>> from schoolbell.app.app import Person, PersonContainer
+        >>> from schoolbell.app.interfaces import IPerson
+        >>> setup.setUpAnnotations()
+
+        >>> personContainer = PersonContainer()
+        >>> directlyProvides(personContainer, IContainmentRoot)
+
+        >>> personContainer['pete'] = Person('pete', 'Pete Parrot')
+        >>> personContainer['john'] = Person('john', 'Long John')
+        >>> personContainer['frog'] = Person('frog', 'Frog Man')
+        >>> personContainer['toad'] = Person('toad', 'Taodsworth')
+        >>> request = TestRequest()
+        >>> view = ContainerDeleteView(personContainer, request)
+
+    We should have the list of all the Ids of items that are going to
+    be deleted from container:
+
+        >>> view.listIdsForDeletion()
+        []
+
+    We must pass ids of selected people in the request:
+
+        >>> request.form = {'delete.pete': 'on',
+        ...                 'delete.john': 'on',
+        ...                 'UPDATE_SUBMIT': 'Delete'}
+        >>> ids = [key for key in view.listIdsForDeletion()]
+        >>> ids.sort()
+        >>> ids
+        [u'john', u'pete']
+        >>> [item.title for item in view.itemsToDelete]
+        ['Long John', 'Pete Parrot']
+
+    These two should be gone after update:
+
+        >>> view.update()
+        >>> ids = [key for key in personContainer]
+        >>> ids.sort()
+        >>> ids
+        [u'frog', u'toad']
+
+    And we should be redirected to the container view:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1'
+
+    If we press Cancel no one should get hurt though:
+
+        >>> request.form = {'delete.frog': 'on',
+        ...                 'delete.toad': 'on',
+        ...                 'CANCEL': 'Cancel'}
+
+    You see, both our firends are still in there:
+
+        >>> ids = [key for key in personContainer]
+        >>> ids.sort()
+        >>> ids
+        [u'frog', u'toad']
+
+    But we should be redirected to the container:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1'
+
+    No redirection if nothing was pressed should happen:
+
+        >>> request.form = {'delete.frog': 'on',
+        ...                 'delete.toad': 'on'}
+        >>> view.update()
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1'
+
+    """
+
+
 def doctest_PersonView():
     r"""Test for PersonView
 

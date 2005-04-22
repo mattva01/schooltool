@@ -145,6 +145,14 @@
       title="Change membership"
       />
 
+  <page
+      name="delete.html"
+      for="schoolbell.app.interfaces.IContainer"
+      class="schoolbell.app.browser.app.ContainerDeleteView"
+      template="templates/container_delete.pt"
+      permission="zope.View"
+      />
+
     <!--
     FIXME: zope.View is certainly not the right permission.
     How can we say "a person may only edit their own preferences"?

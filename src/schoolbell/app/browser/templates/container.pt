@@ -13,10 +13,18 @@
 
   <p tal:condition="not:objects" i18n:translate="">There are none.</p>
   <ul tal:condition="objects">
-    <li tal:repeat="obj objects/sortby:title">
-      <a tal:content="obj/title"
-         tal:attributes="href obj/@@absolute_url">Some Object</a>
-    </li>
+    <form method="post"
+          tal:attributes="action string:${context/@@absolute_url}/delete.html">
+      <li tal:repeat="obj objects/sortby:title">
+        <input type="checkbox" tal:attributes="name string:delete.${obj/zope:name}" />
+        <a tal:content="obj/title"
+           tal:attributes="href obj/@@absolute_url">Some Object</a>
+      </li>
+      <div class="controls">
+        <input type="submit" class="button-cancel" value="Delete"
+               i18n:attributes="value delete-button;" />
+      </div>
+    </form>
   </ul>
 
 </metal:block>

@@ -100,6 +100,35 @@ class ResourceContainerView(ContainerView):
     add_url = "+/addSchoolBellResource.html"
 
 
+class ContainerDeleteView(BrowserView):
+    """A view for deleting items from container."""
+
+    def listItemsForDeletion(self):
+        return [self.context[key]
+                for key in self.context
+                if "delete.%s" % key in self.request]
+
+    def listIdsForDeletion(self):
+        return [key for key in self.context
+                if "delete.%s" % key in self.request]
+
+    def _listItemsForDeletion(self):
+        return [self.context[key] for key in self.listIdsForDeletion()]
+
+    itemsToDelete = property(_listItemsForDeletion)
+
+    def update(self):
+        if 'UPDATE_SUBMIT' in self.request:
+            for key in self.listIdsForDeletion():
+                del self.context[key]
+            self.request.response.redirect(self.nextURL())
+        elif 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+
+    def nextURL(self):
+        return zapi.absoluteURL(self.context, self.request)
+
+
 class PersonView(BrowserView):
     """A Person info view."""
 
