@@ -88,6 +88,21 @@ def doctest_Section():
         >>> verifyObject(IGroup, section)
         True
 
+    We'll add an instructor to the section.
+
+        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> setUp()
+
+        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.interfaces import IPerson
+        >>> teacher = Person('teacher', 'Mr. Jones')
+        >>> section.instructors.add(teacher)
+        >>> for instructor in section.instructors:
+        ...     print instructor.title
+        Mr. Jones
+
+        >>> tearDown()
+
     """
 
 def test_suite():

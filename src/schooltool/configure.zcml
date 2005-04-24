@@ -10,6 +10,13 @@
       factory="schoolbell.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
+  <!-- Events -->
+
+  <subscriber
+    for="schoolbell.relationship.interfaces.IBeforeRelationshipEvent"
+    handler=".uris.enforceInstructionConstraints"
+    />
+
   <!-- Content -->
   <content class=".app.SchoolToolApplication">
     <allow interface=".interfaces.ISchoolToolApplication" />

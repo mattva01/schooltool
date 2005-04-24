@@ -34,10 +34,12 @@ from schoolbell.app.app import SchoolBellApplication
 from schoolbell.app.app import Group, GroupContainer
 from schoolbell.app.app import PersonContainer, ResourceContainer
 from schoolbell.app.cal import Calendar
+from schoolbell.relationship import RelationshipProperty
 
 from schooltool.interfaces import ISchoolToolApplication
 from schooltool.interfaces import ISchoolToolGroupContainer
 from schooltool.interfaces import ICourse, ISection
+from schooltool.uris import URIInstruction, URISection, URIInstructor
 from schoolbell.app.app import SchoolBellApplication, Person, Group, Resource
 
 
@@ -72,11 +74,13 @@ class Section(Group):
 
     implements(ISection)
 
-    def __init__(self, title=None, description=None, instructors=None,
+    instructors = RelationshipProperty(URIInstruction, URISection,
+                                       URIInstructor)
+
+    def __init__(self, title=None, description=None,
                  learners=None, schedule=None, courses=None):
         self.title = title
         self.description = description
-        self.instructors = instructors
         self.learners = learners
         self.schedule = schedule
         self.courses = courses

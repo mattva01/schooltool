@@ -44,7 +44,7 @@ class SectionView(GroupView):
     __used_for__ = ISection
 
     def getInstructors(self):
-        return self.context.members
+        return self.context.instructors
 
     def getLearners(self):
         return self.context.members

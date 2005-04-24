@@ -80,10 +80,15 @@ def doctest_SectionView():
         >>> titles
         ['First', 'Intermediate', 'Last']
 
+    Lets add some instructors to the section.
+
+        >>> section.instructors.add(Person(title='First Teacher'))
+        >>> section.instructors.add(Person(title='Last Teacher'))
+
         >>> titles = [person.title for person in view.getInstructors()]
         >>> titles.sort()
         >>> titles
-        ['First', 'Intermediate', 'Last']
+        ['First Teacher', 'Last Teacher']
 
     """
 
