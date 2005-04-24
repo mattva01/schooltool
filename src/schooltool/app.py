@@ -38,6 +38,7 @@ from schoolbell.app.cal import Calendar
 from schooltool.interfaces import ISchoolToolApplication
 from schooltool.interfaces import ISchoolToolGroupContainer
 from schooltool.interfaces import ICourse, ISection
+from schoolbell.app.app import SchoolBellApplication, Person, Group, Resource
 
 
 # XXX Should we use the Zope 3 translation service here?
