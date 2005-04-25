@@ -362,3 +362,17 @@ He can delete the other relationship now too:
     ...
     <BLANKLINE>
     Link removed
+
+Calendars have their relationships too:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/frog/calendar/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+    <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
+                   xmlns="http://schooltool.org/ns/model/0.1">
+      <existing>
+      </existing>
+    </relationships>

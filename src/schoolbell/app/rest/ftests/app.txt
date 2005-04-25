@@ -332,6 +332,9 @@ Let's look how our group looks now:
       <description></description>
       <calendar xlink:type="simple" xlink:title="Calendar"
                 xlink:href="http://localhost/frogpond/groups/a-group/calendar"/>
+      <relationships xlink:type="simple"
+                     xlink:title="Relationships"
+                     xlink:href="http://localhost/frogpond/groups/a-group/relationships"/>
     </group>
     <BLANKLINE>
 
@@ -362,6 +365,9 @@ Now the title of the group should be different:
       <description></description>
       <calendar xlink:type="simple" xlink:title="Calendar"
                 xlink:href="http://localhost/frogpond/groups/a-group/calendar"/>
+      <relationships xlink:type="simple"
+                     xlink:title="Relationships"
+                     xlink:href="http://localhost/frogpond/groups/a-group/relationships"/>
     </group>
     <BLANKLINE>
 
@@ -378,6 +384,9 @@ Resource:
       <description></description>
       <calendar xlink:type="simple" xlink:title="Calendar"
                 xlink:href="http://localhost/frogpond/resources/a-resource/calendar"/>
+      <relationships xlink:type="simple"
+                     xlink:title="Relationships"
+                     xlink:href="http://localhost/frogpond/resources/a-resource/relationships"/>
     </resource>
     <BLANKLINE>
 
@@ -408,6 +417,9 @@ Now the title of the resource should be different:
       <description></description>
       <calendar xlink:type="simple" xlink:title="Calendar"
                 xlink:href="http://localhost/frogpond/resources/a-resource/calendar"/>
+      <relationships xlink:type="simple"
+                     xlink:title="Relationships"
+                     xlink:href="http://localhost/frogpond/resources/a-resource/relationships"/>
     </resource>
     <BLANKLINE>
 
@@ -423,6 +435,9 @@ Person:
       <title>John</title>
       <calendar xlink:type="simple" xlink:title="Calendar"
                 xlink:href="http://localhost/frogpond/persons/john/calendar"/>
+      <relationships xlink:type="simple"
+                     xlink:title="Relationships"
+                     xlink:href="http://localhost/frogpond/persons/john/relationships"/>
     </person>
     <BLANKLINE>
 
@@ -452,6 +467,9 @@ Now the title of the person should be different:
       <title>The person</title>
       <calendar xlink:type="simple" xlink:title="Calendar"
                 xlink:href="http://localhost/frogpond/persons/john/calendar"/>
+      <relationships xlink:type="simple"
+                     xlink:title="Relationships"
+                     xlink:href="http://localhost/frogpond/persons/john/relationships"/>
     </person>
     <BLANKLINE>
 
@@ -606,6 +624,9 @@ He should be capable of logging in with this password now:
       <title>The person</title>
       <calendar xlink:type="simple" xlink:title="Calendar"
                 xlink:href="http://localhost/frogpond/persons/john/calendar"/>
+      <relationships xlink:type="simple"
+                     xlink:title="Relationships"
+                     xlink:href="http://localhost/frogpond/persons/john/relationships"/>
     </person>
     <BLANKLINE>
 

@@ -459,6 +459,8 @@ class TestGroupView(ApplicationObjectViewTestMixin, unittest.TestCase):
                    <description/>
                    <calendar xlink:href="http://127.0.0.1/groups/root/calendar"
                              xlink:title="Calendar" xlink:type="simple"/>
+                   <relationships xlink:href="http://127.0.0.1/groups/root/relationships"
+                                  xlink:title="Relationships" xlink:type="simple"/>
                </group>""")
 
     def testGETDescription(self):
@@ -475,6 +477,8 @@ class TestGroupView(ApplicationObjectViewTestMixin, unittest.TestCase):
                    <description>Foo</description>
                    <calendar xlink:href="http://127.0.0.1/groups/root/calendar"
                              xlink:title="Calendar" xlink:type="simple"/>
+                   <relationships xlink:href="http://127.0.0.1/groups/root/relationships"
+                                  xlink:title="Relationships" xlink:type="simple"/>
                </group>""")
 
 
@@ -501,6 +505,8 @@ class TestResourceView(ApplicationObjectViewTestMixin, unittest.TestCase):
                    <description/>
                    <calendar xlink:href="http://127.0.0.1/resources/root/calendar"
                              xlink:title="Calendar" xlink:type="simple"/>
+                   <relationships xlink:href="http://127.0.0.1/resources/root/relationships"
+                                  xlink:title="Relationships" xlink:type="simple"/>
                </resource>""")
 
     def testGETDescription(self):
@@ -517,6 +523,8 @@ class TestResourceView(ApplicationObjectViewTestMixin, unittest.TestCase):
                    <description>Foo</description>
                    <calendar xlink:href="http://127.0.0.1/resources/root/calendar"
                              xlink:title="Calendar" xlink:type="simple"/>
+                   <relationships xlink:href="http://127.0.0.1/resources/root/relationships"
+                                  xlink:title="Relationships" xlink:type="simple"/>
                </resource>""")
 
 
@@ -542,6 +550,8 @@ class TestPersonView(ApplicationObjectViewTestMixin, unittest.TestCase):
                    <title>Root person</title>
                    <calendar xlink:href="http://127.0.0.1/persons/root/calendar"
                              xlink:title="Calendar" xlink:type="simple"/>
+                   <relationships xlink:href="http://127.0.0.1/persons/root/relationships"
+                                  xlink:title="Relationships" xlink:type="simple"/>
                </person>""")
 
 
