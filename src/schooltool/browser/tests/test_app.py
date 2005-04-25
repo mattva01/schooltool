@@ -91,6 +91,34 @@ def doctest_SectionView():
     """
 
 
+def doctest_SectionAddView():
+    r"""Tests for adding sections.
+
+    Sections are special types of groups meant to represent one meeting time
+    of a course.  If they don't have a course, they can't be created "stand
+    alone".
+
+        >>> from schooltool.browser.app import SectionAddView
+        >>> from schoolbell.app.app import GroupContainer
+        >>> container = GroupContainer()
+
+    first a request with a course reference raises an error.
+
+        >>> request = TestRequest()
+        >>> view = SectionAddView(container, request)
+        Traceback (most recent call last):
+        ...
+        NotImplementedError
+
+    A request with course_id doesn't
+
+        >>> request = TestRequest(course_id='algebraI')
+        >>> view = SectionAddView(container, request)
+        >>> view.update()
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,

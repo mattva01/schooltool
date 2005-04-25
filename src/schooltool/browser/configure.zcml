@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="2.0"?>
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
@@ -42,6 +42,25 @@
       layer="SchoolToolLayer"
       />
 
+  <addform
+      label="Add a Course"
+      name="addSchoolBellCourse.html"
+      schema="schooltool.interfaces.ICourse"
+      fields="title description"
+      set_before_add="title"
+      content_factory="schooltool.app.Course"
+      permission="schoolbell.create"
+      class=".app.CourseAddView">
+    <widget field="description" height="5" />
+  </addform>
+
+  <menuItem
+    menu="schoolbell_actions"
+    title="New Course"
+    for="schoolbell.app.interfaces.IGroupContainer"
+    action="+/addSchoolBellCourse.html"
+    />
+
   <page
       name="index.html"
       for="schooltool.interfaces.ISection"
@@ -52,5 +71,18 @@
       title="View"
       layer="SchoolToolLayer"
       />
+
+  <addform
+      label="Add a Section"
+      name="addSchoolToolSection.html"
+      schema="schooltool.interfaces.ISection"
+      fields="title description"
+      template="templates/section_add.pt"
+      set_before_add="title"
+      content_factory="schooltool.app.Section"
+      permission="schoolbell.create"
+      class=".app.SectionAddView">
+    <widget field="description" height="5" />
+  </addform>
 
 </configure>

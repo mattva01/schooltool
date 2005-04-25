@@ -798,17 +798,17 @@ class ISection(IGroupContained):
     """Sections are groups of users in a particular meeting of a Course."""
 
     instructors = Attribute(
-               """XXX A list of Person objects in the role of instructor""")
+               """A list of Person objects in the role of instructor""")
 
     learners = Attribute(
-               """XXX A list of Person objects in the role of learner""")
+               """A list of Person objects in the role of learner""")
 
     schedule = Attribute("""
                    a representation of the calendar events and recurrences \
                    that make up this section's meetings """)
 
     courses = Attribute(
-               """XXX A list of courses this section is a member of.""")
+               """A list of courses this section is a member of.""")
 
 
 class ISchoolToolGroupContainer(IGroupContainer):

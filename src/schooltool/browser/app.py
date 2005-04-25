@@ -23,8 +23,11 @@ $Id: app.py 3481 2005-04-21 15:28:29Z bskahan $
 """
 
 from zope.app.publisher.browser import BrowserView
+from zope.app.form.browser.add import AddView
+from zope.app import zapi
 
 from schoolbell.app.browser.app import GroupView
+from schoolbell.app.browser.app import MemberViewBase
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ICourse, ISection
@@ -38,6 +41,10 @@ class CourseView(GroupView):
         return self.context.members
 
 
+class CourseAddView(AddView):
+    "A view for adding Courses."
+
+
 class SectionView(GroupView):
     """A view for courses providing a list of sections."""
 
@@ -48,3 +55,18 @@ class SectionView(GroupView):
 
     def getLearners(self):
         return self.context.learners
+
+
+class SectionAddView(AddView):
+    "A view for adding Sections."
+
+    def __init__(self, context, request):
+        if 'course_id' not in request:
+            raise NotImplementedError()
+
+        self.context = context
+        self.request = request
+
+
+    def nextURL(self):
+        return zapi.absoluteURL(self.context, self.request)

@@ -10,6 +10,7 @@
     <p class="description" tal:content="context/description"/>
 
     <div class="sections">
+
       <div tal:define="sections view/getSections">
         <h3 i18n:translate="">Sections</h3>
         <ul>
@@ -22,6 +23,14 @@
         </p>
       </div>
     </div>
+    <div class="controls">
+      <a class="button-ok" href="" title="New Section"
+        tal:attributes="href string:${context/schoolbell:app/@@absolute_url}/groups/+/addSchoolToolSection.html?course_id=${context/title}">
+        New Section
+      </a>
+    </div>
+
+
   </div>
   <tal:block replace="structure context/@@notes|nothing"/>
 
