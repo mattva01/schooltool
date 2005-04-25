@@ -47,4 +47,4 @@ class SectionView(GroupView):
         return self.context.instructors
 
     def getLearners(self):
-        return self.context.members
+        return self.context.learners

@@ -69,16 +69,14 @@ def doctest_SectionView():
         >>> view = SectionView(section, request)
 
         >>> from schoolbell.app.app import Person, Resource
-        >>> section.members.add(Person(title='First'))
-        >>> section.members.add(Person(title='Last'))
-        >>> section.members.add(Person(title='Intermediate'))
-
-    for the moment we just return all the members of the section
+        >>> section.learners.add(Person(title='First Student'))
+        >>> section.learners.add(Person(title='Last Student'))
+        >>> section.learners.add(Person(title='Intermediate Student'))
 
         >>> titles = [person.title for person in view.getLearners()]
         >>> titles.sort()
         >>> titles
-        ['First', 'Intermediate', 'Last']
+        ['First Student', 'Intermediate Student', 'Last Student']
 
     Lets add some instructors to the section.
 
