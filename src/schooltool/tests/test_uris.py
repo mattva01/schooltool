@@ -27,8 +27,8 @@ from zope.testing import doctest
 from zope.app import zapi
 from zope.interface.verify import verifyObject
 
-def doctest_Section():
-    r"""Tests for URIs
+def doctest_Instruction():
+    r"""Tests for Instruction URIs and methods
 
         >>> from schooltool.uris import *
 
@@ -59,6 +59,17 @@ def doctest_Section():
         >>> tearDown()
 
     """
+
+
+def doctest_Learning():
+    r"""Tests for Instruction URIs and methods
+
+    For now just import these to check for syntax errors
+
+        >>> from schooltool.uris import Learning, URILearning, URILearner
+
+    """
+
 
 def test_suite():
     return unittest.TestSuite([

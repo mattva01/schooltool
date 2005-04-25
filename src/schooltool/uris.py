@@ -31,6 +31,9 @@ from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
 from schoolbell.relationship.interfaces import InvalidRelationship
 from schooltool.interfaces import ISection
 
+#
+# The Instruction relationship
+#
 
 URIInstruction = URIObject('http://schooltool.org/ns/instruction',
                           'Instruction', 'The instruction relationship.')
@@ -57,3 +60,17 @@ def enforceInstructionConstraints(event):
                                   ' and one section.')
     if not ISection.providedBy(event[URISection]):
         raise InvalidRelationship('Sections must provide ISection.')
+
+
+#
+# The Learning relationship
+#
+
+URILearning = URIObject('http://schooltool.org/ns/learning',
+                          'Learning', 'The learning relationship.')
+URILearner = URIObject('http://schooltool.org/ns/instruction/learner',
+                      'Learner', 'A person in the learner role.')
+
+Learning = RelationshipSchema(URILearning,
+                                learner=URILearner,
+                                section=URISection)

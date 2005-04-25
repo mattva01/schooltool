@@ -91,14 +91,30 @@ def doctest_Section():
     We'll add an instructor to the section.
 
         >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schoolbell.relationship import getRelatedObjects
         >>> setUp()
 
         >>> from schoolbell.app.app import Person
         >>> from schoolbell.app.interfaces import IPerson
+        >>> from schooltool.uris import URIInstructor
         >>> teacher = Person('teacher', 'Mr. Jones')
         >>> section.instructors.add(teacher)
-        >>> for instructor in section.instructors:
-        ...     print instructor.title
+
+    Now we'll add some learners to the Section.
+
+        >>> from schooltool.uris import Learning, URILearner, URILearning
+        >>> section.learners.add(Person('first','First'))
+        >>> section.learners.add(Person('second','Second'))
+        >>> section.learners.add(Person('third','Third'))
+
+        >>> for person in section.learners:
+        ...     print person.title
+        First
+        Second
+        Third
+
+        >>> for person in section.instructors:
+        ...     print person.title
         Mr. Jones
 
         >>> tearDown()

@@ -40,6 +40,7 @@ from schooltool.interfaces import ISchoolToolApplication
 from schooltool.interfaces import ISchoolToolGroupContainer
 from schooltool.interfaces import ICourse, ISection
 from schooltool.uris import URIInstruction, URISection, URIInstructor
+from schooltool.uris import URILearning, URILearner
 from schoolbell.app.app import SchoolBellApplication, Person, Group, Resource
 
 
@@ -74,14 +75,16 @@ class Section(Group):
 
     implements(ISection)
 
-    instructors = RelationshipProperty(URIInstruction, URISection,
-                                       URIInstructor)
+    instructors = RelationshipProperty(URIInstruction, URIInstructor,
+                                       URISection)
 
-    def __init__(self, title=None, description=None,
-                 learners=None, schedule=None, courses=None):
+    learners = RelationshipProperty(URILearning, URILearner,
+                                       URISection)
+
+    def __init__(self, title=None, description=None, schedule=None,
+                 courses=None):
         self.title = title
         self.description = description
-        self.learners = learners
         self.schedule = schedule
         self.courses = courses
         self.calendar = Calendar(self)
