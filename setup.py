@@ -101,6 +101,8 @@ class install_scripts(_install_scripts):
         self.set_undefined_options('install',
                 ('paths', 'paths'),
                 ('default_config', 'default_config'))
+        if not self.paths:
+            self.paths = ''
         return _install_scripts.finalize_options(self)
 
     def update_scripts(self):
@@ -112,26 +114,21 @@ class install_scripts(_install_scripts):
             finally:
                 script_file.close()
             # Update the paths in the script
-            if self.paths:
-                paths_str = '\n'.join(['# paths begin']
-                        + ['sys.path.insert(0, %s)' % repr(path)\
-                        for path in self.paths.split(';')] + ['# paths end'])
-            else:
-                paths_str = '\n'.join(['# paths begin', '# paths end'])
             paths_regex = re.compile(r'# paths begin\n.*# paths end', re.S)
-            script_str = re.sub(paths_regex, paths_str, script_str)
+            paths = ['# paths begin', '# paths end']
+            for path in self.paths.split(';'):
+                paths.insert(-1, 'sys.path.insert(0, %s)' \
+                        % repr(os.path.abspath(path)))
+            script_str = re.sub(paths_regex, '\n'.join(paths), script_str)
             # Update the default config file
-            if self.default_config:
-                config_str = '\n'.join(['# config begin',
-                        'sys.argv.insert(1, \'--config=%s\')'
-                        % self.default_config, '# config end'])
-            else:
-                config_str = '\n'.join(['# config begin',
-                        "sys.argv.insert(1, \'--config=%s\' % "
-                        "__file__ + \'.conf\')",
-                        '# config end'])
             config_regex = re.compile(r'# config begin\n.*# config end', re.S)
-            script_str = re.sub(config_regex, config_str, script_str)
+            config = ['# config begin',
+                    'sys.argv.insert(1, \'--config=%s.conf\' % __file__)',
+                    '# config end']
+            if self.default_config:
+                config[1] = 'sys.argv.insert(1, \'--config=%s\')'\
+                        % os.path.abspath(self.default_config)
+            script_str = re.sub(config_regex, '\n'.join(config), script_str)
             # Write the script again
             try:
                 script_file = open(script, 'w')
