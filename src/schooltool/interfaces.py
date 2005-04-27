@@ -803,9 +803,9 @@ class ISection(IGroupContained):
     learners = Attribute(
                """A list of Person objects in the role of learner""")
 
-    schedule = Attribute("""
-                   a representation of the calendar events and recurrences \
-                   that make up this section's meetings """)
+    schedule = Attribute(
+                    """A representation of the calendar events and \
+                    recurrences that make up this section's meetings.""")
 
     courses = Attribute(
                """A list of courses this section is a member of.""")

@@ -25,12 +25,18 @@ $Id: app.py 3481 2005-04-21 15:28:29Z bskahan $
 from zope.app.publisher.browser import BrowserView
 from zope.app.form.browser.add import AddView
 from zope.app import zapi
+from zope.app.component.hooks import getSite
+from zope.app.form.utility import setUpWidgets, getWidgetsData
+from zope.app.form.interfaces import IInputWidget, WidgetsError
+from zope.security.proxy import removeSecurityProxy
 
 from schoolbell.app.browser.app import GroupView
 from schoolbell.app.browser.app import MemberViewBase
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ICourse, ISection
+from schooltool.interfaces import ISchoolBellApplication
+from schooltool.app import Section
 
 class CourseView(GroupView):
     """A view for courses providing a list of sections."""
@@ -58,15 +64,57 @@ class SectionView(GroupView):
 
 
 class SectionAddView(AddView):
-    "A view for adding Sections."
+    """A view for adding Sections."""
+
+    error = None
+    course = None
+
+    def getCourseFromId(self, id):
+        app = getSite()
+        try:
+            return app['groups'][id]
+        except KeyError:
+            self.error = _("No such course.")
 
     def __init__(self, context, request):
-        if 'course_id' not in request:
-            raise NotImplementedError()
 
-        self.context = context
-        self.request = request
+        super(AddView, self).__init__(context, request)
 
+        try:
+            self.course = self.getCourseFromId(request['field.course_id'])
+            # XXX: need to figure out how to i18n this
+        except KeyError:
+            self.error = _("Need a course ID.")
+
+        if self.course is not None:
+            self.label = 'Add a Section to ' + self.course.title
+
+    def update(self):
+
+        if self.update_status is not None:
+            # We've been called before. Just return the previous result.
+            return self.update_status
+
+        if "UPDATE_SUBMIT" in self.request:
+
+            self.update_status = ''
+            try:
+                data = getWidgetsData(self, self.schema, names=self.fieldNames)
+                section = removeSecurityProxy(self.createAndAdd(data))
+                self.course.members.add(section)
+            except WidgetsError, errors:
+                self.errors = errors
+                self.update_status = _("An error occured.")
+                return self.update_status
+
+            self.request.response.redirect(self.nextURL())
+
+        if 'CANCEL' in self.request:
+            url = zapi.absoluteURL(self.course, self.request)
+            self.request.response.redirect(url)
+
+        return self.update_status
 
     def nextURL(self):
-        return zapi.absoluteURL(self.context, self.request)
+        return zapi.absoluteURL(self.course, self.request)
+

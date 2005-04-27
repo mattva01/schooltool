@@ -6,6 +6,9 @@
 <h1 metal:fill-slot="content-header"><span tal:replace="context/title" /></h1>
 
 <metal:block metal:fill-slot="body">
+
+  <tal:block replace="structure context/@@notes|nothing"/>
+
   <div id="course-view">
     <p class="description" tal:content="context/description"/>
 
@@ -13,11 +16,23 @@
 
       <div tal:define="sections view/getSections">
         <h3 i18n:translate="">Sections</h3>
-        <ul>
-          <li tal:repeat="obj sections/sortby:title">
-            <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
-          </li>
-        </ul>
+        <div class="section-list">
+          <tal:loop tal:repeat="section sections/sortby:title">
+
+            <!-- XXX This should be moved into a macro -->
+            <div class="section"
+                 tal:define="instructors section/instructors|nothing;
+                             learners section/learners|nothing">
+              <h4>
+                <a tal:attributes="href section/@@absolute_url"
+                   tal:content="section/title" />
+              </h4>
+              <p tal:content="section/description" />
+            </div>
+
+          </tal:loop>
+
+        </div>
         <p tal:condition="not:sections" i18n:translate="">
           There are no sections for this course.
         </p>
@@ -25,15 +40,13 @@
     </div>
     <div class="controls">
       <a class="button-ok" href="" title="New Section"
-        tal:attributes="href string:${context/schoolbell:app/@@absolute_url}/groups/+/addSchoolToolSection.html?course_id=${context/title}">
+        tal:attributes="href string:${context/schoolbell:app/@@absolute_url}/groups/+/addSchoolToolSection.html?field.course_id=${context/__name__}">
         New Section
       </a>
     </div>
 
 
   </div>
-  <tal:block replace="structure context/@@notes|nothing"/>
-
 
 </metal:block>
 </body>
