@@ -37,7 +37,7 @@ A list of all defined timetable schemas is available from the timetable schema
 service (see getTimetableSchemaService, ITimetableSchemaService).
 
 A list of all defined time periods is available from the time period service
-(see getTimePeriodService, ITimePeriodService).
+(see getTermService, ITermService).
 
 Timetable schemas and time periods are identified by alphanumeric IDs.
 
@@ -176,11 +176,11 @@ from schooltool.interfaces import ITimetableModel
 from schooltool.interfaces import ITimetableModelFactory
 from schooltool.interfaces import ITimetabled, ICompositeTimetableProvider
 from schooltool.interfaces import ITimetableSchemaService
-from schooltool.interfaces import ITimePeriodService
+from schooltool.interfaces import ITermService
 from schooltool.interfaces import ILocation
 from schooltool.interfaces import Unchanged
 from schooltool.interfaces import IDateRange
-from schooltool.interfaces import ISchooldayModelWrite, ISchooldayModel
+from schooltool.interfaces import ITermCalendarWrite, ITermCalendar
 from schooltool import getSchoolToolApplication
 
 __metaclass__ = type
@@ -216,9 +216,9 @@ class DateRange:
         return self.first <= date <= self.last
 
 
-class SchooldayModel(DateRange, Persistent):
+class TermCalendar(DateRange, Persistent):
 
-    implements(ISchooldayModel, ISchooldayModelWrite, ILocation)
+    implements(ITermCalendar, ITermCalendarWrite, ILocation)
 
     __name__ = None
     __parent__ = None
@@ -229,7 +229,7 @@ class SchooldayModel(DateRange, Persistent):
 
     def _validate(self, date):
         if not date in self:
-            raise ValueError("Date %r not in period [%r, %r]" %
+            raise ValueError("Date %r not in term [%r, %r]" %
                              (date, self.first, self.last))
 
     def isSchoolday(self, date):
@@ -1004,7 +1004,7 @@ class TimetabledMixin:
 
     def makeTimetableCalendar(self):
         events = []
-        timePeriodService = getTimePeriodService(self)
+        timePeriodService = getTermService(self)
         for period_id, schema_id in self.listCompositeTimetables():
             schoolday_model = timePeriodService[period_id]
             tt = self.getCompositeTimetable(period_id, schema_id)
@@ -1064,8 +1064,8 @@ class TimetableSchemaService(Persistent):
         return self[self.default_id]
 
 
-class TimePeriodService(Persistent):
-    implements(ITimePeriodService)
+class TermService(Persistent):
+    implements(ITermService)
 
     __parent__ = None
     __name__ = None
@@ -1091,30 +1091,25 @@ class TimePeriodService(Persistent):
         del self.periods[period_id]
 
 
-def getTimePeriodForDate(date, context):
+def getTermForDate(date):
     """Find the time period that contains `date`.
 
     Returns None if there is `date` falls outside all time periods.
-
-    `context` is used to get the time period service.
     """
 
-    app = getSchoolToolApplication()
-    period_service = app.timePeriodService
-    for period_id in period_service.keys():
-        time_period = period_service[period_id]
-        if date in time_period:
-            return time_period
+    terms = getSchoolToolApplication().terms
+    for term_id in terms.keys():
+        term = terms[term_id]
+        if date in term:
+            return term
     return None
 
 
-def getPeriodsForDay(date, context):
+def getPeriodsForDay(date):
     """Return a list of timetable periods defined for `date`.
 
     This function uses the default timetable schema and the appropriate time
     period for `date`.
-
-    `context` is used to get the time period and timetable schema services.
 
     Returns a list of ISchooldayPeriod objects.
 
@@ -1122,7 +1117,7 @@ def getPeriodsForDay(date, context):
     if there is no default timetable schema, or `date` falls outside all
     time periods, or it happens to be a holiday).
     """
-    schooldays = getTimePeriodForDate(date, context)
+    schooldays = getTermForDate(date)
     ttservice = getSchoolToolApplication().timetableSchemaService
     if ttservice.default_id is None or schooldays is None:
         return []

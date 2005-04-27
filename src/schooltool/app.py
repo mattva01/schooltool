@@ -42,7 +42,7 @@ from schooltool.interfaces import ISchoolToolGroupContainer
 from schooltool.interfaces import ICourse, ISection
 from schooltool.uris import URIInstruction, URISection, URIInstructor
 from schooltool.uris import URILearning, URILearner
-from schooltool.timetable import TimePeriodService, TimetableSchemaService
+from schooltool.timetable import TermService, TimetableSchemaService
 
 # XXX Should we use the Zope 3 translation service here?
 localedir = os.path.join(os.path.dirname(__file__), 'locales')
@@ -65,7 +65,7 @@ class SchoolToolApplication(SchoolBellApplication):
         groups['learners'] = Group('learners', _('Learners'))
         groups['courses'] = Group('courses', _('Courses currently offered'))
 
-        self.timePeriodService = TimePeriodService()
+        self.terms = TermService()
         self.timetableSchemaService = TimetableSchemaService()
 
 class Course(Group):

@@ -87,41 +87,41 @@ class IDateRange(Interface):
         """Return the number of dates covered by the range."""
 
 
-class ISchooldayModel(IDateRange):
+class ITermCalendar(IDateRange):
     """A calendar which can tell whether a day is a school day or not
-    for a certain period of time.
+    in a certain school term.
     """
 
     def isSchoolday(date):
         """Return whether the date is a schoolday.
 
-        Raises a ValueError if the date is outside of the period covered.
+        Raises a ValueError if the date is outside of the term covered.
         """
 
 
-class ISchooldayModelWrite(Interface):
+class ITermCalendarWrite(Interface):
 
     def add(day):
         """Mark the day as a schoolday.
 
-        Raises a ValueError if the date is outside of the period covered.
+        Raises a ValueError if the date is outside of the term covered.
         """
 
     def remove(day):
         """Mark the day as a holiday.
 
-        Raises a ValueError if the date is outside of the period covered.
+        Raises a ValueError if the date is outside of the term covered.
         """
 
     def reset(first, last):
-        """Change the period and mark all days as holidays.
+        """Change the term and mark all days as holidays.
 
         If first is later than last, a ValueError is raised.
         """
 
     def addWeekdays(*weekdays):
         """Mark that all days of week with a number in weekdays within the
-        period will be schooldays.
+        term will be schooldays.
 
         The numbering used is the same as one used by datetime.date.weekday()
         method, or the calendar module: 0 is Monday, 1 is Tuesday, etc.
@@ -129,7 +129,7 @@ class ISchooldayModelWrite(Interface):
 
     def removeWeekdays(*weekdays):
         """Mark that all days of week with a number in weekdays within the
-        period will be holidays.
+        term will be holidays.
 
         The numbering used is the same as one used by datetime.date.weekday()
         method, or the calendar module: 0 is Monday, 1 is Tuesday, etc.
@@ -757,26 +757,26 @@ class ITimetableSchemaService(ILocation):
         """Remove a stored schema with a given id."""
 
 
-class ITimePeriodService(ILocation):
-    """Service for registering time periods.
+class ITermService(ILocation):
+    """A container for terms.
 
-    It stores schoolday models for registered time period IDs.
+    It stores term calendars for registered term IDs.
     """
 
     def keys():
-        """Return a sequence of all time period ids."""
+        """Return a sequence of all term ids."""
 
-    def __contains__(period_id):
+    def __contains__(term_id):
         """Return True iff period with this id is defined."""
 
-    def __getitem__(period_id):
-        """Return the schoolday model for this time period."""
+    def __getitem__(term_id):
+        """Return the term calendar for this term."""
 
-    def __setitem__(period_id, schoolday_model):
-        """Store a schoolday model for this time period."""
+    def __setitem__(term_id, term_calendar):
+        """Store a term calendar for this term."""
 
-    def __delitem__(period_id):
-        """Remove the specified time period."""
+    def __delitem__(term_id):
+        """Remove the specified term."""
 
 
 #
@@ -817,5 +817,5 @@ class ISchoolToolApplication(ISchoolBellApplication):
     """The main SchoolTool application object"""
 
     timetableSchemaService = Attribute("Timetable schemas")
-    timePeriodService = Attribute("Terms")
+    terms = Attribute("Terms")
 

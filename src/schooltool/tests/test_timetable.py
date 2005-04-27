@@ -38,7 +38,7 @@ from zope.app.testing import ztapi
 
 from schooltool.tests.helpers import diff, sorted
 from schoolbell.app.rest.tests.utils import NiceDiffsMixin, EqualsSortedMixin
-from schooltool.interfaces import ISchooldayModel
+from schooltool.interfaces import ITermCalendar
 from schooltool.interfaces import ITimetableActivity
 from schooltool.interfaces import ILocation
 from schooltool.timetable import TimetabledMixin
@@ -79,22 +79,22 @@ class TestDateRange(unittest.TestCase):
                           date(2003, 1, 2), date(2003, 1, 1))
 
 
-class TestSchooldayModel(unittest.TestCase):
+class TestTermCalendar(unittest.TestCase):
 
     def test_interface(self):
-        from schooltool.timetable import SchooldayModel
-        from schooltool.interfaces import ISchooldayModel, ISchooldayModelWrite
+        from schooltool.timetable import TermCalendar
+        from schooltool.interfaces import ITermCalendar, ITermCalendarWrite
         from schooltool.interfaces import ILocation
 
-        cal = SchooldayModel(date(2003, 9, 1), date(2003, 12, 24))
-        verifyObject(ISchooldayModel, cal)
-        verifyObject(ISchooldayModelWrite, cal)
+        cal = TermCalendar(date(2003, 9, 1), date(2003, 12, 24))
+        verifyObject(ITermCalendar, cal)
+        verifyObject(ITermCalendarWrite, cal)
         verifyObject(ILocation, cal)
 
     def testAddRemoveSchoolday(self):
-        from schooltool.timetable import SchooldayModel
+        from schooltool.timetable import TermCalendar
 
-        cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 14))
+        cal = TermCalendar(date(2003, 9, 1), date(2003, 9, 14))
 
         self.assert_(not cal.isSchoolday(date(2003, 9, 1)))
         self.assert_(not cal.isSchoolday(date(2003, 9, 2)))
@@ -108,8 +108,8 @@ class TestSchooldayModel(unittest.TestCase):
         self.assertRaises(ValueError, cal.remove, date(2003, 9, 15))
 
     def testReset(self):
-        from schooltool.timetable import SchooldayModel
-        cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 15))
+        from schooltool.timetable import TermCalendar
+        cal = TermCalendar(date(2003, 9, 1), date(2003, 9, 15))
         cal.addWeekdays(1, 3, 5)
 
         new_first, new_last = date(2003, 8, 1), date(2003, 9, 30)
@@ -123,8 +123,8 @@ class TestSchooldayModel(unittest.TestCase):
         self.assertRaises(ValueError, cal.reset, new_last, new_first)
 
     def testMarkWeekday(self):
-        from schooltool.timetable import SchooldayModel
-        cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 17))
+        from schooltool.timetable import TermCalendar
+        cal = TermCalendar(date(2003, 9, 1), date(2003, 9, 17))
         for day in 1, 8, 15:
             self.assert_(not cal.isSchoolday(date(2003, 9, day)))
 
@@ -150,8 +150,8 @@ class TestSchooldayModel(unittest.TestCase):
             self.assert_(cal.isSchoolday(date(2003, 9, day+2)))
 
     def test_contains(self):
-        from schooltool.timetable import SchooldayModel
-        cal = SchooldayModel(date(2003, 9, 1), date(2003, 9, 16))
+        from schooltool.timetable import TermCalendar
+        cal = TermCalendar(date(2003, 9, 1), date(2003, 9, 16))
         self.assert_(date(2003, 8, 31) not in cal)
         self.assert_(date(2003, 9, 17) not in cal)
         for day in range(1, 17):
@@ -923,9 +923,9 @@ class TestSchooldayTemplate(unittest.TestCase):
         self.assert_(not tmpl != tmpl2)
 
 
-class SchooldayModelStub:
+class TermCalendarStub:
 
-    implements(ISchooldayModel)
+    implements(ITermCalendar)
 
     #     November 2003
     #  Su Mo Tu We Th Fr Sa
@@ -1067,7 +1067,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
 
         tt = self.createTimetable()
         model = self.createModel()
-        schooldays = SchooldayModelStub()
+        schooldays = TermCalendarStub()
 
         cal = model.createCalendar(schooldays, tt)
         verifyObject(ICalendar, cal)
@@ -1101,7 +1101,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
 
         tt = self.createTimetable()
         model = self.createModel()
-        schooldays = SchooldayModelStub()
+        schooldays = TermCalendarStub()
 
         cal = model.createCalendar(schooldays, tt)
         verifyObject(ICalendar, cal)
@@ -1188,9 +1188,9 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         model = WeeklyTimetableModel(day_templates={None: template})
         verifyObject(ITimetableModel, model)
 
-        cal = model.createCalendar(SchooldayModelStub(), tt)
+        cal = model.createCalendar(TermCalendarStub(), tt)
 
-        result = self.extractCalendarEvents(cal, SchooldayModelStub())
+        result = self.extractCalendarEvents(cal, TermCalendarStub())
 
         expected = [
             {datetime(2003, 11, 20, 9, 0, tzinfo=UTC): "Chemistry",
@@ -1233,7 +1233,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         tt = Timetable(days)
         for day_id in days:
             tt[day_id] = TimetableDay()
-        schooldays = SchooldayModelStub()
+        schooldays = TermCalendarStub()
         self.assertEquals(model.periodsInDay(schooldays, tt, day), [])
 
         # Just make sure there are no exceptions.
@@ -1379,8 +1379,8 @@ class TestTimetabledMixin(NiceDiffsMixin, unittest.TestCase,
         english = TimetableActivity("English")
         composite["A"].add("Green", english)
 
-        def newComposite(period_id, schema_id):
-            if (period_id, schema_id) == ("2003 fall", "sequential"):
+        def newComposite(term_id, schema_id):
+            if (term_id, schema_id) == ("2003 fall", "sequential"):
                 return composite
             else:
                 return None
@@ -1483,7 +1483,7 @@ class TestTimetabledMixin(NiceDiffsMixin, unittest.TestCase,
         from schooltool.timetable import TimetableActivity
         from schoolbell.app.cal import Calendar, CalendarEvent
         tps = self.serviceManager.timePeriodService = {}
-        sms = tps['2003 fall'] = SchooldayModelStub()
+        sms = tps['2003 fall'] = TermCalendarStub()
         tss = self.serviceManager.timetableSchemaService = {}
         tss['sequential'] = None
         tss['other'] = None
@@ -1576,21 +1576,21 @@ class TestTimetableSchemaService(unittest.TestCase):
         self.assertRaises(ValueError, setattr, service, 'default_id', 'nosuch')
 
 
-class TestTimePeriodService(unittest.TestCase):
+class TestTermService(unittest.TestCase):
 
     def test_interface(self):
-        from schooltool.timetable import TimePeriodService
-        from schooltool.interfaces import ITimePeriodService
+        from schooltool.timetable import TermService
+        from schooltool.interfaces import ITermService
 
-        service = TimePeriodService()
-        verifyObject(ITimePeriodService, service)
+        service = TermService()
+        verifyObject(ITermService, service)
 
     def test(self):
-        from schooltool.timetable import TimePeriodService
-        service = TimePeriodService()
+        from schooltool.timetable import TermService
+        service = TermService()
         self.assertEqual(service.keys(), [])
 
-        schooldays = SchooldayModelStub()
+        schooldays = TermCalendarStub()
         service['2003 fall'] = schooldays
         self.assertEqual(service.keys(), ['2003 fall'])
         self.assert_('2003 fall' in service)
@@ -1600,13 +1600,13 @@ class TestTimePeriodService(unittest.TestCase):
         self.assert_(schooldays.__parent__ is service)
 
         # duplicate registration
-        schooldays2 = SchooldayModelStub()
+        schooldays2 = TermCalendarStub()
         service['2003 fall'] = schooldays2
         self.assertEqual(service.keys(), ['2003 fall'])
         self.assert_('2003 fall' in service)
         self.assert_(service['2003 fall'] is schooldays2)
 
-        schooldays3 = SchooldayModelStub()
+        schooldays3 = TermCalendarStub()
         service['2004 spring'] = schooldays3
         self.assertEqual(sorted(service.keys()), ['2003 fall', '2004 spring'])
         self.assert_('2004 spring' in service)
@@ -1625,22 +1625,20 @@ class TestTimePeriodService(unittest.TestCase):
 class TestGetPeriodsForDay(PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.timetable import TimePeriodService
+        from schooltool.timetable import TermService
         from schooltool.timetable import Timetable
-        from schooltool.timetable import SchooldayModel
+        from schooltool.timetable import TermCalendar
         from schooltool.timetable import TimetableSchemaService
         from schooltool.app import SchoolToolApplication
         from zope.app.component.hooks import setSite
         from zope.app.component.site import LocalSiteManager
-        context = SchoolToolApplication()
-        context.setSiteManager(LocalSiteManager(context))
-        setSite(context)
-        self.sm1 = SchooldayModel(date(2004, 9, 1), date(2004, 12, 20))
-        self.sm2 = SchooldayModel(date(2005, 1, 1), date(2005, 6, 1))
-        context.timePeriodService = TimePeriodService()
-        context.timePeriodService['2004-fall'] = self.sm1
-        context.timePeriodService['2005-spring'] = self.sm2
-        context.timetableSchemaService = TimetableSchemaService()
+        app = SchoolToolApplication()
+        app.setSiteManager(LocalSiteManager(app))
+        setSite(app)
+        self.sm1 = TermCalendar(date(2004, 9, 1), date(2004, 12, 20))
+        self.sm2 = TermCalendar(date(2005, 1, 1), date(2005, 6, 1))
+        app.terms['2004-fall'] = self.sm1
+        app.terms['2005-spring'] = self.sm2
         tt = Timetable([])
 
         class TimetableModelStub:
@@ -1649,42 +1647,41 @@ class TestGetPeriodsForDay(PlacelessSetup, unittest.TestCase):
 
         tt.model = TimetableModelStub()
         self.tt = tt
-        context.timetableSchemaService['default'] = tt
-        self.context = context
+        app.timetableSchemaService['default'] = tt
+        self.app = app
 
-    def test_getTimePeriodForDate(self):
-        from schooltool.timetable import getTimePeriodForDate
-        c = self.context
-        self.assert_(getTimePeriodForDate(date(2004, 8, 31), c) is None)
-        self.assert_(getTimePeriodForDate(date(2004, 9, 1), c) is self.sm1)
-        self.assert_(getTimePeriodForDate(date(2004, 11, 5), c) is self.sm1)
-        self.assert_(getTimePeriodForDate(date(2004, 12, 20), c) is self.sm1)
-        self.assert_(getTimePeriodForDate(date(2004, 12, 21), c) is None)
-        self.assert_(getTimePeriodForDate(date(2005, 3, 17), c) is self.sm2)
-        self.assert_(getTimePeriodForDate(date(2005, 11, 5), c) is None)
+    def test_getTermForDate(self):
+        from schooltool.timetable import getTermForDate
+        self.assert_(getTermForDate(date(2004, 8, 31)) is None)
+        self.assert_(getTermForDate(date(2004, 9, 1)) is self.sm1)
+        self.assert_(getTermForDate(date(2004, 11, 5)) is self.sm1)
+        self.assert_(getTermForDate(date(2004, 12, 20)) is self.sm1)
+        self.assert_(getTermForDate(date(2004, 12, 21)) is None)
+        self.assert_(getTermForDate(date(2005, 3, 17)) is self.sm2)
+        self.assert_(getTermForDate(date(2005, 11, 5)) is None)
 
     def test_getPeriodsForDay(self):
         from schooltool.timetable import getPeriodsForDay
         # A white-box test: we delegate to ITimetableModel.periodsInDay
         # with the correct arguments
-        self.assertEquals(getPeriodsForDay(date(2004, 10, 14), self.context),
+        self.assertEquals(getPeriodsForDay(date(2004, 10, 14)),
                           ('periodsInDay', self.sm1, self.tt,
                            date(2004, 10, 14)))
 
         # However, if there is no time period, we return []
-        self.assertEquals(getPeriodsForDay(date(2005, 10, 14), self.context),
+        self.assertEquals(getPeriodsForDay(date(2005, 10, 14)),
                           [])
 
         # If there is no timetable schema, we return []
-        self.context.timetableSchemaService.default_id = None
-        self.assertEquals(getPeriodsForDay(date(2004, 10, 14), self.context),
+        self.app.timetableSchemaService.default_id = None
+        self.assertEquals(getPeriodsForDay(date(2004, 10, 14)),
                           [])
 
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestDateRange))
-    suite.addTest(unittest.makeSuite(TestSchooldayModel))
+    suite.addTest(unittest.makeSuite(TestTermCalendar))
     suite.addTest(unittest.makeSuite(TestTimetable))
     suite.addTest(unittest.makeSuite(TestTimetableDay))
     suite.addTest(unittest.makeSuite(TestTimetableActivity))
@@ -1697,7 +1694,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestWeeklyTimetableModel))
     suite.addTest(unittest.makeSuite(TestTimetableDict))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaService))
-    suite.addTest(unittest.makeSuite(TestTimePeriodService))
+    suite.addTest(unittest.makeSuite(TestTermService))
     # XXX: these tests depend on more infrastructure, disabling for now
     #suite.addTest(unittest.makeSuite(TestTimetabledMixin))
     suite.addTest(unittest.makeSuite(TestGetPeriodsForDay))
