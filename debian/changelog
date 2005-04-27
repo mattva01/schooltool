@@ -1,4 +1,4 @@
-schooltool (1.0-1) unstable; urgency=low
+schooltool (0.10-1) unstable; urgency=low
 
   * Split the schoolbell and schooltool source packages. (Closes: Bug#301277)
   * Remove the conflicts on the schoolbell package as other changes have made
