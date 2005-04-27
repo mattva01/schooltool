@@ -155,6 +155,9 @@ from zope.app.location.traversing import LocationPhysicallyLocatable
 from zope.component import provideAdapter, adapts
 from zope.interface import directlyProvides, implements, moduleProvides
 
+from schoolbell.app.membership import URIGroup
+from schoolbell.app.cal import Calendar, CalendarEvent
+
 from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.interfaces import ITimetableActivity, ITimetableException
@@ -178,8 +181,7 @@ from schooltool.interfaces import ILocation
 from schooltool.interfaces import Unchanged
 from schooltool.interfaces import IDateRange
 from schooltool.interfaces import ISchooldayModelWrite, ISchooldayModel
-from schoolbell.app.membership import URIGroup
-from schoolbell.app.cal import Calendar, CalendarEvent
+from schooltool import getSchoolToolApplication
 
 __metaclass__ = type
 
@@ -1096,7 +1098,9 @@ def getTimePeriodForDate(date, context):
 
     `context` is used to get the time period service.
     """
-    period_service = getTimePeriodService(context)
+
+    app = getSchoolToolApplication()
+    period_service = app.timePeriodService
     for period_id in period_service.keys():
         time_period = period_service[period_id]
         if date in time_period:
@@ -1119,7 +1123,7 @@ def getPeriodsForDay(date, context):
     time periods, or it happens to be a holiday).
     """
     schooldays = getTimePeriodForDate(date, context)
-    ttservice = getTimetableSchemaService(context)
+    ttservice = getSchoolToolApplication().timetableSchemaService
     if ttservice.default_id is None or schooldays is None:
         return []
     ttschema = ttservice.getDefault()

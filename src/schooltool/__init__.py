@@ -22,3 +22,21 @@ SchoolTool libraries and application
 
 from zope.i18n import MessageIDFactory
 SchoolToolMessageID = MessageIDFactory("schooltool")
+
+
+
+# This utility function is located here in order to avoid circular imports
+# between schooltool.app and schooltool.timetable
+
+from schooltool.interfaces import ISchoolToolApplication
+from zope.app.component.hooks import getSite
+
+
+def getSchoolToolApplication():
+    """Return the nearest ISchoolToolApplication"""
+
+    candidate = getSite()
+    if ISchoolToolApplication.providedBy(candidate):
+        return candidate
+    else:
+        raise ValueError("can't get a SchoolToolApplication")

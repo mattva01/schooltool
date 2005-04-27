@@ -54,13 +54,6 @@ class Time(Field):
 
     implements(ITime)
 
-#
-#  Main application
-#
-
-class ISchoolToolApplication(ISchoolBellApplication):
-    """The main SchoolTool application object"""
-
 
 #
 #  Timetabling
@@ -815,3 +808,14 @@ class ISchoolToolGroupContainer(IGroupContainer):
     """SchoolTool's group container contains Groups and subclasses."""
 
     contains(IGroup, ICourse, ISection)
+
+#
+#  Main application
+#
+
+class ISchoolToolApplication(ISchoolBellApplication):
+    """The main SchoolTool application object"""
+
+    timetableSchemaService = Attribute("Timetable schemas")
+    timePeriodService = Attribute("Terms")
+

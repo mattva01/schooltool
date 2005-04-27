@@ -26,6 +26,7 @@ import unittest
 from zope.testing import doctest
 from zope.app import zapi
 from zope.interface.verify import verifyObject
+from zope.app.testing import setup, ztapi
 
 
 def doctest_SchoolToolApplication():
@@ -120,6 +121,39 @@ def doctest_Section():
         >>> tearDown()
 
     """
+
+
+def doctest_getSchoolToolApplication():
+    """Tests for getSchoolToolApplication.
+
+      >>> setup.placelessSetUp()
+
+    Let's say we have a SchoolTool app, which is a site.
+
+      >>> from schooltool.app import SchoolToolApplication, Person
+      >>> from zope.app.component.site import LocalSiteManager
+      >>> app = SchoolToolApplication()
+      >>> app.setSiteManager(LocalSiteManager(app))
+
+    If site is not a SchoolToolApplication, we get an error
+
+      >>> from schooltool import getSchoolToolApplication
+      >>> getSchoolToolApplication()
+      Traceback (most recent call last):
+      ...
+      ValueError: can't get a SchoolToolApplication
+
+    If current site is a SchoolToolApplication, we get it:
+
+      >>> from zope.app.component.hooks import setSite
+      >>> setSite(app)
+
+      >>> getSchoolToolApplication() is app
+      True
+
+      >>> setup.placelessTearDown()
+    """
+
 
 def test_suite():
     return unittest.TestSuite([

@@ -1622,14 +1622,19 @@ class TestTimePeriodService(unittest.TestCase):
         self.assertRaises(KeyError, service.__delitem__, '2003 fall')
 
 
-class TestGetPeriodsForDay(unittest.TestCase):
+class TestGetPeriodsForDay(PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
         from schooltool.timetable import TimePeriodService
         from schooltool.timetable import Timetable
         from schooltool.timetable import SchooldayModel
         from schooltool.timetable import TimetableSchemaService
-        context = TraversableRoot()
+        from schooltool.app import SchoolToolApplication
+        from zope.app.component.hooks import setSite
+        from zope.app.component.site import LocalSiteManager
+        context = SchoolToolApplication()
+        context.setSiteManager(LocalSiteManager(context))
+        setSite(context)
         self.sm1 = SchooldayModel(date(2004, 9, 1), date(2004, 12, 20))
         self.sm2 = SchooldayModel(date(2005, 1, 1), date(2005, 6, 1))
         context.timePeriodService = TimePeriodService()
@@ -1695,7 +1700,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimePeriodService))
     # XXX: these tests depend on more infrastructure, disabling for now
     #suite.addTest(unittest.makeSuite(TestTimetabledMixin))
-    #suite.addTest(unittest.makeSuite(TestGetPeriodsForDay))
+    suite.addTest(unittest.makeSuite(TestGetPeriodsForDay))
     return suite
 
 if __name__ == '__main__':

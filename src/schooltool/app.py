@@ -35,14 +35,14 @@ from schoolbell.app.app import Group, GroupContainer
 from schoolbell.app.app import PersonContainer, ResourceContainer
 from schoolbell.app.cal import Calendar
 from schoolbell.relationship import RelationshipProperty
+from schoolbell.app.app import SchoolBellApplication, Person, Group, Resource
 
 from schooltool.interfaces import ISchoolToolApplication
 from schooltool.interfaces import ISchoolToolGroupContainer
 from schooltool.interfaces import ICourse, ISection
 from schooltool.uris import URIInstruction, URISection, URIInstructor
 from schooltool.uris import URILearning, URILearner
-from schoolbell.app.app import SchoolBellApplication, Person, Group, Resource
-
+from schooltool.timetable import TimePeriodService, TimetableSchemaService
 
 # XXX Should we use the Zope 3 translation service here?
 localedir = os.path.join(os.path.dirname(__file__), 'locales')
@@ -58,14 +58,15 @@ class SchoolToolApplication(SchoolBellApplication):
     def __init__(self):
         SampleContainer.__init__(self)
         self['persons'] = PersonContainer()
-        self['groups'] = SchoolToolGroupContainer()
+        self['groups'] = groups = SchoolToolGroupContainer()
         self['resources'] = ResourceContainer()
         # XXX Do we want to localize the container names?
-        self['groups']['staff'] = Group('staff', _('Staff'))
-        self['groups']['learners'] = Group('learners', _('Learners'))
-        self['groups']['courses'] = Group('courses',
-                                          _('Courses currently offered'))
+        groups['staff'] = Group('staff', _('Staff'))
+        groups['learners'] = Group('learners', _('Learners'))
+        groups['courses'] = Group('courses', _('Courses currently offered'))
 
+        self.timePeriodService = TimePeriodService()
+        self.timetableSchemaService = TimetableSchemaService()
 
 class Course(Group):
 
@@ -94,3 +95,4 @@ class SchoolToolGroupContainer(GroupContainer):
     """Extend the schoolbell group container to support subclasses."""
 
     implements(ISchoolToolGroupContainer)
+
