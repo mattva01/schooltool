@@ -82,7 +82,6 @@ class SectionAddView(AddView):
 
         try:
             self.course = self.getCourseFromId(request['field.course_id'])
-            # XXX: need to figure out how to i18n this
         except KeyError:
             self.error = _("Need a course ID.")
 
