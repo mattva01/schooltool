@@ -17,31 +17,35 @@
       <div tal:define="sections view/getSections">
         <h3 i18n:translate="">Sections</h3>
         <div class="section-list">
-          <tal:loop tal:repeat="section sections/sortby:title">
+          <tal:loop tal:repeat="section sections/sortby:label">
 
             <!-- XXX This should be moved into a macro -->
             <div class="section"
                  tal:define="instructors section/instructors|nothing;
                              learners section/learners|nothing;
                              calendar section/calendar|nothing">
-              <strong>
-                <a tal:attributes="href section/@@absolute_url"
-                   tal:content="section/title" />
-              </strong>
 
               <tal:loop repeat="instructor instructors">
-                <div class="instuctor">
+                <div class="instructor">
                   <tal:if condition="instructor/photo">
                     <img src="photo" class="person-photo"
                          tal:attributes="src string:${instructor/@@absolute_url}/photo" />
                   </tal:if>
-                  <strong tal:content="instructor/title" />
+                  <br />
+                  <a href="" tal:content="instructor/title"
+                     tal:attributes="href instructor/@@absolute_url" />
                 </div>
               </tal:loop>
+
+              <strong>
+                <a tal:attributes="href section/@@absolute_url"
+                   tal:content="section/label" />
+              </strong>
 
               <p tal:content="section/description" />
 
             </div>
+            <div class="hr"><hr/></div>
 
           </tal:loop>
 

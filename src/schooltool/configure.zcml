@@ -43,7 +43,7 @@
     <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
     <require permission="schoolbell.view"
              attributes="title description members instructors learners
-                         courses" />
+                         courses label" />
     <require permission="schoolbell.edit"
              set_schema="schooltool.interfaces.ISection" />
   </content>

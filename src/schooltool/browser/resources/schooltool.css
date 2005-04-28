@@ -7,4 +7,28 @@
  *
  */
 
+div.hr {
+  clear: both;
+}
 
+div.hr hr {
+  display: none;
+}
+
+.section {
+    margin: 0.5em;
+    background: #eae8e3;
+    padding: 2px;
+    border: 1px #999 solid;
+}
+
+.instructor {
+    float: left;
+    text-align: center;
+}
+
+.instructor img
+    background: #d6d6d6;
+    padding: 2px;
+    border: 1px #999 solid;
+}

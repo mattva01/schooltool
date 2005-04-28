@@ -86,8 +86,9 @@ class Section(Group):
         label = label + _('section of ')
         for course in self.courses:
             label = label + course.title + ' '
+        return label
 
-    _title = None
+    label = property(getLabel)
 
     def getTitle(self):
         courses = ''

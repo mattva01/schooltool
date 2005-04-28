@@ -106,5 +106,12 @@
       title="Add/remove learners"
       />
 
+  <page
+      name="view_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/view_macros.pt"
+      layer=".skin.ISchoolToolLayer"
+      />
 
 </configure>

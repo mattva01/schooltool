@@ -790,6 +790,13 @@ class ICourse(IGroupContained):
 class ISection(IGroupContained):
     """Sections are groups of users in a particular meeting of a Course."""
 
+    label = TextLine(
+        title=_("Label"),
+        required=False,
+        description=_(
+            """An identifier for a section, made up if instructor
+            names, courses, and meeting time."""))
+
     title = TextLine(
         title=_("Title"),
         required=False,

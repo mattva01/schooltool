@@ -63,6 +63,7 @@ def doctest_SchoolToolApplication():
 
     """
 
+
 def doctest_Course():
     r"""Tests for course groups.
 
@@ -76,6 +77,7 @@ def doctest_Course():
         True
 
     """
+
 
 def doctest_Section():
     r"""Tests for course section groups.
@@ -114,6 +116,25 @@ def doctest_Section():
         >>> for person in section.instructors:
         ...     print person.title
         Mr. Jones
+
+    Sections are generally shown in the interface by their label.  Labels are
+    created from the list of instructors, courses, and XXX time (not yet).
+
+        >>> section.label
+        u'Mr. Jones section of '
+
+    Labels are updated dynamically when more instructors are added.
+
+        >>> section.instructors.add(Person('teacher2', 'Mrs. Smith'))
+        >>> section.label
+        u'Mr. Jones Mrs. Smith section of '
+
+    Labels should include the courses that a Section is part of:
+        >>> from schooltool.app import Course
+        >>> course = Course(title="US History")
+        >>> course.members.add(section)
+        >>> section.label
+        u'Mr. Jones Mrs. Smith section of US History '
 
         >>> tearDown()
 
