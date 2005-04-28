@@ -80,20 +80,17 @@ def doctest_Course():
 def doctest_Section():
     r"""Tests for course section groups.
 
+        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schoolbell.relationship import getRelatedObjects
+        >>> setUp()
+
         >>> from schooltool.app import Section
         >>> section = Section()
         >>> from schooltool.interfaces import ISection
         >>> verifyObject(ISection, section)
         True
-        >>> from schoolbell.app.interfaces import IGroup
-        >>> verifyObject(IGroup, section)
-        True
 
     We'll add an instructor to the section.
-
-        >>> from schoolbell.relationship.tests import setUp, tearDown
-        >>> from schoolbell.relationship import getRelatedObjects
-        >>> setUp()
 
         >>> from schoolbell.app.app import Person
         >>> from schoolbell.app.interfaces import IPerson

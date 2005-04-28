@@ -790,6 +790,11 @@ class ICourse(IGroupContained):
 class ISection(IGroupContained):
     """Sections are groups of users in a particular meeting of a Course."""
 
+    title = TextLine(
+        title=_("Title"),
+        required=False,
+        description=_("Title of the group."))
+
     instructors = Attribute(
                """A list of Person objects in the role of instructor""")
 

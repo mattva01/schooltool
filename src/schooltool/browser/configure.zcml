@@ -78,9 +78,8 @@
       label="Add a Section"
       name="addSchoolToolSection.html"
       schema="schooltool.interfaces.ISection"
-      fields="title description"
+      fields="description"
       template="templates/section_add.pt"
-      set_before_add="title"
       content_factory="schooltool.app.Section"
       permission="schoolbell.create"
       class=".app.SectionAddView">

@@ -45,22 +45,20 @@ def doctest_CourseView():
 
         >>> from schooltool.browser.app import CourseView
         >>> from schooltool.app import Course
-        >>> course = Course()
+        >>> course = Course(title="Algebra 1")
         >>> request = TestRequest()
         >>> view = CourseView(course, request)
 
         >>> from schooltool.app import Section
-        >>> course.members.add(Section(title='First'))
-        >>> course.members.add(Section(title='Last'))
-        >>> course.members.add(Section(title='Intermediate'))
+        >>> course.members.add(Section())
+        >>> course.members.add(Section())
+        >>> course.members.add(Section())
 
     get sections returns all the members of the course, we'll restrict
     membership to Sections later.
 
-        >>> titles = [person.title for person in view.getSections()]
-        >>> titles.sort()
-        >>> titles
-        ['First', 'Intermediate', 'Last']
+        >>> [section.title for section in view.getSections()]
+        [u'Section of Algebra 1 ', u'Section of Algebra 1 ', u'Section of Algebra 1 ']
 
     """
 
@@ -218,21 +216,18 @@ def doctest_SectionAddView():
 
         >>> request = TestRequest()
         >>> request.form = {'UPDATE_SUBMIT': True,
-        ...                 'field.course_id' : 'algebraI',
-        ...                 'field.title': 'Section 1'}
+        ...                 'field.course_id' : 'algebraI'}
         >>> context = AddingStub(container, request)
         >>> view = SectionAddViewForTesting(context, request)
-
-    taking this out for the moment because I'm missing some test setup
-
         >>> view.update()
         ''
 
-    if you call view.update() this will actually work, printing 'Section 1'
+    Our section is now a member of the Course, we use a generic title for
+    sections
 
         >>> for member in course.members:
-        ...     print member.title
-        Section 1
+        ...     print member.__name__
+        Section
 
         >>> tearDown()
 
@@ -259,7 +254,7 @@ def doctest_SectionInstructorView():
 
         >>> from schooltool.app import Section
         >>> from schooltool.browser.app import SectionInstructorView
-        >>> section = Section(title="Section 1")
+        >>> section = Section()
         >>> groups['section'] = section
         >>> request = TestRequest()
         >>> view = SectionInstructorView(section, request)
@@ -357,7 +352,7 @@ def doctest_SectionLearnerView():
 
         >>> from schooltool.app import Section
         >>> from schooltool.browser.app import SectionLearnerView
-        >>> section = Section(title="Section 1")
+        >>> section = Section()
         >>> groups['section'] = section
         >>> request = TestRequest()
         >>> view = SectionLearnerView(section, request)

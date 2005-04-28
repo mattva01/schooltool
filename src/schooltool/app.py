@@ -79,20 +79,38 @@ class Section(Group):
 
     implements(ISection)
 
+    def getLabel(self):
+        label = ''
+        for instructor in self.instructors:
+            label = label + instructor.title + ' '
+        label = label + _('section of ')
+        for course in self.courses:
+            label = label + course.title + ' '
+
+    _title = None
+
+    def getTitle(self):
+        courses = ''
+        for course in self.courses:
+            courses = courses + course.title + ' '
+
+        return _('Section of ') + courses
+
+    title = property(getTitle)
+
     instructors = RelationshipProperty(URIInstruction, URISection,
                                        URIInstructor)
 
     learners = RelationshipProperty(URILearning, URISection,
                                        URILearner)
 
-    courses = RelationshipProperty(URIMembership, URIGroup,
-                                   URIMember)
+    courses = RelationshipProperty(URIMembership, URIMember,
+                                   URIGroup)
 
 
 
-    def __init__(self, title=None, description=None, schedule=None,
+    def __init__(self, description=None, schedule=None,
                  courses=None):
-        self.title = title
         self.description = description
         self.schedule = schedule
         self.calendar = Calendar(self)
