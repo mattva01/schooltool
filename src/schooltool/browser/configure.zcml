@@ -22,6 +22,8 @@
   <resource name="logo.png" file="resources/schooltool.png"
             layer=".skin.ISchoolToolLayer" />
 
+  <resource name="schooltool.css" file="resources/schooltool.css"
+            layer=".skin.ISchoolToolLayer" />
 
   <!-- Add SchoolTool to the Zope menu -->
 
