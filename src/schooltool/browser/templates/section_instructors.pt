@@ -1,0 +1,42 @@
+<tal:defs define="update view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<head>
+  <title metal:fill-slot="title" tal:content="context/title" />
+</head>
+<body>
+<metal:block metal:fill-slot="body"
+             tal:define="possible_instructors view/getPotentialInstructors">
+
+<form method="post" tal:attributes="action request/URL" class="standalone">
+<h3 i18n:translate="">
+  Available instructors
+</h3>
+<p tal:condition="not:possible_instructors" i18n:translate="">
+  There are none.
+</p>
+<fieldset tal:condition="possible_instructors">
+  <div class="instructor_list">
+    <div tal:repeat="instructor possible_instructors/sortby:title">
+      <label>
+        <input tal:attributes="name string:instructor.${instructor/__name__};
+                               checked python:instructor in context.instructors"
+               type="checkbox" />
+        <span tal:replace="instructor/title" />
+    </label>
+    </div>
+  </div>
+</fieldset>
+
+<div class="controls">
+  <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Apply"
+         tal:condition="possible_instructors"
+         title="Shortcut: Alt-A" accesskey="A"
+         i18n:attributes="value submit-button; accesskey" />
+  <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+         i18n:attributes="value cancel-button" />
+</div>
+</form>
+
+</metal:block>
+</body>
+</html>
