@@ -49,13 +49,15 @@ There are no groups at the moment:
     >>> print rest("""
     ... GET /frogpond/groups/ HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... """)
+    ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     ...
     <container xmlns:xlink="http://www.w3.org/1999/xlink">
       <name>groups</name>
       <items>
       </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/groups/acl"/>
     </container>
     <BLANKLINE>
 
@@ -71,6 +73,8 @@ no resources:
       <name>resources</name>
       <items>
       </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/resources/acl"/>
     </container>
     <BLANKLINE>
 
@@ -86,6 +90,8 @@ and no persons:
       <name>persons</name>
       <items>
       </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/persons/acl"/>
     </container>
     <BLANKLINE>
 
@@ -135,6 +141,8 @@ Both groups were created:
               xlink:href="http://localhost/frogpond/groups/another-group"
               xlink:title="Another Group"/>
       </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/groups/acl"/>
     </container>
     <BLANKLINE>
 
@@ -162,6 +170,8 @@ Only one group is left:
               xlink:href="http://localhost/frogpond/groups/a-group"
               xlink:title="A Group"/>
       </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/groups/acl"/>
     </container>
     <BLANKLINE>
 
@@ -213,6 +223,8 @@ Both resources were created:
               xlink:href="http://localhost/frogpond/resources/another-resource"
               xlink:title="Another Resource"/>
       </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/resources/acl"/>
     </container>
     <BLANKLINE>
 
@@ -240,6 +252,8 @@ Only one resource is left:
               xlink:href="http://localhost/frogpond/resources/a-resource"
               xlink:title="A Resource"/>
       </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/resources/acl"/>
     </container>
     <BLANKLINE>
 
@@ -289,6 +303,8 @@ Both persons were created:
               xlink:href="http://localhost/frogpond/persons/peter"
               xlink:title="Peter"/>
       </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/persons/acl"/>
     </container>
     <BLANKLINE>
 
@@ -316,6 +332,8 @@ Only one person is left:
               xlink:href="http://localhost/frogpond/persons/john"
               xlink:title="John"/>
       </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/persons/acl"/>
     </container>
     <BLANKLINE>
 
@@ -324,17 +342,24 @@ Let's look how our group looks now:
     >>> print rest("""
     ... GET /frogpond/groups/a-group HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... """)
+    ... """, handle_errors = False)
     HTTP/1.1 200 Ok
     ...
     <group xmlns:xlink="http://www.w3.org/1999/xlink">
       <title>A Group</title>
       <description></description>
-      <calendar xlink:type="simple" xlink:title="Calendar"
-                xlink:href="http://localhost/frogpond/groups/a-group/calendar"/>
       <relationships xlink:type="simple"
                      xlink:title="Relationships"
                      xlink:href="http://localhost/frogpond/groups/a-group/relationships"/>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/groups/a-group/acl"/>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/groups/a-group/calendar"/>
+      <relationships xlink:type="simple"
+                     xlink:title="Calendar subscriptions"
+                     xlink:href="http://localhost/frogpond/groups/a-group/calendar/relationships"/>
+      <acl xlink:type="simple" xlink:title="Calendar ACL"
+           xlink:href="http://localhost/frogpond/groups/a-group/calendar/acl"/>
     </group>
     <BLANKLINE>
 
@@ -363,11 +388,18 @@ Now the title of the group should be different:
     <group xmlns:xlink="http://www.w3.org/1999/xlink">
       <title>The group</title>
       <description></description>
-      <calendar xlink:type="simple" xlink:title="Calendar"
-                xlink:href="http://localhost/frogpond/groups/a-group/calendar"/>
       <relationships xlink:type="simple"
                      xlink:title="Relationships"
                      xlink:href="http://localhost/frogpond/groups/a-group/relationships"/>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/groups/a-group/acl"/>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/groups/a-group/calendar"/>
+      <relationships xlink:type="simple"
+                     xlink:title="Calendar subscriptions"
+                     xlink:href="http://localhost/frogpond/groups/a-group/calendar/relationships"/>
+      <acl xlink:type="simple" xlink:title="Calendar ACL"
+           xlink:href="http://localhost/frogpond/groups/a-group/calendar/acl"/>
     </group>
     <BLANKLINE>
 
@@ -382,11 +414,18 @@ Resource:
     <resource xmlns:xlink="http://www.w3.org/1999/xlink">
       <title>A Resource</title>
       <description></description>
-      <calendar xlink:type="simple" xlink:title="Calendar"
-                xlink:href="http://localhost/frogpond/resources/a-resource/calendar"/>
       <relationships xlink:type="simple"
                      xlink:title="Relationships"
                      xlink:href="http://localhost/frogpond/resources/a-resource/relationships"/>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/resources/a-resource/acl"/>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/resources/a-resource/calendar"/>
+      <relationships xlink:type="simple"
+                     xlink:title="Calendar subscriptions"
+                     xlink:href="http://localhost/frogpond/resources/a-resource/calendar/relationships"/>
+      <acl xlink:type="simple" xlink:title="Calendar ACL"
+           xlink:href="http://localhost/frogpond/resources/a-resource/calendar/acl"/>
     </resource>
     <BLANKLINE>
 
@@ -415,11 +454,18 @@ Now the title of the resource should be different:
     <resource xmlns:xlink="http://www.w3.org/1999/xlink">
       <title>The resource</title>
       <description></description>
-      <calendar xlink:type="simple" xlink:title="Calendar"
-                xlink:href="http://localhost/frogpond/resources/a-resource/calendar"/>
       <relationships xlink:type="simple"
                      xlink:title="Relationships"
                      xlink:href="http://localhost/frogpond/resources/a-resource/relationships"/>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/resources/a-resource/acl"/>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/resources/a-resource/calendar"/>
+      <relationships xlink:type="simple"
+                     xlink:title="Calendar subscriptions"
+                     xlink:href="http://localhost/frogpond/resources/a-resource/calendar/relationships"/>
+      <acl xlink:type="simple" xlink:title="Calendar ACL"
+           xlink:href="http://localhost/frogpond/resources/a-resource/calendar/acl"/>
     </resource>
     <BLANKLINE>
 
@@ -433,11 +479,18 @@ Person:
     ...
     <person xmlns:xlink="http://www.w3.org/1999/xlink">
       <title>John</title>
-      <calendar xlink:type="simple" xlink:title="Calendar"
-                xlink:href="http://localhost/frogpond/persons/john/calendar"/>
       <relationships xlink:type="simple"
                      xlink:title="Relationships"
                      xlink:href="http://localhost/frogpond/persons/john/relationships"/>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/persons/john/acl"/>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/persons/john/calendar"/>
+      <relationships xlink:type="simple"
+                     xlink:title="Calendar subscriptions"
+                     xlink:href="http://localhost/frogpond/persons/john/calendar/relationships"/>
+      <acl xlink:type="simple" xlink:title="Calendar ACL"
+           xlink:href="http://localhost/frogpond/persons/john/calendar/acl"/>
     </person>
     <BLANKLINE>
 
@@ -465,11 +518,18 @@ Now the title of the person should be different:
     ...
     <person xmlns:xlink="http://www.w3.org/1999/xlink">
       <title>The person</title>
-      <calendar xlink:type="simple" xlink:title="Calendar"
-                xlink:href="http://localhost/frogpond/persons/john/calendar"/>
       <relationships xlink:type="simple"
                      xlink:title="Relationships"
                      xlink:href="http://localhost/frogpond/persons/john/relationships"/>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/persons/john/acl"/>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/persons/john/calendar"/>
+      <relationships xlink:type="simple"
+                     xlink:title="Calendar subscriptions"
+                     xlink:href="http://localhost/frogpond/persons/john/calendar/relationships"/>
+      <acl xlink:type="simple" xlink:title="Calendar ACL"
+           xlink:href="http://localhost/frogpond/persons/john/calendar/acl"/>
     </person>
     <BLANKLINE>
 
@@ -622,11 +682,18 @@ He should be capable of logging in with this password now:
     <BLANKLINE>
     <person xmlns:xlink="http://www.w3.org/1999/xlink">
       <title>The person</title>
-      <calendar xlink:type="simple" xlink:title="Calendar"
-                xlink:href="http://localhost/frogpond/persons/john/calendar"/>
       <relationships xlink:type="simple"
                      xlink:title="Relationships"
                      xlink:href="http://localhost/frogpond/persons/john/relationships"/>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/persons/john/acl"/>
+      <calendar xlink:type="simple" xlink:title="Calendar"
+                xlink:href="http://localhost/frogpond/persons/john/calendar"/>
+      <relationships xlink:type="simple"
+                     xlink:title="Calendar subscriptions"
+                     xlink:href="http://localhost/frogpond/persons/john/calendar/relationships"/>
+      <acl xlink:type="simple" xlink:title="Calendar ACL"
+           xlink:href="http://localhost/frogpond/persons/john/calendar/acl"/>
     </person>
     <BLANKLINE>
 

@@ -3,10 +3,19 @@
         xmlns:i18n="http://xml.zope.org/namespaces/i18n"
         i18n:domain="schooltool">
   <title tal:content="view/context/title">Pete</title>
-  <calendar xlink:type="simple" xlink:title="Calendar"
-      i18n:attributes="xlink:title Calendar"
-      tal:attributes="xlink:href string:${context/@@absolute_url}/calendar" />
   <relationships xlink:type="simple" xlink:title="Relationships"
       i18n:attributes="xlink:title Relationships"
       tal:attributes="xlink:href string:${context/@@absolute_url}/relationships" />
+  <acl xlink:type="simple" xlink:title="ACL"
+      i18n:attributes="xlink:title ACL"
+      tal:attributes="xlink:href string:${context/@@absolute_url}/acl" />
+  <calendar xlink:type="simple" xlink:title="Calendar"
+      i18n:attributes="xlink:title Calendar"
+      tal:attributes="xlink:href string:${context/@@absolute_url}/calendar" />
+  <relationships xlink:type="simple" xlink:title="Calendar subscriptions"
+      i18n:attributes="xlink:title Calendar_relationships"
+      tal:attributes="xlink:href string:${context/@@absolute_url}/calendar/relationships" />
+  <acl xlink:type="simple" xlink:title="Calendar ACL"
+      i18n:attributes="xlink:title Calendar_ACL"
+      tal:attributes="xlink:href string:${context/@@absolute_url}/calendar/acl" />
 </person>

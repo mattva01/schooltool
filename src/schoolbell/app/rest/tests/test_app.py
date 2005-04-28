@@ -173,6 +173,8 @@ class TestGroupContainerView(ContainerViewTestMixin,
                 <item xlink:href="http://127.0.0.1/groups/root"
                       xlink:type="simple" xlink:title="Root group"/>
               </items>
+              <acl xlink:href="http://127.0.0.1/groups/acl" xlink:title="ACL"
+                   xlink:type="simple"/>
             </container>
             """)
 
@@ -240,6 +242,8 @@ class TestResourceContainerView(ContainerViewTestMixin,
                 <item xlink:href="http://127.0.0.1/resources/root"
                       xlink:type="simple" xlink:title="Root resource"/>
               </items>
+              <acl xlink:href="http://127.0.0.1/resources/acl" xlink:title="ACL"
+                   xlink:type="simple"/>
             </container>
             """)
 
@@ -308,6 +312,8 @@ class TestPersonContainerView(ContainerViewTestMixin,
                 <item xlink:href="http://127.0.0.1/persons/root"
                       xlink:type="simple" xlink:title="Root person"/>
               </items>
+              <acl xlink:href="http://127.0.0.1/persons/acl" xlink:title="ACL"
+                   xlink:type="simple"/>
             </container>
             """)
 
@@ -457,10 +463,17 @@ class TestGroupView(ApplicationObjectViewTestMixin, unittest.TestCase):
             """<group xmlns:xlink="http://www.w3.org/1999/xlink">
                    <title>Root group</title>
                    <description/>
-                   <calendar xlink:href="http://127.0.0.1/groups/root/calendar"
-                             xlink:title="Calendar" xlink:type="simple"/>
                    <relationships xlink:href="http://127.0.0.1/groups/root/relationships"
                                   xlink:title="Relationships" xlink:type="simple"/>
+                   <acl xlink:href="http://127.0.0.1/groups/root/acl" xlink:title="ACL"
+                        xlink:type="simple"/>
+                   <calendar xlink:href="http://127.0.0.1/groups/root/calendar"
+                             xlink:title="Calendar" xlink:type="simple"/>
+                   <relationships
+                                  xlink:href="http://127.0.0.1/groups/root/calendar/relationships"
+                                  xlink:title="Calendar subscriptions" xlink:type="simple"/>
+                   <acl xlink:href="http://127.0.0.1/groups/root/calendar/acl"
+                        xlink:title="Calendar ACL" xlink:type="simple"/>
                </group>""")
 
     def testGETDescription(self):
@@ -475,10 +488,17 @@ class TestGroupView(ApplicationObjectViewTestMixin, unittest.TestCase):
             """<group xmlns:xlink="http://www.w3.org/1999/xlink">
                    <title>Root group</title>
                    <description>Foo</description>
-                   <calendar xlink:href="http://127.0.0.1/groups/root/calendar"
-                             xlink:title="Calendar" xlink:type="simple"/>
                    <relationships xlink:href="http://127.0.0.1/groups/root/relationships"
                                   xlink:title="Relationships" xlink:type="simple"/>
+                   <acl xlink:href="http://127.0.0.1/groups/root/acl" xlink:title="ACL"
+                        xlink:type="simple"/>
+                   <calendar xlink:href="http://127.0.0.1/groups/root/calendar"
+                             xlink:title="Calendar" xlink:type="simple"/>
+                   <relationships
+                                  xlink:href="http://127.0.0.1/groups/root/calendar/relationships"
+                                  xlink:title="Calendar subscriptions" xlink:type="simple"/>
+                   <acl xlink:href="http://127.0.0.1/groups/root/calendar/acl"
+                        xlink:title="Calendar ACL" xlink:type="simple"/>
                </group>""")
 
 
@@ -503,10 +523,17 @@ class TestResourceView(ApplicationObjectViewTestMixin, unittest.TestCase):
             """<resource xmlns:xlink="http://www.w3.org/1999/xlink">
                    <title>Root resource</title>
                    <description/>
-                   <calendar xlink:href="http://127.0.0.1/resources/root/calendar"
-                             xlink:title="Calendar" xlink:type="simple"/>
                    <relationships xlink:href="http://127.0.0.1/resources/root/relationships"
                                   xlink:title="Relationships" xlink:type="simple"/>
+                   <acl xlink:href="http://127.0.0.1/resources/root/acl" xlink:title="ACL"
+                        xlink:type="simple"/>
+                   <calendar xlink:href="http://127.0.0.1/resources/root/calendar"
+                             xlink:title="Calendar" xlink:type="simple"/>
+                   <relationships
+                                  xlink:href="http://127.0.0.1/resources/root/calendar/relationships"
+                                  xlink:title="Calendar subscriptions" xlink:type="simple"/>
+                   <acl xlink:href="http://127.0.0.1/resources/root/calendar/acl"
+                        xlink:title="Calendar ACL" xlink:type="simple"/>
                </resource>""")
 
     def testGETDescription(self):
@@ -521,10 +548,17 @@ class TestResourceView(ApplicationObjectViewTestMixin, unittest.TestCase):
             """<resource xmlns:xlink="http://www.w3.org/1999/xlink">
                    <title>Root resource</title>
                    <description>Foo</description>
-                   <calendar xlink:href="http://127.0.0.1/resources/root/calendar"
-                             xlink:title="Calendar" xlink:type="simple"/>
                    <relationships xlink:href="http://127.0.0.1/resources/root/relationships"
                                   xlink:title="Relationships" xlink:type="simple"/>
+                   <acl xlink:href="http://127.0.0.1/resources/root/acl" xlink:title="ACL"
+                        xlink:type="simple"/>
+                   <calendar xlink:href="http://127.0.0.1/resources/root/calendar"
+                             xlink:title="Calendar" xlink:type="simple"/>
+                   <relationships
+                                  xlink:href="http://127.0.0.1/resources/root/calendar/relationships"
+                                  xlink:title="Calendar subscriptions" xlink:type="simple"/>
+                   <acl xlink:href="http://127.0.0.1/resources/root/calendar/acl"
+                        xlink:title="Calendar ACL" xlink:type="simple"/>
                </resource>""")
 
 
@@ -548,10 +582,17 @@ class TestPersonView(ApplicationObjectViewTestMixin, unittest.TestCase):
         self.assertEqualsXML(result,
             """<person xmlns:xlink="http://www.w3.org/1999/xlink">
                    <title>Root person</title>
-                   <calendar xlink:href="http://127.0.0.1/persons/root/calendar"
-                             xlink:title="Calendar" xlink:type="simple"/>
                    <relationships xlink:href="http://127.0.0.1/persons/root/relationships"
                                   xlink:title="Relationships" xlink:type="simple"/>
+                   <acl xlink:href="http://127.0.0.1/persons/root/acl" xlink:title="ACL"
+                        xlink:type="simple"/>
+                   <calendar xlink:href="http://127.0.0.1/persons/root/calendar"
+                             xlink:title="Calendar" xlink:type="simple"/>
+                   <relationships
+                                  xlink:href="http://127.0.0.1/persons/root/calendar/relationships"
+                                  xlink:title="Calendar subscriptions" xlink:type="simple"/>
+                   <acl xlink:href="http://127.0.0.1/persons/root/calendar/acl"
+                        xlink:title="Calendar ACL" xlink:type="simple"/>
                </person>""")
 
 

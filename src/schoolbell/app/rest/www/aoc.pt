@@ -1,8 +1,13 @@
 <container xmlns:xlink="http://www.w3.org/1999/xlink"
-            xmlns:tal="http://xml.zope.org/namespaces/tal">
+           xmlns:tal="http://xml.zope.org/namespaces/tal"
+           xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+           i18n:domain="schooltool">
   <name tal:content="view/getName" />
   <items>
     <item xlink:type="simple" tal:repeat="root view/items"
           tal:attributes="xlink:title root/title; xlink:href root/href" />
   </items>
+  <acl xlink:type="simple" xlink:title="ACL"
+      i18n:attributes="xlink:title ACL"
+      tal:attributes="xlink:href string:${context/@@absolute_url}/acl" />
 </container>
