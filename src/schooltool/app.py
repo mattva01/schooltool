@@ -30,11 +30,12 @@ import locale
 from zope.interface import implements
 from zope.app.container.sample import SampleContainer
 
+from schoolbell.relationship import RelationshipProperty
 from schoolbell.app.app import SchoolBellApplication
 from schoolbell.app.app import Group, GroupContainer
 from schoolbell.app.app import PersonContainer, ResourceContainer
 from schoolbell.app.cal import Calendar
-from schoolbell.relationship import RelationshipProperty
+from schoolbell.app.membership import URIMembership, URIGroup, URIMember
 from schoolbell.app.app import SchoolBellApplication, Person, Group, Resource
 
 from schooltool.interfaces import ISchoolToolApplication
@@ -68,26 +69,32 @@ class SchoolToolApplication(SchoolBellApplication):
         self.terms = TermService()
         self.timetableSchemaService = TimetableSchemaService()
 
+
 class Course(Group):
 
     implements(ICourse)
+
 
 class Section(Group):
 
     implements(ISection)
 
-    instructors = RelationshipProperty(URIInstruction, URIInstructor,
-                                       URISection)
+    instructors = RelationshipProperty(URIInstruction, URISection,
+                                       URIInstructor)
 
-    learners = RelationshipProperty(URILearning, URILearner,
-                                       URISection)
+    learners = RelationshipProperty(URILearning, URISection,
+                                       URILearner)
+
+    courses = RelationshipProperty(URIMembership, URIGroup,
+                                   URIMember)
+
+
 
     def __init__(self, title=None, description=None, schedule=None,
                  courses=None):
         self.title = title
         self.description = description
         self.schedule = schedule
-        self.courses = courses
         self.calendar = Calendar(self)
 
 

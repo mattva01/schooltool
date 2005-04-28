@@ -42,7 +42,8 @@
   <content class=".app.Section">
     <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
     <require permission="schoolbell.view"
-             attributes="title description members" />
+             attributes="title description members instructors learners
+                         courses" />
     <require permission="schoolbell.edit"
              set_schema="schooltool.interfaces.ISection" />
   </content>

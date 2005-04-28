@@ -27,6 +27,8 @@ import unittest
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 from zope.publisher.browser import TestRequest
+from zope.interface import directlyProvides
+from zope.app.traversing.interfaces import IContainmentRoot
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 
@@ -168,6 +170,7 @@ def doctest_SectionAddView():
         >>> app.setSiteManager(LocalSiteManager(app))
         >>> from zope.app.component.hooks import setSite
         >>> setSite(app)
+        >>> directlyProvides(app, IContainmentRoot)
         >>> container = app['groups']
         >>> course = Course(title="Algebra I")
         >>> container['algebraI'] = course
@@ -222,15 +225,216 @@ def doctest_SectionAddView():
 
     taking this out for the moment because I'm missing some test setup
 
-        >>> #view.update()
+        >>> view.update()
+        ''
 
     if you call view.update() this will actually work, printing 'Section 1'
+
         >>> for member in course.members:
         ...     print member.title
+        Section 1
 
         >>> tearDown()
 
     """
+
+
+def doctest_SectionInstructorView():
+    r"""Tests for adding sections.
+
+    lets setup a schooltool instance with some members.
+
+        >>> from schooltool.app import SchoolToolApplication
+        >>> from schoolbell.app.app import Person
+        >>> school = SchoolToolApplication()
+        >>> persons = school['persons']
+        >>> directlyProvides(school, IContainmentRoot)
+        >>> groups = school['groups']
+        >>> persons['smith'] = Person('smith', 'Mr. Smith')
+        >>> persons['jones'] = Person('jones', 'Mrs. Jones')
+        >>> persons['stevens'] = Person('stevens', 'Ms. Stevens')
+
+    SecionInstructorView is used to relate persons to the section with the
+    URIInstruction relationship.
+
+        >>> from schooltool.app import Section
+        >>> from schooltool.browser.app import SectionInstructorView
+        >>> section = Section(title="Section 1")
+        >>> groups['section'] = section
+        >>> request = TestRequest()
+        >>> view = SectionInstructorView(section, request)
+        >>> view.update()
+
+    No instructors yet:
+
+        >>> [i.title for i in section.instructors]
+        []
+
+    lets see who's available to be an instructor:
+
+        >>> [i.title for i in view.getPotentialInstructors()]
+        ['Mrs. Jones', 'Mr. Smith', 'Ms. Stevens']
+
+    let's make Mr. Smith the instructor:
+
+        >>> request = TestRequest()
+        >>> request.form = {'instructor.smith': 'on', 'UPDATE_SUBMIT': 'Apply'}
+        >>> view = SectionInstructorView(section, request)
+        >>> view.update()
+
+    He should have joined:
+
+        >>> [i.title for i in section.instructors]
+        ['Mr. Smith']
+
+    And we should be directed to the group info page:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1/groups/section'
+
+    Someone might want to cancel a change.
+
+        We can cancel an action if we want to:
+
+        >>> request = TestRequest()
+        >>> request.form = {'instructor.jones': 'on', 'CANCEL': 'Cancel'}
+        >>> view = SectionInstructorView(section, request)
+        >>> view.update()
+        >>> [person.title for person in section.instructors]
+        ['Mr. Smith']
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1/groups/section'
+
+    a Section can have more than one instructor:
+
+        >>> request.form = {'instructor.smith': 'on',
+        ...                 'instructor.stevens': 'on',
+        ...                 'UPDATE_SUBMIT': 'Apply'}
+        >>> view = SectionInstructorView(section, request)
+        >>> request = TestRequest()
+        >>> view.update()
+
+        >>> [person.title for person in section.instructors]
+        ['Mr. Smith', 'Ms. Stevens']
+
+    We can remove an instructor:
+
+        >>> request.form = {'instructor.stevens': 'on',
+        ...                 'UPDATE_SUBMIT': 'Apply'}
+        >>> view = SectionInstructorView(section, request)
+        >>> request = TestRequest()
+        >>> view.update()
+
+    Goodbye Mr. Smith:
+
+        >>> [person.title for person in section.instructors]
+        ['Ms. Stevens']
+
+
+    """
+
+def doctest_SectionLearnerView():
+    r"""Tests for adding sections.
+
+    lets setup a schooltool instance with some members.
+
+        >>> from schooltool.app import SchoolToolApplication
+        >>> from schoolbell.app.app import Person
+        >>> school = SchoolToolApplication()
+        >>> persons = school['persons']
+        >>> directlyProvides(school, IContainmentRoot)
+        >>> groups = school['groups']
+        >>> persons['smith'] = Person('smith', 'John Smith')
+        >>> persons['jones'] = Person('jones', 'Sally Jones')
+        >>> persons['stevens'] = Person('stevens', 'Bob Stevens')
+
+    SecionLearnerView is used to relate persons to the section with the
+    URIInstruction relationship.
+
+        >>> from schooltool.app import Section
+        >>> from schooltool.browser.app import SectionLearnerView
+        >>> section = Section(title="Section 1")
+        >>> groups['section'] = section
+        >>> request = TestRequest()
+        >>> view = SectionLearnerView(section, request)
+        >>> view.update()
+
+    No learners yet:
+
+        >>> [i.title for i in section.learners]
+        []
+
+    lets see who's available to be an learner:
+
+        >>> [i.title for i in view.getPotentialLearners()]
+        ['Sally Jones', 'John Smith', 'Bob Stevens']
+
+    let's make Mr. Smith the learner:
+
+        >>> request = TestRequest()
+        >>> request.form = {'learner.smith': 'on', 'UPDATE_SUBMIT': 'Apply'}
+        >>> view = SectionLearnerView(section, request)
+        >>> view.update()
+
+    He should have joined:
+
+        >>> [i.title for i in section.learners]
+        ['John Smith']
+
+    And we should be directed to the group info page:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1/groups/section'
+
+    Someone might want to cancel a change.
+
+        We can cancel an action if we want to:
+
+        >>> request = TestRequest()
+        >>> request.form = {'learner.jones': 'on', 'CANCEL': 'Cancel'}
+        >>> view = SectionLearnerView(section, request)
+        >>> view.update()
+        >>> [person.title for person in section.learners]
+        ['John Smith']
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1/groups/section'
+
+    a Section can have more than one learner:
+
+        >>> request.form = {'learner.smith': 'on',
+        ...                 'learner.stevens': 'on',
+        ...                 'UPDATE_SUBMIT': 'Apply'}
+        >>> view = SectionLearnerView(section, request)
+        >>> request = TestRequest()
+        >>> view.update()
+
+        >>> [person.title for person in section.learners]
+        ['John Smith', 'Bob Stevens']
+
+    We can remove an learner:
+
+        >>> request.form = {'learner.stevens': 'on',
+        ...                 'UPDATE_SUBMIT': 'Apply'}
+        >>> view = SectionLearnerView(section, request)
+        >>> request = TestRequest()
+        >>> view.update()
+
+    Goodbye Mr. Smith:
+
+        >>> [person.title for person in section.learners]
+        ['Bob Stevens']
+
+
+    """
+
 
 
 def test_suite():

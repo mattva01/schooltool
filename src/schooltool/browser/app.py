@@ -31,7 +31,6 @@ from zope.app.form.interfaces import IInputWidget, WidgetsError
 from zope.security.proxy import removeSecurityProxy
 
 from schoolbell.app.browser.app import GroupView
-from schoolbell.app.browser.app import MemberViewBase
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ICourse, ISection
@@ -61,6 +60,9 @@ class SectionView(GroupView):
 
     def getLearners(self):
         return self.context.learners
+
+    def getCourses(self):
+        return self.context.courses
 
 
 class SectionAddView(AddView):
@@ -117,3 +119,66 @@ class SectionAddView(AddView):
     def nextURL(self):
         return zapi.absoluteURL(self.course, self.request)
 
+
+class SectionInstructorView(BrowserView):
+    """View for adding instructors to a Section.  """
+
+    __used_for__ = ISection
+
+    def getPotentialInstructors(self):
+        """Return a list of all possible members."""
+        container = ISchoolBellApplication(self.context)['persons']
+        return container.values()
+
+    def update(self):
+        # This method is rather similar to GroupListView.update().
+        context_url = zapi.absoluteURL(self.context, self.request)
+        if 'UPDATE_SUBMIT' in self.request:
+            context_instructors = removeSecurityProxy(self.context.instructors)
+            for instructor in self.getPotentialInstructors():
+                want = bool('instructor.' + instructor.__name__ in self.request)
+                have = bool(instructor in context_instructors)
+                # add() and remove() could throw an exception, but at the
+                # moment the constraints are never violated, so we ignore
+                # the problem.
+                if want != have:
+                    instructor = removeSecurityProxy(instructor)
+                    if want:
+                        context_instructors.add(instructor)
+                    else:
+                        context_instructors.remove(instructor)
+            self.request.response.redirect(context_url)
+        elif 'CANCEL' in self.request:
+            self.request.response.redirect(context_url)
+
+
+class SectionLearnerView(BrowserView):
+    """View for adding learners to a Section.  """
+
+    __used_for__ = ISection
+
+    def getPotentialLearners(self):
+        """Return a list of all possible members."""
+        container = ISchoolBellApplication(self.context)['persons']
+        return container.values()
+
+    def update(self):
+        # This method is rather similar to GroupListView.update().
+        context_url = zapi.absoluteURL(self.context, self.request)
+        if 'UPDATE_SUBMIT' in self.request:
+            context_learners = removeSecurityProxy(self.context.learners)
+            for learner in self.getPotentialLearners():
+                want = bool('learner.' + learner.__name__ in self.request)
+                have = bool(learner in context_learners)
+                # add() and remove() could throw an exception, but at the
+                # moment the constraints are never violated, so we ignore
+                # the problem.
+                if want != have:
+                    learner = removeSecurityProxy(learner)
+                    if want:
+                        context_learners.add(learner)
+                    else:
+                        context_learners.remove(learner)
+            self.request.response.redirect(context_url)
+        elif 'CANCEL' in self.request:
+            self.request.response.redirect(context_url)

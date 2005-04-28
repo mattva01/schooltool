@@ -22,12 +22,25 @@
             <!-- XXX This should be moved into a macro -->
             <div class="section"
                  tal:define="instructors section/instructors|nothing;
-                             learners section/learners|nothing">
-              <h4>
+                             learners section/learners|nothing;
+                             calendar section/calendar|nothing">
+              <strong>
                 <a tal:attributes="href section/@@absolute_url"
                    tal:content="section/title" />
-              </h4>
+              </strong>
+
+              <tal:loop repeat="instructor instructors">
+                <div class="instuctor">
+                  <tal:if condition="instructor/photo">
+                    <img src="photo" class="person-photo"
+                         tal:attributes="src string:${instructor/@@absolute_url}/photo" />
+                  </tal:if>
+                  <strong tal:content="instructor/title" />
+                </div>
+              </tal:loop>
+
               <p tal:content="section/description" />
+
             </div>
 
           </tal:loop>

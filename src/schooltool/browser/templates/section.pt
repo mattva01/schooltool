@@ -10,15 +10,15 @@
   <tal:block replace="structure context/@@notes|nothing"/>
 
   <div id="section-view">
+
     <p class="description" tal:content="context/description"/>
 
-      <!-- XXX This isn't allowed in ZCML yet
     <div class="instructors">
       <div tal:define="instructors view/getInstructors">
         <h3 i18n:translate="">Instructors</h3>
         <ul>
           <li tal:repeat="obj instructors/sortby:title">
-            <a tal:attributes="href obj/@@absolute_url" 
+            <a tal:attributes="href obj/@@absolute_url"
                tal:content="obj/title" />
           </li>
         </ul>
@@ -42,7 +42,6 @@
         </p>
       </div>
     </div>
-      -->
 
   </div>
 </metal:block>
