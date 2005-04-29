@@ -134,7 +134,7 @@ def doctest_Section():
         >>> course = Course(title="US History")
         >>> course.members.add(section)
         >>> section.label
-        u'Mr. Jones Mrs. Smith section of US History '
+        u'Mr. Jones Mrs. Smith section of US History'
 
         >>> tearDown()
 

@@ -79,25 +79,17 @@ class Section(Group):
 
     implements(ISection)
 
-    def getLabel(self):
-        label = ''
-        for instructor in self.instructors:
-            label = label + instructor.title + ' '
-        label = label + _('section of ')
-        for course in self.courses:
-            label = label + course.title + ' '
-        return label
+    def _getLabel(self):
+        instructors = " ".join([i.title for i in self.instructors])
+        courses = " ".join([c.title for c in self.courses])
+        return _('%s section of %s') % (instructors, courses)
 
-    label = property(getLabel)
+    label = property(_getLabel)
 
-    def getTitle(self):
-        courses = ''
-        for course in self.courses:
-            courses = courses + course.title + ' '
+    def _getTitle(self):
+        return _('Section of ') + " ".join([c.title for c in self.courses])
 
-        return _('Section of ') + courses
-
-    title = property(getTitle)
+    title = property(_getTitle)
 
     instructors = RelationshipProperty(URIInstruction, URISection,
                                        URIInstructor)

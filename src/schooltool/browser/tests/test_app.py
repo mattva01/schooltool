@@ -58,7 +58,7 @@ def doctest_CourseView():
     membership to Sections later.
 
         >>> [section.title for section in view.getSections()]
-        [u'Section of Algebra 1 ', u'Section of Algebra 1 ', u'Section of Algebra 1 ']
+        [u'Section of Algebra 1', u'Section of Algebra 1', u'Section of Algebra 1']
 
     """
 
