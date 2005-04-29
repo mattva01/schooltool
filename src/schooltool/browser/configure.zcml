@@ -17,7 +17,7 @@
   <skin
       name="SchoolTool"
       interface=".skin.ISchoolToolSkin"
-      layers="SchoolToolLayer SchoolBell default" />
+   />
 
   <resource name="logo.png" file="resources/schooltool.png"
             layer=".skin.ISchoolToolLayer" />
