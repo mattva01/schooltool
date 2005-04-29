@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <view
+      for="schooltool.interfaces.ISchoolToolApplication"
+      name="GET"
+      factory=".app.SchoolToolApplicationView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+</configure>

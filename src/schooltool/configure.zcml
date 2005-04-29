@@ -49,5 +49,6 @@
   </content>
 
   <include package=".browser" />
+  <include package=".rest" />
 
 </configure>
