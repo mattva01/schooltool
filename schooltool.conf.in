@@ -55,6 +55,20 @@ listen 7001
 web 7080
 
 #
+# rest port
+# rest interface:port
+#
+#   Specifies the port number and optionaly a network interface for
+#   the RESTive application server to listen on
+#
+# Examples:
+#   rest 7001
+#   rest 127.0.0.1:7001
+#
+
+# rest 7001
+
+#
 #
 # ssl_certificate certificate
 #
