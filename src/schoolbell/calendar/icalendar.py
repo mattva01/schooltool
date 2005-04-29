@@ -1151,6 +1151,11 @@ class VEvent:
 
         self.rrule = self.getOne('RRULE', None)
         if self.rrule is not None and self.exdates:
+            # XXX bug: _getType will barf if len(self.exdates) > 1
+            #          http://issues.schooltool.org/issue222
+            # TODO: use something like
+            #          exceptions = [datetime.date(dt.year, dt.month, dt.day)
+            #                        for dt in self.exdates]
             if self._getType('EXDATE') == 'DATE-TIME':
                 exceptions = [dt.date() for dt in self.exdates]
             else:
@@ -1179,7 +1184,10 @@ class VEvent:
         return dates
 
     def _getType(self, property):
-        """Return the type of the property value."""
+        """Return the type of the property value.
+
+        Only call getOne for properties that do not occur more than once.
+        """
         key = property.upper()
         values = self._props[key]
         assert len(values) == 1
