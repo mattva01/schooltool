@@ -156,7 +156,9 @@ from zope.component import provideAdapter, adapts
 from zope.interface import directlyProvides, implements, moduleProvides
 
 from schoolbell.app.membership import URIGroup
-from schoolbell.app.cal import Calendar, CalendarEvent
+from schoolbell.app.cal import CalendarEvent
+from schoolbell.calendar.simple import ImmutableCalendar
+from schoolbell.relationship import getRelatedObjects
 
 from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
@@ -751,7 +753,7 @@ class BaseTimetableModel(Persistent):
         for e in timetable.exceptions:
             exceptions[(e.date, e.period_id, e.activity)] = e
         uid_suffix = '%s@%s' % (getPath(timetable), socket.getfqdn())
-        cal = Calendar()
+        events = []
         day_id_gen = self._dayGenerator()
 
         for date in schoolday_model:
@@ -771,10 +773,10 @@ class BaseTimetableModel(Persistent):
                                     dt, period.duration, activity.title,
                                     unique_id=uid,
                                     period_id=period.title, activity=activity)
-                        cal.addEvent(event)
+                        events.append(event)
                     elif exception.replacement is not None:
-                        cal.addEvent(exception.replacement)
-        return cal
+                        events.append(exception.replacement)
+        return ImmutableCalendar(events)
 
     def _periodsInDay(self, schoolday_model, timetable, day, day_id_gen=None):
         """Return a timetable day_id and a list of periods for a given day.
@@ -958,9 +960,6 @@ class TimetabledMixin:
 
     def _sources(self):
         sources = list(self.timetableSource)
-        for facet in FacetManager(self).iterFacets():
-            if ICompositeTimetableProvider.providedBy(facet):
-                sources += facet.timetableSource
         return sources
 
     def getCompositeTimetable(self, period_id, schema_id):
@@ -1004,10 +1003,10 @@ class TimetabledMixin:
 
     def makeTimetableCalendar(self):
         events = []
-        timePeriodService = getTermService(self)
-        for period_id, schema_id in self.listCompositeTimetables():
-            schoolday_model = timePeriodService[period_id]
-            tt = self.getCompositeTimetable(period_id, schema_id)
+        terms = getSchoolToolApplication().terms
+        for term_id, schema_id in self.listCompositeTimetables():
+            schoolday_model = terms[term_id]
+            tt = self.getCompositeTimetable(term_id, schema_id)
             cal = tt.model.createCalendar(schoolday_model, tt)
             events += list(cal)
         result = ImmutableCalendar(events)

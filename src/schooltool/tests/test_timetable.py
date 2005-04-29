@@ -30,11 +30,13 @@ from datetime import date, time, timedelta, datetime
 from pytz import UTC
 
 from persistent import Persistent
+from zope.app.testing import setup
 from zope.interface.verify import verifyObject
 from zope.interface import implements, directlyProvides
 from zope.app.traversing.api import getPath
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.testing import ztapi
+from zope.app.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.tests.helpers import diff, sorted
 from schoolbell.app.rest.tests.utils import NiceDiffsMixin, EqualsSortedMixin
@@ -959,6 +961,13 @@ class TermCalendarStub:
         return date(2003, 11, 20) <= day <= date(2003, 11, 26)
 
 
+class TimetablePhysicallyLocatableAdapterStub:
+    def __init__(self, tt):
+        self.tt = tt
+    def getPath(self):
+        return '/tt/%s' % id(self.tt)
+
+
 class BaseTestTimetableModel:
 
     def extractCalendarEvents(self, cal, daterange):
@@ -985,13 +994,8 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         from schooltool.interfaces import ITimetable
         PlacelessSetup.setUp(self)
 
-        class TTPLAdapter:
-            def __init__(self, tt):
-                self.tt = tt
-            def getPath(self):
-                return '/tt/%s' % id(self.tt)
-
-        ztapi.provideAdapter(ITimetable, IPhysicallyLocatable, TTPLAdapter)
+        ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
+                             TimetablePhysicallyLocatableAdapterStub)
 
     def test_interface(self):
         from schooltool.timetable import SequentialDaysTimetableModel
@@ -1076,7 +1080,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         # in it (including unique calendar event IDs) must not change
         # if it is regenerated.
         cal2 = model.createCalendar(schooldays, tt)
-        self.assertEquals(cal.events, cal2.events)
+        self.assertEquals(list(cal), list(cal2))
 
         result = self.extractCalendarEvents(cal, schooldays)
 
@@ -1129,14 +1133,9 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         from zope.app.traversing.interfaces import IPhysicallyLocatable
         from schooltool.interfaces import ITimetable
         PlacelessSetup.setUp(self)
+        ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
+                             TimetablePhysicallyLocatableAdapterStub)
 
-        class TTPLAdapter:
-            def __init__(self, tt):
-                self.tt = tt
-            def getPath(self):
-                return '/tt/%s' % id(self.tt)
-
-        ztapi.provideAdapter(ITimetable, IPhysicallyLocatable, TTPLAdapter)
     def test(self):
         from schooltool.timetable import WeeklyTimetableModel
         from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
@@ -1247,8 +1246,7 @@ class TimetabledStub(TimetabledMixin):
     members = RelationshipProperty(URIMembership, URIGroup, URIMember)
     groups = RelationshipProperty(URIMembership, URIGroup, URIMember)
 
-    def __init__(self, parent=None):
-        TimetabledMixin.__init__(self)
+    implements(IAttributeAnnotatable)
 
 
 class PersistentLocatableStub(Persistent):
@@ -1335,6 +1333,22 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
 
 class TestTimetabledMixin(NiceDiffsMixin, unittest.TestCase,
                           EqualsSortedMixin):
+
+    def setUp(self):
+        from schoolbell.relationship.tests import setUpRelationships
+        from zope.app.traversing.interfaces import IPhysicallyLocatable
+        from schooltool.interfaces import ITimetable
+        from schooltool.timetable import TimetablePhysicallyLocatable
+
+        self.site = setup.placefulSetUp(True)
+        setup.setUpAnnotations()
+        setUpRelationships()
+
+        ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
+                             TimetablePhysicallyLocatable)
+
+    def tearDown(self):
+        setup.placefulTearDown()
 
     def test_interface(self):
         from schooltool.interfaces import ITimetabled
@@ -1435,42 +1449,10 @@ class TestTimetabledMixin(NiceDiffsMixin, unittest.TestCase,
         self.assertEqual(tm.listCompositeTimetables(),
                          Set([("2003 fall", "sequential")]))
 
-    def test_getCompositeTable_facets(self):
-        from schooltool.timetable import TimetableActivity
-        from schooltool.component import FacetManager
-        from schooltool.interfaces import IFacet, ICompositeTimetableProvider
-        from schooltool.teaching import Teaching
-        from schooltool.uris import URITaught
-        import schooltool.relationship
-
-        schooltool.relationship.setUp()
-
-        class TeacherFacet(Persistent):
-            implements(IFacet, ICompositeTimetableProvider)
-            __parent__ = None
-            __name__ = None
-            active = False
-            owner = None
-            timetableSource = ((URITaught, False), )
-
-        teacher = TimetabledStub()
-        taught = TimetabledStub()
-        Teaching(teacher=teacher, taught=taught)
-
-        facets = FacetManager(teacher)
-        facets.setFacet(TeacherFacet())
-
-        tt = self.newTimetable()
-        taught.timetables['2003 fall', 'sequential'] = tt
-        stuff = TimetableActivity("Stuff")
-        tt["A"].add("Green", stuff)
-
-        result = teacher.getCompositeTimetable('2003 fall', 'sequential')
-        self.assertEqual(result, tt)
-
     def test_paths(self):
         tm = TimetabledStub()
         tm.__name__ = 'stub'
+        tm.__parent__ = self.site
         tt = tm.timetables["2003-fall", "sequential"] = self.newTimetable()
         tt1 = tm.getCompositeTimetable("2003-fall", "sequential")
 
@@ -1480,15 +1462,20 @@ class TestTimetabledMixin(NiceDiffsMixin, unittest.TestCase,
                          '/stub/composite-timetables/2003-fall/sequential')
 
     def test_makeTimetableCalendar(self):
-        from schooltool.timetable import TimetableActivity
+        from schooltool.timetable import TimetableActivity, Timetable
         from schoolbell.app.cal import Calendar, CalendarEvent
-        tps = self.serviceManager.timePeriodService = {}
-        sms = tps['2003 fall'] = TermCalendarStub()
-        tss = self.serviceManager.timetableSchemaService = {}
-        tss['sequential'] = None
-        tss['other'] = None
-        tss['and another'] = None
-        tm = TimetabledStub(self.serviceManager)
+        from schooltool.app import SchoolToolApplication
+        from zope.app.component.site import LocalSiteManager
+        from zope.app.component.hooks import setSite
+        app = SchoolToolApplication()
+        app.setSiteManager(LocalSiteManager(app))
+        setSite(app)
+        sms = app.terms['2003 fall'] = TermCalendarStub()
+        tss = app.timetableSchemaService
+        tss['sequential'] = self.newTimetable()
+        tss['other'] = self.newTimetable()
+        tss['and another'] = self.newTimetable()
+        tm = TimetabledStub()
 
         tt1 = self.newTimetable()
         tt1["A"].add("Green", TimetableActivity("AG"))
@@ -1695,8 +1682,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableDict))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaService))
     suite.addTest(unittest.makeSuite(TestTermService))
-    # XXX: these tests depend on more infrastructure, disabling for now
-    #suite.addTest(unittest.makeSuite(TestTimetabledMixin))
+    suite.addTest(unittest.makeSuite(TestTimetabledMixin))
     suite.addTest(unittest.makeSuite(TestGetPeriodsForDay))
     return suite
 
