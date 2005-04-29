@@ -537,10 +537,10 @@ class CalendarViewBase(BrowserView):
                 if (removeSecurityProxy(event.__parent__) is removeSecurityProxy(self.context) and
                     calendar is not self.context) or event.allday:
                     # Skip resource booking events (coming from
-                    # overlayed calendars) if they were booked by The
+                    # overlayed calendars) if they were booked by the
                     # person whose calendar we are viewing.
                     # removeSecurityProxy(event.__parent__) and
-                    # removeSecurityProxy(self.context), needed so we
+                    # removeSecurityProxy(self.context) are needed so we
                     # could compare them.
                     continue
                 yield EventForDisplay(event, color1, color2, calendar,
@@ -560,6 +560,7 @@ class CalendarViewBase(BrowserView):
                        tzinfo=self.timezone)
         for calendar, color1, color2 in self.getCalendars():
             for event in calendar.expand(start, end):
+                # XXX removeSecurityProxy needed here
                 if event.__parent__ is self.context and calendar is not \
                         self.context or not event.allday:
                     continue
@@ -1867,6 +1868,7 @@ def datesParser(raw_dates):
 
 
 def enableVfbView(ical_view):
+    """XXX wanna docstring!"""
     return IReadFile(ical_view.context)
 
 
