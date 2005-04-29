@@ -1,0 +1,107 @@
+Functional tests for SchoolTool app RESTive views
+=================================================
+
+First of all, we will need a schooltool instance.  We will add it via
+the web ZMI:
+
+    >>> print http("""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... type_name=BrowserAdd__schooltool.app.SchoolToolApplication&\
+    ... new_value=frogpond""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+Also, we need the REST HTTP caller:
+
+    >>> from schoolbell.app.rest.ftests import rest
+
+Now, we can run the REST page tests:
+
+    >>> print rest("""
+    ... GET /frogpond HTTP/1.1
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
+      <message>Welcome to the SchoolTool server</message>
+      <containers>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/persons"
+                   xlink:title="persons"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/groups"
+                   xlink:title="groups"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/resources"
+                   xlink:title="resources"/>
+      </containers>
+    </schooltool>
+    <BLANKLINE>
+
+There are no groups at the moment:
+
+    >>> print rest("""
+    ... GET /frogpond/groups/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: 597
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>groups</name>
+      <items>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/groups/courses"
+              xlink:title="courses"/>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/groups/learners"
+              xlink:title="learners"/>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/groups/staff"
+              xlink:title="staff"/>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/groups/acl"/>
+    </container>
+    <BLANKLINE>
+
+no resources:
+
+    >>> print rest("""
+    ... GET /frogpond/resources/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>resources</name>
+      <items>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/resources/acl"/>
+    </container>
+    <BLANKLINE>
+
+and no persons:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>persons</name>
+      <items>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/persons/acl"/>
+    </container>
+    <BLANKLINE>
