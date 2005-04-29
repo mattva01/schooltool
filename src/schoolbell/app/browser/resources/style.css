@@ -300,7 +300,7 @@ a.button-ok {
     margin: 0;
     border-top: 1px #314e6c solid;
     border-bottom: 1px #314e6c solid;
-    color: #fff;
+    color: #fff !important;
 }
 
 #column-left .portlet .controls {
