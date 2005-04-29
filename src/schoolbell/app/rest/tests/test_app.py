@@ -108,7 +108,7 @@ class TestAppView(XMLCompareMixin, unittest.TestCase):
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result, """
             <schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
-              <message>Welcome to the SchoolTool server</message>
+              <message>Welcome to the SchoolBell server</message>
               <containers>
                 <container xlink:type="simple"
                            xlink:href="http://127.0.0.1/persons"
