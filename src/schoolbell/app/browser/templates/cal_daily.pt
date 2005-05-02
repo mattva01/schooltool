@@ -9,7 +9,7 @@
       tal:attributes="style string:border: 1px ${allday/color2} solid;;
                       background: ${allday/color1};;">
       <h6>
-        <a tal:attributes="href string:${allday/@@absolute_url}/edit.html?date=${evdate};
+        <a tal:attributes="href allday/@@absolute_url;
           title allday/description" tal:content="allday/title"/>
       </h6>
           <a title="" i18n:attributes="title" class="delete"
@@ -71,7 +71,7 @@
                              top: ${top}em;
                              class python:mine and 'event' or 'event other'">
           <h6 tal:attributes="style string:background: ${ev/color2}">
-            <a tal:attributes="href string:${ev/@@absolute_url}/edit.html?date=${evdate};
+            <a tal:attributes="href ev/@@absolute_url;
                                title ev/title">
               <span tal:replace="ev/shortTitle" />
               <span class="start-end">
