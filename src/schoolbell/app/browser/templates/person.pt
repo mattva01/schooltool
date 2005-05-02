@@ -6,29 +6,27 @@
   </metal:block>
 
   <metal:block fill-slot="content-header">
-    <h1 i18n:translate="">
-      <span tal:replace="context/title" i18n:name="title"/>
-    </h1>
+
+    <tal:if condition="context/photo">
+      <img width="48px" src="photo" class="person-photo"
+           tal:attributes="src string:${context/@@absolute_url}/photo" />
+    </tal:if>
+    <h1 tal:content="context/title" />
+    <strong i18n:translate="">Username:</strong>
+    <span tal:replace="context/zope:name">not_doe</span>
+
   </metal:block>
 
   <metal:block metal:fill-slot="body">
 
     <div class="person-info">
-      <tal:if condition="context/photo">
-        <img src="photo" class="person-photo"
-          tal:attributes="src string:${context/@@absolute_url}/photo" />
-      </tal:if>
-
       <div class="person-details">
-        <strong i18n:translate="">Username:</strong>
-        <span tal:replace="context/zope:name">not_doe</span>
         <metal:block use-macro="view/@@standard_macros/person-details" />
-
       </div>
 
       <div class="person-groups"
         tal:define="groups context/groups/sortby:title">
-        <h3 i18n:translate="">Groups</h3>
+        <strong i18n:translate="">Groups</strong>
         <ul>
           <tal:loop repeat="group groups">
             <li>
