@@ -14,8 +14,7 @@ PYTHONPATH=src:Zope3/src
 all: build
 
 build: build-translations
-	$(PYTHON) setup.py schoolbell build_ext -i
-	$(PYTHON) setup.py schooltool build_ext -i
+	$(PYTHON) setup.py build_ext -i
 	cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) remove-stale-bytecode.py
 
@@ -30,44 +29,24 @@ realclean: clean
 	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;
 	rm -f Data.fs* *.csv tags ID *.log
 	rm -f scripts/import-sampleschool
-	rm -f MANIFEST.schoolbell
 	rm -f MANIFEST.schooltool
 	rm -rf dist
 
 test: build
-	LC_ALL="C" $(PYTHON) test.py $(TESTFLAGS) schooltool
+	$(PYTHON) test.py $(TESTFLAGS) -s src/schooltool
 
 testall: build
-	LC_ALL="C" $(PYTHON) test.py $(TESTFLAGS)
+	$(PYTHON) test.py $(TESTFLAGS)
 
 ftest: build
-	@LC_ALL="C" $(PYTHON) schooltool-server.py -c test.conf -d \
-	&& ($(PYTHON) test.py -f $(TESTFLAGS) ; \
-	kill `cat testserver.pid`)
+	$(PYTHON) test.py $(TESTFLAGS) -s src/schooltool -f
 
 run: build
 	$(PYTHON) schooltool-server.py
 
-runtestserver: build
-	LC_ALL="C" $(PYTHON) schooltool-server.py -c test.conf
-
-runclient: build
-	$(PYTHON) schooltool-client.py
-
-runwxclient: build
-	$(PYTHON) wxschooltool.py
-
-sampledata persons.csv groups.csv resources.csv timetable.csv roster.txt:
-	$(PYTHON) generate-sampleschool.py
-
-sampleschool: build persons.csv groups.csv resources.csv timetable.csv roster.txt
-	@$(PYTHON) schooltool-server.py -d && \
-	($(PYTHON) import-sampleschool.py ; \
-	 kill `cat schooltool.pid`)
-
 coverage: build
 	rm -rf coverage
-	LC_ALL="C" $(PYTHON) test.py $(TESTFLAGS) --coverage schooltool
+	$(PYTHON) test.py $(TESTFLAGS) --coverage -s src/schooltool
 
 coverage-report:
 	@cd coverage && ls schooltool* | grep -v tests | xargs grep -c '^>>>>>>' | grep -v ':0$$'
@@ -91,12 +70,6 @@ schooltooldist: realclean build extract-translations \
 	rm -rf dist
 	fakeroot ./debian/rules clean
 	./setup.py schooltool sdist --formats=gztar,zip
-
-.PHONY: schoolbelldist
-schoolbelldist: realclean build extract-translations clean
-	rm -rf dist
-	fakeroot ./debian/rules clean
-	./setup.py schoolbell sdist --formats=gztar,zip
 
 .PHONY: signtar
 signtar: dist
