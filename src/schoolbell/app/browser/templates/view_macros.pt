@@ -351,14 +351,18 @@
 
   <div tal:condition="view/details/primary_email">
     <strong i18n:translate="">Primary email:</strong>
-    <a href="string:mailto:${view/details/primary_email}"
-       tal:content="view/details/primary_email" />
+    <a href="" title="Click to launch email client."
+       tal:attributes="href string:mailto:${view/details/primary_email}"
+       tal:content="view/details/primary_email"
+       i18n:attributes="title" />
   </div>
 
   <div tal:condition="view/details/secondary_email|nothing">
     <strong i18n:translate="">Secondary email:</strong>
-    <a href="string:mailto:${view/details/secondary_email}"
-       tal:content="view/details/secondary_email" />
+    <a href="" title="Click to launch email client."
+       tal:attributes="href string:mailto:${view/details/secondary_email}"
+       tal:content="view/details/secondary_email"
+       i18n:attributes="title" />
   </div>
 
   <div tal:condition="view/details/primary_phone">

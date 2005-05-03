@@ -305,39 +305,31 @@ class IPersonDetails(Interface, ILocation):
         description=u"A short nickname for this person.")
 
     primary_email = TextLine(
-        title=u"Primary Email Address",
-        required=False,
-        description=u"Email address.")
+        title=u"Primary Email",
+        required=False)
 
     secondary_email = TextLine(
-        title=u"Secondary Email Address",
-        required=False,
-        description=u"Email address.")
+        title=u"Secondary Email",
+        required=False)
 
     primary_phone = TextLine(
-        title=u"Primary phone number",
+        title=u"Primary phone",
         required=False,
-        description=u"Phone number.")
+        description=u"Recommended telephone number.")
 
     secondary_phone = TextLine(
-        title=u"Secondary phone number",
+        title=u"Secondary phone",
         required=False,
-        description=u"Phone number.")
-
-    secondary_phone = TextLine(
-        title=u"Secondary phone number",
-        required=False,
-        description=u"Phone number.")
-
-    mailing_address = Text(
-        title=u"Mailing address",
-        required=False,
-        description=u"Mailing address.")
+        description=u"Secondary telephone number.")
 
     home_page = TextLine(
         title=u"Website",
         required=False,
         description=u"Website or weblog.")
+
+    mailing_address = Text(
+        title=u"Mailing address",
+        required=False)
 
 
 class IGroup(ICalendarOwner):
