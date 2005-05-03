@@ -10,11 +10,18 @@
       factory="schoolbell.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
+  <subscriber
+      for="schooltool.interfaces.ITimetabled"
+      provides="schooltool.interfaces.ITimetableSource"
+      factory="schooltool.timetable.MembershipTimetableSource"
+      permission="zope.Public"
+      />
+
   <!-- Events -->
 
   <subscriber
-    for="schoolbell.relationship.interfaces.IBeforeRelationshipEvent"
-    handler=".uris.enforceInstructionConstraints"
+      for="schoolbell.relationship.interfaces.IBeforeRelationshipEvent"
+      handler=".uris.enforceInstructionConstraints"
     />
 
   <!-- Content -->

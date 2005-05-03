@@ -1338,8 +1338,10 @@ class TestTimetabledMixin(NiceDiffsMixin, unittest.TestCase,
     def setUp(self):
         from schoolbell.relationship.tests import setUpRelationships
         from zope.app.traversing.interfaces import IPhysicallyLocatable
-        from schooltool.interfaces import ITimetable
+        from schooltool.interfaces import ITimetable, ITimetabled
+        from schooltool.interfaces import ITimetableSource
         from schooltool.timetable import TimetablePhysicallyLocatable
+        from schooltool.timetable import MembershipTimetableSource
 
         self.site = setup.placefulSetUp(True)
         setup.setUpAnnotations()
@@ -1347,6 +1349,10 @@ class TestTimetabledMixin(NiceDiffsMixin, unittest.TestCase,
 
         ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
                              TimetablePhysicallyLocatable)
+
+        ztapi.subscribe((ITimetabled, ), ITimetableSource,
+                        MembershipTimetableSource)
+
 
     def tearDown(self):
         setup.placefulTearDown()
@@ -1406,12 +1412,6 @@ class TestTimetabledMixin(NiceDiffsMixin, unittest.TestCase,
         parent.getCompositeTimetable = newComposite
         parent.listCompositeTimetables = listComposites
 
-        tm.timetableSource = ((URIGroup, False), )
-        result = tm.getCompositeTimetable("2003 fall", "sequential")
-        self.assert_(result is None)
-        self.assertEqual(tm.listCompositeTimetables(), Set())
-
-        tm.timetableSource = ((URIGroup, True), )
         result = tm.getCompositeTimetable("2003 fall", "sequential")
         self.assertEqual(result, composite)
         self.assert_(result is not composite)
@@ -1429,24 +1429,6 @@ class TestTimetabledMixin(NiceDiffsMixin, unittest.TestCase,
         expected.update(composite)
         expected.update(private)
         self.assertEqual(result, expected)
-        self.assertEqual(tm.listCompositeTimetables(),
-                         Set([("2003 fall", "sequential")]))
-
-        # Now test things with a table which says (URIGroup, False)
-        tm.timetableSource = ((URIGroup, False), )
-
-        parent_private = self.newTimetable()
-        french = TimetableActivity("French")
-        parent_private["A"].add("Green", french)
-        parent.timetables["2003 fall", "sequential"] = parent_private
-
-        result = tm.getCompositeTimetable("2003 fall", "sequential")
-        expected = composite.cloneEmpty()
-        expected.update(private)
-        expected.update(parent_private)
-        self.assertEqual(result, expected)
-        self.assertEqual(Set(result["B"]["Blue"]), Set([math]))
-        self.assertEqual(Set(result["A"]["Green"]), Set([french]))
         self.assertEqual(tm.listCompositeTimetables(),
                          Set([("2003 fall", "sequential")]))
 
@@ -1512,6 +1494,116 @@ class TestTimetabledMixin(NiceDiffsMixin, unittest.TestCase,
         cal = tm.makeTimetableCalendar()
         self.assertEqualSorted(list(cal), list(cal1) + list(cal2))
         self.assert_(cal.__parent__ is tm)
+
+
+class TestMembershipTimetableSource(unittest.TestCase):
+
+    def setUp(self):
+        from schoolbell.relationship.tests import setUpRelationships
+        from zope.app.traversing.interfaces import IPhysicallyLocatable
+        from schooltool.interfaces import ITimetable
+        from schooltool.timetable import TimetablePhysicallyLocatable
+
+        self.site = setup.placefulSetUp(True)
+        setup.setUpAnnotations()
+        setUpRelationships()
+
+        ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
+                             TimetablePhysicallyLocatable)
+
+    def tearDown(self):
+        setup.placefulTearDown()
+
+    def test(self):
+        from schooltool.timetable import MembershipTimetableSource
+        from schooltool.interfaces import ITimetableSource
+        context = TimetabledStub()
+        adapter = MembershipTimetableSource(context)
+        verifyObject(ITimetableSource, adapter)
+
+    def newTimetable(self):
+        from schooltool.timetable import Timetable, TimetableDay
+        tt = Timetable(("A", "B"))
+        tt["A"] = TimetableDay(["Green", "Blue"])
+        tt["B"] = TimetableDay(["Green", "Blue"])
+        return tt
+
+    def test_getTimetable(self):
+        from schooltool.timetable import TimetableActivity
+        from schoolbell.app.membership import Membership
+
+        tm = TimetabledStub()
+        parent = TimetabledStub()
+        Membership(group=parent, member=tm)
+
+        composite = self.newTimetable()
+        english = TimetableActivity("English")
+        composite["A"].add("Green", english)
+
+        def newComposite(term_id, schema_id):
+            if (term_id, schema_id) == ("2003 fall", "sequential"):
+                return composite
+            else:
+                return None
+
+        parent.getCompositeTimetable = newComposite
+        parent.listCompositeTimetables = (
+            lambda: Set([("2003 fall", "sequential")]))
+
+        from schooltool.timetable import MembershipTimetableSource
+        adapter = MembershipTimetableSource(tm)
+        result = adapter.getTimetable("2003 fall", "sequential")
+        self.assertEqual(result, composite)
+
+        # nonexising
+        result = adapter.getTimetable("2005 fall", "sequential")
+        self.assertEqual(result, None)
+
+        # let's try it with two timetables
+        otherparent = TimetabledStub()
+        Membership(group=otherparent, member=tm)
+
+        othertt = self.newTimetable()
+        math = TimetableActivity("Math")
+        othertt["A"].add("Blue", math)
+
+        otherparent.getCompositeTimetable = lambda x ,y: othertt
+
+        expected = composite.cloneEmpty()
+        expected.update(composite)
+        expected.update(othertt)
+
+        result = adapter.getTimetable("2003 fall", "sequential")
+        self.assertEqual(result, expected)
+
+    def test_listTimetables(self):
+        from schooltool.timetable import TimetableActivity
+        from schoolbell.app.membership import Membership
+        from schooltool.timetable import MembershipTimetableSource
+
+        tm = TimetabledStub()
+
+        adapter = MembershipTimetableSource(tm)
+        self.assertEqual(adapter.listTimetables(), Set())
+
+        parent = TimetabledStub()
+        Membership(group=parent, member=tm)
+
+        parent.listCompositeTimetables = (
+            lambda: Set([("2003 fall", "sequential")]))
+
+        self.assertEqual(adapter.listTimetables(),
+                         Set([("2003 fall", "sequential")]))
+
+        otherparent = TimetabledStub()
+        Membership(group=otherparent, member=tm)
+
+        otherparent.listCompositeTimetables = (
+            lambda: Set([("2005 fall", "sequential")]))
+
+        self.assertEqual(adapter.listTimetables(),
+                         Set([("2003 fall", "sequential"),
+                              ("2005 fall", "sequential")]))
 
 
 class TestTimetableSchemaService(unittest.TestCase):
@@ -1677,6 +1769,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableSchemaService))
     suite.addTest(unittest.makeSuite(TestTermService))
     suite.addTest(unittest.makeSuite(TestTimetabledMixin))
+    suite.addTest(unittest.makeSuite(TestMembershipTimetableSource))
     suite.addTest(unittest.makeSuite(TestGetPeriodsForDay))
     return suite
 

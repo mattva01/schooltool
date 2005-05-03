@@ -629,26 +629,6 @@ class IExceptionalTTCalendarEvent(ICalendarEvent):
         schema=ITimetableException)
 
 
-class ICompositeTimetableProvider(Interface):
-    """An object which knows how to get the timetables for composition
-    """
-
-    timetableSource = List(
-        title=u"Timetable source",
-        description=u"""
-        A specification of how the timetables of related object
-        should be composed together to provide a composed timetable of
-        this object.
-
-        Actually it is a sequence of tuples with the following members:
-
-               link_role    The role URI of a link to traverse
-               composed     A boolean value specifying whether to use
-                            the composed timetable, otherwise private.
-        """,
-        value_type=Tuple())
-
-
 class ITimetabled(Interface):
     """A facet or an object that has a timetable related to it --
     either its own, or composed of the timetables of related objects.
@@ -674,7 +654,7 @@ class ITimetabled(Interface):
         getCompositeTimetable).
         """)
 
-    def getCompositeTimetable(time_period_id, tt_schema_id):
+    def getCompositeTimetable(term_id, tt_schema_id):
         """Return a composite timetable for a given object with a
         given timetable schema for a given time period id.
 
@@ -691,6 +671,28 @@ class ITimetabled(Interface):
 
     def makeTimetableCalendar():
         """Generate and return a calendar from all composite timetables."""
+
+
+class ITimetableSource(Interface):
+    """Timetable source.
+
+    A subscription adapter that contributes a timetable to the
+    composite timetable of the context.
+    """
+
+    def getTimetable(term_id, schema_id):
+        """Return a timetable to be merged to the composite timetable
+        of the context.
+
+        Can return None if this adapter can not contribute to the
+        timetable of this object.
+        """
+
+    def listTimetables():
+        """Return a sequence of timetable keys for which getTimetable
+        would return not a None.
+        """
+
 
 
 class ITimetableReplacedEvent(Interface):

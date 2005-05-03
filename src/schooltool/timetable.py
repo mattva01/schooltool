@@ -50,9 +50,9 @@ Objects that have timetables
 
 An object that has (or may have) timetables implements ITimettabled.
 
-An object's composite timetable is derived by combining the object's timetable
-with composite timetables of other objects, usually inherited through
-relationships.  See also ICompositeTimetableProvider.
+An object's composite timetable is derived by combining the object's
+timetable with composite timetables of other objects, acquired by
+calling subscribers of ITimetableSource interface.
 
 Timetables
 ----------
@@ -150,7 +150,8 @@ from persistent.list import PersistentList
 from persistent.dict import PersistentDict
 import zope.event
 from zope.interface import implements, moduleProvides, classProvides
-from zope.interface import directlyProvides, implements, moduleProvides
+from zope.interface import directlyProvides
+from zope.app import zapi
 from zope.app.traversing.api import getPath
 from zope.app.location.traversing import LocationPhysicallyLocatable
 from zope.component import provideAdapter, adapts
@@ -177,13 +178,14 @@ from schooltool.interfaces import ISchooldayPeriod
 from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
 from schooltool.interfaces import ITimetableModel
 from schooltool.interfaces import ITimetableModelFactory
-from schooltool.interfaces import ITimetabled, ICompositeTimetableProvider
+from schooltool.interfaces import ITimetabled
 from schooltool.interfaces import ITimetableSchemaService
 from schooltool.interfaces import ITermService
 from schooltool.interfaces import ILocation
 from schooltool.interfaces import Unchanged
 from schooltool.interfaces import IDateRange
 from schooltool.interfaces import ITermCalendarWrite, ITermCalendar
+from schooltool.interfaces import ITimetableSource
 from schooltool import getSchoolToolApplication
 
 __metaclass__ = type
@@ -951,28 +953,22 @@ class TimetabledMixin:
     ICompositeTimetableProvider facets.
     """
 
-    implements(ITimetabled, ICompositeTimetableProvider)
-
-    timetableSource = ((URIGroup, True), )
+    implements(ITimetabled)
 
     def __init__(self):
         self.timetables = TimetableDict()
         self.timetables.__parent__ = self
 
-    def _sources(self):
-        sources = list(self.timetableSource)
-        return sources
-
     def getCompositeTimetable(self, period_id, schema_id):
         timetables = []
-        for role, composite in self._sources():
-            for related in getRelatedObjects(self, role):
-                if composite:
-                    tt = related.getCompositeTimetable(period_id, schema_id)
-                else:
-                    tt = related.timetables.get((period_id, schema_id))
-                if tt is not None:
-                    timetables.append(tt)
+
+        # Get the timetables from timetable source subscription adapters
+        for adapter in zapi.subscribers((self, ), ITimetableSource):
+            tt = adapter.getTimetable(period_id, schema_id)
+            if tt is not None:
+                timetables.append(tt)
+
+        # Add the individual timetable to the composite
         try:
             timetables.append(self.timetables[period_id, schema_id])
         except KeyError:
@@ -981,6 +977,7 @@ class TimetabledMixin:
         if not timetables:
             return None
 
+        # Aggregate results
         result = timetables[0].cloneEmpty()
         for tt in timetables:
             result.update(tt)
@@ -994,12 +991,8 @@ class TimetabledMixin:
 
     def listCompositeTimetables(self):
         keys = Set(self.timetables.keys())
-        for role, composite in self._sources():
-            for related in getRelatedObjects(self, role):
-                if composite:
-                    keys |= related.listCompositeTimetables()
-                else:
-                    keys.update(related.timetables.keys())
+        for adapter in zapi.subscribers((self, ), ITimetableSource):
+            keys |= adapter.listTimetables()
         return keys
 
     def makeTimetableCalendar(self):
@@ -1020,6 +1013,39 @@ class TimetabledMixin:
         result.__parent__ = self
         result.__name__ = 'timetable-calendar'
         return result
+
+
+class MembershipTimetableSource(object):
+    """A subscription adapter that adds the group timetables to the members'
+    composite timetables.
+    """
+
+    implements(ITimetableSource)
+
+    def __init__(self, context):
+        self.context = context
+
+    def getTimetable(self, term, schema):
+        timetables = []
+        for obj in getRelatedObjects(self.context, URIGroup):
+            tt = obj.getCompositeTimetable(term, schema)
+            if tt is not None:
+                timetables.append(tt)
+
+        if not timetables:
+            return None
+
+        result = timetables[0].cloneEmpty()
+        for tt in timetables:
+            result.update(tt)
+
+        return result
+
+    def listTimetables(self):
+        keys = Set()
+        for obj in getRelatedObjects(self.context, URIGroup):
+            keys.update(obj.listCompositeTimetables())
+        return keys
 
 
 class TimetableSchemaService(Persistent):
