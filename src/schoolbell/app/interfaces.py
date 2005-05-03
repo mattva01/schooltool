@@ -301,6 +301,7 @@ class IPersonPreferences(Interface):
                                ("YYYY-DD-MM", _("YYYY-DD-MM")),
                                ("Day Month, Year", _("Day Month, Year"))]))
 
+    # SUNDAY and MONDAY are integers, 6 and 0 respectivley
     weekstart = Choice(
         title=_("Week starts on:"),
         description=_("Start display of weeks on Sunday or Monday"),
