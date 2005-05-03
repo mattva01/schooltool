@@ -3,7 +3,7 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
-<!-- Skin and resources -->
+  <!-- Skin and resources -->
 
   <zope:subscriber
       handler=".skin.schoolToolTraverseSubscriber"
@@ -12,12 +12,13 @@
 
   <layer
       name="SchoolToolLayer"
-      interface=".skin.ISchoolToolLayer" />
+      interface=".skin.ISchoolToolLayer"
+      />
 
   <skin
       name="SchoolTool"
       interface=".skin.ISchoolToolSkin"
-   />
+      />
 
   <resource name="logo.png" file="resources/schooltool.png"
             layer=".skin.ISchoolToolLayer" />
@@ -57,11 +58,11 @@
   </addform>
 
   <menuItem
-    menu="schoolbell_actions"
-    title="New Course"
-    for="schoolbell.app.interfaces.IGroupContainer"
-    action="+/addSchoolBellCourse.html"
-    />
+      menu="schoolbell_actions"
+      title="New Course"
+      for="schoolbell.app.interfaces.IGroupContainer"
+      action="+/addSchoolBellCourse.html"
+      />
 
   <page
       name="index.html"
