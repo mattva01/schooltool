@@ -1,5 +1,5 @@
-Functional doctest for schooltool
-=====================================
+Functional doctest for SchoolTool
+=================================
 
 This is a functional doctest for schooltool.  To find out more about
 functional doctests, read Zope3/src/zope/app/ftests/doctest.txt
@@ -93,3 +93,9 @@ The daily view should be the default for a persons calendar:
     HTTP/1.1 200 Ok
     ...
     ...calendar-view-day...
+
+
+Epilogue
+--------
+
+ vim: ft=rest

@@ -1,0 +1,54 @@
+Timetabling in SchoolTool
+=========================
+
+This functional doctest demonstrates and tests SchoolTool's timetables.
+
+
+Overview
+--------
+
+1. Definition of terms
+2. Definition of timetable schemas (TODO)
+3. Usage of timetables (TODO)
+
+
+Prologue
+--------
+
+We will need a SchoolTool instance.  Let's call it 'frogpond'.
+
+    >>> print http(r"""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... type_name=BrowserAdd__schooltool.app.SchoolToolApplication&new_value=frogpond""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+
+Terms
+-----
+
+
+    >>> print http(r"""
+    ... GET /frogpond/terms HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    ...
+    <title>Terms</title>
+    ...
+    <p>There are none.</p>
+    ...
+
+
+Epilogue
+--------
+
+ vim: ft=rest

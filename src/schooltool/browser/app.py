@@ -28,8 +28,11 @@ from zope.app import zapi
 from zope.app.component.hooks import getSite
 from zope.app.form.utility import setUpWidgets, getWidgetsData
 from zope.app.form.interfaces import IInputWidget, WidgetsError
+from zope.app.container.traversal import ContainerTraverser
 from zope.security.proxy import removeSecurityProxy
+from zope.publisher.interfaces.browser import IBrowserPublisher
 
+from schooltool.interfaces import ISchoolToolApplication
 from schoolbell.app.browser.app import GroupView
 
 from schooltool import SchoolToolMessageID as _
@@ -182,3 +185,16 @@ class SectionLearnerView(BrowserView):
             self.request.response.redirect(context_url)
         elif 'CANCEL' in self.request:
             self.request.response.redirect(context_url)
+
+
+class SchoolToolApplicationTraverser(ContainerTraverser):
+    """URL traverser for ISchoolBellApplication"""
+
+    __used_for__ = ISchoolToolApplication
+
+    def publishTraverse(self, request, name):
+        if name == 'terms':
+            return self.context.terms
+        else:
+            return ContainerTraverser.publishTraverse(self, request, name)
+
