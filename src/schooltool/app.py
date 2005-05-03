@@ -25,10 +25,13 @@ $Id$
 import os.path
 import gettext
 import locale
-import locale
 
+from persistent import Persistent
+from persistent.dict import PersistentDict
 from zope.interface import implements
 from zope.app.container.sample import SampleContainer
+from zope.app.site.servicecontainer import SiteManagerContainer
+from zope.app.annotation.interfaces import IAttributeAnnotatable
 
 from schoolbell.relationship import RelationshipProperty
 from schoolbell.app.app import SchoolBellApplication
@@ -51,23 +54,25 @@ catalog = gettext.translation('schooltool', localedir, fallback=True)
 _ = lambda us: catalog.ugettext(us)
 
 
-class SchoolToolApplication(SchoolBellApplication):
+class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
     """The main SchoolTool application object"""
 
-    implements(ISchoolToolApplication)
+    implements(ISchoolToolApplication, IAttributeAnnotatable)
 
     def __init__(self):
         SampleContainer.__init__(self)
         self['persons'] = PersonContainer()
         self['groups'] = groups = SchoolToolGroupContainer()
         self['resources'] = ResourceContainer()
-        # XXX Do we want to localize the container names?
         groups['staff'] = Group('staff', _('Staff'))
         groups['learners'] = Group('learners', _('Learners'))
         groups['courses'] = Group('courses', _('Courses currently offered'))
 
         self.terms = TermService()
         self.timetableSchemaService = TimetableSchemaService()
+
+    def _newContainerData(self):
+        return PersistentDict()
 
 
 class Course(Group):
