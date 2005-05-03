@@ -61,6 +61,9 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
         groups['courses'] = Group('courses', _('Courses currently offered'))
 
         self.terms = TermService()
+        self.terms.__parent__ = self
+        self.terms.__name__ = 'terms'
+
         self.timetableSchemaService = TimetableSchemaService()
 
     def _newContainerData(self):

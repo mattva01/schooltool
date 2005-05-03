@@ -24,13 +24,12 @@ $Id$
 
 import datetime
 
-from zope.interface import Interface, implements
+from zope.interface import Interface, Attribute, implements
 from zope.app.location.interfaces import ILocation
 from zope.schema.interfaces import IField
 from zope.schema import Field, Object, Int, TextLine, List, Set, Tuple
 from zope.schema import Dict, Date, Timedelta
-
-from zope.interface import Attribute
+from zope.app.container.interfaces import IContainer, IContained
 from zope.app.container.constraints import contains
 
 from schooltool import SchoolToolMessageID as _
@@ -87,7 +86,7 @@ class IDateRange(Interface):
         """Return the number of dates covered by the range."""
 
 
-class ITermCalendar(IDateRange):
+class ITermCalendar(IDateRange, IContained):
     """A calendar which can tell whether a day is a school day or not
     in a certain school term.
     """
@@ -757,26 +756,13 @@ class ITimetableSchemaService(ILocation):
         """Remove a stored schema with a given id."""
 
 
-class ITermService(ILocation):
+class ITermService(IContainer, ILocation):
     """A container for terms.
 
     It stores term calendars for registered term IDs.
     """
 
-    def keys():
-        """Return a sequence of all term ids."""
-
-    def __contains__(term_id):
-        """Return True iff period with this id is defined."""
-
-    def __getitem__(term_id):
-        """Return the term calendar for this term."""
-
-    def __setitem__(term_id, term_calendar):
-        """Store a term calendar for this term."""
-
-    def __delitem__(term_id):
-        """Remove the specified term."""
+    contains(ITermCalendar)
 
 
 #
@@ -821,6 +807,7 @@ class ISchoolToolGroupContainer(IGroupContainer):
 
     contains(IGroup, ICourse, ISection)
 
+
 #
 #  Main application
 #
@@ -828,6 +815,8 @@ class ISchoolToolGroupContainer(IGroupContainer):
 class ISchoolToolApplication(ISchoolBellApplication):
     """The main SchoolTool application object"""
 
-    timetableSchemaService = Attribute("Timetable schemas")
-    terms = Attribute("Terms")
+    timetableSchemaService = Object(title=u"Timetable schemas",
+                                    schema=ITimetableSchemaService)
+
+    terms = Object(title=u"Terms", schema=ITermService)
 

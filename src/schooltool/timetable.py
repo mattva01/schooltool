@@ -150,10 +150,11 @@ from persistent.list import PersistentList
 from persistent.dict import PersistentDict
 import zope.event
 from zope.interface import implements, moduleProvides, classProvides
+from zope.interface import directlyProvides, implements, moduleProvides
 from zope.app.traversing.api import getPath
 from zope.app.location.traversing import LocationPhysicallyLocatable
 from zope.component import provideAdapter, adapts
-from zope.interface import directlyProvides, implements, moduleProvides
+from zope.app.container.btree import BTreeContainer
 
 from schoolbell.app.membership import URIGroup
 from schoolbell.app.cal import CalendarEvent
@@ -1063,31 +1064,9 @@ class TimetableSchemaService(Persistent):
         return self[self.default_id]
 
 
-class TermService(Persistent):
+class TermService(BTreeContainer):
+
     implements(ITermService)
-
-    __parent__ = None
-    __name__ = None
-
-    def __init__(self):
-        self.periods = PersistentDict()
-
-    def keys(self):
-        return self.periods.keys()
-
-    def __contains__(self, period_id):
-        return period_id in self.periods
-
-    def __getitem__(self, period_id):
-        return self.periods[period_id]
-
-    def __setitem__(self, period_id, schoolday_model):
-        self.periods[period_id] = schoolday_model
-        schoolday_model.__parent__ = self
-        schoolday_model.__name__ = period_id
-
-    def __delitem__(self, period_id):
-        del self.periods[period_id]
 
 
 def getTermForDate(date):

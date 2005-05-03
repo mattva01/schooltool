@@ -37,6 +37,7 @@ from zope.app.traversing.api import getPath
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.testing import ztapi
 from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.app.container.contained import Contained
 
 from schooltool.tests.helpers import diff, sorted
 from schoolbell.app.rest.tests.utils import NiceDiffsMixin, EqualsSortedMixin
@@ -925,7 +926,7 @@ class TestSchooldayTemplate(unittest.TestCase):
         self.assert_(not tmpl != tmpl2)
 
 
-class TermCalendarStub:
+class TermCalendarStub(Contained):
 
     implements(ITermCalendar)
 
@@ -1327,7 +1328,7 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
         td['b', 'c'] = PersistentLocatableStub()
         self.clearEvents()
         td.clear()
-        self.assertEquals(td.keys(), [])
+        self.assertEquals(list(td.keys()), [])
         self.assertEquals(len(self.events), 2)
 
 
@@ -1575,23 +1576,16 @@ class TestTermService(unittest.TestCase):
     def test(self):
         from schooltool.timetable import TermService
         service = TermService()
-        self.assertEqual(service.keys(), [])
+        self.assertEqual(list(service.keys()), [])
 
         schooldays = TermCalendarStub()
         service['2003 fall'] = schooldays
-        self.assertEqual(service.keys(), ['2003 fall'])
+        self.assertEqual(list(service.keys()), ['2003 fall'])
         self.assert_('2003 fall' in service)
         self.assert_('2004 spring' not in service)
         self.assert_(service['2003 fall'] is schooldays)
         self.assertEquals(schooldays.__name__, '2003 fall')
         self.assert_(schooldays.__parent__ is service)
-
-        # duplicate registration
-        schooldays2 = TermCalendarStub()
-        service['2003 fall'] = schooldays2
-        self.assertEqual(service.keys(), ['2003 fall'])
-        self.assert_('2003 fall' in service)
-        self.assert_(service['2003 fall'] is schooldays2)
 
         schooldays3 = TermCalendarStub()
         service['2004 spring'] = schooldays3
@@ -1600,7 +1594,7 @@ class TestTermService(unittest.TestCase):
         self.assert_(service['2004 spring'] is schooldays3)
 
         del service['2003 fall']
-        self.assertEqual(service.keys(), ['2004 spring'])
+        self.assertEqual(list(service.keys()), ['2004 spring'])
         self.assert_('2003 fall' not in service)
         self.assert_('2004 spring' in service)
         self.assertRaises(KeyError, lambda: service['2003 fall'])
