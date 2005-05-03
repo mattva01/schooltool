@@ -389,8 +389,9 @@ class CalendarViewBase(BrowserView):
         person = IPerson(self.request.principal, None)
         if person is not None:
             prefs = IPersonPreferences(person)
-            if prefs.weekstart == "Sunday":
-                self.first_day_of_week = 6
+
+            if prefs.weekstart is not None:
+                self.first_day_of_week = prefs.weekstart
             else:
                 self.first_day_of_week = 0
 

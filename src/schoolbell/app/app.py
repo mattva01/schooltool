@@ -23,6 +23,7 @@ $Id$
 """
 
 import sha
+import calendar
 
 from persistent import Persistent
 from persistent.dict import PersistentDict
@@ -206,7 +207,7 @@ class PersonPreferences(Persistent):
         self.timezone = "UTC"
         self.dateformat = "YYYY-MM-DD"
         self.timeformat = "HH:MM"
-        self.weekstart = "Monday"
+        self.weekstart = calendar.MONDAY
 
 
 def getPersonPreferences(person):

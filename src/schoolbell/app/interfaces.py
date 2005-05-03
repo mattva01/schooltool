@@ -38,6 +38,8 @@ done to avoid a circular dependency between IXxxContained and IXxxContainer.
 $Id$
 """
 
+import calendar
+
 from zope.interface import Interface, Attribute
 from zope.schema import Text, TextLine, Bytes, Object, Choice
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
@@ -281,19 +283,29 @@ class IPersonPreferences(Interface):
 
     __parent__ = Attribute("""Person who owns these preferences""")
 
-    timezone = Attribute("""Timezone to display""")
+    timezone = Choice(
+        title=_("Time Zone"),
+        description=_("Time Zone used to display your calendar"),
+        values=pytz.common_timezones)
 
-    timeformat = TextLine(
-        title=u"Time Format preference",
-        description=u"strftime format string to display time.")
+    timeformat = Choice(
+        title=_("Time Format"),
+        description=_("Time Format"),
+        vocabulary=vocabulary([("HH:MM", _("HH:MM")),
+                               ("H:MM am/pm", _("H:MM am/pm"))]))
 
-    dateformat = TextLine(
-        title=u"Date Format preference",
-        description=u"strftime format string to display date.")
+    dateformat = Choice(
+        title=_("Date Format"),
+        description=_("Date Format"),
+        vocabulary=vocabulary([("MM/DD/YY", _("MM/DD/YY")),
+                               ("YYYY-DD-MM", _("YYYY-DD-MM")),
+                               ("Day Month, Year", _("Day Month, Year"))]))
 
-    weekstart = TextLine(
-        title=u"Start week Sunday or Monday",
-        description=u"Day of week name to start calendar display weeks.")
+    weekstart = Choice(
+        title=_("Week starts on:"),
+        description=_("Start display of weeks on Sunday or Monday"),
+        vocabulary=vocabulary([(calendar.SUNDAY, _("Sunday")),
+                               (calendar.MONDAY, _("Monday"))]))
 
 
 class IPersonDetails(Interface, ILocation):

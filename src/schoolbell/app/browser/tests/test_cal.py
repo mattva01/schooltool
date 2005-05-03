@@ -589,6 +589,7 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(view.nextDay(), date(2004, 8, 19))
 
     def test_getWeek(self):
+        import calendar as pycalendar
         from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
         from schoolbell.app.cal import Calendar
         from schoolbell.app.app import getPersonPreferences
@@ -608,7 +609,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
         # change our preferences
         prefs = IPersonPreferences(request.principal._person)
-        prefs.weekstart = "Sunday"
+        prefs.weekstart = pycalendar.SUNDAY
         prefs.timeformat = "H:MM am/pm"
 
         view_sunday = CalendarViewBase(cal, request)
@@ -757,6 +758,7 @@ class TestCalendarViewBase(unittest.TestCase):
         the view, but it may also include other calendars as well.
 
             >>> from schoolbell.app.browser.cal import CalendarViewBase
+            >>> import calendar as pycalendar
             >>> class CalendarStub:
             ...     def __init__(self, title):
             ...         self.title = title
@@ -778,7 +780,7 @@ class TestCalendarViewBase(unittest.TestCase):
             ...         self.show = show
             >>> class PreferenceStub:
             ...     def __init__(self):
-            ...         self.weekstart = "Monday"
+            ...         self.weekstart = pycalendar.MONDAY
             ...         self.timeformat = "%H:%M"
             ...         self.dateformat = "YYYY-MM-DD"
             ...         self.timezone = 'UTC'

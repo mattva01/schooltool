@@ -323,33 +323,6 @@ class PersonEditView(BrowserView):
             self.request.response.redirect(url)
 
 
-class IPersonPreferencesForm(Interface):
-
-    timezone = Choice(
-        title=_("Time Zone"),
-        description=_("Time Zone used to display your calendar"),
-        values=common_timezones)
-
-    timeformat = Choice(
-        title=_("Time Format"),
-        description=_("Time Format"),
-        vocabulary=vocabulary([("HH:MM", _("HH:MM")),
-                               ("H:MM am/pm", _("H:MM am/pm"))]))
-
-    dateformat = Choice(
-        title=_("Date Format"),
-        description=_("Date Format"),
-        vocabulary=vocabulary([("MM/DD/YY", _("MM/DD/YY")),
-                               ("YYYY-DD-MM", _("YYYY-DD-MM")),
-                               ("Day Month, Year", _("Day Month, Year"))]))
-
-    weekstart = Choice(
-        title=_("Week starts on:"),
-        description=_("Start display of weeks on Sunday or Monday"),
-        vocabulary=vocabulary([("Sunday", _("Sunday")),
-                               ("Monday", _("Monday"))]))
-
-
 class PersonPreferencesView(BrowserView):
     """View used for editing person preferences."""
 
@@ -368,7 +341,7 @@ class PersonPreferencesView(BrowserView):
                    'dateformat': prefs.dateformat,
                    'weekstart': prefs.weekstart}
 
-        setUpWidgets(self, IPersonPreferencesForm, IInputWidget,
+        setUpWidgets(self, IPersonPreferences, IInputWidget,
                      initial=initial)
 
     def update(self):
@@ -378,7 +351,7 @@ class PersonPreferencesView(BrowserView):
 
         if 'UPDATE_SUBMIT' in self.request:
             try:
-                data = getWidgetsData(self, IPersonPreferencesForm)
+                data = getWidgetsData(self, IPersonPreferences)
             except WidgetsError:
                 return # Errors will be displayed next to widgets
 

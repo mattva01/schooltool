@@ -261,7 +261,7 @@ def doctest_PersonPreferences():
         >>> prefs.timezone
         'UTC'
         >>> prefs.weekstart
-        'Monday'
+        0
 
     Need to have prefs.__parent__ refer to the person its attached to
         >>> prefs.__parent__ == person
