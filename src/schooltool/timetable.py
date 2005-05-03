@@ -1074,10 +1074,8 @@ def getTermForDate(date):
 
     Returns None if there is `date` falls outside all time periods.
     """
-
     terms = getSchoolToolApplication().terms
-    for term_id in terms.keys():
-        term = terms[term_id]
+    for term in terms.values():
         if date in term:
             return term
     return None
