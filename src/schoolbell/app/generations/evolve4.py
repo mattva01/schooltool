@@ -17,14 +17,26 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
+Upgrade to generation 4.
+
+Revision 3554 changed the format of the weekstart preference from an string to
+an int.
 
 $Id$
 """
+from zope.app.publication.zopepublication import ZopePublication
+from zope.app.generations.utility import findObjectsProviding
+from schoolbell.app.interfaces import ISchoolBellApplication, IHavePreferences
+from schoolbell.app.app import getPersonPreferences
+import datetime
+import random
 
-from zope.app.generations.generations import SchemaManager
-
-schemaManager = SchemaManager(
-    minimum_generation=4,
-    generation=4,
-    package_name='schoolbell.app.generations')
+def evolve(context):
+    root = context.connection.root().get(ZopePublication.root_name, None)
+    for app in findObjectsProviding(root, ISchoolBellApplication):
+        for person in findObjectsProviding(root, IHavePreferences):
+            preferences = getPersonPreferences(person)
+            if preferences.weekstart == "Sunday":
+                preferences.weekstart = 6
+            else:
+                preferences.weekstart = 0
