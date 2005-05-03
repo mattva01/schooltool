@@ -27,8 +27,16 @@ div.hr hr {
     text-align: center;
 }
 
-.instructor img
+.instructor img {
     background: #d6d6d6;
     padding: 2px;
     border: 1px #999 solid;
 }
+
+/* This overrides schoolbell's style.css */
+#header .logo {
+    height: 60px;
+    padding: 5px;
+    vertical-align: middle;
+}
+
