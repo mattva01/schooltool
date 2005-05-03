@@ -63,6 +63,10 @@ h2, h3, h4, h5, h6 {
     text-align: center;
 }
 
+.inline {
+  display: inline;
+}
+
 .popup {
     font-size: smaller;
 
@@ -93,6 +97,12 @@ form.standalone fieldset {
 
 form.standalone p {
     margin: 0.5em;
+}
+
+form.standalone p.hint {
+    font-size: 80%;
+    font-style: italic;
+    color: #bab5ab;
 }
 
 form.standalone .controls input {

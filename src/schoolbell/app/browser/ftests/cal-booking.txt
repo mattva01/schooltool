@@ -261,7 +261,7 @@ Frog should see the event in the resource calendar too:
     ... """)
     HTTP/1.1 200 Ok
     ...
-                <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04"
+                <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid"
                    title="Test event">
                   Test event
                   <span class="start-end">

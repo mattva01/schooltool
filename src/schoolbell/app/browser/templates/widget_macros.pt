@@ -1,6 +1,7 @@
 <metal:block define-macro="widget_rows">
 <div class="row" tal:repeat="widget view/widgets">
   <metal:block define-macro="widget_row">
+  <p class="hint" tal:content="widget/hint" />
   <div class="label">
     <label for="field.name" title="The widget's hint"
       tal:attributes="for widget/name; title widget/hint"

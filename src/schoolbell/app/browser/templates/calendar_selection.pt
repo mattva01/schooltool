@@ -26,12 +26,12 @@
       Hold down Ctrl or Shift to select multiple calendars.
     </p>
 
-    <fieldset tal:define="persons view/persons">
+    <fieldset class="inline" tal:define="persons view/persons">
       <legend i18n:translate="">People</legend>
       <p tal:condition="not:persons" i18n:translate="">
         There are no persons with calendars accessible to you.
       </p>
-      <select multiple="multiple" id="people" name="persons:list"
+      <select size=8 multiple="multiple" id="people" name="persons:list"
               tal:condition="persons">
         <option tal:repeat="person persons/sortby:title"
                 tal:attributes="value person/id;
@@ -40,12 +40,12 @@
       </select>
     </fieldset>
 
-    <fieldset tal:define="groups view/groups">
+    <fieldset class="inline" tal:define="groups view/groups">
       <legend i18n:translate="">Groups</legend>
       <p tal:condition="not:groups" i18n:translate="">
         There are no groups with calendars accessible to you.
       </p>
-      <select multiple="multiple" id="groups" name="groups:list"
+      <select size=8 multiple="multiple" id="groups" name="groups:list"
               tal:condition="groups">
         <option tal:repeat="group groups/sortby:title"
                 tal:attributes="value group/id;
@@ -54,12 +54,12 @@
       </select>
     </fieldset>
 
-    <fieldset tal:define="resources view/resources">
+    <fieldset class="inline" tal:define="resources view/resources">
       <legend i18n:translate="">Resources</legend>
       <p tal:condition="not:resources" i18n:translate="">
         There are no resources with calendars accessible to you.
       </p>
-      <select multiple="multiple" id="resources" name="resources:list"
+      <select size=8 multiple="multiple" id="resources" name="resources:list"
               tal:condition="resources">
         <option tal:repeat="resource resources/sortby:title"
                 tal:attributes="value resource/id;

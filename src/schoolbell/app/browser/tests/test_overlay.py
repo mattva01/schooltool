@@ -199,29 +199,32 @@ def doctest_CalendarSelectionView():
         >>> print view()
         <BLANKLINE>
         ...
-          Select calendars to display
+            Select calendars to display
         ...
-        <fieldset>
-          <legend>People</legend>
-          <select multiple="multiple" id="people" name="persons:list">
-            <option value="eric">Eric Bjornsen</option>
-            <option value="igor">Igor</option>
-          </select>
-        </fieldset>
+            <fieldset class="inline">
+              <legend>People</legend>
+              <select size="8" multiple="multiple" id="people"
+                      name="persons:list">
+                <option value="eric">Eric Bjornsen</option>
+                <option value="igor">Igor</option>
+              </select>
+            </fieldset>
         <BLANKLINE>
-        <fieldset>
-          <legend>Groups</legend>
-          <select multiple="multiple" id="groups" name="groups:list">
-            <option value="admins">Administrators</option>
-          </select>
-        </fieldset>
+            <fieldset class="inline">
+              <legend>Groups</legend>
+              <select size="8" multiple="multiple" id="groups"
+                      name="groups:list">
+                <option value="admins">Administrators</option>
+              </select>
+            </fieldset>
         <BLANKLINE>
-        <fieldset>
-          <legend>Resources</legend>
-          <select multiple="multiple" id="resources" name="resources:list">
-            <option value="car">Company car</option>
-          </select>
-        </fieldset>
+            <fieldset class="inline">
+              <legend>Resources</legend>
+              <select size="8" multiple="multiple" id="resources"
+                      name="resources:list">
+                <option value="car">Company car</option>
+              </select>
+            </fieldset>
         ...
 
     If a person's calendar is added to your overlaid calendars list, you
@@ -232,10 +235,11 @@ def doctest_CalendarSelectionView():
         >>> print view()
         <BLANKLINE>
         ...
-          <select multiple="multiple" id="people" name="persons:list">
-            <option selected="selected" value="eric">Eric Bjornsen</option>
-            <option value="igor">Igor</option>
-          </select>
+              <select size="8" multiple="multiple" id="people"
+                      name="persons:list">
+                <option selected="selected" value="eric">Eric Bjornsen</option>
+                <option value="igor">Igor</option>
+              </select>
         ...
 
     Note that the user does not see his own calendar in that list:
@@ -252,10 +256,11 @@ def doctest_CalendarSelectionView():
         >>> print view()
         <BLANKLINE>
         ...
-          <select multiple="multiple" id="people" name="persons:list">
-            <option selected="selected" value="eric">Eric Bjornsen</option>
-            <option selected="selected" value="igor">Igor</option>
-          </select>
+              <select size="8" multiple="multiple" id="people" 
+                      name="persons:list">
+                <option selected="selected" value="eric">Eric Bjornsen</option>
+                <option selected="selected" value="igor">Igor</option>
+              </select>
         ...
 
     We can see that the calendars we selected were added to the list
@@ -274,10 +279,11 @@ def doctest_CalendarSelectionView():
         >>> print view()
         <BLANKLINE>
         ...
-          <select multiple="multiple" id="people" name="persons:list">
-            <option value="eric">Eric Bjornsen</option>
-            <option selected="selected" value="igor">Igor</option>
-          </select>
+              <select size="8" multiple="multiple" id="people"
+                      name="persons:list">
+                <option value="eric">Eric Bjornsen</option>
+                <option selected="selected" value="igor">Igor</option>
+              </select>
         ...
 
         >>> eric.calendar in fred.overlaid_calendars

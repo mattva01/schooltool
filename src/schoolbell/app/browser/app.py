@@ -261,7 +261,8 @@ class IPersonEditForm(Interface):
     photo = Bytes(
         title=_("New photo"),
         required=False,
-        description=_("""Photo (in JPEG format)"""))
+        description=_(
+            """A small picture (about 48x48 pixels in JPEG format)"""))
 
     clear_photo = Bool(
         title=_("Clear photo"),
