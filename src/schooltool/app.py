@@ -22,10 +22,6 @@ SchoolTool application
 $Id$
 """
 
-import os.path
-import gettext
-import locale
-
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from zope.interface import implements
@@ -41,17 +37,13 @@ from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIGroup, URIMember
 from schoolbell.app.app import SchoolBellApplication, Person, Group, Resource
 
+from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ISchoolToolApplication
 from schooltool.interfaces import ISchoolToolGroupContainer
 from schooltool.interfaces import ICourse, ISection
 from schooltool.uris import URIInstruction, URISection, URIInstructor
 from schooltool.uris import URILearning, URILearner
 from schooltool.timetable import TermService, TimetableSchemaService
-
-# XXX Should we use the Zope 3 translation service here?
-localedir = os.path.join(os.path.dirname(__file__), 'locales')
-catalog = gettext.translation('schooltool', localedir, fallback=True)
-_ = lambda us: catalog.ugettext(us)
 
 
 class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
