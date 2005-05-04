@@ -612,7 +612,7 @@ def format_exception(etype, value, tb, limit=None, basedir=None,
     list = []
     if tb:
         list = ['Traceback (most recent call last):\n']
-        if color is not None:
+        if color:
             list[0] = colorize('tbheader', list[0])
         w = list.append
 
