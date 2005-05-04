@@ -64,12 +64,24 @@ def main():
                 try:
                     suite = FunctionalDocFileSuite(filename,
                                                    optionflags=optionflags)
-                    unittest.TextTestRunner().run(suite)
+                    run(suite)
                 except Exception, e:
                     import traceback
                     traceback.print_exc()
     except (KeyboardInterrupt, EOFError):
         print "Bye!"
+
+
+def run(suite):
+    try:
+        from test import CustomTestRunner, Options, Colorizer, light_colormap
+    except ImportError:
+        runner = unittest.TextTestRunner()
+    else:
+        cfg = Options()
+        cfg.colorizer = Colorizer(light_colormap)
+        runner = CustomTestRunner(cfg, [])
+    runner.run(suite)
 
 if __name__ == '__main__':
     main()
