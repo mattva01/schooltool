@@ -387,7 +387,11 @@ dark_colormap = { # Color scheme for dark backgrounds
             'doctest_title': 'dark white',
             'doctest_code': 'yellow',
             'doctest_expected': 'green',
-            'doctest_got': 'red'}
+            'doctest_got': 'red',
+            'diff_expected': 'red',
+            'diff_actual': 'green',
+            'diff_context': 'dark white',
+            'diff_inline': 'gray'}
 
 light_colormap = { # Color scheme for light backgrounds
             'fail': 'red',
@@ -406,7 +410,11 @@ light_colormap = { # Color scheme for light backgrounds
             'doctest_title': 'gray',
             'doctest_code': 'dark blue',
             'doctest_expected': 'dark green',
-            'doctest_got': 'dark red'}
+            'doctest_got': 'dark red',
+            'diff_expected': 'dark red',
+            'diff_actual': 'dark green',
+            'diff_context': 'dark gray',
+            'diff_inline': 'dark magenta'}
 
 
 class Colorizer(object):
@@ -424,6 +432,39 @@ class Colorizer(object):
             light = 1
         code = 30 + colorcodes[color]
         return '\033[%d;%dm' % (light, code) + text + '\033[0m'
+
+    def colorize_ndiff(self, lines):
+        """Colorize ndiff output.
+
+        Returns a new sequence of colored strings.
+
+        `lines` is a sequence of strings.
+
+        Typical input:
+
+              Some context lines
+            - This line was removed
+              Some context
+            + This line was added
+              Some context
+            - This line esd chnged
+            ?           ^^^     -
+            + This line was changd
+            ?           ^^^   + 
+              Some context
+
+        """
+        result = []
+        for line in lines:
+            if line.startswith('    -'):
+                result.append(self.colorize('diff_expected', line))
+            elif line.startswith('    +'):
+                result.append(self.colorize('diff_actual', line))
+            elif line.startswith('    ?'):
+                result.append(self.colorize('diff_inline', line))
+            else:
+                result.append(self.colorize('diff_context', line))
+        return result
 
     def colorize_zope_doctest_output(self, lines):
         """Colorize output formatted by the doctest engine included with Zope 3.
@@ -517,10 +558,7 @@ class Colorizer(object):
                 result.append(self.colorize('doctest_got', line))
         elif remaining[0] == 'Differences (ndiff with -expected +actual):':
             result.append(self.colorize('doctest_title', remaining.pop(0))) # E. raised:
-            while remaining:
-                line = remaining.pop(0)
-                # TODO: Scrape and colorize the diff
-                result.append(self.colorize('doctest_got', line))
+            result.extend(self.colorize_ndiff(remaining))
         else:
             return lines
 
