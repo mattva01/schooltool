@@ -606,7 +606,8 @@ def format_exception(etype, value, tb, limit=None, basedir=None,
     If colorizer is not None, it is used to colorize the output.
     """
     color = (colorizer is not None)
-    colorize = colorizer.colorize
+    if color:
+        colorize = colorizer.colorize
     # Show stack trace.
     list = []
     if tb:
@@ -740,7 +741,7 @@ class CustomTestResult(unittest._TextTestResult):
         if self.cfg.progress and not (self.dots or self.showAll):
             w()
         if self.cfg.immediate_errors and (self.errors or self.failures):
-            if self.cfg.colorizer:
+            if self.cfg.colorizer is not None:
                 w(self.cfg.colorizer.colorize('separator', self.separator1))
                 w(self.cfg.colorizer.colorize('title', "Tests that failed"))
                 w(self.cfg.colorizer.colorize('separator', self.separator2))
@@ -756,7 +757,7 @@ class CustomTestResult(unittest._TextTestResult):
 
     def printTraceback(self, kind, test, err):
         w = self.stream.writeln
-        if self.cfg.colorizer:
+        if self.cfg.colorizer is not None:
             c = self.cfg.colorizer.colorize
         else:
             c = lambda texttype, text: text
@@ -815,7 +816,7 @@ class CustomTestRunner(unittest.TextTestRunner):
         """Run the given test case or test suite."""
         if self.count is None:
             self.count = test.countTestCases()
-        if self.cfg.colorizer:
+        if self.cfg.colorizer is not None:
             c = self.cfg.colorizer.colorize
         else:
             c = lambda texttype, text: text
