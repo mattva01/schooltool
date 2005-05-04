@@ -393,7 +393,7 @@ light_colormap = { # Color scheme for light backgrounds
             'fail': 'red',
             'pass': 'dark green',
             'count': 'dark green',
-            'title': 'dark green',
+            'title': 'red',
             'separator': 'dark white',
             'longtestname': 'dark red',
             'filename': 'dark green',
@@ -423,7 +423,7 @@ class Colorizer(object):
         else:
             light = 1
         code = 30 + colorcodes[color]
-        return '\033[%d;%dm' % (light, code)+ text + '\033[0;0m'
+        return '\033[%d;%dm' % (light, code) + text + '\033[0m'
 
     def colorize_zope_doctest_output(self, lines):
         """Colorize output formatted by the doctest engine included with Zope 3.
@@ -474,19 +474,24 @@ class Colorizer(object):
         header = header[fn_end+len('", line '):]
         parts = header.split(', in ')
         if len(parts) != 2:
-            return lines
-        lineno, testname = parts
-        filename = self.colorize('filename', filename)
-        lineno = self.colorize('lineno', lineno)
-        testname = self.colorize('testname', testname)
-        result = ['File "%s", line %s, in %s' % (filename, lineno, testname)]
+            lineno = header
+            filename = self.colorize('filename', filename)
+            lineno = self.colorize('lineno', lineno)
+            result = ['File "%s", line %s' % (filename, lineno)]
+        else:
+            lineno, testname = parts
+            filename = self.colorize('filename', filename)
+            lineno = self.colorize('lineno', lineno)
+            testname = self.colorize('testname', testname)
+            result = ['File "%s", line %s, in %s' % (filename, lineno, testname)]
 
         # Colorize the 'Failed example:' section.
         if lines[1] != 'Failed example:':
             return lines
         result.append(self.colorize('doctest_title', lines[1]))
         remaining = lines[2:]
-        terminators = ['Expected:', 'Expected nothing', 'Exception raised:']
+        terminators = ['Expected:', 'Expected nothing', 'Exception raised:',
+                       'Differences (ndiff with -expected +actual):']
         while remaining and remaining[0] not in terminators:
             line = remaining.pop(0)
             result.append(self.colorize('doctest_code', line))
@@ -509,6 +514,12 @@ class Colorizer(object):
             while remaining:
                 line = remaining.pop(0)
                 # TODO: Scrape and colorize the traceback.
+                result.append(self.colorize('doctest_got', line))
+        elif remaining[0] == 'Differences (ndiff with -expected +actual):':
+            result.append(self.colorize('doctest_title', remaining.pop(0))) # E. raised:
+            while remaining:
+                line = remaining.pop(0)
+                # TODO: Scrape and colorize the diff
                 result.append(self.colorize('doctest_got', line))
         else:
             return lines
