@@ -47,7 +47,8 @@ Options:
   -v                    verbose (print dots for each test run)
   -vv                   very verbose (print test names)
   -q                    quiet (do not print anything on success)
-  -c                    colorize output
+  -c                    colorize output (assumes dark background)
+  -C                    colorize output (assumes bright background)
   -w                    enable warnings about omitted test cases
   -d                    invoke pdb when an exception occurs
   -1                    report only the first failure in doctests
@@ -121,7 +122,7 @@ class Options:
     print_import_time = True    # print time taken to import test modules
                                 # (currently hardcoded)
     progress = False            # show running progress (-p)
-    colorize = False            # colorize output (-c)
+    colorizer = None            # colorize output (-c)
     coverage = False            # produce coverage reports (--coverage)
     coverdir = 'coverage'       # where to put them (currently hardcoded)
     immediate_errors = True     # show tracebacks twice (--immediate-errors,
@@ -369,7 +370,8 @@ def extract_tb(tb, limit=None):
 colorcodes = {'gray': 0, 'red': 1, 'green': 2, 'yellow': 3,
               'blue': 4, 'magenta': 5, 'cyan': 6, 'white': 7}
 
-colormap = {'fail': 'red',
+dark_colormap = { # Color scheme for dark backgrounds
+            'fail': 'red',
             'pass': 'green',
             'count': 'white',
             'title': 'white',
@@ -387,155 +389,180 @@ colormap = {'fail': 'red',
             'doctest_expected': 'green',
             'doctest_got': 'red'}
 
-
-def colorize(texttype, text):
-    """Colorize text by ANSI escape codes in a color provided in colormap."""
-    color = colormap[texttype]
-    if color.startswith('dark '):
-        light = 0
-        color = color[len('dark '):] # strip the 'dark' prefix
-    else:
-        light = 1
-    code = 30 + colorcodes[color]
-    return '\033[%d;%dm' % (light, code)+ text + '\033[0;0m'
-
-
-def colorize_zope_doctest_output(lines):
-    """Colorize output formatted by the doctest engine included with Zope 3.
-
-    Returns a new sequence of colored strings.
-
-    `lines` is a sequence of strings.
-
-    The typical structure of the doctest output looks either like this:
-
-        File "...", line 123, in foo.bar.baz.doctest_quux
-        Failed example:
-            f(2, 3)
-        Expected:
-            6
-        Got:
-            5
-
-    Or, if an exception has occured, like this:
-
-        File "...", line 123, in foo.bar.baz.doctest_quux
-        Failed example:
-            f(2, 3)
-        Exception raised:
-            Traceback (most recent call last):
-              File "...", line 123, in __init__
-                self.do_something(a, b, c)
-              File "...", line ...
-                ...
-            FooError: something bad happened
-
-    If some assumption made by this function is not met, the original sequence
-    is returned without any modifications.
-    """
-    # XXX bug: doctest may report several failures in one test, they are
-    #          separated by a horizontal dash line.  Only the first one of
-    #          them is now colorized properly.
-    header = lines[0]
-    if not header.startswith('File "'):
-        return lines # not a doctest failure report?
-
-    # Dissect the header in a rather nasty way.
-    header = header[len('File "'):]
-    fn_end = header.find('"')
-    if fn_end == -1:
-        return lines
-    filename = header[:fn_end]
-    header = header[fn_end+len('", line '):]
-    parts = header.split(', in ')
-    if len(parts) != 2:
-        return lines
-    lineno, testname = parts
-    filename = colorize('filename', filename)
-    lineno = colorize('lineno', lineno)
-    testname = colorize('testname', testname)
-    result = ['File "%s", line %s, in %s' % (filename, lineno, testname)]
-
-    # Colorize the 'Failed example:' section.
-    if lines[1] != 'Failed example:':
-        return lines
-    result.append(colorize('doctest_title', lines[1]))
-    remaining = lines[2:]
-    terminators = ['Expected:', 'Expected nothing', 'Exception raised:']
-    while remaining and remaining[0] not in terminators:
-        line = remaining.pop(0)
-        result.append(colorize('doctest_code', line))
-    if not remaining:
-        return lines
-
-    if remaining[0] in ('Expected:', 'Expected nothing'):
-        result.append(colorize('doctest_title', remaining.pop(0))) # Expected:
-        while remaining and remaining[0] not in ('Got:', 'Got nothing'):
-            line = remaining.pop(0)
-            result.append(colorize('doctest_expected', line))
-        if not remaining or remaining[0] not in ('Got:', 'Got nothing'):
-            return lines
-        result.append(colorize('doctest_title', remaining.pop(0))) # Got:
-        while remaining:
-            line = remaining.pop(0)
-            result.append(colorize('doctest_got', line))
-    elif remaining[0] == 'Exception raised:':
-        result.append(colorize('doctest_title', remaining.pop(0))) # E. raised:
-        while remaining:
-            line = remaining.pop(0)
-            # TODO: Scrape and colorize the traceback.
-            result.append(colorize('doctest_got', line))
-    else:
-        return lines
-
-    return result
+light_colormap = { # Color scheme for light backgrounds
+            'fail': 'red',
+            'pass': 'dark green',
+            'count': 'dark green',
+            'title': 'dark green',
+            'separator': 'dark white',
+            'longtestname': 'dark red',
+            'filename': 'dark green',
+            'lineno': 'dark magenta',
+            'testname': 'dark yellow',
+            'excname': 'red',
+            'excstring': 'dark yellow',
+            'tbheader': 'gray',
+            'doctest_ignored': 'dark white',
+            'doctest_title': 'gray',
+            'doctest_code': 'dark blue',
+            'doctest_expected': 'dark green',
+            'doctest_got': 'dark red'}
 
 
-def colorize_exception_only(lines):
-    """Colorize result of traceback.format_exception_only."""
-    if len(lines) > 1:
-        return lines # SyntaxError?  We won't deal with that for now.
-    lines = lines[0].splitlines()
+class Colorizer(object):
 
-    # First, colorize the first line, which usually contains the name
-    # and the string of the exception.
-    result = []
-    doctest = 'Failed doctest test for' in lines[0]
-    # TODO: We only deal with the output from Zope 3's doctest module.
-    #       A colorizer for the Python's doctest module would be nice too.
-    if doctest:
-        # If we have a doctest, we do not care about this header.  All the
-        # interesting things are below, formatted by the doctest runner.
-        for lineno in range(4):
-            result.append(colorize('doctest_ignored', lines[lineno]))
-        beef = colorize_zope_doctest_output(lines[4:])
-        result.extend(beef)
-        return '\n'.join(result)
-    else:
-        # A simple exception.  Try to colorize the first row, leave others be.
-        excline = lines[0].split(': ', 1)
-        if len(excline) == 2:
-            excname = colorize('excname', excline[0])
-            excstring = colorize('excstring', excline[1])
-            result.append('%s: %s' % (excname, excstring))
+    def __init__(self, colormap):
+        self.colormap = colormap
+
+    def colorize(self, texttype, text):
+        """Colorize text by ANSI escape codes in a color provided in colormap."""
+        color = self.colormap[texttype]
+        if color.startswith('dark '):
+            light = 0
+            color = color[len('dark '):] # strip the 'dark' prefix
         else:
-            result.append(colorize('excstring', lines[0]))
-        result.extend(lines[1:])
-        return '\n'.join(result)
+            light = 1
+        code = 30 + colorcodes[color]
+        return '\033[%d;%dm' % (light, code)+ text + '\033[0;0m'
+
+    def colorize_zope_doctest_output(self, lines):
+        """Colorize output formatted by the doctest engine included with Zope 3.
+
+        Returns a new sequence of colored strings.
+
+        `lines` is a sequence of strings.
+
+        The typical structure of the doctest output looks either like this:
+
+            File "...", line 123, in foo.bar.baz.doctest_quux
+            Failed example:
+                f(2, 3)
+            Expected:
+                6
+            Got:
+                5
+
+        Or, if an exception has occured, like this:
+
+            File "...", line 123, in foo.bar.baz.doctest_quux
+            Failed example:
+                f(2, 3)
+            Exception raised:
+                Traceback (most recent call last):
+                  File "...", line 123, in __init__
+                    self.do_something(a, b, c)
+                  File "...", line ...
+                    ...
+                FooError: something bad happened
+
+        If some assumption made by this function is not met, the original sequence
+        is returned without any modifications.
+        """
+        # XXX bug: doctest may report several failures in one test, they are
+        #          separated by a horizontal dash line.  Only the first one of
+        #          them is now colorized properly.
+        header = lines[0]
+        if not header.startswith('File "'):
+            return lines # not a doctest failure report?
+
+        # Dissect the header in a rather nasty way.
+        header = header[len('File "'):]
+        fn_end = header.find('"')
+        if fn_end == -1:
+            return lines
+        filename = header[:fn_end]
+        header = header[fn_end+len('", line '):]
+        parts = header.split(', in ')
+        if len(parts) != 2:
+            return lines
+        lineno, testname = parts
+        filename = self.colorize('filename', filename)
+        lineno = self.colorize('lineno', lineno)
+        testname = self.colorize('testname', testname)
+        result = ['File "%s", line %s, in %s' % (filename, lineno, testname)]
+
+        # Colorize the 'Failed example:' section.
+        if lines[1] != 'Failed example:':
+            return lines
+        result.append(self.colorize('doctest_title', lines[1]))
+        remaining = lines[2:]
+        terminators = ['Expected:', 'Expected nothing', 'Exception raised:']
+        while remaining and remaining[0] not in terminators:
+            line = remaining.pop(0)
+            result.append(self.colorize('doctest_code', line))
+        if not remaining:
+            return lines
+
+        if remaining[0] in ('Expected:', 'Expected nothing'):
+            result.append(self.colorize('doctest_title', remaining.pop(0))) # Expected:
+            while remaining and remaining[0] not in ('Got:', 'Got nothing'):
+                line = remaining.pop(0)
+                result.append(self.colorize('doctest_expected', line))
+            if not remaining or remaining[0] not in ('Got:', 'Got nothing'):
+                return lines
+            result.append(self.colorize('doctest_title', remaining.pop(0))) # Got:
+            while remaining:
+                line = remaining.pop(0)
+                result.append(self.colorize('doctest_got', line))
+        elif remaining[0] == 'Exception raised:':
+            result.append(self.colorize('doctest_title', remaining.pop(0))) # E. raised:
+            while remaining:
+                line = remaining.pop(0)
+                # TODO: Scrape and colorize the traceback.
+                result.append(self.colorize('doctest_got', line))
+        else:
+            return lines
+
+        return result
+
+    def colorize_exception_only(self, lines):
+        """Colorize result of traceback.format_exception_only."""
+        if len(lines) > 1:
+            return lines # SyntaxError?  We won't deal with that for now.
+        lines = lines[0].splitlines()
+
+        # First, colorize the first line, which usually contains the name
+        # and the string of the exception.
+        result = []
+        doctest = 'Failed doctest test for' in lines[0]
+        # TODO: We only deal with the output from Zope 3's doctest module.
+        #       A colorizer for the Python's doctest module would be nice too.
+        if doctest:
+            # If we have a doctest, we do not care about this header.  All the
+            # interesting things are below, formatted by the doctest runner.
+            for lineno in range(4):
+                result.append(self.colorize('doctest_ignored', lines[lineno]))
+            beef = self.colorize_zope_doctest_output(lines[4:])
+            result.extend(beef)
+            return '\n'.join(result)
+        else:
+            # A simple exception.  Try to colorize the first row, leave others be.
+            excline = lines[0].split(': ', 1)
+            if len(excline) == 2:
+                excname = self.colorize('excname', excline[0])
+                excstring = self.colorize('excstring', excline[1])
+                result.append('%s: %s' % (excname, excstring))
+            else:
+                result.append(self.colorize('excstring', lines[0]))
+            result.extend(lines[1:])
+            return '\n'.join(result)
 
 
-def format_exception(etype, value, tb, limit=None, basedir=None, color=False):
+def format_exception(etype, value, tb, limit=None, basedir=None,
+                     colorizer=None):
     """Improved version of traceback.format_exception.
 
     Includes Zope-specific extra information in tracebacks.
 
-    If color is True, ANSI codes are used to colorize output.
+    If colorizer is not None, it is used to colorize the output.
     """
+    color = (colorizer is not None)
+    colorize = colorizer.colorize
     # Show stack trace.
     list = []
     if tb:
         list = ['Traceback (most recent call last):\n']
-        if color:
+        if color is not None:
             list[0] = colorize('tbheader', list[0])
         w = list.append
 
@@ -587,7 +614,7 @@ def format_exception(etype, value, tb, limit=None, basedir=None, color=False):
     # Add the representation of the exception itself.
     lines = traceback.format_exception_only(etype, value)
     if color:
-        lines = colorize_exception_only(lines)
+        lines = colorizer.colorize_exception_only(lines)
     list.extend(lines)
 
     return list
@@ -664,10 +691,10 @@ class CustomTestResult(unittest._TextTestResult):
         if self.cfg.progress and not (self.dots or self.showAll):
             w()
         if self.cfg.immediate_errors and (self.errors or self.failures):
-            if self.cfg.colorize:
-                w(colorize('separator', self.separator1))
-                w(colorize('title', "Tests that failed"))
-                w(colorize('separator', self.separator2))
+            if self.cfg.colorizer:
+                w(self.cfg.colorizer.colorize('separator', self.separator1))
+                w(self.cfg.colorizer.colorize('title', "Tests that failed"))
+                w(self.cfg.colorizer.colorize('separator', self.separator2))
             else:
                 w(self.separator1)
                 w("Tests that failed")
@@ -676,12 +703,12 @@ class CustomTestResult(unittest._TextTestResult):
 
     def formatError(self, err):
         return "".join(format_exception(basedir=self.cfg.basedir,
-                                        color=self.cfg.colorize, *err))
+                                        colorizer=self.cfg.colorizer, *err))
 
     def printTraceback(self, kind, test, err):
         w = self.stream.writeln
-        if self.cfg.colorize:
-            c = colorize
+        if self.cfg.colorizer:
+            c = self.cfg.colorizer.colorize
         else:
             c = lambda texttype, text: text
         w()
@@ -739,8 +766,8 @@ class CustomTestRunner(unittest.TextTestRunner):
         """Run the given test case or test suite."""
         if self.count is None:
             self.count = test.countTestCases()
-        if self.cfg.colorize:
-            c = colorize
+        if self.cfg.colorizer:
+            c = self.cfg.colorizer.colorize
         else:
             c = lambda texttype, text: text
         result = self._makeResult()
@@ -808,7 +835,7 @@ def main(argv):
 
     # Option processing
     try:
-        opts, args = getopt.gnu_getopt(argv[1:], 'hvpcqufwd1s:',
+        opts, args = getopt.gnu_getopt(argv[1:], 'hvpcCqufwd1s:',
                                ['list-files', 'list-tests', 'list-hooks',
                                 'level=', 'all-levels', 'coverage',
                                 'search-in=', 'immediate-errors',
@@ -828,7 +855,9 @@ def main(argv):
             cfg.progress = True
             cfg.quiet = False
         elif k == '-c':
-            cfg.colorize = True
+            cfg.colorizer = Colorizer(dark_colormap)
+        elif k == '-C':
+            cfg.colorizer = Colorizer(light_colormap)
         elif k == '-q':
             cfg.verbosity = 0
             cfg.progress = False
