@@ -30,12 +30,11 @@ from zope.app.site.servicecontainer import SiteManagerContainer
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 
 from schoolbell.relationship import RelationshipProperty
-from schoolbell.app.app import SchoolBellApplication
-from schoolbell.app.app import Group, GroupContainer
-from schoolbell.app.app import PersonContainer, ResourceContainer
+from schoolbell.app.app import SchoolBellApplication, Person, Group, Resource
+from schoolbell.app.app import PersonContainer, GroupContainer
+from schoolbell.app.app import ResourceContainer
 from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIGroup, URIMember
-from schoolbell.app.app import SchoolBellApplication, Person, Group, Resource
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ISchoolToolApplication
@@ -94,16 +93,11 @@ class Section(Group):
     instructors = RelationshipProperty(URIInstruction, URISection,
                                        URIInstructor)
 
-    learners = RelationshipProperty(URILearning, URISection,
-                                       URILearner)
+    learners = RelationshipProperty(URILearning, URISection, URILearner)
 
-    courses = RelationshipProperty(URIMembership, URIMember,
-                                   URIGroup)
+    courses = RelationshipProperty(URIMembership, URIMember, URIGroup)
 
-
-
-    def __init__(self, description=None, schedule=None,
-                 courses=None):
+    def __init__(self, description=None, schedule=None, courses=None):
         self.description = description
         self.schedule = schedule
         self.calendar = Calendar(self)
@@ -113,4 +107,3 @@ class SchoolToolGroupContainer(GroupContainer):
     """Extend the schoolbell group container to support subclasses."""
 
     implements(ISchoolToolGroupContainer)
-
