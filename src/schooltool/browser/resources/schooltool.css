@@ -8,11 +8,11 @@
  */
 
 div.hr {
-  clear: both;
+    clear: both;
 }
 
 div.hr hr {
-  display: none;
+    display: none;
 }
 
 .section {
@@ -38,5 +38,42 @@ div.hr hr {
     height: 60px;
     padding: 5px;
     vertical-align: middle;
+}
+
+/* Terms */
+
+table.schooldaymodel {
+    width: 90%;
+    margin-bottom: 0.5ex;
+}
+
+table.schooldaymodel tr.legend td {
+    text-align: center;
+}
+table.schooldaymodel tr.legend td.legend {
+    text-align: left;
+    padding-left: 0;
+}
+table.schooldaymodel td.holiday {
+    color: red;
+    background: #eeeeee;
+    font-weight: bold;
+}
+table.schooldaymodel td.schoolday {
+    color: black;
+    background: #eeeeee;
+    font-weight: normal;
+}
+table.schooldaymodel td {
+    background: transparent;
+    text-align: right;
+    padding: 0ex 1ex;
+}
+table.schooldaymodel td label {
+    display: inline;
+    font-weight: inherit;
+    float: none;
+    width: auto;
+    color: inherit;
 }
 

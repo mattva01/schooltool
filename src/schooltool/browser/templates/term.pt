@@ -1,0 +1,170 @@
+<tal:defs define="dummy view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="view/title">Term</title>
+  <script type="text/javascript" metal:fill-slot="extrahead">
+    function update(idx) {
+        var checkbox = document.getElementById('c' + idx);
+        var cell = document.getElementById('td' + idx);
+        if (checkbox.checked) {
+            cell.className = "holiday";
+        } else {
+            cell.className = "schoolday";
+        }
+    }
+    function toggle(idx) {
+        var checkbox = document.getElementById('c' + idx);
+        checkbox.checked = !checkbox.checked;
+        update(idx);
+    }
+    document.write('\074style\076 input.chk { display: none } \074/style\076');
+  </script>
+</head>
+<body>
+  <h1 metal:fill-slot="content-header" tal:content="view/title">Term</h1>
+
+<metal:block metal:fill-slot="body">
+
+<form class="plain" method="post" tal:attributes="action request/URL"
+      tal:define="calendar view/calendar">
+
+<!-- XXX: use view.update_status
+<div class="info" tal:condition="view/status" tal:content="view/status">
+  [Status message]
+</div>
+-->
+
+<p i18n:translate="">
+First, please name and define the time period itself.  The name should be short
+and contain no spaces (e.g., 2004-fall).  The date range is inclusive (e.g.,
+2004-09-01 to 2004-12-31).  Dates must be specified in YYYY-MM-DD format.
+</p>
+
+<!-- XXX The above is for creating.  This is for editing:
+<p i18n:translate="" tal:condition="view/context">
+The date range is inclusive (e.g., 2004-09-01 to 2004-12-31).
+</p>
+  -->
+<fieldset>
+  <div class="row" tal:define="widget nocall:view/title_widget">
+    <div metal:use-macro="context/@@form_macros/widget_row" />
+  </div>
+  <div class="row" tal:define="widget nocall:view/start_date_widget">
+    <div metal:use-macro="context/@@form_macros/widget_row" />
+  </div>
+  <div class="row" tal:define="widget nocall:view/end_date_widget">
+    <div metal:use-macro="context/@@form_macros/widget_row" />
+  </div>
+</fieldset>
+  <div class="controls" tal:condition="not:calendar">
+    <input type="submit" class="button-ok" name="NEXT"
+           value="Next" i18n:attributes="value" />
+  </div>
+  <div class="controls" tal:condition="calendar">
+    <input type="submit" class="button-ok" name="REFRESH"
+           value="Refresh" i18n:attributes="value" />
+  </div>
+
+<tal:if condition="calendar">
+
+<p i18n:translate="">
+Second, please specify which days are school days, and which days are holidays.
+</p>
+
+<!-- XXX The above is for creating.  This is for editing:
+<p i18n:translate="" tal:condition="view/context">
+Please specify which days are school days, and which days are holidays.
+</p>
+  -->
+
+<fieldset>
+  <table id="legend" class="schooldaymodel">
+    <tr class="legend">
+      <td class="legend" i18n:translate="">Legend:</td>
+      <td width="12%" class="schoolday" i18n:translate="">Schoolday</td>
+      <td width="12%" class="holiday" i18n:translate="">Holiday</td>
+      <td width="12%"></td>
+      <td width="12%"></td>
+      <td width="12%"></td>
+      <td width="12%"></td>
+      <td width="12%"></td>
+    </tr>
+  </table>
+
+  <p>
+    <span i18n:translate="">Toggle the following days of week: </span>
+    <input class="button" type="submit" name="TOGGLE_0" value="Monday"
+           i18n:attributes="value" />
+    <input class="button" type="submit" name="TOGGLE_1" value="Tuesday"
+           i18n:attributes="value" />
+    <input class="button" type="submit" name="TOGGLE_2" value="Wednesday"
+           i18n:attributes="value" />
+    <input class="button" type="submit" name="TOGGLE_3" value="Thursday"
+           i18n:attributes="value" />
+    <input class="button" type="submit" name="TOGGLE_4" value="Friday"
+           i18n:attributes="value" />
+    <input class="button" type="submit" name="TOGGLE_5" value="Saturday"
+           i18n:attributes="value" />
+    <input class="button" type="submit" name="TOGGLE_6" value="Sunday"
+           i18n:attributes="value" />
+  </p>
+
+  <p>Click on a day to toggle its state.</p>
+
+  <table class="schooldaymodel" tal:repeat="month calendar">
+    <tr>
+      <th class="month" colspan="8" tal:content="month/title">[Month]</th>
+    </tr>
+    <tr>
+      <th class="day"></th>
+      <th class="day" width="12%" i18n:translate="">Monday</th>
+      <th class="day" width="12%" i18n:translate="">Tuesday</th>
+      <th class="day" width="12%" i18n:translate="">Wednesday</th>
+      <th class="day" width="12%" i18n:translate="">Thursday</th>
+      <th class="day" width="12%" i18n:translate="">Friday</th>
+      <th class="day" width="12%" i18n:translate="">Saturday</th>
+      <th class="day" width="12%" i18n:translate="">Sunday</th>
+    </tr>
+    <tr tal:repeat="week month/weeks">
+      <th class="week" tal:content="week/title">[Week N]</th>
+      <td tal:repeat="day week/days"
+          tal:attributes="class day/class;
+                          id python:day['index'] and 'td%d' % day['index'];
+                          onclick day/onclick">
+        <label tal:condition="day/number">
+          <span tal:replace="day/number">N</span>
+          <input type="checkbox" name="holiday" class="chk"
+                 tal:attributes="value day/date; checked day/checked;
+                           onchange string:javascript:update(${day/index});
+                           id string:c${day/index};" />
+        </label>
+      </td>
+    </tr>
+  </table>
+</fieldset>
+
+  <div class="controls">
+    <input type="submit" class="button-ok" name="REFRESH"
+           value="Refresh" i18n:attributes="value" />
+    <input type="submit" class="button-ok" name="CREATE"
+           value="Add term" i18n:attributes="value" />
+  </div>
+
+<!-- XXX The above is for creating.  This is for editing:
+  <div class="controls" tal:condition="view/context">
+    <input type="submit" class="button-ok" name="REFRESH"
+           value="Refresh"
+           i18n:attributes="value" />
+    <input type="submit" class="button-ok" name="UPDATE"
+           value="Save changes"
+           i18n:attributes="value" />
+  </div>
+  -->
+
+</tal:if>
+
+</form>
+
+</metal:block>
+</body>
+</html>

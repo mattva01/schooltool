@@ -33,6 +33,11 @@ We will need a SchoolTool instance.  Let's call it 'frogpond'.
 Terms
 -----
 
+Terms are periods of time (such as semesters or trimesters) that also say which
+days are holidays and which are not.  You can define any number of terms -- and
+you have to have at least one if you want to use timetables.
+
+Initially there are no terms defined.
 
     >>> print http(r"""
     ... GET /frogpond/terms HTTP/1.1
@@ -41,11 +46,101 @@ Terms
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
     ...
     <title>Terms</title>
     ...
+    <a href="@@add.html">New term</a>
+    ...
+    <h1>Terms</h1>
+    ...
     <p>There are none.</p>
     ...
+
+The manager can add one.
+
+    >>> print http(r"""
+    ... GET /frogpond/terms/@@add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <title>New term</title>
+    ...
+    <h1>New term</h1>
+    ...
+    <form class="plain" method="post"
+          action="http://localhost/frogpond/terms/@@add.html">
+    ...
+    <p>
+    First, please name and define the time period itself.  The name should be short
+    and contain no spaces (e.g., 2004-fall).  The date range is inclusive (e.g.,
+    2004-09-01 to 2004-12-31).  Dates must be specified in YYYY-MM-DD format.
+    </p>
+    ...<input class="textType" id="field.title" name="field.title" size="20"
+              type="text" value="" />...
+    ...<input class="textType" id="field.start_date" name="field.start_date"
+              size="20" type="text" value="" />...
+    ...<input class="textType" id="field.end_date" name="field.end_date"
+              size="20" type="text" value="" />...
+    <div class="controls">
+      <input type="submit" class="button-ok" name="NEXT" value="Next" />
+    </div>
+    </form>
+    ...
+
+First you have to specify the title and date.
+
+    >>> print http(r"""
+    ... POST /frogpond/terms/@@add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 75
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=2005+Fall&field.start_date=2005-09-01&field.end_date=2005-12-31
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <title>New term</title>
+    ...
+    <h1>New term</h1>
+    ...
+    <form class="plain" method="post"
+          action="http://localhost/frogpond/terms/@@add.html">
+    ...
+    <p>
+    First, please name and define the time period itself.  The name should be short
+    and contain no spaces (e.g., 2004-fall).  The date range is inclusive (e.g.,
+    2004-09-01 to 2004-12-31).  Dates must be specified in YYYY-MM-DD format.
+    </p>
+    ...<input class="textType" id="field.title" name="field.title" size="20"
+              type="text" value="2005 Fall" />...
+    ...<input class="textType" id="field.start_date" name="field.start_date"
+              size="20" type="text" value="2005-09-01" />...
+    ...<input class="textType" id="field.end_date" name="field.end_date"
+              size="20" type="text" value="2005-12-31" />...
+    <div class="controls">
+      <input type="submit" class="button-ok" name="REFRESH" value="Refresh" />
+    </div>
+    <p>
+    Second, please specify which days are school days, and which days are holidays.
+    </p>
+    ...
+    </form>
+    ...
+
+TODO: make toggle buttons work
+TODO: make 'Create' button work
+TODO: implement edition of already defined terms
+TODO: verify that you can delete terms
+TODO: error message when end date < start date
+TODO: error message when title/name is already in use
 
 
 Epilogue
