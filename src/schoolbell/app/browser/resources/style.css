@@ -327,7 +327,7 @@ a.button-ok {
 */
 
 #column-center {
-    padding: 1em 2em;
+    padding: 15px 20px;
 }
 
 #content-header,
@@ -336,8 +336,8 @@ a.button-ok {
 }
 
 #content-header h1 {
-    border-bottom: 1px #d6d6d6 solid;
 }
+
 #breadcrumbs {
     list-style: none;
     padding: 0;
@@ -927,40 +927,49 @@ body#path-login form.standalone {
 
 .person-photo {
     float: left;
-    margin-right: 0.5em;
+    margin: 0 0.5em 0 0;
     background: #d6d6d6;
     padding: 2px;
     border: 1px #999 solid;
 }
 
 .person-info {
-    /* XXX: We want person-info to expand to fit person-photo.. by default the
-    * float on person-photo causes person-info to ignore it and only expand to
-    * contain whatever other contents there are, but for some reason adding
-    * 'overflow: auto' or 'overflow: hidden' causes person-info to expand to
-    * the height of person-photo.  This is what we want, but I have no idea why
-    * auto/hidden would cause this. 
-    */ 
-    margin-top: 2ex;
 }
 
-.person-info .person-details {
-    margin: 0.5em;
-    padding: 0.5em;
+.info-block {
+    width: 62%;
+    border: none;
+    border-top: 1px #d6d6d6 solid;
+    margin: 1em 0em;
+    padding: 0em 0.5em;
 }
 
-.person-groups {
-    margin: 0.5em;
-    padding: 0.5em;
-    background: #d6d6d6;
-    border: 1px #999 solid;
-    width: 30%;
+.info-block h5 {
+    margin: 0px;
+    padding: 0px;
+    font-weight: bold;
+}
+
+td.dl {
+  text-align: left;
+}
+
+td.dr {
+  text-align: right;
+}
+
+a.modify {
+    font-weight: normal;
 }
 
 .person-info a {
-  font-weight: normal;
+    font-weight: normal;
 }
-.person-info .address {
+
+table.person-details {
+    text-align: center;
+}
+.person-details .address {
     margin: 0.25em;
     font-size: 85%;
 }
@@ -1025,8 +1034,7 @@ table.event_booking td.booked {
 
 #notes {
   float: right;
-  width: 18em;
-  top: 1ex !important;
+  width: 32%;
 }
 
 #notes h5 {
@@ -1040,7 +1048,7 @@ table.event_booking td.booked {
 */
 
 .note {
-  margin-top: 1ex;
+  margin-bottom: 1ex;
   background: #eed680 url(++resource++note-body-r.gif) no-repeat bottom right;
 }
 
@@ -1054,7 +1062,7 @@ table.event_booking td.booked {
 .note .header h6 {
   background: url(++resource++note-head-l.gif) no-repeat top left;
   margin: 0;
-  padding: 0.5ex;
+  padding: 0.25ex 0.5ex;
   font-weight: bold; 
   font-size: small;
 }
@@ -1077,6 +1085,6 @@ table.event_booking td.booked {
   background: url(++resource++note-body-l.gif) no-repeat bottom left;
   margin: 0;
   padding: 1ex;
-  font-size: small;
+  font-size: x-small;
 }
 

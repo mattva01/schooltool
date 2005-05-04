@@ -231,7 +231,9 @@ themselves can see it:
     ...Username:...
           frog
     ...
-    This person does not belong to any groups.
+          <h5>Groups</h5>
+    <BLANKLINE>
+          <a class="modify"
     ...
 
 If we try to create a person with the same login name, we get a nice error:
