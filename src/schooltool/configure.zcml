@@ -53,6 +53,31 @@
              set_schema="schooltool.interfaces.ICourse" />
   </content>
 
+  <content class=".app.Group">
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
+    <require permission="schoolbell.view"
+             attributes="title description groups members" />
+    <require permission="schoolbell.edit"
+             set_schema="schooltool.interfaces.IGroup" />
+  </content>
+
+  <content class=".app.Person">
+    <require permission="schoolbell.view"
+             interface="schoolbell.app.interfaces.IReadPerson" />
+    <require permission="schoolbell.edit"
+             interface="schoolbell.app.interfaces.IWritePerson"
+             set_schema="schooltool.interfaces.IPerson" />
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
+  </content>
+
+  <content class=".app.Resource">
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
+    <require permission="schoolbell.view"
+             attributes="title description groups" />
+    <require permission="schoolbell.edit"
+             set_schema="schooltool.interfaces.IResource" />
+  </content>
+
   <content class=".app.Section">
     <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
     <require permission="schoolbell.view"

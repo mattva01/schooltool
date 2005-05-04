@@ -35,6 +35,8 @@ from zope.app.container.constraints import contains
 from schooltool import SchoolToolMessageID as _
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IGroup, IGroupContainer, IGroupContained
+from schoolbell.app.interfaces import IPerson, IPersonContained
+from schoolbell.app.interfaces import IResource, IResourceContained
 
 from schoolbell.calendar.interfaces import Unchanged
 from schoolbell.calendar.interfaces import ICalendarEvent
@@ -630,8 +632,8 @@ class IExceptionalTTCalendarEvent(ICalendarEvent):
 
 
 class ITimetabled(Interface):
-    """A facet or an object that has a timetable related to it --
-    either its own, or composed of the timetables of related objects.
+    """An object that has a timetable related to it -- either its own,
+    or composed of the timetables of related objects.
     """
 
     timetables = Dict(

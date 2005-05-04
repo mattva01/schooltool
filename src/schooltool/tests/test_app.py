@@ -170,6 +170,41 @@ def doctest_getSchoolToolApplication():
       >>> setup.placelessTearDown()
     """
 
+def doctest_Person():
+    """
+        >>> from schooltool.app import Person
+        >>> p = Person("jonn")
+
+        >>> from schooltool.interfaces import IPerson, ITimetabled
+        >>> verifyObject(IPerson, p)
+        True
+        >>> verifyObject(ITimetabled, p)
+        True
+    """
+
+def doctest_Group():
+    """
+        >>> from schooltool.app import Group
+        >>> g = Group("The Beatles")
+
+        >>> from schooltool.interfaces import IGroup, ITimetabled
+        >>> verifyObject(IGroup, g)
+        True
+        >>> verifyObject(ITimetabled, g)
+        True
+    """
+
+def doctest_Group():
+    """
+        >>> from schooltool.app import Resource
+        >>> r = Resource("Printer")
+
+        >>> from schooltool.interfaces import IResource, ITimetabled
+        >>> verifyObject(IResource, r)
+        True
+        >>> verifyObject(ITimetabled, r)
+        True
+    """
 
 def test_suite():
     return unittest.TestSuite([

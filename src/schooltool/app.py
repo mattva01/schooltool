@@ -30,11 +30,9 @@ from zope.app.site.servicecontainer import SiteManagerContainer
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 
 from schoolbell.relationship import RelationshipProperty
-from schoolbell.app.app import SchoolBellApplication, Person, Group, Resource
-from schoolbell.app.app import PersonContainer, GroupContainer
-from schoolbell.app.app import ResourceContainer
 from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIGroup, URIMember
+from schoolbell.app import app as sb
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ISchoolToolApplication
@@ -43,6 +41,7 @@ from schooltool.interfaces import ICourse, ISection
 from schooltool.relationships import URIInstruction, URISection, URIInstructor
 from schooltool.relationships import URILearning, URILearner
 from schooltool.timetable import TermService, TimetableSchemaService
+from schooltool.timetable import TimetabledMixin
 
 
 class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
@@ -52,9 +51,9 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
 
     def __init__(self):
         SampleContainer.__init__(self)
-        self['persons'] = PersonContainer()
+        self['persons'] = sb.PersonContainer()
         self['groups'] = groups = SchoolToolGroupContainer()
-        self['resources'] = ResourceContainer()
+        self['resources'] = sb.ResourceContainer()
         groups['staff'] = Group('staff', _('Staff'))
         groups['learners'] = Group('learners', _('Learners'))
         groups['courses'] = Group('courses', _('Courses currently offered'))
@@ -67,6 +66,27 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
 
     def _newContainerData(self):
         return PersistentDict()
+
+
+class Group(sb.Group, TimetabledMixin):
+
+    def __init__(self, *args, **kw):
+        sb.Group.__init__(self, *args, **kw)
+        TimetabledMixin.__init__(self)
+
+
+class Person(sb.Person, TimetabledMixin):
+
+    def __init__(self, *args, **kw):
+        sb.Person.__init__(self, *args, **kw)
+        TimetabledMixin.__init__(self)
+
+
+class Resource(sb.Resource, TimetabledMixin):
+
+    def __init__(self, *args, **kw):
+        sb.Resource.__init__(self, *args, **kw)
+        TimetabledMixin.__init__(self)
 
 
 class Course(Group):
@@ -103,7 +123,7 @@ class Section(Group):
         self.calendar = Calendar(self)
 
 
-class SchoolToolGroupContainer(GroupContainer):
+class SchoolToolGroupContainer(sb.GroupContainer):
     """Extend the schoolbell group container to support subclasses."""
 
     implements(ISchoolToolGroupContainer)
