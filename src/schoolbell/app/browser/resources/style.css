@@ -941,6 +941,7 @@ body#path-login form.standalone {
 a.modify {
     display: block;
     padding: 0.25em;
+    font-weight: normal;
 }
 
 .person-photo {
