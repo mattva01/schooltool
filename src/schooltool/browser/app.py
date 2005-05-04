@@ -91,7 +91,7 @@ class SectionAddView(AddView):
             self.error = _("Need a course ID.")
 
         if self.course is not None:
-            self.label = 'Add a Section to ' + self.course.title # XXX i18n?
+            self.label = _('Add a Section to ') + self.course.title
 
     def update(self):
 
