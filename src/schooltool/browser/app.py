@@ -91,7 +91,7 @@ class SectionAddView(AddView):
             self.error = _("Need a course ID.")
 
         if self.course is not None:
-            self.label = 'Add a Section to ' + self.course.title
+            self.label = 'Add a Section to ' + self.course.title # XXX i18n?
 
     def update(self):
 
@@ -124,7 +124,7 @@ class SectionAddView(AddView):
 
 
 class SectionInstructorView(BrowserView):
-    """View for adding instructors to a Section.  """
+    """View for adding instructors to a Section."""
 
     __used_for__ = ISection
 
@@ -197,4 +197,3 @@ class SchoolToolApplicationTraverser(ContainerTraverser):
             return self.context.terms
         else:
             return ContainerTraverser.publishTraverse(self, request, name)
-
