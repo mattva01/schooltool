@@ -7,38 +7,49 @@
 
 <metal:block metal:fill-slot="body">
 
+  <tal:block replace="structure context/@@notes|nothing"/>
+
   <div class="group-info">
     <p class="description" tal:content="context/description"/>
 
-    <div class="group-members">
-      <div tal:define="members view/getPersons">
-        <h3 i18n:translate="">Members</h3>
-        <ul>
-          <li tal:repeat="obj members/sortby:title">
-            <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
-          </li>
-        </ul>
-        <p tal:condition="not:members" i18n:translate="">
-          This group has no members.
-        </p>
-      </div>
-      <div tal:define="resources view/getResources"
-        tal:condition="resources">
-        <tal:comment condition="nothing">
-          <!-- The resource section is hidden altogether when there are no
-          resources as members - I presume that many groups will not
-          have resources as members. -->
-        </tal:comment>
-        <h3 i18n:translate="">Resources</h3>
-        <ul>
-          <li tal:repeat="obj resources/sortby:title">
-            <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
-          </li>
-        </ul>
-      </div>
+    <div tal:define="members view/getPersons" class="info-block">
+      <h5 i18n:translate="">Members</h5>
+      <ul tal:condition="members">
+        <li tal:repeat="obj members/sortby:title">
+          <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
+        </li>
+      </ul>
+
+      <a class="modify" href=""
+         title="Change the people who are members of this group."
+         tal:attributes="href string:${context/@@absolute_url}/@@members_persons.html"
+         i18n:attributes="title"
+         i18n:translate="">
+         edit members
+      </a>
+    </div>
+    <div tal:define="resources view/getResources" class="info-block"
+      tal:condition="resources">
+      <tal:comment condition="nothing">
+        <!-- The resource section is hidden altogether when there are no
+        resources as members - I presume that many groups will not
+        have resources as members. -->
+      </tal:comment>
+      <h5 i18n:translate="">Resources</h5>
+      <ul>
+        <li tal:repeat="obj resources/sortby:title">
+          <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
+        </li>
+      </ul>
+      <a class="modify" href=""
+         title="Change the resources selected for this group."
+         tal:attributes="href string:${context/@@absolute_url}/@@members_persons.html"
+         i18n:attributes="title"
+         i18n:translate="">
+         edit resources
+      </a>
     </div>
   </div>
-  <tal:block replace="structure context/@@notes|nothing"/>
 
 </metal:block>
 </body>

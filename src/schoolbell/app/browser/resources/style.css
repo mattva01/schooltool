@@ -915,27 +915,6 @@ body#path-login form.standalone {
 
 /** Specific Page Styling **/
 
-.resource-info {
-    width: 55%;
-    float: left;
-}
-
-.group-info {
-    width: 55%;
-    float: left;
-}
-
-.person-photo {
-    float: left;
-    margin: 0 0.5em 0 0;
-    background: #d6d6d6;
-    padding: 2px;
-    border: 1px #999 solid;
-}
-
-.person-info {
-}
-
 .info-block {
     width: 62%;
     border: none;
@@ -950,20 +929,34 @@ body#path-login form.standalone {
     font-weight: bold;
 }
 
+.info-block a {
+    font-weight: normal;
+}
+
+.info-block ul {
+    margin: 0.25em;
+    list-style: circle;
+}
+
+a.modify {
+    display: block;
+    padding: 0.25em;
+}
+
+.person-photo {
+    float: left;
+    margin: 0 0.5em 0 0;
+    background: #d6d6d6;
+    padding: 2px;
+    border: 1px #999 solid;
+}
+
 td.dl {
   text-align: left;
 }
 
 td.dr {
   text-align: right;
-}
-
-a.modify {
-    font-weight: normal;
-}
-
-.person-info a {
-    font-weight: normal;
 }
 
 table.person-details {
