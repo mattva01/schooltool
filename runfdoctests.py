@@ -21,6 +21,8 @@ import readline
 
 
 def main():
+    args = sys.argv[1:]
+
     # Hack hack hack!
     sys.path.insert(0, os.path.abspath('src')) # breaks horribly without os.path.abspath
     sys.path.insert(0, os.path.abspath('Zope3/src'))
@@ -46,7 +48,14 @@ def main():
         print "\n".join(fns)
         print
         while True:
-            filename = raw_input("fdoctest file name> ")
+            if args:
+                # Process command line arguments first, then go into
+                # interactive mode
+                filename = args.pop(0)
+                readline.add_history(filename)
+                print "fdoctest file name>", filename
+            else:
+                filename = raw_input("fdoctest file name> ")
             if not filename:
                 print "^D to exit"
             elif filename == 'pdb':
