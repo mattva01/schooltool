@@ -41,8 +41,8 @@ from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ISchoolToolApplication
 from schooltool.interfaces import ISchoolToolGroupContainer
 from schooltool.interfaces import ICourse, ISection
-from schooltool.uris import URIInstruction, URISection, URIInstructor
-from schooltool.uris import URILearning, URILearner
+from schooltool.relationships import URIInstruction, URISection, URIInstructor
+from schooltool.relationships import URILearning, URILearner
 from schooltool.timetable import TermService, TimetableSchemaService
 
 

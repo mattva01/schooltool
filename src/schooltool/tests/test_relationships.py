@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.uris
+Unit tests for schooltool.relationships
 
 $Id: test_app.py 3504 2005-04-22 16:34:13Z bskahan $
 """
@@ -30,7 +30,7 @@ from zope.interface.verify import verifyObject
 def doctest_Instruction():
     r"""Tests for Instruction URIs and methods
 
-        >>> from schooltool.uris import *
+        >>> from schooltool.relationships import *
 
         >>> from schoolbell.relationship.tests import setUp, tearDown
         >>> setUp()
@@ -66,7 +66,8 @@ def doctest_Learning():
 
     For now just import these to check for syntax errors
 
-        >>> from schooltool.uris import Learning, URILearning, URILearner
+        >>> from schooltool.relationships import Learning
+        >>> from schooltool.relationships import URILearning, URILearner
 
     """
 
@@ -74,7 +75,7 @@ def doctest_Learning():
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
-                doctest.DocTestSuite('schooltool.uris',
+                doctest.DocTestSuite('schooltool.relationships',
                                      optionflags=doctest.ELLIPSIS),
            ])
 

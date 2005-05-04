@@ -21,7 +21,7 @@
 
   <subscriber
       for="schoolbell.relationship.interfaces.IBeforeRelationshipEvent"
-      handler=".uris.enforceInstructionConstraints"
+      handler=".relationships.enforceInstructionConstraints"
     />
 
   <!-- Content -->

@@ -96,13 +96,11 @@ def doctest_Section():
 
         >>> from schoolbell.app.app import Person
         >>> from schoolbell.app.interfaces import IPerson
-        >>> from schooltool.uris import URIInstructor
         >>> teacher = Person('teacher', 'Mr. Jones')
         >>> section.instructors.add(teacher)
 
     Now we'll add some learners to the Section.
 
-        >>> from schooltool.uris import Learning, URILearner, URILearning
         >>> section.learners.add(Person('first','First'))
         >>> section.learners.add(Person('second','Second'))
         >>> section.learners.add(Person('third','Third'))
