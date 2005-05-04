@@ -1332,8 +1332,8 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
         self.assertEquals(len(self.events), 2)
 
 
-class TestTimetabledMixin(NiceDiffsMixin, unittest.TestCase,
-                          EqualsSortedMixin):
+class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
+                          unittest.TestCase):
 
     def setUp(self):
         from schoolbell.relationship.tests import setUpRelationships
@@ -1496,7 +1496,7 @@ class TestTimetabledMixin(NiceDiffsMixin, unittest.TestCase,
         self.assert_(cal.__parent__ is tm)
 
 
-class TestMembershipTimetableSource(unittest.TestCase):
+class BaseTimetableSourceTest(object):
 
     def setUp(self):
         from schoolbell.relationship.tests import setUpRelationships
@@ -1515,10 +1515,9 @@ class TestMembershipTimetableSource(unittest.TestCase):
         setup.placefulTearDown()
 
     def test(self):
-        from schooltool.timetable import MembershipTimetableSource
         from schooltool.interfaces import ITimetableSource
         context = TimetabledStub()
-        adapter = MembershipTimetableSource(context)
+        adapter = self.createAdapter(context)
         verifyObject(ITimetableSource, adapter)
 
     def newTimetable(self):
@@ -1530,11 +1529,10 @@ class TestMembershipTimetableSource(unittest.TestCase):
 
     def test_getTimetable(self):
         from schooltool.timetable import TimetableActivity
-        from schoolbell.app.membership import Membership
 
         tm = TimetabledStub()
         parent = TimetabledStub()
-        Membership(group=parent, member=tm)
+        self.createRelationship(tm, parent)
 
         composite = self.newTimetable()
         english = TimetableActivity("English")
@@ -1550,8 +1548,7 @@ class TestMembershipTimetableSource(unittest.TestCase):
         parent.listCompositeTimetables = (
             lambda: Set([("2003 fall", "sequential")]))
 
-        from schooltool.timetable import MembershipTimetableSource
-        adapter = MembershipTimetableSource(tm)
+        adapter = self.createAdapter(tm)
         result = adapter.getTimetable("2003 fall", "sequential")
         self.assertEqual(result, composite)
 
@@ -1561,7 +1558,7 @@ class TestMembershipTimetableSource(unittest.TestCase):
 
         # let's try it with two timetables
         otherparent = TimetabledStub()
-        Membership(group=otherparent, member=tm)
+        self.createRelationship(tm, otherparent)
 
         othertt = self.newTimetable()
         math = TimetableActivity("Math")
@@ -1578,16 +1575,14 @@ class TestMembershipTimetableSource(unittest.TestCase):
 
     def test_listTimetables(self):
         from schooltool.timetable import TimetableActivity
-        from schoolbell.app.membership import Membership
-        from schooltool.timetable import MembershipTimetableSource
 
         tm = TimetabledStub()
 
-        adapter = MembershipTimetableSource(tm)
+        adapter = self.createAdapter(tm)
         self.assertEqual(adapter.listTimetables(), Set())
 
         parent = TimetabledStub()
-        Membership(group=parent, member=tm)
+        self.createRelationship(tm, parent)
 
         parent.listCompositeTimetables = (
             lambda: Set([("2003 fall", "sequential")]))
@@ -1596,7 +1591,7 @@ class TestMembershipTimetableSource(unittest.TestCase):
                          Set([("2003 fall", "sequential")]))
 
         otherparent = TimetabledStub()
-        Membership(group=otherparent, member=tm)
+        self.createRelationship(tm, otherparent)
 
         otherparent.listCompositeTimetables = (
             lambda: Set([("2005 fall", "sequential")]))
@@ -1604,6 +1599,46 @@ class TestMembershipTimetableSource(unittest.TestCase):
         self.assertEqual(adapter.listTimetables(),
                          Set([("2003 fall", "sequential"),
                               ("2005 fall", "sequential")]))
+
+
+class TestMembershipTimetableSource(BaseTimetableSourceTest,
+                                    unittest.TestCase):
+
+    def createAdapter(self, context):
+        from schooltool.timetable import MembershipTimetableSource
+        return MembershipTimetableSource(context)
+
+    def createRelationship(self, context, related):
+        from schoolbell.app.membership import Membership
+        Membership(group=related, member=context)
+
+
+class TestInstructionTimetableSource(BaseTimetableSourceTest,
+                                     unittest.TestCase):
+
+    def createAdapter(self, context):
+        from schooltool.timetable import InstructionTimetableSource
+        return InstructionTimetableSource(context)
+
+    def createRelationship(self, context, related):
+        from schooltool.relationships import Instruction
+        Instruction(instructor=context, section=related)
+
+
+class TestLearningTimetableSource(BaseTimetableSourceTest,
+                                  unittest.TestCase):
+    # Test that the InstructionTimetableSource works for the Learning
+    # relationship, too.
+    #
+    # This is true because the role URI is the same -- URISection.
+
+    def createAdapter(self, context):
+        from schooltool.timetable import InstructionTimetableSource
+        return InstructionTimetableSource(context)
+
+    def createRelationship(self, context, related):
+        from schooltool.relationships import Learning
+        Learning(learner=context, section=related)
 
 
 class TestTimetableSchemaService(unittest.TestCase):
@@ -1770,6 +1805,8 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTermService))
     suite.addTest(unittest.makeSuite(TestTimetabledMixin))
     suite.addTest(unittest.makeSuite(TestMembershipTimetableSource))
+    suite.addTest(unittest.makeSuite(TestInstructionTimetableSource))
+    suite.addTest(unittest.makeSuite(TestLearningTimetableSource))
     suite.addTest(unittest.makeSuite(TestGetPeriodsForDay))
     return suite
 

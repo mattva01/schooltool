@@ -187,6 +187,7 @@ from schooltool.interfaces import IDateRange
 from schooltool.interfaces import ITermCalendarWrite, ITermCalendar
 from schooltool.interfaces import ITimetableSource
 from schooltool import getSchoolToolApplication
+from schooltool.relationships import URISection
 
 __metaclass__ = type
 
@@ -1015,9 +1016,11 @@ class TimetabledMixin:
         return result
 
 
-class MembershipTimetableSource(object):
-    """A subscription adapter that adds the group timetables to the members'
-    composite timetables.
+class BaseRelationshipTimetableSource(object):
+    """A timetable source for composing timetables over relationships.
+
+    Subclasses must provide a role attribute, with a URI of the role
+    of the related objects, timetables of which will be added.
     """
 
     implements(ITimetableSource)
@@ -1027,7 +1030,7 @@ class MembershipTimetableSource(object):
 
     def getTimetable(self, term, schema):
         timetables = []
-        for obj in getRelatedObjects(self.context, URIGroup):
+        for obj in getRelatedObjects(self.context, self.role):
             tt = obj.getCompositeTimetable(term, schema)
             if tt is not None:
                 timetables.append(tt)
@@ -1043,9 +1046,23 @@ class MembershipTimetableSource(object):
 
     def listTimetables(self):
         keys = Set()
-        for obj in getRelatedObjects(self.context, URIGroup):
+        for obj in getRelatedObjects(self.context, self.role):
             keys.update(obj.listCompositeTimetables())
         return keys
+
+
+class MembershipTimetableSource(BaseRelationshipTimetableSource):
+    """A subscription adapter that adds the group timetables to the members'
+    composite timetables.
+    """
+    role = URIGroup
+
+
+class InstructionTimetableSource(BaseRelationshipTimetableSource):
+    """A subscription adapter that adds the section timetables to the teachers'
+    composite timetables.
+    """
+    role = URISection
 
 
 class TimetableSchemaService(Persistent):

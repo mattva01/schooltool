@@ -17,6 +17,13 @@
       permission="zope.Public"
       />
 
+  <subscriber
+      for="schooltool.interfaces.ITimetabled"
+      provides="schooltool.interfaces.ITimetableSource"
+      factory="schooltool.timetable.InstructionTimetableSource"
+      permission="zope.Public"
+      />
+
   <!-- Events -->
 
   <subscriber
