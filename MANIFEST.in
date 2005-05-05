@@ -1,8 +1,8 @@
 include RELEASE
 include GPL
 include Makefile
-include MANIFEST*schooltool
-include test.conf test.py testserver.pem
+include MANIFEST
+include test.py
 include ttconfig.data
 include schooltool.conf.in
 include ftesting.zcml
