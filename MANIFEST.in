@@ -1,3 +1,4 @@
+# Top level directory
 include RELEASE
 include GPL
 include Makefile
@@ -7,20 +8,22 @@ include schooltool.conf.in
 include ftesting.zcml
 include schooltool-*.py
 include remove-stale-bytecode.py
+
+# scripts
 include scripts/schooltool
 
-recursive-include src/schooltool *.py *.scr *.pt *.css *.png *.pot
+# Data files scattered in the schooltool source
+# XXX - cross check with regex in setup.py
+recursive-include src/schooltool *.scr *.pt *.css *.png *.pot
 recursive-include src/schooltool *.js *.xml *.rng *.ico *.conf
 recursive-include doc *.txt *.rst
-recursive-include db-conversion-tests Data.fs-* test_*.py
 
+# include the debian directory
 include debian/rules debian/changelog debian/compat debian/control
 include debian/copyright debian/README.Debian debian/TODO
 include debian/*.1 debian/schooltool.* debian/ssl-cert.cnf
 include debian/python*schooltool.*
 include debian/po/*.po debian/po/templates.pot debian/po/POTFILES.in
-
-recursive-include src/schooltool/schema/protege *
 
 # Some things that we should not let into a distribution
 # RCS stuff is handled internally by distutils
