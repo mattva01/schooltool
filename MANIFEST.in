@@ -3,15 +3,11 @@ include GPL
 include Makefile
 include MANIFEST
 include test.py
-include ttconfig.data
 include schooltool.conf.in
 include ftesting.zcml
 include schooltool-*.py
 include remove-stale-bytecode.py
-include *sampleschool.py
-include *.csv
-include scripts/schooltool scripts/import-sampleschool
-include scripts/schooltool-client
+include scripts/schooltool
 
 recursive-include src/schooltool *.py *.scr *.pt *.css *.png *.pot
 recursive-include src/schooltool *.js *.xml *.rng *.ico *.conf

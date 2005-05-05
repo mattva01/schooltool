@@ -60,13 +60,8 @@ edit-coverage-reports:
 vi-coverage-reports:
 	@cd coverage && vi '+/^>>>>>>/' `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
 
-scripts/import-sampleschool: scripts/import-sampleschool.head
-	(cat $< && sed -ne '/^# -- Do not remove this line --$$/,$$p' \
-	    import-sampleschool.py) > $@
-
 .PHONY: schooltooldist
-schooltooldist: realclean build extract-translations \
-	sampledata scripts/import-sampleschool clean
+schooltooldist: realclean build extract-translations clean
 	rm -rf dist
 	fakeroot ./debian/rules clean
 	./setup.py sdist

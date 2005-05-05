@@ -179,18 +179,7 @@ setup(name="schooltool",
         'install_scripts': install_scripts,
         'install_data': install_data},
     package_dir={'': 'src'},
-    packages=['schooltool'],
-    ## XXX - these comments represent features from the twisted schooltool,
-    ## which may still appear in the new schooltool, so keep them around for
-    ## reference
-    #    'schooltool.interfaces',
-    #    'schooltool.schema', 'schooltool.translation',
-    #    'schooltool.rest', 'schooltool.browser',
-    #    'schooltool.clients'],
-    #data_files=[('sampleschool', ['persons.csv', 'groups.csv',
-    #        'resources.csv', 'timetable.csv', 'ttconfig.data'])]
-    #    + data_files + [('', ['schooltool.conf.in'])],
-    #scripts=['scripts/import-sampleschool', 'scripts/schooltool',
-    #    'scripts/schooltool-client']
+    packages=['schooltool', 'schooltool.rest', 'schooltool.browser'],
+    data_files=data_files + [('', ['schooltool.conf.in'])],
     scripts=['scripts/schooltool']
     )
