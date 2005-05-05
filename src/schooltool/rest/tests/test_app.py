@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.app.
+Unit tests for schooltool.rest.app.
 
 $Id: test_app.py 3526 2005-04-28 17:16:47Z bskahan $
 """
@@ -45,6 +45,8 @@ def doctest_SchoolToolApplicationView():
         >>> app = SchoolToolApplication()
         >>> directlyProvides(app, IContainmentRoot)
         >>> view = SchoolToolApplicationView(app, TestRequest())
+
+    XXX: Brian, it this it?
 
     """
 
