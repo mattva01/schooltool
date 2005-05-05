@@ -6,13 +6,9 @@ PYTHON=python2.3
 
 # Server Packages
 package=schooltool
-library=$(PYTHON)-schooltool
+library=libschooltool
 
-build: build-stamp
-build-stamp:
-	dh_testdir
-	$(MAKE) PYTHON=$(PYTHON) PYTHONDIR=/usr/bin/$(PYTHON)
-	touch build-stamp
+build:
 
 clean::
 	dh_testdir
@@ -30,17 +26,13 @@ install-indep-stamp: build
 	dh_clean -k -i
 	dh_installdirs -i
 
-	$(PYTHON) setup.py $(package) install_lib \
-	    --datafile-dir=/usr/share/$(package)/$(package) --no-compile\
-	    --install-dir=debian/$(library)/usr/lib/$(package)
-	$(PYTHON) setup.py $(package) install_data \
-	    --install-dir=debian/$(library)/usr/share/$(package)
-	$(PYTHON) setup.py $(package) install_scripts \
-	    --install-dir=debian/$(library)/usr/bin
+	$(PYTHON) setup.py install --no-compile \
+	    --install-lib=debian/$(library)/usr/lib/$(library) \
+	    --install-scripts=debian/$(library)/usr/bin
 
 	# move the server executable to the configuration package
-	install -m 755 -D -p debian/$(library)/usr/bin/$(package) \
-		debian/$(package)/usr/bin/$(package)
+	install -m 755 -D -p debian/$(library)/usr/bin/schooltool \
+		debian/$(package)/usr/bin/schooltool
 	rm debian/$(library)/usr/bin/$(package)
 	# configuration
 	install -m 644 -D -p debian/$(package).logrotate \
