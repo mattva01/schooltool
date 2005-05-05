@@ -345,50 +345,7 @@
 <!-- END CALENDAR MACROS -->
 
 <metal:block define-macro="person-details">
-  <!--
-  <div tal:condition="view/details/nickname">
-    <strong i18n:translate="">Nickname:</strong>
-    <span tal:content="view/details/nickname" />
-  </div>
 
-  <div tal:condition="view/details/primary_email">
-    <strong i18n:translate="">Primary email:</strong>
-    <a href="" title="Click to launch email client."
-       tal:attributes="href string:mailto:${view/details/primary_email}"
-       tal:content="view/details/primary_email"
-       i18n:attributes="title" />
-  </div>
-
-  <div tal:condition="view/details/secondary_email|nothing">
-    <strong i18n:translate="">Secondary email:</strong>
-    <a href="" title="Click to launch email client."
-       tal:attributes="href string:mailto:${view/details/secondary_email}"
-       tal:content="view/details/secondary_email"
-       i18n:attributes="title" />
-  </div>
-
-  <div tal:condition="view/details/primary_phone">
-    <strong i18n:translate="">Primary phone:</strong>
-    <span tal:content="view/details/primary_phone" />
-  </div>
-
-  <div tal:condition="view/details/secondary_phone|nothing">
-    <strong i18n:translate="">Secondary phone:</strong>
-    <span tal:content="view/details/secondary_phone" />
-  </div>
-
-  <div tal:condition="view/details/home_page">
-    <strong i18n:translate="">Website:</strong>
-    <a href=""
-       tal:attributes="href view/details/home_page"
-       tal:content="view/details/home_page" />
-  </div>
-
-  <div tal:condition="view/details/mailing_address">
-    <strong i18n:translate="">Mailing Address:</strong>
-    <div class="address" tal:content="structure view/details/mailing_address" />
-  </div>
-  -->
   <table class="person-details">
     <tr tal:condition="view/details/nickname">
       <td class="dr" i18n:translate="">Nickname</td>
