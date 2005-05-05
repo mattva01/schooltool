@@ -155,7 +155,7 @@ if sys.version_info < (2, 3):
         _setup(**kwargs)
 
 # find the data files
-# this regex should be similar to the MANIFEST.in recursive includes
+# if you modify this, also modify MANIFEST.in recursive includes
 datafile_re = re.compile('.*\.(pt|js|png|gif|css|mo|rng|xml|zcml)\Z')
 data_files = []
 for root, dirs, files in os.walk(os.path.join('src', 'schoolbell')):
