@@ -45,7 +45,7 @@ install-indep-stamp:
 
 	################## schoolbell ########################
 	: # configuration for a standalone schoolbell server
-	$(PYTHON) setup.py $(package) install_scripts\
+	$(PYTHON) setup.py install_scripts\
 	    --install-dir=debian/$(package)/usr/bin\
 	    --default-config=/etc/$(package)/$(package).conf\
 	    --paths=/usr/lib/$(library)
@@ -72,11 +72,10 @@ install-arch-stamp: build
 	: # These are not really arch-dep, but zope is and is large in
 	: # comparison. When Zope3 is removed from the packages, these
 	: # will go in their own arch-indep library.
-	$(PYTHON) setup.py $(package) install --no-compile\
+	$(PYTHON) setup.py install --no-compile\
 	    --install-lib=debian/$(library)/usr/lib/$(library)\
 	    --install-data=debian/$(library)/usr/lib/$(library) \
-	    --install-scripts=debian/garbage\
-	    --datafile-dir=/usr/lib/$(package)
+	    --install-scripts=debian/garbage
 
 	################ libschoolbell ###################
 	: # copy parts of Zope3 included in the tarball to libschoolbell
