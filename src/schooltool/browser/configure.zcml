@@ -169,6 +169,17 @@
       />
 
   <page
+      name="csvimport.html"
+      for="schooltool.interfaces.ISchoolToolApplication"
+      class="schooltool.browser.csvimport.TimetableCSVImportView"
+      template="templates/csvimport.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="Import CSV"
+      layer="SchoolToolLayer"
+      /> <!-- XXX zope.View is probably not appropriate here -->
+
+  <page
       name="add.html"
       for="schooltool.interfaces.ITermService"
       class="schooltool.browser.timetable.TermAddView"
