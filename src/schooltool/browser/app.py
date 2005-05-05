@@ -34,11 +34,12 @@ from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from schooltool.interfaces import ISchoolToolApplication
 from schoolbell.app.browser.app import GroupView
+from schoolbell.app.browser import app as sb
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ICourse, ISection
 from schooltool.interfaces import ISchoolBellApplication
-from schooltool.app import Section
+from schooltool.app import Section, Person
 
 class CourseView(GroupView):
     """A view for courses providing a list of sections."""
@@ -197,3 +198,9 @@ class SchoolToolApplicationTraverser(ContainerTraverser):
             return self.context.terms
         else:
             return ContainerTraverser.publishTraverse(self, request, name)
+
+
+class PersonAddView(sb.PersonAddView):
+    """An add view that creates SchoolTool, rather than SchoolBell, persons"""
+
+    _factory = Person

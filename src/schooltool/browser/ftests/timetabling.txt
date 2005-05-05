@@ -143,6 +143,69 @@ TODO: error message when end date < start date
 TODO: error message when title/name is already in use
 
 
+Timetables on persons, groups, and resources
+--------------------------------------------
+
+Persons, groups and resources should have timetables.
+
+Let's create a person:
+
+    >>> print http("""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 112
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Frog&field.username=frog&field.password=pwd\
+    ... &field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+Now he should be a schooltool.app.Person, not schoolbell.app.app.Person:
+
+    >>> getRootFolder()['frogpond']['persons']['frog']
+    <schooltool.app.Person object at ...>
+
+Likewise, if we add a group:
+
+    >>> print http(r"""
+    ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Animals&UPDATE_SUBMIT=Add&add_input_name=""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/groups
+    ...
+
+This is a schooltool group:
+
+    >>> getRootFolder()['frogpond']['groups']['animals']
+    <schooltool.app.Group object at ...>
+
+The same with a resource:
+
+    >>> print http(r"""
+    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Mud&UPDATE_SUBMIT=Add&add_input_name=""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/resources
+    ...
+
+This is a schooltool resource:
+
+    >>> getRootFolder()['frogpond']['resources']['mud']
+    <schooltool.app.Resource object at ...>
+
+
 Epilogue
 --------
 

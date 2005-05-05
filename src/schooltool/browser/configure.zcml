@@ -57,6 +57,45 @@
       layer="SchoolToolLayer"
       />
 
+  <page
+      name="add.html"
+      for="schoolbell.app.interfaces.IPersonContainer"
+      class="schooltool.browser.app.PersonAddView"
+      template="../../schoolbell/app/browser/templates/person_add.pt"
+      permission="schoolbell.create"
+      layer=".skin.ISchoolToolLayer"
+      menu="schoolbell_actions" title="New person" />
+
+  <addform
+      label="Add a Group"
+      name="addSchoolBellGroup.html"
+      schema="schoolbell.app.interfaces.IGroup"
+      fields="title description"
+      set_before_add="title"
+      content_factory="schooltool.app.Group"
+      permission="schoolbell.create"
+      template="../../schoolbell/app/browser/templates/simple_add.pt"
+      class="schoolbell.app.browser.app.GroupAddView"
+      layer=".skin.ISchoolToolLayer"
+      >
+    <widget field="description" height="5" />
+  </addform>
+
+  <addform
+      label="Add a Resource"
+      name="addSchoolBellResource.html"
+      schema="schoolbell.app.interfaces.IResource"
+      fields="title description"
+      set_before_add="title"
+      content_factory="schooltool.app.Resource"
+      template="../../schoolbell/app/browser/templates/simple_add.pt"
+      class="schoolbell.app.browser.app.ResourceAddView"
+      permission="schoolbell.create"
+      layer=".skin.ISchoolToolLayer"
+      >
+    <widget field="description" height="5" />
+  </addform>
+
   <addform
       label="Add a Course"
       name="addSchoolBellCourse.html"
