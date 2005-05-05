@@ -20,9 +20,13 @@ include scripts/run-export.sh
 include scripts/run-import.sh
 include doc/release-policy.txt doc/release-checklist.txt
 
-# modules
-recursive-include src/schoolbell *.py *.pt *.css *.png *.txt *.gif
-recursive-include src/schoolbell *.js *.xml *.conf *.zcml *.ics
+# Data files installed in the setup.py
+# If you modify this, also modify the regex in setup.py
+recursive-include src/schoolbell *.pt *.js *.png *.gif *.css *.mo
+recursive-include src/schoolbell *.rng *.xml *.zcml
+
+# Miscellaneous other data files
+recursive-include src/schoolbell *.ics
 
 # Zope
 include Zope3/setup.py
