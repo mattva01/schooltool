@@ -29,7 +29,7 @@ realclean: clean
 	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;
 	rm -f Data.fs* *.csv tags ID *.log
 	rm -f scripts/import-sampleschool
-	rm -f MANIFEST.schooltool
+	rm -f MANIFEST
 	rm -rf dist
 
 test: build
@@ -69,11 +69,11 @@ schooltooldist: realclean build extract-translations \
 	sampledata scripts/import-sampleschool clean
 	rm -rf dist
 	fakeroot ./debian/rules clean
-	./setup.py schooltool sdist --formats=gztar,zip
+	./setup.py sdist
 
 .PHONY: signtar
 signtar: dist
-	md5sum dist/school*.{tar.gz,zip} > dist/md5sum
+	md5sum dist/school*.tar.gz > dist/md5sum
 	gpg --clearsign dist/md5sum
 	mv dist/md5sum.asc dist/md5sum
 
