@@ -92,7 +92,7 @@ class SectionAddView(AddView):
             self.error = _("Need a course ID.")
 
         if self.course is not None:
-            self.label = _('Add a Section to ') + self.course.title
+            self.label = _('Add a Section to %s') % self.course.title
 
     def update(self):
 
@@ -101,7 +101,6 @@ class SectionAddView(AddView):
             return self.update_status
 
         if "UPDATE_SUBMIT" in self.request:
-
             self.update_status = ''
             try:
                 data = getWidgetsData(self, self.schema, names=self.fieldNames)

@@ -1066,6 +1066,7 @@ class InstructionTimetableSource(BaseRelationshipTimetableSource):
 
 
 class TimetableSchemaService(Persistent):
+
     implements(ITimetableSchemaService)
 
     __parent__ = None
@@ -1115,7 +1116,7 @@ class TermService(BTreeContainer):
 def getTermForDate(date):
     """Find the time period that contains `date`.
 
-    Returns None if there is `date` falls outside all time periods.
+    Returns None if `date` falls outside all time periods.
     """
     terms = getSchoolToolApplication().terms
     for term in terms.values():
