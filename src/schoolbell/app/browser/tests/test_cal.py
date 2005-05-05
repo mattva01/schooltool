@@ -1155,6 +1155,26 @@ def doctest_CalendarEventView():
         >>> view.end
         '13:29'
 
+    Our view has a display attribute with an EventForDisplay object of this
+    event.
+
+        >>> type(view.display)
+        <class 'schoolbell.app.browser.cal.EventForDisplay'>
+
+    the display's dtstarttz and dtendtz should be datetime representations of
+    view.start and view.end
+
+        >>> view.display.dtstarttz.time()
+        datetime.time(12, 30)
+        >>> view.display.dtendtz.time()
+        datetime.time(13, 29)
+
+    the display has knows about booked resources, currently there are none.
+
+        >>> view.display.getBookedResources()
+        ()
+
+
     """
 
 

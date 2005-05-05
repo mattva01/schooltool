@@ -1151,6 +1151,10 @@ class CalendarEventView(BrowserView):
         self.start = self.dtstart.strftime(self.preferences.timeformat)
         self.end = self.dtend.strftime(self.preferences.timeformat)
 
+        self.display = EventForDisplay(context,'#9db8d2', '#7590ae',
+                                       context.__parent__,
+                                       timezone=self.preferences.timezone)
+
 
 class ICalendarEventAddForm(Interface):
     """Schema for event adding form."""
