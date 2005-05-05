@@ -25,3 +25,8 @@ include debian/python*schooltool.*
 include debian/po/*.po debian/po/templates.pot debian/po/POTFILES.in
 
 recursive-include src/schooltool/schema/protege *
+
+# Some things that we should not let into a distribution
+# RCS stuff is handled internally by distutils
+# NOTE: it is important that this is last
+global-exclude *.so *.pyo *.pyc
