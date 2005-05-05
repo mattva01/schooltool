@@ -2,7 +2,8 @@ schooltool (0.10-1) unstable; urgency=low
 
   * Split the schoolbell and schooltool source packages. (Closes: Bug#301277)
   * Remove the conflicts on the schoolbell package as other changes have made
-    this un-necessary.
+    this un-necessary. In fact add a versioned depends on schoolbell as it is
+    a required library (version 1.1).
   * Hack upstreams build process until it does everything debian/rules used to
     do, then reduce the rules file to less than 75 lines. Also the application
     startup scripts are moved to the upstream scripts directory as they will
