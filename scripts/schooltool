@@ -11,4 +11,4 @@ import sys
 # config end
 
 import schooltool.main
-schooltool.main.main()
+schooltool.main.StandaloneServer().main()
