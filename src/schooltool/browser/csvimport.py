@@ -47,11 +47,9 @@ class TimetableCSVImportView(BrowserView):
         if "UPDATE_SUBMIT" not in self.request:
             return
 
-#        try:
-#            charset = self.getCharset(request)
-#        except ValueError:
-#            return self.do_GET(request)
-        charset = 'UTF-8' # TODO
+        charset = self.getCharset()
+        if charset is None:
+            return
 
         timetable_csv = self.request['timetable.csv'] or ''
         if timetable_csv:
@@ -106,6 +104,25 @@ class TimetableCSVImportView(BrowserView):
             if v:
                 values = ', '.join([str(st) for st in v])
                 self.errors.append(msg % values)
+
+    def getCharset(self):
+        """Return the charset (as a string) that was specified in the request.
+
+        Updates self.errors and returns None if the charset was not specified
+        or if it is invalid.
+        """
+        charset = self.request['charset']
+        if charset == 'other':
+            charset = self.request['other_charset']
+        if not charset:
+            self.errors.append(_("No charset specified"))
+            return
+        try:
+            unicode(' ', charset)
+        except LookupError:
+            self.errors.append(_("Unknown charset"))
+            return
+        return charset
 
 
 class ImportErrorCollection(object):

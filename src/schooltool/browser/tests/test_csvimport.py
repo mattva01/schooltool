@@ -37,31 +37,6 @@ from schoolbell.relationship.tests import tearDown as tearDownRelationshipStuff
 __metaclass__ = type
 
 
-#class TestCharsetMixin(unittest.TestCase):
-#
-#    def createMixin(self):
-#        from schooltool.browser.csvimport import CharsetMixin
-#        return CharsetMixin(None)
-#
-#    def test_getCharset(self):
-#        mixin = self.createMixin()
-#
-#        request = TestRequest(args={'charset': 'UTF-8',
-#                                    'other_charset': ''})
-#        self.assertEquals(mixin.getCharset(request), 'UTF-8')
-#
-#        request = TestRequest(args={'charset': '',
-#                                    'other_charset': 'ISO-8859-1'})
-#        self.assertEquals(mixin.getCharset(request), 'ISO-8859-1')
-#
-#        self.assertRaises(ValueError, mixin.getCharset,
-#                          RequestStub(args={'charset': 'bogus-charset',
-#                                            'other_charset': 'UTF-8'}))
-#        self.assertRaises(ValueError, mixin.getCharset,
-#                          RequestStub(args={'charset': '',
-#                                            'other_charset': 'bogus-charset'}))
-
-
 class TestTimetableCSVImportView(unittest.TestCase):
 
     def setUp(self):
@@ -84,6 +59,27 @@ class TestTimetableCSVImportView(unittest.TestCase):
             form = {}
         request = TestRequest(form=form)
         return TimetableCSVImportView(self.app, request)
+
+    def test_getCharset(self):
+        view = self.createView(form={'charset': 'UTF-8',
+                                     'other_charset': ''})
+        self.assertEquals(view.getCharset(), 'UTF-8')
+        self.failIf(view.errors)
+
+        view = self.createView(form={'charset': 'other',
+                                     'other_charset': 'ISO-8859-1'})
+        self.assertEquals(view.getCharset(), 'ISO-8859-1')
+        self.failIf(view.errors)
+
+        view = self.createView(form={'charset': 'bogus-charset',
+                                     'other_charset': ''})
+        self.assertEquals(view.getCharset(), None)
+        self.assertEquals(view.errors, ['Unknown charset'])
+
+        view = self.createView(form={'charset': 'other',
+                                     'other_charset': 'bogus-charset'})
+        self.assertEquals(view.getCharset(), None)
+        self.assertEquals(view.errors, ['Unknown charset'])
 
     def test_dummy_update(self):
         view = self.createView()
@@ -120,13 +116,15 @@ class TestTimetableCSVImportView(unittest.TestCase):
 
 #        self.assertEquals(view.request.applog, [])
 
-#    def test_POST_invalid_charset(self):
-#        view = self.createView()
-#        view.request = RequestStub(args={'timetable.csv':'"A","\xff","C","D"',
-#                                         'roster.txt': '',
-#                                         'charset': 'UTF-8'})
-#        content = view.do_POST(view.request)
-#        self.assert_('incorrect charset' in content)
+    def test_POST_invalid_charset(self):
+        tt_csv = StringIO('"A","\xff","C","D"')
+        view = self.createView(form={'timetable.csv': tt_csv,
+                                     'roster.txt': '',
+                                     'charset': 'UTF-8',
+                                     'UPDATE_SUBMIT': 'Submit'})
+        view.update()
+        self.assertEquals(view.errors, ["Could not convert data to Unicode"
+                                        " (incorrect charset?)."])
 #        self.assertEquals(view.request.applog, [])
 
     def test_POST_utf8(self):
@@ -516,7 +514,6 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-#    suite.addTest(unittest.makeSuite(TestCharsetMixin))
     suite.addTest(unittest.makeSuite(TestTimetableCSVImportView))
     suite.addTest(unittest.makeSuite(TestTimetableCSVImporter))
     return suite
