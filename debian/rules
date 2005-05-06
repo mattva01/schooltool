@@ -28,7 +28,9 @@ install-indep-stamp: build
 
 	$(PYTHON) setup.py install --no-compile \
 	    --install-lib=debian/$(library)/usr/lib/$(library) \
-	    --install-scripts=debian/$(library)/usr/bin
+	    --install-scripts=debian/$(library)/usr/bin \
+	    --default-config=/etc/$(package)/$(package).conf \
+	    --paths='/usr/lib/$(library);/usr/lib/libschoolbell'
 
 	# move the server executable to the configuration package
 	install -m 755 -D -p debian/$(library)/usr/bin/schooltool \
