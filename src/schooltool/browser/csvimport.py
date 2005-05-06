@@ -356,8 +356,11 @@ class TimetableCSVImporter(object):
         try:
             group = self.findByTitle('groups', group_name)
         except KeyError:
-            # XXX what would be a sensible key (group name) here?
-            group = self.groups[group_name] = Group(title=group_name)
+            group = Group(title=group_name)
+            from zope.app.container.interfaces import INameChooser
+            chooser = INameChooser(self.groups)
+            group_name = chooser.chooseName('', group)
+            self.groups[group_name] = group
             Membership(group=subject, member=group)
 
         if not teacher in getRelatedObjects(group, URIInstructor):
