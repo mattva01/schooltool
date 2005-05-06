@@ -42,7 +42,7 @@ Upload schooltool timetable as CSV
     -->
 
   <div class="buttons">
-    <input class="button" type="submit" value="Submit"
+    <input name="UPDATE_SUBMIT" class="button" type="submit" value="Submit"
            i18n:attributes="value" />
   </div>
 

@@ -31,14 +31,17 @@ from schooltool.app import Person, Group
 from schooltool import SchoolToolMessageID as _
 from schooltool.relationships import URIInstruction, URIInstructor, URISection
 from schooltool.timetable import TimetableActivity
+from zope.security.proxy import removeSecurityProxy
 
 
 class TimetableCSVImportView(BrowserView):
 
     __used_for__ = ISchoolToolApplication
 
-    success = None
-    errors = None
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+        self.errors = []
+        self.success = []
 
     def update(self):
         if "UPDATE_SUBMIT" not in self.request:
@@ -50,15 +53,19 @@ class TimetableCSVImportView(BrowserView):
 #            return self.do_GET(request)
         charset = 'UTF-8' # TODO
 
-        timetable_csv = self.request['timetable.csv']
-        roster_txt = self.request['roster.txt']
+        timetable_csv = self.request['timetable.csv'] or ''
+        if timetable_csv:
+            timetable_csv = timetable_csv.read()
+        roster_txt = self.request['roster.txt'] or ''
+        if roster_txt:
+            roster_txt = roster_txt.read()
 
         if not (timetable_csv or roster_txt):
-            self.errors.append(_('No data provided.'))
+            self.errors.append(_('No data provided'))
             return
 
         try:
-            unicode(timetable_csv, charset) # XXX why not assign?
+            unicode(timetable_csv, charset)
             roster_txt = unicode(roster_txt, charset)
         except UnicodeError:
             self.errors.append(_('Could not convert data to Unicode'
@@ -71,7 +78,7 @@ class TimetableCSVImportView(BrowserView):
             ok = importer.importTimetable(timetable_csv)
             if ok:
                 self.success.append(_("timetable.csv imported successfully."))
-                request.appLog(_("School timetable imported"))
+#                request.appLog(_("School timetable imported"))
             else:
                 self.errors.append(_("Failed to import timetable.csv"))
                 self._presentErrors(importer.errors)
@@ -79,7 +86,7 @@ class TimetableCSVImportView(BrowserView):
             ok = importer.importRoster(roster_txt)
             if ok:
                 self.success.append(_("roster.txt imported successfully."))
-                request.appLog(_("School timetable roster imported"))
+#                request.appLog(_("School timetable roster imported"))
             else:
                 self.errors.append(("Failed to import roster.txt"))
                 self._presentErrors(importer.errors)
@@ -129,7 +136,7 @@ class TimetableCSVImporter(object):
     # Perhaps this class should be moved to schooltool.csvimport
 
     def __init__(self, app, charset=None):
-        self.app = app
+        self.app = removeSecurityProxy(app) # XXX temporary
         self.groups = self.app['groups']
         self.persons = self.app['persons']
         self.errors = ImportErrorCollection()

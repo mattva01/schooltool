@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 import datetime
+from StringIO import StringIO
 from logging import INFO
 from zope.publisher.browser import TestRequest
 from schooltool.common import dedent
@@ -66,6 +67,7 @@ class TestTimetableCSVImportView(unittest.TestCase):
     def setUp(self):
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.app import SchoolToolApplication
+        setUpRelationshipStuff()
         self.app = SchoolToolApplication()
 
         ttschema = Timetable(["1","2","3"])
@@ -73,51 +75,51 @@ class TestTimetableCSVImportView(unittest.TestCase):
             ttschema[str(day)] = TimetableDay([str(day)])
         self.app.timetableSchemaService['three-day'] = ttschema
 
-    def createView(self):
+    def tearDown(self):
+        tearDownRelationshipStuff()
+
+    def createView(self, form=None):
         from schooltool.browser.csvimport import TimetableCSVImportView
-        request = TestRequest()
+        if form is None:
+            form = {}
+        request = TestRequest(form=form)
         return TimetableCSVImportView(self.app, request)
 
-#    def test_render(self):
-#        view = self.createView()
-#        request = RequestStub(authenticated_user=self.manager)
-#        result = view.render(request)
-#        self.assertEquals(request.code, 200, result)
-#
-#    def test_access(self):
-#        view = self.createView()
-#        view.isManager = lambda: False
-#        request = RequestStub(authenticated_user=self.person)
-#        result = view.render(request)
-#        self.assertEquals(request.code, 302, result)
-#        self.assert_('forbidden' in result)
+    def test_dummy_update(self):
+        view = self.createView()
+        view.update()
+        self.failIf(view.errors)
+        self.failIf(view.success)
 
-#    def test_POST(self):
-#        view = self.createView()
-#
-#        request = RequestStub(authenticated_user=self.manager,
-#                              method='POST',
-#                              args={'timetable.csv': '"fall","three-day"',
-#                                    'roster.txt': 'Locations\nJohn Doe',
-#                                    'charset': 'UTF-8'})
-#        result = view.render(request)
-#        self.assertEquals(request.code, 200, result)
-#        self.assert_('timetable.csv imported successfully' in result, result)
-#
+    def test_POST(self):
+        from schooltool.app import Person
+        self.app['persons']['person'] = Person('person', 'Some person')
+        tt_csv = StringIO('"fall","three-day"')
+        roster = StringIO('staff\nSome person')
+        view = self.createView(form={'timetable.csv': tt_csv,
+                                     'roster.txt': roster,
+                                     'charset': 'UTF-8',
+                                     'UPDATE_SUBMIT': 'Submit'})
+        view.update()
+        self.assertEquals(view.success,
+                          ['timetable.csv imported successfully.',
+                           'roster.txt imported successfully.'])
+        self.assertEquals(view.errors, [])
+
 #        self.assertEquals(request.applog,
 #                  [(self.manager, u'School timetable imported', INFO),
 #                   (self.manager, u'School timetable roster imported', INFO)])
-#
-#    def test_POST_empty(self):
-#        view = self.createView()
-#        view.request = RequestStub(args={'timetable.csv': '',
-#                                         'roster.txt': '',
-#                                         'charset': 'UTF-8'})
-#        content = view.do_POST(view.request)
-#        self.assert_('No data provided' in content)
-#
+
+    def test_POST_empty(self):
+        view = self.createView(form={'timetable.csv': '',
+                                     'roster.txt': '',
+                                     'charset': 'UTF-8',
+                                     'UPDATE_SUBMIT': 'Submit'})
+        view.update()
+        self.assertEquals(view.errors, ['No data provided'])
+
 #        self.assertEquals(view.request.applog, [])
-#
+
 #    def test_POST_invalid_charset(self):
 #        view = self.createView()
 #        view.request = RequestStub(args={'timetable.csv':'"A","\xff","C","D"',
@@ -126,16 +128,18 @@ class TestTimetableCSVImportView(unittest.TestCase):
 #        content = view.do_POST(view.request)
 #        self.assert_('incorrect charset' in content)
 #        self.assertEquals(view.request.applog, [])
-#
-#    def test_POST_utf8(self):
-#        view = self.createView()
-#        ttschema = self.app.timetableSchemaService[u'three-day']
-#        self.app.timetableSchemaService[u'three-day \u263b'] = ttschema
-#        view.request = RequestStub(
-#                args={'timetable.csv': '"whatever","three-day \xe2\x98\xbb"',
-#                      'roster.txt': '', 'charset': 'UTF-8'})
-#        result = view.do_POST(view.request)
-#        self.assert_('timetable.csv imported successfully' in result, result)
+
+    def test_POST_utf8(self):
+        ttschema = self.app.timetableSchemaService[u'three-day']
+        self.app.timetableSchemaService[u'three-day \u263b'] = ttschema
+        tt_csv = StringIO('"whatever","three-day \xe2\x98\xbb"')
+        view = self.createView(form={'timetable.csv': tt_csv,
+                                     'roster.txt': '',
+                                     'charset': 'UTF-8',
+                                     'UPDATE_SUBMIT': 'Submit'})
+        view.update()
+        self.assertEquals(view.success,
+                          ['timetable.csv imported successfully.'])
 #        self.assertEquals(view.request.applog,
 #                          [(None, u'School timetable imported', INFO)])
 
