@@ -24,12 +24,12 @@ $Id: app.py 3419 2005-04-14 18:34:36Z alga $
 from zope.app import zapi
 
 from schoolbell.app.rest import View, Template
-from schoolbell.app.rest.app import ApplicationView
+from schoolbell.app.rest import app as sb
 
 from schooltool import SchoolToolMessageID as _
 
 
-class SchoolToolApplicationView(ApplicationView):
+class SchoolToolApplicationView(sb.ApplicationView):
     """The root view for the application."""
 
     template = Template("www/app.pt", content_type="text/xml; charset=UTF-8")

@@ -2,6 +2,11 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+  <subscriber
+      handler=".restSchoolToolSubscriber"
+      for="zope.app.publication.interfaces.IBeforeTraverseEvent"
+      />
+
   <view
       for="schooltool.interfaces.ISchoolToolApplication"
       name="GET"
