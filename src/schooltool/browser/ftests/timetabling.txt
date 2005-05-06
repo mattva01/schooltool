@@ -100,7 +100,7 @@ First you have to specify the title and date.
     ... Content-Length: 75
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=2005+Fall&field.start_date=2005-09-01&field.end_date=2005-12-31
+    ... field.title=2005+Fall&field.start_date=2005-09-01&field.end_date=2005-12-31&REFRESH=
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -135,7 +135,48 @@ First you have to specify the title and date.
     </form>
     ...
 
-TODO: make toggle buttons work
+Then you can click on a couple of the toggle buttons to mark all Saturdays and
+Sundays as holidays.  (This test is cheating a bit because it includes both
+buttons in the request, while in real life the user would have to push each
+button separately causing two requests)
+
+    >>> print http(r"""
+    ... POST /frogpond/terms/@@add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 109
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=2005+Fall&field.start_date=2005-09-01&field.end_date=2005-12-31&TOGGLE_5=Saturday&TOGGLE_6=Sunday
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    ...
+    <h1>New term</h1>
+    ...
+          <td class="schoolday" onclick="javascript:toggle(9)"
+              id="td9">
+            <label>
+              9
+              <input type="checkbox" name="holiday" class="chk"
+                     onchange="javascript:update(9)" id="c9"
+                     value="2005-09-09" />
+            </label>
+          </td>
+          <td class="holiday" onclick="javascript:toggle(10)"
+              id="td10">
+            <label>
+              10
+              <input type="checkbox" name="holiday" class="chk"
+                     onchange="javascript:update(10)"
+                     checked="checked" id="c10"
+                     value="2005-09-10" />
+            </label>
+          </td>
+    ...
+
 TODO: make 'Create' button work
 TODO: implement edition of already defined terms
 TODO: verify that you can delete terms

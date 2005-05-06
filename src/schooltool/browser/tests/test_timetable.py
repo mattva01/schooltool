@@ -33,6 +33,29 @@ from zope.testing.doctestunit import pprint
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 
 
+def doctest_TermAddView_update():
+    """Unit tests for TermAddView.update
+
+    `update` sets view.term
+
+        >>> from schooltool.timetable import TermService
+        >>> from schooltool.browser.timetable import TermAddView
+        >>> context = TermService()
+        >>> request = TestRequest()
+        >>> view = TermAddView(context, request)
+        >>> view.update()
+        >>> view.term is None
+        True
+
+        >>> request.form['field.start_date'] = '2005-09-01'
+        >>> request.form['field.end_date'] = '2005-10-15'
+        >>> view.update()
+        >>> view.term
+        <...TermCalendar object at ...>
+
+    """
+
+
 def doctest_TermAddView_buildTerm():
     """Unit tests for TermAddView._buildTerm
 
@@ -43,7 +66,7 @@ def doctest_TermAddView_buildTerm():
         >>> view = TermAddView(context, request)
 
     When there are no dates in the request, or when the dates are not valid,
-    view._buildTerm() returns None
+    view._buildTerm() returns None.
 
         >>> view._buildTerm()
 
@@ -59,12 +82,14 @@ def doctest_TermAddView_buildTerm():
         >>> request.form['field.end_date'] = '2005-09-01'
         >>> view._buildTerm()
 
+    If the dates are valid, but the interval is not, you get None again.
+
         >>> request.form['field.start_date'] = '2005-09-02'
         >>> request.form['field.end_date'] = '2005-09-01'
         >>> view._buildTerm()
 
     When the dates describe a valid non-empty inclusive time interval,
-    view.calendar() returns a list of dicts, one for each month
+    view._buildTerm() returns a TermCalendar object.
 
         >>> request.form['field.start_date'] = '2005-09-01'
         >>> request.form['field.end_date'] = '2005-10-15'
@@ -73,6 +98,60 @@ def doctest_TermAddView_buildTerm():
         datetime.date(2005, 9, 1)
         >>> term.last
         datetime.date(2005, 10, 15)
+
+    When there are no indication about schooldays or holidays in the request,
+    all days are marked as schooldays.
+
+        >>> def print_holidays(term):
+        ...     all = True
+        ...     for day in term:
+        ...         if not term.isSchoolday(day):
+        ...             print "%s is a holiday" % day
+        ...             all = False
+        ...     if all:
+        ...         print "All days are schooldays."
+
+        >>> print_holidays(term)
+        All days are schooldays.
+
+        >>> request.form['holiday'] = u'2005-09-07'
+        >>> term = view._buildTerm()
+        >>> print_holidays(term)
+        2005-09-07 is a holiday
+
+        >>> request.form['holiday'] = [u'2005-10-02', u'2005-09-07']
+        >>> term = view._buildTerm()
+        >>> print_holidays(term)
+        2005-09-07 is a holiday
+        2005-10-02 is a holiday
+
+    Ill-formed or out-of-range dates are just ignored
+
+        >>> request.form['holiday'] = [u'2005-10-17', u'2005-09-07', u'foo!']
+        >>> term = view._buildTerm()
+        >>> print_holidays(term)
+        2005-09-07 is a holiday
+
+    The presence of 'TOGGLE_n' (where n is 0..6) in the request requests the
+    state of corresponding weekdays (0 = Monday, 6 = Sunday) to be toggled.
+
+        >>> request.form['holiday'] = [u'2005-10-02', u'2005-09-07']
+        >>> request.form['TOGGLE_0'] = [u'Monday']
+        >>> request.form['TOGGLE_6'] = [u'Sunday']
+        >>> term = view._buildTerm()
+        >>> print_holidays(term)
+        2005-09-04 is a holiday
+        2005-09-05 is a holiday
+        2005-09-07 is a holiday
+        2005-09-11 is a holiday
+        2005-09-12 is a holiday
+        2005-09-18 is a holiday
+        2005-09-19 is a holiday
+        2005-09-25 is a holiday
+        2005-09-26 is a holiday
+        2005-10-03 is a holiday
+        2005-10-09 is a holiday
+        2005-10-10 is a holiday
 
     """
 
@@ -89,22 +168,27 @@ def doctest_TermAddView_calendar():
     When there are no dates in the request, or when the dates are not valid,
     view.caledar() returns None
 
+        >>> view.term = view._buildTerm()
         >>> view.calendar()
 
         >>> request.form['field.start_date'] = '2005-09-01'
         >>> request.form['field.end_date'] = 'not a clue'
+        >>> view.term = view._buildTerm()
         >>> view.calendar()
 
         >>> request.form['field.start_date'] = 'bogus'
         >>> request.form['field.end_date'] = '2005-12-31'
+        >>> view.term = view._buildTerm()
         >>> view.calendar()
 
         >>> request.form['field.start_date'] = '2005-12-31'
         >>> request.form['field.end_date'] = '2005-09-01'
+        >>> view.term = view._buildTerm()
         >>> view.calendar()
 
         >>> request.form['field.start_date'] = '2005-09-02'
         >>> request.form['field.end_date'] = '2005-09-01'
+        >>> view.term = view._buildTerm()
         >>> view.calendar()
 
     When the dates describe a valid non-empty inclusive time interval,
@@ -125,6 +209,7 @@ def doctest_TermAddView_calendar():
 
         >>> request.form['field.start_date'] = '2004-08-01'
         >>> request.form['field.end_date'] = '2004-08-31'
+        >>> view.term = view._buildTerm()
         >>> print_cal(view.calendar())
         *                        August 2004
                  Mon Tue Wed Thu Fri Sat Sun
@@ -137,6 +222,7 @@ def doctest_TermAddView_calendar():
 
         >>> request.form['field.start_date'] = '2004-08-02'
         >>> request.form['field.end_date'] = '2004-09-01'
+        >>> view.term = view._buildTerm()
         >>> print_cal(view.calendar())
         *                        August 2004
                  Mon Tue Wed Thu Fri Sat Sun
@@ -151,6 +237,7 @@ def doctest_TermAddView_calendar():
 
         >>> request.form['field.start_date'] = '2004-08-03'
         >>> request.form['field.end_date'] = '2004-08-03'
+        >>> view.term = view._buildTerm()
         >>> print_cal(view.calendar())
         *                        August 2004
                  Mon Tue Wed Thu Fri Sat Sun
@@ -158,6 +245,7 @@ def doctest_TermAddView_calendar():
 
         >>> request.form['field.start_date'] = '2004-12-30'
         >>> request.form['field.end_date'] = '2005-01-03'
+        >>> view.term = view._buildTerm()
         >>> print_cal(view.calendar())
         *                      December 2004
                  Mon Tue Wed Thu Fri Sat Sun
@@ -171,6 +259,7 @@ def doctest_TermAddView_calendar():
 
         >>> request.form['field.start_date'] = '2004-12-30'
         >>> request.form['field.end_date'] = '2005-01-03'
+        >>> view.term = view._buildTerm()
         >>> print_cal(view.calendar(), '%(index)3s')
         *                      December 2004
                  Mon Tue Wed Thu Fri Sat Sun
@@ -186,7 +275,10 @@ def doctest_TermAddView_calendar():
 def doctest_TermAddView_month():
     """Unit test for TermAddView.month
 
+        >>> from schooltool.timetable import TermCalendar
         >>> from schooltool.browser.timetable import TermAddView
+        >>> term = TermCalendar(datetime.date(2005, 1, 1),
+        ...                     datetime.date(2005, 12, 31))
         >>> month = TermAddView.month
 
     The month function goes through all weeks between mindate and maxdate.
@@ -206,7 +298,7 @@ def doctest_TermAddView_month():
         >>> counter = itertools.count(1)
 
         >>> print_month(month(datetime.date(2005, 5, 1),
-        ...                   datetime.date(2005, 5, 31), counter))
+        ...                   datetime.date(2005, 5, 31), counter, term))
         *                           May 2005
                  Mon Tue Wed Thu Fri Sat Sun
         Week 17:                           1
@@ -217,7 +309,7 @@ def doctest_TermAddView_month():
         Week 22:  30  31
 
         >>> print_month(month(datetime.date(2005, 5, 2),
-        ...                   datetime.date(2005, 5, 30), counter))
+        ...                   datetime.date(2005, 5, 30), counter, term))
         *                           May 2005
                  Mon Tue Wed Thu Fri Sat Sun
         Week 18:   2   3   4   5   6   7   8
@@ -227,7 +319,7 @@ def doctest_TermAddView_month():
         Week 22:  30
 
         >>> print_month(month(datetime.date(2005, 5, 3),
-        ...                   datetime.date(2005, 5, 29), counter))
+        ...                   datetime.date(2005, 5, 29), counter, term))
         *                           May 2005
                  Mon Tue Wed Thu Fri Sat Sun
         Week 18:       3   4   5   6   7   8
@@ -236,13 +328,13 @@ def doctest_TermAddView_month():
         Week 21:  23  24  25  26  27  28  29
 
         >>> print_month(month(datetime.date(2005, 5, 10),
-        ...                   datetime.date(2005, 5, 11), counter))
+        ...                   datetime.date(2005, 5, 11), counter, term))
         *                           May 2005
                  Mon Tue Wed Thu Fri Sat Sun
         Week 19:      10  11
 
         >>> print_month(month(datetime.date(2005, 5, 17),
-        ...                   datetime.date(2005, 5, 17), counter))
+        ...                   datetime.date(2005, 5, 17), counter, term))
         *                           May 2005
                  Mon Tue Wed Thu Fri Sat Sun
         Week 20:      17
@@ -253,7 +345,11 @@ def doctest_TermAddView_month():
 def doctest_TermAddView_week():
     """Unit test for TermAddView.week
 
+        >>> from schooltool.timetable import TermCalendar
         >>> from schooltool.browser.timetable import TermAddView
+        >>> term = TermCalendar(datetime.date(2005, 5, 1),
+        ...                     datetime.date(2005, 5, 31))
+        >>> term.addWeekdays(0, 1, 2, 3, 4)
         >>> week = TermAddView.week
 
     The week function is pretty simple.  First we will try to pass Monday
@@ -271,7 +367,7 @@ def doctest_TermAddView_week():
         >>> print_week(week(datetime.date(2005, 5, 2),
         ...                 datetime.date(2005, 5, 2),
         ...                 datetime.date(2005, 5, 8),
-        ...                 counter))
+        ...                 counter, term))
         Week 18
         index date number checked class onclick
         1 2005-05-02 2 False schoolday javascript:toggle(1)
@@ -279,15 +375,15 @@ def doctest_TermAddView_week():
         3 2005-05-04 4 False schoolday javascript:toggle(3)
         4 2005-05-05 5 False schoolday javascript:toggle(4)
         5 2005-05-06 6 False schoolday javascript:toggle(5)
-        6 2005-05-07 7 False schoolday javascript:toggle(6)
-        7 2005-05-08 8 False schoolday javascript:toggle(7)
+        6 2005-05-07 7 True holiday javascript:toggle(6)
+        7 2005-05-08 8 True holiday javascript:toggle(7)
 
     min_date is handled
 
         >>> print_week(week(datetime.date(2005, 5, 2),
         ...                 datetime.date(2005, 5, 3),
         ...                 datetime.date(2005, 5, 8),
-        ...                 counter))
+        ...                 counter, term))
         Week 18
         index date number checked class onclick
         None None None None None None
@@ -295,15 +391,15 @@ def doctest_TermAddView_week():
         9 2005-05-04 4 False schoolday javascript:toggle(9)
         10 2005-05-05 5 False schoolday javascript:toggle(10)
         11 2005-05-06 6 False schoolday javascript:toggle(11)
-        12 2005-05-07 7 False schoolday javascript:toggle(12)
-        13 2005-05-08 8 False schoolday javascript:toggle(13)
+        12 2005-05-07 7 True holiday javascript:toggle(12)
+        13 2005-05-08 8 True holiday javascript:toggle(13)
 
     max_date is handled too
 
         >>> print_week(week(datetime.date(2005, 5, 2),
         ...                 datetime.date(2005, 5, 3),
         ...                 datetime.date(2005, 5, 6),
-        ...                 counter))
+        ...                 counter, term))
         Week 18
         index date number checked class onclick
         None None None None None None
@@ -319,16 +415,16 @@ def doctest_TermAddView_week():
         >>> print_week(week(datetime.date(2005, 5, 1),
         ...                 datetime.date(2005, 5, 1),
         ...                 datetime.date(2005, 5, 8),
-        ...                 counter))
+        ...                 counter, term))
         Week 18
         index date number checked class onclick
-        18 2005-05-01 1 False schoolday javascript:toggle(18)
+        18 2005-05-01 1 True holiday javascript:toggle(18)
         19 2005-05-02 2 False schoolday javascript:toggle(19)
         20 2005-05-03 3 False schoolday javascript:toggle(20)
         21 2005-05-04 4 False schoolday javascript:toggle(21)
         22 2005-05-05 5 False schoolday javascript:toggle(22)
         23 2005-05-06 6 False schoolday javascript:toggle(23)
-        24 2005-05-07 7 False schoolday javascript:toggle(24)
+        24 2005-05-07 7 True holiday javascript:toggle(24)
 
     """
 

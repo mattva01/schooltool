@@ -32,8 +32,9 @@ from zope.app.form.browser.add import AddView
 from zope.app.form.utility import getWidgetsData
 from zope.app.form.interfaces import WidgetsError
 
-from schoolbell.app.browser.app import ContainerView
+from schoolbell.calendar.utils import parse_date
 from schoolbell.calendar.utils import next_month, week_start
+from schoolbell.app.browser.app import ContainerView
 from schoolbell.app.browser.cal import month_names, short_day_of_week_names
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ITermService
@@ -70,6 +71,11 @@ class TermAddView(AddView):
     title = _("New term")
     schema = ITermAddForm
 
+    def update(self):
+        """Process the form."""
+        self.term = self._buildTerm()
+        return AddView.update(self)
+
     def _buildTerm(self):
         """Build a TermCalendar object from form values.
 
@@ -77,14 +83,25 @@ class TermAddView(AddView):
         """
         try:
             data = getWidgetsData(self, self.schema,
-                                names=['start_date', 'end_date'])
+                                  names=['start_date', 'end_date'])
         except WidgetsError:
             return None
         try:
             term = TermCalendar(data['start_date'], data['end_date'])
         except ValueError:
             return None # date range invalid
-        # TODO: extract schooldays/holidays from request
+        term.addWeekdays(0, 1, 2, 3, 4, 5, 6)
+        holidays = self.request.form.get('holiday', [])
+        if not isinstance(holidays, list):
+            holidays = [holidays]
+        for holiday in holidays:
+            try:
+                term.remove(parse_date(holiday))
+            except ValueError:
+                pass # ignore ill-formed or out-of-range dates
+        toggle = [n for n in range(7) if ('TOGGLE_%d' % n) in self.request]
+        if toggle:
+            term.toggleWeekdays(*toggle)
         return term
 
     def calendar(self):
@@ -93,7 +110,7 @@ class TermAddView(AddView):
         Returns None if the form doesn't contain enough information.  Otherwise
         returns a list of month dicts (see `month`).
         """
-        term = self._buildTerm()
+        term = self.term
         if not term:
             return None
         calendar = []
@@ -103,11 +120,11 @@ class TermAddView(AddView):
             start_of_next_month = next_month(date)
             end_of_this_month = start_of_next_month - datetime.date.resolution
             maxdate = min(term.last, end_of_this_month)
-            calendar.append(self.month(date, maxdate, counter))
+            calendar.append(self.month(date, maxdate, counter, self.term))
             date = start_of_next_month
         return calendar
 
-    def month(mindate, maxdate, counter):
+    def month(mindate, maxdate, counter, term):
         """Prepare one month for display.
 
         Returns a dict with these keys:
@@ -122,17 +139,31 @@ class TermAddView(AddView):
                           'month': month_names[mindate.month],
                           'year': mindate.year}
         weeks = []
+        week = TermAddView.week
         date = week_start(mindate, first_day_of_week)
         while date <= maxdate:
-            weeks.append(TermAddView.week(date, mindate, maxdate, counter))
+            weeks.append(week(date, mindate, maxdate, counter, term))
             date += datetime.timedelta(days=7)
         return {'title': month_title,
                 'weeks': weeks}
 
     month = staticmethod(month)
 
-    def week(start_of_week, mindate, maxdate, counter):
+    def week(start_of_week, mindate, maxdate, counter, term):
         """Prepare one week for display.
+
+        `start_of_week` is the date when the week starts.
+
+        `mindate` and `maxdate` are used to indicate which month (or part of
+        the month) interests us -- days in this week that fall outside
+        [mindate, maxdate] result in a dict containing None values for all
+        keys.
+
+        `counter` is an iterator that returns indexes for days
+        (itertools.count(1) is handy for this purpose).
+
+        `term` is an ITermCalendar that indicates which days are schooldays,
+        and which are holidays.
 
         Returns a dict with these keys:
 
@@ -144,6 +175,10 @@ class TermAddView(AddView):
             date    -- date as a string (YYYY-MM-DD)
             number  -- day of month
                        (None when date is outside [mindate, maxdate])
+            index   -- serial number of this day (used in Javascript)
+            class   -- CSS class ('holiday' or 'schoolday')
+            checked -- True for holidays, False for schooldays
+            onclick -- onclick event handler that calls toggle(index)
 
         """
         # start_of_week will be a Sunday or a Monday.  If it is a Sunday,
@@ -157,8 +192,7 @@ class TermAddView(AddView):
         for day in range(7):
             if mindate <= date <= maxdate:
                 index = counter.next()
-                # TODO: extract checked from self.term
-                checked = False
+                checked = not term.isSchoolday(date)
                 css_class = checked and 'holiday' or 'schoolday'
                 days.append({'number': date.day, 'class': css_class,
                              'date': date.strftime('%Y-%m-%d'),
