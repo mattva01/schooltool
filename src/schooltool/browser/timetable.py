@@ -27,10 +27,12 @@ import itertools
 
 from zope.interface import Interface
 from zope.schema import TextLine, Date
+from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 from zope.app.form.browser.add import AddView
 from zope.app.form.utility import getWidgetsData
 from zope.app.form.interfaces import WidgetsError
+from zope.app.container.interfaces import INameChooser
 
 from schoolbell.calendar.utils import parse_date
 from schoolbell.calendar.utils import next_month, week_start
@@ -69,12 +71,38 @@ class TermAddView(AddView):
     __used_for__ = ITermService
 
     title = _("New term")
+
+    # Since this view is registered via <browser:page>, and not via
+    # <browser:addform>, we need to set up some attributes for AddView.
     schema = ITermAddForm
+    _arguments = ()
+    _keyword_arguments = ()
+    _set_before_add = ()
+    _set_after_add = ()
 
     def update(self):
         """Process the form."""
         self.term = self._buildTerm()
         return AddView.update(self)
+
+    def create(self):
+        """Create the object to be added.
+
+        We already have it, actually -- unless there was an error in the form.
+        """
+        if self.term is None:
+            raise WidgetsError([])
+        return self.term
+
+    def add(self, content):
+        """Add the object to the term service."""
+        chooser = INameChooser(self.context)
+        name = chooser.chooseName(None, content)
+        self.context[name] = content
+
+    def nextURL(self):
+        """Return the location to visit once the term's been added."""
+        return zapi.absoluteURL(self.context, self.request)
 
     def _buildTerm(self):
         """Build a TermCalendar object from form values.
@@ -83,11 +111,12 @@ class TermAddView(AddView):
         """
         try:
             data = getWidgetsData(self, self.schema,
-                                  names=['start_date', 'end_date'])
+                                  names=['title', 'start_date', 'end_date'])
         except WidgetsError:
             return None
         try:
-            term = TermCalendar(data['start_date'], data['end_date'])
+            term = TermCalendar(data['title'], data['start_date'],
+                                data['end_date'])
         except ValueError:
             return None # date range invalid
         term.addWeekdays(0, 1, 2, 3, 4, 5, 6)

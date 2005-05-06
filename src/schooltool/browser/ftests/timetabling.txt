@@ -177,7 +177,55 @@ button separately causing two requests)
           </td>
     ...
 
-TODO: make 'Create' button work
+Finally, you click on the 'Add term' button.  (This test is cheating again --
+instead of listing all the holidays in the request I specify the two toggle
+buttons again.)
+
+    >>> print http(r"""
+    ... POST /frogpond/terms/@@add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 132
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=2005+Fall&field.start_date=2005-09-01&field.end_date=2005-12-31&TOGGLE_5=Saturday&TOGGLE_6=Sunday&UPDATE_SUBMIT=Add+term
+    ... """, handle_errors=False)
+    HTTP/1.1 303 See Other
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    Location: http://localhost/frogpond/terms
+    <BLANKLINE>
+    ...
+
+The new term is there
+
+    >>> print http(r"""
+    ... GET /frogpond/terms HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <title>Terms</title>
+    ...
+    <a href="@@add.html">New term</a>
+    ...
+    <h1>Terms</h1>
+    ...
+        <form method="post"
+              action="http://localhost/frogpond/terms/delete.html">
+          <li>
+            <input type="checkbox" name="delete.2005-fall" />
+            <a href="http://localhost/frogpond/terms/2005-fall">2005 Fall</a>
+          </li>
+          <div class="controls">
+            <input type="submit" class="button-cancel"
+                   value="Delete" />
+          </div>
+        </form>
+    ...
+
 TODO: implement edition of already defined terms
 TODO: verify that you can delete terms
 TODO: error message when end date < start date

@@ -89,7 +89,7 @@ class TestTermCalendar(unittest.TestCase):
         from schooltool.interfaces import ITermCalendar, ITermCalendarWrite
         from schooltool.interfaces import ILocation
 
-        cal = TermCalendar(date(2003, 9, 1), date(2003, 12, 24))
+        cal = TermCalendar('Sample', date(2003, 9, 1), date(2003, 12, 24))
         verifyObject(ITermCalendar, cal)
         verifyObject(ITermCalendarWrite, cal)
         verifyObject(ILocation, cal)
@@ -97,7 +97,7 @@ class TestTermCalendar(unittest.TestCase):
     def testAddRemoveSchoolday(self):
         from schooltool.timetable import TermCalendar
 
-        cal = TermCalendar(date(2003, 9, 1), date(2003, 9, 14))
+        cal = TermCalendar('Sample', date(2003, 9, 1), date(2003, 9, 14))
 
         self.assert_(not cal.isSchoolday(date(2003, 9, 1)))
         self.assert_(not cal.isSchoolday(date(2003, 9, 2)))
@@ -112,7 +112,7 @@ class TestTermCalendar(unittest.TestCase):
 
     def testReset(self):
         from schooltool.timetable import TermCalendar
-        cal = TermCalendar(date(2003, 9, 1), date(2003, 9, 15))
+        cal = TermCalendar('Sample', date(2003, 9, 1), date(2003, 9, 15))
         cal.addWeekdays(1, 3, 5)
 
         new_first, new_last = date(2003, 8, 1), date(2003, 9, 30)
@@ -127,7 +127,7 @@ class TestTermCalendar(unittest.TestCase):
 
     def testMarkWeekday(self):
         from schooltool.timetable import TermCalendar
-        cal = TermCalendar(date(2003, 9, 1), date(2003, 9, 17))
+        cal = TermCalendar('Sample', date(2003, 9, 1), date(2003, 9, 17))
         for day in 1, 8, 15:
             self.assert_(not cal.isSchoolday(date(2003, 9, day)))
 
@@ -154,7 +154,7 @@ class TestTermCalendar(unittest.TestCase):
 
     def test_contains(self):
         from schooltool.timetable import TermCalendar
-        cal = TermCalendar(date(2003, 9, 1), date(2003, 9, 16))
+        cal = TermCalendar('Sample', date(2003, 9, 1), date(2003, 9, 16))
         self.assert_(date(2003, 8, 31) not in cal)
         self.assert_(date(2003, 9, 17) not in cal)
         for day in range(1, 17):
@@ -1743,8 +1743,8 @@ class TestGetPeriodsForDay(PlacelessSetup, unittest.TestCase):
         app = SchoolToolApplication()
         app.setSiteManager(LocalSiteManager(app))
         setSite(app)
-        self.sm1 = TermCalendar(date(2004, 9, 1), date(2004, 12, 20))
-        self.sm2 = TermCalendar(date(2005, 1, 1), date(2005, 6, 1))
+        self.sm1 = TermCalendar('Sample', date(2004, 9, 1), date(2004, 12, 20))
+        self.sm2 = TermCalendar('Sample', date(2005, 1, 1), date(2005, 6, 1))
         app.terms['2004-fall'] = self.sm1
         app.terms['2005-spring'] = self.sm2
         tt = Timetable([])

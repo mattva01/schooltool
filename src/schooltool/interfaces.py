@@ -93,6 +93,8 @@ class ITermCalendar(IDateRange, IContained):
     in a certain school term.
     """
 
+    title = TextLine(title=_("Title"))
+
     def isSchoolday(date):
         """Return whether the date is a schoolday.
 

@@ -146,7 +146,7 @@ Please specify which days are school days, and which days are holidays.
   <div class="controls">
     <input type="submit" class="button-ok" name="REFRESH"
            value="Refresh" i18n:attributes="value" />
-    <input type="submit" class="button-ok" name="CREATE"
+    <input type="submit" class="button-ok" name="UPDATE_SUBMIT"
            value="Add term" i18n:attributes="value" />
   </div>
 

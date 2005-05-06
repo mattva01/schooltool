@@ -26,7 +26,9 @@ import unittest
 import datetime
 import itertools
 
+from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
+from zope.app.traversing.interfaces import IContainmentRoot
 from zope.testing import doctest
 from zope.testing.doctestunit import pprint
 
@@ -47,11 +49,108 @@ def doctest_TermAddView_update():
         >>> view.term is None
         True
 
+        >>> request.form['field.title'] = 'Sample'
         >>> request.form['field.start_date'] = '2005-09-01'
         >>> request.form['field.end_date'] = '2005-10-15'
         >>> view.update()
         >>> view.term
         <...TermCalendar object at ...>
+
+    """
+
+
+def doctest_TermAddView_create():
+    """Unit tests for TermAddView.create
+
+    `create` either returns view.term (if it has been successfully built
+    by `update` before), or raises a WidgetsError (because `_buildTerm`
+    discovered an error in the form).
+
+        >>> from schooltool.timetable import TermService
+        >>> from schooltool.browser.timetable import TermAddView
+        >>> context = TermService()
+        >>> request = TestRequest()
+        >>> view = TermAddView(context, request)
+
+        >>> view.term = object()
+        >>> view.create() is view.term
+        True
+
+        >>> view.term = None
+        >>> view.create()
+        Traceback (most recent call last):
+          ...
+        WidgetsError
+
+    """
+
+
+def doctest_TermAddView_add():
+    r"""Unit tests for TermAddView.add
+
+    `add` adds the term to the term service.
+
+        >>> from schooltool.timetable import TermService
+        >>> from schooltool.timetable import TermCalendar
+        >>> from schooltool.browser.timetable import TermAddView
+        >>> context = TermService()
+        >>> request = TestRequest()
+        >>> view = TermAddView(context, request)
+
+        >>> term = TermCalendar('Sample', datetime.date(2005, 1, 1),
+        ...                     datetime.date(2005, 12, 31))
+        >>> view.add(term)
+
+    The standard NameChooser adapter picks the name 'TermCalendar'.
+
+        >>> print '\n'.join(context.keys())
+        TermCalendar
+
+        >>> context['TermCalendar'] is term
+        True
+
+    """
+
+
+def doctest_TermAddView_create():
+    """Unit tests for TermAddView.create
+
+    `create` either returns view.term (if it has been successfully built
+    by `update` before), or raises a WidgetsError (because `_buildTerm`
+    discovered an error in the form).
+
+        >>> from schooltool.timetable import TermService
+        >>> from schooltool.browser.timetable import TermAddView
+        >>> context = TermService()
+        >>> request = TestRequest()
+        >>> view = TermAddView(context, request)
+
+        >>> view.term = object()
+        >>> view.create() is view.term
+        True
+
+        >>> view.term = None
+        >>> view.create()
+        Traceback (most recent call last):
+          ...
+        WidgetsError
+
+    """
+
+
+def doctest_TermAddView_nextURL():
+    """Unit tests for TermAddView.nextURL
+
+    `nextURL` returns the absolute url of its context.
+
+        >>> from schooltool.timetable import TermService
+        >>> from schooltool.browser.timetable import TermAddView
+        >>> context = TermService()
+        >>> directlyProvides(context, IContainmentRoot)
+        >>> request = TestRequest()
+        >>> view = TermAddView(context, request)
+        >>> view.nextURL()
+        'http://127.0.0.1'
 
     """
 
@@ -64,6 +163,8 @@ def doctest_TermAddView_buildTerm():
         >>> context = TermService()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
+
+        >>> request.form['field.title'] = 'Sample'
 
     When there are no dates in the request, or when the dates are not valid,
     view._buildTerm() returns None.
@@ -98,6 +199,8 @@ def doctest_TermAddView_buildTerm():
         datetime.date(2005, 9, 1)
         >>> term.last
         datetime.date(2005, 10, 15)
+        >>> term.title
+        u'Sample'
 
     When there are no indication about schooldays or holidays in the request,
     all days are marked as schooldays.
@@ -207,6 +310,7 @@ def doctest_TermAddView_calendar():
         ...                     s.append(day_format % day)
         ...             print ' '.join(s).rstrip()
 
+        >>> request.form['field.title'] = 'Sample'
         >>> request.form['field.start_date'] = '2004-08-01'
         >>> request.form['field.end_date'] = '2004-08-31'
         >>> view.term = view._buildTerm()
@@ -277,7 +381,7 @@ def doctest_TermAddView_month():
 
         >>> from schooltool.timetable import TermCalendar
         >>> from schooltool.browser.timetable import TermAddView
-        >>> term = TermCalendar(datetime.date(2005, 1, 1),
+        >>> term = TermCalendar('Sample', datetime.date(2005, 1, 1),
         ...                     datetime.date(2005, 12, 31))
         >>> month = TermAddView.month
 
@@ -347,7 +451,7 @@ def doctest_TermAddView_week():
 
         >>> from schooltool.timetable import TermCalendar
         >>> from schooltool.browser.timetable import TermAddView
-        >>> term = TermCalendar(datetime.date(2005, 5, 1),
+        >>> term = TermCalendar('Sample', datetime.date(2005, 5, 1),
         ...                     datetime.date(2005, 5, 31))
         >>> term.addWeekdays(0, 1, 2, 3, 4)
         >>> week = TermAddView.week
@@ -435,7 +539,6 @@ def test_suite():
                                        optionflags=doctest.ELLIPSIS|
                                                    doctest.REPORT_NDIFF))
     return suite
-
 
 
 if __name__ == '__main__':

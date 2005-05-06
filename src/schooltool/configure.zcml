@@ -3,7 +3,7 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schooltool">
 
-  <!-- adapters -->
+  <!-- Adapters -->
 
   <adapter
       for=".interfaces.ISchoolToolGroupContainer"
@@ -23,6 +23,11 @@
       factory="schooltool.timetable.InstructionTimetableSource"
       permission="zope.Public"
       />
+
+  <adapter
+      for=".interfaces.ITermService"
+      factory="schoolbell.app.app.SimpleNameChooser"
+      provides="zope.app.container.interfaces.INameChooser" />
 
   <!-- Events -->
 
@@ -93,6 +98,10 @@
              attributes="keys values __iter__ __len__" />
     <require permission="schoolbell.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
+  </content>
+
+  <content class=".timetable.TermCalendar">
+    <allow interface=".interfaces.ITermCalendar" />
   </content>
 
   <include package=".browser" />

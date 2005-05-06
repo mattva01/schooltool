@@ -229,8 +229,9 @@ class TermCalendar(DateRange, Persistent):
     __name__ = None
     __parent__ = None
 
-    def __init__(self, first, last):
+    def __init__(self, title, first, last):
         DateRange.__init__(self, first, last)
+        self.title = title
         self._schooldays = Set()
 
     def _validate(self, date):
