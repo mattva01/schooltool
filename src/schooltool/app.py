@@ -52,7 +52,7 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
     def __init__(self):
         SampleContainer.__init__(self)
         self['persons'] = sb.PersonContainer()
-        self['groups'] = groups = SchoolToolGroupContainer()
+        self['groups'] = groups = GroupContainer()
         self['resources'] = sb.ResourceContainer()
         groups['staff'] = Group('staff', _('Staff'))
         groups['learners'] = Group('learners', _('Learners'))
@@ -123,7 +123,7 @@ class Section(Group):
         self.calendar = Calendar(self)
 
 
-class SchoolToolGroupContainer(sb.GroupContainer):
+class GroupContainer(sb.GroupContainer):
     """Extend the schoolbell group container to support subclasses."""
 
     implements(ISchoolToolGroupContainer)
