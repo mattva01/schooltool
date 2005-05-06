@@ -121,8 +121,7 @@ Membership = RelationshipSchema(URIMembership,
 
 
 def enforceMembershipConstraints(event):
-    """Enforce membership constraints (IBeforeRelationshipEvent subscriber).
-    """
+    """Enforce membership constraints (IBeforeRelationshipEvent subscriber)."""
     if not IBeforeRelationshipEvent.providedBy(event):
         return
     if event.rel_type != URIMembership:
