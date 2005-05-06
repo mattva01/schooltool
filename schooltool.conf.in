@@ -163,25 +163,6 @@ rest-access-log-file rest-access.log
 web-access-log-file web-access.log
 
 #
-# app-log-file
-#
-#   Specifies the path of a file used for the application log.
-#   Special values STDERR and STDOUT mean standard error and standard
-#   output respectively.
-#
-#   You can specify more than one log file.  All messages will be duplicated
-#   to all the log files.
-#
-# Default:
-#    app-log-file STDOUT
-#
-# Examples:
-#    app-log-file /var/log/schooltool/app.log
-#    app-log-file STDOUT
-#
-app-log-file app.log
-
-#
 # lang
 #
 #   Specifies the locale of the messages to be used on the server.
