@@ -40,7 +40,7 @@
   <content class=".app.SchoolToolGroupContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schoolbell.view"
-             attributes="keys values __iter__ __len__" />
+             attributes="keys values items __iter__ __len__" />
     <require permission="schoolbell.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
