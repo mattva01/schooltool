@@ -102,17 +102,20 @@ case "$1" in
     set_simple listen "$RET"
     db_get $package/web
     set_simple web "$RET"
-    db_get $package/listen_ssl
-    set_simple listen_ssl "$RET"
-    db_get $package/web_ssl
-    set_simple web_ssl "$RET"
+    # XXX - SSL certificate generation is disabled. dee config for details
+    #db_get $package/listen_ssl
+    #set_simple listen_ssl "$RET"
+    #db_get $package/web_ssl
+    #set_simple web_ssl "$RET"
 
+    # XXX - SSL certificate generation is disabled. see .config for details
     # Should we create an SSL cert?
-    db_get $package/create-cert
-    Create="$RET"
+    #db_get $package/create-cert
+    #Create="$RET"
     # re-set the default
-    db_reset $package/create-cert
-    if [ "z$Create" == ztrue ]; then
+    #db_reset $package/create-cert
+    #if [ "z$Create" == ztrue ]; then
+    if false; then
         db_get $package/cert-type
         case "$RET" in
 
