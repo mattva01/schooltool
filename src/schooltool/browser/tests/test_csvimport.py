@@ -102,10 +102,6 @@ class TestTimetableCSVImportView(unittest.TestCase):
                            'roster.txt imported successfully.'])
         self.assertEquals(view.errors, [])
 
-#        self.assertEquals(request.applog,
-#                  [(self.manager, u'School timetable imported', INFO),
-#                   (self.manager, u'School timetable roster imported', INFO)])
-
     def test_POST_empty(self):
         view = self.createView(form={'timetable.csv': '',
                                      'roster.txt': '',
@@ -113,8 +109,6 @@ class TestTimetableCSVImportView(unittest.TestCase):
                                      'UPDATE_SUBMIT': 'Submit'})
         view.update()
         self.assertEquals(view.errors, ['No data provided'])
-
-#        self.assertEquals(view.request.applog, [])
 
     def test_POST_invalid_charset(self):
         tt_csv = StringIO('"A","\xff","C","D"')
@@ -125,7 +119,6 @@ class TestTimetableCSVImportView(unittest.TestCase):
         view.update()
         self.assertEquals(view.errors, ["Could not convert data to Unicode"
                                         " (incorrect charset?)."])
-#        self.assertEquals(view.request.applog, [])
 
     def test_POST_utf8(self):
         ttschema = self.app.timetableSchemaService[u'three-day']
@@ -138,8 +131,6 @@ class TestTimetableCSVImportView(unittest.TestCase):
         view.update()
         self.assertEquals(view.success,
                           ['timetable.csv imported successfully.'])
-#        self.assertEquals(view.request.applog,
-#                          [(None, u'School timetable imported', INFO)])
 
 
 class TestTimetableCSVImporter(unittest.TestCase):
