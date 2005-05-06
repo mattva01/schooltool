@@ -228,8 +228,9 @@ The new term is there
 
 TODO: implement edition of already defined terms
 TODO: verify that you can delete terms
-TODO: error message when end date < start date
-TODO: error message when title/name is already in use
+TODO: check that there's an error message when end date < start date
+MAYBE TODO: add an 'Identifier (optional)' field to the term addition form,
+            just like in group/resource addition form
 
 
 Timetables on persons, groups, and resources
