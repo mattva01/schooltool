@@ -33,10 +33,7 @@ from zope.app.container.interfaces import IContainer, IContained
 from zope.app.container.constraints import contains
 
 from schooltool import SchoolToolMessageID as _
-from schoolbell.app.interfaces import ISchoolBellApplication
-from schoolbell.app.interfaces import IGroup, IGroupContainer, IGroupContained
-from schoolbell.app.interfaces import IPerson, IPersonContained
-from schoolbell.app.interfaces import IResource, IResourceContained
+from schoolbell.app import interfaces as sb
 
 from schoolbell.calendar.interfaces import Unchanged
 from schoolbell.calendar.interfaces import ICalendarEvent
@@ -772,14 +769,27 @@ class ITermService(IContainer, ILocation):
 
 
 #
-#  Courses and sections
+#  SchoolTool domain model objects
 #
 
-class ICourse(IGroupContained):
+
+class IPerson(sb.IPerson, ITimetabled):
+    """SchoolTool person object"""
+
+
+class IGroup(sb.IGroup, ITimetabled):
+    """SchoolTool group object"""
+
+
+class IResource(sb.IResource, ITimetabled):
+    """SchoolTool resource object"""
+
+
+class ICourse(sb.IGroupContained):
     """Courses are groups of Sections."""
 
 
-class ISection(IGroupContained):
+class ISection(sb.IGroupContained):
     """Sections are groups of users in a particular meeting of a Course."""
 
     label = TextLine(
@@ -808,7 +818,7 @@ class ISection(IGroupContained):
                """A list of courses this section is a member of.""")
 
 
-class ISchoolToolGroupContainer(IGroupContainer):
+class ISchoolToolGroupContainer(sb.IGroupContainer):
     """SchoolTool's group container contains Groups and subclasses."""
 
     contains(IGroup, ICourse, ISection)
@@ -818,7 +828,7 @@ class ISchoolToolGroupContainer(IGroupContainer):
 #  Main application
 #
 
-class ISchoolToolApplication(ISchoolBellApplication):
+class ISchoolToolApplication(sb.ISchoolBellApplication):
     """The main SchoolTool application object"""
 
     timetableSchemaService = Object(title=u"Timetable schemas",

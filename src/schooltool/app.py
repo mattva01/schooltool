@@ -37,7 +37,7 @@ from schoolbell.app import app as sb
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ISchoolToolApplication
 from schooltool.interfaces import ISchoolToolGroupContainer
-from schooltool.interfaces import ICourse, ISection
+from schooltool.interfaces import IPerson, IGroup, IResource, ICourse, ISection
 from schooltool.relationships import URIInstruction, URISection, URIInstructor
 from schooltool.relationships import URILearning, URILearner
 from schooltool.timetable import TermService, TimetableSchemaService
@@ -70,6 +70,8 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
 
 class Group(sb.Group, TimetabledMixin):
 
+    implements(IGroup)
+
     def __init__(self, *args, **kw):
         sb.Group.__init__(self, *args, **kw)
         TimetabledMixin.__init__(self)
@@ -77,12 +79,16 @@ class Group(sb.Group, TimetabledMixin):
 
 class Person(sb.Person, TimetabledMixin):
 
+    implements(IPerson)
+
     def __init__(self, *args, **kw):
         sb.Person.__init__(self, *args, **kw)
         TimetabledMixin.__init__(self)
 
 
 class Resource(sb.Resource, TimetabledMixin):
+
+    implements(IResource)
 
     def __init__(self, *args, **kw):
         sb.Resource.__init__(self, *args, **kw)

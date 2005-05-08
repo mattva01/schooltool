@@ -35,10 +35,10 @@ from zope.publisher.interfaces.browser import IBrowserPublisher
 from schooltool.interfaces import ISchoolToolApplication
 from schoolbell.app.browser.app import GroupView
 from schoolbell.app.browser import app as sb
+from schoolbell.app.interfaces import ISchoolBellApplication
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ICourse, ISection
-from schooltool.interfaces import ISchoolBellApplication
 from schooltool.app import Section, Person
 
 class CourseView(GroupView):
