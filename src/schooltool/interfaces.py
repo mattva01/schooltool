@@ -818,7 +818,7 @@ class ISection(sb.IGroupContained):
                """A list of courses this section is a member of.""")
 
 
-class ISchoolToolGroupContainer(sb.IGroupContainer):
+class IGroupContainer(sb.IGroupContainer):
     """SchoolTool's group container contains Groups and subclasses."""
 
     contains(IGroup, ICourse, ISection)

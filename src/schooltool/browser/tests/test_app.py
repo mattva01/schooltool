@@ -137,9 +137,9 @@ def doctest_SectionAddView():
         ...     def __init__(self, context, request): pass
         ...     def __call__(self): return "http://localhost/frogpond/groups"
         ...
-        >>> from schooltool.interfaces import ISchoolToolGroupContainer
+        >>> from schooltool.interfaces import IGroupContainer
         >>> from zope.app.traversing.browser.interfaces import IAbsoluteURL
-        >>> ztapi.browserViewProviding(ISchoolToolGroupContainer, FakeURL, \
+        >>> ztapi.browserViewProviding(IGroupContainer, FakeURL, \
         ...                            providing=IAbsoluteURL)
 
     we need to stub out the widgets

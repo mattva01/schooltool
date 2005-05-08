@@ -6,7 +6,7 @@
   <!-- Adapters -->
 
   <adapter
-      for=".interfaces.ISchoolToolGroupContainer"
+      for=".interfaces.IGroupContainer"
       factory="schoolbell.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 

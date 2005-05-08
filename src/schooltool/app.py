@@ -36,7 +36,7 @@ from schoolbell.app import app as sb
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ISchoolToolApplication
-from schooltool.interfaces import ISchoolToolGroupContainer
+from schooltool.interfaces import IGroupContainer
 from schooltool.interfaces import IPerson, IGroup, IResource, ICourse, ISection
 from schooltool.relationships import URIInstruction, URISection, URIInstructor
 from schooltool.relationships import URILearning, URILearner
@@ -132,4 +132,4 @@ class Section(Group):
 class GroupContainer(sb.GroupContainer):
     """Extend the schoolbell group container to support subclasses."""
 
-    implements(ISchoolToolGroupContainer)
+    implements(IGroupContainer)
