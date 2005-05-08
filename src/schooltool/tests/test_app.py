@@ -194,7 +194,7 @@ def doctest_Group():
         True
     """
 
-def doctest_Group():
+def doctest_Resource():
     """
         >>> from schooltool.app import Resource
         >>> r = Resource("Printer")
@@ -204,6 +204,35 @@ def doctest_Group():
         True
         >>> verifyObject(ITimetabled, r)
         True
+    """
+
+
+def doctest_GroupContainer():
+    """
+    First, make sure that GroupContainer implements the
+    IGroupContainer interface:
+
+        >>> from schooltool.app import GroupContainer
+        >>> from schooltool.interfaces import IGroupContainer
+        >>> gc = GroupContainer()
+        >>> verifyObject(IGroupContainer, gc)
+        True
+
+    Now, let's check that it can contain groups, sections, and courses.
+
+        >>> from schooltool.app import Group, Section, Course, Person
+        >>> from zope.app.container.constraints import checkObject
+        >>> checkObject(gc, 'name', Group())
+        >>> checkObject(gc, 'name', Section())
+        >>> checkObject(gc, 'name', Course())
+
+    It cannot contain persons though:
+
+        >>> checkObject(gc, 'name', Person())
+        Traceback (most recent call last):
+          ...
+        InvalidItemType: ...
+
     """
 
 def test_suite():
