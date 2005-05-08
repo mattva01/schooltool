@@ -27,6 +27,7 @@ from zope.testing import doctest
 from zope.app import zapi
 from zope.interface.verify import verifyObject
 
+
 def doctest_Instruction():
     r"""Tests for Instruction URIs and methods
 

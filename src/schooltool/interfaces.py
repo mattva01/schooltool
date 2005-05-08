@@ -818,10 +818,22 @@ class ISection(sb.IGroupContained):
                """A list of courses this section is a member of.""")
 
 
+class IPersonContainer(sb.IPersonContainer):
+    """SchoolTool's person container"""
+
+    contains(IPerson)
+
+
 class IGroupContainer(sb.IGroupContainer):
     """SchoolTool's group container contains Groups and subclasses."""
 
     contains(IGroup, ICourse, ISection)
+
+
+class IResourceContainer(sb.IResourceContainer):
+    """SchoolTool's resource container"""
+
+    contains(IResource)
 
 
 #
@@ -829,7 +841,14 @@ class IGroupContainer(sb.IGroupContainer):
 #
 
 class ISchoolToolApplication(sb.ISchoolBellApplication):
-    """The main SchoolTool application object"""
+    """The main SchoolTool application object
+
+    The application is a read-only container with the following items:
+
+        'persons' - IPersonContainer
+        'groups' - IGroupContainer
+        'resources' - IResourceContainer
+    """
 
     timetableSchemaService = Object(title=u"Timetable schemas",
                                     schema=ITimetableSchemaService)

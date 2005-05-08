@@ -48,6 +48,18 @@ def doctest_SchoolToolApplication():
         >>> verifyObject(ISchoolBellApplication, app)
         True
 
+    The person, group, and resource containers should be from
+    SchoolTool, not SchoolBell:
+
+        >>> from schooltool.interfaces import IPersonContainer, IGroupContainer
+        >>> from schooltool.interfaces import IResourceContainer
+        >>> verifyObject(IPersonContainer, app['persons'])
+        True
+        >>> verifyObject(IGroupContainer, app['groups'])
+        True
+        >>> verifyObject(IResourceContainer, app['resources'])
+        True
+
     Make sure the default groups and resources are created
 
         >>> from schoolbell.app.interfaces import IGroup
@@ -209,6 +221,48 @@ def doctest_Resource():
 
 def doctest_GroupContainer():
     """
+    First, make sure that PersonContainer implements the advertised
+    interface:
+
+        >>> from schooltool.app import PersonContainer
+        >>> from schooltool.interfaces import IPersonContainer
+        >>> pc = PersonContainer()
+        >>> verifyObject(IPersonContainer, pc)
+        True
+
+    It should be able to contain persons:
+
+        >>> from schooltool.app import Group, Section, Course, Person, Resource
+        >>> from zope.app.container.constraints import checkObject
+        >>> checkObject(gc, 'name', Person())
+
+    But not groups and resources:
+
+        >>> checkObject(pc, 'name', Group())
+        Traceback (most recent call last):
+          ...
+        InvalidItemType: ...
+
+        >>> checkObject(pc, 'name', Section())
+        Traceback (most recent call last):
+          ...
+        InvalidItemType: ...
+
+        >>> checkObject(pc, 'name', Course())
+        Traceback (most recent call last):
+          ...
+        InvalidItemType: ...
+
+        >>> checkObject(pc, 'name', Resource())
+        Traceback (most recent call last):
+          ...
+        InvalidItemType: ...
+
+    """
+
+
+def doctest_GroupContainer():
+    """
     First, make sure that GroupContainer implements the
     IGroupContainer interface:
 
@@ -229,6 +283,48 @@ def doctest_GroupContainer():
     It cannot contain persons though:
 
         >>> checkObject(gc, 'name', Person())
+        Traceback (most recent call last):
+          ...
+        InvalidItemType: ...
+
+    """
+
+
+def doctest_ResourceContainer():
+    """
+    First, make sure that ResourceContainer implements the advertised
+    interface:
+
+        >>> from schooltool.app import ResourceContainer
+        >>> from schooltool.interfaces import IResourceContainer
+        >>> rc = ResourceContainer()
+        >>> verifyObject(IResourceContainer, rc)
+        True
+
+    It should be able to contain resources:
+
+        >>> from schooltool.app import Group, Section, Course, Person, Resource
+        >>> from zope.app.container.constraints import checkObject
+        >>> checkObject(rc, 'name', Resource())
+
+    But not groups and persons:
+
+        >>> checkObject(rc, 'name', Group())
+        Traceback (most recent call last):
+          ...
+        InvalidItemType: ...
+
+        >>> checkObject(rc, 'name', Section())
+        Traceback (most recent call last):
+          ...
+        InvalidItemType: ...
+
+        >>> checkObject(rc, 'name', Course())
+        Traceback (most recent call last):
+          ...
+        InvalidItemType: ...
+
+        >>> checkObject(rc, 'name', Person())
         Traceback (most recent call last):
           ...
         InvalidItemType: ...

@@ -36,7 +36,8 @@ from schoolbell.app import app as sb
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ISchoolToolApplication
-from schooltool.interfaces import IGroupContainer
+from schooltool.interfaces import IPersonContainer, IGroupContainer
+from schooltool.interfaces import IResourceContainer
 from schooltool.interfaces import IPerson, IGroup, IResource, ICourse, ISection
 from schooltool.relationships import URIInstruction, URISection, URIInstructor
 from schooltool.relationships import URILearning, URILearner
@@ -51,9 +52,9 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
 
     def __init__(self):
         SampleContainer.__init__(self)
-        self['persons'] = sb.PersonContainer()
+        self['persons'] = PersonContainer()
         self['groups'] = groups = GroupContainer()
-        self['resources'] = sb.ResourceContainer()
+        self['resources'] = ResourceContainer()
         groups['staff'] = Group('staff', _('Staff'))
         groups['learners'] = Group('learners', _('Learners'))
         groups['courses'] = Group('courses', _('Courses currently offered'))
@@ -129,7 +130,19 @@ class Section(Group):
         self.calendar = Calendar(self)
 
 
+class PersonContainer(sb.PersonContainer):
+    """A container for SchoolTool persons"""
+
+    implements(IPersonContainer)
+
+
 class GroupContainer(sb.GroupContainer):
-    """Extend the schoolbell group container to support subclasses."""
+    """A container for groups, sections and courses."""
 
     implements(IGroupContainer)
+
+
+class ResourceContainer(sb.ResourceContainer):
+    """A container for SchoolTool resources."""
+
+    implements(IResourceContainer)
