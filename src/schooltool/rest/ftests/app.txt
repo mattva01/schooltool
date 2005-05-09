@@ -105,3 +105,45 @@ and no persons:
            xlink:href="http://localhost/frogpond/persons/acl"/>
     </container>
     <BLANKLINE>
+
+
+Let's add a person, a group, and a resource, and let's make sure they
+are SchoolTool objects, rather than SchoolBell objects:
+
+
+    >>> print rest("""
+    ... PUT /frogpond/persons/goose HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Goose"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... PUT /frogpond/groups/birds HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birds"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... PUT /frogpond/resources/lily HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Lily"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> getRootFolder()['frogpond']['persons']['goose']
+    <schooltool.app.Person object at ...>
+    >>> getRootFolder()['frogpond']['groups']['birds']
+    <schooltool.app.Group object at ...>
+    >>> getRootFolder()['frogpond']['resources']['lily']
+    <schooltool.app.Resource object at ...>

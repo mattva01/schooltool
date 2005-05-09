@@ -25,6 +25,7 @@ from zope.app import zapi
 
 from schoolbell.app.rest import View, Template
 from schoolbell.app.rest import app as sb
+from schooltool.app import Person, Group, Resource
 
 from schooltool import SchoolToolMessageID as _
 
@@ -33,3 +34,21 @@ class SchoolToolApplicationView(sb.ApplicationView):
     """The root view for the application."""
 
     template = Template("www/app.pt", content_type="text/xml; charset=UTF-8")
+
+
+class PersonFileFactory(sb.PersonFileFactory):
+    """An adapter that creates SchoolTool persons in RESTive views"""
+
+    factory = Person
+
+
+class GroupFileFactory(sb.GroupFileFactory):
+    """An adapter that creates SchoolTool groups in RESTive views"""
+
+    factory = Group
+
+
+class ResourceFileFactory(sb.ResourceFileFactory):
+    """An adapter that creates SchoolTool resources in RESTive views"""
+
+    factory = Resource

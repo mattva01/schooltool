@@ -15,4 +15,25 @@
       permission="zope.Public"
       />
 
+  <adapter
+      for="schooltool.interfaces.IPersonContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".app.PersonFileFactory"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="schooltool.interfaces.IGroupContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".app.GroupFileFactory"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="schooltool.interfaces.IResourceContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".app.ResourceFileFactory"
+      permission="zope.Public"
+      />
+
 </configure>
