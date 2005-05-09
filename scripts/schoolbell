@@ -16,4 +16,4 @@ if sys.version_info < (2, 3):
     sys.exit(1)
 
 import schoolbell.app.main
-schoolbell.app.main.main()
+schoolbell.app.main.StandaloneServer().main()
