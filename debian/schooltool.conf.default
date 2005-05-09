@@ -9,13 +9,13 @@
 ## But editing them here is safe
 
 # TCP port for the RESTive HTTP interface to listen on
-# marker for listen settings - Please don't change or delete this line.
+# marker for rest settings - Please don't change or delete this line.
 
 # TCP port for the web HTTP interface to listen on
 # marker for web settings - Please don't change or delete this line.
 
 # TCP port for the RESTive HTTPS interface to listen on
-# marker for listen_ssl settings - Please don't change or delete this line.
+# marker for rest_ssl settings - Please don't change or delete this line.
 
 # TCP port for the web HTTPS interface to listen on
 # marker for web_ssl settings - Please don't change or delete this line.

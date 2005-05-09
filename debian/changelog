@@ -8,6 +8,10 @@ schooltool (0.10-1) unstable; urgency=low
     do, then reduce the rules file to less than 75 lines. Also the application
     startup scripts are moved to the upstream scripts directory as they will
     be usefull for the RPM packages.
+  * Use the 'rest' directive rather than the 'listen' directive in config files
+    and convert all existing 'listen' directives to 'rest' directives with some
+    compatibility code. 'listen' and 'rest' are equivilent, but listen is
+    depreciated upstream.
   * Fold the clients (command line and import-sampleschool) into the library
     package as they would otherwise have been 2 lonely scripts in one big
     package. Add conflicts/replaces on these packages.

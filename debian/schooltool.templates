@@ -1,4 +1,4 @@
-Template: schooltool/listen
+Template: schooltool/rest
 Type: string
 Default:
 _Description: Network interfaces for SchoolTool XML web services:
@@ -19,7 +19,7 @@ _Description: Network interfaces for the HTML browser interface
  .
  The HTML interface provides access to SchoolTool via any standard web browser.
 
-Template: schooltool/listen_ssl
+Template: schooltool/rest_ssl
 Type: string
 Default:
 _Description: Network interfaces for SchoolTool XML web services (SSL):
