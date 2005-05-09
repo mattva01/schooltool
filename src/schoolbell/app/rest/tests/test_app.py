@@ -129,6 +129,9 @@ class ContainerViewTestMixin(XMLCompareMixin, QuietLibxml2Mixin):
 
     def setUp(self):
         from schoolbell.app.app import SchoolBellApplication
+        from schoolbell.app.rest.app import GroupFileFactory
+        from schoolbell.app.rest.app import ResourceFileFactory
+        from zope.app.filerepresentation.interfaces import IFileFactory
 
         setup.placefulSetUp()
         self.setUpLibxml2()
@@ -138,6 +141,13 @@ class ContainerViewTestMixin(XMLCompareMixin, QuietLibxml2Mixin):
         ztapi.provideAdapter(IGroupContainer,
                              INameChooser,
                              SimpleNameChooser)
+        ztapi.provideAdapter(IGroupContainer,
+                             IFileFactory,
+                             GroupFileFactory)
+        ztapi.provideAdapter(IResourceContainer,
+                             IFileFactory,
+                             ResourceFileFactory)
+
 
         self.app = SchoolBellApplication()
         directlyProvides(self.app, IContainmentRoot)

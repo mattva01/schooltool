@@ -258,7 +258,7 @@ class GenericContainerView(View):
         response = self.request.response
         body = self.request.bodyFile.read()
 
-        factory = self.factory(self.context)
+        factory = IFileFactory(self.context)
         item = factory(None, None, body)
         self.add(item)
         location = zapi.absoluteURL(item, self.request)
@@ -273,19 +273,13 @@ class GenericContainerView(View):
 class GroupContainerView(GenericContainerView):
     """RESTive view of a group container."""
 
-    factory = GroupFileFactory
-
 
 class ResourceContainerView(GenericContainerView):
     """RESTive view of a resource container."""
 
-    factory = ResourceFileFactory
-
 
 class PersonContainerView(GenericContainerView):
     """RESTive view of a person container."""
-
-    factory = PersonFileFactory
 
 
 class GroupView(View):
