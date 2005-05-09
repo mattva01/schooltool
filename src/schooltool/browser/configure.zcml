@@ -183,7 +183,7 @@
       name="add.html"
       for="schooltool.interfaces.ITermService"
       class="schooltool.browser.timetable.TermAddView"
-      template="templates/term_add.pt"
+      template="templates/term_add_edit.pt"
       permission="schoolbell.create"
       menu="schoolbell_actions" title="New Term"
       />
@@ -201,7 +201,7 @@
       name="edit.html"
       for="schooltool.interfaces.ITermCalendar"
       class="schooltool.browser.timetable.TermEditView"
-      template="templates/term_add.pt"
+      template="templates/term_add_edit.pt"
       permission="schoolbell.edit"
       menu="schoolbell_actions" title="Edit"
       />
