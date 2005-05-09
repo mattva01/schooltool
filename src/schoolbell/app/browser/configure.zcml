@@ -85,7 +85,7 @@
       class=".app.ACLView"
       template="templates/acl.pt"
       permission="schoolbell.controlAccess"
-      title="Set up access"
+      title="Set up Access"
       menu="schoolbell_actions"
       />
 
@@ -105,7 +105,7 @@
       template="templates/note_add.pt"
       permission="schoolbell.view"
       menu="schoolbell_actions"
-      title="New note" />
+      title="New Note" />
 
 <!-- PersonContainer, Person configuration -->
 
@@ -142,7 +142,7 @@
       template="templates/groups.pt"
       permission="schoolbell.manageMembership"
       menu="schoolbell_actions"
-      title="Change membership"
+      title="Change Membership"
       />
 
   <page
@@ -164,7 +164,7 @@
       template="templates/person_preferences.pt"
       permission="zope.View"
       menu="schoolbell_actions" 
-      title="Change preferences" />
+      title="Change Preferences" />
 
   <page
       name="details.html"
@@ -182,7 +182,7 @@
       template="templates/person_edit.pt"
       permission="zope.View"
       menu="schoolbell_actions"
-      title="Edit info"
+      title="Edit Info"
       />
 
   <page
@@ -191,7 +191,7 @@
       class="schoolbell.app.browser.app.PersonAddView"
       template="templates/person_add.pt"
       permission="schoolbell.create"
-      menu="schoolbell_actions" title="New person" />
+      menu="schoolbell_actions" title="New Person" />
 
   <page
       name="photo"
@@ -232,7 +232,7 @@
 
   <menuItem
       menu="schoolbell_actions"
-      title="New group"
+      title="New Group"
       for="schoolbell.app.interfaces.IGroupContainer"
       action="+/addSchoolBellGroup.html"
       />
@@ -247,7 +247,7 @@
       template="templates/simple_edit.pt"
       class=".app.GroupEditView"
       menu="schoolbell_actions"
-      title="Edit info"
+      title="Edit Info"
       />
 
   <addMenuItem
@@ -275,7 +275,7 @@
       template="templates/members.pt"
       permission="schoolbell.manageMembership"
       menu="schoolbell_actions"
-      title="Add/remove members"
+      title="Add/Remove Members"
       />
 
   <page
@@ -285,7 +285,7 @@
       template="templates/members.pt"
       permission="schoolbell.manageMembership"
       menu="schoolbell_actions"
-      title="Add/remove resources"
+      title="Add/Remove Resources"
       />
 
 <!-- ResourceContainer, Resource configuration -->
@@ -329,12 +329,12 @@
       template="templates/simple_edit.pt"
       class=".app.ResourceEditView"
       menu="schoolbell_actions"
-      title="Edit info"
+      title="Edit Info"
       />
 
   <menuItem
       menu="schoolbell_actions"
-      title="New resource"
+      title="New Resource"
       for="schoolbell.app.interfaces.IResourceContainer"
       action="+/addSchoolBellResource.html"
       />
@@ -377,7 +377,7 @@
 
   <menuItem
       menu="schoolbell_actions"
-      title="View calendar"
+      title="View Calendar"
       for="schoolbell.app.interfaces.ICalendarOwner"
       permission="schoolbell.viewCalendar"
       action="calendar"
@@ -390,7 +390,7 @@
       template="templates/cal_daily.pt"
       permission="schoolbell.viewCalendar"
       menu="zmi_views"
-      title="Calendar (daily)"
+      title="Calendar (Daily)"
       />
 
   <page
@@ -400,7 +400,7 @@
       template="templates/cal_weekly.pt"
       permission="schoolbell.viewCalendar"
       menu="zmi_views"
-      title="Calendar (weekly)"
+      title="Calendar (Weekly)"
       />
 
   <page
@@ -410,7 +410,7 @@
       template="templates/cal_monthly.pt"
       permission="schoolbell.viewCalendar"
       menu="zmi_views"
-      title="Calendar (monthly)"
+      title="Calendar (Monthly)"
       />
 
   <page
@@ -420,7 +420,7 @@
       template="templates/cal_yearly.pt"
       permission="schoolbell.viewCalendar"
       menu="zmi_views"
-      title="Calendar (yearly)"
+      title="Calendar (Yearly)"
       />
 
   <page
@@ -455,7 +455,7 @@
 
   <menuItem
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
-      menu="schoolbell_actions" title="New event"
+      menu="schoolbell_actions" title="New Event"
       action="add.html" permission="schoolbell.addEvent" />
 
   <page

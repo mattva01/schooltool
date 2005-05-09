@@ -135,7 +135,7 @@ person index:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    <a href="@@add.html">New person</a>
+    <a href="@@add.html">New Person</a>
     ...
 
 We can click on it and get a form:
@@ -369,7 +369,7 @@ group index:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    <a href="+/addSchoolBellGroup.html">New group</a>
+    <a href="+/addSchoolBellGroup.html">New Group</a>
     ...
 
 We can click on it and get a form:
@@ -537,7 +537,7 @@ the resource index:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    <a href="+/addSchoolBellResource.html">New resource</a>
+    <a href="+/addSchoolBellResource.html">New Resource</a>
     ...
 
 We can click on it and get a form:
