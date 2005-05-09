@@ -147,3 +147,31 @@ are SchoolTool objects, rather than SchoolBell objects:
     <schooltool.app.Group object at ...>
     >>> getRootFolder()['frogpond']['resources']['lily']
     <schooltool.app.Resource object at ...>
+
+The same should happen if we post to respective containers:
+
+    >>> print rest("""
+    ... POST /frogpond/groups HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Animals"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... POST /frogpond/resources HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Water"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> getRootFolder()['frogpond']['groups']['animals']
+    <schooltool.app.Group object at ...>
+    >>> getRootFolder()['frogpond']['resources']['water']
+    <schooltool.app.Resource object at ...>
+
