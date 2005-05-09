@@ -55,6 +55,7 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
         self['persons'] = PersonContainer()
         self['groups'] = groups = GroupContainer()
         self['resources'] = ResourceContainer()
+        # XXX Such translation does not seem to be working.
         groups['staff'] = Group('staff', _('Staff'))
         groups['learners'] = Group('learners', _('Learners'))
         groups['courses'] = Group('courses', _('Courses currently offered'))
@@ -108,11 +109,12 @@ class Section(Group):
     def _getLabel(self):
         instructors = " ".join([i.title for i in self.instructors])
         courses = " ".join([c.title for c in self.courses])
-        return _('%s section of %s') % (instructors, courses)
+        return _('%s section of %s') % (instructors, courses) # XXX i18n bug?
 
     label = property(_getLabel)
 
     def _getTitle(self):
+        # XXX i18n bug?
         return _('Section of ') + " ".join([c.title for c in self.courses])
 
     title = property(_getTitle)
