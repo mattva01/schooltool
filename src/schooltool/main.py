@@ -86,11 +86,10 @@ SCHOOLTOOL_SITE_DEFINITION = """
   <everybodyGroup id="zope.Everybody" title="%(all_users)s" />
 
 </configure>
-""" % {'unauth_user': _("Unauthenticated User"),
-       'unauth_users': _("Unauthenticated Users"),
-       'auth_users': _("Unauthenticated Users"),
-       'all_users': _("All Users")}
-# XXX Possible bug: maybe we should use Unicode rather than UTF-8 here?
+""" % {'unauth_user': catalog.ugettext("Unauthenticated User"),
+       'unauth_users': catalog.ugettext("Unauthenticated Users"),
+       'auth_users': catalog.ugettext("Unauthenticated Users"),
+       'all_users': catalog.ugettext("All Users")}
 
 
 class StandaloneServer(SchoolBellServer):
