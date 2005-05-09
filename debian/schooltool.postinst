@@ -99,7 +99,6 @@ case "$1" in
 
     ### Compatibility code added in 0.10 to convert old listen marker lines to
     ### rest marker lines
-    =""
     cp -a $config $config.tmp
     cat $config                 \
     | sed "s|# marker for listen settings - Please don't change or delete this line.|# marker for rest settings - Please don't change or delete this line.|"  \
