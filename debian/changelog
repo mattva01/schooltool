@@ -4,6 +4,8 @@ schooltool (0.10-1) unstable; urgency=low
   * Remove the conflicts on the schoolbell package as other changes have made
     this un-necessary. In fact add a versioned depends on schoolbell as it is
     a required library (version 1.1).
+  * Update the database version as databases from 0.8/0.9 are incompatible
+    with 0.10.
   * Hack upstreams build process until it does everything debian/rules used to
     do, then reduce the rules file to less than 75 lines. Also the application
     startup scripts are moved to the upstream scripts directory as they will

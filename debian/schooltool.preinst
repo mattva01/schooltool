@@ -27,7 +27,7 @@ package=schooltool
 # which will dissapear when schooltool can automatically upgrade
 # its own database.
 
-db_version=0.8
+db_version=0.10
 
 try_db_delete () {
     db_fset $package/incompatible_database seen false
