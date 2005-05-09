@@ -226,6 +226,29 @@ The new term is there
         </form>
     ...
 
+You can look at it
+
+    >>> print http(r"""
+    ... GET /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <title>2005 Fall</title>
+    ...
+    <h1>2005 Fall</h1>
+    ...
+          <td class="schoolday">
+            <label> 9 </label>
+          </td>
+          <td class="holiday">
+            <label> 10 </label>
+          </td>
+    ...
+
 TODO: implement edition of already defined terms
 TODO: verify that you can delete terms
 TODO: check that there's an error message when end date < start date

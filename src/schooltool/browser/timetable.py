@@ -39,7 +39,7 @@ from schoolbell.calendar.utils import next_month, week_start
 from schoolbell.app.browser.app import ContainerView
 from schoolbell.app.browser.cal import month_names, short_day_of_week_names
 from schooltool import SchoolToolMessageID as _
-from schooltool.interfaces import ITermService
+from schooltool.interfaces import ITermService, ITermCalendar
 from schooltool.timetable import TermCalendar
 
 
@@ -63,6 +63,20 @@ class ITermAddForm(Interface):
 
     end_date = Date(
         title=_("End date"))
+
+
+class TermView(BrowserView):
+    """Browser view for terms."""
+
+    __used_for__ = ITermCalendar
+
+    def calendar(self):
+        """Prepare the calendar for display.
+
+        Returns a structure composed of lists and dicts, see `TermRenderer`
+        for more details.
+        """
+        return TermRenderer(self.context).calendar()
 
 
 class TermAddView(AddView):
@@ -137,23 +151,39 @@ class TermAddView(AddView):
         """Prepare the calendar for display.
 
         Returns None if the form doesn't contain enough information.  Otherwise
-        returns a list of month dicts (see `month`).
+        returns a structure composed of lists and dicts (see `TermRenderer`
+        for more details).
         """
-        term = self.term
-        if not term:
+        if self.term is None:
             return None
+        return TermRenderer(self.term).calendar()
+
+
+class TermRenderer(object):
+    """Helper for rendering ITermCalendars."""
+
+    first_day_of_week = 0 # Monday  TODO: get from IPersonPreferences
+
+    def __init__(self, term):
+        self.term = term
+
+    def calendar(self):
+        """Prepare the calendar for display.
+
+        Returns a list of month dicts (see `month`).
+        """
         calendar = []
-        date = term.first
+        date = self.term.first
         counter = itertools.count(1)
-        while date <= term.last:
+        while date <= self.term.last:
             start_of_next_month = next_month(date)
             end_of_this_month = start_of_next_month - datetime.date.resolution
-            maxdate = min(term.last, end_of_this_month)
-            calendar.append(self.month(date, maxdate, counter, self.term))
+            maxdate = min(self.term.last, end_of_this_month)
+            calendar.append(self.month(date, maxdate, counter))
             date = start_of_next_month
         return calendar
 
-    def month(mindate, maxdate, counter, term):
+    def month(self, mindate, maxdate, counter):
         """Prepare one month for display.
 
         Returns a dict with these keys:
@@ -162,24 +192,20 @@ class TermAddView(AddView):
             weeks   -- a list of week dicts in this month (see `week`)
 
         """
-        first_day_of_week = 0 # Monday  TODO: get from IPersonPreferences
         assert (mindate.year, mindate.month) == (maxdate.year, maxdate.month)
         month_title = _('%(month)s %(year)s') % {
                           'month': month_names[mindate.month],
                           'year': mindate.year}
         weeks = []
-        week = TermAddView.week
-        date = week_start(mindate, first_day_of_week)
+        date = week_start(mindate, self.first_day_of_week)
         while date <= maxdate:
-            weeks.append(week(date, mindate, maxdate, counter, term))
+            weeks.append(self.week(date, mindate, maxdate, counter))
             date += datetime.timedelta(days=7)
         return {'title': month_title,
                 'weeks': weeks}
 
-    month = staticmethod(month)
-
-    def week(start_of_week, mindate, maxdate, counter, term):
-        """Prepare one week for display.
+    def week(self, start_of_week, mindate, maxdate, counter):
+        """Prepare one week of a TermCalendar for display.
 
         `start_of_week` is the date when the week starts.
 
@@ -221,7 +247,7 @@ class TermAddView(AddView):
         for day in range(7):
             if mindate <= date <= maxdate:
                 index = counter.next()
-                checked = not term.isSchoolday(date)
+                checked = not self.term.isSchoolday(date)
                 css_class = checked and 'holiday' or 'schoolday'
                 days.append({'number': date.day, 'class': css_class,
                              'date': date.strftime('%Y-%m-%d'),
@@ -233,6 +259,4 @@ class TermAddView(AddView):
             date += datetime.date.resolution
         return {'title': week_title,
                 'days': days}
-
-    week = staticmethod(week)
 

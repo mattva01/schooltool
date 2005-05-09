@@ -183,9 +183,18 @@
       name="add.html"
       for="schooltool.interfaces.ITermService"
       class="schooltool.browser.timetable.TermAddView"
-      template="templates/term.pt"
+      template="templates/term_add.pt"
       permission="schoolbell.create"
       menu="schoolbell_actions" title="New Term" />
+
+  <page
+      name="index.html"
+      for="schooltool.interfaces.ITermCalendar"
+      class="schooltool.browser.timetable.TermView"
+      template="templates/term.pt"
+      permission="schoolbell.view"
+      menu="zmi_views" title="View"
+      layer="SchoolToolLayer" />
 
   <page
       name="view_macros"
