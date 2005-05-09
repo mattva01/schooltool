@@ -64,7 +64,7 @@
       template="../../schoolbell/app/browser/templates/person_add.pt"
       permission="schoolbell.create"
       layer=".skin.ISchoolToolLayer"
-      menu="schoolbell_actions" title="New person" />
+      menu="schoolbell_actions" title="New Person" />
 
   <addform
       label="Add a Group"
@@ -145,7 +145,7 @@
       template="templates/section_instructors.pt"
       permission="schoolbell.manageMembership"
       menu="schoolbell_actions"
-      title="Add/remove instructors"
+      title="Add/Remove Instructors"
       />
 
   <page
@@ -155,7 +155,7 @@
       template="templates/section_learners.pt"
       permission="schoolbell.manageMembership"
       menu="schoolbell_actions"
-      title="Add/remove learners"
+      title="Add/Remove Learners"
       />
 
   <page
@@ -185,7 +185,7 @@
       class="schooltool.browser.timetable.TermAddView"
       template="templates/term.pt"
       permission="schoolbell.create"
-      menu="schoolbell_actions" title="New term" />
+      menu="schoolbell_actions" title="New Term" />
 
   <page
       name="view_macros"

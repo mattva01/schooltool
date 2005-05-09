@@ -50,7 +50,7 @@ Initially there are no terms defined.
     ...
     <title>Terms</title>
     ...
-    <a href="@@add.html">New term</a>
+    <a href="@@add.html">New Term</a>
     ...
     <h1>Terms</h1>
     ...
@@ -76,9 +76,9 @@ The manager can add one.
           action="http://localhost/frogpond/terms/@@add.html">
     ...
     <p>
-    First, please name and define the time period itself.  The name should be short
-    and contain no spaces (e.g., 2004-fall).  The date range is inclusive (e.g.,
-    2004-09-01 to 2004-12-31).  Dates must be specified in YYYY-MM-DD format.
+    First, please name and define the time period of the term.  The date range is
+    inclusive (e.g., 2004-09-01 to 2004-12-31).  Dates must be specified in
+    YYYY-MM-DD format.
     </p>
     ...<input class="textType" id="field.title" name="field.title" size="20"
               type="text" value="" />...
@@ -115,9 +115,9 @@ First you have to specify the title and date.
           action="http://localhost/frogpond/terms/@@add.html">
     ...
     <p>
-    First, please name and define the time period itself.  The name should be short
-    and contain no spaces (e.g., 2004-fall).  The date range is inclusive (e.g.,
-    2004-09-01 to 2004-12-31).  Dates must be specified in YYYY-MM-DD format.
+    First, please name and define the time period of the term.  The date range is
+    inclusive (e.g., 2004-09-01 to 2004-12-31).  Dates must be specified in
+    YYYY-MM-DD format.
     </p>
     ...<input class="textType" id="field.title" name="field.title" size="20"
               type="text" value="2005 Fall" />...
@@ -209,7 +209,7 @@ The new term is there
     ...
     <title>Terms</title>
     ...
-    <a href="@@add.html">New term</a>
+    <a href="@@add.html">New Term</a>
     ...
     <h1>Terms</h1>
     ...
