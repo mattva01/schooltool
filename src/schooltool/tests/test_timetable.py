@@ -646,61 +646,6 @@ class TestTimetableEvents(unittest.TestCase):
         verifyObject(ITimetableActivityRemovedEvent, e)
 
 
-class TestTimetableException(unittest.TestCase):
-
-    def test(self):
-        from schooltool.timetable import TimetableException
-        from schooltool.timetable import ExceptionalTTCalendarEvent
-        from schooltool.interfaces import ITimetableException
-        activity = object()
-        e = TimetableException(date(2004, 10, 12), 123, activity)
-        e.replacement = ExceptionalTTCalendarEvent(date(2004, 10, 13),
-                                                 timedelta(45),
-                                                 "Math",
-                                                 exception=e)
-        verifyObject(ITimetableException, e)
-        self.assertEquals(e.date, date(2004, 10, 12))
-        self.assertEquals(e.period_id, 123)
-        assert e.activity is activity
-        e.replacement = None
-
-        self.assertRaises(ValueError, setattr, e, 'replacement', object())
-        self.assertRaises(AttributeError, setattr, e, 'date', object())
-        self.assertRaises(AttributeError, setattr, e, 'period_id', object())
-        self.assertRaises(AttributeError, setattr, e, 'activity', object())
-
-    def test_comparison(self):
-        from schooltool.timetable import TimetableException
-        from schooltool.timetable import ExceptionalTTCalendarEvent
-        activity1 = object()
-        activity2 = object()
-
-        e1 = TimetableException(date(2004, 10, 14), 'period 1', activity1)
-        e2 = TimetableException(date(2004, 10, 14), 'period 1', activity1)
-        assert e1 == e2
-        assert not (e1 != e2)
-
-        e3 = TimetableException(date(2004, 10, 15), 'period 1', activity1)
-        assert e1 != e3
-        assert not (e1 == e3)
-
-        e4 = TimetableException(date(2004, 10, 14), 'period 2', activity1)
-        assert e1 != e4
-        assert not (e1 == e4)
-
-        e5 = TimetableException(date(2004, 10, 14), 'period 1', activity2)
-        assert e1 != e5
-        assert not (e1 == e5)
-
-        e6 = TimetableException(date(2004, 10, 14), 'period 1', activity1)
-        e6.replacement = ExceptionalTTCalendarEvent(date(2004, 10, 14),
-                                                    timedelta(45),
-                                                    "Math",
-                                                    exception=e6)
-        assert e1 != e6
-        assert not (e1 == e6)
-
-
 class TestTimetablingPersistence(unittest.TestCase):
     """A functional test for timetables persistence."""
 
@@ -818,29 +763,6 @@ class TestTimetableCalendarEvent(unittest.TestCase):
         verifyObject(ITimetableCalendarEvent, ev)
         for attr in ['period_id', 'activity']:
             self.assertRaises(AttributeError, setattr, ev, attr, object())
-
-
-class TestExceptionalTTCalendarEvent(unittest.TestCase):
-
-    def test(self):
-        from schooltool.timetable import ExceptionalTTCalendarEvent
-        from schooltool.timetable import TimetableException
-        from schooltool.interfaces import IExceptionalTTCalendarEvent
-
-        period_id = 'Mathematics'
-        activity = object()
-        exc = TimetableException(date(2004, 10, 12), 123, activity)
-        ev = ExceptionalTTCalendarEvent(date(2004, 10, 13), timedelta(45),
-                                        "Math", exception=exc)
-        verifyObject(IExceptionalTTCalendarEvent, ev)
-        self.assert_(ev.exception is exc)
-
-        exc.replacement = ev
-
-        self.assertRaises(AttributeError, setattr, ev, 'exception', object())
-        self.assertRaises(ValueError, ExceptionalTTCalendarEvent,
-                          date(2004, 10, 13), timedelta(45), "Math",
-                          exception=object())
 
 
 class TestSchooldayPeriod(unittest.TestCase):
