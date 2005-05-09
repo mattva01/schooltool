@@ -1,29 +1,9 @@
 Debian Package Todo
 -------------------
 
-*   Kick Zope 3 out of the package.
+*   Play better with the Zope packages, speak to Mattias Klose.
 
-    Prerequisites:
-        - Zope 3 package in Debian and Ubuntu.
-        - Trunk to work with the above package.
+*   Do something about all the documentation scattered in the source in the form
+    of *.txt doctests. It is completely ignored and not installed.
 
-*   Split the package into two source packages, schoolbell ad schooltool.
-        - Different upstream release cycles.
-
-*   Put architecture independent files into /usr/share/schooolbell
-    How:
-        patch the Template class
-        jinty thanks.
-        mgedmin override get_path_from_prefix
-        mgedmin also change read_file in the same module (src/schooltool/rest/__init__.py)
-        mgedmin recursively grep the source tree for __file__ just to be safe
-        jinty Running the functional tests on the server in a chroot enough to catch everything?
-        mgedmin our functional tests for the web interface are not very complete
-        jinty ah, ok then, leave it to the users
-        mgedmin I suggest looking at a couple of pages with a bro%s/\s\+$//er
-        jinty ok
-        mgedmin if you see text, images and css, then it works
-        mgedmin I do not think there are any other arch-indep files in there
-        mgedmin maybe zconfig's schema.xml
-        mgedmin maybe our relaxng schemas, but patching read_file() should fix them
-        jinty Ok, i'll give it a try, probably for 0.10
+*   Use dbconfig-common as much as possible.
