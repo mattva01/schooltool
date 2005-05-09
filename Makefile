@@ -43,7 +43,7 @@ run: build
 	$(PYTHON) schoolbell-server.py
 
 .PHONY: schoolbelldist
-schoolbelldist: realclean
+schoolbelldist: realclean build extract-translations clean
 	rm -rf dist
 	find . -name '*.py[dco]' -exec rm -f {} \;
 	fakeroot ./debian/rules clean
