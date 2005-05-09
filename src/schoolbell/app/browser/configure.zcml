@@ -85,7 +85,7 @@
       class=".app.ACLView"
       template="templates/acl.pt"
       permission="schoolbell.controlAccess"
-      title="Set up Access"
+      title="Set Up Access"
       menu="schoolbell_actions"
       />
 

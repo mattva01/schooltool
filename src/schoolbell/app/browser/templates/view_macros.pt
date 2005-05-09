@@ -47,7 +47,7 @@
 
           <tal:if condition="not:user/schoolbell:authenticated">
             <a id="tools-login" i18n:translate=""
-              tal:attributes="href string:${url}/@@login.html">Log in</a>
+              tal:attributes="href string:${url}/@@login.html">Log In</a>
           </tal:if>
 
           <tal:if condition="user/schoolbell:authenticated"
@@ -76,7 +76,7 @@
                 </tal:disable>
                 <a id="tools-logout" i18n:translate=""
                   tal:attributes="href string:${url}/@@logout.html"
-                  >Log out</a>
+                  >Log Out</a>
               </tal:if>
 
             </div>
