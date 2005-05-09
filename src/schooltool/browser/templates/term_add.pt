@@ -28,31 +28,29 @@
 <form class="plain" method="post" tal:attributes="action request/URL"
       tal:define="calendar view/calendar">
 
-<!-- XXX: use view.update_status
-<div class="info" tal:condition="view/status" tal:content="view/status">
+<div class="info" tal:condition="view/update_status"
+                  tal:content="view/update_status">
   [Status message]
 </div>
--->
 
-<p i18n:translate="">
+<p i18n:translate="" tal:condition="view/creating">
 First, please name and define the time period of the term.  The date range is
 inclusive (e.g., 2004-09-01 to 2004-12-31).  Dates must be specified in
 YYYY-MM-DD format.
 </p>
 
-<!-- XXX The above is for creating.  This is for editing:
-<p i18n:translate="" tal:condition="view/context">
+<p i18n:translate="" tal:condition="not:view/creating">
 The date range is inclusive (e.g., 2004-09-01 to 2004-12-31).
 </p>
-  -->
+
 <fieldset>
   <div class="row" tal:define="widget nocall:view/title_widget">
     <div metal:use-macro="context/@@form_macros/widget_row" />
   </div>
-  <div class="row" tal:define="widget nocall:view/start_date_widget">
+  <div class="row" tal:define="widget nocall:view/first_widget">
     <div metal:use-macro="context/@@form_macros/widget_row" />
   </div>
-  <div class="row" tal:define="widget nocall:view/end_date_widget">
+  <div class="row" tal:define="widget nocall:view/last_widget">
     <div metal:use-macro="context/@@form_macros/widget_row" />
   </div>
 </fieldset>
@@ -67,15 +65,13 @@ The date range is inclusive (e.g., 2004-09-01 to 2004-12-31).
 
 <tal:if condition="calendar">
 
-<p i18n:translate="">
+<p i18n:translate="" tal:condition="view/creating">
 Second, please specify which days are school days, and which days are holidays.
 </p>
 
-<!-- XXX The above is for creating.  This is for editing:
-<p i18n:translate="" tal:condition="view/context">
+<p i18n:translate="" tal:condition="not:view/creating">
 Please specify which days are school days, and which days are holidays.
 </p>
-  -->
 
 <fieldset>
   <table id="legend" class="schooldaymodel">
@@ -143,23 +139,19 @@ Please specify which days are school days, and which days are holidays.
   </table>
 </fieldset>
 
-  <div class="controls">
+  <div class="controls" tal:condition="view/creating">
     <input type="submit" class="button-ok" name="REFRESH"
            value="Refresh" i18n:attributes="value" />
     <input type="submit" class="button-ok" name="UPDATE_SUBMIT"
            value="Add term" i18n:attributes="value" />
   </div>
 
-<!-- XXX The above is for creating.  This is for editing:
-  <div class="controls" tal:condition="view/context">
+  <div class="controls" tal:condition="not:view/creating">
     <input type="submit" class="button-ok" name="REFRESH"
-           value="Refresh"
-           i18n:attributes="value" />
-    <input type="submit" class="button-ok" name="UPDATE"
-           value="Save changes"
-           i18n:attributes="value" />
+           value="Refresh" i18n:attributes="value" />
+    <input type="submit" class="button-ok" name="UPDATE_SUBMIT"
+           value="Save changes" i18n:attributes="value" />
   </div>
-  -->
 
 </tal:if>
 

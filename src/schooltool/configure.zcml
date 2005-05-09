@@ -118,6 +118,9 @@
 
   <content class=".timetable.TermCalendar">
     <allow interface=".interfaces.ITermCalendar" />
+    <require permission="schoolbell.edit"
+             interface=".interfaces.ITermCalendarWrite"
+             set_schema=".interfaces.ITermCalendar" />
   </content>
 
   <include package=".browser" />

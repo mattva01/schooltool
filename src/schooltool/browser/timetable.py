@@ -30,9 +30,11 @@ from zope.schema import TextLine, Date
 from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 from zope.app.form.browser.add import AddView
-from zope.app.form.utility import getWidgetsData
+from zope.app.form.browser.submit import Update
+from zope.app.form.utility import getWidgetsData, setUpEditWidgets
 from zope.app.form.interfaces import WidgetsError
 from zope.app.container.interfaces import INameChooser
+from zope.app.event.objectevent import modified
 
 from schoolbell.calendar.utils import parse_date
 from schoolbell.calendar.utils import next_month, week_start
@@ -53,16 +55,14 @@ class TermServiceView(ContainerView):
     add_url = "new.html"
 
 
-class ITermAddForm(Interface):
+class ITermForm(Interface):
+    """Form schema for ITermCalendar add/edit views."""
 
-    title = TextLine(
-        title=_("Title"))
+    title = TextLine(title=_("Title"))
 
-    start_date = Date(
-        title=_("Start date"))
+    first = Date(title=_("Start date"))
 
-    end_date = Date(
-        title=_("End date"))
+    last = Date(title=_("End date"))
 
 
 class TermView(BrowserView):
@@ -79,16 +79,93 @@ class TermView(BrowserView):
         return TermRenderer(self.context).calendar()
 
 
-class TermAddView(AddView):
+class TermEditViewMixin(object):
+    """Mixin for Term add/edit views."""
+
+    def _buildTerm(self):
+        """Build a TermCalendar object from form values.
+
+        Returns None if the form doesn't contain enough information.
+        """
+        try:
+            data = getWidgetsData(self, ITermForm)
+        except WidgetsError:
+            return None
+        try:
+            term = TermCalendar(data['title'], data['first'], data['last'])
+        except ValueError:
+            return None # date range invalid
+        term.addWeekdays(0, 1, 2, 3, 4, 5, 6)
+        holidays = self.request.form.get('holiday', [])
+        if not isinstance(holidays, list):
+            holidays = [holidays]
+        for holiday in holidays:
+            try:
+                term.remove(parse_date(holiday))
+            except ValueError:
+                pass # ignore ill-formed or out-of-range dates
+        toggle = [n for n in range(7) if ('TOGGLE_%d' % n) in self.request]
+        if toggle:
+            term.toggleWeekdays(*toggle)
+        return term
+
+
+class TermEditView(BrowserView, TermEditViewMixin):
+    """Edit view for terms."""
+
+    __used_for__ = ITermCalendar
+
+    creating = False
+
+    update_status = None
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+        setUpEditWidgets(self, ITermForm)
+
+    def title(self):
+        title = _("Change Term: $title")
+        title.mapping = {'title': self.context.title}
+        return title
+
+    def update(self):
+        if self.update_status is not None:
+            return self.update_status # We've been called before.
+        self.update_status = ''
+        self.term = self._buildTerm()
+        if self.term is None:
+            self.term = self.context
+        elif Update in self.request:
+            self.context.reset(self.term.first, self.term.last)
+            for day in self.term:
+                if self.term.isSchoolday(day):
+                    self.context.add(day)
+            modified(self.context)
+            self.update_status = _("Saved changes.")
+        return self.update_status
+
+    def calendar(self):
+        """Prepare the calendar for display.
+
+        Returns a structure composed of lists and dicts, see `TermRenderer`
+        for more details.
+        """
+        return TermRenderer(self.term).calendar()
+
+
+
+class TermAddView(AddView, TermEditViewMixin):
     """Adding view for terms."""
 
     __used_for__ = ITermService
+
+    creating = True
 
     title = _("New term")
 
     # Since this view is registered via <browser:page>, and not via
     # <browser:addform>, we need to set up some attributes for AddView.
-    schema = ITermAddForm
+    schema = ITermForm
     _arguments = ()
     _keyword_arguments = ()
     _set_before_add = ()
@@ -117,35 +194,6 @@ class TermAddView(AddView):
     def nextURL(self):
         """Return the location to visit once the term's been added."""
         return zapi.absoluteURL(self.context, self.request)
-
-    def _buildTerm(self):
-        """Build a TermCalendar object from form values.
-
-        Returns None if the form doesn't contain enough information.
-        """
-        try:
-            data = getWidgetsData(self, self.schema,
-                                  names=['title', 'start_date', 'end_date'])
-        except WidgetsError:
-            return None
-        try:
-            term = TermCalendar(data['title'], data['start_date'],
-                                data['end_date'])
-        except ValueError:
-            return None # date range invalid
-        term.addWeekdays(0, 1, 2, 3, 4, 5, 6)
-        holidays = self.request.form.get('holiday', [])
-        if not isinstance(holidays, list):
-            holidays = [holidays]
-        for holiday in holidays:
-            try:
-                term.remove(parse_date(holiday))
-            except ValueError:
-                pass # ignore ill-formed or out-of-range dates
-        toggle = [n for n in range(7) if ('TOGGLE_%d' % n) in self.request]
-        if toggle:
-            term.toggleWeekdays(*toggle)
-        return term
 
     def calendar(self):
         """Prepare the calendar for display.

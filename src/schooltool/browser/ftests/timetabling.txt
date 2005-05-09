@@ -74,7 +74,6 @@ The manager can add one.
     ...
     <form class="plain" method="post"
           action="http://localhost/frogpond/terms/@@add.html">
-    ...
     <p>
     First, please name and define the time period of the term.  The date range is
     inclusive (e.g., 2004-09-01 to 2004-12-31).  Dates must be specified in
@@ -82,9 +81,9 @@ The manager can add one.
     </p>
     ...<input class="textType" id="field.title" name="field.title" size="20"
               type="text" value="" />...
-    ...<input class="textType" id="field.start_date" name="field.start_date"
+    ...<input class="textType" id="field.first" name="field.first"
               size="20" type="text" value="" />...
-    ...<input class="textType" id="field.end_date" name="field.end_date"
+    ...<input class="textType" id="field.last" name="field.last"
               size="20" type="text" value="" />...
     <div class="controls">
       <input type="submit" class="button-ok" name="NEXT" value="Next" />
@@ -100,7 +99,7 @@ First you have to specify the title and date.
     ... Content-Length: 75
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=2005+Fall&field.start_date=2005-09-01&field.end_date=2005-12-31&REFRESH=
+    ... field.title=2005+Fall&field.first=2005-09-01&field.last=2005-12-31&REFRESH=
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -113,7 +112,6 @@ First you have to specify the title and date.
     ...
     <form class="plain" method="post"
           action="http://localhost/frogpond/terms/@@add.html">
-    ...
     <p>
     First, please name and define the time period of the term.  The date range is
     inclusive (e.g., 2004-09-01 to 2004-12-31).  Dates must be specified in
@@ -121,9 +119,9 @@ First you have to specify the title and date.
     </p>
     ...<input class="textType" id="field.title" name="field.title" size="20"
               type="text" value="2005 Fall" />...
-    ...<input class="textType" id="field.start_date" name="field.start_date"
+    ...<input class="textType" id="field.first" name="field.first"
               size="20" type="text" value="2005-09-01" />...
-    ...<input class="textType" id="field.end_date" name="field.end_date"
+    ...<input class="textType" id="field.last" name="field.last"
               size="20" type="text" value="2005-12-31" />...
     <div class="controls">
       <input type="submit" class="button-ok" name="REFRESH" value="Refresh" />
@@ -143,10 +141,10 @@ button separately causing two requests)
     >>> print http(r"""
     ... POST /frogpond/terms/@@add.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 109
+    ... Content-Length: 100
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=2005+Fall&field.start_date=2005-09-01&field.end_date=2005-12-31&TOGGLE_5=Saturday&TOGGLE_6=Sunday
+    ... field.title=2005+Fall&field.first=2005-09-01&field.last=2005-12-31&TOGGLE_5=Saturday&TOGGLE_6=Sunday
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -184,10 +182,10 @@ buttons again.)
     >>> print http(r"""
     ... POST /frogpond/terms/@@add.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 132
+    ... Content-Length: 123
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=2005+Fall&field.start_date=2005-09-01&field.end_date=2005-12-31&TOGGLE_5=Saturday&TOGGLE_6=Sunday&UPDATE_SUBMIT=Add+term
+    ... field.title=2005+Fall&field.first=2005-09-01&field.last=2005-12-31&TOGGLE_5=Saturday&TOGGLE_6=Sunday&UPDATE_SUBMIT=Add+term
     ... """, handle_errors=False)
     HTTP/1.1 303 See Other
     Content-Length: ...
@@ -249,7 +247,65 @@ You can look at it
           </td>
     ...
 
-TODO: implement edition of already defined terms
+You can edit it
+
+    >>> print http(r"""
+    ... GET /frogpond/terms/2005-fall/edit.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+        <title>Change Term: 2005 Fall</title>
+    ...
+              <h1>Change Term: 2005 Fall</h1>
+    ...
+    ...<input class="textType" id="field.title" name="field.title" size="20"
+              type="text" value="2005 Fall" />...
+    ...<input class="textType" id="field.first" name="field.first"
+              size="20" type="text" value="2005-09-01" />...
+    ...<input class="textType" id="field.last" name="field.last"
+              size="20" type="text" value="2005-12-31" />...
+      <div class="controls">
+        <input type="submit" class="button-ok" name="REFRESH"
+               value="Refresh" />
+        <input type="submit" class="button-ok"
+               name="UPDATE_SUBMIT" value="Save changes" />
+      </div>
+    </form>
+    ...
+
+    >>> print http(r"""
+    ... POST /frogpond/terms/2005-fall/edit.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 119
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=2005+Fall&field.first=2005-08-01&field.last=2005-11-30&TOGGLE_5=Saturday&TOGGLE_6=Sunday&UPDATE_SUBMIT=Save
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <title>Change Term: 2005 Fall</title>
+    ...
+    <h1>Change Term: 2005 Fall</h1>
+    ...Saved changes...
+    ...
+    ...<input class="textType" id="field.title" name="field.title" size="20"
+              type="text" value="2005 Fall" />...
+    ...<input class="textType" id="field.first" name="field.first"
+              size="20" type="text" value="2005-08-01" />...
+    ...<input class="textType" id="field.last" name="field.last"
+              size="20" type="text" value="2005-11-30" />...
+    ...
+    </form>
+    ...
+
+
 TODO: verify that you can delete terms
 TODO: check that there's an error message when end date < start date
 MAYBE TODO: add an 'Identifier (optional)' field to the term addition form,

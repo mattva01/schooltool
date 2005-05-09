@@ -60,6 +60,127 @@ def doctest_TermView_calendar():
 
     """
 
+
+def doctest_TermEditView_title():
+    """Unit tests for TermEditView.title
+
+        >>> from schooltool.timetable import TermCalendar
+        >>> from schooltool.browser.timetable import TermEditView
+        >>> context = TermCalendar('Sample', datetime.date(2004, 8, 1),
+        ...                        datetime.date(2004, 8, 31))
+        >>> request = TestRequest()
+        >>> view = TermEditView(context, request)
+
+    view.title returns a Zope 3 I18N Message ID.
+
+        >>> from zope.i18n import translate
+        >>> view.title()
+        u'Change Term: $title'
+        >>> translate(view.title())
+        u'Change Term: Sample'
+
+    """
+
+
+def doctest_TermEditView_calendar():
+    """Unit tests for TermEditView.calendar
+
+        >>> from schooltool.timetable import TermCalendar
+        >>> from schooltool.browser.timetable import TermEditView
+        >>> context = TermCalendar('Sample', datetime.date(2004, 8, 4),
+        ...                        datetime.date(2004, 8, 6))
+        >>> request = TestRequest()
+        >>> view = TermEditView(context, request)
+
+    view.calendar() always renders view.term
+
+        >>> view.term = TermCalendar('Sample', datetime.date(2004, 8, 1),
+        ...                          datetime.date(2004, 8, 12))
+        >>> print_cal(view.calendar())
+        *                        August 2004
+                 Mon Tue Wed Thu Fri Sat Sun
+        Week 31:                           1
+        Week 32:   2   3   4   5   6   7   8
+        Week 33:   9  10  11  12
+
+    """
+
+
+def doctest_TermEditView_update():
+    """Unit tests for TermEditView.update
+
+        >>> from schooltool.timetable import TermCalendar
+        >>> from schooltool.browser.timetable import TermEditView
+        >>> context = TermCalendar('Sample', datetime.date(2004, 8, 4),
+        ...                        datetime.date(2004, 8, 6))
+        >>> request = TestRequest()
+        >>> view = TermEditView(context, request)
+
+    When there are no dates in the request, or when the dates are not valid,
+    view.update() sets self.term to self.context (so that the unchanged
+    term calendar is then rendered by view.calendar()).  It also sets
+    update_status.
+
+        >>> view.update()
+        ''
+        >>> view.update_status
+        ''
+        >>> view.term is view.context
+        True
+
+    If you call view.update again, it will notice that update_status is
+    set and do nothing.
+
+        >>> request.form['field.title'] = 'Sample'
+        >>> request.form['field.first'] = '2005-08-01'
+        >>> request.form['field.last'] = '2005-08-05'
+        >>> view.update()
+        ''
+        >>> view.term is view.context
+        True
+
+    However if you reset update_status back to None, update will 
+
+        >>> view.update_status = None
+        >>> view.update()
+        ''
+        >>> view.term is view.context
+        False
+        >>> view.term.first
+        datetime.date(2005, 8, 1)
+        >>> view.term.last
+        datetime.date(2005, 8, 5)
+
+    If UPDATE_SUBMIT appears in the request, update changes view.context
+    and sends an ObjectModifiedEvent.
+
+        >>> import zope.event
+        >>> from zope.app.event.interfaces import IObjectModifiedEvent
+        >>> old_subscribers = zope.event.subscribers[:]
+        >>> def modified_handler(event):
+        ...     if IObjectModifiedEvent.providedBy(event):
+        ...         print "*** Object modified ***"
+        >>> zope.event.subscribers.append(modified_handler)
+
+        >>> request.form['UPDATE_SUBMIT'] = 'Save'
+        >>> request.form['holiday'] = '2005-08-03'
+        >>> view.update_status = None
+        >>> view.update()
+        *** Object modified ***
+        u'Saved changes.'
+        >>> context.first
+        datetime.date(2005, 8, 1)
+        >>> context.last
+        datetime.date(2005, 8, 5)
+        >>> context.isSchoolday(datetime.date(2005, 8, 2))
+        True
+        >>> context.isSchoolday(datetime.date(2005, 8, 3))
+        False
+
+        >>> zope.event.subscribers[:] = old_subscribers
+
+    """
+
 def doctest_TermAddView_update():
     """Unit tests for TermAddView.update
 
@@ -75,8 +196,8 @@ def doctest_TermAddView_update():
         True
 
         >>> request.form['field.title'] = 'Sample'
-        >>> request.form['field.start_date'] = '2005-09-01'
-        >>> request.form['field.end_date'] = '2005-10-15'
+        >>> request.form['field.first'] = '2005-09-01'
+        >>> request.form['field.last'] = '2005-10-15'
         >>> view.update()
         >>> view.term
         <...TermCalendar object at ...>
@@ -180,8 +301,11 @@ def doctest_TermAddView_nextURL():
     """
 
 
-def doctest_TermAddView_buildTerm():
-    """Unit tests for TermAddView._buildTerm
+def doctest_TermEditViewMixin_buildTerm():
+    """Unit tests for TermEditViewMixin._buildTerm
+
+    We shall use TermAddView here -- it inherits TermEditViewMixin._buildTerm
+    without changing it.
 
         >>> from schooltool.timetable import TermService
         >>> from schooltool.browser.timetable import TermAddView
@@ -196,29 +320,29 @@ def doctest_TermAddView_buildTerm():
 
         >>> view._buildTerm()
 
-        >>> request.form['field.start_date'] = '2005-09-01'
-        >>> request.form['field.end_date'] = 'not a clue'
+        >>> request.form['field.first'] = '2005-09-01'
+        >>> request.form['field.last'] = 'not a clue'
         >>> view._buildTerm()
 
-        >>> request.form['field.start_date'] = 'bogus'
-        >>> request.form['field.end_date'] = '2005-12-31'
+        >>> request.form['field.first'] = 'bogus'
+        >>> request.form['field.last'] = '2005-12-31'
         >>> view._buildTerm()
 
-        >>> request.form['field.start_date'] = '2005-12-31'
-        >>> request.form['field.end_date'] = '2005-09-01'
+        >>> request.form['field.first'] = '2005-12-31'
+        >>> request.form['field.last'] = '2005-09-01'
         >>> view._buildTerm()
 
     If the dates are valid, but the interval is not, you get None again.
 
-        >>> request.form['field.start_date'] = '2005-09-02'
-        >>> request.form['field.end_date'] = '2005-09-01'
+        >>> request.form['field.first'] = '2005-09-02'
+        >>> request.form['field.last'] = '2005-09-01'
         >>> view._buildTerm()
 
     When the dates describe a valid non-empty inclusive time interval,
     view._buildTerm() returns a TermCalendar object.
 
-        >>> request.form['field.start_date'] = '2005-09-01'
-        >>> request.form['field.end_date'] = '2005-10-15'
+        >>> request.form['field.first'] = '2005-09-01'
+        >>> request.form['field.last'] = '2005-10-15'
         >>> term = view._buildTerm()
         >>> term.first
         datetime.date(2005, 9, 1)
@@ -299,23 +423,23 @@ def doctest_TermAddView_calendar():
         >>> view.term = view._buildTerm()
         >>> view.calendar()
 
-        >>> request.form['field.start_date'] = '2005-09-01'
-        >>> request.form['field.end_date'] = 'not a clue'
+        >>> request.form['field.first'] = '2005-09-01'
+        >>> request.form['field.last'] = 'not a clue'
         >>> view.term = view._buildTerm()
         >>> view.calendar()
 
-        >>> request.form['field.start_date'] = 'bogus'
-        >>> request.form['field.end_date'] = '2005-12-31'
+        >>> request.form['field.first'] = 'bogus'
+        >>> request.form['field.last'] = '2005-12-31'
         >>> view.term = view._buildTerm()
         >>> view.calendar()
 
-        >>> request.form['field.start_date'] = '2005-12-31'
-        >>> request.form['field.end_date'] = '2005-09-01'
+        >>> request.form['field.first'] = '2005-12-31'
+        >>> request.form['field.last'] = '2005-09-01'
         >>> view.term = view._buildTerm()
         >>> view.calendar()
 
-        >>> request.form['field.start_date'] = '2005-09-02'
-        >>> request.form['field.end_date'] = '2005-09-01'
+        >>> request.form['field.first'] = '2005-09-02'
+        >>> request.form['field.last'] = '2005-09-01'
         >>> view.term = view._buildTerm()
         >>> view.calendar()
 
@@ -323,8 +447,8 @@ def doctest_TermAddView_calendar():
     view.calendar() returns a list of dicts, one for each month.
 
         >>> request.form['field.title'] = 'Sample'
-        >>> request.form['field.start_date'] = '2004-08-01'
-        >>> request.form['field.end_date'] = '2004-08-31'
+        >>> request.form['field.first'] = '2004-08-01'
+        >>> request.form['field.last'] = '2004-08-31'
         >>> view.term = view._buildTerm()
         >>> print_cal(view.calendar())
         *                        August 2004

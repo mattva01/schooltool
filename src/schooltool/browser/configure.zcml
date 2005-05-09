@@ -159,16 +159,6 @@
       />
 
   <page
-      name="index.html"
-      for="schooltool.interfaces.ITermService"
-      class=".timetable.TermServiceView"
-      template="../../schoolbell/app/browser/templates/container.pt"
-      permission="zope.View"
-      menu="zmi_views"
-      title="View"
-      />
-
-  <page
       name="csvimport.html"
       for="schooltool.interfaces.ISchoolToolApplication"
       class="schooltool.browser.csvimport.TimetableCSVImportView"
@@ -180,21 +170,41 @@
       /> <!-- XXX zope.View is probably not appropriate here -->
 
   <page
+      name="index.html"
+      for="schooltool.interfaces.ITermService"
+      class=".timetable.TermServiceView"
+      template="../../schoolbell/app/browser/templates/container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
       name="add.html"
       for="schooltool.interfaces.ITermService"
       class="schooltool.browser.timetable.TermAddView"
       template="templates/term_add.pt"
       permission="schoolbell.create"
-      menu="schoolbell_actions" title="New Term" />
+      menu="schoolbell_actions" title="New Term"
+      />
 
   <page
       name="index.html"
       for="schooltool.interfaces.ITermCalendar"
       class="schooltool.browser.timetable.TermView"
       template="templates/term.pt"
-      permission="schoolbell.view"
+      permission="zope.View"
       menu="zmi_views" title="View"
-      layer="SchoolToolLayer" />
+      />
+
+  <page
+      name="edit.html"
+      for="schooltool.interfaces.ITermCalendar"
+      class="schooltool.browser.timetable.TermEditView"
+      template="templates/term_add.pt"
+      permission="schoolbell.edit"
+      menu="schoolbell_actions" title="Edit"
+      />
 
   <page
       name="view_macros"
