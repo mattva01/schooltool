@@ -494,6 +494,13 @@ class StandaloneServer(object):
             restServerType.create('REST', task_dispatcher, db,
                                   port=port, ip=ip)
 
+        # TODO: remove the folowing lines after a while.
+        # respecting options.config.listen is depreciated and for
+        # compatibility only.
+        for ip, port in options.config.listen:
+            restServerType.create('REST', task_dispatcher, db,
+                                  port=port, ip=ip)
+
         notify(ProcessStarting())
 
         if options.config.pid_file:
