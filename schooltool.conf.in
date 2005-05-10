@@ -24,6 +24,9 @@
 # listen[_ssl] port
 # listen[_ssl] interface:port
 #
+#   DEPRECIATED: The listen directives are depreciated in favour of the rest
+#   directives.
+#
 #   Specifies the port number and optionaly a network interface for
 #   the RESTive server to listen on. There can be one or more 'listen'
 #   directives. If _ssl is used the server will accept only SSL connctions
@@ -34,7 +37,7 @@
 #   listen 127.0.0.1:80
 #   listen_ssl 7002
 
-listen 7001
+# listen 7001
 
 #
 # web[_ssl] port
@@ -45,6 +48,8 @@ listen 7001
 #   'listen' directives. If _ssl is used the server will accept only
 #   SSL connctions on that port and a ssl_certificate configuration
 #   line is required.
+#
+#   Note: SSL is currently un-implemented in the schooltool server.  
 #
 # Examples:
 #   web 8080
