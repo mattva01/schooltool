@@ -219,7 +219,7 @@ def doctest_Resource():
     """
 
 
-def doctest_GroupContainer():
+def doctest_PersonContainer():
     """
     First, make sure that PersonContainer implements the advertised
     interface:
@@ -234,7 +234,7 @@ def doctest_GroupContainer():
 
         >>> from schooltool.app import Group, Section, Course, Person, Resource
         >>> from zope.app.container.constraints import checkObject
-        >>> checkObject(gc, 'name', Person())
+        >>> checkObject(pc, 'name', Person())
 
     But not groups and resources:
 
