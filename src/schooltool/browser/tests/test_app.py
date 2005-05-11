@@ -431,36 +431,6 @@ def doctest_SectionLearnerView():
 
     """
 
-
-def doctest_SchoolToolApplicationTraverser():
-    """Tests for SchoolToolApplicationTraverser
-
-        >>> from schooltool.app import SchoolToolApplication
-        >>> from schooltool.browser.app import SchoolToolApplicationTraverser
-        >>> app = SchoolToolApplication()
-        >>> request = TestRequest()
-        >>> traverser = SchoolToolApplicationTraverser(app, request)
-
-    The traverser lets us find the term service at /terms
-
-        >>> traverser.publishTraverse(request, 'terms') is app.terms
-        True
-
-    It delegates other names to ContainerTraverser, which takes care of
-    container items and views.
-
-        >>> traverser.publishTraverse(request, 'persons') is app['persons']
-        True
-        >>> traverser.publishTraverse(request, 'standard_macros')
-        <zope.app.basicskin.standardmacros.StandardMacros object at ...>
-        >>> traverser.publishTraverse(request, 'no-such-thing')
-        Traceback (most recent call last):
-          ...
-        NotFound: ...
-
-    """
-
-
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,

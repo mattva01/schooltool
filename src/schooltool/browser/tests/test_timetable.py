@@ -38,9 +38,9 @@ from schoolbell.app.browser.tests.setup import setUp, tearDown
 def doctest_TermView_calendar():
     """Unit tests for TermAddView.calendar
 
-        >>> from schooltool.timetable import TermCalendar
+        >>> from schooltool.timetable import Term
         >>> from schooltool.browser.timetable import TermView
-        >>> context = TermCalendar('Sample', datetime.date(2004, 8, 1),
+        >>> context = Term('Sample', datetime.date(2004, 8, 1),
         ...                        datetime.date(2004, 8, 31))
         >>> request = TestRequest()
         >>> view = TermView(context, request)
@@ -64,9 +64,9 @@ def doctest_TermView_calendar():
 def doctest_TermEditView_title():
     """Unit tests for TermEditView.title
 
-        >>> from schooltool.timetable import TermCalendar
+        >>> from schooltool.timetable import Term
         >>> from schooltool.browser.timetable import TermEditView
-        >>> context = TermCalendar('Sample', datetime.date(2004, 8, 1),
+        >>> context = Term('Sample', datetime.date(2004, 8, 1),
         ...                        datetime.date(2004, 8, 31))
         >>> request = TestRequest()
         >>> view = TermEditView(context, request)
@@ -85,16 +85,16 @@ def doctest_TermEditView_title():
 def doctest_TermEditView_calendar():
     """Unit tests for TermEditView.calendar
 
-        >>> from schooltool.timetable import TermCalendar
+        >>> from schooltool.timetable import Term
         >>> from schooltool.browser.timetable import TermEditView
-        >>> context = TermCalendar('Sample', datetime.date(2004, 8, 4),
+        >>> context = Term('Sample', datetime.date(2004, 8, 4),
         ...                        datetime.date(2004, 8, 6))
         >>> request = TestRequest()
         >>> view = TermEditView(context, request)
 
     view.calendar() always renders view.term
 
-        >>> view.term = TermCalendar('Sample', datetime.date(2004, 8, 1),
+        >>> view.term = Term('Sample', datetime.date(2004, 8, 1),
         ...                          datetime.date(2004, 8, 12))
         >>> print_cal(view.calendar())
         *                        August 2004
@@ -109,9 +109,9 @@ def doctest_TermEditView_calendar():
 def doctest_TermEditView_update():
     """Unit tests for TermEditView.update
 
-        >>> from schooltool.timetable import TermCalendar
+        >>> from schooltool.timetable import Term
         >>> from schooltool.browser.timetable import TermEditView
-        >>> context = TermCalendar('Sample', datetime.date(2004, 8, 4),
+        >>> context = Term('Sample', datetime.date(2004, 8, 4),
         ...                        datetime.date(2004, 8, 6))
         >>> request = TestRequest()
         >>> view = TermEditView(context, request)
@@ -186,9 +186,9 @@ def doctest_TermAddView_update():
 
     `update` sets view.term
 
-        >>> from schooltool.timetable import TermService
+        >>> from schooltool.timetable import TermContainer
         >>> from schooltool.browser.timetable import TermAddView
-        >>> context = TermService()
+        >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
         >>> view.update()
@@ -200,7 +200,7 @@ def doctest_TermAddView_update():
         >>> request.form['field.last'] = '2005-10-15'
         >>> view.update()
         >>> view.term
-        <...TermCalendar object at ...>
+        <...Term object at ...>
 
     """
 
@@ -212,9 +212,9 @@ def doctest_TermAddView_create():
     by `update` before), or raises a WidgetsError (because `_buildTerm`
     discovered an error in the form).
 
-        >>> from schooltool.timetable import TermService
+        >>> from schooltool.timetable import TermContainer
         >>> from schooltool.browser.timetable import TermAddView
-        >>> context = TermService()
+        >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
 
@@ -236,23 +236,23 @@ def doctest_TermAddView_add():
 
     `add` adds the term to the term service.
 
-        >>> from schooltool.timetable import TermService
-        >>> from schooltool.timetable import TermCalendar
+        >>> from schooltool.timetable import TermContainer
+        >>> from schooltool.timetable import Term
         >>> from schooltool.browser.timetable import TermAddView
-        >>> context = TermService()
+        >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
 
-        >>> term = TermCalendar('Sample', datetime.date(2005, 1, 1),
+        >>> term = Term('Sample', datetime.date(2005, 1, 1),
         ...                     datetime.date(2005, 12, 31))
         >>> view.add(term)
 
-    The standard NameChooser adapter picks the name 'TermCalendar'.
+    The standard NameChooser adapter picks the name 'Term'.
 
         >>> print '\n'.join(context.keys())
-        TermCalendar
+        Term
 
-        >>> context['TermCalendar'] is term
+        >>> context['Term'] is term
         True
 
     """
@@ -265,9 +265,9 @@ def doctest_TermAddView_create():
     by `update` before), or raises a WidgetsError (because `_buildTerm`
     discovered an error in the form).
 
-        >>> from schooltool.timetable import TermService
+        >>> from schooltool.timetable import TermContainer
         >>> from schooltool.browser.timetable import TermAddView
-        >>> context = TermService()
+        >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
 
@@ -289,9 +289,9 @@ def doctest_TermAddView_nextURL():
 
     `nextURL` returns the absolute url of its context.
 
-        >>> from schooltool.timetable import TermService
+        >>> from schooltool.timetable import TermContainer
         >>> from schooltool.browser.timetable import TermAddView
-        >>> context = TermService()
+        >>> context = TermContainer()
         >>> directlyProvides(context, IContainmentRoot)
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
@@ -307,9 +307,9 @@ def doctest_TermEditViewMixin_buildTerm():
     We shall use TermAddView here -- it inherits TermEditViewMixin._buildTerm
     without changing it.
 
-        >>> from schooltool.timetable import TermService
+        >>> from schooltool.timetable import TermContainer
         >>> from schooltool.browser.timetable import TermAddView
-        >>> context = TermService()
+        >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
 
@@ -339,7 +339,7 @@ def doctest_TermEditViewMixin_buildTerm():
         >>> view._buildTerm()
 
     When the dates describe a valid non-empty inclusive time interval,
-    view._buildTerm() returns a TermCalendar object.
+    view._buildTerm() returns a Term object.
 
         >>> request.form['field.first'] = '2005-09-01'
         >>> request.form['field.last'] = '2005-10-15'
@@ -411,9 +411,9 @@ def doctest_TermEditViewMixin_buildTerm():
 def doctest_TermAddView_calendar():
     """Unit tests for TermAddView.calendar
 
-        >>> from schooltool.timetable import TermService
+        >>> from schooltool.timetable import TermContainer
         >>> from schooltool.browser.timetable import TermAddView
-        >>> context = TermService()
+        >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
 
@@ -466,10 +466,10 @@ def doctest_TermAddView_calendar():
 def doctest_TermRenderer_calendar():
     """Unit tests for TermRenderer.calendar
 
-        >>> from schooltool.timetable import TermCalendar
+        >>> from schooltool.timetable import Term
         >>> from schooltool.browser.timetable import TermRenderer
 
-        >>> term = TermCalendar('Sample', datetime.date(2004, 8, 1),
+        >>> term = Term('Sample', datetime.date(2004, 8, 1),
         ...                     datetime.date(2004, 8, 31))
         >>> print_cal(TermRenderer(term).calendar())
         *                        August 2004
@@ -481,7 +481,7 @@ def doctest_TermRenderer_calendar():
         Week 35:  23  24  25  26  27  28  29
         Week 36:  30  31
 
-        >>> term = TermCalendar('Sample', datetime.date(2004, 8, 2),
+        >>> term = Term('Sample', datetime.date(2004, 8, 2),
         ...                     datetime.date(2004, 9, 1))
         >>> print_cal(TermRenderer(term).calendar())
         *                        August 2004
@@ -495,14 +495,14 @@ def doctest_TermRenderer_calendar():
                  Mon Tue Wed Thu Fri Sat Sun
         Week 36:           1
 
-        >>> term = TermCalendar('Sample', datetime.date(2004, 8, 3),
+        >>> term = Term('Sample', datetime.date(2004, 8, 3),
         ...                     datetime.date(2004, 8, 3))
         >>> print_cal(TermRenderer(term).calendar())
         *                        August 2004
                  Mon Tue Wed Thu Fri Sat Sun
         Week 32:       3
 
-        >>> term = TermCalendar('Sample', datetime.date(2004, 12, 30),
+        >>> term = Term('Sample', datetime.date(2004, 12, 30),
         ...                     datetime.date(2005, 1, 3))
         >>> print_cal(TermRenderer(term).calendar())
         *                      December 2004
@@ -515,7 +515,7 @@ def doctest_TermRenderer_calendar():
 
     Each day gets a numeric index, used in Javascript
 
-        >>> term = TermCalendar('Sample', datetime.date(2004, 12, 30),
+        >>> term = Term('Sample', datetime.date(2004, 12, 30),
         ...                     datetime.date(2005, 1, 3))
         >>> print_cal(TermRenderer(term).calendar(), '%(index)3s')
         *                      December 2004
@@ -532,9 +532,9 @@ def doctest_TermRenderer_calendar():
 def doctest_TermRenderer_month():
     """Unit test for TermRenderer.month
 
-        >>> from schooltool.timetable import TermCalendar
+        >>> from schooltool.timetable import Term
         >>> from schooltool.browser.timetable import TermRenderer
-        >>> term = TermCalendar('Sample', datetime.date(2005, 1, 1),
+        >>> term = Term('Sample', datetime.date(2005, 1, 1),
         ...                     datetime.date(2005, 12, 31))
         >>> month = TermRenderer(term).month
 
@@ -602,9 +602,9 @@ def doctest_TermRenderer_month():
 def doctest_TermRenderer_week():
     """Unit test for TermRenderer.week
 
-        >>> from schooltool.timetable import TermCalendar
+        >>> from schooltool.timetable import Term
         >>> from schooltool.browser.timetable import TermRenderer
-        >>> term = TermCalendar('Sample', datetime.date(2005, 5, 1),
+        >>> term = Term('Sample', datetime.date(2005, 5, 1),
         ...                     datetime.date(2005, 5, 31))
         >>> term.addWeekdays(0, 1, 2, 3, 4)
         >>> week = TermRenderer(term).week

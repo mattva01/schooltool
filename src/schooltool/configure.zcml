@@ -25,7 +25,7 @@
       />
 
   <adapter
-      for=".interfaces.ITermService"
+      for=".interfaces.ITermContainer"
       factory="schoolbell.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
@@ -108,7 +108,7 @@
              set_schema="schooltool.interfaces.ISection" />
   </content>
 
-  <content class=".timetable.TermService">
+  <content class=".timetable.TermContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schoolbell.view"
              attributes="keys values __iter__ __len__" />
@@ -116,11 +116,11 @@
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
-  <content class=".timetable.TermCalendar">
-    <allow interface=".interfaces.ITermCalendar" />
+  <content class=".timetable.Term">
+    <allow interface=".interfaces.ITerm" />
     <require permission="schoolbell.edit"
-             interface=".interfaces.ITermCalendarWrite"
-             set_schema=".interfaces.ITermCalendar" />
+             interface=".interfaces.ITermWrite"
+             set_schema=".interfaces.ITerm" />
   </content>
 
   <include package=".browser" />

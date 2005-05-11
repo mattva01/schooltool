@@ -180,11 +180,11 @@ from schooltool.interfaces import ITimetableModel
 from schooltool.interfaces import ITimetableModelFactory
 from schooltool.interfaces import ITimetabled
 from schooltool.interfaces import ITimetableSchemaService
-from schooltool.interfaces import ITermService
+from schooltool.interfaces import ITermContainer
 from schooltool.interfaces import ILocation
 from schooltool.interfaces import Unchanged
 from schooltool.interfaces import IDateRange
-from schooltool.interfaces import ITermCalendarWrite, ITermCalendar
+from schooltool.interfaces import ITermWrite, ITerm
 from schooltool.interfaces import ITimetableSource
 from schooltool import getSchoolToolApplication
 from schooltool.relationships import URISection
@@ -222,9 +222,9 @@ class DateRange:
         return self.first <= date <= self.last
 
 
-class TermCalendar(DateRange, Persistent):
+class Term(DateRange, Persistent):
 
-    implements(ITermCalendar, ITermCalendarWrite, ILocation)
+    implements(ITerm, ITermWrite, ILocation)
 
     __name__ = None
     __parent__ = None
@@ -999,7 +999,7 @@ class TimetabledMixin:
 
     def makeTimetableCalendar(self):
         events = []
-        terms = getSchoolToolApplication().terms
+        terms = getSchoolToolApplication()["terms"]
         for term_id, schema_id in self.listCompositeTimetables():
             schoolday_model = terms[term_id]
             tt = self.getCompositeTimetable(term_id, schema_id)
@@ -1109,9 +1109,9 @@ class TimetableSchemaService(Persistent):
         return self[self.default_id]
 
 
-class TermService(BTreeContainer):
+class TermContainer(BTreeContainer):
 
-    implements(ITermService)
+    implements(ITermContainer)
 
 
 def getTermForDate(date):
@@ -1119,7 +1119,7 @@ def getTermForDate(date):
 
     Returns None if `date` falls outside all time periods.
     """
-    terms = getSchoolToolApplication().terms
+    terms = getSchoolToolApplication()["terms"]
     for term in terms.values():
         if date in term:
             return term

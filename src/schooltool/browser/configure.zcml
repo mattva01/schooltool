@@ -34,16 +34,6 @@
       permission="zope.ManageContent"
       />
 
-  <!-- Traversal -->
-
-  <zope:view
-      for="schooltool.interfaces.ISchoolToolApplication"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-      factory=".app.SchoolToolApplicationTraverser"
-      permission="zope.Public"
-      />
-
   <!-- Views -->
 
   <page
@@ -171,8 +161,8 @@
 
   <page
       name="index.html"
-      for="schooltool.interfaces.ITermService"
-      class=".timetable.TermServiceView"
+      for="schooltool.interfaces.ITermContainer"
+      class=".timetable.TermContainerView"
       template="../../schoolbell/app/browser/templates/container.pt"
       permission="zope.View"
       menu="zmi_views"
@@ -181,7 +171,7 @@
 
   <page
       name="add.html"
-      for="schooltool.interfaces.ITermService"
+      for="schooltool.interfaces.ITermContainer"
       class="schooltool.browser.timetable.TermAddView"
       template="templates/term_add_edit.pt"
       permission="schoolbell.create"
@@ -190,7 +180,7 @@
 
   <page
       name="index.html"
-      for="schooltool.interfaces.ITermCalendar"
+      for="schooltool.interfaces.ITerm"
       class="schooltool.browser.timetable.TermView"
       template="templates/term.pt"
       permission="zope.View"
@@ -199,7 +189,7 @@
 
   <page
       name="edit.html"
-      for="schooltool.interfaces.ITermCalendar"
+      for="schooltool.interfaces.ITerm"
       class="schooltool.browser.timetable.TermEditView"
       template="templates/term_add_edit.pt"
       permission="schoolbell.edit"

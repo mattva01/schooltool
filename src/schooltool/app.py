@@ -41,7 +41,7 @@ from schooltool.interfaces import IResourceContainer
 from schooltool.interfaces import IPerson, IGroup, IResource, ICourse, ISection
 from schooltool.relationships import URIInstruction, URISection, URIInstructor
 from schooltool.relationships import URILearning, URILearner
-from schooltool.timetable import TermService, TimetableSchemaService
+from schooltool.timetable import TermContainer, TimetableSchemaService
 from schooltool.timetable import TimetabledMixin
 
 
@@ -55,14 +55,11 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
         self['persons'] = PersonContainer()
         self['groups'] = groups = GroupContainer()
         self['resources'] = ResourceContainer()
+        self['terms'] = TermContainer()
         # XXX Such translation does not seem to be working.
         groups['staff'] = Group('staff', _('Staff'))
         groups['learners'] = Group('learners', _('Learners'))
         groups['courses'] = Group('courses', _('Courses currently offered'))
-
-        self.terms = TermService()
-        self.terms.__parent__ = self
-        self.terms.__name__ = 'terms'
 
         self.timetableSchemaService = TimetableSchemaService()
 

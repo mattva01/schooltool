@@ -35,6 +35,9 @@ Now, we can run the REST page tests:
                    xlink:href="http://localhost/frogpond/persons"
                    xlink:title="persons"/>
         <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/terms"
+                   xlink:title="terms"/>
+        <container xlink:type="simple"
                    xlink:href="http://localhost/frogpond/groups"
                    xlink:title="groups"/>
         <container xlink:type="simple"

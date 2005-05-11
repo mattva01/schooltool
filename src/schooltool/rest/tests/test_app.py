@@ -62,21 +62,21 @@ class DatetimeStub:
         return datetime.datetime(2004, 1, 2, 3, 4, 5)
 
 
-class TestTermCalendarView(QuietLibxml2Mixin, unittest.TestCase):
+class TestTermView(QuietLibxml2Mixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.timetable import TermCalendar, TermService
-        from schooltool.rest.app import TermCalendarView
+        from schooltool.timetable import Term, TermContainer
+        from schooltool.rest.app import TermView
 
-        self.ts = TermService()
-        self.ts["calendar"] =  self.termCalendar = TermCalendar(
+        self.terms = TermContainer()
+        self.terms["calendar"] =  self.term = Term(
             "Test",
             datetime.date(2003, 9, 1),
             datetime.date(2003, 9, 30))
 
-        directlyProvides(self.ts, IContainmentRoot)
+        directlyProvides(self.terms, IContainmentRoot)
 
-        self.view = TermCalendarView(self.termCalendar, TestRequest())
+        self.view = TermView(self.term, TestRequest())
         self.view.datetime_hook = DatetimeStub()
         self.setUpLibxml2()
 
@@ -101,7 +101,7 @@ class TestTermCalendarView(QuietLibxml2Mixin, unittest.TestCase):
             """).replace("\n", "\r\n"))
 
     def test_get(self):
-        self.termCalendar.addWeekdays(0, 1, 2, 3, 4) # Mon to Fri
+        self.term.addWeekdays(0, 1, 2, 3, 4) # Mon to Fri
         expected = dedent(u"""
             BEGIN:VCALENDAR
             PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
@@ -114,7 +114,7 @@ class TestTermCalendarView(QuietLibxml2Mixin, unittest.TestCase):
             DTSTAMP:20040102T030405Z
             END:VEVENT
         """)
-        for date in self.termCalendar:
+        for date in self.term:
             if date.weekday() not in (5, 6):
                 s = date.strftime("%Y%m%d")
                 expected += dedent("""
@@ -130,15 +130,15 @@ class TestTermCalendarView(QuietLibxml2Mixin, unittest.TestCase):
             (expected + "END:VCALENDAR\n").replace("\n", "\r\n"))
 
 
-class TestTermCalendarFileFactory(QuietLibxml2Mixin, unittest.TestCase):
+class TestTermFileFactory(QuietLibxml2Mixin, unittest.TestCase):
     def setUp(self):
-        from schooltool.timetable import TermCalendar, TermService
-        from schooltool.rest.app import TermCalendarFileFactory
-        from schooltool.rest.app import TermCalendarFile
-        from schooltool.rest.app import TermCalendarView
+        from schooltool.timetable import Term, TermContainer
+        from schooltool.rest.app import TermFileFactory
+        from schooltool.rest.app import TermFile
+        from schooltool.rest.app import TermView
 
-        self.ts = TermService()
-        self.fileFactory = TermCalendarFileFactory(self.ts)
+        self.terms = TermContainer()
+        self.fileFactory = TermFileFactory(self.terms)
         self.setUpLibxml2()
 
 
@@ -177,16 +177,16 @@ class TestTermCalendarFileFactory(QuietLibxml2Mixin, unittest.TestCase):
         # normalize line endings
         calendar = "\r\n".join(calendar.splitlines()) + "\r\n"
 
-        termCalendar = self.fileFactory("calendar", "", calendar)
+        term = self.fileFactory("calendar", "", calendar)
 
-        self.assertEquals(termCalendar.title, "calendar")
-        self.assertEquals(termCalendar.first, datetime.date(2004, 9, 1))
-        self.assertEquals(termCalendar.last, datetime.date(2004, 9, 30))
-        for date in termCalendar:
+        self.assertEquals(term.title, "calendar")
+        self.assertEquals(term.first, datetime.date(2004, 9, 1))
+        self.assertEquals(term.last, datetime.date(2004, 9, 30))
+        for date in term:
             if date == datetime.date(2004, 9, 12):
-                self.assert_(termCalendar.isSchoolday(date))
+                self.assert_(term.isSchoolday(date))
             else:
-                self.assert_(not termCalendar.isSchoolday(date))
+                self.assert_(not term.isSchoolday(date))
 
     def test_callXML(self):
         body = dedent("""
@@ -199,35 +199,35 @@ class TestTermCalendarFileFactory(QuietLibxml2Mixin, unittest.TestCase):
             </schooldays>
         """)
 
-        termCalendar = self.fileFactory("calendar_from_xml", "", body)
+        term = self.fileFactory("calendar_from_xml", "", body)
 
-        self.assertEquals(termCalendar.title, "calendar_from_xml")
-        self.assertEquals(termCalendar.first, datetime.date(2003, 9, 1))
-        self.assertEquals(termCalendar.last, datetime.date(2003, 9, 7))
+        self.assertEquals(term.title, "calendar_from_xml")
+        self.assertEquals(term.first, datetime.date(2003, 9, 1))
+        self.assertEquals(term.last, datetime.date(2003, 9, 7))
         schooldays = []
-        for date in termCalendar:
-            if termCalendar.isSchoolday(date):
+        for date in term:
+            if term.isSchoolday(date):
                 schooldays.append(date)
         expected = [datetime.date(2003, 9, d) for d in 1, 2, 4, 5]
         self.assertEquals(schooldays, expected)
 
 
 
-class TestTermCalendarFile(QuietLibxml2Mixin, unittest.TestCase):
+class TestTermFile(QuietLibxml2Mixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.timetable import TermCalendar, TermService
-        from schooltool.rest.app import TermCalendarFile
-        from schooltool.rest.app import TermCalendarView
+        from schooltool.timetable import Term, TermContainer
+        from schooltool.rest.app import TermFile
+        from schooltool.rest.app import TermView
 
-        self.ts = TermService()
-        self.ts["calendar"] =  self.termCalendar = TermCalendar(
+        self.terms = TermContainer()
+        self.terms["calendar"] =  self.term = Term(
             "Test",
             datetime.date(2003, 9, 1),
             datetime.date(2003, 9, 30))
 
 
-        self.file = TermCalendarFile(self.termCalendar)
+        self.file = TermFile(self.term)
 
         self.setUpLibxml2()
 
@@ -264,13 +264,13 @@ class TestTermCalendarFile(QuietLibxml2Mixin, unittest.TestCase):
 
         self.file.write(calendar)
 
-        self.assertEquals(self.termCalendar.first, datetime.date(2004, 9, 1))
-        self.assertEquals(self.termCalendar.last, datetime.date(2004, 9, 30))
-        for date in self.termCalendar:
+        self.assertEquals(self.term.first, datetime.date(2004, 9, 1))
+        self.assertEquals(self.term.last, datetime.date(2004, 9, 30))
+        for date in self.term:
             if date == datetime.date(2004, 9, 12):
-                self.assert_(self.termCalendar.isSchoolday(date))
+                self.assert_(self.term.isSchoolday(date))
             else:
-                self.assert_(not self.termCalendar.isSchoolday(date))
+                self.assert_(not self.term.isSchoolday(date))
 
     def test_write_xml(self):
         body = dedent("""
@@ -285,11 +285,11 @@ class TestTermCalendarFile(QuietLibxml2Mixin, unittest.TestCase):
 
         self.file.write(body)
 
-        self.assertEquals(self.termCalendar.first, datetime.date(2003, 9, 1))
-        self.assertEquals(self.termCalendar.last, datetime.date(2003, 9, 7))
+        self.assertEquals(self.term.first, datetime.date(2003, 9, 1))
+        self.assertEquals(self.term.last, datetime.date(2003, 9, 7))
         schooldays = []
-        for date in self.termCalendar:
-            if self.termCalendar.isSchoolday(date):
+        for date in self.term:
+            if self.term.isSchoolday(date):
                 schooldays.append(date)
         expected = [datetime.date(2003, 9, d) for d in 1, 2, 4, 5]
         self.assertEquals(schooldays, expected)
@@ -300,9 +300,9 @@ def test_suite():
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
                 doctest.DocTestSuite('schooltool.rest.app',
                                      optionflags=doctest.ELLIPSIS),
-                unittest.makeSuite(TestTermCalendarView),
-                unittest.makeSuite(TestTermCalendarFileFactory),
-                unittest.makeSuite(TestTermCalendarFile)
+                unittest.makeSuite(TestTermView),
+                unittest.makeSuite(TestTermFileFactory),
+                unittest.makeSuite(TestTermFile)
            ])
 
 if __name__ == '__main__':

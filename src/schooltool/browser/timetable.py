@@ -41,14 +41,14 @@ from schoolbell.calendar.utils import next_month, week_start
 from schoolbell.app.browser.app import ContainerView
 from schoolbell.app.browser.cal import month_names, short_day_of_week_names
 from schooltool import SchoolToolMessageID as _
-from schooltool.interfaces import ITermService, ITermCalendar
-from schooltool.timetable import TermCalendar
+from schooltool.interfaces import ITermContainer, ITerm
+from schooltool.timetable import Term
 
 
-class TermServiceView(ContainerView):
-    """Term service view."""
+class TermContainerView(ContainerView):
+    """Term container view."""
 
-    __used_for__ = ITermService
+    __used_for__ = ITermContainer
 
     index_title = _("Terms")
     add_title = _("Add a new term")
@@ -56,7 +56,7 @@ class TermServiceView(ContainerView):
 
 
 class ITermForm(Interface):
-    """Form schema for ITermCalendar add/edit views."""
+    """Form schema for ITerm add/edit views."""
 
     title = TextLine(title=_("Title"))
 
@@ -68,7 +68,7 @@ class ITermForm(Interface):
 class TermView(BrowserView):
     """Browser view for terms."""
 
-    __used_for__ = ITermCalendar
+    __used_for__ = ITerm
 
     def calendar(self):
         """Prepare the calendar for display.
@@ -83,7 +83,7 @@ class TermEditViewMixin(object):
     """Mixin for Term add/edit views."""
 
     def _buildTerm(self):
-        """Build a TermCalendar object from form values.
+        """Build a Term object from form values.
 
         Returns None if the form doesn't contain enough information.
         """
@@ -92,7 +92,7 @@ class TermEditViewMixin(object):
         except WidgetsError:
             return None
         try:
-            term = TermCalendar(data['title'], data['first'], data['last'])
+            term = Term(data['title'], data['first'], data['last'])
         except ValueError:
             return None # date range invalid
         term.addWeekdays(0, 1, 2, 3, 4, 5, 6)
@@ -113,7 +113,7 @@ class TermEditViewMixin(object):
 class TermEditView(BrowserView, TermEditViewMixin):
     """Edit view for terms."""
 
-    __used_for__ = ITermCalendar
+    __used_for__ = ITerm
 
     creating = False
 
@@ -156,7 +156,7 @@ class TermEditView(BrowserView, TermEditViewMixin):
 class TermAddView(AddView, TermEditViewMixin):
     """Adding view for terms."""
 
-    __used_for__ = ITermService
+    __used_for__ = ITermContainer
 
     creating = True
 
@@ -185,7 +185,7 @@ class TermAddView(AddView, TermEditViewMixin):
         return self.term
 
     def add(self, content):
-        """Add the object to the term service."""
+        """Add the object to the term container."""
         chooser = INameChooser(self.context)
         name = chooser.chooseName(None, content)
         self.context[name] = content
@@ -207,7 +207,7 @@ class TermAddView(AddView, TermEditViewMixin):
 
 
 class TermRenderer(object):
-    """Helper for rendering ITermCalendars."""
+    """Helper for rendering ITerms."""
 
     first_day_of_week = 0 # Monday  TODO: get from IPersonPreferences
 
@@ -252,7 +252,7 @@ class TermRenderer(object):
                 'weeks': weeks}
 
     def week(self, start_of_week, mindate, maxdate, counter):
-        """Prepare one week of a TermCalendar for display.
+        """Prepare one week of a Term for display.
 
         `start_of_week` is the date when the week starts.
 
@@ -264,7 +264,7 @@ class TermRenderer(object):
         `counter` is an iterator that returns indexes for days
         (itertools.count(1) is handy for this purpose).
 
-        `term` is an ITermCalendar that indicates which days are schooldays,
+        `term` is an ITerm that indicates which days are schooldays,
         and which are holidays.
 
         Returns a dict with these keys:

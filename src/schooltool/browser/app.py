@@ -187,18 +187,6 @@ class SectionLearnerView(BrowserView):
             self.request.response.redirect(context_url)
 
 
-class SchoolToolApplicationTraverser(ContainerTraverser):
-    """URL traverser for ISchoolBellApplication"""
-
-    __used_for__ = ISchoolToolApplication
-
-    def publishTraverse(self, request, name):
-        if name == 'terms':
-            return self.context.terms
-        else:
-            return ContainerTraverser.publishTraverse(self, request, name)
-
-
 class PersonAddView(sb.PersonAddView):
     """An add view that creates SchoolTool, rather than SchoolBell, persons"""
 

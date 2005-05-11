@@ -85,7 +85,7 @@ class IDateRange(Interface):
         """Return the number of dates covered by the range."""
 
 
-class ITermCalendar(IDateRange, IContained):
+class ITerm(IDateRange, IContained):
     """A calendar which can tell whether a day is a school day or not
     in a certain school term.
     """
@@ -99,7 +99,7 @@ class ITermCalendar(IDateRange, IContained):
         """
 
 
-class ITermCalendarWrite(Interface):
+class ITermWrite(Interface):
 
     def add(day):
         """Mark the day as a schoolday.
@@ -759,13 +759,13 @@ class ITimetableSchemaService(ILocation):
         """Remove a stored schema with a given id."""
 
 
-class ITermService(IContainer, ILocation):
+class ITermContainer(IContainer, ILocation):
     """A container for terms.
 
     It stores term calendars for registered term IDs.
     """
 
-    contains(ITermCalendar)
+    contains(ITerm)
 
 
 #
@@ -848,10 +848,9 @@ class ISchoolToolApplication(sb.ISchoolBellApplication):
         'persons' - IPersonContainer
         'groups' - IGroupContainer
         'resources' - IResourceContainer
+        'terms' - ITermContainer
     """
 
     timetableSchemaService = Object(title=u"Timetable schemas",
                                     schema=ITimetableSchemaService)
-
-    terms = Object(title=u"Terms", schema=ITermService)
 

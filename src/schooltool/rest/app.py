@@ -33,6 +33,7 @@ from zope.interface import implements
 from zope.app.traversing.api import getPath
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 
+from schoolbell.app.rest.app import GenericContainerView
 from schoolbell.app.rest import View, Template
 from schoolbell.app.rest import app as sb
 from schoolbell.app.rest.rng import validate_against_schema
@@ -42,8 +43,8 @@ from schoolbell.calendar.icalendar import ICalReader
 
 from schooltool.app import Person, Group, Resource
 from schooltool.common import parse_date
-from schooltool.interfaces import ITermCalendar
-from schooltool.timetable import TermCalendar
+from schooltool.interfaces import ITerm
+from schooltool.timetable import Term
 
 from schooltool import SchoolToolMessageID as _
 
@@ -72,11 +73,15 @@ class ResourceFileFactory(sb.ResourceFileFactory):
     factory = Resource
 
 
-class TermCalendarFileFactory(object):
+class TermContainerView(GenericContainerView):
+    """RESTive view of a TermContainer."""
+
+
+class TermFileFactory(object):
     """A superclass for ApplicationObjectContainer to FileFactory adapters."""
 
     implements(IFileFactory)
-    adapts(ITermCalendar)
+    adapts(ITerm)
 
     complex_prop_names = ('RRULE', 'RDATE', 'EXRULE', 'EXDATE')
 
@@ -85,7 +90,7 @@ class TermCalendarFileFactory(object):
 
     schema = """<?xml version="1.0" encoding="UTF-8"?>
     <!--
-    RelaxNG grammar for a representation of TermCalendar
+    RelaxNG grammar for a representation of Term
     -->
     <grammar xmlns="http://relaxng.org/ns/structure/1.0"
              ns="http://schooltool.org/ns/schooldays/0.1"
@@ -136,7 +141,7 @@ class TermCalendarFileFactory(object):
     </grammar>
     """
 
-    factory = TermCalendar
+    factory = Term
 
     def __init__(self, container):
         self.context = container
@@ -189,10 +194,10 @@ class TermCalendarFileFactory(object):
                 if not first <= day < last:
                     return textErrorPage(request,
                                          _("Schoolday outside school period"))
-            termCalendar = TermCalendar(name, first, last - datetime.date.resolution)
+            term = Term(name, first, last - datetime.date.resolution)
             for day in days:
-                termCalendar.add(day)
-        return termCalendar
+                term.add(day)
+        return term
 
     def parseXML(self, data, name=None):
         xml = data
@@ -230,20 +235,20 @@ class TermCalendarFileFactory(object):
             doc.freeDoc()
             xpathctx.xpathFreeContext()
 
-        termCalendar = TermCalendar(name, first, last)
-        termCalendar.addWeekdays(*dows)
+        term = Term(name, first, last)
+        term.addWeekdays(*dows)
         for holiday in holidays:
-            if holiday in termCalendar and termCalendar.isSchoolday(holiday):
-                termCalendar.remove(holiday)
-        return termCalendar
+            if holiday in term and term.isSchoolday(holiday):
+                term.remove(holiday)
+        return term
 
 
-class TermCalendarFile(object):
-    """Adapter adapting TermCalendar to IWriteFile"""
+class TermFile(object):
+    """Adapter adapting Term to IWriteFile"""
 
-    adapts(ITermCalendar)
+    adapts(ITerm)
     implements(IWriteFile)
-    factory = TermCalendarFileFactory
+    factory = TermFileFactory
 
     def __init__(self, context):
         self.context = context
@@ -264,8 +269,8 @@ class TermCalendarFile(object):
                 self.context.add(day)
 
 
-class TermCalendarView(View):
-    """iCalendar view for ITermCalendar."""
+class TermView(View):
+    """iCalendar view for ITerm."""
 
     datetime_hook = datetime.datetime
 

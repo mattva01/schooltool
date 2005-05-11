@@ -15,6 +15,23 @@
       permission="zope.Public"
       />
 
+
+  <view
+      for="schooltool.interfaces.ITermContainer"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory="schoolbell.app.rest.RestPublishTraverse"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.interfaces.ISchoolToolApplication"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory="schoolbell.app.rest.RestPublishTraverse"
+      permission="zope.Public"
+      />
+
   <adapter
       for="schooltool.interfaces.IPersonContainer"
       provides="zope.app.filerepresentation.interfaces.IFileFactory"
@@ -33,6 +50,14 @@
       for="schooltool.interfaces.IResourceContainer"
       provides="zope.app.filerepresentation.interfaces.IFileFactory"
       factory=".app.ResourceFileFactory"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.interfaces.ITermContainer"
+      name="GET"
+      factory=".app.TermContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />
 
