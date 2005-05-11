@@ -33,11 +33,11 @@ from zope.interface import implements
 from zope.app.traversing.api import getPath
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 
+from schoolbell.app.rest.xmlparsing import XMLDocument
 from schoolbell.app.rest.app import GenericContainerView
 from schoolbell.app.rest import View, Template
 from schoolbell.app.rest import app as sb
 from schoolbell.app.rest.rng import validate_against_schema
-from schoolbell.app.rest.xmlparsing import to_unicode
 from schoolbell.calendar.icalendar import ICalParseError
 from schoolbell.calendar.icalendar import ICalReader
 
@@ -200,47 +200,32 @@ class TermFileFactory(object):
         return term
 
     def parseXML(self, data, name=None):
-        xml = data
         # TODO: rewrite this using schooltool.rest.xmlparser.XMLDocument
+        doc = XMLDocument(data, self.schema)
         try:
-            if not validate_against_schema(self.schema, xml):
-                return textErrorPage(request,
-                            _("Schoolday model not valid according to schema"))
-        except libxml2.parserError:
-            return textErrorPage(request,
-                            _("Schoolday model is not valid XML"))
-        doc = libxml2.parseDoc(xml)
-        xpathctx = doc.xpathNewContext()
-        try:
-            ns = 'http://schooltool.org/ns/schooldays/0.1'
-            xpathctx.xpathRegisterNs('tt', ns)
-            schooldays = xpathctx.xpathEval('/tt:schooldays')[0]
-            first_attr = to_unicode(schooldays.nsProp('first', None))
-            last_attr = to_unicode(schooldays.nsProp('last', None))
-            try:
-                first = parse_date(first_attr)
-                last = parse_date(last_attr)
-                holidays = [parse_date(to_unicode(node.content))
-                            for node in xpathctx.xpathEval(
-                                            '/tt:schooldays/tt:holiday/@date')]
-            except ValueError, e:
-                return textErrorPage(request, str(e))
-            try:
-                node = xpathctx.xpathEval('/tt:schooldays/tt:daysofweek')[0]
-                dows = [self._dow_map[d]
-                        for d in to_unicode(node.content).split()]
-            except KeyError, e:
-                return textErrorPage(request, str(e))
-        finally:
-            doc.freeDoc()
-            xpathctx.xpathFreeContext()
+            doc.registerNs('m', 'http://schooltool.org/ns/schooldays/0.1')
 
-        term = Term(name, first, last)
-        term.addWeekdays(*dows)
-        for holiday in holidays:
-            if holiday in term and term.isSchoolday(holiday):
-                term.remove(holiday)
-        return term
+            schooldays = doc.query('/m:schooldays')[0]
+            first_attr = schooldays['first']
+            last_attr = schooldays['last']
+
+            first = parse_date(first_attr)
+            last = parse_date(last_attr)
+            holidays = [parse_date(node.content)
+                        for node in doc.query('/m:schooldays/m:holiday/@date')]
+
+            node = doc.query('/m:schooldays/m:daysofweek')[0]
+            dows = [self._dow_map[d]
+                    for d in node.content.split()]
+
+            term = Term(name, first, last)
+            term.addWeekdays(*dows)
+            for holiday in holidays:
+                if holiday in term and term.isSchoolday(holiday):
+                    term.remove(holiday)
+            return term
+        finally:
+            doc.free()
 
 
 class TermFile(object):

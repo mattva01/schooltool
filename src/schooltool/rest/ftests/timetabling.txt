@@ -1,0 +1,238 @@
+Timetabling in SchoolTool
+=========================
+
+This functional doctest demonstrates and tests SchoolTool's timetable
+restive views.
+
+
+Overview
+--------
+
+1. Definition of terms
+2. Definition of timetable schemas (TODO)
+3. Usage of timetables (TODO)
+
+
+Prologue
+--------
+
+We will need a SchoolTool instance.  Let's call it 'frogpond'.
+
+    >>> print http(r"""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... type_name=BrowserAdd__schooltool.app.SchoolToolApplication&new_value=frogpond""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+
+Also, we need the REST HTTP caller:
+
+    >>> from schoolbell.app.rest.ftests import rest
+
+Terms
+-----
+
+Initially there are no terms defined.
+
+    >>> print rest(r"""
+    ... GET /frogpond/terms HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>terms</name>
+      <items>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/terms/acl"/>
+    </container>
+    <BLANKLINE>
+
+The manager can add one.
+
+    >>> print http(r"""
+    ... PUT /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
+    ...             first="2003-09-01" last="2003-09-07">
+    ...     <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
+    ...     <holiday date="2003-09-03">Holiday</holiday>
+    ...     <holiday date="2003-09-06">Holiday</holiday>
+    ...     <holiday date="2003-09-23">Holiday</holiday>
+    ... </schooldays>
+    ... """)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+The new term is there
+
+    >>> print rest(r"""
+    ... GET /frogpond/terms HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>terms</name>
+      <items>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/terms/2005-fall"
+              xlink:title="2005-fall"/>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/terms/acl"/>
+    </container>
+    <BLANKLINE>
+
+
+You can look at it
+
+    >>> print str(rest(r"""
+    ... GET /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)).replace("\r\n", "\n")
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/calendar; charset=UTF-8
+    <BLANKLINE>
+    BEGIN:VCALENDAR
+    PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+    VERSION:2.0
+    BEGIN:VEVENT
+    UID:school-period-/frogpond/terms/2005-fall@localhost
+    SUMMARY:School Period
+    DTSTART;VALUE=DATE:20030901
+    DTEND;VALUE=DATE:20030908
+    DTSTAMP:...
+    END:VEVENT
+    BEGIN:VEVENT
+    UID:schoolday-20030901-/frogpond/terms/2005-fall@localhost
+    SUMMARY:Schoolday
+    DTSTART;VALUE=DATE:20030901
+    DTSTAMP:...
+    END:VEVENT
+    BEGIN:VEVENT
+    UID:schoolday-20030902-/frogpond/terms/2005-fall@localhost
+    SUMMARY:Schoolday
+    DTSTART;VALUE=DATE:20030902
+    DTSTAMP:...
+    END:VEVENT
+    BEGIN:VEVENT
+    UID:schoolday-20030904-/frogpond/terms/2005-fall@localhost
+    SUMMARY:Schoolday
+    DTSTART;VALUE=DATE:20030904
+    DTSTAMP:...
+    END:VEVENT
+    BEGIN:VEVENT
+    UID:schoolday-20030905-/frogpond/terms/2005-fall@localhost
+    SUMMARY:Schoolday
+    DTSTART;VALUE=DATE:20030905
+    DTSTAMP:...
+    END:VEVENT
+    END:VCALENDAR
+    <BLANKLINE>
+
+
+You can edit it:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/calendar; charset=UTF-8
+    ...
+    ... BEGIN:VCALENDAR
+    ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+    ... VERSION:2.0
+    ... BEGIN:VEVENT
+    ... UID:school-period-/frogpond/terms/2005-fall@localhost
+    ... SUMMARY:School Period
+    ... DTSTART;VALUE=DATE:20030901
+    ... DTEND;VALUE=DATE:20030908
+    ... DTSTAMP:20050511T145037Z
+    ... END:VEVENT
+    ... BEGIN:VEVENT
+    ... UID:schoolday-20030901-/frogpond/terms/2005-fall@localhost
+    ... SUMMARY:Schoolday
+    ... DTSTART;VALUE=DATE:20030901
+    ... DTSTAMP:20050511T145037Z
+    ... END:VEVENT
+    ... BEGIN:VEVENT
+    ... UID:schoolday-20030902-/frogpond/terms/2005-fall@localhost
+    ... SUMMARY:Schoolday
+    ... DTSTART;VALUE=DATE:20030902
+    ... DTSTAMP:20050511T145037Z
+    ... END:VEVENT
+    ... BEGIN:VEVENT
+    ... UID:schoolday-20030903-/frogpond/terms/2005-fall@localhost
+    ... SUMMARY:Schoolday
+    ... DTSTART;VALUE=DATE:20030903
+    ... DTSTAMP:20050511T145037Z
+    ... END:VEVENT
+    ... END:VCALENDAR
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+
+Last two days should not be holidays now, and there should be an
+additional day:
+
+    >>> print str(rest(r"""
+    ... GET /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)).replace("\r\n", "\n")
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/calendar; charset=UTF-8
+    <BLANKLINE>
+    BEGIN:VCALENDAR
+    PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+    VERSION:2.0
+    BEGIN:VEVENT
+    UID:school-period-/frogpond/terms/2005-fall@localhost
+    SUMMARY:School Period
+    DTSTART;VALUE=DATE:20030901
+    DTEND;VALUE=DATE:20030908
+    DTSTAMP:...
+    END:VEVENT
+    BEGIN:VEVENT
+    UID:schoolday-20030901-/frogpond/terms/2005-fall@localhost
+    SUMMARY:Schoolday
+    DTSTART;VALUE=DATE:20030901
+    DTSTAMP:...
+    END:VEVENT
+    BEGIN:VEVENT
+    UID:schoolday-20030902-/frogpond/terms/2005-fall@localhost
+    SUMMARY:Schoolday
+    DTSTART;VALUE=DATE:20030902
+    DTSTAMP:...
+    END:VEVENT
+    BEGIN:VEVENT
+    UID:schoolday-20030903-/frogpond/terms/2005-fall@localhost
+    SUMMARY:Schoolday
+    DTSTART;VALUE=DATE:20030903
+    DTSTAMP:...
+    END:VEVENT
+    END:VCALENDAR
+    <BLANKLINE>
+
+
+Epilogue
+--------
+
+ vim: ft=rest
