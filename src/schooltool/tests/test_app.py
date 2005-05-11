@@ -69,9 +69,6 @@ def doctest_SchoolToolApplication():
         >>> learners = app['groups']['learners']
         >>> verifyObject(IGroup, learners)
         True
-        >>> courses = app['groups']['courses']
-        >>> verifyObject(IGroup, courses)
-        True
 
     """
 

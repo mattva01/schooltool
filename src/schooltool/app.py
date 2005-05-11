@@ -59,7 +59,6 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
         # XXX Such translation does not seem to be working.
         groups['staff'] = Group('staff', _('Staff'))
         groups['learners'] = Group('learners', _('Learners'))
-        groups['courses'] = Group('courses', _('Courses currently offered'))
 
         self.timetableSchemaService = TimetableSchemaService()
 
