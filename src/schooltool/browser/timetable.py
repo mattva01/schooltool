@@ -153,7 +153,6 @@ class TermEditView(BrowserView, TermEditViewMixin):
         return TermRenderer(self.term).calendar()
 
 
-
 class TermAddView(AddView, TermEditViewMixin):
     """Adding view for terms."""
 

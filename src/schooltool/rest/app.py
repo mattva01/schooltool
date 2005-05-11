@@ -21,11 +21,29 @@ RESTive views for SchoolBellApplication
 
 $Id: app.py 3419 2005-04-14 18:34:36Z alga $
 """
+import datetime
+from StringIO import StringIO
+import operator
+
 from zope.app import zapi
+import libxml2
+
+from zope.component import adapts
+from zope.interface import implements
+from zope.app.traversing.api import getPath
+from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 
 from schoolbell.app.rest import View, Template
 from schoolbell.app.rest import app as sb
+from schoolbell.app.rest.rng import validate_against_schema
+from schoolbell.app.rest.xmlparsing import to_unicode
+from schoolbell.calendar.icalendar import ICalParseError
+from schoolbell.calendar.icalendar import ICalReader
+
 from schooltool.app import Person, Group, Resource
+from schooltool.common import parse_date
+from schooltool.interfaces import ITermCalendar
+from schooltool.timetable import TermCalendar
 
 from schooltool import SchoolToolMessageID as _
 
@@ -52,3 +70,235 @@ class ResourceFileFactory(sb.ResourceFileFactory):
     """An adapter that creates SchoolTool resources in RESTive views"""
 
     factory = Resource
+
+
+class TermCalendarFileFactory(object):
+    """A superclass for ApplicationObjectContainer to FileFactory adapters."""
+
+    implements(IFileFactory)
+    adapts(ITermCalendar)
+
+    complex_prop_names = ('RRULE', 'RDATE', 'EXRULE', 'EXDATE')
+
+    _dow_map = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3,
+                "Friday": 4, "Saturday": 5, "Sunday": 6}
+
+    schema = """<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+    RelaxNG grammar for a representation of TermCalendar
+    -->
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0"
+             ns="http://schooltool.org/ns/schooldays/0.1"
+             datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+      <define name="idattr">
+         <attribute name="id">
+            <text/>
+         </attribute>
+      </define>
+
+      <define name="datetext">
+        <!-- date in YYYY-MM-DD format -->
+        <text/>
+      </define>
+
+      <define name="daysofweek">
+        <!-- space separated list of weekdays -->
+        <text/>
+      </define>
+
+      <start>
+        <ref name="schooldays"/>
+      </start>
+
+      <define name="schooldays">
+        <element name="schooldays">
+          <attribute name="first">
+            <text/>
+          </attribute>
+          <attribute name="last">
+            <ref name="datetext"/>
+          </attribute>
+          <element name="daysofweek">
+            <ref name="daysofweek"/>
+          </element>
+          <zeroOrMore>
+            <element name="holiday">
+              <attribute name="date">
+                <ref name="datetext"/>
+              </attribute>
+              <text/>
+            </element>
+          </zeroOrMore>
+        </element>
+      </define>
+
+    </grammar>
+    """
+
+    factory = TermCalendar
+
+    def __init__(self, container):
+        self.context = container
+
+    def __call__(self, name, content_type, data):
+        if self.isDataICal(data):
+            return self.parseText(data, name=name)
+        else:
+            return self.parseXML(data, name=name)
+
+    def isDataICal(self, data):
+        return data.strip().startswith("BEGIN:VCALENDAR")
+
+    def parseText(self, data, name=None):
+        first = last = None
+        days = []
+        reader = ICalReader(StringIO(data))
+        for event in reader.iterEvents():
+            summary = event.getOne('SUMMARY', '').lower()
+            if summary not in ('school period', 'schoolday'):
+                continue # ignore boring events
+
+            if not event.all_day_event:
+                return textErrorPage(request,
+                         _("All-day event should be used"))
+
+            has_complex_props = reduce(operator.or_,
+                                  map(event.hasProp, self.complex_prop_names))
+
+            if has_complex_props:
+                return textErrorPage(request,
+                     _("Repeating events/exceptions not yet supported"))
+
+            if summary == 'school period':
+                if (first is not None and
+                    (first, last) != (event.dtstart, event.dtend)):
+                    return textErrorPage(request,
+                                _("Multiple definitions of school period"))
+                else:
+                    first, last = event.dtstart, event.dtend
+            elif summary == 'schoolday':
+                if event.duration != datetime.date.resolution:
+                    return textErrorPage(request,
+                                _("Schoolday longer than one day"))
+                days.append(event.dtstart)
+        else:
+            if first is None:
+                return textErrorPage(request, _("School period not defined"))
+            for day in days:
+                if not first <= day < last:
+                    return textErrorPage(request,
+                                         _("Schoolday outside school period"))
+            termCalendar = TermCalendar(name, first, last - datetime.date.resolution)
+            for day in days:
+                termCalendar.add(day)
+        return termCalendar
+
+    def parseXML(self, data, name=None):
+        xml = data
+        # TODO: rewrite this using schooltool.rest.xmlparser.XMLDocument
+        try:
+            if not validate_against_schema(self.schema, xml):
+                return textErrorPage(request,
+                            _("Schoolday model not valid according to schema"))
+        except libxml2.parserError:
+            return textErrorPage(request,
+                            _("Schoolday model is not valid XML"))
+        doc = libxml2.parseDoc(xml)
+        xpathctx = doc.xpathNewContext()
+        try:
+            ns = 'http://schooltool.org/ns/schooldays/0.1'
+            xpathctx.xpathRegisterNs('tt', ns)
+            schooldays = xpathctx.xpathEval('/tt:schooldays')[0]
+            first_attr = to_unicode(schooldays.nsProp('first', None))
+            last_attr = to_unicode(schooldays.nsProp('last', None))
+            try:
+                first = parse_date(first_attr)
+                last = parse_date(last_attr)
+                holidays = [parse_date(to_unicode(node.content))
+                            for node in xpathctx.xpathEval(
+                                            '/tt:schooldays/tt:holiday/@date')]
+            except ValueError, e:
+                return textErrorPage(request, str(e))
+            try:
+                node = xpathctx.xpathEval('/tt:schooldays/tt:daysofweek')[0]
+                dows = [self._dow_map[d]
+                        for d in to_unicode(node.content).split()]
+            except KeyError, e:
+                return textErrorPage(request, str(e))
+        finally:
+            doc.freeDoc()
+            xpathctx.xpathFreeContext()
+
+        termCalendar = TermCalendar(name, first, last)
+        termCalendar.addWeekdays(*dows)
+        for holiday in holidays:
+            if holiday in termCalendar and termCalendar.isSchoolday(holiday):
+                termCalendar.remove(holiday)
+        return termCalendar
+
+
+class TermCalendarFile(object):
+    """Adapter adapting TermCalendar to IWriteFile"""
+
+    adapts(ITermCalendar)
+    implements(IWriteFile)
+    factory = TermCalendarFileFactory
+
+    def __init__(self, context):
+        self.context = context
+
+    def write(self, data):
+        """See IWriteFile"""
+        container = self.context.__parent__
+        factory = self.factory(container)
+
+        if factory.isDataICal(data):
+            term = factory.parseText(data)
+        else:
+            term = factory.parseXML(data)
+
+        self.context.reset(term.first, term.last)
+        for day in term:
+            if term.isSchoolday(day):
+                self.context.add(day)
+
+
+class TermCalendarView(View):
+    """iCalendar view for ITermCalendar."""
+
+    datetime_hook = datetime.datetime
+
+    def GET(self):
+        end_date = self.context.last + datetime.date.resolution
+        uid_suffix = "%s@%s" % (getPath(self.context),
+                                # XXX not a very nice way (cutting http://)
+                                self.request._app_server[7:])
+        dtstamp = self.datetime_hook.utcnow().strftime("%Y%m%dT%H%M%SZ")
+        result = [
+            "BEGIN:VCALENDAR",
+            "PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN",
+            "VERSION:2.0",
+            "BEGIN:VEVENT",
+            "UID:school-period-%s" % uid_suffix,
+            "SUMMARY:School Period",
+            "DTSTART;VALUE=DATE:%s" % self.context.first.strftime("%Y%m%d"),
+            "DTEND;VALUE=DATE:%s" % end_date.strftime("%Y%m%d"),
+            "DTSTAMP:%s" % dtstamp,
+            "END:VEVENT",
+        ]
+        for date in self.context:
+            if self.context.isSchoolday(date):
+                s = date.strftime("%Y%m%d")
+                result += [
+                    "BEGIN:VEVENT",
+                    "UID:schoolday-%s-%s" % (s, uid_suffix),
+                    "SUMMARY:Schoolday",
+                    "DTSTART;VALUE=DATE:%s" % s,
+                    "DTSTAMP:%s" % dtstamp,
+                    "END:VEVENT",
+                ]
+        result.append("END:VCALENDAR")
+        self.request.response.setHeader('Content-Type',
+                                        'text/calendar; charset=UTF-8')
+        return "\r\n".join(result) + "\r\n"

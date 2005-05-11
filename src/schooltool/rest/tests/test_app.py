@@ -24,15 +24,20 @@ $Id: test_app.py 3526 2005-04-28 17:16:47Z bskahan $
 
 import unittest
 import pprint
+import datetime
 
+from StringIO import StringIO
 from zope.testing import doctest
+from schooltool.common import dedent
 from zope.app import zapi
 from zope.interface import directlyProvides, Interface
 from zope.interface.verify import verifyObject
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.testing import setup, ztapi
 from zope.publisher.browser import TestRequest
+from zope.app.traversing.interfaces import IContainmentRoot
 
+from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin
 
 def doctest_SchoolToolApplicationView():
     """SchoolToolApplication
@@ -50,11 +55,254 @@ def doctest_SchoolToolApplicationView():
 
     """
 
+
+class DatetimeStub:
+
+    def utcnow(self):
+        return datetime.datetime(2004, 1, 2, 3, 4, 5)
+
+
+class TestTermCalendarView(QuietLibxml2Mixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.timetable import TermCalendar, TermService
+        from schooltool.rest.app import TermCalendarView
+
+        self.ts = TermService()
+        self.ts["calendar"] =  self.termCalendar = TermCalendar(
+            "Test",
+            datetime.date(2003, 9, 1),
+            datetime.date(2003, 9, 30))
+
+        directlyProvides(self.ts, IContainmentRoot)
+
+        self.view = TermCalendarView(self.termCalendar, TestRequest())
+        self.view.datetime_hook = DatetimeStub()
+        self.setUpLibxml2()
+
+    def tearDown(self):
+        self.tearDownLibxml2()
+
+    def test_get_empty(self):
+        self.assertEqual(
+            self.view.GET(),
+            dedent(u"""
+                BEGIN:VCALENDAR
+                PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+                VERSION:2.0
+                BEGIN:VEVENT
+                UID:school-period-/calendar@127.0.0.1
+                SUMMARY:School Period
+                DTSTART;VALUE=DATE:20030901
+                DTEND;VALUE=DATE:20031001
+                DTSTAMP:20040102T030405Z
+                END:VEVENT
+                END:VCALENDAR
+            """).replace("\n", "\r\n"))
+
+    def test_get(self):
+        self.termCalendar.addWeekdays(0, 1, 2, 3, 4) # Mon to Fri
+        expected = dedent(u"""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:school-period-/calendar@127.0.0.1
+            SUMMARY:School Period
+            DTSTART;VALUE=DATE:20030901
+            DTEND;VALUE=DATE:20031001
+            DTSTAMP:20040102T030405Z
+            END:VEVENT
+        """)
+        for date in self.termCalendar:
+            if date.weekday() not in (5, 6):
+                s = date.strftime("%Y%m%d")
+                expected += dedent("""
+                    BEGIN:VEVENT
+                    UID:schoolday-%s-/calendar@127.0.0.1
+                    SUMMARY:Schoolday
+                    DTSTART;VALUE=DATE:%s
+                    DTSTAMP:20040102T030405Z
+                    END:VEVENT
+                """ % (s, s))
+        self.assertEqual(
+            self.view.GET(),
+            (expected + "END:VCALENDAR\n").replace("\n", "\r\n"))
+
+
+class TestTermCalendarFileFactory(QuietLibxml2Mixin, unittest.TestCase):
+    def setUp(self):
+        from schooltool.timetable import TermCalendar, TermService
+        from schooltool.rest.app import TermCalendarFileFactory
+        from schooltool.rest.app import TermCalendarFile
+        from schooltool.rest.app import TermCalendarView
+
+        self.ts = TermService()
+        self.fileFactory = TermCalendarFileFactory(self.ts)
+        self.setUpLibxml2()
+
+
+    def test_isDataICal(self):
+        self.assert_(self.fileFactory.isDataICal("BEGIN:VCALENDAR"))
+        self.assertEqual(self.fileFactory.isDataICal("<foo />"), False)
+
+    def test_callText(self):
+        calendar = dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:school-period-/person/calendar@localhost
+            SUMMARY:School Period
+            DTSTART;VALUE=DATE:20040901
+            DTEND;VALUE=DATE:20041001
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random@example.com
+            SUMMARY:Doctor's appointment
+            DTSTART;VALUE=DATE:20040911
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random2@example.com
+            SUMMARY:Schoolday
+            DTSTART;VALUE=DATE:20040912
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random2@example.com
+            SUMMARY:Schoolday
+            DTSTART;VALUE=DATE:20040912
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        # normalize line endings
+        calendar = "\r\n".join(calendar.splitlines()) + "\r\n"
+
+        termCalendar = self.fileFactory("calendar", "", calendar)
+
+        self.assertEquals(termCalendar.title, "calendar")
+        self.assertEquals(termCalendar.first, datetime.date(2004, 9, 1))
+        self.assertEquals(termCalendar.last, datetime.date(2004, 9, 30))
+        for date in termCalendar:
+            if date == datetime.date(2004, 9, 12):
+                self.assert_(termCalendar.isSchoolday(date))
+            else:
+                self.assert_(not termCalendar.isSchoolday(date))
+
+    def test_callXML(self):
+        body = dedent("""
+            <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
+                        first="2003-09-01" last="2003-09-07">
+              <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
+              <holiday date="2003-09-03">Holiday</holiday>
+              <holiday date="2003-09-06">Holiday</holiday>
+              <holiday date="2003-09-23">Holiday</holiday>
+            </schooldays>
+        """)
+
+        termCalendar = self.fileFactory("calendar_from_xml", "", body)
+
+        self.assertEquals(termCalendar.title, "calendar_from_xml")
+        self.assertEquals(termCalendar.first, datetime.date(2003, 9, 1))
+        self.assertEquals(termCalendar.last, datetime.date(2003, 9, 7))
+        schooldays = []
+        for date in termCalendar:
+            if termCalendar.isSchoolday(date):
+                schooldays.append(date)
+        expected = [datetime.date(2003, 9, d) for d in 1, 2, 4, 5]
+        self.assertEquals(schooldays, expected)
+
+
+
+class TestTermCalendarFile(QuietLibxml2Mixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.timetable import TermCalendar, TermService
+        from schooltool.rest.app import TermCalendarFile
+        from schooltool.rest.app import TermCalendarView
+
+        self.ts = TermService()
+        self.ts["calendar"] =  self.termCalendar = TermCalendar(
+            "Test",
+            datetime.date(2003, 9, 1),
+            datetime.date(2003, 9, 30))
+
+
+        self.file = TermCalendarFile(self.termCalendar)
+
+        self.setUpLibxml2()
+
+    def test_write(self):
+        calendar = dedent("""
+            BEGIN:VCALENDAR
+            PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:school-period-/person/calendar@localhost
+            SUMMARY:School Period
+            DTSTART;VALUE=DATE:20040901
+            DTEND;VALUE=DATE:20041001
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random@example.com
+            SUMMARY:Doctor's appointment
+            DTSTART;VALUE=DATE:20040911
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random2@example.com
+            SUMMARY:Schoolday
+            DTSTART;VALUE=DATE:20040912
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:random2@example.com
+            SUMMARY:Schoolday
+            DTSTART;VALUE=DATE:20040912
+            END:VEVENT
+            END:VCALENDAR
+        """)
+        # normalize line endings
+        calendar = "\r\n".join(calendar.splitlines()) + "\r\n"
+
+        self.file.write(calendar)
+
+        self.assertEquals(self.termCalendar.first, datetime.date(2004, 9, 1))
+        self.assertEquals(self.termCalendar.last, datetime.date(2004, 9, 30))
+        for date in self.termCalendar:
+            if date == datetime.date(2004, 9, 12):
+                self.assert_(self.termCalendar.isSchoolday(date))
+            else:
+                self.assert_(not self.termCalendar.isSchoolday(date))
+
+    def test_write_xml(self):
+        body = dedent("""
+            <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
+                        first="2003-09-01" last="2003-09-07">
+              <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
+              <holiday date="2003-09-03">Holiday</holiday>
+              <holiday date="2003-09-06">Holiday</holiday>
+              <holiday date="2003-09-23">Holiday</holiday>
+            </schooldays>
+        """)
+
+        self.file.write(body)
+
+        self.assertEquals(self.termCalendar.first, datetime.date(2003, 9, 1))
+        self.assertEquals(self.termCalendar.last, datetime.date(2003, 9, 7))
+        schooldays = []
+        for date in self.termCalendar:
+            if self.termCalendar.isSchoolday(date):
+                schooldays.append(date)
+        expected = [datetime.date(2003, 9, d) for d in 1, 2, 4, 5]
+        self.assertEquals(schooldays, expected)
+
+
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
                 doctest.DocTestSuite('schooltool.rest.app',
                                      optionflags=doctest.ELLIPSIS),
+                unittest.makeSuite(TestTermCalendarView),
+                unittest.makeSuite(TestTermCalendarFileFactory),
+                unittest.makeSuite(TestTermCalendarFile)
            ])
 
 if __name__ == '__main__':
