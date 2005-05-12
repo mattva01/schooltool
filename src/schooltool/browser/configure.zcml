@@ -38,6 +38,16 @@
 
   <page
       name="index.html"
+      for="schooltool.interfaces.ICourseContainer"
+      class=".app.CourseContainerView"
+      template="../../schoolbell/app/browser/templates/container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
+      name="index.html"
       for="schooltool.interfaces.ICourse"
       class="schooltool.browser.app.CourseView"
       template="templates/course.pt"
@@ -88,7 +98,7 @@
 
   <addform
       label="Add a Course"
-      name="addSchoolBellCourse.html"
+      name="addSchoolToolCourse.html"
       schema="schooltool.interfaces.ICourse"
       fields="title description"
       set_before_add="title"
@@ -98,12 +108,14 @@
     <widget field="description" height="5" />
   </addform>
 
+  <!-- XXX not sure why this causes a traversal error
   <menuItem
       menu="schoolbell_actions"
       title="New Course"
-      for="schoolbell.app.interfaces.IGroupContainer"
-      action="+/addSchoolBellCourse.html"
+      for="schooltool.interfaces.ICourseContainer"
+      action="+/addSchoolToolCourse.html"
       />
+    -->
 
   <page
       name="index.html"

@@ -38,6 +38,18 @@ class AddingStub(Adding):
     pass
 
 
+def doctest_CourseContainerView():
+    r"""View for the courses container.
+
+        >>> from schooltool.browser.app import CourseContainerView
+        >>> from schooltool.app import CourseContainer
+        >>> cc = CourseContainer()
+        >>> request = TestRequest()
+        >>> view = CourseContainerView(cc, request)
+
+    """
+
+
 def doctest_CourseView():
     r"""View for courses.
 

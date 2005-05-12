@@ -33,7 +33,8 @@ from zope.security.proxy import removeSecurityProxy
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from schooltool.interfaces import ISchoolToolApplication
-from schoolbell.app.browser.app import GroupView
+from schooltool.interfaces import ICourseContainer
+from schoolbell.app.browser.app import GroupView, ContainerView
 from schoolbell.app.browser import app as sb
 from schoolbell.app.interfaces import ISchoolBellApplication
 
@@ -41,8 +42,19 @@ from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ICourse, ISection
 from schooltool.app import Section, Person
 
+
+class CourseContainerView(ContainerView):
+    """A Course Container view."""
+
+    __used_for__ = ICourseContainer
+
+    index_title = _("Course index")
+    add_title = _("Add a new course")
+    add_url = "+/addSchoolBellCourse.html"
+
+
 class CourseView(BrowserView):
-    """A view for courses providing a list of sections."""
+    """A view for courses."""
 
     __used_for__ = ICourse
 
