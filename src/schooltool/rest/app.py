@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-RESTive views for SchoolBellApplication
+RESTive views for SchoolToolApplication
 
 $Id: app.py 3419 2005-04-14 18:34:36Z alga $
 """
