@@ -328,12 +328,14 @@ def doctest_ResourceContainer():
 
     """
 
+
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
                 doctest.DocTestSuite('schooltool.app',
                                      optionflags=doctest.ELLIPSIS),
            ])
+
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')
