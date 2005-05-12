@@ -69,6 +69,8 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
         groups['learners'] = Group('learners', _('Learners'))
 
         self.timetableSchemaService = TimetableSchemaService()
+        self.timetableSchemaService.__parent__ = self
+        self.timetableSchemaService.__name__ = 'ttschemas'
 
     def _newContainerData(self):
         return PersistentDict()

@@ -316,7 +316,7 @@ class Timetable(Persistent):
         return [(day, self.days[day]) for day in self.day_ids]
 
     def __repr__(self):
-        return '<Timetable: %s, %s, %s, %s>' % (self.day_ids, self.days,
+        return '<Timetable: %s, %s, %s, %s>' % (self.day_ids, dict(self.days),
                                                 self.model, self.exceptions)
 
     def __getitem__(self, key):
