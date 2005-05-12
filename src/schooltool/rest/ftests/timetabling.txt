@@ -231,6 +231,34 @@ additional day:
     END:VCALENDAR
     <BLANKLINE>
 
+We should be capable of deleting it:
+
+    >>> print rest(r"""
+    ... DELETE /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+Terms should be gone now:
+
+    >>> print rest(r"""
+    ... GET /frogpond/terms HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>terms</name>
+      <items>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/terms/acl"/>
+    </container>
+    <BLANKLINE>
 
 Epilogue
 --------
