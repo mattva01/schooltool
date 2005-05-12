@@ -248,6 +248,7 @@ def doctest_setup():
         >>> class ConfigStub:
         ...     web = []
         ...     rest = []
+        ...     listen = []
         ...     thread_pool_size = 1
         ...     database = DatabaseConfigStub()
         ...     pid_file = ''
