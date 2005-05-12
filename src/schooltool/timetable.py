@@ -750,8 +750,7 @@ class BaseTimetableModel(Persistent):
             for weekday in range(7):
                 if weekday not in self.dayTemplates:
                     raise AssertionError("No day template for day %d,"
-                                         " and no fallback either"
-                                         % weekday)
+                                         " and no fallback either" % weekday)
 
     def createCalendar(self, schoolday_model, timetable):
         exceptions = {}
@@ -1123,7 +1122,6 @@ def getTermForDate(date):
     for term in terms.values():
         if date in term:
             return term
-    return None
 
 
 def getPeriodsForDay(date):

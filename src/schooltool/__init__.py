@@ -33,7 +33,7 @@ from zope.app.component.hooks import getSite
 
 
 def getSchoolToolApplication():
-    """Return the nearest ISchoolToolApplication"""
+    """Return the nearest ISchoolToolApplication."""
 
     candidate = getSite()
     if ISchoolToolApplication.providedBy(candidate):
