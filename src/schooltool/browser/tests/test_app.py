@@ -89,6 +89,18 @@ def doctest_CourseAddView():
     """
 
 
+def doctest_SectionContainerView():
+    r"""View for the sections container.
+
+        >>> from schooltool.browser.app import SectionContainerView
+        >>> from schooltool.app import SectionContainer
+        >>> sc = SectionContainer()
+        >>> request = TestRequest()
+        >>> view = SectionContainerView(sc, request)
+
+    """
+
+
 def doctest_SectionView():
     r"""View for sections
 
@@ -170,9 +182,10 @@ def doctest_SectionAddView():
         >>> from zope.app.component.hooks import setSite
         >>> setSite(app)
         >>> directlyProvides(app, IContainmentRoot)
-        >>> container = app['groups']
+        >>> sections = app['sections']
+        >>> courses = app['courses']
         >>> course = Course(title="Algebra I")
-        >>> container['algebraI'] = course
+        >>> courses['algebraI'] = course
 
     on to the actual work
 
@@ -183,7 +196,7 @@ def doctest_SectionAddView():
     first a request without a course reference sets the view error.
 
         >>> request = TestRequest()
-        >>> context = AddingStub(container, request)
+        >>> context = AddingStub(sections, request)
         >>> view = SectionAddViewForTesting(context, request)
         >>> view.error
         u'Need a course ID.'
@@ -193,7 +206,7 @@ def doctest_SectionAddView():
 
         >>> request = TestRequest()
         >>> request.form = {'field.course_id' : 'algebraI'}
-        >>> context = AddingStub(container, request)
+        >>> context = AddingStub(sections, request)
         >>> view = SectionAddViewForTesting(context, request)
         >>> view.error is None
         True
@@ -204,7 +217,7 @@ def doctest_SectionAddView():
 
         >>> request = TestRequest()
         >>> request.form = {'field.course_id' : 'math'}
-        >>> context = AddingStub(container, request)
+        >>> context = AddingStub(sections, request)
         >>> view = SectionAddViewForTesting(context, request)
         >>> view.error
         u'No such course.'
@@ -218,7 +231,7 @@ def doctest_SectionAddView():
         >>> request = TestRequest()
         >>> request.form = {'UPDATE_SUBMIT': True,
         ...                 'field.course_id' : 'algebraI'}
-        >>> context = AddingStub(container, request)
+        >>> context = AddingStub(sections, request)
         >>> view = SectionAddViewForTesting(context, request)
         >>> view.update()
         ''
@@ -245,7 +258,7 @@ def doctest_SectionInstructorView():
         >>> school = SchoolToolApplication()
         >>> persons = school['persons']
         >>> directlyProvides(school, IContainmentRoot)
-        >>> groups = school['groups']
+        >>> sections = school['sections']
         >>> persons['smith'] = Person('smith', 'Mr. Smith')
         >>> persons['jones'] = Person('jones', 'Mrs. Jones')
         >>> persons['stevens'] = Person('stevens', 'Ms. Stevens')
@@ -256,7 +269,7 @@ def doctest_SectionInstructorView():
         >>> from schooltool.app import Section
         >>> from schooltool.browser.app import SectionInstructorView
         >>> section = Section()
-        >>> groups['section'] = section
+        >>> sections['section'] = section
         >>> request = TestRequest()
         >>> view = SectionInstructorView(section, request)
         >>> view.update()
@@ -288,7 +301,7 @@ def doctest_SectionInstructorView():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeaders()['Location']
-        'http://127.0.0.1/groups/section'
+        'http://127.0.0.1/sections/section'
 
     Someone might want to cancel a change.
 
@@ -303,7 +316,7 @@ def doctest_SectionInstructorView():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeaders()['Location']
-        'http://127.0.0.1/groups/section'
+        'http://127.0.0.1/sections/section'
 
     a Section can have more than one instructor:
 
@@ -344,7 +357,7 @@ def doctest_SectionLearnerView():
         >>> school = SchoolToolApplication()
         >>> persons = school['persons']
         >>> directlyProvides(school, IContainmentRoot)
-        >>> groups = school['groups']
+        >>> sections = school['sections']
         >>> persons['smith'] = Person('smith', 'John Smith')
         >>> persons['jones'] = Person('jones', 'Sally Jones')
         >>> persons['stevens'] = Person('stevens', 'Bob Stevens')
@@ -355,7 +368,7 @@ def doctest_SectionLearnerView():
         >>> from schooltool.app import Section
         >>> from schooltool.browser.app import SectionLearnerView
         >>> section = Section()
-        >>> groups['section'] = section
+        >>> sections['section'] = section
         >>> request = TestRequest()
         >>> view = SectionLearnerView(section, request)
         >>> view.update()
@@ -387,7 +400,7 @@ def doctest_SectionLearnerView():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeaders()['Location']
-        'http://127.0.0.1/groups/section'
+        'http://127.0.0.1/sections/section'
 
     Someone might want to cancel a change.
 
@@ -402,7 +415,7 @@ def doctest_SectionLearnerView():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeaders()['Location']
-        'http://127.0.0.1/groups/section'
+        'http://127.0.0.1/sections/section'
 
     a Section can have more than one learner:
 

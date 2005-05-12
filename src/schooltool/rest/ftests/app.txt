@@ -32,20 +32,23 @@ Now, we can run the REST page tests:
       <message>Welcome to the SchoolTool server</message>
       <containers>
         <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/terms"
+                   xlink:title="terms"/>
+        <container xlink:type="simple"
                    xlink:href="http://localhost/frogpond/persons"
                    xlink:title="persons"/>
         <container xlink:type="simple"
-                   xlink:href="http://localhost/frogpond/terms"
-                   xlink:title="terms"/>
+                   xlink:href="http://localhost/frogpond/courses"
+                   xlink:title="courses"/>
         <container xlink:type="simple"
                    xlink:href="http://localhost/frogpond/groups"
                    xlink:title="groups"/>
         <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/sections"
+                   xlink:title="sections"/>
+        <container xlink:type="simple"
                    xlink:href="http://localhost/frogpond/resources"
                    xlink:title="resources"/>
-        <container xlink:type="simple"
-                   xlink:href="http://localhost/frogpond/courses"
-                   xlink:title="courses"/>
       </containers>
     </schooltool>
     <BLANKLINE>

@@ -33,7 +33,7 @@ from zope.security.proxy import removeSecurityProxy
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from schooltool.interfaces import ISchoolToolApplication
-from schooltool.interfaces import ICourseContainer
+from schooltool.interfaces import ICourseContainer, ISectionContainer
 from schoolbell.app.browser.app import GroupView, ContainerView
 from schoolbell.app.browser import app as sb
 from schoolbell.app.interfaces import ISchoolBellApplication
@@ -50,7 +50,7 @@ class CourseContainerView(ContainerView):
 
     index_title = _("Course index")
     add_title = _("Add a new course")
-    add_url = "+/addSchoolBellCourse.html"
+    add_url = "+/addSchoolToolCourse.html"
 
 
 class CourseView(BrowserView):
@@ -61,6 +61,16 @@ class CourseView(BrowserView):
 
 class CourseAddView(AddView):
     "A view for adding Courses."
+
+
+class SectionContainerView(ContainerView):
+    """A Course Container view."""
+
+    __used_for__ = ISectionContainer
+
+    index_title = _("Section index")
+    add_title = _("Add a new section")
+    add_url = "+/addSchoolToolSection.html"
 
 
 class SectionView(GroupView):
@@ -87,7 +97,7 @@ class SectionAddView(AddView):
     def getCourseFromId(self, id):
         app = getSite()
         try:
-            return app['groups'][id]
+            return app['courses'][id]
         except KeyError:
             self.error = _("No such course.")
 

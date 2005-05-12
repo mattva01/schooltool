@@ -60,9 +60,14 @@ def doctest_SchoolToolApplication():
         >>> verifyObject(IResourceContainer, app['resources'])
         True
 
-    We should have a CourseContainer
+    We should have a CourseContainer and a SectionContainer
+
         >>> from schooltool.interfaces import ICourseContainer
         >>> verifyObject(ICourseContainer, app['courses'])
+        True
+
+        >>> from schooltool.interfaces import ISectionContainer
+        >>> verifyObject(ISectionContainer, app['sections'])
         True
 
     Make sure the default groups and resources are created
@@ -114,9 +119,9 @@ def doctest_Course():
     We need some sections and a person to test:
 
         >>> from schooltool.app import Course, Section, Person
-        >>> section1 = Section("section1")
-        >>> section2 = Section("section2")
-        >>> section3 = Section("section3")
+        >>> section1 = Section(title = "section1")
+        >>> section2 = Section(title = "section2")
+        >>> section3 = Section(title = "section3")
         >>> person = Person()
 
     Our course doesn't have any sections yet:
@@ -128,7 +133,7 @@ def doctest_Course():
 
         >>> algebraI.sections.add(section1)
         >>> for section in algebraI.sections:
-        ...     print section.description
+        ...     print section.title
         section1
 
     Lets try to add a person to the course:
@@ -151,7 +156,7 @@ def doctest_Course():
         >>> algebraI.sections.add(section2)
         >>> algebraI.sections.add(section3)
         >>> for section in algebraI.sections:
-        ...     print section.description
+        ...     print section.title
         section1
         section2
         section3
@@ -171,10 +176,17 @@ def doctest_Section():
         >>> setUp()
 
         >>> from schooltool.app import Section
-        >>> section = Section()
+        >>> section = Section(title="section 1", description="advanced")
         >>> from schooltool.interfaces import ISection
         >>> verifyObject(ISection, section)
         True
+
+    sections have some basic properties:
+
+        >>> section.title
+        'section 1'
+        >>> section.description
+        'advanced'
 
     We'll add an instructor to the section.
 
@@ -186,11 +198,11 @@ def doctest_Section():
     Now we'll add some learners to the Section with the sections membership
     RelationshipPeroperty.
 
-        >>> section.members.add(Person('first','First'))
-        >>> section.members.add(Person('second','Second'))
-        >>> section.members.add(Person('third','Third'))
+        >>> section.learners.add(Person('first','First'))
+        >>> section.learners.add(Person('second','Second'))
+        >>> section.learners.add(Person('third','Third'))
 
-        >>> for person in section.members:
+        >>> for person in section.learners:
         ...     print person.title
         First
         Second
@@ -212,12 +224,29 @@ def doctest_Section():
         >>> section.label
         u'Mr. Jones Mrs. Smith section of '
 
-    Labels should include the courses that a Section is part of:
+    Label s should include the courses that a Section is part of:
+
         >>> from schooltool.app import Course
         >>> course = Course(title="US History")
         >>> course.sections.add(section)
         >>> section.label
         u'Mr. Jones Mrs. Smith section of US History'
+
+    The course should be listed in courses:
+
+        >>> for course in section.courses:
+        ...     print course.title
+        US History
+
+    Sections can be part of more than one Course:
+
+        >>> english = Course(title="English")
+        >>> section.courses.add(english)
+        >>> for course in section.courses:
+        ...     print course.title
+        US History
+        English
+
 
         >>> tearDown()
 
@@ -345,20 +374,25 @@ def doctest_GroupContainer():
         >>> verifyObject(IGroupContainer, gc)
         True
 
-    Now, let's check that it can contain groups, sections, and courses.
+    Now, let's check that it can contain groups
 
         >>> from schooltool.app import Group, Section, Course, Person
         >>> from zope.app.container.constraints import checkObject
         >>> checkObject(gc, 'name', Group())
-        >>> checkObject(gc, 'name', Section())
 
-    It cannot contain persons or courses though:
+    It cannot contain persons, sections, or courses though:
 
         >>> checkObject(gc, 'name', Person())
         Traceback (most recent call last):
           ...
         InvalidItemType: ...
+
         >>> checkObject(gc, 'name', Course())
+        Traceback (most recent call last):
+          ...
+        InvalidContainerType: ...
+
+        >>> checkObject(gc, 'name', Section())
         Traceback (most recent call last):
           ...
         InvalidContainerType: ...

@@ -119,6 +119,16 @@
 
   <page
       name="index.html"
+      for="schooltool.interfaces.ISectionContainer"
+      class=".app.SectionContainerView"
+      template="../../schoolbell/app/browser/templates/container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
+      name="index.html"
       for="schooltool.interfaces.ISection"
       class="schooltool.browser.app.SectionView"
       template="templates/section.pt"

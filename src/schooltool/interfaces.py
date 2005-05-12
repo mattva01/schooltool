@@ -815,7 +815,7 @@ class ICourseContained(ICourse, IContained,
     containers(ICourseContainer)
 
 
-class ISection(sb.IGroupContained):
+class ISection(ITimetabled, sb.ICalendarOwner):
     """Sections are groups of users in a particular meeting of a Course."""
 
     label = TextLine(
@@ -828,7 +828,12 @@ class ISection(sb.IGroupContained):
     title = TextLine(
         title=_("Title"),
         required=False,
-        description=_("Title of the group."))
+        description=_("Title of the section."))
+
+    description = Text(
+        title=_("Description"),
+        required=False,
+        description=_("Description of the section."))
 
     instructors = Attribute(
                """A list of Person objects in the role of instructor""")
@@ -836,12 +841,21 @@ class ISection(sb.IGroupContained):
     learners = Attribute(
                """A list of Person objects in the role of member""")
 
-    schedule = Attribute(
-                    """A representation of the calendar events and \
-                    recurrences that make up this section's meetings.""")
-
     courses = Attribute(
                """A list of courses this section is a member of.""")
+
+
+class ISectionContainer(IContainer):
+    """A container for Sections."""
+
+    contains(ISection)
+
+
+class ISectionContained(ISection, IContained,
+                       sb.IAdaptableToSchoolBellApplication):
+    """Sections in a SectionContainer."""
+
+    containers(ISectionContainer)
 
 
 class IPersonContainer(sb.IPersonContainer):

@@ -41,7 +41,8 @@ from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ISchoolToolApplication
 from schooltool.interfaces import IPersonContainer, IGroupContainer
 from schooltool.interfaces import IResourceContainer
-from schooltool.interfaces import IPerson, IGroup, IResource, ICourse, ISection
+from schooltool.interfaces import IPerson, IGroup, IResource, ICourse
+from schooltool.interfaces import ISectionContained, ISectionContainer
 from schooltool.interfaces import ICourseContainer, ICourseContained
 from schooltool.relationships import URIInstruction, URISection, URIInstructor
 from schooltool.relationships import URICourseSections, URICourse
@@ -62,6 +63,7 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
         self['resources'] = ResourceContainer()
         self['terms'] = TermContainer()
         self['courses'] = CourseContainer()
+        self['sections'] = SectionContainer()
         # XXX Such translation does not seem to be working.
         groups['staff'] = Group('staff', _('Staff'))
         groups['learners'] = Group('learners', _('Learners'))
@@ -126,9 +128,9 @@ class Course(Persistent, Contained, TimetabledMixin):
             return self.__parent__.__parent__
 
 
-class Section(Group):
+class Section(Persistent, Contained, TimetabledMixin):
 
-    implements(ISection)
+    implements(ISectionContained, IHaveNotes, IAttributeAnnotatable)
 
     def _getLabel(self):
         instructors = " ".join([i.title for i in self.instructors])
@@ -136,12 +138,6 @@ class Section(Group):
         return _('%s section of %s') % (instructors, courses) # XXX i18n bug?
 
     label = property(_getLabel)
-
-    def _getTitle(self):
-        # XXX i18n bug?
-        return _('Section of ') + " ".join([c.title for c in self.courses])
-
-    title = property(_getTitle)
 
     instructors = RelationshipProperty(URIInstruction, URISection,
                                        URIInstructor)
@@ -151,10 +147,26 @@ class Section(Group):
 
     learners = RelationshipProperty(URIMembership, URIGroup, URIMember)
 
-    def __init__(self, description=None, schedule=None, courses=None):
+    def __init__(self, title="Section", description=None, schedule=None,
+                 courses=None):
+        self.title = title
         self.description = description
-        self.schedule = schedule
         self.calendar = Calendar(self)
+        TimetabledMixin.__init__(self)
+
+    def __conform__(self, protocol):
+        if protocol is sb.ISchoolBellApplication:
+            return self.__parent__.__parent__
+
+
+class SectionContainer(BTreeContainer):
+    """Container of Sections."""
+
+    implements(ISectionContainer, IAttributeAnnotatable)
+
+    def __conform__(self, protocol):
+        if protocol is sb.ISchoolBellApplication:
+            return self.__parent__
 
 
 class PersonContainer(sb.PersonContainer):

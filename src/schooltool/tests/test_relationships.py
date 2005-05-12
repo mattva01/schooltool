@@ -83,9 +83,9 @@ def doctest_CourseSections():
 
         >>> from schooltool.app import Course, Section, Person
         >>> history = Course()
-        >>> section1 = Section("section1")
-        >>> section2 = Section("section2")
-        >>> section3 = Section("section3")
+        >>> section1 = Section(title = "section1")
+        >>> section2 = Section(title = "section2")
+        >>> section3 = Section(title = "section3")
         >>> person = Person()
 
     Our course doesn't have any sections yet:
@@ -97,7 +97,7 @@ def doctest_CourseSections():
 
         >>> history.sections.add(section1)
         >>> for section in history.sections:
-        ...     print section.description
+        ...     print section.title
         section1
 
     Lets try to add a person to the course:
@@ -120,7 +120,7 @@ def doctest_CourseSections():
         >>> history.sections.add(section2)
         >>> history.sections.add(section3)
         >>> for section in history.sections:
-        ...     print section.description
+        ...     print section.title
         section1
         section2
         section3

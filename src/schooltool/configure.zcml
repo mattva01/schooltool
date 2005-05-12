@@ -10,6 +10,16 @@
       factory="schoolbell.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
+  <adapter
+      for=".interfaces.ICourseContainer"
+      factory="schoolbell.app.app.SimpleNameChooser"
+      provides="zope.app.container.interfaces.INameChooser" />
+
+  <adapter
+      for=".interfaces.ISectionContainer"
+      factory="schoolbell.app.app.SimpleNameChooser"
+      provides="zope.app.container.interfaces.INameChooser" />
+
   <subscriber
       for="schooltool.interfaces.ITimetabled"
       provides="schooltool.interfaces.ITimetableSource"
@@ -107,10 +117,18 @@
              set_schema="schooltool.interfaces.IResource" />
   </content>
 
+  <content class=".app.SectionContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schoolbell.view"
+             attributes="keys values __iter__ __len__" />
+    <require permission="schoolbell.create"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </content>
+
   <content class=".app.Section">
     <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
     <require permission="schoolbell.view"
-             attributes="title description members instructors learners
+             attributes="title description instructors learners
                          courses label" />
     <require permission="schoolbell.edit"
              set_schema="schooltool.interfaces.ISection" />
