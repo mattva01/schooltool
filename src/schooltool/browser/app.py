@@ -41,7 +41,7 @@ from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ICourse, ISection
 from schooltool.app import Section, Person
 
-class CourseView(GroupView):
+class CourseView(BrowserView):
     """A view for courses providing a list of sections."""
 
     __used_for__ = ICourse
