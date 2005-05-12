@@ -7,6 +7,7 @@
 PYTHON=python2.3
 PYTHONDIR=/usr/lib/python2.3
 TESTFLAGS=-w
+POT=src/schooltool/locales/schooltool.pot
 PO=$(wildcard src/schooltool/locales/*/LC_MESSAGES/*.po)
 PYTHONPATH=src:Zope3/src
 
