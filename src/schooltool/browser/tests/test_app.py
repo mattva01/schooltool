@@ -49,17 +49,6 @@ def doctest_CourseView():
         >>> request = TestRequest()
         >>> view = CourseView(course, request)
 
-        >>> from schooltool.app import Section
-        >>> course.members.add(Section())
-        >>> course.members.add(Section())
-        >>> course.members.add(Section())
-
-    get sections returns all the members of the course, we'll restrict
-    membership to Sections later.
-
-        >>> [section.title for section in view.getSections()]
-        [u'Section of Algebra 1', u'Section of Algebra 1', u'Section of Algebra 1']
-
     """
 
 
@@ -209,10 +198,10 @@ def doctest_SectionAddView():
         u'No such course.'
         >>> view.update()
 
-    Currently our course has no members
+    Currently our course has no sections
 
-        >>> for member in course.members:
-        ...     print member
+        >>> for section in course.sections:
+        ...     print section
 
         >>> request = TestRequest()
         >>> request.form = {'UPDATE_SUBMIT': True,
@@ -225,8 +214,8 @@ def doctest_SectionAddView():
     Our section is now a member of the Course, we use a generic title for
     sections
 
-        >>> for member in course.members:
-        ...     print member.__name__
+        >>> for section in course.sections:
+        ...     print section.__name__
         Section
 
         >>> tearDown()
@@ -349,7 +338,7 @@ def doctest_SectionLearnerView():
         >>> persons['stevens'] = Person('stevens', 'Bob Stevens')
 
     SecionLearnerView is used to relate persons to the section with the
-    URIInstruction relationship.
+    URIMembership relationship.
 
         >>> from schooltool.app import Section
         >>> from schooltool.browser.app import SectionLearnerView

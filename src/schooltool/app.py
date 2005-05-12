@@ -25,11 +25,14 @@ $Id$
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from zope.interface import implements
+from zope.app.container.btree import BTreeContainer
+from zope.app.container.contained import Contained
 from zope.app.container.sample import SampleContainer
 from zope.app.site.servicecontainer import SiteManagerContainer
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 
 from schoolbell.relationship import RelationshipProperty
+from schoolbell.app.interfaces import IHaveNotes
 from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIGroup, URIMember
 from schoolbell.app import app as sb
@@ -39,8 +42,10 @@ from schooltool.interfaces import ISchoolToolApplication
 from schooltool.interfaces import IPersonContainer, IGroupContainer
 from schooltool.interfaces import IResourceContainer
 from schooltool.interfaces import IPerson, IGroup, IResource, ICourse, ISection
+from schooltool.interfaces import ICourseContainer, ICourseContained
 from schooltool.relationships import URIInstruction, URISection, URIInstructor
-from schooltool.relationships import URILearning, URILearner
+from schooltool.relationships import URICourseSections, URICourse
+from schooltool.relationships import URISectionOfCourse
 from schooltool.timetable import TermContainer, TimetableSchemaService
 from schooltool.timetable import TimetabledMixin
 
@@ -56,6 +61,7 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
         self['groups'] = groups = GroupContainer()
         self['resources'] = ResourceContainer()
         self['terms'] = TermContainer()
+        self['courses'] = CourseContainer()
         # XXX Such translation does not seem to be working.
         groups['staff'] = Group('staff', _('Staff'))
         groups['learners'] = Group('learners', _('Learners'))
@@ -93,9 +99,31 @@ class Resource(sb.Resource, TimetabledMixin):
         TimetabledMixin.__init__(self)
 
 
-class Course(Group):
+class CourseContainer(BTreeContainer):
+    """Container of Courses."""
 
-    implements(ICourse)
+    implements(ICourseContainer, IAttributeAnnotatable)
+
+    def __conform__(self, protocol):
+        if protocol is sb.ISchoolBellApplication:
+            return self.__parent__
+
+
+class Course(Persistent, Contained, TimetabledMixin):
+
+    implements(ICourseContained, IHaveNotes, IAttributeAnnotatable)
+
+    sections = RelationshipProperty(URICourseSections, URICourse,
+                                    URISectionOfCourse)
+
+    def __init__(self, title=None, description=None):
+        self.title = title
+        self.description = description
+
+    # XXX not sure this is needed anymore, and it should be SchoolTool anyway
+    def __conform__(self, protocol):
+        if protocol is sb.ISchoolBellApplication:
+            return self.__parent__.__parent__
 
 
 class Section(Group):
@@ -118,9 +146,10 @@ class Section(Group):
     instructors = RelationshipProperty(URIInstruction, URISection,
                                        URIInstructor)
 
-    learners = RelationshipProperty(URILearning, URISection, URILearner)
+    courses = RelationshipProperty(URICourseSections, URISectionOfCourse,
+                                   URICourse)
 
-    courses = RelationshipProperty(URIMembership, URIMember, URIGroup)
+    learners = RelationshipProperty(URIMembership, URIGroup, URIMember)
 
     def __init__(self, description=None, schedule=None, courses=None):
         self.description = description

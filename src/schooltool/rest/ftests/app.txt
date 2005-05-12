@@ -43,6 +43,9 @@ Now, we can run the REST page tests:
         <container xlink:type="simple"
                    xlink:href="http://localhost/frogpond/resources"
                    xlink:title="resources"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/courses"
+                   xlink:title="courses"/>
       </containers>
     </schooltool>
     <BLANKLINE>

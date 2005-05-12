@@ -29,7 +29,7 @@ from schoolbell.relationship import URIObject, RelationshipSchema
 from schoolbell.relationship import getRelatedObjects
 from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
 from schoolbell.relationship.interfaces import InvalidRelationship
-from schooltool.interfaces import ISection
+from schooltool.interfaces import ISection, ICourse
 
 #
 # The Instruction relationship
@@ -63,14 +63,37 @@ def enforceInstructionConstraints(event):
 
 
 #
-# The Learning relationship
+# The CourseSection relationship
 #
 
-URILearning = URIObject('http://schooltool.org/ns/learning',
-                          'Learning', 'The learning relationship.')
-URILearner = URIObject('http://schooltool.org/ns/instruction/learner',
-                      'Learner', 'A person in the learner role.')
 
-Learning = RelationshipSchema(URILearning,
-                                learner=URILearner,
-                                section=URISection)
+URICourseSections = URIObject('http://schooltool.org/ns/coursesections',
+                          'Course Sections',
+                          'The sections that implement a course.')
+
+URICourse = URIObject('http://schooltool.org/ns/coursesections/course',
+                      'Course', 'A section that implements a course.')
+
+# TODO it seems to me like this should be the same as URISection but because
+# the URIs for roles have, so far, included the ../ns/RELATIONSHIP/.. that the
+# role participates in I'm creating a seperate role URI.
+
+URISectionOfCourse = URIObject(
+                      'http://schooltool.org/ns/coursesections/section',
+                      'Section', 'A course of study.')
+
+def enforceCourseSectionConstraint(event):
+    """Each CourseSections relationship requires one ICourse and one ISection
+    """
+    if not IBeforeRelationshipEvent.providedBy(event):
+        return
+    if event.rel_type != URICourseSections:
+        return
+    if ((event.role1, event.role2) != (URICourse, URISectionOfCourse) and
+        (event.role1, event.role2) != (URISectionOfCourse, URIInstructor)):
+        raise InvalidRelationship('CourseSections must have one course'
+                                  ' and one section.')
+    if not ISection.providedBy(event[URISectionOfCourse]):
+        raise InvalidRelationship('Sections must provide ISection.')
+    if not ICourse.providedBy(event[URICourse]):
+        raise InvalidRelationship('Course must provide ICourse.')

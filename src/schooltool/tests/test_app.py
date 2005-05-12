@@ -60,6 +60,11 @@ def doctest_SchoolToolApplication():
         >>> verifyObject(IResourceContainer, app['resources'])
         True
 
+    We should have a CourseContainer
+        >>> from schooltool.interfaces import ICourseContainer
+        >>> verifyObject(ICourseContainer, app['courses'])
+        True
+
     Make sure the default groups and resources are created
 
         >>> from schoolbell.app.interfaces import IGroup
@@ -73,18 +78,88 @@ def doctest_SchoolToolApplication():
     """
 
 
+
 def doctest_Course():
-    r"""Tests for course groups.
+    r"""Tests for Courses
+
+    Courses are similar to schoolbell groups but have sections instead of
+    members.
 
         >>> from schooltool.app import Course
         >>> algebraI= Course("Algebra I", "First year math.")
         >>> from schooltool.interfaces import ICourse
         >>> verifyObject(ICourse, algebraI)
         True
-        >>> from schoolbell.app.interfaces import IGroup
-        >>> verifyObject(IGroup, algebraI)
-        True
 
+    Basic properties:
+
+        >>> algebraI.title
+        'Algebra I'
+        >>> algebraI.description
+        'First year math.'
+
+    Courses are instructional content that is taught in Sections, the Sections
+    are related to the course with the schooltool URICourseSections
+    relationship.
+
+    To test the relationship we need to do some setup:
+
+        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationships import enforceCourseSectionConstraint
+        >>> setUp()
+        >>> import zope.event
+        >>> old_subscribers = zope.event.subscribers[:]
+        >>> zope.event.subscribers.append(enforceCourseSectionConstraint)
+
+    We need some sections and a person to test:
+
+        >>> from schooltool.app import Course, Section, Person
+        >>> section1 = Section("section1")
+        >>> section2 = Section("section2")
+        >>> section3 = Section("section3")
+        >>> person = Person()
+
+    Our course doesn't have any sections yet:
+
+        >>> for section in algebraI.sections:
+        ...     print section
+
+    Lets add one:
+
+        >>> algebraI.sections.add(section1)
+        >>> for section in algebraI.sections:
+        ...     print section.description
+        section1
+
+    Lets try to add a person to the course:
+
+        >>> algebraI.sections.add(person)
+        Traceback (most recent call last):
+        ...
+        InvalidRelationship: Sections must provide ISection.
+
+    Lets try to add a course to the course:
+
+        >>> history = Course()
+        >>> algebraI.sections.add(history)
+        Traceback (most recent call last):
+        ...
+        InvalidRelationship: Sections must provide ISection.
+
+    No luck, you can only add sections:
+
+        >>> algebraI.sections.add(section2)
+        >>> algebraI.sections.add(section3)
+        >>> for section in algebraI.sections:
+        ...     print section.description
+        section1
+        section2
+        section3
+
+    That's it:
+
+        >>> zope.event.subscribers[:] = old_subscribers
+        >>> tearDown()
     """
 
 
@@ -108,13 +183,14 @@ def doctest_Section():
         >>> teacher = Person('teacher', 'Mr. Jones')
         >>> section.instructors.add(teacher)
 
-    Now we'll add some learners to the Section.
+    Now we'll add some learners to the Section with the sections membership
+    RelationshipPeroperty.
 
-        >>> section.learners.add(Person('first','First'))
-        >>> section.learners.add(Person('second','Second'))
-        >>> section.learners.add(Person('third','Third'))
+        >>> section.members.add(Person('first','First'))
+        >>> section.members.add(Person('second','Second'))
+        >>> section.members.add(Person('third','Third'))
 
-        >>> for person in section.learners:
+        >>> for person in section.members:
         ...     print person.title
         First
         Second
@@ -139,7 +215,7 @@ def doctest_Section():
     Labels should include the courses that a Section is part of:
         >>> from schooltool.app import Course
         >>> course = Course(title="US History")
-        >>> course.members.add(section)
+        >>> course.sections.add(section)
         >>> section.label
         u'Mr. Jones Mrs. Smith section of US History'
 
@@ -275,14 +351,17 @@ def doctest_GroupContainer():
         >>> from zope.app.container.constraints import checkObject
         >>> checkObject(gc, 'name', Group())
         >>> checkObject(gc, 'name', Section())
-        >>> checkObject(gc, 'name', Course())
 
-    It cannot contain persons though:
+    It cannot contain persons or courses though:
 
         >>> checkObject(gc, 'name', Person())
         Traceback (most recent call last):
           ...
         InvalidItemType: ...
+        >>> checkObject(gc, 'name', Course())
+        Traceback (most recent call last):
+          ...
+        InvalidContainerType: ...
 
     """
 
@@ -328,6 +407,42 @@ def doctest_ResourceContainer():
 
     """
 
+def doctest_CourseContainer():
+    r"""Schooltool toplevel container for Courses.
+
+        >>> from schooltool.interfaces import ICourseContainer
+        >>> from schooltool.app import CourseContainer
+        >>> courses = CourseContainer()
+        >>> verifyObject(ICourseContainer, courses)
+        True
+
+    It should only be able to contain courses
+
+        >>> from schooltool.app import Group, Section, Course, Person, Resource
+        >>> from zope.app.container.constraints import checkObject
+        >>> checkObject(courses, 'name', Course())
+
+        >>> checkObject(courses, 'name', Group())
+        Traceback (most recent call last):
+          ...
+        InvalidItemType: ...
+
+        >>> checkObject(courses, 'name', Person())
+        Traceback (most recent call last):
+          ...
+        InvalidItemType: ...
+
+        >>> checkObject(courses, 'name', Section())
+        Traceback (most recent call last):
+          ...
+        InvalidItemType: ...
+
+        >>> checkObject(courses, 'name', Resource())
+        Traceback (most recent call last):
+          ...
+        InvalidItemType: ...
+
+    """
 
 def test_suite():
     return unittest.TestSuite([

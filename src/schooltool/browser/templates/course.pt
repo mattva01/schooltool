@@ -14,7 +14,7 @@
 
     <div class="sections">
 
-      <div tal:define="sections view/getSections">
+      <div tal:define="sections context/sections">
         <h3 i18n:translate="">Sections</h3>
         <div class="section-list">
           <tal:loop tal:repeat="section sections/sortby:label">

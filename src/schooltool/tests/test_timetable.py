@@ -1547,22 +1547,6 @@ class TestInstructionTimetableSource(BaseTimetableSourceTest,
         Instruction(instructor=context, section=related)
 
 
-class TestLearningTimetableSource(BaseTimetableSourceTest,
-                                  unittest.TestCase):
-    # Test that the InstructionTimetableSource works for the Learning
-    # relationship, too.
-    #
-    # This is true because the role URI is the same -- URISection.
-
-    def createAdapter(self, context):
-        from schooltool.timetable import InstructionTimetableSource
-        return InstructionTimetableSource(context)
-
-    def createRelationship(self, context, related):
-        from schooltool.relationships import Learning
-        Learning(learner=context, section=related)
-
-
 class TestTimetableSchemaService(unittest.TestCase):
 
     def test_interface(self):
@@ -1728,7 +1712,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetabledMixin))
     suite.addTest(unittest.makeSuite(TestMembershipTimetableSource))
     suite.addTest(unittest.makeSuite(TestInstructionTimetableSource))
-    suite.addTest(unittest.makeSuite(TestLearningTimetableSource))
     suite.addTest(unittest.makeSuite(TestGetPeriodsForDay))
     return suite
 

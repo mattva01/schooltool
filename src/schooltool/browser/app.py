@@ -46,9 +46,6 @@ class CourseView(GroupView):
 
     __used_for__ = ICourse
 
-    def getSections(self):
-        return self.context.members
-
 
 class CourseAddView(AddView):
     "A view for adding Courses."
@@ -105,7 +102,7 @@ class SectionAddView(AddView):
             try:
                 data = getWidgetsData(self, self.schema, names=self.fieldNames)
                 section = removeSecurityProxy(self.createAndAdd(data))
-                self.course.members.add(section)
+                self.course.sections.add(section)
             except WidgetsError, errors:
                 self.errors = errors
                 self.update_status = _("An error occured.")

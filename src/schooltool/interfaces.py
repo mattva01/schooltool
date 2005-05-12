@@ -27,12 +27,13 @@ import datetime
 from zope.interface import Interface, Attribute, implements
 from zope.app.location.interfaces import ILocation
 from zope.schema.interfaces import IField
-from zope.schema import Field, Object, Int, TextLine, List, Set, Tuple
+from zope.schema import Field, Object, Int, Text, TextLine, List, Set, Tuple
 from zope.schema import Dict, Date, Timedelta
 from zope.app.container.interfaces import IContainer, IContained
-from zope.app.container.constraints import contains
+from zope.app.container.constraints import contains, containers
 
 from schooltool import SchoolToolMessageID as _
+
 from schoolbell.app import interfaces as sb
 
 from schoolbell.calendar.interfaces import Unchanged
@@ -785,8 +786,33 @@ class IResource(sb.IResource, ITimetabled):
     """SchoolTool resource object"""
 
 
-class ICourse(sb.IGroupContained):
-    """Courses are groups of Sections."""
+class ICourse(Interface):
+    """Courses are similar to groups, membership is restricted to Sections."""
+
+    title = TextLine(
+        title=_("Title"),
+        description=_("Title of the course."))
+
+    description = Text(
+        title=_("Description"),
+        required=False,
+        description=_("Description of the course."))
+
+    sections = Attribute("""The Sections that implement this course material,
+            see schoolbell.relationship.interfaces.IRelationshipProrperty.""")
+
+
+class ICourseContainer(IContainer, sb.IAdaptableToSchoolBellApplication):
+    """Container of Courses."""
+
+    contains(ICourse)
+
+
+class ICourseContained(ICourse, IContained,
+                       sb.IAdaptableToSchoolBellApplication):
+    """Courses contained in an ICourseContainer."""
+
+    containers(ICourseContainer)
 
 
 class ISection(sb.IGroupContained):
@@ -808,7 +834,7 @@ class ISection(sb.IGroupContained):
                """A list of Person objects in the role of instructor""")
 
     learners = Attribute(
-               """A list of Person objects in the role of learner""")
+               """A list of Person objects in the role of member""")
 
     schedule = Attribute(
                     """A representation of the calendar events and \
