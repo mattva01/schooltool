@@ -54,15 +54,12 @@ There are no groups at the moment:
     ... Authorization: Basic mgr:mgrpw
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
-    Content-Length: 597
+    Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
     <BLANKLINE>
     <container xmlns:xlink="http://www.w3.org/1999/xlink">
       <name>groups</name>
       <items>
-        <item xlink:type="simple"
-              xlink:href="http://localhost/frogpond/groups/courses"
-              xlink:title="courses"/>
         <item xlink:type="simple"
               xlink:href="http://localhost/frogpond/groups/learners"
               xlink:title="learners"/>
