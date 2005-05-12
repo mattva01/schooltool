@@ -14,7 +14,7 @@
     <p class="description" tal:content="context/description"/>
 
     <div class="instructors">
-      <div tal:define="instructors view/getInstructors">
+      <div tal:define="instructors context/instructors">
         <h3 i18n:translate="">Instructors</h3>
         <ul>
           <li tal:repeat="obj instructors/sortby:title">
@@ -29,7 +29,7 @@
     </div>
 
     <div class="learners">
-      <div tal:define="learners view/getLearners">
+      <div tal:define="learners context/learners">
         <h3 i18n:translate="">Learners</h3>
         <ul>
           <li tal:repeat="obj learners/sortby:title">

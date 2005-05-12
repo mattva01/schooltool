@@ -73,19 +73,10 @@ class SectionContainerView(ContainerView):
     add_url = "+/addSchoolToolSection.html"
 
 
-class SectionView(GroupView):
+class SectionView(BrowserView):
     """A view for courses providing a list of sections."""
 
     __used_for__ = ISection
-
-    def getInstructors(self):
-        return self.context.instructors
-
-    def getLearners(self):
-        return self.context.learners
-
-    def getCourses(self):
-        return self.context.courses
 
 
 class SectionAddView(AddView):
