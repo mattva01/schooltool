@@ -104,7 +104,6 @@ class TimetableCSVImportView(BrowserView):
             v = getattr(err, key)
             if v:
                 values = ', '.join([unicode(st) for st in v])
-                print msg, repr(values)
                 msg.mapping = {'args': values}
                 self.errors.append(msg)
 
