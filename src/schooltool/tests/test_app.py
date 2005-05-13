@@ -82,11 +82,10 @@ def doctest_SchoolToolApplication():
     """
 
 
-
 def doctest_Course():
     r"""Tests for Courses
 
-    Courses are similar to schoolbell groups but have sections instead of
+    Courses are similar to SchoolBell groups but have sections instead of
     members.
 
         >>> from schooltool.app import Course
@@ -118,9 +117,9 @@ def doctest_Course():
     We need some sections and a person to test:
 
         >>> from schooltool.app import Course, Section, Person
-        >>> section1 = Section(title = "section1")
-        >>> section2 = Section(title = "section2")
-        >>> section3 = Section(title = "section3")
+        >>> section1 = Section(title="section1")
+        >>> section2 = Section(title="section2")
+        >>> section3 = Section(title="section3")
         >>> person = Person()
 
     Our course doesn't have any sections yet:
