@@ -89,7 +89,7 @@ def doctest_Course():
     members.
 
         >>> from schooltool.app import Course
-        >>> algebraI= Course("Algebra I", "First year math.")
+        >>> algebraI = Course("Algebra I", "First year math.")
         >>> from schooltool.interfaces import ICourse
         >>> verifyObject(ICourse, algebraI)
         True
@@ -194,7 +194,7 @@ def doctest_Section():
         >>> section.instructors.add(teacher)
 
     Now we'll add some learners to the Section with the sections membership
-    RelationshipPeroperty.
+    RelationshipProperty.
 
         >>> section.learners.add(Person('first','First'))
         >>> section.learners.add(Person('second','Second'))

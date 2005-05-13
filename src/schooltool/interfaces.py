@@ -798,7 +798,7 @@ class ICourse(Interface):
         description=_("Description of the course."))
 
     sections = Attribute("""The Sections that implement this course material,
-            see schoolbell.relationship.interfaces.IRelationshipProrperty.""")
+            see schoolbell.relationship.interfaces.IRelationshipProperty.""")
 
 
 class ICourseContainer(IContainer, sb.IAdaptableToSchoolBellApplication):
