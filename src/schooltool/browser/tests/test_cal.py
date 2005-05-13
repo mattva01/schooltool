@@ -46,7 +46,6 @@ class TestDailyCalendarView(unittest.TestCase):
         ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
                              getPersonPreferences)
 
-
         # set up the site
         from schooltool.app import SchoolToolApplication, Person
         app = SchoolToolApplication()
