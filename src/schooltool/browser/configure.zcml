@@ -231,6 +231,20 @@
       menu="schoolbell_actions" 
       title="Change Preferences" />
 
+  <!-- TODO: register this view to override daily.html.
+             This is not trivial because SchoolTool calendars do not implement
+             any specific interfaces. -->
+  <page
+      name="daily_st.html"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      class=".cal.DailyCalendarView"
+      template="../../schoolbell/app/browser/templates/cal_daily.pt"
+      permission="schoolbell.viewCalendar"
+      menu="zmi_views"
+      title="Calendar (Daily)"
+      />
+  <!-- XXX make a copy of cal_daily? -->
+
   <page
       name="view_macros"
       for="*"
