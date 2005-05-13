@@ -24,10 +24,11 @@ $Id$
 
 import csv
 from zope.app.publisher.browser import BrowserView
+from zope.app.container.interfaces import INameChooser
 from schoolbell.relationship import getRelatedObjects, relate
-from schoolbell.app.membership import Membership, URIGroup
+from schoolbell.app.membership import Membership
 from schooltool.interfaces import ISchoolToolApplication
-from schooltool.app import Person, Group
+from schooltool.app import Person, Section
 from schooltool import SchoolToolMessageID as _
 from schooltool.relationships import URIInstruction, URIInstructor, URISection
 from schooltool.timetable import TimetableActivity
@@ -95,7 +96,7 @@ class TimetableCSVImportView(BrowserView):
             ('day_ids', _("Day ids not defined in selected schema: %s.")),
             ('periods', _("Periods not defined in selected days: %s.")),
             ('persons', _("Persons not found: %s.")),
-            ('groups', _("Groups not found: %s.")),
+            ('sections', _("Sections not found: %s.")),
             ('locations', _("Locations not found: %s.")),
             ('records', _("Invalid records: %s."))]:
             v = getattr(err, key)
@@ -130,13 +131,14 @@ class ImportErrorCollection(object):
         self.day_ids = []
         self.periods = []
         self.persons = []
-        self.groups = []
+        self.courses = []
+        self.sections = []
         self.locations = []
         self.records = []
 
     def anyErrors(self):
         return bool(self.generic or self.day_ids or self.periods
-                    or self.persons or self.groups
+                    or self.persons or self.courses or self.sections
                     or self.locations or self.records)
 
     def __repr__(self):
@@ -151,8 +153,8 @@ class TimetableCSVImporter(object):
     # Perhaps this class should be moved to schooltool.csvimport
 
     def __init__(self, app, charset=None):
-        self.app = removeSecurityProxy(app) # XXX temporary
-        self.groups = self.app['groups']
+        self.app = app
+        self.sections = self.app['sections']
         self.persons = self.app['persons']
         self.errors = ImportErrorCollection()
         self.charset = charset
@@ -332,48 +334,46 @@ class TimetableCSVImporter(object):
 
     def clearTimetables(self):
         """Delete timetables of the period and schema we are dealing with."""
-        for group in self.groups.values():
-            if (self.period_id, self.ttschema) in group.timetables.keys():
-                del group.timetables[self.period_id, self.ttschema]
+        for section in self.sections.values():
+            if (self.period_id, self.ttschema) in section.timetables.keys():
+                del section.timetables[self.period_id, self.ttschema]
 
-    def scheduleClass(self, period, subject, teacher,
+    def scheduleClass(self, period, course_name, teacher,
                       day_ids, location, dry_run=False):
-        """Schedule a class of subject during a given period.
+        """Schedule a class of course during a given period.
 
         If dry_run is set, no objects are changed.
         """
         errors = False
-        subject = self.findByTitle('groups', subject, self.errors.groups)
+        course = self.findByTitle('courses', course_name, self.errors.courses)
         teacher = self.findByTitle('persons', teacher, self.errors.persons)
         location = self.findByTitle('resources', location,
                                     self.errors.locations)
-        if dry_run or not (subject and teacher and location):
+        if dry_run or not (course and teacher and location):
             return # some objects were not found; do not process
 
-        group_name = '%s - %s' % (subject.title, teacher.title)
+        section_name = '%s - %s' % (course.title, teacher.title)
         try:
-            group = self.findByTitle('groups', group_name)
+            section = self.findByTitle('sections', section_name)
         except KeyError:
-            group = Group(title=group_name)
-            from zope.app.container.interfaces import INameChooser
-            chooser = INameChooser(self.groups)
-            group_name = chooser.chooseName('', group)
-            self.groups[group_name] = group
-            Membership(group=subject, member=group)
+            section = Section(title=section_name)
+            chooser = INameChooser(self.sections)
+            section_name = chooser.chooseName('', section)
+            self.sections[section_name] = section
+            course.sections.add(section)
 
-        if not teacher in getRelatedObjects(group, URIInstructor):
-            relate(URIInstruction,
-                   (teacher, URIInstructor), (group, URISection))
+        if not teacher in section.instructors:
+            section.instructors.add(teacher)
 
         # Create the timetable if it does not exist yet.
-        if (self.period_id, self.ttschema) not in group.timetables.keys():
+        if (self.period_id, self.ttschema) not in section.timetables.keys():
             tt = self.app.timetableSchemaService[self.ttschema]
-            group.timetables[self.period_id, self.ttschema] = tt
+            section.timetables[self.period_id, self.ttschema] = tt
         else:
-            tt = group.timetables[self.period_id, self.ttschema]
+            tt = section.timetables[self.period_id, self.ttschema]
 
         # Add a new activity to the timetable
-        act = TimetableActivity(title=subject.title, owner=group,
+        act = TimetableActivity(title=course.title, owner=section,
                                 resources=(location, ))
         for day_id in day_ids:
             tt[day_id].add(period, act)
@@ -385,25 +385,24 @@ class TimetableCSVImporter(object):
         """
         invalid = object()
         for dry_run in [True, False]:
-            group = None
+            section = None
             for line in roster_txt.splitlines():
                 line = line.strip()
-                if group is None:
-                    group = self.findByTitle('sections', line,
-                                             self.errors.groups)
-                    if group is None:
-                        group = invalid
+                if section is None:
+                    section = self.findByTitle('sections', line,
+                                               self.errors.sections)
+                    if section is None:
+                        section = invalid
                     continue
                 elif not line:
-                    group = None
+                    section = None
                     continue
                 else:
                     person = self.findByTitle('persons', line,
                                               self.errors.persons)
-                    if group is not invalid and person is not None:
-                        if (not dry_run and
-                            group not in getRelatedObjects(person, URIGroup)):
-                            Membership(group=group, member=person)
+                    if section is not invalid and person is not None:
+                        if (not dry_run and person not in section.learners):
+                            section.learners.add(person)
 
             if self.errors.anyErrors():
                 assert dry_run, ("Something bad happened,"

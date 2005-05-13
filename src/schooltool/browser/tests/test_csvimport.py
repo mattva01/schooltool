@@ -28,8 +28,8 @@ from StringIO import StringIO
 from logging import INFO
 from zope.publisher.browser import TestRequest
 from schooltool.common import dedent
-from schooltool.app import Person, Group, Resource
-from schooltool.relationships import URISection
+from schooltool.app import Person, Course, Section, Resource
+from schooltool.relationships import URISection, URISectionOfCourse
 from schoolbell.app.membership import URIMember
 from schoolbell.relationship.tests import setUp as setUpRelationshipStuff
 from schoolbell.relationship.tests import tearDown as tearDownRelationshipStuff
@@ -145,7 +145,8 @@ class TestTimetableCSVImporter(unittest.TestCase):
         from schooltool.app import SchoolToolApplication
         self.app = app = SchoolToolApplication()
 
-        self.pupils = app['groups']['pupils'] = Group(title="Pupils")
+        self.course = app['courses']['philosophy'] = Course(title="Philosophy")
+        self.section = app['sections']['section'] = Section(title="Something")
         self.location = app['resources']['location'] = Resource("Inside")
         self.location2 = app['resources']['location2'] = Resource("Outside")
 
@@ -162,7 +163,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         for title in ['Math1', 'Math2', 'Math3',
                       'English1', 'English2', 'English3']:
             name = title.lower()
-            self.app['groups'][name] = Group(title)
+            self.app['courses'][name] = Course(title)
 
     def tearDown(self):
         tearDownRelationshipStuff()
@@ -185,14 +186,14 @@ class TestTimetableCSVImporter(unittest.TestCase):
                 """)
         ok = imp.importTimetable(csv)
         self.assert_(ok, imp.errors)
-        group = imp.findByTitle('groups', 'Math1 - Curtin')
-        tt = group.timetables['summer', 'three-day']
+        section = imp.findByTitle('sections', 'Math1 - Curtin')
+        tt = section.timetables['summer', 'three-day']
         self.assert_(list(tt['Monday']['A']))
         self.assert_(not list(tt['Monday']['B']))
         self.assert_(list(tt['Monday']['C']))
 
-        group2 = imp.findByTitle('groups', 'Math2 - Lorch')
-        tt2 = group2.timetables['summer', 'three-day']
+        section2 = imp.findByTitle('sections', 'Math2 - Lorch')
+        tt2 = section2.timetables['summer', 'three-day']
         self.assert_(list(tt2['Monday']['A']))
         self.assert_(not list(tt2['Monday']['B']))
         self.assert_(not list(tt2['Monday']['C']))
@@ -218,8 +219,8 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assert_(success, imp.errors)
 
         # A little poking around.  We could be more comprehensive...
-        group = imp.findByTitle('groups', 'English1 - Lorch')
-        tt = group.timetables['summer', 'three-day']
+        section = imp.findByTitle('sections', 'English1 - Lorch')
+        tt = section.timetables['summer', 'three-day']
         self.assert_(list(tt['Monday']['A']))
         self.assert_(not list(tt['Monday']['B']))
         self.assert_(not list(tt['Monday']['C']))
@@ -254,7 +255,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
                           "Conversion to unicode failed in line 1")
         self.assertEquals(result, None)
 
-        # test sanitization
+        # test string sanitization
         imp = self.createImporter(charset='UTF-8')
         result = imp.parseCSVRows(['', ',', '"",""', 'hi', '"some ","data"',
                                    '"two",""," \t ","elements"',
@@ -338,7 +339,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assert_(imp.findByTitle('persons', 'Lorch')
                      is self.app['persons']['lorch'])
         self.assert_(imp.findByTitle('persons', 'Missing', errs) is None)
-        self.assert_(imp.findByTitle('groups', 'Foo', errs) is None)
+        self.assert_(imp.findByTitle('sections', 'Foo', errs) is None)
         self.assertEquals(errs, ['Missing', 'Foo'])
         self.assertRaises(KeyError, imp.findByTitle, 'persons', 'Missing')
 
@@ -352,27 +353,27 @@ class TestTimetableCSVImporter(unittest.TestCase):
         ttday = tt['day1'] = TimetableDay(['A', 'B'])
         ttday.add('A', TimetableActivity(title="Sleeping"))
         ttday.add('B', TimetableActivity(title="Snoring"))
-        self.pupils.timetables['period1', 'some_schema'] = tt
+        self.section.timetables['period1', 'some_schema'] = tt
 
         tt2 = Timetable(['day2'])
         tt2day = tt2['day2'] = TimetableDay(['A', 'B'])
         tt2day.add('A', TimetableActivity(title="Working"))
-        self.pupils.timetables['period2', 'some_schema'] = tt2
+        self.section.timetables['period2', 'some_schema'] = tt2
 
         imp = self.createImporter()
         imp.period_id = 'period1'
         imp.ttschema = 'some_schema'
         imp.clearTimetables()
 
-        tt_notblank = self.pupils.timetables['period2', 'some_schema']
+        tt_notblank = self.section.timetables['period2', 'some_schema']
         self.assert_(('period1', 'some_schema')
-                     not in self.pupils.timetables.keys())
+                     not in self.section.timetables.keys())
         self.assertEquals(len(list(tt_notblank.itercontent())), 1)
 
     def test_scheduleClass(self):
         from schooltool.timetable import Timetable, TimetableDay
 
-        math101 = self.app['groups']['math101'] = Group(title='Math 101')
+        math101 = self.app['courses']['math101'] = Course(title='Math 101')
         teacher = Person('teacher', 'Prof. Bar')
         self.app['persons']['teacher'] = teacher
 
@@ -390,34 +391,35 @@ class TestTimetableCSVImporter(unittest.TestCase):
                           dry_run=True)
         self.failIf(imp.errors.anyErrors(), imp.errors)
         self.assertRaises(KeyError, imp.findByTitle,
-                          'groups', 'Math 101 - Prof. Bar')
+                          'sections', 'Math 101 - Prof. Bar')
 
         imp.scheduleClass('A', 'Math 101', 'Prof. Bar',
                           day_ids=['day1', 'day2'], location='Inside')
 
-        group = imp.findByTitle('groups', 'Math 101 - Prof. Bar')
-        self.assertIsRelated(group, math101)
-        self.assertIsRelated(group, teacher, rel=URISection)
+        section = imp.findByTitle('sections', 'Math 101 - Prof. Bar')
+        self.assertIsRelated(section, math101, rel=URISectionOfCourse)
+        self.assertIsRelated(section, teacher, rel=URISection)
 
-        tt = group.timetables['period1', 'two_day']
+        tt = section.timetables['period1', 'two_day']
         activities = list(tt.itercontent())
         self.assertEquals(len(activities), 2)
         for day_id, period_id, activity in activities:
             self.assertEquals(activity.title, 'Math 101')
-            self.assert_(activity.owner is group)
+            self.assert_(activity.owner is section)
             self.assertEquals(list(activity.resources), [self.location])
             self.assert_(activity.timetable is tt)
 
-        new_group = self.app['groups']['g1'] = Group(title='Math 101 - Lorch')
+        new_section = Section(title='Math 101 - Lorch')
+        self.app['sections']['g1'] = new_section
         imp.scheduleClass('A', 'Math 101', 'Lorch',
                           day_ids=['day1', 'day2'], location='Inside')
-        self.assertIsRelated(new_group, self.app['persons']['lorch'],
+        self.assertIsRelated(new_section, self.app['persons']['lorch'],
                              rel=URISection)
 
     def test_scheduleClass_errors(self):
         from schooltool.timetable import Timetable, TimetableDay
 
-        math101 = self.app['groups']['math101'] = Group(title='Math 101')
+        math101 = self.app['courses']['math101'] = Course(title='Math 101')
 
         imp = self.createImporter()
         imp.ttname = 'tt'
@@ -427,10 +429,10 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp.ttschema["day1"] = TimetableDay(("A", "B"))
         imp.ttschema["day2"] = TimetableDay(("A", "B"))
 
-        imp.scheduleClass('A', 'Invalid subject', 'Dumb professor',
+        imp.scheduleClass('A', 'Invalid course', 'Dumb professor',
                           day_ids=['day1', 'day2'], location='Nowhere')
         self.assertEquals(list(imp.errors.persons), ['Dumb professor'])
-        self.assertEquals(list(imp.errors.groups), ['Invalid subject'])
+        self.assertEquals(list(imp.errors.courses), ['Invalid course'])
         self.assertEquals(list(imp.errors.locations), ['Nowhere'])
 
     def test_parseRecordRow(self):
@@ -489,7 +491,6 @@ class TestTimetableCSVImporter(unittest.TestCase):
             self.assertIsRelated(self.app['persons'][name], group, expected)
 
     def test_importRoster_errors(self):
-        from schooltool.app import Section
         g2 = self.app['sections']['s'] = Section(title="Math2 - Guzman")
         self.assertIsRelated(self.app['persons']['curtin'], g2, False)
         roster = dedent("""
@@ -505,7 +506,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp = self.createImporter()
         self.failIf(imp.importRoster(roster))
         self.assertIsRelated(self.app['persons']['curtin'], g2, False)
-        self.assertEquals(imp.errors.groups, ['Nonexistent section'])
+        self.assertEquals(imp.errors.sections, ['Nonexistent section'])
         self.assertEquals(imp.errors.persons, ['Bogus person'])
         self.assertEquals(imp.errors.generic, [])
 
