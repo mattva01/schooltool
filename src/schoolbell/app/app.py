@@ -203,11 +203,12 @@ class PersonPreferences(Persistent):
 
     implements(IPersonPreferences)
 
-    def __init__(self):
-        self.timezone = "UTC"
-        self.dateformat = "YYYY-MM-DD"
-        self.timeformat = "HH:MM"
-        self.weekstart = calendar.MONDAY
+    __parent__ = None
+
+    timezone = "UTC"
+    dateformat = "YYYY-MM-DD"
+    timeformat = "HH:MM"
+    weekstart = calendar.MONDAY
 
 
 def getPersonPreferences(person):
@@ -320,7 +321,6 @@ class Resource(Persistent, Contained):
 
 def getSchoolBellApplication():
     """Return the nearest ISchoolBellApplication"""
-
     candidate = getSite()
     if ISchoolBellApplication.providedBy(candidate):
         return candidate

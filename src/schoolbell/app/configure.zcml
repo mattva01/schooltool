@@ -121,7 +121,7 @@
   <content class=".app.PersonPreferences">
     <require permission="schoolbell.edit"
         interface="schoolbell.app.interfaces.IPersonPreferences"
-        set_schema="schoolbell.app.browser.app.IPersonPreferences" />
+        set_schema="schoolbell.app.interfaces.IPersonPreferences" />
   </content>
 
   <content class=".app.PersonDetails">

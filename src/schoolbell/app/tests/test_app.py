@@ -242,7 +242,6 @@ def doctest_PersonPreferences():
     r"""Tests for the Preferences adapter
 
         >>> from zope.app.tests import setup
-        >>> from zope.interface.verify import verifyObject
         >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
         >>> from schoolbell.app.app import Person
@@ -253,6 +252,7 @@ def doctest_PersonPreferences():
         True
 
     Make sure the attribute stores the correct interface
+
         >>> from schoolbell.app.app import IPersonPreferences
         >>> from schoolbell.app.app import getPersonPreferences
         >>> prefs = getPersonPreferences(person)
@@ -263,17 +263,20 @@ def doctest_PersonPreferences():
         >>> prefs.weekstart
         0
 
-    Need to have prefs.__parent__ refer to the person its attached to
+    Need to have prefs.__parent__ refer to the person it's attached to:
+
         >>> prefs.__parent__ == person
         True
 
+        >>> setup.placelessTearDown()
+
     """
+
 
 def doctest_PersonDetails():
     r"""Tests for the contact information Details adapter
 
         >>> from zope.app.tests import setup
-        >>> from zope.interface.verify import verifyObject
         >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
         >>> from schoolbell.app.app import Person
