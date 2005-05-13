@@ -333,7 +333,6 @@ class PersonPreferencesView(BrowserView):
     message = None
 
     schema = IPersonPreferences
-    fields = 'timezone', 'timeformat', 'dateformat', 'weekstart'
 
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
@@ -355,9 +354,10 @@ class PersonPreferencesView(BrowserView):
             except WidgetsError:
                 return # Errors will be displayed next to widgets
 
-            prefs = IPersonPreferences(self.context)
-            for field in self.fields:
-                setattr(prefs, field, data[field])
+            prefs = self.schema(self.context)
+            for field in self.schema:
+                if field in data: # skip non-fields
+                    setattr(prefs, field, data[field])
 
 
 class PersonDetailsView(BrowserView):

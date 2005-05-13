@@ -848,12 +848,26 @@ def doctest_PersonPreferencesView():
 
     Cancel a change TODO: set view.message
 
-        >>> request.form = {'CANCEL': 'Cancel'}
+        >>> request = TestRequest(form={'CANCEL': 'Cancel'})
         >>> view = PersonPreferencesView(person, request)
 
-    XXX this should test post
+    Let's see if posting works properly:
+
+        >>> request = TestRequest(form={'UPDATE_SUBMIT': 'Update',
+        ...                             'field.timezone': 'Europe/Vilnius',
+        ...                             'field.timeformat': 'H:MM am/pm',
+        ...                             'field.dateformat': 'Day Month, Year',
+        ...                             'field.weekstart': '6'})
+        >>> view = PersonPreferencesView(person, request)
+
+        >>> view.update()
+
+        >>> prefs = getPersonPreferences(person)
+        >>> prefs.timezone, prefs.timeformat, prefs.dateformat, prefs.weekstart
+        ('Europe/Vilnius', 'H:MM am/pm', 'Day Month, Year', 6)
 
     """
+
 
 def doctest_PersonDetailsView():
     """
