@@ -88,8 +88,9 @@ class TestTimetableCSVImportView(unittest.TestCase):
         self.failIf(view.success)
 
     def test_POST(self):
-        from schooltool.app import Person
+        from schooltool.app import Person, Section
         self.app['persons']['person'] = Person('person', 'Some person')
+        self.app['sections']['s'] = Section('staff')
         tt_csv = StringIO('"fall","three-day"')
         roster = StringIO('staff\nSome person')
         view = self.createView(form={'timetable.csv': tt_csv,
@@ -99,7 +100,7 @@ class TestTimetableCSVImportView(unittest.TestCase):
         view.update()
         self.assertEquals(view.success,
                           ['timetable.csv imported successfully.',
-                           'roster.txt imported successfully.'])
+                           'roster.txt imported successfully.'], view.errors)
         self.assertEquals(view.errors, [])
 
     def test_POST_empty(self):
@@ -459,8 +460,13 @@ class TestTimetableCSVImporter(unittest.TestCase):
                                                related, rel))
 
     def test_importRoster(self):
-        g1 = self.app['groups']['g1'] = Group(title="Math1 - Lorch")
-        g2 = self.app['groups']['g2'] = Group(title="Math2 - Guzman")
+        from schooltool.app import Course, Section
+        course = self.app['courses']['math'] = Course()
+        g1 = self.app['sections']['g1'] = Section(title="Math1 - Lorch")
+        g2 = self.app['sections']['g2'] = Section(title="Math2 - Guzman")
+        course.sections.add(g1)
+        course.sections.add(g2)
+
         roster = dedent("""
             Math1 - Lorch
             Guzman
@@ -472,7 +478,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
             """)
         imp = self.createImporter()
         ok = imp.importRoster(roster)
-        self.assert_(ok)
+        self.assert_(ok, imp.errors)
 
         for name, group, expected in [('lorch', g1, False),
                                       ('guzman', g1, True),
@@ -483,10 +489,11 @@ class TestTimetableCSVImporter(unittest.TestCase):
             self.assertIsRelated(self.app['persons'][name], group, expected)
 
     def test_importRoster_errors(self):
-        g2 = self.app['groups']['g2'] = Group(title="Math2 - Guzman")
+        from schooltool.app import Section
+        g2 = self.app['sections']['s'] = Section(title="Math2 - Guzman")
         self.assertIsRelated(self.app['persons']['curtin'], g2, False)
         roster = dedent("""
-            Nonexistent group
+            Nonexistent section
             Guzman
             Curtin
 
@@ -498,7 +505,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp = self.createImporter()
         self.failIf(imp.importRoster(roster))
         self.assertIsRelated(self.app['persons']['curtin'], g2, False)
-        self.assertEquals(imp.errors.groups, ['Nonexistent group'])
+        self.assertEquals(imp.errors.groups, ['Nonexistent section'])
         self.assertEquals(imp.errors.persons, ['Bogus person'])
         self.assertEquals(imp.errors.generic, [])
 

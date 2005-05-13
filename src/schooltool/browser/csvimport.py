@@ -389,7 +389,7 @@ class TimetableCSVImporter(object):
             for line in roster_txt.splitlines():
                 line = line.strip()
                 if group is None:
-                    group = self.findByTitle('groups', line,
+                    group = self.findByTitle('sections', line,
                                              self.errors.groups)
                     if group is None:
                         group = invalid
