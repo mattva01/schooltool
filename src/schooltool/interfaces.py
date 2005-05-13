@@ -28,7 +28,7 @@ from zope.interface import Interface, Attribute, implements
 from zope.app.location.interfaces import ILocation
 from zope.schema.interfaces import IField
 from zope.schema import Field, Object, Int, Text, TextLine, List, Set, Tuple
-from zope.schema import Dict, Date, Timedelta
+from zope.schema import Dict, Date, Timedelta, Bool
 from zope.app.container.interfaces import IContainer, IContained
 from zope.app.container.constraints import contains, containers
 
@@ -696,7 +696,6 @@ class ITimetableSource(Interface):
         """
 
 
-
 class ITimetableReplacedEvent(Interface):
     """Event that gets sent when a timetable is replaced."""
 
@@ -874,6 +873,18 @@ class IResourceContainer(sb.IResourceContainer):
     """SchoolTool's resource container"""
 
     contains(IResource)
+
+
+#
+#  Miscellaneous
+#
+
+
+class IPersonPreferences(sb.IPersonPreferences):
+
+    cal_periods = Bool(
+        title=_("Show periods"),
+        description=_("Show period names in daily view"))
 
 
 #

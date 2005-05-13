@@ -39,6 +39,13 @@
       factory="schoolbell.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
+  <adapter
+      for="schoolbell.app.interfaces.IHavePreferences"
+      provides=".interfaces.IPersonPreferences"
+      factory=".app.getPersonPreferences"
+      trusted="true"
+      />
+
   <!-- Events -->
 
   <subscriber
@@ -147,6 +154,12 @@
     <require permission="schoolbell.edit"
              interface=".interfaces.ITermWrite"
              set_schema=".interfaces.ITerm" />
+  </content>
+
+  <content class=".app.PersonPreferences">
+    <require permission="schoolbell.edit"
+        interface="schooltool.interfaces.IPersonPreferences"
+        set_schema="schooltool.interfaces.IPersonPreferences" />
   </content>
 
   <include package=".browser" />

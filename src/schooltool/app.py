@@ -29,7 +29,7 @@ from zope.app.container.btree import BTreeContainer
 from zope.app.container.contained import Contained
 from zope.app.container.sample import SampleContainer
 from zope.app.site.servicecontainer import SiteManagerContainer
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 
 from schoolbell.relationship import RelationshipProperty
 from schoolbell.app.interfaces import IHaveNotes
@@ -44,6 +44,7 @@ from schooltool.interfaces import IResourceContainer
 from schooltool.interfaces import IPerson, IGroup, IResource, ICourse
 from schooltool.interfaces import ISectionContained, ISectionContainer
 from schooltool.interfaces import ICourseContainer, ICourseContained
+from schooltool.interfaces import IPersonPreferences
 from schooltool.relationships import URIInstruction, URISection, URIInstructor
 from schooltool.relationships import URICourseSections, URICourse
 from schooltool.relationships import URISectionOfCourse
@@ -187,3 +188,29 @@ class ResourceContainer(sb.ResourceContainer):
     """A container for SchoolTool resources."""
 
     implements(IResourceContainer)
+
+
+class PersonPreferences(sb.PersonPreferences):
+
+    implements(IPersonPreferences)
+
+    cal_periods = True
+
+
+def getPersonPreferences(person):
+    """Adapt an IAnnotatable object to IPersonPreferences."""
+    prefs = sb.getPersonPreferences(person)
+    if IPersonPreferences.providedBy(prefs):
+        # A SchoolTool preferences object was found
+        return prefs
+    else:
+        # A SchoolBell preferences object was found.
+        # We need to replace it with a SchoolTool-specific one.
+        st_prefs = PersonPreferences()
+        st_prefs.__parent__ = person
+        for field in sb.IPersonPreferences:
+            value = getattr(prefs, field)
+            setattr(st_prefs, field, value)
+        annotations = IAnnotations(person)
+        annotations[sb.PERSON_PREFERENCES_KEY] = st_prefs
+        return st_prefs

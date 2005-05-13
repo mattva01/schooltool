@@ -218,6 +218,19 @@
       menu="schoolbell_actions" title="Edit"
       />
 
+    <!--
+    FIXME: zope.View is certainly not the right permission.
+    How can we say "a person may only edit their own preferences"?
+    -->
+  <page
+      name="preferences.html"
+      for="schooltool.interfaces.IPerson"
+      class="schooltool.browser.app.PersonPreferencesView"
+      template="templates/person_preferences.pt"
+      permission="zope.View"
+      menu="schoolbell_actions" 
+      title="Change Preferences" />
+
   <page
       name="view_macros"
       for="*"

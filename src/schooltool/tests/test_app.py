@@ -36,7 +36,6 @@ def doctest_SchoolToolApplication():
 
         >>> from schooltool.app import SchoolToolApplication
         >>> from schooltool.interfaces import ISchoolToolApplication
-        >>> from zope.interface.verify import verifyObject
 
         >>> app = SchoolToolApplication()
         >>> verifyObject(ISchoolToolApplication, app)
@@ -477,6 +476,71 @@ def doctest_CourseContainer():
         InvalidItemType: ...
 
     """
+
+def doctest_PersonPreferences():
+    """Tests for SchoolTool PersonPreferences.
+
+    Simple check against the interface:
+
+        >>> from schooltool.app import PersonPreferences
+        >>> prefs = PersonPreferences()
+        >>> from schooltool.interfaces import IPersonPreferences
+        >>> verifyObject(IPersonPreferences, prefs)
+        True
+
+    Check the getPersonPreferences function too:
+
+        >>> setup.placelessSetUp()
+        >>> setup.setUpAnnotations()
+
+        >>> from schooltool.app import Person, getPersonPreferences
+        >>> person = Person('person')
+        >>> prefs = getPersonPreferences(person)
+
+    `prefs` is the SchoolTool preferences object, not SchoolBell:
+
+        >>> prefs
+        <schooltool.app.PersonPreferences object at 0x...>
+
+        >>> prefs.cal_periods
+        True
+
+        >>> prefs.__parent__ is person
+        True
+
+    Called another time, getPersonPreferences() returns the same object:
+
+        >>> getPersonPreferences(person) is prefs
+        True
+
+    By the way, getPersonPreferences should preserve settings found in a
+    SchoolBell preferences object.
+
+        >>> from schoolbell.app import app as sb
+        >>> person = Person('person')
+        >>> old_prefs = sb.getPersonPreferences(person)
+        >>> old_prefs
+        <schoolbell.app.app.PersonPreferences object at 0x...>
+        >>> old_prefs.timezone = 'Europe/Vilnius'
+
+        >>> new_prefs = getPersonPreferences(person)
+        >>> new_prefs
+        <schooltool.app.PersonPreferences object at 0x...>
+        >>> new_prefs.timezone
+        'Europe/Vilnius'
+
+    Afterwards even the SchoolBell getPersonPreferences function returns the ST
+    preferences object.
+
+        >>> sb.getPersonPreferences(person) is new_prefs
+        True
+
+    We're done.
+
+        >>> setup.placelessTearDown()
+
+    """
+
 
 def test_suite():
     return unittest.TestSuite([
