@@ -175,11 +175,11 @@
       for="schooltool.interfaces.ISchoolToolApplication"
       class="schooltool.browser.csvimport.TimetableCSVImportView"
       template="templates/csvimport.pt"
-      permission="zope.View"
-      menu="zmi_views"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
       title="Import CSV"
       layer="SchoolToolLayer"
-      /> <!-- XXX zope.View is probably not appropriate here -->
+      />
 
   <page
       name="index.html"
