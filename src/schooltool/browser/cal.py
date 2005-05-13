@@ -40,7 +40,7 @@ class DailyCalendarView(SBDailyCalView):
     __used_for__ = ISchoolBellCalendar
 
     def calendarRows(self):
-        """Iterates over (title, start, duration) of time slots that make up
+        """Iterate over (title, start, duration) of time slots that make up
         the daily calendar.
         """
         person = IPerson(self.request.principal, None)
