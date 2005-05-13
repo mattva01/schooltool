@@ -342,6 +342,7 @@ class StandaloneServer(object):
     system_name = "SchoolBell"
 
     Options = Options
+    Person = Person
 
     AppFactory = SchoolBellApplication
     AppInterface = ISchoolBellApplication
@@ -418,7 +419,7 @@ class StandaloneServer(object):
             notify(ObjectAddedEvent(app))
             _('%s Manager') # mark for l10n
             manager_title = catalog.ugettext('%s Manager') % self.system_name
-            manager = Person('manager', manager_title)
+            manager = self.Person('manager', manager_title)
             manager.setPassword(self.system_name.lower())
             app['persons']['manager'] = manager
             roles = IPrincipalRoleManager(app)

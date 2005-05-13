@@ -394,7 +394,7 @@ def doctest_bootstrapSchoolBell():
         >>> 'user1' in root[ZopePublication.root_name]['persons']
         True
 
-    However it fails if the application root is not a schoolbell application
+    However it fails if the application root is not a SchoolBell application
 
         >>> root[ZopePublication.root_name] = 'the object is strange'
         >>> transaction.commit()
