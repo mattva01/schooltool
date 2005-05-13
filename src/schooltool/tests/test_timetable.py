@@ -443,7 +443,7 @@ class TestTimetableDay(EventTestMixin, unittest.TestCase):
         periods = ('1', '2', '3', '4')
         timetable = Timetable(['td'])
         ttd = TimetableDict()
-        ttd['a', 'key'] = timetable
+        ttd['a.key'] = timetable
         td = timetable['td'] = TimetableDay(periods)
 
         self.assertRaises(KeyError, td.__getitem__, "Mo")
@@ -1194,19 +1194,19 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
 
         td = TimetableDict()
         item = PersistentLocatableStub()
-        td['aa', 'bb'] = item
-        self.assertEqual(item.__name__, ('aa', 'bb'))
+        td['aa.bb'] = item
+        self.assertEqual(item.__name__, ('aa.bb'))
         self.assertEqual(item.__parent__, td)
-        self.assertEqual(item, td['aa', 'bb'])
+        self.assertEqual(item, td['aa.bb'])
 
         item2 = PersistentLocatableStub()
-        td['aa', 'bb'] = item2
-        self.assertEqual(item2, td['aa', 'bb'])
+        td['aa.bb'] = item2
+        self.assertEqual(item2, td['aa.bb'])
         self.assertEqual(item.__parent__, None)
         self.assertEqual(item.__name__, None)
 
-        del td['aa', 'bb']
-        self.assertRaises(KeyError, td.__getitem__, ('aa', 'bb'))
+        del td['aa.bb']
+        self.assertRaises(KeyError, td.__getitem__, ('aa.bb'))
         self.assertEqual(item2.__parent__, None)
         self.assertEqual(item2.__name__, None)
 
@@ -1216,42 +1216,55 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
 
         td = TimetableDict()
         item = PersistentLocatableStub()
-        td['aa', 'bb'] = item
+        td['aa.bb'] = item
         e = self.checkOneEventReceived()
         self.assert_(ITimetableReplacedEvent.providedBy(e))
         self.assert_(e.object is td.__parent__)
-        self.assertEquals(e.key, ('aa', 'bb'))
+        self.assertEquals(e.key, ('aa.bb'))
         self.assert_(e.old_timetable is None)
         self.assert_(e.new_timetable is item)
 
         self.clearEvents()
         item2 = PersistentLocatableStub()
-        td['aa', 'bb'] = item2
+        td['aa.bb'] = item2
         e = self.checkOneEventReceived()
         self.assert_(ITimetableReplacedEvent.providedBy(e))
         self.assert_(e.object is td.__parent__)
-        self.assertEquals(e.key, ('aa', 'bb'))
+        self.assertEquals(e.key, ('aa.bb'))
         self.assert_(e.old_timetable is item)
         self.assert_(e.new_timetable is item2)
 
         self.clearEvents()
-        del td['aa', 'bb']
+        del td['aa.bb']
         e = self.checkOneEventReceived()
         self.assert_(ITimetableReplacedEvent.providedBy(e))
         self.assert_(e.object is td.__parent__)
-        self.assertEquals(e.key, ('aa', 'bb'))
+        self.assertEquals(e.key, ('aa.bb'))
         self.assert_(e.old_timetable is item2)
         self.assert_(e.new_timetable is None)
 
     def test_clear(self):
         from schooltool.timetable import TimetableDict
         td = TimetableDict()
-        td['a', 'b'] = PersistentLocatableStub()
-        td['b', 'c'] = PersistentLocatableStub()
+        td['a.b'] = PersistentLocatableStub()
+        td['b.c'] = PersistentLocatableStub()
         self.clearEvents()
         td.clear()
         self.assertEquals(list(td.keys()), [])
         self.assertEquals(len(self.events), 2)
+
+    def test_validation(self):
+        from schooltool.timetable import TimetableDict
+        td = TimetableDict()
+        self.assertRaises(ValueError, td.__setitem__, 'a.b.c',
+                          PersistentLocatableStub())
+        self.assertRaises(ValueError, td.__setitem__, 'abc',
+                          PersistentLocatableStub())
+        self.assertRaises(ValueError, td.__setitem__, 'c.',
+                          PersistentLocatableStub())
+        self.assertRaises(ValueError, td.__setitem__, '.c',
+                          PersistentLocatableStub())
+        td['a.c'] = PersistentLocatableStub()
 
 
 class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
@@ -1262,15 +1275,11 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         from zope.app.traversing.interfaces import IPhysicallyLocatable
         from schooltool.interfaces import ITimetable, ITimetabled
         from schooltool.interfaces import ITimetableSource
-        from schooltool.timetable import TimetablePhysicallyLocatable
         from schooltool.timetable import MembershipTimetableSource
 
         self.site = setup.placefulSetUp(True)
         setup.setUpAnnotations()
         setUpRelationships()
-
-        ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
-                             TimetablePhysicallyLocatable)
 
         ztapi.subscribe((ITimetabled, ), ITimetableSource,
                         MembershipTimetableSource)
@@ -1301,7 +1310,7 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         self.assertEqual(tm.getCompositeTimetable("a", "b"), None)
         self.assertEqual(tm.listCompositeTimetables(), Set())
 
-        tt = tm.timetables["2003 fall", "sequential"] = self.newTimetable()
+        tt = tm.timetables["2003 fall.sequential"] = self.newTimetable()
 
         result = tm.getCompositeTimetable("2003 fall", "sequential")
         self.assertEqual(result, tt)
@@ -1344,7 +1353,7 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         private = self.newTimetable()
         math = TimetableActivity("Math")
         private["B"].add("Blue", math)
-        tm.timetables["2003 fall", "sequential"] = private
+        tm.timetables["2003 fall.sequential"] = private
 
         result = tm.getCompositeTimetable("2003 fall", "sequential")
         expected = composite.cloneEmpty()
@@ -1358,13 +1367,13 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         tm = TimetabledStub()
         tm.__name__ = 'stub'
         tm.__parent__ = self.site
-        tt = tm.timetables["2003-fall", "sequential"] = self.newTimetable()
+        tt = tm.timetables["2003-fall.sequential"] = self.newTimetable()
         tt1 = tm.getCompositeTimetable("2003-fall", "sequential")
 
         self.assertEqual(getPath(tt),
-                         '/stub/timetables/2003-fall/sequential')
+                         '/stub/timetables/2003-fall.sequential')
         self.assertEqual(getPath(tt1),
-                         '/stub/composite-timetables/2003-fall/sequential')
+                         '/stub/composite-timetables/2003-fall.sequential')
 
     def test_makeTimetableCalendar(self):
         from schooltool.timetable import TimetableActivity, Timetable
@@ -1396,10 +1405,10 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
                             timedelta(minutes=30), "AB")
         cal2.addEvent(ev2)
 
-        ttdict = {("2003 fall", "sequential"): tt1,
-                  ("2003 fall", "other"): tt2}
-        tm.getCompositeTimetable = lambda p, s: ttdict.get((p, s))
-        tm.listCompositeTimetables = ttdict.keys
+        ttdict = {"2003 fall.sequential": tt1,
+                  "2003 fall.other": tt2}
+        tm.getCompositeTimetable = lambda p, s: ttdict.get("%s.%s" % (p, s))
+        tm.listCompositeTimetables = lambda: [k.split(".") for k in ttdict.keys()]
 
         class TimetableModelStub:
             def createCalendar(this_self, schoolday_model, tt):
@@ -1422,16 +1431,10 @@ class BaseTimetableSourceTest(object):
 
     def setUp(self):
         from schoolbell.relationship.tests import setUpRelationships
-        from zope.app.traversing.interfaces import IPhysicallyLocatable
-        from schooltool.interfaces import ITimetable
-        from schooltool.timetable import TimetablePhysicallyLocatable
 
         self.site = setup.placefulSetUp(True)
         setup.setUpAnnotations()
         setUpRelationships()
-
-        ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
-                             TimetablePhysicallyLocatable)
 
     def tearDown(self):
         setup.placefulTearDown()
@@ -1702,11 +1705,11 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableEvents))
     suite.addTest(unittest.makeSuite(TestTimetablingPersistence))
     suite.addTest(unittest.makeSuite(TestTimetableCalendarEvent))
+    suite.addTest(unittest.makeSuite(TestTimetableDict))
     suite.addTest(unittest.makeSuite(TestSchooldayPeriod))
     suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
     suite.addTest(unittest.makeSuite(TestSequentialDaysTimetableModel))
     suite.addTest(unittest.makeSuite(TestWeeklyTimetableModel))
-    suite.addTest(unittest.makeSuite(TestTimetableDict))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaService))
     suite.addTest(unittest.makeSuite(TestTermContainer))
     suite.addTest(unittest.makeSuite(TestTimetabledMixin))

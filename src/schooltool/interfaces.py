@@ -25,6 +25,7 @@ $Id$
 import datetime
 
 from zope.interface import Interface, Attribute, implements
+from zope.interface.common.mapping import IReadMapping, IWriteMapping
 from zope.app.location.interfaces import ILocation
 from zope.schema.interfaces import IField
 from zope.schema import Field, Object, Int, Text, TextLine, List, Set, Tuple
@@ -631,21 +632,24 @@ class IExceptionalTTCalendarEvent(ICalendarEvent):
         schema=ITimetableException)
 
 
+class ITimetableDict(IReadMapping, IWriteMapping):
+    """Container for timetables.
+
+    The id of the timetable is composed by joining term id and
+    timetable schema id with a dot.  For example,"2005-fall.default"
+    means a timetable for a term "2005-fall" with a timetable schema
+    "default".
+    """
+
 class ITimetabled(Interface):
     """An object that has a timetable related to it -- either its own,
     or composed of the timetables of related objects.
     """
 
-    timetables = Dict(
+    timetables = Object(
+        schema=ITimetableDict,
         title=u"Private timetables of this object",
-        key_type=Tuple(title=u"Time period and timetable schema ids",
-                       description=u"""
-                       Tuples of (time_period_id, timetable_schema_id), e.g.,
-                       ('2004-autumn-semester', 'weekly')
-                       """),
-        value_type=Object(schema=ITimetable),
         description=u"""
-        A mapping of private timetables of this object.
 
         These timetables can be directly manipulated.  Adding, changing
         or removing a timetable will result in a ITimetableReplacedEvent

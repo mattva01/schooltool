@@ -187,13 +187,13 @@ class TestTimetableCSVImporter(unittest.TestCase):
         ok = imp.importTimetable(csv)
         self.assert_(ok, imp.errors)
         section = imp.findByTitle('sections', 'Math1 - Curtin')
-        tt = section.timetables['summer', 'three-day']
+        tt = section.timetables['summer.three-day']
         self.assert_(list(tt['Monday']['A']))
         self.assert_(not list(tt['Monday']['B']))
         self.assert_(list(tt['Monday']['C']))
 
         section2 = imp.findByTitle('sections', 'Math2 - Lorch')
-        tt2 = section2.timetables['summer', 'three-day']
+        tt2 = section2.timetables['summer.three-day']
         self.assert_(list(tt2['Monday']['A']))
         self.assert_(not list(tt2['Monday']['B']))
         self.assert_(not list(tt2['Monday']['C']))
@@ -220,7 +220,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
         # A little poking around.  We could be more comprehensive...
         section = imp.findByTitle('sections', 'English1 - Lorch')
-        tt = section.timetables['summer', 'three-day']
+        tt = section.timetables['summer.three-day']
         self.assert_(list(tt['Monday']['A']))
         self.assert_(not list(tt['Monday']['B']))
         self.assert_(not list(tt['Monday']['C']))
@@ -353,20 +353,20 @@ class TestTimetableCSVImporter(unittest.TestCase):
         ttday = tt['day1'] = TimetableDay(['A', 'B'])
         ttday.add('A', TimetableActivity(title="Sleeping"))
         ttday.add('B', TimetableActivity(title="Snoring"))
-        self.section.timetables['period1', 'some_schema'] = tt
+        self.section.timetables['period1.some_schema'] = tt
 
         tt2 = Timetable(['day2'])
         tt2day = tt2['day2'] = TimetableDay(['A', 'B'])
         tt2day.add('A', TimetableActivity(title="Working"))
-        self.section.timetables['period2', 'some_schema'] = tt2
+        self.section.timetables['period2.some_schema'] = tt2
 
         imp = self.createImporter()
         imp.period_id = 'period1'
         imp.ttschema = 'some_schema'
         imp.clearTimetables()
 
-        tt_notblank = self.section.timetables['period2', 'some_schema']
-        self.assert_(('period1', 'some_schema')
+        tt_notblank = self.section.timetables['period2.some_schema']
+        self.assert_(('period1.some_schema')
                      not in self.section.timetables.keys())
         self.assertEquals(len(list(tt_notblank.itercontent())), 1)
 
@@ -400,7 +400,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assertIsRelated(section, math101, rel=URISectionOfCourse)
         self.assertIsRelated(section, teacher, rel=URISection)
 
-        tt = section.timetables['period1', 'two_day']
+        tt = section.timetables['period1.two_day']
         activities = list(tt.itercontent())
         self.assertEquals(len(activities), 2)
         for day_id, period_id, activity in activities:

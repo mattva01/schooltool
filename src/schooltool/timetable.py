@@ -913,6 +913,10 @@ class TimetableDict(PersistentDict):
     __parent__ = None
 
     def __setitem__(self, key, value):
+        keys = key.split(".")
+        if len(keys) != 2 or not keys[0] or not keys[1]:
+            raise ValueError("The key should be composed of a term id and a"
+                             "schema id separated with a . (got %r)" % key)
         old_value = self.get(key)
         if old_value is not None:
             old_value.__parent__ = None
@@ -962,7 +966,6 @@ class TimetabledMixin:
 
     def getCompositeTimetable(self, period_id, schema_id):
         timetables = []
-
         # Get the timetables from timetable source subscription adapters
         for adapter in zapi.subscribers((self, ), ITimetableSource):
             tt = adapter.getTimetable(period_id, schema_id)
@@ -971,7 +974,7 @@ class TimetabledMixin:
 
         # Add the individual timetable to the composite
         try:
-            timetables.append(self.timetables[period_id, schema_id])
+            timetables.append(self.timetables["%s.%s" % (period_id, schema_id)])
         except KeyError:
             pass
 
@@ -986,12 +989,12 @@ class TimetabledMixin:
         parent = TimetableDict()
         parent.__parent__ = self
         parent.__name__ = 'composite-timetables'
-        parent[period_id, schema_id] = result
+        parent[".".join((period_id, schema_id))] = result
 
         return result
 
     def listCompositeTimetables(self):
-        keys = Set(self.timetables.keys())
+        keys = Set([tuple(k.split(".")) for k in self.timetables.keys()])
         for adapter in zapi.subscribers((self, ), ITimetableSource):
             keys |= adapter.listTimetables()
         return keys
@@ -1147,33 +1150,6 @@ def getPeriodsForDay(date):
 #
 # Module setup
 #
-
-class TimetablePhysicallyLocatable(LocationPhysicallyLocatable):
-    """A traversal adapter for timetables.
-
-    Timetables are special in that they have tuples (schema_id, period_id)
-    as their __name__, so the standard getPath() will not work on them.
-    """
-
-    adapts(ITimetable)
-
-    def getPath(self):
-        if ITimetableSchemaService.providedBy(self.context.__parent__):
-            # XXX Hacky!
-            #     This hack is necessary because at the moment timetable
-            #     objects in SchoolTool live in two places:
-            #       - some timetables live in the timetable schema service,
-            #         they have a regular unicode __name__, and their path
-            #         looks like "/parent/path/__name__"
-            #       - some timetables live in the timetables dict of an
-            #         ITimetabledObject, and their name is a tuple
-            #         (time_period_id, schema_id), and their path looks like
-            #         "/parent/path/time_period_id/schema_id"
-            path = LocationPhysicallyLocatable.getPath(self)
-        else:
-            path = (getPath(self.context.__parent__) + "/"
-                    + u"/".join(self.context.__name__))
-        return path
 
 
 def setUp():

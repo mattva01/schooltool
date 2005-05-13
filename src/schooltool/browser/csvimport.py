@@ -335,8 +335,9 @@ class TimetableCSVImporter(object):
     def clearTimetables(self):
         """Delete timetables of the period and schema we are dealing with."""
         for section in self.sections.values():
-            if (self.period_id, self.ttschema) in section.timetables.keys():
-                del section.timetables[self.period_id, self.ttschema]
+            key = ".".join((self.period_id, self.ttschema))
+            if key in section.timetables.keys():
+                del section.timetables[key]
 
     def scheduleClass(self, period, course_name, teacher,
                       day_ids, location, dry_run=False):
@@ -366,11 +367,12 @@ class TimetableCSVImporter(object):
             section.instructors.add(teacher)
 
         # Create the timetable if it does not exist yet.
-        if (self.period_id, self.ttschema) not in section.timetables.keys():
+        timetable_key = ".".join((self.period_id, self.ttschema))
+        if timetable_key not in section.timetables.keys():
             tt = self.app.timetableSchemaService[self.ttschema]
-            section.timetables[self.period_id, self.ttschema] = tt
+            section.timetables[timetable_key] = tt
         else:
-            tt = section.timetables[self.period_id, self.ttschema]
+            tt = section.timetables[timetable_key]
 
         # Add a new activity to the timetable
         act = TimetableActivity(title=course.title, owner=section,
