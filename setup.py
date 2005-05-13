@@ -190,11 +190,10 @@ setup(name="schoolbell",
         * Access controllable
         * Importable and exportable to iCal clients
             (e.g. Apple's iCal or Mozilla Sunbird)
-
-        And will:
         * Time zone aware
-        * Provide resource rooking
-        * Do anything else that makes sense
+        * Provide resource booking
+        * Support for Allday events
+        * Atom feed support for upcoming events
 
         All of this is accessible through a web interface which is simple,
         powerful and beautiful.
