@@ -36,6 +36,7 @@ from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.testing import setup, ztapi
 from zope.publisher.browser import TestRequest
 from zope.app.traversing.interfaces import IContainmentRoot
+from zope.app.filerepresentation.interfaces import IFileFactory
 
 from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin
 
@@ -217,8 +218,12 @@ class TestTermFile(QuietLibxml2Mixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.timetable import Term, TermContainer
+        from schooltool.interfaces import ITermContainer
+        from schooltool.rest.app import TermFileFactory
         from schooltool.rest.app import TermFile
         from schooltool.rest.app import TermView
+
+        ztapi.provideAdapter(ITermContainer, IFileFactory, TermFileFactory)
 
         self.terms = TermContainer()
         self.terms["calendar"] =  self.term = Term(

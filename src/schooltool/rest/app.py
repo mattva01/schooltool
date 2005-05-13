@@ -45,6 +45,7 @@ from schooltool.app import Person, Group, Resource
 from schooltool.common import parse_date
 from schooltool.interfaces import ITerm
 from schooltool.timetable import Term
+from schooltool.interfaces import ITermContainer
 
 from schooltool import SchoolToolMessageID as _
 
@@ -78,10 +79,10 @@ class TermContainerView(GenericContainerView):
 
 
 class TermFileFactory(object):
-    """A superclass for ApplicationObjectContainer to FileFactory adapters."""
+    """Adapter adapting ITermContainer to FileFactory."""
 
     implements(IFileFactory)
-    adapts(ITerm)
+    adapts(ITermContainer)
 
     complex_prop_names = ('RRULE', 'RDATE', 'EXRULE', 'EXDATE')
 
@@ -233,7 +234,6 @@ class TermFile(object):
 
     adapts(ITerm)
     implements(IWriteFile)
-    factory = TermFileFactory
 
     def __init__(self, context):
         self.context = context
@@ -241,7 +241,7 @@ class TermFile(object):
     def write(self, data):
         """See IWriteFile"""
         container = self.context.__parent__
-        factory = self.factory(container)
+        factory = IFileFactory(container)
 
         if factory.isDataICal(data):
             term = factory.parseText(data)
