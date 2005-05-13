@@ -25,8 +25,10 @@ $Id$
 import unittest
 from datetime import date, timedelta, time
 from zope.testing import doctest
+from zope.app.tests import setup, ztapi
 from zope.publisher.browser import TestRequest
 from schoolbell.app.browser.tests.setup import setUp, tearDown
+
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable import SequentialDaysTimetableModel
 
@@ -34,6 +36,17 @@ from schooltool.timetable import SequentialDaysTimetableModel
 class TestDailyCalendarView(unittest.TestCase):
 
     def setUp(self):
+        from schooltool.app import getPersonPreferences
+        from schooltool.interfaces import IPersonPreferences
+        from schoolbell.app.interfaces import IHavePreferences
+
+        # set up adaptation (the view checks user preferences)
+        setup.placelessSetUp()
+        setup.setUpAnnotations()
+        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
+                             getPersonPreferences)
+
+
         # set up the site
         from schooltool.app import SchoolToolApplication, Person
         app = SchoolToolApplication()
@@ -64,9 +77,11 @@ class TestDailyCalendarView(unittest.TestCase):
                                            date(2004, 12, 31))
         term.add(date(2004, 11, 5))
 
+    def tearDown(self):
+        setup.placelessTearDown()
+
     def createSchema(self, days, *periods_for_each_day):
         """Create a timetable schema."""
-
         from schooltool.timetable import Timetable
         from schooltool.timetable import TimetableDay
         schema = Timetable(days)
@@ -78,7 +93,9 @@ class TestDailyCalendarView(unittest.TestCase):
         from schooltool.browser.cal import DailyCalendarView
         from schooltool.common import parse_datetime
 
-        view = DailyCalendarView(self.person.calendar, TestRequest())
+        request = TestRequest()
+        request.setPrincipal(self.person)
+        view = DailyCalendarView(self.person.calendar, request)
         view.cursor = date(2004, 11, 5)
 
         result = list(view.calendarRows())
@@ -100,6 +117,27 @@ class TestDailyCalendarView(unittest.TestCase):
                     ("17:00", dt('17:00'), timedelta(hours=1)),
                     ("18:00", dt('18:00'), timedelta(hours=1))]
 
+        self.assertEquals(result, expected)
+
+    def test_calendarRows_no_periods(self):
+        from schooltool.browser.cal import DailyCalendarView
+        from schooltool.common import parse_datetime
+        from schooltool.app import getPersonPreferences
+
+        prefs = getPersonPreferences(self.person)
+        prefs.cal_periods = False # do not show periods
+        request = TestRequest()
+        request.setPrincipal(self.person)
+        view = DailyCalendarView(self.person.calendar, request)
+        view.cursor = date(2004, 11, 5)
+
+        result = list(view.calendarRows())
+
+        def dt(timestr):
+            return parse_datetime('2004-11-05 %s:00' % timestr)
+
+        expected = [("%d:00" % i, dt('%d:00' % i), timedelta(hours=1))
+                    for i in range(8, 19)]
         self.assertEquals(result, expected)
 
 

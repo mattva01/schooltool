@@ -27,6 +27,7 @@ from datetime import datetime, time, timedelta
 from schoolbell.app.browser.cal import DailyCalendarView as SBDailyCalView
 from schoolbell.app.interfaces import ISchoolBellCalendar
 from schooltool.timetable import getPeriodsForDay
+from schooltool.interfaces import IPersonPreferences, IPerson
 
 
 class DailyCalendarView(SBDailyCalView):
@@ -42,11 +43,17 @@ class DailyCalendarView(SBDailyCalView):
         """Iterates over (title, start, duration) of time slots that make up
         the daily calendar.
         """
-# TODO: show periods only if set in preferences
-#        if self.request.getCookie('cal_periods') != 'no':
-        periods = getPeriodsForDay(self.cursor)
-#        else:
-#            periods = []
+        person = IPerson(self.request.principal, None)
+        if person is not None:
+            prefs = IPersonPreferences(person)
+            show_periods = prefs.cal_periods
+        else:
+            show_periods = False # XXX or should True be the default?
+
+        if show_periods:
+            periods = getPeriodsForDay(self.cursor)
+        else:
+            periods = []
         today = datetime.combine(self.cursor, time())
         row_ends = [today + timedelta(hours=hour + 1)
                     for hour in range(self.starthour, self.endhour)]
