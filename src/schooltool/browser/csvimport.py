@@ -71,9 +71,12 @@ class TimetableCSVImportView(BrowserView):
                                  ' (incorrect charset?).'))
             return
 
-        ok = True
+        # XXX This removeSecurityProxy is here until we get proper security
+        #     declarations for the various objects that TimetableCSVImporter
+        #     touches (mostly timetable-related stuff).
         root = removeSecurityProxy(self.context)
         importer = TimetableCSVImporter(root, charset)
+        ok = True
         if timetable_csv:
             ok = importer.importTimetable(timetable_csv)
             if ok:
