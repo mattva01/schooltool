@@ -30,7 +30,7 @@ from zope.app.http.put import FilePUT
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
-from schoolbell.app.rest import View, Template, textErrorPage, IRestTraverser
+from schoolbell.app.rest import View, Template, IRestTraverser
 from schoolbell.app.rest.xmlparsing import XMLValidationError, XMLParseError
 from schoolbell.app.rest.xmlparsing import XMLDocument
 from schoolbell.calendar.icalendar import convert_calendar_to_ical

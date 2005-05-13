@@ -82,20 +82,6 @@ class View(object):
         return ""
 
 
-def textErrorPage(response, message, code=400, reason=None):
-    """Renders a simple error page and sets the HTTP status code and reason.
-
-    Since textErrorPage is used in low-level parts of schooltool.main.Request,
-    it cannot rely on the Unicode processing happening in View.render and must
-    always return an 8-bit string with the appropriate charset set in the
-    Content-Type header.
-    """
-
-    response.setStatus(code, reason)
-    response.setHeader('Content-Type', 'text/plain; charset=UTF-8')
-    return unicode(message).encode('UTF-8')
-
-
 class IRestTraverser(IPublishTraverse):
     """A named traverser for ReSTive views."""
 
