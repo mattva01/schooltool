@@ -61,8 +61,11 @@ edit-coverage-reports:
 vi-coverage-reports:
 	@cd coverage && vi '+/^>>>>>>/' `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
 
+Zope3/principals.zcml:
+	[ -f Zope3/principals.zcml ] && touch Zope3/principals.zcml || cp Zope3/sample_principals.zcml Zope3/principals.zcml
+
 .PHONY: schooltooldist
-schooltooldist: realclean build extract-translations clean
+schooltooldist: realclean build Zope3/principals.zcml extract-translations clean
 	rm -rf dist
 	fakeroot ./debian/rules clean
 	./setup.py sdist
