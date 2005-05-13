@@ -181,7 +181,7 @@ class ApplicationObjectFile(object):
     def write(self, data):
         """See IWriteFile"""
         container = self.context.__parent__
-        factory = self.factory(container)
+        factory = IFileFactory(container)
         kwargs = factory.parseXML(data)
         self.modify(**kwargs)
 
@@ -190,7 +190,6 @@ class GroupFile(ApplicationObjectFile):
     """Adapter that adapts IGroup to IWriteFile"""
 
     adapts(IGroup)
-    factory = GroupFileFactory
 
     def modify(self, title=None, description=None):
         """Modifies underlying schema."""
@@ -202,7 +201,6 @@ class ResourceFile(ApplicationObjectFile):
     """Adapter that adapts IResource to IWriteFile"""
 
     adapts(IResource)
-    factory = ResourceFileFactory
 
     def modify(self, title=None, description=None):
         """Modifies underlying object."""
@@ -214,7 +212,6 @@ class PersonFile(ApplicationObjectFile):
     """Adapter that adapts IPerson to IWriteFile"""
 
     adapts(IPerson)
-    factory = PersonFileFactory
 
     def modify(self, title=None):
         """Modifies underlying object."""

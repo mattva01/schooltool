@@ -36,6 +36,8 @@ from zope.publisher.browser import TestRequest
 from zope.app.testing import setup
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.container.interfaces import INameChooser
+from zope.app.component.testing import PlacefulSetup
+
 import zope
 
 from schoolbell.app.app import SimpleNameChooser, Group, Person, Resource
@@ -397,11 +399,33 @@ class TestPersonFileFactory(unittest.TestCase):
         self.assertEquals(person.title, "New Person")
 
 
-class TestGroupFile(unittest.TestCase):
+class FileFactoriesSetUp(PlacefulSetup):
+
+    def setUp(self):
+        from schoolbell.app.rest.app import PersonFileFactory
+        from schoolbell.app.rest.app import GroupFileFactory
+        from schoolbell.app.rest.app import ResourceFileFactory
+        from zope.app.filerepresentation.interfaces import IFileFactory
+        PlacefulSetup.setUp(self)
+        ztapi.provideAdapter(IPersonContainer,
+                             IFileFactory,
+                             PersonFileFactory)
+        ztapi.provideAdapter(IGroupContainer,
+                             IFileFactory,
+                             GroupFileFactory)
+        ztapi.provideAdapter(IResourceContainer,
+                             IFileFactory,
+                             ResourceFileFactory)
+
+
+class TestGroupFile(FileFactoriesSetUp, unittest.TestCase):
     """A test for IGroup IWriteFile adapter"""
 
     def testWrite(self):
+        from schoolbell.app.app import GroupContainer
+        gc = GroupContainer()
         group = Group("Lillies")
+        gc['group1'] = group
 
         file = GroupFile(group)
         file.write('''<object xmlns="http://schooltool.org/ns/model/0.1"
@@ -412,11 +436,14 @@ class TestGroupFile(unittest.TestCase):
         self.assertEquals(group.description, "Boo")
 
 
-class TestResourceFile(unittest.TestCase):
+class TestResourceFile(FileFactoriesSetUp, unittest.TestCase):
     """A test for IResource IWriteFile adapter"""
 
     def testWrite(self):
+        from schoolbell.app.app import ResourceContainer
+        rc = ResourceContainer()
         resource = Resource("Mud")
+        rc['resource'] = resource
 
         file = ResourceFile(resource)
         file.write('''<object xmlns="http://schooltool.org/ns/model/0.1"
@@ -427,11 +454,14 @@ class TestResourceFile(unittest.TestCase):
         self.assertEquals(resource.description, "Baa")
 
 
-class TestPersonFile(unittest.TestCase):
+class TestPersonFile(FileFactoriesSetUp, unittest.TestCase):
     """A test for IPerson IWriteFile adapter"""
 
     def testWrite(self):
+        from schoolbell.app.app import PersonContainer
+        pc = PersonContainer()
         person = Person("Frog")
+        pc['frog'] = person
 
         file = PersonFile(person)
         file.write('''<object xmlns="http://schooltool.org/ns/model/0.1"
