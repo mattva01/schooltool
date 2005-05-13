@@ -332,34 +332,32 @@ class PersonPreferencesView(BrowserView):
     error = None
     message = None
 
+    schema = IPersonPreferences
+    fields = 'timezone', 'timeformat', 'dateformat', 'weekstart'
+
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
 
-        prefs = IPersonPreferences(self.context)
-        initial = {'timezone': prefs.timezone,
-                   'timeformat': prefs.timeformat,
-                   'dateformat': prefs.dateformat,
-                   'weekstart': prefs.weekstart}
+        prefs = self.schema(self.context)
+        initial = {}
+        for field in self.schema:
+            initial[field] = getattr(prefs, field)
 
-        setUpWidgets(self, IPersonPreferences, IInputWidget,
-                     initial=initial)
+        setUpWidgets(self, self.schema, IInputWidget, initial=initial)
 
     def update(self):
         if 'CANCEL' in self.request:
             url = zapi.absoluteURL(self.context, self.request)
             self.request.response.redirect(url)
-
-        if 'UPDATE_SUBMIT' in self.request:
+        elif 'UPDATE_SUBMIT' in self.request:
             try:
-                data = getWidgetsData(self, IPersonPreferences)
+                data = getWidgetsData(self, self.schema)
             except WidgetsError:
                 return # Errors will be displayed next to widgets
 
             prefs = IPersonPreferences(self.context)
-            prefs.timezone = data['timezone']
-            prefs.timeformat = data['timeformat']
-            prefs.dateformat = data['dateformat']
-            prefs.weekstart = data['weekstart']
+            for field in self.fields:
+                setattr(prefs, field, data[field])
 
 
 class PersonDetailsView(BrowserView):
