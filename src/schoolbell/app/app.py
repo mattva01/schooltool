@@ -51,6 +51,9 @@ from schoolbell.app.overlay import OverlaidCalendarsProperty
 from schoolbell.relationship import RelationshipProperty
 
 
+PERSON_PREFERENCES_KEY = 'schoolbell.app.PersonPreferences'
+
+
 class SchoolBellApplication(Persistent, SampleContainer,
                             SiteManagerContainer):
     """The main application object.
@@ -214,25 +217,24 @@ class PersonPreferences(Persistent):
 def getPersonPreferences(person):
     """Adapt an IAnnotatable object to IPersonPreferences."""
     annotations = IAnnotations(person)
-    key = 'schoolbell.app.PersonPreferences'
     try:
-        return annotations[key]
+        return annotations[PERSON_PREFERENCES_KEY]
     except KeyError:
-        annotations[key] = PersonPreferences()
-        annotations[key].__parent__ = person
-        return annotations[key]
+        prefs = PersonPreferences()
+        prefs.__parent__ = person
+        annotations[PERSON_PREFERENCES_KEY] = prefs
+        return prefs
 
 
 class PersonDetails(Persistent):
 
     implements(IPersonDetails)
 
-    def __init__(self, nickname = None, primary_email=None,
-            secondary_email=None, primary_phone=None, secondary_phone=None,
-            mailing_address=None,home_page=None):
+    __name__ = 'details'
 
-        self.__name__ = 'details'
-
+    def __init__(self, nickname=None, primary_email=None,
+                 secondary_email=None, primary_phone=None,
+                 secondary_phone=None, mailing_address=None, home_page=None):
         self.nickname = nickname
         self.primary_email = primary_email
         self.secondary_email = secondary_email
