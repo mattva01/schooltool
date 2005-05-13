@@ -242,6 +242,17 @@
       layer=".skin.ISchoolToolLayer"
       />
 
+  <!-- Timetabling -->
+  <page
+      name="newschema.html"
+      for="schooltool.interfaces.ITimetableSchemaService"
+      class="schooltool.browser.timetable.TimetableSchemaWizard"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="New Schema"
+      />
+
+  <!-- Skin -->
   <page
       name="view_macros"
       for="*"

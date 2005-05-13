@@ -50,6 +50,19 @@
       trusted="true"
       />
 
+  <!-- Utilities -->
+  <utility
+      provides="schooltool.interfaces.ITimetableModelFactory"
+      name="SequentialDaysTimetableModel"
+      component="schooltool.timetable.SequentialDaysTimetableModel"
+      />
+
+  <utility
+      provides="schooltool.interfaces.ITimetableModelFactory"
+      name="WeeklyTimetableModel"
+      component="schooltool.timetable.WeeklyTimetableModel"
+      />
+
   <!-- Events -->
 
   <subscriber
@@ -57,7 +70,7 @@
       handler=".relationships.enforceInstructionConstraints"
     />
 
-  <!-- Content -->
+  <!-- Application objects -->
   <content class=".app.SchoolToolApplication">
     <allow interface=".interfaces.ISchoolToolApplication" />
     <allow attributes="getSiteManager" />
@@ -165,6 +178,13 @@
         set_schema="schooltool.interfaces.IPersonPreferences" />
   </content>
 
+  <content class=".timetable.TimetableSchemaService">
+    <require permission="schoolbell.create"
+        attributes="__setitem__ __delitem__" />
+    <allow attributes="getDefault default_id keys __getitem__" />
+  </content>
+
+  <!-- Views -->
   <include package=".browser" />
   <include package=".rest" />
 

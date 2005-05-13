@@ -1145,15 +1145,3 @@ def getPeriodsForDay(date):
         return []
     ttschema = ttservice.getDefault()
     return ttschema.model.periodsInDay(schooldays, ttschema, date)
-
-
-#
-# Module setup
-#
-
-
-def setUp():
-    provideAdapter(TimetablePhysicallyLocatable)
-    registerTimetableModel('SequentialDaysTimetableModel',
-                           SequentialDaysTimetableModel)
-    registerTimetableModel('WeeklyTimetableModel', WeeklyTimetableModel)
