@@ -1,4 +1,4 @@
-<metal:block define-macro="page" i18n:domain="schoolbell">
+<metal:block define-macro="page" i18n:domain="schooltool">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
@@ -16,7 +16,7 @@
             tal:attributes="src context/++resource++schoolbell.js">
     </script>
     <metal:block define-slot="title">
-      <title i18n:translate="">SchoolBell</title>
+      <title i18n:translate="">SchoolTool</title>
     </metal:block>
     <metal:block metal:define-slot="extrahead" />
   </head>
@@ -66,7 +66,7 @@
               <tal:if condition="person">
                 <a id="tools-principal" i18n:translate=""
                   tal:attributes="href person/@@absolute_url"
-                  tal:content="user/title">Schoolbell Person</a> |
+                  tal:content="user/title">SchoolTool Person</a> |
                 <a id="tools-calendar" i18n:translate=""
                   tal:attributes="href person/calendar/@@absolute_url"
                   >My Calendar</a> |
