@@ -96,6 +96,7 @@ class TimetableCSVImportView(BrowserView):
             ('day_ids', _("Day ids not defined in selected schema: %s.")),
             ('periods', _("Periods not defined in selected days: %s.")),
             ('persons', _("Persons not found: %s.")),
+            ('courses', _("Courses not found: %s.")),
             ('sections', _("Sections not found: %s.")),
             ('locations', _("Locations not found: %s.")),
             ('records', _("Invalid records: %s."))]:
