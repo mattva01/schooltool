@@ -60,7 +60,7 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
     def __init__(self):
         SampleContainer.__init__(self)
         self['persons'] = PersonContainer()
-        self['groups'] = groups = GroupContainer()
+        self['groups'] = GroupContainer()
         self['resources'] = ResourceContainer()
         self['terms'] = TermContainer()
         self['courses'] = CourseContainer()
