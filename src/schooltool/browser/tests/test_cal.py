@@ -140,6 +140,25 @@ class TestDailyCalendarView(unittest.TestCase):
                     for i in range(8, 19)]
         self.assertEquals(result, expected)
 
+    def test_calendarRows_default(self):
+        from schooltool.browser.cal import DailyCalendarView
+        from schooltool.common import parse_datetime
+
+        request = TestRequest()
+        # do not set the principal
+        view = DailyCalendarView(self.person.calendar, request)
+        view.cursor = date(2004, 11, 5)
+
+        result = list(view.calendarRows())
+
+        def dt(timestr):
+            return parse_datetime('2004-11-05 %s:00' % timestr)
+
+        # the default is not to show periods
+        expected = [("%d:00" % i, dt('%d:00' % i), timedelta(hours=1))
+                    for i in range(8, 19)]
+        self.assertEquals(result, expected)
+
 
 def test_suite():
     suite = unittest.TestSuite()
