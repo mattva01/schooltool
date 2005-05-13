@@ -2783,29 +2783,38 @@ class TestDailyCalendarView(unittest.TestCase):
         result = list(view.getHours())
         self.assertEquals(result,
                           [{'duration': 60, 'time': '10:00',
-                            'title': '10:00', 'cols': (None,)},
+                            'title': '10:00', 'cols': (None,),
+                            'top': 0.0, 'height': 4.0},
                            {'duration': 60, 'time': '11:00',
-                            'title': '11:00', 'cols': (None,)},
+                            'title': '11:00', 'cols': (None,),
+                            'top': 4.0, 'height': 4.0},
                            {'duration': 60, 'time': '12:00',
-                            'title': '12:00', 'cols': (None,)},
+                            'title': '12:00', 'cols': (None,),
+                            'top': 8.0, 'height': 4.0},
                            {'duration': 60, 'time': '13:00',
-                            'title': '13:00', 'cols': (None,)},
+                            'title': '13:00', 'cols': (None,),
+                            'top': 12.0, 'height': 4.0},
                            {'duration': 60, 'time': '14:00',
-                            'title': '14:00', 'cols': (None,)},
+                            'title': '14:00', 'cols': (None,),
+                            'top': 16.0, 'height': 4.0},
                            {'duration': 60, 'time': '15:00',
-                            'title': '15:00', 'cols': (None,)},])
+                            'title': '15:00', 'cols': (None,),
+                            'top': 20.0, 'height': 4.0},
+                            ])
 
         ev1 = createEvent('2004-08-12 12:00', '2h', "Meeting")
         cal.addEvent(ev1)
         result = list(view.getHours())
 
-        def clearTimeAndDuration(l):
+        def clearMisc(l):
             for d in l:
                 del d['time']
                 del d['duration']
+                del d['top']
+                del d['height']
             return l
 
-        result = clearTimeAndDuration(result)
+        result = clearMisc(result)
         self.assertEquals(result,
                           [{'title': '10:00', 'cols': (None,)},
                            {'title': '11:00', 'cols': (None,)},
@@ -2828,7 +2837,7 @@ class TestDailyCalendarView(unittest.TestCase):
         cal.addEvent(ev3)
 
         result = list(view.getHours())
-        self.assertEquals(clearTimeAndDuration(result),
+        self.assertEquals(clearMisc(result),
                           [{'title': '10:00', 'cols': (None, None)},
                            {'title': '11:00', 'cols': (None, None)},
                            {'title': '12:00', 'cols': (ev1, None)},
@@ -2840,7 +2849,7 @@ class TestDailyCalendarView(unittest.TestCase):
         cal.addEvent(ev4)
 
         result = list(view.getHours())
-        self.assertEquals(clearTimeAndDuration(result),
+        self.assertEquals(clearMisc(result),
                           [{'title': '00:00', 'cols': (ev4, None, None)},
                            {'title': '01:00', 'cols': ('', None, None)},
                            {'title': '02:00', 'cols': ('', None, None)},

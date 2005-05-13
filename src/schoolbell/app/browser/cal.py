@@ -919,6 +919,7 @@ class DailyCalendarView(CalendarViewBase):
         events = self.dayEvents(self.cursor)
         self._setRange(events)
         slots = Slots()
+        top = 0
         for title, start, duration in self.calendarRows():
             end = start + duration
             hour = start.hour
@@ -947,10 +948,16 @@ class DailyCalendarView(CalendarViewBase):
                     # Either None, or new event
                     cols.append(ev)
 
-            yield {'title': title, 'cols': tuple(cols),
+            height = duration.seconds / 900.0
+            yield {'title': height > 1.5 and title or '',
+                   'cols': tuple(cols),
                    'time': start.strftime("%H:%M"),
+                   'top': top,
+                   'height': height,
                    # We can trust no period will be longer than a day
                    'duration': duration.seconds // 60}
+
+            top += height
 
     def rowspan(self, event):
         """Calculate how many calendar rows the event will take today."""
@@ -971,8 +978,7 @@ class DailyCalendarView(CalendarViewBase):
         Clips dt so that it is never outside today's box.
         """
         dtaware = dt.replace(tzinfo=self.timezone)
-        base = datetime.combine(self.cursor,
-                time(tzinfo=self.timezone))
+        base = datetime.combine(self.cursor, time(tzinfo=self.timezone))
         display_start = base + timedelta(hours=self.starthour)
         display_end = base + timedelta(hours=self.endhour)
         clipped_dt = max(display_start, min(dtaware, display_end))
