@@ -25,9 +25,9 @@ $Id$
 from datetime import datetime, time, timedelta
 
 from schoolbell.app.browser.cal import DailyCalendarView as SBDailyCalView
-from schoolbell.app.interfaces import ISchoolBellCalendar
+from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
 from schooltool.timetable import getPeriodsForDay
-from schooltool.interfaces import IPersonPreferences, IPerson
+from schooltool.interfaces import IPersonPreferences
 
 
 class DailyCalendarView(SBDailyCalView):
