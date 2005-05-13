@@ -65,10 +65,7 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
         self['terms'] = TermContainer()
         self['courses'] = CourseContainer()
         self['sections'] = SectionContainer()
-
-        self.timetableSchemaService = TimetableSchemaService()
-        self.timetableSchemaService.__parent__ = self
-        self.timetableSchemaService.__name__ = 'ttschemas'
+        self['ttschemas'] = TimetableSchemaService()
 
     def _newContainerData(self):
         return PersistentDict()

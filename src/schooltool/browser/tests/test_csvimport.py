@@ -48,7 +48,7 @@ class TestTimetableCSVImportView(unittest.TestCase):
         ttschema = Timetable(["1","2","3"])
         for day in range(1, 4):
             ttschema[str(day)] = TimetableDay([str(day)])
-        self.app.timetableSchemaService['three-day'] = ttschema
+        self.app['ttschemas']['three-day'] = ttschema
 
     def tearDown(self):
         tearDownRelationshipStuff()
@@ -122,8 +122,8 @@ class TestTimetableCSVImportView(unittest.TestCase):
                                         " (incorrect charset?)."])
 
     def test_POST_utf8(self):
-        ttschema = self.app.timetableSchemaService[u'three-day']
-        self.app.timetableSchemaService[u'three-day \u263b'] = ttschema
+        ttschema = self.app["ttschemas"][u'three-day']
+        self.app["ttschemas"][u'three-day \u263b'] = ttschema
         tt_csv = StringIO('"whatever","three-day \xe2\x98\xbb"')
         view = self.createView(form={'timetable.csv': tt_csv,
                                      'roster.txt': '',
@@ -154,7 +154,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         ttschema = Timetable(self.days)
         for day in self.days:
             ttschema[day] = TimetableDay(self.periods)
-        self.app.timetableSchemaService['three-day'] = ttschema
+        self.app["ttschemas"]['three-day'] = ttschema
 
         # add some people and groups
         for title in ['Curtin', 'Lorch', 'Guzman']:
@@ -384,7 +384,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         ttschema = Timetable(("day1", "day2"))
         ttschema["day1"] = TimetableDay(("A", "B"))
         ttschema["day2"] = TimetableDay(("A", "B"))
-        self.app.timetableSchemaService['two_day'] = ttschema
+        self.app["ttschemas"]['two_day'] = ttschema
 
         imp.scheduleClass('A', 'Math 101', 'Prof. Bar',
                           day_ids=['day1', 'day2'], location='Inside',

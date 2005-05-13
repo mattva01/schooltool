@@ -771,7 +771,7 @@ class TestTimetableSchemaWizard(NiceDiffsMixin, unittest.TestCase):
 
     def createView(self, request=None):
         from schooltool.browser.timetable import TimetableSchemaWizard
-        context = self.app.timetableSchemaService
+        context = self.app["ttschemas"]
         context['default'] = createSchema(['Day 1'], ['Period 1'])
         if request is None:
             request = TestRequest()

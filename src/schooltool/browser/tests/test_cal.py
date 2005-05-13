@@ -77,7 +77,7 @@ class TestDailyCalendarView(unittest.TestCase):
         template.add(SchooldayPeriod('4', time(12, 30), timedelta(hours=1)))
         schema.model = SequentialDaysTimetableModel(days, {None: template})
 
-        app.timetableSchemaService['default'] = schema
+        app['ttschemas']['default'] = schema
 
         # set up terms
         from schooltool.timetable import Term

@@ -186,7 +186,7 @@ class TimetableCSVImporter(object):
             return False
 
         self.period_id, self.ttschema = rows[0]
-        if self.ttschema not in self.app.timetableSchemaService.keys():
+        if self.ttschema not in self.app["ttschemas"].keys():
             self.errors.generic.append(
                 _("The timetable schema %s does not exist." % self.ttschema))
             return False
@@ -290,7 +290,7 @@ class TimetableCSVImporter(object):
 
     def validatePeriods(self, day_ids, periods):
         """Check if all periods are defined in the timetable schema."""
-        tt = self.app.timetableSchemaService[self.ttschema]
+        tt = self.app["ttschemas"][self.ttschema]
         for day_id in day_ids:
             if day_id not in tt.keys():
                 if day_id not in self.errors.day_ids:
@@ -375,7 +375,7 @@ class TimetableCSVImporter(object):
         # Create the timetable if it does not exist yet.
         timetable_key = ".".join((self.period_id, self.ttschema))
         if timetable_key not in section.timetables.keys():
-            tt = self.app.timetableSchemaService[self.ttschema]
+            tt = self.app["ttschemas"][self.ttschema]
             section.timetables[timetable_key] = tt
         else:
             tt = section.timetables[timetable_key]

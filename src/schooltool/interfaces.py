@@ -904,8 +904,6 @@ class ISchoolToolApplication(sb.ISchoolBellApplication):
         'groups' - IGroupContainer
         'resources' - IResourceContainer
         'terms' - ITermContainer
+        'ttschemas' - ITimetableSchemaService
     """
-
-    timetableSchemaService = Object(title=u"Timetable schemas",
-                                    schema=ITimetableSchemaService)
 

@@ -1385,7 +1385,7 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         app.setSiteManager(LocalSiteManager(app))
         setSite(app)
         term = app["terms"]['2003 fall'] = TermStub()
-        tss = app.timetableSchemaService
+        tss = app["ttschemas"]
         tss['sequential'] = self.newTimetable()
         tss['other'] = self.newTimetable()
         tss['and another'] = self.newTimetable()
@@ -1664,7 +1664,7 @@ class TestGetPeriodsForDay(PlacelessSetup, unittest.TestCase):
 
         tt.model = TimetableModelStub()
         self.tt = tt
-        app.timetableSchemaService['default'] = tt
+        app["ttschemas"]['default'] = tt
         self.app = app
 
     def test_getTermForDate(self):
@@ -1690,7 +1690,7 @@ class TestGetPeriodsForDay(PlacelessSetup, unittest.TestCase):
                           [])
 
         # If there is no timetable schema, we return []
-        self.app.timetableSchemaService.default_id = None
+        self.app["ttschemas"].default_id = None
         self.assertEquals(getPeriodsForDay(date(2004, 10, 14)),
                           [])
 

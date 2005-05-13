@@ -240,7 +240,7 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
         from schooltool.interfaces import ITimetableModelFactory
 
         self.app = SchoolToolApplication()
-        self.schemaService = self.app.timetableSchemaService
+        self.schemaService = self.app["ttschemas"]
 
         ztapi.provideAdapter(ITimetableSchemaService, IFileFactory,
                              TimetableSchemaFileFactory)

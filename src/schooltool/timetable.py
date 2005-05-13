@@ -1140,7 +1140,7 @@ def getPeriodsForDay(date):
     time periods, or it happens to be a holiday).
     """
     schooldays = getTermForDate(date)
-    ttservice = getSchoolToolApplication().timetableSchemaService
+    ttservice = getSchoolToolApplication()['ttschemas']
     if ttservice.default_id is None or schooldays is None:
         return []
     ttschema = ttservice.getDefault()
