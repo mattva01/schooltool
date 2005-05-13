@@ -1,0 +1,125 @@
+<tal:defs define="status view/update" />
+<html metal:use-macro="view/@@standard_macros/calendar-page" i18n:domain="schoolbell">
+<metal:block fill-slot="calendar-body">
+
+<div id="events-allday">
+  <tal:loop repeat="allday view/getAllDayEvents">
+    <div class="event-allday"
+      tal:define="evdate python:allday.dtstart.strftime('%Y-%m-%d')"
+      tal:attributes="style string:border: 1px ${allday/color2} solid;;
+                      background: ${allday/color1};;">
+      <h6>
+        <a tal:attributes="href allday/@@absolute_url;
+          title allday/description" tal:content="allday/title"/>
+      </h6>
+          <a title="" i18n:attributes="title" class="delete"
+            tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${allday/unique_id}&date=${evdate};
+                            title string:Delete ${allday/title}"
+            ><img alt="[X]"
+              tal:attributes="src context/++resource++delete.png"/></a>
+      <tal:if condition="allday/description">
+        <p tal:content="allday/description"></p>
+      </tal:if>
+    </div>
+  </tal:loop>
+</div>
+
+<div id="calendar-view-day"
+     tal:define="height python:4;
+                 hours python:list(view.getHours());
+                 dayheight python: len(hours) * height;"
+     tal:attributes="style string:height: ${dayheight}em">
+
+<!-- Day grid -->
+<tal:loop repeat="hour hours">
+  <tal:block tal:define="num repeat/hour/index; top python:num * height">
+    <div class="hour"
+         tal:attributes="onclick string:parent.location='${context/@@absolute_url}/add.html?field.start_date=${view/cursor}&amp;field.start_time=${hour/time}&amp;field.duration=${hour/duration}';
+                         style string:top: ${top}em;
+                         class string:hour ${repeat/hour/parity}">
+      <a class="event-new" style="width:100%;height:100%;" title=""
+         i18n:attributes="title"
+         tal:attributes="href string:${context/@@absolute_url}/add.html?field.start_date=${view/cursor}&amp;field.start_time=${hour/time}&amp;field.duration=${hour/duration};
+                         title string:Add new event starting at ${hour/title}"
+         tal:content="hour/title">HH:MM</a>
+    </div>
+  </tal:block>
+</tal:loop>
+
+<!-- Events -->
+<div class="events">
+  <tal:loop repeat="hour hours">
+    <tal:block define="num repeat/hour/index; top python:num * height"
+               repeat="ev hour/cols">
+      <tal:if condition="ev">
+        <div class="event"
+             onmouseover="this.style.zIndex=9; this.style.overflow='visible'; this.style.display='table-cell';"
+             onmouseout="this.style.zIndex=1; this.style.overflow='hidden'; this.style.display='block';"
+             tal:define="num repeat/ev/index;
+                         compress python:view.getColumns() > 2;
+                         unit python:compress and '%' or 'em';
+                         indent python:compress and 15 or 20.5;
+                         left python:num * indent;
+                         top python:view.eventTop(ev);
+                         height python:view.eventHeight(ev);
+                         evdate python:ev.dtstart.strftime('%Y-%m-%d');
+                         mine python:True or ev.owner==request.authenticated_user"
+             tal:attributes="style string:background: ${ev/color1};;
+                             min-height: ${height}em;;
+                             height: ${height}em;;
+                             margin-left: $left$unit;;
+                             top: ${top}em;
+                             class python:mine and 'event' or 'event other'">
+          <h6 tal:attributes="style string:background: ${ev/color2}">
+            <a tal:attributes="href ev/@@absolute_url;
+                               title ev/title">
+              <span tal:replace="ev/shortTitle" />
+              <span class="start-end">
+                (<span
+                   tal:content="python:ev.dtstart.astimezone(view.timezone).strftime(view.time_fmt)"/>
+                   -
+                 <span
+                   tal:content="python:ev.dtend.astimezone(view.timezone).strftime(view.time_fmt)"/>)
+              </span>
+            </a>
+          </h6>
+          <a title="" i18n:attributes="title" class="delete"
+            tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${ev/unique_id}&date=${evdate};
+                            title string:Delete ${ev/title}"
+            ><img alt="[X]"
+              tal:attributes="src context/++resource++delete.png"/></a>
+          <div class="body"
+              tal:attributes="style string:background: ${ev/color1};">
+            <div class="title" tal:content="ev/title"
+              tal:condition="python: ev.title != ev.shortTitle" />
+            <div class="description" tal:content="ev/description" />
+          </div>
+          <div class="booked-resources"
+               tal:define="resources ev/getBookedResources"
+               tal:condition="resources">
+            <h6 class="booked-resource-header" tal:attributes="style string:background: ${ev/color2}">
+              <a style="color: #000;"
+                 tal:attributes="href string:${ev/@@absolute_url}/booking.html?date=${evdate};">Booked resources</a></h6>
+            <tal:block tal:repeat="resource resources">
+              <a tal:attributes="href string:${resource/@@absolute_url}"
+                 tal:content="resource/title">A Pond</a>
+            </tal:block>
+          </div>
+          <div class="booked-resources"
+               tal:define="booker ev/getBooker"
+               tal:condition="booker">
+            <h6 class="booked-resource-header" tal:attributes="style string:background: ${ev/color2}">
+              <a style="color: #000;"
+                 tal:attributes="href string:${ev/@@absolute_url}/booking.html?date=${evdate};">Booked by</a></h6>
+            <a tal:attributes="href string:${booker/@@absolute_url}"
+               tal:content="booker/title">A Dude</a>
+          </div>
+        </div>
+      </tal:if>
+    </tal:block>
+  </tal:loop>
+</div>
+
+</div>
+</metal:block>
+</html>
