@@ -48,7 +48,7 @@ class DailyCalendarView(SBDailyCalView):
             prefs = IPersonPreferences(person)
             show_periods = prefs.cal_periods
         else:
-            show_periods = False # XXX or should True be the default?
+            show_periods = False
 
         if show_periods:
             periods = getPeriodsForDay(self.cursor)
