@@ -65,9 +65,6 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
         self['terms'] = TermContainer()
         self['courses'] = CourseContainer()
         self['sections'] = SectionContainer()
-        # XXX Such translation does not seem to be working.
-        groups['staff'] = Group('staff', _('Staff'))
-        groups['learners'] = Group('learners', _('Learners'))
 
         self.timetableSchemaService = TimetableSchemaService()
         self.timetableSchemaService.__parent__ = self

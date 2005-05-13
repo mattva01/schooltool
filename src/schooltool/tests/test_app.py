@@ -69,16 +69,6 @@ def doctest_SchoolToolApplication():
         >>> verifyObject(ISectionContainer, app['sections'])
         True
 
-    Make sure the default groups and resources are created
-
-        >>> from schoolbell.app.interfaces import IGroup
-        >>> staff = app['groups']['staff']
-        >>> verifyObject(IGroup, staff)
-        True
-        >>> learners = app['groups']['learners']
-        >>> verifyObject(IGroup, learners)
-        True
-
     """
 
 
