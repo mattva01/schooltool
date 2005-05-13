@@ -24,10 +24,15 @@ $Id$
 
 from datetime import datetime, time, timedelta
 
+from pytz import timezone
+
 from schoolbell.app.browser.cal import DailyCalendarView as SBDailyCalView
 from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
 from schooltool.timetable import getPeriodsForDay
 from schooltool.interfaces import IPersonPreferences
+
+
+utc = timezone('UTC')
 
 
 class DailyCalendarView(SBDailyCalView):
@@ -54,13 +59,14 @@ class DailyCalendarView(SBDailyCalView):
             periods = getPeriodsForDay(self.cursor)
         else:
             periods = []
-        today = datetime.combine(self.cursor, time())
+        today = datetime.combine(self.cursor, time(tzinfo=utc))
         row_ends = [today + timedelta(hours=hour + 1)
                     for hour in range(self.starthour, self.endhour)]
 
         # Put starts and ends of periods into row_ends
         for period in periods:
             pstart = datetime.combine(self.cursor, period.tstart)
+            pstart = pstart.replace(tzinfo=self.timezone)
             pend = pstart + period.duration
             for point in row_ends:
                 if pstart < point < pend:
@@ -77,6 +83,7 @@ class DailyCalendarView(SBDailyCalView):
             if not periods:
                 return False
             pstart = datetime.combine(self.cursor, periods[0].tstart)
+            pstart = pstart.replace(tzinfo=self.timezone)
             if pstart == dt:
                 return True
 
