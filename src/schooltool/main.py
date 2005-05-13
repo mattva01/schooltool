@@ -32,7 +32,7 @@ import os.path
 from schoolbell.app.main import StandaloneServer as SchoolBellServer
 from schoolbell.app.main import Options as SchoolBellOptions
 
-from schooltool.app import SchoolToolApplication
+from schooltool.app import SchoolToolApplication, Person
 from schooltool.interfaces import ISchoolToolApplication
 
 
@@ -97,6 +97,7 @@ class StandaloneServer(SchoolBellServer):
     incompatible_db_error_msg = st_incompatible_db_error_msg
     old_db_error_msg = st_old_db_error_msg
     Options = Options
+    Person = Person
     system_name = 'SchoolTool'
     AppFactory = SchoolToolApplication
     AppInterface = ISchoolToolApplication

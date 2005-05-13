@@ -246,6 +246,11 @@ def doctest_setup():
         >>> app
         <schooltool.app.SchoolToolApplication object at ...>
 
+    The manager is a SchoolTool person:
+
+        >>> app['persons']['manager']
+        <schooltool.app.Person object at ...>
+
     A web access logger has been set up:
 
         >>> logger1 = logging.getLogger('accesslog')
