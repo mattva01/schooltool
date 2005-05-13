@@ -1,14 +1,14 @@
 <tal:defs define="update view/update" />
-<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title" i18n:translate="">
-    Upload schooltool timetable as CSV
+    Upload SchoolTool timetable as CSV
   </title>
 </head>
 <body>
 
 <h1 metal:fill-slot="content-header" i18n:translate="">
-Upload schooltool timetable as CSV
+  Upload SchoolTool timetable as CSV
 </h1>
 
 <metal:block metal:fill-slot="body">
@@ -38,15 +38,16 @@ Upload schooltool timetable as CSV
 
     <div class="row">
       Charset: <select name="charset">
-        <option value="UTF-8">Unicode (UTF-8)</option>
-        <option value="ISO-8859-1">Western (ISO-8859-1)</option>
-        <option value="ISO-8859-15">Western (ISO-8859-15)</option>
-        <option value="Windows-1252">Western (Windows-1252)</option>
-        <option value="other">Other (please specify)</option>
+        <option value="UTF-8" i18n:translate="">Unicode (UTF-8)</option>
+        <option value="ISO-8859-1" i18n:translate="">Western (ISO-8859-1)</option>
+        <option value="ISO-8859-15" i18n:translate="">Western (ISO-8859-15)</option>
+        <option value="Windows-1252" i18n:translate="">Western (Windows-1252)</option>
+        <option value="other" i18n:translate="">Other (please specify)</option>
       </select>
     </div>
-    <div class="row">
-      Other charset: <input name="other_charset" type="text" />
+    <div class="row" i18n:translate="">
+        Other charset: <input i18n:name="other_charset"
+                              name="other_charset" type="text" />
     </div>
 
     <br />

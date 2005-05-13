@@ -72,7 +72,8 @@ class TimetableCSVImportView(BrowserView):
             return
 
         ok = True
-        importer = TimetableCSVImporter(self.context, charset)
+        root = removeSecurityProxy(self.context)
+        importer = TimetableCSVImporter(root, charset)
         if timetable_csv:
             ok = importer.importTimetable(timetable_csv)
             if ok:
@@ -93,17 +94,19 @@ class TimetableCSVImportView(BrowserView):
             self.errors.extend(err.generic)
 
         for key, msg in [
-            ('day_ids', _("Day ids not defined in selected schema: %s.")),
-            ('periods', _("Periods not defined in selected days: %s.")),
-            ('persons', _("Persons not found: %s.")),
-            ('courses', _("Courses not found: %s.")),
-            ('sections', _("Sections not found: %s.")),
-            ('locations', _("Locations not found: %s.")),
-            ('records', _("Invalid records: %s."))]:
+            ('day_ids', _("Day ids not defined in selected schema: ${args}.")),
+            ('periods', _("Periods not defined in selected days: ${args}.")),
+            ('persons', _("Persons not found: ${args}.")),
+            ('courses', _("Courses not found: ${args}.")),
+            ('sections', _("Sections not found: ${args}.")),
+            ('locations', _("Locations not found: ${args}.")),
+            ('records', _("Invalid records: ${args}."))]:
             v = getattr(err, key)
             if v:
-                values = ', '.join([str(st) for st in v])
-                self.errors.append(msg % values)
+                values = ', '.join([unicode(st) for st in v])
+                print msg, repr(values)
+                msg.mapping = {'args': values}
+                self.errors.append(msg)
 
     def getCharset(self):
         """Return the charset (as a string) that was specified in the request.
