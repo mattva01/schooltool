@@ -29,8 +29,17 @@ from zope.app.tests import setup, ztapi
 from zope.publisher.browser import TestRequest
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 
+from schooltool.common import parse_datetime
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable import SequentialDaysTimetableModel
+from pytz import timezone
+
+utc = timezone('UTC')
+
+
+def dt(timestr):
+    dt = parse_datetime('2004-11-05 %s:00' % timestr)
+    return dt.replace(tzinfo=utc)
 
 
 class TestDailyCalendarView(unittest.TestCase):
@@ -90,7 +99,6 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_calendarRows(self):
         from schooltool.browser.cal import DailyCalendarView
-        from schooltool.common import parse_datetime
 
         request = TestRequest()
         request.setPrincipal(self.person)
@@ -98,9 +106,6 @@ class TestDailyCalendarView(unittest.TestCase):
         view.cursor = date(2004, 11, 5)
 
         result = list(view.calendarRows())
-
-        def dt(timestr):
-            return parse_datetime('2004-11-05 %s:00' % timestr)
 
         expected = [("8:00", dt('08:00'), timedelta(hours=1)),
                     ("1", dt('09:00'), timedelta(hours=1)),
@@ -120,7 +125,6 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_calendarRows_no_periods(self):
         from schooltool.browser.cal import DailyCalendarView
-        from schooltool.common import parse_datetime
         from schooltool.app import getPersonPreferences
 
         prefs = getPersonPreferences(self.person)
@@ -132,16 +136,12 @@ class TestDailyCalendarView(unittest.TestCase):
 
         result = list(view.calendarRows())
 
-        def dt(timestr):
-            return parse_datetime('2004-11-05 %s:00' % timestr)
-
         expected = [("%d:00" % i, dt('%d:00' % i), timedelta(hours=1))
                     for i in range(8, 19)]
         self.assertEquals(result, expected)
 
     def test_calendarRows_default(self):
         from schooltool.browser.cal import DailyCalendarView
-        from schooltool.common import parse_datetime
 
         request = TestRequest()
         # do not set the principal
@@ -149,9 +149,6 @@ class TestDailyCalendarView(unittest.TestCase):
         view.cursor = date(2004, 11, 5)
 
         result = list(view.calendarRows())
-
-        def dt(timestr):
-            return parse_datetime('2004-11-05 %s:00' % timestr)
 
         # the default is not to show periods
         expected = [("%d:00" % i, dt('%d:00' % i), timedelta(hours=1))
