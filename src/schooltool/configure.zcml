@@ -96,9 +96,8 @@
   </content>
 
   <content class=".app.Course">
-    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
     <require permission="schoolbell.view"
-             attributes="title description members" />
+             attributes="title description sections" />
     <require permission="schoolbell.edit"
              set_schema="schooltool.interfaces.ICourse" />
   </content>
