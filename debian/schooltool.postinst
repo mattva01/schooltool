@@ -83,18 +83,6 @@ case "$1" in
     #Put the default template there if none exists
     if [ ! -e $config ]; then
         cp -a /usr/share/$package/$package.conf.default $config
-        # Set the default language from the default environment if it exists
-        if [ -f /etc/environment ];then
-            if [ `grep -c '^LANG=' /etc/environment` != 0 ]; then
-                lang=`cat /etc/environment|grep '^LANG='|tail -1\
-                |sed -e 's/^LANG=//' -e 's/["[:space:]]//g'`
-                if [ -n $lang ];then
-                    echo >> $config
-                    echo '# Default translation' >> $config
-                    echo lang $lang >> $config
-                fi
-            fi
-        fi
     fi
 
     ### Compatibility code added in 0.10 to convert old listen marker lines to

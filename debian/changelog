@@ -30,6 +30,7 @@ schooltool (0.10-1) unstable; urgency=low
   * Disabled the SSL Certificate generation in the maintainer scripts as the
     server SSL support did not survive the transition to Zope 3. Left the code
     in, just in case that support is added.
+  * Don't set the 'lang' config file directive from /etc/environment.
   * FTBFS on amd64 with gcc-4.0 fixed in Zope 3. (Closes: #294997).
 
  -- Brian Sutherland <jinty@web.de>  Fri, 28 Jan 2005 19:48:56 +0100
