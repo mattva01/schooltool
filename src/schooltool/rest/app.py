@@ -25,11 +25,12 @@ import datetime
 from StringIO import StringIO
 import operator
 
-from zope.app import zapi
 import libxml2
 
 from zope.component import adapts
 from zope.interface import implements
+from zope.app import zapi
+from zope.app.testing import setup
 from zope.app.traversing.api import getPath
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 
@@ -41,9 +42,10 @@ from schoolbell.app.rest.rng import validate_against_schema
 from schoolbell.calendar.icalendar import ICalParseError
 from schoolbell.calendar.icalendar import ICalReader
 
-from schooltool.app import Person, Group, Resource
+from schooltool.app import Person, Group, Resource, Course
+from schooltool.app import CourseContainer
 from schooltool.common import parse_date
-from schooltool.interfaces import ITerm
+from schooltool.interfaces import ITerm, ICourse, ICourseContainer
 from schooltool.timetable import Term
 from schooltool.interfaces import ITermContainer
 
@@ -72,6 +74,73 @@ class ResourceFileFactory(sb.ResourceFileFactory):
     """An adapter that creates SchoolTool resources in RESTive views"""
 
     factory = Resource
+
+
+class CourseFileFactory(sb.ApplicationObjectFileFactory):
+    """Adapter that adapts CourseContainer to FileFactory."""
+
+    adapts(ICourseContainer)
+
+    schema = '''<?xml version="1.0" encoding="UTF-8"?>
+        <grammar xmlns="http://relaxng.org/ns/structure/1.0"
+                 ns="http://schooltool.org/ns/model/0.1"
+                 datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+          <start>
+            <element name="object">
+              <attribute name="title">
+                <text/>
+              </attribute>
+              <optional>
+                <attribute name="description">
+                  <text/>
+                </attribute>
+              </optional>
+            </element>
+          </start>
+        </grammar>
+        '''
+
+    factory = Course
+
+    def parseDoc(self, doc):
+        kwargs = {}
+        node = doc.query('/m:object')[0]
+        kwargs['title'] = node['title']
+        kwargs['description'] = node.get('description')
+        return kwargs
+
+
+class CourseFile(sb.ApplicationObjectFile):
+    """Adapter that adapts ICourse to IWriteFile"""
+
+    adapts(ICourse)
+
+    def modify(self, title=None, description=None):
+        """Modifies underlying schema."""
+        self.context.title = title
+        self.context.description = description
+
+
+class CourseContainerView(sb.GenericContainerView):
+    """RESTive view of a course container."""
+
+
+class CourseFile(sb.ApplicationObjectFile):
+    """Adapter that adapts ICourse to IWriteFile"""
+
+    adapts(ICourse)
+
+    def modify(self, title=None, description=None):
+        """Modifies underlying schema."""
+        self.context.title = title
+        self.context.description = description
+
+
+class CourseView(View):
+    """RESTive view for courses."""
+
+    template = Template("www/course.pt", content_type="text/xml; charset=UTF-8")
+    factory = CourseFile
 
 
 class TermContainerView(GenericContainerView):

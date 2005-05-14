@@ -31,14 +31,18 @@ from zope.testing import doctest
 from schooltool.common import dedent
 from zope.app import zapi
 from zope.interface import directlyProvides, Interface
+from zope.app.traversing.interfaces import ITraversable
 from zope.interface.verify import verifyObject
 from zope.app.traversing.interfaces import IContainmentRoot
+from zope.app.traversing import namespace
 from zope.app.testing import setup, ztapi
 from zope.publisher.browser import TestRequest
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.filerepresentation.interfaces import IFileFactory
 
-from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin
+from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin, diff
+from schoolbell.app.rest.tests.utils import normalize_xml
+
 
 def doctest_SchoolToolApplicationView():
     """SchoolToolApplication
@@ -51,8 +55,76 @@ def doctest_SchoolToolApplicationView():
         >>> app = SchoolToolApplication()
         >>> directlyProvides(app, IContainmentRoot)
         >>> view = SchoolToolApplicationView(app, TestRequest())
+        >>> result = view.GET()
 
-    XXX: Brian, it this it?
+    Lets test the XML output:
+
+        >>> from schoolbell.app.rest.xmlparsing import XMLDocument
+        >>> doc = XMLDocument(result)
+        >>> doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
+
+    There should only be one set of containers:
+
+        >>> nodes = doc.query('/schooltool/containers')
+        >>> len(nodes)
+        1
+
+    Let's test our containers:
+
+    persons:
+
+        >>> persons = doc.query('/schooltool/containers/container'
+        ...                     '[@xlink:href="http://127.0.0.1/persons"]')[0]
+        >>> persons['xlink:type']
+        u'simple'
+        >>> persons['xlink:title']
+        u'persons'
+
+    groups:
+
+        >>> groups = doc.query('/schooltool/containers/container'
+        ...                     '[@xlink:href="http://127.0.0.1/groups"]')[0]
+        >>> groups['xlink:type']
+        u'simple'
+        >>> groups['xlink:title']
+        u'groups'
+
+    resources:
+
+        >>> resources = doc.query('/schooltool/containers/container'
+        ...                     '[@xlink:href="http://127.0.0.1/resources"]')[0]
+        >>> resources['xlink:type']
+        u'simple'
+        >>> resources['xlink:title']
+        u'resources'
+
+    sections:
+
+        >>> sections = doc.query('/schooltool/containers/container'
+        ...                     '[@xlink:href="http://127.0.0.1/sections"]')[0]
+        >>> sections['xlink:type']
+        u'simple'
+        >>> sections['xlink:title']
+        u'sections'
+
+    courses:
+
+        >>> courses = doc.query('/schooltool/containers/container'
+        ...                     '[@xlink:href="http://127.0.0.1/courses"]')[0]
+        >>> courses['xlink:type']
+        u'simple'
+        >>> courses['xlink:title']
+        u'courses'
+
+    that's all of our containers:
+
+        >>> doc.free()
+
+    XXX this is what our output should look like:
+
+
+
+
 
     """
 
@@ -213,7 +285,6 @@ class TestTermFileFactory(QuietLibxml2Mixin, unittest.TestCase):
         self.assertEquals(schooldays, expected)
 
 
-
 class TestTermFile(QuietLibxml2Mixin, unittest.TestCase):
 
     def setUp(self):
@@ -298,6 +369,188 @@ class TestTermFile(QuietLibxml2Mixin, unittest.TestCase):
                 schooldays.append(date)
         expected = [datetime.date(2003, 9, d) for d in 1, 2, 4, 5]
         self.assertEquals(schooldays, expected)
+
+
+def compareXML(result, expected, recursively_sort=()):
+    """Compare 2 XML snippets for equality.
+
+    This is a doctest version of
+    schoolbell.app.rest.tests.utils.asserEqualsXML If recursively_sort is
+    given, it is a sequence of tags that will have test:sort="recursively"
+    appended to their attribute lists in 'result' text.  See the docstring for
+    normalize_xml for more information about this attribute.
+    """
+
+    result = normalize_xml(result, recursively_sort=recursively_sort)
+    expected = normalize_xml(expected, recursively_sort=recursively_sort)
+    if result == expected:
+        return True
+    else:
+        print  diff(expected, result)
+        return "False \n"
+
+
+def doctest_CourseFileFactory():
+    r"""Tests for CourseFileFactory
+
+        >>> from schooltool.app import CourseContainer
+        >>> from schooltool.rest.app import CourseFileFactory
+        >>> courses = CourseContainer
+        >>> factory = CourseFileFactory(courses)
+
+    We can create a few courses
+        >>> course = factory("course1", None,
+        ...              '''<object xmlns="http://schooltool.org/ns/model/0.1"
+        ...                         title="New Course"/>''')
+        >>> course.title
+        u'New Course'
+        >>> course.description
+
+        >>> course = factory("course2", None,
+        ...              '''<object xmlns="http://schooltool.org/ns/model/0.1"
+        ...                         title="Newer Course"
+        ...                         description="Newer, Better"/>''')
+
+        >>> course.title
+        u'Newer Course'
+        >>> course.description
+        u'Newer, Better'
+
+    """
+
+
+def doctest_CourseFile():
+    r"""Tests for CourseFile.
+
+        >>> from schooltool.rest.app import CourseFile, CourseFileFactory
+        >>> from schooltool.app import CourseContainer, Course
+        >>> from schooltool.interfaces import ICourseContainer
+        >>> ztapi.provideAdapter(ICourseContainer,
+        ...                      IFileFactory,
+        ...                      CourseFileFactory)
+
+        >>> courses = CourseContainer()
+        >>> course = Course(title="History", description="US History")
+        >>> course.title
+        'History'
+        >>> course.description
+        'US History'
+
+        >>> courses['course'] = course
+        >>> file = CourseFile(course)
+        >>> file.write('''<object xmlns="http://schooltool.org/ns/model/0.1"
+        ...                       title="Herstory"
+        ...                       description="Gender Aware History"/>''')
+        >>> course.title
+        u'Herstory'
+        >>> course.description
+        u'Gender Aware History'
+
+    """
+
+
+def doctest_CourseContainerView():
+    r"""Tests for RESTive container view.
+
+    Lets create a container and a course:
+
+        >>> from schooltool.rest.app import CourseContainerView
+        >>> from schooltool.rest.app import CourseFileFactory
+        >>> from schooltool.interfaces import ICourseContainer
+        >>> from schooltool.app import Course, CourseContainer
+        >>> from schooltool.app import SchoolToolApplication
+        >>> setup.placefulSetUp()
+        >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
+        ...                   namespace.view)
+        >>> ztapi.provideAdapter(ICourseContainer,
+        ...                     IFileFactory,
+        ...                     CourseFileFactory)
+
+        >>> app = SchoolToolApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> courses = app['courses']
+        >>> courses['course1'] = course1 = Course()
+
+    lets create a RESTive view for it:
+
+        >>> view = CourseContainerView(courses, TestRequest())
+        >>> result = view.GET()
+        >>> response = view.request.response
+        >>> response.getHeader('content-type')
+        'text/xml; charset=UTF-8'
+        >>> compareXML(result,
+        ... '''<container xmlns:xlink="http://www.w3.org/1999/xlink">
+        ...    <name>courses</name>
+        ...    <items>
+        ...      <item xlink:href="http://127.0.0.1/courses/course1"
+        ...            xlink:type="simple"/>
+        ...    </items>
+        ...    <acl xlink:href="http://127.0.0.1/courses/acl" xlink:title="ACL"
+        ...         xlink:type="simple"/>
+        ...  </container>''')
+        True
+
+    We can post to the container to create a course:
+
+        >>> len(courses)
+        1
+        >>> body = '''<object xmlns="http://schooltool.org/ns/model/0.1"
+        ...           title="new course" description="something new"/>'''
+        >>> view = CourseContainerView(courses,
+        ...                          TestRequest(StringIO(body)))
+        >>> result = view.POST()
+        >>> response = view.request.response
+        >>> response.getStatus()
+        201
+        >>> response._reason
+        'Created'
+        >>> len(courses)
+        2
+        >>> courses['Course'].title
+        u'new course'
+        >>> courses['Course'].description
+        u'something new'
+
+    """
+
+
+def doctest_CourseView():
+    r"""Test for RESTive view of courses.
+
+        >>> from schooltool.rest.app import CourseView
+        >>> from schooltool.app import Course, CourseContainer
+        >>> from schooltool.app import SchoolToolApplication
+        >>> setup.placefulSetUp()
+        >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
+        ...                   namespace.view)
+
+        >>> app = SchoolToolApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> courses = app['courses']
+        >>> courses['course1'] = course1 = Course(title="Course 1",
+        ...                                       description="Something")
+        >>> view = CourseView(course1, TestRequest())
+        >>> result = view.GET()
+        >>> response = view.request.response
+        >>> response.getHeader('content-type')
+        'text/xml; charset=UTF-8'
+        >>> compareXML(result,'''
+        ... <course xmlns:xlink="http://www.w3.org/1999/xlink">
+        ...   <title>
+        ...     Course 1
+        ...   </title>
+        ...   <description>Something</description>
+        ...   <relationships
+        ...      xlink:href="http://127.0.0.1/courses/course1/relationships"
+        ...      xlink:title="Relationships"
+        ...      xlink:type="simple"/>
+        ...   <acl xlink:href="http://127.0.0.1/courses/course1/acl"
+        ...      xlink:title="ACL" xlink:type="simple"/>
+        ... </course>
+        ... ''')
+        True
+
+    """
 
 
 def test_suite():

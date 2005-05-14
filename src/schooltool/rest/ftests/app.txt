@@ -110,7 +110,25 @@ and no persons:
     <BLANKLINE>
 
 
-Let's add a person, a group, and a resource, and let's make sure they
+and no courses:
+
+    >>> print rest("""
+    ... GET /frogpond/courses/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>courses</name>
+      <items>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/courses/acl"/>
+    </container>
+    <BLANKLINE>
+
+
+Let's add a person, a group, a resource and a course, and let's make sure they
 are SchoolTool objects, rather than SchoolBell objects:
 
 
@@ -144,12 +162,24 @@ are SchoolTool objects, rather than SchoolBell objects:
     HTTP/1.1 201 Created
     ...
 
+    >>> print rest("""
+    ... PUT /frogpond/courses/birdwatching HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
     >>> getRootFolder()['frogpond']['persons']['goose']
     <schooltool.app.Person object at ...>
     >>> getRootFolder()['frogpond']['groups']['birds']
     <schooltool.app.Group object at ...>
     >>> getRootFolder()['frogpond']['resources']['lily']
     <schooltool.app.Resource object at ...>
+    >>> getRootFolder()['frogpond']['courses']['birdwatching']
+    <schooltool.app.Course object at ...>
 
 The same should happen if we post to respective containers:
 
@@ -173,8 +203,41 @@ The same should happen if we post to respective containers:
     HTTP/1.1 201 Created
     ...
 
+    >>> print rest("""
+    ... POST /frogpond/courses HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Flight"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
     >>> getRootFolder()['frogpond']['groups']['animals']
     <schooltool.app.Group object at ...>
     >>> getRootFolder()['frogpond']['resources']['water']
     <schooltool.app.Resource object at ...>
+    >>> getRootFolder()['frogpond']['courses']['flight']
+    <schooltool.app.Course object at ...>
+
+Let's see what our course looks like:
+
+    >>> print rest("""
+    ... GET /frogpond/courses/flight HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 397
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <course xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>Flight</title>
+      <description></description>
+      <relationships xlink:type="simple"
+                     xlink:title="Relationships"
+                     xlink:href="http://localhost/frogpond/courses/flight/relationships"/>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/courses/flight/acl"/>
+    </course>
+    <BLANKLINE>
 
