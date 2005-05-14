@@ -1,5 +1,9 @@
 schoolbell (1.1-1) unstable; urgency=low
 
+  * Use the 'rest' directive rather than the 'listen' directive in config files
+    and convert all existing 'listen' directives to 'rest' directives with some
+    compatibility code. 'listen' and 'rest' are equivilent, but listen is
+    depreciated upstream.
   * Add --retry 30 to start-stop-daemon calls and a small sleep afterwards to
     try to prevent race conditions when the server takes a while to shut down.
   * Remove the code dealing with incompatible databases from 0.7.

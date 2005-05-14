@@ -147,9 +147,18 @@ case "$1" in
         cp -a /usr/share/$package/$package.conf.default $config
     fi
 
+    ### Compatibility code added in 1.1 to convert old listen marker lines to
+    ### rest marker lines
+    cp -a $config $config.tmp
+    cat $config                 \
+    | sed "s|# marker for listen settings - Please don't change or delete this line.|# marker for rest settings - Please don't change or delete this line.|"  \
+    | sed "s|# marker for listen_ssl settings - Please don't change or delete this line.|# marker for rest_ssl settings - Please don't change or delete this line.|"  \
+    > $config.tmp
+    mv -f $config.tmp $config
+
     # Setup Interfaces
-    db_get $package/listen
-    set_simple listen "$RET"
+    db_get $package/rest
+    set_simple rest "$RET"
     db_get $package/web
     set_simple web "$RET"
     # XXX - SSL certificate generation is disabled. dee config for details
