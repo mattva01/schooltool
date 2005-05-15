@@ -250,7 +250,7 @@ class GenericContainerView(View):
         return self.create()
 
     def create(self):
-        """Creates a new object from the data supplied in the request."""
+        """Create a new object from the data supplied in the request."""
 
         response = self.request.response
         body = self.request.bodyFile.read()
@@ -264,7 +264,9 @@ class GenericContainerView(View):
         response.setHeader('Content-Type', 'text/plain; charset=UTF-8')
         response.setHeader('Location', location)
 
-        return _("Object created: %s") % location
+        msg = _("Object created: ${location}")
+        msg.mapping = {'location': location}
+        return translate(msg, context=self.request)
 
 
 class GroupContainerView(GenericContainerView):
