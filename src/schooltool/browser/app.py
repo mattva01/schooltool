@@ -181,19 +181,19 @@ class SectionLearnerView(BrowserView):
         # This method is rather similar to GroupListView.update().
         context_url = zapi.absoluteURL(self.context, self.request)
         if 'UPDATE_SUBMIT' in self.request:
-            context_learners = removeSecurityProxy(self.context.learners)
-            for learner in self.getPotentialLearners():
-                want = bool('learner.' + learner.__name__ in self.request)
-                have = bool(learner in context_learners)
+            context_members = removeSecurityProxy(self.context.members)
+            for member in self.getPotentialLearners():
+                want = bool('member.' + member.__name__ in self.request)
+                have = bool(member in context_members)
                 # add() and remove() could throw an exception, but at the
                 # moment the constraints are never violated, so we ignore
                 # the problem.
                 if want != have:
-                    learner = removeSecurityProxy(learner)
+                    member = removeSecurityProxy(member)
                     if want:
-                        context_learners.add(learner)
+                        context_members.add(member)
                     else:
-                        context_learners.remove(learner)
+                        context_members.remove(member)
             self.request.response.redirect(context_url)
         elif 'CANCEL' in self.request:
             self.request.response.redirect(context_url)

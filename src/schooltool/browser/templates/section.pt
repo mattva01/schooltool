@@ -29,8 +29,8 @@
     </div>
 
     <div class="learners">
-      <div tal:define="learners context/learners">
-        <h3 i18n:translate="">Learners</h3>
+      <div tal:define="learners context/members">
+        <h3 i18n:translate="">Students</h3>
         <ul>
           <li tal:repeat="obj learners/sortby:title">
             <a tal:attributes="href obj/@@absolute_url"

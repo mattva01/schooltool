@@ -415,8 +415,8 @@ class TimetableCSVImporter(object):
                     person = self.findByTitle('persons', line,
                                               self.errors.persons)
                     if section is not invalid and person is not None:
-                        if (not dry_run and person not in section.learners):
-                            section.learners.add(person)
+                        if (not dry_run and person not in section.members):
+                            section.members.add(person)
 
             if self.errors.anyErrors():
                 assert dry_run, ("Something bad happened,"

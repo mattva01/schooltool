@@ -18,8 +18,8 @@
   <div class="learner_list">
     <div tal:repeat="learner possible_learners/sortby:title">
       <label>
-        <input tal:attributes="name string:learner.${learner/__name__};
-                               checked python:learner in context.learners"
+        <input tal:attributes="name string:member.${learner/__name__};
+                               checked python:learner in context.members"
                type="checkbox" />
         <span tal:replace="learner/title" />
     </label>

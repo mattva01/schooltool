@@ -144,7 +144,7 @@ class Section(Persistent, Contained, TimetabledMixin):
     courses = RelationshipProperty(URICourseSections, URISectionOfCourse,
                                    URICourse)
 
-    learners = RelationshipProperty(URIMembership, URIGroup, URIMember)
+    members = RelationshipProperty(URIMembership, URIGroup, URIMember)
 
     def __init__(self, title="Section", description=None, schedule=None,
                  courses=None):

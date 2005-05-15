@@ -347,7 +347,8 @@ def doctest_SectionLearnerView():
         >>> persons['stevens'] = Person('stevens', 'Bob Stevens')
 
     SecionLearnerView is used to relate persons to the section with the
-    URIMembership relationship.
+    URIMembership relationship.  Persons with standard membership in a section
+    are considered 'learners' or 'students':
 
         >>> from schooltool.app import Section
         >>> from schooltool.browser.app import SectionLearnerView
@@ -359,7 +360,7 @@ def doctest_SectionLearnerView():
 
     No learners yet:
 
-        >>> [i.title for i in section.learners]
+        >>> [i.title for i in section.members]
         []
 
     lets see who's available to be an learner:
@@ -370,13 +371,13 @@ def doctest_SectionLearnerView():
     let's make Mr. Smith the learner:
 
         >>> request = TestRequest()
-        >>> request.form = {'learner.smith': 'on', 'UPDATE_SUBMIT': 'Apply'}
+        >>> request.form = {'member.smith': 'on', 'UPDATE_SUBMIT': 'Apply'}
         >>> view = SectionLearnerView(section, request)
         >>> view.update()
 
     He should have joined:
 
-        >>> [i.title for i in section.learners]
+        >>> [i.title for i in section.members]
         ['John Smith']
 
     And we should be directed to the group info page:
@@ -391,10 +392,10 @@ def doctest_SectionLearnerView():
         We can cancel an action if we want to:
 
         >>> request = TestRequest()
-        >>> request.form = {'learner.jones': 'on', 'CANCEL': 'Cancel'}
+        >>> request.form = {'member.jones': 'on', 'CANCEL': 'Cancel'}
         >>> view = SectionLearnerView(section, request)
         >>> view.update()
-        >>> [person.title for person in section.learners]
+        >>> [person.title for person in section.members]
         ['John Smith']
         >>> request.response.getStatus()
         302
@@ -403,19 +404,19 @@ def doctest_SectionLearnerView():
 
     a Section can have more than one learner:
 
-        >>> request.form = {'learner.smith': 'on',
-        ...                 'learner.stevens': 'on',
+        >>> request.form = {'member.smith': 'on',
+        ...                 'member.stevens': 'on',
         ...                 'UPDATE_SUBMIT': 'Apply'}
         >>> view = SectionLearnerView(section, request)
         >>> request = TestRequest()
         >>> view.update()
 
-        >>> [person.title for person in section.learners]
+        >>> [person.title for person in section.members]
         ['John Smith', 'Bob Stevens']
 
     We can remove an learner:
 
-        >>> request.form = {'learner.stevens': 'on',
+        >>> request.form = {'member.stevens': 'on',
         ...                 'UPDATE_SUBMIT': 'Apply'}
         >>> view = SectionLearnerView(section, request)
         >>> request = TestRequest()
@@ -423,7 +424,7 @@ def doctest_SectionLearnerView():
 
     Goodbye Mr. Smith:
 
-        >>> [person.title for person in section.learners]
+        >>> [person.title for person in section.members]
         ['Bob Stevens']
 
 

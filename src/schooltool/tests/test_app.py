@@ -186,11 +186,11 @@ def doctest_Section():
     Now we'll add some learners to the Section with the sections membership
     RelationshipProperty.
 
-        >>> section.learners.add(Person('first','First'))
-        >>> section.learners.add(Person('second','Second'))
-        >>> section.learners.add(Person('third','Third'))
+        >>> section.members.add(Person('first','First'))
+        >>> section.members.add(Person('second','Second'))
+        >>> section.members.add(Person('third','Third'))
 
-        >>> for person in section.learners:
+        >>> for person in section.members:
         ...     print person.title
         First
         Second
