@@ -68,6 +68,7 @@ def doctest_CourseSections():
     Lets import the pieces of CourseSections
 
         >>> from schooltool.relationships import URICourseSections, URICourse
+        >>> from schooltool.relationships import CourseSections
         >>> from schooltool.relationships import URISectionOfCourse
         >>> from schooltool.relationships import enforceCourseSectionConstraint
 
@@ -86,6 +87,7 @@ def doctest_CourseSections():
         >>> section1 = Section(title = "section1")
         >>> section2 = Section(title = "section2")
         >>> section3 = Section(title = "section3")
+        >>> section4 = Section(title = "section4")
         >>> person = Person()
 
     Our course doesn't have any sections yet:
@@ -124,6 +126,16 @@ def doctest_CourseSections():
         section1
         section2
         section3
+
+    You can use the Relationship to relate sections and courses:
+
+        >>> CourseSections(course=history, section=section4)
+        >>> for section in history.sections:
+        ...     print section.title
+        section1
+        section2
+        section3
+        section4
 
     That's it:
 
