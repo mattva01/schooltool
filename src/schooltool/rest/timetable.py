@@ -113,12 +113,8 @@ def parseDuration(duration_str):
 class TimetableReadView(View):
     """Read-only view for ITimetable."""
 
-    template = Template("www/timetable.pt", content_type="text/xml; charset=UTF-8")
-
-    def title(self):
-        timetabled = self.context.__parent__.__parent__
-        return _("%s's complete timetable for %s") % (timetabled.title,
-                                                   ", ".join(self.key))
+    template = Template("www/timetable.pt",
+                        content_type="text/xml; charset=UTF-8")
 
     def absolutePath(self, obj):
         return zapi.absoluteURL(obj, self.request)
