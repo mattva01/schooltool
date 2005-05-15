@@ -25,6 +25,7 @@ $Id$
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from zope.interface import implements
+from zope.app.component.hooks import getSite
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.contained import Contained
 from zope.app.container.sample import SampleContainer
@@ -210,3 +211,12 @@ def getPersonPreferences(person):
         annotations = IAnnotations(person)
         annotations[sb.PERSON_PREFERENCES_KEY] = st_prefs
         return st_prefs
+
+
+def getSchoolToolApplication():
+    """Return the nearest ISchoolBellApplication"""
+    candidate = getSite()
+    if ISchoolToolApplication.providedBy(candidate):
+        return candidate
+    else:
+        raise ValueError("can't get a SchoolToolApplication")

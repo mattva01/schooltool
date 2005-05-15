@@ -34,6 +34,17 @@
       permission="zope.ManageContent"
       />
 
+  <!-- Navigation -->
+
+  <page
+      for="*"
+      name="schoolbell_navigation"
+      layer=".skin.ISchoolToolLayer"
+      template="templates/navigation.pt"
+      class=".NavigationView"
+      permission="zope.View"
+      />
+
   <!-- Views -->
 
   <page

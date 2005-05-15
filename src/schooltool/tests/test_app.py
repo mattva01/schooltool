@@ -544,6 +544,35 @@ def doctest_PersonPreferences():
     """
 
 
+def doctest_getSchoolToolApplication():
+    """Tests for getSchoolToolApplication.
+
+    Let's say we have a SchoolTool app.
+
+      >>> from schooltool.app import SchoolToolApplication, Person
+      >>> from zope.app.component.site import LocalSiteManager
+      >>> app = SchoolToolApplication()
+      >>> app.setSiteManager(LocalSiteManager(app))
+
+    If site is not a SchoolToolApplication, we get an error
+
+      >>> from schooltool.app import getSchoolToolApplication
+      >>> getSchoolToolApplication()
+      Traceback (most recent call last):
+      ...
+      ValueError: can't get a SchoolToolApplication
+
+    If current site is a SchoolToolApplication, we get it:
+
+      >>> from zope.app.component.hooks import setSite
+      >>> setSite(app)
+
+      >>> getSchoolToolApplication() is app
+      True
+
+    """
+
+
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),

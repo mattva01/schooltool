@@ -105,6 +105,19 @@ Let's make sure that we are seeing the SchoolTool preferences page:
     ...
     ...cal_periods...
 
+Let's make sure that we are seeing the SchoolTool navigation portlet page:
+
+    >>> print http(r"""
+    ... GET /frogpond HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+       <li><a href="http://localhost/frogpond/persons">Persons</a></li>
+       <li><a href="http://localhost/frogpond/courses">Courses</a></li>
+       <li><a href="http://localhost/frogpond/groups">Groups</a></li>
+    ...
+
 
 Epilogue
 --------
