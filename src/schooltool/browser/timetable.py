@@ -487,6 +487,7 @@ class TimetableSchemaWizard(BrowserView, TabindexMixin):
                 self.ttschema.model = model
                 key = self.data['name']
                 self.context[key] = self.ttschema
+                #Note: if you uncomment this, fix the i18n bug inside too.
                 #self.request.appLog(_("Timetable schema %s created") %
                 #               getPath(self.context[key]))
                 return self.request.response.redirect(
@@ -497,7 +498,7 @@ class TimetableSchemaWizard(BrowserView, TabindexMixin):
         return format_timetable_for_presentation(self.ttschema)
 
     def _buildSchema(self):
-        """Built a timetable schema from data contained in the request."""
+        """Build a timetable schema from data contained in the request."""
         n = 1
         day_ids = []
         day_idxs = []
