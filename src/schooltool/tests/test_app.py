@@ -196,6 +196,17 @@ def doctest_Section():
         Second
         Third
 
+    We can add a Group as a member
+
+        >>> from schooltool.app import Group
+        >>> section.members.add(Group('group','Group'))
+        >>> for member in section.members:
+        ...     print member.title
+        First
+        Second
+        Third
+        group
+
         >>> for person in section.instructors:
         ...     print person.title
         Mr. Jones

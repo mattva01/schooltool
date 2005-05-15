@@ -199,6 +199,15 @@ class SectionLearnerView(BrowserView):
             self.request.response.redirect(context_url)
 
 
+class SectionLearnerGroupView(SectionLearnerView):
+    """View for adding groups of students to a Section."""
+
+    def getPotentialLearners(self):
+        """Return a list of all possible members."""
+        container = ISchoolBellApplication(self.context)['groups']
+        return container.values()
+
+
 class PersonAddView(sb.PersonAddView):
     """An add view that creates SchoolTool, rather than SchoolBell, persons"""
 

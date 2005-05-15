@@ -427,8 +427,76 @@ def doctest_SectionLearnerView():
         >>> [person.title for person in section.members]
         ['Bob Stevens']
 
+    """
+
+
+def doctest_SectionLearnerGroupView():
+    r"""Tests for adding groups of students to sections.
+
+    lets setup a schooltool instance with some members.
+
+        >>> from schooltool.browser.app import SectionLearnerGroupView
+        >>> from schooltool.app import SchoolToolApplication
+        >>> from schoolbell.app.app import Person, Group
+        >>> school = SchoolToolApplication()
+        >>> persons = school['persons']
+        >>> groups = school['groups']
+        >>> directlyProvides(school, IContainmentRoot)
+        >>> sections = school['sections']
+
+    Some People:
+
+        >>> persons['smith'] = smith = Person('smith', 'John Smith')
+        >>> persons['jones'] = jones = Person('jones', 'Sally Jones')
+        >>> persons['stevens'] = stevens = Person('stevens', 'Bob Stevens')
+
+    We'll need a group:
+
+        >>> groups['form1'] = form1 = Group(title="Form 1")
+        >>> form1.members.add(smith)
+        >>> form1.members.add(jones)
+
+        >>> from schooltool.app import Section
+        >>> section = Section()
+        >>> sections['section'] = section
+        >>> request = TestRequest()
+
+
+        >>> view = SectionLearnerGroupView(section, request)
+        >>> view.update()
+
+    Let's see what's available to add:
+
+        >>> [g.title for g in view.getPotentialLearners()]
+        ['Form 1']
+
+    No learners yet:
+
+        >>> [i.title for i in section.members]
+        []
+
+    Lets add the Group as a member:
+
+        >>> request = TestRequest()
+        >>> request.form = {'member.form1': 'on', 'UPDATE_SUBMIT': 'Apply'}
+        >>> view = SectionLearnerGroupView(section, request)
+        >>> view.update()
+
+        >>> [g.title for g in section.members]
+        ['Form 1']
+
+    We can delete it like we would a Person:
+
+        >>> request = TestRequest()
+        >>> request.form = {'UPDATE_SUBMIT': 'Apply'}
+        >>> view = SectionLearnerGroupView(section, request)
+        >>> view.update()
+
+        >>> [g.title for g in section.members]
+        []
 
     """
+
 
 def test_suite():
     suite = unittest.TestSuite()

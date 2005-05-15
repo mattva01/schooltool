@@ -171,6 +171,16 @@
       />
 
   <page
+      name="learner-groups.html"
+      for="schooltool.interfaces.ISection"
+      class="schooltool.browser.app.SectionLearnerGroupView"
+      template="templates/section_learners.pt"
+      permission="schoolbell.manageMembership"
+      menu="schoolbell_actions"
+      title="Add/Remove Groups of Learners"
+      />
+
+  <page
       name="csvimport.html"
       for="schooltool.interfaces.ISchoolToolApplication"
       class="schooltool.browser.csvimport.TimetableCSVImportView"
