@@ -151,7 +151,7 @@
   <content class=".app.Section">
     <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
     <require permission="schoolbell.view"
-             attributes="title description instructors learners
+             attributes="title description instructors members
                          courses label" />
     <require permission="schoolbell.edit"
              set_schema="schooltool.interfaces.ISection" />

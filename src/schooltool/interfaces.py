@@ -818,7 +818,7 @@ class ICourseContained(ICourse, IContained,
     containers(ICourseContainer)
 
 
-class ISection(ITimetabled, sb.ICalendarOwner):
+class ISection(IGroup):
     """Sections are groups of users in a particular meeting of a Course."""
 
     label = TextLine(
