@@ -1805,8 +1805,8 @@ def doctest_CalendarEventAddView_getLastWeekDay():
 
         >>> request.form['field.start_date'] = ""
         >>> view = CalendarEventAddTestView(calendar, request)
-        >>> view.getLastWeekDay()
-        u'last weekday'
+        >>> translate(view.getLastWeekDay())
+        'last weekday'
 
         >>> request.form['field.start_date'] = "2004-10-24"
         >>> view = CalendarEventAddTestView(calendar, request)
@@ -1815,12 +1815,12 @@ def doctest_CalendarEventAddView_getLastWeekDay():
 
         >>> request.form['field.start_date'] = "2004-10-25"
         >>> view = CalendarEventAddTestView(calendar, request)
-        >>> view.getLastWeekDay()
+        >>> translate(view.getLastWeekDay())
         u'Last Monday'
 
         >>> request.form['field.start_date'] = "2004-10-31"
         >>> view = CalendarEventAddTestView(calendar, request)
-        >>> view.getLastWeekDay()
+        >>> translate(view.getLastWeekDay())
         u'Last Sunday'
 
     """
@@ -3202,7 +3202,7 @@ def doctest_MonthlyCalendarView():
         >>> view.dayOfWeek(date(2005, 5, 17))
         u'Tuesday'
 
-        >>> view.weekTitle(date(2005, 5, 17))
+        >>> translate(view.weekTitle(date(2005, 5, 17)))
         u'Week 20'
 
     prev(), current and next() return links for adjacent months:

@@ -775,7 +775,9 @@ class MonthlyCalendarView(CalendarViewBase):
         return day_of_week_names[date.weekday()]
 
     def weekTitle(self, date):
-        return _('Week %d') % date.isocalendar()[1]
+        msg = _('Week ${week_no}')
+        msg.mapping = {'week_no': date.isocalendar()[1]}
+        return msg
 
     def getCurrentMonth(self):
         """Return the current month as a nested list of CalendarDays."""
@@ -1371,8 +1373,11 @@ class CalendarEventViewMixin(object):
             return None
         else:
             weekday = evdate.weekday()
-            day_of_week = day_of_week_names[weekday]
-            return _("Last %(weekday)s") % {'weekday': day_of_week}
+            day_of_week_msgid = day_of_week_names[weekday]
+            day_of_week = translate(day_of_week_msgid, context=self.request)
+            msg = _("Last ${weekday}")
+            msg.mapping = {'weekday': day_of_week}
+            return msg
 
     def getStartDate(self):
         """If a start_date is set returns the value of the widget."""
