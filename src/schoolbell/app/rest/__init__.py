@@ -66,8 +66,7 @@ restServerType = ServerType(PublisherHTTPServer,
 
 
 class View(object):
-    """A base class for RESTive views.
-    """
+    """A base class for RESTive views."""
 
     def __init__(self, context, request):
         self.context = context

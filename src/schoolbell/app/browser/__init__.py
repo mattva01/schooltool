@@ -189,7 +189,7 @@ class SchoolBellSized(object):
         if num == 1:
             return _("1 person")
         else:
-            return _("%d persons" % num)
+            return _("%d persons" % num) # XXX i18n bug
 
 
 class ViewPreferences(object):
