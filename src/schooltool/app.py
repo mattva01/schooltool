@@ -132,7 +132,9 @@ class Section(Persistent, Contained, TimetabledMixin):
     def _getLabel(self):
         instructors = " ".join([i.title for i in self.instructors])
         courses = " ".join([c.title for c in self.courses])
-        return _('%s section of %s') % (instructors, courses) # XXX i18n bug?
+        msg = _('${instructors} section of ${courses}')
+        msg.mapping = {'instructors': instructors, 'courses': courses}
+        return msg
 
     label = property(_getLabel)
 
