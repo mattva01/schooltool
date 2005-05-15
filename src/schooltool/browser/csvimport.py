@@ -187,8 +187,9 @@ class TimetableCSVImporter(object):
 
         self.period_id, self.ttschema = rows[0]
         if self.ttschema not in self.app["ttschemas"].keys():
-            self.errors.generic.append(
-                _("The timetable schema %s does not exist." % self.ttschema))
+            error_msg = _("The timetable schema ${schema} does not exist.")
+            error_msg.mapping = {'schema': self.ttschema}
+            self.errors.generic.append(error_msg)
             return False
 
         for dry_run in [True, False]:
@@ -203,9 +204,10 @@ class TimetableCSVImporter(object):
                     continue
                 elif state == 'periods':
                     if row[0]:
-                        self.errors.generic.append(
-                            "The first cell on the period list row (%s)"
-                            " should be empty." % row[0])
+                        error_msg = _("The first cell on the period list row"
+                                      " (${row_no}) should be empty.")
+                        error_msg.mapping = {'row_no': row[0]}
+                        self.errors.generic.append(error_msg)
                     periods = row[1:]
                     self.validatePeriods(day_ids, periods)
                     state = 'content'
@@ -215,10 +217,12 @@ class TimetableCSVImporter(object):
                 if len(records) > len(periods):
                     nice_row = ", ".join(row[1:])
                     nice_periods = ", ".join(periods)
-                    self.errors.generic.append(
-                            _("There are more records [%s] (line %d)"
-                              " than periods [%s]."
-                              % (nice_row, row_no + 3, nice_periods)))
+                    error_msg = _("There are more records [${records}]"
+                            " (line ${line_no}) than periods [${periods}].")
+                    error_msg.mapping = {'records': nice_row,
+                                         'line_no': row_no + 3,
+                                         'periods': nice_periods}
+                    self.errors.generic.append(error_msg)
                     continue
 
                 for period, record in zip(periods, records):
@@ -228,7 +232,7 @@ class TimetableCSVImporter(object):
                                            day_ids, location, dry_run=dry_run)
             if self.errors.anyErrors():
                 assert dry_run, ("Something bad happened,"
-                                 " aborting transaction.") # XXX
+                                 " aborting transaction.")
                 return False
         return True
 
@@ -259,11 +263,13 @@ class TimetableCSVImporter(object):
         except StopIteration:
             return result
         except csv.Error:
-            self.errors.generic.append(
-                    _("Error in timetable CSV data, line %d" % line))
+            error_msg = _("Error in timetable CSV data, line ${line_no}")
+            error_msg.mapping = {'line_no': line}
+            self.errors.generic.append(error_msg)
         except UnicodeError:
-            self.errors.generic.append(
-                    _("Conversion to unicode failed in line %d" % line))
+            error_msg = _("Conversion to unicode failed in line ${line_no}")
+            error_msg.mapping = {'line_no': line}
+            self.errors.generic.append(error_msg)
 
     def parseRecordRow(self, records):
         """Parse records and return a list of tuples (subject, teacher).

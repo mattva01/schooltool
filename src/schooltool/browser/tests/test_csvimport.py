@@ -27,6 +27,7 @@ import datetime
 from StringIO import StringIO
 from logging import INFO
 from zope.publisher.browser import TestRequest
+from zope.i18n import translate
 from schooltool.common import dedent
 from schooltool.app import Person, Course, Section, Resource
 from schooltool.relationships import URISection, URISectionOfCourse
@@ -239,7 +240,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp = self.createImporter()
         result = imp.parseCSVRows(['"invalid"', '"csv"', '"follows'])
         self.assertEquals(result, None)
-        self.assertEquals(imp.errors.generic[0],
+        self.assertEquals(translate(imp.errors.generic[0]),
                           "Error in timetable CSV data, line 3")
 
         # test conversion to unicode
@@ -251,7 +252,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         # test invalid charset
         imp = self.createImporter(charset='UTF-8')
         result = imp.parseCSVRows(['"B0rken stuff: \xe2"'])
-        self.assertEquals(imp.errors.generic[0],
+        self.assertEquals(translate(imp.errors.generic[0]),
                           "Conversion to unicode failed in line 1")
         self.assertEquals(result, None)
 
@@ -268,7 +269,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
     def test_timetable_invalid(self):
         imp = self.createImporter()
         ok = imp.importTimetable('"Some"\n"invalid"\n"csv"\n"follows')
-        self.assertEquals(imp.errors.generic[0],
+        self.assertEquals(translate(imp.errors.generic[0]),
                           "Error in timetable CSV data, line 4")
         self.failIf(ok)
 
@@ -281,9 +282,8 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp = self.createImporter()
         ok = imp.importTimetable('"summer","four-day"')
         self.failIf(ok)
-        self.assert_(imp.errors.generic[0].startswith(
-                                "The timetable schema four-day "),
-                     imp.errors.generic)
+        self.assertEquals(translate(imp.errors.generic[0]),
+                          "The timetable schema four-day does not exist.")
 
         csv = dedent("""
                 "summer","three-day"
@@ -316,9 +316,9 @@ class TestTimetableCSVImporter(unittest.TestCase):
                 """)
         imp = self.createImporter()
         self.failIf(imp.importTimetable(csv))
-        self.assertEquals(imp.errors.generic[0],
-                "There are more records [many, , values] (line 5)"
-                " than periods [A, B].")
+        self.assertEquals(translate(imp.errors.generic[0]),
+                          "There are more records [many, , values] (line 5)"
+                          " than periods [A, B].")
 
         csv = dedent("""
                 "summer","three-day"
@@ -328,9 +328,9 @@ class TestTimetableCSVImporter(unittest.TestCase):
                 """)
         imp = self.createImporter()
         self.failIf(imp.importTimetable(csv))
-        self.assertEquals(imp.errors.generic[0],
-                "The first cell on the period list row"
-                " (this should be empty!) should be empty.")
+        self.assertEquals(translate(imp.errors.generic[0]),
+                          "The first cell on the period list row"
+                          " (this should be empty!) should be empty.")
         self.assertEquals(imp.errors.periods, ["Invalid"])
 
     def test_findByTitle(self):
