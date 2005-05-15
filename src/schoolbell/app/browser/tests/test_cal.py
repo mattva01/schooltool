@@ -28,6 +28,7 @@ from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from zope.interface import directlyProvides
 from zope.interface.verify import verifyObject
+from zope.i18n import translate
 from zope.app.tests import setup, ztapi
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.interfaces import IContainmentRoot
@@ -440,7 +441,7 @@ def doctest_CalendarDay():
         >>> day1 = CalendarDay(date(2004, 8, 5))
         >>> day1.date
         datetime.date(2004, 8, 5)
-        >>> day1.title
+        >>> translate(day1.title)
         u'Thursday, 2004-08-05'
         >>> day1.events
         []
@@ -448,7 +449,7 @@ def doctest_CalendarDay():
         >>> day2 = CalendarDay(date(2004, 7, 15), ["abc", "def"])
         >>> day2.date
         datetime.date(2004, 7, 15)
-        >>> day2.title
+        >>> translate(day2.title)
         u'Thursday, 2004-07-15'
         >>> day2.events
         ['abc', 'def']
@@ -3156,7 +3157,7 @@ def doctest_WeeklyCalendarView():
     title() forms a nice title for the calendar:
 
         >>> view.cursor = date(2005, 2, 3)
-        >>> view.title()
+        >>> translate(view.title())
         u'February, 2005 (week 5)'
 
     prev(), current() and next() return links for adjacent weeks:
@@ -3193,7 +3194,7 @@ def doctest_MonthlyCalendarView():
     title() forms a nice title for the calendar:
 
         >>> view.cursor = date(2005, 2, 3)
-        >>> view.title()
+        >>> translate(view.title())
         u'February, 2005'
 
     Some helpers for are provided for use in the template:
@@ -3239,7 +3240,7 @@ def doctest_YearlyCalendarView():
 
         >>> view.cursor = date(2005, 2, 3)
         >>> view.title()
-        '2005'
+        u'2005'
 
     monthTitle() returns names of months:
 

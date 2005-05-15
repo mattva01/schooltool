@@ -43,6 +43,7 @@ from zope.app.traversing.browser.absoluteurl import absoluteURL, AbsoluteURL
 from zope.app.filerepresentation.interfaces import IWriteFile, IReadFile
 from zope.component import queryView, queryMultiAdapter, adapts
 from zope.interface import implements, Interface
+from zope.i18n import translate
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
 from zope.schema import Date, TextLine, Choice, Int, Bool, List, Text
@@ -358,7 +359,10 @@ class CalendarDay(object):
         self.date = date
         self.events = events
         day_of_week = day_of_week_names[date.weekday()]
-        self.title = _('%s, %s') % (day_of_week, date.strftime('%Y-%m-%d'))
+        self.title = _('${day_of_week}, ${date}')
+        self.title.mapping = {'day_of_week': day_of_week,
+                              'date': date.strftime('%Y-%m-%d')}
+        # XXX Shouldn't we use a i18n formatter for the date in the title?
 
     def __cmp__(self, other):
         return cmp(self.date, other.date)
@@ -702,11 +706,13 @@ class WeeklyCalendarView(CalendarViewBase):
     prev_title = _("Previous week")
 
     def title(self):
-        month_name = month_names[self.cursor.month]
-        args = {'month': month_name,
-                'year': self.cursor.year,
-                'week': self.cursor.isocalendar()[1]}
-        return _('%(month)s, %(year)s (week %(week)s)') % args
+        month_name_msgid = month_names[self.cursor.month]
+        month_name = translate(month_name_msgid, context=self.request)
+        msg = _('${month}, ${year} (week ${week})')
+        msg.mapping = {'month': month_name,
+                       'year': self.cursor.year,
+                       'week': self.cursor.isocalendar()[1]}
+        return msg
 
     def prev(self):
         """Return the link for the previous week."""
@@ -747,9 +753,11 @@ class MonthlyCalendarView(CalendarViewBase):
     prev_title = _("Previous month")
 
     def title(self):
-        month_name = month_names[self.cursor.month]
-        args = {'month': month_name, 'year': self.cursor.year}
-        return _('%(month)s, %(year)s') % args
+        month_name_msgid = month_names[self.cursor.month]
+        month_name = translate(month_name_msgid, context=self.request)
+        msg = _('${month}, ${year}')
+        msg.mapping = {'month': month_name, 'year': self.cursor.year}
+        return msg
 
     def prev(self):
         """Return the link for the previous month."""
@@ -782,7 +790,7 @@ class YearlyCalendarView(CalendarViewBase):
     prev_title = _("Previous year")
 
     def title(self):
-        return self.cursor.strftime('%Y')
+        return unicode(self.cursor.year)
 
     def prev(self):
         """Return the link for the previous year."""
