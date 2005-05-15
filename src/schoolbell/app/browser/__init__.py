@@ -187,9 +187,11 @@ class SchoolBellSized(object):
     def sizeForDisplay(self):
         num = self.sizeForSorting()
         if num == 1:
-            return _("1 person")
+            msgid = _("1 person")
         else:
-            return _("%d persons" % num) # XXX i18n bug
+            msgid = _("${number} persons")
+            msgid.mapping = {'number': num}
+        return msgid
 
 
 class ViewPreferences(object):

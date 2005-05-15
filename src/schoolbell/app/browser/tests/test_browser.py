@@ -27,6 +27,7 @@ from zope.interface import implements
 from zope.testing import doctest
 from zope.interface.verify import verifyObject
 from zope.app.location.interfaces import ILocation
+from zope.i18n import translate
 
 
 def doctest_SchoolBellAPI():
@@ -227,19 +228,19 @@ def doctest_SchoolBellSized():
       >>> app = SchoolBellApplication()
       >>> sized = SchoolBellSized(app)
 
-      >>> sized.sizeForSorting(), sized.sizeForDisplay()
+      >>> sized.sizeForSorting(), translate(sized.sizeForDisplay())
       (0, u'0 persons')
 
       >>> persons = app['persons']
       >>> persons['gintas'] = Person(u'gintas')
 
-      >>> sized.sizeForSorting(), sized.sizeForDisplay()
-      (1, u'1 person')
+      >>> sized.sizeForSorting(), translate(sized.sizeForDisplay())
+      (1, '1 person')
 
       >>> persons['ignas'] = Person(u'ignas')
       >>> persons['marius'] = Person(u'marius')
 
-      >>> sized.sizeForSorting(), sized.sizeForDisplay()
+      >>> sized.sizeForSorting(), translate(sized.sizeForDisplay())
       (3, u'3 persons')
 
     """
