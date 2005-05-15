@@ -40,6 +40,7 @@ from zope.app.event.objectevent import modified
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.form.interfaces import IInputWidget
+from zope.i18n import translate
 from zope.schema import TextLine, Int
 
 
@@ -386,6 +387,7 @@ class TimetableSchemaWizard(BrowserView, TabindexMixin):
     """View for defining a new timetable schema.
 
     Can be accessed at /newttschema.
+    XXX Really?  /newttschema doesn't work for me.
     """
 
     __used_for__ = ITimetableSchemaService
@@ -498,7 +500,7 @@ class TimetableSchemaWizard(BrowserView, TabindexMixin):
         return format_timetable_for_presentation(self.ttschema)
 
     def _buildSchema(self):
-        """Build a timetable schema from data contained in the request."""
+        """Build a timetable schema from data in the request."""
         n = 1
         day_ids = []
         day_idxs = []
@@ -506,12 +508,17 @@ class TimetableSchemaWizard(BrowserView, TabindexMixin):
             if 'DELETE_DAY_%d' % n not in self.request:
                 day_id = self.request['day%d' % n].strip()
                 if not day_id:
-                    day_id = _('Day %d' % (len(day_ids) + 1))
+                    day_id_msgid = _('Day ${number}')
+                    day_id_msgid.mapping = {'number': len(day_ids) + 1}
+                    day_id = translate(day_id_msgid, context=self.request)
                 day_ids.append(day_id)
                 day_idxs.append(n)
             n += 1
         if 'ADD_DAY' in self.request or not day_ids:
-            day_ids.append(_('Day %d' % (len(day_ids) + 1)))
+            day_id_msgid = _('Day ${number}')
+            day_id_msgid.mapping = {'number': len(day_ids) + 1}
+            day_id = translate(day_id_msgid, context=self.request)
+            day_ids.append(day_id)
             day_idxs.append(-1)
         day_ids = fix_duplicates(day_ids)
 
@@ -531,7 +538,8 @@ class TimetableSchemaWizard(BrowserView, TabindexMixin):
                     n += 1
                 periods = filter(None, periods)
                 if not periods:
-                    periods = [_('Period 1')]
+                    period1 = translate(_("Period 1"), context=self.request)
+                    periods = [period1]
                 else:
                     periods = fix_duplicates(periods)
             periods_for_day.append(periods)
@@ -540,7 +548,10 @@ class TimetableSchemaWizard(BrowserView, TabindexMixin):
             previous_day = periods
 
         if 'ADD_PERIOD' in self.request:
-            longest_day.append(_('Period %d') % (len(longest_day) + 1))
+            period_name_msgid = _('Period ${number}')
+            period_name_msgid.mapping = {'number': len(longest_day) + 1}
+            period_name = translate(period_name_msgid, context=self.request)
+            longest_day.append(period_name)
 
         ttschema = Timetable(day_ids)
         for day, periods in zip(day_ids, periods_for_day):
