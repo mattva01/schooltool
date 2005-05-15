@@ -29,6 +29,7 @@ from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 from zope.app.http.put import FilePUT
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserPublisher
+from zope.i18n import translate
 
 from schoolbell.app.rest import View, Template, IRestTraverser
 from schoolbell.app.rest.xmlparsing import XMLValidationError, XMLParseError
