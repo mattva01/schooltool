@@ -22,7 +22,9 @@
 
   <table class="schooldaymodel" tal:repeat="month view/calendar">
     <tr>
-      <th class="month" colspan="8" tal:content="month/title">[Month]</th>
+      <th class="month" colspan="8" i18n:translate="">
+        <span tal:replace="month/month" i18n:name="month" /> <span tal:replace="month/year" i18n:name="year" />
+      </th>
     </tr>
     <tr>
       <th class="day"></th>
@@ -35,7 +37,9 @@
       <th class="day" width="12%" i18n:translate="">Sunday</th>
     </tr>
     <tr tal:repeat="week month/weeks">
-      <th class="week" tal:content="week/title">[Week N]</th>
+      <th class="week" i18n:translate="">
+        Week <span tal:replace="week/number" i18n:name="week_number" />
+      </th>
       <td tal:repeat="day week/days"
           tal:attributes="class day/class">
         <label tal:condition="day/number">

@@ -585,10 +585,11 @@ def doctest_TermRenderer_month():
     The month function goes through all weeks between mindate and maxdate.
 
         >>> def print_month(month, day_format='%(number)3d'):
-        ...     print '*%35s' % month['title']
+        ...     title = '%s %d' % (month['month'], month['year'])
+        ...     print '*%35s' % title
         ...     print '         Mon Tue Wed Thu Fri Sat Sun'
         ...     for week in month['weeks']:
-        ...         s = ['%-7s:' % week['title']]
+        ...         s = ['Week %-2d:' % week['number']]
         ...         for day in week['days']:
         ...             if day['number'] is None:
         ...                 s.append('   ')
@@ -657,7 +658,7 @@ def doctest_TermRenderer_week():
     as start_of_week.
 
         >>> def print_week(week):
-        ...     print week['title']
+        ...     print 'Week %d' % week['number']
         ...     print 'index date number checked class onclick'
         ...     for day in week['days']:
         ...         print ('%(index)s %(date)s %(number)s %(checked)s'
@@ -733,10 +734,11 @@ def doctest_TermRenderer_week():
 def print_cal(calendar, day_format='%(number)3d'):
     """Print a calendar as returned by TermRenderer.calendar."""
     for month in calendar:
-        print '*%35s' % month['title']
+        title = '%s %d' % (month['month'], month['year'])
+        print '*%35s' % title
         print '         Mon Tue Wed Thu Fri Sat Sun'
         for week in month['weeks']:
-            s = ['%-7s:' % week['title']]
+            s = ['Week %-2d:' % week['number']]
             for day in week['days']:
                 if day['number'] is None:
                     s.append('   ')

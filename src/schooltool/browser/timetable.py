@@ -246,20 +246,19 @@ class TermRenderer(object):
 
         Returns a dict with these keys:
 
-            title   -- month title ("January 2005")
+            month   -- title of the month
+            year    -- the year number
             weeks   -- a list of week dicts in this month (see `week`)
 
         """
         assert (mindate.year, mindate.month) == (maxdate.year, maxdate.month)
-        month_title = _('%(month)s %(year)s') % {
-                          'month': month_names[mindate.month],
-                          'year': mindate.year}
         weeks = []
         date = week_start(mindate, self.first_day_of_week)
         while date <= maxdate:
             weeks.append(self.week(date, mindate, maxdate, counter))
             date += datetime.timedelta(days=7)
-        return {'title': month_title,
+        return {'month': month_names[mindate.month],
+                'year': mindate.year,
                 'weeks': weeks}
 
     def week(self, start_of_week, mindate, maxdate, counter):
@@ -280,7 +279,7 @@ class TermRenderer(object):
 
         Returns a dict with these keys:
 
-            title   -- week title ("Week 42")
+            number  -- week number
             days    -- a list of exactly seven dicts
 
         Each day dict has the following keys
@@ -299,7 +298,6 @@ class TermRenderer(object):
         # it is a Monday, we won't break anything by taking the week number
         # of the following Tuesday.
         week_no = (start_of_week + datetime.date.resolution).isocalendar()[1]
-        week_title = _('Week %d') % week_no
         date = start_of_week
         days = []
         for day in range(7):
@@ -315,7 +313,7 @@ class TermRenderer(object):
                 days.append({'number': None, 'class': None, 'index': None,
                              'onclick': None, 'checked': None, 'date': None})
             date += datetime.date.resolution
-        return {'title': week_title,
+        return {'number': week_no,
                 'days': days}
 
 
