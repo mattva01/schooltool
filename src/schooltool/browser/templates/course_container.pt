@@ -1,0 +1,38 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<head>
+  <title metal:fill-slot="title" tal:content="view/index_title">
+    Contents
+  </title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header" tal:content="view/index_title">Contents</h1>
+
+<metal:block metal:fill-slot="body"
+             tal:define="objects context/values">
+
+  <p tal:condition="not:objects" i18n:translate="">There are none.</p>
+  <ul tal:condition="objects">
+    <form method="post"
+          tal:attributes="action string:${context/@@absolute_url}/delete.html">
+      <li tal:repeat="course objects/sortby:title">
+          <input type="checkbox" tal:attributes="name string:delete.${course/zope:name}" />
+          <a tal:content="course/title"
+             tal:attributes="href course/@@absolute_url">Some Object</a>
+        <ul tal:condition="course/sections|nothing">
+          <li tal:repeat="section course/sections">
+            <a tal:content="section/label"
+               tal:attributes="href section/@@absolute_url">Some Object</a>
+          </li>
+        </ul>
+      </li>
+      <div class="controls">
+        <input type="submit" class="button-cancel" value="Delete"
+               i18n:attributes="value delete-button;" />
+      </div>
+    </form>
+  </ul>
+
+</metal:block>
+</body>
+</html>
