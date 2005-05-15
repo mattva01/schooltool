@@ -172,6 +172,17 @@ are SchoolTool objects, rather than SchoolBell objects:
     HTTP/1.1 201 Created
     ...
 
+    >>> print rest("""
+    ... PUT /frogpond/sections/birdwatching-1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding1" 
+    ...         course="birding"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
     >>> getRootFolder()['frogpond']['persons']['goose']
     <schooltool.app.Person object at ...>
     >>> getRootFolder()['frogpond']['groups']['birds']
@@ -180,6 +191,8 @@ are SchoolTool objects, rather than SchoolBell objects:
     <schooltool.app.Resource object at ...>
     >>> getRootFolder()['frogpond']['courses']['birdwatching']
     <schooltool.app.Course object at ...>
+    >>> getRootFolder()['frogpond']['sections']['birdwatching-1']
+    <schooltool.app.Section object at ...>
 
 The same should happen if we post to respective containers:
 
@@ -239,5 +252,26 @@ Let's see what our course looks like:
       <acl xlink:type="simple" xlink:title="ACL"
            xlink:href="http://localhost/frogpond/courses/flight/acl"/>
     </course>
+    <BLANKLINE>
+
+Let's see what our section looks like:
+
+    >>> print rest("""
+    ... GET /frogpond/sections/birdwatching-1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 419
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <section xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>Birding1</title>
+      <description></description>
+      <relationships xlink:type="simple"
+                     xlink:title="Relationships"
+                     xlink:href="http://localhost/frogpond/sections/birdwatching-1/relationships"/>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/sections/birdwatching-1/acl"/>
+    </section>
     <BLANKLINE>
 

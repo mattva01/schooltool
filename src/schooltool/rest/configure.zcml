@@ -55,6 +55,30 @@
       permission="zope.Public"
       />
 
+  <view
+      for="schooltool.interfaces.ISectionContainer"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory="schoolbell.app.rest.RestPublishTraverse"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.interfaces.ISectionContainer"
+      name="POST"
+      factory=".app.SectionContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.interfaces.ISectionContainer"
+      name="PUT"
+      factory=".app.SectionContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
   <adapter
       for="schooltool.interfaces.IPersonContainer"
       provides="zope.app.filerepresentation.interfaces.IFileFactory"
@@ -110,6 +134,44 @@
       for="schooltool.interfaces.ICourse"
       name="POST"
       factory=".app.CourseView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="schooltool.interfaces.ISectionContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".app.SectionFileFactory"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="schooltool.interfaces.ISection"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      factory=".app.SectionFile"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.interfaces.ISectionContainer"
+      name="GET"
+      factory=".app.SectionContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.interfaces.ISection"
+      name="GET"
+      factory=".app.SectionView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.interfaces.ISection"
+      name="POST"
+      factory=".app.SectionView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />

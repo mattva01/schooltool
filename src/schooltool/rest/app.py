@@ -38,14 +38,16 @@ from schoolbell.app.rest.xmlparsing import XMLDocument
 from schoolbell.app.rest.app import GenericContainerView
 from schoolbell.app.rest import View, Template
 from schoolbell.app.rest import app as sb
+from schoolbell.app.rest.errors import RestError
 from schoolbell.app.rest.rng import validate_against_schema
 from schoolbell.calendar.icalendar import ICalParseError
 from schoolbell.calendar.icalendar import ICalReader
 
-from schooltool.app import Person, Group, Resource, Course
-from schooltool.app import CourseContainer
+from schooltool.app import Person, Group, Resource, Course, Section
+from schooltool.app import CourseContainer, SectionContainer
 from schooltool.common import parse_date
 from schooltool.interfaces import ITerm, ICourse, ICourseContainer
+from schooltool.interfaces import ISection, ISectionContainer
 from schooltool.timetable import Term
 from schooltool.interfaces import ITermContainer
 
@@ -141,6 +143,77 @@ class CourseView(View):
 
     template = Template("www/course.pt", content_type="text/xml; charset=UTF-8")
     factory = CourseFile
+
+
+class SectionFileFactory(sb.ApplicationObjectFileFactory):
+    """Adapter that adapts SectionContainer to FileFactory."""
+
+    adapts(ISectionContainer)
+
+    schema = '''<?xml version="1.0" encoding="UTF-8"?>
+        <grammar xmlns="http://relaxng.org/ns/structure/1.0"
+                 ns="http://schooltool.org/ns/model/0.1"
+                 datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+          <start>
+            <element name="object">
+              <attribute name="title">
+                <text/>
+              </attribute>
+              <attribute name="course">
+                <text/>
+              </attribute>
+              <optional>
+                <attribute name="description">
+                  <text/>
+                </attribute>
+              </optional>
+            </element>
+          </start>
+        </grammar>
+        '''
+
+    factory = Section
+
+    def parseDoc(self, doc):
+        kwargs = {}
+        node = doc.query('/m:object')[0]
+        kwargs['title'] = node['title']
+        kwargs['description'] = node.get('description')
+        return kwargs
+
+
+class SectionFile(sb.ApplicationObjectFile):
+    """Adapter that adapts ISection to IWriteFile"""
+
+    adapts(ISection)
+
+    def modify(self, title=None, description=None):
+        """Modifies underlying schema."""
+        self.context.title = title
+        self.context.description = description
+
+
+class SectionContainerView(sb.GenericContainerView):
+    """RESTive view of a section container."""
+
+
+class SectionFile(sb.ApplicationObjectFile):
+    """Adapter that adapts ISection to IWriteFile"""
+
+    adapts(ISection)
+
+    def modify(self, title=None, description=None):
+        """Modifies underlying schema."""
+        self.context.title = title
+        self.context.description = description
+
+
+class SectionView(View):
+    """RESTive view for sections."""
+
+    template = Template("www/section.pt",
+                        content_type="text/xml; charset=UTF-8")
+    factory = SectionFile
 
 
 class TermContainerView(GenericContainerView):

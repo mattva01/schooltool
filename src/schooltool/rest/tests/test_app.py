@@ -386,8 +386,10 @@ def compareXML(result, expected, recursively_sort=()):
     if result == expected:
         return True
     else:
+        # RFC: is this very bad form to have this print and raise?
+        # My thought was to use to to test truth and debug if false.
         print  diff(expected, result)
-        return "False \n"
+        raise ValueError("Unexpected Results.")
 
 
 def doctest_CourseFileFactory():
@@ -547,6 +549,175 @@ def doctest_CourseView():
         ...   <acl xlink:href="http://127.0.0.1/courses/course1/acl"
         ...      xlink:title="ACL" xlink:type="simple"/>
         ... </course>
+        ... ''')
+        True
+
+    """
+
+
+def doctest_SectionFileFactory():
+    r"""Tests for SectionFileFactory
+
+        >>> from schooltool.app import SectionContainer
+        >>> from schooltool.rest.app import SectionFileFactory
+        >>> sections = SectionContainer
+        >>> factory = SectionFileFactory(sections)
+
+    We can create a few sections
+
+        >>> section = factory("section1", None,
+        ...              '''<object xmlns="http://schooltool.org/ns/model/0.1"
+        ...                         title="New Section"
+        ...                         course="history"/>''')
+        >>> section.title
+        u'New Section'
+        >>> section.description
+
+        >>> section = factory("section2", None,
+        ...              '''<object xmlns="http://schooltool.org/ns/model/0.1"
+        ...                         title="Newer Section"
+        ...                         course="history"
+        ...                         description="Newer, Better"/>''')
+
+        >>> section.title
+        u'Newer Section'
+        >>> section.description
+        u'Newer, Better'
+
+    """
+
+
+def doctest_SectionFile():
+    r"""Tests for SectionFile.
+
+        >>> from schooltool.rest.app import SectionFile, SectionFileFactory
+        >>> from schooltool.app import SectionContainer, Section
+        >>> from schooltool.interfaces import ISectionContainer
+        >>> ztapi.provideAdapter(ISectionContainer,
+        ...                      IFileFactory,
+        ...                      SectionFileFactory)
+
+        >>> sections = SectionContainer()
+        >>> section = Section(title="Section 1", description="Good Students")
+        >>> section.title
+        'Section 1'
+        >>> section.description
+        'Good Students'
+
+        >>> sections['section'] = section
+        >>> file = SectionFile(section)
+        >>> file.write('''<object xmlns="http://schooltool.org/ns/model/0.1"
+        ...                       title="Section A"
+        ...                       course="algebra"
+        ...                       description="Still pretty good"/>''')
+        >>> section.title
+        u'Section A'
+        >>> section.description
+        u'Still pretty good'
+
+    """
+
+
+def doctest_SectionContainerView():
+    r"""Tests for RESTive section container view.
+
+    Lets create a container and a section:
+
+        >>> from schooltool.rest.app import SectionContainerView
+        >>> from schooltool.rest.app import SectionFileFactory
+        >>> from schooltool.interfaces import ISectionContainer
+        >>> from schooltool.app import Section, SectionContainer
+        >>> from schooltool.app import SchoolToolApplication
+        >>> setup.placefulSetUp()
+        >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
+        ...                   namespace.view)
+        >>> ztapi.provideAdapter(ISectionContainer,
+        ...                     IFileFactory,
+        ...                     SectionFileFactory)
+
+        >>> app = SchoolToolApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> sections = app['sections']
+        >>> sections['section1'] = section1 = Section()
+
+    lets create a RESTive view for it:
+
+        >>> view = SectionContainerView(sections, TestRequest())
+        >>> result = view.GET()
+        >>> response = view.request.response
+        >>> response.getHeader('content-type')
+        'text/xml; charset=UTF-8'
+        >>> compareXML(result,
+        ... '''<container xmlns:xlink="http://www.w3.org/1999/xlink">
+        ...    <name>sections</name>
+        ...    <items>
+        ...      <item xlink:href="http://127.0.0.1/sections/section1"
+        ...            xlink:title="Section" xlink:type="simple"/>
+        ...    </items>
+        ...    <acl xlink:href="http://127.0.0.1/sections/acl" xlink:title="ACL"
+        ...         xlink:type="simple"/>
+        ...  </container>''')
+        True
+
+    We can post to the container to create a section:
+
+        >>> len(sections)
+        1
+        >>> body = '''<object xmlns="http://schooltool.org/ns/model/0.1"
+        ...                   title="new section"
+        ...                   course="algebra"
+        ...                   description="something new"/>'''
+        >>> view = SectionContainerView(sections,
+        ...                          TestRequest(StringIO(body)))
+        >>> result = view.POST()
+        >>> response = view.request.response
+        >>> response.getStatus()
+        201
+        >>> response._reason
+        'Created'
+        >>> len(sections)
+        2
+        >>> sections['Section'].title
+        u'new section'
+        >>> sections['Section'].description
+        u'something new'
+
+    """
+
+
+def doctest_SectionView():
+    r"""Test for RESTive view of sections.
+
+        >>> from schooltool.rest.app import SectionView
+        >>> from schooltool.app import Section, SectionContainer
+        >>> from schooltool.app import SchoolToolApplication
+        >>> setup.placefulSetUp()
+        >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
+        ...                   namespace.view)
+
+        >>> app = SchoolToolApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> sections = app['sections']
+        >>> sections['section1'] = section1 = Section(title="Section 1",
+        ...                                       description="Something")
+        >>> view = SectionView(section1, TestRequest())
+        >>> result = view.GET()
+        >>> response = view.request.response
+        >>> response.getHeader('content-type')
+        'text/xml; charset=UTF-8'
+        >>> compareXML(result,'''
+        ... <section xmlns:xlink="http://www.w3.org/1999/xlink">
+        ...   <title>
+        ...     Section 1
+        ...   </title>
+        ...   <description>Something</description>
+        ...   <relationships
+        ...      xlink:href="http://127.0.0.1/sections/section1/relationships"
+        ...      xlink:title="Relationships"
+        ...      xlink:type="simple"/>
+        ...   <acl xlink:href="http://127.0.0.1/sections/section1/acl"
+        ...      xlink:title="ACL" xlink:type="simple"/>
+        ... </section>
         ... ''')
         True
 
