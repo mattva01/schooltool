@@ -201,7 +201,9 @@ class RelationshipsView(View):
         response.setHeader('Location', location)
         response.setStatus(201)
         response.setHeader('Content-Type', 'text/plain; charset=UTF-8')
-        return translate(_("Relationship created: %s")) % location
+        msg = _("Relationship created: ${location}")
+        msg.mapping = {'location': location}
+        return translate(msg, context=self.request)
 
 
 def LinkViewFactory(context, request):
