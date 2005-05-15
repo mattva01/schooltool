@@ -29,6 +29,7 @@ from zope.app.testing import setup, ztapi
 from zope.publisher.browser import TestRequest
 from zope.interface import directlyProvides
 from zope.app.traversing.interfaces import IContainmentRoot
+from zope.i18n import translate
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 
@@ -153,7 +154,7 @@ def doctest_SectionAddView():
         ...     _set_before_add = 'title',
         ...     _set_after_add = []
 
-    create a schooltool instance:
+    create a SchoolTool instance:
 
         >>> from schooltool.app import SchoolToolApplication
         >>> app = SchoolToolApplication()
@@ -167,13 +168,13 @@ def doctest_SectionAddView():
         >>> course = Course(title="Algebra I")
         >>> courses['algebraI'] = course
 
-    on to the actual work
+    On to the actual work...
 
     Sections are special types of groups meant to represent one meeting time
     of a course.  If they don't have a course, they can't be created "stand
     alone".
 
-    first a request without a course reference sets the view error.
+    First a request without a course reference sets the view error.
 
         >>> request = TestRequest()
         >>> context = AddingStub(sections, request)
@@ -215,6 +216,9 @@ def doctest_SectionAddView():
         >>> view = SectionAddViewForTesting(context, request)
         >>> view.update()
         ''
+
+        >>> translate(view.label)
+        u'Add a Section to Algebra I'
 
     Our section is now a member of the Course, we use a generic title for
     sections

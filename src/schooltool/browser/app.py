@@ -94,19 +94,20 @@ class SectionAddView(AddView):
             self.error = _("No such course.")
 
     def __init__(self, context, request):
-
         super(AddView, self).__init__(context, request)
 
         try:
-            self.course = self.getCourseFromId(request['field.course_id'])
+            course_id = request['field.course_id']
         except KeyError:
             self.error = _("Need a course ID.")
+            return
 
+        self.course = self.getCourseFromId(course_id)
         if self.course is not None:
-            self.label = _("Add a Section to %s") % self.course.title # XXX bug!
+            self.label = _("Add a Section to ${course}")
+            self.label.mapping = {'course': self.course.title}
 
     def update(self):
-
         if self.update_status is not None:
             # We've been called before. Just return the previous result.
             return self.update_status
