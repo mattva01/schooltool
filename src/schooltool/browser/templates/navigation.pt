@@ -1,4 +1,4 @@
-<div class="portlet" i18n:domain="schoolbell">
+<div class="portlet" i18n:domain="schooltool">
 <h4 i18n:translate="">Navigation</h4>
 <ul>
    <li><a tal:attributes="href view/app/persons/@@absolute_url"
