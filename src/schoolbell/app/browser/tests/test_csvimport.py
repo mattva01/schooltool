@@ -53,7 +53,7 @@ def doctest_BaseCSVImporter():
         >>> importer.parseCSVRows(data)
         [['one', 'two', 'three'], ['four', 'five', 'six']]
 
-    parseCSVRows can also set errors should they occour
+    parseCSVRows can also set errors should they occur
 
         >>> data = ["one, \xff"]
         >>> importer.charset = 'UTF-8'
