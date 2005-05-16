@@ -155,7 +155,7 @@ class BaseCSVImporter(object):
             return result
         except csv.Error:
             self.errors.generic.append(
-                    _("Error in timetable CSV data, line %d" % line))
+                    _("Error in CSV data, line %d" % line))
         except UnicodeError:
             self.errors.generic.append(
                     _("Conversion to unicode failed in line %d" % line))

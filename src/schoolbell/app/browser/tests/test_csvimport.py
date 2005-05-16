@@ -32,6 +32,67 @@ from schoolbell.app.browser.tests.setup import setUp, tearDown
 __metaclass__ = type
 
 
+def doctest_BaseCSVImporter():
+    r"""Test for BaseCSVImporter
+
+    Set up
+
+        >>> from schoolbell.app.browser.csvimport import BaseCSVImporter
+        >>> importer = BaseCSVImporter(None)
+
+    Subclasses need to define the createAndAdd method
+
+        >>> importer.createAndAdd(None)
+        Traceback (most recent call last):
+        ...
+        NotImplementedError: Please override this method in subclasses
+
+    When given a list of CSV rows parseCSVRows should return a list of lists
+
+        >>> data = ["one, two, three", "four, five, six"]
+        >>> importer.parseCSVRows(data)
+        [['one', 'two', 'three'], ['four', 'five', 'six']]
+
+    parseCSVRows can also set errors should they occour
+
+        >>> data = ["one, \xff"]
+        >>> importer.charset = 'UTF-8'
+        >>> importer.parseCSVRows(data)
+        >>> importer.errors.generic
+        [u'Conversion to unicode failed in line 1']
+
+    Moving on, importFromCSV calls createAndAdd which we have not defined
+
+        >>> csvdata = "one, two, three\nfour, five, six"
+        >>> importer.importFromCSV(csvdata)
+        Traceback (most recent call last):
+        ...
+        NotImplementedError: Please override this method in subclasses
+
+    We need to make a subclass to test this properly
+
+        >>> class TestCSVImporter(BaseCSVImporter):
+        ...     def __init__(self):
+        ...         BaseCSVImporter.__init__(self, None, 'UTF-8')
+        ...     def createAndAdd(self, data, True):
+        ...         pass
+
+        >>> myimporter = TestCSVImporter()
+
+    importFromCSV just returns True if everything goes well
+
+        >>> myimporter.importFromCSV(csvdata)
+        True
+
+    False is returned if there are errors
+
+        >>> myimporter.importFromCSV("one, two\nthree, \xff")
+        False
+        >>> myimporter.errors.generic
+        [u'Conversion to unicode failed in line 2']
+
+    """
+
 def doctest_GroupCSVImporter():
     r"""Tests for GroupCSVImporter.
 
