@@ -10,6 +10,7 @@ schoolbell (1.1-1) unstable; urgency=low
   * Do not listen on the RESTive/XML interface by default. See:
     http://lists.schooltool.org/pipermail/schooltool/2005-April/001173.html
   * Update the rules file to the newer way of calling setup.py.
+  * Build translations in rules file.
   * Depend on python2.3-libxml2 again.
 
  -- Brian Sutherland <jinty@web.de>  Mon, 28 Mar 2005 16:28:20 +0200
