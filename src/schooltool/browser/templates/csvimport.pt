@@ -37,7 +37,7 @@
     <br />
 
     <div class="row">
-      Charset: <select name="charset">
+      <tal:i18n i18n:translate="">Charset:</tal:i18n> <select name="charset">
         <option value="UTF-8" i18n:translate="">Unicode (UTF-8)</option>
         <option value="ISO-8859-1" i18n:translate="">Western (ISO-8859-1)</option>
         <option value="ISO-8859-15" i18n:translate="">Western (ISO-8859-15)</option>
@@ -46,8 +46,10 @@
       </select>
     </div>
     <div class="row" i18n:translate="">
-        Other charset: <input i18n:name="other_charset"
-                              name="other_charset" type="text" />
+        <tal:i18n i18n:translate="">
+          Other charset:
+        </tal:i18n>
+        <input name="other_charset" type="text" />
     </div>
 
     <br />
