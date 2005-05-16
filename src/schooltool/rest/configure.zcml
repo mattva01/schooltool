@@ -56,14 +56,6 @@
       />
 
   <view
-      for="schooltool.interfaces.ICourseContainer"
-      name="PUT"
-      factory=".app.CourseContainerView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
       for="schooltool.interfaces.ISectionContainer"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
       provides="zope.publisher.interfaces.IPublishTraverse"
@@ -74,14 +66,6 @@
   <view
       for="schooltool.interfaces.ISectionContainer"
       name="POST"
-      factory=".app.SectionContainerView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.interfaces.ISectionContainer"
-      name="PUT"
       factory=".app.SectionContainerView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
