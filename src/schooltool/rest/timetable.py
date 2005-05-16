@@ -21,26 +21,26 @@ RESTive views for SchoolTool timetabling
 
 $Id: app.py 3419 2005-04-14 18:34:36Z alga $
 """
+
 import datetime
 import sets
+
 from zope.app import zapi
 from zope.component import adapts
 from zope.interface import implements
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 
-# TODO: reorder imports
-from schooltool.timetable import Timetable
-from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 from schoolbell.app.rest import View, Template
-from schooltool.common import parse_date, parse_time
-from schoolbell.app.rest.errors import RestError
-from schooltool.timetable import TimetableSchemaContainer
-from schoolbell.app.rest.xmlparsing import XMLDocument
-from schooltool.interfaces import ITimetableModelFactory
-from schooltool.timetable import SchooldayTemplate
-from schooltool.timetable import SchooldayPeriod
-from schooltool.timetable import TimetableDay
 from schoolbell.app.rest.app import GenericContainerView
+from schoolbell.app.rest.errors import RestError
+from schoolbell.app.rest.xmlparsing import XMLDocument
+from schooltool.common import parse_date, parse_time
+from schooltool.interfaces import ITimetableModelFactory
+from schooltool.timetable import SchooldayPeriod
+from schooltool.timetable import SchooldayTemplate
+from schooltool.timetable import Timetable, TimetableDay
+from schooltool.timetable import TimetableSchema, TimetableSchemaDay
+from schooltool.timetable import TimetableSchemaContainer
 
 
 def parseDate(date_str):
