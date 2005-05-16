@@ -9,7 +9,7 @@ Overview
 --------
 
 1. Definition of terms
-2. Definition of timetable schemas (TODO)
+2. Definition of timetable schemas
 3. Usage of timetables (TODO)
 
 
