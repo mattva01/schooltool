@@ -199,6 +199,17 @@
              set_schema=".interfaces.ITimetableDay" />
   </content>
 
+  <content class=".timetable.TimetableSchema">
+    <allow interface=".interfaces.ITimetableSchema" />
+    <require permission="schoolbell.edit"
+             interface=".interfaces.ITimetableSchemaWrite"
+             set_schema=".interfaces.ITimetableSchema" />
+  </content>
+
+  <content class=".timetable.TimetableSchemaDay">
+    <allow interface=".interfaces.ITimetableSchemaDay" />
+  </content>
+
   <content class=".timetable.SchooldayTemplate">
     <allow interface=".interfaces.ISchooldayTemplate" />
     <require permission="schoolbell.edit"

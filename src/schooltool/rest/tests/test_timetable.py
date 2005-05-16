@@ -265,20 +265,20 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
         self.tearDownLibxml2()
         setup.placelessTearDown()
 
-    def createEmpty(self):
-        from schooltool.timetable import Timetable, TimetableDay
+    def createEmptySchema(self):
+        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 
-        timetable = Timetable(['Day 1', 'Day 2'])
-        timetable['Day 1'] = TimetableDay(['A', 'B'])
-        timetable['Day 2'] = TimetableDay(['C', 'D'])
+        timetable = TimetableSchema(['Day 1', 'Day 2'])
+        timetable['Day 1'] = TimetableSchemaDay(['A', 'B'])
+        timetable['Day 2'] = TimetableSchemaDay(['C', 'D'])
         return timetable
 
-    def createExtended(self):
+    def createExtendedSchema(self):
         from schooltool.timetable import SequentialDaysTimetableModel
         from schooltool.timetable import SchooldayPeriod, SchooldayTemplate
         from datetime import time, timedelta
 
-        tt = self.createEmpty()
+        tt = self.createEmptySchema()
 
         day_template1 = SchooldayTemplate()
         hour = timedelta(minutes=60)
@@ -340,7 +340,7 @@ class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
     def test_get(self):
         from schooltool.rest.timetable import TimetableSchemaView
         request = TestRequest()
-        view = TimetableSchemaView(self.createExtended(), request)
+        view = TimetableSchemaView(self.createExtendedSchema(), request)
 
         result = view.GET()
         self.assertEquals(request.response.getHeader('content-type'),
@@ -361,14 +361,14 @@ class TestTimetableSchemaFileFactory(TimetableSchemaMixin, unittest.TestCase):
     def test_parseXML(self):
         factory = IFileFactory(self.schemaContainer)
         schema = factory("two_day", "text/xml", self.schema_xml)
-        self.assertEquals(schema, self.createExtended())
+        self.assertEquals(schema, self.createExtendedSchema())
 
 
 class TestTimetableSchemaFile(TimetableSchemaMixin, unittest.TestCase):
 
     def setUp(self):
         TimetableSchemaMixin.setUp(self)
-        self.schemaContainer["two_day"] = self.createEmpty()
+        self.schemaContainer["two_day"] = self.createEmptySchema()
 
     def test(self):
         from schooltool.rest.timetable import TimetableSchemaFile
@@ -380,7 +380,7 @@ class TestTimetableSchemaFile(TimetableSchemaMixin, unittest.TestCase):
         schemaFile = TimetableSchemaFile(self.schemaContainer["two_day"])
         schemaFile.write(self.schema_xml)
         self.assertEquals(self.schemaContainer["two_day"],
-                          self.createExtended())
+                          self.createExtendedSchema())
 
 
 def test_suite():

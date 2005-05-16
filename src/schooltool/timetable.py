@@ -163,6 +163,7 @@ from schoolbell.calendar.simple import ImmutableCalendar
 from schoolbell.relationship import getRelatedObjects
 
 from schooltool.interfaces import ITimetableSchema, ITimetableSchemaDay
+from schooltool.interfaces import ITimetableSchemaWrite
 from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.interfaces import ITimetableActivity, ITimetableException
@@ -290,7 +291,7 @@ class Term(DateRange, Persistent):
 
 class TimetableSchema(Persistent, Contained):
 
-    implements(ITimetableSchema)
+    implements(ITimetableSchema, ITimetableSchemaWrite)
 
     def __init__(self, day_ids):
         """Create a new empty timetable schema.
@@ -328,6 +329,16 @@ class TimetableSchema(Persistent, Contained):
             other[day_id] = TimetableDay(self[day_id].periods)
         return other
 
+    def __eq__(self, other):
+        if ITimetableSchema.providedBy(other):
+            return (self.items() == other.items()
+                    and self.model == other.model)
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
 
 class TimetableSchemaDay(Persistent):
 
@@ -335,6 +346,26 @@ class TimetableSchemaDay(Persistent):
 
     def __init__(self, periods=()):
         self.periods = periods
+
+    def keys(self):
+        return self.periods
+
+    def items(self):
+        return [(period, Set()) for period in self.periods]
+
+    def __getitem__(self, period):
+        if period not in self.periods:
+            raise KeyError(period)
+        return Set()
+
+    def __eq__(self, other):
+        if ITimetableSchemaDay.providedBy(other):
+            return self.periods == other.periods
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
 
 class Timetable(Persistent):
@@ -967,6 +998,7 @@ class TimetableDict(PersistentDict):
     __parent__ = None
 
     def __setitem__(self, key, value):
+        assert ITimetable.providedBy(value)
         keys = key.split(".")
         if len(keys) != 2 or not keys[0] or not keys[1]:
             raise ValueError("The key should be composed of a term id and a"
@@ -1135,17 +1167,11 @@ class TimetableSchemaContainer(BTreeContainer):
 
     default_id = property(lambda self: self._default_id, _set_default_id)
 
-    def __getitem__(self, schema_id):
-        schema = BTreeContainer.__getitem__(self, schema_id).cloneEmpty()
-        schema.__parent__ = self
-        schema.__name__ = schema_id
-        return schema
-
-    def __setitem__(self, schema_id, timetable):
-        prototype = timetable.cloneEmpty()
+    def __setitem__(self, schema_id, ttschema):
+        assert ITimetableSchema.providedBy(ttschema)
         if self.has_key(schema_id):
             BTreeContainer.__delitem__(self, schema_id)
-        BTreeContainer.__setitem__(self, schema_id, prototype)
+        BTreeContainer.__setitem__(self, schema_id, ttschema)
         if self.default_id is None:
             self.default_id = schema_id
 

@@ -214,14 +214,14 @@
       />
 
   <adapter
-      for="schooltool.interfaces.ITimetable"
+      for="schooltool.interfaces.ITimetableSchema"
       provides="zope.app.filerepresentation.interfaces.IWriteFile"
       factory=".timetable.TimetableSchemaFile"
       permission="zope.Public"
       />
 
   <view
-      for="schooltool.interfaces.ITimetable"
+      for="schooltool.interfaces.ITimetableSchema"
       name="GET"
       factory=".timetable.TimetableSchemaView"
       type="zope.publisher.interfaces.http.IHTTPRequest"

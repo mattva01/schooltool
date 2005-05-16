@@ -12,10 +12,8 @@
   <day tal:repeat="item context/items"
        tal:attributes="id python:item[0]">
     <period tal:define="day python:item[1]"
-            tal:repeat="item day/items"
-            tal:attributes="id python:item[0]">
-      <activity tal:repeat="activity python:item[1]"
-                tal:content="activity/title" />
+            tal:repeat="period day/periods"
+            tal:attributes="id period">
     </period>
   </day>
 </timetable>

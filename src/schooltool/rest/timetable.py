@@ -28,7 +28,9 @@ from zope.component import adapts
 from zope.interface import implements
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 
+# TODO: reorder imports
 from schooltool.timetable import Timetable
+from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 from schoolbell.app.rest import View, Template
 from schooltool.common import parse_date, parse_time
 from schoolbell.app.rest.errors import RestError
@@ -281,7 +283,7 @@ class TimetableSchemaFileFactory(object):
 
             if len(sets.Set(day_ids)) != len(day_ids):
                 raise RestError("Duplicate days in schema")
-            timetable = Timetable(day_ids)
+            timetable = TimetableSchema(day_ids)
             timetable.model = model
             for day in days:
                 day_id = day['id']
@@ -291,7 +293,7 @@ class TimetableSchemaFileFactory(object):
                     # XXX Should raise RestError here.
                     return textErrorPage(request,
                                          "Duplicate periods in schema")
-                timetable[day_id] = TimetableDay(period_ids)
+                timetable[day_id] = TimetableSchemaDay(period_ids)
 
             return timetable
         finally:

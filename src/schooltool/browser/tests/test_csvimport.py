@@ -41,14 +41,14 @@ __metaclass__ = type
 class TestTimetableCSVImportView(unittest.TestCase):
 
     def setUp(self):
-        from schooltool.timetable import Timetable, TimetableDay
+        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
         from schooltool.app import SchoolToolApplication
         setUpRelationshipStuff()
         self.app = SchoolToolApplication()
 
-        ttschema = Timetable(["1","2","3"])
+        ttschema = TimetableSchema(["1","2","3"])
         for day in range(1, 4):
-            ttschema[str(day)] = TimetableDay([str(day)])
+            ttschema[str(day)] = TimetableSchemaDay([str(day)])
         self.app['ttschemas']['three-day'] = ttschema
 
     def tearDown(self):
@@ -142,7 +142,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
     def setUp(self):
         setUpRelationshipStuff()
-        from schooltool.timetable import Timetable, TimetableDay
+        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
         from schooltool.app import SchoolToolApplication
         self.app = app = SchoolToolApplication()
 
@@ -152,9 +152,9 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.location2 = app['resources']['location2'] = Resource("Outside")
 
         # set a timetable schema
-        ttschema = Timetable(self.days)
+        ttschema = TimetableSchema(self.days)
         for day in self.days:
-            ttschema[day] = TimetableDay(self.periods)
+            ttschema[day] = TimetableSchemaDay(self.periods)
         self.app["ttschemas"]['three-day'] = ttschema
 
         # add some people and groups
@@ -371,7 +371,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assertEquals(len(list(tt_notblank.itercontent())), 1)
 
     def test_scheduleClass(self):
-        from schooltool.timetable import Timetable, TimetableDay
+        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 
         math101 = self.app['courses']['math101'] = Course(title='Math 101')
         teacher = Person('teacher', 'Prof. Bar')
@@ -381,9 +381,9 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp.ttname = 'tt'
         imp.ttschema = 'two_day'
         imp.period_id = 'period1'
-        ttschema = Timetable(("day1", "day2"))
-        ttschema["day1"] = TimetableDay(("A", "B"))
-        ttschema["day2"] = TimetableDay(("A", "B"))
+        ttschema = TimetableSchema(("day1", "day2"))
+        ttschema["day1"] = TimetableSchemaDay(("A", "B"))
+        ttschema["day2"] = TimetableSchemaDay(("A", "B"))
         self.app["ttschemas"]['two_day'] = ttschema
 
         imp.scheduleClass('A', 'Math 101', 'Prof. Bar',
@@ -417,7 +417,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
                              rel=URISection)
 
     def test_scheduleClass_errors(self):
-        from schooltool.timetable import Timetable, TimetableDay
+        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 
         math101 = self.app['courses']['math101'] = Course(title='Math 101')
 
@@ -425,9 +425,9 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp.ttname = 'tt'
         imp.ttschema = 'two_day'
         imp.period_id = 'period1'
-        imp.ttschema = Timetable(("day1", "day2"))
-        imp.ttschema["day1"] = TimetableDay(("A", "B"))
-        imp.ttschema["day2"] = TimetableDay(("A", "B"))
+        imp.ttschema = TimetableSchema(("day1", "day2"))
+        imp.ttschema["day1"] = TimetableSchemaDay(("A", "B"))
+        imp.ttschema["day2"] = TimetableSchemaDay(("A", "B"))
 
         imp.scheduleClass('A', 'Invalid course', 'Dumb professor',
                           day_ids=['day1', 'day2'], location='Nowhere')

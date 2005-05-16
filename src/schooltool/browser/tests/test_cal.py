@@ -90,11 +90,11 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def createSchema(self, days, *periods_for_each_day):
         """Create a timetable schema."""
-        from schooltool.timetable import Timetable
-        from schooltool.timetable import TimetableDay
-        schema = Timetable(days)
+        from schooltool.timetable import TimetableSchema
+        from schooltool.timetable import TimetableSchemaDay
+        schema = TimetableSchema(days)
         for day, periods in zip(days, periods_for_each_day):
-            schema[day] = TimetableDay(list(periods))
+            schema[day] = TimetableSchemaDay(list(periods))
         return schema
 
     def test_calendarRows(self):

@@ -400,6 +400,10 @@ class ITimetableSchema(IContained):
         period ids within each day.  It has no activities nor exceptions.
         """
 
+
+class ITimetableSchemaWrite(Interface):
+    """Interface for initializing timetable schemas."""
+
     def __setitem__(key, value):
         """Set an ITimetableSchemaDay for a given day id.
 
@@ -414,11 +418,25 @@ class ITimetableSchemaDay(Interface):
     A timetable day is an ordered collection of periods.
 
     Different days within the same timetable schema may have different periods.
+
+    ITimetableSchemaDay has keys, items and __getitem__ for interface
+    compatibility with ITimetableDay -- so that, for example, views for
+    ITimetable can be used to render ITimetableSchemas.
     """
 
     periods = List(
         title=u"A list of period IDs for this day.",
         value_type=TextLine(title=u"A period id"))
+
+    def keys():
+        """Return self.periods."""
+
+    def items():
+        """Return a sequence of (period_id, empty_set)."""
+
+    def __getitem__(key):
+        """Return an empty set, if key is in periods, otherwise raise KeyError.
+        """
 
 
 class ITimetable(ILocation):
@@ -800,6 +818,8 @@ class ITimetableSchemaContainer(IContainer, ILocation):
     This service stores timetable prototypes (empty timetables) and
     can return a new timetable of a certain schema on request.
     """
+
+    contains(ITimetableSchema)
 
     default_id = TextLine(
         title=u"Schema id of the default schema")

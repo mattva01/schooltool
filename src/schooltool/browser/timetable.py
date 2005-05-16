@@ -53,6 +53,7 @@ from schooltool.interfaces import ITermContainer, ITerm
 from schooltool.interfaces import ITimetableSchemaContainer
 from schooltool.interfaces import ITimetableModelFactory
 from schooltool.timetable import Term, Timetable, TimetableDay
+from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool import getSchoolToolApplication
 
@@ -553,9 +554,9 @@ class TimetableSchemaWizard(BrowserView, TabindexMixin):
             period_name = translate(period_name_msgid, context=self.request)
             longest_day.append(period_name)
 
-        ttschema = Timetable(day_ids)
+        ttschema = TimetableSchema(day_ids)
         for day, periods in zip(day_ids, periods_for_day):
-            ttschema[day] = TimetableDay(periods)
+            ttschema[day] = TimetableSchemaDay(periods)
 
         return ttschema
 

@@ -381,7 +381,7 @@ class TimetableCSVImporter(object):
         # Create the timetable if it does not exist yet.
         timetable_key = ".".join((self.period_id, self.ttschema))
         if timetable_key not in section.timetables.keys():
-            tt = self.app["ttschemas"][self.ttschema]
+            tt = self.app["ttschemas"][self.ttschema].createTimetable()
             section.timetables[timetable_key] = tt
         else:
             tt = section.timetables[timetable_key]

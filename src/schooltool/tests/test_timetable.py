@@ -42,7 +42,7 @@ from zope.app.container.contained import Contained
 from schooltool.tests.helpers import diff, sorted
 from schoolbell.app.rest.tests.utils import NiceDiffsMixin, EqualsSortedMixin
 from schooltool.interfaces import ITerm
-from schooltool.interfaces import ITimetableActivity
+from schooltool.interfaces import ITimetable, ITimetableActivity
 from schooltool.interfaces import ILocation
 from schooltool.timetable import TimetabledMixin
 from schoolbell.relationship import RelationshipProperty
@@ -178,14 +178,13 @@ class ActivityStub:
 class TestTimetableSchema(unittest.TestCase):
 
     def test_interface(self):
-        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
-        from schooltool.interfaces import ITimetableSchema, ITimetableSchemaDay
+        from schooltool.timetable import TimetableSchema
+        from schooltool.interfaces import ITimetableSchema
+        from schooltool.interfaces import ITimetableSchemaWrite
 
         t = TimetableSchema(['one', 'two'])
         verifyObject(ITimetableSchema, t)
-
-        td = TimetableSchemaDay(['a', 'b', 'c'])
-        verifyObject(ITimetableSchemaDay, td)
+        verifyObject(ITimetableSchemaWrite, t)
 
     def test_keys(self):
         from schooltool.timetable import TimetableSchema
@@ -248,6 +247,61 @@ class TestTimetableSchema(unittest.TestCase):
             self.assertEquals(day.periods, day2.periods)
             for period in day.periods:
                 self.assertEquals(list(day[period]), [])
+
+    def test_equality(self):
+        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
+        days = ('A', 'B')
+        periods1 = ('Green', 'Blue')
+        periods2 = ('Green', 'Red', 'Yellow')
+        tts = TimetableSchema(days)
+        tts["A"] = TimetableSchemaDay(periods1)
+        tts["B"] = TimetableSchemaDay(periods2)
+        self.assertEquals(tts, tts)
+        self.assertNotEquals(tts, None)
+
+        # Same thing
+        tts2 = TimetableSchema(days)
+        tts2["A"] = TimetableSchemaDay(periods1)
+        tts2["B"] = TimetableSchemaDay(periods2)
+        self.assertEquals(tts, tts2)
+
+        # Swap periods in days
+        tts3 = TimetableSchema(days)
+        tts3["A"] = TimetableSchemaDay(periods2)
+        tts3["B"] = TimetableSchemaDay(periods1)
+        self.assertNotEquals(tts, tts3)
+
+        # Add an extra day
+        tts4 = TimetableSchema(days + ('C', ))
+        tts4["A"] = TimetableSchemaDay(periods1)
+        tts4["B"] = TimetableSchemaDay(periods1)
+        tts4["C"] = TimetableSchemaDay(periods1)
+        self.assertNotEquals(tts, tts4)
+
+        # Change the model
+        tts5 = TimetableSchema(days)
+        tts5.model = object()
+        tts5["A"] = TimetableSchemaDay(periods1)
+        tts5["B"] = TimetableSchemaDay(periods2)
+        self.assertNotEquals(tts, tts5)
+
+
+class TestTimetableSchemaDay(unittest.TestCase):
+
+    def test(self):
+        from schooltool.timetable import TimetableSchemaDay
+        from schooltool.interfaces import ITimetableSchemaDay
+
+        td = TimetableSchemaDay(['a', 'b', 'c'])
+        verifyObject(ITimetableSchemaDay, td)
+
+        self.assertEquals(list(td.periods), ['a', 'b', 'c'])
+        self.assertEquals(list(td.keys()), ['a', 'b', 'c'])
+        self.assertEquals(list(td.items()), [('a', Set()),
+                                             ('b', Set()),
+                                             ('c', Set())])
+        self.assertEquals(td['b'], Set())
+        self.assertRaises(KeyError, td.__getitem__, 'x')
 
 
 class TestTimetable(unittest.TestCase):
@@ -1253,6 +1307,10 @@ class PersistentLocatableStub(Persistent):
     __parent__ = None
 
 
+class TimetableStub(PersistentLocatableStub):
+    implements(ITimetable)
+
+
 class TestTimetableDict(EventTestMixin, unittest.TestCase):
 
     def test(self):
@@ -1268,13 +1326,13 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
         from schooltool.timetable import TimetableDict
 
         td = TimetableDict()
-        item = PersistentLocatableStub()
+        item = TimetableStub()
         td['aa.bb'] = item
         self.assertEqual(item.__name__, ('aa.bb'))
         self.assertEqual(item.__parent__, td)
         self.assertEqual(item, td['aa.bb'])
 
-        item2 = PersistentLocatableStub()
+        item2 = TimetableStub()
         td['aa.bb'] = item2
         self.assertEqual(item2, td['aa.bb'])
         self.assertEqual(item.__parent__, None)
@@ -1290,7 +1348,7 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
         from schooltool.interfaces import ITimetableReplacedEvent
 
         td = TimetableDict()
-        item = PersistentLocatableStub()
+        item = TimetableStub()
         td['aa.bb'] = item
         e = self.checkOneEventReceived()
         self.assert_(ITimetableReplacedEvent.providedBy(e))
@@ -1300,7 +1358,7 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
         self.assert_(e.new_timetable is item)
 
         self.clearEvents()
-        item2 = PersistentLocatableStub()
+        item2 = TimetableStub()
         td['aa.bb'] = item2
         e = self.checkOneEventReceived()
         self.assert_(ITimetableReplacedEvent.providedBy(e))
@@ -1321,8 +1379,8 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
     def test_clear(self):
         from schooltool.timetable import TimetableDict
         td = TimetableDict()
-        td['a.b'] = PersistentLocatableStub()
-        td['b.c'] = PersistentLocatableStub()
+        td['a.b'] = TimetableStub()
+        td['b.c'] = TimetableStub()
         self.clearEvents()
         td.clear()
         self.assertEquals(list(td.keys()), [])
@@ -1332,14 +1390,14 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
         from schooltool.timetable import TimetableDict
         td = TimetableDict()
         self.assertRaises(ValueError, td.__setitem__, 'a.b.c',
-                          PersistentLocatableStub())
+                          TimetableStub())
         self.assertRaises(ValueError, td.__setitem__, 'abc',
-                          PersistentLocatableStub())
+                          TimetableStub())
         self.assertRaises(ValueError, td.__setitem__, 'c.',
-                          PersistentLocatableStub())
+                          TimetableStub())
         self.assertRaises(ValueError, td.__setitem__, '.c',
-                          PersistentLocatableStub())
-        td['a.c'] = PersistentLocatableStub()
+                          TimetableStub())
+        td['a.c'] = TimetableStub()
 
 
 class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
@@ -1371,6 +1429,13 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         verifyObject(ITimetabled, tm)
         self.assert_(isinstance(tm.timetables, TimetableDict))
         self.assertEqual(tm.timetables.__parent__, tm)
+
+    def newTimetableSchema(self):
+        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
+        tt = TimetableSchema(("A", "B"))
+        tt["A"] = TimetableSchemaDay(["Green", "Blue"])
+        tt["B"] = TimetableSchemaDay(["Green", "Blue"])
+        return tt
 
     def newTimetable(self):
         from schooltool.timetable import Timetable, TimetableDay
@@ -1461,9 +1526,9 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         setSite(app)
         term = app["terms"]['2003 fall'] = TermStub()
         tss = app["ttschemas"]
-        tss['sequential'] = self.newTimetable()
-        tss['other'] = self.newTimetable()
-        tss['and another'] = self.newTimetable()
+        tss['sequential'] = self.newTimetableSchema()
+        tss['other'] = self.newTimetableSchema()
+        tss['and another'] = self.newTimetableSchema()
         tm = TimetabledStub()
 
         tt1 = self.newTimetable()
@@ -1636,36 +1701,20 @@ class TestTimetableSchemaContainer(unittest.TestCase):
 
     def test(self):
         from schooltool.timetable import TimetableSchemaContainer
-        from schooltool.timetable import Timetable, TimetableDay
-        from schooltool.timetable import TimetableActivity
+        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 
         service = TimetableSchemaContainer()
         self.assertEqual(list(service.keys()), [])
 
-        tt = Timetable(("A", "B"))
-        tt["A"] = TimetableDay(("Green", "Blue"))
-        tt["B"] = TimetableDay(("Red", "Yellow"))
-        tt["A"].add("Green", TimetableActivity("Slacking"))
-        self.assertEqual(len(list(tt["A"]["Green"])), 1)
+        tt = TimetableSchema(("A", "B"))
+        tt["A"] = TimetableSchemaDay(("Green", "Blue"))
+        tt["B"] = TimetableSchemaDay(("Red", "Yellow"))
 
         service["super"] = tt
         self.assertEqual(list(service.keys()), ["super"])
         self.assertEqual(service["super"].__name__, "super")
         self.assert_(service["super"].__parent__ is service)
         self.assertEqual(service.default_id, "super")
-
-        copy1 = service["super"]
-        copy2 = service["super"]
-        self.assert_(copy2 is not copy1)
-        self.assertEqual(copy2, copy1)
-        self.assertEqual(service.getDefault(), copy1)
-        self.assertEqual(tt.cloneEmpty(), copy1)
-
-        self.assertEqual(len(list(copy1["A"]["Green"])), 0)
-
-        copy1["A"].add("Green", TimetableActivity("Slacking"))
-        self.assertEqual(len(list(copy1["A"]["Green"])), 1)
-        self.assertEqual(len(list(copy2["A"]["Green"])), 0)
 
         del service["super"]
         self.assertRaises(KeyError, service.__getitem__, "super")
@@ -1718,7 +1767,7 @@ class TestGetPeriodsForDay(PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
         from schooltool.timetable import TermContainer
-        from schooltool.timetable import Timetable
+        from schooltool.timetable import TimetableSchema
         from schooltool.timetable import Term
         from schooltool.timetable import TimetableSchemaContainer
         from schooltool.app import SchoolToolApplication
@@ -1731,7 +1780,7 @@ class TestGetPeriodsForDay(PlacelessSetup, unittest.TestCase):
         self.term2 = Term('Sample', date(2005, 1, 1), date(2005, 6, 1))
         app["terms"]['2004-fall'] = self.term1
         app["terms"]['2005-spring'] = self.term2
-        tt = Timetable([])
+        tt = TimetableSchema([])
 
         class TimetableModelStub:
             def periodsInDay(self, schooldays, ttschema, date):
@@ -1775,6 +1824,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestDateRange))
     suite.addTest(unittest.makeSuite(TestTerm))
     suite.addTest(unittest.makeSuite(TestTimetableSchema))
+    suite.addTest(unittest.makeSuite(TestTimetableSchemaDay))
     suite.addTest(unittest.makeSuite(TestTimetable))
     suite.addTest(unittest.makeSuite(TestTimetableDay))
     suite.addTest(unittest.makeSuite(TestTimetableActivity))
