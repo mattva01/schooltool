@@ -26,6 +26,7 @@ import unittest
 
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
+from zope.i18n import translate
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 
@@ -58,8 +59,8 @@ def doctest_BaseCSVImporter():
         >>> data = ["one, \xff"]
         >>> importer.charset = 'UTF-8'
         >>> importer.parseCSVRows(data)
-        >>> importer.errors.generic
-        [u'Conversion to unicode failed in line 1']
+        >>> translate(importer.errors.generic[0])
+        u'Conversion to unicode failed in line 1'
 
     Moving on, importFromCSV calls createAndAdd which we have not defined
 
@@ -88,8 +89,8 @@ def doctest_BaseCSVImporter():
 
         >>> myimporter.importFromCSV("one, two\nthree, \xff")
         False
-        >>> myimporter.errors.generic
-        [u'Conversion to unicode failed in line 2']
+        >>> translate(myimporter.errors.generic[0])
+        u'Conversion to unicode failed in line 2'
 
     """
 

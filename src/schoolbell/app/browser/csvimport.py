@@ -154,11 +154,13 @@ class BaseCSVImporter(object):
         except StopIteration:
             return result
         except csv.Error:
-            self.errors.generic.append(
-                    _("Error in CSV data, line %d" % line))
+            error_msg = _("Error in CSV data, line ${line_no}")
+            error_msg.mapping = {'line_no': line}
+            self.errors.generic.append(error_msg)
         except UnicodeError:
-            self.errors.generic.append(
-                    _("Conversion to unicode failed in line %d" % line))
+            error_msg = _("Conversion to unicode failed in line ${line_no}")
+            error_msg.mapping = {'line_no': line}
+            self.errors.generic.append(error_msg)
 
     def importFromCSV(self, csvdata):
         """Import objects from CSV data.
