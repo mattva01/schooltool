@@ -33,19 +33,25 @@ here=os.path.dirname(__file__)
 # Configuration
 #
 
-# Translations to download
+# Translations to download, these are the rosetta translations which have had
+# some work on them
 locales=["af",
-# XXX: commented out for until tested
-#         "ca",
-#         "de",
-#         "de_CH",
-#         "es_MX",
-#         "es_ES",
-#         "fr",
-#         "fr_FR",
-#         "nl",
-#         "pl",
-#         "pt_PT",
+         "ca",
+         "de",
+         "de_CH",
+         "es_MX",
+         "es_ES",
+         "en_US"
+         "fr",
+         "fr_CA",
+         "fr_FR",
+         "he",
+         "it",
+         "lt",
+         "nl",
+         "pl",
+         "pt_PT",
+         "sv"
          ]
 
 rosetta_url = "https://launchpad.ubuntu.com/products/$domain$/unknown/+pots/$domain$-ui/$locale$/po"
