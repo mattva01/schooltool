@@ -21,6 +21,25 @@
         <h3 i18n:translate="">
           Import Groups
         </h3>
+        <p i18n:translate="">
+          CSV data should be made up of a group title and an optional group
+          description.  Any extra information will be discarded.
+        </p>
+        <p i18n:translate="">Example:</p>
+
+<pre i18n:translate="">
+Some Group, Some group description
+Second Group
+Another Group, Another description, this text will be discarded
+</pre>
+        <p i18n:translate="">
+          The above example will create 3 groups titled 'Some Group', 'Second
+          Group' and 'Another Group'.  The first and last group will have the
+          descriptions 'Some group description' and 'Another description'
+          respectively.  The Second group will have no description, and the
+          extra "this text will be discarded" text on the third group will be
+          ignored.
+        </p>
 
         <fieldset>
           <legend i18n:translate="">Upload CSV File</legend>
