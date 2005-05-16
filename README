@@ -45,33 +45,18 @@ System requirements
 
 - libxml2 Python bindings (http://xmlsoft.org/)
 
-- Twisted 1.3.0 or newer (http://www.twistedmatrix.com/)
-  (needed for the server only)
-
 - Python Imaging library (http://www.pythonware.com/products/pil/index.htm)
-  (needed for the server only)
-
-- wxPython 2.4 (http://www.wxpython.org/)
-  (needed for the wxWidgets client only)
-
-- pyOpenSSL (http://sourceforge.net/projects/pyopenssl/)
   (needed for the server only)
 
 - Development environment and a C compiler
   (precompiled binaries are available for Windows users)
 
 
-Optional Extras
----------------
-
-- PyTCPWrap (http://ples.sourceforge.net/index.cgi?PyTCPWrap)
-  (useful for the server only)
-
-
 Building SchoolTool
 -------------------
 
-Run 'make' to build the necessary extension modules.
+Run 'make build update-translations' to build the necessary extension modules
+and translations.
 
 It is a good idea to run 'make test' and 'make ftest' to check if all the
 essential unit and functional tests pass.
@@ -118,10 +103,6 @@ The top-level project directory contains the following executable Python
 scripts:
 
   schooltool-server.py      starts the SchoolTool server
-  schoolbell-server.py      starts the SchoolBell server
-  schooltool-client.py      starts the command line client
-  generate-sampleschool.py  generates sample school data
-  import-sampleschool.py    imports sample data into the server
 
 The SchoolTool server automatically creates an empty database if it cannot find
 an existing one.  You can customize the location of the database and a few
@@ -131,26 +112,10 @@ to suit your needs.
 
 By default a user with manager privileges is created in the new database.
 The username is 'manager', and the password is 'schooltool'.  The database
-is otherwise mostly empty, but you can run import-sampleschool.py to populate
-it with some sample data.
+is otherwise mostly empty.
 
 The default web application port is 7080.  Once the server is running, you can
 connect to it with a web browser.
-
-The Makefile also contains several shortcuts, which are kept mainly for
-backwards-compatibility:
-
-  make sampleschool         generates and imports sample data into the server
-
-  make run                  starts the SchoolTool server
-  make runtestserver        starts the SchoolTool server using test.conf as the
-                            configuration file (this is used for running
-                            automated functional tests)
-
-  make runclient            starts the command line client
-
-These commands are superseded by executable Python scripts in the top-level
-directory.
 
 
 Project structure
@@ -168,18 +133,7 @@ Project structure
                         script to remove stale *.pyc files
 
   schooltool-server.py  script to start the SchoolTool server
-  schoolbell-server.py  script to start the SchoolBell server
-  generate-sampleschool.py
-                        script to generate sample school data
-  import-sampleschool.py
-                        script to import sample school data
-  schooltool-client.py  script to start the command-line client
-
-  test.conf             configuration file used for functional tests
-  testserver.pem        sample SSL certificate used for functional tests
   schooltool.conf.in    sample configuration file
-  schoolbell.conf.in    sample configuration file for SchoolBell
-  ttconfig.data         sample timetable configuration
 
   build/                temporary files are placed here during build process
   coverage/             unit test coverage reports are placed here
@@ -189,19 +143,14 @@ Project structure
     schooltool/         Python package 'schooltool'
       main.py           the SchoolTool server
       *.py              other modules (see docstrings)
-      schema.xml        ZConfig schema definition for the configuration file
       tests/            unit tests for the schooltool package
-      ftests/           functional tests for the schooltool package
       browser/          web application views for the server
         www/            page templates
         tests/          unit tests for the schooltool.browser package
       rest/             RESTive views for the server
         www/            page templates
         tests/          unit tests for the schooltool.rest package
-      clients/          SchoolTool clients
-        client.py       executable command line client
-        wxclient.py     executable wxWindows client
-
+    schoolbell/         Python package 'schoolbell'
 
 Testing
 -------
