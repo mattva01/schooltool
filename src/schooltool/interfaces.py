@@ -233,6 +233,9 @@ class ITimetableModel(Interface):
     timetable model is coded to use.
     """
 
+    factory_id = Attribute("""Name of the ITimetableModelFactory utility
+                              that was used to create this model.""")
+
     timetableDayIds = List(
         title=u"A sequence of day_ids which can be used in the timetable.",
         value_type=TextLine(title=u"Day id"))

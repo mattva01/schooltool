@@ -865,6 +865,8 @@ class SequentialDaysTimetableModel(BaseTimetableModel):
     Mon     Day 2
     """
 
+    factory_id = "SequentialDaysTimetableModel"
+
     classProvides(ITimetableModelFactory)
 
     def __init__(self, day_ids, day_templates):
@@ -881,6 +883,8 @@ class SequentialDaysTimetableModel(BaseTimetableModel):
 
 class WeeklyTimetableModel(BaseTimetableModel):
     """A timetable model where the schedule depends only on weekdays."""
+
+    factory_id = "WeeklyTimetableModel"
 
     timetableDayIds = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
 
