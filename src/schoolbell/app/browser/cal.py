@@ -419,15 +419,15 @@ class CalendarViewBase(BrowserView):
 
     def internationalDate(self, day):
         day_of_week = day_of_week_names[day.weekday()]
-        return _('%s, %s') % (day_of_week, day.strftime('%Y-%m-%d'))
+        return '%s, %s' % (day_of_week, day.strftime('%Y-%m-%d'))
 
     def usDate(self, day):
         day_of_week = day_of_week_names[day.weekday()]
-        return _('%s, %s') % (day_of_week, day.strftime('%m/%d/%Y'))
+        return '%s, %s' % (day_of_week, day.strftime('%m/%d/%Y'))
 
     def longDate(self, day):
         day_of_week = day_of_week_names[day.weekday()]
-        return _('%s, %s') % (day_of_week, day.strftime('%d %B, %Y'))
+        return '%s, %s' % (day_of_week, day.strftime('%d %B, %Y'))
 
     def dayTitle(self, day):
         if self.dateformat == "MM/DD/YY":
