@@ -9,7 +9,6 @@ import libxml2
 from zope.interface import implements
 from zope.interface.common.interfaces import IException
 
-from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.rest.rng import validate_against_schema
 
 
@@ -166,16 +165,16 @@ class XMLDocument(object):
             try:
                 if not validate_against_schema(schema, body):
                     raise XMLValidationError(
-                                _("Document not valid according to schema."))
+                                "Document not valid according to schema.")
             except libxml2.parserError, e:
                 if 'xmlRelaxNGParse' in str(e):
-                    raise XMLSchemaError(_("Invalid RelaxNG schema."))
+                    raise XMLSchemaError("Invalid RelaxNG schema.")
                 else:
-                    raise XMLParseError(_("Ill-formed document."))
+                    raise XMLParseError("Ill-formed document.")
         try:
             self._doc = libxml2.parseDoc(body)
         except libxml2.parserError:
-            raise XMLParseError(_("Ill-formed document."))
+            raise XMLParseError("Ill-formed document.")
         self._xpathctx = self._doc.xpathNewContext()
         self.namespaces = {}
         if namespaces:
@@ -242,8 +241,7 @@ class XMLDocument(object):
             return [XMLNode(node, self)
                     for node in self._xpathctx.xpathEval(xpath_query)]
         except libxml2.xpathError:
-            raise XMLXPathError(_('Ill-formed XPath query (%r).')
-                                % xpath_query)
+            raise XMLXPathError('Ill-formed XPath query (%r).' % xpath_query)
 
     def free(self):
         """Free libxml2 data structures.
@@ -369,13 +367,13 @@ class XMLNode(object):
             try:
                 ns, attr = name.split(':')
             except (KeyError, ValueError):
-                raise XMLAttributeError(_("Ill-formed attribute name (%s).")
+                raise XMLAttributeError("Ill-formed attribute name (%s)."
                                         % name)
             try:
                 uri = self._doc.namespaces[ns]
             except (KeyError, ValueError):
                 raise XMLNamespaceError(
-                            _("Unregistered namespace prefix (%s).") % name)
+                            "Unregistered namespace prefix (%s)." % name)
         else:
             attr = name
             uri = None
@@ -476,7 +474,7 @@ class XMLNode(object):
             return [XMLNode(node, self._doc)
                     for node in xpathctx.xpathEval(xpath_query)]
         except libxml2.xpathError:
-            raise XMLXPathError(_('Ill-formed XPath query (%r).')
+            raise XMLXPathError('Ill-formed XPath query (%r).'
                                 % xpath_query)
 
 
