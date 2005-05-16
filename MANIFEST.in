@@ -23,7 +23,7 @@ include doc/release-policy.txt doc/release-checklist.txt
 # Data files installed in the setup.py
 # If you modify this, also modify the regex in setup.py
 recursive-include src/schoolbell *.pt *.js *.png *.gif *.css *.mo
-recursive-include src/schoolbell *.rng *.xml *.zcml *.ico *.pot
+recursive-include src/schoolbell *.rng *.xml *.zcml *.ico *.pot *.po
 
 # Miscellaneous other data files
 recursive-include src/schoolbell *.ics

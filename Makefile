@@ -46,7 +46,7 @@ Zope3/principals.zcml:
 	[ -f Zope3/principals.zcml ] && touch Zope3/principals.zcml || cp Zope3/sample_principals.zcml Zope3/principals.zcml
 
 .PHONY: schoolbelldist
-schoolbelldist: realclean build Zope3/principals.zcml extract-translations clean
+schoolbelldist: realclean build Zope3/principals.zcml extract-translations update-translations clean
 	rm -rf dist
 	find . -name '*.py[dco]' -exec rm -f {} \;
 	fakeroot ./debian/rules clean
