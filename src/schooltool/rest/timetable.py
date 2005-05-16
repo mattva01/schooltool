@@ -40,8 +40,6 @@ from schooltool.timetable import SchooldayPeriod
 from schooltool.timetable import TimetableDay
 from schoolbell.app.rest.app import GenericContainerView
 
-from schooltool import SchoolToolMessageID as _
-
 
 def parseDate(date_str):
     """Parse a date string and return a datetime.date object.
@@ -255,7 +253,7 @@ class TimetableSchemaFileFactory(object):
 
             factory = zapi.queryUtility(ITimetableModelFactory, factory_id)
             if factory is None:
-                raise RestError(_("Incorrect timetable model factory"))
+                raise RestError("Incorrect timetable model factory")
 
             for template in templates:
                 day = SchooldayTemplate()
@@ -267,7 +265,7 @@ class TimetableSchemaFileFactory(object):
                         tstart = parse_time(tstart_str)
                         duration = datetime.timedelta(minutes=int(dur_str))
                     except ValueError:
-                        raise RestError(_("Bad period"))
+                        raise RestError("Bad period")
                     else:
                         day.add(SchooldayPeriod(pid, tstart, duration))
                 used = template.query('tt:used')[0]['when']
@@ -282,7 +280,7 @@ class TimetableSchemaFileFactory(object):
             model = factory(day_ids, template_dict)
 
             if len(sets.Set(day_ids)) != len(day_ids):
-                raise RestError(_("Duplicate days in schema"))
+                raise RestError("Duplicate days in schema")
             timetable = Timetable(day_ids)
             timetable.model = model
             for day in days:
@@ -290,8 +288,9 @@ class TimetableSchemaFileFactory(object):
                 period_ids = [period['id']
                               for period in day.query('tt:period')]
                 if len(sets.Set(period_ids)) != len(period_ids):
+                    # XXX Should raise RestError here.
                     return textErrorPage(request,
-                                         _("Duplicate periods in schema"))
+                                         "Duplicate periods in schema")
                 timetable[day_id] = TimetableDay(period_ids)
 
             return timetable
@@ -304,6 +303,7 @@ class TimetableSchemaFileFactory(object):
             raise RestError("Unsupported content type: %s" % content_type)
 
         return self.parseXML(data)
+
 
 class TimetableSchemaFile(object):
     implements(IWriteFile)

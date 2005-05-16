@@ -51,8 +51,6 @@ from schooltool.interfaces import ISection, ISectionContainer
 from schooltool.timetable import Term
 from schooltool.interfaces import ITermContainer
 
-from schooltool import SchoolToolMessageID as _
-
 
 class SchoolToolApplicationView(sb.ApplicationView):
     """The root view for the application."""
@@ -308,35 +306,34 @@ class TermFileFactory(object):
                 continue # ignore boring events
 
             if not event.all_day_event:
-                return textErrorPage(request,
-                         _("All-day event should be used"))
+                return textErrorPage(request, "All-day event should be used")
 
             has_complex_props = reduce(operator.or_,
                                   map(event.hasProp, self.complex_prop_names))
 
             if has_complex_props:
                 return textErrorPage(request,
-                     _("Repeating events/exceptions not yet supported"))
+                             "Repeating events/exceptions not yet supported")
 
             if summary == 'school period':
                 if (first is not None and
                     (first, last) != (event.dtstart, event.dtend)):
                     return textErrorPage(request,
-                                _("Multiple definitions of school period"))
+                                "Multiple definitions of school period")
                 else:
                     first, last = event.dtstart, event.dtend
             elif summary == 'schoolday':
                 if event.duration != datetime.date.resolution:
                     return textErrorPage(request,
-                                _("Schoolday longer than one day"))
+                                "Schoolday longer than one day")
                 days.append(event.dtstart)
         else:
             if first is None:
-                return textErrorPage(request, _("School period not defined"))
+                return textErrorPage(request, "School period not defined")
             for day in days:
                 if not first <= day < last:
                     return textErrorPage(request,
-                                         _("Schoolday outside school period"))
+                                         "Schoolday outside school period")
             term = Term(name, first, last - datetime.date.resolution)
             for day in days:
                 term.add(day)
