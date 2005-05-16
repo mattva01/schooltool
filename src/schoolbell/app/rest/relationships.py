@@ -46,8 +46,6 @@ from schoolbell.relationship.interfaces import IRelationshipSchema
 from schoolbell.relationship.relationship import relate, unrelate
 from zope.i18n import translate
 
-from schoolbell import SchoolBellMessageID as _
-
 
 def RelationshipsViewFactory(context, request):
     return ProxyFactory(RelationshipsView(context, request))
@@ -201,9 +199,7 @@ class RelationshipsView(View):
         response.setHeader('Location', location)
         response.setStatus(201)
         response.setHeader('Content-Type', 'text/plain; charset=UTF-8')
-        msg = _("Relationship created: ${location}")
-        msg.mapping = {'location': location}
-        return translate(msg, context=self.request)
+        return "Relationship created: %s" % location
 
 
 def LinkViewFactory(context, request):
@@ -235,7 +231,7 @@ class LinkView(View):
         response = self.request.response
         response.setStatus(200)
         response.setHeader('content-type', 'text/plain; charset=UTF-8')
-        return translate(_("Link removed"))
+        return "Link removed"
 
 
 class RelationshipsTraverser(object):

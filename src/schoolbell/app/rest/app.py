@@ -32,6 +32,7 @@ from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.i18n import translate
 
 from schoolbell.app.rest import View, Template, IRestTraverser
+from schoolbell.app.rest.interfaces import IPasswordWriter, IPersonPhoto
 from schoolbell.app.rest.xmlparsing import XMLValidationError, XMLParseError
 from schoolbell.app.rest.xmlparsing import XMLDocument
 from schoolbell.calendar.icalendar import convert_calendar_to_ical
@@ -41,10 +42,6 @@ from schoolbell.app.interfaces import IGroupContainer, IGroup
 from schoolbell.app.interfaces import IResourceContainer, IResource
 from schoolbell.app.interfaces import IPersonContainer, IPerson
 from schoolbell.app.browser.cal import CalendarOwnerHTTPTraverser
-
-from schoolbell.app.rest.interfaces import IPasswordWriter, IPersonPhoto
-
-from schoolbell import SchoolBellMessageID as _
 
 
 class ApplicationObjectFileFactory(object):
@@ -264,10 +261,7 @@ class GenericContainerView(View):
         response.setStatus(201, 'Created')
         response.setHeader('Content-Type', 'text/plain; charset=UTF-8')
         response.setHeader('Location', location)
-
-        msg = _("Object created: ${location}")
-        msg.mapping = {'location': location}
-        return translate(msg, context=self.request)
+        return u"Object created: %s" % location
 
 
 class GroupContainerView(GenericContainerView):

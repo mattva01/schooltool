@@ -25,7 +25,6 @@ from zope.interface.common.interfaces import IException
 from zope.interface import classImplements
 
 from schoolbell.app.rest import View
-from schoolbell import SchoolBellMessageID as _
 from schoolbell.calendar.icalendar import ICalParseError
 
 
@@ -65,7 +64,7 @@ class SystemErrorView(TextErrorView):
 
     def __call__(self):
         self.request.response.setStatus(500)
-        return _("A system error has occured.")
+        return "A system error has occured."
 
 
 class IRestError(IException): pass

@@ -29,7 +29,6 @@ from schoolbell.app.rest import View, Template
 from schoolbell.app.rest.errors import RestError
 from schoolbell.app.browser.app import ACLViewBase, hasPermission
 from schoolbell.app.rest.xmlparsing import XMLDocument
-from schoolbell import SchoolBellMessageID as _
 from zope.security.proxy import removeSecurityProxy, ProxyFactory
 
 
@@ -139,7 +138,7 @@ class ACLView(View, ACLViewBase):
                 else:
                     manager.unsetPermissionForPrincipal(permission, principal)
 
-        return unicode(_("Permissions updated"))
+        return "Permissions updated"
 
     def parseData(self, body):
         """Extracts the data and validates it.
