@@ -225,7 +225,7 @@ class GroupCSVImporter(BaseCSVImporter):
             self.errors.fields.append(_('Titles may not be empty'))
             return
 
-        if len(data) > 2:
+        if len(data) > 1:
             description = data[1]
         else: 
             description = ''
