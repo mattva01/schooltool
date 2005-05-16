@@ -9,5 +9,9 @@
           i18n:translate="">Groups</a></li>
    <li><a tal:attributes="href view/app/resources/@@absolute_url"
           i18n:translate="">Resources</a></li>
+   <li><a tal:attributes="href view/app/terms/@@absolute_url"
+          i18n:translate="">Terms</a></li>
+   <li><a tal:attributes="href view/app/ttschemas/@@absolute_url"
+          i18n:translate="">Timetable Schemas</a></li>
 </ul>
 </div>

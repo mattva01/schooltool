@@ -113,9 +113,15 @@ Let's make sure that we are seeing the SchoolTool navigation portlet page:
     ... """)
     HTTP/1.1 200 Ok
     ...
+    <h4>Navigation</h4>
+    <ul>
        <li><a href="http://localhost/frogpond/persons">Persons</a></li>
        <li><a href="http://localhost/frogpond/courses">Courses</a></li>
        <li><a href="http://localhost/frogpond/groups">Groups</a></li>
+       <li><a href="http://localhost/frogpond/resources">Resources</a></li>
+       <li><a href="http://localhost/frogpond/terms">Terms</a></li>
+       <li><a href="http://localhost/frogpond/ttschemas">Timetable Schemas</a></li>
+    </ul>
     ...
 
 
