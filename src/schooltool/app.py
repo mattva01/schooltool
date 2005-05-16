@@ -49,7 +49,7 @@ from schooltool.interfaces import IPersonPreferences
 from schooltool.relationships import URIInstruction, URISection, URIInstructor
 from schooltool.relationships import URICourseSections, URICourse
 from schooltool.relationships import URISectionOfCourse
-from schooltool.timetable import TermContainer, TimetableSchemaService
+from schooltool.timetable import TermContainer, TimetableSchemaContainer
 from schooltool.timetable import TimetabledMixin
 
 
@@ -66,7 +66,7 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
         self['terms'] = TermContainer()
         self['courses'] = CourseContainer()
         self['sections'] = SectionContainer()
-        self['ttschemas'] = TimetableSchemaService()
+        self['ttschemas'] = TimetableSchemaContainer()
 
     def _newContainerData(self):
         return PersistentDict()

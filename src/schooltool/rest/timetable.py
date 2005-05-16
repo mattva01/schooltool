@@ -32,12 +32,13 @@ from schooltool.timetable import Timetable
 from schoolbell.app.rest import View, Template
 from schooltool.common import parse_date, parse_time
 from schoolbell.app.rest.errors import RestError
-from schooltool.timetable import TimetableSchemaService
+from schooltool.timetable import TimetableSchemaContainer
 from schoolbell.app.rest.xmlparsing import XMLDocument
 from schooltool.interfaces import ITimetableModelFactory
 from schooltool.timetable import SchooldayTemplate
 from schooltool.timetable import SchooldayPeriod
 from schooltool.timetable import TimetableDay
+from schoolbell.app.rest.app import GenericContainerView
 
 from schooltool import SchoolToolMessageID as _
 
@@ -110,6 +111,15 @@ def parseDuration(duration_str):
         return datetime.timedelta(minutes=min)
 
 
+class TimetableSchemaContainerView(GenericContainerView):
+    """RESTive view of a TimetableSchemaContainer."""
+
+    def items(self):
+        return [{'href': zapi.absoluteURL(self.context[key], self.request),
+                 'title': self.context[key].__name__}
+                for key in self.context.keys()]
+
+
 class TimetableReadView(View):
     """Read-only view for ITimetable."""
 
@@ -120,10 +130,45 @@ class TimetableReadView(View):
         return zapi.absoluteURL(obj, self.request)
 
 
+class TimetableSchemaView(View):
+    """View for ITimetableSchema"""
+
+    dows = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
+            'Friday', 'Saturday', 'Sunday']
+
+    template = Template("www/timetable_schema.pt",
+                        content_type="text/xml; charset=UTF-8")
+
+    def daytemplates(self):
+        result = []
+        for id, day in self.context.model.dayTemplates.items():
+            if id is None:
+                used = "default"
+            else:
+                used = self.dows[id]
+            periods = []
+            for period in day:
+                periods.append(
+                    {'id': period.title,
+                     'tstart': period.tstart.strftime("%H:%M"),
+                     'duration': period.duration.seconds / 60})
+            periods.sort()
+            for template in result:
+                if template['periods'] == periods:
+                    days = template['used'].split()
+                    days.append(used)
+                    days.sort()
+                    template['used'] = " ".join(days)
+                    break
+            else:
+                result.append({'used': used, 'periods': periods})
+        return result
+
+
 class TimetableSchemaFileFactory(object):
 
     implements(IFileFactory)
-    adapts(TimetableSchemaService)
+    adapts(TimetableSchemaContainer)
 
     dows = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
             'Friday', 'Saturday', 'Sunday']
@@ -254,6 +299,7 @@ class TimetableSchemaFileFactory(object):
             doc.free()
 
     def __call__(self, name, content_type, data):
+
         if content_type != 'text/xml':
             raise RestError("Unsupported content type: %s" % content_type)
 

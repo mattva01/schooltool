@@ -178,10 +178,43 @@
         set_schema="schooltool.interfaces.IPersonPreferences" />
   </content>
 
-  <content class=".timetable.TimetableSchemaService">
+  <content class=".timetable.TimetableSchemaContainer">
     <require permission="schoolbell.create"
         attributes="__setitem__ __delitem__" />
-    <allow attributes="getDefault default_id keys __getitem__" />
+    <allow attributes="getDefault default_id keys __getitem__ get" />
+  </content>
+
+  <content class=".timetable.Timetable">
+    <allow interface=".interfaces.ITimetable" />
+    <require permission="schoolbell.edit"
+             interface=".interfaces.ITimetableWrite"
+             set_schema=".interfaces.ITimetable" />
+  </content>
+
+  <content class=".timetable.TimetableDay">
+    <allow interface=".interfaces.ITimetableDay" />
+    <require permission="schoolbell.edit"
+             interface=".interfaces.ITimetableDayWrite"
+             set_schema=".interfaces.ITimetableDay" />
+  </content>
+
+  <content class=".timetable.SchooldayTemplate">
+    <allow interface=".interfaces.ISchooldayTemplate" />
+    <require permission="schoolbell.edit"
+             interface=".interfaces.ISchooldayTemplateWrite"
+             set_schema=".interfaces.ISchooldayTemplate" />
+  </content>
+
+  <content class=".timetable.SequentialDaysTimetableModel">
+    <allow interface=".interfaces.ITimetableModel" />
+  </content>
+
+  <content class=".timetable.WeeklyTimetableModel">
+    <allow interface=".interfaces.ITimetableModel" />
+  </content>
+
+  <content class=".timetable.SchooldayPeriod">
+    <allow interface=".interfaces.ISchooldayPeriod" />
   </content>
 
   <!-- Views -->

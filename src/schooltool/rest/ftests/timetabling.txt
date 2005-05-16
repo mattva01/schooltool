@@ -260,6 +260,219 @@ Terms should be gone now:
     </container>
     <BLANKLINE>
 
+
+Timetable schemas
+-----------------
+
+There should be no timetable schemas yet:
+
+    >>> print rest(r"""
+    ... GET /frogpond/ttschemas/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>ttschemas</name>
+      <items>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/ttschemas/acl"/>
+    </container>
+    <BLANKLINE>
+
+Lets add a timetable schema:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+    ...   <model factory="SequentialDaysTimetableModel">
+    ...     <daytemplate>
+    ...       <used when="default" />
+    ...       <period id="A" tstart="9:00" duration="60" />
+    ...       <period id="C" tstart="9:00" duration="60" />
+    ...       <period id="B" tstart="10:00" duration="60" />
+    ...       <period id="D" tstart="10:00" duration="60" />
+    ...     </daytemplate>
+    ...     <daytemplate>
+    ...       <used when="Friday Thursday" />
+    ...       <period id="A" tstart="8:00" duration="60" />
+    ...       <period id="C" tstart="8:00" duration="60" />
+    ...       <period id="B" tstart="11:00" duration="60" />
+    ...       <period id="D" tstart="11:00" duration="60" />
+    ...     </daytemplate>
+    ...   </model>
+    ...   <day id="Day 1">
+    ...     <period id="A">
+    ...     </period>
+    ...     <period id="B">
+    ...     </period>
+    ...   </day>
+    ...   <day id="Day 2">
+    ...     <period id="C">
+    ...     </period>
+    ...     <period id="D">
+    ...     </period>
+    ...   </day>
+    ... </timetable>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+
+We should see this new schema in the container:
+
+    >>> print rest(r"""
+    ... GET /frogpond/ttschemas/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 352
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>ttschemas</name>
+      <items>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/ttschemas/schema1"
+              xlink:title="schema1"/>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/ttschemas/acl"/>
+    </container>
+    <BLANKLINE>
+
+
+Lets see what's inside:
+
+    >>> print rest(r"""
+    ... GET /frogpond/ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    <BLANKLINE>
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+      <model factory="SequentialDaysTimetableModel">
+        <daytemplate>
+          <used when="default"/>
+          <period duration="60" id="A" tstart="09:00"/>
+          <period duration="60" id="B" tstart="10:00"/>
+          <period duration="60" id="C" tstart="09:00"/>
+          <period duration="60" id="D" tstart="10:00"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="Friday Thursday"/>
+          <period duration="60" id="A" tstart="08:00"/>
+          <period duration="60" id="B" tstart="11:00"/>
+          <period duration="60" id="C" tstart="08:00"/>
+          <period duration="60" id="D" tstart="11:00"/>
+        </daytemplate>
+      </model>
+      <day id="Day 1">
+        <period id="A">
+        </period>
+        <period id="B">
+        </period>
+      </day>
+      <day id="Day 2">
+        <period id="C">
+        </period>
+        <period id="D">
+        </period>
+      </day>
+    </timetable>
+
+
+Lets modify the timetable schema:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+    ...   <model factory="SequentialDaysTimetableModel">
+    ...     <daytemplate>
+    ...       <used when="default" />
+    ...       <period id="A" tstart="10:00" duration="60" />
+    ...       <period id="C" tstart="10:00" duration="60" />
+    ...       <period id="B" tstart="11:00" duration="60" />
+    ...       <period id="D" tstart="11:00" duration="60" />
+    ...     </daytemplate>
+    ...     <daytemplate>
+    ...       <used when="Friday Thursday" />
+    ...       <period id="A" tstart="8:00" duration="70" />
+    ...       <period id="C" tstart="8:00" duration="70" />
+    ...       <period id="B" tstart="11:00" duration="70" />
+    ...       <period id="D" tstart="11:00" duration="70" />
+    ...     </daytemplate>
+    ...   </model>
+    ...   <day id="Day 1">
+    ...     <period id="A">
+    ...     </period>
+    ...     <period id="B">
+    ...     </period>
+    ...   </day>
+    ...   <day id="Day 2">
+    ...     <period id="C">
+    ...     </period>
+    ...     <period id="D">
+    ...     </period>
+    ...   </day>
+    ... </timetable>
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+
+And check that schema was indeed modified:
+
+    >>> print rest(r"""
+    ... GET /frogpond/ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    <BLANKLINE>
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+      <model factory="SequentialDaysTimetableModel">
+        <daytemplate>
+          <used when="default"/>
+          <period duration="60" id="A" tstart="10:00"/>
+          <period duration="60" id="B" tstart="11:00"/>
+          <period duration="60" id="C" tstart="10:00"/>
+          <period duration="60" id="D" tstart="11:00"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="Friday Thursday"/>
+          <period duration="70" id="A" tstart="08:00"/>
+          <period duration="70" id="B" tstart="11:00"/>
+          <period duration="70" id="C" tstart="08:00"/>
+          <period duration="70" id="D" tstart="11:00"/>
+        </daytemplate>
+      </model>
+      <day id="Day 1">
+        <period id="A">
+        </period>
+        <period id="B">
+        </period>
+      </day>
+      <day id="Day 2">
+        <period id="C">
+        </period>
+        <period id="D">
+        </period>
+      </day>
+    </timetable>
+
 Epilogue
 --------
 

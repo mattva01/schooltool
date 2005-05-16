@@ -260,7 +260,7 @@
   <!-- Timetabling -->
   <page
       name="newschema.html"
-      for="schooltool.interfaces.ITimetableSchemaService"
+      for="schooltool.interfaces.ITimetableSchemaContainer"
       class="schooltool.browser.timetable.TimetableSchemaWizard"
       permission="schoolbell.create"
       menu="schoolbell_actions"

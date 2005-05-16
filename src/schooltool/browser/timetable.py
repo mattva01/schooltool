@@ -50,7 +50,7 @@ from schoolbell.app.browser.app import ContainerView
 from schoolbell.app.browser.cal import month_names, short_day_of_week_names
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ITermContainer, ITerm
-from schooltool.interfaces import ITimetableSchemaService
+from schooltool.interfaces import ITimetableSchemaContainer
 from schooltool.interfaces import ITimetableModelFactory
 from schooltool.timetable import Term, Timetable, TimetableDay
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
@@ -390,7 +390,7 @@ class TimetableSchemaWizard(BrowserView, TabindexMixin):
     XXX Really?  /newttschema doesn't work for me.
     """
 
-    __used_for__ = ITimetableSchemaService
+    __used_for__ = ITimetableSchemaContainer
 
     template = ViewPageTemplateFile("templates/ttwizard.pt")
 

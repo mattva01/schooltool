@@ -34,10 +34,10 @@ Global services
 ---------------
 
 A list of all defined timetable schemas is available from the timetable schema
-service (see getTimetableSchemaService, ITimetableSchemaService).
+service (see getTimetableSchemaContainer, ITimetableSchemaContainer).
 
 A list of all defined time periods is available from the time period service
-(see getTermService, ITermService).
+(see getTermContainer, ITermContainer).
 
 Timetable schemas and time periods are identified by alphanumeric IDs.
 
@@ -179,7 +179,7 @@ from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
 from schooltool.interfaces import ITimetableModel
 from schooltool.interfaces import ITimetableModelFactory
 from schooltool.interfaces import ITimetabled
-from schooltool.interfaces import ITimetableSchemaService
+from schooltool.interfaces import ITimetableSchemaContainer
 from schooltool.interfaces import ITermContainer
 from schooltool.interfaces import ILocation
 from schooltool.interfaces import Unchanged
@@ -1068,42 +1068,35 @@ class InstructionTimetableSource(BaseRelationshipTimetableSource):
     role = URISection
 
 
-class TimetableSchemaService(Persistent):
+class TimetableSchemaContainer(BTreeContainer):
 
-    implements(ITimetableSchemaService)
-
-    __parent__ = None
-    __name__ = None
+    implements(ITimetableSchemaContainer)
 
     _default_id = None
 
-    def __init__(self):
-        self.timetables = PersistentDict()
-
     def _set_default_id(self, new_id):
-        if new_id is not None and new_id not in self.timetables:
+        if new_id is not None and new_id not in self:
             raise ValueError("Timetable schema %r does not exist" % new_id)
         self._default_id = new_id
 
     default_id = property(lambda self: self._default_id, _set_default_id)
 
-    def keys(self):
-        return self.timetables.keys()
-
     def __getitem__(self, schema_id):
-        schema = self.timetables[schema_id].cloneEmpty()
+        schema = BTreeContainer.__getitem__(self, schema_id).cloneEmpty()
         schema.__parent__ = self
         schema.__name__ = schema_id
         return schema
 
     def __setitem__(self, schema_id, timetable):
         prototype = timetable.cloneEmpty()
-        self.timetables[schema_id] = prototype
+        if self.has_key(schema_id):
+            BTreeContainer.__delitem__(self, schema_id)
+        BTreeContainer.__setitem__(self, schema_id, prototype)
         if self.default_id is None:
             self.default_id = schema_id
 
     def __delitem__(self, schema_id):
-        del self.timetables[schema_id]
+        BTreeContainer.__delitem__(self, schema_id)
         if schema_id == self.default_id:
             self.default_id = None
 
@@ -1140,8 +1133,8 @@ def getPeriodsForDay(date):
     time periods, or it happens to be a holiday).
     """
     schooldays = getTermForDate(date)
-    ttservice = getSchoolToolApplication()['ttschemas']
-    if ttservice.default_id is None or schooldays is None:
+    ttcontainer = getSchoolToolApplication()['ttschemas']
+    if ttcontainer.default_id is None or schooldays is None:
         return []
-    ttschema = ttservice.getDefault()
+    ttschema = ttcontainer.getDefault()
     return ttschema.model.periodsInDay(schooldays, ttschema, date)

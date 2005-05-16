@@ -737,7 +737,7 @@ class ITimetableModelRegistry(Interface):
         """Register a timetable schema identified by a given id."""
 
 
-class ITimetableSchemaService(ILocation):
+class ITimetableSchemaContainer(IContainer, ILocation):
     """Service for creating timetables of a certain schema.
 
     This service stores timetable prototypes (empty timetables) and
@@ -749,18 +749,6 @@ class ITimetableSchemaService(ILocation):
 
     def getDefault():
         """Return the default schema for the school"""
-
-    def keys():
-        """Return a sequence of all stored schema ids."""
-
-    def __getitem__(schema_id):
-        """Return a new empty timetable of a given schema."""
-
-    def __setitem__(schema_id, timetable):
-        """Store a given timetable as a schema with a given id."""
-
-    def __delitem__(schema_id):
-        """Remove a stored schema with a given id."""
 
 
 class ITermContainer(IContainer, ILocation):
@@ -904,6 +892,6 @@ class ISchoolToolApplication(sb.ISchoolBellApplication):
         'groups' - IGroupContainer
         'resources' - IResourceContainer
         'terms' - ITermContainer
-        'ttschemas' - ITimetableSchemaService
+        'ttschemas' - ITimetableSchemaContainer
     """
 

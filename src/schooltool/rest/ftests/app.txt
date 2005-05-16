@@ -254,6 +254,7 @@ Let's see what our course looks like:
     </course>
     <BLANKLINE>
 
+
 Let's see what our section looks like:
 
     >>> print rest("""

@@ -25,7 +25,9 @@ $Id$
 import unittest
 import datetime
 
-from zope.app.testing import ztapi
+from zope.interface import Interface
+from zope.app.traversing import namespace
+from zope.app.testing import ztapi, setup
 from zope.interface import implements, directlyProvides
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 from zope.interface.verify import verifyObject
@@ -234,25 +236,34 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
 
     def setUp(self):
         from schooltool.app import SchoolToolApplication
-        from schooltool.interfaces import ITimetableSchemaService
+        from schooltool.interfaces import ITimetableSchemaContainer
         from schooltool.rest.timetable import TimetableSchemaFileFactory
         from schooltool.timetable import SequentialDaysTimetableModel
         from schooltool.interfaces import ITimetableModelFactory
 
         self.app = SchoolToolApplication()
-        self.schemaService = self.app["ttschemas"]
+        self.schemaContainer = self.app["ttschemas"]
 
-        ztapi.provideAdapter(ITimetableSchemaService, IFileFactory,
+        setup.placelessSetUp()
+        setup.setUpTraversal()
+
+        ztapi.provideAdapter(ITimetableSchemaContainer, IFileFactory,
                              TimetableSchemaFileFactory)
 
         ztapi.provideUtility(ITimetableModelFactory,
                              SequentialDaysTimetableModel,
                              "SequentialDaysTimetableModel")
 
+        ztapi.provideView(Interface, Interface, ITraversable, 'view',
+                          namespace.view)
+
+        directlyProvides(self.schemaContainer, IContainmentRoot)
+
         self.setUpLibxml2()
 
     def tearDown(self):
         self.tearDownLibxml2()
+        setup.placelessTearDown()
 
     def createEmpty(self):
         from schooltool.timetable import Timetable, TimetableDay
@@ -290,18 +301,65 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
         return tt
 
 
+class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
+                              unittest.TestCase):
+
+    empty_xml = """
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <model factory="SequentialDaysTimetableModel">
+            <daytemplate>
+              <used when="Friday Thursday"/>
+              <period duration="60" id="A" tstart="08:00"/>
+              <period duration="60" id="B" tstart="11:00"/>
+              <period duration="60" id="C" tstart="08:00"/>
+              <period duration="60" id="D" tstart="11:00"/>
+            </daytemplate>
+            <daytemplate>
+              <used when="default"/>
+              <period duration="60" id="A" tstart="09:00"/>
+              <period duration="60" id="B" tstart="10:00"/>
+              <period duration="60" id="C" tstart="09:00"/>
+              <period duration="60" id="D" tstart="10:00"/>
+            </daytemplate>
+          </model>
+          <day id="Day 1">
+            <period id="A">
+            </period>
+            <period id="B">
+            </period>
+          </day>
+          <day id="Day 2">
+            <period id="C">
+            </period>
+            <period id="D">
+            </period>
+          </day>
+        </timetable>
+        """
+
+    def test_get(self):
+        from schooltool.rest.timetable import TimetableSchemaView
+        request = TestRequest()
+        view = TimetableSchemaView(self.createExtended(), request)
+
+        result = view.GET()
+        self.assertEquals(request.response.getHeader('content-type'),
+                          "text/xml; charset=UTF-8")
+        self.assertEqualsXML(result, self.empty_xml, recursively_sort=['timetable'])
+
+
 class TestTimetableSchemaFileFactory(TimetableSchemaMixin, unittest.TestCase):
 
     def test(self):
         from schooltool.rest.timetable import TimetableSchemaFileFactory
-        verifyObject(IFileFactory, TimetableSchemaFileFactory(self.schemaService))
+        verifyObject(IFileFactory, TimetableSchemaFileFactory(self.schemaContainer))
 
     def test_call(self):
-        factory = IFileFactory(self.schemaService)
+        factory = IFileFactory(self.schemaContainer)
         self.assertRaises(RestError, factory, "two_day", "text/plain", self.schema_xml)
 
     def test_parseXML(self):
-        factory = IFileFactory(self.schemaService)
+        factory = IFileFactory(self.schemaContainer)
         schema = factory("two_day", "text/xml", self.schema_xml)
         self.assertEquals(schema, self.createExtended())
 
@@ -310,18 +368,18 @@ class TestTimetableSchemaFile(TimetableSchemaMixin, unittest.TestCase):
 
     def setUp(self):
         TimetableSchemaMixin.setUp(self)
-        self.schemaService["two_day"] = self.createEmpty()
+        self.schemaContainer["two_day"] = self.createEmpty()
 
     def test(self):
         from schooltool.rest.timetable import TimetableSchemaFile
         verifyObject(IWriteFile,
-                     TimetableSchemaFile(self.schemaService["two_day"]))
+                     TimetableSchemaFile(self.schemaContainer["two_day"]))
 
     def test_write(self):
         from schooltool.rest.timetable import TimetableSchemaFile
-        schemaFile = TimetableSchemaFile(self.schemaService["two_day"])
+        schemaFile = TimetableSchemaFile(self.schemaContainer["two_day"])
         schemaFile.write(self.schema_xml)
-        self.assertEquals(self.schemaService["two_day"],
+        self.assertEquals(self.schemaContainer["two_day"],
                           self.createExtended())
 
 
@@ -331,6 +389,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableReadView))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaFileFactory))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaFile))
+    suite.addTest(unittest.makeSuite(TestTimetableSchemaView))
     return suite
 
 if __name__ == '__main__':

@@ -40,6 +40,14 @@
       />
 
   <view
+      for="schooltool.interfaces.ITimetableSchemaContainer"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory="schoolbell.app.rest.RestPublishTraverse"
+      permission="zope.Public"
+      />
+
+  <view
       for="schooltool.interfaces.ICourseContainer"
       name="POST"
       factory=".app.CourseContainerView"
@@ -202,6 +210,36 @@
       for="schooltool.interfaces.ITerm"
       name="GET"
       factory=".app.TermView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.interfaces.ITimetableSchemaContainer"
+      name="GET"
+      factory=".timetable.TimetableSchemaContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="schooltool.interfaces.ITimetableSchemaContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".timetable.TimetableSchemaFileFactory"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="schooltool.interfaces.ITimetable"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      factory=".timetable.TimetableSchemaFile"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.interfaces.ITimetable"
+      name="GET"
+      factory=".timetable.TimetableSchemaView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />

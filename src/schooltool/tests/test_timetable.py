@@ -1550,22 +1550,22 @@ class TestInstructionTimetableSource(BaseTimetableSourceTest,
         Instruction(instructor=context, section=related)
 
 
-class TestTimetableSchemaService(unittest.TestCase):
+class TestTimetableSchemaContainer(unittest.TestCase):
 
     def test_interface(self):
-        from schooltool.timetable import TimetableSchemaService
-        from schooltool.interfaces import ITimetableSchemaService
+        from schooltool.timetable import TimetableSchemaContainer
+        from schooltool.interfaces import ITimetableSchemaContainer
 
-        service = TimetableSchemaService()
-        verifyObject(ITimetableSchemaService, service)
+        service = TimetableSchemaContainer()
+        verifyObject(ITimetableSchemaContainer, service)
 
     def test(self):
-        from schooltool.timetable import TimetableSchemaService
+        from schooltool.timetable import TimetableSchemaContainer
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
 
-        service = TimetableSchemaService()
-        self.assertEqual(service.keys(), [])
+        service = TimetableSchemaContainer()
+        self.assertEqual(list(service.keys()), [])
 
         tt = Timetable(("A", "B"))
         tt["A"] = TimetableDay(("Green", "Blue"))
@@ -1574,7 +1574,7 @@ class TestTimetableSchemaService(unittest.TestCase):
         self.assertEqual(len(list(tt["A"]["Green"])), 1)
 
         service["super"] = tt
-        self.assertEqual(service.keys(), ["super"])
+        self.assertEqual(list(service.keys()), ["super"])
         self.assertEqual(service["super"].__name__, "super")
         self.assert_(service["super"].__parent__ is service)
         self.assertEqual(service.default_id, "super")
@@ -1594,7 +1594,7 @@ class TestTimetableSchemaService(unittest.TestCase):
 
         del service["super"]
         self.assertRaises(KeyError, service.__getitem__, "super")
-        self.assertEqual(service.keys(), [])
+        self.assertEqual(list(service.keys()), [])
         self.assertEqual(service.default_id, None)
 
         self.assertRaises(ValueError, setattr, service, 'default_id', 'nosuch')
@@ -1645,7 +1645,7 @@ class TestGetPeriodsForDay(PlacelessSetup, unittest.TestCase):
         from schooltool.timetable import TermContainer
         from schooltool.timetable import Timetable
         from schooltool.timetable import Term
-        from schooltool.timetable import TimetableSchemaService
+        from schooltool.timetable import TimetableSchemaContainer
         from schooltool.app import SchoolToolApplication
         from zope.app.component.hooks import setSite
         from zope.app.component.site import LocalSiteManager
@@ -1710,7 +1710,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
     suite.addTest(unittest.makeSuite(TestSequentialDaysTimetableModel))
     suite.addTest(unittest.makeSuite(TestWeeklyTimetableModel))
-    suite.addTest(unittest.makeSuite(TestTimetableSchemaService))
+    suite.addTest(unittest.makeSuite(TestTimetableSchemaContainer))
     suite.addTest(unittest.makeSuite(TestTermContainer))
     suite.addTest(unittest.makeSuite(TestTimetabledMixin))
     suite.addTest(unittest.makeSuite(TestMembershipTimetableSource))
