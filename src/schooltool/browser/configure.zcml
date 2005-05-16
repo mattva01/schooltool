@@ -167,8 +167,6 @@
       class="schooltool.browser.app.SectionInstructorView"
       template="templates/section_instructors.pt"
       permission="schoolbell.manageMembership"
-      menu="schoolbell_actions"
-      title="Add/Remove Instructors"
       />
 
   <page
@@ -177,8 +175,6 @@
       class="schooltool.browser.app.SectionLearnerView"
       template="templates/section_learners.pt"
       permission="schoolbell.manageMembership"
-      menu="schoolbell_actions"
-      title="Add/Remove Learners"
       />
 
   <page
@@ -187,8 +183,6 @@
       class="schooltool.browser.app.SectionLearnerGroupView"
       template="templates/section_learners.pt"
       permission="schoolbell.manageMembership"
-      menu="schoolbell_actions"
-      title="Add/Remove Groups of Learners"
       />
 
   <page

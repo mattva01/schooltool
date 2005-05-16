@@ -13,34 +13,54 @@
 
     <p class="description" tal:content="context/description"/>
 
-    <div class="instructors">
-      <div tal:define="instructors context/instructors">
-        <h3 i18n:translate="">Instructors</h3>
-        <ul>
-          <li tal:repeat="obj instructors/sortby:title">
-            <a tal:attributes="href obj/@@absolute_url"
-               tal:content="obj/title" />
-          </li>
-        </ul>
-        <p tal:condition="not:instructors" i18n:translate="">
-          There are no instructors for this section.
-        </p>
-      </div>
+    <div class="info-block" tal:define="instructors context/instructors">
+      <h3 i18n:translate="">Instructors</h3>
+      <ul>
+        <li tal:repeat="obj instructors/sortby:title">
+          <a tal:attributes="href obj/@@absolute_url"
+             tal:content="obj/title" />
+        </li>
+      </ul>
+      <a class="modify" href="" title="Modify this person's details"
+         tal:attributes="href string:${context/@@absolute_url}/instructors.html"
+         i18n:attributes="title"
+         i18n:translate="">
+         edit instructors
+      </a>
     </div>
 
-    <div class="learners">
-      <div tal:define="learners context/members">
-        <h3 i18n:translate="">Students</h3>
-        <ul>
-          <li tal:repeat="obj learners/sortby:title">
-            <a tal:attributes="href obj/@@absolute_url"
-               tal:content="obj/title" />
-          </li>
-        </ul>
-        <p tal:condition="not:learners" i18n:translate="">
-          There are no learners for this section.
-        </p>
-      </div>
+    <div class="info-block"
+         tal:define="groups view/getGroups;
+                     persons view/getPersons">
+      <h3 i18n:translate="">Students</h3>
+      <ul>
+        <li tal:repeat="group groups/sortby:title">
+          <a tal:attributes="href group/@@absolute_url"
+             tal:content="group/title" />
+          <ul tal:condition="group/members">
+            <li tal:repeat="person group/members">
+              <a tal:attributes="href person/@@absolute_url"
+                 tal:content="person/title" />
+            </li>
+          </ul>
+        </li>
+        <li tal:repeat="person persons/sortby:title">
+          <a tal:attributes="href person/@@absolute_url"
+             tal:content="person/title" />
+        </li>
+      </ul>
+      <a class="modify" href="" title="Modify this person's details"
+         tal:attributes="href string:${context/@@absolute_url}/learners.html"
+         i18n:attributes="title"
+         i18n:translate="">
+         edit individuals
+      </a>
+      <a class="modify" href="" title="Modify this person's details"
+         tal:attributes="href string:${context/@@absolute_url}/learner-groups.html"
+         i18n:attributes="title"
+         i18n:translate="">
+         edit groups
+      </a>
     </div>
 
   </div>

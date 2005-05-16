@@ -112,6 +112,35 @@ def doctest_SectionView():
         >>> section = Section()
         >>> request = TestRequest()
         >>> view = SectionView(section, request)
+        >>> view.getPersons()
+        []
+        >>> view.getGroups()
+        []
+
+    Let's create some students and a group:
+
+        >>> from schooltool.app import Group, Person
+        >>> person1 = Person(title='Person1')
+        >>> person2 = Person(title='Person2')
+        >>> person3 = Person(title='Person3')
+        >>> person4 = Person(title='Person4')
+        >>> form = Group('Form1')
+        >>> form.members.add(person3)
+        >>> form.members.add(person4)
+
+    Let's add the individuals and the group to the section:
+
+        >>> section.members.add(person1)
+        >>> section.members.add(person2)
+        >>> section.members.add(form)
+        >>> view = SectionView(section, request)
+        >>> [p.title for p in view.getPersons()]
+        ['Person1', 'Person2']
+        >>> [g.title for g in view.getGroups()]
+        ['Form1']
+
+    TODO in the future we should probably prevent users being direct memebers
+    of a section if they're transitive members.
 
     """
 

@@ -41,6 +41,7 @@ from schoolbell.app.interfaces import ISchoolBellApplication
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ICourse, ISection
 from schooltool.interfaces import IPersonPreferences
+from schooltool.interfaces import IGroup, IPerson
 from schooltool.app import Section, Person
 
 
@@ -78,6 +79,12 @@ class SectionView(BrowserView):
     """A view for courses providing a list of sections."""
 
     __used_for__ = ISection
+
+    def getPersons(self):
+        return filter(IPerson.providedBy, self.context.members)
+
+    def getGroups(self):
+        return filter(IGroup.providedBy, self.context.members)
 
 
 class SectionAddView(AddView):
