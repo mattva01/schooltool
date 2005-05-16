@@ -367,6 +367,60 @@ class ITimetableException(Interface):
         """See if self != other."""
 
 
+class ITimetableSchema(IContained):
+    """A timetable schema.
+
+    A timetable schema is an ordered collection of timetable days that contain
+    periods.
+    """
+
+    model = Object(
+        title=u"A timetable model this timetable should be used with.",
+        schema=ITimetableModel)
+
+    def keys():
+        """Return a sequence of identifiers for days within the timetable.
+
+        The order of day IDs is fixed.
+        """
+
+    def items():
+        """Return a sequence of tuples of (day_id, ITimetableSchemaDay).
+
+        The order of day IDs is fixed and is the same as returned by keys().
+        """
+
+    def __getitem__(key):
+        """Return a ITimetableSchemaDay for a given day id."""
+
+    def createTimetable():
+        """Return a new empty timetable with the same structure.
+
+        The new timetable has the same set of day_ids, and the sets of
+        period ids within each day.  It has no activities nor exceptions.
+        """
+
+    def __setitem__(key, value):
+        """Set an ITimetableSchemaDay for a given day id.
+
+        Throws a TypeError if the value does not implement ITimetableSchemaDay.
+        Throws a ValueError if the key is not a valid day id.
+        """
+
+
+class ITimetableSchemaDay(Interface):
+    """A day in a timetable schema.
+
+    A timetable day is an ordered collection of periods.
+
+    Different days within the same timetable schema may have different periods.
+    """
+
+    periods = List(
+        title=u"A list of period IDs for this day.",
+        value_type=TextLine(title=u"A period id"))
+
+
 class ITimetable(ILocation):
     """A timetable.
 

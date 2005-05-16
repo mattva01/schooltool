@@ -28,27 +28,25 @@ Every application object (person, group or a resource) can have a number of
 timetables.  First, the timetables can vary in the timetable schema (e.g. a
 school may have a 4-day rotating timetable for classes, and then another
 timetable for events that recur weekly). Second, there are separate timetables
-for different time periods, such as semesters.
+for different time periods (terms).
 
-Global services
----------------
+Global containers
+-----------------
 
-A list of all defined timetable schemas is available from the timetable schema
-service (see getTimetableSchemaContainer, ITimetableSchemaContainer).
+A list of all defined timetable schemas is available in app['ttschemas']
+(see ISchoolToolApplication, ITimetableSchemaContainer).
 
-A list of all defined time periods is available from the time period service
-(see getTermContainer, ITermContainer).
+A list of all defined terms is available in app['terms'] (see
+ISchoolToolApplication, ITermContainer).
 
-Timetable schemas and time periods are identified by alphanumeric IDs.
-
-Every timetable is defined for a given schema and a given time period.  A tuple
-consisting of the schema's ID and the time period's ID is often refered to as
-a timetable's key.
+Every timetable is defined for a given schema and a given term.  A tuple
+consisting of the schema's ID and the terms's ID is often refered to as a
+timetable's key.
 
 Objects that have timetables
 ----------------------------
 
-An object that has (or may have) timetables implements ITimettabled.
+An object that has (or may have) timetables implements ITimetabled.
 
 An object's composite timetable is derived by combining the object's
 timetable with composite timetables of other objects, acquired by
@@ -125,16 +123,16 @@ Another example:
 Timetable schemas
 -----------------
 
-A timetable schema is just a timetable that has no activities and no exeptions.
-You can get a timetable schema by calling the cloneEmpty method of a timetable,
-but usually cloneEmpty is used to create a new empty timetable from a schema.
+A timetable schema is like a timetable that has no activities and no exeptions.
+You can create an empty timetable by calling the createTimetable method of a
+schema.  See ITimetableSchema, ITimetableSchemaDay.
 
-Time periods
-------------
+Terms
+-----
 
-A time period defines a range in time (e.g. September 1 to December 31,
-2004) and for every day within that range it defines whether that day is a
-schoolday or a holiday.
+A term defines a range in time (e.g. September 1 to December 31, 2004) and for
+every day within that range it defines whether that day is a schoolday or a
+holiday.
 
 
 $Id$
@@ -157,12 +155,14 @@ from zope.app.traversing.api import getPath
 from zope.app.location.traversing import LocationPhysicallyLocatable
 from zope.component import provideAdapter, adapts
 from zope.app.container.btree import BTreeContainer
+from zope.app.container.contained import Contained
 
 from schoolbell.app.membership import URIGroup
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.calendar.simple import ImmutableCalendar
 from schoolbell.relationship import getRelatedObjects
 
+from schooltool.interfaces import ITimetableSchema, ITimetableSchemaDay
 from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.interfaces import ITimetableActivity, ITimetableException
@@ -287,6 +287,55 @@ class Term(DateRange, Persistent):
 #
 # Timetabling
 #
+
+class TimetableSchema(Persistent, Contained):
+
+    implements(ITimetableSchema)
+
+    def __init__(self, day_ids):
+        """Create a new empty timetable schema.
+
+        day_ids is a sequence of the day ids of this timetable.
+
+        The caller must then assign a TimetableDay for each day ID and
+        set the model before trying to use the timetable.
+        """
+        self.day_ids = day_ids
+        self.days = PersistentDict()
+        self.model = None
+
+    def keys(self):
+        return list(self.day_ids)
+
+    def items(self):
+        return [(day, self.days[day]) for day in self.day_ids]
+
+    def __getitem__(self, key):
+        return self.days[key]
+
+    def __setitem__(self, key, value):
+        if not ITimetableSchemaDay.providedBy(value):
+            raise TypeError("Timetable schema can only contain"
+                            " ITimetableSchemaDay objects (got %r)" % (value,))
+        elif key not in self.day_ids:
+            raise ValueError("Key %r not in day_ids %r" % (key, self.day_ids))
+        self.days[key] = value
+
+    def createTimetable(self):
+        other = Timetable(self.day_ids)
+        other.model = self.model
+        for day_id in self.day_ids:
+            other[day_id] = TimetableDay(self[day_id].periods)
+        return other
+
+
+class TimetableSchemaDay(Persistent):
+
+    implements(ITimetableSchemaDay)
+
+    def __init__(self, periods=()):
+        self.periods = periods
+
 
 class Timetable(Persistent):
 

@@ -175,6 +175,81 @@ class ActivityStub:
         return self
 
 
+class TestTimetableSchema(unittest.TestCase):
+
+    def test_interface(self):
+        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
+        from schooltool.interfaces import ITimetableSchema, ITimetableSchemaDay
+
+        t = TimetableSchema(['one', 'two'])
+        verifyObject(ITimetableSchema, t)
+
+        td = TimetableSchemaDay(['a', 'b', 'c'])
+        verifyObject(ITimetableSchemaDay, td)
+
+    def test_keys(self):
+        from schooltool.timetable import TimetableSchema
+        days = ('Mo', 'Tu', 'We', 'Th', 'Fr')
+        t = TimetableSchema(days)
+        self.assertEqual(t.keys(), list(days))
+
+    def test_getitem_setitem(self):
+        from schooltool.timetable import TimetableSchema
+        from schooltool.interfaces import ITimetableSchemaDay
+
+        days = ('Mo', 'Tu', 'We', 'Th', 'Fr')
+        t = TimetableSchema(days)
+        self.assertRaises(KeyError, t.__getitem__, "Mo")
+        self.assertRaises(KeyError, t.__getitem__, "What!?")
+
+        class DayStub:
+            implements(ITimetableSchemaDay)
+
+        self.assertRaises(TypeError, t.__setitem__, "Mo", object())
+        self.assertRaises(ValueError, t.__setitem__, "Mon", DayStub())
+        monday = DayStub()
+        t["Mo"] = monday
+        self.assertEqual(t["Mo"], monday)
+
+    def test_items(self):
+        from schooltool.timetable import TimetableSchema
+        from schooltool.interfaces import ITimetableSchemaDay
+
+        days = ('Day 1', 'Day 2', 'Day 3')
+        t = TimetableSchema(days)
+
+        class DayStub:
+            implements(ITimetableSchemaDay)
+
+        t["Day 1"] = day1 = DayStub()
+        t["Day 2"] = day2 = DayStub()
+        self.assertRaises(KeyError, t.items)
+        t["Day 3"] = day3 = DayStub()
+        self.assertEqual(t.items(),
+                         [("Day 1", day1), ("Day 2", day2), ("Day 3", day3)])
+
+    def test_createTimetable(self):
+        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
+        days = ('A', 'B')
+        periods1 = ('Green', 'Blue')
+        periods2 = ('Green', 'Red', 'Yellow')
+        tts = TimetableSchema(days)
+        tts["A"] = TimetableSchemaDay(periods1)
+        tts["B"] = TimetableSchemaDay(periods2)
+
+        tt = tts.createTimetable()
+        self.assertEquals(tt.day_ids, tts.day_ids)
+        self.assert_(tt.model is tts.model)
+        self.assertEquals(tt.exceptions, [])
+        for day_id in tt.day_ids:
+            day = tt[day_id]
+            day2 = tts[day_id]
+            self.assert_(day is not day2)
+            self.assertEquals(day.periods, day2.periods)
+            for period in day.periods:
+                self.assertEquals(list(day[period]), [])
+
+
 class TestTimetable(unittest.TestCase):
 
     def test_interface(self):
@@ -1699,6 +1774,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestDateRange))
     suite.addTest(unittest.makeSuite(TestTerm))
+    suite.addTest(unittest.makeSuite(TestTimetableSchema))
     suite.addTest(unittest.makeSuite(TestTimetable))
     suite.addTest(unittest.makeSuite(TestTimetableDay))
     suite.addTest(unittest.makeSuite(TestTimetableActivity))
