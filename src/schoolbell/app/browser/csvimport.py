@@ -212,7 +212,7 @@ class GroupCSVImporter(BaseCSVImporter):
     def __init__(self, container, charset=None):
         BaseCSVImporter.__init__(self, container, charset)
         self.groups = container
-        self.chooser = SimpleNameChooser(self.groups)
+        self.chooser = SimpleNameChooser(container)
 
     def createAndAdd(self, data, dry_run=True):
         """Create Group objects and add them to the group container.
@@ -221,13 +221,17 @@ class GroupCSVImporter(BaseCSVImporter):
             self.errors.fields.append(_('Insufficient data provided.'))
             return
 
+        if not data[0]:
+            self.errors.fields.append(_('Titles may not be empty'))
+            return
+
         if len(data) > 2:
             description = data[1]
         else: 
             description = ''
 
         group = Group(title=data[0], description=description)
-        name = self.chooser.chooseName(group.title, group)
+        name = self.chooser.chooseName('', group)
         if not dry_run:
             self.groups[name] = group
 
