@@ -23,7 +23,6 @@ $Id: test_app.py 3526 2005-04-28 17:16:47Z bskahan $
 """
 
 import unittest
-import pprint
 import datetime
 
 from StringIO import StringIO
@@ -374,22 +373,21 @@ class TestTermFile(QuietLibxml2Mixin, unittest.TestCase):
 def compareXML(result, expected, recursively_sort=()):
     """Compare 2 XML snippets for equality.
 
-    This is a doctest version of
-    schoolbell.app.rest.tests.utils.asserEqualsXML If recursively_sort is
-    given, it is a sequence of tags that will have test:sort="recursively"
-    appended to their attribute lists in 'result' text.  See the docstring for
-    normalize_xml for more information about this attribute.
-    """
+    This is a doctest version of XMLCompareMixin.assertEqualsXML from
+    schoolbell.app.rest.tests.utils.
 
+    If recursively_sort is given, it is a sequence of tags that will have
+    test:sort="recursively" appended to their attribute lists in 'result' text.
+    See the docstring for normalize_xml for more information about this
+    attribute.
+    """
     result = normalize_xml(result, recursively_sort=recursively_sort)
     expected = normalize_xml(expected, recursively_sort=recursively_sort)
     if result == expected:
         return True
     else:
-        # RFC: is this very bad form to have this print and raise?
-        # My thought was to use to to test truth and debug if false.
-        print  diff(expected, result)
-        raise ValueError("Unexpected Results.")
+        print diff(expected, result)
+        return False
 
 
 def doctest_CourseFileFactory():
