@@ -77,3 +77,20 @@ table.schooldaymodel td label {
     color: inherit;
 }
 
+/* Forms beautification for ttschema wizard */
+p.hint {
+    font-size: 80%;
+    font-style: italic;
+    color: #bab5ab;
+}
+
+
+div.label {
+    float: left;
+    width: 10em;
+    padding-top: 0.5ex;
+}
+
+table.timetable input.text {
+    width: 7em;
+}
