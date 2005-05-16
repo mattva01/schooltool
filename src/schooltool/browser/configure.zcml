@@ -121,7 +121,7 @@
       set_before_add="title"
       content_factory="schooltool.app.Course"
       permission="schoolbell.create"
-      template="../../schoolbell/app/browser/templates/simple_add.pt"
+      template="templates/simple_add.pt"
       class=".app.CourseAddView">
     <widget field="description" height="5" />
   </addform>
