@@ -120,6 +120,18 @@ schools.
 See schooltool.browser.app for showing indivudual members of the form in the
 UI.
 
+Sections can be part of more than 1 course and sections have a courses
+RelatioshipProperty to list what courses they implement.
+
+    >>> amlit = Course(title="American Literature",
+    ...                    description="Taught with US History")
+    >>> school['courses']['almit'] = ushistory
+    >>> amlit.sections.add(section1)
+    >>> [section.title for section in amlit.sections]
+    ['Section 1']
+    >>> [course.title for course in section1.courses]
+    ['US History', 'American Literature']
+
     >>> tearDown()
 
 """
