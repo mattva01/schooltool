@@ -145,10 +145,11 @@ import datetime
 import itertools
 from sets import Set, ImmutableSet
 
+import zope.event
 from persistent import Persistent
 from persistent.list import PersistentList
 from persistent.dict import PersistentDict
-import zope.event
+from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.interface import implements, moduleProvides, classProvides
 from zope.interface import directlyProvides
 from zope.app import zapi
@@ -1070,7 +1071,7 @@ class InstructionTimetableSource(BaseRelationshipTimetableSource):
 
 class TimetableSchemaContainer(BTreeContainer):
 
-    implements(ITimetableSchemaContainer)
+    implements(ITimetableSchemaContainer, IAttributeAnnotatable)
 
     _default_id = None
 
@@ -1106,7 +1107,7 @@ class TimetableSchemaContainer(BTreeContainer):
 
 class TermContainer(BTreeContainer):
 
-    implements(ITermContainer)
+    implements(ITermContainer, IAttributeAnnotatable)
 
 
 def getTermForDate(date):
