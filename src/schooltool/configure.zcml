@@ -180,8 +180,9 @@
 
   <content class=".timetable.TimetableSchemaContainer">
     <require permission="schoolbell.create"
-        attributes="__setitem__ __delitem__" />
-    <allow attributes="getDefault default_id keys __getitem__ get" />
+        interface="zope.app.container.interfaces.IWriteContainer" />
+    <require permission="zope.View"
+        interface="zope.app.container.interfaces.IReadContainer" />
   </content>
 
   <content class=".timetable.Timetable">

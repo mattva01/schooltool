@@ -269,8 +269,15 @@
       />
 
   <!-- Timetabling -->
+  <containerViews
+      for="schooltool.interfaces.ITimetableSchemaContainer"
+      contents="schoolbell.edit"
+      index="schoolbell.view"
+      add="schoolbell.create"
+      />
+
   <page
-      name="newschema.html"
+      name="+"
       for="schooltool.interfaces.ITimetableSchemaContainer"
       class="schooltool.browser.timetable.TimetableSchemaWizard"
       permission="schoolbell.create"
