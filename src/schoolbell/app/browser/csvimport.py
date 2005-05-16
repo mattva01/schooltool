@@ -221,7 +221,7 @@ class GroupCSVImporter(BaseCSVImporter):
             self.errors.fields.append(_('Insufficient data provided.'))
             return
 
-        if len(data) == 2:
+        if len(data) > 2:
             description = data[1]
         else: 
             description = ''
