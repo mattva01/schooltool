@@ -64,6 +64,15 @@ class CourseView(BrowserView):
 class CourseAddView(AddView):
     """A view for adding Courses."""
 
+    def nextURL(self):
+        return zapi.absoluteURL(self.context.context, self.request)
+
+    def update(self):
+        if 'CANCEL' in self.request:
+            self.request.response.redirect(self.nextURL())
+        else:
+            return AddView.update(self)
+
 
 class SectionContainerView(ContainerView):
     """A Course Container view."""

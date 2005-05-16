@@ -107,6 +107,12 @@
     <widget field="description" height="5" />
   </addform>
 
+  <containerViews
+      for="schooltool.interfaces.ICourseContainer"
+      contents="zope.ManageContent"
+      add="zope.View"
+      />
+
   <addform
       label="Add a Course"
       name="addSchoolToolCourse.html"
@@ -115,18 +121,17 @@
       set_before_add="title"
       content_factory="schooltool.app.Course"
       permission="schoolbell.create"
+      template="../../schoolbell/app/browser/templates/simple_add.pt"
       class=".app.CourseAddView">
     <widget field="description" height="5" />
   </addform>
 
-  <!-- XXX not sure why this causes a traversal error
   <menuItem
       menu="schoolbell_actions"
       title="New Course"
       for="schooltool.interfaces.ICourseContainer"
       action="+/addSchoolToolCourse.html"
       />
-    -->
 
   <page
       name="index.html"
@@ -147,6 +152,12 @@
       menu="zmi_views"
       title="View"
       layer="SchoolToolLayer"
+      />
+
+  <containerViews
+      for="schooltool.interfaces.ISectionContainer"
+      contents="zope.ManageContent"
+      add="zope.View"
       />
 
   <addform

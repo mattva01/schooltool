@@ -80,12 +80,19 @@ def doctest_CourseAddView():
 
         >>> from schooltool.app import SchoolToolApplication
         >>> app = SchoolToolApplication()
-        >>> container = app['groups']
+        >>> container = app['courses']
         >>> request = TestRequest()
         >>> context = AddingStub(container, request)
         >>> context = container
 
         >>> view = CourseAddViewForTesting(context, request)
+        >>> view.update()
+
+        >>> request = TestRequest()
+        >>> request.form = {'field.title' : 'math'}
+        >>> context = AddingStub(context, request)
+        >>> view = CourseAddViewForTesting(context, request)
+        >>> view.update()
 
     """
 

@@ -124,6 +124,57 @@ Let's make sure that we are seeing the SchoolTool navigation portlet page:
     </ul>
     ...
 
+This is a school, so we should add some courses
+
+    >>> print http(r"""
+    ... POST /frogpond/courses/+/addSchoolToolCourse.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=History&UPDATE_SUBMIT=Add&add_input_name=""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/courses
+    ...
+
+Lets see that course:
+
+    >>> print http(r"""
+    ... GET /frogpond/courses/history HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...History...
+    ...
+
+Lets create a section to add to that course:
+
+    >>> print http(r"""
+    ... POST /frogpond/sections/+/addSchoolToolSection.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.description=Section1&field.course_id=history&UPDATE_SUBMIT=Add&add_input_name=""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/courses/history
+    ...
+
+Notice we got redirected to the course we added the section to.
+
+    >>> print http(r"""
+    ... GET /frogpond/courses/history HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...History...
+    ...
+    ...<h3>Sections</h3>
+    ...
+    ...<p>Section1</p>
+    ...
 
 Epilogue
 --------
