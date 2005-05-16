@@ -62,11 +62,18 @@ vi-coverage-reports:
 	@cd coverage && vi '+/^>>>>>>/' `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
 
 Zope3/principals.zcml:
-	[ -f Zope3/principals.zcml ] && touch Zope3/principals.zcml || cp Zope3/sample_principals.zcml Zope3/principals.zcml
+	cp Zope3/sample_principals.zcml $@
+
+Zope3/package-includes/schoolbell-configure.zcml:
+	echo '<include package="schoolbell.app" />' > $@
+
+Zope3/package-includes/schooltool-configure.zcml:
+	echo '<include package="schooltool" />' > $@
 
 .PHONY: schooltooldist
-schooltooldist: realclean build Zope3/principals.zcml extract-translations clean
+schooltooldist: realclean build extract-translations update-translations clean
 	rm -rf dist
+	find . -name '*.py[dco]' -exec rm -f {} \;
 	fakeroot ./debian/rules clean
 	./setup.py sdist
 
@@ -79,7 +86,7 @@ signtar: dist
 .PHONY: all build clean test ftest run coverage sampleschool
 
 .PHONY: extract-translations
-extract-translations:
+extract-translations: Zope3/principals.zcml Zope3/package-includes/schoolbell-configure.zcml Zope3/package-includes/schooltool-configure.zcml
 	PYTHONPATH=$(PYTHONPATH) $(PYTHON) \
 		Zope3/utilities/i18nextract.py -d schooltool \
 			-o locales -p src/schooltool schooltool
