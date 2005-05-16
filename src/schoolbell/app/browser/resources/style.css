@@ -59,6 +59,12 @@ h2, h3, h4, h5, h6 {
     font-size: medium;
 }
 
+pre {
+  margin: 1em;
+  padding: 1em;
+  border: 1px #000 dotted;
+}
+
 .center {
     text-align: center;
 }
