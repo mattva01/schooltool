@@ -14,12 +14,10 @@ PYTHONPATH=src:Zope3/src
 
 all: build
 
-build: build-translations
+build:
 	$(PYTHON) setup.py build_ext -i
 	cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) remove-stale-bytecode.py
-
-build-translations: $(MO)
 
 clean:
 	find . \( -path './src/schooltool/*.mo' -o -name '*.o' \
