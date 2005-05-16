@@ -288,6 +288,17 @@
       title="Add/Remove Resources"
       />
 
+  <page
+      name="group-csvimport.html"
+      for="schoolbell.app.interfaces.IGroupContainer"
+      class="schoolbell.app.browser.csvimport.GroupCSVImportView"
+      template="templates/group-csvimport.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Import Groups"
+      layer=".skin.ISchoolBellLayer"
+      />
+
 <!-- ResourceContainer, Resource configuration -->
 
   <page
