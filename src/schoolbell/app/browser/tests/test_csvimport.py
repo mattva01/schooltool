@@ -44,25 +44,25 @@ def doctest_GroupCSVImporter():
 
     Import some sample data
 
-        >>> csvdata="Group 1, Group 1 Description\nGroup2, Group 2 Description"
+        >>> csvdata="Group 1, Group 1 Description\nGroup2, Group 2 Description\nGroup3, Group 3 Description, Some extra data"
         >>> importer.importFromCSV(csvdata)
         True
 
     Check that the groups exist
 
         >>> [group for group in container]
-        [u'Group 1', u'Group2']
+        [u'group-1', u'group2', u'group3']
 
     Check that descriptions were imported properly
 
         >>> [group.description for group in container.values()]
-        ['Group 1 Description', 'Group 2 Description']
+        ['Group 1 Description', 'Group 2 Description', 'Group 3 Description']
 
     """
 
-def doctest_BaseCSVImportView():
+def doctest_GroupCSVImportView():
     r"""
-    We'll create a base csv import view
+    We'll create a group csv import view
 
         >>> from schoolbell.app.browser.csvimport import GroupCSVImportView
         >>> from schoolbell.app.app import GroupContainer
@@ -78,7 +78,7 @@ def doctest_BaseCSVImportView():
         >>> view = GroupCSVImportView(container, request)
         >>> view.update()
         >>> [group for group in container]
-        [u'A Group', u'Another Group']
+        [u'a-group', u'another-group']
 
     If no data is provided, we naturally get an error
 
@@ -86,6 +86,16 @@ def doctest_BaseCSVImportView():
         >>> view.update()
         >>> view.errors
         [u'No data provided']
+
+    We also get an error if a line starts with a comma (no title)
+
+        >>> request.form = {'csvtext' : ", No title provided here",
+        ...                 'charset' : 'UTF-8',
+        ...                 'UPDATE_SUBMIT': 1}
+        >>> view = GroupCSVImportView(container, request)
+        >>> view.update()
+        >>> view.errors
+        [u'Failed to import CSV text', u'Titles may not be empty']
 
     """
 
