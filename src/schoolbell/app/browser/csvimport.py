@@ -195,6 +195,11 @@ class BaseCSVImporter(object):
 
 
 class ImportErrorCollection(object):
+    """A simple container for import errors.
+
+    This class just holds errors that occour in the CSVImporter class so they
+    can be delt with by the CSVImportView class.
+    """
 
     def __init__(self):
         self.generic = []

@@ -44,7 +44,9 @@ def doctest_GroupCSVImporter():
 
     Import some sample data
 
-        >>> csvdata="Group 1, Group 1 Description\nGroup2, Group 2 Description\nGroup3, Group 3 Description, Some extra data"
+        >>> csvdata='''Group 1, Group 1 Description
+        ... Group2
+        ... Group3, Group 3 Description, Some extra data'''
         >>> importer.importFromCSV(csvdata)
         True
 
@@ -56,7 +58,7 @@ def doctest_GroupCSVImporter():
     Check that descriptions were imported properly
 
         >>> [group.description for group in container.values()]
-        ['Group 1 Description', 'Group 2 Description', 'Group 3 Description']
+        ['Group 1 Description', '', 'Group 3 Description']
 
     """
 
@@ -96,6 +98,25 @@ def doctest_GroupCSVImportView():
         >>> view.update()
         >>> view.errors
         [u'Failed to import CSV text', u'Titles may not be empty']
+
+    """
+
+def doctest_ImportErrorCollection():
+    r"""
+    Make the class
+
+        >>> from schoolbell.app.browser.csvimport import ImportErrorCollection
+        >>> errors = ImportErrorCollection()
+        >>> errors
+        <ImportErrorCollection {'generic': [], 'fields': []}>
+
+    anyErrors returns True if there are errors and False if not
+
+        >>> errors.anyErrors()
+        False
+        >>> errors.fields.append('A Sample Error Message')
+        >>> errors.anyErrors()
+        True
 
     """
 
