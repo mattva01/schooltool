@@ -11,19 +11,22 @@ POT=src/schooltool/locales/schooltool.pot
 PO=$(wildcard src/schooltool/locales/*/LC_MESSAGES/*.po)
 PYTHONPATH=src:Zope3/src
 
-
+.PHONY: all
 all: build
 
+.PHONY: build
 build:
 	$(PYTHON) setup.py build_ext -i
 	cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) remove-stale-bytecode.py
 
+.PHONY: clean
 clean:
 	find . \( -path './src/schooltool/*.mo' -o -name '*.o' \
 	         -o -name '*.py[co]' \) -exec rm -f {} \;
 	rm -rf build
 
+.PHONY: realclean
 realclean: clean
 	find . \( -name '*.so' -o -name '*.pyd' \) -exec rm -f {} \;
 	rm -f Data.fs* *.csv tags ID *.log
@@ -31,31 +34,40 @@ realclean: clean
 	rm -f MANIFEST
 	rm -rf dist
 
+.PHONY: test
 test: build
 	$(PYTHON) test.py $(TESTFLAGS) -s src/schooltool
 
+.PHONY: testall
 testall: build
 	$(PYTHON) test.py $(TESTFLAGS)
 
+.PHONY: ftest
 ftest: build
 	$(PYTHON) test.py $(TESTFLAGS) -s src/schooltool -f
 
+.PHONY: run
 run: build
 	$(PYTHON) schooltool-server.py
 
+.PHONY: coverage
 coverage: build
 	rm -rf coverage
 	$(PYTHON) test.py $(TESTFLAGS) --coverage -s src/schooltool
 
+.PHONY: coverage-report
 coverage-report:
 	@cd coverage && ls schooltool* | grep -v tests | xargs grep -c '^>>>>>>' | grep -v ':0$$'
 
+.PHONY: coverage-report-list
 coverage-report-list:
 	@cd coverage && ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'
 
+.PHONY: edit-coverage-reports
 edit-coverage-reports:
 	@cd coverage && $(EDITOR) `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
 
+.PHONY: vi-coverage-reports
 vi-coverage-reports:
 	@cd coverage && vi '+/^>>>>>>/' `ls schooltool* | grep -v tests | xargs grep -l '^>>>>>>'`
 
@@ -80,8 +92,6 @@ signtar: dist
 	md5sum dist/school*.tar.gz > dist/md5sum
 	gpg --clearsign dist/md5sum
 	mv dist/md5sum.asc dist/md5sum
-
-.PHONY: all build clean test ftest run coverage sampleschool
 
 .PHONY: extract-translations
 extract-translations: Zope3/principals.zcml Zope3/package-includes/schoolbell-configure.zcml Zope3/package-includes/schooltool-configure.zcml
