@@ -191,14 +191,14 @@ class BaseCSVImporter(object):
 
         This should be defined in the subclass.
         """
-        raise NotImplementedError()
+        raise NotImplementedError("Please override this method in subclasses")
 
 
 class ImportErrorCollection(object):
     """A simple container for import errors.
 
-    This class just holds errors that occour in the CSVImporter class so they
-    can be delt with by the CSVImportView class.
+    This class just holds errors that occur in the CSVImporter class so they
+    can be dealt with by the CSVImportView class.
     """
 
     def __init__(self):
