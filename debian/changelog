@@ -27,6 +27,8 @@ schooltool (0.10-1) unstable; urgency=low
     try to prevent race conditions when the server takes a while to shut down.
   * Do not listen on the RESTive/XML interface by default. See:
     http://lists.schooltool.org/pipermail/schooltool/2005-April/001173.html
+  * Remove the dependency on python2.3-twisted.
+  * Remove the dependency on python2.3-pyopenssl.
   * Disabled the SSL Certificate generation in the maintainer scripts as the
     server SSL support did not survive the transition to Zope 3. Left the code
     in, just in case that support is added.
