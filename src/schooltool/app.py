@@ -21,7 +21,7 @@ SchoolTool application
 
 $Id$
 
-Schooltool currenlty provides a SchoolBell based calendar server that adds
+SchoolTool currently provides a SchoolBell based calendar server that adds
 school specific features.  In addition to the basic SchoolBell Person, Groups,
 and Resources, SchoolTool adds Course and Sections.
 
@@ -50,7 +50,7 @@ particular course of study.
 
 The educational material covered by a course is taugh to sets of students in
 Sections.  Each section is related to the Course with the CourseSections
-relationship and the lits of sections can be accessed via the Course.sections
+relationship and the list of sections can be accessed via the Course.sections
 RelationshipProperty.
 
 We haven't set up any sections yet so:
@@ -78,7 +78,7 @@ instructor at a particular time to cover the course material.
     >>> school['persons']['student4'] = student4 = Person('Student4')
 
 The teacher of a section is defined with the Instruction relationship and can
-be access via the section.instructors RelationshipProperty:
+be accessed via the section.instructors RelationshipProperty:
 
     >>> from schooltool.relationships import Instruction
     >>> [teacher.username for teacher in section1.instructors]
@@ -117,7 +117,7 @@ schools.
     >>> [form.title for form in section2.members]
     ['Form1']
 
-See schooltool.browser.app for showing indivudual members of the form in the
+See schooltool.browser.app for showing individual members of the form in the
 UI.
 
 Sections can be part of more than 1 course and sections have a courses
