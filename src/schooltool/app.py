@@ -20,6 +20,108 @@
 SchoolTool application
 
 $Id$
+
+Schooltool currenlty provides a SchoolBell based calendar server that adds
+school specific features.  In addition to the basic SchoolBell Person, Groups,
+and Resources, SchoolTool adds Course and Sections.
+
+We need some test setup:
+
+    >>> from schoolbell.relationship.tests import setUp, tearDown
+    >>> setUp()
+
+    >>> school = SchoolToolApplication()
+    >>> school['courses']
+    <schooltool.app.CourseContainer object at ...>
+    >>> school['sections']
+    <schooltool.app.SectionContainer object at ...>
+
+A Course is a simple object with a title and description that can describe a
+particular course of study.
+
+    >>> ushistory = Course(title="US History", description="Years 1945 - 2000")
+    >>> school['courses']['ushistory'] = ushistory
+
+    >>> ushistory.title
+    'US History'
+
+    >>> ushistory.description
+    'Years 1945 - 2000'
+
+The educational material covered by a course is taugh to sets of students in
+Sections.  Each section is related to the Course with the CourseSections
+relationship and the lits of sections can be accessed via the Course.sections
+RelationshipProperty.
+
+We haven't set up any sections yet so:
+
+    >>> [section.title for section in ushistory.sections]
+    []
+
+is empty.  Lets create some sections and add them to US History.
+
+    >>> school['sections']['section1'] = section1 = Section(title="Section 1")
+    >>> school['sections']['section2'] = section2 = Section(title="Section 2")
+    >>> ushistory.sections.add(section1)
+    >>> ushistory.sections.add(section2)
+    >>> [section.title for section in ushistory.sections]
+    ['Section 1', 'Section 2']
+
+Each section represents a particular set of students meeting with a particular
+instructor at a particular time to cover the course material.
+
+    >>> school['persons']['teacher1'] = teacher1 = Person('Teacher1')
+    >>> school['persons']['teacher2'] = teacher2 = Person('Teacher2')
+    >>> school['persons']['student1'] = student1 = Person('Student1')
+    >>> school['persons']['student2'] = student2 = Person('Student2')
+    >>> school['persons']['student3'] = student3 = Person('Student3')
+    >>> school['persons']['student4'] = student4 = Person('Student4')
+
+The teacher of a section is defined with the Instruction relationship and can
+be access via the section.instructors RelationshipProperty:
+
+    >>> from schooltool.relationships import Instruction
+    >>> [teacher.username for teacher in section1.instructors]
+    []
+    >>> Instruction(instructor=teacher1, section=section1)
+    >>> [teacher.username for teacher in section1.instructors]
+    ['Teacher1']
+
+sections can have more than one instructor:
+
+    >>> section1.instructors.add(teacher2)
+    >>> [teacher.username for teacher in section1.instructors]
+    ['Teacher1', 'Teacher2']
+
+sections students are associated with a section via the Membership
+relationship from SchoolBell or via the section.members property.  The section
+itself participates in the Membership relationship in the URIGroup role which
+is possible because Sections implement the IGroup interface.
+
+    >>> [student.username for student in section1.members]
+    []
+    >>> from schoolbell.app.membership import Membership
+    >>> Membership(group=section1, member=student1)
+    >>> Membership(group=section1, member=student2)
+    >>> [student.username for student in section1.members]
+    ['Student1', 'Student2']
+
+We can use Groups to add multiple students to a section to keep the group of
+students together, similar to the "Form" concept used in some US Primary
+schools.
+
+    >>> school['groups']['form1'] = form1 = Group(title="Form1")
+    >>> form1.members.add(student3)
+    >>> form1.members.add(student4)
+    >>> section2.members.add(form1)
+    >>> [form.title for form in section2.members]
+    ['Form1']
+
+See schooltool.browser.app for showing indivudual members of the form in the
+UI.
+
+    >>> tearDown()
+
 """
 
 from persistent import Persistent
