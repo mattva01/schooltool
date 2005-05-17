@@ -28,7 +28,6 @@ from zope.app import zapi
 from zope.app.component.hooks import getSite
 from zope.app.form.utility import setUpWidgets, getWidgetsData
 from zope.app.form.interfaces import IInputWidget, WidgetsError
-from zope.app.container.traversal import ContainerTraverser
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
