@@ -1,0 +1,148 @@
+Functional test for the timetable schema wizard
+===============================================
+
+Let's create a SchoolTool instance:
+
+  >>> print http("""
+  ... POST /@@contents.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Length: ...
+  ... Content-Type: application/x-www-form-urlencoded
+  ... 
+  ... type_name=BrowserAdd__schooltool.app.SchoolToolApplication&\
+  ... new_value=frogpond""")
+  HTTP/1.1 303 See Other
+  ...
+  Location: http://localhost/@@contents.html
+  ...
+
+Let's go to the advanced 'New Timetable' view:
+
+  >>> print http(r"""
+  ... GET /frogpond/ttschemas/@@+ HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+      <input class="textType" id="field.name" name="field.name" size="20" type="text" value="default"  />
+  ...
+
+When we enter a schema name and press the 'Add day' button, we get an
+extra day:
+
+  >>> print http("""
+  ... POST /frogpond/ttschemas/@@+ HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Length: ...
+  ... Content-Type: application/x-www-form-urlencoded
+  ... 
+  ... field.name=weekly&day1=Day+1&day1.period1=Period+1&ADD_DAY=Add+day&\
+  ... time1.period=Period+1&time1.day0=&time1.day1=&time1.day2=&\
+  ... time1.day3=&time1.day4=&time1.day5=&time1.day6=&field.duration=""")
+  HTTP/1.1 200 Ok
+  ...
+        <th class="day">
+          <input class="text" type="text" name="day2"
+                 value="Day 2" tabindex="4" />
+        </th>
+        <th class="day" width="1%">
+          <input class="button-ok" type="submit" value="C"
+                 title="Copy periods from previous day"
+                 name="COPY_DAY_1" tabindex="5" />
+        </th>
+        <th class="day" width="1%">
+          <input class="button-cancel" type="submit" value="X"
+                 title="Remove this day" name="DELETE_DAY_2"
+                 tabindex="6" />
+        </th>
+  ...
+
+When we click 'Add Period', we get an extra period!
+
+  >>> print http("""
+  ... POST /frogpond/ttschemas/@@+ HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Length: ...
+  ... Content-Type: application/x-www-form-urlencoded
+  ... 
+  ... field.name=weekly&day1=Monday&day2=Tuesday&day3=Wednesday&\
+  ... day4=Thursday&day5=Friday&day1.period1=Period+1&\
+  ... day2.period1=Period+1&day3.period1=Period+1&day4.period1=Period+1&\
+  ... day5.period1=Period+1&ADD_PERIOD=Add+period&time1.period=Period+1&\
+  ... time1.day0=&time1.day1=&time1.day2=&time1.day3=&time1.day4=&\
+  ... time1.day5=&time1.day6=&field.duration=""")
+  HTTP/1.1 200 Ok
+  ...
+      <tr>
+        <td class="period" width="20%" colspan="2">
+          <input type="text" class="text" name="day1.period2"
+                 value="Period 2" tabindex="17" />
+        </td>
+  <BLANKLINE>
+        <td class="period" width="20%" colspan="3">
+          <input type="text" class="text" name="day2.period2"
+                 value="" tabindex="19" />
+        </td>
+  <BLANKLINE>
+        <td class="period" width="20%" colspan="3">
+          <input type="text" class="text" name="day3.period2"
+                 value="" tabindex="21" />
+        </td>
+  <BLANKLINE>
+        <td class="period" width="20%" colspan="3">
+          <input type="text" class="text" name="day4.period2"
+                 value="" tabindex="23" />
+        </td>
+  <BLANKLINE>
+        <td class="period" width="20%" colspan="3">
+          <input type="text" class="text" name="day5.period2"
+                 value="" tabindex="25" />
+        </td>
+      </tr>
+  ...
+
+
+Finally we post the completed form:
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/@@+ HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Length: ...
+  ... Content-Type: application/x-www-form-urlencoded
+  ... 
+  ... field.name=weekly&day1=Monday&day2=Tuesday&day3=Wednesday&day4=Thursday&day5=Friday&day1.period1=Period+1&day2.period1=Period+1&day3.period1=Period+1&day4.period1=Period+1&day5.period1=Period+1&day1.period2=Period+2&day2.period2=Period+2&day3.period2=Period+2&day4.period2=Period+2&day5.period2=Period+2&day1.period3=Period+3&day2.period3=Period+3&day3.period3=Period+3&day4.period3=Period+3&day5.period3=Period+3&day1.period4=Period+4&day2.period4=Period+4&day3.period4=Period+4&day4.period4=Period+4&day5.period4=Period+4&model=WeeklyTimetableModel&time1.period=Period+1&time1.day0=09%3A00-09%3A45&time1.day1=09%3A00-09%3A45&time1.day2=09%3A00-09%3A45&time1.day3=09%3A00-09%3A45&time1.day4=09%3A00-09%3A45&time1.day5=09%3A00-09%3A45&time1.day6=09%3A00-09%3A45&time2.period=Period+2&time2.day0=10%3A00-10%3A45&time2.day1=10%3A00-10%3A45&time2.day2=10%3A00-10%3A45&time2.day3=10%3A00-10%3A45&time2.day4=10%3A00-10%3A45&time2.day5=10%3A00-10%3A45&time2.day6=10%3A00-10%3A45&time3.period=Period+3&time3.day0=11%3A00-11%3A45&time3.day1=11%3A00-11%3A45&time3.day2=11%3A00-11%3A45&time3.day3=11%3A00-11%3A45&time3.day4=11%3A00-11%3A45&time3.day5=11%3A00-11%3A45&time3.day6=11%3A00-11%3A45&time4.period=Period+4&time4.day0=12%3A00-12%3A45&time4.day1=12%3A00-12%3A45&time4.day2=12%3A00-12%3A45&time4.day3=12%3A00-12%3A45&time4.day4=12%3A00-12%3A45&time4.day5=12%3A00-12%3A45&time4.day6=12%3A00-12%3A45&field.duration=45&CREATE=Create+timetable+schema""")
+  HTTP/1.1 303 See Other
+  Content-Length: ...
+  Content-Type: text/plain;charset=utf-8
+  Location: http://localhost/frogpond/ttschemas
+  <BLANKLINE>
+  http://localhost/frogpond/ttschemas
+
+Now we see the newly created timetable schema in the list:
+
+  >>> print http(r"""
+  ... GET /frogpond/ttschemas HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+      <tbody>
+  <BLANKLINE>
+        <tr>
+          <td>
+            <a href="weekly"></a>
+          </td>
+  <BLANKLINE>
+          <td class="ContentTitle">
+            <a href="weekly">weekly</a>
+          </td>
+  <BLANKLINE>
+          <td><span>&nbsp;</span></td>
+          <td><span>&nbsp;</span></td>
+          <td><span>&nbsp;</span></td>
+  <BLANKLINE>
+        </tr>
+  <BLANKLINE>
+  <BLANKLINE>
+      </tbody>
+  ...
