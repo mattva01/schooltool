@@ -199,6 +199,17 @@
       class="schoolbell.app.browser.app.PersonPhotoView"
       permission="zope.View" />
 
+  <page
+      name="person-csvimport.html"
+      for="schoolbell.app.interfaces.IPersonContainer"
+      class="schoolbell.app.browser.csvimport.PersonCSVImportView"
+      template="templates/person-csvimport.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Import Persons"
+      layer=".skin.ISchoolBellLayer"
+      />
+
 <!-- GroupContainer, Group configuration -->
 
   <page
