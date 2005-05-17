@@ -869,7 +869,7 @@ class TimetableDict(PersistentDict):
         keys = key.split(".")
         if len(keys) != 2 or not keys[0] or not keys[1]:
             raise ValueError("The key should be composed of a term id and a"
-                             "schema id separated with a . (got %r)" % key)
+                             " schema id separated with a . (got %r)" % key)
         old_value = self.get(key)
         if old_value is not None:
             old_value.__parent__ = None
