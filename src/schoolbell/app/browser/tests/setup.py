@@ -2,6 +2,7 @@
 Setup code for SchoolBell unit tests.
 """
 
+import os.path
 from zope.interface import directlyProvides, implements
 from zope.app.testing import setup, ztapi
 from zope.app.session.session import ClientId, Session
@@ -31,6 +32,7 @@ from zope.app.traversing.namespace import view, resource
 from zope.app.traversing.interfaces import IPathAdapter
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.basicskin.standardmacros import StandardMacros
+from zope.app.form.browser.macros import FormMacros
 from zope.app.publisher.browser.menu import MenuAccessView
 from zope.app.publisher.interfaces.browser import IMenuItemType, IBrowserMenu
 from zope.app.component.hooks import setSite
@@ -153,6 +155,13 @@ def setUp(test=None):
     ztapi.browserView(None, 'schoolbell_navigation',
                       SimpleViewClass("../templates/navigation.pt",
                                       bases=(NavigationView,)))
+
+    # form macros
+    ztapi.browserView(None, 'form_macros', FormMacros)
+    import zope.app.form.browser
+    base = zope.app.form.browser.__path__[0]
+    ztapi.browserView(None, 'widget_macros',
+                      SimpleViewClass(os.path.join(base, 'widget_macros.pt')))
 
     # resources
     class ResourceStub:
