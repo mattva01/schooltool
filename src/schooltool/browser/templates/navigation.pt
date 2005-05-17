@@ -5,8 +5,6 @@
           i18n:translate="">Persons</a></li>
    <li><a tal:attributes="href view/app/courses/@@absolute_url"
           i18n:translate="">Courses</a></li>
-   <li><a tal:attributes="href view/app/sections/@@absolute_url"
-          i18n:translate="">Sections</a></li>
    <li><a tal:attributes="href view/app/groups/@@absolute_url"
           i18n:translate="">Groups</a></li>
    <li><a tal:attributes="href view/app/resources/@@absolute_url"
