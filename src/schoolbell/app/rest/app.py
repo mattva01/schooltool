@@ -219,7 +219,8 @@ class PersonFile(ApplicationObjectFile):
 class ApplicationView(View):
     """The root view for the application."""
 
-    template = Template("www/app.pt", content_type="text/xml; charset=UTF-8")
+    template = Template("templates/app.pt",
+                        content_type="text/xml; charset=UTF-8")
 
     def getContainers(self):
         return [{'href': zapi.absoluteURL(self.context[key], self.request),
@@ -229,7 +230,8 @@ class ApplicationView(View):
 class GenericContainerView(View):
     """A RESTive container view superclass."""
 
-    template = Template("www/aoc.pt", content_type="text/xml; charset=UTF-8")
+    template = Template("templates/aoc.pt",
+                        content_type="text/xml; charset=UTF-8")
 
     def getName(self):
         return self.context.__name__
@@ -279,14 +281,15 @@ class PersonContainerView(GenericContainerView):
 class GroupView(View):
     """RESTive view for groups"""
 
-    template = Template("www/group.pt", content_type="text/xml; charset=UTF-8")
+    template = Template("templates/group.pt",
+                        content_type="text/xml; charset=UTF-8")
     factory = GroupFile
 
 
 class ResourceView(View):
     """RESTive view for resources"""
 
-    template = Template("www/resource.pt",
+    template = Template("templates/resource.pt",
                         content_type="text/xml; charset=UTF-8")
     factory = ResourceFile
 
@@ -294,7 +297,8 @@ class ResourceView(View):
 class PersonView(View):
     """RESTive view for persons"""
 
-    template = Template("www/person.pt", content_type="text/xml; charset=UTF-8")
+    template = Template("templates/person.pt",
+                        content_type="text/xml; charset=UTF-8")
     factory = PersonFile
 
 

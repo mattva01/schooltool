@@ -58,7 +58,7 @@ class RelationshipsView(View):
     and create new relationships (POST).
     """
 
-    template = Template("www/relationships.pt",
+    template = Template("templates/relationships.pt",
                         content_type="text/xml; charset=UTF-8")
 
     schema = """<?xml version="1.0" encoding="UTF-8"?>
@@ -209,7 +209,8 @@ def LinkViewFactory(context, request):
 class LinkView(View):
     """A view on relationship links."""
 
-    template = Template("www/link.pt", content_type="text/xml; charset=UTF-8")
+    template = Template("templates/link.pt",
+                        content_type="text/xml; charset=UTF-8")
 
     def __init__(self, context, request):
         self.context = context

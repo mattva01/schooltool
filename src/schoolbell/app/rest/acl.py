@@ -79,7 +79,7 @@ def ACLViewFactory(context, request):
 class ACLView(View, ACLViewBase):
     """A RESTive view for access control setup"""
 
-    template = Template('www/acl.pt')
+    template = Template('templates/acl.pt')
 
     schema = """<?xml version="1.0" encoding="UTF-8"?>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0"
