@@ -126,6 +126,17 @@
     <widget field="description" height="5" />
   </addform>
 
+  <page
+      name="course-csvimport.html"
+      for="schooltool.app.ICourseContainer"
+      class="schooltool.browser.csvimport.CourseCSVImportView"
+      template="templates/course-csvimport.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Import Courses"
+      layer=".skin.ISchoolToolLayer"
+      />
+
   <menuItem
       menu="schoolbell_actions"
       title="New Course"

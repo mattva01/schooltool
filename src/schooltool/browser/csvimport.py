@@ -25,10 +25,14 @@ $Id$
 import csv
 from zope.app.publisher.browser import BrowserView
 from zope.app.container.interfaces import INameChooser
+
 from schoolbell.relationship import getRelatedObjects, relate
 from schoolbell.app.membership import Membership
+from schoolbell.app.browser.csvimport import SimpleCSVImporter
+from schoolbell.app.browser.csvimport import BaseCSVImportView
+
 from schooltool.interfaces import ISchoolToolApplication
-from schooltool.app import Person, Section
+from schooltool.app import Person, Section, Course
 from schooltool import SchoolToolMessageID as _
 from schooltool.relationships import URIInstruction, URIInstructor, URISection
 from schooltool.timetable import TimetableActivity
@@ -423,3 +427,17 @@ class TimetableCSVImporter(object):
                                  " aborting transaction.")
                 return False
         return True
+
+
+class CourseCSVImporter(SimpleCSVImporter):
+    """Course CSV Importer"""
+
+    factory = Course
+
+
+class CourseCSVImportView(BaseCSVImportView):
+    """View for Course CSV importer."""
+
+    def __init__(self, context, request):
+        BaseCSVImportView.__init__(self, context, request)
+        self.importer_class = CourseCSVImporter

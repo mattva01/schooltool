@@ -511,6 +511,77 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assertEquals(imp.errors.generic, [])
 
 
+def doctest_CourseCSVImporter():
+    r"""Tests for CourseCSVImporter.
+
+    Create a course container and an importer
+
+        >>> from schooltool.browser.csvimport import CourseCSVImporter
+        >>> from schooltool.app import CourseContainer
+        >>> container = CourseContainer()
+        >>> importer = CourseCSVImporter(container, None)
+
+    Import some sample data
+
+        >>> csvdata='''Course 1, Course 1 Description
+        ... Course2
+        ... Course3, Course 3 Description, Some extra data'''
+        >>> importer.importFromCSV(csvdata)
+        True
+
+    Check that the courses exist
+
+        >>> [course for course in container]
+        [u'course-1', u'course2', u'course3']
+
+    Check that descriptions were imported properly
+
+        >>> [course.description for course in container.values()]
+        ['Course 1 Description', '', 'Course 3 Description']
+
+    """
+
+
+def doctest_CourseCSVImportView():
+    r"""
+    We'll create a course csv import view
+
+        >>> from schooltool.browser.csvimport import CourseCSVImportView
+        >>> from schooltool.app import CourseContainer
+        >>> from zope.publisher.browser import TestRequest
+        >>> container = CourseContainer()
+        >>> request = TestRequest()
+
+    Now we'll try a text import.  Note that the description is not required
+
+        >>> request.form = {'csvtext' : "A Course, The best Course\nAnother Course",
+        ...                 'charset' : 'UTF-8',
+        ...                 'UPDATE_SUBMIT': 1}
+        >>> view = CourseCSVImportView(container, request)
+        >>> view.update()
+        >>> [course for course in container]
+        [u'a-course', u'another-course']
+
+    If no data is provided, we naturally get an error
+
+        >>> request.form = {'charset' : 'UTF-8', 'UPDATE_SUBMIT': 1}
+        >>> view.update()
+        >>> view.errors
+        [u'No data provided']
+
+    We also get an error if a line starts with a comma (no title)
+
+        >>> request.form = {'csvtext' : ", No title provided here",
+        ...                 'charset' : 'UTF-8',
+        ...                 'UPDATE_SUBMIT': 1}
+        >>> view = CourseCSVImportView(container, request)
+        >>> view.update()
+        >>> view.errors
+        [u'Failed to import CSV text', u'Titles may not be empty']
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTimetableCSVImportView))
