@@ -304,7 +304,9 @@ class PersonCSVImporter(BaseCSVImporter):
             password = None
 
         if username in self.container:
-            self.errors.fields.append(_("Duplicate username: %s" % ', '.join(data)))
+            error_msg = _("Duplicate username: ${username}")
+            error_msg.mapping = {'username' : ', '.join(data)}
+            self.errors.fields.append(error_msg)
             return
 
         obj = Person(username=data[0], title=data[1])

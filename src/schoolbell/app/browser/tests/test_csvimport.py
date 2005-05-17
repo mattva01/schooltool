@@ -309,11 +309,13 @@ def doctest_PersonCSVImporter():
         >>> [p for p in container]
         [u'jdoe', u'joe']
 
-    Now we'll try to add another 'jdoe' user.  Note that only the username
-    matters when checking for duplicates
+    Now we'll try to add another 'jdoe' username.  In this case the error
+    message contains a translated variable, so we need zope.i18n.translate to
+    properly demonstrate it.
 
+        >>> from zope.i18n import translate
         >>> importer.createAndAdd([u'jdoe', u'Jim Doe'], False)
-        >>> importer.errors.fields
+        >>> [translate(error) for error in importer.errors.fields]
         [u'Duplicate username: jdoe, Jim Doe']
 
     """
