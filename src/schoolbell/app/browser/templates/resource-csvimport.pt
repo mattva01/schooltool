@@ -22,7 +22,8 @@
           Import Resources
         </h3>
         <p i18n:translate="">
-          CSV data should be made up of a resource title and an optional
+          CSV data <strong i18n:translate="">must</strong> include a resource
+          title and <strong i18n:translate="">may</strong> include an optional
           resource description.  Any extra information will be discarded.
         </p>
         <p i18n:translate="">Example:</p>

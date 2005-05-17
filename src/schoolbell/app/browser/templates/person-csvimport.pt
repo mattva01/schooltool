@@ -22,19 +22,20 @@
           Import Persons
         </h3>
         <p i18n:translate="">
-          CSV data must contain a user name and a full name.  An optional
-          password can be included as well.
+          CSV data <strong i18n:translate="">must</strong> contain a user name
+          and a full name.  An optional password <strong
+            i18n:translate="">may</strong> be included as well.
         </p>
         <p i18n:translate="">Example:</p>
 
 <pre i18n:translate="">
 jjones, Jimmy Jones
-jbjones, Jim Bob Jones, monkey
+jbjones, Jim Bob Jones, r2m45J
 howard, Howard
 </pre>
         <p i18n:translate="">
           The above example will create three users, 'jjones', 'jbjones' and
-          'howard'.  Of the three, only 'jbjones' has a password ('monkey') and
+          'howard'.  Of the three, only 'jbjones' has a password ('r2m45J') and
           will be able to login to the system.  Note that passwords must be
           sent in plain text.
         </p>

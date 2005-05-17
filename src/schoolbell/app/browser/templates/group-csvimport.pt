@@ -22,8 +22,9 @@
           Import Groups
         </h3>
         <p i18n:translate="">
-          CSV data should be made up of a group title and an optional group
-          description.  Any extra information will be discarded.
+          CSV data <strong i18n:translate="">must</strong> include a group
+          title and <strong i18n:translate="">may</strong> include an optional
+          group description.  Any extra information will be discarded.
         </p>
         <p i18n:translate="">Example:</p>
 
