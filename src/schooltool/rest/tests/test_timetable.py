@@ -94,33 +94,6 @@ class TestTimetableReadView(PlacefulSetup, XMLCompareMixin, unittest.TestCase):
         </timetable>
         """
 
-    full_xml_with_exceptions = full_xml.replace('</timetable>', '') + """
-        <exception date="2004-10-24" period="C">
-          <activity title="CompSci">
-            <resource xlink:type="simple" xlink:href="http://127.0.0.1/resources/lab1"
-                      xlink:title="Lab1"/>
-            <resource xlink:type="simple" xlink:href="http://127.0.0.1/resources/lab2"
-                      xlink:title="Lab2"/>
-          </activity>
-        </exception>
-        <exception date="2004-11-04" period="A">
-          <activity title="Maths">
-            <resource xlink:type="simple" xlink:href="http://127.0.0.1/resources/room1"
-                      xlink:title="Room1"/>
-          </activity>
-          <replacement time="08:30" duration="45" uid="rpl-ev-uid1">
-            Geometry
-          </replacement>
-        </exception>
-        <exception date="2004-11-25" period="B">
-          <activity title="English" />
-          <replacement date="2004-11-26" time="12:45" duration="30"
-                       uid="rpl-ev-uid2">
-            English (short)
-          </replacement>
-        </exception>
-        """ + "</timetable>"
-
     def setUp(self):
         from schooltool.app import SchoolToolApplication
         from schooltool.app import Person
@@ -153,33 +126,6 @@ class TestTimetableReadView(PlacefulSetup, XMLCompareMixin, unittest.TestCase):
         tt['Day 2'].add('C', TimetableActivity('CompSci', owner, [lab1, lab2]))
         return tt
 
-    def createFullWithExceptions(self, owner=None):
-        from schooltool.timetable import TimetableException
-        from schooltool.timetable import ExceptionalTTCalendarEvent
-        tt = self.createFull(owner)
-        maths = list(tt['Day 1']['A'])[0]
-        english = list(tt['Day 1']['B'])[0]
-        compsci = list(tt['Day 2']['C'])[0]
-        tt.exceptions.append(TimetableException(datetime.date(2004, 10, 24),
-                                                'C', compsci))
-        exc = TimetableException(datetime.date(2004, 11, 4), 'A', maths)
-        exc.replacement = ExceptionalTTCalendarEvent(
-                                       datetime.datetime(2004, 11, 4, 8, 30),
-                                       datetime.timedelta(minutes=45),
-                                       "Geometry",
-                                       unique_id="rpl-ev-uid1",
-                                       exception=exc)
-        tt.exceptions.append(exc)
-        exc = TimetableException(datetime.date(2004, 11, 25), 'B', english)
-        exc.replacement = ExceptionalTTCalendarEvent(
-                                       datetime.datetime(2004, 11, 26, 12, 45),
-                                       datetime.timedelta(minutes=30),
-                                       "English (short)",
-                                       unique_id="rpl-ev-uid2",
-                                       exception=exc)
-        tt.exceptions.append(exc)
-        return tt
-
     def createView(self, context, request):
         from schooltool.rest.timetable import TimetableReadView
         return TimetableReadView(context, request)
@@ -195,8 +141,6 @@ class TestTimetableReadView(PlacefulSetup, XMLCompareMixin, unittest.TestCase):
     def test_get(self):
         self.do_test_get(self.createEmpty(), self.empty_xml)
         self.do_test_get(self.createFull(), self.full_xml)
-        self.do_test_get(self.createFullWithExceptions(),
-                         self.full_xml_with_exceptions)
 
 
 class TimetableSchemaMixin(QuietLibxml2Mixin):

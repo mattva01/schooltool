@@ -397,7 +397,7 @@ class ITimetableSchema(IContained):
         """Return a new empty timetable with the same structure.
 
         The new timetable has the same set of day_ids, and the sets of
-        period ids within each day.  It has no activities nor exceptions.
+        period ids within each day.  It has no activities.
         """
 
 
@@ -453,10 +453,6 @@ class ITimetable(ILocation):
         title=u"A timetable model this timetable should be used with.",
         schema=ITimetableModel)
 
-    exceptions = Object(
-        title=u"A list of timetable exceptions.",
-        schema=ITimetableException)
-
     def keys():
         """Return a sequence of identifiers for days within the timetable.
 
@@ -482,13 +478,13 @@ class ITimetable(ILocation):
         """Return a new empty timetable with the same structure.
 
         The new timetable has the same set of day_ids, and the sets of
-        period ids within each day.  It has no activities nor exceptions.
+        period ids within each day.  It has no activities.
         """
 
     def __eq__(other):
         """Is this timetable equal to other?
 
-        Timetables are equal iff they have the same model, set of exceptions,
+        Timetables are equal iff they have the same model,
         set of day IDs, and their corresponding days are equal.
 
         Returns False if other is not a timetable.
@@ -519,7 +515,7 @@ class ITimetableWrite(Interface):
         """
 
     def update(timetable):
-        """Add all the events and exceptions from timetable to self.
+        """Add all the events from timetable to self.
 
         Useful for producing combined timetables.
 
@@ -623,71 +619,6 @@ class ITimetableActivityRemovedEvent(ITimetableActivityEvent):
     """Event that gets sent when an activity is removed from a timetable."""
 
 
-class ITimetableExceptionList(Interface):
-    """A list of timetable exceptions.
-
-    All items in this list are objects providing ITimetableException.
-    """
-
-    def __iter__():
-        """Iterate over all timetable exceptions."""
-
-    def __len__():
-        """Return the number of exceptions in the list."""
-
-    def __getitem__(index):
-        """Return the n-th exception in the list."""
-
-    def __eq__(other):
-        """Is this list equal to other?"""
-
-    def __ne__(other):
-        """Is this list not equal to other?"""
-
-    def append(exception):
-        """Add a timetable exception.
-
-        Sends an ITimetableExceptionAddedEvent to the __parent__ of the
-        timetable, if the timetable provides ILocation, and its __parent__
-        provides IEventTarget.
-        """
-
-    def remove(exception):
-        """Remove a timetable exception.
-
-        Sends an ITimetableExceptionAddedEvent to the __parent__ of the
-        timetable, if the timetable provides ILocation, and its __parent__
-        provides IEventTarget.
-        """
-
-    def extend(exceptions):
-        """Extend the list with new exceptions.
-
-        This method should only be used for constructing composite timetables.
-        It does not send any events.
-        """
-
-
-class ITimetableExceptionEvent(Interface):
-    """Base interface for timetable exception events."""
-
-    timetable = Object(
-        title=u"The timetable.",
-        schema=ITimetable)
-
-    exception = Object(
-        title=u"The timetable exception.",
-        schema=ITimetableException)
-
-
-class ITimetableExceptionAddedEvent(ITimetableExceptionEvent):
-    """Event that gets sent when an exception is added to a timetable."""
-
-
-class ITimetableExceptionRemovedEvent(ITimetableExceptionEvent):
-    """Event that gets sent when an exception is removed from a timetable."""
-
-
 class ITimetableCalendarEvent(ICalendarEvent):
     """A calendar event that has been created from a timetable."""
 
@@ -697,14 +628,6 @@ class ITimetableCalendarEvent(ICalendarEvent):
     activity = Object(
         title=u"The activity from which this event was created.",
         schema=ITimetableActivity)
-
-
-class IExceptionalTTCalendarEvent(ICalendarEvent):
-    """A calendar event that replaces a particular timetable event."""
-
-    exception = Object(
-        title=u"The exception in which this event is stored.",
-        schema=ITimetableException)
 
 
 class ITimetableDict(IReadMapping, IWriteMapping):

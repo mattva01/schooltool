@@ -60,11 +60,6 @@ sets of periods for different days may be different), and each period may have
 zero or more timetable activities (two or more activities represent scheduling
 conflicts).  See ITimetable, ITimetableDay, ITimetableActivity.
 
-A timetable may also have a list of exceptions that represent irregularities
-in activities.  For example, a certain activity may be canceled on a certain
-day, or an activity may be shifted in time, or it may be shortened.  See
-ITimetableException.
-
 A timetable model describes the mapping between timetable days and calendar
 days, and also the mapping between period IDs and time of the day.  Currently
 SchoolTool has two kinds of timetable models:
@@ -166,16 +161,11 @@ from schooltool.interfaces import ITimetableSchema, ITimetableSchemaDay
 from schooltool.interfaces import ITimetableSchemaWrite
 from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
-from schooltool.interfaces import ITimetableActivity, ITimetableException
+from schooltool.interfaces import ITimetableActivity
 from schooltool.interfaces import ITimetableActivityAddedEvent
 from schooltool.interfaces import ITimetableActivityRemovedEvent
-from schooltool.interfaces import ITimetableExceptionList
-from schooltool.interfaces import ITimetableExceptionEvent
-from schooltool.interfaces import ITimetableExceptionAddedEvent
-from schooltool.interfaces import ITimetableExceptionRemovedEvent
 from schooltool.interfaces import ITimetableReplacedEvent
 from schooltool.interfaces import ITimetableCalendarEvent
-from schooltool.interfaces import IExceptionalTTCalendarEvent
 from schooltool.interfaces import ISchooldayPeriod
 from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
 from schooltool.interfaces import ITimetableModel
@@ -386,9 +376,6 @@ class Timetable(Persistent):
         self.day_ids = day_ids
         self.days = PersistentDict()
         self.model = None
-        self._exceptions = TimetableExceptionList(self)
-
-    exceptions = property(lambda self: self._exceptions)
 
     def keys(self):
         return list(self.day_ids)
@@ -397,8 +384,8 @@ class Timetable(Persistent):
         return [(day, self.days[day]) for day in self.day_ids]
 
     def __repr__(self):
-        return '<Timetable: %s, %s, %s, %s>' % (self.day_ids, dict(self.days),
-                                                self.model, self.exceptions)
+        return '<Timetable: %s, %s, %s>' % (self.day_ids, dict(self.days),
+                                            self.model)
 
     def __getitem__(self, key):
         return self.days[key]
@@ -426,7 +413,6 @@ class Timetable(Persistent):
             raise ValueError("Timetables have different schemas")
         for day, period, activity in other.itercontent():
             self[day].add(period, activity, False)
-        self.exceptions.extend(other.exceptions)
 
     def cloneEmpty(self):
         other = Timetable(self.day_ids)
@@ -438,8 +424,7 @@ class Timetable(Persistent):
     def __eq__(self, other):
         if ITimetable.providedBy(other):
             return (self.items() == other.items()
-                    and self.model == other.model
-                    and self.exceptions == other.exceptions)
+                    and self.model == other.model)
         else:
             return False
 
@@ -579,47 +564,6 @@ class TimetableActivity:
                                  resources=resources, timetable=timetable)
 
 
-class TimetableExceptionList:
-
-    implements(ITimetableExceptionList)
-
-    def __init__(self, timetable):
-        self._list = PersistentList()
-        self._timetable = timetable
-
-    def __iter__(self):
-        return iter(self._list)
-
-    def __len__(self):
-        return len(self._list)
-
-    def __getitem__(self, index):
-        return self._list[index]
-
-    def __eq__(self, other):
-        return self._list == other
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def extend(self, exceptions):
-        self._list.extend(exceptions)
-
-    def append(self, exception):
-        self._list.append(exception)
-        tt = self._timetable
-        if ILocation.providedBy(tt):
-            event = TimetableExceptionAddedEvent(self._timetable, exception)
-            zope.event.notify(event)
-
-    def remove(self, exception):
-        self._list.remove(exception)
-        tt = self._timetable
-        if ILocation.providedBy(tt) and IEventTarget.providedBy(tt.__parent__):
-            event = TimetableExceptionRemovedEvent(self._timetable, exception)
-            event.dispatch(tt.__parent__)
-
-
 class TimetableReplacedEvent:
 
     implements(ITimetableReplacedEvent)
@@ -651,60 +595,6 @@ class TimetableActivityRemovedEvent(TimetableActivityEvent):
     implements(ITimetableActivityRemovedEvent)
 
 
-class TimetableExceptionEvent:
-
-    implements(ITimetableExceptionEvent)
-
-    def __init__(self, timetable, exception):
-        self.timetable = timetable
-        self.exception = exception
-
-
-class TimetableExceptionAddedEvent(TimetableExceptionEvent):
-    implements(ITimetableExceptionAddedEvent)
-
-
-class TimetableExceptionRemovedEvent(TimetableExceptionEvent):
-    implements(ITimetableExceptionRemovedEvent)
-
-
-class TimetableException(Persistent):
-
-    implements(ITimetableException)
-
-    def __init__(self, date, period_id, activity, replacement=None):
-        self._date = date
-        self._period_id = period_id
-        self._activity = activity
-        self.replacement = replacement
-
-    def _setReplacement(self, replacement):
-        if (replacement is not None and
-            not IExceptionalTTCalendarEvent.providedBy(replacement)):
-            raise ValueError("%r is not an exceptional TT event" % replacement)
-        self._replacement = replacement
-
-    date = property(lambda self: self._date)
-    period_id = property(lambda self: self._period_id)
-    activity = property(lambda self: self._activity)
-    replacement = property(lambda self: self._replacement, _setReplacement)
-
-    def __eq__(self, other):
-        if ITimetableException.providedBy(other):
-            return ((self.date, self.period_id, self.activity,
-                     self.replacement) == (other.date, other.period_id,
-                                           other.activity, other.replacement))
-        else:
-            return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def __repr__(self):
-        return ('TimetableException(%r, %r, %r, %r)'
-                % (self.date, self.period_id, self.activity, self.replacement))
-
-
 #
 #  Timetable model stuff
 #
@@ -721,23 +611,6 @@ class TimetableCalendarEvent(CalendarEvent):
         self._period_id = kwargs.pop('period_id')
         self._activity = kwargs.pop('activity')
         CalendarEvent.__init__(self, *args, **kwargs)
-
-
-
-class ExceptionalTTCalendarEvent(CalendarEvent):
-
-    implements(IExceptionalTTCalendarEvent)
-
-    exception = property(lambda self: self._exception)
-
-    def __init__(self, *args, **kwargs):
-        self._exception = kwargs.pop('exception')
-        if not ITimetableException.providedBy(self._exception):
-            raise ValueError('%r is not a timetable exception'
-                             % self._exception)
-
-        CalendarEvent.__init__(self, *args, **kwargs)
-
 
 
 class SchooldayPeriod:
@@ -834,9 +707,6 @@ class BaseTimetableModel(Persistent):
                                          " and no fallback either" % weekday)
 
     def createCalendar(self, schoolday_model, timetable):
-        exceptions = {}
-        for e in timetable.exceptions:
-            exceptions[(e.date, e.period_id, e.activity)] = e
         uid_suffix = '%s@%s' % (getPath(timetable), socket.getfqdn())
         events = []
         day_id_gen = self._dayGenerator()
@@ -848,19 +718,15 @@ class BaseTimetableModel(Persistent):
                 dt = datetime.datetime.combine(date, period.tstart)
                 for activity in timetable[day_id][period.title]:
                     key = (date, period.title, activity)
-                    exception = exceptions.get(key)
-                    if exception is None:
-                        # IDs for functionally derived calendars should be
-                        # functionally derived, and not random
-                        uid = '%d-%s' % (hash((activity.title, dt,
-                                               period.duration)), uid_suffix)
-                        event = TimetableCalendarEvent(
-                                    dt, period.duration, activity.title,
-                                    unique_id=uid,
-                                    period_id=period.title, activity=activity)
-                        events.append(event)
-                    elif exception.replacement is not None:
-                        events.append(exception.replacement)
+                    # IDs for functionally derived calendars should be
+                    # functionally derived, and not random
+                    uid = '%d-%s' % (hash((activity.title, dt,
+                                           period.duration)), uid_suffix)
+                    event = TimetableCalendarEvent(
+                                dt, period.duration, activity.title,
+                                unique_id=uid,
+                                period_id=period.title, activity=activity)
+                    events.append(event)
         return ImmutableCalendar(events)
 
     def _periodsInDay(self, schoolday_model, timetable, day, day_id_gen=None):

@@ -239,7 +239,6 @@ class TestTimetableSchema(unittest.TestCase):
         tt = tts.createTimetable()
         self.assertEquals(tt.day_ids, tts.day_ids)
         self.assert_(tt.model is tts.model)
-        self.assertEquals(tt.exceptions, [])
         for day_id in tt.day_ids:
             day = tt[day_id]
             day2 = tts[day_id]
@@ -397,8 +396,6 @@ class TestTimetable(unittest.TestCase):
         tt["A"].add("Green", english)
         tt["A"].add("Blue", math)
         tt["B"].add("Green", bio)
-        exc1 = object()
-        tt.exceptions.append(exc1)
 
         tt2 = self.createTimetable()
         french = TimetableActivity("French")
@@ -407,8 +404,6 @@ class TestTimetable(unittest.TestCase):
         tt2["A"].add("Green", french)
         tt2["A"].add("Blue", math2)
         tt2["B"].add("Blue", geo)
-        exc2 = object()
-        tt2.exceptions.append(exc2)
 
         tt.update(tt2)
 
@@ -420,15 +415,12 @@ class TestTimetable(unittest.TestCase):
         self.assertEqual(items, [("Green", Set([bio])),
                                  ("Blue", Set([geo]))])
 
-        self.assertEqual(tt.exceptions, [exc1, exc2])
-
         tt3 = Timetable(("A", ))
         tt3["A"] = TimetableDay(('Green', 'Blue'))
         self.assertRaises(ValueError, tt.update, tt3)
 
     def test_cloneEmpty(self):
         from schooltool.timetable import TimetableActivity
-        from schooltool.timetable import TimetableException
 
         tt = self.createTimetable()
         english = TimetableActivity("English")
@@ -438,14 +430,11 @@ class TestTimetable(unittest.TestCase):
         tt["A"].add("Blue", math)
         tt["B"].add("Green", bio)
         tt.model = object()
-        tt.exceptions.append(TimetableException(date(2005, 1, 4),
-                                                'Green', bio))
 
         tt2 = tt.cloneEmpty()
         self.assert_(tt2 is not tt)
         self.assertEquals(tt.day_ids, tt2.day_ids)
         self.assert_(tt.model is tt2.model)
-        self.assertEquals(tt2.exceptions, [])
         for day_id in tt2.day_ids:
             day = tt[day_id]
             day2 = tt2[day_id]
@@ -479,12 +468,6 @@ class TestTimetable(unittest.TestCase):
         tt2.model = model
         self.assertNotEquals(tt, tt2)
         tt.model = model
-        self.assertEquals(tt, tt2)
-
-        tt.exceptions.append('foo')
-        self.assertNotEquals(tt, tt2)
-
-        tt2.exceptions.append('foo')
         self.assertEquals(tt, tt2)
 
         tt2["B"].remove("Green", bio)
@@ -733,18 +716,6 @@ class TestTimetableActivity(unittest.TestCase):
 
 
 class TestTimetableEvents(unittest.TestCase):
-
-    def test_tt_exception_events(self):
-        from schooltool.timetable import TimetableExceptionAddedEvent
-        from schooltool.timetable import TimetableExceptionRemovedEvent
-        from schooltool.interfaces import ITimetableExceptionAddedEvent
-        from schooltool.interfaces import ITimetableExceptionRemovedEvent
-        timetable = object()
-        exception = object()
-        e1 = TimetableExceptionAddedEvent(timetable, exception)
-        verifyObject(ITimetableExceptionAddedEvent, e1)
-        e2 = TimetableExceptionRemovedEvent(timetable, exception)
-        verifyObject(ITimetableExceptionRemovedEvent, e2)
 
     def test_tt_replaced_event(self):
         from schooltool.timetable import TimetableReplacedEvent
@@ -1287,9 +1258,6 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         schooldays = TermStub()
         self.assertEquals(model.periodsInDay(schooldays, tt, day), [])
 
-        # Just make sure there are no exceptions.
-        #setPath(tt, '/path/to/tt')
-        #getOptions(tt).timetable_privacy = 'private'
         model.createCalendar(schooldays, tt)
 
 

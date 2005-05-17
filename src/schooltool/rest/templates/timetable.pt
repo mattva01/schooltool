@@ -18,21 +18,4 @@
      </tal:block>
     </period>
   </day>
-  <exception tal:repeat="exc context/exceptions"
-             tal:attributes="date python:exc.date.strftime('%Y-%m-%d');
-                             period exc/period_id">
-   <tal:block tal:define="activity exc/activity">
-    <activity metal:use-macro="template/macros/activity" />
-   </tal:block>
-   <tal:if tal:define="event exc/replacement" tal:condition="event">
-    <replacement tal:define="date python:event.dtstart.date();
-                             same_date python:date == exc.date;
-                             datestr python:date.strftime('%Y-%m-%d')"
-                 tal:attributes="date python:not same_date and datestr or None;
-                                 time python:event.dtstart.strftime('%H:%M');
-                                 duration python:event.duration.seconds / 60;
-                                 uid python:event.unique_id"
-                 tal:content="exc/replacement/title"/>
-   </tal:if>
-  </exception>
 </timetable>
