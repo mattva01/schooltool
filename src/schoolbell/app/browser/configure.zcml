@@ -368,6 +368,17 @@
       title="View"
       />
 
+  <page
+      name="resource-csvimport.html"
+      for="schoolbell.app.interfaces.IResourceContainer"
+      class="schoolbell.app.browser.csvimport.ResourceCSVImportView"
+      template="templates/resource-csvimport.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Import Resources"
+      layer=".skin.ISchoolBellLayer"
+      />
+
 <!-- Calendar views -->
 
   <zope:view

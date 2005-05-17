@@ -94,6 +94,22 @@ def doctest_BaseCSVImporter():
 
     """
 
+def doctest_SimpleCSVImporter():
+    r"""Tests for SimpleCSVImporter.
+
+    If you do not define the 'factory' attribute, you get an error
+
+        >>> from schoolbell.app.browser.csvimport import SimpleCSVImporter
+        >>> importer = SimpleCSVImporter(None, None)
+        >>> importer.createAndAdd(None)
+        Traceback (most recent call last):
+        ...
+        NotImplementedError: factory attribute not defined in subclass
+
+    See GroupCSVImporter and ResourceCSVImporter for more usage examples.
+
+    """
+
 def doctest_GroupCSVImporter():
     r"""Tests for GroupCSVImporter.
 
@@ -121,6 +137,36 @@ def doctest_GroupCSVImporter():
 
         >>> [group.description for group in container.values()]
         ['Group 1 Description', '', 'Group 3 Description']
+
+    """
+
+def doctest_ResourceCSVImporter():
+    r"""Tests for ResourceCSVImporter.
+
+    Create a resource container and an importer
+
+        >>> from schoolbell.app.browser.csvimport import ResourceCSVImporter
+        >>> from schoolbell.app.app import ResourceContainer
+        >>> container = ResourceContainer()
+        >>> importer = ResourceCSVImporter(container, None)
+
+    Import some sample data
+
+        >>> csvdata='''Resource 1, Resource 1 Description
+        ... Resource2
+        ... Resource3, Resource 3 Description, Some extra data'''
+        >>> importer.importFromCSV(csvdata)
+        True
+
+    Check that the resources exist
+
+        >>> [resource for resource in container]
+        [u'resource-1', u'resource2', u'resource3']
+
+    Check that descriptions were imported properly
+
+        >>> [resource.description for resource in container.values()]
+        ['Resource 1 Description', '', 'Resource 3 Description']
 
     """
 
@@ -157,6 +203,45 @@ def doctest_GroupCSVImportView():
         ...                 'charset' : 'UTF-8',
         ...                 'UPDATE_SUBMIT': 1}
         >>> view = GroupCSVImportView(container, request)
+        >>> view.update()
+        >>> view.errors
+        [u'Failed to import CSV text', u'Titles may not be empty']
+
+    """
+
+def doctest_ResourceCSVImportView():
+    r"""
+    We'll create a resource csv import view
+
+        >>> from schoolbell.app.browser.csvimport import ResourceCSVImportView
+        >>> from schoolbell.app.app import ResourceContainer
+        >>> from zope.publisher.browser import TestRequest
+        >>> container = ResourceContainer()
+        >>> request = TestRequest()
+
+    Now we'll try a text import.  Note that the description is not required
+
+        >>> request.form = {'csvtext' : "A Resource, The best Resource\nAnother Resource",
+        ...                 'charset' : 'UTF-8',
+        ...                 'UPDATE_SUBMIT': 1}
+        >>> view = ResourceCSVImportView(container, request)
+        >>> view.update()
+        >>> [resource for resource in container]
+        [u'a-resource', u'another-resource']
+
+    If no data is provided, we naturally get an error
+
+        >>> request.form = {'charset' : 'UTF-8', 'UPDATE_SUBMIT': 1}
+        >>> view.update()
+        >>> view.errors
+        [u'No data provided']
+
+    We also get an error if a line starts with a comma (no title)
+
+        >>> request.form = {'csvtext' : ", No title provided here",
+        ...                 'charset' : 'UTF-8',
+        ...                 'UPDATE_SUBMIT': 1}
+        >>> view = ResourceCSVImportView(container, request)
         >>> view.update()
         >>> view.errors
         [u'Failed to import CSV text', u'Titles may not be empty']

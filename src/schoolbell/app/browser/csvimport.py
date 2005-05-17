@@ -27,7 +27,8 @@ from zope.security.proxy import removeSecurityProxy
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import ISchoolBellApplication
-from schoolbell.app.app import Group, SimpleNameChooser
+from schoolbell.app.app import SimpleNameChooser
+from schoolbell.app.app import Group, Resource
 
 import csv
 
@@ -214,16 +215,30 @@ class ImportErrorCollection(object):
         return "<%s %r>" % (self.__class__.__name__, self.__dict__)
 
 
-class GroupCSVImporter(BaseCSVImporter):
+class SimpleCSVImporter(BaseCSVImporter):
+    """A simple "title, description" csv importer.
+
+    This class is only useful for CSV importers with required titles and
+    optional descriptions (at the moment this only applies to Group and
+    Resource importers).
+
+    Subclasses must provide the following attributes.
+
+        `factory` -- class to create an instance to add to the container
+    """
+
+    factory = None
 
     def __init__(self, container, charset=None):
         BaseCSVImporter.__init__(self, container, charset)
-        self.groups = container
+        self.container = container
         self.chooser = SimpleNameChooser(container)
 
     def createAndAdd(self, data, dry_run=True):
-        """Create Group objects and add them to the group container.
+        """Create objects and add them to the container.
         """
+        if not self.factory:
+            raise NotImplementedError("factory attribute not defined in subclass")
         if len(data) < 1:
             self.errors.fields.append(_('Insufficient data provided.'))
             return
@@ -237,15 +252,34 @@ class GroupCSVImporter(BaseCSVImporter):
         else: 
             description = ''
 
-        group = Group(title=data[0], description=description)
-        name = self.chooser.chooseName('', group)
+        obj = self.factory(title=data[0], description=description)
+        name = self.chooser.chooseName('', obj)
         if not dry_run:
-            self.groups[name] = group
+            self.container[name] = obj
+
+
+class GroupCSVImporter(SimpleCSVImporter):
+    """Group CSV Importer"""
+    factory = Group
+
+
+class ResourceCSVImporter(SimpleCSVImporter):
+    """Resource CSV Importer"""
+    factory = Resource
 
 
 class GroupCSVImportView(BaseCSVImportView):
+    """View for Group CSV importer."""
 
     def __init__(self, context, request):
         BaseCSVImportView.__init__(self, context, request)
         self.importer_class = GroupCSVImporter
+
+
+class ResourceCSVImportView(BaseCSVImportView):
+    """View for Resource CSV importer."""
+
+    def __init__(self, context, request):
+        BaseCSVImportView.__init__(self, context, request)
+        self.importer_class = ResourceCSVImporter
 
