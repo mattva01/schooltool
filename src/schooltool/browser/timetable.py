@@ -49,6 +49,7 @@ from schoolbell.calendar.utils import next_month, week_start
 from schoolbell.app.browser.app import ContainerView
 from schoolbell.app.browser.cal import month_names, short_day_of_week_names
 from schooltool import SchoolToolMessageID as _
+from schooltool.interfaces import ITimetable, ITimetableSchema
 from schooltool.interfaces import ITermContainer, ITerm
 from schooltool.interfaces import ITimetableSchemaContainer
 from schooltool.interfaces import ITimetableModelFactory
@@ -842,3 +843,27 @@ def format_timetable_for_presentation(timetable):
         for nrow in range(nrow + 1, len(rows)):
             rows[nrow].append({'period': '', 'activity': ''})
     return rows
+
+
+class TimetableView(BrowserView):
+
+    __used_for__ = ITimetable
+
+    def title(self):
+        timetabled = self.context.__parent__.__parent__
+        msg = _("${object}'s timetable")
+        msg.mapping = {'object': timetabled.title}
+        return msg
+
+    def rows(self):
+        return format_timetable_for_presentation(self.context)
+
+
+class TimetableSchemaView(TimetableView):
+
+    __used_for__ = ITimetableSchema
+
+    def title(self):
+        msg = _("Timetable schema ${schema}")
+        msg.mapping = {'schema': self.context.__name__}
+        return msg

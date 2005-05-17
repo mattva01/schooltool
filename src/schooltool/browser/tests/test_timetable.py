@@ -34,6 +34,7 @@ from zope.app.testing import ztapi
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.component.hooks import setSite
 from zope.app.component.site import LocalSiteManager
+from zope.i18n import translate
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 from schoolbell.app.rest.tests.utils import NiceDiffsMixin
@@ -117,7 +118,6 @@ def doctest_TermEditView_title():
 
     view.title returns a Zope 3 I18N Message ID.
 
-        >>> from zope.i18n import translate
         >>> view.title()
         u'Change Term: $title'
         >>> translate(view.title())
@@ -745,6 +745,67 @@ def print_cal(calendar, day_format='%(number)3d'):
                 else:
                     s.append(day_format % day)
             print ' '.join(s).rstrip()
+
+
+def doctest_TimetableView():
+    """Test for TimetableView.
+
+        >>> from schooltool.browser.timetable import TimetableView
+        >>> from schooltool.timetable import Timetable
+        >>> from schooltool.timetable import TimetableDay, TimetableActivity
+        >>> from schooltool.app import Section
+
+    Create some context:
+
+        >>> s = Section()
+        >>> s.timetables['term.schema'] = tt = Timetable(['day 1'])
+        >>> tt['day 1'] = ttd = TimetableDay(['A'])
+        >>> ttd.add('A', TimetableActivity('Something'))
+
+        >>> request = TestRequest()
+        >>> view = TimetableView(tt, request)
+
+    title() returns the view's title:
+
+        >>> translate(view.title())
+        u"Section's timetable"
+
+    rows() delegates the job to format_timetable_for_presentation:
+
+        >>> view.rows()
+        [[{'period': 'A', 'activity': 'Something'}]]
+
+    """
+
+
+def doctest_TimetableSchemaView():
+    """Test for TimetableView.
+
+        >>> from schooltool.browser.timetable import TimetableSchemaView
+        >>> from schooltool.timetable import TimetableSchema
+        >>> from schooltool.timetable import TimetableSchemaDay
+        >>> from schooltool.timetable import TimetableActivity
+
+    Create some context:
+
+        >>> tts = TimetableSchema(['day 1'])
+        >>> tts.__name__ = 'some-schema'
+        >>> tts['day 1'] = ttd = TimetableSchemaDay(['A'])
+
+        >>> request = TestRequest()
+        >>> view = TimetableSchemaView(tts, request)
+
+    title() returns the view's title:
+
+        >>> translate(view.title())
+        u'Timetable schema some-schema'
+
+    rows() delegates the job to format_timetable_for_presentation:
+
+        >>> view.rows()
+        [[{'period': 'A', 'activity': ''}]]
+
+    """
 
 
 class TestTimetableSchemaWizard(NiceDiffsMixin, unittest.TestCase):

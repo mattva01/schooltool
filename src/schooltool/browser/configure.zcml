@@ -34,6 +34,7 @@
       permission="zope.ManageContent"
       />
 
+
   <!-- Navigation -->
 
   <page
@@ -280,6 +281,7 @@
       />
 
   <!-- Timetabling -->
+
   <containerViews
       for="schooltool.interfaces.ITimetableSchemaContainer"
       contents="schoolbell.edit"
@@ -290,13 +292,72 @@
   <page
       name="+"
       for="schooltool.interfaces.ITimetableSchemaContainer"
-      class="schooltool.browser.timetable.TimetableSchemaWizard"
+      class=".timetable.TimetableSchemaWizard"
       permission="schoolbell.create"
       menu="schoolbell_actions"
       title="New Schema"
       />
 
+  <page
+      name="index.html"
+      for="schooltool.interfaces.ITimetableSchema"
+      class=".timetable.TimetableSchemaView"
+      template="templates/timetable.pt"
+      permission="schoolbell.view"
+      menu="zmi_views" title="View"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.interfaces.ITimetable"
+      class=".timetable.TimetableView"
+      template="templates/timetable.pt"
+      permission="schoolbell.view"
+      menu="zmi_views" title="View"
+      />
+
+  <containerViews
+      for="schooltool.timetable.ITimetableDict"
+      contents="zope.ManageContent"
+      />
+
+  <!-- We already have a traverser registered on ICalendarOwner which is not
+       aware of timetables.  However, we need to traverse into timetables
+       in the web views, so for now I'll resort to the ugly solution of just
+       registering a derived traverser for each timetabled object.
+  -->
+
+  <zope:view
+      for="schooltool.interfaces.IPerson"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".TimetabledTraverser"
+      permission="zope.Public"
+      />
+  <zope:view
+      for="schooltool.interfaces.IGroup"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".TimetabledTraverser"
+      permission="zope.Public"
+      />
+  <zope:view
+      for="schooltool.interfaces.IResource"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".TimetabledTraverser"
+      permission="zope.Public"
+      />
+  <zope:view
+      for="schooltool.interfaces.ISection"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".TimetabledTraverser"
+      permission="zope.Public"
+      />
+
   <!-- Skin -->
+
   <page
       name="view_macros"
       for="*"
