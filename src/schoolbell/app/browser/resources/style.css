@@ -116,8 +116,6 @@ form.standalone .controls input {
 }
 
 form.standalone div.label {
-    float: left;
-    clear: left;
     width: 10em;
     padding-top: 0.5ex;
 }
