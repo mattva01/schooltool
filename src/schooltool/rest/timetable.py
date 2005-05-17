@@ -123,7 +123,7 @@ class TimetableSchemaContainerView(GenericContainerView):
 class TimetableReadView(View):
     """Read-only view for ITimetable."""
 
-    template = Template("www/timetable.pt",
+    template = Template("templates/timetable.pt",
                         content_type="text/xml; charset=UTF-8")
 
     def absolutePath(self, obj):
@@ -136,7 +136,7 @@ class TimetableSchemaView(View):
     dows = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
             'Friday', 'Saturday', 'Sunday']
 
-    template = Template("www/timetable_schema.pt",
+    template = Template("templates/timetable_schema.pt",
                         content_type="text/xml; charset=UTF-8")
 
     def daytemplates(self):

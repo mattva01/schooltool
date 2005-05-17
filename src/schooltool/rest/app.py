@@ -55,7 +55,8 @@ from schooltool.interfaces import ITermContainer
 class SchoolToolApplicationView(sb.ApplicationView):
     """The root view for the application."""
 
-    template = Template("www/app.pt", content_type="text/xml; charset=UTF-8")
+    template = Template("templates/app.pt",
+                        content_type="text/xml; charset=UTF-8")
 
 
 class PersonFileFactory(sb.PersonFileFactory):
@@ -139,7 +140,8 @@ class CourseFile(sb.ApplicationObjectFile):
 class CourseView(View):
     """RESTive view for courses."""
 
-    template = Template("www/course.pt", content_type="text/xml; charset=UTF-8")
+    template = Template("templates/course.pt",
+                        content_type="text/xml; charset=UTF-8")
     factory = CourseFile
 
 
@@ -209,7 +211,7 @@ class SectionFile(sb.ApplicationObjectFile):
 class SectionView(View):
     """RESTive view for sections."""
 
-    template = Template("www/section.pt",
+    template = Template("templates/section.pt",
                         content_type="text/xml; charset=UTF-8")
     factory = SectionFile
 
