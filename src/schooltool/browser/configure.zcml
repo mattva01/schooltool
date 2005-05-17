@@ -316,9 +316,12 @@
       menu="zmi_views" title="View"
       />
 
-  <containerViews
-      for="schooltool.timetable.ITimetableDict"
-      contents="zope.ManageContent"
+  <page
+      name="index.html"
+      for="schooltool.interfaces.ITimetableDict"
+      template="templates/timetable_list.pt"
+      permission="schoolbell.view"
+      menu="zmi_views" title="View"
       />
 
   <!-- We already have a traverser registered on ICalendarOwner which is not
@@ -354,6 +357,13 @@
       provides="zope.publisher.interfaces.browser.IBrowserPublisher"
       factory=".TimetabledTraverser"
       permission="zope.Public"
+      />
+
+  <menuItem
+      menu="schoolbell_actions"
+      title="View Timetables"
+      for="schooltool.interfaces.ITimetabled"
+      action="timetables/index.html"
       />
 
   <!-- Skin -->

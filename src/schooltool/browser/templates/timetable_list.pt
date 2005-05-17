@@ -1,0 +1,28 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Timetables for <span i18n:name="object"
+                         tal:replace="context/__parent__/title" />
+  </title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header" i18n:translate="">
+  Timetables for <span i18n:name="object"
+                       tal:replace="context/__parent__/title" />
+</h1>
+
+<metal:block metal:fill-slot="body">
+  <div class="info-block">
+    <h3>Timetables</h3>
+    <ul>
+      <li tal:repeat="timetable context/values">
+        <a tal:attributes="href timetable/@@absolute_url"
+           tal:content="timetable/__name__">some.timetable</a>
+      </li>
+    </ul>
+  </div>
+</metal:block>
+
+</body>
+</html>
