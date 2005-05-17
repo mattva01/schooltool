@@ -130,6 +130,7 @@
              interface="schoolbell.app.interfaces.IWritePerson"
              set_schema="schooltool.interfaces.IPerson" />
     <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
+    <allow interface="schooltool.interfaces.ITimetabled" />
   </content>
 
   <content class=".app.Resource">
@@ -150,11 +151,16 @@
 
   <content class=".app.Section">
     <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
+    <allow interface="schooltool.interfaces.ITimetabled" />
     <require permission="schoolbell.view"
              attributes="title description instructors members
                          courses label" />
     <require permission="schoolbell.edit"
              set_schema="schooltool.interfaces.ISection" />
+  </content>
+
+  <content class=".timetable.TimetableActivity">
+    <allow interface="schooltool.interfaces.ITimetableActivity" />
   </content>
 
   <content class=".timetable.TermContainer">
@@ -170,6 +176,11 @@
     <require permission="schoolbell.edit"
              interface=".interfaces.ITermWrite"
              set_schema=".interfaces.ITerm" />
+  </content>
+
+  <content class=".timetable.TimetableDict">
+    <require permission="schoolbell.edit"
+             interface="zope.app.container.interfaces.IContainer" />
   </content>
 
   <content class=".app.PersonPreferences">
