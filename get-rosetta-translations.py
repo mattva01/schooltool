@@ -41,7 +41,7 @@ locales=["af",
          "de_CH",
          "es_MX",
          "es_ES",
-         "en_US"
+         "en_US",
          "fr",
          "fr_CA",
          "fr_FR",
@@ -59,7 +59,7 @@ rosetta_url = "https://launchpad.ubuntu.com/products/$domain$/unknown/+pots/$dom
 translation_dir = os.path.join(here, 'src', 'schoolbell', 'app', 'locales',
         "$locale$", "LC_MESSAGES", "$domain$.po")
 
-create_dir = False
+create_dir = True
 
 domain = "schoolbell"
 

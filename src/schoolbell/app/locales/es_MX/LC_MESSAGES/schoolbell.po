@@ -1,0 +1,1702 @@
+# Spanish (Mexico) translation for SchoolBell
+# Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
+# This file is distributed under the same license as the SchoolBell package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: SchoolBell\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2005-01-04 21:21:42.080336\n"
+"PO-Revision-Date: 2005-02-27 07:34+0000\n"
+"Last-Translator: David Suarez <dsuarezp@gmail.com>\n"
+"Language-Team: Spanish (Mexico) <es_MX@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Rosetta-Version: 0.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
+"X-Generator: Rosetta (http://launchpad.ubuntu.com/rosetta/)\n"
+
+#: src/schoolbell/app/browser/__init__.py:190
+msgid "1 person"
+msgstr ""
+
+#: src/schoolbell/app/browser/__init__.py:192
+msgid "${number} persons"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:258
+#: src/schoolbell/app/browser/app.py:413
+#: src/schoolbell/app/interfaces.py:210
+msgid "Full name"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:259
+#: src/schoolbell/app/browser/app.py:414
+#: src/schoolbell/app/interfaces.py:211
+msgid "Name that should be displayed"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:262
+msgid "New photo"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:264
+msgid "A small picture (about 48x48 pixels in JPEG format)"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:268
+msgid "Clear photo"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:270
+msgid "Check this to clear the photo"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:273
+msgid "New password"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:277
+#: src/schoolbell/app/browser/app.py:425
+msgid "Verify password"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:306
+msgid "Passwords do not match."
+msgstr "Las contraseñas no coinciden."
+
+#: src/schoolbell/app/browser/app.py:310
+msgid "Password was successfully changed!"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:417
+#: src/schoolbell/app/browser/app.py:418
+#: src/schoolbell/app/interfaces.py:219
+#: src/schoolbell/app/browser/templates/login.pt:38
+msgid "Username"
+msgstr "Usuario"
+
+#: src/schoolbell/app/browser/app.py:421
+#: src/schoolbell/app/browser/templates/login.pt:44
+msgid "Password"
+msgstr "Contraseña"
+
+#: src/schoolbell/app/browser/app.py:429
+#: src/schoolbell/app/interfaces.py:214
+msgid "Photo"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:431
+#: src/schoolbell/app/interfaces.py:216
+msgid "Photo (in JPEG format)"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:454
+msgid "Passwords do not match!"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:457
+msgid "This username is already used!"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:561
+msgid "Username or password is incorrect"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:588
+#: src/schoolbell/app/configure.zcml:16
+#: src/schoolbell/app/browser/configure.zcml:58
+#: src/schoolbell/app/browser/configure.zcml:112
+#: src/schoolbell/app/browser/configure.zcml:128
+#: src/schoolbell/app/browser/configure.zcml:204
+#: src/schoolbell/app/browser/configure.zcml:261
+#: src/schoolbell/app/browser/configure.zcml:304
+#: src/schoolbell/app/browser/configure.zcml:361
+#: src/schoolbell/app/browser/configure.zcml:505
+#: src/schoolbell/app/browser/templates/acl.pt:88
+msgid "View"
+msgstr "Ver"
+
+#: src/schoolbell/app/browser/app.py:589
+#: src/schoolbell/app/browser/templates/acl.pt:94
+msgid "Edit"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:590
+#: src/schoolbell/app/configure.zcml:22
+#: src/schoolbell/app/browser/templates/acl.pt:99
+msgid "Create new objects"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:591
+#: src/schoolbell/app/configure.zcml:18
+#: src/schoolbell/app/browser/templates/acl.pt:104
+msgid "View calendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:592
+#: src/schoolbell/app/browser/templates/acl.pt:109
+msgid "Add events"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:593
+#: src/schoolbell/app/browser/templates/acl.pt:114
+msgid "Modify/delete events"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:594
+#: src/schoolbell/app/browser/templates/acl.pt:119
+msgid "Control access"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:595
+#: src/schoolbell/app/configure.zcml:23
+#: src/schoolbell/app/browser/templates/acl.pt:124
+msgid "Manage membership"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:623
+msgid "Authenticated users"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:628
+msgid "Unauthenticated users"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:78
+msgid "Person index"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:79
+msgid "Add a new person"
+msgstr "Agregar nueva persona"
+
+#: src/schoolbell/app/browser/app.py:88
+msgid "Group index"
+msgstr "Índice de grupo"
+
+#: src/schoolbell/app/browser/app.py:89
+msgid "Add a new group"
+msgstr "Agregar nuevo grupo"
+
+#: src/schoolbell/app/browser/app.py:98
+msgid "Resource index"
+msgstr "Índice de recurso"
+
+#: src/schoolbell/app/browser/app.py:99
+msgid "Add a new resource"
+msgstr "Agregar nuevo recurso"
+
+#: src/schoolbell/app/browser/cal.py:1179
+#: src/schoolbell/app/interfaces.py:127
+#: src/schoolbell/app/interfaces.py:352
+#: src/schoolbell/app/interfaces.py:379
+msgid "Title"
+msgstr "Título"
+
+#: src/schoolbell/app/browser/cal.py:1182
+#: src/schoolbell/app/browser/templates/cal_weekly.pt:33
+#: src/schoolbell/app/browser/templates/cal_monthly.pt:29
+msgid "All day"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1185
+msgid "Date"
+msgstr "Fecha"
+
+#: src/schoolbell/app/browser/cal.py:1188
+msgid "Time"
+msgstr "Hora"
+
+#: src/schoolbell/app/browser/cal.py:1192
+msgid "Duration"
+msgstr "Duración"
+
+#: src/schoolbell/app/browser/cal.py:1197
+msgid "Duration Type"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1200
+#: src/schoolbell/app/browser/templates/event_add.pt:139
+msgid "Minutes"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1201
+#: src/schoolbell/app/browser/templates/event_add.pt:142
+msgid "Hours"
+msgstr "Horas"
+
+#: src/schoolbell/app/browser/cal.py:1202
+#: src/schoolbell/app/browser/templates/event_add.pt:146
+msgid "Days"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1205
+#: src/schoolbell/app/browser/templates/event.pt:49
+msgid "Location"
+msgstr "Localidad"
+
+#: src/schoolbell/app/browser/cal.py:1209
+#: src/schoolbell/app/interfaces.py:356
+#: src/schoolbell/app/interfaces.py:383
+msgid "Description"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1214
+msgid "Recurring"
+msgstr "Recurrente"
+
+#: src/schoolbell/app/browser/cal.py:1218
+msgid "Recurs every"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1221
+msgid "Day"
+msgstr "Día"
+
+#: src/schoolbell/app/browser/cal.py:1222
+msgid "Week"
+msgstr "Semana"
+
+#: src/schoolbell/app/browser/cal.py:1223
+#: src/schoolbell/app/browser/templates/view_macros.pt:241
+msgid "Month"
+msgstr "Mes"
+
+#: src/schoolbell/app/browser/cal.py:1224
+#: src/schoolbell/app/browser/templates/view_macros.pt:254
+msgid "Year"
+msgstr "Año"
+
+#: src/schoolbell/app/browser/cal.py:1227
+msgid "Repeat every"
+msgstr "Repetir cada"
+
+#: src/schoolbell/app/browser/cal.py:1232
+msgid "Range"
+msgstr "Rango"
+
+#: src/schoolbell/app/browser/cal.py:1235
+msgid "Count"
+msgstr "Cuenta"
+
+#: src/schoolbell/app/browser/cal.py:1236
+msgid "Until"
+msgstr "Hasta"
+
+#: src/schoolbell/app/browser/cal.py:1237
+msgid "forever"
+msgstr "siempre"
+
+#: src/schoolbell/app/browser/cal.py:1240
+msgid "Number of events"
+msgstr "Número de eventos"
+
+#: src/schoolbell/app/browser/cal.py:1244
+#: src/schoolbell/app/browser/templates/event_add.pt:273
+msgid "Repeat until"
+msgstr "Repetir hasta"
+
+#: src/schoolbell/app/browser/cal.py:1248
+msgid "Weekdays"
+msgstr "Días de la semana"
+
+#: src/schoolbell/app/browser/cal.py:1251
+msgid "Weekday"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1261
+#: src/schoolbell/app/browser/templates/event_add.pt:226
+#: src/schoolbell/app/browser/templates/view_macros.pt:175
+msgid "Monthly"
+msgstr "Mensualmente"
+
+#: src/schoolbell/app/browser/cal.py:1269
+msgid "Exception dates"
+msgstr "Excepciones"
+
+#: src/schoolbell/app/browser/cal.py:1348
+msgid "same weekday"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1353
+msgid "1st"
+msgstr "1°"
+
+#: src/schoolbell/app/browser/cal.py:1353
+msgid "4th"
+msgstr "4°"
+
+#: src/schoolbell/app/browser/cal.py:1353
+msgid "3rd"
+msgstr "3°"
+
+#: src/schoolbell/app/browser/cal.py:1353
+msgid "2nd"
+msgstr "2°"
+
+#: src/schoolbell/app/browser/cal.py:1354
+msgid "5th"
+msgstr "5°"
+
+#: src/schoolbell/app/browser/cal.py:1368
+msgid "last weekday"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1378
+msgid "Last ${weekday}"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1402
+#: src/schoolbell/app/browser/cal.py:1703
+msgid "An error occured."
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1434
+msgid "Invalid time"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1455
+msgid "End date is earlier than start date"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1464
+msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1501
+msgid "Add event"
+msgstr "Agregar evento"
+
+#: src/schoolbell/app/browser/cal.py:1502
+msgid "Add"
+msgstr "Agregar"
+
+#: src/schoolbell/app/browser/cal.py:1591
+msgid "Edit event"
+msgstr "Editar evento"
+
+#: src/schoolbell/app/browser/cal.py:1592
+msgid "Update"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1709
+msgid "Updated on ${date_time}"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:362
+msgid "${day_of_week}, ${date}"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:422
+#: src/schoolbell/app/browser/cal.py:426
+#: src/schoolbell/app/browser/cal.py:430
+msgid "%s, %s"
+msgstr "%s, %s"
+
+#: src/schoolbell/app/browser/cal.py:704
+msgid "Next week"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:705
+msgid "Current week"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:706
+msgid "Previous week"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:711
+msgid "${month}, ${year} (week ${week})"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:751
+msgid "Next month"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:752
+msgid "Current month"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:753
+msgid "Previous month"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:758
+msgid "${month}, ${year}"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:778
+msgid "Week ${week_no}"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:790
+msgid "Next year"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:791
+msgid "Current year"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:792
+msgid "Previous year"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:829
+msgid "The next day"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:830
+msgid "Today"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:831
+msgid "The previous day"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:86
+msgid "March"
+msgstr "Marzo"
+
+#: src/schoolbell/app/browser/cal.py:86
+msgid "January"
+msgstr "Enero"
+
+#: src/schoolbell/app/browser/cal.py:86
+msgid "February"
+msgstr "Febrero"
+
+#: src/schoolbell/app/browser/cal.py:87
+msgid "June"
+msgstr "Junio"
+
+#: src/schoolbell/app/browser/cal.py:87
+msgid "May"
+msgstr "Mayo"
+
+#: src/schoolbell/app/browser/cal.py:87
+msgid "April"
+msgstr "Abril"
+
+#: src/schoolbell/app/browser/cal.py:88
+msgid "August"
+msgstr "Agosto"
+
+#: src/schoolbell/app/browser/cal.py:88
+msgid "September"
+msgstr "Septiembre"
+
+#: src/schoolbell/app/browser/cal.py:88
+msgid "July"
+msgstr "Julio"
+
+#: src/schoolbell/app/browser/cal.py:89
+msgid "October"
+msgstr "Octubre"
+
+#: src/schoolbell/app/browser/cal.py:89
+msgid "November"
+msgstr "Noviembre"
+
+#: src/schoolbell/app/browser/cal.py:89
+msgid "December"
+msgstr "Diciembre"
+
+#: src/schoolbell/app/browser/cal.py:92
+msgid "Wednesday"
+msgstr "Miércoles"
+
+#: src/schoolbell/app/browser/cal.py:92
+msgid "Tuesday"
+msgstr "Martes"
+
+#: src/schoolbell/app/browser/cal.py:92
+msgid "Thursday"
+msgstr "Jueves"
+
+#: src/schoolbell/app/browser/cal.py:92
+#: src/schoolbell/app/interfaces.py:309
+msgid "Monday"
+msgstr "Lunes"
+
+#: src/schoolbell/app/browser/cal.py:93
+msgid "Saturday"
+msgstr "Sábado"
+
+#: src/schoolbell/app/browser/cal.py:93
+msgid "Friday"
+msgstr "Viernes"
+
+#: src/schoolbell/app/browser/cal.py:93
+#: src/schoolbell/app/interfaces.py:308
+msgid "Sunday"
+msgstr "Domingo"
+
+#: src/schoolbell/app/browser/cal.py:96
+#: src/schoolbell/app/browser/cal.py:1252
+msgid "Mon"
+msgstr "Lun"
+
+#: src/schoolbell/app/browser/cal.py:96
+#: src/schoolbell/app/browser/cal.py:1253
+msgid "Tue"
+msgstr "Mar"
+
+#: src/schoolbell/app/browser/cal.py:96
+#: src/schoolbell/app/browser/cal.py:1254
+msgid "Wed"
+msgstr "Mie"
+
+#: src/schoolbell/app/browser/cal.py:96
+#: src/schoolbell/app/browser/cal.py:1255
+msgid "Thu"
+msgstr "Jue"
+
+#: src/schoolbell/app/browser/cal.py:97
+#: src/schoolbell/app/browser/cal.py:1256
+msgid "Fri"
+msgstr "Vie"
+
+#: src/schoolbell/app/browser/cal.py:97
+#: src/schoolbell/app/browser/cal.py:1257
+msgid "Sat"
+msgstr "Sab"
+
+#: src/schoolbell/app/browser/cal.py:97
+#: src/schoolbell/app/browser/cal.py:1258
+msgid "Sun"
+msgstr "Dom"
+
+#: src/schoolbell/app/browser/configure.zcml:101
+msgid "New Note"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:138
+msgid "Change Membership"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:160
+msgid "Change Preferences"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:169
+msgid "Change Details"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:188
+msgid "New Person"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:220
+msgid "Add a Group"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:233
+msgid "New Group"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:240
+msgid "Edit Group Information"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:253
+msgid "A Group"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:253
+msgid "SchoolBell Group"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:271
+msgid "Add/Remove Members"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:281
+msgid "Add/Remove Resources"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:291
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:21
+msgid "Import Groups"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:320
+msgid "Add a Resource"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:333
+msgid "Edit Resource Information"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:346
+msgid "New Resource"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:353
+msgid "SchoolBell Resource"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:353
+msgid "A Resource"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:389
+msgid "View Calendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:39
+#: src/schoolbell/app/browser/templates/view_macros.pt:96
+msgid "Actions"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:397
+msgid "Calendar (Daily)"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:407
+msgid "Calendar (Weekly)"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:417
+msgid "Calendar (Monthly)"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:427
+msgid "Calendar (Yearly)"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:43
+#: src/schoolbell/app/browser/templates/view_macros.pt:17
+msgid "SchoolBell"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:437
+msgid "Atom View"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:447
+msgid "iCalendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:457
+msgid "Free/Busy"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:467
+msgid "New Event"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:480
+msgid "Open in iCal"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:534
+msgid "Edit Event"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:81
+msgid "Set Up Access"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:108
+msgid "No charset specified"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:113
+msgid "Unknown charset"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:157
+msgid "Error in CSV data, line ${line_no}"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:161
+msgid "Conversion to unicode failed in line ${line_no}"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:228
+msgid "Insufficient data provided."
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:232
+msgid "Titles may not be empty"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:58
+msgid "No data provided"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:65
+msgid "Could not convert data to Unicode (incorrect charset?)."
+msgstr ""
+"Los datos no se pudieron convertir a Unicode (¿juego de caracteres "
+"incorrecto?)"
+
+#: src/schoolbell/app/browser/csvimport.py:74
+msgid "CSV file imported successfully."
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:76
+msgid "Failed to import CSV file"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:84
+msgid "CSV text imported successfully."
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:86
+msgid "Failed to import CSV text"
+msgstr ""
+
+#: src/schoolbell/app/browser/overlay.py:181
+msgid "Saved changes."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:100
+msgid "Lets the user create new persons, groups, and resources."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:105
+msgid "Allows viewing calendars of persons, groups, and resources."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:110
+msgid "Allows adding new events to calendars."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:115
+msgid "Allows editing and delete events in calendars."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:120
+msgid "Allows the user to use this form (Access control)"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:125
+msgid ""
+"Allows the user to add persons, groups and resources to groups. In order to "
+"add something to a group, the user needs this permission only on the group. "
+"Keep in mind that joining groups has security implications."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:13
+msgid "Access control for ${title}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:17
+msgid "Permissions for Groups"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:20
+msgid "Group"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:3
+#: src/schoolbell/app/browser/templates/acl.pt:9
+msgid "Access control"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:41
+msgid "Permissions for Users"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:44
+msgid "User"
+msgstr "Usuario"
+
+#: src/schoolbell/app/browser/templates/acl.pt:67
+msgid "Set"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:75
+msgid ""
+"The permissions are inherited in the containment hierarchy. For example, if "
+"you set a View Calendar permission for a user on the Persons Index, that "
+"user will be able to see the calendars of all persons. If you want the user "
+"to be able to access just a calendar of some resource, you can set the View "
+"Calendar permission for that user on that resource."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:83
+msgid "Below is a list of permission names with their respective meanings."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:89
+msgid ""
+"This permission allows viewing names, titles, photos, lists of objects, and "
+"other information."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:95
+msgid "Allows to edit names, titles, descriptions, photos, etc."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/cal_atom.pt:15
+msgid "[Schooltool.org]"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/cal_atom.pt:15
+msgid "Schooltool"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/cal_atom.pt:22
+msgid "Events for"
+msgstr ""
+
+# Default: ""
+#  "This is an Atom formatted XML site feed. It is intended to be viewed\n"
+#  "      in a Newsreader or syndicated to another site. Please visit"
+#: src/schoolbell/app/browser/templates/cal_atom.pt:43
+msgid "atom_description"
+msgstr ""
+
+# Default: "Atom Enabled"
+#: src/schoolbell/app/browser/templates/cal_atom.pt:47
+msgid "atom_enabled"
+msgstr ""
+
+# Default: "for more info."
+#: src/schoolbell/app/browser/templates/cal_atom.pt:50
+msgid "atom_more_info"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/cal_atom.pt:57
+msgid "Validate my Atom feed"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/cal_atom.pt:57
+msgid "[Valid Atom]"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:15
+msgid "Select additional calendars to display"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:25
+msgid "Hold down Ctrl or Shift to select multiple calendars."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:30
+msgid "People"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:31
+msgid "There are no persons with calendars accessible to you."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:4
+msgid "Select calendars to display"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:45
+msgid "There are no groups with calendars accessible to you."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:59
+msgid "There are no resources with calendars accessible to you."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/container_delete.pt:10
+msgid "Are you sure you want to delete selected items?"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/container_delete.pt:16
+msgid "You have not selected any items."
+msgstr ""
+
+# Default: "Confirm"
+#: src/schoolbell/app/browser/templates/container_delete.pt:27
+#: src/schoolbell/app/browser/templates/container.pt:24
+msgid "delete-button"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event.pt:18
+msgid "Change the title or description of this event"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event.pt:18
+msgid "edit"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event.pt:38
+msgid "Starts"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event.pt:43
+msgid "Ends"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event.pt:54
+msgid "Change the details of this event"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event.pt:65
+msgid "Scheduled resources"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:108
+msgid "Event information"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:114
+msgid "Event details"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:168
+msgid "Book Resources"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:178
+msgid "Update form"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:195
+msgid "day"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:196
+msgid "week"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:197
+msgid "month"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:198
+msgid "year"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:206
+#: src/schoolbell/app/browser/templates/view_macros.pt:169
+msgid "Weekly"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:207
+msgid "This section only applies when weekly recurrence is selected."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:227
+msgid "This section only applies when the monthly recurrence is selected."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:234
+msgid "Day ${monthday} of every month"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:241
+msgid "${weekday} of every month"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:248
+msgid "XXX of every month"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:258
+msgid "Repeat"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:261
+msgid "times"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:286
+msgid "Repeat forever"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:307
+msgid "Book resources"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:4
+#: src/schoolbell/app/browser/templates/event_add.pt:302
+#: src/schoolbell/app/browser/templates/cal_daily.pt:15
+#: src/schoolbell/app/browser/templates/cal_daily.pt:40
+#: src/schoolbell/app/browser/templates/cal_daily.pt:86
+#: src/schoolbell/app/browser/templates/event.pt:3
+#: src/schoolbell/app/browser/templates/view_macros.pt:60
+#: src/schoolbell/app/browser/templates/view_macros.pt:65
+#: src/schoolbell/app/browser/templates/view_macros.pt:99
+#: src/schoolbell/app/browser/templates/view_macros.pt:133
+#: src/schoolbell/app/browser/templates/view_macros.pt:140
+#: src/schoolbell/app/browser/templates/view_macros.pt:147
+#: src/schoolbell/app/browser/templates/view_macros.pt:256
+#: src/schoolbell/app/browser/templates/login.pt:29
+msgid "XXX"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:11
+msgid "Resource Booking for ${title}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:17
+msgid "Title:"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:21
+msgid "Starts:"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:25
+msgid "Ends:"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:29
+msgid "This is a recurring event!"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:36
+msgid "Available Resources"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:4
+msgid "Resource Booking"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:55
+msgid "Conflicting events"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:75
+msgid "Book"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:24
+msgid ""
+"CSV data should be made up of a group title and an optional group "
+"description. Any extra information will be discarded."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:28
+msgid "Example:"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:30
+msgid ""
+"\n"
+"Some Group, Some group description\n"
+"Second Group\n"
+"Another Group, Another description, this text will be discarded\n"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:35
+msgid ""
+"The above example will create 3 groups titled 'Some Group', 'Second Group' "
+"and 'Another Group'. The first and last group will have the descriptions "
+"'Some group description' and 'Another description' respectively. The Second "
+"group will have no description, and the extra \"this text will be "
+"discarded\" text on the third group will be ignored."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:4
+msgid "Upload schooltool groups as CSV"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:45
+msgid "Upload CSV File"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:47
+msgid "CSV File"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:65
+msgid "Input CSV Data"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:66
+msgid "CSV Data"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:70
+msgid "Submit"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group.pt:16
+msgid "Members"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group.pt:23
+msgid "edit members"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group.pt:23
+msgid "Change the people who are members of this group."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group.pt:44
+msgid "Change the resources selected for this group."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group.pt:44
+msgid "edit resources"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/groups.pt:12
+msgid "Groups of ${title}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/groups.pt:14
+msgid "There are no groups defined."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/index.pt:5
+msgid "Welcome to SchoolBell"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/login.pt:13
+msgid ""
+"You are not allowed to access this page. You can click on the back button in "
+"your browser to go back, or ask a more privileged user to log in."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/login.pt:23
+msgid "Please log in"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/login.pt:3
+msgid "Login"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/login.pt:35
+msgid "User Information"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/login.pt:57
+msgid "L"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/login.pt:8
+msgid "Your session has expired."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/members.pt:12
+msgid "Members of ${title}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/members.pt:14
+#: src/schoolbell/app/browser/templates/container.pt:14
+msgid "There are none."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/members.pt:31
+#: src/schoolbell/app/browser/templates/note_add.pt:43
+#: src/schoolbell/app/browser/templates/person_preferences.pt:44
+#: src/schoolbell/app/browser/templates/simple_add.pt:56
+#: src/schoolbell/app/browser/templates/person_edit.pt:52
+#: src/schoolbell/app/browser/templates/person_details.pt:59
+#: src/schoolbell/app/browser/templates/person_add.pt:52
+#: src/schoolbell/app/browser/templates/groups.pt:31
+#: src/schoolbell/app/browser/templates/simple_edit.pt:51
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:72
+msgid "A"
+msgstr ""
+
+# Default: "Apply"
+#: src/schoolbell/app/browser/templates/members.pt:31
+#: src/schoolbell/app/browser/templates/person_preferences.pt:44
+#: src/schoolbell/app/browser/templates/person_edit.pt:52
+#: src/schoolbell/app/browser/templates/person_details.pt:59
+#: src/schoolbell/app/browser/templates/groups.pt:31
+#: src/schoolbell/app/browser/templates/simple_edit.pt:51
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:72
+msgid "submit-button"
+msgstr ""
+
+# Default: "Cancel"
+#: src/schoolbell/app/browser/templates/members.pt:35
+#: src/schoolbell/app/browser/templates/event_add.pt:305
+#: src/schoolbell/app/browser/templates/note_add.pt:46
+#: src/schoolbell/app/browser/templates/event_booking.pt:77
+#: src/schoolbell/app/browser/templates/container_delete.pt:29
+#: src/schoolbell/app/browser/templates/person_preferences.pt:47
+#: src/schoolbell/app/browser/templates/acl.pt:69
+#: src/schoolbell/app/browser/templates/simple_add.pt:59
+#: src/schoolbell/app/browser/templates/person_edit.pt:55
+#: src/schoolbell/app/browser/templates/person_details.pt:62
+#: src/schoolbell/app/browser/templates/person_add.pt:55
+#: src/schoolbell/app/browser/templates/groups.pt:35
+#: src/schoolbell/app/browser/templates/simple_edit.pt:54
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:75
+msgid "cancel-button"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/navigation.pt:2
+msgid "Navigation"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/navigation.pt:4
+#: src/schoolbell/app/browser/templates/index.pt:10
+msgid "Persons"
+msgstr "Personas"
+
+#: src/schoolbell/app/browser/templates/navigation.pt:6
+#: src/schoolbell/app/browser/templates/resource.pt:13
+#: src/schoolbell/app/browser/templates/person.pt:46
+#: src/schoolbell/app/browser/templates/index.pt:11
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:44
+msgid "Groups"
+msgstr "Grupos"
+
+#: src/schoolbell/app/browser/templates/navigation.pt:8
+#: src/schoolbell/app/browser/templates/group.pt:38
+#: src/schoolbell/app/browser/templates/index.pt:12
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:58
+msgid "Resources"
+msgstr "Recursos"
+
+#: src/schoolbell/app/browser/templates/note_add.pt:13
+msgid "Note"
+msgstr "Nota"
+
+#: src/schoolbell/app/browser/templates/note_add.pt:24
+msgid "Who can view the note"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/note_add.pt:30
+msgid "Private"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/note_add.pt:31
+msgid "Public"
+msgstr "Público"
+
+#: src/schoolbell/app/browser/templates/note_add.pt:4
+msgid "Add note"
+msgstr "Agregar nota"
+
+# Default: "Add"
+#: src/schoolbell/app/browser/templates/note_add.pt:43
+#: src/schoolbell/app/browser/templates/simple_add.pt:56
+#: src/schoolbell/app/browser/templates/person_add.pt:52
+msgid "add-button"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:15
+msgid "Username:"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:18
+msgid "Change this person's name, picture, or password"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:18
+msgid "edit name"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:34
+#: src/schoolbell/app/browser/templates/event.pt:34
+msgid "Details"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:36
+msgid "Modify this person's details"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:36
+#: src/schoolbell/app/browser/templates/event.pt:54
+msgid "edit details"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:4
+msgid "Person info: ${title}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:57
+msgid "edit groups"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:57
+msgid "Manage this person's memberships"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_add.pt:13
+msgid "Person Information"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_add.pt:4
+msgid "Add person"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_add.pt:40
+msgid "Add to groups"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_details.pt:16
+msgid "Change contact details for${user}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_details.pt:24
+msgid "Contact information"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_details.pt:4
+msgid "Edit contact information"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_edit.pt:14
+msgid "Change info for ${user}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_edit.pt:41
+msgid "Change password"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_preferences.pt:14
+msgid "Change preferences for ${user}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_preferences.pt:22
+msgid "Calendar Preferences"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_preferences.pt:4
+#: src/schoolbell/app/browser/templates/person_edit.pt:4
+msgid "Edit person"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/recevent_delete.pt:21
+msgid "You are trying to delete a repeating event."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/recevent_delete.pt:43
+msgid "Current"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/recevent_delete.pt:45
+msgid "Future"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/recevent_delete.pt:47
+msgid "All"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/recevent_delete.pt:49
+msgid "Cancel"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/recevent_delete.pt:6
+#: src/schoolbell/app/browser/templates/recevent_delete.pt:16
+msgid "Deleting a repeating event (${event_title})"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/resource.pt:20
+msgid "This resource does not belong to any groups."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/simple_add.pt:23
+#: src/schoolbell/app/browser/templates/simple_edit.pt:23
+msgid "There are ${num_errors} input errors."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/simple_add.pt:46
+msgid "Identifier (optional)"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:118
+msgid ""
+"<p> &copy; The Shuttleworth Foundation 2003 - <span>2005</span>: Supporting "
+"Social Innovation. </p> <p> SchoolTool&trade; is a Trademark of The "
+"Shuttleworth Foundation. </p>"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:159
+msgid "View daily calendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:163
+msgid "Daily"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:163
+#: src/schoolbell/app/browser/templates/view_macros.pt:169
+#: src/schoolbell/app/browser/templates/view_macros.pt:175
+#: src/schoolbell/app/browser/templates/view_macros.pt:181
+msgid "<img alt=\"x\" src=\"XXX\" />"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:165
+msgid "View weekly calendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:171
+msgid "View monthly calendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:177
+msgid "View yearly calendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:181
+msgid "Yearly"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:192
+#: src/schoolbell/app/browser/templates/view_macros.pt:206
+msgid "Calendar for ${title} - ${calendar_title}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:237
+msgid "Jump To ..."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:27
+msgid "SchoolTool"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:314
+msgid "Tomorrow's Events"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:34
+msgid "top"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:49
+#: src/schoolbell/app/browser/templates/login.pt:57
+msgid "Log in"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:57
+msgid "User:"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:68
+msgid "My Calendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:73
+msgid "My Preferences"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:77
+msgid "Log Out"
+msgstr ""
+
+#: src/schoolbell/app/configure.zcml:17
+#: src/schoolbell/app/browser/configure.zcml:178
+#: src/schoolbell/app/browser/configure.zcml:240
+#: src/schoolbell/app/browser/configure.zcml:333
+msgid "Edit Info"
+msgstr ""
+
+#: src/schoolbell/app/configure.zcml:19
+#: src/schoolbell/app/browser/configure.zcml:515
+msgid "Add Event"
+msgstr ""
+
+#: src/schoolbell/app/configure.zcml:20
+msgid "Modify Event"
+msgstr ""
+
+#: src/schoolbell/app/configure.zcml:21
+msgid "Set up access"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:128
+msgid "Title of the note."
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:131
+msgid "Body"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:132
+msgid "Body of the note."
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:135
+#: src/schoolbell/app/browser/templates/note_add.pt:24
+msgid "Privacy"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:287
+msgid "Time Zone"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:288
+msgid "Time Zone used to display your calendar"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:292
+#: src/schoolbell/app/interfaces.py:293
+msgid "Time Format"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:294
+msgid "HH:MM"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:295
+msgid "H:MM am/pm"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:298
+#: src/schoolbell/app/interfaces.py:299
+msgid "Date Format"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:300
+msgid "MM/DD/YY"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:301
+msgid "YYYY-DD-MM"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:302
+msgid "Day Month, Year"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:306
+msgid "Week starts on:"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:307
+msgid "Start display of weeks on Sunday or Monday"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:353
+msgid "Title of the group."
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:358
+msgid "Description of the group."
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:380
+msgid "Title of the resource."
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:385
+msgid "Description of the resource."
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:62
+msgid "Required input is missing."
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:70
+msgid "Form input is not a file object"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:71
+#: src/schoolbell/app/interfaces.py:75
+msgid "Invalid integer data"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:72
+msgid "Invalid text data"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:73
+msgid "Invalid textual data"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:74
+msgid "Invalid unicode data"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:76
+msgid "Invalid floating point data"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:77
+msgid "Invalid datetime data"
+msgstr ""
+
+#: src/schoolbell/app/main.py:286
+msgid "Going to background, daemon pid %d"
+msgstr ""
+
+#: src/schoolbell/app/main.py:323
+msgid "Unauthenticated User"
+msgstr ""
+
+#: src/schoolbell/app/main.py:324
+#: src/schoolbell/app/main.py:325
+msgid "Unauthenticated Users"
+msgstr ""
+
+#: src/schoolbell/app/main.py:326
+msgid "All Users"
+msgstr ""
+
+#: src/schoolbell/app/main.py:366
+#: src/schoolbell/app/main.py:390
+#: src/schoolbell/app/main.py:393
+msgid "%s: %s"
+msgstr ""
+
+#: src/schoolbell/app/main.py:367
+msgid "Run %s -h for help."
+msgstr ""
+
+#: src/schoolbell/app/main.py:377
+msgid "%s: daemon mode not supported on your operating system."
+msgstr ""
+
+#: src/schoolbell/app/main.py:385
+msgid "Reading configuration from %s"
+msgstr ""
+
+# Default: ""
+#: src/schoolbell/app/main.py:402
+msgid "%s: warning: ignored configuration option '%s'"
+msgstr ""
+
+#: src/schoolbell/app/main.py:420
+msgid "%s Manager"
+msgstr ""
+
+#: src/schoolbell/app/main.py:440
+msgid "Startup time: %.3f sec real, %.3f sec CPU"
+msgstr ""
+
+# Default: ""
+#: src/schoolbell/app/main.py:467
+msgid ""
+"Could not initialize the database:\n"
+"%s"
+msgstr ""
+
+#: src/schoolbell/app/main.py:470
+msgid ""
+"\n"
+"Perhaps another %s instance is using it?"
+msgstr ""
+
+#: src/schoolbell/app/main.py:69
+msgid ""
+"\n"
+"Usage: %s [options]\n"
+"Options:\n"
+"  -c, --config xxx  use this configuration file instead of the default\n"
+"  -h, --help        show this help message\n"
+"  -d, --daemon      go to background after starting\n"
+msgstr ""
+
+#: src/schoolbell/app/main.py:78
+msgid ""
+"\n"
+"No storage defined in the configuration file.\n"
+"\n"
+"If you're using the default configuration file, please edit it now and\n"
+"uncomment one of the ZODB storage sections.\n"
+msgstr ""
+
+#: src/schoolbell/app/main.py:86
+msgid ""
+"\n"
+"This is not a SchoolBell 1.0 database file, aborting.\n"
+msgstr ""
+
+#: src/schoolbell/app/main.py:91
+msgid ""
+"\n"
+"This is not a SchoolBell 1.0 database file, aborting.\n"
+"\n"
+"Please run the standalone database upgrade script.\n"
+msgstr ""
