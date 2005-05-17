@@ -1,12 +1,12 @@
 <metal:block define-macro="widget_rows">
 <div class="row" tal:repeat="widget view/widgets">
   <metal:block define-macro="widget_row">
-  <p class="hint" tal:content="widget/hint" />
   <div class="label">
     <label for="field.name" title="The widget's hint"
       tal:attributes="for widget/name; title widget/hint"
       tal:content="widget/label">The Label</label>
   </div>
+  <p class="hint" tal:content="widget/hint" />
   <div class="field">
     <input type="text" style="width:100%" tal:replace="structure widget" />
     <metal:block define-slot="extra" />
