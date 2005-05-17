@@ -55,7 +55,7 @@
             </tal:loop>
           </ul>
           <a class="modify" href="" title="Manage this person's memberships"
-             tal:attributes="href string:${context/@@absolute_url}/@@details.html"
+             tal:attributes="href string:${context/@@absolute_url}/@@groups.html"
              i18n:attributes="title"
              i18n:translate="">
              edit groups
