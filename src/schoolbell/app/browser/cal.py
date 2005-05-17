@@ -51,7 +51,7 @@ from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.security.proxy import removeSecurityProxy
 from zope.security.interfaces import ForbiddenAttribute
-from zope.security.checker import canWrite, canAccess
+from zope.security.checker import canAccess
 
 from pytz import timezone
 
