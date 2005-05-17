@@ -25,6 +25,8 @@ $Id: test_browser.py 3710 2005-05-15 10:27:21Z gintas $
 import unittest
 from zope.interface import implements
 from zope.testing import doctest
+from zope.publisher.browser import TestRequest
+
 
 def doctest_NavigationView():
     """Unit tests for NavigationView.
@@ -48,6 +50,35 @@ def doctest_NavigationView():
       True
 
     """
+
+
+def doctest_TimetabledTraverser():
+    """Tests for TimetabledTraverser.
+
+        >>> from schooltool.browser import TimetabledTraverser
+        >>> class TimetabledStub:
+        ...     timetables = 'Timetables'
+        ...     calendar = 'Calendar'
+        >>> request = TestRequest()
+        >>> t = TimetabledTraverser(TimetabledStub(), request)
+
+    If we ask for timetables, the corresponding object will be returned:
+
+        >>> t.publishTraverse(request, 'timetables')
+        'Timetables'
+
+    By the way, this traverser inherits from CalendarOwnerTraverser:
+
+        >>> t.publishTraverse(None, 'calendar')
+        'Calendar'
+
+        >>> t.publishTraverse(None, 'foobar') # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+          ...
+        NotFound: Object: <...TimetabledStub instance at 0x...>, name: 'foobar'
+
+    """
+
 
 def test_suite():
     suite = unittest.TestSuite()
