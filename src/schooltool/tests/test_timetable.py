@@ -38,12 +38,12 @@ from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.testing import ztapi
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container.contained import Contained
+from zope.app.location.interfaces import ILocation
 
 from schooltool.tests.helpers import diff, sorted
 from schoolbell.app.rest.tests.utils import NiceDiffsMixin, EqualsSortedMixin
 from schooltool.interfaces import ITerm
 from schooltool.interfaces import ITimetable, ITimetableActivity
-from zope.app.location.interfaces import ILocation
 from schooltool.timetable import TimetabledMixin
 from schoolbell.relationship import RelationshipProperty
 from schoolbell.app.membership import URIGroup, URIMember, URIMembership
@@ -87,7 +87,6 @@ class TestTerm(unittest.TestCase):
     def test_interface(self):
         from schooltool.timetable import Term
         from schooltool.interfaces import ITerm, ITermWrite
-        from schooltool.interfaces import ILocation
 
         cal = Term('Sample', date(2003, 9, 1), date(2003, 12, 24))
         verifyObject(ITerm, cal)
@@ -308,7 +307,6 @@ class TestTimetable(unittest.TestCase):
     def test_interface(self):
         from schooltool.timetable import Timetable
         from schooltool.interfaces import ITimetable, ITimetableWrite
-        from schooltool.interfaces import ILocation
 
         t = Timetable(('1', '2'))
         verifyObject(ITimetable, t)
@@ -1270,6 +1268,7 @@ class TimetabledStub(TimetabledMixin):
 
 
 class PersistentLocatableStub(Persistent):
+
     implements(ILocation)
     __name__ = None
     __parent__ = None
