@@ -43,7 +43,7 @@ from schooltool.tests.helpers import diff, sorted
 from schoolbell.app.rest.tests.utils import NiceDiffsMixin, EqualsSortedMixin
 from schooltool.interfaces import ITerm
 from schooltool.interfaces import ITimetable, ITimetableActivity
-from schooltool.interfaces import ILocation
+from zope.app.location.interfaces import ILocation
 from schooltool.timetable import TimetabledMixin
 from schoolbell.relationship import RelationshipProperty
 from schoolbell.app.membership import URIGroup, URIMember, URIMembership
@@ -1284,11 +1284,12 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
     def test(self):
         from schooltool.timetable import TimetableDict
         from persistent.dict import PersistentDict
-        from schooltool.interfaces import ILocation
+        from schooltool.interfaces import ITimetableDict
 
         timetables = TimetableDict()
         self.assert_(isinstance(timetables, PersistentDict))
         verifyObject(ILocation, timetables)
+        verifyObject(ITimetableDict, timetables)
 
     def test_setitem_delitem(self):
         from schooltool.timetable import TimetableDict

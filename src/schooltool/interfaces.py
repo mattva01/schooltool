@@ -25,7 +25,6 @@ $Id$
 import datetime
 
 from zope.interface import Interface, Attribute, implements
-from zope.interface.common.mapping import IReadMapping, IWriteMapping
 from zope.app.location.interfaces import ILocation
 from zope.schema.interfaces import IField
 from zope.schema import Field, Object, Int, Text, TextLine, List, Set, Tuple
@@ -630,7 +629,7 @@ class ITimetableCalendarEvent(ICalendarEvent):
         schema=ITimetableActivity)
 
 
-class ITimetableDict(IReadMapping, IWriteMapping):
+class ITimetableDict(IContainer):
     """Container for timetables.
 
     The id of the timetable is composed by joining term id and

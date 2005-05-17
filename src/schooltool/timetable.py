@@ -161,6 +161,7 @@ from schooltool.interfaces import ITimetableSchema, ITimetableSchemaDay
 from schooltool.interfaces import ITimetableSchemaWrite
 from schooltool.interfaces import ITimetable, ITimetableWrite
 from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
+from schooltool.interfaces import ITimetableDict
 from schooltool.interfaces import ITimetableActivity
 from schooltool.interfaces import ITimetableActivityAddedEvent
 from schooltool.interfaces import ITimetableActivityRemovedEvent
@@ -858,7 +859,7 @@ class WeeklyTimetableModel(BaseTimetableModel):
 
 class TimetableDict(PersistentDict):
 
-    implements(ILocation)
+    implements(ILocation, ITimetableDict)
 
     __name__ = 'timetables'
     __parent__ = None
