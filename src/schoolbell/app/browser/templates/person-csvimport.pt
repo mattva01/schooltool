@@ -22,9 +22,8 @@
           Import Persons
         </h3>
         <p i18n:translate="">
-          CSV data <strong i18n:translate="">must</strong> contain a user name
-          and a full name.  An optional password <strong
-            i18n:translate="">may</strong> be included as well.
+          CSV data <strong>must</strong> contain a user name and a full name.
+          An optional password <strong >may</strong> be included as well.
         </p>
         <p i18n:translate="">Example:</p>
 
