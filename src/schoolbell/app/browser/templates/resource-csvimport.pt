@@ -29,17 +29,17 @@
         <p i18n:translate="">Example:</p>
 
 <pre i18n:translate="">
-Some Resource, Some resource description
-Second Resource
-Another Resource, Another description, this text will be discarded
+PRJ302, Overhead Projector #302
+Main Auditorium
+LC-805, Laptop Computer #805, <em i18n:translate="">text after a second comma</em>
 </pre>
         <p i18n:translate="">
-          The above example will create 3 groups titled 'Some Resource',
-          'Second Resource' and 'Another Resource'.  The first and last
-          resource will have the descriptions 'Some resource description' and
-          'Another description' respectively.  The Second resource will have no
-          description, and the extra "this text will be discarded" text on the
-          third resource will be ignored.
+          The above example will create 3 resources titled 'PRJ302',
+          'Main Auditorium' and 'LC-805'.  The first and last
+          resource will have the descriptions 'Overhead Projector #302' and
+          'Laptop Computer #805' respectively.  The "Main Auditorium" resource
+          will have no description, and the "text after a second comma" text on
+          the third resource will be ignored.
         </p>
 
         <fieldset>
