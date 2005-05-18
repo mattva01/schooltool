@@ -29,17 +29,16 @@
         <p i18n:translate="">Example:</p>
 
 <pre i18n:translate="">
-Some Group, Some group description
-Second Group
-Another Group, Another description, this text will be discarded
+LUG, Linux Users Group
+Chess Club
+Sports Club, After-school sports club, <em i18n:translate="">text after a second comma</em>
 </pre>
         <p i18n:translate="">
-          The above example will create 3 groups titled 'Some Group', 'Second
-          Group' and 'Another Group'.  The first and last group will have the
-          descriptions 'Some group description' and 'Another description'
-          respectively.  The Second group will have no description, and the
-          extra "this text will be discarded" text on the third group will be
-          ignored.
+          The above example will create 3 groups titled 'LUG', 'Chess Club' and
+          'Sports Club'.  The first and last group will have the descriptions
+          'Linux Users Group' and 'After-school sports club' respectively.  The
+          'Chess Club' group will have no description, and the extra "text
+          after a second comma" text on the third group will be ignored.
         </p>
 
         <fieldset>
