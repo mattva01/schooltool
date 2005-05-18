@@ -359,12 +359,14 @@
       permission="zope.Public"
       />
 
+  <!-- XXX mg: this directive causes a functional test failure
   <menuItem
       menu="schoolbell_actions"
       title="View Timetables"
       for="schooltool.interfaces.ITimetabled"
       action="timetables/index.html"
       />
+      -->
 
   <!-- Skin -->
 
