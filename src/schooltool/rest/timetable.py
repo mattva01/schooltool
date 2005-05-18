@@ -26,28 +26,46 @@ import datetime
 import sets
 
 from zope.app import zapi
+from zope.event import notify
 from zope.component import adapts
 from zope.interface import implements
+from zope.interface import Interface
+from zope.publisher.interfaces import NotFound
+from zope.publisher.interfaces import IPublishTraverse
+from zope.publisher.interfaces.http import IHTTPRequest
+from zope.security.proxy import removeSecurityProxy
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
+from zope.app.traversing.api import traverse
+from zope.app.traversing.interfaces import TraversalError
+from zope.app.http.put import NullResource
+from zope.app.http.interfaces import INullResource
+from zope.app.filerepresentation.interfaces import IWriteDirectory
+from zope.app.event.objectevent import ObjectCreatedEvent
 
 from schoolbell.app.rest import View, Template
+from schoolbell.app.rest import IRestTraverser
 from schoolbell.app.rest.app import GenericContainerView
 from schoolbell.app.rest.errors import RestError
 from schoolbell.app.rest.xmlparsing import XMLDocument
+from schooltool import getSchoolToolApplication
 from schooltool.common import parse_date, parse_time
 from schooltool.interfaces import ITimetableModelFactory
+from schooltool.interfaces import ITimetabled
+from schooltool.interfaces import ITimetableDict
 from schooltool.timetable import SchooldayPeriod
 from schooltool.timetable import SchooldayTemplate
-from schooltool.timetable import Timetable, TimetableDay
+from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
 from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import TimetableSchemaContainer
+from schooltool.rest.interfaces import ITimetableFileFactory
+from schooltool.rest.interfaces import INullTimetable
 
 
 def parseDate(date_str):
     """Parse a date string and return a datetime.date object.
 
     This is a thin wrapper over parse_date that converts ValueErrors into
-    (internationalized) ViewErrors.
+    RestErrors.
 
         >>> parseDate('2004-10-14')
         datetime.date(2004, 10, 14)
@@ -67,7 +85,7 @@ def parseTime(time_str):
     """Parse a time string and return a datetime.time object.
 
     This is a thin wrapper over parse_time that converts ValueErrors into
-    (internationalized) ViewErrors.
+    RestErrors.
 
         >>> parseTime('8:45')
         datetime.time(8, 45)
@@ -174,67 +192,67 @@ class TimetableSchemaFileFactory(object):
             'Friday', 'Saturday', 'Sunday']
 
     schema = """<?xml version="1.0" encoding="UTF-8"?>
-             <!--
-             RelaxNG grammar for a timetable.
-             -->
-             <grammar xmlns="http://relaxng.org/ns/structure/1.0"
-                      ns="http://schooltool.org/ns/timetable/0.1"
-                      datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
-               <define name="idattr">
-                  <attribute name="id">
-                     <text/>
-                  </attribute>
-               </define>
-               <define name="daysofweek">
-                 <!-- space separated list of weekdays -->
+         <!--
+         RelaxNG grammar for a timetable.
+         -->
+         <grammar xmlns="http://relaxng.org/ns/structure/1.0"
+                  ns="http://schooltool.org/ns/timetable/0.1"
+                  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+           <define name="idattr">
+              <attribute name="id">
                  <text/>
-               </define>
-               <start>
-                 <ref name="timetable"/>
-               </start>
-               <define name="timetable">
-                 <element name="timetable">
-                   <element name="model">
-                     <attribute name="factory">
-                       <text/>
-                     </attribute>
-                     <oneOrMore>
-                       <element name="daytemplate">
-                         <element name="used">
-                           <attribute name="when">
-                             <ref name="daysofweek"/>
-                           </attribute>
-                         </element>
-                         <zeroOrMore>
-                           <element name="period">
-                             <ref name="idattr"/>
-                             <attribute name="tstart">
-                               <!-- XXX  d?d:dd -->
-                               <text/>
-                             </attribute>
-                             <attribute name="duration">
-                               <!-- a natural number (of minutes)-->
-                               <text/>
-                             </attribute>
-                           </element>
-                         </zeroOrMore>
-                       </element>
-                     </oneOrMore>
-                   </element>
-                   <oneOrMore>
-                     <element name="day">
-                       <ref name="idattr"/>
-                       <zeroOrMore>
-                         <element name="period">
-                           <ref name="idattr"/>
-                         </element>
-                       </zeroOrMore>
+              </attribute>
+           </define>
+           <define name="daysofweek">
+             <!-- space separated list of weekdays -->
+             <text/>
+           </define>
+           <start>
+             <ref name="timetable"/>
+           </start>
+           <define name="timetable">
+             <element name="timetable">
+               <element name="model">
+                 <attribute name="factory">
+                   <text/>
+                 </attribute>
+                 <oneOrMore>
+                   <element name="daytemplate">
+                     <element name="used">
+                       <attribute name="when">
+                         <ref name="daysofweek"/>
+                       </attribute>
                      </element>
-                   </oneOrMore>
+                     <zeroOrMore>
+                       <element name="period">
+                         <ref name="idattr"/>
+                         <attribute name="tstart">
+                           <!-- XXX  d?d:dd -->
+                           <text/>
+                         </attribute>
+                         <attribute name="duration">
+                           <!-- a natural number (of minutes)-->
+                           <text/>
+                         </attribute>
+                       </element>
+                     </zeroOrMore>
+                   </element>
+                 </oneOrMore>
+               </element>
+               <oneOrMore>
+                 <element name="day">
+                   <ref name="idattr"/>
+                   <zeroOrMore>
+                     <element name="period">
+                       <ref name="idattr"/>
+                     </element>
+                   </zeroOrMore>
                  </element>
-               </define>
-             </grammar>
-             """
+               </oneOrMore>
+             </element>
+           </define>
+         </grammar>
+         """
 
     def __init__(self, container):
         self.container = container
@@ -290,9 +308,8 @@ class TimetableSchemaFileFactory(object):
                 period_ids = [period['id']
                               for period in day.query('tt:period')]
                 if len(sets.Set(period_ids)) != len(period_ids):
-                    # XXX Should raise RestError here.
-                    return textErrorPage(request,
-                                         "Duplicate periods in schema")
+                    raise RestError("Duplicate periods in schema")
+
                 timetable[day_id] = TimetableSchemaDay(period_ids)
 
             return timetable
@@ -318,3 +335,261 @@ class TimetableSchemaFile(object):
         factory = IFileFactory(container)
 
         container[self.context.__name__] = factory.parseXML(data)
+
+
+class TimetableFileFactory(object):
+
+    implements(ITimetableFileFactory)
+
+    schema = """<?xml version="1.0" encoding="UTF-8"?>
+        <!--
+        RelaxNG grammar for a timetable.
+        -->
+        <grammar xmlns="http://relaxng.org/ns/structure/1.0"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 ns="http://schooltool.org/ns/timetable/0.1"
+                 datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+          <define name="idattr">
+            <attribute name="id">
+              <text/>
+            </attribute>
+          </define>
+
+          <define name="datetext">
+            <!-- date in YYYY-MM-DD format -->
+            <text/>
+          </define>
+
+          <define name="timetext">
+            <!-- time in HH:MM format -->
+            <text/>
+          </define>
+
+          <define name="duration">
+            <!-- duration (minutes) -->
+            <text/>
+          </define>
+
+          <define name="xlinkattr">
+            <attribute name="xlink:type">
+              <value>simple</value>
+            </attribute>
+            <attribute name="xlink:href">
+              <data type="anyURI"/>
+            </attribute>
+            <optional>
+              <attribute name="xlink:title">
+                <text/>
+              </attribute>
+            </optional>
+          </define>
+
+          <start>
+            <ref name="timetable"/>
+          </start>
+
+          <define name="activity">
+            <element name="activity">
+              <attribute name="title">
+                <text/>
+              </attribute>
+              <zeroOrMore>
+                <element name="resource">
+                  <ref name="xlinkattr"/>
+                </element>
+              </zeroOrMore>
+            </element>
+          </define>
+
+          <define name="timetable">
+            <element name="timetable">
+              <oneOrMore>
+                <element name="day">
+                  <ref name="idattr"/>
+                  <zeroOrMore>
+                    <element name="period">
+                      <ref name="idattr"/>
+                      <zeroOrMore>
+                        <ref name="activity"/>
+                      </zeroOrMore>
+                    </element>
+                  </zeroOrMore>
+                </element>
+              </oneOrMore>
+            </element>
+          </define>
+
+        </grammar>
+        """
+
+    def __init__(self, context):
+        self.context = context
+
+    def __call__(self, name, content_type, xml, request):
+        self.request = request
+
+        if content_type != 'text/xml':
+            raise RestError("Unsupported content type: %s" % content_type)
+
+        doc = XMLDocument(xml, self.schema)
+
+        try:
+            doc.registerNs('tt', 'http://schooltool.org/ns/timetable/0.1')
+            doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
+
+            time_period_id, schema_id = name.split(".")
+
+            app = getSchoolToolApplication()
+
+            if time_period_id not in app["terms"]:
+                raise RestError("Time period not defined: %s" % time_period_id)
+            try:
+                tt = app["ttschemas"][schema_id].createTimetable()
+            except KeyError:
+                raise RestError("Timetable schema not defined: %s" % schema_id)
+            for day in doc.query('/tt:timetable/tt:day'):
+                day_id = day['id']
+                if day_id not in tt.keys():
+                    raise ViewError(_("Unknown day id: %r") % day_id)
+                ttday = tt[day_id]
+                for period in day.query('tt:period'):
+                    period_id = period['id']
+                    if period_id not in ttday.periods:
+                        raise ViewError(_("Unknown period id: %r") % period_id)
+                    for activity in period.query('tt:activity'):
+                        ttday.add(period_id, self._parseActivity(activity))
+            all_periods = sets.Set()
+            for day_id, ttday in tt.items():
+                all_periods.update(ttday.keys())
+            for exc in doc.query('/tt:timetable/tt:exception'):
+                tt.exceptions.append(self._parseException(exc, all_periods))
+        finally:
+            doc.free()
+
+        return tt
+
+    def _parseActivity(self, activity_node):
+        """Parse the <activity> element and return a TimetableActivity.
+
+        The element looks like this:
+
+            <activity title="TITLE">
+              <resource xlink:href="/PATH1" />
+              <resource xlink:href="/PATH2" />
+              ...
+            </activity>
+
+        There can be zero or more resource elements.
+        """
+        title = activity_node['title']
+        resources = []
+        for resource in activity_node.query('tt:resource'):
+            path = resource['xlink:href']
+            try:
+                st_app = getSchoolToolApplication()
+                st_url = zapi.absoluteURL(st_app, self.request)
+                path = path.replace("%s/" % st_url, "")
+                res = traverse(st_app, path)
+            except TraversalError, e:
+                raise RestError("Bad URI: %s" % path)
+
+            resources.append(res)
+
+        # removeSecurityProxy needed because we will put the TimetableActivity
+        # into ZODB
+        owner = removeSecurityProxy(self.context.__parent__)
+        return TimetableActivity(title, owner, resources)
+
+
+class TimetableTraverser(object):
+    """Allows traversing into /timetables of a timetabled object.
+
+    We need a timetabled object and a request:
+
+        >>> from schooltool.app import Person
+        >>> from zope.publisher.browser import TestRequest
+        >>> person = Person()
+        >>> request = TestRequest()
+
+        >>> traverser = TimetableTraverser(person, request)
+        >>> traverser.publishTraverse(request, "anything") is person.timetables
+        True
+
+    """
+
+    implements(IRestTraverser)
+    adapts(ITimetabled, IHTTPRequest)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        return self.context.timetables
+
+
+class NullTimetable(NullResource):
+    """Placeholder objects for new timetables to be created via PUT"""
+
+    implements(INullTimetable)
+
+
+class TimetableDictPublishTraverse(object):
+    """Traverser for a_timetabled_object/timetables"""
+
+    adapts(ITimetableDict, IHTTPRequest)
+    implements(IPublishTraverse)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        # Note: the way the code is written now lets the user access
+        # existing timetables even if their name refers to a deleted
+        # term/schema. Not sure if that is a good or a bad thing.
+        try:
+            return self.context[name]
+        except KeyError:
+            app = getSchoolToolApplication()
+            try:
+                term, schema = name.split('.')
+            except ValueError:
+                raise NotFound(self.context, name, request)
+            if term in app['terms'] and schema in app['ttschemas']:
+                return NullTimetable(self.context, name)
+            else:
+                raise NotFound(self.context, name, request)
+
+
+class NullTimetablePUT(object):
+    """Put handler for null timetables
+
+    This view creates new timetable in a TimetableDict.
+    """
+
+    __used_for__ = INullTimetable
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def PUT(self):
+        for name in self.request:
+            if name.startswith('HTTP_CONTENT_'):
+                # Unimplemented content header
+                self.request.response.setStatus(501)
+                return ''
+        # Zope's NullPUT view adapts the container to IWriteDirectory,
+        # but we don't need that here.
+        container = self.context.container
+        name = self.context.name
+        factory = ITimetableFileFactory(container)
+        data = self.request.bodyFile.read()
+        timetable = factory(name, self.request.getHeader('content-type', ''),
+                            data, self.request)
+        notify(ObjectCreatedEvent(timetable))
+        container[name] = timetable
+        self.request.response.setStatus(201)
+        return ''

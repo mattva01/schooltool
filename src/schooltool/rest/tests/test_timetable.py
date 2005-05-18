@@ -25,7 +25,10 @@ $Id$
 import unittest
 import datetime
 
+from zope.app.component.hooks import setSite
+from zope.app.component.site import LocalSiteManager
 from zope.interface import Interface
+from zope.component import adapts
 from zope.app.traversing import namespace
 from zope.app.testing import ztapi, setup
 from zope.interface import implements, directlyProvides
@@ -34,7 +37,7 @@ from zope.interface.verify import verifyObject
 from zope.app.location.interfaces import ILocation
 from zope.app.traversing.interfaces import ITraversable
 from zope.app.component.testing import PlacefulSetup
-from zope.testing.doctest import DocTestSuite
+from zope.testing.doctest import DocTestSuite, ELLIPSIS
 from zope.publisher.browser import TestRequest
 from zope.app.traversing.interfaces import IContainmentRoot
 
@@ -43,7 +46,7 @@ from schoolbell.app.rest.tests.utils import XMLCompareMixin
 from schoolbell.app.rest.errors import RestError
 
 
-class TestTimetableReadView(PlacefulSetup, XMLCompareMixin, unittest.TestCase):
+class TimetableTextMixin(PlacefulSetup, XMLCompareMixin):
 
     empty_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
@@ -100,18 +103,34 @@ class TestTimetableReadView(PlacefulSetup, XMLCompareMixin, unittest.TestCase):
         from schooltool.app import Resource
         PlacefulSetup.setUp(self)
         self.app = SchoolToolApplication()
+        self.app.setSiteManager(LocalSiteManager(self.app))
+        setSite(self.app)
         directlyProvides(self.app, IContainmentRoot)
         self.app["persons"]["john"] = self.person = Person("john", "John Smith")
         self.app["resources"]['room1'] = Resource("Room1")
         self.app["resources"]['lab1'] = Resource("Lab1")
         self.app["resources"]['lab2'] = Resource("Lab2")
+        self.app["ttschemas"]["schema1"] = self.createSchema()
+        self.app["terms"]["2003 fall"] = self.createTerm()
+
+    def createTerm(self):
+        from schooltool.timetable import Term
+        return Term("2003 fall",
+                    datetime.date(2003, 9, 1),
+                    datetime.date(2003, 9, 30))
+
+    def createSchema(self):
+        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
+        tt = TimetableSchema(['Day 1', 'Day 2'])
+        tt['Day 1'] = TimetableSchemaDay(['A', 'B'])
+        tt['Day 2'] = TimetableSchemaDay(['C', 'D'])
+        return tt
 
     def createEmpty(self):
         from schooltool.timetable import Timetable, TimetableDay
         tt = Timetable(['Day 1', 'Day 2'])
         tt['Day 1'] = TimetableDay(['A', 'B'])
         tt['Day 2'] = TimetableDay(['C', 'D'])
-        self.person.timetables['random.something'] = tt
         return tt
 
     def createFull(self, owner=None):
@@ -125,6 +144,9 @@ class TestTimetableReadView(PlacefulSetup, XMLCompareMixin, unittest.TestCase):
         tt['Day 1'].add('B', TimetableActivity('French', owner))
         tt['Day 2'].add('C', TimetableActivity('CompSci', owner, [lab1, lab2]))
         return tt
+
+
+class TestTimetableReadView(TimetableTextMixin, unittest.TestCase):
 
     def createView(self, context, request):
         from schooltool.rest.timetable import TimetableReadView
@@ -289,18 +311,22 @@ class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
         result = view.GET()
         self.assertEquals(request.response.getHeader('content-type'),
                           "text/xml; charset=UTF-8")
-        self.assertEqualsXML(result, self.empty_xml, recursively_sort=['timetable'])
+        self.assertEqualsXML(result, self.empty_xml,
+                             recursively_sort=['timetable'])
 
 
 class TestTimetableSchemaFileFactory(TimetableSchemaMixin, unittest.TestCase):
 
     def test(self):
         from schooltool.rest.timetable import TimetableSchemaFileFactory
-        verifyObject(IFileFactory, TimetableSchemaFileFactory(self.schemaContainer))
+        from schooltool.rest.interfaces import ITimetableFileFactory
+        verifyObject(IFileFactory,
+                     TimetableSchemaFileFactory(self.schemaContainer))
 
     def test_call(self):
         factory = IFileFactory(self.schemaContainer)
-        self.assertRaises(RestError, factory, "two_day", "text/plain", self.schema_xml)
+        self.assertRaises(RestError, factory, "two_day", "text/plain",
+                          self.schema_xml)
 
     def test_parseXML(self):
         factory = IFileFactory(self.schemaContainer)
@@ -327,13 +353,199 @@ class TestTimetableSchemaFile(TimetableSchemaMixin, unittest.TestCase):
                           self.createExtendedSchema())
 
 
+class TestTimetableFileFactory(TimetableTextMixin, unittest.TestCase):
+
+    namespaces = {'tt': 'http://schooltool.org/ns/timetable/0.1',
+                  'xlink': 'http://www.w3.org/1999/xlink'}
+
+    def test(self):
+        from schooltool.rest.interfaces import ITimetableFileFactory
+        from schooltool.rest.timetable import TimetableFileFactory
+        verifyObject(ITimetableFileFactory,
+                     TimetableFileFactory(self.person.timetables))
+
+    def test_call(self):
+        from schooltool.rest.timetable import TimetableFileFactory
+
+        factory = TimetableFileFactory(self.person.timetables)
+        timetable = factory("2003 fall.schema1", "text/xml", self.full_xml,
+                            TestRequest())
+        self.assertEquals(timetable, self.createFull(self.person))
+
+        timetable = factory("2003 fall.schema1", "text/xml", self.empty_xml,
+                            TestRequest())
+        self.assertEquals(timetable, self.createEmpty())
+
+
+def doctest_TimetableDictPublishTraverse():
+    """Unit tests for TimetableDictPublishTraverse
+
+    Some setup is needed:
+
+        >>> setup.placelessSetUp()
+
+        >>> from zope.app.component.hooks import setSite
+        >>> from zope.app.component.site import LocalSiteManager
+        >>> from schooltool.app import SchoolToolApplication
+        >>> app = SchoolToolApplication()
+        >>> app.setSiteManager(LocalSiteManager(app))
+        >>> setSite(app)
+
+        >>> from datetime import date
+        >>> from schooltool.timetable import Term
+        >>> from schooltool.timetable import TimetableSchema
+        >>> app['terms']['2005-fall'] = Term('2005 Fall',
+        ...         date(2005, 9, 1), date(2005, 12, 31))
+        >>> app['terms']['2006-spring'] = Term('2006 Spring',
+        ...         date(2006, 2, 1), date(2006, 6, 30))
+        >>> app['ttschemas']['default'] = TimetableSchema([])
+
+    TimetableDictPublishTraverse adapts (ITimetableDict, IHTTPRequest)
+    pair
+
+        >>> from schooltool.timetable import TimetableDict
+        >>> from schooltool.rest.timetable import TimetableDictPublishTraverse
+        >>> context = TimetableDict()
+        >>> request = TestRequest()
+        >>> pt = TimetableDictPublishTraverse(context, request)
+
+    There are three cases.
+
+    1. Existing timetable
+
+        >>> from schooltool.timetable import Timetable
+        >>> context['2005-fall.default'] = tt = Timetable([])
+        >>> obj = pt.publishTraverse(request, '2005-fall.default')
+        >>> obj
+        <Timetable: ...>
+        >>> obj is tt
+        True
+
+    2. Nonexisting timetable
+
+        >>> obj = pt.publishTraverse(request, '2006-spring.default')
+        >>> obj
+        <...NullTimetable object at ...>
+        >>> obj.container is context
+        True
+        >>> obj.name
+        '2006-spring.default'
+
+    3. Undefined term and/or schema
+
+        >>> pt.publishTraverse(request, '2006-sprig.default')
+        Traceback (most recent call last):
+          ...
+        NotFound: Object: <...TimetableDict...>, name: '2006-sprig.default'
+
+        >>> pt.publishTraverse(request, '2006-spring.insane')
+        Traceback (most recent call last):
+          ...
+        NotFound: Object: <...TimetableDict...>, name: '2006-spring.insane'
+
+        >>> pt.publishTraverse(request, 'too.many.dots')
+        Traceback (most recent call last):
+          ...
+        NotFound: Object: <...TimetableDict...>, name: 'too.many.dots'
+
+        >>> pt.publishTraverse(request, 'no dots')
+        Traceback (most recent call last):
+          ...
+        NotFound: Object: <...TimetableDict...>, name: 'no dots'
+
+    Cleanup:
+
+        >>> setup.placelessTearDown()
+
+    """
+
+
+def doctest_NullTimetablePUT():
+    """Unit tests for NullTimetablePUT
+
+    Setup: there should be an adapter from ITimetableDict to
+    ITimetableFileFactory.
+
+        >>> setup.placelessSetUp()
+        >>> from schooltool.interfaces import ITimetableDict
+        >>> from schooltool.rest.interfaces import ITimetableFileFactory
+        >>> from schooltool.timetable import Timetable
+        >>> class TimetableFileFactoryStub(object):
+        ...     adapts(ITimetableDict)
+        ...     implements(ITimetableFileFactory)
+        ...     def __init__(self, context):
+        ...         self.context = context
+        ...     def __call__(self, name, ctype, data, request):
+        ...         print "*** Creating a timetable called %s" % name
+        ...         print "    from a %s entity containing %s" % (ctype, data)
+        ...         return Timetable([])
+        >>> ztapi.provideAdapter(ITimetableDict, ITimetableFileFactory,
+        ...                      TimetableFileFactoryStub)
+
+    Also we want to see what events are sent out
+
+        >>> import zope.event
+        >>> old_subscribers = zope.event.subscribers[:]
+        >>> def handler(event):
+        ...     print "*** Event: %r" % event
+        >>> zope.event.subscribers.append(handler)
+
+    NullTimetablePUT is a view on NullTimetable, which in turn knows
+    where the new timetable is to be placed, and how it should be
+    named.
+
+        >>> from StringIO import StringIO
+        >>> from schooltool.rest.timetable import NullTimetablePUT
+        >>> from schooltool.rest.timetable import NullTimetable
+        >>> from schooltool.timetable import TimetableDict
+        >>> container = TimetableDict()
+        >>> name = '2005-fall.default'
+        >>> context = NullTimetable(container, name)
+        >>> request = TestRequest(StringIO('<timetable data>'),
+        ...                       environ={'CONTENT_TYPE': 'text/xml'})
+        >>> view = NullTimetablePUT(context, request)
+
+        >>> view.PUT()
+        *** Creating a timetable called 2005-fall.default
+            from a text/xml entity containing <timetable data>
+        *** Event: <...ObjectCreatedEvent...>
+        ''
+        >>> request.response.getStatus()
+        201
+
+        >>> container[name]
+        <Timetable: ...>
+
+    As per the HTTP spec, NullTimetablePUT barfs if the request contains
+    unrecognized Content-* headers.
+
+        >>> request = TestRequest(StringIO('<timetable data>'),
+        ...                       environ={'CONTENT_TYPE': 'text/xml',
+        ...                                'HTTP_CONTENT_RANGE': 'blah'})
+        >>> view = NullTimetablePUT(context, request)
+        >>> view.PUT()
+        ''
+        >>> request.response.getStatus()
+        501
+
+    Cleanup:
+
+        >>> zope.event.subscribers[:] = old_subscribers
+        >>> setup.placelessTearDown()
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(DocTestSuite('schooltool.rest.timetable'))
-    suite.addTest(unittest.makeSuite(TestTimetableReadView))
+    suite.addTest(DocTestSuite('schooltool.rest.timetable',
+                               optionflags=ELLIPSIS))
+    suite.addTest(DocTestSuite(optionflags=ELLIPSIS))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaFileFactory))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaFile))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaView))
+    suite.addTest(unittest.makeSuite(TestTimetableReadView))
+    suite.addTest(unittest.makeSuite(TestTimetableFileFactory))
     return suite
 
 if __name__ == '__main__':

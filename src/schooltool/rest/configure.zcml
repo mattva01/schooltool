@@ -2,6 +2,10 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+  <content class=".timetable.NullTimetable">
+    <allow interface=".timetable.INullTimetable" />
+  </content>
+
   <subscriber
       handler=".restSchoolToolSubscriber"
       for="zope.app.publication.interfaces.IBeforeTraverseEvent"
@@ -52,6 +56,39 @@
       name="POST"
       factory=".app.CourseContainerView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.interfaces.ITimetabled"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="schoolbell.app.rest.IRestTraverser"
+      factory=".timetable.TimetableTraverser"
+      permission="zope.Public"
+      name="timetables"
+      />
+
+  <view
+      for="schooltool.interfaces.ITimetableDict"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory=".timetable.TimetableDictPublishTraverse"
+      permission="zope.Public"
+      />
+
+  <view
+      for=".timetable.NullTimetable"
+      name="PUT"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      factory=".timetable.NullTimetablePUT"
+      permission="zope.Public"
+      allowed_attributes="PUT"
+      />
+
+  <adapter
+      for="schooltool.interfaces.ITimetableDict"
+      provides=".interfaces.ITimetableFileFactory"
+      factory=".timetable.TimetableFileFactory"
       permission="zope.Public"
       />
 
@@ -224,6 +261,14 @@
       for="schooltool.interfaces.ITimetableSchema"
       name="GET"
       factory=".timetable.TimetableSchemaView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.interfaces.ITimetable"
+      name="GET"
+      factory=".timetable.TimetableReadView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />

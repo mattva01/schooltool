@@ -10,7 +10,7 @@ Overview
 
 1. Definition of terms
 2. Definition of timetable schemas
-3. Usage of timetables (TODO)
+3. Usage of timetables
 
 
 Prologue
@@ -231,7 +231,7 @@ additional day:
     END:VCALENDAR
     <BLANKLINE>
 
-We should be capable of deleting it:
+We should be capable of deleting the term:
 
     >>> print rest(r"""
     ... DELETE /frogpond/terms/2005-fall HTTP/1.1
@@ -241,7 +241,7 @@ We should be capable of deleting it:
     Content-Length: 0
     <BLANKLINE>
 
-Terms should be gone now:
+The term should be gone now:
 
     >>> print rest(r"""
     ... GET /frogpond/terms HTTP/1.1
@@ -472,6 +472,135 @@ And check that schema was indeed modified:
         </period>
       </day>
     </timetable>
+
+Trying to put an invalid schema should get us an error:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+    ...   <model factory="SequentialDaysTimetableModel">
+    ...     <daytemplate>
+    ...       <used when="default" />
+    ...       <period id="A" tstart="10:00" duration="60" />
+    ...       <period id="B" tstart="11:00" duration="60" />
+    ...       <period id="D" tstart="11:00" duration="60" />
+    ...     </daytemplate>
+    ...     <daytemplate>
+    ...       <used when="Friday Thursday" />
+    ...       <period id="A" tstart="8:00" duration="70" />
+    ...       <period id="B" tstart="11:00" duration="70" />
+    ...       <period id="D" tstart="11:00" duration="70" />
+    ...     </daytemplate>
+    ...   </model>
+    ...   <day id="Day 1">
+    ...     <period id="A">
+    ...     </period>
+    ...     <period id="A">
+    ...     </period>
+    ...   </day>
+    ... </timetable>
+    ... """)
+    HTTP/1.1 400 Bad Request
+    Content-Length: ...
+    Content-Type: text/plain; charset=utf-8
+    <BLANKLINE>
+    Duplicate periods in schema
+
+
+Timetables
+----------
+
+We will need at least one term (we have deleted the one inserted in the first test):
+
+    >>> print http(r"""
+    ... PUT /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
+    ...             first="2003-09-01" last="2003-09-07">
+    ...     <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
+    ...     <holiday date="2003-09-03">Holiday</holiday>
+    ...     <holiday date="2003-09-06">Holiday</holiday>
+    ...     <holiday date="2003-09-23">Holiday</holiday>
+    ... </schooldays>
+    ... """)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+Lets add a person:
+
+    >>> print rest("""
+    ... PUT /frogpond/persons/john HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="John"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+We can now add a timetable for the person:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+    ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <day id="Day 1">
+    ...     <period id="A">
+    ...     </period>
+    ...     <period id="B">
+    ...     </period>
+    ...   </day>
+    ...   <day id="Day 2">
+    ...     <period id="C">
+    ...       <activity title="English"/>
+    ...     </period>
+    ...     <period id="D">
+    ...     </period>
+    ...   </day>
+    ... </timetable>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+It should be there:
+
+    >>> print rest(r"""
+    ... GET /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw""")
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+               xmlns:xlink="http://www.w3.org/1999/xlink">
+      <day id="Day 1">
+        <period id="A">
+        </period>
+        <period id="B">
+        </period>
+      </day>
+      <day id="Day 2">
+        <period id="C">
+          <activity title="English">
+          </activity>
+        </period>
+        <period id="D">
+        </period>
+      </day>
+    </timetable>
+
+TODO: modification of timetables
+
 
 Epilogue
 --------
