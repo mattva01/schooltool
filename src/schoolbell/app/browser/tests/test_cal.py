@@ -23,7 +23,7 @@ $Id$
 """
 
 import unittest
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta, time
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from zope.interface import directlyProvides
@@ -2771,6 +2771,21 @@ class TestDailyCalendarView(unittest.TestCase):
         cal.addEvent(createEvent('2004-08-12 12:30', '3h', "Nap"))
         self.assertEquals(view.getColumns(), 5)
 
+    def test_calendarRows(self):
+        from schoolbell.app.browser.cal import DailyCalendarView
+        from schoolbell.app.app import Person
+
+        person = Person(title="Da Boss")
+        cal = person.calendar
+        view = DailyCalendarView(cal, TestRequest())
+        view.cursor = date(2004, 8, 12)
+        view.starthour = 10
+        view.endhour = 16
+        result = list(view.calendarRows())
+        expected = [('%d:00' % hr, datetime(2004, 8, 12, hr, tzinfo=utc),
+                     timedelta(0, 3600)) for hr in range(10, 16)]
+        self.assertEquals(result, expected)
+
     def test_getHours(self):
         from schoolbell.app.browser.cal import DailyCalendarView
         from schoolbell.app.app import Person
@@ -2875,6 +2890,48 @@ class TestDailyCalendarView(unittest.TestCase):
                            {'title': '21:00', 'cols': ('', None, None)},
                            {'title': '22:00', 'cols': ('', None, None)},
                            {'title': '23:00', 'cols': ('', None, None)}])
+
+    def test_getHours_short_periods(self):
+        from schoolbell.app.browser.cal import DailyCalendarView
+        from schoolbell.app.app import Person
+
+        # Some setup.
+        person = Person(title="Da Boss")
+        cal = person.calendar
+        view = DailyCalendarView(cal, TestRequest())
+        view.cursor = date(2004, 8, 12)
+
+        # Patch in a custom simpleCalendarRows method to test short periods.
+
+        def simpleCalendarRows():
+            today = datetime.combine(view.cursor, time(13, tzinfo=utc))
+            durations = [0, 1800, 1351, 1349, 600, 7200]
+            row_ends = [today + timedelta(seconds=sum(durations[:i+1]))
+                        for i in range(1, len(durations))]
+
+            start = today + timedelta(hours=view.starthour)
+            for end in row_ends:
+                duration = end - start
+                yield (view.rowTitle(start.hour, start.minute),
+                       start, duration)
+                start = end
+
+        view.calendarRows = simpleCalendarRows
+
+        result = list(view.getHours())
+        # clean up the result
+        for rowinfo in result:
+            for key in rowinfo.keys():
+                if key not in ('height', 'title'):
+                    del rowinfo[key]
+                rowinfo['height'] = round(rowinfo['height'], 4)
+
+        expected = [{'title': '21:00', 'height': 66.0},
+                    {'title': '13:30', 'height': 1.5011},
+                    {'title': '', 'height': 1.4989},
+                    {'title': '', 'height': 0.6667},
+                    {'title': '14:25', 'height': 8.0}]
+        self.assertEquals(result, expected)
 
     def test_rowspan(self):
         from schoolbell.app.browser.cal import DailyCalendarView
