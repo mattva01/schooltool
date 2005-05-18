@@ -25,8 +25,9 @@ include doc/release-policy.txt doc/release-checklist.txt
 recursive-include src/schoolbell *.pt *.js *.png *.gif *.css *.mo
 recursive-include src/schoolbell *.rng *.xml *.zcml *.ico *.pot *.po
 
-# Miscellaneous other data files
+# Miscellaneous other data files (mostly for testing - yes *.py is right!)
 recursive-include src/schoolbell *.ics
+recursive-include src/schoolbell *.py *.txt *.conf
 
 # Zope
 include Zope3/setup.py
