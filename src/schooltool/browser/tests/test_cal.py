@@ -99,9 +99,11 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_calendarRows(self):
         from schooltool.browser.cal import DailyCalendarView
+        from schoolbell.app.security import Principal
 
         request = TestRequest()
-        request.setPrincipal(self.person)
+        principal = Principal('person', 'Some person', person=self.person)
+        request.setPrincipal(principal)
         view = DailyCalendarView(self.person.calendar, request)
         view.cursor = date(2004, 11, 5)
 
@@ -126,11 +128,13 @@ class TestDailyCalendarView(unittest.TestCase):
     def test_calendarRows_no_periods(self):
         from schooltool.browser.cal import DailyCalendarView
         from schooltool.app import getPersonPreferences
+        from schoolbell.app.security import Principal
 
         prefs = getPersonPreferences(self.person)
         prefs.cal_periods = False # do not show periods
         request = TestRequest()
-        request.setPrincipal(self.person)
+        principal = Principal('person', 'Some person', person=self.person)
+        request.setPrincipal(principal)
         view = DailyCalendarView(self.person.calendar, request)
         view.cursor = date(2004, 11, 5)
 
