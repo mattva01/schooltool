@@ -27,6 +27,7 @@ from zope.app.publisher.browser import BrowserView
 from schooltool.app import getSchoolToolApplication
 from schoolbell.app.browser.cal import CalendarOwnerTraverser
 
+
 class NavigationView(BrowserView):
     """View for the navigation portlet.
 
