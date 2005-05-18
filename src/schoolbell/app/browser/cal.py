@@ -900,7 +900,6 @@ class DailyCalendarView(CalendarViewBase):
         """Iterate over (title, start, duration) of time slots that make up
         the daily calendar.
         """
-        # XXX not tested
         today = datetime.combine(self.cursor, time(tzinfo=utc))
         row_ends = [today + timedelta(hours=hour + 1)
                     for hour in range(self.starthour, self.endhour)]
@@ -959,7 +958,12 @@ class DailyCalendarView(CalendarViewBase):
                     cols.append(ev)
 
             height = duration.seconds / 900.0
-            yield {'title': height > 1.5 and title or '',
+            if height < 1.5:
+                # Do not display the time of the start of the period when there
+                # is too little space as that looks rather ugly.
+                title = ''
+
+            yield {'title': title,
                    'cols': tuple(cols),
                    'time': start.strftime("%H:%M"),
                    'top': top,
@@ -1111,7 +1115,6 @@ class EventDeleteView(BrowserView):
         If the event does not have any recurrences afterwards, it is removed
         from the parent calendar
         """
-        # XXX This depends on mutable events. Is this OK? -- gintas
         rrule = event.recurrence
         new_rrule = rrule.replace(**kwargs)
         # This view requires the modifyEvent permission.
