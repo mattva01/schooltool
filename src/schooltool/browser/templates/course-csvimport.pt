@@ -22,8 +22,9 @@
           Import Courses
         </h3>
         <p i18n:translate="">
-          CSV data should be made up of a course title and an optional course
-          description.  Any extra information will be discarded.
+          CSV data <strong i18n:translate="">must</strong> include a course
+          title and <strong i18n:translate="">may</strong> include an optional
+          course description.  Any extra information will be discarded.
         </p>
         <p i18n:translate="">Example:</p>
 
