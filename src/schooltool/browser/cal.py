@@ -119,6 +119,8 @@ class CalendarSTOverlayView(CalendarOverlayView):
     contain 'OVERLAY_APPLY' or 'OVERLAY_MORE' in the request.
     """
 
+    show_my_timetable = True # TODO: store this setting in an annotation
+
     def items(self):
         person = IPerson(self.request.principal)
         items = [(item.calendar.title,
