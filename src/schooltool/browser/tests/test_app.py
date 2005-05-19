@@ -550,7 +550,15 @@ def doctest_PersonView():
         >>> setup.setUpAnnotations()
         >>> setUp()
         >>> ztapi.provideAdapter(IPerson, IPersonDetails, getPersonDetails)
-        >>> teacher = Person()
+
+        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app import Person
+        >>> school = SchoolToolApplication()
+        >>> persons = school['persons']
+        >>> directlyProvides(school, IContainmentRoot)
+        >>> sections = school['sections']
+
+        >>> persons['teacher'] = teacher = Person("Teacher")
         >>> teacher_view = PersonView(teacher, TestRequest())
 
     Not a teacher yet:
@@ -561,7 +569,8 @@ def doctest_PersonView():
     We'll need something to teach:
 
         >>> from schooltool.app import Section
-        >>> section = Section()
+        >>> sections['section'] = section = Section(title="History")
+        >>> sections['section2'] = section2 = Section(title="Algebra")
         >>> section.instructors.add(teacher)
 
     Now we're teaching:
@@ -571,9 +580,17 @@ def doctest_PersonView():
         >>> teacher_view.isLearner()
         False
 
+    We'll teach 2 courses this semester, and we'll need an easy way to get a
+    list of all the courses we're teaching.
+
+        >>> section2.instructors.add(teacher)
+        >>> teacher_view = PersonView(teacher, TestRequest())
+        >>> [section.title for section in teacher_view.instructorOf()]
+        ['History', 'Algebra']
+
     Let's create a student
 
-        >>> student = Person()
+        >>> persons['student'] = student = Person("Student")
         >>> student_view = PersonView(student, TestRequest())
 
         >>> student_view.isTeacher()
@@ -588,6 +605,29 @@ def doctest_PersonView():
         False
         >>> student_view.isLearner()
         True
+
+        >>> sections['section3'] = section3 = Section(title="English")
+        >>> sections['section4'] = section4 = Section(title="Gym")
+
+    Our student is taking several classes
+
+        >>> section3.members.add(student)
+        >>> student_view = PersonView(student, TestRequest())
+
+        >>> [section.title for section in student_view.learnerOf()]
+        ['Algebra', 'English']
+
+    Students can also participate in sections as part of a group, say all 10th
+    grade students must take gym:
+
+        >>> from schooltool.app import Group
+        >>> tenth_grade = Group()
+        >>> tenth_grade.members.add(student)
+        >>> section4.members.add(tenth_grade)
+
+        >>> student_view = PersonView(student, TestRequest())
+        >>> [section.title for section in student_view.learnerOf()]
+        ['Algebra', 'English', 'Gym']
 
         >>> tearDown()
 

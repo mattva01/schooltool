@@ -270,6 +270,16 @@
       title="Change Preferences" />
 
   <page
+      name="index.html"
+      for="schooltool.interfaces.IPerson"
+      class="schooltool.browser.app.PersonView"
+      template="templates/person.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
       name="daily.html"
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.DailyCalendarView"

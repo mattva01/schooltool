@@ -36,6 +36,7 @@ from schooltool.interfaces import ICourseContainer, ISectionContainer
 from schoolbell.app.browser.app import GroupView, ContainerView
 from schoolbell.app.browser import app as sb
 from schoolbell.app.membership import URIMembership, URIGroup
+from schoolbell.app.membership import isTransitiveMember
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.relationship import getRelatedObjects
 from schoolbell.relationship.interfaces import IRelationshipLinks
@@ -43,8 +44,8 @@ from schoolbell.relationship.interfaces import IRelationshipLinks
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ICourse, ISection
 from schooltool.interfaces import IPersonPreferences
-from schooltool.interfaces import IGroup, IPerson
-from schooltool.relationships import URIInstructor
+from schooltool.interfaces import IGroup, IPerson, ISchoolToolApplication
+from schooltool.relationships import URIInstruction, URIInstructor, URISection
 from schooltool.app import Section, Person
 
 
@@ -249,6 +250,20 @@ class PersonView(sb.PersonView):
                 return True
 
         return False
+
+    def instructorOf(self):
+        return getRelatedObjects(self.context, URISection,
+                                 rel_type=URIInstruction)
+
+    def learnerOf(self):
+        results = []
+        sections = ISchoolBellApplication(self.context)['sections'].values()
+        for section in sections:
+            if isTransitiveMember(self.context, section):
+                results.append(section)
+
+        return results
+
 
 
 class PersonAddView(sb.PersonAddView):
