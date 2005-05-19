@@ -7,6 +7,12 @@
  *
  */
 
+
+/* XXX move this into Schoolbell style.css after release */
+ul {
+    list-style: none;
+}
+
 div.hr {
     clear: both;
 }
@@ -93,4 +99,28 @@ div.label {
 
 table.timetable input.text {
     width: 7em;
+}
+
+ul.container-content a {
+    text-decoration: none;
+}
+
+ul.container-content {
+    padding: 0;
+    margin: 0;
+    margin: 0.25em 0 0 0.5em;
+}
+
+li.course {
+    border: none;
+    border-left: 1px #d6d6d6 solid;
+    margin-bottom: 1em;
+}
+
+ul.section-list {
+    margin: 0.25em 0 0 0.5em;
+}
+
+ul.section-list a {
+    font-weight: normal;
 }

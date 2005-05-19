@@ -390,7 +390,7 @@ class Section(Persistent, Contained, TimetabledMixin):
     def _getLabel(self):
         instructors = " ".join([i.title for i in self.instructors])
         courses = " ".join([c.title for c in self.courses])
-        msg = _('${instructors} section of ${courses}')
+        msg = _('${instructors} -- ${courses}')
         msg.mapping = {'instructors': instructors, 'courses': courses}
         return msg
 

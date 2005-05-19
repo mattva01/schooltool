@@ -216,13 +216,13 @@ def doctest_Section():
 
         >>> from zope.i18n import translate
         >>> translate(section.label)
-        u'Mr. Jones section of '
+        u'Mr. Jones -- '
 
     Labels are updated dynamically when more instructors are added.
 
         >>> section.instructors.add(Person('teacher2', 'Mrs. Smith'))
         >>> translate(section.label)
-        u'Mr. Jones Mrs. Smith section of '
+        u'Mr. Jones Mrs. Smith -- '
 
     Label s should include the courses that a Section is part of:
 
@@ -230,7 +230,7 @@ def doctest_Section():
         >>> course = Course(title="US History")
         >>> course.sections.add(section)
         >>> translate(section.label)
-        u'Mr. Jones Mrs. Smith section of US History'
+        u'Mr. Jones Mrs. Smith -- US History'
 
     The course should be listed in courses:
 
