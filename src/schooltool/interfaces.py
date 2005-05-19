@@ -32,12 +32,11 @@ from zope.schema import Dict, Date, Timedelta, Bool
 from zope.app.container.interfaces import IContainer, IContained
 from zope.app.container.constraints import contains, containers
 
-from schooltool import SchoolToolMessageID as _
-
 from schoolbell.app import interfaces as sb
-
+from schoolbell.app.overlay import ICalendarOverlayInfo
 from schoolbell.calendar.interfaces import Unchanged
 from schoolbell.calendar.interfaces import ICalendarEvent
+from schooltool import SchoolToolMessageID as _
 
 #
 # Time field used in timetabling interfaces
@@ -876,6 +875,16 @@ class IPersonPreferences(sb.IPersonPreferences):
     cal_periods = Bool(
         title=_("Show periods"),
         description=_("Show period names in daily view"))
+
+
+class ICalendarAndTTOverlayInfo(ICalendarOverlayInfo):
+
+    show_timetables = Bool(
+            title=u"Show timetables",
+            description=u"""
+            An option that controls whether the timetable of this calendar's
+            owner is shown in the calendar views.
+            """)
 
 
 #

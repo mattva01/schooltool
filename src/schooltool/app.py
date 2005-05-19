@@ -147,9 +147,14 @@ from zope.app.site.servicecontainer import SiteManagerContainer
 from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 
 from schoolbell.relationship import RelationshipProperty
+from schoolbell.relationship.relationship import BoundRelationshipProperty
 from schoolbell.app.interfaces import IHaveNotes
 from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIGroup, URIMember
+from schoolbell.app.overlay import choose_color, DEFAULT_COLORS
+from schoolbell.app.overlay import OverlaidCalendarsProperty
+from schoolbell.app.overlay import BoundOverlaidCalendarsProperty
+from schoolbell.app.overlay import CalendarOverlayInfo
 from schoolbell.app import app as sb
 
 from schooltool import SchoolToolMessageID as _
@@ -160,6 +165,7 @@ from schooltool.interfaces import IPerson, IGroup, IResource, ICourse
 from schooltool.interfaces import ISectionContained, ISectionContainer
 from schooltool.interfaces import ICourseContainer, ICourseContained
 from schooltool.interfaces import IPersonPreferences
+from schooltool.interfaces import ICalendarAndTTOverlayInfo
 from schooltool.relationships import URIInstruction, URISection, URIInstructor
 from schooltool.relationships import URICourseSections, URICourse
 from schooltool.relationships import URISectionOfCourse
@@ -186,21 +192,136 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
         return PersistentDict()
 
 
-class Group(sb.Group, TimetabledMixin):
+class OverlaidCalendarsAndTTProperty(object):
+    """Property for `overlaid_calendars` in SchoolTool.
 
-    implements(IGroup)
+    Stores the list of overlaid calendars in relationships.
 
-    def __init__(self, *args, **kw):
-        sb.Group.__init__(self, *args, **kw)
-        TimetabledMixin.__init__(self)
+    Example:
+
+        >>> class SomeClass(object): # must be a new-style class
+        ...     calendars = OverlaidCalendarsAndTTProperty()
+
+        >>> from zope.interface.verify import verifyObject
+        >>> someinstance = SomeClass()
+        >>> someinstance.calendars
+        <schooltool.app.BoundOverlaidCalendarsAndTTProperty object at 0x...>
+
+    """
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        else:
+            return BoundOverlaidCalendarsAndTTProperty(instance)
+
+
+class BoundOverlaidCalendarsAndTTProperty(BoundOverlaidCalendarsProperty):
+    """Bound property for `overlaid_calendars` in SchoolTool.
+
+        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schoolbell.relationship.tests import SomeObject
+        >>> from schoolbell.relationship import getRelatedObjects
+        >>> setUp()
+
+    Given a relatable object, and a relatable calendar
+
+        >>> a = SomeObject('a')
+        >>> cal = SomeObject('cal')
+
+    we can create a BoundOverlaidCalendarsProperty
+
+        >>> overlaid_calendars = BoundOverlaidCalendarsAndTTProperty(a)
+
+    The `add` method establishes a URICalendarSubscriber relationship
+
+        >>> overlaid_calendars.add(cal, show=False, show_timetables=False,
+        ...                        color1="red", color2="green")
+
+        >>> from schoolbell.app.overlay import URICalendarProvider
+        >>> from schoolbell.app.overlay import URICalendarSubscriber
+        >>> getRelatedObjects(a, URICalendarProvider)
+        [cal]
+        >>> getRelatedObjects(cal, URICalendarSubscriber)
+        [a]
+
+    You can extract these when iterating
+
+        >>> for item in overlaid_calendars:
+        ...     print item.calendar, item.show, item.show_timetables
+        ...     print item.color1, item.color2
+        cal False False
+        red green
+
+    We're done.
+
+        >>> tearDown()
+
+    """
+
+    def add(self, calendar, show=True, show_timetables=True,
+            color1=None, color2=None):
+        if not color1 or not color2:
+            used_colors = [(item.color1, item.color2) for item in self]
+            color1, color2 = choose_color(DEFAULT_COLORS, used_colors)
+        info = CalendarAndTTOverlayInfo(calendar, show, show_timetables,
+                                        color1, color2)
+        info.__parent__ = self.this
+        BoundRelationshipProperty.add(self, calendar, info)
+
+
+class CalendarAndTTOverlayInfo(CalendarOverlayInfo):
+    """Tests for CalendarAndTTOverlayInfo.
+
+    CalendarAndTTOverlayInfo is much like the ordinary CalendarOverlayInfo
+    object, with one difference: it has an extra attribute `show_timetables`.
+
+        >>> calendar = object()
+        >>> item = CalendarAndTTOverlayInfo(calendar, True, False,
+        ...                                 'red', 'yellow')
+
+        >>> from zope.interface.verify import verifyObject
+        >>> verifyObject(ICalendarAndTTOverlayInfo, item)
+        True
+
+        >>> item.show
+        True
+        >>> item.show_timetables
+        False
+
+    The `show_timetables` attribute is changeable:
+
+        >>> item.show_timetables = True
+
+    """
+
+    implements(ICalendarAndTTOverlayInfo)
+
+    def __init__(self, calendar, show, show_timetables, color1, color2):
+        self._calendar = calendar
+        self.show = show
+        self.show_timetables = show_timetables
+        self.color1 = color1
+        self.color2 = color2
 
 
 class Person(sb.Person, TimetabledMixin):
 
     implements(IPerson)
 
+    overlaid_calendars = OverlaidCalendarsAndTTProperty()
+
     def __init__(self, *args, **kw):
         sb.Person.__init__(self, *args, **kw)
+        TimetabledMixin.__init__(self)
+
+
+class Group(sb.Group, TimetabledMixin):
+
+    implements(IGroup)
+
+    def __init__(self, *args, **kw):
+        sb.Group.__init__(self, *args, **kw)
         TimetabledMixin.__init__(self)
 
 
