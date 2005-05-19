@@ -137,7 +137,7 @@ This is a school, so we should add some courses
     Location: http://localhost/frogpond/courses
     ...
 
-Lets see that course:
+Let's see that course:
 
     >>> print http(r"""
     ... GET /frogpond/courses/history HTTP/1.1
