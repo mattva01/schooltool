@@ -32,7 +32,7 @@ utc = timezone('UTC')
 class CalendarMixin(object):
     """Mixin for implementing ICalendar methods.
 
-    You do not have to use this mixin, however it might make implementation
+    You do not have to use this mixin, however, it might make implementation
     easier, albeit potentially slower.
 
     A class that uses this mixin must already implement ICalendar.__iter__.

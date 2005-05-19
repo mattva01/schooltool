@@ -175,7 +175,7 @@ class IOverlaidCalendarsProperty(Interface):
 
 
 class OverlaidCalendarsProperty(object):
-    """Property for `overlaid_calendars`
+    """Property for `overlaid_calendars`.
 
     Stores the list of overlaid calendars in relationships.
 
@@ -254,6 +254,10 @@ class BoundOverlaidCalendarsProperty(BoundRelationshipProperty):
         >>> for item in overlaid_calendars:
         ...     print item.calendar, item.show, item.color1, item.color2
         cal False red green
+
+    We're done.
+
+        >>> tearDown()
 
     """
 
