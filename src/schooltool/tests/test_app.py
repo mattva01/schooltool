@@ -578,6 +578,8 @@ def test_suite():
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
                 doctest.DocTestSuite('schooltool.app',
                                      optionflags=doctest.ELLIPSIS),
+                doctest.DocFileSuite('../README.txt',
+                                     optionflags=doctest.ELLIPSIS)
            ])
 
 
