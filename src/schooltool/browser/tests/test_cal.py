@@ -211,7 +211,6 @@ def doctest_CalendarSTOverlayView():
         >>> print view()
         <div id="portlet-calendar-overlay" class="portlet">
         ...
-
         <input type="checkbox" name="overlay:list"
                checked="checked" value="/groups/g1" />
         <input type="checkbox"
@@ -235,8 +234,6 @@ def doctest_CalendarSTOverlayView():
         <div id="portlet-calendar-overlay" class="portlet">
         ...
         <input type="checkbox" name="overlay:list"
-        ...
-
                value="/groups/g1" />
         <input type="checkbox"
                name="overlay_timetables:list"
