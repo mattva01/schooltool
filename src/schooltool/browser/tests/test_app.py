@@ -621,13 +621,19 @@ def doctest_PersonView():
     grade students must take gym:
 
         >>> from schooltool.app import Group
-        >>> tenth_grade = Group()
+        >>> tenth_grade = Group(title="Tenth Grade")
         >>> tenth_grade.members.add(student)
         >>> section4.members.add(tenth_grade)
 
         >>> student_view = PersonView(student, TestRequest())
         >>> [section.title for section in student_view.learnerOf()]
         ['Algebra', 'English', 'Gym']
+
+    One thing that might confuse is that learnerOf may be similar to but not
+    the same as view.context.groups
+
+        >>> [group.title for group in student_view.context.groups]
+        ['Algebra', 'English', 'Tenth Grade']
 
         >>> tearDown()
 
