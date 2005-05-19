@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 import datetime
+from StringIO import StringIO
 
 from zope.app.component.hooks import setSite
 from zope.app.component.site import LocalSiteManager
@@ -40,13 +41,14 @@ from zope.app.component.testing import PlacefulSetup
 from zope.testing.doctest import DocTestSuite, ELLIPSIS
 from zope.publisher.browser import TestRequest
 from zope.app.traversing.interfaces import IContainmentRoot
+from zope.publisher.interfaces.http import IHTTPRequest
 
 from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin
 from schoolbell.app.rest.tests.utils import XMLCompareMixin
 from schoolbell.app.rest.errors import RestError
 
 
-class TimetableTextMixin(PlacefulSetup, XMLCompareMixin):
+class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
 
     empty_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
@@ -98,6 +100,9 @@ class TimetableTextMixin(PlacefulSetup, XMLCompareMixin):
         """
 
     def setUp(self):
+        from schooltool.rest.interfaces import ITimetableFileFactory
+        from schooltool.rest.timetable import TimetableFileFactory
+        from schooltool.interfaces import ITimetableDict
         from schooltool.app import SchoolToolApplication
         from schooltool.app import Person
         from schooltool.app import Resource
@@ -112,6 +117,10 @@ class TimetableTextMixin(PlacefulSetup, XMLCompareMixin):
         self.app["resources"]['lab2'] = Resource("Lab2")
         self.app["ttschemas"]["schema1"] = self.createSchema()
         self.app["terms"]["2003 fall"] = self.createTerm()
+
+        ztapi.provideAdapter((ITimetableDict, IHTTPRequest),
+                              ITimetableFileFactory,
+                              TimetableFileFactory)
 
     def createTerm(self):
         from schooltool.timetable import Term
@@ -146,7 +155,7 @@ class TimetableTextMixin(PlacefulSetup, XMLCompareMixin):
         return tt
 
 
-class TestTimetableReadView(TimetableTextMixin, unittest.TestCase):
+class TestTimetableReadView(TimetableTestMixin, unittest.TestCase):
 
     def createView(self, context, request):
         from schooltool.rest.timetable import TimetableReadView
@@ -353,7 +362,7 @@ class TestTimetableSchemaFile(TimetableSchemaMixin, unittest.TestCase):
                           self.createExtendedSchema())
 
 
-class TestTimetableFileFactory(TimetableTextMixin, unittest.TestCase):
+class TestTimetableFileFactory(TimetableTestMixin, unittest.TestCase):
 
     namespaces = {'tt': 'http://schooltool.org/ns/timetable/0.1',
                   'xlink': 'http://www.w3.org/1999/xlink'}
@@ -362,19 +371,38 @@ class TestTimetableFileFactory(TimetableTextMixin, unittest.TestCase):
         from schooltool.rest.interfaces import ITimetableFileFactory
         from schooltool.rest.timetable import TimetableFileFactory
         verifyObject(ITimetableFileFactory,
-                     TimetableFileFactory(self.person.timetables))
+                     TimetableFileFactory(self.person.timetables,
+                                          TestRequest()))
 
     def test_call(self):
         from schooltool.rest.timetable import TimetableFileFactory
 
-        factory = TimetableFileFactory(self.person.timetables)
-        timetable = factory("2003 fall.schema1", "text/xml", self.full_xml,
-                            TestRequest())
+        factory = TimetableFileFactory(self.person.timetables,
+                                       TestRequest())
+        timetable = factory("2003 fall.schema1", "text/xml", self.full_xml)
         self.assertEquals(timetable, self.createFull(self.person))
 
-        timetable = factory("2003 fall.schema1", "text/xml", self.empty_xml,
-                            TestRequest())
+        timetable = factory("2003 fall.schema1", "text/xml", self.empty_xml)
         self.assertEquals(timetable, self.createEmpty())
+
+
+class TestTimetablePUT(TimetableTestMixin, unittest.TestCase):
+
+    def setUp(self):
+        from schooltool.interfaces import ITimetableDict
+        from schooltool.rest.timetable import TimetableFileFactory
+
+        TimetableTestMixin.setUp(self)
+        self.timetable =  self.createEmpty()
+        self.person.timetables["2003 fall.schema1"] = self.timetable
+
+    def test_put(self):
+        from schooltool.rest.timetable import TimetablePUT
+        request = TestRequest(StringIO(self.full_xml))
+        view = TimetablePUT(self.timetable, request)
+        view.PUT()
+        self.assertEquals(self.person.timetables["2003 fall.schema1"],
+                          self.createFull(self.person))
 
 
 def doctest_TimetableDictPublishTraverse():
@@ -470,16 +498,19 @@ def doctest_NullTimetablePUT():
         >>> from schooltool.interfaces import ITimetableDict
         >>> from schooltool.rest.interfaces import ITimetableFileFactory
         >>> from schooltool.timetable import Timetable
+        >>> from zope.publisher.interfaces.http import IHTTPRequest
         >>> class TimetableFileFactoryStub(object):
         ...     adapts(ITimetableDict)
         ...     implements(ITimetableFileFactory)
-        ...     def __init__(self, context):
+        ...     def __init__(self, context, request):
         ...         self.context = context
-        ...     def __call__(self, name, ctype, data, request):
+        ...         self.request = request
+        ...     def __call__(self, name, ctype, data):
         ...         print "*** Creating a timetable called %s" % name
         ...         print "    from a %s entity containing %s" % (ctype, data)
         ...         return Timetable([])
-        >>> ztapi.provideAdapter(ITimetableDict, ITimetableFileFactory,
+        >>> ztapi.provideAdapter((ITimetableDict, IHTTPRequest),
+        ...                      ITimetableFileFactory,
         ...                      TimetableFileFactoryStub)
 
     Also we want to see what events are sent out
@@ -543,6 +574,7 @@ def test_suite():
     suite.addTest(DocTestSuite(optionflags=ELLIPSIS))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaFileFactory))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaFile))
+    suite.addTest(unittest.makeSuite(TestTimetablePUT))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaView))
     suite.addTest(unittest.makeSuite(TestTimetableReadView))
     suite.addTest(unittest.makeSuite(TestTimetableFileFactory))

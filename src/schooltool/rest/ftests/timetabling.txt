@@ -599,8 +599,66 @@ It should be there:
       </day>
     </timetable>
 
-TODO: modification of timetables
+Lets modify it:
 
+    >>> print rest(r"""
+    ... PUT /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+    ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <day id="Day 1">
+    ...     <period id="A">
+    ...     </period>
+    ...     <period id="B">
+    ...     </period>
+    ...   </day>
+    ...   <day id="Day 2">
+    ...     <period id="C">
+    ...       <activity title="English"/>
+    ...       <activity title="Math"/>
+    ...     </period>
+    ...     <period id="D">
+    ...       <activity title="English"/>
+    ...     </period>
+    ...   </day>
+    ... </timetable>
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+The timetable should look different now:
+
+    >>> print rest(r"""
+    ... GET /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw""")
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+               xmlns:xlink="http://www.w3.org/1999/xlink">
+      <day id="Day 1">
+        <period id="A">
+        </period>
+        <period id="B">
+        </period>
+      </day>
+      <day id="Day 2">
+        <period id="C">
+          <activity title="English">
+          </activity>
+          <activity title="Math">
+          </activity>
+        </period>
+        <period id="D">
+          <activity title="English">
+          </activity>
+        </period>
+      </day>
+    </timetable>
 
 Epilogue
 --------

@@ -41,6 +41,7 @@ from zope.app.http.put import NullResource
 from zope.app.http.interfaces import INullResource
 from zope.app.filerepresentation.interfaces import IWriteDirectory
 from zope.app.event.objectevent import ObjectCreatedEvent
+from zope.component import queryMultiAdapter
 
 from schoolbell.app.rest import View, Template
 from schoolbell.app.rest import IRestTraverser
@@ -423,14 +424,18 @@ class TimetableFileFactory(object):
         </grammar>
         """
 
-    def __init__(self, context):
+    def __init__(self, context, request):
         self.context = context
-
-    def __call__(self, name, content_type, xml, request):
         self.request = request
+
+    def __call__(self, name, content_type, data):
 
         if content_type != 'text/xml':
             raise RestError("Unsupported content type: %s" % content_type)
+
+        return self.parseXML(name, data)
+
+    def parseXML(self, name, xml):
 
         doc = XMLDocument(xml, self.schema)
 
@@ -500,6 +505,34 @@ class TimetableFileFactory(object):
         # into ZODB
         owner = removeSecurityProxy(self.context.__parent__)
         return TimetableActivity(title, owner, resources)
+
+
+class TimetablePUT(object):
+    """Put handler for existing file-like things
+    """
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def PUT(self):
+        request = self.request
+
+        for name in request:
+            if name.startswith('HTTP_CONTENT_'):
+                # Unimplemented content header
+                request.response.setStatus(501)
+                return ''
+
+        body = self.request.bodyFile
+        data = body.read()
+        container = self.context.__parent__
+        name = self.context.__name__
+
+        factory = queryMultiAdapter((container, self.request),
+                                    ITimetableFileFactory)
+        container[name] = factory.parseXML(name, data)
+        return ''
 
 
 class TimetableTraverser(object):
@@ -585,10 +618,11 @@ class NullTimetablePUT(object):
         # but we don't need that here.
         container = self.context.container
         name = self.context.name
-        factory = ITimetableFileFactory(container)
+        factory = queryMultiAdapter((container, self.request),
+                                    ITimetableFileFactory)
         data = self.request.bodyFile.read()
         timetable = factory(name, self.request.getHeader('content-type', ''),
-                            data, self.request)
+                            data)
         notify(ObjectCreatedEvent(timetable))
         container[name] = timetable
         self.request.response.setStatus(201)

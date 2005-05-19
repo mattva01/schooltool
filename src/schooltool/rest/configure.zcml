@@ -85,8 +85,18 @@
       allowed_attributes="PUT"
       />
 
+  <view
+      for="schooltool.timetable.Timetable"
+      name="PUT"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      factory=".timetable.TimetablePUT"
+      permission="zope.Public"
+      allowed_attributes="PUT"
+      />
+
   <adapter
-      for="schooltool.interfaces.ITimetableDict"
+      for="schooltool.interfaces.ITimetableDict
+           zope.publisher.interfaces.http.IHTTPRequest"
       provides=".interfaces.ITimetableFileFactory"
       factory=".timetable.TimetableFileFactory"
       permission="zope.Public"

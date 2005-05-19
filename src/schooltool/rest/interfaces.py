@@ -29,7 +29,7 @@ from zope.app.http.interfaces import INullResource
 class ITimetableFileFactory(Interface):
     """A special interface fot a custom file factory that needs the request. """
 
-    def __call__(name, content_type, data, request):
+    def __call__(name, content_type, data):
         """Create a timetable
 
         The file `name`, content `type`, `data` and `request` are provided to
