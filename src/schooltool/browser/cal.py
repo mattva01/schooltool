@@ -122,6 +122,26 @@ class CalendarSTOverlayView(CalendarOverlayView):
     show_my_timetable = True # TODO: store this setting in an annotation
 
     def items(self):
+        """Return items to be shown in the calendar overlay.
+
+        Does not include "my calendar".
+
+        Each item is a dict with the following keys:
+
+            'title' - title of the calendar
+
+            'calendar' - the calendar object
+
+            'color1', 'color2' - colors assigned to this calendar
+
+            'id' - identifier for form controls
+
+            'checked' - was this item checked for display (either "checked" or
+            None)?
+
+            'checked_tt' - was this calendar owner's timetable checked for
+            display?
+        """
         person = IPerson(self.request.principal)
         items = [(item.calendar.title,
                   {'title': item.calendar.title,
@@ -137,6 +157,7 @@ class CalendarSTOverlayView(CalendarOverlayView):
         return [i[-1] for i in items]
 
     def update(self):
+        """Process form submission."""
         if 'OVERLAY_APPLY' in self.request:
             person = IPerson(self.request.principal)
             selected = Set(self.request.get('overlay_timetables', []))
