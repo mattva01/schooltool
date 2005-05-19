@@ -77,7 +77,7 @@
         </tal:block>
       </tal:if>
 
-      <tal:block tal:define="groups context/groups/sortby:title">
+      <tal:block tal:define="groups view/memberOf">
         <div class="info-block person-groups">
           <h5 i18n:translate="">Groups</h5>
           <ul tal:condition="groups">

@@ -264,6 +264,14 @@ class PersonView(sb.PersonView):
 
         return results
 
+    def memberOf(self):
+        # this is a hack to get seperate out generic groups from sections
+        results = []
+        for group in self.context.groups:
+            if type(group) is not Section:
+                results.append(group)
+
+        return results
 
 
 class PersonAddView(sb.PersonAddView):

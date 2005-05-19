@@ -635,6 +635,15 @@ def doctest_PersonView():
         >>> [group.title for group in student_view.context.groups]
         ['Algebra', 'English', 'Tenth Grade']
 
+    We want to display the generic groups a person is part of that aren't
+    sections so we have a filter in the view:
+
+        >>> team = Group(title="Sports Team")
+        >>> team.members.add(student)
+        >>> student_view = PersonView(student, TestRequest())
+        >>> [group.title for group in student_view.memberOf()]
+        ['Tenth Grade', 'Sports Team']
+
         >>> tearDown()
 
     """
