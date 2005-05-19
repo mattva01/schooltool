@@ -35,12 +35,16 @@ from schooltool.interfaces import ISchoolToolApplication
 from schooltool.interfaces import ICourseContainer, ISectionContainer
 from schoolbell.app.browser.app import GroupView, ContainerView
 from schoolbell.app.browser import app as sb
+from schoolbell.app.membership import URIMembership, URIGroup
 from schoolbell.app.interfaces import ISchoolBellApplication
+from schoolbell.relationship import getRelatedObjects
+from schoolbell.relationship.interfaces import IRelationshipLinks
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ICourse, ISection
 from schooltool.interfaces import IPersonPreferences
 from schooltool.interfaces import IGroup, IPerson
+from schooltool.relationships import URIInstructor
 from schooltool.app import Section, Person
 
 
@@ -221,6 +225,30 @@ class SectionLearnerGroupView(SectionLearnerView):
         """Return a list of all possible members."""
         container = ISchoolBellApplication(self.context)['groups']
         return container.values()
+
+
+class PersonView(sb.PersonView):
+    """Add additional information to the Person view.
+
+    Tal friendly methods for determining if a person is a teacher or a
+    student.
+    """
+
+    def isTeacher(self):
+        links = IRelationshipLinks(self.context)
+
+        if URIInstructor in [link.my_role for link in links]:
+            return True
+        else:
+            return False
+
+    def isLearner(self):
+        for obj in getRelatedObjects(self.context, URIGroup,
+                                     rel_type=URIMembership):
+            if ISection.providedBy(obj):
+                return True
+
+        return False
 
 
 class PersonAddView(sb.PersonAddView):

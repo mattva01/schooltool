@@ -93,6 +93,16 @@ sections can have more than one instructor:
     >>> [teacher.username for teacher in section1.instructors]
     ['Teacher1', 'Teacher2']
 
+
+You can determine if a Person is a teacher using schoolbell.relationship
+methods, there is also a method PersonView.isTeacher in schooltool's web UI:
+
+    >>> from schoolbell.relationship.interfaces import IRelationshipLinks
+    >>> from schooltool.relationships import URIInstructor
+    >>> links = IRelationshipLinks(teacher1)
+    >>> URIInstructor in [link.my_role for link in links]
+    True
+
 sections students are associated with a section via the Membership
 relationship from SchoolBell or via the section.members property.  The section
 itself participates in the Membership relationship in the URIGroup role which
@@ -116,6 +126,18 @@ schools.
     >>> section2.members.add(form1)
     >>> [form.title for form in section2.members]
     ['Form1']
+
+Checking for a person's status as a student is also handled with the
+schoolbell.relationship methods.  There are convenience methods in PersonView
+as well:
+
+    >>> from schoolbell.relationship import getRelatedObjects
+    >>> from schoolbell.app.membership import URIGroup, URIMembership
+    >>> from schooltool.interfaces import ISection
+    >>> for obj in getRelatedObjects(student2, URIGroup,
+    ...                              rel_type=URIMembership):
+    ...     ISection.providedBy(obj)
+    True
 
 See schooltool.browser.app for showing individual members of the form in the
 UI.

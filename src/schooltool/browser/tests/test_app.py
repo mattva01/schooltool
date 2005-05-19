@@ -35,6 +35,8 @@ from schoolbell.app.browser.tests.setup import setUp, tearDown
 
 # Used for CourseAddView and SectionAddView
 from zope.app.container.browser.adding import Adding
+
+
 class AddingStub(Adding):
     pass
 
@@ -530,6 +532,64 @@ def doctest_SectionLearnerGroupView():
 
         >>> [g.title for g in section.members]
         []
+
+    """
+
+
+def doctest_PersonView():
+    r"""Test for PersonView
+
+    Let's create a view for a person:
+
+        >>> from schooltool.browser.app import PersonView
+        >>> from schooltool.app import Person
+        >>> from schooltool.interfaces import IPerson
+        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schoolbell.app.app import getPersonDetails
+        >>> from schoolbell.app.interfaces import IPersonDetails
+        >>> setup.setUpAnnotations()
+        >>> setUp()
+        >>> ztapi.provideAdapter(IPerson, IPersonDetails, getPersonDetails)
+        >>> teacher = Person()
+        >>> teacher_view = PersonView(teacher, TestRequest())
+
+    Not a teacher yet:
+
+        >>> teacher_view.isTeacher()
+        False
+
+    We'll need something to teach:
+
+        >>> from schooltool.app import Section
+        >>> section = Section()
+        >>> section.instructors.add(teacher)
+
+    Now we're teaching:
+
+        >>> teacher_view.isTeacher()
+        True
+        >>> teacher_view.isLearner()
+        False
+
+    Let's create a student
+
+        >>> student = Person()
+        >>> student_view = PersonView(student, TestRequest())
+
+        >>> student_view.isTeacher()
+        False
+        >>> student_view.isLearner()
+        False
+
+    Membership in a Section implies being a learner:
+
+        >>> section.members.add(student)
+        >>> student_view.isTeacher()
+        False
+        >>> student_view.isLearner()
+        True
+
+        >>> tearDown()
 
     """
 
