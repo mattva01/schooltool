@@ -183,6 +183,22 @@
              interface="zope.app.container.interfaces.IContainer" />
   </content>
 
+  <content class=".app.BoundOverlaidCalendarsAndTTProperty">
+    <allow attributes="__iter__ __contains__" />
+    <require
+        permission="schoolbell.viewCalendar"
+        attributes="add remove" />
+  </content>
+
+  <content class=".app.CalendarAndTTOverlayInfo">
+    <require
+        permission="schoolbell.view"
+        interface=".interfaces.ICalendarAndTTOverlayInfo"/>
+    <require
+        permission="schoolbell.viewCalendar"
+        set_schema=".interfaces.ICalendarAndTTOverlayInfo"/>
+  </content>
+
   <content class=".app.PersonPreferences">
     <require permission="schoolbell.edit"
         interface="schooltool.interfaces.IPersonPreferences"
