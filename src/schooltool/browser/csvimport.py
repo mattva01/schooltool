@@ -28,11 +28,10 @@ from zope.app.container.interfaces import INameChooser
 
 from schoolbell.relationship import getRelatedObjects, relate
 from schoolbell.app.membership import Membership
-from schoolbell.app.browser.csvimport import SimpleCSVImporter
-from schoolbell.app.browser.csvimport import BaseCSVImportView
+from schoolbell.app.browser import csvimport as sb
 
 from schooltool.interfaces import ISchoolToolApplication
-from schooltool.app import Person, Section, Course
+from schooltool.app import Person, Section, Course, Group, Resource
 from schooltool import SchoolToolMessageID as _
 from schooltool.relationships import URIInstruction, URIInstructor, URISection
 from schooltool.timetable import TimetableActivity
@@ -429,15 +428,41 @@ class TimetableCSVImporter(object):
         return True
 
 
-class CourseCSVImporter(SimpleCSVImporter):
+class CourseCSVImporter(sb.SimpleCSVImporter):
     """Course CSV Importer"""
 
     factory = Course
 
 
-class CourseCSVImportView(BaseCSVImportView):
+class CourseCSVImportView(sb.BaseCSVImportView):
     """View for Course CSV importer."""
 
     def __init__(self, context, request):
-        BaseCSVImportView.__init__(self, context, request)
+        sb.BaseCSVImportView.__init__(self, context, request)
         self.importer_class = CourseCSVImporter
+
+
+class GroupCSVImporter(sb.SimpleCSVImporter):
+    """Group CSV Importer"""
+    factory = Group
+
+
+class GroupCSVImportView(sb.BaseCSVImportView):
+    """View for Group CSV importer."""
+
+    def __init__(self, context, request):
+        sb.BaseCSVImportView.__init__(self, context, request)
+        self.importer_class = GroupCSVImporter
+
+
+class ResourceCSVImporter(sb.SimpleCSVImporter):
+    """Resource CSV Importer"""
+    factory = Resource
+
+
+class ResourceCSVImportView(sb.BaseCSVImportView):
+    """View for Resource CSV importer."""
+
+    def __init__(self, context, request):
+        sb.BaseCSVImportView.__init__(self, context, request)
+        self.importer_class = ResourceCSVImporter

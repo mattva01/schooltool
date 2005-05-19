@@ -26,14 +26,17 @@ import unittest
 import datetime
 from StringIO import StringIO
 from logging import INFO
+from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from zope.i18n import translate
+from zope.interface.verify import verifyObject
 from schooltool.common import dedent
 from schooltool.app import Person, Course, Section, Resource
 from schooltool.relationships import URISection, URISectionOfCourse
 from schoolbell.app.membership import URIMember
 from schoolbell.relationship.tests import setUp as setUpRelationshipStuff
 from schoolbell.relationship.tests import tearDown as tearDownRelationshipStuff
+from schoolbell.app.browser.tests.setup import setUp, tearDown
 
 __metaclass__ = type
 
@@ -582,10 +585,125 @@ def doctest_CourseCSVImportView():
     """
 
 
+def doctest_GroupCSVImporter():
+    r"""Tests GroupCSVImporter to make sure we're generating Schooltool objects
+
+    Create a group container and an importer
+
+        >>> from schooltool.browser.csvimport import GroupCSVImporter
+        >>> from schooltool.app import GroupContainer
+        >>> from schooltool.interfaces import IGroup
+        >>> container = GroupContainer()
+        >>> importer = GroupCSVImporter(container, None)
+
+    Import some sample data
+
+        >>> csvdata='''Group 1, Group 1 Description
+        ... Group2
+        ... Group3, Group 3 Description, Some extra data'''
+        >>> importer.importFromCSV(csvdata)
+        True
+
+    Check that the groups are schooltool groups
+
+        >>> for group in container.values():
+        ...     verifyObject(IGroup, group)
+        True
+        True
+        True
+
+    """
+
+
+def doctest_GroupCSVImportView():
+    r"""Tests for GroupCSVImportView
+
+    We'll create a group csv import view
+
+        >>> from schooltool.browser.csvimport import GroupCSVImportView
+        >>> from schooltool.app import GroupContainer
+        >>> from schooltool.interfaces import IGroup
+        >>> from zope.publisher.browser import TestRequest
+        >>> container = GroupContainer()
+        >>> request = TestRequest()
+
+    Now we'll try a text import.  Note that the description is not required
+
+        >>> request.form = {'csvtext' : "A Group, The best Group\nAnother Group",
+        ...                 'charset' : 'UTF-8',
+        ...                 'UPDATE_SUBMIT': 1}
+        >>> view = GroupCSVImportView(container, request)
+        >>> view.update()
+        >>> [verifyObject(IGroup, group) for group in container.values()]
+        [True, True]
+
+    """
+
+
+def doctest_ResourceCSVImporter():
+    r"""Tests ResourceCSVImporter for generating Schooltool objects
+
+    Create a resource container and an importer
+
+        >>> from schooltool.browser.csvimport import ResourceCSVImporter
+        >>> from schooltool.app import ResourceContainer
+        >>> from schooltool.interfaces import IResource
+        >>> container = ResourceContainer()
+        >>> importer = ResourceCSVImporter(container, None)
+
+    Import some sample data
+
+        >>> csvdata='''Resource 1, Resource 1 Description
+        ... Resource2
+        ... Resource3, Resource 3 Description, Some extra data'''
+        >>> importer.importFromCSV(csvdata)
+        True
+
+    Check that the resources are schooltool resources
+
+        >>> for resource in container.values():
+        ...     verifyObject(IResource, resource)
+        True
+        True
+        True
+
+    """
+
+
+def doctest_ResourceCSVImportView():
+    r"""Tests for ResourceCSVImportView
+
+    We'll create a resource csv import view
+
+        >>> from schooltool.browser.csvimport import ResourceCSVImportView
+        >>> from schooltool.app import ResourceContainer
+        >>> from schooltool.interfaces import IResource
+        >>> from zope.publisher.browser import TestRequest
+        >>> container = ResourceContainer()
+        >>> request = TestRequest()
+
+    Now we'll try a text import.  Note that the description is not required
+
+        >>> request.form = {'csvtext' : "A Resource, The best Resource\nAnother Resource",
+        ...                 'charset' : 'UTF-8',
+        ...                 'UPDATE_SUBMIT': 1}
+        >>> view = ResourceCSVImportView(container, request)
+        >>> view.update()
+        >>> for resource in container.values():
+        ...     verifyObject(IResource, resource)
+        True
+        True
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTimetableCSVImportView))
     suite.addTest(unittest.makeSuite(TestTimetableCSVImporter))
+    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
+                                       optionflags=doctest.ELLIPSIS|
+                                                   doctest.REPORT_NDIFF))
     return suite
 
 

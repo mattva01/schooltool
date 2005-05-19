@@ -93,6 +93,17 @@
     <widget field="description" height="5" />
   </addform>
 
+  <page
+      name="group-csvimport.html"
+      for="schooltool.interfaces.IGroupContainer"
+      class="schooltool.browser.csvimport.GroupCSVImportView"
+      template="templates/group-csvimport.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Import Groups"
+      layer=".skin.ISchoolToolLayer"
+      />
+
   <addform
       label="Add a Resource"
       name="addSchoolBellResource.html"
@@ -107,6 +118,17 @@
       >
     <widget field="description" height="5" />
   </addform>
+
+  <page
+      name="resource-csvimport.html"
+      for="schooltool.interfaces.IResourceContainer"
+      class="schooltool.browser.csvimport.ResourceCSVImportView"
+      template="templates/resource-csvimport.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Import Resources"
+      layer=".skin.ISchoolToolLayer"
+      />
 
   <containerViews
       for="schooltool.interfaces.ICourseContainer"
