@@ -28,7 +28,7 @@ import sets
 import re
 
 from zope.interface import Interface
-from zope.schema import TextLine, Date
+from zope.schema import TextLine, Date, Int
 from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 from zope.app.form.browser.add import AddView
@@ -41,13 +41,13 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.form.interfaces import IInputWidget
 from zope.i18n import translate
-from zope.schema import TextLine, Int
 
 
 from schoolbell.calendar.utils import parse_date
 from schoolbell.calendar.utils import next_month, week_start
 from schoolbell.app.browser.app import ContainerView
 from schoolbell.app.browser.cal import month_names, short_day_of_week_names
+
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ITimetable, ITimetableSchema
 from schooltool.interfaces import ITermContainer, ITerm
@@ -621,6 +621,7 @@ class TimetableSchemaWizard(BrowserView, TabindexMixin):
                     times_for[event.title][day] = range
         return result
 
+
 def fix_duplicates(names):
     """Change a list of names so that there are no duplicates.
 
@@ -660,7 +661,6 @@ def fix_duplicates(names):
         result.append(name)
         used.add(name)
     return result
-
 
 def parse_time_range(value, default_duration=None):
     """Parse a range of times (e.g. 9:45-14:20).
@@ -742,7 +742,6 @@ def parse_time_range(value, default_duration=None):
         if duration < 0:
             duration += 1440
     return datetime.time(h1, m1), datetime.timedelta(minutes=duration)
-
 
 def format_time_range(start, duration):
     """Format a range of times (e.g. 9:45-14:20).

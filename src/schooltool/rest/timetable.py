@@ -28,6 +28,7 @@ import sets
 from zope.app import zapi
 from zope.event import notify
 from zope.component import adapts
+from zope.component import queryMultiAdapter
 from zope.interface import implements
 from zope.interface import Interface
 from zope.publisher.interfaces import NotFound
@@ -41,7 +42,6 @@ from zope.app.http.put import NullResource
 from zope.app.http.interfaces import INullResource
 from zope.app.filerepresentation.interfaces import IWriteDirectory
 from zope.app.event.objectevent import ObjectCreatedEvent
-from zope.component import queryMultiAdapter
 
 from schoolbell.app.rest import View, Template
 from schoolbell.app.rest import IRestTraverser

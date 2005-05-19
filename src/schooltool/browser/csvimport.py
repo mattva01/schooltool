@@ -23,19 +23,20 @@ $Id$
 """
 
 import csv
+
 from zope.app.publisher.browser import BrowserView
 from zope.app.container.interfaces import INameChooser
+from zope.security.proxy import removeSecurityProxy
 
 from schoolbell.relationship import getRelatedObjects, relate
 from schoolbell.app.membership import Membership
 from schoolbell.app.browser import csvimport as sb
 
+from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ISchoolToolApplication
 from schooltool.app import Person, Section, Course, Group, Resource
-from schooltool import SchoolToolMessageID as _
 from schooltool.relationships import URIInstruction, URIInstructor, URISection
 from schooltool.timetable import TimetableActivity
-from zope.security.proxy import removeSecurityProxy
 
 
 class TimetableCSVImportView(BrowserView):

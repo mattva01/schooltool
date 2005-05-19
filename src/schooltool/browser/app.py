@@ -31,8 +31,6 @@ from zope.app.form.interfaces import IInputWidget, WidgetsError
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
-from schooltool.interfaces import ISchoolToolApplication
-from schooltool.interfaces import ICourseContainer, ISectionContainer
 from schoolbell.app.browser.app import GroupView, ContainerView
 from schoolbell.app.browser import app as sb
 from schoolbell.app.membership import URIMembership, URIGroup
@@ -42,6 +40,8 @@ from schoolbell.relationship import getRelatedObjects
 from schoolbell.relationship.interfaces import IRelationshipLinks
 
 from schooltool import SchoolToolMessageID as _
+from schooltool.interfaces import ISchoolToolApplication
+from schooltool.interfaces import ICourseContainer, ISectionContainer
 from schooltool.interfaces import ICourse, ISection
 from schooltool.interfaces import IPersonPreferences
 from schooltool.interfaces import IGroup, IPerson, ISchoolToolApplication

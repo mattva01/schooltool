@@ -25,6 +25,7 @@ $Id: __init__.py 3405 2005-04-12 16:08:43Z bskahan $
 from zope.interface import directlyProvidedBy, directlyProvides
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.publisher.interfaces.browser import IBrowserRequest
+
 from schooltool.interfaces import ISchoolToolApplication
 
 

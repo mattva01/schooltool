@@ -47,9 +47,9 @@ from schooltool.app import Person, Group, Resource, Course, Section
 from schooltool.app import CourseContainer, SectionContainer
 from schooltool.common import parse_date
 from schooltool.interfaces import ITerm, ICourse, ICourseContainer
+from schooltool.interfaces import ITermContainer
 from schooltool.interfaces import ISection, ISectionContainer
 from schooltool.timetable import Term
-from schooltool.interfaces import ITermContainer
 
 
 class SchoolToolApplicationView(sb.ApplicationView):

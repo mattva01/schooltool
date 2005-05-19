@@ -36,6 +36,7 @@ from schoolbell.app import interfaces as sb
 from schoolbell.app.overlay import ICalendarOverlayInfo
 from schoolbell.calendar.interfaces import Unchanged
 from schoolbell.calendar.interfaces import ICalendarEvent
+
 from schooltool import SchoolToolMessageID as _
 
 #
@@ -636,6 +637,7 @@ class ITimetableDict(IContainer):
     means a timetable for a term "2005-fall" with a timetable schema
     "default".
     """
+
 
 class ITimetabled(Interface):
     """An object that has a timetable related to it -- either its own,

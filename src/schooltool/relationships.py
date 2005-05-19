@@ -25,11 +25,12 @@ $Id$
 
 import sets
 
+from schooltool.interfaces import ISection, ICourse
+
 from schoolbell.relationship import URIObject, RelationshipSchema
 from schoolbell.relationship import getRelatedObjects
 from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
 from schoolbell.relationship.interfaces import InvalidRelationship
-from schooltool.interfaces import ISection, ICourse
 
 #
 # The Instruction relationship

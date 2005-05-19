@@ -33,6 +33,7 @@ from zope.app.traversing.api import getPath
 from schoolbell.app.browser.cal import DailyCalendarView as SBDailyCalView
 from schoolbell.app.browser.overlay import CalendarOverlayView
 from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
+
 from schooltool.timetable import getPeriodsForDay
 from schooltool.interfaces import IPersonPreferences
 
