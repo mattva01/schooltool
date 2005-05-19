@@ -25,8 +25,12 @@ $Id$
 import unittest
 from datetime import date, timedelta, time
 from zope.testing import doctest
-from zope.app.tests import setup, ztapi
+from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
+from zope.app.tests import setup, ztapi
+from zope.app.traversing.interfaces import IContainmentRoot
+from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
+
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 
 from schooltool.common import parse_datetime
@@ -35,6 +39,17 @@ from schooltool.timetable import SequentialDaysTimetableModel
 from pytz import timezone
 
 utc = timezone('UTC')
+
+
+def setUpSchoolToolSite():
+    from schooltool.app import SchoolToolApplication
+    app = SchoolToolApplication()
+    directlyProvides(app, IContainmentRoot)
+    from zope.app.component.site import LocalSiteManager
+    app.setSiteManager(LocalSiteManager(app))
+    from zope.app.component.hooks import setSite
+    setSite(app)
+    return app
 
 
 def dt(timestr):
@@ -56,12 +71,8 @@ class TestDailyCalendarView(unittest.TestCase):
                              getPersonPreferences)
 
         # set up the site
-        from schooltool.app import SchoolToolApplication, Person
-        app = SchoolToolApplication()
-        from zope.app.component.site import LocalSiteManager
-        app.setSiteManager(LocalSiteManager(app))
-        from zope.app.component.hooks import setSite
-        setSite(app)
+        app = setUpSchoolToolSite()
+        from schooltool.app import Person
         self.person = app['persons']['person'] = Person('person')
 
         # set up the timetable schema
@@ -160,12 +171,120 @@ class TestDailyCalendarView(unittest.TestCase):
         self.assertEquals(result, expected)
 
 
+def doctest_CalendarSTOverlayView():
+    r"""Tests for CalendarSTOverlayView
+
+        >>> from schooltool.browser.cal import CalendarSTOverlayView
+        >>> View = SimpleViewClass('../templates/calendar_overlay.pt',
+        ...                        bases=(CalendarSTOverlayView,))
+
+    CalendarOverlayView is a view on anything.
+
+        >>> context = object()
+        >>> request = TestRequest()
+        >>> view = View(context, request)
+
+    It renders to an empty string unless its context is the calendar of the
+    authenticated user
+
+        >>> view()
+        u'\n'
+
+    If you are an authenticated user looking at your own calendar, this view
+    renders a calendar selection portlet.
+
+        >>> from schooltool.app import Person, Group
+        >>> from schoolbell.app.security import Principal
+        >>> app = setUpSchoolToolSite()
+        >>> person = app['persons']['whatever'] = Person('fred')
+        >>> group1 = app['groups']['g1'] = Group(title="Group 1")
+        >>> group2 = app['groups']['g2'] = Group(title="Group 2")
+        >>> person.overlaid_calendars.add(group1.calendar, show=True,
+        ...                               show_timetables=False)
+        >>> person.overlaid_calendars.add(group2.calendar, show=False,
+        ...                               show_timetables=True)
+
+        >>> request = TestRequest()
+        >>> request.setPrincipal(Principal('id', 'title', person))
+        >>> view = View(person.calendar, request)
+
+        >>> print view()
+        <div id="portlet-calendar-overlay" class="portlet">
+        ...
+
+        <input type="checkbox" name="overlay:list"
+               checked="checked" value="/groups/g1" />
+        <input type="checkbox"
+               name="overlay_timetables:list"
+               value="/groups/g1" />
+        ...
+        <input type="checkbox" name="overlay:list"
+               value="/groups/g2" />
+        <input type="checkbox" name="overlay_timetables:list"
+               checked="checked" value="/groups/g2" />
+        ...
+        </div>
+
+    If the request has 'OVERLAY_APPLY', CalendarOverlayView applies your
+    changes
+
+        >>> request.form['overlay'] = [u'/groups/g2']
+        >>> request.form['overlay_timetables'] = [u'/groups/g1']
+        >>> request.form['OVERLAY_APPLY'] = u"Apply"
+        >>> print view()
+        <div id="portlet-calendar-overlay" class="portlet">
+        ...
+        <input type="checkbox" name="overlay:list"
+        ...
+
+               value="/groups/g1" />
+        <input type="checkbox"
+               name="overlay_timetables:list"
+               checked="checked" value="/groups/g1" />
+        ...
+        <input type="checkbox" name="overlay:list"
+               checked="checked" value="/groups/g2" />
+        <input type="checkbox" name="overlay_timetables:list"
+               value="/groups/g2" />
+        ...
+        </div>
+
+    It also redirects you to request.URL:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('Location')
+        'http://127.0.0.1'
+
+    There are two reasons for the redirect: first, part of the page template
+    just rendered might have become invalid when calendar overlay selection
+    changed, second, this lets the user refresh the page without having to
+    experience confirmation dialogs that say "Do you want to POST this form
+    again?".
+
+    If the request has 'OVERLAY_MORE', CalendarOverlayView redirects to
+    calendar_selection.html
+
+        >>> request = TestRequest()
+        >>> request.setPrincipal(Principal('id', 'title', person))
+        >>> request.form['OVERLAY_MORE'] = u"More..."
+        >>> view = View(person.calendar, request)
+        >>> content = view()
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('Location')
+        'http://127.0.0.1/persons/fred/calendar_selection.html?nexturl=http%3A//127.0.0.1'
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestDailyCalendarView))
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
                                        optionflags=doctest.ELLIPSIS|
-                                                   doctest.REPORT_NDIFF))
+                                                   doctest.REPORT_NDIFF|
+                                                 doctest.NORMALIZE_WHITESPACE))
     return suite
 
 

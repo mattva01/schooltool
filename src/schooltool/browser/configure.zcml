@@ -280,6 +280,15 @@
       layer=".skin.ISchoolToolLayer"
       />
 
+  <page
+      for="*"
+      name="calendar_overlay"
+      layer=".skin.ISchoolToolLayer"
+      class=".cal.CalendarSTOverlayView"
+      template="templates/calendar_overlay.pt"
+      permission="zope.View"
+      />
+
   <!-- Timetabling -->
 
   <containerViews
