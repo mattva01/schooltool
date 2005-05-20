@@ -1180,337 +1180,337 @@ class TestTimetableSchemaWizard(NiceDiffsMixin, unittest.TestCase):
         self.assertEquals(times[4]['times'], ['10:30-11:10'] + [None] * 6) # F
 
 
-## def doctest_SimpleTimetableSchemaAdd():
-##     """Doctest for the SimpleTimetableSchemaAdd view
+def doctest_SimpleTimetableSchemaAdd():
+    """Doctest for the SimpleTimetableSchemaAdd view
 
-##         >>> from schooltool.timetable import WeeklyTimetableModel
-##         >>> from schooltool.interfaces import ITimetableModelFactory
-##         >>> setUp()
-##         >>> ztapi.provideUtility(ITimetableModelFactory,
-##         ...                      WeeklyTimetableModel,
-##         ...                      'WeeklyTimetableModel')
+        >>> from schooltool.timetable import WeeklyTimetableModel
+        >>> from schooltool.interfaces import ITimetableModelFactory
+        >>> setUp()
+        >>> ztapi.provideUtility(ITimetableModelFactory,
+        ...                      WeeklyTimetableModel,
+        ...                      'WeeklyTimetableModel')
 
-##     Suppose we have a SchoolTool instance, and create a view for its
-##     timetable schemas container:
+    Suppose we have a SchoolTool instance, and create a view for its
+    timetable schemas container:
 
-##         >>> from schooltool.app import SchoolToolApplication
-##         >>> from schooltool.browser.timetable import SimpleTimetableSchemaAdd
-##         >>> app = SchoolToolApplication()
-##         >>> directlyProvides(app, IContainmentRoot)
-##         >>> app.setSiteManager(LocalSiteManager(app))
-##         >>> setSite(app)
-##         >>> request = TestRequest()
-##         >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.browser.timetable import SimpleTimetableSchemaAdd
+        >>> app = SchoolToolApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> app.setSiteManager(LocalSiteManager(app))
+        >>> setSite(app)
+        >>> request = TestRequest()
+        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
 
-##     Let's render it.  There is a widget for name there:
+    Let's render it.  There is a widget for name there:
 
-##         >>> print view()
-##         <BLANKLINE>
-##         ...
-##                   <div class="field"><input
-##                             class="textType" id="field.name"
-##                             name="field.name" size="20" type="text"
-##                             value="default"  /></div>
-##         ...
-##           <tr>
-##             <th>
-##               <div><input class="textType" id="field.period_name_1"
-##                           name="field.period_name_1" size="20" type="text"
-##                           value=""  /></div>
-##             </th>
-##             <th>
-##               <div><input class="textType" id="field.period_start_1"
-##                           name="field.period_start_1" size="20"
-##                           type="text" value="" /></div>
-##             </th>
-##             <th>
-##               <div><input class="textType" id="field.period_finish_1"
-##                           name="field.period_finish_1" size="20"
-##                           type="text" value="" /></div>
-##             </th>
-##           </tr>
-##         ...
+        >>> print view()
+        <BLANKLINE>
+        ...
+                  <div class="field"><input
+                            class="textType" id="field.name"
+                            name="field.name" size="20" type="text"
+                            value="default"  /></div>
+        ...
+          <tr>
+            <th>
+              <div><input class="textType" id="field.period_name_1"
+                          name="field.period_name_1" size="20" type="text"
+                          value=""  /></div>
+            </th>
+            <th>
+              <div><input class="textType" id="field.period_start_1"
+                          name="field.period_start_1" size="20"
+                          type="text" value="" /></div>
+            </th>
+            <th>
+              <div><input class="textType" id="field.period_finish_1"
+                          name="field.period_finish_1" size="20"
+                          type="text" value="" /></div>
+            </th>
+          </tr>
+        ...
 
-##     getPeriods returns None, as the form is not yet filled:
+    getPeriods returns None, as the form is not yet filled:
 
-##         >>> view.getPeriods()
-##         []
+        >>> view.getPeriods()
+        []
 
-##     Now, let's create a simple case with all the fields filled:
+    Now, let's create a simple case with all the fields filled:
 
-##         >>> request = TestRequest(form={'field.name': 'default',
-##         ...                             'field.period_name_1': 'Period 1',
-##         ...                             'field.period_start_1': '9:00',
-##         ...                             'field.period_finish_1': '9:45',
-##         ...                             'field.period_name_2': 'Period 2',
-##         ...                             'field.period_start_2': '10:00',
-##         ...                             'field.period_finish_2': '10:45',
-##         ...                             'field.period_name_3': '',
-##         ...                             'field.period_name_4': '',
-##         ...                             'CREATE': 'Go'
-##         ...                            })
-##         >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> request = TestRequest(form={'field.name': 'default',
+        ...                             'field.period_name_1': 'Period 1',
+        ...                             'field.period_start_1': '9:00',
+        ...                             'field.period_finish_1': '9:45',
+        ...                             'field.period_name_2': 'Period 2',
+        ...                             'field.period_start_2': '10:00',
+        ...                             'field.period_finish_2': '10:45',
+        ...                             'field.period_name_3': '',
+        ...                             'field.period_name_4': '',
+        ...                             'CREATE': 'Go'
+        ...                            })
+        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
 
-##     getPeriods should extract a list of periods:
+    getPeriods should extract a list of periods:
 
-##         >>> pprint(view.getPeriods())
-##         [(u'Period 1',
-##           datetime.time(9, 0),
-##           datetime.timedelta(0, 2700)),
-##          (u'Period 2',
-##           datetime.time(10, 0),
-##           datetime.timedelta(0, 2700))]
+        >>> pprint(view.getPeriods())
+        [(u'Period 1',
+          datetime.time(9, 0),
+          datetime.timedelta(0, 2700)),
+         (u'Period 2',
+          datetime.time(10, 0),
+          datetime.timedelta(0, 2700))]
 
-##     If we call the view, a new timetable schema is created:
+    If we call the view, a new timetable schema is created:
 
-##         >>> result = view()
-##         >>> list(view.context.keys())
-##         [u'default']
-##         >>> schema = view.context['default']
-##         >>> print " ".join(schema.day_ids)
-##         Monday Tuesday Wednesday Thursday Friday
-##         >>> print ", ".join(schema['Monday'].periods)
-##         Period 1, Period 2
+        >>> result = view()
+        >>> list(view.context.keys())
+        [u'default']
+        >>> schema = view.context['default']
+        >>> print " ".join(schema.day_ids)
+        Monday Tuesday Wednesday Thursday Friday
+        >>> print ", ".join(schema['Monday'].periods)
+        Period 1, Period 2
 
-##     All days are the same
+    All days are the same
 
-##         >>> for day_id, day in schema.items():
-##         ...     assert day == schema['Monday']
+        >>> for day_id, day in schema.items():
+        ...     assert day == schema['Monday']
 
-##     The schema uses the weekly timetable model
+    The schema uses the weekly timetable model
 
-##         >>> print schema.model.__class__.__name__
-##         WeeklyTimetableModel
-##         >>> print " ".join(schema.model.timetableDayIds)
-##         Monday Tuesday Wednesday Thursday Friday
-##         >>> for period in schema.model.dayTemplates[None]:
-##         ...     print period.title, period.tstart, period.duration
-##         Period 1 09:00:00 0:45:00
-##         Period 2 10:00:00 0:45:00
+        >>> print schema.model.__class__.__name__
+        WeeklyTimetableModel
+        >>> print " ".join(schema.model.timetableDayIds)
+        Monday Tuesday Wednesday Thursday Friday
+        >>> for period in schema.model.dayTemplates[None]:
+        ...     print period.title, period.tstart, period.duration
+        Period 1 09:00:00 0:45:00
+        Period 2 10:00:00 0:45:00
 
-##     We should get redirected to the ttschemas index:
+    We should get redirected to the ttschemas index:
 
-##         >>> request.response.getStatus()
-##         302
-##         >>> request.response.getHeader('location')
-##         'http://127.0.0.1/ttschemas'
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('location')
+        'http://127.0.0.1/ttschemas'
 
-##     If a cancel button is pressed, nothing is done and the user is
-##     redirected to ttschemas index:
+    If a cancel button is pressed, nothing is done and the user is
+    redirected to ttschemas index:
 
-##         >>> request = TestRequest(form={'field.name': 'default2',
-##         ...                             'field.period_name_1': 'Period 1',
-##         ...                             'field.period_start_1': '9:00',
-##         ...                             'field.period_finish_1': '9:45',
-##         ...                             'field.period_name_2': 'Period 2',
-##         ...                             'field.period_start_2': '10:00',
-##         ...                             'field.period_finish_2': '10:45',
-##         ...                             'field.period_name_3': '',
-##         ...                             'field.period_name_4': '',
-##         ...                             'CANCEL': 'Cancel'
-##         ...                            })
-##         >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
-##         >>> result = view()
-##         >>> list(view.context.keys())
-##         [u'default']
+        >>> request = TestRequest(form={'field.name': 'default2',
+        ...                             'field.period_name_1': 'Period 1',
+        ...                             'field.period_start_1': '9:00',
+        ...                             'field.period_finish_1': '9:45',
+        ...                             'field.period_name_2': 'Period 2',
+        ...                             'field.period_start_2': '10:00',
+        ...                             'field.period_finish_2': '10:45',
+        ...                             'field.period_name_3': '',
+        ...                             'field.period_name_4': '',
+        ...                             'CANCEL': 'Cancel'
+        ...                            })
+        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> result = view()
+        >>> list(view.context.keys())
+        [u'default']
 
-##         >>> request.response.getStatus()
-##         302
-##         >>> request.response.getHeader('location')
-##         'http://127.0.0.1/ttschemas'
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('location')
+        'http://127.0.0.1/ttschemas'
 
-##     If there's a period skipped in a form, consequent periods are not included:
+    If there's a period skipped in a form, consequent periods are not included:
 
-##         >>> request = TestRequest(form={'field.name': 'default',
-##         ...                             'field.period_name_1': 'Period 1',
-##         ...                             'field.period_start_1': '9:00',
-##         ...                             'field.period_finish_1': '9:45',
-##         ...                             'field.period_name_3': 'Period 2',
-##         ...                             'field.period_start_3': '10:00',
-##         ...                             'field.period_finish_3': '10:45',
-##         ...                             'field.period_name_4': '',
-##         ...                            })
-##         >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
-##         >>> view.getPeriods()
-##         [(u'Period 1',
-##           datetime.time(9, 0),
-##           datetime.timedelta(0, 2700)),
-##          (u'Period 2',
-##           datetime.time(10, 0),
-##           datetime.timedelta(0, 2700))]
+        >>> request = TestRequest(form={'field.name': 'default',
+        ...                             'field.period_name_1': 'Period 1',
+        ...                             'field.period_start_1': '9:00',
+        ...                             'field.period_finish_1': '9:45',
+        ...                             'field.period_name_3': 'Period 2',
+        ...                             'field.period_start_3': '10:00',
+        ...                             'field.period_finish_3': '10:45',
+        ...                             'field.period_name_4': '',
+        ...                            })
+        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> view.getPeriods()
+        [(u'Period 1',
+          datetime.time(9, 0),
+          datetime.timedelta(0, 2700)),
+         (u'Period 2',
+          datetime.time(10, 0),
+          datetime.timedelta(0, 2700))]
 
-##     If a period does not have a start time specified, it is skipped:
+    If a period does not have a start time specified, it is skipped:
 
-##         >>> request = TestRequest(form={'field.name': 'default',
-##         ...                             'field.period_name_1': 'Period 1',
-##         ...                             'field.period_start_1': '9:00',
-##         ...                             'field.period_finish_1': '9:45',
-##         ...                             'field.period_name_2': 'Period 2',
-##         ...                             'field.period_start_2': '',
-##         ...                             'field.period_finish_2': '10:45',
-##         ...                            })
-##         >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
-##         >>> view.getPeriods()
-##         [(u'Period 1',
-##           datetime.time(9, 0),
-##           datetime.timedelta(0, 2700))]
+        >>> request = TestRequest(form={'field.name': 'default',
+        ...                             'field.period_name_1': 'Period 1',
+        ...                             'field.period_start_1': '9:00',
+        ...                             'field.period_finish_1': '9:45',
+        ...                             'field.period_name_2': 'Period 2',
+        ...                             'field.period_start_2': '',
+        ...                             'field.period_finish_2': '10:45',
+        ...                            })
+        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> view.getPeriods()
+        [(u'Period 1',
+          datetime.time(9, 0),
+          datetime.timedelta(0, 2700))]
 
-##     Clean up:
+    Clean up:
 
-##         >>> tearDown()
-##     """
+        >>> tearDown()
+    """
 
-## def doctest_SimpleTimetableSchemaAdd_errors():
-##     """Doctest for the SimpleTimetableSchemaAdd view
+def doctest_SimpleTimetableSchemaAdd_errors():
+    """Doctest for the SimpleTimetableSchemaAdd view
 
-##         >>> from schooltool.timetable import WeeklyTimetableModel
-##         >>> from schooltool.interfaces import ITimetableModelFactory
-##         >>> setUp()
-##         >>> ztapi.provideUtility(ITimetableModelFactory,
-##         ...                      WeeklyTimetableModel,
-##         ...                      'WeeklyTimetableModel')
+        >>> from schooltool.timetable import WeeklyTimetableModel
+        >>> from schooltool.interfaces import ITimetableModelFactory
+        >>> setUp()
+        >>> ztapi.provideUtility(ITimetableModelFactory,
+        ...                      WeeklyTimetableModel,
+        ...                      'WeeklyTimetableModel')
 
-##     Suppose we have a SchoolTool instance, and create a view for its
-##     timetable schemas container:
+    Suppose we have a SchoolTool instance, and create a view for its
+    timetable schemas container:
 
-##         >>> from schooltool.app import SchoolToolApplication
-##         >>> from schooltool.browser.timetable import SimpleTimetableSchemaAdd
-##         >>> app = SchoolToolApplication()
-##         >>> directlyProvides(app, IContainmentRoot)
-##         >>> app.setSiteManager(LocalSiteManager(app))
-##         >>> setSite(app)
+        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.browser.timetable import SimpleTimetableSchemaAdd
+        >>> app = SchoolToolApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> app.setSiteManager(LocalSiteManager(app))
+        >>> setSite(app)
 
-##     No name specified:
+    No name specified:
 
-##         >>> request = TestRequest(form={
-##         ...                             'field.name': '',
-##         ...                             'field.period_name_1': 'p1',
-##         ...                             'field.period_start_1': '9:00',
-##         ...                             'field.period_finish_1': '10:00',
-##         ...                             'CREATE': 'Create'
-##         ...                            })
-##         >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
-##         >>> print view()
-##         <BLANKLINE>
-##         ...
-##                  <div class="label">
-##                     <label for="field.name" title="">Name</label>
-##                   </div>
-##                   <span class="error">Required input is missing.</span>
-##                   <div class="field"><input class="textType" id="field.name"
-##                                             name="field.name" size="20"
-##                                             type="text" value=""  /></div>
-##         ...
-##           <tr>
-##             <th>
-##               <div><input class="textType" id="field.period_name_1"
-##                           name="field.period_name_1" size="20" type="text"
-##                           value="p1"  /></div>
-##             </th>
-##             <th>
-##               <div><input class="textType" id="field.period_start_1"
-##                           name="field.period_start_1" size="20"
-##                           type="text" value="9:00" /></div>
-##             </th>
-##             <th>
-##               <div><input class="textType" id="field.period_finish_1"
-##                           name="field.period_finish_1" size="20"
-##                           type="text" value="10:00" /></div>
-##             </th>
-##           </tr>
-##         ...
+        >>> request = TestRequest(form={
+        ...                             'field.name': '',
+        ...                             'field.period_name_1': 'p1',
+        ...                             'field.period_start_1': '9:00',
+        ...                             'field.period_finish_1': '10:00',
+        ...                             'CREATE': 'Create'
+        ...                            })
+        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> print view()
+        <BLANKLINE>
+        ...
+                 <div class="label">
+                    <label for="field.name" title="">Name</label>
+                  </div>
+                  <span class="error">Required input is missing.</span>
+                  <div class="field"><input class="textType" id="field.name"
+                                            name="field.name" size="20"
+                                            type="text" value=""  /></div>
+        ...
+          <tr>
+            <th>
+              <div><input class="textType" id="field.period_name_1"
+                          name="field.period_name_1" size="20" type="text"
+                          value="p1"  /></div>
+            </th>
+            <th>
+              <div><input class="textType" id="field.period_start_1"
+                          name="field.period_start_1" size="20"
+                          type="text" value="9:00" /></div>
+            </th>
+            <th>
+              <div><input class="textType" id="field.period_finish_1"
+                          name="field.period_finish_1" size="20"
+                          type="text" value="10:00" /></div>
+            </th>
+          </tr>
+        ...
 
-##         >>> request.response.getStatus() != 302
-##         True
+        >>> request.response.getStatus() != 302
+        True
 
-##    Name already exists:
+   Name already exists:
 
-##         >>> request = TestRequest(form={
-##         ...                             'field.name': 'already',
-##         ...                             'field.period_name_1': 'p1',
-##         ...                             'field.period_start_1': '9:00',
-##         ...                             'field.period_finish_1': '10:00',
-##         ...                             'CREATE': 'Create'
-##         ...                            })
-##         >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
-##         >>> from schooltool.timetable import TimetableSchema
-##         >>> app['ttschemas']['already'] = TimetableSchema([])
-##         >>> print view()
-##         <BLANKLINE>
-##         ...
-##                   <div class="label">
-##                     <label for="field.name" title="">Name</label>
-##                   </div>
-##                   <span class="error">This name is already used</span>
-##                   <div class="field"><input class="textType" id="field.name"
-##                                             name="field.name" size="20"
-##                                             type="text" value="already"
-##                                             /></div>
-##         ...
+        >>> request = TestRequest(form={
+        ...                             'field.name': 'already',
+        ...                             'field.period_name_1': 'p1',
+        ...                             'field.period_start_1': '9:00',
+        ...                             'field.period_finish_1': '10:00',
+        ...                             'CREATE': 'Create'
+        ...                            })
+        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> from schooltool.timetable import TimetableSchema
+        >>> app['ttschemas']['already'] = TimetableSchema([])
+        >>> print view()
+        <BLANKLINE>
+        ...
+                  <div class="label">
+                    <label for="field.name" title="">Name</label>
+                  </div>
+                  <span class="error">This name is already used</span>
+                  <div class="field"><input class="textType" id="field.name"
+                                            name="field.name" size="20"
+                                            type="text" value="already"
+                                            /></div>
+        ...
 
-##         >>> request.response.getStatus() != 302
-##         True
+        >>> request.response.getStatus() != 302
+        True
 
-##    Dots in names not allowed:
+   Dots in names not allowed:
 
-##         >>> request = TestRequest(form={
-##         ...                             'field.name': 'all.ready',
-##         ...                             'field.period_name_1': 'p1',
-##         ...                             'field.period_start_1': '9:00',
-##         ...                             'field.period_finish_1': '10:00',
-##         ...                             'CREATE': 'Create'
-##         ...                            })
-##         >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
-##         >>> from schooltool.timetable import TimetableSchema
-##         >>> app['ttschemas']['already'] = TimetableSchema([])
-##         >>> print view()
-##         <BLANKLINE>
-##         ...
-##                   <div class="label">
-##                     <label for="field.name" title="">Name</label>
-##                   </div>
-##                   <span class="error">Dots in names are not allowed</span>
-##                   <div class="field"><input class="textType" id="field.name"
-##                                             name="field.name" size="20"
-##                                             type="text" value="all.ready"
-##                                             /></div>
-##         ...
+        >>> request = TestRequest(form={
+        ...                             'field.name': 'all.ready',
+        ...                             'field.period_name_1': 'p1',
+        ...                             'field.period_start_1': '9:00',
+        ...                             'field.period_finish_1': '10:00',
+        ...                             'CREATE': 'Create'
+        ...                            })
+        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> from schooltool.timetable import TimetableSchema
+        >>> app['ttschemas']['already'] = TimetableSchema([])
+        >>> print view()
+        <BLANKLINE>
+        ...
+                  <div class="label">
+                    <label for="field.name" title="">Name</label>
+                  </div>
+                  <span class="error">Dots in names are not allowed</span>
+                  <div class="field"><input class="textType" id="field.name"
+                                            name="field.name" size="20"
+                                            type="text" value="all.ready"
+                                            /></div>
+        ...
 
-##         >>> request.response.getStatus() != 302
-##         True
+        >>> request.response.getStatus() != 302
+        True
 
-##     No periods:
+    No periods:
 
-##         >>> request = TestRequest(form={
-##         ...                             'field.name': 'empty',
-##         ...                             'field.period_name_1': '',
-##         ...                             'field.period_start_1': '',
-##         ...                             'field.period_finish_1': '',
-##         ...                             'CREATE': 'Create'
-##         ...                            })
-##         >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
-##         >>> print view()
-##         <BLANKLINE>
-##         ...
-##             <div class="error">You must specify at least one period.</div>
-##         ...
-##                   <div class="label">
-##                     <label for="field.name" title="">Name</label>
-##                   </div>
-##                   <div class="field"><input class="textType" id="field.name"
-##                                             name="field.name" size="20"
-##                                             type="text" value="empty"
-##                                             /></div>
-##         ...
+        >>> request = TestRequest(form={
+        ...                             'field.name': 'empty',
+        ...                             'field.period_name_1': '',
+        ...                             'field.period_start_1': '',
+        ...                             'field.period_finish_1': '',
+        ...                             'CREATE': 'Create'
+        ...                            })
+        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> print view()
+        <BLANKLINE>
+        ...
+            <div class="error">You must specify at least one period.</div>
+        ...
+                  <div class="label">
+                    <label for="field.name" title="">Name</label>
+                  </div>
+                  <div class="field"><input class="textType" id="field.name"
+                                            name="field.name" size="20"
+                                            type="text" value="empty"
+                                            /></div>
+        ...
 
-##         >>> request.response.getStatus() != 302
-##         True
+        >>> request.response.getStatus() != 302
+        True
 
-##     Clean up:
+    Clean up:
 
-##         >>> tearDown()
+        >>> tearDown()
 
-##     """
+    """
 
 
 def test_suite():

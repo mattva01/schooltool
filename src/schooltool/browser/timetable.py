@@ -40,7 +40,10 @@ from zope.app.event.objectevent import modified
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.form.interfaces import IInputWidget
+from zope.app.form.interfaces import IWidgetInputError
 from zope.i18n import translate
+from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
+from zope.app.form.interfaces import ConversionError
 
 
 from schoolbell.calendar.utils import parse_date
@@ -866,3 +869,122 @@ class TimetableSchemaView(TimetableView):
         msg = _("Timetable schema ${schema}")
         msg.mapping = {'schema': self.context.__name__}
         return msg
+
+
+class SimpleTimetableSchemaAdd(BrowserView):
+    """A simple timetable schema definition view"""
+
+    _nrperiods = 9
+
+    day_ids = (_("Monday"),
+               _("Tuesday"),
+               _("Wednesday"),
+               _("Thursday"),
+               _("Friday"),
+               )
+
+    error = None
+
+    template = ViewPageTemplateFile('templates/simpletts.pt')
+
+
+    def __init__(self, content, request):
+        BrowserView.__init__(self, content, request)
+        self._schema = {}
+        self._schema['name'] = TextLine(__name__='name', title=u"Name")
+        for nr in range(1, self._nrperiods + 1):
+            pname = 'period_name_%s' % nr
+            pstart = 'period_start_%s' % nr
+            pfinish = 'period_finish_%s' % nr
+            self._schema[pname] = TextLine(__name__=pname,
+                                           title=u"Period title",
+                                           required=False)
+            self._schema[pstart] = TextLine(__name__=pstart,
+                                            title=u"Period start time",
+                                            required=False)
+            self._schema[pfinish] = TextLine(__name__=pfinish,
+                                             title=u"Period finish time",
+                                             required=False)
+        setUpWidgets(self, self._schema, IInputWidget,
+                     initial={'name': 'default'})
+
+
+    def _setError(self, name, error=RequiredMissing()):
+        """Set an error on a widget."""
+        # XXX Touching widget._error is bad, see
+        #     http://dev.zope.org/Zope3/AccessToWidgetErrors
+        # The call to setRenderedValue is necessary because
+        # otherwise _getFormValue will call getInputValue and
+        # overwrite _error while rendering.
+        widget = getattr(self, name + '_widget')
+        widget.setRenderedValue(widget._getFormValue())
+        if not IWidgetInputError.providedBy(error):
+            error = WidgetInputError(name, widget.label, error)
+        widget._error = error
+
+
+    def getPeriods(self):
+        try:
+            data = getWidgetsData(self, self._schema)
+        except WidgetsError:
+            return []
+
+        result = []
+        for nr in range(1, self._nrperiods + 1):
+            pname = 'period_name_%s' % nr
+            pstart = 'period_start_%s' % nr
+            pfinish = 'period_finish_%s' % nr
+            if data.get(pstart):
+                start, duration = parse_time_range("%s-%s" % (data[pstart],
+                                                              data[pfinish]))
+                result.append((data[pname], start, duration))
+        return result
+
+    def createSchema(self, periods):
+        daytemplate = SchooldayTemplate()
+        for title, start, duration in periods:
+            daytemplate.add(SchooldayPeriod(title, start, duration))
+
+        factory = zapi.getUtility(ITimetableModelFactory,
+                                  'WeeklyTimetableModel')
+        model = factory(self.day_ids, {None: daytemplate})
+        schema = TimetableSchema(self.day_ids)
+        for day_id in self.day_ids:
+            schema[day_id] = TimetableSchemaDay(
+                [title for title, start, duration in periods])
+        schema.model = model
+        return schema
+
+    def __call__(self):
+        try:
+            data = getWidgetsData(self, self._schema)
+        except WidgetsError:
+            return self.template()
+
+        if 'CANCEL' in self.request:
+            self.request.response.redirect(
+                zapi.absoluteURL(self.context, self.request))
+        elif 'CREATE' in self.request:
+            name = data['name']
+
+            if name in self.context:
+                self._setError(
+                    'name', ConversionError('This name is already used'))
+                return self.template()
+
+            if '.' in name:
+                self._setError(
+                    'name',
+                    ConversionError('Dots in names are not allowed'))
+                return self.template()
+
+            periods = self.getPeriods()
+            if not periods:
+                self.error = _('You must specify at least one period.')
+                return self.template()
+
+            self.context[name] = self.createSchema(periods)
+            self.request.response.redirect(
+                zapi.absoluteURL(self.context, self.request))
+
+        return self.template()

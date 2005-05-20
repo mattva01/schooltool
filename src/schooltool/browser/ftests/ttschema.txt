@@ -146,3 +146,43 @@ Now we see the newly created timetable schema in the list:
   <BLANKLINE>
       </tbody>
   ...
+
+
+Simple timetable add
+====================
+
+
+Now let's try the simple timetable schema setup view:
+
+  >>> print http("""
+  ... POST /frogpond/ttschemas/+ HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Length: ...
+  ... Content-Type: application/x-www-form-urlencoded
+  ... 
+  ... field.name=other&\
+  ... field.period_name_1=P1&\
+  ... field.period_start_1=9:00&field.period_finish_1=9:45&\
+  ... field.period_name_2=P2&\
+  ... field.period_start_2=10:00&field.period_finish_2=10:45&\
+  ... field.period_name_3=P3&\
+  ... field.period_start_3=11:00&field.period_finish_3=11:45&\
+  ... CREATE=Create\
+  ... """)
+  HTTP/1.1 303 See Other
+  Content-Length: ...
+  ...
+  Location: http://localhost/frogpond/ttschemas
+  <BLANKLINE>
+  ...
+
+A new timetable schema appeared:
+
+  >>> print http(r"""
+  ... GET /frogpond/ttschemas HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+            <a href="other">other</a>
+  ...

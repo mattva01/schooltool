@@ -341,14 +341,14 @@
       add="schoolbell.create"
       />
 
-  <!--page
+  <page
       name="+"
       for="schooltool.interfaces.ITimetableSchemaContainer"
       class=".timetable.SimpleTimetableSchemaAdd"
       permission="schoolbell.create"
       menu="schoolbell_actions"
       title="New Schema"
-      /-->
+      />
 
   <page
       name="schemawizard.html"
