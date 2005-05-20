@@ -269,8 +269,7 @@ class ResourceCSVImporter(SimpleCSVImporter):
 
 
 class PersonCSVImporter(BaseCSVImporter):
-    """A Person CSV importer.
-    """
+    """A Person CSV importer."""
 
     def __init__(self, container, charset=None):
         BaseCSVImporter.__init__(self, container, charset)
