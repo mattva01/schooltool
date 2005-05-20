@@ -78,6 +78,17 @@
       layer=".skin.ISchoolToolLayer"
       menu="schoolbell_actions" title="New Person" />
 
+  <page
+      name="person-csvimport.html"
+      for="schooltool.interfaces.IPersonContainer"
+      class="schooltool.browser.csvimport.PersonCSVImportView"
+      template="templates/person-csvimport.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Import Persons"
+      layer=".skin.ISchoolToolLayer"
+      />
+
   <addform
       label="Add a Group"
       name="addSchoolBellGroup.html"

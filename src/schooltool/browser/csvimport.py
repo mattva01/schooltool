@@ -31,6 +31,7 @@ from zope.security.proxy import removeSecurityProxy
 from schoolbell.relationship import getRelatedObjects, relate
 from schoolbell.app.membership import Membership
 from schoolbell.app.browser import csvimport as sb
+from schoolbell.app.app import SimpleNameChooser
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ISchoolToolApplication
@@ -467,3 +468,59 @@ class ResourceCSVImportView(sb.BaseCSVImportView):
     def __init__(self, context, request):
         sb.BaseCSVImportView.__init__(self, context, request)
         self.importer_class = ResourceCSVImporter
+
+
+class PersonCSVImporter(sb.BaseCSVImporter):
+    """Person CSV Importer."""
+
+    def __init__(self, container, charset=None):
+        sb.BaseCSVImporter.__init__(self, container, charset)
+        self.chooser = SimpleNameChooser(container)
+
+    def createAndAdd(self, data, dry_run=True):
+        """Create a Person object and add it to the container.
+
+        Duplicates are reported as errors.  Both username and fullname (title)
+        are required.
+        """
+        if len(data) < 2:
+            self.errors.fields.append(_("Insufficient data provided."))
+            return
+
+        if not data[0]:
+            self.errors.fields.append(_("username may not be empty"))
+            return 
+
+        if not data[1]:
+            self.errors.fields.append(_("fullname may not be empty"))
+            return
+
+        username = data[0]
+        fullname = data[1]
+        if len(data) > 2:
+            password = data[2]
+        else:
+            password = None
+
+        if username in self.container:
+            error_msg = _("Duplicate username: ${username}")
+            error_msg.mapping = {'username' : ', '.join(data)}
+            self.errors.fields.append(error_msg)
+            return
+
+        obj = Person(username=data[0], title=data[1])
+
+        if password:
+            obj.setPassword(password)
+
+        if not dry_run:
+            self.container[data[0]] = obj
+
+
+class PersonCSVImportView(sb.BaseCSVImportView):
+    """View for Person CSV importer."""
+
+    def __init__(self, context, request):
+        sb.BaseCSVImportView.__init__(self, context, request)
+        self.importer_class = PersonCSVImporter
+

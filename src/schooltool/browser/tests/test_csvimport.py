@@ -696,6 +696,57 @@ def doctest_ResourceCSVImportView():
 
     """
 
+def doctest_PersonCSVImporter():
+    r"""Tests for PersonCSVImporter.
+
+    Create a person container and an importer
+
+        >>> from schooltool.browser.csvimport import PersonCSVImporter
+        >>> from schooltool.app import PersonContainer
+        >>> container = PersonContainer()
+        >>> importer = PersonCSVImporter(container, None)
+
+    Import a user and verify that it worked
+
+        >>> importer.createAndAdd([u'joe', u'Joe Smith'], False)
+        >>> [p for p in container]
+        [u'joe']
+
+    Import a user with a password and verify it
+
+        >>> importer.createAndAdd([u'jdoe', u'John Doe', u'monkey'], False)
+        >>> container['jdoe'].checkPassword('monkey')
+        True
+
+    Some basic data validation exists.  Note that the errors are cumulative
+    between calls on an instance.
+
+        >>> importer.createAndAdd([], False)
+        >>> importer.errors.fields
+        [u'Insufficient data provided.']
+        >>> importer.createAndAdd([u'', u'Jim Smith'], False)
+        >>> importer.errors.fields
+        [u'Insufficient data provided.', u'username may not be empty']
+        >>> importer.createAndAdd([u'user', u''], False)
+        >>> importer.errors.fields
+        [u'Insufficient data provided.', u'username may not be empty', u'fullname may not be empty']
+
+    Let's clear the errors and review the contents of the container
+
+        >>> importer.errors.fields = []
+        >>> [p for p in container]
+        [u'jdoe', u'joe']
+
+    Now we'll try to add another 'jdoe' username.  In this case the error
+    message contains a translated variable, so we need zope.i18n.translate to
+    properly demonstrate it.
+
+        >>> from zope.i18n import translate
+        >>> importer.createAndAdd([u'jdoe', u'Jim Doe'], False)
+        >>> [translate(error) for error in importer.errors.fields]
+        [u'Duplicate username: jdoe, Jim Doe']
+
+    """
 
 def test_suite():
     suite = unittest.TestSuite()
