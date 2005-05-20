@@ -508,7 +508,7 @@ class TimetableFileFactory(object):
 
 
 class TimetablePUT(object):
-    """Put handler for existing file-like things
+    """Put handler for existing timetables
     """
 
     def __init__(self, context, request):
