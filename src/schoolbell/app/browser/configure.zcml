@@ -522,6 +522,14 @@
       permission="schoolbell.edit"
       />
 
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      name="calendar_list"
+      layer=".skin.ISchoolBellLayer"
+      class=".cal.CalendarListView"
+      permission="zope.View"
+      />
+
 <!-- Calendar event views -->
 
   <page

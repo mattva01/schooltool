@@ -515,21 +515,9 @@ class CalendarViewBase(BrowserView):
         return day.events
 
     def getCalendars(self):
-        """Get a list of calendars to display.
-
-        Yields tuples (calendar, color1, color2).
-        """
-        yield (self.context, '#9db8d2', '#7590ae')
-        user = IPerson(self.request.principal, None)
-        if user is None:
-            return
-
-        unproxied_context = removeSecurityProxy(self.context) 
-        unproxied_calendar = removeSecurityProxy(user.calendar)
-        if unproxied_context is unproxied_calendar:
-            for item in user.overlaid_calendars:
-                if item.show and canAccess(item.calendar, '__iter__'):
-                    yield (item.calendar, item.color1, item.color2)
+        view = zapi.getMultiAdapter((self.context, self.request),
+                                    name='calendar_list')
+        return view.getCalendars()
 
     def getEvents(self, start_dt, end_dt):
         """Get a list of EventForDisplay objects for a selected time interval.
@@ -1839,6 +1827,29 @@ class CalendarEventBookingView(BrowserView):
             if event != self.context:
                 events.append(EventForBookingDisplay(event))
         return events
+
+
+class CalendarListView(BrowserView):
+    """A simple view that can tell which calendars should be displayed."""
+
+    __used_for__ = ISchoolBellCalendar
+
+    def getCalendars(self):
+        """Get a list of calendars to display.
+
+        Yields tuples (calendar, color1, color2).
+        """
+        yield (self.context, '#9db8d2', '#7590ae')
+        user = IPerson(self.request.principal, None)
+        if user is None:
+            return
+
+        unproxied_context = removeSecurityProxy(self.context) 
+        unproxied_calendar = removeSecurityProxy(user.calendar)
+        if unproxied_context is unproxied_calendar:
+            for item in user.overlaid_calendars:
+                if item.show and canAccess(item.calendar, '__iter__'):
+                    yield (item.calendar, item.color1, item.color2)
 
 
 def makeRecurrenceRule(interval=None, until=None,

@@ -518,13 +518,20 @@ def createEvent(dtstart, duration, title, **kw):
     return CalendarEvent(dtstart, dur, title, **kw)
 
 
-class PrincipalStub:
+class PrincipalStub(object):
 
     _person = Person()
 
     def __conform__(self, interface):
         if interface is IPerson:
             return self._person
+
+
+def registerCalendarListView():
+    """Register the real CalendarListView for use by other views."""
+    from schoolbell.app.browser.cal import CalendarListView
+    from schoolbell.app.interfaces import ISchoolBellCalendar
+    ztapi.browserView(ISchoolBellCalendar, 'calendar_list', CalendarListView)
 
 
 class TestCalendarViewBase(unittest.TestCase):
@@ -534,6 +541,8 @@ class TestCalendarViewBase(unittest.TestCase):
         setup.placelessSetUp()
         setup.setUpTraversal()
         setup.setUpAnnotations()
+
+        registerCalendarListView()
 
     def tearDown(self):
         setup.placelessTearDown()
@@ -751,73 +760,41 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(result, expected,
                           '%s != %s' % (fmt(result), fmt(expected)))
 
-    def doctest_getCalendars(self):
-        """Test for CalendarViewBase.getCalendars
+    def test_getCalendars(self):
+        """Test for CalendarViewBase.getCalendars().
 
-        CalendarViewBase.getCalendars returns a list of calendars that
-        should be displayed.  This list always includes the context of
-        the view, but it may also include other calendars as well.
+            >>> setup.placelessSetUp()
 
+        getCalendars() only delegates the task to a calendar list view.  We
+        will provide a stub view to test the method.
+
+            >>> class CalendarListViewStub(BrowserView):
+            ...     def getCalendars(self):
+            ...         return ['some calendar', 'another calendar']
+            >>> from schoolbell.app.interfaces import ISchoolBellCalendar
+            >>> ztapi.browserView(ISchoolBellCalendar, 'calendar_list',
+            ...                   CalendarListViewStub)
+
+            >>> from schoolbell.app.cal import Calendar
             >>> from schoolbell.app.browser.cal import CalendarViewBase
-            >>> import calendar as pycalendar
-            >>> class CalendarStub:
-            ...     def __init__(self, title):
-            ...         self.title = title
-            >>> calendar = CalendarStub('My Calendar') 
-            >>> request = TestRequest()
-            >>> view = CalendarViewBase(calendar, request)
-            >>> for c, col1, col2 in view.getCalendars():
-            ...     print '%s (%s, %s)' % (c.title, col1, col2)
-            My Calendar (#9db8d2, #7590ae)
+            >>> view = CalendarViewBase(Calendar(), TestRequest())
 
-        If the authenticated user is looking at his own calendar, then
-        a list of overlaid calendars is taken into consideration
+        Now, if we call the method, the output of our stub will be returned:
 
-            >>> class OverlayInfoStub:
-            ...     def __init__(self, title, color1, color2, show=True):
-            ...         self.calendar = CalendarStub(title)
-            ...         self.color1 = color1
-            ...         self.color2 = color2
-            ...         self.show = show
-            >>> class PreferenceStub:
-            ...     def __init__(self):
-            ...         self.weekstart = pycalendar.MONDAY
-            ...         self.timeformat = "%H:%M"
-            ...         self.dateformat = "YYYY-MM-DD"
-            ...         self.timezone = 'UTC'
-            >>> from schoolbell.app.interfaces import IPersonPreferences
-            >>> class PersonStub:
-            ...     def __conform__(self, interface):
-            ...         if interface is IPersonPreferences:
-            ...             return PreferenceStub()
-            ...     calendar = calendar
-            ...     overlaid_calendars = [
-            ...         OverlayInfoStub('Other Calendar', 'red', 'blue'),
-            ...         OverlayInfoStub('Hidden', 'green', 'red', False)]
-            >>> from schoolbell.app.interfaces import IPerson
-            >>> class PrincipalStub:
-            ...     def __conform__(self, interface):
-            ...         if interface is IPerson:
-            ...             return PersonStub()
-            >>> request.setPrincipal(PrincipalStub())
-            >>> for c, col1, col2 in view.getCalendars():
-            ...     print '%s (%s, %s)' % (c.title, col1, col2)
-            My Calendar (#9db8d2, #7590ae)
-            Other Calendar (red, blue)
+            >>> view.getCalendars()
+            ['some calendar', 'another calendar']
 
-        No calendars are overlaid if the user is looking at a different
-        calendar
+        We're done:
 
-            >>> view = CalendarViewBase(CalendarStub('Some Calendar'),
-            ...                         request)
-            >>> for c, col1, col2 in view.getCalendars():
-            ...     print '%s (%s, %s)' % (c.title, col1, col2)
-            Some Calendar (#9db8d2, #7590ae)
+            >>> setup.placelessTearDown()
 
         """
 
     def test_getEvents(self):
         """Test for CalendarViewBase.getEvents
+
+            >>> setup.placelessSetUp()
+            >>> registerCalendarListView()
 
         CalendarViewBase.getEvents returns a list of wrapped calendar
         events.
@@ -1001,10 +978,17 @@ class TestCalendarViewBase(unittest.TestCase):
             day2-8
             day2-9
 
+        We're done:
+
+            >>> setup.placelessSetUp()
+
         """
 
     def test_getAllDayEvents(self):
         """Test for CalendarViewBase.getAllDayEvents
+
+            >>> setup.placelessSetUp()
+            >>> registerCalendarListView()
 
         CalendarViewBase.getAllDayEvents returns a list of wrapped all-day
         calendar events for a specified date or the date of the view cursor if
@@ -1034,6 +1018,10 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> view.cursor = datetime(2005, 2, 20)
             >>> [e.title for e in view.getAllDayEvents()]
             ['A Birthday']
+
+        We're done:
+
+            >>> setup.placelessTearDown()
 
         """
 
@@ -2629,6 +2617,13 @@ def doctest_getEvents_booking():
 
 class TestDailyCalendarView(unittest.TestCase):
 
+    def setUp(self):
+        setup.placelessSetUp()
+        registerCalendarListView()
+
+    def tearDown(self):
+        setup.placelessTearDown()
+
     def test_title(self):
         from schoolbell.app.browser.cal import DailyCalendarView
         from schoolbell.app.app import Person
@@ -3293,6 +3288,11 @@ def doctest_YearlyCalendarView():
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = YearlyCalendarView(calendar, TestRequest())
 
+    Stub out view.getCalendars so that we do not need to worry about view
+    registration:
+
+        >>> view.getCalendars = lambda: []
+
     title() forms a nice title for the calendar:
 
         >>> view.cursor = date(2005, 2, 3)
@@ -3348,12 +3348,20 @@ def doctest_YearlyCalendarView():
 def doctest_AtomCalendarView():
     r"""Tests for AtomCalendarView.
 
+    Some setup:
+
+        >>> setup.placelessSetUp()
+        >>> registerCalendarListView()
+
         >>> from schoolbell.app.browser.cal import AtomCalendarView
 
         >>> from schoolbell.app.cal import Calendar
         >>> from schoolbell.app.browser.cal import CalendarDay
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
+
+    Populate the calendar:
+
         >>> lastweek = CalendarEvent(datetime.now().replace(hour=12) -
         ...                          timedelta(8),
         ...                          timedelta(hours=3), "Last Week")
@@ -3398,6 +3406,8 @@ def doctest_AtomCalendarView():
 
         >>> view.w3cdtf_datetime_now()[-1]
         'Z'
+
+        >>> setup.placelessTearDown()
 
     """
 
@@ -3620,6 +3630,73 @@ def doctest_EventDeleteView():
 
         >>> print view.handleEvent()
         None
+
+    """
+
+def doctest_CalendarListView(self):
+    """Tests for CalendarListView.
+
+    This view only has the getCalendars() method.  The view was introduced to
+    enhance pluggability.
+
+    CalendarListView.getCalendars returns a list of calendars that
+    should be displayed.  This list always includes the context of
+    the view, but it may also include other calendars as well.
+
+        >>> from schoolbell.app.browser.cal import CalendarListView
+        >>> import calendar as pycalendar
+        >>> class CalendarStub:
+        ...     def __init__(self, title):
+        ...         self.title = title
+        >>> calendar = CalendarStub('My Calendar') 
+        >>> request = TestRequest()
+        >>> view = CalendarListView(calendar, request)
+        >>> for c, col1, col2 in view.getCalendars():
+        ...     print '%s (%s, %s)' % (c.title, col1, col2)
+        My Calendar (#9db8d2, #7590ae)
+
+    If the authenticated user is looking at his own calendar, then
+    a list of overlaid calendars is taken into consideration
+
+        >>> class OverlayInfoStub:
+        ...     def __init__(self, title, color1, color2, show=True):
+        ...         self.calendar = CalendarStub(title)
+        ...         self.color1 = color1
+        ...         self.color2 = color2
+        ...         self.show = show
+        >>> class PreferenceStub:
+        ...     def __init__(self):
+        ...         self.weekstart = pycalendar.MONDAY
+        ...         self.timeformat = "%H:%M"
+        ...         self.dateformat = "YYYY-MM-DD"
+        ...         self.timezone = 'UTC'
+        >>> from schoolbell.app.interfaces import IPersonPreferences
+        >>> class PersonStub:
+        ...     def __conform__(self, interface):
+        ...         if interface is IPersonPreferences:
+        ...             return PreferenceStub()
+        ...     calendar = calendar
+        ...     overlaid_calendars = [
+        ...         OverlayInfoStub('Other Calendar', 'red', 'blue'),
+        ...         OverlayInfoStub('Hidden', 'green', 'red', False)]
+        >>> from schoolbell.app.interfaces import IPerson
+        >>> class PrincipalStub:
+        ...     def __conform__(self, interface):
+        ...         if interface is IPerson:
+        ...             return PersonStub()
+        >>> request.setPrincipal(PrincipalStub())
+        >>> for c, col1, col2 in view.getCalendars():
+        ...     print '%s (%s, %s)' % (c.title, col1, col2)
+        My Calendar (#9db8d2, #7590ae)
+        Other Calendar (red, blue)
+
+    No calendars are overlaid if the user is looking at a different
+    calendar
+
+        >>> view = CalendarListView(CalendarStub('Some Calendar'), request)
+        >>> for c, col1, col2 in view.getCalendars():
+        ...     print '%s (%s, %s)' % (c.title, col1, col2)
+        Some Calendar (#9db8d2, #7590ae)
 
     """
 
