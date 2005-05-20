@@ -129,6 +129,10 @@
     <require permission="schoolbell.edit"
              interface="schoolbell.app.interfaces.IWritePerson"
              set_schema="schooltool.interfaces.IPerson" />
+
+    <!-- Calendar access protection is performed on the calendar object.
+         If we want local grants set on the calendar itself to work, then
+         the 'calendar' attribute must be publically available. -->
     <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
     <allow interface="schooltool.interfaces.ITimetabled" />
   </content>
