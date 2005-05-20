@@ -315,10 +315,12 @@ class EventForDisplay(object):
         as the parent calendar is enough, because only booked
         resources can have events with non matching parent and source.
         """
-        if self.source_calendar != self.context.__parent__:
-            #                    Calendar    Person
-            return self.context.__parent__.__parent__
-        return None
+        calendar = self.context.__parent__ 
+        if calendar is not None and self.source_calendar != calendar:
+            # XXX Shouldn't there be `is not` instead of `!=`?
+            return calendar.__parent__
+        else:
+            return None
 
     def getBookedResources(self):
         """Return the list of booked resources.
@@ -514,10 +516,14 @@ class CalendarViewBase(BrowserView):
         day = self.getDays(date, date + timedelta(1))[0]
         return day.events
 
+    __calendars = None # cache
+
     def getCalendars(self):
         view = zapi.getMultiAdapter((self.context, self.request),
                                     name='calendar_list')
-        return view.getCalendars()
+        if self.__calendars is None:
+            self.__calendars = list(view.getCalendars())
+        return self.__calendars
 
     def getEvents(self, start_dt, end_dt):
         """Get a list of EventForDisplay objects for a selected time interval.

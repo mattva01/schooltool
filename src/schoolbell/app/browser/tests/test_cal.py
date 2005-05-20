@@ -358,6 +358,18 @@ def doctest_EventForDisplay():
        >>> e1.getBooker() is person
        True
 
+    If an event does not have a __parent__, getBooker() will return None:
+
+        >>> e1.context.__parent__ is person.calendar
+        True
+        >>> e1.context.__parent__ = None
+        >>> print e1.getBooker()
+        None
+
+    QED.  Now restore the fixture.
+
+        >>> e1.context.__parent__ = person.calendar
+
     We should not see booked resources though:
 
        >>> e1.getBookedResources()
