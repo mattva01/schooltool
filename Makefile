@@ -105,3 +105,24 @@ update-translations:
 	     msgmerge -U $$f $(POT);		\
 	     msgfmt -o $${f%.po}.mo $$f;	\
 	done
+
+.PHONY: update-rosetta-pot
+update-rosetta-pot:
+	$(MAKE) build extract-translations
+	touch ../launchpad_cookies
+	chmod 0600 ../launchpad_cookies ../launchpad_pwd
+	curl -kc ../launchpad_cookies -D ../header_login\
+	    -F "loginpage_password=<../launchpad_pwd" \
+	    -F loginpage_email=jinty@web.de \
+	    -F loginpage_submit_login=Log\ In \
+	    https://launchpad.ubuntu.com/+login > ../launchpad_log
+	curl -kc ../launchpad_cookies -b ../launchpad_cookies\
+	    -F "file=@src/schooltool/locales/schooltool.pot" \
+	    -F "UPLOAD=Upload" \
+	    https://launchpad.ubuntu.com/products/schooltool/0.10-rc1/+pots/schooltool/+edit > ../launchpad_log2
+	rm ../launchpad_cookies
+
+.PHONY: get-rosetta-translations
+get-rosetta-translations:
+	./get-rosetta-translations.py
+	$(MAKE) update-translations
