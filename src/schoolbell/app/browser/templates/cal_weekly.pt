@@ -33,11 +33,25 @@
               (<span i18n:translate="">All day</span>)
             </a>
           </div>
+
           <div tal:repeat="event day/events">
-            <a tal:define="start repeat/event/start;
+            <a tal:condition="event/__parent__"
+               tal:define="start repeat/event/start;
                            evdate python:event.dtstart.strftime('%Y-%m-%d')"
                tal:attributes="class python:start and 'first' or '';
                                href string:${event/@@absolute_url}/edit.html?date=${evdate};
+                               style string:background: ${event/color1};;
+                                            border-color: ${event/color2};
+                               title event/title">
+              <span tal:content="event/shortTitle"/>
+              (<span tal:content="python:event.dtstart.astimezone(view.timezone).strftime(view.time_fmt)"
+               /> - <span
+                   tal:content="python:event.dtend.astimezone(view.timezone).strftime(view.time_fmt)"/>)
+            </a>
+            <a tal:condition="not:event/__parent__"
+               tal:define="start repeat/event/start;
+                           evdate python:event.dtstart.strftime('%Y-%m-%d')"
+               tal:attributes="class python:start and 'first' or '';
                                style string:background: ${event/color1};;
                                             border-color: ${event/color2};
                                title event/title">
