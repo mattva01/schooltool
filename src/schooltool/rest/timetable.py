@@ -59,7 +59,7 @@ from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
 from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import TimetableSchemaContainer
 from schooltool.rest.interfaces import ITimetableFileFactory
-from schooltool.rest.interfaces import INullTimetable
+from schooltool.rest.interfaces import INullTimetable, ICompositeTimetabled
 
 
 def parseDate(date_str):
@@ -627,3 +627,118 @@ class NullTimetablePUT(object):
         container[name] = timetable
         self.request.response.setStatus(201)
         return ''
+
+
+class CompositeTimetabled(object):
+    """Adapter of timetabled to ICompositeTimetabled.
+
+    It just wraps a timetabled object under an ICompositeTimetabled
+    interface.
+
+        >>> from schooltool.app import Person
+        >>> person = Person()
+        >>> ct = CompositeTimetabled(person)
+        >>> ICompositeTimetabled.providedBy(ct)
+        True
+
+        >>> person.getCompositeTimetable = lambda term,schema: [term, schema]
+        >>> ct.getCompositeTimetable("term", "schema")
+        ['term', 'schema']
+
+    """
+
+    implements(ICompositeTimetabled)
+
+    def __init__(self, context):
+        self.context = context
+
+    def getCompositeTimetable(self, term, schema):
+        """See ICompositeTimetabled."""
+
+        return self.context.getCompositeTimetable(term, schema)
+
+
+class CompositeTimetableTraverser(object):
+    """Traverser for a_timetabled_object/composite-timetables
+
+    We need a timetabled object and a request:
+
+        >>> from schooltool.app import Person
+        >>> from zope.publisher.browser import TestRequest
+        >>> person = Person()
+        >>> request = TestRequest()
+
+        >>> traverser = CompositeTimetableTraverser(person, request)
+        >>> result = traverser.publishTraverse(request, "anything")
+        >>> ICompositeTimetabled.providedBy(result)
+        True
+        >>> result.context is person
+        True
+
+    """
+
+    def __init__(self, context, request):
+        self.context = context
+
+    def publishTraverse(self, request, name):
+        return CompositeTimetabled(self.context)
+
+
+class CompositeTimetabledPublishTraverse(object):
+    """Traverser for ICompositeTimetabled objects
+
+    We need a timetabled object and a request:
+
+        >>> from schooltool.app import Person
+        >>> from zope.publisher.browser import TestRequest
+        >>> person = Person()
+        >>> request = TestRequest()
+
+    If we provide avalid name we should get the result of
+    timetabled.getCompositeTimetable:
+
+        >>> person.getCompositeTimetable = lambda term,schema: [term, schema]
+        >>> traverser = CompositeTimetabledPublishTraverse(person, request)
+        >>> traverser.publishTraverse(request, "term.schema")
+        ['term', 'schema']
+
+    If name is not valid (has too many dots for example) we should get
+    a NotFound exception:
+
+        >>> traverser.publishTraverse(request, "term.schema.aa")
+        Traceback (most recent call last):
+        ...
+        NotFound: Object: <schooltool.app.Person ...>, name: 'term.schema.aa'
+
+    If timetabled.getCompositeTimetable returns None we should get the
+    exception too:
+
+        >>> person.getCompositeTimetable = lambda term,schema: None
+        >>> traverser.publishTraverse(request, "term.schema")
+        Traceback (most recent call last):
+        ...
+        NotFound: Object: <schooltool.app.Person ...>, name: 'term.schema'
+
+    """
+
+    adapts(ICompositeTimetabled, IHTTPRequest)
+    implements(IPublishTraverse)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        # Note: the way the code is written now lets the user access
+        # existing timetables even if their name refers to a deleted
+        # term/schema. Not sure if that is a good or a bad thing.
+        try:
+            term, schema = name.split('.')
+            timetable = self.context.getCompositeTimetable(term, schema)
+        except ValueError:
+            raise NotFound(self.context, name, request)
+
+        if timetable:
+            return timetable
+
+        raise NotFound(self.context, name, request)

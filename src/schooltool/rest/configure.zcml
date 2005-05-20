@@ -6,6 +6,10 @@
     <allow interface=".timetable.INullTimetable" />
   </content>
 
+  <content class=".timetable.CompositeTimetabled">
+    <allow interface=".interfaces.ICompositeTimetabled" />
+  </content>
+
   <subscriber
       handler=".restSchoolToolSubscriber"
       for="zope.app.publication.interfaces.IBeforeTraverseEvent"
@@ -69,10 +73,27 @@
       />
 
   <view
+      for="schooltool.interfaces.ITimetabled"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="schoolbell.app.rest.IRestTraverser"
+      factory=".timetable.CompositeTimetableTraverser"
+      permission="zope.Public"
+      name="composite-timetables"
+      />
+
+  <view
       for="schooltool.interfaces.ITimetableDict"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
       provides="zope.publisher.interfaces.IPublishTraverse"
       factory=".timetable.TimetableDictPublishTraverse"
+      permission="zope.Public"
+      />
+
+  <view
+      for=".interfaces.ICompositeTimetabled"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory=".timetable.CompositeTimetabledPublishTraverse"
       permission="zope.Public"
       />
 

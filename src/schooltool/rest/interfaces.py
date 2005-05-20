@@ -40,3 +40,17 @@ class ITimetableFileFactory(Interface):
 class INullTimetable(INullResource):
     """Placeholder objects for new timetables to be created via PUT
     """
+
+
+class ICompositeTimetabled(Interface):
+    """A marker interface used when traversing into composite timetables."""
+
+    def getCompositeTimetable(term_id, tt_schema_id):
+        """Return a composite timetable for a given object with a
+        given timetable schema for a given time period id.
+
+        The timetable returned includes the events from the timetables
+        of parent groups, groups taught, etc.
+
+        This function can return None if the object has no timetable.
+        """

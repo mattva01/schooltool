@@ -134,6 +134,7 @@
              attributes="title description groups members" />
     <require permission="schoolbell.edit"
              set_schema="schooltool.interfaces.IGroup" />
+    <allow interface="schooltool.interfaces.ITimetabled" />
   </content>
 
   <content class=".app.Person">
