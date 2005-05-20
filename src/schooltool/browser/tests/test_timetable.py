@@ -1295,6 +1295,27 @@ def doctest_SimpleTimetableSchemaAdd():
         >>> request.response.getHeader('location')
         'http://127.0.0.1/ttschemas'
 
+    If period names are not provided, use start times:
+
+        >>> request = TestRequest(form={'field.name': 'default',
+        ...                             'field.period_name_1': '',
+        ...                             'field.period_start_1': '9:00',
+        ...                             'field.period_finish_1': '9:45',
+        ...                             'field.period_name_2': '',
+        ...                             'field.period_start_2': '10:00',
+        ...                             'field.period_finish_2': '10:45',
+        ...                             'CREATE': 'Go'
+        ...                            })
+        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+
+        >>> pprint(view.getPeriods())
+        [(u'9:00',
+          datetime.time(9, 0),
+          datetime.timedelta(0, 2700)),
+         (u'10:00',
+          datetime.time(10, 0),
+          datetime.timedelta(0, 2700))]
+
     If a cancel button is pressed, nothing is done and the user is
     redirected to ttschemas index:
 
@@ -1339,7 +1360,8 @@ def doctest_SimpleTimetableSchemaAdd():
           datetime.time(10, 0),
           datetime.timedelta(0, 2700))]
 
-    If a period does not have a start time specified, it is skipped:
+    If a period does not have a start time or end time specified, it
+    is skipped:
 
         >>> request = TestRequest(form={'field.name': 'default',
         ...                             'field.period_name_1': 'Period 1',
@@ -1348,6 +1370,9 @@ def doctest_SimpleTimetableSchemaAdd():
         ...                             'field.period_name_2': 'Period 2',
         ...                             'field.period_start_2': '',
         ...                             'field.period_finish_2': '10:45',
+        ...                             'field.period_name_3': 'Period 3',
+        ...                             'field.period_start_3': '11:00',
+        ...                             'field.period_finish_3': '',
         ...                            })
         >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
         >>> view.getPeriods()

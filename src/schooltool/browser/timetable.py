@@ -934,10 +934,13 @@ class SimpleTimetableSchemaAdd(BrowserView):
             pname = 'period_name_%s' % nr
             pstart = 'period_start_%s' % nr
             pfinish = 'period_finish_%s' % nr
-            if data.get(pstart):
-                start, duration = parse_time_range("%s-%s" % (data[pstart],
-                                                              data[pfinish]))
-                result.append((data[pname], start, duration))
+            if data.get(pstart) and data.get(pfinish):
+                start, duration = parse_time_range(
+                    "%s-%s" % (data[pstart], data[pfinish]))
+                name = data[pname]
+                if not name:
+                    name = data[pstart]
+                result.append((name, start, duration))
         return result
 
     def createSchema(self, periods):

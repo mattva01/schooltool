@@ -24,6 +24,7 @@ If you need more flexibility, you can use an
   <div class="error"
        tal:content="view/error"
        tal:condition="view/error"
+       i18n:translate=""
        />
 
   <div class="row" tal:define="widget nocall:view/name_widget">
