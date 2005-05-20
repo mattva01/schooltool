@@ -284,6 +284,122 @@ def doctest_CalendarSTOverlayView():
     """
 
 
+def doctest_CalendarListView(self):
+    """Tests for CalendarListView.
+
+    This view only has the getCalendars() method.
+
+    The difference between this view and the one in SchoolBell is that this
+    view knows about timetables and may return timetable calendars as well.
+    The color of each timetable calendar is the same as of the corresponding
+    personal calendar.
+
+    CalendarListView.getCalendars returns a list of calendars that
+    should be displayed.  This list always includes the context of
+    the view, but it may also include other calendars as well.
+
+        >>> from schooltool.browser.cal import CalendarListView
+        >>> import calendar as pycalendar
+        >>> class CalendarStub:
+        ...     def __init__(self, title):
+        ...         self.title = title
+        ...     def _getParent(self):
+        ...         return PersonStub(self.title)
+        ...     __parent__ = property(_getParent)
+        >>> calendar = CalendarStub('My Calendar') 
+        >>> request = TestRequest()
+        >>> view = CalendarListView(calendar, request)
+        >>> for c, col1, col2 in view.getCalendars():
+        ...     print '%s (%s, %s)' % (c.title, col1, col2)
+        My Calendar (#9db8d2, #7590ae)
+
+    If the authenticated user is looking at his own calendar, then
+    a list of overlaid calendars is taken into consideration
+
+        >>> class OverlayInfoStub:
+        ...     def __init__(self, title, color1, color2,
+        ...                  show=True, show_timetables=True):
+        ...         self.calendar = CalendarStub(title)
+        ...         self.color1 = color1
+        ...         self.color2 = color2
+        ...         self.show = show
+        ...         self.show_timetables = show_timetables
+        >>> class PreferenceStub:
+        ...     def __init__(self):
+        ...         self.weekstart = pycalendar.MONDAY
+        ...         self.timeformat = "%H:%M"
+        ...         self.dateformat = "YYYY-MM-DD"
+        ...         self.timezone = 'UTC'
+        >>> from schoolbell.app.interfaces import IPersonPreferences
+        >>> from zope.interface import implements
+        >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
+        >>> class PersonStub:
+        ...     implements(IAttributeAnnotatable)
+        ...     def __init__(self, title):
+        ...         self.title = title
+        ...     def makeTimetableCalendar(self):
+        ...         return CalendarStub(self.title + ' (timetable)')
+        ...     def __conform__(self, interface):
+        ...         if interface is IPersonPreferences:
+        ...             return PreferenceStub()
+        ...     calendar = calendar
+        ...     overlaid_calendars = [
+        ...         OverlayInfoStub('Other Calendar', 'red', 'blue',
+        ...                         True, False),
+        ...         OverlayInfoStub('Another Calendar', 'green', 'red',
+        ...                         False, True),
+        ...         OverlayInfoStub('Interesting Calendar', 'yellow', 'white',
+        ...                         True, True),
+        ...         OverlayInfoStub('Boring Calendar', 'brown', 'magenta',
+        ...                         False, False)]
+
+        >>> from schoolbell.app.interfaces import IPerson
+        >>> class PrincipalStub:
+        ...     def __init__(self):
+        ...         self.person = PersonStub('x')
+        ...     def __conform__(self, interface):
+        ...         if interface is IPerson:
+        ...             return self.person
+        >>> principal = PrincipalStub()
+        >>> request.setPrincipal(principal)
+        >>> for c, col1, col2 in view.getCalendars():
+        ...     print '%s (%s, %s)' % (c.title, col1, col2)
+        My Calendar (#9db8d2, #7590ae)
+        My Calendar (timetable) (#9db8d2, #7590ae)
+        Other Calendar (red, blue)
+        Another Calendar (timetable) (green, red)
+        Interesting Calendar (yellow, white)
+        Interesting Calendar (timetable) (yellow, white)
+
+    If the person has the current timetable display unchecked, the composite
+    timetable calendar is not included in the list:
+
+        >>> from zope.app.annotation.interfaces import IAnnotations
+        >>> annotations = IAnnotations(principal.person)
+        >>> from schooltool.browser.cal import CalendarSTOverlayView
+        >>> annotations[CalendarSTOverlayView.SHOW_TIMETABLE_KEY] = False
+
+        >>> for c, col1, col2 in view.getCalendars():
+        ...     print '%s (%s, %s)' % (c.title, col1, col2)
+        My Calendar (#9db8d2, #7590ae)
+        Other Calendar (red, blue)
+        Another Calendar (timetable) (green, red)
+        Interesting Calendar (yellow, white)
+        Interesting Calendar (timetable) (yellow, white)
+
+        >>> annotations[CalendarSTOverlayView.SHOW_TIMETABLE_KEY] = True
+
+    No calendars are overlaid if the user is looking at a different
+    calendar:
+
+        >>> view = CalendarListView(CalendarStub('Some Calendar'), request)
+        >>> for c, col1, col2 in view.getCalendars():
+        ...     print '%s (%s, %s)' % (c.title, col1, col2)
+        Some Calendar (#9db8d2, #7590ae)
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestDailyCalendarView))

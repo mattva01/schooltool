@@ -332,6 +332,14 @@
       permission="zope.View"
       />
 
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      name="calendar_list"
+      layer=".skin.ISchoolToolLayer"
+      class=".cal.CalendarListView"
+      permission="zope.View"
+      />
+
   <!-- Timetabling -->
 
   <containerViews

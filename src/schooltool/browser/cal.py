@@ -31,6 +31,7 @@ from zope.security.checker import canAccess
 from zope.security.proxy import removeSecurityProxy
 from zope.app.traversing.api import getPath
 from zope.app.annotation.interfaces import IAnnotations
+from zope.app.publisher.browser import BrowserView
 
 from schoolbell.app.browser.cal import DailyCalendarView as SBDailyCalView
 from schoolbell.app.browser.overlay import CalendarOverlayView
@@ -56,6 +57,8 @@ class DailyCalendarView(SBDailyCalView):
         """Iterate over (title, start, duration) of time slots that make up
         the daily calendar.
         """
+        # TODO: Refactor this into a view or adapter so that we don't have
+        #       to keep a copy of cal_daily.pt around.
         person = IPerson(self.request.principal, None)
         if person is not None:
             prefs = IPersonPreferences(person)
@@ -122,8 +125,6 @@ class CalendarSTOverlayView(CalendarOverlayView):
     contain 'OVERLAY_APPLY' or 'OVERLAY_MORE' in the request.
     """
 
-    show_my_timetable = True
-
     SHOW_TIMETABLE_KEY = 'schooltool.browser.cal.show_my_timetable'
 
     def items(self):
@@ -184,3 +185,50 @@ class CalendarSTOverlayView(CalendarOverlayView):
         person = removeSecurityProxy(person)
         annotations = IAnnotations(person)
         return annotations.get(self.SHOW_TIMETABLE_KEY, True)
+
+
+class CalendarListView(BrowserView):
+    """A simple view that can tell which calendars should be displayed.
+
+    This view differs from the one in SchoolBell in that it includes
+    composite timetable calendars too.
+    """
+
+    __used_for__ = ISchoolBellCalendar
+
+    def getCalendars(self):
+        """Get a list of calendars to display.
+
+        Yields tuples (calendar, color1, color2).
+        """
+        # personal calendar
+        yield (self.context, '#9db8d2', '#7590ae')
+
+        user = IPerson(self.request.principal, None)
+        if user is None:
+            return # unauthenticated user
+
+        unproxied_context = removeSecurityProxy(self.context) 
+        unproxied_calendar = removeSecurityProxy(user.calendar)
+        if unproxied_context is not unproxied_calendar:
+            return # user looking at the calendar of some other person
+
+        # personal timetable
+        unproxied_person = removeSecurityProxy(user) # for annotations
+        annotations = IAnnotations(unproxied_person)
+        if annotations.get(CalendarSTOverlayView.SHOW_TIMETABLE_KEY, True):
+            ttcalendar = self.context.__parent__.makeTimetableCalendar()
+            yield (ttcalendar, '#9db8d2', '#7590ae')
+            # Maybe we should change the colour to differ from the user's
+            # personal calendar?
+
+        for item in user.overlaid_calendars:
+            # overlaid calendars
+            if item.show and canAccess(item.calendar, '__iter__'):
+                yield (item.calendar, item.color1, item.color2)
+
+            # overlaid timetables
+            if item.show_timetables:
+                owner = item.calendar.__parent__
+                ttcalendar = owner.makeTimetableCalendar()
+                yield (ttcalendar, item.color1, item.color2)

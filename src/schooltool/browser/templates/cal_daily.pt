@@ -70,9 +70,10 @@
                              margin-left: $left$unit;;
                              top: ${top}em;
                              class python:mine and 'event' or 'event other'">
+
+          <tal:block condition="ev/__parent__">
           <h6 tal:attributes="style string:background: ${ev/color2}">
-            <a tal:attributes="href ev/@@absolute_url;
-                               title ev/title">
+            <a tal:attributes="href ev/@@absolute_url; title ev/title">
               <span tal:replace="ev/shortTitle" />
               <span class="start-end">
                 (<span
@@ -83,11 +84,28 @@
               </span>
             </a>
           </h6>
-          <a title="" i18n:attributes="title" class="delete"
-            tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${ev/unique_id}&date=${evdate};
-                            title string:Delete ${ev/title}"
+          <a tal:condition="ev/__parent__"
+             i18n:attributes="title" class="delete"
+             tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${ev/unique_id}&date=${evdate};
+                             title string:Delete ${ev/title}"
             ><img alt="[X]"
               tal:attributes="src context/++resource++delete.png"/></a>
+          </tal:block>
+
+          <tal:block condition="not:ev/__parent__">
+          <h6 tal:attributes="style string:background: ${ev/color2}">
+              <span tal:replace="ev/shortTitle" />
+              <span class="start-end">
+                (<span
+                   tal:content="python:ev.dtstart.astimezone(view.timezone).strftime(view.time_fmt)"/>
+                   -
+                 <span
+                   tal:content="python:ev.dtend.astimezone(view.timezone).strftime(view.time_fmt)"/>)
+              </span>
+          </h6>
+          </tal:block>
+
+
           <div class="body"
               tal:attributes="style string:background: ${ev/color1};">
             <div class="title" tal:content="ev/title"
