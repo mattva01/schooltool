@@ -11,6 +11,7 @@
 /* XXX move this into Schoolbell style.css after release */
 ul {
     list-style: none;
+    padding-left: 1em;
 }
 
 div.hr {
@@ -122,5 +123,23 @@ ul.section-list {
 }
 
 ul.section-list a {
+    font-weight: normal;
+}
+
+.info-block ul {
+    list-style: none;
+}
+
+.info-block li ul {
+    border: none;
+    border-left: 1px #d6d6d6 solid;
+    padding: 0em 0em 0.5em 0.5em;
+}
+
+.info-block li.group a {
+    font-weight: bold;
+}
+
+.info-block li.individual a {
     font-weight: normal;
 }

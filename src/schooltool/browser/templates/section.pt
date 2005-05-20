@@ -3,7 +3,14 @@
   <title metal:fill-slot="title" tal:content="context/title" />
 </head>
 <body>
-<h1 metal:fill-slot="content-header"><span tal:replace="context/title" /></h1>
+  <h1 metal:fill-slot="content-header">
+    Section of
+    <tal:loop tal:repeat="course context/courses">
+      <a href=""
+         tal:attributes="href course/@@absolute_url"
+         tal:content="course/title" />
+    </tal:loop>
+  </h1>
 
 <metal:block metal:fill-slot="body">
 
@@ -35,17 +42,17 @@
                      persons view/getPersons">
       <h3 i18n:translate="">Students</h3>
       <ul>
-        <li tal:repeat="group groups/sortby:title">
+        <li class="group" tal:repeat="group groups/sortby:title">
           <a tal:attributes="href group/@@absolute_url"
              tal:content="group/title" />
           <ul tal:condition="group/members">
-            <li tal:repeat="person group/members">
+            <li class="individual" tal:repeat="person group/members">
               <a tal:attributes="href person/@@absolute_url"
                  tal:content="person/title" />
             </li>
           </ul>
         </li>
-        <li tal:repeat="person persons/sortby:title">
+        <li class="individual" tal:repeat="person persons/sortby:title">
           <a tal:attributes="href person/@@absolute_url"
              tal:content="person/title" />
         </li>
