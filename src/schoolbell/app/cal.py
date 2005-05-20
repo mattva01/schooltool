@@ -30,7 +30,6 @@ from zope.schema import getFieldNames
 from zope.component import adapts
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container.contained import Contained
-from zope.app.filerepresentation.interfaces import IWriteFile
 from zope.app.location.interfaces import ILocation
 
 from schoolbell.calendar.icalendar import read_icalendar
@@ -41,6 +40,7 @@ from schoolbell.calendar.simple import SimpleCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.interfaces import IHaveNotes
+from schoolbell.app.interfaces import IWriteCalendar
 
 
 class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
@@ -159,25 +159,46 @@ class WriteCalendar(object):
         ...     print e.dtstart.strftime('%Y-%m-%d %H:%M'), e.title
         2005-02-26 16:00 LAN party
 
+    Supporting other charsets would be nice too:
+
+        >>> calendar = Calendar()
+        >>> adapter = WriteCalendar(calendar)
+        >>> adapter.write('''\
+        ... BEGIN:VCALENDAR
+        ... VERSION:2.0
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ... BEGIN:VEVENT
+        ... UID:some-random-uid@example.com
+        ... SUMMARY:LAN party %s
+        ... DTSTART:20050226T160000
+        ... DURATION:PT6H
+        ... DTSTAMP:20050203T150000
+        ... END:VEVENT
+        ... END:VCALENDAR
+        ... ''' %  chr(163), charset='latin-1')
+        >>> titles = [e.title for e in calendar]
+        >>> titles[0]
+        u'LAN party \xa3'
+
     """
 
     adapts(ISchoolBellCalendar)
-    implements(IWriteFile)
+    implements(IWriteCalendar)
 
     # Hook for unit tests.
     read_icalendar = staticmethod(read_icalendar)
 
     _event_attrs = getFieldNames(ICalendarEvent)
 
-    def __init__(self, context):
+    def __init__(self, context, request=None):
         self.calendar = context
 
-    def write(self, data):
+    def write(self, data, charset='UTF-8'):
         changes = {} # unique_id -> (old_event, new_event)
         for e in self.calendar:
             changes[e.unique_id] = (e, None)
 
-        for event in self.read_icalendar(data):
+        for event in self.read_icalendar(data, charset):
             old_event = changes.get(event.unique_id, (None, ))[0]
             changes[event.unique_id] = (old_event, event)
 

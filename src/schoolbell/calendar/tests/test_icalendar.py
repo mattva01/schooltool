@@ -793,6 +793,26 @@ def doctest_ical_reader_empty_summary():
         >>> [e.title for e in events]
         ['']
 
+    We support reading calendars when ical files are using different
+    charset too:
+
+        >>> events = list(read_icalendar('''\
+        ... BEGIN:VCALENDAR
+        ... VERSION:2.0
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ... BEGIN:VEVENT
+        ... UID:some-random-uid@example.com
+        ... SUMMARY:LAN party %s
+        ... DTSTART:20050226T160000
+        ... DURATION:PT6H
+        ... DTSTAMP:20050203T150000
+        ... END:VEVENT
+        ... END:VCALENDAR
+        ... ''' %  chr(163), charset='latin-1'))
+        >>> titles = [e.title for e in events]
+        >>> titles[0]
+        u'LAN party \xa3'
+
     """
 
 def test_suite():

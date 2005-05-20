@@ -382,7 +382,7 @@ def ical_duration(value):
         return "%sP%dD%s" % (sign, abs(value.days), timepart)
 
 
-def read_icalendar(icalendar_text):
+def read_icalendar(icalendar_text, charset='UTF-8'):
     """Read an iCalendar file and return calendar events.
 
     Returns an iterator over calendar events.
@@ -396,7 +396,7 @@ def read_icalendar(icalendar_text):
     if not hasattr(icalendar_text, 'read'):
         # It is not a file-like object -- let's assume it is a string
         icalendar_text = StringIO(icalendar_text)
-    reader = ICalReader(icalendar_text)
+    reader = ICalReader(icalendar_text, charset)
     for vevent in reader.iterEvents():
         if vevent.uid == EMPTY_CALENDAR_PLACEHOLDER:
             continue # Ignore empty calendar placeholder "event"

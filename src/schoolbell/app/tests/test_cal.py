@@ -344,8 +344,8 @@ def doctest_WriteCalendar():
         >>> cal = Calendar()
         >>> writer = WriteCalendar(cal)
 
-        >>> from zope.app.filerepresentation.interfaces import IWriteFile
-        >>> verifyObject(IWriteFile, writer)
+        >>> from schoolbell.app.interfaces import IWriteCalendar
+        >>> verifyObject(IWriteCalendar, writer)
         True
 
     Let's check that WriteCalendar is hooked up to the iCalendar parser:
@@ -380,7 +380,7 @@ def doctest_WriteCalendar():
         ...                                duration=duration,
         ...                                unique_id=unique_id)
         >>> evts = []
-        >>> writer.read_icalendar = lambda ignored: evts
+        >>> writer.read_icalendar = lambda ignored, ignored_too: evts
 
     OK, now we can do a trivial test with two events:
 

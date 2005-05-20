@@ -423,3 +423,9 @@ class ISchoolBellAuthentication(IAuthentication, ILogout):
 
     def clearCredentials(request):
         """Forget the username and password stored in a session"""
+
+class IWriteCalendar(Interface):
+
+    def write(data, charset='UTF-8'):
+        """Update the calendar data
+        """

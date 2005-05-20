@@ -89,7 +89,7 @@
 
   <adapter
       for=".interfaces.ISchoolBellCalendar"
-      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      provides=".interfaces.IWriteCalendar"
       factory=".cal.WriteCalendar"
       />
 
@@ -101,7 +101,7 @@
       />
 
   <class class=".cal.WriteCalendar">
-    <allow interface="zope.app.filerepresentation.interfaces.IWriteFile" />
+    <allow interface=".interfaces.IWriteCalendar" />
   </class>
 
 <!-- Domain content objects -->
@@ -221,7 +221,7 @@
   <adapter
       for="schoolbell.calendar.interfaces.IEditCalendar"
       factory=".cal.WriteCalendar"
-      provides="zope.app.filerepresentation.interfaces.IWriteFile" />
+      provides=".interfaces.IWriteCalendar" />
 
   <content
       class="schoolbell.app.overlay.BoundOverlaidCalendarsProperty">

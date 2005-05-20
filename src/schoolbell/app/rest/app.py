@@ -36,6 +36,7 @@ from schoolbell.app.rest.interfaces import IPasswordWriter, IPersonPhoto
 from schoolbell.app.rest.xmlparsing import XMLValidationError, XMLParseError
 from schoolbell.app.rest.xmlparsing import XMLDocument
 from schoolbell.calendar.icalendar import convert_calendar_to_ical
+from schoolbell.app.interfaces import IWriteCalendar
 
 from schoolbell.app.app import Group, Resource, Person
 from schoolbell.app.interfaces import IGroupContainer, IGroup
@@ -302,7 +303,39 @@ class PersonView(View):
     factory = PersonFile
 
 
-class CalendarView(View, FilePUT):
+
+def getCharset(content_type, default="UTF-8"):
+    """Gets charset out of content-type
+
+        >>> getCharset('text/xml; charset=latin-1')
+        'latin-1'
+
+        >>> getCharset('text/xml; charset=yada-yada')
+        'yada-yada'
+
+        >>> getCharset('text/xml; charset=yada-yada; fo=ba')
+        'yada-yada'
+
+        >>> getCharset('text/plain')
+        'UTF-8'
+
+    """
+    parts = content_type.split(";")
+    if len(parts) == 0:
+        return default
+
+    stripped_parts = [part.strip() for part in parts]
+
+    charsets = [part for part in stripped_parts
+                if part.startswith("charset=")]
+
+    if len(charsets) == 0:
+        return default
+
+    return charsets[0].split("=")[1]
+
+
+class CalendarView(View):
     """Restive view for calendars"""
 
     def GET(self):
@@ -311,8 +344,26 @@ class CalendarView(View, FilePUT):
         request.response.setHeader('Content-Type',
                                    'text/calendar; charset=UTF-8')
         request.response.setHeader('Content-Length', len(data))
+        request.response.setStatus(200)
+        request.response.write(data)
+        return request.response
 
-        return data
+    def PUT(self):
+        request = self.request
+
+        for name in request:
+            if name.startswith('HTTP_CONTENT_'):
+                # Unimplemented content header
+                request.response.setStatus(501)
+                return ''
+
+        body = self.request.bodyFile
+        data = body.read()
+        charset = getCharset(self.request.getHeader("Content-Type"))
+
+        adapter = IWriteCalendar(self.context)
+        adapter.write(data, charset)
+        return ''
 
 
 class PersonHTTPTraverser(CalendarOwnerHTTPTraverser):
@@ -397,8 +448,9 @@ class PersonPhotoView(View):
             raise NotFound(self.context, u'photo', self.request)
 
         self.request.response.setHeader('Content-Type', "image/jpeg")
-        self.request.response.setStatus("200")
-        return photo
+        self.request.response.setStatus(200)
+        self.request.response.write(photo)
+        return self.request.response
 
     def DELETE(self):
         self.context.deletePhoto()

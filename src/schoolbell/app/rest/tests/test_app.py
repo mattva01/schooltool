@@ -37,6 +37,8 @@ from zope.app.testing import setup
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.container.interfaces import INameChooser
 from zope.app.component.testing import PlacefulSetup
+from zope.publisher.browser import TestRequest
+from zope.publisher.interfaces.http import IHTTPRequest
 
 import zope
 
@@ -743,7 +745,8 @@ class TestPersonPhotoView(ApplicationObjectViewTestMixin,
         response = view.request.response
 
         self.assertEquals(response.getStatus(), 200)
-        self.assertEquals(result, "Icky Picky")
+        self.assertEquals(result, response)
+        self.assert_(result._outstream.getvalue().endswith("Icky Picky"))
 
     def testPUT(self):
 
@@ -760,6 +763,68 @@ class TestPersonPhotoView(ApplicationObjectViewTestMixin,
         view.DELETE()
 
         self.assertRaises(NotFound, view.GET)
+
+
+def doctest_CalendarView():
+    r"""Tests for CalendarView.
+
+    First lets create a view:
+
+        >>> from schoolbell.app.rest.app import CalendarView
+        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
+        >>> from schoolbell.app.cal import WriteCalendar
+        >>> from schoolbell.app.interfaces import IWriteCalendar
+        >>> ztapi.provideAdapter(ISchoolBellCalendar, IWriteCalendar,
+        ...                      WriteCalendar)
+
+        >>> person = Person()
+        >>> calendar = person.calendar
+        >>> view = CalendarView(calendar, TestRequest())
+
+        >>> print view.GET()._outstream.getvalue().replace("\r\n", "\n")
+        Status: 200 Ok
+        Content-Length: ...
+        Content-Type: text/calendar; charset=UTF-8
+        X-Powered-By: Zope (www.zope.org), Python (www.python.org)
+        <BLANKLINE>
+        BEGIN:VCALENDAR
+        VERSION:2.0
+        PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        BEGIN:VEVENT
+        UID:empty-calendar-placeholder@schooltool.org
+        SUMMARY:Empty calendar
+        DTSTART:19700101T000000
+        DURATION:P0D
+        DTSTAMP:...
+        END:VEVENT
+        END:VCALENDAR
+        <BLANKLINE>
+
+        >>> calendar_text = '''\
+        ... BEGIN:VCALENDAR
+        ... VERSION:2.0
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ... BEGIN:VEVENT
+        ... UID:some-random-uid@example.com
+        ... SUMMARY:LAN party %s
+        ... DTSTART:20050226T160000
+        ... DURATION:PT6H
+        ... DTSTAMP:20050203T150000
+        ... END:VEVENT
+        ... END:VCALENDAR
+        ... ''' %  chr(163)
+
+        >>> view.request = TestRequest(StringIO(calendar_text),
+        ...     environ={'CONTENT_TYPE': 'text/plain; charset=latin-1'})
+
+        >>> view.PUT()
+        ''
+        >>> titles = [e.title for e in calendar]
+        >>> titles[0]
+        u'LAN party \xa3'
+
+    """
 
 
 def doctest_PersonHttpTraverser():
