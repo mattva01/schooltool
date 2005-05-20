@@ -231,7 +231,6 @@ class SimpleCSVImporter(BaseCSVImporter):
 
     def __init__(self, container, charset=None):
         BaseCSVImporter.__init__(self, container, charset)
-        self.container = container
         self.chooser = SimpleNameChooser(container)
 
     def createAndAdd(self, data, dry_run=True):
@@ -273,7 +272,6 @@ class PersonCSVImporter(BaseCSVImporter):
 
     def __init__(self, container, charset=None):
         BaseCSVImporter.__init__(self, container, charset)
-        self.container = container
         self.chooser = SimpleNameChooser(container)
 
     def createAndAdd(self, data, dry_run=True):
