@@ -1380,6 +1380,35 @@ def doctest_SimpleTimetableSchemaAdd():
           datetime.time(9, 0),
           datetime.timedelta(0, 2700))]
 
+    Incorrect start and end times are handled gracefully:
+
+        >>> request = TestRequest(form={'field.name': 'default',
+        ...                             'field.period_name_1': 'Period 1',
+        ...                             'field.period_start_1': '9:00',
+        ...                             'field.period_finish_1': '9:45',
+        ...                             'field.period_name_2': '',
+        ...                             'field.period_start_2': '10h',
+        ...                             'field.period_finish_2': '',
+        ...                            })
+        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+
+    getPeriods fails:
+
+        >>> view.getPeriods()
+        [(u'Period 1', datetime.time(9, 0), datetime.timedelta(0, 2700))]
+
+    The widgets responsible get an error set on them:
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+            <div class="error">Please use HH:MM format for period start
+                               and end times</div>
+        ...
+
+        >>> request.response.getStatus() != 302
+        True
+
     Clean up:
 
         >>> tearDown()

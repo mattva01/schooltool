@@ -929,14 +929,19 @@ class SimpleTimetableSchemaAdd(BrowserView):
         except WidgetsError:
             return []
 
-        result = []
+        result = [] 
         for nr in range(1, self._nrperiods + 1):
             pname = 'period_name_%s' % nr
             pstart = 'period_start_%s' % nr
             pfinish = 'period_finish_%s' % nr
-            if data.get(pstart) and data.get(pfinish):
-                start, duration = parse_time_range(
-                    "%s-%s" % (data[pstart], data[pfinish]))
+            if data.get(pstart) or data.get(pfinish):
+                try:
+                    start, duration = parse_time_range(
+                        "%s-%s" % (data[pstart], data[pfinish]))
+                except ValueError:
+                    self.error = _('Please use HH:MM format for period '
+                                   'start and end times')
+                    continue
                 name = data[pname]
                 if not name:
                     name = data[pstart]
@@ -982,6 +987,9 @@ class SimpleTimetableSchemaAdd(BrowserView):
                 return self.template()
 
             periods = self.getPeriods()
+            if self.error:
+                return self.template()
+
             if not periods:
                 self.error = _('You must specify at least one period.')
                 return self.template()

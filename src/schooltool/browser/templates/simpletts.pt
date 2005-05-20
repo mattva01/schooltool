@@ -33,9 +33,9 @@ If you need more flexibility, you can use an
 
 <table>
   <tr>
-    <th>Period title</th>
-    <th>Period start time</th>
-    <th>Period end time </th>
+    <th i18n:translate="">Period title (optional)</th>
+    <th i18n:translate="">Period start time</th>
+    <th i18n:translate="">Period end time </th>
   <tr>
   <tr tal:repeat="nr python:range(1, view._nrperiods)">
     <th tal:define="widget python:getattr(view, 'period_name_%s_widget' % nr)">
