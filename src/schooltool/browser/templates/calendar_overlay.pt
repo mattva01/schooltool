@@ -9,7 +9,7 @@
     <div class="row" style="background: #9db8d2">
         <input type="checkbox" checked="checked" disabled="disabled" />
         <input type="checkbox" name="my_timetable"
-               tal:attributes="checked view/show_my_timetable" />
+               tal:attributes="checked view/myTimetableShown" />
         <tal:translate i18n:translate="">My Calendar</tal:translate>
     </div>
 

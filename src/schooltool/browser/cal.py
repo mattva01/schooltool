@@ -28,7 +28,9 @@ from sets import Set
 from pytz import timezone
 
 from zope.security.checker import canAccess
+from zope.security.proxy import removeSecurityProxy
 from zope.app.traversing.api import getPath
+from zope.app.annotation.interfaces import IAnnotations
 
 from schoolbell.app.browser.cal import DailyCalendarView as SBDailyCalView
 from schoolbell.app.browser.overlay import CalendarOverlayView
@@ -120,7 +122,9 @@ class CalendarSTOverlayView(CalendarOverlayView):
     contain 'OVERLAY_APPLY' or 'OVERLAY_MORE' in the request.
     """
 
-    show_my_timetable = True # TODO: store this setting in an annotation
+    show_my_timetable = True
+
+    SHOW_TIMETABLE_KEY = 'schooltool.browser.cal.show_my_timetable'
 
     def items(self):
         """Return items to be shown in the calendar overlay.
@@ -165,4 +169,18 @@ class CalendarSTOverlayView(CalendarOverlayView):
             for item in person.overlaid_calendars:
                 path = getPath(item.calendar.__parent__)
                 item.show_timetables = path in selected
+
+            # The unproxied object will only be used for annotations.
+            person = removeSecurityProxy(person)
+
+            annotations = IAnnotations(person)
+            annotations[self.SHOW_TIMETABLE_KEY] = bool('my_timetable'
+                                                        in self.request)
         return CalendarOverlayView.update(self)
+
+    def myTimetableShown(self):
+        person = IPerson(self.request.principal)
+        # The unproxied object will only be used for annotations.
+        person = removeSecurityProxy(person)
+        annotations = IAnnotations(person)
+        return annotations.get(self.SHOW_TIMETABLE_KEY, True)

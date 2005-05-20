@@ -211,6 +211,11 @@ def doctest_CalendarSTOverlayView():
         >>> print view()
         <div id="portlet-calendar-overlay" class="portlet">
         ...
+        <input type="checkbox" checked="checked" disabled="disabled" />
+        <input type="checkbox" name="my_timetable"
+               checked="checked" />
+        My Calendar
+        ...
         <input type="checkbox" name="overlay:list"
                checked="checked" value="/groups/g1" />
         <input type="checkbox"
@@ -232,6 +237,10 @@ def doctest_CalendarSTOverlayView():
         >>> request.form['OVERLAY_APPLY'] = u"Apply"
         >>> print view()
         <div id="portlet-calendar-overlay" class="portlet">
+        ...
+        <input type="checkbox" checked="checked" disabled="disabled" />
+        <input type="checkbox" name="my_timetable" />
+        My Calendar
         ...
         <input type="checkbox" name="overlay:list"
                value="/groups/g1" />
