@@ -19,7 +19,7 @@ Let's create a SchoolTool instance:
 Let's go to the advanced 'New Timetable' view:
 
   >>> print http(r"""
-  ... GET /frogpond/ttschemas/@@+ HTTP/1.1
+  ... GET /frogpond/ttschemas/schemawizard.html HTTP/1.1
   ... Authorization: Basic mgr:mgrpw
   ... """)
   HTTP/1.1 200 Ok
@@ -31,7 +31,7 @@ When we enter a schema name and press the 'Add day' button, we get an
 extra day:
 
   >>> print http("""
-  ... POST /frogpond/ttschemas/@@+ HTTP/1.1
+  ... POST /frogpond/ttschemas/schemawizard.html HTTP/1.1
   ... Authorization: Basic mgr:mgrpw
   ... Content-Length: ...
   ... Content-Type: application/x-www-form-urlencoded
@@ -60,7 +60,7 @@ extra day:
 When we click 'Add Period', we get an extra period!
 
   >>> print http("""
-  ... POST /frogpond/ttschemas/@@+ HTTP/1.1
+  ... POST /frogpond/ttschemas/schemawizard.html HTTP/1.1
   ... Authorization: Basic mgr:mgrpw
   ... Content-Length: ...
   ... Content-Type: application/x-www-form-urlencoded
@@ -105,7 +105,7 @@ When we click 'Add Period', we get an extra period!
 Finally we post the completed form:
 
   >>> print http(r"""
-  ... POST /frogpond/ttschemas/@@+ HTTP/1.1
+  ... POST /frogpond/ttschemas/schemawizard.html HTTP/1.1
   ... Authorization: Basic mgr:mgrpw
   ... Content-Length: ...
   ... Content-Type: application/x-www-form-urlencoded
