@@ -521,9 +521,12 @@ class CalendarViewBase(BrowserView):
         """
         yield (self.context, '#9db8d2', '#7590ae')
         user = IPerson(self.request.principal, None)
-        if (user and
-            removeSecurityProxy(self.context) is
-            removeSecurityProxy(user.calendar)):
+        if user is None:
+            return
+
+        unproxied_context = removeSecurityProxy(self.context) 
+        unproxied_calendar = removeSecurityProxy(user.calendar)
+        if unproxied_context is unproxied_calendar:
             for item in user.overlaid_calendars:
                 if item.show and canAccess(item.calendar, '__iter__'):
                     yield (item.calendar, item.color1, item.color2)
