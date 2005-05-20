@@ -107,10 +107,7 @@ class SectionAddView(AddView):
     course = None
 
     def validCourse(self):
-        if self.course is not None:
-            return True
-        else:
-            return False
+        return self.course is not None
 
     def getCourseFromId(self, id):
         app = getSite()
