@@ -145,12 +145,14 @@ Project structure
       *.py              other modules (see docstrings)
       tests/            unit tests for the schooltool package
       browser/          web application views for the server
-        www/            page templates
+        resources/      resource files (images, stylesheets)
+        templates/      page templates
         tests/          unit tests for the schooltool.browser package
       rest/             RESTive views for the server
-        www/            page templates
+        templates/      page templates
         tests/          unit tests for the schooltool.rest package
     schoolbell/         Python package 'schoolbell'
+
 
 Testing
 -------
@@ -258,13 +260,13 @@ following to your Apache configuration file:
   <VirtualHost *:80>
     ServerName school1.example.org
     RewriteEngine On
-    RewriteRule ^/(.*) http://localhost:7001/++vh++http:school1.example.org:80/$1 [P]
+    RewriteRule ^/(.*) http://localhost:7001/++vh++http:school1.example.org:80/++/$1 [P]
   </VirtualHost>
 
   <VirtualHost *:80>
     ServerName school2.example.org
     RewriteEngine On
-    RewriteRule ^/(.*) http://localhost:7002/++vh++http:school2.example.org:80/$1 [P]
+    RewriteRule ^/(.*) http://localhost:7002/++vh++http:school2.example.org:80/++/$1 [P]
   </VirtualHost>
 
 Also, enable mod_proxy and mod_rewrite.
@@ -282,7 +284,7 @@ SSL support:
     SSLEnable          # Apache 1.3
     # SSLEngine On     # Apache 2.0
     RewriteEngine On
-    RewriteRule ^/(.*) http://localhost:7001/++vh++https:school1.example.org:443/$1 [P]
+    RewriteRule ^/(.*) http://localhost:7001/++vh++https:school1.example.org:443/++/$1 [P]
   </VirtualHost>
 
 The web application interface also supports virtual hosting in this manner,
@@ -307,23 +309,6 @@ Files in the following directories are (c) their respective owners. See
 the individual files and directories for details of the licences.
 
   Zope3
-  src/schooltool/translation
-
-The following files are (c) the GNOME Foundation under the GPL.
-
-  src/schooltool/browser/www/booking.png
-  src/schooltool/browser/www/calendar.png
-  src/schooltool/browser/www/current.png
-  src/schooltool/browser/www/day.png
-  src/schooltool/browser/www/information.png
-  src/schooltool/browser/www/manage.png
-  src/schooltool/browser/www/meeting.png
-  src/schooltool/browser/www/month.png
-  src/schooltool/browser/www/next.png
-  src/schooltool/browser/www/previous.png
-  src/schooltool/browser/www/week.png
-  src/schooltool/browser/www/year.png
-
 
 Files in the same directory as this README file are (c) Shuttleworth
 Foundation, with the exception of GPL, which is a copy of the Free Software
