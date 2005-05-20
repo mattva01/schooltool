@@ -148,3 +148,19 @@ ul.section-list a {
 .info-block li.individual a {
     font-weight: normal;
 }
+
+/* timetable display */
+
+table.timetable {
+  width: 90%;
+}
+
+table.timetable th {
+  background: #cccccc;
+}
+table.timetable th.period {
+  background: #ccccff;
+}
+table.timetable td {
+  background: #eeeeee;
+}
