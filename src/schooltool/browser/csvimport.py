@@ -470,12 +470,8 @@ class ResourceCSVImportView(sb.BaseCSVImportView):
         self.importer_class = ResourceCSVImporter
 
 
-class PersonCSVImporter(sb.BaseCSVImporter):
+class PersonCSVImporter(sb.PersonCSVImporter):
     """Person CSV Importer."""
-
-    def __init__(self, container, charset=None):
-        sb.BaseCSVImporter.__init__(self, container, charset)
-        self.chooser = SimpleNameChooser(container)
 
     def createAndAdd(self, data, dry_run=True):
         """Create a Person object and add it to the container.
