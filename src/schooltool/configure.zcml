@@ -24,6 +24,9 @@
       factory="schoolbell.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
+
+  <!-- Subscribers -->
+
   <subscriber
       for="schooltool.interfaces.ITimetabled"
       provides="schooltool.interfaces.ITimetableSource"
@@ -36,6 +39,16 @@
       provides="schooltool.interfaces.ITimetableSource"
       factory="schooltool.timetable.InstructionTimetableSource"
       permission="zope.Public"
+      />
+
+  <subscriber
+      for="schoolbell.relationship.interfaces.IRelationshipAddedEvent"
+      handler=".relationships.setInstructorPermissions"
+      />
+
+  <subscriber
+      for="schoolbell.relationship.interfaces.IRelationshipRemovedEvent"
+      handler=".relationships.setInstructorPermissions"
       />
 
   <adapter

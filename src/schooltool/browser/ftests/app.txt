@@ -190,6 +190,15 @@ Looking at the section:
     <BLANKLINE>
     ...
 
+Frog can't see the section's calendar by default
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/section/calendar HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
 Adding a teacher:
 
     >>> print http(r"""
@@ -223,6 +232,53 @@ Now Frog is in the Instructors div
             </li>
           </ul>
     ...
+
+Frog can see the calendar now
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/section/calendar HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 28519
+    ...
+
+If we fire Frog, in hopes of getting Salamander to step in:
+
+
+    >>> print http(r"""
+    ... POST /frogpond/sections/section/instructors.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... UPDATE_SUBMIT=Apply""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/sections/section
+    ...
+
+Frog can't see the section's calendar any more
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/section/calendar HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+and he's no longer an instructor:
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/section HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+          <h3>Instructors</h3>
+          <ul>
+          </ul>
+    ...
+
 
 Adding a student:
 

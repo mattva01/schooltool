@@ -25,11 +25,15 @@ $Id$
 
 import sets
 
+from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
+
 from schooltool.interfaces import ISection, ICourse
 
 from schoolbell.relationship import URIObject, RelationshipSchema
 from schoolbell.relationship import getRelatedObjects
 from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
+from schoolbell.relationship.interfaces import IRelationshipAddedEvent
+from schoolbell.relationship.interfaces import IRelationshipRemovedEvent
 from schoolbell.relationship.interfaces import InvalidRelationship
 
 #
@@ -61,6 +65,28 @@ def enforceInstructionConstraints(event):
                                   ' and one section.')
     if not ISection.providedBy(event[URISection]):
         raise InvalidRelationship('Sections must provide ISection.')
+
+
+def setInstructorPermissions(event):
+    """Assign section access to section instructors."""
+
+    if event.rel_type != URIInstruction:
+        return
+
+    if IRelationshipAddedEvent.providedBy(event):
+        map = IPrincipalPermissionManager(event[URISection])
+        principalid = 'sb.person.' + event[URIInstructor].__name__
+        map.grantPermissionToPrincipal('schoolbell.view', principalid)
+        map.grantPermissionToPrincipal('schoolbell.viewCalendar', principalid)
+        map.grantPermissionToPrincipal('schoolbell.addEvent', principalid)
+    elif IRelationshipRemovedEvent.providedBy(event):
+        map = IPrincipalPermissionManager(event[URISection])
+        principalid = 'sb.person.' + event[URIInstructor].__name__
+        map.denyPermissionToPrincipal('schoolbell.view', principalid)
+        map.denyPermissionToPrincipal('schoolbell.viewCalendar', principalid)
+        map.denyPermissionToPrincipal('schoolbell.addEvent', principalid)
+    else:
+        return
 
 
 #
