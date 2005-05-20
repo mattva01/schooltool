@@ -60,9 +60,18 @@
                tal:attributes="value request/field.course_id|nothing" />
     </fieldset>
     <div class="controls">
-      <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Add"
-             title="Shortcut: Alt-A" accesskey="A"
-             i18n:attributes="value add-button; accesskey" />
+      <tal:if condition="view/validCourse">
+        <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Add"
+               title="Shortcut: Alt-A" accesskey="A"
+               i18n:attributes="value add-button; accesskey" />
+      </tal:if>
+      <tal:if condition="not:view/validCourse">
+        <input class="disabled button-ok" disabled="disabled"
+               type="submit" name="UPDATE_SUBMIT" value="Add"
+               title="Shortcut: Alt-A" accesskey="A"
+               i18n:attributes="value add-button; accesskey" />
+      </tal:if>
+
       <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
              i18n:attributes="value cancel-button" />
     </div>

@@ -219,6 +219,11 @@ def doctest_SectionAddView():
         >>> view = SectionAddViewForTesting(context, request)
         >>> view.error
         u'Need a course ID.'
+
+    validCourse is used to disable the update input button:
+
+        >>> view.validCourse()
+        False
         >>> view.update()
 
     A request with course_id doesn't
@@ -228,6 +233,8 @@ def doctest_SectionAddView():
         >>> context = AddingStub(sections, request)
         >>> view = SectionAddViewForTesting(context, request)
         >>> view.error is None
+        True
+        >>> view.validCourse()
         True
         >>> view.update()
 
@@ -240,6 +247,8 @@ def doctest_SectionAddView():
         >>> view = SectionAddViewForTesting(context, request)
         >>> view.error
         u'No such course.'
+        >>> view.validCourse()
+        False
         >>> view.update()
 
     Currently our course has no sections
