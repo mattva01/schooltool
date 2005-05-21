@@ -261,6 +261,18 @@ class Section(Persistent, Contained, TimetabledMixin):
 
     label = property(_getLabel)
 
+    def _getSize(self):
+        size = 0
+        for member in self.members:
+            if IPerson.providedBy(member):
+                size = size + 1
+            if IGroup.providedBy(member):
+                size = size + len(member.members)
+
+        return size
+
+    size = property(_getSize)
+
     instructors = RelationshipProperty(URIInstruction, URISection,
                                        URIInstructor)
 

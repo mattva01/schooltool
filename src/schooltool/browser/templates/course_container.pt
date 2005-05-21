@@ -23,6 +23,10 @@
           <li tal:repeat="section course/sections">
             <a tal:content="section/label"
                tal:attributes="href section/@@absolute_url">Some Object</a>
+            <span class="hint">
+              (<span tal:replace="section/size"/>
+              <span i18n:translate="">Students</span>)
+            </span>
           </li>
         </ul>
       </li>

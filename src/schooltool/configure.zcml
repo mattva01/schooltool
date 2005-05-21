@@ -172,7 +172,7 @@
     <allow interface="schooltool.interfaces.ITimetabled" />
     <require permission="schoolbell.view"
              attributes="title description instructors members
-                         courses label" />
+                         courses label size" />
     <require permission="schoolbell.edit"
              set_schema="schooltool.interfaces.ISection" />
   </content>

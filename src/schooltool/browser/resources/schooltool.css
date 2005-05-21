@@ -14,14 +14,6 @@ ul {
     padding-left: 1em;
 }
 
-div.hr {
-    clear: both;
-}
-
-div.hr hr {
-    display: none;
-}
-
 input.disabled {
     color: #eae8e3 !important;
     background: #bab5ab !important;
@@ -90,6 +82,7 @@ table.schooldaymodel td label {
 }
 
 /* Forms beautification for ttschema wizard */
+span.hint,
 p.hint {
     font-size: 80%;
     font-style: italic;

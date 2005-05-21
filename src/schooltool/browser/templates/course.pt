@@ -26,26 +26,29 @@
                              calendar section/calendar|nothing">
 
               <tal:loop repeat="instructor instructors">
-                <div class="instructor">
-                  <tal:if condition="instructor/photo">
+                <tal:if condition="instructor/photo">
+                  <div class="instructor">
                     <img src="photo" class="person-photo"
                          tal:attributes="src string:${instructor/@@absolute_url}/photo" />
-                  </tal:if>
                   <br />
                   <a href="" tal:content="instructor/title"
                      tal:attributes="href instructor/@@absolute_url" />
-                </div>
+                  </div>
+                </tal:if>
               </tal:loop>
 
               <strong>
                 <a tal:attributes="href section/@@absolute_url"
                    tal:content="section/label" />
               </strong>
+              <p>
+                <strong i18n:translate="">Size:</strong>
+                <span tal:content="section/size" />
+              </p>
 
               <p tal:content="section/description" />
 
             </div>
-            <div class="hr"><hr/></div>
 
           </tal:loop>
 

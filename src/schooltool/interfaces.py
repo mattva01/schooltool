@@ -835,6 +835,8 @@ class ISection(IGroup):
     courses = Attribute(
                """A list of courses this section is a member of.""")
 
+    size = Attribute(
+               """The number of member students in the section.""")
 
 class ISectionContainer(IContainer):
     """A container for Sections."""

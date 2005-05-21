@@ -175,11 +175,13 @@ def doctest_Section():
         'section 1'
         >>> section.description
         'advanced'
+        >>> section.size
+        0
 
     We'll add an instructor to the section.
 
-        >>> from schoolbell.app.app import Person
-        >>> from schoolbell.app.interfaces import IPerson
+        >>> from schooltool.app import Person
+        >>> from schooltool.interfaces import IPerson
         >>> teacher = Person('teacher', 'Mr. Jones')
         >>> section.instructors.add(teacher)
 
@@ -195,17 +197,32 @@ def doctest_Section():
         First
         Second
         Third
+        >>> section.size
+        3
 
     We can add a Group as a member
 
         >>> from schooltool.app import Group
-        >>> section.members.add(Group('group','Group'))
+        >>> group = Group('group','Group')
+        >>> section.members.add(group)
         >>> for member in section.members:
         ...     print member.title
         First
         Second
         Third
         group
+
+    That group is empty so the size of our section doesn't change:
+
+        >>> section.size
+        3
+
+    If the group grows, our section grows as well:
+
+        >>> group.members.add(Person('fourth','Fourth'))
+        >>> group.members.add(Person('fifth','Fifth'))
+        >>> section.size
+        5
 
         >>> for person in section.instructors:
         ...     print person.title
