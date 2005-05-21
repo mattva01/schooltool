@@ -317,13 +317,21 @@
       <ul>
       <tal:loop tal:repeat="event tevents">
         <li tal:condition="python: event.dtstart.date() == tomorrow">
-          <a href="" title=""
-             tal:attributes="title event/title;
+        <tal:if condition="event/__parent__">
+          <a tal:attributes="title event/title;
                              style string:color: ${event/color2};
                              href event/@@absolute_url">
             <strong tal:content="python:event.dtstart.astimezone(view.timezone).strftime('%H:%M')" />
             <span tal:replace="event/shortTitle">Event</span>
           </a>
+        </tal:if>
+        <tal:if condition="not:event/__parent__">
+          <a tal:attributes="title event/title;
+                             style string:color: ${event/color2}">
+            <strong tal:content="python:event.dtstart.astimezone(view.timezone).strftime('%H:%M')" />
+            <span tal:replace="event/shortTitle">Event</span>
+          </a>
+        </tal:if>
         </li>
       </tal:loop>
       </ul>

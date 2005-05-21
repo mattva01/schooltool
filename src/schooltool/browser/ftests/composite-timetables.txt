@@ -1,0 +1,245 @@
+Timetabling in SchoolTool
+=========================
+
+This functional doctest demonstrates and tests SchoolTool's timetable
+browser views.
+
+We do most of the fixture setup through ReSTive views for now.  A lot of the
+code has been copied from rest/composite-timetables.txt.
+
+Overview
+--------
+
+1. Set up 1 Term, 1 Schema, a User and a a couple of Groups
+2. Add the User to both Groups
+3. Check composite Timetable for the User
+
+Prologue
+--------
+
+We will need a SchoolTool instance.  Let's call it 'frogpond'.
+
+    >>> print http(r"""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... type_name=BrowserAdd__schooltool.app.SchoolToolApplication&new_value=frogpond""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+
+Also, we need the REST HTTP caller:
+
+    >>> from schoolbell.app.rest.ftests import rest
+
+Add a term:
+
+    >>> print http(r"""
+    ... PUT /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
+    ...             first="2003-09-01" last="2003-09-07">
+    ...     <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
+    ...     <holiday date="2003-09-03">Holiday</holiday>
+    ...     <holiday date="2003-09-06">Holiday</holiday>
+    ...     <holiday date="2003-09-23">Holiday</holiday>
+    ... </schooldays>
+    ... """)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+Add Schema:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+    ...   <model factory="SequentialDaysTimetableModel">
+    ...     <daytemplate>
+    ...       <used when="default" />
+    ...       <period id="A" tstart="9:00" duration="60" />
+    ...       <period id="C" tstart="9:00" duration="60" />
+    ...       <period id="B" tstart="10:00" duration="60" />
+    ...       <period id="D" tstart="10:00" duration="60" />
+    ...     </daytemplate>
+    ...     <daytemplate>
+    ...       <used when="Friday Thursday" />
+    ...       <period id="A" tstart="8:00" duration="60" />
+    ...       <period id="C" tstart="8:00" duration="60" />
+    ...       <period id="B" tstart="11:00" duration="60" />
+    ...       <period id="D" tstart="11:00" duration="60" />
+    ...     </daytemplate>
+    ...   </model>
+    ...   <day id="Day 1">
+    ...     <period id="A">
+    ...     </period>
+    ...     <period id="B">
+    ...     </period>
+    ...   </day>
+    ...   <day id="Day 2">
+    ...     <period id="C">
+    ...     </period>
+    ...     <period id="D">
+    ...     </period>
+    ...   </day>
+    ... </timetable>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+Let's create a person so that we can fool around with his calendar:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 112
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=John&field.username=john&field.password=pwd&field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+Add a 2 groups:
+
+    >>> print rest("""
+    ... PUT /frogpond/groups/boys HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Boys"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... PUT /frogpond/groups/guys HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Guys"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+Add John to boys an guys:
+
+    >>> print rest("""
+    ... POST /frogpond/persons/john/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
+    ...               xmlns:xlink="http://www.w3.org/1999/xlink"
+    ...               xlink:type="simple"
+    ...               xlink:role="http://schooltool.org/ns/membership/group"
+    ...               xlink:arcrole="http://schooltool.org/ns/membership"
+    ...               xlink:href="http://localhost/frogpond/groups/boys"/>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... POST /frogpond/persons/john/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
+    ...               xmlns:xlink="http://www.w3.org/1999/xlink"
+    ...               xlink:type="simple"
+    ...               xlink:role="http://schooltool.org/ns/membership/group"
+    ...               xlink:arcrole="http://schooltool.org/ns/membership"
+    ...               xlink:href="http://localhost/frogpond/groups/guys"/>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    ...
+
+Add group timetables:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/groups/boys/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+    ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <day id="Day 1">
+    ...     <period id="A">
+    ...     </period>
+    ...     <period id="B">
+    ...     </period>
+    ...   </day>
+    ...   <day id="Day 2">
+    ...     <period id="C">
+    ...       <activity title="English for boys"/>
+    ...     </period>
+    ...     <period id="D">
+    ...     </period>
+    ...   </day>
+    ... </timetable>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+    >>> print rest(r"""
+    ... PUT /frogpond/groups/guys/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+    ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <day id="Day 1">
+    ...     <period id="A">
+    ...     </period>
+    ...     <period id="B">
+    ...     </period>
+    ...   </day>
+    ...   <day id="Day 2">
+    ...     <period id="C">
+    ...     </period>
+    ...     <period id="D">
+    ...       <activity title="English for tough guys"/>
+    ...     </period>
+    ...   </day>
+    ... </timetable>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+Finally, we're done with setup.
+
+Rendering views
+---------------
+
+Let's look at John's composite calendar:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/john/calendar/2003-09-02 HTTP/1.1
+    ... Authorization: Basic john:pwd""", handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    ...
+    English for boys
+    ...
+    English for tou...
+    ...
+
+
+Epilogue
+--------
+
+ vim: ft=rest
