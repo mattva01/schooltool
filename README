@@ -25,10 +25,12 @@ System requirements
   (Debian users will need both python2.3 and python2.3-xml packages)
 
 - Zope X3 (http://www.zope.org/)
-  (Users will require Zope X3 development trunk subversion revision 29357,
+  (Users will require Zope X3 development trunk revision,
   Zope libraries of this revision are included with the distribution)
 
 - Python Imaging library (http://www.pythonware.com/products/pil/index.htm)
+
+- libxml2 Python bindings (http://xmlsoft.org/)
 
 - Development environment and a C compiler
   (pre-compiled binaries are available for Windows users)
@@ -37,7 +39,8 @@ System requirements
 Building SchoolBell
 -------------------
 
-Run 'make' to build the necessary extension modules.
+Run 'make build update-translations' to build the necessary extension modules
+and translations.
 
 It is a good idea to run 'make test' and 'make ftest' to check if all the
 essential unit and functional tests pass.
