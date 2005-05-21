@@ -829,14 +829,12 @@ class ISection(IGroup):
     instructors = Attribute(
                """A list of Person objects in the role of instructor""")
 
-    members = Attribute(
-               """Students listed in the role of member""")
+    members = Attribute("""Students listed in the role of member""")
 
-    courses = Attribute(
-               """A list of courses this section is a member of.""")
+    courses = Attribute("""A list of courses this section is a member of.""")
 
-    size = Attribute(
-               """The number of member students in the section.""")
+    size = Attribute("""The number of member students in the section.""")
+
 
 class ISectionContainer(IContainer):
     """A container for Sections."""
