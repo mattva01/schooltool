@@ -240,7 +240,6 @@ Frog can see the calendar now
     ... Authorization: Basic frog:pwd
     ... """)
     HTTP/1.1 200 Ok
-    Content-Length: 28519
     ...
 
 If we fire Frog, in hopes of getting Salamander to step in:
