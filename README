@@ -274,7 +274,7 @@ Also, enable mod_proxy and mod_rewrite.
 See http://issues.schooltool.org/issue91 if you're interested why two rewrite rules
 are needed for each virtual host.
 
-You can also get SSL support in the same way, as an alternative to the build-in
+You can also get SSL support in the same way, as an alternative to the built-in
 SSL support:
 
   NameVirtualHost *:443
@@ -297,7 +297,7 @@ Copyright information
 SchoolTool is copyright (c) 2003--2005 Shuttleworth Foundation
 
 All files in the src/schooltool directory (with some exceptions in
-src/schooltool/translation) are part of SchoolTool, and are (c) Shuttleworth
+src/schooltool/locales) are part of SchoolTool, and are (c) Shuttleworth
 Foundation.
 
 Unless otherwise stated, files in src/schooltool are released under the

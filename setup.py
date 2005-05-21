@@ -173,8 +173,46 @@ for root, dirs, files in os.walk(os.path.join('src', 'schooltool')):
 
 # Setup SchoolTool
 setup(name="schooltool",
+    description="A common information systems platform for school administration.",
+    long_description="""
+SchoolTool is an open source school management information system.  It is
+a distributed client/server system.  The SchoolTool server presents two
+interfaces to clients:
+
+  - a traditional web application interface, usable with an ordinary browser.
+
+  - HTTP-based programming interface suitable for fat clients, adhering to
+    the Representational State Transfer (REST) architectural style (see
+    http://rest.blueoxen.net/).
+
+The web application interface is the primary one.  The RESTive interface is
+there for potential interoperability with other systems and fat clients to
+perform data entry that is inconvenient to do via the web application
+interface.
+
+There are several clients that demonstrate the usage of the REST interface
+(a command-line client that is used for functional tests, a wxWidgets GUI
+client, and a command-line client for data import).
+
+Any modern web browser is suitable for the web application interface.  The
+interface degrades gracefully, so a browser that does not support CSS or
+Javascript will be usable, although perhaps not very nice or convenient.
+    """,
     version="0.10rc1",
     url='http://www.schooltool.org',
+    license="GPL",
+    maintainer="SchoolTool development team",
+    maintainer_email="schooltool-dev@schooltool.org",
+    platforms=["any"],
+    classifiers=["Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: GNU General Public License (GPL)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Zope",
+    "Topic :: Education",
+    "Topic :: Office/Business :: Scheduling"],
     cmdclass={'install': install,
         'install_scripts': install_scripts,
         'install_data': install_data},
