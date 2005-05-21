@@ -6,26 +6,37 @@
   <form method="post" action="" tal:attributes="action request/URL"
         tal:define="dummy view/update">
 
-    <div class="row" style="background: #9db8d2">
-        <input type="checkbox" checked="checked" disabled="disabled" />
-        <input type="checkbox" name="my_timetable"
-               tal:attributes="checked view/myTimetableShown" />
-        <tal:translate i18n:translate="">My Calendar</tal:translate>
-    </div>
+    <table class="overlays">
 
-    <div class="row" tal:repeat="item view/items"
-         tal:attributes="style string:background: ${item/color1}">
-      <input type="checkbox" name="overlay:list"
-             tal:attributes="value item/id; checked item/checked" />
-      <input type="checkbox" name="overlay_timetables:list"
-             tal:attributes="value item/id; checked item/checked_tt" />
-      <span tal:content="item/title">Title</span>
-      <a class="go"
-         tal:attributes="href item/calendar/@@absolute_url;
-                         style string:background: ${item/color2};;
-                                      color: ${item/color2}"
-      >&nbsp;</a>
-    </div>
+      <tr>
+        <th style="text-align: center"><acronym title="Personal calendar">Cal</acronym></th>
+        <th><acronym title="Timetable calendar">TT</acronym></th>
+        <th></th>
+        <th></th>
+      </tr>
+
+      <tr style="background: #9db8d2">
+        <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
+        <td><input type="checkbox" name="my_timetable"
+                   tal:attributes="checked view/myTimetableShown" /></td>
+        <td style="width: 100%" i18n:translate="">My Calendar</td>
+        <td></td>
+      </tr>
+
+      <tr tal:repeat="item view/items"
+          tal:attributes="style string:background: ${item/color1}">
+        <td><input type="checkbox" name="overlay:list"
+            tal:attributes="value item/id; checked item/checked" /></td>
+        <td><input type="checkbox" name="overlay_timetables:list"
+          tal:attributes="value item/id; checked item/checked_tt" /></td>
+        <td style="width: 100%" tal:content="item/title">Title</td>
+        <td><a class="go"
+            tal:attributes="href string:item/calendar/@@absolute_url;
+            style string:background: ${item/color2};;
+            color: ${item/color2}"
+            >&nbsp;</a></td>
+    </tr>
+    </table>
 
     <div class="controls">
       <input name="OVERLAY_APPLY" type="submit" value="Apply"

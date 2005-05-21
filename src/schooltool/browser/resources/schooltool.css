@@ -157,3 +157,23 @@ table.timetable th.period {
 table.timetable td {
   background: #eeeeee;
 }
+
+/* calendar overlay */
+
+#portlet-calendar-overlay a.go {
+    top: 0em;
+}
+
+#portlet-calendar-overlay table.overlays {
+    padding: none;
+    margin: none;
+    border-collapse: collapse;
+}
+
+#portlet-calendar-overlay table.overlays th {
+    text-align: right;
+}
+
+#portlet-calendar-overlay table.overlays acronym {
+    border-bottom: none;
+}
