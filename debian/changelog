@@ -29,6 +29,8 @@ schooltool (0.10-1) unstable; urgency=low
     http://lists.schooltool.org/pipermail/schooltool/2005-April/001173.html
   * Remove the dependency on python2.3-twisted.
   * Remove the dependency on python2.3-pyopenssl.
+  * Remove python2.3-imaging as a dependency as it is is not used anymore
+    upstream.
   * Disabled the SSL Certificate generation in the maintainer scripts as the
     server SSL support did not survive the transition to Zope 3. Left the code
     in, just in case that support is added.
@@ -36,8 +38,7 @@ schooltool (0.10-1) unstable; urgency=low
   * FTBFS on amd64 with gcc-4.0 fixed in Zope 3. (Closes: #294997).
   * Debconf translatqion updates:
     Czech, contributed by Miroslav Kure (Closes: #300186).
-  * Remove python2.3-imaging as a dependency as it is is not used anymore
-    upstream.
+  * Update package description.
 
  -- Brian Sutherland <jinty@web.de>  Fri, 28 Jan 2005 19:48:56 +0100
 

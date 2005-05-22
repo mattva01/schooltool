@@ -10,10 +10,30 @@ Architecture: all
 Depends: ${python:Depends}, ssl-cert, openssl, libschooltool (= ${Source-Version}), ${misc:Depends}
 Recommends: python2.3-tcpwrap (>= 0.2)
 Description: common platform for school administration
- SchoolTool is a project to develop a common global school administration
- infrastructure that is freely available under an Open Source licence.
+ SchoolTool is an open source school management information system.  It is
+ a distributed client/server system.  The SchoolTool server presents two
+ interfaces to clients:
  .
- This package contains the architecture independent parts of the SchoolTool
+ - a traditional web application interface, usable with an ordinary browser.
+ .
+ - HTTP-based programming interface suitable for fat clients, adhering to
+   the Representational State Transfer (REST) architectural style (see
+   http://rest.blueoxen.net/).
+ .
+ The web application interface is the primary one.  The RESTive interface is
+ there for potential interoperability with other systems and fat clients to
+ perform data entry that is inconvenient to do via the web application
+ interface.
+ .
+ There are several clients that demonstrate the usage of the REST interface
+ (a command-line client that is used for functional tests, a wxWidgets GUI
+ client, and a command-line client for data import).
+ .
+ Any modern web browser is suitable for the web application interface.  The
+ interface degrades gracefully, so a browser that does not support CSS or
+ Javascript will be usable, although perhaps not very nice or convenient.
+ .
+ This package is a configuration package which sets up a standard stand alone
  server.
  .
  Homepage: http://www.schooltool.org/
@@ -26,10 +46,29 @@ Conflicts: schooltool-clients, libschooltool-clients
 Replaces: schooltool-clients, libschooltool-clients
 Recommends: python2.3-tcpwrap (>= 0.2)
 Description: common platform for school administration
- SchoolTool is a project to develop a common global school administration
- infrastructure that is freely available under an Open Source licence.
+ SchoolTool is an open source school management information system.  It is
+ a distributed client/server system.  The SchoolTool server presents two
+ interfaces to clients:
  .
- This package contains the architecture independent parts of the SchoolTool
- server.
+ - a traditional web application interface, usable with an ordinary browser.
+ .
+ - HTTP-based programming interface suitable for fat clients, adhering to
+   the Representational State Transfer (REST) architectural style (see
+   http://rest.blueoxen.net/).
+ .
+ The web application interface is the primary one.  The RESTive interface is
+ there for potential interoperability with other systems and fat clients to
+ perform data entry that is inconvenient to do via the web application
+ interface.
+ .
+ There are several clients that demonstrate the usage of the REST interface
+ (a command-line client that is used for functional tests, a wxWidgets GUI
+ client, and a command-line client for data import).
+ .
+ Any modern web browser is suitable for the web application interface.  The
+ interface degrades gracefully, so a browser that does not support CSS or
+ Javascript will be usable, although perhaps not very nice or convenient.
+ .
+ This package contains the SchoolTool python modules.
  .
  Homepage: http://www.schooltool.org/
