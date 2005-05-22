@@ -304,4 +304,20 @@
       permission="zope.Public"
       />
 
+  <view
+      for="schooltool.interfaces.ITimetableDict"
+      name="GET"
+      factory=".timetable.TimetableDictView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.rest.interfaces.ICompositeTimetabled"
+      name="GET"
+      factory=".timetable.CompositeTimetabledView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
 </configure>

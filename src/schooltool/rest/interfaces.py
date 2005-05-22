@@ -54,3 +54,8 @@ class ICompositeTimetabled(Interface):
 
         This function can return None if the object has no timetable.
         """
+
+    def listCompositeTimetables():
+        """Return a sequence of (time_period_id, tt_schema_id) for all
+        available composite timetables.
+        """

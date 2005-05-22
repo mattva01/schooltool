@@ -660,6 +660,45 @@ The timetable should look different now:
       </day>
     </timetable>
 
+Lets look at the listof timetables we have now:
+
+    >>> print rest(r"""
+    ... GET /frogpond/persons/john/timetables/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw""")
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
+      <timetable xlink:type="simple" term="2005-fall"
+                 xlink:href="http://localhost/frogpond/persons/john/timetables/2005-fall.schema1"
+                 schema="schema1"/>
+    </timetables>
+    <BLANKLINE>
+
+Lets delete it:
+
+    >>> print rest(r"""
+    ... DELETE /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw""")
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+Now it's gone:
+
+    >>> print rest(r"""
+    ... GET /frogpond/persons/john/timetables/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw""")
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
+    </timetables>
+    <BLANKLINE>
+
+
 Epilogue
 --------
 

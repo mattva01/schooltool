@@ -250,8 +250,32 @@ Lets look at johns composite timetable:
     </timetable>
     <BLANKLINE>
 
+There is a view listing all of them too:
 
-Epilogue
+    >>> print rest(r"""
+    ... GET /frogpond/persons/john/composite-timetables/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw""", handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
+      <timetable xlink:type="simple" term="2005-fall"
+                 xlink:href="http://localhost/frogpond/persons/john/composite-timetables/2005-fall.schema1"
+                 schema="schema1"/>
+    </timetables>
+    <BLANKLINE>
+
+We can't delete composite timetables:
+
+    >>> print rest(r"""
+    ... DELETE /frogpond/persons/john/composite-timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw""", handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+
 --------
 
  vim: ft=rest

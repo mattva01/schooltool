@@ -290,6 +290,9 @@ class TermFileFactory(object):
         self.context = container
 
     def __call__(self, name, content_type, data):
+        if '.' in name:
+            raise RestError("Terms can not contain dots in their names.")
+
         if self.isDataICal(data):
             return self.parseText(data, name=name)
         else:
@@ -308,41 +311,37 @@ class TermFileFactory(object):
                 continue # ignore boring events
 
             if not event.all_day_event:
-                return textErrorPage(request, "All-day event should be used")
+                raise RestError("All-day event should be used")
 
             has_complex_props = reduce(operator.or_,
                                   map(event.hasProp, self.complex_prop_names))
 
             if has_complex_props:
-                return textErrorPage(request,
-                             "Repeating events/exceptions not yet supported")
+                raise RestError("Repeating events/exceptions not yet supported")
 
             if summary == 'school period':
                 if (first is not None and
                     (first, last) != (event.dtstart, event.dtend)):
-                    return textErrorPage(request,
-                                "Multiple definitions of school period")
+                    raise RestError("Multiple definitions of school period")
                 else:
                     first, last = event.dtstart, event.dtend
             elif summary == 'schoolday':
                 if event.duration != datetime.date.resolution:
-                    return textErrorPage(request,
-                                "Schoolday longer than one day")
+                    raise RestError("Schoolday longer than one day")
                 days.append(event.dtstart)
         else:
             if first is None:
-                return textErrorPage(request, "School period not defined")
+                raise RestError("School period not defined")
             for day in days:
                 if not first <= day < last:
-                    return textErrorPage(request,
-                                         "Schoolday outside school period")
+                    raise RestError("Schoolday outside school period")
             term = Term(name, first, last - datetime.date.resolution)
             for day in days:
                 term.add(day)
         return term
 
     def parseXML(self, data, name=None):
-        # TODO: rewrite this using schooltool.rest.xmlparser.XMLDocument
+
         doc = XMLDocument(data, self.schema)
         try:
             doc.registerNs('m', 'http://schooltool.org/ns/schooldays/0.1')

@@ -1,0 +1,7 @@
+<timetables xmlns:xlink="http://www.w3.org/1999/xlink"
+                  xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <timetable tal:repeat="tt view/timetables" xlink:type="simple"
+             tal:attributes="xlink:href tt/url;
+                             term tt/term;
+                             schema tt/schema;"/>
+</timetables>

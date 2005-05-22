@@ -283,6 +283,10 @@ class TestTermFileFactory(QuietLibxml2Mixin, unittest.TestCase):
         expected = [datetime.date(2003, 9, d) for d in 1, 2, 4, 5]
         self.assertEquals(schooldays, expected)
 
+    def test_invalid_name(self):
+        from schoolbell.app.rest.errors import RestError
+        self.assertRaises(RestError, self.fileFactory, "foo.bar", "", "")
+
 
 class TestTermFile(QuietLibxml2Mixin, unittest.TestCase):
 

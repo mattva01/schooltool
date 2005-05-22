@@ -259,7 +259,6 @@ class TimetableSchemaFileFactory(object):
         self.container = container
 
     def parseXML(self, xml):
-
         doc = XMLDocument(xml, self.schema)
 
         try:
@@ -318,7 +317,8 @@ class TimetableSchemaFileFactory(object):
             doc.free()
 
     def __call__(self, name, content_type, data):
-
+        if "." in name:
+            raise RestError("Time table schemas can't have dots in their names.")
         if content_type != 'text/xml':
             raise RestError("Unsupported content type: %s" % content_type)
 
@@ -657,6 +657,11 @@ class CompositeTimetabled(object):
 
         return self.context.getCompositeTimetable(term, schema)
 
+    def listCompositeTimetables(self):
+        """See ICompositeTimetabled."""
+
+        return self.context.listCompositeTimetables()
+
 
 class CompositeTimetableTraverser(object):
     """Traverser for a_timetabled_object/composite-timetables
@@ -742,3 +747,33 @@ class CompositeTimetabledPublishTraverse(object):
             return timetable
 
         raise NotFound(self.context, name, request)
+
+
+class TimetableDictView(View):
+    """View for a timetable dict."""
+
+    template = Template("templates/timetables.pt",
+                        content_type="text/xml; charset=UTF-8")
+
+    def getTimetables(self):
+        return self.context.values()
+
+    def _timetables(self):
+        timetables = []
+        for timetable in self.getTimetables():
+            term, schema = timetable.__name__.split(".")
+            timetables.append({
+                'url': zapi.absoluteURL(timetable, self.request),
+                'term': term,
+                'schema': schema})
+        return timetables
+
+    timetables = property(_timetables)
+
+
+class CompositeTimetabledView(TimetableDictView):
+    """View listing composite timebables of CompositeTimetabled"""
+
+    def getTimetables(self):
+        return [self.context.getCompositeTimetable(term, schema)
+                for term, schema in self.context.listCompositeTimetables()]
