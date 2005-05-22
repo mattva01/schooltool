@@ -197,6 +197,12 @@ class TimetableCSVImporter(object):
             self.errors.generic.append(error_msg)
             return False
 
+        if self.period_id not in self.app["terms"].keys():
+            error_msg = _("The term ${term} does not exist.")
+            error_msg.mapping = {'term': self.period_id}
+            self.errors.generic.append(error_msg)
+            return False
+
         for dry_run in [True, False]:
             state = 'day_ids'
             for row_no, row in enumerate(rows[2:]):

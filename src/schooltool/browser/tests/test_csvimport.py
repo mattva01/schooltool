@@ -46,6 +46,7 @@ class TestTimetableCSVImportView(unittest.TestCase):
     def setUp(self):
         from schooltool.timetable import TimetableSchema, TimetableSchemaDay
         from schooltool.app import SchoolToolApplication
+        from schooltool.timetable import Term
         setUpRelationshipStuff()
         self.app = SchoolToolApplication()
 
@@ -53,6 +54,10 @@ class TestTimetableCSVImportView(unittest.TestCase):
         for day in range(1, 4):
             ttschema[str(day)] = TimetableSchemaDay([str(day)])
         self.app['ttschemas']['three-day'] = ttschema
+
+        self.app['terms']['fall'] = Term("Fall term",
+                                         datetime.datetime(2004, 1, 1),
+                                         datetime.datetime(2004, 5, 1))
 
     def tearDown(self):
         tearDownRelationshipStuff()
@@ -128,7 +133,7 @@ class TestTimetableCSVImportView(unittest.TestCase):
     def test_POST_utf8(self):
         ttschema = self.app["ttschemas"][u'three-day']
         self.app["ttschemas"][u'three-day \u263b'] = ttschema
-        tt_csv = StringIO('"whatever","three-day \xe2\x98\xbb"')
+        tt_csv = StringIO('"fall","three-day \xe2\x98\xbb"')
         view = self.createView(form={'timetable.csv': tt_csv,
                                      'roster.txt': '',
                                      'charset': 'UTF-8',
@@ -146,6 +151,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
     def setUp(self):
         setUpRelationshipStuff()
         from schooltool.timetable import TimetableSchema, TimetableSchemaDay
+        from schooltool.timetable import Term
         from schooltool.app import SchoolToolApplication
         self.app = app = SchoolToolApplication()
 
@@ -159,6 +165,16 @@ class TestTimetableCSVImporter(unittest.TestCase):
         for day in self.days:
             ttschema[day] = TimetableSchemaDay(self.periods)
         self.app["ttschemas"]['three-day'] = ttschema
+
+        term = Term("Summer term",
+                    datetime.datetime(2004, 1, 1),
+                    datetime.datetime(2004, 5, 1))
+        self.app["terms"]["summer"] = term
+
+        term2 = Term("Fall term",
+                    datetime.datetime(2004, 1, 1),
+                    datetime.datetime(2004, 5, 1))
+        self.app["terms"]["fall"] = term2
 
         # add some people and groups
         for title in ['Curtin', 'Lorch', 'Guzman']:
@@ -288,6 +304,12 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assertEquals(translate(imp.errors.generic[0]),
                           "The timetable schema four-day does not exist.")
 
+        imp = self.createImporter()
+        ok = imp.importTimetable('"winter","three-day"')
+        self.failIf(ok)
+        self.assertEquals(translate(imp.errors.generic[0]),
+                          "The term winter does not exist.")
+
         csv = dedent("""
                 "summer","three-day"
                 ""
@@ -298,6 +320,17 @@ class TestTimetableCSVImporter(unittest.TestCase):
         ok = imp.importTimetable(csv)
         self.failIf(ok)
         self.assertEquals(imp.errors.day_ids, ["Bogus", "Junk"])
+
+        csv = dedent("""
+                "summer","three-day"
+                ""
+                "Monday","Tuesday"
+                "","No","A","such","B","period","No","No"
+                "Inside",%s
+                """ % ','.join(['"English1|Lorch"'] * 7))
+        imp = self.createImporter()
+        self.failIf(imp.importTimetable(csv))
+        self.assertEquals(imp.errors.periods, ["No", "such", "period"])
 
         csv = dedent("""
                 "summer","three-day"
