@@ -45,9 +45,6 @@ System requirements
 
 - libxml2 Python bindings (http://xmlsoft.org/)
 
-- Python Imaging library (http://www.pythonware.com/products/pil/index.htm)
-  (needed for the server only)
-
 - Development environment and a C compiler
   (precompiled binaries are available for Windows users)
 

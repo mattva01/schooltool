@@ -36,6 +36,8 @@ schooltool (0.10-1) unstable; urgency=low
   * FTBFS on amd64 with gcc-4.0 fixed in Zope 3. (Closes: #294997).
   * Debconf translatqion updates:
     Czech, contributed by Miroslav Kure (Closes: #300186).
+  * Remove python2.3-imaging as a dependency as it is is not used anymore
+    upstream.
 
  -- Brian Sutherland <jinty@web.de>  Fri, 28 Jan 2005 19:48:56 +0100
 
