@@ -43,6 +43,7 @@ Add a term:
     ... 
     ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
     ...             first="2003-09-01" last="2003-09-07">
+    ...     <title>2005 Fall</title>
     ...     <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
     ...     <holiday date="2003-09-03">Holiday</holiday>
     ...     <holiday date="2003-09-06">Holiday</holiday>

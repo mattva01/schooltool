@@ -255,6 +255,11 @@ class TermFileFactory(object):
         <text/>
       </define>
 
+      <define name="title">
+        <!-- A title of the term -->
+        <text/>
+      </define>
+
       <start>
         <ref name="schooldays"/>
       </start>
@@ -267,6 +272,9 @@ class TermFileFactory(object):
           <attribute name="last">
             <ref name="datetext"/>
           </attribute>
+          <element name="title">
+            <ref name="title"/>
+          </element>
           <element name="daysofweek">
             <ref name="daysofweek"/>
           </element>
@@ -359,11 +367,15 @@ class TermFileFactory(object):
             dows = [self._dow_map[d]
                     for d in node.content.split()]
 
-            term = Term(name, first, last)
+            node = doc.query('/m:schooldays/m:title')[0]
+            title = node.content
+
+            term = Term(title, first, last)
             term.addWeekdays(*dows)
             for holiday in holidays:
                 if holiday in term and term.isSchoolday(holiday):
                     term.remove(holiday)
+
             return term
         finally:
             doc.free()

@@ -264,6 +264,7 @@ class TestTermFileFactory(QuietLibxml2Mixin, unittest.TestCase):
         body = dedent("""
             <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
                         first="2003-09-01" last="2003-09-07">
+              <title>Test.term!</title>
               <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
               <holiday date="2003-09-03">Holiday</holiday>
               <holiday date="2003-09-06">Holiday</holiday>
@@ -273,7 +274,7 @@ class TestTermFileFactory(QuietLibxml2Mixin, unittest.TestCase):
 
         term = self.fileFactory("calendar_from_xml", "", body)
 
-        self.assertEquals(term.title, "calendar_from_xml")
+        self.assertEquals(term.title, "Test.term!")
         self.assertEquals(term.first, datetime.date(2003, 9, 1))
         self.assertEquals(term.last, datetime.date(2003, 9, 7))
         schooldays = []
@@ -355,6 +356,7 @@ class TestTermFile(QuietLibxml2Mixin, unittest.TestCase):
         body = dedent("""
             <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
                         first="2003-09-01" last="2003-09-07">
+              <title>A super title!</title>
               <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
               <holiday date="2003-09-03">Holiday</holiday>
               <holiday date="2003-09-06">Holiday</holiday>
