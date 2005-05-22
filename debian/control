@@ -19,14 +19,13 @@ Description: web server for co-ordinating schedules, timetables and calendars
   * Access controllable
   * Importable and exportable to iCal clients
     (e.g. Apple's iCal or Mozilla Sunbird)
- .
- And will:
   * Time zone aware
-  * Provide resource rooking
-  * Do anything else that makes sense
+  * Provide resource booking
+  * Support for Allday events
+  * Atom feed support for upcoming events
  .
- All of this is accessible through a web interface which is simple,
- powerful and beautiful.
+ All of this is accessible through a web interface which is simple, powerful
+ and beautiful.
  .
  For developers SchoolBell offers:
   * Re-usable calendaring Zope 3 components.
@@ -43,7 +42,7 @@ Description: web server for co-ordinating schedules, timetables and calendars
 Package: libschoolbell
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${python:Depends}, python2.3-xml, python2.3-imaging, python2.3-libxml2 (>= 2.6.3-1), ${misc:Depends}
+Depends: ${shlibs:Depends}, ${python:Depends}, python2.3-xml, python2.3-libxml2 (>= 2.6.3-1), ${misc:Depends}
 Description: web server for co-ordinating schedules, timetables and calendars
  A calendaring server which can be used as a standalone server or a Zope 3
  component. This server allows for people and resources to have individual and
@@ -55,11 +54,10 @@ Description: web server for co-ordinating schedules, timetables and calendars
   * Access controllable
   * Importable and exportable to iCal clients
     (e.g. Apple's iCal or Mozilla Sunbird)
- .
- And will:
   * Time zone aware
-  * Provide resource rooking
-  * Do anything else that makes sense
+  * Provide resource booking
+  * Support for Allday events
+  * Atom feed support for upcoming events
  .
  All of this is accessible through a web interface which is simple,
  powerful and beautiful.

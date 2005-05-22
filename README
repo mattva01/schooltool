@@ -28,8 +28,6 @@ System requirements
   (Users will require Zope X3 development trunk revision,
   Zope libraries of this revision are included with the distribution)
 
-- Python Imaging library (http://www.pythonware.com/products/pil/index.htm)
-
 - libxml2 Python bindings (http://xmlsoft.org/)
 
 - Development environment and a C compiler

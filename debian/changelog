@@ -14,7 +14,9 @@ schoolbell (1.1-1) unstable; urgency=low
     Czech, contributed by Miroslav Kure (Closes: #300187).
     French, contributed by Jean-Luc Coulon (Closes: #300881).
   * Build translations in rules file.
-  * Depend on python2.3-libxml2 again.
+  * Depend on python2.3-libxml2 again as it is again used by upstream.
+  * Remove dependency on python2.3-imaging.
+  * Update package descriptions.
 
  -- Brian Sutherland <jinty@web.de>  Mon, 28 Mar 2005 16:28:20 +0200
 
