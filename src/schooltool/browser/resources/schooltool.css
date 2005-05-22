@@ -177,3 +177,20 @@ table.timetable td {
 #portlet-calendar-overlay table.overlays acronym {
     border-bottom: none;
 }
+
+/* Timetable setup form */
+
+table.timetable_setup {
+  border-collapse: collapse;
+}
+table.timetable_setup tr.conflict {
+  background: yellow;
+}
+table.timetable_setup th,
+table.timetable_setup td {
+  padding: 1ex;
+  background: transparent;
+}
+table.timetable_setup th {
+  text-align: left;
+}

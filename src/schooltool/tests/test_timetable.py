@@ -1769,6 +1769,25 @@ class TestGetPeriodsForDay(PlacelessSetup, unittest.TestCase):
         self.assert_(getTermForDate(date(2005, 3, 17)) is self.term2)
         self.assert_(getTermForDate(date(2005, 11, 5)) is None)
 
+    def test_getNextTermForDate(self):
+        from schooltool.timetable import getNextTermForDate
+        from schooltool.timetable import Term
+        self.assert_(getNextTermForDate(date(2004, 8, 31)) is self.term1)
+        self.assert_(getNextTermForDate(date(2004, 9, 1)) is self.term1)
+        self.assert_(getNextTermForDate(date(2004, 11, 5)) is self.term1)
+        self.assert_(getNextTermForDate(date(2004, 12, 20)) is self.term1)
+        self.assert_(getNextTermForDate(date(2004, 12, 21)) is self.term2)
+        self.assert_(getNextTermForDate(date(2005, 3, 17)) is self.term2)
+        self.assert_(getNextTermForDate(date(2005, 11, 5)) is self.term2)
+        self.term3 = Term('Sample', date(2006, 1, 1), date(2006, 6, 1))
+        self.app["terms"]["term3"] = self.term3
+        self.assert_(getNextTermForDate(date(2005, 11, 5)) is self.term3)
+        self.assert_(getNextTermForDate(date(2004, 8, 31)) is self.term1)
+        del self.app["terms"]["term3"]
+        del self.app["terms"]['2004-fall']
+        del self.app["terms"]['2005-spring']
+        self.assert_(getNextTermForDate(date(2004, 8, 31)) is None)
+
     def test_getPeriodsForDay(self):
         from schooltool.timetable import getPeriodsForDay
         # A white-box test: we delegate to ITimetableModel.periodsInDay

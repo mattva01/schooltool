@@ -1,0 +1,98 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Scheduling for <span i18n:name="person" tal:replace="context/title" />
+  </title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header" i18n:translate="">
+  Scheduling for <span i18n:name="person" tal:replace="context/title" />
+</h1>
+
+<metal:block metal:fill-slot="body">
+
+<form tal:attributes="action request/URL" class="plain" method="post">
+
+  <fieldset>
+    <legend i18n:translate="">Timetable</legend>
+
+    <label for="term" i18n:translate="">Term</label>
+    <select id="term" name="term"
+            tal:define="terms view/app/terms/values">
+      <option tal:repeat="term terms/sortby:first"
+              tal:attributes="value term/__name__;
+                              selected python:term is view.term
+                                          and 'selected' or None"
+              tal:content="term/title"></option>
+    </select>
+
+    <label for="ttschema" i18n:translate="">Schema</label>
+    <select id="ttschema" name="ttschema"
+            tal:define="ttschemas view/app/ttschemas/values">
+      <option tal:repeat="ttschema ttschemas/sortby:__name__"
+              tal:attributes="value ttschema/__name__;
+                              selected python:ttschema is view.ttschema
+                                          and 'selected' or None"
+              tal:content="ttschema/__name__"></option>
+    </select>
+    <input class="button-ok" type="submit" name="REFRESH" value="Choose"
+           i18n:attributes="value" />
+  </fieldset>
+</form>
+
+<form tal:attributes="action request/URL" class="plain" method="post">
+
+  <input type="hidden" name="term" tal:attributes="value view/term/__name__" />
+  <input type="hidden" name="ttschema"
+         tal:attributes="value view/ttschema/__name__" />
+
+  <p i18n:translate="">
+  This form lets you set up the timetable of a person by adding and removing
+  the person to and from sections that have classes in their timetables.
+  </p>
+
+  <tal:block repeat="day view/days">
+    <h2 tal:content="day/title">Day N</h2>
+
+    <table class="timetable_setup">
+      <tal:block tal:repeat="period day/periods">
+      <tr tal:define="conflict python: len(period['selected']) > 1"
+          tal:attributes="class python: conflict and 'conflict' or ''">
+        <th tal:content="period/title">Period N</th>
+        <td tal:repeat="selection period/selected">
+          <select name="sections:list">
+            <option value=""
+                    tal:attributes="selected python:selection is None
+                                                and 'selected' or None"
+                    i18n:translate="">none</option>
+            <option tal:repeat="section period/sections/sortby:title"
+                    tal:attributes="value section/__name__;
+                                    selected python:section is selection
+                                                and 'selected' or None"
+                    tal:content="section/title"></option>
+          </select>
+        </td>
+        <td class="conflict" tal:condition="conflict" i18n:translate="">
+        Scheduling conflict.
+        </td>
+      </tr>
+      </tal:block>
+    </table>
+  </tal:block>
+
+  <p i18n:translate="">
+  Note: if a section appears in more than one slot, all of them have
+  to be set to <em>none</em> to remove it.
+  </p>
+
+  <div class="controls">
+    <input class="button-ok" type="submit" name="SAVE" value="Save"
+           i18n:attributes="value" />
+  </div>
+
+</form>
+
+</metal:block>
+</body>
+</html>

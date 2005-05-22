@@ -225,6 +225,7 @@ def doctest_TermEditView_update():
 
     """
 
+
 def doctest_TermAddView_update():
     """Unit tests for TermAddView.update
 
@@ -1185,7 +1186,6 @@ def doctest_SimpleTimetableSchemaAdd():
 
         >>> from schooltool.timetable import WeeklyTimetableModel
         >>> from schooltool.interfaces import ITimetableModelFactory
-        >>> setUp()
         >>> ztapi.provideUtility(ITimetableModelFactory,
         ...                      WeeklyTimetableModel,
         ...                      'WeeklyTimetableModel')
@@ -1409,17 +1409,14 @@ def doctest_SimpleTimetableSchemaAdd():
         >>> request.response.getStatus() != 302
         True
 
-    Clean up:
-
-        >>> tearDown()
     """
+
 
 def doctest_SimpleTimetableSchemaAdd_errors():
     """Doctest for the SimpleTimetableSchemaAdd view
 
         >>> from schooltool.timetable import WeeklyTimetableModel
         >>> from schooltool.interfaces import ITimetableModelFactory
-        >>> setUp()
         >>> ztapi.provideUtility(ITimetableModelFactory,
         ...                      WeeklyTimetableModel,
         ...                      'WeeklyTimetableModel')
@@ -1560,22 +1557,230 @@ def doctest_SimpleTimetableSchemaAdd_errors():
         >>> request.response.getStatus() != 302
         True
 
-    Clean up:
-
-        >>> tearDown()
-
     """
 
 
+def doctest_PersonTimetableSetupView():
+    """Doctest for the PersonTimetableSetupView view
+
+    We will need an application object
+
+        >>> from schooltool.app import SchoolToolApplication
+        >>> app = SchoolToolApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> app.setSiteManager(LocalSiteManager(app))
+        >>> setSite(app)
+
+    and a Person from that application
+
+        >>> from schooltool.app import Person
+        >>> context = Person("student", "Steven Udent")
+        >>> app["persons"]["whatever"] = context
+
+    We will need some sections
+
+        >>> from schooltool.app import Section
+        >>> app["sections"]["math"] = math = Section("Math")
+        >>> app["sections"]["biology"] = biology = Section("Biology")
+        >>> app["sections"]["physics"] = physics = Section("Physics")
+
+    We will also need a timetable schema, and a term.  Two of each, in fact.
+
+        >>> app["ttschemas"]["default"] = createSchema(["Mon", "Tue"],
+        ...                                            ["9:00", "10:00"],
+        ...                                            ["9:00", "10:00"])
+        >>> app["ttschemas"]["other"] = createSchema([], [])
+
+        >>> from schooltool.timetable import Term
+        >>> app["terms"]["2005-spring"] = Term('2005 Spring',
+        ...                                    datetime.date(2004, 2, 1),
+        ...                                    datetime.date(2004, 6, 30))
+        >>> app["terms"]["2005-fall"] = Term('2005 Fall',
+        ...                                    datetime.date(2004, 9, 1),
+        ...                                    datetime.date(2004, 12, 31))
+
+    We can now create the view.
+
+        >>> from schooltool.browser.timetable import PersonTimetableSetupView
+        >>> request = TestRequest()
+        >>> view = PersonTimetableSetupView(context, request)
+
+    There are two helper methods, getSchema and getTerm, that extract the
+    schema and term from the request, or pick suitable defaults.
+
+        >>> view.getSchema() is app["ttschemas"].getDefault()
+        True
+        >>> request.form['ttschema'] = 'other'
+        >>> view.getSchema() is app["ttschemas"]["other"]
+        True
+        >>> request.form['ttschema'] = 'default'
+        >>> view.getSchema() is app["ttschemas"]["default"]
+        True
+
+    The default for a term is "the current term", or, if there's none, the next
+    one.  Since this depends on today's date, we can't explicitly test it here.
+
+        >>> (view.getTerm() is app["terms"]["2005-spring"] or
+        ...  view.getTerm() is app["terms"]["2005-fall"])
+        True
+        >>> request.form['term'] = '2005-spring'
+        >>> view.getTerm() is app["terms"]["2005-spring"]
+        True
+        >>> request.form['term'] = '2005-fall'
+        >>> view.getTerm() is app["terms"]["2005-fall"]
+        True
+
+    sectionMap finds out which sections are scheduled in which timetable slots.
+
+        >>> term = app["terms"]["2005-fall"]
+        >>> ttschema = app["ttschemas"]["default"]
+        >>> section_map = view.sectionMap(term, ttschema)
+
+        >>> from zope.testing.doctestunit import pprint
+        >>> pprint(section_map)
+        {('Mon', '10:00'): Set([]),
+         ('Mon', '9:00'): Set([]),
+         ('Tue', '10:00'): Set([]),
+         ('Tue', '9:00'): Set([])}
+
+    It gets more interesting when sections actually have some scheduled
+    activities:
+
+        >>> from schooltool.timetable import TimetableActivity
+        >>> ttkey = "2005-fall.default"
+        >>> math.timetables[ttkey] = ttschema.createTimetable()
+        >>> math.timetables[ttkey]['Tue'].add('10:00',
+        ...                                   TimetableActivity('Math'))
+
+        >>> section_map = view.sectionMap(term, ttschema)
+        >>> pprint(section_map)
+        {('Mon', '10:00'): Set([]),
+         ('Mon', '9:00'): Set([]),
+         ('Tue', '10:00'): Set([<schooltool.app.Section object at ...>]),
+         ('Tue', '9:00'): Set([])}
+
+    allSections simply takes a union of a number of sets containing sections.
+
+        >>> from sets import Set
+        >>> sections = view.allSections({1: Set([math]),
+        ...                              2: Set([math, biology]),
+        ...                              3: Set([])})
+        >>> sections = [s.title for s in sections]
+        >>> sections.sort()
+        >>> sections
+        ['Biology', 'Math']
+
+    getDays does most of the work
+
+        >>> def printDays(days):
+        ...     for day in days:
+        ...         print day['title']
+        ...         for period in day['periods']:
+        ...             sections = [s.title for s in period['sections']]
+        ...             selected = [s and s.title or "none"
+        ...                         for s in period['selected']]
+        ...             print "%7s: [%s] [%s]" % (period['title'],
+        ...                                       ', '.join(sections),
+        ...                                       ', '.join(selected))
+
+        >>> days = view.getDays(ttschema, section_map)
+        >>> printDays(days)
+        Mon
+           9:00: [] [none]
+          10:00: [] [none]
+        Tue
+           9:00: [] [none]
+          10:00: [Math] [none]
+
+        >>> math.members.add(context)
+
+        >>> days = view.getDays(ttschema, section_map)
+        >>> printDays(days)
+        Mon
+           9:00: [] [none]
+          10:00: [] [none]
+        Tue
+           9:00: [] [none]
+          10:00: [Math] [Math]
+
+    And finally, __call__ ties everything together -- it processes the form and
+    renders a page template.
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <title> Scheduling for Steven Udent </title>
+        ...
+        <h1> Scheduling for Steven Udent </h1>
+        ...
+        <form class="plain" method="post" action="http://127.0.0.1">
+        ...
+            <label for="term">Term</label>
+            <select id="term" name="term">
+              <option value="2005-spring">2005 Spring</option>
+              <option selected="selected" value="2005-fall">2005 Fall</option>
+            </select>
+            <label for="ttschema">Schema</label>
+            <select id="ttschema" name="ttschema">
+              <option selected="selected" value="default">default</option>
+              <option value="other">other</option>
+            </select>
+        ...
+        </form>
+        <form class="plain" method="post" action="http://127.0.0.1">
+          <input type="hidden" name="term" value="2005-fall" />
+          <input type="hidden" name="ttschema" value="default" />
+        ...
+            <h2>Mon</h2>
+        ...
+                <th>9:00</th>
+                <td>
+                  <select name="sections:list">
+                    <option value="" selected="selected">none</option>
+                  </select>
+        ...
+            <h2>Tue</h2>
+        ...
+                <th>10:00</th>
+                <td>
+                  <select name="sections:list">
+                    <option value="">none</option>
+                    <option selected="selected" value="math">Math</option>
+                  </select>
+        ...
+        </form>
+        ...
+
+    If the form contains 'SAVE', the form gets processed.  Suppose we unselect
+    Math
+
+        >>> request.form['SAVE'] = 'Save'
+        >>> request.form['sections'] = ['']
+        >>> content = view()
+
+        >>> context in math.members
+        False
+
+    If we select it back
+
+        >>> request.form['SAVE'] = 'Save'
+        >>> request.form['sections'] = ['math']
+        >>> content = view()
+
+        >>> context in math.members
+        True
+
+    """
+
 def test_suite():
     suite = unittest.TestSuite()
+    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
+                   doctest.REPORT_ONLY_FIRST_FAILURE)
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
-                                       optionflags=doctest.ELLIPSIS|
-                                       doctest.REPORT_NDIFF|
-                                       doctest.NORMALIZE_WHITESPACE))
+                                       optionflags=optionflags
+                                            | doctest.NORMALIZE_WHITESPACE))
     suite.addTest(doctest.DocTestSuite('schooltool.browser.timetable',
-                                       optionflags=doctest.ELLIPSIS|
-                                                   doctest.REPORT_NDIFF))
+                                       optionflags=optionflags))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaWizard))
     return suite
 

@@ -29,6 +29,7 @@ import re
 
 from zope.interface import Interface
 from zope.schema import TextLine, Date, Int
+from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
 from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 from zope.app.form.browser.add import AddView
@@ -41,10 +42,9 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import IWidgetInputError
-from zope.i18n import translate
-from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
 from zope.app.form.interfaces import ConversionError
-
+from zope.i18n import translate
+from zope.security.proxy import removeSecurityProxy
 
 from schoolbell.calendar.utils import parse_date
 from schoolbell.calendar.utils import next_month, week_start
@@ -56,9 +56,11 @@ from schooltool.interfaces import ITimetable, ITimetableSchema
 from schooltool.interfaces import ITermContainer, ITerm
 from schooltool.interfaces import ITimetableSchemaContainer
 from schooltool.interfaces import ITimetableModelFactory
+from schooltool.interfaces import IPerson
 from schooltool.timetable import Term, Timetable, TimetableDay
 from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+from schooltool.timetable import getNextTermForDate
 from schooltool import getSchoolToolApplication
 
 
@@ -999,3 +1001,113 @@ class SimpleTimetableSchemaAdd(BrowserView):
                 zapi.absoluteURL(self.context, self.request))
 
         return self.template()
+
+
+class PersonTimetableSetupView(BrowserView):
+    """A view for scheduling a student.
+
+    This view displays a drop-down for every timetable period, listing the
+    sections scheduled for that period.  When the user submits the form, the
+    person is added to selected sections and removed from unselected ones.
+    """
+
+    __used_for__ = IPerson
+
+    template = ViewPageTemplateFile('templates/person-timetable-setup.pt')
+
+    def getSchema(self):
+        """Return the chosen timetable schema."""
+        app = getSchoolToolApplication()
+        ttschemas = app["ttschemas"]
+        selected_ttschema = self.request.get('ttschema', ttschemas.default_id)
+        return ttschemas[selected_ttschema]
+
+    def getTerm(self):
+        """Return the chosen term."""
+        if 'term' in self.request:
+            terms = getSchoolToolApplication()["terms"]
+            return terms[self.request['term']]
+        else:
+            return getNextTermForDate(datetime.date.today())
+
+    def sectionMap(self, term, ttschema):
+        """Compute a mapping of timetable slots to sections.
+
+        Returns a dict {(day_id, period_id): Set([section])}.  The set for
+        each period contains all sections that have activities in the
+        (non-composite) timetable during that timetable period.
+        """
+        ttkey = "%s.%s" % (term.__name__, ttschema.__name__)
+        section_map = {}
+        for day_id, day in ttschema.items():
+            for period_id in day.periods:
+                section_map[day_id, period_id] = sets.Set()
+        for section in getSchoolToolApplication()['sections'].values():
+            timetable = section.timetables.get(ttkey)
+            if timetable:
+                for day_id, period_id, activity in timetable.itercontent():
+                    section_map[day_id, period_id].add(section)
+        return section_map
+
+    def allSections(self, section_map):
+        """Return a set of all sections that can be selected."""
+        sections = sets.Set()
+        for sectionset in section_map.itervalues():
+            sections.update(sectionset)
+        return sections
+
+    def getDays(self, ttschema, section_map):
+        """Return the current selection.
+
+        Returns a list of dicts with the following keys
+
+            title   -- title of the timetable day
+            periods -- list of timetable periods in that day
+
+        Each period is represented by a dict with the following keys
+
+            title    -- title of the period
+            sections -- all sections that are scheduled for this slot
+            selected -- a list of sections of which self.context is a member,
+                        or a list containing [None] if there are none.
+
+        """
+
+        def days(schema):
+            for day_id, day in schema.items():
+                yield {'title': day_id,
+                       'periods': list(periods(day_id, day))}
+
+        def periods(day_id, day):
+            for period_id in day.periods:
+                sections = section_map[day_id, period_id]
+                selected = [section for section in sections
+                            if self.context in section.members]
+                if not selected:
+                    selected = [None]
+                yield {'title': period_id,
+                       'selected': selected,
+                       'sections': sections}
+
+        return list(days(ttschema))
+
+    def __call__(self):
+        self.app = getSchoolToolApplication()
+        self.term = self.getTerm()
+        self.ttschema = self.getSchema()
+        section_map = self.sectionMap(self.term, self.ttschema)
+        self.days = self.getDays(self.ttschema, section_map)
+        if 'SAVE' in self.request:
+            student = removeSecurityProxy(self.context)
+            all_sections = self.allSections(section_map)
+            selected = self.request.get('sections', [])
+            for section in all_sections:
+                want = section.__name__ in selected
+                have = student in section.members
+                if want and not have:
+                    section.members.add(student)
+                elif not want and have:
+                    section.members.remove(student)
+            self.days = self.getDays(self.ttschema, section_map)
+        return self.template()
+

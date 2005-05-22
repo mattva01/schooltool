@@ -313,6 +313,14 @@
       />
 
   <page
+      name="schedule.html"
+      for="schooltool.interfaces.IPerson"
+      class="schooltool.browser.timetable.PersonTimetableSetupView"
+      permission="zope.View"
+      menu="schoolbell_actions" 
+      title="Schedule" />
+
+  <page
       name="daily.html"
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.DailyCalendarView"

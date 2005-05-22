@@ -1057,14 +1057,41 @@ class TermContainer(BTreeContainer):
 
 
 def getTermForDate(date):
-    """Find the time period that contains `date`.
+    """Find the term that contains `date`.
 
-    Returns None if `date` falls outside all time periods.
+    Returns None if `date` falls outside all terms.
     """
     terms = getSchoolToolApplication()["terms"]
     for term in terms.values():
         if date in term:
             return term
+    return None
+
+
+def getNextTermForDate(date):
+    """Find the term that contains `date`, or the next one.
+
+    If there is a term that contains `date`, it is returned.  Otherwise, the
+    first term that starts after `date` is returned.  If there are none,
+    the last term that ended before `date` is returned.
+
+    Returns None if there are no terms.
+    """
+    terms = getSchoolToolApplication()["terms"]
+    before, after = [], []
+    for term in terms.values():
+        if date in term:
+            return term
+        if date > term.last:
+            before.append((term.last, term))
+        if date < term.first:
+            after.append((term.first, term))
+    if after:
+        return after[0][1]
+        return min(after)[1]
+    if before:
+        return max(before)[1]
+    return None
 
 
 def getPeriodsForDay(date):
