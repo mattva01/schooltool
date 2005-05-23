@@ -962,10 +962,6 @@ class TimetabledMixin:
             events += list(cal)
         result = ImmutableCalendar(events)
         # Parent is needed so that we can find out the owner of this calendar.
-        # XXX Committing the following workaround without a unit or a
-        #     functional test to get SchoolTool 0.8 out of the door without
-        #     this bug.  See http://issues.schooltool.org/issue130
-        #     Remove this comment once we have proper tests.
         directlyProvides(result, ILocation)
         result.__parent__ = self
         result.__name__ = 'timetable-calendar'
