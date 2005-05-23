@@ -318,24 +318,27 @@ class PersonCSVImporter(BaseCSVImporter):
 class GroupCSVImportView(BaseCSVImportView):
     """View for Group CSV importer."""
 
+    importer_class = GroupCSVImporter
+
     def __init__(self, context, request):
         BaseCSVImportView.__init__(self, context, request)
-        self.importer_class = GroupCSVImporter
 
 
 class ResourceCSVImportView(BaseCSVImportView):
     """View for Resource CSV importer."""
 
+    importer_class = ResourceCSVImporter
+
     def __init__(self, context, request):
         BaseCSVImportView.__init__(self, context, request)
-        self.importer_class = ResourceCSVImporter
 
 
 class PersonCSVImportView(BaseCSVImportView):
     """View for Person CSV importer."""
 
+    importer_class = PersonCSVImporter
+
     def __init__(self, context, request):
         BaseCSVImportView.__init__(self, context, request)
-        self.importer_class = PersonCSVImporter
 
 
