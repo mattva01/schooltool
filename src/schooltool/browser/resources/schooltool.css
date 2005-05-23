@@ -145,17 +145,17 @@ ul.section-list a {
 /* timetable display */
 
 table.timetable {
-  width: 90%;
+    width: 90%;
 }
 
 table.timetable th {
-  background: #cccccc;
+    background: #cccccc;
 }
 table.timetable th.period {
-  background: #ccccff;
+    background: #ccccff;
 }
 table.timetable td {
-  background: #eeeeee;
+    background: #eeeeee;
 }
 
 /* Calendar overlay */
