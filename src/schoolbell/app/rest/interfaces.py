@@ -20,7 +20,7 @@
 SchoolBell REST interfaces
 """
 
-from zope.interface import Interface
+from zope.interface import Interface, Attribute
 
 class IPasswordWriter(Interface):
     """Interface for writing password through REST."""
@@ -40,3 +40,11 @@ class IPersonPhoto(Interface):
 
     def getPhoto():
         """Read the photo of the person."""
+
+
+class IPersonPreferencesAdapter(Interface):
+    """Interface for PersonPreferencesAdapter."""
+
+    person = Attribute("""Person with preferences.""")
+
+

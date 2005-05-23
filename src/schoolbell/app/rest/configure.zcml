@@ -6,6 +6,10 @@
     <allow interface="schoolbell.app.rest.interfaces.IPasswordWriter" />
   </content>
 
+  <content class=".app.PersonPreferencesAdapter">
+    <allow interface="schoolbell.app.rest.interfaces.IPersonPreferencesAdapter" />
+  </content>
+
   <content class=".app.PersonPhotoAdapter">
     <allow interface="schoolbell.app.rest.interfaces.IPersonPhoto" />
   </content>
@@ -84,6 +88,15 @@
       factory=".app.PersonHTTPTraverser"
       permission="zope.Public"
       name="password"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IHavePreferences"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides=".IRestTraverser"
+      factory=".app.PersonHTTPTraverser"
+      permission="zope.Public"
+      name="preferences"
       />
 
   <view
@@ -349,6 +362,22 @@
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       name="PUT"
       factory=".app.CalendarView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.rest.interfaces.IPersonPreferencesAdapter"
+      name="PUT"
+      factory=".app.PersonPreferencesView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.rest.interfaces.IPersonPreferencesAdapter"
+      name="GET"
+      factory=".app.PersonPreferencesView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />

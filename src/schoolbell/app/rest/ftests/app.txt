@@ -800,3 +800,54 @@ And it should raise a not found if the photo is missing:
     HTTP/1.1 404 Not Found
     Content-Length: 0
     <BLANKLINE>
+
+We can view the preferences of our user:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/john/preferences HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <preferences xmlns:xlink="http://www.w3.org/1999/xlink">
+    <BLANKLINE>
+      <preference id="timezone" value="UTC"/>
+      <preference id="timeformat" value="HH:MM"/>
+      <preference id="dateformat" value="YYYY-MM-DD"/>
+      <preference id="weekstart" value="0"/>
+    <BLANKLINE>
+    </preferences>
+    <BLANKLINE>
+
+We can change the preferences:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/persons/john/preferences HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 244
+    ... Content-Type: text/xml; charset=latin-1
+    ...
+    ... <?xml version="1.0"?>
+    ... <preferences xmlns="http://schooltool.org/ns/model/0.1">
+    ...  <preference id="timezone" value="US/Eastern"/>
+    ... </preferences>
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    <BLANKLINE>
+    Preferences updated
+
+And verify that the preference was changed:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/john/preferences HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    ...
+      <preference id="timezone" value="US/Eastern"/>
+    ...

@@ -30,9 +30,12 @@ from zope.app.http.put import FilePUT
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.i18n import translate
+from zope.schema.interfaces import IField
 
 from schoolbell.app.rest import View, Template, IRestTraverser
+from schoolbell.app.rest.errors import RestError
 from schoolbell.app.rest.interfaces import IPasswordWriter, IPersonPhoto
+from schoolbell.app.rest.interfaces import IPersonPreferencesAdapter
 from schoolbell.app.rest.xmlparsing import XMLValidationError, XMLParseError
 from schoolbell.app.rest.xmlparsing import XMLDocument
 from schoolbell.calendar.icalendar import convert_calendar_to_ical
@@ -42,8 +45,8 @@ from schoolbell.app.app import Group, Resource, Person
 from schoolbell.app.interfaces import IGroupContainer, IGroup
 from schoolbell.app.interfaces import IResourceContainer, IResource
 from schoolbell.app.interfaces import IPersonContainer, IPerson
+from schoolbell.app.interfaces import IPersonPreferences
 from schoolbell.app.browser.cal import CalendarOwnerHTTPTraverser
-
 
 class ApplicationObjectFileFactory(object):
     """A superclass for ApplicationObjectContainer to FileFactory adapters."""
@@ -367,7 +370,7 @@ class CalendarView(View):
 
 
 class PersonHTTPTraverser(CalendarOwnerHTTPTraverser):
-    """A traverser that allows to traverse to a persons password or photo."""
+    """A traverser that allows to traverse to a persons password, preferences or photo."""
 
     adapts(IPerson)
     implements(IRestTraverser)
@@ -377,6 +380,8 @@ class PersonHTTPTraverser(CalendarOwnerHTTPTraverser):
             return PersonPasswordWriter(self.context)
         elif name == 'photo':
             return PersonPhotoAdapter(self.context)
+        elif name == 'preferences':
+            return PersonPreferencesAdapter(self.context)
 
         return CalendarOwnerHTTPTraverser.publishTraverse(self, request, name)
 
@@ -469,6 +474,85 @@ class PersonPhotoView(View):
         self.context.writePhoto(body.read())
         self.request.response.setStatus("200")
         return ''
+
+
+class PersonPreferencesAdapter(object):
+    """Adapter of person to IPreferencesWriter"""
+
+    implements(IPersonPreferencesAdapter)
+
+    def __init__(self, person):
+        self.person = person
+
+
+class PersonPreferencesView(View):
+    """A view for Persons preferences."""
+
+    template = Template("templates/person-preferences.pt",
+                        content_type="text/xml; charset=UTF-8")
+
+    schema = """<?xml version="1.0" encoding="UTF-8"?>
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://schooltool.org/ns/model/0.1"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+      <start>
+        <element name="preferences">
+          <zeroOrMore>
+            <element name="preference">
+              <attribute name="id"><text/></attribute>
+              <attribute name="value"><text/></attribute>
+            </element>
+          </zeroOrMore>
+        </element>
+      </start>
+    </grammar>"""
+
+    def __init__(self, context, request):
+        View.__init__(self, context, request)
+        self.preferences = IPersonPreferences(context.person)
+
+    def parseData(self, body):
+        """Gets values from document, and puts them into a dict"""
+        doc = XMLDocument(body, self.schema)
+        results = {}
+        try:
+            doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
+            for preference in doc.query('/m:preferences/m:preference'):
+                results[preference['id']] = preference['value']
+        finally:
+            doc.free()
+
+        return results
+
+    def validatePreference(self, name, value):
+        """Validate a preference.
+
+        Validates against IPersonPreferences widgets and raises RestError if:
+
+        * 'name' is not defined in the interface
+        * 'value' does not pass widget validation
+        """
+        if name not in IPersonPreferences.names():
+            raise RestError('Preference "%s" unknown' % name)
+
+        try:
+            IPersonPreferences.get(name).validate(value)
+        except Exception:
+            raise RestError('Preference value "%s" does not pass validation on "%s"' % (value, name))
+
+    def PUT(self):
+        """Extract data and validate it.
+
+        Validates preferences through validatePreference which can return a
+        RestError.
+        """
+        data = self.parseData(self.request.bodyFile.read())
+        for name,value in data.items():
+            self.validatePreference(name, value)
+            setattr(self.preferences, name, value)
+
+        return "Preferences updated"
 
 
 class CalendarNullTraverser(object):

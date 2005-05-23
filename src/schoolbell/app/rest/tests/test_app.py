@@ -830,13 +830,22 @@ def doctest_CalendarView():
 def doctest_PersonHttpTraverser():
     """Tests for PersonHttpTraverser.
 
-    PersonHttpTraverser allows you to access photo and password of the
-    person:
+    PersonHttpTraverser allows you to access photo, preferences and password of
+    the person:
 
         >>> from schoolbell.app.rest.app import PersonHTTPTraverser
         >>> from schoolbell.app.app import Person
         >>> person = Person()
         >>> request = TestRequest()
+
+        >>> from schoolbell.app.app import getPersonPreferences
+        >>> from zope.app.annotation.interfaces import IAnnotations
+        >>> from schoolbell.app.interfaces import IPersonPreferences
+        >>> from schoolbell.app.interfaces import IHavePreferences
+        >>> setup.setUpAnnotations()
+        >>> ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
+        ...                      getPersonPreferences)
+
         >>> traverser = PersonHTTPTraverser(person, request)
         >>> traverser.context is person
         True
@@ -868,6 +877,82 @@ def doctest_PersonHttpTraverser():
 
         >>> traverser.publishTraverse(request, 'photo')
         <schoolbell.app.rest.app.PersonPhotoAdapter object at ...>
+
+    and preferences:
+
+        >>> traverser.publishTraverse(request, 'preferences')
+        <schoolbell.app.rest.app.PersonPreferencesAdapter object at ...>
+
+    """
+
+
+def doctest_PersonPreferencesView():
+    r"""Tests for PersonPreferencesView.
+
+    First lets create a view:
+
+        >>> from schoolbell.app.rest.app import PersonPreferencesAdapter
+        >>> from schoolbell.app.rest.app import PersonPreferencesView
+        >>> from schoolbell.app.rest.app import PersonHTTPTraverser
+        >>> from schoolbell.app.app import Person
+
+        >>> from schoolbell.app.app import getPersonPreferences
+        >>> from schoolbell.app.interfaces import IPersonPreferences
+        >>> from schoolbell.app.interfaces import IHavePreferences
+        >>> from zope.app.annotation.interfaces import IAnnotations
+        >>> setup.setUpAnnotations()
+        >>> setup.placefulSetUp()
+        >>> ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
+        ...                      getPersonPreferences)
+
+        >>> person = Person()
+        >>> traverser = PersonHTTPTraverser(person, TestRequest())
+        >>> adapter = traverser.publishTraverse(TestRequest(), 'preferences')
+        >>> view = PersonPreferencesView(adapter, TestRequest())
+
+        >>> view.GET()
+        u'<preferences xmlns:xlink="http://www.w3.org/1999/xlink">\n\n  <preference id="timezone" value="UTC"/>\n  <preference id="timeformat" value="HH:MM"/>\n  <preference id="dateformat" value="YYYY-MM-DD"/>\n  <preference id="weekstart" value="0"/>\n\n</preferences>\n'
+
+
+        Set a preference:
+
+        >>> from StringIO import StringIO
+        >>> body = '<preferences xmlns="http://schooltool.org/ns/model/0.1">' \
+        ...        '  <preference id="timezone" value="US/Eastern"/>' \
+        ...        '</preferences>'
+
+        >>> view = PersonPreferencesView(adapter, TestRequest(StringIO(body)))
+        >>> view.PUT()
+        'Preferences updated'
+
+        Check that the preference was set:
+
+        >>> u'  <preference id="timezone" value="US/Eastern"/>' in view.GET().splitlines()
+        True
+
+        Attempting to set a preference that does not exist will raise an error:
+
+        >>> body = '<preferences xmlns="http://schooltool.org/ns/model/0.1">' \
+        ...        '  <preference id="fakepref" value="1"/>' \
+        ...        '</preferences>'
+
+        >>> view = PersonPreferencesView(adapter, TestRequest(StringIO(body)))
+        >>> view.PUT()
+        Traceback (most recent call last):
+        ...
+        RestError: Preference "fakepref" unknown
+
+        Attempting to set a preference to an invalid value will also raise an error:
+
+        >>> body = '<preferences xmlns="http://schooltool.org/ns/model/0.1">' \
+        ...        '  <preference id="timezone" value="Tatooine/Mos Isley"/>' \
+        ...        '</preferences>'
+
+        >>> view = PersonPreferencesView(adapter, TestRequest(StringIO(body)))
+        >>> view.PUT()
+        Traceback (most recent call last):
+        ...
+        RestError: Preference value "Tatooine/Mos Isley" does not pass validation on "timezone"
 
     """
 
