@@ -158,7 +158,7 @@ table.timetable td {
   background: #eeeeee;
 }
 
-/* calendar overlay */
+/* Calendar overlay */
 
 #portlet-calendar-overlay a.go {
     top: 0em;
@@ -181,16 +181,16 @@ table.timetable td {
 /* Timetable setup form */
 
 table.timetable_setup {
-  border-collapse: collapse;
+    border-collapse: collapse;
 }
 table.timetable_setup tr.conflict {
-  background: yellow;
+    background: yellow;
 }
 table.timetable_setup th,
 table.timetable_setup td {
-  padding: 1ex;
-  background: transparent;
+    padding: 1ex;
+    background: transparent;
 }
 table.timetable_setup th {
-  text-align: left;
+    text-align: left;
 }
