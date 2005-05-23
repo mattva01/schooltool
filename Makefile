@@ -73,3 +73,24 @@ update-translations:
 	     msgmerge -U $$f $(POT);		\
 	     msgfmt -o $${f%.po}.mo $$f;	\
 	done
+
+.PHONY: update-rosetta
+update-rosetta-template:
+	$(MAKE) build extract-translations
+	touch ../launchpad_cookies
+	chmod 600 ../launchpad_cookies
+	curl -kc ../launchpad_cookies -D ../header_login\
+	    -F loginpage_password=$$(cat ../launchpad_pwd) \
+	    -F loginpage_email=jinty@web.de \
+	    -F loginpage_submit_login=Log\ In \
+	    https://launchpad.ubuntu.com/+login >log
+	curl -kc ../launchpad_cookies -b ../launchpad_cookies\
+	    -F file=@src/schoolbell/app/locales/schoolbell.pot\
+	    -F UPLOAD=Upload \
+	    https://launchpad.ubuntu.com/products/schoolbell/unknown/+pots/schoolbell-ui/+edit > log2
+	rm ../launchpad_cookies
+
+.PHONY: get-rosetta
+get-rosetta-translations:
+	./get-rosetta-translations.py
+	$(MAKE) update-translations

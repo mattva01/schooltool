@@ -1,5 +1,7 @@
 schoolbell (1.1-1) unstable; urgency=low
 
+  * New upstream version, which includes:
+    * Re-introduction of RESTive interface (Closes: #310304).
   * Use the 'rest' directive rather than the 'listen' directive in config files
     and convert all existing 'listen' directives to 'rest' directives with some
     compatibility code. 'listen' and 'rest' are equivilent, but listen is
