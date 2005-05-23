@@ -1093,6 +1093,9 @@ class PersonTimetableSetupView(BrowserView):
 
     def __call__(self):
         self.app = getSchoolToolApplication()
+        self.has_timetables = bool(self.app["terms"] and self.app["ttschemas"])
+        if not self.has_timetables:
+            return self.template()
         self.term = self.getTerm()
         self.ttschema = self.getSchema()
         section_map = self.sectionMap(self.term, self.ttschema)

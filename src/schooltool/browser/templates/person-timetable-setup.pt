@@ -12,6 +12,10 @@
 
 <metal:block metal:fill-slot="body">
 
+<p tal:condition="not:view/has_timetables"
+   i18n:translate="">There are no terms or timetable schemas defined.</p>
+
+<tal:if tal:condition="view/has_timetables">
 <form tal:attributes="action request/URL" class="plain" method="post">
 
   <fieldset>
@@ -92,6 +96,7 @@
   </div>
 
 </form>
+</tal:if>
 
 </metal:block>
 </body>

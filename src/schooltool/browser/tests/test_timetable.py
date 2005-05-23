@@ -1772,6 +1772,47 @@ def doctest_PersonTimetableSetupView():
 
     """
 
+
+def doctest_PersonTimetableSetupView_no_timetables():
+    """Doctest for the PersonTimetableSetupView view
+
+    What if there are no terms/timetable schemas?
+
+    We will need an application object
+
+        >>> from schooltool.app import SchoolToolApplication
+        >>> app = SchoolToolApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> app.setSiteManager(LocalSiteManager(app))
+        >>> setSite(app)
+
+    and a Person from that application
+
+        >>> from schooltool.app import Person
+        >>> context = Person("student", "Steven Udent")
+        >>> app["persons"]["whatever"] = context
+
+    We can now create the view.
+
+        >>> from schooltool.browser.timetable import PersonTimetableSetupView
+        >>> request = TestRequest()
+        >>> view = PersonTimetableSetupView(context, request)
+
+    What does __call__ do?
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <title> Scheduling for Steven Udent </title>
+        ...
+        <h1> Scheduling for Steven Udent </h1>
+        ...
+        <p>There are no terms or timetable schemas defined.</p>
+        ...
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
