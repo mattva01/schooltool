@@ -199,6 +199,35 @@ Frog can't see the section's calendar by default
     HTTP/1.1 303 See Other
     ...
 
+Frog's overlay portlet just has his own calendar:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+        <table class="overlays">
+    <BLANKLINE>
+          <tr>
+            <th style="text-align: center"><acronym title="Personal calendar">Cal</acronym></th>
+            <th><acronym title="Timetable calendar">TT</acronym></th>
+            <th></th>
+            <th></th>
+          </tr>
+    <BLANKLINE>
+          <tr style="background: #9db8d2">
+            <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
+            <td><input type="checkbox" name="my_timetable"
+                       checked="checked" /></td>
+            <td style="width: 100%">My Calendar</td>
+            <td></td>
+          </tr>
+    <BLANKLINE>
+        </table>
+    ...
+
+
 Adding a teacher:
 
     >>> print http(r"""
@@ -242,6 +271,50 @@ Frog can see the calendar now
     HTTP/1.1 200 Ok
     ...
 
+And Frog's overlay portlet shows the section:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+        <table class="overlays">
+    <BLANKLINE>
+          <tr>
+            <th style="text-align: center"><acronym title="Personal calendar">Cal</acronym></th>
+            <th><acronym title="Timetable calendar">TT</acronym></th>
+            <th></th>
+            <th></th>
+          </tr>
+    <BLANKLINE>
+          <tr style="background: #9db8d2">
+            <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
+            <td><input type="checkbox" name="my_timetable"
+                       checked="checked" /></td>
+            <td style="width: 100%">My Calendar</td>
+            <td></td>
+          </tr>
+    <BLANKLINE>
+          <tr style="background: #e0b6af">
+            <td><input type="checkbox" name="overlay:list"
+                       checked="checked"
+                       value="/frogpond/sections/section" /></td>
+            <td><input type="checkbox"
+                       name="overlay_timetables:list"
+                       checked="checked"
+                       value="/frogpond/sections/section" /></td>
+            <td style="width: 100%">Section</td>
+            <td><a class="go"
+                   style="background: #c1665a;
+                color: #c1665a"
+                   href="item/calendar/@@absolute_url">&nbsp;</a></td>
+        </tr>
+        </table>
+    ...
+
+
+
 If we fire Frog, in hopes of getting Salamander to step in:
 
 
@@ -276,6 +349,34 @@ and he's no longer an instructor:
           <h3>Instructors</h3>
           <ul>
           </ul>
+    ...
+
+And the section's calendar is no longer in his overlay portlet.
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+        <table class="overlays">
+    <BLANKLINE>
+          <tr>
+            <th style="text-align: center"><acronym title="Personal calendar">Cal</acronym></th>
+            <th><acronym title="Timetable calendar">TT</acronym></th>
+            <th></th>
+            <th></th>
+          </tr>
+    <BLANKLINE>
+          <tr style="background: #9db8d2">
+            <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
+            <td><input type="checkbox" name="my_timetable"
+                       checked="checked" /></td>
+            <td style="width: 100%">My Calendar</td>
+            <td></td>
+          </tr>
+    <BLANKLINE>
+        </table>
     ...
 
 

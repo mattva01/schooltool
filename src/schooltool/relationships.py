@@ -89,6 +89,24 @@ def setInstructorPermissions(event):
         return
 
 
+def updateInstructorCalendars(event):
+    """Add section's calendar to instructors overlaid calendars."""
+
+    if event.rel_type != URIInstruction:
+        return
+
+    if IRelationshipAddedEvent.providedBy(event):
+        person = event[URIInstructor]
+        section = event[URISection]
+        person.overlaid_calendars.add(section.calendar)
+    elif IRelationshipRemovedEvent.providedBy(event):
+        person = event[URIInstructor]
+        section = event[URISection]
+        person.overlaid_calendars.remove(section.calendar)
+    else:
+        return
+
+
 #
 # The CourseSection relationship
 #

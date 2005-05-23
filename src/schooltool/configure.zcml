@@ -51,6 +51,16 @@
       handler=".relationships.setInstructorPermissions"
       />
 
+  <subscriber
+      for="schoolbell.relationship.interfaces.IRelationshipAddedEvent"
+      handler=".relationships.updateInstructorCalendars"
+      />
+
+  <subscriber
+      for="schoolbell.relationship.interfaces.IRelationshipRemovedEvent"
+      handler=".relationships.updateInstructorCalendars"
+      />
+
   <adapter
       for=".interfaces.ITermContainer"
       factory="schoolbell.app.app.SimpleNameChooser"
