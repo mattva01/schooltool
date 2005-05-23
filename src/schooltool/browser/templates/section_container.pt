@@ -19,6 +19,10 @@
         <input type="checkbox" tal:attributes="name string:delete.${obj/zope:name}" />
         <a tal:content="obj/label"
            tal:attributes="href obj/@@absolute_url">Some Object</a>
+        <span class="hint">
+          (<span tal:replace="obj/size"/>
+          <span i18n:translate="">Students</span>)
+        </span>
       </li>
       <div class="controls">
         <input type="submit" class="button-cancel" value="Delete"
