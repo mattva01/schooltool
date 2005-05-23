@@ -223,12 +223,13 @@ class CalendarListView(BrowserView):
             # personal calendar?
 
         for item in user.overlaid_calendars:
-            # overlaid calendars
-            if item.show and canAccess(item.calendar, '__iter__'):
-                yield (item.calendar, item.color1, item.color2)
+            if canAccess(item.calendar, '__iter__'):
+                # overlaid calendars
+                if item.show:
+                    yield (item.calendar, item.color1, item.color2)
 
-            # overlaid timetables
-            if item.show_timetables:
-                owner = item.calendar.__parent__
-                ttcalendar = owner.makeTimetableCalendar()
-                yield (ttcalendar, item.color1, item.color2)
+                # overlaid timetables
+                if item.show_timetables:
+                    owner = item.calendar.__parent__
+                    ttcalendar = owner.makeTimetableCalendar()
+                    yield (ttcalendar, item.color1, item.color2)
