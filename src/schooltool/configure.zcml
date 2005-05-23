@@ -74,6 +74,7 @@
       />
 
   <!-- Utilities -->
+
   <utility
       provides="schooltool.interfaces.ITimetableModelFactory"
       name="SequentialDaysTimetableModel"
@@ -85,6 +86,21 @@
       name="WeeklyTimetableModel"
       component="schooltool.timetable.WeeklyTimetableModel"
       />
+
+  <utility
+      provides="schoolbell.relationship.interfaces.IRelationshipSchema"
+      component=".relationships.Instruction"
+      name="http://schooltool.org/ns/instruction" />
+
+  <utility
+      provides="schoolbell.relationship.uri.IURIObject"
+      component=".relationships.URIInstructor"
+      name="http://schooltool.org/ns/instruction/instructor" />
+
+  <utility
+      provides="schoolbell.relationship.uri.IURIObject"
+      component=".relationships.URISection"
+      name="http://schooltool.org/ns/instruction/section" />
 
   <!-- Events -->
 

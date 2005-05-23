@@ -26,6 +26,7 @@ import unittest
 from zope.testing import doctest
 from zope.app import zapi
 from zope.interface.verify import verifyObject
+from zope.interface import implements
 
 
 def doctest_Instruction():
@@ -144,6 +145,97 @@ def doctest_CourseSections():
 
     """
 
+
+def doctest_updateInstructorCalendars():
+    r"""
+        >>> from schooltool.relationships import updateInstructorCalendars
+        >>> from schooltool.relationships import URIInstruction
+        >>> from schooltool.relationships import URISection, URIInstructor
+        >>> from schoolbell.relationship.interfaces import \
+        ...                                         IRelationshipAddedEvent
+        >>> from schoolbell.relationship.interfaces import \
+        ...                                         IRelationshipRemovedEvent
+        >>> from schooltool.app import Person, Section
+        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> setUp()
+
+        >>> class AddEventStub(dict):
+        ...     rel_type = URIInstruction
+        ...     implements(IRelationshipAddedEvent)
+
+        >>> class RemoveEventStub(dict):
+        ...     rel_type = URIInstruction
+        ...     implements(IRelationshipRemovedEvent)
+
+        >>> class OtherEventStub(dict):
+        ...     rel_type = URIInstruction
+
+        >>> person = Person()
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        []
+        >>> section = Section(title="SectionA")
+
+    When the person is made the instructor of a section the sections calendar
+    is added to the overlaid calendars:
+
+        >>> add = AddEventStub()
+        >>> add[URIInstructor] = person
+        >>> add[URISection] = section
+        >>> updateInstructorCalendars(add)
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        ['SectionA']
+
+    The calendar is removed when the instructor is no longer in the section:
+
+        >>> remove = RemoveEventStub()
+        >>> remove[URIInstructor] = person
+        >>> remove[URISection] = section
+        >>> updateInstructorCalendars(remove)
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        []
+
+    If a person allready has that calendar nothing changes:
+
+        >>> sectionb = Section(title="SectionB")
+        >>> person.overlaid_calendars.add(sectionb.calendar)
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        ['SectionB']
+
+        >>> add = AddEventStub()
+        >>> add[URIInstructor] = person
+        >>> add[URISection] = sectionb
+        >>> updateInstructorCalendars(add)
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        ['SectionB']
+
+    If the person removes the calendar manually, that's ok:
+
+        >>> person.overlaid_calendars.remove(sectionb.calendar)
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        []
+
+
+        >>> remove = RemoveEventStub()
+        >>> remove[URIInstructor] = person
+        >>> remove[URISection] = sectionb
+        >>> updateInstructorCalendars(remove)
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        []
+
+    Events that aren't RelationshipAdded/Removed are ignored:
+
+        >>> other = OtherEventStub()
+        >>> other[URIInstructor] = person
+        >>> other[URISection] = sectionb
+        >>> updateInstructorCalendars(other)
+
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        []
+
+
+        >>> tearDown()
+
+    """
 
 def test_suite():
     return unittest.TestSuite([

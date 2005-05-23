@@ -375,5 +375,43 @@ Now we'll need an instructor:
     HTTP/1.1 201 Created
     ...
 
-Maverick is going to teach Goose a lesson XXX: as soon a I figure out some ZCML
+Maverick is going to teach Goose a lesson:
 
+    >>> print rest("""
+    ... POST /frogpond/persons/maverick/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
+    ...               xmlns:xlink="http://www.w3.org/1999/xlink"
+    ...               xlink:type="simple"
+    ...               xlink:role="http://schooltool.org/ns/instruction/section"
+    ...               xlink:arcrole="http://schooltool.org/ns/instruction"
+    ...  xlink:href="http://localhost/frogpond/sections/birdwatching-1"/>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    ...
+
+Now the section is in maverick's relationships
+
+    >>> print rest("""
+    ... GET /frogpond/persons/goose/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length:...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
+                   xmlns="http://schooltool.org/ns/model/0.1">
+      <existing>
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/membership/group"
+                      xlink:arcrole="http://schooltool.org/ns/membership"
+                      xlink:href="http://localhost/frogpond/sections/birdwatching-1">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/persons/goose/relationships/1"/>
+        </relationship>
+      </existing>
+    </relationships>
+    <BLANKLINE>

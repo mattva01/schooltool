@@ -85,8 +85,6 @@ def setInstructorPermissions(event):
         map.denyPermissionToPrincipal('schoolbell.view', principalid)
         map.denyPermissionToPrincipal('schoolbell.viewCalendar', principalid)
         map.denyPermissionToPrincipal('schoolbell.addEvent', principalid)
-    else:
-        return
 
 
 def updateInstructorCalendars(event):
@@ -98,13 +96,13 @@ def updateInstructorCalendars(event):
     if IRelationshipAddedEvent.providedBy(event):
         person = event[URIInstructor]
         section = event[URISection]
-        person.overlaid_calendars.add(section.calendar)
+        if section.calendar not in person.overlaid_calendars:
+            person.overlaid_calendars.add(section.calendar)
     elif IRelationshipRemovedEvent.providedBy(event):
         person = event[URIInstructor]
         section = event[URISection]
-        person.overlaid_calendars.remove(section.calendar)
-    else:
-        return
+        if section.calendar in person.overlaid_calendars:
+            person.overlaid_calendars.remove(section.calendar)
 
 
 #
