@@ -389,20 +389,20 @@ class TestTimetableCSVImporter(unittest.TestCase):
         ttday = tt['day1'] = TimetableDay(['A', 'B'])
         ttday.add('A', TimetableActivity(title="Sleeping"))
         ttday.add('B', TimetableActivity(title="Snoring"))
-        self.section.timetables['period1.some_schema'] = tt
+        self.section.timetables['term1.some_schema'] = tt
 
         tt2 = Timetable(['day2'])
         tt2day = tt2['day2'] = TimetableDay(['A', 'B'])
         tt2day.add('A', TimetableActivity(title="Working"))
-        self.section.timetables['period2.some_schema'] = tt2
+        self.section.timetables['term2.some_schema'] = tt2
 
         imp = self.createImporter()
-        imp.period_id = 'period1'
+        imp.term_id = 'term1'
         imp.ttschema = 'some_schema'
         imp.clearTimetables()
 
-        tt_notblank = self.section.timetables['period2.some_schema']
-        self.assert_(('period1.some_schema')
+        tt_notblank = self.section.timetables['term2.some_schema']
+        self.assert_(('term1.some_schema')
                      not in self.section.timetables.keys())
         self.assertEquals(len(list(tt_notblank.itercontent())), 1)
 
@@ -416,7 +416,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp = self.createImporter()
         imp.ttname = 'tt'
         imp.ttschema = 'two_day'
-        imp.period_id = 'period1'
+        imp.term_id = 'term1'
         ttschema = TimetableSchema(("day1", "day2"))
         ttschema["day1"] = TimetableSchemaDay(("A", "B"))
         ttschema["day2"] = TimetableSchemaDay(("A", "B"))
@@ -436,10 +436,10 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assertIsRelated(section, math101, rel=URISectionOfCourse)
         self.assertIsRelated(section, teacher, rel=URISection)
 
-        tt = section.timetables['period1.two_day']
+        tt = section.timetables['term1.two_day']
         activities = list(tt.itercontent())
         self.assertEquals(len(activities), 2)
-        for day_id, period_id, activity in activities:
+        for day_id, term_id, activity in activities:
             self.assertEquals(activity.title, 'Math 101')
             self.assert_(activity.owner is section)
             self.assertEquals(list(activity.resources), [self.location])
@@ -460,7 +460,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp = self.createImporter()
         imp.ttname = 'tt'
         imp.ttschema = 'two_day'
-        imp.period_id = 'period1'
+        imp.term_id = 'term1'
         imp.ttschema = TimetableSchema(("day1", "day2"))
         imp.ttschema["day1"] = TimetableSchemaDay(("A", "B"))
         imp.ttschema["day2"] = TimetableSchemaDay(("A", "B"))

@@ -189,16 +189,16 @@ class TimetableCSVImporter(object):
                       " of the timetable."))
             return False
 
-        self.period_id, self.ttschema = rows[0]
+        self.term_id, self.ttschema = rows[0]
         if self.ttschema not in self.app["ttschemas"].keys():
             error_msg = _("The timetable schema ${schema} does not exist.")
             error_msg.mapping = {'schema': self.ttschema}
             self.errors.generic.append(error_msg)
             return False
 
-        if self.period_id not in self.app["terms"].keys():
+        if self.term_id not in self.app["terms"].keys():
             error_msg = _("The term ${term} does not exist.")
-            error_msg.mapping = {'term': self.period_id}
+            error_msg.mapping = {'term': self.term_id}
             self.errors.generic.append(error_msg)
             return False
 
@@ -357,7 +357,7 @@ class TimetableCSVImporter(object):
     def clearTimetables(self):
         """Delete timetables of the period and schema we are dealing with."""
         for section in self.sections.values():
-            key = ".".join((self.period_id, self.ttschema))
+            key = ".".join((self.term_id, self.ttschema))
             if key in section.timetables.keys():
                 del section.timetables[key]
 
@@ -389,7 +389,7 @@ class TimetableCSVImporter(object):
             section.instructors.add(teacher)
 
         # Create the timetable if it does not exist yet.
-        timetable_key = ".".join((self.period_id, self.ttschema))
+        timetable_key = ".".join((self.term_id, self.ttschema))
         if timetable_key not in section.timetables.keys():
             tt = self.app["ttschemas"][self.ttschema].createTimetable()
             section.timetables[timetable_key] = tt
