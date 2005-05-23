@@ -31,7 +31,6 @@ from zope.security.proxy import removeSecurityProxy
 from schoolbell.relationship import getRelatedObjects, relate
 from schoolbell.app.membership import Membership
 from schoolbell.app.browser import csvimport as sb
-from schoolbell.app.app import SimpleNameChooser
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ISchoolToolApplication
