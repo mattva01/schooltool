@@ -2,7 +2,7 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
   <head>
     <title metal:fill-slot="title" i18n:translate="">
-      Upload schooltool persons as CSV
+      Upload SchoolTool persons as CSV
     </title>
   </head>
   <body>

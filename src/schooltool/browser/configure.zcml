@@ -248,7 +248,7 @@
       template="templates/csvimport.pt"
       permission="schoolbell.create"
       menu="schoolbell_actions"
-      title="Import CSV"
+      title="Import Timetables"
       layer="SchoolToolLayer"
       />
 
