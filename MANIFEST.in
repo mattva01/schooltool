@@ -17,8 +17,8 @@ include scripts/schooltool
 recursive-include src/schooltool *.pt *.js *.png *.gif *.css *.mo
 recursive-include src/schooltool *.rng *.xml *.zcml *.pot
 
-# Miscellaneous other data files included in the distribution
-recursive-include src/schooltool *.ics
+# Miscellaneous other data files (mostly for testing - yes *.py is right!)
+recursive-include src/schooltool *.ics *.py *.txt *.conf
 recursive-include doc *.txt *.rst
 
 # include the debian directory
@@ -27,6 +27,60 @@ include debian/copyright debian/README.Debian debian/TODO
 include debian/*.1 debian/schooltool.* debian/ssl-cert.cnf
 include debian/python*schooltool.*
 include debian/po/*.po debian/po/templates.pot debian/po/POTFILES.in
+
+# The schoolbell module
+recursive-include src/schoolbell *
+
+# Zope
+include Zope3/setup.py
+include Zope3/utilities/runurl.py
+include Zope3/z3.py
+include Zope3/test.py
+include Zope3/Makefile
+include Zope3/ftesting.zcml
+include Zope3/securitypolicy.zcml
+include Zope3/securitypolicy-ftesting.zcml
+include Zope3/ZopePublicLicense.txt
+include Zope3/overrides_ftesting.zcml.in
+
+recursive-include Zope3/src/BTrees *
+recursive-include Zope3/src/docutils *
+recursive-include Zope3/src/persistent *
+recursive-include Zope3/src/pytz *
+recursive-include Zope3/src/RestrictedPython *
+recursive-include Zope3/src/transaction *
+recursive-include Zope3/src/ZConfig *
+recursive-include Zope3/src/ZODB *
+recursive-include Zope3/src/zodbcode *
+
+include Zope3/src/zope/__init__.py
+recursive-include Zope3/src/zope/app *
+include Zope3/package-includes/zope.app.session-configure.zcml
+recursive-include Zope3/src/zope/cachedescriptors *
+recursive-include Zope3/src/zope/configuration *
+recursive-include Zope3/src/zope/component *
+recursive-include Zope3/src/zope/deprecation *
+recursive-include Zope3/src/zope/exceptions *
+recursive-include Zope3/src/zope/event *
+recursive-include Zope3/src/zope/i18n *
+recursive-include Zope3/src/zope/i18nmessageid *
+recursive-include Zope3/src/zope/interface *
+recursive-include Zope3/src/zope/hookable *
+recursive-include Zope3/src/zope/modulealias *
+recursive-include Zope3/src/zope/pagetemplate *
+recursive-include Zope3/src/zope/proxy *
+recursive-include Zope3/src/zope/publisher *
+recursive-include Zope3/src/zope/schema *
+include Zope3/package-includes/securitypolicy-meta.zcml
+recursive-include Zope3/src/zope/security *
+recursive-include Zope3/src/zope/server *
+recursive-include Zope3/src/zope/tales *
+recursive-include Zope3/src/zope/tal *
+recursive-include Zope3/src/zope/testing *
+recursive-include Zope3/src/zope/thread *
+
+recursive-include Zope3/src/ThreadedAsync *
+recursive-include Zope3/src/zdaemon *
 
 # Some things that we should not let into a distribution
 # RCS stuff is handled internally by distutils
