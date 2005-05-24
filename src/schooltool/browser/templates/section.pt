@@ -3,7 +3,7 @@
   <title metal:fill-slot="title" tal:content="context/title" />
 </head>
 <body>
-  <h1 metal:fill-slot="content-header">
+  <h1 metal:fill-slot="content-header" i18n:translate="">
     Section of
     <tal:loop tal:repeat="course context/courses">
       <a href=""
