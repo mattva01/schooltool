@@ -419,62 +419,6 @@ class TimetableSchemaWizard(BrowserView, TabindexMixin):
         setUpWidgets(self, self._schema, IInputWidget,
                      initial={'name': 'default'})
 
-    def name_parser(name):
-        """Strip whitespace from names.
-
-          >>> name_parser = TimetableSchemaWizard.name_parser
-          >>> name_parser(None)
-          >>> name_parser('  ')
-          ''
-          >>> name_parser(' default ')
-          'default'
-
-        """
-        if name is None:
-            return None
-        return name.strip()
-    name_parser = staticmethod(name_parser)
-
-    def name_validator(self, name):
-        if name is None:
-            return
-        if not name:
-            raise ValueError(_("Timetable schema name must not be empty"))
-        elif not valid_name(name):
-            raise ValueError(_("Timetable schema name can only contain"
-                               " English letters, numbers, and the"
-                               " following punctuation characters:"
-                               " - . , ' ( )"))
-        elif name in self.context.keys():
-            raise ValueError(_("Timetable schema with this name already"
-                               " exists."))
-
-    def duration_validator(value):
-        """Check if duration is acceptable.
-
-          >>> duration_validator = TimetableSchemaWizard.duration_validator
-          >>> duration_validator(None)
-          >>> duration_validator(42)
-          >>> duration_validator(0)
-          >>> duration_validator(1440)
-          >>> duration_validator(-1)
-          Traceback (most recent call last):
-            ...
-          ValueError: Duration cannot be negative
-          >>> duration_validator(1441)
-          Traceback (most recent call last):
-            ...
-          ValueError: Duration cannot be longer than 24 hours
-
-        """
-        if value is None:
-            return
-        if value < 0:
-            raise ValueError(_("Duration cannot be negative"))
-        if value > 24 * 60:
-            raise ValueError(_("Duration cannot be longer than 24 hours"))
-    duration_validator = staticmethod(duration_validator)
-
     def __call__(self):
         self.data = getWidgetsData(self, self._schema)
 
