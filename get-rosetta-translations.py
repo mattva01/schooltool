@@ -49,7 +49,7 @@ locales=["de",
 
 rosetta_url = "https://launchpad.ubuntu.com/products/$domain$/0.10-rc1/+pots/$domain$/$locale$/po"
 
-translation_dir = os.path.join(here, 'src', 'schoolbell', 'app', 'locales',
+translation_dir = os.path.join(here, 'src', 'schooltool', 'locales',
         "$locale$", "LC_MESSAGES", "$domain$.po")
 
 create_dir = True
