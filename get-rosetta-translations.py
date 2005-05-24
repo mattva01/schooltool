@@ -36,10 +36,15 @@ here=os.path.dirname(__file__)
 # Translations to download, these are the rosetta translations which have had
 # some work on them
 locales=["de",
+         "el",
          "fr",
          "id",
          "lt",
+         "nl",
+         "nb",
          "pa",
+         "pt",
+         "tr",
          ]
 
 rosetta_url = "https://launchpad.ubuntu.com/products/$domain$/0.10-rc1/+pots/$domain$/$locale$/po"
