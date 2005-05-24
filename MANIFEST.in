@@ -15,7 +15,7 @@ include scripts/schooltool
 # Data files installed in the setup.py
 # If you modify this, also modify the regex in setup.py
 recursive-include src/schooltool *.pt *.js *.png *.gif *.css *.mo
-recursive-include src/schooltool *.rng *.xml *.zcml *.pot
+recursive-include src/schooltool *.rng *.xml *.zcml *.pot *.po
 
 # Miscellaneous other data files (mostly for testing - yes *.py is right!)
 recursive-include src/schooltool *.ics *.py *.txt *.conf
