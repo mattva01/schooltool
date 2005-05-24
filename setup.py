@@ -198,7 +198,7 @@ Any modern web browser is suitable for the web application interface.  The
 interface degrades gracefully, so a browser that does not support CSS or
 Javascript will be usable, although perhaps not very nice or convenient.
     """,
-    version="0.10rc1",
+    version="0.10pre1",
     url='http://www.schooltool.org',
     license="GPL",
     maintainer="SchoolTool development team",
