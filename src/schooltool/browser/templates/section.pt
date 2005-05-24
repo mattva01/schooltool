@@ -5,11 +5,10 @@
 <body>
   <h1 metal:fill-slot="content-header" i18n:translate="">
     Section of
-    <tal:loop tal:repeat="course context/courses">
+    <tal:loop tal:repeat="course context/courses" i18n:name="course">
       <a href=""
          tal:attributes="href course/@@absolute_url"
-         tal:content="course/title"
-         i18n:name="course"/>
+         tal:content="course/title"/>
     </tal:loop>
   </h1>
 
