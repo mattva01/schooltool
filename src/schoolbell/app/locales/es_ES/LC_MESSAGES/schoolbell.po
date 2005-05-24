@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: SchoolBell\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2005-01-04 21:21:42.080336\n"
-"PO-Revision-Date: 2005-05-17 15:52+0000\n"
-"Last-Translator: Alejandro Sánchez Marín <asmarin@us.es>\n"
+"PO-Revision-Date: 2005-05-19 10:19+0000\n"
+"Last-Translator: Carlos Perello Marin <carlos.perello@canonical.com>\n"
 "Language-Team: Spanish (Spain) <es_ES@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -111,11 +111,11 @@ msgstr "Nombre de usuario o contraseña incorrectos"
 #: src/schoolbell/app/browser/configure.zcml:58
 #: src/schoolbell/app/browser/configure.zcml:112
 #: src/schoolbell/app/browser/configure.zcml:128
-#: src/schoolbell/app/browser/configure.zcml:204
-#: src/schoolbell/app/browser/configure.zcml:261
-#: src/schoolbell/app/browser/configure.zcml:304
-#: src/schoolbell/app/browser/configure.zcml:361
-#: src/schoolbell/app/browser/configure.zcml:505
+#: src/schoolbell/app/browser/configure.zcml:215
+#: src/schoolbell/app/browser/configure.zcml:272
+#: src/schoolbell/app/browser/configure.zcml:315
+#: src/schoolbell/app/browser/configure.zcml:372
+#: src/schoolbell/app/browser/configure.zcml:527
 #: src/schoolbell/app/browser/templates/acl.pt:88
 msgid "View"
 msgstr "Vista"
@@ -389,13 +389,7 @@ msgstr "Actualizado en ${date time}"
 
 #: src/schoolbell/app/browser/cal.py:362
 msgid "${day_of_week}, ${date}"
-msgstr ""
-
-#: src/schoolbell/app/browser/cal.py:422
-#: src/schoolbell/app/browser/cal.py:426
-#: src/schoolbell/app/browser/cal.py:430
-msgid "%s, %s"
-msgstr "%s, %s"
+msgstr "${day_of_week}, ${date}"
 
 #: src/schoolbell/app/browser/cal.py:704
 msgid "Next week"
@@ -411,7 +405,7 @@ msgstr "Semana anterior"
 
 #: src/schoolbell/app/browser/cal.py:711
 msgid "${month}, ${year} (week ${week})"
-msgstr ""
+msgstr "  \t${month}, ${year} (week ${week})"
 
 #: src/schoolbell/app/browser/cal.py:751
 msgid "Next month"
@@ -427,7 +421,7 @@ msgstr "Mes anterior"
 
 #: src/schoolbell/app/browser/cal.py:758
 msgid "${month}, ${year}"
-msgstr ""
+msgstr "${month}, ${year}"
 
 #: src/schoolbell/app/browser/cal.py:778
 msgid "Week ${week_no}"
@@ -590,110 +584,120 @@ msgstr "Cambiar detalles"
 msgid "New Person"
 msgstr "Nueva persona"
 
-#: src/schoolbell/app/browser/configure.zcml:220
+#: src/schoolbell/app/browser/configure.zcml:202
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:21
+msgid "Import Persons"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:231
 msgid "Add a Group"
 msgstr "Añadir a Grupo"
 
-#: src/schoolbell/app/browser/configure.zcml:233
+#: src/schoolbell/app/browser/configure.zcml:244
 msgid "New Group"
 msgstr "Nuevo Grupo"
 
-#: src/schoolbell/app/browser/configure.zcml:240
+#: src/schoolbell/app/browser/configure.zcml:251
 msgid "Edit Group Information"
 msgstr "Editar información de grupo"
 
-#: src/schoolbell/app/browser/configure.zcml:253
+#: src/schoolbell/app/browser/configure.zcml:264
 msgid "A Group"
 msgstr "Un grupo"
 
-#: src/schoolbell/app/browser/configure.zcml:253
+#: src/schoolbell/app/browser/configure.zcml:264
 msgid "SchoolBell Group"
 msgstr "Grupo SchoolBell"
 
-#: src/schoolbell/app/browser/configure.zcml:271
+#: src/schoolbell/app/browser/configure.zcml:282
 msgid "Add/Remove Members"
 msgstr "Añadir/Eliminar miembros"
 
-#: src/schoolbell/app/browser/configure.zcml:281
+#: src/schoolbell/app/browser/configure.zcml:292
 msgid "Add/Remove Resources"
 msgstr "Añadir/Eliminar recursos"
 
-#: src/schoolbell/app/browser/configure.zcml:291
+#: src/schoolbell/app/browser/configure.zcml:302
 #: src/schoolbell/app/browser/templates/group-csvimport.pt:21
 msgid "Import Groups"
 msgstr "Importar grupos"
 
-#: src/schoolbell/app/browser/configure.zcml:320
+#: src/schoolbell/app/browser/configure.zcml:331
 msgid "Add a Resource"
 msgstr "Añadir un recurso"
 
-#: src/schoolbell/app/browser/configure.zcml:333
+#: src/schoolbell/app/browser/configure.zcml:344
 msgid "Edit Resource Information"
 msgstr "Editar información recurso"
 
-#: src/schoolbell/app/browser/configure.zcml:346
+#: src/schoolbell/app/browser/configure.zcml:357
 msgid "New Resource"
 msgstr "Nuevo recurso"
 
-#: src/schoolbell/app/browser/configure.zcml:353
+#: src/schoolbell/app/browser/configure.zcml:364
 msgid "SchoolBell Resource"
 msgstr "Recurso SchoolBell"
 
-#: src/schoolbell/app/browser/configure.zcml:353
+#: src/schoolbell/app/browser/configure.zcml:364
 msgid "A Resource"
 msgstr "Un recurso"
 
-#: src/schoolbell/app/browser/configure.zcml:389
-msgid "View Calendar"
-msgstr "Ver calendario"
+#: src/schoolbell/app/browser/configure.zcml:382
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:21
+msgid "Import Resources"
+msgstr ""
 
 #: src/schoolbell/app/browser/configure.zcml:39
 #: src/schoolbell/app/browser/templates/view_macros.pt:96
 msgid "Actions"
 msgstr "Acciones"
 
-#: src/schoolbell/app/browser/configure.zcml:397
+#: src/schoolbell/app/browser/configure.zcml:411
+msgid "View Calendar"
+msgstr "Ver calendario"
+
+#: src/schoolbell/app/browser/configure.zcml:419
 msgid "Calendar (Daily)"
 msgstr "Calendario (Diario)"
 
-#: src/schoolbell/app/browser/configure.zcml:407
+#: src/schoolbell/app/browser/configure.zcml:429
 msgid "Calendar (Weekly)"
 msgstr "Calendario(Semanal)"
-
-#: src/schoolbell/app/browser/configure.zcml:417
-msgid "Calendar (Monthly)"
-msgstr "Calendario(Mensual)"
-
-#: src/schoolbell/app/browser/configure.zcml:427
-msgid "Calendar (Yearly)"
-msgstr "Calendario(Anual)"
 
 #: src/schoolbell/app/browser/configure.zcml:43
 #: src/schoolbell/app/browser/templates/view_macros.pt:17
 msgid "SchoolBell"
-msgstr ""
+msgstr "SchoolBell"
 
-#: src/schoolbell/app/browser/configure.zcml:437
+#: src/schoolbell/app/browser/configure.zcml:439
+msgid "Calendar (Monthly)"
+msgstr "Calendario(Mensual)"
+
+#: src/schoolbell/app/browser/configure.zcml:449
+msgid "Calendar (Yearly)"
+msgstr "Calendario(Anual)"
+
+#: src/schoolbell/app/browser/configure.zcml:459
 msgid "Atom View"
-msgstr ""
+msgstr "Atom View"
 
-#: src/schoolbell/app/browser/configure.zcml:447
+#: src/schoolbell/app/browser/configure.zcml:469
 msgid "iCalendar"
-msgstr ""
+msgstr "iCalendar"
 
-#: src/schoolbell/app/browser/configure.zcml:457
+#: src/schoolbell/app/browser/configure.zcml:479
 msgid "Free/Busy"
 msgstr "Libre/Ocupado"
 
-#: src/schoolbell/app/browser/configure.zcml:467
+#: src/schoolbell/app/browser/configure.zcml:489
 msgid "New Event"
 msgstr "Nuevo Evento"
 
-#: src/schoolbell/app/browser/configure.zcml:480
+#: src/schoolbell/app/browser/configure.zcml:502
 msgid "Open in iCal"
 msgstr "Abrir en iCal"
 
-#: src/schoolbell/app/browser/configure.zcml:534
+#: src/schoolbell/app/browser/configure.zcml:556
 msgid "Edit Event"
 msgstr "Editar evento"
 
@@ -701,52 +705,65 @@ msgstr "Editar evento"
 msgid "Set Up Access"
 msgstr "Configurar acceso"
 
-#: src/schoolbell/app/browser/csvimport.py:108
+#: src/schoolbell/app/browser/csvimport.py:109
 msgid "No charset specified"
 msgstr "Mapa de caracteres no especificado"
 
-#: src/schoolbell/app/browser/csvimport.py:113
+#: src/schoolbell/app/browser/csvimport.py:114
 msgid "Unknown charset"
 msgstr "Juego de caracteres desconocido"
 
-#: src/schoolbell/app/browser/csvimport.py:157
+#: src/schoolbell/app/browser/csvimport.py:158
 msgid "Error in CSV data, line ${line_no}"
 msgstr "Error en datos CVS, línea ${line_no}"
 
-#: src/schoolbell/app/browser/csvimport.py:161
+#: src/schoolbell/app/browser/csvimport.py:162
 msgid "Conversion to unicode failed in line ${line_no}"
 msgstr "Conversión a unicode fallida en línea ${line_no}"
 
-#: src/schoolbell/app/browser/csvimport.py:228
+#: src/schoolbell/app/browser/csvimport.py:243
+#: src/schoolbell/app/browser/csvimport.py:288
 msgid "Insufficient data provided."
 msgstr "Datos suministrados insuficientes"
 
-#: src/schoolbell/app/browser/csvimport.py:232
+#: src/schoolbell/app/browser/csvimport.py:247
 msgid "Titles may not be empty"
 msgstr "Los títulos no puede estar vacíos"
 
-#: src/schoolbell/app/browser/csvimport.py:58
+#: src/schoolbell/app/browser/csvimport.py:292
+msgid "username may not be empty"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:296
+msgid "fullname may not be empty"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:307
+msgid "Duplicate username: ${username}"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:59
 msgid "No data provided"
 msgstr "Datos no suministrados"
 
-#: src/schoolbell/app/browser/csvimport.py:65
+#: src/schoolbell/app/browser/csvimport.py:66
 msgid "Could not convert data to Unicode (incorrect charset?)."
 msgstr ""
 "No se puede convertir datos a Unicode (¿conjunto de caractéres incorrecto?)"
 
-#: src/schoolbell/app/browser/csvimport.py:74
+#: src/schoolbell/app/browser/csvimport.py:75
 msgid "CSV file imported successfully."
 msgstr "Archivo CVS importado correctamente"
 
-#: src/schoolbell/app/browser/csvimport.py:76
+#: src/schoolbell/app/browser/csvimport.py:77
 msgid "Failed to import CSV file"
 msgstr "Fallo al importar archivo CVS"
 
-#: src/schoolbell/app/browser/csvimport.py:84
+#: src/schoolbell/app/browser/csvimport.py:85
 msgid "CSV text imported successfully."
 msgstr "Texto CVS importado correctamente"
 
-#: src/schoolbell/app/browser/csvimport.py:86
+#: src/schoolbell/app/browser/csvimport.py:87
 msgid "Failed to import CSV text"
 msgstr "Fallo al importar texto CVS"
 
@@ -848,11 +865,11 @@ msgstr "Permite editar nombres, títulos, descripciones, fotos, etc."
 
 #: src/schoolbell/app/browser/templates/cal_atom.pt:15
 msgid "[Schooltool.org]"
-msgstr ""
+msgstr "[Schooltool.org]"
 
 #: src/schoolbell/app/browser/templates/cal_atom.pt:15
 msgid "Schooltool"
-msgstr ""
+msgstr "Schooltool"
 
 #: src/schoolbell/app/browser/templates/cal_atom.pt:22
 msgid "Events for"
@@ -863,7 +880,7 @@ msgstr "Eventos para"
 #  "      in a Newsreader or syndicated to another site. Please visit"
 #: src/schoolbell/app/browser/templates/cal_atom.pt:43
 msgid "atom_description"
-msgstr ""
+msgstr "atom_description"
 
 # Default: "Atom Enabled"
 #: src/schoolbell/app/browser/templates/cal_atom.pt:47
@@ -1081,62 +1098,65 @@ msgstr "Reservar"
 
 #: src/schoolbell/app/browser/templates/group-csvimport.pt:24
 msgid ""
-"CSV data should be made up of a group title and an optional group "
-"description. Any extra information will be discarded."
+"CSV data <strong>must</strong> include a group title and "
+"<strong>may</strong> include an optional group description. Any extra "
+"information will be discarded."
 msgstr ""
-"Datos CVS deben tener un título de grupo y una descripción de grupo "
-"opcional. Cualquier información adicional será descartada."
 
-#: src/schoolbell/app/browser/templates/group-csvimport.pt:28
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:29
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:29
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:28
 msgid "Example:"
 msgstr "Ejemplo:"
 
-#: src/schoolbell/app/browser/templates/group-csvimport.pt:30
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:31
 msgid ""
 "\n"
-"Some Group, Some group description\n"
-"Second Group\n"
-"Another Group, Another description, this text will be discarded\n"
+"LUG, Linux Users Group\n"
+"Chess Club\n"
+"Sports Club, After-school sports club, <em>text after a second comma</em>\n"
 msgstr ""
-"\n"
-"Algun grupo, alguna descripción de grupo\n"
-"Segundo grupo, alguna descripción, este texto será descartado\n"
 
-#: src/schoolbell/app/browser/templates/group-csvimport.pt:35
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:36
 msgid ""
-"The above example will create 3 groups titled 'Some Group', 'Second Group' "
-"and 'Another Group'. The first and last group will have the descriptions "
-"'Some group description' and 'Another description' respectively. The Second "
-"group will have no description, and the extra \"this text will be "
-"discarded\" text on the third group will be ignored."
+"The above example will create 3 groups titled 'LUG', 'Chess Club' and "
+"'Sports Club'. The first and last group will have the descriptions 'Linux "
+"Users Group' and 'After-school sports club' respectively. The 'Chess Club' "
+"group will have no description, and the extra \"text after a second comma\" "
+"text on the third group will be ignored."
 msgstr ""
-"El siguiente ejemplo creará 3 grupos llamados 'Some Group','Second Group' y "
-"'Otro grupo'. El primer y último grupo tendrán la descripción 'Some group "
-"description' y 'Another description' respectivamente. El segundo grupo no "
-"tendrá descripción y el texto extra \"this text will be discarded\" en el "
-"tercer grupo será ignorado."
 
 #: src/schoolbell/app/browser/templates/group-csvimport.pt:4
 msgid "Upload schooltool groups as CSV"
 msgstr ""
 
 #: src/schoolbell/app/browser/templates/group-csvimport.pt:45
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:46
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:43
 msgid "Upload CSV File"
 msgstr ""
 
 #: src/schoolbell/app/browser/templates/group-csvimport.pt:47
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:48
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:45
 msgid "CSV File"
 msgstr ""
 
 #: src/schoolbell/app/browser/templates/group-csvimport.pt:65
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:66
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:63
 msgid "Input CSV Data"
 msgstr ""
 
 #: src/schoolbell/app/browser/templates/group-csvimport.pt:66
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:67
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:64
 msgid "CSV Data"
 msgstr "Datos CVS"
 
 #: src/schoolbell/app/browser/templates/group-csvimport.pt:70
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:71
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:68
 msgid "Submit"
 msgstr "Enviar"
 
@@ -1302,6 +1322,31 @@ msgstr "Añadir nota"
 msgid "add-button"
 msgstr "Añadir"
 
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:24
+msgid ""
+"CSV data <strong>must</strong> contain a user name and a full name. An "
+"optional password <strong>may</strong> be included as well."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:30
+msgid ""
+"\n"
+"jjones, Jimmy Jones\n"
+"jbjones, Jim Bob Jones, r2m45J\n"
+"howard, Howard\n"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:35
+msgid ""
+"The above example will create three users, 'jjones', 'jbjones' and 'howard'. "
+"Of the three, only 'jbjones' has a password ('r2m45J') and will be able to "
+"login to the system. Note that passwords must be sent in plain text."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:4
+msgid "Upload schooltool persons as CSV"
+msgstr ""
+
 #: src/schoolbell/app/browser/templates/person.pt:15
 msgid "Username:"
 msgstr "Usuario:"
@@ -1338,7 +1383,7 @@ msgstr "Editar grupos"
 
 #: src/schoolbell/app/browser/templates/person.pt:57
 msgid "Manage this person's memberships"
-msgstr ""
+msgstr "Gestionar los grupos a los que pertenece esta persona"
 
 #: src/schoolbell/app/browser/templates/person_add.pt:13
 msgid "Person Information"
@@ -1410,6 +1455,34 @@ msgstr "Cancelar"
 msgid "Deleting a repeating event (${event_title})"
 msgstr "Eliminando un evento repetitivo (${event_title})"
 
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:24
+msgid ""
+"CSV data <strong>must</strong> include a resource title and "
+"<strong>may</strong> include an optional resource description. Any extra "
+"information will be discarded."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:31
+msgid ""
+"\n"
+"PRJ302, Overhead Projector #302\n"
+"Main Auditorium\n"
+"LC-805, Laptop Computer #805, <em>text after a second comma</em>\n"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:36
+msgid ""
+"The above example will create 3 resources titled 'PRJ302', 'Main Auditorium' "
+"and 'LC-805'. The first and last resource will have the descriptions "
+"'Overhead Projector #302' and 'Laptop Computer #805' respectively. The "
+"\"Main Auditorium\" resource will have no description, and the \"text after "
+"a second comma\" text on the third resource will be ignored."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:4
+msgid "Upload schooltool resources as CSV"
+msgstr ""
+
 #: src/schoolbell/app/browser/templates/resource.pt:20
 msgid "This resource does not belong to any groups."
 msgstr "Este recurso no esta asociado a ningún grupo"
@@ -1446,7 +1519,7 @@ msgstr "Diario"
 #: src/schoolbell/app/browser/templates/view_macros.pt:175
 #: src/schoolbell/app/browser/templates/view_macros.pt:181
 msgid "<img alt=\"x\" src=\"XXX\" />"
-msgstr ""
+msgstr "<img alt=\"x\" src=\"XXX\" />"
 
 #: src/schoolbell/app/browser/templates/view_macros.pt:165
 msgid "View weekly calendar"
@@ -1475,7 +1548,7 @@ msgstr "Ir a..."
 
 #: src/schoolbell/app/browser/templates/view_macros.pt:27
 msgid "SchoolTool"
-msgstr ""
+msgstr "SchoolTool"
 
 #: src/schoolbell/app/browser/templates/view_macros.pt:314
 msgid "Tomorrow's Events"
@@ -1508,13 +1581,13 @@ msgstr ""
 
 #: src/schoolbell/app/configure.zcml:17
 #: src/schoolbell/app/browser/configure.zcml:178
-#: src/schoolbell/app/browser/configure.zcml:240
-#: src/schoolbell/app/browser/configure.zcml:333
+#: src/schoolbell/app/browser/configure.zcml:251
+#: src/schoolbell/app/browser/configure.zcml:344
 msgid "Edit Info"
 msgstr "Editar información"
 
 #: src/schoolbell/app/configure.zcml:19
-#: src/schoolbell/app/browser/configure.zcml:515
+#: src/schoolbell/app/browser/configure.zcml:537
 msgid "Add Event"
 msgstr ""
 
@@ -1558,11 +1631,11 @@ msgstr "Formato horario"
 
 #: src/schoolbell/app/interfaces.py:294
 msgid "HH:MM"
-msgstr ""
+msgstr "HH:MM"
 
 #: src/schoolbell/app/interfaces.py:295
 msgid "H:MM am/pm"
-msgstr ""
+msgstr "H:MM am/pm"
 
 #: src/schoolbell/app/interfaces.py:298
 #: src/schoolbell/app/interfaces.py:299
@@ -1659,7 +1732,7 @@ msgstr "Todos los usuarios"
 #: src/schoolbell/app/main.py:390
 #: src/schoolbell/app/main.py:393
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #: src/schoolbell/app/main.py:367
 msgid "Run %s -h for help."
@@ -1718,7 +1791,7 @@ msgstr ""
 "  -c, --config xxx sustituir este archivo de configuración por la "
 "configuración por defecto \n"
 "  -h, --help muestra esta ayuda\n"
-"  -d, --daemon mover a segundo plano después de ejecutar\n"
+"  -d, --daemon mover a segundo plano después de ejecutar"
 
 #: src/schoolbell/app/main.py:78
 msgid ""
@@ -1739,7 +1812,6 @@ msgid ""
 "\n"
 "This is not a SchoolBell 1.0 database file, aborting.\n"
 msgstr ""
-"\n"
 "Esto no es una base de datos de Schoolbell 1.0, abortando.\n"
 
 #: src/schoolbell/app/main.py:91
@@ -1749,7 +1821,6 @@ msgid ""
 "\n"
 "Please run the standalone database upgrade script.\n"
 msgstr ""
-"\n"
 "Esto no es una base de datos de schoolbell 1.0, abortando.\n"
 "\n"
 "Por favor ejecute el script local de actualización.\n"
