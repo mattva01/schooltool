@@ -373,6 +373,9 @@ class ITimetableSchema(IContained):
     periods.
     """
 
+    title = TextLine(
+        title=u"The title of the timetable schema.")
+
     model = Object(
         title=u"A timetable model this timetable should be used with.",
         schema=ITimetableModel)

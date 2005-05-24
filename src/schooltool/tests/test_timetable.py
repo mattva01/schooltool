@@ -185,6 +185,15 @@ class TestTimetableSchema(unittest.TestCase):
         verifyObject(ITimetableSchema, t)
         verifyObject(ITimetableSchemaWrite, t)
 
+    def test_title(self):
+        from schooltool.timetable import TimetableSchema
+        days = ('Mo', 'Tu', 'We', 'Th', 'Fr')
+        t = TimetableSchema(days, title="A Schema")
+        self.assertEqual(t.title, "A Schema")
+
+        t = TimetableSchema(days)
+        self.assertEqual(t.title, "Schema")
+
     def test_keys(self):
         from schooltool.timetable import TimetableSchema
         days = ('Mo', 'Tu', 'We', 'Th', 'Fr')

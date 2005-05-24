@@ -829,6 +829,12 @@ class TestTimetableSchemaWizard(NiceDiffsMixin, unittest.TestCase):
         ztapi.provideUtility(ITimetableModelFactory,
                              WeeklyTimetableModel,
                              'WeeklyTimetableModel')
+        from schooltool.interfaces import ITimetableSchemaContainer
+        from schoolbell.app.app import SimpleNameChooser
+        from zope.app.container.interfaces import INameChooser
+        ztapi.provideAdapter(ITimetableSchemaContainer,
+                             INameChooser,
+                             SimpleNameChooser)
 
     def tearDown(self):
         tearDown()
@@ -845,12 +851,12 @@ class TestTimetableSchemaWizard(NiceDiffsMixin, unittest.TestCase):
     def test(self):
         view = self.createView()
         result = view()
-        self.assert_('name="field.name" size="20" type="text" value="default"'
+        self.assert_('name="field.title" size="20" type="text" value="default"'
                      in result)
 
     def test_with_data(self):
         request = TestRequest(form={'day1': 'Monday',
-                                    'field.name': 'something',
+                                    'field.title': 'something',
                                     'model': 'SequentialDaysTimetableModel',
                                     'time1.period': 'Period 1',
                                     'time1.day0': '9:00-9:45',
@@ -860,7 +866,7 @@ class TestTimetableSchemaWizard(NiceDiffsMixin, unittest.TestCase):
         self.assertEquals(view.ttschema,
                           createSchema(['Monday'], ['Period 1']))
         self.assert_('value="something"' in result, result)
-        self.assertEquals(view.name_widget.error(), '')
+        self.assertEquals(view.title_widget.error(), '')
         self.assertEquals(view.model_name, 'SequentialDaysTimetableModel')
         self.assertEquals(view.model_error, None)
         self.assertEquals(view.day_templates,
@@ -869,7 +875,7 @@ class TestTimetableSchemaWizard(NiceDiffsMixin, unittest.TestCase):
 
     def test_creation(self):
         request = TestRequest(form={'day1': 'Monday',
-                                    'field.name': 'something',
+                                    'field.title': 'some.thing',
                                     'model': 'SequentialDaysTimetableModel',
                                     'time1.period': 'Period 1',
                                     'time1.day0': '9:00-9:45',
@@ -885,25 +891,6 @@ class TestTimetableSchemaWizard(NiceDiffsMixin, unittest.TestCase):
         self.assertEquals(schema.model.timetableDayIds, view.ttschema.keys())
         self.assertEquals(schema.model.dayTemplates, view.day_templates)
 
-    def XXXtest_name_missing(self):
-        request = TestRequest(form={'name': ''})
-        view = self.createView(request)
-        view()
-        self.assertEquals(view.name_widget.error,
-                          "Timetable schema name must not be empty")
-
-    def XXXtest_name_error(self):
-        view = self.createView(TestRequest(form={'name': 'not valid'}))
-        view()
-        self.assert_(view.name_widget.error().startswith(
-                            "Timetable schema name can only contain "))
-
-    def XXXtest_name_duplicate(self):
-        view = self.createView(TestRequest(form={'name': 'default'}))
-        view()
-        self.assertEquals(view.name_widget.error,
-                          "Timetable schema with this name already exists.")
-
     def test_model_error(self):
         request = TestRequest(form={'model': 'xxx',
                                     'CREATE': 'Create'})
@@ -912,7 +899,8 @@ class TestTimetableSchemaWizard(NiceDiffsMixin, unittest.TestCase):
         self.assertEquals(view.model_error, "Please select a value")
 
     def test_model_error_ignored_unless_this_is_the_final_submit(self):
-        view = self.createView(TestRequest(form={'model': 'xxx'}))
+        view = self.createView(TestRequest(form={'field.title': 'Schema',
+                                                 'model': 'xxx'}))
         view()
         self.assertEquals(view.model_error, None)
 
@@ -1189,6 +1177,12 @@ def doctest_SimpleTimetableSchemaAdd():
         >>> ztapi.provideUtility(ITimetableModelFactory,
         ...                      WeeklyTimetableModel,
         ...                      'WeeklyTimetableModel')
+        >>> from schooltool.interfaces import ITimetableSchemaContainer
+        >>> from schoolbell.app.app import SimpleNameChooser
+        >>> from zope.app.container.interfaces import INameChooser
+        >>> ztapi.provideAdapter(ITimetableSchemaContainer,
+        ...                      INameChooser,
+        ...                      SimpleNameChooser)
 
     Suppose we have a SchoolTool instance, and create a view for its
     timetable schemas container:
@@ -1202,15 +1196,15 @@ def doctest_SimpleTimetableSchemaAdd():
         >>> request = TestRequest()
         >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
 
-    Let's render it.  There is a widget for name there:
+    Let's render it.  There is a widget for title there:
 
         >>> print view()
         <BLANKLINE>
         ...
-                  <div class="field"><input
-                            class="textType" id="field.name"
-                            name="field.name" size="20" type="text"
-                            value="default"  /></div>
+                  <div class="field"><input class="textType"
+                             id="field.title"
+                             name="field.title" size="20" type="text"
+                             value="default"  /></div>
         ...
           <tr>
             <th>
@@ -1238,7 +1232,7 @@ def doctest_SimpleTimetableSchemaAdd():
 
     Now, let's create a simple case with all the fields filled:
 
-        >>> request = TestRequest(form={'field.name': 'default',
+        >>> request = TestRequest(form={'field.title': 'default',
         ...                             'field.period_name_1': 'Period 1',
         ...                             'field.period_start_1': '9:00',
         ...                             'field.period_finish_1': '9:45',
@@ -1297,7 +1291,7 @@ def doctest_SimpleTimetableSchemaAdd():
 
     If period names are not provided, use start times:
 
-        >>> request = TestRequest(form={'field.name': 'default',
+        >>> request = TestRequest(form={'field.title': 'default',
         ...                             'field.period_name_1': '',
         ...                             'field.period_start_1': '9:00',
         ...                             'field.period_finish_1': '9:45',
@@ -1319,7 +1313,7 @@ def doctest_SimpleTimetableSchemaAdd():
     If a cancel button is pressed, nothing is done and the user is
     redirected to ttschemas index:
 
-        >>> request = TestRequest(form={'field.name': 'default2',
+        >>> request = TestRequest(form={'field.title': 'default2',
         ...                             'field.period_name_1': 'Period 1',
         ...                             'field.period_start_1': '9:00',
         ...                             'field.period_finish_1': '9:45',
@@ -1342,7 +1336,7 @@ def doctest_SimpleTimetableSchemaAdd():
 
     If there's a period skipped in a form, consequent periods are not included:
 
-        >>> request = TestRequest(form={'field.name': 'default',
+        >>> request = TestRequest(form={'field.title': 'default',
         ...                             'field.period_name_1': 'Period 1',
         ...                             'field.period_start_1': '9:00',
         ...                             'field.period_finish_1': '9:45',
@@ -1363,7 +1357,7 @@ def doctest_SimpleTimetableSchemaAdd():
     If a period does not have a start time or end time specified, it
     is skipped:
 
-        >>> request = TestRequest(form={'field.name': 'default',
+        >>> request = TestRequest(form={'field.title': 'default',
         ...                             'field.period_name_1': 'Period 1',
         ...                             'field.period_start_1': '9:00',
         ...                             'field.period_finish_1': '9:45',
@@ -1382,7 +1376,7 @@ def doctest_SimpleTimetableSchemaAdd():
 
     Incorrect start and end times are handled gracefully:
 
-        >>> request = TestRequest(form={'field.name': 'default',
+        >>> request = TestRequest(form={'field.title': 'default',
         ...                             'field.period_name_1': 'Period 1',
         ...                             'field.period_start_1': '9:00',
         ...                             'field.period_finish_1': '9:45',
@@ -1407,6 +1401,26 @@ def doctest_SimpleTimetableSchemaAdd():
         ...
 
         >>> request.response.getStatus() != 302
+        True
+
+
+   One can provide the same title more than once (thought it is not
+   advised to do so):
+
+        >>> request = TestRequest(form={
+        ...                             'field.title': 'already',
+        ...                             'field.period_name_1': 'p1',
+        ...                             'field.period_start_1': '9:00',
+        ...                             'field.period_finish_1': '10:00',
+        ...                             'CREATE': 'Create'
+        ...                            })
+        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
+        >>> from schooltool.timetable import TimetableSchema
+        >>> app['ttschemas']['already'] = TimetableSchema([])
+        >>> result = view()
+        >>> request.response.getStatus() == 302
+        True
+        >>> 'already-2' in app['ttschemas']
         True
 
     """
@@ -1434,7 +1448,7 @@ def doctest_SimpleTimetableSchemaAdd_errors():
     No name specified:
 
         >>> request = TestRequest(form={
-        ...                             'field.name': '',
+        ...                             'field.title': '',
         ...                             'field.period_name_1': 'p1',
         ...                             'field.period_start_1': '9:00',
         ...                             'field.period_finish_1': '10:00',
@@ -1445,11 +1459,11 @@ def doctest_SimpleTimetableSchemaAdd_errors():
         <BLANKLINE>
         ...
                  <div class="label">
-                    <label for="field.name" title="">Name</label>
+                    <label for="field.title" title="">Title</label>
                   </div>
                   <span class="error">Required input is missing.</span>
-                  <div class="field"><input class="textType" id="field.name"
-                                            name="field.name" size="20"
+                  <div class="field"><input class="textType" id="field.title"
+                                            name="field.title" size="20"
                                             type="text" value=""  /></div>
         ...
           <tr>
@@ -1474,66 +1488,10 @@ def doctest_SimpleTimetableSchemaAdd_errors():
         >>> request.response.getStatus() != 302
         True
 
-   Name already exists:
-
-        >>> request = TestRequest(form={
-        ...                             'field.name': 'already',
-        ...                             'field.period_name_1': 'p1',
-        ...                             'field.period_start_1': '9:00',
-        ...                             'field.period_finish_1': '10:00',
-        ...                             'CREATE': 'Create'
-        ...                            })
-        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
-        >>> from schooltool.timetable import TimetableSchema
-        >>> app['ttschemas']['already'] = TimetableSchema([])
-        >>> print view()
-        <BLANKLINE>
-        ...
-                  <div class="label">
-                    <label for="field.name" title="">Name</label>
-                  </div>
-                  <span class="error">This name is already used</span>
-                  <div class="field"><input class="textType" id="field.name"
-                                            name="field.name" size="20"
-                                            type="text" value="already"
-                                            /></div>
-        ...
-
-        >>> request.response.getStatus() != 302
-        True
-
-   Dots in names not allowed:
-
-        >>> request = TestRequest(form={
-        ...                             'field.name': 'all.ready',
-        ...                             'field.period_name_1': 'p1',
-        ...                             'field.period_start_1': '9:00',
-        ...                             'field.period_finish_1': '10:00',
-        ...                             'CREATE': 'Create'
-        ...                            })
-        >>> view = SimpleTimetableSchemaAdd(app['ttschemas'], request)
-        >>> from schooltool.timetable import TimetableSchema
-        >>> app['ttschemas']['already'] = TimetableSchema([])
-        >>> print view()
-        <BLANKLINE>
-        ...
-                  <div class="label">
-                    <label for="field.name" title="">Name</label>
-                  </div>
-                  <span class="error">Dots in names are not allowed</span>
-                  <div class="field"><input class="textType" id="field.name"
-                                            name="field.name" size="20"
-                                            type="text" value="all.ready"
-                                            /></div>
-        ...
-
-        >>> request.response.getStatus() != 302
-        True
-
     No periods:
 
         >>> request = TestRequest(form={
-        ...                             'field.name': 'empty',
+        ...                             'field.title': 'empty',
         ...                             'field.period_name_1': '',
         ...                             'field.period_start_1': '',
         ...                             'field.period_finish_1': '',
@@ -1546,10 +1504,10 @@ def doctest_SimpleTimetableSchemaAdd_errors():
             <div class="error">You must specify at least one period.</div>
         ...
                   <div class="label">
-                    <label for="field.name" title="">Name</label>
+                    <label for="field.title" title="">Title</label>
                   </div>
-                  <div class="field"><input class="textType" id="field.name"
-                                            name="field.name" size="20"
+                  <div class="field"><input class="textType" id="field.title"
+                                            name="field.title" size="20"
                                             type="text" value="empty"
                                             /></div>
         ...

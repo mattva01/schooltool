@@ -64,6 +64,7 @@ Add Schema:
     ... Content-Type: text/xml
     ... 
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+    ...   <title>Some Title</title>
     ...   <model factory="SequentialDaysTimetableModel">
     ...     <daytemplate>
     ...       <used when="default" />

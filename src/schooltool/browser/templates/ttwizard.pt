@@ -19,7 +19,7 @@ Please choose a name for the timetable schema you want to create.
 </p>
 
 <div class="form">
-  <div class="row" tal:define="widget nocall:view/name_widget">
+  <div class="row" tal:define="widget nocall:view/title_widget">
       <metal:block use-macro="context/@@form_macros/widget_row" />
   </div>
 

@@ -385,7 +385,7 @@ class TabindexMixin(object):
 
 class ITimetableSchemaWizardSchema(Interface):
 
-    name = TextLine(title=u"Name", required=False)
+    title = TextLine(title=u"Title", required=False)
     duration = Int(title=u"Duration", description=u"Duration in minutes",
                    required=False)
 
@@ -417,10 +417,9 @@ class TimetableSchemaWizard(BrowserView, TabindexMixin):
         BrowserView.__init__(self, context, request)
         TabindexMixin.__init__(self)
         setUpWidgets(self, self._schema, IInputWidget,
-                     initial={'name': 'default'})
+                     initial={'title': 'default'})
 
     def __call__(self):
-        self.data = getWidgetsData(self, self._schema)
 
         # We could build a custom widget for the model radio buttons, but I do
         # not think it is worth the trouble.
@@ -431,14 +430,17 @@ class TimetableSchemaWizard(BrowserView, TabindexMixin):
         self.day_templates = self._buildDayTemplates()
 
         if 'CREATE' in self.request:
+            data = getWidgetsData(self, self._schema)
             factory = zapi.queryUtility(ITimetableModelFactory,
                                         name=self.model_name)
             if factory is None:
                 self.model_error = _("Please select a value")
-            if not self.name_widget.error() and not self.model_error:
+            if not self.title_widget.error() and not self.model_error:
                 model = factory(self.ttschema.day_ids, self.day_templates)
                 self.ttschema.model = model
-                key = self.data['name']
+                self.ttschema.title = data['title']
+                nameChooser = INameChooser(self.context)
+                key = nameChooser.chooseName('', self.ttschema)
                 self.context[key] = self.ttschema
                 #Note: if you uncomment this, fix the i18n bug inside too.
                 #self.request.appLog(_("Timetable schema %s created") %
@@ -516,8 +518,8 @@ class TimetableSchemaWizard(BrowserView, TabindexMixin):
         The dict is suitable to be passed as the second argument to the
         timetable model factory.
         """
-        self.data = getWidgetsData(self, self._schema)
-        default_duration = self.data.get('duration')
+        data = getWidgetsData(self, self._schema)
+        default_duration = data.get('duration')
         result = {None: SchooldayTemplate()}
         n = 1
         self.discarded_some_periods = False
@@ -833,11 +835,10 @@ class SimpleTimetableSchemaAdd(BrowserView):
 
     template = ViewPageTemplateFile('templates/simpletts.pt')
 
-
     def __init__(self, content, request):
         BrowserView.__init__(self, content, request)
         self._schema = {}
-        self._schema['name'] = TextLine(__name__='name', title=u"Name")
+        self._schema['title'] = TextLine(__name__='title', title=u"Title")
         for nr in range(1, self._nrperiods + 1):
             pname = 'period_name_%s' % nr
             pstart = 'period_start_%s' % nr
@@ -852,8 +853,7 @@ class SimpleTimetableSchemaAdd(BrowserView):
                                              title=u"Period finish time",
                                              required=False)
         setUpWidgets(self, self._schema, IInputWidget,
-                     initial={'name': 'default'})
-
+                     initial={'title': 'default'})
 
     def _setError(self, name, error=RequiredMissing()):
         """Set an error on a widget."""
@@ -867,7 +867,6 @@ class SimpleTimetableSchemaAdd(BrowserView):
         if not IWidgetInputError.providedBy(error):
             error = WidgetInputError(name, widget.label, error)
         widget._error = error
-
 
     def getPeriods(self):
         try:
@@ -919,19 +918,6 @@ class SimpleTimetableSchemaAdd(BrowserView):
             self.request.response.redirect(
                 zapi.absoluteURL(self.context, self.request))
         elif 'CREATE' in self.request:
-            name = data['name']
-
-            if name in self.context:
-                self._setError(
-                    'name', ConversionError('This name is already used'))
-                return self.template()
-
-            if '.' in name:
-                self._setError(
-                    'name',
-                    ConversionError('Dots in names are not allowed'))
-                return self.template()
-
             periods = self.getPeriods()
             if self.error:
                 return self.template()
@@ -940,7 +926,13 @@ class SimpleTimetableSchemaAdd(BrowserView):
                 self.error = _('You must specify at least one period.')
                 return self.template()
 
-            self.context[name] = self.createSchema(periods)
+            schema = self.createSchema(periods)
+            schema.title = data['title']
+
+            nameChooser = INameChooser(self.context)
+            name = nameChooser.chooseName('', schema)
+
+            self.context[name] = schema
             self.request.response.redirect(
                 zapi.absoluteURL(self.context, self.request))
 

@@ -67,6 +67,11 @@
       provides="zope.app.container.interfaces.INameChooser" />
 
   <adapter
+      for=".interfaces.ITimetableSchemaContainer"
+      factory="schoolbell.app.app.SimpleNameChooser"
+      provides="zope.app.container.interfaces.INameChooser" />
+
+  <adapter
       for="schoolbell.app.interfaces.IHavePreferences"
       provides=".interfaces.IPersonPreferences"
       factory=".app.getPersonPreferences"

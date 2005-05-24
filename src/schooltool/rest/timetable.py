@@ -213,6 +213,11 @@ class TimetableSchemaFileFactory(object):
            </start>
            <define name="timetable">
              <element name="timetable">
+               <optional>
+                 <element name="title">
+                   <text />
+                 </element>
+               </optional>
                <element name="model">
                  <attribute name="factory">
                    <text/>
@@ -271,6 +276,12 @@ class TimetableSchemaFileFactory(object):
             model_node = doc.query('/tt:timetable/tt:model')[0]
             factory_id = model_node['factory']
 
+            title = None
+            titles = doc.query('/tt:timetable/tt:title')
+            if titles:
+                title_node = titles[0]
+                title = title_node.content
+
             factory = zapi.queryUtility(ITimetableModelFactory, factory_id)
             if factory is None:
                 raise RestError("Incorrect timetable model factory")
@@ -301,7 +312,7 @@ class TimetableSchemaFileFactory(object):
 
             if len(sets.Set(day_ids)) != len(day_ids):
                 raise RestError("Duplicate days in schema")
-            timetable = TimetableSchema(day_ids)
+            timetable = TimetableSchema(day_ids, title=title)
             timetable.model = model
             for day in days:
                 day_id = day['id']

@@ -284,7 +284,7 @@ class TimetableSchema(Persistent, Contained):
 
     implements(ITimetableSchema, ITimetableSchemaWrite)
 
-    def __init__(self, day_ids):
+    def __init__(self, day_ids, title=None):
         """Create a new empty timetable schema.
 
         day_ids is a sequence of the day ids of this timetable.
@@ -292,6 +292,9 @@ class TimetableSchema(Persistent, Contained):
         The caller must then assign a TimetableDay for each day ID and
         set the model before trying to use the timetable.
         """
+        self.title = title
+        if self.title is None:
+            self.title = "Schema"
         self.day_ids = day_ids
         self.days = PersistentDict()
         self.model = None

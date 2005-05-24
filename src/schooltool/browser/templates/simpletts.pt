@@ -27,7 +27,7 @@ If you need more flexibility, you can use an
        i18n:translate=""
        />
 
-  <div class="row" tal:define="widget nocall:view/name_widget">
+  <div class="row" tal:define="widget nocall:view/title_widget">
       <metal:block use-macro="context/@@form_macros/widget_row" />
   </div>
 

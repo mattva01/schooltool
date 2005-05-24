@@ -24,7 +24,7 @@ Let's go to the advanced 'New Timetable' view:
   ... """)
   HTTP/1.1 200 Ok
   ...
-      <input class="textType" id="field.name" name="field.name" size="20" type="text" value="default"  />
+      <input class="textType" id="field.title" name="field.title" size="20" type="text" value="default"  />
   ...
 
 When we enter a schema name and press the 'Add day' button, we get an
@@ -110,7 +110,7 @@ Finally we post the completed form:
   ... Content-Length: ...
   ... Content-Type: application/x-www-form-urlencoded
   ... 
-  ... field.name=weekly&day1=Monday&day2=Tuesday&day3=Wednesday&day4=Thursday&day5=Friday&day1.period1=Period+1&day2.period1=Period+1&day3.period1=Period+1&day4.period1=Period+1&day5.period1=Period+1&day1.period2=Period+2&day2.period2=Period+2&day3.period2=Period+2&day4.period2=Period+2&day5.period2=Period+2&day1.period3=Period+3&day2.period3=Period+3&day3.period3=Period+3&day4.period3=Period+3&day5.period3=Period+3&day1.period4=Period+4&day2.period4=Period+4&day3.period4=Period+4&day4.period4=Period+4&day5.period4=Period+4&model=WeeklyTimetableModel&time1.period=Period+1&time1.day0=09%3A00-09%3A45&time1.day1=09%3A00-09%3A45&time1.day2=09%3A00-09%3A45&time1.day3=09%3A00-09%3A45&time1.day4=09%3A00-09%3A45&time1.day5=09%3A00-09%3A45&time1.day6=09%3A00-09%3A45&time2.period=Period+2&time2.day0=10%3A00-10%3A45&time2.day1=10%3A00-10%3A45&time2.day2=10%3A00-10%3A45&time2.day3=10%3A00-10%3A45&time2.day4=10%3A00-10%3A45&time2.day5=10%3A00-10%3A45&time2.day6=10%3A00-10%3A45&time3.period=Period+3&time3.day0=11%3A00-11%3A45&time3.day1=11%3A00-11%3A45&time3.day2=11%3A00-11%3A45&time3.day3=11%3A00-11%3A45&time3.day4=11%3A00-11%3A45&time3.day5=11%3A00-11%3A45&time3.day6=11%3A00-11%3A45&time4.period=Period+4&time4.day0=12%3A00-12%3A45&time4.day1=12%3A00-12%3A45&time4.day2=12%3A00-12%3A45&time4.day3=12%3A00-12%3A45&time4.day4=12%3A00-12%3A45&time4.day5=12%3A00-12%3A45&time4.day6=12%3A00-12%3A45&field.duration=45&CREATE=Create+timetable+schema""")
+  ... field.title=weekly&day1=Monday&day2=Tuesday&day3=Wednesday&day4=Thursday&day5=Friday&day1.period1=Period+1&day2.period1=Period+1&day3.period1=Period+1&day4.period1=Period+1&day5.period1=Period+1&day1.period2=Period+2&day2.period2=Period+2&day3.period2=Period+2&day4.period2=Period+2&day5.period2=Period+2&day1.period3=Period+3&day2.period3=Period+3&day3.period3=Period+3&day4.period3=Period+3&day5.period3=Period+3&day1.period4=Period+4&day2.period4=Period+4&day3.period4=Period+4&day4.period4=Period+4&day5.period4=Period+4&model=WeeklyTimetableModel&time1.period=Period+1&time1.day0=09%3A00-09%3A45&time1.day1=09%3A00-09%3A45&time1.day2=09%3A00-09%3A45&time1.day3=09%3A00-09%3A45&time1.day4=09%3A00-09%3A45&time1.day5=09%3A00-09%3A45&time1.day6=09%3A00-09%3A45&time2.period=Period+2&time2.day0=10%3A00-10%3A45&time2.day1=10%3A00-10%3A45&time2.day2=10%3A00-10%3A45&time2.day3=10%3A00-10%3A45&time2.day4=10%3A00-10%3A45&time2.day5=10%3A00-10%3A45&time2.day6=10%3A00-10%3A45&time3.period=Period+3&time3.day0=11%3A00-11%3A45&time3.day1=11%3A00-11%3A45&time3.day2=11%3A00-11%3A45&time3.day3=11%3A00-11%3A45&time3.day4=11%3A00-11%3A45&time3.day5=11%3A00-11%3A45&time3.day6=11%3A00-11%3A45&time4.period=Period+4&time4.day0=12%3A00-12%3A45&time4.day1=12%3A00-12%3A45&time4.day2=12%3A00-12%3A45&time4.day3=12%3A00-12%3A45&time4.day4=12%3A00-12%3A45&time4.day5=12%3A00-12%3A45&time4.day6=12%3A00-12%3A45&field.duration=45&CREATE=Create+timetable+schema""", handle_errors=False)
   HTTP/1.1 303 See Other
   Content-Length: ...
   Content-Type: text/plain;charset=utf-8
@@ -160,7 +160,7 @@ Now let's try the simple timetable schema setup view:
   ... Content-Length: ...
   ... Content-Type: application/x-www-form-urlencoded
   ... 
-  ... field.name=other&\
+  ... field.title=other&\
   ... field.period_name_1=P1&\
   ... field.period_start_1=9:00&field.period_finish_1=9:45&\
   ... field.period_name_2=P2&\

@@ -184,7 +184,7 @@ You can edit it:
     ... DTSTAMP:20050511T145037Z
     ... END:VEVENT
     ... END:VCALENDAR
-    ... """, handle_errors=False)
+    ... """)
     HTTP/1.1 200 Ok
     Content-Length: 0
     <BLANKLINE>
@@ -292,6 +292,7 @@ Lets add a timetable schema:
     ... Content-Type: text/xml
     ... 
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+    ...   <title>Some Title</title>
     ...   <model factory="SequentialDaysTimetableModel">
     ...     <daytemplate>
     ...       <used when="default" />
@@ -321,7 +322,7 @@ Lets add a timetable schema:
     ...     </period>
     ...   </day>
     ... </timetable>
-    ... """, handle_errors=False)
+    ... """)
     HTTP/1.1 201 Created
     Content-Length: 0
     <BLANKLINE>
@@ -360,6 +361,7 @@ Lets see what's inside:
     Content-Length: ...
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+      <title>Some Title</title>
       <model factory="SequentialDaysTimetableModel">
         <daytemplate>
           <used when="default"/>
@@ -428,7 +430,7 @@ Lets modify the timetable schema:
     ...     </period>
     ...   </day>
     ... </timetable>
-    ... """, handle_errors=False)
+    ... """)
     HTTP/1.1 200 Ok
     Content-Length: 0
     <BLANKLINE>
@@ -439,11 +441,12 @@ And check that schema was indeed modified:
     >>> print rest(r"""
     ... GET /frogpond/ttschemas/schema1 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... """, handle_errors=False)
+    ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+      <title>Schema</title>
       <model factory="SequentialDaysTimetableModel">
         <daytemplate>
           <used when="default"/>
@@ -569,7 +572,7 @@ We can now add a timetable for the person:
     ...     </period>
     ...   </day>
     ... </timetable>
-    ... """, handle_errors=False)
+    ... """)
     HTTP/1.1 201 Created
     Content-Length: 0
     <BLANKLINE>
@@ -626,7 +629,7 @@ Lets modify it:
     ...     </period>
     ...   </day>
     ... </timetable>
-    ... """, handle_errors=False)
+    ... """)
     HTTP/1.1 200 Ok
     Content-Length: 0
     <BLANKLINE>

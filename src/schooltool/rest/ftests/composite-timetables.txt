@@ -91,7 +91,7 @@ Add Schema:
     ...     </period>
     ...   </day>
     ... </timetable>
-    ... """, handle_errors=False)
+    ... """)
     HTTP/1.1 201 Created
     Content-Length: 0
     <BLANKLINE>
@@ -143,7 +143,7 @@ Add John to boys an guys:
     ...               xlink:role="http://schooltool.org/ns/membership/group"
     ...               xlink:arcrole="http://schooltool.org/ns/membership"
     ...               xlink:href="http://localhost/frogpond/groups/boys"/>
-    ... """, handle_errors=False)
+    ... """)
     HTTP/1.1 201 Created
     ...
 
@@ -158,7 +158,7 @@ Add John to boys an guys:
     ...               xlink:role="http://schooltool.org/ns/membership/group"
     ...               xlink:arcrole="http://schooltool.org/ns/membership"
     ...               xlink:href="http://localhost/frogpond/groups/guys"/>
-    ... """, handle_errors=False)
+    ... """)
     HTTP/1.1 201 Created
     ...
 
@@ -185,7 +185,7 @@ Add group timetables:
     ...     </period>
     ...   </day>
     ... </timetable>
-    ... """, handle_errors=False)
+    ... """)
     HTTP/1.1 201 Created
     Content-Length: 0
     <BLANKLINE>
@@ -211,7 +211,7 @@ Add group timetables:
     ...     </period>
     ...   </day>
     ... </timetable>
-    ... """, handle_errors=False)
+    ... """)
     HTTP/1.1 201 Created
     Content-Length: 0
     <BLANKLINE>

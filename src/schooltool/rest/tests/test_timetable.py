@@ -178,6 +178,7 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
 
     schema_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <title>Title</title>
           <model factory="SequentialDaysTimetableModel">
             <daytemplate>
               <used when="default" />
@@ -208,6 +209,8 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
           </day>
         </timetable>
         """
+
+    schema_without_title_xml = schema_xml.replace("<title>Title</title>", "")
 
     def setUp(self):
         from schooltool.app import SchoolToolApplication
@@ -243,10 +246,11 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
     def createEmptySchema(self):
         from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 
-        timetable = TimetableSchema(['Day 1', 'Day 2'])
-        timetable['Day 1'] = TimetableSchemaDay(['A', 'B'])
-        timetable['Day 2'] = TimetableSchemaDay(['C', 'D'])
-        return timetable
+        schema = TimetableSchema(['Day 1', 'Day 2'])
+        schema['Day 1'] = TimetableSchemaDay(['A', 'B'])
+        schema['Day 2'] = TimetableSchemaDay(['C', 'D'])
+        schema.title = "A Schema"
+        return schema
 
     def createExtendedSchema(self):
         from schooltool.timetable import SequentialDaysTimetableModel
@@ -281,6 +285,7 @@ class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
 
     empty_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <title>A Schema</title>
           <model factory="SequentialDaysTimetableModel">
             <daytemplate>
               <used when="Friday Thursday"/>
@@ -339,7 +344,12 @@ class TestTimetableSchemaFileFactory(TimetableSchemaMixin, unittest.TestCase):
 
     def test_parseXML(self):
         factory = IFileFactory(self.schemaContainer)
+        schema = factory("two_day", "text/xml", self.schema_without_title_xml)
+        self.assertEquals(schema.title, "Schema")
+        self.assertEquals(schema, self.createExtendedSchema())
+
         schema = factory("two_day", "text/xml", self.schema_xml)
+        self.assertEquals(schema.title, "Title")
         self.assertEquals(schema, self.createExtendedSchema())
 
     def test_invalid_name(self):
@@ -361,9 +371,13 @@ class TestTimetableSchemaFile(TimetableSchemaMixin, unittest.TestCase):
 
     def test_write(self):
         from schooltool.rest.timetable import TimetableSchemaFile
-        schemaFile = TimetableSchemaFile(self.schemaContainer["two_day"])
+        schema = self.schemaContainer["two_day"]
+        schemaFile = TimetableSchemaFile(schema)
         schemaFile.write(self.schema_xml)
-        self.assertEquals(self.schemaContainer["two_day"],
+
+        schema = self.schemaContainer["two_day"]
+        self.assertEquals(schema.title, "Title")
+        self.assertEquals(schema,
                           self.createExtendedSchema())
 
 
