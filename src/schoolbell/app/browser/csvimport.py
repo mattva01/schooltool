@@ -248,7 +248,7 @@ class SimpleCSVImporter(BaseCSVImporter):
 
         if len(data) > 1:
             description = data[1]
-        else: 
+        else:
             description = ''
 
         obj = self.factory(title=data[0], description=description)
@@ -297,7 +297,7 @@ class PersonCSVImporter(BaseCSVImporter):
         fullname = data[1]
         if len(data) > 2:
             password = data[2]
-        else: 
+        else:
             password = None
 
         if username in self.container:
