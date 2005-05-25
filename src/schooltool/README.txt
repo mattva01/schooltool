@@ -76,10 +76,10 @@ sections can have more than one instructor:
 You can determine if a Person is a teacher using schoolbell.relationship
 methods, there is also a method PersonView.isTeacher in schooltool's web UI:
 
-    >>> from schoolbell.relationship.interfaces import IRelationshipLinks
-    >>> from schooltool.relationships import URIInstructor
-    >>> links = IRelationshipLinks(teacher1)
-    >>> URIInstructor in [link.my_role for link in links]
+    >>> from schooltool.relationships import URISection, URIInstruction
+    >>> from schoolbell.relationship import getRelatedObjects
+    >>> len(getRelatedObjects(teacher1, URISection,
+    ...                       rel_type=URIInstruction)) > 0
     True
 
 sections students are associated with a section via the Membership
@@ -110,7 +110,6 @@ Checking for a person's status as a student is also handled with the
 schoolbell.relationship methods.  There are convenience methods in PersonView
 as well:
 
-    >>> from schoolbell.relationship import getRelatedObjects
     >>> from schoolbell.app.membership import URIGroup, URIMembership
     >>> from schooltool.interfaces import ISection
     >>> for obj in getRelatedObjects(student2, URIGroup,

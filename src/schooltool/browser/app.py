@@ -37,7 +37,6 @@ from schoolbell.app.membership import URIMembership, URIGroup
 from schoolbell.app.membership import isTransitiveMember
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.relationship import getRelatedObjects
-from schoolbell.relationship.interfaces import IRelationshipLinks
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ISchoolToolApplication
@@ -239,16 +238,15 @@ class PersonView(sb.PersonView):
     """
 
     def isTeacher(self):
-        links = IRelationshipLinks(self.context)
 
-        if URIInstructor in [link.my_role for link in links]:
+        if len(getRelatedObjects(self.context, URISection,
+                                 rel_type=URIInstruction)) > 0:
             return True
         else:
             return False
 
     def isLearner(self):
-        for obj in getRelatedObjects(self.context, URIGroup,
-                                     rel_type=URIMembership):
+        for obj in self.context.groups:
             if ISection.providedBy(obj):
                 return True
 
