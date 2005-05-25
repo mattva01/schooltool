@@ -26,6 +26,7 @@ It assumes that rosetta is the cannonical source of translations.
 
 import os
 import urllib2
+import optparse
 
 here=os.path.dirname(__file__)
 
@@ -65,37 +66,74 @@ create_dir = True
 
 domain = "schoolbell"
 
-#
+def main():
+    print """WARNING: This script does no data verification or po file merging,
+    it simply downloads the file from rosetta.
 
-print """WARNING: This script does no data verification or po file merging,
-it simply downloads the file from rosetta.
+    It would be a very good idea to manually check the translations before
+    committing them to ensure no data loss.
+    """
 
-It would be a very good idea to manually check the translations before
-committing them to ensure no data loss.
-"""
+    for locale in locales:
+        # setup filename and url
+        tmp = translation_dir.replace("$locale$", locale)
+        filename = tmp.replace("$domain$", domain)
+        url = rosetta_url.replace("$locale$", locale).replace("$domain$", domain)
+        # Get the target filename, optionally creating directories
+        print "saving %s \nin %s" % (url, filename)
+        if not os.path.exists(os.path.dirname(filename)):
+            if create_dir:
+                os.makedirs(os.path.dirname(filename))
+                print "     created dir."
+            else:
+                print "     create_dir set to FALSE."
+                print "ERROR: no directory to put translation, ignoring."
+                continue
+        # Download the translation .po
+        url_obj = urllib2.urlopen(url)
+        data = url_obj.read()
+        url_obj.close()
+        print "    read."
+        # Save it to the file
+        file = open(filename, 'w')
+        file.write(data)
+        file.close()
+        print "    saved."
 
-for locale in locales:
-    # setup filename and url
-    tmp = translation_dir.replace("$locale$", locale)
-    filename = tmp.replace("$domain$", domain)
-    url = rosetta_url.replace("$locale$", locale).replace("$domain$", domain)
-    # Get the target filename, optionally creating directories
-    print "saving %s \nin %s" % (url, filename)
-    if not os.path.exists(os.path.dirname(filename)):
-        if create_dir:
-            os.makedirs(os.path.dirname(filename))
-            print "     created dir."
-        else:
-            print "     create_dir set to FALSE."
-            print "ERROR: no directory to put translation, ignoring."
-            continue
-    # Download the translation .po
-    url_obj = urllib2.urlopen(url)
-    data = url_obj.read()
-    url_obj.close()
-    print "    read."
-    # Save it to the file
-    file = open(filename, 'w')
-    file.write(data)
-    file.close()
-    print "    saved."
+def parseOptions():
+    """Parse the arguments.
+
+    Save the old args.
+        >>> import sys
+        >>> old_args = sys.argv
+
+    Defaults:
+        >>> sys.argv = ['myprog']
+        >>> (options, args) = parseOptions()
+        >>> options.test
+        False
+
+    Some settings:
+        >>> sys.argv = ['myprog', '--test']
+        >>> (options, args) = parseOptions()
+        >>> options.test
+        True
+
+    Cleanup:
+        >>> sys.argv = old_args
+    """
+    parser = optparse.OptionParser()
+    parser.add_option("-t", "--test", dest="test", action="store_true",
+                      default=False, help="run self tests")
+    return parser.parse_args()
+
+def test():
+    import doctest
+    doctest.testmod(verbose=True)
+    
+if __name__ == "__main__":
+    (options, args) = parseOptions()
+    if options.test:
+        test()
+    else:
+        main()
