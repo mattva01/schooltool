@@ -242,10 +242,10 @@
       />
 
   <page
-      name="csvimport.html"
+      name="timetables-csvimport.html"
       for="schooltool.interfaces.ISchoolToolApplication"
       class="schooltool.browser.csvimport.TimetableCSVImportView"
-      template="templates/csvimport.pt"
+      template="templates/timetables-csvimport.pt"
       permission="schoolbell.create"
       menu="schoolbell_actions"
       title="Import Timetables"
