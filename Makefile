@@ -69,28 +69,30 @@ extract-translations: Zope3/principals.zcml Zope3/package-includes/schoolbell-co
 
 .PHONY: update-translations
 update-translations:
-	for f in $(PO); do			\
+	# XXX - fail on error (set -e) when
+	# https://launchpad.ubuntu.com/malone/bugs/710 is fixed - jinty
+	-for f in $(PO); do			\
 	     msgmerge -U $$f $(POT);		\
 	     msgfmt -o $${f%.po}.mo $$f;	\
 	done
 
-.PHONY: update-rosetta
-update-rosetta-template:
+.PHONY: update-rosetta-pot
+update-rosetta-pot:
 	$(MAKE) build extract-translations
 	touch ../launchpad_cookies
-	chmod 600 ../launchpad_cookies
+	chmod 0600 ../launchpad_cookies ../launchpad_pwd
 	curl -kc ../launchpad_cookies -D ../header_login\
-	    -F loginpage_password=$$(cat ../launchpad_pwd) \
+	    -F "loginpage_password=<../launchpad_pwd" \
 	    -F loginpage_email=jinty@web.de \
 	    -F loginpage_submit_login=Log\ In \
-	    https://launchpad.ubuntu.com/+login >log
+	    https://launchpad.ubuntu.com/+login > ../launchpad_log
 	curl -kc ../launchpad_cookies -b ../launchpad_cookies\
-	    -F file=@src/schoolbell/app/locales/schoolbell.pot\
-	    -F UPLOAD=Upload \
-	    https://launchpad.ubuntu.com/products/schoolbell/unknown/+pots/schoolbell-ui/+edit > log2
+	    -F "file=@src/schoolbell/app/locales/schoolbell.pot" \
+	    -F "UPLOAD=Upload" \
+	    https://launchpad.ubuntu.com/products/schoolbell/unknown/+pots/schoolbell-ui/+edit > ../launchpad_log2
 	rm ../launchpad_cookies
 
-.PHONY: get-rosetta
+.PHONY: get-rosetta-translations
 get-rosetta-translations:
 	./get-rosetta-translations.py
 	$(MAKE) update-translations
