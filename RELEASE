@@ -1,16 +1,17 @@
 Release Notes - SchoolTool Calendar (0.10)
 ==========================================
 
-TODO - intro
+This is the first release of a SchoolTool version based fully on Zope 3. It has
+been christened SchoolTool Calendar by Tom Hoffman (Project Manager) as it
+focuses quite a bit on the calendaring and timetabling.
+
+Using Zope3 generations, the database will be upgradeable automatically for
+the foreseeable future.
 
 Major Changes from 0.9
 ----------------------
 
 Contributions by POV_:
-
-TODO ???
-
-Contributions by Brian Sutherland:
 
 TODO ???
 
@@ -26,11 +27,6 @@ Known Issues
 
 TODO ???
 
-Planned Features
-----------------
-
-TODO ???
-
 Download and Installation
 -------------------------
 
@@ -40,8 +36,6 @@ Distributed Files:
 * `Zip File`_
 * `GPG signed md5sums`_
 * Packages will be distributed with Ubuntu_ universe and in Debian_ unstable.
-* A Live CD based on the Ubuntu_ Hoary distribution will be available from
-  Brian Sutherland on request after Hoary is released.
 
 .. _`Tarball`: http://www.schooltool.org/releases/schooltool0.10/final/schoolbell-1.0.tar.gz
 .. _`Zip File`: http://www.schooltool.org/releases/schooltool0.10/final/schoolbell-1.0.zip
