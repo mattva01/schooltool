@@ -12,12 +12,7 @@ XXX - Can we try and add this as the features are completed?
 
 Contributions by `Etria, LLP`_:
 
-* User interface improvements
-* Time zone awareness
-* Support for Allday events
-* Atom feed support for upcoming events, by accessing ../calendar/atom.xml
-* Support for iCalendar VFREEBUSY component
-* Events now have a read only view and can have notes
+XXX - Can we try and add this as the features are completed?
 
 .. _`Etria, LLP`: http://etria.com/
 .. _POV: http://pov.lt/
