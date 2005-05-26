@@ -444,35 +444,31 @@ class CourseCSVImporter(sb.SimpleCSVImporter):
 class CourseCSVImportView(sb.BaseCSVImportView):
     """View for Course CSV importer."""
 
-    def __init__(self, context, request):
-        sb.BaseCSVImportView.__init__(self, context, request)
-        self.importer_class = CourseCSVImporter
+    importer_class = CourseCSVImporter
 
 
 class GroupCSVImporter(sb.SimpleCSVImporter):
     """Group CSV Importer"""
+
     factory = Group
 
 
 class GroupCSVImportView(sb.BaseCSVImportView):
     """View for Group CSV importer."""
 
-    def __init__(self, context, request):
-        sb.BaseCSVImportView.__init__(self, context, request)
-        self.importer_class = GroupCSVImporter
+    importer_class = GroupCSVImporter
 
 
 class ResourceCSVImporter(sb.SimpleCSVImporter):
     """Resource CSV Importer"""
+
     factory = Resource
 
 
 class ResourceCSVImportView(sb.BaseCSVImportView):
     """View for Resource CSV importer."""
 
-    def __init__(self, context, request):
-        sb.BaseCSVImportView.__init__(self, context, request)
-        self.importer_class = ResourceCSVImporter
+    importer_class = ResourceCSVImporter
 
 
 class PersonCSVImporter(sb.PersonCSVImporter):
@@ -521,7 +517,5 @@ class PersonCSVImporter(sb.PersonCSVImporter):
 class PersonCSVImportView(sb.BaseCSVImportView):
     """View for Person CSV importer."""
 
-    def __init__(self, context, request):
-        sb.BaseCSVImportView.__init__(self, context, request)
-        self.importer_class = PersonCSVImporter
+    importer_class = PersonCSVImporter
 
