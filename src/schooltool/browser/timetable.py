@@ -956,7 +956,7 @@ class PersonTimetableSetupView(BrowserView):
         app = getSchoolToolApplication()
         ttschemas = app["ttschemas"]
         selected_ttschema = self.request.get('ttschema', ttschemas.default_id)
-        return ttschemas[selected_ttschema]
+        return ttschemas.get(selected_ttschema, ttschemas.values()[0])
 
     def getTerm(self):
         """Return the chosen term."""

@@ -1771,6 +1771,49 @@ def doctest_PersonTimetableSetupView_no_timetables():
     """
 
 
+def doctest_PersonTimetableSetupView_no_default_ttschema():
+    """Doctest for the PersonTimetableSetupView view
+
+    What if there is no default timetable schema?
+
+    We will need an application object
+
+        >>> from schooltool.app import SchoolToolApplication
+        >>> app = SchoolToolApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> app.setSiteManager(LocalSiteManager(app))
+        >>> setSite(app)
+
+    and a Person from that application
+
+        >>> from schooltool.app import Person
+        >>> context = Person("student", "Steven Udent")
+        >>> app["persons"]["whatever"] = context
+
+    There is one timetable schema, but it is not the default one.
+
+        >>> app["ttschemas"]["default"] = createSchema(["Mon", "Tue"],
+        ...                                            ["9:00", "10:00"],
+        ...                                            ["9:00", "10:00"])
+        >>> app["ttschemas"]["other"] = createSchema([], [])
+        >>> del app["ttschemas"]["default"]
+        >>> app["ttschemas"].default_id is None
+        True
+
+    We can now create the view.
+
+        >>> from schooltool.browser.timetable import PersonTimetableSetupView
+        >>> request = TestRequest()
+        >>> view = PersonTimetableSetupView(context, request)
+
+    What does getSchema return?
+
+        >>> view.getSchema() is app["ttschemas"]["other"]
+        True
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
