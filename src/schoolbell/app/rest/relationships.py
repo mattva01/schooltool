@@ -33,7 +33,6 @@ from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import ProxyFactory
 
 from schoolbell.app.app import getSchoolBellApplication
-from schoolbell.app.rest.errors import RestError
 from schoolbell.relationship.annotatable import getRelationshipLinks
 from schoolbell.relationship.uri import IURIObject
 from schoolbell.app.browser.app import ACLViewBase, hasPermission
