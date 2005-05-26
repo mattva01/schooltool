@@ -126,25 +126,17 @@ Now we see the newly created timetable schema in the list:
   ... """)
   HTTP/1.1 200 Ok
   ...
-      <tbody>
-  <BLANKLINE>
-        <tr>
-          <td>
-            <a href="weekly"></a>
-          </td>
-  <BLANKLINE>
-          <td class="ContentTitle">
-            <a href="weekly">weekly</a>
-          </td>
-  <BLANKLINE>
-          <td><span>&nbsp;</span></td>
-          <td><span>&nbsp;</span></td>
-          <td><span>&nbsp;</span></td>
-  <BLANKLINE>
-        </tr>
-  <BLANKLINE>
-  <BLANKLINE>
-      </tbody>
+      <form method="post"
+            action="http://localhost/frogpond/ttschemas/delete.html">
+        <div>
+          <input type="checkbox" name="delete.weekly" />
+          <a href="http://localhost/frogpond/ttschemas/weekly">weekly</a>
+        </div>
+        <div class="controls">
+          <input type="submit" class="button-cancel"
+                 value="Delete" />
+        </div>
+      </form>
   ...
 
 
@@ -155,7 +147,7 @@ Simple timetable add
 Now let's try the simple timetable schema setup view:
 
   >>> print http("""
-  ... POST /frogpond/ttschemas/+ HTTP/1.1
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
   ... Authorization: Basic mgr:mgrpw
   ... Content-Length: ...
   ... Content-Type: application/x-www-form-urlencoded
@@ -184,5 +176,5 @@ A new timetable schema appeared:
   ... """)
   HTTP/1.1 200 Ok
   ...
-            <a href="other">other</a>
+            <a href="http://localhost/frogpond/ttschemas/other">other</a>
   ...

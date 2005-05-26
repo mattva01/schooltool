@@ -48,7 +48,6 @@ from zope.security.proxy import removeSecurityProxy
 
 from schoolbell.calendar.utils import parse_date
 from schoolbell.calendar.utils import next_month, week_start
-from schoolbell.app.browser.app import ContainerView
 from schoolbell.app.browser.cal import month_names, short_day_of_week_names
 
 from schooltool import SchoolToolMessageID as _
@@ -62,6 +61,7 @@ from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable import getNextTermForDate
 from schooltool import getSchoolToolApplication
+from schooltool.browser.app import ContainerView
 
 
 class TermContainerView(ContainerView):
@@ -381,6 +381,16 @@ class TabindexMixin(object):
                                      for row in range(nrows)
                                        for col in range(ncols)]
         self.__tabindex += nrows * ncols
+
+
+class TimetableSchemaContainerView(ContainerView):
+    """TimetableSchema Container view."""
+
+    __used_for__ = ITimetableSchemaContainer
+
+    index_title = _("Timetable Schemas")
+    add_title = _("Add a new schema")
+    add_url = "add.html"
 
 
 class ITimetableSchemaWizardSchema(Interface):

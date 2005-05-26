@@ -79,6 +79,16 @@
       menu="schoolbell_actions" title="New Person" />
 
   <page
+      name="index.html"
+      for="schooltool.interfaces.IPersonContainer"
+      class=".app.PersonContainerView"
+      template="templates/container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
       name="person-csvimport.html"
       for="schooltool.interfaces.IPersonContainer"
       class="schooltool.browser.csvimport.PersonCSVImportView"
@@ -105,6 +115,16 @@
   </addform>
 
   <page
+      name="index.html"
+      for="schooltool.interfaces.IGroupContainer"
+      class=".app.GroupContainerView"
+      template="templates/container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
       name="group-csvimport.html"
       for="schooltool.interfaces.IGroupContainer"
       class="schooltool.browser.csvimport.GroupCSVImportView"
@@ -129,6 +149,16 @@
       >
     <widget field="description" height="5" />
   </addform>
+
+  <page
+      name="index.html"
+      for="schooltool.interfaces.IResourceContainer"
+      class=".app.ResourceContainerView"
+      template="templates/container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
 
   <page
       name="resource-csvimport.html"
@@ -350,15 +380,18 @@
 
   <!-- Timetabling -->
 
-  <containerViews
+  <page
+      name="index.html"
       for="schooltool.interfaces.ITimetableSchemaContainer"
-      contents="schoolbell.edit"
-      index="schoolbell.view"
-      add="schoolbell.create"
+      class=".timetable.TimetableSchemaContainerView"
+      template="templates/container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
       />
 
   <page
-      name="+"
+      name="add.html"
       for="schooltool.interfaces.ITimetableSchemaContainer"
       class=".timetable.SimpleTimetableSchemaAdd"
       permission="schoolbell.create"

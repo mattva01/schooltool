@@ -213,10 +213,10 @@ The new term is there
     ...
         <form method="post"
               action="http://localhost/frogpond/terms/delete.html">
-          <li>
+          <div>
             <input type="checkbox" name="delete.2005-fall" />
             <a href="http://localhost/frogpond/terms/2005-fall">2005 Fall</a>
-          </li>
+          </div>
           <div class="controls">
             <input type="submit" class="button-cancel"
                    value="Delete" />
@@ -337,6 +337,23 @@ Now he should be a schooltool.app.Person, not schoolbell.app.app.Person:
 
     >>> getRootFolder()['frogpond']['persons']['frog']
     <schooltool.app.Person object at ...>
+
+He hasn't got a permission to delete himself, so in SchoolTool there
+are no checkboxes around him:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/ HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+        <ul>
+          <li>
+            <a href="http://localhost/frogpond/persons/frog">Frog</a>
+          </li>
+        </ul>
+    ...
+
 
 The person's timetable list can be accessed through a menu item in the main
 page:

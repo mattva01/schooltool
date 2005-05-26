@@ -30,8 +30,9 @@ from zope.app.form.utility import setUpWidgets, getWidgetsData
 from zope.app.form.interfaces import IInputWidget, WidgetsError
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.interfaces.browser import IBrowserPublisher
+from zope.security.checker import canAccess
 
-from schoolbell.app.browser.app import GroupView, ContainerView
+from schoolbell.app.browser.app import GroupView
 from schoolbell.app.browser import app as sb
 from schoolbell.app.membership import URIMembership, URIGroup
 from schoolbell.app.membership import isTransitiveMember
@@ -46,6 +47,28 @@ from schooltool.interfaces import IPersonPreferences
 from schooltool.interfaces import IGroup, IPerson, ISchoolToolApplication
 from schooltool.relationships import URIInstruction, URIInstructor, URISection
 from schooltool.app import Section, Person
+
+class ContainerView(sb.ContainerView):
+    """A Container view for schooltool containers.
+
+    XXX: Move the functionality to SchoolBell after freeze (ignas)."""
+
+    def _canModify(self):
+        return canAccess(self.context, '__delitem__')
+
+    canModify = property(_canModify)
+
+
+class PersonContainerView(sb.PersonContainerView, ContainerView):
+    """A SchoolTool PersonContainer View"""
+
+
+class GroupContainerView(sb.GroupContainerView, ContainerView):
+    """A SchoolTool GroupContainer View"""
+
+
+class ResourceContainerView(sb.ResourceContainerView, ContainerView):
+    """A SchoolTool ResourceContainer View"""
 
 
 class CourseContainerView(ContainerView):

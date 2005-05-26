@@ -9,16 +9,38 @@
 <h1 metal:fill-slot="content-header" tal:content="view/index_title">Contents</h1>
 
 <metal:block metal:fill-slot="body"
-             tal:define="objects context/values">
+             tal:define="objects context/values;
+                         canModify view/canModify">
 
   <p tal:condition="not:objects" i18n:translate="">There are none.</p>
-  <ul tal:condition="objects" class="container-content">
+  <tal:block tal:condition="objects">
     <form method="post"
+          tal:condition="canModify"
           tal:attributes="action string:${context/@@absolute_url}/delete.html">
+      <div tal:repeat="course objects/sortby:title" class="course">
+        <input type="checkbox" tal:attributes="name string:delete.${course/zope:name}" />
+        <a tal:content="course/title"
+           tal:attributes="href course/@@absolute_url">Some Object</a>
+        <ul tal:condition="course/sections|nothing" class="section-list">
+          <li tal:repeat="section course/sections">
+            <a tal:content="section/label"
+               tal:attributes="href section/@@absolute_url">Some Object</a>
+            <span class="hint">
+              (<span tal:replace="section/size"/>
+              <span i18n:translate="">Students</span>)
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div class="controls">
+        <input type="submit" class="button-cancel" value="Delete"
+               i18n:attributes="value delete-button;" />
+      </div>
+    </form>
+    <ul tal:condition="not:canModify" class="container-content">
       <li tal:repeat="course objects/sortby:title" class="course">
-          <input type="checkbox" tal:attributes="name string:delete.${course/zope:name}" />
-          <a tal:content="course/title"
-             tal:attributes="href course/@@absolute_url">Some Object</a>
+        <a tal:content="course/title"
+           tal:attributes="href course/@@absolute_url">Some Object</a>
         <ul tal:condition="course/sections|nothing" class="section-list">
           <li tal:repeat="section course/sections">
             <a tal:content="section/label"
@@ -30,12 +52,8 @@
           </li>
         </ul>
       </li>
-      <div class="controls">
-        <input type="submit" class="button-cancel" value="Delete"
-               i18n:attributes="value delete-button;" />
-      </div>
-    </form>
-  </ul>
+    </ul>
+  </tal:block>
 
 </metal:block>
 </body>
