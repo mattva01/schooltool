@@ -9,6 +9,10 @@ TESTFLAGS=-w1
 POT=src/schoolbell/app/locales/schoolbell.pot
 PO=$(wildcard src/schoolbell/app/locales/*/LC_MESSAGES/*.po)
 PYTHONPATH=src:Zope3/src
+LOCALE_PATTERN='src/schoolbell/app/locales/@locale@/LC_MESSAGES/schoolbell.po'
+ROSETTA_URL='https://launchpad.ubuntu.com/products/schoolbell/unknown/+pots/schoolbell-ui'
+ROSETTA_LOCALES=af ca de de_CH es_MX es_ES en_US et fr fr_CA fr_FR he it lt\
+        ml nl pl pt_PT sv
 
 .PHONY: all
 all: build
@@ -94,5 +98,8 @@ update-rosetta-pot:
 
 .PHONY: get-rosetta-translations
 get-rosetta-translations:
-	./get-rosetta-translations.py
+	./get-rosetta-translations.py \
+	    --baseurl $(ROSETTA_URL)\
+	    --filepattern $(LOCALE_PATTERN)\
+	    --loglevel='INFO' $(ROSETTA_LOCALES)
 	$(MAKE) update-translations
