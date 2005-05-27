@@ -637,6 +637,62 @@ Now, you can see both calendars in the overlay portlet:
          </label>
     ...
 
+Regression test for Issue243 (Calendars with identical titles are
+throwing system error):
+
+Rename the group so it's title would be Toad:
+
+    >>> print http("""
+    ... GET /frogpond/groups/animals/@@edit.html?field.title=Toad&UPDATE_SUBMIT=Apply HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 303 See Other
+    ...
+
+Calendars with identical titles will get sorted in random order so i
+am just checking that they are there:
+
+    >>> result = http("""
+    ... GET /frogpond/persons/frog/calendar/daily.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """, handle_errors=False)
+
+    >>> print result
+    HTTP/1.1 200 Ok
+    ...
+          <label class="disabled">
+            <input type="checkbox" checked="checked" disabled="disabled" />
+            My Calendar
+          </label>
+    ...
+         <label>
+           <input type="checkbox" name="overlay:list"
+                  checked="checked"
+                  value="/frogpond/groups/animals" />
+           <span>Toad</span>
+         </label>
+    ...
+
+    >>> print result
+    HTTP/1.1 200 Ok
+    ...
+         <label>
+           <input type="checkbox" name="overlay:list"
+                  checked="checked"
+                  value="/frogpond/persons/toad" />
+           <span>Toad</span>
+         </label>
+    ...
+
+Rename the group back to Animals:
+
+    >>> print http("""
+    ... GET /frogpond/groups/animals/@@edit.html?field.title=Animals&UPDATE_SUBMIT=Apply HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 303 See Other
+    ...
+
 Now, if there are events in the animals' and toad's calendars, you can
 see them:
 
