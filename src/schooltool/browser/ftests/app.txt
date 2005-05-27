@@ -308,7 +308,7 @@ And Frog's overlay portlet shows the section:
             <td><a class="go"
                    style="background: #c1665a;
                 color: #c1665a"
-                   href="item/calendar/@@absolute_url">&nbsp;</a></td>
+                   href="http://localhost/frogpond/sections/section/calendar">&nbsp;</a></td>
         </tr>
         </table>
     ...
