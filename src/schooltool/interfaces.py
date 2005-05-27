@@ -816,7 +816,7 @@ class ISection(IGroup):
         title=_("Label"),
         required=False,
         description=_(
-            """An identifier for a section, made up if instructor
+            """An identifier for a section, made up of instructor
             names, courses, and meeting time."""))
 
     title = TextLine(
