@@ -27,7 +27,7 @@ particular course of study.
     >>> ushistory.description
     'Years 1945 - 2000'
 
-The educational material covered by a course is taugh to sets of students in
+The educational material covered by a course is taught to sets of students in
 Sections.  Each section is related to the Course with the CourseSections
 relationship and the list of sections can be accessed via the Course.sections
 RelationshipProperty.
@@ -37,7 +37,7 @@ We haven't set up any sections yet so:
     >>> [section.title for section in ushistory.sections]
     []
 
-is empty.  Lets create some sections and add them to US History.
+is empty.  Let's create some sections and add them to US History.
 
     >>> school['sections']['section1'] = section1 = Section(title="Section 1")
     >>> school['sections']['section2'] = section2 = Section(title="Section 2")
