@@ -155,6 +155,10 @@ class ImportErrorCollection(object):
         return "<%s %r>" % (self.__class__.__name__, self.__dict__)
 
 
+class InvalidCSVError(Exception):
+    pass
+
+
 class TimetableCSVImporter(object):
     """A timetable CSV parser and importer.
 
@@ -162,13 +166,275 @@ class TimetableCSVImporter(object):
     """
     # Perhaps this class should be moved to schooltool.csvimport
 
+    # This class does not use exceptions for handling errors excessively
+    # because of the nature of error-checking: we want to gather many errors
+    # in one sweep and present them to the user at once.
+
     def __init__(self, app, charset=None):
         self.app = app
         self.sections = self.app['sections']
         self.persons = self.app['persons']
         self.errors = ImportErrorCollection()
         self.charset = charset
-        self.cache = {}
+        self.cache = {} # TODO: this is obsolete
+
+    def importSections(self, sections_csv): # TODO: rename this method
+        """Import sections from CSV data.
+
+        This method obsoletes importTimetable and importRoster.
+        TODO: remove those methods after we're done.
+
+        At the top of the file there should be a header row:
+
+        timetable_schema_id, term_id
+
+        Then an empty line should follow, and the remaining CSV data should
+        consist of chunks like this:
+
+        course_id, instructor_id
+        day_id, period_id[, location_id]
+        day_id, period_id[, location_id]
+        ...
+        ***
+        student_id
+        student_id
+        ...
+
+        """
+        if '\n' not in sections_csv:
+            self.errors.generic.append(_("No data provided"))
+            raise InvalidCSVError()
+
+        rows = self.parseCSVRows(sections_csv.splitlines())
+
+        if rows[1]:
+            self.errors.generic.append(_("Row 2 is not empty"))
+            raise InvalidCSVError()
+
+        self.importHeader(rows[0])
+        if self.errors.anyErrors():
+            raise InvalidCSVError()
+
+        self.importChunks(rows[2:], dry_run=True)
+        if self.errors.anyErrors():
+            raise InvalidCSVError()
+
+        self.importChunks(rows[2:], dry_run=False)
+        if self.errors.anyErrors():
+            raise AssertionError('something bad happened while importing CSV'
+                                 ' data, aborting transaction.')
+
+    def importChunks(self, rows, dry_run=True):
+        """Import chunks separated by empty lines."""
+        chunk_start = 0
+        for i, row in enumerate(rows):
+            if not row:
+                if rows[chunk_start]:
+                    self.importChunk(rows[chunk_start:i],
+                                     chunk_start + 3, dry_run)
+                chunk_start = i + 1
+        if rows and rows[-1]:
+            self.importChunk(rows[chunk_start:], chunk_start + 3, dry_run)
+
+    def importChunk(self, rows, line, dry_run=True):
+        """Import a chunk of data that describes a section.
+
+        You should run this method with dry_run=True before trying the
+        real thing, or you might get in trouble.
+        """
+        # TODO: split up this method
+        course_id, instructor_id = rows[0]
+
+        course = self.app['courses'].get(course_id, None)
+        if course is None:
+            self.errors.courses.append(course_id)
+
+        instructor = self.persons.get(instructor_id, None)
+        if instructor is None:
+            self.errors.persons.append(instructor_id)
+
+        line_ofs = 1
+        finished = False
+        for row in rows[1:]:
+            line_ofs += 1
+            if row == ['***']:
+                finished = True
+                break
+            elif len(row) == 2:
+                day_id, period_id = row
+                location_id = None
+            elif len(row) == 3:
+                day_id, period_id, location_id = row
+            else:
+                err_msg = _('Malformed line ${line_no} (it should contain a'
+                            ' day id, a period id and optionally a location'
+                            ' id)')
+                err_msg.mapping = {'line_no': line + line_ofs - 1}
+                self.errors.generic.append(err_msg)
+                continue
+
+            # check resource_id
+            if location_id and location_id not in self.app['resources'].keys():
+                if location_id not in self.errors.locations:
+                    self.errors.locations.append(location_id)
+
+            # check day_id
+            try:
+                ttday = self.ttschema[day_id]
+            except KeyError:
+                if day_id not in self.errors.day_ids:
+                    self.errors.day_ids.append(day_id)
+                continue
+
+            # check period_id
+            if (period_id not in ttday.periods
+                and period_id not in self.errors.periods):
+                self.errors.periods.append(period_id)
+                continue
+
+        if not finished or len(rows) == line_ofs:
+            err_msg = _("Incomplete section description on line ${line}")
+            err_msg.mapping = {'line': line}
+            self.errors.generic.append(err_msg)
+            return
+
+        section = self.createSection(course, instructor, [], dry_run=dry_run)
+        self.importPersons(rows[line_ofs:], section, dry_run=dry_run)
+
+    def createSection(self, course, instructor, periods, dry_run=True):
+        """Create a section.
+
+        `periods` is a list of tuples (day_id, period_id, location).
+        `location` is a Resource object, or None, in which case no
+        resource is booked.
+
+        A title is generated from the titles of `course` and `instructor`.
+        If an existing section with the same title is found, it is used instead
+        of creating a new one.
+
+        The created section is returned, or None if dry_run is True.
+        """
+        if dry_run:
+            return None
+
+        # Create or pick a section.
+        section_title = '%s - %s' % (course.title, instructor.title)
+        for sctn in self.app['sections'].values():
+            # Look for an existing section with the same title.
+            if sctn.title == section_title:
+                section = sctn
+                break
+        else:
+            # No existing sections with this title found, create a new one.
+            section = Section(title=section_title)
+            chooser = INameChooser(self.sections)
+            section_name = chooser.chooseName('', section)
+            self.sections[section_name] = section
+
+        # Establish links to course and to teacher
+        section.courses.add(course)
+        section.instructors.add(instructor)
+
+        # Create a timetable
+        timetable_key = ".".join((self.term.__name__, self.ttschema.__name__))
+        if timetable_key not in section.timetables.keys():
+            tt = self.ttschema.createTimetable()
+            section.timetables[timetable_key] = tt
+        else:
+            tt = section.timetables[timetable_key]
+
+        # Add timetable activities.
+        for day_id, period_id, location in periods:
+            if location is not None:
+                resources = (location, )
+            else:
+                resources = ()
+            act = TimetableActivity(title=course.title, owner=section,
+                                    resources=resources)
+            tt[day_id].add(period_id, act)
+
+        return section
+
+    def importPersons(self, person_data, section, dry_run=True):
+        """Import persons into a section."""
+        for row in person_data:
+            person_id = row[0]
+            try:
+                person = self.persons[person_id]
+            except KeyError:
+                if person_id not in self.errors.persons:
+                    self.errors.persons.append(person_id)
+            else:
+                if not dry_run:
+                    section.members.add(person)
+
+    def importHeader(self, row):
+        """Read the header row of the CSV file.
+
+        Sets self.term and self.ttschema.
+        """
+        if len(row) != 2:
+            self.errors.generic.append(
+                    _("The first row of the CSV file must contain"
+                      " the term id and the timetable schema id."))
+            return
+
+        term_id, ttschema_id = row
+
+        try:
+            self.term = self.app['terms'][term_id]
+        except KeyError:
+            error_msg = _("The term ${term} does not exist.")
+            error_msg.mapping = {'term': term_id}
+            self.errors.generic.append(error_msg)
+
+        try:
+            self.ttschema = self.app['ttschemas'][ttschema_id]
+        except KeyError:
+            error_msg = _("The timetable schema ${schema} does not exist.")
+            error_msg.mapping = {'schema': ttschema_id}
+            self.errors.generic.append(error_msg)
+
+    def parseCSVRows(self, rows):
+        """Parse rows (a list of strings) in CSV format.
+
+        Returns a list of rows as lists.  Trailing empty cells are discarded.
+
+        rows must be in the encoding specified during construction of
+        TimetableCSVImportView; the returned values are in unicode.
+
+        If the provided data is invalid, self.errors.generic will be updated
+        and InvalidCSVError will be returned.
+        """
+        result = []
+        reader = csv.reader(rows)
+        line = 0
+        try:
+            while True:
+                line += 1
+                values = [v.strip() for v in reader.next()]
+                if self.charset:
+                    values = [unicode(v, self.charset) for v in values]
+                # Remove trailing empty cells.
+                while values and not values[-1].strip():
+                    del values[-1]
+                result.append(values)
+        except StopIteration:
+            return result
+        except csv.Error:
+            error_msg = _("Error in timetable CSV data, line ${line_no}")
+            error_msg.mapping = {'line_no': line}
+            self.errors.generic.append(error_msg)
+            raise InvalidCSVError()
+        except UnicodeError:
+            error_msg = _("Conversion to unicode failed in line ${line_no}")
+            error_msg.mapping = {'line_no': line}
+            self.errors.generic.append(error_msg)
+            raise InvalidCSVError()
+
+    # --------------
+    # obsolete stuff
+    # --------------
 
     def importTimetable(self, timetable_csv):
         """Import timetables from CSV data.
@@ -190,6 +456,7 @@ class TimetableCSVImporter(object):
             return False
 
         self.term_id, self.ttschema = rows[0]
+
         if self.ttschema not in self.app["ttschemas"].keys():
             error_msg = _("The timetable schema ${schema} does not exist.")
             error_msg.mapping = {'schema': self.ttschema}
@@ -245,41 +512,6 @@ class TimetableCSVImporter(object):
                                  " aborting transaction.")
                 return False
         return True
-
-    def parseCSVRows(self, rows):
-        """Parse rows (a list of strings) in CSV format.
-
-        Returns a list of rows as lists.
-
-        rows must be in the encoding specified during construction of
-        TimetableCSVImportView; the returned values are in unicode.
-
-        If the provided data is invalid, self.errors.generic will be updated
-        and None will be returned.
-        """
-        result = []
-        reader = csv.reader(rows)
-        line = 0
-        try:
-            while True:
-                line += 1
-                values = [v.strip() for v in reader.next()]
-                if self.charset:
-                    values = [unicode(v, self.charset) for v in values]
-                # Remove trailing empty cells.
-                while values and not values[-1].strip():
-                    del values[-1]
-                result.append(values)
-        except StopIteration:
-            return result
-        except csv.Error:
-            error_msg = _("Error in timetable CSV data, line ${line_no}")
-            error_msg.mapping = {'line_no': line}
-            self.errors.generic.append(error_msg)
-        except UnicodeError:
-            error_msg = _("Conversion to unicode failed in line ${line_no}")
-            error_msg.mapping = {'line_no': line}
-            self.errors.generic.append(error_msg)
 
     def parseRecordRow(self, records):
         """Parse records and return a list of tuples (subject, teacher).
@@ -363,7 +595,7 @@ class TimetableCSVImporter(object):
 
     def scheduleClass(self, period, course_name, teacher,
                       day_ids, location, dry_run=False):
-        """Schedule a class of course during a given period.
+        """Schedule a class of a particular course during a given period.
 
         If dry_run is set, no objects are changed.
         """
