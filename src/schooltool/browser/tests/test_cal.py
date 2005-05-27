@@ -82,10 +82,10 @@ class TestDailyCalendarView(unittest.TestCase):
                                    ['1', '2', '3', '4'],
                                    ['1', '2', '3', '4'])
         template = SchooldayTemplate()
-        template.add(SchooldayPeriod('1', time(9, 0), timedelta(hours=1)))
+        template.add(SchooldayPeriod('1', time(8, 0), timedelta(hours=1)))
         template.add(SchooldayPeriod('2', time(10, 15), timedelta(hours=1)))
         template.add(SchooldayPeriod('3', time(11, 30), timedelta(hours=1)))
-        template.add(SchooldayPeriod('4', time(12, 30), timedelta(hours=1)))
+        template.add(SchooldayPeriod('4', time(12, 30), timedelta(hours=2)))
         schema.model = SequentialDaysTimetableModel(days, {None: template})
 
         app['ttschemas']['default'] = schema
@@ -120,15 +120,14 @@ class TestDailyCalendarView(unittest.TestCase):
 
         result = list(view.calendarRows())
 
-        expected = [("8:00", dt('08:00'), timedelta(hours=1)),
-                    ("1", dt('09:00'), timedelta(hours=1)),
+        expected = [("1", dt('08:00'), timedelta(hours=1)),
+                    ("9:00", dt('09:00'), timedelta(hours=1)),
                     ("10:00", dt('10:00'), timedelta(minutes=15)),
                     ("2", dt('10:15'), timedelta(hours=1)),
                     ("11:15", dt('11:15'), timedelta(minutes=15)),
                     ("3", dt('11:30'), timedelta(hours=1)),
-                    ("4", dt('12:30'), timedelta(hours=1)),
-                    ("13:30", dt('13:30'), timedelta(minutes=30)),
-                    ("14:00", dt('14:00'), timedelta(hours=1)),
+                    ("4", dt('12:30'), timedelta(hours=2)),
+                    ("14:30", dt('14:30'), timedelta(minutes=30)),
                     ("15:00", dt('15:00'), timedelta(hours=1)),
                     ("16:00", dt('16:00'), timedelta(hours=1)),
                     ("17:00", dt('17:00'), timedelta(hours=1)),

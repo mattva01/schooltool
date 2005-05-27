@@ -41,9 +41,6 @@ from schooltool.timetable import getPeriodsForDay
 from schooltool.interfaces import IPersonPreferences
 
 
-utc = timezone('UTC')
-
-
 class DailyCalendarView(SBDailyCalView):
     """Daily calendar view for SchoolTool.
 
@@ -70,7 +67,7 @@ class DailyCalendarView(SBDailyCalView):
             periods = getPeriodsForDay(self.cursor)
         else:
             periods = []
-        today = datetime.combine(self.cursor, time(tzinfo=utc))
+        today = datetime.combine(self.cursor, time(tzinfo=self.timezone))
         row_ends = [today + timedelta(hours=hour + 1)
                     for hour in range(self.starthour, self.endhour)]
 
@@ -79,13 +76,13 @@ class DailyCalendarView(SBDailyCalView):
             pstart = datetime.combine(self.cursor, period.tstart)
             pstart = pstart.replace(tzinfo=self.timezone)
             pend = pstart + period.duration
-            for point in row_ends:
+            for point in row_ends[:]:
                 if pstart < point < pend:
                     row_ends.remove(point)
-                if pstart not in row_ends:
-                    row_ends.append(pstart)
-                if pend not in row_ends:
-                    row_ends.append(pend)
+            if pstart not in row_ends:
+                row_ends.append(pstart)
+            if pend not in row_ends:
+                row_ends.append(pend)
 
         if periods:
             row_ends.sort()
@@ -98,15 +95,13 @@ class DailyCalendarView(SBDailyCalView):
             if pstart == dt:
                 return True
 
-        start = today + timedelta(hours=self.starthour)
+        start, row_ends = row_ends[0], row_ends[1:]
         for end in row_ends:
             if periodIsStarting(start):
                 period = periods.pop(0)
-                pstart = datetime.combine(self.cursor, period.tstart)
-                pend = pstart + period.duration
                 yield (period.title, start, period.duration)
             else:
-                duration =  end - start
+                duration = end - start
                 yield ('%d:%02d' % (start.hour, start.minute), start, duration)
             start = end
 
