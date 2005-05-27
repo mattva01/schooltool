@@ -57,7 +57,7 @@ schoolbelldist: realclean build extract-translations update-translations clean
 	rm -rf dist
 	find . -name '*.py[dco]' -exec rm -f {} \;
 	fakeroot ./debian/rules clean
-	./setup.py sdist --formats=gztar
+	./setup.py sdist --formats=schooltooltgz
 
 .PHONY: signtar
 signtar: dist

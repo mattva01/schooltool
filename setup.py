@@ -38,10 +38,27 @@ from distutils.command.install import install as _install
 from distutils.command.install_data import install_data as _install_data
 from distutils.command.install_scripts \
         import install_scripts as _install_scripts
+from distutils.archive_util import ARCHIVE_FORMATS
+from distutils.dir_util import mkpath
+from distutils.spawn import spawn
+
 
 #
 # Distutils Customization
 #
+
+def make_schooltool_tarball(base_name, base_dir, verbose=0, dry_run=0):
+    """Make a tarball with the right permissions/owenership."""
+    archive_name = base_name + ".tar"
+    mkpath(os.path.dirname(archive_name), dry_run=dry_run)
+    spawn(["tar", "--owner=0", "--group=0", "--mode=a+r",
+           "-cf", archive_name, base_dir], dry_run=dry_run)
+    spawn(["gzip", "-f9", archive_name], dry_run=dry_run)
+    return archive_name + '.gz'
+
+# Register custom archive creation function
+ARCHIVE_FORMATS['schooltooltgz'] = (make_schooltool_tarball, [],
+                                    "create tarball with schooltool defaults")
 
 class install_data(_install_data):
     """Specialized Python installer for SchoolBell.
