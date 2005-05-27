@@ -352,6 +352,8 @@ class TimetableCSVImporter(object):
             act = TimetableActivity(title=course.title, owner=section,
                                     resources=resources)
             tt[day_id].add(period_id, act)
+            # XXX If imported several times, multiple copies of activities
+            #     will appear.  That is bad.
 
         return section
 
