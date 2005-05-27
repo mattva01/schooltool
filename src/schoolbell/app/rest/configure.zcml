@@ -476,6 +476,42 @@
       name="DELETE"
       />
 
+  <!-- Note views -->
+
+  <content class=".notes.NotesAdapter">
+    <allow attributes="context" />
+  </content>
+
+  <class class="schoolbell.app.rest.notes.NotesView">
+      <allow interface="schoolbell.app.rest.notes.INotesView" />
+  </class>
+
+  <view
+      for="schoolbell.app.interfaces.IHaveNotes"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides=".IRestTraverser"
+      factory=".notes.NotesTraverser"
+      name="notes"
+      />
+
+  <view
+      for="schoolbell.app.rest.notes.INotesAdapter"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      factory="schoolbell.app.rest.notes.NotesViewFactory"
+      allowed_interface="schoolbell.app.rest.notes.INotesView"
+      permission="zope.Public"
+      name="GET"
+      />
+
+  <view
+      for="schoolbell.app.rest.notes.INotesAdapter"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      factory="schoolbell.app.rest.notes.NotesViewFactory"
+      allowed_interface="schoolbell.app.rest.notes.INotesView"
+      permission="zope.Public"
+      name="PUT"
+      />
+
   <!-- Error views -->
 
   <defaultView
