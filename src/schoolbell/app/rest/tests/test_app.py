@@ -23,7 +23,6 @@ $Id$
 """
 
 import unittest
-import doctest
 from StringIO import StringIO
 
 from zope.app.testing import ztapi
