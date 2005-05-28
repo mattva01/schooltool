@@ -39,101 +39,6 @@ from schooltool.relationships import URIInstruction, URIInstructor, URISection
 from schooltool.timetable import TimetableActivity
 
 
-class TimetableCSVImportView(BrowserView):
-
-    __used_for__ = ISchoolToolApplication
-
-    def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
-        self.errors = []
-        self.success = []
-
-    def update(self):
-        if "UPDATE_SUBMIT" not in self.request:
-            return
-
-        charset = self.getCharset()
-        if charset is None:
-            return
-
-        timetable_csv = self.request['timetable.csv'] or ''
-        if timetable_csv:
-            timetable_csv = timetable_csv.read()
-        roster_txt = self.request['roster.txt'] or ''
-        if roster_txt:
-            roster_txt = roster_txt.read()
-
-        if not (timetable_csv or roster_txt):
-            self.errors.append(_('No data provided'))
-            return
-
-        try:
-            unicode(timetable_csv, charset)
-            roster_txt = unicode(roster_txt, charset)
-        except UnicodeError:
-            self.errors.append(_('Could not convert data to Unicode'
-                                 ' (incorrect charset?).'))
-            return
-
-        # XXX This removeSecurityProxy is here until we get proper security
-        #     declarations for the various objects that TimetableCSVImporter
-        #     touches (mostly timetable-related stuff).
-        root = removeSecurityProxy(self.context)
-        importer = TimetableCSVImporter(root, charset)
-        ok = True
-        if timetable_csv:
-            ok = importer.importTimetable(timetable_csv)
-            if ok:
-                self.success.append(_("timetable.csv imported successfully."))
-            else:
-                self.errors.append(_("Failed to import timetable.csv"))
-                self._presentErrors(importer.errors)
-        if ok and roster_txt:
-            ok = importer.importRoster(roster_txt)
-            if ok:
-                self.success.append(_("roster.txt imported successfully."))
-            else:
-                self.errors.append(("Failed to import roster.txt"))
-                self._presentErrors(importer.errors)
-
-    def _presentErrors(self, err):
-        if err.generic:
-            self.errors.extend(err.generic)
-
-        for key, msg in [
-            ('day_ids', _("Day ids not defined in selected schema: ${args}.")),
-            ('periods', _("Periods not defined in selected days: ${args}.")),
-            ('persons', _("Persons not found: ${args}.")),
-            ('courses', _("Courses not found: ${args}.")),
-            ('sections', _("Sections not found: ${args}.")),
-            ('locations', _("Locations not found: ${args}.")),
-            ('records', _("Invalid records: ${args}."))]:
-            v = getattr(err, key)
-            if v:
-                values = ', '.join([unicode(st) for st in v])
-                msg.mapping = {'args': values}
-                self.errors.append(msg)
-
-    def getCharset(self):
-        """Return the charset (as a string) that was specified in the request.
-
-        Updates self.errors and returns None if the charset was not specified
-        or if it is invalid.
-        """
-        charset = self.request['charset']
-        if charset == 'other':
-            charset = self.request['other_charset']
-        if not charset:
-            self.errors.append(_("No charset specified"))
-            return
-        try:
-            unicode(' ', charset)
-        except LookupError:
-            self.errors.append(_("Unknown charset"))
-            return
-        return charset
-
-
 class ImportErrorCollection(object):
 
     def __init__(self):
@@ -163,22 +68,23 @@ class TimetableCSVImporter(object):
     """A timetable CSV parser and importer.
 
     Two externally useful methods are importTimetable and importRoster.
-    """
-    # Perhaps this class should be moved to schooltool.csvimport
 
-    # This class does not use exceptions for handling errors excessively
-    # because of the nature of error-checking: we want to gather many errors
-    # in one sweep and present them to the user at once.
+    This class does not use exceptions for handling errors excessively
+    because of the nature of error-checking: we want to gather many errors
+    in one sweep and present them to the user at once.
+    """
 
     def __init__(self, app, charset=None):
-        self.app = app
+        # XXX It appears that our security declarations are inadequate,
+        #     because things break without this removeSecurityProxy.
+        self.app = removeSecurityProxy(app)
         self.sections = self.app['sections']
         self.persons = self.app['persons']
         self.errors = ImportErrorCollection()
         self.charset = charset
         self.cache = {} # TODO: this is obsolete
 
-    def importSections(self, sections_csv): # TODO: rename this method
+    def importSections(self, sections_csv): # TODO: see importFromCSV
         """Import sections from CSV data.
 
         This method obsoletes importTimetable and importRoster.
@@ -343,8 +249,8 @@ class TimetableCSVImporter(object):
             self.sections[section_name] = section
 
         # Establish links to course and to teacher
-        section.courses.add(course)
-        section.instructors.add(instructor)
+        section.courses.add(course) # XXX duplicate relationship
+        section.instructors.add(instructor) # XXX duplicate relationship
 
         # Create a timetable
         timetable_key = ".".join((self.term.__name__, self.ttschema.__name__))
@@ -678,6 +584,48 @@ class TimetableCSVImporter(object):
                                  " aborting transaction.")
                 return False
         return True
+
+    def importFromCSV(self, csvdata):
+        """Invoke importSections while playing with BaseCSVImportView nicely.
+
+        Currently sb.BaseCSVImportView expects ImporterClass.importFromCSV
+        return True on success, False on error.  It would be nicer if it
+        caught InvalidCSVErrors instead.  When this refactoring is performed,
+        this method may be removed and importSections can be renamed to
+        importFromCSV.
+        """
+        try:
+            self.importSections(csvdata)
+        except InvalidCSVError:
+            return False
+        else:
+            return True
+
+
+class TimetableCSVImportView(sb.BaseCSVImportView):
+    """Timetable CSV import view."""
+
+    __used_for__ = ISchoolToolApplication
+
+    importer_class = TimetableCSVImporter
+
+    def _presentErrors(self, err):
+        if err.generic:
+            self.errors.extend(err.generic)
+
+        for key, msg in [
+            ('day_ids', _("Day ids not defined in selected schema: ${args}.")),
+            ('periods', _("Periods not defined in selected days: ${args}.")),
+            ('persons', _("Persons not found: ${args}.")),
+            ('courses', _("Courses not found: ${args}.")),
+            ('sections', _("Sections not found: ${args}.")),
+            ('locations', _("Locations not found: ${args}.")),
+            ('records', _("Invalid records: ${args}."))]:
+            v = getattr(err, key)
+            if v:
+                values = ', '.join([unicode(st) for st in v])
+                msg.mapping = {'args': values}
+                self.errors.append(msg)
 
 
 class CourseCSVImporter(sb.SimpleCSVImporter):

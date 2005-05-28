@@ -99,20 +99,19 @@ class TestTimetableCSVImportView(unittest.TestCase):
         self.failIf(view.errors)
         self.failIf(view.success)
 
-    def test_POST(self):
+    def test_POST_csvfile(self):
         from schooltool.app import Person, Section
-        self.app['persons']['person'] = Person('person', 'Some person')
-        self.app['sections']['s'] = Section('staff')
-        tt_csv = StringIO('"fall","three-day"')
-        roster = StringIO('staff\nSome person')
-        view = self.createView(form={'timetable.csv': tt_csv,
-                                     'roster.txt': roster,
+        tt_csv_text = '"fall","three-day"\n""\n""'
+        tt_csv = StringIO(tt_csv_text)
+        view = self.createView(form={'csvfile': tt_csv,
+                                     'csvtext': tt_csv_text,
                                      'charset': 'UTF-8',
                                      'UPDATE_SUBMIT': 'Submit'})
         view.update()
         self.assertEquals(view.success,
-                          ['timetable.csv imported successfully.',
-                           'roster.txt imported successfully.'], view.errors)
+                          ["CSV file imported successfully.",
+                           "CSV text imported successfully."],
+                          view.errors)
         self.assertEquals(view.errors, [])
 
     def test_POST_empty(self):
@@ -125,8 +124,7 @@ class TestTimetableCSVImportView(unittest.TestCase):
 
     def test_POST_invalid_charset(self):
         tt_csv = StringIO('"A","\xff","C","D"')
-        view = self.createView(form={'timetable.csv': tt_csv,
-                                     'roster.txt': '',
+        view = self.createView(form={'csvfile': tt_csv,
                                      'charset': 'UTF-8',
                                      'UPDATE_SUBMIT': 'Submit'})
         view.update()
@@ -136,14 +134,12 @@ class TestTimetableCSVImportView(unittest.TestCase):
     def test_POST_utf8(self):
         ttschema = self.app["ttschemas"][u'three-day']
         self.app["ttschemas"][u'three-day \u263b'] = ttschema
-        tt_csv = StringIO('"fall","three-day \xe2\x98\xbb"')
-        view = self.createView(form={'timetable.csv': tt_csv,
-                                     'roster.txt': '',
+        tt_csv = StringIO('"fall","three-day \xe2\x98\xbb"\n""\n""')
+        view = self.createView(form={'csvfile': tt_csv,
                                      'charset': 'UTF-8',
                                      'UPDATE_SUBMIT': 'Submit'})
         view.update()
-        self.assertEquals(view.success,
-                          ['timetable.csv imported successfully.'])
+        self.assertEquals(view.success, ['CSV file imported successfully.'])
 
 
 class TestTimetableCSVImporter(unittest.TestCase):
