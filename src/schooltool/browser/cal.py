@@ -68,35 +68,32 @@ class DailyCalendarView(SBDailyCalView):
         else:
             periods = []
         today = datetime.combine(self.cursor, time(tzinfo=self.timezone))
-        row_ends = [today + timedelta(hours=hour)
-                    for hour in range(self.starthour, self.endhour+1)]
-
-        # Put starts and ends of periods into row_ends
-        for period in periods:
-            pstart = datetime.combine(self.cursor, period.tstart)
-            pstart = pstart.replace(tzinfo=self.timezone)
-            pend = pstart + period.duration
-            for point in row_ends[:]:
-                if pstart < point < pend:
-                    row_ends.remove(point)
-            if pstart not in row_ends:
-                row_ends.append(pstart)
-            if pend not in row_ends:
-                row_ends.append(pend)
+        rows = [today + timedelta(hours=hour)
+                for hour in range(self.starthour, self.endhour+1)]
 
         if periods:
-            row_ends.sort()
+            # Put starts and ends of periods into rows
+            for period in periods:
+                pstart = datetime.combine(self.cursor, period.tstart)
+                pstart = pstart.replace(tzinfo=self.timezone)
+                pend = pstart + period.duration
+                for point in rows[:]:
+                    if pstart < point < pend:
+                        rows.remove(point)
+                if pstart not in rows:
+                    rows.append(pstart)
+                if pend not in rows:
+                    rows.append(pend)
+            rows.sort()
 
         def periodIsStarting(dt):
-            if not periods:
-                return False
             pstart = datetime.combine(self.cursor, periods[0].tstart)
             pstart = pstart.replace(tzinfo=self.timezone)
             return pstart == dt
 
-        start, row_ends = row_ends[0], row_ends[1:]
+        start, row_ends = rows[0], rows[1:]
         for end in row_ends:
-            if periodIsStarting(start):
+            if periods and periodIsStarting(start):
                 period = periods.pop(0)
                 yield (period.title, start, period.duration)
             else:
