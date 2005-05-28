@@ -126,7 +126,6 @@ class BaseCSVImporter(object):
         self.container = container
         self.errors = ImportErrorCollection()
         self.charset = charset
-        self.cache = {}
 
     def parseCSVRows(self, rows):
         """Parse rows (a list of strings) in CSV format.
@@ -234,8 +233,8 @@ class SimpleCSVImporter(BaseCSVImporter):
         self.chooser = SimpleNameChooser(container)
 
     def createAndAdd(self, data, dry_run=True):
-        """Create objects and add them to the container.
-        """
+        """Create objects and add them to the container."""
+
         if not self.factory:
             raise NotImplementedError("factory attribute not defined in subclass")
         if len(data) < 1:
