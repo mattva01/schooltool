@@ -1,8 +1,8 @@
 <tal:defs define="update view/update" />
-<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
   <head>
     <title metal:fill-slot="title" i18n:translate="">
-      Upload schooltool groups as CSV
+      Upload SchoolTool groups as CSV
     </title>
   </head>
   <body>

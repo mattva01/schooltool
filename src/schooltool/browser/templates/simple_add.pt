@@ -1,5 +1,5 @@
 <html metal:use-macro="context/@@standard_macros/page"
-      i18n:domain="schoolbell">
+      i18n:domain="schooltool">
 <body>
 <div metal:fill-slot="body">
 
