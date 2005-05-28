@@ -318,6 +318,10 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assert_(activity.owner is philosophy_lorch)
         self.assertEquals(list(activity.resources), [self.location])
 
+        # Finally, let's make sure that we can import the same data
+        # several times without crashing.
+        imp.importSections(data)
+
     def test_importHeader(self):
         # too many fields on first row
         imp = self.createImporter()
@@ -452,6 +456,13 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assertEquals(act.title, course.title)
         self.assert_(act.owner is section)
         self.assertEquals(list(act.resources), [])
+
+        # If the same data is imported a second time, nothing should change.
+        section2 = imp.createSection(course, instructor,
+                                     periods=periods, dry_run=False)
+        self.assert_(section2 is section)
+        self.assert_(section.timetables['fall.three-day'] is tt)
+        self.assertEquals(len(list(tt.itercontent())), 2)
 
     def test_createSection_existing(self):
         imp = self.createImporter(term='fall', ttschema='three-day')
@@ -592,6 +603,14 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.failIf(imp.errors.anyErrors(), imp.errors)
 
         persons = self.app['persons']
+        self.assert_(persons['curtin'] in self.section.members)
+        self.assert_(persons['lorch'] in self.section.members)
+        self.assert_(persons['guzman'] not in self.section.members)
+
+        # Try the same import a second time.
+        imp.importPersons(lines, self.section, dry_run=False)
+        self.failIf(imp.errors.anyErrors(), imp.errors)
+
         self.assert_(persons['curtin'] in self.section.members)
         self.assert_(persons['lorch'] in self.section.members)
         self.assert_(persons['guzman'] not in self.section.members)

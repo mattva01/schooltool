@@ -245,8 +245,10 @@ class TimetableCSVImporter(object):
             self.sections[section_name] = section
 
         # Establish links to course and to teacher
-        section.courses.add(course) # XXX duplicate relationship
-        section.instructors.add(instructor) # XXX duplicate relationship
+        if course not in section.courses:
+            section.courses.add(course)
+        if instructor not in section.instructors:
+            section.instructors.add(instructor)
 
         # Create a timetable
         timetable_key = ".".join((self.term.__name__, self.ttschema.__name__))
@@ -265,8 +267,6 @@ class TimetableCSVImporter(object):
             act = TimetableActivity(title=course.title, owner=section,
                                     resources=resources)
             tt[day_id].add(period_id, act)
-            # XXX If imported several times, multiple copies of activities
-            #     will appear.  That is bad.
 
         return section
 
@@ -281,7 +281,8 @@ class TimetableCSVImporter(object):
                     self.errors.persons.append(person_id)
             else:
                 if not dry_run:
-                    section.members.add(person)
+                    if person not in section.members:
+                        section.members.add(person)
 
     def importHeader(self, row):
         """Read the header row of the CSV file.

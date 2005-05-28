@@ -84,7 +84,8 @@
           <em>"philosophy","lorch","",""</em>), those cells will be discarded.
           You may separate section descriptions by more than one line.  In the
           list of learners, only the first column containing the person ids is
-          processed, the other columns are ignored.
+          processed, the other columns are ignored.  You can import the same
+          data several times without any side effects.
         </p>
 
         <fieldset>
