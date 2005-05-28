@@ -68,8 +68,8 @@ class DailyCalendarView(SBDailyCalView):
         else:
             periods = []
         today = datetime.combine(self.cursor, time(tzinfo=self.timezone))
-        row_ends = [today + timedelta(hours=hour + 1)
-                    for hour in range(self.starthour, self.endhour)]
+        row_ends = [today + timedelta(hours=hour)
+                    for hour in range(self.starthour, self.endhour+1)]
 
         # Put starts and ends of periods into row_ends
         for period in periods:
@@ -92,8 +92,7 @@ class DailyCalendarView(SBDailyCalView):
                 return False
             pstart = datetime.combine(self.cursor, periods[0].tstart)
             pstart = pstart.replace(tzinfo=self.timezone)
-            if pstart == dt:
-                return True
+            return pstart == dt
 
         start, row_ends = row_ends[0], row_ends[1:]
         for end in row_ends:
