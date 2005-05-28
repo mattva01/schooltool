@@ -253,7 +253,9 @@ class TimetableCSVImporter(object):
         if instructor is None:
             self.errors.persons.append(instructor_id)
 
+        invalid_location = object() # marker
         line_ofs = 1
+        periods = []
         finished = False
         for row in rows[1:]:
             line_ofs += 1
@@ -274,9 +276,15 @@ class TimetableCSVImporter(object):
                 continue
 
             # check resource_id
-            if location_id and location_id not in self.app['resources'].keys():
-                if location_id not in self.errors.locations:
-                    self.errors.locations.append(location_id)
+            if location_id:
+                try:
+                    location = self.app['resources'][location_id]
+                except KeyError:
+                    if location_id not in self.errors.locations:
+                        location = invalid_location
+                        self.errors.locations.append(location_id)
+            else:
+                location = None
 
             # check day_id
             try:
@@ -292,13 +300,16 @@ class TimetableCSVImporter(object):
                 self.errors.periods.append(period_id)
                 continue
 
+            periods.append((day_id, period_id, location))
+
         if not finished or len(rows) == line_ofs:
             err_msg = _("Incomplete section description on line ${line}")
             err_msg.mapping = {'line': line}
             self.errors.generic.append(err_msg)
             return
 
-        section = self.createSection(course, instructor, [], dry_run=dry_run)
+        section = self.createSection(course, instructor, periods,
+                                     dry_run=dry_run)
         self.importPersons(rows[line_ofs:], section, dry_run=dry_run)
 
     def createSection(self, course, instructor, periods, dry_run=True):

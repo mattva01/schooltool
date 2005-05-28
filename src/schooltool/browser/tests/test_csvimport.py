@@ -267,7 +267,60 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
     def test_importSections_functional(self):
         imp = self.createImporter()
-        # TODO
+        data = dedent("""\
+            "summer","three-day"
+            "","",""
+            "philosophy","lorch"
+            "Monday","A","location"
+            "Monday","B"
+            "Tuesday","C","location2"
+            "***"
+            "guzman"
+            "curtin"
+            ""
+            "philosophy","guzman",""
+            "Wednesday","B",""
+            "Wednesday","C","location2"
+            "***"
+            "curtin"
+            "lorch"
+        """)
+        imp.importSections(data)
+
+        # Let's do a little snooping around.  We don't have to be very
+        # verbose as this test mostly checks integration; the components
+        # are tested well individually.
+
+        persons = self.app['persons']
+        sections = self.app['sections']
+
+        # Check out the created sections.
+        philosophy_lorch = sections['philosophy--lorch']
+        philosophy_guzman = sections['philosophy--guzman']
+
+        self.assertEquals(list(philosophy_lorch.instructors),
+                          [persons['lorch']])
+        self.assert_(persons['guzman'] in philosophy_lorch.members)
+        self.assert_(persons['curtin'] in philosophy_lorch.members)
+        self.assert_(persons['lorch'] not in philosophy_lorch.members)
+
+        self.assertEquals(list(philosophy_guzman.instructors),
+                          [persons['guzman']])
+        self.assert_(persons['guzman'] not in philosophy_guzman.members)
+        self.assert_(persons['curtin'] in philosophy_guzman.members)
+        self.assert_(persons['lorch'] in philosophy_guzman.members)
+
+        # Look at the timetables of the sections
+        lorch_tt = philosophy_lorch.timetables['summer.three-day']
+        self.assertEquals(len(list(lorch_tt.itercontent())), 3)
+        # Look at a couple of periods.
+        self.assertEquals(len(lorch_tt['Monday']['B']), 1)
+        self.assertEquals(len(lorch_tt['Monday']['C']), 0)
+
+        # Look closer into an activity.
+        activity = list(lorch_tt['Monday']['A'])[0]
+        self.assert_(activity.owner is philosophy_lorch)
+        self.assertEquals(list(activity.resources), [self.location])
 
     def test_importHeader(self):
         # too many fields on first row
@@ -395,6 +448,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assertEquals(act.title, course.title)
         self.assert_(act.owner is section)
         self.assertEquals(list(act.resources), [self.location])
+        self.assert_(act.timetable is tt)
 
         acts = tt['Tuesday']['C']
         self.assertEquals(len(acts), 1)
@@ -436,7 +490,38 @@ class TestTimetableCSVImporter(unittest.TestCase):
         imp.importChunk(lines, 5, dry_run=False)
         self.failIf(imp.errors.anyErrors(), imp.errors)
 
-        self.assert_('philosophy--curtin' in self.app['sections'].keys())
+        philosophy_curtin = self.app['sections']['philosophy--curtin']
+        tt = philosophy_curtin.timetables['fall.three-day']
+        activities = list(tt.itercontent())
+        self.assertEquals(len(activities), 2)
+
+        # Let's stub out createSection and importPersons and make sure that the
+        # right arguments are passed.
+        imp = self.createImporter(term='fall', ttschema='three-day')
+        section_log = []
+        stub_section = self.section
+        def createSectionStub(course, instructor, periods, dry_run=True):
+            section_log.append((course, instructor, periods, dry_run))
+            return stub_section
+        imp.createSection = createSectionStub
+        persons_log  = []
+        def importPersonsStub(person_data, section, dry_run=True):
+            persons_log.append((person_data, section, dry_run))
+        imp.importPersons = importPersonsStub
+
+        # invoke the method
+        imp.importChunk(lines, 5, dry_run=False)
+        self.failIf(imp.errors.anyErrors(), imp.errors)
+
+        # check the logs
+        philosophy = self.course
+        curtin = self.app['persons']['curtin']
+        expected_periods = [('Monday', 'A', self.location),
+                            ('Wednesday', 'B', None)]
+        self.assertEquals(section_log,
+                          [(philosophy, curtin, expected_periods, False)])
+        lines_expected = [['lorch'], ['guzman']]
+        self.assertEquals(persons_log, [(lines_expected, stub_section, False)])
 
     def test_importChunk_errors_top(self):
         # only provide the top row
