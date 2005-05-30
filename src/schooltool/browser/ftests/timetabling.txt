@@ -9,7 +9,8 @@ Overview
 
 1. Definition of terms
 2. Definition of timetable schemas (TODO)
-3. Usage of timetables (TODO)
+3. Import of timetables
+4. Usage of timetables (TODO)
 
 
 Prologue
@@ -29,6 +30,47 @@ We will need a SchoolTool instance.  Let's call it 'frogpond'.
     Location: http://localhost/@@contents.html
     ...
 
+Let's create a person for use in tests:
+
+    >>> print http("""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 112
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Frog&field.username=frog&field.password=pwd\
+    ... &field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+And a group:
+
+    >>> print http(r"""
+    ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Animals&UPDATE_SUBMIT=Add&add_input_name=""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/groups
+    ...
+
+And a resource:
+
+    >>> print http(r"""
+    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Mud&UPDATE_SUBMIT=Add&add_input_name=""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/resources
+    ...
 
 Terms
 -----
@@ -312,20 +354,62 @@ MAYBE TODO: add an 'Identifier (optional)' field to the term addition form,
             just like in group/resource addition form
 
 
-Timetables on persons, groups, and resources
---------------------------------------------
+Definition of timetable schemas
+-------------------------------
 
-Persons, groups and resources should have timetables.
+We will create a timetable schema using the simple schema definition form:
 
-Let's create a person:
+    >>> print http("""
+    ... POST /frogpond/ttschemas/@@add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 185
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=default&\
+    ... field.period_name_1=A&field.period_name_2=B&\
+    ... field.period_start_1=9:00&field.period_start_2=10:00&\
+    ... field.period_finish_1=9:45&field.period_finish_2=10:45&\
+    ... CREATE=Create
+    ... """, handle_errors=False)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/ttschemas
+    ...
+
+Let's look at the new timetable:
+
+    >>> print http(r"""
+    ... GET /frogpond/ttschemas/default HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+    <table class="timetable">
+    ...
+    <th class="period" width="...">A</th>
+    <td class="activity" width="..."></td>
+    ...
+    <th class="period" width="...">B</th>
+    <td class="activity" width="..."></td>
+    ...
+    </table>
+    ...
+
+TODO: check the complex timetable schema definition page too.
+
+
+Importing timetables
+--------------------
+
+We will need to define a person who will be a learner.
 
     >>> print http("""
     ... POST /frogpond/persons/add.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 112
+    ... Content-Length: 118
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=Frog&field.username=frog&field.password=pwd\
+    ... field.title=Tadpole&field.username=tadpole&field.password=pwd\
     ... &field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
     ... """)
     HTTP/1.1 303 See Other
@@ -333,7 +417,140 @@ Let's create a person:
     Location: http://localhost/frogpond/persons
     ...
 
-Now he should be a schooltool.app.Person, not schoolbell.app.app.Person:
+We will also need a course.
+
+    >>> print http(r"""
+    ... POST /frogpond/courses/+/addSchoolToolCourse.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Swimming&UPDATE_SUBMIT=Add&add_input_name=""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/courses
+    ...
+
+We can import timetables using the CSV timetable import page.
+
+    >>> print http(r"""
+    ... GET /frogpond/@@timetables-csvimport.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+    <legend>Upload CSV File</legend>
+    <div class="row">
+      <label for="csvfile">CSV File</label>
+      <input id="csvfile" type="file" name="csvfile" />
+    </div>
+    ...
+    <legend>Input CSV Data</legend>
+    <label for="csvtext">CSV Data</label>
+    <textarea name="csvtext" id="csvtext" cols="50"
+              rows="10"></textarea>
+    ...
+
+As you can see, the form allows to submit the CSV data either by sending the
+file or typing/pasting it into a text area field.
+
+    >>> import urllib
+    >>> csvdata = "UPDATE_SUBMIT=Submit&charset=UTF-8&csvtext=" \
+    ... + urllib.quote("""\
+    ... "2005-fall","default"
+    ... ""
+    ... "swimming","frog"
+    ... "Monday","A"
+    ... "Tuesday","B"
+    ... "***"
+    ... "tadpole"
+    ... """)
+
+    >>> print http("""
+    ... POST /frogpond/@@timetables-csvimport.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: %d
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... %s
+    ... """ % (len(csvdata), csvdata), handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+    <div class="info">
+      <p>CSV text imported successfully.</p>
+    </div>
+    ...
+
+A new section should have been created:
+
+XXX Bug: the section's title is not shown right.
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/ HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <a href="http://localhost/frogpond/sections/swimming--frog">...</a>
+    ...
+
+We should see a timetable in the section's timetable list:
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/swimming--frog/timetables/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    Timetables for Swimming - Frog
+    ...
+    <ul>
+      <li>
+        <a href="http://localhost/frogpond/sections/swimming--frog/timetables/2005-fall.default">2005-fall.default</a>
+      </li>
+    </ul>
+    ...
+
+We can have a look at the timetable too, and see a few timetable activities:
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/swimming--frog/timetables/2005-fall.default HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <tr>
+      <th class="period" width="...">A</th>
+      <td class="activity" width="...>Swimming</td>
+      ...
+      <th class="period" width="...">A</th>
+      <td class="activity" width="..."></td>
+    </tr>
+    <tr>
+      <th class="period" width="...">B</th>
+      <td class="activity" width="..."></td>
+    <BLANKLINE>
+      <th class="period" width="...">B</th>
+      <td class="activity" width="...>Swimming</td>
+      ...
+      <th class="period" width="...">B</th>
+      <td class="activity" width="..."></td>
+    </tr>
+    ...
+
+
+Timetables on persons, groups, and resources
+--------------------------------------------
+
+Persons, groups and resources should have timetables.
+
+The person whom we have registered initially should be a schooltool.app.Person,
+not schoolbell.app.app.Person:
 
     >>> getRootFolder()['frogpond']['persons']['frog']
     <schooltool.app.Person object at ...>
@@ -347,11 +564,14 @@ are no checkboxes around him:
     ... """)
     HTTP/1.1 200 Ok
     ...
-        <ul>
-          <li>
-            <a href="http://localhost/frogpond/persons/frog">Frog</a>
-          </li>
-        </ul>
+    <ul>
+      <li>
+        <a href="http://localhost/frogpond/persons/frog">Frog</a>
+      </li>
+      <li>
+        <a href="http://localhost/frogpond/persons/tadpole">Tadpole</a>
+      </li>
+    </ul>
     ...
 
 
@@ -384,41 +604,15 @@ We can view the person's timetable list, although it will be empty:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-      Timetables for Frog
+    Timetables for Frog
     ...
 
-Likewise, if we add a group:
-
-    >>> print http(r"""
-    ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Animals&UPDATE_SUBMIT=Add&add_input_name=""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/groups
-    ...
-
-This is a schooltool group:
+The group is a SchoolTool group:
 
     >>> getRootFolder()['frogpond']['groups']['animals']
     <schooltool.app.Group object at ...>
 
-The same with a resource:
-
-    >>> print http(r"""
-    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Mud&UPDATE_SUBMIT=Add&add_input_name=""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/resources
-    ...
-
-This is a schooltool resource:
+The resource is a SchoolTool resource:
 
     >>> getRootFolder()['frogpond']['resources']['mud']
     <schooltool.app.Resource object at ...>
