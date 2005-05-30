@@ -23,7 +23,7 @@
   <table class="schooldaymodel" tal:repeat="month view/calendar">
     <tr>
       <th class="month" colspan="8" i18n:translate="">
-        <span tal:replace="month/month" i18n:name="month" /> <span tal:replace="month/year" i18n:name="year" />
+        <span tal:replace="month/month" i18n:name="month" i18n:translate="" /> <span tal:replace="month/year" i18n:name="year" />
       </th>
     </tr>
     <tr>

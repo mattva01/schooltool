@@ -149,7 +149,7 @@ above, use the Update button to refresh the form.
                     skip view/next_tabindex">
       <th class="day"></th>
       <tal:block repeat="day view/days_of_week">
-      <th class="day" tal:content="day">Monday</th>
+      <th class="day" tal:content="day" i18n:translate="">Monday</th>
       <th class="day" width="1%"
           tal:condition="not: repeat/day/start">
         <input class="button-ok" type="submit" tal:define="n repeat/day/index"

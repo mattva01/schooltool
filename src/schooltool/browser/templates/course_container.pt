@@ -1,12 +1,12 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title" tal:content="view/index_title">
-    Contents
-  </title>
+  <title metal:fill-slot="title"
+         tal:content="view/index_title" i18n:translate="">Contents</title>
 </head>
 <body>
 
-<h1 metal:fill-slot="content-header" tal:content="view/index_title">Contents</h1>
+<h1 metal:fill-slot="content-header"
+    tal:content="view/index_title" i18n:translate="">Contents</h1>
 
 <metal:block metal:fill-slot="body"
              tal:define="objects context/values;
@@ -23,7 +23,7 @@
            tal:attributes="href course/@@absolute_url">Some Object</a>
         <ul tal:condition="course/sections|nothing" class="section-list">
           <li tal:repeat="section course/sections">
-            <a tal:content="section/label"
+            <a tal:content="section/label" i18n:translate=""
                tal:attributes="href section/@@absolute_url">Some Object</a>
             <span class="hint">
               (<span tal:replace="section/size"/>

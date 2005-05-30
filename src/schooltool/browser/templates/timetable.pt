@@ -1,10 +1,12 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title" tal:content="view/title" />
+  <title metal:fill-slot="title"
+         tal:content="view/title" i18n:translate="" />
 </head>
 <body>
 
-<h1 metal:fill-slot="content-header" tal:content="view/title" />
+<h1 metal:fill-slot="content-header"
+    tal:content="view/title" i18n:translate="" />
 
 <metal:block metal:fill-slot="body"
              tal:define="owner_url context/__parent__/__parent__/@@absolute_url;

@@ -1,7 +1,8 @@
 <tal:defs define="dummy view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title" tal:content="view/title">Term</title>
+  <title metal:fill-slot="title"
+         tal:content="view/title" i18n:translate="">Term</title>
   <script type="text/javascript" metal:fill-slot="extrahead">
     function update(idx) {
         var checkbox = document.getElementById('c' + idx);
@@ -21,7 +22,8 @@
   </script>
 </head>
 <body>
-  <h1 metal:fill-slot="content-header" tal:content="view/title">Term</h1>
+  <h1 metal:fill-slot="content-header"
+      tal:content="view/title" i18n:translate="">Term</h1>
 
 <metal:block metal:fill-slot="body">
 
@@ -29,7 +31,7 @@
       tal:define="calendar view/calendar">
 
 <div class="info" tal:condition="view/update_status"
-                  tal:content="view/update_status">
+                  tal:content="view/update_status" i18n:translate="">
   [Status message]
 </div>
 
@@ -110,7 +112,7 @@ Please specify which days are school days, and which days are holidays.
   <table class="schooldaymodel" tal:repeat="month calendar">
     <tr>
       <th class="month" colspan="8" i18n:translate="">
-        <span tal:replace="month/month" i18n:name="month" /> <span tal:replace="month/year" i18n:name="year" />
+        <span tal:replace="month/month" i18n:translate="" i18n:name="month" /> <span tal:replace="month/year" i18n:name="year" />
       </th>
     </tr>
     <tr>

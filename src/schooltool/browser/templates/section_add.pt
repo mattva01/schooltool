@@ -11,7 +11,7 @@
     <fieldset metal:define-macro="formbody">
 
       <h3 tal:condition="view/label"
-          tal:content="view/label"
+          tal:content="view/label" i18n:translate=""
           metal:define-slot="heading"
           >Edit something</h3>
 
