@@ -1776,9 +1776,14 @@ class CalendarEventBookingView(BrowserView):
     _redirectToDate = None
 
     def update(self):
-        """Books and unbooks resources according to the request."""
+        """Book/unbook resources according to the request."""
         start_date = self.context.dtstart.strftime("%Y-%m-%d")
         self._redirectToDate = self.request.get('date', start_date)
+
+        if 'CANCEL' in self.request:
+            url = absoluteURL(self.context, self.request)
+            self.request.response.redirect('%s/@@edit.html' % url)
+            return ''
 
         if "UPDATE_SUBMIT" in self.request and not self.update_status:
             self.update_status = ''

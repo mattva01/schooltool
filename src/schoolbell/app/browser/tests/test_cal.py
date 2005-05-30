@@ -2540,14 +2540,14 @@ def doctest_TestCalendarEventBookingView():
         >>> view.update()
         ''
 
-    Couple of resources should be booked now:
+    A couple of resources should be booked now:
 
         >>> [resource.title for resource in view.availableResources
         ...                 if view.hasBooked(resource)]
         ['res2', 'res4']
 
 
-    Now let's unbook a resource and book a nnew one:
+    Now let's unbook a resource and book a new one:
 
         >>> request = TestRequest(form={'marker-res0': '1',
         ...                             'marker-res1': '1',
@@ -2568,11 +2568,41 @@ def doctest_TestCalendarEventBookingView():
         >>> view.update()
         ''
 
-    We should see a resource 3 in the list now:
+    We should see resource 3 in the list now:
 
         >>> [resource.title for resource in view.availableResources
         ...                 if view.hasBooked(resource)]
         ['res3', 'res4']
+
+    If you don't feel very brave, use the Cancel button:
+
+        >>> request = TestRequest(form={'marker-res0': '1',
+        ...                             'marker-res1': '1',
+        ...                             'marker-res2': '1',
+        ...                             'marker-res3': '1',
+        ...                             'marker-res4': '1',
+        ...                             'marker-res5': '1',
+        ...                             'res5': 'booked',
+        ...                             'marker-res6': '1',
+        ...                             'marker-res7': '1',
+        ...                             'marker-res8': '1',
+        ...                             'marker-res9': '1',
+        ...                             'CANCEL': 'Cancel'})
+
+        >>> view = CalendarEventBookingView(event, request)
+        >>> view.update()
+        ''
+
+    Nothing has changed, see?
+
+        >>> [resource.title for resource in view.availableResources
+        ...                 if view.hasBooked(resource)]
+        ['res3', 'res4']
+
+    And you have been redirected back to the calendar:
+
+        >>> request.response.getHeader('Location')
+        'http://127.0.0.1/persons/ignas/calendar/ev1/@@edit.html'
 
     """
 
