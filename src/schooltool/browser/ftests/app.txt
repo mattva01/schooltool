@@ -213,7 +213,9 @@ Frog's overlay portlet just has his own calendar:
         <table class="overlays">
     <BLANKLINE>
           <tr>
-            <th style="text-align: center"><acronym title="Personal calendar">Cal</acronym></th>
+            <th style="text-align: center">
+              <acronym title="Personal calendar">Cal</acronym>
+            </th>
             <th><acronym title="Timetable calendar">TT</acronym></th>
             <th></th>
             <th></th>
@@ -285,7 +287,9 @@ And Frog's overlay portlet shows the section:
         <table class="overlays">
     <BLANKLINE>
           <tr>
-            <th style="text-align: center"><acronym title="Personal calendar">Cal</acronym></th>
+            <th style="text-align: center">
+              <acronym title="Personal calendar">Cal</acronym>
+            </th>
             <th><acronym title="Timetable calendar">TT</acronym></th>
             <th></th>
             <th></th>
@@ -307,7 +311,7 @@ And Frog's overlay portlet shows the section:
                        name="overlay_timetables:list"
                        checked="checked"
                        value="/frogpond/sections/section" /></td>
-            <td style="width: 100%">Section</td>
+            <td style="width: 100%">Frog -- History</td>
             <td><a class="go"
                    style="background: #c1665a;
                 color: #c1665a"
@@ -365,7 +369,9 @@ And the section's calendar is no longer in his overlay portlet.
         <table class="overlays">
     <BLANKLINE>
           <tr>
-            <th style="text-align: center"><acronym title="Personal calendar">Cal</acronym></th>
+            <th style="text-align: center">
+              <acronym title="Personal calendar">Cal</acronym>
+            </th>
             <th><acronym title="Timetable calendar">TT</acronym></th>
             <th></th>
             <th></th>

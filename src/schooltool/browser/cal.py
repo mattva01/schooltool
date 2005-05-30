@@ -142,7 +142,7 @@ class CalendarSTOverlayView(CalendarOverlayView):
         def getTitleOrLabel(item):
             object = item.calendar.__parent__
             if ISection.providedBy(object):
-                return object.label
+                return removeSecurityProxy(object.label)
             else:
                 return item.calendar.title
 
