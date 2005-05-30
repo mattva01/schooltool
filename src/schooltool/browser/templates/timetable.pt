@@ -18,7 +18,7 @@
                      th_width python: '%d%%' % (10 / ncols);
                      td_width python: '%d%%' % (90 / ncols)">
     <tr>
-      <th tal:repeat="day context/keys" tal:content="day"
+      <th tal:repeat="day context/keys" tal:content="day" i18n:translate=""
           tal:attributes="width col_width" colspan="2" class="day">Day N</th>
     </tr>
     <tr tal:repeat="row view/rows"><tal:block tal:repeat="col row">

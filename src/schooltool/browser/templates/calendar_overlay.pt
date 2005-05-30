@@ -1,5 +1,5 @@
 <div id="portlet-calendar-overlay" class="portlet"
-     tal:condition="view/show_overlay">
+     i18n:domain="schooltool" tal:condition="view/show_overlay">
 
   <h4 i18n:translate="">Calendars</h4>
 
@@ -9,8 +9,12 @@
     <table class="overlays">
 
       <tr>
-        <th style="text-align: center"><acronym title="Personal calendar">Cal</acronym></th>
-        <th><acronym title="Timetable calendar">TT</acronym></th>
+        <th style="text-align: center">
+          <acronym title="Personal calendar" i18n:attributes="title"
+                   i18n:translate="">Cal</acronym>
+        </th>
+        <th><acronym title="Timetable calendar" i18n:attributes="title"
+                     i18n:translate="">TT</acronym></th>
         <th></th>
         <th></th>
       </tr>
