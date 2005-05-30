@@ -9,7 +9,7 @@
 
 <h1 metal:fill-slot="content-header" i18n:translate="">
   Scheduling for <span i18n:name="section"
-                       tal:replace="context/label" i18n;translate="" />
+                       tal:replace="context/label" i18n:translate="" />
 </h1>
 
 <metal:block metal:fill-slot="body">
