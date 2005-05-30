@@ -39,7 +39,7 @@
 
               <strong>
                 <a tal:attributes="href section/@@absolute_url"
-                   tal:content="section/label" />
+                   tal:content="section/label" i18n:translate="" />
               </strong>
               <p>
                 <strong i18n:translate="">Size:</strong>

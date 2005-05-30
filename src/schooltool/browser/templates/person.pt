@@ -51,7 +51,7 @@
                   <a title=""
                     tal:attributes="href group/@@absolute_url;
                     title group/description|group/title"
-                    tal:content="group/label"></a>
+                    tal:content="group/label" i18n:translate=""></a>
                 </li>
               </tal:loop>
             </ul>
