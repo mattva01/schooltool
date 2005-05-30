@@ -202,20 +202,23 @@ class CalendarListView(BrowserView):
         # personal calendar
         yield (self.context, '#9db8d2', '#7590ae')
 
+        ttcalendar = self.context.__parent__.makeTimetableCalendar()
+
         user = IPerson(self.request.principal, None)
         if user is None:
+            yield (ttcalendar, '#9db8d2', '#7590ae')
             return # unauthenticated user
 
         unproxied_context = removeSecurityProxy(self.context) 
         unproxied_calendar = removeSecurityProxy(user.calendar)
         if unproxied_context is not unproxied_calendar:
+            yield (ttcalendar, '#9db8d2', '#7590ae')
             return # user looking at the calendar of some other person
 
         # personal timetable
         unproxied_person = removeSecurityProxy(user) # for annotations
         annotations = IAnnotations(unproxied_person)
         if annotations.get(CalendarSTOverlayView.SHOW_TIMETABLE_KEY, True):
-            ttcalendar = self.context.__parent__.makeTimetableCalendar()
             yield (ttcalendar, '#9db8d2', '#7590ae')
             # Maybe we should change the colour to differ from the user's
             # personal calendar?

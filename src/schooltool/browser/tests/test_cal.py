@@ -308,23 +308,14 @@ def doctest_CalendarListView(self):
     should be displayed.  This list always includes the context of
     the view, but it may also include other calendars as well.
 
-        >>> from schooltool.browser.cal import CalendarListView
-        >>> import calendar as pycalendar
+    A handful of useful stubs:
+
         >>> class CalendarStub:
         ...     def __init__(self, title):
         ...         self.title = title
         ...     def _getParent(self):
-        ...         return PersonStub(self.title)
+        ...         return PersonStub(self.title, self)
         ...     __parent__ = property(_getParent)
-        >>> calendar = CalendarStub('My Calendar') 
-        >>> request = TestRequest()
-        >>> view = CalendarListView(calendar, request)
-        >>> for c, col1, col2 in view.getCalendars():
-        ...     print '%s (%s, %s)' % (c.title, col1, col2)
-        My Calendar (#9db8d2, #7590ae)
-
-    If the authenticated user is looking at his own calendar, then
-    a list of overlaid calendars is taken into consideration
 
         >>> class OverlayInfoStub:
         ...     def __init__(self, title, color1, color2,
@@ -334,25 +325,20 @@ def doctest_CalendarListView(self):
         ...         self.color2 = color2
         ...         self.show = show
         ...         self.show_timetables = show_timetables
-        >>> class PreferenceStub:
-        ...     def __init__(self):
-        ...         self.weekstart = pycalendar.MONDAY
-        ...         self.timeformat = "%H:%M"
-        ...         self.dateformat = "YYYY-MM-DD"
-        ...         self.timezone = 'UTC'
+
         >>> from schoolbell.app.interfaces import IPersonPreferences
         >>> from zope.interface import implements
         >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
         >>> class PersonStub:
         ...     implements(IAttributeAnnotatable)
-        ...     def __init__(self, title):
+        ...     def __init__(self, title, calendar=None):
         ...         self.title = title
+        ...         self.calendar = calendar
         ...     def makeTimetableCalendar(self):
         ...         return CalendarStub(self.title + ' (timetable)')
         ...     def __conform__(self, interface):
         ...         if interface is IPersonPreferences:
         ...             return PreferenceStub()
-        ...     calendar = calendar
         ...     overlaid_calendars = [
         ...         OverlayInfoStub('Other Calendar', 'red', 'blue',
         ...                         True, False),
@@ -363,15 +349,38 @@ def doctest_CalendarListView(self):
         ...         OverlayInfoStub('Boring Calendar', 'brown', 'magenta',
         ...                         False, False)]
 
+        >>> class PreferenceStub:
+        ...     def __init__(self):
+        ...         self.weekstart = pycalendar.MONDAY
+        ...         self.timeformat = "%H:%M"
+        ...         self.dateformat = "YYYY-MM-DD"
+        ...         self.timezone = 'UTC'
+
+    A simple check:
+
+        >>> from schooltool.browser.cal import CalendarListView
+        >>> import calendar as pycalendar
+        >>> calendar = CalendarStub('My Calendar') 
+        >>> request = TestRequest()
+        >>> view = CalendarListView(calendar, request)
+        >>> for c, col1, col2 in view.getCalendars():
+        ...     print '%s (%s, %s)' % (c.title, col1, col2)
+        My Calendar (#9db8d2, #7590ae)
+        My Calendar (timetable) (#9db8d2, #7590ae)
+
+    If the authenticated user is looking at his own calendar, then
+    a list of overlaid calendars is taken into consideration
+
         >>> from schoolbell.app.interfaces import IPerson
         >>> class PrincipalStub:
         ...     def __init__(self):
-        ...         self.person = PersonStub('x')
+        ...         self.person = PersonStub('x', calendar=calendar)
         ...     def __conform__(self, interface):
         ...         if interface is IPerson:
         ...             return self.person
         >>> principal = PrincipalStub()
         >>> request.setPrincipal(principal)
+
         >>> for c, col1, col2 in view.getCalendars():
         ...     print '%s (%s, %s)' % (c.title, col1, col2)
         My Calendar (#9db8d2, #7590ae)
@@ -399,13 +408,14 @@ def doctest_CalendarListView(self):
 
         >>> annotations[CalendarSTOverlayView.SHOW_TIMETABLE_KEY] = True
 
-    No calendars are overlaid if the user is looking at a different
+    Only the timetable is overlaid if the user is looking at someone else's
     calendar:
 
         >>> view = CalendarListView(CalendarStub('Some Calendar'), request)
         >>> for c, col1, col2 in view.getCalendars():
         ...     print '%s (%s, %s)' % (c.title, col1, col2)
         Some Calendar (#9db8d2, #7590ae)
+        Some Calendar (timetable) (#9db8d2, #7590ae)
 
     """
 
