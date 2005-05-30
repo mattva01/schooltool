@@ -108,7 +108,8 @@
 
   <content class=".app.Person">
     <require permission="schoolbell.view"
-             interface="schoolbell.app.interfaces.IReadPerson" />
+             interface="schoolbell.app.interfaces.IReadPerson"
+             attributes="__cmp__"/>
     <require permission="schoolbell.edit"
              interface="schoolbell.app.interfaces.IWritePerson"
              set_schema="schoolbell.app.interfaces.IPerson" />
@@ -132,7 +133,8 @@
   </content>
 
   <content class=".app.Group">
-    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner"
+           attributes="__cmp__" />
     <require permission="schoolbell.view"
              attributes="title description groups members" />
     <require permission="schoolbell.edit"
@@ -140,7 +142,8 @@
   </content>
 
   <content class=".app.Resource">
-    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner"
+           attributes="__cmp__" />
     <require permission="schoolbell.view"
              attributes="title description groups" />
     <require permission="schoolbell.edit"
