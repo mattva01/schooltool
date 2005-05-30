@@ -23,7 +23,6 @@ $Id: __init__.py 3405 2005-04-12 16:08:43Z bskahan $
 """
 
 from zope.app.publisher.browser import BrowserView
-from zope.security.checker import canAccess
 
 from schooltool.app import getSchoolToolApplication
 from schoolbell.app.browser.cal import CalendarOwnerTraverser
@@ -47,12 +46,6 @@ class NavigationView(BrowserView):
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
         self.app = getSchoolToolApplication()
-
-    #XXX this should be removed when issue236 is closed.
-    def _deleteSections(self):
-        return canAccess(self.app['sections'], '__delitem__')
-
-    deleteSections = property(_deleteSections)
 
 
 class TimetabledTraverser(CalendarOwnerTraverser):

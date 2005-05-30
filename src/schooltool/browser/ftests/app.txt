@@ -117,6 +117,7 @@ page:
     <ul>
        <li><a href="http://localhost/frogpond/persons">Persons</a></li>
        <li><a href="http://localhost/frogpond/courses">Courses</a></li>
+       <li><a href="http://localhost/frogpond/sections">Sections</a></li>
        <li><a href="http://localhost/frogpond/groups">Groups</a></li>
        <li><a href="http://localhost/frogpond/resources">Resources</a></li>
        <li><a href="http://localhost/frogpond/terms">Terms</a></li>
@@ -125,26 +126,6 @@ page:
     ...
               <h1>Welcome to SchoolTool</h1>
     ...
-
-If we log in as manager we can also access the Sections container:
-
-    >>> print http(r"""
-    ... GET /frogpond HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    <h4>Navigation</h4>
-    <ul>
-       <li><a href="http://localhost/frogpond/persons">Persons</a></li>
-       <li><a href="http://localhost/frogpond/courses">Courses</a></li>
-       <li><a href="http://localhost/frogpond/sections">Sections</a></li>
-       <li><a href="http://localhost/frogpond/groups">Groups</a></li>
-       <li><a href="http://localhost/frogpond/resources">Resources</a></li>
-       <li><a href="http://localhost/frogpond/terms">Terms</a></li>
-       <li><a href="http://localhost/frogpond/ttschemas">Timetable Schemas</a></li>
-    ...
-
 
 This is a school, so we should add some courses
 
