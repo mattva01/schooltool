@@ -1814,6 +1814,53 @@ def doctest_PersonTimetableSetupView_no_default_ttschema():
     """
 
 
+def doctest_TimetableSchemaContainerView():
+    """A test for TimetableSchemaContainer view
+
+    We will need an application:
+
+        >>> from schooltool.app import SchoolToolApplication
+        >>> app = SchoolToolApplication()
+
+    Some timetable schemas:
+
+        >>> from schooltool.timetable import TimetableSchema
+        >>> app["ttschemas"]["schema1"] = TimetableSchema([])
+        >>> app["ttschemas"]["schema2"] = TimetableSchema([])
+
+    Let's create our view:
+
+        >>> from schooltool.browser.timetable import TimetableSchemaContainerView
+        >>> from zope.publisher.browser import TestRequest
+        >>> view = TimetableSchemaContainerView(app["ttschemas"], TestRequest())
+
+    The default ttschema id should be "schema1":
+
+        >>> app["ttschemas"].default_id
+        'schema1'
+
+    If the view is submited without any data - the default ttschema
+    should not change:
+
+        >>> view.update()
+        ''
+        >>> app["ttschemas"].default_id
+        'schema1'
+
+    We can change the default schema:
+
+        >>> view.request = TestRequest(form={
+        ...                                  'ttschema': 'schema2',
+        ...                                  'UPDATE_SUBMIT': 'Change'
+        ...                                 })
+        >>> view.update()
+        ''
+        >>> app["ttschemas"].default_id
+        'schema2'
+
+    """
+
+
 def doctest_SectionTimetableSetupView():
     """Doctest for the SectionTimetableSetupView view
 

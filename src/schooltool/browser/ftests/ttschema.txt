@@ -118,27 +118,71 @@ Finally we post the completed form:
   <BLANKLINE>
   http://localhost/frogpond/ttschemas
 
-Now we see the newly created timetable schema in the list:
+Now we see the newly created timetable schema in the list, it should
+be the default one:
 
   >>> print http(r"""
   ... GET /frogpond/ttschemas HTTP/1.1
   ... Authorization: Basic mgr:mgrpw
-  ... """)
+  ... """, handle_errors=False)
   HTTP/1.1 200 Ok
   ...
-      <form method="post"
-            action="http://localhost/frogpond/ttschemas/delete.html">
-        <div>
-          <input type="checkbox" name="delete.weekly" />
           <a href="http://localhost/frogpond/ttschemas/weekly">weekly</a>
-        </div>
-        <div class="controls">
-          <input type="submit" class="button-cancel"
-                 value="Delete" />
-        </div>
-      </form>
+  ...
+        <label for="ttschema">Default Timetable Schema:</label>
+        <form method="post" action=".">
+          <select name="ttschema" size="1" id="ttschema">
+            <option selected="selected" value="weekly">weekly</option>
+          </select>
+          <input type="submit" class="button-ok"
+                 name="UPDATE_SUBMIT" value="Change"
+                 title="Shortcut: Alt-A" accesskey="A" />
+        </form>
+      </div>
   ...
 
+Lets add one more schema:
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/schemawizard.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Length: ...
+  ... Content-Type: application/x-www-form-urlencoded
+  ... 
+  ... field.title=Another Schema&day1=Monday&day2=Tuesday&day3=Wednesday&day4=Thursday&day5=Friday&day1.period1=Period+1&day2.period1=Period+1&day3.period1=Period+1&day4.period1=Period+1&day5.period1=Period+1&day1.period2=Period+2&day2.period2=Period+2&day3.period2=Period+2&day4.period2=Period+2&day5.period2=Period+2&day1.period3=Period+3&day2.period3=Period+3&day3.period3=Period+3&day4.period3=Period+3&day5.period3=Period+3&day1.period4=Period+4&day2.period4=Period+4&day3.period4=Period+4&day4.period4=Period+4&day5.period4=Period+4&model=WeeklyTimetableModel&time1.period=Period+1&time1.day0=09%3A00-09%3A45&time1.day1=09%3A00-09%3A45&time1.day2=09%3A00-09%3A45&time1.day3=09%3A00-09%3A45&time1.day4=09%3A00-09%3A45&time1.day5=09%3A00-09%3A45&time1.day6=09%3A00-09%3A45&time2.period=Period+2&time2.day0=10%3A00-10%3A45&time2.day1=10%3A00-10%3A45&time2.day2=10%3A00-10%3A45&time2.day3=10%3A00-10%3A45&time2.day4=10%3A00-10%3A45&time2.day5=10%3A00-10%3A45&time2.day6=10%3A00-10%3A45&time3.period=Period+3&time3.day0=11%3A00-11%3A45&time3.day1=11%3A00-11%3A45&time3.day2=11%3A00-11%3A45&time3.day3=11%3A00-11%3A45&time3.day4=11%3A00-11%3A45&time3.day5=11%3A00-11%3A45&time3.day6=11%3A00-11%3A45&time4.period=Period+4&time4.day0=12%3A00-12%3A45&time4.day1=12%3A00-12%3A45&time4.day2=12%3A00-12%3A45&time4.day3=12%3A00-12%3A45&time4.day4=12%3A00-12%3A45&time4.day5=12%3A00-12%3A45&time4.day6=12%3A00-12%3A45&field.duration=45&CREATE=Create+timetable+schema""", handle_errors=False)
+  HTTP/1.1 303 See Other
+  Content-Length: ...
+  Content-Type: text/plain;charset=utf-8
+  Location: http://localhost/frogpond/ttschemas
+  <BLANKLINE>
+  http://localhost/frogpond/ttschemas
+
+Itshould appear on the list:
+
+  >>> print http(r"""
+  ... GET /frogpond/ttschemas HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... """, handle_errors=False)
+  HTTP/1.1 200 Ok
+  ...
+          <a href="http://localhost/frogpond/ttschemas/another-schema">Another Schema</a>
+  ...
+          <a href="http://localhost/frogpond/ttschemas/weekly">weekly</a>
+  ...
+
+We can change the default ttschema if we want to:
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Length: ...
+  ... Content-Type: application/x-www-form-urlencoded
+  ... 
+  ... ttschema=another-schema&UPDATE_SUBMIT=Change""")
+  HTTP/1.1 200 Ok
+  ...
+            <option selected="selected" value="another-schema">Another Schema</option>
+  ...
 
 Simple timetable add
 ====================

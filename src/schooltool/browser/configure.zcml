@@ -399,7 +399,7 @@
       name="index.html"
       for="schooltool.interfaces.ITimetableSchemaContainer"
       class=".timetable.TimetableSchemaContainerView"
-      template="templates/container.pt"
+      template="templates/timetable-schema-container.pt"
       permission="zope.View"
       menu="zmi_views"
       title="View"

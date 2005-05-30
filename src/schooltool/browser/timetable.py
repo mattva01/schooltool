@@ -393,6 +393,11 @@ class TimetableSchemaContainerView(ContainerView):
     add_title = _("Add a new schema")
     add_url = "add.html"
 
+    def update(self):
+        if 'UPDATE_SUBMIT' in self.request:
+            self.context.default_id = self.request['ttschema']
+        return ''
+
 
 class ITimetableSchemaWizardSchema(Interface):
 

@@ -266,9 +266,11 @@
 
   <content class=".timetable.TimetableSchemaContainer">
     <require permission="schoolbell.create"
-        interface="zope.app.container.interfaces.IWriteContainer" />
+             interface="zope.app.container.interfaces.IWriteContainer"
+             set_attributes="default_id" />
     <require permission="zope.View"
-        interface="zope.app.container.interfaces.IReadContainer" />
+             interface="zope.app.container.interfaces.IReadContainer"
+             attributes="getDefault default_id" />
   </content>
 
   <content class=".timetable.Timetable">
