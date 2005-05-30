@@ -45,8 +45,6 @@
   </fieldset>
 </form>
 
-<!-- XXX Marker please remove -->
-
 <form tal:attributes="action request/URL" class="plain" method="post">
 
   <input type="hidden" name="term" tal:attributes="value view/term/__name__" />
