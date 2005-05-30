@@ -1,5 +1,5 @@
 <div id="portlet-calendar-overlay" class="portlet"
-     tal:condition="view/show_overlay">
+     i18n:domain="schoolbell" tal:condition="view/show_overlay">
 
   <h4 i18n:translate="">Calendars</h4>
 
