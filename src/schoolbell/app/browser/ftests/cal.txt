@@ -312,6 +312,38 @@ events
     ...calendar-view-day...
     ...
 
+Lets just check that when we update the form, the duration type last entered is
+preserved (regression test for http://issues.schooltool.org/issue197):
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 159
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=A Birthday&field.start_date=2005-03-29&\
+    ... field.duration_type=hours&field.allday=on&field.recurrence.used=&\
+    ... field.recurrence_type=daily&UPDATE=Update form
+    ... """)
+    HTTP/1.1 200 Ok
+    ...<option value="hours" selected="selected">...
+
+The duration should be set even if form has errors in it:
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 159
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=&field.start_date=2005-03-29&\
+    ... field.duration_type=hours&field.allday=on&field.recurrence.used=&\
+    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 200 Ok
+    ...<option value="hours" selected="selected">...
+
+
 Editing events
 --------------
 

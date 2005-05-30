@@ -134,8 +134,8 @@
                 Very similar to Repeat Every field
               </tal:comment>
               <select name="field.duration_type" size="1"
-                  id="field.duration_type"
-                  tal:define="duration_type string:minutes">
+                      id="field.duration_type"
+                      tal:define="duration_type python: view.duration_type_widget._getFormValue() or 'minutes'">
                 <option i18n:translate="" value="minutes"
                     tal:attributes="selected python: duration_type == 'minutes'">
                   Minutes</option>
