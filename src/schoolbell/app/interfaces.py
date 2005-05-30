@@ -313,35 +313,35 @@ class IPersonDetails(Interface, ILocation):
     """Contacts details stored as an annotation on a Person."""
 
     nickname = TextLine(
-        title=u"Nickname",
+        title=_("Nickname"),
         required=False,
-        description=u"A short nickname for this person.")
+        description=_("A short nickname for this person."))
 
     primary_email = TextLine(
-        title=u"Primary Email",
+        title=_("Primary Email"),
         required=False)
 
     secondary_email = TextLine(
-        title=u"Secondary Email",
+        title=_("Secondary Email"),
         required=False)
 
     primary_phone = TextLine(
-        title=u"Primary phone",
+        title=_("Primary phone"),
         required=False,
-        description=u"Recommended telephone number.")
+        description=_("Recommended telephone number."))
 
     secondary_phone = TextLine(
-        title=u"Secondary phone",
+        title=_("Secondary phone"),
         required=False,
-        description=u"Secondary telephone number.")
+        description=_("Secondary telephone number."))
 
     home_page = TextLine(
-        title=u"Website",
+        title=_("Website"),
         required=False,
-        description=u"Website or weblog.")
+        description=_("Website or weblog."))
 
     mailing_address = Text(
-        title=u"Mailing address",
+        title=_("Mailing address"),
         required=False)
 
 
