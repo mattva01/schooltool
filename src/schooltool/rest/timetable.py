@@ -467,12 +467,14 @@ class TimetableFileFactory(object):
             for day in doc.query('/tt:timetable/tt:day'):
                 day_id = day['id']
                 if day_id not in tt.keys():
-                    raise ViewError(_("Unknown day id: %r") % day_id)
+                    #XXX Ftest it!
+                    raise RestError(_("Unknown day id: %r") % day_id)
                 ttday = tt[day_id]
                 for period in day.query('tt:period'):
                     period_id = period['id']
                     if period_id not in ttday.periods:
-                        raise ViewError(_("Unknown period id: %r") % period_id)
+                        #XXX Ftest it!
+                        raise RestError(_("Unknown period id: %r") % period_id)
                     for activity in period.query('tt:activity'):
                         ttday.add(period_id, self._parseActivity(activity))
             all_periods = sets.Set()
