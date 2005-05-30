@@ -105,11 +105,11 @@ Let's make sure that we are seeing the SchoolTool preferences page:
     ...
     ...cal_periods...
 
-Let's make sure that we are seeing the SchoolTool navigation portlet page:
+Let's make sure that we are seeing the SchoolTool navigation portlet and index
+page:
 
     >>> print http(r"""
     ... GET /frogpond HTTP/1.1
-    ... Authorization: Basic frog:pwd
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -122,6 +122,8 @@ Let's make sure that we are seeing the SchoolTool navigation portlet page:
        <li><a href="http://localhost/frogpond/terms">Terms</a></li>
        <li><a href="http://localhost/frogpond/ttschemas">Timetable Schemas</a></li>
     </ul>
+    ...
+              <h1>Welcome to SchoolTool</h1>
     ...
 
 This is a school, so we should add some courses

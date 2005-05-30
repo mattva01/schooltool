@@ -50,6 +50,13 @@
 
   <page
       name="index.html"
+      for="schooltool.interfaces.ISchoolToolApplication"
+      template="templates/index.pt"
+      permission="zope.Public"
+      />
+
+  <page
+      name="index.html"
       for="schooltool.interfaces.ICourseContainer"
       class=".app.CourseContainerView"
       template="templates/course_container.pt"
