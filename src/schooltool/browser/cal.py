@@ -38,7 +38,7 @@ from schoolbell.app.browser.overlay import CalendarOverlayView
 from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
 
 from schooltool.timetable import getPeriodsForDay
-from schooltool.interfaces import IPersonPreferences
+from schooltool.interfaces import IPersonPreferences, ISection
 
 
 class DailyCalendarView(SBDailyCalView):
@@ -125,7 +125,7 @@ class CalendarSTOverlayView(CalendarOverlayView):
 
         Each item is a dict with the following keys:
 
-            'title' - title of the calendar
+            'title' - title of the calendar, or label for section calendars
 
             'calendar' - the calendar object
 
@@ -139,9 +139,16 @@ class CalendarSTOverlayView(CalendarOverlayView):
             'checked_tt' - was this calendar owner's timetable checked for
             display?
         """
+        def getTitleOrLabel(item):
+            object = item.calendar.__parent__
+            if ISection.providedBy(object):
+                return object.label
+            else:
+                return item.calendar.title
+
         person = IPerson(self.request.principal)
         items = [(item.calendar.title,
-                  {'title': item.calendar.title,
+                  {'title': getTitleOrLabel(item),
                    'id': getPath(item.calendar.__parent__),
                    'calendar': item.calendar,
                    'checked': item.show and "checked" or '',

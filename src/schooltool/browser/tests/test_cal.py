@@ -192,17 +192,21 @@ def doctest_CalendarSTOverlayView():
     If you are an authenticated user looking at your own calendar, this view
     renders a calendar selection portlet.
 
-        >>> from schooltool.app import Person, Group
+        >>> from schooltool.app import Person, Group, Section, Course
         >>> from schoolbell.app.security import Principal
         >>> app = setUpSchoolToolSite()
         >>> person = app['persons']['whatever'] = Person('fred')
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
         >>> group2 = app['groups']['g2'] = Group(title="Group 2")
+        >>> history = app['courses']['c1'] = Course(title="History")
+        >>> section = app['sections']['s1'] = Section()
+        >>> history.sections.add(section)
         >>> person.overlaid_calendars.add(group1.calendar, show=True,
         ...                               show_timetables=False)
         >>> person.overlaid_calendars.add(group2.calendar, show=False,
         ...                               show_timetables=True)
-
+        >>> person.overlaid_calendars.add(section.calendar, show=False,
+        ...                               show_timetables=True)
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('id', 'title', person))
         >>> view = View(person.calendar, request)
@@ -225,6 +229,13 @@ def doctest_CalendarSTOverlayView():
                   value="/groups/g2" />...
         ...<input type="checkbox" name="overlay_timetables:list"
                   checked="checked" value="/groups/g2" />...
+        ...<td style="width: 100%">Group 2</td>...
+        ...
+        ...<input type="checkbox" name="overlay:list"
+                  value="/sections/s1" />...
+        ...<input type="checkbox" name="overlay_timetables:list"
+                  checked="checked" value="/sections/s1" />...
+        ...<td style="width: 100%"> -- History</td>...
         ...
         </div>
 
