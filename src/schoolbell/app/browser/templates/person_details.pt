@@ -13,7 +13,7 @@
         class="standalone" enctype="multipart/form-data">
 
     <h3 i18n:translate="">
-      Change contact details for<span tal:replace="context/title"
+      Change contact details for <span tal:replace="context/title"
       i18n:name="user">User</span>
     </h3>
 
