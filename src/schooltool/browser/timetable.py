@@ -55,8 +55,9 @@ from schooltool.interfaces import ITimetable, ITimetableSchema
 from schooltool.interfaces import ITermContainer, ITerm
 from schooltool.interfaces import ITimetableSchemaContainer
 from schooltool.interfaces import ITimetableModelFactory
-from schooltool.interfaces import IPerson
+from schooltool.interfaces import IPerson, ISection
 from schooltool.timetable import Term, Timetable, TimetableDay
+from schooltool.timetable import TimetableActivity
 from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable import getNextTermForDate
@@ -949,17 +950,8 @@ class SimpleTimetableSchemaAdd(BrowserView):
         return self.template()
 
 
-class PersonTimetableSetupView(BrowserView):
-    """A view for scheduling a student.
-
-    This view displays a drop-down for every timetable period, listing the
-    sections scheduled for that period.  When the user submits the form, the
-    person is added to selected sections and removed from unselected ones.
-    """
-
-    __used_for__ = IPerson
-
-    template = ViewPageTemplateFile('templates/person-timetable-setup.pt')
+class TimetableSetupViewMixin(BrowserView):
+    """Common methods for setting up timetables."""
 
     def getSchema(self):
         """Return the chosen timetable schema."""
@@ -975,6 +967,19 @@ class PersonTimetableSetupView(BrowserView):
             return terms[self.request['term']]
         else:
             return getNextTermForDate(datetime.date.today())
+
+
+class PersonTimetableSetupView(TimetableSetupViewMixin):
+    """A view for scheduling a student.
+
+    This view displays a drop-down for every timetable period, listing the
+    sections scheduled for that period.  When the user submits the form, the
+    person is added to selected sections and removed from unselected ones.
+    """
+
+    __used_for__ = IPerson
+
+    template = ViewPageTemplateFile('templates/person-timetable-setup.pt')
 
     def sectionMap(self, term, ttschema):
         """Compute a mapping of timetable slots to sections.
@@ -1059,4 +1064,81 @@ class PersonTimetableSetupView(BrowserView):
                     section.members.remove(student)
             self.days = self.getDays(self.ttschema, section_map)
         return self.template()
+
+
+class SectionTimetableSetupView(TimetableSetupViewMixin):
+
+    __used_for__ = ISection
+
+    template = ViewPageTemplateFile('templates/section-timetable-setup.pt')
+
+    def getDays(self, ttschema):
+        """Return the current selection.
+
+        Returns a list of dicts with the following keys
+
+            title   -- title of the timetable day
+            periods -- list of timetable periods in that day
+
+        Each period is represented by a dict with the following keys
+
+            title    -- title of the period
+            selected -- a boolean whether that period is in self.context's tt
+                            for this shcema
+
+        """
+
+        try:
+            timetable = self.context.timetables[self.ttkey]
+        except KeyError:
+            timetable = None
+
+        def days(schema):
+            for day_id, day in schema.items():
+                yield {'title': day_id,
+                       'periods': list(periods(day_id, day))}
+
+        def periods(day_id, day):
+            for period_id in day.periods:
+                if timetable:
+                    selected = timetable[day_id][period_id]
+                else:
+                    selected = False
+                yield {'title': period_id,
+                       'selected': selected}
+
+        return list(days(ttschema))
+
+    def __call__(self):
+        self.app = getSchoolToolApplication()
+        self.has_timetables = bool(self.app["terms"] and self.app["ttschemas"])
+        if not self.has_timetables:
+            return self.template()
+        self.term = self.getTerm()
+        self.ttschema = self.getSchema()
+        self.ttkey = ''.join((self.term.__name__, '.', self.ttschema.__name__))
+        self.days = self.getDays(self.ttschema)
+        #XXX dumb, this doesn't space course names
+        course_title = ''.join([course.title for course in self.context.courses])
+
+        if 'CANCEL' in self.request:
+            self.request.response.redirect(
+                zapi.absoluteURL(self.context, self.request))
+        if 'SAVE' in self.request:
+            section = removeSecurityProxy(self.context)
+            timetable = self.ttschema.createTimetable()
+            section.timetables[self.ttkey] = timetable
+            for day_id, day in timetable.items():
+                for period_id in day.periods:
+                    if ''.join((day_id, '.',period_id)) in self.request:
+                        act =  TimetableActivity(title=course_title,
+                                                 owner=section)
+                        timetable[day_id].add(period_id, act)
+
+            self.request.response.redirect(
+                zapi.absoluteURL(self.context.timetables[self.ttkey],
+                                 self.request))
+
+        return self.template()
+
 

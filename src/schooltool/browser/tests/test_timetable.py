@@ -1814,6 +1814,159 @@ def doctest_PersonTimetableSetupView_no_default_ttschema():
     """
 
 
+def doctest_SectionTimetableSetupView():
+    """Doctest for the SectionTimetableSetupView view
+
+    We will need an application object
+
+        >>> from schooltool.app import SchoolToolApplication
+        >>> app = SchoolToolApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> app.setSiteManager(LocalSiteManager(app))
+        >>> setSite(app)
+
+    We will need a section
+
+        >>> from schooltool.app import Section
+        >>> app["sections"]["math"] = math = Section("Math")
+        >>> math.timetables.keys()
+        []
+
+    We will also need a timetable schema, and a term.  Two of each, in fact.
+
+        >>> app["ttschemas"]["default"] = createSchema(["Mon", "Tue"],
+        ...                                            ["9:00", "10:00"],
+        ...                                            ["9:00", "10:00"])
+        >>> app["ttschemas"]["other"] = createSchema([], [])
+
+        >>> from schooltool.timetable import Term
+        >>> app["terms"]["2005-spring"] = Term('2005 Spring',
+        ...                                    datetime.date(2004, 2, 1),
+        ...                                    datetime.date(2004, 6, 30))
+        >>> app["terms"]["2005-fall"] = Term('2005 Fall',
+        ...                                    datetime.date(2004, 9, 1),
+        ...                                    datetime.date(2004, 12, 31))
+
+    We can now create the view to look at the Math timetable
+
+        >>> from schooltool.browser.timetable import SectionTimetableSetupView
+        >>> context = math
+        >>> request = TestRequest()
+        >>> view = SectionTimetableSetupView(context, request)
+
+    There are two helper methods from the Mixin, getSchema and getTerm, that
+    extract the schema and term from the request, or pick suitable defaults.
+    XXX this test should be in a seperate test for the Mixin class
+
+        >>> view.getSchema() is app["ttschemas"].getDefault()
+        True
+        >>> request.form['ttschema'] = 'other'
+        >>> view.getSchema() is app["ttschemas"]["other"]
+        True
+        >>> request.form['ttschema'] = 'default'
+        >>> view.getSchema() is app["ttschemas"]["default"]
+        True
+
+    If we cancel the form, we get redirected to the section
+
+        >>> request = TestRequest(form={'CANCEL': 'Cancel'})
+        >>> view = SectionTimetableSetupView(context, request)
+        >>> result = view()
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('location')
+        'http://127.0.0.1/sections/math'
+
+    If we save the form, we're redirected to the timetable view for the schema
+    that we just saved:
+
+        >>> request = TestRequest(form={'SAVE': 'Save'})
+        >>> view = SectionTimetableSetupView(context, request)
+        >>> result = view()
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('location')
+        'http://127.0.0.1/sections/math/timetables/2005-fall.default'
+
+    An empty save request will create an empty timetable:
+
+        >>> math.timetables['2005-fall.default']
+        <Timetable: ...>
+        >>> math.timetables['2005-fall.default']['Mon'].items()
+        [('9:00', Set([])), ('10:00', Set([]))]
+        >>> math.timetables['2005-fall.default']['Tue'].items()
+        [('9:00', Set([])), ('10:00', Set([]))]
+
+    Let's add some scheduled classes:
+
+        >>> request = TestRequest(form={'ttschema': 'default',
+        ...                             'term': '2005-fall',
+        ...                             'Mon.9:00':'ON',
+        ...                             'Tue.9:00':'ON',
+        ...                             'SAVE': 'Save'})
+
+        >>> view = SectionTimetableSetupView(context, request)
+
+    The first time we view the page all the events are off:
+
+        >>> print view()
+        ...
+        <BLANKLINE>
+        ...
+                            id="Mon.9:00" value="Mon.9:00"
+        ...
+                            id="Mon.10:00" value="Mon.10:00"
+        ...
+                            id="Tue.9:00" value="Tue.9:00"
+        ...
+                            id="Tue.10:00" value="Tue.10:00"
+        ...
+
+        >>> request = TestRequest(form={'ttschema': 'default',
+        ...                             'term': '2005-fall',
+        ...                             'Mon.9:00':'ON',
+        ...                             'SAVE': 'Save'})
+
+    Since we don't have an update() method, we call the page again to see our
+    last changes, all the periods that were 'ON' are now checked:
+
+        >>> view = SectionTimetableSetupView(context, request)
+        >>> print view()
+        ...
+        <BLANKLINE>
+        ...
+                            checked="checked" id="Mon.9:00"
+        ...
+                            id="Mon.10:00" value="Mon.10:00"
+        ...
+                            checked="checked" id="Tue.9:00"
+        ...
+                            id="Tue.10:00" value="Tue.10:00"
+        ...
+
+    To remove a period from our schedule we create a new save request without
+    that period listed.
+
+        >>> view = SectionTimetableSetupView(context, request)
+        >>> print view()
+        ...
+        <BLANKLINE>
+        ...
+                            checked="checked" id="Mon.9:00"
+        ...
+                            id="Mon.10:00" value="Mon.10:00"
+        ...
+                            id="Tue.9:00" value="Tue.9:00"
+        ...
+                            id="Tue.10:00" value="Tue.10:00"
+        ...
+
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |

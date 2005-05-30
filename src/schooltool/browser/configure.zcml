@@ -229,6 +229,14 @@
       layer="SchoolToolLayer"
       />
 
+  <page
+      name="schedule.html"
+      for="schooltool.interfaces.ISection"
+      class="schooltool.browser.timetable.SectionTimetableSetupView"
+      permission="zope.View"
+      menu="schoolbell_actions"
+      title="Schedule" />
+
   <containerViews
       for="schooltool.interfaces.ISectionContainer"
       contents="zope.ManageContent"
@@ -459,6 +467,7 @@
       factory=".TimetabledTraverser"
       permission="zope.Public"
       />
+
   <zope:view
       for="schooltool.interfaces.ISection"
       type="zope.publisher.interfaces.browser.IBrowserRequest"

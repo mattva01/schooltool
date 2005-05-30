@@ -1,0 +1,96 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Scheduling for <span i18n:name="section" tal:replace="context/label" />
+  </title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header" i18n:translate="">
+  Scheduling for <span i18n:name="section" tal:replace="context/label" />
+</h1>
+
+<metal:block metal:fill-slot="body">
+
+<p tal:condition="not:view/has_timetables"
+   i18n:translate="">There are no terms or timetable schemas defined.</p>
+
+<tal:if tal:condition="view/has_timetables">
+<form tal:attributes="action request/URL" class="plain" method="post">
+
+  <fieldset>
+    <legend i18n:translate="">Timetable</legend>
+
+    <label for="term" i18n:translate="">Term</label>
+    <select id="term" name="term"
+            tal:define="terms view/app/terms/values">
+      <option tal:repeat="term terms/sortby:first"
+              tal:attributes="value term/__name__;
+                              selected python:term is view.term
+                                          and 'selected' or None"
+              tal:content="term/title"></option>
+    </select>
+
+    <label for="ttschema" i18n:translate="">Schema</label>
+    <select id="ttschema" name="ttschema"
+            tal:define="ttschemas view/app/ttschemas/values">
+      <option tal:repeat="ttschema ttschemas/sortby:__name__"
+              tal:attributes="value ttschema/__name__;
+                              selected python:ttschema is view.ttschema
+                                          and 'selected' or None"
+              tal:content="ttschema/__name__"></option>
+    </select>
+    <input class="button-ok" type="submit" name="REFRESH" value="Choose"
+           i18n:attributes="value" />
+  </fieldset>
+</form>
+
+<!-- XXX Marker please remove -->
+
+<form tal:attributes="action request/URL" class="plain" method="post">
+
+  <input type="hidden" name="term" tal:attributes="value view/term/__name__" />
+  <input type="hidden" name="ttschema"
+         tal:attributes="value view/ttschema/__name__" />
+
+  <table class="timetable">
+    <tr>
+      <tal:block repeat="day view/days">
+        <th class="day" tal:content="day/title">Day N</th>
+      </tal:block>
+    </tr>
+    <tr>
+      <tal:block repeat="day view/days">
+        <td >
+          <ul>
+            <tal:block tal:repeat="period day/periods">
+              <li>
+                <input class="activity" type="checkbox"
+                       tal:attributes="checked period/selected;
+                                       id string:${day/title}.${period/title};
+                                       name string:${day/title}.${period/title};
+                                       value string:${day/title}.${period/title}" />
+                <label class="period"
+                       tal:attributes="for string:${day/title}.${period/title}"
+                       tal:content="period/title">
+                  Period N
+                </label>
+              </li>
+            </tal:block>
+          </ul>
+        </td>
+      </tal:block>
+    </tr>
+  </table>
+
+  <div class="controls">
+    <input class="button-ok" type="submit" name="SAVE" value="Save"
+           i18n:attributes="value" />
+  </div>
+
+</form>
+</tal:if>
+
+</metal:block>
+</body>
+</html>
