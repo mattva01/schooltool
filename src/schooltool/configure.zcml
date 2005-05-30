@@ -154,7 +154,7 @@
 
   <content class=".app.Course">
     <require permission="schoolbell.view"
-             attributes="title description sections" />
+             attributes="title description sections __cmp__" />
     <require permission="schoolbell.edit"
              set_schema="schooltool.interfaces.ICourse" />
   </content>
@@ -162,7 +162,7 @@
   <content class=".app.Group">
     <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
     <require permission="schoolbell.view"
-             attributes="title description groups members" />
+             attributes="title description groups members __cmp__" />
     <require permission="schoolbell.edit"
              set_schema="schooltool.interfaces.IGroup" />
     <allow interface="schooltool.interfaces.ITimetabled" />
@@ -170,7 +170,8 @@
 
   <content class=".app.Person">
     <require permission="schoolbell.view"
-             interface="schoolbell.app.interfaces.IReadPerson" />
+             interface="schoolbell.app.interfaces.IReadPerson"
+             attributes="__cmp__" />
     <require permission="schoolbell.edit"
              interface="schoolbell.app.interfaces.IWritePerson"
              set_schema="schooltool.interfaces.IPerson" />
@@ -184,7 +185,8 @@
   </content>
 
   <content class=".app.Resource">
-    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner"
+             attributes="__cmp__" />
     <require permission="schoolbell.view"
              attributes="title description groups" />
     <require permission="schoolbell.edit"
@@ -204,7 +206,7 @@
     <allow interface="schooltool.interfaces.ITimetabled" />
     <require permission="schoolbell.view"
              attributes="title description instructors members
-                         courses label size" />
+                         courses label size __cmp__" />
     <require permission="schoolbell.edit"
              set_schema="schooltool.interfaces.ISection" />
   </content>
@@ -228,7 +230,8 @@
   </content>
 
   <content class=".timetable.Term">
-    <allow interface=".interfaces.ITerm" />
+    <allow interface=".interfaces.ITerm"
+           attributes="__cmp__"/>
     <require permission="schoolbell.edit"
              interface=".interfaces.ITermWrite"
              set_schema=".interfaces.ITerm" />
