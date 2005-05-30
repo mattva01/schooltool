@@ -1591,6 +1591,15 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
     title = _("Edit event")
     submit_button_title = _("Update")
 
+    def __init__(self, context, request):
+        person = IPerson(request.principal, None)
+        if person is not None:
+            prefs = IPersonPreferences(person)
+            if prefs.timezone is not None:
+                self.timezone = timezone(prefs.timezone)
+
+        EditView.__init__(self, context, request)
+
     def keyword_arguments(self):
         """Wraps fieldNames under another name.
 
@@ -1611,7 +1620,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         initial["title"] = context.title
         initial["allday"] = context.allday
         initial["start_date"] = context.dtstart.date()
-        initial["start_time"] = context.dtstart.strftime("%H:%M")
+        initial["start_time"] = context.dtstart.astimezone(self.timezone).strftime("%H:%M")
         initial["duration"] = context.duration.seconds / 60
         initial["location"] = context.location
         initial["description"] = context.description
