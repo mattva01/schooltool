@@ -29,7 +29,7 @@
             tal:attributes="value item/id; checked item/checked" /></td>
         <td><input type="checkbox" name="overlay_timetables:list"
           tal:attributes="value item/id; checked item/checked_tt" /></td>
-        <td style="width: 100%" tal:content="item/title">Title</td>
+        <td style="width: 100%" tal:content="item/title" i18n:translate="">Title</td>
         <td><a class="go"
             tal:attributes="href item/calendar/@@absolute_url;
             style string:background: ${item/color2};;

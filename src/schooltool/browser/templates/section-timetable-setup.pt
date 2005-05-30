@@ -1,13 +1,15 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <title metal:fill-slot="title" i18n:translate="">
-    Scheduling for <span i18n:name="section" tal:replace="context/label" />
+      Scheduling for <span i18n:name="section"
+                           tal:replace="context/label" i18n:translate="" />
   </title>
 </head>
 <body>
 
 <h1 metal:fill-slot="content-header" i18n:translate="">
-  Scheduling for <span i18n:name="section" tal:replace="context/label" />
+  Scheduling for <span i18n:name="section"
+                       tal:replace="context/label" i18n;translate="" />
 </h1>
 
 <metal:block metal:fill-slot="body">
