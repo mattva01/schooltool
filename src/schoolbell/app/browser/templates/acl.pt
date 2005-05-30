@@ -19,12 +19,12 @@
       <tr class="header">
          <th class="principal" i18n:translate="">Group</th>
          <th class="permission" tal:repeat="perm view/permissions"
-             tal:content="python: perm[1]" />
+             tal:content="python: perm[1]" i18n:translate="" />
       </tr>
       <tr tal:repeat="prin view/groups/sortby:title"
           tal:attributes="class repeat/prin/parity">
          <th class="principal">
-            <span tal:replace="prin/title">Group foo</span>
+            <span tal:replace="prin/title" i18n:translate="">Group foo</span>
             <input type="hidden" tal:attributes="name string:marker-${prin/id}"
                    value="1" />
          </th>
@@ -43,12 +43,12 @@
       <tr class="header">
          <th class="principal" i18n:translate="">User</th>
          <th class="permission" tal:repeat="perm view/permissions"
-             tal:content="python: perm[1]" />
+             tal:content="python: perm[1]" i18n:translate="" />
       </tr>
       <tr tal:repeat="prin view/persons/sortby:title"
           tal:attributes="class repeat/prin/parity">
          <th class="principal">
-            <span tal:replace="prin/title">User foo</span>
+            <span tal:replace="prin/title" i18n:translate="">User foo</span>
             <input type="hidden" tal:attributes="name string:marker-${prin/id}"
                    value="1" />
          </th>

@@ -7,7 +7,8 @@
           <th>&nbsp;</th>
           <th class="weekday"
               tal:repeat="weekday python:weeks[0]"
-              tal:content="python:view.dayOfWeek(weekday.date)" />
+              tal:content="python:view.dayOfWeek(weekday.date)"
+              i18n:translate="" />
         </tr>
         <tr tal:repeat="week weeks">
           <td class="weekno" width="30">

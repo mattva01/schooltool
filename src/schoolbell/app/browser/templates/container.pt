@@ -1,12 +1,14 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
 <head>
-  <title metal:fill-slot="title" tal:content="view/index_title">
+  <title metal:fill-slot="title"
+         tal:content="view/index_title" i18n:translate="">
     Contents
   </title>
 </head>
 <body>
 
-<h1 metal:fill-slot="content-header" tal:content="view/index_title">Contents</h1>
+<h1 metal:fill-slot="content-header"
+    tal:content="view/index_title" i18n:translate="">Contents</h1>
 
 <metal:block metal:fill-slot="body"
              tal:define="objects context/values">

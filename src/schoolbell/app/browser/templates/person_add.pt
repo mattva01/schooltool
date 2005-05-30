@@ -12,7 +12,8 @@
         tal:attributes="action request/URL">
     <h3 i18n:translate="">Person Information</h3>
 
-    <div class="error" tal:condition="view/error" tal:content="view/error" />
+    <div class="error" tal:condition="view/error"
+         tal:content="view/error" i18n:translate="" />
 
     <fieldset>
       <div class="row" tal:define="widget nocall:view/title_widget">

@@ -15,8 +15,10 @@
       i18n:name="user">User</span>
     </h3>
 
-    <div class="info" tal:condition="view/message" tal:content="view/message" />
-    <div class="error" tal:condition="view/error" tal:content="view/error" />
+    <div class="info" tal:condition="view/message"
+         tal:content="view/message" i18n:translate="" />
+    <div class="error" tal:condition="view/error"
+         tal:content="view/error" i18n:translate="" />
 
     <fieldset>
       <div class="row" tal:define="widget nocall:view/title_widget">

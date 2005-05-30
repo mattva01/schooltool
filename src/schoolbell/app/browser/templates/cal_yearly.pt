@@ -13,7 +13,7 @@
             <tr>
               <th colspan="7" class="month-title"
                   tal:define="mtit python:view.monthTitle(month[1][0].date)">
-                <a tal:content="mtit"
+                <a tal:content="mtit" i18n:translate=""
                     tal:attributes="href python:view.calURL('monthly',
                                     month[1][0].date);
                                     title mtit"/>
@@ -23,7 +23,8 @@
               <th class="month-weekday"
                   width="14%"
                   tal:repeat="weekday python:month[0]"
-                  tal:content="python:view.shortDayOfWeek(weekday.date)" />
+                  tal:content="python:view.shortDayOfWeek(weekday.date)"
+                  i18n:translate="" />
             </tr>
             <tr tal:repeat="week month">
               <td tal:replace="structure

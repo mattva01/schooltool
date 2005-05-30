@@ -97,8 +97,7 @@
             <ul>
               <li tal:repeat="view context/@@view_get_menu/schoolbell_actions">
                 <a tal:attributes="href view/action"
-                   tal:content="view/title"
-                   i18n:translate="" />
+                   tal:content="view/title" i18n:translate="" />
               </li>
             </ul>
           </div>
@@ -133,21 +132,21 @@
     <a id="calendar-navigation-context-previous" i18n:attributes="title"
        tal:attributes="href view/prev;
                        title string:Go to ${view/prev_title}">
-      <span tal:content="view/prev_title">
+      <span tal:content="view/prev_title" i18n:translate="">
         Previous
       </span>
     </a>
     <a id="calendar-navigation-context-current" i18n:attributes="title"
        tal:attributes="href view/current;
                        title string:Go to ${view/current_title}">
-      <span tal:content="view/current_title">
+      <span tal:content="view/current_title" i18n:translate="">
         Current
       </span>
     </a>
     <a id="calendar-navigation-context-next" i18n:attributes="title"
        tal:attributes="href view/next;
                        title string:Go to ${view/next_title}">
-      <span tal:content="view/next_title">
+      <span tal:content="view/next_title" i18n:translate="">
         Next
       </span>
     </a>
@@ -190,7 +189,7 @@
       <title i18n:translate="">
         Calendar for <span tal:replace="context/title"
             i18n:name="title" /> - <span i18n:name="calendar_title"
-                                         tal:replace="view/title"/>
+                                         tal:replace="view/title" i18n:translate=""/>
       </title>
     </metal:block>
 
@@ -204,7 +203,7 @@
       <h1 i18n:translate="">
         Calendar for <span tal:replace="context/title"
             i18n:name="title" /> - <span i18n:name="calendar_title"
-                                         tal:replace="view/title"/>
+                                         tal:replace="view/title" i18n:translate=""/>
       </h1>
     </metal:block>
 
@@ -242,7 +241,7 @@
           <tal:loop repeat="month view/getJumpToMonths">
             <option
               tal:attributes="value month/href"
-              tal:content="month/label" />
+              tal:content="month/label" i18n:translate="" />
           </tal:loop>
         </select>
       </div>
@@ -269,7 +268,7 @@
     <tr>
       <th colspan="7" class="month-title"
           tal:define="mtit python:view.monthTitle(month[1][0].date)">
-        <a tal:content="mtit"
+        <a tal:content="mtit" i18n:translate=""
             tal:attributes="href python:view.calURL('monthly',
                             month[1][0].date);
                             title mtit"/>

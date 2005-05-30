@@ -238,14 +238,14 @@
             <input type="radio" name="field.monthly" value="weekday" id="monthly_w"
               tal:attributes="checked python:monthly_value == 'weekday'"/>
             <label for="monthly_w" class="plain" i18n:translate="">
-              <span tal:replace="view/getWeekDay" i18n:name="weekday" /> of
+              <span tal:replace="view/getWeekDay" i18n:translate="" i18n:name="weekday" /> of
               every month</label>
           </div>
           <div class="row" tal:condition="view/getLastWeekDay">
             <input type="radio" name="field.monthly" value="lastweekday" id="monthly_l"
               tal:attributes="checked python:monthly_value == 'lastweekday'"/>
             <label for="monthly_l" class="plain" i18n:translate="">
-              <span tal:replace="view/getLastWeekDay" i18n:name="" /> of
+              <span tal:replace="view/getLastWeekDay" i18n:translate="" i18n:name="" /> of
               every month</label>
           </div>
         </fieldset>
