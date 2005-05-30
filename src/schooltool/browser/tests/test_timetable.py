@@ -1924,6 +1924,18 @@ def doctest_SectionTimetableSetupView():
                             id="Tue.10:00" value="Tue.10:00"
         ...
 
+
+    Now we have a schedule for our course:
+
+        >>> math.timetables['2005-fall.default']['Mon']['9:00']
+        Set([TimetableActivity('', ...
+        >>> math.timetables['2005-fall.default']['Mon']['10:00']
+        Set([])
+        >>> math.timetables['2005-fall.default']['Tue']['9:00']
+        Set([TimetableActivity('', ...
+        >>> math.timetables['2005-fall.default']['Tue']['10:00']
+        Set([])
+
         >>> request = TestRequest(form={'ttschema': 'default',
         ...                             'term': '2005-fall',
         ...                             'Mon.9:00':'ON',
@@ -1962,6 +1974,11 @@ def doctest_SectionTimetableSetupView():
         ...
                             id="Tue.10:00" value="Tue.10:00"
         ...
+
+    Tuesday's Activity is no longer there:
+
+        >>> math.timetables['2005-fall.default']['Tue']['9:00']
+        Set([])
 
 
     """
