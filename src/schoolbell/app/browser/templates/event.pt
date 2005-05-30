@@ -10,7 +10,7 @@
     <span tal:replace="context/title" />
   </h1>
   <tal:if condition="context/allday">
-    <div><strong>All day event</strong></div>
+    <div><strong i18n:translate="">All day event</strong></div>
   </tal:if>
 
   <p style="width:62%; font-size:85%" tal:content="context/description|nothing" />
@@ -70,12 +70,14 @@
     </ul>
     <a class="modify" href=""
       title="Change the resources scheduled for this event"
+      i18n:translate=""
       tal:attributes="href string:${context/@@absolute_url}/booking.html?date=${evdate}">
       edit resources
     </a>
   </div>
 
   <a href="" class="modify destructive" title="Delete this event"
+    i18n:translate=""
     tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${context/unique_id}&date=${evdate}">
     delete event
   </a>
