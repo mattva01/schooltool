@@ -84,6 +84,8 @@
   <div class="controls">
     <input class="button-ok" type="submit" name="SAVE" value="Save"
            i18n:attributes="value" />
+    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+           i18n:attributes="value cancel-button" />
   </div>
 
 </form>
