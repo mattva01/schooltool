@@ -50,16 +50,17 @@ World History, 1000 A.D. through the 20th century, text after a second comma
           </div>
 
           <div class="row">
-            Charset: <select name="charset">
-              <option value="UTF-8">Unicode (UTF-8)</option>
-              <option value="ISO-8859-1">Western (ISO-8859-1)</option>
-              <option value="ISO-8859-15">Western (ISO-8859-15)</option>
-              <option value="Windows-1252">Western (Windows-1252)</option>
-              <option value="other">Other (please specify)</option>
+            <tal:block i18n:translate="">Charset:</tal:block>
+            <select name="charset">
+              <option value="UTF-8" i18n:translate="">Unicode (UTF-8)</option>
+              <option value="ISO-8859-1" i18n:translate="">Western (ISO-8859-1)</option>
+              <option value="ISO-8859-15" i18n:translate="">Western (ISO-8859-15)</option>
+              <option value="Windows-1252" i18n:translate="">Western (Windows-1252)</option>
+              <option value="other" i18n:translate="">Other (please specify)</option>
             </select>
           </div>
-          <div class="row">
-            Other charset: <input name="other_charset" type="text" />
+          <div class="row" i18n:translate="">
+            Other charset: <input name="other_charset" type="text" i18n:name="other_charset" />
           </div>
         </fieldset>
         <fieldset>
@@ -69,7 +70,7 @@ World History, 1000 A.D. through the 20th century, text after a second comma
         </fieldset>
         <div class="controls">
           <input name="UPDATE_SUBMIT" class="button-ok" type="submit"
-            value="Submit" i18n:attributes="value" />
+                 value="Submit" i18n:attributes="value submit-button" />
         </div>
       </form>
     </metal:block>
