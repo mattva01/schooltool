@@ -19,7 +19,7 @@
           tal:attributes="action string:${context/@@absolute_url}/delete.html">
       <li tal:repeat="obj objects/sortby:title">
         <input type="checkbox" tal:attributes="name string:delete.${obj/zope:name}" />
-        <a tal:content="obj/label"
+        <a tal:content="obj/label" i18n:translate=""
            tal:attributes="href obj/@@absolute_url">Some Object</a>
         <span class="hint">
           (<span tal:replace="obj/size"/>
