@@ -138,6 +138,26 @@ def convert_event_to_ical(event):
         DTSTAMP:...
         END:VEVENT
 
+    All-day events have DTSTART as a date:
+
+        >>> from schoolbell.calendar.recurrent import WeeklyRecurrenceRule
+        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> event = SimpleCalendarEvent(datetime(2005, 2, 11, 0, 0, 0),
+        ...                             timedelta(days=2), "iCal tests",
+        ...                             recurrence=WeeklyRecurrenceRule(),
+        ...                             unique_id="12345678-9876@example.com",
+        ...                             allday=True)
+        >>> lines = convert_event_to_ical(event)
+        >>> print "\n".join(lines)
+        BEGIN:VEVENT
+        UID:12345678-9876@example.com
+        SUMMARY:iCal tests
+        RRULE:FREQ=WEEKLY;BYDAY=FR;INTERVAL=1
+        DTSTART;VALUE=DATE:20050211
+        DURATION:P2D
+        DTSTAMP:...
+        END:VEVENT
+
     """
     dtstamp = datetime.datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
     result = [
@@ -151,12 +171,15 @@ def convert_event_to_ical(event):
     if event.recurrence is not None:
         start = event.dtstart
         result.extend(event.recurrence.iCalRepresentation(start))
-    result += [
-        "DTSTART:%s" % ical_datetime(event.dtstart),
-        "DURATION:%s" % ical_duration(event.duration),
-        "DTSTAMP:%s" % dtstamp,
-        "END:VEVENT",
-    ]
+
+    if event.allday:
+        dtstart = 'DTSTART;VALUE=DATE:%s' % ical_date(event.dtstart)
+    else:
+        dtstart = 'DTSTART:%s' % ical_datetime(event.dtstart)
+    result += [dtstart,
+               "DURATION:%s" % ical_duration(event.duration),
+               "DTSTAMP:%s" % dtstamp,
+               "END:VEVENT"]
     return result
 
 
