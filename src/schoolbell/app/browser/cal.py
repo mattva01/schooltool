@@ -73,7 +73,7 @@ from schoolbell.calendar.interfaces import IYearlyRecurrenceRule
 from schoolbell.calendar.interfaces import IMonthlyRecurrenceRule
 from schoolbell.calendar.interfaces import IWeeklyRecurrenceRule
 from schoolbell.calendar.utils import parse_date, parse_datetimetz
-from schoolbell.calendar.utils import parse_timetz, weeknum_bounds
+from schoolbell.calendar.utils import parse_time, weeknum_bounds
 from schoolbell.calendar.utils import week_start, prev_month, next_month
 from schoolbell.calendar.icalendar import ical_datetime
 from schoolbell import SchoolBellMessageID as _
@@ -1428,7 +1428,7 @@ class CalendarEventViewMixin(object):
         start_time = kwargs.pop('start_time', None)
         if start_time:
             try:
-                start_time = parse_timetz(start_time, self.timezone)
+                start_time = parse_time(start_time)
             except ValueError:
                 self._setError("start_time",
                                ConversionError(_("Invalid time")))
@@ -1477,7 +1477,8 @@ class CalendarEventViewMixin(object):
             start_time = time(0, 0, tzinfo=utc)
             start = datetime.combine(start_date, start_time)
         else:
-            start = datetime.combine(start_date, start_time).astimezone(utc)
+            start = datetime.combine(start_date, start_time)
+            start = self.timezone.localize(start).astimezone(utc)
 
         dargs = {duration_type : duration}
         duration = timedelta(**dargs)

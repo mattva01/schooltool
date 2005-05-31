@@ -1321,13 +1321,12 @@ def doctest_CalendarEventAddView_add():
         >>> request.form['field.start_time']
         '15:30'
 
-   We use parsetimetz to create a time object with the user's preferred tz
+   We use parse_time to create a naive time object.
 
-        >>> from schoolbell.calendar.utils import parse_timetz
-        >>> st = parse_timetz(request.form['field.start_time'], eastern)
-        >>> st.isoformat()
-        '15:30:00-05:00'
-        >>> sdt = datetime.combine(date(2004, 8, 13), st)
+        >>> from schoolbell.calendar.utils import parse_time
+        >>> st = parse_time(request.form['field.start_time'])
+        >>> sdt = datetime.combine(date(2004, 2, 13), st)
+        >>> sdt = eastern.localize(sdt)
         >>> sdt.tzname()
         'EST'
         >>> sdt.time()
@@ -1345,15 +1344,21 @@ def doctest_CalendarEventAddView_add():
         >>> sdt.time()
         datetime.time(20, 30)
 
-    This is what it looks like in a request.
+    If we set the event during DST, the offset is -04:00
 
-        >>> event = list(calendar)[0]
-        >>> event.location
-        u'East Coast'
-        >>> event.dtstart.date()
-        datetime.date(2004, 8, 13)
-        >>> event.dtstart.time()
-        datetime.time(20, 30)
+        >>> sdt = datetime.combine(date(2004, 5, 31), st)
+        >>> sdt = eastern.localize(sdt)
+        >>> sdt.tzname()
+        'EDT'
+        >>> sdt.time()
+        datetime.time(15, 30)
+
+        >>> sdt = sdt.astimezone(utc)
+        >>> sdt.tzname()
+        'UTC'
+
+        >>> sdt.time()
+        datetime.time(19, 30)
 
     """
 
