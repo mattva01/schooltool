@@ -467,7 +467,8 @@ class TestVEvent(unittest.TestCase):
         vevent.add('uid', 'unique5', {})
         vevent.add('location', 'Somewhere')
         vevent.add('rrule', 'FREQ=MONTHLY;BYDAY=3MO')
-        vevent.add('exdate', '19960402T010000,19960404T010000',)
+        vevent.add('exdate', '19960402T010000,19960404T010000')
+        vevent.add('exdate', '19960406T010000,19960408T010000')
         vevent.validate()
 
         self.assertEquals(vevent.rrule.interval, 1)
@@ -475,7 +476,8 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.rrule.until, None)
         self.assertEquals(vevent.rrule.monthly, 'weekday')
         self.assertEquals(vevent.rrule.exceptions,
-                          (date(1996, 4, 2), date(1996, 4, 4)))
+                          (date(1996, 4, 2), date(1996, 4, 4),
+                           date(1996, 4, 6), date(1996, 4, 8)))
         self.assert_(not isinstance(vevent.rrule.exceptions[0], datetime))
 
     def test_extractListOfDates(self):
