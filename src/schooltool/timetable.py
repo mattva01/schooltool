@@ -1064,6 +1064,8 @@ def getTermForDate(date):
     for term in terms.values():
         if date in term:
             return term
+    else:
+        return None
 
 
 def getNextTermForDate(date):
