@@ -2518,6 +2518,19 @@ def doctest_TestCalendarEventBookingView():
         >>> [resource.title for resource in view.availableResources]
         ['res0', 'res1', 'res2', 'res3', 'res4', 'res5', 'res6', 'res7', 'res8', 'res9']
 
+    But if event belongs to a resource it should not see its owner in the list:
+
+        >>> r_event = CalendarEvent(datetime(2002, 2, 2, 2, 2),
+        ...                       timedelta(hours=2), "Some event",
+        ...                       unique_id="rev")
+        >>> app['resources']['res3'].calendar.addEvent(r_event)
+        >>> view.context = r_event
+
+        >>> [resource.title for resource in view.availableResources]
+        ['res0', 'res1', 'res2', 'res4', 'res5', 'res6', 'res7', 'res8', 'res9']
+
+        >>> view.context = event
+
     All the resources should be unbooked:
 
         >>> [resource.title for resource in view.availableResources

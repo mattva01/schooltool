@@ -1817,11 +1817,13 @@ class CalendarEventBookingView(BrowserView):
 
     def _availableResources(self):
         """Gives us a list of all bookable resources."""
-        sb = getSchoolBellApplication()
         resources = []
+        calendar_owner = removeSecurityProxy(self.context.__parent__.__parent__)
+        sb = getSchoolBellApplication()
         for resource in sb["resources"].values():
-            if (canAccess(resource.calendar, "addEvent") or
-                self.hasBooked(resource)):
+            if ((canAccess(resource.calendar, "addEvent") or
+                 self.hasBooked(resource)) and
+                resource is not calendar_owner):
                 resources.append(resource)
         return resources
 
