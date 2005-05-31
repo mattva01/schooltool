@@ -14,8 +14,7 @@
                          canModify view/canModify">
   <p tal:condition="not:objects" i18n:translate="">There are none.</p>
   <tal:block tal:condition="objects"
-             tal:define="default_id context/default_id;
-                         default_schema context/getDefault">
+             tal:define="default_id context/default_id">
     <ul>
       <li tal:repeat="obj objects/sortby:title">
         <a tal:content="obj/title"
@@ -24,9 +23,13 @@
     </ul>
     <div class="row">
       <label i18n:translate="" for="ttschema">Default Timetable Schema:</label>
-      <a tal:condition="not:canModify"
-         tal:content="default_schema/title"
-         tal:attributes="href default_schema/@@absolute_url">Default Schema</a>
+      <tal:block tal:condition="not:canModify">
+        <a tal:condition="default_id"
+           tal:content="context/getDefault/title"
+           tal:attributes="href context/getDefault/@@absolute_url">Default Schema</a>
+      </tal:block>
+      <tal:block tal:condition="python: default_id and not canModify"
+                 tal:replace="string:Not Selected" />
       <form tal:condition="canModify"
             method="post"
             action=".">

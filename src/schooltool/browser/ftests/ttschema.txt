@@ -16,7 +16,19 @@ Let's create a SchoolTool instance:
   Location: http://localhost/@@contents.html
   ...
 
-Let's go to the advanced 'New Timetable' view:
+The schema container is empty:
+
+  >>> print http(r"""
+  ... GET /frogpond/ttschemas HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... """, handle_errors=False)
+  HTTP/1.1 200 Ok
+  ...
+      <p>There are none.</p>
+  ...
+
+
+Let's go to the advanced 'New Timetable Schema' view:
 
   >>> print http(r"""
   ... GET /frogpond/ttschemas/schemawizard.html HTTP/1.1
