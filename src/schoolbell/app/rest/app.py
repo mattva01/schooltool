@@ -308,7 +308,7 @@ class PersonView(View):
 
 
 def getCharset(content_type, default="UTF-8"):
-    """Gets charset out of content-type
+    """Get charset out of content-type
 
         >>> getCharset('text/xml; charset=latin-1')
         'latin-1'
@@ -322,7 +322,13 @@ def getCharset(content_type, default="UTF-8"):
         >>> getCharset('text/plain')
         'UTF-8'
 
+        >>> getCharset(None)
+        'UTF-8'
+
     """
+    if not content_type:
+        return default
+
     parts = content_type.split(";")
     if len(parts) == 0:
         return default
