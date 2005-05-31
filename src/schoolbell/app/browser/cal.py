@@ -1156,6 +1156,35 @@ class Slots(dict):
 class CalendarEventView(BrowserView):
     """View for single events."""
 
+    def internationalDate(self, day):
+        day_of_week = day_of_week_names[day.weekday()]
+        return '%s, %s' % (day_of_week, day.strftime('%Y-%m-%d'))
+
+    def usDate(self, day):
+        day_of_week = day_of_week_names[day.weekday()]
+        return '%s, %s' % (day_of_week, day.strftime('%m/%d/%Y'))
+
+    def longDate(self, day):
+        day_of_week = day_of_week_names[day.weekday()]
+        return '%s, %s' % (day_of_week, day.strftime('%d %B, %Y'))
+
+    def dayTitle(self, day):
+        if self.preferences.dateformat == "MM/DD/YY":
+            return self.usDate(day)
+        elif self.preferences.dateformat == "Day Month, Year":
+            return self.longDate(day)
+        else:
+            return self.internationalDate(day)
+
+    def recurrence(self):
+
+        rrule = self.context.recurrence
+
+        if rrule is None:
+            return False
+        else:
+            return True
+
     def __init__(self, context, request):
         self.context = context
         self.request = request
@@ -1166,6 +1195,7 @@ class CalendarEventView(BrowserView):
         self.dtend = self.dtstart + context.duration
         self.start = self.dtstart.strftime(self.preferences.timeformat)
         self.end = self.dtend.strftime(self.preferences.timeformat)
+        self.day = self.dayTitle(self.dtstart)
 
         self.display = EventForDisplay(context,'#9db8d2', '#7590ae',
                                        context.__parent__,

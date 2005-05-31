@@ -1144,6 +1144,7 @@ def doctest_CalendarEventView():
         >>> from schoolbell.app.cal import CalendarEvent
         >>> from schoolbell.app.cal import Calendar
         >>> from schoolbell.app.browser.cal import CalendarEventView
+        >>> from schoolbell.app.browser.cal import makeRecurrenceRule
         >>> cal = Calendar()
         >>> event = CalendarEvent(datetime(2002, 2, 3, 12, 30),
         ...                       timedelta(minutes=59), "Event")
@@ -1174,6 +1175,42 @@ def doctest_CalendarEventView():
 
         >>> view.display.getBookedResources()
         ()
+
+        >>> from schoolbell.app.app import Resource
+        >>> resource = Resource("r1")
+        >>> event.bookResource(resource)
+        >>> [r.title for r in view.display.getBookedResources()]
+        ['r1']
+
+    If our event doesn't recur, then view.recurrence is False, currently this
+    is pretty naive and doesn't take into account different types of recurrence
+
+        >>> view.recurrence()
+        False
+
+        >>> yearly = makeRecurrenceRule(recurrence_type='yearly', interval=2,
+        ...                           range='until', until='2004-01-02')
+        >>> event1 = CalendarEvent(datetime(2002, 2, 3, 12, 30),
+        ...                       timedelta(minutes=59), "Event",
+        ...                       recurrence=yearly)
+        >>> cal.addEvent(event1)
+        >>> request = TestRequest()
+        >>> view = CalendarEventView(event1, request)
+        >>> view.recurrence()
+        True
+
+    The view has a day attribute the provides the date and day of week:
+
+        >>> view.day
+        u'Sunday, 2002-02-03'
+
+        >>> event2 = CalendarEvent(datetime(2004, 2, 3, 12, 30),
+        ...                       timedelta(minutes=59), "Event")
+        >>> cal.addEvent(event2)
+        >>> request = TestRequest()
+        >>> view = CalendarEventView(event2, request)
+        >>> view.day
+        u'Tuesday, 2004-02-03'
 
 
     """
