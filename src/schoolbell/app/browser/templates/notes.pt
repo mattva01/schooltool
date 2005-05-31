@@ -1,4 +1,4 @@
-<div id="notes">
+<div id="notes" i18n:domain="schoolbell">
   <h5 i18n:translate="">Notes</h5>
   <tal:loop repeat="note context/@@notes/notes">
     <div class="note">
@@ -10,9 +10,9 @@
                to the owner of the note. -->
         </tal:comment>
         <tal:if condition="python:note.owner == request.principal.id">
-          <a class="delete" href="" alt="[x]"
-            tal:attributes="href string:?DELETE_NOTE=1&uid=${note/unique_id}"
-            >Delete</a>
+          <a class="delete" alt="[x]"
+             tal:attributes="href string:?DELETE_NOTE=1&uid=${note/unique_id}"
+             i18n:translate="">Delete</a>
         </tal:if>
       </div>
       <div class="body" tal:content="note/body"></div>

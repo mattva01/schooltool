@@ -1,4 +1,4 @@
-<metal:block define-macro="widget_rows">
+<metal:block define-macro="widget_rows" i18n:domain="schoolbell">
 <div class="row" tal:repeat="widget view/widgets">
   <metal:block define-macro="widget_row">
   <div class="label">
