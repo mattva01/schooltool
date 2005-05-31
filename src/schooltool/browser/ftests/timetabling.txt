@@ -253,17 +253,7 @@ The new term is there
     ...
     <h1>Terms</h1>
     ...
-        <form method="post"
-              action="http://localhost/frogpond/terms/delete.html">
-          <div>
-            <input type="checkbox" name="delete.2005-fall" />
             <a href="http://localhost/frogpond/terms/2005-fall">2005 Fall</a>
-          </div>
-          <div class="controls">
-            <input type="submit" class="button-cancel"
-                   value="Delete" />
-          </div>
-        </form>
     ...
 
 You can look at it
