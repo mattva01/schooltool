@@ -94,14 +94,9 @@ def convert_event_to_vfb(event):
         FREEBUSY:20041216T100729/20041216T11072900Z
 
     """
-    dtend = event.dtstart + event.duration
-    result = []
     # XXX: not handling recurrence yet
-    result += [
-        "FREEBUSY:%s/%s00Z" % (ical_datetime(event.dtstart),
-                               ical_datetime(dtend)),
-    ]
-    return result
+    return ["FREEBUSY:%s/%s00Z" % (ical_datetime(event.dtstart),
+                               ical_datetime(event.dtstart + event.duration))]
 
 
 def convert_event_to_ical(event):
@@ -208,20 +203,16 @@ def convert_calendar_to_vfb(calendar):
 
 
     """
-    header = [
-        "BEGIN:VCALENDAR",
-        "VERSION:2.0",
-        "PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN",
-        "METHOD:PUBLISH",
-        "BEGIN:VFREEBUSY"
-    ]
-    footer = [
-        "END:VFREEBUSY",
-        "END:VCALENDAR"
-    ]
+    header = ["BEGIN:VCALENDAR",
+              "VERSION:2.0",
+              "PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN",
+              "METHOD:PUBLISH",
+              "BEGIN:VFREEBUSY"]
     events = []
     for event in calendar:
         events += convert_event_to_vfb(event)
+    footer = ["END:VFREEBUSY",
+              "END:VCALENDAR"]
     return header + events + footer
 
 
@@ -272,14 +263,10 @@ def convert_calendar_to_ical(calendar):
         END:VCALENDAR
 
     """
-    header = [
-        "BEGIN:VCALENDAR",
-        "VERSION:2.0",
-        "PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN",
-    ]
-    footer = [
-        "END:VCALENDAR"
-    ]
+    header = ["BEGIN:VCALENDAR",
+              "VERSION:2.0",
+              "PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN"]
+    footer = ["END:VCALENDAR"]
     events = []
     for event in calendar:
         events += convert_event_to_ical(event)

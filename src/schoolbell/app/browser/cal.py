@@ -1380,7 +1380,7 @@ class CalendarEventViewMixin(object):
             return msg
 
     def getStartDate(self):
-        """If a start_date is set returns the value of the widget."""
+        """Return the value of the widget if a start_date is set."""
         try:
             return self.start_date_widget.getInputValue()
         except (WidgetInputError, ConversionError):
@@ -1406,7 +1406,7 @@ class CalendarEventViewMixin(object):
         return self.update_status
 
     def processRequest(self, kwargs):
-        """Puts informations from the widgets into a dict.
+        """Put information from the widgets into a dict.
 
         This method performs additional validation, because Zope 3 forms aren't
         powerful enough.  If any errors are encountered, a WidgetsError is
