@@ -42,7 +42,7 @@
         </select>
         <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Change"
                title="Shortcut: Alt-A" accesskey="A"
-               i18n:attributes="value add-button; accesskey" />
+               i18n:attributes="value change-button; accesskey" />
       </form>
     </div>
   </tal:block>
