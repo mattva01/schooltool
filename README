@@ -28,10 +28,10 @@ System requirements
   (Users will require Zope X3 development trunk revision,
   Zope libraries of this revision are included with the distribution)
 
-- libxml2 Python bindings (http://xmlsoft.org/)
+- libxml2 Python bindings (http://xmlsoft.org/).  Windows users can download libxml2 binaries here:  http://users.skynet.be/sbi/libxml-python/
 
 - Development environment and a C compiler
-  (pre-compiled binaries are available for Windows users)
+  (pre-compiled binaries are available for Windows users at the SchoolBell website)
 
 
 Building SchoolBell
@@ -44,8 +44,8 @@ It is a good idea to run 'make test' and 'make ftest' to check if all the
 essential unit and functional tests pass.
 
 
-Installing and Configuring with Distutils
------------------------------------------
+Installing and Configuring with Distutils (optional)
+----------------------------------------------------
 
 It is possible to install SchoolBell using python distutils.  To do this, you
 have to use one of the distributed tarballs/zipfiles, which you unpack in a
