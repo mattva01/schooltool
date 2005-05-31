@@ -26,19 +26,19 @@
       <tal:block tal:condition="not:canModify">
         <a tal:condition="default_id"
            tal:content="context/getDefault/title"
-           tal:attributes="href context/getDefault/@@absolute_url">Default Schema</a>
+           tal:attributes="href context/getDefault/@@absolute_url">(Default Schema)</a>
+        <span tal:condition="not:default_id" i18n:translate="">Not Selected</span>
       </tal:block>
-      <tal:block tal:condition="python: default_id and not canModify"
-                 tal:replace="string:Not Selected" />
       <form tal:condition="canModify"
             method="post"
             action=".">
         <select name="ttschema" size="1"
                 id="ttschema">
+          <option value="" i18n:translate="">Not Selected</option>
           <option tal:repeat="obj objects/sortby:title"
                   tal:content="obj/title"
                   tal:attributes="selected python:obj.__name__ == default_id;
-                                  value python: obj.__name__"></option>
+                                  value python: obj.__name__">(Schema title)</option>
         </select>
         <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Change"
                title="Shortcut: Alt-A" accesskey="A"

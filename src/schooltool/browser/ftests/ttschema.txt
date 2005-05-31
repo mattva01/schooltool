@@ -144,6 +144,7 @@ be the default one:
         <label for="ttschema">Default Timetable Schema:</label>
         <form method="post" action=".">
           <select name="ttschema" size="1" id="ttschema">
+            <option value="">Not Selected</option>
             <option selected="selected" value="weekly">weekly</option>
           </select>
           <input type="submit" class="button-ok"

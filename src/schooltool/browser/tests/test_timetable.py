@@ -1858,6 +1858,17 @@ def doctest_TimetableSchemaContainerView():
         >>> app["ttschemas"].default_id
         'schema2'
 
+    We can set the default_id to none:
+
+        >>> view.request = TestRequest(form={
+        ...                                  'ttschema': '',
+        ...                                  'UPDATE_SUBMIT': 'Change'
+        ...                                 })
+        >>> view.update()
+        ''
+        >>> app["ttschemas"].default_id is None
+        True
+
     """
 
 
