@@ -28,25 +28,92 @@ import os
 import urllib2
 import optparse
 import logging
+from StringIO import StringIO
+import tempfile
+import subprocess
+
+class POVerificationError(Exception):
+    pass
 
 
 class FileWriter:
 
     open = open
 
-    def __init__(self, pathnamepattern):
+    def __init__(self, pathnamepattern, config):
         self.pathnamepattern = pathnamepattern
         self.logger = logging
+        self.config = config
+
+    def _testcompile(self, po, locale):
+        r"""Tries to compile the po file using msgfmt, raising an error on fail.
+
+        Get a writer:
+
+            >>> writer = FileWriter(os.path.join('tmp', '@locale@', 'po.po'),
+            ...     'ConfigStub')
+
+        some stubs:
+
+            >>> class logger:
+            ...     def info(self, msg):
+            ...         print 'INFO: %s' % msg
+            >>> writer.logger = logger()
+
+        Write a non-compiling PO file:
+
+            >>> po = r'msgid ""' + '\n' +\
+            ...     r'"\n"' + '\n' +\
+            ...     r'"This is not a SchoolBelldatabase\n"' + '\n' +\
+            ...     r'msgstr ""' + '\n' +\
+            ...     r'"Esto no es una base de datos de Schoolbell\n"' + '\n'
+
+        Test it:
+
+            >>> writer._testcompile(po, 'es')
+            Traceback (most recent call last):
+                ...
+            POVerificationError: PO file for es fails to compile with error:
+            <stdin>:1: `msgid' and `msgstr' entries do not both begin with '\n'
+            msgfmt: found 1 fatal error
+            <BLANKLINE>
+
+        Write a compiling PO file:
+
+            >>> po = r'msgid ""' + '\n' +\
+            ...     r'"This is not a SchoolBelldatabase\n"' + '\n' +\
+            ...     r'msgstr ""' + '\n' +\
+            ...     r'"Esto no es una base de datos de Schoolbell\n"' + '\n'
+
+        Test it:
+
+            >>> writer._testcompile(po, 'es')
+        """
+        pofile = tempfile.NamedTemporaryFile()
+        pofile.write(po)
+        pofile.seek(0)
+        p = subprocess.Popen(['msgfmt', '-o', '-', '-'], stdin=pofile,
+                stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        if  p.wait() != 0:
+            raise POVerificationError("PO file for %s fails to compile "
+                    "with error:\n%s" % (locale, p.stderr.read()))
 
     def write(self, po, locale):
         r"""Write the po file to disk.
 
+            >>> class ConfigStub:
+            ...     testcompile = True
+
         Get a writer:
 
-            >>> writer = FileWriter(os.path.join('tmp', '@locale@', 'po.po'))
+            >>> writer = FileWriter(os.path.join('tmp', '@locale@', 'po.po'),
+            ...     ConfigStub())
 
         Stub some stuff:
 
+            >>> def testcompile(po, locale):
+            ...     print 'tested locale %s' % locale
+            >>> writer._testcompile = testcompile
             >>> class OpenStub:
             ...     def __init__(self, filename, perm):
             ...         self.filename = filename
@@ -73,10 +140,15 @@ class FileWriter:
         Write some locales:
 
             >>> writer.write('I am the es_ZA po file.', 'es_ZA')
+            tested locale es_ZA
             File: tmp/es_ZA/po.po
             Permissions: w
             Contents: I am the es_ZA po file.
             INFO: Written locale es_ZA to tmp/es_ZA/po.po
+
+        Change the configuration and try again:
+
+            >>> writer.config.testcompile = False
             >>> writer.write('I am the es po file.', 'es')
             Created: tmp/es
             File: tmp/es/po.po
@@ -88,6 +160,8 @@ class FileWriter:
             >>> os.makedirs = old_makedirs
             >>> os.path.exists = old_exists
         """
+        if self.config.testcompile:
+            self._testcompile(po, locale)
         filename = self.pathnamepattern.replace("@locale@", locale)
         if not os.path.exists(os.path.dirname(filename)):
             os.makedirs(os.path.dirname(filename))
@@ -102,21 +176,21 @@ class RosettaConnection:
     stream_factory = urllib2
     logger = logging
 
-    def __init__(self, baseurl):
+    def __init__(self, baseurl, config):
         """Set up a connection where baseurl is the location in the rosetta.
 
         e.g. baseurl =
              "https://launchpad.ubuntu.com/products/myproduct/1.0/+pots"
         """
         self.baseurl = baseurl
-
+        self.config = config
 
     def getPO(self, locale):
         """Return the translation for a locale as a string.
 
         Get a connection:
 
-            >>> con = RosettaConnection("https://somerosetta")
+            >>> con = RosettaConnection("https://somerosetta", 'ConfigStub')
 
         First we can stub the stream factory:
 
@@ -169,13 +243,13 @@ class ImportExport:
         Stub everything:
 
             >>> class ImporterStub:
-            ...     def __init__(self, baseurl):
+            ...     def __init__(self, baseurl, config):
             ...         self.baseurl = baseurl
             ...     def getPO(self, locale):
             ...         return "locale %s from %s" % (locale, self.baseurl)
             >>> impexp.importer_hook = ImporterStub
             >>> class ExporterStub:
-            ...     def __init__(self, pattern, create_dir=True):
+            ...     def __init__(self, pattern, config, create_dir=True):
             ...         self.pattern = pattern
             ...     def write(self, po, locale):
             ...         if locale == "en_ZA":
@@ -206,8 +280,8 @@ class ImportExport:
             INFO: Importing en_ZA
             EXCEPTION: Failed to import locale en_ZA
         """
-        importer = self.importer_hook(config.baseurl)
-        exporter = self.exporter_hook(config.filepattern)
+        importer = self.importer_hook(config.baseurl, config)
+        exporter = self.exporter_hook(config.filepattern, config)
         for locale in locales:
             try:
                 self.logger.info("Importing %s" % locale)
@@ -236,12 +310,14 @@ def parseOptions():
         True
         >>> options.loglevel
         'INFO'
+        >>> options.testcompile
+        True
 
     Some settings:
         >>> sys.argv = ['myprog', '--test', 'ca',
         ...     '--filepattern', '/root/@locale@', 'en_ZA',
         ...     '--baseurl', 'http://somehost/rosetta',
-        ...     '-l', 'DEBUG']
+        ...     '-l', 'DEBUG', '--notestcompile']
         >>> (options, locales) = parseOptions()
         >>> options.test
         True
@@ -253,6 +329,8 @@ def parseOptions():
         '/root/@locale@'
         >>> options.loglevel
         'DEBUG'
+        >>> options.testcompile
+        False
 
     Cleanup:
         >>> sys.argv = old_args
@@ -261,6 +339,10 @@ def parseOptions():
     parser = optparse.OptionParser()
     parser.add_option("-t", "--test", dest="test", action="store_true",
                       default=False, help="run self tests")
+    parser.add_option("--notestcompile", dest="testcompile",
+                      action="store_false", default=True,
+                      help="do not test the po file by checking if compilation"
+                      " with msgfmt succeeds")
     parser.add_option("--filepattern", dest="filepattern",
                       help="The file pattern to write to, the locale name "
                       "will replace any instances of @locale@.")
