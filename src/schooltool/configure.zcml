@@ -81,6 +81,12 @@
   <!-- Utilities -->
 
   <utility
+      name="schooltool"
+      provides="zope.app.generations.interfaces.ISchemaManager"
+      factory="zope.app.generations.generations.SchemaManager"
+      />
+
+  <utility
       provides="schooltool.interfaces.ITimetableModelFactory"
       name="SequentialDaysTimetableModel"
       component="schooltool.timetable.SequentialDaysTimetableModel"
