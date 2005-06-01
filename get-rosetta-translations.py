@@ -28,15 +28,19 @@ import os
 import urllib2
 import optparse
 import logging
-from StringIO import StringIO
 import tempfile
 import subprocess
 
 class POVerificationError(Exception):
-    pass
+    """To be raised when verification of a PO file fails."""
 
 
 class FileWriter:
+    """Write PO files to disk.
+
+    Verifies a PO file and writes it to disk according to a filename pettern
+    based on its locale.
+    """
 
     open = open
 
@@ -45,6 +49,65 @@ class FileWriter:
         self.logger = logging
         self.config = config
 
+    def _testsize(self, po, locale):
+        r"""Raises error if no of lines of the new po file is <50% of the old.
+
+        Get a writer:
+
+            >>> writer = FileWriter(os.path.join('tmp', '@locale@', 'po.po'),
+            ...     'ConfigStub')
+
+        Stub some things:
+
+            >>> def existsStub(dir):
+            ...     return not dir == os.path.join('tmp', 'se', 'po.po')
+            >>> old_exists = os.path.exists
+            >>> os.path.exists = existsStub
+            >>> class OpenStub:
+            ...     def __init__(self, filename, perm):
+            ...         self.filename = filename
+            ...         self.perm = perm
+            ...     def read(self):
+            ...         print "FileRead: %s\nPermissions: %s"\
+            ...             % (self.filename, self.perm)
+            ...         return "\n".join(["" for i in range(22)])
+            ...     def close(self):
+            ...         pass
+            >>> writer.open = OpenStub
+
+        Test a small PO file:
+
+            >>> po = "\n".join(["" for i in range(11)])
+            >>> writer._testsize(po, 'es_ES')
+            Traceback (most recent call last):
+                ...
+            POVerificationError: New es_ES PO file is suspiciously smaller.
+
+        Test a bigger PO file:
+
+            >>> po = "\n".join(["" for i in range(12)])
+            >>> writer._testsize(po, 'es')
+            FileRead: tmp/es/po.po
+            Permissions: r
+
+        Make sure we don't try to read non-existent files:
+
+            >>> po = "\n".join(["" for i in range(22)])
+            >>> writer._testsize(po, 'se')
+
+        Cleanup:
+            >>> os.path.exists = old_exists
+        """
+        filename = self.pathnamepattern.replace("@locale@", locale)
+        if not os.path.exists(filename):
+            return
+        file = self.open(filename, 'r')
+        oldpo = file.read()
+        file.close()
+        if (0.5 * len(oldpo.splitlines())) > len(po.splitlines()):
+            raise POVerificationError("New %s PO file is suspiciously smaller."
+                    % locale)
+
     def _testcompile(self, po, locale):
         r"""Tries to compile the po file using msgfmt, raising an error on fail.
 
@@ -52,13 +115,6 @@ class FileWriter:
 
             >>> writer = FileWriter(os.path.join('tmp', '@locale@', 'po.po'),
             ...     'ConfigStub')
-
-        some stubs:
-
-            >>> class logger:
-            ...     def info(self, msg):
-            ...         print 'INFO: %s' % msg
-            >>> writer.logger = logger()
 
         Write a non-compiling PO file:
 
@@ -89,7 +145,7 @@ class FileWriter:
 
             >>> writer._testcompile(po, 'es')
         """
-        pofile = tempfile.NamedTemporaryFile()
+        pofile = tempfile.NamedTemporaryFile() # XXX - must be a better way
         pofile.write(po)
         pofile.seek(0)
         p = subprocess.Popen(['msgfmt', '-o', '-', '-'], stdin=pofile,
@@ -98,22 +154,53 @@ class FileWriter:
             raise POVerificationError("PO file for %s fails to compile "
                     "with error:\n%s" % (locale, p.stderr.read()))
 
-    def write(self, po, locale):
-        r"""Write the po file to disk.
+    def runTests(self, po, locale):
+        """Raises POVerificationError if new PO file fails tests.
 
             >>> class ConfigStub:
             ...     testcompile = True
+            ...     testsize = False
 
         Get a writer:
 
             >>> writer = FileWriter(os.path.join('tmp', '@locale@', 'po.po'),
             ...     ConfigStub())
 
+        Some stubs:
+            >>> def testcompile(po, locale):
+            ...     print 'compilation tested locale %s' % locale
+            >>> writer._testcompile = testcompile
+            >>> def testsize(po, locale):
+            ...     print 'size tested locale %s' % locale
+            >>> writer._testsize = testsize
+
+        Tests:
+
+            >>> writer.runTests("hi", "es")
+            compilation tested locale es
+            >>> writer.config.testcompile = False
+            >>> writer.config.testsize = True
+            >>> writer.runTests("hi", "es")
+            size tested locale es
+        """
+        if self.config.testcompile:
+            self._testcompile(po, locale)
+        if self.config.testsize:
+            self._testsize(po, locale)
+
+    def write(self, po, locale):
+        r"""Write the po file to disk.
+
+        Get a writer:
+
+            >>> writer = FileWriter(os.path.join('tmp', '@locale@', 'po.po'),
+            ...     'ConfigStub')
+
         Stub some stuff:
 
-            >>> def testcompile(po, locale):
+            >>> def runTests(po, locale):
             ...     print 'tested locale %s' % locale
-            >>> writer._testcompile = testcompile
+            >>> writer.runTests = runTests
             >>> class OpenStub:
             ...     def __init__(self, filename, perm):
             ...         self.filename = filename
@@ -123,11 +210,11 @@ class FileWriter:
             ...             % (self.filename, self.perm, data)
             ...     def close(self):
             ...         pass
+            >>> writer.open = OpenStub
             >>> class logger:
             ...     def info(self, msg):
             ...         print 'INFO: %s' % msg
             >>> writer.logger = logger()
-            >>> writer.open = OpenStub
             >>> def mkdirStub(dir):
             ...     print "Created: %s" % dir
             >>> old_makedirs = os.makedirs
@@ -145,11 +232,8 @@ class FileWriter:
             Permissions: w
             Contents: I am the es_ZA po file.
             INFO: Written locale es_ZA to tmp/es_ZA/po.po
-
-        Change the configuration and try again:
-
-            >>> writer.config.testcompile = False
             >>> writer.write('I am the es po file.', 'es')
+            tested locale es
             Created: tmp/es
             File: tmp/es/po.po
             Permissions: w
@@ -160,8 +244,7 @@ class FileWriter:
             >>> os.makedirs = old_makedirs
             >>> os.path.exists = old_exists
         """
-        if self.config.testcompile:
-            self._testcompile(po, locale)
+        self.runTests(po, locale)
         filename = self.pathnamepattern.replace("@locale@", locale)
         if not os.path.exists(os.path.dirname(filename)):
             os.makedirs(os.path.dirname(filename))
@@ -172,11 +255,12 @@ class FileWriter:
 
 
 class RosettaConnection:
+    """Represents a rosetta source."""
 
     stream_factory = urllib2
     logger = logging
 
-    def __init__(self, baseurl, config):
+    def __init__(self, baseurl):
         """Set up a connection where baseurl is the location in the rosetta.
 
         e.g. baseurl =
@@ -190,7 +274,7 @@ class RosettaConnection:
 
         Get a connection:
 
-            >>> con = RosettaConnection("https://somerosetta", 'ConfigStub')
+            >>> con = RosettaConnection("https://somerosetta")
 
         First we can stub the stream factory:
 
@@ -228,6 +312,7 @@ class RosettaConnection:
 
 
 class ImportExport:
+    """Iterates over locales importing them from rosetta nad writing to disk."""
 
     importer_hook = RosettaConnection
     exporter_hook = FileWriter
@@ -243,7 +328,7 @@ class ImportExport:
         Stub everything:
 
             >>> class ImporterStub:
-            ...     def __init__(self, baseurl, config):
+            ...     def __init__(self, baseurl):
             ...         self.baseurl = baseurl
             ...     def getPO(self, locale):
             ...         return "locale %s from %s" % (locale, self.baseurl)
@@ -280,7 +365,7 @@ class ImportExport:
             INFO: Importing en_ZA
             EXCEPTION: Failed to import locale en_ZA
         """
-        importer = self.importer_hook(config.baseurl, config)
+        importer = self.importer_hook(config.baseurl)
         exporter = self.exporter_hook(config.filepattern, config)
         for locale in locales:
             try:
@@ -312,12 +397,14 @@ def parseOptions():
         'INFO'
         >>> options.testcompile
         True
+        >>> options.testsize
+        True
 
     Some settings:
         >>> sys.argv = ['myprog', '--test', 'ca',
         ...     '--filepattern', '/root/@locale@', 'en_ZA',
         ...     '--baseurl', 'http://somehost/rosetta',
-        ...     '-l', 'DEBUG', '--notestcompile']
+        ...     '-l', 'DEBUG', '--notestcompile', '--notestsize']
         >>> (options, locales) = parseOptions()
         >>> options.test
         True
@@ -331,6 +418,8 @@ def parseOptions():
         'DEBUG'
         >>> options.testcompile
         False
+        >>> options.testsize
+        False
 
     Cleanup:
         >>> sys.argv = old_args
@@ -343,6 +432,10 @@ def parseOptions():
                       action="store_false", default=True,
                       help="do not test the po file by checking if compilation"
                       " with msgfmt succeeds")
+    parser.add_option("--notestsize", dest="testsize",
+                      action="store_false", default=True,
+                      help="do not test the po file by checking if the new no"
+                      " of lines are less than 20% of the old")
     parser.add_option("--filepattern", dest="filepattern",
                       help="The file pattern to write to, the locale name "
                       "will replace any instances of @locale@.")
