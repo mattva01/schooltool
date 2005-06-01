@@ -425,7 +425,7 @@ def parseOptions():
         >>> sys.argv = old_args
     """
     # TODO - filepattern and baseurl are essential, this function needs to fail
-    parser = optparse.OptionParser()
+    parser = optparse.OptionParser(usage="usage: %prog [options] [locale...]")
     parser.add_option("-t", "--test", dest="test", action="store_true",
                       default=False, help="run self tests")
     parser.add_option("--notestcompile", dest="testcompile",
