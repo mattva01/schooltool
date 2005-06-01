@@ -1773,7 +1773,7 @@ msgid ""
 "\n"
 "Perhaps another %s instance is using it?"
 msgstr ""
-"\n"
+"\n"
 "¿Tal vez otra instancia %s se esté ejecutando?"
 
 #: src/schoolbell/app/main.py:69
@@ -1785,13 +1785,13 @@ msgid ""
 "  -h, --help        show this help message\n"
 "  -d, --daemon      go to background after starting\n"
 msgstr ""
-"\n"
+"\n"
 "Uso: %s [options]\n"
 "Options:\n"
 "  -c, --config xxx sustituir este archivo de configuración por la "
 "configuración por defecto \n"
 "  -h, --help muestra esta ayuda\n"
-"  -d, --daemon mover a segundo plano después de ejecutar"
+"  -d, --daemon mover a segundo plano después de ejecutar\n"
 
 #: src/schoolbell/app/main.py:78
 msgid ""
@@ -1801,7 +1801,7 @@ msgid ""
 "If you're using the default configuration file, please edit it now and\n"
 "uncomment one of the ZODB storage sections.\n"
 msgstr ""
-"\n"
+"\n"
 "No está definida la ruta de almacenamiento en el archivo de configuración.\n"
 "\n"
 "Si está utilizando la configuración por defecto, por favor editelá ahora y\n"
@@ -1812,6 +1812,7 @@ msgid ""
 "\n"
 "This is not a SchoolBell 1.0 database file, aborting.\n"
 msgstr ""
+"\n"
 "Esto no es una base de datos de Schoolbell 1.0, abortando.\n"
 
 #: src/schoolbell/app/main.py:91
@@ -1821,6 +1822,7 @@ msgid ""
 "\n"
 "Please run the standalone database upgrade script.\n"
 msgstr ""
+"\n"
 "Esto no es una base de datos de schoolbell 1.0, abortando.\n"
 "\n"
 "Por favor ejecute el script local de actualización.\n"

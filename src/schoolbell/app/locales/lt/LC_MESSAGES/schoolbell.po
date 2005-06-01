@@ -1112,7 +1112,7 @@ msgid ""
 "Chess Club\n"
 "Sports Club, After-school sports club, <em>text after a second comma</em>\n"
 msgstr ""
-"\n"
+"\n"
 "LVG, Linux Vartotojų Grupė\n"
 "Šachmatų Klubas\n"
 "Sporto Klubas, Popamokinis sporto klubas, <em>tekstas po antrojo "
@@ -1342,7 +1342,7 @@ msgid ""
 "jbjones, Jim Bob Jones, r2m45J\n"
 "howard, Howard\n"
 msgstr ""
-"\n"
+"\n"
 "jonas, Jonas Pytonas\n"
 "pjonas, Jonas Petras Lietuvis, rprp34\n"
 "scile, Sicilija\n"
@@ -1486,11 +1486,10 @@ msgid ""
 "Main Auditorium\n"
 "LC-805, Laptop Computer #805, <em>text after a second comma</em>\n"
 msgstr ""
-"\n"
+"\n"
 "PRJ302, Multimedia projektorius #302\n"
 "Sporto Salė\n"
 "LC-01, Nešiojamas kompiuteris #01, <em> tekstas po antrojo kablelio </em>\n"
-" "
 
 #: src/schoolbell/app/browser/templates/resource-csvimport.pt:36
 msgid ""

@@ -1767,7 +1767,7 @@ msgid ""
 "\n"
 "Perhaps another %s instance is using it?"
 msgstr ""
-"\n"
+"\n"
 "Może inna instacja %s używja jej?"
 
 #: src/schoolbell/app/main.py:69
@@ -1779,7 +1779,7 @@ msgid ""
 "  -h, --help        show this help message\n"
 "  -d, --daemon      go to background after starting\n"
 msgstr ""
-"\n"
+"\n"
 "Użycie: %s [opcje]\n"
 "Opcje:\n"
 "  -c, --config xxx użyj tego pliku konfiguracyjnego zamiast domyślengo\n"
@@ -1794,7 +1794,7 @@ msgid ""
 "If you're using the default configuration file, please edit it now and\n"
 "uncomment one of the ZODB storage sections.\n"
 msgstr ""
-"\n"
+"\n"
 "Brak zdefioniowanego schowka w tym pliku konfiguracyjny.\n"
 "\n"
 "Jeśli uzywasz domyślnego pliku konfiguracyjnego, proszę odytuj do teraz i\n"
