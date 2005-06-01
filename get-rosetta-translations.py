@@ -430,18 +430,18 @@ def parseOptions():
                       default=False, help="run self tests")
     parser.add_option("--notestcompile", dest="testcompile",
                       action="store_false", default=True,
-                      help="do not test the po file by checking if compilation"
+                      help="do not test the PO file by checking if compilation"
                       " with msgfmt succeeds")
     parser.add_option("--notestsize", dest="testsize",
                       action="store_false", default=True,
-                      help="do not test the po file by checking if the new no"
-                      " of lines are less than 20% of the old")
+                      help="do not test the PO file by checking if the new no"
+                      " of lines are less than 50% of the old")
     parser.add_option("--filepattern", dest="filepattern",
                       help="The file pattern to write to, the locale name "
                       "will replace any instances of @locale@.")
     parser.add_option("--baseurl", dest="baseurl",
                       help="The base url of the rosetta page to use, will be"
-                      " extended by @locale@/po to get the po file.")
+                      " extended by @locale@/po to get the PO file.")
     parser.add_option("-l", "--loglevel", dest="loglevel", default="INFO",
                       help="The level of logging, see the logging module")
     return parser.parse_args()
