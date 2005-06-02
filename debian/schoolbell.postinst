@@ -27,7 +27,6 @@ sslcert=/etc/$package/$package.cert.pem
 sslkey=/etc/$package/$package.privkey.pem
 sslconf=/etc/$package/ssl-cert.cnf
 config=/etc/$package/$package.conf
-db_version=0.8     # TODO - delete this when schooltool can upgrade it's own database
 
 # Helper Functions
 set_simple () {
@@ -53,56 +52,6 @@ set_simple () {
     mv -f $config.tmp $config
 }
 
-db_upgrade () {
-    # Try to upgrade a database using a standalone upgrade script
-    # arguments:
-    # $1 old version
-    importscr=/usr/lib/libschoolbell/scripts/schoolbell-import.py
-    exportscr=/usr/lib/libschoolbell/scripts/schoolbell-export.py
-    compat=/var/lib/$package/compat
-    dump=/var/lib/$package/dump/
-    backup=/var/lib/$package/backup/
-    db=/var/lib/$package/Data.fs
-    # only do anything unless we actually have a db and some compat libs
-    if [ -f $db ] && [ -d $compat ];then
-        mkdir -p $dump/calendars
-        if PYTHONPATH=$compat $PYTHON $exportscr \
-                $db $dump/backup.xml $dump/calendars; then
-            # yay !! export sucessfull backing up old db
-            mkdir -p $backup
-            mv $db $backup
-            mv $db.index $backup
-            mv $db.lock $backup
-            mv $db.tmp $backup
-            if PYTHONPATH=/usr/lib/libschoolbell $PYTHON \
-                $importscr $db $dump/backup.xml $dump/calendars ; then
-                chown $package:$package $db*
-            else
-                # oops, we're screwed and way past the point of no return
-                # try to restore db and let admin know
-                db_upgrade=failed
-                rm -f $db $db.index $db.lock $db.tmp
-                mv $backup/* /var/lib/$package
-                rmdir $backup
-            fi
-        else
-            # dump failed!!! tell admin and continue
-            db_upgrade=failed
-        fi
-        rm -rf $dump
-    else
-        db_upgrade=failed
-    fi
-    if [ z$db_upgrade == zfailed ];then
-        db_fset $package/db_upgrade_error seen false
-        db_input critical $package/db_upgrade_error || true
-        db_go || true
-    fi
-    # try to clean up a little
-    rmdir /var/lib/$package/dump || true
-    rmdir /var/lib/$package/backup || true
-}
-
 . /usr/share/debconf/confmodule
 
 case "$1" in
@@ -124,18 +73,6 @@ case "$1" in
     chown $package:$package /var/lib/$package
     chown $package:$package /var/run/$package
     chown $package:$package /var/log/$package
-
-    # Set the database version.
-    # This is depended on and depends on code in preinst
-    # TODO - delete this when schooltool can upgrade it's own database
-    echo $db_version > /var/lib/$package/database_ver
-
-    # try database upgrades of old versions
-    db_get $package/auto_upgrade_db
-    ans="$RET"
-    db_fset $package/auto_upgrade_db seen false
-    db_reset $package/auto_upgrade_db
-    [ "$ans" == false ] || db_upgrade ${2}
 
     # reset the no_compat_libs question
     db_fset $package/no_compat_libs seen false
