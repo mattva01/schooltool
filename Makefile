@@ -96,8 +96,9 @@ update-rosetta-pot:
 
 .PHONY: get-rosetta-translations
 get-rosetta-translations:
+	# This needs to be vewy vewy quiet as it will probably be called by cron
 	./get-rosetta-translations.py \
 	    --baseurl $(ROSETTA_URL)\
 	    --filepattern $(LOCALE_PATTERN)\
-	    --loglevel='INFO' $(ROSETTA_LOCALES)
-	$(MAKE) update-translations
+	    --loglevel='ERROR' $(ROSETTA_LOCALES)
+	$(MAKE) update-translations 2>/dev/null
