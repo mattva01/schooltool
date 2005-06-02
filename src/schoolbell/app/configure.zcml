@@ -166,7 +166,8 @@
              attributes="resources" />
     <require permission="schoolbell.modifyEvent"
              set_schema="schoolbell.calendar.interfaces.ICalendarEvent"
-             attributes="bookResource unbookResource" />
+             attributes="bookResource unbookResource"
+             set_attributes="__parent__" />
   </content>
 
   <content class=".notes.Notes">

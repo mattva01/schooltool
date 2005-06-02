@@ -382,6 +382,64 @@ Editing view should have a link to its booking view:
     <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid/booking.html?date=2005-02-04">Book resources</a>
     ...
 
+Lets book the mud again (Regression test for 266, deletion of events
+that book resources should remove events from resource calendars):
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar/dummy-uid/booking.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... date=2005-02-04&\
+    ... marker-mud=1&\
+    ... mud=booked&\
+    ... UPDATE_SUBMIT=Set
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons/frog/calendar/2005-02-04
+    ...
+
+It is in mud's calendar again:
+
+    >>> print http("""
+    ... GET /frogpond/resources/mud/calendar/2005-02-04 HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+              <a style="color: #000;"
+                      href="http://localhost/frogpond/persons/frog/calendar/dummy-uid/booking.html?date=2005-02-04">Booked by</a></h6>
+    ...
+
+And delete the event from frog's calendar:
+
+    >>> print http("""
+    ... GET /frogpond/persons/frog/calendar/delete.html?event_id=dummy-uid&date=2005-02-04 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons/frog/calendar/2005-02-04
+
+The event should be gone from the frog's calendar:
+
+    >>> result = http("""
+    ... GET /frogpond/persons/frog/calendar/2005-02-04 HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    >>> "dummy-uid" not in str(result)
+    True
+
+And it should not be seen in mud's calendar too:
+
+    >>> result = http("""
+    ... GET /frogpond/resources/mud/calendar/2005-02-04 HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    >>> "dummy-uid" not in str(result)
+    True
+
 Let's do some event clashing, first we set up some overlaping
 events:
 
