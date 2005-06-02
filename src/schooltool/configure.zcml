@@ -192,7 +192,8 @@
 
   <content class=".app.Resource">
     <allow interface="schoolbell.app.interfaces.ICalendarOwner"
-             attributes="__cmp__" />
+    <allow interface="schooltool.interfaces.ITimetabled" />
+    <allow attributes="__cmp__" />
     <require permission="schoolbell.view"
              attributes="title description groups" />
     <require permission="schoolbell.edit"
