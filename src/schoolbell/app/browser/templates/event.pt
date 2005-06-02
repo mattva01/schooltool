@@ -79,7 +79,7 @@
 
   <a href="" class="modify destructive" title="Delete this event"
     i18n:translate=""
-    tal:attributes="href string:${context/@@absolute_url}/delete.html?event_id=${context/unique_id}&date=${evdate}">
+    tal:attributes="href string:${context/__parent__/@@absolute_url}/delete.html?event_id=${context/unique_id}&date=${evdate}">
     delete event
   </a>
 
