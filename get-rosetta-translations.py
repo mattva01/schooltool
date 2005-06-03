@@ -298,12 +298,12 @@ class RosettaConnection:
 
             >>> for locale in ['fr', 'es_CO']:
             ...    con.getPO(locale)
-            INFO: Read locale fr from https://somerosetta/fr/po
-            'I am: https://somerosetta/fr/po'
-            INFO: Read locale es_CO from https://somerosetta/es_CO/po
-            'I am: https://somerosetta/es_CO/po'
+            INFO: Read locale fr from https://somerosetta/fr/+po
+            'I am: https://somerosetta/fr/+po'
+            INFO: Read locale es_CO from https://somerosetta/es_CO/+po
+            'I am: https://somerosetta/es_CO/+po'
         """
-        url = self.baseurl + '/' + locale + '/po'
+        url = self.baseurl + '/' + locale + '/+po'
         url_obj = self.stream_factory.urlopen(url)
         po = url_obj.read()
         url_obj.close()
