@@ -101,4 +101,3 @@ get-rosetta-translations:
 	    --baseurl $(ROSETTA_URL)\
 	    --filepattern $(LOCALE_PATTERN)\
 	    --loglevel='ERROR' $(ROSETTA_LOCALES)
-	$(MAKE) update-translations 2>/dev/null
