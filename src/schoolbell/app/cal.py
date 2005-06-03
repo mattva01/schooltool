@@ -31,7 +31,6 @@ from zope.component import adapts
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container.contained import Contained
 from zope.app.location.interfaces import ILocation
-from zope.security.proxy import removeSecurityProxy
 
 from schoolbell.calendar.icalendar import read_icalendar
 from schoolbell.calendar.interfaces import ICalendar
@@ -119,13 +118,11 @@ class Calendar(Persistent, CalendarMixin):
         self.events[event.unique_id] = event
 
     def removeEvent(self, event):
-        unproxied_resources = [removeSecurityProxy(resource)
-                               for resource in event.resources]
-        if self.__parent__ in unproxied_resources:
+        if self.__parent__ in event.resources:
             event.unbookResource(self.__parent__)
         else:
             del self.events[event.unique_id]
-            parent_calendar = removeSecurityProxy(event.__parent__)
+            parent_calendar = event.__parent__
             if self is parent_calendar:
                 for resource in event.resources:
                     event.unbookResource(resource)

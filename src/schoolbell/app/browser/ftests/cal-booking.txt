@@ -261,7 +261,7 @@ Frog should see the event in the resource calendar too:
     ... """)
     HTTP/1.1 200 Ok
     ...
-                <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid"
+                <a href="http://localhost/frogpond/resources/fish/calendar/dummy-uid"
                    title="Test event">
                   Test event
                   <span class="start-end">
@@ -384,6 +384,72 @@ Editing view should have a link to its booking view:
 
 Lets book the mud again (Regression test for 266, deletion of events
 that book resources should remove events from resource calendars):
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar/dummy-uid/booking.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... date=2005-02-04&\
+    ... marker-mud=1&\
+    ... mud=booked&\
+    ... UPDATE_SUBMIT=Set
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons/frog/calendar/2005-02-04
+    ...
+
+We can see the event in mud's calendar:
+
+    >>> print http("""
+    ... GET /frogpond/resources/mud/calendar/2005-02-04 HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+              <a style="color: #000;"
+                      href="http://localhost/frogpond/persons/frog/calendar/dummy-uid/booking.html?date=2005-02-04">Booked by</a></h6>
+    ...
+
+If we will delete the event from mud's calendar the original event
+should stay in place, yet the resource should become unbooked:
+
+    >>> print http("""
+    ... GET /frogpond/resources/mud/calendar/delete.html?event_id=dummy-uid&date=2005-02-04 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/resources/mud/calendar/2005-02-04
+
+
+Frog still can see the event:
+
+    >>> print http("""
+    ... GET /frogpond/persons/frog/calendar/2005-02-04 HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    href="http://localhost/frogpond/persons/frog/calendar/delete.html?event_id=dummy-uid&amp;date=2005-02-04"
+    ...
+
+Yet mud is not booked anymore:
+
+    >>> print http("""
+    ... GET /frogpond/persons/frog/calendar/dummy-uid/booking.html?date=2005-02-04 HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+              <td class="booked">
+                <input type="checkbox" value="booked" name="mud"
+                       id="mud" />
+              </td>
+    ...
+
+Lets book it again:
 
     >>> print http("""
     ... POST /frogpond/persons/frog/calendar/dummy-uid/booking.html HTTP/1.1

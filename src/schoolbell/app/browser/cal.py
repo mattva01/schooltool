@@ -1049,10 +1049,10 @@ class EventDeleteView(BrowserView):
             # The event was not found.
             return self._redirectBack(date)
 
-        if event.recurrence is None:
+        if event.recurrence is None or event.__parent__ != self.context:
             # Bah, the event is not recurrent.  Easy!
             # XXX It shouldn't be.  We should still ask for confirmation.
-            ICalendar(event).removeEvent(event)
+            self.context.removeEvent(removeSecurityProxy(event))
             return self._redirectBack(date)
         else:
             # The event is recurrent, we might need to show a form.
@@ -1071,17 +1071,6 @@ class EventDeleteView(BrowserView):
         except KeyError:
             pass
 
-        # We could not find the event in the current calendar, so we scan
-        # the overlaid ones.  We only need to look if the current calendar
-        # is the owner's (otherwise the overlays are not active).
-        owner = IPerson(self.request.principal, None)
-        if owner and owner.username == self.context.__parent__.username:
-            for info in owner.overlaid_calendars:
-                try:
-                    return info.calendar.find(event_id)
-                except KeyError:
-                    pass
-
     def _redirectBack(self, date):
         """Redirect to the current calendar's daily view."""
         isodate = date.isoformat()
@@ -1093,7 +1082,7 @@ class EventDeleteView(BrowserView):
         if 'CANCEL' in self.request:
             pass # Fall through and redirect back to the calendar.
         elif 'ALL' in self.request:
-            ICalendar(event).removeEvent(event)
+            self.context.removeEvent(removeSecurityProxy(event))
         elif 'FUTURE' in self.request:
             self._modifyRecurrenceRule(event, until=(date - timedelta(1)),
                                        count=None)
@@ -1117,7 +1106,7 @@ class EventDeleteView(BrowserView):
         # This view requires the modifyEvent permission.
         event.recurrence = removeSecurityProxy(new_rrule)
         if not event.hasOccurrences():
-            ICalendar(event).removeEvent(event)
+            ICalendar(event).removeEvent(removeSecurityProxy(event))
 
 
 class Slots(dict):

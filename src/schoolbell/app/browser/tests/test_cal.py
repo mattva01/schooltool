@@ -3686,7 +3686,8 @@ def doctest_EventDeleteView():
         >>> cal.find('counted').recurrence
         DailyRecurrenceRule(1, None, datetime.date(2005, 2, 7), ())
 
-    Overlaid events are also found and handled properly:
+    Overlaid events should have their removal links pointing to their
+    source calendars so they are not handled:
 
         >>> cal2 = Calendar() # a dummy calendar
         >>> owner = container['friend'] = Person('friend')
@@ -3697,33 +3698,15 @@ def doctest_EventDeleteView():
         >>> request.setPrincipal(ConformantStub(owner))
 
         >>> view = EventDeleteView(owner.calendar, request)
-        >>> view.handleEvent() # doctest: +ELLIPSIS
-        <schoolbell.app.cal.CalendarEvent object at 0x...>
+        >>> print view.handleEvent()
+        None
 
-    We have been presented with a form.  We say: nuke it.
-
-        >>> request.form['ALL'] = 'All'
-        >>> view.handleEvent()
-        >>> cal.find('counted')
-        Traceback (most recent call last):
-        ...
-        KeyError: 'counted'
-
-    We have been redirected to the right calendar too:
-
-        >>> redirected(request, 3, 'friend')
-        True
 
     Note that if the context calendar's parent is different from the
     principal's calendar, overlaid events are not even scanned.
 
-        >>> evt = CalendarEvent(dtstart, timedelta(hours=3), "Butterfly",
-        ...                     unique_id='counted', recurrence=rrule)
-        >>> cal.addEvent(evt)
-
         >>> foe = container['foe'] = Person('foe')
         >>> view.context.__parent__ = foe
-        >>> del view.request.form['ALL']
 
         >>> print view.handleEvent()
         None
