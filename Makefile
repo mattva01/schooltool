@@ -85,7 +85,7 @@ schooltooldist: realclean build extract-translations update-translations clean
 	rm -rf dist
 	find . -name '*.py[dco]' -exec rm -f {} \;
 	fakeroot ./debian/rules clean
-	./setup.py sdist
+	./setup.py sdist --formats=schooltooltgz
 
 .PHONY: signtar
 signtar: dist
@@ -127,4 +127,3 @@ update-rosetta-pot:
 .PHONY: get-rosetta-translations
 get-rosetta-translations:
 	./get-rosetta-translations.py
-	$(MAKE) update-translations
