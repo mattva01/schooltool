@@ -113,6 +113,21 @@
       component=".relationships.URISection"
       name="http://schooltool.org/ns/instruction/section" />
 
+  <utility
+      provides="schoolbell.relationship.interfaces.IRelationshipSchema"
+      component=".relationships.CourseSections"
+      name="http://schooltool.org/ns/coursesections" />
+
+  <utility
+      provides="schoolbell.relationship.uri.IURIObject"
+      component=".relationships.URICourse"
+      name="http://schooltool.org/ns/coursesections/course" />
+
+  <utility
+      provides="schoolbell.relationship.uri.IURIObject"
+      component=".relationships.URISectionOfCourse"
+      name="http://schooltool.org/ns/coursesections/section" />
+
   <!-- Events -->
 
   <subscriber

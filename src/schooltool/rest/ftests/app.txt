@@ -276,7 +276,23 @@ Let's see what our section looks like:
     </section>
     <BLANKLINE>
 
-Currently, the relationships of goose and the section should be emtpy:
+    >>> print rest("""
+    ... POST /frogpond/courses/flight/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
+    ...               xmlns:xlink="http://www.w3.org/1999/xlink"
+    ...               xlink:type="simple"
+    ...  xlink:role="http://schooltool.org/ns/coursesections/section"
+    ...               xlink:arcrole="http://schooltool.org/ns/coursesections"
+    ...  xlink:href="http://localhost/frogpond/sections/birdwatching-1"/>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    ...
+
+Currently, the relationships of goose should be empty, and our section show's
+its link to the course Flight:
 
     >>> print rest("""
     ... GET /frogpond/persons/goose/relationships HTTP/1.1
@@ -299,6 +315,13 @@ Currently, the relationships of goose and the section should be emtpy:
     <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
                    xmlns="http://schooltool.org/ns/model/0.1">
       <existing>
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/coursesections/course"
+                      xlink:arcrole="http://schooltool.org/ns/coursesections"
+                      xlink:href="http://localhost/frogpond/courses/flight">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/sections/birdwatching-1/relationships/1"/>
+        </relationship>
       </existing>
     </relationships>
 
@@ -354,11 +377,18 @@ Now the membership relationship, which indicates a student should be in both:
                    xmlns="http://schooltool.org/ns/model/0.1">
       <existing>
         <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/coursesections/course"
+                      xlink:arcrole="http://schooltool.org/ns/coursesections"
+                      xlink:href="http://localhost/frogpond/courses/flight">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/sections/birdwatching-1/relationships/1"/>
+        </relationship>
+        <relationship xlink:type="simple"
                       xlink:role="http://schooltool.org/ns/membership/member"
                       xlink:arcrole="http://schooltool.org/ns/membership"
                       xlink:href="http://localhost/frogpond/persons/goose">
           <manage xlink:type="simple"
-                  xlink:href="http://localhost/frogpond/sections/birdwatching-1/relationships/1"/>
+                  xlink:href="http://localhost/frogpond/sections/birdwatching-1/relationships/2"/>
         </relationship>
       </existing>
     </relationships>
