@@ -236,5 +236,5 @@ Javascript will be usable, although perhaps not very nice or convenient.
     package_dir={'': 'src'},
     packages=['schooltool', 'schooltool.rest', 'schooltool.browser'],
     data_files=data_files + [('', ['schooltool.conf.in'])],
-    scripts=['scripts/schooltool']
+    scripts=['scripts/schooltool', 'scripts/schooltool-rest-client']
     )
