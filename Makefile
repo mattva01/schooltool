@@ -4,8 +4,7 @@
 #
 # $Id$
 
-PYTHON=python2.3
-PYTHONDIR=/usr/lib/python2.3
+PYTHON=python
 TESTFLAGS=-w
 POT=src/schooltool/locales/schooltool.pot
 PO=$(wildcard src/schooltool/locales/*/LC_MESSAGES/*.po)

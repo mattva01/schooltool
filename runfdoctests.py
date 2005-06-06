@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.3
+#!/usr/bin/env python
 """Hacky script for a fast feedback loop with SchoolTool's functional tests.
 
 The problem with functional doctests is that the initial setup (ZCML parsing
