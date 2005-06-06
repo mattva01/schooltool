@@ -1,6 +1,6 @@
-#!/usr/bin/env python2.3
+#!/usr/bin/env python
 """
-A script to start the schooltool server from the source directory.
+A script to run the SchoolTool REST client from the source directory.
 """
 
 import sys
