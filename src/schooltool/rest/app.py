@@ -111,17 +111,6 @@ class CourseFileFactory(sb.ApplicationObjectFileFactory):
         return kwargs
 
 
-class CourseFile(sb.ApplicationObjectFile):
-    """Adapter that adapts ICourse to IWriteFile"""
-
-    adapts(ICourse)
-
-    def modify(self, title=None, description=None):
-        """Modifies underlying schema."""
-        self.context.title = title
-        self.context.description = description
-
-
 class CourseContainerView(sb.GenericContainerView):
     """RESTive view of a course container."""
 
@@ -182,17 +171,6 @@ class SectionFileFactory(sb.ApplicationObjectFileFactory):
         return kwargs
 
 
-class SectionFile(sb.ApplicationObjectFile):
-    """Adapter that adapts ISection to IWriteFile"""
-
-    adapts(ISection)
-
-    def modify(self, title=None, description=None):
-        """Modifies underlying schema."""
-        self.context.title = title
-        self.context.description = description
-
-
 class SectionContainerView(sb.GenericContainerView):
     """RESTive view of a section container."""
 
@@ -213,7 +191,6 @@ class SectionView(View):
 
     template = Template("templates/section.pt",
                         content_type="text/xml; charset=UTF-8")
-    factory = SectionFile
 
 
 class TermContainerView(GenericContainerView):
