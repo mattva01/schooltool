@@ -148,9 +148,11 @@ class SectionFileFactory(sb.ApplicationObjectFileFactory):
               <attribute name="title">
                 <text/>
               </attribute>
-              <attribute name="course">
-                <text/>
-              </attribute>
+              <optional>
+                <attribute name="course">
+                  <text/>
+                </attribute>
+              </optional>
               <optional>
                 <attribute name="description">
                   <text/>
