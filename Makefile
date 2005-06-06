@@ -4,7 +4,7 @@
 #
 # $Id$
 
-PYTHON=python2.3
+PYTHON=python
 TESTFLAGS=-w1
 POT=src/schoolbell/app/locales/schoolbell.pot
 PO=$(wildcard src/schoolbell/app/locales/*/LC_MESSAGES/*.po)
