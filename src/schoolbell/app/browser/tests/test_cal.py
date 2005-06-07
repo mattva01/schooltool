@@ -582,7 +582,7 @@ class TestCalendarViewBase(unittest.TestCase):
         # timezone preference
 
         prefs = IPersonPreferences(request2.principal._person)
-        prefs.dateformat = "Day Month, Year"
+        prefs.dateformat = "%d %B, %Y"
         prefs.timezone = "US/Eastern"
 
         view2 = CalendarViewBase(None, request2)
@@ -632,7 +632,7 @@ class TestCalendarViewBase(unittest.TestCase):
         # change our preferences
         prefs = IPersonPreferences(request.principal._person)
         prefs.weekstart = pycalendar.SUNDAY
-        prefs.timeformat = "H:MM am/pm"
+        prefs.timeformat = "%I:%M %p"
 
         view_sunday = CalendarViewBase(cal, request)
         self.assertEquals(view_sunday.first_day_of_week, 6)
@@ -2659,6 +2659,44 @@ def doctest_TestCalendarEventBookingView():
         >>> request.response.getHeader('Location')
         'http://127.0.0.1/persons/ignas/calendar/ev1/@@edit.html'
 
+    The view also follows PersonPreferences timeformat and dateformat settings.
+    To demonstrate these we need to setup PersonPreferences:
+
+        >>> from schoolbell.app.app import getPersonPreferences
+        >>> from schoolbell.app.interfaces import IPersonPreferences
+        >>> from schoolbell.app.interfaces import IHavePreferences
+        >>> setup.setUpAnnotations()
+        >>> ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
+        ...                      getPersonPreferences)
+        >>> request.setPrincipal(person)
+        >>> view = CalendarEventBookingView(event, request)
+        >>> view.update()
+        ''
+
+    Without the preferences set, we get the default start and end time
+    formatting:
+
+        >>> view.start
+        u'2002-02-02 - 02:02'
+        >>> view.end
+        u'2002-02-02 - 04:02'
+
+    We'll change the date and time formatting in the preferences and create a
+    new view.  Note that we need to create a new view because 'start' and 'end'
+    are set in __init__:
+
+        >>> prefs = IPersonPreferences(person)
+        >>> prefs.timeformat = '%I:%M %p'
+        >>> prefs.dateformat = '%d %B, %Y'
+        >>> view = CalendarEventBookingView(event, request)
+
+    Now we can see the changes:
+
+        >>> view.start
+        u'02 February, 2002 - 02:02 AM'
+        >>> view.end
+        u'02 February, 2002 - 04:02 AM'
+
     """
 
 def doctest_getEvents_booking():
@@ -3748,7 +3786,7 @@ def doctest_CalendarListView(self):
         ...     def __init__(self):
         ...         self.weekstart = pycalendar.MONDAY
         ...         self.timeformat = "%H:%M"
-        ...         self.dateformat = "YYYY-MM-DD"
+        ...         self.dateformat = "%Y-%m-%d"
         ...         self.timezone = 'UTC'
         >>> from schoolbell.app.interfaces import IPersonPreferences
         >>> class PersonStub:

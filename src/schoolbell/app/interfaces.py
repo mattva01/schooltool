@@ -291,15 +291,15 @@ class IPersonPreferences(Interface):
     timeformat = Choice(
         title=_("Time Format"),
         description=_("Time Format"),
-        vocabulary=vocabulary([("HH:MM", _("HH:MM")),
-                               ("H:MM am/pm", _("H:MM am/pm"))]))
+        vocabulary=vocabulary([("%H:%M", _("HH:MM")),
+                               ("%I:%M %p", _("HH:MM am/pm"))]))
 
     dateformat = Choice(
         title=_("Date Format"),
         description=_("Date Format"),
-        vocabulary=vocabulary([("MM/DD/YY", _("MM/DD/YY")),
-                               ("YYYY-DD-MM", _("YYYY-DD-MM")),
-                               ("Day Month, Year", _("Day Month, Year"))]))
+        vocabulary=vocabulary([("%m/%d/%y", _("MM/DD/YY")),
+                               ("%Y-%m-%d", _("YYYY-MM-DD")),
+                               ("%d %B, %Y", _("Day Month, Year"))]))
 
     # SUNDAY and MONDAY are integers, 6 and 0 respectivley
     weekstart = Choice(

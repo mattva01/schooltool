@@ -19,11 +19,11 @@
     </div>
     <div>
       <strong i18n:translate="">Starts:</strong>
-      <span tal:replace="python: context.dtstart.strftime('%Y-%m-%d %H:%M')">some date and time</span>
+      <span tal:replace="view/start"/>
     </div>
     <div>
       <strong i18n:translate="">Ends:</strong>
-      <span tal:replace="python: (context.dtstart + context.duration).strftime('%Y-%m-%d %H:%M')">some time</span>
+      <span tal:replace="view/end"/>
     </div>
     <div tal:condition="context/recurrence">
       <strong i18n:translate="">This is a recurring event!</strong>

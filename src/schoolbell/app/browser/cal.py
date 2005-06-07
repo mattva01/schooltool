@@ -392,52 +392,17 @@ class CalendarViewBase(BrowserView):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        person = IPerson(self.request.principal, None)
-        if person is not None:
-            prefs = IPersonPreferences(person)
 
-            if prefs.weekstart is not None:
-                self.first_day_of_week = prefs.weekstart
-            else:
-                self.first_day_of_week = 0
-
-            if prefs.timeformat == "H:MM am/pm":
-                self.time_fmt = '%I:%M %p'
-            else:
-                self.time_fmt = '%H:%M'
-
-            if prefs.timezone is not None:
-                self.timezone = timezone(prefs.timezone)
-            else:
-                self.timezone = utc
-
-            self.dateformat = prefs.dateformat
-
-        else:
-            self.first_day_of_week = 0
-            self.time_fmt = '%H:%M'
-            self.dateformat = 'YYYY-MM-DD'
-            self.timezone = utc
-
-    def internationalDate(self, day):
-        day_of_week = day_of_week_names[day.weekday()]
-        return '%s, %s' % (day_of_week, day.strftime('%Y-%m-%d'))
-
-    def usDate(self, day):
-        day_of_week = day_of_week_names[day.weekday()]
-        return '%s, %s' % (day_of_week, day.strftime('%m/%d/%Y'))
-
-    def longDate(self, day):
-        day_of_week = day_of_week_names[day.weekday()]
-        return '%s, %s' % (day_of_week, day.strftime('%d %B, %Y'))
+        # XXX Clean this up (use self.preferences in this and subclasses)
+        prefs = ViewPreferences(request)
+        self.first_day_of_week = prefs.first_day_of_week
+        self.time_fmt = prefs.timeformat
+        self.dateformat = prefs.dateformat
+        self.timezone = prefs.timezone
 
     def dayTitle(self, day):
-        if self.dateformat == "MM/DD/YY":
-            return self.usDate(day)
-        elif self.dateformat == "Day Month, Year":
-            return self.longDate(day)
-        else:
-            return self.internationalDate(day)
+        dayformat = '%A, ' + self.dateformat
+        return u'' + day.strftime(dayformat)
 
     __url = None
 
@@ -1145,35 +1110,6 @@ class Slots(dict):
 class CalendarEventView(BrowserView):
     """View for single events."""
 
-    def internationalDate(self, day):
-        day_of_week = day_of_week_names[day.weekday()]
-        return '%s, %s' % (day_of_week, day.strftime('%Y-%m-%d'))
-
-    def usDate(self, day):
-        day_of_week = day_of_week_names[day.weekday()]
-        return '%s, %s' % (day_of_week, day.strftime('%m/%d/%Y'))
-
-    def longDate(self, day):
-        day_of_week = day_of_week_names[day.weekday()]
-        return '%s, %s' % (day_of_week, day.strftime('%d %B, %Y'))
-
-    def dayTitle(self, day):
-        if self.preferences.dateformat == "MM/DD/YY":
-            return self.usDate(day)
-        elif self.preferences.dateformat == "Day Month, Year":
-            return self.longDate(day)
-        else:
-            return self.internationalDate(day)
-
-    def recurrence(self):
-
-        rrule = self.context.recurrence
-
-        if rrule is None:
-            return False
-        else:
-            return True
-
     def __init__(self, context, request):
         self.context = context
         self.request = request
@@ -1184,11 +1120,21 @@ class CalendarEventView(BrowserView):
         self.dtend = self.dtstart + context.duration
         self.start = self.dtstart.strftime(self.preferences.timeformat)
         self.end = self.dtend.strftime(self.preferences.timeformat)
-        self.day = self.dayTitle(self.dtstart)
+
+        dayformat = '%A, ' + self.preferences.dateformat
+        self.day = u'' + self.dtstart.strftime(dayformat)
 
         self.display = EventForDisplay(context,'#9db8d2', '#7590ae',
                                        context.__parent__,
                                        timezone=self.preferences.timezone)
+
+    def recurrence(self):
+        rrule = self.context.recurrence
+
+        if rrule is None:
+            return False
+        else:
+            return True
 
 
 class ICalendarEventAddForm(Interface):
@@ -1797,12 +1743,19 @@ class EventForBookingDisplay(object):
             self.shortTitle = self.title
 
 
-class CalendarEventBookingView(BrowserView):
+class CalendarEventBookingView(CalendarEventView):
     """A view for booking resources."""
 
     errors = ()
     update_status = None
     _redirectToDate = None
+
+    def __init__(self, context, request):
+        CalendarEventView.__init__(self, context, request)
+
+        format = self.preferences.dateformat +' - '+ self.preferences.timeformat
+        self.start = u'' + self.dtstart.strftime(format)
+        self.end = u'' + self.dtend.strftime(format)
 
     def update(self):
         """Book/unbook resources according to the request."""

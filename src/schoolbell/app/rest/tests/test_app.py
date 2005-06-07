@@ -910,7 +910,7 @@ def doctest_PersonPreferencesView():
         >>> view = PersonPreferencesView(adapter, TestRequest())
 
         >>> view.GET()
-        u'<preferences xmlns:xlink="http://www.w3.org/1999/xlink">\n\n  <preference id="timezone" value="UTC"/>\n  <preference id="timeformat" value="HH:MM"/>\n  <preference id="dateformat" value="YYYY-MM-DD"/>\n  <preference id="weekstart" value="0"/>\n\n</preferences>\n'
+        u'<preferences xmlns:xlink="http://www.w3.org/1999/xlink">\n\n  <preference id="timezone" value="UTC"/>\n  <preference id="timeformat" value="%H:%M"/>\n  <preference id="dateformat" value="%Y-%m-%d"/>\n  <preference id="weekstart" value="0"/>\n\n</preferences>\n'
 
 
         Set a preference:

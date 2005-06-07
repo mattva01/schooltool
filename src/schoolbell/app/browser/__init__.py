@@ -201,25 +201,16 @@ class ViewPreferences(object):
         person = IPerson(request.principal, None)
         if person is not None:
             prefs = IPersonPreferences(person)
-            if prefs.weekstart == "Sunday":
-                self.first_day_of_week = 6
-            else:
-                self.first_day_of_week = 0
-
-            if prefs.timeformat == "H:MM am/pm":
-                self.timeformat = '%I:%M %p'
-            else:
-                self.timeformat = '%H:%M'
-
-            if prefs.timezone is not None:
-                self.timezone = timezone(prefs.timezone)
-            else:
-                self.timezone = utc
 
             self.dateformat = prefs.dateformat
+            self.timeformat = prefs.timeformat
+            self.first_day_of_week = prefs.weekstart
+            self.timezone = timezone(prefs.timezone)
 
         else:
             self.first_day_of_week = 0
-            self.timeformat = '%H:%M'
-            self.dateformat = 'YYYY-MM-DD'
+            self.timeformat = '%H:%M'  # HH:MM
+            self.dateformat = '%Y-%m-%d'  # YYYY-MM-DD
             self.timezone = utc
+
+

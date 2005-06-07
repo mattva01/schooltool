@@ -814,8 +814,8 @@ We can view the preferences of our user:
     <preferences xmlns:xlink="http://www.w3.org/1999/xlink">
     <BLANKLINE>
       <preference id="timezone" value="UTC"/>
-      <preference id="timeformat" value="HH:MM"/>
-      <preference id="dateformat" value="YYYY-MM-DD"/>
+      <preference id="timeformat" value="%H:%M"/>
+      <preference id="dateformat" value="%Y-%m-%d"/>
       <preference id="weekstart" value="0"/>
     <BLANKLINE>
     </preferences>

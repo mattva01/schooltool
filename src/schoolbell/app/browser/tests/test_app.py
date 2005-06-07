@@ -855,8 +855,8 @@ def doctest_PersonPreferencesView():
 
         >>> request = TestRequest(form={'UPDATE_SUBMIT': 'Update',
         ...                             'field.timezone': 'Europe/Vilnius',
-        ...                             'field.timeformat': 'H:MM am/pm',
-        ...                             'field.dateformat': 'Day Month, Year',
+        ...                             'field.timeformat': '%H:%M',
+        ...                             'field.dateformat': '%d %B, %Y',
         ...                             'field.weekstart': '6'})
         >>> view = PersonPreferencesView(person, request)
 
@@ -864,7 +864,7 @@ def doctest_PersonPreferencesView():
 
         >>> prefs = getPersonPreferences(person)
         >>> prefs.timezone, prefs.timeformat, prefs.dateformat, prefs.weekstart
-        ('Europe/Vilnius', 'H:MM am/pm', 'Day Month, Year', 6)
+        ('Europe/Vilnius', '%H:%M', '%d %B, %Y', 6)
 
     """
 

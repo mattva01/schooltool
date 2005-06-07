@@ -258,9 +258,9 @@ def doctest_ViewPrefences():
 
         >>> class PreferenceStub:
         ...     def __init__(self):
-        ...         self.weekstart = "Monday"
+        ...         self.weekstart = "0"
         ...         self.timeformat = "%H:%M"
-        ...         self.dateformat = "YYYY-MM-DD"
+        ...         self.dateformat = "%Y-%m-%d"
         ...         self.timezone = 'UTC'
         >>> class PersonStub:
         ...     def __conform__(self, interface):
@@ -279,7 +279,9 @@ def doctest_ViewPrefences():
         >>> prefs.timeformat
         '%H:%M'
         >>> prefs.dateformat
-        'YYYY-MM-DD'
+        '%Y-%m-%d'
+        >>> prefs.first_day_of_week
+        '0'
 
     """
 

@@ -209,8 +209,8 @@ class PersonPreferences(Persistent):
     __parent__ = None
 
     timezone = "UTC"
-    dateformat = "YYYY-MM-DD"
-    timeformat = "HH:MM"
+    dateformat = "%Y-%m-%d"
+    timeformat = "%H:%M"
     weekstart = calendar.MONDAY
 
 
