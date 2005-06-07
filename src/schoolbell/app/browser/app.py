@@ -103,11 +103,6 @@ class ResourceContainerView(ContainerView):
 class ContainerDeleteView(BrowserView):
     """A view for deleting items from container."""
 
-    def listItemsForDeletion(self):
-        return [self.context[key]
-                for key in self.context
-                if "delete.%s" % key in self.request]
-
     def listIdsForDeletion(self):
         return [key for key in self.context
                 if "delete.%s" % key in self.request]
@@ -127,6 +122,14 @@ class ContainerDeleteView(BrowserView):
 
     def nextURL(self):
         return zapi.absoluteURL(self.context, self.request)
+
+
+class PersonContainerDeleteView(ContainerDeleteView):
+    """A view for deleting users from PersonContainer."""
+
+    def isDeletingHimself(self):
+        person = IPerson(self.request.principal, None)
+        return person in self.itemsToDelete
 
 
 class PersonView(BrowserView):

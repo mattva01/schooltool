@@ -203,7 +203,6 @@ And a group:
     ...
 
 
-
 And a resource too:
 
     >>> print http(r"""
@@ -217,6 +216,92 @@ And a resource too:
     HTTP/1.1 303 See Other
     ...
     Location: http://localhost/frogpond/resources
+    ...
+
+Lets try deleting the snake:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/delete.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 14
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... delete.snake=1
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    ...
+      <ul>
+        <form method="post" action="delete.html">
+          <li>
+            <input type="hidden" name="delete.snake" />
+            <a href="http://localhost/frogpond/persons/snake">Snake</a>
+          </li>
+          <div class="controls">
+            <input type="submit" class="button-cancel"
+                   name="UPDATE_SUBMIT" value="Confirm" />
+            <input type="submit" class="button-cancel"
+                   name="CANCEL" value="Cancel" />
+          </div>
+        </form>
+      </ul>
+     ...
+
+Lets confirm it:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/delete.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 36
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... delete.snake=1&UPDATE_SUBMIT=Confirm
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+Snakes be gone:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/ HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    ...
+      <ul>
+        <form method="post"
+              action="http://localhost/frogpond/persons/delete.html">
+          <li>
+            <input type="checkbox" name="delete.frog" />
+            <a href="http://localhost/frogpond/persons/frog">Frog</a>
+          </li>
+          <div class="controls">
+            <input type="submit" class="button-cancel"
+                   value="Delete" />
+          </div>
+        </form>
+      </ul>
+    ...
+
+If frog tries deleting himself - he should get an error:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/delete.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 13
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... delete.frog=1
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    ...
+      <p>
+        Sorry you can not delete the current user!
+      </p>
     ...
 
 

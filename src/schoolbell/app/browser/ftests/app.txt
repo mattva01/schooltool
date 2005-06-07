@@ -353,7 +353,6 @@ You can create a person without providing a password:
     Location: http://localhost/frogpond/persons
     ...
 
-
 Groups
 ------
 

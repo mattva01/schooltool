@@ -121,6 +121,54 @@ def doctest_ContainerDeleteView():
     """
 
 
+def doctest_PersonContainerDeleteView():
+    r"""Test for PersonContainerDeleteView
+
+    Let's create some persons to delete from a person container:
+
+        >>> from schoolbell.app.browser.app import PersonContainerDeleteView
+        >>> from schoolbell.app.app import Person, PersonContainer
+        >>> from schoolbell.app.interfaces import IPerson
+        >>> setup.setUpAnnotations()
+
+        >>> personContainer = PersonContainer()
+        >>> directlyProvides(personContainer, IContainmentRoot)
+
+        >>> personContainer['pete'] = Person('pete', 'Pete Parrot')
+        >>> personContainer['john'] = Person('john', 'Long John')
+        >>> personContainer['frog'] = Person('frog', 'Frog Man')
+        >>> personContainer['toad'] = Person('toad', 'Taodsworth')
+        >>> request = TestRequest()
+        >>> view = PersonContainerDeleteView(personContainer, request)
+
+    Our user is not trying to delete anything yet:
+
+        >>> view.isDeletingHimself()
+        False
+
+    Lets log in:
+
+        >>> from schoolbell.app.security import Principal
+        >>> principal = Principal('pete', 'Pete Parrot', personContainer['pete'])
+        >>> request.setPrincipal(principal)
+
+    Even if he is trying to delete someone who is not pete:
+
+        >>> request.form = {'delete.frog': 'on',
+        ...                 'delete.toad': 'on'}
+        >>> view.isDeletingHimself()
+        False
+
+    But if he will try deleting himself - the method should return true:
+
+        >>> request.form = {'delete.pete': 'on',
+        ...                 'delete.toad': 'on'}
+        >>> view.isDeletingHimself()
+        True
+
+    """
+
+
 def doctest_PersonView():
     r"""Test for PersonView
 

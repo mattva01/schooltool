@@ -153,6 +153,14 @@
       permission="zope.View"
       />
 
+  <page
+      name="delete.html"
+      for="schoolbell.app.interfaces.IPersonContainer"
+      class="schoolbell.app.browser.app.PersonContainerDeleteView"
+      template="templates/person_container_delete.pt"
+      permission="zope.View"
+      />
+
     <!--
     FIXME: zope.View is certainly not the right permission.
     How can we say "a person may only edit their own preferences"?
