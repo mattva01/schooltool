@@ -53,7 +53,7 @@
                repeat="ev hour/cols">
       <tal:if condition="ev">
         <div class="event"
-             onmouseover="this.style.zIndex=9; this.style.overflow='visible'; this.style.display='table-cell';"
+             onmouseover="this.style.zIndex=9; this.style.overflow='visible'; this.style.display='block';"
              onmouseout="this.style.zIndex=1; this.style.overflow='hidden'; this.style.display='block';"
              tal:define="num repeat/ev/index;
                          compress python:view.getColumns() > 2;
