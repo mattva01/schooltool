@@ -79,8 +79,8 @@ Zope3/package-includes/schoolbell-configure.zcml:
 Zope3/package-includes/schooltool-configure.zcml:
 	echo '<include package="schooltool" />' > $@
 
-.PHONY: schooltooldist
-schooltooldist: realclean build extract-translations update-translations clean
+.PHONY: dist
+dist: realclean build extract-translations update-translations clean
 	rm -rf dist
 	find . -name '*.py[dco]' -exec rm -f {} \;
 	fakeroot ./debian/rules clean
