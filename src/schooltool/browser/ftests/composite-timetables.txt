@@ -136,7 +136,7 @@ Add a 2 groups:
     HTTP/1.1 201 Created
     ...
 
-Add John to boys an guys:
+Add John to boys and guys:
 
     >>> print rest("""
     ... POST /frogpond/persons/john/relationships HTTP/1.1
