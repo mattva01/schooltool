@@ -2,8 +2,6 @@ schoolbell (1.2-1) unstable; urgency=low
 
   * New upstream release.
   * Remove pre 1.0 database upgrade code.
-  * Add make extract-translations to the build sequence. Fix for
-    http://issues.schooltool.org/issue279.
 
  -- Brian Sutherland <jinty@web.de>  Thu,  2 Jun 2005 15:11:54 +0200
 
