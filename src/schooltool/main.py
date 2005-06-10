@@ -92,6 +92,10 @@ SCHOOLTOOL_SITE_DEFINITION = u"""\
        'auth_users': catalog.ugettext("Authenticated Users"),
        'all_users': catalog.ugettext("All Users")}
 
+# Mark strings for i18n extractor
+_("Unauthenticated User"), _("Unauthenticated Users")
+_("Authenticated Users"), _("All Users")
+
 SCHOOLTOOL_SITE_DEFINITION = SCHOOLTOOL_SITE_DEFINITION.encode('utf-8')
 
 
