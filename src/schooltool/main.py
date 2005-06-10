@@ -59,7 +59,8 @@ class Options(SchoolBellOptions):
     config_filename = 'schooltool.conf'
 
 
-SCHOOLTOOL_SITE_DEFINITION = """
+SCHOOLTOOL_SITE_DEFINITION = u"""\
+<?xml version="1.0" encoding="utf-8"?>
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser">
 
@@ -90,6 +91,8 @@ SCHOOLTOOL_SITE_DEFINITION = """
        'unauth_users': catalog.ugettext("Unauthenticated Users"),
        'auth_users': catalog.ugettext("Unauthenticated Users"),
        'all_users': catalog.ugettext("All Users")}
+
+SCHOOLTOOL_SITE_DEFINITION = SCHOOLTOOL_SITE_DEFINITION.encode('utf-8')
 
 
 class StandaloneServer(SchoolBellServer):
