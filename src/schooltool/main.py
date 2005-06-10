@@ -89,7 +89,7 @@ SCHOOLTOOL_SITE_DEFINITION = u"""\
 </configure>
 """ % {'unauth_user': catalog.ugettext("Unauthenticated User"),
        'unauth_users': catalog.ugettext("Unauthenticated Users"),
-       'auth_users': catalog.ugettext("Unauthenticated Users"),
+       'auth_users': catalog.ugettext("Authenticated Users"),
        'all_users': catalog.ugettext("All Users")}
 
 SCHOOLTOOL_SITE_DEFINITION = SCHOOLTOOL_SITE_DEFINITION.encode('utf-8')
