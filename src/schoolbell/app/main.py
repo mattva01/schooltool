@@ -295,6 +295,7 @@ def daemonize():
 
 
 SCHOOLBELL_SITE_DEFINITION = """
+<?xml version="1.0" encoding="utf-8"?>
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser">
 
@@ -320,11 +321,16 @@ SCHOOLBELL_SITE_DEFINITION = """
   <everybodyGroup id="zope.Everybody" title="%(all_users)s" />
 
 </configure>
-""" % {'unauth_user': _("Unauthenticated User"),
-       'unauth_users': _("Unauthenticated Users"),
-       'auth_users': _("Unauthenticated Users"),
-       'all_users': _("All Users")}
-# XXX Possible bug: maybe we should use Unicode rather than UTF-8 here?
+""" % {'unauth_user': catalog.ugettext("Unauthenticated User"),
+       'unauth_users': catalog.ugettext("Unauthenticated Users"),
+       'auth_users': catalog.ugettext("Authenticated Users"),
+       'all_users': catalog.ugettext("All Users")}
+
+# Mark strings for i18n extractor
+_("Unauthenticated User"), _("Unauthenticated Users")
+_("Authenticated Users"), _("All Users")
+
+SCHOOLBELL_SITE_DEFINITION = SCHOOLBELL_SITE_DEFINITION.encode('utf-8')
 
 
 class StandaloneServer(object):
