@@ -9,6 +9,9 @@ TESTFLAGS=-w
 POT=src/schooltool/locales/schooltool.pot
 PO=$(wildcard src/schooltool/locales/*/LC_MESSAGES/*.po)
 PYTHONPATH=src:Zope3/src
+LOCALE_PATTERN='src/schooltool/locales/@locale@/LC_MESSAGES/schoolbell.po'
+ROSETTA_URL='https://launchpad.ubuntu.com/products/schooltool/0.10-rc1/+pots/schooltool'
+ROSETTA_LOCALES=de el fr id lt nl nb pa pt tr
 
 .PHONY: all
 all: build
@@ -125,4 +128,8 @@ update-rosetta-pot:
 
 .PHONY: get-rosetta-translations
 get-rosetta-translations:
-	./get-rosetta-translations.py
+	# This needs to be vewy vewy quiet as it will probably be called by cron
+	./get-rosetta-translations.py \
+	    --baseurl $(ROSETTA_URL)\
+	    --filepattern $(LOCALE_PATTERN)\
+	    --loglevel='ERROR' $(ROSETTA_LOCALES)
