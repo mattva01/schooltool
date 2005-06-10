@@ -294,7 +294,7 @@ def daemonize():
     os.dup(0)
 
 
-SCHOOLBELL_SITE_DEFINITION = """
+SCHOOLBELL_SITE_DEFINITION = """\
 <?xml version="1.0" encoding="utf-8"?>
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser">
