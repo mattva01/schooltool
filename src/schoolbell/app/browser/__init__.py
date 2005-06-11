@@ -182,10 +182,10 @@ class SchoolBellSized(object):
         self._app = app
 
     def sizeForSorting(self):
-        return len(self._app['persons'])
+        return (_("Persons"), len(self._app['persons']))
 
     def sizeForDisplay(self):
-        num = self.sizeForSorting()
+        num = self.sizeForSorting()[1]
         if num == 1:
             msgid = _("1 person")
         else:

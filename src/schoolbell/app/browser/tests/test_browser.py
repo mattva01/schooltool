@@ -229,19 +229,19 @@ def doctest_SchoolBellSized():
       >>> sized = SchoolBellSized(app)
 
       >>> sized.sizeForSorting(), translate(sized.sizeForDisplay())
-      (0, u'0 persons')
+      ((u'Persons', 0), u'0 persons')
 
       >>> persons = app['persons']
       >>> persons['gintas'] = Person(u'gintas')
 
       >>> sized.sizeForSorting(), translate(sized.sizeForDisplay())
-      (1, '1 person')
+      ((u'Persons', 1), '1 person')
 
       >>> persons['ignas'] = Person(u'ignas')
       >>> persons['marius'] = Person(u'marius')
 
       >>> sized.sizeForSorting(), translate(sized.sizeForDisplay())
-      (3, u'3 persons')
+      ((u'Persons', 3), u'3 persons')
 
     """
 
