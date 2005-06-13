@@ -53,6 +53,14 @@ class TestTimetableCSVImportView(unittest.TestCase):
         setUpRelationshipStuff()
         self.app = SchoolToolApplication()
 
+        from zope.interface import directlyProvides
+        from zope.app.traversing.interfaces import IContainmentRoot
+        from zope.app.component.site import LocalSiteManager
+        from zope.app.component.hooks import setSite
+        directlyProvides(self.app, IContainmentRoot)
+        self.app.setSiteManager(LocalSiteManager(self.app))
+        setSite(self.app)
+
         ttschema = TimetableSchema(["1","2","3"])
         for day in range(1, 4):
             ttschema[str(day)] = TimetableSchemaDay([str(day)])
@@ -162,6 +170,14 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
         self.app = app = SchoolToolApplication()
 
+        from zope.interface import directlyProvides
+        from zope.app.traversing.interfaces import IContainmentRoot
+        from zope.app.component.site import LocalSiteManager
+        from zope.app.component.hooks import setSite
+        directlyProvides(app, IContainmentRoot)
+        app.setSiteManager(LocalSiteManager(app))
+        setSite(app)
+
         self.course = app['courses']['philosophy'] = Course(title="Philosophy")
         self.section = app['sections']['section'] = Section(title="Something")
         self.location = app['resources']['location'] = Resource("Inside")
@@ -197,7 +213,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
     def createImporter(self, term=None, ttschema=None, charset=None):
         from schooltool.browser.csvimport import TimetableCSVImporter
-        importer = TimetableCSVImporter(self.app, charset=charset)
+        importer = TimetableCSVImporter(self.app['sections'], charset=charset)
         if term is not None:
             importer.term = self.app['terms'][term]
         if ttschema is not None:

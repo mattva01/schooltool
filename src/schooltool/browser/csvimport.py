@@ -33,11 +33,11 @@ from schoolbell.app.membership import Membership
 from schoolbell.app.browser import csvimport as sb
 
 from schooltool import SchoolToolMessageID as _
-from schooltool.interfaces import ISchoolToolApplication
+from schooltool import getSchoolToolApplication
+from schooltool.interfaces import ISchoolToolApplication, ISectionContainer
 from schooltool.app import Person, Section, Course, Group, Resource
 from schooltool.relationships import URIInstruction, URIInstructor, URISection
 from schooltool.timetable import TimetableActivity
-
 
 class ImportErrorCollection(object):
 
@@ -74,11 +74,12 @@ class TimetableCSVImporter(object):
     in one sweep and present them to the user at once.
     """
 
-    def __init__(self, app, charset=None):
+    def __init__(self, container, charset=None):
         # XXX It appears that our security declarations are inadequate,
         #     because things break without this removeSecurityProxy.
-        self.app = removeSecurityProxy(app)
-        self.sections = self.app['sections']
+        self.container = removeSecurityProxy(container)
+        self.app = getSchoolToolApplication()
+        self.sections = self.container
         self.persons = self.app['persons']
         self.errors = ImportErrorCollection()
         self.charset = charset
@@ -368,7 +369,7 @@ class TimetableCSVImporter(object):
 class TimetableCSVImportView(sb.BaseCSVImportView):
     """Timetable CSV import view."""
 
-    __used_for__ = ISchoolToolApplication
+    __used_for__ = ISectionContainer
 
     importer_class = TimetableCSVImporter
 
