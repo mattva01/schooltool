@@ -77,9 +77,8 @@ class TimetableCSVImporter(object):
     def __init__(self, container, charset=None):
         # XXX It appears that our security declarations are inadequate,
         #     because things break without this removeSecurityProxy.
-        self.container = removeSecurityProxy(container)
         self.app = getSchoolToolApplication()
-        self.sections = self.container
+        self.sections = removeSecurityProxy(container)
         self.persons = self.app['persons']
         self.errors = ImportErrorCollection()
         self.charset = charset
