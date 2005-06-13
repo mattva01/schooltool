@@ -74,7 +74,7 @@
                     tal:attributes="value section/__name__;
                                     selected python:section is selection
                                                 and 'selected' or None"
-                    tal:content="section/title"></option>
+                    tal:content="section/label"></option>
           </select>
         </td>
         <td class="conflict" tal:condition="conflict" i18n:translate="">
