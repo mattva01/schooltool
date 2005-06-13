@@ -413,6 +413,7 @@ def read_icalendar(icalendar_text, charset='UTF-8'):
 
         # Currently SchoolBell does not support all-day events, so we must
         # convert them into ordinary events that last 24 hours
+        # TODO: Now it does and this should be fixed!
         dtstart = vevent.dtstart
         if not isinstance(dtstart, datetime.datetime):
             dtstart = datetime.datetime.combine(dtstart,
@@ -577,6 +578,8 @@ class ICalReader:
         """
         record = []
         for line in self.file:
+            if not line.strip():
+                continue
             if line[0] in '\t ':
                 line = line[1:]
             elif record:

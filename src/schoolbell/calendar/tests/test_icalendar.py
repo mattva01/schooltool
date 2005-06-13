@@ -622,6 +622,7 @@ class TestICalReader(unittest.TestCase):
 
         reader = ICalReader(StringIO(dedent("""\
                     BEGIN:VCALENDAR
+
                     BEGIN:VEVENT
                     UID:hello
                     DTSTART;VALUE=DATE:20010203
@@ -629,6 +630,7 @@ class TestICalReader(unittest.TestCase):
                     X-PROP:foo
                     END:VALARM
                     END:VEVENT
+
                     END:VCALENDAR
                     """)))
         result = list(reader.iterEvents())
@@ -706,6 +708,7 @@ class TestICalReader(unittest.TestCase):
         from schoolbell.calendar.icalendar import ICalReader
         file = StringIO("key1\n"
                         " :value1\n"
+                        " \n"
                         "key2\n"
                         " ;VALUE=foo\n"
                         " :value2\n"
