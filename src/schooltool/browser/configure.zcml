@@ -417,7 +417,7 @@
       class=".timetable.SimpleTimetableSchemaAdd"
       permission="schoolbell.create"
       menu="schoolbell_actions"
-      title="New Schema"
+      title="New Timetable"
       />
 
   <page
