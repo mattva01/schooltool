@@ -358,6 +358,11 @@ def doctest_Resource():
         >>> ISchoolBellApplication(resource) is app
         True
 
+    Resources can be tagged as locations, the default is false:
+
+        >>> blender.isLocation
+        False
+
     """
 
 

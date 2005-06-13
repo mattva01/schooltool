@@ -41,7 +41,7 @@ $Id$
 import calendar
 
 from zope.interface import Interface, Attribute
-from zope.schema import Text, TextLine, Bytes, Object, Choice
+from zope.schema import Text, TextLine, Bytes, Object, Choice, Bool
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.app.container.interfaces import IReadContainer, IContainer
 from zope.app.container.interfaces import IContained
@@ -384,6 +384,12 @@ class IResource(IGroupMember, ICalendarOwner):
         required=False,
         description=_("Description of the resource."))
 
+    isLocation = Bool(
+        title=_("A Location."),
+        description=_(
+            """Indicate this resource is a location, like a classroom."""),
+        required=False,
+        default=False)
 
 class IResourceContainer(IContainer, IAdaptableToSchoolBellApplication):
     """Container of resources."""

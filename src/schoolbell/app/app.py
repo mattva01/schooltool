@@ -311,10 +311,11 @@ class Resource(Persistent, Contained):
 
     groups = RelationshipProperty(URIMembership, URIMember, URIGroup)
 
-    def __init__(self, title=None, description=None):
+    def __init__(self, title=None, description=None, isLocation=False):
         self.title = title
         self.description = description
         self.calendar = Calendar(self)
+        self.isLocation = isLocation
 
     def __conform__(self, protocol):
         if protocol is ISchoolBellApplication:
