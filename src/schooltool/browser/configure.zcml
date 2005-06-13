@@ -286,14 +286,20 @@
       permission="schoolbell.manageMembership"
       />
 
+  <menuItem
+      menu="schoolbell_actions"
+      title="Import Sections"
+      for="schooltool.interfaces.ISectionContainer"
+      action="/timetables-csvimport.html"
+      permission="schoolbell.create"
+      />
+
   <page
       name="timetables-csvimport.html"
       for="schooltool.interfaces.ISchoolToolApplication"
       class="schooltool.browser.csvimport.TimetableCSVImportView"
       template="templates/timetables-csvimport.pt"
       permission="schoolbell.create"
-      menu="schoolbell_actions"
-      title="Import Timetables"
       layer="SchoolToolLayer"
       />
 

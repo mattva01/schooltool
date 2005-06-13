@@ -423,7 +423,7 @@ We will also need a course.
 We can import timetables using the CSV timetable import page.
 
     >>> print http(r"""
-    ... GET /frogpond/@@timetables-csvimport.html HTTP/1.1
+    ... GET /frogpond/timetables-csvimport.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
@@ -456,7 +456,7 @@ file or typing/pasting it into a text area field.
     ... """)
 
     >>> print http("""
-    ... POST /frogpond/@@timetables-csvimport.html HTTP/1.1
+    ... POST /frogpond/timetables-csvimport.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: %d
     ... Content-Type: application/x-www-form-urlencoded
