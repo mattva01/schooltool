@@ -25,5 +25,7 @@ SchoolBell libraries
 - schoolbell.app is a calendaring server and web application for Zope 3
 """
 
+VERSION = 'SVN'
+
 from zope.i18n import MessageIDFactory
 SchoolBellMessageID = MessageIDFactory("schoolbell")

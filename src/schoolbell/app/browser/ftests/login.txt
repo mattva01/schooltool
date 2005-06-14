@@ -33,14 +33,21 @@ We have the views @@login.html and @@logout.html on the main
 application object.  Those views log in or log out the user of the
 session.
 
-    >>> print http(r"""
+    >>> login_page = http(r"""
     ... GET /frogpond/@@login.html HTTP/1.1
     ... """)
+    >>> print login_page
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
+
+Make sure the current version number is somewhere on the page:
+
+    >>> import schoolbell
+    >>> str(login_page).count(schoolbell.VERSION) > 0
+    True
 
 Incorrect password:
 
