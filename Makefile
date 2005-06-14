@@ -24,7 +24,8 @@ build:
 
 .PHONY: clean
 clean:
-	find . \( -name '*.o' -o -name '*.py[co]' \) -exec rm -f {} \;
+	find . \( -path './src/*.mo' -o -name '*.o' \
+	         -o -name '*.py[co]' \) -exec rm -f {} \;
 	rm -rf build
 
 .PHONY: realclean
