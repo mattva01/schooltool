@@ -24,7 +24,7 @@ build:
 
 .PHONY: clean
 clean:
-	find . \( -path './src/schooltool/*.mo' -o -name '*.o' \
+	find . \( -path './src/*.mo' -o -name '*.o' \
 	         -o -name '*.py[co]' \) -exec rm -f {} \;
 	rm -rf build
 

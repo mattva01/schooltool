@@ -173,6 +173,7 @@ if sys.version_info < (2, 3):
 
 # find the data files
 # if you modify this, also modify MANIFEST.in recursive includes
+# XXX - do something more intelligent with *.mo files. It's a mess - jinty
 datafile_re = re.compile('.*\.(pt|js|png|gif|css|mo|rng|xml|zcml|pot|po)\Z')
 data_files = []
 for root, dirs, files in os.walk(os.path.join('src', 'schooltool')):
