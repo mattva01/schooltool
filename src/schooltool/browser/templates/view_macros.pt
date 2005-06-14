@@ -119,6 +119,7 @@
     </div>
     <div id="footer" i18n:translate="">
       <p>
+        SchoolTool <span tal:content="modules/schoolbell/VERSION"/>
         &copy; The Shuttleworth Foundation 2003 - <span>2005</span>:
         Supporting Social Innovation.
       </p>

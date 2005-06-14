@@ -41,6 +41,19 @@ We will obviously need a SchoolTool instance.
     Location: http://localhost/@@contents.html
     ...
 
+
+The SchoolTool version is displayed on the page:
+
+    >>> page = http(r"""
+    ... GET /frogpond/sections/section HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+
+    >>> import schoolbell
+    >>> str(page).count(schoolbell.VERSION) > 0
+    True
+
+
 Let's create a person so that we can fool around with his calendar:
 
     >>> print http(r"""

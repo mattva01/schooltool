@@ -189,6 +189,11 @@ for root, dirs, files in os.walk(os.path.join('src', 'schooltool')):
     if tmp:
         data_files.append((root[4:], tmp))
 
+# get the version number of schooltool
+sys.path.insert(1, os.path.join(os.path.dirname(__file__), 'Zope3', 'src'))
+sys.path.insert(1, os.path.join(os.path.dirname(__file__), 'src'))
+import schooltool
+
 # Setup SchoolTool
 setup(name="schooltool",
     description="A common information systems platform for school administration.",
@@ -216,7 +221,7 @@ Any modern web browser is suitable for the web application interface.  The
 interface degrades gracefully, so a browser that does not support CSS or
 Javascript will be usable, although perhaps not very nice or convenient.
     """,
-    version="0.10pre1",
+    version=schooltool.VERSION,
     url='http://www.schooltool.org',
     license="GPL",
     maintainer="SchoolTool development team",
