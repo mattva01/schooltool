@@ -195,6 +195,11 @@ for root, dirs, files in os.walk(os.path.join('src', 'schoolbell')):
     if tmp:
         data_files.append((root[4:], tmp))
 
+# get the version number of schoolbell
+sys.path.insert(1, os.path.join(os.path.dirname(__file__), 'Zope3', 'src'))
+sys.path.insert(1, os.path.join(os.path.dirname(__file__), 'src'))
+import schoolbell
+
 # Final setup of SchoolBell
 setup(name="schoolbell",
     description="A standalone or Zope 3 component calendaring server",
@@ -221,7 +226,7 @@ setup(name="schoolbell",
         * Rigourous functional and unit testing.
 
         Enjoy!""",
-    version="1.1rc1",
+    version=schoolbell.VERSION,
     url='http://www.schooltool.org/schoolbell',
     license="GPL",
     maintainer="SchoolTool development team",
