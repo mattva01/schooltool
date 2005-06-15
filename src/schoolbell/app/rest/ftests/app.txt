@@ -184,13 +184,29 @@ We can add some resources with POST:
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: text/xml
     ...
-    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="A Resource"/>
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="A Resource" isLocation="true" />
     ... """)
     HTTP/1.1 201 Created
     ...
     Location: http://localhost/frogpond/resources/a-resource
     <BLANKLINE>
     Object created: http://localhost/frogpond/resources/a-resource
+
+This resource is a location:
+
+    >>> print rest("""
+    ... GET /frogpond/resources/a-resource HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+    <resource xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...
+      <isLocation>True</isLocation>
+    ...
+    <BLANKLINE>
+
 
 We can add some resources with PUT:
 
@@ -202,6 +218,22 @@ We can add some resources with PUT:
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Another Resource"/>
     ... """)
     HTTP/1.1 201 Created
+    ...
+    <BLANKLINE>
+
+
+This resource is not a location:
+
+    >>> print rest("""
+    ... GET /frogpond/resources/another-resource HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+    <resource xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...
+      <isLocation>False</isLocation>
     ...
     <BLANKLINE>
 
@@ -414,6 +446,7 @@ Resource:
     <resource xmlns:xlink="http://www.w3.org/1999/xlink">
       <title>A Resource</title>
       <description></description>
+      <isLocation>True</isLocation>
       <relationships xlink:type="simple"
                      xlink:title="Relationships"
                      xlink:href="http://localhost/frogpond/resources/a-resource/relationships"/>
@@ -437,7 +470,7 @@ We can change the title of the resource that we just created:
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: text/xml
     ...
-    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="The resource"/>
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="The resource" isLocation="true" />
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -454,6 +487,7 @@ Now the title of the resource should be different:
     <resource xmlns:xlink="http://www.w3.org/1999/xlink">
       <title>The resource</title>
       <description></description>
+      <isLocation>True</isLocation>
       <relationships xlink:type="simple"
                      xlink:title="Relationships"
                      xlink:href="http://localhost/frogpond/resources/a-resource/relationships"/>
@@ -468,6 +502,33 @@ Now the title of the resource should be different:
            xlink:href="http://localhost/frogpond/resources/a-resource/calendar/acl"/>
     </resource>
     <BLANKLINE>
+
+We can decide this resource isn't really a usable location:
+
+    >>> print rest("""
+    ... PUT /frogpond/resources/a-resource HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="The resource" isLocation="false" />
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <BLANKLINE>
+
+Now the resource isn't a location
+
+    >>> print rest("""
+    ... GET /frogpond/resources/a-resource HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <resource xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>The resource</title>
+      <description></description>
+      <isLocation>False</isLocation>
+    ...
 
 Person:
 

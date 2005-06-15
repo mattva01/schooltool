@@ -122,6 +122,11 @@ class ResourceFileFactory(ApplicationObjectFileFactory):
                   <text/>
                 </attribute>
               </optional>
+              <optional>
+                <attribute name="isLocation">
+                  <data type="boolean" />
+                </attribute>
+              </optional>
             </element>
           </start>
         </grammar>
@@ -135,6 +140,7 @@ class ResourceFileFactory(ApplicationObjectFileFactory):
         node = doc.query('/m:object')[0]
         kwargs['title'] = node['title']
         kwargs['description'] = node.get('description')
+        kwargs['isLocation'] = (node.get('isLocation') == "true")
         return kwargs
 
 
@@ -204,10 +210,11 @@ class ResourceFile(ApplicationObjectFile):
 
     adapts(IResource)
 
-    def modify(self, title=None, description=None):
+    def modify(self, title=None, description=None, isLocation=False):
         """Modifies underlying object."""
         self.context.title = title
         self.context.description = description
+        self.context.isLocation = isLocation
 
 
 class PersonFile(ApplicationObjectFile):
