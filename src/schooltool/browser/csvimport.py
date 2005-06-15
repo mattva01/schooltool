@@ -391,10 +391,31 @@ class TimetableCSVImportView(sb.BaseCSVImportView):
                 self.errors.append(msg)
 
 
-class CourseCSVImporter(sb.SimpleCSVImporter):
+class CourseCSVImporter(sb.BaseCSVImporter):
     """Course CSV Importer"""
 
     factory = Course
+
+    def createAndAdd(self, data, dry_run=True):
+        """Create objects and add them to the container."""
+
+        if len(data) < 1:
+            self.errors.fields.append(_('Insufficient data provided.'))
+            return
+
+        if not data[0]:
+            self.errors.fields.append(_('Titles may not be empty'))
+            return
+
+        if len(data) > 1:
+            description = data[1]
+        else:
+            description = ''
+
+        obj = self.factory(title=data[0], description=description)
+        name = self.chooser.chooseName('', obj)
+        if not dry_run:
+            self.container[name] = obj
 
 
 class CourseCSVImportView(sb.BaseCSVImportView):
@@ -403,7 +424,7 @@ class CourseCSVImportView(sb.BaseCSVImportView):
     importer_class = CourseCSVImporter
 
 
-class GroupCSVImporter(sb.SimpleCSVImporter):
+class GroupCSVImporter(sb.GroupCSVImporter):
     """Group CSV Importer"""
 
     factory = Group
@@ -415,7 +436,7 @@ class GroupCSVImportView(sb.BaseCSVImportView):
     importer_class = GroupCSVImporter
 
 
-class ResourceCSVImporter(sb.SimpleCSVImporter):
+class ResourceCSVImporter(sb.ResourceCSVImporter):
     """Resource CSV Importer"""
 
     factory = Resource

@@ -210,7 +210,7 @@
     <allow interface="schooltool.interfaces.ITimetabled" />
     <allow attributes="__cmp__" />
     <require permission="schoolbell.view"
-             attributes="title description groups" />
+             attributes="title description groups isLocation" />
     <require permission="schoolbell.edit"
              set_schema="schooltool.interfaces.IResource" />
   </content>

@@ -146,7 +146,7 @@
       label="Add a Resource"
       name="addSchoolBellResource.html"
       schema="schoolbell.app.interfaces.IResource"
-      fields="title description"
+      fields="title description isLocation"
       set_before_add="title"
       content_factory="schooltool.app.Resource"
       template="templates/simple_add.pt"
