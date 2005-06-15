@@ -126,6 +126,7 @@ class BaseCSVImporter(object):
         self.container = container
         self.errors = ImportErrorCollection()
         self.charset = charset
+        self.chooser = SimpleNameChooser(container)
 
     def parseCSVRows(self, rows):
         """Parse rows (a list of strings) in CSV format.
@@ -214,29 +215,14 @@ class ImportErrorCollection(object):
         return "<%s %r>" % (self.__class__.__name__, self.__dict__)
 
 
-class SimpleCSVImporter(BaseCSVImporter):
-    """A simple "title, description" csv importer.
+class GroupCSVImporter(BaseCSVImporter):
+    """Group CSV Importer"""
 
-    This class is only useful for CSV importers with required titles and
-    optional descriptions (at the moment this only applies to Group and
-    Resource importers).
-
-    Subclasses must provide the following attributes.
-
-        `factory` -- class to create an instance to add to the container
-    """
-
-    factory = None
-
-    def __init__(self, container, charset=None):
-        BaseCSVImporter.__init__(self, container, charset)
-        self.chooser = SimpleNameChooser(container)
+    factory = Group
 
     def createAndAdd(self, data, dry_run=True):
         """Create objects and add them to the container."""
 
-        if not self.factory:
-            raise NotImplementedError("factory attribute not defined in subclass")
         if len(data) < 1:
             self.errors.fields.append(_('Insufficient data provided.'))
             return
@@ -256,20 +242,14 @@ class SimpleCSVImporter(BaseCSVImporter):
             self.container[name] = obj
 
 
-class GroupCSVImporter(SimpleCSVImporter):
-    """Group CSV Importer"""
-    factory = Group
-
-
-class ResourceCSVImporter(SimpleCSVImporter):
+class ResourceCSVImporter(BaseCSVImporter):
     """Resource CSV Importer"""
+
     factory = Resource
 
     def createAndAdd(self, data, dry_run=True):
         """Create objects and add them to the container."""
 
-        if not self.factory:
-            raise NotImplementedError("factory attribute not defined in subclass")
         if len(data) < 1:
             self.errors.fields.append(_('Insufficient data provided.'))
             return
@@ -295,10 +275,6 @@ class ResourceCSVImporter(SimpleCSVImporter):
 
 class PersonCSVImporter(BaseCSVImporter):
     """A Person CSV importer."""
-
-    def __init__(self, container, charset=None):
-        BaseCSVImporter.__init__(self, container, charset)
-        self.chooser = SimpleNameChooser(container)
 
     def createAndAdd(self, data, dry_run=True):
         """Create Person object and add to container.

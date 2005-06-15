@@ -94,21 +94,6 @@ def doctest_BaseCSVImporter():
 
     """
 
-def doctest_SimpleCSVImporter():
-    r"""Tests for SimpleCSVImporter.
-
-    If you do not define the 'factory' attribute, you get an error
-
-        >>> from schoolbell.app.browser.csvimport import SimpleCSVImporter
-        >>> importer = SimpleCSVImporter(None, None)
-        >>> importer.createAndAdd(None)
-        Traceback (most recent call last):
-        ...
-        NotImplementedError: factory attribute not defined in subclass
-
-    See GroupCSVImporter and ResourceCSVImporter for more usage examples.
-
-    """
 
 def doctest_GroupCSVImporter():
     r"""Tests for GroupCSVImporter.
