@@ -154,19 +154,22 @@ def doctest_ResourceCSVImporter():
 
         >>> csvdata='''Resource 1, Resource 1 Description
         ... Resource2
-        ... Resource3, Resource 3 Description, Some extra data'''
+        ... Resource3, Resource 3 Description, location
+        ... Resource4, , location'''
         >>> importer.importFromCSV(csvdata)
         True
 
     Check that the resources exist
 
         >>> [resource for resource in container]
-        [u'resource-1', u'resource2', u'resource3']
+        [u'resource-1', u'resource2', u'resource3', u'resource4']
 
     Check that descriptions were imported properly
 
         >>> [resource.description for resource in container.values()]
-        ['Resource 1 Description', '', 'Resource 3 Description']
+        ['Resource 1 Description', '', 'Resource 3 Description', '']
+        >>> [resource.isLocation for resource in container.values()]
+        [False, False, True, True]
 
     """
 

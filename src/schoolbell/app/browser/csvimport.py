@@ -265,6 +265,33 @@ class ResourceCSVImporter(SimpleCSVImporter):
     """Resource CSV Importer"""
     factory = Resource
 
+    def createAndAdd(self, data, dry_run=True):
+        """Create objects and add them to the container."""
+
+        if not self.factory:
+            raise NotImplementedError("factory attribute not defined in subclass")
+        if len(data) < 1:
+            self.errors.fields.append(_('Insufficient data provided.'))
+            return
+
+        if not data[0]:
+            self.errors.fields.append(_('Titles may not be empty'))
+            return
+
+        if len(data) > 1:
+            description = data[1]
+        else:
+            description = ''
+
+        isLocation =  len(data) > 2
+
+        obj = self.factory(title=data[0], description=description,
+                           isLocation=isLocation)
+        name = self.chooser.chooseName('', obj)
+
+        if not dry_run:
+            self.container[name] = obj
+
 
 class PersonCSVImporter(BaseCSVImporter):
     """A Person CSV importer."""
