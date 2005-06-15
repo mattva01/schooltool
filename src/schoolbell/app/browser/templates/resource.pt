@@ -7,6 +7,9 @@
 <metal:block metal:fill-slot="body">
 
   <div class="resource-info">
+    <tal:if condition="context/isLocation|nothing">
+      <strong i18n:translate="">Location</strong>
+    </tal:if>
     <p class="description" tal:content="context/description"/>
 
     <div class="resource-groups" tal:define="groups context/groups">

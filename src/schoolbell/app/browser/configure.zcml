@@ -340,7 +340,7 @@
       label="Add a Resource"
       name="addSchoolBellResource.html"
       schema="schoolbell.app.interfaces.IResource"
-      fields="title description"
+      fields="title description isLocation"
       set_before_add="title"
       content_factory="schoolbell.app.app.Resource"
       template="templates/simple_add.pt"
@@ -354,13 +354,14 @@
       name="edit.html"
       label="Edit Resource Information"
       schema="schoolbell.app.interfaces.IResource"
-      fields="title description"
+      fields="title description isLocation"
       permission="schoolbell.edit"
       template="templates/simple_edit.pt"
       class=".app.ResourceEditView"
       menu="schoolbell_actions"
-      title="Edit Info"
-      />
+      title="Edit Info">
+    <widget field="description" height="5" />
+  </editform>
 
   <menuItem
       menu="schoolbell_actions"
