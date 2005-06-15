@@ -199,7 +199,7 @@ class GroupView(BrowserView):
         return filter(IResource.providedBy, self.context.members)
 
 
-class MemberViewBase(BrowserView):
+class MemberViewPersons(BrowserView):
     """A base view class for adding / removing members from a group.
 
     Subclasses must override container_name.
@@ -207,7 +207,7 @@ class MemberViewBase(BrowserView):
 
     __used_for__ = IGroupContained
 
-    container_name = None
+    container_name = 'persons'
 
     def getPotentialMembers(self):
         """Return a list of all possible members."""
@@ -234,18 +234,6 @@ class MemberViewBase(BrowserView):
             self.request.response.redirect(context_url)
         elif 'CANCEL' in self.request:
             self.request.response.redirect(context_url)
-
-
-class MemberViewPersons(MemberViewBase):
-    """A view for adding / removing group members that are persons."""
-
-    container_name = 'persons'
-
-
-class MemberViewResources(MemberViewBase):
-    """A view for adding / removing group members that are resources."""
-
-    container_name = 'resources'
 
 
 class ResourceView(BrowserView):

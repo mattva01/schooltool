@@ -603,21 +603,6 @@ We should have a view for that resource as well:
     ...<strong>Location</strong>...
     ...
 
-The supergroup list works for resources too:
-
-    >>> print http(r"""
-    ... GET /frogpond/resources/lily/groups.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    ...
-    <input type="checkbox" name="group.venerable-frogs" />
-    Venerable Frogs
-    ...
-
 Cancelling the resource addition redirects us to the resource index:
 
     >>> print http(r"""

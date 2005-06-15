@@ -372,7 +372,7 @@ class IGroupContained(IGroup, IContained, IAdaptableToSchoolBellApplication):
     containers(IGroupContainer)
 
 
-class IResource(IGroupMember, ICalendarOwner):
+class IResource(ICalendarOwner):
     """Resource."""
 
     title = TextLine(

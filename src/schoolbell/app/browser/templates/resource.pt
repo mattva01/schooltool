@@ -12,18 +12,6 @@
     </tal:if>
     <p class="description" tal:content="context/description"/>
 
-    <div class="resource-groups" tal:define="groups context/groups">
-      <h3 i18n:translate="">Groups</h3>
-      <ul>
-        <li tal:repeat="group groups/sortby:title">
-          <a tal:attributes="href group/@@absolute_url"
-            tal:content="group/title">Title</a>
-        </li>
-      </ul>
-      <div tal:condition="not:groups" i18n:translate="">
-        This resource does not belong to any groups.
-      </div>
-    </div>
   </div>
 
   <tal:block replace="structure context/@@notes|nothing"/>

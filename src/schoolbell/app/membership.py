@@ -87,6 +87,15 @@ You may not create ill-formed relationships
       ...
     InvalidRelationship: Membership must have one member and one group.
 
+Resources can't be part of a group:
+
+    >>> from schoolbell.app.app import Resource
+    >>> printer = Resource()
+    >>> relate(URIMembership, (admins, URIGroup), (printer, URIMember))
+    Traceback (most recent call last):
+      ...
+    InvalidRelationship: Resources cannot be members of a group.
+
 Of course, these constraints do not apply to other kinds of relationships.
 
     >>> relate('example:Frogship', (jonas, 'example:Frog'),
@@ -105,7 +114,7 @@ from schoolbell.relationship import URIObject, RelationshipSchema
 from schoolbell.relationship import getRelatedObjects
 from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
 from schoolbell.relationship.interfaces import InvalidRelationship
-from schoolbell.app.interfaces import IGroup
+from schoolbell.app.interfaces import IGroup, IResource
 
 
 URIMembership = URIObject('http://schooltool.org/ns/membership',
@@ -130,6 +139,8 @@ def enforceMembershipConstraints(event):
         (event.role1, event.role2) != (URIGroup, URIMember)):
         raise InvalidRelationship('Membership must have one member'
                                   ' and one group.')
+    if IResource.providedBy(event[URIMember]):
+        raise InvalidRelationship("Resources cannot be members of a group.")
     if not IGroup.providedBy(event[URIGroup]):
         raise InvalidRelationship('Groups must provide IGroup.')
     if isTransitiveMember(event[URIGroup], event[URIMember]):
