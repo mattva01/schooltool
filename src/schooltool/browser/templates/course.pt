@@ -37,13 +37,13 @@
                 </tal:if>
               </tal:loop>
 
-              <strong>
-                <a tal:attributes="href section/@@absolute_url"
-                   tal:content="section/label" i18n:translate="" />
-              </strong>
+                <a tal:attributes="href section/@@absolute_url">
+                  <span tal:replace="section/label" i18n:translate=""/>
+                  (<span tal:replace="section/title" i18n:translate=""/>)
+                </a>
               <p>
-                <strong i18n:translate="">Size:</strong>
-                <span tal:content="section/size" />
+                  <span tal:replace="section/size" />
+                  <span i18n:translate="">students</span>
               </p>
 
               <p tal:content="section/description" />

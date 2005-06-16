@@ -10,6 +10,7 @@
          tal:attributes="href course/@@absolute_url"
          tal:content="course/title"/>
     </tal:loop>
+    -- <span tal:replace="context/title" />
   </h1>
 
 <metal:block metal:fill-slot="body">
