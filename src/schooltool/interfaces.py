@@ -820,9 +820,9 @@ class ISection(IGroup):
             names, courses, and meeting time."""))
 
     title = TextLine(
-        title=_("Title"),
-        required=False,
-        description=_("Title of the section."))
+        title=_("Code"),
+        required=True,
+        description=_("ID code for the section."))
 
     description = Text(
         title=_("Description"),

@@ -45,7 +45,7 @@ We will obviously need a SchoolTool instance.
 The SchoolTool version is displayed on the page:
 
     >>> page = http(r"""
-    ... GET /frogpond/sections/section HTTP/1.1
+    ... GET /frogpond/sections/his1 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
 
@@ -182,7 +182,7 @@ Lets create a section to add to that course:
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.description=Section1&field.course_id=history&UPDATE_SUBMIT=Add&add_input_name=""")
+    ... field.title=HIS1&field.description=Section1&field.course_id=history&UPDATE_SUBMIT=Add&add_input_name=""")
     HTTP/1.1 303 See Other
     ...
     Location: http://localhost/frogpond/courses/history
@@ -206,7 +206,7 @@ Notice we got redirected to the course we added the section to.
 Looking at the section:
 
     >>> print http(r"""
-    ... GET /frogpond/sections/section HTTP/1.1
+    ... GET /frogpond/sections/his1 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
@@ -220,7 +220,7 @@ Looking at the section:
 Frog can't see the section's calendar by default
 
     >>> print http(r"""
-    ... GET /frogpond/sections/section/calendar HTTP/1.1
+    ... GET /frogpond/sections/his1/calendar HTTP/1.1
     ... Authorization: Basic frog:pwd
     ... """)
     HTTP/1.1 303 See Other
@@ -260,20 +260,20 @@ Frog's overlay portlet just has his own calendar:
 Adding a teacher:
 
     >>> print http(r"""
-    ... POST /frogpond/sections/section/instructors.html HTTP/1.1
+    ... POST /frogpond/sections/his1/instructors.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... instructor.frog=On&UPDATE_SUBMIT=Apply""")
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/sections/section
+    Location: http://localhost/frogpond/sections/his1
     ...
 
 Now Frog is in the Instructors div
 
     >>> print http(r"""
-    ... GET /frogpond/sections/section HTTP/1.1
+    ... GET /frogpond/sections/his1 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
@@ -294,7 +294,7 @@ Now Frog is in the Instructors div
 Frog can see the calendar now
 
     >>> print http(r"""
-    ... GET /frogpond/sections/section/calendar HTTP/1.1
+    ... GET /frogpond/sections/his1/calendar HTTP/1.1
     ... Authorization: Basic frog:pwd
     ... """)
     HTTP/1.1 200 Ok
@@ -330,16 +330,16 @@ And Frog's overlay portlet shows the section:
           <tr style="background: #e0b6af">
             <td><input type="checkbox" name="overlay:list"
                        checked="checked"
-                       value="/frogpond/sections/section" /></td>
+                       value="/frogpond/sections/his1" /></td>
             <td><input type="checkbox"
                        name="overlay_timetables:list"
                        checked="checked"
-                       value="/frogpond/sections/section" /></td>
+                       value="/frogpond/sections/his1" /></td>
             <td style="width: 100%">Frog -- History</td>
             <td><a class="go"
                    style="background: #c1665a;
                 color: #c1665a"
-                   href="http://localhost/frogpond/sections/section/calendar">&nbsp;</a></td>
+                   href="http://localhost/frogpond/sections/his1/calendar">&nbsp;</a></td>
         </tr>
         </table>
     ...
@@ -350,20 +350,20 @@ If we fire Frog, in hopes of getting Salamander to step in:
 
 
     >>> print http(r"""
-    ... POST /frogpond/sections/section/instructors.html HTTP/1.1
+    ... POST /frogpond/sections/his1/instructors.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... UPDATE_SUBMIT=Apply""")
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/sections/section
+    Location: http://localhost/frogpond/sections/his1
     ...
 
 Frog can't see the section's calendar any more
 
     >>> print http(r"""
-    ... GET /frogpond/sections/section/calendar HTTP/1.1
+    ... GET /frogpond/sections/his1/calendar HTTP/1.1
     ... Authorization: Basic frog:pwd
     ... """)
     HTTP/1.1 303 See Other
@@ -372,7 +372,7 @@ Frog can't see the section's calendar any more
 and he's no longer an instructor:
 
     >>> print http(r"""
-    ... GET /frogpond/sections/section HTTP/1.1
+    ... GET /frogpond/sections/his1 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
@@ -416,20 +416,20 @@ And the section's calendar is no longer in his overlay portlet.
 Adding a student:
 
     >>> print http(r"""
-    ... POST /frogpond/sections/section/learners.html HTTP/1.1
+    ... POST /frogpond/sections/his1/learners.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... member.toad=On&UPDATE_SUBMIT=Apply""")
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/sections/section
+    Location: http://localhost/frogpond/sections/his1
     ...
 
 Now toad is in the Students div
 
     >>> print http(r"""
-    ... GET /frogpond/sections/section HTTP/1.1
+    ... GET /frogpond/sections/his1 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok

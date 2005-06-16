@@ -258,6 +258,7 @@ def doctest_SectionAddView():
 
         >>> request = TestRequest()
         >>> request.form = {'UPDATE_SUBMIT': True,
+        ...                 'field.title' : 'MAT1',
         ...                 'field.course_id' : 'algebraI'}
         >>> context = AddingStub(sections, request)
         >>> view = SectionAddViewForTesting(context, request)
@@ -271,8 +272,8 @@ def doctest_SectionAddView():
     sections
 
         >>> for section in course.sections:
-        ...     print section.__name__
-        Section
+        ...     print section.title
+        MAT1
 
         >>> tearDown()
 
