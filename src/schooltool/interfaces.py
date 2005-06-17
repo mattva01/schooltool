@@ -838,6 +838,8 @@ class ISection(IGroup):
 
     size = Attribute("""The number of member students in the section.""")
 
+    location = Attribute("""The resource where this section meets.""")
+
 
 class ISectionContainer(IContainer):
     """A container for Sections."""

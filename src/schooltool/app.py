@@ -273,6 +273,16 @@ class Section(Persistent, Contained, TimetabledMixin):
 
     size = property(_getSize)
 
+    _location = None
+
+    def _setLocation(self, location):
+        if location is not None:
+            if not IResource.providedBy(location) or not location.isLocation:
+                raise TypeError("Locations must be location resources.")
+        self._location = location
+
+    location = property(lambda self: self._location, _setLocation)
+
     instructors = RelationshipProperty(URIInstruction, URISection,
                                        URIInstructor)
 
@@ -281,11 +291,13 @@ class Section(Persistent, Contained, TimetabledMixin):
 
     members = RelationshipProperty(URIMembership, URIGroup, URIMember)
 
+
     def __init__(self, title="Section", description=None, schedule=None,
-                 courses=None):
+                 courses=None, location=None):
         self.title = title
         self.description = description
         self.calendar = Calendar(self)
+        self.location = location
         TimetabledMixin.__init__(self)
 
     def __conform__(self, protocol):

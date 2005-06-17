@@ -264,6 +264,36 @@ def doctest_Section():
         US History
         English
 
+    Sections can have a location resource to indicate where the section
+    regularly meets.
+
+        >>> from schooltool.app import Resource
+        >>> section.location is None
+        True
+
+        >>> room123 = Resource("Room123", isLocation=True)
+        >>> section.location = room123
+        >>> section.location.title
+        'Room123'
+
+    Locations have to be marked with isLocation, so printers can'r be
+    locations:
+
+        >>> printer = Resource("Laser Printer")
+        >>> section.location = printer
+        Traceback (most recent call last):
+        ...
+        TypeError: Locations must be location resources.
+
+    Things other than resources can't be locations:
+
+        >>> section.location = Course()
+        Traceback (most recent call last):
+        ...
+        TypeError: Locations must be location resources.
+
+        >>> section.location = None
+
     We're done:
 
         >>> tearDown()
