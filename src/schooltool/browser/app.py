@@ -26,27 +26,23 @@ from zope.app.publisher.browser import BrowserView
 from zope.app.form.browser.add import AddView
 from zope.app import zapi
 from zope.app.component.hooks import getSite
-from zope.app.form.utility import setUpWidgets, getWidgetsData
-from zope.app.form.interfaces import IInputWidget, WidgetsError
+from zope.app.form.utility import getWidgetsData
+from zope.app.form.interfaces import WidgetsError
 from zope.security.proxy import removeSecurityProxy
-from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.security.checker import canAccess
 
-from schoolbell.app.browser.app import GroupView
 from schoolbell.app.browser import app as sb
-from schoolbell.app.membership import URIMembership, URIGroup
 from schoolbell.app.membership import isTransitiveMember
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.relationship import getRelatedObjects
 
 from schooltool import SchoolToolMessageID as _
-from schooltool.interfaces import ISchoolToolApplication
 from schooltool.interfaces import ICourseContainer, ISectionContainer
 from schooltool.interfaces import ICourse, ISection
 from schooltool.interfaces import IPersonPreferences
-from schooltool.interfaces import IGroup, IPerson, ISchoolToolApplication
-from schooltool.relationships import URIInstruction, URIInstructor, URISection
-from schooltool.app import Section, Person
+from schooltool.interfaces import IGroup, IPerson
+from schooltool.relationships import URIInstruction, URISection
+from schooltool.app import Person
 
 class ContainerView(sb.ContainerView):
     """A Container view for schooltool containers.
@@ -131,15 +127,17 @@ class SectionAddView(AddView):
     def validCourse(self):
         return self.course is not None
 
-    def getCourseFromId(self, id):
+    def getCourseFromId(self, cid):
         app = getSite()
         try:
-            return app['courses'][id]
+            return app['courses'][cid]
         except KeyError:
             self.error = _("No such course.")
 
     def __init__(self, context, request):
         super(AddView, self).__init__(context, request)
+        self.update_status = None
+        self.errors = None
 
         try:
             course_id = request['field.course_id']
