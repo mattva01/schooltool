@@ -70,7 +70,8 @@
                     tal:attributes="selected python:selection is None
                                                 and 'selected' or None"
                     i18n:translate="">none</option>
-            <option tal:repeat="section period/sections/sortby:title"
+            <option i18n:translate=""
+                    tal:repeat="section period/sections/sortby:title"
                     tal:attributes="value section/__name__;
                                     selected python:section is selection
                                                 and 'selected' or None"

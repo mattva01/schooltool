@@ -96,7 +96,8 @@ Second, select the way timetable days are aligned with calendar days.
 </p>
 
 <div class="form">
-  <div class="error" tal:condition="view/model_error"
+  <div class="error" i18n:translate=""
+       tal:condition="view/model_error"
        tal:content="view/model_error">
     Error.
   </div>
