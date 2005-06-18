@@ -25,8 +25,6 @@ $Id$
 from datetime import datetime, time, timedelta
 from sets import Set
 
-from pytz import timezone
-
 from zope.security.checker import canAccess
 from zope.security.proxy import removeSecurityProxy
 from zope.app.traversing.api import getPath

@@ -23,14 +23,11 @@ $Id$
 
 """
 
-import sets
-
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 
 from schooltool.interfaces import ISection, ICourse
 
 from schoolbell.relationship import URIObject, RelationshipSchema
-from schoolbell.relationship import getRelatedObjects
 from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
 from schoolbell.relationship.interfaces import IRelationshipAddedEvent
 from schoolbell.relationship.interfaces import IRelationshipRemovedEvent

@@ -29,12 +29,12 @@ import re
 
 from zope.interface import Interface
 from zope.schema import TextLine, Date, Int
-from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
+from zope.schema.interfaces import RequiredMissing
 from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 from zope.app.form.browser.add import AddView
 from zope.app.form.browser.submit import Update
-from zope.app.form.utility import getWidgetsData, setUpEditWidgets
+from zope.app.form.utility import setUpEditWidgets
 from zope.app.form.interfaces import WidgetsError
 from zope.app.container.interfaces import INameChooser
 from zope.app.event.objectevent import modified
@@ -42,13 +42,12 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import IWidgetInputError
-from zope.app.form.interfaces import ConversionError
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 
 from schoolbell.calendar.utils import parse_date
 from schoolbell.calendar.utils import next_month, week_start
-from schoolbell.app.browser.cal import month_names, short_day_of_week_names
+from schoolbell.app.browser.cal import month_names
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ITimetable, ITimetableSchema
