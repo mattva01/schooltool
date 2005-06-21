@@ -1912,9 +1912,8 @@ def doctest_SectionTimetableSetupView():
         >>> request = TestRequest()
         >>> view = SectionTimetableSetupView(context, request)
 
-    There are two helper methods from the Mixin, getSchema and getTerm, that
-    extract the schema and term from the request, or pick suitable defaults.
-    XXX this test should be in a seperate test for the Mixin class
+    We have getSchema from the Mixin class to get the schema from the request
+    or choose a default.
 
         >>> view.getSchema() is app["ttschemas"].getDefault()
         True
@@ -1924,6 +1923,37 @@ def doctest_SectionTimetableSetupView():
         >>> request.form['ttschema'] = 'default'
         >>> view.getSchema() is app["ttschemas"]["default"]
         True
+
+    getTerms will give us a list of available terms from the request or a list
+    with just the current term if we're working at a time not during any term.
+
+    Without any terms in the request we get the output of getNextTermForDate
+    today
+
+        >>> import datetime
+        >>> from schooltool.timetable import getNextTermForDate
+        >>> getNextTermForDate(datetime.date.today()) in view.getTerms()
+        True
+        >>> len(view.getTerms())
+        1
+
+        >>> request.form['terms'] = ['2005-spring', '2005-fall']
+        >>> [t.__name__ for t in view.getTerms()]
+        [u'2005-spring', u'2005-fall']
+
+        >>> request.form['terms'] = ['2005-spring']
+        >>> [t.__name__ for t in view.getTerms()]
+        [u'2005-spring']
+
+        >>> request.form['terms'] = ['2005-fall']
+        >>> [t.__name__ for t in view.getTerms()]
+        [u'2005-fall']
+
+    Single terms may be returned as a single string, rather than a list:
+
+        >>> request.form['terms'] = '2005-spring'
+        >>> [t.__name__ for t in view.getTerms()]
+        [u'2005-spring']
 
     If we cancel the form, we get redirected to the section
 

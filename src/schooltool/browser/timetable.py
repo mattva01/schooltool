@@ -964,14 +964,6 @@ class TimetableSetupViewMixin(BrowserView):
         selected_ttschema = self.request.get('ttschema', ttschemas.default_id)
         return ttschemas.get(selected_ttschema, ttschemas.values()[0])
 
-    def getTerm(self):
-        """Return the chosen term."""
-        if 'term' in self.request:
-            terms = getSchoolToolApplication()["terms"]
-            return terms[self.request['term']]
-        else:
-            return getNextTermForDate(datetime.date.today())
-
 
 class PersonTimetableSetupView(TimetableSetupViewMixin):
     """A view for scheduling a student.
@@ -984,6 +976,14 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
     __used_for__ = IPerson
 
     template = ViewPageTemplateFile('templates/person-timetable-setup.pt')
+
+    def getTerm(self):
+        """Return the chosen term."""
+        if 'term' in self.request:
+            terms = getSchoolToolApplication()["terms"]
+            return terms[self.request['term']]
+        else:
+            return getNextTermForDate(datetime.date.today())
 
     def sectionMap(self, term, ttschema):
         """Compute a mapping of timetable slots to sections.
@@ -1076,6 +1076,22 @@ class SectionTimetableSetupView(TimetableSetupViewMixin):
 
     template = ViewPageTemplateFile('templates/section-timetable-setup.pt')
 
+    def getTerms(self):
+        """Return the chosen term."""
+        if 'terms' in self.request:
+            terms = getSchoolToolApplication()['terms']
+            requested_terms = []
+
+            # request['terms'] may be a list of strings or a single string, we
+            # need to handle both cases
+            try:
+                requested_terms = requested_terms + self.request['terms']
+            except TypeError:
+                requested_terms.append(self.request['terms'])
+            return [terms[term] for term in requested_terms]
+        else:
+            return [getNextTermForDate(datetime.date.today()),]
+
     def getDays(self, ttschema):
         """Return the current selection.
 
@@ -1093,7 +1109,9 @@ class SectionTimetableSetupView(TimetableSetupViewMixin):
         """
 
         try:
-            timetable = self.context.timetables[self.ttkey]
+            # All timetables for a given ttschema will have the same pattern
+            # regardless of term.
+            timetable = self.context.timetables[self.ttkeys[0]]
         except KeyError:
             timetable = None
 
@@ -1118,9 +1136,9 @@ class SectionTimetableSetupView(TimetableSetupViewMixin):
         self.has_timetables = bool(self.app["terms"] and self.app["ttschemas"])
         if not self.has_timetables:
             return self.template()
-        self.term = self.getTerm()
+        self.terms = self.getTerms()
         self.ttschema = self.getSchema()
-        self.ttkey = ''.join((self.term.__name__, '.', self.ttschema.__name__))
+        self.ttkeys = [''.join((term.__name__, '.', self.ttschema.__name__)) for term in self.terms]
         self.days = self.getDays(self.ttschema)
         #XXX dumb, this doesn't space course names
         course_title = ''.join([course.title for course in self.context.courses])
@@ -1130,17 +1148,19 @@ class SectionTimetableSetupView(TimetableSetupViewMixin):
                 zapi.absoluteURL(self.context, self.request))
         if 'SAVE' in self.request:
             section = removeSecurityProxy(self.context)
-            timetable = self.ttschema.createTimetable()
-            section.timetables[self.ttkey] = timetable
-            for day_id, day in timetable.items():
-                for period_id in day.periods:
-                    if ''.join((day_id, '.',period_id)) in self.request:
-                        act =  TimetableActivity(title=course_title,
-                                                 owner=section)
-                        timetable[day_id].add(period_id, act)
+            for key in self.ttkeys:
+                timetable =  self.ttschema.createTimetable()
+                section.timetables[key] = timetable
+                for day_id, day in timetable.items():
+                    for period_id in day.periods:
+                        if ''.join((day_id, '.',period_id)) in self.request:
+                            act =  TimetableActivity(title=course_title,
+                                                     owner=section)
+                            timetable[day_id].add(period_id, act)
 
+            # TODO: find a better place to redirect to
             self.request.response.redirect(
-                zapi.absoluteURL(self.context.timetables[self.ttkey],
+                zapi.absoluteURL(self.context.timetables[self.ttkeys[0]],
                                  self.request))
 
         return self.template()

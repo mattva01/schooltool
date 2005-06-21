@@ -20,36 +20,39 @@
 <tal:if tal:condition="view/has_timetables">
 <form tal:attributes="action request/URL" class="plain" method="post">
 
-  <fieldset>
-    <legend i18n:translate="">Timetable</legend>
+  <fieldset tal:define="terms view/app/terms/values;
+                        ttschemas view/app/ttschemas/values">
+    <legend i18n:translate="">Choose schedule template</legend>
 
-    <label for="term" i18n:translate="">Term</label>
-    <select id="term" name="term"
-            tal:define="terms view/app/terms/values">
-      <option tal:repeat="term terms/sortby:first"
-              tal:attributes="value term/__name__;
-                              selected python:term is view.term
-                                          and 'selected' or None"
-              tal:content="term/title"></option>
-    </select>
-
-    <label for="ttschema" i18n:translate="">Schema</label>
-    <select id="ttschema" name="ttschema"
-            tal:define="ttschemas view/app/ttschemas/values">
-      <option tal:repeat="ttschema ttschemas/sortby:__name__"
-              tal:attributes="value ttschema/__name__;
-                              selected python:ttschema is view.ttschema
-                                          and 'selected' or None"
-              tal:content="ttschema/__name__"></option>
-    </select>
-    <input class="button-ok" type="submit" name="REFRESH" value="Choose"
+    <p i18n:translate="">For terms:</p>
+    <tal:loop tal:repeat="term terms/sortby:first">
+      <input type="checkbox" name="terms"
+             tal:attributes="value term/__name__;
+                             checked python:term in view.terms
+                                                and 'checked' or None" />
+      <span tal:content="term/title" i18n:translate="" />
+    </tal:loop>
+    <input class="button-ok" type="submit" name="REFRESH" value="Update"
+           i18n:attributes="value" />
+    <p i18n:translate="">Using template:</p>
+    <tal:loop tal:repeat="ttschema ttschemas/sortby:__name__">
+      <input type="radio" name="ttschema"
+             tal:attributes="value ttschema/__name__;
+                             checked python:ttschema is view.ttschema
+                                                 and 'checked' or None" />
+      <span tal:content="ttschema/title" i18n:translate="" />
+    </tal:loop>
+    <input class="button-ok" type="submit" name="REFRESH" value="Update"
            i18n:attributes="value" />
   </fieldset>
 </form>
 
 <form tal:attributes="action request/URL" class="plain" method="post">
 
-  <input type="hidden" name="term" tal:attributes="value view/term/__name__" />
+  <tal:loop repeat="term view/terms">
+    <input type="hidden" name="terms"
+           tal:attributes="value term/__name__" />
+  </tal:loop>
   <input type="hidden" name="ttschema"
          tal:attributes="value view/ttschema/__name__" />
 
