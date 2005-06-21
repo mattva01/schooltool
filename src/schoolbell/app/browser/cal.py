@@ -981,8 +981,7 @@ class DailyCalendarView(CalendarViewBase):
                    self.snapToGrid(dtend) - self.snapToGrid(event.dtstart))
 
     def isResourceCalendar(self):
-        """Are we showing a calendar of some resource."""
-
+        """Return True if we are showing a calendar of some resource."""
         return IResource.providedBy(self.context.__parent__)
 
 
@@ -1569,7 +1568,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
     def keyword_arguments(self):
         """Wraps fieldNames under another name.
 
-        AddView and EditView api does not match so some wraping is needed.
+        AddView and EditView API does not match so some wrapping is needed.
         """
         return self.fieldNames
 
@@ -1580,7 +1579,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
                      initial=self._getInitialData(self.context))
 
     def _getInitialData(self, context):
-        """Extracts initial widgets data from context."""
+        """Extract initial widgets data from context."""
 
         initial = {}
         initial["title"] = context.title
@@ -1719,7 +1718,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
 
 
 class EventForBookingDisplay(object):
-    """Event wraper for display in booking view.
+    """Event wrapper for display in booking view.
 
     This is a wrapper around an ICalendarEvent object.  It adds view-specific
     attributes:
@@ -1753,7 +1752,8 @@ class CalendarEventBookingView(CalendarEventView):
     def __init__(self, context, request):
         CalendarEventView.__init__(self, context, request)
 
-        format = self.preferences.dateformat +' - '+ self.preferences.timeformat
+        format = '%s - %s' % (self.preferences.dateformat,
+                              self.preferences.timeformat)
         self.start = u'' + self.dtstart.strftime(format)
         self.end = u'' + self.dtend.strftime(format)
 
