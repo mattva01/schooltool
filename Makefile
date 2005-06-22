@@ -18,8 +18,8 @@ all: build
 
 .PHONY: build
 build:
-	$(PYTHON) setup.py build_ext -i
 	cd Zope3 && $(PYTHON) setup.py build_ext -i
+	$(PYTHON) setup.py build_ext -i
 	$(PYTHON) remove-stale-bytecode.py
 
 .PHONY: clean
