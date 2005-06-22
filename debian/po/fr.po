@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-05 16:05+0200\n"
+"POT-Creation-Date: 2005-01-08 23:59+0100\n"
 "PO-Revision-Date: 2004-11-08 22:11+0100\n"
 "Last-Translator: Jean-Luc Ccoulon (f5ibh) <jean-luc.coulon@wanadoo.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -61,9 +61,9 @@ msgstr ""
 "Cette interface est utilisée par SchoolTool pour communiquer avec des "
 "clients autres que HTML tels que le client SchoolTool et certains clients de "
 "tierce partie (par exemple Mozilla Calendar). Les messages XML et iCalendar "
-"peuvent être transmis à cette interface en utilisant « GET » et « PUT » par "
-"l'intermédiaire de HTTP, ce qui permet l'accès à toutes les fonctionnalités "
-"de SchoolTool."
+"peuvent être transmis à cette interface en utilisant « GET » et « PUT » "
+"par l'intermédiaire de HTTP, ce qui permet l'accès à toutes les "
+"fonctionnalités de SchoolTool."
 
 #. Type: string
 #. Description
@@ -73,7 +73,7 @@ msgstr "Interfaces réseau pour l'interface avec le navigateur HTML (SSL)"
 
 #. Type: string
 #. Description
-#: ../schooltool.templates:40
+#: ../schooltool.templates:40 ../schoolbell.templates:40
 msgid ""
 "Please enter a space separated list of [address:]port values that you would "
 "like the server to listen on."
@@ -92,7 +92,7 @@ msgstr ""
 
 #. Type: string
 #. Description
-#: ../schooltool.templates:40
+#: ../schooltool.templates:40 ../schoolbell.templates:40
 msgid ""
 "This is an SSL version of this interface and will only accept SSL "
 "connections."
@@ -102,19 +102,19 @@ msgstr ""
 
 #. Type: select
 #. Choices
-#: ../schooltool.templates:51
+#: ../schooltool.templates:51 ../schoolbell.templates:51
 msgid "Create self-signed certificate"
 msgstr "Créer un certificat auto-signé"
 
 #. Type: select
 #. Choices
-#: ../schooltool.templates:51
+#: ../schooltool.templates:51 ../schoolbell.templates:51
 msgid "Import certificate"
 msgstr "Importer d'un certificat existant"
 
 #. Type: select
 #. Description
-#: ../schooltool.templates:53
+#: ../schooltool.templates:53 ../schoolbell.templates:53
 msgid "Method for setting up the SSL certificate:"
 msgstr "Méthode de création du certificat SSL :"
 
@@ -131,7 +131,7 @@ msgstr ""
 
 #. Type: select
 #. Description
-#: ../schooltool.templates:53
+#: ../schooltool.templates:53 ../schoolbell.templates:53
 msgid ""
 "You can also import a certificate, for instance a certificate signed by a "
 "certification authority (CA). The certificate must be in PEM format and "
@@ -143,13 +143,13 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../schooltool.templates:65
+#: ../schooltool.templates:65 ../schoolbell.templates:65
 msgid "Would you like to re-create the SSL certificate?"
 msgstr "Voulez-vous recréer le certificat SSL ?"
 
 #. Type: boolean
 #. Description
-#: ../schooltool.templates:65
+#: ../schooltool.templates:65 ../schoolbell.templates:65
 msgid ""
 "A SSL certificate already exists. Please confirm whether you want to create "
 "a new certificate."
@@ -159,13 +159,13 @@ msgstr ""
 
 #. Type: string
 #. Description
-#: ../schooltool.templates:72
+#: ../schooltool.templates:72 ../schoolbell.templates:72
 msgid "PEM format SSL certificate:"
 msgstr "Certificat SSL au format PEM :"
 
 #. Type: string
 #. Description
-#: ../schooltool.templates:72
+#: ../schooltool.templates:72 ../schoolbell.templates:72
 msgid "Please enter the file name of the SSL certificate you want to import."
 msgstr ""
 "Veuillez indiquer le nom du fichier du certificat SSL (au format PEM) à "
@@ -173,13 +173,13 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../schooltool.templates:78
+#: ../schooltool.templates:78 ../schoolbell.templates:78
 msgid "Should the previous database be removed?"
 msgstr "Faut-il supprimer la base de données existante ?"
 
 #. Type: boolean
 #. Description
-#: ../schooltool.templates:78
+#: ../schooltool.templates:78 ../schoolbell.templates:78
 msgid ""
 "A possibly incompatible pre-existing database was detected. Since this is a "
 "testing/beta version, converting existing databases to the new format is not "
@@ -191,7 +191,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../schooltool.templates:78
+#: ../schooltool.templates:78 ../schoolbell.templates:78
 msgid ""
 "Therefore the new version cannot be installed unless the existing database "
 "is removed first. All data in the existing database will be deleted."
@@ -208,7 +208,7 @@ msgstr "Voulez-vous purger la base de données de SchoolTool ?"
 
 #. Type: boolean
 #. Description
-#: ../schooltool.templates:89
+#: ../schooltool.templates:89 ../schoolbell.templates:89
 msgid ""
 "By default, databases are removed when a package is purged.  However, if you "
 "would like to retain the database for SchoolBell, this is your last chance.  "
@@ -220,55 +220,81 @@ msgstr ""
 "SchoolBell, vous pouvez le préciser ici. Veuillez noter que la purge de la "
 "base de données entraînera la perte irrémédiable des données."
 
-#~ msgid "Network interfaces for SchoolBell XML web services:"
-#~ msgstr "Interfaces réseau pour les services web XML de SchoolBell :"
+#. Type: string
+#. Description
+#: ../schoolbell.templates:4
+msgid "Network interfaces for SchoolBell XML web services:"
+msgstr "Interfaces réseau pour les services web XML de SchoolBell :"
 
-#~ msgid "Network interfaces for the HTML browser interface:"
-#~ msgstr "Interfaces réseau pour l'interface du navigateur HTML :"
+#. Type: string
+#. Description
+#: ../schoolbell.templates:16
+msgid "Network interfaces for the HTML browser interface:"
+msgstr "Interfaces réseau pour l'interface du navigateur HTML :"
 
-#~ msgid ""
-#~ "The HTML interface provides access to SchoolBell via any standard web "
-#~ "browser."
-#~ msgstr ""
-#~ "L'interface HTML permet l'accès à SchoolBell en utilisant n'importe quel "
-#~ "navigateur internet standard."
+#. Type: string
+#. Description
+#: ../schoolbell.templates:16
+msgid ""
+"The HTML interface provides access to SchoolBell via any standard web "
+"browser."
+msgstr ""
+"L'interface HTML permet l'accès à SchoolBell en utilisant n'importe quel "
+"navigateur internet standard."
 
-#~ msgid "Network interfaces for SchoolBell XML web services (SSL):"
-#~ msgstr "Interface web pour les services web XML de SchoolBell (SSL) :"
+#. Type: string
+#. Description
+#: ../schoolbell.templates:25
+msgid "Network interfaces for SchoolBell XML web services (SSL):"
+msgstr "Interface web pour les services web XML de SchoolBell (SSL) :"
 
-#~ msgid ""
-#~ "This interface is used by SchoolBell for communicating with non-HTML "
-#~ "clients such as the SchoolTool and 3rd party clients (e.g. Mozilla "
-#~ "Calendar). XML and iCalendar messages can be PUT or GET to this interface "
-#~ "via HTTP allowing access to all SchoolBell functionality."
-#~ msgstr ""
-#~ "Cette interface est utilisée par SchoolBell pour communiquer avec des "
-#~ "clients autres que HTML tels que le client SchoolTool et certains clients "
-#~ "de tierce partie (par exemple Mozilla Calendar). Les messages XML et "
-#~ "iCalendar peuvent être transmis à cette interface en utilisant « GET » et "
-#~ "« PUT » par l'intermédiaire de HTTP ce qui permet l'accès à toutes les "
-#~ "fonctionnalités de SchoolBell."
+#. Type: string
+#. Description
+#: ../schoolbell.templates:25
+msgid ""
+"This interface is used by SchoolBell for communicating with non-HTML clients "
+"such as the SchoolTool and 3rd party clients (e.g. Mozilla Calendar). XML "
+"and iCalendar messages can be PUT or GET to this interface via HTTP allowing "
+"access to all SchoolBell functionality."
+msgstr ""
+"Cette interface est utilisée par SchoolBell pour communiquer avec des "
+"clients autres que HTML tels que le client SchoolTool et certains clients de "
+"tierce partie (par exemple Mozilla Calendar). Les messages XML et iCalendar "
+"peuvent être transmis à cette interface en utilisant « GET » et « PUT » "
+"par l'intermédiaire de HTTP ce qui permet l'accès à toutes les "
+"fonctionnalités de SchoolBell."
 
-#~ msgid "Network interfaces for the HTML browser interface (SSL):"
-#~ msgstr "Interfaces réseau pour l'interface avec le navigateur HTML (SSL) :"
+#. Type: string
+#. Description
+#: ../schoolbell.templates:40
+msgid "Network interfaces for the HTML browser interface (SSL):"
+msgstr "Interfaces réseau pour l'interface avec le navigateur HTML (SSL) :"
 
-#~ msgid ""
-#~ "The web interface provides access to SchoolBell via any standard web "
-#~ "browser."
-#~ msgstr ""
-#~ "L'interface web permet l'accès à SchoolBell à partir de n'importe quel "
-#~ "navigateur Internet standard."
+#. Type: string
+#. Description
+#: ../schoolbell.templates:40
+msgid ""
+"The web interface provides access to SchoolBell via any standard web browser."
+msgstr ""
+"L'interface web permet l'accès à SchoolBell à partir de n'importe quel "
+"navigateur Internet standard."
 
-#~ msgid ""
-#~ "You can create a self-signed root certificate that can be imported into "
-#~ "web browsers. The certificate can be copied from /etc/schoolbell/cert.pem."
-#~ msgstr ""
-#~ "Vous pouvez créer un certificat racine auto-signé qui sera importé par "
-#~ "les navigateurs web. Le certificat peut être copié à partir de /etc/"
-#~ "schoolbell/cert.pem."
+#. Type: select
+#. Description
+#: ../schoolbell.templates:53
+msgid ""
+"You can create a self-signed root certificate that can be imported into web "
+"browsers. The certificate can be copied from /etc/schoolbell/cert.pem."
+msgstr ""
+"Vous pouvez créer un certificat racine auto-signé qui sera importé par les "
+"navigateurs web. Le certificat peut être copié à partir de /etc/schoolbell/"
+"cert.pem."
 
-#~ msgid "Do you want to purge the database for SchoolBell?"
-#~ msgstr "Voulez-vous purger la base de données de SchoolBell ?"
+#. Type: boolean
+#. Description
+#: ../schoolbell.templates:89
+msgid "Do you want to purge the database for SchoolBell?"
+msgstr "Voulez-vous purger la base de données de SchoolBell ?"
 
 #~ msgid "Interfaces for the RESTive interface over HTTP"
 #~ msgstr "Interfaces pour l'interface RESTive via HTTP?:"
@@ -280,8 +306,7 @@ msgstr ""
 #~ "Please select how you would like to set up the SSL certificate for your "
 #~ "server."
 #~ msgstr ""
-#~ "Veuillez choisir la m?thode de cr?ation du certificat SSL de votre "
-#~ "serveur."
+#~ "Veuillez choisir la m?thode de cr?ation du certificat SSL de votre serveur."
 
 #~ msgid "You already have an SSL certificate."
 #~ msgstr "Vous poss?dez d?j? un certificat SSL."
