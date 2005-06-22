@@ -8,7 +8,13 @@ PYTHON=python2.3
 package=schooltool
 library=libschooltool
 
-build:
+.PHONY: build
+build: build-stamp
+
+build-stamp:
+	dh_testdir
+	$(MAKE) PYTHON=$(PYTHON) PYTHONDIR=/usr/bin/$(PYTHON) build extract-translations update-translations
+	touch build-stamp
 
 clean::
 	dh_testdir
@@ -16,6 +22,7 @@ clean::
 	-$(MAKE) clean
 	rm -f install-arch-stamp
 	rm -f install-indep-stamp
+	rm -f build-stamp
 	dh_clean
 	debconf-updatepo
 
@@ -71,4 +78,4 @@ binary-arch:
 
 binary: binary-arch binary-indep
 
-.PHONY: build clean binary-indep binary-arch binary install
+.PHONY: clean binary-indep binary-arch binary install

@@ -1,6 +1,6 @@
 # Top level directory
-include RELEASE
-include GPL
+include RELEASE.txt
+include GPL.txt
 include Makefile
 include MANIFEST
 include test.py

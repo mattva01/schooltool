@@ -1,3 +1,10 @@
+schooltool (0.11-1) unstable; urgency=low
+
+  * New upstream version.
+  * Extract and compile translations in build-stamp rule.
+
+ -- Brian Sutherland <jinty@web.de>  Thu,  9 Jun 2005 06:27:41 +0200
+
 schooltool (0.10-1) unstable; urgency=low
 
   * Split the schoolbell and schooltool source packages. (Closes: Bug#301277)
