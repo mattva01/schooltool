@@ -1040,7 +1040,6 @@ table.event_booking td.booked {
                  /* accessibility (or should we just remove from template? */
 }
 
-
 /* Rounded corners for notes, taken from:
 * http://www.vertexwerks.com/tests/sidebox/
 */
@@ -1048,6 +1047,11 @@ table.event_booking td.booked {
 .note {
   margin-bottom: 1ex;
   background: #eed680 url(++resource++note-body-r.gif) no-repeat bottom right;
+}
+
+.note p {
+  padding: 1em 2em 2em 2em;
+  margin: 0;
 }
 
 .note .header {
@@ -1059,10 +1063,10 @@ table.event_booking td.booked {
 
 .note .header h6 {
   background: url(++resource++note-head-l.gif) no-repeat top left;
-  margin: 0;
-  padding: 0.25ex 0.5ex;
   font-weight: bold; 
   font-size: small;
+  margin: 0;
+  padding: 6px 0 0 15px;
 }
 
 .note .header a.delete {
@@ -1075,14 +1079,33 @@ table.event_booking td.booked {
   overflow: hidden;
   float: right;
   position: absolute;
-  right: 4px;
-  top: 4px;
+  right: 11px;
+  top: 9px;
 }
 
 .note .body {
   background: url(++resource++note-body-l.gif) no-repeat bottom left;
   margin: 0;
-  padding: 1ex;
   font-size: x-small;
 }
 
+.note.private {
+  background: #c1665a url(++resource++private-note-body-r.gif) no-repeat bottom right;
+}
+
+.note.private .header {
+  background: #900 url(++resource++private-note-head-r.gif) no-repeat top right;
+}
+
+.note.private .privacy {
+  font-size: x-small;
+}
+
+.note.private h6 {
+  background: url(++resource++private-note-head-l.gif) no-repeat top left;
+  color: #f0f0f0;
+}
+
+.note.private .body {
+  background: url(++resource++private-note-body-l.gif) no-repeat bottom left;
+}

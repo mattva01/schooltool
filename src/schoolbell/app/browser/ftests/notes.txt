@@ -62,11 +62,16 @@ We should see the note now:
     ...<div id="notes">
     ...<h5>Notes</h5>
     <BLANKLINE>
-    ...<div class="note">
+    ...<div class="note public">
     ...<div class="header">
-    ...<h6>My Note</h6>
+    ...<h6>
+    <BLANKLINE>
+    ...My Note
+    ...</h6>
     ...</div>
-    ...<div class="body">This is the note</div>
+    ...<div class="body">
+    ...<p>This is the note</p>
+    ...</div>
     ...</div>
     <BLANKLINE>
     </div>
@@ -99,17 +104,27 @@ Make sure the note is there when we view it:
     ...<div id="notes">
     ...<h5>Notes</h5>
     <BLANKLINE>
-    ...<div class="note">
+    ...<div class="note public">
     ...<div class="header">
-    ...<h6>My Note</h6>
+    ...<h6>
+    <BLANKLINE>
+    ...My Note
+    ...</h6>
     ...</div>
-    ...<div class="body">This is the note</div>
+    ...<div class="body">
+    ...<p>This is the note</p>
     ...</div>
-    ...<div class="note">
+    ...</div>
+    ...<div class="note private">
     ...<div class="header">
-    ...<h6>My Private Note</h6>
+    ...<h6>
+    <BLANKLINE>
+    ...My Private Note
+    ...</h6>
     ...</div>
-    ...<div class="body">This is a private note</div>
+    ...<div class="body">
+    ...<p>This is a private note</p>
+    ...</div>
     ...</div>
     <BLANKLINE>
     </div>
@@ -144,11 +159,16 @@ View the page as our new user and we will only see the first (public) note:
     ...<div id="notes">
     ...<h5>Notes</h5>
     <BLANKLINE>
-    ...<div class="note">
+    ...<div class="note public">
     ...<div class="header">
-    ...<h6>My Note</h6>
+    ...<h6>
+    <BLANKLINE>
+    ...My Note
+    ...</h6>
     ...</div>
-    ...<div class="body">This is the note</div>
+    ...<div class="body">
+    ...<p>This is the note</p>
+    ...</div>
     ...</div>
     <BLANKLINE>
     </div>
@@ -169,17 +189,27 @@ Notes can also be deleted, but only by the person who created the note:
     ...<div id="notes">
     ...<h5>Notes</h5>
     <BLANKLINE>
-    ...<div class="note">
+    ...<div class="note public">
     ...<div class="header">
-    ...<h6>My Note</h6>
+    ...<h6>
+    <BLANKLINE>
+    ...My Note
+    ...</h6>
     ...</div>
-    ...<div class="body">This is the note</div>
+    ...<div class="body">
+    ...<p>This is the note</p>
     ...</div>
-    ...<div class="note">
+    ...</div>
+    ...<div class="note private">
     ...<div class="header">
-    ...<h6>My Private Note</h6>
+    ...<h6>
+    <BLANKLINE>
+    ...My Private Note
+    ...</h6>
     ...</div>
-    ...<div class="body">This is a private note</div>
+    ...<div class="body">
+    ...<p>This is a private note</p>
+    ...</div>
     ...</div>
     <BLANKLINE>
     </div>
@@ -208,11 +238,16 @@ Now delete the note:
     ...<div id="notes">
     ...<h5>Notes</h5>
     <BLANKLINE>
-    ...<div class="note">
+    ...<div class="note private">
     ...<div class="header">
-    ...<h6>My Private Note</h6>
+    ...<h6>
+    <BLANKLINE>
+    ...My Private Note
+    ...</h6>
     ...</div>
-    ...<div class="body">This is a private note</div>
+    ...<div class="body">
+    ...<p>This is a private note</p>
+    ...</div>
     ...</div>
     <BLANKLINE>
     </div>

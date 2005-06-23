@@ -668,6 +668,19 @@
   <resource name="note-body-l.gif" file="resources/note-body-l.gif"
             layer=".skin.ISchoolBellLayer" />
 
+  <resource name="private-note-head-l.gif"
+            file="resources/private-note-head-l.gif"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="private-note-head-r.gif"
+            file="resources/private-note-head-r.gif"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="private-note-body-r.gif"
+            file="resources/private-note-body-r.gif"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="private-note-body-l.gif"
+            file="resources/private-note-body-l.gif"
+            layer=".skin.ISchoolBellLayer" />
+
 <!-- Navigation -->
 
   <page
