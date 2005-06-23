@@ -196,6 +196,8 @@ def doctest_LocationResourceVocabulary():
          'Room 3': <zope.schema.vocabulary.SimpleTerm object at ...}
 
     """
+
+
 def doctest_SectionAddView():
     r"""Tests for adding sections.
 
@@ -227,12 +229,19 @@ def doctest_SectionAddView():
 
         >>> class SectionAddViewForTesting(SectionAddView):
         ...     schema = ISection
-        ...     fieldNames = ('title', 'description')
+        ...     fieldNames = ('title', 'description', 'location')
         ...     _factory = Section
         ...     _arguments = []
         ...     _keyword_arguments = []
         ...     _set_before_add = 'title',
         ...     _set_after_add = []
+
+    We need some setup for our vocabulary:
+
+        >>> from zope.schema.vocabulary import getVocabularyRegistry
+        >>> from schooltool.browser.app import LocationResourceVocabulary
+        >>> registry = getVocabularyRegistry()
+        >>> registry.register('LocationResources', LocationResourceVocabulary)
 
     create a SchoolTool instance:
 
@@ -318,6 +327,116 @@ def doctest_SectionAddView():
         MAT1
 
         >>> tearDown()
+
+    """
+
+
+def doctest_SectionEditView():
+    r"""Test for SectionEditView
+
+    Let's create a view for editing a section:
+
+        >>> from schooltool.browser.app import SectionEditView
+        >>> from schooltool.app import Section
+        >>> from schooltool.interfaces import ISection
+
+    We need some setup for our vocabulary:
+
+        >>> from schooltool.app import SchoolToolApplication
+        >>> app = SchoolToolApplication()
+        >>> from zope.app.component.site import LocalSiteManager
+        >>> app.setSiteManager(LocalSiteManager(app))
+        >>> from zope.app.component.hooks import setSite
+        >>> setSite(app)
+        >>> from zope.schema.vocabulary import getVocabularyRegistry
+        >>> from schooltool.browser.app import LocationResourceVocabulary
+        >>> registry = getVocabularyRegistry()
+        >>> registry.register('LocationResources', LocationResourceVocabulary)
+        >>> from schooltool.app import Resource
+        >>> app['resources']['room1'] = room1 = Resource("Room 1",
+        ...                                               isLocation=True)
+
+        >>> section = Section()
+        >>> directlyProvides(section, IContainmentRoot)
+        >>> request = TestRequest()
+
+        >>> class TestSectionEditView(SectionEditView):
+        ...     schema = ISection
+        ...     fieldNames = ('title', 'description', 'location')
+        ...     _factory = Section
+
+        >>> view = TestSectionEditView(section, request)
+
+    We should not get redirected if we did not click on apply button:
+
+        >>> request = TestRequest()
+        >>> view = TestSectionEditView(section, request)
+        >>> view.update()
+        ''
+        >>> request.response.getStatus()
+        599
+
+    After changing name of the section you should get redirected to the
+    container:
+
+        >>> request = TestRequest()
+        >>> request.form = {'UPDATE_SUBMIT': 'Apply',
+        ...                 'field.location': u'Room 1',
+        ...                 'field.title': u'new_title'}
+        >>> view = TestSectionEditView(section, request)
+        >>> view.update()
+        u'Updated on ${date_time}'
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1'
+
+        >>> section.title
+        u'new_title'
+        >>> section.location.title
+        'Room 1'
+
+    Even if the title has not changed you should get redirected to the section
+    list:
+
+        >>> request = TestRequest()
+        >>> request.form = {'UPDATE_SUBMIT': 'Apply',
+        ...                 'field.title': u'new_title'}
+        >>> view = TestSectionEditView(section, request)
+        >>> view.update()
+        ''
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1'
+
+        >>> section.title
+        u'new_title'
+
+    We should not get redirected if there were errors:
+
+        >>> request = TestRequest()
+        >>> request.form = {'UPDATE_SUBMIT': 'Apply',
+        ...                 'field.title': u''}
+        >>> view = TestSectionEditView(section, request)
+        >>> view.update()
+        u'An error occured.'
+        >>> request.response.getStatus()
+        599
+
+        >>> section.title
+        u'new_title'
+
+    We can cancel an action if we want to:
+
+        >>> request = TestRequest()
+        >>> request.form = {'CANCEL': 'Cancel'}
+        >>> view = TestSectionEditView(section, request)
+        >>> view.update()
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1'
 
     """
 

@@ -23,7 +23,7 @@ $Id: app.py 3481 2005-04-21 15:28:29Z bskahan $
 """
 
 from zope.app.publisher.browser import BrowserView
-from zope.app.form.browser.add import AddView
+from zope.app.form.browser.add import AddView, EditView
 from zope.app import zapi
 from zope.app.component.hooks import getSite
 from zope.app.form.utility import getWidgetsData
@@ -188,6 +188,12 @@ class SectionAddView(AddView):
 
     def nextURL(self):
         return zapi.absoluteURL(self.course, self.request)
+
+
+class SectionEditView(sb.BaseEditView):
+    """View for editing Sections."""
+
+    __used_for__ = ISection
 
 
 class SectionInstructorView(BrowserView):
