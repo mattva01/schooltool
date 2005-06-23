@@ -19,7 +19,7 @@
 
   <div id="section-view">
 
-    <p>
+    <p tal:condition="context/location">
       <a href=""
          tal:attributes="href context/location/@@absolute_url"
          tal:content="context/location/title"/>
