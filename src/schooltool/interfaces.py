@@ -28,7 +28,7 @@ from zope.interface import Interface, Attribute, implements
 from zope.app.location.interfaces import ILocation
 from zope.schema.interfaces import IField
 from zope.schema import Field, Object, Int, Text, TextLine, List, Set, Tuple
-from zope.schema import Dict, Date, Timedelta, Bool
+from zope.schema import Dict, Date, Timedelta, Bool, Choice
 from zope.app.container.interfaces import IContainer, IContained
 from zope.app.container.constraints import contains, containers
 
@@ -838,7 +838,10 @@ class ISection(IGroup):
 
     size = Attribute("""The number of member students in the section.""")
 
-    location = Attribute("""The resource where this section meets.""")
+    location = Choice(title=u"Location",
+                      required=False,
+                      description=u"The resource where this section meets.",
+                      vocabulary="LocationResources")
 
 
 class ISectionContainer(IContainer):

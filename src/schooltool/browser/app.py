@@ -30,6 +30,7 @@ from zope.app.form.utility import getWidgetsData
 from zope.app.form.interfaces import WidgetsError
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 from schoolbell.app.browser import app as sb
 from schoolbell.app.membership import isTransitiveMember
@@ -37,6 +38,7 @@ from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.relationship import getRelatedObjects
 
 from schooltool import SchoolToolMessageID as _
+from schooltool import getSchoolToolApplication
 from schooltool.interfaces import ICourseContainer, ISectionContainer
 from schooltool.interfaces import ICourse, ISection
 from schooltool.interfaces import IPersonPreferences
@@ -116,6 +118,16 @@ class SectionView(BrowserView):
 
     def getGroups(self):
         return filter(IGroup.providedBy, self.context.members)
+
+
+class LocationResourceVocabulary(SimpleVocabulary):
+    """Choice vocabulary of all location resources."""
+
+    def __init__(self, context):
+        resources = getSchoolToolApplication()['resources']
+        locations = [SimpleTerm(l, token=l.title) for l in resources.values() \
+                                                  if l.isLocation]
+        super(LocationResourceVocabulary, self).__init__(locations)
 
 
 class SectionAddView(AddView):

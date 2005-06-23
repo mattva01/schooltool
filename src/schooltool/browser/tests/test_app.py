@@ -154,6 +154,48 @@ def doctest_SectionView():
     """
 
 
+def doctest_LocationResourceVocabulary():
+    r"""Tests for location choice vocabulary.
+
+        >>> from schooltool.browser.app import LocationResourceVocabulary
+
+    We should be able to choose any Resource in the resource container that is
+    marked with isLocation.
+
+        >>> from schooltool.app import SchoolToolApplication
+        >>> app = SchoolToolApplication()
+        >>> from zope.app.component.site import LocalSiteManager
+        >>> app.setSiteManager(LocalSiteManager(app))
+        >>> from zope.app.component.hooks import setSite
+        >>> setSite(app)
+
+    There's no potential terms:
+
+        >>> vocab = LocationResourceVocabulary(app['sections'])
+        >>> vocab.by_token
+        {}
+
+    Now we'll add some resources
+
+        >>> from schooltool.app import Resource
+        >>> import pprint
+        >>> app['resources']['room1'] = room1 = Resource("Room 1",
+        ...                                               isLocation=True)
+        >>> app['resources']['room2'] = room2 = Resource("Room 2",
+        ...                                               isLocation=True)
+        >>> app['resources']['room3'] = room3 = Resource("Room 3",
+        ...                                               isLocation=True)
+        >>> app['resources']['printer'] = printer = Resource("Printer")
+
+    All of our rooms are available, but the printer is not.
+
+        >>> vocab = LocationResourceVocabulary(app['sections'])
+        >>> pprint.pprint(vocab.by_token)
+        {'Room 1': <zope.schema.vocabulary.SimpleTerm object at ...,
+         'Room 2': <zope.schema.vocabulary.SimpleTerm object at ...,
+         'Room 3': <zope.schema.vocabulary.SimpleTerm object at ...}
+
+    """
 def doctest_SectionAddView():
     r"""Tests for adding sections.
 

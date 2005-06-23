@@ -228,7 +228,7 @@
     <allow interface="schooltool.interfaces.ITimetabled" />
     <require permission="schoolbell.view"
              attributes="title description instructors members
-                         courses label size __cmp__" />
+                         courses label size __cmp__ location" />
     <require permission="schoolbell.edit"
              set_schema="schooltool.interfaces.ISection" />
   </content>

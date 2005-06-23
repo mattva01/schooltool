@@ -19,6 +19,11 @@
 
   <div id="section-view">
 
+    <p>
+      <a href=""
+         tal:attributes="href context/location/@@absolute_url"
+         tal:content="context/location/title"/>
+    </p>
     <p class="description" tal:content="context/description"/>
 
     <div class="info-block" tal:define="instructors context/instructors">

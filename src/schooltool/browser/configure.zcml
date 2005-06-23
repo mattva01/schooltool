@@ -250,11 +250,16 @@
       add="zope.View"
       />
 
+  <zope:vocabulary
+      name="LocationResources"
+      factory=".app.LocationResourceVocabulary"
+      />
+
   <addform
       label="Add a Section"
       name="addSchoolToolSection.html"
       schema="schooltool.interfaces.ISection"
-      fields="title description"
+      fields="title description location"
       set_before_add="title"
       template="templates/section_add.pt"
       content_factory="schooltool.app.Section"
