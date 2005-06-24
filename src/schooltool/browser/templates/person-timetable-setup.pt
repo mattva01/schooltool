@@ -57,7 +57,7 @@
   </p>
 
   <tal:block repeat="day view/days">
-    <h2 tal:content="day/title">Day N</h2>
+    <h2 i18n:translate="" tal:content="day/title">Day N</h2>
 
     <table class="timetable_setup">
       <tal:block tal:repeat="period day/periods">
