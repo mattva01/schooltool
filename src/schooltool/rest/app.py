@@ -43,6 +43,7 @@ from schoolbell.app.rest.rng import validate_against_schema
 from schoolbell.calendar.icalendar import ICalParseError
 from schoolbell.calendar.icalendar import ICalReader
 
+from schooltool import getSchoolToolApplication
 from schooltool.app import Person, Group, Resource, Course, Section
 from schooltool.app import CourseContainer, SectionContainer
 from schooltool.common import parse_date
@@ -158,6 +159,11 @@ class SectionFileFactory(sb.ApplicationObjectFileFactory):
                   <text/>
                 </attribute>
               </optional>
+              <optional>
+                <attribute name="location">
+                  <text/>
+                </attribute>
+              </optional>
             </element>
           </start>
         </grammar>
@@ -170,6 +176,16 @@ class SectionFileFactory(sb.ApplicationObjectFileFactory):
         node = doc.query('/m:object')[0]
         kwargs['title'] = node['title']
         kwargs['description'] = node.get('description')
+        # Locations can be requested by title, we map them to the actual
+        # Resource object here:
+        desired_location = node.get('location')
+        if desired_location:
+            resources = getSchoolToolApplication()['resources']
+            try:
+                location = resources[desired_location]
+                kwargs['location'] = location
+            except KeyError:
+                raise RestError("No such location.")
         return kwargs
 
 

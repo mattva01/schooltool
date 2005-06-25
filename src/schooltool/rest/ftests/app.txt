@@ -157,7 +157,8 @@ are SchoolTool objects, rather than SchoolBell objects:
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: text/xml
     ...
-    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Lily"/>
+    ... <object xmlns="http://schooltool.org/ns/model/0.1"
+    ...         title="Lily" isLocation="true"/>
     ... """)
     HTTP/1.1 201 Created
     ...
@@ -178,7 +179,7 @@ are SchoolTool objects, rather than SchoolBell objects:
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding1" 
-    ...         course="birding"/>
+    ...         course="birding" location="lily"/>
     ... """)
     HTTP/1.1 201 Created
     ...
@@ -193,6 +194,10 @@ are SchoolTool objects, rather than SchoolBell objects:
     <schooltool.app.Course object at ...>
     >>> getRootFolder()['frogpond']['sections']['birdwatching-1']
     <schooltool.app.Section object at ...>
+    >>> getRootFolder()['frogpond']['sections']['birdwatching-1'].location is \
+    ...                        getRootFolder()['frogpond']['resources']['lily']
+    True
+
 
 The same should happen if we post to respective containers:
 
