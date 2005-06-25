@@ -76,14 +76,20 @@
       layer="SchoolToolLayer"
       />
 
-  <page
-      name="add.html"
-      for="schoolbell.app.interfaces.IPersonContainer"
-      class="schooltool.browser.app.PersonAddView"
-      template="templates/person_add.pt"
-      permission="schoolbell.create"
-      layer=".skin.ISchoolToolLayer"
-      menu="schoolbell_actions" title="New Person" />
+  <configure
+      package="schoolbell.app.browser"
+      i18n_domain="schoolbell">
+
+    <page
+        name="add.html"
+        for="schoolbell.app.interfaces.IPersonContainer"
+        class="schooltool.browser.app.PersonAddView"
+        template="templates/person_add.pt"
+        permission="schoolbell.create"
+        layer="schooltool.browser.skin.ISchoolToolLayer"
+        menu="schoolbell_actions" title="New Person" />
+
+  </configure>
 
   <page
       name="index.html"
@@ -365,7 +371,7 @@
       class="schooltool.browser.app.PersonPreferencesView"
       template="templates/person_preferences.pt"
       permission="zope.View"
-      menu="schoolbell_actions" 
+      menu="schoolbell_actions"
       title="Change Preferences" />
 
   <page
@@ -383,7 +389,7 @@
       for="schooltool.interfaces.IPerson"
       class="schooltool.browser.timetable.PersonTimetableSetupView"
       permission="zope.View"
-      menu="schoolbell_actions" 
+      menu="schoolbell_actions"
       title="Schedule" />
 
   <page
