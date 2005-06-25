@@ -47,13 +47,13 @@
       />
 
   <!-- Views -->
-  
+
   <configure
       package="schoolbell.app.browser"
       i18n_domain="schoolbell">
 
     <!-- Views from SchoolBell -->
-      
+
     <page
         name="add.html"
         for="schoolbell.app.interfaces.IPersonContainer"
@@ -62,6 +62,49 @@
         permission="schoolbell.create"
         layer="schooltool.browser.skin.ISchoolToolLayer"
         menu="schoolbell_actions" title="New Person" />
+
+    <addform
+        label="Add a Group"
+        name="addSchoolBellGroup.html"
+        schema="schoolbell.app.interfaces.IGroup"
+        fields="title description"
+        set_before_add="title"
+        content_factory="schooltool.app.Group"
+        permission="schoolbell.create"
+        template="templates/simple_add.pt"
+        class="schoolbell.app.browser.app.GroupAddView"
+        layer="schooltool.browser.skin.ISchoolToolLayer"
+        >
+        <widget field="description" height="5" />
+    </addform>
+
+    <addform
+        label="Add a Resource"
+        name="addSchoolBellResource.html"
+        schema="schoolbell.app.interfaces.IResource"
+        fields="title description isLocation"
+        set_before_add="title"
+        content_factory="schooltool.app.Resource"
+        template="templates/simple_add.pt"
+        class="schoolbell.app.browser.app.ResourceAddView"
+        permission="schoolbell.create"
+        layer="schooltool.browser.skin.ISchoolToolLayer"
+        >
+        <widget field="description" height="5" />
+    </addform>
+
+    <addform
+        label="Add a Course"
+        name="addSchoolToolCourse.html"
+        schema="schooltool.interfaces.ICourse"
+        fields="title description"
+        set_before_add="title"
+        content_factory="schooltool.app.Course"
+        permission="schoolbell.create"
+        template="templates/simple_add.pt"
+        class="schooltool.browser.app.CourseAddView">
+        <widget field="description" height="5" />
+    </addform>
 
   </configure>
 
@@ -114,21 +157,6 @@
       layer=".skin.ISchoolToolLayer"
       />
 
-  <addform
-      label="Add a Group"
-      name="addSchoolBellGroup.html"
-      schema="schoolbell.app.interfaces.IGroup"
-      fields="title description"
-      set_before_add="title"
-      content_factory="schooltool.app.Group"
-      permission="schoolbell.create"
-      template="templates/simple_add.pt"
-      class="schoolbell.app.browser.app.GroupAddView"
-      layer=".skin.ISchoolToolLayer"
-      >
-    <widget field="description" height="5" />
-  </addform>
-
   <page
       name="index.html"
       for="schooltool.interfaces.IGroupContainer"
@@ -149,21 +177,6 @@
       title="Import Groups"
       layer=".skin.ISchoolToolLayer"
       />
-
-  <addform
-      label="Add a Resource"
-      name="addSchoolBellResource.html"
-      schema="schoolbell.app.interfaces.IResource"
-      fields="title description isLocation"
-      set_before_add="title"
-      content_factory="schooltool.app.Resource"
-      template="templates/simple_add.pt"
-      class="schoolbell.app.browser.app.ResourceAddView"
-      permission="schoolbell.create"
-      layer=".skin.ISchoolToolLayer"
-      >
-    <widget field="description" height="5" />
-  </addform>
 
   <page
       name="index.html"
@@ -191,19 +204,6 @@
       contents="zope.ManageContent"
       add="zope.View"
       />
-
-  <addform
-      label="Add a Course"
-      name="addSchoolToolCourse.html"
-      schema="schooltool.interfaces.ICourse"
-      fields="title description"
-      set_before_add="title"
-      content_factory="schooltool.app.Course"
-      permission="schoolbell.create"
-      template="templates/simple_add.pt"
-      class=".app.CourseAddView">
-    <widget field="description" height="5" />
-  </addform>
 
   <page
       name="course-csvimport.html"
@@ -289,7 +289,6 @@
       title="Edit Info"
     <widget field="description" height="5" />
   </editform>
-
 
   <page
       name="instructors.html"
