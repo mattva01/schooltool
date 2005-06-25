@@ -47,6 +47,23 @@
       />
 
   <!-- Views -->
+  
+  <configure
+      package="schoolbell.app.browser"
+      i18n_domain="schoolbell">
+
+    <!-- Views from SchoolBell -->
+      
+    <page
+        name="add.html"
+        for="schoolbell.app.interfaces.IPersonContainer"
+        class="schooltool.browser.app.PersonAddView"
+        template="templates/person_add.pt"
+        permission="schoolbell.create"
+        layer="schooltool.browser.skin.ISchoolToolLayer"
+        menu="schoolbell_actions" title="New Person" />
+
+  </configure>
 
   <page
       name="index.html"
@@ -75,21 +92,6 @@
       title="View"
       layer="SchoolToolLayer"
       />
-
-  <configure
-      package="schoolbell.app.browser"
-      i18n_domain="schoolbell">
-
-    <page
-        name="add.html"
-        for="schoolbell.app.interfaces.IPersonContainer"
-        class="schooltool.browser.app.PersonAddView"
-        template="templates/person_add.pt"
-        permission="schoolbell.create"
-        layer="schooltool.browser.skin.ISchoolToolLayer"
-        menu="schoolbell_actions" title="New Person" />
-
-  </configure>
 
   <page
       name="index.html"
