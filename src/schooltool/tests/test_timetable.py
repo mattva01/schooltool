@@ -1129,6 +1129,74 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         self.assertEqual(expected, result,
                          diff(pformat(expected), pformat(result)))
 
+    def test_createCalendar_exceptionDays(self):
+        from schooltool.timetable import Term
+        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+
+        tt = self.createTimetable()
+        model = self.createModel()
+        schooldays = Term('Sample', date(2003, 11, 20), date(2003, 11, 26))
+        schooldays.addWeekdays(0, 1, 2, 3, 4, 5) # Mon-Sat
+
+        # Add an exception day
+        exception = SchooldayTemplate()
+        t, td = time, timedelta
+        exception.add(SchooldayPeriod('Green', t(6, 0), td(minutes=90)))
+        exception.add(SchooldayPeriod('Blue', t(8, 0), td(minutes=90)))
+        model.exceptionDays[date(2003, 11, 22)] = exception
+
+        # Run the calendar generation
+        cal = model.createCalendar(schooldays, tt)
+
+        result = self.extractCalendarEvents(cal, schooldays)
+
+        expected = [{datetime(2003, 11, 20, 9, 0, tzinfo=UTC): "English",
+                     datetime(2003, 11, 20, 11, 0, tzinfo=UTC): "Math"},
+                    {datetime(2003, 11, 21, 9, 0, tzinfo=UTC): "Biology",
+                     datetime(2003, 11, 21, 10, 30, tzinfo=UTC): "Geography"},
+                    {datetime(2003, 11, 22, 6, 0, tzinfo=UTC): "English",
+                     datetime(2003, 11, 22, 8, 0, tzinfo=UTC): "Math"},
+                    {},
+                    {datetime(2003, 11, 24, 9, 0, tzinfo=UTC): "Biology",
+                     datetime(2003, 11, 24, 11, 0, tzinfo=UTC): "Geography"},
+                    {datetime(2003, 11, 25, 9, 0, tzinfo=UTC): "English",
+                     datetime(2003, 11, 25, 11, 0, tzinfo=UTC): "Math"},
+                    {datetime(2003, 11, 26, 9, 0, tzinfo=UTC): "Biology",
+                     datetime(2003, 11, 26, 11, 0, tzinfo=UTC): "Geography"}]
+
+        self.assertEqual(expected, result,
+                         diff(pformat(expected), pformat(result)))
+
+    def test_schooldayStrategy(self):
+        from schooltool.timetable import SequentialDaysTimetableModel, Term
+        from schooltool.timetable import SchooldayTemplate
+
+        term = Term('Sample', date(2005, 6, 27), date(2005, 7, 10))
+        term.addWeekdays(0, 1, 2, 3, 4)
+
+        template = SchooldayTemplate()
+        model = SequentialDaysTimetableModel(('A', 'B', 'C'), {None: template})
+
+        dgen = model._dayGenerator()
+        days = [model.schooldayStrategy(d, dgen) for d in term
+                if term.isSchoolday(d)]
+
+        self.assertEqual(days, ['A', 'B', 'C', 'A', 'B',
+                                'C', 'A', 'B', 'C', 'A'])
+
+        term.add(date(2005, 7, 2))
+        model.exceptionDayIds[date(2005, 7, 2)] = "X"
+        model.exceptionDayIds[date(2005, 7, 4)] = "Y"
+        dgen = model._dayGenerator()
+        days = [model.schooldayStrategy(d, dgen)
+                for d in term
+                if term.isSchoolday(d)]
+
+        # Effectively, exception day ids get inserted into the normal
+        # sequence of day ids, instead of replacing some day ids.
+        self.assertEqual(days, ['A', 'B', 'C', 'A', 'B', 'X',
+                                'Y', 'C', 'A', 'B', 'C'])
+
     def test_periodsInDay(self):
         from schoolbell.calendar.interfaces import ICalendar
         from schooltool.timetable import SchooldayPeriod
@@ -1171,13 +1239,11 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
+        from schooltool.timetable import Term
         from schooltool.interfaces import ITimetableModel
-        #from schooltool.component import getOptions
 
         days = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
         tt = Timetable(days)
-        #setPath(tt, '/path/to/tt')
-        #getOptions(tt).timetable_privacy = 'private'
 
         periods = ('1', '2', '3', '4')
         for day_id in days:
@@ -1217,9 +1283,22 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         model = WeeklyTimetableModel(day_templates={None: template})
         verifyObject(ITimetableModel, model)
 
-        cal = model.createCalendar(TermStub(), tt)
+        # Add an exception day
+        exception = SchooldayTemplate()
+        t, td = time, timedelta
+        exception.add(SchooldayPeriod('1', t(6, 0), td(minutes=45)))
+        exception.add(SchooldayPeriod('2', t(7, 0), td(minutes=45)))
+        exception.add(SchooldayPeriod('3', t(8, 0), td(minutes=45)))
+        exception.add(SchooldayPeriod('4', t(9, 0), td(minutes=45)))
+        model.exceptionDays[date(2003, 11, 22)] = exception
+        model.exceptionDayIds[date(2003, 11, 22)] = "Monday"
 
-        result = self.extractCalendarEvents(cal, TermStub())
+        schooldays = Term('Sample', date(2003, 11, 20), date(2003, 11, 26))
+        schooldays.addWeekdays(0, 1, 2, 3, 4, 5) # Mon-Sat
+
+        cal = model.createCalendar(schooldays, tt)
+
+        result = self.extractCalendarEvents(cal, schooldays)
 
         expected = [
             {datetime(2003, 11, 20, 9, 0, tzinfo=UTC): "Chemistry",
@@ -1230,7 +1309,12 @@ class TestWeeklyTimetableModel(PlacelessSetup,
              datetime(2003, 11, 21, 9, 50, tzinfo=UTC): "Drawing",
              # skip! datetime(2003, 11, 21, 10, 50): "History",
              datetime(2003, 11, 21, 12, 00, tzinfo=UTC): "Math"},
-            {}, {},
+            # An exceptional working Saturday, with a Monday's timetable
+            {datetime(2003, 11, 22, 6, 0, tzinfo=UTC): "English",
+             datetime(2003, 11, 22, 7, 0, tzinfo=UTC): "History",
+             datetime(2003, 11, 22, 8, 0, tzinfo=UTC): "Biology",
+             datetime(2003, 11, 22, 9, 0, tzinfo=UTC): "Physics"},
+            {},
             {datetime(2003, 11, 24, 9, 0, tzinfo=UTC): "English",
              datetime(2003, 11, 24, 9, 50, tzinfo=UTC): "History",
              datetime(2003, 11, 24, 10, 50, tzinfo=UTC): "Biology",
@@ -1266,6 +1350,36 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         self.assertEquals(model.periodsInDay(schooldays, tt, day), [])
 
         model.createCalendar(schooldays, tt)
+
+    def test_schooldayStrategy(self):
+        from schooltool.timetable import WeeklyTimetableModel, Term
+        from schooltool.timetable import SchooldayTemplate
+
+        term = Term('Sample', date(2005, 6, 27), date(2005, 7, 10))
+        term.addWeekdays(0, 1, 2, 3, 4, 5) # Mon-Sat
+
+        template = SchooldayTemplate()
+        model = WeeklyTimetableModel(day_templates={None: template})
+        dgen = model._dayGenerator()
+        days = [model.schooldayStrategy(d, dgen) for d in term]
+
+        self.assertEqual(days,
+                         ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
+                          'Friday', None, None,
+                          'Monday', 'Tuesday', 'Wednesday', 'Thursday',
+                          'Friday', None, None])
+
+        model.exceptionDayIds[date(2005, 7, 2)] = "Wednesday"
+        model.exceptionDayIds[date(2005, 7, 4)] = "Thursday"
+
+        dgen = model._dayGenerator()
+        days = [model.schooldayStrategy(d, dgen) for d in term]
+
+        self.assertEqual(days,
+                         ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
+                          'Friday', 'Wednesday', None,
+                          'Thursday', 'Tuesday', 'Wednesday', 'Thursday',
+                          'Friday', None, None])
 
 
 class TimetabledStub(TimetabledMixin):

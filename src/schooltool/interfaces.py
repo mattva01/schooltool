@@ -251,6 +251,31 @@ class ITimetableModel(Interface):
         for a particular weekday.
         """)
 
+    exceptionDays = Dict(
+        title=u"Exception schoolday templates",
+        key_type=Date(title=u"Date"),
+        value_type=Object(title=u"Schoolday template",
+                          schema=ISchooldayTemplate),
+        description=u"""
+        Schoolday templates for special days.
+
+        Schoolday templates provided in this attribute override the
+        templates in the dayTemplates attribute.
+        """)
+
+    exceptionDayIds = Dict(
+        title=u"Day ids for special dates",
+        key_type=Date(title=u"Date"),
+        value_type=Object(title=u"Schoolday template",
+                          schema=ISchooldayTemplate),
+        description=u"""
+        Day ids for special dates
+
+        This allows to indicate, that a certain timetable day id
+        should be used for a particular date, for example when the day
+        is a replacement for some other day.
+        """)
+
     def createCalendar(schoolday_model, timetable):
         """Return an ICalendar composed out of schoolday_model and timetable.
 

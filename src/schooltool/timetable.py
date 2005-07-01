@@ -701,7 +701,12 @@ class BaseTimetableModel(Persistent):
     implements(ITimetableModel)
 
     timetableDayIds = ()
-    dayTemplates = {}
+    dayTemplates = {}       # overriden in the __init__s of descendants
+
+
+    def __init__(self):
+        self.exceptionDays = PersistentDict()
+        self.exceptionDayIds = PersistentDict()
 
     def _validateDayTemplates(self):
         if None not in self.dayTemplates:
@@ -772,10 +777,9 @@ class BaseTimetableModel(Persistent):
         return self._periodsInDay(schoolday_model, timetable, day)[1]
 
     def _getTemplateForDay(self, date):
-        try:
-            return self.dayTemplates[date.weekday()]
-        except KeyError:
-            return self.dayTemplates[None]
+        default = self.dayTemplates[None]
+        usual = self.dayTemplates.get(date.weekday(), default)
+        return self.exceptionDays.get(date, usual)
 
     def schooldayStrategy(self, date, generator):
         raise NotImplementedError
@@ -820,6 +824,7 @@ class SequentialDaysTimetableModel(BaseTimetableModel):
     classProvides(ITimetableModelFactory)
 
     def __init__(self, day_ids, day_templates):
+        BaseTimetableModel.__init__(self)
         self.timetableDayIds = day_ids
         self.dayTemplates = day_templates
         self._validateDayTemplates()
@@ -828,7 +833,10 @@ class SequentialDaysTimetableModel(BaseTimetableModel):
         return itertools.cycle(self.timetableDayIds)
 
     def schooldayStrategy(self, date, generator):
-        return generator.next()
+        if date in self.exceptionDayIds:
+            return self.exceptionDayIds[date]
+        else:
+            return generator.next()
 
 
 class WeeklyTimetableModel(BaseTimetableModel):
@@ -841,12 +849,15 @@ class WeeklyTimetableModel(BaseTimetableModel):
     classProvides(ITimetableModelFactory)
 
     def __init__(self, day_ids=None, day_templates={}):
+        BaseTimetableModel.__init__(self)
         self.dayTemplates = day_templates
         if day_ids is not None:
             self.timetableDayIds = day_ids
         self._validateDayTemplates()
 
     def schooldayStrategy(self, date, generator):
+        if date in self.exceptionDayIds:
+            return self.exceptionDayIds[date]
         try:
             return self.timetableDayIds[date.weekday()]
         except IndexError:
