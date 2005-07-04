@@ -1138,10 +1138,12 @@ class SectionTimetableSetupView(TimetableSetupViewMixin):
             return self.template()
         self.terms = self.getTerms()
         self.ttschema = self.getSchema()
-        self.ttkeys = [''.join((term.__name__, '.', self.ttschema.__name__)) for term in self.terms]
+        self.ttkeys = [''.join((term.__name__, '.', self.ttschema.__name__))
+                       for term in self.terms]
         self.days = self.getDays(self.ttschema)
         #XXX dumb, this doesn't space course names
-        course_title = ''.join([course.title for course in self.context.courses])
+        course_title = ''.join([course.title
+                                for course in self.context.courses])
 
         if 'CANCEL' in self.request:
             self.request.response.redirect(
