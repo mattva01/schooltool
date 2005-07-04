@@ -83,7 +83,7 @@
   <utility
       name="schooltool"
       provides="zope.app.generations.interfaces.ISchemaManager"
-      factory="zope.app.generations.generations.SchemaManager"
+      component=".generations.schemaManager"
       />
 
   <utility
