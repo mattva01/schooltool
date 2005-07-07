@@ -188,7 +188,7 @@ Let's book one of them:
     ... """)
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/persons/frog/calendar/2005-02-04
+    Location: http://localhost/frogpond/persons/frog/calendar/daily.html?date=2005-02-04
     ...
 
 We should see the resource as a booked resource:
@@ -228,7 +228,7 @@ Let's unbook one of them and book another:
     ... """)
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/persons/frog/calendar/2005-02-04
+    Location: http://localhost/frogpond/persons/frog/calendar/daily.html?date=2005-02-04
     ...
 
 Now another resource is booked:
@@ -331,7 +331,7 @@ Unless unbooked:
     ... """)
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/persons/frog/calendar/2005-02-04
+    Location: http://localhost/frogpond/persons/frog/calendar/daily.html?date=2005-02-04
     ...
 
     >>> print http("""
@@ -397,7 +397,7 @@ that book resources should remove events from resource calendars):
     ... """)
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/persons/frog/calendar/2005-02-04
+    Location: http://localhost/frogpond/persons/frog/calendar/daily.html?date=2005-02-04
     ...
 
 We can see the event in mud's calendar:
@@ -421,7 +421,7 @@ should stay in place, yet the resource should become unbooked:
     ... """)
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/resources/mud/calendar/2005-02-04
+    Location: http://localhost/frogpond/resources/mud/calendar/daily.html?date=2005-02-04
 
 
 Frog still can see the event:
@@ -463,7 +463,7 @@ Lets book it again:
     ... """)
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/persons/frog/calendar/2005-02-04
+    Location: http://localhost/frogpond/persons/frog/calendar/daily.html?date=2005-02-04
     ...
 
 It is in mud's calendar again:
@@ -486,7 +486,7 @@ And delete the event from frog's calendar:
     ... """)
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/persons/frog/calendar/2005-02-04
+    Location: http://localhost/frogpond/persons/frog/calendar/daily.html?date=2005-02-04
 
 The event should be gone from the frog's calendar:
 
@@ -611,7 +611,7 @@ If we book some resources for the second event:
     ... """)
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/persons/frog/calendar/2005-02-04
+    Location: http://localhost/frogpond/persons/frog/calendar/daily.html?date=2005-02-04
     ...
 
 We should see the conflicts when booking the for the events overlaping Test event2:
