@@ -434,15 +434,17 @@ class CalendarViewBase(BrowserView):
         return '%s/%s' % (self.__url, dt)
 
     def update(self):
-        if 'date' not in self.request:
-            self.cursor = date.today()
-        else:
-            # It would be nice not to b0rk when the date is invalid but fall
-            # back to the current date, as if the date had not been specified.
-            self.cursor = parse_date(self.request['date'])
-
         session = ISession(self.request)['calendar']
         dt = session.get('last_visited_day')
+
+        if 'date' not in self.request:
+            self.cursor = dt or date.today()
+        else:
+            # TODO: It would be nice not to b0rk when the date is invalid but
+            # fall back to the current date, as if the date had not been
+            # specified.
+            self.cursor = parse_date(self.request['date'])
+
         if not (dt and self.inCurrentPeriod(dt)):
             session['last_visited_day'] = self.cursor
 

@@ -3310,7 +3310,7 @@ def doctest_CalendarViewBase():
         ValueError: quarterly
 
     update() sets the cursor for the view.  If it does not find a date in
-    request, it defaults to the current day:
+    request or the session, it defaults to the current day:
 
         >>> view.update()
         >>> view.cursor == date.today()
@@ -3320,7 +3320,6 @@ def doctest_CalendarViewBase():
 
         >>> request.form['date'] = '2005-01-02'
         >>> view.update()
-
         >>> view.cursor
         datetime.date(2005, 1, 2)
 
@@ -3328,6 +3327,15 @@ def doctest_CalendarViewBase():
 
         >>> from zope.app.session.interfaces import ISession
         >>> ISession(view.request)['calendar']['last_visited_day']
+        datetime.date(2005, 1, 2)
+
+    If not given a date, update() will try the last visited one from the
+    session:
+
+        >>> view.cursor = None
+        >>> del request.form['date']
+        >>> view.update()
+        >>> view.cursor
         datetime.date(2005, 1, 2)
 
     It will not update the session data if inCurrentPeriod() returns True:
