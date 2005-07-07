@@ -41,6 +41,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.browser.absoluteurl import absoluteURL, AbsoluteURL
 from zope.app.filerepresentation.interfaces import IWriteFile, IReadFile
+from zope.app.session.interfaces import ISession
 from zope.component import queryView, queryMultiAdapter, adapts
 from zope.interface import implements, Interface
 from zope.i18n import translate
@@ -409,7 +410,13 @@ class CalendarViewBase(BrowserView):
     def calURL(self, cal_type, cursor=None):
         """Construct a URL to a calendar at cursor."""
         if cursor is None:
-            cursor = self.cursor
+            session = ISession(self.request)['calendar']
+            dt = session.get('last_visited_day')
+            if dt and self.inCurrentPeriod(dt):
+                cursor = dt
+            else:
+                cursor = self.cursor
+
         if self.__url is None:
             self.__url = absoluteURL(self.context, self.request)
 
@@ -433,6 +440,15 @@ class CalendarViewBase(BrowserView):
             # It would be nice not to b0rk when the date is invalid but fall
             # back to the current date, as if the date had not been specified.
             self.cursor = parse_date(self.request['date'])
+
+        session = ISession(self.request)['calendar']
+        dt = session.get('last_visited_day')
+        if not (dt and self.inCurrentPeriod(dt)):
+            session['last_visited_day'] = self.cursor
+
+    def inCurrentPeriod(self, dt):
+        """Return True if dt is in the period currently being shown."""
+        raise NotImplementedError("override in subclasses")
 
     def getWeek(self, dt):
         """Return the week that contains the day dt.
@@ -667,6 +683,10 @@ class WeeklyCalendarView(CalendarViewBase):
     current_title = _("Current week")
     prev_title = _("Previous week")
 
+    def inCurrentPeriod(self, dt):
+        # XXX wrong if week starts on Sunday.
+        return dt.isocalendar()[:2] == self.cursor.isocalendar()[:2]
+
     def title(self):
         month_name_msgid = month_names[self.cursor.month]
         month_name = translate(month_name_msgid, context=self.request)
@@ -714,6 +734,9 @@ class MonthlyCalendarView(CalendarViewBase):
     current_title = _("Current month")
     prev_title = _("Previous month")
 
+    def inCurrentPeriod(self, dt):
+        return (dt.year, dt.month) == (self.cursor.year, self.cursor.month)
+
     def title(self):
         month_name_msgid = month_names[self.cursor.month]
         month_name = translate(month_name_msgid, context=self.request)
@@ -753,6 +776,9 @@ class YearlyCalendarView(CalendarViewBase):
     current_title = _("Current year")
     prev_title = _("Previous year")
 
+    def inCurrentPeriod(self, dt):
+        return dt.year == self.cursor.year
+
     def title(self):
         return unicode(self.cursor.year)
 
@@ -791,6 +817,9 @@ class DailyCalendarView(CalendarViewBase):
     next_title = _("The next day")
     current_title = _("Today")
     prev_title = _("The previous day")
+
+    def inCurrentPeriod(self, dt):
+        return dt == self.cursor
 
     def title(self):
         return self.dayTitle(self.cursor)

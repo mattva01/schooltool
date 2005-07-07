@@ -52,6 +52,19 @@ from schoolbell.app.interfaces import IPerson
 
 utc = timezone('UTC')
 
+def setUpSessions():
+    """Set up adapters and utilities for session support."""
+    from zope.publisher.interfaces import IRequest
+    from zope.app.session.interfaces import ISession
+    class SessionAdapterStub(object):
+        _dict = {}
+        def __init__(self, request):
+            pass
+        def __getitem__(self, name):
+            return self._dict.setdefault(name, {})
+    ztapi.provideAdapter(IRequest, ISession, SessionAdapterStub)
+
+
 def doctest_CalendarOwnerTraverser():
     """Tests for CalendarOwnerTraverser.
 
@@ -554,6 +567,7 @@ class TestCalendarViewBase(unittest.TestCase):
         setup.setUpTraversal()
         setup.setUpAnnotations()
 
+        setUpSessions()
         registerCalendarListView()
 
     def tearDown(self):
@@ -807,6 +821,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
             >>> setup.placelessSetUp()
             >>> registerCalendarListView()
+            >>> setUpSessions()
 
         CalendarViewBase.getEvents returns a list of wrapped calendar
         events.
@@ -817,6 +832,7 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> cal1.addEvent(createEvent('2005-02-26 19:39', '1h', 'code'))
             >>> cal1.addEvent(createEvent('2005-02-20 16:00', '1h', 'walk'))
             >>> view = CalendarViewBase(cal1, TestRequest())
+            >>> view.inCurrentPeriod = lambda dt: False
             >>> for e in view.getEvents(datetime(2005, 2, 21),
             ...                         datetime(2005, 3, 1)):
             ...     print e.title
@@ -2755,6 +2771,7 @@ class TestDailyCalendarView(unittest.TestCase):
     def setUp(self):
         setup.placelessSetUp()
         registerCalendarListView()
+        setUpSessions()
 
     def tearDown(self):
         setup.placelessTearDown()
@@ -3241,8 +3258,9 @@ class TestDailyCalendarView(unittest.TestCase):
 def doctest_CalendarViewBase():
     """Tests for CalendarViewBase.
 
-        >>> from schoolbell.app.browser.cal import CalendarViewBase
+        >>> setUpSessions()
 
+        >>> from schoolbell.app.browser.cal import CalendarViewBase
         >>> from schoolbell.app.cal import Calendar
         >>> calendar = Calendar()
         >>> directlyProvides(calendar, IContainmentRoot)
@@ -3260,6 +3278,7 @@ def doctest_CalendarViewBase():
 
         >>> request = TestRequest()
         >>> view = CalendarViewBase(calendar, request)
+        >>> view.inCurrentPeriod = lambda dt: False
         >>> view.cursor = date(2005, 2, 3)
 
         >>> view.calURL("daily")
@@ -3305,6 +3324,20 @@ def doctest_CalendarViewBase():
         >>> view.cursor
         datetime.date(2005, 1, 2)
 
+    update() stores the last visited day in the session:
+
+        >>> from zope.app.session.interfaces import ISession
+        >>> ISession(view.request)['calendar']['last_visited_day']
+        datetime.date(2005, 1, 2)
+
+    It will not update the session data if inCurrentPeriod() returns True:
+
+        >>> view.inCurrentPeriod = lambda dt: True
+        >>> request.form['date'] = '2005-01-01'
+        >>> view.update()
+        >>> ISession(view.request)['calendar']['last_visited_day']
+        datetime.date(2005, 1, 2)
+
     """
 
 
@@ -3327,6 +3360,15 @@ def doctest_DailyCalendarView():
         'http://127.0.0.1/calendar/2004-08-19'
         >>> view.current() == 'http://127.0.0.1/calendar/%s' % date.today()
         True
+
+    inCurrentPeriod returns True for the same day only:
+
+        >>> view.inCurrentPeriod(date(2004, 8, 18))
+        True
+        >>> view.inCurrentPeriod(date(2004, 8, 19))
+        False
+        >>> view.inCurrentPeriod(date(2004, 8, 17))
+        False
 
     """
 
@@ -3364,6 +3406,18 @@ def doctest_WeeklyCalendarView():
         >>> view.getWeek = lambda x: "really " + x
         >>> view.getCurrentWeek()
         'really works'
+
+    inCurrentPeriod returns True for the same week only:
+
+        >>> view.cursor = date(2004, 8, 18)
+        >>> view.inCurrentPeriod(date(2004, 8, 16))
+        True
+        >>> view.inCurrentPeriod(date(2004, 8, 22))
+        True
+        >>> view.inCurrentPeriod(date(2004, 8, 23))
+        False
+        >>> view.inCurrentPeriod(date(2004, 8, 15))
+        False
 
     """
 
@@ -3409,6 +3463,18 @@ def doctest_MonthlyCalendarView():
         >>> view.getMonth = lambda x: "really " + x
         >>> view.getCurrentMonth()
         'really works'
+
+    inCurrentPeriod returns True for the same month only:
+
+        >>> view.cursor = date(2004, 8, 18)
+        >>> view.inCurrentPeriod(date(2004, 8, 18))
+        True
+        >>> view.inCurrentPeriod(date(2004, 8, 1))
+        True
+        >>> view.inCurrentPeriod(date(2004, 7, 31))
+        False
+        >>> view.inCurrentPeriod(date(2003, 8, 18))
+        False
 
     """
 
@@ -3476,6 +3542,18 @@ def doctest_YearlyCalendarView():
         >>> week = view.getWeek(date.today())
         >>> print view.renderRow(week, date.today().month)
         <td...class="cal_yearly_day today">...
+
+    inCurrentPeriod returns True for the same year only:
+
+        >>> view.cursor = date(2004, 8, 18)
+        >>> view.inCurrentPeriod(date(2004, 8, 18))
+        True
+        >>> view.inCurrentPeriod(date(2004, 1, 1))
+        True
+        >>> view.inCurrentPeriod(date(2003, 12, 31))
+        False
+        >>> view.inCurrentPeriod(date(2005, 1, 1))
+        False
 
     """
 
