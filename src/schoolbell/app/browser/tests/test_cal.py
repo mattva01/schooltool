@@ -1264,7 +1264,7 @@ def doctest_CalendarEventAddView_add():
         >>> view.request.response.getStatus()
         302
         >>> view.request.response.getHeaders()['Location']
-        'http://127.0.0.1/calendar/2004-08-13'
+        'http://127.0.0.1/calendar/daily.html?date=2004-08-13'
 
     We can cowardly run away if we decide so, i.e., cancel our request.
     In that case we are redirected to today's calendar.
@@ -1280,7 +1280,7 @@ def doctest_CalendarEventAddView_add():
         >>> view.request.response.getStatus()
         302
         >>> location = view.request.response.getHeaders()['Location']
-        >>> expected = 'http://127.0.0.1/calendar/%s' % date.today()
+        >>> expected = 'http://127.0.0.1/calendar/daily.html?date=%s' % date.today()
         >>> (location == expected) or location
         True
 

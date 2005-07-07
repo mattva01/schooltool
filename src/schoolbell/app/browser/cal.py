@@ -1691,7 +1691,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
             return self.bookingURL(date)
         else:
             url = absoluteURL(self.context.__parent__, self.request)
-            return '%s/%s' % (url, date)
+            return '%s/daily.html?date=%s' % (url, date)
 
     def bookingURL(self, date=None):
         """Returns link to the booking view of the newly created event.
