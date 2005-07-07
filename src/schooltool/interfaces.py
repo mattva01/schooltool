@@ -276,15 +276,15 @@ class ITimetableModel(Interface):
         is a replacement for some other day.
         """)
 
-    def createCalendar(schoolday_model, timetable):
-        """Return an ICalendar composed out of schoolday_model and timetable.
+    def createCalendar(term, timetable):
+        """Return an ICalendar composed out of term and timetable.
 
         This method has model-specific knowledge as to how the schooldays,
         weekends and holidays map affects the mapping of the timetable
         onto the real-world calendar.
         """
 
-    def periodsInDay(schoolday_model, timetable, date):
+    def periodsInDay(term, timetable, date):
         """Return a sequence of periods defined in this day"""
 
 

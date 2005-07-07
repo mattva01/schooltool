@@ -715,13 +715,13 @@ class BaseTimetableModel(Persistent):
                     raise AssertionError("No day template for day %d,"
                                          " and no fallback either" % weekday)
 
-    def createCalendar(self, schoolday_model, timetable):
+    def createCalendar(self, term, timetable):
         uid_suffix = '%s@%s' % (getPath(timetable), socket.getfqdn())
         events = []
         day_id_gen = self._dayGenerator()
 
-        for date in schoolday_model:
-            day_id, periods = self._periodsInDay(schoolday_model, timetable,
+        for date in term:
+            day_id, periods = self._periodsInDay(term, timetable,
                                                  date, day_id_gen)
             for period in periods:
                 dt = datetime.datetime.combine(date, period.tstart)
@@ -738,7 +738,7 @@ class BaseTimetableModel(Persistent):
                     events.append(event)
         return ImmutableCalendar(events)
 
-    def _periodsInDay(self, schoolday_model, timetable, day, day_id_gen=None):
+    def _periodsInDay(self, term, timetable, day, day_id_gen=None):
         """Return a timetable day_id and a list of periods for a given day.
 
         if day_id_gen is not provided, a new generator is created and
@@ -749,13 +749,13 @@ class BaseTimetableModel(Persistent):
             # Scroll to the required day
             day_id_gen = self._dayGenerator()
             if day_id_gen is not None:
-                for date in schoolday_model:
+                for date in term:
                     if date == day:
                         break
-                    if schoolday_model.isSchoolday(date):
+                    if term.isSchoolday(date):
                         self.schooldayStrategy(date, day_id_gen)
 
-        if not schoolday_model.isSchoolday(day):
+        if not term.isSchoolday(day):
             return None, []
         day_id = self.schooldayStrategy(day, day_id_gen)
         if day_id is None:
@@ -772,9 +772,9 @@ class BaseTimetableModel(Persistent):
         result.sort(lambda x, y: cmp(x.tstart, y.tstart))
         return day_id, result
 
-    def periodsInDay(self, schoolday_model, timetable, day):
+    def periodsInDay(self, term, timetable, day):
         """See ITimetableModel.periodsInDay"""
-        return self._periodsInDay(schoolday_model, timetable, day)[1]
+        return self._periodsInDay(term, timetable, day)[1]
 
     def _getTemplateForDay(self, date):
         default = self.dayTemplates[None]
@@ -970,9 +970,9 @@ class TimetabledMixin:
         events = []
         terms = getSchoolToolApplication()["terms"]
         for term_id, schema_id in self.listCompositeTimetables():
-            schoolday_model = terms[term_id]
+            term = terms[term_id]
             tt = self.getCompositeTimetable(term_id, schema_id)
-            cal = tt.model.createCalendar(schoolday_model, tt)
+            cal = tt.model.createCalendar(term, tt)
             events += list(cal)
         result = ImmutableCalendar(events)
         # Parent is needed so that we can find out the owner of this calendar.
