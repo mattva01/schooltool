@@ -412,7 +412,19 @@ class CalendarViewBase(BrowserView):
             cursor = self.cursor
         if self.__url is None:
             self.__url = absoluteURL(self.context, self.request)
-        return  '%s/%s.html?date=%s' % (self.__url, cal_type, cursor)
+
+        if cal_type == 'daily':
+            dt = cursor.isoformat()
+        elif cal_type == 'weekly':
+            dt = '%04d-w%02d' % cursor.isocalendar()[:2]
+        elif cal_type == 'monthly':
+            dt = cursor.strftime('%Y-%m')
+        elif cal_type == 'yearly':
+            dt = str(cursor.year)
+        else:
+            raise ValueError(cal_type)
+
+        return '%s/%s' % (self.__url, dt)
 
     def update(self):
         if 'date' not in self.request:
@@ -1025,8 +1037,8 @@ class EventDeleteView(BrowserView):
 
     def _redirectBack(self, date):
         """Redirect to the current calendar's daily view."""
-        cal_url = absoluteURL(self.context, self.request)
-        url = '%s/daily.html?date=%s' % (cal_url, date.isoformat())
+        isodate = date.isoformat()
+        url = '%s/%s' % (absoluteURL(self.context, self.request), isodate)
         self.request.response.redirect(url)
 
     def _deleteRepeatingEvent(self, event, date):
@@ -1517,10 +1529,10 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
             return self._bookingURL(date)
 
         url = absoluteURL(self.context, self.request)
-        return '%s/daily.html?date=%s' % (url, date)
+        return '%s/%s' % (url, date)
 
     def _bookingURL(self, date):
-        """Return link to the booking view of the newly created event.
+        """Returns link to the booking view of the newly created event.
 
         Passes the date supplied as a redirect date to the booking view.
         """
@@ -1691,7 +1703,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
             return self.bookingURL(date)
         else:
             url = absoluteURL(self.context.__parent__, self.request)
-            return '%s/daily.html?date=%s' % (url, date)
+            return '%s/%s' % (url, date)
 
     def bookingURL(self, date=None):
         """Returns link to the booking view of the newly created event.
@@ -1796,7 +1808,7 @@ class CalendarEventBookingView(CalendarEventView):
     def nextURL(self):
         """Return the URL to be displayed after the add operation."""
         url = absoluteURL(self.context.__parent__, self.request)
-        return '%s/daily.html?date=%s' % (url, self._redirectToDate)
+        return '%s/%s' % (url, self._redirectToDate)
 
     def getConflictingEvents(self, resource):
         """Return a list of events that would conflict when booking resource."""

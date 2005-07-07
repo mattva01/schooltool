@@ -1098,10 +1098,10 @@ class TestCalendarViewBase(unittest.TestCase):
 
         self.assertEquals(displayed_years[0]['label'], first_year)
         self.assertEquals(displayed_years[0]['href'],
-          'http://127.0.0.1/calendar/yearly.html?date=%s-01-01' % first_year)
+                          'http://127.0.0.1/calendar/%s' % first_year)
         self.assertEquals(displayed_years[-1]['label'], last_year)
         self.assertEquals(displayed_years[-1]['href'],
-          'http://127.0.0.1/calendar/yearly.html?date=%s-01-01' % last_year)
+                          'http://127.0.0.1/calendar/%s' % last_year)
 
     def test_getJumpToMonths(self):
         from schoolbell.app.cal import Calendar
@@ -1115,9 +1115,9 @@ class TestCalendarViewBase(unittest.TestCase):
         displayed_months = view.getJumpToMonths()
 
         self.assertEquals(displayed_months[0]['href'],
-                      'http://127.0.0.1/calendar/monthly.html?date=2005-01-01')
+                          'http://127.0.0.1/calendar/2005-01')
         self.assertEquals(displayed_months[-1]['href'],
-                      'http://127.0.0.1/calendar/monthly.html?date=2005-12-01')
+                          'http://127.0.0.1/calendar/2005-12')
 
 
 class CalendarEventAddTestView(CalendarEventAddView):
@@ -1264,7 +1264,7 @@ def doctest_CalendarEventAddView_add():
         >>> view.request.response.getStatus()
         302
         >>> view.request.response.getHeaders()['Location']
-        'http://127.0.0.1/calendar/daily.html?date=2004-08-13'
+        'http://127.0.0.1/calendar/2004-08-13'
 
     We can cowardly run away if we decide so, i.e., cancel our request.
     In that case we are redirected to today's calendar.
@@ -1280,7 +1280,7 @@ def doctest_CalendarEventAddView_add():
         >>> view.request.response.getStatus()
         302
         >>> location = view.request.response.getHeaders()['Location']
-        >>> expected = 'http://127.0.0.1/calendar/daily.html?date=%s' % date.today()
+        >>> expected = 'http://127.0.0.1/calendar/%s' % date.today()
         >>> (location == expected) or location
         True
 
@@ -3263,22 +3263,32 @@ def doctest_CalendarViewBase():
         >>> view.cursor = date(2005, 2, 3)
 
         >>> view.calURL("daily")
-        'http://127.0.0.1/calendar/daily.html?date=2005-02-03'
+        'http://127.0.0.1/calendar/2005-02-03'
         >>> view.calURL("monthly")
-        'http://127.0.0.1/calendar/monthly.html?date=2005-02-03'
-        >>> view.calURL("weekly")
-        'http://127.0.0.1/calendar/weekly.html?date=2005-02-03'
+        'http://127.0.0.1/calendar/2005-02'
         >>> view.calURL("yearly")
-        'http://127.0.0.1/calendar/yearly.html?date=2005-02-03'
+        'http://127.0.0.1/calendar/2005'
 
         >>> view.calURL("daily", date(2005, 12, 13))
-        'http://127.0.0.1/calendar/daily.html?date=2005-12-13'
-        >>> view.calURL("weekly", date(2005, 12, 13))
-        'http://127.0.0.1/calendar/weekly.html?date=2005-12-13'
+        'http://127.0.0.1/calendar/2005-12-13'
         >>> view.calURL("monthly", date(2005, 12, 13))
-        'http://127.0.0.1/calendar/monthly.html?date=2005-12-13'
+        'http://127.0.0.1/calendar/2005-12'
         >>> view.calURL("yearly", date(2007, 11, 13))
-        'http://127.0.0.1/calendar/yearly.html?date=2007-11-13'
+        'http://127.0.0.1/calendar/2007'
+
+    The weekly links need some special attention:
+
+        >>> view.calURL("weekly")
+        'http://127.0.0.1/calendar/2005-w05'
+        >>> view.calURL("weekly", date(2003, 12, 31))
+        'http://127.0.0.1/calendar/2004-w01'
+        >>> view.calURL("weekly", date(2005, 1, 1))
+        'http://127.0.0.1/calendar/2004-w53'
+
+        >>> view.calURL("quarterly")
+        Traceback (most recent call last):
+        ...
+        ValueError: quarterly
 
     update() sets the cursor for the view.  If it does not find a date in
     request, it defaults to the current day:
@@ -3312,10 +3322,10 @@ def doctest_DailyCalendarView():
 
         >>> view.cursor = date(2004, 8, 18)
         >>> view.prev()
-        'http://127.0.0.1/calendar/daily.html?date=2004-08-17'
+        'http://127.0.0.1/calendar/2004-08-17'
         >>> view.next()
-        'http://127.0.0.1/calendar/daily.html?date=2004-08-19'
-        >>> view.current() == 'http://127.0.0.1/calendar/daily.html?date=%s' % date.today()
+        'http://127.0.0.1/calendar/2004-08-19'
+        >>> view.current() == 'http://127.0.0.1/calendar/%s' % date.today()
         True
 
     """
@@ -3341,11 +3351,11 @@ def doctest_WeeklyCalendarView():
 
         >>> view.cursor = date(2004, 8, 18)
         >>> view.prev()
-        'http://127.0.0.1/calendar/weekly.html?date=2004-08-11'
+        'http://127.0.0.1/calendar/2004-w33'
         >>> view.next()
-        'http://127.0.0.1/calendar/weekly.html?date=2004-08-25'
-        >>> fmt = 'http://127.0.0.1/calendar/weekly.html?date=%s'
-        >>> view.current() == fmt % date.today()
+        'http://127.0.0.1/calendar/2004-w35'
+        >>> fmt = 'http://127.0.0.1/calendar/%04d-w%02d'
+        >>> view.current() == fmt % date.today().isocalendar()[:2]
         True
 
     getCurrentWeek is a shortcut for view.getWeek(view.cursor)
@@ -3386,12 +3396,11 @@ def doctest_MonthlyCalendarView():
 
         >>> view.cursor = date(2004, 8, 18)
         >>> view.prev()
-        'http://127.0.0.1/calendar/monthly.html?date=2004-07-01'
+        'http://127.0.0.1/calendar/2004-07'
         >>> view.next()
-        'http://127.0.0.1/calendar/monthly.html?date=2004-09-01'
-        >>> dt = date.today().strftime("%Y-%m-%d")
-        >>> view.current() == ('http://127.0.0.1/calendar/'
-        ...                    'monthly.html?date=%s' % dt)
+        'http://127.0.0.1/calendar/2004-09'
+        >>> dt = date.today().strftime("%Y-%m")
+        >>> view.current() == 'http://127.0.0.1/calendar/%s' % dt
         True
 
     getCurrentWeek is a shortcut for view.getMonth(view.cursor)
@@ -3443,11 +3452,10 @@ def doctest_YearlyCalendarView():
 
         >>> view.cursor = date(2004, 8, 18)
         >>> view.prev()
-        'http://127.0.0.1/calendar/yearly.html?date=2003-01-01'
+        'http://127.0.0.1/calendar/2003'
         >>> view.next()
-        'http://127.0.0.1/calendar/yearly.html?date=2005-01-01'
-        >>> fmt = 'http://127.0.0.1/calendar/yearly.html?date=%s'
-        >>> expected = fmt % date.today()
+        'http://127.0.0.1/calendar/2005'
+        >>> expected = 'http://127.0.0.1/calendar/%d' % date.today().year
         >>> view.current() == expected
         True
 
@@ -3457,10 +3465,10 @@ def doctest_YearlyCalendarView():
         >>> week = view.getWeek(date(2004, 2, 4))[2:4]
         >>> print view.renderRow(week, 2)
         <td class="cal_yearly_day">
-        <a href="http://127.0.0.1/calendar/daily.html?date=2004-02-04" class="cal_yearly_day">4</a>
+        <a href="http://127.0.0.1/calendar/2004-02-04" class="cal_yearly_day">4</a>
         </td>
         <td class="cal_yearly_day">
-        <a href="http://127.0.0.1/calendar/daily.html?date=2004-02-05" class="cal_yearly_day">5</a>
+        <a href="http://127.0.0.1/calendar/2004-02-05" class="cal_yearly_day">5</a>
         </td>
 
     If the week includes today, that is indicated in a class attribute:
@@ -3591,7 +3599,7 @@ def doctest_EventDeleteView():
         ...         return False
         ...     location = view.request.response.getHeaders()['Location']
         ...     expected = ('http://127.0.0.1/%s/calendar/'
-        ...                 'daily.html?date=2005-02-%02d' % (person, day))
+        ...                 '2005-02-%02d' % (person, day))
         ...     assert location == expected, location
         ...     return True
         >>> redirected(request, 3)
