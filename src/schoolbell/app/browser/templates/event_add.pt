@@ -305,7 +305,7 @@
       <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
              i18n:attributes="value cancel-button" />
       <a tal:condition="view/show_book_link"
-         tal:attributes="href view/bookingURL"
+          tal:attributes="href string:${context/@@absolute_url}/booking.html"
          i18n:translate="">Book resources</a>
     </div>
   </form>

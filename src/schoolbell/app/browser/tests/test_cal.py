@@ -1275,17 +1275,14 @@ def doctest_CalendarEventAddView_add():
         True
 
     We should have been redirected to the calendar view:
-    (TODO: redirect to the day when the event occurs)
 
         >>> view.request.response.getStatus()
         302
         >>> view.request.response.getHeaders()['Location']
-        'http://127.0.0.1/calendar/2004-08-13'
+        'http://127.0.0.1/calendar'
 
     We can cowardly run away if we decide so, i.e., cancel our request.
     In that case we are redirected to today's calendar.
-    # TODO: it would be better to redirect to the date the user was on
-    #       before he decided to add an event.
 
         >>> request = TestRequest(form={'CANCEL': 'Cancel'})
         >>> calendar = Calendar()
@@ -1296,7 +1293,7 @@ def doctest_CalendarEventAddView_add():
         >>> view.request.response.getStatus()
         302
         >>> location = view.request.response.getHeaders()['Location']
-        >>> expected = 'http://127.0.0.1/calendar/%s' % date.today()
+        >>> expected = 'http://127.0.0.1/calendar'
         >>> (location == expected) or location
         True
 
@@ -2134,7 +2131,7 @@ def doctest_CalendarEventEditView_nextURL():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeader('location')
-        'http://127.0.0.1/calendar/2004-09-13'
+        'http://127.0.0.1/calendar'
 
     Let's try to cancel the editing event:
 
@@ -2154,7 +2151,7 @@ def doctest_CalendarEventEditView_nextURL():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeader('location')
-        'http://127.0.0.1/calendar/2004-08-13'
+        'http://127.0.0.1/calendar'
 
     If the date stays unchanged - we should be redirected to the date
     that was set in the request:
@@ -2174,7 +2171,7 @@ def doctest_CalendarEventEditView_nextURL():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeader('location')
-        'http://127.0.0.1/calendar/2004-08-13'
+        'http://127.0.0.1/calendar'
 
     """
 
@@ -3680,15 +3677,14 @@ def doctest_EventDeleteView():
 
     As a side effect, you will be shown your way to the calendar view:
 
-        >>> def redirected(request, day, person='person'):
+        >>> def redirected(request, person='person'):
         ...     if view.request.response.getStatus() != 302:
         ...         return False
         ...     location = view.request.response.getHeaders()['Location']
-        ...     expected = ('http://127.0.0.1/%s/calendar/'
-        ...                 '2005-02-%02d' % (person, day))
+        ...     expected = 'http://127.0.0.1/%s/calendar' % (person, )
         ...     assert location == expected, location
         ...     return True
-        >>> redirected(request, 3)
+        >>> redirected(request)
         True
 
     Invalid requests to delete events will be ignored, and you will be bounced
@@ -3700,7 +3696,7 @@ def doctest_EventDeleteView():
         >>> view = EventDeleteView(cal, request)
         >>> view.handleEvent()
 
-        >>> redirected(request, 3)
+        >>> redirected(request)
         True
 
     That was easy.  Now the hard part: recurrent events.  Let's create one.
@@ -3721,7 +3717,7 @@ def doctest_EventDeleteView():
         >>> event = view.handleEvent()
         >>> event is recurrer
         True
-        >>> redirected(request, 5)
+        >>> redirected(request)
         False
 
     The event has not been touched, because we did not issue a command.  We'll
@@ -3734,7 +3730,7 @@ def doctest_EventDeleteView():
 
         >>> request.form['CANCEL'] = 'Cancel'
         >>> view.handleEvent()
-        >>> redirected(request, 5)
+        >>> redirected(request)
         True
         >>> del request.form['CANCEL']
 
@@ -3742,7 +3738,7 @@ def doctest_EventDeleteView():
 
         >>> request.form['CURRENT'] = 'Current'
         >>> view.handleEvent()
-        >>> redirected(request, 5)
+        >>> redirected(request)
         True
 
     As a result, a new exception date should have been added:
@@ -3756,7 +3752,7 @@ def doctest_EventDeleteView():
         >>> del request.form['CURRENT']
         >>> request.form['FUTURE'] = 'Future'
         >>> view.handleEvent()
-        >>> redirected(request, 5)
+        >>> redirected(request)
         True
 
         >>> cal.find('rec').recurrence.until

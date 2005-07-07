@@ -1042,13 +1042,13 @@ class EventDeleteView(BrowserView):
         event = self._findEvent(event_id)
         if event is None:
             # The event was not found.
-            return self._redirectBack(date)
+            return self._redirectBack()
 
         if event.recurrence is None or event.__parent__ != self.context:
             # Bah, the event is not recurrent.  Easy!
             # XXX It shouldn't be.  We should still ask for confirmation.
             self.context.removeEvent(removeSecurityProxy(event))
-            return self._redirectBack(date)
+            return self._redirectBack()
         else:
             # The event is recurrent, we might need to show a form.
             return self._deleteRepeatingEvent(event, date)
@@ -1066,10 +1066,9 @@ class EventDeleteView(BrowserView):
         except KeyError:
             pass
 
-    def _redirectBack(self, date):
+    def _redirectBack(self):
         """Redirect to the current calendar's daily view."""
-        isodate = date.isoformat()
-        url = '%s/%s' % (absoluteURL(self.context, self.request), isodate)
+        url = absoluteURL(self.context, self.request)
         self.request.response.redirect(url)
 
     def _deleteRepeatingEvent(self, event, date):
@@ -1088,7 +1087,7 @@ class EventDeleteView(BrowserView):
             return event # We don't know what to do, let's ask the user.
 
         # We did our job, redirect back to the calendar view.
-        return self._redirectBack(date)
+        return self._redirectBack()
 
     def _modifyRecurrenceRule(self, event, **kwargs):
         """Modify the recurrence rule of an event.
@@ -1531,7 +1530,6 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
         """Add the event to a calendar."""
         self.context.addEvent(event)
         self._event_uid = event.unique_id
-        self._redirectToDate = event.dtstart.date()
         return event
 
     def update(self):
@@ -1540,36 +1538,18 @@ class CalendarEventAddView(CalendarEventViewMixin, AddView):
             return self.updateForm()
         elif 'CANCEL' in self.request:
             self.update_status = ''
-            self.request.response.redirect(self.nextURL(date.today()))
+            self.request.response.redirect(self.nextURL())
             return self.update_status
         else:
             return AddView.update(self)
 
-    def nextURL(self, date=None):
-        """Return the URL to be displayed after the add operation.
-
-        If the date argument is specified, the user is redirected to that
-        particular day in the calendar.  Otherwise, the date is taken from
-        self._redirectToDate, which is set by add() or any other method.
-        # XXX A bit hacky...
-        """
-        if date is None:
-            date = self._redirectToDate
-
+    def nextURL(self):
+        """Return the URL to be displayed after the add operation."""
         if "field.book" in self.request:
-            return self._bookingURL(date)
-
-        url = absoluteURL(self.context, self.request)
-        return '%s/%s' % (url, date)
-
-    def _bookingURL(self, date):
-        """Returns link to the booking view of the newly created event.
-
-        Passes the date supplied as a redirect date to the booking view.
-        """
-
-        url = absoluteURL(self.context, self.request)
-        return '%s/%s/booking.html?date=%s' % (url, self._event_uid, date)
+            url = absoluteURL(self.context, self.request)
+            return '%s/%s/booking.html' % (url, self._event_uid)
+        else:
+            return absoluteURL(self.context, self.request)
 
 
 class ICalendarEventEditForm(ICalendarEventAddForm):
@@ -1580,7 +1560,6 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
     """A view for editing an event."""
 
     error = None
-    _redirectToDate = None
     show_book_checkbox = False
     show_book_link = True
 
@@ -1670,8 +1649,6 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         widget_data = self.processRequest(kw)
 
         parsed_date = parse_datetimetz(widget_data['start'].isoformat())
-        if self.context.dtstart != parsed_date:
-            self._redirectToDate = widget_data['start'].strftime("%Y-%m-%d")
         self.context.dtstart = parsed_date
         self.context.recurrence = widget_data['rrule']
         for attrname in ['allday', 'duration', 'title',
@@ -1688,7 +1665,6 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         status = ''
 
         start_date = self.context.dtstart.strftime("%Y-%m-%d")
-        self._redirectToDate = self.request.get('date', start_date)
 
         if "UPDATE" in self.request:
             return self.updateForm()
@@ -1719,33 +1695,12 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
         self.update_status = status
         return status
 
-    def nextURL(self, date=None):
-        """Return the URL to be displayed after the add operation.
-
-        If the date argument is specified, the user is redirected to that
-        particular day in the calendar.  Otherwise, the date is taken from
-        self._redirectToDate, which is set by add() or any other method.
-        # XXX A bit hacky...
-        """
-        if date is None:
-            date = self._redirectToDate
-
+    def nextURL(self):
+        """Return the URL to be displayed after the add operation."""
         if "field.book" in self.request:
-            return self.bookingURL(date)
+            return absoluteURL(self.context, self.request) + '/booking.html'
         else:
-            url = absoluteURL(self.context.__parent__, self.request)
-            return '%s/%s' % (url, date)
-
-    def bookingURL(self, date=None):
-        """Returns link to the booking view of the newly created event.
-
-        If a date is supplied passes it as a redirect date to the booking view
-        else - passes the date that was supplied in the request.
-        """
-        if date is None:
-            date = self._redirectToDate
-        url = absoluteURL(self.context, self.request)
-        return '%s/booking.html?date=%s' % (url, date)
+            return absoluteURL(self.context.__parent__, self.request)
 
 
 class EventForBookingDisplay(object):
@@ -1778,7 +1733,6 @@ class CalendarEventBookingView(CalendarEventView):
 
     errors = ()
     update_status = None
-    _redirectToDate = None
 
     def __init__(self, context, request):
         CalendarEventView.__init__(self, context, request)
@@ -1791,7 +1745,6 @@ class CalendarEventBookingView(CalendarEventView):
     def update(self):
         """Book/unbook resources according to the request."""
         start_date = self.context.dtstart.strftime("%Y-%m-%d")
-        self._redirectToDate = self.request.get('date', start_date)
 
         if 'CANCEL' in self.request:
             url = absoluteURL(self.context, self.request)
@@ -1838,8 +1791,7 @@ class CalendarEventBookingView(CalendarEventView):
 
     def nextURL(self):
         """Return the URL to be displayed after the add operation."""
-        url = absoluteURL(self.context.__parent__, self.request)
-        return '%s/%s' % (url, self._redirectToDate)
+        return absoluteURL(self.context.__parent__, self.request)
 
     def getConflictingEvents(self, resource):
         """Return a list of events that would conflict when booking resource."""
