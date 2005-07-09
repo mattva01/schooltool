@@ -89,7 +89,6 @@ class OverlaidCalendarsAndTTProperty(object):
         >>> class SomeClass(object): # must be a new-style class
         ...     calendars = OverlaidCalendarsAndTTProperty()
 
-        >>> from zope.interface.verify import verifyObject
         >>> someinstance = SomeClass()
         >>> someinstance.calendars
         <schooltool.app.BoundOverlaidCalendarsAndTTProperty object at 0x...>
