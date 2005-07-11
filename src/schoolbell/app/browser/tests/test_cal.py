@@ -172,34 +172,39 @@ def doctest_CalendarTraverser():
         >>> request['date']
         '2003-01-01'
 
+        >>> view = traverser.publishTraverse(request, '2004-05.pdf')
+        monthly.pdf
+        >>> request['date']
+        '2004-05-01'
+
     The getViewByDate() method is responsible for recognizing dates.  It
     may return a view if it recognizes a date, or None.
 
     The yearly view is returned when only a year is provided:
 
-        >>> traverser.getViewByDate(request, '2002')
-        'yearly.html'
+        >>> traverser.getViewByDate(request, '2002', 'foo')
+        'yearly.foo'
         >>> request['date']
         '2002-01-01'
 
     The monthly view is supported too:
 
-        >>> traverser.getViewByDate(request, '2002-07')
-        'monthly.html'
+        >>> traverser.getViewByDate(request, '2002-07', 'foo')
+        'monthly.foo'
         >>> request['date']
         '2002-07-01'
 
     The weekly view can be accessed by adding 'w' in front of the week number:
 
-      >>> traverser.getViewByDate(request, '2002-w11')
-      'weekly.html'
-      >>> request['date']
-      '2002-03-11'
+        >>> traverser.getViewByDate(request, '2002-w11', 'foo')
+        'weekly.foo'
+        >>> request['date']
+        '2002-03-11'
 
     The daily view is supported too:
 
-        >>> traverser.getViewByDate(request, '2002-07-03')
-        'daily.html'
+        >>> traverser.getViewByDate(request, '2002-07-03', 'foo')
+        'daily.foo'
         >>> request['date']
         '2002-07-03'
 
@@ -208,7 +213,28 @@ def doctest_CalendarTraverser():
         >>> for name in ['', 'abc', 'index.html', '', '200a', '2004-1a',
         ...              '2001-02-03-04', '2001/02/03', '2001-w3a', 'a-w2',
         ...              '1000', '3000']:
-        ...     assert traverser.getViewByDate(request, name) is None
+        ...     assert traverser.getHTMLViewByDate(request, name) is None
+        ...     assert traverser.getViewByDate(request, name, '') is None
+
+    getPDFViewByDate is similar to getHTMLViewByDate but returns PDF views
+    for the dates.
+
+        >>> traverser.getPDFViewByDate(request, '2002-07.pdf')
+        'monthly.pdf'
+        >>> request['date']
+        '2002-07-01'
+
+    It only handles view names ending with '.pdf' and ignores invalid dates:
+
+        >>> del request.form['date']
+        >>> print traverser.getPDFViewByDate(request, '2002-07-03.quux')
+        None
+        >>> 'date' in request
+        False
+        >>> print traverser.getPDFViewByDate(request, '2002-1a-01.pdf')
+        None
+        >>> 'date' in request
+        False
 
     If we try to look up a nonexistent view, we should get a NotFound error:
 

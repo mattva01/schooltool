@@ -149,7 +149,9 @@ class CalendarTraverser(object):
         return self.context, ('daily.html', )
 
     def publishTraverse(self, request, name):
-        view_name = self.getViewByDate(request, name)
+        view_name = self.getHTMLViewByDate(request, name)
+        if not view_name:
+            view_name = self.getPDFViewByDate(request, name)
         if view_name:
             return self.queryMultiAdapter((self.context, request),
                                           name=view_name)
@@ -163,7 +165,19 @@ class CalendarTraverser(object):
         except KeyError:
             raise NotFound(self.context, name, request)
 
-    def getViewByDate(self, request, name):
+    def getHTMLViewByDate(self, request, name):
+        """Get HTML view name from URL component."""
+        return self.getViewByDate(request, name, 'html')
+
+    def getPDFViewByDate(self, request, name):
+        """Get PDF view name from URL component."""
+        if not name.endswith('.pdf'):
+            return None
+        name = name[:-4]
+        return self.getViewByDate(request, name, 'pdf')
+
+    def getViewByDate(self, request, name, suffix):
+        """Get view name from URL component."""
         parts = name.split('-')
 
         if len(parts) == 2 and parts[1].startswith('w'): # a week was given
@@ -173,7 +187,7 @@ class CalendarTraverser(object):
             except ValueError:
                 return
             request.form['date'] = self.getWeek(year, week).isoformat()
-            return 'weekly.html'
+            return 'weekly.%s' % suffix
 
         # a year, month or day might have been given
         try:
@@ -189,13 +203,13 @@ class CalendarTraverser(object):
 
         if len(parts) == 1:
             request.form['date'] = "%d-01-01" % parts
-            return 'yearly.html'
+            return 'yearly.%s' % suffix
         elif len(parts) == 2:
             request.form['date'] = "%d-%02d-01" % parts
-            return 'monthly.html'
+            return 'monthly.%s' % suffix
         elif len(parts) == 3:
             request.form['date'] = "%d-%02d-%02d" % parts
-            return 'daily.html'
+            return 'daily.%s' % suffix
 
     def getWeek(self, year, week):
         """Get the start of a week by week number.
