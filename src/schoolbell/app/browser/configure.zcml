@@ -426,6 +426,16 @@
       />
 
   <page
+      name="daily.pdf"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      class=".pdfcal.DailyCalendarView"
+      attribute="pdfdata"
+      permission="schoolbell.viewCalendar"
+      menu="zmi_views"
+      title="Calendar (Daily)"
+      />
+
+  <page
       name="weekly.html"
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.WeeklyCalendarView"
