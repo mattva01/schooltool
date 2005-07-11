@@ -16,7 +16,7 @@
   </tal:if>
 
   <p style="width:62%; font-size:85%" tal:content="context/description|nothing" />
-  <p tal:condition="view/recurrence">
+  <p tal:condition="context/recurrence">
     <em i18n:translate="">
       This is a recurring event.
     </em>

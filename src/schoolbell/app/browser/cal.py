@@ -1165,19 +1165,11 @@ class CalendarEventView(BrowserView):
         self.end = self.dtend.strftime(self.preferences.timeformat)
 
         dayformat = '%A, ' + self.preferences.dateformat
-        self.day = u'' + self.dtstart.strftime(dayformat)
+        self.day = unicode(self.dtstart.strftime(dayformat))
 
         self.display = EventForDisplay(context,'#9db8d2', '#7590ae',
                                        context.__parent__,
                                        timezone=self.preferences.timezone)
-
-    def recurrence(self):
-        rrule = self.context.recurrence
-
-        if rrule is None:
-            return False
-        else:
-            return True
 
 
 class ICalendarEventAddForm(Interface):
