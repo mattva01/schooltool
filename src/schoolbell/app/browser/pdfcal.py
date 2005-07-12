@@ -26,7 +26,7 @@ from cStringIO import StringIO
 
 # TODO: make things work without reportlab installed
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-from reportlab.platypus import Table, TableStyle
+from reportlab.platypus import Table, TableStyle, Image
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.rl_config import defaultPageSize
@@ -83,9 +83,18 @@ class DailyCalendarView(BrowserView):
         style.fontName = SANS
         style_italic = styles["Italic"]
         style_italic.fontName = SANS_OBLIQUE
+        style_title = styles["Title"]
+        style_title.fontName = SANS_BOLD
 
-        story = [Paragraph(owner.title.encode('utf-8'), style),
-                 Paragraph(date.isoformat(), styles["Normal"]),
+        # TODO: Use a hires logo, this one is too blurry.
+        logo_path = os.path.join(os.path.dirname(__file__),
+                                 'resources', 'logo.png')
+        logo = Image(logo_path)
+        logo.hAlign = 'LEFT'
+
+        story = [logo,
+                 Paragraph(owner.title.encode('utf-8'), style_title),
+                 Paragraph(date.isoformat(), style_title),
                  Spacer(0, 1 * cm)]
 
         events = [event for event in self.context

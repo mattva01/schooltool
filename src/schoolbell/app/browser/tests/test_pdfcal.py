@@ -71,7 +71,7 @@ def doctest_DailyCalendarView_buildStory():
 
 #        TODO: test header
         >>> view.buildStory(date(2005, 7, 8))
-        [Paragraph(
+        [...
         ...
         ...]
 
@@ -81,16 +81,16 @@ def doctest_DailyCalendarView_buildStory():
 
         >>> story = view.buildStory(date(2005, 7, 8))
         >>> len(story)
-        4
-        >>> story[0].text
-        'Mr. Smith'
+        5
         >>> story[1].text
+        'Mr. Smith'
+        >>> story[2].text
         '2005-07-08'
-        >>> story[2]
+        >>> story[3]
         Spacer(0, ...)
-        >>> story[3]._cellvalues[0][0].text
+        >>> story[4]._cellvalues[0][0].text
         '09:10-10:22'
-        >>> story[3]._cellvalues[0][1].text
+        >>> story[4]._cellvalues[0][1].text
         'Some event'
 
         >>> evt = CalendarEvent(datetime(2005, 7, 8), timedelta, "Some event")
@@ -116,12 +116,12 @@ def doctest_DailyCalendarView_buildStory_unicode():
         >>> story = view.buildStory(date(2005, 7, 8))
 
         >>> len(story)
-        4
-        >>> story[0].text
-        '\xc4\x85 person'
+        5
         >>> story[1].text
+        '\xc4\x85 person'
+        >>> story[2].text
         '2005-07-08'
-        >>> story[3]._cellvalues[0][1].text
+        >>> story[4]._cellvalues[0][1].text
         '\xc4\x85 event'
 
     """
