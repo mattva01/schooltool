@@ -104,16 +104,28 @@ class DailyCalendarView(BrowserView):
         if events:
             rows = []
             for event in events:
+                title = event.title.encode('utf-8')
+                text_cell = [Paragraph(title, style)]
+                if event.description:
+                    description = event.description.encode('utf-8')
+                    text_cell.append(Paragraph(description, style_italic))
+                if event.resources:
+                    # TODO: i18n
+                    resource_titles = [resource.title
+                                       for resource in event.resources]
+                    resources = 'Booked: ' + ', '.join(resource_titles)
+                    text_cell.append(Paragraph(resources, style))
+                # TODO: show recurrence
+
                 dtend = event.dtstart + event.duration
                 time = "%s-%s" % (event.dtstart.strftime('%H:%M'),
                                   dtend.strftime('%H:%M'))
-                title = event.title.encode('utf-8')
-                rows.append((Paragraph(time, style_italic),
-                             Paragraph(title, style)))
+                rows.append([Paragraph(time, style_italic), text_cell])
 
             tstyle = TableStyle([('BOX', (0,0), (-1,-1), 0.25, colors.black),
-                           ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black)])
-            table = Table(rows, colWidths=(5 * cm, 10 * cm), style=tstyle)
+                           ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
+                           ('VALIGN', (0,0), (0,-1), 'TOP')])
+            table = Table(rows, colWidths=(3 * cm, 10 * cm), style=tstyle)
             story.append(table)
 
         return story
@@ -181,16 +193,6 @@ def setUpTTF():
     addMapping('FreeSerif', 0, 1, 'FreeSerifItalic')
     addMapping('FreeSerif', 1, 0, 'FreeSerifBold')
     addMapping('FreeSerif', 1, 1, 'FreeSerifBoldItalic')
-
-    global SANS
-    global SANS_OBLIQUE
-    global SANS_BOLD
-    global SERIF
-
-    SANS = 'FreeSans'
-    SANS_OBLIQUE = 'FreeSansOblique'
-    SANS_BOLD = 'FreeSansBold'
-    SERIF = 'FreeSerif'
 
 
 def registerFontPath(directory):

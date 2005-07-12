@@ -90,7 +90,10 @@ def doctest_DailyCalendarView_buildStory():
         Spacer(0, ...)
         >>> story[4]._cellvalues[0][0].text
         '09:10-10:22'
-        >>> story[4]._cellvalues[0][1].text
+        >>> evt_info = story[4]._cellvalues[0][1]
+        >>> len(evt_info)
+        1
+        >>> evt_info[0].text
         'Some event'
 
         >>> evt = CalendarEvent(datetime(2005, 7, 8), timedelta, "Some event")
@@ -121,7 +124,10 @@ def doctest_DailyCalendarView_buildStory_unicode():
         '\xc4\x85 person'
         >>> story[2].text
         '2005-07-08'
-        >>> story[4]._cellvalues[0][1].text
+        >>> evt_info = story[4]._cellvalues[0][1]
+        >>> len(evt_info)
+        1
+        >>> evt_info[0].text
         '\xc4\x85 event'
 
     """
