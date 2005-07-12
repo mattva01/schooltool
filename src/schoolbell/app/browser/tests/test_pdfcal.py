@@ -23,7 +23,7 @@ $Id$
 """
 
 import unittest
-from datetime import datetime, timedelta
+from datetime import datetime, date, timedelta
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from schoolbell.app.app import Person
@@ -52,7 +52,7 @@ def doctest_DailyCalendarView():
 
 
 def doctest_DailyCalendarView_buildStory():
-    """Tests for DailyCalendarView.buildStory.
+    r"""Tests for DailyCalendarView.buildStory.
 
     buildStory returns a list of platypus objects.
 
@@ -62,19 +62,59 @@ def doctest_DailyCalendarView_buildStory():
         >>> view = DailyCalendarView(calendar, request)
 
 #        TODO: test header
-        >>> view.buildStory()
+        >>> view.buildStory(date(2005, 7, 8))
         [Paragraph(
         ...
         ...]
 
+        >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
+        ...                     timedelta(minutes=72), "Some event")
+        >>> calendar.addEvent(evt)
+
+        >>> story = view.buildStory(date(2005, 7, 8))
+        >>> len(story)
+        4
+        >>> story[0].text
+        'Mr. Smith'
+        >>> story[1].text
+        '2005-07-08'
+        >>> story[2]
+        Spacer(0, ...)
+        >>> story[3]._cellvalues[0][0].text
+        '09:10-10:22'
+        >>> story[3]._cellvalues[0][1].text
+        'Some event'
+
         >>> evt = CalendarEvent(datetime(2005, 7, 8), timedelta, "Some event")
         >>> calendar.addEvent(evt)
 
-        >>> story = view.buildStory()
+    """
+
+
+def doctest_DailyCalendarView_buildStory_unicode():
+    r"""Tests for DailyCalendarView.buildStory.
+
+    Unicode text is treated properly:
+
+        >>> from schoolbell.app.browser.pdfcal import DailyCalendarView
+        >>> person = Person(title=u"\u0105 person")
+        >>> calendar = person.calendar
+        >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
+        ...                     timedelta(hours=5), u"\u0105 event")
+        >>> calendar.addEvent(evt)
+
+        >>> request = TestRequest(form={'date': '2005-07-08'})
+        >>> view = DailyCalendarView(calendar, request)
+        >>> story = view.buildStory(date(2005, 7, 8))
+
         >>> len(story)
-        3
+        4
         >>> story[0].text
-        'Mr. Smith'
+        '\xc4\x85 person'
+        >>> story[1].text
+        '2005-07-08'
+        >>> story[3]._cellvalues[0][1].text
+        '\xc4\x85 event'
 
     """
 

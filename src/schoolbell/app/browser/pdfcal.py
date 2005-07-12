@@ -22,16 +22,19 @@ SchoolBell calendar views.
 $Id$
 """
 
-from StringIO import StringIO
+from cStringIO import StringIO
 
 # TODO: make things work without reportlab installed
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.platypus import Table, TableStyle
+from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.rl_config import defaultPageSize
 from reportlab.lib.units import cm
 
 from zope.app.publisher.browser import BrowserView
 from schoolbell.app.interfaces import ISchoolBellCalendar
+from schoolbell.calendar.utils import parse_date
 
 styles = getSampleStyleSheet()
 
@@ -42,10 +45,12 @@ class DailyCalendarView(BrowserView):
 
     def pdfdata(self):
         """Return the PDF representation of a calendar."""
+        date = parse_date(self.request['date']) # TODO: default to today
+
         datafile = StringIO()
         doc = SimpleDocTemplate(datafile)
 
-        story = self.buildStory()
+        story = self.buildStory(date)
         doc.build(story)
 
         data = datafile.getvalue()
@@ -61,15 +66,162 @@ class DailyCalendarView(BrowserView):
         # report in the browser page if this header is not provided.
         response.setHeader('Accept-Ranges', 'bytes')
 
-    def buildStory(self):
+    def buildStory(self, date):
+        """Build a platypus story."""
+        # TODO: add logo
         owner = self.context.__parent__
-        date = self.request['date']
+        style = styles["Normal"]
+        style.fontName = SANS
+        style_italic = styles["Italic"]
+        style_italic.fontName = SANS_OBLIQUE
 
-        story = [Paragraph(owner.title, styles["Normal"]),
-                 Paragraph(date, styles["Normal"])]
+        story = [Paragraph(owner.title.encode('utf-8'), style),
+                 Paragraph(date.isoformat(), styles["Normal"]),
+                 Spacer(0, 1 * cm)]
 
-        for event in self.context:
-            start = event.dtstart.strftime('%H:%M')
-            text = '<i>%s</i> %s' % (event.dtstart, event.title)
-            story.append(Paragraph(text, styles["Normal"]))
+        events = [event for event in self.context
+                  if event.dtstart.date() == date]
+        events.sort() # TODO: test sort
+
+        if events:
+            rows = []
+            for event in events:
+                dtend = event.dtstart + event.duration
+                time = "%s-%s" % (event.dtstart.strftime('%H:%M'),
+                                  dtend.strftime('%H:%M'))
+                title = event.title.encode('utf-8')
+                rows.append((Paragraph(time, style_italic),
+                             Paragraph(title, style)))
+
+            tstyle = TableStyle([('BOX', (0,0), (-1,-1), 0.25, colors.black),
+                           ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black)])
+            table = Table(rows, colWidths=(5 * cm, 10 * cm), style=tstyle)
+            story.append(table)
+
         return story
+
+
+# ------------------
+# Font configuration
+# ------------------
+
+import os.path
+import reportlab.rl_config
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.fonts import addMapping
+
+# These font paths are tailored for Debian/Ubuntu
+# TODO: make paths configurable in schoolbell.conf
+freefont_path = '/usr/share/fonts/truetype/freefont'
+msttcorefonts_path = '/usr/share/fonts/truetype/msttcorefonts'
+
+
+def registerTTFont(fontname, filename):
+    """Register a TrueType font with ReportLab.
+
+    Clears up the incorrect straight-through mappings that ReportLab 1.19
+    unhelpfully gives us.
+    """
+    pdfmetrics.registerFont(TTFont(fontname, filename))
+    # For some reason pdfmetrics.registerFont for TrueType fonts explicitly
+    # calls addMapping with incorrect straight-through mappings, at least in
+    # reportlab version 1.19.  We thus need to stick our dirty fingers in
+    # reportlab's internal data structures and undo those changes so that we
+    # can call addMapping with correct values.
+    key = fontname.lower()
+    del reportlab.lib.fonts._tt2ps_map[key, 0, 0]
+    del reportlab.lib.fonts._tt2ps_map[key, 0, 1]
+    del reportlab.lib.fonts._tt2ps_map[key, 1, 0]
+    del reportlab.lib.fonts._tt2ps_map[key, 1, 1]
+    del reportlab.lib.fonts._ps2tt_map[key]
+
+
+def setUpTTF():
+    """Set up ReportGen to use FreeFonts"""
+    reportlab.rl_config.warnOnMissingFontGlyphs = 0
+    ttfpath = reportlab.rl_config.TTFSearchPath
+    if not os.path.isdir(freefont_path):
+        raise ValueError("'%s' does not exist,"
+                         " please make sure you have FreeFont installed!" %
+                         freefont_path)
+    ttfpath.append(freefont_path)
+
+    registerTTFont('FreeSans', 'FreeSans.ttf')
+    registerTTFont('FreeSansBold', 'FreeSansBold.ttf')
+    registerTTFont('FreeSansOblique', 'FreeSansOblique.ttf')
+    registerTTFont('FreeSansBoldOblique', 'FreeSansBoldOblique.ttf')
+
+    addMapping('FreeSans', 0, 0, 'FreeSans')
+    addMapping('FreeSans', 0, 1, 'FreeSansOblique')
+    addMapping('FreeSans', 1, 0, 'FreeSansBold')
+    addMapping('FreeSans', 1, 1, 'FreeSansBoldOblique')
+
+    registerTTFont('FreeSerif', 'FreeSerif.ttf')
+    registerTTFont('FreeSerifBold', 'FreeSerifBold.ttf')
+    registerTTFont('FreeSerifItalic', 'FreeSerifItalic.ttf')
+    registerTTFont('FreeSerifBoldItalic', 'FreeSerifBoldItalic.ttf')
+
+    addMapping('FreeSerif', 0, 0, 'FreeSerif')
+    addMapping('FreeSerif', 0, 1, 'FreeSerifItalic')
+    addMapping('FreeSerif', 1, 0, 'FreeSerifBold')
+    addMapping('FreeSerif', 1, 1, 'FreeSerifBoldItalic')
+
+    global SANS
+    global SANS_OBLIQUE
+    global SANS_BOLD
+    global SERIF
+
+    SANS = 'FreeSans'
+    SANS_OBLIQUE = 'FreeSansOblique'
+    SANS_BOLD = 'FreeSansBold'
+    SERIF = 'FreeSerif'
+
+
+def setUpMSTTCoreFonts():
+    """Set up ReportGen to use MSTTCoreFonts"""
+    reportlab.rl_config.warnOnMissingFontGlyphs = 0
+    ttfpath = reportlab.rl_config.TTFSearchPath
+    if not os.path.isdir(msttcorefonts_path):
+        raise ValueError(
+            "'%s' does not exist,"
+            " please make sure you have msttcorefonts installed!" %
+            msttcorefonts_path)
+    ttfpath.append(msttcorefonts_path)
+
+    # 'Arial' is predefined in ReportLab, so we use 'Arial_Normal'
+
+    registerTTFont('Arial_Normal', 'Arial.ttf')
+    registerTTFont('Arial_Bold', 'Arial_Bold.ttf')
+    registerTTFont('Arial_Italic', 'Arial_Italic.ttf')
+    registerTTFont('Arial_Bold_Italic', 'Arial_Bold_Italic.ttf')
+
+    addMapping('Arial_Normal', 0, 0, 'Arial_Normal')
+    addMapping('Arial_Normal', 0, 1, 'Arial_Italic')
+    addMapping('Arial_Normal', 1, 0, 'Arial_Bold')
+    addMapping('Arial_Normal', 1, 1, 'Arial_Bold_Italic')
+
+    registerTTFont('Times_New_Roman', 'Times_New_Roman.ttf')
+    registerTTFont('Times_New_Roman_Bold', 'Times_New_Roman_Bold.ttf')
+    registerTTFont('Times_New_Roman_Italic', 'Times_New_Roman_Italic.ttf')
+    registerTTFont('Times_New_Roman_Bold_Italic',
+                   'Times_New_Roman_Bold_Italic.ttf')
+
+    addMapping('Times_New_Roman', 0, 0, 'Times_New_Roman')
+    addMapping('Times_New_Roman', 0, 1, 'Times_New_Roman_Italic')
+    addMapping('Times_New_Roman', 1, 0, 'Times_New_Roman_Bold')
+    addMapping('Times_New_Roman', 1, 1, 'Times_New_Roman_Bold_Italic')
+
+    global SANS
+    global SANS_OBLIQUE
+    global SANS_BOLD
+    global SERIF
+
+    SANS = 'Arial_Normal'
+    SANS_OBLIQUE = 'Arial_Italic'
+    SANS_BOLD = 'Arial_Bold'
+    SERIF = 'Times_New_Roman'
+
+# For some reason, FreeSans and FreeSerif don't show on Acrobat 5.
+# setUpTTF()
+setUpMSTTCoreFonts()
