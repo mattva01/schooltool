@@ -30,6 +30,14 @@ from schoolbell.app.app import Person
 from schoolbell.app.cal import CalendarEvent
 
 
+from schoolbell.app.browser.pdfcal import registerFontPath, setUpMSTTCoreFonts
+# XXX temporary workaround -- will not work on systems without msttcorefonts
+font_path = '/usr/share/fonts/truetype/msttcorefonts'
+registerFontPath(font_path)
+setUpMSTTCoreFonts()
+
+
+
 def doctest_DailyCalendarView():
     """Tests for DailyCalendarView.
 

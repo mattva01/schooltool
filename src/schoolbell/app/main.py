@@ -515,9 +515,16 @@ class StandaloneServer(object):
             print >> pidfile, os.getpid()
             pidfile.close()
 
+        # TODO: untested
+        from schoolbell.app.browser import pdfcal
+        if options.config.reportlab_fontdir:
+            pdfcal.registerFontPath(options.config.reportlab_fontdir)
+            pdfcal.setUpMSTTCoreFonts()
+        else:
+            pdfcal.disabled = True
+
         return db
 
 
 if __name__ == '__main__':
     StandaloneServer().main()
-

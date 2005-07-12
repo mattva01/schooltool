@@ -86,7 +86,6 @@ error-log-file STDERR
 web-access-log-file web-access.log
 
 #
-#
 # lang
 #
 #    Specifies the locale of the messages to be used on the server.
@@ -165,3 +164,13 @@ lang auto
   #   pool-size 7
 
 </zodb>
+
+#
+# reportlab_fontdir
+#
+#   Specifies the path to fonts for reportlab.
+#
+# Examples:
+#    reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+#
+reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts

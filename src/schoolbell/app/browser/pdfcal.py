@@ -36,7 +36,16 @@ from zope.app.publisher.browser import BrowserView
 from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.calendar.utils import parse_date
 
+global disabled
+disabled = False
+# TODO: handle this flag
+
 styles = getSampleStyleSheet()
+
+SANS = 'Arial_Normal'
+SANS_OBLIQUE = 'Arial_Italic'
+SANS_BOLD = 'Arial_Bold'
+SERIF = 'Times_New_Roman'
 
 
 class DailyCalendarView(BrowserView):
@@ -111,10 +120,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.fonts import addMapping
 
-# These font paths are tailored for Debian/Ubuntu
-# TODO: make paths configurable in schoolbell.conf
-freefont_path = '/usr/share/fonts/truetype/freefont'
-msttcorefonts_path = '/usr/share/fonts/truetype/msttcorefonts'
+global msttcorefonts_path
 
 
 def registerTTFont(fontname, filename):
@@ -178,16 +184,18 @@ def setUpTTF():
     SERIF = 'FreeSerif'
 
 
+def registerFontPath(directory):
+    ttfpath = reportlab.rl_config.TTFSearchPath
+    if not os.path.isdir(directory):
+        # TODO: make the error friendlier
+        raise ValueError("Directory '%s' does not exist.")
+    else:
+        ttfpath.append(directory)
+
+
 def setUpMSTTCoreFonts():
     """Set up ReportGen to use MSTTCoreFonts"""
     reportlab.rl_config.warnOnMissingFontGlyphs = 0
-    ttfpath = reportlab.rl_config.TTFSearchPath
-    if not os.path.isdir(msttcorefonts_path):
-        raise ValueError(
-            "'%s' does not exist,"
-            " please make sure you have msttcorefonts installed!" %
-            msttcorefonts_path)
-    ttfpath.append(msttcorefonts_path)
 
     # 'Arial' is predefined in ReportLab, so we use 'Arial_Normal'
 
@@ -211,17 +219,3 @@ def setUpMSTTCoreFonts():
     addMapping('Times_New_Roman', 0, 1, 'Times_New_Roman_Italic')
     addMapping('Times_New_Roman', 1, 0, 'Times_New_Roman_Bold')
     addMapping('Times_New_Roman', 1, 1, 'Times_New_Roman_Bold_Italic')
-
-    global SANS
-    global SANS_OBLIQUE
-    global SANS_BOLD
-    global SERIF
-
-    SANS = 'Arial_Normal'
-    SANS_OBLIQUE = 'Arial_Italic'
-    SANS_BOLD = 'Arial_Bold'
-    SERIF = 'Times_New_Roman'
-
-# For some reason, FreeSans and FreeSerif don't show on Acrobat 5.
-# setUpTTF()
-setUpMSTTCoreFonts()

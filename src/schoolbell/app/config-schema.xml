@@ -229,4 +229,15 @@
     </example>
   </key>
 
+  <key name="reportlab_fontdir" datatype="string">
+    <description>
+      Specifies the path to fonts for reportlab.
+
+      TODO: Set to empty string to disable reportlab.
+    </description>
+    <example>
+      reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+    </example>
+  </key>
+
 </schema>
