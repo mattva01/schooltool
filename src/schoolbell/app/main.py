@@ -58,6 +58,7 @@ from schoolbell.app.app import SchoolBellApplication, Person
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.security import setUpLocalAuth
 from schoolbell.app.rest import restServerType
+from schoolbell.app.browser import pdfcal
 
 
 locale_charset = locale.getpreferredencoding()
@@ -101,6 +102,11 @@ class OldDatabase(Exception):
 
 class IncompatibleDatabase(Exception):
     pass
+
+
+def die(message, exitcode=1):
+    print >> sys.stderr, message
+    sys.exit(exitcode)
 
 
 class Options(object):
@@ -465,6 +471,9 @@ class StandaloneServer(object):
         # Set language specified in the configuration
         setLanguage(options.config.lang)
 
+        # Configure reportlab.
+        self.configureReportlab(options.config.reportlab_fontdir)
+
         # Open the database
         db_configuration = options.config.database
         try:
@@ -501,7 +510,7 @@ class StandaloneServer(object):
             restServerType.create('REST', task_dispatcher, db,
                                   port=port, ip=ip)
 
-        # TODO: remove the folowing lines after a while.
+        # TODO BBB: remove the folowing lines after a while.
         # respecting options.config.listen is depreciated and for
         # compatibility only.
         for ip, port in options.config.listen:
@@ -515,16 +524,30 @@ class StandaloneServer(object):
             print >> pidfile, os.getpid()
             pidfile.close()
 
-        # TODO: untested
-        from schoolbell.app.browser import pdfcal
-        if options.config.reportlab_fontdir:
-            pdfcal.registerFontPath(options.config.reportlab_fontdir)
-            pdfcal.setUpMSTTCoreFonts()
-        else:
-            pdfcal.disabled = True
-
         return db
 
+    def configureReportlab(self, fontdir):
+        """Configure reportlab given a path to TrueType fonts.
+
+        Disables PDF support in SchoolBell if fontdir is empty.
+        Complains and calls sys.exit in case of errors.
+        """
+        if not fontdir:
+            pdfcal.disablePDFGeneration()
+            return
+
+        try:
+            import reportlab
+        except ImportError:
+            die(_("Could not find the reportlab library."))
+
+        if not os.path.isdir(fontdir):
+            die(_("Font directory '%s' does not exist.") % fontdir)
+        for font_file in pdfcal.font_map.values():
+            font_path = os.path.join(fontdir, font_file)
+            if not os.path.exists(font_path):
+                die(_("Font '%s' does not exist.") % font_path)
+        pdfcal.setUpMSTTCoreFonts(fontdir)
 
 if __name__ == '__main__':
     StandaloneServer().main()

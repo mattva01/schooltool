@@ -22,20 +22,15 @@ Tests for SchoolBell calendaring views.
 $Id$
 """
 
+import os
+import sys
 import unittest
 from datetime import datetime, date, timedelta
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from schoolbell.app.app import Person, Resource
 from schoolbell.app.cal import CalendarEvent
-
-
-from schoolbell.app.browser.pdfcal import registerFontPath, setUpMSTTCoreFonts
-# XXX temporary workaround -- will not work on systems without msttcorefonts
-font_path = '/usr/share/fonts/truetype/msttcorefonts'
-registerFontPath(font_path)
-setUpMSTTCoreFonts()
-
+from schoolbell.app.browser.pdfcal import setUpMSTTCoreFonts
 
 
 def doctest_DailyCalendarView():
@@ -138,10 +133,151 @@ def doctest_DailyCalendarView_buildStory_unicode():
     """
 
 
+def test_disablePDFGeneration():
+    """Test for disablePDFGeneration.
+
+        >>> from schoolbell.app.browser import pdfcal
+        >>> pdfcal.disablePDFGeneration()
+
+    First, the `disabled` flag is set to True:
+
+        >>> pdfcal.disabled
+        True
+
+    The DailyCalendarView.pdfdata returns a message:
+
+        >>> view = pdfcal.DailyCalendarView(object(), TestRequest())
+        >>> view.pdfdata()
+        'PDF support is disabled.  It can be enabled by your administrator.'
+
+    """
+
+
+def doctest_setUpMSTTCoreFonts():
+    r"""TrueType font setup tests.
+
+        >>> from schoolbell.app.browser import pdfcal
+
+    The actual setup has been done at import-time by the test_suite function.
+    We only test the results here.
+
+    Let's check that the TrueType fonts have been configured:
+
+        >>> from reportlab.pdfbase import pdfmetrics
+
+        >>> pdfmetrics.getFont('Times_New_Roman')
+        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
+        >>> pdfmetrics.getFont('Times_New_Roman_Bold')
+        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
+        >>> pdfmetrics.getFont('Times_New_Roman_Italic')
+        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
+        >>> pdfmetrics.getFont('Times_New_Roman_Bold_Italic')
+        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
+
+        >>> pdfmetrics.getFont('Arial_Normal')
+        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
+        >>> pdfmetrics.getFont('Arial_Bold')
+        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
+        >>> pdfmetrics.getFont('Arial_Italic')
+        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
+        >>> pdfmetrics.getFont('Arial_Bold_Italic')
+        <reportlab.pdfbase.ttfonts.TTFont instance at ...>
+
+    For our Serif font (normal paragraphs), the bold/italic mappings
+    are registered:
+
+        >>> from reportlab.lib.fonts import tt2ps, ps2tt
+
+        >>> tt2ps('Times_New_Roman', 0, 0)
+        'Times_New_Roman'
+        >>> tt2ps('Times_New_Roman', 1, 0)
+        'Times_New_Roman_Bold'
+        >>> tt2ps('Times_New_Roman', 0, 1)
+        'Times_New_Roman_Italic'
+        >>> tt2ps('Times_New_Roman', 1, 1)
+        'Times_New_Roman_Bold_Italic'
+
+        >>> ps2tt('Times_New_Roman')
+        ('times_new_roman', 0, 0)
+        >>> ps2tt('Times_New_Roman_Bold')
+        ('times_new_roman', 1, 0)
+        >>> ps2tt('Times_New_Roman_Italic')
+        ('times_new_roman', 0, 1)
+        >>> ps2tt('Times_New_Roman_Bold_Italic')
+        ('times_new_roman', 1, 1)
+
+        >>> tt2ps('Arial_Normal', 0, 0)
+        'Arial_Normal'
+        >>> tt2ps('Arial_Normal', 1, 0)
+        'Arial_Bold'
+        >>> tt2ps('Arial_Normal', 0, 1)
+        'Arial_Italic'
+        >>> tt2ps('Arial_Normal', 1, 1)
+        'Arial_Bold_Italic'
+
+        >>> ps2tt('Arial_Normal')
+        ('arial_normal', 0, 0)
+        >>> ps2tt('Arial_Bold')
+        ('arial_normal', 1, 0)
+        >>> ps2tt('Arial_Italic')
+        ('arial_normal', 0, 1)
+        >>> ps2tt('Arial_Bold_Italic')
+        ('arial_normal', 1, 1)
+
+        >>> pdfcal.SANS
+        'Arial_Normal'
+        >>> pdfcal.SANS_OBLIQUE
+        'Arial_Italic'
+        >>> pdfcal.SANS_BOLD
+        'Arial_Bold'
+        >>> pdfcal.SERIF
+        'Times_New_Roman'
+
+    If the fonts can not be found, setUpMSTTCoreFonts() will
+    raise an exception:
+
+        >>> import reportlab.rl_config
+        >>> real_path = reportlab.rl_config.TTFSearchPath[-1]
+        >>> del reportlab.rl_config.TTFSearchPath[-1]
+
+        >>> pdfcal.setUpMSTTCoreFonts('/definitely/nonexistent')
+        Traceback (most recent call last):
+          ...
+        TTFError: Can't open file "....ttf"
+
+    Clean up:
+
+        >>> reportlab.rl_config.TTFSearchPath.append(real_path)
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite(optionflags=doctest.ELLIPSIS))
     suite.addTest(doctest.DocTestSuite('schoolbell.app.browser.pdfcal'))
+
+    try:
+        import reportlab
+    except ImportError:
+        # We don't have reportlab, so we can't get anywhere.
+        print >> sys.stderr, "reportlab not found; PDF generator tests skipped"
+    else:
+        # We have reportlab, but may not have TrueType fonts.
+
+        # Dumb heuristic to try and find the TrueType fonts.
+        font_dirs = ['/usr/share/fonts/truetype/msttcorefonts',
+                     r'C:\WINDOWS\Fonts'] # TODO: actually test this on Windows
+        for font_dir in font_dirs:
+            if os.path.exists(os.path.join(font_dir, 'arial.ttf')):
+                setUpMSTTCoreFonts(font_dir)
+                docsuite = doctest.DocTestSuite(optionflags=doctest.ELLIPSIS)
+                suite.addTest(docsuite)
+                break
+        else:
+            # TODO: suite.addTest(some_tests)
+            print >> sys.stderr, ("TrueType fonts not found;"
+                                  " skipping some PDF generator tests")
+
     return suite
 
 

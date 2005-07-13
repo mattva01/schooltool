@@ -170,7 +170,10 @@ lang auto
 #
 #   Specifies the path to fonts for reportlab.
 #
+#   Set to empty string to disable reportlab.
+#
 # Examples:
 #    reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
 #
-reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+# Uncomment the following and update the path to enable PDF generation:
+#reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts

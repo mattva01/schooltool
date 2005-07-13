@@ -22,34 +22,26 @@ SchoolBell calendar views.
 $Id$
 """
 
+import os.path
 from cStringIO import StringIO
 
 from zope.app.publisher.browser import BrowserView
+from zope.i18n import translate
 from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.calendar.utils import parse_date
+from schoolbell import SchoolBellMessageID as _
 
 global disabled
-disabled = False
-
-try:
-    import reportlab
-except ImportError:
-    disabled = True
-else:
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-    from reportlab.platypus import Table, TableStyle, Image
-    from reportlab.lib import colors
-    from reportlab.lib.styles import getSampleStyleSheet
-    from reportlab.rl_config import defaultPageSize
-    from reportlab.lib.units import cm
-
-disabled = False
-# TODO: handle this flag
+disabled = None
 
 SANS = 'Arial_Normal'
 SANS_OBLIQUE = 'Arial_Italic'
 SANS_BOLD = 'Arial_Bold'
 SERIF = 'Times_New_Roman'
+
+pdf_disabled_text = _("""\
+PDF support is disabled.  It can be enabled by your administrator.\
+""") # TODO: refer to documentation?
 
 
 class DailyCalendarView(BrowserView):
@@ -58,6 +50,7 @@ class DailyCalendarView(BrowserView):
 
     def pdfdata(self):
         """Return the PDF representation of a calendar."""
+        from reportlab.platypus import SimpleDocTemplate
         date = parse_date(self.request['date']) # TODO: default to today
 
         datafile = StringIO()
@@ -81,6 +74,13 @@ class DailyCalendarView(BrowserView):
 
     def buildStory(self, date):
         """Build a platypus story."""
+        # We do the imports locally to avoid a hard dependency on reportlab.
+        from reportlab.lib import colors
+        from reportlab.lib.units import cm
+        from reportlab.lib.styles import getSampleStyleSheet
+        from reportlab.platypus import Paragraph, Spacer
+        from reportlab.platypus import Table, TableStyle, Image
+
         owner = self.context.__parent__
 
         # TODO: fix style variable names, do not use sample stylesheet
@@ -98,6 +98,7 @@ class DailyCalendarView(BrowserView):
         logo = Image(logo_path)
         logo.hAlign = 'LEFT'
 
+        # TODO: all-day events
         story = [logo,
                  Paragraph(owner.title.encode('utf-8'), style_title),
                  Paragraph(date.isoformat(), style_title),
@@ -142,19 +143,16 @@ class DailyCalendarView(BrowserView):
 # Font configuration
 # ------------------
 
-import os.path
-import reportlab.rl_config
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.lib.fonts import addMapping
-
-
 def registerTTFont(fontname, filename):
     """Register a TrueType font with ReportLab.
 
     Clears up the incorrect straight-through mappings that ReportLab 1.19
     unhelpfully gives us.
     """
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+    import reportlab.lib.fonts
+
     pdfmetrics.registerFont(TTFont(fontname, filename))
     # For some reason pdfmetrics.registerFont for TrueType fonts explicitly
     # calls addMapping with incorrect straight-through mappings, at least in
@@ -169,37 +167,54 @@ def registerTTFont(fontname, filename):
     del reportlab.lib.fonts._ps2tt_map[key]
 
 
-def registerFontPath(directory):
-    if not os.path.isdir(directory):
-        # TODO: make the error friendlier
-        raise ValueError("Directory '%s' does not exist." % directory)
-    else:
-        ttfpath = reportlab.rl_config.TTFSearchPath
-        ttfpath.append(directory)
+# 'Arial' is predefined in ReportLab, so we use 'Arial_Normal'
+
+font_map = {'Arial_Normal': 'arial.ttf',
+            'Arial_Bold': 'arialbd.ttf',
+            'Arial_Italic': 'ariali.ttf',
+            'Arial_Bold_Italic': 'arialbi.ttf',
+            'Times_New_Roman': 'times.ttf',
+            'Times_New_Roman_Bold': 'timesbd.ttf',
+            'Times_New_Roman_Italic': 'timesi.ttf',
+            'Times_New_Roman_Bold_Italic': 'timesbi.ttf'}
 
 
-def setUpMSTTCoreFonts():
-    """Set up ReportGen to use MSTTCoreFonts"""
+def setUpMSTTCoreFonts(directory):
+    """Set up ReportGen to use MSTTCoreFonts."""
+    import reportlab.rl_config
+    from reportlab.lib.fonts import addMapping
+
+    ttfpath = reportlab.rl_config.TTFSearchPath
+    ttfpath.append(directory)
+
     reportlab.rl_config.warnOnMissingFontGlyphs = 0
 
-    # 'Arial' is predefined in ReportLab, so we use 'Arial_Normal'
-
-    registerTTFont('Arial_Normal', 'arial.ttf')
-    registerTTFont('Arial_Bold', 'arialbd.ttf')
-    registerTTFont('Arial_Italic', 'ariali.ttf')
-    registerTTFont('Arial_Bold_Italic', 'arialbi.ttf')
+    for font_name, font_file in font_map.items():
+        registerTTFont(font_name, font_file)
 
     addMapping('Arial_Normal', 0, 0, 'Arial_Normal')
     addMapping('Arial_Normal', 0, 1, 'Arial_Italic')
     addMapping('Arial_Normal', 1, 0, 'Arial_Bold')
     addMapping('Arial_Normal', 1, 1, 'Arial_Bold_Italic')
 
-    registerTTFont('Times_New_Roman', 'times.ttf')
-    registerTTFont('Times_New_Roman_Bold', 'timesbd.ttf')
-    registerTTFont('Times_New_Roman_Italic', 'timesi.ttf')
-    registerTTFont('Times_New_Roman_Bold_Italic', 'timesbi.ttf')
-
     addMapping('Times_New_Roman', 0, 0, 'Times_New_Roman')
     addMapping('Times_New_Roman', 0, 1, 'Times_New_Roman_Italic')
     addMapping('Times_New_Roman', 1, 0, 'Times_New_Roman_Bold')
     addMapping('Times_New_Roman', 1, 1, 'Times_New_Roman_Bold_Italic')
+
+    global disabled
+    disabled = False
+
+
+def disablePDFGeneration():
+    """Disable PDF generation tools in SchoolBell.
+
+    To be called when reportlab is not installed or TrueType fonts are not
+    available.
+    """
+    def disabled_pdfdata(self):
+        return translate(pdf_disabled_text, context=self.request)
+    DailyCalendarView.pdfdata = disabled_pdfdata
+
+    global disabled
+    disabled = True

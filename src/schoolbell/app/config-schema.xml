@@ -233,7 +233,7 @@
     <description>
       Specifies the path to fonts for reportlab.
 
-      TODO: Set to empty string to disable reportlab.
+      Set to empty string to disable reportlab.
     </description>
     <example>
       reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts

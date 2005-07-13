@@ -22,6 +22,8 @@ Unit tests for schoolbell.app.main.
 $Id$
 """
 
+import os
+import sys
 import unittest
 from zope.testing import doctest
 from zope.app import zapi
@@ -34,7 +36,6 @@ def doctest_Options():
     The only interesting thing Options does is find the default configuration
     file.
 
-        >>> import os
         >>> from schoolbell.app.main import Options
         >>> options = Options()
         >>> options.config_file
@@ -90,7 +91,6 @@ def doctest_load_options():
 
     We will use a sample configuration file that comes with these tests.
 
-        >>> import os
         >>> from schoolbell.app import tests
         >>> test_dir = os.path.dirname(tests.__file__)
         >>> sample_config_file = os.path.join(test_dir, 'sample.conf')
@@ -100,7 +100,6 @@ def doctest_load_options():
     redirect stderr to stdout, because otherwise doctests will not see the
     output.
 
-        >>> import sys
         >>> old_stderr = sys.stderr
         >>> sys.stderr = sys.stdout
 
@@ -189,6 +188,91 @@ def doctest_load_options():
     Cleaning up.
 
         >>> sys.stderr = old_stderr
+
+    """
+
+
+def doctest_configureReportlab():
+    """Tests for configureReportlab.
+
+        >>> from schoolbell.app.browser import pdfcal
+        >>> from schoolbell.app.main import StandaloneServer
+
+        >>> server = StandaloneServer()
+
+        >>> def disableStub():
+        ...     print 'reportlab disabled'
+        >>> realDisable = pdfcal.disablePDFGeneration
+        >>> pdfcal.disablePDFGeneration = disableStub
+
+        >>> def setupStub(fontdir):
+        ...     print 'reportlab set up: %s' % fontdir
+        >>> realSetup = pdfcal.setUpMSTTCoreFonts
+        >>> pdfcal.setUpMSTTCoreFonts = setupStub
+
+    First, if a null path is given, PDF generation is disabled:
+
+        >>> server.configureReportlab(None)
+        reportlab disabled
+
+    Now, let's imitate a situation where a font path is given, but reportlab
+    can not be imported.
+
+        >>> old_stderr = sys.stderr
+        >>> sys.stderr = sys.stdout
+
+        >>> try:
+        ...     import reportlab
+        ... except ImportError:
+        ...     pass
+
+        >>> real_reportlab = sys.modules.get('reportlab')
+        >>> sys.modules['reportlab'] = None
+
+    reportlab can not be imported, see?
+
+        >>> import reportlab
+        Traceback (most recent call last):
+          ...
+        ImportError: No module named reportlab
+
+    Good.  Now configureReportLab should print an error and exit.
+
+        >>> try:
+        ...     server.configureReportlab('.')
+        ... except SystemExit, e:
+        ...     print '[exited with status %s]' % e
+        Could not find the reportlab library.
+        [exited with status 1]
+
+    We will cheat and temporarily override pdfcal.font_map:
+
+        >>> pseudo_fontdir = os.path.dirname(__file__)
+        >>> real_font_map = pdfcal.font_map
+        >>> pdfcal.font_map = {'1': 'test_main.py', '2': 'nonexistent_file'}
+
+        >>> sys.modules['reportlab'] = object()
+        >>> try:
+        ...     server.configureReportlab(pseudo_fontdir)
+        ... except SystemExit, e:
+        ...     print '[exited with status %s]' % e
+        Font '...nonexistent_file' does not exist.
+        [exited with status 1]
+
+    Now let's simulate a successful scenario:
+
+        >>> del pdfcal.font_map['2']
+        >>> server.configureReportlab(pseudo_fontdir)
+        reportlab set up: ...tests
+
+    Cleaning up.
+
+        >>> pdfcal.font_map = real_font_map
+        >>> sys.stderr = old_stderr
+        >>> if real_reportlab:
+        ...     sys.modules['reportlab'] = real_reportlab
+        >>> pdfcal.disablePDFGeneration = realDisable
+        >>> pdfcal.setUpMSTTCoreFonts = realSetup
 
     """
 
