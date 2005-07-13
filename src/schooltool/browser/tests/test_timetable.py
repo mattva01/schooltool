@@ -25,6 +25,7 @@ $Id$
 import unittest
 import datetime
 import itertools
+from pprint import pprint
 
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
@@ -2071,6 +2072,203 @@ def doctest_SectionTimetableSetupView():
 
     """
 
+def doctest_SpecialDayView():
+    """SpecialDayView tests.
+
+    Special days are days for which some periods are shortened or
+    cancelled altogether.  Our view for that presents the
+    administrator with a way to alter the schoolday template for this
+    day.
+
+    First of all, we need an app object:
+
+        >>> from schooltool.app import SchoolToolApplication
+        >>> app = SchoolToolApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> app.setSiteManager(LocalSiteManager(app))
+        >>> setSite(app)
+
+    We have a timetable schema to put the view on:
+
+        >>> from schooltool.browser.timetable import SpecialDayView
+        >>> ttschema = createSchema(['Day 1', 'Day 2'],
+        ...                         ['First',
+        ...                          'Second',
+        ...                          'Third',
+        ...                          'Fourth'])
+        >>> app['ttschemas']['usual'] = ttschema
+
+    The schema has a model attribute:
+
+        >>> from schooltool.timetable import SequentialDaysTimetableModel
+        >>> default = createDayTemplate([('First', 9, 0, 45),
+        ...                              ('Second', 10, 0, 45),
+        ...                              ('Third', 11, 0, 45),
+        ...                              ('Fourth', 12, 0, 45)])
+        >>> ttschema.model = SequentialDaysTimetableModel(['Day 1', 'Day 2'],
+        ...                                               {None: default})
+
+    We will need a term:
+
+        >>> from schooltool.timetable import Term
+        >>> app["terms"]["2005-summer"] = Term('2005 summer',
+        ...                                    datetime.date(2005, 6, 1),
+        ...                                    datetime.date(2005, 8, 31))
+        >>> app["terms"]["2005-summer"].addWeekdays(0, 1, 2, 3, 4)
+
+    Now we can call the view.  First we get asked what day do we want
+    to change:
+
+        >>> request = TestRequest()
+        >>> view = SpecialDayView(ttschema, request)
+        >>> print view()
+        <BLANKLINE>
+        ...
+          <p>
+            Please enter the date when the periods need to be changed below.
+          </p>
+        <BLANKLINE>
+          <div class="row">
+            <label>Date</label>
+            <input type="text" name="date" />
+          </div>
+        <BLANKLINE>
+          <div class="controls">
+            <input type="submit" class="button-ok" name="CHOOSE"
+                   value="Proceed" />
+            <input type="submit" class="button-cancel" name="CANCEL"
+                   value="Cancel" />
+          </div>
+        ...
+
+        >>> `view.template` == `view.select_template`
+        True
+
+    If we pass a correct date to the view, it gets set as an attribute:
+
+        >>> request = TestRequest(form={'date': '2005-07-05',
+        ...                             'CHOOSE': 'next'})
+        >>> view = SpecialDayView(ttschema, request)
+        >>> view.update()
+        >>> view.date
+        datetime.date(2005, 7, 5)
+        >>> `view.template` == `view.form_template`
+        True
+
+    Our view now can get a list of period titles, start and end times:
+
+        >>> pprint(view.originalPeriods())
+        [('First', '09:00', '09:45'),
+         ('Second', '10:00', '10:45'),
+         ('Third', '11:00', '11:45'),
+         ('Fourth', '12:00', '12:45')]
+
+    The user is taken to the next step.  He gets a table with period
+    names and times, and fields for new start and end times:
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+           <table>
+             <tr>
+               <th>Period title</th>
+               <th>Original start</th>
+               <th>Original end</th>
+               <th>New start</th>
+               <th>New end</th>
+             </tr>
+             <tr>
+               <td>First</td>
+               <td>09:00</td>
+               <td>09:45</td>
+               <td>
+                 <input type="text" name="First_start" value="09:00" />
+               </td>
+               <td>
+                 <input type="text" name="First_end" value="09:45" />
+               </td>
+             </tr>
+             <tr>
+               <td>Second</td>
+               <td>10:00</td>
+               <td>10:45</td>
+               <td>
+                 <input type="text" name="Second_start"
+                        value="10:00" />
+               </td>
+               <td>
+                 <input type="text" name="Second_end" value="10:45" />
+               </td>
+             </tr>
+             <tr>
+               <td>Third</td>
+               <td>11:00</td>
+               <td>11:45</td>
+               <td>
+                 <input type="text" name="Third_start" value="11:00" />
+               </td>
+               <td>
+                 <input type="text" name="Third_end" value="11:45" />
+               </td>
+             </tr>
+             <tr>
+               <td>Fourth</td>
+               <td>12:00</td>
+               <td>12:45</td>
+               <td>
+                 <input type="text" name="Fourth_start"
+                        value="12:00" />
+               </td>
+               <td>
+                 <input type="text" name="Fourth_end" value="12:45" />
+               </td>
+             </tr>
+           <table>
+        ...
+            <input type="submit" class="button-ok" name="SUBMIT"
+                   value="Modify" />
+        ...
+
+    Now the user can fill in the form and create an exception template
+    for this day.
+
+        >>> request = TestRequest(form={'date': '2005-07-05',
+        ...                             'SUBMIT': 'next',
+        ...                             'First_start': '8:00',
+        ...                             'First_end': '8:30',
+        ...                             'Second_start': '8:45',
+        ...                             'Second_end': '9:15',
+        ...                             'Third_start': '9:30',
+        ...                             'Third_end': '10:00',
+        ...                             'Fourth_start': '',
+        ...                             'Fourth_end': '',
+        ...                             })
+        >>> view = SpecialDayView(ttschema, request)
+        >>> from datetime import time, date, timedelta
+        >>> view.date = date(2005, 7, 5)
+        >>> pprint(view.extractPeriods())
+        [('First', datetime.time(8, 0), datetime.timedelta(0, 1800)),
+         ('Second', datetime.time(8, 45), datetime.timedelta(0, 1800)),
+         ('Third', datetime.time(9, 30), datetime.timedelta(0, 1800))]
+
+
+        >>> result = view()
+
+        >>> exception = ttschema.model.exceptionDays[datetime.date(2005, 7, 5)]
+        >>> exception
+        <schooltool.timetable.SchooldayTemplate object at ...>
+        >>> for period in exception:
+        ...     print period.title, period.tstart, period.duration
+        First 08:00:00 0:30:00
+        Second 08:45:00 0:30:00
+        Third 09:30:00 0:30:00
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('location')
+        'http://127.0.0.1/ttschemas/usual'
+
+    """
 
 def test_suite():
     suite = unittest.TestSuite()

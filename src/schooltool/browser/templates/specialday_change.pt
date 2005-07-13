@@ -1,0 +1,62 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Choose a special day</title>
+</head>
+<body>
+  <h1 metal:fill-slot="content-header" i18n:translate="">
+    Choose a special day
+  </h1>
+<metal:block metal:fill-slot="body">
+
+<p i18n:translate="">
+  You can adjust the start and end times of periods for
+  <span tal:replace="view/date"/> in the form below.  In order to
+  remove a period from the day, just delete the period's start and end
+  times.
+</p>
+
+<form class="plain" method="POST" tal:attributes="action request/URL">
+
+  <div class="error"
+       tal:content="view/error"
+       tal:condition="view/error"
+       i18n:translate=""
+       />
+
+   <table>
+     <tr>
+       <th>Period title</th>
+       <th>Original start</th>
+       <th>Original end</th>
+       <th>New start</th>
+       <th>New end</th>
+     </tr>
+     <tr tal:repeat="period view/originalPeriods">
+       <td tal:content="python: period[0]"/>
+       <td tal:content="python: period[1]"/>
+       <td tal:content="python: period[2]"/>
+       <td>
+         <input type="text"
+                tal:attributes="name python: period[0] + '_start';
+                                value python: period[1]"/>
+       </td>
+       <td>
+         <input type="text"
+                tal:attributes="name python: period[0] + '_end';
+                                value python: period[2]"/>
+       </td>
+     </tr>
+   <table>
+
+  <div class="controls">
+    <input type="submit" class="button-ok" name="SUBMIT" value="Modify"
+           i18n:attributes="value" />
+    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+           i18n:attributes="value cancel-button" />
+  </div>
+
+</form>
+
+</metal:block>
+</body>
+</html>

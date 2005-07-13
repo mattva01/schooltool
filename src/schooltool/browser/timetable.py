@@ -45,7 +45,7 @@ from zope.app.form.interfaces import IWidgetInputError
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 
-from schoolbell.calendar.utils import parse_date
+from schoolbell.calendar.utils import parse_date, parse_time
 from schoolbell.calendar.utils import next_month, week_start
 from schoolbell.app.browser.cal import month_names
 
@@ -59,7 +59,7 @@ from schooltool.timetable import Term, Timetable, TimetableDay
 from schooltool.timetable import TimetableActivity
 from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
-from schooltool.timetable import getNextTermForDate
+from schooltool.timetable import getNextTermForDate, getTermForDate
 from schooltool import getSchoolToolApplication
 from schooltool.browser.app import ContainerView
 
@@ -1168,3 +1168,87 @@ class SectionTimetableSetupView(TimetableSetupViewMixin):
         return self.template()
 
 
+class SpecialDayView(BrowserView):
+
+    select_template = ViewPageTemplateFile('templates/specialday_select.pt')
+    form_template = ViewPageTemplateFile('templates/specialday_change.pt')
+
+    error = None
+    date = None
+
+    def delta(self, start, end):
+        """
+        Returns a timedelta between two times
+
+            >>> from datetime import time, timedelta
+            >>> view = SpecialDayView(None, None)
+            >>> view.delta(time(11, 10), time(12, 20))
+            datetime.timedelta(0, 4200)
+
+        If a result is negative, it is 'wrapped around':
+
+            >>> view.delta(time(11, 10), time(10, 10)) == timedelta(hours=23)
+            True
+        """
+        today = datetime.date.today()
+        dtstart = datetime.datetime.combine(today, start)
+        dtend = datetime.datetime.combine(today, end)
+        delta = dtend - dtstart
+        if delta < datetime.timedelta(0):
+            delta += datetime.timedelta(1)
+        return delta
+
+    def extractPeriods(self):
+        """Return a list of three-tuples with period titles, tstarts,
+        durations.
+        """
+        model = self.context.model
+        term = getTermForDate(self.date)
+        result = []
+        for period in model.periodsInDay(term, self.context, self.date):
+            start_name = period.title + '_start'
+            end_name = period.title + '_end'
+            if (start_name in self.request and end_name in self.request and
+                self.request[start_name] and self.request[end_name]):
+                start = parse_time(self.request[start_name])
+                end = parse_time(self.request[end_name])
+                duration = self.delta(start, end)
+                result.append((period.title, start, duration))
+        return result
+
+    def update(self):
+        """Read and validate form data, and update model if necessary.
+
+        Also choose the correct template to render.
+        """
+        self.template = self.select_template
+        if 'date' in self.request:
+            self.date = parse_date(self.request['date'])
+        if self.date and 'CHOOSE' in self.request:
+            self.template = self.form_template
+        if self.date and 'SUBMIT' in self.request:
+            daytemplate = SchooldayTemplate()
+            for title, start, duration in self.extractPeriods():
+                daytemplate.add(SchooldayPeriod(title, start, duration))
+            self.context.model.exceptionDays[self.date] = daytemplate
+            self.request.response.redirect(
+                zapi.absoluteURL(self.context, self.request))
+
+
+    def originalPeriods(self):
+        model = self.context.model
+        term = getTermForDate(self.date)
+        result = []
+        for period in model.periodsInDay(term, self.context, self.date):
+            # datetime authors are cowards
+            endtime = (datetime.datetime.combine(datetime.date.today(),
+                                                 period.tstart)
+                       + period.duration).time()
+            result.append((period.title,
+                           period.tstart.strftime("%H:%M"),
+                           endtime.strftime("%H:%M")))
+        return result
+
+    def __call__(self):
+        self.update()
+        return self.template()
