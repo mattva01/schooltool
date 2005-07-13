@@ -1174,6 +1174,7 @@ class SpecialDayView(BrowserView):
     form_template = ViewPageTemplateFile('templates/specialday_change.pt')
 
     error = None
+    field_errors = None
     date = None
     term = None
 
@@ -1202,18 +1203,32 @@ class SpecialDayView(BrowserView):
     def extractPeriods(self):
         """Return a list of three-tuples with period titles, tstarts,
         durations.
+
+        If errors are encountered in some fields, 
         """
         model = self.context.model
         result = []
         for period in model.periodsInDay(self.term, self.context, self.date):
             start_name = period.title + '_start'
             end_name = period.title + '_end'
-            if (start_name in self.request and end_name in self.request and
-                self.request[start_name] and self.request[end_name]):
-                start = parse_time(self.request[start_name])
-                end = parse_time(self.request[end_name])
-                duration = self.delta(start, end)
-                result.append((period.title, start, duration))
+            if (start_name in self.request and end_name in self.request
+                and (self.request[start_name] or self.request[end_name])):
+                start = end = None
+                try:
+                    start = parse_time(self.request[start_name])
+                except ValueError:
+                    pass
+                try:
+                    end = parse_time(self.request[end_name])
+                except ValueError:
+                    pass
+                if start is None:
+                    self.field_errors.append(start_name)
+                if end is None:
+                    self.field_errors.append(end_name)
+                elif start is not None:
+                    duration = self.delta(start, end)
+                    result.append((period.title, start, duration))
         return result
 
     def update(self):
@@ -1221,6 +1236,7 @@ class SpecialDayView(BrowserView):
 
         Also choose the correct template to render.
         """
+        self.field_errors = []
         self.template = self.select_template
         if 'CANCEL' in self.request:
             self.request.response.redirect(
@@ -1242,9 +1258,10 @@ class SpecialDayView(BrowserView):
             daytemplate = SchooldayTemplate()
             for title, start, duration in self.extractPeriods():
                 daytemplate.add(SchooldayPeriod(title, start, duration))
-            self.context.model.exceptionDays[self.date] = daytemplate
-            self.request.response.redirect(
-                zapi.absoluteURL(self.context, self.request))
+            if not self.field_errors:
+                self.context.model.exceptionDays[self.date] = daytemplate
+                self.request.response.redirect(
+                    zapi.absoluteURL(self.context, self.request))
 
 
     def originalPeriods(self):

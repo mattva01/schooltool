@@ -194,3 +194,9 @@ table.timetable_setup td {
 table.timetable_setup th {
     text-align: left;
 }
+
+/* Special day form */
+
+td.error {
+    border: 1px solid #990000;
+}

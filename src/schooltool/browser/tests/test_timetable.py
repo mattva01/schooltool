@@ -2250,8 +2250,16 @@ def doctest_SpecialDayView():
          ('Second', datetime.time(8, 45), datetime.timedelta(0, 1800)),
          ('Third', datetime.time(9, 30), datetime.timedelta(0, 1800))]
 
+    The processing does not raise:
 
         >>> result = view()
+
+    There are no field errors:
+
+        >>> view.field_errors
+        []
+
+    The actual exception gets added:
 
         >>> exception = ttschema.model.exceptionDays[datetime.date(2005, 7, 5)]
         >>> exception
@@ -2261,6 +2269,8 @@ def doctest_SpecialDayView():
         First 08:00:00 0:30:00
         Second 08:45:00 0:30:00
         Third 09:30:00 0:30:00
+
+    The user is redirected to the schema main page:
 
         >>> request.response.getStatus()
         302
@@ -2326,6 +2336,97 @@ def doctest_SpecialDayView():
 
         >>> 'value="2004-01-01"' in result
         True
+
+    What if the start/end times are incorrect?  Highlight them with a
+    red border.
+
+    If either a start or an end time is provided, the other must be
+    provided as well.  Otherwise it is considered an error.
+
+        >>> request = TestRequest(form={'date': '2005-07-13',
+        ...                             'SUBMIT': 'next',
+        ...                             'First_start': '800',
+        ...                             'First_end': '8:30',
+        ...                             'Second_start': '',
+        ...                             'Second_end': '9:15',
+        ...                             'Third_start': '9:30',
+        ...                             'Third_end': '',
+        ...                             'Fourth_start': '14:00',
+        ...                             'Fourth_end': '15:00',
+        ...                             })
+        >>> view = SpecialDayView(ttschema, request)
+        >>> result = view()
+
+    Update did not happen:
+
+        >>> ttschema.model.exceptionDays[datetime.date(2005, 7, 13)]
+        Traceback (most recent call last):
+          ...
+        KeyError: datetime.date(2005, 7, 13)
+
+    The erroneous fields are noticed:
+
+        >>> view.field_errors
+        ['First_start', 'Second_start', 'Third_end']
+
+        >>> print result
+        <BLANKLINE>
+        ...
+           <table>
+             <tr>
+               <th>Period title</th>
+               <th>Original start</th>
+               <th>Original end</th>
+               <th>New start</th>
+               <th>New end</th>
+             </tr>
+             <tr>
+               <td>First</td>
+               <td>09:00</td>
+               <td>09:45</td>
+               <td class="error">
+                 <input type="text" name="First_start" value="800" />
+               </td>
+               <td>
+                 <input type="text" name="First_end" value="8:30" />
+               </td>
+             </tr>
+             <tr>
+               <td>Second</td>
+               <td>10:00</td>
+               <td>10:45</td>
+               <td class="error">
+                 <input type="text" name="Second_start" value="" />
+               </td>
+               <td>
+               <input type="text" name="Second_end" value="9:15" />
+               </td>
+             </tr>
+             <tr>
+               <td>Third</td>
+               <td>11:00</td>
+               <td>11:45</td>
+               <td>
+                 <input type="text" name="Third_start" value="9:30" />
+               </td>
+               <td class="error">
+                 <input type="text" name="Third_end" value="" />
+               </td>
+             </tr>
+             <tr>
+               <td>Fourth</td>
+               <td>12:00</td>
+               <td>12:45</td>
+               <td>
+                 <input type="text" name="Fourth_start"
+                        value="14:00" />
+               </td>
+               <td>
+                 <input type="text" name="Fourth_end" value="15:00" />
+               </td>
+             </tr>
+           <table>
+        ...
 
     """
 
