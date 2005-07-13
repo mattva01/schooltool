@@ -1169,6 +1169,11 @@ class SectionTimetableSetupView(TimetableSetupViewMixin):
 
 
 class SpecialDayView(BrowserView):
+    """The view for changing the periods for a particular day.
+
+    The typical use case: some periods get shortened or and some get
+    cancelled altogether if some special event is held at noon.
+    """
 
     select_template = ViewPageTemplateFile('templates/specialday_select.pt')
     form_template = ViewPageTemplateFile('templates/specialday_change.pt')
