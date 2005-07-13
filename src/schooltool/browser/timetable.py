@@ -1175,6 +1175,7 @@ class SpecialDayView(BrowserView):
 
     error = None
     date = None
+    term = None
 
     def delta(self, start, end):
         """
@@ -1203,9 +1204,8 @@ class SpecialDayView(BrowserView):
         durations.
         """
         model = self.context.model
-        term = getTermForDate(self.date)
         result = []
-        for period in model.periodsInDay(term, self.context, self.date):
+        for period in model.periodsInDay(self.term, self.context, self.date):
             start_name = period.title + '_start'
             end_name = period.title + '_end'
             if (start_name in self.request and end_name in self.request and
@@ -1222,9 +1222,21 @@ class SpecialDayView(BrowserView):
         Also choose the correct template to render.
         """
         self.template = self.select_template
+        if 'CANCEL' in self.request:
+            self.request.response.redirect(
+                zapi.absoluteURL(self.context, self.request))
+            return
         if 'date' in self.request:
-            self.date = parse_date(self.request['date'])
-        if self.date and 'CHOOSE' in self.request:
+            try:
+                self.date = parse_date(self.request['date'])
+            except ValueError:
+                self.error = _("Invalid date. Please use YYYY-MM-DD format.")
+            else:
+                self.term = getTermForDate(self.date)
+                if self.term is None:
+                    self.error = _("The date does not belong to any term.")
+                    self.date = None
+        if self.date:
             self.template = self.form_template
         if self.date and 'SUBMIT' in self.request:
             daytemplate = SchooldayTemplate()
@@ -1237,9 +1249,8 @@ class SpecialDayView(BrowserView):
 
     def originalPeriods(self):
         model = self.context.model
-        term = getTermForDate(self.date)
         result = []
-        for period in model.periodsInDay(term, self.context, self.date):
+        for period in model.periodsInDay(self.term, self.context, self.date):
             # datetime authors are cowards
             endtime = (datetime.datetime.combine(datetime.date.today(),
                                                  period.tstart)

@@ -2146,8 +2146,7 @@ def doctest_SpecialDayView():
 
     If we pass a correct date to the view, it gets set as an attribute:
 
-        >>> request = TestRequest(form={'date': '2005-07-05',
-        ...                             'CHOOSE': 'next'})
+        >>> request = TestRequest(form={'date': '2005-07-05'})
         >>> view = SpecialDayView(ttschema, request)
         >>> view.update()
         >>> view.date
@@ -2245,7 +2244,7 @@ def doctest_SpecialDayView():
         ...                             })
         >>> view = SpecialDayView(ttschema, request)
         >>> from datetime import time, date, timedelta
-        >>> view.date = date(2005, 7, 5)
+        >>> view.update()
         >>> pprint(view.extractPeriods())
         [('First', datetime.time(8, 0), datetime.timedelta(0, 1800)),
          ('Second', datetime.time(8, 45), datetime.timedelta(0, 1800)),
@@ -2267,6 +2266,66 @@ def doctest_SpecialDayView():
         302
         >>> request.response.getHeader('location')
         'http://127.0.0.1/ttschemas/usual'
+
+    If the user hits the Cancel button, he gets redurected to the
+    ttschema default view:
+
+        >>> request = TestRequest(form={'date': '2005-07-06',
+        ...                             'CANCEL': 'next',
+        ...                             'First_start': '8:00',
+        ...                             'First_end': '8:30',
+        ...                             'Second_start': '8:45',
+        ...                             'Second_end': '9:15',
+        ...                             'Third_start': '9:30',
+        ...                             'Third_end': '10:00',
+        ...                             'Fourth_start': '',
+        ...                             'Fourth_end': '',
+        ...                             })
+        >>> view = SpecialDayView(ttschema, request)
+        >>> result = view()
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('location')
+        'http://127.0.0.1/ttschemas/usual'
+
+    No exception gets added:
+
+        >>> ttschema.model.exceptionDays[datetime.date(2005, 7, 6)]
+        Traceback (most recent call last):
+          ...
+        KeyError: datetime.date(2005, 7, 6)
+
+
+    ==========================================
+    The Boring Bit -- Various Error Conditions
+    ==========================================
+
+    What if the date is incorrect?
+
+        >>> request = TestRequest(form={'date': 'Your father was a hamster'})
+        >>> view = SpecialDayView(ttschema, request)
+        >>> result = view()
+        >>> view.error == 'Invalid date. Please use YYYY-MM-DD format.'
+        True
+        >>> view.error in result
+        True
+        >>> `view.template` == `view.select_template`
+        True
+
+    What if the date is not in a term?
+
+        >>> request = TestRequest(form={'date': '2004-01-01'})
+        >>> view = SpecialDayView(ttschema, request)
+        >>> result = view()
+        >>> view.error == 'The date does not belong to any term.'
+        True
+        >>> view.error in result
+        True
+
+    We're courteous enough though to leave the date intact in the input field:
+
+        >>> 'value="2004-01-01"' in result
+        True
 
     """
 

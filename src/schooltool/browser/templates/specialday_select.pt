@@ -27,7 +27,8 @@ a certain date, or to cancel some periods altogether.
 
   <div class="row">
     <label i18n:translate="">Date</label>
-    <input type="text" name="date"/>
+    <input type="text" name="date"
+           tal:attributes="value request/date|nothing"/>
   </div>
 
   <div class="controls">
