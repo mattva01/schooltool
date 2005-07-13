@@ -1258,7 +1258,10 @@ class SpecialDayView(BrowserView):
             daytemplate = SchooldayTemplate()
             for title, start, duration in self.extractPeriods():
                 daytemplate.add(SchooldayPeriod(title, start, duration))
-            if not self.field_errors:
+            if self.field_errors:
+                self.error = _('Some values were invalid.'
+                               '  They are highlighted in red.')
+            else:
                 self.context.model.exceptionDays[self.date] = daytemplate
                 self.request.response.redirect(
                     zapi.absoluteURL(self.context, self.request))

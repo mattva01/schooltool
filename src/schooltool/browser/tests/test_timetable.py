@@ -2369,6 +2369,9 @@ def doctest_SpecialDayView():
         >>> view.field_errors
         ['First_start', 'Second_start', 'Third_end']
 
+        >>> view.error
+        u'Some values were invalid.  They are highlighted in red.'
+
         >>> print result
         <BLANKLINE>
         ...
