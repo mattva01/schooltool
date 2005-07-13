@@ -77,7 +77,6 @@ class DailyCalendarView(BrowserView):
 
     def buildStory(self, date):
         """Build a platypus story."""
-        # TODO: add logo
         owner = self.context.__parent__
         style = styles["Normal"]
         style.fontName = SANS
@@ -114,7 +113,8 @@ class DailyCalendarView(BrowserView):
                     resource_titles = [resource.title
                                        for resource in event.resources]
                     resources = 'Booked: ' + ', '.join(resource_titles)
-                    text_cell.append(Paragraph(resources, style))
+                    text_cell.append(Paragraph(resources.encode('utf-8'),
+                                               style))
                 # TODO: show recurrence
 
                 dtend = event.dtstart + event.duration
@@ -140,8 +140,6 @@ import reportlab.rl_config
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.fonts import addMapping
-
-global msttcorefonts_path
 
 
 def registerTTFont(fontname, filename):

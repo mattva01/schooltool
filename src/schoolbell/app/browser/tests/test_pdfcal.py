@@ -26,7 +26,7 @@ import unittest
 from datetime import datetime, date, timedelta
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
-from schoolbell.app.app import Person
+from schoolbell.app.app import Person, Resource
 from schoolbell.app.cal import CalendarEvent
 
 
@@ -78,6 +78,8 @@ def doctest_DailyCalendarView_buildStory():
         >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
         ...                     timedelta(minutes=72), "Some event")
         >>> calendar.addEvent(evt)
+        >>> rsrc = Resource(title='Some resource')
+        >>> evt.bookResource(rsrc)
 
         >>> story = view.buildStory(date(2005, 7, 8))
         >>> len(story)
@@ -92,12 +94,11 @@ def doctest_DailyCalendarView_buildStory():
         '09:10-10:22'
         >>> evt_info = story[4]._cellvalues[0][1]
         >>> len(evt_info)
-        1
+        2
         >>> evt_info[0].text
         'Some event'
-
-        >>> evt = CalendarEvent(datetime(2005, 7, 8), timedelta, "Some event")
-        >>> calendar.addEvent(evt)
+        >>> evt_info[1].text
+        'Booked: Some resource'
 
     """
 
@@ -113,6 +114,8 @@ def doctest_DailyCalendarView_buildStory_unicode():
         >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
         ...                     timedelta(hours=5), u"\u0105 event")
         >>> calendar.addEvent(evt)
+        >>> rsrc = Resource(title=u"\u0105 resource")
+        >>> evt.bookResource(rsrc)
 
         >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> view = DailyCalendarView(calendar, request)
@@ -126,9 +129,11 @@ def doctest_DailyCalendarView_buildStory_unicode():
         '2005-07-08'
         >>> evt_info = story[4]._cellvalues[0][1]
         >>> len(evt_info)
-        1
+        2
         >>> evt_info[0].text
         '\xc4\x85 event'
+        >>> evt_info[1].text
+        'Booked: \xc4\x85 resource'
 
     """
 
