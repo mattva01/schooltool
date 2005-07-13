@@ -24,23 +24,27 @@ $Id$
 
 from cStringIO import StringIO
 
-# TODO: make things work without reportlab installed
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-from reportlab.platypus import Table, TableStyle, Image
-from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.rl_config import defaultPageSize
-from reportlab.lib.units import cm
-
 from zope.app.publisher.browser import BrowserView
 from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.calendar.utils import parse_date
 
 global disabled
 disabled = False
-# TODO: handle this flag
 
-styles = getSampleStyleSheet()
+try:
+    import reportlab
+except ImportError:
+    disabled = True
+else:
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+    from reportlab.platypus import Table, TableStyle, Image
+    from reportlab.lib import colors
+    from reportlab.lib.styles import getSampleStyleSheet
+    from reportlab.rl_config import defaultPageSize
+    from reportlab.lib.units import cm
+
+disabled = False
+# TODO: handle this flag
 
 SANS = 'Arial_Normal'
 SANS_OBLIQUE = 'Arial_Italic'
@@ -78,6 +82,9 @@ class DailyCalendarView(BrowserView):
     def buildStory(self, date):
         """Build a platypus story."""
         owner = self.context.__parent__
+
+        # TODO: fix style variable names, do not use sample stylesheet
+        styles = getSampleStyleSheet()
         style = styles["Normal"]
         style.fontName = SANS
         style_italic = styles["Italic"]
@@ -162,43 +169,12 @@ def registerTTFont(fontname, filename):
     del reportlab.lib.fonts._ps2tt_map[key]
 
 
-def setUpTTF():
-    """Set up ReportGen to use FreeFonts"""
-    reportlab.rl_config.warnOnMissingFontGlyphs = 0
-    ttfpath = reportlab.rl_config.TTFSearchPath
-    if not os.path.isdir(freefont_path):
-        raise ValueError("'%s' does not exist,"
-                         " please make sure you have FreeFont installed!" %
-                         freefont_path)
-    ttfpath.append(freefont_path)
-
-    registerTTFont('FreeSans', 'FreeSans.ttf')
-    registerTTFont('FreeSansBold', 'FreeSansBold.ttf')
-    registerTTFont('FreeSansOblique', 'FreeSansOblique.ttf')
-    registerTTFont('FreeSansBoldOblique', 'FreeSansBoldOblique.ttf')
-
-    addMapping('FreeSans', 0, 0, 'FreeSans')
-    addMapping('FreeSans', 0, 1, 'FreeSansOblique')
-    addMapping('FreeSans', 1, 0, 'FreeSansBold')
-    addMapping('FreeSans', 1, 1, 'FreeSansBoldOblique')
-
-    registerTTFont('FreeSerif', 'FreeSerif.ttf')
-    registerTTFont('FreeSerifBold', 'FreeSerifBold.ttf')
-    registerTTFont('FreeSerifItalic', 'FreeSerifItalic.ttf')
-    registerTTFont('FreeSerifBoldItalic', 'FreeSerifBoldItalic.ttf')
-
-    addMapping('FreeSerif', 0, 0, 'FreeSerif')
-    addMapping('FreeSerif', 0, 1, 'FreeSerifItalic')
-    addMapping('FreeSerif', 1, 0, 'FreeSerifBold')
-    addMapping('FreeSerif', 1, 1, 'FreeSerifBoldItalic')
-
-
 def registerFontPath(directory):
-    ttfpath = reportlab.rl_config.TTFSearchPath
     if not os.path.isdir(directory):
         # TODO: make the error friendlier
-        raise ValueError("Directory '%s' does not exist.")
+        raise ValueError("Directory '%s' does not exist." % directory)
     else:
+        ttfpath = reportlab.rl_config.TTFSearchPath
         ttfpath.append(directory)
 
 
@@ -208,21 +184,20 @@ def setUpMSTTCoreFonts():
 
     # 'Arial' is predefined in ReportLab, so we use 'Arial_Normal'
 
-    registerTTFont('Arial_Normal', 'Arial.ttf')
-    registerTTFont('Arial_Bold', 'Arial_Bold.ttf')
-    registerTTFont('Arial_Italic', 'Arial_Italic.ttf')
-    registerTTFont('Arial_Bold_Italic', 'Arial_Bold_Italic.ttf')
+    registerTTFont('Arial_Normal', 'arial.ttf')
+    registerTTFont('Arial_Bold', 'arialbd.ttf')
+    registerTTFont('Arial_Italic', 'ariali.ttf')
+    registerTTFont('Arial_Bold_Italic', 'arialbi.ttf')
 
     addMapping('Arial_Normal', 0, 0, 'Arial_Normal')
     addMapping('Arial_Normal', 0, 1, 'Arial_Italic')
     addMapping('Arial_Normal', 1, 0, 'Arial_Bold')
     addMapping('Arial_Normal', 1, 1, 'Arial_Bold_Italic')
 
-    registerTTFont('Times_New_Roman', 'Times_New_Roman.ttf')
-    registerTTFont('Times_New_Roman_Bold', 'Times_New_Roman_Bold.ttf')
-    registerTTFont('Times_New_Roman_Italic', 'Times_New_Roman_Italic.ttf')
-    registerTTFont('Times_New_Roman_Bold_Italic',
-                   'Times_New_Roman_Bold_Italic.ttf')
+    registerTTFont('Times_New_Roman', 'times.ttf')
+    registerTTFont('Times_New_Roman_Bold', 'timesbd.ttf')
+    registerTTFont('Times_New_Roman_Italic', 'timesi.ttf')
+    registerTTFont('Times_New_Roman_Bold_Italic', 'timesbi.ttf')
 
     addMapping('Times_New_Roman', 0, 0, 'Times_New_Roman')
     addMapping('Times_New_Roman', 0, 1, 'Times_New_Roman_Italic')
