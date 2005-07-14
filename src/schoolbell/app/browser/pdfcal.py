@@ -86,15 +86,15 @@ class DailyCalendarView(BrowserView):
         from reportlab.lib.styles import ParagraphStyle
         from reportlab.lib.enums import TA_CENTER
 
-        self.normal_style = ParagraphStyle(name='Normal', fontname=SANS,
+        self.normal_style = ParagraphStyle(name='Normal', fontName=SANS,
                                            fontsize=10, leading=12)
-        self.title_style = ParagraphStyle(name='Title', fontname=SANS_BOLD,
+        self.title_style = ParagraphStyle(name='Title', fontName=SANS_BOLD,
                                           parent=self.normal_style,
                                           fontsize=18, leading=22,
                                           alignment=TA_CENTER, spaceAfter=6)
         self.italic_style = ParagraphStyle(name='Italic',
                                            parent=self.normal_style,
-                                           fontname=SANS_OBLIQUE)
+                                           fontName=SANS_OBLIQUE)
 
     def setUpPDFHeaders(self, data):
         """Set up HTTP headers to serve data as PDF."""
@@ -123,6 +123,7 @@ class DailyCalendarView(BrowserView):
         return story
 
     def buildEventTable(self, events):
+        """Return the platypus table that shows events."""
         from reportlab.platypus import Paragraph, Spacer
         from reportlab.platypus import Table, TableStyle
         from reportlab.lib import colors
@@ -157,9 +158,10 @@ class DailyCalendarView(BrowserView):
         return table
 
     def listedEvents(self, date):
+        """Return a list of events that should be shown."""
         events = [event for event in self.context
                   if event.dtstart.date() == date]
-        events.sort() # TODO: test sort
+        events.sort()
         return events
 
 

@@ -154,6 +154,48 @@ def test_disablePDFGeneration():
 
     """
 
+def doctest_DailyCalendarView_listedEvents():
+    """Event listing tests.
+
+        >>> from schoolbell.app.browser.pdfcal import DailyCalendarView
+        >>> calendar = Person(title="Mr. Smith").calendar
+        >>> request = TestRequest(form={'date': '2005-07-08'})
+        >>> view = DailyCalendarView(calendar, request)
+
+    First check the simple case when the calendar is empty:
+
+        >>> view.listedEvents(date(2005, 7, 8))
+        []
+
+    Let's add one event.
+
+        >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
+        ...                     timedelta(hours=5), "evt")
+        >>> calendar.addEvent(evt)
+
+    The event should appear in the result
+
+        >>> view.listedEvents(date(2005, 7, 8)) == [evt]
+        True
+
+        >>> view.listedEvents(date(2005, 7, 9))
+        []
+
+    If several events occur, they should be returned sorted by start time:
+
+        >>> evt2 = CalendarEvent(datetime(2005, 7, 8, 9, 12),
+        ...                      timedelta(hours=5), "evt2")
+        >>> calendar.addEvent(evt2)
+
+        >>> evt3 = CalendarEvent(datetime(2005, 7, 8, 9, 3),
+        ...                      timedelta(hours=2), "evt3")
+        >>> calendar.addEvent(evt3)
+
+        >>> view.listedEvents(date(2005, 7, 8)) == [evt3, evt, evt2]
+        True
+
+    """
+
 
 def doctest_setUpMSTTCoreFonts():
     r"""TrueType font setup tests.
