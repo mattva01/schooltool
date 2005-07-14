@@ -738,13 +738,7 @@ class BaseTimetableModel(Persistent):
                     events.append(event)
         return ImmutableCalendar(events)
 
-    def _periodsInDay(self, term, timetable, day, day_id_gen=None):
-        """Return a timetable day_id and a list of periods for a given day.
-
-        if day_id_gen is not provided, a new generator is created and
-        scrolled to the date requested.  If day_id_gen is provided, it
-        is called once to gain a day_id.
-        """
+    def _getDayIdForDay(self, term, day, day_id_gen=None):
         if day_id_gen is None:
             # Scroll to the required day
             day_id_gen = self._dayGenerator()
@@ -756,14 +750,31 @@ class BaseTimetableModel(Persistent):
                         self.schooldayStrategy(date, day_id_gen)
 
         if not term.isSchoolday(day):
-            return None, []
-        day_id = self.schooldayStrategy(day, day_id_gen)
+            return None
+        return self.schooldayStrategy(day, day_id_gen)
+
+    def _periodsInDay(self, term, timetable, day,
+                      day_id_gen=None, original=False):
+        """Return a timetable day_id and a list of periods for a given day.
+
+        if day_id_gen is not provided, a new generator is created and
+        scrolled to the date requested.  If day_id_gen is provided, it
+        is called once to gain a day_id.
+
+        `original` is boolean flag that makes this method disregard
+        exceptionDays.
+        """
+
+        day_id = self._getDayIdForDay(term, day, day_id_gen)
         if day_id is None:
             return None, []
 
         # Now choose the periods that are in this day
         result = []
-        day_template = self._getTemplateForDay(day)
+        if original:
+            day_template = self._getUsualTemplateForDay(day)
+        else:
+            day_template = self._getTemplateForDay(day)
         for period in day_template:
             dt = datetime.datetime.combine(day, period.tstart)
             if period.title in timetable[day_id].keys():
@@ -776,9 +787,20 @@ class BaseTimetableModel(Persistent):
         """See ITimetableModel.periodsInDay"""
         return self._periodsInDay(term, timetable, day)[1]
 
-    def _getTemplateForDay(self, date):
+    def originalPeriodsInDay(self, term, timetable, day):
+        """See ITimetableModel.originalPeriodsInDay"""
+        return self._periodsInDay(term, timetable, day, original=True)[1]
+
+    def _getUsualTemplateForDay(self, date):
+        """Returns the schoolday template for a certain date
+        disregarding special days.
+        """
         default = self.dayTemplates[None]
-        usual = self.dayTemplates.get(date.weekday(), default)
+        return self.dayTemplates.get(date.weekday(), default)
+
+    def _getTemplateForDay(self, date):
+        """Returns the schoolday template for a certain date"""
+        usual = self._getUsualTemplateForDay(date)
         return self.exceptionDays.get(date, usual)
 
     def schooldayStrategy(self, date, generator):

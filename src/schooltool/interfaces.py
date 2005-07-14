@@ -287,6 +287,13 @@ class ITimetableModel(Interface):
     def periodsInDay(term, timetable, date):
         """Return a sequence of periods defined in this day"""
 
+    def originalPeriodsInDay(term, timetable, date):
+        """Return a sequence of original periods defined in this day.
+
+        This method is similar to periodsInDay, but it disregards the
+        exceptionDays.
+        """
+
 
 class ITimetableModelFactory(Interface):
     """A factory of a timetable model"""

@@ -1197,16 +1197,21 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         self.assertEqual(days, ['A', 'B', 'C', 'A', 'B', 'X',
                                 'Y', 'C', 'A', 'B', 'C'])
 
-    def test_periodsInDay(self):
+    def test_periodsInDay_originalPeriodsInDay(self):
         from schoolbell.calendar.interfaces import ICalendar
         from schooltool.timetable import SchooldayPeriod
+        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 
         tt = self.createTimetable()
         model = self.createModel()
         schooldays = TermStub()
 
-        cal = model.createCalendar(schooldays, tt)
-        verifyObject(ICalendar, cal)
+        # Add an exception day
+        exception = SchooldayTemplate()
+        t, td = time, timedelta
+        exception.add(SchooldayPeriod('Green', t(6, 0), td(minutes=90)))
+        exception.add(SchooldayPeriod('Blue', t(8, 0), td(minutes=90)))
+        model.exceptionDays[date(2003, 11, 21)] = exception
 
         self.assertEqual(
             model.periodsInDay(schooldays, tt, date(2003, 11, 20)),
@@ -1214,9 +1219,14 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
              SchooldayPeriod("Blue", time(11, 0), timedelta(minutes=90))])
 
         self.assertEqual(
-            model.periodsInDay(schooldays, tt, date(2003, 11, 21)),
+            model.originalPeriodsInDay(schooldays, tt, date(2003, 11, 21)),
             [SchooldayPeriod("Green", time(9, 0), timedelta(minutes=90)),
              SchooldayPeriod("Blue", time(10, 30), timedelta(minutes=90))])
+
+        self.assertEqual(
+            model.periodsInDay(schooldays, tt, date(2003, 11, 21)),
+            [SchooldayPeriod("Green", time(6, 0), timedelta(minutes=90)),
+             SchooldayPeriod("Blue", time(8, 0), timedelta(minutes=90))])
 
         self.assertEqual(
             model.periodsInDay(schooldays, tt, date(2003, 11, 22)),
