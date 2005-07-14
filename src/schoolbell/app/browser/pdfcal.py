@@ -87,15 +87,14 @@ class DailyCalendarView(BrowserView):
         from reportlab.lib.enums import TA_CENTER
 
         self.normal_style = ParagraphStyle(name='Normal', fontname=SANS,
-                                          fontsize=10, leading=12)
+                                           fontsize=10, leading=12)
         self.title_style = ParagraphStyle(name='Title', fontname=SANS_BOLD,
                                           parent=self.normal_style,
                                           fontsize=18, leading=22,
-                                          alignment=TA_CENTER,
-                                          spaceAfter=6)
+                                          alignment=TA_CENTER, spaceAfter=6)
         self.italic_style = ParagraphStyle(name='Italic',
                                            parent=self.normal_style,
-                                           fontname = SANS_OBLIQUE)
+                                           fontname=SANS_OBLIQUE)
 
     def setUpPDFHeaders(self, data):
         """Set up HTTP headers to serve data as PDF."""
