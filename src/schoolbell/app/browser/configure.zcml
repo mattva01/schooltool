@@ -712,4 +712,18 @@
       allowed_interface="zope.app.traversing.browser.interfaces.IAbsoluteURL"
       />
 
+<!-- calwidget (external) -->
+
+  <resource name="calwidget-calendar.js"
+      file="resources/calwidget/calendar.js"
+      layer=".skin.ISchoolBellLayer" />
+
+  <resource name="calwidget-calendar.css"
+      file="resources/calwidget/calendar.css"
+      layer=".skin.ISchoolBellLayer" />
+
+  <resource name="calwidget-icon.gif"
+      file="resources/calwidget/icon.gif"
+      layer=".skin.ISchoolBellLayer" />
+
 </configure>
