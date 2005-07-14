@@ -204,6 +204,16 @@ def doctest_DailyCalendarView_listedEvents():
         >>> view.listedEvents(date(2005, 7, 8)) == [evt3, evt, evt2]
         True
 
+    All-day events always appear in front:
+
+        >>> ad_evt = CalendarEvent(datetime(2005, 7, 8, 20, 3),
+        ...                            timedelta(hours=2), "allday")
+        >>> calendar.addEvent(ad_evt)
+
+        >>> result = view.listedEvents(date(2005, 7, 8))
+        >>> [evt.title for evt in result]
+        ['evt3', 'evt', 'evt2', 'allday']
+
     """
 
 
@@ -233,6 +243,40 @@ def doctest_DailyCalendarView_buildEventTable():
         >>> table = view.buildEventTable([evt])
         >>> table._cellvalues[0][0].text
         'all day'
+
+    """
+
+
+def doctest_DailyCalendarView_eventInfoCell():
+    """Tests for buildEventTable.
+
+        >>> from schoolbell.app.browser.pdfcal import DailyCalendarView
+        >>> calendar = Person(title="Mr. Smith").calendar
+        >>> request = TestRequest(form={'date': '2005-07-08'})
+        >>> view = DailyCalendarView(calendar, request)
+        >>> view.configureStyles()
+
+    In case of a simple event, only the title is shown:
+
+        >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
+        ...                     timedelta(hours=2), "Some event")
+        >>> paragraphs = view.eventInfoCell(evt)
+        >>> len(paragraphs)
+        1
+        >>> paragraphs[0].text
+        'Some event'
+
+    If the event is recurrent, it is flagged:
+
+        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
+        ...                     timedelta(hours=2), "Some event",
+        ...                     recurrence=DailyRecurrenceRule())
+        >>> paragraphs = view.eventInfoCell(evt)
+        >>> len(paragraphs)
+        2
+        >>> paragraphs[1].text
+        'Recurrent'
 
     """
 

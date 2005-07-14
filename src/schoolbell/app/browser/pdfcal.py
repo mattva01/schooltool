@@ -126,7 +126,7 @@ class DailyCalendarView(BrowserView):
 
         story = [logo,
                  Paragraph(title.encode('utf-8'), self.title_style),
-                 Paragraph(date_title, self.title_style),
+                 Paragraph(date_title.encode('utf-8'), self.title_style),
                  Spacer(0, 1 * cm)]
         return story
 
@@ -145,7 +145,8 @@ class DailyCalendarView(BrowserView):
                 dtend = event.dtstart + event.duration
                 time_cell_text = "%s-%s" % (event.dtstart.strftime('%H:%M'),
                                             dtend.strftime('%H:%M'))
-            time_cell = Paragraph(time_cell_text, self.italic_style)
+            time_cell = Paragraph(time_cell_text.encode('utf-8'),
+                                  self.italic_style)
             text_cell = self.eventInfoCell(event)
             rows.append([time_cell, text_cell])
 
@@ -170,14 +171,24 @@ class DailyCalendarView(BrowserView):
             resources = resource_str_template % ', '.join(resource_titles)
             paragraphs.append(Paragraph(resources.encode('utf-8'),
                                         self.normal_style))
+        if event.recurrence:
+            recurrent_text = translate(_("Recurrent"), context=self.request)
+            paragraphs.append(Paragraph(recurrent_text.encode('utf-8'),
+                                        self.normal_style))
         return paragraphs
 
     def listedEvents(self, date):
-        """Return a list of events that should be shown."""
+        """Return a list of events that should be shown.
+
+        All-day events are placed in front.
+        """
+        allday_events = [event for event in self.context
+                         if event.dtstart.date() == date and event.allday]
+        allday_events.sort()
         events = [event for event in self.context
-                  if event.dtstart.date() == date]
+                  if event.dtstart.date() == date and not event.allday]
         events.sort()
-        return events
+        return allday_events + events
 
 
 # ------------------
