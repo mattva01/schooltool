@@ -117,7 +117,7 @@
         <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>
       <div class="row" tal:define="widget nocall:view/start_date_widget">
-        <div metal:use-macro="context/@@form_macros/widget_row" />
+        <div metal:use-macro="context/@@form_macros/datepicker_widget" />
       </div>
       <div class="row" tal:define="widget nocall:view/allday_widget">
         <div metal:use-macro="context/@@form_macros/widget_row" />

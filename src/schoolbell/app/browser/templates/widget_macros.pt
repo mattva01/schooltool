@@ -29,3 +29,25 @@
   </div>
 </div>
 
+<div class="field" metal:define-macro="datepicker_widget">
+  <link type="text/css" rel="stylesheet"
+    href="++resource++calwidget-calendar.css" />
+  <script type="text/javascript" src="++resource++calwidget-calendar.js">
+  </script>
+  <div class="label">
+    <label for="field.name" title="The widget's hint"
+      tal:attributes="for widget/name; title widget/hint"
+      tal:content="widget/label">The Label</label>
+  </div>
+  <p class="hint" tal:content="widget/hint" />
+  <div class="field" style="z-index: 10;">
+    <script type="text/javascript">
+      createCalendarWidget('field.start_date','EDIT', 'ICON',
+                           '++resource++calwidget-icon.gif');
+    </script>
+  </div>
+  <div class="error" tal:define="error widget/error"
+    tal:condition="error" tal:content="structure error">
+    The Error
+  </div>
+</div>
