@@ -2,7 +2,7 @@
 * Calendar Widget Version 1.0
 * Copyright (c) 2004, Tribador Mediaworks,
 *
-* Brian Munroe <bmunroe@tribador.net
+* Brian Munroe <bmunroe@tribador.net>
 *
 * calendar.js - Calendar Widget JavaScript Library
 *
@@ -156,7 +156,6 @@ function drawCalendar() {
 
     // Mozilla hack,  I am sure there is a more elegent way, but I did it
     // on a Friday to get a release out the door...
-    //
     if (yyyy < 1000) {
         yyyy = yyyy + 1900;
     }
@@ -222,14 +221,15 @@ function drawCalendar() {
     dateField = document.getElementById(idtag);
     t.innerHTML = beginTable + dateControls + calHeader + curHTML + closeControls;
 
-    // need to write some better browser detection/positioning code here
-    // Also, there is a perceived stability issue where the calendar goes offscreen
+    // need to write some better browser detection/positioning code here Also,
+    // there is a perceived stability issue where the calendar goes offscreen
     // when the widget is right justified..Need some edge detection
-    //
-    
-    
-    	var kitName = "applewebkit/";	var tempStr = navigator.userAgent.toLowerCase();	var pos = tempStr.indexOf(kitName);	var isAppleWebkit = (pos != -1);
-    
+
+    var kitName = "applewebkit/";
+    var tempStr = navigator.userAgent.toLowerCase();
+    var pos = tempStr.indexOf(kitName);
+    var isAppleWebkit = (pos != -1);
+
     if (isAppleWebkit || document.all) {
         ieOffset = 10;
     } else {
@@ -256,5 +256,6 @@ function createCalendarWidget() {
         icon = '';
     }
 
-    document.write('<input name="' + idtag + '" id="' + idtag + '" type="text" class="DateField" size="10" value="" ' + readOnly + ' ' + clicking + ' />' +  icon + '<br /><div id="' + idtag + 'Div" style="background: #ffffff; position: absolute; display:none;"></div>');
+    // Edited to match SchoolBell styling
+    document.write('<input name="' + idtag + '" id="' + idtag + '" type="text" class="textType" size="20" value="" ' + readOnly + ' ' + clicking + ' />' +  icon + '<br /><div id="' + idtag + 'Div" style="background: #ffffff; position: absolute; display:none;"></div>');
 }
