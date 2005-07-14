@@ -31,28 +31,28 @@
        <th i18n:translate="">New start</th>
        <th i18n:translate="">New end</th>
      </tr>
-     <tr tal:repeat="period view/originalPeriods">
+     <tr tal:repeat="period view/getPeriods">
      <tal:block define="title python: period[0];
-                        start python: period[1];
-                        end   python: period[2]">
+                        orig_start python: period[1];
+                        orig_end python: period[2];
+                        start python: period[3];
+                        end python: period[4];">
        <td tal:content="title"/>
-       <td tal:content="start"/>
-       <td tal:content="end"/>
+       <td tal:content="orig_start"/>
+       <td tal:content="orig_end"/>
        <td tal:define="name string:${title}_start"
            tal:attributes="
              class python: name in view.field_errors and 'error' or None">
          <input type="text"
                 tal:attributes="name name;
-                                value python: name not in request
-                                              and start or request[name]"/>
+                                value python: request.form.get(name, start)"/>
        </td>
        <td tal:define="name string:${title}_end"
            tal:attributes="
              class python: name in view.field_errors and 'error' or None">
          <input type="text"
                 tal:attributes="name name;
-                                value python: name not in request
-                                              and end or request[name]"/>
+                                value python: request.form.get(name, end)"/>
        </td>
      </tal:block>
      </tr>

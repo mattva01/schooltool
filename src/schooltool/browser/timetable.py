@@ -1272,17 +1272,42 @@ class SpecialDayView(BrowserView):
                     zapi.absoluteURL(self.context, self.request))
 
 
-    def originalPeriods(self):
+    def timeplustd(self, t, td):
+        """Add a timedelta to time.
+
+        datetime authors are cowards.
+
+            >>> view = SpecialDayView(None, None)
+            >>> from datetime import time, timedelta
+            >>> view.timeplustd(time(10,0), timedelta(0, 5))
+            datetime.time(10, 0, 5)
+            >>> view.timeplustd(time(23,0), timedelta(0, 3660))
+            datetime.time(0, 1)
+        """
+        dt = datetime.datetime.combine(datetime.date.today(), t)
+        dt += td
+        return dt.time()
+
+    def getPeriods(self):
+        """A helper method that returns a list of tuples of:
+
+        (period_title, orig_start, orig_end, actual_start, actual_end)
+        """
         model = self.context.model
         result = []
+        actual_times = {}
         for period in model.periodsInDay(self.term, self.context, self.date):
+            endtime = self.timeplustd(period.tstart, period.duration)
+            actual_times[period.title] = (period.tstart.strftime("%H:%M"),
+                                          endtime.strftime("%H:%M"))
+        for period in model.originalPeriodsInDay(self.term, self.context,
+                                                 self.date):
             # datetime authors are cowards
-            endtime = (datetime.datetime.combine(datetime.date.today(),
-                                                 period.tstart)
-                       + period.duration).time()
+            endtime = self.timeplustd(period.tstart, period.duration)
             result.append((period.title,
                            period.tstart.strftime("%H:%M"),
-                           endtime.strftime("%H:%M")))
+                           endtime.strftime("%H:%M")) +
+                          actual_times.get(period.title, ('', '')))
         return result
 
     def __call__(self):

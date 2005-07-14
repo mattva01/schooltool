@@ -2156,11 +2156,11 @@ def doctest_SpecialDayView():
 
     Our view now can get a list of period titles, start and end times:
 
-        >>> pprint(view.originalPeriods())
-        [('First', '09:00', '09:45'),
-         ('Second', '10:00', '10:45'),
-         ('Third', '11:00', '11:45'),
-         ('Fourth', '12:00', '12:45')]
+        >>> pprint(view.getPeriods())
+        [('First', '09:00', '09:45', '09:00', '09:45'),
+         ('Second', '10:00', '10:45', '10:00', '10:45'),
+         ('Third', '11:00', '11:45', '11:00', '11:45'),
+         ('Fourth', '12:00', '12:45', '12:00', '12:45')]
 
     The user is taken to the next step.  He gets a table with period
     names and times, and fields for new start and end times:
@@ -2276,6 +2276,76 @@ def doctest_SpecialDayView():
         302
         >>> request.response.getHeader('location')
         'http://127.0.0.1/ttschemas/usual'
+
+    If we revisit this date, we see the original times on the left,
+    and the times of the exceptional template filled in in the form:
+
+        >>> request = TestRequest(form={'date': '2005-07-05'})
+        >>> view = SpecialDayView(ttschema, request)
+        >>> print view()
+        <BLANKLINE>
+        ...
+           <table>
+             <tr>
+               <th>Period title</th>
+               <th>Original start</th>
+               <th>Original end</th>
+               <th>New start</th>
+               <th>New end</th>
+             </tr>
+             <tr>
+               <td>First</td>
+               <td>09:00</td>
+               <td>09:45</td>
+               <td>
+                 <input type="text" name="First_start" value="08:00" />
+               </td>
+               <td>
+                 <input type="text" name="First_end" value="08:30" />
+               </td>
+             </tr>
+             <tr>
+               <td>Second</td>
+               <td>10:00</td>
+               <td>10:45</td>
+               <td>
+                 <input type="text" name="Second_start" value="08:45" />
+               </td>
+               <td>
+                 <input type="text" name="Second_end" value="09:15" />
+               </td>
+             </tr>
+             <tr>
+               <td>Third</td>
+               <td>11:00</td>
+               <td>11:45</td>
+               <td>
+                 <input type="text" name="Third_start" value="09:30" />
+               </td>
+               <td>
+                 <input type="text" name="Third_end" value="10:00" />
+               </td>
+             </tr>
+             <tr>
+               <td>Fourth</td>
+               <td>12:00</td>
+               <td>12:45</td>
+               <td>
+                 <input type="text" name="Fourth_start" value="" />
+               </td>
+               <td>
+                 <input type="text" name="Fourth_end" value="" />
+               </td>
+             </tr>
+           <table>
+        ...
+            <input type="submit" class="button-ok" name="SUBMIT"
+                   value="Modify" />
+        ...
+
+    =============
+    Cancel button
+    =============
 
     If the user hits the Cancel button, he gets redurected to the
     ttschema default view:
