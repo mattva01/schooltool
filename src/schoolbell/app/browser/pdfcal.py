@@ -23,6 +23,7 @@ $Id$
 """
 
 import os.path
+import datetime
 from cStringIO import StringIO
 
 from zope.app.publisher.browser import BrowserView
@@ -54,7 +55,10 @@ class DailyCalendarView(BrowserView):
     def pdfdata(self):
         """Return the PDF representation of a calendar."""
         from reportlab.platypus import SimpleDocTemplate
-        date = parse_date(self.request['date']) # TODO: default to today
+        if 'date' in self.request:
+            date = parse_date(self.request['date'])
+        else:
+            date = datetime.date.today()
 
         datafile = StringIO()
         doc = SimpleDocTemplate(datafile)
@@ -131,31 +135,35 @@ class DailyCalendarView(BrowserView):
 
         rows = []
         for event in events:
-            title = event.title.encode('utf-8')
-            text_cell = [Paragraph(title, self.normal_style)]
-            if event.description:
-                description = event.description.encode('utf-8')
-                text_cell.append(Paragraph(description, self.italic_style))
-            if event.resources:
-                resource_titles = [resource.title
-                                   for resource in event.resources]
-                resource_str_template = translate(_('Booked resources: %s'),
-                                                  context=self.request)
-                resources = resource_str_template % ', '.join(resource_titles)
-                text_cell.append(Paragraph(resources.encode('utf-8'),
-                                           self.normal_style))
-            # TODO: show recurrence
-
             dtend = event.dtstart + event.duration
             time = "%s-%s" % (event.dtstart.strftime('%H:%M'),
                               dtend.strftime('%H:%M'))
-            rows.append([Paragraph(time, self.italic_style), text_cell])
+            time_cell = Paragraph(time, self.italic_style)
+            text_cell = self.eventInfoCell(event)
+            rows.append([time_cell, text_cell])
 
-        tstyle = TableStyle([('BOX', (0,0), (-1,-1), 0.25, colors.black),
-                       ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
-                       ('VALIGN', (0,0), (0,-1), 'TOP')])
+        tstyle = TableStyle([('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                       ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                       ('VALIGN', (0, 0), (0, -1), 'TOP')])
         table = Table(rows, colWidths=(3 * cm, 10 * cm), style=tstyle)
         return table
+
+    def eventInfoCell(self, event):
+        """Return the contents of an event information cell."""
+        from reportlab.platypus import Paragraph
+        title = event.title.encode('utf-8')
+        paragraphs = [Paragraph(title, self.normal_style)]
+        if event.description:
+            description = event.description.encode('utf-8')
+            paragraphs.append(Paragraph(description, self.italic_style))
+        if event.resources:
+            resource_titles = [resource.title for resource in event.resources]
+            resource_str_template = translate(_('Booked resources: %s'),
+                                              context=self.request)
+            resources = resource_str_template % ', '.join(resource_titles)
+            paragraphs.append(Paragraph(resources.encode('utf-8'),
+                                        self.normal_style))
+        return paragraphs
 
     def listedEvents(self, date):
         """Return a list of events that should be shown."""

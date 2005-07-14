@@ -51,6 +51,15 @@ def doctest_DailyCalendarView():
         >>> request.response.getHeader('Accept-Ranges')
         'bytes'
 
+    If we do not specify a date, today is taken by default:
+
+        >>> request = TestRequest()
+        >>> view = DailyCalendarView(person.calendar, request)
+
+        >>> print view.pdfdata()
+        %PDF-1.3...
+        ...
+
     """
 
 
