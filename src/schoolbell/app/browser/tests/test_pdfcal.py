@@ -65,6 +65,7 @@ def doctest_DailyCalendarView_buildStory():
         >>> view = DailyCalendarView(calendar, request)
 
 #        TODO: test header
+        >>> view.configureStyles()
         >>> view.buildStory(date(2005, 7, 8))
         [...
         ...
@@ -93,7 +94,7 @@ def doctest_DailyCalendarView_buildStory():
         >>> evt_info[0].text
         'Some event'
         >>> evt_info[1].text
-        'Booked: Some resource'
+        'Booked resources: Some resource'
 
     """
 
@@ -114,6 +115,7 @@ def doctest_DailyCalendarView_buildStory_unicode():
 
         >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> view = DailyCalendarView(calendar, request)
+        >>> view.configureStyles()
         >>> story = view.buildStory(date(2005, 7, 8))
 
         >>> len(story)
@@ -128,7 +130,7 @@ def doctest_DailyCalendarView_buildStory_unicode():
         >>> evt_info[0].text
         '\xc4\x85 event'
         >>> evt_info[1].text
-        'Booked: \xc4\x85 resource'
+        'Booked resources: \xc4\x85 resource'
 
     """
 

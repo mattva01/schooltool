@@ -45,6 +45,9 @@ PDF support is disabled.  It can be enabled by your administrator.\
 
 
 class DailyCalendarView(BrowserView):
+    """The daily view of a calendar in PDF."""
+
+    # We do imports from reportlab locally to avoid a hard dependency.
 
     __used_for__ = ISchoolBellCalendar
 
@@ -56,6 +59,7 @@ class DailyCalendarView(BrowserView):
         datafile = StringIO()
         doc = SimpleDocTemplate(datafile)
 
+        self.configureStyles()
         story = self.buildStory(date)
         doc.build(story)
 
@@ -63,34 +67,49 @@ class DailyCalendarView(BrowserView):
         self.setUpPDFHeaders(data)
         return data
 
+    def buildStory(self, date):
+        """Build a platypus story that draws the PDF report."""
+        owner = self.context.__parent__
+        story = self.buildPageHeader(owner.title, date)
+
+        events = self.listedEvents(date)
+        if events:
+            story.append(self.buildEventTable(events))
+        return story
+
+    def configureStyles(self):
+        """Store some styles in instance attributes.
+
+        These would be done in the class declaration if we could do a
+        global import of ParagraphStyle.
+        """
+        from reportlab.lib.styles import ParagraphStyle
+        from reportlab.lib.enums import TA_CENTER
+
+        self.normal_style = ParagraphStyle(name='Normal', fontname=SANS,
+                                          fontsize=10, leading=12)
+        self.title_style = ParagraphStyle(name='Title', fontname=SANS_BOLD,
+                                          parent=self.normal_style,
+                                          fontsize=18, leading=22,
+                                          alignment=TA_CENTER,
+                                          spaceAfter=6)
+        self.italic_style = ParagraphStyle(name='Italic',
+                                           parent=self.normal_style,
+                                           fontname = SANS_OBLIQUE)
+
     def setUpPDFHeaders(self, data):
-        """Set up headers to serve data as PDF."""
+        """Set up HTTP headers to serve data as PDF."""
         response = self.request.response
         response.setHeader('Content-Type', 'application/pdf')
         response.setHeader('Content-Length', len(data))
         # We don't really accept ranges, but Acrobat Reader will not show the
         # report in the browser page if this header is not provided.
         response.setHeader('Accept-Ranges', 'bytes')
+        # TODO: test reports with Acrobat Reader
 
-    def buildStory(self, date):
-        """Build a platypus story."""
-        # We do the imports locally to avoid a hard dependency on reportlab.
-        from reportlab.lib import colors
+    def buildPageHeader(self, owner_title, date):
+        from reportlab.platypus import Image, Paragraph, Spacer
         from reportlab.lib.units import cm
-        from reportlab.lib.styles import getSampleStyleSheet
-        from reportlab.platypus import Paragraph, Spacer
-        from reportlab.platypus import Table, TableStyle, Image
-
-        owner = self.context.__parent__
-
-        # TODO: fix style variable names, do not use sample stylesheet
-        styles = getSampleStyleSheet()
-        style = styles["Normal"]
-        style.fontName = SANS
-        style_italic = styles["Italic"]
-        style_italic.fontName = SANS_OBLIQUE
-        style_title = styles["Title"]
-        style_title.fontName = SANS_BOLD
 
         # TODO: Use a hires logo, this one is too blurry.
         logo_path = os.path.join(os.path.dirname(__file__),
@@ -98,45 +117,51 @@ class DailyCalendarView(BrowserView):
         logo = Image(logo_path)
         logo.hAlign = 'LEFT'
 
-        # TODO: all-day events
         story = [logo,
-                 Paragraph(owner.title.encode('utf-8'), style_title),
-                 Paragraph(date.isoformat(), style_title),
+                 Paragraph(owner_title.encode('utf-8'), self.title_style),
+                 Paragraph(date.isoformat(), self.title_style),
                  Spacer(0, 1 * cm)]
+        return story
 
+    def buildEventTable(self, events):
+        from reportlab.platypus import Paragraph, Spacer
+        from reportlab.platypus import Table, TableStyle
+        from reportlab.lib import colors
+        from reportlab.lib.units import cm
+
+        rows = []
+        for event in events:
+            title = event.title.encode('utf-8')
+            text_cell = [Paragraph(title, self.normal_style)]
+            if event.description:
+                description = event.description.encode('utf-8')
+                text_cell.append(Paragraph(description, self.italic_style))
+            if event.resources:
+                resource_titles = [resource.title
+                                   for resource in event.resources]
+                resource_str_template = translate(_('Booked resources: %s'),
+                                                  context=self.request)
+                resources = resource_str_template % ', '.join(resource_titles)
+                text_cell.append(Paragraph(resources.encode('utf-8'),
+                                           self.normal_style))
+            # TODO: show recurrence
+
+            dtend = event.dtstart + event.duration
+            time = "%s-%s" % (event.dtstart.strftime('%H:%M'),
+                              dtend.strftime('%H:%M'))
+            rows.append([Paragraph(time, self.italic_style), text_cell])
+
+        tstyle = TableStyle([('BOX', (0,0), (-1,-1), 0.25, colors.black),
+                       ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
+                       ('VALIGN', (0,0), (0,-1), 'TOP')])
+        table = Table(rows, colWidths=(3 * cm, 10 * cm), style=tstyle)
+        return table
+
+    def listedEvents(self, date):
         events = [event for event in self.context
                   if event.dtstart.date() == date]
         events.sort() # TODO: test sort
-
-        if events:
-            rows = []
-            for event in events:
-                title = event.title.encode('utf-8')
-                text_cell = [Paragraph(title, style)]
-                if event.description:
-                    description = event.description.encode('utf-8')
-                    text_cell.append(Paragraph(description, style_italic))
-                if event.resources:
-                    # TODO: i18n
-                    resource_titles = [resource.title
-                                       for resource in event.resources]
-                    resources = 'Booked: ' + ', '.join(resource_titles)
-                    text_cell.append(Paragraph(resources.encode('utf-8'),
-                                               style))
-                # TODO: show recurrence
-
-                dtend = event.dtstart + event.duration
-                time = "%s-%s" % (event.dtstart.strftime('%H:%M'),
-                                  dtend.strftime('%H:%M'))
-                rows.append([Paragraph(time, style_italic), text_cell])
-
-            tstyle = TableStyle([('BOX', (0,0), (-1,-1), 0.25, colors.black),
-                           ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
-                           ('VALIGN', (0,0), (0,-1), 'TOP')])
-            table = Table(rows, colWidths=(3 * cm, 10 * cm), style=tstyle)
-            story.append(table)
-
-        return story
+        return events
 
 
 # ------------------
