@@ -120,9 +120,13 @@ class DailyCalendarView(BrowserView):
         logo = Image(logo_path)
         logo.hAlign = 'LEFT'
 
+        title = translate(_("Daily calendar for %s"),
+                             context=self.request) % owner_title
+        date_title = date.isoformat()
+
         story = [logo,
-                 Paragraph(owner_title.encode('utf-8'), self.title_style),
-                 Paragraph(date.isoformat(), self.title_style),
+                 Paragraph(title.encode('utf-8'), self.title_style),
+                 Paragraph(date_title, self.title_style),
                  Spacer(0, 1 * cm)]
         return story
 
@@ -135,17 +139,20 @@ class DailyCalendarView(BrowserView):
 
         rows = []
         for event in events:
-            dtend = event.dtstart + event.duration
-            time = "%s-%s" % (event.dtstart.strftime('%H:%M'),
-                              dtend.strftime('%H:%M'))
-            time_cell = Paragraph(time, self.italic_style)
+            if event.allday:
+                time_cell_text = translate(_("all day"), context=self.request)
+            else:
+                dtend = event.dtstart + event.duration
+                time_cell_text = "%s-%s" % (event.dtstart.strftime('%H:%M'),
+                                            dtend.strftime('%H:%M'))
+            time_cell = Paragraph(time_cell_text, self.italic_style)
             text_cell = self.eventInfoCell(event)
             rows.append([time_cell, text_cell])
 
         tstyle = TableStyle([('BOX', (0, 0), (-1, -1), 0.25, colors.black),
                        ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
                        ('VALIGN', (0, 0), (0, -1), 'TOP')])
-        table = Table(rows, colWidths=(3 * cm, 10 * cm), style=tstyle)
+        table = Table(rows, colWidths=(2.5 * cm, 16 * cm), style=tstyle)
         return table
 
     def eventInfoCell(self, event):

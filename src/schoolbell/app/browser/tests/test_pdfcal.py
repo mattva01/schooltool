@@ -90,7 +90,7 @@ def doctest_DailyCalendarView_buildStory():
         >>> len(story)
         5
         >>> story[1].text
-        'Mr. Smith'
+        'Daily calendar for Mr. Smith'
         >>> story[2].text
         '2005-07-08'
         >>> story[3]
@@ -130,7 +130,7 @@ def doctest_DailyCalendarView_buildStory_unicode():
         >>> len(story)
         5
         >>> story[1].text
-        '\xc4\x85 person'
+        'Daily calendar for \xc4\x85 person'
         >>> story[2].text
         '2005-07-08'
         >>> evt_info = story[4]._cellvalues[0][1]
@@ -162,6 +162,7 @@ def test_disablePDFGeneration():
         'PDF support is disabled.  It can be enabled by your administrator.'
 
     """
+
 
 def doctest_DailyCalendarView_listedEvents():
     """Event listing tests.
@@ -202,6 +203,36 @@ def doctest_DailyCalendarView_listedEvents():
 
         >>> view.listedEvents(date(2005, 7, 8)) == [evt3, evt, evt2]
         True
+
+    """
+
+
+def doctest_DailyCalendarView_buildEventTable():
+    """Tests for buildEventTable.
+
+        >>> from schoolbell.app.browser.pdfcal import DailyCalendarView
+        >>> calendar = Person(title="Mr. Smith").calendar
+        >>> request = TestRequest(form={'date': '2005-07-08'})
+        >>> view = DailyCalendarView(calendar, request)
+        >>> view.configureStyles()
+
+    Let's check the representation of an ordinary event:
+
+        >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
+        ...                     timedelta(hours=2), "Some event")
+        >>> table = view.buildEventTable([evt])
+        >>> table._cellvalues[0][0].text
+        '09:10-11:10'
+        >>> table._cellvalues[0][1][0].text
+        'Some event'
+
+    All-day events are identified as such.
+
+        >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
+        ...                     timedelta(hours=2), "evt3", allday=True)
+        >>> table = view.buildEventTable([evt])
+        >>> table._cellvalues[0][0].text
+        'all day'
 
     """
 
