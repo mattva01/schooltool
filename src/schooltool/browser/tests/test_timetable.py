@@ -2168,6 +2168,7 @@ def doctest_SpecialDayView():
         >>> print view()
         <BLANKLINE>
         ...
+           <input type="hidden" name="date" value="2005-07-05" />
            <table>
              <tr>
                <th>Period title</th>
@@ -2222,7 +2223,7 @@ def doctest_SpecialDayView():
                  <input type="text" name="Fourth_end" value="12:45" />
                </td>
              </tr>
-           <table>
+           </table>
         ...
             <input type="submit" class="button-ok" name="SUBMIT"
                    value="Modify" />
@@ -2337,11 +2338,33 @@ def doctest_SpecialDayView():
                  <input type="text" name="Fourth_end" value="" />
                </td>
              </tr>
-           <table>
+           </table>
         ...
             <input type="submit" class="button-ok" name="SUBMIT"
                    value="Modify" />
         ...
+
+    The disabled periods can be reenabled:
+
+        >>> request = TestRequest(form={'date': '2005-07-05',
+        ...                             'SUBMIT': 'next',
+        ...                             'First_start': '8:00',
+        ...                             'First_end': '8:30',
+        ...                             'Second_start': '8:45',
+        ...                             'Second_end': '9:15',
+        ...                             'Third_start': '9:30',
+        ...                             'Third_end': '10:00',
+        ...                             'Fourth_start': '11:00',
+        ...                             'Fourth_end': '12:00',
+        ...                             })
+        >>> view = SpecialDayView(ttschema, request)
+        >>> from datetime import time, date, timedelta
+        >>> view.update()
+        >>> pprint(view.extractPeriods())
+        [('First', datetime.time(8, 0), datetime.timedelta(0, 1800)),
+         ('Second', datetime.time(8, 45), datetime.timedelta(0, 1800)),
+         ('Third', datetime.time(9, 30), datetime.timedelta(0, 1800)),
+         ('Fourth', datetime.time(11, 0), datetime.timedelta(0, 3600))]
 
     =============
     Cancel button
@@ -2498,7 +2521,7 @@ def doctest_SpecialDayView():
                  <input type="text" name="Fourth_end" value="15:00" />
                </td>
              </tr>
-           <table>
+           </table>
         ...
 
     """

@@ -16,6 +16,7 @@
 </p>
 
 <form class="plain" method="POST" tal:attributes="action request/URL">
+  <input type="hidden" name="date" tal:attributes="value view/date"/>
 
   <div class="error"
        tal:content="view/error"
@@ -56,7 +57,7 @@
        </td>
      </tal:block>
      </tr>
-   <table>
+   </table>
 
   <div class="controls">
     <input type="submit" class="button-ok" name="SUBMIT" value="Modify"

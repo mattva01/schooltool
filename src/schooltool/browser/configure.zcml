@@ -459,6 +459,15 @@
       />
 
   <page
+      name="special.html"
+      for="schooltool.interfaces.ITimetableSchema"
+      class=".timetable.SpecialDayView"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Change Timetable for One Day"
+      />
+
+  <page
       name="index.html"
       for="schooltool.interfaces.ITimetable"
       class=".timetable.TimetableView"

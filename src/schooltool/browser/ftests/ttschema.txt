@@ -206,7 +206,6 @@ Now let's try the simple timetable schema setup view:
   >>> print http("""
   ... POST /frogpond/ttschemas/add.html HTTP/1.1
   ... Authorization: Basic mgr:mgrpw
-  ... Content-Length: ...
   ... Content-Type: application/x-www-form-urlencoded
   ... 
   ... field.title=other&\
@@ -234,4 +233,159 @@ A new timetable schema appeared:
   HTTP/1.1 200 Ok
   ...
             <a href="http://localhost/frogpond/ttschemas/other">other</a>
+  ...
+
+============
+Special days
+============
+
+We need a term:
+
+    >>> print http("""
+    ... POST /frogpond/terms/@@add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=2005+summer&\
+    ... field.first=2005-06-01&\
+    ... field.last=2005-08-31&\
+    ... TOGGLE_5=Saturday&\
+    ... TOGGLE_6=Sunday&\
+    ... UPDATE_SUBMIT=Add+term
+    ... """, handle_errors=False)
+    HTTP/1.1 303 See Other
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    Location: http://localhost/frogpond/terms
+    ...
+
+We can shift the start and end times for periods for a certain day:
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/other/@@special.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... date=2005-07-07
+  ... """)
+  HTTP/1.1 200 Ok
+  <BLANKLINE>
+  ...
+     <table>
+       <tr>
+         <th>Period title</th>
+         <th>Original start</th>
+         <th>Original end</th>
+         <th>New start</th>
+         <th>New end</th>
+       </tr>
+       <tr>
+         <td>P1</td>
+         <td>09:00</td>
+         <td>09:45</td>
+         <td>
+           <input type="text" name="P1_start" value="09:00" />
+         </td>
+         <td>
+           <input type="text" name="P1_end" value="09:45" />
+         </td>
+       </tr>
+       <tr>
+         <td>P2</td>
+         <td>10:00</td>
+         <td>10:45</td>
+         <td>
+           <input type="text" name="P2_start" value="10:00" />
+         </td>
+         <td>
+           <input type="text" name="P2_end" value="10:45" />
+         </td>
+       </tr>
+       <tr>
+         <td>P3</td>
+         <td>11:00</td>
+         <td>11:45</td>
+         <td>
+           <input type="text" name="P3_start" value="11:00" />
+         </td>
+         <td>
+           <input type="text" name="P3_end" value="11:45" />
+         </td>
+       </tr>
+     </table>
+  ...
+
+If we fill in this form, an exception day is posted:
+
+  >>> print http("""
+  ... POST /frogpond/ttschemas/other/@@special.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... date=2005-07-07&\
+  ... SUBMIT=next&\
+  ... P1_start=8:00&\
+  ... P1_end=8:30&\
+  ... P2_start=8:45&\
+  ... P2_end=9:15&\
+  ... P3_start=9:30&\
+  ... P3_end=10:15""")
+  HTTP/1.1 303 See Other
+  <BLANKLINE>
+  ...
+
+If we look at the form again, we see the times have changed:
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/other/@@special.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... date=2005-07-07
+  ... """)
+  HTTP/1.1 200 Ok
+  <BLANKLINE>
+  ...
+     <table>
+       <tr>
+         <th>Period title</th>
+         <th>Original start</th>
+         <th>Original end</th>
+         <th>New start</th>
+         <th>New end</th>
+       </tr>
+       <tr>
+         <td>P1</td>
+         <td>09:00</td>
+         <td>09:45</td>
+         <td>
+           <input type="text" name="P1_start" value="08:00" />
+         </td>
+         <td>
+           <input type="text" name="P1_end" value="08:30" />
+         </td>
+       </tr>
+       <tr>
+         <td>P2</td>
+         <td>10:00</td>
+         <td>10:45</td>
+         <td>
+           <input type="text" name="P2_start" value="08:45" />
+         </td>
+         <td>
+           <input type="text" name="P2_end" value="09:15" />
+         </td>
+       </tr>
+       <tr>
+         <td>P3</td>
+         <td>11:00</td>
+         <td>11:45</td>
+         <td>
+           <input type="text" name="P3_start" value="09:30" />
+         </td>
+         <td>
+           <input type="text" name="P3_end" value="10:15" />
+         </td>
+       </tr>
+     </table>
   ...

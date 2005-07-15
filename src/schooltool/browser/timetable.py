@@ -1209,11 +1209,13 @@ class SpecialDayView(BrowserView):
         """Return a list of three-tuples with period titles, tstarts,
         durations.
 
-        If errors are encountered in some fields, 
+        If errors are encountered in some fields, the names of the
+        fields get added to field_errors.
         """
         model = self.context.model
         result = []
-        for period in model.periodsInDay(self.term, self.context, self.date):
+        for period in model.originalPeriodsInDay(self.term, self.context,
+                                                 self.date):
             start_name = period.title + '_start'
             end_name = period.title + '_end'
             if (start_name in self.request and end_name in self.request
@@ -1267,7 +1269,9 @@ class SpecialDayView(BrowserView):
                 self.error = _('Some values were invalid.'
                                '  They are highlighted in red.')
             else:
-                self.context.model.exceptionDays[self.date] = daytemplate
+                exceptionDays = removeSecurityProxy(
+                    self.context.model.exceptionDays)
+                exceptionDays[self.date] = daytemplate
                 self.request.response.redirect(
                     zapi.absoluteURL(self.context, self.request))
 
