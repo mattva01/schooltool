@@ -224,6 +224,11 @@ def doctest_CalendarTraverser():
         >>> request['date']
         '2002-07-01'
 
+    We do not have a yearly PDF view (that could be huge!):
+
+        >>> print traverser.getPDFViewByDate(request, '2002.pdf')
+        None
+
     It only handles view names ending with '.pdf' and ignores invalid dates:
 
         >>> del request.form['date']

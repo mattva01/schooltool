@@ -173,8 +173,12 @@ class CalendarTraverser(object):
         """Get PDF view name from URL component."""
         if not name.endswith('.pdf'):
             return None
-        name = name[:-4]
-        return self.getViewByDate(request, name, 'pdf')
+        name = name[:-4] # strip off the .pdf
+        view_name = self.getViewByDate(request, name, 'pdf')
+        if view_name == 'yearly.pdf':
+            return None # the yearly PDF view is not available
+        else:
+            return view_name
 
     def getViewByDate(self, request, name, suffix):
         """Get view name from URL component."""
