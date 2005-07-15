@@ -73,7 +73,6 @@ def doctest_DailyCalendarView_buildStory():
         >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> view = DailyCalendarView(calendar, request)
 
-#        TODO: test header
         >>> view.configureStyles()
         >>> view.buildStory(date(2005, 7, 8))
         [...
@@ -143,6 +142,32 @@ def doctest_DailyCalendarView_buildStory_unicode():
 
     """
 
+
+def test_buildPageHeader():
+    r"""Tests for DailyCalendarView.buildPageHeader.
+
+
+        >>> from schoolbell.app.browser.pdfcal import DailyCalendarView
+        >>> request = TestRequest(form={'date': '2005-07-08'})
+        >>> view = DailyCalendarView(Person().calendar, request)
+
+        >>> view.configureStyles()
+        >>> paras = view.buildPageHeader(u'\0105n owner', date(2005, 7, 3))
+
+        >>> len(paras)
+        4
+        >>> paras[0]
+        <...Image...>
+        >>> paras[0].hAlign
+        'LEFT'
+        >>> paras[1].text
+        'Daily calendar for \x085n owner'
+        >>> paras[2].text
+        '2005-07-03'
+        >>> paras[3]
+        Spacer(0, ...)
+
+    """
 
 def test_disablePDFGeneration():
     """Test for disablePDFGeneration.
