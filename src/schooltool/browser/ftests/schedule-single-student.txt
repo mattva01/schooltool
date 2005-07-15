@@ -492,7 +492,7 @@ Now our student should be in sections bw1 and bw2:
                       xlink:arcrole="http://schooltool.org/ns/membership"
                       xlink:href="http://localhost/frogpond/sections/birdwatching-3">
           <manage xlink:type="simple"
-                  xlink:href="http://localhost/frogpond/persons/john/relationships/3"/>
+                  xlink:href="http://localhost/frogpond/persons/john/relationships/..."/>
         </relationship>
       </existing>
     </relationships>

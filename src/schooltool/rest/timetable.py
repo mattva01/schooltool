@@ -181,6 +181,17 @@ class TimetableSchemaView(View):
                     break
             else:
                 result.append({'used': used, 'periods': periods})
+
+        for date, day in self.context.model.exceptionDays.items():
+            periods = []
+            for period in day:
+                periods.append(
+                    {'id': period.title,
+                     'tstart': period.tstart.strftime("%H:%M"),
+                     'duration': period.duration.seconds / 60})
+            periods.sort()
+            result.append({'used': str(date), 'periods': periods})
+
         return result
 
 
@@ -273,6 +284,7 @@ class TimetableSchemaFileFactory(object):
 
             templates = doc.query('/tt:timetable/tt:model/tt:daytemplate')
             template_dict = {}
+            exceptions = {}
             model_node = doc.query('/tt:timetable/tt:model')[0]
             factory_id = model_node['factory']
 
@@ -300,15 +312,28 @@ class TimetableSchemaFileFactory(object):
                     else:
                         day.add(SchooldayPeriod(pid, tstart, duration))
                 used = template.query('tt:used')[0]['when']
-                if used == 'default':
+
+                date = None
+                try:
+                    date = parse_date(used)
+                except ValueError:
+                    pass
+
+                if date is not None:
+                    exceptions[date] = day
+                elif used == 'default':
                     template_dict[None] = day
                 else:
                     for dow in used.split():
                         try:
                             template_dict[self.dows.index(dow)] = day
                         except ValueError:
-                            raise RestError("Unrecognised day of week %r" % dow)
+                            raise RestError("Unrecognised day of week %r"
+                                            % dow)
             model = factory(day_ids, template_dict)
+
+            for date, day in exceptions.items():
+                model.exceptionDays[date] = day
 
             if len(sets.Set(day_ids)) != len(day_ids):
                 raise RestError("Duplicate days in schema")

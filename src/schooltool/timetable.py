@@ -812,7 +812,9 @@ class BaseTimetableModel(Persistent):
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             return (self.timetableDayIds == other.timetableDayIds and
-                    self.dayTemplates == other.dayTemplates)
+                    self.dayTemplates == other.dayTemplates and
+                    self.exceptionDays == other.exceptionDays and
+                    self.exceptionDayIds == other.exceptionDayIds)
         else:
             return False
 

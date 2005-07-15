@@ -194,6 +194,13 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
               <period id="B" tstart="11:00" duration="60" />
               <period id="D" tstart="11:00" duration="60" />
             </daytemplate>
+            <daytemplate>
+              <used when="2005-07-07" />
+              <period id="A" tstart="8:00" duration="30" />
+              <period id="B" tstart="8:30" duration="30" />
+              <period id="C" tstart="9:00" duration="30" />
+              <period id="D" tstart="9:30" duration="30" />
+            </daytemplate>
           </model>
           <day id="Day 1">
             <period id="A">
@@ -255,12 +262,13 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
     def createExtendedSchema(self):
         from schooltool.timetable import SequentialDaysTimetableModel
         from schooltool.timetable import SchooldayPeriod, SchooldayTemplate
-        from datetime import time, timedelta
+        from datetime import time, timedelta, date
 
         tt = self.createEmptySchema()
 
         day_template1 = SchooldayTemplate()
         hour = timedelta(minutes=60)
+        half = timedelta(minutes=30)
         day_template1.add(SchooldayPeriod('A', time(9, 0), hour))
         day_template1.add(SchooldayPeriod('B', time(10, 0), hour))
         day_template1.add(SchooldayPeriod('C', time(9, 0), hour))
@@ -277,6 +285,14 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
                                            3: day_template2,
                                            4: day_template2})
         tt.model = tm
+
+        short_template = SchooldayTemplate()
+        hour = timedelta(minutes=60)
+        short_template.add(SchooldayPeriod('A', time(8, 0), half))
+        short_template.add(SchooldayPeriod('B', time(8, 30), half))
+        short_template.add(SchooldayPeriod('C', time(9, 0), half))
+        short_template.add(SchooldayPeriod('D', time(9, 30), half))
+        tt.model.exceptionDays[date(2005, 7, 7)] = short_template
         return tt
 
 
@@ -300,6 +316,13 @@ class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
               <period duration="60" id="B" tstart="10:00"/>
               <period duration="60" id="C" tstart="09:00"/>
               <period duration="60" id="D" tstart="10:00"/>
+            </daytemplate>
+            <daytemplate>
+              <used when="2005-07-07"/>
+              <period duration="30" id="A" tstart="08:00"/>
+              <period duration="30" id="B" tstart="08:30"/>
+              <period duration="30" id="C" tstart="09:00"/>
+              <period duration="30" id="D" tstart="09:30"/>
             </daytemplate>
           </model>
           <day id="Day 1">
@@ -377,8 +400,7 @@ class TestTimetableSchemaFile(TimetableSchemaMixin, unittest.TestCase):
 
         schema = self.schemaContainer["two_day"]
         self.assertEquals(schema.title, "Title")
-        self.assertEquals(schema,
-                          self.createExtendedSchema())
+        self.assertEquals(schema, self.createExtendedSchema())
 
 
 class TestTimetableFileFactory(TimetableTestMixin, unittest.TestCase):

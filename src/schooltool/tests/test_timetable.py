@@ -1047,6 +1047,14 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         self.assertNotEqual(model2, model4)
         self.assert_(not model2 != model)
 
+        model.exceptionDays[date(2005, 7, 7)] = object()
+        self.assertNotEqual(model, model2)
+
+        del model.exceptionDays[date(2005, 7, 7)]
+        self.assertEqual(model, model2)
+        model.exceptionDayIds[date(2005, 7, 7)] = 'Monday'
+        self.assertNotEqual(model, model2)
+
     def createTimetable(self):
         """Create a simple timetable.
 
