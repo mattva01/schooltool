@@ -29,7 +29,8 @@ from cStringIO import StringIO
 from zope.app.publisher.browser import BrowserView
 from zope.i18n import translate
 from schoolbell.app.interfaces import ISchoolBellCalendar
-from schoolbell.calendar.utils import parse_date
+from schoolbell.calendar.utils import parse_date, week_start
+from schoolbell.app.browser.cal import month_names, day_of_week_names
 from schoolbell import SchoolBellMessageID as _
 
 global disabled
@@ -40,23 +41,25 @@ SANS_OBLIQUE = 'Arial_Italic'
 SANS_BOLD = 'Arial_Bold'
 SERIF = 'Times_New_Roman'
 
-pdf_disabled_text = _("""\
-PDF support is disabled.  It can be enabled by your administrator.\
-""") # TODO: refer to documentation?
 
 
-class DailyCalendarView(BrowserView):
+class PDFCalendarViewBase(BrowserView):
     """The daily view of a calendar in PDF."""
 
     # We do imports from reportlab locally to avoid a hard dependency.
 
     __used_for__ = ISchoolBellCalendar
 
+    title = None # override this in subclasses
+
+    pdf_disabled_text = _("PDF support is disabled."
+                          "  It can be enabled by your administrator.")
+
     def pdfdata(self):
         """Return the PDF representation of a calendar."""
         global disabled
         if disabled:
-            return translate(pdf_disabled_text, context=self.request)
+            return translate(self.pdf_disabled_text, context=self.request)
 
         from reportlab.platypus import SimpleDocTemplate
         if 'date' in self.request:
@@ -79,10 +82,7 @@ class DailyCalendarView(BrowserView):
         """Build a platypus story that draws the PDF report."""
         owner = self.context.__parent__
         story = self.buildPageHeader(owner.title, date)
-
-        events = self.listedEvents(date)
-        if events:
-            story.append(self.buildEventTable(events))
+        story.extend(self.buildEventTables(date))
         return story
 
     def configureStyles(self):
@@ -100,6 +100,9 @@ class DailyCalendarView(BrowserView):
                                           parent=self.normal_style,
                                           fontsize=18, leading=22,
                                           alignment=TA_CENTER, spaceAfter=6)
+        self.subtitle_style = ParagraphStyle(name='Subtitle',
+                                             parent=self.title_style,
+                                             spaceBefore=16)
         self.italic_style = ParagraphStyle(name='Italic',
                                            parent=self.normal_style,
                                            fontName=SANS_OBLIQUE)
@@ -115,7 +118,8 @@ class DailyCalendarView(BrowserView):
         # TODO: test reports with Acrobat Reader
 
     def buildPageHeader(self, owner_title, date):
-        from reportlab.platypus import Image, Paragraph, Spacer
+        """Build a story that constructs the top of the first page."""
+        from reportlab.platypus import Image, Paragraph
         from reportlab.lib.units import cm
 
         # TODO: Use a hires logo, this one is too blurry.
@@ -124,19 +128,17 @@ class DailyCalendarView(BrowserView):
         logo = Image(logo_path)
         logo.hAlign = 'LEFT'
 
-        title = translate(_("Daily calendar for %s"),
-                             context=self.request) % owner_title
-        date_title = date.isoformat()
+        title = translate(self.title, context=self.request) % owner_title
+        date_title = self.dateTitle(date)
 
         story = [logo,
                  Paragraph(title.encode('utf-8'), self.title_style),
-                 Paragraph(date_title.encode('utf-8'), self.title_style),
-                 Spacer(0, 1 * cm)]
+                 Paragraph(date_title.encode('utf-8'), self.title_style)]
         return story
 
-    def buildEventTable(self, events):
+    def buildDayTable(self, events):
         """Return the platypus table that shows events."""
-        from reportlab.platypus import Paragraph, Spacer
+        from reportlab.platypus import Paragraph
         from reportlab.platypus import Table, TableStyle
         from reportlab.lib import colors
         from reportlab.lib.units import cm
@@ -186,7 +188,7 @@ class DailyCalendarView(BrowserView):
                                         self.normal_style))
         return paragraphs
 
-    def listedEvents(self, date):
+    def dayEvents(self, date):
         """Return a list of events that should be shown.
 
         All-day events are placed in front.
@@ -198,6 +200,88 @@ class DailyCalendarView(BrowserView):
                   if event.dtstart.date() == date and not event.allday]
         events.sort()
         return allday_events + events
+
+    def daySubtitle(self, date):
+        """Return a readable representation of a date.
+
+        This is used in captions for individual days in views that
+        span multiple days.
+        """
+        day_of_week_msgid = day_of_week_names[date.weekday()]
+        day_of_week = translate(day_of_week_msgid, context=self.request)
+        return "%s, %s" % (date.isoformat(), day_of_week)
+
+    def buildEventTables(self, date): # override in subclasses
+        """Return the story that draws events in the current time period."""
+        raise NotImplementedError()
+
+    def dateTitle(self, date): # override in subclasses
+        """Return the title for the current time period.
+
+        Used at the top of the page.
+        """
+        raise NotImplementedError()
+
+
+class DailyPDFCalendarView(PDFCalendarViewBase):
+
+    title = _("Daily calendar for %s")
+
+    def buildEventTables(self, date):
+        events = self.dayEvents(date)
+        if events:
+            return [self.buildDayTable(events)]
+        else:
+            return []
+
+    dateTitle = PDFCalendarViewBase.daySubtitle
+
+
+class WeeklyPDFCalendarView(PDFCalendarViewBase):
+
+    title = _("Weekly calendar for %s")
+
+    def dateTitle(self, date):
+        year, week = date.isocalendar()[:2]
+        start = week_start(date, 0) # TODO: first_day_of_week
+        end = start + datetime.timedelta(weeks=1)
+        template = translate(_("Week %d (%s - %s), %d"), context=self.request)
+        return template % (week, start, end, year)
+
+    def buildEventTables(self, date):
+        from reportlab.platypus import Paragraph
+        story = []
+        start = week_start(date, 0) # TODO: first_day_of_week
+        for weekday in range(7):
+            day = start + datetime.timedelta(days=weekday)
+            events = self.dayEvents(day)
+            if events:
+                story.append(Paragraph(self.daySubtitle(day),
+                                       self.subtitle_style))
+                story.append(self.buildDayTable(events))
+        return story
+
+class MonthlyPDFCalendarView(PDFCalendarViewBase):
+
+    title = _("Monthly calendar for %s")
+
+    def dateTitle(self, date):
+        # TODO: take format from user preferences
+        month_name = translate(month_names[date.month], context=self.request)
+        return "%s, %d" % (month_name, date.year)
+
+    def buildEventTables(self, date):
+        from reportlab.platypus import Paragraph
+        story = []
+        day = datetime.date(date.year, date.month, 1)
+        while day.month == date.month:
+            events = self.dayEvents(day)
+            if events:
+                story.append(Paragraph(self.daySubtitle(day),
+                                       self.subtitle_style))
+                story.append(self.buildDayTable(events))
+            day = day + datetime.timedelta(days=1)
+        return story
 
 
 # ------------------

@@ -428,11 +428,11 @@
   <page
       name="daily.pdf"
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
-      class=".pdfcal.DailyCalendarView"
+      class=".pdfcal.DailyPDFCalendarView"
       attribute="pdfdata"
       permission="schoolbell.viewCalendar"
       menu="zmi_views"
-      title="Calendar (Daily)"
+      title="Calendar (Daily, PDF)"
       />
 
   <page
@@ -446,6 +446,16 @@
       />
 
   <page
+      name="weekly.pdf"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      class=".pdfcal.WeeklyPDFCalendarView"
+      attribute="pdfdata"
+      permission="schoolbell.viewCalendar"
+      menu="zmi_views"
+      title="Calendar (Weekly, PDF)"
+      />
+
+  <page
       name="monthly.html"
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       class=".cal.MonthlyCalendarView"
@@ -453,6 +463,16 @@
       permission="schoolbell.viewCalendar"
       menu="zmi_views"
       title="Calendar (Monthly)"
+      />
+
+  <page
+      name="monthly.pdf"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      class=".pdfcal.MonthlyPDFCalendarView"
+      attribute="pdfdata"
+      permission="schoolbell.viewCalendar"
+      menu="zmi_views"
+      title="Calendar (Monthly, PDF)"
       />
 
   <page

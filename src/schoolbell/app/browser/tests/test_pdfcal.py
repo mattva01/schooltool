@@ -30,17 +30,30 @@ from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from schoolbell.app.app import Person, Resource
 from schoolbell.app.cal import CalendarEvent
+from schoolbell.app.browser.pdfcal import PDFCalendarViewBase
 from schoolbell.app.browser.pdfcal import setUpMSTTCoreFonts
+from schoolbell import SchoolBellMessageID as _
 
 
-def doctest_DailyCalendarView():
-    """Tests for DailyCalendarView.
+class StubbedBaseView(PDFCalendarViewBase):
+    """A subclass of PDFCalendarViewBase for use in tests."""
 
-        >>> from schoolbell.app.browser.pdfcal import DailyCalendarView
+    title = _("Calendar for %s")
+
+    def buildEventTables(self, date):
+        events = self.dayEvents(date)
+        return events and [self.buildDayTable(events)] or []
+
+    def dateTitle(self, date):
+        return date.isoformat()
+
+
+def doctest_PDFCalendarViewBase():
+    """Tests for PDFCalendarViewBase.
 
         >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> person = Person(title="Mr. Smith")
-        >>> view = DailyCalendarView(person.calendar, request)
+        >>> view = StubbedBaseView(person.calendar, request)
 
         >>> print view.pdfdata()
         %PDF-1.3...
@@ -54,7 +67,7 @@ def doctest_DailyCalendarView():
     If we do not specify a date, today is taken by default:
 
         >>> request = TestRequest()
-        >>> view = DailyCalendarView(person.calendar, request)
+        >>> view = StubbedBaseView(person.calendar, request)
 
         >>> print view.pdfdata()
         %PDF-1.3...
@@ -63,15 +76,14 @@ def doctest_DailyCalendarView():
     """
 
 
-def doctest_DailyCalendarView_buildStory():
-    r"""Tests for DailyCalendarView.buildStory.
+def doctest_PDFCalendarViewBase_buildStory():
+    r"""Tests for PDFCalendarViewBase.buildStory.
 
     buildStory returns a list of platypus objects.
 
-        >>> from schoolbell.app.browser.pdfcal import DailyCalendarView
         >>> calendar = Person(title="Mr. Smith").calendar
         >>> request = TestRequest(form={'date': '2005-07-08'})
-        >>> view = DailyCalendarView(calendar, request)
+        >>> view = StubbedBaseView(calendar, request)
 
         >>> view.configureStyles()
         >>> view.buildStory(date(2005, 7, 8))
@@ -87,16 +99,14 @@ def doctest_DailyCalendarView_buildStory():
 
         >>> story = view.buildStory(date(2005, 7, 8))
         >>> len(story)
-        5
+        4
         >>> story[1].text
-        'Daily calendar for Mr. Smith'
+        'Calendar for Mr. Smith'
         >>> story[2].text
         '2005-07-08'
-        >>> story[3]
-        Spacer(0, ...)
-        >>> story[4]._cellvalues[0][0].text
+        >>> story[3]._cellvalues[0][0].text
         '09:10-10:22'
-        >>> evt_info = story[4]._cellvalues[0][1]
+        >>> evt_info = story[3]._cellvalues[0][1]
         >>> len(evt_info)
         2
         >>> evt_info[0].text
@@ -107,12 +117,11 @@ def doctest_DailyCalendarView_buildStory():
     """
 
 
-def doctest_DailyCalendarView_buildStory_unicode():
-    r"""Tests for DailyCalendarView.buildStory.
+def doctest_PDFCalendarViewBase_buildStory_unicode():
+    r"""Tests for PDFCalendarViewBase.buildStory.
 
     Unicode text is treated properly:
 
-        >>> from schoolbell.app.browser.pdfcal import DailyCalendarView
         >>> person = Person(title=u"\u0105 person")
         >>> calendar = person.calendar
         >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
@@ -122,17 +131,17 @@ def doctest_DailyCalendarView_buildStory_unicode():
         >>> evt.bookResource(rsrc)
 
         >>> request = TestRequest(form={'date': '2005-07-08'})
-        >>> view = DailyCalendarView(calendar, request)
+        >>> view = StubbedBaseView(calendar, request)
         >>> view.configureStyles()
         >>> story = view.buildStory(date(2005, 7, 8))
 
         >>> len(story)
-        5
+        4
         >>> story[1].text
-        'Daily calendar for \xc4\x85 person'
+        'Calendar for \xc4\x85 person'
         >>> story[2].text
         '2005-07-08'
-        >>> evt_info = story[4]._cellvalues[0][1]
+        >>> evt_info = story[3]._cellvalues[0][1]
         >>> len(evt_info)
         2
         >>> evt_info[0].text
@@ -144,34 +153,31 @@ def doctest_DailyCalendarView_buildStory_unicode():
 
 
 def test_buildPageHeader():
-    r"""Tests for DailyCalendarView.buildPageHeader.
+    r"""Tests for PDFCalendarViewBase.buildPageHeader.
 
 
-        >>> from schoolbell.app.browser.pdfcal import DailyCalendarView
         >>> request = TestRequest(form={'date': '2005-07-08'})
-        >>> view = DailyCalendarView(Person().calendar, request)
+        >>> view = StubbedBaseView(Person().calendar, request)
 
         >>> view.configureStyles()
         >>> paras = view.buildPageHeader(u'\0105n owner', date(2005, 7, 3))
 
         >>> len(paras)
-        4
+        3
         >>> paras[0]
         <...Image...>
         >>> paras[0].hAlign
         'LEFT'
         >>> paras[1].text
-        'Daily calendar for \x085n owner'
+        'Calendar for \x085n owner'
         >>> paras[2].text
         '2005-07-03'
-        >>> paras[3]
-        Spacer(0, ...)
 
     """
 
 
 def test_disabled():
-    """Test for DailyCalendarView in disabled state.
+    """Test for PDFCalendarViewBase in disabled state.
 
         >>> from schoolbell.app.browser import pdfcal
 
@@ -181,9 +187,9 @@ def test_disabled():
 
         >>> pdfcal.disabled = True
 
-    The DailyCalendarView.pdfdata returns a message:
+    The PDFCalendarViewBase.pdfdata returns a message:
 
-        >>> view = pdfcal.DailyCalendarView(object(), TestRequest())
+        >>> view = pdfcal.PDFCalendarViewBase(object(), TestRequest())
         >>> view.pdfdata()
         'PDF support is disabled.  It can be enabled by your administrator.'
 
@@ -194,17 +200,16 @@ def test_disabled():
     """
 
 
-def doctest_DailyCalendarView_listedEvents():
+def doctest_PDFCalendarViewBase_dayEvents():
     """Event listing tests.
 
-        >>> from schoolbell.app.browser.pdfcal import DailyCalendarView
         >>> calendar = Person(title="Mr. Smith").calendar
         >>> request = TestRequest(form={'date': '2005-07-08'})
-        >>> view = DailyCalendarView(calendar, request)
+        >>> view = StubbedBaseView(calendar, request)
 
     First check the simple case when the calendar is empty:
 
-        >>> view.listedEvents(date(2005, 7, 8))
+        >>> view.dayEvents(date(2005, 7, 8))
         []
 
     Let's add one event.
@@ -215,10 +220,10 @@ def doctest_DailyCalendarView_listedEvents():
 
     The event should appear in the result
 
-        >>> view.listedEvents(date(2005, 7, 8)) == [evt]
+        >>> view.dayEvents(date(2005, 7, 8)) == [evt]
         True
 
-        >>> view.listedEvents(date(2005, 7, 9))
+        >>> view.dayEvents(date(2005, 7, 9))
         []
 
     If several events occur, they should be returned sorted by start time:
@@ -231,7 +236,7 @@ def doctest_DailyCalendarView_listedEvents():
         ...                      timedelta(hours=2), "evt3")
         >>> calendar.addEvent(evt3)
 
-        >>> view.listedEvents(date(2005, 7, 8)) == [evt3, evt, evt2]
+        >>> view.dayEvents(date(2005, 7, 8)) == [evt3, evt, evt2]
         True
 
     All-day events always appear in front:
@@ -240,27 +245,26 @@ def doctest_DailyCalendarView_listedEvents():
         ...                            timedelta(hours=2), "allday")
         >>> calendar.addEvent(ad_evt)
 
-        >>> result = view.listedEvents(date(2005, 7, 8))
+        >>> result = view.dayEvents(date(2005, 7, 8))
         >>> [evt.title for evt in result]
         ['evt3', 'evt', 'evt2', 'allday']
 
     """
 
 
-def doctest_DailyCalendarView_buildEventTable():
+def doctest_PDFCalendarViewBase_buildEventTable():
     """Tests for buildEventTable.
 
-        >>> from schoolbell.app.browser.pdfcal import DailyCalendarView
         >>> calendar = Person(title="Mr. Smith").calendar
         >>> request = TestRequest(form={'date': '2005-07-08'})
-        >>> view = DailyCalendarView(calendar, request)
+        >>> view = StubbedBaseView(calendar, request)
         >>> view.configureStyles()
 
     Let's check the representation of an ordinary event:
 
         >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
         ...                     timedelta(hours=2), "Some event")
-        >>> table = view.buildEventTable([evt])
+        >>> table = view.buildDayTable([evt])
         >>> table._cellvalues[0][0].text
         '09:10-11:10'
         >>> table._cellvalues[0][1][0].text
@@ -270,20 +274,19 @@ def doctest_DailyCalendarView_buildEventTable():
 
         >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
         ...                     timedelta(hours=2), "evt3", allday=True)
-        >>> table = view.buildEventTable([evt])
+        >>> table = view.buildDayTable([evt])
         >>> table._cellvalues[0][0].text
         'all day'
 
     """
 
 
-def doctest_DailyCalendarView_eventInfoCell():
+def doctest_PDFCalendarViewBase_eventInfoCell():
     r"""Tests for buildEventTable.
 
-        >>> from schoolbell.app.browser.pdfcal import DailyCalendarView
         >>> calendar = Person(title="Mr. Smith").calendar
         >>> request = TestRequest(form={'date': '2005-07-08'})
-        >>> view = DailyCalendarView(calendar, request)
+        >>> view = StubbedBaseView(calendar, request)
         >>> view.configureStyles()
 
     In case of a simple event, only the title is shown:
@@ -299,7 +302,6 @@ def doctest_DailyCalendarView_eventInfoCell():
     If the event is recurrent, it is flagged.  The location, if provided,
     is also indicated:
 
-
         >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
         >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
         ...                     timedelta(hours=2), "Some event",
@@ -312,6 +314,201 @@ def doctest_DailyCalendarView_eventInfoCell():
         'Location: \xc4\x85 location'
         >>> paragraphs[2].text
         '(recurrent)'
+
+    """
+
+
+def doctest_DailyPDFCalendarView():
+    r"""Tests for DailyPDFCalendarView.
+
+        >>> from schoolbell.app.browser.pdfcal import DailyPDFCalendarView
+        >>> calendar = Person().calendar
+        >>> request = TestRequest(form={'date': '2005-07-01'})
+        >>> view = DailyPDFCalendarView(calendar, request)
+
+    The view's dateTitle method returns the representation of the date shown:
+
+        >>> view.dateTitle(date(2005, 7, 1))
+        '2005-07-01, Friday'
+
+    First, let's make sure that an empty calendar is rendered properly:
+
+        >>> print view.pdfdata()
+        %PDF-1.3...
+        ...
+
+    In this case buildEventTables should return an empty list:
+
+        >>> view.buildEventTables(date(2005, 7, 1))
+        []
+
+    Let's add a few events and make sure that no crashes occur:
+
+        >>> calendar.addEvent(CalendarEvent(datetime(2005, 7, 1, 9, 10),
+        ...                                 timedelta(hours=2), "Some event"))
+        >>> calendar.addEvent(CalendarEvent(datetime(2005, 7, 1, 9, 50),
+        ...                                 timedelta(hours=3), u"An event"))
+
+        >>> print view.pdfdata()
+        %PDF-1.3...
+        ...
+
+    buildEventTables now returns one table.
+
+        >>> tables = view.buildEventTables(date(2005, 7, 1))
+        >>> len(tables)
+        1
+        >>> tables[0]
+        Table(...
+        ...
+
+    """
+
+
+def doctest_WeeklyPDFCalendarView():
+    r"""Tests for WeeklyPDFCalendarView.
+
+        >>> from schoolbell.app.browser.pdfcal import WeeklyPDFCalendarView
+        >>> calendar = Person().calendar
+        >>> request = TestRequest(form={'date': '2005-07-01'})
+        >>> view = WeeklyPDFCalendarView(calendar, request)
+
+    The view's dateTitle method returns the representation of the date shown:
+
+        >>> view.dateTitle(date(2005, 7, 1))
+        'Week 26 (2005-06-27 - 2005-07-04), 2005'
+
+    First, let's make sure that an empty calendar is rendered properly:
+
+        >>> print view.pdfdata()
+        %PDF-1.3...
+        ...
+
+    In this case buildEventTables should return an empty list:
+
+        >>> view.buildEventTables(date(2005, 7, 1))
+        []
+
+    Let's add a few events and make sure that no crashes occur:
+
+        >>> calendar.addEvent(CalendarEvent(datetime(2005, 7, 1, 9, 10),
+        ...                                 timedelta(hours=2), "Some event"))
+        >>> calendar.addEvent(CalendarEvent(datetime(2005, 7, 1, 9, 50),
+        ...                                 timedelta(hours=3), u"An event"))
+
+        >>> print view.pdfdata()
+        %PDF-1.3...
+        ...
+
+    buildEventTables now returns one headline for July 1st and a table.
+
+        >>> tables = view.buildEventTables(date(2005, 7, 1))
+        >>> len(tables)
+        2
+        >>> tables[0].text
+        '2005-07-01, Friday'
+        >>> tables[1]
+        Table(...
+        ...
+
+    If we add an event on some other day
+
+        >>> calendar.addEvent(CalendarEvent(datetime(2005, 7, 3, 9, 10),
+        ...                                 timedelta(hours=2), "Some event"))
+
+    buildEventTables will return two tables with headlines:
+
+        >>> tables = view.buildEventTables(date(2005, 7, 1))
+        >>> len(tables)
+        4
+        >>> tables[0].text
+        '2005-07-01, Friday'
+        >>> tables[1]
+        Table(...
+        ...
+        >>> tables[2].text
+        '2005-07-03, Sunday'
+        >>> tables[3]
+        Table(...
+        ...
+
+    """
+
+
+def doctest_MonthlyPDFCalendarView():
+    r"""Tests for MonthlyPDFCalendarView.
+
+        >>> from schoolbell.app.browser.pdfcal import MonthlyPDFCalendarView
+        >>> calendar = Person().calendar
+        >>> request = TestRequest(form={'date': '2005-07-01'})
+        >>> view = MonthlyPDFCalendarView(calendar, request)
+
+    The view's dateTitle method returns the representation of the date shown:
+
+        >>> view.dateTitle(date(2005, 7, 1))
+        'July, 2005'
+
+    First, let's make sure that an empty calendar is rendered properly:
+
+        >>> print view.pdfdata()
+        %PDF-1.3...
+        ...
+
+    In this case buildEventTables should return an empty list:
+
+        >>> view.buildEventTables(date(2005, 7, 1))
+        []
+
+    Let's add a few events and make sure that no crashes occur:
+
+        >>> calendar.addEvent(CalendarEvent(datetime(2005, 7, 1, 9, 10),
+        ...                                 timedelta(hours=2), "Some event"))
+        >>> calendar.addEvent(CalendarEvent(datetime(2005, 7, 1, 9, 50),
+        ...                                 timedelta(hours=3), u"An event"))
+
+        >>> print view.pdfdata()
+        %PDF-1.3...
+        ...
+
+    buildEventTables now returns one headline for July 1st and a table.
+
+        >>> tables = view.buildEventTables(date(2005, 7, 1))
+        >>> len(tables)
+        2
+        >>> tables[0].text
+        '2005-07-01, Friday'
+        >>> tables[1]
+        Table(...
+        ...
+
+    Let's add some more events.
+
+        >>> calendar.addEvent(CalendarEvent(datetime(2005, 7, 31, 9, 10),
+        ...                                 timedelta(hours=2), "Some event"))
+
+    And corner cases, which should not appear in the report:
+
+        >>> calendar.addEvent(CalendarEvent(datetime(2005, 6, 30, 9, 10),
+        ...                                 timedelta(hours=2), "No event"))
+        >>> calendar.addEvent(CalendarEvent(datetime(2005, 8, 1, 9, 10),
+        ...                                 timedelta(hours=2), "No event"))
+
+    buildEventTables will return two tables with headlines.  The events
+    that do not fall on the current month will be omitted.
+
+        >>> tables = view.buildEventTables(date(2005, 7, 1))
+        >>> len(tables)
+        4
+        >>> tables[0].text
+        '2005-07-01, Friday'
+        >>> tables[1]
+        Table(...
+        ...
+        >>> tables[2].text
+        '2005-07-31, Sunday'
+        >>> tables[3]
+        Table(...
+        ...
 
     """
 
