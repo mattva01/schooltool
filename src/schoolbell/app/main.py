@@ -533,7 +533,6 @@ class StandaloneServer(object):
         Complains and calls sys.exit in case of errors.
         """
         if not fontdir:
-            pdfcal.disablePDFGeneration()
             return
 
         try:
@@ -548,6 +547,7 @@ class StandaloneServer(object):
             if not os.path.exists(font_path):
                 die(_("Font '%s' does not exist.") % font_path)
         pdfcal.setUpMSTTCoreFonts(fontdir)
+
 
 if __name__ == '__main__':
     StandaloneServer().main()

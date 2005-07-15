@@ -200,20 +200,15 @@ def doctest_configureReportlab():
 
         >>> server = StandaloneServer()
 
-        >>> def disableStub():
-        ...     print 'reportlab disabled'
-        >>> realDisable = pdfcal.disablePDFGeneration
-        >>> pdfcal.disablePDFGeneration = disableStub
-
         >>> def setupStub(fontdir):
         ...     print 'reportlab set up: %s' % fontdir
         >>> realSetup = pdfcal.setUpMSTTCoreFonts
         >>> pdfcal.setUpMSTTCoreFonts = setupStub
 
-    First, if a null path is given, PDF generation is disabled:
+    First, if a null path is given, nothing happens (PDF support is
+    left disabled):
 
         >>> server.configureReportlab(None)
-        reportlab disabled
 
     Now, let's imitate a situation where a font path is given, but reportlab
     can not be imported.
@@ -271,7 +266,6 @@ def doctest_configureReportlab():
         >>> sys.stderr = old_stderr
         >>> if real_reportlab:
         ...     sys.modules['reportlab'] = real_reportlab
-        >>> pdfcal.disablePDFGeneration = realDisable
         >>> pdfcal.setUpMSTTCoreFonts = realSetup
 
     """

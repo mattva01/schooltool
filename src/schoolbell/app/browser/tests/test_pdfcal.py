@@ -169,22 +169,27 @@ def test_buildPageHeader():
 
     """
 
-def test_disablePDFGeneration():
-    """Test for disablePDFGeneration.
+
+def test_disabled():
+    """Test for DailyCalendarView in disabled state.
 
         >>> from schoolbell.app.browser import pdfcal
-        >>> pdfcal.disablePDFGeneration()
 
-    First, the `disabled` flag is set to True:
+    The `disabled` flag is set to True by default, but we have run the
+    initialization routine already, so it has been set to False.  Reset it
+    for the moment:
 
-        >>> pdfcal.disabled
-        True
+        >>> pdfcal.disabled = True
 
     The DailyCalendarView.pdfdata returns a message:
 
         >>> view = pdfcal.DailyCalendarView(object(), TestRequest())
         >>> view.pdfdata()
         'PDF support is disabled.  It can be enabled by your administrator.'
+
+    Clean up:
+
+        >>> pdfcal.disabled = False
 
     """
 

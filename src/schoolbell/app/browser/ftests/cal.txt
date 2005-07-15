@@ -174,6 +174,21 @@ The atom view should be here
     ...
     </feed>
 
+PDF views are disabled in this case because SchoolBell is running as
+a Zope 3 content object.  We need a mechanism to specify the font path
+before this use case can be supported.
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar/2005-07-01.pdf HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/plain;charset=utf-8
+    ...
+    <BLANKLINE>
+    PDF support is disabled...
+
 The daily view should be the default:
 
     >>> print http(r"""

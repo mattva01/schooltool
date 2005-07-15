@@ -33,7 +33,7 @@ from schoolbell.calendar.utils import parse_date
 from schoolbell import SchoolBellMessageID as _
 
 global disabled
-disabled = None
+disabled = True
 
 SANS = 'Arial_Normal'
 SANS_OBLIQUE = 'Arial_Italic'
@@ -54,6 +54,10 @@ class DailyCalendarView(BrowserView):
 
     def pdfdata(self):
         """Return the PDF representation of a calendar."""
+        global disabled
+        if disabled:
+            return translate(pdf_disabled_text, context=self.request)
+
         from reportlab.platypus import SimpleDocTemplate
         if 'date' in self.request:
             date = parse_date(self.request['date'])
@@ -256,17 +260,3 @@ def setUpMSTTCoreFonts(directory):
 
     global disabled
     disabled = False
-
-
-def disablePDFGeneration():
-    """Disable PDF generation tools in SchoolBell.
-
-    To be called when reportlab is not installed or TrueType fonts are not
-    available.
-    """
-    def disabled_pdfdata(self):
-        return translate(pdf_disabled_text, context=self.request)
-    DailyCalendarView.pdfdata = disabled_pdfdata
-
-    global disabled
-    disabled = True
