@@ -168,6 +168,11 @@ class DailyCalendarView(BrowserView):
         if event.description:
             description = event.description.encode('utf-8')
             paragraphs.append(Paragraph(description, self.italic_style))
+        if event.location:
+            location_template = translate(_('Location: %s'),
+                                              context=self.request)
+            location = location_template % event.location.encode('utf-8')
+            paragraphs.append(Paragraph(location, self.normal_style))
         if event.resources:
             resource_titles = [resource.title for resource in event.resources]
             resource_str_template = translate(_('Booked resources: %s'),
@@ -176,7 +181,7 @@ class DailyCalendarView(BrowserView):
             paragraphs.append(Paragraph(resources.encode('utf-8'),
                                         self.normal_style))
         if event.recurrence:
-            recurrent_text = translate(_("Recurrent"), context=self.request)
+            recurrent_text = translate(_("(recurrent)"), context=self.request)
             paragraphs.append(Paragraph(recurrent_text.encode('utf-8'),
                                         self.normal_style))
         return paragraphs

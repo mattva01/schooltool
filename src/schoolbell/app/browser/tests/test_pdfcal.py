@@ -278,7 +278,7 @@ def doctest_DailyCalendarView_buildEventTable():
 
 
 def doctest_DailyCalendarView_eventInfoCell():
-    """Tests for buildEventTable.
+    r"""Tests for buildEventTable.
 
         >>> from schoolbell.app.browser.pdfcal import DailyCalendarView
         >>> calendar = Person(title="Mr. Smith").calendar
@@ -296,17 +296,22 @@ def doctest_DailyCalendarView_eventInfoCell():
         >>> paragraphs[0].text
         'Some event'
 
-    If the event is recurrent, it is flagged:
+    If the event is recurrent, it is flagged.  The location, if provided,
+    is also indicated:
+
 
         >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
         >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
         ...                     timedelta(hours=2), "Some event",
+        ...                     location=u"\u0105 location",
         ...                     recurrence=DailyRecurrenceRule())
         >>> paragraphs = view.eventInfoCell(evt)
         >>> len(paragraphs)
-        2
+        3
         >>> paragraphs[1].text
-        'Recurrent'
+        'Location: \xc4\x85 location'
+        >>> paragraphs[2].text
+        '(recurrent)'
 
     """
 
