@@ -1320,3 +1320,58 @@ class SpecialDayView(BrowserView):
     def __call__(self):
         self.update()
         return self.template()
+
+
+class EmergencyDayView(BrowserView):
+    """On emergencies such as extreme temperetures, blizzards, etc,
+    school is cancelled, and a different day gets added to the term
+    instead.
+
+    This view lets the administrator choose the cancelled date and
+    presents the user with a choice of non-schooldays within a term
+    and the days immediately after the term.
+    """
+
+    template = ViewPageTemplateFile('templates/emergency_select.pt')
+
+    error = None
+    date = None
+    replacement = None
+
+    def replacements(self):
+        """Return all non-schooldays in term plus 3 days after the term."""
+        result = []
+        for date in self.term:
+            if date > self.date:
+                if not self.term.isSchoolday(date):
+                    result.append(date)
+        last = self.term.last
+        day = datetime.timedelta(1)
+        result.append(last + day)
+        result.append(last + 2 * day)
+        result.append(last + 3 * day)
+        return result
+
+    def update(self):
+        if 'date' in self.request:
+            self.date = parse_date(self.request['date'])
+            self.term = getTermForDate(self.date)
+        if 'replacement' in self.request:
+            self.replacement = parse_date(self.request['replacement'])
+
+        if self.date and self.replacement:
+            if self.term.last < self.replacement:
+                self.term.last = self.replacement
+            assert not self.term.isSchoolday(self.replacement)
+            assert self.term.isSchoolday(self.date)
+            self.term.add(self.replacement)
+            model = self.context.model
+            model.exceptionDays[self.date] = SchooldayTemplate()
+            day_id = model.getDayId(self.term, self.date)
+            model.exceptionDayIds[self.replacement] = day_id
+            # post two all day events
+
+
+    def __call__(self):
+        self.update()
+        return self.template()

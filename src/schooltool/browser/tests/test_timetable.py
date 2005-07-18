@@ -2552,6 +2552,191 @@ def doctest_SpecialDayView():
 
     """
 
+
+def doctest_EmergencyDayView():
+    """
+    Emergency days
+    ~~~~~~~~~~~~~~
+
+    Set up
+    ======
+
+        >>> from schooltool.tests import setUpApplicationPreferences
+        >>> setUpApplicationPreferences()
+
+    First of all, we need an app object:
+
+        >>> from schooltool.app import SchoolToolApplication
+        >>> app = SchoolToolApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> app.setSiteManager(LocalSiteManager(app))
+        >>> setSite(app)
+
+    We have a timetable schema to put the view on:
+
+        >>> from schooltool.browser.timetable import SpecialDayView
+        >>> ttschema = createSchema(['Day 1', 'Day 2'],
+        ...                         ['First',
+        ...                          'Second',
+        ...                          'Third',
+        ...                          'Fourth'],
+        ...                         ['First',
+        ...                          'Second',
+        ...                          'Third',
+        ...                          'Fourth'])
+        >>> app['ttschemas']['usual'] = ttschema
+
+    The schema has a model attribute:
+
+        >>> from schooltool.timetable import SequentialDaysTimetableModel
+        >>> default = createDayTemplate([('First', 9, 0, 45),
+        ...                              ('Second', 10, 0, 45),
+        ...                              ('Third', 11, 0, 45),
+        ...                              ('Fourth', 12, 0, 45)])
+        >>> ttschema.model = SequentialDaysTimetableModel(['Day 1', 'Day 2'],
+        ...                                               {None: default})
+
+    We will need a term:
+
+        >>> from schooltool.timetable import Term
+        >>> term = Term('2005 summer',
+        ...             datetime.date(2005, 6, 1),
+        ...             datetime.date(2005, 8, 31))
+        >>> app["terms"]["2005-summer"] = term
+        >>> term.addWeekdays(0, 1, 2, 3, 4, 5)
+
+    Now we can create the view:
+
+        >>> from schooltool.browser.timetable import EmergencyDayView
+        >>> request = TestRequest()
+        >>> view = EmergencyDayView(ttschema, request)
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <p>
+        This form allows you to mark a date as an emergency non-schoolday and
+        add a replacement day to the term.
+        </p>
+        ...
+          <div class="row">
+            <label>Date</label>
+            <input type="text" name="date" />
+          </div>
+        <BLANKLINE>
+          <div class="controls">
+            <input type="submit" class="button-ok" name="CHOOSE"
+                   value="Proceed" />
+            <input type="submit" class="button-cancel" name="CANCEL"
+                   value="Cancel" />
+          </div>
+        ...
+
+    When we enter the emergency date, we get to choose the replacement day:
+
+        >>> request = TestRequest(form={'date': '2005-07-07'})
+        >>> view = EmergencyDayView(ttschema, request)
+        >>> view.update()
+        >>> view.date
+        datetime.date(2005, 7, 7)
+
+    The view now can offer a choice of replacements after this day.
+    These will be all non-schooldays in the term and 3 days after the term:
+
+        >>> view.replacements()
+        [datetime.date(2005, 7, 10),
+         datetime.date(2005, 7, 17),
+         datetime.date(2005, 7, 24),
+         datetime.date(2005, 7, 31),
+         datetime.date(2005, 8, 7),
+         datetime.date(2005, 8, 14),
+         datetime.date(2005, 8, 21),
+         datetime.date(2005, 8, 28),
+         datetime.date(2005, 9, 1),
+         datetime.date(2005, 9, 2),
+         datetime.date(2005, 9, 3)]
+
+    The original day id of the emergency day was:
+
+         >>> def getDayId(date):
+         ...     return ttschema.model._periodsInDay(term, ttschema, date)[0]
+         >>> getDayId(datetime.date(2005, 7, 7))
+         'Day 2'
+
+    The ids of some other days before and after the planned
+    replacement day:
+
+         >>> getDayId(datetime.date(2005, 7, 8))
+         'Day 1'
+         >>> getDayId(datetime.date(2005, 7, 11))
+         'Day 1'
+
+    If the user selects a replacement day and calls the view, several
+    things happen:
+
+        >>> request = TestRequest(form={'date': '2005-07-07',
+        ...                             'replacement': '2005-07-10'})
+        >>> view = EmergencyDayView(ttschema, request)
+        >>> result = view()
+        >>> view.date
+        datetime.date(2005, 7, 7)
+        >>> view.replacement
+        datetime.date(2005, 7, 10)
+
+    The replacement day gets added to the calendar, and the emergency
+    day gets an empty day template:
+
+        >>> term.isSchoolday(datetime.date(2005, 7, 10))
+        True
+        >>> term.isSchoolday(datetime.date(2005, 7, 7))
+        True
+        >>> ttschema.model.periodsInDay(term, ttschema,
+        ...                             datetime.date(2005, 7, 7))
+        []
+
+    The day id of the replacement day is the same as that of the
+    emergency day:
+
+         >>> getDayId(datetime.date(2005, 7, 7))
+         'Day 2'
+
+    Day ids of the days before and after the replacement day are unchanged:
+
+         >>> getDayId(datetime.date(2005, 7, 8))
+         'Day 1'
+         >>> getDayId(datetime.date(2005, 7, 11))
+         'Day 1'
+
+    All day events get posted to the schoolwide calendar on both days,
+    notifying of the shift:
+
+        XXX: Tvon has not made the schoolwide calendar yet!
+
+
+    When the replacement day is outside the term, the end date of the
+    term gets adjusted:
+
+        >>> request = TestRequest(form={'date': '2005-07-08',
+        ...                             'replacement': '2005-09-03'})
+        >>> view = EmergencyDayView(ttschema, request)
+        >>> result = view()
+        >>> getDayId(datetime.date(2005, 9, 3))
+        'Day 1'
+        >>> term.last
+        datetime.date(2005, 9, 3)
+
+    The days that might have been implicitly added to the term (might
+    have been a weekend) are not marked as schooldays:
+
+        >>> term.isSchoolday(datetime.date(2005, 9, 1))
+        False
+        >>> term.isSchoolday(datetime.date(2005, 9, 2))
+        False
+        >>> term.isSchoolday(datetime.date(2005, 9, 3))
+        True
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
