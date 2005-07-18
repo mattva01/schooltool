@@ -686,6 +686,8 @@
   <resource name="next.png" file="resources/next.png"
             layer=".skin.ISchoolBellLayer" />
 
+  <resource name="printer.png" file="resources/printer.png"
+            layer=".skin.ISchoolBellLayer" />
   <resource name="day.png" file="resources/day.png"
             layer=".skin.ISchoolBellLayer" />
   <resource name="week.png" file="resources/week.png"

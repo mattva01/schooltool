@@ -57,6 +57,7 @@ from zope.security.checker import canAccess
 from pytz import timezone
 
 from schoolbell.app.browser import ViewPreferences
+from schoolbell.app.browser import pdfcal
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ICalendarOwner, ISchoolBellCalendarEvent
@@ -419,6 +420,14 @@ class CalendarViewBase(BrowserView):
         self.dateformat = prefs.dateformat
         self.timezone = prefs.timezone
 
+    def pdfURL(self):
+        if pdfcal.disabled:
+            return None
+        else:
+            assert self.cal_type != 'yearly'
+            url = self.calURL(self.cal_type, cursor=self.cursor)
+            return url + '.pdf'
+
     def dayTitle(self, day):
         dayformat = '%A, ' + self.dateformat
         return u'' + day.strftime(dayformat)
@@ -699,6 +708,8 @@ class WeeklyCalendarView(CalendarViewBase):
 
     __used_for__ = ISchoolBellCalendar
 
+    cal_type = 'weekly'
+
     next_title = _("Next week")
     current_title = _("Current week")
     prev_title = _("Previous week")
@@ -750,6 +761,10 @@ class AtomCalendarView(WeeklyCalendarView):
 class MonthlyCalendarView(CalendarViewBase):
     """Monthly calendar view."""
 
+    __used_for__ = ISchoolBellCalendar
+
+    cal_type = 'monthly'
+
     next_title = _("Next month")
     current_title = _("Current month")
     prev_title = _("Previous month")
@@ -792,9 +807,16 @@ class MonthlyCalendarView(CalendarViewBase):
 class YearlyCalendarView(CalendarViewBase):
     """Yearly calendar view."""
 
+    __used_for__ = ISchoolBellCalendar
+
+    cal_type = 'yearly'
+
     next_title = _("Next year")
     current_title = _("Current year")
     prev_title = _("Previous year")
+
+    def pdfURL(self):
+        return None
 
     def inCurrentPeriod(self, dt):
         return dt.year == self.cursor.year
@@ -830,6 +852,8 @@ class DailyCalendarView(CalendarViewBase):
     """
 
     __used_for__ = ISchoolBellCalendar
+
+    cal_type = 'daily'
 
     starthour = 8
     endhour = 19

@@ -400,6 +400,7 @@ a.button-ok {
     right: 1em;
 }
 
+#calendar-navigation-pdf,
 #calendar-navigation-day,
 #calendar-navigation-week,
 #calendar-navigation-month,
@@ -411,6 +412,10 @@ a.button-ok {
     border: 0;
     padding: 0;
     width: 24px;
+}
+
+#calendar-navigation-pdf {
+    margin-right: 16px;
 }
 
 #calendar-navigation-context {

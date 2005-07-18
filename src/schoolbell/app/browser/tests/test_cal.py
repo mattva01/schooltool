@@ -3319,6 +3319,14 @@ def doctest_CalendarViewBase():
         ...
         ValueError: quarterly
 
+    pdfURL generates links to PDFs.  It should only be called on subclasses
+    which have cal_type set, so we will temporarily do that.
+
+        >>> view.cal_type = 'weekly'
+        >>> view.pdfURL()
+        'http://127.0.0.1/calendar/2005-w05.pdf'
+        >>> del view.cal_type
+
     update() sets the cursor for the view.  If it does not find a date in
     request or the session, it defaults to the current day:
 
@@ -3572,6 +3580,11 @@ def doctest_YearlyCalendarView():
         False
         >>> view.inCurrentPeriod(date(2005, 1, 1))
         False
+
+    pdfURL always returns None because yearly PDF calendars are not available.
+
+        >>> print view.pdfURL()
+        None
 
     """
 

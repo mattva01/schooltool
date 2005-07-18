@@ -30,7 +30,6 @@ from zope.app.publisher.browser import BrowserView
 from zope.i18n import translate
 from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.calendar.utils import parse_date, week_start
-from schoolbell.app.browser.cal import month_names, day_of_week_names
 from schoolbell import SchoolBellMessageID as _
 
 global disabled
@@ -207,6 +206,8 @@ class PDFCalendarViewBase(BrowserView):
         This is used in captions for individual days in views that
         span multiple days.
         """
+        # avoid recursive imports
+        from schoolbell.app.browser.cal import day_of_week_names
         day_of_week_msgid = day_of_week_names[date.weekday()]
         day_of_week = translate(day_of_week_msgid, context=self.request)
         return "%s, %s" % (date.isoformat(), day_of_week)
@@ -267,6 +268,8 @@ class MonthlyPDFCalendarView(PDFCalendarViewBase):
 
     def dateTitle(self, date):
         # TODO: take format from user preferences
+        # avoid recursive import
+        from schoolbell.app.browser.cal import month_names
         month_name = translate(month_names[date.month], context=self.request)
         return "%s, %d" % (month_name, date.year)
 
