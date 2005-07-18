@@ -738,7 +738,14 @@ class BaseTimetableModel(Persistent):
                     events.append(event)
         return ImmutableCalendar(events)
 
-    def _getDayIdForDay(self, term, day, day_id_gen=None):
+    def getDayId(self, term, day, day_id_gen=None):
+        """See ITimetableModel.originalPeriodsInDay
+
+        `day_id_gen` is an optimization for a case when all day ids
+        are gotten in sequence, e.g. when generating a timetable
+        calendar.
+        """
+
         if day_id_gen is None:
             # Scroll to the required day
             day_id_gen = self._dayGenerator()
@@ -765,7 +772,7 @@ class BaseTimetableModel(Persistent):
         exceptionDays.
         """
 
-        day_id = self._getDayIdForDay(term, day, day_id_gen)
+        day_id = self.getDayId(term, day, day_id_gen)
         if day_id is None:
             return None, []
 

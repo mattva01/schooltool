@@ -1175,7 +1175,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         self.assertEqual(expected, result,
                          diff(pformat(expected), pformat(result)))
 
-    def test_schooldayStrategy(self):
+    def test_schooldayStrategy_getDayId(self):
         from schooltool.timetable import SequentialDaysTimetableModel, Term
         from schooltool.timetable import SchooldayTemplate
 
@@ -1192,6 +1192,10 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         self.assertEqual(days, ['A', 'B', 'C', 'A', 'B',
                                 'C', 'A', 'B', 'C', 'A'])
 
+        self.assertEqual(model.getDayId(term, date(2005, 6, 27)), 'A')
+        self.assertEqual(model.getDayId(term, date(2005, 6, 29)), 'C')
+        self.assertEqual(model.getDayId(term, date(2005, 7, 1)), 'B')
+
         term.add(date(2005, 7, 2))
         model.exceptionDayIds[date(2005, 7, 2)] = "X"
         model.exceptionDayIds[date(2005, 7, 4)] = "Y"
@@ -1204,6 +1208,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         # sequence of day ids, instead of replacing some day ids.
         self.assertEqual(days, ['A', 'B', 'C', 'A', 'B', 'X',
                                 'Y', 'C', 'A', 'B', 'C'])
+
 
     def test_periodsInDay_originalPeriodsInDay(self):
         from schoolbell.calendar.interfaces import ICalendar

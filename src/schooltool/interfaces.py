@@ -294,6 +294,9 @@ class ITimetableModel(Interface):
         exceptionDays.
         """
 
+    def getDayId(term, timetable, date):
+        """Return what day id a certain date will use in this model"""
+
 
 class ITimetableModelFactory(Interface):
     """A factory of a timetable model"""
