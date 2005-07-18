@@ -258,3 +258,17 @@ web-access-log-file web-access.log
   #   pool-size 7
 
 </zodb>
+
+#
+# reportlab_fontdir
+#
+#   Specifies the path to TrueType fonts (Arial and Times New Roman)
+#   for ReportLab.
+#
+#   Comment out or set to empty string to disable reportlab.
+#
+# Examples:
+#    reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+#
+# Uncomment the following and update the path to enable PDF generation:
+#reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
