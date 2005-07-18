@@ -9,6 +9,9 @@
                               tstart period/tstart;
                               duration period/duration"/>
     </daytemplate>
+    <day tal:repeat="day view/exceptiondayids"
+         tal:attributes="when day/when;
+                         id day/id" />
   </model>
   <day tal:repeat="item context/items"
        tal:attributes="id python:item[0]">

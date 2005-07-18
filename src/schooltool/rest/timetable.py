@@ -158,6 +158,14 @@ class TimetableSchemaView(View):
     template = Template("templates/timetable_schema.pt",
                         content_type="text/xml; charset=UTF-8")
 
+    def exceptiondayids(self):
+        result = []
+
+        for date, id in self.context.model.exceptionDayIds.items():
+            result.append({'when': str(date), 'id': id})
+
+        return result
+
     def daytemplates(self):
         result = []
         for id, day in self.context.model.dayTemplates.items():
@@ -255,6 +263,14 @@ class TimetableSchemaFileFactory(object):
                      </zeroOrMore>
                    </element>
                  </oneOrMore>
+                 <zeroOrMore>
+                   <element name="day">
+                     <attribute name="when">
+                       <ref name="daysofweek"/>
+                     </attribute>
+                     <ref name="idattr"/>
+                   </element>
+                 </zeroOrMore>
                </element>
                <oneOrMore>
                  <element name="day">
@@ -274,6 +290,16 @@ class TimetableSchemaFileFactory(object):
     def __init__(self, container):
         self.container = container
 
+    def setUpSchemaDays(self, timetable, days):
+        for day in days:
+            day_id = day['id']
+            period_ids = [period['id']
+                          for period in day.query('tt:period')]
+            if len(sets.Set(period_ids)) != len(period_ids):
+                raise RestError("Duplicate periods in schema")
+
+            timetable[day_id] = TimetableSchemaDay(period_ids)
+
     def parseXML(self, xml):
         doc = XMLDocument(xml, self.schema)
 
@@ -282,9 +308,6 @@ class TimetableSchemaFileFactory(object):
             days = doc.query('/tt:timetable/tt:day')
             day_ids = [day['id'] for day in days]
 
-            templates = doc.query('/tt:timetable/tt:model/tt:daytemplate')
-            template_dict = {}
-            exceptions = {}
             model_node = doc.query('/tt:timetable/tt:model')[0]
             factory_id = model_node['factory']
 
@@ -298,8 +321,14 @@ class TimetableSchemaFileFactory(object):
             if factory is None:
                 raise RestError("Incorrect timetable model factory")
 
+            templates = doc.query('/tt:timetable/tt:model/tt:daytemplate')
+            template_dict = {}
+            exceptions = {}
+
             for template in templates:
                 day = SchooldayTemplate()
+
+                # parse SchoolDayPeriods
                 for period in template.query('tt:period'):
                     pid = period['id']
                     tstart_str = period['tstart']
@@ -313,40 +342,56 @@ class TimetableSchemaFileFactory(object):
                         day.add(SchooldayPeriod(pid, tstart, duration))
                 used = template.query('tt:used')[0]['when']
 
-                date = None
+                # the used attribute might contain a date, a list of
+                # week days, or a string "default"
                 try:
                     date = parse_date(used)
                 except ValueError:
-                    pass
+                    date = None
 
                 if date is not None:
+                    # if used contains a valid date - we treat the
+                    # template as an exception
                     exceptions[date] = day
                 elif used == 'default':
                     template_dict[None] = day
                 else:
+                    # if used is not "default" and is not a valid date
+                    # try processing it as if it was a list of weekdays
                     for dow in used.split():
                         try:
                             template_dict[self.dows.index(dow)] = day
                         except ValueError:
                             raise RestError("Unrecognised day of week %r"
                                             % dow)
+
             model = factory(day_ids, template_dict)
 
             for date, day in exceptions.items():
                 model.exceptionDays[date] = day
 
+            # Parse exceptionDayIds
+            exception_ids = doc.query('/tt:timetable/tt:model/tt:day')
+            for exception_id_tag in exception_ids:
+                used = exception_id_tag['when']
+                exception_id = exception_id_tag['id']
+
+                try:
+                    date = parse_date(used)
+                except ValueError:
+                    raise RestError("Invalid date of an exception day")
+
+                if exception_id not in model.timetableDayIds:
+                    raise RestError("Invalid date id of an exception day")
+
+                model.exceptionDayIds[date] = exception_id
+
+            # create and set up the timetable
             if len(sets.Set(day_ids)) != len(day_ids):
                 raise RestError("Duplicate days in schema")
-            timetable = TimetableSchema(day_ids, title=title)
-            timetable.model = model
-            for day in days:
-                day_id = day['id']
-                period_ids = [period['id']
-                              for period in day.query('tt:period')]
-                if len(sets.Set(period_ids)) != len(period_ids):
-                    raise RestError("Duplicate periods in schema")
 
-                timetable[day_id] = TimetableSchemaDay(period_ids)
+            timetable = TimetableSchema(day_ids, title=title, model=model)
+            self.setUpSchemaDays(timetable, days)
 
             return timetable
         finally:

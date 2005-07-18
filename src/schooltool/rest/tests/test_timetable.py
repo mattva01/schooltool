@@ -201,6 +201,8 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
               <period id="C" tstart="9:00" duration="30" />
               <period id="D" tstart="9:30" duration="30" />
             </daytemplate>
+            <day when="2005-07-08" id="Day 2" />
+            <day when="2005-07-09" id="Day 1" />
           </model>
           <day id="Day 1">
             <period id="A">
@@ -293,6 +295,8 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
         short_template.add(SchooldayPeriod('C', time(9, 0), half))
         short_template.add(SchooldayPeriod('D', time(9, 30), half))
         tt.model.exceptionDays[date(2005, 7, 7)] = short_template
+        tt.model.exceptionDayIds[date(2005, 7, 8)] = 'Day 2'
+        tt.model.exceptionDayIds[date(2005, 7, 9)] = 'Day 1'
         return tt
 
 
@@ -324,6 +328,8 @@ class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
               <period duration="30" id="C" tstart="09:00"/>
               <period duration="30" id="D" tstart="09:30"/>
             </daytemplate>
+            <day when="2005-07-08" id="Day 2" />
+            <day when="2005-07-09" id="Day 1" />
           </model>
           <day id="Day 1">
             <period id="A">
