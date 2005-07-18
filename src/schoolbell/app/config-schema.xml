@@ -231,9 +231,10 @@
 
   <key name="reportlab_fontdir" datatype="string">
     <description>
-      Specifies the path to fonts for reportlab.
+      Specifies the path to TrueType fonts (Arial and Times New Roman)
+      for reportlab.
 
-      Set to empty string to disable reportlab.
+      Comment out or set to empty string to disable reportlab.
     </description>
     <example>
       reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts

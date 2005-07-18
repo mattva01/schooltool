@@ -168,9 +168,10 @@ lang auto
 #
 # reportlab_fontdir
 #
-#   Specifies the path to fonts for reportlab.
+#   Specifies the path to TrueType fonts (Arial and Times New Roman)
+#   for ReportLab.
 #
-#   Set to empty string to disable reportlab.
+#   Comment out or set to empty string to disable reportlab.
 #
 # Examples:
 #    reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
