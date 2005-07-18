@@ -1,0 +1,41 @@
+<tal:defs define="dummy view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<head>
+  <metal:slot fill-slot="title"
+    i18n:translate="">Edit site preferences</metal:slot>
+</head>
+<body>
+<metal:nothing metal:fill-slot="content-header" />
+<metal:block metal:fill-slot="body">
+
+  <form action="." method="post" tal:attributes="action request/URL"
+        class="standalone" enctype="multipart/form-data">
+
+    <h3 i18n:translate="">Change site preferences</h3>
+
+    <div class="info" tal:condition="view/message" tal:content="view/message" />
+    <div class="error" tal:condition="view/error" tal:content="view/error" />
+
+    <fieldset>
+      <legend i18n:translate="">
+        General preferences
+      </legend>
+
+      <div class="row" tal:define="widget nocall:view/title_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+
+    </fieldset>
+
+    <div class="controls">
+        <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Apply"
+               title="Shortcut: Alt-A" accesskey="A"
+               i18n:attributes="value submit-button; accesskey" />
+        <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+               i18n:attributes="value cancel-button" />
+    </div>
+  </form>
+
+</metal:block>
+</body>
+</html>
