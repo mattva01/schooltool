@@ -358,6 +358,12 @@ def getPersonPreferences(person):
         return st_prefs
 
 
+class ApplicationPreferences(sb.ApplicationPreferences):
+    """Object for storing any application-wide preferences we have."""
+
+    title = 'SchoolTool'
+
+
 def getSchoolToolApplication():
     """Return the nearest ISchoolBellApplication"""
     candidate = getSite()

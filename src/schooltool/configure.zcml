@@ -24,6 +24,12 @@
       factory="schoolbell.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
+  <adapter
+      for=".interfaces.ISchoolToolApplication"
+      provides="schoolbell.app.interfaces.IApplicationPreferences"
+      factory="schoolbell.app.app.getApplicationPreferences"
+      trusted="true"
+      />
 
   <!-- Subscribers -->
 

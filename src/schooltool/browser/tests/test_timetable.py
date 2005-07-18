@@ -836,6 +836,8 @@ class TestTimetableSchemaWizard(NiceDiffsMixin, unittest.TestCase):
         ztapi.provideAdapter(ITimetableSchemaContainer,
                              INameChooser,
                              SimpleNameChooser)
+        from schooltool.tests import setUpApplicationPreferences
+        setUpApplicationPreferences()
 
     def tearDown(self):
         tearDown()
@@ -1173,6 +1175,9 @@ class TestTimetableSchemaWizard(NiceDiffsMixin, unittest.TestCase):
 def doctest_SimpleTimetableSchemaAdd():
     """Doctest for the SimpleTimetableSchemaAdd view
 
+        >>> from schooltool.tests import setUpApplicationPreferences
+        >>> setUpApplicationPreferences()
+
         >>> from schooltool.timetable import WeeklyTimetableModel
         >>> from schooltool.interfaces import ITimetableModelFactory
         >>> ztapi.provideUtility(ITimetableModelFactory,
@@ -1430,6 +1435,9 @@ def doctest_SimpleTimetableSchemaAdd():
 def doctest_SimpleTimetableSchemaAdd_errors():
     """Doctest for the SimpleTimetableSchemaAdd view
 
+        >>> from schooltool.tests import setUpApplicationPreferences
+        >>> setUpApplicationPreferences()
+
         >>> from schooltool.timetable import WeeklyTimetableModel
         >>> from schooltool.interfaces import ITimetableModelFactory
         >>> ztapi.provideUtility(ITimetableModelFactory,
@@ -1521,6 +1529,11 @@ def doctest_SimpleTimetableSchemaAdd_errors():
 
 def doctest_PersonTimetableSetupView():
     """Doctest for the PersonTimetableSetupView view
+
+    Setup the ApplicationPreferences adapter
+
+        >>> from schooltool.tests import setUpApplicationPreferences
+        >>> setUpApplicationPreferences()
 
     We will need an application object
 
@@ -1737,6 +1750,11 @@ def doctest_PersonTimetableSetupView_no_timetables():
 
     What if there are no terms/timetable schemas?
 
+    Setup the ApplicationPreferences adapter
+
+        >>> from schooltool.tests import setUpApplicationPreferences
+        >>> setUpApplicationPreferences()
+
     We will need an application object
 
         >>> from schooltool.app import SchoolToolApplication
@@ -1875,6 +1893,11 @@ def doctest_TimetableSchemaContainerView():
 
 def doctest_SectionTimetableSetupView():
     """Doctest for the SectionTimetableSetupView view
+
+    Setup the ApplicationPreferences adapter
+
+        >>> from schooltool.tests import setUpApplicationPreferences
+        >>> setUpApplicationPreferences()
 
     We will need an application object
 
@@ -2081,6 +2104,9 @@ def doctest_SpecialDayView():
     day.
 
     First of all, we need an app object:
+
+        >>> from schooltool.tests import setUpApplicationPreferences
+        >>> setUpApplicationPreferences()
 
         >>> from schooltool.app import SchoolToolApplication
         >>> app = SchoolToolApplication()
