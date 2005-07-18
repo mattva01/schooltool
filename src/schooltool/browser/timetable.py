@@ -408,8 +408,10 @@ class ITimetableSchemaWizardSchema(Interface):
 class TimetableSchemaWizard(BrowserView, TabindexMixin):
     """View for defining a new timetable schema.
 
-    Can be accessed at /newttschema.
-    XXX Really?  /newttschema doesn't work for me.
+    Can be accessed at /ttschemas/schemawizard.html.
+
+    TODO: this class will soon be replaced by a new, more complicated wizard,
+    defined in the schooltool.browser.ttwizard module.
     """
 
     __used_for__ = ITimetableSchemaContainer
@@ -628,6 +630,7 @@ def fix_duplicates(names):
         used.add(name)
     return result
 
+
 def parse_time_range(value, default_duration=None):
     """Parse a range of times (e.g. 9:45-14:20).
 
@@ -709,6 +712,7 @@ def parse_time_range(value, default_duration=None):
             duration += 1440
     return datetime.time(h1, m1), datetime.timedelta(minutes=duration)
 
+
 def format_time_range(start, duration):
     """Format a range of times (e.g. 9:45-14:20).
 
@@ -735,7 +739,6 @@ def format_time_range(start, duration):
         return '00:00-24:00' # special case
     else:
         return '%s-%s' % (start.strftime('%H:%M'), ends)
-
 
 
 # XXX: copied this from schooltool-0.9.rest.timetable
