@@ -40,13 +40,21 @@ Javascript will be usable, although perhaps not very nice or convenient.
 System requirements
 -------------------
 
-- Python 2.3 (http://www.python.org/)
-  (Debian users will need both python2.3 and python2.3-xml packages)
+- Python 2.3 or 2.4 (http://www.python.org/)
+  (Debian users will need either python2.3 and python2.3-xml, or
+  python2.4 and python2.4-xml packages)
 
-- libxml2 Python bindings (http://xmlsoft.org/)
+- libxml2 Python bindings (http://xmlsoft.org/).  Windows users can find
+  binaries here:  http://users.skynet.be/sbi/libxml-python/
+
+- (optional) the ReportLab Toolkit (http://www.reportlab.org), and
+  Arial and Times New Roman TrueType fonts.  ReportLab is only needed if
+  you want to generate PDF calendars.  To enable PDF support you will
+  need to specify the path to fonts in the configuration file.
 
 - Development environment and a C compiler
-  (precompiled binaries are available for Windows users)
+  (pre-compiled binaries are available for Windows users at the SchoolTool
+  website)
 
 
 Building SchoolTool
@@ -89,8 +97,8 @@ directory.
 Those interested in installing into a non-standard location should investigate
 the --paths and --default-config option for the install distutils commands.
 
-NOTE: If you are using a Linux distribution for which packages exist, you
-should consider using those packages instead of this procedure.
+NOTE: If you are using a Linux distribution for which a SchoolTool
+package exists, you should consider using that package instead.
 
 
 Running SchoolTool
@@ -165,16 +173,16 @@ functional tests.
 
 To run all unit tests, do
 
-  python2.3 test.py -pv
+  python test.py -pv
 
 To run all functional tests, start the SchoolTool server using the test.conf
 configuration file (hint: make runtestserver) and then do
 
-  python2.3 test.py -fpv
+  python test.py -fpv
 
 The test runner has more options and features.  To find out about them, do
 
-  python2.3 test.py -h
+  python test.py -h
 
 Functional tests are are not completely isolated.  Some functional tests
 create named database state snapshots, while other tests reuse those snapshots
@@ -268,8 +276,7 @@ following to your Apache configuration file:
 
 Also, enable mod_proxy and mod_rewrite.
 
-You can also get SSL support in the same way, as an alternative to the built-in
-SSL support:
+You can also get SSL support in the same way.
 
   NameVirtualHost *:443
 
