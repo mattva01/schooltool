@@ -386,6 +386,10 @@ a.button-ok {
     line-height: 1em;
 }
 
+#footer p {
+  margin: 0.5ex;
+}
+
 /*
 * Calendar Views
 */

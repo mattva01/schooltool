@@ -117,7 +117,9 @@
     </div>
     <div id="footer" i18n:translate="">
       <p>
-        SchoolBell <span tal:content="modules/schoolbell/VERSION"/>
+        <strong tal:replace="context/schoolbell:preferences/title"/>
+        Server Running SchoolBell
+        <span tal:content="modules/schoolbell/VERSION"/>
         &copy; The Shuttleworth Foundation 2003 - <span>2005</span>:
         Supporting Social Innovation.
       </p>
