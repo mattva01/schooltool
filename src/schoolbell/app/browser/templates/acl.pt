@@ -1,6 +1,6 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
 <head>
-  <title metal:fill-slot="title" i18n:translate="">Access control</title>
+  <metal:slot fill-slot="title" i18n:translate="">Access control</metal:slot>
 </head>
 <body>
 <metal:block metal:fill-slot="body">

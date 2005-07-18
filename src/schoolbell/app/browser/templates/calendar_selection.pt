@@ -1,9 +1,9 @@
 <tal:defs define="dummy view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
 <head>
-  <title metal:fill-slot="title" i18n:translate="">
+  <metal:slot fill-slot="title" i18n:translate="">
     Select calendars to display
-  </title>
+  </metal:slot>
 </head>
 <body>
 <metal:nothing metal:fill-slot="content-header" />

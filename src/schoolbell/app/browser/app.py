@@ -51,6 +51,7 @@ from schoolbell.app.interfaces import IPersonContainer, IPersonContained
 from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
 from schoolbell.app.interfaces import ISchoolBellApplication
+from schoolbell.app.interfaces import IApplicationPreferences
 from schoolbell.app.interfaces import vocabulary
 from schoolbell.app.app import Person
 from schoolbell.app.app import getSchoolBellApplication
@@ -666,6 +667,44 @@ class ACLView(BrowserView, ACLViewBase):
     def __call__(self):
         self.update()
         return self.index()
+
+
+class ApplicationPreferencesView(BrowserView):
+    """View used for editing application preferences."""
+
+    __used_for__ = IApplicationPreferences
+
+    error = None
+    message = None
+
+    schema = IApplicationPreferences
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+
+        app = getSchoolBellApplication()
+        prefs = self.schema(app)
+        initial = {}
+        for field in self.schema:
+            initial[field] = getattr(prefs, field)
+
+        setUpWidgets(self, self.schema, IInputWidget, initial=initial)
+
+    def update(self):
+        if 'CANCEL' in self.request:
+            url = zapi.absoluteURL(self.context, self.request)
+            self.request.response.redirect(url)
+        elif 'UPDATE_SUBMIT' in self.request:
+            try:
+                data = getWidgetsData(self, self.schema)
+            except WidgetsError:
+                return # Errors will be displayed next to widgets
+
+            app = getSchoolBellApplication()
+            prefs = self.schema(app)
+            for field in self.schema:
+                if field in data: # skip non-fields
+                    setattr(prefs, field, data[field])
 
 
 class ProbeParticipation:

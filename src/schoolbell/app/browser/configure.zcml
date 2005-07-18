@@ -59,6 +59,15 @@
       for="schoolbell.app.interfaces.ISchoolBellApplication"
       menu="zmi_views" title="View" action="index.html" />
 
+  <page
+      name="site-preferences.html"
+      for="schoolbell.app.interfaces.IPerson"
+      class="schoolbell.app.browser.app.ApplicationPreferencesView"
+      template="templates/application_preferences.pt"
+      permission="schoolbell.manageMembership"
+      menu="schoolbell_actions" 
+      title="Change Site Preferences" />
+
 <!-- Views for everything -->
 
   <page

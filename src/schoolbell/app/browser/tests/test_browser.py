@@ -27,6 +27,7 @@ from zope.interface import implements
 from zope.testing import doctest
 from zope.interface.verify import verifyObject
 from zope.app.location.interfaces import ILocation
+from zope.app.testing import ztapi, setup
 from zope.i18n import translate
 
 
@@ -52,6 +53,7 @@ def doctest_SchoolBellAPI():
         >>> SchoolBellAPI(app['persons']).app is app
         True
 
+
     It does so even for objects that do not adapt to
     ISchoolBellApplication, but are sublocations of SchoolBellApplication:
 
@@ -62,6 +64,21 @@ def doctest_SchoolBellAPI():
         >>> adding = Adding()
         >>> SchoolBellAPI(adding).app is app
         True
+
+
+    'context/schoolbell:preferences' returns an ApplicationPreferences object
+    for the nearest ISchoolBellApplication
+
+        >>> setup.setUpAnnotations()
+        >>> from schoolbell.app.interfaces import ISchoolBellApplication
+        >>> from schoolbell.app.interfaces import IApplicationPreferences
+        >>> from schoolbell.app.app import getApplicationPreferences
+        >>> ztapi.provideAdapter(ISchoolBellApplication, 
+        ...                      IApplicationPreferences,
+        ...                      getApplicationPreferences)
+        >>> preferences = SchoolBellAPI(app).preferences
+        >>> preferences.title
+        'SchoolBell'
 
 
     'context/schoolbell:person' adapts the context to IPerson:

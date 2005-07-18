@@ -100,6 +100,13 @@
       trusted="true"
       />
 
+  <adapter
+      for=".interfaces.ISchoolBellApplication"
+      provides=".interfaces.IApplicationPreferences"
+      factory=".app.getApplicationPreferences"
+      trusted="true"
+      />
+
   <class class=".cal.WriteCalendar">
     <allow interface=".interfaces.IWriteCalendar" />
   </class>
@@ -182,6 +189,14 @@
              interface=".interfaces.INote" />
     <require permission="schoolbell.create"
              set_schema=".interfaces.INote" />
+  </content>
+
+  <content class=".app.ApplicationPreferences">
+    <require permission="zope.Public"
+             interface=".interfaces.IApplicationPreferences" />
+    <!-- Not really appropriate permission to require -->
+    <require permission="schoolbell.manageMembership"
+             set_schema=".interfaces.IApplicationPreferences" />
   </content>
 
 <!-- Security declarations for calendaring -->

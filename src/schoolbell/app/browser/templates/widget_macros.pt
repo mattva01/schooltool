@@ -42,10 +42,10 @@
   <p class="hint" tal:content="widget/hint" />
   <div class="field">
     <input type="text" tal:replace="structure widget"/>
-    <img src="++resource++calwidget-icon.gif" class="CalIcon" 
-      id="" onmousedown=""
+    <img class="CalIcon" src="" id="" onmousedown=""
       tal:attributes="id string:${widget/name}Icon;
-      onclick string:clickWidgetIcon('${widget/name}');;"/>
+        onclick string:clickWidgetIcon('${widget/name}');;;
+        src context/++resource++calwidget-icon.gif"/>
     <div id="" style="background: #fff; position: absolute; display: none;"
       tal:attributes="id string:${widget/name}Div"/>
   </div>

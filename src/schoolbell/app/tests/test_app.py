@@ -394,6 +394,26 @@ def doctest_getSchoolBellApplication():
     """
 
 
+def doctest_getApplicationPreferences():
+    """Tests for getApplicationPreferences.
+
+    We need a SchoolBell application and some setup for Annotations.
+
+      >>> from zope.app.tests import setup
+      >>> setup.setUpAnnotations()
+      >>> from schoolbell.app.app import SchoolBellApplication
+      >>> app = SchoolBellApplication()
+
+    Now we can get the preferences object.
+
+      >>> from schoolbell.app.app import getApplicationPreferences
+      >>> prefs = getApplicationPreferences(app)
+      >>> prefs
+      <schoolbell.app.app.ApplicationPreferences...
+
+    """
+
+
 def run_unit_tests(testcase):
     r"""Hack to call into unittest from doctests.
 

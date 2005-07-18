@@ -39,6 +39,7 @@ from pytz import timezone
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import ISchoolBellApplication, IPerson
 from schoolbell.app.interfaces import IPersonPreferences
+from schoolbell.app.interfaces import IApplicationPreferences
 from schoolbell.app.app import getSchoolBellApplication
 
 utc = timezone('UTC')
@@ -128,6 +129,19 @@ class SchoolBellAPI(object):
                             " to a principal")
         return not IUnauthenticatedPrincipal.providedBy(self.context)
     authenticated = property(authenticated)
+
+    def preferences(self):
+        """Return ApplicationPreferences for the SchoolBellApplication.
+
+        Sample usage in a page template:
+
+          <div tal:define="preferences context/schoolbell:preferences">
+            <b tal:content="preferences/title"></b>
+          </div>
+
+        """
+        return IApplicationPreferences(self.app)
+    preferences = property(preferences)
 
 
 class SortBy(object):

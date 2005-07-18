@@ -418,6 +418,17 @@ class ISchoolBellApplication(IReadContainer):
     """
 
 
+class IApplicationPreferences(Interface):
+    """Preferences stored in an annotation on the SchoolBellApplication."""
+
+    title = TextLine(
+        title=_("Title"),
+        required=False,
+        description=_("""The name for the school or organization running
+            this server.  This will be displayed on the public calendar, the
+            bottom of all pages and in the page title."""))
+
+
 class ISchoolBellAuthentication(IAuthentication, ILogout):
     """A local authentication utility for SchoolBell"""
 

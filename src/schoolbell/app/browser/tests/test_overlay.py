@@ -173,6 +173,13 @@ def doctest_CalendarOverlayView_items():
 def doctest_CalendarSelectionView():
     """Tests for CalendarSelectionView
 
+        >>> from schoolbell.app.interfaces import ISchoolBellApplication
+        >>> from schoolbell.app.interfaces import IApplicationPreferences
+        >>> from schoolbell.app.app import getApplicationPreferences
+        >>> from zope.app.testing import ztapi
+        >>> ztapi.provideAdapter(ISchoolBellApplication, 
+        ...                      IApplicationPreferences,
+        ...                      getApplicationPreferences)
         >>> from schoolbell.app.browser.overlay import CalendarSelectionView
         >>> View = SimpleViewClass('../templates/calendar_selection.pt',
         ...                        bases=(CalendarSelectionView,))

@@ -945,6 +945,16 @@ def doctest_PersonDetailsView():
 
 def doctest_LoginView():
     """
+
+    Some framework setup:
+
+        >>> from schoolbell.app.interfaces import ISchoolBellApplication
+        >>> from schoolbell.app.interfaces import IApplicationPreferences
+        >>> from schoolbell.app.app import getApplicationPreferences
+        >>> ztapi.provideAdapter(ISchoolBellApplication, 
+        ...                      IApplicationPreferences,
+        ...                      getApplicationPreferences)
+
     We have to set up a security checker for person objects:
 
         >>> from schoolbell.app.app import Person
@@ -1130,6 +1140,12 @@ def doctest_ACLView():
         >>> setup.setUpTraversal()
         >>> ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
         ...                      AnnotationPrincipalPermissionManager)
+        >>> from schoolbell.app.interfaces import ISchoolBellApplication
+        >>> from schoolbell.app.interfaces import IApplicationPreferences
+        >>> from schoolbell.app.app import getApplicationPreferences
+        >>> ztapi.provideAdapter(ISchoolBellApplication, 
+        ...                      IApplicationPreferences,
+        ...                      getApplicationPreferences)
 
     Let's set the security policy:
 
@@ -1711,6 +1727,55 @@ def doctest_hasPermission():
         >>> hasPermission('super', object(), 'sb.person.joe')
         False
     """
+
+def doctest_ApplicationPreferencesView():
+    """
+
+    We need to setup a SchoolBellApplication site and build our
+    ISchoolBellApplication adapter:
+
+        >>> from schoolbell.app.app import SchoolBellApplication, Person
+        >>> from zope.app.component.site import LocalSiteManager
+        >>> app = SchoolBellApplication()
+        >>> app.setSiteManager(LocalSiteManager(app))
+        >>> from zope.app.component.hooks import setSite
+        >>> setSite(app)
+        >>> from schoolbell.app.browser.app import ApplicationPreferencesView
+        >>> from schoolbell.app.app import getApplicationPreferences
+        >>> from zope.app.annotation.interfaces import IAnnotations
+        >>> from schoolbell.app.interfaces import IApplicationPreferences
+        >>> from schoolbell.app.interfaces import ISchoolBellApplication
+        >>> from schoolbell.app.app import SchoolBellApplication
+
+        >>> setup.setUpAnnotations()
+        >>> ztapi.provideAdapter(ISchoolBellApplication,
+        ...                      IApplicationPreferences,
+        ...                      getApplicationPreferences)
+        >>> from schoolbell.app.app import getSchoolBellApplication
+
+
+    Make sure we can create a view:
+
+        >>> app = getSchoolBellApplication()
+
+        >>> request = TestRequest()
+
+        >>> view = ApplicationPreferencesView(app, request)
+
+    Now we can setup a post and set the site title:
+
+        >>> request = TestRequest(form={'UPDATE_SUBMIT': 'Update',
+        ...                             'field.title': 'Company Calendars',})
+        >>> view = ApplicationPreferencesView(app, request)
+
+        >>> view.update()
+
+        >>> prefs = getApplicationPreferences(app)
+        >>> prefs.title
+        u'Company Calendars'
+
+    """
+
 
 def test_suite():
     suite = unittest.TestSuite()

@@ -33,7 +33,7 @@ from zope.app.container.sample import SampleContainer
 from zope.app.container.contained import Contained
 from zope.app.container.contained import NameChooser
 from zope.app.container.interfaces import INameChooser
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.site.servicecontainer import SiteManagerContainer
 from zope.app.location.interfaces import ILocation
 from zope.app.annotation.interfaces import IAnnotations
@@ -45,6 +45,7 @@ from schoolbell.app.interfaces import IPersonPreferences, IPersonDetails
 from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
 from schoolbell.app.interfaces import IHavePreferences, IHaveNotes
+from schoolbell.app.interfaces import IApplicationPreferences
 from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIMember, URIGroup
 from schoolbell.app.overlay import OverlaidCalendarsProperty
@@ -327,3 +328,26 @@ def getSchoolBellApplication():
         return candidate
     else:
         raise ValueError("can't get a SchoolBellApplication")
+
+
+class ApplicationPreferences(Persistent):
+    """Object for storing any application-wide preferences we have.
+
+    See schoolbell.app.interfaces.ApplicationPreferences.
+    """
+    implements(IApplicationPreferences)
+
+    title = 'SchoolBell'
+
+
+def getApplicationPreferences(app):
+    """Adapt a SchoolBellApplication to IApplicationPreferences."""
+
+    annotations = IAnnotations(app)
+    key = 'schoolbell.app.ApplicationPreferences'
+    try:
+        return annotations[key]
+    except KeyError:
+        annotations[key] = ApplicationPreferences()
+        annotations[key].__parent__ = app
+        return annotations[key]
