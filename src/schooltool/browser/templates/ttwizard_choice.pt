@@ -1,0 +1,26 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">New timetable schema</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" i18n:translate="">New timetable schema</h1>
+<metal:block metal:fill-slot="body">
+
+
+<form class="plain" method="POST" tal:attributes="action request/URL">
+
+  <p tal:content="view/question" i18n:translate="">(Question)</p>
+
+  <div class="controls">
+    <input tal:repeat="choice view/choices"
+           class="button-ok" type="submit"
+           tal:attributes="name string:NEXT.${repeat/choice/index};
+                           value python:choice[1]"
+           i18n:attributes="value" />
+  </div>
+
+</form>
+
+</metal:block>
+</body>
+</html>
