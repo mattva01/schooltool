@@ -195,11 +195,24 @@ class PDFCalendarViewBase(BrowserView):
             resources = resource_str_template % ', '.join(resource_titles)
             paragraphs.append(Paragraph(resources.encode('utf-8'),
                                         self.normal_style))
-        if event.recurrence:
-            recurrent_text = translate(_("(recurrent)"), context=self.request)
-            paragraphs.append(Paragraph(recurrent_text.encode('utf-8'),
+        tags = self.eventTags(event)
+        if tags:
+            tags_text = '(' + ', '.join(tags) + ')'
+            paragraphs.append(Paragraph(tags_text.encode('utf-8'),
                                         self.normal_style))
         return paragraphs
+
+    def eventTags(self, event):
+        tags = []
+        if event.recurrence:
+            tags.append(translate(_("recurrent"), context=self.request))
+        if (removeSecurityProxy(event.__parent__)
+            is not removeSecurityProxy(self.context)): # XXX is rSP needed?
+            # TODO: do not show overlaid booking events, as in
+            #       CalendarViewBase.getEvents.
+            tag = translate(_('overlaid from %s'), context=self.request)
+            tags.append(tag % event.__parent__.__parent__.title)
+        return tags
 
     def dayEvents(self, date):
         """Return a list of events that should be shown.

@@ -549,7 +549,7 @@ class CalendarViewBase(BrowserView):
                 if (removeSecurityProxy(event.__parent__) is removeSecurityProxy(self.context) and
                     calendar is not self.context) or event.allday:
                     # Skip resource booking events (coming from
-                    # overlayed calendars) if they were booked by the
+                    # overlaid calendars) if they were booked by the
                     # person whose calendar we are viewing.
                     # removeSecurityProxy(event.__parent__) and
                     # removeSecurityProxy(self.context) are needed so we

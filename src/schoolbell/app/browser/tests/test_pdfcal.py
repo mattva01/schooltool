@@ -273,6 +273,8 @@ def doctest_PDFCalendarViewBase_buildEventTable():
 
         >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
         ...                     timedelta(hours=2), "Some event")
+        >>> calendar.addEvent(evt)
+
         >>> table = view.buildDayTable([evt])
         >>> table._cellvalues[0][0].text
         '09:10-11:10'
@@ -283,6 +285,8 @@ def doctest_PDFCalendarViewBase_buildEventTable():
 
         >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
         ...                     timedelta(hours=2), "evt3", allday=True)
+        >>> calendar.addEvent(evt)
+
         >>> table = view.buildDayTable([evt])
         >>> table._cellvalues[0][0].text
         'all day'
@@ -302,6 +306,7 @@ def doctest_PDFCalendarViewBase_eventInfoCell():
 
         >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
         ...                     timedelta(hours=2), "Some event")
+        >>> calendar.addEvent(evt)
         >>> paragraphs = view.eventInfoCell(evt)
         >>> len(paragraphs)
         1
@@ -309,13 +314,14 @@ def doctest_PDFCalendarViewBase_eventInfoCell():
         'Some event'
 
     If the event is recurrent, it is flagged.  The location, if provided,
-    is also indicated:
+    is also indicated.
 
         >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
         >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
         ...                     timedelta(hours=2), "Some event",
         ...                     location=u"\u0105 location",
         ...                     recurrence=DailyRecurrenceRule())
+        >>> calendar.addEvent(evt)
         >>> paragraphs = view.eventInfoCell(evt)
         >>> len(paragraphs)
         3
@@ -323,6 +329,14 @@ def doctest_PDFCalendarViewBase_eventInfoCell():
         'Location: \xc4\x85 location'
         >>> paragraphs[2].text
         '(recurrent)'
+
+    Overlaid events are also recognized.
+
+        >>> calendar2 = Person(title='Mr. X').calendar
+        >>> evt.__parent__ = calendar2
+        >>> paragraphs = view.eventInfoCell(evt)
+        >>> paragraphs[2].text
+        '(recurrent, overlaid from Mr. X)'
 
     """
 
