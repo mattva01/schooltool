@@ -1332,7 +1332,9 @@ class EmergencyDayView(BrowserView):
     and the days immediately after the term.
     """
 
-    template = ViewPageTemplateFile('templates/emergency_select.pt')
+    template = None
+    date_template = ViewPageTemplateFile('templates/emergency_select.pt')
+    replacement_template = ViewPageTemplateFile('templates/emergency2.pt')
 
     error = None
     date = None
@@ -1353,11 +1355,35 @@ class EmergencyDayView(BrowserView):
         return result
 
     def update(self):
+        self.template = self.date_template
+        if 'CANCEL' in self.request:
+            self.request.response.redirect(
+                zapi.absoluteURL(self.context, self.request))
+            return
         if 'date' in self.request:
-            self.date = parse_date(self.request['date'])
+            try:
+                self.date = parse_date(self.request['date'])
+            except ValueError:
+                self.error = _("The date you entered is invalid."
+                               "  Please use the YYYY-MM-DD format.")
+                return
+
             self.term = getTermForDate(self.date)
+            if self.term is None:
+                self.error = _("The date you entered does not"
+                               " belong to any term.")
+                return
+            if not self.term.isSchoolday(self.date):
+                self.error = _("The date you entered is not a schoolday.")
+                return
+
+            self.template = self.replacement_template
         if 'replacement' in self.request:
-            self.replacement = parse_date(self.request['replacement'])
+            try:
+                self.replacement = parse_date(self.request['replacement'])
+            except ValueError:
+                self.error = _("The replacement date you entered is invalid.")
+                return
 
         if self.date and self.replacement:
             if self.term.last < self.replacement:
@@ -1369,7 +1395,27 @@ class EmergencyDayView(BrowserView):
             model.exceptionDays[self.date] = SchooldayTemplate()
             day_id = model.getDayId(self.term, self.date)
             model.exceptionDayIds[self.replacement] = day_id
-            # post two all day events
+
+            # XXX: post two all day events on self.date and self.replacement
+            # calendar = getSchoolToolApplication().calendar
+            # calendar.addEvent(
+            #     CalendarEvent(datetime.combine(self.date, datetime.time(),
+            #                   datetime.timedelta(),
+            #                   _('School is cancelled'),
+            #                   allday=True))
+            # calendar.addEvent(
+            #     CalendarEvent(datetime.combine(self.replacement,
+            #                                    datetime.time(),
+            #                   datetime.timedelta(),
+            #                   translate(_('Replacement schoolday for'
+            #                               ' emergency day %s'),
+            #                             context=self.request)
+            #                   % self.replacement,
+            #                   allday=True))
+
+            self.request.response.redirect(
+                zapi.absoluteURL(self.context, self.request))
+
 
 
     def __call__(self):

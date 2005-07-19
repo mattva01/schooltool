@@ -2655,6 +2655,30 @@ def doctest_EmergencyDayView():
          datetime.date(2005, 9, 2),
          datetime.date(2005, 9, 3)]
 
+
+    The page presented next contains a selection of these dates:
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+          <div class="row">
+            <label>Replacement</label>
+            <select name="replacement">
+              <option>2005-07-10</option>
+              <option>2005-07-17</option>
+              <option>2005-07-24</option>
+              <option>2005-07-31</option>
+              <option>2005-08-07</option>
+              <option>2005-08-14</option>
+              <option>2005-08-21</option>
+              <option>2005-08-28</option>
+              <option>2005-09-01</option>
+              <option>2005-09-02</option>
+              <option>2005-09-03</option>
+            </select>
+          </div>
+          ...
+
     The original day id of the emergency day was:
 
          >>> def getDayId(date):
@@ -2681,6 +2705,13 @@ def doctest_EmergencyDayView():
         datetime.date(2005, 7, 7)
         >>> view.replacement
         datetime.date(2005, 7, 10)
+
+    The user gets redirected:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('location')
+        'http://127.0.0.1/ttschemas/usual'
 
     The replacement day gets added to the calendar, and the emergency
     day gets an empty day template:
@@ -2710,7 +2741,11 @@ def doctest_EmergencyDayView():
     notifying of the shift:
 
         XXX: Tvon has not made the schoolwide calendar yet!
-
+        #>>> cal = getSchoolToolApplication().calendar
+        #>>> for event in calendar:
+        #...     print event.dtstart, event.title
+        2005-07-07 00:00 UTC School is cancelled
+        2005-07-10 00:00 UTC Replacement schoolday for emergency day 2005-07-07
 
     When the replacement day is outside the term, the end date of the
     term gets adjusted:
@@ -2733,6 +2768,80 @@ def doctest_EmergencyDayView():
         False
         >>> term.isSchoolday(datetime.date(2005, 9, 3))
         True
+
+    ======
+    Cancel
+    ======
+
+    If the cancel button is pressed, nothing is changed, and the user
+    is redirected:
+
+        >>> request = TestRequest(form={'date': '2005-07-09',
+        ...                             'replacement': '2005-09-04',
+        ...                             'CANCEL': 'Cancel'})
+        >>> view = EmergencyDayView(ttschema, request)
+        >>> result = view()
+        >>> ttschema.model.periodsInDay(term, ttschema,
+        ...                             datetime.date(2005, 7, 9))
+        [<schooltool.timetable.SchooldayPeriod object at ...>,
+         <schooltool.timetable.SchooldayPeriod object at ...>,
+         <schooltool.timetable.SchooldayPeriod object at ...>,
+         <schooltool.timetable.SchooldayPeriod object at ...>]
+        >>> term.last
+        datetime.date(2005, 9, 3)
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('location')
+        'http://127.0.0.1/ttschemas/usual'
+
+    ======
+    Errors
+    ======
+
+    If date is invalid, the user sees a nice error:
+
+        >>> request = TestRequest(form={'date': '07/09/05'})
+        >>> view = EmergencyDayView(ttschema, request)
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <div class="error">The date you entered is invalid.
+           Please use the YYYY-MM-DD format.</div>
+        ...
+
+
+    If the date is not in term, the user sees the appropriate message:
+
+        >>> request = TestRequest(form={'date': '1999-12-31'})
+        >>> view = EmergencyDayView(ttschema, request)
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <div class="error">The date you entered does not belong
+        to any term.</div>
+        ...
+
+    If the date is not a schoolday, we tell that:
+
+        >>> request = TestRequest(form={'date': '2005-07-17'})
+        >>> view = EmergencyDayView(ttschema, request)
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <div class="error">The date you entered is not a schoolday.</div>
+        ...
+
+    If replacement is invalid, the user gets to enter it again:
+
+        >>> request = TestRequest(form={'date': '2005-07-19',
+        ...                             'replacement': 'whatever'})
+        >>> view = EmergencyDayView(ttschema, request)
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <div class="error">The replacement date you entered is invalid.</div>
+        ...
 
     """
 

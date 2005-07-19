@@ -4,13 +4,15 @@
 </head>
 <body>
   <h1 metal:fill-slot="content-header" i18n:translate="">
-    Emergency day
+    Choose a replacement for the emergency day.
   </h1>
 <metal:block metal:fill-slot="body">
 
 <p i18n:translate="">
-This form allows you to mark a date as an emergency non-schoolday and
-add a replacement day to the term.
+You have selected <span tal:replace="view/date"/> as the emergency
+day.  Now please select the replacement day.  The selection below
+consists of non-schooldays in this term following the emergency day
+and several days after the term.
 </p>
 
 <form class="plain" method="POST" tal:attributes="action request/URL">
@@ -22,17 +24,19 @@ add a replacement day to the term.
        />
 
   <p i18n:translate="">
-    Please enter the emergency date below.
+    Please enter the replacement date below.
   </p>
 
   <div class="row">
-    <label i18n:translate="">Date</label>
-    <input type="text" name="date"
-           tal:attributes="value request/date|nothing"/>
+    <label i18n:translate="">Replacement</label>
+    <select name="replacement">
+      <option tal:repeat="date view/replacements"
+              tal:content="date"/>
+    </select>
   </div>
 
   <div class="controls">
-    <input type="submit" class="button-ok" name="CHOOSE" value="Proceed"
+    <input type="submit" class="button-ok" name="SUBMIT" value="Proceed"
            i18n:attributes="value" />
     <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
            i18n:attributes="value cancel-button" />
