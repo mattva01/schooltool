@@ -810,7 +810,7 @@ def doctest_TimetableSchemaView():
     """
 
 
-class TestTimetableSchemaWizard(NiceDiffsMixin, unittest.TestCase):
+class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.app import SchoolToolApplication
@@ -843,12 +843,12 @@ class TestTimetableSchemaWizard(NiceDiffsMixin, unittest.TestCase):
         tearDown()
 
     def createView(self, request=None):
-        from schooltool.browser.timetable import TimetableSchemaWizard
+        from schooltool.browser.timetable import AdvancedTimetableSchemaAdd
         context = self.app["ttschemas"]
         context['default'] = createSchema(['Day 1'], ['Period 1'])
         if request is None:
             request = TestRequest()
-        view = TimetableSchemaWizard(context, request)
+        view = AdvancedTimetableSchemaAdd(context, request)
         return view
 
     def test(self):
@@ -2746,7 +2746,7 @@ def test_suite():
                                             | doctest.NORMALIZE_WHITESPACE))
     suite.addTest(doctest.DocTestSuite('schooltool.browser.timetable',
                                        optionflags=optionflags))
-    suite.addTest(unittest.makeSuite(TestTimetableSchemaWizard))
+    suite.addTest(unittest.makeSuite(TestAdvancedTimetableSchemaAdd))
     return suite
 
 

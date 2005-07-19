@@ -398,14 +398,14 @@ class TimetableSchemaContainerView(ContainerView):
         return ''
 
 
-class ITimetableSchemaWizardSchema(Interface):
+class IAdvancedTimetableSchemaAddSchema(Interface):
 
     title = TextLine(title=u"Title", required=False)
     duration = Int(title=u"Duration", description=u"Duration in minutes",
                    required=False)
 
 
-class TimetableSchemaWizard(BrowserView, TabindexMixin):
+class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
     """View for defining a new timetable schema.
 
     Can be accessed at /ttschemas/schemawizard.html.
@@ -428,7 +428,7 @@ class TimetableSchemaWizard(BrowserView, TabindexMixin):
                     _("Sunday"),
                    )
 
-    _schema = ITimetableSchemaWizardSchema
+    _schema = IAdvancedTimetableSchemaAddSchema
 
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)

@@ -445,7 +445,7 @@
   <page
       name="schemawizard.html"
       for="schooltool.interfaces.ITimetableSchemaContainer"
-      class=".timetable.TimetableSchemaWizard"
+      class=".timetable.AdvancedTimetableSchemaAdd"
       permission="schoolbell.create"
       />
 
