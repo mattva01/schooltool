@@ -51,7 +51,7 @@ def setUpSessions():
     ztapi.provideAdapter(IRequest, ISession, Session)
     ztapi.provideUtility(IClientIdManager, CookieClientIdManager())
     sdc = PersistentSessionDataContainer()
-    ztapi.provideUtility(ISessionDataContainer, sdc, 'schoolbell.auth')
+    ztapi.provideUtility(ISessionDataContainer, sdc)
 
 
 def setUpSchoolBellSite():

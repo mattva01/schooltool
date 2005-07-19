@@ -44,25 +44,13 @@ from schoolbell.app.cal import Calendar
 # Used in defining CalendarEventEditTestView
 from schoolbell.app.browser.cal import CalendarEventEditView
 from schoolbell.app.browser.cal import ICalendarEventEditForm
-from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schoolbell.app.browser.tests.setup import setUp, tearDown, setUpSessions
 
 # Used for the PrincipalStub
 from schoolbell.app.app import Person
 from schoolbell.app.interfaces import IPerson
 
 utc = timezone('UTC')
-
-def setUpSessions():
-    """Set up adapters and utilities for session support."""
-    from zope.publisher.interfaces import IRequest
-    from zope.app.session.interfaces import ISession
-    class SessionAdapterStub(object):
-        _dict = {}
-        def __init__(self, request):
-            pass
-        def __getitem__(self, name):
-            return self._dict.setdefault(name, {})
-    ztapi.provideAdapter(IRequest, ISession, SessionAdapterStub)
 
 
 def doctest_CalendarOwnerTraverser():
