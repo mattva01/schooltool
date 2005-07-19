@@ -8,7 +8,6 @@ Package: schooltool
 Section: misc
 Architecture: all
 Depends: ${python:Depends}, ssl-cert, openssl, libschooltool (= ${Source-Version}), ${misc:Depends}
-Recommends: python2.3-tcpwrap (>= 0.2)
 Description: common platform for school administration
  SchoolTool is an open source school management information system.  It is
  a distributed client/server system.  The SchoolTool server presents two
@@ -44,7 +43,6 @@ Architecture: all
 Depends: ${python:Depends}, python2.3-xml, python2.3-libxml2 (>= 2.6.3-1), libschoolbell (>= 1.1), libschoolbell (<< 1.2), ${misc:Depends}
 Conflicts: schooltool-clients, libschooltool-clients
 Replaces: schooltool-clients, libschooltool-clients
-Recommends: python2.3-tcpwrap (>= 0.2)
 Description: common platform for school administration
  SchoolTool is an open source school management information system.  It is
  a distributed client/server system.  The SchoolTool server presents two
