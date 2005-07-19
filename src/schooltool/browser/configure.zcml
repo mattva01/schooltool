@@ -434,9 +434,18 @@
       />
 
   <page
-      name="add.html"
+      name="simpleadd.html"
       for="schooltool.interfaces.ITimetableSchemaContainer"
       class=".timetable.SimpleTimetableSchemaAdd"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="New Timetable (Simple)"
+      />
+
+  <page
+      name="add.html"
+      for="schooltool.interfaces.ITimetableSchemaContainer"
+      class=".ttwizard.TimetableSchemaWizard"
       permission="schoolbell.create"
       menu="schoolbell_actions"
       title="New Timetable"

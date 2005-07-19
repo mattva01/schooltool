@@ -1,0 +1,30 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">New timetable schema</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" i18n:translate="">New timetable schema</h1>
+<metal:block metal:fill-slot="body">
+
+<p>Note: this form is work in progress and is not fully functional yet.
+You might want to use the old <a href="simpleadd.html">simple</a> or
+<a href="schemawizard.html">advanced</a> adding views.</p>
+
+<form class="plain" method="POST" tal:attributes="action request/URL">
+
+  <div class="row" tal:define="widget nocall:view/title_widget">
+    <metal:block use-macro="context/@@form_macros/widget_row" />
+  </div>
+
+  <div class="controls">
+
+    <input type="submit" class="button-ok" name="CREATE"
+           value="Create timetable schema"
+           i18n:attributes="value" />
+  </div>
+
+</form>
+
+</metal:block>
+</body>
+</html>

@@ -204,7 +204,7 @@ Simple timetable add
 Now let's try the simple timetable schema setup view:
 
   >>> print http("""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... POST /frogpond/ttschemas/simpleadd.html HTTP/1.1
   ... Authorization: Basic mgr:mgrpw
   ... Content-Type: application/x-www-form-urlencoded
   ... 
