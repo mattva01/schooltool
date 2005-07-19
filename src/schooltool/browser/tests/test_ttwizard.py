@@ -122,8 +122,8 @@ def doctest_FirstStep():
         <BLANKLINE>
         ...<input class="textType" id="field.title" name="field.title"
                   size="20" type="text" value="default" />...
-        ...<input type="submit" class="button-ok" name="CREATE"
-                 value="Create timetable schema" />
+        ...<input type="submit" class="button-ok" name="NEXT"
+                  value="Next" />
         ...
 
     FirstStep.update can take the title from the request and put it into
@@ -143,6 +143,50 @@ def doctest_FirstStep():
         >>> view = FirstStep(context, request)
         >>> view.update()
         False
+
+    """
+
+
+def doctest_ChoiceStep():
+    """Unit test for ChoiceStep
+
+        >>> from schooltool.browser.ttwizard import ChoiceStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = ChoiceStep(context, request)
+
+    ChoiceStep wants some attributes
+
+        >>> view.key = 'meaning'
+        >>> view.question = 'What is the meaning of life?'
+        >>> view.choices = [('42', "Fourty two"),
+        ...                 ('huh', "I don't know")]
+
+        >>> print view()
+        <BLANKLINE>
+        ...What is the meaning of life?...
+        ...<input class="button-ok" type="submit" name="NEXT.0"
+                  value="Fourty two" />
+        ...<input class="button-ok" type="submit" name="NEXT.1"
+                  value="I don't know" />
+        ...
+
+    Update does something if you choose a valid choice
+
+        >>> view.update()
+        False
+
+        >>> view.request = TestRequest(form={'NEXT.0': "Whatever"})
+        >>> view.update()
+        True
+        >>> view.getSessionData()[view.key]
+        '42'
+
+        >>> view.request = TestRequest(form={'NEXT.1': "Whatever"})
+        >>> view.update()
+        True
+        >>> view.getSessionData()[view.key]
+        'huh'
 
     """
 
@@ -242,14 +286,14 @@ def doctest_TimetableSchemaWizard():
         ...
         ...<input class="textType" id="field.title" name="field.title"
                   size="20" type="text" value="default" />...
-        ...<input type="submit" class="button-ok" name="CREATE"
-                 value="Create timetable schema" />
+        ...<input type="submit" class="button-ok" name="NEXT"
+                  value="Next" />
         ...
 
     Let's make a false step first -- press Create without entering the title.
 
         >>> request = TestRequest(form={'field.title': u'',
-        ...                             'CREATE': u'Create'})
+        ...                             'NEXT': u'Next'})
         >>> view = TimetableSchemaWizard(context, request)
         >>> print view()
         <BLANKLINE>
@@ -263,7 +307,7 @@ def doctest_TimetableSchemaWizard():
     When you press Create, the schema is created.
 
         >>> request = TestRequest(form={'field.title': u'Sample Schema',
-        ...                             'CREATE': u'Create'})
+        ...                             'NEXT': u'Next'})
         >>> view = TimetableSchemaWizard(context, request)
         >>> print view()
         <BLANKLINE>

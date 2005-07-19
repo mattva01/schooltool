@@ -18,8 +18,7 @@ You might want to use the old <a href="simpleadd.html">simple</a> or
 
   <div class="controls">
 
-    <input type="submit" class="button-ok" name="CREATE"
-           value="Create timetable schema"
+    <input type="submit" class="button-ok" name="NEXT" value="Next"
            i18n:attributes="value" />
   </div>
 

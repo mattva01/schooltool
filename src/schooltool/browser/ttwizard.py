@@ -175,6 +175,44 @@ class FirstStep(Step):
         return self.template()
 
 
+class ChoiceStep(Step):
+    """A step that requires the user to make a choice.
+
+    Subclasses should provide two attributes:
+
+        `question` -- question text
+
+        `choices` -- a list of tuples (choice_value, choice_text)
+
+        `key` -- name of the session dict key that will store the value.
+
+    """
+
+    template = ViewPageTemplateFile("templates/ttwizard_choice.pt")
+
+    def __call__(self):
+        return self.template()
+
+    def update(self):
+        session = self.getSessionData()
+        for n, (value, text) in enumerate(self.choices):
+            if 'NEXT.%d' % n in self.request:
+                session[self.key] = value
+                return True
+        return False
+
+
+class CycleStep(ChoiceStep):
+
+    key = 'cycle'
+
+    question = _("Does your school's timetable cycle use days of the week,"
+                 " or a rotating cycle?")
+
+    choices = (('weekly',   _("Days of the week")),
+               ('rotating', _("Rotating cycle")))
+
+
 class FinalStep(Step):
     """Final step: create the schema."""
 
@@ -213,7 +251,7 @@ class TimetableSchemaWizard(BrowserView):
         first_step = FirstStep(self.context, self.request)
         final_step = FinalStep(self.context, self.request)
         next_step = first_step
-        if 'CREATE' in self.request:
+        if 'NEXT' in self.request:
             if first_step.update():
                 next_step = final_step
         return next_step()
