@@ -164,6 +164,9 @@ class FirstStep(Step):
         setUpWidgets(self, self.schema, IInputWidget,
                      initial={'title': 'default'})
 
+    def __call__(self):
+        return self.template()
+
     def update(self):
         try:
             data = getWidgetsData(self, self.schema)
@@ -172,9 +175,6 @@ class FirstStep(Step):
         session = self.getSessionData()
         session['title'] = data['title']
         return True
-
-    def __call__(self):
-        return self.template()
 
     def next(self):
         return CycleStep(self.context, self.request)
@@ -230,6 +230,12 @@ class CycleStep(ChoiceStep):
 class FinalStep(Step):
     """Final step: create the schema."""
 
+    def __call__(self):
+        ttschema = self.createSchema()
+        self.add(ttschema)
+        self.request.response.redirect(
+            zapi.absoluteURL(self.context, self.request))
+
     def update(self):
         return True
 
@@ -254,12 +260,6 @@ class FinalStep(Step):
         nameChooser = INameChooser(self.context)
         key = nameChooser.chooseName('', ttschema)
         self.context[key] = ttschema
-
-    def __call__(self):
-        ttschema = self.createSchema()
-        self.add(ttschema)
-        self.request.response.redirect(
-            zapi.absoluteURL(self.context, self.request))
 
 
 class TimetableSchemaWizard(Step):
