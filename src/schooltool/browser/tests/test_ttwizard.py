@@ -72,6 +72,7 @@ def setUp(test):
     a global named `app` in all doctests.
     """
     schoolbell_setup.setUp(test)
+    schoolbell_setup.setUpSessions()
     setUpApplicationPreferences()
     setUpNameChoosers()
     test.globs['app'] = setUpApplicationAndSite()
@@ -89,13 +90,33 @@ def print_ttschema(ttschema):
         print " ".join(['%-10s' % cell for cell in row])
 
 
-def doctest_TimetableSchemaWizard():
-    """Unit test for TimetableSchemaWizard
+def doctest_Step_getSessionData():
+    """Unit test for Step.getSessionData.
 
-        >>> from schooltool.browser.ttwizard import TimetableSchemaWizard
+        >>> from schooltool.browser.ttwizard import Step
         >>> context = app['ttschemas']
         >>> request = TestRequest()
-        >>> view = TimetableSchemaWizard(context, request)
+        >>> step = Step(context, request)
+        >>> data = step.getSessionData()
+        >>> data
+        <...SessionPkgData...>
+        >>> data['something'] = 42
+
+        >>> request = TestRequest()
+        >>> step = Step(context, request)
+        >>> data['something']
+        42
+
+    """
+
+
+def doctest_FirstStep():
+    """Unit test for FirstStep
+
+        >>> from schooltool.browser.ttwizard import FirstStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = FirstStep(context, request)
 
         >>> print view()
         <BLANKLINE>
@@ -105,8 +126,116 @@ def doctest_TimetableSchemaWizard():
                  value="Create timetable schema" />
         ...
 
+    FirstStep.update can take the title from the request and put it into
+    the session.
+
+        >>> request = TestRequest(form={'field.title': u'Sample Schema'})
+        >>> view = FirstStep(context, request)
+        >>> view.update()
+
+        >>> view.getSessionData()['title']
+        u'Sample Schema'
+
+    """
+
+
+def doctest_FinalStep():
+    """Unit test for FinalStep
+
+        >>> from schooltool.browser.ttwizard import FinalStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = FinalStep(context, request)
+
     In its first primitive incarnation, the wizard can magically create a whole
-    schema from no user data at all!  XXX: fix this
+    schema from almost no user data at all!  XXX: fix this
+
+        >>> data = view.getSessionData()
+        >>> data['title'] = u'Sample Schema'
+
+        >>> view()
+
+        >>> ttschema = context['sample-schema']
+        >>> ttschema
+        <...TimetableSchema object at ...>
+        >>> print ttschema.title
+        Sample Schema
+
+    We should get redirected to the ttschemas index:
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('Location')
+        'http://127.0.0.1/ttschemas'
+
+    """
+
+
+def doctest_FinalStep_createSchema():
+    """Unit test for FinalStep.createSchema
+
+        >>> from schooltool.browser.ttwizard import FinalStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = FinalStep(context, request)
+        >>> data = view.getSessionData()
+        >>> data['title'] = u'Default'
+
+        >>> ttschema = view.createSchema()
+        >>> ttschema
+        <...TimetableSchema object at ...>
+        >>> print ttschema.title
+        Default
+        >>> print_ttschema(ttschema)
+        Monday     Tuesday    Wednesday  Thursday   Friday
+        A          A          A          A          A
+        B          B          B          B          B
+
+        >>> ttschema.model
+        <...WeeklyTimetableModel object at ...>
+        >>> print " ".join(ttschema.model.timetableDayIds)
+        Monday Tuesday Wednesday Thursday Friday
+
+    """
+
+
+def doctest_FinalStep_add():
+    """Unit test for FinalStep.createSchema
+
+        >>> from schooltool.browser.ttwizard import FinalStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = FinalStep(context, request)
+
+        >>> from schooltool.timetable import TimetableSchema
+        >>> ttschema = TimetableSchema([], title="Timetable Schema")
+        >>> view.add(ttschema)
+
+        >>> context['timetable-schema'] is ttschema
+        True
+
+    """
+
+
+def doctest_TimetableSchemaWizard():
+    """Unit test for TimetableSchemaWizard
+
+        >>> from schooltool.browser.ttwizard import TimetableSchemaWizard
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = TimetableSchemaWizard(context, request)
+
+    Initially it displays the first step -- entering the title.
+
+        >>> print view()
+        <BLANKLINE>
+        ...<input class="textType" id="field.title" name="field.title"
+                  size="20" type="text" value="default" />...
+        ...<input type="submit" class="button-ok" name="CREATE"
+                 value="Create timetable schema" />
+        ...
+
+    When you press Create, the schema is created.
 
         >>> request = TestRequest(form={'field.title': u'Sample Schema',
         ...                             'CREATE': u'Create'})
@@ -127,50 +256,6 @@ def doctest_TimetableSchemaWizard():
         302
         >>> request.response.getHeader('Location')
         'http://127.0.0.1/ttschemas'
-
-    """
-
-
-def doctest_TimetableSchemaWizard_createSchema():
-    """Unit test for TimetableSchemaWizard.createSchema
-
-        >>> from schooltool.browser.ttwizard import TimetableSchemaWizard
-        >>> context = app['ttschemas']
-        >>> request = TestRequest(form={'field.title': 'Default'})
-        >>> view = TimetableSchemaWizard(context, request)
-
-        >>> ttschema = view.createSchema()
-        >>> ttschema
-        <...TimetableSchema object at ...>
-        >>> print ttschema.title
-        Default
-        >>> print_ttschema(ttschema)
-        Monday     Tuesday    Wednesday  Thursday   Friday
-        A          A          A          A          A
-        B          B          B          B          B
-
-        >>> ttschema.model
-        <...WeeklyTimetableModel object at ...>
-        >>> print " ".join(ttschema.model.timetableDayIds)
-        Monday Tuesday Wednesday Thursday Friday
-
-    """
-
-
-def doctest_TimetableSchemaWizard_add():
-    """Unit test for TimetableSchemaWizard.createSchema
-
-        >>> from schooltool.browser.ttwizard import TimetableSchemaWizard
-        >>> context = app['ttschemas']
-        >>> request = TestRequest()
-        >>> view = TimetableSchemaWizard(context, request)
-
-        >>> from schooltool.timetable import TimetableSchema
-        >>> ttschema = TimetableSchema([], title="Timetable Schema")
-        >>> view.add(ttschema)
-
-        >>> context['timetable-schema'] is ttschema
-        True
 
     """
 

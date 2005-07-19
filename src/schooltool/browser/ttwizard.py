@@ -118,6 +118,7 @@ from zope.app.form.interfaces import IInputWidget
 from zope.app.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.container.interfaces import INameChooser
+from zope.app.session.interfaces import ISession
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ITimetableSchemaContainer
@@ -127,10 +128,17 @@ from schooltool.timetable import SchooldayTemplate
 from schooltool.timetable import WeeklyTimetableModel
 
 
-class TimetableSchemaWizard(BrowserView):
-    """View for defining a new timetable schema."""
+class Step(BrowserView):
+    """A step, one of many."""
 
     __used_for__ = ITimetableSchemaContainer
+
+    def getSessionData(self):
+        return ISession(self.request)['schooltool.ttwizard']
+
+
+class FirstStep(Step):
+    """First step: enter the title for the new schema."""
 
     template = ViewPageTemplateFile("templates/ttwizard.pt")
 
@@ -142,18 +150,22 @@ class TimetableSchemaWizard(BrowserView):
         setUpWidgets(self, self.schema, IInputWidget,
                      initial={'title': 'default'})
 
+    def update(self):
+        data = getWidgetsData(self, self.schema)
+        session = self.getSessionData()
+        session['title'] = data['title']
+
     def __call__(self):
-        if 'CREATE' in self.request:
-            ttschema = self.createSchema()
-            self.add(ttschema)
-            self.request.response.redirect(
-                zapi.absoluteURL(self.context, self.request))
         return self.template()
+
+
+class FinalStep(Step):
+    """Final step: create the schema."""
 
     def createSchema(self):
         """Create the timetable schema."""
-        data = getWidgetsData(self, self.schema)
-        title = data['title']
+        session = self.getSessionData()
+        title = session['title']
         day_ids = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
         periods = ['A', 'B']
         day_templates = {None: SchooldayTemplate()}
@@ -168,4 +180,25 @@ class TimetableSchemaWizard(BrowserView):
         nameChooser = INameChooser(self.context)
         key = nameChooser.chooseName('', ttschema)
         self.context[key] = ttschema
+
+    def __call__(self):
+        ttschema = self.createSchema()
+        self.add(ttschema)
+        self.request.response.redirect(
+            zapi.absoluteURL(self.context, self.request))
+
+
+class TimetableSchemaWizard(BrowserView):
+    """View for defining a new timetable schema."""
+
+    __used_for__ = ITimetableSchemaContainer
+
+    def __call__(self):
+        first_step = FirstStep(self.context, self.request)
+        final_step = FinalStep(self.context, self.request)
+        if 'CREATE' in self.request:
+            first_step.update()
+            return final_step()
+        else:
+            return first_step()
 
