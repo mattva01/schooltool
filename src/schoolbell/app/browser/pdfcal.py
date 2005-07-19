@@ -44,6 +44,13 @@ SANS_BOLD = 'Arial_Bold'
 SERIF = 'Times_New_Roman'
 
 
+def ident(obj1, obj2):
+    """Return True if the references obj1 and obj2 point to the same object.
+
+    The references may be security-proxied.
+    """
+    return removeSecurityProxy(obj1) is removeSecurityProxy(obj2)
+
 
 class PDFCalendarViewBase(BrowserView):
     """The daily view of a calendar in PDF."""
@@ -206,11 +213,12 @@ class PDFCalendarViewBase(BrowserView):
         tags = []
         if event.recurrence:
             tags.append(translate(_("recurrent"), context=self.request))
-        if (removeSecurityProxy(event.__parent__)
-            is not removeSecurityProxy(self.context)): # XXX is rSP needed?
-            # TODO: do not show overlaid booking events, as in
-            #       CalendarViewBase.getEvents.
+        if (not ident(event.__parent__, self.context)
+            and event.__parent__ is not None):
+            # We have an event from an overlaid calendar.
             tag = translate(_('overlaid from %s'), context=self.request)
+            # We assume that event.__parent__ is a Calendar which belongs to
+            # an object with a title.
             tags.append(tag % event.__parent__.__parent__.title)
         return tags
 
@@ -221,13 +229,23 @@ class PDFCalendarViewBase(BrowserView):
         """
         allday_events = []
         events = []
+        start = datetime.datetime.combine(date, datetime.time(0))
+        end = start + datetime.timedelta(days=1)
+
         for calendar in self.getCalendars():
-            for event in calendar:
-                if event.dtstart.date() == date:
-                    if event.allday:
-                        allday_events.append(event)
-                    else:
-                        events.append(event)
+            for event in calendar.expand(start, end):
+                if (ident(event.__parent__, self.context)
+                      and not ident(calendar, self.context)):
+                    # We may have overlaid resource booking events appearing
+                    # twice (once for self.context and another time for the
+                    # other calendar).  We can recognize such dupes by
+                    # checking that their __parent__ does not match the
+                    # calendar they are coming from.
+                    continue
+                if event.allday:
+                    allday_events.append(event)
+                else:
+                    events.append(event)
 
         allday_events.sort()
         events.sort()

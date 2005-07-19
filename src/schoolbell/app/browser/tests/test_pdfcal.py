@@ -209,7 +209,8 @@ def doctest_PDFCalendarViewBase_dayEvents():
     """Event listing tests.
 
         >>> calendar = Person(title="Mr. Smith").calendar
-        >>> calendar2 = Person().calendar
+        >>> resource = Resource()
+        >>> calendar2 = resource.calendar
         >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> view = StubbedBaseView(calendar, request)
         >>> view.getCalendars = lambda: [calendar, calendar2]
@@ -240,12 +241,16 @@ def doctest_PDFCalendarViewBase_dayEvents():
         ...                      timedelta(hours=5), "evt2")
         >>> calendar2.addEvent(evt2)
 
-        >>> evt3 = CalendarEvent(datetime(2005, 7, 8, 9, 3),
-        ...                      timedelta(hours=2), "evt3")
+    Let's add a recurring event to check expansion:
+
+        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> evt3 = CalendarEvent(datetime(2005, 7, 5, 9, 3),
+        ...                      timedelta(hours=2), "evt3",
+        ...                      recurrence=DailyRecurrenceRule())
         >>> calendar2.addEvent(evt3)
 
         >>> result = view.dayEvents(date(2005, 7, 8))
-        >>> [evt.title for evt in result]
+        >>> [event.title for event in result]
         ['evt3', 'evt', 'evt2']
 
     All-day events always appear in front:
@@ -255,7 +260,14 @@ def doctest_PDFCalendarViewBase_dayEvents():
         >>> calendar.addEvent(ad_evt)
 
         >>> result = view.dayEvents(date(2005, 7, 8))
-        >>> [evt.title for evt in result]
+        >>> [event.title for event in result]
+        ['allday', 'evt3', 'evt', 'evt2']
+
+    Booked event dupes are eliminated:
+
+        >>> evt.bookResource(resource)
+        >>> result = view.dayEvents(date(2005, 7, 8))
+        >>> [event.title for event in result]
         ['allday', 'evt3', 'evt', 'evt2']
 
     """
