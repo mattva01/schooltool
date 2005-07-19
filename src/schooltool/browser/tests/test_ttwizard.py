@@ -340,7 +340,7 @@ def doctest_TimetableSchemaWizard():
         ...     print 'Remembering step: %s' % step
         >>> view.rememberLastStep = rememberLastStep
 
-    There are two main cases.
+    There are three main cases.
 
     Case 1: the user completes the current step successfully.
 
@@ -357,6 +357,17 @@ def doctest_TimetableSchemaWizard():
         Updating...
         Remembering step: <same step>
         Rendered step
+
+    Case 3: the user presses the 'Cancel' button
+
+        >>> view.request.form['CANCEL'] = 'Cancel'
+        >>> view()
+        Remembering step: <...FirstStep...>
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeader('Location')
+        'http://127.0.0.1/ttschemas'
 
     """
 

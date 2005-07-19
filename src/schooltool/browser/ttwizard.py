@@ -282,6 +282,11 @@ class TimetableSchemaWizard(Step):
         session['last_step'] = step.__class__
 
     def __call__(self):
+        if 'CANCEL' in self.request:
+            self.rememberLastStep(FirstStep(self.context, self.request))
+            self.request.response.redirect(
+                    zapi.absoluteURL(self.context, self.request))
+            return
         current_step = self.getLastStep()
         if current_step.update():
             current_step = current_step.next()

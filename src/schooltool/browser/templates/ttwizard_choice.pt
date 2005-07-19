@@ -17,6 +17,8 @@
            tal:attributes="name string:NEXT.${repeat/choice/index};
                            value python:choice[1]"
            i18n:attributes="value" />
+    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+           i18n:attributes="value" />
   </div>
 
 </form>

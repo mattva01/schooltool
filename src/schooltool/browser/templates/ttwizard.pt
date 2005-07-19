@@ -17,8 +17,9 @@ You might want to use the old <a href="simpleadd.html">simple</a> or
   </div>
 
   <div class="controls">
-
     <input type="submit" class="button-ok" name="NEXT" value="Next"
+           i18n:attributes="value" />
+    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
            i18n:attributes="value" />
   </div>
 
