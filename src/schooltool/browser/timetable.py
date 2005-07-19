@@ -1392,9 +1392,11 @@ class EmergencyDayView(BrowserView):
             assert self.term.isSchoolday(self.date)
             self.term.add(self.replacement)
             model = self.context.model
-            model.exceptionDays[self.date] = SchooldayTemplate()
+            exceptionDays = removeSecurityProxy(model.exceptionDays)
+            exceptionDayIds = removeSecurityProxy(model.exceptionDayIds)
+            exceptionDays[self.date] = SchooldayTemplate()
             day_id = model.getDayId(self.term, self.date)
-            model.exceptionDayIds[self.replacement] = day_id
+            exceptionDayIds[self.replacement] = removeSecurityProxy(day_id)
 
             # XXX: post two all day events on self.date and self.replacement
             # calendar = getSchoolToolApplication().calendar

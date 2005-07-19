@@ -477,6 +477,15 @@
       />
 
   <page
+      name="emergency.html"
+      for="schooltool.interfaces.ITimetableSchema"
+      class=".timetable.EmergencyDayView"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Cancel School in Emergency"
+      />
+
+  <page
       name="index.html"
       for="schooltool.interfaces.ITimetable"
       class=".timetable.TimetableView"

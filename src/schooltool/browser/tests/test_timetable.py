@@ -2661,6 +2661,8 @@ def doctest_EmergencyDayView():
         >>> print view()
         <BLANKLINE>
         ...
+          <input type="hidden" name="date" value="2005-07-07" />
+        ...
           <div class="row">
             <label>Replacement</label>
             <select name="replacement">

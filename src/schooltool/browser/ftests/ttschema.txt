@@ -16,6 +16,26 @@ Let's create a SchoolTool instance:
   Location: http://localhost/@@contents.html
   ...
 
+Let's create a person:
+
+    >>> print http("""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 112
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Frog&\
+    ... field.username=frog&\
+    ... field.password=pwd&\
+    ... field.verify_password=pwd&\
+    ... field.photo=&\
+    ... UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
 The schema container is empty:
 
   >>> print http(r"""
@@ -388,4 +408,144 @@ If we look at the form again, we see the times have changed:
          </td>
        </tr>
      </table>
+  ...
+
+
+==============
+Emergency Days
+==============
+
+Let's make 'other' the default timetable schema:
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... ttschema=other&UPDATE_SUBMIT=Change
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+  <option selected="selected" value="other">other</option>
+  ...
+
+Now let's make 2005-07-07 an emergency day:
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/other/@@emergency.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... date=2005-07-07
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+  <BLANKLINE>
+  ...
+  <form class="plain" method="POST"
+        action="http://localhost/frogpond/ttschemas/other/@@emergency.html">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+     <input type="hidden" name="date" value="2005-07-07" />
+  <BLANKLINE>
+    <p>
+      Please enter the replacement date below.
+    </p>
+  <BLANKLINE>
+    <div class="row">
+      <label>Replacement</label>
+      <select name="replacement">
+        <option>2005-07-09</option>
+        <option>2005-07-10</option>
+        <option>2005-07-16</option>
+        <option>2005-07-17</option>
+        <option>2005-07-23</option>
+        <option>2005-07-24</option>
+        <option>2005-07-30</option>
+        <option>2005-07-31</option>
+        <option>2005-08-06</option>
+        <option>2005-08-07</option>
+        <option>2005-08-13</option>
+        <option>2005-08-14</option>
+        <option>2005-08-20</option>
+        <option>2005-08-21</option>
+        <option>2005-08-27</option>
+        <option>2005-08-28</option>
+        <option>2005-09-01</option>
+        <option>2005-09-02</option>
+        <option>2005-09-03</option>
+      </select>
+    </div>
+  <BLANKLINE>
+    <div class="controls">
+      <input type="submit" class="button-ok" name="SUBMIT"
+             value="Proceed" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  <BLANKLINE>
+  </form>
+  ...
+
+When we select both the dates, the replacement day is registered:
+
+  >>> print http("""
+  ... POST /frogpond/ttschemas/other/@@emergency.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... date=2005-07-07&\
+  ... replacement=2005-09-01
+  ... """, handle_errors=False)
+  HTTP/1.1 303 See Other
+  <BLANKLINE>
+  ...
+
+Now all periods for this day are cancelled:
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/other/@@special.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... date=2005-07-07
+  ... """, handle_errors=False)
+  HTTP/1.1 200 Ok
+  ...
+  <input type="text" name="P1_start" value="" />
+  ...
+  <input type="text" name="P1_end" value="" />
+  ...
+  <input type="text" name="P2_start" value="" />
+  ...
+  <input type="text" name="P2_end" value="" />
+  ...
+  <input type="text" name="P3_start" value="" />
+  ...
+  <input type="text" name="P3_end" value="" />
+  ...
+
+But the replacement day now contains periods allright:
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/other/@@special.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... date=2005-09-01
+  ... """, handle_errors=False)
+  HTTP/1.1 200 Ok
+  ...
+  <input type="text" name="P1_start" value="09:00" />
+  ...
+  <input type="text" name="P1_end" value="09:45" />
+  ...
+  <input type="text" name="P2_start" value="10:00" />
+  ...
+  <input type="text" name="P2_end" value="10:45" />
+  ...
+  <input type="text" name="P3_start" value="11:00" />
+  ...
+  <input type="text" name="P3_end" value="11:45" />
   ...

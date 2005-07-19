@@ -23,6 +23,8 @@ and several days after the term.
        i18n:translate=""
        />
 
+   <input type="hidden" name="date" tal:attributes="value view/date" />
+
   <p i18n:translate="">
     Please enter the replacement date below.
   </p>
