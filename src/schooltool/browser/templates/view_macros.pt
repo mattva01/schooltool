@@ -159,6 +159,13 @@
 
 <metal:block define-macro="calendar-mode" i18n:domain="schooltool">
   <div id="calendar-navigation">
+    <a id="calendar-navigation-pdf"
+       tal:condition="view/pdfURL"
+       tal:attributes="href view/pdfURL"
+       title="Printable version"
+       i18n:attributes="title"
+       i18n:translate=""><img tal:attributes="src context/++resource++printer.png"
+                          alt="Printable version" i18n:attributes="alt" /></a>
     <a id="calendar-navigation-day"
        tal:attributes="href python:view.calURL('daily')"
        title="View daily calendar"
