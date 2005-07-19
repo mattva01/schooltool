@@ -225,6 +225,7 @@ def doctest_FinalStep():
 
         >>> data = view.getSessionData()
         >>> data['title'] = u'Sample Schema'
+        >>> data['cycle'] = 'weekly'
 
         >>> view()
 
@@ -260,6 +261,7 @@ def doctest_FinalStep_createSchema():
         >>> view = FinalStep(context, request)
         >>> data = view.getSessionData()
         >>> data['title'] = u'Default'
+        >>> data['cycle'] = 'weekly'
 
         >>> ttschema = view.createSchema()
         >>> ttschema
@@ -275,6 +277,13 @@ def doctest_FinalStep_createSchema():
         <...WeeklyTimetableModel object at ...>
         >>> print " ".join(ttschema.model.timetableDayIds)
         Monday Tuesday Wednesday Thursday Friday
+
+    The model can be either weekly or rotating.
+    
+        >>> data['cycle'] = 'rotating'
+        >>> ttschema = view.createSchema()
+        >>> ttschema.model
+        <...SequentialDaysTimetableModel object at ...>
 
     """
 

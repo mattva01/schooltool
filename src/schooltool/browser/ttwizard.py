@@ -127,6 +127,7 @@ from schooltool.timetable import TimetableSchema
 from schooltool.timetable import TimetableSchemaDay
 from schooltool.timetable import SchooldayTemplate
 from schooltool.timetable import WeeklyTimetableModel
+from schooltool.timetable import SequentialDaysTimetableModel
 
 
 class Step(BrowserView):
@@ -246,10 +247,13 @@ class FinalStep(Step):
         """Create the timetable schema."""
         session = self.getSessionData()
         title = session['title']
+        cycle = session['cycle']
+        model_factory = {'weekly': WeeklyTimetableModel,
+                         'rotating': SequentialDaysTimetableModel}[cycle]
         day_ids = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
         periods = ['A', 'B']
         day_templates = {None: SchooldayTemplate()}
-        model = WeeklyTimetableModel(day_ids, day_templates)
+        model = model_factory(day_ids, day_templates)
         ttschema = TimetableSchema(day_ids, title=title, model=model)
         for day_id in day_ids:
             ttschema[day_id] = TimetableSchemaDay(periods)
