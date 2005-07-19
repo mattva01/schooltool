@@ -75,6 +75,8 @@ def doctest_restSchoolToolSubscriber():
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
+                doctest.DocTestSuite('schooltool.timetable.rest',
+                                     optionflags=doctest.ELLIPSIS)
            ])
 
 if __name__ == '__main__':

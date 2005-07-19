@@ -42,8 +42,8 @@ from zope.app.location.interfaces import ILocation
 
 from schooltool.tests.helpers import diff, sorted
 from schoolbell.app.rest.tests.utils import NiceDiffsMixin, EqualsSortedMixin
-from schooltool.interfaces import ITerm
-from schooltool.interfaces import ITimetable, ITimetableActivity
+from schooltool.timetable.interfaces import ITerm
+from schooltool.timetable.interfaces import ITimetable, ITimetableActivity
 from schooltool.timetable import TimetabledMixin
 from schoolbell.relationship import RelationshipProperty
 from schoolbell.app.membership import URIGroup, URIMember, URIMembership
@@ -56,7 +56,7 @@ class TestDateRange(unittest.TestCase):
 
     def test(self):
         from schooltool.timetable import DateRange
-        from schooltool.interfaces import IDateRange
+        from schooltool.timetable.interfaces import IDateRange
 
         dr = DateRange(date(2003, 1, 1), date(2003, 1, 31))
         verifyObject(IDateRange, dr)
@@ -86,7 +86,7 @@ class TestTerm(unittest.TestCase):
 
     def test_interface(self):
         from schooltool.timetable import Term
-        from schooltool.interfaces import ITerm, ITermWrite
+        from schooltool.timetable.interfaces import ITerm, ITermWrite
 
         cal = Term('Sample', date(2003, 9, 1), date(2003, 12, 24))
         verifyObject(ITerm, cal)
@@ -178,8 +178,8 @@ class TestTimetableSchema(unittest.TestCase):
 
     def test_interface(self):
         from schooltool.timetable import TimetableSchema
-        from schooltool.interfaces import ITimetableSchema
-        from schooltool.interfaces import ITimetableSchemaWrite
+        from schooltool.timetable.interfaces import ITimetableSchema
+        from schooltool.timetable.interfaces import ITimetableSchemaWrite
 
         t = TimetableSchema(['one', 'two'])
         verifyObject(ITimetableSchema, t)
@@ -202,7 +202,7 @@ class TestTimetableSchema(unittest.TestCase):
 
     def test_getitem_setitem(self):
         from schooltool.timetable import TimetableSchema
-        from schooltool.interfaces import ITimetableSchemaDay
+        from schooltool.timetable.interfaces import ITimetableSchemaDay
 
         days = ('Mo', 'Tu', 'We', 'Th', 'Fr')
         t = TimetableSchema(days)
@@ -220,7 +220,7 @@ class TestTimetableSchema(unittest.TestCase):
 
     def test_items(self):
         from schooltool.timetable import TimetableSchema
-        from schooltool.interfaces import ITimetableSchemaDay
+        from schooltool.timetable.interfaces import ITimetableSchemaDay
 
         days = ('Day 1', 'Day 2', 'Day 3')
         t = TimetableSchema(days)
@@ -297,7 +297,7 @@ class TestTimetableSchemaDay(unittest.TestCase):
 
     def test(self):
         from schooltool.timetable import TimetableSchemaDay
-        from schooltool.interfaces import ITimetableSchemaDay
+        from schooltool.timetable.interfaces import ITimetableSchemaDay
 
         td = TimetableSchemaDay(['a', 'b', 'c'])
         verifyObject(ITimetableSchemaDay, td)
@@ -315,7 +315,7 @@ class TestTimetable(unittest.TestCase):
 
     def test_interface(self):
         from schooltool.timetable import Timetable
-        from schooltool.interfaces import ITimetable, ITimetableWrite
+        from schooltool.timetable.interfaces import ITimetable, ITimetableWrite
 
         t = Timetable(('1', '2'))
         verifyObject(ITimetable, t)
@@ -330,7 +330,7 @@ class TestTimetable(unittest.TestCase):
 
     def test_getitem_setitem(self):
         from schooltool.timetable import Timetable
-        from schooltool.interfaces import ITimetableDay
+        from schooltool.timetable.interfaces import ITimetableDay
 
         days = ('Mo', 'Tu', 'We', 'Th', 'Fr')
         t = Timetable(days)
@@ -352,7 +352,7 @@ class TestTimetable(unittest.TestCase):
 
     def test_items(self):
         from schooltool.timetable import Timetable
-        from schooltool.interfaces import ITimetableDay
+        from schooltool.timetable.interfaces import ITimetableDay
 
         days = ('Day 1', 'Day 2', 'Day 3')
         t = Timetable(days)
@@ -518,7 +518,7 @@ class TestTimetableDay(EventTestMixin, unittest.TestCase):
 
     def test_interface(self):
         from schooltool.timetable import TimetableDay
-        from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
+        from schooltool.timetable.interfaces import ITimetableDay, ITimetableDayWrite
 
         td = TimetableDay()
         verifyObject(ITimetableDay, td)
@@ -556,8 +556,8 @@ class TestTimetableDay(EventTestMixin, unittest.TestCase):
 
     def test_getitem_add_items_clear_remove(self):
         from schooltool.timetable import TimetableDay, Timetable, TimetableDict
-        from schooltool.interfaces import ITimetableActivityAddedEvent
-        from schooltool.interfaces import ITimetableActivityRemovedEvent
+        from schooltool.timetable.interfaces import ITimetableActivityAddedEvent
+        from schooltool.timetable.interfaces import ITimetableActivityRemovedEvent
 
         periods = ('1', '2', '3', '4')
         timetable = Timetable(['td'])
@@ -639,7 +639,7 @@ class TestTimetableActivity(unittest.TestCase):
 
     def test(self):
         from schooltool.timetable import TimetableActivity
-        from schooltool.interfaces import ITimetableActivity
+        from schooltool.timetable.interfaces import ITimetableActivity
 
         owner = object()
         ta = TimetableActivity("Dancing", owner)
@@ -726,7 +726,7 @@ class TestTimetableEvents(unittest.TestCase):
 
     def test_tt_replaced_event(self):
         from schooltool.timetable import TimetableReplacedEvent
-        from schooltool.interfaces import ITimetableReplacedEvent
+        from schooltool.timetable.interfaces import ITimetableReplacedEvent
         obj = object()
         key = ('a', 'b')
         old_timetable = object()
@@ -736,7 +736,7 @@ class TestTimetableEvents(unittest.TestCase):
 
     def test_activity_added_event(self):
         from schooltool.timetable import TimetableActivityAddedEvent
-        from schooltool.interfaces import ITimetableActivityAddedEvent
+        from schooltool.timetable.interfaces import ITimetableActivityAddedEvent
         obj = object()
         day_id = 'Monday'
         period_id = 'autumn'
@@ -745,7 +745,7 @@ class TestTimetableEvents(unittest.TestCase):
 
     def test_activity_removed_event(self):
         from schooltool.timetable import TimetableActivityRemovedEvent
-        from schooltool.interfaces import ITimetableActivityRemovedEvent
+        from schooltool.timetable.interfaces import ITimetableActivityRemovedEvent
         obj = object()
         day_id = 'Monday'
         period_id = 'autumn'
@@ -859,7 +859,7 @@ class TestTimetableCalendarEvent(unittest.TestCase):
 
     def test(self):
         from schooltool.timetable import TimetableCalendarEvent
-        from schooltool.interfaces import ITimetableCalendarEvent
+        from schooltool.timetable.interfaces import ITimetableCalendarEvent
 
         period_id = 'Mathematics'
         activity = object()
@@ -876,7 +876,7 @@ class TestSchooldayPeriod(unittest.TestCase):
 
     def test(self):
         from schooltool.timetable import SchooldayPeriod
-        from schooltool.interfaces import ISchooldayPeriod
+        from schooltool.timetable.interfaces import ISchooldayPeriod
 
         ev = SchooldayPeriod("1", time(9, 00), timedelta(minutes=45))
         verifyObject(ISchooldayPeriod, ev)
@@ -910,8 +910,8 @@ class TestSchooldayTemplate(unittest.TestCase):
 
     def test_interface(self):
         from schooltool.timetable import SchooldayTemplate
-        from schooltool.interfaces import ISchooldayTemplate
-        from schooltool.interfaces import ISchooldayTemplateWrite
+        from schooltool.timetable.interfaces import ISchooldayTemplate
+        from schooltool.timetable.interfaces import ISchooldayTemplateWrite
 
         tmpl = SchooldayTemplate()
         verifyObject(ISchooldayTemplate, tmpl)
@@ -1021,7 +1021,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
 
     def setUp(self):
         from zope.app.traversing.interfaces import IPhysicallyLocatable
-        from schooltool.interfaces import ITimetable
+        from schooltool.timetable.interfaces import ITimetable
         PlacelessSetup.setUp(self)
 
         ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
@@ -1029,7 +1029,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
 
     def test_interface(self):
         from schooltool.timetable import SequentialDaysTimetableModel
-        from schooltool.interfaces import ITimetableModel
+        from schooltool.timetable.interfaces import ITimetableModel
 
         model = SequentialDaysTimetableModel(("A","B"), {None: 3})
         verifyObject(ITimetableModel, model)
@@ -1252,7 +1252,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
 
     def setUp(self):
         from zope.app.traversing.interfaces import IPhysicallyLocatable
-        from schooltool.interfaces import ITimetable
+        from schooltool.timetable.interfaces import ITimetable
         PlacelessSetup.setUp(self)
         ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
                              TimetablePhysicallyLocatableAdapterStub)
@@ -1263,7 +1263,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
         from schooltool.timetable import Term
-        from schooltool.interfaces import ITimetableModel
+        from schooltool.timetable.interfaces import ITimetableModel
 
         days = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
         tt = Timetable(days)
@@ -1429,7 +1429,7 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
     def test(self):
         from schooltool.timetable import TimetableDict
         from persistent.dict import PersistentDict
-        from schooltool.interfaces import ITimetableDict
+        from schooltool.timetable.interfaces import ITimetableDict
 
         timetables = TimetableDict()
         self.assert_(isinstance(timetables, PersistentDict))
@@ -1459,7 +1459,7 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
 
     def test_setitem_delitem_events(self):
         from schooltool.timetable import TimetableDict
-        from schooltool.interfaces import ITimetableReplacedEvent
+        from schooltool.timetable.interfaces import ITimetableReplacedEvent
 
         td = TimetableDict()
         item = TimetableStub()
@@ -1520,9 +1520,9 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
     def setUp(self):
         from schoolbell.relationship.tests import setUpRelationships
         from zope.app.traversing.interfaces import IPhysicallyLocatable
-        from schooltool.interfaces import ITimetable, ITimetabled
-        from schooltool.interfaces import ITimetableSource
-        from schooltool.timetable import MembershipTimetableSource
+        from schooltool.timetable.interfaces import ITimetable, ITimetabled
+        from schooltool.timetable.interfaces import ITimetableSource
+        from schooltool.timetable.source import MembershipTimetableSource
 
         self.site = setup.placefulSetUp(True)
         setup.setUpAnnotations()
@@ -1536,7 +1536,7 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         setup.placefulTearDown()
 
     def test_interface(self):
-        from schooltool.interfaces import ITimetabled
+        from schooltool.timetable.interfaces import ITimetabled
         from schooltool.timetable import TimetabledMixin, TimetableDict
 
         tm = TimetabledMixin()
@@ -1681,134 +1681,11 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         self.assert_(cal.__parent__ is tm)
 
 
-class BaseTimetableSourceTest(object):
-
-    def setUp(self):
-        from schoolbell.relationship.tests import setUpRelationships
-
-        self.site = setup.placefulSetUp(True)
-        setup.setUpAnnotations()
-        setUpRelationships()
-
-    def tearDown(self):
-        setup.placefulTearDown()
-
-    def test(self):
-        from schooltool.interfaces import ITimetableSource
-        context = TimetabledStub()
-        adapter = self.createAdapter(context)
-        verifyObject(ITimetableSource, adapter)
-
-    def newTimetable(self):
-        from schooltool.timetable import Timetable, TimetableDay
-        tt = Timetable(("A", "B"))
-        tt["A"] = TimetableDay(["Green", "Blue"])
-        tt["B"] = TimetableDay(["Green", "Blue"])
-        return tt
-
-    def test_getTimetable(self):
-        from schooltool.timetable import TimetableActivity
-
-        tm = TimetabledStub()
-        parent = TimetabledStub()
-        self.createRelationship(tm, parent)
-
-        composite = self.newTimetable()
-        english = TimetableActivity("English")
-        composite["A"].add("Green", english)
-
-        def newComposite(term_id, schema_id):
-            if (term_id, schema_id) == ("2003 fall", "sequential"):
-                return composite
-            else:
-                return None
-
-        parent.getCompositeTimetable = newComposite
-        parent.listCompositeTimetables = (
-            lambda: Set([("2003 fall", "sequential")]))
-
-        adapter = self.createAdapter(tm)
-        result = adapter.getTimetable("2003 fall", "sequential")
-        self.assertEqual(result, composite)
-
-        # nonexising
-        result = adapter.getTimetable("2005 fall", "sequential")
-        self.assertEqual(result, None)
-
-        # let's try it with two timetables
-        otherparent = TimetabledStub()
-        self.createRelationship(tm, otherparent)
-
-        othertt = self.newTimetable()
-        math = TimetableActivity("Math")
-        othertt["A"].add("Blue", math)
-
-        otherparent.getCompositeTimetable = lambda x ,y: othertt
-
-        expected = composite.cloneEmpty()
-        expected.update(composite)
-        expected.update(othertt)
-
-        result = adapter.getTimetable("2003 fall", "sequential")
-        self.assertEqual(result, expected)
-
-    def test_listTimetables(self):
-        from schooltool.timetable import TimetableActivity
-
-        tm = TimetabledStub()
-
-        adapter = self.createAdapter(tm)
-        self.assertEqual(adapter.listTimetables(), Set())
-
-        parent = TimetabledStub()
-        self.createRelationship(tm, parent)
-
-        parent.listCompositeTimetables = (
-            lambda: Set([("2003 fall", "sequential")]))
-
-        self.assertEqual(adapter.listTimetables(),
-                         Set([("2003 fall", "sequential")]))
-
-        otherparent = TimetabledStub()
-        self.createRelationship(tm, otherparent)
-
-        otherparent.listCompositeTimetables = (
-            lambda: Set([("2005 fall", "sequential")]))
-
-        self.assertEqual(adapter.listTimetables(),
-                         Set([("2003 fall", "sequential"),
-                              ("2005 fall", "sequential")]))
-
-
-class TestMembershipTimetableSource(BaseTimetableSourceTest,
-                                    unittest.TestCase):
-
-    def createAdapter(self, context):
-        from schooltool.timetable import MembershipTimetableSource
-        return MembershipTimetableSource(context)
-
-    def createRelationship(self, context, related):
-        from schoolbell.app.membership import Membership
-        Membership(group=related, member=context)
-
-
-class TestInstructionTimetableSource(BaseTimetableSourceTest,
-                                     unittest.TestCase):
-
-    def createAdapter(self, context):
-        from schooltool.timetable import InstructionTimetableSource
-        return InstructionTimetableSource(context)
-
-    def createRelationship(self, context, related):
-        from schooltool.relationships import Instruction
-        Instruction(instructor=context, section=related)
-
-
 class TestTimetableSchemaContainer(unittest.TestCase):
 
     def test_interface(self):
         from schooltool.timetable import TimetableSchemaContainer
-        from schooltool.interfaces import ITimetableSchemaContainer
+        from schooltool.timetable.interfaces import ITimetableSchemaContainer
 
         service = TimetableSchemaContainer()
         verifyObject(ITimetableSchemaContainer, service)
@@ -1842,7 +1719,7 @@ class TestTermContainer(unittest.TestCase):
 
     def test_interface(self):
         from schooltool.timetable import TermContainer
-        from schooltool.interfaces import ITermContainer
+        from schooltool.timetable.interfaces import ITermContainer
 
         service = TermContainer()
         verifyObject(ITermContainer, service)
@@ -1972,8 +1849,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableSchemaContainer))
     suite.addTest(unittest.makeSuite(TestTermContainer))
     suite.addTest(unittest.makeSuite(TestTimetabledMixin))
-    suite.addTest(unittest.makeSuite(TestMembershipTimetableSource))
-    suite.addTest(unittest.makeSuite(TestInstructionTimetableSource))
     suite.addTest(unittest.makeSuite(TestGetPeriodsForDay))
     return suite
 

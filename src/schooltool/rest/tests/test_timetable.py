@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.rest.timetable.
+Unit tests for schooltool.timetable.rest.
 
 $Id$
 """
@@ -104,8 +104,8 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
 
     def setUp(self):
         from schooltool.rest.interfaces import ITimetableFileFactory
-        from schooltool.rest.timetable import TimetableFileFactory
-        from schooltool.interfaces import ITimetableDict
+        from schooltool.timetable.rest import TimetableFileFactory
+        from schooltool.timetable.interfaces import ITimetableDict
         from schooltool.app import SchoolToolApplication
         from schooltool.app import Person
         from schooltool.app import Resource
@@ -158,7 +158,7 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
 class TestTimetableReadView(TimetableTestMixin, unittest.TestCase):
 
     def createView(self, context, request):
-        from schooltool.rest.timetable import TimetableReadView
+        from schooltool.timetable.rest import TimetableReadView
         return TimetableReadView(context, request)
 
     def do_test_get(self, context, expected, ctype="text/xml"):
@@ -223,10 +223,10 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
 
     def setUp(self):
         from schooltool.app import SchoolToolApplication
-        from schooltool.interfaces import ITimetableSchemaContainer
-        from schooltool.rest.timetable import TimetableSchemaFileFactory
+        from schooltool.timetable.interfaces import ITimetableSchemaContainer
+        from schooltool.timetable.rest import TimetableSchemaFileFactory
         from schooltool.timetable import SequentialDaysTimetableModel
-        from schooltool.interfaces import ITimetableModelFactory
+        from schooltool.timetable.interfaces import ITimetableModelFactory
 
         self.app = SchoolToolApplication()
         self.schemaContainer = self.app["ttschemas"]
@@ -347,7 +347,7 @@ class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
         """
 
     def test_get(self):
-        from schooltool.rest.timetable import TimetableSchemaView
+        from schooltool.timetable.rest import TimetableSchemaView
         request = TestRequest()
         view = TimetableSchemaView(self.createExtendedSchema(), request)
 
@@ -361,7 +361,7 @@ class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
 class TestTimetableSchemaFileFactory(TimetableSchemaMixin, unittest.TestCase):
 
     def test(self):
-        from schooltool.rest.timetable import TimetableSchemaFileFactory
+        from schooltool.timetable.rest import TimetableSchemaFileFactory
         from schooltool.rest.interfaces import ITimetableFileFactory
         verifyObject(IFileFactory,
                      TimetableSchemaFileFactory(self.schemaContainer))
@@ -394,12 +394,12 @@ class TestTimetableSchemaFile(TimetableSchemaMixin, unittest.TestCase):
         self.schemaContainer["two_day"] = self.createEmptySchema()
 
     def test(self):
-        from schooltool.rest.timetable import TimetableSchemaFile
+        from schooltool.timetable.rest import TimetableSchemaFile
         verifyObject(IWriteFile,
                      TimetableSchemaFile(self.schemaContainer["two_day"]))
 
     def test_write(self):
-        from schooltool.rest.timetable import TimetableSchemaFile
+        from schooltool.timetable.rest import TimetableSchemaFile
         schema = self.schemaContainer["two_day"]
         schemaFile = TimetableSchemaFile(schema)
         schemaFile.write(self.schema_xml)
@@ -416,13 +416,13 @@ class TestTimetableFileFactory(TimetableTestMixin, unittest.TestCase):
 
     def test(self):
         from schooltool.rest.interfaces import ITimetableFileFactory
-        from schooltool.rest.timetable import TimetableFileFactory
+        from schooltool.timetable.rest import TimetableFileFactory
         verifyObject(ITimetableFileFactory,
                      TimetableFileFactory(self.person.timetables,
                                           TestRequest()))
 
     def test_call(self):
-        from schooltool.rest.timetable import TimetableFileFactory
+        from schooltool.timetable.rest import TimetableFileFactory
 
         factory = TimetableFileFactory(self.person.timetables,
                                        TestRequest())
@@ -436,15 +436,15 @@ class TestTimetableFileFactory(TimetableTestMixin, unittest.TestCase):
 class TestTimetablePUT(TimetableTestMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.interfaces import ITimetableDict
-        from schooltool.rest.timetable import TimetableFileFactory
+        from schooltool.timetable.interfaces import ITimetableDict
+        from schooltool.timetable.rest import TimetableFileFactory
 
         TimetableTestMixin.setUp(self)
         self.timetable =  self.createEmpty()
         self.person.timetables["2003 fall.schema1"] = self.timetable
 
     def test_put(self):
-        from schooltool.rest.timetable import TimetablePUT
+        from schooltool.timetable.rest import TimetablePUT
         request = TestRequest(StringIO(self.full_xml))
         view = TimetablePUT(self.timetable, request)
         view.PUT()
@@ -479,7 +479,7 @@ def doctest_TimetableDictPublishTraverse():
     pair
 
         >>> from schooltool.timetable import TimetableDict
-        >>> from schooltool.rest.timetable import TimetableDictPublishTraverse
+        >>> from schooltool.timetable.rest import TimetableDictPublishTraverse
         >>> context = TimetableDict()
         >>> request = TestRequest()
         >>> pt = TimetableDictPublishTraverse(context, request)
@@ -542,7 +542,7 @@ def doctest_NullTimetablePUT():
     ITimetableFileFactory.
 
         >>> setup.placelessSetUp()
-        >>> from schooltool.interfaces import ITimetableDict
+        >>> from schooltool.timetable.interfaces import ITimetableDict
         >>> from schooltool.rest.interfaces import ITimetableFileFactory
         >>> from schooltool.timetable import Timetable
         >>> from zope.publisher.interfaces.http import IHTTPRequest
@@ -573,8 +573,8 @@ def doctest_NullTimetablePUT():
     named.
 
         >>> from StringIO import StringIO
-        >>> from schooltool.rest.timetable import NullTimetablePUT
-        >>> from schooltool.rest.timetable import NullTimetable
+        >>> from schooltool.timetable.rest import NullTimetablePUT
+        >>> from schooltool.timetable.rest import NullTimetable
         >>> from schooltool.timetable import TimetableDict
         >>> container = TimetableDict()
         >>> name = '2005-fall.default'
@@ -617,7 +617,7 @@ def doctest_NullTimetablePUT():
 class TestTimetableDictView(TimetableTestMixin, unittest.TestCase):
 
     def createView(self, context, request):
-        from schooltool.rest.timetable import TimetableDictView
+        from schooltool.timetable.rest import TimetableDictView
         return TimetableDictView(context, request)
 
     def setUp(self):
@@ -651,7 +651,7 @@ class TestTimetableDictView(TimetableTestMixin, unittest.TestCase):
 class TestCompositeTimetabledView(TimetableTestMixin, unittest.TestCase):
 
     def createView(self, context, request):
-        from schooltool.rest.timetable import CompositeTimetabledView
+        from schooltool.timetable.rest import CompositeTimetabledView
         return CompositeTimetabledView(context, request)
 
     def setUp(self):
@@ -685,8 +685,6 @@ class TestCompositeTimetabledView(TimetableTestMixin, unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(DocTestSuite('schooltool.rest.timetable',
-                               optionflags=ELLIPSIS))
     suite.addTest(DocTestSuite(optionflags=ELLIPSIS))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaFileFactory))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaFile))

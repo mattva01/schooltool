@@ -151,36 +151,35 @@ from zope.app.location.traversing import LocationPhysicallyLocatable
 from zope.component import provideAdapter, adapts
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.contained import Contained
+from zope.app.location.interfaces import ILocation
 
-from schoolbell.app.membership import URIGroup
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.calendar.simple import ImmutableCalendar
-from schoolbell.relationship import getRelatedObjects
 
-from schooltool.interfaces import ITimetableSchema, ITimetableSchemaDay
-from schooltool.interfaces import ITimetableSchemaWrite
-from schooltool.interfaces import ITimetable, ITimetableWrite
-from schooltool.interfaces import ITimetableDay, ITimetableDayWrite
-from schooltool.interfaces import ITimetableDict
-from schooltool.interfaces import ITimetableActivity
-from schooltool.interfaces import ITimetableActivityAddedEvent
-from schooltool.interfaces import ITimetableActivityRemovedEvent
-from schooltool.interfaces import ITimetableReplacedEvent
-from schooltool.interfaces import ITimetableCalendarEvent
-from schooltool.interfaces import ISchooldayPeriod
-from schooltool.interfaces import ISchooldayTemplate, ISchooldayTemplateWrite
-from schooltool.interfaces import ITimetableModel
-from schooltool.interfaces import ITimetableModelFactory
-from schooltool.interfaces import ITimetabled
-from schooltool.interfaces import ITimetableSchemaContainer
-from schooltool.interfaces import ITermContainer
-from schooltool.interfaces import ILocation
-from schooltool.interfaces import Unchanged
-from schooltool.interfaces import IDateRange
-from schooltool.interfaces import ITermWrite, ITerm
-from schooltool.interfaces import ITimetableSource
+from schooltool.timetable.interfaces import ITimetableSchema
+from schooltool.timetable.interfaces import ITimetableSchemaDay
+from schooltool.timetable.interfaces import ITimetableSchemaWrite
+from schooltool.timetable.interfaces import ITimetable, ITimetableWrite
+from schooltool.timetable.interfaces import ITimetableDay, ITimetableDayWrite
+from schooltool.timetable.interfaces import ITimetableDict
+from schooltool.timetable.interfaces import ITimetableActivity
+from schooltool.timetable.interfaces import ITimetableActivityAddedEvent
+from schooltool.timetable.interfaces import ITimetableActivityRemovedEvent
+from schooltool.timetable.interfaces import ITimetableReplacedEvent
+from schooltool.timetable.interfaces import ITimetableCalendarEvent
+from schooltool.timetable.interfaces import ISchooldayPeriod
+from schooltool.timetable.interfaces import ISchooldayTemplate
+from schooltool.timetable.interfaces import ISchooldayTemplateWrite
+from schooltool.timetable.interfaces import ITimetableModel
+from schooltool.timetable.interfaces import ITimetableModelFactory
+from schooltool.timetable.interfaces import ITimetabled
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
+from schooltool.timetable.interfaces import ITermContainer
+from schooltool.timetable.interfaces import ITermWrite, ITerm
+from schooltool.timetable.interfaces import ITimetableSource
+from schooltool.timetable.interfaces import Unchanged
+from schooltool.timetable.interfaces import IDateRange
 from schooltool import getSchoolToolApplication
-from schooltool.relationships import URISection
 
 __metaclass__ = type
 
@@ -1011,55 +1010,6 @@ class TimetabledMixin:
         result.__parent__ = self
         result.__name__ = 'timetable-calendar'
         return result
-
-
-class BaseRelationshipTimetableSource(object):
-    """A timetable source for composing timetables over relationships.
-
-    Subclasses must provide a role attribute, with a URI of the role
-    of the related objects, timetables of which will be added.
-    """
-
-    implements(ITimetableSource)
-
-    def __init__(self, context):
-        self.context = context
-
-    def getTimetable(self, term, schema):
-        timetables = []
-        for obj in getRelatedObjects(self.context, self.role):
-            tt = obj.getCompositeTimetable(term, schema)
-            if tt is not None:
-                timetables.append(tt)
-
-        if not timetables:
-            return None
-
-        result = timetables[0].cloneEmpty()
-        for tt in timetables:
-            result.update(tt)
-
-        return result
-
-    def listTimetables(self):
-        keys = Set()
-        for obj in getRelatedObjects(self.context, self.role):
-            keys.update(obj.listCompositeTimetables())
-        return keys
-
-
-class MembershipTimetableSource(BaseRelationshipTimetableSource):
-    """A subscription adapter that adds the group timetables to the members'
-    composite timetables.
-    """
-    role = URIGroup
-
-
-class InstructionTimetableSource(BaseRelationshipTimetableSource):
-    """A subscription adapter that adds the section timetables to the teachers'
-    composite timetables.
-    """
-    role = URISection
 
 
 class TimetableSchemaContainer(BTreeContainer):

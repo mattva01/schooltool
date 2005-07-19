@@ -85,7 +85,7 @@ def doctest_TermView_calendar():
     """Unit tests for TermAddView.calendar
 
         >>> from schooltool.timetable import Term
-        >>> from schooltool.browser.timetable import TermView
+        >>> from schooltool.timetable.browser import TermView
         >>> context = Term('Sample', datetime.date(2004, 8, 1),
         ...                        datetime.date(2004, 8, 31))
         >>> request = TestRequest()
@@ -111,7 +111,7 @@ def doctest_TermEditView_title():
     """Unit tests for TermEditView.title
 
         >>> from schooltool.timetable import Term
-        >>> from schooltool.browser.timetable import TermEditView
+        >>> from schooltool.timetable.browser import TermEditView
         >>> context = Term('Sample', datetime.date(2004, 8, 1),
         ...                        datetime.date(2004, 8, 31))
         >>> request = TestRequest()
@@ -131,7 +131,7 @@ def doctest_TermEditView_calendar():
     """Unit tests for TermEditView.calendar
 
         >>> from schooltool.timetable import Term
-        >>> from schooltool.browser.timetable import TermEditView
+        >>> from schooltool.timetable.browser import TermEditView
         >>> context = Term('Sample', datetime.date(2004, 8, 4),
         ...                        datetime.date(2004, 8, 6))
         >>> request = TestRequest()
@@ -155,7 +155,7 @@ def doctest_TermEditView_update():
     """Unit tests for TermEditView.update
 
         >>> from schooltool.timetable import Term
-        >>> from schooltool.browser.timetable import TermEditView
+        >>> from schooltool.timetable.browser import TermEditView
         >>> context = Term('Sample', datetime.date(2004, 8, 4),
         ...                        datetime.date(2004, 8, 6))
         >>> request = TestRequest()
@@ -233,7 +233,7 @@ def doctest_TermAddView_update():
     `update` sets view.term
 
         >>> from schooltool.timetable import TermContainer
-        >>> from schooltool.browser.timetable import TermAddView
+        >>> from schooltool.timetable.browser import TermAddView
         >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
@@ -259,7 +259,7 @@ def doctest_TermAddView_create():
     discovered an error in the form).
 
         >>> from schooltool.timetable import TermContainer
-        >>> from schooltool.browser.timetable import TermAddView
+        >>> from schooltool.timetable.browser import TermAddView
         >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
@@ -284,7 +284,7 @@ def doctest_TermAddView_add():
 
         >>> from schooltool.timetable import TermContainer
         >>> from schooltool.timetable import Term
-        >>> from schooltool.browser.timetable import TermAddView
+        >>> from schooltool.timetable.browser import TermAddView
         >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
@@ -312,7 +312,7 @@ def doctest_TermAddView_create():
     discovered an error in the form).
 
         >>> from schooltool.timetable import TermContainer
-        >>> from schooltool.browser.timetable import TermAddView
+        >>> from schooltool.timetable.browser import TermAddView
         >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
@@ -336,7 +336,7 @@ def doctest_TermAddView_nextURL():
     `nextURL` returns the absolute url of its context.
 
         >>> from schooltool.timetable import TermContainer
-        >>> from schooltool.browser.timetable import TermAddView
+        >>> from schooltool.timetable.browser import TermAddView
         >>> context = TermContainer()
         >>> directlyProvides(context, IContainmentRoot)
         >>> request = TestRequest()
@@ -354,7 +354,7 @@ def doctest_TermEditViewMixin_buildTerm():
     without changing it.
 
         >>> from schooltool.timetable import TermContainer
-        >>> from schooltool.browser.timetable import TermAddView
+        >>> from schooltool.timetable.browser import TermAddView
         >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
@@ -458,7 +458,7 @@ def doctest_TermAddView_calendar():
     """Unit tests for TermAddView.calendar
 
         >>> from schooltool.timetable import TermContainer
-        >>> from schooltool.browser.timetable import TermAddView
+        >>> from schooltool.timetable.browser import TermAddView
         >>> context = TermContainer()
         >>> request = TestRequest()
         >>> view = TermAddView(context, request)
@@ -513,7 +513,7 @@ def doctest_TermRenderer_calendar():
     """Unit tests for TermRenderer.calendar
 
         >>> from schooltool.timetable import Term
-        >>> from schooltool.browser.timetable import TermRenderer
+        >>> from schooltool.timetable.browser import TermRenderer
 
         >>> term = Term('Sample', datetime.date(2004, 8, 1),
         ...                     datetime.date(2004, 8, 31))
@@ -579,7 +579,7 @@ def doctest_TermRenderer_month():
     """Unit test for TermRenderer.month
 
         >>> from schooltool.timetable import Term
-        >>> from schooltool.browser.timetable import TermRenderer
+        >>> from schooltool.timetable.browser import TermRenderer
         >>> term = Term('Sample', datetime.date(2005, 1, 1),
         ...                     datetime.date(2005, 12, 31))
         >>> month = TermRenderer(term).month
@@ -650,7 +650,7 @@ def doctest_TermRenderer_week():
     """Unit test for TermRenderer.week
 
         >>> from schooltool.timetable import Term
-        >>> from schooltool.browser.timetable import TermRenderer
+        >>> from schooltool.timetable.browser import TermRenderer
         >>> term = Term('Sample', datetime.date(2005, 5, 1),
         ...                     datetime.date(2005, 5, 31))
         >>> term.addWeekdays(0, 1, 2, 3, 4)
@@ -752,7 +752,7 @@ def print_cal(calendar, day_format='%(number)3d'):
 def doctest_TimetableView():
     """Test for TimetableView.
 
-        >>> from schooltool.browser.timetable import TimetableView
+        >>> from schooltool.timetable.browser import TimetableView
         >>> from schooltool.timetable import Timetable
         >>> from schooltool.timetable import TimetableDay, TimetableActivity
         >>> from schooltool.app import Section
@@ -783,7 +783,7 @@ def doctest_TimetableView():
 def doctest_TimetableSchemaView():
     """Test for TimetableView.
 
-        >>> from schooltool.browser.timetable import TimetableSchemaView
+        >>> from schooltool.timetable.browser import TimetableSchemaView
         >>> from schooltool.timetable import TimetableSchema
         >>> from schooltool.timetable import TimetableSchemaDay
         >>> from schooltool.timetable import TimetableActivity
@@ -823,14 +823,14 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
         # Register the timetable models
         from schooltool.timetable import SequentialDaysTimetableModel
         from schooltool.timetable import WeeklyTimetableModel
-        from schooltool.interfaces import ITimetableModelFactory
+        from schooltool.timetable.interfaces import ITimetableModelFactory
         ztapi.provideUtility(ITimetableModelFactory,
                              SequentialDaysTimetableModel,
                              'SequentialDaysTimetableModel')
         ztapi.provideUtility(ITimetableModelFactory,
                              WeeklyTimetableModel,
                              'WeeklyTimetableModel')
-        from schooltool.interfaces import ITimetableSchemaContainer
+        from schooltool.timetable.interfaces import ITimetableSchemaContainer
         from schoolbell.app.app import SimpleNameChooser
         from zope.app.container.interfaces import INameChooser
         ztapi.provideAdapter(ITimetableSchemaContainer,
@@ -843,7 +843,7 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
         tearDown()
 
     def createView(self, request=None):
-        from schooltool.browser.timetable import AdvancedTimetableSchemaAdd
+        from schooltool.timetable.browser.timetable import AdvancedTimetableSchemaAdd
         context = self.app["ttschemas"]
         context['default'] = createSchema(['Day 1'], ['Period 1'])
         if request is None:
@@ -1173,17 +1173,18 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
 
 
 def doctest_SimpleTimetableSchemaAdd():
-    """Doctest for the SimpleTimetableSchemaAdd view
+    r"""Doctest for the SimpleTimetableSchemaAdd view
 
         >>> from schooltool.tests import setUpApplicationPreferences
         >>> setUpApplicationPreferences()
 
         >>> from schooltool.timetable import WeeklyTimetableModel
-        >>> from schooltool.interfaces import ITimetableModelFactory
+        >>> from schooltool.timetable.interfaces import ITimetableModelFactory
         >>> ztapi.provideUtility(ITimetableModelFactory,
         ...                      WeeklyTimetableModel,
         ...                      'WeeklyTimetableModel')
-        >>> from schooltool.interfaces import ITimetableSchemaContainer
+        >>> from schooltool.timetable.interfaces import \
+        ...                           ITimetableSchemaContainer
         >>> from schoolbell.app.app import SimpleNameChooser
         >>> from zope.app.container.interfaces import INameChooser
         >>> ztapi.provideAdapter(ITimetableSchemaContainer,
@@ -1194,7 +1195,7 @@ def doctest_SimpleTimetableSchemaAdd():
     timetable schemas container:
 
         >>> from schooltool.app import SchoolToolApplication
-        >>> from schooltool.browser.timetable import SimpleTimetableSchemaAdd
+        >>> from schooltool.timetable.browser import SimpleTimetableSchemaAdd
         >>> app = SchoolToolApplication()
         >>> directlyProvides(app, IContainmentRoot)
         >>> app.setSiteManager(LocalSiteManager(app))
@@ -1439,7 +1440,7 @@ def doctest_SimpleTimetableSchemaAdd_errors():
         >>> setUpApplicationPreferences()
 
         >>> from schooltool.timetable import WeeklyTimetableModel
-        >>> from schooltool.interfaces import ITimetableModelFactory
+        >>> from schooltool.timetable.interfaces import ITimetableModelFactory
         >>> ztapi.provideUtility(ITimetableModelFactory,
         ...                      WeeklyTimetableModel,
         ...                      'WeeklyTimetableModel')
@@ -1448,7 +1449,7 @@ def doctest_SimpleTimetableSchemaAdd_errors():
     timetable schemas container:
 
         >>> from schooltool.app import SchoolToolApplication
-        >>> from schooltool.browser.timetable import SimpleTimetableSchemaAdd
+        >>> from schooltool.timetable.browser import SimpleTimetableSchemaAdd
         >>> app = SchoolToolApplication()
         >>> directlyProvides(app, IContainmentRoot)
         >>> app.setSiteManager(LocalSiteManager(app))
@@ -1573,7 +1574,7 @@ def doctest_PersonTimetableSetupView():
 
     We can now create the view.
 
-        >>> from schooltool.browser.timetable import PersonTimetableSetupView
+        >>> from schooltool.timetable.browser import PersonTimetableSetupView
         >>> request = TestRequest()
         >>> view = PersonTimetableSetupView(context, request)
 
@@ -1771,7 +1772,7 @@ def doctest_PersonTimetableSetupView_no_timetables():
 
     We can now create the view.
 
-        >>> from schooltool.browser.timetable import PersonTimetableSetupView
+        >>> from schooltool.timetable.browser import PersonTimetableSetupView
         >>> request = TestRequest()
         >>> view = PersonTimetableSetupView(context, request)
 
@@ -1821,7 +1822,7 @@ def doctest_PersonTimetableSetupView_no_default_ttschema():
 
     We can now create the view.
 
-        >>> from schooltool.browser.timetable import PersonTimetableSetupView
+        >>> from schooltool.timetable.browser import PersonTimetableSetupView
         >>> request = TestRequest()
         >>> view = PersonTimetableSetupView(context, request)
 
@@ -1849,7 +1850,7 @@ def doctest_TimetableSchemaContainerView():
 
     Let's create our view:
 
-        >>> from schooltool.browser.timetable import TimetableSchemaContainerView
+        >>> from schooltool.timetable.browser import TimetableSchemaContainerView
         >>> from zope.publisher.browser import TestRequest
         >>> view = TimetableSchemaContainerView(app["ttschemas"], TestRequest())
 
@@ -1931,7 +1932,7 @@ def doctest_SectionTimetableSetupView():
 
     We can now create the view to look at the Math timetable
 
-        >>> from schooltool.browser.timetable import SectionTimetableSetupView
+        >>> from schooltool.timetable.browser import SectionTimetableSetupView
         >>> context = math
         >>> request = TestRequest()
         >>> view = SectionTimetableSetupView(context, request)
@@ -2116,7 +2117,7 @@ def doctest_SpecialDayView():
 
     We have a timetable schema to put the view on:
 
-        >>> from schooltool.browser.timetable import SpecialDayView
+        >>> from schooltool.timetable.browser import SpecialDayView
         >>> ttschema = createSchema(['Day 1', 'Day 2'],
         ...                         ['First',
         ...                          'Second',
@@ -2574,7 +2575,7 @@ def doctest_EmergencyDayView():
 
     We have a timetable schema to put the view on:
 
-        >>> from schooltool.browser.timetable import SpecialDayView
+        >>> from schooltool.timetable.browser import SpecialDayView
         >>> ttschema = createSchema(['Day 1', 'Day 2'],
         ...                         ['First',
         ...                          'Second',
@@ -2607,7 +2608,7 @@ def doctest_EmergencyDayView():
 
     Now we can create the view:
 
-        >>> from schooltool.browser.timetable import EmergencyDayView
+        >>> from schooltool.timetable.browser import EmergencyDayView
         >>> request = TestRequest()
         >>> view = EmergencyDayView(ttschema, request)
         >>> print view()
@@ -2855,7 +2856,7 @@ def test_suite():
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
                                        optionflags=optionflags
                                             | doctest.NORMALIZE_WHITESPACE))
-    suite.addTest(doctest.DocTestSuite('schooltool.browser.timetable',
+    suite.addTest(doctest.DocTestSuite('schooltool.timetable.browser.timetable',
                                        optionflags=optionflags))
     suite.addTest(unittest.makeSuite(TestAdvancedTimetableSchemaAdd))
     return suite

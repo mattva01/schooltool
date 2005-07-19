@@ -50,9 +50,9 @@ from schoolbell.app.rest.errors import RestError
 from schoolbell.app.rest.xmlparsing import XMLDocument
 from schooltool import getSchoolToolApplication
 from schooltool.common import parse_date, parse_time
-from schooltool.interfaces import ITimetableModelFactory
-from schooltool.interfaces import ITimetabled
-from schooltool.interfaces import ITimetableDict
+from schooltool.timetable.interfaces import ITimetableModelFactory
+from schooltool.timetable.interfaces import ITimetabled
+from schooltool.timetable.interfaces import ITimetableDict
 from schooltool.timetable import SchooldayPeriod
 from schooltool.timetable import SchooldayTemplate
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity

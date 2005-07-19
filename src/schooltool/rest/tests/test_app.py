@@ -293,7 +293,7 @@ class TestTermFile(QuietLibxml2Mixin, unittest.TestCase):
 
     def setUp(self):
         from schooltool.timetable import Term, TermContainer
-        from schooltool.interfaces import ITermContainer
+        from schooltool.timetable.interfaces import ITermContainer
         from schooltool.rest.app import TermFileFactory
         from schooltool.rest.app import TermFile
         from schooltool.rest.app import TermView

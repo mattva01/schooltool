@@ -49,11 +49,10 @@ from schoolbell.calendar.utils import parse_date, parse_time
 from schoolbell.calendar.utils import next_month, week_start
 from schoolbell.app.browser.cal import month_names
 
-from schooltool import SchoolToolMessageID as _
-from schooltool.interfaces import ITimetable, ITimetableSchema
-from schooltool.interfaces import ITermContainer, ITerm
-from schooltool.interfaces import ITimetableSchemaContainer
-from schooltool.interfaces import ITimetableModelFactory
+from schooltool.timetable.interfaces import ITimetable, ITimetableSchema
+from schooltool.timetable.interfaces import ITermContainer, ITerm
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
+from schooltool.timetable.interfaces import ITimetableModelFactory
 from schooltool.interfaces import IPerson, ISection
 from schooltool.timetable import Term, Timetable, TimetableDay
 from schooltool.timetable import TimetableActivity
@@ -62,6 +61,7 @@ from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable import getNextTermForDate, getTermForDate
 from schooltool import getSchoolToolApplication
 from schooltool.browser.app import ContainerView
+from schooltool import SchoolToolMessageID as _
 
 
 class TermContainerView(ContainerView):

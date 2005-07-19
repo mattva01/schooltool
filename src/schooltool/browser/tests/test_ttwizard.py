@@ -37,7 +37,7 @@ from schoolbell.app.browser.tests import setup as schoolbell_setup
 from schoolbell.app.app import SimpleNameChooser
 from schooltool.tests import setUpApplicationPreferences
 from schooltool.app import SchoolToolApplication
-from schooltool.interfaces import ITimetableSchemaContainer
+from schooltool.timetable.interfaces import ITimetableSchemaContainer
 
 
 def setUpNameChoosers():

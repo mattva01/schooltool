@@ -43,7 +43,7 @@ def doctest_evolve1():
     situation:
 
         >>> from schooltool.interfaces import ISchoolToolApplication
-        >>> from schooltool.interfaces import ITimetableModel
+        >>> from schooltool.timetable.interfaces import ITimetableModel
         >>> class MockSchoolTool(dict):
         ...     implements(ISchoolToolApplication)
 

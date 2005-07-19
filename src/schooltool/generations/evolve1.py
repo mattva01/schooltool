@@ -27,7 +27,8 @@ $Id$
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
 from persistent.dict import PersistentDict
-from schooltool.interfaces import ISchoolToolApplication, ITimetableModel
+from schooltool.interfaces import ISchoolToolApplication
+from schooltool.timetable.interfaces import ITimetableModel
 
 
 def evolve(context):

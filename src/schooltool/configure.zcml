@@ -34,20 +34,6 @@
   <!-- Subscribers -->
 
   <subscriber
-      for="schooltool.interfaces.ITimetabled"
-      provides="schooltool.interfaces.ITimetableSource"
-      factory="schooltool.timetable.MembershipTimetableSource"
-      permission="zope.Public"
-      />
-
-  <subscriber
-      for="schooltool.interfaces.ITimetabled"
-      provides="schooltool.interfaces.ITimetableSource"
-      factory="schooltool.timetable.InstructionTimetableSource"
-      permission="zope.Public"
-      />
-
-  <subscriber
       for="schoolbell.relationship.interfaces.IRelationshipAddedEvent"
       handler=".relationships.setInstructorPermissions"
       />
@@ -66,16 +52,6 @@
       for="schoolbell.relationship.interfaces.IRelationshipRemovedEvent"
       handler=".relationships.updateInstructorCalendars"
       />
-
-  <adapter
-      for=".interfaces.ITermContainer"
-      factory="schoolbell.app.app.SimpleNameChooser"
-      provides="zope.app.container.interfaces.INameChooser" />
-
-  <adapter
-      for=".interfaces.ITimetableSchemaContainer"
-      factory="schoolbell.app.app.SimpleNameChooser"
-      provides="zope.app.container.interfaces.INameChooser" />
 
   <adapter
       for="schoolbell.app.interfaces.IHavePreferences"
@@ -90,18 +66,6 @@
       name="schooltool"
       provides="zope.app.generations.interfaces.ISchemaManager"
       component=".generations.schemaManager"
-      />
-
-  <utility
-      provides="schooltool.interfaces.ITimetableModelFactory"
-      name="SequentialDaysTimetableModel"
-      component="schooltool.timetable.SequentialDaysTimetableModel"
-      />
-
-  <utility
-      provides="schooltool.interfaces.ITimetableModelFactory"
-      name="WeeklyTimetableModel"
-      component="schooltool.timetable.WeeklyTimetableModel"
       />
 
   <utility
@@ -239,37 +203,6 @@
              set_schema="schooltool.interfaces.ISection" />
   </content>
 
-  <content class=".timetable.TimetableActivity">
-    <allow interface="schooltool.interfaces.ITimetableActivity" />
-  </content>
-
-  <content class=".timetable.TimetableCalendarEvent">
-    <!-- TTCalendarEvent does not have a __parent__, so fine-grained
-         security declarations won't work. -->
-    <allow interface="schooltool.interfaces.ITimetableCalendarEvent" />
-  </content>
-
-  <content class=".timetable.TermContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schoolbell.view"
-             attributes="keys values __iter__ __len__" />
-    <require permission="schoolbell.create"
-             interface="zope.app.container.interfaces.IWriteContainer" />
-  </content>
-
-  <content class=".timetable.Term">
-    <allow interface=".interfaces.ITerm"
-           attributes="__cmp__"/>
-    <require permission="schoolbell.edit"
-             interface=".interfaces.ITermWrite"
-             set_schema=".interfaces.ITerm" />
-  </content>
-
-  <content class=".timetable.TimetableDict">
-    <require permission="schoolbell.edit"
-             interface="zope.app.container.interfaces.IContainer" />
-  </content>
-
   <content class=".app.BoundOverlaidCalendarsAndTTProperty">
     <allow attributes="__iter__ __contains__" />
     <require
@@ -292,61 +225,10 @@
         set_schema="schooltool.interfaces.IPersonPreferences" />
   </content>
 
-  <content class=".timetable.TimetableSchemaContainer">
-    <require permission="schoolbell.create"
-             interface="zope.app.container.interfaces.IWriteContainer"
-             set_attributes="default_id" />
-    <require permission="zope.View"
-             interface="zope.app.container.interfaces.IReadContainer"
-             attributes="getDefault default_id" />
-  </content>
-
-  <content class=".timetable.Timetable">
-    <allow interface=".interfaces.ITimetable" />
-    <require permission="schoolbell.edit"
-             interface=".interfaces.ITimetableWrite"
-             set_schema=".interfaces.ITimetable" />
-  </content>
-
-  <content class=".timetable.TimetableDay">
-    <allow interface=".interfaces.ITimetableDay" />
-    <require permission="schoolbell.edit"
-             interface=".interfaces.ITimetableDayWrite"
-             set_schema=".interfaces.ITimetableDay" />
-  </content>
-
-  <content class=".timetable.TimetableSchema">
-    <allow interface=".interfaces.ITimetableSchema" />
-    <require permission="schoolbell.edit"
-             interface=".interfaces.ITimetableSchemaWrite"
-             set_schema=".interfaces.ITimetableSchema" />
-  </content>
-
-  <content class=".timetable.TimetableSchemaDay">
-    <allow interface=".interfaces.ITimetableSchemaDay" />
-  </content>
-
-  <content class=".timetable.SchooldayTemplate">
-    <allow interface=".interfaces.ISchooldayTemplate" />
-    <require permission="schoolbell.edit"
-             interface=".interfaces.ISchooldayTemplateWrite"
-             set_schema=".interfaces.ISchooldayTemplate" />
-  </content>
-
-  <content class=".timetable.SequentialDaysTimetableModel">
-    <allow interface=".interfaces.ITimetableModel" />
-  </content>
-
-  <content class=".timetable.WeeklyTimetableModel">
-    <allow interface=".interfaces.ITimetableModel" />
-  </content>
-
-  <content class=".timetable.SchooldayPeriod">
-    <allow interface=".interfaces.ISchooldayPeriod" />
-  </content>
-
   <!-- Views -->
   <include package=".browser" />
   <include package=".rest" />
+
+  <include package=".timetable" />
 
 </configure>

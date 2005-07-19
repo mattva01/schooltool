@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <!-- Subscribers -->
+
+  <subscriber
+      for=".interfaces.ITimetabled"
+      provides=".interfaces.ITimetableSource"
+      factory="schooltool.timetable.source.MembershipTimetableSource"
+      permission="zope.Public"
+      />
+
+  <subscriber
+      for=".interfaces.ITimetabled"
+      provides=".interfaces.ITimetableSource"
+      factory="schooltool.timetable.source.InstructionTimetableSource"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for=".interfaces.ITermContainer"
+      factory="schoolbell.app.app.SimpleNameChooser"
+      provides="zope.app.container.interfaces.INameChooser" />
+
+  <adapter
+      for=".interfaces.ITimetableSchemaContainer"
+      factory="schoolbell.app.app.SimpleNameChooser"
+      provides="zope.app.container.interfaces.INameChooser" />
+
+  <utility
+      provides=".interfaces.ITimetableModelFactory"
+      name="SequentialDaysTimetableModel"
+      component="schooltool.timetable.SequentialDaysTimetableModel"
+      />
+
+  <utility
+      provides=".interfaces.ITimetableModelFactory"
+      name="WeeklyTimetableModel"
+      component="schooltool.timetable.WeeklyTimetableModel"
+      />
+
+  <content class=".TimetableActivity">
+    <allow interface=".interfaces.ITimetableActivity" />
+  </content>
+
+  <content class=".TimetableCalendarEvent">
+    <!-- TTCalendarEvent does not have a __parent__, so fine-grained
+         security declarations won't work. -->
+    <allow interface=".interfaces.ITimetableCalendarEvent" />
+  </content>
+
+  <content class=".TermContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schoolbell.view"
+             attributes="keys values __iter__ __len__" />
+    <require permission="schoolbell.create"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </content>
+
+  <content class=".Term">
+    <allow interface=".interfaces.ITerm"
+           attributes="__cmp__"/>
+    <require permission="schoolbell.edit"
+             interface=".interfaces.ITermWrite"
+             set_schema=".interfaces.ITerm" />
+  </content>
+
+  <content class=".TimetableDict">
+    <require permission="schoolbell.edit"
+             interface="zope.app.container.interfaces.IContainer" />
+  </content>
+
+  <content class=".TimetableSchemaContainer">
+    <require permission="schoolbell.create"
+             interface="zope.app.container.interfaces.IWriteContainer"
+             set_attributes="default_id" />
+    <require permission="zope.View"
+             interface="zope.app.container.interfaces.IReadContainer"
+             attributes="getDefault default_id" />
+  </content>
+
+  <content class=".Timetable">
+    <allow interface=".interfaces.ITimetable" />
+    <require permission="schoolbell.edit"
+             interface=".interfaces.ITimetableWrite"
+             set_schema=".interfaces.ITimetable" />
+  </content>
+
+  <content class=".TimetableDay">
+    <allow interface=".interfaces.ITimetableDay" />
+    <require permission="schoolbell.edit"
+             interface=".interfaces.ITimetableDayWrite"
+             set_schema=".interfaces.ITimetableDay" />
+  </content>
+
+  <content class=".TimetableSchema">
+    <allow interface=".interfaces.ITimetableSchema" />
+    <require permission="schoolbell.edit"
+             interface=".interfaces.ITimetableSchemaWrite"
+             set_schema=".interfaces.ITimetableSchema" />
+  </content>
+
+  <content class=".TimetableSchemaDay">
+    <allow interface=".interfaces.ITimetableSchemaDay" />
+  </content>
+
+  <content class=".SchooldayTemplate">
+    <allow interface=".interfaces.ISchooldayTemplate" />
+    <require permission="schoolbell.edit"
+             interface=".interfaces.ISchooldayTemplateWrite"
+             set_schema=".interfaces.ISchooldayTemplate" />
+  </content>
+
+  <content class=".SequentialDaysTimetableModel">
+    <allow interface=".interfaces.ITimetableModel" />
+  </content>
+
+  <content class=".WeeklyTimetableModel">
+    <allow interface=".interfaces.ITimetableModel" />
+  </content>
+
+  <content class=".SchooldayPeriod">
+    <allow interface=".interfaces.ISchooldayPeriod" />
+  </content>
+
+  <include package=".browser" />
+  <include package=".rest" />
+
+</configure>
