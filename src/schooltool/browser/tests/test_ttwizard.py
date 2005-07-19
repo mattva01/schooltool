@@ -144,6 +144,11 @@ def doctest_FirstStep():
         >>> view.update()
         False
 
+    The next step is always CycleStep
+
+        >>> view.next()
+        <...CycleStep...>
+
     """
 
 
@@ -187,6 +192,22 @@ def doctest_ChoiceStep():
         True
         >>> view.getSessionData()[view.key]
         'huh'
+    """
+
+
+def doctest_CycleStep():
+    """Unit test for CycleStep
+
+        >>> from schooltool.browser.ttwizard import CycleStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = CycleStep(context, request)
+
+    The next step is always FinalStep (for now)
+
+        >>> view.getSessionData()['cycle'] = 'weekly'
+        >>> view.next()
+        <...FinalStep...>
 
     """
 
@@ -219,6 +240,13 @@ def doctest_FinalStep():
         302
         >>> request.response.getHeader('Location')
         'http://127.0.0.1/ttschemas'
+
+    The cycle of steps loops here
+
+        >>> view.update()
+        True
+        >>> view.next()
+        <...FirstStep...>
 
     """
 
@@ -277,54 +305,89 @@ def doctest_TimetableSchemaWizard():
         >>> request = TestRequest()
         >>> view = TimetableSchemaWizard(context, request)
 
-    Initially it displays the first step -- entering the title.
+    We shall stub it heavily.
 
+        >>> class StepStub:
+        ...     update_succeeds = False
+        ...     def __repr__(self):
+        ...         return '<same step>'
+        ...     def update(self):
+        ...         print 'Updating...'
+        ...         return self.update_succeeds
+        ...     def __call__(self):
+        ...         return 'Rendered step'
+        ...     def next(self):
+        ...         return NextStepStub()
+
+        >>> class NextStepStub:
+        ...     def __repr__(self):
+        ...         return '<next step>'
+        ...     def __call__(self):
+        ...         return 'Rendered next step'
+
+        >>> view.getLastStep = StepStub
+
+        >>> def rememberLastStep(step):
+        ...     print 'Remembering step: %s' % step
+        >>> view.rememberLastStep = rememberLastStep
+
+    There are two main cases.
+
+    Case 1: the user completes the current step successfully.
+
+        >>> StepStub.update_succeeds = True
         >>> print view()
-        <BLANKLINE>
-        ...
-        <form class="plain" method="POST" action="http://127.0.0.1">
-        ...
-        ...<input class="textType" id="field.title" name="field.title"
-                  size="20" type="text" value="default" />...
-        ...<input type="submit" class="button-ok" name="NEXT"
-                  value="Next" />
-        ...
+        Updating...
+        Remembering step: <next step>
+        Rendered next step
 
-    Let's make a false step first -- press Create without entering the title.
+    Case 2: the user does not complete the current step successfully.
 
-        >>> request = TestRequest(form={'field.title': u'',
-        ...                             'NEXT': u'Next'})
+        >>> StepStub.update_succeeds = False
+        >>> print view()
+        Updating...
+        Remembering step: <same step>
+        Rendered step
+
+    """
+
+
+def doctest_TimetableSchemaWizard_getLastStep():
+    """Unit test for TimetableSchemaWizard.getLastStep
+
+        >>> from schooltool.browser.ttwizard import TimetableSchemaWizard
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
         >>> view = TimetableSchemaWizard(context, request)
-        >>> print view()
-        <BLANKLINE>
-        ...
-        <form class="plain" method="POST" action="http://127.0.0.1">
-        ...
-        ...Required input is missing...
-        ...<input class="textType" id="field.title" name="field.title"
-                  size="20" type="text" value="" />...
 
-    When you press Create, the schema is created.
+    When there is no step saved in the session, getLastStep returns the first
+    step.
 
-        >>> request = TestRequest(form={'field.title': u'Sample Schema',
-        ...                             'NEXT': u'Next'})
+        >>> view.getLastStep()
+        <...FirstStep...>
+
+    When there is one, that's what getLastStep returns.
+
+        >>> from schooltool.browser.ttwizard import CycleStep
+        >>> view.getSessionData()['last_step'] = CycleStep
+        >>> view.getLastStep()
+        <...CycleStep...>
+
+    """
+
+
+def doctest_TimetableSchemaWizard_rememberLastStep():
+    """Unit test for TimetableSchemaWizard.rememberLastStep
+
+        >>> from schooltool.browser.ttwizard import TimetableSchemaWizard
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
         >>> view = TimetableSchemaWizard(context, request)
-        >>> print view()
-        <BLANKLINE>
-        ...
 
-        >>> ttschema = context['sample-schema']
-        >>> ttschema
-        <...TimetableSchema object at ...>
-        >>> print ttschema.title
-        Sample Schema
-
-    We should get redirected to the ttschemas index:
-
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeader('Location')
-        'http://127.0.0.1/ttschemas'
+        >>> from schooltool.browser.ttwizard import CycleStep
+        >>> view.rememberLastStep(CycleStep(context, request))
+        >>> view.getSessionData()['last_step']
+        <class 'schooltool.browser.ttwizard.CycleStep'>
 
     """
 

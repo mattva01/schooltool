@@ -140,6 +140,8 @@ class Step(BrowserView):
         session, and returns True if the form was submitted correctly, or
         returns False if it wasn't.
 
+        `next` returns the next step.
+
     """
 
     __used_for__ = ITimetableSchemaContainer
@@ -174,6 +176,9 @@ class FirstStep(Step):
     def __call__(self):
         return self.template()
 
+    def next(self):
+        return CycleStep(self.context, self.request)
+
 
 class ChoiceStep(Step):
     """A step that requires the user to make a choice.
@@ -186,6 +191,7 @@ class ChoiceStep(Step):
 
         `key` -- name of the session dict key that will store the value.
 
+    They should also define the `next` method.
     """
 
     template = ViewPageTemplateFile("templates/ttwizard_choice.pt")
@@ -212,9 +218,23 @@ class CycleStep(ChoiceStep):
     choices = (('weekly',   _("Days of the week")),
                ('rotating', _("Rotating cycle")))
 
+    def next(self):
+        session = self.getSessionData()
+        # This if statement will become much more meaningful in near future
+        if session['cycle'] == 'weekly':
+            return FinalStep(self.context, self.request)
+        else:
+            return FinalStep(self.context, self.request)
+
 
 class FinalStep(Step):
     """Final step: create the schema."""
+
+    def update(self):
+        return True
+
+    def next(self):
+        return FirstStep(self.context, self.request)
 
     def createSchema(self):
         """Create the timetable schema."""
@@ -242,17 +262,25 @@ class FinalStep(Step):
             zapi.absoluteURL(self.context, self.request))
 
 
-class TimetableSchemaWizard(BrowserView):
+class TimetableSchemaWizard(Step):
     """View for defining a new timetable schema."""
 
     __used_for__ = ITimetableSchemaContainer
 
+    def getLastStep(self):
+        session = self.getSessionData()
+        step_class = session.get('last_step', FirstStep)
+        step = step_class(self.context, self.request)
+        return step
+
+    def rememberLastStep(self, step):
+        session = self.getSessionData()
+        session['last_step'] = step.__class__
+
     def __call__(self):
-        first_step = FirstStep(self.context, self.request)
-        final_step = FinalStep(self.context, self.request)
-        next_step = first_step
-        if 'NEXT' in self.request:
-            if first_step.update():
-                next_step = final_step
-        return next_step()
+        current_step = self.getLastStep()
+        if current_step.update():
+            current_step = current_step.next()
+        self.rememberLastStep(current_step)
+        return current_step()
 
