@@ -134,7 +134,7 @@ page:
        <li><a href="http://localhost/frogpond/groups">Groups</a></li>
        <li><a href="http://localhost/frogpond/resources">Resources</a></li>
        <li><a href="http://localhost/frogpond/terms">Terms</a></li>
-       <li><a href="http://localhost/frogpond/ttschemas">School Timetable</a></li>
+       <li><a href="http://localhost/frogpond/ttschemas">School Timetables</a></li>
     </ul>
     ...
               <h1>Welcome to SchoolTool</h1>

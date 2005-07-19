@@ -14,6 +14,6 @@
   <li><a tal:attributes="href view/app/terms/@@absolute_url"
          i18n:translate="">Terms</a></li>
   <li><a tal:attributes="href view/app/ttschemas/@@absolute_url"
-         i18n:translate="">School Timetable</a></li>
+         i18n:translate="">School Timetables</a></li>
 </ul>
 </div>
