@@ -132,9 +132,17 @@ def doctest_FirstStep():
         >>> request = TestRequest(form={'field.title': u'Sample Schema'})
         >>> view = FirstStep(context, request)
         >>> view.update()
+        True
 
         >>> view.getSessionData()['title']
         u'Sample Schema'
+
+    If the form is incomplete, update says so by returning False
+
+        >>> request = TestRequest(form={'field.title': u''})
+        >>> view = FirstStep(context, request)
+        >>> view.update()
+        False
 
     """
 
@@ -229,11 +237,28 @@ def doctest_TimetableSchemaWizard():
 
         >>> print view()
         <BLANKLINE>
+        ...
+        <form class="plain" method="POST" action="http://127.0.0.1">
+        ...
         ...<input class="textType" id="field.title" name="field.title"
                   size="20" type="text" value="default" />...
         ...<input type="submit" class="button-ok" name="CREATE"
                  value="Create timetable schema" />
         ...
+
+    Let's make a false step first -- press Create without entering the title.
+
+        >>> request = TestRequest(form={'field.title': u'',
+        ...                             'CREATE': u'Create'})
+        >>> view = TimetableSchemaWizard(context, request)
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <form class="plain" method="POST" action="http://127.0.0.1">
+        ...
+        ...Required input is missing...
+        ...<input class="textType" id="field.title" name="field.title"
+                  size="20" type="text" value="" />...
 
     When you press Create, the schema is created.
 

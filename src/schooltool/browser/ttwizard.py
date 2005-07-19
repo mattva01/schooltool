@@ -115,6 +115,7 @@ from zope.app import zapi
 from zope.app.form.utility import setUpWidgets
 from zope.app.form.utility import getWidgetsData
 from zope.app.form.interfaces import IInputWidget
+from zope.app.form.interfaces import WidgetsError
 from zope.app.publisher.browser import BrowserView
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.container.interfaces import INameChooser
@@ -129,11 +130,22 @@ from schooltool.timetable import WeeklyTimetableModel
 
 
 class Step(BrowserView):
-    """A step, one of many."""
+    """A step, one of many.
+
+    Each step has two important methods:
+
+        `__call__` renders the page.
+
+        `update` processes the form, and then either stores the data in the
+        session, and returns True if the form was submitted correctly, or
+        returns False if it wasn't.
+
+    """
 
     __used_for__ = ITimetableSchemaContainer
 
     def getSessionData(self):
+        """Return the data container stored in the session."""
         return ISession(self.request)['schooltool.ttwizard']
 
 
@@ -151,9 +163,13 @@ class FirstStep(Step):
                      initial={'title': 'default'})
 
     def update(self):
-        data = getWidgetsData(self, self.schema)
+        try:
+            data = getWidgetsData(self, self.schema)
+        except WidgetsError:
+            return False
         session = self.getSessionData()
         session['title'] = data['title']
+        return True
 
     def __call__(self):
         return self.template()
@@ -196,9 +212,9 @@ class TimetableSchemaWizard(BrowserView):
     def __call__(self):
         first_step = FirstStep(self.context, self.request)
         final_step = FinalStep(self.context, self.request)
+        next_step = first_step
         if 'CREATE' in self.request:
-            first_step.update()
-            return final_step()
-        else:
-            return first_step()
+            if first_step.update():
+                next_step = final_step
+        return next_step()
 
