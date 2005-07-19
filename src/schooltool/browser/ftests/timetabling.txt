@@ -350,7 +350,7 @@ Definition of timetable schemas
 We will create a timetable schema using the simple schema definition form:
 
     >>> print http("""
-    ... POST /frogpond/ttschemas/@@add.html HTTP/1.1
+    ... POST /frogpond/ttschemas/@@simpleadd.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 185
     ... Content-Type: application/x-www-form-urlencoded
