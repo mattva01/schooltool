@@ -1,5 +1,5 @@
-Functional test for the timetable schema wizard
-===============================================
+Functional test for the advanced timetable schema add view
+==========================================================
 
 Let's create a SchoolTool instance:
 

@@ -416,7 +416,7 @@ class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
 
     __used_for__ = ITimetableSchemaContainer
 
-    template = ViewPageTemplateFile("templates/ttwizard.pt")
+    template = ViewPageTemplateFile("templates/advancedtts.pt")
 
     # Used in the page template
     days_of_week = (_("Monday"),
