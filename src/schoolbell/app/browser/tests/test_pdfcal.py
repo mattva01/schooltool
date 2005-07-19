@@ -28,6 +28,8 @@ import unittest
 from datetime import datetime, date, timedelta
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
+from zope.app.tests import setup, ztapi
+from zope.app.publisher.browser import BrowserView
 from schoolbell.app.app import Person, Resource
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.browser.pdfcal import PDFCalendarViewBase
@@ -39,6 +41,9 @@ class StubbedBaseView(PDFCalendarViewBase):
     """A subclass of PDFCalendarViewBase for use in tests."""
 
     title = _("Calendar for %s")
+
+    def getCalendars(self):
+        return [self.context]
 
     def buildEventTables(self, date):
         events = self.dayEvents(date)
@@ -204,8 +209,10 @@ def doctest_PDFCalendarViewBase_dayEvents():
     """Event listing tests.
 
         >>> calendar = Person(title="Mr. Smith").calendar
+        >>> calendar2 = Person().calendar
         >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> view = StubbedBaseView(calendar, request)
+        >>> view.getCalendars = lambda: [calendar, calendar2]
 
     First check the simple case when the calendar is empty:
 
@@ -226,28 +233,30 @@ def doctest_PDFCalendarViewBase_dayEvents():
         >>> view.dayEvents(date(2005, 7, 9))
         []
 
+    We will add some events to the other calendar to test overlaying.
     If several events occur, they should be returned sorted by start time:
 
         >>> evt2 = CalendarEvent(datetime(2005, 7, 8, 9, 12),
         ...                      timedelta(hours=5), "evt2")
-        >>> calendar.addEvent(evt2)
+        >>> calendar2.addEvent(evt2)
 
         >>> evt3 = CalendarEvent(datetime(2005, 7, 8, 9, 3),
         ...                      timedelta(hours=2), "evt3")
-        >>> calendar.addEvent(evt3)
+        >>> calendar2.addEvent(evt3)
 
-        >>> view.dayEvents(date(2005, 7, 8)) == [evt3, evt, evt2]
-        True
+        >>> result = view.dayEvents(date(2005, 7, 8))
+        >>> [evt.title for evt in result]
+        ['evt3', 'evt', 'evt2']
 
     All-day events always appear in front:
 
         >>> ad_evt = CalendarEvent(datetime(2005, 7, 8, 20, 3),
-        ...                            timedelta(hours=2), "allday")
+        ...                        timedelta(hours=2), "allday", allday=True)
         >>> calendar.addEvent(ad_evt)
 
         >>> result = view.dayEvents(date(2005, 7, 8))
         >>> [evt.title for evt in result]
-        ['evt3', 'evt', 'evt2', 'allday']
+        ['allday', 'evt3', 'evt', 'evt2']
 
     """
 
@@ -325,6 +334,7 @@ def doctest_DailyPDFCalendarView():
         >>> calendar = Person().calendar
         >>> request = TestRequest(form={'date': '2005-07-01'})
         >>> view = DailyPDFCalendarView(calendar, request)
+        >>> view.getCalendars = lambda: [calendar]
 
     The view's dateTitle method returns the representation of the date shown:
 
@@ -372,6 +382,7 @@ def doctest_WeeklyPDFCalendarView():
         >>> calendar = Person().calendar
         >>> request = TestRequest(form={'date': '2005-07-01'})
         >>> view = WeeklyPDFCalendarView(calendar, request)
+        >>> view.getCalendars = lambda: [calendar]
 
     The view's dateTitle method returns the representation of the date shown:
 
@@ -442,6 +453,7 @@ def doctest_MonthlyPDFCalendarView():
         >>> calendar = Person().calendar
         >>> request = TestRequest(form={'date': '2005-07-01'})
         >>> view = MonthlyPDFCalendarView(calendar, request)
+        >>> view.getCalendars = lambda: [calendar]
 
     The view's dateTitle method returns the representation of the date shown:
 
@@ -608,6 +620,37 @@ def doctest_setUpMSTTCoreFonts():
     Clean up:
 
         >>> reportlab.rl_config.TTFSearchPath.append(real_path)
+
+    """
+
+
+def test_getCalendars(self):
+    """Test for PDFCalendarViewBase.getCalendars().
+
+        >>> setup.placelessSetUp()
+
+    getCalendars() only delegates the task to a calendar list view.  We
+    will provide a stub view to test the method.
+
+        >>> class CalendarListViewStub(BrowserView):
+        ...     def getCalendars(self):
+        ...         return [('some calendar', 'color1', 'color2'),
+        ...                 ('another calendar', 'color1', 'color2')]
+        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
+        >>> ztapi.browserView(ISchoolBellCalendar, 'calendar_list',
+        ...                   CalendarListViewStub)
+
+        >>> from schoolbell.app.cal import Calendar
+        >>> view = PDFCalendarViewBase(Calendar(), TestRequest())
+
+    Now, if we call the method, the output of our stub will be returned:
+
+        >>> view.getCalendars()
+        ['some calendar', 'another calendar']
+
+    We're done:
+
+        >>> setup.placelessTearDown()
 
     """
 

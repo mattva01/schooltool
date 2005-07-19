@@ -26,9 +26,12 @@ import os.path
 import datetime
 from cStringIO import StringIO
 
+from zope.component import getMultiAdapter
 from zope.app.publisher.browser import BrowserView
 from zope.i18n import translate
-from schoolbell.app.interfaces import ISchoolBellCalendar
+from zope.security.proxy import removeSecurityProxy
+from zope.security.checker import canAccess
+from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
 from schoolbell.calendar.utils import parse_date, week_start
 from schoolbell import SchoolBellMessageID as _
 
@@ -81,8 +84,19 @@ class PDFCalendarViewBase(BrowserView):
         """Build a platypus story that draws the PDF report."""
         owner = self.context.__parent__
         story = self.buildPageHeader(owner.title, date)
-        story.extend(self.buildEventTables(date))
+
+        self.calendars = self.getCalendars()
+        event_tables = self.buildEventTables(date)
+        story.extend(event_tables)
         return story
+
+    def getCalendars(self):
+        """Get a list of calendars to display."""
+        calendar_list_view = getMultiAdapter((self.context, self.request),
+                                             name='calendar_list')
+        calendars = [calendar for (calendar, color1, color2)
+                                  in calendar_list_view.getCalendars()]
+        return calendars
 
     def configureStyles(self):
         """Store some styles in instance attributes.
@@ -192,11 +206,17 @@ class PDFCalendarViewBase(BrowserView):
 
         All-day events are placed in front.
         """
-        allday_events = [event for event in self.context
-                         if event.dtstart.date() == date and event.allday]
+        allday_events = []
+        events = []
+        for calendar in self.getCalendars():
+            for event in calendar:
+                if event.dtstart.date() == date:
+                    if event.allday:
+                        allday_events.append(event)
+                    else:
+                        events.append(event)
+
         allday_events.sort()
-        events = [event for event in self.context
-                  if event.dtstart.date() == date and not event.allday]
         events.sort()
         return allday_events + events
 
