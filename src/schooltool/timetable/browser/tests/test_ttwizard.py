@@ -271,11 +271,11 @@ def doctest_CycleStep():
         >>> request = TestRequest()
         >>> view = CycleStep(context, request)
 
-    The next step is SimpleSlotEntryStep for weekly cycle
+    The next step is IndependentDaysStep for weekly cycle
 
         >>> view.getSessionData()['cycle'] = 'weekly'
         >>> view.next()
-        <...SimpleSlotEntryStep...>
+        <...IndependentDaysStep...>
 
     The next step is DayEntryStep for rotating cycle
 
@@ -327,10 +327,34 @@ def doctest_DayEntryStep():
         >>> view.parse(u'')
         []
 
-    The next page is the final page.
+    The next page is IndependentDaysStep.
 
         >>> view.next()
+        <...IndependentDaysStep...>
+
+    """
+
+
+def doctest_IndependentDaysStep():
+    r"""Unit test for IndependentDaysStep
+
+        >>> from schooltool.timetable.browser.ttwizard \
+        ...                                         import IndependentDaysStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = IndependentDaysStep(context, request)
+
+    The next step is SimpleSlotEntryStep if days are similar:
+
+        >>> view.getSessionData()['similar_days'] = 'similar'
+        >>> view.next()
         <...SimpleSlotEntryStep...>
+
+    The next step is SlotEntryStep if each day is different:
+
+        >>> view.getSessionData()['similar_days'] = 'independent'
+        >>> view.next()
+        <...SlotEntryStep...>
 
     """
 
@@ -381,6 +405,60 @@ def doctest_SimpleSlotEntryStep():
         []
         >>> view.parse(u'')
         []
+
+    The next page is the final page.
+
+        >>> view.next()
+        <...FinalStep...>
+
+    """
+
+
+def doctest_SlotEntryStep():
+    r"""Unit test for SlotEntryStep
+
+        >>> from schooltool.timetable.browser.ttwizard import SlotEntryStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = SlotEntryStep(context, request)
+        >>> view.getSessionData()['day_names'] = ['Oneday', 'Twoday']
+
+    At first we get a table with one empty row of input fields:
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <tr>
+          <th>Oneday</th>
+          <th>Twoday</th>
+        </tr>
+        <tr>
+          <td>
+            <input ...>
+          </td>
+          <td>
+            <input ...>
+          </td>
+          <td>
+            <input ...>
+          </td>
+        </tr>
+        ...
+
+    SlotEntryStep.update wants at least one slot on each day:
+
+        >>> view.update()
+        False
+
+#        TODO
+#        >>> request = TestRequest(form={'field.times': u'\n\n\n'})
+#        >>> view = SlotEntryStep(context, request)
+#        >>> view.update()
+#        False
+
+#        TODO
+#        >>> view.getSessionData()['time_slots']
+#        [(datetime.time(9, 30), datetime.timedelta(0, 3300))]
 
     The next page is the final page.
 

@@ -244,9 +244,9 @@ class CycleStep(ChoiceStep):
 
     def next(self):
         session = self.getSessionData()
-        # This if statement will become much more meaningful in near future
         if session['cycle'] == 'weekly':
-            return SimpleSlotEntryStep(self.context, self.request)
+            # TODO: fill session['day_names'] with weekday names
+            return IndependentDaysStep(self.context, self.request)
         else:
             return DayEntryStep(self.context, self.request)
 
@@ -278,7 +278,26 @@ class DayEntryStep(FormStep):
         return filter(None, map(unicode.strip, day_names.splitlines()))
 
     def next(self):
-        return SimpleSlotEntryStep(self.context, self.request)
+        return IndependentDaysStep(self.context, self.request)
+
+
+class IndependentDaysStep(ChoiceStep):
+    """A step for choosing if all period times are the same each day."""
+
+    key = 'similar_days'
+
+    question = _("Do classes begin and end at the same time each day in"
+                 " your school's timetable?")
+
+    choices = (('similar',     _("Same time")),
+               ('independent', _("Different times")))
+
+    def next(self):
+        session = self.getSessionData()
+        if session['similar_days'] == 'similar':
+            return SimpleSlotEntryStep(self.context, self.request)
+        else:
+            return SlotEntryStep(self.context, self.request)
 
 
 class SimpleSlotEntryStep(FormStep):
@@ -317,6 +336,33 @@ class SimpleSlotEntryStep(FormStep):
                    filter(None, map(unicode.strip, times.splitlines())))
 
     def next(self):
+        return FinalStep(self.context, self.request)
+
+
+class SlotEntryStep(Step):
+    """Step for entering start and end times of slots in each day.
+
+    This step is taken when the start/end times are different for each day.
+    """
+
+    template = ViewPageTemplateFile("templates/ttwizard_slottimes.pt")
+
+    day_names = ['Day A', 'Day B', 'Day C']
+
+    def __init__(self, context, request):
+        Step.__init__(self, context, request)
+        self.time_rows = [('', ) * len(self.day_names)]
+
+    def __call__(self):
+        """Render the template."""
+        return self.template()
+
+    def update(self):
+        # TODO
+        return False
+
+    def next(self):
+        # TODO: redirect to period names/time step when we have it.
         return FinalStep(self.context, self.request)
 
 
