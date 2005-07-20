@@ -30,6 +30,7 @@ from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from zope.interface import Interface, directlyProvides
 from zope.schema import TextLine
+from zope.i18n import translate
 from zope.app.testing import ztapi
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.component.site import LocalSiteManager
@@ -333,21 +334,21 @@ def doctest_DayEntryStep():
 
         >>> view.update()
         False
-        >>> print view.error
+        >>> print translate(view.error)
         Please enter at least one day name.
 
         >>> request = TestRequest(form={'field.days': u''})
         >>> view = DayEntryStep(context, request)
         >>> view.update()
         False
-        >>> print view.error
+        >>> print translate(view.error)
         Please enter at least one day name.
 
         >>> request = TestRequest(form={'field.days': u'\n\n\n'})
         >>> view = DayEntryStep(context, request)
         >>> view.update()
         False
-        >>> print view.error
+        >>> print translate(view.error)
         Please enter at least one day name.
 
         >>> request = TestRequest(form={'field.days': u'A\nB\n\n'})
@@ -422,21 +423,42 @@ def doctest_SimpleSlotEntryStep():
 
         >>> view.update()
         False
+        >>> print translate(view.error)
+        Please enter at least one time slot.
+
+        >>> request = TestRequest(form={'field.times': u''})
+        >>> view = SimpleSlotEntryStep(context, request)
+        >>> view.update()
+        False
+        >>> print translate(view.error)
+        Please enter at least one time slot.
 
         >>> request = TestRequest(form={'field.times': u'\n\n\n'})
         >>> view = SimpleSlotEntryStep(context, request)
         >>> view.update()
         False
+        >>> print translate(view.error)
+        Please enter at least one time slot.
 
         >>> request = TestRequest(form={'field.times': u'not a time\n\n\n'})
         >>> view = SimpleSlotEntryStep(context, request)
         >>> view.update()
         False
+        >>> print translate(view.error)
+        Not a valid time slot: not a time.
+
+        >>> request = TestRequest(form={'field.times': u'unicode is tr\u00efcky'})
+        >>> view = SimpleSlotEntryStep(context, request)
+        >>> view.update()
+        False
+        >>> translate(view.error)
+        u'Not a valid time slot: unicode is tr\xefcky.'
 
         >>> request = TestRequest(form={'field.times': u'9:30-10:25\n\n'})
         >>> view = SimpleSlotEntryStep(context, request)
         >>> view.update()
         True
+        >>> view.error
 
         >>> view.getSessionData()['time_slots']
         [(datetime.time(9, 30), datetime.timedelta(0, 3300))]

@@ -333,9 +333,21 @@ def parse_time_range_list(times):
         >>> parse_time_range_list(u'')
         []
 
+        >>> parse_time_range_list(u'9:30-12:20\nbad value\nanother bad value')
+        Traceback (most recent call last):
+          ...
+        ValueError: bad value
+
     """
-    return map(parse_time_range,
-               filter(None, map(unicode.strip, times.splitlines())))
+    result = []
+    for line in times.splitlines():
+        line = line.strip()
+        if line:
+            try:
+                result.append(parse_time_range(line))
+            except ValueError:
+                raise ValueError(line)
+    return result
 
 
 class SimpleSlotEntryStep(FormStep):
@@ -348,7 +360,7 @@ class SimpleSlotEntryStep(FormStep):
                     " one slot (HH:MM - HH:MM) per line.")
 
     class schema(Interface):
-        times = Text(default=u"9:30-10:25\n10:30-11:25")
+        times = Text(default=u"9:30-10:25\n10:30-11:25", required=False)
 
     def update(self):
         try:
@@ -356,10 +368,13 @@ class SimpleSlotEntryStep(FormStep):
         except WidgetsError, e:
             return False
         try:
-            times = parse_time_range_list(data['times'])
-        except ValueError:
-            return False # TODO: tell the user what was wrong
+            times = parse_time_range_list(data.get('times') or '')
+        except ValueError, e:
+            self.error = _("Not a valid time slot: $slot.")
+            self.error.mapping['slot'] = unicode(e.args[0])
+            return False
         if not times:
+            self.error = _("Please enter at least one time slot.")
             return False
         session = self.getSessionData()
         session['time_slots'] = times
