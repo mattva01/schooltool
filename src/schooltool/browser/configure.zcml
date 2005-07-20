@@ -369,16 +369,6 @@
       permission="zope.View"
       />
 
-  <page
-      name="add.html"
-      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
-      class=".ttwizard.TimetableSchemaWizard"
-      permission="schoolbell.create"
-      menu="schoolbell_actions"
-      title="New Timetable"
-      />
-
-
   <!-- We already have a traverser registered on ICalendarOwner which is not
        aware of timetables.  However, we need to traverse into timetables
        in the web views, so for now I'll resort to the ugly solution of just

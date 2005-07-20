@@ -126,4 +126,14 @@
       menu="zmi_views" title="View"
       />
 
+  <!-- ttwizard -->
+  <page
+      name="add.html"
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      class=".ttwizard.TimetableSchemaWizard"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="New Timetable"
+      />
+
 </configure>

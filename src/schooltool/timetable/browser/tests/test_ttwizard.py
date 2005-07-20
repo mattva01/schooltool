@@ -93,7 +93,7 @@ def print_ttschema(ttschema):
 def doctest_Step_getSessionData():
     """Unit test for Step.getSessionData.
 
-        >>> from schooltool.browser.ttwizard import Step
+        >>> from schooltool.timetable.browser.ttwizard import Step
         >>> context = app['ttschemas']
         >>> request = TestRequest()
         >>> step = Step(context, request)
@@ -113,7 +113,7 @@ def doctest_Step_getSessionData():
 def doctest_FirstStep():
     """Unit test for FirstStep
 
-        >>> from schooltool.browser.ttwizard import FirstStep
+        >>> from schooltool.timetable.browser.ttwizard import FirstStep
         >>> context = app['ttschemas']
         >>> request = TestRequest()
         >>> view = FirstStep(context, request)
@@ -155,7 +155,7 @@ def doctest_FirstStep():
 def doctest_ChoiceStep():
     """Unit test for ChoiceStep
 
-        >>> from schooltool.browser.ttwizard import ChoiceStep
+        >>> from schooltool.timetable.browser.ttwizard import ChoiceStep
         >>> context = app['ttschemas']
         >>> request = TestRequest()
         >>> view = ChoiceStep(context, request)
@@ -198,7 +198,7 @@ def doctest_ChoiceStep():
 def doctest_CycleStep():
     """Unit test for CycleStep
 
-        >>> from schooltool.browser.ttwizard import CycleStep
+        >>> from schooltool.timetable.browser.ttwizard import CycleStep
         >>> context = app['ttschemas']
         >>> request = TestRequest()
         >>> view = CycleStep(context, request)
@@ -221,7 +221,7 @@ def doctest_CycleStep():
 def doctest_DayEntryStep():
     r"""Unit test for DayEntryStep
 
-        >>> from schooltool.browser.ttwizard import DayEntryStep
+        >>> from schooltool.timetable.browser.ttwizard import DayEntryStep
         >>> context = app['ttschemas']
         >>> request = TestRequest()
         >>> view = DayEntryStep(context, request)
@@ -270,7 +270,7 @@ def doctest_DayEntryStep():
 def doctest_FinalStep():
     """Unit test for FinalStep
 
-        >>> from schooltool.browser.ttwizard import FinalStep
+        >>> from schooltool.timetable.browser.ttwizard import FinalStep
         >>> context = app['ttschemas']
         >>> request = TestRequest()
         >>> view = FinalStep(context, request)
@@ -310,7 +310,7 @@ def doctest_FinalStep():
 def doctest_FinalStep_createSchema():
     """Unit test for FinalStep.createSchema
 
-        >>> from schooltool.browser.ttwizard import FinalStep
+        >>> from schooltool.timetable.browser.ttwizard import FinalStep
         >>> context = app['ttschemas']
         >>> request = TestRequest()
         >>> view = FinalStep(context, request)
@@ -351,7 +351,7 @@ def doctest_FinalStep_createSchema():
 def doctest_FinalStep_add():
     """Unit test for FinalStep.createSchema
 
-        >>> from schooltool.browser.ttwizard import FinalStep
+        >>> from schooltool.timetable.browser.ttwizard import FinalStep
         >>> context = app['ttschemas']
         >>> request = TestRequest()
         >>> view = FinalStep(context, request)
@@ -369,7 +369,8 @@ def doctest_FinalStep_add():
 def doctest_TimetableSchemaWizard():
     """Unit test for TimetableSchemaWizard
 
-        >>> from schooltool.browser.ttwizard import TimetableSchemaWizard
+        >>> from schooltool.timetable.browser.ttwizard import \\
+        ...                                     TimetableSchemaWizard
         >>> context = app['ttschemas']
         >>> request = TestRequest()
         >>> view = TimetableSchemaWizard(context, request)
@@ -435,7 +436,8 @@ def doctest_TimetableSchemaWizard():
 def doctest_TimetableSchemaWizard_getLastStep():
     """Unit test for TimetableSchemaWizard.getLastStep
 
-        >>> from schooltool.browser.ttwizard import TimetableSchemaWizard
+        >>> from schooltool.timetable.browser.ttwizard import \\
+        ...                                    TimetableSchemaWizard
         >>> context = app['ttschemas']
         >>> request = TestRequest()
         >>> view = TimetableSchemaWizard(context, request)
@@ -448,7 +450,7 @@ def doctest_TimetableSchemaWizard_getLastStep():
 
     When there is one, that's what getLastStep returns.
 
-        >>> from schooltool.browser.ttwizard import CycleStep
+        >>> from schooltool.timetable.browser.ttwizard import CycleStep
         >>> view.getSessionData()['last_step'] = CycleStep
         >>> view.getLastStep()
         <...CycleStep...>
@@ -459,15 +461,16 @@ def doctest_TimetableSchemaWizard_getLastStep():
 def doctest_TimetableSchemaWizard_rememberLastStep():
     """Unit test for TimetableSchemaWizard.rememberLastStep
 
-        >>> from schooltool.browser.ttwizard import TimetableSchemaWizard
+        >>> from schooltool.timetable.browser.ttwizard import \\
+        ...                                     TimetableSchemaWizard
         >>> context = app['ttschemas']
         >>> request = TestRequest()
         >>> view = TimetableSchemaWizard(context, request)
 
-        >>> from schooltool.browser.ttwizard import CycleStep
+        >>> from schooltool.timetable.browser.ttwizard import CycleStep
         >>> view.rememberLastStep(CycleStep(context, request))
         >>> view.getSessionData()['last_step']
-        <class 'schooltool.browser.ttwizard.CycleStep'>
+        <class 'schooltool.timetable.browser.ttwizard.CycleStep'>
 
     """
 
