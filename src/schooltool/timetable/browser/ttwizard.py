@@ -246,11 +246,11 @@ class CycleStep(ChoiceStep):
     def next(self):
         session = self.getSessionData()
         if session['cycle'] == 'weekly':
-            # TODO: fill session['day_names'] with weekday names
             return IndependentDaysStep(self.context, self.request)
         else:
             return DayEntryStep(self.context, self.request)
 
+    # TODO: fill session['day_names'] with weekday names in update()
 
 class DayEntryStep(FormStep):
     """A step for entering names of days."""
@@ -290,12 +290,12 @@ class IndependentDaysStep(ChoiceStep):
     question = _("Do classes begin and end at the same time each day in"
                  " your school's timetable?")
 
-    choices = (('similar',     _("Same time")),
-               ('independent', _("Different times")))
+    choices = ((True,  _("Same time")),
+               (False, _("Different times")))
 
     def next(self):
         session = self.getSessionData()
-        if session['similar_days'] == 'similar':
+        if session['similar_days']:
             return SimpleSlotEntryStep(self.context, self.request)
         else:
             return SlotEntryStep(self.context, self.request)
@@ -346,16 +346,12 @@ class SlotEntryStep(Step):
     This step is taken when the start/end times are different for each day.
     """
 
-    template = ViewPageTemplateFile("templates/ttwizard_slottimes.pt")
+    __call__ = ViewPageTemplateFile("templates/ttwizard_slottimes.pt")
 
     def __init__(self, context, request):
         Step.__init__(self, context, request)
         self.day_names = self.getSessionData()['day_names']
         self.time_rows = [('', ) * len(self.day_names)]
-
-    def __call__(self):
-        """Render the template."""
-        return self.template()
 
     def update(self):
         # TODO

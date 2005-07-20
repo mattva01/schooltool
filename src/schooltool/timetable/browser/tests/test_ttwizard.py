@@ -346,9 +346,9 @@ def doctest_IndependentDaysStep():
 
     The next step is SimpleSlotEntryStep if days are similar:
 
-        >>> view.getSessionData()['similar_days'] = 'similar'
+        >>> view.getSessionData()['similar_days'] = True
         >>> view.next()
-        <...SimpleSlotEntryStep...>
+        <...ttwizard.SimpleSlotEntryStep...>
 
     The next step cares about day names in the session.
 
@@ -356,9 +356,9 @@ def doctest_IndependentDaysStep():
 
     The next step is SlotEntryStep if each day is different:
 
-        >>> view.getSessionData()['similar_days'] = 'independent'
+        >>> view.getSessionData()['similar_days'] = False
         >>> view.next()
-        <...SlotEntryStep...>
+        <...ttwizard.SlotEntryStep...>
 
     """
 
@@ -428,6 +428,11 @@ def doctest_SlotEntryStep():
         >>> getSessionData(request)['day_names'] = ['Oneday', 'Twoday']
         >>> view = SlotEntryStep(context, request)
 
+        >>> view.day_names
+        ['Oneday', 'Twoday']
+        >>> view.time_rows
+        [('', '')]
+
     At first we get a table with one empty row of input fields:
 
         >>> print view()
@@ -445,12 +450,31 @@ def doctest_SlotEntryStep():
             <input ...>
           </td>
         </tr>
+        </table>
         ...
 
     SlotEntryStep.update wants at least one slot on each day:
 
         >>> view.update()
         False
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <tr>
+          <th>Oneday</th>
+          <th>Twoday</th>
+        </tr>
+        <tr>
+          <td>
+            <input ...>
+          </td>
+          <td>
+            <input ...>
+          </td>
+        </tr>
+        </table>
+        ...
 
 #        TODO
 #        >>> request = TestRequest(form={'field.times': u'\n\n\n'})
