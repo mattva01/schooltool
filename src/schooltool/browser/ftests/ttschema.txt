@@ -1,5 +1,9 @@
-Functional test for the advanced timetable schema add view
-==========================================================
+Functional test for ttimetable schemas
+======================================
+
+
+Setup
+-----
 
 Let's create a SchoolTool instance:
 
@@ -47,6 +51,9 @@ The schema container is empty:
       <p>There are none.</p>
   ...
 
+
+Advanced timetable schema add view
+----------------------------------
 
 Let's go to the advanced 'New Timetable Schema' view:
 
@@ -190,7 +197,7 @@ Lets add one more schema:
   <BLANKLINE>
   http://localhost/frogpond/ttschemas
 
-Itshould appear on the list:
+It should appear on the list:
 
   >>> print http(r"""
   ... GET /frogpond/ttschemas HTTP/1.1
@@ -217,9 +224,9 @@ We can change the default ttschema if we want to:
             <option selected="selected" value="another-schema">Another Schema</option>
   ...
 
-Simple timetable add
-====================
 
+Simple timetable add view
+-------------------------
 
 Now let's try the simple timetable schema setup view:
 
@@ -255,9 +262,9 @@ A new timetable schema appeared:
             <a href="http://localhost/frogpond/ttschemas/other">other</a>
   ...
 
-============
+
 Special days
-============
+------------
 
 We need a term:
 
@@ -411,9 +418,8 @@ If we look at the form again, we see the times have changed:
   ...
 
 
-==============
 Emergency Days
-==============
+--------------
 
 Let's make 'other' the default timetable schema:
 
@@ -488,7 +494,7 @@ Now let's make 2005-07-07 an emergency day:
   </form>
   ...
 
-When we select both the dates, the replacement day is registered:
+When we select both dates, the replacement day is registered:
 
   >>> print http("""
   ... POST /frogpond/ttschemas/other/@@emergency.html HTTP/1.1
@@ -526,7 +532,7 @@ Now all periods for this day are cancelled:
   <input type="text" name="P3_end" value="" />
   ...
 
-But the replacement day now contains periods allright:
+But the replacement day now contains periods all-right:
 
   >>> print http(r"""
   ... POST /frogpond/ttschemas/other/@@special.html HTTP/1.1
