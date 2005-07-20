@@ -843,7 +843,7 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
         tearDown()
 
     def createView(self, request=None):
-        from schooltool.timetable.browser.timetable import AdvancedTimetableSchemaAdd
+        from schooltool.timetable.browser import AdvancedTimetableSchemaAdd
         context = self.app["ttschemas"]
         context['default'] = createSchema(['Day 1'], ['Period 1'])
         if request is None:
@@ -2856,7 +2856,7 @@ def test_suite():
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
                                        optionflags=optionflags
                                             | doctest.NORMALIZE_WHITESPACE))
-    suite.addTest(doctest.DocTestSuite('schooltool.timetable.browser.timetable',
+    suite.addTest(doctest.DocTestSuite('schooltool.timetable.browser',
                                        optionflags=optionflags))
     suite.addTest(unittest.makeSuite(TestAdvancedTimetableSchemaAdd))
     return suite
