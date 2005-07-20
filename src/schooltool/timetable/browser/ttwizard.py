@@ -132,6 +132,12 @@ from schooltool.timetable import WeeklyTimetableModel
 from schooltool.timetable import SequentialDaysTimetableModel
 
 
+
+def getSessionData(self):
+    """Return the data container stored in the session."""
+    return ISession(self.request)['schooltool.ttwizard']
+
+
 class Step(BrowserView):
     """A step, one of many.
 
@@ -149,9 +155,7 @@ class Step(BrowserView):
 
     __used_for__ = ITimetableSchemaContainer
 
-    def getSessionData(self):
-        """Return the data container stored in the session."""
-        return ISession(self.request)['schooltool.ttwizard']
+    getSessionData = getSessionData
 
 
 class FirstStep(Step):
@@ -364,10 +368,12 @@ class FinalStep(Step):
         self.context[key] = ttschema
 
 
-class TimetableSchemaWizard(Step):
+class TimetableSchemaWizard(BrowserView):
     """View for defining a new timetable schema."""
 
     __used_for__ = ITimetableSchemaContainer
+
+    getSessionData = getSessionData
 
     def getLastStep(self):
         session = self.getSessionData()
