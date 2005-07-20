@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+import datetime
 
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
@@ -203,11 +204,11 @@ def doctest_CycleStep():
         >>> request = TestRequest()
         >>> view = CycleStep(context, request)
 
-    The next step is FinalStep for weekly cycle
+    The next step is SimpleSlotEntryStep for weekly cycle
 
         >>> view.getSessionData()['cycle'] = 'weekly'
         >>> view.next()
-        <...FinalStep...>
+        <...SimpleSlotEntryStep...>
 
     The next step is DayEntryStep for rotating cycle
 
@@ -262,6 +263,61 @@ def doctest_DayEntryStep():
     The next page is the final page.
 
         >>> view.next()
+        <...SimpleSlotEntryStep...>
+
+    """
+
+
+def doctest_SimpleSlotEntryStep():
+    r"""Unit test for SimpleSlotEntryStep
+
+        >>> from schooltool.timetable.browser.ttwizard import SimpleSlotEntryStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = SimpleSlotEntryStep(context, request)
+
+        >>> print view()
+        <BLANKLINE>
+        ...<textarea cols="60" id="field.times" name="field.times"
+                     rows="15" >...</textarea>...
+
+    SimpleSlotEntryStep.update wants at least one slot
+
+        >>> view.update()
+        False
+
+        >>> request = TestRequest(form={'field.times': u'\n\n\n'})
+        >>> view = SimpleSlotEntryStep(context, request)
+        >>> view.update()
+        False
+
+        >>> request = TestRequest(form={'field.times': u'not a time\n\n\n'})
+        >>> view = SimpleSlotEntryStep(context, request)
+        >>> view.update()
+        False
+
+        >>> request = TestRequest(form={'field.times': u'9:30-10:25\n\n'})
+        >>> view = SimpleSlotEntryStep(context, request)
+        >>> view.update()
+        True
+
+        >>> view.getSessionData()['time_slots']
+        [(datetime.time(9, 30), datetime.timedelta(0, 3300))]
+
+    The text area contains one slot per line; extra spaces are stripped;
+    empty lines are ignored.
+
+        >>> view.parse(u' 9:30 - 10:25 \n \n 12:30 - 13:25 \n')
+        [(datetime.time(9, 30), datetime.timedelta(0, 3300)),
+         (datetime.time(12, 30), datetime.timedelta(0, 3300))]
+        >>> view.parse(u'  \n\n ')
+        []
+        >>> view.parse(u'')
+        []
+
+    The next page is the final page.
+
+        >>> view.next()
         <...FinalStep...>
 
     """
@@ -278,9 +334,12 @@ def doctest_FinalStep():
     In its first primitive incarnation, the wizard can magically create a whole
     schema from almost no user data at all!  XXX: fix this
 
+        >>> from datetime import time, timedelta
         >>> data = view.getSessionData()
         >>> data['title'] = u'Sample Schema'
         >>> data['cycle'] = 'weekly'
+        >>> data['times'] = [(time(9, 30), timedelta(minutes=55)),
+        ...                  (time(10, 30), timedelta(minutes=55))]
 
         >>> view()
 
@@ -317,6 +376,9 @@ def doctest_FinalStep_createSchema():
         >>> data = view.getSessionData()
         >>> data['title'] = u'Default'
         >>> data['cycle'] = 'weekly'
+        >>> from datetime import time, timedelta
+        >>> data['times'] = [(time(9, 30), timedelta(minutes=55)),
+        ...                  (time(10, 30), timedelta(minutes=55))]
 
         >>> ttschema = view.createSchema()
         >>> ttschema
@@ -332,6 +394,18 @@ def doctest_FinalStep_createSchema():
         <...WeeklyTimetableModel object at ...>
         >>> print " ".join(ttschema.model.timetableDayIds)
         Monday Tuesday Wednesday Thursday Friday
+
+    There is one day template
+
+        >>> ttschema.model.dayTemplates.keys()
+        [None]
+        >>> slots = [(period.tstart, period.duration, period.title)
+        ...          for period in ttschema.model.dayTemplates[None]]
+        >>> slots.sort()
+        >>> for tstart, duration, title in slots:
+        ...     print tstart, duration, title
+        09:30:00 0:55:00 09:30-10:25
+        10:30:00 0:55:00 10:30-11:25
 
     The model can be either weekly or rotating.
 

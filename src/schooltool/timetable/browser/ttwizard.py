@@ -121,11 +121,13 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.container.interfaces import INameChooser
 from zope.app.session.interfaces import ISession
 
+from schooltool.timetable.browser import parse_time_range
+from schooltool.timetable.browser import format_time_range
 from schooltool import SchoolToolMessageID as _
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable import TimetableSchema
 from schooltool.timetable import TimetableSchemaDay
-from schooltool.timetable import SchooldayTemplate
+from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable import WeeklyTimetableModel
 from schooltool.timetable import SequentialDaysTimetableModel
 
@@ -223,7 +225,7 @@ class CycleStep(ChoiceStep):
         session = self.getSessionData()
         # This if statement will become much more meaningful in near future
         if session['cycle'] == 'weekly':
-            return FinalStep(self.context, self.request)
+            return SimpleSlotEntryStep(self.context, self.request)
         else:
             return DayEntryStep(self.context, self.request)
 
@@ -265,6 +267,55 @@ class DayEntryStep(Step):
         return filter(None, map(unicode.strip, day_names.splitlines()))
 
     def next(self):
+        return SimpleSlotEntryStep(self.context, self.request)
+
+
+class SimpleSlotEntryStep(Step):
+    """A step for entering times for classes.
+
+    This step is used when the times are the same in each day.
+    """
+
+    __call__ = ViewPageTemplateFile("templates/ttwizard_form.pt")
+
+    class schema(Interface):
+        times = Text(title=_("Start and end times for each slot"),
+                     default=u"9:30-10:25\n10:30-11:25")
+
+    def widgets(self):
+        return [getattr(self, name + '_widget')
+                for name in getFieldNamesInOrder(self.schema)]
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+        setUpWidgets(self, self.schema, IInputWidget)
+
+    def update(self):
+        try:
+            data = getWidgetsData(self, self.schema)
+        except WidgetsError, e:
+            return False
+        try:
+            times = self.parse(data['times'])
+        except ValueError:
+            # TODO: tell the user what was wrong
+            return False
+        if not times:
+            return False
+        session = self.getSessionData()
+        session['time_slots'] = times
+        return True
+
+    def parse(self, times):
+        """Parse a multi-line string into a list of time slots.
+
+        One slot per line (HH:MM - HH:MM).  Empty lines are ignored.  Extra
+        spaces are stripped.
+        """
+        return map(parse_time_range,
+                   filter(None, map(unicode.strip, times.splitlines())))
+
+    def next(self):
         return FinalStep(self.context, self.request)
 
 
@@ -295,7 +346,11 @@ class FinalStep(Step):
         else:
             day_ids = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
         periods = ['A', 'B']
-        day_templates = {None: SchooldayTemplate()}
+        template = SchooldayTemplate()
+        for tstart, duration in session['times']:
+            ptitle = format_time_range(tstart, duration)
+            template.add(SchooldayPeriod(ptitle, tstart, duration))
+        day_templates = {None: template}
         model = model_factory(day_ids, day_templates)
         ttschema = TimetableSchema(day_ids, title=title, model=model)
         for day_id in day_ids:
