@@ -11,7 +11,7 @@
 
   <table>
     <tr>
-      <th tal:repeat="day_name python:view.getSessionData()['day_names']"
+      <th tal:repeat="day_name view/day_names"
           tal:content="day_name" />
     </tr>
     <tr tal:repeat="row view/time_rows">

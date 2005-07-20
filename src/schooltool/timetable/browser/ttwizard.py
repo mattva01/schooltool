@@ -133,9 +133,9 @@ from schooltool.timetable import SequentialDaysTimetableModel
 
 
 
-def getSessionData(self):
+def getSessionData(request):
     """Return the data container stored in the session."""
-    return ISession(self.request)['schooltool.ttwizard']
+    return ISession(request)['schooltool.ttwizard']
 
 
 #
@@ -159,7 +159,8 @@ class Step(BrowserView):
 
     __used_for__ = ITimetableSchemaContainer
 
-    getSessionData = getSessionData
+    def getSessionData(self):
+        return getSessionData(self.request)
 
 
 class ChoiceStep(Step):
@@ -347,10 +348,9 @@ class SlotEntryStep(Step):
 
     template = ViewPageTemplateFile("templates/ttwizard_slottimes.pt")
 
-    day_names = ['Day A', 'Day B', 'Day C']
-
     def __init__(self, context, request):
         Step.__init__(self, context, request)
+        self.day_names = self.getSessionData()['day_names']
         self.time_rows = [('', ) * len(self.day_names)]
 
     def __call__(self):
@@ -420,7 +420,8 @@ class TimetableSchemaWizard(BrowserView):
 
     __used_for__ = ITimetableSchemaContainer
 
-    getSessionData = getSessionData
+    def getSessionData(self):
+        return getSessionData(self.request)
 
     def getLastStep(self):
         session = self.getSessionData()

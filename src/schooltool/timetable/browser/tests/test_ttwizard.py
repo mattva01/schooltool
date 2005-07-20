@@ -350,6 +350,10 @@ def doctest_IndependentDaysStep():
         >>> view.next()
         <...SimpleSlotEntryStep...>
 
+    The next step cares about day names in the session.
+
+        >>> view.getSessionData()['day_names'] = ['Day A', 'Day B']
+
     The next step is SlotEntryStep if each day is different:
 
         >>> view.getSessionData()['similar_days'] = 'independent'
@@ -418,10 +422,11 @@ def doctest_SlotEntryStep():
     r"""Unit test for SlotEntryStep
 
         >>> from schooltool.timetable.browser.ttwizard import SlotEntryStep
+        >>> from schooltool.timetable.browser.ttwizard import getSessionData
         >>> context = app['ttschemas']
         >>> request = TestRequest()
+        >>> getSessionData(request)['day_names'] = ['Oneday', 'Twoday']
         >>> view = SlotEntryStep(context, request)
-        >>> view.getSessionData()['day_names'] = ['Oneday', 'Twoday']
 
     At first we get a table with one empty row of input fields:
 
@@ -433,9 +438,6 @@ def doctest_SlotEntryStep():
           <th>Twoday</th>
         </tr>
         <tr>
-          <td>
-            <input ...>
-          </td>
           <td>
             <input ...>
           </td>
