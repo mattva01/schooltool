@@ -221,6 +221,17 @@ def doctest_FormStep():
         </form>
         ...
 
+    An error message may come from the `error` attribute.
+
+        >>> view.error = "A terrible error has occurred!"
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <form class="plain" method="POST" action="http://127.0.0.1">
+          <p>Informative text shown above the form.</p>
+          <div class="error">A terrible error has occurred!</div>
+        ...
+
     """
 
 
@@ -322,16 +333,28 @@ def doctest_DayEntryStep():
 
         >>> view.update()
         False
+        >>> print view.error
+        Please enter at least one day name.
+
+        >>> request = TestRequest(form={'field.days': u''})
+        >>> view = DayEntryStep(context, request)
+        >>> view.update()
+        False
+        >>> print view.error
+        Please enter at least one day name.
 
         >>> request = TestRequest(form={'field.days': u'\n\n\n'})
         >>> view = DayEntryStep(context, request)
         >>> view.update()
         False
+        >>> print view.error
+        Please enter at least one day name.
 
         >>> request = TestRequest(form={'field.days': u'A\nB\n\n'})
         >>> view = DayEntryStep(context, request)
         >>> view.update()
         True
+        >>> view.error
 
         >>> view.getSessionData()['day_names']
         [u'A', u'B']

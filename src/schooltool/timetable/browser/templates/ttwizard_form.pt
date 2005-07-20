@@ -11,6 +11,9 @@
   <p tal:condition="view/description" tal:content="view/description"
      i18n:translate="">(informative text)</p>
 
+  <div tal:condition="view/error" tal:content="view/error" class="error"
+       i18n:translate="">(error message)</div>
+
   <metal:block use-macro="context/@@form_macros/widget_rows" />
 
   <div class="controls">

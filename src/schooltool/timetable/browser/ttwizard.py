@@ -203,6 +203,8 @@ class FormStep(Step):
 
     description = None
 
+    error = None
+
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
         setUpWidgets(self, self.schema, IInputWidget)
@@ -270,15 +272,16 @@ class DayEntryStep(FormStep):
     description = _("Enter names of days in cycle, one per line.")
 
     class schema(Interface):
-        days = Text()
+        days = Text(required=False)
 
     def update(self):
         try:
             data = getWidgetsData(self, self.schema)
         except WidgetsError, e:
             return False
-        day_names = self.parse(data['days'])
+        day_names = self.parse(data.get('days') or '')
         if not day_names:
+            self.error = _("Please enter at least one day name.")
             return False
         session = self.getSessionData()
         session['day_names'] = day_names
