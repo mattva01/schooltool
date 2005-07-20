@@ -3,7 +3,7 @@
   <title metal:fill-slot="title" i18n:translate="">New timetable schema</title>
 </head>
 <body>
-  <h1 metal:fill-slot="h1" i18n:translate="">New timetable schema</h1>
+  <h1 metal:fill-slot="content-header" i18n:translate="">New timetable schema</h1>
 <metal:block metal:fill-slot="body">
 
 <form class="plain" method="POST" tal:attributes="action request/URL">
