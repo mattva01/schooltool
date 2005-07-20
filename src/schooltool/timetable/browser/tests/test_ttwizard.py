@@ -92,8 +92,11 @@ def print_ttschema(ttschema):
         print " ".join(['%-10s' % cell for cell in row])
 
 
-def doctest_Step_getSessionData():
-    """Unit test for Step.getSessionData.
+def doctest_getSessionData():
+    """Unit test for getSessionData.
+
+    This function is used as a method for both Step and TimetableSchemaWizard
+    classes (and subclasses of the former).
 
         >>> from schooltool.timetable.browser.ttwizard import Step
         >>> context = app['ttschemas']
@@ -109,6 +112,55 @@ def doctest_Step_getSessionData():
         >>> data['something']
         42
 
+        >>> from schooltool.timetable.browser.ttwizard import \\
+        ...                                     TimetableSchemaWizard
+        >>> view = TimetableSchemaWizard(context, request)
+        >>> data['something']
+        42
+
+    """
+
+
+def doctest_ChoiceStep():
+    """Unit test for ChoiceStep
+
+        >>> from schooltool.timetable.browser.ttwizard import ChoiceStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = ChoiceStep(context, request)
+
+    ChoiceStep wants some attributes
+
+        >>> view.key = 'meaning'
+        >>> view.question = 'What is the meaning of life?'
+        >>> view.choices = [('42', "Fourty two"),
+        ...                 ('huh', "I don't know")]
+
+        >>> print view()
+        <BLANKLINE>
+        ...What is the meaning of life?...
+        ...<input class="button-ok" type="submit" name="NEXT.0"
+                  value="Fourty two" />
+        ...<input class="button-ok" type="submit" name="NEXT.1"
+                  value="I don't know" />
+        ...
+
+    Update does something if you choose a valid choice
+
+        >>> view.update()
+        False
+
+        >>> view.request = TestRequest(form={'NEXT.0': "Whatever"})
+        >>> view.update()
+        True
+        >>> view.getSessionData()[view.key]
+        '42'
+
+        >>> view.request = TestRequest(form={'NEXT.1': "Whatever"})
+        >>> view.update()
+        True
+        >>> view.getSessionData()[view.key]
+        'huh'
     """
 
 
@@ -208,49 +260,6 @@ def doctest_FirstStep():
         >>> view.next()
         <...CycleStep...>
 
-    """
-
-
-def doctest_ChoiceStep():
-    """Unit test for ChoiceStep
-
-        >>> from schooltool.timetable.browser.ttwizard import ChoiceStep
-        >>> context = app['ttschemas']
-        >>> request = TestRequest()
-        >>> view = ChoiceStep(context, request)
-
-    ChoiceStep wants some attributes
-
-        >>> view.key = 'meaning'
-        >>> view.question = 'What is the meaning of life?'
-        >>> view.choices = [('42', "Fourty two"),
-        ...                 ('huh', "I don't know")]
-
-        >>> print view()
-        <BLANKLINE>
-        ...What is the meaning of life?...
-        ...<input class="button-ok" type="submit" name="NEXT.0"
-                  value="Fourty two" />
-        ...<input class="button-ok" type="submit" name="NEXT.1"
-                  value="I don't know" />
-        ...
-
-    Update does something if you choose a valid choice
-
-        >>> view.update()
-        False
-
-        >>> view.request = TestRequest(form={'NEXT.0': "Whatever"})
-        >>> view.update()
-        True
-        >>> view.getSessionData()[view.key]
-        '42'
-
-        >>> view.request = TestRequest(form={'NEXT.1': "Whatever"})
-        >>> view.update()
-        True
-        >>> view.getSessionData()[view.key]
-        'huh'
     """
 
 
