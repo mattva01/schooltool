@@ -1246,10 +1246,10 @@ def doctest_ACLView():
         <html>
         ...
         <form method="post" action="http://127.0.0.1">
-          <h3>
-              Access control
-          </h3>
         ...
+          <h3>
+              Access control for SchoolBell
+          </h3>
           <fieldset>
             <legend>Permissions for Groups</legend>
             <table class="acl">

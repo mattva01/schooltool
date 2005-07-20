@@ -23,6 +23,7 @@ $Id$
 """
 
 from zope.interface import Interface, implements
+from zope.component import adapts
 from zope.schema import Password, TextLine, Bytes, Bool, getFieldNamesInOrder
 from zope.schema import Choice
 from zope.schema.interfaces import ValidationError
@@ -55,8 +56,22 @@ from schoolbell.app.interfaces import IApplicationPreferences
 from schoolbell.app.interfaces import vocabulary
 from schoolbell.app.app import Person
 from schoolbell.app.app import getSchoolBellApplication
+from schoolbell.app.browser.cal import CalendarOwnerTraverser
 
 from pytz import common_timezones
+
+
+class SchoolBellApplicationTraverser(CalendarOwnerTraverser):
+    """Traverser for a SchoolBellApplication."""
+
+    adapts(ISchoolBellApplication)
+
+    def publishTraverse(self, request, name):
+        if name in ('persons', 'resources', 'groups'):
+            return self.context[name]
+
+        return CalendarOwnerTraverser.publishTraverse(self, request, name)
+
 
 class ContainerView(BrowserView):
     """A base view for all containers.

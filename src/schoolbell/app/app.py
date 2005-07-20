@@ -71,9 +71,14 @@ class SchoolBellApplication(Persistent, SampleContainer,
         self['persons'] = PersonContainer()
         self['groups'] = GroupContainer()
         self['resources'] = ResourceContainer()
+        self.calendar = Calendar(self)
 
     def _newContainerData(self):
         return PersistentDict()
+
+    def title(self):
+        """This is required for the site calendar views to work."""
+        return IApplicationPreferences(self).title
 
 
 class PersonContainer(BTreeContainer):

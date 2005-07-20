@@ -404,7 +404,7 @@ class IResourceContained(IResource, IContained,
     containers(IResourceContainer)
 
 
-class ISchoolBellApplication(IReadContainer):
+class ISchoolBellApplication(IReadContainer, ICalendarOwner):
     """The main SchoolBell application object.
 
     The application is a read-only container with the following items:

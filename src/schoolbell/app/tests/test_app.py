@@ -85,6 +85,17 @@ def doctest_SchoolBellApplication():
         >>> ISchoolBellApplication(resources) is app
         True
 
+    SchoolBellApplication is also a calendar owner:
+
+        >>> from schoolbell.app.interfaces import ICalendarOwner
+        >>> verifyObject(ICalendarOwner, app)
+        True
+
+    and naturally has a calendar attribute:
+
+        >>> app.calendar
+        <schoolbell.app.cal.Calendar object at ...
+
     """
 
 
