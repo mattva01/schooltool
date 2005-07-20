@@ -1,7 +1,7 @@
 <metal:block define-macro="widget_rows" i18n:domain="schoolbell">
 <div class="row" tal:repeat="widget view/widgets">
   <metal:block define-macro="widget_row">
-  <div class="label">
+  <div class="label" tal:condition="widget/label">
     <label for="field.name" title="The widget's hint"
       tal:attributes="for widget/name; title widget/hint"
       tal:content="widget/label">The Label</label>
