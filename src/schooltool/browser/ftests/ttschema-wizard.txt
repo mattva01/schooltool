@@ -1,0 +1,174 @@
+Functional test for timetable schema add wizard
+===============================================
+
+Let's create a SchoolTool instance:
+
+  >>> print http("""
+  ... POST /@@contents.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Length: ...
+  ... Content-Type: application/x-www-form-urlencoded
+  ... 
+  ... type_name=BrowserAdd__schooltool.app.SchoolToolApplication&\
+  ... new_value=frogpond""")
+  HTTP/1.1 303 See Other
+  ...
+  Location: http://localhost/@@contents.html
+  ...
+
+Let's go to the new timetable schema wizard:
+
+  >>> print http(r"""
+  ... GET /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+      <title>New timetable schema</title>
+  ...
+            <h1>New timetable schema</h1>
+  ...
+  <form class="plain" method="POST"
+        action="http://localhost/frogpond/ttschemas/add.html">
+    <div class="row">
+    <div class="label">
+      <label for="field.title" title="">Title</label>
+    </div>
+    <p class="hint"></p>
+    <div class="field">
+      <input class="textType" id="field.title" name="field.title" size="20"
+             type="text" value="default"  />
+    </div>
+    </div>
+    <div class="controls">
+      <input type="submit" class="button-ok" name="NEXT"
+             value="Next" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  </form>
+  ...
+
+We enter a title and press Next
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... field.title=Default&NEXT=Next
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+      <title>New timetable schema</title>
+  ...
+            <h1>New timetable schema</h1>
+  ...
+  <form class="plain" method="POST"
+        action="http://localhost/frogpond/ttschemas/add.html">
+    <p>Does your school's timetable cycle use days of the week, or a rotating
+       cycle?</p>
+    <div class="controls">
+      <input class="button-ok" type="submit" name="NEXT.0"
+             value="Days of the week" />
+      <input class="button-ok" type="submit" name="NEXT.1"
+             value="Rotating cycle" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  </form>
+  ...
+
+Let's choose weekly for now -- we'll try the rotating cycle later.
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... NEXT.0=Days+of+the+week
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+      <title>New timetable schema</title>
+  ...
+            <h1>New timetable schema</h1>
+  ...
+  <form class="plain" method="POST"
+        action="http://localhost/frogpond/ttschemas/add.html">
+    <p>Do classes begin and end at the same time each day in your school's
+       timetable?</p>
+    <div class="controls">
+      <input class="button-ok" type="submit" name="NEXT.0"
+             value="Same time" />
+      <input class="button-ok" type="submit" name="NEXT.1"
+             value="Different times" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  </form>
+  ...
+
+Let's say that classes begin at the same time (because the other branch
+is not implemented yet -- XXX don't forget to update this bit later)
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... NEXT.0=Same+time
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+      <title>New timetable schema</title>
+  ...
+            <h1>New timetable schema</h1>
+  ...
+  <form class="plain" method="POST"
+        action="http://localhost/frogpond/ttschemas/add.html">
+    <div class="row">
+    <div class="label">
+      <label for="field.times" title="">Start and end times for each slot</label>
+    </div>
+    <p class="hint"></p>
+    <div class="field">
+      <textarea cols="60" id="field.times" name="field.times" rows="15"
+      >9:30-10:25
+      10:30-11:25</textarea>
+    </div>
+    </div>
+    <div class="controls">
+      <input type="submit" class="button-ok" name="NEXT"
+             value="Next" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  </form>
+  ...
+
+Let's add two more periods.  The timetable schema gets created.
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... field.times=9:30-10:25%0D%0A10:30-11:25%0D%0A11:30-12:25%0D%0A12:30-13:25&NEXT=Next
+  ... """)
+  HTTP/1.1 303 See Other
+  Content-Length: 0
+  Location: http://localhost/frogpond/ttschemas
+  ...
+
+Now we see the newly created timetable schema in the list.
+
+  >>> print http(r"""
+  ... GET /frogpond/ttschemas HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... """, handle_errors=False)
+  HTTP/1.1 200 Ok
+  ...
+          <a href="http://localhost/frogpond/ttschemas/default">Default</a>
+  ...
+
