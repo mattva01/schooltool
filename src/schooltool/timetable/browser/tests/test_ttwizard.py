@@ -469,7 +469,7 @@ def doctest_SimpleSlotEntryStep():
     The next page is the final page.
 
         >>> view.next()
-        <...FinalStep...>
+        <...ttwizard.NamedPeriodsStep...>
 
     """
 
@@ -548,10 +548,124 @@ def doctest_SlotEntryStep():
     The next page is the final page.
 
         >>> view.next()
-        <...FinalStep...>
+        <...ttwizard.NamedPeriodsStep...>
 
     """
 
+
+def doctest_NamedPeriodsStep():
+    r"""Unit test for NamedPeriodsStep
+
+        >>> from schooltool.timetable.browser.ttwizard \
+        ...     import NamedPeriodsStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = NamedPeriodsStep(context, request)
+
+    The next step is PeriodNamesStep if perods should be named:
+
+        >>> view.getSessionData()['named_periods'] = True
+        >>> view.next()
+        <schooltool.timetable.browser.ttwizard.PeriodNamesStep...>
+
+    If periods are not named, go straight to the final step:
+
+        >>> view.getSessionData()['named_periods'] = False
+        >>> view.next()
+        <...ttwizard.FinalStep...>
+
+    """
+
+def doctest_PeriodNamesStep():
+    r"""
+    Unit test for PeriodNamesStep
+
+        >>> from schooltool.timetable.browser.ttwizard import PeriodNamesStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = PeriodNamesStep(context, request)
+
+    The number of the required periods depends on the maximum number
+    of slots:
+
+        >>> view.getSessionData()['time_slots'] = [
+        ...     (datetime.time(9, 15), datetime.timedelta(0, 3300)),
+        ...     (datetime.time(10, 35), datetime.timedelta(0, 2700)),
+        ...     (datetime.time(11, 55), datetime.timedelta(0, 2700))]
+        >>> view.requiredperiods()
+        3
+
+        TODO: test when slots are different on different days
+
+    The view asks the user to enter at least 3 period names:
+
+        >>> view.update()
+        False
+        >>> print translate(view.error)
+        Please enter at least 3 periods.
+
+        >>> request = TestRequest(form={'field.periods': u''})
+        >>> view = PeriodNamesStep(context, request)
+        >>> view.getSessionData()['time_slots'] = [
+        ...     (datetime.time(9, 15), datetime.timedelta(0, 3300)),
+        ...     (datetime.time(10, 35), datetime.timedelta(0, 2700)),
+        ...     (datetime.time(11, 55), datetime.timedelta(0, 2700))]
+        >>> view.update()
+        False
+        >>> print translate(view.error)
+        Please enter at least 3 periods.
+
+        >>> request = TestRequest(form={'field.periods': u'\n\n\n'})
+        >>> view = PeriodNamesStep(context, request)
+        >>> view.getSessionData()['time_slots'] = [
+        ...     (datetime.time(9, 15), datetime.timedelta(0, 3300)),
+        ...     (datetime.time(10, 35), datetime.timedelta(0, 2700)),
+        ...     (datetime.time(11, 55), datetime.timedelta(0, 2700))]
+        >>> view.update()
+        False
+        >>> print translate(view.error)
+        Please enter at least 3 periods.
+
+        >>> request = TestRequest(form={'field.periods': u'A\n'})
+        >>> view = PeriodNamesStep(context, request)
+        >>> view.getSessionData()['time_slots'] = [
+        ...     (datetime.time(9, 15), datetime.timedelta(0, 3300)),
+        ...     (datetime.time(10, 35), datetime.timedelta(0, 2700)),
+        ...     (datetime.time(11, 55), datetime.timedelta(0, 2700))]
+        >>> view.update()
+        False
+        >>> print translate(view.error)
+        Please enter at least 3 periods.
+
+        >>> request = TestRequest(form={'field.periods': u'A\nB\nC\nD'})
+        >>> view = PeriodNamesStep(context, request)
+        >>> view.getSessionData()['time_slots'] = [
+        ...     (datetime.time(9, 15), datetime.timedelta(0, 3300)),
+        ...     (datetime.time(10, 35), datetime.timedelta(0, 2700)),
+        ...     (datetime.time(11, 55), datetime.timedelta(0, 2700))]
+        >>> view.update()
+        True
+        >>> view.error
+
+        >>> view.getSessionData()['period_names']
+        [u'A', u'B', u'C', u'D']
+
+    The text area contains one day name per line; extra spaces are stripped;
+    empty lines are ignored.
+
+        >>> view.parse(u'period 1\n P2\nP3 \n\n\n P4 ')
+        [u'period 1', u'P2', u'P3', u'P4']
+        >>> view.parse(u'  \n\n\t ')
+        []
+        >>> view.parse(u'')
+        []
+
+    The next page is FinalStep.
+
+        >>> view.next()
+        <...ttwizard.FinalStep...>
+
+    """
 
 def doctest_FinalStep():
     """Unit test for FinalStep
@@ -570,6 +684,7 @@ def doctest_FinalStep():
         >>> data['cycle'] = 'weekly'
         >>> data['time_slots'] = [(time(9, 30), timedelta(minutes=55)),
         ...                       (time(10, 30), timedelta(minutes=55))]
+        >>> data['named_periods'] = False
 
         >>> view()
 
@@ -609,6 +724,7 @@ def doctest_FinalStep_createSchema():
         >>> from datetime import time, timedelta
         >>> data['time_slots'] = [(time(9, 30), timedelta(minutes=55)),
         ...                       (time(10, 30), timedelta(minutes=55))]
+        >>> data['named_periods'] = False
 
         >>> ttschema = view.createSchema()
         >>> ttschema
@@ -648,6 +764,20 @@ def doctest_FinalStep_createSchema():
         D1           D2           D3
         09:30-10:25  09:30-10:25  09:30-10:25
         10:30-11:25  10:30-11:25  10:30-11:25
+
+    The periods can be named rather than be designated by time:
+
+        >>> data['cycle'] = 'rotating'
+        >>> data['day_names'] = ['D1', 'D2', 'D3']
+        >>> data['named_periods'] = True
+        >>> data['period_names'] = ['Green', 'Blue']
+        >>> ttschema = view.createSchema()
+        >>> ttschema.model
+        <...SequentialDaysTimetableModel object at ...>
+        >>> print_ttschema(ttschema)
+        D1           D2           D3
+        Green        Green        Green
+        Blue         Blue         Blue
 
     """
 

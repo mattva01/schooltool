@@ -293,7 +293,7 @@ class DayEntryStep(FormStep):
         One day name per line.  Empty lines are ignored.  Extra spaces
         are stripped.
         """
-        return filter(None, map(unicode.strip, day_names.splitlines()))
+        return [s.strip() for s in day_names.splitlines() if s.strip()]
 
     def next(self):
         return IndependentDaysStep(self.context, self.request)
@@ -381,7 +381,7 @@ class SimpleSlotEntryStep(FormStep):
         return True
 
     def next(self):
-        return FinalStep(self.context, self.request)
+        return NamedPeriodsStep(self.context, self.request)
 
 
 class SlotEntryStep(Step):
@@ -418,7 +418,66 @@ class SlotEntryStep(Step):
         return True
 
     def next(self):
-        # TODO: redirect to period names/time step when we have it.
+        return NamedPeriodsStep(self.context, self.request)
+
+
+class NamedPeriodsStep(ChoiceStep):
+    """A step for choosing if periods have names or are designated by time"""
+
+    key = 'named_periods'
+
+    question = _("Do periods have names or are they simply"
+                 " designated by time?")
+
+    choices = ((True,  _("Have names")),
+               (False, _("Designated by time")))
+
+    def next(self):
+        session = self.getSessionData()
+        if session['named_periods']:
+            return PeriodNamesStep(self.context, self.request)
+        else:
+            return FinalStep(self.context, self.request)
+
+
+class PeriodNamesStep(FormStep):
+    """A step for entering names of periods"""
+
+    description = _("Enter names of periods, one per line.")
+
+    class schema(Interface):
+        periods = Text(required=False)
+
+    def update(self):
+        try:
+            data = getWidgetsData(self, self.schema)
+        except WidgetsError, e:
+            return False
+        periods = self.parse(data.get('periods') or '')
+        min_periods = self.requiredperiods()
+        if len(periods) < min_periods:
+            self.error = _("Please enter at least $number periods.")
+            self.error.mapping['number'] = min_periods
+            return False
+        session = self.getSessionData()
+        session['period_names'] = periods
+        return True
+
+    def requiredperiods(self):
+        """Returns the maximum number of slots there can be on a day"""
+        # TODO make this work if slots are different on different days
+        return len(self.getSessionData()['time_slots'])
+
+    def parse(self, day_names):
+        """Parse a multi-line string into a list of day names.
+
+        One day name per line.  Empty lines are ignored.  Extra spaces
+        are stripped.
+        """
+        return [s.strip() for s in day_names.splitlines() if s.strip()]
+
+    def next(self):
+        # TODO: redirect to periods same/different choice
         return FinalStep(self.context, self.request)
 
 
@@ -449,11 +508,19 @@ class FinalStep(Step):
         else:
             day_ids = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
         periods = []
+
+        slots = session['time_slots']
         template = SchooldayTemplate()
-        for tstart, duration in session['time_slots']:
-            ptitle = format_time_range(tstart, duration)
-            template.add(SchooldayPeriod(ptitle, tstart, duration))
-            periods.append(ptitle)
+        if session['named_periods']:
+            period_names = session['period_names']
+            for ptitle, (tstart, duration) in zip(period_names, slots):
+                template.add(SchooldayPeriod(ptitle, tstart, duration))
+                periods.append(ptitle)
+        else:
+            for tstart, duration in slots:
+                ptitle = format_time_range(tstart, duration)
+                template.add(SchooldayPeriod(ptitle, tstart, duration))
+                periods.append(ptitle)
         day_templates = {None: template}
         model = model_factory(day_ids, day_templates)
         ttschema = TimetableSchema(day_ids, title=title, model=model)
@@ -501,4 +568,3 @@ class TimetableSchemaWizard(BrowserView):
             current_step = current_step.next()
         self.rememberLastStep(current_step)
         return current_step()
-
