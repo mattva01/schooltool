@@ -459,3 +459,147 @@ We can examine its composition more easily by invoking the RESTive view.
       <period id="12:30-13:25"> </period>
     </day>
   </timetable>
+
+
+The Cancel button
+-----------------
+
+Let's do it once more!
+
+  >>> print http(r"""
+  ... GET /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+      <title>New timetable schema</title>
+  ...
+            <h1>New timetable schema</h1>
+  ...
+  <form class="plain" method="POST"
+        action="http://localhost/frogpond/ttschemas/add.html">
+    <div class="row">
+    <div class="label">
+      <label for="field.title" title="">Title</label>
+    </div>
+    <p class="hint"></p>
+    <div class="field">
+      <input class="textType" id="field.title" name="field.title" size="20"
+             type="text" value="default"  />
+    </div>
+    </div>
+    <div class="controls">
+      <input type="submit" class="button-ok" name="NEXT"
+             value="Next" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  </form>
+  ...
+
+We enter a title and press Next
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... field.title=Rotating&NEXT=Next
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+      <title>New timetable schema</title>
+  ...
+            <h1>New timetable schema</h1>
+  ...
+  <form class="plain" method="POST"
+        action="http://localhost/frogpond/ttschemas/add.html">
+    <p>Does your school's timetable cycle use days of the week, or a rotating
+       cycle?</p>
+    <div class="controls">
+      <input class="button-ok" type="submit" name="NEXT.0"
+             value="Days of the week" />
+      <input class="button-ok" type="submit" name="NEXT.1"
+             value="Rotating cycle" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  </form>
+  ...
+
+And now we suddenly realize that we don't need another schema.  We can't
+simply go away and forget about this wizard, because it remembers the
+last step we completed:
+
+  >>> print http(r"""
+  ... GET /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+      <title>New timetable schema</title>
+  ...
+            <h1>New timetable schema</h1>
+  ...
+  <form class="plain" method="POST"
+        action="http://localhost/frogpond/ttschemas/add.html">
+    <p>Does your school's timetable cycle use days of the week, or a rotating
+       cycle?</p>
+    <div class="controls">
+      <input class="button-ok" type="submit" name="NEXT.0"
+             value="Days of the week" />
+      <input class="button-ok" type="submit" name="NEXT.1"
+             value="Rotating cycle" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  </form>
+  ...
+
+However we can press the Cancel button and go back to the beginning
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... CANCEL=Cancel
+  ... """)
+  HTTP/1.1 303 See Other
+  Content-Length: 0
+  Location: http://localhost/frogpond/ttschemas
+  ...
+
+If we now click on the New Timetable button, we'll see the first page
+again.
+
+  >>> print http(r"""
+  ... GET /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+      <title>New timetable schema</title>
+  ...
+            <h1>New timetable schema</h1>
+  ...
+  <form class="plain" method="POST"
+        action="http://localhost/frogpond/ttschemas/add.html">
+    <div class="row">
+    <div class="label">
+      <label for="field.title" title="">Title</label>
+    </div>
+    <p class="hint"></p>
+    <div class="field">
+      <input class="textType" id="field.title" name="field.title" size="20"
+             type="text" value="default"  />
+    </div>
+    </div>
+    <div class="controls">
+      <input type="submit" class="button-ok" name="NEXT"
+             value="Next" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  </form>
+  ...
