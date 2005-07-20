@@ -27,7 +27,8 @@ import datetime
 
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
-from zope.interface import directlyProvides
+from zope.interface import Interface, directlyProvides
+from zope.schema import TextLine
 from zope.app.testing import ztapi
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.component.site import LocalSiteManager
@@ -107,6 +108,63 @@ def doctest_Step_getSessionData():
         >>> step = Step(context, request)
         >>> data['something']
         42
+
+    """
+
+
+def doctest_FormStep():
+    """Unit test for FormStep
+
+    FormStep needs to be subclassed, and a subclass has to provide a `schema`
+    attribute
+
+        >>> from schooltool.timetable.browser.ttwizard import FormStep
+        >>> class SampleFormStep(FormStep):
+        ...     class schema(Interface):
+        ...         a_field = TextLine(title=u"A field")
+        ...         b_field = TextLine(title=u"B field")
+
+    The constructor sets up input widgets.
+
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = SampleFormStep(context, request)
+        >>> view.a_field_widget
+        <...TextWidget...>
+        >>> view.b_field_widget
+        <...TextWidget...>
+
+    The `widgets` method returns all widgets in oroder
+
+        >>> view.widgets() == [view.a_field_widget, view.b_field_widget]
+        True
+
+    Calling the view renders the form
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <form class="plain" method="POST" action="http://127.0.0.1">
+              <div class="row">
+                  <div class="label">
+                    <label for="field.a_field" title="">A field</label>
+                  </div>
+                  <div class="field"><input class="textType" id="field.a_field" name="field.a_field" size="20" type="text" value=""  /></div>
+              </div>
+              <div class="row">
+                  <div class="label">
+                    <label for="field.b_field" title="">B field</label>
+                  </div>
+                  <div class="field"><input class="textType" id="field.b_field" name="field.b_field" size="20" type="text" value=""  /></div>
+              </div>
+          <div class="controls">
+            <input type="submit" class="button-ok" name="NEXT"
+                   value="Next" />
+            <input type="submit" class="button-cancel" name="CANCEL"
+                   value="Cancel" />
+          </div>
+        </form>
+        ...
 
     """
 

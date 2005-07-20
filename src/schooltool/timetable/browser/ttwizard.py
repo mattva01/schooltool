@@ -176,10 +176,7 @@ class ChoiceStep(Step):
     They should also define the `next` method.
     """
 
-    template = ViewPageTemplateFile("templates/ttwizard_choice.pt")
-
-    def __call__(self):
-        return self.template()
+    __call__ = ViewPageTemplateFile("templates/ttwizard_choice.pt")
 
     def update(self):
         session = self.getSessionData()
@@ -190,25 +187,36 @@ class ChoiceStep(Step):
         return False
 
 
+class FormStep(Step):
+    """A step that presents a form.
+
+    Subclasses should provide a `schema` attribute.
+
+    They should also define the `update` and `next` methods.
+    """
+
+    __call__ = ViewPageTemplateFile("templates/ttwizard_form.pt")
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+        setUpWidgets(self, self.schema, IInputWidget)
+
+    def widgets(self):
+        return [getattr(self, name + '_widget')
+                for name in getFieldNamesInOrder(self.schema)]
+
+
 #
 # Concrete wizard steps
 #
 
-class FirstStep(Step):
+class FirstStep(FormStep):
     """First step: enter the title for the new schema."""
 
-    template = ViewPageTemplateFile("templates/ttwizard.pt")
+    __call__ = ViewPageTemplateFile("templates/ttwizard.pt")
 
     class schema(Interface):
-        title = TextLine(title=_("Title"), required=True)
-
-    def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
-        setUpWidgets(self, self.schema, IInputWidget,
-                     initial={'title': 'default'})
-
-    def __call__(self):
-        return self.template()
+        title = TextLine(title=_("Title"), default=u"default")
 
     def update(self):
         try:
@@ -243,21 +251,11 @@ class CycleStep(ChoiceStep):
             return DayEntryStep(self.context, self.request)
 
 
-class DayEntryStep(Step):
+class DayEntryStep(FormStep):
     """A step for entering names of days."""
-
-    __call__ = ViewPageTemplateFile("templates/ttwizard_form.pt")
 
     class schema(Interface):
         days = Text(title=_("Names of days"))
-
-    def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
-        setUpWidgets(self, self.schema, IInputWidget)
-
-    def widgets(self):
-        return [getattr(self, name + '_widget')
-                for name in getFieldNamesInOrder(self.schema)]
 
     def update(self):
         try:
@@ -283,25 +281,15 @@ class DayEntryStep(Step):
         return SimpleSlotEntryStep(self.context, self.request)
 
 
-class SimpleSlotEntryStep(Step):
+class SimpleSlotEntryStep(FormStep):
     """A step for entering times for classes.
 
     This step is used when the times are the same in each day.
     """
 
-    __call__ = ViewPageTemplateFile("templates/ttwizard_form.pt")
-
     class schema(Interface):
         times = Text(title=_("Start and end times for each slot"),
                      default=u"9:30-10:25\n10:30-11:25")
-
-    def widgets(self):
-        return [getattr(self, name + '_widget')
-                for name in getFieldNamesInOrder(self.schema)]
-
-    def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
-        setUpWidgets(self, self.schema, IInputWidget)
 
     def update(self):
         try:
