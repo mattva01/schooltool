@@ -138,6 +138,10 @@ def getSessionData(self):
     return ISession(self.request)['schooltool.ttwizard']
 
 
+#
+# Abstract step classes
+#
+
 class Step(BrowserView):
     """A step, one of many.
 
@@ -156,35 +160,6 @@ class Step(BrowserView):
     __used_for__ = ITimetableSchemaContainer
 
     getSessionData = getSessionData
-
-
-class FirstStep(Step):
-    """First step: enter the title for the new schema."""
-
-    template = ViewPageTemplateFile("templates/ttwizard.pt")
-
-    class schema(Interface):
-        title = TextLine(title=_("Title"), required=True)
-
-    def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
-        setUpWidgets(self, self.schema, IInputWidget,
-                     initial={'title': 'default'})
-
-    def __call__(self):
-        return self.template()
-
-    def update(self):
-        try:
-            data = getWidgetsData(self, self.schema)
-        except WidgetsError:
-            return False
-        session = self.getSessionData()
-        session['title'] = data['title']
-        return True
-
-    def next(self):
-        return CycleStep(self.context, self.request)
 
 
 class ChoiceStep(Step):
@@ -215,7 +190,41 @@ class ChoiceStep(Step):
         return False
 
 
+#
+# Concrete wizard steps
+#
+
+class FirstStep(Step):
+    """First step: enter the title for the new schema."""
+
+    template = ViewPageTemplateFile("templates/ttwizard.pt")
+
+    class schema(Interface):
+        title = TextLine(title=_("Title"), required=True)
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+        setUpWidgets(self, self.schema, IInputWidget,
+                     initial={'title': 'default'})
+
+    def __call__(self):
+        return self.template()
+
+    def update(self):
+        try:
+            data = getWidgetsData(self, self.schema)
+        except WidgetsError:
+            return False
+        session = self.getSessionData()
+        session['title'] = data['title']
+        return True
+
+    def next(self):
+        return CycleStep(self.context, self.request)
+
+
 class CycleStep(ChoiceStep):
+    """A step for choosing the timetable cycle."""
 
     key = 'cycle'
 
@@ -367,6 +376,10 @@ class FinalStep(Step):
         key = nameChooser.chooseName('', ttschema)
         self.context[key] = ttschema
 
+
+#
+# The wizard itself
+#
 
 class TimetableSchemaWizard(BrowserView):
     """View for defining a new timetable schema."""
