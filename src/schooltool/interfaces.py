@@ -178,7 +178,7 @@ class ICalendarAndTTOverlayInfo(ICalendarOverlayInfo):
 #  Main application
 #
 
-class ISchoolToolApplication(sb.ISchoolBellApplication):
+class ISchoolToolApplication(sb.ISchoolBellApplication, ITimetabled):
     """The main SchoolTool application object
 
     The application is a read-only container with the following items:
@@ -189,4 +189,6 @@ class ISchoolToolApplication(sb.ISchoolBellApplication):
         'terms' - ITermContainer
         'ttschemas' - ITimetableSchemaContainer
     """
+
+    calendar = Attribute("School Calendar.")
 

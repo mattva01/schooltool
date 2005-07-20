@@ -22,6 +22,8 @@ SchoolTool application views.
 $Id: app.py 3481 2005-04-21 15:28:29Z bskahan $
 """
 
+from zope.interface import implements
+from zope.component import adapts
 from zope.app.publisher.browser import BrowserView
 from zope.app.form.browser.add import AddView, EditView
 from zope.app import zapi
@@ -33,6 +35,7 @@ from zope.security.checker import canAccess
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 from schoolbell.app.browser import app as sb
+from schoolbell.app.browser import cal as sbcal
 from schoolbell.app.membership import isTransitiveMember
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.relationship import getRelatedObjects
@@ -43,8 +46,27 @@ from schooltool.interfaces import ICourseContainer, ISectionContainer
 from schooltool.interfaces import ICourse, ISection
 from schooltool.interfaces import IPersonPreferences
 from schooltool.interfaces import IGroup, IPerson
+from schooltool.interfaces import ISchoolToolApplication
 from schooltool.relationships import URIInstruction, URISection
 from schooltool.app import Person
+
+class SchoolToolApplicationTraverser(sbcal.CalendarOwnerTraverser):
+    """SchoolToolApplication traverser.
+
+    We basically have this to allow for ICalendarOwner traversing while also
+    providing access to top-level containers.
+
+    XXX: I suspect there is a more elgant way to do this (in zcml?)."""
+
+    adapts(ISchoolToolApplication)
+
+    def publishTraverse(self, request, name):
+        if name in ('persons', 'resources', 'sections', 'groups',
+                    'ttschemas', 'terms', 'courses'):
+            return self.context[name]
+
+        return sbcal.CalendarOwnerTraverser.publishTraverse(self, request, name)
+
 
 class ContainerView(sb.ContainerView):
     """A Container view for schooltool containers.

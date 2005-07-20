@@ -35,7 +35,7 @@ from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 
 from schoolbell.relationship import RelationshipProperty
 from schoolbell.relationship.relationship import BoundRelationshipProperty
-from schoolbell.app.interfaces import IHaveNotes
+from schoolbell.app.interfaces import IHaveNotes, IApplicationPreferences
 from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIGroup, URIMember
 from schoolbell.app.overlay import choose_color, DEFAULT_COLORS
@@ -60,13 +60,15 @@ from schooltool.timetable import TermContainer, TimetableSchemaContainer
 from schooltool.timetable import TimetabledMixin
 
 
-class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
+class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer,
+                            TimetabledMixin):
     """The main SchoolTool application object"""
 
     implements(ISchoolToolApplication, IAttributeAnnotatable)
 
     def __init__(self):
         SampleContainer.__init__(self)
+        TimetabledMixin.__init__(self)
         self['persons'] = PersonContainer()
         self['groups'] = GroupContainer()
         self['resources'] = ResourceContainer()
@@ -74,9 +76,14 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
         self['courses'] = CourseContainer()
         self['sections'] = SectionContainer()
         self['ttschemas'] = TimetableSchemaContainer()
+        self.calendar = Calendar(self)
 
     def _newContainerData(self):
         return PersistentDict()
+
+    def title(self):
+        """This is required for the site calendar views to work."""
+        return IApplicationPreferences(self).title
 
 
 class OverlaidCalendarsAndTTProperty(object):

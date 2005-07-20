@@ -69,6 +69,11 @@ def doctest_SchoolToolApplication():
         >>> verifyObject(ISectionContainer, app['sections'])
         True
 
+    We should also have a calendar:
+
+        >>> app.calendar
+        <schoolbell.app.cal.Calendar object at ...
+
     """
 
 
