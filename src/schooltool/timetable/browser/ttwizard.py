@@ -141,7 +141,7 @@ def getSessionData(self):
 class Step(BrowserView):
     """A step, one of many.
 
-    Each step has two important methods:
+    Each step has three important methods:
 
         `__call__` renders the page.
 
@@ -190,7 +190,7 @@ class FirstStep(Step):
 class ChoiceStep(Step):
     """A step that requires the user to make a choice.
 
-    Subclasses should provide two attributes:
+    Subclasses should provide three attributes:
 
         `question` -- question text
 
