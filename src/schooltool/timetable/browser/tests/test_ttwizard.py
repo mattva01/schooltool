@@ -405,8 +405,8 @@ def doctest_FinalStep():
         >>> data = view.getSessionData()
         >>> data['title'] = u'Sample Schema'
         >>> data['cycle'] = 'weekly'
-        >>> data['times'] = [(time(9, 30), timedelta(minutes=55)),
-        ...                  (time(10, 30), timedelta(minutes=55))]
+        >>> data['time_slots'] = [(time(9, 30), timedelta(minutes=55)),
+        ...                       (time(10, 30), timedelta(minutes=55))]
 
         >>> view()
 
@@ -444,8 +444,8 @@ def doctest_FinalStep_createSchema():
         >>> data['title'] = u'Default'
         >>> data['cycle'] = 'weekly'
         >>> from datetime import time, timedelta
-        >>> data['times'] = [(time(9, 30), timedelta(minutes=55)),
-        ...                  (time(10, 30), timedelta(minutes=55))]
+        >>> data['time_slots'] = [(time(9, 30), timedelta(minutes=55)),
+        ...                       (time(10, 30), timedelta(minutes=55))]
 
         >>> ttschema = view.createSchema()
         >>> ttschema

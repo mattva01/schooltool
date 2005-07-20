@@ -348,7 +348,7 @@ class FinalStep(Step):
             day_ids = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
         periods = ['A', 'B']
         template = SchooldayTemplate()
-        for tstart, duration in session['times']:
+        for tstart, duration in session['time_slots']:
             ptitle = format_time_range(tstart, duration)
             template.add(SchooldayPeriod(ptitle, tstart, duration))
         day_templates = {None: template}
