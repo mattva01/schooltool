@@ -171,6 +171,8 @@ class TimetableSchemaView(View):
         for id, day in self.context.model.dayTemplates.items():
             if id is None:
                 used = "default"
+            elif id in self.context.keys():
+                used = id
             else:
                 used = self.dows[id]
             periods = []
@@ -355,6 +357,8 @@ class TimetableSchemaFileFactory(object):
                     exceptions[date] = day
                 elif used == 'default':
                     template_dict[None] = day
+                elif used in day_ids:
+                    template_dict[used] = day
                 else:
                     # if used is not "default" and is not a valid date
                     # try processing it as if it was a list of weekdays

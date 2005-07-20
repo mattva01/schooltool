@@ -226,6 +226,7 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
         from schooltool.timetable.interfaces import ITimetableSchemaContainer
         from schooltool.timetable.rest import TimetableSchemaFileFactory
         from schooltool.timetable import SequentialDaysTimetableModel
+        from schooltool.timetable import SequentialDayIdBasedTimetableModel
         from schooltool.timetable.interfaces import ITimetableModelFactory
 
         self.app = SchoolToolApplication()
@@ -240,6 +241,10 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
         ztapi.provideUtility(ITimetableModelFactory,
                              SequentialDaysTimetableModel,
                              "SequentialDaysTimetableModel")
+
+        ztapi.provideUtility(ITimetableModelFactory,
+                             SequentialDayIdBasedTimetableModel,
+                             "SequentialDayIdBasedTimetableModel")
 
         ztapi.provideView(Interface, Interface, ITraversable, 'view',
                           namespace.view)
@@ -268,20 +273,21 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
 
         tt = self.createEmptySchema()
 
-        day_template1 = SchooldayTemplate()
         hour = timedelta(minutes=60)
         half = timedelta(minutes=30)
+
+        day_template1 = SchooldayTemplate()
         day_template1.add(SchooldayPeriod('A', time(9, 0), hour))
         day_template1.add(SchooldayPeriod('B', time(10, 0), hour))
         day_template1.add(SchooldayPeriod('C', time(9, 0), hour))
         day_template1.add(SchooldayPeriod('D', time(10, 0), hour))
 
         day_template2 = SchooldayTemplate()
-        hour = timedelta(minutes=60)
         day_template2.add(SchooldayPeriod('A', time(8, 0), hour))
         day_template2.add(SchooldayPeriod('B', time(11, 0), hour))
         day_template2.add(SchooldayPeriod('C', time(8, 0), hour))
         day_template2.add(SchooldayPeriod('D', time(11, 0), hour))
+
         tm = SequentialDaysTimetableModel(['Day 1', 'Day 2'],
                                           {None: day_template1,
                                            3: day_template2,
@@ -289,7 +295,6 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
         tt.model = tm
 
         short_template = SchooldayTemplate()
-        hour = timedelta(minutes=60)
         short_template.add(SchooldayPeriod('A', time(8, 0), half))
         short_template.add(SchooldayPeriod('B', time(8, 30), half))
         short_template.add(SchooldayPeriod('C', time(9, 0), half))
@@ -358,6 +363,85 @@ class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
                              recursively_sort=['timetable'])
 
 
+class DayIdBasedModelMixin:
+
+    empty_xml = """
+        <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+          <title>Title</title>
+          <model factory="SequentialDayIdBasedTimetableModel">
+            <daytemplate>
+              <used when="Day 1"/>
+              <period duration="60" id="A" tstart="08:00"/>
+              <period duration="60" id="B" tstart="11:00"/>
+              <period duration="60" id="C" tstart="08:00"/>
+              <period duration="60" id="D" tstart="11:00"/>
+            </daytemplate>
+            <daytemplate>
+              <used when="Day 2"/>
+              <period duration="60" id="A" tstart="09:00"/>
+              <period duration="60" id="B" tstart="10:00"/>
+              <period duration="60" id="C" tstart="09:00"/>
+              <period duration="60" id="D" tstart="10:00"/>
+            </daytemplate>
+            <day when="2005-07-08" id="Day 2" />
+            <day when="2005-07-09" id="Day 1" />
+          </model>
+          <day id="Day 1">
+            <period id="A">
+            </period>
+            <period id="B">
+            </period>
+          </day>
+          <day id="Day 2">
+            <period id="C">
+            </period>
+            <period id="D">
+            </period>
+          </day>
+        </timetable>
+        """
+
+    def createExtendedSchema(self):
+        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
+        from schooltool.timetable import SequentialDayIdBasedTimetableModel
+        from schooltool.timetable import SchooldayPeriod, SchooldayTemplate
+        from datetime import time, timedelta, date
+
+        tt = TimetableSchema(['Day 1', 'Day 2'])
+        tt['Day 1'] = TimetableSchemaDay(['A', 'B'])
+        tt['Day 2'] = TimetableSchemaDay(['C', 'D'])
+        tt.title = "Title"
+
+        hour = timedelta(minutes=60)
+        half = timedelta(minutes=30)
+
+        day_template1 = SchooldayTemplate()
+        day_template1.add(SchooldayPeriod('A', time(8, 0), hour))
+        day_template1.add(SchooldayPeriod('B', time(11, 0), hour))
+        day_template1.add(SchooldayPeriod('C', time(8, 0), hour))
+        day_template1.add(SchooldayPeriod('D', time(11, 0), hour))
+
+        day_template2 = SchooldayTemplate()
+        day_template2.add(SchooldayPeriod('A', time(9, 0), hour))
+        day_template2.add(SchooldayPeriod('B', time(10, 0), hour))
+        day_template2.add(SchooldayPeriod('C', time(9, 0), hour))
+        day_template2.add(SchooldayPeriod('D', time(10, 0), hour))
+
+        tm = SequentialDayIdBasedTimetableModel(['Day 1', 'Day 2'],
+                                                {'Day 1': day_template1,
+                                                 'Day 2': day_template2})
+        tt.model = tm
+
+        tt.model.exceptionDayIds[date(2005, 7, 8)] = 'Day 2'
+        tt.model.exceptionDayIds[date(2005, 7, 9)] = 'Day 1'
+        return tt
+
+
+class TestTimetableSchemaViewDayIdBased(DayIdBasedModelMixin,
+                                        TestTimetableSchemaView):
+    pass
+
+
 class TestTimetableSchemaFileFactory(TimetableSchemaMixin, unittest.TestCase):
 
     def test(self):
@@ -385,6 +469,14 @@ class TestTimetableSchemaFileFactory(TimetableSchemaMixin, unittest.TestCase):
         from schoolbell.app.rest.errors import RestError
         self.assertRaises(RestError, IFileFactory(self.schemaContainer),
                           "foo.bar", "text/xml", self.schema_xml)
+
+
+class TestTimetableSchemaFileFactoryDayIdBased(DayIdBasedModelMixin,
+                                               TestTimetableSchemaFileFactory):
+
+    schema_xml = DayIdBasedModelMixin.empty_xml
+
+    schema_without_title_xml = schema_xml.replace("<title>Title</title>", "")
 
 
 class TestTimetableSchemaFile(TimetableSchemaMixin, unittest.TestCase):
@@ -685,15 +777,17 @@ class TestCompositeTimetabledView(TimetableTestMixin, unittest.TestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(DocTestSuite(optionflags=ELLIPSIS))
-    suite.addTest(unittest.makeSuite(TestTimetableSchemaFileFactory))
-    suite.addTest(unittest.makeSuite(TestTimetableSchemaFile))
-    suite.addTest(unittest.makeSuite(TestTimetablePUT))
-    suite.addTest(unittest.makeSuite(TestTimetableSchemaView))
     suite.addTest(unittest.makeSuite(TestTimetableReadView))
+    suite.addTest(unittest.makeSuite(TestTimetableSchemaView))
+    suite.addTest(unittest.makeSuite(TestTimetableSchemaViewDayIdBased))
+    suite.addTest(unittest.makeSuite(TestTimetableSchemaFileFactory))
+    suite.addTest(unittest.makeSuite(TestTimetableSchemaFileFactoryDayIdBased))
+    suite.addTest(unittest.makeSuite(TestTimetableSchemaFile))
     suite.addTest(unittest.makeSuite(TestTimetableFileFactory))
+    suite.addTest(unittest.makeSuite(TestTimetablePUT))
     suite.addTest(unittest.makeSuite(TestTimetableDictView))
     suite.addTest(unittest.makeSuite(TestCompositeTimetabledView))
+    suite.addTest(DocTestSuite(optionflags=ELLIPSIS))
     return suite
 
 if __name__ == '__main__':
