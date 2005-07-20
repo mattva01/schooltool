@@ -14,10 +14,13 @@
       <th tal:repeat="day_name view/day_names"
           tal:content="day_name" />
     </tr>
-    <tr tal:repeat="row view/time_rows">
-      <td tal:repeat="cell row">
-        <input tal:condition="python:cell is not None"
-               tal:attributes="value cell" />
+    <tr>
+      <td tal:repeat="day_name view/day_names">
+        <textarea tal:define="name string:times.${repeat/day_name/index}"
+                tal:attributes="name name"
+                tal:content="python:name in request and request[name] or None"
+                rows="12" cols="15">
+        </textarea>
       </td>
     </tr>
   </table>

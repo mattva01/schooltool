@@ -24,6 +24,7 @@ $Id$
 
 import unittest
 import datetime
+from pprint import pprint
 
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
@@ -418,14 +419,6 @@ def doctest_SimpleSlotEntryStep():
     The text area contains one slot per line; extra spaces are stripped;
     empty lines are ignored.
 
-        >>> view.parse(u' 9:30 - 10:25 \n \n 12:30 - 13:25 \n')
-        [(datetime.time(9, 30), datetime.timedelta(0, 3300)),
-         (datetime.time(12, 30), datetime.timedelta(0, 3300))]
-        >>> view.parse(u'  \n\n ')
-        []
-        >>> view.parse(u'')
-        []
-
     The next page is the final page.
 
         >>> view.next()
@@ -446,8 +439,6 @@ def doctest_SlotEntryStep():
 
         >>> view.day_names
         ['Oneday', 'Twoday']
-        >>> view.time_rows
-        [('', '')]
 
     At first we get a table with one empty row of input fields:
 
@@ -460,10 +451,10 @@ def doctest_SlotEntryStep():
         </tr>
         <tr>
           <td>
-            <input ...>
+            <textarea rows="12" cols="15" name="times.0"></textarea>
           </td>
           <td>
-            <input ...>
+            <textarea rows="12" cols="15" name="times.1"></textarea>
           </td>
         </tr>
         </table>
@@ -471,6 +462,7 @@ def doctest_SlotEntryStep():
 
     SlotEntryStep.update wants at least one slot on each day:
 
+        >>> view.request.form['times.0'] = u'9:30 - 10:25'
         >>> view.update()
         False
 
@@ -483,24 +475,28 @@ def doctest_SlotEntryStep():
         </tr>
         <tr>
           <td>
-            <input ...>
+            <textarea rows="12" cols="15" name="times.0">9:30 - 10:25</textarea>
           </td>
           <td>
-            <input ...>
+            <textarea rows="12" cols="15" name="times.1"></textarea>
           </td>
         </tr>
         </table>
         ...
 
-#        TODO
-#        >>> request = TestRequest(form={'field.times': u'\n\n\n'})
-#        >>> view = SlotEntryStep(context, request)
-#        >>> view.update()
-#        False
+    If we provide both fields, the form will be parsed successfully:
 
-#        TODO
-#        >>> view.getSessionData()['time_slots']
-#        [(datetime.time(9, 30), datetime.timedelta(0, 3300))]
+        >>> view.request.form['times.1'] = u'9:15 - 10:10\n10:35 - 11:20'
+        >>> view.update()
+        True
+
+        >>> result = view.getSessionData()['time_slots2'].items()
+        >>> result.sort()
+        >>> pprint(result)
+        [('Oneday', [(datetime.time(9, 30), datetime.timedelta(0, 3300))]),
+         ('Twoday',
+          [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
+           (datetime.time(10, 35), datetime.timedelta(0, 2700))])]
 
     The next page is the final page.
 
@@ -737,11 +733,15 @@ def doctest_TimetableSchemaWizard_rememberLastStep():
 
 
 def test_suite():
+    suite = unittest.TestSuite()
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
                    doctest.NORMALIZE_WHITESPACE |
                    doctest.REPORT_ONLY_FIRST_FAILURE)
-    return doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
-                                optionflags=optionflags)
+    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
+                                       optionflags=optionflags))
+    module_name = 'schooltool.timetable.browser.ttwizard'
+    suite.addTest(doctest.DocTestSuite(module_name, optionflags=optionflags))
+    return suite
 
 
 if __name__ == '__main__':

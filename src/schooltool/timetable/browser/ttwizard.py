@@ -133,7 +133,6 @@ from schooltool.timetable import WeeklyTimetableModel
 from schooltool.timetable import SequentialDaysTimetableModel
 
 
-
 def getSessionData(request):
     """Return the data container stored in the session."""
     return ISession(request)['schooltool.ttwizard']
@@ -259,6 +258,7 @@ class CycleStep(ChoiceStep):
             session['day_names'] = weekday_names
         return success
 
+
 class DayEntryStep(FormStep):
     """A step for entering names of days."""
 
@@ -308,6 +308,26 @@ class IndependentDaysStep(ChoiceStep):
             return SlotEntryStep(self.context, self.request)
 
 
+def parse_time_range_list(times):
+    r"""Parse a multi-line string into a list of time slots.
+
+    One slot per line (HH:MM - HH:MM).  Empty lines are ignored.  Extra
+    spaces are stripped.
+
+        >>> parse_time_range_list(u' 9:30 - 10:25 \n \n 12:30 - 13:25 \n')
+        [(datetime.time(9, 30), datetime.timedelta(0, 3300)),
+         (datetime.time(12, 30), datetime.timedelta(0, 3300))]
+
+        >>> parse_time_range_list(u'  \n\n ')
+        []
+        >>> parse_time_range_list(u'')
+        []
+
+    """
+    return map(parse_time_range,
+               filter(None, map(unicode.strip, times.splitlines())))
+
+
 class SimpleSlotEntryStep(FormStep):
     """A step for entering times for classes.
 
@@ -324,24 +344,14 @@ class SimpleSlotEntryStep(FormStep):
         except WidgetsError, e:
             return False
         try:
-            times = self.parse(data['times'])
+            times = parse_time_range_list(data['times'])
         except ValueError:
-            # TODO: tell the user what was wrong
-            return False
+            return False # TODO: tell the user what was wrong
         if not times:
             return False
         session = self.getSessionData()
         session['time_slots'] = times
         return True
-
-    def parse(self, times):
-        """Parse a multi-line string into a list of time slots.
-
-        One slot per line (HH:MM - HH:MM).  Empty lines are ignored.  Extra
-        spaces are stripped.
-        """
-        return map(parse_time_range,
-                   filter(None, map(unicode.strip, times.splitlines())))
 
     def next(self):
         return FinalStep(self.context, self.request)
@@ -358,11 +368,22 @@ class SlotEntryStep(Step):
     def __init__(self, context, request):
         Step.__init__(self, context, request)
         self.day_names = self.getSessionData()['day_names']
-        self.time_rows = [('', ) * len(self.day_names)]
 
     def update(self):
-        # TODO
-        return False
+        result = {}
+        for i, day_name in enumerate(self.day_names):
+            s = self.request.form.get('times.%d' % i, '')
+            try:
+                times = parse_time_range_list(s)
+            except ValueError:
+                return False # TODO: tell the user what was wrong
+            if not times:
+                return False # TODO: tell the user what was wrong
+            result[day_name] = times
+
+        session = self.getSessionData()
+        session['time_slots2'] = result # TODO: rename to time_slots
+        return True
 
     def next(self):
         # TODO: redirect to period names/time step when we have it.
