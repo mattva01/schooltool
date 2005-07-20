@@ -199,34 +199,34 @@ We can examine its composition more easily by invoking the RESTive view.
       </daytemplate>
     </model>
     <day id="Monday">
-      <period id="A">
-      </period>
-      <period id="B">
-      </period>
+      <period id="09:30-10:25"> </period>
+      <period id="10:30-11:25"> </period>
+      <period id="11:30-12:25"> </period>
+      <period id="12:30-13:25"> </period>
     </day>
     <day id="Tuesday">
-      <period id="A">
-      </period>
-      <period id="B">
-      </period>
+      <period id="09:30-10:25"> </period>
+      <period id="10:30-11:25"> </period>
+      <period id="11:30-12:25"> </period>
+      <period id="12:30-13:25"> </period>
     </day>
     <day id="Wednesday">
-      <period id="A">
-      </period>
-      <period id="B">
-      </period>
+      <period id="09:30-10:25"> </period>
+      <period id="10:30-11:25"> </period>
+      <period id="11:30-12:25"> </period>
+      <period id="12:30-13:25"> </period>
     </day>
     <day id="Thursday">
-      <period id="A">
-      </period>
-      <period id="B">
-      </period>
+      <period id="09:30-10:25"> </period>
+      <period id="10:30-11:25"> </period>
+      <period id="11:30-12:25"> </period>
+      <period id="12:30-13:25"> </period>
     </day>
     <day id="Friday">
-      <period id="A">
-      </period>
-      <period id="B">
-      </period>
+      <period id="09:30-10:25"> </period>
+      <period id="10:30-11:25"> </period>
+      <period id="11:30-12:25"> </period>
+      <period id="12:30-13:25"> </period>
     </day>
   </timetable>
 
@@ -445,21 +445,21 @@ We can examine its composition more easily by invoking the RESTive view.
       </daytemplate>
     </model>
     <day id="A">
-      <period id="A">
-      </period>
-      <period id="B">
-      </period>
+      <period id="09:30-10:25"> </period>
+      <period id="10:30-11:25"> </period>
+      <period id="11:30-12:25"> </period>
+      <period id="12:30-13:25"> </period>
     </day>
     <day id="B">
-      <period id="A">
-      </period>
-      <period id="B">
-      </period>
+      <period id="09:30-10:25"> </period>
+      <period id="10:30-11:25"> </period>
+      <period id="11:30-12:25"> </period>
+      <period id="12:30-13:25"> </period>
     </day>
     <day id="C">
-      <period id="A">
-      </period>
-      <period id="B">
-      </period>
+      <period id="09:30-10:25"> </period>
+      <period id="10:30-11:25"> </period>
+      <period id="11:30-12:25"> </period>
+      <period id="12:30-13:25"> </period>
     </day>
   </timetable>

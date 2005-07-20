@@ -416,11 +416,12 @@ class FinalStep(Step):
             day_ids = session['day_names']
         else:
             day_ids = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-        periods = ['A', 'B']
+        periods = []
         template = SchooldayTemplate()
         for tstart, duration in session['time_slots']:
             ptitle = format_time_range(tstart, duration)
             template.add(SchooldayPeriod(ptitle, tstart, duration))
+            periods.append(ptitle)
         day_templates = {None: template}
         model = model_factory(day_ids, day_templates)
         ttschema = TimetableSchema(day_ids, title=title, model=model)

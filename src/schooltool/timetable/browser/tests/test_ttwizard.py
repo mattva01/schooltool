@@ -90,7 +90,7 @@ def print_ttschema(ttschema):
     """Print a timetable schema as a grid."""
     for row in map(None, *[[day_id] + list(day.periods)
                            for day_id, day in ttschema.items()]):
-        print " ".join(['%-10s' % cell for cell in row])
+        print " ".join(['%-12s' % cell for cell in row])
 
 
 def doctest_getSessionData():
@@ -569,9 +569,9 @@ def doctest_FinalStep_createSchema():
         >>> print ttschema.title
         Default
         >>> print_ttschema(ttschema)
-        Monday     Tuesday    Wednesday  Thursday   Friday
-        A          A          A          A          A
-        B          B          B          B          B
+        Monday       Tuesday      Wednesday    Thursday     Friday
+        09:30-10:25  09:30-10:25  09:30-10:25  09:30-10:25  09:30-10:25
+        10:30-11:25  10:30-11:25  10:30-11:25  10:30-11:25  10:30-11:25
 
         >>> ttschema.model
         <...WeeklyTimetableModel object at ...>
@@ -598,9 +598,9 @@ def doctest_FinalStep_createSchema():
         >>> ttschema.model
         <...SequentialDaysTimetableModel object at ...>
         >>> print_ttschema(ttschema)
-        D1         D2         D3
-        A          A          A
-        B          B          B
+        D1           D2           D3
+        09:30-10:25  09:30-10:25  09:30-10:25
+        10:30-11:25  10:30-11:25  10:30-11:25
 
     """
 
