@@ -1,0 +1,24 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">New timetable schema</title>
+</head>
+<body>
+  <h1 metal:fill-slot="h1" i18n:translate="">New timetable schema</h1>
+<metal:block metal:fill-slot="body">
+
+<form class="plain" method="POST" tal:attributes="action request/URL">
+
+  <metal:block use-macro="context/@@form_macros/widget_rows" />
+
+  <div class="controls">
+    <input type="submit" class="button-ok" name="NEXT" value="Next"
+           i18n:attributes="value" />
+    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+           i18n:attributes="value" />
+  </div>
+
+</form>
+
+</metal:block>
+</body>
+</html>

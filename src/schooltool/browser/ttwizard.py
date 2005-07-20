@@ -110,7 +110,7 @@ $Id$
 """
 
 from zope.interface import Interface
-from zope.schema import TextLine
+from zope.schema import TextLine, Text, getFieldNamesInOrder
 from zope.app import zapi
 from zope.app.form.utility import setUpWidgets
 from zope.app.form.utility import getWidgetsData
@@ -225,7 +225,47 @@ class CycleStep(ChoiceStep):
         if session['cycle'] == 'weekly':
             return FinalStep(self.context, self.request)
         else:
-            return FinalStep(self.context, self.request)
+            return DayEntryStep(self.context, self.request)
+
+
+class DayEntryStep(Step):
+    """A step for entering names of days."""
+
+    __call__ = ViewPageTemplateFile("templates/ttwizard_form.pt")
+
+    class schema(Interface):
+        days = Text(title=_("Names of days"))
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+        setUpWidgets(self, self.schema, IInputWidget)
+
+    def widgets(self):
+        return [getattr(self, name + '_widget')
+                for name in getFieldNamesInOrder(self.schema)]
+
+    def update(self):
+        try:
+            data = getWidgetsData(self, self.schema)
+        except WidgetsError, e:
+            return False
+        day_names = self.parse(data['days'])
+        if not day_names:
+            return False
+        session = self.getSessionData()
+        session['day_names'] = day_names
+        return True
+
+    def parse(self, day_names):
+        """Parse a multi-line string into a list of day names.
+
+        One day name per line.  Empty lines are ignored.  Extra spaces
+        are stripped.
+        """
+        return filter(None, map(unicode.strip, day_names.splitlines()))
+
+    def next(self):
+        return FinalStep(self.context, self.request)
 
 
 class FinalStep(Step):
@@ -250,7 +290,10 @@ class FinalStep(Step):
         cycle = session['cycle']
         model_factory = {'weekly': WeeklyTimetableModel,
                          'rotating': SequentialDaysTimetableModel}[cycle]
-        day_ids = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+        if cycle == 'rotating':
+            day_ids = session['day_names']
+        else:
+            day_ids = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
         periods = ['A', 'B']
         day_templates = {None: SchooldayTemplate()}
         model = model_factory(day_ids, day_templates)

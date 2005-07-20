@@ -203,9 +203,64 @@ def doctest_CycleStep():
         >>> request = TestRequest()
         >>> view = CycleStep(context, request)
 
-    The next step is always FinalStep (for now)
+    The next step is FinalStep for weekly cycle
 
         >>> view.getSessionData()['cycle'] = 'weekly'
+        >>> view.next()
+        <...FinalStep...>
+
+    The next step is DayEntryStep for rotating cycle
+
+        >>> view.getSessionData()['cycle'] = 'rotating'
+        >>> view.next()
+        <...DayEntryStep...>
+
+    """
+
+
+def doctest_DayEntryStep():
+    r"""Unit test for DayEntryStep
+
+        >>> from schooltool.browser.ttwizard import DayEntryStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = DayEntryStep(context, request)
+
+        >>> print view()
+        <BLANKLINE>
+        ...<textarea cols="60" id="field.days" name="field.days"
+                     rows="15" ></textarea>...
+
+    DayEntryStep.update wants at least one day name
+
+        >>> view.update()
+        False
+
+        >>> request = TestRequest(form={'field.days': u'\n\n\n'})
+        >>> view = DayEntryStep(context, request)
+        >>> view.update()
+        False
+
+        >>> request = TestRequest(form={'field.days': u'A\nB\n\n'})
+        >>> view = DayEntryStep(context, request)
+        >>> view.update()
+        True
+
+        >>> view.getSessionData()['day_names']
+        [u'A', u'B']
+
+    The text area contains one day name per line; extra spaces are stripped;
+    empty lines are ignored.
+
+        >>> view.parse(u'Day 1\n Day 2\nDay 3 \n\n\n Day 4 ')
+        [u'Day 1', u'Day 2', u'Day 3', u'Day 4']
+        >>> view.parse(u'  \n\n ')
+        []
+        >>> view.parse(u'')
+        []
+
+    The next page is the final page.
+
         >>> view.next()
         <...FinalStep...>
 
@@ -279,11 +334,16 @@ def doctest_FinalStep_createSchema():
         Monday Tuesday Wednesday Thursday Friday
 
     The model can be either weekly or rotating.
-    
+
         >>> data['cycle'] = 'rotating'
+        >>> data['day_names'] = ['D1', 'D2', 'D3']
         >>> ttschema = view.createSchema()
         >>> ttschema.model
         <...SequentialDaysTimetableModel object at ...>
+        >>> print_ttschema(ttschema)
+        D1         D2         D3
+        A          A          A
+        B          B          B
 
     """
 
