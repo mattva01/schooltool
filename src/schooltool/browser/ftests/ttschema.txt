@@ -1,5 +1,21 @@
-Functional test for ttimetable schemas
-======================================
+Functional test for timetable schemas
+=====================================
+
+
+Overview
+--------
+
+0. Create a SchoolTool instance.
+1. Add a timetable schema named 'weekly' with the advanced add view.
+2. Add another timetable schema -- one called 'Another Schema'.
+3. Choose the second schema as the default one.
+4. Add a third timetable schema ('other') -- but this time use the simple add
+   view.
+5. Create a term '2005-summer' from 2005-06-01 to 2005-08-31.
+6. Mark 2005-07-07 as a special day -- change class start and end times.
+7. Switch the default schema to 'other'.
+8. Mark 2005-07-07 as an emergency day -- move it to 2005-09-01.
+9. Verify that 2005-09-01 remembers class times specified in step 6.
 
 
 Setup
@@ -20,27 +36,7 @@ Let's create a SchoolTool instance:
   Location: http://localhost/@@contents.html
   ...
 
-Let's create a person:
-
-    >>> print http("""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 112
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Frog&\
-    ... field.username=frog&\
-    ... field.password=pwd&\
-    ... field.verify_password=pwd&\
-    ... field.photo=&\
-    ... UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons
-    ...
-
-The schema container is empty:
+The schema container is empty initially:
 
   >>> print http(r"""
   ... GET /frogpond/ttschemas HTTP/1.1
