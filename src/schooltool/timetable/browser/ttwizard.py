@@ -392,6 +392,11 @@ class SlotEntryStep(Step):
 
     __call__ = ViewPageTemplateFile("templates/ttwizard_slottimes.pt")
 
+    description = _("Enter start and end times for each slot,"
+                    " one slot (HH:MM - HH:MM) per line.")
+
+    error = None
+
     def __init__(self, context, request):
         Step.__init__(self, context, request)
         self.day_names = self.getSessionData()['day_names']

@@ -6,8 +6,13 @@
   <h1 metal:fill-slot="content-header" i18n:translate="">New timetable schema</h1>
 <metal:block metal:fill-slot="body">
 
-
 <form class="plain" method="POST" tal:attributes="action request/URL">
+
+  <p tal:condition="view/description" tal:content="view/description"
+     i18n:translate="">(informative text)</p>
+
+  <div tal:condition="view/error" tal:content="view/error" class="error"
+       i18n:translate="">(error message)</div>
 
   <table>
     <tr>
