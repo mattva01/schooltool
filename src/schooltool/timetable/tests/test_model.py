@@ -58,46 +58,7 @@ class BaseTestTimetableModel:
         return result
 
 
-class TestSequentialDaysTimetableModel(PlacelessSetup,
-                                       NiceDiffsMixin,
-                                       unittest.TestCase,
-                                       BaseTestTimetableModel):
-
-    def setUp(self):
-        from zope.app.traversing.interfaces import IPhysicallyLocatable
-        from schooltool.timetable.interfaces import ITimetable
-        PlacelessSetup.setUp(self)
-
-        ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
-                             TimetablePhysicallyLocatableAdapterStub)
-
-    def test_interface(self):
-        from schooltool.timetable import SequentialDaysTimetableModel
-        from schooltool.timetable.interfaces import ITimetableModel
-
-        model = SequentialDaysTimetableModel(("A","B"), {None: 3})
-        verifyObject(ITimetableModel, model)
-
-    def test_eq(self):
-        from schooltool.timetable import SequentialDaysTimetableModel
-        from schooltool.timetable import WeeklyTimetableModel
-        model = SequentialDaysTimetableModel(("A","B"), {1: 2, None: 3})
-        model2 = SequentialDaysTimetableModel(("A","B"), {1: 2, None: 3})
-        model3 = WeeklyTimetableModel(("A","B"), {1: 2, None: 3})
-        model4 = SequentialDaysTimetableModel(("A"), {1: 2, None: 3})
-
-        self.assertEqual(model, model2)
-        self.assertNotEqual(model2, model3)
-        self.assertNotEqual(model2, model4)
-        self.assert_(not model2 != model)
-
-        model.exceptionDays[date(2005, 7, 7)] = object()
-        self.assertNotEqual(model, model2)
-
-        del model.exceptionDays[date(2005, 7, 7)]
-        self.assertEqual(model, model2)
-        model.exceptionDayIds[date(2005, 7, 7)] = 'Monday'
-        self.assertNotEqual(model, model2)
+class SequentialTestSetupMixin:
 
     def createTimetable(self):
         """Create a simple timetable.
@@ -123,6 +84,21 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         tt["B"].add("Blue", TimetableActivity("Geography"))
         return tt
 
+
+class TestSequentialDaysTimetableModel(PlacelessSetup,
+                                       NiceDiffsMixin,
+                                       unittest.TestCase,
+                                       BaseTestTimetableModel,
+                                       SequentialTestSetupMixin):
+
+    def setUp(self):
+        from zope.app.traversing.interfaces import IPhysicallyLocatable
+        from schooltool.timetable.interfaces import ITimetable
+        PlacelessSetup.setUp(self)
+
+        ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
+                             TimetablePhysicallyLocatableAdapterStub)
+
     def createModel(self):
         """Create a simple sequential timetable model.
 
@@ -147,6 +123,34 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
                                              {None: template1,
                                               calendar.FRIDAY: template2})
         return model
+
+    def test_interface(self):
+        from schooltool.timetable import SequentialDaysTimetableModel
+        from schooltool.timetable.interfaces import IWeekdayBasedTimetableModel
+
+        model = SequentialDaysTimetableModel(("A","B"), {None: 3})
+        verifyObject(IWeekdayBasedTimetableModel, model)
+
+    def test_eq(self):
+        from schooltool.timetable import SequentialDaysTimetableModel
+        from schooltool.timetable import WeeklyTimetableModel
+        model = SequentialDaysTimetableModel(("A","B"), {1: 2, None: 3})
+        model2 = SequentialDaysTimetableModel(("A","B"), {1: 2, None: 3})
+        model3 = WeeklyTimetableModel(("A","B"), {1: 2, None: 3})
+        model4 = SequentialDaysTimetableModel(("A"), {1: 2, None: 3})
+
+        self.assertEqual(model, model2)
+        self.assertNotEqual(model2, model3)
+        self.assertNotEqual(model2, model4)
+        self.assert_(not model2 != model)
+
+        model.exceptionDays[date(2005, 7, 7)] = object()
+        self.assertNotEqual(model, model2)
+
+        del model.exceptionDays[date(2005, 7, 7)]
+        self.assertEqual(model, model2)
+        model.exceptionDayIds[date(2005, 7, 7)] = 'Monday'
+        self.assertNotEqual(model, model2)
 
     def test_createCalendar(self):
         from schoolbell.calendar.interfaces import ICalendar
@@ -290,6 +294,103 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
             [])
 
 
+class TestSequentialDayIdBasedTimetableModel(PlacelessSetup,
+                                             unittest.TestCase,
+                                             SequentialTestSetupMixin,
+                                             BaseTestTimetableModel):
+
+    def setUp(self):
+        from zope.app.traversing.interfaces import IPhysicallyLocatable
+        from schooltool.timetable.interfaces import ITimetable
+        PlacelessSetup.setUp(self)
+
+        ztapi.provideAdapter(ITimetable, IPhysicallyLocatable,
+                             TimetablePhysicallyLocatableAdapterStub)
+
+    def createDayTemplates(self):
+        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+        t, td = time, timedelta
+        template1 = SchooldayTemplate()
+        template1.add(SchooldayPeriod('Green', t(9, 0), td(minutes=90)))
+        template1.add(SchooldayPeriod('Blue', t(11, 0), td(minutes=90)))
+        template2 = SchooldayTemplate()
+        template2.add(SchooldayPeriod('Green', t(11, 0), td(minutes=90)))
+        template2.add(SchooldayPeriod('Blue', t(13, 0), td(minutes=90)))
+        return template1, template2
+
+    def test_createCalendar(self):
+        from schoolbell.calendar.interfaces import ICalendar
+        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+        from schooltool.timetable.model import \
+             SequentialDayIdBasedTimetableModel
+
+        tt = self.createTimetable()
+        template1, template2 = self.createDayTemplates()
+
+        model = SequentialDayIdBasedTimetableModel(('A', 'B'),
+                                                   {'A': template1,
+                                                    'B': template2})
+        schooldays = TermStub()
+
+        cal = model.createCalendar(schooldays, tt)
+        verifyObject(ICalendar, cal)
+
+        # The calendar is functionally derived, therefore everything
+        # in it (including unique calendar event IDs) must not change
+        # if it is regenerated.
+        cal2 = model.createCalendar(schooldays, tt)
+        self.assertEquals(list(cal), list(cal2))
+
+        result = self.extractCalendarEvents(cal, schooldays)
+
+        expected = [{datetime(2003, 11, 20, 9, 0, tzinfo=UTC): "English",
+                     datetime(2003, 11, 20, 11, 0, tzinfo=UTC): "Math"},
+                    {datetime(2003, 11, 21, 11, 0, tzinfo=UTC): "Biology",
+                     datetime(2003, 11, 21, 13, 0, tzinfo=UTC): "Geography"},
+                    {}, {},
+                    {datetime(2003, 11, 24, 9, 0, tzinfo=UTC): "English",
+                     datetime(2003, 11, 24, 11, 0, tzinfo=UTC): "Math"},
+                    {datetime(2003, 11, 25, 11, 0, tzinfo=UTC): "Biology",
+                     datetime(2003, 11, 25, 13, 0, tzinfo=UTC): "Geography"},
+                    {datetime(2003, 11, 26, 9, 0, tzinfo=UTC): "English",
+                     datetime(2003, 11, 26, 11, 0, tzinfo=UTC): "Math"}]
+
+        self.assertEqual(expected, result,
+                         diff(pformat(expected), pformat(result)))
+
+    def test_verification(self):
+        from schooltool.timetable.model import \
+             SequentialDayIdBasedTimetableModel
+
+        tt = self.createTimetable()
+        template1, template2 = self.createDayTemplates()
+
+        self.assertRaises(AssertionError,
+                          SequentialDayIdBasedTimetableModel,
+                          ('A', 'B'),
+                          {'A': template1,'Z': template2})
+
+        SequentialDayIdBasedTimetableModel(
+            ('A', 'Z'),
+            {'A': template1, 'Z': template2})
+
+    def test__getUsualTemplateForDay(self):
+        from schooltool.timetable.model import \
+             SequentialDayIdBasedTimetableModel
+
+        tt = self.createTimetable()
+        template1, template2 = self.createDayTemplates()
+        model = SequentialDayIdBasedTimetableModel(
+            ('A', 'Z'),
+            {'A': template1, 'Z': template2})
+        self.assertEqual(model._getUsualTemplateForDay(date(2005, 7, 20), 'A'),
+                         template1)
+        self.assertEqual(model._getUsualTemplateForDay(date(2005, 7, 21), 'Z'),
+                         template2)
+        self.assertRaises(KeyError, model._getUsualTemplateForDay,
+                          date(2005, 7, 21), 'B')
+
+
 class TestWeeklyTimetableModel(PlacelessSetup,
                                unittest.TestCase,
                                BaseTestTimetableModel):
@@ -307,7 +408,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
         from schooltool.timetable import Term
-        from schooltool.timetable.interfaces import ITimetableModel
+        from schooltool.timetable.interfaces import IWeekdayBasedTimetableModel
 
         days = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
         tt = Timetable(days)
@@ -348,7 +449,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         template.add(SchooldayPeriod('4', t(12, 0), td(minutes=45)))
 
         model = WeeklyTimetableModel(day_templates={None: template})
-        verifyObject(ITimetableModel, model)
+        verifyObject(IWeekdayBasedTimetableModel, model)
 
         # Add an exception day
         exception = SchooldayTemplate()
@@ -469,6 +570,7 @@ class TestTimetableCalendarEvent(unittest.TestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSequentialDaysTimetableModel))
+    suite.addTest(unittest.makeSuite(TestSequentialDayIdBasedTimetableModel))
     suite.addTest(unittest.makeSuite(TestWeeklyTimetableModel))
     suite.addTest(unittest.makeSuite(TestTimetableCalendarEvent))
     return suite

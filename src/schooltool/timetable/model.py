@@ -46,11 +46,32 @@ from zope.app.traversing.api import getPath
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.calendar.simple import ImmutableCalendar
 
-from schooltool.timetable.interfaces import ITimetableModel
+from schooltool.timetable.interfaces import IWeekdayBasedTimetableModel
+from schooltool.timetable.interfaces import IDayIdBasedTimetableModel
 from schooltool.timetable.interfaces import ITimetableModelFactory
 from schooltool.timetable.interfaces import ITimetableCalendarEvent
 
 __metaclass__ = type
+
+
+class WeekdayBasedModelMixin:
+    """A mixin for a timetable model that indexes day templates by weekday"""
+
+    implements(IWeekdayBasedTimetableModel)
+
+    def _validateDayTemplates(self):
+        if None not in self.dayTemplates:
+            for weekday in range(7):
+                if weekday not in self.dayTemplates:
+                    raise AssertionError("No day template for day %d,"
+                                         " and no fallback either" % weekday)
+
+    def _getUsualTemplateForDay(self, date, day_id):
+        """Returns the schoolday template for a certain date
+        disregarding special days.
+        """
+        default = self.dayTemplates[None]
+        return self.dayTemplates.get(date.weekday(), default)
 
 
 class BaseTimetableModel(Persistent):
@@ -76,23 +97,23 @@ class BaseTimetableModel(Persistent):
 
        def _dayGenerator(self):
            '''Return an iterator to be passed to schooldayStrategy'''
+
+       def _validateDayTemplates(self):
+           '''Check that the dayTemplates attribute is well formed'''
+
+       def _getUsualTemplateForDay(self, date, day_id):
+           '''Return the schoolday template for a certain date
+           disregarding special days.
+           '''
+
     """
-    implements(ITimetableModel)
 
     timetableDayIds = ()
     dayTemplates = {}       # overriden in the __init__s of descendants
 
-
     def __init__(self):
         self.exceptionDays = PersistentDict()
         self.exceptionDayIds = PersistentDict()
-
-    def _validateDayTemplates(self):
-        if None not in self.dayTemplates:
-            for weekday in range(7):
-                if weekday not in self.dayTemplates:
-                    raise AssertionError("No day template for day %d,"
-                                         " and no fallback either" % weekday)
 
     def createCalendar(self, term, timetable):
         uid_suffix = '%s@%s' % (getPath(timetable), socket.getfqdn())
@@ -158,9 +179,9 @@ class BaseTimetableModel(Persistent):
         # Now choose the periods that are in this day
         result = []
         if original:
-            day_template = self._getUsualTemplateForDay(day)
+            day_template = self._getUsualTemplateForDay(day, day_id)
         else:
-            day_template = self._getTemplateForDay(day)
+            day_template = self._getTemplateForDay(day, day_id)
         for period in day_template:
             dt = datetime.datetime.combine(day, period.tstart)
             if period.title in timetable[day_id].keys():
@@ -177,16 +198,9 @@ class BaseTimetableModel(Persistent):
         """See ITimetableModel.originalPeriodsInDay"""
         return self._periodsInDay(term, timetable, day, original=True)[1]
 
-    def _getUsualTemplateForDay(self, date):
-        """Returns the schoolday template for a certain date
-        disregarding special days.
-        """
-        default = self.dayTemplates[None]
-        return self.dayTemplates.get(date.weekday(), default)
-
-    def _getTemplateForDay(self, date):
+    def _getTemplateForDay(self, date, day_id):
         """Returns the schoolday template for a certain date"""
-        usual = self._getUsualTemplateForDay(date)
+        usual = self._getUsualTemplateForDay(date, day_id)
         return self.exceptionDays.get(date, usual)
 
     def schooldayStrategy(self, date, generator):
@@ -208,7 +222,7 @@ class BaseTimetableModel(Persistent):
         return not self == other
 
 
-class SequentialDaysTimetableModel(BaseTimetableModel):
+class BaseSequentialTimetableModel(BaseTimetableModel):
     """A timetable model in which the school days go in sequence with
     shifts over non-schooldays:
 
@@ -229,10 +243,6 @@ class SequentialDaysTimetableModel(BaseTimetableModel):
     Mon     Day 2
     """
 
-    factory_id = "SequentialDaysTimetableModel"
-
-    classProvides(ITimetableModelFactory)
-
     def __init__(self, day_ids, day_templates):
         BaseTimetableModel.__init__(self)
         self.timetableDayIds = day_ids
@@ -249,7 +259,40 @@ class SequentialDaysTimetableModel(BaseTimetableModel):
             return generator.next()
 
 
-class WeeklyTimetableModel(BaseTimetableModel):
+class SequentialDaysTimetableModel(BaseSequentialTimetableModel,
+                                   WeekdayBasedModelMixin):
+    """A sequential days timetable model in which the days are chosen
+    by weekday
+    """
+
+    factory_id = "SequentialDaysTimetableModel"
+
+    classProvides(ITimetableModelFactory)
+
+
+class SequentialDayIdBasedTimetableModel(BaseSequentialTimetableModel):
+    """A sequential timetable model in which the day templates are
+    indexed by day id rather than weekday.
+    """
+
+    factory_id = "SequentialDayIdBasedTimetableModel"
+    classProvides(ITimetableModelFactory)
+    implements(IDayIdBasedTimetableModel)
+
+    def _validateDayTemplates(self):
+        for day_id in self.timetableDayIds:
+            if day_id not in self.dayTemplates:
+                raise AssertionError("No day template for day id %s" % day_id)
+
+
+    def _getUsualTemplateForDay(self, date, day_id):
+        """Returns the schoolday template for a certain date
+        disregarding special days.
+        """
+        return self.dayTemplates[day_id]
+
+
+class WeeklyTimetableModel(BaseTimetableModel, WeekdayBasedModelMixin):
     """A timetable model where the schedule depends only on weekdays."""
 
     factory_id = "WeeklyTimetableModel"

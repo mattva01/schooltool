@@ -176,10 +176,11 @@ from schooltool.timetable.interfaces import Unchanged
 from schooltool.timetable.interfaces import IDateRange
 from schooltool import getSchoolToolApplication
 
-# ZODB compatibility
+# Imports for ZODB compatibility
 from schooltool.timetable.model import BaseTimetableModel
 from schooltool.timetable.model import WeeklyTimetableModel
 from schooltool.timetable.model import SequentialDaysTimetableModel
+from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
 from schooltool.timetable.model import TimetableCalendarEvent
 
 __metaclass__ = type

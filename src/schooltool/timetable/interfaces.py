@@ -237,18 +237,6 @@ class ITimetableModel(Interface):
         title=u"A sequence of day_ids which can be used in the timetable.",
         value_type=TextLine(title=u"Day id"))
 
-    dayTemplates = Dict(
-        title=u"Schoolday templates",
-        key_type=Int(title=u"Weekday", required=False),
-        value_type=Object(title=u"Schoolday template",
-                          schema=ISchooldayTemplate),
-        description=u"""
-        Schoolday templates.
-
-        The template with the key of None is used if there is no template
-        for a particular weekday.
-        """)
-
     exceptionDays = Dict(
         title=u"Exception schoolday templates",
         key_type=Date(title=u"Date"),
@@ -296,6 +284,35 @@ class ITimetableModel(Interface):
         """Return what day id a certain date will use in this model"""
 
 
+class IWeekdayBasedTimetableModel(ITimetableModel):
+    """A model that chooses the day template according to the day of week."""
+
+    dayTemplates = Dict(
+        title=u"Schoolday templates",
+        key_type=Int(title=u"Weekday", required=False),
+        value_type=Object(title=u"Schoolday template",
+                          schema=ISchooldayTemplate),
+        description=u"""
+        Schoolday templates.
+
+        The template with the key of None is used if there is no template
+        for a particular weekday.
+        """)
+
+
+class IDayIdBasedTimetableModel(ITimetableModel):
+    """A model that chooses the day template according to the day id."""
+
+    dayTemplates = Dict(
+        title=u"Schoolday templates",
+        key_type=TextLine(title=u"Day Id", required=False),
+        value_type=Object(title=u"Schoolday template",
+                          schema=ISchooldayTemplate),
+        description=u"""
+        Schoolday templates indexed by day id.
+        """)
+
+
 class ITimetableModelFactory(Interface):
     """A factory of a timetable model"""
 
@@ -304,8 +321,8 @@ class ITimetableModelFactory(Interface):
 
         `day_ids` is a sequence of day ids.
 
-        `day_templates` is a dict with weekday numbers as keys and
-        ITimetableDay objects as values.
+        `day_templates` is a dict ITimetableDay objects as values and
+        implementation dependent keys.
         """
 
 

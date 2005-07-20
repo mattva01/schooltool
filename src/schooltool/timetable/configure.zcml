@@ -37,6 +37,12 @@
 
   <utility
       provides=".interfaces.ITimetableModelFactory"
+      name="SequentialDayIdBasedTimetableModel"
+      component="schooltool.timetable.SequentialDayIdBasedTimetableModel"
+      />
+
+  <utility
+      provides=".interfaces.ITimetableModelFactory"
       name="WeeklyTimetableModel"
       component="schooltool.timetable.WeeklyTimetableModel"
       />
@@ -114,11 +120,15 @@
   </content>
 
   <content class=".SequentialDaysTimetableModel">
-    <allow interface=".interfaces.ITimetableModel" />
+    <allow interface=".interfaces.IWeekdayBasedTimetableModel" />
+  </content>
+
+  <content class=".SequentialDayIdBasedTimetableModel">
+    <allow interface=".interfaces.IDayIdBasedTimetableModel" />
   </content>
 
   <content class=".WeeklyTimetableModel">
-    <allow interface=".interfaces.ITimetableModel" />
+    <allow interface=".interfaces.IWeekdayBasedTimetableModel" />
   </content>
 
   <content class=".SchooldayPeriod">
