@@ -131,10 +131,9 @@ is not implemented yet -- XXX don't forget to update this bit later)
   ...
   <form class="plain" method="POST"
         action="http://localhost/frogpond/ttschemas/add.html">
+    <p>Enter start and end times for each slot, one slot (HH:MM - HH:MM) per
+       line.</p>
     <div class="row">
-    <div class="label">
-      <label for="field.times" title="">Start and end times for each slot</label>
-    </div>
     <p class="hint"></p>
     <div class="field">
       <textarea cols="60" id="field.times" name="field.times" rows="15"
@@ -310,10 +309,8 @@ Let's choose rotating.
   ...
   <form class="plain" method="POST"
         action="http://localhost/frogpond/ttschemas/add.html">
+    <p>Enter names of days in cycle, one per line.</p>
     <div class="row">
-    <div class="label">
-      <label for="field.days" title="">Names of days</label>
-    </div>
     <p class="hint"></p>
     <div class="field">
       <textarea cols="60" id="field.days" name="field.days" rows="15"
@@ -378,10 +375,9 @@ is not implemented yet -- XXX don't forget to update this bit later)
   ...
   <form class="plain" method="POST"
         action="http://localhost/frogpond/ttschemas/add.html">
+    <p>Enter start and end times for each slot, one slot (HH:MM - HH:MM) per
+       line.</p>
     <div class="row">
-    <div class="label">
-      <label for="field.times" title="">Start and end times for each slot</label>
-    </div>
     <p class="hint"></p>
     <div class="field">
       <textarea cols="60" id="field.times" name="field.times" rows="15"

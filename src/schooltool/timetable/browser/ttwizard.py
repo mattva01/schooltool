@@ -193,10 +193,15 @@ class FormStep(Step):
 
     Subclasses should provide a `schema` attribute.
 
+    They can override the `description` attribute and specify some informative
+    text to be displayed above the form.
+
     They should also define the `update` and `next` methods.
     """
 
     __call__ = ViewPageTemplateFile("templates/ttwizard_form.pt")
+
+    description = None
 
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
@@ -262,8 +267,10 @@ class CycleStep(ChoiceStep):
 class DayEntryStep(FormStep):
     """A step for entering names of days."""
 
+    description = _("Enter names of days in cycle, one per line.")
+
     class schema(Interface):
-        days = Text(title=_("Names of days"))
+        days = Text()
 
     def update(self):
         try:
@@ -334,9 +341,11 @@ class SimpleSlotEntryStep(FormStep):
     This step is used when the times are the same in each day.
     """
 
+    description = _("Enter start and end times for each slot,"
+                    " one slot (HH:MM - HH:MM) per line.")
+
     class schema(Interface):
-        times = Text(title=_("Start and end times for each slot"),
-                     default=u"9:30-10:25\n10:30-11:25")
+        times = Text(default=u"9:30-10:25\n10:30-11:25")
 
     def update(self):
         try:

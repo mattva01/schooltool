@@ -173,6 +173,7 @@ def doctest_FormStep():
 
         >>> from schooltool.timetable.browser.ttwizard import FormStep
         >>> class SampleFormStep(FormStep):
+        ...     description = "Informative text shown above the form."
         ...     class schema(Interface):
         ...         a_field = TextLine(title=u"A field")
         ...         b_field = TextLine(title=u"B field")
@@ -198,6 +199,7 @@ def doctest_FormStep():
         <BLANKLINE>
         ...
         <form class="plain" method="POST" action="http://127.0.0.1">
+          <p>Informative text shown above the form.</p>
               <div class="row">
                   <div class="label">
                     <label for="field.a_field" title="">A field</label>

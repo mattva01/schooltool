@@ -8,6 +8,9 @@
 
 <form class="plain" method="POST" tal:attributes="action request/URL">
 
+  <p tal:condition="view/description" tal:content="view/description"
+     i18n:translate="">(informative text)</p>
+
   <metal:block use-macro="context/@@form_macros/widget_rows" />
 
   <div class="controls">
