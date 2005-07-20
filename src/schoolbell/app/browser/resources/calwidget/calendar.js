@@ -23,7 +23,14 @@ function _isLeapYear(year) {
 
 function setCalendar(idtag,yyyy,mm,dd) {
     y = document.getElementById(idtag);
-    y.value = mm + "/" + dd + "/" + yyyy;
+    // Zero pad months and days
+    if (mm < 10) {
+        mm = "0" + mm;
+    }
+    if (dd < 10) {
+        dd = "0" + dd;
+    }
+    y.value = yyyy + "-" + mm + "-" + dd;
     y = document.getElementById(idtag + "Div");
     y.style.display = "none";
 }
@@ -142,10 +149,10 @@ function drawCalendar() {
         x = document.getElementById(idtag);
         if (x.value != "") {
             var wholeValue = x.value;
-            var dateparts = wholeValue.split("/");
-            var mm = dateparts[0]*1;
-            var dd = dateparts[1]*1;
-            var yyyy = dateparts[2]*1;
+            var dateparts = wholeValue.split("-");
+            var yyyy = dateparts[0]*1;
+            var mm = dateparts[1]*1;
+            var dd = dateparts[2]*1;
         } else {
             var doDate = new Date();
             var mm = doDate.getMonth()+1;
