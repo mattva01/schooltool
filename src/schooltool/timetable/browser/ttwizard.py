@@ -349,6 +349,7 @@ def parse_name_list(names):
         >>> parse_name_list(u'')
         []
 
+    TODO: enforce uniqueness of names.
     """
     return [s.strip() for s in names.splitlines() if s.strip()]
 
@@ -660,52 +661,98 @@ class FinalStep(Step):
     def next(self):
         return FirstStep(self.context, self.request)
 
-    def modelFactory(self):
-        """Return the timetable model factory for the current state."""
-        session = self.getSessionData()
-        cycle = session['cycle']
+    def modelFactory(cycle):
+        """Return the timetable model factory for the chosen cycle.
+
+        Cycle can be either 'weekly' or 'rotating'.
+
+            >>> FinalStep.modelFactory('weekly')
+            <...WeeklyTimetableModel...>
+            >>> FinalStep.modelFactory('rotating')
+            <...SequentialDaysTimetableModel...>
+
+        """
         return {'weekly': WeeklyTimetableModel,
                 'rotating': SequentialDaysTimetableModel}[cycle]
 
-    def periodNames(self):
-        session = self.getSessionData()
-        assert session['similar_days']
-        if session['named_periods']:
-            period_names = session['period_names']
-        else:
-            slots = session['time_slots'][0]
-            period_names = [format_time_range(tstart, duration)
-                            for tstart, duration in slots]
-        return period_names
+    modelFactory = staticmethod(modelFactory)
 
-    def dayTemplates(self):
-        session = self.getSessionData()
-        if session['similar_days']:
-            slots = session['time_slots'][0]
-        else:
-            raise NotImplementedError()
+    def periodNames(named_periods, period_names, time_slots):
+        """Return names of periods in order.
 
-        period_names = self.periodNames()
+        `named_periods` indicates whether periods are named (as opposed to
+        being designated by time).
+
+        `period_names` specifies the names of the periods.
+
+        `time_slots` is a list of day definitions, where each day is a
+        list of slots, and each slot is a tuple (tstart, duration).
+
+        XXX: This method is only meaningful when all days have the same slots.
+
+            >>> FinalStep.periodNames(True, ['a', 'b', 'c'], 'whatever')
+            ['a', 'b', 'c']
+
+            >>> from datetime import time, timedelta
+            >>> periods = [(time(9, 0), timedelta(minutes=50)),
+            ...            (time(12, 35), timedelta(minutes=50)),
+            ...            (time(14, 15), timedelta(minutes=55))]
+            >>> FinalStep.periodNames(False, 'whatever', [periods] * 4)
+            ['09:00-09:50', '12:35-13:25', '14:15-15:10']
+
+        """
+        if named_periods:
+            return period_names
+        else:
+            return [format_time_range(tstart, duration)
+                    for tstart, duration in time_slots[0]]
+
+    periodNames = staticmethod(periodNames)
+
+    def dayTemplates(period_names, time_slots):
+        """Return a dict of day templates for ITimetableModelFactory.
+
+            >>> from datetime import time, timedelta
+            >>> periods = [(time(9, 0), timedelta(minutes=50)),
+            ...            (time(12, 35), timedelta(minutes=50)),
+            ...            (time(14, 15), timedelta(minutes=55))]
+            >>> dt = FinalStep.dayTemplates(['A', 'B', 'C'], [periods] * 4)
+            >>> from schooltool.timetable.browser.tests.test_ttwizard \\
+            ...     import print_day_templates
+            >>> print_day_templates(dt)
+            --- day template None
+            09:00-09:50: A
+            12:35-13:25: B
+            14:15-15:10: C
+
+        XXX: This method is currenly only implemented for the case when all
+             days have the same slots.
+        """
+        slots = time_slots[0]
         template = SchooldayTemplate()
         for ptitle, (tstart, duration) in zip(period_names, slots):
             template.add(SchooldayPeriod(ptitle, tstart, duration))
-
         return {None: template}
+
+    dayTemplates = staticmethod(dayTemplates)
 
     def createSchema(self):
         """Create the timetable schema."""
         session = self.getSessionData()
         title = session['title']
-
         day_ids = session['day_names']
-        periods = self.periodNames()
-        day_templates = self.dayTemplates()
+        assert session['similar_days']  # TODO: implement the other case
 
-        model_factory = self.modelFactory()
+        period_names = self.periodNames(session['named_periods'],
+                                        session.get('period_names'),
+                                        session['time_slots'])
+        day_templates = self.dayTemplates(period_names, session['time_slots'])
+
+        model_factory = self.modelFactory(session['cycle'])
         model = model_factory(day_ids, day_templates)
         ttschema = TimetableSchema(day_ids, title=title, model=model)
         for day_id in day_ids:
-            ttschema[day_id] = TimetableSchemaDay(periods)
+            ttschema[day_id] = TimetableSchemaDay(period_names)
         return ttschema
 
     def add(self, ttschema):

@@ -42,6 +42,7 @@ from schoolbell.app.app import SimpleNameChooser
 from schooltool.tests import setUpApplicationPreferences
 from schooltool.app import SchoolToolApplication
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
+from schooltool.timetable.browser import format_time_range
 
 
 def setUpNameChoosers():
@@ -85,6 +86,19 @@ def setUp(test):
 def tearDown(test):
     """Test cleanup."""
     schoolbell_setup.tearDown(test)
+
+
+def print_day_templates(daytemplates):
+    """Print day templates."""
+    keys = daytemplates.keys()
+    keys.sort()
+    for key in keys:
+        print "--- day template %r" % key
+        slots = [(period.tstart, period.duration, period.title)
+                 for period in daytemplates[key]]
+        slots.sort()
+        for tstart, duration, title in slots:
+            print "%s: %s" % (format_time_range(tstart, duration), title)
 
 
 def print_ttschema(ttschema):
@@ -1203,15 +1217,10 @@ def doctest_FinalStep_createSchema():
 
     There is a single day template
 
-        >>> ttschema.model.dayTemplates.keys()
-        [None]
-        >>> slots = [(period.tstart, period.duration, period.title)
-        ...          for period in ttschema.model.dayTemplates[None]]
-        >>> slots.sort()
-        >>> for tstart, duration, title in slots:
-        ...     print tstart, duration, title
-        09:30:00 0:55:00 09:30-10:25
-        10:30:00 0:55:00 10:30-11:25
+        >>> print_day_templates(ttschema.model.dayTemplates)
+        --- day template None
+        09:30-10:25: 09:30-10:25
+        10:30-11:25: 10:30-11:25
 
     The model can also be rotating.
 
