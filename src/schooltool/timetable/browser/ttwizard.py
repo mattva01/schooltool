@@ -324,7 +324,7 @@ class SequentialModelStep(ChoiceStep):
     key = 'time_model'
 
     question = _("Do start and end times vary based on the day of the week"
-                 "(Monday - Friday) or the day in the cycle?")
+                 " (Monday - Friday) or the day in the cycle?")
 
     choices = [('weekly', _("Day of week")),
                ('cycle_day', _("Day in cycle"))]
@@ -573,7 +573,7 @@ class PeriodSequenceSameStep(ChoiceStep):
 
 
 class PeriodOrderSimple(Step):
-    """Step to put periods in order if all days are the same"""
+    """Step to put periods in order if all days are the same."""
 
     template = ViewPageTemplateFile('templates/ttwizard_period_order1.pt')
     description = _('Please put the periods in order:')
