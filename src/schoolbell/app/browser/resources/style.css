@@ -383,6 +383,7 @@ a.button-ok {
     font-size: xx-small;
     background: #eae8e3;
     border-top: 1px solid #bab5ab;
+    border-bottom: 1px solid #bab5ab;
     line-height: 1em;
 }
 

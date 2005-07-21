@@ -5,38 +5,15 @@
  *
  */
 
-/*
- * Position the footer at the bottom of the page.
- * See http://scott.sauyet.com/CSS/Demo/FooterDemo1.html
- */
-html, body {
-    min-height: 100%;
-    width: 100%;
-    height: 100%;
-}
-
-/*
- * The "height" above is a hack for IE5+/Win.  Below we adjust
- * it using the child selector to hide from IE5+/Win
- */
-
-html>body, html>body {
-    height: auto;
-}
-
 body {
-    position: absolute;
-    top: 0;
-    left: 0;
     margin: 0;
 }
 
 #footer {
-    position: absolute;
-    bottom: 0;
     width: 70%;
-    padding: 0 15%;
+    padding: 1em 15%;
     margin-top: 2em;
+    margin-bottom: 1em;
 }
 
 #columns {
@@ -47,18 +24,6 @@ body {
     clear: both;
     margin-top: 2em;
 }
-
-/* SBMH -- see http://css-discuss.incutio.com/?page=BoxModelHack
- * Stupid hack lets IE see 100%, others see 70%.
- */
-#footer {
-    \width: 100%;
-    w\idth: 70%;
-}
-
-/*
- * Other rules follow
- */
 
 ul {
     padding-left: 2em;
