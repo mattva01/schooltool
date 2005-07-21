@@ -306,7 +306,7 @@ class IndependentDaysStep(ChoiceStep):
     question = _("Do classes begin and end at the same time each day in"
                  " your school's timetable?")
 
-    choices = ((True,  _("Same time")),
+    choices = ((True,  _("Same time each day")),
                (False, _("Different times")))
 
     def next(self):
@@ -314,7 +314,26 @@ class IndependentDaysStep(ChoiceStep):
         if session['similar_days']:
             return SimpleSlotEntryStep(self.context, self.request)
         else:
-            return SlotEntryStep(self.context, self.request)
+            if session['cycle'] == 'weekly':
+                return SlotEntryStep(self.context, self.request)
+            else:
+                return SequentialModelStep(self.context, self.request)
+
+
+class SequentialModelStep(ChoiceStep):
+    """Step for choosing if start and end times vay based on the day of
+    the week or the day in the cycle."""
+
+    key = 'time_model'
+
+    question = _("Do start and end times vary based on the day of the week"
+                 "(Monday - Friday) or the day in the cycle?")
+
+    choices = [('weekly', _("Day of week")),
+               ('cycle_day', _("Day in cycle"))]
+
+    def next(self):
+        return SlotEntryStep(self.context, self.request)
 
 
 def parse_time_range_list(times):

@@ -397,9 +397,35 @@ def doctest_IndependentDaysStep():
 
         >>> view.getSessionData()['day_names'] = ['Day A', 'Day B']
 
-    The next step is SlotEntryStep if each day is different:
+    The next step is SlotEntryStep if each day is different and you chose
+    the weekly cycle:
 
         >>> view.getSessionData()['similar_days'] = False
+        >>> view.getSessionData()['cycle'] = 'weekly'
+        >>> view.next()
+        <...ttwizard.SlotEntryStep...>
+
+    If you chose the rotating cycle, you will be asked another question
+    about the time model:
+
+        >>> view.getSessionData()['cycle'] = 'rotating'
+        >>> view.next()
+        <...ttwizard.SequentialModelStep...>
+
+    """
+
+
+def doctest_SequentialModelStep():
+    r"""Unit test for SequentialModelStep
+
+        >>> from schooltool.timetable.browser.ttwizard import SequentialModelStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = SequentialModelStep(context, request)
+
+    The next step is always SlotEntryStep, which uses the answer for
+    this question:
+
         >>> view.next()
         <...ttwizard.SlotEntryStep...>
 
