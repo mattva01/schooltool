@@ -1,9 +1,8 @@
 <metal:block use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 
-  <metal:block fill-slot="title">
-    <title i18n:translate="">Person info: <span tal:replace="context/title"
-        i18n:name="title"/></title>
-  </metal:block>
+  <metal:slot fill-slot="title"
+    i18n:translate="">Person info: <span tal:replace="context/title"
+      i18n:name="title"/></metal:slot>
 
   <metal:block fill-slot="content-header">
 

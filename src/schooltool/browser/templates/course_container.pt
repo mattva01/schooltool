@@ -1,7 +1,7 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title"
-         tal:content="view/index_title" i18n:translate="">Contents</title>
+  <metal:slot fill-slot="title"
+         tal:content="view/index_title" i18n:translate="">Contents</metal:slot>
 </head>
 <body>
 

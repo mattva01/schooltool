@@ -15,9 +15,10 @@
     <script type="text/javascript" src="schoolbell.js"
             tal:attributes="src context/++resource++schoolbell.js">
     </script>
-    <metal:block define-slot="title">
-      <title i18n:translate="">SchoolTool</title>
-    </metal:block>
+    <title>
+      <span tal:replace="context/schoolbell:preferences/title"/> :
+      <metal:block define-slot="title"/>
+    </title>
     <metal:block metal:define-slot="extrahead" />
   </head>
   <body>
@@ -119,7 +120,9 @@
     </div>
     <div id="footer" i18n:translate="">
       <p>
-        SchoolTool <span tal:content="modules/schoolbell/VERSION"/>
+        <strong tal:replace="context/schoolbell:preferences/title"/>
+        Server Running SchoolTool
+        <span tal:content="modules/schoolbell/VERSION"/>
         &copy; The Shuttleworth Foundation 2003 - <span>2005</span>:
         Supporting Social Innovation.
       </p>
@@ -196,13 +199,11 @@
 <metal:block define-macro="calendar-page" i18n:domain="schooltool">
   <html metal:use-macro="view/@@standard_macros/page">
 
-    <metal:block fill-slot="title">
-      <title i18n:translate="">
-        Calendar for <span tal:replace="context/title"
+    <metal:slot fill-slot="title" i18n:translate="">
+      Calendar for <span tal:replace="context/title"
         i18n:name="title" i18n:translate=""/> -
-        <span i18n:name="calendar_title" tal:replace="view/title"/>
-      </title>
-    </metal:block>
+      <span i18n:name="calendar_title" tal:replace="view/title"/>
+    </metal:slot>
 
     <metal:block fill-slot="extrahead">
       <link rel="service.feed" type="application/atom+xml"

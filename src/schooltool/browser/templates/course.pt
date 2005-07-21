@@ -1,6 +1,6 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
-  <title metal:fill-slot="title" tal:content="context/title" />
+  <metal:slot fill-slot="title" tal:content="context/title" />
 </head>
 <body>
 <h1 metal:fill-slot="content-header"><span tal:replace="context/title" /></h1>
