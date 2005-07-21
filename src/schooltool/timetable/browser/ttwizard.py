@@ -133,6 +133,7 @@ from schooltool.timetable import TimetableSchemaDay
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable import WeeklyTimetableModel
 from schooltool.timetable import SequentialDaysTimetableModel
+from schooltool.timetable import SequentialDayIdBasedTimetableModel
 
 
 def getSessionData(view):
@@ -661,19 +662,41 @@ class FinalStep(Step):
     def next(self):
         return FirstStep(self.context, self.request)
 
-    def modelFactory(cycle):
+    def modelFactory(cycle, similar_days, time_model):
         """Return the timetable model factory for the chosen cycle.
 
-        Cycle can be either 'weekly' or 'rotating'.
+        Cycle can be either 'weekly' or 'rotating'.  Weekly cycles always
+        use the WeeklyTimetableModel.
 
-            >>> FinalStep.modelFactory('weekly')
+            >>> FinalStep.modelFactory('weekly', None, None)
             <...WeeklyTimetableModel...>
-            >>> FinalStep.modelFactory('rotating')
+
+        Rotating cycles can either vary based on the day of the week, or
+        on the day in the cycle.
+
+            >>> FinalStep.modelFactory('rotating', False, 'weekly')
+            <...SequentialDaysTimetableModel...>
+
+            >>> FinalStep.modelFactory('rotating', False, 'cycle_day')
+            <...SequentialDayIdBasedTimetableModel...>
+
+        but there's no distinction between the two if all days have the same
+        time slots.
+
+            >>> FinalStep.modelFactory('rotating', True, None)
             <...SequentialDaysTimetableModel...>
 
         """
-        return {'weekly': WeeklyTimetableModel,
-                'rotating': SequentialDaysTimetableModel}[cycle]
+        assert cycle in ('weekly', 'rotating')
+        if cycle == 'weekly':
+            return WeeklyTimetableModel
+        if similar_days:
+            return SequentialDaysTimetableModel
+        assert time_model in ('weekly', 'cycle_day')
+        if time_model == 'weekly':
+            return SequentialDaysTimetableModel
+        else:
+            return SequentialDayIdBasedTimetableModel
 
     modelFactory = staticmethod(modelFactory)
 
@@ -748,7 +771,9 @@ class FinalStep(Step):
                                         session['time_slots'])
         day_templates = self.dayTemplates(period_names, session['time_slots'])
 
-        model_factory = self.modelFactory(session['cycle'])
+        model_factory = self.modelFactory(session['cycle'],
+                                          session['similar_days'],
+                                          session.get('time_model'))
         model = model_factory(day_ids, day_templates)
         ttschema = TimetableSchema(day_ids, title=title, model=model)
         for day_id in day_ids:
