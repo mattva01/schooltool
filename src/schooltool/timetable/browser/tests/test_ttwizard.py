@@ -312,7 +312,7 @@ def doctest_CycleStep():
         >>> view.update()
         True
         >>> session['day_names']
-        [u'Monday', u'Tuesday', u'Wednesday', u'Thursday', u'Friday']
+        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
     """
 

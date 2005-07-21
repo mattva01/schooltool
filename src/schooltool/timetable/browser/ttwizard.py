@@ -262,7 +262,9 @@ class CycleStep(ChoiceStep):
         success = ChoiceStep.update(self)
         session = self.getSessionData()
         if success and session['cycle'] == 'weekly':
-            weekday_names = [day_of_week_names[i] for i in range(5)]
+            weekday_names = [translate(day_of_week_names[i],
+                                       context=self.request)
+                             for i in range(5)]
             session['day_names'] = weekday_names
         return success
 
