@@ -1212,18 +1212,46 @@ def doctest_FinalStep():
 def doctest_FinalStep_dayTemplates():
     """Unit test for FinalStep.dayTemplates
 
+        >>> from schooltool.timetable.browser.ttwizard import FinalStep
         >>> from datetime import time, timedelta
         >>> names = ['A', 'B', 'C']
         >>> slots = [(time(9, 0), timedelta(minutes=50)),
         ...          (time(12, 35), timedelta(minutes=50)),
         ...          (time(14, 15), timedelta(minutes=55))]
 
-        >>> from schooltool.timetable.browser.ttwizard import FinalStep
+    Simple case: all days are the same.
+
         >>> dt = FinalStep.dayTemplates([names] * 4, [slots] * 4)
         >>> print_day_templates(dt)
         --- day template None
         09:00-09:50: A
         12:35-13:25: B
+        14:15-15:10: C
+
+    Time slots are the same for all days, but period order differs.
+
+        >>> dt = FinalStep.dayTemplates([['A', 'B', 'C'],
+        ...                              ['B', 'C', 'A'],
+        ...                              ['C', 'A', 'B'],
+        ...                              ['B', 'A', 'C']],
+        ...                             [slots] * 4)
+        >>> print_day_templates(dt)
+        --- day template None
+        --- day template 0
+        09:00-09:50: A
+        12:35-13:25: B
+        14:15-15:10: C
+        --- day template 1
+        09:00-09:50: B
+        12:35-13:25: C
+        14:15-15:10: A
+        --- day template 2
+        09:00-09:50: C
+        12:35-13:25: A
+        14:15-15:10: B
+        --- day template 3
+        09:00-09:50: B
+        12:35-13:25: A
         14:15-15:10: C
 
     """
@@ -1299,6 +1327,71 @@ def doctest_FinalStep_createSchema():
         D1           D2           D3
         Green        Green        Green
         Blue         Blue         Blue
+
+    """
+
+
+def doctest_FinalStep_createSchema_different_order_on_different_days():
+    """Unit test for FinalStep.createSchema
+
+        >>> from schooltool.timetable.browser.ttwizard import FinalStep
+        >>> view = FinalStep(app['ttschemas'], TestRequest())
+        >>> data = view.getSessionData()
+
+        >>> from datetime import time, timedelta
+        >>> slots = [(time(8+n, 0), timedelta(minutes=45))
+        ...          for n in range(4)]
+
+        >>> data['title'] = u'Default'
+        >>> data['cycle'] = 'weekly'
+        >>> data['day_names'] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
+        ...                      'Friday']
+        >>> data['similar_days'] = True
+        >>> data['time_slots'] = [slots] * 5
+        >>> data['named_periods'] = True
+        >>> data['period_names'] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+        >>> data['periods_same'] = False
+        >>> data['periods_order'] = [['A', 'B', 'C', 'D'],
+        ...                          ['B', 'C', 'D', 'E'],
+        ...                          ['C', 'D', 'E', 'F'],
+        ...                          ['D', 'E', 'F', 'G'],
+        ...                          ['E', 'F', 'G', 'H']]
+        >>> ttschema = view.createSchema()
+
+        >>> print_ttschema(ttschema)
+        Monday       Tuesday      Wednesday    Thursday     Friday
+        A            B            C            D            E
+        B            C            D            E            F
+        C            D            E            F            G
+        D            E            F            G            H
+
+        >>> print_day_templates(ttschema.model.dayTemplates)
+        --- day template None
+        --- day template 0
+        08:00-08:45: A
+        09:00-09:45: B
+        10:00-10:45: C
+        11:00-11:45: D
+        --- day template 1
+        08:00-08:45: B
+        09:00-09:45: C
+        10:00-10:45: D
+        11:00-11:45: E
+        --- day template 2
+        08:00-08:45: C
+        09:00-09:45: D
+        10:00-10:45: E
+        11:00-11:45: F
+        --- day template 3
+        08:00-08:45: D
+        09:00-09:45: E
+        10:00-10:45: F
+        11:00-11:45: G
+        --- day template 4
+        08:00-08:45: E
+        09:00-09:45: F
+        10:00-10:45: G
+        11:00-11:45: H
 
     """
 

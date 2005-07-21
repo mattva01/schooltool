@@ -723,7 +723,7 @@ class FinalStep(Step):
     modelFactory = staticmethod(modelFactory)
 
     def periodNames(named_periods, periods_order, time_slots):
-        """Return names of periods in order.
+        """Return names of periods for each day in order.
 
         `named_periods` indicates whether periods are named (as opposed to
         being designated by time).
@@ -734,26 +734,25 @@ class FinalStep(Step):
         `time_slots` is a list of day definitions, where each day is a
         list of slots, and each slot is a tuple (tstart, duration).
 
-        XXX: This method is only meaningful when all days have the same slots,
-        i.e., for all n periods_order[n] == periods_order[0] and
-                        time_slots[n] == time_slots[0].
-
             >>> FinalStep.periodNames(True, [['a', 'b', 'c']] * 3, None)
-            ['a', 'b', 'c']
+            [['a', 'b', 'c'], ['a', 'b', 'c'], ['a', 'b', 'c']]
 
             >>> from datetime import time, timedelta
             >>> periods = [(time(9, 0), timedelta(minutes=50)),
             ...            (time(12, 35), timedelta(minutes=50)),
             ...            (time(14, 15), timedelta(minutes=55))]
             >>> FinalStep.periodNames(False, None, [periods] * 4)
-            ['09:00-09:50', '12:35-13:25', '14:15-15:10']
+            [['09:00-09:50', '12:35-13:25', '14:15-15:10'],
+             ['09:00-09:50', '12:35-13:25', '14:15-15:10'],
+             ['09:00-09:50', '12:35-13:25', '14:15-15:10'],
+             ['09:00-09:50', '12:35-13:25', '14:15-15:10']]
 
         """
         if named_periods:
-            return periods_order[0]
+            return periods_order
         else:
-            return [format_time_range(tstart, duration)
-                    for tstart, duration in time_slots[0]]
+            return [[format_time_range(tstart, duration)
+                    for tstart, duration in time_slots[0]]] * len(time_slots)
 
     periodNames = staticmethod(periodNames)
 
@@ -767,15 +766,21 @@ class FinalStep(Step):
         list of slots, and each slot is a tuple (tstart, duration).
 
         XXX: This method is currenly only implemented for the case when all
-             days have the same slots, and the sequence of periods each day
-             is the same.
+             days have the same slots.
         """
-        period_names = periods_order[0]
-        slots = time_slots[0]
-        template = SchooldayTemplate()
-        for ptitle, (tstart, duration) in zip(period_names, slots):
-            template.add(SchooldayPeriod(ptitle, tstart, duration))
-        return {None: template}
+        templates = {None: SchooldayTemplate()}
+        same = True
+        for n, (periods, slots) in enumerate(zip(periods_order, time_slots)):
+            template = SchooldayTemplate()
+            for ptitle, (tstart, duration) in zip(periods, slots):
+                template.add(SchooldayPeriod(ptitle, tstart, duration))
+            templates[n] = template
+            if n > 0 and template != templates[n-1]:
+                same = False
+        if same:
+            return {None: templates[0]}
+        else:
+            return templates
 
     dayTemplates = staticmethod(dayTemplates)
 
@@ -785,21 +790,19 @@ class FinalStep(Step):
         title = session['title']
         day_ids = session['day_names']
         assert session['similar_days']  # TODO: implement the other case
-        if session['named_periods']:
-            assert session['periods_same']  # TODO: implement the other case
 
-        period_names = self.periodNames(session['named_periods'],
-                                        session.get('periods_order'),
-                                        session['time_slots'])
-        day_templates = self.dayTemplates([period_names], session['time_slots'])
+        periods_order = self.periodNames(session['named_periods'],
+                                         session.get('periods_order'),
+                                         session['time_slots'])
+        day_templates = self.dayTemplates(periods_order, session['time_slots'])
 
         model_factory = self.modelFactory(session['cycle'],
                                           session['similar_days'],
                                           session.get('time_model'))
         model = model_factory(day_ids, day_templates)
         ttschema = TimetableSchema(day_ids, title=title, model=model)
-        for day_id in day_ids:
-            ttschema[day_id] = TimetableSchemaDay(period_names)
+        for day_id, periods in zip(day_ids, periods_order):
+            ttschema[day_id] = TimetableSchemaDay(periods)
         return ttschema
 
     def add(self, ttschema):
