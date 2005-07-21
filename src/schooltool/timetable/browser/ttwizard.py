@@ -398,6 +398,7 @@ class SlotEntryStep(Step):
     error = None
 
     def __init__(self, context, request):
+        # TODO: get rid of this, restore old getSessionData.
         Step.__init__(self, context, request)
         self.day_names = self.getSessionData()['day_names']
 
@@ -407,10 +408,14 @@ class SlotEntryStep(Step):
             s = self.request.form.get('times.%d' % i, '')
             try:
                 times = parse_time_range_list(s)
-            except ValueError:
-                return False # TODO: tell the user what was wrong
+            except ValueError, e:
+                self.error = _("Not a valid time slot: $slot.")
+                self.error.mapping['slot'] = unicode(e.args[0])
+                return False
             if not times:
-                return False # TODO: tell the user what was wrong
+                self.error = _("Please enter at least one time slot for $day.")
+                self.error.mapping['day'] = day_name
+                return False
             result[day_name] = times
 
         session = self.getSessionData()

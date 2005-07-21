@@ -507,11 +507,17 @@ def doctest_SlotEntryStep():
         </table>
         ...
 
+        >>> print view.error
+        None
+
     SlotEntryStep.update wants at least one slot on each day:
 
         >>> view.request.form['times.0'] = u'9:30 - 10:25'
         >>> view.update()
         False
+
+        >>> print translate(view.error)
+        Please enter at least one time slot for Twoday.
 
         >>> print view()
         <BLANKLINE>
@@ -530,6 +536,14 @@ def doctest_SlotEntryStep():
         </tr>
         </table>
         ...
+
+    If we provide an invalid interval, an error message will be shown:
+
+        >>> view.request.form['times.1'] = u'9:15 - 10:73'
+        >>> view.update()
+        False
+        >>> print translate(view.error)
+        Not a valid time slot: 9:15 - 10:73.
 
     If we provide both fields, the form will be parsed successfully:
 
