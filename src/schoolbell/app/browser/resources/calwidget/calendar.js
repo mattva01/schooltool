@@ -15,7 +15,30 @@
 * implied warranty.
 */
 
+function pageOffsetLeft(elem) {
 
+    if (elem.offsetParent) {
+        for(var offX = 0; elem.offsetParent; elem = elem.offsetParent){
+            offX += elem.offsetLeft;
+        }
+
+        return offX;
+    } else {
+        return elem.x;
+    }
+}
+
+function pageOffsetTop(elem) {
+
+    if (elem.offsetParent) {
+        for(var offY = 0; elem.offsetParent; elem = elem.offsetParent){
+            offY += elem.offsetTop;
+        }
+        return offY;
+    } else {
+        return elem.y;
+    }
+}
 
 function _isLeapYear(year) {
     return (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) ? 1 : 0;
@@ -237,13 +260,8 @@ function drawCalendar() {
     var pos = tempStr.indexOf(kitName);
     var isAppleWebkit = (pos != -1);
 
-    if (isAppleWebkit || document.all) {
-        ieOffset = 10;
-    } else {
-        ieOffset = 0;
-    }
-
-    t.style.left = ieOffset + dateField.offsetLeft + "px";
+    t.style.left = pageOffsetLeft(dateField);
+    t.style.top = pageOffsetTop(dateField);
     t.style.display = "";
 }
 
