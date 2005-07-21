@@ -478,6 +478,28 @@ class WeeklySlotEntryStep(RotatingSlotEntryStep):
         return [translate(day_of_week_names[i], context=self.request)
                 for i in range(5)]
 
+    def update(self):
+        """Store the slots in the session.
+
+        If a rotating timetable cycle is selected and slots vary based on day
+        of week, each day must have the same number of slots.
+        """
+        result = RotatingSlotEntryStep.update(self)
+        session = self.getSessionData()
+        if (result and session['cycle'] == 'rotating'
+            and session.get('time_model') == 'weekly'):
+            slots = session['time_slots']
+            assert len(slots) == 5 # Monday - Friday
+            num_slots = len(slots[0])
+            for day in slots[1:]:
+                if len(day) != num_slots:
+                    self.error = _('As you have selected a rotating timetable'
+                                   ' cycle and slots based on day of week,'
+                                   ' all days must have the same number'
+                                   ' of time periods.')
+                    return False
+        return result
+
 
 class NamedPeriodsStep(ChoiceStep):
     """A step for choosing if periods have names or are designated by time"""

@@ -603,7 +603,6 @@ def doctest_RotatingSlotEntryStep():
          [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
           (datetime.time(10, 35), datetime.timedelta(0, 2700))]]
 
-
     The next page is the period naming step.
 
         >>> view.next()
@@ -620,6 +619,7 @@ def doctest_WeeklySlotEntryStep():
         >>> context = app['ttschemas']
         >>> request = TestRequest()
         >>> view = WeeklySlotEntryStep(context, request)
+        >>> view.getSessionData()['cycle'] = 'weekly'
 
         >>> view.dayNames()
         ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
@@ -700,6 +700,36 @@ def doctest_WeeklySlotEntryStep():
          [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
           (datetime.time(10, 35), datetime.timedelta(0, 2700))]]
 
+    If we choose a rotating timetable cycle and slots vary based on day of
+    week, each day must have the same number of slots.
+
+        >>> form = {'times.4': '9:15 - 10:10\n10:35 - 11:20\n11:30 - 12:15\n'}
+        >>> for i in range(0, 4):
+        ...     field_name = 'times.%d' % i
+        ...     form[field_name] = u'9:15 - 10:10\n10:35 - 11:20'
+        >>> request = TestRequest(form=form)
+        >>> view = WeeklySlotEntryStep(context, request)
+
+        >>> session = view.getSessionData()
+        >>> session['cycle'] = 'rotating'
+        >>> session['time_model'] = 'weekly'
+
+        >>> view.update()
+        False
+        >>> translate(view.error)
+        'As you have selected a rotating timetable cycle and slots based on day of week, all days must have the same number of time periods.'
+
+    If we change the time model, the same data will pass:
+
+        >>> session['time_model'] = 'cycle_day'
+        >>> view.update()
+        True
+
+    Or we can delete that key altogether:
+
+        >>> del session['time_model']
+        >>> view.update()
+        True
 
     The next page is the period naming step.
 
