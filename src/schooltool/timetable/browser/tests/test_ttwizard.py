@@ -299,21 +299,6 @@ def doctest_CycleStep():
         >>> view.next()
         <...IndependentDaysStep...>
 
-    The session variable day_names is filled with weekday
-    names in view.update() if and only if the cycle is weekly
-
-        >>> view.request.form['NEXT.1'] = 'Rotating' # rotating
-        >>> view.update()
-        True
-        >>> 'day_names' in session
-        False
-
-        >>> view.request.form['NEXT.0'] = 'weekly' # weekly
-        >>> view.update()
-        True
-        >>> session['day_names']
-        [u'Monday', u'Tuesday', u'Wednesday', u'Thursday', u'Friday']
-
     """
 
 
