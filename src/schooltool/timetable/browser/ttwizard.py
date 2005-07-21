@@ -667,7 +667,6 @@ class FinalStep(Step):
         else:
             raise NotImplementedError()
 
-        periods = []
         template = SchooldayTemplate()
         if session['named_periods']:
             period_names = session['period_names']
@@ -676,9 +675,8 @@ class FinalStep(Step):
                             for tstart, duration in slots]
         for ptitle, (tstart, duration) in zip(period_names, slots):
             template.add(SchooldayPeriod(ptitle, tstart, duration))
-            periods.append(ptitle)
 
-        return periods, {None: template}
+        return period_names, {None: template}
 
     def createSchema(self):
         """Create the timetable schema."""
