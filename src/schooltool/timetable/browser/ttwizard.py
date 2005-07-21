@@ -257,6 +257,14 @@ class CycleStep(ChoiceStep):
         else:
             return DayEntryStep(self.context, self.request)
 
+    def update(self):
+        success = ChoiceStep.update(self)
+        session = self.getSessionData()
+        if success and session['cycle'] == 'weekly':
+            weekday_names = [day_of_week_names[i] for i in range(5)]
+            session['day_names'] = weekday_names
+        return success
+
 
 class DayEntryStep(FormStep):
     """A step for entering names of days."""
