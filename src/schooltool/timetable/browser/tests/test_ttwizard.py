@@ -854,10 +854,11 @@ def doctest_PeriodOrderSimple():
         ...                             'period_2': 'B', 'period_3': 'A'})
         >>> view = PeriodOrderSimple(context, request)
         >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D']
+        >>> view.getSessionData()['day_names'] = ['1', '2']
         >>> view.update()
         True
-        >>> print view.getSessionData()['period_names']
-        ['D', 'C', 'B', 'A']
+        >>> print view.getSessionData()['periods_order']
+        [['D', 'C', 'B', 'A'], ['D', 'C', 'B', 'A']]
 
     The next step is always the final step:
 
@@ -876,8 +877,8 @@ def doctest_PeriodOrderSimple():
         False
         >>> print translate(view.error)
         Please provide all periods.
-        >>> print view.getSessionData()['period_names']
-        ['A', 'B', 'C', 'D']
+        >>> 'periods_order' in view.getSessionData()
+        False
 
     A much more likely scenario is that some period was selected
     twice, and some was missed out:
@@ -890,8 +891,8 @@ def doctest_PeriodOrderSimple():
         False
         >>> print translate(view.error)
         The following periods were not selected: A, B
-        >>> print view.getSessionData()['period_names']
-        ['A', 'B', 'C', 'D']
+        >>> 'periods_order' in view.getSessionData()
+        False
 
     The view will display the order the user has selected though:
 
@@ -931,6 +932,166 @@ def doctest_PeriodOrderSimple():
             </select>
           </div>
           ...
+
+    """
+
+
+def doctest_PeriodOrderComplex():
+    """Unit test for PeriodOrderComplex view
+
+        >>> from schooltool.timetable.browser.ttwizard import \\
+        ...     PeriodOrderComplex
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = PeriodOrderComplex(context, request)
+
+    Let's say we have some periods:
+
+        >>> session = view.getSessionData()
+        >>> session['period_names'] = ['A', 'B']
+        >>> session['day_names'] = ['Day One', 'Day Two']
+
+    Our view lets the template easily access them:
+
+        >>> view.periods()
+        ['A', 'B']
+
+        >>> view.days()
+        ['Day One', 'Day Two']
+
+    If we render the view, we get a list of dropdowns with consecutive
+    periods selected:
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+          <table>
+            <tr>
+              <th>Day One</th>
+              <th>Day Two</th>
+            </tr>
+            <tr>
+              <td>
+                <select name="period_0_0">
+                  <option selected="selected">A</option>
+                  <option>B</option>
+                </select>
+              </td>
+              <td>
+                <select name="period_1_0">
+                  <option selected="selected">A</option>
+                  <option>B</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <select name="period_0_1">
+                  <option>A</option>
+                  <option selected="selected">B</option>
+                </select>
+              </td>
+              <td>
+                <select name="period_1_1">
+                  <option>A</option>
+                  <option selected="selected">B</option>
+                </select>
+              </td>
+            </tr>
+          </table>
+        ...
+
+    When the user shuffles the dropdowns and submits them, the order
+    of periods is changed:
+
+        >>> request = TestRequest(form={'period_0_0': 'A', 'period_0_1': 'B',
+        ...                             'period_1_0': 'B', 'period_1_1': 'A'})
+        >>> view = PeriodOrderComplex(context, request)
+        >>> view.getSessionData()['period_names'] = ['A', 'B']
+        >>> view.getSessionData()['day_names'] = ['Day 1', 'Day 2']
+        >>> view.update()
+        True
+        >>> print view.getSessionData()['periods_order']
+        [['A', 'B'], ['B', 'A']]
+
+    The next step is always the final step:
+
+        >>> view.next()
+        <...ttwizard.FinalStep ...>
+
+    If not all periods are in the request, update fails and the user
+    gets an error.  This is unlikely in real life as the dropdowns
+    have values preselected:
+
+        >>> request = TestRequest(form={'period_0_0': 'A', 'period_0_1': 'B',
+        ...                             'period_1_1': 'A'})
+        >>> view = PeriodOrderComplex(context, request)
+        >>> view.getSessionData()['period_names'] = ['A', 'B']
+        >>> view.getSessionData()['day_names'] = ['Z', 'X']
+        >>> view.update()
+        False
+        >>> print translate(view.error)
+        Please provide all periods.
+        >>> 'periods_order' not in view.getSessionData()
+        True
+
+    A much more likely scenario is that some period was selected
+    twice, and some was missed out:
+
+        >>> request = TestRequest(form={'period_0_0': 'B', 'period_0_1': 'B',
+        ...                             'period_1_0': 'A', 'period_1_1': 'A'})
+        >>> view = PeriodOrderComplex(context, request)
+        >>> view.getSessionData()['period_names'] = ['A', 'B']
+        >>> view.getSessionData()['day_names'] = ['X', 'Y']
+        >>> view.update()
+        False
+        >>> print translate(view.error)
+        The following periods were not selected: X A, Y B
+        >>> 'periods_order' not in view.getSessionData()
+        True
+
+    The view will display the order the user has selected though:
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+          <div class="error">The following periods were not selected:
+            X A, Y B</div>
+          <table>
+            <tr>
+              <th>X</th>
+              <th>Y</th>
+            </tr>
+            <tr>
+              <td>
+                <select name="period_0_0">
+                  <option>A</option>
+                  <option selected="selected">B</option>
+                </select>
+              </td>
+              <td>
+                <select name="period_1_0">
+                  <option selected="selected">A</option>
+                  <option>B</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <select name="period_0_1">
+                  <option>A</option>
+                  <option selected="selected">B</option>
+                </select>
+              </td>
+              <td>
+                <select name="period_1_1">
+                  <option selected="selected">A</option>
+                  <option>B</option>
+                </select>
+              </td>
+            </tr>
+          </table>
+        ...
 
     """
 

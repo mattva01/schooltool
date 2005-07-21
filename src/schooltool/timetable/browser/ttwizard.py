@@ -561,7 +561,57 @@ class PeriodOrderSimple(Step):
             self.error.mapping['periods'] = ', '.join(remaining)
             return False
 
-        self.getSessionData()['period_names'] = result
+        days = self.getSessionData()['day_names']
+        self.getSessionData()['periods_order'] = [result for day in days]
+        return True
+
+    def next(self):
+        return FinalStep(self.context, self.request)
+
+
+class PeriodOrderComplex(Step):
+    """Step to put periods in order if order is different on different days"""
+
+    template = ViewPageTemplateFile('templates/ttwizard_period_order2.pt')
+    description = _('Please put the periods in order for each day:')
+    error = None
+
+    def __call__(self):
+        return self.template()
+
+    def periods(self):
+        return self.getSessionData()['period_names']
+
+    def days(self):
+        return self.getSessionData()['day_names']
+
+    def update(self):
+        result = []
+        periods = self.periods()
+        for i in range(len(self.days())):
+            day = []
+            for j in range(len(periods)):
+                name = 'period_%d_%d' % (i, j)
+                if name not in self.request:
+                    self.error = _('Please provide all periods.')
+                    return False
+                day.append(self.request[name])
+            result.append(day)
+
+        # Validate that all periods are selected
+        errors = []
+        for i, day in enumerate(self.days()):
+            remaining = Set(periods)
+            for period in result[i]:
+                if period in remaining:
+                    remaining.remove(period)
+            errors += ['%s %s' % (day, p) for p in remaining]
+        if errors:
+            self.error = _('The following periods were not selected: $periods')
+            self.error.mapping['periods'] = ', '.join(errors)
+            return False
+
+        self.getSessionData()['periods_order'] = result
         return True
 
     def next(self):
