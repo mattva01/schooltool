@@ -17,14 +17,21 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
+Upgrade to generation 7.
+
+We need to add a calendar to the root SchoolBellApplication object.
 
 $Id$
 """
 
-from zope.app.generations.generations import SchemaManager
+from zope.app.publication.zopepublication import ZopePublication
+from zope.app.generations.utility import findObjectsProviding
 
-schemaManager = SchemaManager(
-    minimum_generation=7,
-    generation=7,
-    package_name='schoolbell.app.generations')
+from schoolbell.app.interfaces import ISchoolBellApplication
+from schoolbell.app.cal import Calendar
+
+def evolve(context):
+    root = context.connection.root().get(ZopePublication.root_name, None)
+    for app in findObjectsProviding(root, ISchoolBellApplication):
+        app.calendar = Calendar(app)
+
