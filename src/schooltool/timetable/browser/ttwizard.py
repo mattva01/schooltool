@@ -280,21 +280,13 @@ class DayEntryStep(FormStep):
             data = getWidgetsData(self, self.schema)
         except WidgetsError, e:
             return False
-        day_names = self.parse(data.get('days') or '')
+        day_names = parse_name_list(data.get('days') or '')
         if not day_names:
             self.error = _("Please enter at least one day name.")
             return False
         session = self.getSessionData()
         session['day_names'] = day_names
         return True
-
-    def parse(self, day_names):
-        """Parse a multi-line string into a list of day names.
-
-        One day name per line.  Empty lines are ignored.  Extra spaces
-        are stripped.
-        """
-        return [s.strip() for s in day_names.splitlines() if s.strip()]
 
     def next(self):
         return IndependentDaysStep(self.context, self.request)
@@ -340,6 +332,23 @@ class SequentialModelStep(ChoiceStep):
             return WeeklySlotEntryStep(self.context, self.request)
         else:
             return RotatingSlotEntryStep(self.context, self.request)
+
+
+def parse_name_list(names):
+    r"""Parse a multi-line string into a list of names.
+
+    One day name per line.  Empty lines are ignored.  Extra spaces
+    are stripped.
+
+        >>> parse_name_list(u'Day 1\n Day 2\nDay 3 \n\n\n Day 4 ')
+        [u'Day 1', u'Day 2', u'Day 3', u'Day 4']
+        >>> parse_name_list(u'  \n\n ')
+        []
+        >>> parse_name_list(u'')
+        []
+
+    """
+    return [s.strip() for s in names.splitlines() if s.strip()]
 
 
 def parse_time_range_list(times):
@@ -497,7 +506,7 @@ class PeriodNamesStep(FormStep):
             data = getWidgetsData(self, self.schema)
         except WidgetsError, e:
             return False
-        periods = self.parse(data.get('periods') or '')
+        periods = parse_name_list(data.get('periods') or '')
         min_periods = self.requiredPeriods()
         if len(periods) < min_periods:
             self.error = _("Please enter at least $number periods.")
@@ -512,14 +521,6 @@ class PeriodNamesStep(FormStep):
         session = self.getSessionData()
         times = session['time_slots']
         return max(map(len, times))
-
-    def parse(self, day_names):
-        """Parse a multi-line string into a list of day names.
-
-        One day name per line.  Empty lines are ignored.  Extra spaces
-        are stripped.
-        """
-        return [s.strip() for s in day_names.splitlines() if s.strip()]
 
     def next(self):
         # TODO: redirect to periods same/different choice

@@ -360,16 +360,6 @@ def doctest_DayEntryStep():
         >>> view.getSessionData()['day_names']
         [u'A', u'B']
 
-    The text area contains one day name per line; extra spaces are stripped;
-    empty lines are ignored.
-
-        >>> view.parse(u'Day 1\n Day 2\nDay 3 \n\n\n Day 4 ')
-        [u'Day 1', u'Day 2', u'Day 3', u'Day 4']
-        >>> view.parse(u'  \n\n ')
-        []
-        >>> view.parse(u'')
-        []
-
     The next page is IndependentDaysStep.
 
         >>> view.next()
@@ -791,16 +781,6 @@ def doctest_PeriodNamesStep():
 
         >>> view.getSessionData()['period_names']
         [u'A', u'B', u'C', u'D']
-
-    The text area contains one day name per line; extra spaces are stripped;
-    empty lines are ignored.
-
-        >>> view.parse(u'period 1\n P2\nP3 \n\n\n P4 ')
-        [u'period 1', u'P2', u'P3', u'P4']
-        >>> view.parse(u'  \n\n\t ')
-        []
-        >>> view.parse(u'')
-        []
 
     The next page is FinalStep.
 
