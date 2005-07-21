@@ -723,3 +723,9 @@ again.
     </div>
   </form>
   ...
+
+
+Epilogue
+--------
+
+ vim: ft=rest
