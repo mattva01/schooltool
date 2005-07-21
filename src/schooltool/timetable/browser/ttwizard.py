@@ -660,6 +660,17 @@ class FinalStep(Step):
         elif cycle == 'rotating':
             return SequentialDaysTimetableModel
 
+    def periodNames(self):
+        session = self.getSessionData()
+        assert session['similar_days']
+        if session['named_periods']:
+            period_names = session['period_names']
+        else:
+            slots = session['time_slots'][0]
+            period_names = [format_time_range(tstart, duration)
+                            for tstart, duration in slots]
+        return period_names
+
     def dayTemplates(self):
         session = self.getSessionData()
         if session['similar_days']:
@@ -667,16 +678,12 @@ class FinalStep(Step):
         else:
             raise NotImplementedError()
 
+        period_names = self.periodNames()
         template = SchooldayTemplate()
-        if session['named_periods']:
-            period_names = session['period_names']
-        else:
-            period_names = [format_time_range(tstart, duration)
-                            for tstart, duration in slots]
         for ptitle, (tstart, duration) in zip(period_names, slots):
             template.add(SchooldayPeriod(ptitle, tstart, duration))
 
-        return period_names, {None: template}
+        return {None: template}
 
     def createSchema(self):
         """Create the timetable schema."""
@@ -684,7 +691,8 @@ class FinalStep(Step):
         title = session['title']
 
         day_ids = session['day_names']
-        periods, day_templates = self.dayTemplates()
+        periods = self.periodNames()
+        day_templates = self.dayTemplates()
 
         model_factory = self.modelFactory()
         model = model_factory(day_ids, day_templates)
