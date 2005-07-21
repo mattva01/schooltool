@@ -599,14 +599,12 @@ class FinalStep(Step):
         template = SchooldayTemplate()
         if session['named_periods']:
             period_names = session['period_names']
-            for ptitle, (tstart, duration) in zip(period_names, slots):
-                template.add(SchooldayPeriod(ptitle, tstart, duration))
-                periods.append(ptitle)
         else:
-            for tstart, duration in slots:
-                ptitle = format_time_range(tstart, duration)
-                template.add(SchooldayPeriod(ptitle, tstart, duration))
-                periods.append(ptitle)
+            period_names = [format_time_range(tstart, duration)
+                            for tstart, duration in slots]
+        for ptitle, (tstart, duration) in zip(period_names, slots):
+            template.add(SchooldayPeriod(ptitle, tstart, duration))
+            periods.append(ptitle)
         day_templates = {None: template}
         model = model_factory(day_ids, day_templates)
         ttschema = TimetableSchema(day_ids, title=title, model=model)
