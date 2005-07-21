@@ -383,8 +383,6 @@ class SimpleSlotEntryStep(FormStep):
     description = _("Enter start and end times for each slot,"
                     " one slot (HH:MM - HH:MM) per line.")
 
-    key = 'time_slots_simple'
-
     class schema(Interface):
         times = Text(default=u"9:30-10:25\n10:30-11:25", required=False)
 
@@ -403,7 +401,8 @@ class SimpleSlotEntryStep(FormStep):
             self.error = _("Please enter at least one time slot.")
             return False
         session = self.getSessionData()
-        session[self.key] = times
+        num_days = len(session['day_names'])
+        session['time_slots'] = [times] * num_days
         return True
 
     def next(self):
@@ -424,21 +423,13 @@ class RotatingSlotEntryStep(Step):
                     " one slot (HH:MM - HH:MM) per line.")
 
     error = None
-    key = 'time_slots_rotating'
 
     def dayNames(self):
         """Return the list of day names."""
         return self.getSessionData()['day_names']
 
-    def addDay(self, index, day_name, times):
-        """Temporarily store the slot times for a schoolday.
-
-        Requires the dict self.result to be initialized.
-        """
-        self.result[day_name] = times
-
     def update(self):
-        self.result = {}
+        result = []
         for i, day_name in enumerate(self.dayNames()):
             s = self.request.form.get('times.%d' % i, '')
             try:
@@ -451,10 +442,10 @@ class RotatingSlotEntryStep(Step):
                 self.error = _("Please enter at least one time slot for $day.")
                 self.error.mapping['day'] = day_name
                 return False
-            self.addDay(i, day_name, times)
+            result.append(times)
 
         session = self.getSessionData()
-        session[self.key] = self.result
+        session['time_slots'] = result
         return True
 
     def next(self):
@@ -468,19 +459,10 @@ class WeeklySlotEntryStep(RotatingSlotEntryStep):
     and the weekly cycle is chosen in the 1st or in the 6th step.
     """
 
-    key = 'time_slots_weekly'
-
     def dayNames(self):
         """Return the list of day names."""
         return [translate(day_of_week_names[i], context=self.request)
                 for i in range(5)]
-
-    def addDay(self, index, day_name, times):
-        """Temporarily store the slot times for a schoolday.
-
-        Requires the dict self.result to be initialized.
-        """
-        self.result[index] = times
 
 
 class NamedPeriodsStep(ChoiceStep):
@@ -526,17 +508,10 @@ class PeriodNamesStep(FormStep):
         return True
 
     def requiredPeriods(self):
-        """Returns the maximum number of slots there can be on a day."""
+        """Return the maximum number of slots there can be on a day."""
         session = self.getSessionData()
-        try:
-            return len(session['time_slots_simple'])
-        except KeyError:
-            pass
-        try:
-            period_dict = session['time_slots_rotating']
-        except KeyError:
-            period_dict = session['time_slots_weekly']
-        return max(map(len, period_dict.values()))
+        times = session['time_slots']
+        return max(map(len, times))
 
     def parse(self, day_names):
         """Parse a multi-line string into a list of day names.
@@ -619,7 +594,7 @@ class FinalStep(Step):
             day_ids = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
         periods = []
 
-        slots = session['time_slots_simple'] # TODO: handle others too
+        slots = session['time_slots'][0] # XXX TODO
         template = SchooldayTemplate()
         if session['named_periods']:
             period_names = session['period_names']

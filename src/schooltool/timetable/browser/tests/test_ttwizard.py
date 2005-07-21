@@ -488,14 +488,22 @@ def doctest_SimpleSlotEntryStep():
         >>> translate(view.error)
         u'Not a valid time slot: unicode is tr\xefcky.'
 
+    Let's cover the successful case.  We will need day names in the session.
+
         >>> request = TestRequest(form={'field.times': u'9:30-10:25\n\n'})
         >>> view = SimpleSlotEntryStep(context, request)
+        >>> view.getSessionData()['day_names'] = ['DA', 'DB', 'DC']
         >>> view.update()
         True
         >>> view.error
 
-        >>> view.getSessionData()['time_slots_simple']
-        [(datetime.time(9, 30), datetime.timedelta(0, 3300))]
+    The time_slots structure will be filled with as many duplicates of the
+    slot times as there are day names.
+
+        >>> pprint(view.getSessionData()['time_slots'])
+        [[(datetime.time(9, 30), datetime.timedelta(0, 3300))],
+         [(datetime.time(9, 30), datetime.timedelta(0, 3300))],
+         [(datetime.time(9, 30), datetime.timedelta(0, 3300))]]
 
     The text area contains one slot per line; extra spaces are stripped;
     empty lines are ignored.
@@ -586,13 +594,11 @@ def doctest_RotatingSlotEntryStep():
         >>> view.update()
         True
 
-        >>> result = view.getSessionData()['time_slots_rotating'].items()
-        >>> result.sort()
-        >>> pprint(result)
-        [('Oneday', [(datetime.time(9, 30), datetime.timedelta(0, 3300))]),
-         ('Twoday',
-          [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
-           (datetime.time(10, 35), datetime.timedelta(0, 2700))])]
+        >>> pprint(view.getSessionData()['time_slots'])
+        [[(datetime.time(9, 30), datetime.timedelta(0, 3300))],
+         [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
+          (datetime.time(10, 35), datetime.timedelta(0, 2700))]]
+
 
     The next page is the period naming step.
 
@@ -679,22 +685,17 @@ def doctest_WeeklySlotEntryStep():
         >>> view.update()
         True
 
-        >>> result = view.getSessionData()['time_slots_weekly'].items()
-        >>> result.sort()
-        >>> pprint(result)
-        [(0, [(datetime.time(9, 30), datetime.timedelta(0, 3300))]),
-         (1,
-          [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
-           (datetime.time(10, 35), datetime.timedelta(0, 2700))]),
-         (2,
-          [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
-           (datetime.time(10, 35), datetime.timedelta(0, 2700))]),
-         (3,
-          [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
-           (datetime.time(10, 35), datetime.timedelta(0, 2700))]),
-         (4,
-          [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
-           (datetime.time(10, 35), datetime.timedelta(0, 2700))])]
+        >>> pprint(view.getSessionData()['time_slots'])
+        [[(datetime.time(9, 30), datetime.timedelta(0, 3300))],
+         [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
+          (datetime.time(10, 35), datetime.timedelta(0, 2700))],
+         [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
+          (datetime.time(10, 35), datetime.timedelta(0, 2700))],
+         [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
+          (datetime.time(10, 35), datetime.timedelta(0, 2700))],
+         [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
+          (datetime.time(10, 35), datetime.timedelta(0, 2700))]]
+
 
     The next page is the period naming step.
 
@@ -741,34 +742,16 @@ def doctest_PeriodNamesStep():
 
         >>> session = view.getSessionData()
         >>> interval = (datetime.time(9, 15), datetime.timedelta(0, 3300))
-        >>> session['time_slots_simple'] = [interval] * 4
-        >>> view.requiredPeriods()
-        4
-        >>> del session['time_slots_simple']
-
-        >>> view.getSessionData()['time_slots_rotating'] = {
-        ...     'day a': [interval] * 3,
-        ...     'day b': [interval] * 5,
-        ...     'day c': [interval] * 2}
+        >>> view.getSessionData()['time_slots'] = \
+        ...     [[interval] * 3, [interval] * 5, [interval] * 2]
         >>> view.requiredPeriods()
         5
-        >>> del session['time_slots_rotating']
-
-        >>> view.getSessionData()['time_slots_weekly'] = {
-        ...     'day a': [interval] * 3,
-        ...     'day b': [interval] * 5,
-        ...     'day c': [interval] * 2}
-        >>> view.requiredPeriods()
-        5
-        >>> del session['time_slots_weekly']
-
+        >>> del session['time_slots']
 
     The view asks the user to enter at least 3 period names:
 
-        >>> view.getSessionData()['time_slots_simple'] = [
-        ...     (datetime.time(9, 15), datetime.timedelta(0, 3300)),
-        ...     (datetime.time(10, 35), datetime.timedelta(0, 2700)),
-        ...     (datetime.time(11, 55), datetime.timedelta(0, 2700))]
+        >>> default_slots = [[interval] * 3]
+        >>> view.getSessionData()['time_slots'] = default_slots
         >>> view.update()
         False
         >>> print translate(view.error)
@@ -776,10 +759,7 @@ def doctest_PeriodNamesStep():
 
         >>> request = TestRequest(form={'field.periods': u''})
         >>> view = PeriodNamesStep(context, request)
-        >>> view.getSessionData()['time_slots_simple'] = [
-        ...     (datetime.time(9, 15), datetime.timedelta(0, 3300)),
-        ...     (datetime.time(10, 35), datetime.timedelta(0, 2700)),
-        ...     (datetime.time(11, 55), datetime.timedelta(0, 2700))]
+        >>> view.getSessionData()['time_slots'] = default_slots
         >>> view.update()
         False
         >>> print translate(view.error)
@@ -787,10 +767,7 @@ def doctest_PeriodNamesStep():
 
         >>> request = TestRequest(form={'field.periods': u'\n\n\n'})
         >>> view = PeriodNamesStep(context, request)
-        >>> view.getSessionData()['time_slots_simple'] = [
-        ...     (datetime.time(9, 15), datetime.timedelta(0, 3300)),
-        ...     (datetime.time(10, 35), datetime.timedelta(0, 2700)),
-        ...     (datetime.time(11, 55), datetime.timedelta(0, 2700))]
+        >>> view.getSessionData()['time_slots'] = default_slots
         >>> view.update()
         False
         >>> print translate(view.error)
@@ -798,10 +775,7 @@ def doctest_PeriodNamesStep():
 
         >>> request = TestRequest(form={'field.periods': u'A\n'})
         >>> view = PeriodNamesStep(context, request)
-        >>> view.getSessionData()['time_slots_simple'] = [
-        ...     (datetime.time(9, 15), datetime.timedelta(0, 3300)),
-        ...     (datetime.time(10, 35), datetime.timedelta(0, 2700)),
-        ...     (datetime.time(11, 55), datetime.timedelta(0, 2700))]
+        >>> view.getSessionData()['time_slots'] = default_slots
         >>> view.update()
         False
         >>> print translate(view.error)
@@ -809,10 +783,7 @@ def doctest_PeriodNamesStep():
 
         >>> request = TestRequest(form={'field.periods': u'A\nB\nC\nD'})
         >>> view = PeriodNamesStep(context, request)
-        >>> view.getSessionData()['time_slots_simple'] = [
-        ...     (datetime.time(9, 15), datetime.timedelta(0, 3300)),
-        ...     (datetime.time(10, 35), datetime.timedelta(0, 2700)),
-        ...     (datetime.time(11, 55), datetime.timedelta(0, 2700))]
+        >>> view.getSessionData()['time_slots'] = default_slots
         >>> view.update()
         True
         >>> view.error
@@ -997,8 +968,8 @@ def doctest_FinalStep():
         >>> data = view.getSessionData()
         >>> data['title'] = u'Sample Schema'
         >>> data['cycle'] = 'weekly'
-        >>> data['time_slots_simple'] = [(time(9, 30), timedelta(minutes=55)),
-        ...                       (time(10, 30), timedelta(minutes=55))]
+        >>> data['time_slots'] = [[(time(9, 30), timedelta(minutes=55)),
+        ...                        (time(10, 30), timedelta(minutes=55))]]
         >>> data['named_periods'] = False
 
         >>> view()
@@ -1037,8 +1008,8 @@ def doctest_FinalStep_createSchema():
         >>> data['title'] = u'Default'
         >>> data['cycle'] = 'weekly'
         >>> from datetime import time, timedelta
-        >>> data['time_slots_simple'] = [(time(9, 30), timedelta(minutes=55)),
-        ...                       (time(10, 30), timedelta(minutes=55))]
+        >>> data['time_slots'] = [[(time(9, 30), timedelta(minutes=55)),
+        ...                        (time(10, 30), timedelta(minutes=55))]]
         >>> data['named_periods'] = False
 
         >>> ttschema = view.createSchema()
