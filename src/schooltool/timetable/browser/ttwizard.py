@@ -612,8 +612,8 @@ class PeriodOrderSimple(Step):
             self.error.mapping['periods'] = ', '.join(errors)
             return False
 
-        days = self.getSessionData()['day_names']
-        self.getSessionData()['periods_order'] = [result for day in days]
+        day_names = self.getSessionData()['day_names']
+        self.getSessionData()['periods_order'] = [result] * len(day_names)
         return True
 
     def next(self):
