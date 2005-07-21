@@ -409,10 +409,7 @@ class IAdvancedTimetableSchemaAddSchema(Interface):
 class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
     """View for defining a new timetable schema.
 
-    Can be accessed at /ttschemas/schemawizard.html.
-
-    TODO: this class will soon be replaced by a new, more complicated wizard,
-    defined in the schooltool.browser.ttwizard module.
+    Can be accessed at /ttschemas/complexadd.html.
     """
 
     __used_for__ = ITimetableSchemaContainer

@@ -14,8 +14,9 @@ in a sufficient number of lines for your periods.
 </p>
 
 <p i18n:translate="">
-If you need more flexibility, you can use an
-<a href="schemawizard.html">advanced timetable schema set up</a> wizard.
+If you need more flexibility, you can use the <a href="add.html">timetable
+schema creation wizard</a>, or a <a href="complexadd.html">complex timetable
+schema set up form</a>.
 </p>
 
 

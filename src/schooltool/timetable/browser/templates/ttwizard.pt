@@ -6,9 +6,9 @@
   <h1 metal:fill-slot="content-header" i18n:translate="">New timetable schema</h1>
 <metal:block metal:fill-slot="body">
 
-<p>Note: this form is work in progress and is not fully functional yet.
-You might want to use the old <a href="simpleadd.html">simple</a> or
-<a href="schemawizard.html">advanced</a> adding views.</p>
+<p>This wizard presents you with a series of questions.  You may alternatively
+create a <a href="simpleadd.html">simple weekly timetable schema</a>, or use
+a more complex <a href="complexadd.html">advanced adding form</a>.</p>
 
 <form class="plain" method="POST" tal:attributes="action request/URL">
 

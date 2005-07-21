@@ -71,12 +71,10 @@
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       class=".SimpleTimetableSchemaAdd"
       permission="schoolbell.create"
-      menu="schoolbell_actions"
-      title="New Timetable (Simple)"
       />
 
   <page
-      name="schemawizard.html"
+      name="complexadd.html"
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       class=".AdvancedTimetableSchemaAdd"
       permission="schoolbell.create"
