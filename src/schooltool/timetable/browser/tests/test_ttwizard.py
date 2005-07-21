@@ -940,6 +940,45 @@ def doctest_PeriodOrderSimple():
         >>> print view.getSessionData()['period_names']
         ['A', 'B', 'C', 'D']
 
+    The view will display the order the user has selected though:
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+          <div class="row">
+            <select name="period_0">
+              <option>A</option>
+              <option>B</option>
+              <option>C</option>
+              <option selected="selected">D</option>
+            </select>
+          </div>
+          <div class="row">
+            <select name="period_1">
+              <option>A</option>
+              <option>B</option>
+              <option selected="selected">C</option>
+              <option>D</option>
+            </select>
+          </div>
+          <div class="row">
+            <select name="period_2">
+              <option>A</option>
+              <option>B</option>
+              <option selected="selected">C</option>
+              <option>D</option>
+            </select>
+          </div>
+          <div class="row">
+            <select name="period_3">
+              <option>A</option>
+              <option>B</option>
+              <option>C</option>
+              <option selected="selected">D</option>
+            </select>
+          </div>
+          ...
+
     """
 
 
