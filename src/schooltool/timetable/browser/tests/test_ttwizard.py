@@ -785,10 +785,32 @@ def doctest_PeriodNamesStep():
     The next page is FinalStep.
 
         >>> view.next()
-        <...ttwizard.PeriodOrderSimple...>
+        <schooltool.timetable.browser.ttwizard.PeriodSequenceSameStep ...>
 
     """
 
+def doctest_PeriodSequenceSameStep():
+    r"""Unit test for PeriodSequenceSameStep
+
+        >>> from schooltool.timetable.browser.ttwizard \
+        ...     import PeriodSequenceSameStep
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = PeriodSequenceSameStep(context, request)
+
+    The next step is PeriodOrderSimple if periods are the same:
+
+        >>> view.getSessionData()['periods_same'] = True
+        >>> view.next()
+        <schooltool.timetable.browser.ttwizard.PeriodOrderSimple...>
+
+    The next step is PeriodOrderComplex if periods are not the same:
+
+        >>> view.getSessionData()['periods_same'] = False
+        >>> view.next()
+        <schooltool.timetable.browser.ttwizard.PeriodOrderComplex...>
+
+    """
 
 def doctest_PeriodOrderSimple():
     """Unit test for PeriodOrderSimple view

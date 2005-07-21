@@ -524,8 +524,26 @@ class PeriodNamesStep(FormStep):
         return max(map(len, times))
 
     def next(self):
-        # TODO: redirect to periods same/different choice
-        return PeriodOrderSimple(self.context, self.request)
+        return PeriodSequenceSameStep(self.context, self.request)
+
+
+class PeriodSequenceSameStep(ChoiceStep):
+    """A step for choosing whether periods are the same on all days"""
+
+    key = 'periods_same'
+
+    question = _("Is the sequence of periods each day the same or different?")
+
+    choices = ((True,  _("Same")),
+               (False, _("Different")))
+
+    def next(self):
+        session = self.getSessionData()
+        if session[self.key]:
+            return PeriodOrderSimple(self.context, self.request)
+        else:
+            return PeriodOrderComplex(self.context, self.request)
+
 
 
 class PeriodOrderSimple(Step):
