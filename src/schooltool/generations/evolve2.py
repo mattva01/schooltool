@@ -17,14 +17,23 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
+Upgrade SchoolTool to generation 1.
+
+The first incompatible change from generation 0 was introduced in rev 4128.
 
 $Id$
 """
 
-from zope.app.generations.generations import SchemaManager
+from zope.app.publication.zopepublication import ZopePublication
+from zope.app.generations.utility import findObjectsProviding
+from schooltool.interfaces import ISchoolToolApplication
+from schoolbell.app.cal import Calendar
+from schooltool.timetable import TimetableDict
 
-schemaManager = SchemaManager(
-    minimum_generation=2,
-    generation=2,
-    package_name='schooltool.generations')
+
+def evolve(context):
+    root = context.connection.root().get(ZopePublication.root_name, None)
+    for app in findObjectsProviding(root, ISchoolToolApplication):
+        app.calendar = Calendar(app)
+        app.timetables = TimetableDict()
+        app.timetables.__parent__ = app
