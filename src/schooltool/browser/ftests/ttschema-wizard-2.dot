@@ -1,0 +1,30 @@
+digraph "Timetable Schema Wizard" {
+  FirstStep -> CycleStep [style="bold"];
+  CycleStep -> IndependentDaysStep;
+  CycleStep -> DayEntryStep [style="bold"];
+  DayEntryStep -> IndependentDaysStep [style="bold"];
+  IndependentDaysStep -> SimpleSlotEntryStep [style="bold"];
+  IndependentDaysStep -> WeeklySlotEntryStep;
+  IndependentDaysStep -> SequentialModelStep;
+  SequentialModelStep -> WeeklySlotEntryStep;
+  SequentialModelStep -> RotatingSlotEntryStep;
+  SimpleSlotEntryStep -> NamedPeriodsStep [style="bold"];
+  RotatingSlotEntryStep -> NamedPeriodsStep;
+  WeeklySlotEntryStep -> NamedPeriodsStep;
+  NamedPeriodsStep -> PeriodNamesStep [style="bold"];
+  NamedPeriodsStep -> FinalStep;
+  PeriodNamesStep -> PeriodOrderSimple [style="bold"];
+  PeriodNamesStep -> PeriodOrderComplex;
+  PeriodOrderSimple -> FinalStep [style="bold"];
+  PeriodOrderComplex -> FinalStep;
+
+  FirstStep[style="filled"];
+  CycleStep[style="filled"];
+  DayEntryStep[style="filled"];
+  IndependentDaysStep[style="filled"];
+  SimpleSlotEntryStep[style="filled"];
+  NamedPeriodsStep[style="filled"];
+  PeriodNamesStep[style="filled"];
+  PeriodOrderSimple[style="filled"];
+  FinalStep[style="filled"];
+}
