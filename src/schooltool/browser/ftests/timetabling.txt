@@ -8,9 +8,9 @@ Overview
 --------
 
 1. Definition of terms
-2. Definition of timetable schemas (TODO)
+2. Definition of timetable schemas
 3. Import of timetables
-4. Usage of timetables (TODO)
+4. Usage of timetables
 
 
 Prologue
@@ -385,7 +385,8 @@ Let's look at the new timetable:
     </table>
     ...
 
-TODO: check the complex timetable schema definition page too.
+(The more complex timetable schema definition pages are tested in
+ttschema.txt and ttschema-wizard.txt).
 
 
 Importing timetables
@@ -599,23 +600,21 @@ We can view the person's timetable list, although it will be empty:
 
 The activities should show up in the calendar:
 
-XXX Why does this test fail?
-
-##  >>> print http(r"""
-##  ... GET /frogpond/persons/frog/calendar/2005-09-05 HTTP/1.1
-##  ... Authorization: Basic mgr:mgrpw
-##  ... """, handle_errors=False)
-##  HTTP/1.1 200 Ok
-##  ...
-##      <h6 style="background: #7590ae">
-##          Swimming
-##          <span class="start-end">
-##            (<span>09:00</span>
-##               -
-##             <span>09:45</span>)
-##          </span>
-##      </h6>
-##  ...
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar/2005-09-05 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+        <h6 style="background: #7590ae">
+            Swimming
+            <span class="start-end">
+              (<span>09:00</span>
+                 -
+               <span>09:45</span>)
+            </span>
+        </h6>
+    ...
 
 
 The group is a SchoolTool group:
