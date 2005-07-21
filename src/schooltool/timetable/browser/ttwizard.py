@@ -561,10 +561,13 @@ class PeriodOrderSimple(Step):
     def periods(self):
         return self.getSessionData()['period_names']
 
+    def numPeriods(self):
+        return max([len(day) for day in self.getSessionData()['time_slots']])
+
     def update(self):
         result = []
         periods = self.getSessionData()['period_names']
-        for i in range(len(periods)):
+        for i in range(self.numPeriods()):
             name = 'period_%d' % i
             if name not in self.request:
                 self.error = _('Please provide all periods.')
@@ -572,13 +575,17 @@ class PeriodOrderSimple(Step):
             result.append(self.request[name])
 
         # Validate that all periods are selected
-        remaining = Set(periods)
+        seen = Set()
+        errors = Set()
         for period in result:
-            if period in remaining:
-                remaining.remove(period)
-        if remaining:
-            self.error = _('The following periods were not selected: $periods')
-            self.error.mapping['periods'] = ', '.join(remaining)
+            if period not in seen:
+                seen.add(period)
+            else:
+                errors.add(period)
+        if errors:
+            self.error = _('The following periods were selected more'
+                           ' than once: $periods')
+            self.error.mapping['periods'] = ', '.join(errors)
             return False
 
         days = self.getSessionData()['day_names']

@@ -829,6 +829,17 @@ def doctest_PeriodOrderSimple():
         >>> view.periods()
         ['A', 'B', 'C', 'D']
 
+    The number of period dropdowns is the maximum of slots in a day:
+
+        >>> time_slots = [
+        ...     [(datetime.time(9, 30), datetime.timedelta(0, 3300))],
+        ...     [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
+        ...      (datetime.time(10, 35), datetime.timedelta(0, 2700)),
+        ...      (datetime.time(10, 35), datetime.timedelta(0, 2700)),]]
+        >>> view.getSessionData()['time_slots'] = time_slots
+        >>> view.numPeriods()
+        3
+
     If we render the view, we get a list of dropdowns with consecutive
     periods selected:
 
@@ -859,15 +870,7 @@ def doctest_PeriodOrderSimple():
               <option>D</option>
             </select>
           </div>
-          <div class="row">
-            <select name="period_3">
-              <option>A</option>
-              <option>B</option>
-              <option>C</option>
-              <option selected="selected">D</option>
-            </select>
-          </div>
-          ...
+        ...
 
     When the user shuffles the dropdowns and submits them, the order
     of periods is changed:
@@ -875,12 +878,15 @@ def doctest_PeriodOrderSimple():
         >>> request = TestRequest(form={'period_0': 'D', 'period_1': 'C',
         ...                             'period_2': 'B', 'period_3': 'A'})
         >>> view = PeriodOrderSimple(context, request)
-        >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D']
+        >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D',
+        ...                                          'E', 'F']
         >>> view.getSessionData()['day_names'] = ['1', '2']
+        >>> view.getSessionData()['time_slots'] = time_slots
+
         >>> view.update()
         True
         >>> print view.getSessionData()['periods_order']
-        [['D', 'C', 'B', 'A'], ['D', 'C', 'B', 'A']]
+        [['D', 'C', 'B'], ['D', 'C', 'B']]
 
     The next step is always the final step:
 
@@ -891,10 +897,10 @@ def doctest_PeriodOrderSimple():
     gets an error.  This is unlikely in real life as the dropdowns
     have values preselected:
 
-        >>> request = TestRequest(form={'period_0': 'D', 'period_1': 'C',
-        ...                             'period_2': 'B'})
+        >>> request = TestRequest(form={'period_0': 'D', 'period_1': 'C'})
         >>> view = PeriodOrderSimple(context, request)
         >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D']
+        >>> view.getSessionData()['time_slots'] = time_slots
         >>> view.update()
         False
         >>> print translate(view.error)
@@ -906,13 +912,15 @@ def doctest_PeriodOrderSimple():
     twice, and some was missed out:
 
         >>> request = TestRequest(form={'period_0': 'D', 'period_1': 'C',
-        ...                             'period_2': 'C', 'period_3': 'D'})
+        ...                             'period_2': 'C'})
         >>> view = PeriodOrderSimple(context, request)
         >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D']
+        >>> view.getSessionData()['time_slots'] = time_slots
+        >>> view.getSessionData()['day_names'] = ['1', '2']
         >>> view.update()
         False
         >>> print translate(view.error)
-        The following periods were not selected: A, B
+        The following periods were selected more than once: C
         >>> 'periods_order' in view.getSessionData()
         False
 
@@ -943,14 +951,6 @@ def doctest_PeriodOrderSimple():
               <option>B</option>
               <option selected="selected">C</option>
               <option>D</option>
-            </select>
-          </div>
-          <div class="row">
-            <select name="period_3">
-              <option>A</option>
-              <option>B</option>
-              <option>C</option>
-              <option selected="selected">D</option>
             </select>
           </div>
           ...

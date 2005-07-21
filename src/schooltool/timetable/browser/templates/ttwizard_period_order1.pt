@@ -14,14 +14,16 @@
   <div tal:condition="view/error" tal:content="view/error" class="error"
        i18n:translate="">(error message)</div>
 
-  <div class="row" tal:repeat="slot view/periods">
+  <div class="row" tal:repeat="slotnr python:range(view.numPeriods())">
+  <tal:block define="slot python:view.periods()[slotnr]">
     <select tal:attributes="name name"
-            tal:define="name string:period_${repeat/slot/index}">
+            tal:define="name string:period_${slotnr}">
       <option tal:repeat="period view/periods"
               tal:attributes="selected
                       python:(period == request.get(name, slot)) or None"
               tal:content="period" />
     </select>
+  </tal:block>
   </div>
 
   <div class="controls">
