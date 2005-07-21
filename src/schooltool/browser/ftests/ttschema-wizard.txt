@@ -440,12 +440,35 @@ This time, let's say that periods are named.
   <textarea ... name="field.periods" rows="15" ></textarea>
   ...
 
+We get to choose whether sequences of periods in all days are the same:
+
   >>> print http(r"""
   ... POST /frogpond/ttschemas/add.html HTTP/1.1
   ... Authorization: Basic mgr:mgrpw
   ... Content-Type: application/x-www-form-urlencoded
   ...
   ... field.periods=Period_A%0D%0APeriod_B%0D%0APeriod_C%0D%0APeriod_D
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+  <p>Is the sequence of periods each day the same or different?</p>
+    <div class="controls">
+      <input class="button-ok" type="submit" name="NEXT.0"
+             value="Same" />
+      <input class="button-ok" type="submit" name="NEXT.1"
+             value="Different" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  ...
+
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... NEXT.0=Same
   ... """)
   HTTP/1.1 200 Ok
   ...
