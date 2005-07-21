@@ -510,7 +510,7 @@ We can rearrange the periods:
   ... period_0=Period_A&\
   ... period_1=Period_C&\
   ... period_2=Period_B&\
-  ... period_3=Period_D""")
+  ... period_3=Period_D""", handle_errors=False)
   HTTP/1.1 303 See Other
   ...
   Location: http://localhost/frogpond/ttschemas

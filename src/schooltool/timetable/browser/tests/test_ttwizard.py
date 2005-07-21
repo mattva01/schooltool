@@ -1179,6 +1179,26 @@ def doctest_FinalStep():
     """
 
 
+def doctest_FinalStep_dayTemplates():
+    """Unit test for FinalStep.dayTemplates
+
+        >>> from datetime import time, timedelta
+        >>> names = ['A', 'B', 'C']
+        >>> slots = [(time(9, 0), timedelta(minutes=50)),
+        ...          (time(12, 35), timedelta(minutes=50)),
+        ...          (time(14, 15), timedelta(minutes=55))]
+
+        >>> from schooltool.timetable.browser.ttwizard import FinalStep
+        >>> dt = FinalStep.dayTemplates([names] * 4, [slots] * 4)
+        >>> print_day_templates(dt)
+        --- day template None
+        09:00-09:50: A
+        12:35-13:25: B
+        14:15-15:10: C
+
+    """
+
+
 def doctest_FinalStep_createSchema():
     """Unit test for FinalStep.createSchema
 
@@ -1240,6 +1260,8 @@ def doctest_FinalStep_createSchema():
         >>> data['day_names'] = ['D1', 'D2', 'D3']
         >>> data['named_periods'] = True
         >>> data['period_names'] = ['Green', 'Blue']
+        >>> data['periods_same'] = True
+        >>> data['periods_order'] = [['Green', 'Blue']] * 3
         >>> ttschema = view.createSchema()
         >>> ttschema.model
         <...SequentialDaysTimetableModel object at ...>

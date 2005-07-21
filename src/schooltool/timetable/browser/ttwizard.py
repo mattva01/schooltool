@@ -700,57 +700,55 @@ class FinalStep(Step):
 
     modelFactory = staticmethod(modelFactory)
 
-    def periodNames(named_periods, period_names, time_slots):
+    def periodNames(named_periods, periods_order, time_slots):
         """Return names of periods in order.
 
         `named_periods` indicates whether periods are named (as opposed to
         being designated by time).
 
-        `period_names` specifies the names of the periods.
+        `periods_order` is a list of lists of period names in order (one list
+        per day).
 
         `time_slots` is a list of day definitions, where each day is a
         list of slots, and each slot is a tuple (tstart, duration).
 
-        XXX: This method is only meaningful when all days have the same slots.
+        XXX: This method is only meaningful when all days have the same slots,
+        i.e., for all n periods_order[n] == periods_order[0] and
+                        time_slots[n] == time_slots[0].
 
-            >>> FinalStep.periodNames(True, ['a', 'b', 'c'], 'whatever')
+            >>> FinalStep.periodNames(True, [['a', 'b', 'c']] * 3, None)
             ['a', 'b', 'c']
 
             >>> from datetime import time, timedelta
             >>> periods = [(time(9, 0), timedelta(minutes=50)),
             ...            (time(12, 35), timedelta(minutes=50)),
             ...            (time(14, 15), timedelta(minutes=55))]
-            >>> FinalStep.periodNames(False, 'whatever', [periods] * 4)
+            >>> FinalStep.periodNames(False, None, [periods] * 4)
             ['09:00-09:50', '12:35-13:25', '14:15-15:10']
 
         """
         if named_periods:
-            return period_names
+            return periods_order[0]
         else:
             return [format_time_range(tstart, duration)
                     for tstart, duration in time_slots[0]]
 
     periodNames = staticmethod(periodNames)
 
-    def dayTemplates(period_names, time_slots):
+    def dayTemplates(periods_order, time_slots):
         """Return a dict of day templates for ITimetableModelFactory.
 
-            >>> from datetime import time, timedelta
-            >>> periods = [(time(9, 0), timedelta(minutes=50)),
-            ...            (time(12, 35), timedelta(minutes=50)),
-            ...            (time(14, 15), timedelta(minutes=55))]
-            >>> dt = FinalStep.dayTemplates(['A', 'B', 'C'], [periods] * 4)
-            >>> from schooltool.timetable.browser.tests.test_ttwizard \\
-            ...     import print_day_templates
-            >>> print_day_templates(dt)
-            --- day template None
-            09:00-09:50: A
-            12:35-13:25: B
-            14:15-15:10: C
+        `periods_order` is a list of lists of period names in order (one list
+        per day).
+
+        `time_slots` is a list of day definitions, where each day is a
+        list of slots, and each slot is a tuple (tstart, duration).
 
         XXX: This method is currenly only implemented for the case when all
-             days have the same slots.
+             days have the same slots, and the sequence of periods each day
+             is the same.
         """
+        period_names = periods_order[0]
         slots = time_slots[0]
         template = SchooldayTemplate()
         for ptitle, (tstart, duration) in zip(period_names, slots):
@@ -765,11 +763,13 @@ class FinalStep(Step):
         title = session['title']
         day_ids = session['day_names']
         assert session['similar_days']  # TODO: implement the other case
+        if session['named_periods']:
+            assert session['periods_same']  # TODO: implement the other case
 
         period_names = self.periodNames(session['named_periods'],
-                                        session.get('period_names'),
+                                        session.get('periods_order'),
                                         session['time_slots'])
-        day_templates = self.dayTemplates(period_names, session['time_slots'])
+        day_templates = self.dayTemplates([period_names], session['time_slots'])
 
         model_factory = self.modelFactory(session['cycle'],
                                           session['similar_days'],
