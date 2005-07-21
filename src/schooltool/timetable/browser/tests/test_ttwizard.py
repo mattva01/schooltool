@@ -1014,16 +1014,30 @@ def doctest_PeriodOrderComplex():
     Let's say we have some periods:
 
         >>> session = view.getSessionData()
-        >>> session['period_names'] = ['A', 'B']
+        >>> session['period_names'] = ['A', 'B', 'C', 'D']
         >>> session['day_names'] = ['Day One', 'Day Two']
+
+    The number of period dropdowns is the maximum of slots in a day:
+
+        >>> time_slots = [
+        ...     [(datetime.time(9, 30), datetime.timedelta(0, 3300))],
+        ...     [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
+        ...      (datetime.time(10, 35), datetime.timedelta(0, 2700)),
+        ...      (datetime.time(10, 35), datetime.timedelta(0, 2700)),]]
+        >>> view.getSessionData()['time_slots'] = time_slots
 
     Our view lets the template easily access them:
 
         >>> view.periods()
-        ['A', 'B']
+        ['A', 'B', 'C', 'D']
 
         >>> view.days()
         ['Day One', 'Day Two']
+
+    The number of dropdowns for a day is equal to the number of slots:
+
+        >>> view.numSlots()
+        [1, 3]
 
     If we render the view, we get a list of dropdowns with consecutive
     periods selected:
@@ -1041,26 +1055,40 @@ def doctest_PeriodOrderComplex():
                 <select name="period_0_0">
                   <option selected="selected">A</option>
                   <option>B</option>
+                  <option>C</option>
+                  <option>D</option>
                 </select>
               </td>
               <td>
                 <select name="period_1_0">
                   <option selected="selected">A</option>
                   <option>B</option>
+                  <option>C</option>
+                  <option>D</option>
                 </select>
               </td>
             </tr>
             <tr>
               <td>
-                <select name="period_0_1">
-                  <option>A</option>
-                  <option selected="selected">B</option>
-                </select>
               </td>
               <td>
                 <select name="period_1_1">
                   <option>A</option>
                   <option selected="selected">B</option>
+                  <option>C</option>
+                  <option>D</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                <select name="period_1_2">
+                  <option>A</option>
+                  <option>B</option>
+                  <option selected="selected">C</option>
+                  <option>D</option>
                 </select>
               </td>
             </tr>
@@ -1070,15 +1098,17 @@ def doctest_PeriodOrderComplex():
     When the user shuffles the dropdowns and submits them, the order
     of periods is changed:
 
-        >>> request = TestRequest(form={'period_0_0': 'A', 'period_0_1': 'B',
-        ...                             'period_1_0': 'B', 'period_1_1': 'A'})
+        >>> request = TestRequest(form={'period_0_0': 'A',
+        ...                             'period_1_0': 'B', 'period_1_1': 'A',
+        ...                             'period_1_2': 'C'})
         >>> view = PeriodOrderComplex(context, request)
-        >>> view.getSessionData()['period_names'] = ['A', 'B']
+        >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D']
         >>> view.getSessionData()['day_names'] = ['Day 1', 'Day 2']
+        >>> view.getSessionData()['time_slots'] = time_slots
         >>> view.update()
         True
         >>> print view.getSessionData()['periods_order']
-        [['A', 'B'], ['B', 'A']]
+        [['A'], ['B', 'A', 'C']]
 
     The next step is always the final step:
 
@@ -1092,8 +1122,9 @@ def doctest_PeriodOrderComplex():
         >>> request = TestRequest(form={'period_0_0': 'A', 'period_0_1': 'B',
         ...                             'period_1_1': 'A'})
         >>> view = PeriodOrderComplex(context, request)
-        >>> view.getSessionData()['period_names'] = ['A', 'B']
+        >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D']
         >>> view.getSessionData()['day_names'] = ['Z', 'X']
+        >>> view.getSessionData()['time_slots'] = time_slots
         >>> view.update()
         False
         >>> print translate(view.error)
@@ -1105,14 +1136,22 @@ def doctest_PeriodOrderComplex():
     twice, and some was missed out:
 
         >>> request = TestRequest(form={'period_0_0': 'B', 'period_0_1': 'B',
+        ...                             'period_1_2': 'C',
         ...                             'period_1_0': 'A', 'period_1_1': 'A'})
         >>> view = PeriodOrderComplex(context, request)
-        >>> view.getSessionData()['period_names'] = ['A', 'B']
+        >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D']
         >>> view.getSessionData()['day_names'] = ['X', 'Y']
+        >>> view.getSessionData()['time_slots'] = [
+        ...     [(datetime.time(9, 30), datetime.timedelta(0, 3300)),
+        ...      (datetime.time(10, 30), datetime.timedelta(0, 3300))],
+        ...     [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
+        ...      (datetime.time(10, 35), datetime.timedelta(0, 2700)),
+        ...      (datetime.time(10, 35), datetime.timedelta(0, 2700)),]]
         >>> view.update()
         False
         >>> print translate(view.error)
-        The following periods were not selected: X A, Y B
+        The following periods were selected more than once: \
+B on day X, A on day Y
         >>> 'periods_order' not in view.getSessionData()
         True
 
@@ -1121,8 +1160,8 @@ def doctest_PeriodOrderComplex():
         >>> print view()
         <BLANKLINE>
         ...
-          <div class="error">The following periods were not selected:
-            X A, Y B</div>
+          <div class="error">The following periods were selected more
+            than once: B on day X, A on day Y</div>
           <table>
             <tr>
               <th>X</th>
@@ -1133,12 +1172,16 @@ def doctest_PeriodOrderComplex():
                 <select name="period_0_0">
                   <option>A</option>
                   <option selected="selected">B</option>
+                  <option>C</option>
+                  <option>D</option>
                 </select>
               </td>
               <td>
                 <select name="period_1_0">
                   <option selected="selected">A</option>
                   <option>B</option>
+                  <option>C</option>
+                  <option>D</option>
                 </select>
               </td>
             </tr>
@@ -1147,12 +1190,28 @@ def doctest_PeriodOrderComplex():
                 <select name="period_0_1">
                   <option>A</option>
                   <option selected="selected">B</option>
+                  <option>C</option>
+                  <option>D</option>
                 </select>
               </td>
               <td>
                 <select name="period_1_1">
                   <option selected="selected">A</option>
                   <option>B</option>
+                  <option>C</option>
+                  <option>D</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                <select name="period_1_2">
+                  <option>A</option>
+                  <option>B</option>
+                  <option selected="selected">C</option>
+                  <option>D</option>
                 </select>
               </td>
             </tr>

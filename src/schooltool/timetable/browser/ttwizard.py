@@ -636,12 +636,16 @@ class PeriodOrderComplex(Step):
     def days(self):
         return self.getSessionData()['day_names']
 
+    def numSlots(self):
+        return [len(day) for day in self.getSessionData()['time_slots']]
+
     def update(self):
         result = []
         periods = self.periods()
+        numSlots = self.numSlots()
         for i in range(len(self.days())):
             day = []
-            for j in range(len(periods)):
+            for j in range(numSlots[i]):
                 name = 'period_%d_%d' % (i, j)
                 if name not in self.request:
                     self.error = _('Please provide all periods.')
@@ -650,15 +654,20 @@ class PeriodOrderComplex(Step):
             result.append(day)
 
         # Validate that all periods are selected
-        errors = []
+        errors = Set()
         for i, day in enumerate(self.days()):
-            remaining = Set(periods)
+            seen = Set()
             for period in result[i]:
-                if period in remaining:
-                    remaining.remove(period)
-            errors += ['%s %s' % (day, p) for p in remaining]
+                if period not in seen:
+                    seen.add(period)
+                else:
+                    error = _("$period on day $day")
+                    error.mapping['period'] = period
+                    error.mapping['day'] = self.days()[i]
+                    errors.add(translate(error, context=self.request))
         if errors:
-            self.error = _('The following periods were not selected: $periods')
+            self.error = _('The following periods were selected more'
+                           ' than once: $periods')
             self.error.mapping['periods'] = ', '.join(errors)
             return False
 
