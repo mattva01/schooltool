@@ -583,20 +583,23 @@ class FinalStep(Step):
     def next(self):
         return FirstStep(self.context, self.request)
 
-    def createSchema(self):
-        """Create the timetable schema."""
+    def modelFactory(self):
+        """Return the timetable model factory for the current state."""
         session = self.getSessionData()
-        title = session['title']
         cycle = session['cycle']
-        model_factory = {'weekly': WeeklyTimetableModel,
-                         'rotating': SequentialDaysTimetableModel}[cycle]
-        if cycle == 'rotating':
-            day_ids = session['day_names']
-        else:
-            day_ids = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-        periods = []
+        if cycle == 'weekly':
+            return WeeklyTimetableModel
+        elif cycle == 'rotating':
+            return SequentialDaysTimetableModel
 
-        slots = session['time_slots'][0] # XXX TODO
+    def dayTemplates(self):
+        session = self.getSessionData()
+        if session['similar_days']:
+            slots = session['time_slots'][0]
+        else:
+            raise NotImplementedError()
+
+        periods = []
         template = SchooldayTemplate()
         if session['named_periods']:
             period_names = session['period_names']
@@ -606,7 +609,18 @@ class FinalStep(Step):
         for ptitle, (tstart, duration) in zip(period_names, slots):
             template.add(SchooldayPeriod(ptitle, tstart, duration))
             periods.append(ptitle)
-        day_templates = {None: template}
+
+        return periods, {None: template}
+
+    def createSchema(self):
+        """Create the timetable schema."""
+        session = self.getSessionData()
+        title = session['title']
+
+        day_ids = session['day_names']
+        periods, day_templates = self.dayTemplates()
+
+        model_factory = self.modelFactory()
         model = model_factory(day_ids, day_templates)
         ttschema = TimetableSchema(day_ids, title=title, model=model)
         for day_id in day_ids:

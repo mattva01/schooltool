@@ -988,10 +988,16 @@ def doctest_FinalStep_createSchema():
         >>> view = FinalStep(context, request)
         >>> data = view.getSessionData()
         >>> data['title'] = u'Default'
+
+    First, let's try the simple weekly model.
+
         >>> data['cycle'] = 'weekly'
+        >>> data['day_names'] = ['Monday', 'Tuesday', 'Wednesday',
+        ...                      'Thursday', 'Friday']
         >>> from datetime import time, timedelta
+        >>> data['similar_days'] = True
         >>> data['time_slots'] = [[(time(9, 30), timedelta(minutes=55)),
-        ...                        (time(10, 30), timedelta(minutes=55))]]
+        ...                        (time(10, 30), timedelta(minutes=55))]] * 5
         >>> data['named_periods'] = False
 
         >>> ttschema = view.createSchema()
@@ -1009,7 +1015,7 @@ def doctest_FinalStep_createSchema():
         >>> print " ".join(ttschema.model.timetableDayIds)
         Monday Tuesday Wednesday Thursday Friday
 
-    There is one day template
+    There is a single day template
 
         >>> ttschema.model.dayTemplates.keys()
         [None]
@@ -1021,7 +1027,7 @@ def doctest_FinalStep_createSchema():
         09:30:00 0:55:00 09:30-10:25
         10:30:00 0:55:00 10:30-11:25
 
-    The model can be either weekly or rotating.
+    The model can also be rotating.
 
         >>> data['cycle'] = 'rotating'
         >>> data['day_names'] = ['D1', 'D2', 'D3']
