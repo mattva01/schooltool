@@ -48,6 +48,7 @@ from zope.security.proxy import removeSecurityProxy
 from schoolbell.calendar.utils import parse_date, parse_time
 from schoolbell.calendar.utils import next_month, week_start
 from schoolbell.app.browser.cal import month_names
+from schoolbell.app.cal import CalendarEvent
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.timetable.interfaces import ITimetable, ITimetableSchema
@@ -1398,22 +1399,25 @@ class EmergencyDayView(BrowserView):
             day_id = model.getDayId(self.term, self.date)
             exceptionDayIds[self.replacement] = removeSecurityProxy(day_id)
 
-            # XXX: post two all day events on self.date and self.replacement
-            # calendar = getSchoolToolApplication().calendar
-            # calendar.addEvent(
-            #     CalendarEvent(datetime.combine(self.date, datetime.time(),
-            #                   datetime.timedelta(),
-            #                   _('School is cancelled'),
-            #                   allday=True))
-            # calendar.addEvent(
-            #     CalendarEvent(datetime.combine(self.replacement,
-            #                                    datetime.time(),
-            #                   datetime.timedelta(),
-            #                   translate(_('Replacement schoolday for'
-            #                               ' emergency day %s'),
-            #                             context=self.request)
-            #                   % self.replacement,
-            #                   allday=True))
+            # Post calendar events to schoolwide calendar
+            calendar = getSchoolToolApplication().calendar
+            dtstart = datetime.datetime.combine(self.date, datetime.time())
+            msg = _('School cancelled due to emergency.'
+                    ' Replacement day $replacement.')
+            msg.mapping['replacement'] = str(self.replacement)
+            msg = translate(msg, context=self.request)
+            calendar.addEvent(
+                CalendarEvent(dtstart, datetime.timedelta(),
+                              msg, allday=True))
+
+            dtstart = datetime.datetime.combine(self.replacement,
+                                                datetime.time())
+            msg = _('Replacement day for emergency day $emergency.')
+            msg.mapping['emergency'] = str(self.date)
+            msg = translate(msg, context=self.request)
+            calendar.addEvent(
+                CalendarEvent(dtstart, datetime.timedelta(),
+                              msg, allday=True))
 
             self.request.response.redirect(
                 zapi.absoluteURL(self.context, self.request))

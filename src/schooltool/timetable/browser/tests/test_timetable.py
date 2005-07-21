@@ -2743,12 +2743,17 @@ def doctest_EmergencyDayView():
     All day events get posted to the schoolwide calendar on both days,
     notifying of the shift:
 
-        XXX: Tvon has not made the schoolwide calendar yet!
-        #>>> cal = getSchoolToolApplication().calendar
-        #>>> for event in calendar:
-        #...     print event.dtstart, event.title
-        2005-07-07 00:00 UTC School is cancelled
-        2005-07-10 00:00 UTC Replacement schoolday for emergency day 2005-07-07
+        >>> from schooltool import getSchoolToolApplication
+        >>> cal = getSchoolToolApplication().calendar
+        >>> events = list(cal)
+        >>> events.sort()
+        >>> for event in events:
+        ...     print event.dtstart
+        ...     print event.title
+        2005-07-07 00:00:00+00:00
+        School cancelled due to emergency. Replacement day 2005-07-10.
+        2005-07-10 00:00:00+00:00
+        Replacement day for emergency day 2005-07-07.
 
     When the replacement day is outside the term, the end date of the
     term gets adjusted:
