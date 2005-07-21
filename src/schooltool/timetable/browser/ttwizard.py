@@ -422,8 +422,8 @@ class RotatingSlotEntryStep(Step):
     """Step for entering start and end times of slots in each day.
 
     This step is taken when the start/end times are different for each day,
-    the rotating cycle is chosen in the 1st step and 'day in the cycle' is
-    chosen in the 6th step.
+    the rotating cycle is chosen in the CycleStep and 'day in the cycle' is
+    chosen in the SequentialModelStep.
     """
 
     __call__ = ViewPageTemplateFile("templates/ttwizard_slottimes.pt")
@@ -465,7 +465,8 @@ class WeeklySlotEntryStep(RotatingSlotEntryStep):
     """Step for entering start and end times of slots in each day.
 
     This step is taken when the start/end times are different for each day,
-    and the weekly cycle is chosen in the 1st or in the 6th step.
+    and the weekly cycle is chosen in the CycleStep or in the
+    SequentialModelStep.
     """
 
     def dayNames(self):
