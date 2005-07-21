@@ -357,7 +357,6 @@ def parse_name_list(names):
         >>> parse_name_list(u'')
         []
 
-    TODO: enforce uniqueness of names.
     """
     return [s.strip() for s in names.splitlines() if s.strip()]
 
