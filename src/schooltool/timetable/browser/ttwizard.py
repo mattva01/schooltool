@@ -383,6 +383,8 @@ class SimpleSlotEntryStep(FormStep):
     description = _("Enter start and end times for each slot,"
                     " one slot (HH:MM - HH:MM) per line.")
 
+    key = 'time_slots_simple'
+
     class schema(Interface):
         times = Text(default=u"9:30-10:25\n10:30-11:25", required=False)
 
@@ -401,7 +403,7 @@ class SimpleSlotEntryStep(FormStep):
             self.error = _("Please enter at least one time slot.")
             return False
         session = self.getSessionData()
-        session['time_slots'] = times
+        session[self.key] = times
         return True
 
     def next(self):
@@ -422,7 +424,7 @@ class RotatingSlotEntryStep(Step):
                     " one slot (HH:MM - HH:MM) per line.")
 
     error = None
-    key = 'time_slots2'
+    key = 'time_slots_rotating'
 
     def dayNames(self):
         """Return the list of day names."""
@@ -466,7 +468,7 @@ class WeeklySlotEntryStep(RotatingSlotEntryStep):
     and the weekly cycle is chosen in the 1st or in the 6th step.
     """
 
-    key = 'time_slots3'
+    key = 'time_slots_weekly'
 
     def dayNames(self):
         """Return the list of day names."""
@@ -524,9 +526,17 @@ class PeriodNamesStep(FormStep):
         return True
 
     def requiredPeriods(self):
-        """Returns the maximum number of slots there can be on a day"""
-        # TODO make this work if slots are different on different days
-        return len(self.getSessionData()['time_slots'])
+        """Returns the maximum number of slots there can be on a day."""
+        session = self.getSessionData()
+        try:
+            return len(session['time_slots_simple'])
+        except KeyError:
+            pass
+        try:
+            period_dict = session['time_slots_rotating']
+        except KeyError:
+            period_dict = session['time_slots_weekly']
+        return max(map(len, period_dict.values()))
 
     def parse(self, day_names):
         """Parse a multi-line string into a list of day names.
@@ -609,7 +619,7 @@ class FinalStep(Step):
             day_ids = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
         periods = []
 
-        slots = session['time_slots']
+        slots = session['time_slots_simple'] # TODO: handle others too
         template = SchooldayTemplate()
         if session['named_periods']:
             period_names = session['period_names']
