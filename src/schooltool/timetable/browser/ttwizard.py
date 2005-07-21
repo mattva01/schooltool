@@ -657,10 +657,8 @@ class FinalStep(Step):
         """Return the timetable model factory for the current state."""
         session = self.getSessionData()
         cycle = session['cycle']
-        if cycle == 'weekly':
-            return WeeklyTimetableModel
-        elif cycle == 'rotating':
-            return SequentialDaysTimetableModel
+        return {'weekly': WeeklyTimetableModel,
+                'rotating': SequentialDaysTimetableModel}[cycle]
 
     def periodNames(self):
         session = self.getSessionData()
