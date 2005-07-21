@@ -104,7 +104,7 @@ Let's choose weekly for now -- we'll try the rotating cycle later.
        timetable?</p>
     <div class="controls">
       <input class="button-ok" type="submit" name="NEXT.0"
-             value="Same time" />
+             value="Same time each day" />
       <input class="button-ok" type="submit" name="NEXT.1"
              value="Different times" />
       <input type="submit" class="button-cancel" name="CANCEL"
@@ -364,7 +364,7 @@ C.
        timetable?</p>
     <div class="controls">
       <input class="button-ok" type="submit" name="NEXT.0"
-             value="Same time" />
+             value="Same time each day" />
       <input class="button-ok" type="submit" name="NEXT.1"
              value="Different times" />
       <input type="submit" class="button-cancel" name="CANCEL"
