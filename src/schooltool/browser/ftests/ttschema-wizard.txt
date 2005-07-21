@@ -447,8 +447,49 @@ This time, let's say that periods are named.
   ...
   ... field.periods=Period_A%0D%0APeriod_B%0D%0APeriod_C%0D%0APeriod_D
   ... """)
+  HTTP/1.1 200 Ok
+  ...
+  <BLANKLINE>
+  ...
+  <p>Please put the periods in order:</p>
+  <div class="row">
+    <select name="period_0">
+      <option selected="selected">Period_A</option>
+      <option>Period_B</option>
+      <option>Period_C</option>
+      <option>Period_D</option>
+    </select>
+  </div>
+  <div class="row">
+    <select name="period_1">
+      <option>Period_A</option>
+      <option selected="selected">Period_B</option>
+      <option>Period_C</option>
+      <option>Period_D</option>
+    </select>
+  </div>
+  ...
+  <div class="controls">
+    <input type="submit" class="button-ok" name="NEXT"
+           value="Next" />
+    <input type="submit" class="button-cancel" name="CANCEL"
+           value="Cancel" />
+  </div>
+  ...
+
+We can rearrange the periods:
+
+  >>> print http("""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... period_0=Period_A&\
+  ... period_1=Period_C&\
+  ... period_2=Period_B&\
+  ... period_3=Period_D""")
   HTTP/1.1 303 See Other
-  Content-Length: 0
+  ...
   Location: http://localhost/frogpond/ttschemas
   ...
 
@@ -479,17 +520,17 @@ We can examine its composition more easily by invoking the RESTive view.
       <daytemplate>
         <used when="default"/>
         <period duration="55" id="Period_A" tstart="09:30"/>
-        <period duration="55" id="Period_B" tstart="10:30"/>
-        <period duration="55" id="Period_C" tstart="11:30"/>
+        <period duration="55" id="Period_B" tstart="11:30"/>
+        <period duration="55" id="Period_C" tstart="10:30"/>
         <period duration="55" id="Period_D" tstart="12:30"/>
       </daytemplate>
     </model>
     <day id="A">
       <period id="Period_A">
       </period>
-      <period id="Period_B">
-      </period>
       <period id="Period_C">
+      </period>
+      <period id="Period_B">
       </period>
       <period id="Period_D">
       </period>
@@ -497,9 +538,9 @@ We can examine its composition more easily by invoking the RESTive view.
     <day id="B">
       <period id="Period_A">
       </period>
-      <period id="Period_B">
-      </period>
       <period id="Period_C">
+      </period>
+      <period id="Period_B">
       </period>
       <period id="Period_D">
       </period>
@@ -507,9 +548,9 @@ We can examine its composition more easily by invoking the RESTive view.
     <day id="C">
       <period id="Period_A">
       </period>
-      <period id="Period_B">
-      </period>
       <period id="Period_C">
+      </period>
+      <period id="Period_B">
       </period>
       <period id="Period_D">
       </period>

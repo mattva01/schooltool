@@ -814,9 +814,115 @@ def doctest_PeriodNamesStep():
     The next page is FinalStep.
 
         >>> view.next()
-        <...ttwizard.FinalStep...>
+        <...ttwizard.PeriodOrderSimple...>
 
     """
+
+def doctest_PeriodOrderSimple():
+    """Unit test for PeriodOrderSimple view
+
+        >>> from schooltool.timetable.browser.ttwizard import PeriodOrderSimple
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = PeriodOrderSimple(context, request)
+
+    Let's say we have some periods:
+
+        >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D']
+
+    Our view lets the template easily access them:
+
+        >>> view.periods()
+        ['A', 'B', 'C', 'D']
+
+    If we render the view, we get a list of dropdowns with consecutive
+    periods selected:
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+          <div class="row">
+            <select name="period_0">
+              <option selected="selected">A</option>
+              <option>B</option>
+              <option>C</option>
+              <option>D</option>
+            </select>
+          </div>
+          <div class="row">
+            <select name="period_1">
+              <option>A</option>
+              <option selected="selected">B</option>
+              <option>C</option>
+              <option>D</option>
+            </select>
+          </div>
+          <div class="row">
+            <select name="period_2">
+              <option>A</option>
+              <option>B</option>
+              <option selected="selected">C</option>
+              <option>D</option>
+            </select>
+          </div>
+          <div class="row">
+            <select name="period_3">
+              <option>A</option>
+              <option>B</option>
+              <option>C</option>
+              <option selected="selected">D</option>
+            </select>
+          </div>
+          ...
+
+    When the user shuffles the dropdowns and submits them, the order
+    of periods is changed:
+
+        >>> request = TestRequest(form={'period_0': 'D', 'period_1': 'C',
+        ...                             'period_2': 'B', 'period_3': 'A'})
+        >>> view = PeriodOrderSimple(context, request)
+        >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D']
+        >>> view.update()
+        True
+        >>> print view.getSessionData()['period_names']
+        ['D', 'C', 'B', 'A']
+
+    The next step is always the final step:
+
+        >>> view.next()
+        <...ttwizard.FinalStep ...>
+
+    If not all periods are in the request, update fails and the user
+    gets an error.  This is unlikely in real life as the dropdowns
+    have values preselected:
+
+        >>> request = TestRequest(form={'period_0': 'D', 'period_1': 'C',
+        ...                             'period_2': 'B'})
+        >>> view = PeriodOrderSimple(context, request)
+        >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D']
+        >>> view.update()
+        False
+        >>> print translate(view.error)
+        Please provide all periods.
+        >>> print view.getSessionData()['period_names']
+        ['A', 'B', 'C', 'D']
+
+    A much more likely scenario is that some period was selected
+    twice, and some was missed out:
+
+        >>> request = TestRequest(form={'period_0': 'D', 'period_1': 'C',
+        ...                             'period_2': 'C', 'period_3': 'D'})
+        >>> view = PeriodOrderSimple(context, request)
+        >>> view.getSessionData()['period_names'] = ['A', 'B', 'C', 'D']
+        >>> view.update()
+        False
+        >>> print translate(view.error)
+        The following periods were not selected: A, B
+        >>> print view.getSessionData()['period_names']
+        ['A', 'B', 'C', 'D']
+
+    """
+
 
 def doctest_FinalStep():
     """Unit test for FinalStep

@@ -84,13 +84,13 @@ The workflow is as follows:
 
     12. "Put the periods in order for each day:"
 
-        (The user sees a grid of drop-downs.)
+        (The user sees a list of drop-downs.)
 
         Jump to step 14.
 
     13. "Put the periods in order:"
 
-        (The user sees a list of drop-downs.)
+        (The user sees a grid of drop-downs.)
 
     14. The timetable schema is created.
 
@@ -108,6 +108,7 @@ Step 14 needs the following data:
 
 $Id$
 """
+from sets import Set
 
 from zope.interface import Interface
 from zope.schema import TextLine, Text, getFieldNamesInOrder
@@ -537,6 +538,46 @@ class PeriodNamesStep(FormStep):
 
     def next(self):
         # TODO: redirect to periods same/different choice
+        return PeriodOrderSimple(self.context, self.request)
+
+
+class PeriodOrderSimple(Step):
+    """Step to put periods in order if all days are the same"""
+
+    template = ViewPageTemplateFile('templates/ttwizard_period_order1.pt')
+    description = _('Please put the periods in order:')
+    error = None
+
+    def __call__(self):
+        return self.template()
+
+    def periods(self):
+        return self.getSessionData()['period_names']
+
+    def update(self):
+        result = []
+        periods = self.getSessionData()['period_names']
+        for i in range(len(periods)):
+            name = 'period_%d' % i
+            if name not in self.request:
+                self.error = _('Please provide all periods.')
+                return False
+            result.append(self.request[name])
+
+        # Validate that all periods are selected
+        remaining = Set(periods)
+        for period in result:
+            if period in remaining:
+                remaining.remove(period)
+        if remaining:
+            self.error = _('The following periods were not selected: $periods')
+            self.error.mapping['periods'] = ', '.join(remaining)
+            return False
+
+        self.getSessionData()['period_names'] = result
+        return True
+
+    def next(self):
         return FinalStep(self.context, self.request)
 
 
