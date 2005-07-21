@@ -287,6 +287,13 @@ class DayEntryStep(FormStep):
         if not day_names:
             self.error = _("Please enter at least one day name.")
             return False
+
+        seen = Set()
+        for day in day_names:
+            if day in seen:
+                self.error = _("Please make sure the day names are unique.")
+                return False
+            seen.add(day)
         session = self.getSessionData()
         session['day_names'] = day_names
         return True
@@ -539,6 +546,12 @@ class PeriodNamesStep(FormStep):
             self.error = _("Please enter at least $number periods.")
             self.error.mapping['number'] = min_periods
             return False
+        seen = Set()
+        for period in periods:
+            if period in seen:
+                self.error = _("Please make sure the period names are unique.")
+                return False
+            seen.add(period)
         session = self.getSessionData()
         session['period_names'] = periods
         return True

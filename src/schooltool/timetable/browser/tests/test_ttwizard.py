@@ -365,6 +365,13 @@ def doctest_DayEntryStep():
         >>> print translate(view.error)
         Please enter at least one day name.
 
+        >>> request = TestRequest(form={'field.days': u'A\nB\nA\n'})
+        >>> view = DayEntryStep(context, request)
+        >>> view.update()
+        False
+        >>> print translate(view.error)
+        Please make sure the day names are unique.
+
         >>> request = TestRequest(form={'field.days': u'A\nB\n\n'})
         >>> view = DayEntryStep(context, request)
         >>> view.update()
@@ -807,6 +814,14 @@ def doctest_PeriodNamesStep():
         False
         >>> print translate(view.error)
         Please enter at least 3 periods.
+
+        >>> request = TestRequest(form={'field.periods': u'A\nB\nB\n'})
+        >>> view = PeriodNamesStep(context, request)
+        >>> view.getSessionData()['time_slots'] = default_slots
+        >>> view.update()
+        False
+        >>> print translate(view.error)
+        Please make sure the period names are unique.
 
         >>> request = TestRequest(form={'field.periods': u'A\n'})
         >>> view = PeriodNamesStep(context, request)
