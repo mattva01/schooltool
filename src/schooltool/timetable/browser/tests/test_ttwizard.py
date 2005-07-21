@@ -1331,7 +1331,7 @@ def doctest_FinalStep_createSchema():
     """
 
 
-def doctest_FinalStep_createSchema_different_order_on_different_days():
+def doctest_FinalStep_createSchema_different_order_on_different_days_weekly():
     """Unit test for FinalStep.createSchema
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
@@ -1392,6 +1392,57 @@ def doctest_FinalStep_createSchema_different_order_on_different_days():
         09:00-09:45: F
         10:00-10:45: G
         11:00-11:45: H
+
+    """
+
+def doctest_FinalStep_createSchema_different_order_on_different_days_cyclic():
+    """Unit test for FinalStep.createSchema
+
+        >>> from schooltool.timetable.browser.ttwizard import FinalStep
+        >>> view = FinalStep(app['ttschemas'], TestRequest())
+        >>> data = view.getSessionData()
+
+        >>> from datetime import time, timedelta
+        >>> slots = [(time(8+n, 0), timedelta(minutes=45))
+        ...          for n in range(4)]
+
+        >>> data['title'] = u'Default'
+        >>> data['cycle'] = 'rotating'
+        >>> data['day_names'] = ['Day 1', 'Day 2', 'Day 3']
+        >>> data['similar_days'] = True
+        >>> data['time_slots'] = [slots] * 3
+        >>> data['named_periods'] = True
+        >>> data['period_names'] = ['A', 'B', 'C', 'D', 'E', 'F']
+        >>> data['periods_same'] = False
+        >>> data['periods_order'] = [['A', 'B', 'C', 'D'],
+        ...                          ['B', 'C', 'D', 'E'],
+        ...                          ['C', 'D', 'E', 'F']]
+        >>> ttschema = view.createSchema()
+
+        >>> print_ttschema(ttschema)
+        Day 1        Day 2        Day 3
+        A            B            C
+        B            C            D
+        C            D            E
+        D            E            F
+
+        >>> print_day_templates(ttschema.model.dayTemplates)
+        --- day template None
+        --- day template 0
+        08:00-08:45: A
+        09:00-09:45: B
+        10:00-10:45: C
+        11:00-11:45: D
+        --- day template 1
+        08:00-08:45: B
+        09:00-09:45: C
+        10:00-10:45: D
+        11:00-11:45: E
+        --- day template 2
+        08:00-08:45: C
+        09:00-09:45: D
+        10:00-10:45: E
+        11:00-11:45: F
 
     """
 
