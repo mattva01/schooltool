@@ -715,14 +715,14 @@ class FinalStep(Step):
         time slots.
 
             >>> FinalStep.modelFactory('rotating', True, None)
-            <...SequentialDaysTimetableModel...>
+            <...SequentialDayIdBasedTimetableModel...>
 
         """
         assert cycle in ('weekly', 'rotating')
         if cycle == 'weekly':
             return WeeklyTimetableModel
         if similar_days:
-            return SequentialDaysTimetableModel
+            return SequentialDayIdBasedTimetableModel
         assert time_model in ('weekly', 'cycle_day')
         if time_model == 'weekly':
             return SequentialDaysTimetableModel
@@ -773,9 +773,6 @@ class FinalStep(Step):
 
         `time_slots` is a list of day definitions, where each day is a
         list of slots, and each slot is a tuple (tstart, duration).
-
-        XXX: This method is currenly only implemented for the case when all
-             days have the same slots.
         """
         templates = {None: SchooldayTemplate()}
         same = True
@@ -798,7 +795,6 @@ class FinalStep(Step):
         session = self.getSessionData()
         title = session['title']
         day_ids = session['day_names']
-        assert session['similar_days']  # TODO: implement the other case
 
         periods_order = self.periodNames(session['named_periods'],
                                          session.get('periods_order'),
@@ -808,6 +804,11 @@ class FinalStep(Step):
         model_factory = self.modelFactory(session['cycle'],
                                           session['similar_days'],
                                           session.get('time_model'))
+        if model_factory is SequentialDayIdBasedTimetableModel:
+            # This conversion is not very nice
+            default = day_templates[None]
+            day_templates = dict([(day_id, day_templates.get(idx, default))
+                                  for idx, day_id in enumerate(day_ids)])
         model = model_factory(day_ids, day_templates)
         ttschema = TimetableSchema(day_ids, title=title, model=model)
         for day_id, periods in zip(day_ids, periods_order):

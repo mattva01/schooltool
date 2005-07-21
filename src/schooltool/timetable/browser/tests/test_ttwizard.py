@@ -1313,6 +1313,35 @@ def doctest_FinalStep_dayTemplates():
         12:35-13:25: A
         14:15-15:10: C
 
+    Time slots are different.
+
+        >>> duration = timedelta(minutes=30)
+        >>> dt = FinalStep.dayTemplates([['A', 'B', 'C'],
+        ...                              ['B', 'C', 'A'],
+        ...                              ['C', 'A', 'B'],
+        ...                              ['B', 'A', 'C']],
+        ...                             [[(time(9+n, 5*d), duration)
+        ...                               for n in range(3)]
+        ...                              for d in range(4)])
+        >>> print_day_templates(dt)
+        --- day template None
+        --- day template 0
+        09:00-09:30: A
+        10:00-10:30: B
+        11:00-11:30: C
+        --- day template 1
+        09:05-09:35: B
+        10:05-10:35: C
+        11:05-11:35: A
+        --- day template 2
+        09:10-09:40: C
+        10:10-10:40: A
+        11:10-11:40: B
+        --- day template 3
+        09:15-09:45: B
+        10:15-10:45: A
+        11:15-11:45: C
+
     """
 
 
@@ -1365,7 +1394,7 @@ def doctest_FinalStep_createSchema():
         >>> data['day_names'] = ['D1', 'D2', 'D3']
         >>> ttschema = view.createSchema()
         >>> ttschema.model
-        <...SequentialDaysTimetableModel object at ...>
+        <...SequentialDayIdBasedTimetableModel object at ...>
         >>> print_ttschema(ttschema)
         D1           D2           D3
         09:30-10:25  09:30-10:25  09:30-10:25
@@ -1381,7 +1410,7 @@ def doctest_FinalStep_createSchema():
         >>> data['periods_order'] = [['Green', 'Blue']] * 3
         >>> ttschema = view.createSchema()
         >>> ttschema.model
-        <...SequentialDaysTimetableModel object at ...>
+        <...SequentialDayIdBasedTimetableModel object at ...>
         >>> print_ttschema(ttschema)
         D1           D2           D3
         Green        Green        Green
@@ -1392,6 +1421,9 @@ def doctest_FinalStep_createSchema():
 
 def doctest_FinalStep_createSchema_different_order_on_different_days_weekly():
     """Unit test for FinalStep.createSchema
+
+    Weekly cycle, same time slots on each day, different period order in 
+    each day.
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
         >>> view = FinalStep(app['ttschemas'], TestRequest())
@@ -1424,6 +1456,9 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_weekly():
         C            D            E            F            G
         D            E            F            G            H
 
+        >>> ttschema.model
+        <...WeeklyTimetableModel object at ...>
+
         >>> print_day_templates(ttschema.model.dayTemplates)
         --- day template None
         --- day template 0
@@ -1454,8 +1489,12 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_weekly():
 
     """
 
+
 def doctest_FinalStep_createSchema_different_order_on_different_days_cyclic():
     """Unit test for FinalStep.createSchema
+
+    Rotating cycle, same time slots on each day, different period order in 
+    each day.
 
         >>> from schooltool.timetable.browser.ttwizard import FinalStep
         >>> view = FinalStep(app['ttschemas'], TestRequest())
@@ -1485,6 +1524,70 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_cyclic():
         C            D            E
         D            E            F
 
+        >>> ttschema.model
+        <...SequentialDayIdBasedTimetableModel object at ...>
+
+        >>> print_day_templates(ttschema.model.dayTemplates)
+        --- day template 'Day 1'
+        08:00-08:45: A
+        09:00-09:45: B
+        10:00-10:45: C
+        11:00-11:45: D
+        --- day template 'Day 2'
+        08:00-08:45: B
+        09:00-09:45: C
+        10:00-10:45: D
+        11:00-11:45: E
+        --- day template 'Day 3'
+        08:00-08:45: C
+        09:00-09:45: D
+        10:00-10:45: E
+        11:00-11:45: F
+
+    """
+
+
+def doctest_FinalStep_createSchema_different_times():
+    """Unit test for FinalStep.createSchema
+
+    Weekly cycle, different time slots on each day, different period order in 
+    each day.
+
+        >>> from schooltool.timetable.browser.ttwizard import FinalStep
+        >>> view = FinalStep(app['ttschemas'], TestRequest())
+        >>> data = view.getSessionData()
+
+        >>> from datetime import time, timedelta
+        >>> slots = [[(time(8+n, d*5), timedelta(minutes=45))
+        ...           for n in range(4)]
+        ...          for d in range(5)]
+
+        >>> data['title'] = u'Default'
+        >>> data['cycle'] = 'weekly'
+        >>> data['day_names'] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
+        ...                      'Friday']
+        >>> data['similar_days'] = False
+        >>> data['time_slots'] = slots
+        >>> data['named_periods'] = True
+        >>> data['period_names'] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+        >>> data['periods_same'] = False
+        >>> data['periods_order'] = [['A', 'B', 'C', 'D'],
+        ...                          ['B', 'C', 'D', 'E'],
+        ...                          ['C', 'D', 'E', 'F'],
+        ...                          ['D', 'E', 'F', 'G'],
+        ...                          ['E', 'F', 'G', 'H']]
+        >>> ttschema = view.createSchema()
+
+        >>> print_ttschema(ttschema)
+        Monday       Tuesday      Wednesday    Thursday     Friday
+        A            B            C            D            E
+        B            C            D            E            F
+        C            D            E            F            G
+        D            E            F            G            H
+
+        >>> ttschema.model
+        <...WeeklyTimetableModel object at ...>
+
         >>> print_day_templates(ttschema.model.dayTemplates)
         --- day template None
         --- day template 0
@@ -1493,15 +1596,25 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_cyclic():
         10:00-10:45: C
         11:00-11:45: D
         --- day template 1
-        08:00-08:45: B
-        09:00-09:45: C
-        10:00-10:45: D
-        11:00-11:45: E
+        08:05-08:50: B
+        09:05-09:50: C
+        10:05-10:50: D
+        11:05-11:50: E
         --- day template 2
-        08:00-08:45: C
-        09:00-09:45: D
-        10:00-10:45: E
-        11:00-11:45: F
+        08:10-08:55: C
+        09:10-09:55: D
+        10:10-10:55: E
+        11:10-11:55: F
+        --- day template 3
+        08:15-09:00: D
+        09:15-10:00: E
+        10:15-11:00: F
+        11:15-12:00: G
+        --- day template 4
+        08:20-09:05: E
+        09:20-10:05: F
+        10:20-11:05: G
+        11:20-12:05: H
 
     """
 
