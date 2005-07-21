@@ -539,9 +539,9 @@ We can examine its composition more easily by invoking the RESTive view.
   <BLANKLINE>
   <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
     <title>Rotating</title>
-    <model factory="SequentialDaysTimetableModel">
+    <model factory="SequentialDayIdBasedTimetableModel">
       <daytemplate>
-        <used when="default"/>
+        <used when="A B C"/>
         <period duration="55" id="Period_A" tstart="09:30"/>
         <period duration="55" id="Period_B" tstart="11:30"/>
         <period duration="55" id="Period_C" tstart="10:30"/>
