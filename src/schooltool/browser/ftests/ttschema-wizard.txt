@@ -1449,6 +1449,483 @@ The schema is now created:
   </timetable>
 
 
+Rotating timetable, take three
+----------------------------
+
+.. image: ttschema-wizard-5.png
+
+Let's do it again!
+
+  >>> print http(r"""
+  ... GET /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+      <title>New timetable schema</title>
+  ...
+            <h1>New timetable schema</h1>
+  ...
+  <form class="plain" method="POST"
+        action="http://localhost/frogpond/ttschemas/add.html">
+    <div class="row">
+    <div class="label">
+      <label for="field.title" title="">Title</label>
+    </div>
+    <p class="hint"></p>
+    <div class="field">
+      <input class="textType" id="field.title" name="field.title" size="20"
+             type="text" value="default"  />
+    </div>
+    </div>
+    <div class="controls">
+      <input type="submit" class="button-ok" name="NEXT"
+             value="Next" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  </form>
+  ...
+
+We enter a title and press Next
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... field.title=Rotating+3&NEXT=Next
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+      <title>New timetable schema</title>
+  ...
+            <h1>New timetable schema</h1>
+  ...
+  <form class="plain" method="POST"
+        action="http://localhost/frogpond/ttschemas/add.html">
+    <p>Does your school's timetable cycle use days of the week, or a rotating
+       cycle?</p>
+    <div class="controls">
+      <input class="button-ok" type="submit" name="NEXT.0"
+             value="Days of the week" />
+      <input class="button-ok" type="submit" name="NEXT.1"
+             value="Rotating cycle" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  </form>
+  ...
+
+Let's choose rotating.
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... NEXT.1=Rotating+cycle
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+  <form class="plain" method="POST"
+        action="http://localhost/frogpond/ttschemas/add.html">
+    <p>Enter names of days in cycle, one per line.</p>
+    <div class="row">
+    <p class="hint"></p>
+    <div class="field">
+      <textarea cols="60" id="field.days" name="field.days" rows="15"
+      ></textarea>
+    </div>
+    </div>
+    <div class="controls">
+      <input type="submit" class="button-ok" name="NEXT"
+             value="Next" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  </form>
+  ...
+
+We shall have three days, designated A, B, and C.
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... field.days=A%0D%0AB%0D%0AC%0D%0A&NEXT=Next
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+      <title>New timetable schema</title>
+  ...
+            <h1>New timetable schema</h1>
+  ...
+  <form class="plain" method="POST"
+        action="http://localhost/frogpond/ttschemas/add.html">
+    <p>Do classes begin and end at the same time each day in your school's
+       timetable?</p>
+    <div class="controls">
+      <input class="button-ok" type="submit" name="NEXT.0"
+             value="Same time each day" />
+      <input class="button-ok" type="submit" name="NEXT.1"
+             value="Different times" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  </form>
+  ...
+
+Let's say that classes begin at different times
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... NEXT.1=Different+times
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+      <title>New timetable schema</title>
+  ...
+            <h1>New timetable schema</h1>
+  ...
+    <p>Do start and end times vary based on the day of the week (Monday -
+       Friday) or the day in the cycle?</p>
+    <div class="controls">
+      <input class="button-ok" type="submit" name="NEXT.0"
+             value="Day of week" />
+      <input class="button-ok" type="submit" name="NEXT.1"
+             value="Day in cycle" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  ...
+
+We'll go with weekly.
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... NEXT.0=Day+of+week
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+  <form class="plain" method="POST"
+        action="http://localhost/frogpond/ttschemas/add.html">
+    <p>Enter start and end times for each slot on each day, one slot (HH:MM -
+       HH:MM) per line.</p>
+    <table>
+      <tr>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+      </tr>
+      <tr>
+        <td>
+          <textarea rows="12" cols="15" name="times.0"></textarea>
+        </td>
+        <td>
+          <textarea rows="12" cols="15" name="times.1"></textarea>
+        </td>
+        <td>
+          <textarea rows="12" cols="15" name="times.2"></textarea>
+        </td>
+        <td>
+          <textarea rows="12" cols="15" name="times.3"></textarea>
+        </td>
+        <td>
+          <textarea rows="12" cols="15" name="times.4"></textarea>
+        </td>
+      </tr>
+    </table>
+    <div class="controls">
+      <input type="submit" class="button-ok" name="NEXT"
+             value="Next" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  </form>
+  ...
+
+Let's add a few periods.  All days must have the same number of periods.
+
+  >>> print http("""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... times.0=9:30-10:25%0D%0A10:30-11:25%0D%0A11:30-12:25%0D%0A12:30-13:25&\
+  ... times.1=9:30-10:25%0D%0A10:30-11:25%0D%0A11:30-12:25%0D%0A12:30-13:25&\
+  ... times.2=9:30-10:25%0D%0A10:30-11:25%0D%0A11:30-12:25%0D%0A12:30-13:25&\
+  ... times.3=9:30-10:25%0D%0A10:30-11:25%0D%0A11:30-12:25%0D%0A12:30-13:25&\
+  ... times.4=9:30-10:20%0D%0A10:25-11:15%0D%0A11:20-12:10%0D%0A12:15-13:05&\
+  ... NEXT=Next
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+  <p>Do periods have names or are they simply designated by time?</p>
+  ...
+
+Let's say that periods are named.
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... NEXT.0=DesignatedByTime
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+  <p>Enter names of periods, one per line.</p>
+  ...
+  <textarea ... name="field.periods" rows="15" ></textarea>
+  ...
+
+We get to choose whether sequences of periods in all days are the same:
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... field.periods=Period_A%0D%0APeriod_B%0D%0APeriod_C%0D%0APeriod_D
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+  <p>Is the sequence of periods each day the same or different?</p>
+    <div class="controls">
+      <input class="button-ok" type="submit" name="NEXT.0"
+             value="Same" />
+      <input class="button-ok" type="submit" name="NEXT.1"
+             value="Different" />
+      <input type="submit" class="button-cancel" name="CANCEL"
+             value="Cancel" />
+    </div>
+  ...
+
+Let's say they are different.
+
+  >>> print http(r"""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... NEXT.1=Different
+  ... """)
+  HTTP/1.1 200 Ok
+  ...
+  <BLANKLINE>
+  ...
+  <p>Please put the periods in order for each day:</p>
+  <table>
+    <tr>
+      <th>A</th>
+      <th>B</th>
+      <th>C</th>
+    </tr>
+    <tr>
+      <td>
+        <select name="period_0_0">
+          <option selected="selected">Period_A</option>
+          <option>Period_B</option>
+          <option>Period_C</option>
+          <option>Period_D</option>
+        </select>
+      </td>
+      <td>
+        <select name="period_1_0">
+          <option selected="selected">Period_A</option>
+          <option>Period_B</option>
+          <option>Period_C</option>
+          <option>Period_D</option>
+        </select>
+      </td>
+      <td>
+        <select name="period_2_0">
+          <option selected="selected">Period_A</option>
+          <option>Period_B</option>
+          <option>Period_C</option>
+          <option>Period_D</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <select name="period_0_1">
+          <option>Period_A</option>
+          <option selected="selected">Period_B</option>
+          <option>Period_C</option>
+          <option>Period_D</option>
+        </select>
+      </td>
+      <td>
+        <select name="period_1_1">
+          <option>Period_A</option>
+          <option selected="selected">Period_B</option>
+          <option>Period_C</option>
+          <option>Period_D</option>
+        </select>
+      </td>
+      <td>
+        <select name="period_2_1">
+          <option>Period_A</option>
+          <option selected="selected">Period_B</option>
+          <option>Period_C</option>
+          <option>Period_D</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <select name="period_0_2">
+          <option>Period_A</option>
+          <option>Period_B</option>
+          <option selected="selected">Period_C</option>
+          <option>Period_D</option>
+        </select>
+      </td>
+      <td>
+        <select name="period_1_2">
+          <option>Period_A</option>
+          <option>Period_B</option>
+          <option selected="selected">Period_C</option>
+          <option>Period_D</option>
+        </select>
+      </td>
+      <td>
+        <select name="period_2_2">
+          <option>Period_A</option>
+          <option>Period_B</option>
+          <option selected="selected">Period_C</option>
+          <option>Period_D</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <select name="period_0_3">
+          <option>Period_A</option>
+          <option>Period_B</option>
+          <option>Period_C</option>
+          <option selected="selected">Period_D</option>
+        </select>
+      </td>
+      <td>
+        <select name="period_1_3">
+          <option>Period_A</option>
+          <option>Period_B</option>
+          <option>Period_C</option>
+          <option selected="selected">Period_D</option>
+        </select>
+      </td>
+      <td>
+        <select name="period_2_3">
+          <option>Period_A</option>
+          <option>Period_B</option>
+          <option>Period_C</option>
+          <option selected="selected">Period_D</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+  ...
+
+We can rearrange them:
+
+  >>> print http("""
+  ... POST /frogpond/ttschemas/add.html HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... Content-Type: application/x-www-form-urlencoded
+  ...
+  ... period_0_0=Period_A&period_1_0=Period_D&period_2_0=Period_A&\
+  ... period_0_1=Period_C&period_1_1=Period_B&period_2_1=Period_B&\
+  ... period_0_2=Period_B&period_1_2=Period_C&period_2_2=Period_C&\
+  ... period_0_3=Period_D&period_1_3=Period_A&period_2_3=Period_D&\
+  ... NEXT=Next""", handle_errors=False)
+  HTTP/1.1 303 See Other
+  ...
+  Location: http://localhost/frogpond/ttschemas
+  ...
+
+The schema is now created:
+
+  >>> print rest(r"""
+  ... GET /frogpond/ttschemas/rotating-3 HTTP/1.1
+  ... Authorization: Basic mgr:mgrpw
+  ... """, handle_errors=False)
+  HTTP/1.1 200 Ok
+  Content-Length: ...
+  Content-Type: text/xml; charset=UTF-8
+  <BLANKLINE>
+  <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+    <title>Rotating 3</title>
+    <model factory="SequentialDaysTimetableModel">
+      <daytemplate>
+        <used when="default"/>
+      </daytemplate>
+      <daytemplate>
+        <used when="Monday"/>
+        <period duration="55" id="Period_A" tstart="09:30"/>
+        <period duration="55" id="Period_B" tstart="11:30"/>
+        <period duration="55" id="Period_C" tstart="10:30"/>
+        <period duration="55" id="Period_D" tstart="12:30"/>
+      </daytemplate>
+      <daytemplate>
+        <used when="Wednesday"/>
+        <period duration="55" id="Period_A" tstart="09:30"/>
+        <period duration="55" id="Period_B" tstart="10:30"/>
+        <period duration="55" id="Period_C" tstart="11:30"/>
+        <period duration="55" id="Period_D" tstart="12:30"/>
+      </daytemplate>
+      <daytemplate>
+        <used when="Tuesday"/>
+        <period duration="55" id="Period_A" tstart="12:30"/>
+        <period duration="55" id="Period_B" tstart="10:30"/>
+        <period duration="55" id="Period_C" tstart="11:30"/>
+        <period duration="55" id="Period_D" tstart="09:30"/>
+      </daytemplate>
+    </model>
+    <day id="A">
+      <period id="Period_A">
+      </period>
+      <period id="Period_C">
+      </period>
+      <period id="Period_B">
+      </period>
+      <period id="Period_D">
+      </period>
+    </day>
+    <day id="B">
+      <period id="Period_D">
+      </period>
+      <period id="Period_B">
+      </period>
+      <period id="Period_C">
+      </period>
+      <period id="Period_A">
+      </period>
+    </day>
+    <day id="C">
+      <period id="Period_A">
+      </period>
+      <period id="Period_B">
+      </period>
+      <period id="Period_C">
+      </period>
+      <period id="Period_D">
+      </period>
+    </day>
+  </timetable>
+
+
 The Cancel button
 -----------------
 
