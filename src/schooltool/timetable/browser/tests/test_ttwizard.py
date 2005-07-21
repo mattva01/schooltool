@@ -728,7 +728,7 @@ def doctest_PeriodNamesStep():
         ...     (datetime.time(9, 15), datetime.timedelta(0, 3300)),
         ...     (datetime.time(10, 35), datetime.timedelta(0, 2700)),
         ...     (datetime.time(11, 55), datetime.timedelta(0, 2700))]
-        >>> view.requiredperiods()
+        >>> view.requiredPeriods()
         3
 
         TODO: test when slots are different on different days

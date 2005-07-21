@@ -505,7 +505,7 @@ class PeriodNamesStep(FormStep):
         except WidgetsError, e:
             return False
         periods = self.parse(data.get('periods') or '')
-        min_periods = self.requiredperiods()
+        min_periods = self.requiredPeriods()
         if len(periods) < min_periods:
             self.error = _("Please enter at least $number periods.")
             self.error.mapping['number'] = min_periods
@@ -514,7 +514,7 @@ class PeriodNamesStep(FormStep):
         session['period_names'] = periods
         return True
 
-    def requiredperiods(self):
+    def requiredPeriods(self):
         """Returns the maximum number of slots there can be on a day"""
         # TODO make this work if slots are different on different days
         return len(self.getSessionData()['time_slots'])
