@@ -397,13 +397,13 @@ def doctest_IndependentDaysStep():
 
         >>> view.getSessionData()['day_names'] = ['Day A', 'Day B']
 
-    The next step is SlotEntryStep if each day is different and you chose
+    The next step is WeeklySlotEntryStep if each day is different and you chose
     the weekly cycle:
 
         >>> view.getSessionData()['similar_days'] = False
         >>> view.getSessionData()['cycle'] = 'weekly'
         >>> view.next()
-        <...ttwizard.SlotEntryStep...>
+        <...ttwizard.WeeklySlotEntryStep...>
 
     If you chose the rotating cycle, you will be asked another question
     about the time model:
@@ -423,11 +423,19 @@ def doctest_SequentialModelStep():
         >>> request = TestRequest()
         >>> view = SequentialModelStep(context, request)
 
-    The next step is always SlotEntryStep, which uses the answer for
-    this question:
+    If you choose the weekly cycle, you will be redirected to
+    WeeklySlotEntryStep:
 
+        >>> session = view.getSessionData()
+        >>> session['time_model'] = 'weekly'
         >>> view.next()
-        <...ttwizard.SlotEntryStep...>
+        <...ttwizard.WeeklySlotEntryStep...>
+
+    Otherwise, the rotating cycle will be used:
+
+        >>> session['time_model'] = 'cycle_day'
+        >>> view.next()
+        <...ttwizard.RotatingSlotEntryStep...>
 
     """
 
@@ -500,14 +508,15 @@ def doctest_SimpleSlotEntryStep():
     """
 
 
-def doctest_SlotEntryStep():
-    r"""Unit test for SlotEntryStep
+def doctest_RotatingSlotEntryStep():
+    r"""Unit test for RotatingSlotEntryStep
 
-        >>> from schooltool.timetable.browser.ttwizard import SlotEntryStep
+        >>> from schooltool.timetable.browser.ttwizard import RotatingSlotEntryStep
         >>> from schooltool.timetable.browser.ttwizard import getSessionData
         >>> context = app['ttschemas']
         >>> request = TestRequest()
-        >>> view = SlotEntryStep(context, request)
+        >>> view = RotatingSlotEntryStep(context, request)
+
         >>> view.getSessionData()['day_names'] = ['Oneday', 'Twoday']
 
         >>> view.dayNames()
@@ -585,7 +594,109 @@ def doctest_SlotEntryStep():
           [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
            (datetime.time(10, 35), datetime.timedelta(0, 2700))])]
 
-    The next page is the final page.
+    The next page is the period naming step.
+
+        >>> view.next()
+        <...ttwizard.NamedPeriodsStep...>
+
+    """
+
+
+def doctest_WeeklySlotEntryStep():
+    r"""Unit test for WeeklySlotEntryStep
+
+        >>> from schooltool.timetable.browser.ttwizard import WeeklySlotEntryStep
+        >>> from schooltool.timetable.browser.ttwizard import getSessionData
+        >>> context = app['ttschemas']
+        >>> request = TestRequest()
+        >>> view = WeeklySlotEntryStep(context, request)
+
+        >>> view.dayNames()
+        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+
+    At first we get a table with one empty row of input fields:
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <tr>
+          <th>Monday</th>
+          ...
+          <th>Friday</th>
+        </tr>
+        <tr>
+          <td>
+            <textarea rows="12" cols="15" name="times.0"></textarea>
+          </td>
+          ...
+          <td>
+            <textarea rows="12" cols="15" name="times.4"></textarea>
+          </td>
+        </tr>
+        </table>
+        ...
+
+        >>> print view.error
+        None
+
+    SlotEntryStep.update wants at least one slot on each day:
+
+        >>> view.request.form['times.0'] = u'9:30 - 10:25'
+        >>> view.update()
+        False
+
+        >>> print translate(view.error)
+        Please enter at least one time slot for Tuesday.
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <tr>
+          <td>
+            <textarea rows="12" cols="15" name="times.0">9:30 - 10:25</textarea>
+          </td>
+          <td>
+            <textarea rows="12" cols="15" name="times.1"></textarea>
+          </td>
+          ...
+        </tr>
+        </table>
+        ...
+
+    If we provide an invalid interval, an error message will be shown:
+
+        >>> view.request.form['times.1'] = u'9:15 - 10:73'
+        >>> view.update()
+        False
+        >>> print translate(view.error)
+        Not a valid time slot: 9:15 - 10:73.
+
+    If we provide both fields, the form will be parsed successfully:
+
+        >>> for i in range(1, 5):
+        ...     field_name = 'times.%d' % i
+        ...     view.request.form[field_name] = u'9:15 - 10:10\n10:35 - 11:20'
+        >>> view.update()
+        True
+
+        >>> result = view.getSessionData()['time_slots3'].items()
+        >>> result.sort()
+        >>> pprint(result)
+        [(0, [(datetime.time(9, 30), datetime.timedelta(0, 3300))]),
+         (1,
+          [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
+           (datetime.time(10, 35), datetime.timedelta(0, 2700))]),
+         (2,
+          [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
+           (datetime.time(10, 35), datetime.timedelta(0, 2700))]),
+         (3,
+          [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
+           (datetime.time(10, 35), datetime.timedelta(0, 2700))]),
+         (4,
+          [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
+           (datetime.time(10, 35), datetime.timedelta(0, 2700))])]
+
+    The next page is the period naming step.
 
         >>> view.next()
         <...ttwizard.NamedPeriodsStep...>

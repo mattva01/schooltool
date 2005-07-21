@@ -111,6 +111,7 @@ $Id$
 
 from zope.interface import Interface
 from zope.schema import TextLine, Text, getFieldNamesInOrder
+from zope.i18n import translate
 from zope.app import zapi
 from zope.app.form.utility import setUpWidgets
 from zope.app.form.utility import getWidgetsData
@@ -257,6 +258,7 @@ class CycleStep(ChoiceStep):
             return DayEntryStep(self.context, self.request)
 
     def update(self):
+        # TODO: dump this method
         success = ChoiceStep.update(self)
         session = self.getSessionData()
         if success and session['cycle'] == 'weekly':
@@ -315,7 +317,7 @@ class IndependentDaysStep(ChoiceStep):
             return SimpleSlotEntryStep(self.context, self.request)
         else:
             if session['cycle'] == 'weekly':
-                return SlotEntryStep(self.context, self.request)
+                return WeeklySlotEntryStep(self.context, self.request)
             else:
                 return SequentialModelStep(self.context, self.request)
 
@@ -333,7 +335,11 @@ class SequentialModelStep(ChoiceStep):
                ('cycle_day', _("Day in cycle"))]
 
     def next(self):
-        return SlotEntryStep(self.context, self.request)
+        session = self.getSessionData()
+        if session['time_model'] == 'weekly':
+            return WeeklySlotEntryStep(self.context, self.request)
+        else:
+            return RotatingSlotEntryStep(self.context, self.request)
 
 
 def parse_time_range_list(times):
@@ -402,10 +408,12 @@ class SimpleSlotEntryStep(FormStep):
         return NamedPeriodsStep(self.context, self.request)
 
 
-class SlotEntryStep(Step):
+class RotatingSlotEntryStep(Step):
     """Step for entering start and end times of slots in each day.
 
-    This step is taken when the start/end times are different for each day.
+    This step is taken when the start/end times are different for each day,
+    the rotating cycle is chosen in the 1st step and 'day in the cycle' is
+    chosen in the 6th step.
     """
 
     __call__ = ViewPageTemplateFile("templates/ttwizard_slottimes.pt")
@@ -414,13 +422,21 @@ class SlotEntryStep(Step):
                     " one slot (HH:MM - HH:MM) per line.")
 
     error = None
+    key = 'time_slots2'
 
     def dayNames(self):
         """Return the list of day names."""
         return self.getSessionData()['day_names']
 
+    def addDay(self, index, day_name, times):
+        """Temporarily store the slot times for a schoolday.
+
+        Requires the dict self.result to be initialized.
+        """
+        self.result[day_name] = times
+
     def update(self):
-        result = {}
+        self.result = {}
         for i, day_name in enumerate(self.dayNames()):
             s = self.request.form.get('times.%d' % i, '')
             try:
@@ -433,14 +449,36 @@ class SlotEntryStep(Step):
                 self.error = _("Please enter at least one time slot for $day.")
                 self.error.mapping['day'] = day_name
                 return False
-            result[day_name] = times
+            self.addDay(i, day_name, times)
 
         session = self.getSessionData()
-        session['time_slots2'] = result # TODO: rename to time_slots
+        session[self.key] = self.result
         return True
 
     def next(self):
         return NamedPeriodsStep(self.context, self.request)
+
+
+class WeeklySlotEntryStep(RotatingSlotEntryStep):
+    """Step for entering start and end times of slots in each day.
+
+    This step is taken when the start/end times are different for each day,
+    and the weekly cycle is chosen in the 1st or in the 6th step.
+    """
+
+    key = 'time_slots3'
+
+    def dayNames(self):
+        """Return the list of day names."""
+        return [translate(day_of_week_names[i], context=self.request)
+                for i in range(5)]
+
+    def addDay(self, index, day_name, times):
+        """Temporarily store the slot times for a schoolday.
+
+        Requires the dict self.result to be initialized.
+        """
+        self.result[index] = times
 
 
 class NamedPeriodsStep(ChoiceStep):
