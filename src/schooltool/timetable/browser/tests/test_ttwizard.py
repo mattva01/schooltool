@@ -728,6 +728,7 @@ def doctest_NamedPeriodsStep():
 
     """
 
+
 def doctest_PeriodNamesStep():
     r"""
     Unit test for PeriodNamesStep
@@ -807,6 +808,7 @@ def doctest_PeriodNamesStep():
         <...ttwizard.PeriodOrderSimple...>
 
     """
+
 
 def doctest_PeriodOrderSimple():
     """Unit test for PeriodOrderSimple view
@@ -1196,15 +1198,15 @@ def doctest_TimetableSchemaWizard_rememberLastStep():
 
 
 def test_suite():
-    suite = unittest.TestSuite()
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
                    doctest.NORMALIZE_WHITESPACE |
                    doctest.REPORT_ONLY_FIRST_FAILURE)
-    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
-                                       optionflags=optionflags))
-    module_name = 'schooltool.timetable.browser.ttwizard'
-    suite.addTest(doctest.DocTestSuite(module_name, optionflags=optionflags))
-    return suite
+    return unittest.TestSuite([
+                doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
+                                     optionflags=optionflags),
+                doctest.DocTestSuite('schooltool.timetable.browser.ttwizard',
+                                     optionflags=optionflags),
+           ])
 
 
 if __name__ == '__main__':

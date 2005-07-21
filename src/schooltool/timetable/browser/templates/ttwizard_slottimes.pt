@@ -23,7 +23,7 @@
       <td tal:repeat="day_name view/dayNames">
         <textarea tal:define="name string:times.${repeat/day_name/index}"
                 tal:attributes="name name"
-                tal:content="python:name in request and request[name] or None"
+                tal:content="python:request.get(name)"
                 rows="12" cols="15">
         </textarea>
       </td>
