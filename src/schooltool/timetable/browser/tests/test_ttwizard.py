@@ -1111,6 +1111,9 @@ def doctest_FinalStep():
         >>> data = view.getSessionData()
         >>> data['title'] = u'Sample Schema'
         >>> data['cycle'] = 'weekly'
+        >>> data['day_names'] = ['Monday', 'Tuesday', 'Wednesday',
+        ...                      'Thursday', 'Friday']
+        >>> data['similar_days'] = True
         >>> data['time_slots'] = [[(time(9, 30), timedelta(minutes=55)),
         ...                        (time(10, 30), timedelta(minutes=55))]]
         >>> data['named_periods'] = False
