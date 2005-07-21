@@ -481,10 +481,10 @@ def doctest_SlotEntryStep():
         >>> from schooltool.timetable.browser.ttwizard import getSessionData
         >>> context = app['ttschemas']
         >>> request = TestRequest()
-        >>> getSessionData(request)['day_names'] = ['Oneday', 'Twoday']
         >>> view = SlotEntryStep(context, request)
+        >>> view.getSessionData()['day_names'] = ['Oneday', 'Twoday']
 
-        >>> view.day_names
+        >>> view.dayNames()
         ['Oneday', 'Twoday']
 
     At first we get a table with one empty row of input fields:

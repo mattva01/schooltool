@@ -133,9 +133,9 @@ from schooltool.timetable import WeeklyTimetableModel
 from schooltool.timetable import SequentialDaysTimetableModel
 
 
-def getSessionData(request):
+def getSessionData(view):
     """Return the data container stored in the session."""
-    return ISession(request)['schooltool.ttwizard']
+    return ISession(view.request)['schooltool.ttwizard']
 
 
 #
@@ -159,8 +159,7 @@ class Step(BrowserView):
 
     __used_for__ = ITimetableSchemaContainer
 
-    def getSessionData(self):
-        return getSessionData(self.request)
+    getSessionData = getSessionData
 
 
 class ChoiceStep(Step):
@@ -392,19 +391,18 @@ class SlotEntryStep(Step):
 
     __call__ = ViewPageTemplateFile("templates/ttwizard_slottimes.pt")
 
-    description = _("Enter start and end times for each slot,"
+    description = _("Enter start and end times for each slot on each day,"
                     " one slot (HH:MM - HH:MM) per line.")
 
     error = None
 
-    def __init__(self, context, request):
-        # TODO: get rid of this, restore old getSessionData.
-        Step.__init__(self, context, request)
-        self.day_names = self.getSessionData()['day_names']
+    def dayNames(self):
+        """Return the list of day names."""
+        return self.getSessionData()['day_names']
 
     def update(self):
         result = {}
-        for i, day_name in enumerate(self.day_names):
+        for i, day_name in enumerate(self.dayNames()):
             s = self.request.form.get('times.%d' % i, '')
             try:
                 times = parse_time_range_list(s)
@@ -549,8 +547,7 @@ class TimetableSchemaWizard(BrowserView):
 
     __used_for__ = ITimetableSchemaContainer
 
-    def getSessionData(self):
-        return getSessionData(self.request)
+    getSessionData = getSessionData
 
     def getLastStep(self):
         session = self.getSessionData()

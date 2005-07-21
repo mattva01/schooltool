@@ -16,11 +16,11 @@
 
   <table>
     <tr>
-      <th tal:repeat="day_name view/day_names"
+      <th tal:repeat="day_name view/dayNames"
           tal:content="day_name" />
     </tr>
     <tr>
-      <td tal:repeat="day_name view/day_names">
+      <td tal:repeat="day_name view/dayNames">
         <textarea tal:define="name string:times.${repeat/day_name/index}"
                 tal:attributes="name name"
                 tal:content="python:name in request and request[name] or None"
