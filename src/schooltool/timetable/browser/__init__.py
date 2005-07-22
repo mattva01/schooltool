@@ -890,7 +890,7 @@ class SimpleTimetableSchemaAdd(BrowserView):
         except WidgetsError:
             return []
 
-        result = [] 
+        result = []
         for nr in range(1, self._nrperiods + 1):
             pname = 'period_name_%s' % nr
             pstart = 'period_start_%s' % nr
