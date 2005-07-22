@@ -1700,118 +1700,124 @@ Let's say they are different.
   ...
   <BLANKLINE>
   ...
-  <p>Please put the periods in order for each day:</p>
-  <table>
-    <tr>
-      <th>A</th>
-      <th>B</th>
-      <th>C</th>
-    </tr>
-    <tr>
-      <td>
-        <select name="period_0_0">
-          <option selected="selected">Period_A</option>
-          <option>Period_B</option>
-          <option>Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_1_0">
-          <option selected="selected">Period_A</option>
-          <option>Period_B</option>
-          <option>Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_2_0">
-          <option selected="selected">Period_A</option>
-          <option>Period_B</option>
-          <option>Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <select name="period_0_1">
-          <option>Period_A</option>
-          <option selected="selected">Period_B</option>
-          <option>Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_1_1">
-          <option>Period_A</option>
-          <option selected="selected">Period_B</option>
-          <option>Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_2_1">
-          <option>Period_A</option>
-          <option selected="selected">Period_B</option>
-          <option>Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <select name="period_0_2">
-          <option>Period_A</option>
-          <option>Period_B</option>
-          <option selected="selected">Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_1_2">
-          <option>Period_A</option>
-          <option>Period_B</option>
-          <option selected="selected">Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_2_2">
-          <option>Period_A</option>
-          <option>Period_B</option>
-          <option selected="selected">Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <select name="period_0_3">
-          <option>Period_A</option>
-          <option>Period_B</option>
-          <option>Period_C</option>
-          <option selected="selected">Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_1_3">
-          <option>Period_A</option>
-          <option>Period_B</option>
-          <option>Period_C</option>
-          <option selected="selected">Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_2_3">
-          <option>Period_A</option>
-          <option>Period_B</option>
-          <option>Period_C</option>
-          <option selected="selected">Period_D</option>
-        </select>
-      </td>
-    </tr>
-  </table>
+    <p>Please put the periods in order for each day:</p>
+    <table>
+      <tr>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+      </tr>
+      <tr>
+        <td>
+          <select name="period_0_0">
+            <option selected="selected">Period_A</option>
+            <option>Period_B</option>
+            <option>Period_C</option>
+            <option>Period_D</option>
+          </select>
+        </td>
+        <td>
+          <select name="period_1_0">
+            <option selected="selected">Period_A</option>
+            <option>Period_B</option>
+            <option>Period_C</option>
+            <option>Period_D</option>
+          </select>
+        </td>
+        ...
+        <td>
+          <select name="period_4_0">
+            <option selected="selected">Period_A</option>
+            <option>Period_B</option>
+            <option>Period_C</option>
+            <option>Period_D</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <select name="period_0_1">
+            <option>Period_A</option>
+            <option selected="selected">Period_B</option>
+            <option>Period_C</option>
+            <option>Period_D</option>
+          </select>
+        </td>
+        <td>
+          <select name="period_1_1">
+            <option>Period_A</option>
+            <option selected="selected">Period_B</option>
+            <option>Period_C</option>
+            <option>Period_D</option>
+          </select>
+        </td>
+        ...
+        <td>
+          <select name="period_4_1">
+            <option>Period_A</option>
+            <option selected="selected">Period_B</option>
+            <option>Period_C</option>
+            <option>Period_D</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <select name="period_0_2">
+            <option>Period_A</option>
+            <option>Period_B</option>
+            <option selected="selected">Period_C</option>
+            <option>Period_D</option>
+          </select>
+        </td>
+        <td>
+          <select name="period_1_2">
+            <option>Period_A</option>
+            <option>Period_B</option>
+            <option selected="selected">Period_C</option>
+            <option>Period_D</option>
+          </select>
+        </td>
+        ...
+        <td>
+          <select name="period_4_2">
+            <option>Period_A</option>
+            <option>Period_B</option>
+            <option selected="selected">Period_C</option>
+            <option>Period_D</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <select name="period_0_3">
+            <option>Period_A</option>
+            <option>Period_B</option>
+            <option>Period_C</option>
+            <option selected="selected">Period_D</option>
+          </select>
+        </td>
+        <td>
+          <select name="period_1_3">
+            <option>Period_A</option>
+            <option>Period_B</option>
+            <option>Period_C</option>
+            <option selected="selected">Period_D</option>
+          </select>
+        </td>
+        ...
+        <td>
+          <select name="period_4_3">
+            <option>Period_A</option>
+            <option>Period_B</option>
+            <option>Period_C</option>
+            <option selected="selected">Period_D</option>
+          </select>
+        </td>
+      </tr>
+    </table>
   ...
 
 We can rearrange them:
@@ -1825,6 +1831,10 @@ We can rearrange them:
   ... period_0_1=Period_C&period_1_1=Period_B&period_2_1=Period_B&\
   ... period_0_2=Period_B&period_1_2=Period_C&period_2_2=Period_C&\
   ... period_0_3=Period_D&period_1_3=Period_A&period_2_3=Period_D&\
+  ... period_3_0=Period_B&period_4_0=Period_D&\
+  ... period_3_1=Period_C&period_4_1=Period_C&\
+  ... period_3_2=Period_D&period_4_2=Period_B&\
+  ... period_3_3=Period_A&period_4_3=Period_A&\
   ... NEXT=Next""", handle_errors=False)
   HTTP/1.1 303 See Other
   ...
@@ -1862,6 +1872,20 @@ The schema is now created:
         <period duration="55" id="Period_D" tstart="12:30"/>
       </daytemplate>
       <daytemplate>
+        <used when="Thursday"/>
+        <period duration="55" id="Period_A" tstart="12:30"/>
+        <period duration="55" id="Period_B" tstart="09:30"/>
+        <period duration="55" id="Period_C" tstart="10:30"/>
+        <period duration="55" id="Period_D" tstart="11:30"/>
+      </daytemplate>
+      <daytemplate>
+        <used when="Friday"/>
+        <period duration="50" id="Period_A" tstart="12:15"/>
+        <period duration="50" id="Period_B" tstart="11:20"/>
+        <period duration="50" id="Period_C" tstart="10:25"/>
+        <period duration="50" id="Period_D" tstart="09:30"/>
+      </daytemplate>
+      <daytemplate>
         <used when="Tuesday"/>
         <period duration="55" id="Period_A" tstart="12:30"/>
         <period duration="55" id="Period_B" tstart="10:30"/>
@@ -1876,15 +1900,15 @@ The schema is now created:
       <period id="Period_D"/>
     </day>
     <day id="B">
-      <period id="Period_D"/>
-      <period id="Period_B"/>
-      <period id="Period_C"/>
       <period id="Period_A"/>
+      <period id="Period_C"/>
+      <period id="Period_B"/>
+      <period id="Period_D"/>
     </day>
     <day id="C">
       <period id="Period_A"/>
-      <period id="Period_B"/>
       <period id="Period_C"/>
+      <period id="Period_B"/>
       <period id="Period_D"/>
     </day>
   </timetable>

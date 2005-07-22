@@ -583,16 +583,14 @@ class PeriodSequenceSameStep(ChoiceStep):
             return PeriodOrderComplex(self.context, self.request)
 
 
-
 class PeriodOrderSimple(Step):
     """Step to put periods in order if all days are the same."""
 
-    template = ViewPageTemplateFile('templates/ttwizard_period_order1.pt')
-    description = _('Please put the periods in order:')
-    error = None
+    __call__ = ViewPageTemplateFile('templates/ttwizard_period_order1.pt')
 
-    def __call__(self):
-        return self.template()
+    description = _('Please put the periods in order:')
+
+    error = None
 
     def periods(self):
         return self.getSessionData()['period_names']
@@ -635,18 +633,23 @@ class PeriodOrderSimple(Step):
 class PeriodOrderComplex(Step):
     """Step to put periods in order if order is different on different days"""
 
-    template = ViewPageTemplateFile('templates/ttwizard_period_order2.pt')
-    description = _('Please put the periods in order for each day:')
-    error = None
+    __call__ = ViewPageTemplateFile('templates/ttwizard_period_order2.pt')
 
-    def __call__(self):
-        return self.template()
+    description = _('Please put the periods in order for each day:')
+
+    error = None
 
     def periods(self):
         return self.getSessionData()['period_names']
 
     def days(self):
-        return self.getSessionData()['day_names']
+        session = self.getSessionData()
+        if (session['cycle'] == 'rotating' and
+            session.get('time_model') == 'weekly'):
+            return [translate(day_of_week_names[i], context=self.request)
+                    for i in range(5)]
+        else:
+            return session['day_names']
 
     def numSlots(self):
         return [len(day) for day in self.getSessionData()['time_slots']]
@@ -744,7 +747,8 @@ class FinalStep(Step):
     modelFactory = staticmethod(modelFactory)
 
     def periodNames(named_periods, periods_order, time_slots):
-        """Return names of periods for each day in order.
+        """Return names of periods for each day in order, in the time slot
+        cycle.
 
         `named_periods` indicates whether periods are named (as opposed to
         being designated by time).
@@ -821,9 +825,19 @@ class FinalStep(Step):
             default = day_templates[None]
             day_templates = dict([(day_id, day_templates.get(idx, default))
                                   for idx, day_id in enumerate(day_ids)])
+        if model_factory is SequentialDaysTimetableModel:
+            # It would be better to avoid comparing model factories
+            period_names = periods_order[0]
+            for day in periods_order[1:]:
+                for name in day:
+                    if name not in period_names:
+                        period_names.append(name)
+            periods_in_days = [period_names] * len(day_ids)
+        else:
+            periods_in_days = periods_order
         model = model_factory(day_ids, day_templates)
         ttschema = TimetableSchema(day_ids, title=title, model=model)
-        for day_id, periods in zip(day_ids, periods_order):
+        for day_id, periods in zip(day_ids, periods_in_days):
             ttschema[day_id] = TimetableSchemaDay(periods)
         return ttschema
 
