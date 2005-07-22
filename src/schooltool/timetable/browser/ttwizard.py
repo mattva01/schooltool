@@ -766,18 +766,21 @@ class FinalStep(Step):
             >>> periods = [(time(9, 0), timedelta(minutes=50)),
             ...            (time(12, 35), timedelta(minutes=50)),
             ...            (time(14, 15), timedelta(minutes=55))]
-            >>> FinalStep.periodNames(False, None, [periods] * 4)
+            >>> periods2 = [(time(9, 10), timedelta(minutes=50)),
+            ...             (time(12, 35), timedelta(minutes=50))]
+            >>> FinalStep.periodNames(False, None, [periods] * 3 + [periods2])
             [['09:00-09:50', '12:35-13:25', '14:15-15:10'],
              ['09:00-09:50', '12:35-13:25', '14:15-15:10'],
              ['09:00-09:50', '12:35-13:25', '14:15-15:10'],
-             ['09:00-09:50', '12:35-13:25', '14:15-15:10']]
+             ['09:10-10:00', '12:35-13:25']]
 
         """
         if named_periods:
             return periods_order
         else:
             return [[format_time_range(tstart, duration)
-                    for tstart, duration in time_slots[0]]] * len(time_slots)
+                     for tstart, duration in slots]
+                    for slots in time_slots]
 
     periodNames = staticmethod(periodNames)
 
