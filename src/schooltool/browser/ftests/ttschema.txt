@@ -177,6 +177,23 @@ be the default one:
       </div>
   ...
 
+
+The unauthenticated user can also, surprisingly, see what is the
+default schema:
+
+  >>> print http(r"""
+  ... GET /frogpond/ttschemas HTTP/1.1
+  ... """, handle_errors=False)
+  HTTP/1.1 200 Ok
+  ...
+          <a href="http://localhost/frogpond/ttschemas/weekly">weekly</a>
+  ...
+          <div class="row">
+            <label for="ttschema">Default Timetable Schema:</label>
+            <a href="http://localhost/frogpond/ttschemas/weekly">weekly</a>
+          </div>
+  ...
+
 Lets add one more schema:
 
   >>> print http(r"""

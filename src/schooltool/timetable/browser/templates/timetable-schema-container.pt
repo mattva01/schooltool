@@ -25,8 +25,9 @@
       <label i18n:translate="" for="ttschema">Default Timetable Schema:</label>
       <tal:block tal:condition="not:canModify">
         <a tal:condition="default_id"
-           tal:content="context/getDefault/title"
-           tal:attributes="href context/getDefault/@@absolute_url">(Default Schema)</a>
+           tal:define="default context/getDefault"
+           tal:content="default/title"
+           tal:attributes="href default/@@absolute_url">(Default Schema)</a>
         <span tal:condition="not:default_id" i18n:translate="">Not Selected</span>
       </tal:block>
       <form tal:condition="canModify"
