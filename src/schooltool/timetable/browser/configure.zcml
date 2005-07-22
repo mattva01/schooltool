@@ -100,7 +100,7 @@
 
   <page
       name="emergency.html"
-      for="schooltool.timetable.interfaces.ITimetableSchema"
+      for="schooltool.timetable.interfaces.ITerm"
       class=".EmergencyDayView"
       permission="schoolbell.create"
       menu="schoolbell_actions"

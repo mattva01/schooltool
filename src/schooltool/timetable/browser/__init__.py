@@ -1330,6 +1330,8 @@ class EmergencyDayView(BrowserView):
     and the days immediately after the term.
     """
 
+    __used_for__ = ITerm
+
     template = None
     date_template = ViewPageTemplateFile('templates/emergency_select.pt')
     replacement_template = ViewPageTemplateFile('templates/emergency2.pt')
@@ -1341,11 +1343,11 @@ class EmergencyDayView(BrowserView):
     def replacements(self):
         """Return all non-schooldays in term plus 3 days after the term."""
         result = []
-        for date in self.term:
+        for date in self.context:
             if date > self.date:
-                if not self.term.isSchoolday(date):
+                if not self.context.isSchoolday(date):
                     result.append(date)
-        last = self.term.last
+        last = self.context.last
         day = datetime.timedelta(1)
         result.append(last + day)
         result.append(last + 2 * day)
@@ -1365,13 +1367,11 @@ class EmergencyDayView(BrowserView):
                 self.error = _("The date you entered is invalid."
                                "  Please use the YYYY-MM-DD format.")
                 return
-
-            self.term = getTermForDate(self.date)
-            if self.term is None:
-                self.error = _("The date you entered does not"
-                               " belong to any term.")
+            if not self.date in self.context:
+                self.error = _("The date you entered does not belong to"
+                               " this term.")
                 return
-            if not self.term.isSchoolday(self.date):
+            if not self.context.isSchoolday(self.date):
                 self.error = _("The date you entered is not a schoolday.")
                 return
 
@@ -1384,17 +1384,21 @@ class EmergencyDayView(BrowserView):
                 return
 
         if self.date and self.replacement:
-            if self.term.last < self.replacement:
-                self.term.last = self.replacement
-            assert not self.term.isSchoolday(self.replacement)
-            assert self.term.isSchoolday(self.date)
-            self.term.add(self.replacement)
-            model = self.context.model
-            exceptionDays = removeSecurityProxy(model.exceptionDays)
-            exceptionDayIds = removeSecurityProxy(model.exceptionDayIds)
-            exceptionDays[self.date] = SchooldayTemplate()
-            day_id = model.getDayId(self.term, self.date)
-            exceptionDayIds[self.replacement] = removeSecurityProxy(day_id)
+            if self.context.last < self.replacement:
+                self.context.last = self.replacement
+            assert not self.context.isSchoolday(self.replacement)
+            assert self.context.isSchoolday(self.date)
+            self.context.add(self.replacement)
+
+            # Update all schemas
+            ttschemas = getSchoolToolApplication()['ttschemas']
+            for schema in ttschemas.values():
+                model = schema.model
+                exceptionDays = removeSecurityProxy(model.exceptionDays)
+                exceptionDayIds = removeSecurityProxy(model.exceptionDayIds)
+                exceptionDays[self.date] = SchooldayTemplate()
+                day_id = model.getDayId(self.context, self.date)
+                exceptionDayIds[self.replacement] = removeSecurityProxy(day_id)
 
             # Post calendar events to schoolwide calendar
             calendar = getSchoolToolApplication().calendar

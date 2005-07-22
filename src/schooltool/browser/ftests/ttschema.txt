@@ -434,24 +434,10 @@ If we look at the form again, we see the times have changed:
 Emergency Days
 --------------
 
-Let's make 'other' the default timetable schema:
-
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... ttschema=other&UPDATE_SUBMIT=Change
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <option selected="selected" value="other">other</option>
-  ...
-
 Now let's make 2005-07-07 an emergency day:
 
   >>> print http(r"""
-  ... POST /frogpond/ttschemas/other/@@emergency.html HTTP/1.1
+  ... POST /frogpond/terms/2005-summer/@@emergency.html HTTP/1.1
   ... Authorization: Basic mgr:mgrpw
   ... Content-Type: application/x-www-form-urlencoded
   ...
@@ -462,7 +448,7 @@ Now let's make 2005-07-07 an emergency day:
   <BLANKLINE>
   ...
   <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/other/@@emergency.html">
+        action="http://localhost/frogpond/terms/2005-summer/@@emergency.html">
   <BLANKLINE>
   <BLANKLINE>
   <BLANKLINE>
@@ -510,7 +496,7 @@ Now let's make 2005-07-07 an emergency day:
 When we select both dates, the replacement day is registered:
 
   >>> print http("""
-  ... POST /frogpond/ttschemas/other/@@emergency.html HTTP/1.1
+  ... POST /frogpond/terms/2005-summer/@@emergency.html HTTP/1.1
   ... Authorization: Basic mgr:mgrpw
   ... Content-Type: application/x-www-form-urlencoded
   ...

@@ -2588,8 +2588,13 @@ def doctest_EmergencyDayView():
         ...                          'Third',
         ...                          'Fourth'])
         >>> app['ttschemas']['usual'] = ttschema
+        >>> ttschema1 = createSchema(['Day 1', 'Day 2', 'Day 3'],
+        ...                          ['First', 'Second', 'Third', 'Fourth'],
+        ...                          ['First', 'Second', 'Third', 'Fourth'],
+        ...                          ['First', 'Second', 'Third', 'Fourth'])
+        >>> app['ttschemas']['unusual'] = ttschema1
 
-    The schema has a model attribute:
+    The schemas have a model attribute:
 
         >>> from schooltool.timetable import SequentialDaysTimetableModel
         >>> default = createDayTemplate([('First', 9, 0, 45),
@@ -2598,6 +2603,9 @@ def doctest_EmergencyDayView():
         ...                              ('Fourth', 12, 0, 45)])
         >>> ttschema.model = SequentialDaysTimetableModel(['Day 1', 'Day 2'],
         ...                                               {None: default})
+        >>> ttschema1.model = SequentialDaysTimetableModel(
+        ...     ['Day 1', 'Day 2', 'Day 3'],
+        ...     {None: default})
 
     We will need a term:
 
@@ -2612,7 +2620,7 @@ def doctest_EmergencyDayView():
 
         >>> from schooltool.timetable.browser import EmergencyDayView
         >>> request = TestRequest()
-        >>> view = EmergencyDayView(ttschema, request)
+        >>> view = EmergencyDayView(term, request)
         >>> print view()
         <BLANKLINE>
         ...
@@ -2637,7 +2645,7 @@ def doctest_EmergencyDayView():
     When we enter the emergency date, we get to choose the replacement day:
 
         >>> request = TestRequest(form={'date': '2005-07-07'})
-        >>> view = EmergencyDayView(ttschema, request)
+        >>> view = EmergencyDayView(term, request)
         >>> view.update()
         >>> view.date
         datetime.date(2005, 7, 7)
@@ -2684,27 +2692,34 @@ def doctest_EmergencyDayView():
           </div>
           ...
 
-    The original day id of the emergency day was:
+    The original day ids of the emergency day were:
 
-         >>> def getDayId(date):
+         >>> def getDayId(date, ttschema):
          ...     return ttschema.model._periodsInDay(term, ttschema, date)[0]
-         >>> getDayId(datetime.date(2005, 7, 7))
+         >>> getDayId(datetime.date(2005, 7, 7), ttschema)
+         'Day 2'
+         >>> getDayId(datetime.date(2005, 7, 7), ttschema1)
          'Day 2'
 
     The ids of some other days before and after the planned
     replacement day:
 
-         >>> getDayId(datetime.date(2005, 7, 8))
+         >>> getDayId(datetime.date(2005, 7, 8), ttschema)
          'Day 1'
-         >>> getDayId(datetime.date(2005, 7, 11))
+         >>> getDayId(datetime.date(2005, 7, 11), ttschema)
          'Day 1'
+
+         >>> getDayId(datetime.date(2005, 7, 8), ttschema1)
+         'Day 3'
+         >>> getDayId(datetime.date(2005, 7, 11), ttschema1)
+         'Day 2'
 
     If the user selects a replacement day and calls the view, several
     things happen:
 
         >>> request = TestRequest(form={'date': '2005-07-07',
         ...                             'replacement': '2005-07-10'})
-        >>> view = EmergencyDayView(ttschema, request)
+        >>> view = EmergencyDayView(term, request)
         >>> result = view()
         >>> view.date
         datetime.date(2005, 7, 7)
@@ -2716,7 +2731,7 @@ def doctest_EmergencyDayView():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeader('location')
-        'http://127.0.0.1/ttschemas/usual'
+        'http://127.0.0.1/terms/2005-summer'
 
     The replacement day gets added to the calendar, and the emergency
     day gets an empty day template:
@@ -2728,19 +2743,29 @@ def doctest_EmergencyDayView():
         >>> ttschema.model.periodsInDay(term, ttschema,
         ...                             datetime.date(2005, 7, 7))
         []
+        >>> ttschema1.model.periodsInDay(term, ttschema1,
+        ...                              datetime.date(2005, 7, 7))
+        []
 
     The day id of the replacement day is the same as that of the
     emergency day:
 
-         >>> getDayId(datetime.date(2005, 7, 7))
+         >>> getDayId(datetime.date(2005, 7, 7), ttschema)
+         'Day 2'
+         >>> getDayId(datetime.date(2005, 7, 7), ttschema1)
          'Day 2'
 
     Day ids of the days before and after the replacement day are unchanged:
 
-         >>> getDayId(datetime.date(2005, 7, 8))
+         >>> getDayId(datetime.date(2005, 7, 8), ttschema)
          'Day 1'
-         >>> getDayId(datetime.date(2005, 7, 11))
+         >>> getDayId(datetime.date(2005, 7, 11), ttschema)
          'Day 1'
+
+         >>> getDayId(datetime.date(2005, 7, 8), ttschema1)
+         'Day 3'
+         >>> getDayId(datetime.date(2005, 7, 11), ttschema1)
+         'Day 2'
 
     All day events get posted to the schoolwide calendar on both days,
     notifying of the shift:
@@ -2762,10 +2787,12 @@ def doctest_EmergencyDayView():
 
         >>> request = TestRequest(form={'date': '2005-07-08',
         ...                             'replacement': '2005-09-03'})
-        >>> view = EmergencyDayView(ttschema, request)
+        >>> view = EmergencyDayView(term, request)
         >>> result = view()
-        >>> getDayId(datetime.date(2005, 9, 3))
+        >>> getDayId(datetime.date(2005, 9, 3), ttschema)
         'Day 1'
+        >>> getDayId(datetime.date(2005, 9, 3), ttschema1)
+        'Day 3'
         >>> term.last
         datetime.date(2005, 9, 3)
 
@@ -2789,7 +2816,7 @@ def doctest_EmergencyDayView():
         >>> request = TestRequest(form={'date': '2005-07-09',
         ...                             'replacement': '2005-09-04',
         ...                             'CANCEL': 'Cancel'})
-        >>> view = EmergencyDayView(ttschema, request)
+        >>> view = EmergencyDayView(term, request)
         >>> result = view()
         >>> ttschema.model.periodsInDay(term, ttschema,
         ...                             datetime.date(2005, 7, 9))
@@ -2803,7 +2830,7 @@ def doctest_EmergencyDayView():
         >>> request.response.getStatus()
         302
         >>> request.response.getHeader('location')
-        'http://127.0.0.1/ttschemas/usual'
+        'http://127.0.0.1/terms/2005-summer'
 
     ======
     Errors
@@ -2812,7 +2839,7 @@ def doctest_EmergencyDayView():
     If date is invalid, the user sees a nice error:
 
         >>> request = TestRequest(form={'date': '07/09/05'})
-        >>> view = EmergencyDayView(ttschema, request)
+        >>> view = EmergencyDayView(term, request)
         >>> print view()
         <BLANKLINE>
         ...
@@ -2824,18 +2851,18 @@ def doctest_EmergencyDayView():
     If the date is not in term, the user sees the appropriate message:
 
         >>> request = TestRequest(form={'date': '1999-12-31'})
-        >>> view = EmergencyDayView(ttschema, request)
+        >>> view = EmergencyDayView(term, request)
         >>> print view()
         <BLANKLINE>
         ...
         <div class="error">The date you entered does not belong
-        to any term.</div>
+        to this term.</div>
         ...
 
     If the date is not a schoolday, we tell that:
 
         >>> request = TestRequest(form={'date': '2005-07-17'})
-        >>> view = EmergencyDayView(ttschema, request)
+        >>> view = EmergencyDayView(term, request)
         >>> print view()
         <BLANKLINE>
         ...
@@ -2846,7 +2873,7 @@ def doctest_EmergencyDayView():
 
         >>> request = TestRequest(form={'date': '2005-07-19',
         ...                             'replacement': 'whatever'})
-        >>> view = EmergencyDayView(ttschema, request)
+        >>> view = EmergencyDayView(term, request)
         >>> print view()
         <BLANKLINE>
         ...
