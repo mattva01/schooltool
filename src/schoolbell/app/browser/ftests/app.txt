@@ -160,7 +160,7 @@ We can click on it and get a form:
       </form>
     ...
 
-After submiting the form:
+After submitting the form:
 
     >>> print http(r"""
     ... POST /frogpond/persons/add.html HTTP/1.1
@@ -391,7 +391,7 @@ We can click on it and get a form:
       </form>
     ...
 
-After submiting the form
+After submitting the form
 
     >>> print http(r"""
     ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
@@ -558,7 +558,7 @@ We can click on it and get a form:
       </form>
     ...
 
-After submiting the form
+After submitting the form
 
     >>> print http(r"""
     ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
