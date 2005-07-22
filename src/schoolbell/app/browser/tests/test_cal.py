@@ -3307,13 +3307,27 @@ def doctest_CalendarViewBase():
         ...
         ValueError: quarterly
 
-    pdfURL generates links to PDFs.  It should only be called on subclasses
-    which have cal_type set, so we will temporarily do that.
+    pdfURL generates links to PDFs.  It only works when calendar generation
+    is enabled:
+
+        >>> from schoolbell.app.browser import pdfcal
+        >>> real_pdfcal_disabled = pdfcal.disabled
+
+        >>> pdfcal.disabled = True
+        >>> print view.pdfURL()
+        None
+
+        >>> pdfcal.disabled = False
+
+    It should only be called on subclasses which have cal_type set, so we
+    will temporarily do that.
 
         >>> view.cal_type = 'weekly'
         >>> view.pdfURL()
         'http://127.0.0.1/calendar/2005-w05.pdf'
         >>> del view.cal_type
+
+        >>> pdfcal.disabled = real_pdfcal_disabled 
 
     update() sets the cursor for the view.  If it does not find a date in
     request or the session, it defaults to the current day:
