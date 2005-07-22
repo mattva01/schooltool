@@ -2292,7 +2292,9 @@ def doctest_SpecialDayView():
         >>> exception = ttschema.model.exceptionDays[datetime.date(2005, 7, 5)]
         >>> exception
         <schooltool.timetable.SchooldayTemplate object at ...>
-        >>> for period in exception:
+        >>> periods = list(exception)
+        >>> periods.sort(lambda x, y: cmp(x.tstart, y.tstart))
+        >>> for period in periods:
         ...     print period.title, period.tstart, period.duration
         First 08:00:00 0:30:00
         Second 08:45:00 0:30:00
