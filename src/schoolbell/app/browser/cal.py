@@ -27,6 +27,7 @@ import urllib
 import calendar
 import sys
 
+import transaction
 from zope.event import notify
 from zope.app import zapi
 from zope.app.event.objectevent import ObjectModifiedEvent
@@ -1716,7 +1717,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
             except WidgetsError, errors:
                 self.errors = errors
                 status = _("An error occured.")
-                get_transaction().abort()
+                transaction.abort()
             else:
                 if changed:
                     formatter = self.request.locale.dates.getFormatter(
