@@ -215,34 +215,34 @@ We can examine its composition more easily by invoking the RESTive view.
       </daytemplate>
     </model>
     <day id="Monday">
-      <period id="09:30-10:25"> </period>
-      <period id="10:30-11:25"> </period>
-      <period id="11:30-12:25"> </period>
-      <period id="12:30-13:25"> </period>
+      <period id="09:30-10:25"/>
+      <period id="10:30-11:25"/>
+      <period id="11:30-12:25"/>
+      <period id="12:30-13:25"/>
     </day>
     <day id="Tuesday">
-      <period id="09:30-10:25"> </period>
-      <period id="10:30-11:25"> </period>
-      <period id="11:30-12:25"> </period>
-      <period id="12:30-13:25"> </period>
+      <period id="09:30-10:25"/>
+      <period id="10:30-11:25"/>
+      <period id="11:30-12:25"/>
+      <period id="12:30-13:25"/>
     </day>
     <day id="Wednesday">
-      <period id="09:30-10:25"> </period>
-      <period id="10:30-11:25"> </period>
-      <period id="11:30-12:25"> </period>
-      <period id="12:30-13:25"> </period>
+      <period id="09:30-10:25"/>
+      <period id="10:30-11:25"/>
+      <period id="11:30-12:25"/>
+      <period id="12:30-13:25"/>
     </day>
     <day id="Thursday">
-      <period id="09:30-10:25"> </period>
-      <period id="10:30-11:25"> </period>
-      <period id="11:30-12:25"> </period>
-      <period id="12:30-13:25"> </period>
+      <period id="09:30-10:25"/>
+      <period id="10:30-11:25"/>
+      <period id="11:30-12:25"/>
+      <period id="12:30-13:25"/>
     </day>
     <day id="Friday">
-      <period id="09:30-10:25"> </period>
-      <period id="10:30-11:25"> </period>
-      <period id="11:30-12:25"> </period>
-      <period id="12:30-13:25"> </period>
+      <period id="09:30-10:25"/>
+      <period id="10:30-11:25"/>
+      <period id="11:30-12:25"/>
+      <period id="12:30-13:25"/>
     </day>
   </timetable>
 
@@ -552,34 +552,22 @@ We can examine its composition more easily by invoking the RESTive view.
       </daytemplate>
     </model>
     <day id="A">
-      <period id="Period_A">
-      </period>
-      <period id="Period_C">
-      </period>
-      <period id="Period_B">
-      </period>
-      <period id="Period_D">
-      </period>
+      <period id="Period_A"/>
+      <period id="Period_C"/>
+      <period id="Period_B"/>
+      <period id="Period_D"/>
     </day>
     <day id="B">
-      <period id="Period_A">
-      </period>
-      <period id="Period_C">
-      </period>
-      <period id="Period_B">
-      </period>
-      <period id="Period_D">
-      </period>
+      <period id="Period_A"/>
+      <period id="Period_C"/>
+      <period id="Period_B"/>
+      <period id="Period_D"/>
     </day>
     <day id="C">
-      <period id="Period_A">
-      </period>
-      <period id="Period_C">
-      </period>
-      <period id="Period_B">
-      </period>
-      <period id="Period_D">
-      </period>
+      <period id="Period_A"/>
+      <period id="Period_C"/>
+      <period id="Period_B"/>
+      <period id="Period_D"/>
     </day>
   </timetable>
 
@@ -980,34 +968,22 @@ The schema is now created:
       </daytemplate>
     </model>
     <day id="A">
-      <period id="Period_A">
-      </period>
-      <period id="Period_C">
-      </period>
-      <period id="Period_B">
-      </period>
-      <period id="Period_D">
-      </period>
+      <period id="Period_A"/>
+      <period id="Period_C"/>
+      <period id="Period_B"/>
+      <period id="Period_D"/>
     </day>
     <day id="B">
-      <period id="Period_D">
-      </period>
-      <period id="Period_B">
-      </period>
-      <period id="Period_C">
-      </period>
-      <period id="Period_A">
-      </period>
+      <period id="Period_D"/>
+      <period id="Period_B"/>
+      <period id="Period_C"/>
+      <period id="Period_A"/>
     </day>
     <day id="C">
-      <period id="Period_A">
-      </period>
-      <period id="Period_B">
-      </period>
-      <period id="Period_C">
-      </period>
-      <period id="Period_D">
-      </period>
+      <period id="Period_A"/>
+      <period id="Period_B"/>
+      <period id="Period_C"/>
+      <period id="Period_D"/>
     </day>
   </timetable>
 
@@ -1418,33 +1394,33 @@ The schema is now created:
       </daytemplate>
     </model>
     <day id="Monday">
-      <period id="A"> </period>
-      <period id="B"> </period>
-      <period id="C"> </period>
-      <period id="D"> </period>
+      <period id="A"/>
+      <period id="B"/>
+      <period id="C"/>
+      <period id="D"/>
     </day>
     <day id="Tuesday">
-      <period id="B"> </period>
-      <period id="C"> </period>
-      <period id="D"> </period>
-      <period id="E"> </period>
+      <period id="B"/>
+      <period id="C"/>
+      <period id="D"/>
+      <period id="E"/>
     </day>
     <day id="Wednesday">
-      <period id="C"> </period>
-      <period id="D"> </period>
-      <period id="E"> </period>
-      <period id="F"> </period>
+      <period id="C"/>
+      <period id="D"/>
+      <period id="E"/>
+      <period id="F"/>
     </day>
     <day id="Thursday">
-      <period id="D"> </period>
-      <period id="E"> </period>
-      <period id="F"> </period>
-      <period id="A"> </period>
+      <period id="D"/>
+      <period id="E"/>
+      <period id="F"/>
+      <period id="A"/>
     </day>
     <day id="Friday">
-      <period id="C"> </period>
-      <period id="D"> </period>
-      <period id="E"> </period>
+      <period id="C"/>
+      <period id="D"/>
+      <period id="E"/>
     </day>
   </timetable>
 
@@ -1894,34 +1870,22 @@ The schema is now created:
       </daytemplate>
     </model>
     <day id="A">
-      <period id="Period_A">
-      </period>
-      <period id="Period_C">
-      </period>
-      <period id="Period_B">
-      </period>
-      <period id="Period_D">
-      </period>
+      <period id="Period_A"/>
+      <period id="Period_C"/>
+      <period id="Period_B"/>
+      <period id="Period_D"/>
     </day>
     <day id="B">
-      <period id="Period_D">
-      </period>
-      <period id="Period_B">
-      </period>
-      <period id="Period_C">
-      </period>
-      <period id="Period_A">
-      </period>
+      <period id="Period_D"/>
+      <period id="Period_B"/>
+      <period id="Period_C"/>
+      <period id="Period_A"/>
     </day>
     <day id="C">
-      <period id="Period_A">
-      </period>
-      <period id="Period_B">
-      </period>
-      <period id="Period_C">
-      </period>
-      <period id="Period_D">
-      </period>
+      <period id="Period_A"/>
+      <period id="Period_B"/>
+      <period id="Period_C"/>
+      <period id="Period_D"/>
     </day>
   </timetable>
 
@@ -2370,23 +2334,23 @@ The schema is now created:
       </daytemplate>
     </model>
     <day id="Day A">
-      <period id="A"> </period>
-      <period id="B"> </period>
-      <period id="C"> </period>
-      <period id="D"> </period>
+      <period id="A"/>
+      <period id="B"/>
+      <period id="C"/>
+      <period id="D"/>
     </day>
     <day id="Day B">
-      <period id="B"> </period>
-      <period id="C"> </period>
-      <period id="D"> </period>
-      <period id="E"> </period>
-      <period id="F"> </period>
+      <period id="B"/>
+      <period id="C"/>
+      <period id="D"/>
+      <period id="E"/>
+      <period id="F"/>
     </day>
     <day id="Day C">
-      <period id="C"> </period>
-      <period id="D"> </period>
-      <period id="E"> </period>
-      <period id="F"> </period>
+      <period id="C"/>
+      <period id="D"/>
+      <period id="E"/>
+      <period id="F"/>
     </day>
   </timetable>
 

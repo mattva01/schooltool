@@ -310,16 +310,12 @@ Lets add a timetable schema:
     ...     </daytemplate>
     ...   </model>
     ...   <day id="Day 1">
-    ...     <period id="A">
-    ...     </period>
-    ...     <period id="B">
-    ...     </period>
+    ...     <period id="A" />
+    ...     <period id="B" />
     ...   </day>
     ...   <day id="Day 2">
-    ...     <period id="C">
-    ...     </period>
-    ...     <period id="D">
-    ...     </period>
+    ...     <period id="C" />
+    ...     <period id="D" />
     ...   </day>
     ... </timetable>
     ... """)
@@ -379,16 +375,12 @@ Lets see what's inside:
         </daytemplate>
       </model>
       <day id="Day 1">
-        <period id="A">
-        </period>
-        <period id="B">
-        </period>
+        <period id="A"/>
+        <period id="B"/>
       </day>
       <day id="Day 2">
-        <period id="C">
-        </period>
-        <period id="D">
-        </period>
+        <period id="C"/>
+        <period id="D"/>
       </day>
     </timetable>
 
@@ -464,16 +456,12 @@ And check that schema was indeed modified:
         </daytemplate>
       </model>
       <day id="Day 1">
-        <period id="A">
-        </period>
-        <period id="B">
-        </period>
+        <period id="A"/>
+        <period id="B"/>
       </day>
       <day id="Day 2">
-        <period id="C">
-        </period>
-        <period id="D">
-        </period>
+        <period id="C"/>
+        <period id="D"/>
       </day>
     </timetable>
 
@@ -500,10 +488,8 @@ Trying to put an invalid schema should get us an error:
     ...     </daytemplate>
     ...   </model>
     ...   <day id="Day 1">
-    ...     <period id="A">
-    ...     </period>
-    ...     <period id="A">
-    ...     </period>
+    ...     <period id="A" />
+    ...     <period id="A" />
     ...   </day>
     ... </timetable>
     ... """)
