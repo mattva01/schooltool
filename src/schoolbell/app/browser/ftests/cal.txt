@@ -6,14 +6,14 @@ Set up
 
 We will obviously need a SchoolBell instance.
 
-    >>> print http(r"""
+    >>> print http("""
     ... POST /@@contents.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
     ... Content-Type: application/x-www-form-urlencoded
     ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication
     ...
-    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&new_value=frogpond""")
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&new_value=frogpond\
+    ... """)
     HTTP/1.1 303 See Other
     ...
     Location: http://localhost/@@contents.html
@@ -21,13 +21,12 @@ We will obviously need a SchoolBell instance.
 
 Let's create a person so that we can fool around with his calendar:
 
-    >>> print http(r"""
+    >>> print http("""
     ... POST /frogpond/persons/add.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 112
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=Frog&field.username=frog&field.password=pwd&field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
+    ... field.title=Frog&field.username=frog&field.password=pwd&field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add\
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -36,13 +35,12 @@ Let's create a person so that we can fool around with his calendar:
 
 Let's create a second person so that we can test access control.
 
-    >>> print http(r"""
+    >>> print http("""
     ... POST /frogpond/persons/add.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 114
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=Toad&field.username=toad&field.password=doat&field.verify_password=doat&field.photo=&UPDATE_SUBMIT=Add
+    ... field.title=Toad&field.username=toad&field.password=doat&field.verify_password=doat&field.photo=&UPDATE_SUBMIT=Add\
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -226,12 +224,11 @@ Let's add an ordinary event that takes place on 3rd February, 2005:
     >>> print http("""
     ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
     ... Authorization: Basic frog:pwd
-    ... Content-Length: 159
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... field.title=Sleeping&field.start_date=2005-02-03&\
     ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
+    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add\
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -302,11 +299,10 @@ Now let's add an allday event 29th March, 2005:
     >>> print http("""
     ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
     ... Authorization: Basic frog:pwd
-    ... Content-Length: 159
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... field.title=A Birthday&field.start_date=2005-03-29&field.allday=on&\
-    ... field.recurrence.used=&field.recurrence_type=daily&UPDATE_SUBMIT=Add
+    ... field.recurrence.used=&field.recurrence_type=daily&UPDATE_SUBMIT=Add\
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -333,12 +329,11 @@ preserved (regression test for http://issues.schooltool.org/issue197):
     >>> print http("""
     ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
     ... Authorization: Basic frog:pwd
-    ... Content-Length: 159
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... field.title=A Birthday&field.start_date=2005-03-29&\
     ... field.duration_type=hours&field.allday=on&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE=Update form
+    ... field.recurrence_type=daily&UPDATE=Update+form\
     ... """)
     HTTP/1.1 200 Ok
     ...<option value="hours" selected="selected">...
@@ -348,12 +343,11 @@ The duration should be set even if form has errors in it:
     >>> print http("""
     ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
     ... Authorization: Basic frog:pwd
-    ... Content-Length: 159
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... field.title=&field.start_date=2005-03-29&\
     ... field.duration_type=hours&field.allday=on&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
+    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add\
     ... """)
     HTTP/1.1 200 Ok
     ...<option value="hours" selected="selected">...
@@ -368,7 +362,6 @@ Let's add a calendar through iCalendar PUT view (so we would know the event id):
     ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
     ... Host: localhost:7080
     ... Authorization: Basic frog:pwd
-    ... Content-Length: 244
     ... Content-Type: text/calendar
     ...
     ... BEGIN:VCALENDAR
@@ -416,12 +409,11 @@ Let the Frog modify this event:
     >>> print http("""
     ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04 HTTP/1.1
     ... Authorization: Basic frog:pwd
-    ... Content-Length: 159
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... field.title=Sleeping&field.start_date=2005-02-03&\
     ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
+    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add\
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -452,7 +444,6 @@ Let's enter some invalid values:
     >>> print http("""
     ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html HTTP/1.1
     ... Authorization: Basic frog:pwd
-    ... Content-Length: 159
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... field.title=Lalalla&field.start_date=20050203&\
@@ -460,7 +451,7 @@ Let's enter some invalid values:
     ... field.recurrence=on&\
     ... date=2005-02-04&\
     ... field.recurrence_type=daily&\
-    ... UPDATE_SUBMIT=Add
+    ... UPDATE_SUBMIT=Add\
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -479,11 +470,9 @@ If we cancel the form - we should be redirected to the day "date" tells us:
     >>> print http("""
     ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html HTTP/1.1
     ... Authorization: Basic frog:pwd
-    ... Content-Length: 159
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... date=2005-02-07&\
-    ... CANCEL=Cancel
+    ... date=2005-02-07&CANCEL=Cancel\
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -495,7 +484,6 @@ Let's change the recurrence of the event a bit more this time:
     >>> print http("""
     ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04 HTTP/1.1
     ... Authorization: Basic frog:pwd
-    ... Content-Length: 264
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... field.title=Sleeping&field.start_date=2005-02-03&\
@@ -503,7 +491,7 @@ Let's change the recurrence of the event a bit more this time:
     ... field.interval=1&\
     ... field.recurrence=on&field.recurrence_type=monthly&\
     ... field.monthly=weekday&field.range=until&field.until=2005-12-01&\
-    ... UPDATE_SUBMIT=Update
+    ... UPDATE_SUBMIT=Update\
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -545,11 +533,10 @@ Uploading iCalendar files
 
 We can try and put an updated calendar:
 
-    >>> print http(r"""
+    >>> print http("""
     ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
     ... Host: localhost:7080
     ... Authorization: Basic frog:pwd
-    ... Content-Length: 244
     ... Content-Type: text/calendar
     ...
     ... BEGIN:VCALENDAR
@@ -898,7 +885,6 @@ too.  Notice we don't mark Saturday in the BYDAY list:
     ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
     ... Host: localhost:7080
     ... Authorization: Basic frog:pwd
-    ... Content-Length: 244
     ... Content-Type: text/calendar
     ...
     ... BEGIN:VCALENDAR

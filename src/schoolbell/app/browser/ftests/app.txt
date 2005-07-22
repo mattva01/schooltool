@@ -31,7 +31,6 @@ Let's add one!
     >>> print http(r"""
     ... POST /@@contents.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
     ... Content-Type: application/x-www-form-urlencoded
     ... 
     ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&new_value=frogpond""")
@@ -463,12 +462,11 @@ We should see the group in this person's possible group list.
 
 Let's add the person to the group.
 
-    >>> print http(r"""
+    >>> print http("""
     ... POST /frogpond/persons/frog/groups.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 44
     ... Content-Type: application/x-www-form-urlencoded
-    ... UPDATE_SUBMIT=Apply&group.venerable-frogs=on
+    ... UPDATE_SUBMIT=Apply&group.venerable-frogs=on\
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -560,13 +558,12 @@ We can click on it and get a form:
 
 After submitting the form
 
-    >>> print http(r"""
+    >>> print http("""
     ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 50
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=Lily&field.isLocation=on&UPDATE_SUBMIT=Add&add_input_name=
+    ... field.title=Lily&field.isLocation=on&UPDATE_SUBMIT=Add&add_input_name=\
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -605,13 +602,12 @@ We should have a view for that resource as well:
 
 Cancelling the resource addition redirects us to the resource index:
 
-    >>> print http(r"""
+    >>> print http("""
     ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 46
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=Rose&CANCEL=Cancel&add_input_name=
+    ... field.title=Rose&CANCEL=Cancel&add_input_name=\
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -657,10 +653,9 @@ If the Cancel button is hit, we get redirected to the group info view:
     >>> print http("""
     ... POST /frogpond/groups/venerable-frogs/edit.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 29
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=Foo&CANCEL=Cancel
+    ... field.title=Foo&CANCEL=Cancel\
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -684,10 +679,9 @@ view:
     >>> print http("""
     ... POST /frogpond/groups/venerable-frogs/edit.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 52
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=Very+Venerable+Frogs&UPDATE_SUBMIT=Apply
+    ... field.title=Very+Venerable+Frogs&UPDATE_SUBMIT=Apply\
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -739,10 +733,9 @@ If the Cancel button is hit, we get redirected to the resource info view:
     >>> print http("""
     ... POST /frogpond/resources/lily/edit.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 29
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=Foo&CANCEL=Cancel
+    ... field.title=Foo&CANCEL=Cancel\
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -766,10 +759,9 @@ view:
     >>> print http("""
     ... POST /frogpond/resources/lily/edit.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 43
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... field.title=Pretty+Lily&UPDATE_SUBMIT=Apply
+    ... field.title=Pretty+Lily&UPDATE_SUBMIT=Apply\
     ... """)
     HTTP/1.1 303 See Other
     ...
