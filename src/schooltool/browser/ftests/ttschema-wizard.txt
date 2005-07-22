@@ -20,7 +20,7 @@ Let's create a SchoolTool instance:
 Weekly timetable
 ----------------
 
-.. image: ttschema-wizard-1.png
+.. image:: ttschema-wizard-1.png
 
 Let's go to the new timetable schema wizard:
 
@@ -250,7 +250,7 @@ We can examine its composition more easily by invoking the RESTive view.
 Rotating timetable
 ------------------
 
-.. image: ttschema-wizard-2.png
+.. image:: ttschema-wizard-2.png
 
 Let's do it again!
 
@@ -587,7 +587,7 @@ We can examine its composition more easily by invoking the RESTive view.
 Rotating timetable, take two
 ----------------------------
 
-.. image: ttschema-wizard-3.png
+.. image:: ttschema-wizard-3.png
 
 Let's do it again!
 
@@ -1015,7 +1015,7 @@ The schema is now created:
 Weekly timetable, take two
 --------------------------
 
-.. image: ttschema-wizard-4.png
+.. image:: ttschema-wizard-4.png
 
 Let's go to the timetable schema wizard:
 
@@ -1452,7 +1452,7 @@ The schema is now created:
 Rotating timetable, take three
 ------------------------------
 
-.. image: ttschema-wizard-5.png
+.. image:: ttschema-wizard-5.png
 
 Let's do it again!
 
@@ -1929,7 +1929,7 @@ The schema is now created:
 Rotating timetable, take four
 -----------------------------
 
-.. image: ttschema-wizard-6.png
+.. image:: ttschema-wizard-6.png
 
 Let's do it one last time!
 
