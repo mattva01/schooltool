@@ -7,3 +7,9 @@ debian/files
 src/schooltool/locales/schooltool.pot
 ./Data.fs
 ./Data.fs.*
+./testserver_app.log
+./testserver.log
+./testserver_web_access.log
+./testserver_rest_access.log
+./web-access.log
+./schooltool.log
