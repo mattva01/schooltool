@@ -33,6 +33,16 @@ class IBatch(Interface):
     def __iter__():
         """An iterator over the batch"""
 
+    def __eq__(other):
+        """Compare this batch to another to see if they are the same.
+
+        Compares size, start, list and the current batch list."""
+
+    def __ne__(other):
+        """Compare this batch to another to see if they are not equal.
+
+        Returns the boolean opposite of __eq__."""
+
     def next():
         """The next batch from the list."""
 

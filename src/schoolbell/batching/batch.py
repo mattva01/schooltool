@@ -44,6 +44,20 @@ class Batch(object):
     def __contains__(self, item):
         return bool(item in [i for i in self])
 
+    def __eq__(self, other):
+        if self.size != other.size:
+            return False
+        if self.start != other.start:
+            return False
+        if self.batch != other.batch:
+            return False
+        if self.list != other.list:
+            return False
+        return True
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def first(self):
         return self.batch[0]
 
@@ -69,7 +83,3 @@ class Batch(object):
         if len(self.list) % self.size:
             num += 1
         return num
-
-    def batches(self):
-        batch = Batch(self.list, 0, self.size)
-

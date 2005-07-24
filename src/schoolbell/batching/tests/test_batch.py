@@ -111,6 +111,26 @@ def doctest_Batch():
       >>> print batch.next()
       None
 
+    We can also comapre two batches to see if they are or are not equal:
+
+      >>> batch1 = Batch(testData, 0, 10)
+      >>> batch2 = Batch(testData, 0, 10)
+      >>> batch1 == batch2
+      True
+      >>> batch1 != batch2
+      False
+
+      >>> batch1 = batch1.next()
+      >>> batch1 == batch2
+      False
+      >>> batch1 != batch2
+      True
+
+      >>> batch2 = batch2.next()
+      >>> batch1 == batch2
+      True
+      >>> batch1 != batch2
+      False
 
     """
 
