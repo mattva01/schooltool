@@ -337,6 +337,29 @@ def doctest_updateStudentCalendars():
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         []
 
+    You can add a group to a section and it's members overlay list will be
+    updated:
+
+        >>> student = Person()
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        []
+        >>> freshmen = Group()
+        >>> freshmen.members.add(student)
+        >>> section = Section("Freshmen Math")
+        >>> add = AddEventStub()
+        >>> add[URIMember] = freshmen
+        >>> add[URIGroup] = section
+        >>> updateStudentCalendars(add)
+        >>> [cal.calendar.title for cal in student.overlaid_calendars]
+        ['Freshmen Math']
+
+        >>> remove = RemoveEventStub()
+        >>> remove[URIMember] = freshmen
+        >>> remove[URIGroup] = section
+        >>> updateStudentCalendars(remove)
+        >>> [cal.calendar.title for cal in student.overlaid_calendars]
+        []
+
         >>> tearDown()
 
     """

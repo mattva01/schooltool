@@ -317,19 +317,26 @@ class PersonView(sb.PersonView):
         return getRelatedObjects(self.context, URISection,
                                  rel_type=URIInstruction)
 
+    def memberOf(self):
+        """Seperate out generic groups from sections."""
+
+        return [group for group in self.context.groups if not
+                ISection.providedBy(group)]
+
     def learnerOf(self):
         results = []
         sections = ISchoolBellApplication(self.context)['sections'].values()
         for section in sections:
-            if isTransitiveMember(self.context, section):
-                results.append(section)
+            if self.context in section.members:
+                results.append({'section' : section, 'group': None})
+            # XXX isTransitiveMember works in the test fixture but not in the
+            # application, working around it for the time being.
+            for group in self.memberOf():
+                if group in section.members:
+                    results.append({'section' : section,
+                                    'group': group})
 
         return results
-
-    def memberOf(self):
-        # this is a hack to get seperate out generic groups from sections
-        return [group for group in self.context.groups if not
-                ISection.providedBy(group)]
 
 
 class PersonAddView(sb.PersonAddView):

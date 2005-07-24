@@ -785,7 +785,7 @@ def doctest_PersonView():
         >>> section3.members.add(student)
         >>> student_view = PersonView(student, TestRequest())
 
-        >>> [section.title for section in student_view.learnerOf()]
+        >>> [section['section'].title for section in student_view.learnerOf()]
         ['Algebra', 'English']
 
     Students can also participate in sections as part of a group, say all 10th
@@ -797,7 +797,7 @@ def doctest_PersonView():
         >>> section4.members.add(tenth_grade)
 
         >>> student_view = PersonView(student, TestRequest())
-        >>> [section.title for section in student_view.learnerOf()]
+        >>> [section['section'].title for section in student_view.learnerOf()]
         ['Algebra', 'English', 'Gym']
 
     One thing that might confuse is that learnerOf may be similar to but not

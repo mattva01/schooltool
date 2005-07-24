@@ -1950,6 +1950,11 @@ def doctest_SectionTimetableSetupView():
         ...                                    datetime.date(2004, 9, 1),
         ...                                    datetime.date(2004, 12, 31))
 
+        >>> view.singleTerm()
+        False
+        >>> view.singleSchema()
+        False
+
     We have getSchema from the Mixin class to get the schema from the request
     or choose a default.
 

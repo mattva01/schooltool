@@ -65,10 +65,18 @@
             <ul tal:condition="sections">
               <tal:loop repeat="group sections">
                 <li>
-                  <a title=""
-                    tal:attributes="href group/@@absolute_url;
-                    title group/description|group/title"
-                    tal:content="group/label"></a>
+                  <a title="" i18n:translate=""
+                     tal:attributes="href group/section/@@absolute_url;
+                     title group/section/description|group/section/title"
+                     tal:content="group/section/label"></a>
+                  <span class="hint" tal:condition="group/group">
+                    <span i18n:translate="">
+                      via group
+                    </span>
+                    <a href=""  i18n:translate=""
+                       tal:attributes="href group/group/@@absolute_url"
+                       tal:content="group/group/title" />
+                  </span>
                 </li>
               </tal:loop>
             </ul>

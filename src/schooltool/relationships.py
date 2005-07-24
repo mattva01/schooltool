@@ -25,7 +25,7 @@ $Id$
 
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 
-from schooltool.interfaces import ISection, ICourse
+from schooltool.interfaces import ISection, ICourse, IPerson, IGroup
 
 from schoolbell.app.membership import URIMembership, URIMember, URIGroup
 
@@ -158,15 +158,32 @@ def updateStudentCalendars(event):
     if event.rel_type != URIMembership:
         return
 
+    section = event[URIGroup]
+
+    # Only continue if we're working with Sections rather than generic groups
+    if not ISection.providedBy(section):
+        return
+
+    member = event[URIMember]
+
     if IRelationshipAddedEvent.providedBy(event):
-        person = event[URIMember]
-        section = event[URIGroup]
-        if ISection.providedBy(section) and section.calendar not in \
-                                                    person.overlaid_calendars:
-            person.overlaid_calendars.add(section.calendar)
+        if IPerson.providedBy(member) and \
+                      section.calendar not in member.overlaid_calendars:
+            member.overlaid_calendars.add(section.calendar)
+        elif IGroup.providedBy(member):
+            for person in member.members:
+                # we don't handle nested groups any more so there
+                # shouldn't be more than one layer of groups
+                # TODO make sure nested groups are not possible via REST
+                if IPerson.providedBy(person) and \
+                         section.calendar not in person.overlaid_calendars:
+                    person.overlaid_calendars.add(section.calendar)
     elif IRelationshipRemovedEvent.providedBy(event):
-        person = event[URIMember]
-        section = event[URIGroup]
-        if ISection.providedBy(section) and section.calendar in \
-                                                    person.overlaid_calendars:
-            person.overlaid_calendars.remove(section.calendar)
+        if IPerson.providedBy(member) and \
+                              section.calendar in member.overlaid_calendars:
+            member.overlaid_calendars.remove(section.calendar)
+        elif IGroup.providedBy(member):
+            for person in member.members:
+                if IPerson.providedBy(person) and \
+                         section.calendar in person.overlaid_calendars:
+                    person.overlaid_calendars.remove(section.calendar)
