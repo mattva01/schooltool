@@ -45,6 +45,16 @@
 
   <subscriber
       for="schoolbell.relationship.interfaces.IRelationshipAddedEvent"
+      handler=".relationships.updateStudentCalendars"
+      />
+
+  <subscriber
+      for="schoolbell.relationship.interfaces.IRelationshipRemovedEvent"
+      handler=".relationships.updateStudentCalendars"
+      />
+
+  <subscriber
+      for="schoolbell.relationship.interfaces.IRelationshipAddedEvent"
       handler=".relationships.updateInstructorCalendars"
       />
 
@@ -52,6 +62,8 @@
       for="schoolbell.relationship.interfaces.IRelationshipRemovedEvent"
       handler=".relationships.updateInstructorCalendars"
       />
+
+
 
   <adapter
       for="schoolbell.app.interfaces.IHavePreferences"

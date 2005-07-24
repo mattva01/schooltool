@@ -27,6 +27,8 @@ from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 
 from schooltool.interfaces import ISection, ICourse
 
+from schoolbell.app.membership import URIMembership, URIMember, URIGroup
+
 from schoolbell.relationship import URIObject, RelationshipSchema
 from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
 from schoolbell.relationship.interfaces import IRelationshipAddedEvent
@@ -142,3 +144,29 @@ def enforceCourseSectionConstraint(event):
 CourseSections = RelationshipSchema(URICourseSections, 
                                     course=URICourse,
                                     section=URISectionOfCourse)
+
+#
+# Additional handling of the section membership relationship to add sections
+# to members' (students') overlay portlets automatically.  In Group membership
+# relationships users must manually add the calendar to the portlet (see
+# schoolbell.app.membership).
+#
+
+def updateStudentCalendars(event):
+    """Add section's calendar to students overlaid calendars."""
+
+    if event.rel_type != URIMembership:
+        return
+
+    if IRelationshipAddedEvent.providedBy(event):
+        person = event[URIMember]
+        section = event[URIGroup]
+        if ISection.providedBy(section) and section.calendar not in \
+                                                    person.overlaid_calendars:
+            person.overlaid_calendars.add(section.calendar)
+    elif IRelationshipRemovedEvent.providedBy(event):
+        person = event[URIMember]
+        section = event[URIGroup]
+        if ISection.providedBy(section) and section.calendar in \
+                                                    person.overlaid_calendars:
+            person.overlaid_calendars.remove(section.calendar)

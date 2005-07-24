@@ -348,7 +348,8 @@ Let's make goose a student in our section:
     HTTP/1.1 201 Created
     ...
 
-Now the membership relationship, which indicates a student should be in both:
+Now the membership relationship, which indicates a student should be in both
+and the calendar subscription to show the student the section's calendar:
 
     >>> print rest("""
     ... GET /frogpond/persons/goose/relationships HTTP/1.1
@@ -367,6 +368,13 @@ Now the membership relationship, which indicates a student should be in both:
                       xlink:href="http://localhost/frogpond/sections/birdwatching-1">
           <manage xlink:type="simple"
                   xlink:href="http://localhost/frogpond/persons/goose/relationships/1"/>
+        </relationship>
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/calendar_subscription/provider"
+                      xlink:arcrole="http://schooltool.org/ns/calendar_subscription"
+                      xlink:href="http://localhost/frogpond/sections/birdwatching-1/calendar">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/persons/goose/relationships/2"/>
         </relationship>
       </existing>
     </relationships>
@@ -446,6 +454,13 @@ Now the section is in maverick's relationships
                       xlink:href="http://localhost/frogpond/sections/birdwatching-1">
           <manage xlink:type="simple"
                   xlink:href="http://localhost/frogpond/persons/goose/relationships/1"/>
+        </relationship>
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/calendar_subscription/provider"
+                      xlink:arcrole="http://schooltool.org/ns/calendar_subscription"
+                      xlink:href="http://localhost/frogpond/sections/birdwatching-1/calendar">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/persons/goose/relationships/2"/>
         </relationship>
       </existing>
     </relationships>

@@ -237,6 +237,111 @@ def doctest_updateInstructorCalendars():
 
     """
 
+
+def doctest_updateStudentCalendars():
+    r"""
+        >>> from schooltool.relationships import updateStudentCalendars
+        >>> from schoolbell.app.membership import URIMembership
+        >>> from schoolbell.app.membership import URIGroup, URIMember
+        >>> from schoolbell.relationship.interfaces import \
+        ...                                         IRelationshipAddedEvent
+        >>> from schoolbell.relationship.interfaces import \
+        ...                                         IRelationshipRemovedEvent
+        >>> from schooltool.app import Person, Section
+        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> setUp()
+
+        >>> class AddEventStub(dict):
+        ...     rel_type = URIMembership
+        ...     implements(IRelationshipAddedEvent)
+
+        >>> class RemoveEventStub(dict):
+        ...     rel_type = URIMembership
+        ...     implements(IRelationshipRemovedEvent)
+
+        >>> class OtherEventStub(dict):
+        ...     rel_type = URIMembership
+
+        >>> person = Person()
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        []
+        >>> section = Section(title="SectionA")
+
+    When the person is made a member of a section the sections calendar
+    is added to the overlaid calendars:
+
+        >>> add = AddEventStub()
+        >>> add[URIMember] = person
+        >>> add[URIGroup] = section
+        >>> updateStudentCalendars(add)
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        ['SectionA']
+
+    The calendar is removed when the person is no longer in the section:
+
+        >>> remove = RemoveEventStub()
+        >>> remove[URIMember] = person
+        >>> remove[URIGroup] = section
+        >>> updateStudentCalendars(remove)
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        []
+
+    If a person allready has that calendar nothing changes:
+
+        >>> sectionb = Section(title="SectionB")
+        >>> person.overlaid_calendars.add(sectionb.calendar)
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        ['SectionB']
+
+        >>> add = AddEventStub()
+        >>> add[URIMember] = person
+        >>> add[URIGroup] = sectionb
+        >>> updateStudentCalendars(add)
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        ['SectionB']
+
+    If the person removes the calendar manually, that's ok for now, we may
+    want to take away this ability later.
+
+        >>> person.overlaid_calendars.remove(sectionb.calendar)
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        []
+
+        >>> remove = RemoveEventStub()
+        >>> remove[URIMember] = person
+        >>> remove[URIGroup] = sectionb
+        >>> updateStudentCalendars(remove)
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        []
+
+    Events that aren't RelationshipAdded/Removed are ignored:
+
+        >>> other = OtherEventStub()
+        >>> other[URIMember] = person
+        >>> other[URIGroup] = sectionb
+        >>> updateStudentCalendars(other)
+
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        []
+
+    If you add a person to a Group that isn't a section, nothing happens, the
+    user will have to overlay the calendar manually:
+
+        >>> from schooltool.app import Group
+        >>> person = Person()
+        >>> group = Group()
+        >>> add = AddEventStub()
+        >>> add[URIMember] = person
+        >>> add[URIGroup] = group
+        >>> updateStudentCalendars(add)
+        >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        []
+
+        >>> tearDown()
+
+    """
+
+
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
