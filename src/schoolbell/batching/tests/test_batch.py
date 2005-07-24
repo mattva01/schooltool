@@ -132,6 +132,12 @@ def doctest_Batch():
       >>> batch1 != batch2
       False
 
+    We can also loop through the batches using the batches() method
+
+      >>> batch = Batch(testData, 0, 3)
+      >>> [[item for item in b] for b in batch.batches()]
+      [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14]]
+
     """
 
 def test_suite():

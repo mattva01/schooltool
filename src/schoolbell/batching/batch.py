@@ -83,3 +83,13 @@ class Batch(object):
         if len(self.list) % self.size:
             num += 1
         return num
+
+    def batches(self):
+        batch = Batch(self.list, 0, self.size)
+        result = [batch]
+        while batch.next():
+            result.append(batch.next())
+            batch = batch.next()
+        return result
+
+

@@ -57,3 +57,6 @@ class IBatch(Interface):
 
     def numBatches():
         """The number of batches required to cover the entire list."""
+
+    def batches():
+        """Iterator over all batches in the list."""
