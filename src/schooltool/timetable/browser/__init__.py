@@ -1077,6 +1077,12 @@ class SectionTimetableSetupView(TimetableSetupViewMixin):
 
     template = ViewPageTemplateFile('templates/section-timetable-setup.pt')
 
+    def singleSchema(self):
+        return len(self.app['ttschemas'].values()) == 1
+
+    def singleTerm(self):
+        return len(self.app['terms'].values()) == 1
+
     def getTerms(self):
         """Return the chosen term."""
         if 'terms' in self.request:

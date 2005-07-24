@@ -1915,20 +1915,17 @@ def doctest_SectionTimetableSetupView():
         >>> math.timetables.keys()
         []
 
-    We will also need a timetable schema, and a term.  Two of each, in fact.
+    We will also need a timetable schema, and a term.
 
         >>> app["ttschemas"]["default"] = createSchema(["Mon", "Tue"],
         ...                                            ["9:00", "10:00"],
         ...                                            ["9:00", "10:00"])
-        >>> app["ttschemas"]["other"] = createSchema([], [])
+
 
         >>> from schooltool.timetable import Term
         >>> app["terms"]["2005-spring"] = Term('2005 Spring',
         ...                                    datetime.date(2004, 2, 1),
         ...                                    datetime.date(2004, 6, 30))
-        >>> app["terms"]["2005-fall"] = Term('2005 Fall',
-        ...                                    datetime.date(2004, 9, 1),
-        ...                                    datetime.date(2004, 12, 31))
 
     We can now create the view to look at the Math timetable
 
@@ -1936,6 +1933,22 @@ def doctest_SectionTimetableSetupView():
         >>> context = math
         >>> request = TestRequest()
         >>> view = SectionTimetableSetupView(context, request)
+
+    We have some helper methods to simplify the form if there's only one
+    option for terms or schemas:
+
+        >>> view.app = app
+        >>> view.singleTerm()
+        True
+        >>> view.singleSchema()
+        True
+
+    Another term and schema:
+
+        >>> app["ttschemas"]["other"] = createSchema([], [])
+        >>> app["terms"]["2005-fall"] = Term('2005 Fall',
+        ...                                    datetime.date(2004, 9, 1),
+        ...                                    datetime.date(2004, 12, 31))
 
     We have getSchema from the Mixin class to get the schema from the request
     or choose a default.
