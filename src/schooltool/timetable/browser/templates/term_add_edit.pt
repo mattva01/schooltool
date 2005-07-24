@@ -50,10 +50,10 @@ The date range is inclusive (e.g., 2004-09-01 to 2004-12-31).
     <div metal:use-macro="context/@@form_macros/widget_row" />
   </div>
   <div class="row" tal:define="widget nocall:view/first_widget">
-    <div metal:use-macro="context/@@form_macros/widget_row" />
+    <div metal:use-macro="context/@@form_macros/datepicker_widget" />
   </div>
   <div class="row" tal:define="widget nocall:view/last_widget">
-    <div metal:use-macro="context/@@form_macros/widget_row" />
+    <div metal:use-macro="context/@@form_macros/datepicker_widget" />
   </div>
 </fieldset>
   <div class="controls" tal:condition="not:calendar">
