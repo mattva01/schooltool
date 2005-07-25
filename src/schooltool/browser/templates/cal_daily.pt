@@ -110,6 +110,10 @@
               tal:attributes="style string:background: ${ev/color1};">
             <div class="title" tal:content="ev/title"
               tal:condition="python: ev.title != ev.shortTitle" />
+            <div i18n:translate="" class="location"
+                 tal:condition="ev/location">Location:
+              <span tal:content="ev/location" i18n:name="location" />
+            </div>
             <div class="description" tal:content="ev/description" />
           </div>
           <div class="booked-resources"
