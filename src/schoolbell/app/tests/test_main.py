@@ -509,6 +509,57 @@ def doctest_bootstrapSchoolBell():
     """
 
 
+def doctest_enableErrorReporting():
+    r"""Tests for enableErrorReporting()
+
+    Normally, bootstrapSchoolBell is called when Zope 3 is fully configured
+
+        >>> from schoolbell.app.main import StandaloneServer
+        >>> server = StandaloneServer()
+        >>> server.configure()
+
+    We need a database with the error reporting utility in it
+
+        >>> import transaction
+        >>> from ZODB.DB import DB
+        >>> from ZODB.MappingStorage import MappingStorage
+        >>> db = DB(MappingStorage())
+
+        >>> from zope.event import notify
+        >>> from zope.app.appsetup import DatabaseOpened
+        >>> notify(DatabaseOpened(db))
+
+    Now we can tweak that utility
+
+        >>> server.enableErrorReporting(db)
+
+    Let's take a look
+
+        >>> from zope.app.publication.zopepublication import ZopePublication
+        >>> from zope.app.error.interfaces import IErrorReportingUtility
+        >>> connection = db.open()
+        >>> root = connection.root()
+        >>> app = root.get(ZopePublication.root_name)
+        >>> error_reporting = zapi.getUtility(IErrorReportingUtility,
+        ...                                   context=app)
+        >>> props = error_reporting.getProperties()
+        >>> props['copy_to_zlog']
+        True
+        >>> print '\n'.join(props['ignored_exceptions'])
+        Unauthorized
+        NotFound
+
+    Clean up
+
+        >>> transaction.abort()
+        >>> connection.close()
+
+        >>> from zope.app.testing import setup
+        >>> setup.placelessTearDown()
+
+    """
+
+
 def test_setUpLogger():
     r"""Tests for setUpLogger.
 
