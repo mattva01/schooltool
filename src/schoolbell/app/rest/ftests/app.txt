@@ -673,14 +673,14 @@ Let's put a new calendar in there:
     ... BEGIN:VEVENT
     ... UID:some-uid@example.com
     ... SUMMARY:Sample event (modified)
-    ... DTSTART:20050204T100000
+    ... DTSTART:20050204T100000Z
     ... DURATION:PT2H
     ... DTSTAMP:20050203T150000
     ... END:VEVENT
     ... BEGIN:VEVENT
     ... UID:some-uid2@example.com
     ... SUMMARY:New event
-    ... DTSTART:20050204T120000
+    ... DTSTART:20050204T120000Z
     ... DURATION:PT1H
     ... DTSTAMP:20050203T150000
     ... END:VEVENT
@@ -705,14 +705,14 @@ Let's get it back:
     BEGIN:VEVENT
     UID:some-uid@example.com
     SUMMARY:Sample event (modified)
-    DTSTART:20050204T100000
+    DTSTART:20050204T100000Z
     DURATION:PT2H
     ...
     END:VEVENT
     BEGIN:VEVENT
     UID:some-uid2@example.com
     SUMMARY:New event
-    DTSTART:20050204T120000
+    DTSTART:20050204T120000Z
     DURATION:PT1H
     ...
     END:VEVENT
@@ -765,14 +765,14 @@ The event should be there now:
     BEGIN:VEVENT
     UID:some-uid@example.com
     SUMMARY:Sample event 200 ... (pounds)
-    DTSTART:20050204T100000
+    DTSTART:20050204T100000Z
     DURATION:PT2H
     ...
     END:VEVENT
     BEGIN:VEVENT
     UID:some-uid2@example.com
     SUMMARY:New event
-    DTSTART:20050204T120000
+    DTSTART:20050204T120000Z
     DURATION:PT1H
     ...
     END:VEVENT

@@ -117,7 +117,7 @@ def convert_event_to_ical(event):
         SUMMARY:iCal rendering
         LOCATION:Big room
         DESCRIPTION:Blah blah\nblah!
-        DTSTART:20041216T100729
+        DTSTART:20041216T100729Z
         DURATION:PT1H
         DTSTAMP:...
         END:VEVENT
@@ -133,7 +133,7 @@ def convert_event_to_ical(event):
         UID:12345678-9876@example.com
         SUMMARY:iCal tests
         RRULE:FREQ=DAILY;INTERVAL=1
-        DTSTART:20050211T224250
+        DTSTART:20050211T224250Z
         DURATION:PT15M
         DTSTAMP:...
         END:VEVENT
@@ -175,7 +175,7 @@ def convert_event_to_ical(event):
     if event.allday:
         dtstart = 'DTSTART;VALUE=DATE:%s' % ical_date(event.dtstart)
     else:
-        dtstart = 'DTSTART:%s' % ical_datetime(event.dtstart)
+        dtstart = 'DTSTART:%sZ' % ical_datetime(event.dtstart)
     result += [dtstart,
                "DURATION:%s" % ical_duration(event.duration),
                "DTSTAMP:%s" % dtstamp,
@@ -262,7 +262,7 @@ def convert_calendar_to_ical(calendar):
         UID:12345678-5432@example.com
         SUMMARY:iCal rendering
         LOCATION:Big room
-        DTSTART:20041216T100729
+        DTSTART:20041216T100729Z
         DURATION:PT1H
         DTSTAMP:...
         END:VEVENT
@@ -279,7 +279,7 @@ def convert_calendar_to_ical(calendar):
         BEGIN:VEVENT
         UID:...
         SUMMARY:Empty calendar
-        DTSTART:19700101T000000
+        DTSTART:19700101T000000Z
         DURATION:P0D
         DTSTAMP:...
         END:VEVENT
@@ -724,12 +724,21 @@ def parse_date_time(value):
     >>> parse_date_time('20030405T060708')
     datetime.datetime(2003, 4, 5, 6, 7, 8)
 
+    >>> parse_date_time('20030405T060708Z')
+    datetime.datetime(2003, 4, 5, 6, 7, 8)
+
     Examples of invalid arguments:
+
+    >>> parse_date_time('20030405T060708+05:00')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid iCalendar date-time: '20030405T060708+05:00'
 
     >>> parse_date_time('20030405T060708A')
     Traceback (most recent call last):
       ...
     ValueError: Invalid iCalendar date-time: '20030405T060708A'
+
     >>> parse_date_time('')
     Traceback (most recent call last):
       ...
@@ -747,12 +756,8 @@ def parse_date_time(value):
     dt = datetime.datetime(int(y), int(m), int(d),
                            int(hh), int(mm), int(ss))
     if utc:
-        # In the future we might want to get the timezone from the iCalendar
-        # file, but for now using the local timezone of the server should
-        # be adequate.
-        timetuple = dt.timetuple()
-        ticks = calendar.timegm(timetuple)
-        dt = datetime.datetime.fromtimestamp(ticks)
+        # currently we only handle iCal files in UTC.
+        pass
 
     return dt
 

@@ -825,7 +825,7 @@ def doctest_CalendarView():
         BEGIN:VEVENT
         UID:empty-calendar-placeholder@schooltool.org
         SUMMARY:Empty calendar
-        DTSTART:19700101T000000
+        DTSTART:19700101T000000Z
         DURATION:P0D
         DTSTAMP:...
         END:VEVENT
@@ -839,7 +839,7 @@ def doctest_CalendarView():
         ... BEGIN:VEVENT
         ... UID:some-random-uid@example.com
         ... SUMMARY:LAN party %s
-        ... DTSTART:20050226T160000
+        ... DTSTART:20050226T160000Z
         ... DURATION:PT6H
         ... DTSTAMP:20050203T150000
         ... END:VEVENT

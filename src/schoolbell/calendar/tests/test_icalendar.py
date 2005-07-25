@@ -97,9 +97,14 @@ class TestParseDateTime(TimezoneTestMixin, unittest.TestCase):
 
         self.setTZ('EET-2EEST')
         dt = parse_date_time('20041029T095031Z') # daylight savings
-        self.assertEquals(dt, datetime(2004, 10, 29, 12, 50, 31))
+        self.assertEquals(dt, datetime(2004, 10, 29, 9, 50, 31))
         dt = parse_date_time('20041129T095031Z') # no daylight savings
-        self.assertEquals(dt, datetime(2004, 11, 29, 11, 50, 31))
+        self.assertEquals(dt, datetime(2004, 11, 29, 9, 50, 31))
+
+        # we handle dates without any TZ info by assuming UTC.
+        # TODO: probably can remove support and raise an error in these cases.
+        self.assertEquals(parse_date_time('20041129T095031Z'),
+                          parse_date_time('20041129T095031'))
 
 
 class TestPeriod(unittest.TestCase):

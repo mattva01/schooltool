@@ -82,7 +82,7 @@ We should find just a placeholder there.
     BEGIN:VEVENT
     UID:empty-calendar-placeholder@schooltool.org
     SUMMARY:Empty calendar
-    DTSTART:19700101T000000
+    DTSTART:19700101T000000Z
     DURATION:P0D
     DTSTAMP:...
     END:VEVENT
@@ -266,7 +266,7 @@ let's use an aliased URL (directly on the person rather than on the calendar):
     ...BEGIN:VEVENT
     UID:...
     SUMMARY:Sleeping
-    DTSTART:20050203T010000
+    DTSTART:20050203T010000Z
     DURATION:PT8H20M
     DTSTAMP:...
     END:VEVENT...

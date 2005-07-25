@@ -51,7 +51,7 @@ CalendarICalendarView can export calendars in iCalendar format
      'UID:12345678-5432@example.com\r\n',
      'SUMMARY:doctests\r\n',
      'LOCATION:Matar\xc3\xb3\r\n',
-     'DTSTART:20041216T114616\r\n',
+     'DTSTART:20041216T114616Z\r\n',
      'DURATION:PT1H\r\n',
      'DTSTAMP:...\r\n',
      'END:VEVENT\r\n',
