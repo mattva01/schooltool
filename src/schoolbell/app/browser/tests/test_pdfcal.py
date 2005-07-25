@@ -638,10 +638,10 @@ def doctest_setUpMSTTCoreFonts():
 #        Traceback (most recent call last):
 #          ...
 #        TTFError: Can't open file "....ttf"
-
-    Clean up:
-
-        >>> reportlab.rl_config.TTFSearchPath.append(real_path)
+#
+#    Clean up:
+#
+#        >>> reportlab.rl_config.TTFSearchPath.append(real_path)
 
     """
 
@@ -677,30 +677,47 @@ def test_getCalendars(self):
     """
 
 
-def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite('schoolbell.app.browser.pdfcal'))
+def tryToSetUpReportLab():
+    """Try to set up reportlab.
 
+    Returns True without doing anything if pdfcal.disabled is False.
+
+    Tries to guess the location of fonts.  Returns True on success,
+    False if reportlab is not available or fonts could not be found.
+
+    If something breaks during setUpMSTTCoreFonts, the exception
+    will be propagated up.
+    """
     try:
         import reportlab
     except ImportError:
-        # We don't have reportlab, so we can't get anywhere.
-        print >> sys.stderr, "reportlab not found; PDF generator tests skipped"
-    else:
-        # We have reportlab, but may not have TrueType fonts.
+        return False # We don't have reportlab, so we can't get anywhere.
 
-        # Dumb heuristic to try and find the TrueType fonts.
-        font_dirs = ['/usr/share/fonts/truetype/msttcorefonts',
-                     r'C:\WINDOWS\Fonts']
-        for font_dir in font_dirs:
-            if os.path.exists(os.path.join(font_dir, 'arial.ttf')):
-                setUpMSTTCoreFonts(font_dir)
-                docsuite = doctest.DocTestSuite(optionflags=doctest.ELLIPSIS)
-                suite.addTest(docsuite)
-                break
-        else:
-            print >> sys.stderr, ("TrueType fonts not found;"
-                                  " PDF generator tests skipped")
+    from schoolbell.app.browser import pdfcal
+    if not pdfcal.disabled:
+        return True # Assume that reportlab has been configured already.
+
+    # Heuristic to try and find the TrueType fonts.
+    font_dirs = ['/usr/share/fonts/truetype/msttcorefonts',
+                 r'C:\WINDOWS\Fonts']
+    for font_dir in font_dirs:
+        if os.path.exists(os.path.join(font_dir, 'arial.ttf')):
+            setUpMSTTCoreFonts(font_dir)
+            return True
+    else:
+        return False
+
+
+def test_suite():
+    suite = unittest.TestSuite()
+    suite.addTest(doctest.DocTestSuite('schoolbell.app.browser.pdfcal'))
+    success = tryToSetUpReportLab()
+    if success:
+        docsuite = doctest.DocTestSuite(optionflags=doctest.ELLIPSIS)
+        suite.addTest(docsuite)
+    else:
+        print >> sys.stderr, ("reportlab or TrueType fonts not found;"
+                              " PDF generator tests skipped")
 
     return suite
 
