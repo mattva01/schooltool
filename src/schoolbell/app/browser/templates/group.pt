@@ -28,27 +28,6 @@
          edit members
       </a>
     </div>
-    <div tal:define="resources view/getResources" class="info-block"
-      tal:condition="resources">
-      <tal:comment condition="nothing">
-        <!-- The resource section is hidden altogether when there are no
-        resources as members - I presume that many groups will not
-        have resources as members. -->
-      </tal:comment>
-      <h5 i18n:translate="">Resources</h5>
-      <ul>
-        <li tal:repeat="obj resources/sortby:title">
-          <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
-        </li>
-      </ul>
-      <a class="modify" href=""
-         title="Change the resources selected for this group."
-         tal:attributes="href string:${context/@@absolute_url}/@@members_persons.html"
-         i18n:attributes="title"
-         i18n:translate="">
-         edit resources
-      </a>
-    </div>
   </div>
 
 </metal:block>
