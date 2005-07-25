@@ -313,6 +313,13 @@ class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
           <title>A Schema</title>
           <model factory="SequentialDaysTimetableModel">
             <daytemplate>
+              <used when="2005-07-07"/>
+              <period duration="30" id="A" tstart="08:00"/>
+              <period duration="30" id="B" tstart="08:30"/>
+              <period duration="30" id="C" tstart="09:00"/>
+              <period duration="30" id="D" tstart="09:30"/>
+            </daytemplate>
+            <daytemplate>
               <used when="Friday Thursday"/>
               <period duration="60" id="A" tstart="08:00"/>
               <period duration="60" id="B" tstart="11:00"/>
@@ -325,13 +332,6 @@ class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
               <period duration="60" id="B" tstart="10:00"/>
               <period duration="60" id="C" tstart="09:00"/>
               <period duration="60" id="D" tstart="10:00"/>
-            </daytemplate>
-            <daytemplate>
-              <used when="2005-07-07"/>
-              <period duration="30" id="A" tstart="08:00"/>
-              <period duration="30" id="B" tstart="08:30"/>
-              <period duration="30" id="C" tstart="09:00"/>
-              <period duration="30" id="D" tstart="09:30"/>
             </daytemplate>
             <day when="2005-07-08" id="Day 2" />
             <day when="2005-07-09" id="Day 1" />
@@ -359,8 +359,7 @@ class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
         result = view.GET()
         self.assertEquals(request.response.getHeader('content-type'),
                           "text/xml; charset=UTF-8")
-        self.assertEqualsXML(result, self.empty_xml,
-                             recursively_sort=['timetable'])
+        self.assertEqualsXML(result, self.empty_xml)
 
 
 class DayIdBasedModelMixin:

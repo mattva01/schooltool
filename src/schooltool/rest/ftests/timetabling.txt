@@ -295,18 +295,18 @@ Lets add a timetable schema:
     ...   <title>Some Title</title>
     ...   <model factory="SequentialDaysTimetableModel">
     ...     <daytemplate>
-    ...       <used when="default" />
-    ...       <period id="A" tstart="9:00" duration="60" />
-    ...       <period id="C" tstart="9:00" duration="60" />
-    ...       <period id="B" tstart="10:00" duration="60" />
-    ...       <period id="D" tstart="10:00" duration="60" />
-    ...     </daytemplate>
-    ...     <daytemplate>
     ...       <used when="Friday Thursday" />
     ...       <period id="A" tstart="8:00" duration="60" />
     ...       <period id="C" tstart="8:00" duration="60" />
     ...       <period id="B" tstart="11:00" duration="60" />
     ...       <period id="D" tstart="11:00" duration="60" />
+    ...     </daytemplate>
+    ...     <daytemplate>
+    ...       <used when="default" />
+    ...       <period id="A" tstart="9:00" duration="60" />
+    ...       <period id="C" tstart="9:00" duration="60" />
+    ...       <period id="B" tstart="10:00" duration="60" />
+    ...       <period id="D" tstart="10:00" duration="60" />
     ...     </daytemplate>
     ...   </model>
     ...   <day id="Day 1">
@@ -360,18 +360,18 @@ Lets see what's inside:
       <title>Some Title</title>
       <model factory="SequentialDaysTimetableModel">
         <daytemplate>
-          <used when="default"/>
-          <period duration="60" id="A" tstart="09:00"/>
-          <period duration="60" id="B" tstart="10:00"/>
-          <period duration="60" id="C" tstart="09:00"/>
-          <period duration="60" id="D" tstart="10:00"/>
-        </daytemplate>
-        <daytemplate>
           <used when="Friday Thursday"/>
           <period duration="60" id="A" tstart="08:00"/>
           <period duration="60" id="B" tstart="11:00"/>
           <period duration="60" id="C" tstart="08:00"/>
           <period duration="60" id="D" tstart="11:00"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="default"/>
+          <period duration="60" id="A" tstart="09:00"/>
+          <period duration="60" id="B" tstart="10:00"/>
+          <period duration="60" id="C" tstart="09:00"/>
+          <period duration="60" id="D" tstart="10:00"/>
         </daytemplate>
       </model>
       <day id="Day 1">
@@ -395,18 +395,18 @@ Lets modify the timetable schema:
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
     ...   <model factory="SequentialDaysTimetableModel">
     ...     <daytemplate>
-    ...       <used when="default" />
-    ...       <period id="A" tstart="10:00" duration="60" />
-    ...       <period id="C" tstart="10:00" duration="60" />
-    ...       <period id="B" tstart="11:00" duration="60" />
-    ...       <period id="D" tstart="11:00" duration="60" />
-    ...     </daytemplate>
-    ...     <daytemplate>
     ...       <used when="Friday Thursday" />
     ...       <period id="A" tstart="8:00" duration="70" />
     ...       <period id="C" tstart="8:00" duration="70" />
     ...       <period id="B" tstart="11:00" duration="70" />
     ...       <period id="D" tstart="11:00" duration="70" />
+    ...     </daytemplate>
+    ...     <daytemplate>
+    ...       <used when="default" />
+    ...       <period id="A" tstart="10:00" duration="60" />
+    ...       <period id="C" tstart="10:00" duration="60" />
+    ...       <period id="B" tstart="11:00" duration="60" />
+    ...       <period id="D" tstart="11:00" duration="60" />
     ...     </daytemplate>
     ...   </model>
     ...   <day id="Day 1">
@@ -441,18 +441,18 @@ And check that schema was indeed modified:
       <title>Schema</title>
       <model factory="SequentialDaysTimetableModel">
         <daytemplate>
-          <used when="default"/>
-          <period duration="60" id="A" tstart="10:00"/>
-          <period duration="60" id="B" tstart="11:00"/>
-          <period duration="60" id="C" tstart="10:00"/>
-          <period duration="60" id="D" tstart="11:00"/>
-        </daytemplate>
-        <daytemplate>
           <used when="Friday Thursday"/>
           <period duration="70" id="A" tstart="08:00"/>
           <period duration="70" id="B" tstart="11:00"/>
           <period duration="70" id="C" tstart="08:00"/>
           <period duration="70" id="D" tstart="11:00"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="default"/>
+          <period duration="60" id="A" tstart="10:00"/>
+          <period duration="60" id="B" tstart="11:00"/>
+          <period duration="60" id="C" tstart="10:00"/>
+          <period duration="60" id="D" tstart="11:00"/>
         </daytemplate>
       </model>
       <day id="Day 1">
@@ -475,16 +475,16 @@ Trying to put an invalid schema should get us an error:
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
     ...   <model factory="SequentialDaysTimetableModel">
     ...     <daytemplate>
-    ...       <used when="default" />
-    ...       <period id="A" tstart="10:00" duration="60" />
-    ...       <period id="B" tstart="11:00" duration="60" />
-    ...       <period id="D" tstart="11:00" duration="60" />
-    ...     </daytemplate>
-    ...     <daytemplate>
     ...       <used when="Friday Thursday" />
     ...       <period id="A" tstart="8:00" duration="70" />
     ...       <period id="B" tstart="11:00" duration="70" />
     ...       <period id="D" tstart="11:00" duration="70" />
+    ...     </daytemplate>
+    ...     <daytemplate>
+    ...       <used when="default" />
+    ...       <period id="A" tstart="10:00" duration="60" />
+    ...       <period id="B" tstart="11:00" duration="60" />
+    ...       <period id="D" tstart="11:00" duration="60" />
     ...     </daytemplate>
     ...   </model>
     ...   <day id="Day 1">

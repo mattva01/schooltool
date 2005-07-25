@@ -953,18 +953,18 @@ The schema is now created:
         <period duration="55" id="Period_D" tstart="12:30"/>
       </daytemplate>
       <daytemplate>
-        <used when="C"/>
-        <period duration="55" id="Period_A" tstart="09:30"/>
-        <period duration="55" id="Period_B" tstart="10:30"/>
-        <period duration="55" id="Period_C" tstart="11:30"/>
-        <period duration="55" id="Period_D" tstart="12:30"/>
-      </daytemplate>
-      <daytemplate>
         <used when="B"/>
         <period duration="55" id="Period_A" tstart="12:30"/>
         <period duration="55" id="Period_B" tstart="10:30"/>
         <period duration="55" id="Period_C" tstart="11:30"/>
         <period duration="55" id="Period_D" tstart="09:30"/>
+      </daytemplate>
+      <daytemplate>
+        <used when="C"/>
+        <period duration="55" id="Period_A" tstart="09:30"/>
+        <period duration="55" id="Period_B" tstart="10:30"/>
+        <period duration="55" id="Period_C" tstart="11:30"/>
+        <period duration="55" id="Period_D" tstart="12:30"/>
       </daytemplate>
     </model>
     <day id="A">
@@ -1352,7 +1352,10 @@ The schema is now created:
     <title>Weekly 2</title>
     <model factory="WeeklyTimetableModel">
       <daytemplate>
-        <used when="default"/>
+        <used when="Friday"/>
+        <period duration="50" id="C" tstart="09:30"/>
+        <period duration="50" id="D" tstart="10:25"/>
+        <period duration="50" id="E" tstart="11:20"/>
       </daytemplate>
       <daytemplate>
         <used when="Monday"/>
@@ -1362,13 +1365,6 @@ The schema is now created:
         <period duration="55" id="D" tstart="12:30"/>
       </daytemplate>
       <daytemplate>
-        <used when="Wednesday"/>
-        <period duration="55" id="C" tstart="09:30"/>
-        <period duration="55" id="D" tstart="10:30"/>
-        <period duration="55" id="E" tstart="11:30"/>
-        <period duration="55" id="F" tstart="12:30"/>
-      </daytemplate>
-      <daytemplate>
         <used when="Thursday"/>
         <period duration="55" id="A" tstart="12:30"/>
         <period duration="55" id="D" tstart="09:30"/>
@@ -1376,17 +1372,21 @@ The schema is now created:
         <period duration="55" id="F" tstart="11:30"/>
       </daytemplate>
       <daytemplate>
-        <used when="Friday"/>
-        <period duration="50" id="C" tstart="09:30"/>
-        <period duration="50" id="D" tstart="10:25"/>
-        <period duration="50" id="E" tstart="11:20"/>
-      </daytemplate>
-      <daytemplate>
         <used when="Tuesday"/>
         <period duration="55" id="B" tstart="09:30"/>
         <period duration="55" id="C" tstart="10:30"/>
         <period duration="55" id="D" tstart="11:30"/>
         <period duration="55" id="E" tstart="12:30"/>
+      </daytemplate>
+      <daytemplate>
+        <used when="Wednesday"/>
+        <period duration="55" id="C" tstart="09:30"/>
+        <period duration="55" id="D" tstart="10:30"/>
+        <period duration="55" id="E" tstart="11:30"/>
+        <period duration="55" id="F" tstart="12:30"/>
+      </daytemplate>
+      <daytemplate>
+        <used when="default"/>
       </daytemplate>
     </model>
     <day id="Monday">
@@ -1821,11 +1821,11 @@ The schema is now created:
     <title>Rotating 4</title>
     <model factory="SequentialDayIdBasedTimetableModel">
       <daytemplate>
-        <used when="Day C"/>
-        <period duration="55" id="C" tstart="09:30"/>
-        <period duration="55" id="D" tstart="10:30"/>
-        <period duration="55" id="E" tstart="11:30"/>
-        <period duration="55" id="F" tstart="12:30"/>
+        <used when="Day A"/>
+        <period duration="55" id="A" tstart="09:30"/>
+        <period duration="55" id="B" tstart="10:30"/>
+        <period duration="55" id="C" tstart="11:30"/>
+        <period duration="55" id="D" tstart="12:30"/>
       </daytemplate>
       <daytemplate>
         <used when="Day B"/>
@@ -1836,11 +1836,11 @@ The schema is now created:
         <period duration="55" id="F" tstart="13:00"/>
       </daytemplate>
       <daytemplate>
-        <used when="Day A"/>
-        <period duration="55" id="A" tstart="09:30"/>
-        <period duration="55" id="B" tstart="10:30"/>
-        <period duration="55" id="C" tstart="11:30"/>
-        <period duration="55" id="D" tstart="12:30"/>
+        <used when="Day C"/>
+        <period duration="55" id="C" tstart="09:30"/>
+        <period duration="55" id="D" tstart="10:30"/>
+        <period duration="55" id="E" tstart="11:30"/>
+        <period duration="55" id="F" tstart="12:30"/>
       </daytemplate>
     </model>
     <day id="Day A">

@@ -164,6 +164,8 @@ class TimetableSchemaView(View):
         for date, id in self.context.model.exceptionDayIds.items():
             result.append({'when': str(date), 'id': id})
 
+        result.sort(lambda a, b: cmp((a['when'], a['id']),
+                                     (b['when'], b['id'])))
         return result
 
     def daytemplates(self):
@@ -201,6 +203,9 @@ class TimetableSchemaView(View):
                      'duration': period.duration.seconds / 60})
             periods.sort()
             result.append({'used': str(date), 'periods': periods})
+
+        result.sort(lambda a, b: cmp((a['used'], a['periods']),
+                                     (b['used'], b['periods'])))
 
         return result
 
