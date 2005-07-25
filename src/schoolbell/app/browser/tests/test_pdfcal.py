@@ -181,10 +181,9 @@ def test_disabled():
     """Test for PDFCalendarViewBase in disabled state.
 
         >>> from schoolbell.app.browser import pdfcal
+        >>> real_pdfcal_disabled = pdfcal.disabled
 
-    The `disabled` flag is set to True by default, but we have run the
-    initialization routine already, so it has been set to False.  Reset it
-    for the moment:
+    Reset the disabled flag to True for the moment:
 
         >>> pdfcal.disabled = True
 
@@ -196,7 +195,7 @@ def test_disabled():
 
     Clean up:
 
-        >>> pdfcal.disabled = False
+        >>> pdfcal.disabled = real_pdfcal_disabled
 
     """
 
