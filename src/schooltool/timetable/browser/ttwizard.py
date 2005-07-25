@@ -442,6 +442,7 @@ class RotatingSlotEntryStep(Step):
                     " one slot (HH:MM - HH:MM) per line.")
 
     error = None
+    example_intervals = '8:00 - 8:45\n9:05 - 9:50\n'
 
     def dayNames(self):
         """Return the list of day names."""

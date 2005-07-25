@@ -1115,19 +1115,15 @@ Let's say that classes begin at different times
       </tr>
       <tr>
         <td>
-          <textarea rows="12" cols="15" name="times.0"></textarea>
+          <textarea rows="12" cols="15" name="times.0">8:00 - 8:45
+    9:05 - 9:50
+    </textarea>
         </td>
+        ...
         <td>
-          <textarea rows="12" cols="15" name="times.1"></textarea>
-        </td>
-        <td>
-          <textarea rows="12" cols="15" name="times.2"></textarea>
-        </td>
-        <td>
-          <textarea rows="12" cols="15" name="times.3"></textarea>
-        </td>
-        <td>
-          <textarea rows="12" cols="15" name="times.4"></textarea>
+          <textarea rows="12" cols="15" name="times.4">8:00 - 8:45
+    9:05 - 9:50
+    </textarea>
         </td>
       </tr>
     </table>
@@ -1605,19 +1601,15 @@ We'll go with weekly.
       </tr>
       <tr>
         <td>
-          <textarea rows="12" cols="15" name="times.0"></textarea>
+          <textarea rows="12" cols="15" name="times.0">8:00 - 8:45
+    9:05 - 9:50
+    </textarea>
         </td>
+        ...
         <td>
-          <textarea rows="12" cols="15" name="times.1"></textarea>
-        </td>
-        <td>
-          <textarea rows="12" cols="15" name="times.2"></textarea>
-        </td>
-        <td>
-          <textarea rows="12" cols="15" name="times.3"></textarea>
-        </td>
-        <td>
-          <textarea rows="12" cols="15" name="times.4"></textarea>
+          <textarea rows="12" cols="15" name="times.4">8:00 - 8:45
+    9:05 - 9:50
+    </textarea>
         </td>
       </tr>
     </table>
@@ -2092,13 +2084,19 @@ We'll go with cyclic.
       </tr>
       <tr>
         <td>
-          <textarea rows="12" cols="15" name="times.0"></textarea>
+          <textarea rows="12" cols="15" name="times.0">8:00 - 8:45
+    9:05 - 9:50
+    </textarea>
         </td>
         <td>
-          <textarea rows="12" cols="15" name="times.1"></textarea>
+          <textarea rows="12" cols="15" name="times.1">8:00 - 8:45
+    9:05 - 9:50
+    </textarea>
         </td>
         <td>
-          <textarea rows="12" cols="15" name="times.2"></textarea>
+          <textarea rows="12" cols="15" name="times.2">8:00 - 8:45
+    9:05 - 9:50
+    </textarea>
         </td>
       </tr>
     </table>

@@ -552,10 +552,14 @@ def doctest_RotatingSlotEntryStep():
         </tr>
         <tr>
           <td>
-            <textarea rows="12" cols="15" name="times.0"></textarea>
+            <textarea rows="12" cols="15" name="times.0">8:00 - 8:45
+        9:05 - 9:50
+        </textarea>
           </td>
           <td>
-            <textarea rows="12" cols="15" name="times.1"></textarea>
+            <textarea rows="12" cols="15" name="times.1">8:00 - 8:45
+        9:05 - 9:50
+        </textarea>
           </td>
         </tr>
         </table>
@@ -567,6 +571,7 @@ def doctest_RotatingSlotEntryStep():
     SlotEntryStep.update wants at least one slot on each day:
 
         >>> view.request.form['times.0'] = u'9:30 - 10:25'
+        >>> view.request.form['times.1'] = u''
         >>> view.update()
         False
 
@@ -643,11 +648,15 @@ def doctest_WeeklySlotEntryStep():
         </tr>
         <tr>
           <td>
-            <textarea rows="12" cols="15" name="times.0"></textarea>
+            <textarea rows="12" cols="15" name="times.0">8:00 - 8:45
+        9:05 - 9:50
+        </textarea>
           </td>
           ...
           <td>
-            <textarea rows="12" cols="15" name="times.4"></textarea>
+            <textarea rows="12" cols="15" name="times.4">8:00 - 8:45
+        9:05 - 9:50
+        </textarea>
           </td>
         </tr>
         </table>
@@ -659,6 +668,7 @@ def doctest_WeeklySlotEntryStep():
     SlotEntryStep.update wants at least one slot on each day:
 
         >>> view.request.form['times.0'] = u'9:30 - 10:25'
+        >>> view.request.form['times.1'] = u''
         >>> view.update()
         False
 
