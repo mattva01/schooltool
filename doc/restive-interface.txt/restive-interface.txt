@@ -1,0 +1,231 @@
+SchoolTool server RESTive interface
+===================================
+
+This is a brief list of all actions accessible through the RESTive interface
+to the SchoolTool server.
+
+  GET /
+    lists all application object containers, roots, utilities
+
+  GET /persons
+    lists all persons in the system
+  POST /persons
+    creates a new person in the system
+  PUT /persons/new_person_id
+    creates a new person in the system
+  DELETE /persons/person_id
+    permanently delete a person from the system
+
+  GET /resources
+    lists all resources in the system
+  POST /resources
+    creates a new resource in the system
+  PUT /resources/new_resource_id
+    creates a new resource in the system
+  GET /resources/resource_id
+    shows the information for a resource
+  DELETE /resources/resource_id
+    permanently delete a resource from the system
+
+  GET /groups
+    lists all groups in the system
+  POST /groups
+    creates a new group in the system
+  PUT /groups/new_group_id
+    creates a new group in the system
+  GET /groups/group_id
+    shows the information for a group
+  DELETE /groups/group_id
+    permanently delete a group from the system
+
+  GET /groups/group_id/tree
+    shows the tree of members rooted at this group
+
+  GET /groups/group_id/rollcall
+    get a roll-call template
+  POST /groups/group_id/rollcall
+    perform a roll call
+
+  GET /persons/person_id
+    shows the information for a person
+
+  GET /persons/person_id/absences
+    list a person's absences
+  POST /persons/person_id/absences
+    report a new absence or update the current absence
+  GET /persons/person_id/absences/id
+    show detailed information about an absence
+  POST /persons/person_id/absences/id
+    add a comment to an absence
+
+  PUT /persons/person_id/password
+    set a password for a person
+  DELETE /persons/person_id/password
+    disable the account of a person
+
+  GET /notes
+    list all notes in the system
+  GET /notes/note_id
+    show information about a note
+  POST /notes
+    create a new note
+  PUT /notest/note_id
+    create a new note with a given id
+  DELETE /notest/note_id
+    delete a note
+
+  GET ...object/facets
+    lists all facets for an object and all available facet factories
+  POST ...object/facets
+    creates a new facet for an object
+  DELETE ...object/facets/facet_name
+    removes the facet named 'facet_name' from an object
+
+  GET ...object/facets/eventlog
+    lists all events logged for an object (only if the object has an eventlog
+    facet)
+  PUT ...object/facets/eventlog
+    clears all events logged for an object accessible at '...object' (only if
+    the object has an eventlog facet)
+
+  GET ...object/facets/absences
+    lists all logged absences (only if the object has an absence tracker facet)
+
+  GET ...object/relationships
+    lists all relationships and valencies of an object
+  POST ...object/relationships
+    establish a new relationship
+  GET ...object/relationships/link_id
+    show information about the specific relationship
+  DELETE ...object/relationships/link_id
+    remove the relationship
+
+  GET ...object/timetables
+    shows the list of existing timetables
+  GET ...object/timetables/time_period/schema
+    shows the specific timetable
+  PUT ...object/timetables/time_period/schema
+    creates or replaces the specific timetable
+  DELETE ...object/timetables/time_period/schema
+    removes the specific timetable
+  GET ...object/composite-timetables
+    shows the list of existing composite timetables
+  GET ...object/composite-timetables/time_period/schema
+    shows the specific composite timetable
+
+  GET ...object/calendar
+    shows the person's or group's calendar (in iCalendar format)
+  PUT ...object/calendar
+    uploads the person's or group's calendar (in iCalendar format)
+
+  GET ...object/timetable-calendar
+    shows the person's or group's calendar generated from all
+    composite timetables (in iCalendar format)
+
+  GET /utils
+    lists all utilities
+
+  GET /utils/absences
+    lists all logged absences
+
+  GET /utils/eventlog
+    lists all logged events
+  PUT /utils/eventlog
+    clears the event log
+
+  GET /ttschemas
+    lists all defined timetable schemas
+  GET /ttschemas/schema_name
+    shows the timetable schema named 'schema_name'
+  PUT /ttschemas/schema_name
+    creates or updates timetable schema named 'schema_name'
+  DELETE /ttschemas/schema_name
+    deletes the timetable schema named 'schema_name'
+
+  GET /time-periods
+    lists all defined time periods
+  GET /time-periods/period_name
+    shows the schooldays model for a given time period
+  PUT /time-periods/period_name
+    creates or updates the schooldays model for a given time period
+  DELETE /time-periods/period_name
+    deletes the time period named 'period_name'
+
+  GET /schooltt/timetables
+    shows the list of all possible school timetables
+  GET /schooltt/timetables/time_period/schema
+    shows the specific school timetable
+  PUT /schooltt/timetables/time_period/schema
+    creates or replaces the specific school timetable
+  DELETE /schooltt/timetables/time_period/schema
+    deletes the timetable schema
+
+  GET /busysearch?query
+    Searches when given resources are free within a specified range of
+    dates at given hours of a day for a certain period of time.
+
+    The following query parameters are accepted:
+
+       resources  a list of paths of resources searched. Empty list
+                  means all resources.
+
+       first      The first day the searched period of time
+                  in the YYYY-MM-DD format.
+
+       last       The last day of the searched period of time
+                  in the YYYY-MM-DD format.
+
+       hours      multiple values expected.  A list of hours 0..23
+                  specifying the time of day.
+
+       duration   The minimal duration of a free period of time in minutes.
+
+  POST ...resource/booking
+    books a resource. An event is added to the calendars of a resource
+    and of a person booking.
+
+  GET /csvexport.zip
+    returns a zip with four csv files, suitable for importing with csvclient.
+
+  GET /applog?query
+    returns the application log as text/plain
+
+    The following query parameters are accepted:
+
+       filter     Substring for filtering log messages.
+
+       pagesize   Number of lines per page (ignored if you omit the 'page'
+                  parameter).
+
+       page       Page number (1-based), negative numbers count backwards from
+                  the last page.  Ignored if you omit the 'pagesize'
+                  parameter.
+
+    If you specify both page and pagesize, the response will contain a couple
+    of additional headers:
+
+        X-Page    Page number (always positive).
+
+        X-Total-Pages
+                  Total number of pages.
+
+  GET /uris
+    returns the list of URI objects
+
+  GET /options
+    returns global application settings
+  PUT /options
+    updates global application settings
+
+In the above, '...object' stands for a full path to an application object
+(i.e., a group, a person or a resource), for example,
+'/persons/some_person_id'.
+
+Note: residences are not yet available through the ReSTive interface.
+
+This list should be up-to-date (I think) with respect to SchoolTool revision
+1993.  It has not been verified, so it might contain errors or omissions.
+
+Ideally all this should be automatically extracted from source code (e.g.,
+docstrings for views).
+
