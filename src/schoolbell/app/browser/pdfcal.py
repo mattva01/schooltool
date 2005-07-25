@@ -139,20 +139,13 @@ class PDFCalendarViewBase(BrowserView):
 
     def buildPageHeader(self, owner_title, date):
         """Build a story that constructs the top of the first page."""
-        from reportlab.platypus import Image, Paragraph
+        from reportlab.platypus import Paragraph
         from reportlab.lib.units import cm
-
-        # TODO: Use a hires logo, this one is too blurry.
-        logo_path = os.path.join(os.path.dirname(__file__),
-                                 'resources', 'logo.png')
-        logo = Image(logo_path)
-        logo.hAlign = 'LEFT'
 
         title = translate(self.title, context=self.request) % owner_title
         date_title = self.dateTitle(date)
 
-        story = [logo,
-                 Paragraph(title.encode('utf-8'), self.title_style),
+        story = [Paragraph(title.encode('utf-8'), self.title_style),
                  Paragraph(date_title.encode('utf-8'), self.title_style)]
         return story
 

@@ -104,14 +104,14 @@ def doctest_PDFCalendarViewBase_buildStory():
 
         >>> story = view.buildStory(date(2005, 7, 8))
         >>> len(story)
-        4
-        >>> story[1].text
+        3
+        >>> story[0].text
         'Calendar for Mr. Smith'
-        >>> story[2].text
+        >>> story[1].text
         '2005-07-08'
-        >>> story[3]._cellvalues[0][0].text
+        >>> story[2]._cellvalues[0][0].text
         '09:10-10:22'
-        >>> evt_info = story[3]._cellvalues[0][1]
+        >>> evt_info = story[2]._cellvalues[0][1]
         >>> len(evt_info)
         2
         >>> evt_info[0].text
@@ -141,12 +141,12 @@ def doctest_PDFCalendarViewBase_buildStory_unicode():
         >>> story = view.buildStory(date(2005, 7, 8))
 
         >>> len(story)
-        4
-        >>> story[1].text
+        3
+        >>> story[0].text
         'Calendar for \xc4\x85 person'
-        >>> story[2].text
+        >>> story[1].text
         '2005-07-08'
-        >>> evt_info = story[3]._cellvalues[0][1]
+        >>> evt_info = story[2]._cellvalues[0][1]
         >>> len(evt_info)
         2
         >>> evt_info[0].text
@@ -168,14 +168,10 @@ def test_buildPageHeader():
         >>> paras = view.buildPageHeader(u'\0105n owner', date(2005, 7, 3))
 
         >>> len(paras)
-        3
-        >>> paras[0]
-        <...Image...>
-        >>> paras[0].hAlign
-        'LEFT'
-        >>> paras[1].text
+        2
+        >>> paras[0].text
         'Calendar for \x085n owner'
-        >>> paras[2].text
+        >>> paras[1].text
         '2005-07-03'
 
     """
