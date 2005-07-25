@@ -420,7 +420,7 @@ def doctest_SectionEditView():
         ...                 'field.title': u''}
         >>> view = TestSectionEditView(section, request)
         >>> view.update()
-        u'An error occured.'
+        u'An error occurred.'
         >>> request.response.getStatus()
         599
 
