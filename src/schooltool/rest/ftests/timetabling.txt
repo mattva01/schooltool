@@ -2,7 +2,7 @@ Timetabling in SchoolTool
 =========================
 
 This functional doctest demonstrates and tests SchoolTool's timetable
-restive views.
+RESTive views.
 
 
 Overview
@@ -34,6 +34,7 @@ We will need a SchoolTool instance.  Let's call it 'frogpond'.
 Also, we need the REST HTTP caller:
 
     >>> from schoolbell.app.rest.ftests import rest
+
 
 Terms
 -----
@@ -284,7 +285,7 @@ There should be no timetable schemas yet:
     </container>
     <BLANKLINE>
 
-Lets add a timetable schema:
+Let's add a timetable schema:
 
     >>> print rest(r"""
     ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
@@ -347,7 +348,7 @@ We should see this new schema in the container:
     <BLANKLINE>
 
 
-Lets see what's inside:
+Let's see what's inside:
 
     >>> print rest(r"""
     ... GET /frogpond/ttschemas/schema1 HTTP/1.1
@@ -385,7 +386,7 @@ Lets see what's inside:
     </timetable>
 
 
-Lets modify the timetable schema:
+Let's modify the timetable schema:
 
     >>> print rest(r"""
     ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
@@ -503,7 +504,8 @@ Trying to put an invalid schema should get us an error:
 Timetables
 ----------
 
-We will need at least one term (we have deleted the one inserted in the first test):
+We will need at least one term (we have deleted the one inserted in the first
+test):
 
     >>> print http(r"""
     ... PUT /frogpond/terms/2005-fall HTTP/1.1
@@ -523,7 +525,7 @@ We will need at least one term (we have deleted the one inserted in the first te
     Content-Length: 0
     <BLANKLINE>
 
-Lets add a person:
+Let's add a person:
 
     >>> print rest("""
     ... PUT /frogpond/persons/john HTTP/1.1
@@ -590,7 +592,7 @@ It should be there:
       </day>
     </timetable>
 
-Lets modify it:
+Let's modify it:
 
     >>> print rest(r"""
     ... PUT /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
@@ -651,7 +653,7 @@ The timetable should look different now:
       </day>
     </timetable>
 
-Lets look at the listof timetables we have now:
+Let's look at the list of timetables we have now:
 
     >>> print rest(r"""
     ... GET /frogpond/persons/john/timetables/ HTTP/1.1
@@ -667,7 +669,7 @@ Lets look at the listof timetables we have now:
     </timetables>
     <BLANKLINE>
 
-Lets delete it:
+Let's delete it:
 
     >>> print rest(r"""
     ... DELETE /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
