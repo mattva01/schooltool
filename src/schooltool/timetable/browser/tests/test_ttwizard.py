@@ -416,35 +416,10 @@ def doctest_IndependentDaysStep():
         >>> view.next()
         <...ttwizard.WeeklySlotEntryStep...>
 
-    If you chose the rotating cycle, you will be asked another question
-    about the time model:
+    If you chose the rotating cycle, you will get to the view to enter
+    the slots for rotating schedule:
 
         >>> view.getSessionData()['cycle'] = 'rotating'
-        >>> view.next()
-        <...ttwizard.SequentialModelStep...>
-
-    """
-
-
-def doctest_SequentialModelStep():
-    r"""Unit test for SequentialModelStep
-
-        >>> from schooltool.timetable.browser.ttwizard import SequentialModelStep
-        >>> context = app['ttschemas']
-        >>> request = TestRequest()
-        >>> view = SequentialModelStep(context, request)
-
-    If you choose the weekly cycle, you will be redirected to
-    WeeklySlotEntryStep:
-
-        >>> session = view.getSessionData()
-        >>> session['time_model'] = 'weekly'
-        >>> view.next()
-        <...ttwizard.WeeklySlotEntryStep...>
-
-    Otherwise, the rotating cycle will be used:
-
-        >>> session['time_model'] = 'cycle_day'
         >>> view.next()
         <...ttwizard.RotatingSlotEntryStep...>
 
@@ -729,22 +704,6 @@ def doctest_WeeklySlotEntryStep():
 
         >>> session = view.getSessionData()
         >>> session['cycle'] = 'rotating'
-        >>> session['time_model'] = 'weekly'
-
-        >>> view.update()
-        False
-        >>> translate(view.error)
-        'As you have selected a rotating timetable cycle and slots based on day of week, all days must have the same number of time periods.'
-
-    If we change the time model, the same data will pass:
-
-        >>> session['time_model'] = 'cycle_day'
-        >>> view.update()
-        True
-
-    Or we can delete that key altogether:
-
-        >>> del session['time_model']
         >>> view.update()
         True
 
@@ -1042,7 +1001,6 @@ def doctest_PeriodOrderComplex():
         >>> session['period_names'] = ['A', 'B', 'C', 'D']
         >>> session['day_names'] = ['Day One', 'Day Two']
         >>> session['cycle'] = 'rotating'
-        >>> session['time_model'] = 'cycle_day'
 
     The number of period dropdowns is the maximum of slots in a day:
 
@@ -1133,7 +1091,6 @@ def doctest_PeriodOrderComplex():
         >>> view.getSessionData()['day_names'] = ['Day 1', 'Day 2']
         >>> view.getSessionData()['time_slots'] = time_slots
         >>> view.getSessionData()['cycle'] = 'rotating'
-        >>> view.getSessionData()['time_model'] = 'cycle_day'
         >>> view.update()
         True
         >>> print view.getSessionData()['periods_order']
@@ -1155,7 +1112,6 @@ def doctest_PeriodOrderComplex():
         >>> view.getSessionData()['day_names'] = ['Z', 'X']
         >>> view.getSessionData()['time_slots'] = time_slots
         >>> view.getSessionData()['cycle'] = 'rotating'
-        >>> view.getSessionData()['time_model'] = 'cycle_day'
         >>> view.update()
         False
         >>> print translate(view.error)
@@ -1179,7 +1135,6 @@ def doctest_PeriodOrderComplex():
         ...      (datetime.time(10, 35), datetime.timedelta(0, 2700)),
         ...      (datetime.time(10, 35), datetime.timedelta(0, 2700)),]]
         >>> view.getSessionData()['cycle'] = 'rotating'
-        >>> view.getSessionData()['time_model'] = 'cycle_day'
         >>> view.update()
         False
         >>> print translate(view.error)
@@ -1249,56 +1204,6 @@ def doctest_PeriodOrderComplex():
             </tr>
           </table>
         ...
-
-    """
-
-
-def doctest_PeriodOrderComplex_weekly_rotating():
-    """Unit test for PeriodOrderComplex view
-
-        >>> from schooltool.timetable.browser.ttwizard import \\
-        ...     PeriodOrderComplex
-        >>> context = app['ttschemas']
-        >>> request = TestRequest()
-        >>> view = PeriodOrderComplex(context, request)
-
-    There is one special case: a rotating cycle that uses weekdays to determine
-    time slots.
-
-        >>> session = view.getSessionData()
-        >>> session['cycle'] = 'rotating'
-        >>> session['time_model'] = 'weekly'
-
-    Let's say we have some periods:
-
-        >>> session['period_names'] = ['A', 'B', 'C', 'D']
-        >>> session['day_names'] = ['Day One', 'Day Two']
-
-    The number of period dropdowns is the maximum of slots in a day:
-
-        >>> time_slots = [
-        ...     [(datetime.time(9, 30), datetime.timedelta(0, 3300))],
-        ...     [(datetime.time(9, 30), datetime.timedelta(0, 3300))],
-        ...     [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
-        ...      (datetime.time(10, 35), datetime.timedelta(0, 2700)),
-        ...      (datetime.time(11, 35), datetime.timedelta(0, 2700)),],
-        ...     [(datetime.time(9, 30), datetime.timedelta(0, 3300))],
-        ...     [(datetime.time(9, 30), datetime.timedelta(0, 3300))],
-        ... ]
-        >>> view.getSessionData()['time_slots'] = time_slots
-
-    Our view lets the template easily access them:
-
-        >>> view.periods()
-        ['A', 'B', 'C', 'D']
-
-        >>> view.days()
-        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-
-    The number of dropdowns for a day is equal to the number of slots:
-
-        >>> view.numSlots()
-        [1, 1, 3, 1, 1]
 
     """
 
@@ -1625,80 +1530,6 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_cyclic():
         09:00-09:45: D
         10:00-10:45: E
         11:00-11:45: F
-
-    """
-
-
-def doctest_FinalStep_createSchema_different_order_cyclic_weekly():
-    """Unit test for FinalStep.createSchema
-
-    Rotating cycle, different time slots on a weekly basis, different period
-    order in each day.
-
-        >>> from schooltool.timetable.browser.ttwizard import FinalStep
-        >>> view = FinalStep(app['ttschemas'], TestRequest())
-        >>> data = view.getSessionData()
-
-        >>> from datetime import time, timedelta
-        >>> slots = [[(time(8+n, d*5), timedelta(minutes=45))
-        ...           for n in range(4)]
-        ...          for d in range(5)]
-
-        >>> data['title'] = u'Default'
-        >>> data['cycle'] = 'rotating'
-        >>> data['day_names'] = ['Day 1', 'Day 2', 'Day 3']
-        >>> data['similar_days'] = False
-        >>> data['time_model'] = 'weekly'
-        >>> data['time_slots'] = slots
-        >>> data['named_periods'] = True
-        >>> data['period_names'] = ['A', 'B', 'C', 'D', 'E', 'F']
-        >>> data['periods_same'] = False
-        >>> data['periods_order'] = [['A', 'B', 'C', 'D'],
-        ...                          ['B', 'C', 'D', 'E'],
-        ...                          ['C', 'D', 'E', 'F'],
-        ...                          ['D', 'E', 'F', 'A'],
-        ...                          ['E', 'F', 'A', 'B']]
-        >>> ttschema = view.createSchema()
-
-        >>> print_ttschema(ttschema)
-        Day 1        Day 2        Day 3
-        A            A            A
-        B            B            B
-        C            C            C
-        D            D            D
-        E            E            E
-        F            F            F
-
-        >>> ttschema.model
-        <...SequentialDaysTimetableModel object at ...>
-
-        >>> print_day_templates(ttschema.model.dayTemplates)
-        --- day template None
-        --- day template 0
-        08:00-08:45: A
-        09:00-09:45: B
-        10:00-10:45: C
-        11:00-11:45: D
-        --- day template 1
-        08:05-08:50: B
-        09:05-09:50: C
-        10:05-10:50: D
-        11:05-11:50: E
-        --- day template 2
-        08:10-08:55: C
-        09:10-09:55: D
-        10:10-10:55: E
-        11:10-11:55: F
-        --- day template 3
-        08:15-09:00: D
-        09:15-10:00: E
-        10:15-11:00: F
-        11:15-12:00: A
-        --- day template 4
-        08:20-09:05: E
-        09:20-10:05: F
-        10:20-11:05: A
-        11:20-12:05: B
 
     """
 
