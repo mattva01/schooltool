@@ -7,7 +7,7 @@
 <metal:block metal:fill-slot="body">
 
 <p i18n:translate="">An internal server error has occurred.  This most likely
-means that you have found a bug in SchoolTool.  Please report it on <a
+means that you have found a bug in SchoolBell.  Please report it on <a
 href="http://issues.schooltool.org">the issue tracker</a>.</p>
 
 <h2 i18n:translate="">Exception</h2>

@@ -64,11 +64,9 @@ def doctest_ErrorView():
         ...     raise exception
         ... except:
         ...     print view.traceback()
-        Traceback (most recent call last):
-          File "&lt;doctest schoolbell..._ErrorView[...]&gt;", line 2, in ?
-            raise exception
-        RuntimeError: some kind of error
-
+        File "<span class="filename">&lt;doctest...ErrorView[...]&gt;</span>",
+        line <span class="lineno">2</span>, in <span class="method">?</span>
+          <span class="source">raise exception</span>
 
     """
 

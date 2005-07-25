@@ -1120,3 +1120,27 @@ table.event_booking td.booked {
 .note.private .body {
   background: url(++resource++private-note-body-l.gif) no-repeat bottom left;
 }
+
+/* Internal error pages */
+
+pre.traceback {
+  color: #444444;
+  font-size: small;
+}
+
+pre.traceback span.filename {
+  color: blue;
+}
+pre.traceback span.lineno,
+pre.traceback span.column {
+  color: red;
+}
+pre.traceback span.method {
+  color: green;
+}
+pre.traceback span.expr {
+  color: green;
+}
+pre.traceback span.source {
+  color: black;
+}
