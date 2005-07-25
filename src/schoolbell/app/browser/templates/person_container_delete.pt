@@ -16,7 +16,7 @@
   <p tal:condition="not:objects" i18n:translate="">You have not
   selected any items.</p>
   <p tal:condition="view/isDeletingHimself" i18n:translate="">
-    Sorry you can not delete the current user!
+    Sorry, you may not delete your own user account.
   </p>
   <ul tal:condition="python: objects and not view.isDeletingHimself()">
     <form method="post"

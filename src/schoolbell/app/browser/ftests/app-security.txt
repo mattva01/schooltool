@@ -300,7 +300,7 @@ If frog tries deleting himself - he should get an error:
     Content-Type: text/html;charset=utf-8
     ...
       <p>
-        Sorry you can not delete the current user!
+        Sorry, you may not delete your own user account.
       </p>
     ...
 
