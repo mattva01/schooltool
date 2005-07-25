@@ -215,7 +215,8 @@
       <h1 i18n:translate="">
         Calendar for <span tal:replace="context/title"
           i18n:name="title" i18n:translate="" /> -
-        <span i18n:name="calendar_title" tal:replace="view/title"/>
+        <span i18n:name="calendar_title" i18n:translate=""
+              tal:replace="view/title"/>
       </h1>
     </metal:block>
 
