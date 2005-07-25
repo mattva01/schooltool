@@ -38,7 +38,7 @@ import ZConfig
 import transaction
 import zope.app.component.hooks
 from zope.interface import directlyProvides, implements
-from zope.component import provideAdapter, adapts, getUtility
+from zope.component import provideAdapter, adapts
 from zope.event import notify
 from zope.configuration import xmlconfig
 from zope.server.taskthreads import ThreadedTaskDispatcher
@@ -53,7 +53,6 @@ from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.component.site import LocalSiteManager
 from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 from zope.app.container.contained import ObjectAddedEvent
-from zope.app.error.interfaces import IErrorReportingUtility
 
 from schoolbell.app.app import SchoolBellApplication, Person
 from schoolbell.app.interfaces import ISchoolBellApplication
@@ -459,19 +458,6 @@ class StandaloneServer(object):
         roles = IPrincipalRoleManager(app)
         roles.assignRoleToPrincipal('zope.Manager', 'sb.person.manager')
 
-    def enableErrorReporting(self, db):
-        """Tell the error reporting utility to copy errors to the log file."""
-        connection = db.open()
-        root = connection.root()
-        app = root[ZopePublication.root_name]
-        error_reporting_utility = getUtility(IErrorReportingUtility,
-                                             context=app)
-        error_reporting_utility.setProperties(keep_entries=20,
-                copy_to_zlog=True,
-                ignored_exceptions=('Unauthorized', 'NotFound'))
-        transaction.commit()
-        connection.close()
-
     def main(self, argv=sys.argv):
         """Start the SchoolBell server."""
         t0, c0 = time.time(), time.clock()
@@ -525,9 +511,6 @@ class StandaloneServer(object):
             sys.exit(1)
 
         notify(DatabaseOpened(db))
-
-        # Enable error reporting to the log file
-        self.enableErrorReporting(db)
 
         if options.restore_manager:
             connection = db.open()
