@@ -1428,7 +1428,7 @@ class CalendarEventViewMixin(object):
             self.processRequest(kw)
         except WidgetsError, errors:
             self.errors = errors
-            self.update_status = _("An error occurred.")
+            self.update_status = _("An error occured.")
             return self.update_status
         # AddView.update() sets self.update_status and returns it.  Weird,
         # but let's copy that behavior.
@@ -1716,7 +1716,7 @@ class CalendarEventEditView(CalendarEventViewMixin, EditView):
                     notify(ObjectModifiedEvent(self.context))
             except WidgetsError, errors:
                 self.errors = errors
-                status = _("An error occurred.")
+                status = _("An error occured.")
                 transaction.abort()
             else:
                 if changed:

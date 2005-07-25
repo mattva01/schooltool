@@ -1429,7 +1429,7 @@ def doctest_CalendarEventAddView_add_validation():
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
-        u'An error occurred.'
+        u'An error occured.'
 
         >>> print view.errors
         MissingInputError: ('field.start_time', 'Time', None)
@@ -1447,7 +1447,7 @@ def doctest_CalendarEventAddView_add_validation():
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
-        u'An error occurred.'
+        u'An error occured.'
         >>> view.errors
         WidgetInputError: ('title', 'Title', )
         >>> view.error is None
@@ -1463,7 +1463,7 @@ def doctest_CalendarEventAddView_add_validation():
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
-        u'An error occurred.'
+        u'An error occured.'
         >>> view.errors                                # doctest: +ELLIPSIS
         ConversionError: (u'Invalid datetime data', <...>)
         >>> view.error is None
@@ -1479,7 +1479,7 @@ def doctest_CalendarEventAddView_add_validation():
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
-        u'An error occurred.'
+        u'An error occured.'
         >>> view.errors                                # doctest: +ELLIPSIS
         ConversionError: (u'Invalid integer data', <...>)
         >>> view.error is None
@@ -1494,7 +1494,7 @@ def doctest_CalendarEventAddView_add_validation():
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
-        u'An error occurred.'
+        u'An error occured.'
         >>> view.errors
         WidgetInputError: ('title', 'Title', )
         ConversionError: (u'Invalid time', None)
@@ -1510,7 +1510,7 @@ def doctest_CalendarEventAddView_add_validation():
         ...                             'UPDATE': 'update'})
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
-        u'An error occurred.'
+        u'An error occured.'
         >>> view.errors
         WidgetInputError: ('title', 'Title', )
         ConversionError: (u'Invalid time', None)
@@ -1696,7 +1696,7 @@ def doctest_CalendarEventAddView_recurrence_exceptions():
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
-        u'An error occurred.'
+        u'An error occured.'
 
         >>> view.errors
         ConversionError: (u'Invalid date.  Please specify YYYY-MM-DD, one per line.', None)
@@ -1900,7 +1900,7 @@ def doctest_CalendarEventAddView_cross_validation():
         >>> calendar = Calendar()
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
-        u'An error occurred.'
+        u'An error occured.'
         >>> view.errors
         WidgetInputError: ('interval', 'Repeat every', )
         >>> view.error is None
@@ -1920,7 +1920,7 @@ def doctest_CalendarEventAddView_cross_validation():
         >>> calendar = Calendar()
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
-        u'An error occurred.'
+        u'An error occured.'
         >>> view.errors
         WidgetInputError: ('until', 'Repeat until', End date is earlier than start date)
         >>> view.error is None
@@ -1939,7 +1939,7 @@ def doctest_CalendarEventAddView_cross_validation():
         >>> calendar = Calendar()
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
-        u'An error occurred.'
+        u'An error occured.'
         >>> view.errors
         MissingInputError: ('field.interval', 'Repeat every', None)
         MissingInputError: ('field.until', 'Repeat until', None)
@@ -2240,7 +2240,7 @@ def doctest_CalendarEventEditView_updateForm():
         >>> view = CalendarEventEditTestView(event, request)
 
         >>> view.update()
-        u'An error occurred.'
+        u'An error occured.'
         >>> print view.errors
         WidgetInputError: ('start_date', 'Date', )
         WidgetInputError: ('start_time', 'Time', )

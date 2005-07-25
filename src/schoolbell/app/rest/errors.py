@@ -64,7 +64,7 @@ class SystemErrorView(TextErrorView):
 
     def __call__(self):
         self.request.response.setStatus(500)
-        return "A system error has occurred."
+        return "A system error has occured."
 
 
 class IRestError(IException): pass
