@@ -1750,7 +1750,7 @@ class EventForBookingDisplay(object):
     """
 
     def __init__(self, event):
-        # The event came from resource calendar yet it's parent might
+        # The event came from resource calendar, so its parent might
         # be a calendar we don't have permission to view.
         self.context = removeSecurityProxy(event)
         self.dtstart = self.context.dtstart

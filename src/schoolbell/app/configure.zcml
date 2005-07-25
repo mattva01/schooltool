@@ -206,6 +206,7 @@
   <content class="schoolbell.calendar.mixins.ExpandedCalendarEvent">
     <require permission="schoolbell.view"
              interface="schoolbell.calendar.interfaces.IExpandedCalendarEvent"
+             attributes="resources"
              />
   </content>
 
