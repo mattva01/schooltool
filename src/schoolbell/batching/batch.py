@@ -45,15 +45,8 @@ class Batch(object):
         return bool(item in [i for i in self])
 
     def __eq__(self, other):
-        if self.size != other.size:
-            return False
-        if self.start != other.start:
-            return False
-        if self.batch != other.batch:
-            return False
-        if self.list != other.list:
-            return False
-        return True
+        return ((self.size, self.start, self.batch, self.list) == 
+                (other.size, other.start, other.batch, other.list))
 
     def __ne__(self, other):
         return not self.__eq__(other)
