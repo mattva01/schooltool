@@ -21,8 +21,10 @@ RESTive views for errors in SchoolBellApplication
 
 $Id$
 """
+
+from zope.interface import classImplements, implements
 from zope.interface.common.interfaces import IException
-from zope.interface import classImplements
+from zope.app.exception.interfaces import ISystemErrorView
 
 from schoolbell.app.rest import View
 from schoolbell.calendar.icalendar import ICalParseError
@@ -40,13 +42,13 @@ class TextErrorView(View):
         request.response.setStatus(400)
         request.response.setHeader('Content-Type', 'text/plain; charset=utf-8')
 
-
     def __call__(self):
         return str(self.context)
 
 
 class XMLErrorView(TextErrorView):
     """A view for IXMLErrors"""
+
 
 class ICalParseErrorView(TextErrorView):
 
@@ -61,6 +63,11 @@ classImplements(ICalParseError, IICalParseError)
 
 class SystemErrorView(TextErrorView):
     """A catch-all view for programmer errors"""
+
+    implements(ISystemErrorView)
+
+    def isSystemError(self):
+        return True
 
     def __call__(self):
         self.request.response.setStatus(500)

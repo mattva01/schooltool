@@ -752,6 +752,35 @@
       allowed_interface="zope.app.traversing.browser.interfaces.IAbsoluteURL"
       />
 
+<!-- Error messages -->
+
+  <page
+      for="zope.interface.common.interfaces.IException"
+      name="index.html"
+      layer=".skin.ISchoolBellLayer"
+      class=".error.ErrorView"
+      template="templates/error.pt"
+      permission="zope.Public"
+      />
+
+  <page
+      for="zope.publisher.interfaces.INotFound"
+      name="index.html"
+      layer=".skin.ISchoolBellLayer"
+      class="zope.app.exception.browser.notfound.NotFound"
+      template="templates/notfound.pt"
+      permission="zope.Public"
+      />
+
+  <page
+      for="zope.security.interfaces.IUnauthorized"
+      name="index.html"
+      layer=".skin.ISchoolBellLayer"
+      class="zope.app.exception.browser.unauthorized.Unauthorized" 
+      template="templates/unauthorized.pt"
+      permission="zope.Public"
+      />
+
 <!-- calwidget (external) -->
 
   <resource name="calwidget-calendar.js"

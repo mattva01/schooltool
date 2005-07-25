@@ -1,0 +1,24 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<head>
+  <metal:x metal:fill-slot="title" i18n:translate="">Not Found</metal:x>
+</head>
+<body>
+<h1 metal:fill-slot="content-header" i18n:translate="">Not Found</h1>
+<metal:block metal:fill-slot="body">
+
+<h3 i18n:translate="">
+  The page that you are trying to access is not available
+</h3>
+<br/> 
+<b i18n:translate="">Please note the following:</b>
+<br/>
+<ol>
+   <li i18n:translate=""> You might have misspelled the url </li>
+   <li i18n:translate="">
+     You might be trying to access a non-existing page
+   </li>
+</ol>
+
+</metal:block>
+</body>
+</html>

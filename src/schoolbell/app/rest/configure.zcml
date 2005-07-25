@@ -520,6 +520,14 @@
       name="GET"
       />
 
+    <!-- but restore the original default view for browser requests -->
+
+  <defaultView
+      for="zope.interface.common.interfaces.IException"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="index.html"
+      />
+
   <view
       for="schoolbell.app.rest.xmlparsing.IXMLError"
       name="GET"
@@ -551,4 +559,5 @@
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />
+
 </configure>

@@ -1,0 +1,90 @@
+Error handling in browser views
+===============================
+
+First of all, we will need a schoolbell instance.  We will add it via
+the web:
+
+    >>> print http("""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&\
+    ... new_value=frogpond""", handle_errors=False)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+
+NotFound
+--------
+
+When you go to a location that doesn't exist, you get a pretty standard
+404 error page
+
+    >>> print http("""
+    ... GET /frogpond/nosuchthing HTTP/1.1
+    ... """)
+    HTTP/1.1 404 Not Found
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <title> SchoolBell : Not Found </title>
+    ...
+    <h1>Not Found</h1>
+    ...
+    <h3>
+      The page that you are trying to access is not available
+    </h3>
+    ...
+    SchoolTool&trade; is a Trademark of The Shuttleworth Foundation.
+    ...
+
+Internal server errors
+----------------------
+
+When an internal server error happens, we show a nice view pointing to our
+issue tracker.
+
+    >>> from zope.interface import implements
+    >>> from zope.app.publisher.browser import BrowserView
+    >>> from zope.publisher.interfaces.browser import IBrowserPublisher
+    >>> class BrokenView(BrowserView):
+    ...     implements(IBrowserPublisher)
+    ...     def browserDefault(self, request):
+    ...         return self, ()
+    ...     def publishTraverse(self, name, request):
+    ...         raise LookupError(name)
+    ...     def __call__(self):
+    ...         raise RuntimeError("Houston, we've got a problem")
+
+    >>> from zope.security.checker import NamesChecker
+    >>> from zope.security.checker import defineChecker
+    >>> defineChecker(BrokenView, NamesChecker(['__call__', 'browserDefault']))
+
+    >>> from zope.app.testing import ztapi
+    >>> from schoolbell.app.interfaces import ISchoolBellApplication
+    >>> ztapi.browserView(ISchoolBellApplication, 'breakit.html', BrokenView)
+
+Now, let's trigger it:
+
+    >>> print http("""
+    ... GET /frogpond/breakit.html HTTP/1.1
+    ... """)
+    HTTP/1.1 500 Internal Server Error
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <title> SchoolBell : Server Error </title>
+    ...
+    <h1>Server Error</h1>
+    ...
+    ...Houston, we've got a problem
+    ...
+    SchoolTool&trade; is a Trademark of The Shuttleworth Foundation.
+    ...
+
