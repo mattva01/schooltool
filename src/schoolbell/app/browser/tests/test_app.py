@@ -613,7 +613,7 @@ def doctest_GroupEditView():
         ...                 'field.title': u''}
         >>> view = TestGroupEditView(group, request)
         >>> view.update()
-        u'An error occured.'
+        u'An error occurred.'
         >>> request.response.getStatus()
         599
 
@@ -810,7 +810,7 @@ def doctest_PersonAddView():
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> view = PersonAddView(pc, request)
         >>> view.update()
-        u'An error occured.'
+        u'An error occurred.'
         >>> view.error
         u'This username is already used!'
 
@@ -824,7 +824,7 @@ def doctest_PersonAddView():
         ...                             'UPDATE_SUBMIT': 'Add'})
         >>> view = PersonAddView(pc, request)
         >>> view.update()
-        u'An error occured.'
+        u'An error occurred.'
         >>> view.error
         u'Passwords do not match!'
         >>> 'coo' in pc
