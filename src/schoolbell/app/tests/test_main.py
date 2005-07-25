@@ -108,7 +108,7 @@ def doctest_load_options():
 
         >>> from schoolbell.app.main import StandaloneServer
         >>> server = StandaloneServer()
-        >>> o = server.load_options(['sb.py', '-c', sample_config_file])
+        >>> o = server.load_options(['sb.py', '-c', sample_config_file, '-r'])
         Reading configuration from ...sample.conf
         sb.py: warning: ignored configuration option 'module'
         sb.py: warning: ignored configuration option 'domain'
@@ -122,6 +122,8 @@ def doctest_load_options():
         '...sample.conf'
         >>> o.daemon
         False
+        >>> o.restore_manager
+        True
 
     Some come from the config file
 
@@ -146,9 +148,10 @@ def doctest_load_options():
         ...     print '[exited with status %s]' % e
         Usage: sb.py [options]
         Options:
-          -c, --config xxx  use this configuration file instead of the default
-          -h, --help        show this help message
-          -d, --daemon      go to background after starting
+          -c, --config xxx       use this configuration file instead of the default
+          -h, --help             show this help message
+          -d, --daemon           go to background after starting
+          -r, --restore-manager  restore the manager user with the default password
         [exited with status 0]
 
     Here's what happens, when you use an unknown command line option.
@@ -508,6 +511,79 @@ def doctest_bootstrapSchoolBell():
 
     """
 
+
+def doctes_restoreManagerUser():
+    """Unittest for StandaloneServer.restoreManagerUser
+
+    We need a configured server:
+
+        >>> from schoolbell.app.main import StandaloneServer
+        >>> server = StandaloneServer()
+        >>> server.configure()
+
+
+    We also need an application:
+
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+
+    Initially, there's no manager user in the database:
+
+        >>> app['persons']['manager']
+        Traceback (most recent call last):
+          ...
+        KeyError: 'manager'
+
+    When we call restoreManagerUser, it gets created:
+
+        >>> server.restoreManagerUser(app)
+
+        >>> manager = app['persons']['manager']
+        >>> manager.checkPassword('schoolbell')
+        True
+
+    This user has a grant for zope.Manager role
+
+        >>> from zope.app.securitypolicy.interfaces import \\
+        ...     IPrincipalRoleManager
+        >>> grants = IPrincipalRoleManager(app)
+        >>> grants.getRolesForPrincipal('sb.person.manager')
+        [('zope.Manager', PermissionSetting: Allow)]
+
+    Let's break the manager user by forgetting his password and
+    revoking his permissions:
+
+        >>> marker = object()
+        >>> manager.calendar = marker
+        >>> manager.setPassword('randomrandom')
+        >>> grants.removeRoleFromPrincipal('zope.Manager', 'sb.person.manager')
+
+        >>> manager.checkPassword('schoolbell')
+        False
+        >>> grants.getRolesForPrincipal('sb.person.manager')
+        [('zope.Manager', PermissionSetting: Deny)]
+
+    If we call restoreManagerUser again, the object remains the same,
+    but its password and permissions get reset:
+
+        >>> server.restoreManagerUser(app)
+
+        >>> manager = app['persons']['manager']
+        >>> manager.checkPassword('schoolbell')
+        True
+        >>> grants.getRolesForPrincipal('sb.person.manager')
+        [('zope.Manager', PermissionSetting: Allow)]
+
+    The manager is the same:
+
+        >>> manager.calendar is marker
+        True
+
+    Cleanup:
+
+        >>> from zope.app.testing import setup
+        >>> setup.placelessTearDown()
+    """
 
 def doctest_enableErrorReporting():
     r"""Tests for enableErrorReporting()

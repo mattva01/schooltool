@@ -71,9 +71,10 @@ _ = lambda us: catalog.ugettext(us).encode(locale_charset, 'replace')
 sb_usage_message = _("""
 Usage: %s [options]
 Options:
-  -c, --config xxx  use this configuration file instead of the default
-  -h, --help        show this help message
-  -d, --daemon      go to background after starting
+  -c, --config xxx       use this configuration file instead of the default
+  -h, --help             show this help message
+  -d, --daemon           go to background after starting
+  -r, --restore-manager  restore the manager user with the default password
 """).strip()
 
 
@@ -117,6 +118,7 @@ class Options(object):
     daemon = False
     quiet = False
     config = None
+    restore_manager = False
 
     def __init__(self):
         dirname = os.path.dirname(__file__)
@@ -373,8 +375,9 @@ class StandaloneServer(object):
         # Parse command line
         progname = os.path.basename(argv[0])
         try:
-            opts, args = getopt.gnu_getopt(argv[1:], 'c:hd',
-                                           ['config=', 'help', 'daemon'])
+            opts, args = getopt.gnu_getopt(argv[1:], 'c:hdr',
+                                           ['config=', 'help', 'daemon',
+                                            'restore-manager'])
         except getopt.error, e:
             print >> sys.stderr, _("%s: %s") % (progname, e)
             print >> sys.stderr, _("Run %s -h for help.") % progname
@@ -392,6 +395,8 @@ class StandaloneServer(object):
                     sys.exit(1)
                 else:
                     options.daemon = True
+            if k in ('-r', '--restore-manager'):
+                options.restore_manager = True
 
         # Read configuration file
         schema = ZConfig.loadSchema(self.ZCONFIG_SCHEMA)
@@ -430,19 +435,29 @@ class StandaloneServer(object):
             directlyProvides(app, IContainmentRoot)
             root[ZopePublication.root_name] = app
             notify(ObjectAddedEvent(app))
-            _('%s Manager') # mark for l10n
-            manager_title = catalog.ugettext('%s Manager') % self.system_name
-            manager = self.Person('manager', manager_title)
-            manager.setPassword(self.system_name.lower())
-            app['persons']['manager'] = manager
-            roles = IPrincipalRoleManager(app)
-            roles.assignRoleToPrincipal('zope.Manager', 'sb.person.manager')
+            self.restoreManagerUser(app)
         elif not self.AppInterface.providedBy(app_obj):
             transaction.abort()
             connection.close()
             raise IncompatibleDatabase('incompatible database')
         transaction.commit()
         connection.close()
+
+    def restoreManagerUser(self, app):
+        """Ensure there is a manager user
+
+        Create a user if needed, set password to default, grant
+        manager permissions
+        """
+        _('%s Manager') # mark for l10n
+        manager_title = catalog.ugettext('%s Manager') % self.system_name
+        if 'manager' not in app['persons']:
+            manager = self.Person('manager', manager_title)
+            app['persons']['manager'] = manager
+        manager = app['persons']['manager']
+        manager.setPassword(self.system_name.lower())
+        roles = IPrincipalRoleManager(app)
+        roles.assignRoleToPrincipal('zope.Manager', 'sb.person.manager')
 
     def enableErrorReporting(self, db):
         """Tell the error reporting utility to copy errors to the log file."""
@@ -513,6 +528,14 @@ class StandaloneServer(object):
 
         # Enable error reporting to the log file
         self.enableErrorReporting(db)
+
+        if options.restore_manager:
+            connection = db.open()
+            root = connection.root()
+            app = root[ZopePublication.root_name]
+            self.restoreManagerUser(app)
+            transaction.commit()
+            connection.close()
 
         if options.daemon:
             daemonize()
