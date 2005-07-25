@@ -476,7 +476,8 @@ a.button-ok {
 }
 
 #calendar-view-month {
-    width: 100%;
+    width: 99%;
+    min-width: 100%;
 }
 
 #calendar-view-year table.month th,
