@@ -147,9 +147,10 @@ def doctest_load_options():
         ...     print '[exited with status %s]' % e
         Usage: st.py [options]
         Options:
-          -c, --config xxx  use this configuration file instead of the default
-          -h, --help        show this help message
-          -d, --daemon      go to background after starting
+          -c, --config xxx       use this configuration file instead of the default
+          -h, --help             show this help message
+          -d, --daemon           go to background after starting
+          -r, --restore-manager  restore the manager user with the default password
         [exited with status 0]
 
     Here's what happens, when you use an unknown command line option.
