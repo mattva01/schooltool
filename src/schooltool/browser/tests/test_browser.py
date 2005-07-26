@@ -79,6 +79,26 @@ def doctest_TimetabledTraverser():
 
     """
 
+def doctest_SchoolToolApplicationTraverser():
+    """Test the ST App Traverser.
+
+    >>> from schooltool.app import SchoolToolApplication
+    >>> app = SchoolToolApplication()
+
+    >>> request = TestRequest()
+    >>> from schooltool.browser.app import SchoolToolApplicationTraverser
+    >>> traverser = SchoolToolApplicationTraverser(app, request)
+    
+    >>> traverser.publishTraverse(request, 'persons') #doctest: +ELLIPSIS
+    <schooltool.app.PersonContainer object at ...>
+
+    >>> app['foo'] = 'bar'
+    >>> traverser.publishTraverse(request, 'foo')
+    'bar'
+
+    >>> traverser.publishTraverse(request, 'calendar') #doctest: +ELLIPSIS
+    <schoolbell.app.cal.Calendar object at ...>
+    """
 
 def test_suite():
     suite = unittest.TestSuite()

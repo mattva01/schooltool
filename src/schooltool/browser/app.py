@@ -55,17 +55,15 @@ class SchoolToolApplicationTraverser(sbcal.CalendarOwnerTraverser):
 
     We basically have this to allow for ICalendarOwner traversing while also
     providing access to top-level containers.
-
-    XXX: I suspect there is a more elgant way to do this (in zcml?)."""
-
+    """
     adapts(ISchoolToolApplication)
 
     def publishTraverse(self, request, name):
-        if name in ('persons', 'resources', 'sections', 'groups',
-                    'ttschemas', 'terms', 'courses'):
-            return self.context[name]
-
-        return sbcal.CalendarOwnerTraverser.publishTraverse(self, request, name)
+        obj = self.context.get(name)
+        if obj is None:
+            obj = sbcal.CalendarOwnerTraverser.publishTraverse(
+                self, request, name)
+        return obj
 
 
 class ContainerView(sb.ContainerView):
