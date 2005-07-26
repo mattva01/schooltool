@@ -456,7 +456,6 @@ class PersonAddView(AddView):
 
     def createAndAdd(self, data):
         """Create a Person from form data and add it to the container."""
-        # TODO: i18n
         if data['password'] != data['verify_password']:
             self.error = _("Passwords do not match!")
             raise WidgetsError([ValidationError(self.error)])
