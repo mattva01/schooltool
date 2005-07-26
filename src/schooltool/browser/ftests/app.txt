@@ -108,7 +108,7 @@ The daily view should be the default for a person's calendar:
     ...calendar-view-day...
 
 
-Let's make sure that we are seeing the SchoolTool preferences page:
+Let's make sure that we can see the SchoolTool preferences page:
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/@@preferences.html HTTP/1.1
@@ -118,7 +118,7 @@ Let's make sure that we are seeing the SchoolTool preferences page:
     ...
     ...cal_periods...
 
-Let's make sure that we are seeing the SchoolTool navigation portlet and index
+Let's make sure that we can see the SchoolTool navigation portlet and index
 page:
 
     >>> print http(r"""
