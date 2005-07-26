@@ -55,6 +55,9 @@ class IBatch(Interface):
     def last():
         """The last item in the batch."""
 
+    def num():
+        """The number of this batch in the full set of batches."""
+
     def numBatches():
         """The number of batches required to cover the entire list."""
 

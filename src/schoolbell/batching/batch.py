@@ -71,6 +71,9 @@ class Batch(object):
 
         return Batch(self.list, start, self.size)
 
+    def num(self):
+        return self.start / self.size + 1
+
     def numBatches(self):
         num = len(self.list) / self.size
         if len(self.list) % self.size:
@@ -84,5 +87,4 @@ class Batch(object):
             result.append(batch.next())
             batch = batch.next()
         return result
-
 

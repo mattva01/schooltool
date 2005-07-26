@@ -90,6 +90,16 @@ def doctest_Batch():
       >>> pbatch.start
       7
 
+    Given any batch in a set we can tell what position the batch is in relative
+    to the set:
+
+      >>> nbatch.num()
+      5
+      >>> batch.num()
+      4
+      >>> pbatch.num()
+      3
+
     It's also important that our batches don't overlap
 
       >>> [item for item in pbatch]
