@@ -577,6 +577,15 @@
       permission="zope.View"
       />
 
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      name="daily_calendar_rows"
+      layer=".skin.ISchoolBellLayer"
+      class=".cal.DailyCalendarRowsView"
+      permission="zope.View"
+      />
+
+
 <!-- Calendar event views -->
 
   <page

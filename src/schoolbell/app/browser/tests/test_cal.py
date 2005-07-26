@@ -571,11 +571,14 @@ class PrincipalStub(object):
             return self._person
 
 
-def registerCalendarListView():
+def registerCalendarHelperViews():
     """Register the real CalendarListView for use by other views."""
     from schoolbell.app.browser.cal import CalendarListView
+    from schoolbell.app.browser.cal import DailyCalendarRowsView
     from schoolbell.app.interfaces import ISchoolBellCalendar
     ztapi.browserView(ISchoolBellCalendar, 'calendar_list', CalendarListView)
+    ztapi.browserView(ISchoolBellCalendar, 'daily_calendar_rows',
+                      DailyCalendarRowsView)
 
 
 class TestCalendarViewBase(unittest.TestCase):
@@ -587,7 +590,7 @@ class TestCalendarViewBase(unittest.TestCase):
         setup.setUpAnnotations()
 
         setUpSessions()
-        registerCalendarListView()
+        registerCalendarHelperViews()
 
     def tearDown(self):
         setup.placelessTearDown()
@@ -839,7 +842,7 @@ class TestCalendarViewBase(unittest.TestCase):
         """Test for CalendarViewBase.getEvents
 
             >>> setup.placelessSetUp()
-            >>> registerCalendarListView()
+            >>> registerCalendarHelperViews()
             >>> setUpSessions()
 
         CalendarViewBase.getEvents returns a list of wrapped calendar
@@ -1035,7 +1038,7 @@ class TestCalendarViewBase(unittest.TestCase):
         """Test for CalendarViewBase.getAllDayEvents
 
             >>> setup.placelessSetUp()
-            >>> registerCalendarListView()
+            >>> registerCalendarHelperViews()
 
         CalendarViewBase.getAllDayEvents returns a list of wrapped all-day
         calendar events for a specified date or the date of the view cursor if
@@ -2768,7 +2771,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def setUp(self):
         setup.placelessSetUp()
-        registerCalendarListView()
+        registerCalendarHelperViews()
         setUpSessions()
 
     def tearDown(self):
@@ -3048,6 +3051,9 @@ class TestDailyCalendarView(unittest.TestCase):
 
         # Patch in a custom simpleCalendarRows method to test short periods.
 
+        from schoolbell.app.browser.cal import DailyCalendarRowsView
+        rows_view = DailyCalendarRowsView(view.context, view.request)
+
         def simpleCalendarRows():
             today = datetime.combine(view.cursor, time(13, tzinfo=utc))
             durations = [0, 1800, 1351, 1349, 600, 7200]
@@ -3057,7 +3063,7 @@ class TestDailyCalendarView(unittest.TestCase):
             start = today + timedelta(hours=view.starthour)
             for end in row_ends:
                 duration = end - start
-                yield (view.rowTitle(start.hour, start.minute),
+                yield (rows_view.rowTitle(start.hour, start.minute),
                        start, duration)
                 start = end
 
@@ -3080,8 +3086,8 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_rowspan(self):
         from schoolbell.app.browser.cal import DailyCalendarView
-        from schoolbell.app.app import Person
-        view = DailyCalendarView(None, TestRequest())
+        from schoolbell.app.app import Person, Calendar
+        view = DailyCalendarView(Calendar(), TestRequest())
         view.starthour = 10
         view.endhour = 18
         view.cursor = date(2004, 8, 12)
@@ -3597,7 +3603,7 @@ def doctest_AtomCalendarView():
     Some setup:
 
         >>> setup.placelessSetUp()
-        >>> registerCalendarListView()
+        >>> registerCalendarHelperViews()
 
         >>> from schoolbell.app.browser.cal import AtomCalendarView
 

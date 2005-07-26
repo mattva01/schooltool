@@ -928,23 +928,18 @@ class DailyCalendarView(CalendarViewBase):
                 if self.endhour == 0:
                     self.endhour = 24
 
-    def rowTitle(self, hour, minute):
-        """Return the row title as HH:MM or H:MM am/pm."""
-        return time(hour, minute).strftime(self.time_fmt)
+    __cursor = None
+    __calendar_rows = None
 
     def calendarRows(self):
         """Iterate over (title, start, duration) of time slots that make up
         the daily calendar.
-        """
-        today = datetime.combine(self.cursor, time(tzinfo=utc))
-        row_ends = [today + timedelta(hours=hour + 1)
-                    for hour in range(self.starthour, self.endhour)]
 
-        start = today + timedelta(hours=self.starthour)
-        for end in row_ends:
-            duration = end - start
-            yield (self.rowTitle(start.hour, start.minute), start, duration)
-            start = end
+        Returns a list, caches the answer for subsequent calls.
+        """
+        view = zapi.getMultiAdapter((self.context, self.request),
+                                    name='daily_calendar_rows')
+        return view.calendarRows(self.cursor, self.starthour, self.endhour)
 
     def getHours(self):
         """Return an iterator over the rows of the table.
@@ -1011,6 +1006,7 @@ class DailyCalendarView(CalendarViewBase):
 
     def rowspan(self, event):
         """Calculate how many calendar rows the event will take today."""
+        # XXX This method does not seem to be used anywhere.
         count = 0
         for title, start, duration in self.calendarRows():
             if (start < event.dtstart + event.duration and
@@ -1057,6 +1053,31 @@ class DailyCalendarView(CalendarViewBase):
     def isResourceCalendar(self):
         """Return True if we are showing a calendar of some resource."""
         return IResource.providedBy(self.context.__parent__)
+
+
+class DailyCalendarRowsView(BrowserView):
+    """Daily calendar rows view."""
+
+    def calendarRows(self, cursor, starthour, endhour):
+        """Iterate over (title, start, duration) of time slots that make up
+        the daily calendar.
+
+        Returns a generator.
+        """
+        today = datetime.combine(cursor, time(tzinfo=utc))
+        row_ends = [today + timedelta(hours=hour + 1)
+                    for hour in range(starthour, endhour)]
+
+        start = today + timedelta(hours=starthour)
+        for end in row_ends:
+            duration = end - start
+            yield (self.rowTitle(start.hour, start.minute), start, duration)
+            start = end
+
+    def rowTitle(self, hour, minute):
+        """Return the row title as HH:MM or H:MM am/pm."""
+        prefs = ViewPreferences(self.request)
+        return time(hour, minute).strftime(prefs.timeformat)
 
 
 #
