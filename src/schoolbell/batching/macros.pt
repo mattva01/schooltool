@@ -1,0 +1,60 @@
+<!-- batch navigation
+
+The following must be defined in the page prior to calling the batch-navigation
+macro:
+
+  batch - a schoolbell.batching.Batch instance
+  batch_start - the starting index of the batch relative to the full list
+  batch_size - the size of the batch
+
+-->
+<metal:block define-macro="batch-navigation">
+  <div class="batch-navigation"
+    tal:define="needsBatch python:bool(batch.prev() or batch.next());
+    batch_size python:int(batch_size)">
+
+    <tal:if condition="needsBatch">
+      <span tal:condition="not:batch/prev" i18n:translate=""
+        class="previous">&laquo; Previous</span>
+      <a class="previous"
+        tal:condition="batch/prev"
+        tal:attributes="href python:'?batch_start=%s&batch_size=%s' % (batch.prev().start, batch_size)"
+        i18n:translate=""
+        >&laquo; Previous</a>
+    </tal:if>
+
+    <div class="batch-extra-navigation"
+      tal:define="full_size python:len(batch.list)">
+      <a href="?batch_size=30" class="more"
+        tal:condition="python:batch_size < 30 and batch_size < full_size"
+        >Show More</a>
+      <a href="?batch_size=10" class="less"
+        tal:condition="python:batch_size > 10">Show Less</a>
+
+      <a tal:attributes="href string:?batch_size=${full_size}"
+        tal:condition="python:batch_size < full_size"
+        class="all">Show All</a>
+
+    </div>
+
+    <tal:if condition="python:batch.prev() or batch.next()">
+      <a class="next"
+        tal:condition="batch/next"
+        tal:attributes="href python:'?batch_start=%s&batch_size=%s' % (batch.next().start, batch_size)"
+        i18n:translate=""
+        >Next &raquo;</a>
+
+      <span tal:condition="not:batch/next" i18n:translate=""
+        class="next">Next &raquo;</span>
+
+      <span tal:repeat="b batch/batches">
+        <a tal:attributes="href python:'?batch_start=%s&batch_size=%s' % (b.start, batch_size);
+          class python:batch == b and 'current'"
+          tal:content="b/num">
+        </a>
+      </span>
+    </tal:if>
+
+  </div>
+
+</metal:block>
