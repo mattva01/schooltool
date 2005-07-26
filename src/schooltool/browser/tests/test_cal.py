@@ -57,7 +57,7 @@ def dt(timestr):
     return dt.replace(tzinfo=utc)
 
 
-class TestDailyCalendarView(unittest.TestCase):
+class TestDailyCalendarRowsView(unittest.TestCase):
 
     def setUp(self):
         from schooltool.app import getPersonPreferences
@@ -109,16 +109,14 @@ class TestDailyCalendarView(unittest.TestCase):
         return schema
 
     def test_calendarRows(self):
-        from schooltool.browser.cal import DailyCalendarView
+        from schooltool.browser.cal import DailyCalendarRowsView
         from schoolbell.app.security import Principal
 
         request = TestRequest()
         principal = Principal('person', 'Some person', person=self.person)
         request.setPrincipal(principal)
-        view = DailyCalendarView(self.person.calendar, request)
-        view.cursor = date(2004, 11, 5)
-
-        result = list(view.calendarRows())
+        view = DailyCalendarRowsView(self.person.calendar, request)
+        result = list(view.calendarRows(date(2004, 11, 5), 8, 19))
 
         expected = [("1", dt('08:00'), timedelta(hours=1)),
                     ("9:00", dt('09:00'), timedelta(hours=1)),
@@ -136,7 +134,7 @@ class TestDailyCalendarView(unittest.TestCase):
         self.assertEquals(result, expected)
 
     def test_calendarRows_no_periods(self):
-        from schooltool.browser.cal import DailyCalendarView
+        from schooltool.browser.cal import DailyCalendarRowsView
         from schooltool.app import getPersonPreferences
         from schoolbell.app.security import Principal
 
@@ -145,24 +143,21 @@ class TestDailyCalendarView(unittest.TestCase):
         request = TestRequest()
         principal = Principal('person', 'Some person', person=self.person)
         request.setPrincipal(principal)
-        view = DailyCalendarView(self.person.calendar, request)
-        view.cursor = date(2004, 11, 5)
+        view = DailyCalendarRowsView(self.person.calendar, request)
 
-        result = list(view.calendarRows())
+        result = list(view.calendarRows(date(2004, 11, 5), 8, 19))
 
         expected = [("%d:00" % i, dt('%d:00' % i), timedelta(hours=1))
                     for i in range(8, 19)]
         self.assertEquals(result, expected)
 
     def test_calendarRows_default(self):
-        from schooltool.browser.cal import DailyCalendarView
+        from schooltool.browser.cal import DailyCalendarRowsView
 
         request = TestRequest()
         # do not set the principal
-        view = DailyCalendarView(self.person.calendar, request)
-        view.cursor = date(2004, 11, 5)
-
-        result = list(view.calendarRows())
+        view = DailyCalendarRowsView(self.person.calendar, request)
+        result = list(view.calendarRows(date(2004, 11, 5), 8, 19))
 
         # the default is not to show periods
         expected = [("%d:00" % i, dt('%d:00' % i), timedelta(hours=1))
@@ -422,7 +417,7 @@ def doctest_CalendarListView(self):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestDailyCalendarView))
+    suite.addTest(unittest.makeSuite(TestDailyCalendarRowsView))
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
                                        optionflags=doctest.ELLIPSIS|
                                                    doctest.REPORT_NDIFF|

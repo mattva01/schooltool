@@ -25,22 +25,24 @@ $Id$
 from datetime import datetime, time, timedelta
 from sets import Set
 
+from pytz import timezone
+
 from zope.security.checker import canAccess
 from zope.security.proxy import removeSecurityProxy
 from zope.app.traversing.api import getPath
 from zope.app.annotation.interfaces import IAnnotations
 from zope.app.publisher.browser import BrowserView
 
-from schoolbell.app.browser.cal import DailyCalendarView as SBDailyCalView
 from schoolbell.app.browser.overlay import CalendarOverlayView
 from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
 
+from schooltool.app import PersonPreferences
 from schooltool.timetable import getPeriodsForDay
 from schooltool.interfaces import IPersonPreferences, ISection
 
 
-class DailyCalendarView(SBDailyCalView):
-    """Daily calendar view for SchoolTool.
+class DailyCalendarRowsView(BrowserView):
+    """Daily calendar rows view for SchoolTool.
 
     This view differs from the original view in SchoolBell in that it can
     also show day periods instead of hour numbers.
@@ -48,32 +50,34 @@ class DailyCalendarView(SBDailyCalView):
 
     __used_for__ = ISchoolBellCalendar
 
-    def calendarRows(self):
+    def calendarRows(self, cursor, starthour, endhour):
         """Iterate over (title, start, duration) of time slots that make up
         the daily calendar.
+
+        Returns a generator.
         """
-        # TODO: Refactor this into a view or adapter so that we don't have
-        #       to keep a copy of cal_daily.pt around.
         person = IPerson(self.request.principal, None)
         if person is not None:
             prefs = IPersonPreferences(person)
             show_periods = prefs.cal_periods
+            tz = timezone(prefs.timezone)
         else:
             show_periods = False
+            tz = timezone(PersonPreferences.timezone)
 
         if show_periods:
-            periods = getPeriodsForDay(self.cursor)
+            periods = getPeriodsForDay(cursor)
         else:
             periods = []
-        today = datetime.combine(self.cursor, time(tzinfo=self.timezone))
+        today = datetime.combine(cursor, time(tzinfo=tz))
         rows = [today + timedelta(hours=hour)
-                for hour in range(self.starthour, self.endhour+1)]
+                for hour in range(starthour, endhour+1)]
 
         if periods:
             # Put starts and ends of periods into rows
             for period in periods:
-                pstart = datetime.combine(self.cursor, period.tstart)
-                pstart = pstart.replace(tzinfo=self.timezone)
+                pstart = datetime.combine(cursor, period.tstart)
+                pstart = pstart.replace(tzinfo=tz)
                 pend = pstart + period.duration
                 for point in rows[:]:
                     if pstart < point < pend:
@@ -85,8 +89,8 @@ class DailyCalendarView(SBDailyCalView):
             rows.sort()
 
         def periodIsStarting(dt):
-            pstart = datetime.combine(self.cursor, periods[0].tstart)
-            pstart = pstart.replace(tzinfo=self.timezone)
+            pstart = datetime.combine(cursor, periods[0].tstart)
+            pstart = pstart.replace(tzinfo=tz)
             return pstart == dt
 
         start, row_ends = rows[0], rows[1:]

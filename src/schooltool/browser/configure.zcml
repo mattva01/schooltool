@@ -350,17 +350,6 @@
       />
 
   <page
-      name="daily.html"
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
-      class=".cal.DailyCalendarView"
-      template="templates/cal_daily.pt"
-      permission="schoolbell.viewCalendar"
-      menu="zmi_views"
-      title="Calendar (Daily)"
-      layer=".skin.ISchoolToolLayer"
-      />
-
-  <page
       for="*"
       name="calendar_overlay"
       layer=".skin.ISchoolToolLayer"
@@ -374,6 +363,14 @@
       name="calendar_list"
       layer=".skin.ISchoolToolLayer"
       class=".cal.CalendarListView"
+      permission="zope.View"
+      />
+
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      name="daily_calendar_rows"
+      layer=".skin.ISchoolToolLayer"
+      class=".cal.DailyCalendarRowsView"
       permission="zope.View"
       />
 
