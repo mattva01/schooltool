@@ -132,6 +132,11 @@ class IHistoricalRecord(zope.interface.Interface):
         description=_("The date and time the record was created."),
         required=True)
 
+    user = zope.schema.Id(
+        title=_("User"),
+        description=_("The principal id of the user making the record."),
+        required=True)
+
     title = zope.schema.TextLine(
         title=_("Title"),
         description=_("Title of the record."),

@@ -25,6 +25,7 @@ import datetime
 import persistent
 import zope.component
 import zope.interface
+import zope.security
 from zope.app.annotation.interfaces import IAnnotations
 
 import schooltool.interfaces
@@ -52,6 +53,11 @@ class HistoricalRecord(persistent.Persistent):
 
     def __init__(self, title, description=u''):
         self.timestamp = datetime.datetime.now()
+        inter = zope.security.management.getInteraction()
+        if inter.participations:
+            self.user = inter.participations[0].principal.id
+        else:
+            self.user = '<unknown>'
         self.title = title
         self.description = description
 

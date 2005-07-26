@@ -311,7 +311,10 @@ now create the workflow:
   <ul style="list-style: disc">
     <li>
       <em>Enrolled</em>
-      <div style="font-size: smaller">...</div>
+      <div style="font-size: smaller">
+         on <span>...</span>
+         by <span>zope.mgr</span>
+      </div>
       <p>Enrolled at school</p>
     </li>
   </ul>
@@ -351,7 +354,10 @@ Now let's fail the student in the first grade:
   ...
     <li>
       <em>Failed</em>
-      <div style="font-size: smaller">...</div>
+      <div style="font-size: smaller">
+         on <span>...</span>
+         by <span>zope.mgr</span>
+      </div>
       <p>Failed level "1st Grade"</p>
     </li>
   </ul>
@@ -376,13 +382,16 @@ After the first grade, the student withdraws from the school:
   ...
     <li>
       <em>Withdrawn</em>
-      <div style="font-size: smaller">...</div>
+      <div style="font-size: smaller">
+         on <span>...</span>
+         by <span>zope.mgr</span>
+      </div>
       <p>Withdrew before or during level "1st Grade"</p>
     </li>
   </ul>
   ...
 
-As you can see, the withdrawing from the school also removed the 
+As you can see, the withdrawing from the school also removed the process.
 
 To get the correct status,w e first have to reload:
 

@@ -539,6 +539,10 @@ from the school:
   >>> rec.history[-1].description
   u'Withdrew before or during level "7th Grade"'
 
+  >>> rec.history[-1].user
+  '<unknown>'
+
+
 Cleanup:
 
   >>> zope.event.subscribers.pop() #doctest: +ELLIPSIS

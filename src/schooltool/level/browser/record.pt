@@ -103,7 +103,10 @@
     <ul style="list-style: disc">
       <li tal:repeat="record view/history">
         <em tal:content="record/title">Enrolled</em>
-        <div style="font-size: smaller" tal:content="record/timestamp" />
+        <div style="font-size: smaller" i18n:translate="">
+          on <span tal:content="record/timestamp" i18n:name="timestamp" />
+          by <span tal:content="record/user" i18n:name="user" />
+        </div>
         <p tal:content="record/description">
           Description of record.
         </p>

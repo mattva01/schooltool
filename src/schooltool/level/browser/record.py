@@ -93,6 +93,7 @@ class AcademicRecordView(browser.BrowserView):
         for record in self.record.history:
             yield {'title': record.title,
                    'description': record.description,
+                   'user': record.user,
                    'timestamp': formatter.format(record.timestamp)}
 
 
