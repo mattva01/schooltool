@@ -3084,57 +3084,6 @@ class TestDailyCalendarView(unittest.TestCase):
                     {'title': '14:25', 'height': 8.0}]
         self.assertEquals(result, expected)
 
-    def test_rowspan(self):
-        from schoolbell.app.browser.cal import DailyCalendarView
-        from schoolbell.app.app import Person, Calendar
-        view = DailyCalendarView(Calendar(), TestRequest())
-        view.starthour = 10
-        view.endhour = 18
-        view.cursor = date(2004, 8, 12)
-        view.request = TestRequest()
-
-        self.assertEquals(view.rowspan(
-                            createEvent('2004-08-12 12:00', '1d', "Long")), 6)
-        self.assertEquals(view.rowspan(
-                            createEvent('2004-08-11 12:00', '3d', "Very")), 8)
-        self.assertEquals(view.rowspan(
-                            createEvent('2004-08-12 12:00', '10min', "")), 1)
-        self.assertEquals(view.rowspan(
-                            createEvent('2004-08-12 12:00', '1h+1sec', "")), 2)
-        self.assertEquals(view.rowspan(
-                            createEvent('2004-08-12 09:00', '3h', "")), 2)
-
-    def test_rowspan_periods(self):
-        from schoolbell.app.browser.cal import DailyCalendarView
-        from schoolbell.app.app import Person
-        from schoolbell.calendar.utils import parse_datetimetz
-        view = DailyCalendarView(None, TestRequest())
-        view.calendarRows = lambda: iter([
-            ("8", parse_datetimetz('2004-08-12 08:00:00'), timedelta(hours=1)),
-            ("A", parse_datetimetz('2004-08-12 09:00:00'), timedelta(hours=1)),
-            ("B", parse_datetimetz('2004-08-12 10:00:00'), timedelta(hours=3)),
-            ("C", parse_datetimetz('2004-08-12 13:00:00'), timedelta(hours=2)),
-            ("D", parse_datetimetz('2004-08-12 15:00:00'), timedelta(hours=1)),
-            ("16", parse_datetimetz('2004-08-12 16:00:00'), timedelta(hours=1)),
-            ("17", parse_datetimetz('2004-08-12 17:00:00'), timedelta(hours=1)),
-             ])
-        view.cursor = date(2004, 8, 12)
-        view.starthour = 8
-        view.endhour = 18
-
-        self.assertEquals(view.rowspan(
-                            createEvent('2004-08-12 12:00', '1d', "Long")), 5)
-        self.assertEquals(view.rowspan(
-                            createEvent('2004-08-11 12:00', '3d', "Very")), 7)
-        self.assertEquals(view.rowspan(
-                            createEvent('2004-08-12 12:00', '10min', "")), 1)
-        self.assertEquals(view.rowspan(
-                            createEvent('2004-08-12 12:00', '1h+1sec', "")), 2)
-        self.assertEquals(view.rowspan(
-                            createEvent('2004-08-12 13:00', '2h', "")), 1)
-        self.assertEquals(view.rowspan(
-                            createEvent('2004-08-12 09:00', '3h', "")), 2)
-
     def doctest_snapToGrid(self):
         """Tests for DailyCalendarView.snapToGrid
 
@@ -3227,8 +3176,6 @@ class TestDailyCalendarView(unittest.TestCase):
         view.timezone = timezone('US/Eastern')
         check('2004-08-12 14:30', '1h', 10)
         check('2004-08-12 16:30', '1h', 18)
-
-
 
     def test_eventHeight(self):
         from schoolbell.app.browser.cal import DailyCalendarView

@@ -1004,16 +1004,6 @@ class DailyCalendarView(CalendarViewBase):
 
             top += height
 
-    def rowspan(self, event):
-        """Calculate how many calendar rows the event will take today."""
-        # XXX This method does not seem to be used anywhere.
-        count = 0
-        for title, start, duration in self.calendarRows():
-            if (start < event.dtstart + event.duration and
-                event.dtstart < start + duration):
-                count += 1
-        return count
-
     def snapToGrid(self, dt):
         """Calculate the position of a datetime on the display grid.
 
