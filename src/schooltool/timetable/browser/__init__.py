@@ -1026,6 +1026,7 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
             sections -- all sections that are scheduled for this slot
             selected -- a list of sections of which self.context is a member,
                         or a list containing [None] if there are none.
+            in_group -- user is a member of a section as part of a group.
 
         """
 
@@ -1037,13 +1038,24 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
         def periods(day_id, day):
             for period_id in day.periods:
                 sections = section_map[day_id, period_id]
-                selected = [section for section in sections
-                            if self.context in section.members]
+
+                in_group = []
+                for group in self.context.groups:
+                    for section in sections:
+                        if group in section.members:
+                            in_group.append({'group' : group,
+                                            'section' : section})
+
+                if not in_group:
+                    selected = [section for section in sections
+                                if self.context in section.members]
                 if not selected:
                     selected = [None]
+
                 yield {'title': period_id,
                        'selected': selected,
-                       'sections': sections}
+                       'sections': sections,
+                       'in_group': in_group}
 
         return list(days(ttschema))
 

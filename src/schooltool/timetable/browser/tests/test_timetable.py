@@ -1546,9 +1546,11 @@ def doctest_PersonTimetableSetupView():
 
     and a Person from that application
 
-        >>> from schooltool.app import Person
+        >>> from schooltool.app import Person, Group
         >>> context = Person("student", "Steven Udent")
         >>> app["persons"]["whatever"] = context
+        >>> app["groups"]["juniors"] = juniors = Group("Juniors")
+        >>> juniors.members.add(context)
 
     We will need some sections
 
@@ -1742,6 +1744,40 @@ def doctest_PersonTimetableSetupView():
 
         >>> context in math.members
         True
+
+        >>> math.members.remove(context)
+
+        >>> days = view.getDays(ttschema, section_map)
+        >>> printDays(days)
+        Mon
+           9:00: [] [none]
+          10:00: [] [none]
+        Tue
+           9:00: [] [none]
+          10:00: [Math] [none]
+
+    When people are members of a section as part of a form (group) we don't
+    allow changing that period from here.  They must be removed from the
+    group.
+
+        >>> math.members.add(juniors)
+
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <title> Scheduling for Steven Udent </title>
+        ...
+            <h2>Tue</h2>
+        ...
+                <th>10:00</th>
+                <td>
+                  <a href="http://127.0.0.1/sections/math">Math</a>
+                  <span class="hint">
+                    <span>as part of</span>
+                    <a href="http://127.0.0.1/groups/juniors">Juniors</a>
+                  </span>
+                </td>
+        ...
 
     """
 

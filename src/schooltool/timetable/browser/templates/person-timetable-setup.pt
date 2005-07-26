@@ -64,7 +64,20 @@
       <tr tal:define="conflict python: len(period['selected']) > 1"
           tal:attributes="class python: conflict and 'conflict' or ''">
         <th tal:content="period/title">Period N</th>
-        <td tal:repeat="selection period/selected">
+        <td tal:condition="period/in_group"
+            tal:repeat="in_group period/in_group">
+          <a href=""
+             tal:attributes="href in_group/section/@@absolute_url"
+             tal:content="in_group/section/title" />
+          <span class="hint">
+            <span i18n:translate="">as part of</span>
+            <a href="" i18n:translate
+               tal:attributes="href in_group/group/@@absolute_url"
+               tal:content="in_group/group/title" />
+          </span>
+        </td>
+        <td tal:condition="not:period/in_group"
+            tal:repeat="selection period/selected">
           <select name="sections:list">
             <option value=""
                     tal:attributes="selected python:selection is None
