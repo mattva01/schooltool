@@ -1,0 +1,114 @@
+<metal:block use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+
+  <metal:slot fill-slot="title">
+    <span tal:replace="context/title" i18n:translate="">Academic Record</span>
+  </metal:slot>
+
+  <metal:block fill-slot="content-header">
+    <h1 i18n:translate="">
+      Academic Record for <em tal:content="context/title" i18n:name="name" /> 
+    </h1>
+  </metal:block>
+
+  <metal:block metal:fill-slot="body">
+
+    <h3 i18n:translate="">Status</h3>
+    <form tal:attributes="action request/URL" method="post"
+          enctype="multipart/form-data" class="standalone">
+
+      <div id="message" i18n:translate=""
+           tal:define="message view/updateStatus"
+           tal:content="message" tal:condition="message">
+        Status Message
+      </div>
+
+      <fieldset>
+        <div metal:use-macro="context/@@form_macros/widget_rows" />
+  
+        <div class="controls">
+          <input type="submit" class="button-ok" name="UPDATE_SUBMIT" 
+                 value="Apply" title="Shortcut: Alt-S" accesskey="S"
+                 i18n:attributes="value submit-button; accesskey" />
+        </div>
+  
+      </fieldset>
+    </form>
+
+
+    <h3 i18n:translate="">Workflow</h3>
+    <div id="message" i18n:translate=""
+         tal:define="message view/updateProcess"
+         tal:content="message" tal:condition="message">
+      Status Message
+    </div>
+    <div tal:condition="view/record/levelProcess">
+
+      <p i18n:translate="">
+        Below you see the current promotion work items for the student.
+      </p>
+
+      <div tal:repeat="view view/workitems">
+        <form tal:attributes="action request/URL" method="post"
+              class="standalone">
+        
+          <input type="hidden" name="workitemId" value=""
+                 tal:attributes="value view/context/zope:name" />
+
+          <div class="row">
+            <h5 tal:content="view/context/schema/__doc__" />
+          </div>  
+      
+          <fieldset>
+            <div metal:use-macro="context/@@form_macros/widget_rows" />
+          </fieldset>
+        
+          <div class="controls">
+            <input type="submit" class="button-ok" name="WORKITEM_SUBMIT" 
+                   value="Finish" title="Shortcut: Alt-R" accesskey="W"
+                   i18n:attributes="value remove-button; accesskey" />
+          </div>
+        
+        </form>
+      </div>
+
+      <p i18n:translate="">
+        You can also delete the process. All work items associated with this
+        process will be removed as well.
+      </p>
+
+      <form tal:attributes="action request/URL" method="post">
+          <div class="controls">
+            <input type="submit" class="button-ok" name="REMOVE_SUBMIT" 
+                   value="Remove" title="Shortcut: Alt-R" accesskey="W"
+                   i18n:attributes="value remove-button; accesskey" />
+          </div>
+      </form>
+    </div>
+    <div tal:condition="not: view/record/levelProcess">
+      <p i18n:translate="">
+        The student is currently not initialized in the school. By pressing
+        the button below, the student's school career will be initialized.
+      </p>
+      <form tal:attributes="action request/URL" method="post">
+          <div class="controls">
+            <input type="submit" class="button-ok" name="INITIALIZE_SUBMIT" 
+                   value="Initialize" title="Shortcut: Alt-W" accesskey="W"
+                   i18n:attributes="value initialize-button; accesskey" />
+          </div>
+      </form>
+    </div>
+
+
+    <h3 i18n:translate="">History</h3>
+    <ul style="list-style: disc">
+      <li tal:repeat="record view/history">
+        <em tal:content="record/title">Enrolled</em>
+        <div style="font-size: smaller" tal:content="record/timestamp" />
+        <p tal:content="record/description">
+          Description of record.
+        </p>
+      </li>
+    </ul>
+  </metal:block>
+
+</metal:block>

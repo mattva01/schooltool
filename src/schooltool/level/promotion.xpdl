@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package Id="promotion" Name="Level Promotion" xmlns="http://www.wfmc.org/2002/XPDL1.0" xmlns:xpdl="http://www.wfmc.org/2002/XPDL1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wfmc.org/2002/XPDL1.0 http://wfmc.org/standards/docs/TC-1025_schema_10_xpdl.xsd">
+    <PackageHeader>
+        <XPDLVersion>1.0</XPDLVersion>
+        <Vendor>Together</Vendor>
+        <Created>2005-07-21 13:02:08</Created>
+    </PackageHeader>
+    <RedefinableHeader PublicationStatus="UNDER_TEST"/>
+    <ConformanceClass GraphConformance="NON_BLOCKED"/>
+    <Participants>
+        <Participant Id="manager" Name="Manager">
+            <ParticipantType Type="ROLE"/>
+        </Participant>
+    </Participants>
+    <Applications>
+        <Application Id="writeRecord" Name="Write Record">
+            <Description>This application is responsible for creating a historical record of the activity and store it in the academic history of the student.</Description>
+            <FormalParameters>
+                <FormalParameter Id="student" Mode="IN">
+                    <DataType>
+                        <BasicType Type="REFERENCE"/>
+                    </DataType>
+                    <Description>The student for which we want to write a record entry.</Description>
+                </FormalParameter>
+                <FormalParameter Id="level" Mode="IN">
+                    <DataType>
+                        <BasicType Type="REFERENCE"/>
+                    </DataType>
+                    <Description>The level the student is currently in.</Description>
+                </FormalParameter>
+            </FormalParameters>
+        </Application>
+        <Application Id="updateStatus" Name="Update Status">
+            <Description>Update the status of the student in the academic records.</Description>
+            <FormalParameters>
+                <FormalParameter Id="student" Mode="IN">
+                    <DataType>
+                        <BasicType Type="REFERENCE"/>
+                    </DataType>
+                    <Description>The student, whose status we want to update.</Description>
+                </FormalParameter>
+            </FormalParameters>
+        </Application>
+        <Application Id="progressToNextLevel" Name="Progress to Next Level">
+            <Description>When a level is passed, this application will progress the student to the next level or allow him to graduate.</Description>
+            <FormalParameters>
+                <FormalParameter Id="level" Mode="INOUT">
+                    <DataType>
+                        <BasicType Type="REFERENCE"/>
+                    </DataType>
+                    <Description>The level the student will be next in. In case the student is graduating, this value can be a NULL (or equivalent).</Description>
+                </FormalParameter>
+            </FormalParameters>
+        </Application>
+        <Application Id="selectInitialLevel" Name="Select Initial Level">
+            <Description>Select the initial level for the student.</Description>
+            <FormalParameters>
+                <FormalParameter Id="level" Mode="OUT">
+                    <DataType>
+                        <BasicType Type="REFERENCE"/>
+                    </DataType>
+                    <Description>The level at which the student enters the school. This is commonly one of the initial levels the school defined, but can also be any other level, in case the student transferred.</Description>
+                </FormalParameter>
+            </FormalParameters>
+        </Application>
+        <Application Id="setLevelOutcome" Name="Set Level Outcome">
+            <Description>Set the the level outcome. This application should set the the `lastOutcome` variable in the workflow-relevant data to 'pass', 'fail', or 'withdraw'.</Description>
+            <FormalParameters>
+                <FormalParameter Id="outcome" Mode="OUT">
+                    <DataType>
+                        <BasicType Type="STRING"/>
+                    </DataType>
+                    <Description>Outcome of the level completion. Can be either 'pass', 'fail' or 'withdraw'.</Description>
+                </FormalParameter>
+            </FormalParameters>
+        </Application>
+    </Applications>
+    <DataFields>
+        <DataField Id="outcome" IsArray="FALSE" Name="Outcome">
+            <DataType>
+                <BasicType Type="STRING"/>
+            </DataType>
+            <Description>This value describes the outcome of the level completion activity. Based on this value the next activity will be chosen.</Description>
+        </DataField>
+        <DataField Id="level" IsArray="FALSE" Name="Level">
+            <DataType>
+                <BasicType Type="REFERENCE"/>
+            </DataType>
+            <Description>The level the sudent is currently enrolled in.</Description>
+        </DataField>
+        <DataField Id="student" IsArray="FALSE" Name="Student">
+            <DataType>
+                <BasicType Type="REFERENCE"/>
+            </DataType>
+            <Description>The student of which this process describes the academic career.</Description>
+        </DataField>
+    </DataFields>
+    <WorkflowProcesses>
+        <WorkflowProcess AccessLevel="PUBLIC" Id="promotion" Name="Promotion">
+            <ProcessHeader DurationUnit="D">
+                <Created>2005-07-21 13:14:30</Created>
+            </ProcessHeader>
+            <RedefinableHeader PublicationStatus="UNDER_TEST"/>
+            <FormalParameters>
+                <FormalParameter Id="student" Mode="IN">
+                    <DataType>
+                        <BasicType Type="REFERENCE"/>
+                    </DataType>
+                    <Description>Student for which the promotion workflow is executed.</Description>
+                </FormalParameter>
+                <FormalParameter Id="level" Mode="IN">
+                    <DataType>
+                        <BasicType Type="REFERENCE"/>
+                    </DataType>
+                </FormalParameter>
+                <FormalParameter Id="outcome" Mode="IN">
+                    <DataType>
+                        <BasicType Type="REFERENCE"/>
+                    </DataType>
+                </FormalParameter>
+            </FormalParameters>
+            <Activities>
+                <Activity Id="pass" Name="Pass">
+                    <Description>The student passes the class.</Description>
+                    <Implementation>
+                        <Tool Id="writeRecord" Type="APPLICATION">
+                            <ActualParameters>
+                                <ActualParameter>student</ActualParameter>
+                                <ActualParameter>level</ActualParameter>
+                            </ActualParameters>
+                        </Tool>
+                        <Tool Id="progressToNextLevel" Type="APPLICATION">
+                            <ActualParameters>
+                                <ActualParameter>level</ActualParameter>
+                            </ActualParameters>
+                        </Tool>
+                    </Implementation>
+                    <Performer>manager</Performer>
+                    <StartMode>
+                        <Automatic/>
+                    </StartMode>
+                    <FinishMode>
+                        <Automatic/>
+                    </FinishMode>
+                    <TransitionRestrictions>
+                        <TransitionRestriction>
+                            <Split Type="XOR">
+                                <TransitionRefs>
+                                    <TransitionRef Id="pass_to_graduate"/>
+                                    <TransitionRef Id="pass_to_complete"/>
+                                </TransitionRefs>
+                            </Split>
+                        </TransitionRestriction>
+                    </TransitionRestrictions>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="ParticipantID" Value="manager"/>
+                        <ExtendedAttribute Name="XOffset" Value="250"/>
+                        <ExtendedAttribute Name="YOffset" Value="180"/>
+                    </ExtendedAttributes>
+                </Activity>
+                <Activity Id="fail" Name="Fail">
+                    <Description>The syudent fails the level.</Description>
+                    <Implementation>
+                        <Tool Id="writeRecord" Type="APPLICATION">
+                            <ActualParameters>
+                                <ActualParameter>student</ActualParameter>
+                                <ActualParameter>level</ActualParameter>
+                            </ActualParameters>
+                        </Tool>
+                    </Implementation>
+                    <Performer>manager</Performer>
+                    <StartMode>
+                        <Automatic/>
+                    </StartMode>
+                    <FinishMode>
+                        <Automatic/>
+                    </FinishMode>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="ParticipantID" Value="manager"/>
+                        <ExtendedAttribute Name="XOffset" Value="440"/>
+                        <ExtendedAttribute Name="YOffset" Value="180"/>
+                    </ExtendedAttributes>
+                </Activity>
+                <Activity Id="withdraw" Name="Withdraw">
+                    <Description>The student withdraws from the level.</Description>
+                    <Implementation>
+                        <Tool Id="updateStatus" Type="APPLICATION">
+                            <ActualParameters>
+                                <ActualParameter>student</ActualParameter>
+                            </ActualParameters>
+                        </Tool>
+                        <Tool Id="writeRecord" Type="APPLICATION">
+                            <ActualParameters>
+                                <ActualParameter>student</ActualParameter>
+                                <ActualParameter>level</ActualParameter>
+                            </ActualParameters>
+                        </Tool>
+                    </Implementation>
+                    <Performer>manager</Performer>
+                    <StartMode>
+                        <Automatic/>
+                    </StartMode>
+                    <FinishMode>
+                        <Automatic/>
+                    </FinishMode>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="ParticipantID" Value="manager"/>
+                        <ExtendedAttribute Name="XOffset" Value="620"/>
+                        <ExtendedAttribute Name="YOffset" Value="180"/>
+                    </ExtendedAttributes>
+                </Activity>
+                <Activity Id="enroll" Name="Enroll">
+                    <Implementation>
+                        <Tool Id="writeRecord" Type="APPLICATION">
+                            <ActualParameters>
+                                <ActualParameter>student</ActualParameter>
+                                <ActualParameter>level</ActualParameter>
+                            </ActualParameters>
+                        </Tool>
+                        <Tool Id="selectInitialLevel" Type="APPLICATION">
+                            <ActualParameters>
+                                <ActualParameter>level</ActualParameter>
+                            </ActualParameters>
+                        </Tool>
+                        <Tool Id="updateStatus" Type="APPLICATION">
+                            <ActualParameters>
+                                <ActualParameter>student</ActualParameter>
+                            </ActualParameters>
+                        </Tool>
+                    </Implementation>
+                    <Performer>manager</Performer>
+                    <StartMode>
+                        <Automatic/>
+                    </StartMode>
+                    <FinishMode>
+                        <Automatic/>
+                    </FinishMode>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="ParticipantID" Value="manager"/>
+                        <ExtendedAttribute Name="XOffset" Value="190"/>
+                        <ExtendedAttribute Name="YOffset" Value="280"/>
+                    </ExtendedAttributes>
+                </Activity>
+                <Activity Id="graduate" Name="Graduate">
+                    <Implementation>
+                        <Tool Id="updateStatus" Type="APPLICATION">
+                            <ActualParameters>
+                                <ActualParameter>student</ActualParameter>
+                            </ActualParameters>
+                        </Tool>
+                    </Implementation>
+                    <Performer>manager</Performer>
+                    <StartMode>
+                        <Automatic/>
+                    </StartMode>
+                    <FinishMode>
+                        <Automatic/>
+                    </FinishMode>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="ParticipantID" Value="manager"/>
+                        <ExtendedAttribute Name="XOffset" Value="250"/>
+                        <ExtendedAttribute Name="YOffset" Value="80"/>
+                    </ExtendedAttributes>
+                </Activity>
+                <Activity Id="complete" Name="Complete Level">
+                    <Description>The student completes a level.</Description>
+                    <Implementation>
+                        <Tool Id="setLevelOutcome" Type="APPLICATION">
+                            <ActualParameters>
+                                <ActualParameter>outcome</ActualParameter>
+                            </ActualParameters>
+                        </Tool>
+                    </Implementation>
+                    <Performer>manager</Performer>
+                    <StartMode>
+                        <Automatic/>
+                    </StartMode>
+                    <FinishMode>
+                        <Automatic/>
+                    </FinishMode>
+                    <TransitionRestrictions>
+                        <TransitionRestriction>
+                            <Join Type="XOR"/>
+                            <Split Type="XOR">
+                                <TransitionRefs>
+                                    <TransitionRef Id="complete_to_fail"/>
+                                    <TransitionRef Id="complete_to_pass"/>
+                                    <TransitionRef Id="complete_to_withdraw"/>
+                                </TransitionRefs>
+                            </Split>
+                        </TransitionRestriction>
+                    </TransitionRestrictions>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="ParticipantID" Value="manager"/>
+                        <ExtendedAttribute Name="XOffset" Value="440"/>
+                        <ExtendedAttribute Name="YOffset" Value="280"/>
+                    </ExtendedAttributes>
+                </Activity>
+            </Activities>
+            <Transitions>
+                <Transition From="enroll" Id="enroll_to_complete" Name="Enroll -&gt; Complete" To="complete">
+                    <Condition Type="CONDITION">level is not None</Condition>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                    </ExtendedAttributes>
+                </Transition>
+                <Transition From="complete" Id="complete_to_pass" Name="Complete -&gt; Pass" To="pass">
+                    <Condition Type="CONDITION">outcome == 'pass'</Condition>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                    </ExtendedAttributes>
+                </Transition>
+                <Transition From="complete" Id="complete_to_fail" Name="Complete -&gt; Fail" To="fail">
+                    <Condition Type="CONDITION">outcome == 'fail'</Condition>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                    </ExtendedAttributes>
+                </Transition>
+                <Transition From="complete" Id="complete_to_withdraw" Name="Complete -&gt; Withdraw" To="withdraw">
+                    <Condition Type="CONDITION">outcome == 'withdraw'</Condition>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                    </ExtendedAttributes>
+                </Transition>
+                <Transition From="pass" Id="pass_to_graduate" Name="Pass -&gt; Graduate" To="graduate">
+                    <Condition Type="CONDITION">level is None</Condition>
+                    <Description>If there are no more levels to complete, then the student should gradaute.</Description>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                    </ExtendedAttributes>
+                </Transition>
+                <Transition From="pass" Id="pass_to_complete" Name="Pass -&gt; Complete" To="complete">
+                    <Description>Student starts a new level.</Description>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                    </ExtendedAttributes>
+                </Transition>
+                <Transition From="fail" Id="fail_to_complete" Name="Fail -&gt; Complete" To="complete">
+                    <Description>Student must repeat the level because s/he failed.</Description>
+                    <ExtendedAttributes>
+                        <ExtendedAttribute Name="RoutingType" Value="NOROUTING"/>
+                    </ExtendedAttributes>
+                </Transition>
+            </Transitions>
+            <ExtendedAttributes>
+                <ExtendedAttribute Name="StartOfWorkflow" Value="manager;enroll;110;280;NOROUTING"/>
+                <ExtendedAttribute Name="EndOfWorkflow" Value="manager;withdraw;640;80;NOROUTING"/>
+                <ExtendedAttribute Name="EndOfWorkflow" Value="manager;graduate;270;1;NOROUTING"/>
+                <ExtendedAttribute Name="ParticipantVisualOrder" Value="manager;"/>
+            </ExtendedAttributes>
+        </WorkflowProcess>
+    </WorkflowProcesses>
+    <ExtendedAttributes>
+        <ExtendedAttribute Name="MadeBy" Value="JaWE"/>
+        <ExtendedAttribute Name="Version" Value="1.4.2"/>
+    </ExtendedAttributes>
+</Package>

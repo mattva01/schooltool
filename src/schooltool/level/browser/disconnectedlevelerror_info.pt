@@ -1,0 +1,32 @@
+<div id="message">
+  <h1 i18n:translate="">One or more disconnected levels detected.</h1>
+
+  <h5 i18n:translate="">Details</h5>
+  <p>
+    One or more disconnected levels have been detected:
+  </p>
+  <ul style="list-style: circle">
+    <li tal:repeat="level context/levels">
+      <a href=""
+          tal:attributes="href string: ${level/@@absolute_url}/@@edit.html">
+        <em tal:replace="level/title">Level X</em> 
+        (<span tal:replace="level/zope:name" />)
+      </a>
+    </li>
+  </ul>
+  <br />
+
+  <h5 i18n:translate="">Explanation</h5>
+  <p i18n:translate="">
+    Disconnected levels will simply never be used, since they are not
+    connected to a graph. This does not affect the integrity of the level
+    graphs, but it is not desirable.
+  </p>
+
+  <h5 i18n:translate="">Solution</h5>
+  <p i18n:translate="">
+    You can either <a href="@@index.html">remove</a> those levels or connect 
+    them to an existing graph.    
+  </p>
+
+</div>

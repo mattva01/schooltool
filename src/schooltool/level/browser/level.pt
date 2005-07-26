@@ -1,0 +1,44 @@
+<metal:block use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+
+  <metal:slot fill-slot="title">
+    <span tal:replace="context/title">Level X</span>
+  </metal:slot>
+
+  <metal:block fill-slot="content-header">
+    <h1 tal:content="context/title" />
+  </metal:block>
+
+  <metal:block metal:fill-slot="body">
+
+    <div class="info-block">
+
+      <p tal:condition="context/isInitial" i18n:translate="">
+        This is an initial level.
+      </p>
+
+      <p>
+        Next Level:
+        <span tal:condition="not: context/nextLevel"
+              i18n:translate="">None</span>
+
+        <a href=""
+           tal:attributes="href context/nextLevel/@@absolute_url"
+           tal:condition="context/nextLevel"
+           tal:content="context/nextLevel/title">
+           Level Next
+        </a>
+
+      </p>
+
+      <br />
+
+      <a class="modify" href="@@edit.html" title="Edit Info"
+         i18n:attributes="title" i18n:translate="">
+         Edit Info
+      </a>
+
+    </div>
+
+  </metal:block>
+
+</metal:block>

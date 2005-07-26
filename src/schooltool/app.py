@@ -59,7 +59,6 @@ from schooltool.relationships import URISectionOfCourse
 from schooltool.timetable import TermContainer, TimetableSchemaContainer
 from schooltool.timetable import TimetabledMixin
 
-
 class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer,
                             TimetabledMixin):
     """The main SchoolTool application object"""
@@ -76,7 +75,14 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer,
         self['courses'] = CourseContainer()
         self['sections'] = SectionContainer()
         self['ttschemas'] = TimetableSchemaContainer()
+        # Local import to avoid recursive imports
+        import schooltool.level.level
+        self['levels'] = schooltool.level.level.LevelContainer()
+
         self.calendar = Calendar(self)
+
+        # Set up initial groups
+        self['groups']['manager'] = Group(u'Manager', u'Manager Group.')
 
     def _newContainerData(self):
         return PersistentDict()

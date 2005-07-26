@@ -61,8 +61,15 @@ class SchoolToolApplicationTraverser(sbcal.CalendarOwnerTraverser):
     adapts(ISchoolToolApplication)
 
     def publishTraverse(self, request, name):
+        # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
+        # XXX: THIS IS TOTALLY TOTALLY UNACCEPTABLE!!!! THIS REALLY SUCKS!!!
+        #      I CANNOT BELIEVE THIS IS IN HERE!!! (SR) XXX
+        # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
+        #
+        # Even the following would be better:
+        # return self.context.get(name, sbcal.CalendarOwnerT...)
         if name in ('persons', 'resources', 'sections', 'groups',
-                    'ttschemas', 'terms', 'courses'):
+                    'ttschemas', 'terms', 'courses', 'levels'):
             return self.context[name]
 
         return sbcal.CalendarOwnerTraverser.publishTraverse(self, request, name)

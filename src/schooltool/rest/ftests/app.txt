@@ -41,6 +41,9 @@ Now, we can run the REST page tests:
                    xlink:href="http://localhost/frogpond/courses"
                    xlink:title="courses"/>
         <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/levels"
+                   xlink:title="levels"/>
+        <container xlink:type="simple"
                    xlink:href="http://localhost/frogpond/groups"
                    xlink:title="groups"/>
         <container xlink:type="simple"
@@ -56,7 +59,7 @@ Now, we can run the REST page tests:
     </schooltool>
     <BLANKLINE>
 
-There are no groups at the moment:
+There is only the manager group
 
     >>> print rest("""
     ... GET /frogpond/groups/ HTTP/1.1
@@ -69,6 +72,9 @@ There are no groups at the moment:
     <container xmlns:xlink="http://www.w3.org/1999/xlink">
       <name>groups</name>
       <items>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/groups/manager"
+              xlink:title="Manager"/>
       </items>
       <acl xlink:type="simple" xlink:title="ACL"
            xlink:href="http://localhost/frogpond/groups/acl"/>
