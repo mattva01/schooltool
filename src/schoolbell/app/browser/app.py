@@ -87,6 +87,18 @@ class ContainerView(BrowserView):
 
     """
 
+    def update(self):
+
+        results = [item for item in self.context.values()]
+        if 'SEARCH' in self.request:
+            results = [item for item in results if 
+                       self.request.get('SEARCH').lower() in item.title.lower()]
+
+        start = int(self.request.get('batch_start', 0))
+        size = int(self.request.get('batch_size', 10))
+        self.batch = Batch(results, start, size)
+
+
 
 class PersonContainerView(ContainerView):
     """A Person Container view."""

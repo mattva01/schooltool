@@ -1131,7 +1131,6 @@ table.event_booking td.booked {
     margin: 1em auto;
     overflow: auto;
     font-size: 94%;
-    clear: both;
 }
 
 .batch-navigation a {

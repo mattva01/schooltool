@@ -270,19 +270,19 @@ Snakes be gone:
     HTTP/1.1 200 Ok
     Content-Length: ...
     ...
-      <ul>
         <form method="post"
               action="http://localhost/frogpond/persons/delete.html">
-          <li>
-            <input type="checkbox" name="delete.frog" />
-            <a href="http://localhost/frogpond/persons/frog">Frog</a>
-          </li>
+          <ul>
+            <li>
+              <input type="checkbox" name="delete.frog" />
+                <a href="http://localhost/frogpond/persons/frog">Frog</a>
+            </li>
           <div class="controls">
             <input type="submit" class="button-cancel"
                    value="Delete" />
           </div>
+           </ul>
         </form>
-      </ul>
     ...
 
 If frog tries deleting himself - he should get an error:
