@@ -22,7 +22,8 @@
   <form method="post">
     <div class="batch-search">
       <input type="text" name="SEARCH"/>
-      <input type="submit" name="batch_search_button" value="Find Now"/>
+      <input type="submit" name="SEARCH_BUTTON" value="Find Now"
+        i18n:attributes="value"/>
     </div>
   </form>
   <tal:if condition="batch">

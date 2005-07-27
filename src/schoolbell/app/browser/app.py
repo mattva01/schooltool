@@ -88,7 +88,6 @@ class ContainerView(BrowserView):
     """
 
     def update(self):
-
         results = [item for item in self.context.values()]
         if 'SEARCH' in self.request:
             results = [item for item in results if 
