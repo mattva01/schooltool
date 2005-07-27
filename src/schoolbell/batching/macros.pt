@@ -4,14 +4,14 @@ The following must be defined in the page prior to calling the batch-navigation
 macro:
 
   batch - a schoolbell.batching.Batch instance
-  batch_start - the starting index of the batch relative to the full list
-  batch_size - the size of the batch
 
 -->
 <metal:block define-macro="batch-navigation">
   <div class="batch-navigation"
-    tal:define="needsBatch python:bool(batch.prev() or batch.next());
-    batch_size python:int(batch_size)">
+    tal:define="batch_size request/batch_size|string:10;
+                batch_start request/batch_start|string:0;
+                needsBatch python:bool(batch.prev() or batch.next());
+                batch_size python:int(batch_size)">
 
     <tal:if condition="needsBatch">
       <span tal:condition="not:batch/prev" i18n:translate=""
@@ -37,7 +37,7 @@ macro:
 
     </div>
 
-    <tal:if condition="python:batch.prev() or batch.next()">
+    <tal:if condition="needsBatch">
       <a class="next"
         tal:condition="batch/next"
         tal:attributes="href python:'?batch_start=%s&batch_size=%s' % (batch.next().start, batch_size)"
