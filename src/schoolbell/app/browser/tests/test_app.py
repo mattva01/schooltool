@@ -401,6 +401,11 @@ def doctest_MemberListView():
         >>> [person.title for person in pov.members]
         ['Ignas']
 
+    Search again to make sure members do not appear in the results:
+
+        >>> [g.title for g in view.searchPotentialMembers('as')]
+        ['Albertas', 'Gintas']
+
     We can cancel an action if we want to:
 
         >>> request = TestRequest()
