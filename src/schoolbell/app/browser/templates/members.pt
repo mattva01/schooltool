@@ -42,11 +42,13 @@
     <tal:if condition="not:request/SEARCH|nothing">
       <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
     </tal:if>
-    <div class="batch-search">
-      <input type="text" name="SEARCH"/>
-      <input type="submit" name="SEARCH_BUTTON" value="Find Now"
-        i18n:attributes="value"/>
-    </div>
+  </tal:if>
+  <div class="batch-search">
+    <input type="text" name="SEARCH"/>
+    <input type="submit" name="SEARCH_BUTTON" value="Find Now"
+      i18n:attributes="value"/>
+  </div>
+  <tal:if condition="batch">
     <div class="member_list">
       <div tal:repeat="member batch">
         <label>
@@ -56,7 +58,6 @@
         </label>
       </div>
     </div>
-
     <div class="controls">
       <input type="submit" class="button-ok" name="ADD_MEMBERS" value="Add Members"
         tal:condition="batch"

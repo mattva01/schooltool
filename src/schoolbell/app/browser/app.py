@@ -88,15 +88,16 @@ class ContainerView(BrowserView):
     """
 
     def update(self):
-        results = [item for item in self.context.values()]
         if 'SEARCH' in self.request:
-            results = [item for item in results if 
-                       self.request.get('SEARCH').lower() in item.title.lower()]
+            searchstr = self.request['SEARCH'].lower()
+            results = [item for item in self.context.values()
+                       if searchstr in item.title.lower()]
+        else:
+            results = list(self.context.values())
 
         start = int(self.request.get('batch_start', 0))
         size = int(self.request.get('batch_size', 10))
         self.batch = Batch(results, start, size)
-
 
 
 class PersonContainerView(ContainerView):
@@ -257,12 +258,8 @@ class MemberViewPersons(BrowserView):
         self.batch = Batch(lst, start, size)
 
     def update(self):
-
         context_url = zapi.absoluteURL(self.context, self.request)
-        results = self.getPotentialMembers()
-        if 'SEARCH' in self.request:
-            results = self.searchPotentialMembers(self.request.get('SEARCH'))
-        elif 'DONE' in self.request:
+        if 'DONE' in self.request:
             self.request.response.redirect(context_url)
         elif 'ADD_MEMBERS' in self.request:
             context_members = removeSecurityProxy(self.context.members)
@@ -280,6 +277,10 @@ class MemberViewPersons(BrowserView):
                 if 'REMOVE_MEMBER.' + member.__name__ in self.request:
                     member = removeSecurityProxy(member)
                     context_members.remove(member)
+
+        results = self.getPotentialMembers()
+        if 'SEARCH' in self.request:
+            results = self.searchPotentialMembers(self.request.get('SEARCH'))
 
         self.updateBatch(results)
 
