@@ -1,3 +1,4 @@
+<tal:define define="dummy view/update"/>
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <metal:slot fill-slot="title"
@@ -11,13 +12,14 @@
     tal:content="view/index_title" i18n:translate="">Contents</h1>
 
 <metal:block metal:fill-slot="body"
-             tal:define="objects context/values">
+             tal:define="batch view/batch">
 
-  <p tal:condition="not:objects" i18n:translate="">There are none.</p>
-  <ul tal:condition="objects">
-    <form method="post"
-          tal:attributes="action string:${context/@@absolute_url}/delete.html">
-      <li tal:repeat="obj objects/sortby:title">
+  <p tal:condition="not:batch" i18n:translate="">There are none.</p>
+  <form method="post"
+        tal:attributes="action string:${context/@@absolute_url}/delete.html">
+    <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    <ul tal:condition="batch">
+      <li tal:repeat="obj batch/sortby:title">
         <input type="checkbox" tal:attributes="name string:delete.${obj/zope:name}" />
         <a tal:content="obj/label" i18n:translate=""
            tal:attributes="href obj/@@absolute_url">Some Object</a>
@@ -30,8 +32,8 @@
         <input type="submit" class="button-cancel" value="Delete"
                i18n:attributes="value delete-button;" />
       </div>
-    </form>
-  </ul>
+    </ul>
+  </form>
 
 </metal:block>
 </body>

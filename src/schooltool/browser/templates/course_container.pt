@@ -1,3 +1,4 @@
+<tal:define define="dummy view/update"/>
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <metal:slot fill-slot="title"
@@ -9,15 +10,16 @@
     tal:content="view/index_title" i18n:translate="">Contents</h1>
 
 <metal:block metal:fill-slot="body"
-             tal:define="objects context/values;
+             tal:define="batch view/batch;
                          canModify view/canModify">
 
-  <p tal:condition="not:objects" i18n:translate="">There are none.</p>
-  <tal:block tal:condition="objects">
+  <p tal:condition="not:batch" i18n:translate="">There are none.</p>
+  <tal:block tal:condition="batch">
     <form method="post"
           tal:condition="canModify"
           tal:attributes="action string:${context/@@absolute_url}/delete.html">
-      <div tal:repeat="course objects/sortby:title" class="course">
+      <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+      <div tal:repeat="course batch/sortby:title" class="course">
         <input type="checkbox" tal:attributes="name string:delete.${course/zope:name}" />
         <a tal:content="course/title"
            tal:attributes="href course/@@absolute_url">Some Object</a>
@@ -42,7 +44,7 @@
       </div>
     </form>
     <ul tal:condition="not:canModify" class="container-content">
-      <li tal:repeat="course objects/sortby:title" class="course">
+      <li tal:repeat="course batch/sortby:title" class="course">
         <a tal:content="course/title"
            tal:attributes="href course/@@absolute_url">Some Object</a>
         <ul tal:condition="course/sections|nothing" class="section-list">

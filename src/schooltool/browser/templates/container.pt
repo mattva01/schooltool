@@ -1,3 +1,4 @@
+<tal:define define="dummy view/update"/>
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
   <metal:slot fill-slot="title" tal:content="view/index_title"
@@ -11,14 +12,15 @@
     tal:content="view/index_title" i18n:translate="">Contents</h1>
 
 <metal:block metal:fill-slot="body"
-             tal:define="objects context/values;
+             tal:define="batch view/batch;
                          canModify view/canModify">
-  <p tal:condition="not:objects" i18n:translate="">There are none.</p>
-  <tal:block tal:condition="objects">
+  <p tal:condition="not:batch" i18n:translate="">There are none.</p>
+  <tal:block tal:condition="batch">
     <form tal:condition="canModify"
           method="post"
           tal:attributes="action string:${context/@@absolute_url}/delete.html">
-      <div tal:repeat="obj objects/sortby:title">
+          <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+      <div tal:repeat="obj batch/sortby:title">
         <input type="checkbox" tal:attributes="name string:delete.${obj/zope:name}" />
         <a tal:content="obj/title"
            tal:attributes="href obj/@@absolute_url">Some Object</a>
@@ -29,7 +31,7 @@
       </div>
     </form>
     <ul tal:condition="not:canModify">
-      <li tal:repeat="obj objects/sortby:title">
+      <li tal:repeat="obj batch/sortby:title">
         <a tal:content="obj/title"
            tal:attributes="href obj/@@absolute_url">Some Object</a>
       </li>
