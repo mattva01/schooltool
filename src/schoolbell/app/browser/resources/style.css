@@ -1182,6 +1182,8 @@ table.event_booking td.booked {
 pre.traceback {
   color: #444444;
   font-size: small;
+  overflow: auto;
+  background: #f0f0f0;
 }
 
 pre.traceback span.filename {
