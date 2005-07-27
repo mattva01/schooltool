@@ -4,35 +4,68 @@
   <metal:slot fill-slot="title" tal:content="context/title" />
 </head>
 <body>
-<metal:block metal:fill-slot="body"
-             tal:define="possible_members view/getPotentialMembers">
+  <metal:block metal:fill-slot="body"
+    tal:define="batch_search request/SEARCH|nothing">
 
-<form method="post" tal:attributes="action request/URL" class="standalone">
+<form method="post" tal:attributes="action request/URL" class="standalone"
+  tal:define="batch view/batch">
 <h3 i18n:translate="">
   Members of <span i18n:name="title" tal:replace="context/title" />
 </h3>
-<p tal:condition="not:possible_members" i18n:translate="">
-  There are none.
-</p>
-<fieldset tal:condition="possible_members">
-  <div class="member_list">
-    <div tal:repeat="member possible_members/sortby:title">
+<fieldset tal:define="members view/getMembers">
+  <legend i18n:translate="">Current Members</legend>
+  <p tal:condition="not:members" i18n:translate="">
+    There are none.
+  </p>
+  <tal:if condition="members">
+    <div tal:repeat="member members/sortby:title">
       <label>
-        <input tal:attributes="name string:member.${member/__name__};
-                               checked python:member in context.members"
-               type="checkbox" />
+        <input tal:attributes="name string:REMOVE_MEMBER.${member/__name__}"
+          type="checkbox" />
         <span tal:replace="member/title" />
-    </label>
+      </label>
     </div>
-  </div>
+    <div class="controls">
+      <input type="submit" class="button-ok" name="REMOVE_MEMBERS" 
+        value="Remove Members" tal:condition="batch"
+        title="Shortcut: Alt-R" accesskey="R"
+        i18n:attributes="value submit-button; accesskey" />
+    </div>
+  </tal:if>
 </fieldset>
+<fieldset>
+  <legend i18n:translate="">Add Members</legend>
+  <p tal:condition="not:batch" i18n:translate="">
+    There are none to add.
+  </p>
+  <tal:if condition="batch">
+    <tal:if condition="not:request/SEARCH|nothing">
+      <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    </tal:if>
+    <div class="batch-search">
+      <input type="text" name="SEARCH"/>
+      <input type="submit" name="batch_search_button" value="Find Now"/>
+    </div>
+    <div class="member_list">
+      <div tal:repeat="member batch">
+        <label>
+          <input tal:attributes="name string:ADD_MEMBER.${member/__name__}"
+            type="checkbox" />
+          <span tal:replace="member/title" />
+        </label>
+      </div>
+    </div>
 
+    <div class="controls">
+      <input type="submit" class="button-ok" name="ADD_MEMBERS" value="Add Members"
+        tal:condition="batch"
+        title="Shortcut: Alt-A" accesskey="A"
+        i18n:attributes="value submit-button; accesskey" />
+    </div>
+  </tal:if>
+</fieldset>
 <div class="controls">
-  <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Apply"
-         tal:condition="possible_members"
-         title="Shortcut: Alt-A" accesskey="A"
-         i18n:attributes="value submit-button; accesskey" />
-  <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+  <input type="submit" class="button-cancel" name="DONE" value="Done"
          i18n:attributes="value cancel-button" />
 </div>
 </form>

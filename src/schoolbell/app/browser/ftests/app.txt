@@ -513,8 +513,7 @@ The group members view reflects the change that we have done:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    <input type="checkbox" checked="checked"
-           name="member.frog" />
+    <input type="checkbox" name="REMOVE_MEMBER.frog" />
     Frog
     ...
 

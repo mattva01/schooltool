@@ -382,10 +382,17 @@ def doctest_MemberListView():
         >>> [g.title for g in view.getPotentialMembers()]
         ['Albertas', 'Gintas', 'Ignas']
 
+    We can search persons not in the group
+
+        >>> [g.title for g in view.searchPotentialMembers('al')]
+        ['Albertas']
+        >>> [g.title for g in view.searchPotentialMembers('i')]
+        ['Gintas', 'Ignas']
+
     Let's make Ignas a member of PoV:
 
         >>> request = TestRequest()
-        >>> request.form = {'member.ignas': 'on', 'UPDATE_SUBMIT': 'Apply'}
+        >>> request.form = {'ADD_MEMBER.ignas': 'on', 'ADD_MEMBERS': 'Apply'}
         >>> view = MemberViewPersons(pov, request)
         >>> view.update()
 
@@ -394,17 +401,10 @@ def doctest_MemberListView():
         >>> [person.title for person in pov.members]
         ['Ignas']
 
-    And we should be directed to the group info page:
-
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeaders()['Location']
-        'http://127.0.0.1/groups/pov'
-
     We can cancel an action if we want to:
 
         >>> request = TestRequest()
-        >>> request.form = {'member.gintas': 'on', 'CANCEL': 'Cancel'}
+        >>> request.form = {'ADD_MEMBER.gintas': 'on', 'DONE': 'Done'}
         >>> view = MemberViewPersons(pov, request)
         >>> view.update()
         >>> [person.title for person in pov.members]
@@ -414,11 +414,17 @@ def doctest_MemberListView():
         >>> request.response.getHeaders()['Location']
         'http://127.0.0.1/groups/pov'
 
-    Finally, let's remove Ignas from PoV (he went home early today)
+    Let's remove Ignas from PoV (he went home early today);
+
+        >>> request = TestRequest()
+        >>> request.form = {'REMOVE_MEMBER.ignas': 'on', 'REMOVE_MEMBERS': 'Apply'}
+        >>> view = MemberViewPersons(pov, request)
+        >>> view.update()
+
     and add Albert, who came in late and has to work after-hours:
 
         >>> request = TestRequest()
-        >>> request.form = {'member.alga': 'on', 'UPDATE_SUBMIT': 'Apply'}
+        >>> request.form = {'ADD_MEMBER.alga': 'on', 'ADD_MEMBERS': 'Apply'}
         >>> view = MemberViewPersons(pov, request)
         >>> view.update()
 
@@ -427,8 +433,12 @@ def doctest_MemberListView():
         >>> [person.title for person in pov.members]
         ['Albertas']
 
-    Yadda yadda, redirection works:
+    Click 'Done' when we are finished and we go back to the group view
 
+        >>> request = TestRequest()
+        >>> request.form = {'DONE': 'Done'}
+        >>> view = MemberViewPersons(pov, request)
+        >>> view.update()
         >>> request.response.getStatus()
         302
         >>> request.response.getHeaders()['Location']

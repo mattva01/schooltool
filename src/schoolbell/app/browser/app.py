@@ -58,6 +58,8 @@ from schoolbell.app.app import Person
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.browser.cal import CalendarOwnerTraverser
 
+from schoolbell.batching import Batch
+
 from pytz import common_timezones
 
 
@@ -225,31 +227,50 @@ class MemberViewPersons(BrowserView):
 
     container_name = 'persons'
 
+    def getMembers(self):
+        """Return a list of current group memebers."""
+        return filter(IPerson.providedBy, self.context.members)
+
     def getPotentialMembers(self):
         """Return a list of all possible members."""
         container = ISchoolBellApplication(self.context)[self.container_name]
-        return container.values()
+        return [m for m in container.values() if m not in self.context.members]
+
+    def searchPotentialMembers(self, s):
+        potentials = self.getPotentialMembers()
+        return [m for m in potentials if s.lower() in m.title.lower()]
+
+    def updateBatch(self, lst):
+        start = int(self.request.get('batch_start', 0))
+        size = int(self.request.get('batch_size', 10))
+        self.batch = Batch(lst, start, size)
 
     def update(self):
-        # This method is rather similar to GroupListView.update().
+
         context_url = zapi.absoluteURL(self.context, self.request)
-        if 'UPDATE_SUBMIT' in self.request:
+        results = self.getPotentialMembers()
+        if 'SEARCH' in self.request:
+            results = self.searchPotentialMembers(self.request.get('SEARCH'))
+        elif 'DONE' in self.request:
+            self.request.response.redirect(context_url)
+        elif 'ADD_MEMBERS' in self.request:
             context_members = removeSecurityProxy(self.context.members)
             for member in self.getPotentialMembers():
-                want = bool('member.' + member.__name__ in self.request)
-                have = bool(member in context_members)
-                # add() and remove() could throw an exception, but at the
-                # moment the constraints are never violated, so we ignore
-                # the problem.
-                if want != have:
+                # add() could throw an exception, but at the moment the
+                # constraints are never violated, so we ignore the problem.
+                if 'ADD_MEMBER.' + member.__name__ in self.request:
                     member = removeSecurityProxy(member)
-                    if want:
-                        context_members.add(member)
-                    else:
-                        context_members.remove(member)
-            self.request.response.redirect(context_url)
-        elif 'CANCEL' in self.request:
-            self.request.response.redirect(context_url)
+                    context_members.add(member)
+        elif 'REMOVE_MEMBERS' in self.request:
+            context_members = removeSecurityProxy(self.context.members)
+            for member in self.getMembers():
+                # remove() could throw an exception, but at the moment the
+                # constraints are never violated, so we ignore the problem.
+                if 'REMOVE_MEMBER.' + member.__name__ in self.request:
+                    member = removeSecurityProxy(member)
+                    context_members.remove(member)
+
+        self.updateBatch(results)
 
 
 class ResourceView(BrowserView):

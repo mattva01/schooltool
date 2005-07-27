@@ -3,6 +3,10 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schoolbell">
 
+<!-- Dependencies -->
+
+  <include package="schoolbell.batching" />
+
 <!-- TALES path expressions -->
 
   <zope:adapter

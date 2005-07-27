@@ -1121,6 +1121,63 @@ table.event_booking td.booked {
   background: url(++resource++private-note-body-l.gif) no-repeat bottom left;
 }
 
+/* Batch navigation */
+
+.batch-navigation {
+    background: #d6d6d6;
+    border: 1px #bab5ab solid;
+    text-align: center;
+    vertical-align: top;
+    margin: 1em auto;
+    overflow: auto;
+    font-size: 94%;
+    clear: both;
+}
+
+.batch-navigation a {
+    text-decoration: none;
+    padding: 0 0.5em;
+}
+
+.batch-navigation a:hover {
+    background: #bab5ab;
+}
+
+.batch-navigation span.previous,
+.batch-navigation a.previous {
+    text-align: left;
+    float: left;
+    padding-left: 1em;
+}
+
+.batch-navigation span.next,
+.batch-navigation a.next {
+    text-align: right;
+    float: right;
+    padding-right: 1em;
+}
+
+.batch-navigation span.next,
+.batch-navigation span.previous {
+    color: #BAB5AB;
+    font-weight: bold;
+}
+
+.batch-navigation a.current {
+    text-decoration: underline;
+}
+
+.batch-extra-navigation {
+    float: right;
+    border-left: 1px #bab5ab solid;
+}
+
+.batch-extra-navigation .more,
+.batch-extra-navigation .less,
+.batch-extra-navigation .all {
+    padding: 0 0.5em;
+}
+
 /* Internal error pages */
 
 pre.traceback {
@@ -1131,16 +1188,20 @@ pre.traceback {
 pre.traceback span.filename {
   color: blue;
 }
+
 pre.traceback span.lineno,
 pre.traceback span.column {
   color: red;
 }
+
 pre.traceback span.method {
   color: green;
 }
+
 pre.traceback span.expr {
   color: green;
 }
+
 pre.traceback span.source {
   color: black;
 }
