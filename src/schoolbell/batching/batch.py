@@ -29,11 +29,13 @@ class Batch(object):
 
     See schoolbell.batching.interfaces.IBatch."""
 
-    def __init__(self, list, start, size):
+    def __init__(self, list, start, size, sort_by=None):
         self.list = list
+        if sort_by:
+            self._sortBy(sort_by)
         self.start = start
         self.size = size
-        self.batch = list[start:start + size]
+        self.batch = self.list[start:start + size]
 
     def __len__(self):
         return len(self.batch)
@@ -87,4 +89,10 @@ class Batch(object):
             result.append(batch.next())
             batch = batch.next()
         return result
+
+    def _sortBy(self, attribute):
+        """Sort the full batch list by specified attribute"""
+        results = [(getattr(obj, attribute), obj) for obj in self.list]
+        results.sort()
+        self.list = [obj for (key, obj) in results]
 

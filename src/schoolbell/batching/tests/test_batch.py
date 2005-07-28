@@ -148,6 +148,26 @@ def doctest_Batch():
       >>> [[item for item in b] for b in batch.batches()]
       [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14]]
 
+    By default, items are presented in the same order they are passed to Batch
+
+      >>> class Foo(object):
+      ...   def __init__(self, val):
+      ...     self.title = val
+
+      >>> data = [Foo('aaa'), Foo('zzz'), Foo('ccc'), Foo('mmm')]
+      >>> batch = Batch(data, 0, 2)
+
+      >>> [[item.title for item in b] for b in batch.batches()]
+      [['aaa', 'zzz'], ['ccc', 'mmm']]
+
+    If we pass an attribute name to the constructor we can sort our batch
+
+      >>> batch = Batch(data, 0, 2, sort_by='title')
+      >>> [[item.title for item in b] for b in batch.batches()]
+      [['aaa', 'ccc'], ['mmm', 'zzz']]
+
+    
+
     """
 
 def test_suite():
