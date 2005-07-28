@@ -57,7 +57,6 @@ from schoolbell.app.interfaces import vocabulary
 from schoolbell.app.app import Person
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.browser.cal import CalendarOwnerTraverser
-from schoolbell.app.browser import SortBy
 
 from schoolbell.batching import Batch
 
@@ -89,17 +88,16 @@ class ContainerView(BrowserView):
     """
 
     def update(self):
-        sorted = SortBy(self.context.values()).traverse('title')
         if 'SEARCH' in self.request:
             searchstr = self.request['SEARCH'].lower()
-            results = [item for item in sorted
+            results = [item for item in self.context.values()
                        if searchstr in item.title.lower()]
         else:
-            results = list(sorted)
+            results = list(self.context.values())
 
         start = int(self.request.get('batch_start', 0))
         size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(results, start, size)
+        self.batch = Batch(results, start, size, sort_by='title')
 
 
 class PersonContainerView(ContainerView):
@@ -224,17 +222,16 @@ class GroupListView(BrowserView):
         elif 'CANCEL' in self.request:
             self.request.response.redirect(context_url)
 
-        sorted = SortBy(self.getPotentialGroups()).traverse('title')
         if 'SEARCH' in self.request:
             searchstr = self.request['SEARCH'].lower()
-            results = [item for item in sorted
+            results = [item for item in self.getPotentialGroups()
                        if searchstr in item.title.lower()]
         else:
-            results = list(sorted)
+            results = self.getPotentialGroups()
 
         start = int(self.request.get('batch_start', 0))
         size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(results, start, size)
+        self.batch = Batch(results, start, size, sort_by='title')
 
 
 class GroupView(BrowserView):
