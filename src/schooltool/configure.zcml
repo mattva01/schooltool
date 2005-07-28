@@ -26,8 +26,8 @@
 
   <adapter
       for=".interfaces.ISchoolToolApplication"
-      provides="schoolbell.app.interfaces.IApplicationPreferences"
-      factory="schoolbell.app.app.getApplicationPreferences"
+      provides="schooltool.interfaces.IApplicationPreferences"
+      factory="schooltool.app.getApplicationPreferences"
       trusted="true"
       />
 

@@ -74,6 +74,14 @@ def doctest_SchoolToolApplication():
         >>> app.calendar
         <schoolbell.app.cal.Calendar object at ...
 
+    Our ApplicationPreferences title should be 'SchoolTool' by default:
+
+      >>> setup.setUpAnnotations()
+      >>> from schooltool.app import getApplicationPreferences
+      >>> getApplicationPreferences(app).title
+      'SchoolTool'
+
+
     """
 
 

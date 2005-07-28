@@ -192,3 +192,7 @@ class ISchoolToolApplication(sb.ISchoolBellApplication, ITimetabled):
 
     calendar = Attribute("School Calendar.")
 
+
+class IApplicationPreferences(sb.IApplicationPreferences):
+    """ScholTool ApplicationPreferences."""
+

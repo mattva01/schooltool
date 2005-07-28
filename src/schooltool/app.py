@@ -378,3 +378,17 @@ def getSchoolToolApplication():
         return candidate
     else:
         raise ValueError("can't get a SchoolToolApplication")
+
+
+def getApplicationPreferences(app):
+    """Adapt a SchoolToolApplication to IApplicationPreferences."""
+
+    annotations = IAnnotations(app)
+    key = 'schooltool.app.ApplicationPreferences'
+    try:
+        return annotations[key]
+    except KeyError:
+        annotations[key] = ApplicationPreferences()
+        annotations[key].__parent__ = app
+        return annotations[key]
+
