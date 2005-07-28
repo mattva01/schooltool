@@ -777,3 +777,179 @@ Now the resource info is indeed updated:
     ...
     ...Pretty Lily...
 
+
+Container Batching
+------------------
+
+Let's import a bunch of people we can play with:
+
+    >>> print http("""
+    ... POST /frogpond/persons/@@person-csvimport.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: multipart/form-data; boundary=---------------------------68355286210571712431437723486
+    ...
+    ... -----------------------------68355286210571712431437723486
+    ... Content-Disposition: form-data; name="csvtext"
+    ...
+    ... aaa, Person 01
+    ... aab, Person 02
+    ... aac, Person 03
+    ... aad, Person 04
+    ... aae, Person 05
+    ... aaf, Person 06
+    ... aag, Person 07
+    ... aah, Person 08
+    ... aai, Person 09
+    ... aaj, Person 10
+    ... aak, Person 11
+    ... aal, Person 12
+    ... aam, Person 13
+    ... aan, Person 14
+    ... aao, Person 15
+    ... aap, Person 16
+    ... aaq, Person 17
+    ... aar, Person 18
+    ... aas, Person 19
+    ... aat, Person 20
+    ... aau, Person 21
+    ... aav, Person 22
+    ... aaw, Person 23
+    ... aax, Person 24
+    ... aay, Person 25
+    ... aaz, Person 26
+    ... aba, Person 27
+    ... aca, Person 28
+    ... ada, Person 29
+    ... aea, Person 30
+    ... afa, Person 31
+    ... aga, Person 32
+    ... -----------------------------68355286210571712431437723486
+    ... Content-Disposition: form-data; name="charset"
+    ...
+    ... UTF-8
+    ... -----------------------------68355286210571712431437723486
+    ... Content-Disposition: form-data; name="UPDATE_SUBMIT"
+    ...
+    ... 1
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+Now we have a batched view, showing the first 10 items
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    ...
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+          <ul>
+    ...
+              <a href="http://localhost/frogpond/persons/frog">Frog</a>
+    ...
+              <a href="http://localhost/frogpond/persons/frog2">Frog2</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aaa">Person 01</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aab">Person 02</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aac">Person 03</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aad">Person 04</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aae">Person 05</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aaf">Person 06</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aag">Person 07</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aah">Person 08</a>
+    ...
+          </ul>
+    ...
+
+
+The next batch (starting at index 10) shows the next 10 people
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/?batch_start=10 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    ...
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+          <ul>
+    ...
+              <a href="http://localhost/frogpond/persons/aai">Person 09</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aaj">Person 10</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aak">Person 11</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aal">Person 12</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aam">Person 13</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aan">Person 14</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aao">Person 15</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aap">Person 16</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aaq">Person 17</a>
+    ...
+              <a href="http://localhost/frogpond/persons/aar">Person 18</a>
+    ...
+          </ul>
+    ...
+
+
+Sorting is done by the 'title' attribute, so we can change a persons title
+(fullname) and see them re-sorted into the batch:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/frog2/edit.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 1318
+    ... Content-Type: multipart/form-data; boundary=---------------------------705046721187019535891597004
+    ... 
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="field.title"
+    ... 
+    ... Adam
+    ... -----------------------------705046721187019535891597004
+    ... Content-Disposition: form-data; name="UPDATE_SUBMIT"
+    ... 
+    ... Edit
+    ... -----------------------------705046721187019535891597004--
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    ...
+
+Now 'Adam' is at the top of the list.
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    ...
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+          <ul>
+    ...
+              <a href="http://localhost/frogpond/persons/frog2">Adam</a>
+    ...
+              <a href="http://localhost/frogpond/persons/frog">Frog</a>
+    ...

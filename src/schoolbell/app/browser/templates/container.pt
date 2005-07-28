@@ -30,7 +30,7 @@
     <form method="post"
       tal:attributes="action string:${context/@@absolute_url}/delete.html">
       <ul>
-        <li tal:repeat="obj batch/sortby:title">
+        <li tal:repeat="obj batch">
           <input type="checkbox" tal:attributes="name string:delete.${obj/zope:name}" />
           <a tal:content="obj/title"
             tal:attributes="href obj/@@absolute_url">Some Object</a>

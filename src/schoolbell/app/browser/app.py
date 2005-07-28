@@ -57,6 +57,7 @@ from schoolbell.app.interfaces import vocabulary
 from schoolbell.app.app import Person
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.browser.cal import CalendarOwnerTraverser
+from schoolbell.app.browser import SortBy
 
 from schoolbell.batching import Batch
 
@@ -88,12 +89,13 @@ class ContainerView(BrowserView):
     """
 
     def update(self):
+        sorted = SortBy(self.context.values()).traverse('title')
         if 'SEARCH' in self.request:
             searchstr = self.request['SEARCH'].lower()
-            results = [item for item in self.context.values()
+            results = [item for item in sorted
                        if searchstr in item.title.lower()]
         else:
-            results = list(self.context.values())
+            results = list(sorted)
 
         start = int(self.request.get('batch_start', 0))
         size = int(self.request.get('batch_size', 10))
