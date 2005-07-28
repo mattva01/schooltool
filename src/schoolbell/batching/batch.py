@@ -92,7 +92,11 @@ class Batch(object):
 
     def _sortBy(self, attribute):
         """Sort the full batch list by specified attribute"""
-        results = [(getattr(obj, attribute), obj) for obj in self.list]
+        try:
+            results = [(obj.get(attribute), obj) for obj in self.list]
+        except AttributeError:
+            results = [(getattr(obj, attribute), obj) for obj in self.list]
+
         results.sort()
         self.list = [obj for (key, obj) in results]
 

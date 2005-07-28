@@ -166,13 +166,23 @@ def doctest_Batch():
       >>> [[item.title for item in b] for b in batch.batches()]
       [['aaa', 'ccc'], ['mmm', 'zzz']]
 
+    We can also sort dicts
+
+      >>> dict_data = [{'n': i} for i in range(6)]
+      >>> dict_data = dict_data[3:] + dict_data[:3]
+      >>> print dict_data
+      [{'n': 3}, {'n': 4}, {'n': 5}, {'n': 0}, {'n': 1}, {'n': 2}]
+
+      >>> batch = Batch(dict_data, 0, 2, sort_by='n')
+      >>> [[item for item in b] for b in batch.batches()]
+      [[{'n': 0}, {'n': 1}], [{'n': 2}, {'n': 3}], [{'n': 4}, {'n': 5}]]
+
 
     We can also take an iterator
 
       >>> batch = Batch(iter([i for i in range(10)]), 0, 5)
       >>> [[item for item in b] for b in batch.batches()]
       [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]]
-
 
     """
 
