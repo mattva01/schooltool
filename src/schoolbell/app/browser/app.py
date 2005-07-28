@@ -93,7 +93,7 @@ class ContainerView(BrowserView):
             results = [item for item in self.context.values()
                        if searchstr in item.title.lower()]
         else:
-            results = list(self.context.values())
+            results = self.context.values()
 
         start = int(self.request.get('batch_start', 0))
         size = int(self.request.get('batch_size', 10))
@@ -192,7 +192,7 @@ class GroupListView(BrowserView):
 
     def getCurrentGroups(self):
         """Return a list of groups the current user is a member of."""
-        return list(self.context.groups)
+        return self.context.groups
 
     def getPotentialGroups(self):
         """Return a list of groups the current user is not a member of."""
