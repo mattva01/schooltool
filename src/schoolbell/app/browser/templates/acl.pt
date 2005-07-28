@@ -13,15 +13,18 @@
       Access control for <span i18n:name="title"
       tal:replace="context/title">something</span>
   </h3>
-  <fieldset>
+  <fieldset tal:define="batch view/batches/groups">
     <legend i18n:translate="">Permissions for Groups</legend>
+    <tal:block define="batch_name string:groups">
+      <div metal:use-macro="view/@@batch_macros/multi-batch-navigation"/>
+    </tal:block>
     <table class="acl">
       <tr class="header">
          <th class="principal" i18n:translate="">Group</th>
          <th class="permission" tal:repeat="perm view/permissions"
              tal:content="python: perm[1]" i18n:translate="" />
       </tr>
-      <tr tal:repeat="prin view/groups/sortby:title"
+      <tr tal:repeat="prin batch"
           tal:attributes="class repeat/prin/parity">
          <th class="principal">
             <span tal:replace="prin/title" i18n:translate="">Group foo</span>
@@ -37,15 +40,18 @@
          </td>
       </tr>
   </fieldset>
-  <fieldset>
+  <fieldset tal:define="batch view/batches/persons">
     <legend i18n:translate="">Permissions for Users</legend>
+    <tal:block define="batch_name string:persons">
+      <div metal:use-macro="view/@@batch_macros/multi-batch-navigation"/>
+    </tal:block>
     <table class="acl">
       <tr class="header">
          <th class="principal" i18n:translate="">User</th>
          <th class="permission" tal:repeat="perm view/permissions"
              tal:content="python: perm[1]" i18n:translate="" />
       </tr>
-      <tr tal:repeat="prin view/persons/sortby:title"
+      <tr tal:repeat="prin batch"
           tal:attributes="class repeat/prin/parity">
          <th class="principal">
             <span tal:replace="prin/title" i18n:translate="">User foo</span>

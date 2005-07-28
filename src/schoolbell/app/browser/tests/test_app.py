@@ -1261,6 +1261,7 @@ def doctest_ACLView():
           </h3>
           <fieldset>
             <legend>Permissions for Groups</legend>
+        ...
             <table class="acl">
               <tr class="header">
                  <th class="principal">Group</th>
@@ -1274,7 +1275,7 @@ def doctest_ACLView():
                  <th class="permission">Manage membership</th>
               </tr>
         ...
-              <tr class="even">
+              <tr class="odd">
                  <th class="principal">
                     office
                     <input type="hidden" value="1"
@@ -1412,7 +1413,7 @@ def doctest_ACLView():
                   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
         <html>
         ...
-              <tr class="even">
+              <tr class="odd">
                  <th class="principal">
                     office
                     <input type="hidden" value="1"

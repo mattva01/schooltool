@@ -156,6 +156,10 @@ def setUp(test=None):
                       SimpleViewClass("../templates/navigation.pt",
                                       bases=(NavigationView,)))
 
+    # batching macros
+    ztapi.browserView(None, 'batch_macros',
+                      SimpleViewClass("../../../batching/macros.pt"))
+
     # form macros
     ztapi.browserView(None, 'form_macros', FormMacros)
     import zope.app.form.browser

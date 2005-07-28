@@ -59,6 +59,7 @@ from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.browser.cal import CalendarOwnerTraverser
 
 from schoolbell.batching import Batch
+from schoolbell.batching.browser import MultiBatchViewMixin
 
 from pytz import common_timezones
 
@@ -693,8 +694,12 @@ class ACLViewBase(object):
     groups = property(getGroups)
 
 
-class ACLView(BrowserView, ACLViewBase):
+class ACLView(BrowserView, ACLViewBase, MultiBatchViewMixin):
     """A view for editing SchoolBell-relevant local grants"""
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+        MultiBatchViewMixin.__init__(self, ['groups', 'persons'])
 
     def update(self):
         if 'UPDATE_SUBMIT' in self.request or 'CANCEL' in self.request:
@@ -727,6 +732,11 @@ class ACLView(BrowserView, ACLViewBase):
                         map.denyPermissionToPrincipal(perm, principalid)
                     else:
                         map.unsetPermissionForPrincipal(perm, principalid)
+
+        MultiBatchViewMixin.update(self)
+
+        self.updateBatch('persons', self.persons)
+        self.updateBatch('groups', self.groups)
 
     def __call__(self):
         self.update()
