@@ -166,7 +166,13 @@ def doctest_Batch():
       >>> [[item.title for item in b] for b in batch.batches()]
       [['aaa', 'ccc'], ['mmm', 'zzz']]
 
-    
+
+    We can also take an iterator
+
+      >>> batch = Batch(iter([i for i in range(10)]), 0, 5)
+      >>> [[item for item in b] for b in batch.batches()]
+      [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]]
+
 
     """
 

@@ -29,8 +29,8 @@ class Batch(object):
 
     See schoolbell.batching.interfaces.IBatch."""
 
-    def __init__(self, list, start, size, sort_by=None):
-        self.list = list
+    def __init__(self, iterable, start, size, sort_by=None):
+        self.list = list(iterable)
         if sort_by:
             self._sortBy(sort_by)
         self.start = start
