@@ -5,7 +5,7 @@ Level Management and Academic Workflow via the Web UI
 This document presents the management of levels and the academic career of a
 student via a promotion workflow from the perspective of the Web UI.
 
-  >>> from zc.mechtest.testing import Browser
+  >>> from zope.app.testing.testbrowser import Browser
   >>> browser = Browser()
   >>> browser.addHeader('Authorization', 'Basic mgr:mgrpw')
 
@@ -132,9 +132,8 @@ career:
 We now select the student which we want to enroll in the school.
 
   >>> form = browser.forms['enroll']
-  >>> ctrl = browser.getControl('ids:list', form=form.mech_form) 
-  >>> ctrl.mech_control.value = ['srichter']
-  >>> browser.click('Enroll')
+  >>> form.controls['ids:list'] = ['srichter']
+  >>> form.submit('Enroll')
 
   >>> print browser.contents
   <BLANKLINE>
@@ -149,11 +148,11 @@ Now that the student is enrolled, we can initialize him at a particular
 level. Our student will enter the first grade:
 
   >>> form = browser.forms['initialize']
-  >>> ctrl = browser.getControl('ids:list', form=form.mech_form) 
+  >>> ctrl = form.getControl('ids:list')
   >>> id = ctrl.options[0]
-  >>> ctrl.mech_control.value = [id]
-  >>> browser.controls[id+'.level'] = ['level1']
-  >>> browser.click('Apply')
+  >>> ctrl.value = [id]
+  >>> form.controls[id+'.level'] = ['level1']
+  >>> form.submit('Apply')
 
   >>> print browser.contents
   <BLANKLINE>
@@ -172,9 +171,9 @@ level. Our student will enter the first grade:
 The student passes the first grade
 
   >>> form = browser.forms['outcome']
-  >>> ctrl = browser.getControl('ids:list', form=form.mech_form) 
+  >>> ctrl = form.getControl('ids:list')
   >>> id = ctrl.options[0]
-  >>> ctrl.mech_control.value = [id]
+  >>> ctrl.value = [id]
   >>> browser.controls[id+'.outcome'] = ['pass']
   >>> form.submit('Apply')
 
@@ -189,9 +188,9 @@ The student passes the first grade
 but fails the second grade the first time around:
 
   >>> form = browser.forms['outcome']
-  >>> ctrl = browser.getControl('ids:list', form=form.mech_form) 
+  >>> ctrl = browser.getControl('ids:list')
   >>> id = ctrl.options[0]
-  >>> ctrl.mech_control.value = [id]
+  >>> ctrl.value = [id]
   >>> browser.controls[id+'.outcome'] = ['fail']
   >>> form.submit('Apply')
 
@@ -206,7 +205,7 @@ but fails the second grade the first time around:
 If you forget to select the student, you get a nice notice:
 
   >>> form = browser.forms['outcome']
-  >>> ctrl = browser.getControl('ids:list', form=form.mech_form) 
+  >>> ctrl = form.getControl('ids:list')
   >>> id = ctrl.options[0]
   >>> browser.controls[id+'.outcome'] = ['fail']
   >>> form.submit('Apply')
@@ -221,9 +220,9 @@ Now we finally pass the student, so he will graduate; that means he will
 appear at the top of the list again:
 
   >>> form = browser.forms['outcome']
-  >>> ctrl = browser.getControl('ids:list', form=form.mech_form) 
+  >>> ctrl = form.getControl('ids:list')
   >>> id = ctrl.options[0]
-  >>> ctrl.mech_control.value = [id]
+  >>> ctrl.value = [id]
   >>> browser.controls[id+'.outcome'] = ['pass']
   >>> form.submit('Apply')
 
