@@ -14,10 +14,11 @@
 <metal:block metal:fill-slot="body"
              tal:define="batch view/batch">
 
+  <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+  <div metal:use-macro="view/@@view_macros/batch-search"/>
   <p tal:condition="not:batch" i18n:translate="">There are none.</p>
   <form method="post"
         tal:attributes="action string:${context/@@absolute_url}/delete.html">
-    <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
     <ul tal:condition="batch">
       <li tal:repeat="obj batch/sortby:title">
         <input type="checkbox" tal:attributes="name string:delete.${obj/zope:name}" />
