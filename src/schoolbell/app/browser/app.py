@@ -192,31 +192,49 @@ class GroupListView(BrowserView):
 
     __used_for__ = IGroupMember
 
-    def getAllGroups(self):
-        """Return a list of groups the current user can add to"""
+    def getCurrentGroups(self):
+        """Return a list of groups the current user is a member of."""
+        return list(self.context.groups)
+
+    def getPotentialGroups(self):
+        """Return a list of groups the current user is not a member of."""
         groups = ISchoolBellApplication(self.context)['groups']
         return [group for group in groups.values()
-                if checkPermission('schoolbell.manageMembership', group)]
+                if checkPermission('schoolbell.manageMembership', group)
+                and group not in self.context.groups]
 
     def update(self):
         context_url = zapi.absoluteURL(self.context, self.request)
-        if 'UPDATE_SUBMIT' in self.request:
+        if 'ADD_GROUPS' in self.request:
             context_groups = removeSecurityProxy(self.context.groups)
-            for group in self.getAllGroups():
-                want = bool('group.' + group.__name__ in self.request)
-                have = bool(group in context_groups)
-                # add() and remove() could throw an exception, but at the
-                # moment the constraints are never violated, so we ignore
-                # the problem.
-                if want != have:
+            for group in self.getPotentialGroups():
+                # add() could throw an exception, but at the moment the
+                # constraints are never violated, so we ignore the problem.
+                if 'add_group.' + group.__name__ in self.request:
                     group = removeSecurityProxy(group)
-                    if want:
-                        context_groups.add(group)
-                    else:
-                        context_groups.remove(group)
-            self.request.response.redirect(context_url)
+                    context_groups.add(group)
+        elif 'REMOVE_GROUPS' in self.request:
+            context_groups = removeSecurityProxy(self.context.groups)
+            for group in self.getCurrentGroups():
+                # add() could throw an exception, but at the moment the
+                # constraints are never violated, so we ignore the problem.
+                if 'remove_group.' + group.__name__ in self.request:
+                    group = removeSecurityProxy(group)
+                    context_groups.remove(group)
         elif 'CANCEL' in self.request:
             self.request.response.redirect(context_url)
+
+        sorted = SortBy(self.getPotentialGroups()).traverse('title')
+        if 'SEARCH' in self.request:
+            searchstr = self.request['SEARCH'].lower()
+            results = [item for item in sorted
+                       if searchstr in item.title.lower()]
+        else:
+            results = list(sorted)
+
+        start = int(self.request.get('batch_start', 0))
+        size = int(self.request.get('batch_size', 10))
+        self.batch = Batch(results, start, size)
 
 
 class GroupView(BrowserView):

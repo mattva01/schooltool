@@ -273,17 +273,24 @@ def doctest_GroupListView():
 
         >>> view.update()
 
-    First, all groups should be listed:
+    First, all groups the person is not a member of should be listed:
 
-        >>> group_titles = [g.title for g in view.getAllGroups()]
+        >>> group_titles = [g.title for g in view.getPotentialGroups()]
         >>> group_titles.sort()
         >>> group_titles
         ['Etria', 'Others', 'PoV']
 
+    As well as all groups the person is currently a member of:
+
+        >>> group_titles = [g.title for g in view.getCurrentGroups()]
+        >>> group_titles.sort()
+        >>> group_titles
+        []
+
     Let's tell the person to join PoV:
 
         >>> request = TestRequest()
-        >>> request.form = {'group.pov': 'on', 'UPDATE_SUBMIT': 'Apply'}
+        >>> request.form = {'add_group.pov': 'on', 'ADD_GROUPS': 'Apply'}
         >>> view = GroupListView(person, request)
         >>> view.update()
 
@@ -292,17 +299,10 @@ def doctest_GroupListView():
         >>> [group.title for group in person.groups]
         ['PoV']
 
-    And we should be directed to the person info page:
-
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeaders()['Location']
-        'http://127.0.0.1/persons/ignas'
-
     Had we decided to make the guy join Etria but then changed our mind:
 
         >>> request = TestRequest()
-        >>> request.form = {'group.pov': 'on', 'group.etria': 'on',
+        >>> request.form = {'remove_group.pov': 'on', 'add_group.etria': 'on',
         ...                 'CANCEL': 'Cancel'}
         >>> view = GroupListView(person, request)
         >>> view.update()
@@ -323,24 +323,18 @@ def doctest_GroupListView():
     to The World.
 
         >>> request = TestRequest()
-        >>> request.form = {'group.the_world': 'on', 'UPDATE_SUBMIT': 'Apply'}
+        >>> request.form = {'remove_group.pov': 'on', 'REMOVE_GROUPS': 'Apply'}
         >>> view = GroupListView(person, request)
         >>> view.update()
 
     Mission successful:
 
         >>> [group.title for group in person.groups]
-        ['Others']
-
-    Yadda yadda, redirection works:
-
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeaders()['Location']
-        'http://127.0.0.1/persons/ignas'
+        []
 
 
         >>> endInteraction()
+
     """
 
 

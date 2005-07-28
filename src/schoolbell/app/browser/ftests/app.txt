@@ -456,7 +456,7 @@ We should see the group in this person's possible group list.
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    <input type="checkbox" name="group.venerable-frogs" />
+    <input type="checkbox" name="add_group.venerable-frogs" />
     Venerable Frogs
     ...
 
@@ -466,11 +466,9 @@ Let's add the person to the group.
     ... POST /frogpond/persons/frog/groups.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: application/x-www-form-urlencoded
-    ... UPDATE_SUBMIT=Apply&group.venerable-frogs=on\
+    ... ADD_GROUPS=Apply&add_group.venerable-frogs=on\
     ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog
+    HTTP/1.1 200 Ok
     ...
 
 The person's info view should show the group:
@@ -486,7 +484,7 @@ The person's info view should show the group:
     <a href=".../groups/venerable-frogs">Venerable Frogs</a>
     ...
 
-And the groups page shows the checkbox checked.
+And the group page shows the group in the 'current groups' section.
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/groups.html HTTP/1.1
@@ -495,11 +493,16 @@ And the groups page shows the checkbox checked.
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
     ...
-    <input type="checkbox" checked="checked"
-           name="group.venerable-frogs" />
-    Venerable Frogs
+    <fieldset>
+      <legend>Current Groups</legend>
+    ...
+            <input type="checkbox"
+                   name="remove_group.venerable-frogs" />
+            Venerable Frogs
+    ...
+    <fieldset>
+      <legend>Available Groups</legend>
     ...
 
 The group members view reflects the change that we have done:

@@ -5,35 +5,66 @@
 </head>
 <body>
 <metal:block metal:fill-slot="body"
-             tal:define="all_groups view/getAllGroups">
+             tal:define="batch view/batch">
 
 <form method="post" tal:attributes="action request/URL" class="standalone">
 <h3 i18n:translate="">
   Groups of <span i18n:name="title" tal:replace="context/title" />
 </h3>
-<p tal:condition="not:all_groups" i18n:translate="">
-  There are no groups defined.
-</p>
-<fieldset tal:condition="all_groups">
-  <div class="group_list">
-    <div tal:repeat="group all_groups/sortby:title">
+<fieldset tal:define="groups view/getCurrentGroups">
+  <legend i18n:translate="">Current Groups</legend>
+  <div class="group_list" tal:condition="groups">
+    <div tal:repeat="group groups">
       <label>
-        <input tal:attributes="name string:group.${group/__name__};
-                               checked python:group in context.groups"
-               type="checkbox" />
+        <input tal:attributes="name string:remove_group.${group/__name__}"
+          type="checkbox" />
         <span tal:replace="group/title" />
       </label>
     </div>
   </div>
+  <div class="controls">
+    <input type="submit" class="button-ok" name="REMOVE_GROUPS"
+      value="Remove" tal:condition="batch"
+      title="Shortcut: Alt-R" accesskey="R"
+      i18n:attributes="value; accesskey" />
+  </div>
+  <p tal:condition="not:groups" i18n:translate="">
+    There are none.
+  </p>
 </fieldset>
-
+<fieldset>
+  <legend i18n:translate="">Available Groups</legend>
+  <div class="group_list">
+    <tal:if condition="not:request/SEARCH|nothing">
+      <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    </tal:if>
+    <div class="batch-search">
+      <input type="text" name="SEARCH"/>
+      <input type="submit" name="SEARCH_BUTTON" value="Find Now"
+        i18n:attributes="value"/>
+    </div>
+    <div tal:repeat="group batch">
+      <label>
+        <input tal:attributes="name string:add_group.${group/__name__}"
+          type="checkbox" />
+        <span tal:replace="group/title" />
+      </label>
+    </div>
+  </div>
+  <p tal:condition="not:batch" i18n:translate="">
+    There are none to add.
+  </p>
+  <div class="controls">
+    <input type="submit" class="button-ok" name="ADD_GROUPS" value="Add"
+      tal:condition="batch"
+      title="Shortcut: Alt-A" accesskey="A"
+      i18n:attributes="value; accesskey" />
+  </div>
+</fieldset>
 <div class="controls">
-  <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Apply"
-         tal:condition="all_groups"
-         title="Shortcut: Alt-A" accesskey="A"
-         i18n:attributes="value submit-button; accesskey" />
-  <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
-         i18n:attributes="value cancel-button" />
+
+  <input type="submit" class="button-cancel" name="CANCEL" value="Done"
+    i18n:attributes="value cancel-button" />
 </div>
 </form>
 
