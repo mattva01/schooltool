@@ -5,13 +5,22 @@ macro:
 
   batch - a schoolbell.batching.Batch instance
 
+
+Batch navigation shows up if:
+
+  * There is a next or a previous batch
+  * We are currently showing more than the default batch size (this assumes
+    'show more' has been selected and there will be a batch if 'show less' is
+    selected).
+
 -->
 <metal:block define-macro="batch-navigation">
   <div class="batch-navigation"
     tal:define="batch_size request/batch_size|string:10;
                 batch_start request/batch_start|string:0;
-                needsBatch python:bool(batch.prev() or batch.next());
-                batch_size python:int(batch_size)">
+                batch_size python:int(batch_size);
+                needsBatch python:bool(batch.prev() or batch.next());"
+                tal:condition="python:batch_size > 10 or needsBatch">
 
     <tal:if condition="needsBatch">
       <span tal:condition="not:batch/prev" i18n:translate=""
@@ -25,9 +34,11 @@ macro:
 
     <div class="batch-extra-navigation"
       tal:define="full_size python:len(batch.list)">
+
       <a href="?batch_size=30" class="more"
         tal:condition="python:batch_size < 30 and batch_size < full_size"
         >Show More</a>
+
       <a href="?batch_size=10" class="less"
         tal:condition="python:batch_size > 10">Show Less</a>
 
