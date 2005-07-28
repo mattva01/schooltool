@@ -5,33 +5,61 @@
 </head>
 <body>
 <metal:block metal:fill-slot="body"
-             tal:define="possible_instructors view/getPotentialInstructors">
+             tal:define="batch view/batch">
 
 <form method="post" tal:attributes="action request/URL" class="standalone">
 <h3 i18n:translate="">
-  Available instructors
+  Instructors
 </h3>
-<p tal:condition="not:possible_instructors" i18n:translate="">
-  There are none.
-</p>
-<fieldset tal:condition="possible_instructors">
-  <div class="instructor_list">
-    <div tal:repeat="instructor possible_instructors/sortby:title">
+<fieldset tal:define="instructors view/getCurrentInstructors">
+  <tal:if condition="instructors">
+    <legend i18n:translate="">Current Instructors</legend>
+    <div tal:repeat="instructor instructors/sortby:title">
       <label>
-        <input tal:attributes="name string:instructor.${instructor/__name__};
-                               checked python:instructor in context.instructors"
+        <input tal:attributes="name string:remove_instructor.${instructor/__name__}"
+          type="checkbox" />
+        <span tal:replace="instructor/title" />
+      </label>
+    </div>
+    <div class="controls">
+      <input type="submit" class="button-ok" name="REMOVE_INSTRUCTORS"
+        value="Remove" tal:condition="batch"
+        title="Shortcut: Alt-R" accesskey="R"
+        i18n:attributes="value; accesskey" />
+    </div>
+  </tal:if>
+  <p tal:condition="not:instructors" i18n:translate="">
+    There are none.
+  </p>
+</fieldset>
+<fieldset>
+  <legend i18n:translate="">Available Instructors</legend>
+  <div class="instructor_list">
+    <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    <input type="text" name="SEARCH"
+      tal:attributes="value context/request/SEARCH|nothing"/>
+    <input type="submit" name="SEARCH_BUTTON" value="Find Now"
+      i18n:attributes="value"/>
+    <div tal:repeat="instructor batch" tal:condition="batch">
+      <label>
+        <input tal:attributes="name string:add_instructor.${instructor/__name__}"
                type="checkbox" />
         <span tal:replace="instructor/title" />
-    </label>
+      </label>
     </div>
+    <div class="controls">
+      <input type="submit" class="button-ok" name="ADD_INSTRUCTORS"
+        value="Add" tal:condition="batch"
+        title="Shortcut: Alt-A" accesskey="A"
+        i18n:attributes="value; accesskey" />
+    </div>
+    <p tal:condition="not:batch" i18n:translate="">
+      There are none to add.
+    </p>
   </div>
 </fieldset>
 
 <div class="controls">
-  <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Apply"
-         tal:condition="possible_instructors"
-         title="Shortcut: Alt-A" accesskey="A"
-         i18n:attributes="value submit-button; accesskey" />
   <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
          i18n:attributes="value cancel-button" />
 </div>

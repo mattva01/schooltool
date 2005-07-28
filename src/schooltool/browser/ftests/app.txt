@@ -264,10 +264,8 @@ Adding a teacher:
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... instructor.frog=On&UPDATE_SUBMIT=Apply""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/sections/his1
+    ... add_instructor.frog=On&ADD_INSTRUCTORS=Apply""")
+    HTTP/1.1 200 Ok
     ...
 
 Now Frog is in the Instructors div
@@ -354,10 +352,8 @@ If we fire Frog, in hopes of getting Salamander to step in:
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... UPDATE_SUBMIT=Apply""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/sections/his1
+    ... remove_instructor.frog&REMOVE_INSTRUCTORS=Remove""")
+    HTTP/1.1 200 Ok
     ...
 
 Frog can't see the section's calendar any more

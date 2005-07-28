@@ -39,6 +39,7 @@ from schoolbell.app.browser import cal as sbcal
 from schoolbell.app.membership import isTransitiveMember
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.relationship import getRelatedObjects
+from schoolbell.batching import Batch
 
 from schooltool import SchoolToolMessageID as _
 from schooltool import getSchoolToolApplication
@@ -221,31 +222,43 @@ class SectionInstructorView(BrowserView):
 
     __used_for__ = ISection
 
+    def getCurrentInstructors(self):
+        """Return a list of all possible members."""
+        return self.context.instructors
+
     def getPotentialInstructors(self):
         """Return a list of all possible members."""
         container = ISchoolBellApplication(self.context)['persons']
-        return container.values()
+        return [p for p in container.values() if p not in
+                self.context.instructors]
 
     def update(self):
         # This method is rather similar to GroupListView.update().
         context_url = zapi.absoluteURL(self.context, self.request)
-        if 'UPDATE_SUBMIT' in self.request:
-            context_instructors = removeSecurityProxy(self.context.instructors)
+        context_instructors = removeSecurityProxy(self.context.instructors)
+        if 'ADD_INSTRUCTORS' in self.request:
             for instructor in self.getPotentialInstructors():
-                want = bool('instructor.' + instructor.__name__ in self.request)
-                have = bool(instructor in context_instructors)
-                # add() and remove() could throw an exception, but at the
-                # moment the constraints are never violated, so we ignore
-                # the problem.
-                if want != have:
+                if 'add_instructor.' + instructor.__name__ in self.request:
                     instructor = removeSecurityProxy(instructor)
-                    if want:
-                        context_instructors.add(instructor)
-                    else:
-                        context_instructors.remove(instructor)
-            self.request.response.redirect(context_url)
+                    context_instructors.add(instructor)
+        elif 'REMOVE_INSTRUCTORS' in self.request:
+            for instructor in self.getCurrentInstructors():
+                if 'remove_instructor.' + instructor.__name__ in self.request:
+                    instructor = removeSecurityProxy(instructor)
+                    context_instructors.remove(instructor)
         elif 'CANCEL' in self.request:
             self.request.response.redirect(context_url)
+
+        if 'SEARCH' in self.request:
+            searchstr = self.request['SEARCH'].lower()
+            results = [item for item in self.getPotentialInstructors()
+                       if searchstr in item.title.lower()]
+        else:
+            results = self.getPotentialInstructors()
+
+        start = int(self.request.get('batch_start', 0))
+        size = int(self.request.get('batch_size', 10))
+        self.batch = Batch(results, start, size, sort_by='title')
 
 
 class SectionLearnerView(BrowserView):

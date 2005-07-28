@@ -480,7 +480,8 @@ def doctest_SectionInstructorView():
     let's make Mr. Smith the instructor:
 
         >>> request = TestRequest()
-        >>> request.form = {'instructor.smith': 'on', 'UPDATE_SUBMIT': 'Apply'}
+        >>> request.form = {'add_instructor.smith': 'on',
+        ...                 'ADD_INSTRUCTORS': 'Apply'}
         >>> view = SectionInstructorView(section, request)
         >>> view.update()
 
@@ -489,19 +490,12 @@ def doctest_SectionInstructorView():
         >>> [i.title for i in section.instructors]
         ['Mr. Smith']
 
-    And we should be directed to the group info page:
-
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeaders()['Location']
-        'http://127.0.0.1/sections/section'
-
     Someone might want to cancel a change.
 
         We can cancel an action if we want to:
 
         >>> request = TestRequest()
-        >>> request.form = {'instructor.jones': 'on', 'CANCEL': 'Cancel'}
+        >>> request.form = {'add_instructor.jones': 'on', 'CANCEL': 'Cancel'}
         >>> view = SectionInstructorView(section, request)
         >>> view.update()
         >>> [person.title for person in section.instructors]
@@ -513,9 +507,8 @@ def doctest_SectionInstructorView():
 
     a Section can have more than one instructor:
 
-        >>> request.form = {'instructor.smith': 'on',
-        ...                 'instructor.stevens': 'on',
-        ...                 'UPDATE_SUBMIT': 'Apply'}
+        >>> request.form = {'add_instructor.stevens': 'on',
+        ...                 'ADD_INSTRUCTORS': 'Add'}
         >>> view = SectionInstructorView(section, request)
         >>> request = TestRequest()
         >>> view.update()
@@ -525,8 +518,8 @@ def doctest_SectionInstructorView():
 
     We can remove an instructor:
 
-        >>> request.form = {'instructor.stevens': 'on',
-        ...                 'UPDATE_SUBMIT': 'Apply'}
+        >>> request.form = {'remove_instructor.smith': 'on',
+        ...                 'REMOVE_INSTRUCTORS': 'Remove'}
         >>> view = SectionInstructorView(section, request)
         >>> request = TestRequest()
         >>> view.update()
