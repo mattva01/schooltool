@@ -15,11 +15,12 @@
 
   <p tal:condition="not:batch" i18n:translate="">There are none.</p>
   <tal:block tal:condition="batch">
+    <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    <div metal:use-macro="view/@@view_macros/batch-search"/>
     <form method="post"
           tal:condition="canModify"
           tal:attributes="action string:${context/@@absolute_url}/delete.html">
-      <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
-      <div tal:repeat="course batch/sortby:title" class="course">
+      <div tal:repeat="course batch" class="course">
         <input type="checkbox" tal:attributes="name string:delete.${course/zope:name}" />
         <a tal:content="course/title"
            tal:attributes="href course/@@absolute_url">Some Object</a>
@@ -44,7 +45,7 @@
       </div>
     </form>
     <ul tal:condition="not:canModify" class="container-content">
-      <li tal:repeat="course batch/sortby:title" class="course">
+      <li tal:repeat="course batch" class="course">
         <a tal:content="course/title"
            tal:attributes="href course/@@absolute_url">Some Object</a>
         <ul tal:condition="course/sections|nothing" class="section-list">
