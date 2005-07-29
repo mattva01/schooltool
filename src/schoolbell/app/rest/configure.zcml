@@ -391,7 +391,7 @@
       />
 
   <class class="schoolbell.app.rest.acl.ACLView">
-      <allow interface="schoolbell.app.rest.acl.IACLView" />
+    <allow interface="schoolbell.app.rest.acl.IACLView" />
   </class>
 
   <view
@@ -459,7 +459,7 @@
   </content>
 
   <class class="schoolbell.app.rest.notes.NotesView">
-      <allow interface="schoolbell.app.rest.notes.INotesView" />
+    <allow interface="schoolbell.app.rest.notes.INotesView" />
   </class>
 
   <view
