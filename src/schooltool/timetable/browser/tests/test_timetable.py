@@ -1558,6 +1558,7 @@ def doctest_PersonTimetableSetupView():
         >>> app["sections"]["math"] = math = Section("Math")
         >>> app["sections"]["biology"] = biology = Section("Biology")
         >>> app["sections"]["physics"] = physics = Section("Physics")
+        >>> app["sections"]["history"] = history = Section("History")
 
     We will also need a timetable schema, and a term.  Two of each, in fact.
 
@@ -1627,6 +1628,10 @@ def doctest_PersonTimetableSetupView():
         >>> math.timetables[ttkey]['Tue'].add('10:00',
         ...                                   TimetableActivity('Math'))
 
+        >>> history.timetables[ttkey] = ttschema.createTimetable()
+        >>> history.timetables[ttkey]['Tue'].add('10:00',
+        ...                                   TimetableActivity('History'))
+
         >>> section_map = view.sectionMap(term, ttschema)
         >>> pprint(section_map)
         {('Mon', '10:00'): Set([]),
@@ -1665,7 +1670,7 @@ def doctest_PersonTimetableSetupView():
           10:00: [] [none]
         Tue
            9:00: [] [none]
-          10:00: [Math] [none]
+          10:00: [Math, History] [none]
 
         >>> math.members.add(context)
 
@@ -1676,7 +1681,7 @@ def doctest_PersonTimetableSetupView():
           10:00: [] [none]
         Tue
            9:00: [] [none]
-          10:00: [Math] [Math]
+          10:00: [Math, History] [Math]
 
     And finally, __call__ ties everything together -- it processes the form and
     renders a page template.
@@ -1720,6 +1725,7 @@ def doctest_PersonTimetableSetupView():
                 <td>
                   <select name="sections:list">
                     <option value="">none</option>
+                    <option value="history"> -- </option>
                     <option selected="selected" value="math"> -- </option>
                   </select>
         ...
@@ -1754,7 +1760,7 @@ def doctest_PersonTimetableSetupView():
           10:00: [] [none]
         Tue
            9:00: [] [none]
-          10:00: [Math] [none]
+          10:00: [Math, History] [none]
 
     When people are members of a section as part of a form (group) we don't
     allow changing that period from here.  They must be removed from the
@@ -1777,6 +1783,39 @@ def doctest_PersonTimetableSetupView():
                     <a href="http://127.0.0.1/groups/juniors">Juniors</a>
                   </span>
                 </td>
+        ...
+
+
+        >>> history.members.add(juniors)
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <title> Scheduling for Steven Udent </title>
+        ...
+            <h2>Tue</h2>
+        ...
+        <BLANKLINE>
+              <tr class="conflict">
+                <th>10:00</th>
+                <td>
+                  <a href="http://127.0.0.1/sections/math">Math</a>
+                  <span class="hint">
+                    <span>as part of</span>
+                    <a href="http://127.0.0.1/groups/juniors">Juniors</a>
+                  </span>
+                </td>
+                <td>
+                  <a href="http://127.0.0.1/sections/history">History</a>
+                  <span class="hint">
+                  <span>as part of</span>
+                  <a href="http://127.0.0.1/groups/juniors">Juniors</a>
+                </span>
+              </td>
+              <td class="conflict">
+              Scheduling conflict.
+              </td>
+            </tr>
+        <BLANKLINE>
         ...
 
     """

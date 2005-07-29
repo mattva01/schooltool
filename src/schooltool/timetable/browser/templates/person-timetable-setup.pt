@@ -61,7 +61,7 @@
 
     <table class="timetable_setup">
       <tal:block tal:repeat="period day/periods">
-      <tr tal:define="conflict python: len(period['selected']) > 1"
+        <tr tal:define="conflict python: len(period['selected']) > 1 or len(period['in_group']) > 1  "
           tal:attributes="class python: conflict and 'conflict' or ''">
         <th tal:content="period/title">Period N</th>
         <td tal:condition="period/in_group"
