@@ -294,7 +294,7 @@
           </tal:block>
         </fieldset>
         <div class="row" tal:define="widget nocall:view/exceptions_widget">
-          <div metal:use-macro="context/@@form_macros/widget_row" />
+          <div metal:use-macro="context/@@form_macros/datepicker_widget" />
         </div>
       </div>
     </fieldset>
