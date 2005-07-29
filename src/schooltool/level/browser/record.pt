@@ -57,6 +57,11 @@
           <div class="row">
             <h5 tal:content="view/context/schema/__doc__" />
           </div>  
+
+          <p tal:condition="view/extra|nothing" tal:content="view/extra"
+             i18n:translate="">
+            Extra message.
+          </p>
       
           <fieldset>
             <div metal:use-macro="context/@@form_macros/widget_rows" />

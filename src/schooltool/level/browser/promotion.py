@@ -57,6 +57,15 @@ class SchemaWorkItemView(browser.BrowserView):
         return _('Work Item successfully finished.')
 
 
+class SetLevelOutcomeView(SchemaWorkItemView):
+
+    def extra(self):
+        wfrd = self.context.participant.activity.process.workflowRelevantData
+        text = _('Current Level: $level')
+        text.mapping = {'level': wfrd.level.title}
+        return text
+
+
 class PromotionWorkItemsView(browser.BrowserView):
     """Managament view for promoting students efficiently."""
 

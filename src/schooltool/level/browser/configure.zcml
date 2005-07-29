@@ -117,7 +117,7 @@
       for="..promotion.SetLevelOutcome"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       provides=".promotion.IFinishSchemaWorkitem"
-      factory=".promotion.SchemaWorkItemView"
+      factory=".promotion.SetLevelOutcomeView"
       permission="schoolbell.view"
       />
 
