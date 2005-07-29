@@ -54,7 +54,7 @@ Now the notes view for the new group should be empty
 We can add a note:
 
     >>> print rest("""
-    ... PUT /frogpond/groups/a-group/notes HTTP/1.1
+    ... POST /frogpond/groups/a-group/notes HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ...
     ... <?xml version="1.0" encoding="utf-8"?>
@@ -88,7 +88,7 @@ And view it:
 We can add multiple notes:
 
     >>> print rest("""
-    ... PUT /frogpond/groups/a-group/notes HTTP/1.1
+    ... POST /frogpond/groups/a-group/notes HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ...
     ... <?xml version="1.0" encoding="utf-8"?>
@@ -133,7 +133,7 @@ We can add multiple notes:
 We can also add private notes:
 
     >>> print rest("""
-    ... PUT /frogpond/groups/a-group/notes HTTP/1.1
+    ... POST /frogpond/groups/a-group/notes HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ...
     ... <?xml version="1.0" encoding="utf-8"?>

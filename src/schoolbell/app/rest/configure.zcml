@@ -485,7 +485,7 @@
       factory="schoolbell.app.rest.notes.NotesViewFactory"
       allowed_interface="schoolbell.app.rest.notes.INotesView"
       permission="zope.Public"
-      name="PUT"
+      name="POST"
       />
 
   <!-- Error views -->

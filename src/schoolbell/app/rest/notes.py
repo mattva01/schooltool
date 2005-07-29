@@ -47,8 +47,8 @@ class INotesView(Interface):
     def GET():
         """The GET handler."""
 
-    def PUT():
-        """The PUT handler."""
+    def POST():
+        """The POST handler."""
 
 
 class NotesView(View):
@@ -96,7 +96,7 @@ class NotesView(View):
 
     notes = property(_getNotes)
 
-    def PUT(self):
+    def POST(self):
         body = self.request.bodyFile.read()
 
         doc = XMLDocument(body, self.schema)

@@ -80,7 +80,7 @@ def doctest_Notes():
 
         >>> request._body_instream = StringIO(body)
         >>> view = NotesView(adapter, request)
-        >>> view.PUT()
+        >>> view.POST()
         ''
 
     And view it:
@@ -105,7 +105,7 @@ def doctest_Notes():
         ... </notes>'''
         >>> request._body_instream = StringIO(body)
         >>> view = NotesView(adapter, request)
-        >>> view.PUT()
+        >>> view.POST()
         ''
 
     We can see the note (along with the previous note):

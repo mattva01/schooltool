@@ -82,6 +82,7 @@ to the SchoolBell server.
 
   GET ...path/notes
     view all notes on an object
-  PUT ...path/notes
+  POST ...path/notes
     add new notes for an object
 
+XXX: There is currently no way to edit/delete notes via the RESTive interface.
