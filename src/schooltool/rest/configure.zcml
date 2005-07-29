@@ -122,14 +122,6 @@
       permission="zope.Public"
       />
 
-  <view
-      for="schooltool.interfaces.ICourse"
-      name="POST"
-      factory=".app.CourseView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
   <adapter
       for="schooltool.interfaces.ISectionContainer"
       provides="zope.app.filerepresentation.interfaces.IFileFactory"
@@ -155,14 +147,6 @@
   <view
       for="schooltool.interfaces.ISection"
       name="GET"
-      factory=".app.SectionView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.interfaces.ISection"
-      name="POST"
       factory=".app.SectionView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
