@@ -311,14 +311,6 @@
       />
 
   <view
-      for="schoolbell.app.interfaces.IGroup"
-      name="POST"
-      factory=".app.GroupView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
       for="schoolbell.app.interfaces.IResource"
       name="GET"
       factory=".app.ResourceView"
@@ -327,24 +319,8 @@
       />
 
   <view
-      for="schoolbell.app.interfaces.IResource"
-      name="POST"
-      factory=".app.ResourceView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
       for="schoolbell.app.interfaces.IPerson"
       name="GET"
-      factory=".app.PersonView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schoolbell.app.interfaces.IPerson"
-      name="POST"
       factory=".app.PersonView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
