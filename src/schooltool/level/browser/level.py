@@ -21,6 +21,10 @@ Level views.
 
 $Id: app.py 3481 2005-04-21 15:28:29Z bskahan $
 """
+import zope.component
+import zope.interface
+import zope.schema
+from zope.security import proxy
 from zope.app import zapi
 from zope.app.form.browser import add
 from zope.app.publisher import browser
@@ -49,6 +53,48 @@ class LevelValidationView(browser.BrowserView):
                 self.context.validate()
             except interfaces.LevelValidationError, error:
                 return zapi.getMultiAdapter((error, self.request), name="info")
+
+
+class IEditLevelSchema(interfaces.ILevel):
+
+    previousLevel = zope.schema.Choice(
+        title=_("Previous Level"),
+        description=_("The previous level in the school. If None, then "
+                      "there is no previous level."),
+        vocabulary="Levels",
+        required=False,
+        default=None)
+
+
+class EditLevelAdapter(object):
+    """Adapter to allow us display the previous level as an option."""
+
+    zope.interface.implements(IEditLevelSchema)
+    zope.component.adapts(interfaces.ILevel)
+
+    def __init__(self, context):
+        self.__dict__['context'] = context
+
+    def __getattr__(self, name):
+        return getattr(self.context, name)
+
+    def __setattr__(self, name, value):
+        if name is 'previousLevel':
+            prevLevel = self.getPreviousLevel()
+            if prevLevel is not None:
+                prevLevel.nextLevel = None
+            if value is not None:
+                value.nextLevel = proxy.removeSecurityProxy(self.context)
+        else:
+            setattr(self.context, name, value)
+
+    def getPreviousLevel(self):
+        parent = zapi.getParent(self.context)
+        for level in parent.values():
+            if level.nextLevel == self.context:
+                return level
+
+    previousLevel = property(getPreviousLevel)
 
 
 class LevelAddView(add.AddView):

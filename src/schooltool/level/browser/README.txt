@@ -30,6 +30,7 @@ First we create a couple of levels.
   >>> browser.controls['field.title'] = u'1st Grade'
   >>> browser.controls['field.isInitial'] = True
   >>> browser.controls['add_input_name'] = u'level1'
+  >>> browser.handleErrors = False
   >>> browser.click('Add')
 
   >>> '1st Grade' in browser.contents
@@ -86,9 +87,9 @@ Okay, so let's do what the error tells us and remove the link in `level2` to
 `level1`:
 
   >>> browser.click('Levels')
-  >>> browser.click('2nd Grade')
+  >>> browser.click('1st Grade')
   >>> browser.click('Edit Info')
-  >>> browser.controls['field.nextLevel'] = []
+  >>> browser.controls['field.previousLevel'] = []
   >>> browser.click('Apply')
 
   >>> browser.click('Levels')

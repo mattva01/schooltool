@@ -51,13 +51,16 @@
 
   <!-- Level Views -->
 
+  <zope:adapter 
+      factory=".level.EditLevelAdapter" />
+
   <configure package="schoolbell.app.browser">
 
     <addform
         label="Add a Level"
         name="addSchoolToolLevel.html"
-        schema="schooltool.level.interfaces.ILevel"
-        fields="title isInitial nextLevel"
+        schema="schooltool.level.browser.level.IEditLevelSchema"
+        fields="title isInitial previousLevel nextLevel"
         arguments="title"
         content_factory="schooltool.level.level.Level"
         permission="schoolbell.create"
@@ -68,9 +71,9 @@
     <editform
         label="Edit Level"
         name="edit.html"
-        schema="schooltool.level.interfaces.ILevel"
+        schema="schooltool.level.browser.level.IEditLevelSchema"
         for="schooltool.level.interfaces.ILevel"
-        fields="title isInitial nextLevel"
+        fields="title isInitial previousLevel nextLevel"
         template="templates/simple_edit.pt"
         class="schooltool.level.browser.level.LevelEditView"
         permission="schoolbell.edit"
