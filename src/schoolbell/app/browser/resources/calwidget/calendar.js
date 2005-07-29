@@ -53,7 +53,13 @@ function setCalendar(idtag,yyyy,mm,dd) {
     if (dd < 10) {
         dd = "0" + dd;
     }
-    y.value = yyyy + "-" + mm + "-" + dd;
+
+    // replace values in text fields, append them in textarea fields.
+    if (y.type == 'text' || y.value == ""){
+      y.value = yyyy + "-" + mm + "-" + dd;
+    } else if (y.type == 'textarea'){
+      y.value += "\n" + yyyy + "-" + mm + "-" + dd;
+    }
     y = document.getElementById(idtag + "Div");
     y.style.display = "none";
 }

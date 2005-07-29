@@ -41,7 +41,7 @@
 
 .CellElement {
     font-family: Arial, Helvetica;
-    font-size: x-small;
+    font-size: small;
     text-align: center;
     cursor: pointer;
     cursor: hand;
@@ -51,7 +51,7 @@
 
 .CurrentCellElement {
     font-family: Arial, Helvetica;
-    font-size: x-small;
+    font-size: small;
     background: #CCCC99;
     color: #000;
     text-align: center;
