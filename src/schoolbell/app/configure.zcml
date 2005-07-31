@@ -282,6 +282,11 @@
       handler=".security.groupPermissionsSubscriber"
       />
 
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".app.personAppCalendarOverlaySubscriber"
+      />
+
 <!-- Utilities -->
 
   <localUtility class=".security.SchoolBellAuthenticationUtility">

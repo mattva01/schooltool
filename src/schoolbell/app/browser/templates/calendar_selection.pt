@@ -28,6 +28,16 @@
       Hold down Ctrl or Shift to select multiple calendars.
     </p>
 
+    <fieldset tal:define="app view/application" tal:condition="app">
+      <legend i18n:translate="">Public Calendar</legend>
+      <label>
+        <input type="checkbox" name="application" value="application"
+            tal:attributes="checked app/selected"/>
+          <span tal:content="app/title"></span>
+          <span i18n:translate="">site-wide calendar</span>
+      </label>
+    </fieldset>
+
     <fieldset class="inline" tal:define="persons view/persons">
       <legend i18n:translate="">People</legend>
       <p tal:condition="not:persons" i18n:translate="">

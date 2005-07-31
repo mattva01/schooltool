@@ -32,7 +32,7 @@ from zope.app.container.btree import BTreeContainer
 from zope.app.container.sample import SampleContainer
 from zope.app.container.contained import Contained
 from zope.app.container.contained import NameChooser
-from zope.app.container.interfaces import INameChooser
+from zope.app.container.interfaces import INameChooser, IObjectAddedEvent
 from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.site.servicecontainer import SiteManagerContainer
 from zope.app.location.interfaces import ILocation
@@ -45,7 +45,7 @@ from schoolbell.app.interfaces import IPersonPreferences, IPersonDetails
 from schoolbell.app.interfaces import IGroupContainer, IGroupContained
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
 from schoolbell.app.interfaces import IHavePreferences, IHaveNotes
-from schoolbell.app.interfaces import IApplicationPreferences
+from schoolbell.app.interfaces import IApplicationPreferences, IPerson
 from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIMember, URIGroup
 from schoolbell.app.overlay import OverlaidCalendarsProperty
@@ -356,3 +356,20 @@ def getApplicationPreferences(app):
         annotations[key] = ApplicationPreferences()
         annotations[key].__parent__ = app
         return annotations[key]
+
+
+def personAppCalendarOverlaySubscriber(event):
+    """Add application calendar to overlays of all new persons.
+    """
+    if IObjectAddedEvent.providedBy(event):
+        if IPerson.providedBy(event.object):
+            try:
+                app = getSchoolBellApplication()
+                event.object.overlaid_calendars.add(app.calendar)
+            except ValueError:
+                # If we get this we are probably in the initial new-site setup
+                # or creating a new manager during startup.  This should be
+                # safe to ignore since it will happen very infrequently
+                # (perhaps only once) and the manager can easily add the site
+                # calendar to his/her overlay in the overlay selection view.
+                pass

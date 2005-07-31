@@ -156,6 +156,24 @@ class CalendarSelectionView(BrowserView):
                 for o in app[container].values()
                 if o is not user and canAccess(o.calendar, '__iter__')]
 
+    def getApplicationCalendar(self):
+        """Return the application calendar.
+
+        Returns None if the user lacks sufficient permissions.
+        """
+        user = removeSecurityProxy(IPerson(self.request.principal, None))
+        if user is None:
+            return None
+        app = getSchoolBellApplication()
+
+        if canAccess(app.calendar, '__iter__'):
+            return {'title': app.title,
+                    'selected': app.calendar in user.overlaid_calendars,
+                    'calendar': app.calendar}
+
+        return None
+
+    application = property(getApplicationCalendar)
     persons = property(lambda self: self.getCalendars('persons'))
     groups = property(lambda self: self.getCalendars('groups'))
     resources = property(lambda self: self.getCalendars('resources'))
@@ -178,6 +196,13 @@ class CalendarSelectionView(BrowserView):
                         user.overlaid_calendars.add(item['calendar'])
                     elif item['id'] not in selected and item['selected']:
                         user.overlaid_calendars.remove(item['calendar'])
+            appcal = self.application['calendar']
+            if ('application' in self.request and 
+                    appcal not in user.overlaid_calendars):
+                user.overlaid_calendars.add(appcal)
+            elif ('application' not in self.request and 
+                    appcal in user.overlaid_calendars):
+                user.overlaid_calendars.remove(appcal)
             self.message = _('Saved changes.')
             nexturl = self.request.form.get('nexturl')
             if nexturl:

@@ -97,7 +97,8 @@ Now some users:
     HTTP/1.1 201 Created
     ...
 
-The list of relationships of persons should be empty:
+The list of relationships of persons should only contain the initial site-wide
+calendar:
 
     >>> print rest("""
     ... GET /frogpond/persons/frog/relationships HTTP/1.1
@@ -108,10 +109,18 @@ The list of relationships of persons should be empty:
     <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
                    xmlns="http://schooltool.org/ns/model/0.1">
       <existing>
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/calendar_subscription/provider"
+                      xlink:arcrole="http://schooltool.org/ns/calendar_subscription"
+                      xlink:href="http://localhost/frogpond/calendar">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/persons/frog/relationships/1"/>
+        </relationship>
       </existing>
     </relationships>
+    <BLANKLINE>
 
-Groups have no relationships too:
+Groups have no relationships:
 
     >>> print rest("""
     ... GET /frogpond/groups/a-group/relationships HTTP/1.1
@@ -347,10 +356,10 @@ John should now be capable of adding himself back into the group:
     ... """)
     HTTP/1.1 201 Created
     ...
-    Location: http://localhost/frogpond/persons/john/relationships/1
+    Location: http://localhost/frogpond/persons/john/relationships/2
     ...
     <BLANKLINE>
-    Relationship created: http://localhost/frogpond/persons/john/relationships/1
+    Relationship created: http://localhost/frogpond/persons/john/relationships/2
 
 He can delete the other relationship now too:
 
