@@ -325,7 +325,7 @@ And Frog's overlay portlet shows the section:
             <td></td>
           </tr>
     <BLANKLINE>
-          <tr style="background: #e0b6af">
+          <tr style="background: #eed680">
             <td><input type="checkbox" name="overlay:list"
                        checked="checked"
                        value="/frogpond/sections/his1" /></td>
@@ -335,8 +335,8 @@ And Frog's overlay portlet shows the section:
                        value="/frogpond/sections/his1" /></td>
             <td style="width: 100%">Frog -- History</td>
             <td><a class="go"
-                   style="background: #c1665a;
-                color: #c1665a"
+                   style="background: #d1940c;
+                color: #d1940c"
                    href="http://localhost/frogpond/sections/his1/calendar">&nbsp;</a></td>
         </tr>
         </table>

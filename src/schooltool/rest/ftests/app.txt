@@ -296,8 +296,8 @@ Let's see what our section looks like:
     HTTP/1.1 201 Created
     ...
 
-Currently, the relationships of goose should be empty, and our section show's
-its link to the course Flight:
+Currently, the relationships of goose should only show the application
+calendar, and our section show's its link to the course Flight:
 
     >>> print rest("""
     ... GET /frogpond/persons/goose/relationships HTTP/1.1
@@ -308,6 +308,13 @@ its link to the course Flight:
     <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
                    xmlns="http://schooltool.org/ns/model/0.1">
       <existing>
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/calendar_subscription/provider"
+                      xlink:arcrole="http://schooltool.org/ns/calendar_subscription"
+                      xlink:href="http://localhost/frogpond/calendar">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/persons/goose/relationships/1"/>
+        </relationship>
       </existing>
     </relationships>
 
@@ -362,19 +369,20 @@ and the calendar subscription to show the student the section's calendar:
     <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
                    xmlns="http://schooltool.org/ns/model/0.1">
       <existing>
+    ...
         <relationship xlink:type="simple"
                       xlink:role="http://schooltool.org/ns/membership/group"
                       xlink:arcrole="http://schooltool.org/ns/membership"
                       xlink:href="http://localhost/frogpond/sections/birdwatching-1">
           <manage xlink:type="simple"
-                  xlink:href="http://localhost/frogpond/persons/goose/relationships/1"/>
+                  xlink:href="http://localhost/frogpond/persons/goose/relationships/2"/>
         </relationship>
         <relationship xlink:type="simple"
                       xlink:role="http://schooltool.org/ns/calendar_subscription/provider"
                       xlink:arcrole="http://schooltool.org/ns/calendar_subscription"
                       xlink:href="http://localhost/frogpond/sections/birdwatching-1/calendar">
           <manage xlink:type="simple"
-                  xlink:href="http://localhost/frogpond/persons/goose/relationships/2"/>
+                  xlink:href="http://localhost/frogpond/persons/goose/relationships/3"/>
         </relationship>
       </existing>
     </relationships>
@@ -448,19 +456,20 @@ Now the section is in maverick's relationships
     <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
                    xmlns="http://schooltool.org/ns/model/0.1">
       <existing>
+    ...
         <relationship xlink:type="simple"
                       xlink:role="http://schooltool.org/ns/membership/group"
                       xlink:arcrole="http://schooltool.org/ns/membership"
                       xlink:href="http://localhost/frogpond/sections/birdwatching-1">
           <manage xlink:type="simple"
-                  xlink:href="http://localhost/frogpond/persons/goose/relationships/1"/>
+                  xlink:href="http://localhost/frogpond/persons/goose/relationships/2"/>
         </relationship>
         <relationship xlink:type="simple"
                       xlink:role="http://schooltool.org/ns/calendar_subscription/provider"
                       xlink:arcrole="http://schooltool.org/ns/calendar_subscription"
                       xlink:href="http://localhost/frogpond/sections/birdwatching-1/calendar">
           <manage xlink:type="simple"
-                  xlink:href="http://localhost/frogpond/persons/goose/relationships/2"/>
+                  xlink:href="http://localhost/frogpond/persons/goose/relationships/3"/>
         </relationship>
       </existing>
     </relationships>
