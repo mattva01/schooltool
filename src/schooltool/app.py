@@ -372,7 +372,7 @@ class ApplicationPreferences(sb.ApplicationPreferences):
 
 
 def getSchoolToolApplication():
-    """Return the nearest ISchoolBellApplication"""
+    """Return the nearest ISchoolToolApplication"""
     candidate = getSite()
     if ISchoolToolApplication.providedBy(candidate):
         return candidate
