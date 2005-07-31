@@ -339,12 +339,12 @@ class PersonView(sb.PersonView):
         sections = ISchoolBellApplication(self.context)['sections'].values()
         for section in sections:
             if self.context in section.members:
-                results.append({'section' : section, 'group': None})
+                results.append({'section': section, 'group': None})
             # XXX isTransitiveMember works in the test fixture but not in the
             # application, working around it for the time being.
             for group in self.memberOf():
                 if group in section.members:
-                    results.append({'section' : section,
+                    results.append({'section': section,
                                     'group': group})
 
         return results

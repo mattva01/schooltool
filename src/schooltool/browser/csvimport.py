@@ -473,7 +473,7 @@ class PersonCSVImporter(sb.PersonCSVImporter):
 
         if username in self.container:
             error_msg = _("Duplicate username: ${username}")
-            error_msg.mapping = {'username' : ', '.join(data)}
+            error_msg.mapping = {'username': ', '.join(data)}
             self.errors.fields.append(error_msg)
             return
 
