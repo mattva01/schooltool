@@ -71,7 +71,7 @@
              tal:content="in_group/section/title" />
           <span class="hint">
             <span i18n:translate="">as part of</span>
-            <a href="" i18n:translate
+            <a href=""
                tal:attributes="href in_group/group/@@absolute_url"
                tal:content="in_group/group/title" />
           </span>
