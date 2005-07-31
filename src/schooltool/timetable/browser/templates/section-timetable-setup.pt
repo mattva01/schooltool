@@ -51,9 +51,9 @@
       </tal:loop>
     </tal:if>
     <tal:if condition="not:view/singleSchema">
-      <tal:loop tal:repeat="ttschema ttschemas/sortby:__name__">
+      <tal:loop tal:repeat="ttschema ttschemas/sortby:title">
         <input type="radio" name="ttschema"
-               tal:attributes="value ttschema/__name__;
+               tal:attributes="value ttschema/title;
                                checked python:ttschema is view.ttschema
                                                    and 'checked' or None" />
         <span tal:content="ttschema/title" i18n:translate="" />
