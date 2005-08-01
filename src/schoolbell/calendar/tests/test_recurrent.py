@@ -252,6 +252,11 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         result = list(rule.apply(ev))
         self.assertEqual(result, expected)
 
+        # With an end date as datetime
+        rule = self.createRule(until=datetime(1978, 7, 12))
+        result = list(rule.apply(ev))
+        self.assertEqual(result, expected)
+
         # With a count
         rule = self.createRule(count=9)
         result = list(rule.apply(ev))

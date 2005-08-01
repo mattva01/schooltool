@@ -215,6 +215,10 @@ class WeeklyRecurrenceRule(RecurrenceRule):
                  weekdays=()):
         self._interval = interval
         self._count = count
+        if until and isinstance(until, datetime.datetime):
+            self._until = until.date()
+        else:
+            self._until = until
         self._until = until
         self._exceptions = tuple(exceptions)
         self._weekdays = tuple(weekdays)
@@ -257,13 +261,6 @@ class WeeklyRecurrenceRule(RecurrenceRule):
             assert not isinstance(enddate, datetime.datetime), \
                     "enddate must be a date, not a datetime"
         cur = start = event.dtstart.date()
-        if isinstance(cur, datetime.date) and isinstance(self.until,
-            datetime.datetime):
-            # convert self.until to a date because it will be compared against
-            # cur, which is a date
-            until = self.until.date()
-        else:
-            until = self.until
         count = 0
         weekdays = Set(self.weekdays)
         weekdays.add(event.dtstart.weekday())
