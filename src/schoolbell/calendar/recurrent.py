@@ -219,7 +219,6 @@ class WeeklyRecurrenceRule(RecurrenceRule):
             self._until = until.date()
         else:
             self._until = until
-        self._until = until
         self._exceptions = tuple(exceptions)
         self._weekdays = tuple(weekdays)
         self._validate()
