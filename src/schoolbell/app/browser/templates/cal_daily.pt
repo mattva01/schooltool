@@ -93,7 +93,7 @@
               </span>
             </a>
           </h6>
-          <tal:if condition="python:view.canRemoveEvents() and ev.__parent__ == context.__parent__">
+          <tal:if condition="python:view.canRemoveEvents() and ev.__parent__ == context">
             <a tal:condition="ev/__parent__"
                i18n:attributes="title" class="delete"
                tal:attributes="href string:${ev/source_calendar/@@absolute_url}/delete.html?event_id=${ev/unique_id}&date=${evdate};

@@ -214,6 +214,43 @@ Now let the Toad try and modify the event too:
     Location: http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=http://localhost/frogpond/persons/frog/calendar/dummy-uid
     ...
 
+Let's grant the Toad the viewCalendar permission on Frog's calendar:
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar/acl.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... marker-sb.person.toad=1&\
+    ... sb.person.toad=schoolbell.viewCalendar&\
+    ... UPDATE_SUBMIT=Set
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons/frog/calendar
+    ...
+
+Toad should not see the event delete link
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar/2005-02-03 HTTP/1.1
+    ... Authorization: Basic toad:doat
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+               <h6 style="background: #7590ae">
+                 <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid"
+                    title="Sleeping">
+                   Sleeping
+                   <span class="start-end">
+                     (<span>01:00</span>
+                        -
+                      <span>09:20</span>)
+                   </span>
+                 </a>
+               </h6>
+    ...
+
 Let's grant the Toad the modifyEvent permission on Frog's calendar:
 
     >>> print http("""
