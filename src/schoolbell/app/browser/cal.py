@@ -709,6 +709,12 @@ class CalendarViewBase(BrowserView):
             return True
         return False
 
+    def canRemoveEvents(self):
+        """Return True if current viewer can remove events to this calendar."""
+        if canAccess(self.context, "removeEvent"):
+            return True
+        return False
+
 
 class WeeklyCalendarView(CalendarViewBase):
     """A view that shows one week of the calendar."""

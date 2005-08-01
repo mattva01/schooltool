@@ -432,7 +432,7 @@ Frog still can see the event:
     ... """)
     HTTP/1.1 200 Ok
     ...
-    href="http://localhost/frogpond/persons/frog/calendar/delete.html?event_id=dummy-uid&amp;date=2005-02-04"
+    ...<a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid"
     ...
 
 Yet mud is not booked anymore:
