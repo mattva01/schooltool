@@ -121,6 +121,11 @@ class TestDailyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         result = list(rule.apply(ev))
         self.assertEqual(result, [date(2004, 10, d) for d in range(13, 21)])
 
+        # With an end date as datetime, see issue318
+        rule = self.createRule(until=datetime(2004, 10, 20))
+        result = list(rule.apply(ev))
+        self.assertEqual(result, [date(2004, 10, d) for d in range(13, 21)])
+
         # With a count
         rule = self.createRule(count=8)
         result = list(rule.apply(ev))

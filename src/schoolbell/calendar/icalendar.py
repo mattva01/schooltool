@@ -932,9 +932,9 @@ def parse_recurrence_rule(value):
     An example that includes use of UNTIL:
 
     >>> parse_recurrence_rule('FREQ=DAILY;UNTIL=20041008T000000')
-    DailyRecurrenceRule(1, None, datetime.datetime(2004, 10, 8, 0, 0), ())
+    DailyRecurrenceRule(1, None, datetime.date(2004, 10, 8), ())
     >>> parse_recurrence_rule('FREQ=DAILY;UNTIL=20041008')
-    DailyRecurrenceRule(1, None, datetime.datetime(2004, 10, 8, 0, 0), ())
+    DailyRecurrenceRule(1, None, datetime.date(2004, 10, 8), ())
 
     Of course, other recurrence frequencies may be used:
 
