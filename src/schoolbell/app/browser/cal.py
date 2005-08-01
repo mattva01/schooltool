@@ -703,6 +703,12 @@ class CalendarViewBase(BrowserView):
             result.append('</td>')
         return "\n".join(result)
 
+    def canAddEvents(self):
+        """Return True if current viewer can add events to this calendar."""
+        if canAccess(self.context, "addEvent"):
+            return True
+        return False
+
 
 class WeeklyCalendarView(CalendarViewBase):
     """A view that shows one week of the calendar."""

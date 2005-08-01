@@ -3319,6 +3319,15 @@ def doctest_CalendarViewBase():
         >>> ISession(view.request)['calendar']['last_visited_day']
         datetime.date(2005, 1, 2)
 
+    canAddEvents checks to see if the current user has addEvent permission on
+    the context:
+
+        >>> defineChecker(Calendar,
+        ...               Checker({'addEvent': 'zope.Public'},
+        ...                       {'addEvent': 'zope.Public'}))
+        >>> view.canAddEvents()
+        True
+
     """
 
 

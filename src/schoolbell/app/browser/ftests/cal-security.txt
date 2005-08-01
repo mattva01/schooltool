@@ -73,7 +73,35 @@ Let the Frog add an ordinary event that takes place on 3rd February, 2005:
     Location: http://localhost/frogpond/persons/frog/calendar
     ...
 
-Now let the Toad try on the Frog's calendar:
+Let's grant the Toad the viewCalendar permission on Frog's calendar:
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar/acl.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... marker-sb.person.toad=1&\
+    ... sb.person.toad=schoolbell.viewCalendar&\
+    ... UPDATE_SUBMIT=Set
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons/frog/calendar
+    ...
+
+Toad should still not even see the new event links (but span tags instead):
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar HTTP/1.1
+    ... Authorization: Basic toad:doat
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+          <span class="event-new"
+    ...
+
+Now let the Toad try to add an event on the Frog's calendar (even though there
+is no link for it):
 
     >>> print http("""
     ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1

@@ -728,7 +728,6 @@ a.button-ok {
     height: 4em;
     margin: 0 !important;
     padding: 0 !important;
-    cursor: pointer;
 }
 
 #calendar-view-day .even {
@@ -841,6 +840,11 @@ a.button-ok {
     padding: 0.5ex;
     cursor: pointer;
     text-decoration: none;
+}
+
+#calendar-view-day .hour span.event-new {
+    font-weight: bold;
+    padding: 0.5ex;
 }
 
 /*
