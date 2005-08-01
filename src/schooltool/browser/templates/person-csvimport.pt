@@ -10,7 +10,8 @@
     <metal:block metal:fill-slot="body">
 
       <div class="info" tal:condition="view/success">
-        <p tal:repeat="msg view/success" tal:content="msg" />
+        <p i18n:translate=""
+           tal:repeat="msg view/success" tal:content="msg" />
       </div>
       <div class="error" tal:condition="view/errors"
         tal:repeat="err view/errors" tal:content="err" />
