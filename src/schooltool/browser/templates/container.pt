@@ -1,10 +1,9 @@
 <tal:define define="dummy view/update"/>
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
 <head>
-  <metal:slot fill-slot="title" tal:content="view/index_title"
-    i18n:translate="">
+  <title metal:fill-slot="title" tal:content="view/index_title" i18n:translate="">
     Contents
-  </metal:slot>
+  </title>
 </head>
 <body>
 

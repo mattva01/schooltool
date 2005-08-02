@@ -15,10 +15,9 @@
     <script type="text/javascript" src="schoolbell.js"
             tal:attributes="src context/++resource++schoolbell.js">
     </script>
-    <title>
-      <span tal:replace="context/schoolbell:preferences/title"/> :
-      <metal:block define-slot="title"/>
-    </title>
+    <metal:block define-slot="title">
+      <title i18n:translate="">SchoolTool</title>
+    </metal:block>
     <metal:block metal:define-slot="extrahead" />
   </head>
   <body>
@@ -199,11 +198,13 @@
 <metal:block define-macro="calendar-page" i18n:domain="schooltool">
   <html metal:use-macro="view/@@standard_macros/page">
 
-    <metal:slot fill-slot="title" i18n:translate="">
-      Calendar for <span tal:replace="context/title"
+    <metal:block fill-slot="title">
+      <title i18n:translate="">
+        Calendar for <span tal:replace="context/title"
         i18n:name="title" i18n:translate=""/> -
-      <span i18n:name="calendar_title" tal:replace="view/title"/>
-    </metal:slot>
+        <span i18n:name="calendar_title" tal:replace="view/title"/>
+      </title>
+    </metal:block>
 
     <metal:block fill-slot="extrahead">
       <link rel="service.feed" type="application/atom+xml"
