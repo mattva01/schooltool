@@ -70,6 +70,11 @@
       handler=".relationships.updateInstructorCalendars"
       />
 
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".app.applicationCalendarPermissionsSubscriber"
+      />
+
   <!-- Utilities -->
 
   <utility

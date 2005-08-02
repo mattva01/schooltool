@@ -27,6 +27,8 @@ from zope.testing import doctest
 from zope.app import zapi
 from zope.interface.verify import verifyObject
 from zope.app.testing import setup, ztapi
+from schoolbell.app.tests.test_security import setUpLocalGrants
+from zope.app.container.contained import ObjectAddedEvent
 
 
 def doctest_SchoolToolApplication():
@@ -630,6 +632,63 @@ def doctest_getSchoolToolApplication():
       >>> getSchoolToolApplication() is app
       True
 
+    """
+
+
+def doctest_applicationCalendarPermissionsSubscriber():
+    r"""
+    Set up:
+
+        >>> from schooltool.app import SchoolToolApplication, Person
+        >>> root = setup.placefulSetUp(True)
+        >>> setUpLocalGrants()
+        >>> app = SchoolToolApplication()
+        >>> root['sb'] = app
+
+        >>> from zope.app.security.interfaces import IUnauthenticatedGroup
+        >>> from zope.app.security.principalregistry import UnauthenticatedGroup
+        >>> ztapi.provideUtility(IUnauthenticatedGroup,
+        ...                      UnauthenticatedGroup('zope.unauthenticated',
+        ...                                         'Unauthenticated users',
+        ...                                         ''))
+        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.app.securitypolicy.interfaces import \
+        ...      IPrincipalPermissionManager
+        >>> from zope.app.securitypolicy.principalpermission import \
+        ...      AnnotationPrincipalPermissionManager
+        >>> setup.setUpAnnotations()
+        >>> ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
+        ...                      AnnotationPrincipalPermissionManager)
+
+    Call our subscriber:
+
+        >>> from schooltool.app import \
+        ...         applicationCalendarPermissionsSubscriber
+        >>> applicationCalendarPermissionsSubscriber(ObjectAddedEvent(app))
+
+    Check that unauthenticated has calendarView permission on app.calendar:
+
+        >>> from zope.app.securitypolicy.interfaces import \
+        ...         IPrincipalPermissionManager
+        >>> unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
+        >>> map = IPrincipalPermissionManager(app.calendar)
+        >>> x = map.getPermissionsForPrincipal(unauthenticated.id)
+        >>> x.sort()
+        >>> print x
+        [('schoolbell.viewCalendar', PermissionSetting: Allow)]
+
+    Check that no permissions are set if the object added is not a person:
+
+        >>> person = Person('james')
+        >>> root['sb']['persons']['james'] = person
+        >>> applicationCalendarPermissionsSubscriber(ObjectAddedEvent(person))
+        >>> map = IPrincipalPermissionManager(person.calendar)
+        >>> map.getPermissionsForPrincipal(unauthenticated.id)
+        []
+
+    Clean up:
+
+        >>> setup.placefulTearDown()
     """
 
 

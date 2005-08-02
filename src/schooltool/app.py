@@ -26,12 +26,16 @@ $Id$
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from zope.interface import implements
+from zope.app import zapi
 from zope.app.component.hooks import getSite
+from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.contained import Contained
 from zope.app.container.sample import SampleContainer
 from zope.app.site.servicecontainer import SiteManagerContainer
 from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
+from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
+from zope.app.security.interfaces import IUnauthenticatedGroup
 
 from schoolbell.relationship import RelationshipProperty
 from schoolbell.relationship.relationship import BoundRelationshipProperty
@@ -391,4 +395,14 @@ def getApplicationPreferences(app):
         annotations[key] = ApplicationPreferences()
         annotations[key].__parent__ = app
         return annotations[key]
+
+
+def applicationCalendarPermissionsSubscriber(event):
+    """Set permissions on application calendar."""
+    if IObjectAddedEvent.providedBy(event):
+        if ISchoolToolApplication.providedBy(event.object):
+            unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
+            perms = IPrincipalPermissionManager(event.object.calendar)
+            perms.grantPermissionToPrincipal('schoolbell.viewCalendar',
+                                              unauthenticated.id)
 
