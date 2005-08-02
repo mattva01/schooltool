@@ -315,6 +315,8 @@ class Resource(Persistent, Contained):
 
     implements(IResourceContained, IHaveNotes, IAttributeAnnotatable)
 
+    isLocation = False # backwards compatibility
+
     def __init__(self, title=None, description=None, isLocation=False):
         self.title = title
         self.description = description
