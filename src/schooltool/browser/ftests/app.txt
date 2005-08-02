@@ -338,9 +338,7 @@ And Frog's overlay portlet shows the section:
     ...
 
 
-
 If we fire Frog, in hopes of getting Salamander to step in:
-
 
     >>> print http(r"""
     ... POST /frogpond/sections/his1/instructors.html HTTP/1.1
