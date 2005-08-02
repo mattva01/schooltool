@@ -157,7 +157,7 @@ class ACLView(View, ACLViewBase):
                 principalid = principal['id']
                 result[principalid] = []
                 if principalid not in allowed_principals:
-                    raise RestError('Principal "%s" unklown' % principalid)
+                    raise RestError('Principal "%s" unknown' % principalid)
                 for perm in principal.query('m:permission[@setting="on"]'):
                     permission = perm['id']
                     if permission not in allowed_permissions:
