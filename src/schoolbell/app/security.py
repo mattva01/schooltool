@@ -41,6 +41,7 @@ from zope.interface import implements, directlyProvides, directlyProvidedBy
 from zope.security.interfaces import IGroupAwarePrincipal
 from zope.security.checker import ProxyFactory
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.app.security.interfaces import IUnauthenticatedGroup
 
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellApplication
@@ -242,3 +243,13 @@ def groupPermissionsSubscriber(event):
             map.grantPermissionToPrincipal('schoolbell.view', principalid)
             map.grantPermissionToPrincipal('schoolbell.viewCalendar',
                                            principalid)
+
+
+def applicationCalendarPermissionsSubscriber(event):
+    """Set permissions on application calendar."""
+    if IObjectAddedEvent.providedBy(event):
+        if ISchoolBellApplication.providedBy(event.object):
+            unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
+            perms = IPrincipalPermissionManager(event.object.calendar)
+            perms.grantPermissionToPrincipal('schoolbell.viewCalendar',
+                                              unauthenticated.id)

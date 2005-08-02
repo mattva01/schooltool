@@ -284,6 +284,11 @@
 
   <subscriber
       for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".security.applicationCalendarPermissionsSubscriber"
+      />
+
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
       handler=".app.personAppCalendarOverlaySubscriber"
       />
 

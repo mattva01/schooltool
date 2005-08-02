@@ -201,6 +201,63 @@ def doctest_personPermissionsSubscriber():
     """
 
 
+def doctest_applicationCalendarPermissionsSubscriber():
+    r"""
+    Set up:
+
+        >>> from schoolbell.app.app import SchoolBellApplication, Person
+        >>> root = setup.placefulSetUp(True)
+        >>> setUpLocalGrants()
+        >>> app = SchoolBellApplication()
+        >>> root['sb'] = app
+
+        >>> from zope.app.security.interfaces import IUnauthenticatedGroup
+        >>> from zope.app.security.principalregistry import UnauthenticatedGroup
+        >>> ztapi.provideUtility(IUnauthenticatedGroup,
+        ...                      UnauthenticatedGroup('zope.unauthenticated',
+        ...                                         'Unauthenticated users',
+        ...                                         ''))
+        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.app.securitypolicy.interfaces import \
+        ...      IPrincipalPermissionManager
+        >>> from zope.app.securitypolicy.principalpermission import \
+        ...      AnnotationPrincipalPermissionManager
+        >>> setup.setUpAnnotations()
+        >>> ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
+        ...                      AnnotationPrincipalPermissionManager)
+
+    Call our subscriber:
+
+        >>> from schoolbell.app.security import \
+        ...         applicationCalendarPermissionsSubscriber
+        >>> applicationCalendarPermissionsSubscriber(ObjectAddedEvent(app))
+
+    Check that unauthenticated has calendarView permission on app.calendar:
+
+        >>> from zope.app.securitypolicy.interfaces import \
+        ...         IPrincipalPermissionManager
+        >>> unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
+        >>> map = IPrincipalPermissionManager(app.calendar)
+        >>> x = map.getPermissionsForPrincipal(unauthenticated.id)
+        >>> x.sort()
+        >>> print x
+        [('schoolbell.viewCalendar', PermissionSetting: Allow)]
+
+    Check that no permissions are set if the object added is not a person:
+
+        >>> person = Person('james')
+        >>> root['sb']['persons']['james'] = person
+        >>> applicationCalendarPermissionsSubscriber(ObjectAddedEvent(person))
+        >>> map = IPrincipalPermissionManager(person.calendar)
+        >>> map.getPermissionsForPrincipal(unauthenticated.id)
+        []
+
+    Clean up:
+
+        >>> setup.placefulTearDown()
+    """
+
+
 def test_suite():
     return unittest.TestSuite([
         unittest.makeSuite(TestAuthSetUpSubscriber),
