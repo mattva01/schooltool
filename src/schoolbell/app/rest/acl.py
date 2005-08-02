@@ -124,7 +124,7 @@ class ACLView(View, ACLViewBase):
     def POST(self):
         settings = self.parseData(self.request.bodyFile.read())
         manager = IPrincipalPermissionManager(self.context)
-        # this view is protected by schooltool.controlAccess
+        # this view is protected by schoolbell.controlAccess
         manager = removeSecurityProxy(manager)
         for principal in settings:
             for permission, title in self.permissions:
@@ -146,7 +146,6 @@ class ACLView(View, ACLViewBase):
         Raises a RestError if a principal or permission id is not from
         the allowed set.
         """
-
         doc = XMLDocument(body, self.schema)
         allowed_principals = self.getPrincipals()
         allowed_permissions = [perm for perm, descritpion in self.permissions]
