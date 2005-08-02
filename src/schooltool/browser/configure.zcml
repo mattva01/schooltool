@@ -285,9 +285,9 @@
       fields="title description location"
       template="templates/section_edit.pt"
       permission="schoolbell.edit"
-      class=".app.SectionEditView">
+      class=".app.SectionEditView"
       menu="schoolbell_actions"
-      title="Edit Info"
+      title="Edit Info">
     <widget field="description" height="5" />
   </editform>
 

@@ -12,6 +12,7 @@
 
   <include package="zope.app" />
   <include package="zope.app.securitypolicy" file="meta.zcml" />
+  <include package="zope.app.wfmc" file="meta.zcml" />
 
   <include package="zope.app.session" />
   <include package="zope.app.server" />
@@ -27,6 +28,7 @@
 
   <include package="zope.app.securitypolicy" file="securitypolicy.zcml" />
   <include package="zope.app.securitypolicy.tests" file="functional.zcml" />
+  <include package="testbrowser.ftests" file="ftesting.zcml" />
 
   <unauthenticatedPrincipal id="zope.anybody" title="Unauthenticated User" />
   <unauthenticatedGroup id="zope.Anybody" title="Unauthenticated Users" />

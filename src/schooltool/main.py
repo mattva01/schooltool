@@ -66,6 +66,7 @@ SCHOOLTOOL_SITE_DEFINITION = u"""\
 
   <include package="zope.app" />
   <include package="zope.app.securitypolicy" file="meta.zcml" />
+  <include package="zope.app.wfmc" file="meta.zcml" />
 
   <include package="zope.app.session" />
   <include package="zope.app.server" />

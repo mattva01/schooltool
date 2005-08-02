@@ -12,6 +12,7 @@
 <p><a href="courses" i18n:translate="">Courses</a></p>
 <p><a href="groups" i18n:translate="">Groups</a></p>
 <p><a href="resources" i18n:translate="">Resources</a></p>
+<p><a href="levels" i18n:translate="">Levels</a></p>
 
 </div>
 </body>

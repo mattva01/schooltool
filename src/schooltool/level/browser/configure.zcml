@@ -1,0 +1,138 @@
+<configure 
+    xmlns="http://namespaces.zope.org/browser"
+    xmlns:zope="http://namespaces.zope.org/zope"
+    i18n_domain="schooltool">
+
+  <!-- Level Container Views -->
+
+  <configure package="schooltool.browser">
+
+    <page
+        name="index.html"
+        for="schooltool.level.interfaces.ILevelContainer"
+        class="schooltool.level.browser.level.LevelContainerView"
+        template="templates/container.pt"
+        permission="zope.View" 
+        menu="zmi_views" title="View"
+        />
+
+  </configure>
+
+  <containerViews
+      for="..interfaces.ILevelContainer"
+      contents="zope.ManageContent"
+      add="zope.View"
+      />
+
+  <page
+      name="validate.html"
+      for="..interfaces.ILevelContainer"
+      class=".level.LevelValidationView"
+      template="level_validation.pt"
+      permission="zope.View" 
+      menu="schoolbell_actions" title="Validate Levels"
+      />
+
+  <!-- Level Graph Validation Error Views -->
+
+  <page
+      name="info"
+      for="..interfaces.ILevelLoopError"
+      template="levellooperror_info.pt"
+      permission="zope.View" 
+      />
+
+  <page
+      name="info"
+      for="..interfaces.IDisconnectedLevelsError"
+      template="disconnectedlevelerror_info.pt"
+      permission="zope.View" 
+      />
+
+  <!-- Level Views -->
+
+  <zope:adapter 
+      factory=".level.EditLevelAdapter" />
+
+  <configure package="schoolbell.app.browser">
+
+    <addform
+        label="Add a Level"
+        name="addSchoolToolLevel.html"
+        schema="schooltool.level.browser.level.IEditLevelSchema"
+        fields="title isInitial previousLevel nextLevel"
+        arguments="title"
+        content_factory="schooltool.level.level.Level"
+        permission="schoolbell.create"
+        template="templates/simple_add.pt"
+        class="schooltool.level.browser.level.LevelAddView"
+        />
+
+    <editform
+        label="Edit Level"
+        name="edit.html"
+        schema="schooltool.level.browser.level.IEditLevelSchema"
+        for="schooltool.level.interfaces.ILevel"
+        fields="title isInitial previousLevel nextLevel"
+        template="templates/simple_edit.pt"
+        class="schooltool.level.browser.level.LevelEditView"
+        permission="schoolbell.edit"
+        menu="schoolbell_actions" title="Edit Info"
+        />
+
+  </configure>
+
+  <menuItem
+      menu="schoolbell_actions"
+      title="New Level"
+      for="..interfaces.ILevelContainer"
+      action="+/addSchoolToolLevel.html"
+      />
+
+  <page
+      name="index.html"
+      for="..interfaces.ILevel"
+      template="level.pt"
+      permission="zope.View"
+      menu="zmi_views" title="View"
+      />
+
+  <!-- Promotion Views -->
+
+  <page
+      name="promotion.html"
+      for="schooltool.interfaces.IGroup"
+      template="promotion.pt"
+      class=".promotion.PromotionWorkItemsView"
+      permission="schoolbell.edit"
+      menu="schoolbell_actions" title="Student Management"
+      />
+
+  <zope:view
+      for="..promotion.SelectInitialLevel"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides=".promotion.IFinishSchemaWorkitem"
+      factory=".promotion.SchemaWorkItemView"
+      permission="schoolbell.view"
+      />
+
+  <zope:view
+      for="..promotion.SetLevelOutcome"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides=".promotion.IFinishSchemaWorkitem"
+      factory=".promotion.SetLevelOutcomeView"
+      permission="schoolbell.view"
+      />
+
+  <!-- Academic Record Views -->
+
+  <page
+      name="academicRecord.html"
+      for="schooltool.interfaces.IPerson"
+      template="record.pt"
+      class=".record.AcademicRecordView"
+      permission="zope.View"
+      menu="schoolbell_actions" title="Academic Record"
+      />
+
+</configure>

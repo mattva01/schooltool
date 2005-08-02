@@ -1,0 +1,182 @@
+<configure 
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="schooltool">
+
+  <!-- Level Managament -->
+
+  <view
+      for="..interfaces.ILevelContainer"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory="schoolbell.app.rest.RestPublishTraverse"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ILevelContainer"
+      name="POST"
+      factory=".level.LevelContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="..interfaces.ILevelContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".level.LevelFileFactory"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="..interfaces.ILevel"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      factory=".level.LevelFile"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ILevelContainer"
+      name="GET"
+      factory=".level.LevelContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ILevel"
+      name="GET"
+      factory=".level.LevelView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ILevel"
+      name="POST"
+      factory=".level.LevelView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <!-- Academic Record Management -->
+
+  <view
+      for="schooltool.interfaces.IPerson"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="schoolbell.app.rest.IRestTraverser"
+      factory=".record.PersonHTTPTraverser"
+      permission="zope.Public"
+      name="academicStatus"
+      />
+
+  <view
+      for=".record.AcademicStatus"
+      name="PUT"
+      factory=".record.AcademicStatusView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for=".record.AcademicStatus"
+      name="POST"
+      factory=".record.AcademicStatusView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <content class=".record.AcademicStatus">
+    <allow attributes="getStatus setStatus" />
+  </content>
+
+  <view
+      for=".record.AcademicStatus"
+      name="GET"
+      factory=".record.AcademicStatusView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.interfaces.IPerson"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="schoolbell.app.rest.IRestTraverser"
+      factory=".record.PersonHTTPTraverser"
+      permission="zope.Public"
+      name="academicHistory"
+      />
+
+  <content class=".record.AcademicHistory">
+    <allow attributes="record" />
+  </content>
+
+  <view
+      for=".record.AcademicHistory"
+      name="GET"
+      factory=".record.AcademicHistoryView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.interfaces.IPerson"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="schoolbell.app.rest.IRestTraverser"
+      factory=".record.PersonHTTPTraverser"
+      permission="zope.Public"
+      name="promotion"
+      />
+
+  <content class=".record.AcademicProcessCreator">
+    <allow attributes="create" />
+  </content>
+
+  <view
+      for=".record.AcademicProcessCreator"
+      name="GET"
+      factory=".record.AcademicProcessCreatorView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for=".record.AcademicProcessCreator"
+      name="PUT"
+      factory=".record.AcademicProcessCreatorView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..promotion.SelectInitialLevel"
+      name="GET"
+      factory=".record.SelectInitialLevelView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..promotion.SelectInitialLevel"
+      name="POST"
+      factory=".record.SelectInitialLevelView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..promotion.SetLevelOutcome"
+      name="GET"
+      factory=".record.SetLevelOutcomeView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..promotion.SetLevelOutcome"
+      name="POST"
+      factory=".record.SetLevelOutcomeView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+</configure>

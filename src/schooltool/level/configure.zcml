@@ -1,0 +1,141 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:wfmc="http://namespaces.zope.org/wfmc"
+    >
+
+  <!-- Process Definition for Promotion workflow -->
+  <wfmc:xpdl
+      file="promotion.xpdl"
+      process="promotion"
+      id="schooltool.promotion"
+      integration="zope.wfmc.adapter.integration"
+      />
+  
+  <!-- Participant: Manager -->
+  <adapter
+     for="zope.wfmc.interfaces.IActivity"
+     provides="zope.wfmc.interfaces.IParticipant"
+     factory=".promotion.Manager"
+     name=".manager"
+     />
+
+  <!-- Promotion Wokflow subscribers -->
+  <subscriber
+      for="zope.wfmc.interfaces.IProcessStarted"
+      handler=".promotion.addProcessToStudent"
+      />
+
+  <subscriber
+      for="zope.wfmc.interfaces.IProcessFinished"
+      handler=".promotion.removeProcessFromStudent"
+      />
+
+  <!-- Workflow Applications -->
+  <!-- Note: The names start with a dot, because they are defined in the
+             pacakge not the process. We might want to change that later. -->  
+
+  <!-- Progress to Next Level (level : input/output)  -->
+  <adapter
+      for="zope.wfmc.interfaces.IParticipant"
+      provides="zope.wfmc.interfaces.IWorkItem"
+      factory=".promotion.ProgressToNextLevel"
+      name=".progressToNextLevel"
+      />
+  
+  <!-- Select Initial Level (level : output)  -->
+  <adapter
+      for="zope.wfmc.interfaces.IParticipant"
+      provides="zope.wfmc.interfaces.IWorkItem"
+      factory=".promotion.SelectInitialLevel"
+      name=".selectInitialLevel"
+      />
+  
+  <!-- Set Level Outcome (outcome : output)  -->
+  <adapter
+      for="zope.wfmc.interfaces.IParticipant"
+      provides="zope.wfmc.interfaces.IWorkItem"
+      factory=".promotion.SetLevelOutcome"
+      name=".setLevelOutcome"
+      />
+  
+  <!-- Update Status (student : input)  -->
+  <adapter
+      for="zope.wfmc.interfaces.IParticipant"
+      provides="zope.wfmc.interfaces.IWorkItem"
+      factory=".promotion.UpdateStatus"
+      name=".updateStatus"
+      />
+  
+  <!-- Write Record (student : input, level: input)  -->
+  <adapter
+      for="zope.wfmc.interfaces.IParticipant"
+      provides="zope.wfmc.interfaces.IWorkItem"
+      factory=".promotion.WriteRecord"
+      name=".writeRecord"
+      />
+
+  <!-- Group to Work Items List Adapater -->
+  <adapter
+      factory=".promotion.ManagerWorkItems"
+      />
+
+  
+  <!-- Application objects -->
+
+  <content class=".level.LevelContainer">
+    <implements
+        interface="zope.app.annotation.interfaces.IAttributeAnnotatable" />
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schoolbell.view"
+             attributes="keys values items __iter__ __len__ validate" />
+    <require permission="schoolbell.create"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </content>
+
+  <content class=".level.Level">
+    <implements
+        interface="zope.app.annotation.interfaces.IAttributeAnnotatable" />
+    <require permission="schoolbell.view"
+             interface=".interfaces.ILevel" />
+    <require permission="schoolbell.edit"
+             set_schema=".interfaces.ILevel" />
+  </content>
+
+  <!-- Level vocabulary -->
+  <vocabulary
+     name="Levels"
+     factory=".level.LevelVocabulary" />
+
+  <!-- Academic Record Adapter -->
+  <class class=".record.History">
+    <allow interface="zope.interface.common.sequence.IReadSequence" />
+    <require permission="schoolbell.edit"
+             interface="zope.interface.common.sequence.IWriteSequence" 
+             attributes="addRecord" />
+  </class>
+
+  <class class=".record.HistoricalRecord">
+    <require permission="schoolbell.view"
+             interface=".interfaces.IHistoricalRecord" />
+  </class>
+
+  <class class=".record.AcademicRecord">
+    <require permission="schoolbell.view"
+             interface=".interfaces.IAcademicRecord" />
+    <require permission="schoolbell.edit"
+             set_schema=".interfaces.IAcademicRecord" />
+  </class>
+
+  <adapter
+      for="schooltool.interfaces.IPerson"
+      provides=".interfaces.IAcademicRecord"
+      factory=".record.AcademicRecord"
+      trusted="true"
+      locate="true"
+      />
+
+  <!-- Views -->
+  <include package=".browser" />
+  <include package=".rest" />
+
+</configure>

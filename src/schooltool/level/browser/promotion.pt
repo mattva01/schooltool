@@ -1,0 +1,137 @@
+<metal:block use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+
+  <metal:slot fill-slot="title">
+    <span tal:replace="context/title" i18n:translate="">
+      Student Management
+    </span>
+  </metal:slot>
+
+  <metal:block fill-slot="content-header">
+    <h1 i18n:translate="">Student Management</h1>
+  </metal:block>
+
+  <metal:block metal:fill-slot="body">
+
+    <div id="message" i18n:translate=""
+         tal:define="message view/update"
+         tal:content="message" tal:condition="message">
+      Status Message
+    </div>
+
+    <h3 i18n:translate="">Enroll Students</h3>
+
+    <form tal:attributes="action request/URL" method="post"
+          enctype="multipart/form-data" name="enroll">
+
+      <table>
+        <tr>
+          <th>&nbsp;</th>
+          <th i18n:translate="">Student Name (username)</th>
+        </tr>
+        <tr tal:repeat="student view/students">
+          <td>
+            <input type="checkbox" name="ids:list" value=""
+                   tal:attributes="value student/name" />
+          </td>
+          <td>
+            <span tal:content="student/title">Student Name</span>
+            (<span tal:content="student/username">username</span>)
+          </td>
+        </tr>
+      </table>
+  
+      <div class="controls">
+        <input type="submit" class="button-ok" name="ENROLL_SUBMIT" 
+               value="Enroll" title="Shortcut: Alt-E" accesskey="E"
+               i18n:attributes="value enroll-button; accesskey" />
+      </div>
+    </form>
+
+
+    <h3 i18n:translate="">Initialize Students</h3>
+
+    <form tal:attributes="action request/URL" method="post"
+          enctype="multipart/form-data" name="initialize">
+
+      <table width="100%">
+        <tr>
+          <th width="5%">&nbsp;</th>
+          <th width="45%" i18n:translate="">Student Name (username)</th>
+          <th width="50%" i18n:translate="">Inital Level</th>
+        </tr>
+        <tr tal:repeat="item view/initialLevelItems">
+          <td>
+            <input type="checkbox" name="ids:list" value=""
+                   tal:attributes="value item/id" />
+          </td>
+          <td>
+            <a href="" tal:attributes="href item/student/@@absolute_url">
+              <span tal:content="item/student/title">Student Name</span>
+              (<span tal:content="item/student/username">username</span>)
+            </a>
+          </td>
+          <td>
+            <div tal:repeat="widget item/item_view/widgets"
+                 tal:content="structure widget">
+              <input />
+            </div>
+          </td>
+
+        </tr>
+      </table>
+  
+      <div class="controls">
+        <input type="submit" class="button-ok" name="WORKFLOW_SUBMIT" 
+               value="Apply" title="Shortcut: Alt-I" accesskey="I"
+               i18n:attributes="value apply-button; accesskey" />
+      </div>
+    </form>
+
+
+    <h3 i18n:translate="">Level Outcome</h3>
+
+    <form tal:attributes="action request/URL" method="post"
+          enctype="multipart/form-data" name="outcome">
+
+      <table>
+        <tr>
+          <th>&nbsp;</th>
+          <th i18n:translate="">Student Name (username)</th>
+          <th i18n:translate="">Current Level</th>
+          <th i18n:translate="">Outcome</th>
+        </tr>
+        <tr tal:repeat="item view/outcomeItems">
+          <td>
+            <input type="checkbox" name="ids:list" value=""
+                   tal:attributes="value item/id" />
+          </td>
+          <td>
+            <a href="" tal:attributes="href item/student/@@absolute_url">
+              <span tal:content="item/student/title">Student Name</span>
+              (<span tal:content="item/student/username">username</span>)
+            </a>
+          </td>
+          <td>
+            <span tal:content="item/level/title">Level X</span>
+          </td>
+          <td>
+            <div tal:repeat="widget item/item_view/widgets"
+                 tal:content="structure widget">
+              <input />
+            </div>
+          </td>
+
+        </tr>
+      </table>
+  
+      <div class="controls">
+        <input type="submit" class="button-ok" name="WORKFLOW_SUBMIT" 
+               value="Apply" title="Shortcut: Alt-O" accesskey="O"
+               i18n:attributes="value apply-button; accesskey" />
+      </div>
+    </form>
+
+
+  </metal:block>
+
+</metal:block>

@@ -1,0 +1,47 @@
+<metal:block use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+
+  <metal:slot fill-slot="title">
+    <span i18n:translate="">Level Validation</span>
+  </metal:slot>
+
+  <metal:block fill-slot="content-header">
+    <h1 i18n:translate="">Level Validation</h1>
+  </metal:block>
+
+  <metal:block metal:fill-slot="body">
+
+    <div class="info-block" tal:define="error view/validate">
+
+      <div i18n:translate="">
+        The validation function examines the level graphs defined for this
+        school and reports errors. It detects two types of errors:
+
+        <ol>
+          <li>Loops in Graphs</li>
+          <li>Disconnected Levels</li>
+        </ol>
+
+      </div>
+
+      <div tal:condition="error" tal:replace="structure error">
+        Error Info
+      </div>
+
+      <div id="message" 
+           tal:condition="python: not error and request.has_key('VALIDATE')">
+        No errors were detected.
+      </div>
+
+      <form method="post" action="">
+        <div class="controls">
+          <input type="submit" name="VALIDATE" 
+                 class="button-ok" value="Validate"
+                 i18n:attributes="value validate-button;" />
+        </div>
+      </form>
+
+    </div>
+
+  </metal:block>
+
+</metal:block>

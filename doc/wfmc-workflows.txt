@@ -1,0 +1,194 @@
+=========================================
+Implementing WfMC Workflows in SchoolTool
+=========================================
+
+Introduction
+------------
+
+After much experimenting, Zope 3's developers have finally embraced WfMC-based
+workflows over state-based workflows. The main different between the two is
+that one is activity- and the other state-centric. In state-centric workflows
+the state of an object is managed by the workflow and behavior depends on this
+state. Transitions define the change from one state to another.
+
+Unfortunately, the state-centric workflow model does not really implement a
+workflow. A workflow is the flow of work, not state. Thus, the WfMC-based
+workflow model provides the concept of activities, which consists of a set of
+work items that have to be completed before the workflow can continue to the
+next activity.
+
+The are several obvious advantages of the activity-centric workflow model:
+
+  - A state-centric workflow is intrinsically also document-centric. The WfMC
+    model is independent of a particular object that is subjected to a
+    workflow. It is thus much more powerful, since it can describe states of
+    many objects at once.
+
+  - A WfMC workflow can be modeled independently of the software that will use
+    the workflow. The workflow will provide hooks via applications and
+    participants that allow the software to interact with the workflow
+    process.
+
+  - Any given WfMC workflow can be easily extended or connected to a larger
+    workflow by replacing simple activities with activities that represent
+    sub-workflows.
+
+Now that I hopefully have convinced you that the WfMC workflow is the way to
+go, let's have a look on how to create a workflow and integrate it into your
+software. Note that I am not providing any unit tests here, because there are
+excellent examples in ``Zope3/src/zope/wfmc/*.txt`` and
+``schooltool/src/schooltool/level/README.txt``.
+
+
+Developing the Workflow Process
+-------------------------------
+
+With the ``zope.wfmc`` package you have choice to develop your workflow
+processes in Python or use the standard XPDL format. I strongly encourage you
+to use the latter one, since there are standard editors available for it (such
+as JaWE) which make it much easier to reason about the workflow. However,
+before you can produce anything useful in JaWE, you need to know the WfMC
+terminology:
+
+  - Process: This object describes one particular work process inside the
+    workflow of an entity. Usually your XPDL file will only contain one
+    process, but remember that WfMC was developed for very large entities
+    with extremely complex processes. Here is an example in the context of
+    SchoolTool. The entity, described by a XPDL file, is a particular
+    school. In a school many different processes are executed, such as
+    enrolling students or the promotion of students through the grades. As
+    mentioned before, one process could be the sub-process of another process.
+
+  - Activity: The activity describes one step inside a process. During an
+    activity, multiple tools (defined via applications) are called to interact
+    with software and also change workflow-relevant data. When all
+    tools are finished the activity will transition to the next one. In the
+    context of SchoolTool, an activity would be enrolling into a class (part
+    of a fictional registration process).
+
+  - Transition: This object, as the name suggests, represents a transition
+    from one activity to another. This object does not have a rich API and
+    merely defines a condition that decides whether a particular transition
+    can be done. In SchoolTool this could be a transition from passing the
+    final grade to graduating from the school.
+
+  - Application: An application is a piece of software that is executed. One
+    can think of it more of less as a function. The input parameters
+    (arguments of the function) can be specified and must be variables from
+    the workflow-relevant data. The application's output parameters (return
+    values) are stored as workflow-relevant data, overwriting existing data as
+    necessary. Applications can require manual input. For example, this could
+    be the assignment of a grade for course to a student.
+
+  - Participant: The participant is the actor/principal that is completing a
+    particular activity. In Zope terms we would think of the participant as a
+    role inside the system, such as a school manager, teacher or
+    student. However, the participant could be also a single human, department
+    or even the computer system, in which case it would be more like a Zope
+    principal.
+
+  - Workflow Relevant Data: This data (WfRD) contains values that are
+    necessary for the workflow function, either by calling applications or
+    evaluating conditions (for example during transitions). Th input and
+    output data of a process can be specified in its formal parameters and
+    will be stored or looked up in the WfRD, respectively. In Zope's
+    implementation, any type of Python object can be stored in the WfRD. In
+    the context of SchoolTool a WfRD variable could be the current level of a
+    student during the promotion process.
+
+When you first start JaWE, you get an empty document that looks pretty
+daunting at the beginning. The first task will be to create a process; do that
+by clicking on the `Toolbox` tab and then on the `Insert Process` icon. You
+then click inside the drawing area somewhere, which places the new process
+into the grid. You can now double click on the process object to modify the
+properties. However, there is not much to do yet besides changing the name and
+id.
+
+To truly edit the process, click on it once, then click on the `Edit` tab
+follwed by selecting the `Edit` icon. A new window should open. This window is
+the edit area of the process. The first task is to create or select the
+participants of the process. If you have defined global participants, you can
+click on the `Process` tab and then on the `Participants` icon to show and
+hide global participants. The screen also allows you to create local
+participants. However, the better way to create local participants is to click
+on the `Toolbox` tab and selecting the `Participant` icon. Once the participant
+is created you should see a box with the participant's name in it. You can
+repeat this process as often as desired.
+
+The next step is to create the activities. You have the choice between
+generic, route, block and subflow activities. Thus far I have only needed
+generic activities. Select the `Generic activity` icon and click with the
+cursor inside any particpant and the activity will appear. You can then double
+click on the activity to edit it. Repeat this process until you have defined
+all activities.
+
+Now that you have developed the activities, you need to define the transitions
+between them. While you can choose between a simple, self-routed, and circular
+transition, I have only used simple transitions until now. To create a
+transition, click on the `Transition` icon then on the initial activity,
+holding the mouse button and going to the final activity after which you can
+let the mouse button go. You can then double click on the newly created arrow
+representing the transition to edit the transition properties. The most
+important attribute here is the condition. In the expression field of the
+condition, you can enter a valid Python expression that should evaluate to
+``True`` or ``False``. All of the workflow-relevant data variables are
+available.
+
+The final step to complete the workflow is to define the starting point and
+several (at least one) end points. Simply create start and end buttons and
+connect them with the activities via transitions. You should now have a valid
+process.
+
+However, the workflow would not do much, because we have not defined the
+workflow-relevant data and applications yet. To add some workflow-relevant
+data definitions, click on the `Process` tab and then on the
+`Workflow-relevant data` icon. You can create new variables from the appearing
+dialog. Similarly, you can define applications by clicking on the
+`Applications` icon. To hook up the applications activities, double click on
+the activity, select the `Tool` tab in the dialog. Click on `New` to create a
+new tool. In the tool dialog, you simply select an application. You then have
+to match the formal parameters of the application with actual parameters of
+the tool. You basically tell the system which WfRD variable is sent in/out for
+which parameter of the application.
+
+Once all the applications are defined and hooked up you are done with defining
+the workflow and you can save the file.
+
+
+Hooking up the XPDL in Zope
+---------------------------
+
+The XPDL file can be easily integrated into your application. A script named
+``xpdl2zcml.py`` in ``zope/app/wfmc`` allows you to specify the XPDL file, the
+process id and the id of the process utility and will create all necessary
+ZCML directives for you. Simply copy the ZCML into your configuration file.
+
+
+Writing the Software
+--------------------
+
+All that is left now is to implement the participants and applications,
+so that they are found by the created adapter directives. A participant
+implementation is usually pretty trivial. The only functionality I have
+implemented for it thus far is the lookup of the workitems. This is
+necessary, because for applications that need manual input, you want to
+reference them at a place that is easily accessible to the principal
+that needs to do the input.
+
+Applications come in two flavors: automatic and manual. Automatic applications
+are simple, since their ``start()`` method simply calls the ``finish()``
+method. The arguments to the those methods are the formal input and output
+parameters of the application, respectively. Automatic applications are good
+for making log entries and updating data.
+
+For manual applications, the ``start()`` is usually empty or simply stores the
+input parameter values. The ``finish()`` method is called by the software
+after the user made the necessary input. The input represents commonly the
+arguments to the ``finish()`` method. For manual applications you also need to
+add the application the the participant's workitems. This can be either done
+in the constructor or the ``start()`` method.
+
+Once all the classes are written, the workflow should be fully functional.
+Usually the only UI you have to develop is the management and
+completion of manual applications/workitems, which greatly depends on the
+software you are developing.

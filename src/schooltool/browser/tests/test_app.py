@@ -721,7 +721,7 @@ def doctest_SectionLearnerGroupView():
     Let's see what's available to add:
 
         >>> [g.title for g in view.getPotentialLearners()]
-        ['Form 1']
+        ['Form 1', u'Manager']
 
     No learners yet:
 

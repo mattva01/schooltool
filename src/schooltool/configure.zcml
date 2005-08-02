@@ -244,6 +244,8 @@
   <include package=".browser" />
   <include package=".rest" />
 
+  <!-- Sub-packages -->
   <include package=".timetable" />
+  <include package=".level" />
 
 </configure>

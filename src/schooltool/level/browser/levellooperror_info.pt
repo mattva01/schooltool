@@ -1,0 +1,41 @@
+<div id="message" tal:define="level context/level">
+  <h1 i18n:translate="">A Level Loop Error was detected.</h1>
+
+  <h5 i18n:translate="">Details</h5>
+  <p i18n:translate="">
+    The loop was closed with level
+    <a href=""
+       tal:attributes="href string: ${level/@@absolute_url}/@@edit.html">
+      <em tal:content="level/title"
+          i18n:name="level_title">Level X</em>
+    </a>
+    (<span tal:replace="level/zope:name"
+        i18n:name="level_id">levelx</span>).
+  </p>
+
+  <h5 i18n:translate="">Explanation</h5>
+  <p i18n:translate="">
+    Level graphs can only be linear. If a level graph is a loop, then
+    students will not be able to graduate, since there is never a final level
+    that leads to graduation.
+  </p>
+
+  <h5 i18n:translate="">Solution</h5>
+  <p i18n:translate="">
+    Simply do not specify level
+    <em tal:content="level/nextLevel/title"
+        i18n:name="next_level_title">Level X</em>
+    (<span tal:replace="level/nextLevel/zope:name" i18n:name="next_level_id">
+       levelx
+     </span>)
+    as the next level of 
+    <a href=""
+       tal:attributes="href string: ${level/@@absolute_url}/@@edit.html">
+      <em tal:content="level/title"
+          i18n:name="level_title">Level X</em>
+    </a>
+    (<span tal:replace="level/zope:name"
+        i18n:name="level_id">levelx</span>).
+  </p>
+
+</div>
