@@ -1234,6 +1234,7 @@ class ICalendarEventAddForm(Interface):
         required=False)
     start_time = TextLine(
         title=_("Time"),
+        description=_("Start time in 24h format"),
         required=False)
 
     duration = Int(
