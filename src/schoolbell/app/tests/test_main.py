@@ -245,7 +245,7 @@ def doctest_configureReportlab():
     Now test the check that the font path is a directory:
 
         >>> server.configureReportlab(__file__)
-        Warning: font directory '...test_main.py' does not exist.
+        Warning: font directory '...test_main...' does not exist.
         PDF support disabled.
 
     We will cheat and temporarily override pdfcal.font_map:
