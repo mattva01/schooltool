@@ -141,7 +141,7 @@ class ACLView(View, ACLViewBase):
         return "Permissions updated"
 
     def parseData(self, body):
-        """Extract the data and validates it.
+        """Extract the data and validate it.
 
         Raises a RestError if a principal or permission id is not from
         the allowed set.
