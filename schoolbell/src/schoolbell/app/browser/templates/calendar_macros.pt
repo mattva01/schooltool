@@ -1,0 +1,277 @@
+<metal:block define-macro="calendar-navigation" i18n:domain="schoolbell">
+  <div id="calendar-navigation-context">
+    <a id="calendar-navigation-context-previous" i18n:attributes="title"
+       tal:attributes="href view/prev;
+                       title string:Go to ${view/prev_title}">
+      <span tal:content="view/prev_title" i18n:translate="">
+        Previous
+      </span>
+    </a>
+    <a id="calendar-navigation-context-current" i18n:attributes="title"
+       tal:attributes="href view/current;
+                       title string:Go to ${view/current_title}">
+      <span tal:content="view/current_title" i18n:translate="">
+        Current
+      </span>
+    </a>
+    <a id="calendar-navigation-context-next" i18n:attributes="title"
+       tal:attributes="href view/next;
+                       title string:Go to ${view/next_title}">
+      <span tal:content="view/next_title" i18n:translate="">
+        Next
+      </span>
+    </a>
+  </div>
+</metal:block>
+
+<metal:block define-macro="calendar-mode" i18n:domain="schoolbell">
+  <div id="calendar-navigation">
+    <a id="calendar-navigation-pdf"
+       tal:condition="view/pdfURL"
+       tal:attributes="href view/pdfURL"
+       title="Printable version"
+       i18n:attributes="title"
+       i18n:translate=""><img tal:attributes="src context/++resource++printer.png"
+                          alt="Printable version" i18n:attributes="alt" /></a>
+    <a id="calendar-navigation-day"
+       tal:attributes="href python:view.calURL('daily')"
+       title="View daily calendar"
+       i18n:attributes="title"
+       i18n:translate=""><img tal:attributes="src context/++resource++day.png"
+                              alt="Daily" i18n:attributes="alt" /></a>
+    <a id="calendar-navigation-week"
+       tal:attributes="href python:view.calURL('weekly')"
+       title="View weekly calendar"
+       i18n:attributes="title"
+       i18n:translate=""><img tal:attributes="src context/++resource++week.png"
+                              alt="Weekly" i18n:attributes="alt" /></a>
+    <a id="calendar-navigation-month"
+       tal:attributes="href python:view.calURL('monthly')"
+       title="View monthly calendar"
+       i18n:attributes="title"
+       i18n:translate=""><img tal:attributes="src context/++resource++month.png"
+                              alt="Monthly" i18n:attributes="alt" /></a>
+    <a id="calendar-navigation-year"
+       tal:attributes="href python:view.calURL('yearly')"
+       title="View yearly calendar"
+       i18n:attributes="title"
+       i18n:translate=""><img tal:attributes="src context/++resource++year.png"
+                              alt="Yearly" i18n:attributes="alt" /></a>
+  </div>
+</metal:block>
+
+<metal:block define-macro="calendar-page" i18n:domain="schoolbell">
+  <html metal:use-macro="view/@@standard_macros/page">
+
+    <title metal:fill-slot="title" i18n:translate="">
+        Calendar for <span tal:replace="context/title"
+            i18n:name="title" /> - <span i18n:name="calendar_title"
+                                         tal:replace="view/title" i18n:translate=""/>
+    </title>
+
+    <metal:block fill-slot="extrahead">
+      <link rel="service.feed" type="application/atom+xml"
+            title="Upcoming Events" href=""
+            tal:attributes="href string:${context/@@absolute_url}/atom.xml" />
+    </metal:block>
+
+    <metal:block fill-slot="content-header">
+      <h1 i18n:translate="">
+        Calendar for <span tal:replace="context/title"
+            i18n:name="title" /> - <span i18n:name="calendar_title"
+                                         tal:replace="view/title" i18n:translate=""/>
+      </h1>
+    </metal:block>
+
+    <metal:block fill-slot="navigation-box">
+    </metal:block>
+
+    <metal:block fill-slot="column-left-extra">
+      <div metal:use-macro="view/@@standard_macros/calendar-portlets"/>
+    </metal:block>
+
+    <metal:block fill-slot="body">
+        <div metal:use-macro="view/@@standard_macros/calendar-mode"/>
+        <div class="calcontent">
+          <div metal:use-macro="view/@@standard_macros/calendar-navigation" />
+          <div metal:define-slot="calendar-body"/>
+        </div>
+    </metal:block>
+  </html>
+</metal:block>
+
+<!-- BEGIN CALENDAR MACROS -->
+
+<metal:block define-macro="portlet-calendar-overlay" i18n:domain="schoolbell">
+  <div tal:replace="structure context/@@calendar_overlay" />
+</metal:block>
+
+<metal:block define-macro="portlet-calendar-jumpto" i18n:domain="schoolbell">
+  <div id="portlet-jumpto" class="portlet">
+
+    <h4 i18n:translate="">Jump To ...</h4>
+    <form class="center" action="">
+      <div>
+        <select name="jump" onChange="jumpTo(this);">
+          <option value="" i18n:translate="">Month</option>
+          <tal:loop repeat="month view/getJumpToMonths">
+            <option
+              tal:attributes="value month/href"
+              tal:content="month/label" i18n:translate="" />
+          </tal:loop>
+        </select>
+      </div>
+    </form>
+
+    <form class="center" action="">
+      <div>
+        <select name="jump" onChange="jumpTo(this);">
+          <option value='' i18n:translate="">Year</option>
+          <tal:loop repeat="year view/getJumpToYears">
+            <option value="" i18n:translate=""
+              tal:attributes="value year/href"
+              tal:content="year/label" />
+          </tal:loop>
+        </select>
+      </div>
+    </form>
+  </div>
+</metal:block>
+
+
+<metal:block define-macro="brief-month-view" i18n:domain="schoolbell">
+  <table class="month" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="7" class="month-title"
+          tal:define="mtit python:view.monthTitle(month[1][0].date)">
+        <a tal:content="mtit" i18n:translate=""
+            tal:attributes="href python:view.calURL('monthly',
+                            month[1][0].date);
+                            title mtit"/>
+      </th>
+    </tr>
+    <tr tal:repeat="week month">
+      <td tal:replace="structure
+          python:view.renderRow(week, month[1][0].date.month)" />
+    </tr>
+
+  </table>
+
+</metal:block>
+
+<metal:block define-macro="portlet-calendar-view-month"
+             i18n:domain="schoolbell">
+
+  <div id="portlet-calendar-view-month" class="portlet">
+
+      <tal:block define="month python:view.getMonth(view.prevMonth());">
+          <metal:block use-macro="view/@@standard_macros/brief-month-view" />
+      </tal:block>
+
+      <tal:block define="month python:view.getMonth(view.cursor);">
+          <metal:block use-macro="view/@@standard_macros/brief-month-view" />
+      </tal:block>
+
+      <tal:block define="month python:view.getMonth(view.nextMonth());">
+          <metal:block use-macro="view/@@standard_macros/brief-month-view" />
+      </tal:block>
+
+  </div>
+
+</metal:block>
+
+<metal:block define-macro="portlet-tomorrow-events" i18n:domain="schoolbell">
+
+  <tal:block define="next view/nextDay;
+                     tomorrow python:next.today() + next.resolution;
+                     tevents python:view.dayEvents(tomorrow)">
+    <div id="portlet-next-day-events" class="portlet" tal:condition="tevents">
+      <h4 i18n:translate="">Tomorrow's Events</h4>
+      <ul>
+      <tal:loop tal:repeat="event tevents">
+        <li tal:condition="python: event.dtstart.date() == tomorrow">
+          <a href="" title=""
+             tal:attributes="title event/title;
+                             style string:color: ${event/color2};
+                             href event/@@absolute_url">
+            <strong tal:content="python:event.dtstart.astimezone(view.timezone).strftime('%H:%M')" />
+            <span tal:replace="event/shortTitle">Event</span>
+          </a>
+        </li>
+      </tal:loop>
+      </ul>
+    </div>
+  </tal:block>
+
+</metal:block>
+
+<metal:block define-macro="calendar-portlets">
+
+  <metal:block use-macro="view/@@standard_macros/portlet-tomorrow-events"/>
+
+  <metal:block use-macro="view/@@standard_macros/portlet-calendar-overlay"/>
+
+  <metal:block use-macro="view/@@standard_macros/portlet-calendar-jumpto"/>
+
+  <metal:block use-macro="view/@@standard_macros/portlet-calendar-view-month"/>
+
+</metal:block>
+
+<!-- END CALENDAR MACROS -->
+
+<metal:block define-macro="person-details">
+
+  <table class="person-details">
+    <tr tal:condition="view/details/nickname">
+      <td class="dr" i18n:translate="">Nickname</td>
+      <td>:&nbsp;</td>
+      <td class="dl" tal:content="view/details/nickname" />
+    </tr>
+    <tr tal:condition="view/details/primary_email">
+      <td class="dr" i18n:translate="">Primary email</td>
+      <td>:&nbsp;</td>
+      <td class="dl">
+        <a href="" title="Click to launch email client."
+           tal:attributes="href string:mailto:${view/details/primary_email}"
+           tal:content="view/details/primary_email"
+           i18n:attributes="title" />
+      </td>
+    </tr>
+    <tr tal:condition="view/details/secondary_email">
+      <td class="dr" i18n:translate="">Secondary email</td>
+      <td>:&nbsp;</td>
+      <td class="dl">
+        <a href="" title="Click to launch email client."
+           tal:attributes="href string:mailto:${view/details/secondary_email}"
+           tal:content="view/details/secondary_email"
+           i18n:attributes="title" />
+       </td>
+    </tr>
+    <tr tal:condition="view/details/primary_phone">
+      <td class="dr" i18n:translate="">Primary phone</td>
+      <td>:&nbsp;</td>
+      <td class="dl" tal:content="view/details/primary_phone" />
+    </tr>
+    <tr tal:condition="view/details/secondary_phone">
+      <td class="dr" i18n:translate="">Secondary phone</td>
+      <td>:&nbsp;</td>
+      <td class="dl" tal:content="view/details/secondary_phone" />
+    </tr>
+    <tr tal:condition="view/details/secondary_phone">
+      <td class="dr" i18n:translate="">Homepage</td>
+      <td>:&nbsp;</td>
+      <td class="dl">
+        <a href=""
+           tal:attributes="href view/details/home_page"
+           tal:content="view/details/home_page" />
+      </td>
+    </tr>
+    <tr tal:condition="view/details/mailing_address">
+      <td class="dr" i18n:translate="">Mailing Address</td>
+      <td>:&nbsp;</td>
+      <td class="dl" tal:content="structure view/details/mailing_address" />
+    </tr>
+  </table>
+
+</metal:block>
+
