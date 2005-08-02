@@ -1,2 +1,1 @@
-
-from batch import Batch
+from schoolbell.batching.batch import Batch # reexport

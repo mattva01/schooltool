@@ -14,7 +14,7 @@ Batch navigation shows up if:
     selected).
 
 -->
-<metal:block define-macro="batch-navigation">
+<metal:block define-macro="batch-navigation" i18n:domain="schoolbell">
   <div class="batch-navigation"
     tal:define="batch_size request/batch_size|string:10;
                 batch_start request/batch_start|string:0;
@@ -59,7 +59,8 @@ Batch navigation shows up if:
         class="next">Next &raquo;</span>
 
       <span tal:repeat="b batch/batches">
-        <a tal:attributes="href python:'?batch_start=%s&batch_size=%s' % (b.start, batch_size);
+        <a tal:attributes="
+          href python:'?batch_start=%s&batch_size=%s' % (b.start, batch_size);
           class python:batch == b and 'current'"
           tal:content="b/num">
         </a>
