@@ -318,6 +318,8 @@
 
 <!-- Subpackages -->
 
+  <include package=".devmode" />
+
   <include package=".browser" />
   <include package=".rest" />
 
