@@ -241,4 +241,17 @@
     </example>
   </key>
 
+  <key name="devmode" datatype="boolean">
+    <description>
+      Switches the Developer Mode on and off.
+
+      In developer mode, the Web UI will provide usefull utilities for
+      developers to work on schooltool applications.
+    </description>
+    <example>
+      devmode on
+    </example>
+    <metadefault>off</metadefault>
+  </key>
+
 </schema>

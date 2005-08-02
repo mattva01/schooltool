@@ -115,7 +115,6 @@ def doctest_load_options():
         sb.py: warning: ignored configuration option 'path'
         sb.py: warning: ignored configuration option 'app_log_file'
 
-
     Some options come from the command line
 
         >>> o.config_file
@@ -138,6 +137,11 @@ def doctest_load_options():
 
     Note that "listen 123" in config.py produces ('localhost', 123) on
     Windows, but ('', 123) on other platforms.
+
+    The developer mode can also be turned on via the configuration file:  
+
+        >>> o.config.devmode
+        True
 
     `load_options` can also give you a nice help message and exit with status
     code 0.
@@ -245,7 +249,7 @@ def doctest_configureReportlab():
     Now test the check that the font path is a directory:
 
         >>> server.configureReportlab(__file__)
-        Warning: font directory '...test_main...' does not exist.
+        Warning: font directory '...test_main.py' does not exist.
         PDF support disabled.
 
     We will cheat and temporarily override pdfcal.font_map:
@@ -338,6 +342,7 @@ def doctest_setup():
         ...     web_access_log_file = ['STDOUT']
         ...     lang = 'lt'
         ...     reportlab_fontdir = ''
+        ...     devmode = True
         >>> options.config = ConfigStub()
 
     Workaround to fix a Windows failure:
