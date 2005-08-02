@@ -41,6 +41,57 @@ class AddingStub(Adding):
     pass
 
 
+def doctest_SchoolBellApplicationView():
+    r"""Test for SchoolBellApplicationView
+
+    Some setup
+
+        >>> from schooltool.app import SchoolToolApplication
+        >>> from zope.app.component.site import LocalSiteManager
+        >>> from zope.app.component.hooks import setSite
+        >>> from schooltool.app import getApplicationPreferences
+        >>> from zope.app.annotation.interfaces import IAnnotations
+        >>> from schooltool.interfaces import IApplicationPreferences
+        >>> from schooltool.interfaces import ISchoolToolApplication
+        >>> from schooltool.app import SchoolToolApplication
+
+        >>> app = SchoolToolApplication()
+
+        >>> app.setSiteManager(LocalSiteManager(app))
+        >>> setup.setUpAnnotations()
+        >>> setSite(app)
+
+        >>> ztapi.provideAdapter(ISchoolToolApplication,
+        ...                      IApplicationPreferences,
+        ...                      getApplicationPreferences)
+
+        >>> directlyProvides(app, IContainmentRoot)
+
+    Now lets create a view
+
+        >>> from schooltool.browser.app import SchoolToolApplicationView
+        >>> request = TestRequest()
+        >>> view = SchoolToolApplicationView(app, request)
+        >>> view.update()
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1/calendar'
+
+    If we change a the front page preference, we should not be redirected
+
+        >>> IApplicationPreferences(app).frontPageCalendar = False
+        >>> request = TestRequest()
+        >>> view = SchoolToolApplicationView(app, request)
+        >>> view.update()
+
+        >>> request.response.getStatus()
+        599
+
+    """
+
+
 def doctest_CourseContainerView():
     r"""View for the courses container.
 

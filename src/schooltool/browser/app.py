@@ -46,7 +46,7 @@ from schooltool import getSchoolToolApplication
 from schooltool.interfaces import ICourseContainer, ISectionContainer
 from schooltool.interfaces import ICourse, ISection
 from schooltool.interfaces import IPersonPreferences
-from schooltool.interfaces import IGroup, IPerson
+from schooltool.interfaces import IGroup, IPerson, IApplicationPreferences
 from schooltool.interfaces import ISchoolToolApplication
 from schooltool.relationships import URIInstruction, URISection
 from schooltool.app import Person
@@ -65,6 +65,16 @@ class SchoolToolApplicationTraverser(sbcal.CalendarOwnerTraverser):
             obj = sbcal.CalendarOwnerTraverser.publishTraverse(
                 self, request, name)
         return obj
+
+
+class SchoolToolApplicationView(BrowserView):
+    """A view for the main application."""
+
+    def update(self):
+        prefs = IApplicationPreferences(getSchoolToolApplication())
+        if prefs.frontPageCalendar:
+            url = zapi.absoluteURL(self.context.calendar, self.request)
+            self.request.response.redirect(url)
 
 
 class ContainerView(sb.ContainerView):

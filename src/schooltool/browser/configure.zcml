@@ -119,6 +119,7 @@
   <page
       name="index.html"
       for="schooltool.interfaces.ISchoolToolApplication"
+      class="schooltool.browser.app.SchoolToolApplicationView"
       template="templates/index.pt"
       permission="zope.Public"
       />

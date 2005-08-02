@@ -118,26 +118,13 @@ Let's make sure that we can see the SchoolTool preferences page:
     ...
     ...cal_periods...
 
-Let's make sure that we can see the SchoolTool navigation portlet and index
-page:
-
+We should be redirected from the index page to the calendar
     >>> print http(r"""
     ... GET /frogpond HTTP/1.1
     ... """)
-    HTTP/1.1 200 Ok
+    HTTP/1.1 303 See Other
     ...
-    <h4>Navigation</h4>
-    <ul>
-       <li><a href="http://localhost/frogpond/persons">Persons</a></li>
-       <li><a href="http://localhost/frogpond/courses">Courses</a></li>
-       <li><a href="http://localhost/frogpond/sections">Sections</a></li>
-       <li><a href="http://localhost/frogpond/groups">Groups</a></li>
-       <li><a href="http://localhost/frogpond/resources">Resources</a></li>
-       <li><a href="http://localhost/frogpond/terms">Terms</a></li>
-       <li><a href="http://localhost/frogpond/ttschemas">School Timetables</a></li>
-    </ul>
-    ...
-              <h1>Welcome to SchoolTool</h1>
+    Location: http://localhost/frogpond/calendar
     ...
 
 The section container view points to the timetable import form:
