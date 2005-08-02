@@ -391,7 +391,10 @@
       />
 
   <class class="schoolbell.app.rest.acl.ACLView">
-    <allow interface="schoolbell.app.rest.acl.IACLView" />
+    <require
+      permission="schoolbell.controlAccess"
+      interface="schoolbell.app.rest.acl.IACLView"
+      />
   </class>
 
   <view
