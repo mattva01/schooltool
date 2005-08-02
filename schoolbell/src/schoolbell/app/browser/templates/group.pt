@@ -1,0 +1,35 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<head>
+  <title metal:fill-slot="title" tal:content="context/title" />
+</head>
+<body>
+<h1 metal:fill-slot="content-header"><span tal:replace="context/title" /></h1>
+
+<metal:block metal:fill-slot="body">
+
+  <tal:block replace="structure context/@@notes|nothing"/>
+
+  <div class="group-info">
+    <p class="description" tal:content="context/description"/>
+
+    <div tal:define="members view/getPersons" class="info-block">
+      <h5 i18n:translate="">Members</h5>
+      <ul tal:condition="members">
+        <li tal:repeat="obj members/sortby:title">
+          <a tal:attributes="href obj/@@absolute_url" tal:content="obj/title" />
+        </li>
+      </ul>
+
+      <a class="modify" href=""
+         title="Change the people who are members of this group."
+         tal:attributes="href string:${context/@@absolute_url}/@@members_persons.html"
+         i18n:attributes="title"
+         i18n:translate="">
+         edit members
+      </a>
+    </div>
+  </div>
+
+</metal:block>
+</body>
+</html>

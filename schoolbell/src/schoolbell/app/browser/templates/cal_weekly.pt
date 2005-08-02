@@ -1,0 +1,70 @@
+<tal:defs define="status view/update" />
+<html metal:use-macro="view/@@standard_macros/calendar-page" i18n:domain="schoolbell">
+<metal:block metal:fill-slot="calendar-body">
+  <table id="calendar-view-week" cellpadding="0" cellspacing="0" width="99%"
+         tal:define="days view/getCurrentWeek">
+    <tr>
+      <tal:loop repeat="day days">
+        <th class="day-title"
+            tal:define="start repeat/day/start"
+            tal:attributes="class python:' '.join(filter(None, ['day-title',
+                                                   start and 'first' or '',
+                                                   day.today()]))">
+          <a tal:content="day/title" i18n:translate=""
+             tal:attributes="href python:view.calURL('daily', day.date)" />
+        </th>
+      </tal:loop>
+    </tr>
+    <tr>
+      <tal:loop repeat="day days">
+        <td valign="top" height="100"
+          tal:define="start repeat/day/start;
+                      alldays python:view.getAllDayEvents(date=day.date)"
+            tal:attributes="class python:start and 'first' or ''">
+          <div tal:repeat="event alldays">
+            <a tal:define="start repeat/event/start;
+                           evdate python:event.dtstart.strftime('%Y-%m-%d')"
+               tal:attributes="class python:start and 'first' or '';
+                               href string:${event/@@absolute_url}/edit.html?date=${evdate};
+                               style string:background: ${event/color1};;
+                                            border-color: ${event/color2};
+                               title event/title">
+              <span tal:content="event/shortTitle"/>
+              (<span i18n:translate="">All day</span>)
+            </a>
+          </div>
+
+          <div tal:repeat="event day/events">
+            <a tal:condition="event/__parent__"
+               tal:define="start repeat/event/start;
+                           evdate python:event.dtstart.strftime('%Y-%m-%d')"
+               tal:attributes="class python:start and 'first' or '';
+                               href string:${event/@@absolute_url}/edit.html?date=${evdate};
+                               style string:background: ${event/color1};;
+                                            border-color: ${event/color2};
+                               title event/title">
+              <span tal:content="event/shortTitle"/>
+              (<span tal:content="python:event.dtstart.astimezone(view.timezone).strftime(view.time_fmt)"
+               /> - <span
+                   tal:content="python:event.dtend.astimezone(view.timezone).strftime(view.time_fmt)"/>)
+            </a>
+            <a tal:condition="not:event/__parent__"
+               tal:define="start repeat/event/start;
+                           evdate python:event.dtstart.strftime('%Y-%m-%d')"
+               tal:attributes="class python:start and 'first' or '';
+                               style string:background: ${event/color1};;
+                                            border-color: ${event/color2};
+                               title event/title">
+              <span tal:content="event/shortTitle"/>
+              (<span tal:content="python:event.dtstart.astimezone(view.timezone).strftime(view.time_fmt)"
+               /> - <span
+                   tal:content="python:event.dtend.astimezone(view.timezone).strftime(view.time_fmt)"/>)
+            </a>
+          </div>
+        </td>
+      </tal:loop>
+    </tr>
+  </table>
+
+</metal:block>
+</html>

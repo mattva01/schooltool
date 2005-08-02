@@ -1,0 +1,14 @@
+<acl xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns="http://schooltool.org/ns/model/0.1">
+  <principal
+      tal:repeat="principal view/getPrincipals"
+      tal:attributes="id principal">
+    <tal:block define="perms python:view.permsForPrincipal(principal)">
+      <permission
+          tal:repeat="perm view/permissions"
+          tal:attributes="id python:perm[0];
+                          setting python:perm[0] in perms and 'on' or None"
+          />
+    </tal:block>
+  </principal>
+</acl>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+  xmlns:zope="http://namespaces.zope.org/zope"
+  i18n_domain="schoolbell">
+
+  <page
+    name="batch_macros"
+    for="*"
+    permission="zope.View"
+    template="macros.pt"
+    />
+
+</configure>
+

@@ -1,0 +1,10 @@
+=========================
+SCHOOLTOOL EXAMPLES INDEX
+=========================
+
+This is a brief overview of the examples available.
+
+-- db_import_export --
+The database import/export scripts used to upgrade the database from SchoolBell
+0.9 to SchoolBell 1.0. Obsolete, but can provide examples of how to directly
+export the ZODB to XML and back again.

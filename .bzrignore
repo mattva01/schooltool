@@ -1,0 +1,9 @@
+schoolbell/*.log
+schoolbell/Data.fs*
+schoolbell/src/schoolbell/app/locales/schoolbell.pot
+schoolbell/debian/schooltool.substvars
+schoolbell/debian/schooltool.postinst.debhelper
+schoolbell/debian/import-sampleschool
+schoolbell/debian/schooltool.postrm.debhelper
+schoolbell/debian/schooltool.prerm.debhelper
+schoolbell/debian/files

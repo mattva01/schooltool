@@ -1,0 +1,391 @@
+# Translators, if you are not familiar with the PO format, gettext
+# documentation is worth reading, especially sections dedicated to
+# this format, e.g. by running:
+# info -n '(gettext)PO Files'
+# info -n '(gettext)Header Entry'
+# Some information specific to po-debconf are available at
+# /usr/share/doc/po-debconf/README-trans
+# or <a href="http://www.debian.org/intl/l10n/po-debconf/README-trans">http://www.debian.org/intl/l10n/po-debconf/README-trans</a>
+# Developers do not need to manually edit POT or PO files.
+# 
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: schoolbell 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-03-15 21:34+0100\n"
+"PO-Revision-Date: 2005-03-18 17:21+0100\n"
+"Last-Translator: Jean-Luc Ccoulon (f5ibh) <jean-luc.coulon@wanadoo.fr>\n"
+"Language-Team: French <debian-l10n-french@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-15\n"
+"Content-Transfer-Encoding: 8bit"
+
+#. Type: string
+#. Description
+#: ../schoolbell.templates:4
+msgid "Network interfaces for SchoolBell XML web services:"
+msgstr "Interfaces réseau pour les services web XML de SchoolBell :"
+
+#. Type: string
+#. Description
+#: ../schoolbell.templates:16
+msgid "Network interfaces for the HTML browser interface:"
+msgstr "Interfaces réseau pour l'interface du navigateur HTML :"
+
+#. Type: string
+#. Description
+#: ../schoolbell.templates:16
+msgid ""
+"The HTML interface provides access to SchoolBell via any standard web "
+"browser."
+msgstr ""
+"L'interface HTML permet l'accès à SchoolBell en utilisant n'importe quel "
+"navigateur Internet standard."
+
+#. Type: string
+#. Description
+#: ../schoolbell.templates:25
+msgid "Network interfaces for SchoolBell XML web services (SSL):"
+msgstr "Interface web pour les services web XML de SchoolBell (SSL) :"
+
+#. Type: string
+#. Description
+#: ../schoolbell.templates:25
+msgid ""
+"This interface is used by SchoolBell for communicating with non-HTML clients "
+"such as the SchoolTool and 3rd party clients (e.g. Mozilla Calendar). XML "
+"and iCalendar messages can be PUT or GET to this interface via HTTP allowing "
+"access to all SchoolBell functionality."
+msgstr ""
+"Cette interface est utilisée par SchoolBell pour communiquer avec des "
+"clients autres que HTML tels que le client SchoolTool et certains clients de "
+"tierce partie (par exemple Mozilla Calendar). Les messages XML et iCalendar "
+"peuvent être transmis à cette interface en utilisant « GET » et « PUT » par "
+"l'intermédiaire de HTTP ce qui permet l'accès à toutes les fonctionnalités "
+"de SchoolBell."
+
+#. Type: string
+#. Description
+#: ../schoolbell.templates:40
+msgid "Network interfaces for the HTML browser interface (SSL):"
+msgstr "Interfaces réseau pour l'interface avec le navigateur HTML (SSL) :"
+
+#. Type: string
+#. Description
+#: ../schoolbell.templates:40
+msgid ""
+"Please enter a space separated list of [address:]port values that you would "
+"like the server to listen on."
+msgstr ""
+"Veuillez indiquer une liste des [adresse:]port (séparés par des espaces) "
+"sur lesquels vous voulez que le serveur écoute."
+
+#. Type: string
+#. Description
+#: ../schoolbell.templates:40
+msgid ""
+"The web interface provides access to SchoolBell via any standard web browser."
+msgstr ""
+"L'interface web permet l'accès à SchoolBell à partir de n'importe quel "
+"navigateur Internet standard."
+
+#. Type: string
+#. Description
+#: ../schoolbell.templates:40
+msgid ""
+"This is an SSL version of this interface and will only accept SSL "
+"connections."
+msgstr ""
+"Ceci est la version SSL de cette interface, elle n'acceptera que les "
+"connexions SSL."
+
+#. Type: select
+#. Choices
+#: ../schoolbell.templates:51
+msgid "Create self-signed certificate"
+msgstr "Créer un certificat auto-signé"
+
+#. Type: select
+#. Choices
+#: ../schoolbell.templates:51
+msgid "Import certificate"
+msgstr "Importer d'un certificat existant"
+
+#. Type: select
+#. Description
+#: ../schoolbell.templates:53
+msgid "Method for setting up the SSL certificate:"
+msgstr "Méthode de création du certificat SSL :"
+
+#. Type: select
+#. Description
+#: ../schoolbell.templates:53
+msgid ""
+"You can create a self-signed root certificate that can be imported into web "
+"browsers. The certificate can be copied from /etc/schoolbell/cert.pem."
+msgstr ""
+"Vous pouvez créer un certificat racine auto-signé qui sera importé par les "
+"navigateurs web. Le certificat peut être copié depuis /etc/schoolbell/"
+"cert.pem."
+
+#. Type: select
+#. Description
+#: ../schoolbell.templates:53
+msgid ""
+"You can also import a certificate, for instance a certificate signed by a "
+"certification authority (CA). The certificate must be in PEM format and "
+"contain the private key."
+msgstr ""
+"Vous pouvez également importer un certificat, par exemple un certificat "
+"signé par une autorité de certification. Il doit être au format « PEM » et "
+"contenir une clé privée."
+
+#. Type: boolean
+#. Description
+#: ../schoolbell.templates:65
+msgid "Would you like to re-create the SSL certificate?"
+msgstr "Voulez-vous recréer le certificat SSL ?"
+
+#. Type: boolean
+#. Description
+#: ../schoolbell.templates:65
+msgid ""
+"A SSL certificate already exists. Please confirm whether you want to create "
+"a new certificate."
+msgstr ""
+"Un certificat SSL existe déjà. Veuillez confirmer que vous voulez créer un "
+"nouveau certificat."
+
+#. Type: string
+#. Description
+#: ../schoolbell.templates:72
+msgid "PEM format SSL certificate:"
+msgstr "Certificat SSL au format PEM :"
+
+#. Type: string
+#. Description
+#: ../schoolbell.templates:72
+msgid "Please enter the file name of the SSL certificate you want to import."
+msgstr ""
+"Veuillez indiquer le nom du fichier du certificat SSL (au format PEM) à "
+"importer."
+
+#. Type: boolean
+#. Description
+#: ../schoolbell.templates:78
+msgid "Should the previous database be removed?"
+msgstr "Faut-il supprimer la base de données existante ?"
+
+#. Type: boolean
+#. Description
+#: ../schoolbell.templates:78
+msgid ""
+"A possibly incompatible pre-existing database was detected. Since this is a "
+"testing/beta version, converting existing databases to the new format is not "
+"possible."
+msgstr ""
+"Une base de données antérieure et peut-être incompatible a été détectée. "
+"Comme il s'agit d'une version de test ou bêta, la conversion de la base de "
+"données vers le nouveau format n'est pas possible."
+
+#. Type: boolean
+#. Description
+#: ../schoolbell.templates:78
+msgid ""
+"Therefore the new version cannot be installed unless the existing database "
+"is removed first. All data in the existing database will be deleted."
+msgstr ""
+"La nouvelle version ne pourra donc pas être installée tant que l'ancienne "
+"base de données n'a pas été supprimée. Toutes les données de cette base de "
+"données seront effacées."
+
+#. Type: boolean
+#. Description
+#: ../schoolbell.templates:89
+msgid "Do you want to purge the database for SchoolBell?"
+msgstr "Voulez-vous purger la base de données de SchoolBell ?"
+
+#. Type: boolean
+#. Description
+#: ../schoolbell.templates:89
+msgid ""
+"By default, databases are removed when a package is purged.  However, if you "
+"would like to retain the database for SchoolBell, this is your last chance.  "
+"Please note that purging the database means that all the data will be "
+"irrevocably lost."
+msgstr ""
+"Par défaut, les bases de données sont supprimées lors de la purge d'un "
+"paquet. Cependant, si vous désirez conserver la base de données de "
+"SchoolBell, vous pouvez le préciser ici. Veuillez noter que la purge de la "
+"base de données entraînera la perte irrémédiable des données."
+
+#. Type: boolean
+#. Description
+#: ../schoolbell.templates:98
+msgid "Should the database be automatically upgraded?"
+msgstr "Faut-il mettre à niveau automatiquement la base de données ?"
+
+#. Type: boolean
+#. Description
+#: ../schoolbell.templates:98
+msgid ""
+"A database from a previous version of SchoolBell has been found. The "
+"SchoolBell package can attempt to automatically upgrade the database. If so, "
+"it will leave compatibility libraries in /var/lib/schoolbell/compat and a "
+"database backup in /var/lib/schoolbell/backup. These can be deleted after an "
+"upgrade is verified to be successful. The database can also be manually "
+"upgraded after package installation by following the documentation in the /"
+"usr/share/doc/schoolbell/README."
+msgstr ""
+"Une base de données d'une version précédente de SchoolBell existe. La "
+"procédure d'installation en cours peut essayer de mettre à niveau "
+"automatiquement cette base de données. Dans ce cas, les bibliothèques de "
+"compatibilité seront laissées dans /var/lib/schoolbell/compat et une base de "
+"données de sauvegarde dans /var/lib/schoolbell/backup. Vous pouvez aussi "
+"mettre à niveau la base de données vous-même après l'installation du paquet en "
+"suivant les instructions qui se trouvent dans /usr/share/doc/schoolbell/"
+"README."
+
+#. Type: select
+#. Choices
+#: ../schoolbell.templates:109
+msgid "ignore and continue"
+msgstr "Ignorer et poursuivre"
+
+#. Type: select
+#. Choices
+#: ../schoolbell.templates:109
+msgid "abort installation"
+msgstr "Abandonner l'installation"
+
+#. Type: select
+#. Choices
+#: ../schoolbell.templates:109
+msgid "delete current database"
+msgstr "Effacer la base de données actuelle"
+
+#. Type: select
+#. Description
+#: ../schoolbell.templates:111
+msgid "Unable to automatically upgrade database:"
+msgstr ""
+"Impossible de mettre à niveau la base de données, action à effectuer :"
+
+#. Type: select
+#. Description
+#: ../schoolbell.templates:111
+msgid ""
+"A database from a previous version of SchoolBell has been found. "
+"Unfortunately, because the previously installed version of SchoolBell has "
+"been removed, the SchoolBell package cannot attempt to automatically upgrade "
+"the database. It is advised to abort, install the old package and attempt an "
+"upgrade again. If continued, the server will be unable to start until the "
+"database had been manually upgraded or deleted."
+msgstr ""
+"Une base de données d'une version précédente de SchoolBell existe. "
+"Malheureusement, comme la version précédente de SchoolBell a été "
+"supprimée, il n'est pas possible de la mettre à niveau automatiquement. Vous "
+"devriez choisir « Abandonner » puis installer l'ancien paquet et de tenter à nouveau la "
+"mise à niveau. Si vous décidez de poursuivre, le serveur sera dans "
+"l'incapacité de démarrer jusqu'à ce que la base de données soit mise à "
+"niveau ou effacée."
+
+#. Type: note
+#. Description
+#: ../schoolbell.templates:121
+msgid "Error upgrading database!"
+msgstr "Erreur lors de la mise à niveau de la base de données"
+
+#. Type: note
+#. Description
+#: ../schoolbell.templates:121
+msgid ""
+"Sorry, there seems to have been an error upgrading the database! "
+"Fortunately, there should be a backup of the database made just before the "
+"upgrade in /var/lib/schoolbell/backup and compatibility libraries from the "
+"previously installed version in /var/lib/schoolbell/compat."
+msgstr ""
+"Une erreur s'est produite lors de la mise à niveau de la base "
+"de données. Vous trouverez une sauvegarde de la base de données, réalisée "
+"juste avant cette mise à niveau, dans var/lib/schoolbell/backup. "
+"Les bibliothèques de compatibilité de la version précédemment "
+"installée se trouvent dans /var/lib/schoolbell/compat."
+
+#. Type: note
+#. Description
+#: ../schoolbell.templates:121
+msgid ""
+"The server will not be able to start until you upgrade the database. "
+"Information on manual upgrades can be found in the /usr/share/doc/schoolbell/"
+"README file."
+msgstr ""
+"Le serveur ne pourra pas démarrer tant que vous n'aurez pas mis à niveau la "
+"base de données. Des informations concernant la procédure de mise à "
+"niveau se trouvent dans le fichier /usr/share/doc/schoolbell/README."
+
+#~ msgid "Network interfaces for SchoolTool XML web services:"
+#~ msgstr "Interfaces rÃ©seau pour les services web XML de SchoolToolÂ :"
+
+#~ msgid "Network interfaces for the HTML browser interface"
+#~ msgstr "Interfaces rÃ©seau pour l'interface avec le navigateur HTMLÂ :"
+
+#~ msgid ""
+#~ "The HTML interface provides access to SchoolTool via any standard web "
+#~ "browser."
+#~ msgstr ""
+#~ "L'interface HTML permet l'accÃ¨s Ã  SchoolTool en utilisant n'importe quel "
+#~ "navigateur Internet standard."
+
+#~ msgid "Network interfaces for SchoolTool XML web services (SSL):"
+#~ msgstr "Interfaces rÃ©seau pour les services web XML de SchoolTool (SSL)Â :"
+
+#~ msgid ""
+#~ "This interface is used by SchoolTool for communicating with non-HTML "
+#~ "clients such as the SchoolTool and 3rd party clients (e.g. Mozilla "
+#~ "Calendar). XML and iCalendar messages can be PUT or GET to this interface "
+#~ "via HTTP allowing access to all SchoolTool functionality."
+#~ msgstr ""
+#~ "Cette interface est utilisÃ©e par SchoolTool pour communiquer avec des "
+#~ "clients autres que HTML tels que le client SchoolTool et certains clients "
+#~ "de tierce partie (par exemple Mozilla Calendar). Les messages XML et "
+#~ "iCalendar peuvent Ãªtre transmis Ã  cette interface en utilisant Â«Â GETÂ Â» et "
+#~ "Â«Â PUTÂ Â» par l'intermÃ©diaire de HTTP, ce qui permet l'accÃ¨s Ã  toutes les "
+#~ "fonctionnalitÃ©s de SchoolTool."
+
+#~ msgid "Network interfaces for the HTML browser interface (SSL)"
+#~ msgstr "Interfaces rÃ©seau pour l'interface avec le navigateur HTML (SSL)"
+
+#~ msgid ""
+#~ "The web interface provides access to SchoolTool via any standard web "
+#~ "browser."
+#~ msgstr ""
+#~ "L'interface web permet d'accÃ©der Ã  SchoolTool en utilisant n'importe quel "
+#~ "navigateur Internet standard."
+
+#~ msgid ""
+#~ "You can create a self-signed root certificate that can be imported into "
+#~ "web browsers. The certificate can be copied from /etc/schooltool/cert.pem."
+#~ msgstr ""
+#~ "Vous pouvez crÃ©er un certificat racine auto-signÃ© qui sera importÃ© par "
+#~ "les navigateurs web. Ce certificat peut Ãªtre copiÃ© Ã  partir de /etc/"
+#~ "schooltool/cert.pem."
+
+#~ msgid "Do you want to purge the database for SchoolTool?"
+#~ msgstr "Voulez-vous purger la base de donnÃ©es de SchoolToolÂ ?"
+
+#~ msgid "Interfaces for the RESTive interface over HTTP"
+#~ msgstr "Interfaces pour l'interface RESTive via HTTP?:"
+
+#~ msgid "Interfaces for the RESTive interface over HTTPS"
+#~ msgstr "Interfaces pour l'interface RESTive via HTTPS?:"
+
+#~ msgid ""
+#~ "Please select how you would like to set up the SSL certificate for your "
+#~ "server."
+#~ msgstr ""
+#~ "Veuillez choisir la m?thode de cr?ation du certificat SSL de votre "
+#~ "serveur."
+
+#~ msgid "You already have an SSL certificate."
+#~ msgstr "Vous poss?dez d?j? un certificat SSL."

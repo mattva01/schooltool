@@ -1,0 +1,77 @@
+<tal:defs define="update view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+  <head>
+    <title metal:fill-slot="title" i18n:translate="">
+      Upload schooltool groups as CSV
+    </title>
+  </head>
+  <body>
+
+    <metal:block metal:fill-slot="body">
+
+      <div class="info" tal:condition="view/success">
+        <p tal:repeat="msg view/success" tal:content="msg" />
+      </div>
+      <div class="error" tal:condition="view/errors"
+        tal:repeat="err view/errors" tal:content="err" />
+
+      <form method="POST" enctype="multipart/form-data" class="standalone"
+        tal:attributes="action request/URL">
+
+        <h3 i18n:translate="">
+          Import Groups
+        </h3>
+        <p i18n:translate="">
+          CSV data <strong>must</strong> include a group title and
+          <strong>may</strong> include an optional group description.  Any
+          extra information will be discarded.
+        </p>
+        <p i18n:translate="">Example:</p>
+
+<pre i18n:translate="">
+LUG, Linux Users Group
+Chess Club
+Sports Club, After-school sports club, <em>text after a second comma</em>
+</pre>
+        <p i18n:translate="">
+          The above example will create 3 groups titled 'LUG', 'Chess Club' and
+          'Sports Club'.  The first and last group will have the descriptions
+          'Linux Users Group' and 'After-school sports club' respectively.  The
+          'Chess Club' group will have no description, and the extra "text
+          after a second comma" text on the third group will be ignored.
+        </p>
+
+        <fieldset>
+          <legend i18n:translate="">Upload CSV File</legend>
+          <div class="row">
+            <label for="csvfile" i18n:translate="">CSV File</label>
+            <input id="csvfile" type="file" name="csvfile"/>
+          </div>
+
+          <div class="row">
+            <tal:block i18n:translate="">Charset:</tal:block>
+            <select name="charset">
+              <option value="UTF-8" i18n:translate="">Unicode (UTF-8)</option>
+              <option value="ISO-8859-1" i18n:translate="">Western (ISO-8859-1)</option>
+              <option value="ISO-8859-15" i18n:translate="">Western (ISO-8859-15)</option>
+              <option value="Windows-1252" i18n:translate="">Western (Windows-1252)</option>
+              <option value="other" i18n:translate="">Other (please specify)</option>
+            </select>
+          </div>
+          <div class="row" i18n:translate="">
+            Other charset: <input name="other_charset" type="text" i18n:name="other_charset" />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend i18n:translate="">Input CSV Data</legend>
+          <label for="csvtext" i18n:translate="">CSV Data</label>
+          <textarea name="csvtext" id="csvtext" cols="50" rows="10"></textarea>
+        </fieldset>
+        <div class="controls">
+          <input name="UPDATE_SUBMIT" class="button-ok" type="submit"
+                 value="Submit" i18n:attributes="value submit-button" />
+        </div>
+      </form>
+    </metal:block>
+  </body>
+</html>

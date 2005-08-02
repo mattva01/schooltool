@@ -1,0 +1,59 @@
+Copying and Pasting SchoolBell objects
+======================================
+
+This is, partially, a regression test.  When you use the Zope Management
+Interface to copy and paste a SchoolBell object, the object copier provided
+with Zope 3 will happily copy relationship links of the object, thus creating
+an inconsistency in the internal data structures.  We now have an event
+handler that clears all relationship links on copied objects.
+
+Set up
+------
+
+We add a group
+
+    >>> print http(r"""
+    ... POST /groups/+/addSchoolBellGroup.html%3D HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 36
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=group1&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+We add a person
+
+    >>> print http(r"""
+    ... POST /persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 126
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=person1&field.username=person&field.password=&field.verify_password=&field.photo=&group.group1=on&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+We look at the groups of the person we added
+
+    >>> print http(r"""
+    ... GET /persons/person HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...group1...
+    ...
+
+We look at the members of the group
+
+    >>> print http(r"""
+    ... GET /groups/group1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...person...
+

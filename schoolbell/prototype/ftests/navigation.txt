@@ -1,0 +1,67 @@
+Navigation
+----------
+
+We have a view called 'schoolbell_navigation'.  Its output is included in the
+page macros template to get the navigation portlet.  Browser requests, such
+as used in this functional test, do not represent normal usage.
+
+
+Set up
+------
+
+We will create a resource
+
+    >>> print http(r"""
+    ... POST /resources/+/addSchoolBellResource.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 50
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Lily&UPDATE_SUBMIT=Add&add_input_name=
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+
+Navigation view
+---------------
+
+The schoolbell_navigation view is registered for "*".  It will present
+a portlet with the navigation links depending on the authorized user.
+
+    >>> print http(r"""
+    ... GET /schoolbell_navigation HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <div class="portlet">
+    <h4>Navigation</h4>
+    <ul>
+       <li><a href="http://localhost">Top</a></li>
+    </ul>
+    </div>
+
+The main technical challenge in this view is finding the nearest
+ISchoolBellApplication instance, and providing the links relative to
+it.
+
+    >>> print http(r"""
+    ... GET /resources/lily/schoolbell_navigation HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    <div class="portlet">
+    <h4>Navigation</h4>
+    <ul>
+       <li><a href="http://localhost">Top</a></li>
+    </ul>
+    </div>
+
+This view will break, though, if the context is not a descendant of
+ISchoolBellApplication.

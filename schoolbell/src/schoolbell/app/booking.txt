@@ -1,0 +1,179 @@
+==============================
+Resource booking in SchoolBell
+==============================
+
+Overview
+--------
+
+Every calendar event may indicate that one or more resources (e.g., projectors,
+rooms) are needed for this event.  We call this "resource booking" in
+SchoolBell.  When a resource is booked, the calendar event is automatically
+added to the resource's calendar, and is kept in sync.
+
+
+Set up
+------
+
+We will need some test fixture for relationships.
+
+    >>> from schoolbell.relationship.tests import setUp, tearDown
+    >>> setUp()
+
+You have a person and a resource
+
+    >>> from schoolbell.app.app import Person, Resource
+    >>> person = Person('froggy')
+    >>> resource = Resource('lily')
+    >>> resource2 = Resource('mud')
+
+
+Resource booking and unbooking
+------------------------------
+
+You want to create a calendar event and book a resource.  You can specify the
+resource when you're creating an event.
+
+    >>> from datetime import datetime, timedelta
+    >>> from schoolbell.app.cal import CalendarEvent
+    >>> e = CalendarEvent(title="Presentation",
+    ...                   dtstart=datetime(2005, 3, 2, 12, 45),
+    ...                   duration=timedelta(minutes=45),
+    ...                   resources=[resource])
+    >>> person.calendar.addEvent(e)
+
+The event magically appears in the resource's calendar
+
+    >>> resource.calendar.find(e.unique_id) is e
+    True
+
+You can change the event to remove the booking
+
+    >>> e.unbookResource(resource)
+    >>> resource.calendar.find(e.unique_id)
+    Traceback (most recent call last):
+      ...
+    KeyError: ...
+
+or you may book a different resource
+
+    >>> e.bookResource(resource2)
+    >>> resource2.calendar.find(e.unique_id) is e
+    True
+
+
+Delayed booking
+---------------
+
+If you create an event with resource bookings, but never add that event
+anywhere, it doesn't appear in resource calendars.
+
+    >>> e = CalendarEvent(title="Bluffing",
+    ...                   dtstart=datetime(2005, 3, 2, 12, 15),
+    ...                   duration=timedelta(minutes=5),
+    ...                   resources=[resource])
+    >>> e in resource.calendar
+    False
+    >>> e.bookResource(resource2)
+    >>> e in resource2.calendar
+    False
+
+However just add the event somewhere, and it materializes in all three calendars
+
+    >>> person.calendar.addEvent(e)
+    >>> [e in x.calendar for x in [person, resource, resource2]]
+    [True, True, True]
+
+
+Deleting events
+---------------
+
+So, you have an event in two calendars:
+
+    >>> e = CalendarEvent(title="Presentation",
+    ...                   dtstart=datetime(2005, 3, 3, 12, 00),
+    ...                   duration=timedelta(minutes=45),
+    ...                   resources=[resource2])
+    >>> person.calendar.addEvent(e)
+    >>> e in resource2.calendar and e in person.calendar
+    True
+
+If you remove it from the person's calendar, it gets removed from the
+resource's calendar too.
+
+    >>> person.calendar.removeEvent(e)
+
+    >>> e not in resource2.calendar
+    True
+
+If you remove an event from a resource's calendar, it loses that booking.
+
+    >>> e = CalendarEvent(title="Big presentation",
+    ...                   dtstart=datetime(2005, 3, 4, 12, 45),
+    ...                   duration=timedelta(minutes=45),
+    ...                   resources=[resource, resource2])
+    >>> person.calendar.addEvent(e)
+    >>> [e in x.calendar for x in [person, resource, resource2]]
+    [True, True, True]
+
+    >>> resource.calendar.removeEvent(e)
+    >>> [e in x.calendar for x in [person, resource, resource2]]
+    [True, False, True]
+    >>> list(e.resources) == [resource2]
+    True
+
+Clearing a calendar is equivalent to removing all its events:
+
+    >>> resource2.calendar.clear()
+    >>> [e in x.calendar for x in [person, resource, resource2]]
+    [True, False, False]
+    >>> list(e.resources) == []
+    True
+
+
+Insane corner cases
+-------------------
+
+Booking loops are not allowed
+
+    >>> e = CalendarEvent(title="Strange presentation",
+    ...                   dtstart=datetime(2005, 3, 4, 12, 45),
+    ...                   duration=timedelta(minutes=5))
+    >>> resource.calendar.addEvent(e)
+    >>> e.bookResource(resource)
+    Traceback (most recent call last):
+      ...
+    ValueError: cannot book itself
+
+    >>> e.resources
+    ()
+
+It doesn't work if you do it differently either
+
+    >>> e = CalendarEvent(title="Strange presentation",
+    ...                   dtstart=datetime(2005, 3, 4, 12, 50),
+    ...                   duration=timedelta(minutes=5),
+    ...                   resources=[resource2, resource])
+    >>> resource.calendar.addEvent(e)
+    Traceback (most recent call last):
+      ...
+    ValueError: cannot book itself
+
+    >>> e in resource.calendar
+    False
+    >>> e in resource2.calendar
+    False
+
+
+Tear down
+---------
+
+    >>> tearDown()
+
+
+Remaining issues
+----------------
+
+XXX what if I do
+     e = CalendarEvent(resources=[r])
+     e.unbookResource(r)
+     without adding a to any calendars?

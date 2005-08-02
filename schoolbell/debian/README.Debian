@@ -1,0 +1,53 @@
+SchoolBell for Debian
+---------------------
+
+The configuration file is /etc/schoolbell/schoolbell.conf.
+
+If you don't want SchoolBell to start automatically on system boot, edit
+/etc/default/schoolbell.
+
+Look at /usr/share/doc/schoolbell/examples/schoolbell.conf.in for a full
+list of SchoolBell server configuration options.
+
+The simplest way to start playing with SchoolBell is as follows:
+
+  1. `apt-get install schoolbell`
+  2. Open http://localhost:7180/ in a web browser and play with the web
+     frontend.
+
+By default a user 'manager' with password 'schoolbell' is created with full
+access and modification privileges.
+
+SSL Certificates
+----------------
+
+NOTE:   In the conversion of SchoolBell to a native Zope 3 app, the serverside
+        SSL support was lost. This may be implemented later. If this is
+        important to you, you could try apache virtual hosting (Described in
+        the README).
+
+If at (re)configuration time, an SSL port is specified, the configuration will
+automatically generate an SSL certificate. You can choose to:
+
+* (default) - Create a self signed certificate. The public certificate is in
+  PEM format and found at /etc/schoolbell/schoolbell.cert.pem. It should be
+  possible to import this file into web browsers as a root certificate.
+  schoolbell.privkey.pem is, of course, the private key an should never be made
+  publicly available.
+
+* Import a certificate from a file in PEM format. The file must also include
+  the private key. Additionally this option is only available if the debconf
+  priority is medium or lower.
+
+The certificate can be re-generated or re-imported at any time by running
+(as root):
+
+DEBIAN_FRONTEND=dialog DEBIAN_PRIORITY=low dpkg-reconfigure schoolbell
+
+Present and Past Maintainers
+----------------------------
+
+Past Maintainer:
+        Marius Gedminas <marius@pov.lt>
+Current maintainer:
+        Brian Sutherland <jinty@web.de>

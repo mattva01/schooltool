@@ -1,0 +1,147 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Access control</title>
+</head>
+<body>
+<metal:block metal:fill-slot="body">
+
+<form tal:attributes="action request/URL" method="post">
+  <h3 i18n:translate="" tal:condition="not:context/title|nothing">
+      Access control
+  </h3>
+  <h3 i18n:translate="" tal:condition="context/title|nothing">
+      Access control for <span i18n:name="title"
+      tal:replace="context/title">something</span>
+  </h3>
+  <fieldset tal:define="batch view/batches/groups">
+    <legend i18n:translate="">Permissions for Groups</legend>
+    <tal:block define="batch_name string:groups">
+      <div metal:use-macro="view/@@batch_macros/multi-batch-navigation"/>
+    </tal:block>
+    <table class="acl">
+      <tr class="header">
+         <th class="principal" i18n:translate="">Group</th>
+         <th class="permission" tal:repeat="perm view/permissions"
+             tal:content="python: perm[1]" i18n:translate="" />
+      </tr>
+      <tr tal:repeat="prin batch"
+          tal:attributes="class repeat/prin/parity">
+         <th class="principal">
+            <span tal:replace="prin/title" i18n:translate="">Group foo</span>
+            <input type="hidden" tal:attributes="name string:marker-${prin/id}"
+                   value="1" />
+         </th>
+         <td class="permission" tal:repeat="perm view/permissions">
+            <input
+                type="checkbox"
+                tal:attributes="name prin/id;
+                                value python: perm[0];
+                                checked python: perm[0] in prin['perms']" />
+         </td>
+      </tr>
+    </table>
+  <div class="controls">
+    <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Set Access"
+           i18n:attributes="value" />
+  </div>
+  </fieldset>
+  <fieldset tal:define="batch view/batches/persons">
+    <legend i18n:translate="">Permissions for Users</legend>
+    <tal:block define="batch_name string:persons">
+      <div metal:use-macro="view/@@batch_macros/multi-batch-navigation"/>
+    </tal:block>
+    <table class="acl">
+      <tr class="header">
+         <th class="principal" i18n:translate="">User</th>
+         <th class="permission" tal:repeat="perm view/permissions"
+             tal:content="python: perm[1]" i18n:translate="" />
+      </tr>
+      <tr tal:repeat="prin batch"
+          tal:attributes="class repeat/prin/parity">
+         <th class="principal">
+            <span tal:replace="prin/title" i18n:translate="">User foo</span>
+            <input type="hidden" tal:attributes="name string:marker-${prin/id}"
+                   value="1" />
+         </th>
+         <td class="permission" tal:repeat="perm view/permissions">
+            <input
+                type="checkbox"
+                tal:attributes="name prin/id;
+                                value python: perm[0];
+                                checked python: perm[0] in prin['perms']" />
+         </td>
+      </tr>
+    </table>
+  <div class="controls">
+    <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Set Access"
+           i18n:attributes="value" />
+  </div>
+  </fieldset>
+
+  <div class="controls">
+    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+           i18n:attributes="value cancel-button" />
+  </div>
+
+</form>
+
+<p i18n:translate="">
+  The permissions are inherited in the containment hierarchy.  For
+  example, if you set a View Calendar permission for a user on the Persons
+  Index, that user will be able to see the calendars of all persons.  If you
+  want the user to be able to access just a calendar of some resource, you
+  can set the View Calendar permission for that user on that resource.
+</p>
+
+<p i18n:translate="">
+  Below is a list of permission names with their respective meanings.
+</p>
+
+<dl>
+  <dt i18n:translate="">View</dt>
+  <dd i18n:translate="">
+    This permission allows viewing names, titles,
+    photos, lists of objects, and other information.
+  </dd>
+
+  <dt i18n:translate="">Edit</dt>
+  <dd i18n:translate="">
+    Allows to edit names, titles, descriptions, photos, etc.
+  </dd>
+
+  <dt i18n:translate="">Create new objects</dt>
+  <dd i18n:translate="">
+    Lets the user create new persons, groups, and resources.
+  </dd>
+
+  <dt i18n:translate="">View calendar</dt>
+  <dd i18n:translate="">
+    Allows viewing calendars of persons, groups, and resources.
+  </dd>
+
+  <dt i18n:translate="">Add events</dt>
+  <dd i18n:translate="">
+    Allows adding new events to calendars.
+  </dd>
+
+  <dt i18n:translate="">Modify/delete events</dt>
+  <dd i18n:translate="">
+    Allows editing and delete events in calendars.
+  </dd>
+
+  <dt i18n:translate="">Control access</dt>
+  <dd i18n:translate="">
+    Allows the user to use this form (Access control)
+  </dd>
+
+  <dt i18n:translate="">Manage membership</dt>
+  <dd i18n:translate="">
+    Allows the user to add persons, groups and resources to groups.  In order
+    to add something to a group, the user needs this permission only on the
+    group.  Keep in mind that joining groups has security implications.
+  </dd>
+</dl>
+
+</metal:block>
+</body>
+</html>

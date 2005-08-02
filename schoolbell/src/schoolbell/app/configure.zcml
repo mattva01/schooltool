@@ -1,0 +1,324 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schoolbell">
+
+<!-- Dependencies -->
+
+  <include package="schoolbell.relationship" />
+
+<!-- Translations -->
+
+  <i18n:registerTranslations directory="locales" />
+
+<!-- Permissions -->
+
+  <permission id="schoolbell.view" title="View" />
+  <permission id="schoolbell.edit" title="Edit Info" />
+  <permission id="schoolbell.viewCalendar"  title="View calendar" />
+  <permission id="schoolbell.addEvent"  title="Add Event" />
+  <permission id="schoolbell.modifyEvent"  title="Modify Event" />
+  <permission id="schoolbell.controlAccess"  title="Set up access" />
+  <permission id="schoolbell.create"  title="Create new objects" />
+  <permission id="schoolbell.manageMembership"  title="Manage membership" />
+
+<!-- Generations -->
+
+  <utility
+      name="schoolbell.app"
+      provides="zope.app.generations.interfaces.ISchemaManager"
+      component=".generations.schemaManager"
+      />
+
+<!-- Core content objects -->
+
+  <content class=".app.SchoolBellApplication">
+    <allow interface=".interfaces.ISchoolBellApplication" />
+    <allow attributes="getSiteManager" />
+  </content>
+
+  <content class=".app.PersonContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schoolbell.view"
+             attributes="keys values __iter__ __len__" />
+    <require permission="schoolbell.create"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </content>
+
+  <content class=".app.GroupContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schoolbell.view"
+             attributes="keys values __iter__ __len__" />
+    <require permission="schoolbell.create"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </content>
+
+  <content class=".app.ResourceContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schoolbell.view"
+             attributes="keys values __iter__ __len__" />
+    <require permission="schoolbell.create"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </content>
+
+<!-- Adapters -->
+
+  <adapter
+      for=".interfaces.IResourceContainer"
+      factory=".app.SimpleNameChooser"
+      provides="zope.app.container.interfaces.INameChooser" />
+
+  <adapter
+      for=".interfaces.IGroupContainer"
+      factory=".app.SimpleNameChooser"
+      provides="zope.app.container.interfaces.INameChooser" />
+
+  <adapter
+      for=".interfaces.IHavePreferences"
+      provides=".interfaces.IPersonPreferences"
+      factory=".app.getPersonPreferences"
+      trusted="true"
+      />
+
+  <adapter
+      for=".interfaces.IPerson"
+      provides=".interfaces.IPersonDetails"
+      factory=".app.getPersonDetails"
+      trusted="true"
+      />
+
+  <adapter
+      for=".interfaces.ISchoolBellCalendar"
+      provides=".interfaces.IWriteCalendar"
+      factory=".cal.WriteCalendar"
+      />
+
+  <adapter
+      for=".interfaces.IHaveNotes"
+      provides=".interfaces.INotes"
+      factory=".notes.getNotes"
+      trusted="true"
+      />
+
+  <adapter
+      for=".interfaces.ISchoolBellApplication"
+      provides=".interfaces.IApplicationPreferences"
+      factory=".app.getApplicationPreferences"
+      trusted="true"
+      />
+
+  <class class=".cal.WriteCalendar">
+    <allow interface=".interfaces.IWriteCalendar" />
+  </class>
+
+<!-- Domain content objects -->
+
+  <content class=".app.Person">
+    <require permission="schoolbell.view"
+             interface="schoolbell.app.interfaces.IReadPerson"
+             attributes="__cmp__"/>
+    <require permission="schoolbell.edit"
+             interface="schoolbell.app.interfaces.IWritePerson"
+             set_schema="schoolbell.app.interfaces.IPerson" />
+    <!-- Calendar access protection is performed on the calendar object.
+         If we want local grants set on the calendar itself to work, then
+         the 'calendar' attribute must be publically available. -->
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
+  </content>
+
+  <content class=".app.PersonPreferences">
+    <require permission="schoolbell.edit"
+        interface="schoolbell.app.interfaces.IPersonPreferences"
+        set_schema="schoolbell.app.interfaces.IPersonPreferences" />
+  </content>
+
+  <content class=".app.PersonDetails">
+    <require permission="schoolbell.view"
+      interface="schoolbell.app.interfaces.IPersonDetails" />
+    <require permission="schoolbell.edit"
+      set_schema="schoolbell.app.interfaces.IPersonDetails" />
+  </content>
+
+  <content class=".app.Group">
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner"
+           attributes="__cmp__" />
+    <require permission="schoolbell.view"
+             attributes="title description groups members" />
+    <require permission="schoolbell.edit"
+             set_schema="schoolbell.app.interfaces.IGroup" />
+  </content>
+
+  <content class=".app.Resource">
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner"
+           attributes="__cmp__" />
+    <require permission="schoolbell.view"
+             attributes="title description groups isLocation" />
+    <require permission="schoolbell.edit"
+             set_schema="schoolbell.app.interfaces.IResource" />
+  </content>
+
+  <content class=".app.Calendar">
+    <require permission="schoolbell.viewCalendar"
+             interface="schoolbell.calendar.interfaces.ICalendar"
+             attributes="title __cmp__" />
+    <require permission="schoolbell.addEvent"
+             attributes="addEvent" />
+    <require permission="schoolbell.modifyEvent"
+             attributes="clear removeEvent" />
+  </content>
+
+  <content class=".cal.CalendarEvent">
+    <require permission="schoolbell.viewCalendar"
+             interface="schoolbell.calendar.interfaces.ICalendarEvent"
+             attributes="resources" />
+    <require permission="schoolbell.modifyEvent"
+             set_schema="schoolbell.calendar.interfaces.ICalendarEvent"
+             attributes="bookResource unbookResource"
+             set_attributes="__parent__" />
+  </content>
+
+  <content class=".notes.Notes">
+    <require permission="zope.Public"
+             attributes="__iter__" />
+    <require permission="schoolbell.view"
+             attributes="add remove clear" />
+  </content>
+
+  <content class=".notes.Note">
+    <require permission="zope.Public"
+             interface=".interfaces.INote" />
+    <require permission="schoolbell.create"
+             set_schema=".interfaces.INote" />
+  </content>
+
+  <content class=".app.ApplicationPreferences">
+    <require permission="zope.Public"
+             interface=".interfaces.IApplicationPreferences" />
+    <!-- Not really appropriate permission to require -->
+    <require permission="schoolbell.manageMembership"
+             set_schema=".interfaces.IApplicationPreferences" />
+  </content>
+
+<!-- Security declarations for calendaring -->
+
+  <!-- XXX It feels wrong to tweak permissions of objects in a sibling. -->
+
+  <content class="schoolbell.calendar.mixins.ExpandedCalendarEvent">
+    <require permission="schoolbell.view"
+             interface="schoolbell.calendar.interfaces.IExpandedCalendarEvent"
+             attributes="resources"
+             />
+  </content>
+
+  <content class="schoolbell.calendar.recurrent.DailyRecurrenceRule">
+    <require permission="zope.Public"
+             interface="schoolbell.calendar.interfaces.IDailyRecurrenceRule" />
+  </content>
+
+  <content class="schoolbell.calendar.recurrent.WeeklyRecurrenceRule">
+    <require permission="zope.Public"
+             interface="schoolbell.calendar.interfaces.IWeeklyRecurrenceRule"
+             />
+  </content>
+
+  <content class="schoolbell.calendar.recurrent.MonthlyRecurrenceRule">
+    <require permission="zope.Public"
+             interface="schoolbell.calendar.interfaces.IMonthlyRecurrenceRule"
+             />
+  </content>
+
+  <content class="schoolbell.calendar.recurrent.YearlyRecurrenceRule">
+    <require permission="zope.Public"
+             interface="schoolbell.calendar.interfaces.IYearlyRecurrenceRule"
+             />
+  </content>
+
+  <content class="schoolbell.calendar.simple.ImmutableCalendar">
+    <require permission="schoolbell.view"
+             interface="schoolbell.calendar.interfaces.ICalendar" />
+  </content>
+
+  <adapter
+      for="schoolbell.calendar.interfaces.IEditCalendar"
+      factory=".cal.WriteCalendar"
+      provides=".interfaces.IWriteCalendar" />
+
+  <content
+      class="schoolbell.app.overlay.BoundOverlaidCalendarsProperty">
+    <allow attributes="__iter__ __contains__" />
+    <require
+        permission="schoolbell.viewCalendar"
+        attributes="add remove" />
+  </content>
+
+  <content class="schoolbell.app.overlay.CalendarOverlayInfo">
+    <require
+        permission="schoolbell.view"
+        interface="schoolbell.app.overlay.ICalendarOverlayInfo"/>
+    <require
+        permission="schoolbell.viewCalendar"
+        set_schema="schoolbell.app.overlay.ICalendarOverlayInfo"/>
+  </content>
+
+<!-- Events -->
+
+  <subscriber
+      for="schoolbell.relationship.interfaces.IBeforeRelationshipEvent"
+      handler=".membership.enforceMembershipConstraints"
+      />
+
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".security.authSetUpSubscriber"
+      />
+
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".security.personPermissionsSubscriber"
+      />
+
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".security.groupPermissionsSubscriber"
+      />
+
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".security.applicationCalendarPermissionsSubscriber"
+      />
+
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".app.personAppCalendarOverlaySubscriber"
+      />
+
+<!-- Utilities -->
+
+  <localUtility class=".security.SchoolBellAuthenticationUtility">
+    <require
+        permission="zope.ManageServices"
+        interface="zope.app.security.interfaces.IAuthentication"
+        />
+  </localUtility>
+
+  <utility
+      provides="schoolbell.relationship.interfaces.IRelationshipSchema"
+      component=".membership.Membership"
+      name="http://schooltool.org/ns/membership" />
+
+  <utility
+      provides="schoolbell.relationship.uri.IURIObject"
+      component=".membership.URIMember"
+      name="http://schooltool.org/ns/membership/member" />
+
+  <utility
+      provides="schoolbell.relationship.uri.IURIObject"
+      component=".membership.URIGroup"
+      name="http://schooltool.org/ns/membership/group" />
+
+<!-- Subpackages -->
+
+  <include package=".browser" />
+  <include package=".rest" />
+
+</configure>

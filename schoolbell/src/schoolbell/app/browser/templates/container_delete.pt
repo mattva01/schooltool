@@ -1,0 +1,36 @@
+<tal:defs define="dummy view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<head>
+  <title metal:fill-slot="title">
+    Delete items
+  </title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header" i18n:translate="">
+  Are you sure you want to delete selected items?
+</h1>
+
+<metal:block metal:fill-slot="body"
+             tal:define="objects view/itemsToDelete">
+  <p tal:condition="not:objects" i18n:translate="">You have not
+  selected any items.</p>
+  <ul tal:condition="objects">
+    <form method="post"
+          action="delete.html">
+      <li tal:repeat="obj objects/sortby:title">
+        <input type="hidden" tal:attributes="name string:delete.${obj/zope:name}" />
+        <a tal:content="obj/title"
+           tal:attributes="href obj/@@absolute_url">Some Object</a>
+      </li>
+      <div class="controls">
+        <input type="submit" class="button-cancel" name="UPDATE_SUBMIT" value="Confirm"
+               i18n:attributes="value delete-button;" />
+        <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+               i18n:attributes="value cancel-button" />
+      </div>
+    </form>
+  </ul>
+
+</metal:block>
+</body></html>

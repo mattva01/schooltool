@@ -1,0 +1,172 @@
+Error handling in REST views
+============================
+
+First of all, we will need a schoolbell instance.  We will add it via
+the web ZMI:
+
+    >>> print http("""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&\
+    ... new_value=frogpond""", handle_errors=False)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+Also, we need the REST HTTP caller:
+
+    >>> from schoolbell.app.rest.ftests import rest
+
+We need to shut up libxml2, so it does not spew errors to stderr:
+
+   >>> import libxml2
+   >>> libxml2.registerErrorHandler(lambda ctx, error: None, None)
+   1
+
+Now, let's submit a well formed but invalid XML document:
+
+    >>> print rest("""
+    ... POST /frogpond/groups HTTP/1.1
+    ...
+    ... <hello>world</hello>
+    ... """)
+    HTTP/1.1 400 Bad Request
+    Content-Length: 39
+    Content-Type: text/plain; charset=utf-8
+    <BLANKLINE>
+    Document not valid according to schema.
+
+An ill-well formed document:
+
+    >>> print rest("""
+    ... POST /frogpond/groups HTTP/1.1
+    ...
+    ... <what's going on?
+    ... """)
+    HTTP/1.1 400 Bad Request
+    Content-Length: 20
+    Content-Type: text/plain; charset=utf-8
+    <BLANKLINE>
+    Ill-formed document.
+
+## Method not supported errors:
+## 
+##     >>> print rest("""
+##     ... POST /frogpond HTTP/1.1
+##     ...
+##     ... new user
+##     ... """)
+##     HTTP/1.1 405 Method Not Allowed
+##     Allow: GET
+##     <BLANKLINE>
+##     Method Not Allowed
+## 
+## This is emitted by a special adapter:
+## 
+##     >>> print rest("""
+##     ... DELETE /frogpond HTTP/1.1
+##     ...
+##     ... """, handle_errors=False)
+##     HTTP/1.1 405 Method Not Allowed
+##     Allow: GET
+##     <BLANKLINE>
+##     Method Not Allowed
+## 
+
+Unauthorized errors are handled by Zope for us:
+
+    >>> print rest("""
+    ... POST /frogpond/groups HTTP/1.1
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="A Group"/>
+    ... """)
+    HTTP/1.1 401 Unauthorized
+    Content-Length: 0
+    Www-Authenticate: basic realm='Zope'
+    <BLANKLINE>
+
+
+Application errors are also handled with a 400 response.  Let's say a
+non valid iCalendar is posted to a user's calendar
+
+    >>> print rest("""
+    ... PUT /frogpond/persons/test HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="John Doe"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... PUT /frogpond/persons/test/calendar HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... !@#$line noise#@$%^
+    ... """)
+    HTTP/1.1 400 Bad Request
+    Content-Length: 80
+    Content-Type: text/plain; charset=utf-8
+    <BLANKLINE>
+    Error parsing iCalendar data: Missing property name in line:
+    !@#$line noise#@$%^
+
+
+Also, there is a special exception that generates a Bad Request
+response.  Let's create a view that raises this error:
+
+    >>> from zope.app.testing import ztapi
+    >>> from schoolbell.app.rest.errors import RestError
+
+    >>> class BadView:
+    ...     def __init__(self, context, request):
+    ...         self.context = context
+    ...         self.request = request
+    ...     def POST(self):
+    ...         raise RestError("Houston, we've got a problem")
+
+    >>> from schoolbell.app.interfaces import ISchoolBellApplication
+    >>> from zope.publisher.interfaces.http import IHTTPRequest
+    >>> from zope.interface import Interface
+    >>> ztapi.provideAdapter((ISchoolBellApplication, IHTTPRequest), Interface,
+    ...                      BadView, 'POST')
+
+Now, let's trigger it:
+
+    >>> print rest("""
+    ... POST /frogpond HTTP/1.1
+    ... Content-Type: text/xml
+    ... """)
+    HTTP/1.1 400 Bad Request
+    Content-Length: ...
+    Content-Type: text/plain; charset=utf-8
+    <BLANKLINE>
+    Houston, we've got a problem
+
+And what about NotFound errors?
+
+    >>> print rest("""
+    ... POST /frogpond/hahaha HTTP/1.1
+    ... Content-Type: text/xml
+    ... """)
+    HTTP/1.1 404 Not Found
+    Content-Length: 0
+
+
+Tear down
+=========
+
+Restore the libxml2 error handling:
+
+    >>> import sys
+    >>> def on_error_callback(ctx, msg):
+    ...     sys.stderr.write(msg)
+    >>> libxml2.registerErrorHandler(on_error_callback, None)
+    1

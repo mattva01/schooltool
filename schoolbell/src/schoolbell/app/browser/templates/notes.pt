@@ -1,0 +1,27 @@
+<div id="notes" i18n:domain="schoolbell">
+  <h5 i18n:translate="">Notes</h5>
+  <tal:loop repeat="note context/@@notes/notes">
+    <div tal:attributes="class python:note.privacy == 'public' and 'note public' or 'note private'">
+      <div class="header">
+        <h6>
+          <tal:if condition="python:note.privacy == 'private'">
+            <span class="privacy" i18n:translate="">( p )</span></tal:if>
+          <span tal:replace="note/title"/>
+        </h6>
+        <tal:comment condition="nothing">
+          Notes can technically be deleted by anyone who can view them, however
+          when rendering the notes we only provide the delete link to the owner
+          of the note.
+        </tal:comment>
+        <tal:if condition="python:note.owner == request.principal.id">
+          <a class="delete" alt="[x]"
+             tal:attributes="href string:?DELETE_NOTE=1&uid=${note/unique_id}"
+             i18n:translate="">Delete</a>
+        </tal:if>
+      </div>
+      <div class="body">
+        <p tal:content="note/body"/>
+      </div>
+    </div>
+  </tal:loop>
+</div>

@@ -1,0 +1,5510 @@
+# #############################################################################
+#
+# SchoolTool - common information systems platform for school administration
+# Copyright (c) 2004 Shuttleworth Foundation
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# #############################################################################
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: SchoolTool (unknown version)\n"
+"POT-Creation-Date: Fri Nov 12 18:06:32 2004\n"
+"PO-Revision-Date: 2005-01-06 11:58+0000\n"
+"Last-Translator: Albertas Agejevas <alga@pov.lt>\n"
+"Language-Team: SchoolTool Developers <schooltool@schooltool.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: schooltool/translation/i18nextract.py\n"
+"plural-forms: nplurals=2; plural=n != 1\n"
+"X-Generator: Rosetta (http://launchpad.ubuntu.com/rosetta/)\n"
+
+#: src/schoolbell/app/browser/__init__.py:190
+msgid "1 person"
+msgstr ""
+
+#: src/schoolbell/app/browser/__init__.py:192
+msgid "${number} persons"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:258
+#: src/schoolbell/app/browser/app.py:413
+#: src/schoolbell/app/interfaces.py:210
+msgid "Full name"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:259
+#: src/schoolbell/app/browser/app.py:414
+#: src/schoolbell/app/interfaces.py:211
+msgid "Name that should be displayed"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:262
+msgid "New photo"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:264
+msgid "A small picture (about 48x48 pixels in JPEG format)"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:268
+msgid "Clear photo"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:270
+msgid "Check this to clear the photo"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:273
+msgid "New password"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:277
+#: src/schoolbell/app/browser/app.py:425
+msgid "Verify password"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:306
+msgid "Passwords do not match."
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:310
+msgid "Password was successfully changed!"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:417
+#: src/schoolbell/app/browser/app.py:418
+#: src/schoolbell/app/interfaces.py:219
+#: src/schoolbell/app/browser/templates/login.pt:38
+msgid "Username"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:421
+#: src/schoolbell/app/browser/templates/login.pt:44
+msgid "Password"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:429
+#: src/schoolbell/app/interfaces.py:214
+msgid "Photo"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:431
+#: src/schoolbell/app/interfaces.py:216
+msgid "Photo (in JPEG format)"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:454
+msgid "Passwords do not match!"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:457
+msgid "This username is already used!"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:561
+msgid "Username or password is incorrect"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:588
+#: src/schoolbell/app/configure.zcml:16
+#: src/schoolbell/app/browser/configure.zcml:58
+#: src/schoolbell/app/browser/configure.zcml:112
+#: src/schoolbell/app/browser/configure.zcml:128
+#: src/schoolbell/app/browser/configure.zcml:215
+#: src/schoolbell/app/browser/configure.zcml:272
+#: src/schoolbell/app/browser/configure.zcml:315
+#: src/schoolbell/app/browser/configure.zcml:372
+#: src/schoolbell/app/browser/configure.zcml:527
+#: src/schoolbell/app/browser/templates/acl.pt:88
+msgid "View"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:589
+#: src/schoolbell/app/browser/templates/acl.pt:94
+msgid "Edit"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:590
+#: src/schoolbell/app/configure.zcml:22
+#: src/schoolbell/app/browser/templates/acl.pt:99
+msgid "Create new objects"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:591
+#: src/schoolbell/app/configure.zcml:18
+#: src/schoolbell/app/browser/templates/acl.pt:104
+msgid "View calendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:592
+#: src/schoolbell/app/browser/templates/acl.pt:109
+msgid "Add events"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:593
+#: src/schoolbell/app/browser/templates/acl.pt:114
+msgid "Modify/delete events"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:594
+#: src/schoolbell/app/browser/templates/acl.pt:119
+msgid "Control access"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:595
+#: src/schoolbell/app/configure.zcml:23
+#: src/schoolbell/app/browser/templates/acl.pt:124
+msgid "Manage membership"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:623
+msgid "Authenticated users"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:628
+msgid "Unauthenticated users"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:78
+msgid "Person index"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:79
+msgid "Add a new person"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:88
+msgid "Group index"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:89
+msgid "Add a new group"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:98
+msgid "Resource index"
+msgstr ""
+
+#: src/schoolbell/app/browser/app.py:99
+msgid "Add a new resource"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1179
+#: src/schoolbell/app/interfaces.py:127
+#: src/schoolbell/app/interfaces.py:352
+#: src/schoolbell/app/interfaces.py:379
+msgid "Title"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1182
+#: src/schoolbell/app/browser/templates/cal_weekly.pt:33
+#: src/schoolbell/app/browser/templates/cal_monthly.pt:29
+msgid "All day"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1185
+msgid "Date"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1188
+msgid "Time"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1192
+msgid "Duration"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1197
+msgid "Duration Type"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1200
+#: src/schoolbell/app/browser/templates/event_add.pt:139
+msgid "Minutes"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1201
+#: src/schoolbell/app/browser/templates/event_add.pt:142
+msgid "Hours"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1202
+#: src/schoolbell/app/browser/templates/event_add.pt:146
+msgid "Days"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1205
+#: src/schoolbell/app/browser/templates/event.pt:49
+msgid "Location"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1209
+#: src/schoolbell/app/interfaces.py:356
+#: src/schoolbell/app/interfaces.py:383
+msgid "Description"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1214
+msgid "Recurring"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1218
+msgid "Recurs every"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1221
+msgid "Day"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1222
+msgid "Week"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1223
+#: src/schoolbell/app/browser/templates/view_macros.pt:241
+msgid "Month"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1224
+#: src/schoolbell/app/browser/templates/view_macros.pt:254
+msgid "Year"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1227
+msgid "Repeat every"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1232
+msgid "Range"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1235
+msgid "Count"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1236
+msgid "Until"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1237
+msgid "forever"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1240
+msgid "Number of events"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1244
+#: src/schoolbell/app/browser/templates/event_add.pt:273
+msgid "Repeat until"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1248
+msgid "Weekdays"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1251
+msgid "Weekday"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1261
+#: src/schoolbell/app/browser/templates/event_add.pt:226
+#: src/schoolbell/app/browser/templates/view_macros.pt:175
+msgid "Monthly"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1269
+msgid "Exception dates"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1348
+msgid "same weekday"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1353
+msgid "1st"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1353
+msgid "4th"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1353
+msgid "3rd"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1353
+msgid "2nd"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1354
+msgid "5th"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1368
+msgid "last weekday"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1378
+msgid "Last ${weekday}"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1402
+#: src/schoolbell/app/browser/cal.py:1703
+msgid "An error occured."
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1434
+msgid "Invalid time"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1455
+msgid "End date is earlier than start date"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1464
+msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1501
+msgid "Add event"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1502
+msgid "Add"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1591
+msgid "Edit event"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1592
+msgid "Update"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1709
+msgid "Updated on ${date_time}"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:362
+msgid "${day_of_week}, ${date}"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:704
+msgid "Next week"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:705
+msgid "Current week"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:706
+msgid "Previous week"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:711
+msgid "${month}, ${year} (week ${week})"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:751
+msgid "Next month"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:752
+msgid "Current month"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:753
+msgid "Previous month"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:758
+msgid "${month}, ${year}"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:778
+msgid "Week ${week_no}"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:790
+msgid "Next year"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:791
+msgid "Current year"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:792
+msgid "Previous year"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:829
+msgid "The next day"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:830
+msgid "Today"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:831
+msgid "The previous day"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:86
+msgid "March"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:86
+msgid "January"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:86
+msgid "February"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:87
+msgid "June"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:87
+msgid "May"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:87
+msgid "April"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:88
+msgid "August"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:88
+msgid "September"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:88
+msgid "July"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:89
+msgid "October"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:89
+msgid "November"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:89
+msgid "December"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:92
+msgid "Wednesday"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:92
+msgid "Tuesday"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:92
+msgid "Thursday"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:92
+#: src/schoolbell/app/interfaces.py:309
+msgid "Monday"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:93
+msgid "Saturday"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:93
+msgid "Friday"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:93
+#: src/schoolbell/app/interfaces.py:308
+msgid "Sunday"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:96
+#: src/schoolbell/app/browser/cal.py:1252
+msgid "Mon"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:96
+#: src/schoolbell/app/browser/cal.py:1253
+msgid "Tue"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:96
+#: src/schoolbell/app/browser/cal.py:1254
+msgid "Wed"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:96
+#: src/schoolbell/app/browser/cal.py:1255
+msgid "Thu"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:97
+#: src/schoolbell/app/browser/cal.py:1256
+msgid "Fri"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:97
+#: src/schoolbell/app/browser/cal.py:1257
+msgid "Sat"
+msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:97
+#: src/schoolbell/app/browser/cal.py:1258
+msgid "Sun"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:101
+msgid "New Note"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:138
+msgid "Change Membership"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:160
+msgid "Change Preferences"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:169
+msgid "Change Details"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:188
+msgid "New Person"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:202
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:21
+msgid "Import Persons"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:231
+msgid "Add a Group"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:244
+msgid "New Group"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:251
+msgid "Edit Group Information"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:264
+msgid "A Group"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:264
+msgid "SchoolBell Group"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:282
+msgid "Add/Remove Members"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:292
+msgid "Add/Remove Resources"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:302
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:21
+msgid "Import Groups"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:331
+msgid "Add a Resource"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:344
+msgid "Edit Resource Information"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:357
+msgid "New Resource"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:364
+msgid "SchoolBell Resource"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:364
+msgid "A Resource"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:382
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:21
+msgid "Import Resources"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:39
+#: src/schoolbell/app/browser/templates/view_macros.pt:96
+msgid "Actions"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:411
+msgid "View Calendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:419
+msgid "Calendar (Daily)"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:429
+msgid "Calendar (Weekly)"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:43
+#: src/schoolbell/app/browser/templates/view_macros.pt:17
+msgid "SchoolBell"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:439
+msgid "Calendar (Monthly)"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:449
+msgid "Calendar (Yearly)"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:459
+msgid "Atom View"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:469
+msgid "iCalendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:479
+msgid "Free/Busy"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:489
+msgid "New Event"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:502
+msgid "Open in iCal"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:556
+msgid "Edit Event"
+msgstr ""
+
+#: src/schoolbell/app/browser/configure.zcml:81
+msgid "Set Up Access"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:109
+msgid "No charset specified"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:114
+msgid "Unknown charset"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:158
+msgid "Error in CSV data, line ${line_no}"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:162
+msgid "Conversion to unicode failed in line ${line_no}"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:243
+#: src/schoolbell/app/browser/csvimport.py:288
+msgid "Insufficient data provided."
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:247
+msgid "Titles may not be empty"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:292
+msgid "username may not be empty"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:296
+msgid "fullname may not be empty"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:307
+msgid "Duplicate username: ${username}"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:59
+msgid "No data provided"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:66
+msgid "Could not convert data to Unicode (incorrect charset?)."
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:75
+msgid "CSV file imported successfully."
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:77
+msgid "Failed to import CSV file"
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:85
+msgid "CSV text imported successfully."
+msgstr ""
+
+#: src/schoolbell/app/browser/csvimport.py:87
+msgid "Failed to import CSV text"
+msgstr ""
+
+#: src/schoolbell/app/browser/overlay.py:181
+msgid "Saved changes."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:100
+msgid "Lets the user create new persons, groups, and resources."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:105
+msgid "Allows viewing calendars of persons, groups, and resources."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:110
+msgid "Allows adding new events to calendars."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:115
+msgid "Allows editing and delete events in calendars."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:120
+msgid "Allows the user to use this form (Access control)"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:125
+msgid ""
+"Allows the user to add persons, groups and resources to groups. In order to "
+"add something to a group, the user needs this permission only on the group. "
+"Keep in mind that joining groups has security implications."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:13
+msgid "Access control for ${title}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:17
+msgid "Permissions for Groups"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:20
+msgid "Group"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:3
+#: src/schoolbell/app/browser/templates/acl.pt:9
+msgid "Access control"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:41
+msgid "Permissions for Users"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:44
+msgid "User"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:67
+msgid "Set"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:75
+msgid ""
+"The permissions are inherited in the containment hierarchy. For example, if "
+"you set a View Calendar permission for a user on the Persons Index, that "
+"user will be able to see the calendars of all persons. If you want the user "
+"to be able to access just a calendar of some resource, you can set the View "
+"Calendar permission for that user on that resource."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:83
+msgid "Below is a list of permission names with their respective meanings."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:89
+msgid ""
+"This permission allows viewing names, titles, photos, lists of objects, and "
+"other information."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/acl.pt:95
+msgid "Allows to edit names, titles, descriptions, photos, etc."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/cal_atom.pt:15
+msgid "[Schooltool.org]"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/cal_atom.pt:15
+msgid "Schooltool"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/cal_atom.pt:22
+msgid "Events for"
+msgstr ""
+
+# Default: ""
+#  "This is an Atom formatted XML site feed. It is intended to be viewed\n"
+#  "      in a Newsreader or syndicated to another site. Please visit"
+#: src/schoolbell/app/browser/templates/cal_atom.pt:43
+msgid "atom_description"
+msgstr ""
+
+# Default: "Atom Enabled"
+#: src/schoolbell/app/browser/templates/cal_atom.pt:47
+msgid "atom_enabled"
+msgstr ""
+
+# Default: "for more info."
+#: src/schoolbell/app/browser/templates/cal_atom.pt:50
+msgid "atom_more_info"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/cal_atom.pt:57
+msgid "Validate my Atom feed"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/cal_atom.pt:57
+msgid "[Valid Atom]"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:15
+msgid "Select additional calendars to display"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:25
+msgid "Hold down Ctrl or Shift to select multiple calendars."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:30
+msgid "People"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:31
+msgid "There are no persons with calendars accessible to you."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:4
+msgid "Select calendars to display"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:45
+msgid "There are no groups with calendars accessible to you."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:59
+msgid "There are no resources with calendars accessible to you."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/container_delete.pt:10
+msgid "Are you sure you want to delete selected items?"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/container_delete.pt:16
+msgid "You have not selected any items."
+msgstr ""
+
+# Default: "Confirm"
+#: src/schoolbell/app/browser/templates/container_delete.pt:27
+#: src/schoolbell/app/browser/templates/container.pt:24
+msgid "delete-button"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event.pt:18
+msgid "Change the title or description of this event"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event.pt:18
+msgid "edit"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event.pt:38
+msgid "Starts"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event.pt:43
+msgid "Ends"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event.pt:54
+msgid "Change the details of this event"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event.pt:65
+msgid "Scheduled resources"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:108
+msgid "Event information"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:114
+msgid "Event details"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:168
+msgid "Book Resources"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:178
+msgid "Update form"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:195
+msgid "day"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:196
+msgid "week"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:197
+msgid "month"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:198
+msgid "year"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:206
+#: src/schoolbell/app/browser/templates/view_macros.pt:169
+msgid "Weekly"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:207
+msgid "This section only applies when weekly recurrence is selected."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:227
+msgid "This section only applies when the monthly recurrence is selected."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:234
+msgid "Day ${monthday} of every month"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:241
+msgid "${weekday} of every month"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:248
+msgid "XXX of every month"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:258
+msgid "Repeat"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:261
+msgid "times"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:286
+msgid "Repeat forever"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:307
+msgid "Book resources"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_add.pt:4
+#: src/schoolbell/app/browser/templates/event_add.pt:302
+#: src/schoolbell/app/browser/templates/cal_daily.pt:15
+#: src/schoolbell/app/browser/templates/cal_daily.pt:40
+#: src/schoolbell/app/browser/templates/cal_daily.pt:86
+#: src/schoolbell/app/browser/templates/event.pt:3
+#: src/schoolbell/app/browser/templates/view_macros.pt:60
+#: src/schoolbell/app/browser/templates/view_macros.pt:65
+#: src/schoolbell/app/browser/templates/view_macros.pt:99
+#: src/schoolbell/app/browser/templates/view_macros.pt:133
+#: src/schoolbell/app/browser/templates/view_macros.pt:140
+#: src/schoolbell/app/browser/templates/view_macros.pt:147
+#: src/schoolbell/app/browser/templates/view_macros.pt:256
+#: src/schoolbell/app/browser/templates/login.pt:29
+msgid "XXX"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:11
+msgid "Resource Booking for ${title}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:17
+msgid "Title:"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:21
+msgid "Starts:"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:25
+msgid "Ends:"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:29
+msgid "This is a recurring event!"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:36
+msgid "Available Resources"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:4
+msgid "Resource Booking"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:55
+msgid "Conflicting events"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/event_booking.pt:75
+msgid "Book"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:24
+msgid ""
+"CSV data <strong>must</strong> include a group title and "
+"<strong>may</strong> include an optional group description. Any extra "
+"information will be discarded."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:29
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:29
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:28
+msgid "Example:"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:31
+msgid ""
+"\n"
+"LUG, Linux Users Group\n"
+"Chess Club\n"
+"Sports Club, After-school sports club, <em>text after a second comma</em>\n"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:36
+msgid ""
+"The above example will create 3 groups titled 'LUG', 'Chess Club' and "
+"'Sports Club'. The first and last group will have the descriptions 'Linux "
+"Users Group' and 'After-school sports club' respectively. The 'Chess Club' "
+"group will have no description, and the extra \"text after a second comma\" "
+"text on the third group will be ignored."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:4
+msgid "Upload schooltool groups as CSV"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:45
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:46
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:43
+msgid "Upload CSV File"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:47
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:48
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:45
+msgid "CSV File"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:65
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:66
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:63
+msgid "Input CSV Data"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:66
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:67
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:64
+msgid "CSV Data"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group-csvimport.pt:70
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:71
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:68
+msgid "Submit"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group.pt:16
+msgid "Members"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group.pt:23
+msgid "edit members"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group.pt:23
+msgid "Change the people who are members of this group."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group.pt:44
+msgid "Change the resources selected for this group."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/group.pt:44
+msgid "edit resources"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/groups.pt:12
+msgid "Groups of ${title}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/groups.pt:14
+msgid "There are no groups defined."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/index.pt:5
+msgid "Welcome to SchoolBell"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/login.pt:13
+msgid ""
+"You are not allowed to access this page. You can click on the back button in "
+"your browser to go back, or ask a more privileged user to log in."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/login.pt:23
+msgid "Please log in"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/login.pt:3
+msgid "Login"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/login.pt:35
+msgid "User Information"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/login.pt:57
+msgid "L"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/login.pt:8
+msgid "Your session has expired."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/members.pt:12
+msgid "Members of ${title}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/members.pt:14
+#: src/schoolbell/app/browser/templates/container.pt:14
+msgid "There are none."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/members.pt:31
+#: src/schoolbell/app/browser/templates/note_add.pt:43
+#: src/schoolbell/app/browser/templates/person_preferences.pt:44
+#: src/schoolbell/app/browser/templates/simple_add.pt:56
+#: src/schoolbell/app/browser/templates/person_edit.pt:52
+#: src/schoolbell/app/browser/templates/person_details.pt:59
+#: src/schoolbell/app/browser/templates/person_add.pt:52
+#: src/schoolbell/app/browser/templates/groups.pt:31
+#: src/schoolbell/app/browser/templates/simple_edit.pt:51
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:72
+msgid "A"
+msgstr ""
+
+# Default: "Apply"
+#: src/schoolbell/app/browser/templates/members.pt:31
+#: src/schoolbell/app/browser/templates/person_preferences.pt:44
+#: src/schoolbell/app/browser/templates/person_edit.pt:52
+#: src/schoolbell/app/browser/templates/person_details.pt:59
+#: src/schoolbell/app/browser/templates/groups.pt:31
+#: src/schoolbell/app/browser/templates/simple_edit.pt:51
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:72
+msgid "submit-button"
+msgstr ""
+
+# Default: "Cancel"
+#: src/schoolbell/app/browser/templates/members.pt:35
+#: src/schoolbell/app/browser/templates/event_add.pt:305
+#: src/schoolbell/app/browser/templates/note_add.pt:46
+#: src/schoolbell/app/browser/templates/event_booking.pt:77
+#: src/schoolbell/app/browser/templates/container_delete.pt:29
+#: src/schoolbell/app/browser/templates/person_preferences.pt:47
+#: src/schoolbell/app/browser/templates/acl.pt:69
+#: src/schoolbell/app/browser/templates/simple_add.pt:59
+#: src/schoolbell/app/browser/templates/person_edit.pt:55
+#: src/schoolbell/app/browser/templates/person_details.pt:62
+#: src/schoolbell/app/browser/templates/person_add.pt:55
+#: src/schoolbell/app/browser/templates/groups.pt:35
+#: src/schoolbell/app/browser/templates/simple_edit.pt:54
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:75
+msgid "cancel-button"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/navigation.pt:2
+msgid "Navigation"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/navigation.pt:4
+#: src/schoolbell/app/browser/templates/index.pt:10
+msgid "Persons"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/navigation.pt:6
+#: src/schoolbell/app/browser/templates/resource.pt:13
+#: src/schoolbell/app/browser/templates/person.pt:46
+#: src/schoolbell/app/browser/templates/index.pt:11
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:44
+msgid "Groups"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/navigation.pt:8
+#: src/schoolbell/app/browser/templates/group.pt:38
+#: src/schoolbell/app/browser/templates/index.pt:12
+#: src/schoolbell/app/browser/templates/calendar_selection.pt:58
+msgid "Resources"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/note_add.pt:13
+msgid "Note"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/note_add.pt:24
+msgid "Who can view the note"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/note_add.pt:30
+msgid "Private"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/note_add.pt:31
+msgid "Public"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/note_add.pt:4
+msgid "Add note"
+msgstr ""
+
+# Default: "Add"
+#: src/schoolbell/app/browser/templates/note_add.pt:43
+#: src/schoolbell/app/browser/templates/simple_add.pt:56
+#: src/schoolbell/app/browser/templates/person_add.pt:52
+msgid "add-button"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:24
+msgid ""
+"CSV data <strong>must</strong> contain a user name and a full name. An "
+"optional password <strong>may</strong> be included as well."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:30
+msgid ""
+"\n"
+"jjones, Jimmy Jones\n"
+"jbjones, Jim Bob Jones, r2m45J\n"
+"howard, Howard\n"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:35
+msgid ""
+"The above example will create three users, 'jjones', 'jbjones' and 'howard'. "
+"Of the three, only 'jbjones' has a password ('r2m45J') and will be able to "
+"login to the system. Note that passwords must be sent in plain text."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person-csvimport.pt:4
+msgid "Upload schooltool persons as CSV"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:15
+msgid "Username:"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:18
+msgid "Change this person's name, picture, or password"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:18
+msgid "edit name"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:34
+#: src/schoolbell/app/browser/templates/event.pt:34
+msgid "Details"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:36
+msgid "Modify this person's details"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:36
+#: src/schoolbell/app/browser/templates/event.pt:54
+msgid "edit details"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:4
+msgid "Person info: ${title}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:57
+msgid "edit groups"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person.pt:57
+msgid "Manage this person's memberships"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_add.pt:13
+msgid "Person Information"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_add.pt:4
+msgid "Add person"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_add.pt:40
+msgid "Add to groups"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_details.pt:16
+msgid "Change contact details for${user}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_details.pt:24
+msgid "Contact information"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_details.pt:4
+msgid "Edit contact information"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_edit.pt:14
+msgid "Change info for ${user}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_edit.pt:41
+msgid "Change password"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_preferences.pt:14
+msgid "Change preferences for ${user}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_preferences.pt:22
+msgid "Calendar Preferences"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/person_preferences.pt:4
+#: src/schoolbell/app/browser/templates/person_edit.pt:4
+msgid "Edit person"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/recevent_delete.pt:21
+msgid "You are trying to delete a repeating event."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/recevent_delete.pt:43
+msgid "Current"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/recevent_delete.pt:45
+msgid "Future"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/recevent_delete.pt:47
+msgid "All"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/recevent_delete.pt:49
+msgid "Cancel"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/recevent_delete.pt:6
+#: src/schoolbell/app/browser/templates/recevent_delete.pt:16
+msgid "Deleting a repeating event (${event_title})"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:24
+msgid ""
+"CSV data <strong>must</strong> include a resource title and "
+"<strong>may</strong> include an optional resource description. Any extra "
+"information will be discarded."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:31
+msgid ""
+"\n"
+"PRJ302, Overhead Projector #302\n"
+"Main Auditorium\n"
+"LC-805, Laptop Computer #805, <em>text after a second comma</em>\n"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:36
+msgid ""
+"The above example will create 3 resources titled 'PRJ302', 'Main Auditorium' "
+"and 'LC-805'. The first and last resource will have the descriptions "
+"'Overhead Projector #302' and 'Laptop Computer #805' respectively. The "
+"\"Main Auditorium\" resource will have no description, and the \"text after "
+"a second comma\" text on the third resource will be ignored."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/resource-csvimport.pt:4
+msgid "Upload schooltool resources as CSV"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/resource.pt:20
+msgid "This resource does not belong to any groups."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/simple_add.pt:23
+#: src/schoolbell/app/browser/templates/simple_edit.pt:23
+msgid "There are ${num_errors} input errors."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/simple_add.pt:46
+msgid "Identifier (optional)"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:118
+msgid ""
+"<p> &copy; The Shuttleworth Foundation 2003 - <span>2005</span>: Supporting "
+"Social Innovation. </p> <p> SchoolTool&trade; is a Trademark of The "
+"Shuttleworth Foundation. </p>"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:159
+msgid "View daily calendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:163
+msgid "Daily"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:163
+#: src/schoolbell/app/browser/templates/view_macros.pt:169
+#: src/schoolbell/app/browser/templates/view_macros.pt:175
+#: src/schoolbell/app/browser/templates/view_macros.pt:181
+msgid "<img alt=\"x\" src=\"XXX\" />"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:165
+msgid "View weekly calendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:171
+msgid "View monthly calendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:177
+msgid "View yearly calendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:181
+msgid "Yearly"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:192
+#: src/schoolbell/app/browser/templates/view_macros.pt:206
+msgid "Calendar for ${title} - ${calendar_title}"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:237
+msgid "Jump To ..."
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:27
+msgid "SchoolTool"
+msgstr "SchoolBell"
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:314
+msgid "Tomorrow's Events"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:34
+msgid "top"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:49
+#: src/schoolbell/app/browser/templates/login.pt:57
+msgid "Log in"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:57
+msgid "User:"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:68
+msgid "My Calendar"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:73
+msgid "My Preferences"
+msgstr ""
+
+#: src/schoolbell/app/browser/templates/view_macros.pt:77
+msgid "Log Out"
+msgstr ""
+
+#: src/schoolbell/app/configure.zcml:17
+#: src/schoolbell/app/browser/configure.zcml:178
+#: src/schoolbell/app/browser/configure.zcml:251
+#: src/schoolbell/app/browser/configure.zcml:344
+msgid "Edit Info"
+msgstr ""
+
+#: src/schoolbell/app/configure.zcml:19
+#: src/schoolbell/app/browser/configure.zcml:537
+msgid "Add Event"
+msgstr ""
+
+#: src/schoolbell/app/configure.zcml:20
+msgid "Modify Event"
+msgstr ""
+
+#: src/schoolbell/app/configure.zcml:21
+msgid "Set up access"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:128
+msgid "Title of the note."
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:131
+msgid "Body"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:132
+msgid "Body of the note."
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:135
+#: src/schoolbell/app/browser/templates/note_add.pt:24
+msgid "Privacy"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:287
+msgid "Time Zone"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:288
+msgid "Time Zone used to display your calendar"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:292
+#: src/schoolbell/app/interfaces.py:293
+msgid "Time Format"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:294
+msgid "HH:MM"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:295
+msgid "H:MM am/pm"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:298
+#: src/schoolbell/app/interfaces.py:299
+msgid "Date Format"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:300
+msgid "MM/DD/YY"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:301
+msgid "YYYY-DD-MM"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:302
+msgid "Day Month, Year"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:306
+msgid "Week starts on:"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:307
+msgid "Start display of weeks on Sunday or Monday"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:353
+msgid "Title of the group."
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:358
+msgid "Description of the group."
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:380
+msgid "Title of the resource."
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:385
+msgid "Description of the resource."
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:62
+msgid "Required input is missing."
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:70
+msgid "Form input is not a file object"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:71
+#: src/schoolbell/app/interfaces.py:75
+msgid "Invalid integer data"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:72
+msgid "Invalid text data"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:73
+msgid "Invalid textual data"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:74
+msgid "Invalid unicode data"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:76
+msgid "Invalid floating point data"
+msgstr ""
+
+#: src/schoolbell/app/interfaces.py:77
+msgid "Invalid datetime data"
+msgstr ""
+
+#: src/schoolbell/app/main.py:286
+msgid "Going to background, daemon pid %d"
+msgstr ""
+
+#: src/schoolbell/app/main.py:323
+msgid "Unauthenticated User"
+msgstr ""
+
+#: src/schoolbell/app/main.py:324
+#: src/schoolbell/app/main.py:325
+msgid "Unauthenticated Users"
+msgstr ""
+
+#: src/schoolbell/app/main.py:326
+msgid "All Users"
+msgstr ""
+
+#: src/schoolbell/app/main.py:366
+#: src/schoolbell/app/main.py:390
+#: src/schoolbell/app/main.py:393
+msgid "%s: %s"
+msgstr ""
+
+#: src/schoolbell/app/main.py:367
+msgid "Run %s -h for help."
+msgstr ""
+
+#: src/schoolbell/app/main.py:377
+msgid "%s: daemon mode not supported on your operating system."
+msgstr ""
+
+#: src/schoolbell/app/main.py:385
+msgid "Reading configuration from %s"
+msgstr ""
+
+# Default: ""
+#: src/schoolbell/app/main.py:402
+msgid "%s: warning: ignored configuration option '%s'"
+msgstr ""
+
+#: src/schoolbell/app/main.py:420
+msgid "%s Manager"
+msgstr ""
+
+#: src/schoolbell/app/main.py:440
+msgid "Startup time: %.3f sec real, %.3f sec CPU"
+msgstr ""
+
+# Default: ""
+#: src/schoolbell/app/main.py:467
+msgid ""
+"Could not initialize the database:\n"
+"%s"
+msgstr ""
+
+#: src/schoolbell/app/main.py:470
+msgid ""
+"\n"
+"Perhaps another %s instance is using it?"
+msgstr ""
+
+#: src/schoolbell/app/main.py:69
+msgid ""
+"\n"
+"Usage: %s [options]\n"
+"Options:\n"
+"  -c, --config xxx  use this configuration file instead of the default\n"
+"  -h, --help        show this help message\n"
+"  -d, --daemon      go to background after starting\n"
+msgstr ""
+
+#: src/schoolbell/app/main.py:78
+msgid ""
+"\n"
+"No storage defined in the configuration file.\n"
+"\n"
+"If you're using the default configuration file, please edit it now and\n"
+"uncomment one of the ZODB storage sections.\n"
+msgstr ""
+
+#: src/schoolbell/app/main.py:86
+msgid ""
+"\n"
+"This is not a SchoolBell 1.0 database file, aborting.\n"
+msgstr ""
+
+#: src/schoolbell/app/main.py:91
+msgid ""
+"\n"
+"This is not a SchoolBell 1.0 database file, aborting.\n"
+"\n"
+"Please run the standalone database upgrade script.\n"
+msgstr ""
+
+#: import-sampleschool.py:102
+#~ msgid "Please enter the port number:"
+#~ msgstr ""
+
+#: import-sampleschool.py:114
+#~ msgid "Use SSL? (y/n)"
+#~ msgstr ""
+
+#: import-sampleschool.py:116
+#~ msgid "y"
+#~ msgstr ""
+
+#: import-sampleschool.py:119
+#~ msgid "n"
+#~ msgstr ""
+
+#: import-sampleschool.py:128
+#~ msgid "%s does not exist.  Please run generate-sampleschool.py"
+#~ msgstr ""
+
+#: import-sampleschool.py:143
+#~ msgid "SchoolTool server not listening on %s:%s"
+#~ msgstr "SchoolBell server not listening on %s:%s"
+
+#: import-sampleschool.py:148
+#~ msgid "Server version is %s, expected %s"
+#~ msgstr ""
+
+#: import-sampleschool.py:58
+#~ msgid "An error occured!"
+#~ msgstr ""
+
+#: import-sampleschool.py:61 import-sampleschool.py:67
+#~ msgid "Press <Enter> to continue."
+#~ msgstr ""
+
+#: import-sampleschool.py:66
+#~ msgid "The sample school has been imported succesfully."
+#~ msgstr ""
+
+#: import-sampleschool.py:86
+#~ msgid "Invalid port number: %s"
+#~ msgstr ""
+
+#: import-sampleschool.py:95
+#~ msgid "Please enter the hostname of the server:"
+#~ msgstr ""
+
+#: src/schooltool/absence.py:167 src/schooltool/absence.py:182
+#~ msgid "Absence Tracker"
+#~ msgstr ""
+
+#: src/schooltool/app.py:194
+#~ msgid "Root Group"
+#~ msgstr ""
+
+#: src/schooltool/app.py:197
+#~ msgid "System Managers"
+#~ msgstr ""
+
+#: src/schooltool/app.py:198
+#~ msgid "Manager"
+#~ msgstr ""
+
+#: src/schooltool/app.py:203 src/schooltool/browser/www/group_teachers.pt:20
+#: src/schooltool/browser/www/group.pt:76
+#~ msgid "Teachers"
+#~ msgstr "Supervisors"
+
+#: src/schooltool/app.py:210
+#~ msgid "Pupils"
+#~ msgstr "Members"
+
+#: src/schooltool/app.py:213
+#~ msgid "Locations"
+#~ msgstr ""
+
+#: src/schooltool/browser/__init__.py:314
+#: src/schooltool/browser/timetable.py:419
+#: src/schooltool/browser/timetable.py:753
+#: src/schooltool/browser/timetable.py:881
+#: src/schooltool/browser/timetable.py:929
+#: src/schooltool/browser/timetable.py:1027
+#: src/schooltool/browser/timetable.py:1046
+#: src/schooltool/browser/www/busysearch.pt:75
+#~ msgid "Start"
+#~ msgstr ""
+
+#: src/schooltool/browser/__init__.py:327 src/schooltool/browser/app.py:639
+#: src/schooltool/rest/www/person.pt:28
+#~ msgid "Notes"
+#~ msgstr ""
+
+#: src/schooltool/browser/acl.py:110
+#~ msgid "Please select a user"
+#~ msgstr ""
+
+#: src/schooltool/browser/acl.py:117
+#~ msgid "Please select a permission"
+#~ msgstr ""
+
+#: src/schooltool/browser/acl.py:170
+#~ msgid "Revoked permission %s on %s from %s"
+#~ msgstr ""
+
+#: src/schooltool/browser/acl.py:172
+#~ msgid "Revoked permission %s from %s"
+#~ msgstr ""
+
+#: src/schooltool/browser/acl.py:187
+#~ msgid "%s already has permission %s."
+#~ msgstr ""
+
+#: src/schooltool/browser/acl.py:192
+#~ msgid "Granted permission %s on %s to %s."
+#~ msgstr ""
+
+#: src/schooltool/browser/acl.py:195
+#~ msgid "Granted permission %s to %s."
+#~ msgstr ""
+
+#: src/schooltool/browser/acl.py:54 src/schooltool/browser/cal.py:205
+#: src/schooltool/browser/www/cal_monthly.pt:3
+#: src/schooltool/browser/www/cal_weekly.pt:3
+#: src/schooltool/browser/www/cal_daily.pt:3
+#: src/schooltool/browser/www/cal_yearly.pt:3
+#: src/schooltool/browser/www/group.pt:16
+#~ msgid "Calendar"
+#~ msgstr ""
+
+#: src/schooltool/browser/acl.py:61
+#~ msgid "ACL"
+#~ msgstr ""
+
+#: src/schooltool/browser/acl.py:69
+#~ msgid "Select a user"
+#~ msgstr ""
+
+#: src/schooltool/browser/acl.py:70 src/schooltool/browser/acl.py:125
+#: src/schooltool/browser/acl.py:201 src/schooltool/interfaces.py:892
+#~ msgid "Everybody"
+#~ msgstr ""
+
+#: src/schooltool/browser/acl.py:76
+#~ msgid "Permissions"
+#~ msgstr ""
+
+#: src/schooltool/browser/acl.py:79 src/schooltool/interfaces.py:890
+#~ msgid "Modify"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:1001
+#~ msgid "Cancelled."
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:1007
+#~ msgid "Deleted %(title)s (%(path)s)."
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:153
+#~ msgid "www/logo.png"
+#~ msgstr "www/schoolbell.png"
+
+#: src/schooltool/browser/app.py:238 src/schooltool/browser/model.py:238
+#~ msgid "First name"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:239 src/schooltool/browser/model.py:240
+#~ msgid "Last name"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:245 src/schooltool/clients/wxclient.py:1507
+#~ msgid "Confirm password"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:246 src/schooltool/browser/model.py:242
+#~ msgid "Birth date"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:247 src/schooltool/browser/model.py:243
+#~ msgid "(YYYY-MM-DD)"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:248 src/schooltool/browser/model.py:245
+#: src/schooltool/clients/wxclient.py:649
+#~ msgid "Comment"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:255
+#~ msgid ""
+#~ "Username can only contain English letters, numbers, and the following "
+#~ "punctuation characters: - . , ' ( )"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:260
+#~ msgid "User with this username already exists."
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:280
+#~ msgid "User with this name already exists."
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:306 src/schooltool/browser/model.py:288
+#~ msgid "Invalid photo"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:326
+#~ msgid "User with this username  already exists."
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:349 src/schooltool/browser/app.py:440
+#: src/schooltool/browser/app.py:548 src/schooltool/rest/app.py:141
+#~ msgid "Object %s of type %s created"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:360 src/schooltool/browser/model.py:296
+#: src/schooltool/rest/infofacets.py:126
+#~ msgid "Person info updated on %s (%s)"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:369 src/schooltool/browser/model.py:305
+#: src/schooltool/rest/infofacets.py:150
+#~ msgid "Photo added on %s (%s)"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:392
+#~ msgid "Add object"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:414
+#~ msgid "Invalid identifier"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:421 src/schooltool/browser/timetable.py:600
+#: src/schooltool/browser/widgets.py:385
+#~ msgid "Invalid UTF-8 data."
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:426
+#~ msgid "Title should not be empty."
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:430
+#~ msgid "There is an object with this title already."
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:437
+#~ msgid "Identifier already taken"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:446
+#~ msgid "Relationship 'Membership' between %s and %s created"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:474
+#~ msgid "Add group"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:483
+#~ msgid "Add group (a subgroup of %s)"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:490
+#~ msgid "Add resource"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:511 src/schooltool/browser/model.py:607
+#: src/schooltool/uris.py:186
+#~ msgid "Noted"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:517
+#~ msgid "Cannot add %(note)s to %(this)s"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:561 src/schooltool/browser/model.py:418
+#: src/schooltool/browser/timetable.py:387
+#: src/schooltool/rest/relationship.py:124
+#~ msgid "Relationship '%s' between %s and %s created"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:640
+#~ msgid "Add a new note"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:657 src/schooltool/browser/model.py:676
+#: src/schooltool/clients/wxclient.py:1281
+#: src/schooltool/clients/wxclient.py:1391
+#: src/schooltool/browser/www/busysearch.pt:16
+#: src/schooltool/browser/www/busysearch.pt:72
+#~ msgid "Resource"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:665
+#: src/schooltool/browser/www/busysearch.pt:32
+#~ msgid "Periods"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:667
+#~ msgid "First"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:669
+#~ msgid "Last"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:672 src/schooltool/browser/cal.py:86
+#: src/schooltool/browser/cal.py:1013
+#~ msgid "min."
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:840 src/schooltool/browser/cal.py:1742
+#~ msgid "Duration cannot be negative."
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:842
+#~ msgid "Duration cannot be zero."
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:871
+#~ msgid "System options"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:884
+#~ msgid "Default visibility of new events to other users"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:886 src/schooltool/browser/app.py:896
+#: src/schooltool/browser/cal.py:1028 src/schooltool/browser/cal.py:1722
+#~ msgid "Busy block"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:887 src/schooltool/browser/app.py:897
+#: src/schooltool/browser/cal.py:1029 src/schooltool/browser/cal.py:1724
+#~ msgid "Hidden"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:894
+#~ msgid "Visibility of timetable events to other users"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:906
+#~ msgid "The default timetable schema"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:913
+#~ msgid "Restrict group membership to  members of immediate parents."
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:972
+#~ msgid "Search string"
+#~ msgstr ""
+
+#: src/schooltool/browser/app.py:999
+#~ msgid "Nothing was selected."
+#~ msgstr ""
+
+#: src/schooltool/browser/applog.py:49 src/schooltool/rest/applog.py:41
+#~ msgid "Application log not configured"
+#~ msgstr ""
+
+#: src/schooltool/browser/applog.py:64 src/schooltool/rest/applog.py:52
+#~ msgid "Invalid value for 'page' parameter."
+#~ msgstr ""
+
+#: src/schooltool/browser/cal.py:1018
+#~ msgid "Other"
+#~ msgstr ""
+
+#: src/schooltool/browser/cal.py:1022
+#~ msgid "Specify other location"
+#~ msgstr ""
+
+#: src/schooltool/browser/cal.py:1026
+#~ msgid "Visibility to other users"
+#~ msgstr ""
+
+#: src/schooltool/browser/cal.py:1037
+#~ msgid "Recurs"
+#~ msgstr ""
+
+#: src/schooltool/browser/cal.py:106
+#~ msgid "This user does not exist."
+#~ msgstr ""
+
+#: src/schooltool/browser/cal.py:115
+#~ msgid "Owner"
+#~ msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:1367
+#~ msgid "Last %(weekday)s"
+#~ msgstr ""
+
+#: src/schooltool/browser/cal.py:1324
+#~ msgid "This event does not exist."
+#~ msgstr ""
+
+#: src/schooltool/browser/cal.py:160
+#~ msgid "The resource is busy at the specified time."
+#~ msgstr ""
+
+#: src/schooltool/browser/cal.py:164
+#~ msgid "Sorry, you don't have permissions to book this resource"
+#~ msgstr ""
+
+#: src/schooltool/browser/cal.py:168 src/schooltool/rest/cal.py:453
+#~ msgid "%s booked by %s"
+#~ msgstr ""
+
+#: src/schooltool/browser/cal.py:1691 src/schooltool/rest/cal.py:245
+#~ msgid "Busy"
+#~ msgstr ""
+
+#: src/schooltool/browser/cal.py:172 src/schooltool/rest/cal.py:457
+#~ msgid "%s (%s) booked by %s (%s) at %s for %s"
+#~ msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:709
+#~ msgid "%(month)s, %(year)s (week %(week)s)"
+#~ msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:422
+#: src/schoolbell/app/browser/cal.py:426
+#: src/schoolbell/app/browser/cal.py:430
+#~ msgid "%s, %s"
+#~ msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:752
+#~ msgid "%(month)s, %(year)s"
+#~ msgstr ""
+
+#: src/schoolbell/app/browser/cal.py:770
+#~ msgid "Week %d"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:117
+#: src/schooltool/browser/csvimport.py:288
+#~ msgid "No data provided."
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:142
+#~ msgid "Import failed: %s"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:146
+#~ msgid "CSV data import started"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:149
+#~ msgid "CSV data import finished successfully"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:171
+#~ msgid "Group already exists: %r"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:177
+#~ msgid "No such group: %s"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:181
+#~ msgid "Cannot add %s to group %s"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:188
+#~ msgid "Unknown facet type: %s"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:191
+#~ msgid "Imported group: %s"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:198
+#~ msgid "Person already exists: %r"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:204
+#: src/schooltool/browser/csvimport.py:232
+#~ msgid "Invalid group: %s"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:210
+#: src/schooltool/browser/csvimport.py:219
+#~ msgid "No such group: %r"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:212
+#: src/schooltool/browser/csvimport.py:236
+#~ msgid "Cannot add %r to %r"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:213
+#~ msgid "Imported person: %s"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:221
+#~ msgid "Cannot add %r as a teacher for %r"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:237
+#~ msgid "Imported resource: %s"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:255
+#~ msgid "Imported person info for %s (%s %s, %s)"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:304
+#~ msgid "timetable.csv imported successfully."
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:305
+#~ msgid "School timetable imported"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:307
+#~ msgid "Failed to import timetable.csv"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:312
+#~ msgid "roster.txt imported successfully."
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:313
+#~ msgid "School timetable roster imported"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:326
+#~ msgid "Day ids not defined in selected schema: %s."
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:327
+#~ msgid "Periods not defined in selected days: %s."
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:328
+#~ msgid "Persons not found: %s."
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:329
+#~ msgid "Groups not found: %s."
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:330
+#~ msgid "Locations not found: %s."
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:331
+#~ msgid "Invalid records: %s."
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:387
+#~ msgid ""
+#~ "The first row of the CSV file should contain the period id and the schema of "
+#~ "the timetable."
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:395
+#~ msgid "The timetable schema %r does not exist."
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:456
+#~ msgid "Error in timetable CSV data, line %d"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:459
+#~ msgid "Conversion to unicode failed in line %d"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:48
+#~ msgid "Unicode (UTF-8)"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:49
+#~ msgid "Western (ISO-8859-1)"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:50
+#~ msgid "Western (ISO-8859-15)"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:51
+#~ msgid "Western (Windows-1252)"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:52
+#~ msgid "Other (please specify)"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:53
+#~ msgid "Charset"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:57
+#~ msgid "Specify other charset"
+#~ msgstr ""
+
+#: src/schooltool/browser/csvimport.py:596
+#~ msgid "%s does not belong to a parent group of %s"
+#~ msgstr ""
+
+#: src/schooltool/browser/model.py:196
+#~ msgid "Incorrect password for %s."
+#~ msgstr ""
+
+#: src/schooltool/browser/model.py:199
+#~ msgid "Account disabled."
+#~ msgstr ""
+
+#: src/schooltool/browser/model.py:201 src/schooltool/rest/model.py:161
+#~ msgid "Account disabled for %s (%s)"
+#~ msgstr ""
+
+#: src/schooltool/browser/model.py:209
+#~ msgid "Password changed."
+#~ msgstr ""
+
+#: src/schooltool/browser/model.py:211 src/schooltool/rest/model.py:154
+#~ msgid "Password changed for %s (%s)"
+#~ msgstr ""
+
+#: src/schooltool/browser/model.py:268
+#~ msgid "Another user with this name already exists."
+#~ msgstr ""
+
+#: src/schooltool/browser/model.py:301 src/schooltool/rest/infofacets.py:158
+#~ msgid "Photo removed from %s (%s)"
+#~ msgstr ""
+
+#: src/schooltool/browser/model.py:378
+#~ msgid "Cannot create relationship between %(other)s and %(this)s"
+#~ msgstr ""
+
+#: src/schooltool/browser/model.py:405 src/schooltool/browser/timetable.py:400
+#: src/schooltool/rest/relationship.py:146
+#~ msgid "Relationship '%s' between %s and %s removed"
+#~ msgstr ""
+
+#: src/schooltool/browser/model.py:434 src/schooltool/browser/timetable.py:388
+#: src/schooltool/browser/timetable.py:402 src/schooltool/uris.py:123
+#~ msgid "Membership"
+#~ msgstr ""
+
+#: src/schooltool/browser/model.py:438
+#~ msgid "Cannot add %(other)s to %(this)s"
+#~ msgstr ""
+
+#: src/schooltool/browser/model.py:483 src/schooltool/uris.py:139
+#~ msgid "Teaching"
+#~ msgstr "Supervision"
+
+#: src/schooltool/browser/model.py:487
+#~ msgid "Cannot add teacher %(other)s to %(this)s"
+#~ msgstr "Cannot add supervisor %(other)s to %(this)s"
+
+#: src/schooltool/browser/model.py:569
+#~ msgid "Resource %s modified"
+#~ msgstr ""
+
+#: src/schooltool/browser/model.py:611
+#~ msgid "Cannot edit %(note)s to %(this)s"
+#~ msgstr ""
+
+#: src/schooltool/browser/model.py:643
+#~ msgid "Note info updated on %s (%s)"
+#~ msgstr ""
+
+#: src/schooltool/browser/model.py:672 src/schooltool/clients/wxclient.py:630
+#: src/schooltool/clients/wxclient.py:1397
+#~ msgid "Person"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:1004
+#~ msgid "Deleted %s."
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:1021
+#: src/schooltool/rest/timetable.py:480
+#~ msgid "Timetable schema %s deleted"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:1041
+#: src/schooltool/rest/timetable.py:884
+#~ msgid "Time period %s deleted"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:1047
+#: src/schooltool/browser/www/time-periods.pt:3
+#: src/schooltool/browser/www/time-periods.pt:8
+#~ msgid "Time periods"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:134
+#: src/schooltool/browser/timetable.py:215
+#~ msgid "Timetable for %s, %s"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:140
+#~ msgid "%s's timetable for %s"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:221
+#~ msgid "%s's timetable setup (%s)"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:295 src/schooltool/rest/absence.py:445
+#: src/schooltool/rest/absence.py:482
+#~ msgid "None"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:420
+#: src/schooltool/browser/timetable.py:754
+#: src/schooltool/browser/timetable.py:1028
+#: src/schooltool/browser/www/ttschemas.pt:3
+#: src/schooltool/browser/www/ttschemas.pt:8
+#~ msgid "Timetable schemas"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:518
+#: src/schooltool/browser/timetable.py:923
+#: src/schooltool/clients/wxclient.py:982
+#: src/schooltool/browser/www/time-periods.pt:24
+#: src/schooltool/browser/www/ttschemas.pt:24
+#~ msgid "Name"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:522
+#~ msgid "minutes (used if you do not specify the ending time explicitly)"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:549
+#~ msgid "Timetable schema name must not be empty"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:551
+#~ msgid ""
+#~ "Timetable schema name can only contain English letters, numbers, and the "
+#~ "following punctuation characters: - . , ' ( )"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:556
+#~ msgid "Timetable schema with this name already exists."
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:580
+#~ msgid "Duration cannot be negative"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:582
+#~ msgid "Duration cannot be longer than 24 hours"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:609
+#~ msgid "Please select a value"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:615
+#~ msgid "Timetable schema %s created"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:636
+#: src/schooltool/browser/timetable.py:641
+#~ msgid "Day %d"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:664
+#~ msgid "Period 1"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:673
+#~ msgid "Period %d"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:791
+#~ msgid "Start date"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:792
+#~ msgid "End date"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:799
+#~ msgid "End date cannot be earlier than start date."
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:830
+#~ msgid "%(month)s %(year)s"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:875
+#~ msgid "Time period %s"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:882
+#: src/schooltool/browser/timetable.py:930
+#~ msgid "Timetable periods"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:906
+#: src/schooltool/rest/timetable.py:878
+#~ msgid "Time period %s updated"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:941
+#~ msgid "Time period name must not be empty"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:943
+#~ msgid ""
+#~ "Time period name can only contain English letters, numbers, and the "
+#~ "following punctuation characters: - . , ' ( )"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:948
+#~ msgid "Time period with this name already exists."
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:951
+#~ msgid "New time period"
+#~ msgstr ""
+
+#: src/schooltool/browser/timetable.py:968
+#~ msgid "Time period %s created"
+#~ msgstr ""
+
+#: src/schooltool/browser/widgets.py:202
+#~ msgid "Invalid date.  Please specify YYYY-MM-DD."
+#~ msgstr ""
+
+#: src/schooltool/browser/widgets.py:229
+#~ msgid "Invalid time.  Please specify HH:MM."
+#~ msgstr ""
+
+#: src/schooltool/browser/widgets.py:233
+#~ msgid "Time must be between 00:00 and 24:00."
+#~ msgstr ""
+
+#: src/schooltool/browser/widgets.py:270
+#~ msgid "Invalid value."
+#~ msgstr ""
+
+#: src/schooltool/browser/widgets.py:294
+#~ msgid "Password can only contain ASCII characters."
+#~ msgstr ""
+
+#: src/schooltool/browser/widgets.py:426
+#~ msgid "This field is required."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/acl.pt:17
+#~ msgid "The ACL is empty."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/acl.pt:24
+#~ msgid "Permission"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/acl.pt:43
+#~ msgid "Revoke permission"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/acl.pt:52
+#~ msgid "Grant permission"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/applog.pt:21
+#~ msgid "(of ${total})"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/applog.pt:23
+#~ msgid "Go"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/applog.pt:28
+#~ msgid "Substring"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/applog.pt:31
+#~ msgid "Filter"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/applog.pt:43
+#~ msgid "First page"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/applog.pt:45
+#~ msgid "Previous page"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/applog.pt:49
+#~ msgid "Next page"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/applog.pt:53
+#~ msgid "Last page"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/booking.pt:13
+#~ msgid "Sorry, you don't have permissions to book this resource."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/booking.pt:16
+#: src/schooltool/browser/www/booking.pt:21
+#~ msgid "Back to resource search"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/booking.pt:20
+#~ msgid "Resource booked."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/booking.pt:7
+#~ msgid "Book resource ${title}"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/busysearch.pt:3
+#~ msgid "Search for resources"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/busysearch.pt:40
+#~ msgid "Dates"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/busysearch.pt:52
+#~ msgid "By hours"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/busysearch.pt:55
+#~ msgid "By periods"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/busysearch.pt:66
+#~ msgid "Available time slots"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/busysearch.pt:67
+#~ msgid "No available time slots found."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/busysearch.pt:74
+#~ msgid "Period"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/busysearch.pt:76
+#~ msgid "End"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/cal_daily.pt:12
+#~ msgid "Previous day"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/cal_daily.pt:17
+#~ msgid "Next day"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/cal_event.pt:3
+#~ msgid "[delete]"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/cal_monthly.pt:7
+#: src/schooltool/browser/www/cal_weekly.pt:7
+#: src/schooltool/browser/www/cal_daily.pt:7
+#: src/schooltool/browser/www/cal_yearly.pt:7
+#~ msgid "Calendar for ${title}"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:100
+#~ msgid ""
+#~ "\"math\",\"Mathematics Department\",\"root\",\"\"<br /> \"year1\",\"Year "
+#~ "1\",\"root\",\"\"<br /> \"math1\",\"Mathematics 1\",\"math "
+#~ "year1\",\"subject_group\""
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:105
+#~ msgid ""
+#~ "<strong>pupils.csv</strong> contains lines of comma-separated values with "
+#~ "the following columns:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:109
+#~ msgid "<strong>title</strong> -- The full name of a pupil."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:111
+#~ msgid ""
+#~ "<strong>groups</strong> -- A space-separated list of groups this pupil is a "
+#~ "member in."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:113
+#~ msgid "<strong>birthday</strong> -- Date of birth (YYYY-MM-DD)."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:115
+#: src/schooltool/browser/www/csvimport.pt:140
+#~ msgid "<strong>comment</strong> -- A comment (a free form string)."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:117
+#~ msgid "<strong>blank</strong> -- A blank column."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:120
+#~ msgid "Pupils are automatically added to the pupils group (/groups/pupils)."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:123
+#~ msgid "Sample pupils.csv:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:125
+#~ msgid ""
+#~ "\"James Cox\",\"year1 math1 ling1\", \"1994-03-10\",\"\", \"\"<br /> \"Tom "
+#~ "Hall\",\"year1 biol1 math1\",\"1994-07-20\",\"\", \"\""
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:129
+#~ msgid ""
+#~ "<strong>teachers.csv</strong> contains lines of comma-separated values with "
+#~ "the following columns:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:134
+#~ msgid "<strong>title</strong> -- The full name of a teacher."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:136
+#~ msgid ""
+#~ "<strong>groups</strong> -- A space-separated list of groups this teacher is "
+#~ "a member of (but doesn't teach to)."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:138
+#~ msgid ""
+#~ "<strong>birthday</strong> -- Date of birth in ISO 8601 format (YYYY-MM-DD)."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:14
+#~ msgid "Data imported successfully."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:142
+#~ msgid ""
+#~ "<strong>teaches</strong> -- A space-separated list of groups "
+#~ "(classes/sections) that this person teaches."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:146
+#~ msgid ""
+#~ "Teachers are automatically added to the teachers group (/groups/teachers)."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:149
+#~ msgid "Sample teachers.csv:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:151
+#~ msgid ""
+#~ "\"Nicola Smith\",\"\",\"1952-12-06\",\"\",\"ling3\"<br /> \"Jeff "
+#~ "Cox\",\"griffindor\",\"1967-06-13\",\"\",\"biol3\""
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:155
+#~ msgid ""
+#~ "<strong>resources.csv</strong> contains lines of comma-separated values with "
+#~ "the following columns:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:159
+#~ msgid "<strong>title</strong> -- The human readable name of the resource."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:161
+#~ msgid ""
+#~ "<strong>groups</strong> -- A space-separated list of groups that this "
+#~ "resource belongs to."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:165
+#~ msgid "Sample resources.csv:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:167
+#~ msgid ""
+#~ "\"Hall\", \"locations\"<br /> \"Stadium\", \"locations\"<br /> \"Projector "
+#~ "1\", \"\"<br /> \"Projector 2\", \"\"<br /> \"Room 1\", \"locations\"<br /> "
+#~ "\"Room 2\", \"locations miscgroup\""
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:18
+#~ msgid "groups.csv"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:23
+#~ msgid "teachers.csv"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:28
+#~ msgid "pupils.csv"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:3
+#: src/schooltool/browser/www/csvimport.pt:8
+#~ msgid "Upload CSV data"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:33
+#~ msgid "resources.csv"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:64
+#~ msgid ""
+#~ "<strong>groups.csv</strong> contains lines of comma-separated values with "
+#~ "the following columns:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:69
+#~ msgid ""
+#~ "<strong>name</strong> -- The name of this group. It is used for constructing "
+#~ "object URIs and cannot be changed. A group with the name of x will be "
+#~ "accessible as /groups/x on the server. Names should not contain spaces."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:74
+#~ msgid "<strong>title</strong> -- A human-readable title of the group."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:76
+#~ msgid ""
+#~ "<strong>parents</strong> -- A space separated list of names of the groups "
+#~ "this group is a member in. The list can be empty."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:79
+#~ msgid ""
+#~ "<strong>facets</strong> -- A space separated list of facet factories to add "
+#~ "to this group. The list can be empty."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:85
+#~ msgid ""
+#~ "The following two groups are always created and should not be defined "
+#~ "explicitly:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:89
+#~ msgid "Pupils group (/groups/pupils)."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:90
+#~ msgid ""
+#~ "Teachers group (/groups/teachers) with teacher_group facet added to it."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/csvimport.pt:94
+#~ msgid "Sample groups.cvs:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/delete.pt:17
+#~ msgid ""
+#~ "You can perform a search for a person/group/resource whose title or ID "
+#~ "contains a substring and then select one or more of the objects for "
+#~ "deletion."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/delete.pt:22
+#~ msgid ""
+#~ "Deleting application objects is a serious matter that should only be done to "
+#~ "undo mistakes such as accidentally entering the same person in the system "
+#~ "twice. When an object is deleted, all data associated with the object "
+#~ "(relationships, timetables, calendars, resource bookings etc.) is gone "
+#~ "forever."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/delete.pt:3
+#: src/schooltool/browser/www/delete.pt:8
+#~ msgid "Delete persons, groups and resources"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/delete.pt:36
+#: src/schooltool/browser/www/busysearch.pt:50
+#~ msgid "Search"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/delete.pt:46
+#~ msgid "Search results"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/delete.pt:49
+#~ msgid "There are no persons/groups/resources matching ${query_string}."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/delete.pt:75
+#~ msgid "Delete selected objects"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/delete.pt:86
+#~ msgid "Are you sure that you want to delete the following objects?"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/error.pt:13
+#~ msgid "Exception"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/error.pt:18
+#~ msgid "Traceback"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/error.pt:3 src/schooltool/browser/www/error.pt:6
+#~ msgid "Server Error"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/error.pt:9
+#~ msgid ""
+#~ "An internal server error has occurred. This most likely means that you have "
+#~ "found a bug in SchoolTool. Please report it on <a "
+#~ "href=\"http://issues.schooltool.org\">the issue tracker</a>."
+#~ msgstr ""
+#~ "An internal server error has occurred. This most likely means that you have "
+#~ "found a bug in SchoolBell. Please report it on <a "
+#~ "href=\"http://issues.schooltool.org\">the issue tracker</a>."
+
+#: src/schooltool/browser/www/event.pt:184
+#~ msgid "of every month"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group.pt:17
+#~ msgid "Use calendar for this group"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group.pt:23
+#~ msgid "Set who can add/remove members<br />and teachers of this group."
+#~ msgstr "Set who can add/remove members<br />and supervisors of this group."
+
+#: src/schooltool/browser/www/group.pt:26
+#~ msgid ""
+#~ "Set who can view, edit, and add<br /> events to the calendar of this group."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group.pt:35
+#~ msgid "Super-groups"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group.pt:40
+#~ msgid "This group has no super-groups."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group.pt:47
+#~ msgid "Sub-groups"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group.pt:51
+#~ msgid "This group has no sub-groups."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group.pt:64
+#~ msgid "This group has no members."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group.pt:81
+#~ msgid "This group has no teachers."
+#~ msgstr "This group has no supervisors."
+
+#: src/schooltool/browser/www/group_edit.pt:26
+#~ msgid "Members and Sub-groups"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group_edit.pt:4
+#: src/schooltool/browser/www/group_edit.pt:9
+#~ msgid "Members of ${group}"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group_edit.pt:46
+#: src/schooltool/browser/www/group_teachers.pt:40
+#~ msgid "Remove"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group_edit.pt:56
+#~ msgid ""
+#~ "The \"Add\" button above lets you add already existing groups and persons as "
+#~ "sub-groups and members of this group. You can also add a completely new "
+#~ "group to the system and make it a sub-group of this group by using the "
+#~ "button below:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group_edit.pt:73
+#~ msgid "Enter a substring of the member name:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group_edit.pt:76
+#: src/schooltool/browser/www/time-period.pt:48
+#~ msgid "Next"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group_edit.pt:85
+#~ msgid "Sorry, there are no objects that could be added to this group."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group_edit.pt:90
+#~ msgid "Select a member you want to add:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group_teachers.pt:21
+#~ msgid "There are no teachers."
+#~ msgstr "There are no supervisors."
+
+#: src/schooltool/browser/www/group_teachers.pt:4
+#: src/schooltool/browser/www/group_teachers.pt:9
+#~ msgid "Teachers for ${group}"
+#~ msgstr "Supervisors for ${group}"
+
+#: src/schooltool/browser/www/group_teachers.pt:55
+#~ msgid "Sorry, there are no teachers that could be added."
+#~ msgstr "Sorry, there are no supervisors that could be added."
+
+#: src/schooltool/browser/www/group_teachers.pt:60
+#~ msgid "Select..."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/group_teachers.pt:65
+#~ msgid "Add teacher"
+#~ msgstr "Add supervisor"
+
+#: src/schooltool/browser/www/login.pt:24
+#~ msgid "Incorrect username or password."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/login.pt:3 src/schooltool/browser/www/login.pt:8
+#: src/schooltool/browser/www/macros.pt:19
+#: src/schooltool/browser/www/macros.pt:63
+#~ msgid "Welcome to SchoolTool"
+#~ msgstr "Welcome to SchoolBell"
+
+#: src/schooltool/browser/www/macros.pt:20
+#~ msgid "Not logged in."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/macros.pt:80
+#~ msgid "Show time in periods"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/macros.pt:83
+#~ msgid "Periods off"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/macros.pt:86
+#~ msgid "Edit ACL"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/note.pt:5 src/schooltool/browser/www/note.pt:12
+#~ msgid "Note: ${title}"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/note_edit.pt:15
+#~ msgid "Note:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/note_edit.pt:3
+#~ msgid "Edit note"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/note_edit.pt:7
+#~ msgid "Edit note: ${title}"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/notfound.pt:3
+#~ msgid "404 Not Found"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/notfound.pt:6
+#~ msgid "Not Found"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/notfound.pt:9
+#~ msgid "Not found: ${uri}"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/password.pt:12
+#~ msgid ""
+#~ "The account for ${user} is <span class=\"accountenabled\">enabled</span>."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/password.pt:16
+#~ msgid ""
+#~ "The account for ${user} is <span class=\"accountdisabled\">disabled</span>. "
+#~ "Enter a new password to enable it."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/password.pt:25
+#~ msgid "Current password"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/password.pt:29
+#~ msgid "Manager's password"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/password.pt:41
+#~ msgid "Shortcut: Alt-C"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/password.pt:45
+#~ msgid "Disable account"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/password.pt:7
+#~ msgid "Change password for ${user}"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person.pt:27
+#~ msgid "Merge calendars:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person.pt:3
+#~ msgid "Person info"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person.pt:52
+#: src/schooltool/browser/www/group.pt:11
+#~ msgid "Timetables"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person.pt:57
+#~ msgid "setup"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person.pt:68
+#~ msgid "First name:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person.pt:7
+#~ msgid "Person info for ${title}"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person.pt:71
+#~ msgid "Last name:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person.pt:74
+#~ msgid "Date of birth:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person.pt:77
+#~ msgid "Comment:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person.pt:81
+#~ msgid "Photo:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person.pt:82
+#~ msgid "N/A"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person_add.pt:27
+#: src/schooltool/browser/www/object_add.pt:28
+#~ msgid "Add anyway"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person_edit.pt:27
+#~ msgid "No photo currently set"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person_edit.pt:3
+#~ msgid "Edit person info"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person_edit.pt:37
+#~ msgid "Save anyway"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person_edit.pt:45
+#~ msgid "Remove photo"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/person_edit.pt:7
+#~ msgid "Edit person info for ${title}"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/recevent_delete.pt:17
+#~ msgid ""
+#~ "You are trying to delete a repeating event. Do you want to delete the "
+#~ "current occurrence, this and all future occurrences, or all ocurrences?"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/redirect.pt:11
+#~ msgid ""
+#~ "Your browser is now being redirected to ${destination}. If the redirect does "
+#~ "not work, please click on the link manually."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/redirect.pt:4
+#~ msgid "Redirecting to ${destination}"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/redirect.pt:7
+#~ msgid "Redirecting"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/resetdb.pt:14
+#~ msgid ""
+#~ "Warning: resetting the database will irreversibly destroy all data in this "
+#~ "SchoolTool instance. Are you sure you want to proceed?"
+#~ msgstr ""
+#~ "Warning: resetting the database will irreversibly destroy all data in this "
+#~ "SchoolBell instance. Are you sure you want to proceed?"
+
+#: src/schooltool/browser/www/resetdb.pt:17
+#~ msgid ""
+#~ "You may have to relogin with the default manager account (password: "
+#~ "'schooltool')."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/resetdb.pt:19
+#: src/schooltool/browser/www/delete.pt:101
+#: src/schooltool/browser/www/ttevent_delete.pt:36
+#~ msgid "Confirm"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/resetdb.pt:3
+#: src/schooltool/browser/www/resetdb.pt:8
+#~ msgid "Reset the SchoolTool database"
+#~ msgstr "Reset the SchoolBell database"
+
+#: src/schooltool/browser/www/resource.pt:27
+#: src/schooltool/browser/www/resource_edit.pt:12
+#~ msgid "Identifier:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/resource.pt:3
+#: src/schooltool/browser/www/resource.pt:6
+#~ msgid "Resource info"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/resource_add.pt:15
+#~ msgid "This resource is a venue"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/resource_edit.pt:17
+#~ msgid "Save Anyway"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/resource_edit.pt:3
+#~ msgid "Edit resource info"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/resource_edit.pt:7
+#~ msgid "Edit resource info for ${title}"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:11
+#~ msgid "You may choose an action from the list below."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:15
+#~ msgid "Browsing"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:16
+#~ msgid "Browse groups and persons"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:18
+#~ msgid "View the person index"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:20
+#~ msgid "View the group index"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:22
+#~ msgid "View the resource index"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:26
+#~ msgid "Administrative tasks"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:27
+#~ msgid "Add a person"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:29
+#~ msgid "Add a group"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:3
+#~ msgid "Start page"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:31
+#~ msgid "Add a resource"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:33
+#~ msgid "View the application log"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:35
+#~ msgid "Manage timetable schemas"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:37
+#~ msgid "Manage time periods"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:39
+#~ msgid "Import CSV data"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:41
+#~ msgid "Import school timetable as CSV"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:43
+#~ msgid "Delete persons, groups or resources"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:45
+#~ msgid "Reset the database"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:47
+#~ msgid "Edit system options"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:52
+#~ msgid "Teacher tasks"
+#~ msgstr "Supervisor tasks"
+
+#: src/schooltool/browser/www/start.pt:53
+#: src/schooltool/browser/www/booking.pt:3
+#~ msgid "Book a resource"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:58
+#~ msgid "User tasks"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:59
+#~ msgid "View your information page"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:61
+#~ msgid "Change your password"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:64
+#~ msgid "Browse your calendar"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:67
+#~ msgid "Open your calendar in an iCal client"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:7
+#~ msgid "Start page for ${user}"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:70
+#~ msgid "Open your timetable calendar in an iCal client"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/start.pt:74
+#: src/schooltool/browser/www/macros.pt:36
+#~ msgid "Log out"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/time-period.pt:138
+#~ msgid "Create time period"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/time-period.pt:147
+#~ msgid "Save changes"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/time-period.pt:33
+#~ msgid ""
+#~ "First, please name and define the time period itself. The name should be "
+#~ "short and contain no spaces (e.g., 2004-fall). The date range is inclusive "
+#~ "(e.g., 2004-09-01 to 2004-12-31). Dates must be specified in YYYY-MM-DD "
+#~ "format."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/time-period.pt:38
+#~ msgid "The date range is inclusive (e.g., 2004-09-01 to 2004-12-31)."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/time-period.pt:61
+#~ msgid ""
+#~ "Second, please specify which days are school days, and which days are "
+#~ "holidays."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/time-period.pt:65
+#~ msgid ""
+#~ "Please specify which days are school days, and which days are holidays."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/time-period.pt:72
+#~ msgid "Legend:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/time-period.pt:73
+#~ msgid "Schoolday"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/time-period.pt:74
+#~ msgid "Holiday"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/time-period.pt:84
+#~ msgid "Toggle the following days of week:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/time-periods.pt:18
+#~ msgid "There are no time periods defined."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/time-periods.pt:38
+#~ msgid "Delete time period"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/time-periods.pt:42
+#~ msgid "Add time period"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable-csvupload.pt:24
+#~ msgid "timetable.csv"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable-csvupload.pt:29
+#~ msgid "roster.txt"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable-csvupload.pt:3
+#: src/schooltool/browser/www/timetable-csvupload.pt:10
+#~ msgid "Upload schooltool timetable as CSV"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable-csvupload.pt:47
+#: src/schooltool/browser/www/csvimport.pt:51
+#~ msgid "Note that the import may take a while. Please be patient."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable-csvupload.pt:53
+#: src/schooltool/browser/www/csvimport.pt:57
+#~ msgid "Format of the files"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable-csvupload.pt:55
+#: src/schooltool/browser/www/csvimport.pt:59
+#~ msgid ""
+#~ "You can create these files in a spreadsheet and export them in the comma "
+#~ "separated value format described below."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable-csvupload.pt:60
+#~ msgid ""
+#~ "<strong>timetable.csv</strong> contains lines of comma-separated values as "
+#~ "in the following example:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable-csvupload.pt:76
+#~ msgid ""
+#~ "<strong>roster.txt</strong> contains plain text as in the following example:"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable-setup.pt:11
+#~ msgid ""
+#~ "This form lets you set up the timetable of a person by adding and removing "
+#~ "the person to and from groups that have classes in their timetables."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable-setup.pt:28
+#~ msgid "Scheduling conflict."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable-setup.pt:36
+#~ msgid ""
+#~ "Note: if a class appears in more than one period, all of them have to be set "
+#~ "to none to remove it."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable-setup.pt:42
+#: src/schooltool/browser/www/event.pt:231
+#: src/schooltool/browser/www/person_edit.pt:43
+#: src/schooltool/browser/www/note_edit.pt:26
+#: src/schooltool/browser/www/options.pt:18
+#: src/schooltool/browser/www/resource_edit.pt:23
+#~ msgid "Save"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable.pt:30
+#: src/schooltool/rest/www/timetable_html.pt:22
+#~ msgid "Timetable exceptions"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable.pt:43
+#: src/schooltool/rest/www/timetable_html.pt:28
+#~ msgid "On ${date}, period ${period}, ${activity} is canceled."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable.pt:56
+#: src/schooltool/rest/www/timetable_html.pt:40
+#~ msgid ""
+#~ "On ${date}, period ${period}, ${activity} is replaced with ${title} from "
+#~ "${start} to ${end}."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable.pt:72
+#: src/schooltool/rest/www/timetable_html.pt:55
+#~ msgid ""
+#~ "On ${date}, period ${period}, ${activity} is replaced with ${title} from "
+#~ "${start} to ${end} on ${new_date}."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable.pt:77
+#~ msgid "Remove this exception"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable.pt:87
+#~ msgid ""
+#~ "To add a timetable exception, just edit or delete a timetable event in the "
+#~ "${calendar}."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/timetable.pt:88
+#~ msgid "calendar"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttevent_delete.pt:17
+#~ msgid ""
+#~ "You are trying to delete an event that has been generated from a timetable. "
+#~ "An exception for this day will be marked in the corresponding timetable. Are "
+#~ "you sure you want to add an exception for this activity?"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttevent_delete.pt:4
+#: src/schooltool/browser/www/ttevent_delete.pt:10
+#~ msgid "Add exception for ${event_title}"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttschemas.pt:18
+#~ msgid "There are no schemas defined."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttschemas.pt:38
+#~ msgid "Delete timetable schema"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttschemas.pt:42
+#~ msgid "Add timetable schema"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttwizard.pt:106
+#~ msgid ""
+#~ "Timetable day always coincides with the day of week (i.e. on Mondays the "
+#~ "first timetable day is used, on Tuesdays the second, and so on)."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttwizard.pt:121
+#~ msgid ""
+#~ "Timetable days are used sequentially, jumping over days that are not school "
+#~ "days."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttwizard.pt:128
+#~ msgid ""
+#~ "Third, define the time and duration of periods when they fall on certain "
+#~ "days of week. Use one of the the following format: <tt>HH:MM</tt> (also, "
+#~ "don't forget to specify the duration in the text box below) or <tt>HH:MM- "
+#~ "HH:MM</tt> (when you want to specify both endpoints explicitly, e.g., 9:30- "
+#~ "10:15). It is not necessary to define all periods for all days of week, "
+#~ "omissions will just cause that period to be skipped if it happens to fall on "
+#~ "that day of week. If the list of periods is not up to date with the changes "
+#~ "you made in the table above, use the Update button to refresh the form."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttwizard.pt:174
+#~ msgid ""
+#~ "Certain period specifications were incorrect, and therefore were discarded."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttwizard.pt:192
+#~ msgid ""
+#~ "Finally, make sure the information in this form is correct, because the only "
+#~ "way to correct it will be to remove this timetable schema and recreate it."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttwizard.pt:198
+#~ msgid "Create timetable schema"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttwizard.pt:3
+#: src/schooltool/browser/www/ttwizard.pt:6
+#~ msgid "New timetable schema"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttwizard.pt:30
+#~ msgid "First, please define the days and periods of the timetable."
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttwizard.pt:45
+#: src/schooltool/browser/www/ttwizard.pt:148
+#~ msgid "Copy periods from previous day"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttwizard.pt:45
+#: src/schooltool/browser/www/ttwizard.pt:148
+#: src/schooltool/browser/www/password.pt:41
+#~ msgid "C"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttwizard.pt:52
+#~ msgid "Remove this day"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttwizard.pt:52
+#~ msgid "X"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttwizard.pt:77
+#~ msgid "Add day"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttwizard.pt:80
+#~ msgid "Add period"
+#~ msgstr ""
+
+#: src/schooltool/browser/www/ttwizard.pt:87
+#~ msgid "Second, select the way timetable days are aligned with calendar days."
+#~ msgstr ""
+
+#: src/schooltool/clients/csvclient.py:176
+#~ msgid "Creating groups... "
+#~ msgstr ""
+
+#: src/schooltool/clients/csvclient.py:178
+#~ msgid "Creating teachers... "
+#~ msgstr "Creating supervisors..."
+
+#: src/schooltool/clients/csvclient.py:180
+#~ msgid "Creating pupils... "
+#~ msgstr "Creating members... "
+
+#: src/schooltool/clients/csvclient.py:182
+#~ msgid "Creating resources... "
+#~ msgstr ""
+
+#: src/schooltool/clients/csvclient.py:184
+#~ msgid "Import finished successfully"
+#~ msgstr ""
+
+#: src/schooltool/clients/datagen.py:165
+#~ msgid "Hall"
+#~ msgstr ""
+
+#: src/schooltool/clients/datagen.py:167
+#~ msgid "Room %d"
+#~ msgstr ""
+
+#: src/schooltool/clients/datagen.py:169
+#~ msgid "Projector %d"
+#~ msgstr ""
+
+#: src/schooltool/clients/datagen.py:35
+#~ msgid ""
+#~ "David Deb Sue Martin Denise Vicki Lorne Jeff Michael Norma Nicola Wendy "
+#~ "Lesley Carey Debbie Alden Carol Jay Heather Barbara John Peter Andrea "
+#~ "Courtney Kathleen Lisa Sharon James Patricia Mary Mary John John John James "
+#~ "James James Geoffrey Tom"
+#~ msgstr ""
+
+#: src/schooltool/clients/datagen.py:41
+#~ msgid ""
+#~ "Moore McCullogh Buckingham Butler Davies Clark Cooper Thrift Cox Ford "
+#~ "Horsman Price Siggs Bisset Ball Barrett Oakley Hall Turner Hester Batchelor "
+#~ "Broughton Jones Smith Smith Smith Smith Smith Smith Smith Greenspun Eastwood "
+#~ "Baggins"
+#~ msgstr ""
+
+#: src/schooltool/clients/datagen.py:51
+#~ msgid "Linguistics"
+#~ msgstr ""
+
+#: src/schooltool/clients/datagen.py:52
+#~ msgid "Physics"
+#~ msgstr ""
+
+#: src/schooltool/clients/datagen.py:53
+#~ msgid "Mathematics"
+#~ msgstr ""
+
+#: src/schooltool/clients/datagen.py:54
+#~ msgid "Biology"
+#~ msgstr ""
+
+#: src/schooltool/clients/datagen.py:84
+#~ msgid "%s Department"
+#~ msgstr ""
+
+#: src/schooltool/clients/datagen.py:87
+#~ msgid "Year %d"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1007
+#~ msgid "Could not parse resource availability slots"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1023
+#: src/schooltool/clients/guiclient.py:1065
+#~ msgid "Bad datetime: %r"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1027
+#~ msgid "Bad duration: %r"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1041
+#~ msgid "Could not parse person info"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1058
+#~ msgid "Insufficient data in person info"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1078
+#~ msgid "Could not parse URI list"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1087
+#~ msgid "Invalid URI: %r"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1093
+#~ msgid "Insufficient data in URI object"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1289
+#~ msgid "%s expected %s, at %s %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1292
+#~ msgid "%s ago"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1292
+#~ msgid "in %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1296
+#~ msgid "%s absent for %s, since %s %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1309 src/schooltool/rest/absence.py:452
+#: src/schooltool/rest/absence.py:466
+#~ msgid "%dh%dm"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1314 src/schooltool/rest/absence.py:428
+#~ msgid "today"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:1397
+#~ msgid "Could not parse school timetable"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:638
+#~ msgid "Could not parse item list"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:677
+#~ msgid "Group tag does not have xlink:href"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:699
+#: src/schooltool/clients/guiclient.py:702
+#~ msgid "Could not parse group tree"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:710
+#~ msgid "Could not parse member list"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:741
+#: src/schooltool/clients/guiclient.py:770
+#~ msgid "Could not parse relationship list"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:785
+#~ msgid "Could not parse roll call"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:801
+#~ msgid "Unrecognized presence value: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:816
+#~ msgid "Could not parse absences"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:833
+#: src/schooltool/clients/guiclient.py:908
+#~ msgid "Datetime not given"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:841
+#: src/schooltool/clients/guiclient.py:921
+#~ msgid "Unrecognized ended value: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:845
+#: src/schooltool/clients/guiclient.py:930
+#~ msgid "Unrecognized resolved value: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:871
+#~ msgid "Could not parse absence comments"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:882
+#~ msgid "Reporter not given"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:884
+#~ msgid "More than one reporter given"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:888
+#~ msgid "Reporter does not have xlink:href"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:895
+#~ msgid "More than one absentfrom given"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:900
+#~ msgid "absentfrom does not have xlink:href"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:948
+#~ msgid "More than one text node"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:967
+#~ msgid "Could not parse time period list"
+#~ msgstr ""
+
+#: src/schooltool/clients/guiclient.py:987
+#~ msgid "Could not parse timetable schema list"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1029
+#: src/schooltool/clients/wxclient.py:1531
+#~ msgid "Passwords do not match"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1039
+#~ msgid "Could not create a new person: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1084
+#~ msgid "School Timetable (%s, %s)"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1101
+#~ msgid "&Fit Cells"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1103
+#~ msgid "&Edit Cell"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1133
+#~ msgid "Could not update the timetable: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1160
+#~ msgid "&Back"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1162
+#~ msgid "&Forward"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1200
+#~ msgid "Search for Available Resources"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1210
+#: src/schooltool/clients/wxclient.py:2653
+#~ msgid "Could not get the list of resources: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1246
+#: src/schooltool/clients/wxclient.py:1417
+#~ msgid "min"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1251
+#~ msgid "First date"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1256
+#~ msgid "Last date"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1265
+#~ msgid "&Find"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1278
+#~ msgid "Results"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1282
+#~ msgid "Available from"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1283
+#~ msgid "Available until"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1295
+#~ msgid "Book Resource"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1341
+#~ msgid "Could not get the list of available resources: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1383
+#: src/schooltool/clients/wxclient.py:2060
+#~ msgid "Could not get a list of persons: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1420
+#: src/schooltool/browser/www/booking.pt:34
+#~ msgid "Ignore conflicts"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1480
+#~ msgid "Could not book the resource: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1490
+#~ msgid "Change Password for %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1499
+#~ msgid "Username: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1538
+#~ msgid "Could not change password: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1557
+#~ msgid "Could not get person information: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1564
+#: src/schooltool/clients/wxclient.py:1675
+#~ msgid "Could not get person photo: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1580
+#~ msgid "First Name"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1586
+#~ msgid "Last Name"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1595
+#~ msgid "Date of Birth"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1646
+#~ msgid "Could not update person information: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1654
+#~ msgid "Choose a new photo"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1663
+#~ msgid "Could not read %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1669
+#~ msgid "Could not update person photo: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1696
+#: src/schooltool/browser/www/applog.pt:3
+#: src/schooltool/browser/www/applog.pt:7
+#~ msgid "Application log"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1702
+#~ msgid "Show only lines containing"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1708
+#~ msgid "&Filter"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1724
+#~ msgid "&Previous"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1726
+#~ msgid "&Next"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1729
+#: src/schooltool/browser/www/applog.pt:17
+#~ msgid "Page"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1737
+#~ msgid "of ?????"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1809
+#~ msgid "Could not retrieve application log data: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1810
+#~ msgid "Error"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1817
+#~ msgid "of %d"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1826
+#~ msgid ""
+#~ "SchoolTool GUI client.\n"
+#~ "\n"
+#~ "SchoolTool is a common information systems platform for school "
+#~ "administration\n"
+#~ "Visit http://www.schooltool.org/\n"
+#~ "\n"
+#~ "Copyright (c) 2003 Shuttleworth Foundation\n"
+#~ "\n"
+#~ "This program is free software; you can redistribute it and/or modify\n"
+#~ "it under the terms of the GNU General Public License as published by\n"
+#~ "the Free Software Foundation; either version 2 of the License, or\n"
+#~ "(at your option) any later version."
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1887
+#~ msgid "&File"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1888
+#~ msgid "Create a new person"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1888
+#~ msgid "New &Person"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1890
+#~ msgid "New &Group"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1890
+#: src/schooltool/browser/www/group_edit.pt:62
+#~ msgid "Create a new group"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1893
+#~ msgid "E&xit\tCtrl+Q"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1893
+#~ msgid "Terminate the program"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1896
+#~ msgid "&View"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1897
+#~ msgid "All &Absences"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1897
+#~ msgid "List all absences in the system"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1899
+#~ msgid "&School Timetable"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1900
+#~ msgid "Edit a timetable for the whole school"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1902
+#~ msgid "Application &Log"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1903
+#~ msgid "View the application audit trail"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1905
+#~ msgid "Search &for Available Resources"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1906
+#: src/schooltool/browser/www/busysearch.pt:6
+#~ msgid "Search for available resources"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1909
+#~ msgid "&Refresh\tCtrl+R"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1909
+#~ msgid "Refresh data from the server"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1912
+#~ msgid "&Settings"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1913
+#~ msgid "&Server"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1913
+#~ msgid "Server settings"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1916
+#~ msgid "&Help"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1917
+#~ msgid "&About"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1917
+#: src/schooltool/clients/wxclient.py:2273
+#~ msgid "About SchoolTool"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1930
+#~ msgid "Do a roll call"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1930
+#~ msgid "Roll &Call"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1931
+#~ msgid "&Absence Tracker"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1932
+#~ msgid "Inspect the absence tracker for this group"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1934
+#: src/schooltool/clients/wxclient.py:1961
+#~ msgid "View &Timetables"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1935
+#~ msgid "View a list of groups's timetables"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1937
+#~ msgid "View C&omposite Timetables"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1938
+#~ msgid "View a list of group's composite timetables"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1941
+#~ msgid "&Refresh"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1941
+#: src/schooltool/browser/www/time-period.pt:53
+#: src/schooltool/browser/www/time-period.pt:135
+#: src/schooltool/browser/www/time-period.pt:144
+#~ msgid "Refresh"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1956
+#~ msgid "View Person &Info"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1957
+#~ msgid "View person's information"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1958
+#~ msgid "View &Absences"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1959
+#~ msgid "View a list of person's absences"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1962
+#~ msgid "View a list of person's timetables"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1964
+#~ msgid "View &Composite Timetables"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1965
+#~ msgid "View a list of person's composite timetables"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1967
+#~ msgid "Change &Password"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1968
+#~ msgid "Change the password of a person"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1971
+#~ msgid "Add &Member"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1971
+#: src/schooltool/clients/wxclient.py:1992
+#~ msgid "Add a person to this group"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1973
+#~ msgid "&Remove Member"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1973
+#~ msgid "Remove a person from this group"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1984
+#: src/schooltool/rest/www/resource.pt:6 src/schooltool/rest/www/person.pt:10
+#: src/schooltool/rest/www/group.pt:8
+#~ msgid "Relationships"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1989
+#~ msgid "Role"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1990
+#~ msgid "Relationship"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1992
+#~ msgid "&Add Member"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1994
+#~ msgid "Add &Teacher"
+#~ msgstr "Add &Supervisor"
+
+#: src/schooltool/clients/wxclient.py:1994
+#~ msgid "Add a teacher to this group"
+#~ msgstr "Add a supervisor to this group"
+
+#: src/schooltool/clients/wxclient.py:1996
+#~ msgid "Add &Subgroup"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1996
+#~ msgid "Add a group to this group"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1998
+#~ msgid "&Remove Relationship"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:1998
+#~ msgid "Remove selected relationship"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2040
+#~ msgid "Could not create a group: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2052
+#: src/schooltool/clients/wxclient.py:2092
+#: src/schooltool/clients/wxclient.py:2134
+#: src/schooltool/clients/wxclient.py:2190
+#: src/schooltool/clients/wxclient.py:2224
+#: src/schooltool/clients/wxclient.py:2426
+#: src/schooltool/clients/wxclient.py:2542
+#: src/schooltool/clients/wxclient.py:2583
+#: src/schooltool/clients/wxclient.py:2602
+#~ msgid "No group selected"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2061
+#: src/schooltool/clients/wxclient.py:2101
+#: src/schooltool/clients/wxclient.py:2110
+#: src/schooltool/clients/wxclient.py:2121
+#~ msgid "Add Teacher"
+#~ msgstr "Add Supervisor"
+
+#: src/schooltool/clients/wxclient.py:2068
+#~ msgid "Select a person to add to %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2069
+#: src/schooltool/clients/wxclient.py:2079
+#~ msgid "Add Member"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2078
+#~ msgid "Could not add member: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2100
+#~ msgid "Could not get a list of teachers: %s"
+#~ msgstr "Could not get a list of supervisors: %s"
+
+#: src/schooltool/clients/wxclient.py:2109
+#~ msgid "Select a teacher to add to %s"
+#~ msgstr "Select a supervisor to add to %s"
+
+#: src/schooltool/clients/wxclient.py:2120
+#~ msgid "Could not add teacher: %s"
+#~ msgstr "Could not add supervisor: %s"
+
+#: src/schooltool/clients/wxclient.py:2142
+#~ msgid "Could not get a list of groups: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2143
+#: src/schooltool/clients/wxclient.py:2151
+#: src/schooltool/clients/wxclient.py:2161
+#~ msgid "Add Subgroup"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2150
+#~ msgid "Select a group to add to %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2160
+#~ msgid "Could not add subgroup: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2173
+#: src/schooltool/clients/wxclient.py:2448
+#: src/schooltool/clients/wxclient.py:2463
+#: src/schooltool/clients/wxclient.py:2480
+#: src/schooltool/clients/wxclient.py:2500
+#: src/schooltool/clients/wxclient.py:2519
+#~ msgid "No person selected"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2184
+#~ msgid "Selected person is not a member of this group"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2195
+#~ msgid "Really remove %s from %s?"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2197
+#: src/schooltool/clients/wxclient.py:2204
+#~ msgid "Remove Person"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2203
+#~ msgid "Could not remove member: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2216
+#~ msgid "No relationship selected"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2229
+#~ msgid "Really remove %s (%s) from %s?"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2233
+#: src/schooltool/clients/wxclient.py:2240
+#~ msgid "Remove Relationship"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2239
+#~ msgid "Could not remove relationship: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2390
+#~ msgid "Roots"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2469
+#~ msgid "%s's absences"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2484
+#: src/schooltool/clients/wxclient.py:2587
+#: src/schooltool/clients/wxclient.py:2606
+#~ msgid "%s's timetables"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2504
+#~ msgid "%s's composite timetables"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2532
+#~ msgid "All absences"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2547
+#~ msgid "Absences of %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2554
+#~ msgid "Do you want to create a new absence tracker facet and put it on %s?"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2561
+#~ msgid "Could not create an absence tracker: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2621
+#~ msgid "Could not get the list of time periods: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2622
+#: src/schooltool/clients/wxclient.py:2631
+#: src/schooltool/clients/wxclient.py:2638
+#: src/schooltool/clients/wxclient.py:2647
+#: src/schooltool/clients/wxclient.py:2654
+#~ msgid "School Timetable"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2630
+#~ msgid "Could not get the list of timetable schemas: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2637
+#~ msgid "Select a timetable to edit"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:2646
+#~ msgid "Could not get the school timetable: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:269
+#~ msgid "Server"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:271
+#~ msgid "Port"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:273
+#~ msgid "Use SSL"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:279
+#~ msgid "Ok"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:292
+#~ msgid "Server Settings"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:391
+#: src/schooltool/clients/wxclient.py:493
+#~ msgid "Unset"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:395
+#~ msgid "Resolve"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:400
+#~ msgid "Do not resolve"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:414
+#: src/schooltool/clients/wxclient.py:523
+#: src/schooltool/clients/wxclient.py:849
+#: src/schooltool/clients/wxclient.py:909
+#: src/schooltool/clients/wxclient.py:1013
+#: src/schooltool/clients/wxclient.py:1105
+#: src/schooltool/clients/wxclient.py:1427
+#: src/schooltool/clients/wxclient.py:1516
+#: src/schooltool/clients/wxclient.py:1623 src/schooltool/rest/cal.py:461
+#: src/schooltool/rest/timetable.py:329 src/schooltool/rest/timetable.py:553
+#: src/schooltool/rest/timetable.py:783 src/schooltool/rest/timetable.py:889
+#~ msgid "OK"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:466
+#~ msgid "Roll Call for %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:489
+#~ msgid "reported absent"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:497
+#~ msgid "Present"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:502
+#~ msgid "Absent"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:583
+#~ msgid "Could not submit the roll call: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:618
+#~ msgid "Absences"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:624
+#: src/schooltool/clients/wxclient.py:646
+#~ msgid "Ended?"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:625
+#: src/schooltool/clients/wxclient.py:647
+#~ msgid "Resolved?"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:626
+#: src/schooltool/clients/wxclient.py:648
+#~ msgid "Expected Presence"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:628
+#~ msgid "Last Comment"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:632
+#~ msgid "Absence"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:640
+#: src/schooltool/clients/wxclient.py:1602
+#~ msgid "Comments"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:644
+#~ msgid "Reporter"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:645
+#~ msgid "Absent From"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:660
+#: src/schooltool/clients/wxclient.py:1164
+#: src/schooltool/clients/wxclient.py:1301
+#: src/schooltool/clients/wxclient.py:1739
+#~ msgid "Close"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:689
+#: src/schooltool/clients/wxclient.py:2568
+#~ msgid "Could not get the list of absences: %s"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:707
+#: src/schooltool/clients/wxclient.py:709
+#: src/schooltool/clients/wxclient.py:764
+#: src/schooltool/clients/wxclient.py:767
+#~ msgid "No"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:707
+#: src/schooltool/clients/wxclient.py:709
+#: src/schooltool/clients/wxclient.py:764
+#: src/schooltool/clients/wxclient.py:767
+#~ msgid "Yes"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:820
+#~ msgid "Resource Assignment"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:828
+#~ msgid ""
+#~ "%s, %s\n"
+#~ "Teacher: %s\n"
+#~ "Activity: %s"
+#~ msgstr ""
+#~ "%s, %s\n"
+#~ "Supervisor: %s\n"
+#~ "Activity: %s"
+
+#: src/schooltool/clients/wxclient.py:879
+#~ msgid "Activity Selection"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:889
+#~ msgid ""
+#~ "%s, %s\n"
+#~ "Teacher: %s"
+#~ msgstr ""
+#~ "%s, %s\n"
+#~ "Supervisor: %s"
+
+#: src/schooltool/clients/wxclient.py:895
+#~ msgid "Activities"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:907
+#~ msgid "&Assign Resources"
+#~ msgstr ""
+
+#: src/schooltool/clients/wxclient.py:985
+#~ msgid "Password (again)"
+#~ msgstr ""
+
+#: src/schooltool/csvimport.py:49
+#~ msgid "Error in group data, line %d: expected 4 columns, got %d"
+#~ msgstr ""
+
+#: src/schooltool/csvimport.py:55
+#~ msgid "Error in group data line %d: %s"
+#~ msgstr ""
+
+#: src/schooltool/csvimport.py:63
+#~ msgid "Error in %s data line %d: expected 5 columns, got %d"
+#~ msgstr ""
+
+#: src/schooltool/csvimport.py:70
+#~ msgid "Error in %s parent_group data line %d: %s"
+#~ msgstr ""
+
+#: src/schooltool/csvimport.py:78
+#~ msgid "Error in resource data line %d: expected 2 columns, got %d"
+#~ msgstr ""
+
+#: src/schooltool/csvimport.py:84
+#~ msgid "Error in resource data line %d: %s"
+#~ msgstr ""
+
+#: src/schooltool/eventlog.py:100 src/schooltool/eventlog.py:129
+#~ msgid "Event Log"
+#~ msgstr ""
+
+#: src/schooltool/http.py:422
+#~ msgid "There should be two colons in the virtual hosting directive"
+#~ msgstr ""
+
+#: src/schooltool/http.py:546
+#~ msgid "Failed login, username: %r"
+#~ msgstr ""
+
+#: src/schooltool/http.py:629 src/schooltool/rest/__init__.py:411
+#~ msgid "Bad username or password"
+#~ msgstr ""
+
+#: src/schooltool/http.py:736
+#~ msgid "Saved snapshot %r"
+#~ msgstr ""
+
+#: src/schooltool/http.py:746
+#~ msgid "Loaded snapshot %r"
+#~ msgstr ""
+
+#: src/schooltool/main.py:103
+#~ msgid ""
+#~ "Usage: %s [options]\n"
+#~ "Options:\n"
+#~ "\n"
+#~ "  -c, --config xxx  use this configuration file instead of the default\n"
+#~ "  -h, --help        show this help message\n"
+#~ "  -d, --daemon      go to background after starting"
+#~ msgstr ""
+
+#: src/schooltool/main.py:151
+#~ msgid "run schooltool -h for help"
+#~ msgstr ""
+
+#: src/schooltool/main.py:205
+#~ msgid "too many arguments"
+#~ msgstr ""
+
+#: src/schooltool/main.py:260
+#~ msgid "Daemon mode is not supported on your operating system"
+#~ msgstr ""
+
+#: src/schooltool/main.py:341
+#~ msgid ""
+#~ "Could not initialize the database:\n"
+#~ "  "
+#~ msgstr ""
+
+#: src/schooltool/main.py:344
+#~ msgid "Perhaps another SchoolTool instance is using it?"
+#~ msgstr "Perhaps another SchoolBell instance is using it?"
+
+#: src/schooltool/main.py:461 src/schooltool/main.py:469
+#~ msgid "Invalid login"
+#~ msgstr ""
+
+#: src/schooltool/main.py:482
+#~ msgid "Started HTTPS server for RESTive API on %s:%s"
+#~ msgstr ""
+
+#: src/schooltool/main.py:484
+#~ msgid "Started HTTP server for RESTive API on %s:%s"
+#~ msgstr ""
+
+#: src/schooltool/main.py:489
+#~ msgid "Started HTTPS server for web UI on %s:%s"
+#~ msgstr ""
+
+#: src/schooltool/main.py:491
+#~ msgid "Started HTTP server for web UI on %s:%s"
+#~ msgstr ""
+
+#: src/schooltool/main.py:498
+#~ msgid "Shutting down"
+#~ msgstr ""
+
+#: src/schooltool/main.py:92
+#~ msgid ""
+#~ "No storage defined in the configuration file.  Unable to start the server.\n"
+#~ "\n"
+#~ "If you're using the default configuration file, please edit it now and\n"
+#~ "uncomment one of the ZODB storage sections."
+#~ msgstr ""
+
+#: src/schooltool/main.py:98
+#~ msgid ""
+#~ "Old database format is incompatible with the new SchoolTool version.\n"
+#~ "Please remove your Data.fs and try again.  Note that you will lose all\n"
+#~ "the data."
+#~ msgstr ""
+#~ "Old database format is incompatible with the new SchoolBell version.\n"
+#~ "Please remove your Data.fs and try again.  Note that you will lose all\n"
+#~ "the data."
+
+#: src/schooltool/membership.py:151
+#~ msgid "Already a member"
+#~ msgstr ""
+
+#: src/schooltool/membership.py:175
+#~ msgid "Only immediate members of parent groups can be members"
+#~ msgstr ""
+
+#: src/schooltool/membership.py:61
+#~ msgid "Circular membership is not allowed."
+#~ msgstr ""
+
+#: src/schooltool/rest/__init__.py:293
+#~ msgid "Not found: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/__init__.py:368
+#~ msgid "Method Not Allowed"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:182
+#~ msgid "Absence %s of %s reported"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:191
+#~ msgid "Presence %s of %s reported"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:194
+#~ msgid "%d absences and %d presences reported"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:329
+#~ msgid "Absence %s of %s created"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:332
+#~ msgid "Absence created: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:335
+#~ msgid "Absence %s of %s updated"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:339
+#~ msgid "Absence updated: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:405
+#~ msgid "Cannot reopen an absence when another one has not ended"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:407
+#~ msgid "Comment for absence %s of %s added"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:410
+#~ msgid "Comment added"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:438
+#~ msgid "Absences at %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:440
+#~ msgid "Unexpected absences"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:455
+#~ msgid "%s expected %s ago, at %s %s%s"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:469
+#~ msgid "%s absent for %s, since %s %s%s"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:477
+#~ msgid "Expected absences"
+#~ msgstr ""
+
+#: src/schooltool/rest/absence.py:491
+#~ msgid "%s expected in %s, at %s %s%s"
+#~ msgstr ""
+
+#: src/schooltool/rest/acl.py:78
+#~ msgid "Bad path %r"
+#~ msgstr ""
+
+#: src/schooltool/rest/acl.py:85
+#~ msgid "ACL saved"
+#~ msgstr ""
+
+#: src/schooltool/rest/app.py:125 src/schooltool/rest/facet.py:110
+#: src/schooltool/rest/relationship.py:80
+#~ msgid "Document not valid according to schema"
+#~ msgstr ""
+
+#: src/schooltool/rest/app.py:127 src/schooltool/rest/facet.py:112
+#: src/schooltool/rest/relationship.py:82
+#~ msgid "Document not valid XML"
+#~ msgstr ""
+
+#: src/schoolbell/app/rest/app.py:267
+#~ msgid "Object created: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/app.py:230
+#~ msgid "%r argument must be provided"
+#~ msgstr ""
+
+#: src/schooltool/rest/app.py:245
+#~ msgid "%r argument is invalid"
+#~ msgstr ""
+
+#: src/schooltool/rest/app.py:255
+#~ msgid "Invalid resource: %r"
+#~ msgstr ""
+
+#: src/schooltool/rest/app.py:257
+#~ msgid "%r is not a resource"
+#~ msgstr ""
+
+#: src/schooltool/rest/app.py:322
+#~ msgid "Ill-formed XML document"
+#~ msgstr ""
+
+#: src/schooltool/rest/app.py:324
+#~ msgid "Invalid XML document"
+#~ msgstr ""
+
+#: src/schooltool/rest/app.py:341
+#~ msgid "Undefined timetable schema"
+#~ msgstr ""
+
+#: src/schooltool/rest/applog.py:57
+#~ msgid "Invalid value for 'pagesize' parameter."
+#~ msgstr ""
+
+#: src/schooltool/rest/applog.py:60
+#~ msgid "Page size must be positive"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:112 src/schooltool/rest/timetable.py:280
+#: src/schooltool/rest/timetable.py:489
+#~ msgid "Unsupported content type: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:126
+#~ msgid "All-day event should be used"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:133
+#~ msgid "Repeating events/exceptions not yet supported"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:139
+#~ msgid "Multiple definitions of school period"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:145
+#~ msgid "Schoolday longer than one day"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:148 src/schooltool/rest/cal.py:332
+#~ msgid "Invalid UTF-8 data"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:153
+#~ msgid "School period not defined"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:157
+#~ msgid "Schoolday outside school period"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:163 src/schooltool/rest/cal.py:208
+#: src/schooltool/rest/cal.py:396
+#~ msgid "Calendar imported"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:171
+#~ msgid "Schoolday model not valid according to schema"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:174
+#~ msgid "Schoolday model is not valid XML"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:215
+#~ msgid "Schoolday Calendar %s updated"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:380
+#~ msgid "You are not allowed to add calendar events"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:383
+#~ msgid "You are not allowed to modify the calendar"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:392
+#~ msgid "Calendar %s for %s imported"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:413
+#~ msgid "Input not valid according to schema"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:415 src/schooltool/rest/timetable.py:497
+#~ msgid "Not valid XML"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:428
+#~ msgid "Invalid path: %r"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:431
+#~ msgid "'owner' in not an ApplicationObject."
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:434
+#~ msgid "You cannot book this resource"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:445
+#~ msgid "%r argument incorrect"
+#~ msgstr ""
+
+#: src/schooltool/rest/cal.py:451
+#~ msgid "The resource is busy at specified time"
+#~ msgstr ""
+
+#: src/schooltool/rest/eventlog.py:57
+#~ msgid "Only PUT with an empty body is defined for event logs"
+#~ msgstr ""
+
+#: src/schooltool/rest/eventlog.py:62
+#~ msgid "1 event cleared in %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/eventlog.py:64
+#~ msgid "%d events cleared in %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/facet.py:129
+#~ msgid "Factory does not exist: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/facet.py:137
+#~ msgid "Facet '%s' already exists"
+#~ msgstr ""
+
+#: src/schooltool/rest/facet.py:140
+#~ msgid "Could not create facet: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/facet.py:143
+#~ msgid "Facet %s (%s) created"
+#~ msgstr ""
+
+#: src/schooltool/rest/facet.py:148
+#~ msgid "Facet created: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/facet.py:71
+#~ msgid "Owned facets may not be deleted manually"
+#~ msgstr ""
+
+#: src/schooltool/rest/facet.py:74
+#~ msgid "Facet %s (%s) removed"
+#~ msgstr ""
+
+#: src/schooltool/rest/infofacets.py:101
+#~ msgid "Invalid XML"
+#~ msgstr ""
+
+#: src/schooltool/rest/infofacets.py:130
+#~ msgid "Updated"
+#~ msgstr ""
+
+#: src/schooltool/rest/infofacets.py:154
+#~ msgid "Photo added"
+#~ msgstr ""
+
+#: src/schooltool/rest/infofacets.py:162
+#~ msgid "Photo removed"
+#~ msgstr ""
+
+#: src/schooltool/rest/infofacets.py:99
+#~ msgid "XML not valid according to schema"
+#~ msgstr ""
+
+#: src/schooltool/rest/model.py:157
+#~ msgid "Password changed"
+#~ msgstr ""
+
+#: src/schooltool/rest/model.py:164
+#~ msgid "Account disabled"
+#~ msgstr ""
+
+#: src/schooltool/rest/model.py:236
+#~ msgid "Object deleted: %s (%s)"
+#~ msgstr ""
+
+#: src/schooltool/rest/model.py:82
+#~ msgid "Object deleted."
+#~ msgstr ""
+
+#: src/schooltool/rest/relationship.py:103
+#~ msgid "Bad URI: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/relationship.py:108
+#~ msgid "Nontraversable path: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/relationship.py:113
+#~ msgid "Valency does not exist"
+#~ msgstr ""
+
+#: src/schooltool/rest/relationship.py:120
+#~ msgid "Cannot establish relationship: %s"
+#~ msgstr ""
+
+#: src/schoolbell/app/rest/relationships.py:204
+#~ msgid "Relationship created: %s"
+#~ msgstr ""
+
+#: src/schoolbell/app/rest/relationships.py:238
+#~ msgid "Link removed"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:120
+#~ msgid "Invalid duration: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:169
+#~ msgid "%s's complete timetable for %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:267
+#~ msgid "%s's own timetable for %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:285 src/schooltool/rest/timetable.py:734
+#~ msgid "Timetable not valid XML"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:288 src/schooltool/rest/timetable.py:495
+#: src/schooltool/rest/timetable.py:732
+#~ msgid "Timetable not valid according to schema"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:295
+#~ msgid "Time period not defined: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:300
+#~ msgid "Timetable schema not defined: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:305 src/schooltool/rest/timetable.py:793
+#~ msgid "Unknown day id: %r"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:310 src/schooltool/rest/timetable.py:374
+#: src/schooltool/rest/timetable.py:797
+#~ msgid "Unknown period id: %r"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:325
+#~ msgid "Timetable of %s (%s) for %s, updated"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:351 src/schooltool/rest/timetable.py:750
+#: src/schooltool/rest/timetable.py:814
+#~ msgid "Invalid path: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:413
+#~ msgid "Timetable of %s (%s) for %s, deleted"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:417
+#~ msgid "Deleted timetable"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:440
+#~ msgid "Timetable schema: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:483
+#~ msgid "Deleted timetable schema"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:511
+#~ msgid "Incorrect timetable model factory"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:522
+#~ msgid "Bad period"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:534
+#~ msgid "Unrecognised day of week %r"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:538
+#~ msgid "Duplicate days in schema"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:547
+#~ msgid "Duplicate periods in schema"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:550
+#~ msgid "Timetable schema %s updated"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:606
+#~ msgid "Timetables for %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:636
+#~ msgid "Composite timetables for %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:668
+#~ msgid "School timetables"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:74
+#~ msgid "Invalid date: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:781
+#~ msgid "School timetable updated"
+#~ msgstr ""
+
+#: src/schooltool/rest/timetable.py:802 src/schooltool/rest/timetable.py:806
+#~ msgid "%s is not a teacher of %s"
+#~ msgstr "%s is not a supervisor of %s"
+
+#: src/schooltool/rest/timetable.py:93
+#~ msgid "Invalid time: %s"
+#~ msgstr ""
+
+#: src/schooltool/rest/www/all_calendars.pt:12
+#: src/schooltool/rest/www/all_calendars.pt:25
+#: src/schooltool/rest/www/all_calendars.pt:38
+#~ msgid "(private calendar)"
+#~ msgstr ""
+
+#: src/schooltool/rest/www/all_calendars.pt:16
+#: src/schooltool/rest/www/all_calendars.pt:29
+#: src/schooltool/rest/www/all_calendars.pt:42
+#~ msgid "(timetable)"
+#~ msgstr ""
+
+#: src/schooltool/rest/www/all_calendars.pt:3
+#: src/schooltool/rest/www/all_calendars.pt:6
+#~ msgid "Calendars"
+#~ msgstr ""
+
+# Default: "Whole school timetables"
+# Default: "Whole school timetables"
+#: src/schooltool/rest/www/app.pt:19
+#~ msgid "Whole_school_timetables"
+#~ msgstr ""
+
+# Default: "Timetable schemas"
+# Default: "Timetable schemas"
+#: src/schooltool/rest/www/app.pt:22
+#~ msgid "Timetable_schemas"
+#~ msgstr ""
+
+# Default: "Time periods"
+# Default: "Time periods"
+#: src/schooltool/rest/www/app.pt:25
+#~ msgid "Time_periods"
+#~ msgstr ""
+
+#: src/schooltool/rest/www/app.pt:5
+#~ msgid "Welcome to the SchoolTool server"
+#~ msgstr "Welcome to the SchoolBell server"
+
+# Default: "Own timetables"
+# Default: "Own timetables"
+#: src/schooltool/rest/www/resource.pt:12 src/schooltool/rest/www/person.pt:16
+#: src/schooltool/rest/www/group.pt:14
+#~ msgid "Own_timetables"
+#~ msgstr ""
+
+# Default: "Composite timetables"
+# Default: "Composite timetables"
+#: src/schooltool/rest/www/resource.pt:15 src/schooltool/rest/www/person.pt:19
+#: src/schooltool/rest/www/group.pt:17
+#~ msgid "Composite_timetables"
+#~ msgstr ""
+
+# Default: "Private calendar"
+# Default: "Private calendar"
+#: src/schooltool/rest/www/resource.pt:18 src/schooltool/rest/www/person.pt:22
+#: src/schooltool/rest/www/group.pt:20
+#~ msgid "Private_calendar"
+#~ msgstr ""
+
+# Default: "Calendar derived from timetables"
+# Default: "Calendar derived from timetables"
+#: src/schooltool/rest/www/resource.pt:21 src/schooltool/rest/www/person.pt:25
+#: src/schooltool/rest/www/group.pt:23
+#~ msgid "Calendar_derived_from_timetables"
+#~ msgstr ""
+
+#: src/schooltool/rest/www/resource.pt:9 src/schooltool/rest/www/person.pt:13
+#: src/schooltool/rest/www/group.pt:11
+#~ msgid "Facets"
+#~ msgstr ""
+
+#: src/schoolbell/app/rest/xmlparsing.py:169
+#~ msgid "Document not valid according to schema."
+#~ msgstr ""
+
+#: src/schoolbell/app/rest/xmlparsing.py:172
+#~ msgid "Invalid RelaxNG schema."
+#~ msgstr ""
+
+#: src/schoolbell/app/rest/xmlparsing.py:174
+#: src/schoolbell/app/rest/xmlparsing.py:178
+#~ msgid "Ill-formed document."
+#~ msgstr ""
+
+#: src/schoolbell/app/rest/xmlparsing.py:245
+#: src/schoolbell/app/rest/xmlparsing.py:479
+#~ msgid "Ill-formed XPath query (%r)."
+#~ msgstr ""
+
+#: src/schoolbell/app/rest/xmlparsing.py:372
+#~ msgid "Ill-formed attribute name (%s)."
+#~ msgstr ""
+
+#: src/schoolbell/app/rest/xmlparsing.py:378
+#~ msgid "Unregistered namespace prefix (%s)."
+#~ msgstr ""
+
+#: src/schooltool/teaching.py:68
+#~ msgid "Subject Group"
+#~ msgstr ""
+
+#: src/schooltool/teaching.py:70
+#~ msgid "Teacher Group"
+#~ msgstr "Supervisor Group"
+
+#: src/schooltool/uris.py:124
+#~ msgid "The membership relationship."
+#~ msgstr ""
+
+#: src/schooltool/uris.py:129
+#~ msgid "A role of a containing group."
+#~ msgstr ""
+
+#: src/schooltool/uris.py:133
+#~ msgid "Member"
+#~ msgstr ""
+
+#: src/schooltool/uris.py:134
+#~ msgid "A group member role."
+#~ msgstr ""
+
+#: src/schooltool/uris.py:140
+#~ msgid "The teaching relationship."
+#~ msgstr "The supervision relationship."
+
+#: src/schooltool/uris.py:144
+#~ msgid "Teacher"
+#~ msgstr "Supervisor"
+
+#: src/schooltool/uris.py:145
+#~ msgid "A role of a teacher."
+#~ msgstr "A role of a supervisor."
+
+#: src/schooltool/uris.py:149
+#~ msgid "Taught"
+#~ msgstr "Supervised"
+
+#: src/schooltool/uris.py:150
+#~ msgid "A role of a group that has a teacher."
+#~ msgstr "A role of a group that has a supervisor."
+
+#: src/schooltool/uris.py:155
+#~ msgid "Occupies"
+#~ msgstr ""
+
+#: src/schooltool/uris.py:156
+#~ msgid "The occupation relationship"
+#~ msgstr ""
+
+#: src/schooltool/uris.py:160
+#~ msgid "Resides"
+#~ msgstr ""
+
+#: src/schooltool/uris.py:161
+#~ msgid "The role of a person in Occupies"
+#~ msgstr ""
+
+#: src/schooltool/uris.py:165
+#~ msgid "Residence"
+#~ msgstr ""
+
+#: src/schooltool/uris.py:166
+#~ msgid "The role of an Address in Occupies"
+#~ msgstr ""
+
+#: src/schooltool/uris.py:171
+#~ msgid "Calendar subscription"
+#~ msgstr ""
+
+#: src/schooltool/uris.py:172
+#~ msgid "The calendar subscription relationship."
+#~ msgstr ""
+
+#: src/schooltool/uris.py:176
+#~ msgid "Calendar provider"
+#~ msgstr ""
+
+#: src/schooltool/uris.py:177
+#~ msgid "A role of an object providing a calendar."
+#~ msgstr ""
+
+#: src/schooltool/uris.py:181
+#~ msgid "Calendar subscriber"
+#~ msgstr ""
+
+#: src/schooltool/uris.py:182
+#~ msgid "A role of an object that subscribes to a calendar."
+#~ msgstr ""
+
+#: src/schooltool/uris.py:187
+#~ msgid "The notation relationship"
+#~ msgstr ""
+
+#: src/schooltool/uris.py:191
+#~ msgid "Notation"
+#~ msgstr ""
+
+#: src/schooltool/uris.py:192
+#~ msgid "The role of a note in Noted"
+#~ msgstr ""
+
+#: src/schooltool/uris.py:196
+#~ msgid "Notandum"
+#~ msgstr ""
+
+#: src/schooltool/uris.py:197
+#~ msgid "The role of a object in Noted"
+#~ msgstr ""
+
+#~ msgid "Invalid group %s for teacher %s"
+#~ msgstr "Invalid group %s for supervisor %s"
+
+#~ msgid "Imported person (teacher): %s"
+#~ msgstr "Imported person (supervisor): %s"

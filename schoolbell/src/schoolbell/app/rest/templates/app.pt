@@ -1,0 +1,11 @@
+<schooltool xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns:tal="http://xml.zope.org/namespaces/tal"
+            xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+            i18n:domain="schooltool">
+  <message i18n:translate="">Welcome to the SchoolBell server</message>
+  <containers>
+    <container xlink:type="simple" tal:repeat="container view/getContainers"
+               tal:attributes="xlink:title container/title;
+                               xlink:href container/href"/>
+  </containers>
+</schooltool>

@@ -1,0 +1,88 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<head>
+  <title metal:fill-slot="title" i18n:translate=""
+         tal:content="context/title">Add/edit event</title>
+</head>
+<body>
+
+<metal:block fill-slot="content-header">
+  <h1>
+    <span tal:replace="context/title" />
+    -
+    <span tal:replace="view/day" />
+  </h1>
+  <tal:if condition="context/allday">
+    <div><strong i18n:translate="">All day event</strong></div>
+  </tal:if>
+
+  <p style="width:62%; font-size:85%" tal:content="context/description|nothing" />
+  <p tal:condition="context/recurrence">
+    <em i18n:translate="">
+      This is a recurring event.
+    </em>
+  </p>
+
+</metal:block>
+
+<metal:block metal:fill-slot="body"
+             tal:define="evdate python:context.dtstart.strftime('%Y-%m-%d')">
+
+  <tal:block replace="structure context/@@notes|nothing"/>
+
+  <div class="info-block">
+    <h5 i18n:translate="">Details</h5>
+    <table class="person-details">
+      <tal:if condition="not:context/allday">
+        <tr tal:condition="view/start">
+          <td class="dr" i18n:translate="">Starts</td>
+          <td>:&nbsp;</td>
+          <td class="dl" tal:content="view/start" />
+        </tr>
+        <tr tal:condition="view/end">
+          <td class="dr" i18n:translate="">Ends</td>
+          <td>:&nbsp;</td>
+          <td class="dl" tal:content="view/end" />
+        </tr>
+      </tal:if>
+      <tr tal:condition="context/location|nothing">
+        <td class="dr" i18n:translate="">Location</td>
+        <td>:&nbsp;</td>
+        <td class="dl" tal:content="context/location" />
+      </tr>
+    </table>
+    <a class="modify" href=""
+       title="Change the details of this event"
+       tal:attributes="href string:${context/@@absolute_url}/edit.html"
+       i18n:attributes="title"
+       i18n:translate="">
+       edit event
+    </a>
+  </div>
+
+  <div class="info-block"
+       tal:define="resources view/display/getBookedResources">
+    <h5 i18n:translate="">Scheduled resources</h5>
+    <ul tal:condition="resources">
+      <li tal:repeat="resource resources">
+        <a href=""
+           tal:attributes="href string:${resource/@@absolute_url}"
+           tal:content="resource/title" />
+      </li>
+    </ul>
+    <a class="modify" href=""
+      title="Change the resources scheduled for this event"
+      i18n:translate=""
+      tal:attributes="href string:${context/@@absolute_url}/booking.html?date=${evdate}">
+      edit resources
+    </a>
+  </div>
+
+  <a href="" class="modify destructive" title="Delete this event"
+    i18n:translate=""
+    tal:attributes="href string:${context/__parent__/@@absolute_url}/delete.html?event_id=${context/unique_id}&date=${evdate}">
+    delete event
+  </a>
+
+
+</metal:block>
+</html>

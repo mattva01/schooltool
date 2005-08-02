@@ -1,0 +1,7 @@
+<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
+              xmlns:tal="http://xml.zope.org/namespaces/tal"
+              xlink:type="simple"
+              tal:define="link view/info"
+              tal:attributes="xlink:role link/role;
+                              xlink:arcrole link/arcrole;
+                              xlink:href link/href"/>

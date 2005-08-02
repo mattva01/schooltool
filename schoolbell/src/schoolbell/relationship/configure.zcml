@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="schoolbell">
+
+  <content
+      class="schoolbell.relationship.relationship.BoundRelationshipProperty">
+    <allow attributes="__iter__ __contains__" />
+  </content>
+
+  <adapter
+      for="zope.app.annotation.interfaces.IAnnotatable"
+      provides="schoolbell.relationship.interfaces.IRelationshipLinks"
+      factory="schoolbell.relationship.annotatable.getRelationshipLinks"
+      trusted="true"
+      />
+
+  <subscriber
+      for="zope.app.container.interfaces.IObjectRemovedEvent"
+      handler="schoolbell.relationship.objectevents.unrelateOnDeletion"
+      />
+
+  <subscriber
+      for="zope.app.event.interfaces.IObjectCopiedEvent"
+      handler="schoolbell.relationship.objectevents.unrelateOnCopy"
+      />
+
+</configure>
