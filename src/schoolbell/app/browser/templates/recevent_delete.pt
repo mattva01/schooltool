@@ -2,10 +2,10 @@
           condition="event">
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
 <head >
-  <metal:slot fill-slot="title" i18n:translate="">
+  <title metal:fill-slot="title" i18n:translate="">
     Deleting a repeating event (<span tal:replace="event/title"
                                       i18n:name="event_title" />)
-  </metal:slot>
+  </title>
 </head>
 <body>
   <metal:block metal:fill-slot="body">

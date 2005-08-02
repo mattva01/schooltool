@@ -1,6 +1,6 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
 <head>
-  <metal:x metal:fill-slot="title" i18n:translate="">Not Found</metal:x>
+  <title metal:fill-slot="title" i18n:translate="">Not Found</title>
 </head>
 <body>
 <h1 metal:fill-slot="content-header" i18n:translate="">Not Found</h1>

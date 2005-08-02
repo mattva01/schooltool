@@ -18,10 +18,9 @@
     <script type="text/javascript" src=""
             tal:attributes="src context/++resource++calwidget-calendar.js">
     </script>
-    <title>
-      <span tal:replace="context/schoolbell:preferences/title"/> :
-      <metal:block define-slot="title"/>
-    </title>
+    <metal:block define-slot="title">
+      <title i18n:translate="">SchoolBell</title>
+    </metal:block>
     <metal:block metal:define-slot="extrahead" />
   </head>
   <body>

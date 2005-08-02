@@ -1,8 +1,8 @@
 <tal:defs define="dummy view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
 <head>
-  <metal:slot fill-slot="title" i18n:translate=""
-         tal:content="view/title">Add/edit event</metal:slot>
+  <title metal:fill-slot="title" i18n:translate=""
+         tal:content="view/title">Add/edit event</title>
   <script type="text/javascript" metal:fill-slot="extrahead">
     function recurrence_changed() {
         var recurrence = document.getElementById('field.recurrence');

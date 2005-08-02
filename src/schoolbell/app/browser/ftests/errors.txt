@@ -32,9 +32,9 @@ When you go to a location that doesn't exist, you get a pretty standard
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    <title> SchoolBell : Not Found </title>
+        <title>Not Found</title>
     ...
-    <h1>Not Found</h1>
+              <h1>Not Found</h1>
     ...
     <h3>
       The page that you are trying to access is not available
@@ -79,7 +79,7 @@ Now, let's trigger it:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    <title> SchoolBell : Server Error </title>
+    <title>Server Error</title>
     ...
     <h1>Server Error</h1>
     ...

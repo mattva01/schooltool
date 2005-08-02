@@ -1,10 +1,10 @@
 <tal:defs define="update view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
 <head>
-  <metal:slot fill-slot="title"
+  <title metal:fill-slot="title"
          tal:content="view/index_title" i18n:translate="">
     Contents
-  </metal:slot>
+  </title>
 </head>
 <body>
 

@@ -1,10 +1,5 @@
 <html metal:use-macro="context/@@standard_macros/view"
       i18n:domain="schoolbell">
-  <head>
-    <metal:slot fill-slot="title" i18n:translate="">
-      Upload schooltool persons as CSV
-    </metal:slot>
-  </head>
 <body>
 
 <h1 metal:fill-slot="content-header" 
