@@ -1,8 +1,7 @@
 <tal:defs define="dummy view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
 <head>
-  <metal:slot fill-slot="title"
-    i18n:translate="">Edit site preferences</metal:slot>
+  <title fill-slot="title" i18n:translate="">Edit site preferences</title>
 </head>
 <body>
 <metal:nothing metal:fill-slot="content-header" />
