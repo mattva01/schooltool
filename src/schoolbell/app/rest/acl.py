@@ -46,23 +46,23 @@ class IACLView(Interface):
     template = Attribute("The template of the generated XML document")
 
     def GET():
-        """The GET handler"""
+        """The GET handler."""
 
     def POST():
-        """The POST handler"""
+        """The POST handler."""
 
     def getPersons():
-        """Return a list of tuples with information for all persons"""
+        """Return a list of tuples with information for all persons."""
 
     def getGroups():
-        """Return a list of tuples with group information
+        """Return a list of tuples with group information.
 
         This list includes the special Unauthenticated and
         Authenticated groups.
         """
 
     def permsForPrincipal(principalid):
-        """Return a list of permissions the principal has on context"""
+        """Return a list of permissions the principal has on context."""
 
     def parseData(body):
         """Extract the data and validate it.
@@ -77,7 +77,7 @@ def ACLViewFactory(context, request):
 
 
 class ACLView(View, ACLViewBase):
-    """A RESTive view for access control setup"""
+    """A RESTive view for access control setup."""
 
     template = Template('templates/acl.pt')
 
@@ -141,7 +141,7 @@ class ACLView(View, ACLViewBase):
         return "Permissions updated"
 
     def parseData(self, body):
-        """Extracts the data and validates it.
+        """Extract the data and validates it.
 
         Raises a RestError if a principal or permission id is not from
         the allowed set.
@@ -165,19 +165,18 @@ class ACLView(View, ACLViewBase):
                         raise RestError('Permission "%s" not allowed' %
                                         permission)
                     result[principalid].append(permission)
-
             return result
-
         finally:
             doc.free()
 
 
 class IACLAdapter(Interface):
-    """A proxy to which the ACL view is hooked up"""
+    """A proxy to which the ACL view is hooked up."""
 
 
 class ACLAdapter:
-    """A proxy to which the ACL view is hooked up"""
+    """A proxy to which the ACL view is hooked up."""
+
     implements(IACLAdapter)
 
     def __init__(self, context):
