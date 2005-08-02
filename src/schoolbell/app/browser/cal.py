@@ -705,15 +705,11 @@ class CalendarViewBase(BrowserView):
 
     def canAddEvents(self):
         """Return True if current viewer can add events to this calendar."""
-        if canAccess(self.context, "addEvent"):
-            return True
-        return False
+        return canAccess(self.context, "addEvent")
 
     def canRemoveEvents(self):
         """Return True if current viewer can remove events to this calendar."""
-        if canAccess(self.context, "removeEvent"):
-            return True
-        return False
+        return canAccess(self.context, "removeEvent")
 
 
 class WeeklyCalendarView(CalendarViewBase):
