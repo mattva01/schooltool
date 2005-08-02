@@ -553,7 +553,7 @@ class StandaloneServer(object):
         """Configure reportlab given a path to TrueType fonts.
 
         Disables PDF support in SchoolBell if fontdir is empty.
-        Complains and calls sys.exit in case of errors.
+        Outputs a warning to stderr in case of errors.
         """
         if not fontdir:
             return
@@ -561,14 +561,23 @@ class StandaloneServer(object):
         try:
             import reportlab
         except ImportError:
-            die(_("Could not find the reportlab library."))
+            print >> sys.stderr, _("Warning: could not find the reportlab"
+                                   " library.\nPDF support disabled.")
+            return
 
         if not os.path.isdir(fontdir):
-            die(_("Font directory '%s' does not exist.") % fontdir)
+            print >> sys.stderr, (_("Warning: font directory '%s' does"
+                                    " not exist.\nPDF support disabled.")
+                                  % fontdir)
+            return
+
         for font_file in pdfcal.font_map.values():
             font_path = os.path.join(fontdir, font_file)
             if not os.path.exists(font_path):
-                die(_("Font '%s' does not exist.") % font_path)
+                print >> sys.stderr, _("Warning: font '%s' does not exist.\n"
+                                       "PDF support disabled.") % font_path
+                return
+
         pdfcal.setUpMSTTCoreFonts(fontdir)
 
 

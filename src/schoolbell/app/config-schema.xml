@@ -234,7 +234,7 @@
       Specifies the path to TrueType fonts (Arial and Times New Roman)
       for reportlab.
 
-      Comment out or set to empty string to disable reportlab.
+      Comment out to disable reportlab.
     </description>
     <example>
       reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts

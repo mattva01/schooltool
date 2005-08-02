@@ -234,14 +234,19 @@ def doctest_configureReportlab():
           ...
         ImportError: No module named reportlab
 
-    Good.  Now configureReportLab should print an error and exit.
+    Good.  Now configureReportLab should print a warning.
 
-        >>> try:
-        ...     server.configureReportlab('.')
-        ... except SystemExit, e:
-        ...     print '[exited with status %s]' % e
-        Could not find the reportlab library.
-        [exited with status 1]
+        >>> server.configureReportlab('.')
+        Warning: could not find the reportlab library.
+        PDF support disabled.
+
+        >>> sys.modules['reportlab'] = object()
+
+    Now test the check that the font path is a directory:
+
+        >>> server.configureReportlab(__file__)
+        Warning: font directory '...test_main.py' does not exist.
+        PDF support disabled.
 
     We will cheat and temporarily override pdfcal.font_map:
 
@@ -249,13 +254,9 @@ def doctest_configureReportlab():
         >>> real_font_map = pdfcal.font_map
         >>> pdfcal.font_map = {'1': 'test_main.py', '2': 'nonexistent_file'}
 
-        >>> sys.modules['reportlab'] = object()
-        >>> try:
-        ...     server.configureReportlab(pseudo_fontdir)
-        ... except SystemExit, e:
-        ...     print '[exited with status %s]' % e
-        Font '...nonexistent_file' does not exist.
-        [exited with status 1]
+        >>> server.configureReportlab(pseudo_fontdir)
+        Warning: font '...nonexistent_file' does not exist.
+        PDF support disabled.
 
     Now let's simulate a successful scenario:
 
