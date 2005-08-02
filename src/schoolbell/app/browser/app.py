@@ -675,7 +675,7 @@ class ACLViewBase(object):
     persons = property(getPersons)
 
     def permsForPrincipal(self, principalid):
-        """Return a list of permissions allowed for principal"""
+        """Return a list of permissions allowed for principal."""
         return [perm
                 for perm, title in self.permissions
                 if hasPermission(perm, self.context, principalid)]
@@ -718,7 +718,7 @@ class ACLView(BrowserView, ACLViewBase, MultiBatchViewMixin):
 
         if 'UPDATE_SUBMIT' in self.request:
             map = IPrincipalPermissionManager(self.context)
-            # this view is protected by schooltool.controlAccess
+            # this view is protected by schoolbell.controlAccess
             map = removeSecurityProxy(map)
 
             def permChecked(perm, principalid):
