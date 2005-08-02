@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <page
+      name="schedule.html"
+      for="schooltool.interfaces.ISection"
+      class="schooltool.timetable.browser.SectionTimetableSetupView"
+      permission="zope.View"
+      menu="schoolbell_actions"
+      title="Schedule" />
+
+  <page
+      name="schedule.html"
+      for="schooltool.interfaces.IPerson"
+      class="schooltool.timetable.browser.PersonTimetableSetupView"
+      permission="zope.View"
+      menu="schoolbell_actions"
+      title="Schedule" />
+
+  <page
+      name="index.html"
+      for="schooltool.timetable.interfaces.ITermContainer"
+      class=".TermContainerView"
+      template="templates/term-container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
+      name="add.html"
+      for="schooltool.timetable.interfaces.ITermContainer"
+      class="schooltool.timetable.browser.TermAddView"
+      template="templates/term_add_edit.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions" title="New Term"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.timetable.interfaces.ITerm"
+      class="schooltool.timetable.browser.TermView"
+      template="templates/term.pt"
+      permission="zope.View"
+      menu="zmi_views" title="View"
+      />
+
+  <page
+      name="edit.html"
+      for="schooltool.timetable.interfaces.ITerm"
+      class="schooltool.timetable.browser.TermEditView"
+      template="templates/term_add_edit.pt"
+      permission="schoolbell.edit"
+      menu="schoolbell_actions" title="Edit"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      class=".TimetableSchemaContainerView"
+      template="templates/timetable-schema-container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
+      name="simpleadd.html"
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      class=".SimpleTimetableSchemaAdd"
+      permission="schoolbell.create"
+      />
+
+  <page
+      name="complexadd.html"
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      class=".AdvancedTimetableSchemaAdd"
+      permission="schoolbell.create"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.timetable.interfaces.ITimetableSchema"
+      class=".TimetableSchemaView"
+      template="templates/timetable.pt"
+      permission="schoolbell.view"
+      menu="zmi_views" title="View"
+      />
+
+  <page
+      name="special.html"
+      for="schooltool.timetable.interfaces.ITimetableSchema"
+      class=".SpecialDayView"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Change Timetable for One Day"
+      />
+
+  <page
+      name="emergency.html"
+      for="schooltool.timetable.interfaces.ITerm"
+      class=".EmergencyDayView"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Cancel School in Emergency"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.timetable.interfaces.ITimetable"
+      class=".TimetableView"
+      template="templates/timetable.pt"
+      permission="schoolbell.view"
+      menu="zmi_views" title="View"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.timetable.interfaces.ITimetableDict"
+      template="templates/timetable_list.pt"
+      permission="schoolbell.view"
+      menu="zmi_views" title="View"
+      />
+
+  <!-- ttwizard -->
+  <page
+      name="add.html"
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      class=".ttwizard.TimetableSchemaWizard"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="New Timetable"
+      />
+
+</configure>

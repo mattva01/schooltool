@@ -1,0 +1,76 @@
+<tal:defs define="update view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+  <head>
+    <title metal:fill-slot="title" i18n:translate="">
+      Upload SchoolTool persons as CSV
+    </title>
+  </head>
+  <body>
+
+    <metal:block metal:fill-slot="body">
+
+      <div class="info" tal:condition="view/success">
+        <p i18n:translate=""
+           tal:repeat="msg view/success" tal:content="msg" />
+      </div>
+      <div class="error" tal:condition="view/errors"
+        tal:repeat="err view/errors" tal:content="err" />
+
+      <form method="POST" enctype="multipart/form-data" class="standalone"
+        tal:attributes="action request/URL">
+
+        <h3 i18n:translate="">
+          Import Persons
+        </h3>
+        <p i18n:translate="">
+          CSV data <strong>must</strong> contain a user name and a full name.
+          An optional password <strong >may</strong> be included as well.
+        </p>
+        <p i18n:translate="">Example:</p>
+
+<pre i18n:translate="">
+jjones, Jimmy Jones
+jbjones, Jim Bob Jones, r2m45J
+howard, Howard
+</pre>
+        <p i18n:translate="">
+          The above example will create three users, 'jjones', 'jbjones' and
+          'howard'.  Of the three, only 'jbjones' has a password ('r2m45J') and
+          will be able to login to the system.  Note that passwords must be
+          sent in plain text.
+        </p>
+
+        <fieldset>
+          <legend i18n:translate="">Upload CSV File</legend>
+          <div class="row">
+            <label for="csvfile" i18n:translate="">CSV File</label>
+            <input id="csvfile" type="file" name="csvfile"/>
+          </div>
+
+          <div class="row">
+            <tal:block i18n:translate="">Charset:</tal:block>
+            <select name="charset">
+              <option value="UTF-8" i18n:translate="">Unicode (UTF-8)</option>
+              <option value="ISO-8859-1" i18n:translate="">Western (ISO-8859-1)</option>
+              <option value="ISO-8859-15" i18n:translate="">Western (ISO-8859-15)</option>
+              <option value="Windows-1252" i18n:translate="">Western (Windows-1252)</option>
+              <option value="other" i18n:translate="">Other (please specify)</option>
+            </select>
+          </div>
+          <div class="row" i18n:translate="">
+            Other charset: <input name="other_charset" type="text" i18n:name="other_charset" />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend i18n:translate="">Input CSV Data</legend>
+          <label for="csvtext" i18n:translate="">CSV Data</label>
+          <textarea name="csvtext" id="csvtext" cols="50" rows="10"></textarea>
+        </fieldset>
+        <div class="controls">
+          <input name="UPDATE_SUBMIT" class="button-ok" type="submit"
+                 value="Submit" i18n:attributes="value submit-button" />
+        </div>
+      </form>
+    </metal:block>
+  </body>
+</html>

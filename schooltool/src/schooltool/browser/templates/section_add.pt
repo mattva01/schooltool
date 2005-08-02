@@ -1,0 +1,84 @@
+<html metal:use-macro="context/@@standard_macros/page"
+      i18n:domain="schooltool">
+<body>
+<div metal:fill-slot="body">
+
+<div metal:define-macro="addform">
+
+  <form tal:attributes="action request/URL"
+        method="post" enctype="multipart/form-data" class="standalone">
+
+    <fieldset metal:define-macro="formbody">
+
+      <h3 tal:condition="view/label"
+          tal:content="view/label" i18n:translate=""
+          metal:define-slot="heading"
+          >Edit something</h3>
+
+      <p tal:define="error view/error|nothing"
+         tal:condition="error"
+         tal:content="error" />
+
+      <p tal:define="status view/update"
+         tal:condition="status"
+         tal:content="status" />
+
+      <p tal:condition="view/errors" i18n:translate="">
+        There are <strong tal:content="python:len(view.errors)"
+                          i18n:name="num_errors">6</strong> input errors.
+      </p>
+
+      <div metal:define-slot="extra_info" tal:replace="nothing">
+      </div>
+
+      <div class="row" metal:define-slot="extra_top" tal:replace="nothing">
+        <div class="label">Extra top</div>
+        <div class="label"><input type="text" style="width:100%" /></div>
+      </div>
+
+      <div metal:use-macro="context/@@form_macros/widget_rows" />
+
+      <div class="separator"></div>
+
+      <div class="row" metal:define-slot="extra_bottom" tal:replace="nothing">
+        <div class="label">Extra bottom</div>
+        <div class="field"><input type="text" style="width:100%" /></div>
+      </div>
+
+      <div class="row">
+        <div class="label">
+          <label for="add_name" i18n:translate="">Identifier
+            (optional)
+          </label>
+        </div>
+        <div class="field">
+          <input id="add_name" type="text" name="add_input_name"
+                 tal:attributes="value context/contentName" />
+        </div>
+        <input id="field.course_id" name="field.course_id" type="hidden"
+               value=""
+               tal:attributes="value request/field.course_id|nothing" />
+    </fieldset>
+    <div class="controls">
+      <tal:if condition="view/validCourse">
+        <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Add"
+               title="Shortcut: Alt-A" accesskey="A"
+               i18n:attributes="value add-button; accesskey" />
+      </tal:if>
+      <tal:if condition="not:view/validCourse">
+        <input class="disabled button-ok" disabled="disabled"
+               type="submit" name="UPDATE_SUBMIT" value="Add"
+               title="Shortcut: Alt-A" accesskey="A"
+               i18n:attributes="value add-button; accesskey" />
+      </tal:if>
+
+      <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+             i18n:attributes="value cancel-button" />
+    </div>
+
+  </form>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,160 @@
+SchoolTool server RESTive interface
+===================================
+
+This is a brief list of all actions accessible through the RESTive interface
+to the SchoolTool server.
+
+  GET /
+    lists all application object containers
+
+  GET /persons
+    lists all persons in the system
+  POST /persons
+    creates a new person in the system
+  PUT /persons/new_person_id
+    creates a new person in the system
+  PUT /persons/existing_person_id
+    changes information for a person
+  DELETE /persons/person_id
+    permanently deletes a person from the system
+  GET /persons/person_id
+    shows the information for a person
+  PUT /persons/person_id/password
+    changes a person's password
+  PUT /persons/person_id/photo
+    upoad a photo for a person
+  GET /persons/person_id/photo
+    get the photo of a person
+  DELETE /persons/person_id/photo
+    remove the photo of a person
+  GET /persons/person_id/preferences
+    get the preferences of a person
+  PUT /persons/person_id/preferences
+    change the preferences of a person
+
+  GET /groups
+    lists all groups in the system
+  POST /groups
+    creates a new group in the system
+  PUT /groups/new_group_id
+    creates a new group in the system
+  PUT /groups/existing_group_id
+    changes information for a group
+  GET /groups/group_id
+    shows the information for a group
+  DELETE /groups/group_id
+    permanently deletes a group from the system
+
+  GET /resources
+    lists all resources in the system
+  POST /resources
+    creates a new resource in the system
+  PUT /resources/new_resource_id
+    creates a new resource in the system
+  PUT /resource/existing_resource_id
+    changes information for a resource
+  GET /resources/resource_id
+    shows the information for a resource
+  DELETE /resources/resource_id
+    permanently deletes a resource from the system
+
+  GET /courses
+    lists all courses in the system
+  POST /courses
+    creates a new course in the system
+  PUT /courses/new_course_id
+    creates a new course in the system
+  PUT /course/existing_course_id
+    changes information for a course
+  GET /courses/course_id
+    shows the information for a course
+  DELETE /courses/course_id
+    permanently deletes a course from the system
+
+  GET /sections
+    lists all sections in the system
+  POST /sections
+    creates a new section in the system
+  PUT /sections/new_section_id
+    creates a new section in the system
+  PUT /section/existing_section_id
+    changes information for a section
+  GET /sections/section_id
+    shows the information for a section
+  DELETE /sections/section_id
+    permanently deletes a section from the system
+
+  GET /terms
+    lists all terms in the system
+  PUT /terms/new_term_id
+    creates a new term
+  PUT /terms/existing_term_id
+    replaces a term
+  GET /terms/term_id
+    shows the information for a term
+  DELETE /terms/term_id
+    deletes the term
+
+  GET /ttschemas
+    lists all defined timetable schemas
+  PUT /ttschemas/new_schema_id
+    creates a new timetable schema
+  GET /ttschemas/ttschema_id
+    shows the timetable schema
+
+XXX You cannot delete timetable schemas -- that would break existing
+    timetables.
+XXX You cannot modify timetable schemas once they're created either, for the
+    same reason.
+
+  GET ...object/calendar  (or /calendar.ics, or /calendar.vfb)
+    view an object's calendar (where the object can be a person, group or a
+    resource)
+  PUT ...object/calendar  (or /calendar.ics, or /calendar.vfb)
+    change an object's calendar (where the object can be a person, group or a
+    resource)
+
+  GET ...object/timetables
+    list an object's timetable (where the object can be a person, group or a
+    resource)
+  GET ...object/timetables/term_id.ttschema_id
+    view an object's timetable
+  PUT ...object/timetables/term_id.ttschema_id
+    change an object's timetables
+
+  GET ...object/composite-timetables
+    list an object's composite timetable (where the object can be a person,
+    group or a resource)
+  GET ...object/composite-timetables/term_id.ttschema_id
+    view an object's composite timetable
+
+XXX There used to be a way to get the calendar derived from all timetables
+
+  GET ...path/acl
+    view the access control list for a location
+  POST ...path/acl
+    change the access control list for a location
+
+  GET ...object/relationships
+    list all object's relationships (where the object can be a person, group or a
+    resource)
+  POST ...object/relationships
+    create a new relationship
+  GET ...object/relationships/nr
+    view a specific relationship
+  DELETE ...object/relationships/nr
+    break up a relationship
+
+  GET ...path/notes
+    view all notes on an object
+  POST ...path/notes
+    add new notes for an object
+
+XXX: There is currently no way to edit/delete notes via the RESTive interface.
+
+This list should be up-to-date (I think) with respect to SchoolTool revision
+4410.  It has not been verified, so it might contain errors or omissions.
+
+Ideally all this should be automatically extracted from source code (e.g.,
+docstrings for views).
+

@@ -1,0 +1,634 @@
+Timetabling in SchoolTool
+=========================
+
+This functional doctest demonstrates and tests SchoolTool's timetables.
+
+
+Overview
+--------
+
+1. Definition of terms
+2. Definition of timetable schemas
+3. Import of timetables
+4. Usage of timetables
+
+
+Prologue
+--------
+
+We will need a SchoolTool instance.  Let's call it 'frogpond'.
+
+    >>> print http(r"""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... type_name=BrowserAdd__schooltool.app.SchoolToolApplication&new_value=frogpond""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+Let's create a person for use in tests:
+
+    >>> print http("""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 112
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Frog&field.username=frog&field.password=pwd\
+    ... &field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+And a group:
+
+    >>> print http(r"""
+    ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Animals&UPDATE_SUBMIT=Add&add_input_name=""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/groups
+    ...
+
+And a resource:
+
+    >>> print http(r"""
+    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Mud&UPDATE_SUBMIT=Add&add_input_name=""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/resources
+    ...
+
+Terms
+-----
+
+Terms are periods of time (such as semesters or trimesters) that also say which
+days are holidays and which are not.  You can define any number of terms -- and
+you have to have at least one if you want to use timetables.
+
+Initially there are no terms defined.
+
+    >>> print http(r"""
+    ... GET /frogpond/terms HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <title>Terms</title>
+    ...
+    <a href="@@add.html">New Term</a>
+    ...
+    <h1>Terms</h1>
+    ...
+    <p>There are none.</p>
+    ...
+
+The manager can add one.
+
+    >>> print http(r"""
+    ... GET /frogpond/terms/@@add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <title>New term</title>
+    ...
+    <h1>New term</h1>
+    ...
+    <form class="plain" method="post"
+          action="http://localhost/frogpond/terms/@@add.html">
+    <p>
+    First, please name and define the time period of the term.  The date range is
+    inclusive (e.g., 2004-09-01 to 2004-12-31).  Dates must be specified in
+    YYYY-MM-DD format.
+    </p>
+    ...<input class="textType" id="field.title" name="field.title" size="20"
+              type="text" value="" />...
+    ...<input class="textType" id="field.first" name="field.first"
+              size="20" type="text" value="" />...
+    ...<input class="textType" id="field.last" name="field.last"
+              size="20" type="text" value="" />...
+    <div class="controls">
+      <input type="submit" class="button-ok" name="NEXT" value="Next" />
+    </div>
+    </form>
+    ...
+
+First you have to specify the title and date.
+
+    >>> print http(r"""
+    ... POST /frogpond/terms/@@add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 75
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=2005+Fall&field.first=2005-09-01&field.last=2005-12-31&REFRESH=
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <title>New term</title>
+    ...
+    <h1>New term</h1>
+    ...
+    <form class="plain" method="post"
+          action="http://localhost/frogpond/terms/@@add.html">
+    <p>
+    First, please name and define the time period of the term.  The date range is
+    inclusive (e.g., 2004-09-01 to 2004-12-31).  Dates must be specified in
+    YYYY-MM-DD format.
+    </p>
+    ...<input class="textType" id="field.title" name="field.title" size="20"
+              type="text" value="2005 Fall" />...
+    ...<input class="textType" id="field.first" name="field.first"
+              size="20" type="text" value="2005-09-01" />...
+    ...<input class="textType" id="field.last" name="field.last"
+              size="20" type="text" value="2005-12-31" />...
+    <div class="controls">
+      <input type="submit" class="button-ok" name="REFRESH" value="Refresh" />
+    </div>
+    <p>
+    Second, please specify which days are school days, and which days are holidays.
+    </p>
+    ...
+    </form>
+    ...
+
+Then you can click on a couple of the toggle buttons to mark all Saturdays and
+Sundays as holidays.  (This test is cheating a bit because it includes both
+buttons in the request, while in real life the user would have to push each
+button separately causing two requests)
+
+    >>> print http(r"""
+    ... POST /frogpond/terms/@@add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 100
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=2005+Fall&field.first=2005-09-01&field.last=2005-12-31&TOGGLE_5=Saturday&TOGGLE_6=Sunday
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    ...
+    <h1>New term</h1>
+    ...
+          <td class="schoolday" onclick="javascript:toggle(9)"
+              id="td9">
+            <label>
+              9
+              <input type="checkbox" name="holiday" class="chk"
+                     onchange="javascript:update(9)" id="c9"
+                     value="2005-09-09" />
+            </label>
+          </td>
+          <td class="holiday" onclick="javascript:toggle(10)"
+              id="td10">
+            <label>
+              10
+              <input type="checkbox" name="holiday" class="chk"
+                     onchange="javascript:update(10)"
+                     checked="checked" id="c10"
+                     value="2005-09-10" />
+            </label>
+          </td>
+    ...
+
+Finally, you click on the 'Add term' button.  (This test is cheating again --
+instead of listing all the holidays in the request I specify the two toggle
+buttons again.)
+
+    >>> print http(r"""
+    ... POST /frogpond/terms/@@add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 123
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=2005+Fall&field.first=2005-09-01&field.last=2005-12-31&TOGGLE_5=Saturday&TOGGLE_6=Sunday&UPDATE_SUBMIT=Add+term
+    ... """, handle_errors=False)
+    HTTP/1.1 303 See Other
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    Location: http://localhost/frogpond/terms
+    <BLANKLINE>
+    ...
+
+The new term is there
+
+    >>> print http(r"""
+    ... GET /frogpond/terms HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <title>Terms</title>
+    ...
+    <a href="@@add.html">New Term</a>
+    ...
+    <h1>Terms</h1>
+    ...
+            <a href="http://localhost/frogpond/terms/2005-fall">2005 Fall</a>
+    ...
+
+You can look at it
+
+    >>> print http(r"""
+    ... GET /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <title>2005 Fall</title>
+    ...
+    <h1>2005 Fall</h1>
+    ...
+          <td class="schoolday">
+            <label> 9 </label>
+          </td>
+          <td class="holiday">
+            <label> 10 </label>
+          </td>
+    ...
+
+You can edit it
+
+    >>> print http(r"""
+    ... GET /frogpond/terms/2005-fall/edit.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+        <title>Change Term: 2005 Fall</title>
+    ...
+              <h1>Change Term: 2005 Fall</h1>
+    ...
+    ...<input class="textType" id="field.title" name="field.title" size="20"
+              type="text" value="2005 Fall" />...
+    ...<input class="textType" id="field.first" name="field.first"
+              size="20" type="text" value="2005-09-01" />...
+    ...<input class="textType" id="field.last" name="field.last"
+              size="20" type="text" value="2005-12-31" />...
+      <div class="controls">
+        <input type="submit" class="button-ok" name="REFRESH"
+               value="Refresh" />
+        <input type="submit" class="button-ok"
+               name="UPDATE_SUBMIT" value="Save changes" />
+      </div>
+    </form>
+    ...
+
+    >>> print http(r"""
+    ... POST /frogpond/terms/2005-fall/edit.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 119
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=2005+Fall&field.first=2005-08-01&field.last=2005-11-30&TOGGLE_5=Saturday&TOGGLE_6=Sunday&UPDATE_SUBMIT=Save
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <title>Change Term: 2005 Fall</title>
+    ...
+    <h1>Change Term: 2005 Fall</h1>
+    ...Saved changes...
+    ...
+    ...<input class="textType" id="field.title" name="field.title" size="20"
+              type="text" value="2005 Fall" />...
+    ...<input class="textType" id="field.first" name="field.first"
+              size="20" type="text" value="2005-08-01" />...
+    ...<input class="textType" id="field.last" name="field.last"
+              size="20" type="text" value="2005-11-30" />...
+    ...
+    </form>
+    ...
+
+
+TODO: verify that you can delete terms
+TODO: check that there's an error message when end date < start date
+MAYBE TODO: add an 'Identifier (optional)' field to the term addition form,
+            just like in group/resource addition form
+
+
+Definition of timetable schemas
+-------------------------------
+
+We will create a timetable schema using the simple schema definition form:
+
+    >>> print http("""
+    ... POST /frogpond/ttschemas/@@simpleadd.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 185
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=default&\
+    ... field.period_name_1=A&field.period_name_2=B&\
+    ... field.period_start_1=9:00&field.period_start_2=10:00&\
+    ... field.period_finish_1=9:45&field.period_finish_2=10:45&\
+    ... CREATE=Create
+    ... """, handle_errors=False)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/ttschemas
+    ...
+
+Let's look at the new timetable:
+
+    >>> print http(r"""
+    ... GET /frogpond/ttschemas/default HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+    <table class="timetable">
+    ...
+    <th class="period" width="...">A</th>
+    <td class="activity" width="..."></td>
+    ...
+    <th class="period" width="...">B</th>
+    <td class="activity" width="..."></td>
+    ...
+    </table>
+    ...
+
+(The more complex timetable schema definition pages are tested in
+ttschema.txt and ttschema-wizard.txt).
+
+
+Importing timetables
+--------------------
+
+We will need to define a person who will be a learner.
+
+    >>> print http("""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 118
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Tadpole&field.username=tadpole&field.password=pwd\
+    ... &field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+We will also need a course.
+
+    >>> print http(r"""
+    ... POST /frogpond/courses/+/addSchoolToolCourse.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Swimming&UPDATE_SUBMIT=Add&add_input_name=""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/courses
+    ...
+
+We can import timetables using the CSV timetable import page.
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/timetables-csvimport.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+    <legend>Upload CSV File</legend>
+    <div class="row">
+      <label for="csvfile">CSV File</label>
+      <input id="csvfile" type="file" name="csvfile" />
+    </div>
+    ...
+    <legend>Input CSV Data</legend>
+    <label for="csvtext">CSV Data</label>
+    <textarea name="csvtext" id="csvtext" cols="50"
+              rows="10"></textarea>
+    ...
+
+As you can see, the form allows to submit the CSV data either by sending the
+file or typing/pasting it into a text area field.
+
+    >>> import urllib
+    >>> csvdata = "UPDATE_SUBMIT=Submit&charset=UTF-8&csvtext=" \
+    ... + urllib.quote("""\
+    ... "2005-fall","default"
+    ... ""
+    ... "swimming","frog"
+    ... "Monday","A"
+    ... "Tuesday","B"
+    ... "***"
+    ... "tadpole"
+    ... """)
+
+    >>> print http("""
+    ... POST /frogpond/sections/timetables-csvimport.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: %d
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... %s
+    ... """ % (len(csvdata), csvdata), handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+    <div class="info">
+      <p>CSV text imported successfully.</p>
+    </div>
+    ...
+
+A new section should have been created:
+
+XXX Bug: the section's title is not shown right.
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/ HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <a href="http://localhost/frogpond/sections/swimming--frog">...</a>
+    ...
+
+We should see a timetable in the section's timetable list:
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/swimming--frog/timetables/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    Timetables for Swimming - Frog
+    ...
+    <ul>
+      <li>
+        <a href="http://localhost/frogpond/sections/swimming--frog/timetables/2005-fall.default">2005-fall.default</a>
+      </li>
+    </ul>
+    ...
+
+We can have a look at the timetable too, and see a few timetable activities:
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/swimming--frog/timetables/2005-fall.default HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <tr>
+      <th class="period" width="...">A</th>
+      <td class="activity" width="...>Swimming</td>
+      ...
+      <th class="period" width="...">A</th>
+      <td class="activity" width="..."></td>
+    </tr>
+    <tr>
+      <th class="period" width="...">B</th>
+      <td class="activity" width="..."></td>
+    <BLANKLINE>
+      <th class="period" width="...">B</th>
+      <td class="activity" width="...>Swimming</td>
+      ...
+      <th class="period" width="...">B</th>
+      <td class="activity" width="..."></td>
+    </tr>
+    ...
+
+
+Timetables on persons, groups, and resources
+--------------------------------------------
+
+Persons, groups and resources should have timetables.
+
+The person whom we have registered initially should be a schooltool.app.Person,
+not schoolbell.app.app.Person:
+
+    >>> getRootFolder()['frogpond']['persons']['frog']
+    <schooltool.app.Person object at ...>
+
+He hasn't got a permission to delete himself, so in SchoolTool there
+are no checkboxes around him:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/ HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <ul>
+      <li>
+        <a href="http://localhost/frogpond/persons/frog">Frog</a>
+      </li>
+      <li>
+        <a href="http://localhost/frogpond/persons/tadpole">Tadpole</a>
+      </li>
+    </ul>
+    ...
+
+
+The person's timetable list can be accessed through a menu item in the main
+page:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <h4>Actions</h4>
+    ...
+    <a href="...">View Timetables</a>
+    ...
+
+
+We can view the person's timetable list, although it will be empty:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/timetables/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    Timetables for Frog
+    ...
+
+The activities should show up in the calendar:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar/2005-09-05 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+        <h6 style="background: #7590ae">
+            Swimming
+            <span class="start-end">
+              (<span>09:00</span>
+                 -
+               <span>09:45</span>)
+            </span>
+        </h6>
+    ...
+
+
+The group is a SchoolTool group:
+
+    >>> getRootFolder()['frogpond']['groups']['animals']
+    <schooltool.app.Group object at ...>
+
+The resource is a SchoolTool resource:
+
+    >>> getRootFolder()['frogpond']['resources']['mud']
+    <schooltool.app.Resource object at ...>
+
+
+Epilogue
+--------
+
+ vim: ft=rest

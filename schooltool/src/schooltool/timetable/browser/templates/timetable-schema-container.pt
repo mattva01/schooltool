@@ -1,0 +1,53 @@
+<tal:defs define="dummy view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<head>
+  <title metal:fill-slot="title"
+         tal:content="view/index_title" i18n:translate="">Contents</title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header"
+    tal:content="view/index_title" i18n:translate="">Contents</h1>
+
+<metal:block metal:fill-slot="body"
+             tal:define="objects context/values;
+                         canModify view/canModify">
+  <p tal:condition="not:objects" i18n:translate="">There are none.</p>
+  <tal:block tal:condition="objects"
+             tal:define="default_id context/default_id">
+    <ul>
+      <li tal:repeat="obj objects/sortby:title">
+        <a tal:content="obj/title"
+           tal:attributes="href obj/@@absolute_url">Some Object</a>
+      </li>
+    </ul>
+    <div class="row">
+      <label i18n:translate="" for="ttschema">Default Timetable Schema:</label>
+      <tal:block tal:condition="not:canModify">
+        <a tal:condition="default_id"
+           tal:define="default context/getDefault"
+           tal:content="default/title"
+           tal:attributes="href default/@@absolute_url">(Default Schema)</a>
+        <span tal:condition="not:default_id" i18n:translate="">Not Selected</span>
+      </tal:block>
+      <form tal:condition="canModify"
+            method="post"
+            action=".">
+        <select name="ttschema" size="1"
+                id="ttschema">
+          <option value="" i18n:translate="">Not Selected</option>
+          <option tal:repeat="obj objects/sortby:title"
+                  tal:content="obj/title"
+                  tal:attributes="selected python:obj.__name__ == default_id;
+                                  value python: obj.__name__">(Schema title)</option>
+        </select>
+        <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Change"
+               title="Shortcut: Alt-A" accesskey="A"
+               i18n:attributes="value change-button; accesskey" />
+      </form>
+    </div>
+  </tal:block>
+
+</metal:block>
+</body>
+</html>

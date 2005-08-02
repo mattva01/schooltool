@@ -1,0 +1,71 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">New timetable schema</title>
+</head>
+<body>
+  <h1 metal:fill-slot="content-header" i18n:translate="">
+    New timetable schema
+  </h1>
+<metal:block metal:fill-slot="body">
+
+<p i18n:translate="">
+This is a simple way to create a weekly timetable schema.  Just fill
+in a sufficient number of lines for your periods.
+</p>
+
+<p i18n:translate="">
+If you need more flexibility, you can use the <a href="add.html">timetable
+schema creation wizard</a>, or a <a href="complexadd.html">complex timetable
+schema set up form</a>.
+</p>
+
+
+<form class="plain" method="POST" tal:attributes="action request/URL">
+
+  <div class="error"
+       tal:content="view/error"
+       tal:condition="view/error"
+       i18n:translate=""
+       />
+
+  <div class="row" tal:define="widget nocall:view/title_widget">
+      <metal:block use-macro="context/@@form_macros/widget_row" />
+  </div>
+
+<table>
+  <tr>
+    <th i18n:translate="">Period title (optional)</th>
+    <th i18n:translate="">Period start time</th>
+    <th i18n:translate="">Period end time </th>
+  <tr>
+  <tr tal:repeat="nr python:range(1, view._nrperiods)">
+    <th tal:define="widget python:getattr(view, 'period_name_%s_widget' % nr)">
+      <span class="error"
+           tal:condition="widget/error" tal:content="structure widget/error" />
+      <div tal:content="structure widget"/>
+    </th>
+    <th tal:define="widget python:getattr(view, 'period_start_%s_widget' % nr)">
+      <span class="error"
+           tal:condition="widget/error" tal:content="structure widget/error" />
+      <div tal:content="structure widget"/>
+    </th>
+    <th tal:define="widget python:getattr(view, 'period_finish_%s_widget' % nr)">
+      <span class="error"
+           tal:condition="widget/error" tal:content="structure widget/error" />
+      <div tal:content="structure widget"/>
+    </th>
+  </tr>
+</table>
+
+<div class="controls">
+  <input type="submit" class="button-ok" name="CREATE" value="Create"
+         i18n:attributes="value" />
+  <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+         i18n:attributes="value cancel-button" />
+</div>
+
+</form>
+
+</metal:block>
+</body>
+</html>

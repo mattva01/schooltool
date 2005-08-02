@@ -1,0 +1,72 @@
+Source: schooltool
+Priority: extra
+Maintainer: Brian Sutherland <jinty@web.de>
+Build-Depends-Indep: debhelper (>= 4.1.16), python, python2.3-dev (>= 2.3.2)
+Standards-Version: 3.6.1
+
+Package: schooltool
+Section: misc
+Architecture: all
+Depends: ${python:Depends}, ssl-cert, openssl, libschooltool (= ${Source-Version}), ${misc:Depends}
+Description: common platform for school administration
+ SchoolTool is an open source school management information system.  It is
+ a distributed client/server system.  The SchoolTool server presents two
+ interfaces to clients:
+ .
+ - a traditional web application interface, usable with an ordinary browser.
+ .
+ - HTTP-based programming interface suitable for fat clients, adhering to
+   the Representational State Transfer (REST) architectural style (see
+   http://rest.blueoxen.net/).
+ .
+ The web application interface is the primary one.  The RESTive interface is
+ there for potential interoperability with other systems and fat clients to
+ perform data entry that is inconvenient to do via the web application
+ interface.
+ .
+ There are several clients that demonstrate the usage of the REST interface
+ (a command-line client that is used for functional tests, a wxWidgets GUI
+ client, and a command-line client for data import).
+ .
+ Any modern web browser is suitable for the web application interface.  The
+ interface degrades gracefully, so a browser that does not support CSS or
+ Javascript will be usable, although perhaps not very nice or convenient.
+ .
+ This package is a configuration package which sets up a standard stand alone
+ server.
+ .
+ Homepage: http://www.schooltool.org/
+
+Package: libschooltool
+Section: misc
+Architecture: all
+Depends: ${python:Depends}, python2.3-xml, python2.3-libxml2 (>= 2.6.3-1), libschoolbell (>= 1.1), libschoolbell (<< 1.2), ${misc:Depends}
+Conflicts: schooltool-clients, libschooltool-clients
+Replaces: schooltool-clients, libschooltool-clients
+Description: common platform for school administration
+ SchoolTool is an open source school management information system.  It is
+ a distributed client/server system.  The SchoolTool server presents two
+ interfaces to clients:
+ .
+ - a traditional web application interface, usable with an ordinary browser.
+ .
+ - HTTP-based programming interface suitable for fat clients, adhering to
+   the Representational State Transfer (REST) architectural style (see
+   http://rest.blueoxen.net/).
+ .
+ The web application interface is the primary one.  The RESTive interface is
+ there for potential interoperability with other systems and fat clients to
+ perform data entry that is inconvenient to do via the web application
+ interface.
+ .
+ There are several clients that demonstrate the usage of the REST interface
+ (a command-line client that is used for functional tests, a wxWidgets GUI
+ client, and a command-line client for data import).
+ .
+ Any modern web browser is suitable for the web application interface.  The
+ interface degrades gracefully, so a browser that does not support CSS or
+ Javascript will be usable, although perhaps not very nice or convenient.
+ .
+ This package contains the SchoolTool python modules.
+ .
+ Homepage: http://www.schooltool.org/

@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""
+A script to run the SchoolTool rest client.
+"""
+
+# Please don't modify the following lines until you have looked in setup.py
+import sys
+# paths begin
+# paths end
+
+import schooltool.main
+schooltool.client.main()

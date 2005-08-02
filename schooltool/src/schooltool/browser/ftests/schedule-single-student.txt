@@ -1,0 +1,507 @@
+Scheduling a single student in SchoolTool
+=========================================
+
+This functional doctest demonstrates and tests the scheduling of a
+single student view.
+
+We do most of the fixture setup through ReSTive views for now.  A lot of the
+code has been copied from rest/composite-timetables.txt.
+
+Overview
+--------
+
+1. Set up 1 Term, 1 Schema, a User, a Course and 3 Sections
+2. Add timetables to sections
+3. Schedule the student
+
+Prologue
+--------
+
+We will need a SchoolTool instance.  Let's call it 'frogpond'.
+
+    >>> print http(r"""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... type_name=BrowserAdd__schooltool.app.SchoolToolApplication&new_value=frogpond""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+Also, we need the REST HTTP caller:
+
+    >>> from schoolbell.app.rest.ftests import rest
+
+Add a term:
+
+    >>> print http(r"""
+    ... PUT /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
+    ...             first="2003-09-01" last="2003-09-07">
+    ...     <title>2005 Fall</title>
+    ...     <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
+    ...     <holiday date="2003-09-03">Holiday</holiday>
+    ...     <holiday date="2003-09-06">Holiday</holiday>
+    ...     <holiday date="2003-09-23">Holiday</holiday>
+    ... </schooldays>
+    ... """)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+Add a schema:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+    ...   <title>Some Title</title>
+    ...   <model factory="SequentialDaysTimetableModel">
+    ...     <daytemplate>
+    ...       <used when="default" />
+    ...       <period id="A" tstart="9:00" duration="60" />
+    ...       <period id="C" tstart="9:00" duration="60" />
+    ...       <period id="B" tstart="10:00" duration="60" />
+    ...       <period id="D" tstart="10:00" duration="60" />
+    ...     </daytemplate>
+    ...     <daytemplate>
+    ...       <used when="Friday Thursday" />
+    ...       <period id="A" tstart="8:00" duration="60" />
+    ...       <period id="C" tstart="8:00" duration="60" />
+    ...       <period id="B" tstart="11:00" duration="60" />
+    ...       <period id="D" tstart="11:00" duration="60" />
+    ...     </daytemplate>
+    ...   </model>
+    ...   <day id="Day 1">
+    ...     <period id="A">
+    ...     </period>
+    ...     <period id="B">
+    ...     </period>
+    ...   </day>
+    ...   <day id="Day 2">
+    ...     <period id="C">
+    ...     </period>
+    ...     <period id="D">
+    ...     </period>
+    ...   </day>
+    ... </timetable>
+    ... """)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+Lets add a course and 3 sections:
+
+    >>> print rest("""
+    ... PUT /frogpond/courses/birdwatching HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... PUT /frogpond/sections/birdwatching-1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding1" 
+    ...         course="birding"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... PUT /frogpond/sections/birdwatching-2 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding2" 
+    ...         course="birding"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... PUT /frogpond/sections/birdwatching-3 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding3" 
+    ...         course="birding"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... POST /frogpond/courses/birdwatching/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
+    ...               xmlns:xlink="http://www.w3.org/1999/xlink"
+    ...               xlink:type="simple"
+    ...  xlink:role="http://schooltool.org/ns/coursesections/section"
+    ...               xlink:arcrole="http://schooltool.org/ns/coursesections"
+    ...  xlink:href="http://localhost/frogpond/sections/birdwatching-1"/>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... POST /frogpond/courses/birdwatching/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
+    ...               xmlns:xlink="http://www.w3.org/1999/xlink"
+    ...               xlink:type="simple"
+    ...  xlink:role="http://schooltool.org/ns/coursesections/section"
+    ...               xlink:arcrole="http://schooltool.org/ns/coursesections"
+    ...  xlink:href="http://localhost/frogpond/sections/birdwatching-2"/>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... POST /frogpond/courses/birdwatching/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
+    ...               xmlns:xlink="http://www.w3.org/1999/xlink"
+    ...               xlink:type="simple"
+    ...  xlink:role="http://schooltool.org/ns/coursesections/section"
+    ...               xlink:arcrole="http://schooltool.org/ns/coursesections"
+    ...  xlink:href="http://localhost/frogpond/sections/birdwatching-3"/>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    ...
+
+Add timetables to sections
+==========================
+
+Lets add a timetable for the first section:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/sections/birdwatching-1/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+    ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <day id="Day 1">
+    ...     <period id="A">
+    ...     </period>
+    ...     <period id="B">
+    ...     </period>
+    ...   </day>
+    ...   <day id="Day 2">
+    ...     <period id="C">
+    ...       <activity title="Birdwatching 1"/>
+    ...     </period>
+    ...     <period id="D">
+    ...       <activity title="Birdwatching 1 (practice)"/>
+    ...     </period>
+    ...   </day>
+    ... </timetable>
+    ... """)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+For the second one:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/sections/birdwatching-2/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+    ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <day id="Day 1">
+    ...     <period id="A">
+    ...       <activity title="Birdwatching 2"/>
+    ...     </period>
+    ...     <period id="B">
+    ...     </period>
+    ...   </day>
+    ...   <day id="Day 2">
+    ...     <period id="C">
+    ...     </period>
+    ...     <period id="D">
+    ...       <activity title="Birdwatching 2 (practice)"/>
+    ...     </period>
+    ...   </day>
+    ... </timetable>
+    ... """)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+And the third one:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/sections/birdwatching-3/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+    ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <day id="Day 1">
+    ...     <period id="A">
+    ...       <activity title="Birdwatching 3 (practice)"/>
+    ...     </period>
+    ...     <period id="B">
+    ...       <activity title="Birdwatching 3"/>
+    ...     </period>
+    ...   </day>
+    ...   <day id="Day 2">
+    ...     <period id="C">
+    ...     </period>
+    ...     <period id="D">
+    ...     </period>
+    ...   </day>
+    ... </timetable>
+    ... """)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+We will need a student too:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 112
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=John&field.username=john&field.password=pwd&field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+Rendering view
+==============
+
+All the sections sohuld bee seen in the drop down lists:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/john/@@schedule.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    ...
+            <th>A</th>
+            <td>
+              <select name="sections:list">
+                <option value="" selected="selected">none</option>
+                <option value="birdwatching-2"> -- Birding</option>
+                <option value="birdwatching-3"> -- Birding</option>
+              </select>
+            </td>
+    ...
+            <th>B</th>
+            <td>
+              <select name="sections:list">
+                <option value="" selected="selected">none</option>
+                <option value="birdwatching-3"> -- Birding</option>
+              </select>
+            </td>
+    ...
+            <th>C</th>
+            <td>
+              <select name="sections:list">
+                <option value="" selected="selected">none</option>
+                <option value="birdwatching-1"> -- Birding</option>
+              </select>
+            </td>
+    ...
+            <th>D</th>
+            <td>
+              <select name="sections:list">
+                <option value="" selected="selected">none</option>
+                <option value="birdwatching-1"> -- Birding</option>
+                <option value="birdwatching-2"> -- Birding</option>
+              </select>
+            </td>
+    ...
+
+Lets add John to Birdwatching 1:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/john/@@schedule.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 33
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... sections=birdwatching-1&SAVE=Save""")
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    ...
+            <th>A</th>
+            <td>
+              <select name="sections:list">
+                <option value="" selected="selected">none</option>
+                <option value="birdwatching-2"> -- Birding</option>
+                <option value="birdwatching-3"> -- Birding</option>
+              </select>
+            </td>
+    ...
+            <th>B</th>
+            <td>
+              <select name="sections:list">
+                <option value="" selected="selected">none</option>
+                <option value="birdwatching-3"> -- Birding</option>
+              </select>
+            </td>
+    ...
+            <th>C</th>
+            <td>
+              <select name="sections:list">
+                <option value="">none</option>
+                <option selected="selected"
+                        value="birdwatching-1"> -- Birding</option>
+              </select>
+            </td>
+    ...
+            <th>D</th>
+            <td>
+              <select name="sections:list">
+                <option value="">none</option>
+                <option selected="selected"
+                        value="birdwatching-1"> -- Birding</option>
+                <option value="birdwatching-2"> -- Birding</option>
+              </select>
+            </td>
+    ...
+
+If john will be added to bw1 and bw2 a conflict should arise:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/john/@@schedule.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 57
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... sections=birdwatching-1&sections=birdwatching-2&SAVE=Save""")
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    ...
+            <th>A</th>
+            <td>
+              <select name="sections:list">
+                <option value="">none</option>
+                <option selected="selected"
+                        value="birdwatching-2"> -- Birding</option>
+                <option value="birdwatching-3"> -- Birding</option>
+              </select>
+            </td>
+    ...
+            <th>B</th>
+            <td>
+              <select name="sections:list">
+                <option value="" selected="selected">none</option>
+                <option value="birdwatching-3"> -- Birding</option>
+              </select>
+            </td>
+    ...
+            <th>C</th>
+            <td>
+              <select name="sections:list">
+                <option value="">none</option>
+                <option selected="selected"
+                        value="birdwatching-1"> -- Birding</option>
+              </select>
+            </td>
+    ...
+          <tr class="conflict">
+            <th>D</th>
+            <td>
+              <select name="sections:list">
+                <option value="">none</option>
+                <option value="birdwatching-1"> -- Birding</option>
+                <option selected="selected"
+                        value="birdwatching-2"> -- Birding</option>
+              </select>
+            </td>
+            <td>
+              <select name="sections:list">
+                <option value="">none</option>
+                <option selected="selected"
+                        value="birdwatching-1"> -- Birding</option>
+                <option value="birdwatching-2"> -- Birding</option>
+              </select>
+            </td>
+            <td class="conflict">
+            Scheduling conflict.
+            </td>
+          </tr>
+    ...
+
+Lets resolve the conflict by moving the student to the bw3:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/john/@@schedule.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 57
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... sections=birdwatching-1&sections=birdwatching-3&SAVE=Save""")
+    HTTP/1.1 200 Ok
+    ...
+
+Now our student should be in sections bw1 and bw2:
+
+    >>> print rest(r"""
+    ... GET /frogpond/persons/john/relationships/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
+                   xmlns="http://schooltool.org/ns/model/0.1">
+      <existing>
+    ...
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/membership/group"
+                      xlink:arcrole="http://schooltool.org/ns/membership"
+                      xlink:href="http://localhost/frogpond/sections/birdwatching-1">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/persons/john/relationships/2"/>
+        </relationship>
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/calendar_subscription/provider"
+                      xlink:arcrole="http://schooltool.org/ns/calendar_subscription"
+                      xlink:href="http://localhost/frogpond/sections/birdwatching-1/calendar">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/persons/john/relationships/3"/>
+        </relationship>
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/membership/group"
+                      xlink:arcrole="http://schooltool.org/ns/membership"
+                      xlink:href="http://localhost/frogpond/sections/birdwatching-3">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/persons/john/relationships/..."/>
+        </relationship>
+      </existing>
+    </relationships>
+    <BLANKLINE>

@@ -1,0 +1,476 @@
+Functional tests for SchoolTool app RESTive views
+=================================================
+
+First of all, we will need a schooltool instance.  We will add it via
+the web ZMI:
+
+    >>> print http("""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... type_name=BrowserAdd__schooltool.app.SchoolToolApplication&\
+    ... new_value=frogpond""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+Also, we need the REST HTTP caller:
+
+    >>> from schoolbell.app.rest.ftests import rest
+
+Now, we can run the REST page tests:
+
+    >>> print rest("""
+    ... GET /frogpond HTTP/1.1
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
+      <message>Welcome to the SchoolTool server</message>
+      <containers>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/terms"
+                   xlink:title="terms"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/persons"
+                   xlink:title="persons"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/courses"
+                   xlink:title="courses"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/groups"
+                   xlink:title="groups"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/ttschemas"
+                   xlink:title="ttschemas"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/sections"
+                   xlink:title="sections"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/resources"
+                   xlink:title="resources"/>
+      </containers>
+    </schooltool>
+    <BLANKLINE>
+
+There are no groups at the moment:
+
+    >>> print rest("""
+    ... GET /frogpond/groups/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>groups</name>
+      <items>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/groups/acl"/>
+    </container>
+    <BLANKLINE>
+
+no resources:
+
+    >>> print rest("""
+    ... GET /frogpond/resources/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>resources</name>
+      <items>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/resources/acl"/>
+    </container>
+    <BLANKLINE>
+
+and no persons:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>persons</name>
+      <items>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/persons/acl"/>
+    </container>
+    <BLANKLINE>
+
+
+and no courses:
+
+    >>> print rest("""
+    ... GET /frogpond/courses/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>courses</name>
+      <items>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/courses/acl"/>
+    </container>
+    <BLANKLINE>
+
+
+Let's add a person, a group, a resource and a course, and let's make sure they
+are SchoolTool objects, rather than SchoolBell objects:
+
+
+    >>> print rest("""
+    ... PUT /frogpond/persons/goose HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Goose"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... PUT /frogpond/groups/birds HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birds"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... PUT /frogpond/resources/lily HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1"
+    ...         title="Lily" isLocation="true"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... PUT /frogpond/courses/birdwatching HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... PUT /frogpond/sections/birdwatching-1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding1" 
+    ...         course="birding" location="lily"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> getRootFolder()['frogpond']['persons']['goose']
+    <schooltool.app.Person object at ...>
+    >>> getRootFolder()['frogpond']['groups']['birds']
+    <schooltool.app.Group object at ...>
+    >>> getRootFolder()['frogpond']['resources']['lily']
+    <schooltool.app.Resource object at ...>
+    >>> getRootFolder()['frogpond']['courses']['birdwatching']
+    <schooltool.app.Course object at ...>
+    >>> getRootFolder()['frogpond']['sections']['birdwatching-1']
+    <schooltool.app.Section object at ...>
+    >>> getRootFolder()['frogpond']['sections']['birdwatching-1'].location is \
+    ...                        getRootFolder()['frogpond']['resources']['lily']
+    True
+
+
+The same should happen if we post to respective containers:
+
+    >>> print rest("""
+    ... POST /frogpond/groups HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Animals"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... POST /frogpond/resources HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Water"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> print rest("""
+    ... POST /frogpond/courses HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Flight"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+    >>> getRootFolder()['frogpond']['groups']['animals']
+    <schooltool.app.Group object at ...>
+    >>> getRootFolder()['frogpond']['resources']['water']
+    <schooltool.app.Resource object at ...>
+    >>> getRootFolder()['frogpond']['courses']['flight']
+    <schooltool.app.Course object at ...>
+
+Let's see what our course looks like:
+
+    >>> print rest("""
+    ... GET /frogpond/courses/flight HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 397
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <course xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>Flight</title>
+      <description></description>
+      <relationships xlink:type="simple"
+                     xlink:title="Relationships"
+                     xlink:href="http://localhost/frogpond/courses/flight/relationships"/>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/courses/flight/acl"/>
+    </course>
+    <BLANKLINE>
+
+
+Let's see what our section looks like:
+
+    >>> print rest("""
+    ... GET /frogpond/sections/birdwatching-1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 419
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <section xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>Birding1</title>
+      <description></description>
+      <relationships xlink:type="simple"
+                     xlink:title="Relationships"
+                     xlink:href="http://localhost/frogpond/sections/birdwatching-1/relationships"/>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/sections/birdwatching-1/acl"/>
+    </section>
+    <BLANKLINE>
+
+    >>> print rest("""
+    ... POST /frogpond/courses/flight/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
+    ...               xmlns:xlink="http://www.w3.org/1999/xlink"
+    ...               xlink:type="simple"
+    ...  xlink:role="http://schooltool.org/ns/coursesections/section"
+    ...               xlink:arcrole="http://schooltool.org/ns/coursesections"
+    ...  xlink:href="http://localhost/frogpond/sections/birdwatching-1"/>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    ...
+
+Currently, the relationships of goose should only show the application
+calendar, and our section show's its link to the course Flight:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/goose/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
+                   xmlns="http://schooltool.org/ns/model/0.1">
+      <existing>
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/calendar_subscription/provider"
+                      xlink:arcrole="http://schooltool.org/ns/calendar_subscription"
+                      xlink:href="http://localhost/frogpond/calendar">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/persons/goose/relationships/1"/>
+        </relationship>
+      </existing>
+    </relationships>
+
+    >>> print rest("""
+    ... GET /frogpond/sections/birdwatching-1/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
+                   xmlns="http://schooltool.org/ns/model/0.1">
+      <existing>
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/coursesections/course"
+                      xlink:arcrole="http://schooltool.org/ns/coursesections"
+                      xlink:href="http://localhost/frogpond/courses/flight">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/sections/birdwatching-1/relationships/1"/>
+        </relationship>
+      </existing>
+    </relationships>
+
+
+Let's make goose a student in our section:
+
+    >>> print rest("""
+    ... POST /frogpond/persons/goose/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
+    ...               xmlns:xlink="http://www.w3.org/1999/xlink"
+    ...               xlink:type="simple"
+    ...               xlink:role="http://schooltool.org/ns/membership/group"
+    ...               xlink:arcrole="http://schooltool.org/ns/membership"
+    ...  xlink:href="http://localhost/frogpond/sections/birdwatching-1"/>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    ...
+
+Now the membership relationship, which indicates a student should be in both
+and the calendar subscription to show the student the section's calendar:
+
+    >>> print rest("""
+    ... GET /frogpond/persons/goose/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length:...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
+                   xmlns="http://schooltool.org/ns/model/0.1">
+      <existing>
+    ...
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/membership/group"
+                      xlink:arcrole="http://schooltool.org/ns/membership"
+                      xlink:href="http://localhost/frogpond/sections/birdwatching-1">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/persons/goose/relationships/2"/>
+        </relationship>
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/calendar_subscription/provider"
+                      xlink:arcrole="http://schooltool.org/ns/calendar_subscription"
+                      xlink:href="http://localhost/frogpond/sections/birdwatching-1/calendar">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/persons/goose/relationships/3"/>
+        </relationship>
+      </existing>
+    </relationships>
+    <BLANKLINE>
+
+    >>> print rest("""
+    ... GET /frogpond/sections/birdwatching-1/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
+                   xmlns="http://schooltool.org/ns/model/0.1">
+      <existing>
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/coursesections/course"
+                      xlink:arcrole="http://schooltool.org/ns/coursesections"
+                      xlink:href="http://localhost/frogpond/courses/flight">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/sections/birdwatching-1/relationships/1"/>
+        </relationship>
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/membership/member"
+                      xlink:arcrole="http://schooltool.org/ns/membership"
+                      xlink:href="http://localhost/frogpond/persons/goose">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/sections/birdwatching-1/relationships/2"/>
+        </relationship>
+      </existing>
+    </relationships>
+
+Now we'll need an instructor:
+
+    >>> print rest("""
+    ... PUT /frogpond/persons/maverick HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Maverick"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+Maverick is going to teach Goose a lesson:
+
+    >>> print rest("""
+    ... POST /frogpond/persons/maverick/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
+    ...               xmlns:xlink="http://www.w3.org/1999/xlink"
+    ...               xlink:type="simple"
+    ...               xlink:role="http://schooltool.org/ns/instruction/section"
+    ...               xlink:arcrole="http://schooltool.org/ns/instruction"
+    ...  xlink:href="http://localhost/frogpond/sections/birdwatching-1"/>
+    ... """, handle_errors=False)
+    HTTP/1.1 201 Created
+    ...
+
+Now the section is in maverick's relationships
+
+    >>> print rest("""
+    ... GET /frogpond/persons/goose/relationships HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length:...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
+                   xmlns="http://schooltool.org/ns/model/0.1">
+      <existing>
+    ...
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/membership/group"
+                      xlink:arcrole="http://schooltool.org/ns/membership"
+                      xlink:href="http://localhost/frogpond/sections/birdwatching-1">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/persons/goose/relationships/2"/>
+        </relationship>
+        <relationship xlink:type="simple"
+                      xlink:role="http://schooltool.org/ns/calendar_subscription/provider"
+                      xlink:arcrole="http://schooltool.org/ns/calendar_subscription"
+                      xlink:href="http://localhost/frogpond/sections/birdwatching-1/calendar">
+          <manage xlink:type="simple"
+                  xlink:href="http://localhost/frogpond/persons/goose/relationships/3"/>
+        </relationship>
+      </existing>
+    </relationships>
+    <BLANKLINE>

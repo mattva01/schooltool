@@ -1,0 +1,51 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Emergency day</title>
+</head>
+<body>
+  <h1 metal:fill-slot="content-header" i18n:translate="">
+    Choose a replacement for the emergency day.
+  </h1>
+<metal:block metal:fill-slot="body">
+
+<p i18n:translate="">
+You have selected <span tal:replace="view/date"/> as the emergency
+day.  Now please select the replacement day.  The selection below
+consists of non-schooldays in this term following the emergency day
+and several days after the term.
+</p>
+
+<form class="plain" method="POST" tal:attributes="action request/URL">
+
+  <div class="error"
+       tal:content="view/error"
+       tal:condition="view/error"
+       i18n:translate=""
+       />
+
+   <input type="hidden" name="date" tal:attributes="value view/date" />
+
+  <p i18n:translate="">
+    Please enter the replacement date below.
+  </p>
+
+  <div class="row">
+    <label i18n:translate="">Replacement</label>
+    <select name="replacement">
+      <option tal:repeat="date view/replacements"
+              tal:content="date"/>
+    </select>
+  </div>
+
+  <div class="controls">
+    <input type="submit" class="button-ok" name="SUBMIT" value="Proceed"
+           i18n:attributes="value" />
+    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+           i18n:attributes="value cancel-button" />
+  </div>
+
+</form>
+
+</metal:block>
+</body>
+</html>

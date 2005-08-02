@@ -1,0 +1,73 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">Choose a special day</title>
+</head>
+<body>
+  <h1 metal:fill-slot="content-header" i18n:translate="">
+    Choose a special day
+  </h1>
+<metal:block metal:fill-slot="body">
+
+<p i18n:translate="">
+  You can adjust the start and end times of periods for
+  <span tal:replace="view/date"/> in the form below.  In order to
+  remove a period from the day, just delete the period's start and end
+  times.
+</p>
+
+<form class="plain" method="POST" tal:attributes="action request/URL">
+  <input type="hidden" name="date" tal:attributes="value view/date"/>
+
+  <div class="error"
+       tal:content="view/error"
+       tal:condition="view/error"
+       i18n:translate=""
+       />
+
+   <table>
+     <tr>
+       <th i18n:translate="">Period title</th>
+       <th i18n:translate="">Original start</th>
+       <th i18n:translate="">Original end</th>
+       <th i18n:translate="">New start</th>
+       <th i18n:translate="">New end</th>
+     </tr>
+     <tr tal:repeat="period view/getPeriods">
+     <tal:block define="title python: period[0];
+                        orig_start python: period[1];
+                        orig_end python: period[2];
+                        start python: period[3];
+                        end python: period[4];">
+       <td tal:content="title"/>
+       <td tal:content="orig_start"/>
+       <td tal:content="orig_end"/>
+       <td tal:define="name string:${title}_start"
+           tal:attributes="
+             class python: name in view.field_errors and 'error' or None">
+         <input type="text"
+                tal:attributes="name name;
+                                value python: request.form.get(name, start)"/>
+       </td>
+       <td tal:define="name string:${title}_end"
+           tal:attributes="
+             class python: name in view.field_errors and 'error' or None">
+         <input type="text"
+                tal:attributes="name name;
+                                value python: request.form.get(name, end)"/>
+       </td>
+     </tal:block>
+     </tr>
+   </table>
+
+  <div class="controls">
+    <input type="submit" class="button-ok" name="SUBMIT" value="Modify"
+           i18n:attributes="value" />
+    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+           i18n:attributes="value cancel-button" />
+  </div>
+
+</form>
+
+</metal:block>
+</body>
+</html>

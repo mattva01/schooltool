@@ -1,0 +1,698 @@
+Timetabling in SchoolTool
+=========================
+
+This functional doctest demonstrates and tests SchoolTool's timetable
+RESTive views.
+
+
+Overview
+--------
+
+1. Definition of terms
+2. Definition of timetable schemas
+3. Usage of timetables
+
+
+Prologue
+--------
+
+We will need a SchoolTool instance.  Let's call it 'frogpond'.
+
+    >>> print http(r"""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... type_name=BrowserAdd__schooltool.app.SchoolToolApplication&new_value=frogpond""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+
+Also, we need the REST HTTP caller:
+
+    >>> from schoolbell.app.rest.ftests import rest
+
+
+Terms
+-----
+
+Initially there are no terms defined.
+
+    >>> print rest(r"""
+    ... GET /frogpond/terms HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>terms</name>
+      <items>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/terms/acl"/>
+    </container>
+    <BLANKLINE>
+
+The manager can add one.
+
+    >>> print http(r"""
+    ... PUT /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
+    ...             first="2003-09-01" last="2003-09-07">
+    ...     <title>2005 Fall</title>
+    ...     <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
+    ...     <holiday date="2003-09-03">Holiday</holiday>
+    ...     <holiday date="2003-09-06">Holiday</holiday>
+    ...     <holiday date="2003-09-23">Holiday</holiday>
+    ... </schooldays>
+    ... """)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+The new term is there
+
+    >>> print rest(r"""
+    ... GET /frogpond/terms HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>terms</name>
+      <items>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/terms/2005-fall"
+              xlink:title="2005 Fall"/>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/terms/acl"/>
+    </container>
+    <BLANKLINE>
+
+
+You can look at it
+
+    >>> print str(rest(r"""
+    ... GET /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)).replace("\r\n", "\n")
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/calendar; charset=UTF-8
+    <BLANKLINE>
+    BEGIN:VCALENDAR
+    PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+    VERSION:2.0
+    BEGIN:VEVENT
+    UID:school-period-/frogpond/terms/2005-fall@localhost
+    SUMMARY:School Period
+    DTSTART;VALUE=DATE:20030901
+    DTEND;VALUE=DATE:20030908
+    DTSTAMP:...
+    END:VEVENT
+    BEGIN:VEVENT
+    UID:schoolday-20030901-/frogpond/terms/2005-fall@localhost
+    SUMMARY:Schoolday
+    DTSTART;VALUE=DATE:20030901
+    DTSTAMP:...
+    END:VEVENT
+    BEGIN:VEVENT
+    UID:schoolday-20030902-/frogpond/terms/2005-fall@localhost
+    SUMMARY:Schoolday
+    DTSTART;VALUE=DATE:20030902
+    DTSTAMP:...
+    END:VEVENT
+    BEGIN:VEVENT
+    UID:schoolday-20030904-/frogpond/terms/2005-fall@localhost
+    SUMMARY:Schoolday
+    DTSTART;VALUE=DATE:20030904
+    DTSTAMP:...
+    END:VEVENT
+    BEGIN:VEVENT
+    UID:schoolday-20030905-/frogpond/terms/2005-fall@localhost
+    SUMMARY:Schoolday
+    DTSTART;VALUE=DATE:20030905
+    DTSTAMP:...
+    END:VEVENT
+    END:VCALENDAR
+    <BLANKLINE>
+
+
+You can edit it:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/calendar; charset=UTF-8
+    ...
+    ... BEGIN:VCALENDAR
+    ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+    ... VERSION:2.0
+    ... BEGIN:VEVENT
+    ... UID:school-period-/frogpond/terms/2005-fall@localhost
+    ... SUMMARY:School Period
+    ... DTSTART;VALUE=DATE:20030901
+    ... DTEND;VALUE=DATE:20030908
+    ... DTSTAMP:20050511T145037Z
+    ... END:VEVENT
+    ... BEGIN:VEVENT
+    ... UID:schoolday-20030901-/frogpond/terms/2005-fall@localhost
+    ... SUMMARY:Schoolday
+    ... DTSTART;VALUE=DATE:20030901
+    ... DTSTAMP:20050511T145037Z
+    ... END:VEVENT
+    ... BEGIN:VEVENT
+    ... UID:schoolday-20030902-/frogpond/terms/2005-fall@localhost
+    ... SUMMARY:Schoolday
+    ... DTSTART;VALUE=DATE:20030902
+    ... DTSTAMP:20050511T145037Z
+    ... END:VEVENT
+    ... BEGIN:VEVENT
+    ... UID:schoolday-20030903-/frogpond/terms/2005-fall@localhost
+    ... SUMMARY:Schoolday
+    ... DTSTART;VALUE=DATE:20030903
+    ... DTSTAMP:20050511T145037Z
+    ... END:VEVENT
+    ... END:VCALENDAR
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+
+Last two days should not be holidays now, and there should be an
+additional day:
+
+    >>> print str(rest(r"""
+    ... GET /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)).replace("\r\n", "\n")
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/calendar; charset=UTF-8
+    <BLANKLINE>
+    BEGIN:VCALENDAR
+    PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
+    VERSION:2.0
+    BEGIN:VEVENT
+    UID:school-period-/frogpond/terms/2005-fall@localhost
+    SUMMARY:School Period
+    DTSTART;VALUE=DATE:20030901
+    DTEND;VALUE=DATE:20030908
+    DTSTAMP:...
+    END:VEVENT
+    BEGIN:VEVENT
+    UID:schoolday-20030901-/frogpond/terms/2005-fall@localhost
+    SUMMARY:Schoolday
+    DTSTART;VALUE=DATE:20030901
+    DTSTAMP:...
+    END:VEVENT
+    BEGIN:VEVENT
+    UID:schoolday-20030902-/frogpond/terms/2005-fall@localhost
+    SUMMARY:Schoolday
+    DTSTART;VALUE=DATE:20030902
+    DTSTAMP:...
+    END:VEVENT
+    BEGIN:VEVENT
+    UID:schoolday-20030903-/frogpond/terms/2005-fall@localhost
+    SUMMARY:Schoolday
+    DTSTART;VALUE=DATE:20030903
+    DTSTAMP:...
+    END:VEVENT
+    END:VCALENDAR
+    <BLANKLINE>
+
+We should be capable of deleting the term:
+
+    >>> print rest(r"""
+    ... DELETE /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+The term should be gone now:
+
+    >>> print rest(r"""
+    ... GET /frogpond/terms HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>terms</name>
+      <items>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/terms/acl"/>
+    </container>
+    <BLANKLINE>
+
+
+Timetable schemas
+-----------------
+
+There should be no timetable schemas yet:
+
+    >>> print rest(r"""
+    ... GET /frogpond/ttschemas/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>ttschemas</name>
+      <items>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/ttschemas/acl"/>
+    </container>
+    <BLANKLINE>
+
+Let's add a timetable schema:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+    ...   <title>Some Title</title>
+    ...   <model factory="SequentialDaysTimetableModel">
+    ...     <daytemplate>
+    ...       <used when="Friday Thursday" />
+    ...       <period id="A" tstart="8:00" duration="60" />
+    ...       <period id="C" tstart="8:00" duration="60" />
+    ...       <period id="B" tstart="11:00" duration="60" />
+    ...       <period id="D" tstart="11:00" duration="60" />
+    ...     </daytemplate>
+    ...     <daytemplate>
+    ...       <used when="default" />
+    ...       <period id="A" tstart="9:00" duration="60" />
+    ...       <period id="C" tstart="9:00" duration="60" />
+    ...       <period id="B" tstart="10:00" duration="60" />
+    ...       <period id="D" tstart="10:00" duration="60" />
+    ...     </daytemplate>
+    ...   </model>
+    ...   <day id="Day 1">
+    ...     <period id="A" />
+    ...     <period id="B" />
+    ...   </day>
+    ...   <day id="Day 2">
+    ...     <period id="C" />
+    ...     <period id="D" />
+    ...   </day>
+    ... </timetable>
+    ... """)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+
+We should see this new schema in the container:
+
+    >>> print rest(r"""
+    ... GET /frogpond/ttschemas/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 352
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <container xmlns:xlink="http://www.w3.org/1999/xlink">
+      <name>ttschemas</name>
+      <items>
+        <item xlink:type="simple"
+              xlink:href="http://localhost/frogpond/ttschemas/schema1"
+              xlink:title="schema1"/>
+      </items>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/frogpond/ttschemas/acl"/>
+    </container>
+    <BLANKLINE>
+
+
+Let's see what's inside:
+
+    >>> print rest(r"""
+    ... GET /frogpond/ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    <BLANKLINE>
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+      <title>Some Title</title>
+      <model factory="SequentialDaysTimetableModel">
+        <daytemplate>
+          <used when="Friday Thursday"/>
+          <period duration="60" id="A" tstart="08:00"/>
+          <period duration="60" id="B" tstart="11:00"/>
+          <period duration="60" id="C" tstart="08:00"/>
+          <period duration="60" id="D" tstart="11:00"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="default"/>
+          <period duration="60" id="A" tstart="09:00"/>
+          <period duration="60" id="B" tstart="10:00"/>
+          <period duration="60" id="C" tstart="09:00"/>
+          <period duration="60" id="D" tstart="10:00"/>
+        </daytemplate>
+      </model>
+      <day id="Day 1">
+        <period id="A"/>
+        <period id="B"/>
+      </day>
+      <day id="Day 2">
+        <period id="C"/>
+        <period id="D"/>
+      </day>
+    </timetable>
+
+
+Let's modify the timetable schema:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+    ...   <model factory="SequentialDaysTimetableModel">
+    ...     <daytemplate>
+    ...       <used when="Friday Thursday" />
+    ...       <period id="A" tstart="8:00" duration="70" />
+    ...       <period id="C" tstart="8:00" duration="70" />
+    ...       <period id="B" tstart="11:00" duration="70" />
+    ...       <period id="D" tstart="11:00" duration="70" />
+    ...     </daytemplate>
+    ...     <daytemplate>
+    ...       <used when="default" />
+    ...       <period id="A" tstart="10:00" duration="60" />
+    ...       <period id="C" tstart="10:00" duration="60" />
+    ...       <period id="B" tstart="11:00" duration="60" />
+    ...       <period id="D" tstart="11:00" duration="60" />
+    ...     </daytemplate>
+    ...   </model>
+    ...   <day id="Day 1">
+    ...     <period id="A">
+    ...     </period>
+    ...     <period id="B">
+    ...     </period>
+    ...   </day>
+    ...   <day id="Day 2">
+    ...     <period id="C">
+    ...     </period>
+    ...     <period id="D">
+    ...     </period>
+    ...   </day>
+    ... </timetable>
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+
+And check that schema was indeed modified:
+
+    >>> print rest(r"""
+    ... GET /frogpond/ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    <BLANKLINE>
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+      <title>Schema</title>
+      <model factory="SequentialDaysTimetableModel">
+        <daytemplate>
+          <used when="Friday Thursday"/>
+          <period duration="70" id="A" tstart="08:00"/>
+          <period duration="70" id="B" tstart="11:00"/>
+          <period duration="70" id="C" tstart="08:00"/>
+          <period duration="70" id="D" tstart="11:00"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="default"/>
+          <period duration="60" id="A" tstart="10:00"/>
+          <period duration="60" id="B" tstart="11:00"/>
+          <period duration="60" id="C" tstart="10:00"/>
+          <period duration="60" id="D" tstart="11:00"/>
+        </daytemplate>
+      </model>
+      <day id="Day 1">
+        <period id="A"/>
+        <period id="B"/>
+      </day>
+      <day id="Day 2">
+        <period id="C"/>
+        <period id="D"/>
+      </day>
+    </timetable>
+
+Trying to put an invalid schema should get us an error:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+    ...   <model factory="SequentialDaysTimetableModel">
+    ...     <daytemplate>
+    ...       <used when="Friday Thursday" />
+    ...       <period id="A" tstart="8:00" duration="70" />
+    ...       <period id="B" tstart="11:00" duration="70" />
+    ...       <period id="D" tstart="11:00" duration="70" />
+    ...     </daytemplate>
+    ...     <daytemplate>
+    ...       <used when="default" />
+    ...       <period id="A" tstart="10:00" duration="60" />
+    ...       <period id="B" tstart="11:00" duration="60" />
+    ...       <period id="D" tstart="11:00" duration="60" />
+    ...     </daytemplate>
+    ...   </model>
+    ...   <day id="Day 1">
+    ...     <period id="A" />
+    ...     <period id="A" />
+    ...   </day>
+    ... </timetable>
+    ... """)
+    HTTP/1.1 400 Bad Request
+    Content-Length: ...
+    Content-Type: text/plain; charset=utf-8
+    <BLANKLINE>
+    Duplicate periods in schema
+
+
+Timetables
+----------
+
+We will need at least one term (we have deleted the one inserted in the first
+test):
+
+    >>> print http(r"""
+    ... PUT /frogpond/terms/2005-fall HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
+    ...             first="2003-09-01" last="2003-09-07">
+    ...     <title>2005 Fall</title>
+    ...     <daysofweek>Monday Tuesday Wednesday Thursday Friday</daysofweek>
+    ...     <holiday date="2003-09-03">Holiday</holiday>
+    ...     <holiday date="2003-09-06">Holiday</holiday>
+    ...     <holiday date="2003-09-23">Holiday</holiday>
+    ... </schooldays>
+    ... """)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+Let's add a person:
+
+    >>> print rest("""
+    ... PUT /frogpond/persons/john HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="John"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+
+We can now add a timetable for the person:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+    ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <day id="Day 1">
+    ...     <period id="A">
+    ...     </period>
+    ...     <period id="B">
+    ...     </period>
+    ...   </day>
+    ...   <day id="Day 2">
+    ...     <period id="C">
+    ...       <activity title="English"/>
+    ...     </period>
+    ...     <period id="D">
+    ...     </period>
+    ...   </day>
+    ... </timetable>
+    ... """)
+    HTTP/1.1 201 Created
+    Content-Length: 0
+    <BLANKLINE>
+
+It should be there:
+
+    >>> print rest(r"""
+    ... GET /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw""")
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+               xmlns:xlink="http://www.w3.org/1999/xlink">
+      <day id="Day 1">
+        <period id="A">
+        </period>
+        <period id="B">
+        </period>
+      </day>
+      <day id="Day 2">
+        <period id="C">
+          <activity title="English">
+          </activity>
+        </period>
+        <period id="D">
+        </period>
+      </day>
+    </timetable>
+
+Let's modify it:
+
+    >>> print rest(r"""
+    ... PUT /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ... 
+    ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+    ...            xmlns:xlink="http://www.w3.org/1999/xlink">
+    ...   <day id="Day 1">
+    ...     <period id="A">
+    ...     </period>
+    ...     <period id="B">
+    ...     </period>
+    ...   </day>
+    ...   <day id="Day 2">
+    ...     <period id="C">
+    ...       <activity title="English"/>
+    ...       <activity title="Math"/>
+    ...     </period>
+    ...     <period id="D">
+    ...       <activity title="English"/>
+    ...     </period>
+    ...   </day>
+    ... </timetable>
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+The timetable should look different now:
+
+    >>> print rest(r"""
+    ... GET /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw""")
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
+               xmlns:xlink="http://www.w3.org/1999/xlink">
+      <day id="Day 1">
+        <period id="A">
+        </period>
+        <period id="B">
+        </period>
+      </day>
+      <day id="Day 2">
+        <period id="C">
+          <activity title="English">
+          </activity>
+          <activity title="Math">
+          </activity>
+        </period>
+        <period id="D">
+          <activity title="English">
+          </activity>
+        </period>
+      </day>
+    </timetable>
+
+Let's look at the list of timetables we have now:
+
+    >>> print rest(r"""
+    ... GET /frogpond/persons/john/timetables/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw""")
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
+      <timetable xlink:type="simple" term="2005-fall"
+                 xlink:href="http://localhost/frogpond/persons/john/timetables/2005-fall.schema1"
+                 schema="schema1"/>
+    </timetables>
+    <BLANKLINE>
+
+Let's delete it:
+
+    >>> print rest(r"""
+    ... DELETE /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw""")
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    <BLANKLINE>
+
+Now it's gone:
+
+    >>> print rest(r"""
+    ... GET /frogpond/persons/john/timetables/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw""")
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
+    </timetables>
+    <BLANKLINE>
+
+
+Epilogue
+--------
+
+ vim: ft=rest

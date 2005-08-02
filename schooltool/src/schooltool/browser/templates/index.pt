@@ -1,0 +1,19 @@
+<tal:dummy define="dummy view/update"/>
+<html metal:use-macro="context/@@standard_macros/view"
+      i18n:domain="schooltool">
+<body>
+
+<h1 metal:fill-slot="content-header" 
+    i18n:translate="">Welcome to SchoolTool</h1>
+
+<div metal:fill-slot="body">
+
+<p><a href="persons" i18n:translate="">Persons</a></p>
+<p><a href="courses" i18n:translate="">Courses</a></p>
+<p><a href="groups" i18n:translate="">Groups</a></p>
+<p><a href="resources" i18n:translate="">Resources</a></p>
+
+</div>
+</body>
+
+</html>

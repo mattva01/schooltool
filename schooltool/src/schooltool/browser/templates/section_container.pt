@@ -1,0 +1,41 @@
+<tal:define define="dummy view/update"/>
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title"
+         tal:content="view/index_title" i18n:translate="">
+    Contents
+  </title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header"
+    tal:content="view/index_title" i18n:translate="">Contents</h1>
+
+<metal:block metal:fill-slot="body"
+             tal:define="batch view/batch">
+
+  <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+  <div metal:use-macro="view/@@view_macros/batch-search"/>
+  <p tal:condition="not:batch" i18n:translate="">There are none.</p>
+  <form method="post"
+        tal:attributes="action string:${context/@@absolute_url}/delete.html">
+    <ul tal:condition="batch">
+      <li tal:repeat="obj batch/sortby:title">
+        <input type="checkbox" tal:attributes="name string:delete.${obj/zope:name}" />
+        <a tal:content="obj/label" i18n:translate=""
+           tal:attributes="href obj/@@absolute_url">Some Object</a>
+        <span class="hint">
+          (<span tal:replace="obj/size"/>
+          <span i18n:translate="">Students</span>)
+        </span>
+      </li>
+      <div class="controls">
+        <input type="submit" class="button-cancel" value="Delete"
+               i18n:attributes="value delete-button;" />
+      </div>
+    </ul>
+  </form>
+
+</metal:block>
+</body>
+</html>

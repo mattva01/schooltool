@@ -1,0 +1,40 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">New timetable schema</title>
+</head>
+<body>
+  <h1 metal:fill-slot="content-header" i18n:translate="">New timetable schema</h1>
+<metal:block metal:fill-slot="body">
+
+<form class="plain" method="POST" tal:attributes="action request/URL">
+
+  <p tal:condition="view/description" tal:content="view/description"
+     i18n:translate="">(informative text)</p>
+
+  <div tal:condition="view/error" tal:content="view/error" class="error"
+       i18n:translate="">(error message)</div>
+
+  <div class="row" tal:repeat="slotnr python:range(view.numPeriods())">
+  <tal:block define="slot python:view.periods()[slotnr]">
+    <select tal:attributes="name name"
+            tal:define="name string:period_${slotnr}">
+      <option tal:repeat="period view/periods"
+              tal:attributes="selected
+                      python:(period == request.get(name, slot)) or None"
+              tal:content="period" />
+    </select>
+  </tal:block>
+  </div>
+
+  <div class="controls">
+    <input type="submit" class="button-ok" name="NEXT" value="Next"
+           i18n:attributes="value" />
+    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+           i18n:attributes="value" />
+  </div>
+
+</form>
+
+</metal:block>
+</body>
+</html>

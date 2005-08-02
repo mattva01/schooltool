@@ -1,0 +1,67 @@
+<tal:define define="dummy view/update"/>
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title"
+         tal:content="view/index_title" i18n:translate="">Contents</title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header"
+    tal:content="view/index_title" i18n:translate="">Contents</h1>
+
+<metal:block metal:fill-slot="body"
+             tal:define="batch view/batch;
+                         canModify view/canModify">
+
+  <p tal:condition="not:batch" i18n:translate="">There are none.</p>
+  <tal:block tal:condition="batch">
+    <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    <div metal:use-macro="view/@@view_macros/batch-search"/>
+    <form method="post"
+          tal:condition="canModify"
+          tal:attributes="action string:${context/@@absolute_url}/delete.html">
+      <div tal:repeat="course batch" class="course">
+        <input type="checkbox" tal:attributes="name string:delete.${course/zope:name}" />
+        <a tal:content="course/title"
+           tal:attributes="href course/@@absolute_url">Some Object</a>
+        <ul tal:condition="course/sections|nothing" class="section-list">
+          <li tal:repeat="section course/sections">
+            <a i18n:translate=""
+               tal:content="section/label"
+               tal:attributes="href section/@@absolute_url;
+                               title section/title">
+              Some Object
+            </a>
+            <span class="hint">
+              (<span tal:replace="section/size"/>
+              <span i18n:translate="">Students</span>)
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div class="controls">
+        <input type="submit" class="button-cancel" value="Delete"
+               i18n:attributes="value delete-button;" />
+      </div>
+    </form>
+    <ul tal:condition="not:canModify" class="container-content">
+      <li tal:repeat="course batch" class="course">
+        <a tal:content="course/title"
+           tal:attributes="href course/@@absolute_url">Some Object</a>
+        <ul tal:condition="course/sections|nothing" class="section-list">
+          <li tal:repeat="section course/sections">
+            <a tal:content="section/label"
+               tal:attributes="href section/@@absolute_url">Some Object</a>
+            <span class="hint">
+              (<span tal:replace="section/size"/>
+              <span i18n:translate="">Students</span>)
+            </span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </tal:block>
+
+</metal:block>
+</body>
+</html>

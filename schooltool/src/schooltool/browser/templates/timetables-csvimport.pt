@@ -1,0 +1,126 @@
+<tal:defs define="update view/update" />
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+  <head>
+    <title metal:fill-slot="title" i18n:translate="">
+      Upload SchoolTool timetable as CSV
+    </title>
+  </head>
+  <body>
+    <metal:block metal:fill-slot="body">
+
+      <div class="info" tal:condition="view/success">
+        <p tal:repeat="msg view/success" tal:content="msg" i18n:translate="" />
+      </div>
+      <div class="error" tal:condition="view/errors"
+        tal:repeat="err view/errors" tal:content="err" i18n:translate="" />
+
+      <form method="POST" enctype="multipart/form-data" class="standalone"
+        tal:attributes="action request/URL">
+
+        <h3 i18n:translate="">
+          Import Timetable
+        </h3>
+
+        <p i18n:translate="">
+          You can create the CSV file in a spreadsheet and export it in CSV
+          (Comma-Separated Values) format.  The structure of the table is
+          described below.
+        </p>
+
+        <p i18n:translate="">
+          The first row of the file must contain the name of the
+          <strong>term</strong> and the <strong>timetable schema</strong> which
+          will be used for the new timetables.  The second row should be empty.
+          After that, several section descriptions may follow.  They are
+          separated by an empty line.
+        </p>
+
+        <p i18n:translate="">
+          Each section description's first row contains the <strong>course
+          id</strong> and the <strong>instructor id</strong> for the new
+          section.  Then a number of rows, each containing a <strong>day
+          id</strong>, a <strong>period id</strong> and an optional
+          <strong>location id</strong>, follows.  The list of period
+          descriptions is terminated by three asterisks ('***') in the first
+          column.  After the terminator, any number of <strong>person
+          ids</strong> may follow, the denoted persons will be added to the
+          section as learners.
+        </p>
+
+        <p i18n:translate="">Example:</p>
+
+<pre i18n:translate="">
+"2005-fall","three-day"
+"","",""
+"philosophy","lorch"
+"Monday","A","room137"
+"Monday","B"
+"Tuesday","C","room138"
+"***"
+"johnny"
+"billy"
+""
+"literature","guzman"
+"Wednesday","B"
+"Wednesday","C","room139"
+"***"
+"johnny"
+"pete"
+</pre>
+        <p i18n:translate="">
+          The above example will create two new sections, one for the
+          philosophy lecture and the other for the literature lecture   The
+          section for the philosophy lecture will have persons with ids
+          'johnny' and 'billy' as learners, and its timetable will contain
+          three timetable activities, two on Monday (one taking place in the
+          location denoted by the id `room137`, one without a specified
+          location)   The literature section will be processed in a similar
+          fashion.
+        </p>
+
+        <p i18n:translate="">
+          Note that only ids of objects are to be used in the file, not titles.
+          If a row ends with empty cells (e.g.,
+          <em>"philosophy","lorch","",""</em>), those cells will be discarded.
+          You may separate section descriptions by more than one line.  In the
+          list of learners, only the first column containing the person ids is
+          processed, the other columns are ignored.  You can import the same
+          data several times without any side effects.
+        </p>
+
+        <fieldset>
+          <legend i18n:translate="">Upload CSV File</legend>
+          <div class="row">
+            <label for="csvfile" i18n:translate="">CSV File</label>
+            <input id="csvfile" type="file" name="csvfile"/>
+          </div>
+
+          <div class="row">
+            <tal:block i18n:translate="">Charset:</tal:block>
+            <select name="charset">
+              <option value="UTF-8" i18n:translate="">Unicode (UTF-8)</option>
+              <option value="ISO-8859-1" i18n:translate="">Western (ISO-8859-1)</option>
+              <option value="ISO-8859-15" i18n:translate="">Western (ISO-8859-15)</option>
+              <option value="Windows-1252" i18n:translate="">Western (Windows-1252)</option>
+              <option value="other" i18n:translate="">Other (please specify)</option>
+            </select>
+          </div>
+          <div class="row" i18n:translate="">
+            Other charset: <input name="other_charset" type="text" i18n:name="other_charset" />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend i18n:translate="">Input CSV Data</legend>
+          <label for="csvtext" i18n:translate="">CSV Data</label>
+          <textarea name="csvtext" id="csvtext" cols="50" rows="10"
+                    tal:content="request/csvtext|nothing">
+          </textarea>
+        </fieldset>
+        <div class="controls">
+          <input name="UPDATE_SUBMIT" class="button-ok" type="submit"
+                 value="Submit" i18n:attributes="value submit-button" />
+        </div>
+      </form>
+    </metal:block>
+  </body>
+</html>

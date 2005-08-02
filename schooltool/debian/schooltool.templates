@@ -1,0 +1,93 @@
+Template: schooltool/rest
+Type: string
+Default:
+_Description: Network interfaces for SchoolTool XML web services:
+ Please enter a space separated list of [address:]port values that you
+ would like the server to listen on.
+ .
+ This interface is used by SchoolTool for communicating with non-HTML clients
+ such as the SchoolTool and 3rd party clients (e.g. Mozilla Calendar). XML and
+ iCalendar messages can be PUT or GET to this interface via HTTP allowing
+ access to all SchoolTool functionality.
+
+Template: schooltool/web
+Type: string
+Default: 7080
+_Description: Network interfaces for the HTML browser interface
+ Please enter a space separated list of [address:]port values that you
+ would like the server to listen on.
+ .
+ The HTML interface provides access to SchoolTool via any standard web browser.
+
+Template: schooltool/rest_ssl
+Type: string
+Default:
+_Description: Network interfaces for SchoolTool XML web services (SSL):
+ Please enter a space separated list of [address:]port values that you
+ would like the server to listen on.
+ .
+ This interface is used by SchoolTool for communicating with non-HTML clients
+ such as the SchoolTool and 3rd party clients (e.g. Mozilla Calendar). XML and
+ iCalendar messages can be PUT or GET to this interface via HTTP allowing
+ access to all SchoolTool functionality.
+ .
+ This is an SSL version of this interface and will only accept SSL
+ connections.
+
+Template: schooltool/web_ssl
+Type: string
+Default:
+_Description: Network interfaces for the HTML browser interface (SSL)
+ Please enter a space separated list of [address:]port values that you
+ would like the server to listen on.
+ .
+ The web interface provides access to SchoolTool via any standard web browser.
+ .
+ This is an SSL version of this interface and will only accept SSL
+ connections.
+
+Template: schooltool/cert-type
+Type: select
+__Choices: Create self-signed certificate, Import certificate
+Default: Create self-signed certificate
+_Description: Method for setting up the SSL certificate:
+ You can create a self-signed root certificate that can be imported into
+ web browsers. The certificate can be copied from
+ /etc/schooltool/cert.pem.
+ .
+ You can also import a certificate, for instance a certificate signed
+ by a certification authority (CA). The certificate must be in PEM
+ format and contain the private key.
+
+Template: schooltool/create-cert
+Type: boolean
+Default: false
+_Description: Would you like to re-create the SSL certificate?
+ A SSL certificate already exists. Please confirm whether you want
+ to create a new certificate.
+
+Template: schooltool/import-cert
+Type: string
+Default: /
+_Description: PEM format SSL certificate:
+ Please enter the file name of the SSL certificate you want to import.
+
+Template: schooltool/incompatible_database
+Type: boolean
+Default: true
+_Description: Should the previous database be removed?
+ A possibly incompatible pre-existing database was detected. Since
+ this is a testing/beta version, converting existing databases to the
+ new format is not possible.
+ .
+ Therefore the new version cannot be installed unless the existing database
+ is removed first. All data in the existing database will be deleted.
+
+Template: schooltool/purge_db
+Type: boolean
+Default: true
+_Description: Do you want to purge the database for SchoolTool?
+ By default, databases are removed when a package is purged.  However,
+ if you would like to retain the database for SchoolBell, this is your
+ last chance.  Please note that purging the database means that all
+ the data will be irrevocably lost.

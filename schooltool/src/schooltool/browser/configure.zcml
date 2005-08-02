@@ -1,0 +1,431 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <!-- Skin and resources -->
+
+  <zope:subscriber
+      handler=".skin.schoolToolTraverseSubscriber"
+      for="zope.app.publication.interfaces.IBeforeTraverseEvent"
+      />
+
+  <layer
+      name="SchoolToolLayer"
+      interface=".skin.ISchoolToolLayer"
+      />
+
+  <skin
+      name="SchoolTool"
+      interface=".skin.ISchoolToolSkin"
+      />
+
+  <resource name="logo.png" file="resources/schooltool.png"
+            layer=".skin.ISchoolToolLayer" />
+
+  <resource name="schooltool.css" file="resources/schooltool.css"
+            layer=".skin.ISchoolToolLayer" />
+
+  <!-- Add SchoolTool to the Zope menu -->
+
+  <addMenuItem
+      title="SchoolTool"
+      class="schooltool.app.SchoolToolApplication"
+      permission="zope.ManageContent"
+      />
+
+
+  <!-- Navigation -->
+
+  <page
+      for="*"
+      name="schoolbell_navigation"
+      layer=".skin.ISchoolToolLayer"
+      template="templates/navigation.pt"
+      class=".NavigationView"
+      permission="zope.View"
+      />
+
+  <!-- Views -->
+
+  <configure
+      package="schoolbell.app.browser"
+      i18n_domain="schoolbell">
+
+  <zope:view
+      for="schooltool.interfaces.ISchoolToolApplication"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory="schooltool.browser.app.SchoolToolApplicationTraverser"
+      permission="zope.Public"
+      />
+
+    <!-- Views from SchoolBell -->
+
+    <page
+        name="add.html"
+        for="schoolbell.app.interfaces.IPersonContainer"
+        class="schooltool.browser.app.PersonAddView"
+        template="templates/person_add.pt"
+        permission="schoolbell.create"
+        layer="schooltool.browser.skin.ISchoolToolLayer"
+        menu="schoolbell_actions" title="New Person" />
+
+    <addform
+        label="Add a Group"
+        name="addSchoolBellGroup.html"
+        schema="schoolbell.app.interfaces.IGroup"
+        fields="title description"
+        set_before_add="title"
+        content_factory="schooltool.app.Group"
+        permission="schoolbell.create"
+        template="templates/simple_add.pt"
+        class="schoolbell.app.browser.app.GroupAddView"
+        layer="schooltool.browser.skin.ISchoolToolLayer"
+        >
+        <widget field="description" height="5" />
+    </addform>
+
+    <addform
+        label="Add a Resource"
+        name="addSchoolBellResource.html"
+        schema="schoolbell.app.interfaces.IResource"
+        fields="title description isLocation"
+        set_before_add="title"
+        content_factory="schooltool.app.Resource"
+        template="templates/simple_add.pt"
+        class="schoolbell.app.browser.app.ResourceAddView"
+        permission="schoolbell.create"
+        layer="schooltool.browser.skin.ISchoolToolLayer"
+        >
+        <widget field="description" height="5" />
+    </addform>
+
+    <addform
+        label="Add a Course"
+        name="addSchoolToolCourse.html"
+        schema="schooltool.interfaces.ICourse"
+        fields="title description"
+        set_before_add="title"
+        content_factory="schooltool.app.Course"
+        permission="schoolbell.create"
+        template="templates/simple_add.pt"
+        class="schooltool.browser.app.CourseAddView">
+        <widget field="description" height="5" />
+    </addform>
+
+  </configure>
+
+  <page
+      name="index.html"
+      for="schooltool.interfaces.ISchoolToolApplication"
+      class="schooltool.browser.app.SchoolToolApplicationView"
+      template="templates/index.pt"
+      permission="zope.Public"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.interfaces.ICourseContainer"
+      class=".app.CourseContainerView"
+      template="templates/course_container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.interfaces.ICourse"
+      class="schooltool.browser.app.CourseView"
+      template="templates/course.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      layer="SchoolToolLayer"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.interfaces.IPersonContainer"
+      class=".app.PersonContainerView"
+      template="templates/container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
+      name="person-csvimport.html"
+      for="schooltool.interfaces.IPersonContainer"
+      class="schooltool.browser.csvimport.PersonCSVImportView"
+      template="templates/person-csvimport.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Import Persons"
+      layer=".skin.ISchoolToolLayer"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.interfaces.IGroupContainer"
+      class=".app.GroupContainerView"
+      template="templates/container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
+      name="group-csvimport.html"
+      for="schooltool.interfaces.IGroupContainer"
+      class="schooltool.browser.csvimport.GroupCSVImportView"
+      template="templates/group-csvimport.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Import Groups"
+      layer=".skin.ISchoolToolLayer"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.interfaces.IResourceContainer"
+      class=".app.ResourceContainerView"
+      template="templates/container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
+      name="resource-csvimport.html"
+      for="schooltool.interfaces.IResourceContainer"
+      class="schooltool.browser.csvimport.ResourceCSVImportView"
+      template="templates/resource-csvimport.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Import Resources"
+      layer=".skin.ISchoolToolLayer"
+      />
+
+  <containerViews
+      for="schooltool.interfaces.ICourseContainer"
+      contents="zope.ManageContent"
+      add="zope.View"
+      />
+
+  <page
+      name="course-csvimport.html"
+      for="schooltool.app.ICourseContainer"
+      class="schooltool.browser.csvimport.CourseCSVImportView"
+      template="templates/course-csvimport.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Import Courses"
+      layer=".skin.ISchoolToolLayer"
+      />
+
+  <menuItem
+      menu="schoolbell_actions"
+      title="New Course"
+      for="schooltool.interfaces.ICourseContainer"
+      action="+/addSchoolToolCourse.html"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.interfaces.ISectionContainer"
+      class=".app.SectionContainerView"
+      template="templates/section_container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
+      name="index.html"
+      for="schooltool.interfaces.ISection"
+      class="schooltool.browser.app.SectionView"
+      template="templates/section.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      layer="SchoolToolLayer"
+      />
+
+  <containerViews
+      for="schooltool.interfaces.ISectionContainer"
+      contents="zope.ManageContent"
+      add="zope.View"
+      />
+
+  <zope:vocabulary
+      name="LocationResources"
+      factory=".app.LocationResourceVocabulary"
+      />
+
+  <addform
+      label="Add a Section"
+      name="addSchoolToolSection.html"
+      schema="schooltool.interfaces.ISection"
+      fields="title description location"
+      set_before_add="title"
+      template="templates/section_add.pt"
+      content_factory="schooltool.app.Section"
+      permission="schoolbell.create"
+      class=".app.SectionAddView">
+    <widget field="description" height="5" />
+  </addform>
+
+  <editform
+      label="Edit Section Information"
+      name="edit.html"
+      schema="schooltool.interfaces.ISection"
+      for="schooltool.interfaces.ISection"
+      fields="title description location"
+      template="templates/section_edit.pt"
+      permission="schoolbell.edit"
+      class=".app.SectionEditView">
+      menu="schoolbell_actions"
+      title="Edit Info"
+    <widget field="description" height="5" />
+  </editform>
+
+  <page
+      name="instructors.html"
+      for="schooltool.interfaces.ISection"
+      class="schooltool.browser.app.SectionInstructorView"
+      template="templates/section_instructors.pt"
+      permission="schoolbell.manageMembership"
+      />
+
+  <page
+      name="learners.html"
+      for="schooltool.interfaces.ISection"
+      class="schooltool.browser.app.SectionLearnerView"
+      template="templates/section_learners.pt"
+      permission="schoolbell.manageMembership"
+      />
+
+  <page
+      name="learner-groups.html"
+      for="schooltool.interfaces.ISection"
+      class="schooltool.browser.app.SectionLearnerGroupView"
+      template="templates/section_learners.pt"
+      permission="schoolbell.manageMembership"
+      />
+
+  <page
+      name="timetables-csvimport.html"
+      for="schooltool.interfaces.ISectionContainer"
+      class="schooltool.browser.csvimport.TimetableCSVImportView"
+      template="templates/timetables-csvimport.pt"
+      permission="schoolbell.create"
+      layer="SchoolToolLayer"
+      menu="schoolbell_actions"
+      title="Import Sections"
+      />
+
+
+    <!--
+    FIXME: zope.View is certainly not the right permission.
+    How can we say "a person may only edit their own preferences"?
+    -->
+  <page
+      name="preferences.html"
+      for="schooltool.interfaces.IPerson"
+      class="schooltool.browser.app.PersonPreferencesView"
+      template="templates/person_preferences.pt"
+      permission="zope.View"
+      menu="schoolbell_actions"
+      title="Change Preferences" />
+
+  <page
+      name="index.html"
+      for="schooltool.interfaces.IPerson"
+      class="schooltool.browser.app.PersonView"
+      template="templates/person.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
+      for="*"
+      name="calendar_overlay"
+      layer=".skin.ISchoolToolLayer"
+      class=".cal.CalendarSTOverlayView"
+      template="templates/calendar_overlay.pt"
+      permission="zope.View"
+      />
+
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      name="calendar_list"
+      layer=".skin.ISchoolToolLayer"
+      class=".cal.CalendarListView"
+      permission="zope.View"
+      />
+
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      name="daily_calendar_rows"
+      layer=".skin.ISchoolToolLayer"
+      class=".cal.DailyCalendarRowsView"
+      permission="zope.View"
+      />
+
+  <!-- We already have a traverser registered on ICalendarOwner which is not
+       aware of timetables.  However, we need to traverse into timetables
+       in the web views, so for now I'll resort to the ugly solution of just
+       registering a derived traverser for each timetabled object.
+  -->
+
+  <zope:view
+      for="schooltool.interfaces.IPerson"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".TimetabledTraverser"
+      permission="zope.Public"
+      />
+  <zope:view
+      for="schooltool.interfaces.IGroup"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".TimetabledTraverser"
+      permission="zope.Public"
+      />
+  <zope:view
+      for="schooltool.interfaces.IResource"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".TimetabledTraverser"
+      permission="zope.Public"
+      />
+
+  <zope:view
+      for="schooltool.interfaces.ISection"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".TimetabledTraverser"
+      permission="zope.Public"
+      />
+
+  <menuItem
+      menu="schoolbell_actions"
+      title="View Timetables"
+      for="schooltool.interfaces.ITimetabled"
+      action="timetables/index.html"
+      />
+
+  <!-- Skin -->
+
+  <page
+      name="view_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/view_macros.pt"
+      layer=".skin.ISchoolToolLayer"
+      />
+
+</configure>

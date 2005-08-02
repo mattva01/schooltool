@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <content class=".NullTimetable">
+    <allow interface=".INullTimetable" />
+  </content>
+
+  <content class=".CompositeTimetabled">
+    <allow interface=".ICompositeTimetabled" />
+  </content>
+
+  <view
+      for="schooltool.timetable.interfaces.ITimetabled"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="schoolbell.app.rest.IRestTraverser"
+      factory=".CompositeTimetableTraverser"
+      permission="zope.Public"
+      name="composite-timetables"
+      />
+
+  <view
+      for="schooltool.timetable.interfaces.ITimetabled"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="schoolbell.app.rest.IRestTraverser"
+      factory=".TimetableTraverser"
+      permission="zope.Public"
+      name="timetables"
+      />
+
+  <view
+      for="schooltool.timetable.interfaces.ITimetableDict"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory=".TimetableDictPublishTraverse"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.rest.interfaces.ICompositeTimetabled"
+      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory=".CompositeTimetabledPublishTraverse"
+      permission="zope.Public"
+      />
+
+  <view
+      for=".NullTimetable"
+      name="PUT"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      factory=".NullTimetablePUT"
+      permission="zope.Public"
+      allowed_attributes="PUT"
+      />
+
+  <view
+      for="schooltool.timetable.Timetable"
+      name="PUT"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      factory=".TimetablePUT"
+      permission="zope.Public"
+      allowed_attributes="PUT"
+      />
+
+  <adapter
+      for="schooltool.timetable.interfaces.ITimetableDict
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.rest.interfaces.ITimetableFileFactory"
+      factory=".TimetableFileFactory"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      name="GET"
+      factory=".TimetableSchemaContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".TimetableSchemaFileFactory"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="schooltool.timetable.interfaces.ITimetableSchema"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      factory=".TimetableSchemaFile"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.timetable.interfaces.ITimetableSchema"
+      name="GET"
+      factory=".TimetableSchemaView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.timetable.interfaces.ITimetable"
+      name="GET"
+      factory=".TimetableReadView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.timetable.interfaces.ITimetableDict"
+      name="GET"
+      factory=".TimetableDictView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.rest.interfaces.ICompositeTimetabled"
+      name="GET"
+      factory=".CompositeTimetabledView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+</configure>

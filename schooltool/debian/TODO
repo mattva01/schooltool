@@ -1,0 +1,9 @@
+Debian Package Todo
+-------------------
+
+*   Play better with the Zope packages, speak to Mattias Klose.
+
+*   Do something about all the documentation scattered in the source in the form
+    of *.txt doctests. It is completely ignored and not installed.
+
+*   Use dbconfig-common as much as possible.

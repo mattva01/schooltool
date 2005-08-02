@@ -1,0 +1,74 @@
+#!/usr/bin/make -f
+
+# This variable, control file and the names of the .manpages and .docs files
+# should be the only thing needed to change the python version
+PYTHON=python2.3
+
+# Server Packages
+package=schooltool
+library=libschooltool
+
+build:
+
+clean::
+	dh_testdir
+	dh_testroot
+	-$(MAKE) clean
+	rm -f install-arch-stamp
+	rm -f install-indep-stamp
+	dh_clean
+	debconf-updatepo
+
+install-indep: install-indep-stamp
+install-indep-stamp: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k -i
+	dh_installdirs -i
+
+	$(PYTHON) setup.py install --no-compile \
+	    --install-lib=debian/$(library)/usr/lib/$(library) \
+	    --install-scripts=debian/$(library)/usr/bin \
+	    --default-config=/etc/$(package)/$(package).conf \
+	    --paths='/usr/lib/$(library);/usr/lib/libschoolbell'
+
+	# move the server executable to the configuration package
+	install -m 755 -D -p debian/$(library)/usr/bin/schooltool \
+		debian/$(package)/usr/bin/schooltool
+	rm debian/$(library)/usr/bin/$(package)
+	# configuration
+	install -m 644 -D -p debian/$(package).logrotate \
+		debian/$(package)/etc/logrotate.d/$(package)
+	install -m 644 -D -p debian/ssl-cert.cnf \
+	    debian/$(package)/etc/$(package)/ssl-cert.cnf
+	install -m 644 -D -p debian/$(package).conf.default \
+	    debian/$(package)/usr/share/$(package)/$(package).conf.default
+
+	touch install-indep-stamp
+
+binary-indep: install-indep
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installinit
+	dh_installexamples
+	dh_installman
+	dh_installdebconf
+	dh_installchangelogs
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_python
+	dh_makeshlibs
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+# policy requires binary-arch, but there is nothing for it to do.
+binary-arch:
+
+binary: binary-arch binary-indep
+
+.PHONY: build clean binary-indep binary-arch binary install

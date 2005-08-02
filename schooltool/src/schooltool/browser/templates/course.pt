@@ -1,0 +1,70 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" tal:content="context/title" />
+</head>
+<body>
+<h1 metal:fill-slot="content-header"><span tal:replace="context/title" /></h1>
+
+<metal:block metal:fill-slot="body">
+
+  <tal:block replace="structure context/@@notes|nothing"/>
+
+  <div id="course-view">
+    <p class="description" tal:content="context/description"/>
+
+    <div class="sections">
+
+      <div tal:define="sections context/sections">
+        <h3 i18n:translate="">Sections</h3>
+        <div class="section-list">
+          <tal:loop tal:repeat="section sections/sortby:label">
+
+            <!-- XXX This should be moved into a macro -->
+            <div class="section"
+                 tal:define="instructors section/instructors|nothing;
+                             learners section/learners|nothing;
+                             calendar section/calendar|nothing">
+
+              <tal:loop repeat="instructor instructors">
+                <tal:if condition="instructor/photo">
+                  <div class="instructor">
+                    <img src="photo" class="person-photo"
+                         tal:attributes="src string:${instructor/@@absolute_url}/photo" />
+                  <br />
+                  <a href="" tal:content="instructor/title"
+                     tal:attributes="href instructor/@@absolute_url" />
+                  </div>
+                </tal:if>
+              </tal:loop>
+
+                <a tal:attributes="href section/@@absolute_url">
+                  <span tal:replace="section/label" i18n:translate=""/>
+                  (<span tal:replace="section/title" i18n:translate=""/>)
+                </a>
+              <p>
+                  <span tal:replace="section/size" />
+                  <span i18n:translate="">students</span>
+              </p>
+
+              <p tal:content="section/description" />
+
+            </div>
+
+          </tal:loop>
+
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <a class="button-ok" href="" title="New Section"
+        tal:attributes="href string:${context/schoolbell:app/@@absolute_url}/sections/+/addSchoolToolSection.html?field.course_id=${context/__name__}">
+        New Section
+      </a>
+    </div>
+
+
+  </div>
+
+</metal:block>
+</body>
+</html>

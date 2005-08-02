@@ -1,0 +1,196 @@
+/*
+ * Stylesheet for SchoolTool
+ *
+ * Aesthetic styling
+ *
+ * Most CSS is inherited from schoolbell/app/browser/resources/style.css
+ *
+ */
+
+
+/* XXX move this into Schoolbell style.css after release */
+ul {
+    list-style: none;
+    padding-left: 1em;
+}
+
+input.disabled {
+    color: #eae8e3 !important;
+    background: #bab5ab !important;
+    border: #eae8e3 !important;
+}
+.section {
+    margin: 0.5em;
+    background: #eae8e3;
+    padding: 2px;
+    border: 1px #999 solid;
+}
+
+.instructor {
+    float: left;
+    text-align: center;
+}
+
+.instructor img {
+    background: #d6d6d6;
+    padding: 2px;
+    border: 1px #999 solid;
+}
+
+/* This overrides schoolbell's style.css */
+#header .logo {
+    height: 60px;
+    padding: 5px;
+    vertical-align: middle;
+}
+
+/* Terms */
+
+table.schooldaymodel {
+    width: 90%;
+    margin-bottom: 0.5ex;
+}
+
+table.schooldaymodel tr.legend td {
+    text-align: center;
+}
+table.schooldaymodel tr.legend td.legend {
+    text-align: left;
+    padding-left: 0;
+}
+table.schooldaymodel td.holiday {
+    color: red;
+    background: #eeeeee;
+    font-weight: bold;
+}
+table.schooldaymodel td.schoolday {
+    color: black;
+    background: #eeeeee;
+    font-weight: normal;
+}
+table.schooldaymodel td {
+    background: transparent;
+    text-align: right;
+    padding: 0ex 1ex;
+}
+table.schooldaymodel td label {
+    display: inline;
+    font-weight: inherit;
+    float: none;
+    width: auto;
+    color: inherit;
+}
+
+/* Forms beautification for ttschema wizard */
+span.hint,
+p.hint {
+    font-size: 80%;
+    font-style: italic;
+    color: #bab5ab;
+}
+
+
+div.label {
+    float: left;
+    width: 10em;
+    padding-top: 0.5ex;
+}
+
+table.timetable input.text {
+    width: 7em;
+}
+
+ul.container-content a {
+    text-decoration: none;
+}
+
+ul.container-content {
+    padding: 0;
+    margin: 0;
+    margin: 0.25em 0 0 0.5em;
+}
+
+li.course {
+    border: none;
+    border-left: 1px #d6d6d6 solid;
+    margin-bottom: 1em;
+}
+
+ul.section-list {
+    margin: 0.25em 0 0 0.5em;
+}
+
+ul.section-list a {
+    font-weight: normal;
+}
+
+.info-block ul {
+    list-style: none;
+}
+
+.info-block li ul {
+    border: none;
+    border-left: 1px #d6d6d6 solid;
+    padding: 0em 0em 0.5em 0.5em;
+}
+
+.info-block li.group a {
+    font-weight: bold;
+}
+
+.info-block li.individual a {
+    font-weight: normal;
+}
+
+/* timetable display */
+
+table.timetable {
+    width: 90%;
+}
+
+table.timetable th {
+    background: #cccccc;
+}
+table.timetable th.period {
+    background: #ccccff;
+}
+table.timetable td {
+    background: #eeeeee;
+}
+
+/* Calendar overlay */
+
+#portlet-calendar-overlay a.go {
+    top: 0em;
+}
+
+#portlet-calendar-overlay table.overlays {
+    padding: none;
+    margin: none;
+    border-collapse: collapse;
+}
+
+#portlet-calendar-overlay table.overlays th {
+    text-align: right;
+}
+
+#portlet-calendar-overlay table.overlays acronym {
+    border-bottom: none;
+}
+
+/* Timetable setup form */
+
+table.timetable_setup {
+    border-collapse: collapse;
+}
+table.timetable_setup tr.conflict {
+    background: yellow;
+}
+table.timetable_setup th,
+table.timetable_setup td {
+    padding: 1ex;
+    background: transparent;
+}
+table.timetable_setup th {
+    text-align: left;
+}

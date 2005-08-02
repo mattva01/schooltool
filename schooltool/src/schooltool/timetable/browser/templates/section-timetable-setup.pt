@@ -1,0 +1,118 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+      Scheduling for <span i18n:name="section"
+                           tal:replace="context/label" i18n:translate="" />
+  </title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header" i18n:translate="">
+  Scheduling for <span i18n:name="section"
+                       tal:replace="context/label" i18n:translate="" />
+</h1>
+
+<metal:block metal:fill-slot="body">
+
+<p tal:condition="not:view/has_timetables"
+   i18n:translate="">There are no terms or timetable schemas defined.</p>
+
+<tal:if tal:condition="view/has_timetables">
+<form tal:attributes="action request/URL" class="plain" method="post">
+
+  <fieldset tal:define="terms view/app/terms/values;
+                        ttschemas view/app/ttschemas/values">
+    <legend i18n:translate="">Choose schedule template</legend>
+
+    <p i18n:translate="">For term(s):</p>
+
+    <tal:if condition="view/singleTerm">
+      <tal:loop tal:repeat="term terms/sortby:first">
+        <strong tal:content="term/title" i18n:translate="" />
+      </tal:loop>
+    </tal:if>
+    <tal:if condition="not:view/singleTerm">
+      <tal:loop tal:repeat="term terms/sortby:first">
+        <input type="checkbox" name="terms"
+               tal:attributes="value term/__name__;
+                               checked python:term in view.terms
+                                                  and 'checked' or None" />
+        <span tal:content="term/title" i18n:translate="" />
+      </tal:loop>
+      <input class="button-ok" type="submit" name="REFRESH" value="Update"
+             i18n:attributes="value" />
+    </tal:if>
+
+    <p i18n:translate="">Using timetable:</p>
+
+    <tal:if condition="view/singleSchema">
+      <tal:loop tal:repeat="ttschema ttschemas/sortby:__name__">
+        <strong tal:content="ttschema/title" i18n:translate="" />
+      </tal:loop>
+    </tal:if>
+    <tal:if condition="not:view/singleSchema">
+      <tal:loop tal:repeat="ttschema ttschemas/sortby:title">
+        <input type="radio" name="ttschema"
+               tal:attributes="value ttschema/__name__;
+                               checked python:ttschema is view.ttschema
+                                                   and 'checked' or None" />
+        <span tal:content="ttschema/title" i18n:translate="" />
+      </tal:loop>
+      <input class="button-ok" type="submit" name="REFRESH" value="Update"
+             i18n:attributes="value" />
+    </tal:if>
+  </fieldset>
+</form>
+
+<form tal:attributes="action request/URL" class="plain" method="post">
+
+  <tal:loop repeat="term view/terms">
+    <input type="hidden" name="terms"
+           tal:attributes="value term/__name__" />
+  </tal:loop>
+  <input type="hidden" name="ttschema"
+         tal:attributes="value view/ttschema/__name__" />
+
+  <table class="timetable">
+    <tr>
+      <tal:block repeat="day view/days">
+        <th class="day" tal:content="day/title">Day N</th>
+      </tal:block>
+    </tr>
+    <tr>
+      <tal:block repeat="day view/days">
+        <td >
+          <ul>
+            <tal:block tal:repeat="period day/periods">
+              <li>
+                <input class="activity" type="checkbox"
+                       tal:attributes="checked period/selected;
+                                       id string:${day/title}.${period/title};
+                                       name string:${day/title}.${period/title};
+                                       value string:${day/title}.${period/title}" />
+                <label class="period"
+                       tal:attributes="for string:${day/title}.${period/title}"
+                       tal:content="period/title">
+                  Period N
+                </label>
+              </li>
+            </tal:block>
+          </ul>
+        </td>
+      </tal:block>
+    </tr>
+  </table>
+
+  <div class="controls">
+    <input class="button-ok" type="submit" name="SAVE" value="Save"
+           i18n:attributes="value" />
+    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+           i18n:attributes="value cancel-button" />
+  </div>
+
+</form>
+</tal:if>
+
+</metal:block>
+</body>
+</html>

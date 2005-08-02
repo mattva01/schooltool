@@ -1,0 +1,445 @@
+Functional doctest for SchoolTool
+=================================
+
+This is a functional doctest for schooltool.  To find out more about
+functional doctests, read Zope3/src/zope/app/ftests/doctest.txt
+
+
+SchoolTool as a Zope 3 content object
+-------------------------------------
+
+First, we'll go to the Zope 3 management interface and verify that you can add
+SchoolBell instances from the add menu.
+
+    >>> print http(r"""
+    ... GET /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <h4>Add:</h4>
+    ...
+    <a href="http://localhost/@@contents.html?type_name=BrowserAdd__schooltool.app.SchoolToolApplication"
+       class="">SchoolTool</a>
+    ...
+
+We will obviously need a SchoolTool instance.
+
+    >>> print http(r"""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schooltool.app.SchoolToolApplication
+    ...
+    ... type_name=BrowserAdd__schooltool.app.SchoolToolApplication&new_value=frogpond""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+
+The SchoolTool version is displayed on the page:
+
+    >>> page = http(r"""
+    ... GET /frogpond/sections/his1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+
+    >>> import schoolbell
+    >>> str(page).count(schoolbell.VERSION) > 0
+    True
+
+
+Let's create a person so that we can fool around with his calendar:
+
+    >>> print http("""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Frog&\
+    ... field.username=frog&\
+    ... field.password=pwd&\
+    ... field.verify_password=pwd&\
+    ... field.photo=&\
+    ... field.photo.used=&\
+    ... UPDATE_SUBMIT=Add""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+Let's create a second person so that we can test access control.
+
+    >>> print http("""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Toad&\
+    ... field.username=toad&\
+    ... field.password=doat&\
+    ... field.verify_password=doat&\
+    ... field.photo=&\
+    ... field.photo.used=&\
+    ... UPDATE_SUBMIT=Add""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+Also, let's create a group:
+
+    >>> print http(r"""
+    ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Animals&UPDATE_SUBMIT=Add&add_input_name=""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/groups
+    ...
+
+The daily view should be the default for a person's calendar:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar/ HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...calendar-view-day...
+
+
+Let's make sure that we can see the SchoolTool preferences page:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/@@preferences.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...cal_periods...
+
+We should be redirected from the index page to the calendar
+    >>> print http(r"""
+    ... GET /frogpond HTTP/1.1
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/calendar
+    ...
+
+The section container view points to the timetable import form:
+
+    >>> print http(r"""
+    ... GET /frogpond/sections HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...<a href="@@timetables-csvimport.html">Import Sections</a>...
+    ...
+
+This is a school, so we should add some courses
+
+    >>> print http(r"""
+    ... POST /frogpond/courses/+/addSchoolToolCourse.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=History&UPDATE_SUBMIT=Add&add_input_name=""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/courses
+    ...
+
+Let's see that course:
+
+    >>> print http(r"""
+    ... GET /frogpond/courses/history HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...History...
+    ...
+
+Lets create a section to add to that course:
+
+    >>> print http(r"""
+    ... POST /frogpond/sections/+/addSchoolToolSection.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=HIS1&field.description=Section1&field.course_id=history&UPDATE_SUBMIT=Add&add_input_name=""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/courses/history
+    ...
+
+Notice we got redirected to the course we added the section to.
+
+    >>> print http(r"""
+    ... GET /frogpond/courses/history HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...History...
+    ...
+    ...<h3>Sections</h3>
+    ...
+    ...<p>Section1</p>
+    ...
+
+Looking at the section:
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/his1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...Section of
+    <BLANKLINE>
+          <a href="http://localhost/frogpond/courses/history">History</a>
+    <BLANKLINE>
+    ...
+
+Frog can't see the section's calendar by default
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/his1/calendar HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+Frog's overlay portlet just has his own calendar:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+        <table class="overlays">
+    <BLANKLINE>
+          <tr>
+            <th style="text-align: center">
+              <acronym title="Personal calendar">Cal</acronym>
+            </th>
+            <th><acronym title="Timetable calendar">TT</acronym></th>
+            <th></th>
+            <th></th>
+          </tr>
+    <BLANKLINE>
+          <tr style="background: #9db8d2">
+            <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
+            <td><input type="checkbox" name="my_timetable"
+                       checked="checked" /></td>
+            <td style="width: 100%">My Calendar</td>
+            <td></td>
+          </tr>
+    <BLANKLINE>
+        </table>
+    ...
+
+
+Adding a teacher:
+
+    >>> print http(r"""
+    ... POST /frogpond/sections/his1/instructors.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... add_instructor.frog=On&ADD_INSTRUCTORS=Apply""")
+    HTTP/1.1 200 Ok
+    ...
+
+Now Frog is in the Instructors div
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/his1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...Section of
+    <BLANKLINE>
+          <a href="http://localhost/frogpond/courses/history">History</a>
+    <BLANKLINE>
+    ...
+          <h3>Instructors</h3>
+          <ul>
+            <li>
+              <a href="http://localhost/frogpond/persons/frog">Frog</a>
+            </li>
+          </ul>
+    ...
+
+Frog can see the calendar now
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/his1/calendar HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+And Frog's overlay portlet shows the section:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+        <table class="overlays">
+    <BLANKLINE>
+          <tr>
+            <th style="text-align: center">
+              <acronym title="Personal calendar">Cal</acronym>
+            </th>
+            <th><acronym title="Timetable calendar">TT</acronym></th>
+            <th></th>
+            <th></th>
+          </tr>
+    <BLANKLINE>
+          <tr style="background: #9db8d2">
+            <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
+            <td><input type="checkbox" name="my_timetable"
+                       checked="checked" /></td>
+            <td style="width: 100%">My Calendar</td>
+            <td></td>
+          </tr>
+    <BLANKLINE>
+          <tr style="background: #eed680">
+            <td><input type="checkbox" name="overlay:list"
+                       checked="checked"
+                       value="/frogpond/sections/his1" /></td>
+            <td><input type="checkbox"
+                       name="overlay_timetables:list"
+                       checked="checked"
+                       value="/frogpond/sections/his1" /></td>
+            <td style="width: 100%">Frog -- History</td>
+            <td><a class="go"
+                   style="background: #d1940c;
+                color: #d1940c"
+                   href="http://localhost/frogpond/sections/his1/calendar">&nbsp;</a></td>
+        </tr>
+        </table>
+    ...
+
+
+
+If we fire Frog, in hopes of getting Salamander to step in:
+
+
+    >>> print http(r"""
+    ... POST /frogpond/sections/his1/instructors.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... remove_instructor.frog&REMOVE_INSTRUCTORS=Remove""")
+    HTTP/1.1 200 Ok
+    ...
+
+Frog can't see the section's calendar any more
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/his1/calendar HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+and he's no longer an instructor:
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/his1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+          <h3>Instructors</h3>
+          <ul>
+          </ul>
+    ...
+
+And the section's calendar is no longer in his overlay portlet.
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+        <table class="overlays">
+    <BLANKLINE>
+          <tr>
+            <th style="text-align: center">
+              <acronym title="Personal calendar">Cal</acronym>
+            </th>
+            <th><acronym title="Timetable calendar">TT</acronym></th>
+            <th></th>
+            <th></th>
+          </tr>
+    <BLANKLINE>
+          <tr style="background: #9db8d2">
+            <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
+            <td><input type="checkbox" name="my_timetable"
+                       checked="checked" /></td>
+            <td style="width: 100%">My Calendar</td>
+            <td></td>
+          </tr>
+    <BLANKLINE>
+        </table>
+    ...
+
+
+Adding a student:
+
+    >>> print http(r"""
+    ... POST /frogpond/sections/his1/learners.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... member.toad=On&UPDATE_SUBMIT=Apply""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/sections/his1
+    ...
+
+Now toad is in the Students div
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/his1 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+    ...Section of
+    <BLANKLINE>
+          <a href="http://localhost/frogpond/courses/history">History</a>
+    <BLANKLINE>
+    ...
+          <h3>Students</h3>
+          <ul>
+            <li class="individual">
+              <a href="http://localhost/frogpond/persons/toad">Toad</a>
+            </li>
+          </ul>
+    ...
+
+
+Epilogue
+--------
+
+ vim: ft=rest
