@@ -127,6 +127,7 @@ Let's make sure that we can see the SchoolTool preferences page:
     ...cal_periods...
 
 We should be redirected from the index page to the calendar
+
     >>> print http(r"""
     ... GET /frogpond HTTP/1.1
     ... """)
@@ -221,7 +222,7 @@ Frog can't see the section's calendar by default
     HTTP/1.1 303 See Other
     ...
 
-Frog's overlay portlet just has his own calendar:
+Frog's overlay portlet has just his own calendar:
 
     >>> print http(r"""
     ... GET /frogpond/persons/frog/calendar HTTP/1.1
