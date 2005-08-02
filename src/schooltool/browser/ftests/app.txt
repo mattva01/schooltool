@@ -346,7 +346,7 @@ If we fire Frog, in hopes of getting Salamander to step in:
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... remove_instructor.frog&REMOVE_INSTRUCTORS=Remove""")
+    ... remove_instructor.frog=on&REMOVE_INSTRUCTORS=Remove""")
     HTTP/1.1 200 Ok
     ...
 
