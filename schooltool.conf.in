@@ -272,3 +272,13 @@ web-access-log-file web-access.log
 #
 # Uncomment the following and update the path to enable PDF generation:
 #reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+
+#
+# devmode
+#
+#   Switches the Developer Mode on and off.
+#
+# Default:
+#   devmode off
+#
+#devmode on
