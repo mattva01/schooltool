@@ -37,6 +37,57 @@ from schoolbell.app.browser.tests.setup import setUp, tearDown
 from schoolbell.app.browser.tests.setup import setUpSessions
 
 
+def doctest_SchoolBellApplicationView():
+    r"""Test for SchoolBellApplicationView
+
+    Some setup
+
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> from zope.app.component.site import LocalSiteManager
+        >>> from zope.app.component.hooks import setSite
+        >>> from schoolbell.app.app import getApplicationPreferences
+        >>> from zope.app.annotation.interfaces import IAnnotations
+        >>> from schoolbell.app.interfaces import IApplicationPreferences
+        >>> from schoolbell.app.interfaces import ISchoolBellApplication
+        >>> from schoolbell.app.app import SchoolBellApplication
+
+        >>> app = SchoolBellApplication()
+
+        >>> app.setSiteManager(LocalSiteManager(app))
+        >>> setup.setUpAnnotations()
+        >>> setSite(app)
+
+        >>> ztapi.provideAdapter(ISchoolBellApplication,
+        ...                      IApplicationPreferences,
+        ...                      getApplicationPreferences)
+
+        >>> directlyProvides(app, IContainmentRoot)
+
+    Now lets create a view
+
+        >>> from schoolbell.app.browser.app import SchoolBellApplicationView
+        >>> request = TestRequest()
+        >>> view = SchoolBellApplicationView(app, request)
+        >>> view.update()
+
+        >>> request.response.getStatus()
+        302
+        >>> request.response.getHeaders()['Location']
+        'http://127.0.0.1/calendar'
+
+    If we change a the front page preference, we should not be redirected
+
+        >>> IApplicationPreferences(app).frontPageCalendar = False
+        >>> request = TestRequest()
+        >>> view = SchoolBellApplicationView(app, request)
+        >>> view.update()
+
+        >>> request.response.getStatus()
+        599
+
+    """
+
+
 def doctest_ContainerDeleteView():
     r"""Test for ContainerDeleteView
 

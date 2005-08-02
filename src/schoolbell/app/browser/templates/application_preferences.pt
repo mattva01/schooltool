@@ -25,6 +25,10 @@
         <div metal:use-macro="context/@@form_macros/widget_row" />
       </div>
 
+      <div class="row" tal:define="widget nocall:view/frontPageCalendar_widget">
+        <div metal:use-macro="context/@@form_macros/widget_row" />
+      </div>
+
     </fieldset>
 
     <div class="controls">

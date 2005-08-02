@@ -344,6 +344,8 @@ class ApplicationPreferences(Persistent):
 
     title = 'SchoolBell'
 
+    frontPageCalendar = True
+
 
 def getApplicationPreferences(app):
     """Adapt a SchoolBellApplication to IApplicationPreferences."""

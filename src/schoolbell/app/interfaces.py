@@ -428,6 +428,13 @@ class IApplicationPreferences(Interface):
             this server.  This will be displayed on the public calendar, the
             bottom of all pages and in the page title."""))
 
+    frontPageCalendar = Bool(
+        title=_("Front Page Calendar"),
+        description=_("""Display site-wide calendar as the front page of the
+            site."""),
+        required=False,
+        default=True)
+
 
 class ISchoolBellAuthentication(IAuthentication, ILogout):
     """A local authentication utility for SchoolBell"""

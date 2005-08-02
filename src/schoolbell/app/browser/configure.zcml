@@ -53,6 +53,7 @@
   <page
       name="index.html"
       for="schoolbell.app.interfaces.ISchoolBellApplication"
+      class="schoolbell.app.browser.app.SchoolBellApplicationView"
       template="templates/index.pt"
       permission="zope.Public"
       />

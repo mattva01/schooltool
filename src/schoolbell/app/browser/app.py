@@ -76,6 +76,16 @@ class SchoolBellApplicationTraverser(CalendarOwnerTraverser):
         return CalendarOwnerTraverser.publishTraverse(self, request, name)
 
 
+class SchoolBellApplicationView(BrowserView):
+    """A view for the main application."""
+
+    def update(self):
+        prefs = IApplicationPreferences(getSchoolBellApplication())
+        if prefs.frontPageCalendar:
+            url = zapi.absoluteURL(self.context.calendar, self.request)
+            self.request.response.redirect(url)
+
+
 class ContainerView(BrowserView):
     """A base view for all containers.
 
