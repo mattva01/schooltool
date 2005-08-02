@@ -39,6 +39,11 @@
                                 checked python: perm[0] in prin['perms']" />
          </td>
       </tr>
+    </table>
+  <div class="controls">
+    <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Set Access"
+           i18n:attributes="value" />
+  </div>
   </fieldset>
   <fieldset tal:define="batch view/batches/persons">
     <legend i18n:translate="">Permissions for Users</legend>
@@ -67,11 +72,13 @@
          </td>
       </tr>
     </table>
+  <div class="controls">
+    <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Set Access"
+           i18n:attributes="value" />
+  </div>
   </fieldset>
 
   <div class="controls">
-    <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Set"
-           i18n:attributes="value" />
     <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
            i18n:attributes="value cancel-button" />
   </div>

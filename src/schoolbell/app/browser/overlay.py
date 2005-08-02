@@ -161,7 +161,7 @@ class CalendarSelectionView(BrowserView):
 
         Returns None if the user lacks sufficient permissions.
         """
-        user = removeSecurityProxy(IPerson(self.request.principal, None))
+        user = IPerson(self.request.principal, None)
         if user is None:
             return None
         app = getSchoolBellApplication()
