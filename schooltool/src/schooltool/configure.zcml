@@ -240,13 +240,6 @@
         set_schema="schooltool.interfaces.IPersonPreferences" />
   </content>
 
-  <!-- Additional Packages -->
-  <include
-      xmlns:zcml="http://namespaces.zope.org/zcml"
-      zcml:condition="have devmode"
-      package=".devmode" />
-
-
   <!-- Views -->
   <include package=".browser" />
   <include package=".rest" />
