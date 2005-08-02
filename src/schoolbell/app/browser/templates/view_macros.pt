@@ -10,8 +10,13 @@
           tal:attributes="href context/++resource++layout.css"/>
     <link rel="stylesheet" type="text/css" href="style.css"
           tal:attributes="href context/++resource++style.css"/>
+    <link type="text/css" rel="stylesheet" href="calwidget-calendar.css"
+          tal:attributes="href context/++resource++calwidget-calendar.css" />
     <script type="text/javascript" src="schoolbell.js"
             tal:attributes="src context/++resource++schoolbell.js">
+    </script>
+    <script type="text/javascript" src=""
+            tal:attributes="src context/++resource++calwidget-calendar.js">
     </script>
     <title>
       <span tal:replace="context/schoolbell:preferences/title"/> :

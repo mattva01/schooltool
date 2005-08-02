@@ -175,7 +175,9 @@ def setUp(test=None):
             return "a dummy resource"
 
     for name in ['layout.css', 'style.css', 'schoolbell.js', 'logo.png',
-                 'next.png', 'prev.png', 'favicon.ico']:
+                 'next.png', 'prev.png', 'favicon.ico', 
+                 'calwidget-calendar.js', 'calwidget-calendar.css',
+                 'calwidget-icon.gif']:
         ztapi.browserResource(name, ResourceStub)
 
     # menus
