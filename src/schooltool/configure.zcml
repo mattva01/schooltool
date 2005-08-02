@@ -31,6 +31,13 @@
       trusted="true"
       />
 
+  <adapter
+      for="schoolbell.app.interfaces.IHavePreferences"
+      provides=".interfaces.IPersonPreferences"
+      factory=".app.getPersonPreferences"
+      trusted="true"
+      />
+
   <!-- Subscribers -->
 
   <subscriber
@@ -61,15 +68,6 @@
   <subscriber
       for="schoolbell.relationship.interfaces.IRelationshipRemovedEvent"
       handler=".relationships.updateInstructorCalendars"
-      />
-
-
-
-  <adapter
-      for="schoolbell.app.interfaces.IHavePreferences"
-      provides=".interfaces.IPersonPreferences"
-      factory=".app.getPersonPreferences"
-      trusted="true"
       />
 
   <!-- Utilities -->
