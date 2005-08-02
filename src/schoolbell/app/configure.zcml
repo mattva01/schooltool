@@ -318,6 +318,11 @@
 
 <!-- Subpackages -->
 
+  <include
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      zcml:condition="have devmode"
+      package=".devmode" />
+
   <include package=".browser" />
   <include package=".rest" />
 

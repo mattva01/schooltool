@@ -663,10 +663,27 @@
       interface=".skin.ISchoolBellSkin" />
 
   <page
+      name="standard_macros"
+      for="*"
+      class=".macros.StandardMacros"
+      allowed_interface="zope.interface.common.mapping.IItemMapping"
+      permission="zope.Public"
+      layer=".skin.ISchoolBellLayer"
+      />
+
+  <page
       name="view_macros"
       for="*"
       permission="zope.View"
       template="templates/view_macros.pt"
+      layer=".skin.ISchoolBellLayer"
+      />
+
+  <page
+      name="calendar_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/calendar_macros.pt"
       layer=".skin.ISchoolBellLayer"
       />
 

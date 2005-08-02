@@ -177,3 +177,13 @@ lang auto
 #    reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
 #
 reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+
+#
+# devmode
+#
+#   Switches the Developer Mode on and off.
+#
+# Default:
+#   devmode off
+#
+#devmode on

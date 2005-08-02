@@ -37,10 +37,11 @@ import errno
 import ZConfig
 import transaction
 import zope.app.component.hooks
+import zope.configuration.config
+import zope.configuration.xmlconfig
 from zope.interface import directlyProvides, implements
 from zope.component import provideAdapter, adapts
 from zope.event import notify
-from zope.configuration import xmlconfig
 from zope.server.taskthreads import ThreadedTaskDispatcher
 from zope.i18n import translate
 from zope.publisher.interfaces.http import IHTTPRequest
@@ -361,11 +362,17 @@ class StandaloneServer(object):
     AppFactory = SchoolBellApplication
     AppInterface = ISchoolBellApplication
 
+    devmode = False
+
     def configure(self):
         """Configure Zope 3 components."""
         # Hook up custom component architecture calls
         zope.app.component.hooks.setHooks()
-        xmlconfig.string(self.SITE_DEFINITION)
+        context = zope.configuration.config.ConfigurationMachine()
+        if self.devmode:
+            context.provideFeature('devmode')
+        zope.configuration.xmlconfig.registerCommonDirectives(context)
+        zope.configuration.xmlconfig.string(self.SITE_DEFINITION, context)
 
     def load_options(self, argv):
         """Parse the command line and read the configuration file."""
@@ -479,6 +486,9 @@ class StandaloneServer(object):
         # Shut up ZODB lock_file, because it logs tracebacks when unable
         # to lock the database file, and we don't want that.
         logging.getLogger('ZODB.lock_file').disabled = True
+
+        # Determine whether we are in developer's mode:
+        self.devmode = options.config.devmode
 
         # Process ZCML
         self.configure()

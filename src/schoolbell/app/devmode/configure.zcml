@@ -1,0 +1,13 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:apidoc="http://namespaces.zope.org/apidoc">
+
+  <!-- Include Dev-Mode specific ZCML -->
+  <include package="zope.app.apidoc" file="meta.zcml" />
+  <include package="zope.app.preference" file="meta.zcml" />
+  <include package="zope.app.apidoc" />
+
+
+
+</configure>
