@@ -117,8 +117,8 @@ class ACLView(View, ACLViewBase):
         self.request = request
 
     def getPrincipals(self):
-        personids = [prin['id'] for prin in self.getPersons()]
-        groupids = [prin['id'] for prin in self.getGroups()]
+        personids = [principal['id'] for principal in self.getPersons()]
+        groupids = [principal['id'] for principal in self.getGroups()]
         return groupids + personids
 
     def POST(self):
