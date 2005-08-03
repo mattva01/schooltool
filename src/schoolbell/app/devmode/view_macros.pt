@@ -150,7 +150,7 @@
          style="vertical-align: middle"
          tal:condition="not:show"
          tal:attributes="id string:${elementId}.arrow" />
-  
+
     <img src="/@@/varrow.png" border="0" id=".arrow"
          style="vertical-align: middle"
          tal:condition="show"
