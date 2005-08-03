@@ -318,12 +318,14 @@
 
 <!-- Subpackages -->
 
+  <include package=".browser" />
+  <include package=".rest" />
+
+<!-- Devmode stuff must be at the end, so it can override stuff -->
   <include
       xmlns:zcml="http://namespaces.zope.org/zcml"
       zcml:condition="have devmode"
       package=".devmode" />
 
-  <include package=".browser" />
-  <include package=".rest" />
 
 </configure>

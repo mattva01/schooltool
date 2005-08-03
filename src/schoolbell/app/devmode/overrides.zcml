@@ -1,0 +1,10 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <subscriber
+      handler=".skin.schoolBellTraverseSubscriber"
+      for="zope.app.publication.interfaces.IBeforeTraverseEvent"
+      />  
+
+</configure>

@@ -1,0 +1,42 @@
+
+div.devtools {
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  border: 2px solid #A70907;
+  background: #eae8e3;
+  width: 200px;
+}
+
+div.devtools .header {
+    border-bottom: 1px #bab5ab solid;
+    background: #d6d6d6;
+    font-size: small;
+    padding: 4px;
+}
+
+div.devtools .header h4 {
+    margin: 0;
+    padding: 0em 1em 0em 2em;
+}
+
+div.devtools .body {
+    padding: 8px 0px;
+}
+
+div.devtools .body a {
+    display: block;
+    margin: 2px 0;
+    padding: 2px 1em;
+    color: #304D6B;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+div.devtools .body a:hover {
+    background: #7590ae;
+    margin: 0;
+    border-top: 1px #314e6c solid;
+    border-bottom: 1px #314e6c solid;
+    color: #fff !important;
+}

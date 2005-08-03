@@ -6,8 +6,47 @@
   <!-- Include Dev-Mode specific ZCML -->
   <include package="zope.app.apidoc" file="meta.zcml" />
   <include package="zope.app.preference" file="meta.zcml" />
+  <include package="zope.app.renderer" file="meta.zcml" />
   <include package="zope.app.apidoc" />
+  <include package="zope.app.renderer" />
 
+  <browser:layer
+      name="DevMode"
+      interface=".skin.IDevModeLayer" />
+
+  <browser:skin
+      name="SchoolBellDevMode"
+      interface=".skin.ISchoolBellDevModeSkin" />
+
+  <browser:resource 
+      name="devmode.css" file="devmode.css"
+      layer=".skin.IDevModeLayer" 
+      />
+
+  <browser:resource 
+      name="varrow.png" file="varrow.png"
+      layer=".skin.IDevModeLayer" 
+      />
+
+  <browser:resource 
+      name="harrow.png" file="harrow.png"
+      layer=".skin.IDevModeLayer" 
+      />
+
+  <browser:resource 
+      name="switch.js" file="switch.js"
+      layer=".skin.IDevModeLayer" 
+      />
+
+  <browser:page
+      name="view_macros"
+      for="*"
+      permission="zope.View"
+      template="view_macros.pt"
+      layer=".skin.IDevModeLayer"
+      />
+
+  <includeOverrides file="overrides.zcml" />
 
 
 </configure>
