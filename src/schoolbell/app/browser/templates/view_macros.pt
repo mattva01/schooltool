@@ -74,7 +74,6 @@
                   tal:attributes="href person/calendar/@@absolute_url"
                   >My Calendar</a> |
                 <tal:disable condition="nothing">
-                  XXX Preferences view is not implemented yet
                 <a id="tools-preferences" i18n:translate=""
                   tal:attributes="href string:${person/@@absolute_url}/preferences.html"
                   >My Preferences</a> |
