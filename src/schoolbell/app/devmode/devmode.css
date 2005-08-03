@@ -3,14 +3,11 @@ div.devtools {
   position: fixed;
   right: 0px;
   top: 0px;
-  border: 2px solid #A70907;
-  background: #eae8e3;
+  background: url(++resource++box-bottom.png) bottom left no-repeat; 
   width: 200px;
 }
 
 div.devtools .header {
-    border-bottom: 1px #bab5ab solid;
-    background: #d6d6d6;
     font-size: small;
     padding: 4px;
 }
@@ -18,6 +15,7 @@ div.devtools .header {
 div.devtools .header h4 {
     margin: 0;
     padding: 0em 1em 0em 2em;
+    font-size: small;
 }
 
 div.devtools .body {

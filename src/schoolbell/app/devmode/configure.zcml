@@ -38,6 +38,11 @@
       layer=".skin.IDevModeLayer" 
       />
 
+  <browser:resource 
+      name="box-bottom.png" file="box-bottom.png"
+      layer=".skin.IDevModeLayer" 
+      />
+
   <browser:page
       name="view_macros"
       for="*"
