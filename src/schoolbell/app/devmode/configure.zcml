@@ -66,6 +66,24 @@
       layer=".skin.IDevModeLayer" 
       />
 
+  <!-- Menu entries for Error Reporting Utility -->
+
+  <browser:menuItem
+      menu="schoolbell_actions"
+      for="zope.app.error.interfaces.IErrorReportingUtility"
+      action="@@configure.html"
+      title="Configure"
+      layer=".skin.IDevModeLayer"
+      />
+
+  <browser:menuItem
+      menu="schoolbell_actions"
+      for="zope.app.error.interfaces.IErrorReportingUtility"
+      action="@@index.html"
+      title="Error List"
+      layer=".skin.IDevModeLayer"
+      />
+
   <!-- Misc -->
   <includeOverrides file="overrides.zcml" />
 
