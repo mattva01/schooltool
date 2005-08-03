@@ -21,6 +21,7 @@ SchoolBell application object
 
 $Id$
 """
+__docformat__ = 'restructuredtext'
 
 import sha
 import calendar

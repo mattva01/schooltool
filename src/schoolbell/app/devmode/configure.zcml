@@ -8,7 +8,10 @@
   <include package="zope.app.preference" file="meta.zcml" />
   <include package="zope.app.renderer" file="meta.zcml" />
   <include package="zope.app.apidoc" />
+  <include package="zope.app.preference" />
   <include package="zope.app.renderer" />
+
+  <!-- Generic DevMode setup -->
 
   <browser:layer
       name="DevMode"
@@ -18,8 +21,23 @@
       name="SchoolBellDevMode"
       interface=".skin.ISchoolBellDevModeSkin" />
 
+  <browser:page
+      name="view_macros"
+      for="*"
+      permission="zope.View"
+      template="view_macros.pt"
+      layer=".skin.IDevModeLayer"
+      />
+
+  <!-- DevTools Menu configuration -->
+
   <browser:resource 
       name="devmode.css" file="devmode.css"
+      layer=".skin.IDevModeLayer" 
+      />
+
+  <browser:resource 
+      name="box-bottom.png" file="box-bottom.png"
       layer=".skin.IDevModeLayer" 
       />
 
@@ -38,19 +56,22 @@
       layer=".skin.IDevModeLayer" 
       />
 
-  <browser:resource 
-      name="box-bottom.png" file="box-bottom.png"
-      layer=".skin.IDevModeLayer" 
-      />
-
+  <!-- Introspector -->
   <browser:page
-      name="view_macros"
+      name="introspector.html"
       for="*"
-      permission="zope.View"
-      template="view_macros.pt"
+      permission="schoolbell.view"
+      template="introspector.pt"
+      class=".introspector.Introspector"
       layer=".skin.IDevModeLayer"
       />
 
+  <browser:resource 
+      name="introspector.css" file="introspector.css"
+      layer=".skin.IDevModeLayer" 
+      />
+
+  <!-- Misc -->
   <includeOverrides file="overrides.zcml" />
 
 
