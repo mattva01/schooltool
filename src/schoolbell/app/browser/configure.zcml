@@ -826,4 +826,77 @@
       file="resources/calwidget/icon.gif"
       layer=".skin.ISchoolBellLayer" />
 
+  <configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      xmlns:apidoc="http://namespaces.zope.org/apidoc"
+      zcml:condition="have apidoc">
+
+    <apidoc:bookchapter 
+        id="browser" 
+        title="Browser UI" 
+        parent="schoolbell" 
+        doc_path="ftests/README.txt" />
+
+    <apidoc:bookchapter 
+        id="copypaste" 
+        title="Copy and Paste" 
+        parent="schoolbell/browser"
+        doc_path="ftests/copypaste.txt" />
+
+    <apidoc:bookchapter 
+        id="notes" 
+        title="Notes" 
+        parent="schoolbell/browser"
+        doc_path="ftests/notes.txt" />
+
+    <apidoc:bookchapter 
+        id="login" 
+        title="Login" 
+        parent="schoolbell/browser"
+        doc_path="ftests/login.txt" />
+
+    <apidoc:bookchapter 
+        id="errors" 
+        title="Errors" 
+        parent="schoolbell/browser"
+        doc_path="ftests/errors.txt" />
+
+    <apidoc:bookchapter 
+        id="acl" 
+        title="ACL" 
+        parent="schoolbell/browser"
+        doc_path="ftests/acl.txt" />
+
+    <apidoc:bookchapter 
+        id="cal" 
+        title="Calendar" 
+        parent="schoolbell/browser"
+        doc_path="ftests/cal.txt" />
+
+    <apidoc:bookchapter 
+        id="navigation" 
+        title="Navigation" 
+        parent="schoolbell/browser"
+        doc_path="ftests/navigation.txt" />
+
+    <apidoc:bookchapter 
+        id="app" 
+        title="Application" 
+        parent="schoolbell/browser"
+        doc_path="ftests/app.txt" />
+
+    <apidoc:bookchapter 
+        id="calwidget" 
+        title="Calendar Widget" 
+        parent="schoolbell/browser"
+        doc_path="resources/calwidget/README.txt" />
+
+    <apidoc:bookchapter 
+        id="templates" 
+        title="Templates" 
+        parent="schoolbell/browser"
+        doc_path="templates.txt" />
+
+  </configure>
+
 </configure>

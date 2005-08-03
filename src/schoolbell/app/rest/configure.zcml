@@ -539,4 +539,46 @@
       permission="zope.Public"
       />
 
+  <configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      xmlns:apidoc="http://namespaces.zope.org/apidoc"
+      zcml:condition="have apidoc">
+
+    <apidoc:bookchapter 
+        id="rest" 
+        title="REST Interface" 
+        parent="schoolbell" />
+
+    <apidoc:bookchapter
+        id="relationships" 
+        title="Relationships" 
+        parent="schoolbell/rest"
+        doc_path="ftests/relationships.txt" />
+
+    <apidoc:bookchapter
+        id="notes" 
+        title="Notes" 
+        parent="schoolbell/rest"
+        doc_path="ftests/notes.txt" />
+
+    <apidoc:bookchapter
+        id="errors" 
+        title="Errors" 
+        parent="schoolbell/rest"
+        doc_path="ftests/errors.txt" />
+
+    <apidoc:bookchapter
+        id="acl" 
+        title="ACL" 
+        parent="schoolbell/rest"
+        doc_path="ftests/acl.txt" />
+
+    <apidoc:bookchapter
+        id="app" 
+        title="Application" 
+        parent="schoolbell/rest"
+        doc_path="ftests/app.txt" />
+
+  </configure>
+
 </configure>

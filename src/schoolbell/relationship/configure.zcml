@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<configure xmlns="http://namespaces.zope.org/zope"
-           i18n_domain="schoolbell">
+<configure 
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="schoolbell">
 
   <content
       class="schoolbell.relationship.relationship.BoundRelationshipProperty">
@@ -23,5 +24,17 @@
       for="zope.app.event.interfaces.IObjectCopiedEvent"
       handler="schoolbell.relationship.objectevents.unrelateOnCopy"
       />
+
+  <configure 
+      xmlns="http://namespaces.zope.org/apidoc"
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      zcml:condition="have apidoc">
+    <bookchapter 
+        id="relationships"
+        title="Relationships"
+        doc_path="README.txt"
+        parent="schoolbell"
+        />
+  </configure>
 
 </configure>
