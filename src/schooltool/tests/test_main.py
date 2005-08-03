@@ -225,6 +225,7 @@ def doctest_setup():
         ...     web_access_log_file = ['STDOUT']
         ...     lang = 'lt'
         ...     reportlab_fontdir = ''
+        ...     devmode = False
         >>> options.config = ConfigStub()
 
     Workaround to fix a Windows failure:
