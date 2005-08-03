@@ -19,21 +19,27 @@ div.devtools .header h4 {
 }
 
 div.devtools .body {
-    padding: 8px 0px;
+    padding-left: 1px;
+    border-top: 1px #bab5ab solid;
+    border-bottom: 1px #bab5ab solid;
+    margin-bottom: 1ex;
 }
 
 div.devtools .body a {
     display: block;
-    margin: 2px 0;
     padding: 2px 1em;
     color: #304D6B;
+    background: #efefab;
     font-weight: bold;
     text-decoration: none;
+
+    background: #eae8e3;
+    border-top: 1px #eae8e3 solid;
+    border-bottom: 1px #eae8e3 solid;
 }
 
 div.devtools .body a:hover {
     background: #7590ae;
-    margin: 0;
     border-top: 1px #314e6c solid;
     border-bottom: 1px #314e6c solid;
     color: #fff !important;
