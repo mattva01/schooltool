@@ -1,9 +1,3 @@
-debian/schooltool.substvars
-debian/schooltool.postinst.debhelper
-debian/import-sampleschool
-debian/schooltool.postrm.debhelper
-debian/schooltool.prerm.debhelper
-debian/files
 src/schooltool/locales/schooltool.pot
 ./Data.fs
 ./Data.fs.*
