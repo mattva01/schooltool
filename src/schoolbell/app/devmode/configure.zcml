@@ -11,6 +11,9 @@
   <include package="zope.app.preference" />
   <include package="zope.app.renderer" />
 
+  <!-- Setup schoolbell as a top-level package in API doc -->
+  <apidoc:rootModule module="schoolbell" />
+
   <!-- Generic DevMode setup -->
 
   <browser:layer

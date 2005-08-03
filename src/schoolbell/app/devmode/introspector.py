@@ -95,5 +95,35 @@ class Introspector(BrowserView):
             yield entry
 
     def getMethods(self):
-        return self.klassView.getMethods()
+        # remove the security proxy, so that `attr` is not proxied. We could
+        # unproxy `attr` for each turn, but that would be less efficient.
+        #
+        # `getPermissionIds()` also expects the class's security checker not
+        # to be proxied.
+        klass = zope.security.proxy.removeSecurityProxy(self.klassView.context)
+        obj = zope.security.proxy.removeSecurityProxy(self.context)
+
+        for name in apidoc.utilities.getPublicAttributes(obj):
+            val = getattr(obj, name)
+            if not (inspect.ismethod(val) or inspect.ismethoddescriptor(val)):
+                continue
+            if inspect.ismethod(val):
+                signature = apidoc.utilities.getFunctionSignature(val)
+            else:
+                signature = '(...)'
+                
+            entry = {
+                'name': name,
+                'signature': signature,
+                'doc': apidoc.utilities.renderText(
+                     val.__doc__ or '',
+                     zapi.getParent(self.klassView.context).getPath()),
+                'interface': apidoc.utilities.getInterfaceForAttribute(
+                     name, klass._Class__all_ifaces)}
+
+            entry.update(apidoc.utilities.getPermissionIds(
+                name, klass.getSecurityChecker()))
+
+            yield entry
+
 
