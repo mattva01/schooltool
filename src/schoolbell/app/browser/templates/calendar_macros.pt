@@ -84,6 +84,12 @@
     </metal:block>
 
     <metal:block fill-slot="navigation-box">
+      <tal:block define="app context/schoolbell:app"
+                 condition="python:context.__parent__ == app">
+        <div metal:define-slot="navigation-box"
+             tal:replace="structure context/@@schoolbell_navigation" 
+             tal:on-error="nothing"/>
+       </tal:block>
     </metal:block>
 
     <metal:block fill-slot="column-left-extra">
