@@ -34,6 +34,12 @@ class PublisherConnection(object):
         self.host = host
         self.caller = HTTPCaller()
 
+        # Python 2.3 compatibility
+        self._method = ''
+        self._url = ''
+        self._headers = {}
+        self._data = ''
+
     def set_debuglevel(self, level):
         pass
 
@@ -82,6 +88,35 @@ class PublisherConnection(object):
                   self.response.getBody())
         return PublisherResponse(output, status, reason)
 
+    ##########################################################################
+    # BBB: Python 2.3 compatibility layer :(
+    
+    def putrequest(self, request, selector):
+        self._method = request
+        self._url = selector
+
+    def putheader(self, name, value):
+        self._headers[name] = value
+        
+    def endheaders(self):
+        pass
+
+    def send(self, data):
+        self._data = data
+
+    def getreply(self):
+        self.request(self._method, self._url, self._data, self._headers)
+        response = self.getresponse()
+        return response.status, response.reason, response.msg
+        
+    def getfile(self):
+        real_response = self.response._response
+        content = (real_response.getHeaderText(real_response.getHeaders()) +
+                  self.response.getBody())
+        return StringIO(content)
+
+    ##########################################################################
+
 
 class PublisherResponse(object):
     """``urllib2`` compatible response object."""
@@ -102,7 +137,16 @@ class PublisherHTTPHandler(urllib2.HTTPHandler):
     def http_open(self, req):
         """Open an HTTP connection having a ``urllib2`` request."""
         # Here we connect to the publisher.
-        return self.do_open(PublisherConnection, req)
+        response = self.do_open(PublisherConnection, req)
+
+        ######################################################################
+        # BBB: Python 2.3 compatibility layer
+        if not hasattr(response, 'code'):
+            code, msg = response.headers['status'].split(' ', 1)
+            response.code = int(code)
+            response.msg = msg
+        ######################################################################
+        return response
 
 
 class PublisherMechanizeBrowser(mechanize.Browser):

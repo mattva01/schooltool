@@ -17,7 +17,7 @@
 $Id: testdoc.py 37513 2005-07-27 23:27:15Z srichter $
 """
 import unittest
-import doctest
+from zope.testing import doctest
 from zope.app.testing.functional import FunctionalDocFileSuite
 
 
