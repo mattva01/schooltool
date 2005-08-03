@@ -96,11 +96,8 @@ class PublisherResponse(object):
     def read(self, amt=None):
         return self.content_as_file.read(amt)
 
-
 class PublisherHTTPHandler(urllib2.HTTPHandler):
     """Special HTTP handler to use the Zope Publisher."""
-
-    http_request = urllib2.AbstractHTTPHandler.do_request_
 
     def http_open(self, req):
         """Open an HTTP connection having a ``urllib2`` request."""
