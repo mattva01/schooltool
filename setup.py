@@ -47,7 +47,7 @@ from distutils.spawn import spawn
 #
 
 def make_schooltool_tarball(base_name, base_dir, verbose=0, dry_run=0):
-    """Make a tarball with the right permissions/owenership."""
+    """Make a tarball with the right permissions/ownership."""
     archive_name = base_name + ".tar"
     mkpath(os.path.dirname(archive_name), dry_run=dry_run)
     spawn(["tar", "--owner=0", "--group=0", "--mode=a+r",
@@ -72,8 +72,7 @@ class install_data(_install_data):
     """
 
     def finalize_options(self):
-        self.set_undefined_options('install',
-                ('install_lib', 'install_dir'))
+        self.set_undefined_options('install', ('install_lib', 'install_dir'))
         return _install_data.finalize_options(self)
 
 
@@ -86,9 +85,9 @@ class install(_install):
 
     user_options = _install.user_options + [
             ('paths=', None, "a semi-colon separated list of paths that should"
-                " be added to the python path on script startup"),
+             " be added to the python path on script startup"),
             ('default-config=', None, "location of the default server config"
-                    " file")]
+             " file")]
 
     def initialize_options(self):
         self.paths = None
@@ -105,9 +104,9 @@ class install_scripts(_install_scripts):
 
     user_options = _install_scripts.user_options + [
             ('paths=', None, "a semi-colon separated list of paths that should"
-                " be added to the python path on script startup"),
+             " be added to the python path on script startup"),
             ('default-config=', None, "location of the default server config"
-                    " file")]
+             " file")]
 
     def initialize_options(self):
         self.paths = None
@@ -134,17 +133,17 @@ class install_scripts(_install_scripts):
             paths_regex = re.compile(r'# paths begin\n.*# paths end', re.S)
             paths = ['# paths begin', '# paths end']
             for path in self.paths.split(';'):
-                paths.insert(-1, 'sys.path.insert(0, %s)' \
-                        % repr(os.path.abspath(path)))
+                paths.insert(-1, 'sys.path.insert(0, %s)'
+                             % repr(os.path.abspath(path)))
             script_str = re.sub(paths_regex, '\n'.join(paths), script_str)
             # Update the default config file
             config_regex = re.compile(r'# config begin\n.*# config end', re.S)
-            config = ['# config begin',
-                    'sys.argv.insert(1, \'--config=%s.conf\' % __file__)',
-                    '# config end']
+            config = ["# config begin",
+                      "sys.argv.insert(1, '--config=%s.conf' % __file__)",
+                      "# config end"]
             if self.default_config:
-                config[1] = 'sys.argv.insert(1, \'--config=%s\')'\
-                        % os.path.abspath(self.default_config)
+                config[1] = ("sys.argv.insert(1, '--config=%s')"
+                             % os.path.abspath(self.default_config))
             script_str = re.sub(config_regex, '\n'.join(config), script_str)
             # Write the script again
             try:
@@ -174,7 +173,7 @@ if sys.version_info < (2, 3):
 # find the data files
 # if you modify this, also modify MANIFEST.in recursive includes
 # XXX - do something more intelligent with *.mo files. It's a mess - jinty
-datafile_re = re.compile('.*\.(pt|js|png|gif|css|mo|rng|xml|zcml|pot|po)\Z')
+datafile_re = re.compile(r'.*\.(pt|js|png|gif|css|mo|rng|xml|zcml|pot|po)\Z')
 data_files = []
 for root, dirs, files in os.walk(os.path.join('src', 'schooltool')):
     # Ignore testing directories
@@ -183,8 +182,8 @@ for root, dirs, files in os.walk(os.path.join('src', 'schooltool')):
     if 'tests' in dirs:
         dirs.remove('tests')
     # Find the data files
-    tmp = [os.path.join(root, file) for file in files \
-            if datafile_re.match(file, 1)]
+    tmp = [os.path.join(root, file) for file in files
+           if datafile_re.match(file, 1)]
     # If any, add them to the files to be copied
     if tmp:
         data_files.append((root[4:], tmp))
@@ -213,14 +212,9 @@ there for potential interoperability with other systems and fat clients to
 perform data entry that is inconvenient to do via the web application
 interface.
 
-There are several clients that demonstrate the usage of the REST interface
-(a command-line client that is used for functional tests, a wxWidgets GUI
-client, and a command-line client for data import).
-
 Any modern web browser is suitable for the web application interface.  The
 interface degrades gracefully, so a browser that does not support CSS or
-Javascript will be usable, although perhaps not very nice or convenient.
-    """,
+Javascript will be usable, although perhaps not very nice or convenient.""",
     version=schooltool.VERSION,
     url='http://www.schooltool.org',
     license="GPL",
