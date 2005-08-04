@@ -1,24 +1,20 @@
 # Top level directory
-include RELEASE
-include *schoolbell*
-include GPL
+include README.txt
+include README.es.txt
+include RELEASE.txt
+include GPL.txt
 include Makefile
 include test.py
 include ftesting.zcml
 include remove-stale-bytecode.py
+include schoolbell-server.py
+include schoolbell.conf.in
 
 # misc directories
-include debian/rules debian/changelog debian/compat debian/control
-include debian/copyright debian/README.Debian debian/TODO
-include debian/*schoolbell* debian/ssl-cert.cnf
-include debian/po/*.po debian/po/templates.pot debian/po/POTFILES.in
 include images/schoolbell.svg
 include scripts/schoolbell
-include scripts/schoolbell-export.py
-include scripts/schoolbell-import.py
-include scripts/run-export.sh
-include scripts/run-import.sh
-include doc/release-policy.txt doc/release-checklist.txt
+include doc/restive-interface.txt
+recursive-include doc/examples *.txt *.sh *.py
 
 # Data files installed in the setup.py
 # If you modify this, also modify the regex in setup.py
@@ -72,6 +68,7 @@ recursive-include Zope3/src/zope/schema *
 include Zope3/package-includes/securitypolicy-meta.zcml
 recursive-include Zope3/src/zope/security *
 recursive-include Zope3/src/zope/server *
+recursive-include Zope3/src/zope/structuredtext *
 recursive-include Zope3/src/zope/tales *
 recursive-include Zope3/src/zope/tal *
 recursive-include Zope3/src/zope/testing *
