@@ -84,6 +84,54 @@
       layer=".skin.IDevModeLayer"
       />
 
+  <!-- apidoc customization -->
+  <browser:resource 
+      name="apidoc.css" file="apidoc.css"
+      layer=".skin.IDevModeLayer" 
+      />
+
+  <browser:pages
+      for="zope.app.apidoc.apidoc.APIDocumentation"
+      class="zope.app.apidoc.browser.apidoc.APIDocumentationView"
+      permission="zope.app.apidoc.UseAPIDoc"
+      layer="schoolbell.app.devmode.skin.IDevModeLayer">
+  
+    <browser:page
+        name="modulelist.html"
+        template="modules.pt" />
+  
+  </browser:pages>
+
+  <configure package="zope.app.apidoc.ifacemodule">
+    <browser:page
+        for=".ifacemodule.InterfaceModule"
+        permission="zope.app.apidoc.UseAPIDoc"
+        class="schoolbell.app.devmode.apidoc.InterfaceMenu"
+        name="menu.html"
+        template="menu.pt"
+        layer="schoolbell.app.devmode.skin.IDevModeLayer"
+        />
+  </configure>
+
+  <browser:page
+      for="zope.app.apidoc.codemodule.codemodule.CodeModule"
+      permission="zope.app.apidoc.UseAPIDoc"
+      class="schoolbell.app.devmode.apidoc.CodeMenu"
+      name="menu.html"
+      template="code_menu.pt" 
+      layer="schoolbell.app.devmode.skin.IDevModeLayer"
+      />
+
+  <configure package="zope.app.apidoc.bookmodule">
+    <browser:page
+        for="zope.app.onlinehelp.onlinehelptopic.RESTOnlineHelpTopic"
+        permission="zope.app.apidoc.UseAPIDoc"
+        class="schoolbell.app.devmode.apidoc.BookMenu"
+        name="menu.html"
+        template="menu.pt"
+        />
+  </configure>
+
   <!-- Misc -->
   <includeOverrides file="overrides.zcml" />
 
