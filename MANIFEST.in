@@ -1,4 +1,5 @@
 # Top level directory
+include README.txt
 include RELEASE.txt
 include GPL.txt
 include Makefile
@@ -6,11 +7,13 @@ include MANIFEST
 include test.py
 include schooltool.conf.in
 include ftesting.zcml
-include schooltool-*.py
+include schooltool-server.py
+include rest-client.py
 include remove-stale-bytecode.py
 
 # scripts
 include scripts/schooltool
+include scripts/schooltool-rest-client
 
 # Data files installed in the setup.py
 # If you modify this, also modify the regex in setup.py
@@ -20,13 +23,7 @@ recursive-include src/schooltool *.rng *.xml *.zcml *.pot *.po
 # Miscellaneous other data files (mostly for testing - yes *.py is right!)
 recursive-include src/schooltool *.ics *.py *.txt *.conf
 recursive-include doc *.txt *.rst
-
-# include the debian directory
-include debian/rules debian/changelog debian/compat debian/control
-include debian/copyright debian/README.Debian debian/TODO
-include debian/*.1 debian/schooltool.* debian/ssl-cert.cnf
-include debian/python*schooltool.*
-include debian/po/*.po debian/po/templates.pot debian/po/POTFILES.in
+include images/schooltool_zebra.svg
 
 # The schoolbell module
 recursive-include src/schoolbell *
