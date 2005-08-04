@@ -39,7 +39,7 @@ class InterfaceMenu(ifacemodule.menu.Menu):
 class CodeMenu(codemodule.browser.menu.Menu):
 
     def findClasses(self):
-        for entry in super(ClassMenu, self).findClasses():
+        for entry in super(CodeMenu, self).findClasses():
             if 'schoolbell' not in entry['path']:
                 continue
             entry['path'] = entry['path'].replace('schoolbell', 'sb')
