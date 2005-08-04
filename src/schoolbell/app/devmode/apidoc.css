@@ -3,7 +3,7 @@ body {
     background: white;
     color: black;
     margin: 1em;
-    padding: 0pt;
+    padding: 0;
 }
 
 body.menu {
@@ -47,8 +47,14 @@ div.apihead {
     margin: 0;
     padding: 2pt;
     margin-bottom: 3pt;
-    border-bottom: 1px #bab5ab solid;
-    background: #d6d6d6;
+    color: #f0f0f0;
+    background: #990000 url(/++resource++toolbar-background.png) top left repeat-x;
+    border-top: 2px #800 solid;
+    border-bottom: 2px #700 solid;
+}
+
+div.apihead a {
+    color: #f0f0f0;
 }
 
 div.menu {
@@ -82,7 +88,10 @@ div.indent {
 h1.details-header {
     font-size: 220%;
     font-weight: normal;
+    background: #eae8e3; 
+    padding: 5px;
     margin-top: 0;
+    border-bottom: 1px #bab5ab solid;
 }
 
 div.details-subheader {
@@ -111,17 +120,23 @@ h3.details-section {
 }
 
 h4 {
-  background: #d6d6d6;
-  padding: 3px;
-  //border-top: 1px #bab5ab solid;
-  //border-bottom: 1px #bab5ab solid;
-  font-size: 90%;
-  font-style: italic;
+    background: #d6d6d6;
+    padding: 3px;
+    font-size: 90%;
+    font-style: italic;
 }
 
 p.breadcrumbs {
-  padding: 2pt;
-  border: solid 1px black;
+    color: #f0f0f0;
+    background: #990000 url(/++resource++toolbar-background.png) top left repeat-x;
+    border-top: 2px #800 solid;
+    border-bottom: 2px #700 solid;
+    padding: 2pt;
+    padding-left: 1em;
+}
+
+p.breadcrumbs a {
+    color: #f0f0f0;
 }
 
 .important {
