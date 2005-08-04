@@ -185,6 +185,87 @@ string:${context/@@absolute_url}/++attribute++${attr/name}/@@introspector.html"
 
   </div>
 
+
+  <div tal:condition="view/isMapping">
+    <h2 i18n:translate="">Mapping Items</h2>
+
+    <div class="indent"
+         tal:define="items view/getMappingItems">
+    
+      <p tal:condition="not:items">
+        <em i18n:translate="">
+          There are no items.
+        </em>
+      </p>
+    
+      <ul class="attr-list"
+          tal:condition="items">
+        <li tal:repeat="item items">
+    
+          <b>
+            <code tal:content="item/key_string">'key'</code>
+          </b>
+          <br />
+          <a href=""
+             tal:attributes="
+                 href string:++items++${item/key}/@@introspector.html">
+            <code tal:content="item/value">'value'</code>
+          </a>
+          <tal:omit-tag condition="not: item/value_type_link">
+            (type: <code tal:content="item/value_type" />)
+          </tal:omit-tag>
+          <tal:omit-tag condition="item/value_type_link">
+            (<span i18n:translate="">type:</span>
+            <a href=""
+               tal:attributes="href 
+             string:${view/getBaseURL}/Code/${item/value_type_link}/index.html">
+              <code tal:content="item/value_type" /></a>)
+          </tal:omit-tag>
+    
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div tal:condition="view/isSequence">
+    <h2 i18n:translate="">Sequence Items</h2>
+
+    <div class="indent"
+         tal:define="items view/getSequenceItems">
+    
+      <p tal:condition="not:items">
+        <em i18n:translate="">
+          There are no items.
+        </em>
+      </p>
+    
+      <ol class="attr-list" start="0"
+          tal:condition="items">
+        <li tal:repeat="item items">
+    
+          <a href=""
+             tal:attributes="
+                 href string:++items++${item/index}/@@introspector.html">
+            <code tal:content="item/value">'value'</code>
+          </a>
+          <tal:omit-tag condition="not: item/value_type_link">
+            (type: <code tal:content="item/value_type" />)
+          </tal:omit-tag>
+          <tal:omit-tag condition="item/value_type_link">
+            (<span i18n:translate="">type:</span>
+            <a href=""
+               tal:attributes="href 
+             string:${view/getBaseURL}/Code/${item/value_type_link}/index.html">
+              <code tal:content="item/value_type" /></a>)
+          </tal:omit-tag>
+    
+        </li>
+      </ol>
+    </div>
+  </div>
+
+
   <div tal:condition="view/isAnnotatable">
     <h2 i18n:translate="">Annotations</h2>
     

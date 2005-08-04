@@ -62,6 +62,38 @@ class annotationsNamespace(object):
         return obj
 
 
+class sequenceItemsNamespace(object):
+    """Used to traverse to the values of a sequence."""
+
+    def __init__(self, ob, request=None):
+        self.context = ob
+        
+    def traverse(self, name, ignore):
+        obj = self.context[int(name)]
+        if not IPhysicallyLocatable(obj, False):
+            obj = location.LocationProxy(obj, self.context, '++items++'+name)
+        return obj
+
+
+class mappingItemsNamespace(object):
+    """Used to traverse to the values of a mapping.
+
+    Important: This might seem like overkill, but we do not know that (1)
+    every mapping has a traverser and (2) whether the location is available. A
+    location might not be available, if we have a mapping in the annotations,
+    for example.
+    """
+
+    def __init__(self, ob, request=None):
+        self.context = ob
+        
+    def traverse(self, name, ignore):
+        obj = self.context[name]
+        if not IPhysicallyLocatable(obj, False):
+            obj = location.LocationProxy(obj, self.context, '++items++'+name)
+        return obj
+
+
 class Introspector(BrowserView):
 
     def __init__(self, context, request):
@@ -69,7 +101,8 @@ class Introspector(BrowserView):
         path = apidoc.utilities.getPythonPath(
             context.__class__).replace('.', '/')
         self.klassView = zapi.traverse(
-            context, '/++apidoc++/Code/%s/@@index.html' %path, request=request)
+            zapi.getSiteManager(),
+            '/++apidoc++/Code/%s/@@index.html' %path, request=request)
 
     def parent(self):
         return zapi.getParent(self.context)
@@ -144,6 +177,42 @@ class Introspector(BrowserView):
                 name, klass.getSecurityChecker()))
 
             yield entry
+
+    def isSequence(self):
+        return zope.interface.common.sequence.IExtendedReadSequence.providedBy(
+            self.context)
+
+    def getSequenceItems(self):
+        ann = []
+        # Make the object naked, so that we can inspect the value types.
+        naked = zope.security.proxy.removeSecurityProxy(self.context)
+        for index in xrange(0, len(self.context)):
+            value = naked[index]
+            ann.append({
+                'index': index,
+                'value': `value`,
+                'value_type': type(value).__name__,
+                'value_type_link': getTypeLink(type(value))
+                })
+        return ann
+
+    def isMapping(self):
+        return zope.interface.common.mapping.IEnumerableMapping.providedBy(
+            self.context)
+
+    def getMappingItems(self):
+        ann = []
+        # Make the object naked, so that we can inspect the value types.
+        naked = zope.security.proxy.removeSecurityProxy(self.context)
+        for key, value in naked.items():
+            ann.append({
+                'key': key,
+                'key_string': `key`,
+                'value': `value`,
+                'value_type': type(value).__name__,
+                'value_type_link': getTypeLink(type(value))
+                })
+        return ann
 
     def isAnnotatable(self):
         return annotation.interfaces.IAnnotatable.providedBy(self.context)

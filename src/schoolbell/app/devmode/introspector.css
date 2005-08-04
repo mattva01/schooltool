@@ -2,6 +2,11 @@ div.indent {
     margin-left: 1.5em;
 }
 
+ol {
+  margin: 0px;
+  padding: 0px;
+}
+
 ul.attr-list li {
     margin-bottom: 0.5ex;
 }

@@ -66,6 +66,7 @@
       layer=".skin.IDevModeLayer" 
       />
 
+  <!-- ++annotations++ Namespace -->
   <view
       name="annotations" type="*"
       provides="zope.app.traversing.interfaces.ITraversable" for="*"
@@ -75,6 +76,34 @@
       name="annotations"
       provides="zope.app.traversing.interfaces.ITraversable" for="*"
       factory=".introspector.annotationsNamespace"
+      />
+
+  <!-- ISequence ++items++ Namespace -->
+  <view
+      name="items" type="*"
+      provides="zope.app.traversing.interfaces.ITraversable" 
+      for="zope.interface.common.sequence.IMinimalSequence"
+      factory=".introspector.sequenceItemsNamespace"
+      />
+  <adapter
+      name="items"
+      provides="zope.app.traversing.interfaces.ITraversable"
+      for="zope.interface.common.sequence.IMinimalSequence"
+      factory=".introspector.sequenceItemsNamespace"
+      />
+
+  <!-- IMapping ++items++ Namespace -->
+  <view
+      name="items" type="*"
+      provides="zope.app.traversing.interfaces.ITraversable" 
+      for="zope.interface.common.mapping.IItemMapping"
+      factory=".introspector.mappingItemsNamespace"
+      />
+  <adapter
+      name="items"
+      provides="zope.app.traversing.interfaces.ITraversable"
+      for="zope.interface.common.mapping.IItemMapping"
+      factory=".introspector.mappingItemsNamespace"
       />
 
   <!-- Menu entries for Error Reporting Utility -->

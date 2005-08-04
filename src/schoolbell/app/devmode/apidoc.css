@@ -111,6 +111,10 @@ h2.details-section {
     padding: 2px 0.5em 2px 0.5em;
 }
 
+h3 {
+    font-size: 130%;
+}
+
 h3.details-section {
     margin-bottom: 2pt;
     background: #d6d6d6;
