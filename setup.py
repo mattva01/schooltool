@@ -71,8 +71,8 @@ class install_data(_install_data):
     It also makes the --install-data option to the install command a no-op.
 
     IMPORTANT: things will break if --install-dir is passed directly to an
-    install_data command and the --install-dir is not where install_lib put/will
-    put the libraries.
+    install_data command and the --install-dir is not where install_lib
+    put/will put the libraries.
     """
 
     def finalize_options(self):
@@ -84,7 +84,7 @@ class install_data(_install_data):
 class install(_install):
     """Specialized install command for schoolbell.
 
-    Make it possilble to pass the --paths and --default-config options to the
+    Make it possible to pass the --paths and --default-config options to the
     install_scripts command.
     """
 
@@ -141,8 +141,8 @@ class install_scripts(_install_scripts):
             paths_regex = re.compile(r'# paths begin\n.*# paths end', re.S)
             paths = ['# paths begin', '# paths end']
             for path in self.paths.split(';'):
-                paths.insert(-1, 'sys.path.insert(0, %s)' \
-                        % repr(os.path.abspath(path)))
+                paths.insert(-1, 'sys.path.insert(0, %s)'
+                             % repr(os.path.abspath(path)))
             script_str = re.sub(paths_regex, '\n'.join(paths), script_str)
             # Update the default config file
             config_regex = re.compile(r'# config begin\n.*# config end', re.S)
@@ -180,7 +180,8 @@ if sys.version_info < (2, 3):
 
 # find the data files
 # this regex should be similar to the MANIFEST.in recursive includes
-datafile_re = re.compile('.*\.(pt|js|png|gif|css|mo|rng|xml|zcml|ico|pot|po)\Z')
+datafile_re = re.compile(r'.*\.(pt|js|png|gif|css|mo|rng"
+                         "|xml|zcml|ico|pot|po)\Z')
 data_files = []
 for root, dirs, files in os.walk(os.path.join('src', 'schoolbell')):
     # Ignore testing directories
@@ -189,8 +190,8 @@ for root, dirs, files in os.walk(os.path.join('src', 'schoolbell')):
     if 'tests' in dirs:
         dirs.remove('tests')
     # Find the data files
-    tmp = [os.path.join(root, file) for file in files \
-            if datafile_re.match(file, 1)]
+    tmp = [os.path.join(root, file) for file in files
+           if datafile_re.match(file, 1)]
     # If any, add them to the files to be copied
     if tmp:
         data_files.append((root[4:], tmp))
