@@ -57,7 +57,7 @@ class ApplicationObjectFileFactory(object):
         self.context = container
 
     def parseXML(self, data):
-        """Gets values from document, and puts them into a dict"""
+        """Get values from document, and put them into a dict."""
         doc = XMLDocument(data, self.schema)
         try:
             doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
@@ -135,7 +135,7 @@ class ResourceFileFactory(ApplicationObjectFileFactory):
     factory = Resource
 
     def parseDoc(self, doc):
-        """Gets values from document, and puts them into a dict"""
+        """Get values from document, and puts them into a dict."""
         kwargs = {}
         node = doc.query('/m:object')[0]
         kwargs['title'] = node['title']
@@ -166,7 +166,7 @@ class PersonFileFactory(ApplicationObjectFileFactory):
     factory = Person
 
     def parseDoc(self, doc):
-        """Gets values from document, and puts them into a dict"""
+        """Get values from document, and puts them into a dict."""
         kwargs = {}
         node = doc.query('/m:object')[0]
         kwargs['title'] = node['title']
@@ -200,7 +200,7 @@ class GroupFile(ApplicationObjectFile):
     adapts(IGroup)
 
     def modify(self, title=None, description=None):
-        """Modifies underlying schema."""
+        """Modify underlying schema."""
         self.context.title = title
         self.context.description = description
 
@@ -211,7 +211,7 @@ class ResourceFile(ApplicationObjectFile):
     adapts(IResource)
 
     def modify(self, title=None, description=None, isLocation=False):
-        """Modifies underlying object."""
+        """Modify underlying object."""
         self.context.title = title
         self.context.description = description
         self.context.isLocation = isLocation
@@ -223,7 +223,7 @@ class PersonFile(ApplicationObjectFile):
     adapts(IPerson)
 
     def modify(self, title=None):
-        """Modifies underlying object."""
+        """Modify underlying object."""
         self.context.title = title
 
 
@@ -409,7 +409,6 @@ class PersonPasswordWriter(object):
 
     def setPassword(self, password):
         """See IPasswordWriter."""
-
         self.person.setPassword(password)
 
 
@@ -433,7 +432,7 @@ class PasswordWriterView(View):
 
 
 class PersonPhotoAdapter(object):
-    """Adapts a Person to PersonPhoto."""
+    """Adapt a Person to PersonPhoto."""
 
     implements(IPersonPhoto)
 
@@ -526,7 +525,7 @@ class PersonPreferencesView(View):
         self.preferences = IPersonPreferences(context.person)
 
     def parseData(self, body):
-        """Gets values from document, and puts them into a dict"""
+        """Get values from document, and put them into a dict"""
         doc = XMLDocument(body, self.schema)
         results = {}
         try:
