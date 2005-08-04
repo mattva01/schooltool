@@ -374,6 +374,10 @@ class StandaloneServer(object):
         zope.configuration.xmlconfig.registerCommonDirectives(context)
         zope.configuration.xmlconfig.string(self.SITE_DEFINITION, context)
 
+        # Store the configuration context
+        from zope.app.appsetup import appsetup
+        appsetup.__dict__['__config_context'] = context
+
     def load_options(self, argv):
         """Parse the command line and read the configuration file."""
         options = self.Options()
