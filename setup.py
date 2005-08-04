@@ -180,8 +180,8 @@ if sys.version_info < (2, 3):
 
 # find the data files
 # this regex should be similar to the MANIFEST.in recursive includes
-datafile_re = re.compile(r'.*\.(pt|js|png|gif|css|mo|rng"
-                         "|xml|zcml|ico|pot|po)\Z')
+datafile_re = re.compile(r'.*\.(pt|js|png|gif|css|mo'
+                         r'|rng|xml|zcml|ico|pot|po)\Z')
 data_files = []
 for root, dirs, files in os.walk(os.path.join('src', 'schoolbell')):
     # Ignore testing directories
@@ -205,26 +205,27 @@ import schoolbell
 setup(name="schoolbell",
     description="A standalone or Zope 3 component calendaring server",
     long_description="""A calendaring server which can be used as a
-        standalone server or a Zope 3 component. This server allows for
-        people and resources to have individual and group calendars.
+        standalone server or a Zope 3 component. This server allows people and
+        resources to have individual and group calendars.
+
         The calendars are:
-        * Shareable
-        * Overlayable
-        * Access controllable
-        * Importable and exportable to iCal clients
-            (e.g. Apple's iCal or Mozilla Sunbird)
-        * Time zone aware
-        * Provide resource booking
-        * Support for Allday events
-        * Atom feed support for upcoming events
+         * Shareable
+         * Overlayable
+         * Access controllable
+         * Importable and exportable to iCalendar clients
+           (e.g. Apple's iCal or Mozilla Sunbird)
+         * Timezone-aware
+         * Capable of handling all-day events
+
+        Upcoming events can be provided using an Atom feed.
 
         All of this is accessible through a web interface which is simple,
         powerful and beautiful.
 
         For developers SchoolBell offers:
-        * Re-usable calendaring Zope 3 components.
-        * iCal parser.
-        * Rigourous functional and unit testing.
+         * Re-usable calendaring Zope 3 components.
+         * iCalendar parser.
+         * Rigorous functional and unit testing.
 
         Enjoy!""",
     version=schoolbell.VERSION,
@@ -241,7 +242,7 @@ setup(name="schoolbell",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Zope",
-#        "Topic :: Office/Business :: Groupware", TODO are we groupware?
+    "Topic :: Office/Business :: Groupware",
     "Topic :: Office/Business :: Scheduling"],
     cmdclass={'install': install,
         'install_data': install_data,
