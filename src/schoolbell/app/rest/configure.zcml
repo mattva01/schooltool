@@ -248,14 +248,6 @@
 
   <view
       for="schoolbell.app.interfaces.IGroupContainer"
-      name="PUT"
-      factory=".app.GroupContainerView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schoolbell.app.interfaces.IGroupContainer"
       name="DELETE"
       factory=".app.GroupContainerView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
@@ -272,24 +264,8 @@
 
   <view
       for="schoolbell.app.interfaces.IResourceContainer"
-      name="PUT"
-      factory=".app.ResourceContainerView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schoolbell.app.interfaces.IResourceContainer"
       name="DELETE"
       factory=".app.ResourceContainerView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schoolbell.app.interfaces.IPersonContainer"
-      name="PUT"
-      factory=".app.PersonContainerView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />
