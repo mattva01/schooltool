@@ -14,10 +14,17 @@
         <a href="Interface/@@menu.html" target="menu" i18n:translate="">
           Interfaces
         </a>
+      </li>
       <li>
         <a href="Code/@@menu.html" target="menu" i18n:translate="">
           Code
         </a>
+      </li>
+      <li>
+        <a href="Interface/@@restmenu.html" target="menu" i18n:translate="">
+          RESTive Views
+        </a>
+      </li>
       <li>
         <a href="Book/schoolbell/@@menu.html" target="menu" i18n:translate="">
           Book

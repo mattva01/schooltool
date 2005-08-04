@@ -31,8 +31,9 @@ import zope.security.proxy
 from zope.component.exceptions import ComponentLookupError
 from zope.interface import directlyProvides, directlyProvidedBy
 
-from zope.app import zapi, apidoc
+from zope.app import zapi, apidoc, annotation
 from zope.app.component.interface import getInterface
+from zope.app.location import location
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.interfaces import IPhysicallyLocatable
 
@@ -41,6 +42,24 @@ def getTypeLink(type):
         return None
     path = apidoc.utilities.getPythonPath(type)
     return path.replace('.', '/')
+
+
+class annotationsNamespace(object):
+    """Used to traverse to the annotations of an object."""
+
+    def __init__(self, ob, request=None):
+        self.context = ob
+        
+    def traverse(self, name, ignore):
+        # This is pretty unsafe, so this should really just be available in
+        # devmode. 
+        naked = zope.security.proxy.removeSecurityProxy(self.context)
+        annotations = annotation.interfaces.IAnnotations(naked)
+        obj = name and annotations[name] or annotations
+        if not IPhysicallyLocatable(obj, False):
+            obj = location.LocationProxy(
+                obj, self.context, '++annotations++'+name)
+        return obj
 
 
 class Introspector(BrowserView):
@@ -126,4 +145,23 @@ class Introspector(BrowserView):
 
             yield entry
 
+    def isAnnotatable(self):
+        return annotation.interfaces.IAnnotatable.providedBy(self.context)
 
+    def getAnnotationsInfo(self):
+        # We purposefully strip the security here; this is the introspector,
+        # so we want to see things that we usually cannot see 
+        naked = zope.security.proxy.removeSecurityProxy(self.context)
+        annotations = annotation.interfaces.IAnnotations(naked)
+        if not hasattr(annotations, 'items'):
+            return
+        ann = []
+        for key, value in annotations.items():
+            ann.append({
+                'key': key,
+                'key_string': `key`,
+                'value': `value`,
+                'value_type': type(value).__name__,
+                'value_type_link': getTypeLink(type(value))
+                })
+        return ann

@@ -66,6 +66,17 @@
       layer=".skin.IDevModeLayer" 
       />
 
+  <view
+      name="annotations" type="*"
+      provides="zope.app.traversing.interfaces.ITraversable" for="*"
+      factory=".introspector.annotationsNamespace"
+      />
+  <adapter
+      name="annotations"
+      provides="zope.app.traversing.interfaces.ITraversable" for="*"
+      factory=".introspector.annotationsNamespace"
+      />
+
   <!-- Menu entries for Error Reporting Utility -->
 
   <browser:menuItem
@@ -108,6 +119,15 @@
         permission="zope.app.apidoc.UseAPIDoc"
         class="schoolbell.app.devmode.apidoc.InterfaceMenu"
         name="menu.html"
+        template="menu.pt"
+        layer="schoolbell.app.devmode.skin.IDevModeLayer"
+        />
+
+    <browser:page
+        for=".ifacemodule.InterfaceModule"
+        permission="zope.app.apidoc.UseAPIDoc"
+        class="schoolbell.app.devmode.restdoc.RESTMenu"
+        name="restmenu.html"
         template="menu.pt"
         layer="schoolbell.app.devmode.skin.IDevModeLayer"
         />

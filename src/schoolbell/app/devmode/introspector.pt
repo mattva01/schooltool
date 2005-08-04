@@ -184,7 +184,48 @@ string:${context/@@absolute_url}/++attribute++${attr/name}/@@introspector.html"
   </p>
 
   </div>
-  
+
+  <div tal:condition="view/isAnnotatable">
+    <h2 i18n:translate="">Annotations</h2>
+    
+    <div class="indent"
+         tal:define="annotations view/getAnnotationsInfo">
+    
+      <p tal:condition="not:annotations">
+        <em i18n:translate="">
+          There were no annotations or they were not inspectable.    
+        </em>
+      </p>
+    
+      <ul class="attr-list"
+          tal:condition="annotations">
+        <li tal:repeat="ann annotations">
+    
+          <b>
+            <code tal:content="ann/key_string">'key'</code>
+          </b>
+          <br />
+          <a href=""
+             tal:attributes="
+                 href string:++annotations++${ann/key}/@@introspector.html">
+            <code tal:content="ann/value">'value'</code>
+          </a>
+          <tal:omit-tag condition="not: ann/value_type_link">
+            (type: <code tal:content="ann/value_type" />)
+          </tal:omit-tag>
+          <tal:omit-tag condition="ann/value_type_link">
+            (<span i18n:translate="">type:</span>
+            <a href=""
+               tal:attributes="href 
+             string:${view/getBaseURL}/Code/${ann/value_type_link}/index.html">
+              <code tal:content="ann/value_type" /></a>)
+          </tal:omit-tag>
+    
+        </li>
+      </ul>
+    </div>
+  </div>
+
 </div>
 </body>
 </html>
