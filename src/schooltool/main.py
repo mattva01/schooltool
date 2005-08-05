@@ -80,7 +80,21 @@ SCHOOLTOOL_SITE_DEFINITION = u"""\
   <include package="schoolbell.app" />
   <include package="schooltool" />
 
-  <include package="zope.app.securitypolicy" file="securitypolicy.zcml" />
+  <include package="zope.app.securitypolicy"/>
+  
+  <!-- Basically a copy of zope.app.securitypolicy/securitypolicy.zcml  -->
+  <securityPolicy
+    component="zope.app.securitypolicy.zopepolicy.ZopeSecurityPolicy" />
+
+  <role id="zope.Anonymous" title="Everybody"
+                 description="All users have this role implicitly" />
+  <role id="zope.Manager" title="Site Manager" />
+  <role id="zope.Member" title="Site Member" />
+
+  <grant permission="zope.View" role="zope.Anonymous" />
+  <grant permission="zope.app.dublincore.view" role="zope.Anonymous" />
+
+  <grantAll role="zope.Manager" />
 
   <unauthenticatedPrincipal id="zope.anybody" title="%(unauth_user)s" />
   <unauthenticatedGroup id="zope.Anybody" title="%(unauth_users)s" />
