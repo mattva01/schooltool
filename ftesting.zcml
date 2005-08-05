@@ -26,7 +26,22 @@
   <include package="schoolbell.app" />
   <include package="schooltool" />
 
-  <include package="zope.app.securitypolicy" file="securitypolicy.zcml" />
+  <include package="zope.app.securitypolicy" />
+  <!-- Basically a copy of zope.app.securitypolicy/securitypolicy.zcml  -->
+  <securityPolicy
+    component="zope.app.securitypolicy.zopepolicy.ZopeSecurityPolicy" />
+
+  <role id="zope.Anonymous" title="Everybody"
+                 description="All users have this role implicitly" />
+  <role id="zope.Manager" title="Site Manager" />
+  <role id="zope.Member" title="Site Member" />
+
+  <grant permission="zope.View" role="zope.Anonymous" />
+  <grant permission="zope.app.dublincore.view" role="zope.Anonymous" />
+
+  <grantAll role="zope.Manager" />
+  <!-- end copy of securitypolicy.zcml -->
+
   <include package="zope.app.securitypolicy.tests" file="functional.zcml" />
   <include package="testbrowser.ftests" file="ftesting.zcml" />
 
