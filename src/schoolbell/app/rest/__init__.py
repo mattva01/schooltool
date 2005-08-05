@@ -95,12 +95,15 @@ class RestPublishTraverse(object):
         self.request = request
 
     def publishTraverse(self, request, name):
+        # Find a traverser for the specific name; also known as name traversers
         traverser = zapi.queryMultiAdapter((self.context, request),
                                            IRestTraverser, name=name)
 
         if traverser is not None:
             return traverser.publishTraverse(request, name)
         elif ISimpleReadContainer.providedBy(self.context):
+            # If the object is a container, we can simply use the container
+            # traverser.
             traverser = ContainerTraverser(self.context, self.request)
             return traverser.publishTraverse(request, name)
 
