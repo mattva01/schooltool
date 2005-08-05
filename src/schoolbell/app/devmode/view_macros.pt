@@ -192,8 +192,6 @@
            target="new">Introspector</a>
         <a href="/++apidoc++"
            target="new">API Docs</a>
-        <a href=""
-           target="new">Profiler</a>
       </div>
     </metal:block>
   </div>
