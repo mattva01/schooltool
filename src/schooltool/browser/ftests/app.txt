@@ -136,6 +136,66 @@ We should be redirected from the index page to the calendar
     Location: http://localhost/frogpond/calendar
     ...
 
+And when we follow that redirect we should have permission to see the
+calendar:
+
+    >>> print http(r"""
+    ... GET /frogpond/calendar HTTP/1.1
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+We should be able to see terms and schemas without authenticating:
+
+    >>> print http(r"""
+    ... GET /frogpond/terms HTTP/1.1
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+    >>> print http(r"""
+    ... GET /frogpond/ttschemas HTTP/1.1
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+But you have to log in to see persons, groups, and other locations:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons HTTP/1.1
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    ...Location: http://localhost/frogpond/@@login.html?forbidden=yes...
+    ...
+
+    >>> print http(r"""
+    ... GET /frogpond/persons HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
+    >>> print http(r"""
+    ... GET /frogpond/groups HTTP/1.1
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    ...Location: http://localhost/frogpond/@@login.html?forbidden=yes...
+    ...
+
+    >>> print http(r"""
+    ... GET /frogpond/resources HTTP/1.1
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    ...Location: http://localhost/frogpond/@@login.html?forbidden=yes...
+    ...
+
+
+
+
+
 The section container view points to the timetable import form:
 
     >>> print http(r"""

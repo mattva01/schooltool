@@ -671,13 +671,35 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> from zope.app.securitypolicy.interfaces import \
         ...         IPrincipalPermissionManager
         >>> unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
-        >>> map = IPrincipalPermissionManager(app.calendar)
+        >>> map = IPrincipalPermissionManager(app)
         >>> x = map.getPermissionsForPrincipal(unauthenticated.id)
         >>> x.sort()
         >>> print x
-        [('schoolbell.viewCalendar', PermissionSetting: Allow)]
+        [('schoolbell.view', PermissionSetting: Allow), ('schoolbell.viewCalendar', PermissionSetting: Allow)]
 
-    Check that no permissions are set if the object added is not a person:
+    We don't want to open up everything:
+
+        >>> for container in ['persons', 'groups', 'resources', 'sections',
+        ...                   'courses']:
+        ...     map = IPrincipalPermissionManager(app[container])
+        ...     x = map.getPermissionsForPrincipal(unauthenticated.id)
+        ...     x.sort()
+        ...     print x
+        [('schoolbell.view', PermissionSetting: Deny), ('schoolbell.viewCalendar', PermissionSetting: Deny)]
+        [('schoolbell.view', PermissionSetting: Deny), ('schoolbell.viewCalendar', PermissionSetting: Deny)]
+        [('schoolbell.view', PermissionSetting: Deny), ('schoolbell.viewCalendar', PermissionSetting: Deny)]
+        [('schoolbell.view', PermissionSetting: Deny), ('schoolbell.viewCalendar', PermissionSetting: Deny)]
+        [('schoolbell.view', PermissionSetting: Deny), ('schoolbell.viewCalendar', PermissionSetting: Deny)]
+
+        >>> for container in ['terms', 'ttschemas']:
+        ...     map = IPrincipalPermissionManager(app[container])
+        ...     x = map.getPermissionsForPrincipal(unauthenticated.id)
+        ...     x.sort()
+        ...     print x
+        []
+        []
+
+    Check that no permissions are set if the object added is not an app.
 
         >>> person = Person('james')
         >>> root['sb']['persons']['james'] = person
@@ -685,6 +707,19 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> map = IPrincipalPermissionManager(person.calendar)
         >>> map.getPermissionsForPrincipal(unauthenticated.id)
         []
+
+    Nothing happens if the event isn't ObjectAdded:
+
+        >>> from zope.app.container.contained import ObjectRemovedEvent
+        >>> app2 = SchoolToolApplication()
+        >>> applicationCalendarPermissionsSubscriber(ObjectRemovedEvent(app2))
+        >>> map2 = IPrincipalPermissionManager(app2)
+        >>> x2 = map.getPermissionsForPrincipal(unauthenticated.id)
+        >>> x2.sort()
+        >>> print x2
+        []
+
+
 
     Clean up:
 

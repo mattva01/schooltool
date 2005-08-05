@@ -404,11 +404,41 @@ def getApplicationPreferences(app):
 
 
 def applicationCalendarPermissionsSubscriber(event):
-    """Set permissions on application calendar."""
-    if IObjectAddedEvent.providedBy(event):
-        if ISchoolToolApplication.providedBy(event.object):
-            unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
-            perms = IPrincipalPermissionManager(event.object.calendar)
-            perms.grantPermissionToPrincipal('schoolbell.viewCalendar',
-                                              unauthenticated.id)
+    """Set the default permissions for schooltool.
 
+    By default view and viewCalendar are granted for unauthenticated users to
+    the top level application so that everyone can see the front page and the
+    the sitewide calendar without logging in.
+
+    Because permissions are applied recursively, we must restrict access
+    explicitly to the areas of the site that should not be public.
+
+    By default we restrict:
+        school/persons
+        school/groups
+        school/resources
+        school/sections
+        school/courses
+
+    """
+    if not IObjectAddedEvent.providedBy(event):
+        # TODO: Do we need to do this in python if the subscriber is set in
+        # zcml?
+        return
+
+    if ISchoolToolApplication.providedBy(event.object):
+        unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
+
+        app_perms = IPrincipalPermissionManager(event.object)
+        app_perms.grantPermissionToPrincipal('schoolbell.view',
+                                          unauthenticated.id)
+        app_perms.grantPermissionToPrincipal('schoolbell.viewCalendar',
+                                          unauthenticated.id)
+
+        for container in ['persons', 'groups', 'resources', 'sections',
+                          'courses']:
+            container_perms = IPrincipalPermissionManager(event.object[container])
+            container_perms.denyPermissionToPrincipal('schoolbell.view',
+                                              unauthenticated.id)
+            container_perms.denyPermissionToPrincipal('schoolbell.viewCalendar',
+                                              unauthenticated.id)
