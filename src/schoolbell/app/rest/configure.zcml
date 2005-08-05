@@ -7,7 +7,8 @@
   </content>
 
   <content class=".app.PersonPreferencesAdapter">
-    <allow interface="schoolbell.app.rest.interfaces.IPersonPreferencesAdapter" />
+    <allow 
+        interface="schoolbell.app.rest.interfaces.IPersonPreferencesAdapter" />
   </content>
 
   <content class=".app.PersonPhotoAdapter">
@@ -48,7 +49,7 @@
   <!-- the multiplexer traversers for schoolbell objects -->
   <view
       for="schoolbell.app.interfaces.IAdaptableToSchoolBellApplication"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.IPublishTraverse"
       factory=".RestPublishTraverse"
       permission="zope.Public"
@@ -56,7 +57,7 @@
 
   <view
       for="schoolbell.app.interfaces.ISchoolBellApplication"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.IPublishTraverse"
       factory=".RestPublishTraverse"
       permission="zope.Public"
@@ -64,7 +65,7 @@
 
   <view
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.IPublishTraverse"
       factory=".RestPublishTraverse"
       permission="zope.Public"
@@ -73,7 +74,7 @@
 
   <view
       for="schoolbell.relationship.interfaces.IRelationshipLinks"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.IPublishTraverse"
       factory=".relationships.LinkTraverser"
       permission="zope.Public"
@@ -83,7 +84,7 @@
   <!-- traversers for persons -->
   <view
       for="schoolbell.app.interfaces.IPerson"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory=".app.PersonHTTPTraverser"
       permission="zope.Public"
@@ -92,7 +93,7 @@
 
   <view
       for="schoolbell.app.interfaces.IHavePreferences"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory=".app.PersonHTTPTraverser"
       permission="zope.Public"
@@ -101,7 +102,7 @@
 
   <view
       for="schoolbell.app.interfaces.IPerson"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory=".app.PersonHTTPTraverser"
       permission="zope.Public"
@@ -110,7 +111,7 @@
 
   <view
       for="schoolbell.app.interfaces.ICalendarOwner"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory="schoolbell.app.browser.cal.CalendarOwnerHTTPTraverser"
       permission="zope.Public"
@@ -119,7 +120,7 @@
 
   <view
       for="schoolbell.app.interfaces.ICalendarOwner"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory="schoolbell.app.browser.cal.CalendarOwnerHTTPTraverser"
       permission="zope.Public"
@@ -128,7 +129,7 @@
 
   <view
       for="schoolbell.app.interfaces.ICalendarOwner"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory="schoolbell.app.browser.cal.CalendarOwnerHTTPTraverser"
       permission="zope.Public"
@@ -137,7 +138,7 @@
 
   <view
       for="zope.app.annotation.interfaces.IAnnotatable"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory=".acl.ACLTraverser"
       permission="schoolbell.controlAccess"
@@ -146,7 +147,7 @@
 
   <view
       for="zope.app.annotation.interfaces.IAnnotatable"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory=".relationships.RelationshipsTraverser"
       permission="zope.Public"
@@ -156,7 +157,7 @@
   <!-- the following are used by PUT requests on the normal web server -->
   <view
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory=".app.CalendarNullTraverser"
       permission="zope.Public"
@@ -165,7 +166,7 @@
 
   <view
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory=".app.CalendarNullTraverser"
       permission="zope.Public"
@@ -375,7 +376,7 @@
 
   <view
       for="schoolbell.app.rest.acl.IACLAdapter"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       factory="schoolbell.app.rest.acl.ACLViewFactory"
       permission="schoolbell.controlAccess"
       allowed_interface="schoolbell.app.rest.acl.IACLView"
@@ -384,7 +385,7 @@
 
   <view
       for="schoolbell.app.rest.acl.IACLAdapter"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       factory="schoolbell.app.rest.acl.ACLViewFactory"
       permission="schoolbell.controlAccess"
       allowed_interface="schoolbell.app.rest.acl.IACLView"
@@ -399,14 +400,14 @@
 
   <view
       for="schoolbell.relationship.interfaces.IRelationshipLinks"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       factory="schoolbell.app.rest.relationships.RelationshipsViewFactory"
       name="GET"
       />
 
   <view
       for="schoolbell.relationship.interfaces.IRelationshipLinks"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       factory="schoolbell.app.rest.relationships.RelationshipsViewFactory"
       name="POST"
       />
@@ -419,14 +420,14 @@
 
   <view
       for="schoolbell.relationship.interfaces.IRelationshipLink"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       factory="schoolbell.app.rest.relationships.LinkViewFactory"
       name="GET"
       />
 
   <view
       for="schoolbell.relationship.interfaces.IRelationshipLink"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       factory="schoolbell.app.rest.relationships.LinkViewFactory"
       name="DELETE"
       />
@@ -443,7 +444,7 @@
 
   <view
       for="schoolbell.app.interfaces.IHaveNotes"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory=".notes.NotesTraverser"
       name="notes"
@@ -451,7 +452,7 @@
 
   <view
       for="schoolbell.app.rest.notes.INotesAdapter"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       factory="schoolbell.app.rest.notes.NotesViewFactory"
       allowed_interface="schoolbell.app.rest.notes.INotesView"
       permission="zope.Public"
@@ -460,7 +461,7 @@
 
   <view
       for="schoolbell.app.rest.notes.INotesAdapter"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       factory="schoolbell.app.rest.notes.NotesViewFactory"
       allowed_interface="schoolbell.app.rest.notes.INotesView"
       permission="zope.Public"
