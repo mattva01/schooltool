@@ -2249,8 +2249,11 @@ def doctest_SpecialDayView():
           </p>
         <BLANKLINE>
           <div class="row">
-            <label>Date</label>
-            <input type="text" name="date" />
+            <label for="date">Date</label>
+            <input type="text" name="date" id="date" />
+            <img class="CalIcon" onclick="clickWidgetIcon('date');"
+                 id="dateIcon" src="a dummy resource" />
+            <div id="dateDiv" style="background: #fff; position: absolute; display: none;" />
           </div>
         <BLANKLINE>
           <div class="controls">
