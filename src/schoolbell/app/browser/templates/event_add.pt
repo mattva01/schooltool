@@ -273,6 +273,12 @@
             <label for="field.range_u" class="plain" i18n:translate="">Repeat until</label>
             <input type="text" name="field.until" id="field.until"
                    tal:attributes="value view/until_widget/_getFormValue"/>
+            <img class="CalIcon" onClick="clickWidgetIcon('field.until');"
+                 id="field.untilIcon"
+                 tal:attributes="src context/++resource++calwidget-icon.gif"/>
+            <div id="field.untilDiv"
+                 style="background: #fff; position: absolute; display: none;"/>
+
             <tal:block tal:define="widget nocall:view/until_widget">
               <div class="error" tal:define="error widget/error"
                    tal:condition="error" tal:content="structure error">
