@@ -26,9 +26,13 @@ add a replacement day to the term.
   </p>
 
   <div class="row">
-    <label i18n:translate="">Date</label>
-    <input type="text" name="date"
+    <label for="date" i18n:translate="">Date</label>
+    <input type="text" name="date" id="date"
            tal:attributes="value request/date|nothing"/>
+    <img class="CalIcon" onClick="clickWidgetIcon('date');" id="fieldIcon"
+         tal:attributes="src context/++resource++calwidget-icon.gif"/>
+    <div id="dateDiv"
+         style="background: #fff; position: absolute; display: none;"/>
   </div>
 
   <div class="controls">
