@@ -12,8 +12,13 @@
           tal:attributes="href context/++resource++style.css"/>
     <link rel="stylesheet" type="text/css" href="schooltool.css"
           tal:attributes="href context/++resource++schooltool.css"/>
+    <link type="text/css" rel="stylesheet" href="calwidget-calendar.css"
+          tal:attributes="href context/++resource++calwidget-calendar.css" />
     <script type="text/javascript" src="schoolbell.js"
             tal:attributes="src context/++resource++schoolbell.js">
+    </script>
+    <script type="text/javascript" src=""
+            tal:attributes="src context/++resource++calwidget-calendar.js">
     </script>
     <metal:block define-slot="title">
       <title i18n:translate="">SchoolTool</title>
