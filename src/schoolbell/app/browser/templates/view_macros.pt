@@ -73,11 +73,6 @@
                 <a id="tools-calendar" i18n:translate=""
                   tal:attributes="href person/calendar/@@absolute_url"
                   >My Calendar</a> |
-                <tal:disable condition="nothing">
-                <a id="tools-preferences" i18n:translate=""
-                  tal:attributes="href string:${person/@@absolute_url}/preferences.html"
-                  >My Preferences</a> |
-                </tal:disable>
                 <a id="tools-logout" i18n:translate=""
                   tal:attributes="href string:${url}/@@logout.html"
                   >Log Out</a>
