@@ -43,7 +43,6 @@ from zope.interface import directlyProvides, implements
 from zope.component import provideAdapter, adapts
 from zope.event import notify
 from zope.server.taskthreads import ThreadedTaskDispatcher
-from zope.i18n import translate
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.app.server.main import run
@@ -323,7 +322,7 @@ SCHOOLBELL_SITE_DEFINITION = """\
   <include package="schoolbell.app" />
 
   <include package="zope.app.securitypolicy"/>
-  
+
   <!-- Basically a copy of zope.app.securitypolicy/securitypolicy.zcml  -->
   <securityPolicy
     component="zope.app.securitypolicy.zopepolicy.ZopeSecurityPolicy" />

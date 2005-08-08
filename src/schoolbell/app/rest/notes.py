@@ -21,7 +21,6 @@ RESTive views for notes
 
 $Id$
 """
-from zope.i18n import translate
 from zope.interface import Interface, Attribute, implements
 from zope.security.checker import ProxyFactory
 

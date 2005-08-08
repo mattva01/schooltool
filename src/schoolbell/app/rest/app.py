@@ -28,7 +28,6 @@ from zope.app.container.interfaces import INameChooser
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.i18n import translate
 from zope.schema.interfaces import IField
 
 from schoolbell.app.rest import View, Template, IRestTraverser
