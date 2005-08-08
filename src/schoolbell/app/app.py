@@ -79,6 +79,8 @@ class SchoolBellApplication(Persistent, SampleContainer,
 
     def title(self):
         """This is required for the site calendar views to work."""
+        # XXX This docstring does not explain anything at all.  It does hint
+        #     at the fact that an ugly hack is hiding beneath.
         return IApplicationPreferences(self).title
 
 
