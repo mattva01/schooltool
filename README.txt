@@ -61,7 +61,8 @@ Building SchoolTool
 -------------------
 
 Run 'make build update-translations' to build the necessary extension modules
-and translations.
+and translations.  You will need to have gettext installed to compile the
+translations.
 
 It is a good idea to run 'make test' and 'make ftest' to check if all the
 essential unit and functional tests pass.
@@ -88,11 +89,11 @@ will install SchoolBell and SchoolTool respectively. Note that SchoolTool
 depends on SchoolBell, so you will have to install both if you want to run
 SchoolTool.
 
-Finally, to setup a SchoolBell / SchoolTool instance, copy the installed script
-into a separate directory and create a config file with the name of the script
-and an extension .conf. A good template can be found in the top level of the
-tarball (.conf.in). Running this script will then run an instance in that
-directory.
+Finally, to setup a SchoolBell / SchoolTool instance, copy the installed
+script, /usr/bin/schooltool, into a separate directory and create a config file
+with the name of the script and an extension .conf. A good template can be
+found in the top level of the tarball (.conf.in). Running this script will then
+run an instance in that directory.
 
 Those interested in installing into a non-standard location should investigate
 the --paths and --default-config option for the install distutils commands.
