@@ -47,7 +47,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 # if we have an Zope3 external, then we use it
 # XXX - try import zope, check version and perhaps error
-zope3 = os.path.join(os.path.dirname(__file__), 'Zope3', 'src')
+zope3 = os.path.join(here, 'Zope3', 'src')
 if os.path.isdir(zope3):
     sys.path.insert(1, zope3)
 from zope.app.locales import extract
@@ -138,9 +138,9 @@ class install(_install):
 
     user_options = _install.user_options + [
             ('paths=', None, "a semi-colon separated list of paths that should"
-                " be added to the python path on script startup"),
+             " be added to the python path on script startup"),
             ('default-config=', None, "location of the default server config"
-                    " file")]
+             " file")]
 
     def initialize_options(self):
         self.paths = None
@@ -160,9 +160,9 @@ class install_scripts(_install_scripts):
 
     user_options = _install_scripts.user_options + [
             ('paths=', None, "a semi-colon separated list of paths that should"
-                " be added to the python path on script startup"),
+             " be added to the python path on script startup"),
             ('default-config=', None, "location of the default server config"
-                    " file")]
+             " file")]
 
     def initialize_options(self):
         self.paths = None
