@@ -47,7 +47,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 # if we have an Zope3 external, then we use it
 # XXX - try import zope, check version and perhaps error
-zope3 = os.path.join(os.dirname(__file__), 'Zope3', 'src')
+zope3 = os.path.join(os.path.dirname(__file__), 'Zope3', 'src')
 if os.path.isdir(zope3):
     sys.path.insert(1, zope3)
 from zope.app.locales import extract
