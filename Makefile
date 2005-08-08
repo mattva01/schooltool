@@ -19,7 +19,7 @@ all: build
 
 .PHONY: build
 build:
-	cd Zope3 && $(PYTHON) setup.py build_ext -i
+	[ ! -d Zope3 ] || cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) setup.py build
 	$(PYTHON) remove-stale-bytecode.py
 
@@ -36,7 +36,7 @@ realclean: clean
 	rm -f MANIFEST
 	rm -rf dist
 
-.PHONY: build
+.PHONY: test
 test: build
 	LC_ALL="C" $(PYTHON) test.py $(TESTFLAGS)
 
