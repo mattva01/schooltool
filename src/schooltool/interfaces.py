@@ -28,7 +28,7 @@ from zope.interface import Interface, Attribute, implements
 from zope.app.location.interfaces import ILocation
 from zope.schema.interfaces import IField
 from zope.schema import Field, Object, Int, Text, TextLine, List, Set, Tuple
-from zope.schema import Dict, Date, Timedelta, Bool, Choice
+from zope.schema import Dict, Date, Timedelta, Bool, Choice, Object
 from zope.app.container.interfaces import IContainer, IContained
 from zope.app.container.constraints import contains, containers
 
@@ -188,9 +188,12 @@ class ISchoolToolApplication(sb.ISchoolBellApplication, ITimetabled):
         'resources' - IResourceContainer
         'terms' - ITermContainer
         'ttschemas' - ITimetableSchemaContainer
+
     """
 
-    calendar = Attribute("School Calendar.")
+    calendar = Object(
+            title=u"School calendar",
+            schema=sb.ISchoolBellCalendar)
 
 
 class IApplicationPreferences(sb.IApplicationPreferences):

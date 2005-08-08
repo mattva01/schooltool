@@ -710,7 +710,7 @@ class TimetableDict(PersistentDict):
     popitem = _not_implemented
 
 
-class TimetabledMixin:
+class TimetabledMixin(object):
     """A mixin providing ITimetabled with the default semantics of
     timetable composition by membership and logic for searching for
     ICompositeTimetableProvider facets.

@@ -63,9 +63,10 @@ from schooltool.relationships import URISectionOfCourse
 from schooltool.timetable import TermContainer, TimetableSchemaContainer
 from schooltool.timetable import TimetabledMixin
 
+
 class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer,
                             TimetabledMixin):
-    """The main SchoolTool application object"""
+    """The main SchoolTool application object."""
 
     implements(ISchoolToolApplication, IAttributeAnnotatable)
 
