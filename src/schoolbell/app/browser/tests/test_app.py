@@ -35,6 +35,7 @@ from zope.app.component.hooks import setSite
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 from schoolbell.app.browser.tests.setup import setUpSessions
+from schoolbell.app.browser.tests.setup import setUpSchoolBellSite
 
 
 def doctest_SchoolBellApplicationView():
@@ -283,7 +284,7 @@ def doctest_GroupListView():
     One requirement: the person has to know where he is.
 
         >>> from schoolbell.app.app import SchoolBellApplication
-        >>> app = SchoolBellApplication()
+        >>> app = setUpSchoolBellSite()
         >>> directlyProvides(app, IContainmentRoot)
         >>> app['persons']['ignas'] = person
 
@@ -405,7 +406,7 @@ def doctest_MemberListView():
     We need these objects to live in an application:
 
         >>> from schoolbell.app.app import SchoolBellApplication
-        >>> app = SchoolBellApplication()
+        >>> app = setUpSchoolBellSite()
         >>> directlyProvides(app, IContainmentRoot)
         >>> app['groups']['pov'] = pov
         >>> app['persons']['gintas'] = gintas
@@ -824,7 +825,7 @@ def doctest_PersonAddView():
     Let's create a PersonContainer
 
         >>> from schoolbell.app.app import SchoolBellApplication
-        >>> app = SchoolBellApplication()
+        >>> app = setUpSchoolBellSite()
         >>> pc = app['persons']
 
     Now let's create a PersonAddView for the container

@@ -47,13 +47,46 @@
 
   <!-- traversal adapters -->
   <!-- the multiplexer traversers for schoolbell objects -->
+
+  <!-- XXX: Band-aid to make application work. I think registering the -->
+  <!--      traverser separately for IPerson, IGroup and IResource is -->
+  <!--      okay, but not great (should have a separate ST directive or -->
+  <!--      special interface). For this first directive for the -->
+  <!--      container we really should have a special layer or a special -->
+  <!--      ST interface; I prefer the first suggestion. (SR) -->
   <view
-      for="schoolbell.app.interfaces.IAdaptableToSchoolBellApplication"
+      for="zope.app.container.interfaces.IContainer"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.IPublishTraverse"
       factory=".RestPublishTraverse"
       permission="zope.Public"
       />
+
+  <view
+      for="schoolbell.app.interfaces.IPerson"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory=".RestPublishTraverse"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IGroup"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory=".RestPublishTraverse"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schoolbell.app.interfaces.IResource"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory=".RestPublishTraverse"
+      permission="zope.Public"
+      />
+
+  <!-- End band-aid -->
 
   <view
       for="schoolbell.app.interfaces.ISchoolBellApplication"

@@ -76,15 +76,6 @@ def doctest_SchoolBellApplication():
         >>> resources.__name__
         u'resources'
 
-    Containers are adaptable to ISchoolBellApplication
-
-        >>> ISchoolBellApplication(persons) is app
-        True
-        >>> ISchoolBellApplication(groups) is app
-        True
-        >>> ISchoolBellApplication(resources) is app
-        True
-
     SchoolBellApplication is also a calendar owner:
 
         >>> from schoolbell.app.interfaces import ICalendarOwner
@@ -244,8 +235,6 @@ def doctest_Person():
         >>> from schoolbell.app.app import SchoolBellApplication
         >>> app = SchoolBellApplication()
         >>> app['persons']['guest'] = person
-        >>> ISchoolBellApplication(person) is app
-        True
 
     """
 
@@ -330,16 +319,6 @@ def doctest_Group():
         'Illuminati'
         >>> illuminati.description
         'Secret Group'
-
-    Groups can be adapted to ISchoolBellApplication
-
-        >>> from schoolbell.app.interfaces import ISchoolBellApplication
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> app = SchoolBellApplication()
-        >>> app['groups']['friends'] = group
-        >>> ISchoolBellApplication(group) is app
-        True
-
     """
 
 
@@ -359,15 +338,6 @@ def doctest_Resource():
         'Blender'
         >>> blender.description
         "It's broken."
-
-    Resources can be adapted to ISchoolBellApplication
-
-        >>> from schoolbell.app.interfaces import ISchoolBellApplication
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> app = SchoolBellApplication()
-        >>> app['resources']['book1'] = resource
-        >>> ISchoolBellApplication(resource) is app
-        True
 
     Resources can be tagged as locations, the default is false:
 

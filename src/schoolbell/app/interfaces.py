@@ -185,14 +185,6 @@ class ICalendarOwner(Interface):
         schema=ISchoolBellCalendar)
 
 
-class IAdaptableToSchoolBellApplication(Interface):
-    """An object that knows which application it came from.
-
-    This is a marker interface.  Objects providing this interface can be
-    adapted to ISchoolBellApplication.
-    """
-
-
 class IGroupMember(Interface):
     """An object that knows the groups it is a member of."""
 
@@ -266,13 +258,13 @@ class IPerson(IReadPerson, IWritePerson, ICalendarOwner):
     """
 
 
-class IPersonContainer(IContainer, IAdaptableToSchoolBellApplication):
+class IPersonContainer(IContainer):
     """Container of persons."""
 
     contains(IPerson)
 
 
-class IPersonContained(IPerson, IContained, IAdaptableToSchoolBellApplication):
+class IPersonContained(IPerson, IContained):
     """Person contained in an IPersonContainer."""
 
     containers(IPersonContainer)
@@ -360,13 +352,13 @@ class IGroup(ICalendarOwner):
     members = Attribute("""Members of the group (see IRelationshipProperty)""")
 
 
-class IGroupContainer(IContainer, IAdaptableToSchoolBellApplication):
+class IGroupContainer(IContainer):
     """Container of groups."""
 
     contains(IGroup)
 
 
-class IGroupContained(IGroup, IContained, IAdaptableToSchoolBellApplication):
+class IGroupContained(IGroup, IContained):
     """Group contained in an IGroupContainer."""
 
     containers(IGroupContainer)
@@ -391,14 +383,13 @@ class IResource(ICalendarOwner):
         required=False,
         default=False)
 
-class IResourceContainer(IContainer, IAdaptableToSchoolBellApplication):
+class IResourceContainer(IContainer):
     """Container of resources."""
 
     contains(IResource)
 
 
-class IResourceContained(IResource, IContained,
-                         IAdaptableToSchoolBellApplication):
+class IResourceContained(IResource, IContained):
     """Group contained in an IGroupContainer."""
 
     containers(IResourceContainer)

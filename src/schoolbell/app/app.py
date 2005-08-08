@@ -87,10 +87,6 @@ class PersonContainer(BTreeContainer):
 
     implements(IPersonContainer, IAttributeAnnotatable)
 
-    def __conform__(self, protocol):
-        if protocol is ISchoolBellApplication:
-            return self.__parent__
-
     def __setitem__(self, key, person):
         """See `IWriteContainer`
 
@@ -105,19 +101,11 @@ class GroupContainer(BTreeContainer):
 
     implements(IGroupContainer, IAttributeAnnotatable)
 
-    def __conform__(self, protocol):
-        if protocol is ISchoolBellApplication:
-            return self.__parent__
-
 
 class ResourceContainer(BTreeContainer):
     """Container of resources."""
 
     implements(IResourceContainer, IAttributeAnnotatable)
-
-    def __conform__(self, protocol):
-        if protocol is ISchoolBellApplication:
-            return self.__parent__
 
 
 class SimpleNameChooser(NameChooser):
@@ -203,10 +191,6 @@ class Person(Persistent, Contained):
 
     def hasPassword(self):
         return self._hashed_password is not None
-
-    def __conform__(self, protocol):
-        if protocol is ISchoolBellApplication:
-            return self.__parent__.__parent__
 
 
 class PersonPreferences(Persistent):
@@ -305,11 +289,7 @@ class Group(Persistent, Contained):
         self.title = title
         self.description = description
         self.calendar = Calendar(self)
-
-    def __conform__(self, protocol):
-        if protocol is ISchoolBellApplication:
-            return self.__parent__.__parent__
-
+        
 
 class Resource(Persistent, Contained):
     """Resource."""
@@ -323,10 +303,6 @@ class Resource(Persistent, Contained):
         self.description = description
         self.calendar = Calendar(self)
         self.isLocation = isLocation
-
-    def __conform__(self, protocol):
-        if protocol is ISchoolBellApplication:
-            return self.__parent__.__parent__
 
 
 def getSchoolBellApplication():

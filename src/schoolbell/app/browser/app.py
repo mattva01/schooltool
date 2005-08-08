@@ -207,7 +207,7 @@ class GroupListView(BrowserView):
 
     def getPotentialGroups(self):
         """Return a list of groups the current user is not a member of."""
-        groups = ISchoolBellApplication(self.context)['groups']
+        groups = getSchoolBellApplication()['groups']
         return [group for group in groups.values()
                 if checkPermission('schoolbell.manageMembership', group)
                 and group not in self.context.groups]
@@ -273,7 +273,7 @@ class MemberViewPersons(BrowserView):
 
     def getPotentialMembers(self):
         """Return a list of all possible members."""
-        container = ISchoolBellApplication(self.context)[self.container_name]
+        container = getSchoolBellApplication()[self.container_name]
         return [m for m in container.values() if m not in self.context.members]
 
     def searchPotentialMembers(self, s):
@@ -527,7 +527,7 @@ class PersonAddView(AddView):
 
     def getAllGroups(self):
         """Return a list of all groups in the system."""
-        return ISchoolBellApplication(self.context)['groups'].values()
+        return getSchoolBellApplication()['groups'].values()
 
     def create(self, title, username, password, photo):
         person = self._factory(username=username, title=title)
