@@ -38,7 +38,7 @@ from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.site.servicecontainer import SiteManagerContainer
 from zope.app.location.interfaces import ILocation
 from zope.app.annotation.interfaces import IAnnotations
-from zope.app.component.hooks import setSite, getSite
+from zope.app.component.hooks import getSite
 
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IPersonContainer, IPersonContained
