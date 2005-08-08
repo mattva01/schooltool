@@ -33,6 +33,7 @@ if sys.version_info < (2, 3):
 
 import os
 import re
+import tempfile
 from distutils.core import setup
 from distutils.command.install import install as _install
 from distutils.command.install_data import install_data as _install_data
@@ -41,6 +42,53 @@ from distutils.command.install_scripts \
 from distutils.archive_util import ARCHIVE_FORMATS
 from distutils.dir_util import mkpath
 from distutils.spawn import spawn
+
+here = os.path.abspath(os.path.dirname(__file__))
+
+# if we have an Zope3 external, then we use it
+# XXX - try import zope, check version and perhaps error
+zope3 = os.path.join(os.dirname(__file__), 'Zope3', 'src')
+if os.path.isdir(zope3):
+    sys.path.insert(1, zope3)
+from zope.app.locales import extract
+
+# prepend the local schoolbell
+sys.path.insert(0, os.path.join(here, 'src'))
+import schoolbell
+
+#
+# Translations
+#
+
+def build_pot():
+    """Build the schoolbell *.pot."""
+    # where is eveything
+    here = os.path.abspath(os.path.dirname(__file__))
+    domain = 'schoolbell'
+    path = os.path.join(here, 'src')
+    output_dir = os.path.join(here, 'src', 'schoolbell', 'app', 'locales')
+    base_dir = os.path.join(here, 'src', 'schoolbell')
+
+    # Setup
+    (zcml, zcml_filename) = tempfile.mkstemp()
+    file = open(zcml_filename, 'w')
+    file.write("""<configure xmlns="http://namespaces.zope.org/zope">
+                     <include package="zope.app" />
+                     <include package="schoolbell.app" />
+                  </configure>""")
+    file.close()
+
+    output_file = os.path.join(path, output_dir, domain + '.pot')
+
+    # Create the POT
+    maker = extract.POTMaker(output_file, path)
+    maker.add(extract.py_strings(path, domain), base_dir)
+    maker.add(extract.zcml_strings(path, domain, site_zcml=zcml_filename), base_dir)
+    maker.add(extract.tal_strings(path, domain), base_dir)
+    maker.write()
+
+    # Cleanup
+    os.remove(zcml_filename)
 
 
 #
@@ -178,6 +226,12 @@ if sys.version_info < (2, 3):
             del kwargs["classifiers"]
         _setup(**kwargs)
 
+# Re-build the translations every time setup.py is invoked. Really nasty,
+# but safe and easy.
+
+print "Extracting translations"
+build_pot()
+
 # find the data files
 # this regex should be similar to the MANIFEST.in recursive includes
 datafile_re = re.compile(r'.*\.(pt|js|png|gif|css|mo'
@@ -195,11 +249,6 @@ for root, dirs, files in os.walk(os.path.join('src', 'schoolbell')):
     # If any, add them to the files to be copied
     if tmp:
         data_files.append((root[4:], tmp))
-
-# get the version number of schoolbell
-sys.path.insert(1, os.path.join(os.path.dirname(__file__), 'Zope3', 'src'))
-sys.path.insert(1, os.path.join(os.path.dirname(__file__), 'src'))
-import schoolbell
 
 # Final setup of SchoolBell
 setup(name="schoolbell",

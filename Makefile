@@ -20,6 +20,7 @@ all: build
 .PHONY: build
 build:
 	cd Zope3 && $(PYTHON) setup.py build_ext -i
+	$(PYTHON) setup.py build
 	$(PYTHON) remove-stale-bytecode.py
 
 .PHONY: clean
@@ -47,14 +48,8 @@ ftest: build
 run: build
 	$(PYTHON) schoolbell-server.py
 
-Zope3/principals.zcml:
-	cp Zope3/sample_principals.zcml $@
-
-Zope3/package-includes/schoolbell-configure.zcml:
-	echo '<include package="schoolbell.app" />' > $@
-
 .PHONY: dist
-dist: realclean build extract-translations update-translations clean
+dist: realclean build update-translations clean
 	rm -rf dist
 	find . -name '*.py[dco]' -exec rm -f {} \;
 	./setup.py sdist --formats=schooltooltgz
@@ -66,10 +61,10 @@ signtar: dist
 	mv dist/md5sum.asc dist/md5sum
 
 .PHONY: extract-translations
-extract-translations: Zope3/principals.zcml Zope3/package-includes/schoolbell-configure.zcml
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) \
-		Zope3/utilities/i18nextract.py -d schoolbell \
-			-o app/locales -p src/schoolbell schoolbell
+extract-translations:
+	# here for backwards compatibility only,
+	# setup.py does the work!
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) setup.py
 
 .PHONY: update-translations
 update-translations:
@@ -80,7 +75,7 @@ update-translations:
 
 .PHONY: update-rosetta-pot
 update-rosetta-pot:
-	$(MAKE) build extract-translations
+	$(PYTHON) setup.py build
 	touch ../launchpad_cookies
 	chmod 0600 ../launchpad_cookies ../launchpad_pwd
 	curl -kc ../launchpad_cookies -D ../header_login\
