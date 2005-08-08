@@ -73,14 +73,13 @@ class ICourse(Interface):
             see schoolbell.relationship.interfaces.IRelationshipProperty.""")
 
 
-class ICourseContainer(IContainer, sb.IAdaptableToSchoolBellApplication):
+class ICourseContainer(IContainer):
     """Container of Courses."""
 
     contains(ICourse)
 
 
-class ICourseContained(ICourse, IContained,
-                       sb.IAdaptableToSchoolBellApplication):
+class ICourseContained(ICourse, IContained):
     """Courses contained in an ICourseContainer."""
 
     containers(ICourseContainer)
@@ -127,8 +126,7 @@ class ISectionContainer(IContainer):
     contains(ISection)
 
 
-class ISectionContained(ISection, IContained,
-                       sb.IAdaptableToSchoolBellApplication):
+class ISectionContained(ISection, IContained):
     """Sections in a SectionContainer."""
 
     containers(ISectionContainer)

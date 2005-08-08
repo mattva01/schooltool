@@ -243,10 +243,6 @@ class CourseContainer(BTreeContainer):
 
     implements(ICourseContainer, IAttributeAnnotatable)
 
-    def __conform__(self, protocol):
-        if protocol is sb.ISchoolBellApplication:
-            return self.__parent__
-
 
 class Course(Persistent, Contained, TimetabledMixin):
 
@@ -258,11 +254,6 @@ class Course(Persistent, Contained, TimetabledMixin):
     def __init__(self, title=None, description=None):
         self.title = title
         self.description = description
-
-    # XXX not sure this is needed anymore, and it should be SchoolTool anyway
-    def __conform__(self, protocol):
-        if protocol is sb.ISchoolBellApplication:
-            return self.__parent__.__parent__
 
 
 class Section(Persistent, Contained, TimetabledMixin):
@@ -317,19 +308,11 @@ class Section(Persistent, Contained, TimetabledMixin):
         self.location = location
         TimetabledMixin.__init__(self)
 
-    def __conform__(self, protocol):
-        if protocol is sb.ISchoolBellApplication:
-            return self.__parent__.__parent__
-
 
 class SectionContainer(BTreeContainer):
     """Container of Sections."""
 
     implements(ISectionContainer, IAttributeAnnotatable)
-
-    def __conform__(self, protocol):
-        if protocol is sb.ISchoolBellApplication:
-            return self.__parent__
 
 
 class PersonContainer(sb.PersonContainer):

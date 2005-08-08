@@ -37,7 +37,6 @@ from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from schoolbell.app.browser import app as sb
 from schoolbell.app.browser import cal as sbcal
 from schoolbell.app.membership import isTransitiveMember
-from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.relationship import getRelatedObjects
 from schoolbell.batching import Batch
 
@@ -238,7 +237,7 @@ class SectionInstructorView(BrowserView):
 
     def getPotentialInstructors(self):
         """Return a list of all possible members."""
-        container = ISchoolBellApplication(self.context)['persons']
+        container = getSchoolToolApplication()['persons']
         return [p for p in container.values() if p not in
                 self.context.instructors]
 
@@ -278,7 +277,7 @@ class SectionLearnerView(BrowserView):
 
     def getPotentialLearners(self):
         """Return a list of all possible members."""
-        container = ISchoolBellApplication(self.context)['persons']
+        container = getSchoolToolApplication()['persons']
         return container.values()
 
     def update(self):
@@ -308,7 +307,7 @@ class SectionLearnerGroupView(SectionLearnerView):
 
     def getPotentialLearners(self):
         """Return a list of all possible members."""
-        container = ISchoolBellApplication(self.context)['groups']
+        container = getSchoolToolApplication()['groups']
         return container.values()
 
 
@@ -346,7 +345,7 @@ class PersonView(sb.PersonView):
 
     def learnerOf(self):
         results = []
-        sections = ISchoolBellApplication(self.context)['sections'].values()
+        sections = getSchoolToolApplication()['sections'].values()
         for section in sections:
             if self.context in section.members:
                 results.append({'section': section, 'group': None})

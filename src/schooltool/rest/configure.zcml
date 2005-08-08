@@ -2,6 +2,35 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+  <!-- XXX: Temporary band-aid -->
+
+  <view
+      for="schooltool.interfaces.ICourse"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory="schoolbell.app.rest.RestPublishTraverse"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.timetable.interfaces.ITerm"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory="schoolbell.app.rest.RestPublishTraverse"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.interfaces.ISection"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory="schoolbell.app.rest.RestPublishTraverse"
+      permission="zope.Public"
+      />
+
+  <!-- End of band-aid -->
+
+
   <subscriber
       handler=".restSchoolToolSubscriber"
       for="zope.app.publication.interfaces.IBeforeTraverseEvent"
