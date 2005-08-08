@@ -46,7 +46,8 @@ Building SchoolBell
 -------------------
 
 Run 'make build update-translations' to build the necessary extension modules
-and translations.
+and translations.  You will need to have gettext installed to compile the
+translations.
 
 It is a good idea to run 'make test' and 'make ftest' to check if all the
 essential unit and functional tests pass.
