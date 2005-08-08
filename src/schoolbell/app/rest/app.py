@@ -47,6 +47,7 @@ from schoolbell.app.interfaces import IPersonContainer, IPerson
 from schoolbell.app.interfaces import IPersonPreferences
 from schoolbell.app.browser.cal import CalendarOwnerHTTPTraverser
 
+
 class ApplicationObjectFileFactory(object):
     """A superclass for ApplicationObjectContainer to FileFactory adapters."""
 
@@ -550,7 +551,8 @@ class PersonPreferencesView(View):
         try:
             IPersonPreferences.get(name).validate(value)
         except Exception:
-            raise RestError('Preference value "%s" does not pass validation on "%s"' % (value, name))
+            raise RestError('Preference value "%s" does not'
+                            ' pass validation on "%s"' % (value, name))
 
     def PUT(self):
         """Extract data and validate it.
@@ -559,7 +561,7 @@ class PersonPreferencesView(View):
         RestError.
         """
         data = self.parseData(self.request.bodyFile.read())
-        for name,value in data.items():
+        for name, value in data.items():
             self.validatePreference(name, value)
             setattr(self.preferences, name, value)
 
