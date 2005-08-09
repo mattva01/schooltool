@@ -264,7 +264,7 @@ def doctest_PersonPreferences():
 
     Make sure the attribute stores the correct interface
 
-        >>> from schoolbell.app.app import IPersonPreferences
+        >>> from schoolbell.app.interfaces import IPersonPreferences
         >>> from schoolbell.app.app import getPersonPreferences
         >>> prefs = getPersonPreferences(person)
         >>> verifyObject(IPersonPreferences, prefs)
@@ -296,7 +296,7 @@ def doctest_PersonDetails():
 
     Make sure the attribute stores the correct interface
 
-        >>> from schoolbell.app.app import IPersonDetails
+        >>> from schoolbell.app.interfaces import IPersonDetails
         >>> from schoolbell.app.app import getPersonDetails
         >>> details = getPersonDetails(person)
         >>> verifyObject(IPersonDetails, details)

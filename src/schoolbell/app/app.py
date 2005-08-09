@@ -29,25 +29,19 @@ import calendar
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from zope.component import adapts
+from zope.event import notify
 from zope.interface import implements
-from zope.app.container.btree import BTreeContainer
-from zope.app.container.sample import SampleContainer
-from zope.app.container.contained import Contained
-from zope.app.container.contained import NameChooser
+
+from zope.app.container import btree, sample
+from zope.app.container.contained import Contained, NameChooser
 from zope.app.container.interfaces import INameChooser, IObjectAddedEvent
 from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
-from zope.app.site.servicecontainer import SiteManagerContainer
+from zope.app.component.site import SiteManagerContainer
 from zope.app.location.interfaces import ILocation
 from zope.app.annotation.interfaces import IAnnotations
 from zope.app.component.hooks import getSite
 
-from schoolbell.app.interfaces import ISchoolBellApplication
-from schoolbell.app.interfaces import IPersonContainer, IPersonContained
-from schoolbell.app.interfaces import IPersonPreferences, IPersonDetails
-from schoolbell.app.interfaces import IGroupContainer, IGroupContained
-from schoolbell.app.interfaces import IResourceContainer, IResourceContained
-from schoolbell.app.interfaces import IHavePreferences, IHaveNotes
-from schoolbell.app.interfaces import IApplicationPreferences, IPerson
+from schoolbell.app import interfaces
 from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIMember, URIGroup
 from schoolbell.app.overlay import OverlaidCalendarsProperty
@@ -57,7 +51,7 @@ from schoolbell.relationship import RelationshipProperty
 PERSON_PREFERENCES_KEY = 'schoolbell.app.PersonPreferences'
 
 
-class SchoolBellApplication(Persistent, SampleContainer,
+class SchoolBellApplication(Persistent, sample.SampleContainer,
                             SiteManagerContainer):
     """The main application object.
 
@@ -65,7 +59,7 @@ class SchoolBellApplication(Persistent, SampleContainer,
     or it can be used as the application root object.
     """
 
-    implements(ISchoolBellApplication, IAttributeAnnotatable)
+    implements(interfaces.ISchoolBellApplication, IAttributeAnnotatable)
 
     def __init__(self):
         super(SchoolBellApplication, self).__init__()
@@ -73,20 +67,21 @@ class SchoolBellApplication(Persistent, SampleContainer,
         self['groups'] = GroupContainer()
         self['resources'] = ResourceContainer()
         self.calendar = Calendar(self)
+        notify(interfaces.ApplicationInitializationEvent(self))
 
     def _newContainerData(self):
         return PersistentDict()
 
     def title(self):
         """This is required for the site calendar views to work."""
-        return IApplicationPreferences(self).title
+        return interfaces.IApplicationPreferences(self).title
     title = property(title)
 
 
-class PersonContainer(BTreeContainer):
+class PersonContainer(btree.BTreeContainer):
     """Container of persons."""
 
-    implements(IPersonContainer, IAttributeAnnotatable)
+    implements(interfaces.IPersonContainer, IAttributeAnnotatable)
 
     def __setitem__(self, key, person):
         """See `IWriteContainer`
@@ -94,19 +89,19 @@ class PersonContainer(BTreeContainer):
         Ignores `key` and uses `person.username` as the key.
         """
         key = person.username
-        BTreeContainer.__setitem__(self, key, person)
+        btree.BTreeContainer.__setitem__(self, key, person)
 
 
-class GroupContainer(BTreeContainer):
+class GroupContainer(btree.BTreeContainer):
     """Container of groups."""
 
-    implements(IGroupContainer, IAttributeAnnotatable)
+    implements(interfaces.IGroupContainer, IAttributeAnnotatable)
 
 
-class ResourceContainer(BTreeContainer):
+class ResourceContainer(btree.BTreeContainer):
     """Container of resources."""
 
-    implements(IResourceContainer, IAttributeAnnotatable)
+    implements(interfaces.IResourceContainer, IAttributeAnnotatable)
 
 
 class SimpleNameChooser(NameChooser):
@@ -168,8 +163,8 @@ class SimpleNameChooser(NameChooser):
 class Person(Persistent, Contained):
     """Person."""
 
-    implements(IPersonContained, IHaveNotes, IHavePreferences,
-               IAttributeAnnotatable)
+    implements(interfaces.IPersonContained, interfaces.IHaveNotes,
+               interfaces.IHavePreferences, IAttributeAnnotatable)
 
     photo = None
     username = None
@@ -196,7 +191,7 @@ class Person(Persistent, Contained):
 
 class PersonPreferences(Persistent):
 
-    implements(IPersonPreferences)
+    implements(interfaces.IPersonPreferences)
 
     __parent__ = None
 
@@ -220,7 +215,7 @@ def getPersonPreferences(person):
 
 class PersonDetails(Persistent):
 
-    implements(IPersonDetails)
+    implements(interfaces.IPersonDetails)
 
     __name__ = 'details'
 
@@ -282,7 +277,8 @@ def hash_password(password):
 class Group(Persistent, Contained):
     """Group."""
 
-    implements(IGroupContained, IHaveNotes, IAttributeAnnotatable)
+    implements(interfaces.IGroupContained, interfaces.IHaveNotes,
+               IAttributeAnnotatable)
 
     members = RelationshipProperty(URIMembership, URIGroup, URIMember)
 
@@ -295,7 +291,8 @@ class Group(Persistent, Contained):
 class Resource(Persistent, Contained):
     """Resource."""
 
-    implements(IResourceContained, IHaveNotes, IAttributeAnnotatable)
+    implements(interfaces.IResourceContained, interfaces.IHaveNotes,
+               IAttributeAnnotatable)
 
     isLocation = False # backwards compatibility
 
@@ -309,7 +306,7 @@ class Resource(Persistent, Contained):
 def getSchoolBellApplication():
     """Return the nearest ISchoolBellApplication"""
     candidate = getSite()
-    if ISchoolBellApplication.providedBy(candidate):
+    if interfaces.ISchoolBellApplication.providedBy(candidate):
         return candidate
     else:
         raise ValueError("can't get a SchoolBellApplication")
@@ -320,8 +317,8 @@ class ApplicationPreferences(Persistent):
 
     See schoolbell.app.interfaces.ApplicationPreferences.
     """
-    implements(IApplicationPreferences)
-    adapts(ISchoolBellApplication)
+    implements(interfaces.IApplicationPreferences)
+    adapts(interfaces.ISchoolBellApplication)
 
     title = 'SchoolBell'
 
@@ -345,7 +342,7 @@ def personAppCalendarOverlaySubscriber(event):
     """Add application calendar to overlays of all new persons.
     """
     if IObjectAddedEvent.providedBy(event):
-        if IPerson.providedBy(event.object):
+        if interfaces.IPerson.providedBy(event.object):
             try:
                 app = getSchoolBellApplication()
                 event.object.overlaid_calendars.add(app.calendar)

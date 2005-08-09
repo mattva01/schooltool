@@ -170,7 +170,7 @@
 
   <page
       name="delete.html"
-      for="schoolbell.app.interfaces.IContainer"
+      for="zope.app.container.interfaces.IContainer"
       class="schoolbell.app.browser.app.ContainerDeleteView"
       template="templates/container_delete.pt"
       permission="zope.View"

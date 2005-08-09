@@ -40,15 +40,16 @@ $Id$
 
 import calendar
 
-from zope.interface import Interface, Attribute
-from zope.schema import Text, TextLine, Bytes, Object, Choice, Bool
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
-from zope.app.container.interfaces import IReadContainer, IContainer
-from zope.app.container.interfaces import IContained
-from zope.app.container.constraints import contains, containers
+import zope.interface
+import zope.schema
+
+import zope.app.event.objectevent
+import zope.app.container.constraints
+from zope.app import container
+from zope.app import event
+from zope.app.annotation.interfaces import IAnnotatable
 from zope.app.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILogout
-from zope.app.annotation.interfaces import IAnnotatable
 
 import pytz
 
@@ -88,7 +89,20 @@ def vocabulary(choices):
     value2 | value2 | Title for value2
 
     """
-    return SimpleVocabulary([SimpleTerm(v, title=t) for v, t in choices])
+    return zope.schema.vocabulary.SimpleVocabulary(
+        [zope.schema.vocabulary.SimpleTerm(v, title=t) for v, t in choices])
+
+
+# Events
+
+class IApplicationInitializationEvent(event.interfaces.IObjectEvent):
+    """The SchoolTool application is being initiazed.
+
+    Usually subscribers add soemthing to the initialization process.
+    """
+
+class ApplicationInitializationEvent(event.objectevent.ObjectEvent):
+    zope.interface.implements(IApplicationInitializationEvent)
 
 
 class ISchoolBellCalendar(IEditCalendar, ILocation):
@@ -97,14 +111,17 @@ class ISchoolBellCalendar(IEditCalendar, ILocation):
     Calendars stored within all provide ISchoolBellCalendarEvent.
     """
 
-    title = TextLine(title=u"Title",
-                     description=u"Title of the calendar.")
+    title = zope.schema.TextLine(
+        title=u"Title",
+        description=u"Title of the calendar.")
 
 
-class ISchoolBellCalendarEvent(ICalendarEvent, IContained):
+class ISchoolBellCalendarEvent(ICalendarEvent,
+                               container.interfaces.IContained):
     """An event that is contained in a SchoolBell calendar."""
 
-    resources = Attribute("""Resources that are booked by this event""")
+    resources = zope.interface.Attribute(
+        """Resources that are booked by this event""")
 
     def bookResource(resource):
         """Book a resource."""
@@ -120,18 +137,18 @@ class IHaveNotes(IAnnotatable):
     """
 
 
-class INote(Interface):
+class INote(zope.interface.Interface):
     """A note."""
 
-    title = TextLine(
+    title = zope.schema.TextLine(
         title=_("Title"),
         description=_("Title of the note."))
 
-    body = Text(
+    body = zope.schema.Text(
         title=_("Body"),
         description=_("Body of the note."))
 
-    privacy = Choice(
+    privacy = zope.schema.Choice(
         title=_("Privacy"),
         values=('private', 'public'),
         description=u"""
@@ -145,15 +162,15 @@ class INote(Interface):
 
         """)
 
-    owner = Attribute("""IPerson who owns this note""")
+    owner = zope.interface.Attribute("""IPerson who owns this note""")
 
-    unique_id = TextLine(
+    unique_id = zope.schema.TextLine(
         title=u"UID",
         required=False,
         description=u"""A globally unique id for this note.""")
 
 
-class INotes(Interface):
+class INotes(zope.interface.Interface):
     """A set of notes.
 
     Objects that can have notes are those that have an adapter to INotes.
@@ -177,18 +194,18 @@ class INotes(Interface):
         """Remove all notes."""
 
 
-class ICalendarOwner(Interface):
+class ICalendarOwner(zope.interface.Interface):
     """An object that has a calendar."""
 
-    calendar = Object(
+    calendar = zope.schema.Object(
         title=u"The object's calendar.",
         schema=ISchoolBellCalendar)
 
 
-class IGroupMember(Interface):
+class IGroupMember(zope.interface.Interface):
     """An object that knows the groups it is a member of."""
 
-    groups = Attribute("""Groups (see IRelationshipProperty)""")
+    groups = zope.interface.Attribute("""Groups (see IRelationshipProperty)""")
 
 
 class IHavePreferences(IAnnotatable):
@@ -198,19 +215,20 @@ class IHavePreferences(IAnnotatable):
 class IReadPerson(IGroupMember):
     """Publically accessible part of IPerson."""
 
-    title = TextLine(
+    title = zope.schema.TextLine(
         title=_("Full name"),
         description=_("Name that should be displayed"))
 
-    photo = Bytes(
+    photo = zope.schema.Bytes(
         title=_("Photo"),
         required=False,
         description=_("""Photo (in JPEG format)"""))
 
-    username = TextLine(
+    username = zope.schema.TextLine(
         title=_("Username"))
 
-    overlaid_calendars = Attribute("""Additional calendars to overlay.
+    overlaid_calendars = zope.interface.Attribute(
+        """Additional calendars to overlay.
 
             A user may select a number of calendars that should be displayed in
             the calendar view, in addition to the user's calendar.
@@ -233,7 +251,7 @@ class IReadPerson(IGroupMember):
         """
 
 
-class IWritePerson(Interface):
+class IWritePerson(zope.interface.Interface):
     """Protected part of IPerson."""
 
     def setPassword(password):
@@ -258,35 +276,36 @@ class IPerson(IReadPerson, IWritePerson, ICalendarOwner):
     """
 
 
-class IPersonContainer(IContainer):
+class IPersonContainer(container.interfaces.IContainer):
     """Container of persons."""
 
-    contains(IPerson)
+    container.constraints.contains(IPerson)
 
 
-class IPersonContained(IPerson, IContained):
+class IPersonContained(IPerson, container.interfaces.IContained):
     """Person contained in an IPersonContainer."""
 
-    containers(IPersonContainer)
+    container.constraints.containers(IPersonContainer)
 
 
-class IPersonPreferences(Interface):
+class IPersonPreferences(zope.interface.Interface):
     """Preferences stored in an annotation on a person."""
 
-    __parent__ = Attribute("""Person who owns these preferences""")
+    __parent__ = zope.interface.Attribute(
+        """Person who owns these preferences""")
 
-    timezone = Choice(
+    timezone = zope.schema.Choice(
         title=_("Time Zone"),
         description=_("Time Zone used to display your calendar"),
         values=pytz.common_timezones)
 
-    timeformat = Choice(
+    timeformat = zope.schema.Choice(
         title=_("Time Format"),
         description=_("Time Format"),
         vocabulary=vocabulary([("%H:%M", _("HH:MM")),
                                ("%I:%M %p", _("HH:MM am/pm"))]))
 
-    dateformat = Choice(
+    dateformat = zope.schema.Choice(
         title=_("Date Format"),
         description=_("Date Format"),
         vocabulary=vocabulary([("%m/%d/%y", _("MM/DD/YY")),
@@ -294,45 +313,45 @@ class IPersonPreferences(Interface):
                                ("%d %B, %Y", _("Day Month, Year"))]))
 
     # SUNDAY and MONDAY are integers, 6 and 0 respectivley
-    weekstart = Choice(
+    weekstart = zope.schema.Choice(
         title=_("Week starts on:"),
         description=_("Start display of weeks on Sunday or Monday"),
         vocabulary=vocabulary([(calendar.SUNDAY, _("Sunday")),
                                (calendar.MONDAY, _("Monday"))]))
 
 
-class IPersonDetails(Interface, ILocation):
+class IPersonDetails(ILocation):
     """Contacts details stored as an annotation on a Person."""
 
-    nickname = TextLine(
+    nickname = zope.schema.TextLine(
         title=_("Nickname"),
         required=False,
         description=_("A short nickname for this person."))
 
-    primary_email = TextLine(
+    primary_email = zope.schema.TextLine(
         title=_("Primary Email"),
         required=False)
 
-    secondary_email = TextLine(
+    secondary_email = zope.schema.TextLine(
         title=_("Secondary Email"),
         required=False)
 
-    primary_phone = TextLine(
+    primary_phone = zope.schema.TextLine(
         title=_("Primary phone"),
         required=False,
         description=_("Recommended telephone number."))
 
-    secondary_phone = TextLine(
+    secondary_phone = zope.schema.TextLine(
         title=_("Secondary phone"),
         required=False,
         description=_("Secondary telephone number."))
 
-    home_page = TextLine(
+    home_page = zope.schema.TextLine(
         title=_("Website"),
         required=False,
         description=_("Website or weblog."))
 
-    mailing_address = Text(
+    mailing_address = zope.schema.Text(
         title=_("Mailing address"),
         required=False)
 
@@ -340,62 +359,64 @@ class IPersonDetails(Interface, ILocation):
 class IGroup(ICalendarOwner):
     """Group."""
 
-    title = TextLine(
+    title = zope.schema.TextLine(
         title=_("Title"),
         description=_("Title of the group."))
 
-    description = Text(
+    description = zope.schema.Text(
         title=_("Description"),
         required=False,
         description=_("Description of the group."))
 
-    members = Attribute("""Members of the group (see IRelationshipProperty)""")
+    members = zope.interface.Attribute(
+        """Members of the group (see IRelationshipProperty)""")
 
 
-class IGroupContainer(IContainer):
+class IGroupContainer(container.interfaces.IContainer):
     """Container of groups."""
 
-    contains(IGroup)
+    container.constraints.contains(IGroup)
 
 
-class IGroupContained(IGroup, IContained):
+class IGroupContained(IGroup, container.interfaces.IContained):
     """Group contained in an IGroupContainer."""
 
-    containers(IGroupContainer)
+    container.constraints.containers(IGroupContainer)
 
 
 class IResource(ICalendarOwner):
     """Resource."""
 
-    title = TextLine(
+    title = zope.schema.TextLine(
         title=_("Title"),
         description=_("Title of the resource."))
 
-    description = Text(
+    description = zope.schema.Text(
         title=_("Description"),
         required=False,
         description=_("Description of the resource."))
 
-    isLocation = Bool(
+    isLocation = zope.schema.Bool(
         title=_("A Location."),
         description=_(
             """Indicate this resource is a location, like a classroom."""),
         required=False,
         default=False)
 
-class IResourceContainer(IContainer):
+class IResourceContainer(container.interfaces.IContainer):
     """Container of resources."""
 
-    contains(IResource)
+    container.constraints.contains(IResource)
 
 
-class IResourceContained(IResource, IContained):
+class IResourceContained(IResource, container.interfaces.IContained):
     """Group contained in an IGroupContainer."""
 
-    containers(IResourceContainer)
+    container.constraints.containers(IResourceContainer)
 
 
-class ISchoolBellApplication(IReadContainer, ICalendarOwner):
+class ISchoolBellApplication(container.interfaces.IReadContainer,
+                             ICalendarOwner):
     """The main SchoolBell application object.
 
     The application is a read-only container with the following items:
@@ -408,22 +429,22 @@ class ISchoolBellApplication(IReadContainer, ICalendarOwner):
     it can be used as the application root object.
     """
 
-    title = TextLine(
+    title = zope.schema.TextLine(
         title=_("Title"),
         description=_("Title of the application."))
 
 
-class IApplicationPreferences(Interface):
+class IApplicationPreferences(zope.interface.Interface):
     """Preferences stored in an annotation on the SchoolBellApplication."""
 
-    title = TextLine(
+    title = zope.schema.TextLine(
         title=_("Title"),
         required=False,
         description=_("""The name for the school or organization running
             this server.  This will be displayed on the public calendar, the
             bottom of all pages and in the page title."""))
 
-    frontPageCalendar = Bool(
+    frontPageCalendar = zope.schema.Bool(
         title=_("Front Page Calendar"),
         description=_("""Display site-wide calendar as the front page of the
             site."""),
@@ -444,7 +465,7 @@ class ISchoolBellAuthentication(IAuthentication, ILogout):
         """Forget the username and password stored in a session"""
 
 
-class IWriteCalendar(Interface):
+class IWriteCalendar(zope.interface.Interface):
 
     def write(data, charset='UTF-8'):
         """Update the calendar data
