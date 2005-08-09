@@ -25,9 +25,7 @@ System requirements
   (Debian users will need either python2.3 and python2.3-xml, or
   python2.4 and python2.4-xml packages)
 
-- Zope X3 (http://www.zope.org/)
-  (Users will require Zope X3 development trunk revision,
-  Zope libraries of this revision are included with the distribution)
+- Zope 3.1 (http://www.zope.org/Products/Zope3)
 
 - libxml2 Python bindings (http://xmlsoft.org/).  Windows users can find
   binaries here:  http://users.skynet.be/sbi/libxml-python/
@@ -36,10 +34,6 @@ System requirements
   Arial and Times New Roman TrueType fonts.  ReportLab is only needed if
   you want to generate PDF calendars.  To enable PDF support you will
   need to specify the path to fonts in the configuration file.
-
-- Development environment and a C compiler
-  (pre-compiled binaries are available for Windows users at the SchoolBell
-  website)
 
 
 Building SchoolBell
@@ -56,17 +50,22 @@ essential unit and functional tests pass.
 Installing and Configuring with Distutils (optional)
 ----------------------------------------------------
 
+WARNING: distutils does not yet take care of removing old packages or ensuring
+that dependencies are correct. If you don't know how to resolve these issues
+manually, you should probably use one of the packages or run SchoolBell from
+an unpacked tarball/subversion checkout.
+
 It is possible to install SchoolBell using python distutils.  To do this, you
 have to use one of the distributed tarballs/zipfiles, which you unpack in a
-directory with the tools appropriate to your OS.  First, it is necessary to
-install the version of Zope included with the tarballs, this can be done by
-running
+directory with the tools appropriate to your OS.
 
-python setup.py install
+First run the tests from the tarball to make sure all dependencies are
+installed and everything is ok (you may need to add the location of the
+Zope modules to the python path):
 
-from the Zope3/ directory included with the SchoolBell distribution.  From the
-top level directory of an unpacked SchoolBell tarball/zipfile SchoolBell can be
-installed with:
+test.py -uf
+
+Then install with:
 
 python setup.py install
 
@@ -77,9 +76,6 @@ extension .conf.  A good template can be found in the top level of the tarball
 
 Those interested in installing into a non-standard location should investigate
 the --paths and --default-config option for the install distutils commands.
-
-NOTE: If you are using a Linux distribution for which a SchoolBell
-package exists, you should consider using those packages instead.
 
 
 Running SchoolBell
@@ -131,7 +127,6 @@ Project structure
   schoolbell.conf.in    sample configuration file for SchoolBell
 
   build/                temporary files are placed here during build process
-  debian/               Debian packaging support
   doc/                  documentation
   src/                  source code
     schoolbell/         Python 'schoolbell' package
@@ -229,17 +224,9 @@ terms of the GNU General Public License as published by the Free
 Software Foundation; either version 2 of the License, or (at your option)
 any later version.
 
-Files in the following directories are (c) their respective owners. See
-the individual files and directories for details of the licences.
-
-  Zope3
-
 Files in the same directory as this README file are (c) Shuttleworth
 Foundation, with the exception of GPL, which is a copy of the Free Software
 Foundation's General Public License, and is (c) FSF.
-
-Files in the debian/ subdirectory are (c) Shuttleworth Foundation and
-contributors.
 
 
 SchoolBell is distributed in the hope that it will be useful,
