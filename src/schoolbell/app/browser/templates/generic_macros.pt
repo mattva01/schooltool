@@ -1,0 +1,11 @@
+<metal:block define-macro="stylesheets">
+</metal:block>
+
+<metal:block define-macro="title">
+  <title i18n:translate="">SchoolBell</title>
+</metal:block>
+
+<metal:block define-macro="serverinfo">
+  <span i18n:translate="">Server Running SchoolBell</span>
+  <span tal:content="modules/schoolbell/VERSION"/>
+</metal:block>

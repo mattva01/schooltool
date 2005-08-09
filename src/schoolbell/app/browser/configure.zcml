@@ -697,6 +697,14 @@
       />
 
   <page
+      name="generic_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/generic_macros.pt"
+      layer=".skin.ISchoolBellLayer"
+      />
+
+  <page
       name="widget_macros"
       for="*"
       permission="zope.View"

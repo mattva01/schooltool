@@ -35,7 +35,7 @@ class StandardMacros(basicskin.standardmacros.StandardMacros):
 class SchoolToolMacros(BrowserView):
     zope.interface.implements(zope.interface.common.mapping.IItemMapping)
 
-    macro_pages = ('calendar_macros',)
+    macro_pages = ('calendar_macros', 'generic_macros')
 
     def __getitem__(self, key):
         name = key + '_macros'

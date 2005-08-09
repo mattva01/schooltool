@@ -12,6 +12,7 @@
           tal:attributes="href context/++resource++style.css"/>
     <link type="text/css" rel="stylesheet" href="calwidget-calendar.css"
           tal:attributes="href context/++resource++calwidget-calendar.css" />
+    <metal:block use-macro="view/@@schooltool_macros/generic/stylesheets" />
     <script type="text/javascript" src="schoolbell.js"
             tal:attributes="src context/++resource++schoolbell.js">
     </script>
@@ -19,7 +20,7 @@
             tal:attributes="src context/++resource++calwidget-calendar.js">
     </script>
     <metal:block define-slot="title">
-      <title i18n:translate="">SchoolBell</title>
+      <metal:block use-macro="view/@@schooltool_macros/generic/title" />
     </metal:block>
     <metal:block metal:define-slot="extrahead" />
   </head>
@@ -52,7 +53,7 @@
 
           <tal:if condition="not:user/schoolbell:authenticated">
             <a id="tools-login" i18n:translate=""
-              tal:attributes="href string:${url}/@@login.html">Log in</a>
+              tal:attributes="href string:${url}/@@login.html">Log In</a>
           </tal:if>
 
           <tal:if condition="user/schoolbell:authenticated"
@@ -113,15 +114,17 @@
       </div>
       <div class="clearer">&nbsp;</div>
     </div>
-    <div id="footer" i18n:translate="">
+    <div id="footer">
       <p>
         <strong tal:replace="context/schoolbell:preferences/title"/>
-        Server Running SchoolBell
-        <span tal:content="modules/schoolbell/VERSION"/>
-        &copy; The Shuttleworth Foundation 2003 - <span>2005</span>:
-        Supporting Social Innovation.
+          <metal:block 
+              use-macro="view/@@schooltool_macros/generic/serverinfo" />
+          <span i18n:translate="">
+            &copy; The Shuttleworth Foundation 2003 - <span>2005</span>:
+            Supporting Social Innovation.
+          </span>
       </p>
-      <p>
+      <p i18n:translate="">
         SchoolTool&trade; is a Trademark of The Shuttleworth Foundation.
       </p>
     </div>
