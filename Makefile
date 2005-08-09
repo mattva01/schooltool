@@ -17,8 +17,11 @@ ROSETTA_LOCALES=af ca de de_CH es_MX es_ES en_US et fr fr_CA fr_FR he it lt\
 .PHONY: all
 all: build
 
+Zope3:
+	svn co svn://svn.zope.org/repos/main/Zope3/branches/Zope-3.1 Zope3
+
 .PHONY: build
-build:
+build: Zope3
 	[ ! -d Zope3 ] || cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) setup.py build
 	$(PYTHON) remove-stale-bytecode.py
