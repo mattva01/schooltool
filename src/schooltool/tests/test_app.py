@@ -23,10 +23,11 @@ $Id$
 """
 
 import unittest
+from zope.component import provideAdapter
 from zope.testing import doctest
 from zope.app import zapi
 from zope.interface.verify import verifyObject
-from zope.app.testing import setup, ztapi
+from zope.app.testing import setup, ztapi, placelesssetup
 from schoolbell.app.tests.test_security import setUpLocalGrants
 from zope.app.container.contained import ObjectAddedEvent
 
@@ -39,15 +40,26 @@ def doctest_SchoolToolApplication():
         >>> from schooltool.app import SchoolToolApplication
         >>> from schooltool.interfaces import ISchoolToolApplication
 
+    We need to register an adapter to make the title attribute available:
+
+        >>> placelesssetup.setUp()
+        >>> from schoolbell.app.app import ApplicationPreferences
+        >>> from schoolbell.app.interfaces import IApplicationPreferences
+        >>> provideAdapter(ApplicationPreferences,
+        ...                provides=IApplicationPreferences)
+
         >>> app = SchoolToolApplication()
         >>> verifyObject(ISchoolToolApplication, app)
         True
+
 
     Also, the app is a schoolbell application:
 
         >>> from schoolbell.app.interfaces import ISchoolBellApplication
         >>> verifyObject(ISchoolBellApplication, app)
         True
+
+        >>> placelesssetup.tearDown()
 
     The person, group, and resource containers should be from
     SchoolTool, not SchoolBell:

@@ -39,8 +39,8 @@ from zope.app.security.interfaces import IUnauthenticatedGroup
 
 from schoolbell.relationship import RelationshipProperty
 from schoolbell.relationship.relationship import BoundRelationshipProperty
-from schoolbell.app.interfaces import IHaveNotes, IApplicationPreferences
 from schoolbell.app.cal import Calendar
+from schoolbell.app.interfaces import IHaveNotes, IApplicationPreferences
 from schoolbell.app.membership import URIMembership, URIGroup, URIMember
 from schoolbell.app.overlay import choose_color, DEFAULT_COLORS
 from schoolbell.app.overlay import OverlaidCalendarsProperty
@@ -50,7 +50,6 @@ from schoolbell.app import app as sb
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.interfaces import ISchoolToolApplication
-from schooltool.interfaces import IPersonContainer, IGroupContainer
 from schooltool.interfaces import IResourceContainer
 from schooltool.interfaces import IPerson, IGroup, IResource, ICourse
 from schooltool.interfaces import ISectionContained, ISectionContainer
@@ -69,16 +68,13 @@ from schoolbell.app.app import \
 from schoolbell.app.app import Group, Resource
 
 
-class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
+class SchoolToolApplication(sb.SchoolBellApplication):
     """The main SchoolTool application object."""
 
     implements(ISchoolToolApplication, IAttributeAnnotatable)
 
     def __init__(self):
-        SampleContainer.__init__(self)
-        self['persons'] = PersonContainer()
-        self['groups'] = GroupContainer()
-        self['resources'] = ResourceContainer()
+        super(SchoolToolApplication, self).__init__()
         self['terms'] = TermContainer()
         self['courses'] = CourseContainer()
         self['sections'] = SectionContainer()
@@ -87,18 +83,11 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
         import schooltool.level.level
         self['levels'] = schooltool.level.level.LevelContainer()
 
-        self.calendar = Calendar(self)
-
         # Set up initial groups
         self['groups']['manager'] = Group(u'Manager', u'Manager Group.')
 
     def _newContainerData(self):
         return PersistentDict()
-
-    # XXX: What? :-( (SR)
-    def title(self):
-        """This is required for the site calendar views to work."""
-        return IApplicationPreferences(self).title
 
 
 class OverlaidCalendarsAndTTProperty(object):
