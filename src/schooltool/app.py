@@ -24,24 +24,19 @@ $Id$
 """
 
 from persistent import Persistent
-from persistent.dict import PersistentDict
-from zope.event import notify
-from zope.interface import implements
+
+import zope.interface
 from zope.app import zapi
-from zope.app.component.hooks import getSite
-from zope.app.container.interfaces import IObjectAddedEvent
-from zope.app.container.btree import BTreeContainer
-from zope.app.container.contained import Contained
-from zope.app.container.sample import SampleContainer
-from zope.app.site.servicecontainer import SiteManagerContainer
 from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
+from zope.app.container import btree, contained
+from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.app.security.interfaces import IUnauthenticatedGroup
+from zope.app.site.servicecontainer import SiteManagerContainer
 
 from schoolbell.relationship import RelationshipProperty
 from schoolbell.relationship.relationship import BoundRelationshipProperty
 from schoolbell.app.cal import Calendar
-from schoolbell.app.interfaces import IHaveNotes, IApplicationPreferences
 from schoolbell.app.membership import URIMembership, URIGroup, URIMember
 from schoolbell.app.overlay import choose_color, DEFAULT_COLORS
 from schoolbell.app.overlay import OverlaidCalendarsProperty
@@ -50,42 +45,26 @@ from schoolbell.app.overlay import CalendarOverlayInfo
 from schoolbell.app import app as sb
 
 from schooltool import SchoolToolMessageID as _
-from schooltool.interfaces import ISchoolToolApplication
-from schooltool.interfaces import IResourceContainer
-from schooltool.interfaces import IPerson, IGroup, IResource, ICourse
-from schooltool.interfaces import ISectionContained, ISectionContainer
-from schooltool.interfaces import ICourseContainer, ICourseContained
-from schooltool.interfaces import IPersonPreferences
-from schooltool.interfaces import ICalendarAndTTOverlayInfo
-from schooltool.interfaces import ApplicationInitializationEvent
-from schooltool.relationships import URIInstruction, URISection, URIInstructor
-from schooltool.relationships import URICourseSections, URICourse
-from schooltool.relationships import URISectionOfCourse
-from schooltool.timetable import TermContainer, TimetableSchemaContainer
+from schooltool import interfaces, relationships
 
-
+###############################################################################
 # Import objects here, since they will eventually move here as well.
+
 from schoolbell.app.app import \
      GroupContainer, PersonContainer, ResourceContainer
 from schoolbell.app.app import Group, Resource
+from schoolbell.app.app import SchoolBellApplication as SchoolToolApplication
+from schoolbell.app.app import getApplicationPreferences
+from schoolbell.app.app import \
+     getSchoolBellApplication as getSchoolToolApplication
+from schoolbell.app.app import PersonPreferences
+from schoolbell.app.app import getPersonPreferences
+
+###############################################################################
 
 
-class SchoolToolApplication(sb.SchoolBellApplication):
-    """The main SchoolTool application object."""
-
-    implements(ISchoolToolApplication, IAttributeAnnotatable)
-
-    def __init__(self):
-        super(SchoolToolApplication, self).__init__()
-        self['terms'] = TermContainer()
-        self['courses'] = CourseContainer()
-        self['sections'] = SectionContainer()
-        self['ttschemas'] = TimetableSchemaContainer()
-
-        # Set up initial groups
-        self['groups']['manager'] = Group(u'Manager', u'Manager Group.')
-
-        notify(ApplicationInitializationEvent(self))
+def addManagerGroupToApplication(event):
+    event.object['groups']['manager'] = Group(u'Manager', u'Manager Group.')
 
 
 class OverlaidCalendarsAndTTProperty(object):
@@ -176,7 +155,7 @@ class CalendarAndTTOverlayInfo(CalendarOverlayInfo):
         ...                                 'red', 'yellow')
 
         >>> from zope.interface.verify import verifyObject
-        >>> verifyObject(ICalendarAndTTOverlayInfo, item)
+        >>> verifyObject(interfaces.ICalendarAndTTOverlayInfo, item)
         True
 
         >>> item.show
@@ -190,7 +169,7 @@ class CalendarAndTTOverlayInfo(CalendarOverlayInfo):
 
     """
 
-    implements(ICalendarAndTTOverlayInfo)
+    zope.interface.implements(interfaces.ICalendarAndTTOverlayInfo)
 
     def __init__(self, calendar, show, show_timetables, color1, color2):
         self._calendar = calendar
@@ -205,27 +184,36 @@ class Person(sb.Person):
     overlaid_calendars = OverlaidCalendarsAndTTProperty()
 
 
-class CourseContainer(BTreeContainer):
+class CourseContainer(btree.BTreeContainer):
     """Container of Courses."""
 
-    implements(ICourseContainer, IAttributeAnnotatable)
+    zope.interface.implements(interfaces.ICourseContainer,
+                              IAttributeAnnotatable)
 
 
-class Course(Persistent, Contained):
+def addCourseContainerToApplication(event):
+    event.object['courses'] = CourseContainer()
 
-    implements(ICourseContained, IHaveNotes, IAttributeAnnotatable)
 
-    sections = RelationshipProperty(URICourseSections, URICourse,
-                                    URISectionOfCourse)
+class Course(Persistent, contained.Contained):
+
+    zope.interface.implements(interfaces.ICourseContained,
+                              interfaces.IHaveNotes,
+                              IAttributeAnnotatable)
+
+    sections = RelationshipProperty(relationships.URICourseSections,
+                                    relationships.URICourse,
+                                    relationships.URISectionOfCourse)
 
     def __init__(self, title=None, description=None):
         self.title = title
         self.description = description
 
 
-class Section(Persistent, Contained):
+class Section(Persistent, contained.Contained):
 
-    implements(ISectionContained, IHaveNotes, IAttributeAnnotatable)
+    zope.interface.implements(interfaces.ISectionContained,
+                              interfaces.IHaveNotes, IAttributeAnnotatable)
 
     def __init__(self, title="Section", description=None, schedule=None,
                  courses=None, location=None):
@@ -247,9 +235,9 @@ class Section(Persistent, Contained):
     def _getSize(self):
         size = 0
         for member in self.members:
-            if IPerson.providedBy(member):
+            if interfaces.IPerson.providedBy(member):
                 size = size + 1
-            if IGroup.providedBy(member):
+            if interfaces.IGroup.providedBy(member):
                 size = size + len(member.members)
 
         return size
@@ -260,80 +248,40 @@ class Section(Persistent, Contained):
 
     def _setLocation(self, location):
         if location is not None:
-            if not IResource.providedBy(location) or not location.isLocation:
+            if (not interfaces.IResource.providedBy(location) or
+                not location.isLocation):
                 raise TypeError("Locations must be location resources.")
         self._location = location
 
     location = property(lambda self: self._location, _setLocation)
 
-    instructors = RelationshipProperty(URIInstruction, URISection,
-                                       URIInstructor)
+    instructors = RelationshipProperty(relationships.URIInstruction,
+                                       relationships.URISection,
+                                       relationships.URIInstructor)
 
-    courses = RelationshipProperty(URICourseSections, URISectionOfCourse,
-                                   URICourse)
+    courses = RelationshipProperty(relationships.URICourseSections,
+                                   relationships.URISectionOfCourse,
+                                   relationships.URICourse)
 
     members = RelationshipProperty(URIMembership, URIGroup, URIMember)
 
 
-class SectionContainer(BTreeContainer):
+class SectionContainer(btree.BTreeContainer):
     """Container of Sections."""
 
-    implements(ISectionContainer, IAttributeAnnotatable)
+    zope.interface.implements(interfaces.ISectionContainer,
+                              IAttributeAnnotatable)
 
 
-class PersonPreferences(sb.PersonPreferences):
-
-    implements(IPersonPreferences)
-
-    cal_periods = True
-
-
-def getPersonPreferences(person):
-    """Adapt an IAnnotatable object to IPersonPreferences."""
-    prefs = sb.getPersonPreferences(person)
-    if IPersonPreferences.providedBy(prefs):
-        # A SchoolTool preferences object was found
-        return prefs
-    else:
-        # A SchoolBell preferences object was found.
-        # We need to replace it with a SchoolTool-specific one.
-        st_prefs = PersonPreferences()
-        st_prefs.__parent__ = person
-        for field in sb.IPersonPreferences:
-            value = getattr(prefs, field)
-            setattr(st_prefs, field, value)
-        annotations = IAnnotations(person)
-        annotations[sb.PERSON_PREFERENCES_KEY] = st_prefs
-        return st_prefs
+def addSectionContainerToApplication(event):
+    event.object['sections'] = SectionContainer()
 
 
 class ApplicationPreferences(sb.ApplicationPreferences):
     """Object for storing any application-wide preferences we have."""
 
     title = 'SchoolTool'
-
-
-def getSchoolToolApplication():
-    """Return the nearest ISchoolToolApplication"""
-    candidate = getSite()
-    if ISchoolToolApplication.providedBy(candidate):
-        return candidate
-    else:
-        raise ValueError("can't get a SchoolToolApplication")
-
-
-def getApplicationPreferences(app):
-    """Adapt a SchoolToolApplication to IApplicationPreferences."""
-
-    annotations = IAnnotations(app)
-    key = 'schooltool.app.ApplicationPreferences'
-    try:
-        return annotations[key]
-    except KeyError:
-        annotations[key] = ApplicationPreferences()
-        annotations[key].__parent__ = app
-        return annotations[key]
-
+    
 
 def applicationCalendarPermissionsSubscriber(event):
     """Set the default permissions for schooltool.
@@ -358,7 +306,7 @@ def applicationCalendarPermissionsSubscriber(event):
         # zcml?
         return
 
-    if ISchoolToolApplication.providedBy(event.object):
+    if interfaces.ISchoolToolApplication.providedBy(event.object):
         unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
 
         app_perms = IPrincipalPermissionManager(event.object)

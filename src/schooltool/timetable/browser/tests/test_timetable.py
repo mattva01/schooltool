@@ -40,6 +40,8 @@ from zope.i18n import translate
 
 from schoolbell.app.browser.tests import setup
 from schoolbell.app.rest.tests.utils import NiceDiffsMixin
+from schooltool import timetable
+from schooltool.interfaces import ApplicationInitializationEvent
 
 
 def setUp(test=None):
@@ -828,6 +830,11 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
         from schooltool.app import SchoolToolApplication
         setUp()
         self.app = SchoolToolApplication()
+
+
+        # Usually automatically called subscribers
+        timetable.addToApplication(ApplicationInitializationEvent(self.app))
+
         directlyProvides(self.app, IContainmentRoot)
         self.app.setSiteManager(LocalSiteManager(self.app))
         setSite(self.app)
@@ -1209,6 +1216,7 @@ def doctest_SimpleTimetableSchemaAdd():
         >>> from schooltool.app import SchoolToolApplication
         >>> from schooltool.timetable.browser import SimpleTimetableSchemaAdd
         >>> app = SchoolToolApplication()
+        >>> timetable.addToApplication(ApplicationInitializationEvent(app))
         >>> directlyProvides(app, IContainmentRoot)
         >>> app.setSiteManager(LocalSiteManager(app))
         >>> setSite(app)
@@ -1463,6 +1471,7 @@ def doctest_SimpleTimetableSchemaAdd_errors():
         >>> from schooltool.app import SchoolToolApplication
         >>> from schooltool.timetable.browser import SimpleTimetableSchemaAdd
         >>> app = SchoolToolApplication()
+        >>> timetable.addToApplication(ApplicationInitializationEvent(app))
         >>> directlyProvides(app, IContainmentRoot)
         >>> app.setSiteManager(LocalSiteManager(app))
         >>> setSite(app)
@@ -1550,9 +1559,11 @@ def doctest_PersonTimetableSetupView():
 
     We will need an application object
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app import SchoolToolApplication, SectionContainer
         >>> from schooltool.timetable.interfaces import ITimetabled
         >>> app = SchoolToolApplication()
+        >>> app['sections'] = SectionContainer()
+        >>> timetable.addToApplication(ApplicationInitializationEvent(app))
         >>> directlyProvides(app, IContainmentRoot)
         >>> app.setSiteManager(LocalSiteManager(app))
         >>> setSite(app)
@@ -1849,6 +1860,7 @@ def doctest_PersonTimetableSetupView_no_timetables():
 
         >>> from schooltool.app import SchoolToolApplication
         >>> app = SchoolToolApplication()
+        >>> timetable.addToApplication(ApplicationInitializationEvent(app))
         >>> directlyProvides(app, IContainmentRoot)
         >>> app.setSiteManager(LocalSiteManager(app))
         >>> setSite(app)
@@ -1889,6 +1901,7 @@ def doctest_PersonTimetableSetupView_no_default_ttschema():
 
         >>> from schooltool.app import SchoolToolApplication
         >>> app = SchoolToolApplication()
+        >>> timetable.addToApplication(ApplicationInitializationEvent(app))
         >>> directlyProvides(app, IContainmentRoot)
         >>> app.setSiteManager(LocalSiteManager(app))
         >>> setSite(app)
@@ -1930,6 +1943,7 @@ def doctest_TimetableSchemaContainerView():
 
         >>> from schooltool.app import SchoolToolApplication
         >>> app = SchoolToolApplication()
+        >>> timetable.addToApplication(ApplicationInitializationEvent(app))
 
     Some timetable schemas:
 
@@ -1991,8 +2005,10 @@ def doctest_SectionTimetableSetupView():
 
     We will need an application object
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app import SchoolToolApplication, SectionContainer
         >>> app = SchoolToolApplication()
+        >>> app['sections'] = SectionContainer()
+        >>> timetable.addToApplication(ApplicationInitializationEvent(app))
         >>> directlyProvides(app, IContainmentRoot)
         >>> app.setSiteManager(LocalSiteManager(app))
         >>> setSite(app)
@@ -2219,6 +2235,7 @@ def doctest_SpecialDayView():
 
         >>> from schooltool.app import SchoolToolApplication
         >>> app = SchoolToolApplication()
+        >>> timetable.addToApplication(ApplicationInitializationEvent(app))
         >>> directlyProvides(app, IContainmentRoot)
         >>> app.setSiteManager(LocalSiteManager(app))
         >>> setSite(app)
@@ -2682,6 +2699,7 @@ def doctest_EmergencyDayView():
 
         >>> from schooltool.app import SchoolToolApplication
         >>> app = SchoolToolApplication()
+        >>> timetable.addToApplication(ApplicationInitializationEvent(app))
         >>> directlyProvides(app, IContainmentRoot)
         >>> app.setSiteManager(LocalSiteManager(app))
         >>> setSite(app)

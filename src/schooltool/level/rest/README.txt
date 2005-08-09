@@ -13,7 +13,7 @@ the web ZMI:
     ... Content-Length: 81
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... type_name=BrowserAdd__schooltool.app.SchoolToolApplication&\
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&\
     ... new_value=test""")
     HTTP/1.1 303 See Other
     ...

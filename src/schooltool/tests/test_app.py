@@ -52,6 +52,14 @@ def doctest_SchoolToolApplication():
         >>> verifyObject(ISchoolToolApplication, app)
         True
 
+        # Usually automatically called subscribers
+        >>> from schooltool.interfaces import ApplicationInitializationEvent
+        >>> import schooltool.app
+        >>> schooltool.app.addCourseContainerToApplication(
+        ...     ApplicationInitializationEvent(app))
+        >>> schooltool.app.addSectionContainerToApplication(
+        ...     ApplicationInitializationEvent(app))
+
 
     Also, the app is a schoolbell application:
 
@@ -93,9 +101,9 @@ def doctest_SchoolToolApplication():
       >>> setup.setUpAnnotations()
       >>> from schooltool.app import getApplicationPreferences
       >>> getApplicationPreferences(app).title
-      'SchoolTool'
+      'SchoolBell'
 
-
+      XXX: Acceptable for now to see SchoolBell here.
     """
 
 
@@ -303,7 +311,7 @@ def doctest_Section():
         >>> section.location.title
         'Room123'
 
-    Locations have to be marked with isLocation, so printers can'r be
+    Locations have to be marked with isLocation, so printers can't be
     locations:
 
         >>> printer = Resource("Laser Printer")
@@ -346,7 +354,7 @@ def doctest_getSchoolToolApplication():
       >>> getSchoolToolApplication()
       Traceback (most recent call last):
       ...
-      ValueError: can't get a SchoolToolApplication
+      ValueError: can't get a SchoolBellApplication
 
     If current site is a SchoolToolApplication, we get it:
 
@@ -570,7 +578,7 @@ def doctest_PersonPreferences():
     `prefs` is the SchoolTool preferences object, not SchoolBell:
 
         >>> prefs
-        <schooltool.app.PersonPreferences object at 0x...>
+        <schoolbell.app.app.PersonPreferences object at 0x...>
 
         >>> prefs.cal_periods
         True
@@ -595,7 +603,7 @@ def doctest_PersonPreferences():
 
         >>> new_prefs = getPersonPreferences(person)
         >>> new_prefs
-        <schooltool.app.PersonPreferences object at 0x...>
+        <schoolbell.app.app.PersonPreferences object at 0x...>
         >>> new_prefs.timezone
         'Europe/Vilnius'
 
@@ -628,7 +636,7 @@ def doctest_getSchoolToolApplication():
       >>> getSchoolToolApplication()
       Traceback (most recent call last):
       ...
-      ValueError: can't get a SchoolToolApplication
+      ValueError: can't get a SchoolBellApplication
 
     If current site is a SchoolToolApplication, we get it:
 
@@ -645,11 +653,22 @@ def doctest_applicationCalendarPermissionsSubscriber():
     r"""
     Set up:
 
-        >>> from schooltool.app import SchoolToolApplication, Person
+        >>> from schooltool import app
         >>> root = setup.placefulSetUp(True)
         >>> setUpLocalGrants()
-        >>> app = SchoolToolApplication()
-        >>> root['sb'] = app
+        >>> st = app.SchoolToolApplication()
+
+        # Usually automatically called subscribers
+        >>> from schooltool.interfaces import ApplicationInitializationEvent
+        >>> import schooltool.app
+        >>> app.addCourseContainerToApplication(
+        ...     ApplicationInitializationEvent(st))
+        >>> app.addSectionContainerToApplication(
+        ...     ApplicationInitializationEvent(st))
+        >>> from schooltool import timetable
+        >>> timetable.addToApplication(ApplicationInitializationEvent(st))
+
+        >>> root['sb'] = st
 
         >>> from zope.app.security.interfaces import IUnauthenticatedGroup
         >>> from zope.app.security.principalregistry import UnauthenticatedGroup
@@ -668,16 +687,14 @@ def doctest_applicationCalendarPermissionsSubscriber():
 
     Call our subscriber:
 
-        >>> from schooltool.app import \
-        ...         applicationCalendarPermissionsSubscriber
-        >>> applicationCalendarPermissionsSubscriber(ObjectAddedEvent(app))
+        >>> app.applicationCalendarPermissionsSubscriber(ObjectAddedEvent(st))
 
-    Check that unauthenticated has calendarView permission on app.calendar:
+    Check that unauthenticated has calendarView permission on st.calendar:
 
         >>> from zope.app.securitypolicy.interfaces import \
         ...         IPrincipalPermissionManager
         >>> unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
-        >>> map = IPrincipalPermissionManager(app)
+        >>> map = IPrincipalPermissionManager(st)
         >>> x = map.getPermissionsForPrincipal(unauthenticated.id)
         >>> x.sort()
         >>> print x
@@ -687,7 +704,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
 
         >>> for container in ['persons', 'groups', 'resources', 'sections',
         ...                   'courses']:
-        ...     map = IPrincipalPermissionManager(app[container])
+        ...     map = IPrincipalPermissionManager(st[container])
         ...     x = map.getPermissionsForPrincipal(unauthenticated.id)
         ...     x.sort()
         ...     print x
@@ -698,7 +715,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
         [('schoolbell.view', PermissionSetting: Deny), ('schoolbell.viewCalendar', PermissionSetting: Deny)]
 
         >>> for container in ['terms', 'ttschemas']:
-        ...     map = IPrincipalPermissionManager(app[container])
+        ...     map = IPrincipalPermissionManager(st[container])
         ...     x = map.getPermissionsForPrincipal(unauthenticated.id)
         ...     x.sort()
         ...     print x
@@ -707,9 +724,10 @@ def doctest_applicationCalendarPermissionsSubscriber():
 
     Check that no permissions are set if the object added is not an app.
 
-        >>> person = Person('james')
+        >>> person = app.Person('james')
         >>> root['sb']['persons']['james'] = person
-        >>> applicationCalendarPermissionsSubscriber(ObjectAddedEvent(person))
+        >>> app.applicationCalendarPermissionsSubscriber(
+        ...     ObjectAddedEvent(person))
         >>> map = IPrincipalPermissionManager(person.calendar)
         >>> map.getPermissionsForPrincipal(unauthenticated.id)
         []
@@ -717,9 +735,10 @@ def doctest_applicationCalendarPermissionsSubscriber():
     Nothing happens if the event isn't ObjectAdded:
 
         >>> from zope.app.container.contained import ObjectRemovedEvent
-        >>> app2 = SchoolToolApplication()
-        >>> applicationCalendarPermissionsSubscriber(ObjectRemovedEvent(app2))
-        >>> map2 = IPrincipalPermissionManager(app2)
+        >>> st2 = app.SchoolToolApplication()
+        >>> app.applicationCalendarPermissionsSubscriber(
+        ...     ObjectRemovedEvent(st2))
+        >>> map2 = IPrincipalPermissionManager(st2)
         >>> x2 = map.getPermissionsForPrincipal(unauthenticated.id)
         >>> x2.sort()
         >>> print x2

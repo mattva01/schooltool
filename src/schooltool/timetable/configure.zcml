@@ -3,6 +3,12 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schooltool">
 
+  <!-- Application hook -->
+  <subscriber
+      for="schooltool.interfaces.IApplicationInitializationEvent"
+      handler=".addToApplication"
+      />
+
   <!-- Subscribers -->
 
   <subscriber

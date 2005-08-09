@@ -42,10 +42,12 @@ from zope.app.location.interfaces import ILocation
 
 from schooltool.tests.helpers import diff, sorted
 from schoolbell.app.rest.tests.utils import NiceDiffsMixin, EqualsSortedMixin
+from schooltool import timetable
 from schooltool.timetable.interfaces import ITerm, ITimetabled
 from schooltool.timetable.interfaces import ITimetable, ITimetableActivity
 from schoolbell.relationship import RelationshipProperty
 from schoolbell.app.membership import URIGroup, URIMember, URIMembership
+from schooltool.interfaces import ApplicationInitializationEvent
 
 __metaclass__ = type
 
@@ -1217,6 +1219,7 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         from zope.app.component.site import LocalSiteManager
         from zope.app.component.hooks import setSite
         app = SchoolToolApplication()
+        timetable.addToApplication(ApplicationInitializationEvent(app))
         app.setSiteManager(LocalSiteManager(app))
         setSite(app)
         term = app["terms"]['2003 fall'] = TermStub()
@@ -1346,6 +1349,7 @@ class TestGetPeriodsForDay(PlacelessSetup, unittest.TestCase):
         from zope.app.component.hooks import setSite
         from zope.app.component.site import LocalSiteManager
         app = SchoolToolApplication()
+        timetable.addToApplication(ApplicationInitializationEvent(app))
         app.setSiteManager(LocalSiteManager(app))
         setSite(app)
         self.term1 = Term('Sample', date(2004, 9, 1), date(2004, 12, 20))

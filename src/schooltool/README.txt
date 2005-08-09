@@ -6,10 +6,18 @@ We need some test setup:
 
     >>> from schoolbell.relationship.tests import setUp, tearDown
     >>> setUp()
-    >>> from schooltool.app import SchoolToolApplication
+    >>> from schooltool import app
     >>> from schooltool.app import Course, Section, Person, Group
+    >>> from schooltool.interfaces import ApplicationInitializationEvent
 
-    >>> school = SchoolToolApplication()
+    >>> school = app.SchoolToolApplication()
+    
+    # Usually automatically called subscribers
+    >>> app.addCourseContainerToApplication(
+    ...     ApplicationInitializationEvent(school))
+    >>> app.addSectionContainerToApplication(
+    ...     ApplicationInitializationEvent(school))
+
     >>> school['courses']
     <schooltool.app.CourseContainer object at ...>
     >>> school['sections']

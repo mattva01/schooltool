@@ -26,15 +26,6 @@
   <resource name="schooltool.css" file="resources/schooltool.css"
             layer=".skin.ISchoolToolLayer" />
 
-  <!-- Add SchoolTool to the Zope menu -->
-
-  <addMenuItem
-      title="SchoolTool"
-      class="schooltool.app.SchoolToolApplication"
-      permission="zope.ManageContent"
-      />
-
-
   <!-- Navigation -->
 
   <page
@@ -51,14 +42,6 @@
   <configure
       package="schoolbell.app.browser"
       i18n_domain="schoolbell">
-
-  <zope:view
-      for="schooltool.interfaces.ISchoolToolApplication"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-      factory="schooltool.browser.app.SchoolToolApplicationTraverser"
-      permission="zope.Public"
-      />
 
     <!-- Views from SchoolBell -->
 
@@ -122,16 +105,7 @@
       class="schooltool.browser.app.SchoolToolApplicationView"
       template="templates/index.pt"
       permission="zope.Public"
-      />
-
-  <page
-      name="index.html"
-      for="schooltool.interfaces.ICourseContainer"
-      class=".app.CourseContainerView"
-      template="templates/course_container.pt"
-      permission="zope.View"
-      menu="zmi_views"
-      title="View"
+      layer="schooltool.browser.skin.ISchoolToolLayer"
       />
 
   <page
@@ -147,13 +121,12 @@
 
   <page
       name="index.html"
-      for="schooltool.interfaces.IPersonContainer"
-      class=".app.PersonContainerView"
-      template="templates/container.pt"
+      for="schooltool.interfaces.ICourseContainer"
+      class=".app.CourseContainerView"
+      template="templates/course_container.pt"
       permission="zope.View"
       menu="zmi_views"
       title="View"
-      layer=".skin.ISchoolToolLayer"
       />
 
   <page
@@ -168,17 +141,6 @@
       />
 
   <page
-      name="index.html"
-      for="schooltool.interfaces.IGroupContainer"
-      class=".app.GroupContainerView"
-      template="templates/container.pt"
-      permission="zope.View"
-      menu="zmi_views"
-      title="View"
-      layer="SchoolToolLayer"
-      />
-
-  <page
       name="group-csvimport.html"
       for="schooltool.interfaces.IGroupContainer"
       class="schooltool.browser.csvimport.GroupCSVImportView"
@@ -186,17 +148,6 @@
       permission="schoolbell.create"
       menu="schoolbell_actions"
       title="Import Groups"
-      layer=".skin.ISchoolToolLayer"
-      />
-
-  <page
-      name="index.html"
-      for="schooltool.interfaces.IResourceContainer"
-      class=".app.ResourceContainerView"
-      template="templates/container.pt"
-      permission="zope.View"
-      menu="zmi_views"
-      title="View"
       layer=".skin.ISchoolToolLayer"
       />
 
@@ -219,7 +170,7 @@
 
   <page
       name="course-csvimport.html"
-      for="schooltool.app.ICourseContainer"
+      for="schooltool.interfaces.ICourseContainer"
       class="schooltool.browser.csvimport.CourseCSVImportView"
       template="templates/course-csvimport.pt"
       permission="schoolbell.create"

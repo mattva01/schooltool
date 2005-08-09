@@ -24,31 +24,15 @@ $Id$
 
 import datetime
 
-from zope.interface import Interface, Attribute, implements
-from zope.app.location.interfaces import ILocation
-from zope.schema.interfaces import IField
-from zope.schema import Field, Object, Int, Text, TextLine, List, Set, Tuple
-from zope.schema import Dict, Date, Timedelta, Bool, Choice, Object
-from zope.app.container.interfaces import IContainer, IContained
-from zope.app.container.constraints import contains, containers
-from zope.app import event
+import zope.interface
+import zope.schema
+from zope.app import container
 
 from schoolbell.app import interfaces as sb
 from schoolbell.app.overlay import ICalendarOverlayInfo
 from schoolbell.calendar.interfaces import Unchanged
 
 from schooltool import SchoolToolMessageID as _
-
-# Events
-
-class IApplicationInitializationEvent(event.interfaces.IObjectEvent):
-    """The SchoolTool application is being initiazed.
-
-    Usually subscribers add soemthing to the initialization process.
-    """
-
-class ApplicationInitializationEvent(event.objectevent.ObjectEvent):
-    implements(IApplicationInitializationEvent)
 
 #
 #  SchoolTool domain model objects
@@ -58,129 +42,104 @@ class ApplicationInitializationEvent(event.objectevent.ObjectEvent):
 from schoolbell.app.interfaces import IPerson, IGroup, IResource
 from schoolbell.app.interfaces import \
      IPersonContainer, IGroupContainer, IResourceContainer
+from schoolbell.app.interfaces import \
+     ISchoolBellApplication as ISchoolToolApplication
+from schoolbell.app.interfaces import IApplicationInitializationEvent
+from schoolbell.app.interfaces import ApplicationInitializationEvent
+from schoolbell.app.interfaces import IApplicationPreferences
+from schoolbell.app.interfaces import IHaveNotes
+from schoolbell.app.interfaces import IPersonPreferences
 
 
-class ICourse(Interface):
+class ICourse(zope.interface.Interface):
     """Courses are similar to groups, membership is restricted to Sections."""
 
-    title = TextLine(
+    title = zope.schema.TextLine(
         title=_("Title"),
         description=_("Title of the course."))
 
-    description = Text(
+    description = zope.schema.Text(
         title=_("Description"),
         required=False,
         description=_("Description of the course."))
 
-    sections = Attribute("""The Sections that implement this course material,
-            see schoolbell.relationship.interfaces.IRelationshipProperty.""")
+    sections = zope.interface.Attribute(
+        """The Sections that implement this course material,
+           see schoolbell.relationship.interfaces.IRelationshipProperty.""")
 
 
-class ICourseContainer(IContainer):
+class ICourseContainer(container.interfaces.IContainer):
     """Container of Courses."""
 
-    contains(ICourse)
+    container.constraints.contains(ICourse)
 
 
-class ICourseContained(ICourse, IContained):
+class ICourseContained(ICourse, container.interfaces.IContained):
     """Courses contained in an ICourseContainer."""
 
-    containers(ICourseContainer)
+    container.constraints.containers(ICourseContainer)
 
 
 class ISection(IGroup):
     """Sections are groups of users in a particular meeting of a Course."""
 
-    label = TextLine(
+    label = zope.schema.TextLine(
         title=_("Label"),
         required=False,
         description=_(
             """An identifier for a section, made up of instructor
             names, courses, and meeting time."""))
 
-    title = TextLine(
+    title = zope.schema.TextLine(
         title=_("Code"),
         required=True,
         description=_("ID code for the section."))
 
-    description = Text(
+    description = zope.schema.Text(
         title=_("Description"),
         required=False,
         description=_("Description of the section."))
 
-    instructors = Attribute(
-               """A list of Person objects in the role of instructor""")
+    instructors = zope.interface.Attribute(
+        """A list of Person objects in the role of instructor""")
 
-    members = Attribute("""Students listed in the role of member""")
+    members = zope.interface.Attribute(
+        """Students listed in the role of member""")
 
-    courses = Attribute("""A list of courses this section is a member of.""")
+    courses = zope.interface.Attribute(
+        """A list of courses this section is a member of.""")
 
-    size = Attribute("""The number of member students in the section.""")
+    size = zope.interface.Attribute(
+        """The number of member students in the section.""")
 
-    location = Choice(title=u"Location",
-                      required=False,
-                      description=u"The resource where this section meets.",
-                      vocabulary="LocationResources")
+    location = zope.schema.Choice(
+        title=u"Location",
+        required=False,
+        description=u"The resource where this section meets.",
+        vocabulary="LocationResources")
 
 
-class ISectionContainer(IContainer):
+class ISectionContainer(container.interfaces.IContainer):
     """A container for Sections."""
 
-    contains(ISection)
+    container.constraints.contains(ISection)
 
 
-class ISectionContained(ISection, IContained):
+class ISectionContained(ISection, container.interfaces.IContained):
     """Sections in a SectionContainer."""
 
-    containers(ISectionContainer)
-
-
+    container.constraints.containers(ISectionContainer)
 
 
 #
 #  Miscellaneous
 #
 
-
-class IPersonPreferences(sb.IPersonPreferences):
-
-    cal_periods = Bool(
-        title=_("Show periods"),
-        description=_("Show period names in daily view"))
-
-
 class ICalendarAndTTOverlayInfo(ICalendarOverlayInfo):
 
-    show_timetables = Bool(
+    show_timetables = zope.schema.Bool(
             title=u"Show timetables",
             description=u"""
             An option that controls whether the timetable of this calendar's
             owner is shown in the calendar views.
             """)
-
-
-#
-#  Main application
-#
-
-class ISchoolToolApplication(sb.ISchoolBellApplication):
-    """The main SchoolTool application object
-
-    The application is a read-only container with the following items:
-
-        'persons' - IPersonContainer
-        'groups' - IGroupContainer
-        'resources' - IResourceContainer
-        'terms' - ITermContainer
-        'ttschemas' - ITimetableSchemaContainer
-
-    """
-
-    calendar = Object(
-            title=u"School calendar",
-            schema=sb.ISchoolBellCalendar)
-
-
-class IApplicationPreferences(sb.IApplicationPreferences):
-    """ScholTool ApplicationPreferences."""
-

@@ -33,7 +33,10 @@ from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 
+import schooltool.app
+from schooltool import timetable
 from schooltool.common import parse_datetime
+from schooltool.interfaces import ApplicationInitializationEvent
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable import SequentialDaysTimetableModel
 from pytz import timezone
@@ -44,6 +47,14 @@ utc = timezone('UTC')
 def setUpSchoolToolSite():
     from schooltool.app import SchoolToolApplication
     app = SchoolToolApplication()
+
+    # Usually automatically called subscribers
+    schooltool.app.addCourseContainerToApplication(
+        ApplicationInitializationEvent(app))
+    schooltool.app.addSectionContainerToApplication(
+        ApplicationInitializationEvent(app))
+    timetable.addToApplication(ApplicationInitializationEvent(app))
+
     directlyProvides(app, IContainmentRoot)
     from zope.app.component.site import LocalSiteManager
     app.setSiteManager(LocalSiteManager(app))

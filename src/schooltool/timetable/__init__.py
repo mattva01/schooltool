@@ -875,3 +875,9 @@ def getPeriodsForDay(date):
         return []
     ttschema = ttcontainer.getDefault()
     return ttschema.model.periodsInDay(schooldays, ttschema, date)
+
+
+def addToApplication(event):
+    event.object['terms'] = TermContainer()
+    event.object['ttschemas'] = TimetableSchemaContainer()
+    

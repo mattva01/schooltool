@@ -39,8 +39,30 @@ from zope.publisher.browser import TestRequest
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.filerepresentation.interfaces import IFileFactory
 
+import schooltool.app
+from schooltool import timetable
+from schooltool.interfaces import ApplicationInitializationEvent
 from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin, diff
 from schoolbell.app.rest.tests.utils import normalize_xml
+
+
+def setUpSchool():
+    from schooltool.app import SchoolToolApplication
+    from zope.app.component.hooks import setSite
+    from zope.app.component.site import LocalSiteManager
+    app = SchoolToolApplication()
+
+    # Usually automatically called subscribers
+    schooltool.app.addCourseContainerToApplication(
+        ApplicationInitializationEvent(app))
+    schooltool.app.addSectionContainerToApplication(
+        ApplicationInitializationEvent(app))
+    timetable.addToApplication(ApplicationInitializationEvent(app))
+
+    app.setSiteManager(LocalSiteManager(app))
+    directlyProvides(app, IContainmentRoot)
+    setSite(app)
+    return app
 
 
 def doctest_SchoolToolApplicationView():
@@ -49,10 +71,8 @@ def doctest_SchoolToolApplicationView():
     Lets create a schooltool instance and make a view for it:
 
         >>> from schooltool.rest.app import SchoolToolApplicationView
-        >>> from schooltool.app import SchoolToolApplication
         >>> setup.placefulSetUp()
-        >>> app = SchoolToolApplication()
-        >>> directlyProvides(app, IContainmentRoot)
+        >>> app = setUpSchool()
         >>> view = SchoolToolApplicationView(app, TestRequest())
         >>> result = view.GET()
 
@@ -472,8 +492,7 @@ def doctest_CourseContainerView():
         ...                     IFileFactory,
         ...                     CourseFileFactory)
 
-        >>> app = SchoolToolApplication()
-        >>> directlyProvides(app, IContainmentRoot)
+        >>> app = setUpSchool()
         >>> courses = app['courses']
         >>> courses['course1'] = course1 = Course()
 
@@ -530,8 +549,7 @@ def doctest_CourseView():
         >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
         ...                   namespace.view)
 
-        >>> app = SchoolToolApplication()
-        >>> directlyProvides(app, IContainmentRoot)
+        >>> app = setUpSchool()
         >>> courses = app['courses']
         >>> courses['course1'] = course1 = Course(title="Course 1",
         ...                                       description="Something")
@@ -592,12 +610,7 @@ def doctest_SectionFileFactory():
     setup:
 
 
-        >>> from schooltool.app import SchoolToolApplication
-        >>> app = SchoolToolApplication()
-        >>> from zope.app.component.site import LocalSiteManager
-        >>> app.setSiteManager(LocalSiteManager(app))
-        >>> from zope.app.component.hooks import setSite
-        >>> setSite(app)
+        >>> app = setUpSchool()
         >>> from schooltool.app import Resource
         >>> import pprint
         >>> app['resources']['room1'] = room1 = Resource("Room 1",
@@ -689,8 +702,7 @@ def doctest_SectionContainerView():
         ...                     IFileFactory,
         ...                     SectionFileFactory)
 
-        >>> app = SchoolToolApplication()
-        >>> directlyProvides(app, IContainmentRoot)
+        >>> app = setUpSchool()
         >>> sections = app['sections']
         >>> sections['section1'] = section1 = Section()
 
@@ -749,8 +761,7 @@ def doctest_SectionView():
         >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
         ...                   namespace.view)
 
-        >>> app = SchoolToolApplication()
-        >>> directlyProvides(app, IContainmentRoot)
+        >>> app = setUpSchool()
         >>> sections = app['sections']
         >>> sections['section1'] = section1 = Section(title="Section 1",
         ...                                       description="Something")

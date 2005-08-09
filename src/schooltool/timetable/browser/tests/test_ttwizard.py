@@ -41,8 +41,10 @@ from schoolbell.app.browser.tests import setup as schoolbell_setup
 from schoolbell.app.app import SimpleNameChooser
 from schooltool.tests import setUpApplicationPreferences
 from schooltool.app import SchoolToolApplication
+from schooltool import timetable
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.browser import format_time_range
+from schooltool.interfaces import ApplicationInitializationEvent
 
 
 def setUpNameChoosers():
@@ -61,6 +63,10 @@ def setUpApplicationAndSite():
     Returns the application.
     """
     app = SchoolToolApplication()
+
+    # Usually automatically called subscribers
+    timetable.addToApplication(ApplicationInitializationEvent(app))
+
     directlyProvides(app, IContainmentRoot)
     app.setSiteManager(LocalSiteManager(app))
     setSite(app)

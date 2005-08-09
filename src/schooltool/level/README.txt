@@ -24,6 +24,8 @@ school. So, given a schooltool application
   >>> from schooltool.interfaces import ApplicationInitializationEvent
   >>> level.level.addLevelContainerToApplication(
   ...     ApplicationInitializationEvent(st))
+  >>> app.addManagerGroupToApplication(
+  ...     ApplicationInitializationEvent(st))
 
 we can inspect the defined levels:
 

@@ -50,8 +50,10 @@ from zope.interface import directlyProvidedBy
 from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin
 from schoolbell.app.rest.tests.utils import XMLCompareMixin
 from schoolbell.app.rest.errors import RestError
+from schooltool import timetable
 from schooltool.timetable import TimetabledAdapter
 from schooltool.timetable.interfaces import ITimetabled
+from schooltool.interfaces import ApplicationInitializationEvent
 
 
 def setUp(test=None):
@@ -122,6 +124,8 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         from schooltool.app import Resource
         PlacefulSetup.setUp(self)
         self.app = SchoolToolApplication()
+        # Usually automatically called subscribers
+        timetable.addToApplication(ApplicationInitializationEvent(self.app))
         self.app.setSiteManager(LocalSiteManager(self.app))
         setSite(self.app)
         directlyProvides(self.app, IContainmentRoot)
@@ -245,6 +249,8 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
         from schooltool.timetable.interfaces import ITimetableModelFactory
 
         self.app = SchoolToolApplication()
+        # Usually automatically called subscribers
+        timetable.addToApplication(ApplicationInitializationEvent(self.app))
         self.schemaContainer = self.app["ttschemas"]
 
         setup.placelessSetUp()
@@ -571,6 +577,7 @@ def doctest_TimetableDictPublishTraverse():
         >>> from zope.app.component.site import LocalSiteManager
         >>> from schooltool.app import SchoolToolApplication
         >>> app = SchoolToolApplication()
+        >>> timetable.addToApplication(ApplicationInitializationEvent(app))
         >>> app.setSiteManager(LocalSiteManager(app))
         >>> setSite(app)
 

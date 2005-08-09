@@ -31,6 +31,9 @@ from zope.interface import directlyProvides
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.i18n import translate
 
+import schooltool.app
+from schooltool import timetable
+from schooltool.interfaces import ApplicationInitializationEvent
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 
 # Used for CourseAddView and SectionAddView
@@ -42,6 +45,14 @@ def setUpSchool():
     from zope.app.component.hooks import setSite
     from zope.app.component.site import LocalSiteManager
     app = SchoolToolApplication()
+
+    # Usually automatically called subscribers
+    schooltool.app.addCourseContainerToApplication(
+        ApplicationInitializationEvent(app))
+    schooltool.app.addSectionContainerToApplication(
+        ApplicationInitializationEvent(app))
+    timetable.addToApplication(ApplicationInitializationEvent(app))
+
     app.setSiteManager(LocalSiteManager(app))
     directlyProvides(app, IContainmentRoot)
     setSite(app)
@@ -132,8 +143,7 @@ def doctest_CourseAddView():
         ...     _factory = Course
 
 
-        >>> from schooltool.app import SchoolToolApplication
-        >>> app = SchoolToolApplication()
+        >>> app = setUpSchool()
         >>> container = app['courses']
         >>> request = TestRequest()
         >>> context = AddingStub(container, request)
@@ -214,12 +224,7 @@ def doctest_LocationResourceVocabulary():
     We should be able to choose any Resource in the resource container that is
     marked with isLocation.
 
-        >>> from schooltool.app import SchoolToolApplication
-        >>> app = SchoolToolApplication()
-        >>> from zope.app.component.site import LocalSiteManager
-        >>> app.setSiteManager(LocalSiteManager(app))
-        >>> from zope.app.component.hooks import setSite
-        >>> setSite(app)
+        >>> app = setUpSchool()
 
     There's no potential terms:
 
@@ -298,11 +303,7 @@ def doctest_SectionAddView():
     create a SchoolTool instance:
 
         >>> from schooltool.app import SchoolToolApplication
-        >>> app = SchoolToolApplication()
-        >>> from zope.app.component.site import LocalSiteManager
-        >>> app.setSiteManager(LocalSiteManager(app))
-        >>> from zope.app.component.hooks import setSite
-        >>> setSite(app)
+        >>> app = setUpSchool()
         >>> directlyProvides(app, IContainmentRoot)
         >>> sections = app['sections']
         >>> courses = app['courses']
@@ -722,7 +723,7 @@ def doctest_SectionLearnerGroupView():
     Let's see what's available to add:
 
         >>> [g.title for g in view.getPotentialLearners()]
-        ['Form 1', u'Manager']
+        ['Form 1']
 
     No learners yet:
 

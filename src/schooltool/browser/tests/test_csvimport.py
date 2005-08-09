@@ -33,6 +33,7 @@ from zope.i18n import translate
 from zope.interface.verify import verifyObject
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 
+import schooltool.app
 from schooltool.common import dedent
 from schooltool.app import Person, Course, Section, Resource
 from schooltool.relationships import URISection, URISectionOfCourse
@@ -41,8 +42,10 @@ from schoolbell.relationship.tests import setUp as setUpRelationshipStuff
 from schoolbell.relationship.tests import tearDown as tearDownRelationshipStuff
 from schoolbell.app.browser.tests.setup import setUp as testSetUp, tearDown
 from schooltool.browser.csvimport import InvalidCSVError
+from schooltool.interfaces import ApplicationInitializationEvent
 from schooltool.timetable.interfaces import ITimetabled
 from schooltool.timetable import TimetabledAdapter
+from schooltool import timetable
 
 __metaclass__ = type
 
@@ -61,6 +64,14 @@ class TestTimetableCSVImportView(unittest.TestCase):
         from schooltool.timetable import Term
         setUpRelationshipStuff()
         self.app = SchoolToolApplication()
+
+        # Usually automatically called subscribers
+        schooltool.app.addCourseContainerToApplication(
+            ApplicationInitializationEvent(self.app))
+        schooltool.app.addSectionContainerToApplication(
+            ApplicationInitializationEvent(self.app))
+        timetable.addToApplication(ApplicationInitializationEvent(self.app))
+
 
         from zope.interface import directlyProvides
         from zope.app.traversing.interfaces import IContainmentRoot
@@ -180,6 +191,13 @@ class TestTimetableCSVImporter(unittest.TestCase):
                              TimetabledAdapter)
 
         self.app = app = SchoolToolApplication()
+
+        # Usually automatically called subscribers
+        schooltool.app.addCourseContainerToApplication(
+            ApplicationInitializationEvent(self.app))
+        schooltool.app.addSectionContainerToApplication(
+            ApplicationInitializationEvent(self.app))
+        timetable.addToApplication(ApplicationInitializationEvent(self.app))
 
         from zope.interface import directlyProvides
         from zope.app.traversing.interfaces import IContainmentRoot

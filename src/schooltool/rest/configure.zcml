@@ -36,19 +36,13 @@
       for="zope.app.publication.interfaces.IBeforeTraverseEvent"
       />
 
+  <!-- XXX: Hack to get schooltool working; we should have a schooltool -->
+  <!--      layer. -->
   <view
-      for="schooltool.interfaces.ISchoolToolApplication"
+      for="schooltool.app.SchoolToolApplication"
       name="GET"
       factory=".app.SchoolToolApplicationView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.interfaces.ISchoolToolApplication"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="zope.publisher.interfaces.IPublishTraverse"
-      factory="schoolbell.app.rest.RestPublishTraverse"
       permission="zope.Public"
       />
 

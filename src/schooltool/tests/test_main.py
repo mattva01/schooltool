@@ -247,7 +247,7 @@ def doctest_setup():
         >>> from zope.app.publication.zopepublication import ZopePublication
         >>> app = root.get(ZopePublication.root_name)
         >>> app
-        <schooltool.app.SchoolToolApplication object at ...>
+        <schoolbell.app.app.SchoolBellApplication object at ...>
 
     The manager is a SchoolTool person:
 

@@ -5,7 +5,7 @@
 
   <!-- Level Container Views -->
 
-  <configure package="schooltool.browser">
+  <configure package="schoolbell.app.browser">
 
     <page
         name="index.html"

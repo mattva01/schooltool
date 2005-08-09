@@ -31,11 +31,9 @@ from zope.app.component.hooks import getSite
 from zope.app.form.utility import getWidgetsData
 from zope.app.form.interfaces import WidgetsError
 from zope.security.proxy import removeSecurityProxy
-from zope.security.checker import canAccess
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 from schoolbell.app.browser import app as sb
-from schoolbell.app.browser import cal as sbcal
 from schoolbell.app.membership import isTransitiveMember
 from schoolbell.relationship import getRelatedObjects
 from schoolbell.batching import Batch
@@ -50,20 +48,11 @@ from schooltool.interfaces import ISchoolToolApplication
 from schooltool.relationships import URIInstruction, URISection
 from schooltool.app import Person
 
-class SchoolToolApplicationTraverser(sbcal.CalendarOwnerTraverser):
-    """SchoolToolApplication traverser.
-
-    We basically have this to allow for ICalendarOwner traversing while also
-    providing access to top-level containers.
-    """
-    adapts(ISchoolToolApplication)
-
-    def publishTraverse(self, request, name):
-        obj = self.context.get(name)
-        if obj is None:
-            obj = sbcal.CalendarOwnerTraverser.publishTraverse(
-                self, request, name)
-        return obj
+# XXX: Import classes that will be in this module eventually
+from schoolbell.app.browser.app import ContainerView
+from schoolbell.app.browser.app import PersonContainerView
+from schoolbell.app.browser.app import GroupContainerView
+from schoolbell.app.browser.app import ResourceContainerView
 
 
 class SchoolToolApplicationView(BrowserView):
@@ -76,30 +65,7 @@ class SchoolToolApplicationView(BrowserView):
             self.request.response.redirect(url)
 
 
-class ContainerView(sb.ContainerView):
-    """A Container view for schooltool containers.
-
-    XXX: Move the functionality to SchoolBell after freeze (ignas)."""
-
-    def _canModify(self):
-        return canAccess(self.context, '__delitem__')
-
-    canModify = property(_canModify)
-
-
-class PersonContainerView(sb.PersonContainerView, ContainerView):
-    """A SchoolTool PersonContainer View"""
-
-
-class GroupContainerView(sb.GroupContainerView, ContainerView):
-    """A SchoolTool GroupContainer View"""
-
-
-class ResourceContainerView(sb.ResourceContainerView, ContainerView):
-    """A SchoolTool ResourceContainer View"""
-
-
-class CourseContainerView(ContainerView):
+class CourseContainerView(sb.ContainerView):
     """A Course Container view."""
 
     __used_for__ = ICourseContainer
@@ -128,7 +94,7 @@ class CourseAddView(AddView):
             return AddView.update(self)
 
 
-class SectionContainerView(ContainerView):
+class SectionContainerView(sb.ContainerView):
     """A Course Container view."""
 
     __used_for__ = ISectionContainer

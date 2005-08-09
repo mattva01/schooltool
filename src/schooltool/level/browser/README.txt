@@ -12,7 +12,7 @@ student via a promotion workflow from the perspective of the Web UI.
   >>> browser.handleErrors = False
   >>> browser.open(
   ...     'http://localhost/contents.html?'
-  ...     'type_name=BrowserAdd__schooltool.app.SchoolToolApplication&'
+  ...     'type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&'
   ...     'new_value=test')
 
   >>> "test" in browser.contents

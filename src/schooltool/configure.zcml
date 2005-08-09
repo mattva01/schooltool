@@ -19,21 +19,22 @@
       factory="schoolbell.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
-  <adapter
-      for=".interfaces.ISchoolToolApplication"
-      provides="schooltool.interfaces.IApplicationPreferences"
-      factory="schooltool.app.getApplicationPreferences"
-      trusted="true"
-      />
-
-  <adapter
-      for="schoolbell.app.interfaces.IHavePreferences"
-      provides=".interfaces.IPersonPreferences"
-      factory=".app.getPersonPreferences"
-      trusted="true"
-      />
-
   <!-- Subscribers -->
+
+  <subscriber
+      for="schooltool.interfaces.IApplicationInitializationEvent"
+      handler=".app.addManagerGroupToApplication"
+      />
+
+  <subscriber
+      for="schooltool.interfaces.IApplicationInitializationEvent"
+      handler=".app.addSectionContainerToApplication"
+      />
+
+  <subscriber
+      for="schooltool.interfaces.IApplicationInitializationEvent"
+      handler=".app.addCourseContainerToApplication"
+      />
 
   <subscriber
       for="schoolbell.relationship.interfaces.IRelationshipAddedEvent"
@@ -116,10 +117,6 @@
     />
 
   <!-- Application objects -->
-  <content class=".app.SchoolToolApplication">
-    <allow interface=".interfaces.ISchoolToolApplication" />
-    <allow attributes="getSiteManager" />
-  </content>
 
   <content class=".app.CourseContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
@@ -181,12 +178,6 @@
     <require
         permission="schoolbell.viewCalendar"
         set_schema=".interfaces.ICalendarAndTTOverlayInfo"/>
-  </content>
-
-  <content class=".app.PersonPreferences">
-    <require permission="schoolbell.edit"
-        interface="schooltool.interfaces.IPersonPreferences"
-        set_schema="schooltool.interfaces.IPersonPreferences" />
   </content>
 
   <!-- Views -->
