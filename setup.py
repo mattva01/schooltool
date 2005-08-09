@@ -61,7 +61,7 @@ import schoolbell
 #
 
 def build_pot():
-    """Build the schoolbell *.pot."""
+    """Build the *.pot."""
     # where is eveything
     here = os.path.abspath(os.path.dirname(__file__))
     domain = 'schoolbell'
