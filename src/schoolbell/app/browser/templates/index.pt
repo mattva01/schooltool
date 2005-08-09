@@ -1,3 +1,4 @@
+<tal:dummy define="dummy view/update"/>
 <html metal:use-macro="context/@@standard_macros/view"
       i18n:domain="schoolbell">
 <body>

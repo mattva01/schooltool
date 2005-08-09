@@ -80,7 +80,7 @@ Another attempt:
 Now we are authenticated:
 
     >>> print http("""
-    ... GET /frogpond HTTP/1.1
+    ... GET /frogpond/persons/user HTTP/1.1
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -101,7 +101,7 @@ Now we can log out:
 We are logged out:
 
     >>> print http("""
-    ... GET /frogpond HTTP/1.1
+    ... GET /frogpond/calendar HTTP/1.1
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...

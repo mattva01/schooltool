@@ -63,15 +63,15 @@ Ok, it is there:
                 <td>
     ...
 
-How does it look inside?
+How does it look inside?  We should be redirected to the site-wide calendar.
 
     >>> print http(r"""
     ... GET /frogpond/ HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
-    HTTP/1.1 200 Ok
+    HTTP/1.1 303 See Other
     Content-Length: ...
-    Content-Type: text/html;charset=utf-8
+    Location: http://localhost/frogpond/calendar
     ...
     <h1>Welcome to SchoolBell</h1>
     ...

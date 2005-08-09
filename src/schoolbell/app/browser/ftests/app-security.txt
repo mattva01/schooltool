@@ -42,7 +42,7 @@ Let's quickly create a user to run the tests with:
     Location: http://localhost/frogpond/persons
     ...
 
-The user should have the view permission set by default, let's check
+The user should be redirected to the site-wide calendar by default, let's check
 it out:
 
 
@@ -50,11 +50,10 @@ it out:
     ... GET /frogpond/ HTTP/1.1
     ... Authorization: Basic frog:pwd
     ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
+    HTTP/1.1 303 See Other
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
-    ...
-    <h1>Welcome to SchoolBell</h1>
+    Location: http://localhost/frogpond/calendar
     ...
 
 We can traverse to the person index:
