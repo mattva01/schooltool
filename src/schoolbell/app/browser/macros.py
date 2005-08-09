@@ -21,7 +21,26 @@ Macros
 
 $Id$
 """
+import zope.interface
+
+from zope.app import zapi
+from zope.app.publisher.browser import BrowserView
+
 from zope.app import basicskin
 
 class StandardMacros(basicskin.standardmacros.StandardMacros):
-    macro_pages = ('view_macros', 'dialog_macros', 'calendar_macros')
+    macro_pages = ('view_macros', 'dialog_macros',)
+
+
+class SchoolToolMacros(BrowserView):
+    zope.interface.implements(zope.interface.common.mapping.IItemMapping)
+
+    macro_pages = ('calendar_macros',)
+
+    def __getitem__(self, key):
+        name = key + '_macros'
+
+        if name in self.macro_pages:
+            return zapi.getMultiAdapter((self.context, self.request), name=name)
+
+        raise KeyError, key

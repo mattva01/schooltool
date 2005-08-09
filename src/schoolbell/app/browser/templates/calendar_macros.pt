@@ -1,4 +1,4 @@
-<metal:block define-macro="calendar-navigation" i18n:domain="schoolbell">
+<metal:block define-macro="navigation" i18n:domain="schoolbell">
   <div id="calendar-navigation-context">
     <a id="calendar-navigation-context-previous" i18n:attributes="title"
        tal:attributes="href view/prev;
@@ -24,14 +24,15 @@
   </div>
 </metal:block>
 
-<metal:block define-macro="calendar-mode" i18n:domain="schoolbell">
+<metal:block define-macro="mode" i18n:domain="schoolbell">
   <div id="calendar-navigation">
     <a id="calendar-navigation-pdf"
        tal:condition="view/pdfURL"
        tal:attributes="href view/pdfURL"
        title="Printable version"
        i18n:attributes="title"
-       i18n:translate=""><img tal:attributes="src context/++resource++printer.png"
+       i18n:translate=""><img tal:attributes="
+                                   src context/++resource++printer.png"
                           alt="Printable version" i18n:attributes="alt" /></a>
     <a id="calendar-navigation-day"
        tal:attributes="href python:view.calURL('daily')"
@@ -60,13 +61,14 @@
   </div>
 </metal:block>
 
-<metal:block define-macro="calendar-page" i18n:domain="schoolbell">
+<metal:block define-macro="page" i18n:domain="schoolbell">
   <html metal:use-macro="view/@@standard_macros/page">
 
     <title metal:fill-slot="title" i18n:translate="">
         Calendar for <span tal:replace="context/title"
             i18n:name="title" /> - <span i18n:name="calendar_title"
-                                         tal:replace="view/title" i18n:translate=""/>
+                                         tal:replace="view/title" 
+                                         i18n:translate=""/>
     </title>
 
     <metal:block fill-slot="extrahead">
@@ -79,7 +81,8 @@
       <h1 i18n:translate="">
         Calendar for <span tal:replace="context/title"
             i18n:name="title" /> - <span i18n:name="calendar_title"
-                                         tal:replace="view/title" i18n:translate=""/>
+                                         tal:replace="view/title" 
+                                         i18n:translate=""/>
       </h1>
     </metal:block>
 
@@ -93,13 +96,13 @@
     </metal:block>
 
     <metal:block fill-slot="column-left-extra">
-      <div metal:use-macro="view/@@standard_macros/calendar-portlets"/>
+      <div metal:use-macro="view/@@schooltool_macros/calendar/portlets"/>
     </metal:block>
 
     <metal:block fill-slot="body">
-        <div metal:use-macro="view/@@standard_macros/calendar-mode"/>
+        <div metal:use-macro="view/@@schooltool_macros/calendar/mode"/>
         <div class="calcontent">
-          <div metal:use-macro="view/@@standard_macros/calendar-navigation" />
+          <div metal:use-macro="view/@@schooltool_macros/calendar/navigation" />
           <div metal:define-slot="calendar-body"/>
         </div>
     </metal:block>
@@ -171,15 +174,18 @@
   <div id="portlet-calendar-view-month" class="portlet">
 
       <tal:block define="month python:view.getMonth(view.prevMonth());">
-          <metal:block use-macro="view/@@standard_macros/brief-month-view" />
+          <metal:block use-macro="
+              view/@@schooltool_macros/calendar/brief-month-view" />
       </tal:block>
 
       <tal:block define="month python:view.getMonth(view.cursor);">
-          <metal:block use-macro="view/@@standard_macros/brief-month-view" />
+          <metal:block use-macro="
+              view/@@schooltool_macros/calendar/brief-month-view" />
       </tal:block>
 
       <tal:block define="month python:view.getMonth(view.nextMonth());">
-          <metal:block use-macro="view/@@standard_macros/brief-month-view" />
+          <metal:block use-macro="
+              view/@@schooltool_macros/calendar/brief-month-view" />
       </tal:block>
 
   </div>
@@ -200,7 +206,9 @@
              tal:attributes="title event/title;
                              style string:color: ${event/color2};
                              href event/@@absolute_url">
-            <strong tal:content="python:event.dtstart.astimezone(view.timezone).strftime('%H:%M')" />
+            <strong tal:content="
+                python: event.dtstart.astimezone(
+                            view.timezone).strftime('%H:%M')" />
             <span tal:replace="event/shortTitle">Event</span>
           </a>
         </li>
@@ -211,15 +219,19 @@
 
 </metal:block>
 
-<metal:block define-macro="calendar-portlets">
+<metal:block define-macro="portlets">
 
-  <metal:block use-macro="view/@@standard_macros/portlet-tomorrow-events"/>
+  <metal:block use-macro="
+      view/@@schooltool_macros/calendar/portlet-tomorrow-events"/>
 
-  <metal:block use-macro="view/@@standard_macros/portlet-calendar-overlay"/>
+  <metal:block use-macro="
+      view/@@schooltool_macros/calendar/portlet-calendar-overlay"/>
 
-  <metal:block use-macro="view/@@standard_macros/portlet-calendar-jumpto"/>
+  <metal:block use-macro="
+      view/@@schooltool_macros/calendar/portlet-calendar-jumpto"/>
 
-  <metal:block use-macro="view/@@standard_macros/portlet-calendar-view-month"/>
+  <metal:block use-macro="
+      view/@@schooltool_macros/calendar/portlet-calendar-view-month"/>
 
 </metal:block>
 

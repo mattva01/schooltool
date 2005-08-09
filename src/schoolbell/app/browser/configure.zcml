@@ -672,6 +672,15 @@
       />
 
   <page
+      name="schooltool_macros"
+      for="*"
+      class=".macros.SchoolToolMacros"
+      allowed_interface="zope.interface.common.mapping.IItemMapping"
+      permission="zope.Public"
+      layer=".skin.ISchoolBellLayer"
+      />
+
+  <page
       name="view_macros"
       for="*"
       permission="zope.View"
