@@ -201,12 +201,18 @@ def doctest_CalendarSelectionView():
         >>> request.setPrincipal(Principal('fred', '', fred))
         >>> view = View(fred, request)
 
-    It lists Eric's and Igor's calendars as available for selection
+    It lists Eric's, Igor's calendars and the site-wide calendar as available
+    for selection
 
         >>> print view()
         <BLANKLINE>
         ...
             Select calendars to display
+        ...
+              <legend>Public Calendar</legend>
+              <label>
+                <input type="checkbox" name="application"
+                       value="application" />
         ...
             <fieldset class="inline">
               <legend>People</legend>
@@ -317,6 +323,15 @@ def doctest_CalendarSelectionView():
         302
         >>> request.response.getHeader('Location')
         'http://localhost/persons/fred/calendar'
+
+    Regression test for issue328 (traceback when adding overlays).  This was
+    caused by getApplicationCalendar returning None if it could not access the
+    application calendar.  To solve this we now return an empty dict and check
+    the result in update()
+
+        >>> view.getApplicationCalendar()
+        {}
+        >>> view.update()
 
     """
 

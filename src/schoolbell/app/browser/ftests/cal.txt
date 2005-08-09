@@ -662,6 +662,7 @@ and add other calendars to this list.
     ... Authorization: Basic frog:pwd
     ... Content-Type: application/x-www-form-urlencoded
     ...
+    ... application=checked&\
     ... persons:list=toad&\
     ... groups:list=animals&\
     ... nexturl=http://localhost/&\
@@ -670,7 +671,8 @@ and add other calendars to this list.
     HTTP/1.1 303 See Other
     ...
 
-Now, you can see both calendars in the overlay portlet:
+Now, you can see three calendars in the overlay portlet, animals, toad and the
+application calendar
 
     >>> print http("""
     ... GET /frogpond/persons/frog/calendar/daily.html HTTP/1.1
@@ -682,6 +684,12 @@ Now, you can see both calendars in the overlay portlet:
             <input type="checkbox" checked="checked" disabled="disabled" />
             My Calendar
           </label>
+    ...
+         <label>
+            <input type="checkbox" name="overlay:list"
+                   checked="checked" value="/frogpond" />
+            <span>SchoolBell</span>
+         </label>
     ...
          <label>
            <input type="checkbox" name="overlay:list"
@@ -697,6 +705,30 @@ Now, you can see both calendars in the overlay portlet:
            <span>Toad</span>
          </label>
     ...
+
+If we disable permissions on the application calendar, it will no longer show up
+
+    >>> print http("""
+    ... POST /frogpond/calendar/acl.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... marker-sb.person.frog=1&\
+    ... UPDATE_SUBMIT=Set
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/calendar
+    ...
+
+Now the application calendar is no longer in the overlay portlet
+
+    >>> result = http("""
+    ... GET /frogpond/persons/frog/calendar/daily.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """, handle_errors=False)
+    >>> 'value="/frogpond"' in result.getBody()
+    False
 
 Regression test for Issue243 (Calendars with identical titles are
 throwing system error):
