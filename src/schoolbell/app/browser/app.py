@@ -70,9 +70,10 @@ class SchoolBellApplicationTraverser(CalendarOwnerTraverser):
     adapts(ISchoolBellApplication)
 
     def publishTraverse(self, request, name):
-        if name in ('persons', 'resources', 'groups'):
-            return self.context[name]
-
+        obj = self.context.get(name)
+        if obj is not None:
+            return obj
+        
         return CalendarOwnerTraverser.publishTraverse(self, request, name)
 
 
@@ -109,6 +110,10 @@ class ContainerView(BrowserView):
         start = int(self.request.get('batch_start', 0))
         size = int(self.request.get('batch_size', 10))
         self.batch = Batch(results, start, size, sort_by='title')
+
+    def canModify(self):
+        return canAccess(self.context, '__delitem__')
+    canModify = property(canModify)
 
 
 class PersonContainerView(ContainerView):
