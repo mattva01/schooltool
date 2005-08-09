@@ -31,14 +31,25 @@ from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.testing.doctestunit import pprint
+from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.testing import ztapi
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.component.hooks import setSite
 from zope.app.component.site import LocalSiteManager
 from zope.i18n import translate
 
-from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schoolbell.app.browser.tests import setup
 from schoolbell.app.rest.tests.utils import NiceDiffsMixin
+
+
+def setUp(test=None):
+    setup.setUp(test)
+    from schooltool import timetable
+    ztapi.provideAdapter(IAttributeAnnotatable,
+                         timetable.interfaces.ITimetabled,
+                         timetable.TimetabledAdapter)
+
+tearDown = setup.tearDown
 
 
 def createSchema(days, *periods_for_each_day):
@@ -82,7 +93,7 @@ def createDayTemplate(periods):
 
 
 def doctest_TermView_calendar():
-    """Unit tests for TermAddView.calendar
+    '''Unit tests for TermAddView.calendar
 
         >>> from schooltool.timetable import Term
         >>> from schooltool.timetable.browser import TermView
@@ -104,11 +115,11 @@ def doctest_TermView_calendar():
         Week 35:  23  24  25  26  27  28  29
         Week 36:  30  31
 
-    """
+    '''
 
 
 def doctest_TermEditView_title():
-    """Unit tests for TermEditView.title
+    '''Unit tests for TermEditView.title
 
         >>> from schooltool.timetable import Term
         >>> from schooltool.timetable.browser import TermEditView
@@ -124,11 +135,11 @@ def doctest_TermEditView_title():
         >>> translate(view.title())
         u'Change Term: Sample'
 
-    """
+    '''
 
 
 def doctest_TermEditView_calendar():
-    """Unit tests for TermEditView.calendar
+    '''Unit tests for TermEditView.calendar
 
         >>> from schooltool.timetable import Term
         >>> from schooltool.timetable.browser import TermEditView
@@ -148,11 +159,11 @@ def doctest_TermEditView_calendar():
         Week 32:   2   3   4   5   6   7   8
         Week 33:   9  10  11  12
 
-    """
+    '''
 
 
 def doctest_TermEditView_update():
-    """Unit tests for TermEditView.update
+    '''Unit tests for TermEditView.update
 
         >>> from schooltool.timetable import Term
         >>> from schooltool.timetable.browser import TermEditView
@@ -224,11 +235,11 @@ def doctest_TermEditView_update():
 
         >>> zope.event.subscribers[:] = old_subscribers
 
-    """
+    '''
 
 
 def doctest_TermAddView_update():
-    """Unit tests for TermAddView.update
+    '''Unit tests for TermAddView.update
 
     `update` sets view.term
 
@@ -248,11 +259,11 @@ def doctest_TermAddView_update():
         >>> view.term
         <...Term object at ...>
 
-    """
+    '''
 
 
 def doctest_TermAddView_create():
-    """Unit tests for TermAddView.create
+    '''Unit tests for TermAddView.create
 
     `create` either returns view.term (if it has been successfully built
     by `update` before), or raises a WidgetsError (because `_buildTerm`
@@ -274,11 +285,11 @@ def doctest_TermAddView_create():
           ...
         WidgetsError
 
-    """
+    '''
 
 
 def doctest_TermAddView_add():
-    r"""Unit tests for TermAddView.add
+    r'''Unit tests for TermAddView.add
 
     `add` adds the term to the term service.
 
@@ -301,11 +312,11 @@ def doctest_TermAddView_add():
         >>> context['Term'] is term
         True
 
-    """
+    '''
 
 
 def doctest_TermAddView_create():
-    """Unit tests for TermAddView.create
+    '''Unit tests for TermAddView.create
 
     `create` either returns view.term (if it has been successfully built
     by `update` before), or raises a WidgetsError (because `_buildTerm`
@@ -327,11 +338,11 @@ def doctest_TermAddView_create():
           ...
         WidgetsError
 
-    """
+    '''
 
 
 def doctest_TermAddView_nextURL():
-    """Unit tests for TermAddView.nextURL
+    '''Unit tests for TermAddView.nextURL
 
     `nextURL` returns the absolute url of its context.
 
@@ -344,11 +355,11 @@ def doctest_TermAddView_nextURL():
         >>> view.nextURL()
         'http://127.0.0.1'
 
-    """
+    '''
 
 
 def doctest_TermEditViewMixin_buildTerm():
-    """Unit tests for TermEditViewMixin._buildTerm
+    '''Unit tests for TermEditViewMixin._buildTerm
 
     We shall use TermAddView here -- it inherits TermEditViewMixin._buildTerm
     without changing it.
@@ -451,11 +462,11 @@ def doctest_TermEditViewMixin_buildTerm():
         2005-10-09 is a holiday
         2005-10-10 is a holiday
 
-    """
+    '''
 
 
 def doctest_TermAddView_calendar():
-    """Unit tests for TermAddView.calendar
+    '''Unit tests for TermAddView.calendar
 
         >>> from schooltool.timetable import TermContainer
         >>> from schooltool.timetable.browser import TermAddView
@@ -506,11 +517,11 @@ def doctest_TermAddView_calendar():
         Week 35:  23  24  25  26  27  28  29
         Week 36:  30  31
 
-    """
+    '''
 
 
 def doctest_TermRenderer_calendar():
-    """Unit tests for TermRenderer.calendar
+    '''Unit tests for TermRenderer.calendar
 
         >>> from schooltool.timetable import Term
         >>> from schooltool.timetable.browser import TermRenderer
@@ -572,11 +583,11 @@ def doctest_TermRenderer_calendar():
         Week 53:                       3   4
         Week 1 :   5
 
-    """
+    '''
 
 
 def doctest_TermRenderer_month():
-    """Unit test for TermRenderer.month
+    '''Unit test for TermRenderer.month
 
         >>> from schooltool.timetable import Term
         >>> from schooltool.timetable.browser import TermRenderer
@@ -643,11 +654,11 @@ def doctest_TermRenderer_month():
                  Mon Tue Wed Thu Fri Sat Sun
         Week 20:      17
 
-    """
+    '''
 
 
 def doctest_TermRenderer_week():
-    """Unit test for TermRenderer.week
+    '''Unit test for TermRenderer.week
 
         >>> from schooltool.timetable import Term
         >>> from schooltool.timetable.browser import TermRenderer
@@ -730,7 +741,7 @@ def doctest_TermRenderer_week():
         23 2005-05-06 6 False schoolday javascript:toggle(23)
         24 2005-05-07 7 True holiday javascript:toggle(24)
 
-    """
+    '''
 
 
 def print_cal(calendar, day_format='%(number)3d'):
@@ -750,17 +761,18 @@ def print_cal(calendar, day_format='%(number)3d'):
 
 
 def doctest_TimetableView():
-    """Test for TimetableView.
+    '''Test for TimetableView.
 
         >>> from schooltool.timetable.browser import TimetableView
         >>> from schooltool.timetable import Timetable
         >>> from schooltool.timetable import TimetableDay, TimetableActivity
+        >>> from schooltool.timetable.interfaces import ITimetabled
         >>> from schooltool.app import Section
 
     Create some context:
 
         >>> s = Section()
-        >>> s.timetables['term.schema'] = tt = Timetable(['day 1'])
+        >>> ITimetabled(s).timetables['term.schema'] = tt = Timetable(['day 1'])
         >>> tt['day 1'] = ttd = TimetableDay(['A'])
         >>> ttd.add('A', TimetableActivity('Something'))
 
@@ -777,11 +789,11 @@ def doctest_TimetableView():
         >>> view.rows()
         [[{'period': 'A', 'activity': 'Something'}]]
 
-    """
+    '''
 
 
 def doctest_TimetableSchemaView():
-    """Test for TimetableView.
+    '''Test for TimetableView.
 
         >>> from schooltool.timetable.browser import TimetableSchemaView
         >>> from schooltool.timetable import TimetableSchema
@@ -807,7 +819,7 @@ def doctest_TimetableSchemaView():
         >>> view.rows()
         [[{'period': 'A', 'activity': ''}]]
 
-    """
+    '''
 
 
 class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
@@ -1173,7 +1185,7 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
 
 
 def doctest_SimpleTimetableSchemaAdd():
-    r"""Doctest for the SimpleTimetableSchemaAdd view
+    r'''Doctest for the SimpleTimetableSchemaAdd view
 
         >>> from schooltool.tests import setUpApplicationPreferences
         >>> setUpApplicationPreferences()
@@ -1341,7 +1353,7 @@ def doctest_SimpleTimetableSchemaAdd():
         >>> request.response.getHeader('location')
         'http://127.0.0.1/ttschemas'
 
-    If there's a period skipped in a form, consequent periods are not included:
+    If there\'s a period skipped in a form, consequent periods are not included:
 
         >>> request = TestRequest(form={'field.title': 'default',
         ...                             'field.period_name_1': 'Period 1',
@@ -1430,11 +1442,11 @@ def doctest_SimpleTimetableSchemaAdd():
         >>> 'already-2' in app['ttschemas']
         True
 
-    """
+    '''
 
 
 def doctest_SimpleTimetableSchemaAdd_errors():
-    """Doctest for the SimpleTimetableSchemaAdd view
+    '''Doctest for the SimpleTimetableSchemaAdd view
 
         >>> from schooltool.tests import setUpApplicationPreferences
         >>> setUpApplicationPreferences()
@@ -1525,11 +1537,11 @@ def doctest_SimpleTimetableSchemaAdd_errors():
         >>> request.response.getStatus() != 302
         True
 
-    """
+    '''
 
 
 def doctest_PersonTimetableSetupView():
-    """Doctest for the PersonTimetableSetupView view
+    '''Doctest for the PersonTimetableSetupView view
 
     Setup the ApplicationPreferences adapter
 
@@ -1539,6 +1551,7 @@ def doctest_PersonTimetableSetupView():
     We will need an application object
 
         >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.timetable.interfaces import ITimetabled
         >>> app = SchoolToolApplication()
         >>> directlyProvides(app, IContainmentRoot)
         >>> app.setSiteManager(LocalSiteManager(app))
@@ -1593,8 +1606,9 @@ def doctest_PersonTimetableSetupView():
         >>> view.getSchema() is app["ttschemas"]["default"]
         True
 
-    The default for a term is "the current term", or, if there's none, the next
-    one.  Since this depends on today's date, we can't explicitly test it here.
+    The default for a term is "the current term", or, if there\'s none, the
+    next one.  Since this depends on today\'s date, we can\'t explicitly test
+    it here.
 
         >>> (view.getTerm() is app["terms"]["2005-spring"] or
         ...  view.getTerm() is app["terms"]["2005-fall"])
@@ -1624,12 +1638,12 @@ def doctest_PersonTimetableSetupView():
 
         >>> from schooltool.timetable import TimetableActivity
         >>> ttkey = "2005-fall.default"
-        >>> math.timetables[ttkey] = ttschema.createTimetable()
-        >>> math.timetables[ttkey]['Tue'].add('10:00',
+        >>> ITimetabled(math).timetables[ttkey] = ttschema.createTimetable()
+        >>> ITimetabled(math).timetables[ttkey]['Tue'].add('10:00',
         ...                                   TimetableActivity('Math'))
 
-        >>> history.timetables[ttkey] = ttschema.createTimetable()
-        >>> history.timetables[ttkey]['Tue'].add('10:00',
+        >>> ITimetabled(history).timetables[ttkey] = ttschema.createTimetable()
+        >>> ITimetabled(history).timetables[ttkey]['Tue'].add('10:00',
         ...                                   TimetableActivity('History'))
 
         >>> section_map = view.sectionMap(term, ttschema)
@@ -1762,7 +1776,7 @@ def doctest_PersonTimetableSetupView():
            9:00: [] [none]
           10:00: [Math, History] [none]
 
-    When people are members of a section as part of a form (group) we don't
+    When people are members of a section as part of a form (group) we don\'t
     allow changing that period from here.  They must be removed from the
     group.
 
@@ -1818,11 +1832,11 @@ def doctest_PersonTimetableSetupView():
         <BLANKLINE>
         ...
 
-    """
+    '''
 
 
 def doctest_PersonTimetableSetupView_no_timetables():
-    """Doctest for the PersonTimetableSetupView view
+    '''Doctest for the PersonTimetableSetupView view
 
     What if there are no terms/timetable schemas?
 
@@ -1863,11 +1877,11 @@ def doctest_PersonTimetableSetupView_no_timetables():
         <p>There are no terms or timetable schemas defined.</p>
         ...
 
-    """
+    '''
 
 
 def doctest_PersonTimetableSetupView_no_default_ttschema():
-    """Doctest for the PersonTimetableSetupView view
+    '''Doctest for the PersonTimetableSetupView view
 
     What if there is no default timetable schema?
 
@@ -1906,11 +1920,11 @@ def doctest_PersonTimetableSetupView_no_default_ttschema():
         >>> view.getSchema() is app["ttschemas"]["other"]
         True
 
-    """
+    '''
 
 
 def doctest_TimetableSchemaContainerView():
-    """A test for TimetableSchemaContainer view
+    '''A test for TimetableSchemaContainer view
 
     We will need an application:
 
@@ -1923,7 +1937,7 @@ def doctest_TimetableSchemaContainerView():
         >>> app["ttschemas"]["schema1"] = TimetableSchema([])
         >>> app["ttschemas"]["schema2"] = TimetableSchema([])
 
-    Let's create our view:
+    Let\'s create our view:
 
         >>> from schooltool.timetable.browser import TimetableSchemaContainerView
         >>> from zope.publisher.browser import TestRequest
@@ -1964,11 +1978,11 @@ def doctest_TimetableSchemaContainerView():
         >>> app["ttschemas"].default_id is None
         True
 
-    """
+    '''
 
 
 def doctest_SectionTimetableSetupView():
-    """Doctest for the SectionTimetableSetupView view
+    '''Doctest for the SectionTimetableSetupView view
 
     Setup the ApplicationPreferences adapter
 
@@ -1986,8 +2000,9 @@ def doctest_SectionTimetableSetupView():
     We will need a section
 
         >>> from schooltool.app import Section
+        >>> from schooltool.timetable.interfaces import ITimetabled
         >>> app["sections"]["math"] = math = Section("Math")
-        >>> math.timetables.keys()
+        >>> ITimetabled(math).timetables.keys()
         []
 
     We will also need a timetable schema, and a term.
@@ -2009,7 +2024,7 @@ def doctest_SectionTimetableSetupView():
         >>> request = TestRequest()
         >>> view = SectionTimetableSetupView(context, request)
 
-    We have some helper methods to simplify the form if there's only one
+    We have some helper methods to simplify the form if there\'s only one
     option for terms or schemas:
 
         >>> view.app = app
@@ -2084,7 +2099,7 @@ def doctest_SectionTimetableSetupView():
         >>> request.response.getHeader('location')
         'http://127.0.0.1/sections/math'
 
-    If we save the form, we're redirected to the timetable view for the schema
+    If we save the form, we\'re redirected to the timetable view for the schema
     that we just saved:
 
         >>> request = TestRequest(form={'SAVE': 'Save'})
@@ -2098,14 +2113,14 @@ def doctest_SectionTimetableSetupView():
 
     An empty save request will create an empty timetable:
 
-        >>> math.timetables['2005-fall.default']
+        >>> ITimetabled(math).timetables['2005-fall.default']
         <Timetable: ...>
-        >>> math.timetables['2005-fall.default']['Mon'].items()
+        >>> ITimetabled(math).timetables['2005-fall.default']['Mon'].items()
         [('9:00', Set([])), ('10:00', Set([]))]
-        >>> math.timetables['2005-fall.default']['Tue'].items()
+        >>> ITimetabled(math).timetables['2005-fall.default']['Tue'].items()
         [('9:00', Set([])), ('10:00', Set([]))]
 
-    Let's add some scheduled classes:
+    Let\'s add some scheduled classes:
 
         >>> request = TestRequest(form={'ttschema': 'default',
         ...                             'term': '2005-fall',
@@ -2133,13 +2148,13 @@ def doctest_SectionTimetableSetupView():
 
     Now we have a schedule for our course:
 
-        >>> math.timetables['2005-fall.default']['Mon']['9:00']
+        >>> ITimetabled(math).timetables['2005-fall.default']['Mon']['9:00']
         Set([TimetableActivity('', ...
-        >>> math.timetables['2005-fall.default']['Mon']['10:00']
+        >>> ITimetabled(math).timetables['2005-fall.default']['Mon']['10:00']
         Set([])
-        >>> math.timetables['2005-fall.default']['Tue']['9:00']
+        >>> ITimetabled(math).timetables['2005-fall.default']['Tue']['9:00']
         Set([TimetableActivity('', ...
-        >>> math.timetables['2005-fall.default']['Tue']['10:00']
+        >>> ITimetabled(math).timetables['2005-fall.default']['Tue']['10:00']
         Set([])
 
         >>> request = TestRequest(form={'ttschema': 'default',
@@ -2147,7 +2162,7 @@ def doctest_SectionTimetableSetupView():
         ...                             'Mon.9:00':'ON',
         ...                             'SAVE': 'Save'})
 
-    Since we don't have an update() method, we call the page again to see our
+    Since we don\'t have an update() method, we call the page again to see our
     last changes, all the periods that were 'ON' are now checked:
 
         >>> view = SectionTimetableSetupView(context, request)
@@ -2181,16 +2196,16 @@ def doctest_SectionTimetableSetupView():
                             id="Tue.10:00" value="Tue.10:00"
         ...
 
-    Tuesday's Activity is no longer there:
+    Tuesday\'s Activity is no longer there:
 
-        >>> math.timetables['2005-fall.default']['Tue']['9:00']
+        >>> ITimetabled(math).timetables['2005-fall.default']['Tue']['9:00']
         Set([])
 
 
-    """
+    '''
 
 def doctest_SpecialDayView():
-    """SpecialDayView tests.
+    '''SpecialDayView tests.
 
     Special days are days for which some periods are shortened or
     cancelled altogether.  Our view for that presents the
@@ -2550,7 +2565,7 @@ def doctest_SpecialDayView():
         >>> view.error in result
         True
 
-    We're courteous enough though to leave the date intact in the input field:
+    We\'re courteous enough though to leave the date intact in the input field:
 
         >>> 'value="2004-01-01"' in result
         True
@@ -2649,11 +2664,11 @@ def doctest_SpecialDayView():
            </table>
         ...
 
-    """
+    '''
 
 
 def doctest_EmergencyDayView():
-    """
+    '''
     Emergency days
     ~~~~~~~~~~~~~~
 
@@ -2979,7 +2994,7 @@ def doctest_EmergencyDayView():
         <div class="error">The replacement date you entered is invalid.</div>
         ...
 
-    """
+    '''
 
 
 def test_suite():

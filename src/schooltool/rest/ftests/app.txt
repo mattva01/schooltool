@@ -193,9 +193,9 @@ are SchoolTool objects, rather than SchoolBell objects:
     >>> getRootFolder()['frogpond']['persons']['goose']
     <schooltool.app.Person object at ...>
     >>> getRootFolder()['frogpond']['groups']['birds']
-    <schooltool.app.Group object at ...>
+    <schoolbell.app.app.Group object at ...>
     >>> getRootFolder()['frogpond']['resources']['lily']
-    <schooltool.app.Resource object at ...>
+    <schoolbell.app.app.Resource object at ...>
     >>> getRootFolder()['frogpond']['courses']['birdwatching']
     <schooltool.app.Course object at ...>
     >>> getRootFolder()['frogpond']['sections']['birdwatching-1']
@@ -238,9 +238,9 @@ The same should happen if we post to respective containers:
     ...
 
     >>> getRootFolder()['frogpond']['groups']['animals']
-    <schooltool.app.Group object at ...>
+    <schoolbell.app.app.Group object at ...>
     >>> getRootFolder()['frogpond']['resources']['water']
-    <schooltool.app.Resource object at ...>
+    <schoolbell.app.app.Resource object at ...>
     >>> getRootFolder()['frogpond']['courses']['flight']
     <schooltool.app.Course object at ...>
 

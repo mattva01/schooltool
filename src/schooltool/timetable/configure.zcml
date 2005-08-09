@@ -29,6 +29,11 @@
       factory="schoolbell.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
+  <adapter
+      factory=".TimetabledAdapter"
+      trusted="true"
+      permission="zope.Public" />
+
   <utility
       provides=".interfaces.ITimetableModelFactory"
       name="SequentialDaysTimetableModel"

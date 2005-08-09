@@ -693,9 +693,11 @@ class ITimetableDict(IContainer):
 
 
 class ITimetabled(Interface):
-    """An object that has a timetable related to it -- either its own,
+    """The timetable content related to an object -- either its own,
     or composed of the timetables of related objects.
     """
+
+    object = Attribute("The object these timetables are for.")
 
     timetables = Object(
         schema=ITimetableDict,

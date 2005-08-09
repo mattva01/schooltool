@@ -44,7 +44,7 @@ from schoolbell.calendar.icalendar import ICalParseError
 from schoolbell.calendar.icalendar import ICalReader
 
 from schooltool import getSchoolToolApplication
-from schooltool.app import Person, Group, Resource, Course, Section
+from schooltool.app import Person, Course, Section
 from schooltool.app import CourseContainer, SectionContainer
 from schooltool.common import parse_date
 from schooltool.timetable.interfaces import ITerm, ITermContainer
@@ -53,29 +53,18 @@ from schooltool.interfaces import ISection, ISectionContainer
 from schooltool.timetable import Term
 
 
-class SchoolToolApplicationView(sb.ApplicationView):
-    """The root view for the application."""
-
-    template = Template("templates/app.pt",
-                        content_type="text/xml; charset=UTF-8")
-
-
+# XXX: Temporary Hack
 class PersonFileFactory(sb.PersonFileFactory):
     """An adapter that creates SchoolTool persons in RESTive views"""
 
     factory = Person
 
 
-class GroupFileFactory(sb.GroupFileFactory):
-    """An adapter that creates SchoolTool groups in RESTive views"""
+class SchoolToolApplicationView(sb.ApplicationView):
+    """The root view for the application."""
 
-    factory = Group
-
-
-class ResourceFileFactory(sb.ResourceFileFactory):
-    """An adapter that creates SchoolTool resources in RESTive views"""
-
-    factory = Resource
+    template = Template("templates/app.pt",
+                        content_type="text/xml; charset=UTF-8")
 
 
 class CourseFileFactory(sb.ApplicationObjectFileFactory):

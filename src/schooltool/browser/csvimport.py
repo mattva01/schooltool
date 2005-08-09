@@ -34,6 +34,7 @@ from schooltool import getSchoolToolApplication
 from schooltool.interfaces import ISectionContainer
 from schooltool.app import Person, Section, Course, Group, Resource
 from schooltool.timetable import TimetableActivity
+from schooltool.timetable.interfaces import ITimetabled
 
 class ImportErrorCollection(object):
 
@@ -247,12 +248,13 @@ class TimetableCSVImporter(object):
             section.instructors.add(instructor)
 
         # Create a timetable
+        timetables = ITimetabled(section).timetables
         timetable_key = ".".join((self.term.__name__, self.ttschema.__name__))
-        if timetable_key not in section.timetables.keys():
+        if timetable_key not in timetables.keys():
             tt = self.ttschema.createTimetable()
-            section.timetables[timetable_key] = tt
+            timetables[timetable_key] = tt
         else:
-            tt = section.timetables[timetable_key]
+            tt = timetables[timetable_key]
 
         # Add timetable activities.
         for day_id, period_id, location in periods:

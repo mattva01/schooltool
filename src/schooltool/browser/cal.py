@@ -29,6 +29,7 @@ from pytz import timezone
 
 from zope.security.checker import canAccess
 from zope.security.proxy import removeSecurityProxy
+from zope.app import zapi
 from zope.app.traversing.api import getPath
 from zope.app.annotation.interfaces import IAnnotations
 from zope.app.publisher.browser import BrowserView
@@ -38,6 +39,7 @@ from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
 
 from schooltool.app import PersonPreferences
 from schooltool.timetable import getPeriodsForDay
+from schooltool.timetable.interfaces import ITimetabled
 from schooltool.interfaces import IPersonPreferences, ISection
 
 
@@ -204,7 +206,8 @@ class CalendarListView(BrowserView):
         # personal calendar
         yield (self.context, '#9db8d2', '#7590ae')
 
-        ttcalendar = self.context.__parent__.makeTimetableCalendar()
+        parent = zapi.getParent(self.context)
+        ttcalendar = ITimetabled(parent).makeTimetableCalendar()
 
         user = IPerson(self.request.principal, None)
         if user is None:
@@ -234,5 +237,5 @@ class CalendarListView(BrowserView):
                 # overlaid timetables
                 if item.show_timetables:
                     owner = item.calendar.__parent__
-                    ttcalendar = owner.makeTimetableCalendar()
+                    ttcalendar = ITimetabled(owner).makeTimetableCalendar()
                     yield (ttcalendar, item.color1, item.color2)

@@ -31,6 +31,7 @@ from zope.app.testing import ztapi
 from zope.publisher.browser import TestRequest
 from zope.i18n import translate
 from zope.interface.verify import verifyObject
+from zope.app.annotation.interfaces import IAttributeAnnotatable
 
 from schooltool.common import dedent
 from schooltool.app import Person, Course, Section, Resource
@@ -38,10 +39,18 @@ from schooltool.relationships import URISection, URISectionOfCourse
 from schoolbell.app.membership import URIMember
 from schoolbell.relationship.tests import setUp as setUpRelationshipStuff
 from schoolbell.relationship.tests import tearDown as tearDownRelationshipStuff
-from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schoolbell.app.browser.tests.setup import setUp as testSetUp, tearDown
 from schooltool.browser.csvimport import InvalidCSVError
+from schooltool.timetable.interfaces import ITimetabled
+from schooltool.timetable import TimetabledAdapter
 
 __metaclass__ = type
+
+
+def setUp(test=None):
+    testSetUp(test)
+    ztapi.provideAdapter(IAttributeAnnotatable, ITimetabled,
+                         TimetabledAdapter)
 
 
 class TestTimetableCSVImportView(unittest.TestCase):
@@ -167,6 +176,8 @@ class TestTimetableCSVImporter(unittest.TestCase):
         from zope.app.container.interfaces import INameChooser
         ztapi.provideAdapter(ISectionContainer, INameChooser,
                              SimpleNameChooser)
+        ztapi.provideAdapter(IAttributeAnnotatable, ITimetabled,
+                             TimetabledAdapter)
 
         self.app = app = SchoolToolApplication()
 
@@ -323,7 +334,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assert_(persons['lorch'] in philosophy_guzman.members)
 
         # Look at the timetables of the sections
-        lorch_tt = philosophy_lorch.timetables['summer.three-day']
+        lorch_tt = ITimetabled(philosophy_lorch).timetables['summer.three-day']
         self.assertEquals(len(list(lorch_tt.itercontent())), 3)
         # Look at a couple of periods.
         self.assertEquals(len(lorch_tt['Monday']['B']), 1)
@@ -454,7 +465,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assert_(instructor in section.instructors)
 
         # Check timetable
-        tt = section.timetables['fall.three-day']
+        tt = ITimetabled(section).timetables['fall.three-day']
         self.assertEquals(len(list(tt.itercontent())), 2)
 
         # Check activities in timetable
@@ -477,7 +488,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         section2 = imp.createSection(course, instructor,
                                      periods=periods, dry_run=False)
         self.assert_(section2 is section)
-        self.assert_(section.timetables['fall.three-day'] is tt)
+        self.assert_(ITimetabled(section).timetables['fall.three-day'] is tt)
         self.assertEquals(len(list(tt.itercontent())), 2)
 
     def test_createSection_existing(self):
@@ -491,14 +502,14 @@ class TestTimetableCSVImporter(unittest.TestCase):
         title = 'Philosophy - Lorch'
         section = self.app['sections']['oogabooga'] = Section(title=title)
         tt = imp.ttschema.createTimetable()
-        section.timetables['fall.three-day'] = tt
+        ITimetabled(section).timetables['fall.three-day'] = tt
 
         # real run
         section2 = imp.createSection(course, instructor,
                                      periods=periods, dry_run=False)
 
         self.assert_(section is section2)
-        self.assert_(section.timetables['fall.three-day'] is tt)
+        self.assert_(ITimetabled(section).timetables['fall.three-day'] is tt)
 
     def test_importChunk(self):
         imp = self.createImporter(term='fall', ttschema='three-day')
@@ -514,7 +525,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.failIf(imp.errors.anyErrors(), imp.errors)
 
         philosophy_curtin = self.app['sections']['philosophy--curtin']
-        tt = philosophy_curtin.timetables['fall.three-day']
+        tt = ITimetabled(philosophy_curtin).timetables['fall.three-day']
         activities = list(tt.itercontent())
         self.assertEquals(len(activities), 2)
 

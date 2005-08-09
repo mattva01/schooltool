@@ -638,9 +638,9 @@ class TimetableTraverser(object):
         >>> request = TestRequest()
 
         >>> traverser = TimetableTraverser(person, request)
-        >>> traverser.publishTraverse(request, "anything") is person.timetables
+        >>> timetables = ITimetabled(person).timetables
+        >>> traverser.publishTraverse(request, "anything") is timetables
         True
-
     """
 
     implements(IRestTraverser)
@@ -651,7 +651,7 @@ class TimetableTraverser(object):
         self.request = request
 
     def publishTraverse(self, request, name):
-        return self.context.timetables
+        return ITimetabled(self.context).timetables
 
 
 class NullTimetable(NullResource):
@@ -727,13 +727,13 @@ class CompositeTimetabled(object):
     It just wraps a timetabled object under an ICompositeTimetabled
     interface.
 
-        >>> from schooltool.app import Person
-        >>> person = Person()
-        >>> ct = CompositeTimetabled(person)
+        >>> from schooltool.timetable.tests.test_timetable import Parent
+        >>> obj = Parent()
+        >>> ct = CompositeTimetabled(obj)
         >>> ICompositeTimetabled.providedBy(ct)
         True
 
-        >>> person.getCompositeTimetable = lambda term,schema: [term, schema]
+        >>> obj.getCompositeTimetable = lambda term,schema: [term, schema]
         >>> ct.getCompositeTimetable("term", "schema")
         ['term', 'schema']
 
@@ -747,12 +747,12 @@ class CompositeTimetabled(object):
     def getCompositeTimetable(self, term, schema):
         """See ICompositeTimetabled."""
 
-        return self.context.getCompositeTimetable(term, schema)
+        return ITimetabled(self.context).getCompositeTimetable(term, schema)
 
     def listCompositeTimetables(self):
         """See ICompositeTimetabled."""
 
-        return self.context.listCompositeTimetables()
+        return ITimetabled(self.context).listCompositeTimetables()
 
 
 class CompositeTimetableTraverser(object):

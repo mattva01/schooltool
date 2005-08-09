@@ -140,16 +140,18 @@ import zope.event
 from persistent import Persistent
 from persistent.list import PersistentList
 from persistent.dict import PersistentDict
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.component import provideAdapter, adapts
 from zope.interface import implements
 from zope.interface import directlyProvides
+
 from zope.app import zapi
-from zope.app.traversing.api import getPath
-from zope.app.location.traversing import LocationPhysicallyLocatable
-from zope.component import provideAdapter, adapts
+from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.app.annotation.interfaces import IAnnotatable, IAnnotations
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.contained import Contained
 from zope.app.location.interfaces import ILocation
+from zope.app.location.traversing import LocationPhysicallyLocatable
+from zope.app.traversing.api import getPath
 
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.calendar.simple import ImmutableCalendar
@@ -710,17 +712,25 @@ class TimetableDict(PersistentDict):
     popitem = _not_implemented
 
 
-class TimetabledMixin(object):
-    """A mixin providing ITimetabled with the default semantics of
+TIMETABLES_KEY = 'schooltool.timetable.timetables'
+
+class TimetabledAdapter(object):
+    """This adapter adapts any annotatable object to be timetabled.
+
+    It provides ``ITimetabled`` with the default semantics of
     timetable composition by membership and logic for searching for
-    ICompositeTimetableProvider facets.
+    ``ICompositeTimetableProvider`` facets.
     """
-
     implements(ITimetabled)
+    adapts(IAnnotatable)
 
-    def __init__(self):
-        self.timetables = TimetableDict()
-        self.timetables.__parent__ = self
+    def __init__(self, context):
+        self.object = context
+        annotations = IAnnotations(context)
+        self.timetables = annotations.get(TIMETABLES_KEY)
+        if self.timetables is None:
+            self.timetables = annotations[TIMETABLES_KEY] = TimetableDict()
+            self.timetables.__parent__ = context
 
     def getCompositeTimetable(self, period_id, schema_id):
         timetables = []
@@ -745,7 +755,7 @@ class TimetabledMixin(object):
             result.update(tt)
 
         parent = TimetableDict()
-        parent.__parent__ = self
+        parent.__parent__ = self.object
         parent.__name__ = 'composite-timetables'
         parent[".".join((period_id, schema_id))] = result
 
@@ -768,7 +778,7 @@ class TimetabledMixin(object):
         result = ImmutableCalendar(events)
         # Parent is needed so that we can find out the owner of this calendar.
         directlyProvides(result, ILocation)
-        result.__parent__ = self
+        result.__parent__ = self.object
         result.__name__ = 'timetable-calendar'
         return result
 

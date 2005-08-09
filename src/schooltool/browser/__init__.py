@@ -25,6 +25,7 @@ $Id: __init__.py 3405 2005-04-12 16:08:43Z bskahan $
 from zope.app.publisher.browser import BrowserView
 
 from schooltool.app import getSchoolToolApplication
+from schooltool.timetable.interfaces import ITimetabled
 from schoolbell.app.browser.cal import CalendarOwnerTraverser
 
 
@@ -52,6 +53,6 @@ class TimetabledTraverser(CalendarOwnerTraverser):
 
     def publishTraverse(self, request, name):
         if name == 'timetables':
-            return self.context.timetables
+            return ITimetabled(self.context).timetables
         else:
             return CalendarOwnerTraverser.publishTraverse(self, request, name)

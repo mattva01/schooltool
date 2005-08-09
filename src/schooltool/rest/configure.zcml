@@ -101,27 +101,6 @@
       />
 
   <adapter
-      for="schooltool.interfaces.IPersonContainer"
-      provides="zope.app.filerepresentation.interfaces.IFileFactory"
-      factory=".app.PersonFileFactory"
-      permission="zope.Public"
-      />
-
-  <adapter
-      for="schooltool.interfaces.IGroupContainer"
-      provides="zope.app.filerepresentation.interfaces.IFileFactory"
-      factory=".app.GroupFileFactory"
-      permission="zope.Public"
-      />
-
-  <adapter
-      for="schooltool.interfaces.IResourceContainer"
-      provides="zope.app.filerepresentation.interfaces.IFileFactory"
-      factory=".app.ResourceFileFactory"
-      permission="zope.Public"
-      />
-
-  <adapter
       for="schooltool.interfaces.ICourseContainer"
       provides="zope.app.filerepresentation.interfaces.IFileFactory"
       factory=".app.CourseFileFactory"
@@ -208,6 +187,16 @@
       name="GET"
       factory=".app.TermView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+
+  <!-- XXX: Temporary hack to override SB registrations. This can go away -->
+  <!--      once there is only 1 Person implementation in SB/ST. -->
+  <adapter
+      for="schooltool.app.PersonContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".app.PersonFileFactory"
       permission="zope.Public"
       />
 

@@ -38,23 +38,14 @@ from schoolbell.calendar.interfaces import Unchanged
 
 from schooltool import SchoolToolMessageID as _
 
-from schooltool.timetable.interfaces import ITimetabled
-
 #
 #  SchoolTool domain model objects
 #
 
-
-class IPerson(sb.IPerson, ITimetabled):
-    """SchoolTool person object"""
-
-
-class IGroup(sb.IGroup, ITimetabled):
-    """SchoolTool group object"""
-
-
-class IResource(sb.IResource, ITimetabled):
-    """SchoolTool resource object"""
+# Those interfaces are imported here, since they will later actually move here.
+from schoolbell.app.interfaces import IPerson, IGroup, IResource
+from schoolbell.app.interfaces import \
+     IPersonContainer, IGroupContainer, IResourceContainer
 
 
 class ICourse(Interface):
@@ -132,22 +123,6 @@ class ISectionContained(ISection, IContained):
     containers(ISectionContainer)
 
 
-class IPersonContainer(sb.IPersonContainer):
-    """SchoolTool's person container"""
-
-    contains(IPerson)
-
-
-class IGroupContainer(sb.IGroupContainer):
-    """SchoolTool's group container contains Groups and subclasses."""
-
-    contains(IGroup, ICourse, ISection)
-
-
-class IResourceContainer(sb.IResourceContainer):
-    """SchoolTool's resource container"""
-
-    contains(IResource)
 
 
 #
@@ -176,7 +151,7 @@ class ICalendarAndTTOverlayInfo(ICalendarOverlayInfo):
 #  Main application
 #
 
-class ISchoolToolApplication(sb.ISchoolBellApplication, ITimetabled):
+class ISchoolToolApplication(sb.ISchoolBellApplication):
     """The main SchoolTool application object
 
     The application is a read-only container with the following items:

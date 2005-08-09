@@ -12,7 +12,7 @@
   </content>
 
   <view
-      for="schooltool.timetable.interfaces.ITimetabled"
+      for="zope.app.annotation.interfaces.IAnnotatable"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
       provides="schoolbell.app.rest.IRestTraverser"
       factory=".CompositeTimetableTraverser"
@@ -21,7 +21,7 @@
       />
 
   <view
-      for="schooltool.timetable.interfaces.ITimetabled"
+      for="zope.app.annotation.interfaces.IAnnotatable"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
       provides="schoolbell.app.rest.IRestTraverser"
       factory=".TimetableTraverser"

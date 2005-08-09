@@ -42,9 +42,8 @@ from zope.app.location.interfaces import ILocation
 
 from schooltool.tests.helpers import diff, sorted
 from schoolbell.app.rest.tests.utils import NiceDiffsMixin, EqualsSortedMixin
-from schooltool.timetable.interfaces import ITerm
+from schooltool.timetable.interfaces import ITerm, ITimetabled
 from schooltool.timetable.interfaces import ITimetable, ITimetableActivity
-from schooltool.timetable import TimetabledMixin
 from schoolbell.relationship import RelationshipProperty
 from schoolbell.app.membership import URIGroup, URIMember, URIMembership
 
@@ -974,12 +973,19 @@ class TermStub(Contained):
         return date(2003, 11, 20) <= day <= date(2003, 11, 26)
 
 
-class TimetabledStub(TimetabledMixin):
+class Content(object):
+
+    implements(IAttributeAnnotatable)
 
     members = RelationshipProperty(URIMembership, URIGroup, URIMember)
     groups = RelationshipProperty(URIMembership, URIGroup, URIMember)
 
-    implements(IAttributeAnnotatable)
+class Parent(Content):
+
+    implements(ITimetabled)
+
+    def __init__(self):
+        self.object = self
 
 
 class PersistentLocatableStub(Persistent):
@@ -1092,6 +1098,7 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         from schooltool.timetable.interfaces import ITimetable, ITimetabled
         from schooltool.timetable.interfaces import ITimetableSource
         from schooltool.timetable.source import MembershipTimetableSource
+        from schooltool.timetable import TimetabledAdapter
 
         self.site = setup.placefulSetUp(True)
         setup.setUpAnnotations()
@@ -1100,18 +1107,22 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         ztapi.subscribe((ITimetabled, ), ITimetableSource,
                         MembershipTimetableSource)
 
+        ztapi.provideAdapter(IAttributeAnnotatable, ITimetabled,
+                             TimetabledAdapter)
+
 
     def tearDown(self):
         setup.placefulTearDown()
 
     def test_interface(self):
         from schooltool.timetable.interfaces import ITimetabled
-        from schooltool.timetable import TimetabledMixin, TimetableDict
+        from schooltool.timetable import TimetabledAdapter, TimetableDict
 
-        tm = TimetabledMixin()
+        content = Content()
+        tm = TimetabledAdapter(content)
         verifyObject(ITimetabled, tm)
         self.assert_(isinstance(tm.timetables, TimetableDict))
-        self.assertEqual(tm.timetables.__parent__, tm)
+        self.assertEqual(tm.timetables.__parent__, content)
 
     def newTimetableSchema(self):
         from schooltool.timetable import TimetableSchema, TimetableSchemaDay
@@ -1128,7 +1139,7 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         return tt
 
     def test_composite_table_own(self):
-        tm = TimetabledStub()
+        tm = ITimetabled(Content())
         self.assertEqual(tm.timetables, {})
         self.assertEqual(tm.getCompositeTimetable("a", "b"), None)
         self.assertEqual(tm.listCompositeTimetables(), Set())
@@ -1146,9 +1157,9 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         from schooltool.timetable import TimetableActivity
         from schoolbell.app.membership import Membership
 
-        tm = TimetabledStub()
-        parent = TimetabledStub()
-        Membership(group=parent, member=tm)
+        tm = ITimetabled(Content())
+        parent = Parent()
+        Membership(group=parent, member=tm.object)
 
         composite = self.newTimetable()
         english = TimetableActivity("English")
@@ -1187,9 +1198,10 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
                          Set([("2003 fall", "sequential")]))
 
     def test_paths(self):
-        tm = TimetabledStub()
-        tm.__name__ = 'stub'
-        tm.__parent__ = self.site
+        content = Content()
+        tm = ITimetabled(content)
+        content.__name__ = 'stub'
+        content.__parent__ = self.site
         tt = tm.timetables["2003-fall.sequential"] = self.newTimetable()
         tt1 = tm.getCompositeTimetable("2003-fall", "sequential")
 
@@ -1212,7 +1224,7 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         tss['sequential'] = self.newTimetableSchema()
         tss['other'] = self.newTimetableSchema()
         tss['and another'] = self.newTimetableSchema()
-        tm = TimetabledStub()
+        tm = ITimetabled(Content())
 
         tt1 = self.newTimetable()
         tt1["A"].add("Green", TimetableActivity("AG"))
@@ -1247,7 +1259,7 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         tt2.model = TimetableModelStub()
         cal = tm.makeTimetableCalendar()
         self.assertEqualSorted(list(cal), list(cal1) + list(cal2))
-        self.assert_(cal.__parent__ is tm)
+        self.assert_(cal.__parent__ is tm.object)
 
 
 class TestTimetableSchemaContainer(unittest.TestCase):

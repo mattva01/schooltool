@@ -10,11 +10,6 @@
   <!-- Adapters -->
 
   <adapter
-      for=".interfaces.IGroupContainer"
-      factory="schoolbell.app.app.SimpleNameChooser"
-      provides="zope.app.container.interfaces.INameChooser" />
-
-  <adapter
       for=".interfaces.ICourseContainer"
       factory="schoolbell.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
@@ -126,30 +121,6 @@
     <allow attributes="getSiteManager" />
   </content>
 
-  <content class=".app.PersonContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schoolbell.view"
-             attributes="keys values items __iter__ __len__" />
-    <require permission="schoolbell.create"
-             interface="zope.app.container.interfaces.IWriteContainer" />
-  </content>
-
-  <content class=".app.GroupContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schoolbell.view"
-             attributes="keys values items __iter__ __len__" />
-    <require permission="schoolbell.create"
-             interface="zope.app.container.interfaces.IWriteContainer" />
-  </content>
-
-  <content class=".app.ResourceContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schoolbell.view"
-             attributes="keys values items __iter__ __len__" />
-    <require permission="schoolbell.create"
-             interface="zope.app.container.interfaces.IWriteContainer" />
-  </content>
-
   <content class=".app.CourseContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schoolbell.view"
@@ -165,15 +136,6 @@
              set_schema="schooltool.interfaces.ICourse" />
   </content>
 
-  <content class=".app.Group">
-    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
-    <require permission="schoolbell.view"
-             attributes="title description groups members __cmp__" />
-    <require permission="schoolbell.edit"
-             set_schema="schooltool.interfaces.IGroup" />
-    <allow interface="schooltool.interfaces.ITimetabled" />
-  </content>
-
   <content class=".app.Person">
     <require permission="schoolbell.view"
              interface="schoolbell.app.interfaces.IReadPerson"
@@ -181,23 +143,11 @@
     <require permission="schoolbell.edit"
              interface="schoolbell.app.interfaces.IWritePerson"
              set_schema="schooltool.interfaces.IPerson" />
-    <require permission="schoolbell.viewCalendar"
-             interface="schooltool.interfaces.ITimetabled" />
 
     <!-- Calendar access protection is performed on the calendar object.
          If we want local grants set on the calendar itself to work, then
          the 'calendar' attribute must be publically available. -->
     <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
-  </content>
-
-  <content class=".app.Resource">
-    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
-    <allow interface="schooltool.interfaces.ITimetabled" />
-    <allow attributes="__cmp__" />
-    <require permission="schoolbell.view"
-             attributes="title description groups isLocation" />
-    <require permission="schoolbell.edit"
-             set_schema="schooltool.interfaces.IResource" />
   </content>
 
   <content class=".app.SectionContainer">
@@ -210,7 +160,6 @@
 
   <content class=".app.Section">
     <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
-    <allow interface="schooltool.interfaces.ITimetabled" />
     <require permission="schoolbell.view"
              attributes="title description instructors members
                          courses label size __cmp__ location" />

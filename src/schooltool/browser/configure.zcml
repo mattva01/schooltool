@@ -142,7 +142,7 @@
       permission="zope.View"
       menu="zmi_views"
       title="View"
-      layer="SchoolToolLayer"
+      layer=".skin.ISchoolToolLayer"
       />
 
   <page
@@ -153,6 +153,7 @@
       permission="zope.View"
       menu="zmi_views"
       title="View"
+      layer=".skin.ISchoolToolLayer"
       />
 
   <page
@@ -174,6 +175,7 @@
       permission="zope.View"
       menu="zmi_views"
       title="View"
+      layer="SchoolToolLayer"
       />
 
   <page
@@ -195,6 +197,7 @@
       permission="zope.View"
       menu="zmi_views"
       title="View"
+      layer=".skin.ISchoolToolLayer"
       />
 
   <page
@@ -338,7 +341,9 @@
       template="templates/person_preferences.pt"
       permission="zope.View"
       menu="schoolbell_actions"
-      title="Change Preferences" />
+      title="Change Preferences" 
+      layer=".skin.ISchoolToolLayer"
+      />
 
   <page
       name="index.html"
@@ -348,6 +353,7 @@
       permission="zope.View"
       menu="zmi_views"
       title="View"
+      layer=".skin.ISchoolToolLayer"
       />
 
   <page
@@ -411,10 +417,11 @@
       permission="zope.Public"
       />
 
+  <!-- XXX: Switch to specific Timetabled interface later. -->
   <menuItem
       menu="schoolbell_actions"
       title="View Timetables"
-      for="schooltool.interfaces.ITimetabled"
+      for="zope.app.annotation.interfaces.IAnnotatable"
       action="timetables/index.html"
       />
 

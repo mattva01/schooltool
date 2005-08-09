@@ -56,7 +56,9 @@ def doctest_TimetabledTraverser():
     """Tests for TimetabledTraverser.
 
         >>> from schooltool.browser import TimetabledTraverser
+        >>> from schooltool.timetable.interfaces import ITimetabled
         >>> class TimetabledStub:
+        ...     implements(ITimetabled)
         ...     timetables = 'Timetables'
         ...     calendar = 'Calendar'
         >>> request = TestRequest()
@@ -90,7 +92,7 @@ def doctest_SchoolToolApplicationTraverser():
     >>> traverser = SchoolToolApplicationTraverser(app, request)
     
     >>> traverser.publishTraverse(request, 'persons') #doctest: +ELLIPSIS
-    <schooltool.app.PersonContainer object at ...>
+    <schoolbell.app.app.PersonContainer object at ...>
 
     >>> app['foo'] = 'bar'
     >>> traverser.publishTraverse(request, 'foo')

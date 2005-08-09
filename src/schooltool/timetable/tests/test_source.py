@@ -23,8 +23,11 @@ $Id$
 """
 import unittest
 from sets import Set
-from zope.app.testing import setup
-from schooltool.timetable.tests.test_timetable import TimetabledStub
+from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.app.testing import setup, ztapi
+from schooltool.timetable.tests.test_timetable import Content, Parent
+from schooltool.timetable.interfaces import ITimetabled
+from schooltool.timetable import TimetabledAdapter
 from zope.interface.verify import verifyObject
 
 
@@ -37,12 +40,15 @@ class BaseTimetableSourceTest(object):
         setup.setUpAnnotations()
         setUpRelationships()
 
+        ztapi.provideAdapter(IAttributeAnnotatable, ITimetabled,
+                             TimetabledAdapter)
+
     def tearDown(self):
         setup.placefulTearDown()
 
     def test(self):
         from schooltool.timetable.interfaces import ITimetableSource
-        context = TimetabledStub()
+        context = ITimetabled(Content())
         adapter = self.createAdapter(context)
         verifyObject(ITimetableSource, adapter)
 
@@ -56,9 +62,9 @@ class BaseTimetableSourceTest(object):
     def test_getTimetable(self):
         from schooltool.timetable import TimetableActivity
 
-        tm = TimetabledStub()
-        parent = TimetabledStub()
-        self.createRelationship(tm, parent)
+        tm = ITimetabled(Content())
+        parent = Parent()
+        self.createRelationship(tm.object, parent)
 
         composite = self.newTimetable()
         english = TimetableActivity("English")
@@ -83,14 +89,14 @@ class BaseTimetableSourceTest(object):
         self.assertEqual(result, None)
 
         # let's try it with two timetables
-        otherparent = TimetabledStub()
-        self.createRelationship(tm, otherparent)
+        otherparent = Parent()
+        self.createRelationship(tm.object, otherparent)
 
         othertt = self.newTimetable()
         math = TimetableActivity("Math")
         othertt["A"].add("Blue", math)
 
-        otherparent.getCompositeTimetable = lambda x ,y: othertt
+        otherparent.getCompositeTimetable = lambda x, y: othertt
 
         expected = composite.cloneEmpty()
         expected.update(composite)
@@ -102,13 +108,13 @@ class BaseTimetableSourceTest(object):
     def test_listTimetables(self):
         from schooltool.timetable import TimetableActivity
 
-        tm = TimetabledStub()
+        tm = ITimetabled(Content())
 
         adapter = self.createAdapter(tm)
         self.assertEqual(adapter.listTimetables(), Set())
 
-        parent = TimetabledStub()
-        self.createRelationship(tm, parent)
+        parent = Parent()
+        self.createRelationship(tm.object, parent)
 
         parent.listCompositeTimetables = (
             lambda: Set([("2003 fall", "sequential")]))
@@ -116,8 +122,8 @@ class BaseTimetableSourceTest(object):
         self.assertEqual(adapter.listTimetables(),
                          Set([("2003 fall", "sequential")]))
 
-        otherparent = TimetabledStub()
-        self.createRelationship(tm, otherparent)
+        otherparent = Parent()
+        self.createRelationship(tm.object, otherparent)
 
         otherparent.listCompositeTimetables = (
             lambda: Set([("2005 fall", "sequential")]))

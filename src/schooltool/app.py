@@ -61,18 +61,21 @@ from schooltool.relationships import URIInstruction, URISection, URIInstructor
 from schooltool.relationships import URICourseSections, URICourse
 from schooltool.relationships import URISectionOfCourse
 from schooltool.timetable import TermContainer, TimetableSchemaContainer
-from schooltool.timetable import TimetabledMixin
 
 
-class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer,
-                            TimetabledMixin):
+# Import objects here, since they will eventually move here as well.
+from schoolbell.app.app import \
+     GroupContainer, PersonContainer, ResourceContainer
+from schoolbell.app.app import Group, Resource
+
+
+class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer):
     """The main SchoolTool application object."""
 
     implements(ISchoolToolApplication, IAttributeAnnotatable)
 
     def __init__(self):
         SampleContainer.__init__(self)
-        TimetabledMixin.__init__(self)
         self['persons'] = PersonContainer()
         self['groups'] = GroupContainer()
         self['resources'] = ResourceContainer()
@@ -92,6 +95,7 @@ class SchoolToolApplication(Persistent, SampleContainer, SiteManagerContainer,
     def _newContainerData(self):
         return PersistentDict()
 
+    # XXX: What? :-( (SR)
     def title(self):
         """This is required for the site calendar views to work."""
         return IApplicationPreferences(self).title
@@ -209,33 +213,9 @@ class CalendarAndTTOverlayInfo(CalendarOverlayInfo):
         self.color2 = color2
 
 
-class Person(sb.Person, TimetabledMixin):
-
-    implements(IPerson)
+class Person(sb.Person):
 
     overlaid_calendars = OverlaidCalendarsAndTTProperty()
-
-    def __init__(self, *args, **kw):
-        sb.Person.__init__(self, *args, **kw)
-        TimetabledMixin.__init__(self)
-
-
-class Group(sb.Group, TimetabledMixin):
-
-    implements(IGroup)
-
-    def __init__(self, *args, **kw):
-        sb.Group.__init__(self, *args, **kw)
-        TimetabledMixin.__init__(self)
-
-
-class Resource(sb.Resource, TimetabledMixin):
-
-    implements(IResource)
-
-    def __init__(self, *args, **kw):
-        sb.Resource.__init__(self, *args, **kw)
-        TimetabledMixin.__init__(self)
 
 
 class CourseContainer(BTreeContainer):
@@ -244,7 +224,7 @@ class CourseContainer(BTreeContainer):
     implements(ICourseContainer, IAttributeAnnotatable)
 
 
-class Course(Persistent, Contained, TimetabledMixin):
+class Course(Persistent, Contained):
 
     implements(ICourseContained, IHaveNotes, IAttributeAnnotatable)
 
@@ -256,9 +236,17 @@ class Course(Persistent, Contained, TimetabledMixin):
         self.description = description
 
 
-class Section(Persistent, Contained, TimetabledMixin):
+class Section(Persistent, Contained):
 
     implements(ISectionContained, IHaveNotes, IAttributeAnnotatable)
+
+    def __init__(self, title="Section", description=None, schedule=None,
+                 courses=None, location=None):
+        self.title = title
+        self.description = description
+        self.calendar = Calendar(self)
+        self.location = location
+
 
     def _getLabel(self):
         instructors = " ".join([i.title for i in self.instructors])
@@ -266,7 +254,7 @@ class Section(Persistent, Contained, TimetabledMixin):
         msg = _('${instructors} -- ${courses}')
         msg.mapping = {'instructors': instructors, 'courses': courses}
         return msg
-
+    
     label = property(_getLabel)
 
     def _getSize(self):
@@ -300,37 +288,10 @@ class Section(Persistent, Contained, TimetabledMixin):
     members = RelationshipProperty(URIMembership, URIGroup, URIMember)
 
 
-    def __init__(self, title="Section", description=None, schedule=None,
-                 courses=None, location=None):
-        self.title = title
-        self.description = description
-        self.calendar = Calendar(self)
-        self.location = location
-        TimetabledMixin.__init__(self)
-
-
 class SectionContainer(BTreeContainer):
     """Container of Sections."""
 
     implements(ISectionContainer, IAttributeAnnotatable)
-
-
-class PersonContainer(sb.PersonContainer):
-    """A container for SchoolTool persons"""
-
-    implements(IPersonContainer)
-
-
-class GroupContainer(sb.GroupContainer):
-    """A container for groups, sections and courses."""
-
-    implements(IGroupContainer)
-
-
-class ResourceContainer(sb.ResourceContainer):
-    """A container for SchoolTool resources."""
-
-    implements(IResourceContainer)
 
 
 class PersonPreferences(sb.PersonPreferences):

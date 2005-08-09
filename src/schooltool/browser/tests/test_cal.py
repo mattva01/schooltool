@@ -324,8 +324,9 @@ def doctest_CalendarListView(self):
         >>> from schoolbell.app.interfaces import IPersonPreferences
         >>> from zope.interface import implements
         >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
+        >>> from schooltool.timetable.interfaces import ITimetabled
         >>> class PersonStub:
-        ...     implements(IAttributeAnnotatable)
+        ...     implements(IAttributeAnnotatable, ITimetabled)
         ...     def __init__(self, title, calendar=None):
         ...         self.title = title
         ...         self.calendar = calendar

@@ -51,6 +51,7 @@ from schoolbell.app.browser.cal import month_names
 from schoolbell.app.cal import CalendarEvent
 
 from schooltool import SchoolToolMessageID as _
+from schooltool.timetable.interfaces import ITimetabled
 from schooltool.timetable.interfaces import ITimetable, ITimetableSchema
 from schooltool.timetable.interfaces import ITermContainer, ITerm
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
@@ -999,7 +1000,7 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
             for period_id in day.periods:
                 section_map[day_id, period_id] = sets.Set()
         for section in getSchoolToolApplication()['sections'].values():
-            timetable = section.timetables.get(ttkey)
+            timetable = ITimetabled(section).timetables.get(ttkey)
             if timetable:
                 for day_id, period_id, activity in timetable.itercontent():
                     section_map[day_id, period_id].add(section)
@@ -1131,7 +1132,7 @@ class SectionTimetableSetupView(TimetableSetupViewMixin):
         try:
             # All timetables for a given ttschema will have the same pattern
             # regardless of term.
-            timetable = self.context.timetables[self.ttkeys[0]]
+            timetable = ITimetabled(self.context).timetables[self.ttkeys[0]]
         except KeyError:
             timetable = None
 
@@ -1172,7 +1173,7 @@ class SectionTimetableSetupView(TimetableSetupViewMixin):
             section = removeSecurityProxy(self.context)
             for key in self.ttkeys:
                 timetable =  self.ttschema.createTimetable()
-                section.timetables[key] = timetable
+                ITimetabled(section).timetables[key] = timetable
                 for day_id, day in timetable.items():
                     for period_id in day.periods:
                         if ''.join((day_id, '.',period_id)) in self.request:
@@ -1182,8 +1183,9 @@ class SectionTimetableSetupView(TimetableSetupViewMixin):
 
             # TODO: find a better place to redirect to
             self.request.response.redirect(
-                zapi.absoluteURL(self.context.timetables[self.ttkeys[0]],
-                                 self.request))
+                zapi.absoluteURL(
+                    ITimetabled(self.context).timetables[self.ttkeys[0]],
+                    self.request))
 
         return self.template()
 

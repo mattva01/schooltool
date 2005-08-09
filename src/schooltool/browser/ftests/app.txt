@@ -193,9 +193,6 @@ But you have to log in to see persons, groups, and other locations:
     ...
 
 
-
-
-
 The section container view points to the timetable import form:
 
     >>> print http(r"""

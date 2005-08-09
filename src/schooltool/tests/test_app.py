@@ -352,10 +352,8 @@ def doctest_Person():
         >>> from schooltool.app import Person
         >>> p = Person("jonn")
 
-        >>> from schooltool.interfaces import IPerson, ITimetabled
+        >>> from schooltool.interfaces import IPerson
         >>> verifyObject(IPerson, p)
-        True
-        >>> verifyObject(ITimetabled, p)
         True
     """
 
@@ -364,10 +362,8 @@ def doctest_Group():
         >>> from schooltool.app import Group
         >>> g = Group("The Beatles")
 
-        >>> from schooltool.interfaces import IGroup, ITimetabled
+        >>> from schooltool.interfaces import IGroup
         >>> verifyObject(IGroup, g)
-        True
-        >>> verifyObject(ITimetabled, g)
         True
     """
 
@@ -376,10 +372,8 @@ def doctest_Resource():
         >>> from schooltool.app import Resource
         >>> r = Resource("Printer")
 
-        >>> from schooltool.interfaces import IResource, ITimetabled
+        >>> from schooltool.interfaces import IResource
         >>> verifyObject(IResource, r)
-        True
-        >>> verifyObject(ITimetabled, r)
         True
     """
 
@@ -453,7 +447,7 @@ def doctest_GroupContainer():
         >>> checkObject(gc, 'name', Course())
         Traceback (most recent call last):
           ...
-        InvalidContainerType: ...
+        InvalidItemType: ...
 
         >>> checkObject(gc, 'name', Section())
         Traceback (most recent call last):
