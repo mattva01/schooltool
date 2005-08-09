@@ -55,6 +55,7 @@ run: build
 dist: realclean build update-translations clean
 	rm -rf dist
 	find . -name '*.py[dco]' -exec rm -f {} \;
+	find . -name '*.mo' -exec rm -f {} \;
 	./setup.py sdist --formats=schooltooltgz
 
 .PHONY: signtar

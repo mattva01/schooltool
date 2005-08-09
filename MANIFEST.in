@@ -28,4 +28,4 @@ recursive-include src/schoolbell *.py *.txt *.conf
 # Some things that we should not let into a distribution
 # RCS stuff is handled internally by distutils
 # NOTE: it is important that this is last
-global-exclude *.so *.pyo *.pyc
+global-exclude *.mo *.so *.pyo *.pyc *.pyd
