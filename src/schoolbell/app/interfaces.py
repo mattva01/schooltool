@@ -319,6 +319,11 @@ class IPersonPreferences(zope.interface.Interface):
         vocabulary=vocabulary([(calendar.SUNDAY, _("Sunday")),
                                (calendar.MONDAY, _("Monday"))]))
 
+    # XXX: Only available in SchoolTool, but that's ok for now.
+    cal_periods = zope.schema.Bool(
+        title=_("Show periods"),
+        description=_("Show period names in daily view"))
+
 
 class IPersonDetails(ILocation):
     """Contacts details stored as an annotation on a Person."""

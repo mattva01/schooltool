@@ -966,7 +966,8 @@ def doctest_PersonPreferencesView():
         ...                             'field.timezone': 'Europe/Vilnius',
         ...                             'field.timeformat': '%H:%M',
         ...                             'field.dateformat': '%d %B, %Y',
-        ...                             'field.weekstart': '6'})
+        ...                             'field.weekstart': '6',
+        ...                             'field.cal_periods': True})
         >>> view = PersonPreferencesView(person, request)
 
         >>> view.update()
