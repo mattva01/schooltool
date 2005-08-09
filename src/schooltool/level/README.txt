@@ -20,6 +20,11 @@ school. So, given a schooltool application
   >>> from schooltool import app
   >>> st = app.SchoolToolApplication()
 
+  # Usually done automatically via a subscriber.
+  >>> from schooltool.interfaces import ApplicationInitializationEvent
+  >>> level.level.addLevelContainerToApplication(
+  ...     ApplicationInitializationEvent(st))
+
 we can inspect the defined levels:
 
   >>> list(st['levels'].keys())

@@ -101,6 +101,13 @@
              set_schema=".interfaces.ILevel" />
   </content>
 
+  <!-- Application hook -->
+  <subscriber
+      for="schooltool.interfaces.IApplicationInitializationEvent"
+      handler=".level.addLevelContainerToApplication"
+      />
+    
+
   <!-- Level vocabulary -->
   <vocabulary
      name="Levels"

@@ -60,6 +60,10 @@ class LevelContainer(btree.BTreeContainer):
             raise interfaces.DisconnectedLevelsError(disconnected)
 
 
+def addLevelContainerToApplication(event):
+    event.object['levels'] = LevelContainer()
+
+
 class Level(persistent.Persistent, contained.Contained):
     """A simple implementation of a school level."""
 

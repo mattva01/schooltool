@@ -9,6 +9,7 @@ student via a promotion workflow from the perspective of the Web UI.
   >>> browser = Browser()
   >>> browser.addHeader('Authorization', 'Basic mgr:mgrpw')
 
+  >>> browser.handleErrors = False
   >>> browser.open(
   ...     'http://localhost/contents.html?'
   ...     'type_name=BrowserAdd__schooltool.app.SchoolToolApplication&'

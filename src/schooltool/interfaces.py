@@ -31,12 +31,24 @@ from zope.schema import Field, Object, Int, Text, TextLine, List, Set, Tuple
 from zope.schema import Dict, Date, Timedelta, Bool, Choice, Object
 from zope.app.container.interfaces import IContainer, IContained
 from zope.app.container.constraints import contains, containers
+from zope.app import event
 
 from schoolbell.app import interfaces as sb
 from schoolbell.app.overlay import ICalendarOverlayInfo
 from schoolbell.calendar.interfaces import Unchanged
 
 from schooltool import SchoolToolMessageID as _
+
+# Events
+
+class IApplicationInitializationEvent(event.interfaces.IObjectEvent):
+    """The SchoolTool application is being initiazed.
+
+    Usually subscribers add soemthing to the initialization process.
+    """
+
+class ApplicationInitializationEvent(event.objectevent.ObjectEvent):
+    implements(IApplicationInitializationEvent)
 
 #
 #  SchoolTool domain model objects

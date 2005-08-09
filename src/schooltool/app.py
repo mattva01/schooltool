@@ -25,6 +25,7 @@ $Id$
 
 from persistent import Persistent
 from persistent.dict import PersistentDict
+from zope.event import notify
 from zope.interface import implements
 from zope.app import zapi
 from zope.app.component.hooks import getSite
@@ -56,6 +57,7 @@ from schooltool.interfaces import ISectionContained, ISectionContainer
 from schooltool.interfaces import ICourseContainer, ICourseContained
 from schooltool.interfaces import IPersonPreferences
 from schooltool.interfaces import ICalendarAndTTOverlayInfo
+from schooltool.interfaces import ApplicationInitializationEvent
 from schooltool.relationships import URIInstruction, URISection, URIInstructor
 from schooltool.relationships import URICourseSections, URICourse
 from schooltool.relationships import URISectionOfCourse
@@ -79,15 +81,11 @@ class SchoolToolApplication(sb.SchoolBellApplication):
         self['courses'] = CourseContainer()
         self['sections'] = SectionContainer()
         self['ttschemas'] = TimetableSchemaContainer()
-        # Local import to avoid recursive imports
-        import schooltool.level.level
-        self['levels'] = schooltool.level.level.LevelContainer()
 
         # Set up initial groups
         self['groups']['manager'] = Group(u'Manager', u'Manager Group.')
 
-    def _newContainerData(self):
-        return PersistentDict()
+        notify(ApplicationInitializationEvent(self))
 
 
 class OverlaidCalendarsAndTTProperty(object):
