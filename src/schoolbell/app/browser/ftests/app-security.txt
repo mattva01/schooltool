@@ -272,16 +272,14 @@ Snakes be gone:
     ...
         <form method="post"
               action="http://localhost/frogpond/persons/delete.html">
-          <ul>
-            <li>
-              <input type="checkbox" name="delete.frog" />
-                <a href="http://localhost/frogpond/persons/frog">Frog</a>
-            </li>
+          <div>
+            <input type="checkbox" name="delete.frog" />
+            <a href="http://localhost/frogpond/persons/frog">Frog</a>
+          </div>
           <div class="controls">
             <input type="submit" class="button-cancel"
                    value="Delete" />
           </div>
-           </ul>
         </form>
     ...
 

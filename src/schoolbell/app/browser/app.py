@@ -24,26 +24,28 @@ $Id$
 
 from zope.interface import Interface, implements
 from zope.component import adapts
+from zope.publisher.interfaces import NotFound
 from zope.schema import Password, TextLine, Bytes, Bool, getFieldNamesInOrder
 from zope.schema import Choice
 from zope.schema.interfaces import ValidationError
+from zope.security.checker import canAccess
+from zope.security import checkPermission
+from zope.security.interfaces import IParticipation
+from zope.security.management import getSecurityPolicy
+from zope.security.proxy import removeSecurityProxy
+
 from zope.app import zapi
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.form.browser.add import AddView
 from zope.app.form.browser.editview import EditView
 from zope.app.form.interfaces import IInputWidget
 from zope.app.form.interfaces import WidgetsError
-from zope.publisher.interfaces import NotFound
 from zope.app.publisher.browser import BrowserView
-from zope.security.proxy import removeSecurityProxy
 from zope.app.security.interfaces import IAuthentication
 from zope.app.security.interfaces import IAuthenticatedGroup
 from zope.app.security.interfaces import IUnauthenticatedGroup
 from zope.app.security.settings import Allow
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
-from zope.security import checkPermission
-from zope.security.interfaces import IParticipation
-from zope.security.management import getSecurityPolicy
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import IGroupMember, IPerson, IResource
