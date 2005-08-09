@@ -379,10 +379,10 @@
   <!-- Skin -->
 
   <page
-      name="view_macros"
+      name="generic_macros"
       for="*"
       permission="zope.View"
-      template="templates/view_macros.pt"
+      template="templates/generic_macros.pt"
       layer=".skin.ISchoolToolLayer"
       />
 
