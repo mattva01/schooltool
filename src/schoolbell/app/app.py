@@ -28,6 +28,7 @@ import calendar
 
 from persistent import Persistent
 from persistent.dict import PersistentDict
+from zope.component import adapts
 from zope.interface import implements
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.sample import SampleContainer
@@ -67,8 +68,7 @@ class SchoolBellApplication(Persistent, SampleContainer,
     implements(ISchoolBellApplication, IAttributeAnnotatable)
 
     def __init__(self):
-        SampleContainer.__init__(self)
-        # XXX Do we want to localize the container names?
+        super(SchoolBellApplication, self).__init__()
         self['persons'] = PersonContainer()
         self['groups'] = GroupContainer()
         self['resources'] = ResourceContainer()
@@ -80,6 +80,7 @@ class SchoolBellApplication(Persistent, SampleContainer,
     def title(self):
         """This is required for the site calendar views to work."""
         return IApplicationPreferences(self).title
+    title = property(title)
 
 
 class PersonContainer(BTreeContainer):
@@ -320,6 +321,7 @@ class ApplicationPreferences(Persistent):
     See schoolbell.app.interfaces.ApplicationPreferences.
     """
     implements(IApplicationPreferences)
+    adapts(ISchoolBellApplication)
 
     title = 'SchoolBell'
 

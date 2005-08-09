@@ -25,10 +25,11 @@ $Id$
 import unittest
 
 from zope.testing import doctest
+from zope.component import provideAdapter
 from zope.interface.verify import verifyObject
 from zope.interface import directlyProvides
 from zope.app.traversing.interfaces import IContainmentRoot
-from zope.app.testing import setup
+from zope.app.testing import setup, placelesssetup
 
 
 def doctest_SchoolBellApplication():
@@ -37,9 +38,19 @@ def doctest_SchoolBellApplication():
         >>> from schoolbell.app.app import SchoolBellApplication
         >>> app = SchoolBellApplication()
 
+    We need to register an adapter to make the title attribute available:
+
+        >>> placelesssetup.setUp()
+        >>> from schoolbell.app.app import ApplicationPreferences
+        >>> from schoolbell.app.interfaces import IApplicationPreferences
+        >>> provideAdapter(ApplicationPreferences,
+        ...                provides=IApplicationPreferences)
+
         >>> from schoolbell.app.interfaces import ISchoolBellApplication
         >>> verifyObject(ISchoolBellApplication, app)
         True
+
+        >>> placelesssetup.tearDown()
 
     Person, group and resource containers are reachable as items of the
     application object.

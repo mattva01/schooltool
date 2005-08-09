@@ -98,7 +98,7 @@ class ISchoolBellCalendar(IEditCalendar, ILocation):
     """
 
     title = TextLine(title=u"Title",
-        description=u"Title of the calendar.")
+                     description=u"Title of the calendar.")
 
 
 class ISchoolBellCalendarEvent(ICalendarEvent, IContained):
@@ -407,6 +407,10 @@ class ISchoolBellApplication(IReadContainer, ICalendarOwner):
     This object can be added as a regular content object to a folder, or
     it can be used as the application root object.
     """
+
+    title = TextLine(
+        title=_("Title"),
+        description=_("Title of the application."))
 
 
 class IApplicationPreferences(Interface):
