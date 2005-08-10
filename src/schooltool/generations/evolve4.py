@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Upgrade SchoolTool to generation 3.
+Upgrade SchoolTool to generation 4.
 
 This generation ensures that all schooltool applications have a levels folder
 and a manager group.
