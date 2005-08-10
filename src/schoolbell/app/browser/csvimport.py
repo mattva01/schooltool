@@ -181,8 +181,6 @@ class BaseCSVImporter(object):
                 self.createAndAdd(rowdata, dry_run)
 
             if self.errors.anyErrors():
-                assert dry_run, ("Something bad happened,"
-                                 " aborting transaction.") # XXX
                 return False
 
         return True

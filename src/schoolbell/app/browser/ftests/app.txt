@@ -798,6 +798,7 @@ Let's import a bunch of people we can play with:
     ... aab, Person 02
     ... aac, Person 03
     ... aad, Person 04
+    ... aad, Duplicate Username
     ... aae, Person 05
     ... aaf, Person 06
     ... aag, Person 07
@@ -837,6 +838,13 @@ Let's import a bunch of people we can play with:
     ... """)
     HTTP/1.1 200 Ok
     ...
+    <BLANKLINE>
+          <div class="error">Failed to import CSV text</div>
+          <div class="error">Duplicate username: aad, Duplicate Username</div>
+    <BLANKLINE>
+    ...
+
+
 
 Now we have a batched view, showing the first 10 items
 
