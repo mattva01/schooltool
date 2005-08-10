@@ -19,26 +19,41 @@
 """
 Upgrade SchoolTool to generation 3.
 
-This generation ensures that all schooltool applications have a levels folder
-and a manager group.
+evolve2.py creates a site calendar, but the default permissions prevent
+unknown visitors from seeing it.
 
 $Id: evolve2.py 4259 2005-07-21 00:57:30Z tvon $
 """
 
+from zope.app import zapi
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
+from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
+from zope.app.security.interfaces import IUnauthenticatedGroup
 from schooltool.interfaces import ISchoolToolApplication
 
-import schooltool.app
-import schooltool.level.level
 
 def evolve(context):
+    """Set the site security policy to the SchoolTool 0.11 defaults.
+
+    See schooltool.app.applicationCalendarPermissionsSubscriber for details.
+
+    """
+
     root = context.connection.root().get(ZopePublication.root_name, None)
     for app in findObjectsProviding(root, ISchoolToolApplication):
-        if 'levels' not in app:
-            app['levels'] = schooltool.level.level.LevelContainer()
+        unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
 
-        if 'manager' not in app['groups']:
-            app['groups']['manager'] = schooltool.app.Group(
-                u'Manager', u'Manager Group.')
-            
+        app_perms = IPrincipalPermissionManager(app)
+        app_perms.grantPermissionToPrincipal('schoolbell.view',
+                                          unauthenticated.id)
+        app_perms.grantPermissionToPrincipal('schoolbell.viewCalendar',
+                                          unauthenticated.id)
+
+        for container in ['persons', 'groups', 'resources', 'sections',
+                          'courses']:
+            container_perms = IPrincipalPermissionManager(app[container])
+            container_perms.denyPermissionToPrincipal('schoolbell.view',
+                                              unauthenticated.id)
+            container_perms.denyPermissionToPrincipal('schoolbell.viewCalendar',
+                                              unauthenticated.id)
