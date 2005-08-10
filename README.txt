@@ -44,6 +44,8 @@ System requirements
   (Debian users will need either python2.3 and python2.3-xml, or
   python2.4 and python2.4-xml packages)
 
+- Zope 3.1 (http://www.zope.org/Products/Zope3)
+
 - libxml2 Python bindings (http://xmlsoft.org/).  Windows users can find
   binaries here:  http://users.skynet.be/sbi/libxml-python/
 
@@ -51,10 +53,6 @@ System requirements
   Arial and Times New Roman TrueType fonts.  ReportLab is only needed if
   you want to generate PDF calendars.  To enable PDF support you will
   need to specify the path to fonts in the configuration file.
-
-- Development environment and a C compiler
-  (pre-compiled binaries are available for Windows users at the SchoolTool
-  website)
 
 
 Building SchoolTool
@@ -68,38 +66,37 @@ It is a good idea to run 'make test' and 'make ftest' to check if all the
 essential unit and functional tests pass.
 
 
-Installing and Configuring with Distutils
------------------------------------------
+Installing and Configuring with Distutils (optional)
+----------------------------------------------------
 
-It is possible to install SchoolTool and SchoolBell using the python distutils.
-To do this, you have to use one of the distributed tarballs/zip files, which
-you unpack in a directory with the tools appropriate to your OS. First, it is
-necessary to install the version of Zope included with the tarballs, this can
-be done by running
+WARNING: distutils does not yet take care of removing old packages or ensuring
+that dependencies are correct. If you don't know how to resolve these issues
+manually, you should probably use one of the packages or run SchoolBell from
+an unpacked tarball/subversion checkout.
+
+It is possible to install SchoolTool using python distutils.  To do this, you
+have to use one of the distributed tarballs/zipfiles, which you unpack in a
+directory with the tools appropriate to your OS.
+
+First run the tests from the tarball to make sure all dependencies are
+installed and everything is ok (you may need to add the location of the
+Zope modules to the python path):
+
+test.py -uf
+
+Then install with:
 
 python setup.py install
 
-from the Zope3/ directory included with the SchoolBell distribution. From the
-top level directory, the commands
+NOTE: You will also have to install SchoolBell from a SchoolBell tarball.
 
-python setup.py install (inside the unpacked schoolbell tarball/zip)
-python setup.py install (inside the unpacked schooltool tarball/zip)
-
-will install SchoolBell and SchoolTool respectively. Note that SchoolTool
-depends on SchoolBell, so you will have to install both if you want to run
-SchoolTool.
-
-Finally, to setup a SchoolBell / SchoolTool instance, copy the installed
-script, /usr/bin/schooltool, into a separate directory and create a config file
-with the name of the script and an extension .conf. A good template can be
-found in the top level of the tarball (.conf.in). Running this script will then
-run an instance in that directory.
+Finally, to setup a SchoolTool instance, copy the installed script into a
+separate directory and create a config file with the name of the script and an
+extension .conf.  A good template can be found in the top level of the tarball
+(.conf.in). Running this script will then run an instance in that directory.
 
 Those interested in installing into a non-standard location should investigate
 the --paths and --default-config option for the install distutils commands.
-
-NOTE: If you are using a Linux distribution for which a SchoolTool
-package exists, you should consider using that package instead.
 
 
 Running SchoolTool
@@ -129,7 +126,6 @@ Project structure
 
   GPL                   the GNU General Public License, version 2
   README                this file
-  README.schoolbell     README for SchoolBell
   RELEASE               release notes for the latest release
 
   Makefile              makefile for building extension modules
@@ -143,7 +139,6 @@ Project structure
 
   build/                temporary files are placed here during build process
   coverage/             unit test coverage reports are placed here
-  debian/               Debian packaging support
   doc/                  documentation
   src/                  source code
     schooltool/         Python package 'schooltool'
@@ -176,8 +171,7 @@ To run all unit tests, do
 
   python test.py -pv
 
-To run all functional tests, start the SchoolTool server using the test.conf
-configuration file (hint: make runtestserver) and then do
+To run all functional tests, do
 
   python test.py -fpv
 
@@ -307,17 +301,9 @@ terms of the GNU General Public License as published by the Free
 Software Foundation; either version 2 of the License, or (at your option)
 any later version.
 
-Files in the following directories are (c) their respective owners. See
-the individual files and directories for details of the licences.
-
-  Zope3
-
 Files in the same directory as this README file are (c) Shuttleworth
 Foundation, with the exception of GPL, which is a copy of the Free Software
 Foundation's General Public License, and is (c) FSF.
-
-Files in the debian/ subdirectory are (c) Shuttleworth Foundation and
-contributors.
 
 
 SchoolTool is distributed in the hope that it will be useful,
