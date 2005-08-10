@@ -43,7 +43,8 @@
         onclick string:clickWidgetIcon('${widget/name}');;;
         src context/++resource++calwidget-icon.gif"/>
     <div id="" style="background: #fff; position: absolute; display: none;"
-      tal:attributes="id string:${widget/name}Div"/>
+         tal:attributes="id string:${widget/name}Div">
+    </div>
   </div>
   <div class="error" tal:define="error widget/error"
     tal:condition="error" tal:content="structure error">
