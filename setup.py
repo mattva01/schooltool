@@ -173,8 +173,6 @@ class install_scripts(_install_scripts):
         self.set_undefined_options('install',
                 ('paths', 'paths'),
                 ('default_config', 'default_config'))
-        if not self.paths:
-            self.paths = ''
         return _install_scripts.finalize_options(self)
 
     def update_scripts(self):
@@ -188,9 +186,10 @@ class install_scripts(_install_scripts):
             # Update the paths in the script
             paths_regex = re.compile(r'# paths begin\n.*# paths end', re.S)
             paths = ['# paths begin', '# paths end']
-            for path in self.paths.split(';'):
-                paths.insert(-1, 'sys.path.insert(0, %s)'
-                             % repr(os.path.abspath(path)))
+            if self.paths:
+                for path in self.paths.split(';'):
+                    paths.insert(-1, 'sys.path.insert(0, %s)'
+                                 % repr(os.path.abspath(path)))
             script_str = re.sub(paths_regex, '\n'.join(paths), script_str)
             # Update the default config file
             config_regex = re.compile(r'# config begin\n.*# config end', re.S)
