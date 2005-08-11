@@ -40,6 +40,7 @@ from zope.app.component.hooks import setSite
 from schoolbell.relationship.tests import setUpRelationships
 from schoolbell.app.browser import SchoolBellAPI, SortBy
 from schoolbell.app.browser import NavigationView
+from schoolbell.app.browser.macros import SchoolToolMacros
 
 
 def setUpSessions():
@@ -148,10 +149,17 @@ def setUp(test=None):
     ztapi.provideAdapter(None, IPathAdapter, SchoolBellAPI, 'schoolbell')
     ztapi.provideAdapter(None, IPathAdapter, SortBy, 'sortby')
 
-    # standard_macros and schoolbell_navigation
+    # standard_macros, schooltool_macros and schoolbell_navigation
     ztapi.browserView(None, 'standard_macros', StandardMacros)
     ztapi.browserView(None, 'view_macros',
                       SimpleViewClass("../templates/view_macros.pt"))
+
+    ztapi.browserView(None, 'schooltool_macros', SchoolToolMacros)
+    ztapi.browserView(None, 'calendar_macros',
+                      SimpleViewClass("../templates/calendar_macros.pt"))
+    ztapi.browserView(None, 'generic_macros',
+                      SimpleViewClass("../templates/generic_macros.pt"))
+
     ztapi.browserView(None, 'schoolbell_navigation',
                       SimpleViewClass("../templates/navigation.pt",
                                       bases=(NavigationView,)))
