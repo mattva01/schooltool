@@ -27,8 +27,8 @@ from zope.security.checker import ProxyFactory
 from schoolbell.app.rest import View, Template
 from schoolbell.app.rest.xmlparsing import XMLDocument
 
-from schoolbell.app.interfaces import INotes
-from schoolbell.app.notes import Note
+from schoolbell.app.note.interfaces import INotes
+from schoolbell.app.note.note import Note
 
 
 def NotesViewFactory(context, request):
@@ -55,7 +55,7 @@ class NotesView(View):
 
     implements(INotesView)
 
-    template = Template("templates/notes.pt",
+    template = Template("rest_notes.pt",
                         content_type="text/xml; charset=UTF-8")
 
     schema = """<?xml version="1.0" encoding="UTF-8"?>

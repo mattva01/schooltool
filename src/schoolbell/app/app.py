@@ -41,7 +41,9 @@ from zope.app.location.interfaces import ILocation
 from zope.app.annotation.interfaces import IAnnotations
 from zope.app.component.hooks import getSite
 
+import schoolbell.app.note.interfaces
 from schoolbell.app import interfaces
+from schoolbell.app import note
 from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIMember, URIGroup
 from schoolbell.app.overlay import OverlaidCalendarsProperty
@@ -163,7 +165,7 @@ class SimpleNameChooser(NameChooser):
 class Person(Persistent, Contained):
     """Person."""
 
-    implements(interfaces.IPersonContained, interfaces.IHaveNotes,
+    implements(interfaces.IPersonContained, note.interfaces.IHaveNotes,
                interfaces.IHavePreferences, IAttributeAnnotatable)
 
     photo = None
@@ -279,7 +281,7 @@ def hash_password(password):
 class Group(Persistent, Contained):
     """Group."""
 
-    implements(interfaces.IGroupContained, interfaces.IHaveNotes,
+    implements(interfaces.IGroupContained, note.interfaces.IHaveNotes,
                IAttributeAnnotatable)
 
     members = RelationshipProperty(URIMembership, URIGroup, URIMember)
@@ -293,7 +295,7 @@ class Group(Persistent, Contained):
 class Resource(Persistent, Contained):
     """Resource."""
 
-    implements(interfaces.IResourceContained, interfaces.IHaveNotes,
+    implements(interfaces.IResourceContained, note.interfaces.IHaveNotes,
                IAttributeAnnotatable)
 
     isLocation = False # backwards compatibility

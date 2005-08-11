@@ -35,16 +35,17 @@ TODO: Notes are basically stupid comments, do we need real discussion items?  A
       group notes that a new supply of super-fresh cream is due the day before
       the picnic..)
 
+$Id:$
 """
-
-from persistent import Persistent
-from persistent.list import PersistentList
-from zope.interface import implements
-from zope.app.annotation.interfaces import IAnnotations
 import datetime
 import random
+import persistent
+import persistent.list
+import zope.interface
 
-from schoolbell.app.interfaces import INotes, INote
+from zope.app.annotation.interfaces import IAnnotations
+
+from schoolbell.app.note import interfaces
 
 
 def getNotes(context):
@@ -59,7 +60,7 @@ def getNotes(context):
         return annotations[key]
 
 
-class Notes(Persistent):
+class Notes(persistent.Persistent):
     """A list of Note objects.
 
     Notes are just a container for Note objects
@@ -91,11 +92,10 @@ class Notes(Persistent):
     []
 
     """
-
-    implements(INotes)
+    zope.interface.implements(interfaces.INotes)
 
     def __init__(self):
-        self._notes = PersistentList()
+        self._notes = persistent.list.PersistentList()
 
     def __iter__(self):
         return iter(self._notes)
@@ -112,7 +112,7 @@ class Notes(Persistent):
         del self._notes[:]
 
 
-class Note(Persistent):
+class Note(persistent.Persistent):
     """A Note.
 
     Your basic simple content ojbect:
@@ -126,15 +126,12 @@ class Note(Persistent):
     "We're going Mexican! Bring tequila and tacos!"
 
     """
-
-    implements(INote)
+    zope.interface.implements(interfaces.INote)
 
     def __init__(self, title=None, body=None, privacy=None, owner=None):
         self.title = title
         self.body = body
         self.privacy = privacy
         self.owner = owner
-        self.unique_id = '%d.%d' % (datetime.datetime.now().microsecond,
-                                 random.randrange(10 ** 6, 10 ** 7))
-
-
+        self.unique_id = '%d.%d' %(datetime.datetime.now().microsecond,
+                                   random.randrange(10 ** 6, 10 ** 7))

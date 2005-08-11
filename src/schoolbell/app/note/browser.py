@@ -24,8 +24,8 @@ from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 from zope.app.form.browser.add import AddView
 
-from schoolbell.app.interfaces import IHaveNotes, INotes, INote
-from schoolbell.app.notes import Note
+from schoolbell.app.note.interfaces import IHaveNotes, INotes, INote
+from schoolbell.app.note.note import Note
 
 
 class NotesView(BrowserView):

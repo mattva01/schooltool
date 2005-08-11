@@ -143,13 +143,6 @@
       />
 
   <adapter
-      for=".interfaces.IHaveNotes"
-      provides=".interfaces.INotes"
-      factory=".notes.getNotes"
-      trusted="true"
-      />
-
-  <adapter
       for=".interfaces.ISchoolBellApplication"
       provides=".interfaces.IApplicationPreferences"
       factory=".app.getApplicationPreferences"
@@ -217,6 +210,7 @@
   </content>
 
   <content class=".cal.CalendarEvent">
+    <implements interface="schoolbell.app.note.interfaces.IHaveNotes" />
     <require permission="schoolbell.viewCalendar"
              interface="schoolbell.calendar.interfaces.ICalendarEvent"
              attributes="resources" />
@@ -224,20 +218,6 @@
              set_schema="schoolbell.calendar.interfaces.ICalendarEvent"
              attributes="bookResource unbookResource"
              set_attributes="__parent__" />
-  </content>
-
-  <content class=".notes.Notes">
-    <require permission="zope.Public"
-             attributes="__iter__" />
-    <require permission="schoolbell.view"
-             attributes="add remove clear" />
-  </content>
-
-  <content class=".notes.Note">
-    <require permission="zope.Public"
-             interface=".interfaces.INote" />
-    <require permission="schoolbell.create"
-             set_schema=".interfaces.INote" />
   </content>
 
   <content class=".app.ApplicationPreferences">
@@ -369,6 +349,8 @@
 
   <include package=".browser" />
   <include package=".rest" />
+
+  <include package=".note" />
 
 <!-- Devmode stuff must be at the end, so it can override stuff -->
   <include

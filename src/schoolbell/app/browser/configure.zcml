@@ -112,24 +112,6 @@
       menu="schoolbell_actions"
       />
 
-  <page
-      name="notes"
-      for="schoolbell.app.interfaces.IHaveNotes"
-      layer=".skin.ISchoolBellLayer"
-      class="schoolbell.app.browser.notes.NotesView"
-      template="templates/notes.pt"
-      permission="zope.Public"
-      />
-
-  <page
-      name="addNote.html"
-      for="schoolbell.app.interfaces.IHaveNotes"
-      class="schoolbell.app.browser.notes.NoteAddView"
-      template="templates/note_add.pt"
-      permission="schoolbell.view"
-      menu="schoolbell_actions"
-      title="New Note" />
-
 <!-- PersonContainer, Person configuration -->
 
   <page
