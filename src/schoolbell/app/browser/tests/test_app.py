@@ -422,16 +422,17 @@ def doctest_MemberViewPersons():
 
         >>> view.update()
 
-    First, all persons should be listed in alphabetical order:
+    First, all persons should be listed (the page template puts them in
+    alphabetical order later):
 
-        >>> [g.title for g in view.getPotentialMembers()]
+        >>> sorted([g.title for g in view.getPotentialMembers()])
         ['Albertas', 'Gintas', 'Ignas']
 
     We can search persons not in the group
 
-        >>> [g.title for g in view.searchPotentialMembers('al')]
+        >>> sorted([g.title for g in view.searchPotentialMembers('al')])
         ['Albertas']
-        >>> [g.title for g in view.searchPotentialMembers('i')]
+        >>> sorted([g.title for g in view.searchPotentialMembers('i')])
         ['Gintas', 'Ignas']
 
     Let's make Ignas a member of PoV:
@@ -443,12 +444,12 @@ def doctest_MemberViewPersons():
 
     He should have joined:
 
-        >>> [person.title for person in pov.members]
+        >>> sorted([person.title for person in pov.members])
         ['Ignas']
 
     Search again to make sure members do not appear in the results:
 
-        >>> [g.title for g in view.searchPotentialMembers('as')]
+        >>> sorted([g.title for g in view.searchPotentialMembers('as')])
         ['Albertas', 'Gintas']
 
     We can cancel an action if we want to:
@@ -457,7 +458,7 @@ def doctest_MemberViewPersons():
         >>> request.form = {'ADD_MEMBER.gintas': 'on', 'DONE': 'Done'}
         >>> view = MemberViewPersons(pov, request)
         >>> view.update()
-        >>> [person.title for person in pov.members]
+        >>> sorted([person.title for person in pov.members])
         ['Ignas']
         >>> request.response.getStatus()
         302
@@ -481,7 +482,7 @@ def doctest_MemberViewPersons():
 
     Mission accomplished:
 
-        >>> [person.title for person in pov.members]
+        >>> sorted([person.title for person in pov.members])
         ['Albertas']
 
     Click 'Done' when we are finished and we go back to the group view
