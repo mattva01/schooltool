@@ -37,6 +37,11 @@ from schoolbell.app.browser.tests.setup import setUp, tearDown
 from schoolbell.app.browser.tests.setup import setUpSessions
 
 
+def sorted(list): # Python 2.3 compatibility
+    list.sort()
+    return list
+
+
 def doctest_SchoolBellApplicationView():
     r"""Test for SchoolBellApplicationView
 
