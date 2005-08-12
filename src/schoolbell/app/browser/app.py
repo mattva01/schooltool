@@ -279,7 +279,7 @@ class MemberViewPersons(BrowserView):
     def updateBatch(self, lst):
         start = int(self.request.get('batch_start', 0))
         size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(lst, start, size) # XXX no sorting? -- mg
+        self.batch = Batch(lst, start, size, sort_by='title')
 
     def update(self):
         context_url = zapi.absoluteURL(self.context, self.request)

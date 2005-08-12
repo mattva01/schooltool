@@ -499,6 +499,30 @@ def doctest_MemberViewPersons():
     """
 
 
+def doctest_MemberViewPersons_updateBatch():
+    r"""Test for MemberViewPersons.updateBatch.
+
+        >>> from schoolbell.app.browser.app import MemberViewPersons
+        >>> from schoolbell.app.app import Group
+        >>> from schoolbell.app.app import Person
+        >>> pov = Group('PoV')
+        >>> gintas = Person('gintas', 'Gintas')
+        >>> ignas = Person('ignas', 'Ignas')
+        >>> alga = Person('alga', 'Albertas')
+
+        >>> request = TestRequest()
+        >>> view = MemberViewPersons(pov, request)
+
+    updateBatch takes a list of persons, and creates a Batch object
+    from that list.
+
+        >>> view.updateBatch([ignas, alga, gintas])
+        >>> [p.title for p in view.batch]
+        ['Albertas', 'Gintas', 'Ignas']
+
+    """
+
+
 def doctest_GroupView():
     r"""Test for GroupView
 
