@@ -17,9 +17,9 @@
   <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
   <div metal:use-macro="view/@@view_macros/batch-search"/>
   <p tal:condition="not:batch" i18n:translate="">There are none.</p>
-  <form method="post"
+  <form method="post" tal:condition="batch"
         tal:attributes="action string:${context/@@absolute_url}/delete.html">
-    <table class="container" tal:condition="batch">
+    <table class="container">
       <tr class="header">
         <th i18n:translate="">
         </th>
