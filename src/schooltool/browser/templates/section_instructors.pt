@@ -23,7 +23,7 @@
     </div>
     <div class="controls">
       <input type="submit" class="button-ok" name="REMOVE_INSTRUCTORS"
-        value="Remove" tal:condition="batch"
+        value="Remove"
         title="Shortcut: Alt-R" accesskey="R"
         i18n:attributes="value; accesskey" />
     </div>
