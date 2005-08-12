@@ -4,8 +4,7 @@
   <title metal:fill-slot="title" tal:content="context/title" />
 </head>
 <body>
-  <metal:block metal:fill-slot="body"
-    tal:define="batch_search request/SEARCH|nothing">
+  <metal:block metal:fill-slot="body">
 
 <form method="post" tal:attributes="action request/URL" class="standalone"
   tal:define="batch view/batch">
