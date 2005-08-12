@@ -22,9 +22,9 @@
       </label>
     </div>
   </div>
-  <div class="controls">
+  <div class="controls" tal:condition="groups">
     <input type="submit" class="button-ok" name="REMOVE_GROUPS"
-      value="Remove" tal:condition="batch"
+      value="Remove"
       title="Shortcut: Alt-R" accesskey="R"
       i18n:attributes="value; accesskey" />
   </div>
