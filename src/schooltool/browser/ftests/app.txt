@@ -272,6 +272,31 @@ Looking at the section:
           <a href="http://localhost/frogpond/courses/history">History</a>
     <BLANKLINE>
     ...
+    ...change location...
+    ...
+
+Students aren't given the option to change the location:
+
+    >>> user = http(r"""
+    ... GET /frogpond/sections/his1 HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+
+    >>> print user
+    HTTP/1.1 200 Ok
+    ...
+
+    >>> "change location" not in str(user)
+    True
+
+The section's edit view:
+
+    >>> print http(r"""
+    ... GET /frogpond/sections/his1/@@edit.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
 
 Frog can't see the section's calendar by default
 

@@ -199,6 +199,17 @@ def doctest_SectionView():
         >>> [g.title for g in view.getGroups()]
         ['Form1']
 
+    We'll need some setup from zope.security:
+
+        >>> from zope.security.checker import defineChecker
+        >>> from zope.security.checker import Checker
+        >>> checker = Checker(
+        ...    {'location':'test_allowed'},
+        ...    {'location':'test_allowed'})
+        >>> defineChecker(Section, checker)
+        >>> view.canModifyLocation
+        True
+
     TODO in the future we should probably prevent users being direct memebers
     of a section if they're transitive members.
 

@@ -31,7 +31,7 @@ from zope.app.component.hooks import getSite
 from zope.app.form.utility import getWidgetsData
 from zope.app.form.interfaces import WidgetsError
 from zope.security.proxy import removeSecurityProxy
-from zope.security.checker import canAccess
+from zope.security.checker import canAccess, canWrite
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 from schoolbell.app.browser import app as sb
@@ -150,6 +150,10 @@ class SectionView(BrowserView):
     def getGroups(self):
         return filter(IGroup.providedBy, self.context.members)
 
+    def _canModifyLocation(self):
+        return canWrite(self.context, 'location')
+
+    canModifyLocation = property(_canModifyLocation)
 
 class LocationResourceVocabulary(SimpleVocabulary):
     """Choice vocabulary of all location resources."""
