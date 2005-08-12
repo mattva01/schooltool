@@ -705,7 +705,51 @@ application calendar
          </label>
     ...
 
-If we disable permissions on the application calendar, it will no longer show up
+Let's remove the application calendar from the overlay
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar_selection.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... persons:list=toad&\
+    ... groups:list=animals&\
+    ... nexturl=http://localhost/&\
+    ... UPDATE_SUBMIT=Apply
+    ... """, handle_errors=False)
+    HTTP/1.1 303 See Other
+    ...
+
+Now the application calendar is no longer in the overlay portlet
+
+    >>> result = http("""
+    ... GET /frogpond/persons/frog/calendar/daily.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """, handle_errors=False)
+    >>> 'value="/frogpond"' in result.getBody()
+    False
+
+
+If we restrict permissions on the application calendar, it will no longer be
+available in the overlay selection view:
+
+  Demonstrate that it is there now:
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/calendar_selection.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+          <label>
+            <input type="checkbox" name="application"
+                   value="application" />
+              <span>SchoolBell</span>
+              <span>site-wide calendar</span>
+          </label>
+    ...
+
+  Restrict permissions on the application calendar
 
     >>> print http("""
     ... POST /frogpond/calendar/acl.html HTTP/1.1
@@ -720,13 +764,13 @@ If we disable permissions on the application calendar, it will no longer show up
     Location: http://localhost/frogpond/calendar
     ...
 
-Now the application calendar is no longer in the overlay portlet
+  And now it's gone
 
     >>> result = http("""
-    ... GET /frogpond/persons/frog/calendar/daily.html HTTP/1.1
+    ... POST /frogpond/persons/frog/calendar_selection.html HTTP/1.1
     ... Authorization: Basic frog:pwd
     ... """, handle_errors=False)
-    >>> 'value="/frogpond"' in result.getBody()
+    >>> '<span>site-wide calendar</span>' in result.getBody()
     False
 
 Regression test for Issue243 (Calendars with identical titles are

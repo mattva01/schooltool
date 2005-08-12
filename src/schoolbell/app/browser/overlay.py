@@ -195,10 +195,9 @@ class CalendarSelectionView(BrowserView):
                     elif item['id'] not in selected and item['selected']:
                         user.overlaid_calendars.remove(item['calendar'])
             appcal = self.application.get('calendar')
-            if appcal:
+            if appcal != None:
                 if ('application' in self.request and
                         appcal not in user.overlaid_calendars):
-                    print self.request.get('application')
                     user.overlaid_calendars.add(appcal)
                 elif ('application' not in self.request and
                         appcal in user.overlaid_calendars):
