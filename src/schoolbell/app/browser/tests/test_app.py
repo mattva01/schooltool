@@ -389,8 +389,8 @@ def doctest_GroupListView():
     """
 
 
-def doctest_MemberListView():
-    r"""Test for MemberListView
+def doctest_MemberViewPersons():
+    r"""Test for MemberViewPersons
 
     We will be (ab)using a group and three test subjects:
 
@@ -467,7 +467,8 @@ def doctest_MemberListView():
     Let's remove Ignas from PoV (he went home early today);
 
         >>> request = TestRequest()
-        >>> request.form = {'REMOVE_MEMBER.ignas': 'on', 'REMOVE_MEMBERS': 'Apply'}
+        >>> request.form = {'REMOVE_MEMBER.ignas': 'on',
+        ...                 'REMOVE_MEMBERS': 'Apply'}
         >>> view = MemberViewPersons(pov, request)
         >>> view.update()
 
@@ -493,8 +494,6 @@ def doctest_MemberListView():
         302
         >>> request.response.getHeaders()['Location']
         'http://127.0.0.1/groups/pov'
-
-    TODO: check resource view
 
     """
 
@@ -935,6 +934,7 @@ def doctest_PersonAddView():
 
     """
 
+
 def doctest_PersonPreferencesView():
     """
 
@@ -1011,7 +1011,7 @@ def doctest_LoginView():
         >>> from schoolbell.app.interfaces import ISchoolBellApplication
         >>> from schoolbell.app.interfaces import IApplicationPreferences
         >>> from schoolbell.app.app import getApplicationPreferences
-        >>> ztapi.provideAdapter(ISchoolBellApplication, 
+        >>> ztapi.provideAdapter(ISchoolBellApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
 
@@ -1203,7 +1203,7 @@ def doctest_ACLView():
         >>> from schoolbell.app.interfaces import ISchoolBellApplication
         >>> from schoolbell.app.interfaces import IApplicationPreferences
         >>> from schoolbell.app.app import getApplicationPreferences
-        >>> ztapi.provideAdapter(ISchoolBellApplication, 
+        >>> ztapi.provideAdapter(ISchoolBellApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
 
@@ -1614,6 +1614,7 @@ def doctest_ACLView():
 
     """
 
+
 def doctest_ACLView_inheritance():
     r"""This test is to check that the ACL view deals correctly with
     the inherited permissions.  If a person has a permission due to a
@@ -1718,6 +1719,7 @@ def doctest_ACLView_inheritance():
 
     """
 
+
 def doctest_hasPermission():
     r"""The Zope security machinery does not have tools to check
     whether a random principal has some permission on some object.  So
@@ -1788,6 +1790,7 @@ def doctest_hasPermission():
         >>> hasPermission('super', object(), 'sb.person.joe')
         False
     """
+
 
 def doctest_ApplicationPreferencesView():
     """
