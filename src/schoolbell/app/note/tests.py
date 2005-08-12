@@ -89,7 +89,7 @@ def doctest_browser_NoteAddView():
         >>> class Owner(object):
         ...     implements(IAttributeAnnotatable, IHaveNotes)
         ...     id = None
-        
+
         >>> owner = Owner()
         >>> owner.id = 'someone'
 
@@ -150,7 +150,9 @@ def doctest_rest_views():
 
     We need an object that implements IHaveNotes.
 
-        >>> from schoolbell.app.app import Person
+        >>> class Person(object):
+        ...     implements(IHaveNotes, IAttributeAnnotatable)
+        ...     id = ''
         >>> person = Person()
 
     We also need a principal in the request:

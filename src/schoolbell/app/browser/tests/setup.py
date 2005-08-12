@@ -65,6 +65,9 @@ def setUpSchoolBellSite():
     app = SchoolBellApplication()
     directlyProvides(app, IContainmentRoot)
     setUpLocalAuth(app)
+    # XXX: Refactor later to use a flexible test setup system
+    from schoolbell.app.person.person import PersonContainer
+    app['persons'] = PersonContainer()
     setSite(app)
     return app
 

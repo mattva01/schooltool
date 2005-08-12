@@ -35,7 +35,8 @@ to enforce relationship constraints.
 
 We will need some sample persons and groups for the demonstration
 
-    >>> from schoolbell.app.app import Person, Group
+    >>> from schoolbell.app.app import Group
+    >>> from schoolbell.app.person.person import Person
     >>> jonas = Person()
     >>> petras = Person()
     >>> developers = Group()

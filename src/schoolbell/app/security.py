@@ -46,7 +46,8 @@ from zope.app.security.interfaces import IUnauthenticatedGroup
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellAuthentication
-from schoolbell.app.interfaces import IPerson, IGroup
+from schoolbell.app.interfaces import IGroup
+from schoolbell.app.person.interfaces import IPerson
 
 
 class Principal(Contained):
@@ -215,23 +216,6 @@ def authSetUpSubscriber(event):
                 perms = IPrincipalPermissionManager(event.object)
                 perms.grantPermissionToPrincipal('schoolbell.view',
                                                  allusers.id)
-
-
-def personPermissionsSubscriber(event):
-    """Grant default permissions to all new persons"""
-    if IObjectAddedEvent.providedBy(event):
-        if IPerson.providedBy(event.object):
-            map = IPrincipalPermissionManager(event.object)
-            principalid = 'sb.person.' + event.object.__name__
-            map.grantPermissionToPrincipal('schoolbell.view', principalid)
-            map.grantPermissionToPrincipal('schoolbell.edit', principalid)
-            map.grantPermissionToPrincipal('schoolbell.addEvent', principalid)
-            map.grantPermissionToPrincipal('schoolbell.modifyEvent',
-                                           principalid)
-            map.grantPermissionToPrincipal('schoolbell.viewCalendar',
-                                           principalid)
-            map.grantPermissionToPrincipal('schoolbell.controlAccess',
-                                           principalid)
 
 
 def groupPermissionsSubscriber(event):

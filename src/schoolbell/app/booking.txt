@@ -21,7 +21,8 @@ We will need some test fixture for relationships.
 
 You have a person and a resource
 
-    >>> from schoolbell.app.app import Person, Resource
+    >>> from schoolbell.app.app import Resource
+    >>> from schoolbell.app.person.person import Person
     >>> person = Person('froggy')
     >>> resource = Resource('lily')
     >>> resource2 = Resource('mud')

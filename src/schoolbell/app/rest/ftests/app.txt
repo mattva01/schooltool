@@ -600,7 +600,7 @@ We should be capable of viewing his calendar:
     >>> print str(rest("""
     ... GET /frogpond/persons/john/calendar HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... """)).replace("\r\n", "\n")
+    ... """, handle_errors=False)).replace("\r\n", "\n")
     HTTP/1.1 200 Ok
     ...
     <BLANKLINE>

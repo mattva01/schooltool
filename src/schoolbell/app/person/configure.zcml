@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="schoolbell">
+
+  <content class=".person.PersonContainer">
+    <implements
+        interface="schoolbell.app.interfaces.IHavePreferences" />
+    <implements
+        interface="schoolbell.app.note.interfaces.IHaveNotes" />
+
+    <allow
+        interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require
+        permission="schoolbell.view"
+        attributes="keys values items __iter__ __len__" />
+    <require
+        permission="schoolbell.create"
+        interface="zope.app.container.interfaces.IWriteContainer" />
+  </content>
+
+  <content class=".person.Person">
+    <implements interface="schoolbell.app.interfaces.IHavePreferences" />
+    <implements interface="schoolbell.app.note.interfaces.IHaveNotes" />
+    <require
+        permission="schoolbell.view"
+        interface=".interfaces.IReadPerson"
+        attributes="__cmp__" />
+    <require
+        permission="schoolbell.edit"
+        interface=".interfaces.IWritePerson"
+        set_schema=".interfaces.IPerson" />
+
+    <!-- Calendar access protection is performed on the calendar object.
+         If we want local grants set on the calendar itself to work, then
+         the 'calendar' attribute must be publically available. -->
+    <allow
+        interface="schoolbell.app.interfaces.ICalendarOwner" />
+  </content>
+
+  <content class=".preference.PersonPreferences">
+    <require
+        permission="schoolbell.edit"
+        interface=".interfaces.IPersonPreferences"
+        set_schema=".interfaces.IPersonPreferences" />
+  </content>
+
+  <content class=".details.PersonDetails">
+    <require
+        permission="schoolbell.view"
+        interface=".interfaces.IPersonDetails" />
+    <require
+        permission="schoolbell.edit"
+        set_schema=".interfaces.IPersonDetails" />
+  </content>
+
+  <adapter
+      for="schoolbell.app.interfaces.IHavePreferences"
+      provides=".interfaces.IPersonPreferences"
+      factory=".preference.getPersonPreferences"
+      trusted="true"
+      />
+
+  <adapter
+      for=".interfaces.IPerson"
+      provides=".interfaces.IPersonDetails"
+      factory=".details.getPersonDetails"
+      trusted="true"
+      />
+
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".security.personPermissionsSubscriber"
+      />
+
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".person.personAppCalendarOverlaySubscriber"
+      />
+
+  <!-- Application hook -->
+  <subscriber
+      for="schoolbell.app.interfaces.IApplicationInitializationEvent"
+      handler=".person.addPersonContainerToApplication"
+      />
+
+  <include package=".browser" />
+  <include package=".rest" />
+
+</configure>

@@ -23,6 +23,7 @@ $Id$
 """
 
 from datetime import datetime, date, time, timedelta
+from pytz import timezone
 import urllib
 import calendar
 import sys
@@ -55,16 +56,15 @@ from zope.security.proxy import removeSecurityProxy
 from zope.security.interfaces import ForbiddenAttribute
 from zope.security.checker import canAccess
 
-from pytz import timezone
-
 from schoolbell.app.browser import ViewPreferences
 from schoolbell.app.browser import pdfcal
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ICalendarOwner, ISchoolBellCalendarEvent
-from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
+from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.interfaces import ISchoolBellApplication
-from schoolbell.app.interfaces import IPersonPreferences, IResource
+from schoolbell.app.interfaces import IResource
+from schoolbell.app.person.interfaces import IPerson, IPersonPreferences
 from schoolbell.app.interfaces import vocabulary
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 from schoolbell.calendar.recurrent import DailyRecurrenceRule

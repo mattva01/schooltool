@@ -73,13 +73,14 @@
       for="schoolbell.app.interfaces.ISchoolBellApplication"
       menu="zmi_views" title="View" action="index.html" />
 
+  <!-- XXX: Ahhh! Why is this a view of the person? -->
   <page
       name="site-preferences.html"
-      for="schoolbell.app.interfaces.IPerson"
+      for="schoolbell.app.person.interfaces.IPerson"
       class="schoolbell.app.browser.app.ApplicationPreferencesView"
       template="templates/application_preferences.pt"
       permission="schoolbell.manageMembership"
-      menu="schoolbell_actions" 
+      menu="schoolbell_actions"
       title="Change Site Preferences" />
 
 <!-- Views for everything -->
@@ -112,33 +113,15 @@
       menu="schoolbell_actions"
       />
 
-<!-- PersonContainer, Person configuration -->
-
   <page
-      name="index.html"
-      for="schoolbell.app.interfaces.IPersonContainer"
-      class="schoolbell.app.browser.app.PersonContainerView"
-      template="templates/container.pt"
+      name="delete.html"
+      for="zope.app.container.interfaces.IContainer"
+      class="schoolbell.app.browser.app.ContainerDeleteView"
+      template="templates/container_delete.pt"
       permission="zope.View"
-      menu="zmi_views"
-      title="View"
       />
 
-  <containerViews
-      for="schoolbell.app.interfaces.IPersonContainer"
-      contents="zope.ManageContent"
-      add="zope.View"
-      />
-
-  <page
-      name="index.html"
-      for="schoolbell.app.interfaces.IPerson"
-      class="schoolbell.app.browser.app.PersonView"
-      template="templates/person.pt"
-      permission="zope.View"
-      menu="zmi_views"
-      title="View"
-      />
+<!-- GroupContainer, Group configuration -->
 
   <page
       name="groups.html"
@@ -149,81 +132,6 @@
       menu="schoolbell_actions"
       title="Change Membership"
       />
-
-  <page
-      name="delete.html"
-      for="zope.app.container.interfaces.IContainer"
-      class="schoolbell.app.browser.app.ContainerDeleteView"
-      template="templates/container_delete.pt"
-      permission="zope.View"
-      />
-
-  <page
-      name="delete.html"
-      for="schoolbell.app.interfaces.IPersonContainer"
-      class="schoolbell.app.browser.app.PersonContainerDeleteView"
-      template="templates/person_container_delete.pt"
-      permission="zope.View"
-      />
-
-    <!--
-    FIXME: zope.View is certainly not the right permission.
-    How can we say "a person may only edit their own preferences"?
-    -->
-  <page
-      name="preferences.html"
-      for="schoolbell.app.interfaces.IPerson"
-      class="schoolbell.app.browser.app.PersonPreferencesView"
-      template="templates/person_preferences.pt"
-      permission="zope.View"
-      menu="schoolbell_actions" 
-      title="Change Preferences" />
-
-  <page
-      name="details.html"
-      for="schoolbell.app.interfaces.IPerson"
-      class="schoolbell.app.browser.app.PersonDetailsView"
-      template="templates/person_details.pt"
-      permission="zope.View"
-      menu="schoolbell_actions" 
-      title="Change Details" />
-
-  <page
-      name="edit.html"
-      for="schoolbell.app.interfaces.IPerson"
-      class="schoolbell.app.browser.app.PersonEditView"
-      template="templates/person_edit.pt"
-      permission="zope.View"
-      menu="schoolbell_actions"
-      title="Edit Info"
-      />
-
-  <page
-      name="add.html"
-      for="schoolbell.app.interfaces.IPersonContainer"
-      class="schoolbell.app.browser.app.PersonAddView"
-      template="templates/person_add.pt"
-      permission="schoolbell.create"
-      menu="schoolbell_actions" title="New Person" />
-
-  <page
-      name="photo"
-      for="schoolbell.app.interfaces.IPerson"
-      class="schoolbell.app.browser.app.PersonPhotoView"
-      permission="zope.View" />
-
-  <page
-      name="person-csvimport.html"
-      for="schoolbell.app.interfaces.IPersonContainer"
-      class="schoolbell.app.browser.csvimport.PersonCSVImportView"
-      template="templates/person-csvimport.pt"
-      permission="schoolbell.create"
-      menu="schoolbell_actions"
-      title="Import Persons"
-      layer=".skin.ISchoolBellLayer"
-      />
-
-<!-- GroupContainer, Group configuration -->
 
   <page
       name="index.html"
@@ -548,15 +456,6 @@
       />
 
   <page
-      for="schoolbell.app.interfaces.IPerson"
-      name="calendar_selection.html"
-      layer=".skin.ISchoolBellLayer"
-      class=".overlay.CalendarSelectionView"
-      template="templates/calendar_selection.pt"
-      permission="schoolbell.edit"
-      />
-
-  <page
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       name="calendar_list"
       layer=".skin.ISchoolBellLayer"
@@ -806,7 +705,7 @@
       for="zope.security.interfaces.IUnauthorized"
       name="index.html"
       layer=".skin.ISchoolBellLayer"
-      class="zope.app.exception.browser.unauthorized.Unauthorized" 
+      class="zope.app.exception.browser.unauthorized.Unauthorized"
       template="templates/unauthorized.pt"
       permission="zope.Public"
       />
@@ -830,69 +729,69 @@
       xmlns:apidoc="http://namespaces.zope.org/apidoc"
       zcml:condition="have apidoc">
 
-    <apidoc:bookchapter 
-        id="browser" 
-        title="Browser UI" 
-        parent="schoolbell" 
+    <apidoc:bookchapter
+        id="browser"
+        title="Browser UI"
+        parent="schoolbell"
         doc_path="ftests/README.txt" />
 
-    <apidoc:bookchapter 
-        id="copypaste" 
-        title="Copy and Paste" 
+    <apidoc:bookchapter
+        id="copypaste"
+        title="Copy and Paste"
         parent="schoolbell/browser"
         doc_path="ftests/copypaste.txt" />
 
-    <apidoc:bookchapter 
-        id="notes" 
-        title="Notes" 
+    <apidoc:bookchapter
+        id="notes"
+        title="Notes"
         parent="schoolbell/browser"
         doc_path="ftests/notes.txt" />
 
-    <apidoc:bookchapter 
-        id="login" 
-        title="Login" 
+    <apidoc:bookchapter
+        id="login"
+        title="Login"
         parent="schoolbell/browser"
         doc_path="ftests/login.txt" />
 
-    <apidoc:bookchapter 
-        id="errors" 
-        title="Errors" 
+    <apidoc:bookchapter
+        id="errors"
+        title="Errors"
         parent="schoolbell/browser"
         doc_path="ftests/errors.txt" />
 
-    <apidoc:bookchapter 
-        id="acl" 
-        title="ACL" 
+    <apidoc:bookchapter
+        id="acl"
+        title="ACL"
         parent="schoolbell/browser"
         doc_path="ftests/acl.txt" />
 
-    <apidoc:bookchapter 
-        id="cal" 
-        title="Calendar" 
+    <apidoc:bookchapter
+        id="cal"
+        title="Calendar"
         parent="schoolbell/browser"
         doc_path="ftests/cal.txt" />
 
-    <apidoc:bookchapter 
-        id="navigation" 
-        title="Navigation" 
+    <apidoc:bookchapter
+        id="navigation"
+        title="Navigation"
         parent="schoolbell/browser"
         doc_path="ftests/navigation.txt" />
 
-    <apidoc:bookchapter 
-        id="app" 
-        title="Application" 
+    <apidoc:bookchapter
+        id="app"
+        title="Application"
         parent="schoolbell/browser"
         doc_path="ftests/app.txt" />
 
-    <apidoc:bookchapter 
-        id="calwidget" 
-        title="Calendar Widget" 
+    <apidoc:bookchapter
+        id="calwidget"
+        title="Calendar Widget"
         parent="schoolbell/browser"
         doc_path="resources/calwidget/README.txt" />
 
-    <apidoc:bookchapter 
-        id="templates" 
-        title="Templates" 
+    <apidoc:bookchapter
+        id="templates"
+        title="Templates"
         parent="schoolbell/browser"
         doc_path="templates.txt" />
 

@@ -30,10 +30,11 @@ from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from zope.app.tests import setup, ztapi
 from zope.app.publisher.browser import BrowserView
-from schoolbell.app.app import Person, Resource
+from schoolbell.app.app import Resource
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.browser.pdfcal import PDFCalendarViewBase
 from schoolbell.app.browser.pdfcal import setUpMSTTCoreFonts
+from schoolbell.app.person.person import Person
 from schoolbell import SchoolBellMessageID as _
 
 

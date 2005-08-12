@@ -31,7 +31,8 @@ from zope.app.publisher.browser import BrowserView
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess
-from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
+from schoolbell.app.interfaces import ISchoolBellCalendar
+from schoolbell.app.person.interfaces import IPerson
 from schoolbell.calendar.utils import parse_date, week_start
 from schoolbell import SchoolBellMessageID as _
 

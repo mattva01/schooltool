@@ -26,7 +26,8 @@ This module defines relationships used to store calendar subscriptions.
 
 We will need some sample persons and groups for the demonstration
 
-    >>> from schoolbell.app.app import Person, Group
+    >>> from schoolbell.app.app import Group
+    >>> from schoolbell.app.person.person import Person
     >>> john = Person(title="John")
     >>> smith = Person(title="Smith")
     >>> developers = Group(title="Developers")

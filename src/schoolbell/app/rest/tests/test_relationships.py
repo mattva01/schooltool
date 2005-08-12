@@ -54,7 +54,8 @@ from schoolbell.app.rest.xmlparsing import XMLValidationError
 class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
     def setUp(self):
         from schoolbell.app.app import SchoolBellApplication
-        from schoolbell.app.app import Group, Person
+        from schoolbell.app.app import Group
+        from schoolbell.app.person.person import Person, PersonContainer
         from schoolbell.relationship.tests import setUpRelationships
 
         setup.placefulSetUp()
@@ -78,6 +79,7 @@ class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
                              SimpleNameChooser)
 
         self.app = SchoolBellApplication()
+        self.app['persons'] = PersonContainer()
         setUpLocalAuth(self.app)
         setSite(self.app)
         directlyProvides(self.app, IContainmentRoot)

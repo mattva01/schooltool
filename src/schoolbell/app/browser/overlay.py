@@ -33,7 +33,8 @@ from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess
 
 from schoolbell import SchoolBellMessageID as _
-from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
+from schoolbell.app.interfaces import ISchoolBellCalendar
+from schoolbell.app.person.interfaces import IPerson
 from schoolbell.app.app import getSchoolBellApplication
 
 
@@ -56,7 +57,7 @@ class CalendarOverlayView(BrowserView):
         Anonymous user:
 
             >>> from zope.publisher.browser import TestRequest
-            >>> from schoolbell.app.app import Person
+            >>> from schoolbell.app.person.person import Person
             >>> request = TestRequest()
             >>> person = Person()
             >>> context = person.calendar

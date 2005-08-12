@@ -36,7 +36,9 @@ def doctest_SchoolBellApplication():
     r"""Tests for SchoolBellApplication.
 
         >>> from schoolbell.app.app import SchoolBellApplication
+        >>> from schoolbell.app.person.person import PersonContainer
         >>> app = SchoolBellApplication()
+        >>> app['persons'] = PersonContainer()
 
     We need to register an adapter to make the title attribute available:
 
@@ -55,7 +57,7 @@ def doctest_SchoolBellApplication():
     Person, group and resource containers are reachable as items of the
     application object.
 
-        >>> from schoolbell.app.interfaces import IPersonContainer
+        >>> from schoolbell.app.person.interfaces import IPersonContainer
         >>> persons = app['persons']
         >>> verifyObject(IPersonContainer, persons)
         True
@@ -101,29 +103,6 @@ def doctest_SchoolBellApplication():
     """
 
 
-def doctest_PersonContainer():
-    """Tests for PersonContainer
-
-        >>> from schoolbell.app.interfaces import IPersonContainer
-        >>> from schoolbell.app.app import PersonContainer
-        >>> c = PersonContainer()
-        >>> verifyObject(IPersonContainer, c)
-        True
-
-    PersonContainer uses the `username` attribute of persons as the key
-
-        >>> from schoolbell.app.app import Person
-        >>> person = Person(username="itsme")
-        >>> c['doesnotmatter'] = person
-        >>> c['itsme'] is person
-        True
-        >>> c.get('doesnotmatter') is None
-        True
-
-    Adaptation (i.e. __conform__) is tested in doctest_SchoolBellApplication.
-    """
-
-
 def doctest_GroupContainer():
     """Tests for GroupContainer
 
@@ -163,154 +142,6 @@ def doctest_ResourceContainer():
         >>> run_unit_tests(Test)
 
     Adaptation (i.e. __conform__) is tested in doctest_SchoolBellApplication.
-    """
-
-
-def doctest_Person():
-    r"""Tests for Person
-
-        >>> from schoolbell.app.interfaces import IPersonContained
-        >>> from schoolbell.app.app import Person
-        >>> person = Person('person')
-        >>> verifyObject(IPersonContained, person)
-        True
-
-    Persons initially have no password
-
-        >>> person.hasPassword()
-        False
-
-    When a person has no password, he cannot log in
-
-        >>> person.checkPassword('')
-        False
-        >>> person.checkPassword(None)
-        False
-
-    You can set the password
-
-        >>> person.setPassword('secret')
-        >>> person.hasPassword()
-        True
-        >>> person.checkPassword('secret')
-        True
-        >>> person.checkPassword('justguessing')
-        False
-
-    Note that the password is not stored in plain text and cannot be recovered
-
-        >>> import pickle
-        >>> 'secret' not in pickle.dumps(person)
-        True
-
-    You can lock out the user's accound by setting the password to None
-
-        >>> person.setPassword(None)
-        >>> person.hasPassword()
-        False
-        >>> person.checkPassword('')
-        False
-        >>> person.checkPassword(None)
-        False
-
-    Note that you can set the password to an empty string, although that is
-    not a secure password
-
-        >>> person.setPassword('')
-        >>> person.hasPassword()
-        True
-        >>> person.checkPassword('')
-        True
-        >>> person.checkPassword(None)
-        False
-
-    It is probably not a very good idea to use non-ASCII characters in
-    passwords, but you can do that
-
-        >>> person.setPassword(u'\u1234')
-        >>> person.checkPassword(u'\u1234')
-        True
-
-    Persons have a calendar:
-
-        >>> person.calendar.__name__
-        'calendar'
-        >>> person.calendar.__parent__ is person
-        True
-        >>> len(person.calendar)
-        0
-
-    Persons can be adapted to ISchoolBellApplication
-
-        >>> from schoolbell.app.interfaces import ISchoolBellApplication
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> app = SchoolBellApplication()
-        >>> app['persons']['guest'] = person
-
-    """
-
-def doctest_PersonPreferences():
-    r"""Tests for the Preferences adapter
-
-        >>> from zope.app.tests import setup
-        >>> setup.placelessSetUp()
-        >>> setup.setUpAnnotations()
-        >>> from schoolbell.app.app import Person
-        >>> from schoolbell.app.interfaces import IHavePreferences
-
-        >>> person = Person('person')
-        >>> verifyObject(IHavePreferences, person)
-        True
-
-    Make sure the attribute stores the correct interface
-
-        >>> from schoolbell.app.interfaces import IPersonPreferences
-        >>> from schoolbell.app.app import getPersonPreferences
-        >>> prefs = getPersonPreferences(person)
-        >>> verifyObject(IPersonPreferences, prefs)
-        True
-        >>> prefs.timezone
-        'UTC'
-        >>> prefs.weekstart
-        0
-
-    Need to have prefs.__parent__ refer to the person it's attached to:
-
-        >>> prefs.__parent__ == person
-        True
-
-        >>> setup.placelessTearDown()
-
-    """
-
-
-def doctest_PersonDetails():
-    r"""Tests for the contact information Details adapter
-
-        >>> from zope.app.tests import setup
-        >>> setup.placelessSetUp()
-        >>> setup.setUpAnnotations()
-        >>> from schoolbell.app.app import Person
-
-        >>> person = Person('person')
-
-    Make sure the attribute stores the correct interface
-
-        >>> from schoolbell.app.interfaces import IPersonDetails
-        >>> from schoolbell.app.app import getPersonDetails
-        >>> details = getPersonDetails(person)
-        >>> verifyObject(IPersonDetails, details)
-        True
-
-        >>> from zope.app.location.interfaces import ILocation
-        >>> verifyObject(ILocation, details)
-        True
-
-    Need to have prefs.__parent__ refer to the person its attached to
-
-        >>> details.__parent__ == person
-        True
-
     """
 
 
@@ -363,7 +194,8 @@ def doctest_getSchoolBellApplication():
 
     Let's say we have a SchoolBell app.
 
-      >>> from schoolbell.app.app import SchoolBellApplication, Person
+      >>> from schoolbell.app.app import SchoolBellApplication
+      >>> from schoolbell.app.person.person import Person
       >>> from zope.app.component.site import LocalSiteManager
       >>> app = SchoolBellApplication()
       >>> app.setSiteManager(LocalSiteManager(app))

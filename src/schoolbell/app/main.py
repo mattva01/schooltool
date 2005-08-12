@@ -54,8 +54,9 @@ from zope.app.component.site import LocalSiteManager
 from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 from zope.app.container.contained import ObjectAddedEvent
 
-from schoolbell.app.app import SchoolBellApplication, Person
+from schoolbell.app.app import SchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellApplication
+from schoolbell.app.person.person import Person
 from schoolbell.app.security import setUpLocalAuth
 from schoolbell.app.rest import restServerType
 from schoolbell.app.browser import pdfcal

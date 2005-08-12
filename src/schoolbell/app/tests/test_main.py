@@ -469,7 +469,7 @@ def doctest_bootstrapSchoolBell():
     bootstrapSchoolBell doesn't do anything if it finds the root object already
     present in the database.
 
-        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.person.person import Person
         >>> manager = app['persons']['user1'] = Person('user1')
         >>> transaction.commit()
         >>> connection.close()

@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="schoolbell">
+
+  <content class=".person.PersonPasswordWriter">
+    <allow interface=".interfaces.IPasswordWriter" />
+  </content>
+
+  <content class=".preference.PersonPreferencesAdapter">
+    <allow
+        interface=".interfaces.IPersonPreferencesAdapter" />
+  </content>
+
+  <content class=".person.PersonPhotoAdapter">
+    <allow interface=".interfaces.IPersonPhoto" />
+  </content>
+
+  <view
+      for="..interfaces.IPerson"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory="schoolbell.app.rest.RestPublishTraverse"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.IPerson"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schoolbell.app.rest.IRestTraverser"
+      factory=".person.PersonHTTPTraverser"
+      permission="zope.Public"
+      name="password"
+      />
+
+  <view
+      for="..interfaces.IPerson"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schoolbell.app.rest.IRestTraverser"
+      factory=".person.PersonHTTPTraverser"
+      permission="zope.Public"
+      name="photo"
+      />
+
+  <adapter
+      for="..interfaces.IPersonContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".person.PersonFileFactory"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="..interfaces.IPerson"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      factory=".person.PersonFile"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.IPersonContainer"
+      name="GET"
+      factory=".person.PersonContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.IPersonContainer"
+      name="DELETE"
+      factory=".person.PersonContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.IPerson"
+      name="GET"
+      factory=".person.PersonView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for=".interfaces.IPersonPreferencesAdapter"
+      name="PUT"
+      factory=".preference.PersonPreferencesView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for=".interfaces.IPersonPreferencesAdapter"
+      name="GET"
+      factory=".preference.PersonPreferencesView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for=".interfaces.IPasswordWriter"
+      name="PUT"
+      factory=".person.PasswordWriterView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for=".interfaces.IPersonPhoto"
+      name="PUT"
+      factory=".person.PersonPhotoView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for=".interfaces.IPersonPhoto"
+      name="GET"
+      factory=".person.PersonPhotoView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for=".interfaces.IPersonPhoto"
+      name="DELETE"
+      factory=".person.PersonPhotoView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+</configure>

@@ -111,104 +111,16 @@ def setUpLocalGrants():
                          AnnotationPrincipalPermissionManager)
 
 
-def doctest_personPermissionsSubscriber():
-    r"""
-    Set up:
-
-        >>> from schoolbell.app.app import SchoolBellApplication, Person, Group
-        >>> root = setup.placefulSetUp(True)
-        >>> setUpLocalGrants()
-        >>> root['sb'] = SchoolBellApplication()
-
-        >>> person = Person('frog', title="Frog")
-        >>> root['sb']['persons']['frog'] = person
-
-    Call our subscriber:
-
-        >>> from schoolbell.app.security import personPermissionsSubscriber
-        >>> personPermissionsSubscriber(ObjectAddedEvent(person))
-
-    Check that the person has the permissions on self:
-
-        >>> from zope.app.securitypolicy.interfaces import \
-        ...     IPrincipalPermissionManager
-        >>> map = IPrincipalPermissionManager(person)
-        >>> x = map.getPermissionsForPrincipal('sb.person.frog')
-        >>> x.sort()
-        >>> pprint(x)
-        [('schoolbell.addEvent', PermissionSetting: Allow),
-         ('schoolbell.controlAccess', PermissionSetting: Allow),
-         ('schoolbell.edit', PermissionSetting: Allow),
-         ('schoolbell.modifyEvent', PermissionSetting: Allow),
-         ('schoolbell.view', PermissionSetting: Allow),
-         ('schoolbell.viewCalendar', PermissionSetting: Allow)]
-
-    Check that no permissions are set if the object added is not a person:
-
-        >>> group = Group('slackers')
-        >>> root['sb']['groups']['slackers'] = group
-        >>> personPermissionsSubscriber(ObjectAddedEvent(group))
-        >>> map = IPrincipalPermissionManager(group)
-        >>> map.getPermissionsForPrincipal('sb.group.slackers')
-        []
-
-    Clean up:
-
-        >>> setup.placefulTearDown()
-    """
-
-
-def doctest_personPermissionsSubscriber():
-    r"""
-    Set up:
-
-        >>> from schoolbell.app.app import SchoolBellApplication, Group, Person
-        >>> root = setup.placefulSetUp(True)
-        >>> setUpLocalGrants()
-        >>> root['sb'] = SchoolBellApplication()
-
-        >>> group = Group('slackers')
-        >>> root['sb']['groups']['slackers'] = group
-
-    Call our subscriber:
-
-        >>> from schoolbell.app.security import groupPermissionsSubscriber
-        >>> groupPermissionsSubscriber(ObjectAddedEvent(group))
-
-    Check that the group has a view permission on self:
-
-        >>> from zope.app.securitypolicy.interfaces import \
-        ...     IPrincipalPermissionManager
-        >>> map = IPrincipalPermissionManager(group)
-        >>> perms = map.getPermissionsForPrincipal('sb.group.slackers')
-        >>> perms.sort()
-        >>> pprint(perms)
-        [('schoolbell.view', PermissionSetting: Allow),
-         ('schoolbell.viewCalendar', PermissionSetting: Allow)]
-
-    Check that no permissions are set if the object added is not a group:
-
-        >>> person = Person('joe')
-        >>> root['sb']['persons']['joe'] = person
-        >>> groupPermissionsSubscriber(ObjectAddedEvent(person))
-        >>> map = IPrincipalPermissionManager(person)
-        >>> map.getPermissionsForPrincipal('sb.person.joe')
-        []
-
-    Clean up:
-
-        >>> setup.placefulTearDown()
-    """
-
-
 def doctest_applicationCalendarPermissionsSubscriber():
     r"""
     Set up:
 
-        >>> from schoolbell.app.app import SchoolBellApplication, Person
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> from schoolbell.app.person.person import Person, PersonContainer
         >>> root = setup.placefulSetUp(True)
         >>> setUpLocalGrants()
         >>> app = SchoolBellApplication()
+        >>> app['persons'] = PersonContainer()
         >>> root['sb'] = app
 
         >>> from zope.app.security.interfaces import IUnauthenticatedGroup

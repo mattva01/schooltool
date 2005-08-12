@@ -32,18 +32,14 @@ from zope.schema.interfaces import IField
 
 from schoolbell.app.rest import View, Template, IRestTraverser
 from schoolbell.app.rest.errors import RestError
-from schoolbell.app.rest.interfaces import IPasswordWriter, IPersonPhoto
-from schoolbell.app.rest.interfaces import IPersonPreferencesAdapter
 from schoolbell.app.rest.xmlparsing import XMLValidationError, XMLParseError
 from schoolbell.app.rest.xmlparsing import XMLDocument
 from schoolbell.calendar.icalendar import convert_calendar_to_ical
 from schoolbell.app.interfaces import IWriteCalendar
 
-from schoolbell.app.app import Group, Resource, Person
+from schoolbell.app.app import Group, Resource
 from schoolbell.app.interfaces import IGroupContainer, IGroup
 from schoolbell.app.interfaces import IResourceContainer, IResource
-from schoolbell.app.interfaces import IPersonContainer, IPerson
-from schoolbell.app.interfaces import IPersonPreferences
 from schoolbell.app.browser.cal import CalendarOwnerHTTPTraverser
 
 
@@ -143,40 +139,6 @@ class ResourceFileFactory(ApplicationObjectFileFactory):
         return kwargs
 
 
-class PersonFileFactory(ApplicationObjectFileFactory):
-    """Adapter that adapts PersonContainer to FileFactory"""
-
-    adapts(IPersonContainer)
-
-    schema = '''<?xml version="1.0" encoding="UTF-8"?>
-        <grammar xmlns="http://relaxng.org/ns/structure/1.0"
-                 ns="http://schooltool.org/ns/model/0.1"
-                 datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
-          <start>
-            <element name="object">
-              <attribute name="title">
-                <text/>
-              </attribute>
-            </element>
-          </start>
-        </grammar>
-        '''
-
-    factory = Person
-
-    def parseDoc(self, doc):
-        """Get values from document, and puts them into a dict."""
-        kwargs = {}
-        node = doc.query('/m:object')[0]
-        kwargs['title'] = node['title']
-        return kwargs
-
-    def __call__(self, name, content_type, data):
-        #Call is overrided in here so we could pass the name to
-        #Persons __init__
-        return self.factory(username=name, **self.parseXML(data))
-
-
 class ApplicationObjectFile(object):
     """Adapter adapting Application Objects to IWriteFile"""
 
@@ -214,16 +176,6 @@ class ResourceFile(ApplicationObjectFile):
         self.context.title = title
         self.context.description = description
         self.context.isLocation = isLocation
-
-
-class PersonFile(ApplicationObjectFile):
-    """Adapter that adapts IPerson to IWriteFile"""
-
-    adapts(IPerson)
-
-    def modify(self, title=None):
-        """Modify underlying object."""
-        self.context.title = title
 
 
 class ApplicationView(View):
@@ -284,10 +236,6 @@ class ResourceContainerView(GenericContainerView):
     """RESTive view of a resource container."""
 
 
-class PersonContainerView(GenericContainerView):
-    """RESTive view of a person container."""
-
-
 class GroupView(View):
     """RESTive view for groups"""
 
@@ -302,15 +250,6 @@ class ResourceView(View):
     template = Template("templates/resource.pt",
                         content_type="text/xml; charset=UTF-8")
     factory = ResourceFile
-
-
-class PersonView(View):
-    """RESTive view for persons"""
-
-    template = Template("templates/person.pt",
-                        content_type="text/xml; charset=UTF-8")
-    factory = PersonFile
-
 
 
 def getCharset(content_type, default="UTF-8"):
@@ -379,192 +318,6 @@ class CalendarView(View):
         adapter = IWriteCalendar(self.context)
         adapter.write(data, charset)
         return ''
-
-
-class PersonHTTPTraverser(CalendarOwnerHTTPTraverser):
-    """A traverser that allows to traverse to a persons password, preferences or photo."""
-
-    adapts(IPerson)
-    implements(IRestTraverser)
-
-    def publishTraverse(self, request, name):
-        if name == 'password':
-            return PersonPasswordWriter(self.context)
-        elif name == 'photo':
-            return PersonPhotoAdapter(self.context)
-        elif name == 'preferences':
-            return PersonPreferencesAdapter(self.context)
-
-        return CalendarOwnerHTTPTraverser.publishTraverse(self, request, name)
-
-
-class PersonPasswordWriter(object):
-    """Adapter of person to IPasswordWriter."""
-
-    implements(IPasswordWriter)
-
-    def __init__(self, person):
-        self.person = person
-
-    def setPassword(self, password):
-        """See IPasswordWriter."""
-        self.person.setPassword(password)
-
-
-class PasswordWriterView(View):
-    """A view that enables setting password of a Person."""
-
-    def PUT(self):
-        request = self.request
-
-        for name in request:
-            if name.startswith('HTTP_CONTENT_'):
-                # Unimplemented content header
-                request.response.setStatus(501)
-                return ''
-
-        body = self.request.bodyFile
-        password = body.read().split("\n")[0]
-        self.context.setPassword(password)
-        self.request.response.setStatus("200")
-        return ''
-
-
-class PersonPhotoAdapter(object):
-    """Adapt a Person to PersonPhoto."""
-
-    implements(IPersonPhoto)
-
-    def __init__(self, person):
-        self.person = person
-
-    def writePhoto(self, data):
-        """See IPersonPhoto."""
-
-        self.person.photo = data
-
-    def deletePhoto(self):
-        """See IPersonPhoto."""
-
-        self.person.photo = None
-
-    def getPhoto(self):
-        """See IPersonPhoto."""
-
-        return self.person.photo
-
-
-class PersonPhotoView(View):
-    """A view for Persons photo."""
-
-    def GET(self):
-        photo = self.context.getPhoto()
-
-        if photo is None:
-            raise NotFound(self.context, u'photo', self.request)
-
-        self.request.response.setHeader('Content-Type', "image/jpeg")
-        self.request.response.setStatus(200)
-        self.request.response.write(photo)
-        return self.request.response
-
-    def DELETE(self):
-        self.context.deletePhoto()
-        return ''
-
-    def PUT(self):
-        request = self.request
-
-        for name in request:
-            if name.startswith('HTTP_CONTENT_'):
-                # Unimplemented content header
-                request.response.setStatus(501)
-                return ''
-
-        body = self.request.bodyFile
-        self.context.writePhoto(body.read())
-        self.request.response.setStatus("200")
-        return ''
-
-
-class PersonPreferencesAdapter(object):
-    """Adapter of person to IPreferencesWriter"""
-
-    implements(IPersonPreferencesAdapter)
-
-    def __init__(self, person):
-        self.person = person
-
-
-class PersonPreferencesView(View):
-    """A view for Persons preferences."""
-
-    template = Template("templates/person-preferences.pt",
-                        content_type="text/xml; charset=UTF-8")
-
-    schema = """<?xml version="1.0" encoding="UTF-8"?>
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         ns="http://schooltool.org/ns/model/0.1"
-         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
-      <start>
-        <element name="preferences">
-          <zeroOrMore>
-            <element name="preference">
-              <attribute name="id"><text/></attribute>
-              <attribute name="value"><text/></attribute>
-            </element>
-          </zeroOrMore>
-        </element>
-      </start>
-    </grammar>"""
-
-    def __init__(self, context, request):
-        View.__init__(self, context, request)
-        self.preferences = IPersonPreferences(context.person)
-
-    def parseData(self, body):
-        """Get values from document, and put them into a dict"""
-        doc = XMLDocument(body, self.schema)
-        results = {}
-        try:
-            doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
-            for preference in doc.query('/m:preferences/m:preference'):
-                results[preference['id']] = preference['value']
-        finally:
-            doc.free()
-
-        return results
-
-    def validatePreference(self, name, value):
-        """Validate a preference.
-
-        Validates against IPersonPreferences widgets and raises RestError if:
-
-        * 'name' is not defined in the interface
-        * 'value' does not pass widget validation
-        """
-        if name not in IPersonPreferences.names():
-            raise RestError('Preference "%s" unknown' % name)
-
-        try:
-            IPersonPreferences.get(name).validate(value)
-        except Exception:
-            raise RestError('Preference value "%s" does not'
-                            ' pass validation on "%s"' % (value, name))
-
-    def PUT(self):
-        """Extract data and validate it.
-
-        Validates preferences through validatePreference which can return a
-        RestError.
-        """
-        data = self.parseData(self.request.bodyFile.read())
-        for name, value in data.items():
-            self.validatePreference(name, value)
-            setattr(self.preferences, name, value)
-
-        return "Preferences updated"
 
 
 class CalendarNullTraverser(object):

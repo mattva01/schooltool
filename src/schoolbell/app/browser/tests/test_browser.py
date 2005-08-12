@@ -30,6 +30,8 @@ from zope.app.location.interfaces import ILocation
 from zope.app.testing import ztapi, setup
 from zope.i18n import translate
 
+from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schoolbell.app.browser.tests.setup import setUpSchoolBellSite
 
 def doctest_SchoolBellAPI():
     r"""Tests for SchoolBellAPI.
@@ -43,12 +45,7 @@ def doctest_SchoolBellAPI():
 
     'context/schoolbell:app' returns the nearest ISchoolBellApplication
 
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> from zope.app.component.hooks import setSite
-        >>> from zope.app.component.site import LocalSiteManager
-        >>> app = SchoolBellApplication()
-        >>> app.setSiteManager(LocalSiteManager(app))
-        >>> setSite(app)
+        >>> app = setUpSchoolBellSite()
 
         >>> SchoolBellAPI(app['persons']).app is app
         True
@@ -73,7 +70,7 @@ def doctest_SchoolBellAPI():
         >>> from schoolbell.app.interfaces import ISchoolBellApplication
         >>> from schoolbell.app.interfaces import IApplicationPreferences
         >>> from schoolbell.app.app import getApplicationPreferences
-        >>> ztapi.provideAdapter(ISchoolBellApplication, 
+        >>> ztapi.provideAdapter(ISchoolBellApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
         >>> preferences = SchoolBellAPI(app).preferences
@@ -83,7 +80,7 @@ def doctest_SchoolBellAPI():
 
     'context/schoolbell:person' adapts the context to IPerson:
 
-        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.person.person import Person
         >>> p = Person()
         >>> SchoolBellAPI(p).person is p
         True
@@ -218,12 +215,9 @@ def doctest_NavigationView():
 
     This view works for any ILocatable object within a SchoolBell instance.
 
-      >>> from schoolbell.app.app import SchoolBellApplication, Person
-      >>> from zope.app.component.hooks import setSite
-      >>> from zope.app.component.site import LocalSiteManager
-      >>> app = SchoolBellApplication()
-      >>> app.setSiteManager(LocalSiteManager(app))
-      >>> setSite(app)
+      >>> app = setUpSchoolBellSite()
+
+      >>> from schoolbell.app.person.person import Person
       >>> p = Person('1')
       >>> app['persons']['1'] = p
 
@@ -239,10 +233,10 @@ def doctest_NavigationView():
 def doctest_SchoolBellSized():
     """Unit tests for SchoolBellSized.
 
-      >>> from schoolbell.app.app import SchoolBellApplication, Person
       >>> from schoolbell.app.browser import SchoolBellSized
+      >>> from schoolbell.app.person.person import Person
 
-      >>> app = SchoolBellApplication()
+      >>> app = setUpSchoolBellSite()
       >>> sized = SchoolBellSized(app)
 
       >>> sized.sizeForSorting(), translate(sized.sizeForDisplay())
@@ -269,9 +263,9 @@ def doctest_ViewPrefences():
         >>> from zope.publisher.browser import TestRequest
 
         >>> from schoolbell.app.browser import ViewPreferences
-        >>> from schoolbell.app.interfaces import IPerson
-        >>> from schoolbell.app.interfaces import IPersonPreferences
-        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.person.interfaces import IPerson
+        >>> from schoolbell.app.person.interfaces import IPersonPreferences
+        >>> from schoolbell.app.person.person import Person
 
         >>> class PreferenceStub:
         ...     def __init__(self):
@@ -305,7 +299,8 @@ def doctest_ViewPrefences():
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite())
+    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
+                                       optionflags=doctest.ELLIPSIS))
     suite.addTest(doctest.DocTestSuite('schoolbell.app.browser'))
     suite.addTest(doctest.DocFileSuite('../templates.txt'))
     return suite

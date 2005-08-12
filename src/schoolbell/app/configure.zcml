@@ -23,30 +23,30 @@
       xmlns:apidoc="http://namespaces.zope.org/apidoc"
       zcml:condition="have apidoc">
 
-    <apidoc:bookchapter 
-        id="schoolbell" 
-        title="SchoolBell" 
+    <apidoc:bookchapter
+        id="schoolbell"
+        title="SchoolBell"
         doc_path="README.txt" />
 
     <!-- Security -->
-    <apidoc:bookchapter 
-        id="security" 
-        title="Security (General)" 
+    <apidoc:bookchapter
+        id="security"
+        title="Security (General)"
         parent="schoolbell"
         doc_path="security.txt" />
 
     <!-- Calendar -->
     <configure package="schoolbell.calendar">
-      <apidoc:bookchapter 
-          id="calendar" 
-          title="Calendar" 
+      <apidoc:bookchapter
+          id="calendar"
+          title="Calendar"
           parent="schoolbell"
           doc_path="README.txt" />
     </configure>
 
-    <apidoc:bookchapter 
-        id="booking" 
-        title="Booking Resources" 
+    <apidoc:bookchapter
+        id="booking"
+        title="Booking Resources"
         parent="schoolbell/calendar"
         doc_path="booking.txt" />
 
@@ -86,14 +86,6 @@
     <allow attributes="getSiteManager" />
   </content>
 
-  <content class=".app.PersonContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schoolbell.view"
-             attributes="keys values items __iter__ __len__" />
-    <require permission="schoolbell.create"
-             interface="zope.app.container.interfaces.IWriteContainer" />
-  </content>
-
   <content class=".app.GroupContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schoolbell.view"
@@ -123,20 +115,6 @@
       provides="zope.app.container.interfaces.INameChooser" />
 
   <adapter
-      for=".interfaces.IHavePreferences"
-      provides=".interfaces.IPersonPreferences"
-      factory=".app.getPersonPreferences"
-      trusted="true"
-      />
-
-  <adapter
-      for=".interfaces.IPerson"
-      provides=".interfaces.IPersonDetails"
-      factory=".app.getPersonDetails"
-      trusted="true"
-      />
-
-  <adapter
       for=".interfaces.ISchoolBellCalendar"
       provides=".interfaces.IWriteCalendar"
       factory=".cal.WriteCalendar"
@@ -154,32 +132,6 @@
   </class>
 
 <!-- Domain content objects -->
-
-  <content class=".app.Person">
-    <require permission="schoolbell.view"
-             interface="schoolbell.app.interfaces.IReadPerson"
-             attributes="__cmp__"/>
-    <require permission="schoolbell.edit"
-             interface="schoolbell.app.interfaces.IWritePerson"
-             set_schema="schoolbell.app.interfaces.IPerson" />
-    <!-- Calendar access protection is performed on the calendar object.
-         If we want local grants set on the calendar itself to work, then
-         the 'calendar' attribute must be publically available. -->
-    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
-  </content>
-
-  <content class=".app.PersonPreferences">
-    <require permission="schoolbell.edit"
-        interface="schoolbell.app.interfaces.IPersonPreferences"
-        set_schema="schoolbell.app.interfaces.IPersonPreferences" />
-  </content>
-
-  <content class=".app.PersonDetails">
-    <require permission="schoolbell.view"
-      interface="schoolbell.app.interfaces.IPersonDetails" />
-    <require permission="schoolbell.edit"
-      set_schema="schoolbell.app.interfaces.IPersonDetails" />
-  </content>
 
   <content class=".app.Group">
     <allow interface="schoolbell.app.interfaces.ICalendarOwner"
@@ -303,22 +255,12 @@
 
   <subscriber
       for="zope.app.container.interfaces.IObjectAddedEvent"
-      handler=".security.personPermissionsSubscriber"
-      />
-
-  <subscriber
-      for="zope.app.container.interfaces.IObjectAddedEvent"
       handler=".security.groupPermissionsSubscriber"
       />
 
   <subscriber
       for="zope.app.container.interfaces.IObjectAddedEvent"
       handler=".security.applicationCalendarPermissionsSubscriber"
-      />
-
-  <subscriber
-      for="zope.app.container.interfaces.IObjectAddedEvent"
-      handler=".app.personAppCalendarOverlaySubscriber"
       />
 
 <!-- Utilities -->
@@ -350,6 +292,7 @@
   <include package=".browser" />
   <include package=".rest" />
 
+  <include package=".person" />
   <include package=".note" />
 
 <!-- Devmode stuff must be at the end, so it can override stuff -->

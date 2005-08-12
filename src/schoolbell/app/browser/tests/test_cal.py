@@ -45,10 +45,14 @@ from schoolbell.app.cal import Calendar
 from schoolbell.app.browser.cal import CalendarEventEditView
 from schoolbell.app.browser.cal import ICalendarEventEditForm
 from schoolbell.app.browser.tests.setup import setUp, tearDown, setUpSessions
+from schoolbell.app.browser.tests.setup import setUpSchoolBellSite
 
 # Used for the PrincipalStub
-from schoolbell.app.app import Person
-from schoolbell.app.interfaces import IPerson
+# XXX: Bad, it depends on the person package.
+from schoolbell.app.person.person import Person, PersonContainer
+from schoolbell.app.person.interfaces import IPerson
+from schoolbell.app.person.preference import getPersonPreferences
+from schoolbell.app.person.interfaces import IPersonPreferences
 
 utc = timezone('UTC')
 
@@ -60,7 +64,6 @@ def doctest_CalendarOwnerTraverser():
     of a calendar owner.
 
         >>> from schoolbell.app.browser.cal import CalendarOwnerTraverser
-        >>> from schoolbell.app.app import Person
         >>> person = Person()
         >>> request = TestRequest()
         >>> traverser = CalendarOwnerTraverser(person, request)
@@ -100,7 +103,6 @@ def doctest_CalendarOwnerTraverser():
 
     However, we should be able to access other views of the object:
 
-        >>> from schoolbell.app.interfaces import IPerson
         >>> ztapi.browserView(IPerson, 'some_view.html', BrowserView)
 
         >>> view = traverser.publishTraverse(request, 'some_view.html')
@@ -256,7 +258,6 @@ def doctest_CalendarOwnerHttpTraverser():
     of a calendar owner.
 
         >>> from schoolbell.app.browser.cal import CalendarOwnerHTTPTraverser
-        >>> from schoolbell.app.app import Person
         >>> person = Person()
         >>> request = TestRequest()
         >>> traverser = CalendarOwnerHTTPTraverser(person, request)
@@ -289,7 +290,6 @@ def doctest_CalendarHttpTraverser():
     of a calendar .
 
         >>> from schoolbell.app.browser.cal import CalendarHTTPTraverser
-        >>> from schoolbell.app.app import Person
         >>> person = Person()
         >>> request = TestRequest()
         >>> calendar = person.calendar
@@ -318,7 +318,7 @@ def doctest_EventForDisplay():
     """A wrapper for calendar events.
 
         >>> from schoolbell.app.browser.cal import EventForDisplay
-        >>> from schoolbell.app.app import Resource, Person
+        >>> from schoolbell.app.app import Resource
         >>> person = Person("p1")
         >>> e1 = createEvent('2004-01-02 14:45:50', '5min', 'yawn')
         >>> person.calendar.addEvent(e1)
@@ -592,16 +592,18 @@ class TestCalendarViewBase(unittest.TestCase):
         setUpSessions()
         registerCalendarHelperViews()
 
+        # Usually registered for IHavePreferences
+        ztapi.provideAdapter(IPerson, IPersonPreferences,
+                             getPersonPreferences)
+
     def tearDown(self):
         setup.placelessTearDown()
 
     def test_dayTitle(self):
         from schoolbell.app.browser.cal import CalendarViewBase
-        from schoolbell.app.app import getPersonPreferences
-        from schoolbell.app.interfaces import IPersonPreferences
-        from schoolbell.app.interfaces import IHavePreferences
 
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
+        # Usually registered for IHavePreferences
+        ztapi.provideAdapter(IPerson, IPersonPreferences,
                              getPersonPreferences)
 
         request1 = TestRequest()
@@ -629,12 +631,6 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def test_prev_next(self):
         from schoolbell.app.browser.cal import CalendarViewBase
-        from schoolbell.app.app import getPersonPreferences
-        from schoolbell.app.interfaces import IPersonPreferences
-        from schoolbell.app.interfaces import IHavePreferences
-
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
-                             getPersonPreferences)
 
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
@@ -650,12 +646,6 @@ class TestCalendarViewBase(unittest.TestCase):
         import calendar as pycalendar
         from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
         from schoolbell.app.cal import Calendar
-        from schoolbell.app.app import getPersonPreferences
-        from schoolbell.app.interfaces import IPersonPreferences
-        from schoolbell.app.interfaces import IHavePreferences
-
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
-                             getPersonPreferences)
 
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
@@ -693,12 +683,6 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getWeek_first_day_of_week(self):
         from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
         from schoolbell.app.cal import Calendar
-        from schoolbell.app.app import getPersonPreferences
-        from schoolbell.app.interfaces import IPersonPreferences
-        from schoolbell.app.interfaces import IHavePreferences
-
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
-                             getPersonPreferences)
 
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
@@ -733,12 +717,6 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getMonth(self):
         from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
         from schoolbell.app.cal import Calendar
-        from schoolbell.app.app import getPersonPreferences
-        from schoolbell.app.interfaces import IPersonPreferences
-        from schoolbell.app.interfaces import IHavePreferences
-
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
-                             getPersonPreferences)
 
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
@@ -777,12 +755,6 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getYear(self):
         from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
         from schoolbell.app.cal import Calendar
-        from schoolbell.app.app import getPersonPreferences
-        from schoolbell.app.interfaces import IPersonPreferences
-        from schoolbell.app.interfaces import IHavePreferences
-
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
-                             getPersonPreferences)
 
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
@@ -2530,16 +2502,10 @@ def doctest_TestCalendarEventBookingView():
     person and his calendar with an event:
 
         >>> from schoolbell.app.browser.cal import CalendarEventBookingView
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> from schoolbell.app.security import setUpLocalAuth
-        >>> from schoolbell.app.app import Resource, Person
+        >>> from schoolbell.app.app import Resource
         >>> from schoolbell.app.cal import CalendarEvent
-        >>> from zope.app.component.hooks import setSite
 
-        >>> app = SchoolBellApplication()
-        >>> directlyProvides(app, IContainmentRoot)
-        >>> setUpLocalAuth(app)
-        >>> setSite(app)
+        >>> app = setUpSchoolBellSite()
 
         >>> from zope.security.checker import defineChecker, Checker
         >>> defineChecker(Calendar,
@@ -2679,11 +2645,10 @@ def doctest_TestCalendarEventBookingView():
     The view also follows PersonPreferences timeformat and dateformat settings.
     To demonstrate these we need to setup PersonPreferences:
 
-        >>> from schoolbell.app.app import getPersonPreferences
-        >>> from schoolbell.app.interfaces import IPersonPreferences
-        >>> from schoolbell.app.interfaces import IHavePreferences
         >>> setup.setUpAnnotations()
-        >>> ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
+
+        # Usually registered for IHavePreferences
+        >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
         ...                      getPersonPreferences)
         >>> request.setPrincipal(person)
         >>> view = CalendarEventBookingView(event, request)
@@ -2724,7 +2689,6 @@ def doctest_getEvents_booking():
 
         >>> from schoolbell.app.browser.cal import CalendarViewBase
         >>> from schoolbell.app.cal import Calendar
-        >>> from schoolbell.app.app import Person
         >>> from schoolbell.app.app import Resource
 
         >>> person = Person(u"frog")
@@ -2779,7 +2743,6 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_title(self):
         from schoolbell.app.browser.cal import DailyCalendarView
-        from schoolbell.app.app import Person
 
         view = DailyCalendarView(Person().calendar, TestRequest())
         view.update()
@@ -2794,7 +2757,6 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test__setRange(self):
         from schoolbell.app.browser.cal import DailyCalendarView
-        from schoolbell.app.app import Person
 
         person = Person("Da Boss")
         cal = person.calendar
@@ -2822,7 +2784,6 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_dayEvents(self):
         from schoolbell.app.browser.cal import DailyCalendarView
-        from schoolbell.app.app import Person
 
         ev1 = createEvent('2004-08-12 12:00', '2h', "ev1")
         ev2 = createEvent('2004-08-12 13:00', '2h', "ev2")
@@ -2841,7 +2802,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_getColumns(self):
         from schoolbell.app.browser.cal import DailyCalendarView
-        from schoolbell.app.app import Person, Calendar
+        from schoolbell.app.app import Calendar
 
         person = Person(title="Da Boss")
         cal = person.calendar
@@ -2901,7 +2862,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_getColumns_periods(self):
         from schoolbell.app.browser.cal import DailyCalendarView
-        from schoolbell.app.app import Person, Calendar
+        from schoolbell.app.app import Calendar
         from schoolbell.calendar.utils import parse_datetimetz
 
         person = Person(title="Da Boss")
@@ -2921,7 +2882,6 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_calendarRows(self):
         from schoolbell.app.browser.cal import DailyCalendarView
-        from schoolbell.app.app import Person
 
         person = Person(title="Da Boss")
         cal = person.calendar
@@ -2936,7 +2896,6 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_getHours(self):
         from schoolbell.app.browser.cal import DailyCalendarView
-        from schoolbell.app.app import Person
 
         person = Person(title="Da Boss")
         cal = person.calendar
@@ -3041,7 +3000,6 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_getHours_short_periods(self):
         from schoolbell.app.browser.cal import DailyCalendarView
-        from schoolbell.app.app import Person
 
         # Some setup.
         person = Person(title="Da Boss")
@@ -3625,7 +3583,6 @@ def doctest_EventDeleteView():
 
     We'll need a little context here:
 
-        >>> from schoolbell.app.app import Person, PersonContainer
         >>> from schoolbell.app.cal import Calendar, CalendarEvent
         >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
         >>> container = PersonContainer()
@@ -3644,7 +3601,6 @@ def doctest_EventDeleteView():
     In order to deal with overlaid calendars, request.principal is adapted
     to IPerson.  To make the adaptation work, we will define a simple stub.
 
-        >>> from schoolbell.app.interfaces import IPerson
         >>> class ConformantStub:
         ...     def __init__(self, obj):
         ...         self.obj = obj
@@ -3860,7 +3816,6 @@ def doctest_CalendarListView(self):
         ...         self.timeformat = "%H:%M"
         ...         self.dateformat = "%Y-%m-%d"
         ...         self.timezone = 'UTC'
-        >>> from schoolbell.app.interfaces import IPersonPreferences
         >>> class PersonStub:
         ...     def __conform__(self, interface):
         ...         if interface is IPersonPreferences:
@@ -3869,7 +3824,6 @@ def doctest_CalendarListView(self):
         ...     overlaid_calendars = [
         ...         OverlayInfoStub('Other Calendar', 'red', 'blue'),
         ...         OverlayInfoStub('Hidden', 'green', 'red', False)]
-        >>> from schoolbell.app.interfaces import IPerson
         >>> class PrincipalStub:
         ...     def __conform__(self, interface):
         ...         if interface is IPerson:
