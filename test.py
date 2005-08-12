@@ -222,6 +222,7 @@ def get_test_files(cfg):
 def import_module(filename, cfg, tracer=None):
     """Import and return a module."""
     filename = os.path.splitext(filename)[0]
+    assert filename.startswith(cfg.basedir)
     modname = filename[len(cfg.basedir):].replace(os.path.sep, '.')
     if modname.startswith('.'):
         modname = modname[1:]
