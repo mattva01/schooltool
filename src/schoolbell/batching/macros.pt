@@ -23,13 +23,18 @@ Batch navigation shows up if:
     tal:condition="python:batch_size > 10 or needsBatch">
 
     <tal:if condition="needsBatch">
-      <span tal:condition="not:batch/prev" i18n:translate=""
-        class="previous">&laquo; Previous</span>
+      <span tal:condition="not:batch/prev" class="previous">
+        &laquo; <span i18n:translate="">Previous</span>
+        <span tal:content="batch_size"/>
+      </span>
+
       <a class="previous"
         tal:condition="batch/prev"
         tal:attributes="href python:'?batch_start=%s&batch_size=%s' % (batch.prev().start, batch_size)"
-        i18n:translate=""
-        >&laquo; Previous</a>
+        i18n:translate="">
+        &laquo; <span i18n:translate="">Previous</span>
+        <span tal:content="batch_size"/>
+      </a>
     </tal:if>
 
     <div class="batch-extra-navigation"
@@ -51,17 +56,20 @@ Batch navigation shows up if:
     <tal:if condition="needsBatch">
       <a class="next"
         tal:condition="batch/next"
-        tal:attributes="href python:'?batch_start=%s&batch_size=%s' % (batch.next().start, batch_size)"
-        i18n:translate=""
-        >Next &raquo;</a>
+        tal:attributes="href python:'?batch_start=%s&batch_size=%s' % (batch.next().start, batch_size)">
+        <span i18n:translate="">Next</span>
+        <span tal:content="batch_size"/> &raquo;
+      </a>
 
-      <span tal:condition="not:batch/next" i18n:translate=""
-        class="next">Next &raquo;</span>
+      <span tal:condition="not:batch/next" i18n:translate="" class="next">
+        <span i18n:translate="">Next</span>
+        <span tal:content="batch_size"/> &raquo;
+      </span>
 
       <span tal:repeat="b batch/batches">
         <a tal:attributes="
           href python:'?batch_start=%s&batch_size=%s' % (b.start, batch_size);
-          class python:batch == b and 'current'"
+          class python:batch == b and 'current' or None"
           tal:content="b/num">
         </a>
       </span>
@@ -73,7 +81,7 @@ Batch navigation shows up if:
 
 <!-- multi-batch navigation
 
-multi-batch-navigation is intended foruse with the MultiBatchViewMixin class.
+multi-batch-navigation is intended for use with the MultiBatchViewMixin class.
 It follows the same guidelins as batch-navigation with the addition of:
 
   batch_name - the name of the batch from MultiBatchViewMixin
@@ -125,7 +133,7 @@ It follows the same guidelins as batch-navigation with the addition of:
 
       <span tal:repeat="b batch/batches">
         <a tal:attributes="href python:'?batch_start.%s=%s&batch_size.%s=%s' % (batch_name, b.start, batch_name, batch_size);
-          class python:batch == b and 'current'"
+          class python:batch == b and 'current' or None"
           tal:content="b/num">
         </a>
       </span>

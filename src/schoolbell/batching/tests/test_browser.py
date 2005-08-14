@@ -86,10 +86,13 @@ def doctest_MultiBatchViewMixin():
     """
 
 def test_suite():
-    return unittest.TestSuite([
-                doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
-                doctest.DocTestSuite('schoolbell.batching.browser'),
-           ])
+    suite = unittest.TestSuite()
+    suite.addTest(doctest.DocTestSuite(optionflags=doctest.ELLIPSIS))
+    suite.addTest(doctest.DocTestSuite('schoolbell.batching.browser'))
+    suite.addTest(doctest.DocFileSuite('../README.txt',
+                                        optionflags=doctest.ELLIPSIS|
+                                                    doctest.REPORT_NDIFF))
+    return suite
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')
