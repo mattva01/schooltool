@@ -129,20 +129,25 @@ Let's go to a group, and look at its members.
     <fieldset>
       <legend>Add Members</legend>
       <div class="batch-navigation">
-          <span class="previous">&laquo; Previous</span>
+          <span class="previous">
+           &laquo; <span>Previous</span>
+           <span>10</span>
+          </span>
         <div class="batch-extra-navigation">
           <a href="?batch_size=30" class="more">Show More</a>
           <a class="all" href="?batch_size=15">Show All</a>
         </div>
           <a class="next"
-             href="?batch_start=10&amp;batch_size=10">Next &raquo;</a>
+             href="?batch_start=10&amp;batch_size=10">
+            <span>Next</span>
+            <span>10</span> &raquo;
+          </a>
           <span>
             <a href="?batch_start=0&amp;batch_size=10"
                class="current">1</a>
           </span>
           <span>
-            <a href="?batch_start=10&amp;batch_size=10"
-               class="False">2</a>
+            <a href="?batch_start=10&amp;batch_size=10">2</a>
           </span>
       </div>
       <div class="batch-search">
