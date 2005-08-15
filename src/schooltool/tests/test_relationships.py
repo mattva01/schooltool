@@ -22,7 +22,9 @@ Unit tests for schooltool.relationships
 $Id: test_app.py 3504 2005-04-22 16:34:13Z bskahan $
 """
 
+from pprint import pprint
 import unittest
+
 from zope.testing import doctest
 from zope.app import zapi
 from zope.interface.verify import verifyObject
@@ -238,6 +240,40 @@ def doctest_updateInstructorCalendars():
     """
 
 
+def doctest_grantViewPermissionToMember():
+    r"""
+
+        >>> from schooltool.relationships import grantViewPermissionToMember
+        >>> class Map:
+        ...     def grantPermissionToPrincipal(self, perm, prin):
+        ...         print (perm, prin)
+        >>> from schooltool.app import Person
+        >>> p = Person("joe")
+        >>> perms = Map()
+        >>> grantViewPermissionToMember(p, perms)
+        ('schoolbell.view', 'sb.person.joe')
+        ('schoolbell.viewCalendar', 'sb.person.joe')
+
+    """
+
+
+def unsetViewPermissionToMember():
+    r"""
+
+        >>> from schooltool.relationships import unsetViewPermissionToMember
+        >>> class Map:
+        ...     def unsetPermissionForPrincipal(self, perm, prin):
+        ...         print (perm, prin)
+        >>> from schooltool.app import Person
+        >>> p = Person("joe")
+        >>> perms = Map()
+        >>> unsetViewPermissionToMember(p, perms)
+        ('schoolbell.view', 'sb.person.joe')
+        ('schoolbell.viewCalendar', 'sb.person.joe')
+
+    """
+
+
 def doctest_updateStudentCalendars():
     r"""
         >>> from schooltool.relationships import updateStudentCalendars
@@ -250,6 +286,8 @@ def doctest_updateStudentCalendars():
         >>> from schooltool.app import Person, Section
         >>> from schoolbell.relationship.tests import setUp, tearDown
         >>> setUp()
+        >>> from schoolbell.app.tests.test_security import setUpLocalGrants
+        >>> setUpLocalGrants()
 
         >>> class AddEventStub(dict):
         ...     rel_type = URIMembership
@@ -262,7 +300,7 @@ def doctest_updateStudentCalendars():
         >>> class OtherEventStub(dict):
         ...     rel_type = URIMembership
 
-        >>> person = Person()
+        >>> person = Person('p')
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         []
         >>> section = Section(title="SectionA")
@@ -277,6 +315,19 @@ def doctest_updateStudentCalendars():
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         ['SectionA']
 
+    The person is granted access to view the section's calendar:
+
+        >>> from schoolbell.app.tests.test_security import setUpLocalGrants
+        >>> from zope.app.securitypolicy.interfaces import \
+        ...                                         IPrincipalPermissionManager
+        >>> setUpLocalGrants()
+        >>> perms = IPrincipalPermissionManager(section)
+        >>> x = perms.getPermissionsForPrincipal('sb.person.p')
+        >>> x.sort()
+        >>> pprint(x)
+        [('schoolbell.view', PermissionSetting: Allow),
+         ('schoolbell.viewCalendar', PermissionSetting: Allow)]
+
     The calendar is removed when the person is no longer in the section:
 
         >>> remove = RemoveEventStub()
@@ -286,12 +337,27 @@ def doctest_updateStudentCalendars():
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         []
 
+    And they should no longer be granted access to the calendar:
+
+        >>> x = perms.getPermissionsForPrincipal('sb.person.p')
+        >>> x.sort()
+        >>> pprint(x)
+        []
+
     If a person allready has that calendar nothing changes:
 
         >>> sectionb = Section(title="SectionB")
         >>> person.overlaid_calendars.add(sectionb.calendar)
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         ['SectionB']
+        >>> perms = IPrincipalPermissionManager(sectionb)
+        >>> perms.grantPermissionToPrincipal('schoolbell.view', 'sb.person.p')
+        >>> perms.grantPermissionToPrincipal('schoolbell.viewCalendar', 'sb.person.p')
+        >>> x = perms.getPermissionsForPrincipal('sb.person.p')
+        >>> x.sort()
+        >>> pprint(x)
+        [('schoolbell.view', PermissionSetting: Allow),
+         ('schoolbell.viewCalendar', PermissionSetting: Allow)]
 
         >>> add = AddEventStub()
         >>> add[URIMember] = person
@@ -299,19 +365,35 @@ def doctest_updateStudentCalendars():
         >>> updateStudentCalendars(add)
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         ['SectionB']
+        >>> x = perms.getPermissionsForPrincipal('sb.person.p')
+        >>> x.sort()
+        >>> pprint(x)
+        [('schoolbell.view', PermissionSetting: Allow),
+         ('schoolbell.viewCalendar', PermissionSetting: Allow)]
 
     If the person removes the calendar manually, that's ok for now, we may
     want to take away this ability later.
 
+    Note, we still remove the permissions in this case:
+
         >>> person.overlaid_calendars.remove(sectionb.calendar)
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         []
+        >>> x = perms.getPermissionsForPrincipal('sb.person.p')
+        >>> x.sort()
+        >>> pprint(x)
+        [('schoolbell.view', PermissionSetting: Allow),
+         ('schoolbell.viewCalendar', PermissionSetting: Allow)]
 
         >>> remove = RemoveEventStub()
         >>> remove[URIMember] = person
         >>> remove[URIGroup] = sectionb
         >>> updateStudentCalendars(remove)
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
+        []
+        >>> x = perms.getPermissionsForPrincipal('sb.person.p')
+        >>> x.sort()
+        >>> pprint(x)
         []
 
     Events that aren't RelationshipAdded/Removed are ignored:
@@ -328,7 +410,7 @@ def doctest_updateStudentCalendars():
     user will have to overlay the calendar manually:
 
         >>> from schooltool.app import Group
-        >>> person = Person()
+        >>> person = Person('p2')
         >>> group = Group()
         >>> add = AddEventStub()
         >>> add[URIMember] = person
@@ -340,7 +422,7 @@ def doctest_updateStudentCalendars():
     You can add a group to a section and it's members overlay list will be
     updated:
 
-        >>> student = Person()
+        >>> student = Person('p3')
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         []
         >>> freshmen = Group()
@@ -353,11 +435,22 @@ def doctest_updateStudentCalendars():
         >>> [cal.calendar.title for cal in student.overlaid_calendars]
         ['Freshmen Math']
 
+        >>> perms = IPrincipalPermissionManager(section)
+        >>> x = perms.getPermissionsForPrincipal('sb.person.p3')
+        >>> x.sort()
+        >>> pprint(x)
+        [('schoolbell.view', PermissionSetting: Allow),
+         ('schoolbell.viewCalendar', PermissionSetting: Allow)]
+
         >>> remove = RemoveEventStub()
         >>> remove[URIMember] = freshmen
         >>> remove[URIGroup] = section
         >>> updateStudentCalendars(remove)
         >>> [cal.calendar.title for cal in student.overlaid_calendars]
+        []
+        >>> x = perms.getPermissionsForPrincipal('sb.person.p3')
+        >>> x.sort()
+        >>> pprint(x)
         []
 
         >>> tearDown()
