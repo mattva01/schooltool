@@ -27,6 +27,7 @@ from zope.app.publisher.browser import BrowserView
 from schoolbell.batching import Batch
 
 class BatchView(BrowserView):
+    """A sample view that implements batching."""
 
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)

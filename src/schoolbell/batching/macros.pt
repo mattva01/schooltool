@@ -36,22 +36,6 @@ Batch navigation shows up if:
       </a>
     </tal:if>
 
-    <div class="batch-extra-navigation"
-      tal:define="full_size python:len(batch.list)">
-
-      <a href="?batch_size=30" class="more"
-        tal:condition="python:batch_size < 30 and batch_size < full_size"
-        >Show More</a>
-
-      <a href="?batch_size=10" class="less"
-        tal:condition="python:batch_size > 10">Show Less</a>
-
-      <a tal:attributes="href string:?batch_size=${full_size}"
-        tal:condition="python:batch_size < full_size"
-        class="all">Show All</a>
-
-    </div>
-
     <tal:if condition="needsBatch">
       <a class="next"
         tal:condition="batch/next"
@@ -64,17 +48,78 @@ Batch navigation shows up if:
         <span i18n:translate="">Next</span> &raquo;
       </span>
 
-      <span tal:repeat="b batch/batches">
-        <a tal:attributes="
-          href python:'?batch_start=%s&batch_size=%s' % (b.start, batch_size);
-          class python:batch == b and 'current' or None"
-          tal:content="b/num">
-        </a>
-      </span>
+      <tal:comment condition="nothing">
+        A complicated bit of TAL here.  We need to figure out when we should
+        crop the navigation bar to keep it from wrapping around.
+
+        The logic goes like this:
+
+        * if we are in the first 6 items of the batch, show the first 9 items,
+          an ellipsis and the last item
+        * if we are within 6 items of the end of the batch, show the first
+          item, an ellipsis and the last 9 items
+        * if we are in neither of the above, show the first item, an ellipsis,
+          7 items (two behind, current and two ahead), another ellipsis and the
+          last item.
+      </tal:comment>
+
+      <tal:if define="cur batch/num;
+                      total batch/numBatches"
+              condition="python:total > 11">
+
+        <tal:if condition="python:cur <= 6">
+          <span tal:repeat="b python:batch.batches()[:9]">
+            <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+          </span>
+          <span class="separator">...</span>
+          <tal:block define="b python:batch.batches()[-1]">
+            <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+          </tal:block>
+        </tal:if>
+
+        <tal:if condition="python:cur < (total - 4) and (cur > 6)">
+          <tal:block define="b python:batch.batches()[0]">
+            <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+          </tal:block>
+          <span class="separator">...</span>
+          <span tal:repeat="b python:batch.batches()[cur - 4: cur + 3]">
+            <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+          </span>
+          <span class="separator">...</span>
+          <tal:block define="b python:batch.batches()[-1]">
+            <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+          </tal:block>
+        </tal:if>
+
+        <tal:if condition="python:cur >= total - 4">
+          <tal:block define="b python:batch.batches()[0]">
+            <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+          </tal:block>
+          <span class="separator">...</span>
+          <span tal:repeat="b python:batch.batches()[-8:]">
+            <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+          </span>
+        </tal:if>
+
+      </tal:if>
+
+      <tal:if condition="not:python:batch.numBatches() > 11">
+        <span tal:repeat="b batch/batches">
+          <metal:macro use-macro="view/@@batch_macros/batch-navigation-link"/>
+        </span>
+      </tal:if>
     </tal:if>
 
   </div>
 
+</metal:block>
+
+<metal:block define-macro="batch-navigation-link">
+  <a tal:attributes="
+    href python:'?batch_start=%s&batch_size=%s' % (b.start, batch_size);
+    class python:batch == b and 'current' or None"
+    tal:content="b/num">
+  </a>
 </metal:block>
 
 <!-- multi-batch navigation
@@ -101,23 +146,6 @@ It follows the same guidelins as batch-navigation with the addition of:
         i18n:translate=""
         >&laquo; Previous</a>
     </tal:if>
-
-    <div class="batch-extra-navigation"
-      tal:define="full_size python:len(batch.list)">
-
-      <a href="?batch_size=30" class="more"
-        tal:condition="python:batch_size < 30 and batch_size < full_size"
-        tal:attributes="href string:?batch_size.${batch_name}=30"
-        >Show More</a>
-
-      <a href="?batch_size=10" class="less"
-        tal:condition="python:batch_size > 10">Show Less</a>
-
-      <a tal:attributes="href string:?batch_size.${batch_name}=${full_size}"
-        tal:condition="python:batch_size < full_size"
-        class="all">Show All</a>
-
-    </div>
 
     <tal:if condition="needsBatch">
       <a class="next"
