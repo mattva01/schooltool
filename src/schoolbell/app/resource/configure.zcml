@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="schoolbell">
+
+  <content class=".resource.ResourceContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schoolbell.view"
+             attributes="keys values items __iter__ __len__" />
+    <require permission="schoolbell.create"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </content>
+
+  <content class=".resource.Resource">
+    <implements
+        interface="schoolbell.app.note.interfaces.IHaveNotes" />
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner"
+           attributes="__cmp__" />
+    <require permission="schoolbell.view"
+             attributes="title description groups isLocation" />
+    <require permission="schoolbell.edit"
+             set_schema=".interfaces.IResource" />
+  </content>
+
+  <adapter
+      for=".interfaces.IResourceContainer"
+      factory="schoolbell.app.app.SimpleNameChooser"
+      provides="zope.app.container.interfaces.INameChooser" />
+
+  <!-- Application hook -->
+  <subscriber
+      for="schoolbell.app.interfaces.IApplicationInitializationEvent"
+      handler=".resource.addResourceContainerToApplication"
+      />
+
+  <include package=".browser" />
+  <include package=".rest" />
+
+</configure>

@@ -63,9 +63,9 @@ from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ICalendarOwner, ISchoolBellCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.interfaces import ISchoolBellApplication
-from schoolbell.app.interfaces import IResource
-from schoolbell.app.person.interfaces import IPerson, IPersonPreferences
 from schoolbell.app.interfaces import vocabulary
+from schoolbell.app.person.interfaces import IPerson, IPersonPreferences
+from schoolbell.app.resource.interfaces import IResource
 from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
 from schoolbell.calendar.recurrent import DailyRecurrenceRule
 from schoolbell.calendar.recurrent import YearlyRecurrenceRule

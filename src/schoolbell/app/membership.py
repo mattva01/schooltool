@@ -90,7 +90,7 @@ You may not create ill-formed relationships
 
 Resources can't be part of a group:
 
-    >>> from schoolbell.app.app import Resource
+    >>> from schoolbell.app.resource.resource import Resource
     >>> printer = Resource()
     >>> relate(URIMembership, (admins, URIGroup), (printer, URIMember))
     Traceback (most recent call last):
@@ -115,7 +115,7 @@ from schoolbell.relationship import URIObject, RelationshipSchema
 from schoolbell.relationship import getRelatedObjects
 from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
 from schoolbell.relationship.interfaces import InvalidRelationship
-from schoolbell.app.interfaces import IResource
+from schoolbell.app.resource.interfaces import IResource
 from schoolbell.app.group.interfaces import IGroup
 
 

@@ -111,6 +111,7 @@ class ISchoolBellCalendar(IEditCalendar, ILocation):
         description=u"Title of the calendar.")
 
 
+# XXX: This screams adapter.
 class ISchoolBellCalendarEvent(ICalendarEvent,
                                container.interfaces.IContained):
     """An event that is contained in a SchoolBell calendar."""
@@ -124,7 +125,7 @@ class ISchoolBellCalendarEvent(ICalendarEvent,
     def unbookResource(resource):
         """Book a resource."""
 
-
+# XXX: This screans adapter as well.
 class ICalendarOwner(zope.interface.Interface):
     """An object that has a calendar."""
 
@@ -135,37 +136,6 @@ class ICalendarOwner(zope.interface.Interface):
 
 class IHavePreferences(IAnnotatable):
     """An object that can have preferences. Namely a Person."""
-
-
-class IResource(ICalendarOwner):
-    """Resource."""
-
-    title = zope.schema.TextLine(
-        title=_("Title"),
-        description=_("Title of the resource."))
-
-    description = zope.schema.Text(
-        title=_("Description"),
-        required=False,
-        description=_("Description of the resource."))
-
-    isLocation = zope.schema.Bool(
-        title=_("A Location."),
-        description=_(
-            """Indicate this resource is a location, like a classroom."""),
-        required=False,
-        default=False)
-
-class IResourceContainer(container.interfaces.IContainer):
-    """Container of resources."""
-
-    container.constraints.contains(IResource)
-
-
-class IResourceContained(IResource, container.interfaces.IContained):
-    """Resource contained in an IResourceContainer."""
-
-    container.constraints.containers(IResourceContainer)
 
 
 class ISchoolBellApplication(container.interfaces.IReadContainer,

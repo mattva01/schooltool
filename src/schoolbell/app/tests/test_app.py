@@ -38,11 +38,12 @@ def doctest_SchoolBellApplication():
         >>> from schoolbell.app.app import SchoolBellApplication
         >>> app = SchoolBellApplication()
 
-        >>> from schoolbell.app.person.person import PersonContainer
-        >>> app['persons'] = PersonContainer()
-
         >>> from schoolbell.app.group.group import GroupContainer
         >>> app['groups'] = GroupContainer()
+        >>> from schoolbell.app.person.person import PersonContainer
+        >>> app['persons'] = PersonContainer()
+        >>> from schoolbell.app.resource.resource import ResourceContainer
+        >>> app['resources'] = ResourceContainer()
 
     We need to register an adapter to make the title attribute available:
 
@@ -71,7 +72,7 @@ def doctest_SchoolBellApplication():
         >>> verifyObject(IGroupContainer, groups)
         True
 
-        >>> from schoolbell.app.interfaces import IResourceContainer
+        >>> from schoolbell.app.resource.interfaces import IResourceContainer
         >>> resources = app['resources']
         >>> verifyObject(IResourceContainer, resources)
         True
@@ -103,52 +104,6 @@ def doctest_SchoolBellApplication():
 
         >>> app.calendar
         <schoolbell.app.cal.Calendar object at ...
-
-    """
-
-
-def doctest_ResourceContainer():
-    """Tests for ResourceContainer
-
-        >>> from schoolbell.app.interfaces import IResourceContainer
-        >>> from schoolbell.app.app import ResourceContainer
-        >>> c = ResourceContainer()
-        >>> verifyObject(IResourceContainer, c)
-        True
-
-    Let's make sure it acts like a proper container should act
-
-        >>> from zope.app.container.tests.test_btree import TestBTreeContainer
-        >>> class Test(TestBTreeContainer):
-        ...    def makeTestObject(self):
-        ...        return ResourceContainer()
-        >>> run_unit_tests(Test)
-
-    Adaptation (i.e. __conform__) is tested in doctest_SchoolBellApplication.
-    """
-
-
-def doctest_Resource():
-    r"""Tests for Resource
-
-        >>> from schoolbell.app.interfaces import IResourceContained
-        >>> from schoolbell.app.app import Resource
-        >>> resource = Resource()
-        >>> verifyObject(IResourceContained, resource)
-        True
-
-    Resources can have titles and descriptions too
-
-        >>> blender = Resource(title='Blender', description="It's broken.")
-        >>> blender.title
-        'Blender'
-        >>> blender.description
-        "It's broken."
-
-    Resources can be tagged as locations, the default is false:
-
-        >>> blender.isLocation
-        False
 
     """
 

@@ -173,20 +173,6 @@ def doctest_ContainerDeleteView():
     """
 
 
-def doctest_ResourceView():
-    r"""Test for ResourceView
-
-    Let's create a view for a resource:
-
-        >>> from schoolbell.app.browser.app import ResourceView
-        >>> from schoolbell.app.app import Resource
-        >>> resource = Resource()
-        >>> request = TestRequest()
-        >>> view = ResourceView(resource, request)
-
-    """
-
-
 def doctest_LoginView():
     """
 

@@ -70,6 +70,8 @@ def setUpSchoolBellSite():
     app['persons'] = PersonContainer()
     from schoolbell.app.group.group import GroupContainer
     app['groups'] = GroupContainer()
+    from schoolbell.app.resource.resource import ResourceContainer
+    app['resources'] = ResourceContainer()
     setSite(app)
     return app
 

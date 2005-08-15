@@ -188,7 +188,7 @@ def doctest_CalendarSelectionView():
 
     CalendarSelectionView is a view on IPerson
 
-        >>> from schoolbell.app.app import Resource
+        >>> from schoolbell.app.resource.resource import Resource
         >>> from schoolbell.app.group.group import Group
         >>> from schoolbell.app.person.person import Person
         >>> from schoolbell.app.security import Principal

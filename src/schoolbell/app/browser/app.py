@@ -22,14 +22,9 @@ SchoolBell application views.
 $Id$
 """
 
-from zope.interface import Interface, implements
+from zope.interface import implements
 from zope.component import adapts
-from zope.publisher.interfaces import NotFound
-from zope.schema import Password, TextLine, Bytes, Bool, getFieldNamesInOrder
-from zope.schema import Choice
-from zope.schema.interfaces import ValidationError
 from zope.security.checker import canAccess
-from zope.security import checkPermission
 from zope.security.interfaces import IParticipation
 from zope.security.management import getSecurityPolicy
 from zope.security.proxy import removeSecurityProxy
@@ -44,23 +39,17 @@ from zope.app.publisher.browser import BrowserView
 from zope.app.security.interfaces import IAuthentication
 from zope.app.security.interfaces import IAuthenticatedGroup
 from zope.app.security.interfaces import IUnauthenticatedGroup
-from zope.app.security.settings import Allow
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 
 from schoolbell import SchoolBellMessageID as _
-from schoolbell.app.interfaces import IResource
-from schoolbell.app.interfaces import IResourceContainer, IResourceContained
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IApplicationPreferences
-from schoolbell.app.interfaces import vocabulary
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.browser.cal import CalendarOwnerTraverser
-from schoolbell.app.person.interfaces import IPerson, IPersonContained
+from schoolbell.app.person.interfaces import IPerson
 
 from schoolbell.batching import Batch
 from schoolbell.batching.browser import MultiBatchViewMixin
-
-from pytz import common_timezones
 
 
 class SchoolBellApplicationTraverser(CalendarOwnerTraverser):
@@ -115,16 +104,6 @@ class ContainerView(BrowserView):
     canModify = property(canModify)
 
 
-class ResourceContainerView(ContainerView):
-    """A Resource Container view."""
-
-    __used_for__ = IResourceContainer
-
-    index_title = _("Resource index")
-    add_title = _("Add a new resource")
-    add_url = "+/addSchoolBellResource.html"
-
-
 class ContainerDeleteView(BrowserView):
     """A view for deleting items from container."""
 
@@ -149,12 +128,6 @@ class ContainerDeleteView(BrowserView):
         return zapi.absoluteURL(self.context, self.request)
 
 
-class ResourceView(BrowserView):
-    """A Resource info view."""
-
-    __used_for__ = IResourceContained
-
-
 class BaseAddView(AddView):
     """Common functionality for adding groups and resources"""
 
@@ -166,10 +139,6 @@ class BaseAddView(AddView):
             self.request.response.redirect(self.nextURL())
         else:
             return AddView.update(self)
-
-
-class ResourceAddView(BaseAddView):
-    """A view for adding a resource."""
 
 
 class BaseEditView(EditView):
@@ -185,12 +154,6 @@ class BaseEditView(EditView):
                 url = zapi.absoluteURL(self.context, self.request)
                 self.request.response.redirect(url)
             return status
-
-
-class ResourceEditView(BaseEditView):
-    """A view for editing resource info."""
-
-    __used_for__ = IResourceContained
 
 
 class LoginView(BrowserView):

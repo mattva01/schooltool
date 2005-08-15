@@ -274,7 +274,7 @@ def doctest_GroupView():
 
     Let's relate some objects to our group:
 
-        >>> from schoolbell.app.app import Resource
+        >>> from schoolbell.app.resource.resource import Resource
         >>> from schoolbell.app.person.person import Person
         >>> group.members.add(Person(title='First'))
         >>> group.members.add(Person(title='Last'))

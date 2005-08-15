@@ -58,7 +58,6 @@ class SchoolBellApplication(Persistent, sample.SampleContainer,
 
     def __init__(self):
         super(SchoolBellApplication, self).__init__()
-        self['resources'] = ResourceContainer()
         self.calendar = Calendar(self)
         notify(interfaces.ApplicationInitializationEvent(self))
 
@@ -69,12 +68,6 @@ class SchoolBellApplication(Persistent, sample.SampleContainer,
         """This is required for the site calendar views to work."""
         return interfaces.IApplicationPreferences(self).title
     title = property(title)
-
-
-class ResourceContainer(btree.BTreeContainer):
-    """Container of resources."""
-
-    implements(interfaces.IResourceContainer, IAttributeAnnotatable)
 
 
 class SimpleNameChooser(NameChooser):
@@ -132,21 +125,6 @@ class SimpleNameChooser(NameChooser):
         # Make sure the name is valid
         self.checkName(n, obj)
         return n
-
-
-class Resource(Persistent, Contained):
-    """Resource."""
-
-    implements(interfaces.IResourceContained, note.interfaces.IHaveNotes,
-               IAttributeAnnotatable)
-
-    isLocation = False # backwards compatibility
-
-    def __init__(self, title=None, description=None, isLocation=False):
-        self.title = title
-        self.description = description
-        self.calendar = Calendar(self)
-        self.isLocation = isLocation
 
 
 def getSchoolBellApplication():

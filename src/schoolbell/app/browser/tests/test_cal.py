@@ -318,7 +318,7 @@ def doctest_EventForDisplay():
     """A wrapper for calendar events.
 
         >>> from schoolbell.app.browser.cal import EventForDisplay
-        >>> from schoolbell.app.app import Resource
+        >>> from schoolbell.app.resource.resource import Resource
         >>> person = Person("p1")
         >>> e1 = createEvent('2004-01-02 14:45:50', '5min', 'yawn')
         >>> person.calendar.addEvent(e1)
@@ -1186,7 +1186,7 @@ def doctest_CalendarEventView():
         >>> view.display.getBookedResources()
         ()
 
-        >>> from schoolbell.app.app import Resource
+        >>> from schoolbell.app.resource.resource import Resource
         >>> resource = Resource("r1")
         >>> event.bookResource(resource)
         >>> [r.title for r in view.display.getBookedResources()]
@@ -2502,7 +2502,7 @@ def doctest_TestCalendarEventBookingView():
     person and his calendar with an event:
 
         >>> from schoolbell.app.browser.cal import CalendarEventBookingView
-        >>> from schoolbell.app.app import Resource
+        >>> from schoolbell.app.resource.resource import Resource
         >>> from schoolbell.app.cal import CalendarEvent
 
         >>> app = setUpSchoolBellSite()
@@ -2689,7 +2689,7 @@ def doctest_getEvents_booking():
 
         >>> from schoolbell.app.browser.cal import CalendarViewBase
         >>> from schoolbell.app.cal import Calendar
-        >>> from schoolbell.app.app import Resource
+        >>> from schoolbell.app.resource.resource import Resource
 
         >>> person = Person(u"frog")
         >>> resource = Resource(u"mud")

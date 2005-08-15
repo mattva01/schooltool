@@ -86,20 +86,7 @@
     <allow attributes="getSiteManager" />
   </content>
 
-  <content class=".app.ResourceContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schoolbell.view"
-             attributes="keys values items __iter__ __len__" />
-    <require permission="schoolbell.create"
-             interface="zope.app.container.interfaces.IWriteContainer" />
-  </content>
-
 <!-- Adapters -->
-
-  <adapter
-      for=".interfaces.IResourceContainer"
-      factory=".app.SimpleNameChooser"
-      provides="zope.app.container.interfaces.INameChooser" />
 
   <adapter
       for=".interfaces.ISchoolBellCalendar"
@@ -119,15 +106,6 @@
   </class>
 
 <!-- Domain content objects -->
-
-  <content class=".app.Resource">
-    <allow interface="schoolbell.app.interfaces.ICalendarOwner"
-           attributes="__cmp__" />
-    <require permission="schoolbell.view"
-             attributes="title description groups isLocation" />
-    <require permission="schoolbell.edit"
-             set_schema="schoolbell.app.interfaces.IResource" />
-  </content>
 
   <content class=".app.Calendar">
     <require permission="schoolbell.viewCalendar"
@@ -272,6 +250,7 @@
 
   <include package=".person" />
   <include package=".group" />
+  <include package=".resource" />
   <include package=".note" />
 
 <!-- Devmode stuff must be at the end, so it can override stuff -->

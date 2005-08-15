@@ -37,8 +37,6 @@ from schoolbell.app.rest.xmlparsing import XMLDocument
 from schoolbell.calendar.icalendar import convert_calendar_to_ical
 from schoolbell.app.interfaces import IWriteCalendar
 
-from schoolbell.app.app import Resource
-from schoolbell.app.interfaces import IResourceContainer, IResource
 from schoolbell.app.browser.cal import CalendarOwnerHTTPTraverser
 
 
@@ -63,47 +61,6 @@ class ApplicationObjectFileFactory(object):
         return self.factory(**self.parseXML(data))
 
 
-class ResourceFileFactory(ApplicationObjectFileFactory):
-    """Adapter that adapts ResourceContainer to FileFactory"""
-
-    adapts(IResourceContainer)
-
-    schema = '''<?xml version="1.0" encoding="UTF-8"?>
-        <grammar xmlns="http://relaxng.org/ns/structure/1.0"
-                 ns="http://schooltool.org/ns/model/0.1"
-                 datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
-          <start>
-            <element name="object">
-              <attribute name="title">
-                <text/>
-              </attribute>
-              <optional>
-                <attribute name="description">
-                  <text/>
-                </attribute>
-              </optional>
-              <optional>
-                <attribute name="isLocation">
-                  <data type="boolean" />
-                </attribute>
-              </optional>
-            </element>
-          </start>
-        </grammar>
-        '''
-
-    factory = Resource
-
-    def parseDoc(self, doc):
-        """Get values from document, and puts them into a dict."""
-        kwargs = {}
-        node = doc.query('/m:object')[0]
-        kwargs['title'] = node['title']
-        kwargs['description'] = node.get('description')
-        kwargs['isLocation'] = (node.get('isLocation') == "true")
-        return kwargs
-
-
 class ApplicationObjectFile(object):
     """Adapter adapting Application Objects to IWriteFile"""
 
@@ -118,18 +75,6 @@ class ApplicationObjectFile(object):
         factory = IFileFactory(container)
         kwargs = factory.parseXML(data)
         self.modify(**kwargs)
-
-
-class ResourceFile(ApplicationObjectFile):
-    """Adapter that adapts IResource to IWriteFile"""
-
-    adapts(IResource)
-
-    def modify(self, title=None, description=None, isLocation=False):
-        """Modify underlying object."""
-        self.context.title = title
-        self.context.description = description
-        self.context.isLocation = isLocation
 
 
 class ApplicationView(View):
@@ -180,18 +125,6 @@ class GenericContainerView(View):
         response.setHeader('Content-Type', 'text/plain; charset=UTF-8')
         response.setHeader('Location', location)
         return u"Object created: %s" % location
-
-
-class ResourceContainerView(GenericContainerView):
-    """RESTive view of a resource container."""
-
-
-class ResourceView(View):
-    """RESTive view for resources"""
-
-    template = Template("templates/resource.pt",
-                        content_type="text/xml; charset=UTF-8")
-    factory = ResourceFile
 
 
 def getCharset(content_type, default="UTF-8"):
