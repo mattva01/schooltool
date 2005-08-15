@@ -35,7 +35,7 @@ to enforce relationship constraints.
 
 We will need some sample persons and groups for the demonstration
 
-    >>> from schoolbell.app.app import Group
+    >>> from schoolbell.app.group.group import Group
     >>> from schoolbell.app.person.person import Person
     >>> jonas = Person()
     >>> petras = Person()
@@ -115,7 +115,8 @@ from schoolbell.relationship import URIObject, RelationshipSchema
 from schoolbell.relationship import getRelatedObjects
 from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
 from schoolbell.relationship.interfaces import InvalidRelationship
-from schoolbell.app.interfaces import IGroup, IResource
+from schoolbell.app.interfaces import IResource
+from schoolbell.app.group.interfaces import IGroup
 
 
 URIMembership = URIObject('http://schooltool.org/ns/membership',
@@ -156,7 +157,7 @@ def isTransitiveMember(obj, group):
 
     Suppose we have four groups, named a, b, c and d.
 
-        >>> from schoolbell.app.app import Group
+        >>> from schoolbell.app.group.group import Group
         >>> a, b, c, d = [Group() for n in range(4)]
 
     A is a member of b, which is a member of c.

@@ -58,7 +58,6 @@ class SchoolBellApplication(Persistent, sample.SampleContainer,
 
     def __init__(self):
         super(SchoolBellApplication, self).__init__()
-        self['groups'] = GroupContainer()
         self['resources'] = ResourceContainer()
         self.calendar = Calendar(self)
         notify(interfaces.ApplicationInitializationEvent(self))
@@ -70,12 +69,6 @@ class SchoolBellApplication(Persistent, sample.SampleContainer,
         """This is required for the site calendar views to work."""
         return interfaces.IApplicationPreferences(self).title
     title = property(title)
-
-
-class GroupContainer(btree.BTreeContainer):
-    """Container of groups."""
-
-    implements(interfaces.IGroupContainer, IAttributeAnnotatable)
 
 
 class ResourceContainer(btree.BTreeContainer):
@@ -139,20 +132,6 @@ class SimpleNameChooser(NameChooser):
         # Make sure the name is valid
         self.checkName(n, obj)
         return n
-
-
-class Group(Persistent, Contained):
-    """Group."""
-
-    implements(interfaces.IGroupContained, note.interfaces.IHaveNotes,
-               IAttributeAnnotatable)
-
-    members = RelationshipProperty(URIMembership, URIGroup, URIMember)
-
-    def __init__(self, title=None, description=None):
-        self.title = title
-        self.description = description
-        self.calendar = Calendar(self)
 
 
 class Resource(Persistent, Contained):

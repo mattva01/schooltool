@@ -33,7 +33,7 @@ from zope.app.location.interfaces import ILocation
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import vocabulary
-from schoolbell.app.interfaces import IGroupMember
+from schoolbell.app.group.interfaces import IGroupMember
 
 class IReadPerson(IGroupMember):
     """Publically accessible part of IPerson."""

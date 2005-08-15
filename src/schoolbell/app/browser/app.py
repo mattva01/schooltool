@@ -48,8 +48,7 @@ from zope.app.security.settings import Allow
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 
 from schoolbell import SchoolBellMessageID as _
-from schoolbell.app.interfaces import IGroupMember, IResource
-from schoolbell.app.interfaces import IGroupContainer, IGroupContained
+from schoolbell.app.interfaces import IResource
 from schoolbell.app.interfaces import IResourceContainer, IResourceContained
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IApplicationPreferences
@@ -116,16 +115,6 @@ class ContainerView(BrowserView):
     canModify = property(canModify)
 
 
-class GroupContainerView(ContainerView):
-    """A Group Container view."""
-
-    __used_for__ = IGroupContainer
-
-    index_title = _("Group index")
-    add_title = _("Add a new group")
-    add_url = "+/addSchoolBellGroup.html"
-
-
 class ResourceContainerView(ContainerView):
     """A Resource Container view."""
 
@@ -160,123 +149,6 @@ class ContainerDeleteView(BrowserView):
         return zapi.absoluteURL(self.context, self.request)
 
 
-class GroupListView(BrowserView):
-    """View for managing groups that a person or a resource belongs to."""
-
-    __used_for__ = IGroupMember
-
-    def getCurrentGroups(self):
-        """Return a list of groups the current user is a member of."""
-        return self.context.groups
-
-    def getPotentialGroups(self):
-        """Return a list of groups the current user is not a member of."""
-        groups = getSchoolBellApplication()['groups']
-        return [group for group in groups.values()
-                if checkPermission('schoolbell.manageMembership', group)
-                and group not in self.context.groups]
-
-    def update(self):
-        context_url = zapi.absoluteURL(self.context, self.request)
-        if 'ADD_GROUPS' in self.request:
-            context_groups = removeSecurityProxy(self.context.groups)
-            for group in self.getPotentialGroups():
-                # add() could throw an exception, but at the moment the
-                # constraints are never violated, so we ignore the problem.
-                if 'add_group.' + group.__name__ in self.request:
-                    group = removeSecurityProxy(group)
-                    context_groups.add(group)
-        elif 'REMOVE_GROUPS' in self.request:
-            context_groups = removeSecurityProxy(self.context.groups)
-            for group in self.getCurrentGroups():
-                # add() could throw an exception, but at the moment the
-                # constraints are never violated, so we ignore the problem.
-                if 'remove_group.' + group.__name__ in self.request:
-                    group = removeSecurityProxy(group)
-                    context_groups.remove(group)
-        elif 'CANCEL' in self.request:
-            self.request.response.redirect(context_url)
-
-        if 'SEARCH' in self.request:
-            searchstr = self.request['SEARCH'].lower()
-            results = [item for item in self.getPotentialGroups()
-                       if searchstr in item.title.lower()]
-        else:
-            results = self.getPotentialGroups()
-
-        start = int(self.request.get('batch_start', 0))
-        size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(results, start, size, sort_by='title')
-
-
-class GroupView(BrowserView):
-    """A Group info view."""
-
-    __used_for__ = IGroupContained
-
-    def getPersons(self):
-        return filter(IPerson.providedBy, self.context.members)
-
-    def getResources(self):
-        return filter(IResource.providedBy, self.context.members)
-
-
-class MemberViewPersons(BrowserView):
-    """A base view class for adding / removing members from a group.
-
-    Subclasses must override container_name.
-    """
-
-    __used_for__ = IGroupContained
-
-    container_name = 'persons'
-
-    def getMembers(self):
-        """Return a list of current group memebers."""
-        return filter(IPerson.providedBy, self.context.members)
-
-    def getPotentialMembers(self):
-        """Return a list of all possible members."""
-        container = getSchoolBellApplication()[self.container_name]
-        return [m for m in container.values() if m not in self.context.members]
-
-    def searchPotentialMembers(self, s):
-        potentials = self.getPotentialMembers()
-        return [m for m in potentials if s.lower() in m.title.lower()]
-
-    def updateBatch(self, lst):
-        start = int(self.request.get('batch_start', 0))
-        size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(lst, start, size)
-
-    def update(self):
-        context_url = zapi.absoluteURL(self.context, self.request)
-        if 'DONE' in self.request:
-            self.request.response.redirect(context_url)
-        elif 'ADD_MEMBERS' in self.request:
-            context_members = removeSecurityProxy(self.context.members)
-            for member in self.getPotentialMembers():
-                # add() could throw an exception, but at the moment the
-                # constraints are never violated, so we ignore the problem.
-                if 'ADD_MEMBER.' + member.__name__ in self.request:
-                    member = removeSecurityProxy(member)
-                    context_members.add(member)
-        elif 'REMOVE_MEMBERS' in self.request:
-            context_members = removeSecurityProxy(self.context.members)
-            for member in self.getMembers():
-                # remove() could throw an exception, but at the moment the
-                # constraints are never violated, so we ignore the problem.
-                if 'REMOVE_MEMBER.' + member.__name__ in self.request:
-                    member = removeSecurityProxy(member)
-                    context_members.remove(member)
-
-        results = self.getPotentialMembers()
-        if 'SEARCH' in self.request:
-            results = self.searchPotentialMembers(self.request.get('SEARCH'))
-
-        self.updateBatch(results)
-
-
 class ResourceView(BrowserView):
     """A Resource info view."""
 
@@ -296,10 +168,6 @@ class BaseAddView(AddView):
             return AddView.update(self)
 
 
-class GroupAddView(BaseAddView):
-    """A view for adding a group."""
-
-
 class ResourceAddView(BaseAddView):
     """A view for adding a resource."""
 
@@ -317,12 +185,6 @@ class BaseEditView(EditView):
                 url = zapi.absoluteURL(self.context, self.request)
                 self.request.response.redirect(url)
             return status
-
-
-class GroupEditView(BaseEditView):
-    """A view for editing group info."""
-
-    __used_for__ = IGroupContained
 
 
 class ResourceEditView(BaseEditView):

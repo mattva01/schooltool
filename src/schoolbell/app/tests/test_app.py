@@ -36,9 +36,13 @@ def doctest_SchoolBellApplication():
     r"""Tests for SchoolBellApplication.
 
         >>> from schoolbell.app.app import SchoolBellApplication
-        >>> from schoolbell.app.person.person import PersonContainer
         >>> app = SchoolBellApplication()
+
+        >>> from schoolbell.app.person.person import PersonContainer
         >>> app['persons'] = PersonContainer()
+
+        >>> from schoolbell.app.group.group import GroupContainer
+        >>> app['groups'] = GroupContainer()
 
     We need to register an adapter to make the title attribute available:
 
@@ -62,7 +66,7 @@ def doctest_SchoolBellApplication():
         >>> verifyObject(IPersonContainer, persons)
         True
 
-        >>> from schoolbell.app.interfaces import IGroupContainer
+        >>> from schoolbell.app.group.interfaces import IGroupContainer
         >>> groups = app['groups']
         >>> verifyObject(IGroupContainer, groups)
         True
@@ -103,27 +107,6 @@ def doctest_SchoolBellApplication():
     """
 
 
-def doctest_GroupContainer():
-    """Tests for GroupContainer
-
-        >>> from schoolbell.app.interfaces import IGroupContainer
-        >>> from schoolbell.app.app import GroupContainer
-        >>> c = GroupContainer()
-        >>> verifyObject(IGroupContainer, c)
-        True
-
-    Let's make sure it acts like a proper container should act
-
-        >>> from zope.app.container.tests.test_btree import TestBTreeContainer
-        >>> class Test(TestBTreeContainer):
-        ...    def makeTestObject(self):
-        ...        return GroupContainer()
-        >>> run_unit_tests(Test)
-
-    Adaptation (i.e. __conform__) is tested in doctest_SchoolBellApplication.
-    """
-
-
 def doctest_ResourceContainer():
     """Tests for ResourceContainer
 
@@ -142,25 +125,6 @@ def doctest_ResourceContainer():
         >>> run_unit_tests(Test)
 
     Adaptation (i.e. __conform__) is tested in doctest_SchoolBellApplication.
-    """
-
-
-def doctest_Group():
-    r"""Tests for Group
-
-        >>> from schoolbell.app.interfaces import IGroupContained
-        >>> from schoolbell.app.app import Group
-        >>> group = Group()
-        >>> verifyObject(IGroupContained, group)
-        True
-
-    Groups can have titles and descriptions too
-
-        >>> illuminati = Group(title='Illuminati', description='Secret Group')
-        >>> illuminati.title
-        'Illuminati'
-        >>> illuminati.description
-        'Secret Group'
     """
 
 

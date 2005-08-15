@@ -21,7 +21,6 @@ Tests for schollbell.rest.relationship
 
 $Id$
 """
-
 import unittest
 from StringIO import StringIO
 
@@ -45,7 +44,7 @@ from schoolbell.relationship.uri import IURIObject
 from schoolbell.app.membership import Membership
 from schoolbell.app.app import SimpleNameChooser
 from schoolbell.relationship.annotatable import getRelationshipLinks
-from schoolbell.app.interfaces import IGroupContainer
+from schoolbell.app.group.interfaces import IGroupContainer
 from schoolbell.app.rest.tests.utils import XMLCompareMixin, QuietLibxml2Mixin
 from schoolbell.app.rest.xmlparsing import XMLDocument, XMLParseError
 from schoolbell.app.membership import Membership, URIMember, URIGroup
@@ -54,7 +53,7 @@ from schoolbell.app.rest.xmlparsing import XMLValidationError
 class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
     def setUp(self):
         from schoolbell.app.app import SchoolBellApplication
-        from schoolbell.app.app import Group
+        from schoolbell.app.group.group import Group, GroupContainer
         from schoolbell.app.person.person import Person, PersonContainer
         from schoolbell.relationship.tests import setUpRelationships
 
@@ -80,6 +79,7 @@ class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
 
         self.app = SchoolBellApplication()
         self.app['persons'] = PersonContainer()
+        self.app['groups'] = GroupContainer()
         setUpLocalAuth(self.app)
         setSite(self.app)
         directlyProvides(self.app, IContainmentRoot)

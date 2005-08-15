@@ -137,7 +137,10 @@ raised:
 
 The groups of the SchoolBell instance are also principals:
 
-    >>> from schoolbell.app.app import Group
+    >>> from schoolbell.app.group.group import GroupContainer
+    >>> app['groups'] = GroupContainer()
+
+    >>> from schoolbell.app.group.group import Group
     >>> group = Group()
     >>> group.title = "The Management"
     >>> app['groups']['management'] = group

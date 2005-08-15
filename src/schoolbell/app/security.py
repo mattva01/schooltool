@@ -46,7 +46,7 @@ from zope.app.security.interfaces import IUnauthenticatedGroup
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellAuthentication
-from schoolbell.app.interfaces import IGroup
+from schoolbell.app.group.interfaces import IGroup
 from schoolbell.app.person.interfaces import IPerson
 
 

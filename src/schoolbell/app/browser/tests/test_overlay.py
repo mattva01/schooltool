@@ -54,7 +54,7 @@ def doctest_CalendarOverlayView():
     If you are an authenticated user looking at your own calendar, this view
     renders a calendar selection portlet.
 
-        >>> from schoolbell.app.app import Group
+        >>> from schoolbell.app.group.group import Group
         >>> from schoolbell.app.person.person import Person
         >>> from schoolbell.app.security import Principal
         >>> app = setUpSchoolBellSite()
@@ -131,7 +131,7 @@ def doctest_CalendarOverlayView_items():
 
     We will need some persons and groups for the demonstration.
 
-        >>> from schoolbell.app.app import Group
+        >>> from schoolbell.app.group.group import Group
         >>> from schoolbell.app.person.person import Person
         >>> app = setUpSchoolBellSite()
         >>> person = app['persons']['p1'] = Person('p1', title="Person")
@@ -188,7 +188,8 @@ def doctest_CalendarSelectionView():
 
     CalendarSelectionView is a view on IPerson
 
-        >>> from schoolbell.app.app import Group, Resource
+        >>> from schoolbell.app.app import Resource
+        >>> from schoolbell.app.group.group import Group
         >>> from schoolbell.app.person.person import Person
         >>> from schoolbell.app.security import Principal
         >>> app = setUpSchoolBellSite()

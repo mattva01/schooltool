@@ -59,11 +59,13 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
 
         # SchoolBellApplication
         from schoolbell.app.rest.app import ApplicationView
-        from schoolbell.app.app import SchoolBellApplication, Group
+        from schoolbell.app.app import SchoolBellApplication
+        from schoolbell.app.group.group import Group, GroupContainer
         from schoolbell.app.person.person import Person, PersonContainer
         from schoolbell.app.security import setUpLocalAuth
         from zope.app.component.hooks import setSite
         self.app = SchoolBellApplication()
+        self.app['groups'] = GroupContainer()
         self.app['persons'] = PersonContainer()
         directlyProvides(self.app, IContainmentRoot)
         setUpLocalAuth(self.app)

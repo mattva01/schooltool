@@ -94,37 +94,6 @@ def doctest_BaseCSVImporter():
 
     """
 
-
-def doctest_GroupCSVImporter():
-    r"""Tests for GroupCSVImporter.
-
-    Create a group container and an importer
-
-        >>> from schoolbell.app.browser.csvimport import GroupCSVImporter
-        >>> from schoolbell.app.app import GroupContainer
-        >>> container = GroupContainer()
-        >>> importer = GroupCSVImporter(container, None)
-
-    Import some sample data
-
-        >>> csvdata='''Group 1, Group 1 Description
-        ... Group2
-        ... Group3, Group 3 Description, Some extra data'''
-        >>> importer.importFromCSV(csvdata)
-        True
-
-    Check that the groups exist
-
-        >>> [group for group in container]
-        [u'group-1', u'group2', u'group3']
-
-    Check that descriptions were imported properly
-
-        >>> [group.description for group in container.values()]
-        ['Group 1 Description', '', 'Group 3 Description']
-
-    """
-
 def doctest_ResourceCSVImporter():
     r"""Tests for ResourceCSVImporter.
 
@@ -155,46 +124,6 @@ def doctest_ResourceCSVImporter():
         ['Resource 1 Description', '', 'Resource 3 Description', '']
         >>> [resource.isLocation for resource in container.values()]
         [False, False, True, True]
-
-    """
-
-def doctest_GroupCSVImportView():
-    r"""Tests for GroupCSVImportView
-
-    We'll create a group csv import view
-
-        >>> from schoolbell.app.browser.csvimport import GroupCSVImportView
-        >>> from schoolbell.app.app import GroupContainer
-        >>> from zope.publisher.browser import TestRequest
-        >>> container = GroupContainer()
-        >>> request = TestRequest()
-
-    Now we'll try a text import.  Note that the description is not required
-
-        >>> request.form = {'csvtext' : "A Group, The best Group\nAnother Group",
-        ...                 'charset' : 'UTF-8',
-        ...                 'UPDATE_SUBMIT': 1}
-        >>> view = GroupCSVImportView(container, request)
-        >>> view.update()
-        >>> [group for group in container]
-        [u'a-group', u'another-group']
-
-    If no data is provided, we naturally get an error
-
-        >>> request.form = {'charset' : 'UTF-8', 'UPDATE_SUBMIT': 1}
-        >>> view.update()
-        >>> view.errors
-        [u'No data provided']
-
-    We also get an error if a line starts with a comma (no title)
-
-        >>> request.form = {'csvtext' : ", No title provided here",
-        ...                 'charset' : 'UTF-8',
-        ...                 'UPDATE_SUBMIT': 1}
-        >>> view = GroupCSVImportView(container, request)
-        >>> view.update()
-        >>> view.errors
-        [u'Failed to import CSV text', u'Titles may not be empty']
 
     """
 

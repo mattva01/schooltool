@@ -21,35 +21,32 @@ Tests for schollbell.rest.app
 
 $Id$
 """
-
 import unittest
 from StringIO import StringIO
 
-from zope.app.testing import ztapi
-from zope.testing import doctest
-from zope.publisher.interfaces import NotFound
-from zope.interface.verify import verifyObject
+import zope
 from zope.interface import directlyProvides, Interface
+from zope.interface.verify import verifyObject
 from zope.app.traversing.interfaces import ITraversable
 from zope.publisher.browser import TestRequest
-from zope.app.testing import setup
-from zope.app.traversing.interfaces import IContainmentRoot
-from zope.app.container.interfaces import INameChooser
-from zope.app.component.testing import PlacefulSetup
-from zope.publisher.browser import TestRequest
+from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.http import IHTTPRequest
+from zope.testing import doctest
 
-import zope
+from zope.app.component.testing import PlacefulSetup
+from zope.app.container.interfaces import INameChooser
+from zope.app.testing import ztapi, setup
+from zope.app.traversing.interfaces import IContainmentRoot
 
-from schoolbell.app.app import SimpleNameChooser, Group, Resource
+from schoolbell.app.app import SimpleNameChooser, Resource
+from schoolbell.app.group.group import Group, GroupContainer
+from schoolbell.app.group.interfaces import IGroupContainer
+from schoolbell.app.group.rest.group import GroupFileFactory, GroupContainerView
+from schoolbell.app.interfaces import IResourceContainer
 from schoolbell.app.person.person import Person, PersonContainer
-from schoolbell.app.rest.app import GroupContainerView, ResourceContainerView
-
-from schoolbell.app.rest.app import GroupView, ResourceView
-from schoolbell.app.rest.app import GroupFile, ResourceFile
-
-from schoolbell.app.interfaces import IGroupContainer, IResourceContainer
-
+from schoolbell.app.rest.app import ResourceContainerView
+from schoolbell.app.rest.app import ResourceView, ResourceFile
+from schoolbell.app.rest.app import ResourceFileFactory
 from schoolbell.app.rest.tests.utils import XMLCompareMixin, QuietLibxml2Mixin
 from schoolbell.app.rest.xmlparsing import XMLDocument, XMLParseError
 
@@ -62,6 +59,7 @@ class TestAppView(XMLCompareMixin, unittest.TestCase):
         setup.placefulSetUp()
         self.app = SchoolBellApplication()
         self.app['persons'] = PersonContainer()
+        self.app['groups'] = GroupContainer()
         directlyProvides(self.app, IContainmentRoot)
         self.view = ApplicationView(self.app, TestRequest())
 
@@ -131,8 +129,6 @@ class ContainerViewTestMixin(XMLCompareMixin, QuietLibxml2Mixin):
 
     def setUp(self):
         from schoolbell.app.app import SchoolBellApplication
-        from schoolbell.app.rest.app import GroupFileFactory
-        from schoolbell.app.rest.app import ResourceFileFactory
         from zope.app.filerepresentation.interfaces import IFileFactory
 
         setup.placefulSetUp()
@@ -152,43 +148,15 @@ class ContainerViewTestMixin(XMLCompareMixin, QuietLibxml2Mixin):
 
 
         self.app = SchoolBellApplication()
+
+        self.groupContainer = self.app['groups'] = GroupContainer()
+        self.group = self.app['groups']['root'] = Group("Root group")
+
         directlyProvides(self.app, IContainmentRoot)
 
     def tearDown(self):
         self.tearDownLibxml2()
         setup.placefulTearDown()
-
-
-class TestGroupContainerView(ContainerViewTestMixin,
-                             unittest.TestCase):
-    """Test for GroupContainerView"""
-
-    def setUp(self):
-        ContainerViewTestMixin.setUp(self)
-        from schoolbell.app.app import Group
-
-        self.group = self.app['groups']['root'] = Group("Root group")
-        self.groupContainer = self.app['groups']
-
-    def test_render(self):
-        view = GroupContainerView(self.groupContainer,
-                                  TestRequest())
-        result = view.GET()
-        response = view.request.response
-
-        self.assertEquals(response.getHeader('content-type'),
-                          "text/xml; charset=UTF-8")
-        self.assertEqualsXML(result, """
-            <container xmlns:xlink="http://www.w3.org/1999/xlink">
-              <name>groups</name>
-              <items>
-                <item xlink:href="http://127.0.0.1/groups/root"
-                      xlink:type="simple" xlink:title="Root group"/>
-              </items>
-              <acl xlink:href="http://127.0.0.1/groups/acl" xlink:title="ACL"
-                   xlink:type="simple"/>
-            </container>
-            """)
 
     def test_post(self, suffix="", view=None,
                   body="""<object xmlns="http://schooltool.org/ns/model/0.1"
@@ -297,32 +265,6 @@ class TestResourceContainerView(ContainerViewTestMixin,
         self.assertRaises(XMLParseError, view.POST)
 
 
-class TestGroupFileFactory(unittest.TestCase):
-
-    def setUp(self):
-        from schoolbell.app.app import GroupContainer
-        from schoolbell.app.rest.app import GroupFileFactory
-
-        self.groupContainer = GroupContainer()
-        self.factory = GroupFileFactory(self.groupContainer)
-
-    def test_title(self):
-        group = self.factory("new_group", None,
-                     '''<object xmlns="http://schooltool.org/ns/model/0.1"
-                                title="New Group"/>''')
-
-        self.assertEquals(group.title, "New Group")
-
-    def test_description(self):
-        group = self.factory("new_group", None,
-                     '''<object xmlns="http://schooltool.org/ns/model/0.1"
-                                title="New Group"
-                                description="Boo"/>''')
-
-        self.assertEquals(group.title, "New Group")
-        self.assertEquals(group.description, "Boo")
-
-
 class TestResourceFileFactory(unittest.TestCase):
 
     def setUp(self):
@@ -352,7 +294,6 @@ class TestResourceFileFactory(unittest.TestCase):
 class FileFactoriesSetUp(PlacefulSetup):
 
     def setUp(self):
-        from schoolbell.app.rest.app import GroupFileFactory
         from schoolbell.app.rest.app import ResourceFileFactory
         from zope.app.filerepresentation.interfaces import IFileFactory
         PlacefulSetup.setUp(self)
@@ -362,24 +303,6 @@ class FileFactoriesSetUp(PlacefulSetup):
         ztapi.provideAdapter(IResourceContainer,
                              IFileFactory,
                              ResourceFileFactory)
-
-
-class TestGroupFile(FileFactoriesSetUp, unittest.TestCase):
-    """A test for IGroup IWriteFile adapter"""
-
-    def testWrite(self):
-        from schoolbell.app.app import GroupContainer
-        gc = GroupContainer()
-        group = Group("Lillies")
-        gc['group1'] = group
-
-        file = GroupFile(group)
-        file.write('''<object xmlns="http://schooltool.org/ns/model/0.1"
-                              title="New Group"
-                              description="Boo"/>''')
-
-        self.assertEquals(group.title, "New Group")
-        self.assertEquals(group.description, "Boo")
 
 
 class TestResourceFile(FileFactoriesSetUp, unittest.TestCase):
@@ -411,65 +334,6 @@ class ApplicationObjectViewTestMixin(ContainerViewTestMixin):
         result = view.GET()
 
         return result, view.request.response
-
-
-class TestGroupView(ApplicationObjectViewTestMixin, unittest.TestCase):
-    """A test for the RESTive view of a group."""
-
-    def setUp(self):
-        ApplicationObjectViewTestMixin.setUp(self)
-
-        self.testObject = self.app['groups']['root'] = Group("Root group")
-
-    def makeTestView(self, object, request):
-        return GroupView(object, request)
-
-    def testGET(self):
-
-        result, response = self.get()
-        self.assertEquals(response.getHeader('content-type'),
-                          "text/xml; charset=UTF-8")
-        self.assertEqualsXML(result,
-            """<group xmlns:xlink="http://www.w3.org/1999/xlink">
-                   <title>Root group</title>
-                   <description/>
-                   <relationships xlink:href="http://127.0.0.1/groups/root/relationships"
-                                  xlink:title="Relationships" xlink:type="simple"/>
-                   <acl xlink:href="http://127.0.0.1/groups/root/acl" xlink:title="ACL"
-                        xlink:type="simple"/>
-                   <calendar xlink:href="http://127.0.0.1/groups/root/calendar"
-                             xlink:title="Calendar" xlink:type="simple"/>
-                   <relationships
-                                  xlink:href="http://127.0.0.1/groups/root/calendar/relationships"
-                                  xlink:title="Calendar subscriptions" xlink:type="simple"/>
-                   <acl xlink:href="http://127.0.0.1/groups/root/calendar/acl"
-                        xlink:title="Calendar ACL" xlink:type="simple"/>
-               </group>""")
-
-    def testGETDescription(self):
-
-        self.testObject.description = "Foo"
-
-        result, response = self.get()
-
-        self.assertEquals(response.getHeader('content-type'),
-                          "text/xml; charset=UTF-8")
-        self.assertEqualsXML(result,
-            """<group xmlns:xlink="http://www.w3.org/1999/xlink">
-                   <title>Root group</title>
-                   <description>Foo</description>
-                   <relationships xlink:href="http://127.0.0.1/groups/root/relationships"
-                                  xlink:title="Relationships" xlink:type="simple"/>
-                   <acl xlink:href="http://127.0.0.1/groups/root/acl" xlink:title="ACL"
-                        xlink:type="simple"/>
-                   <calendar xlink:href="http://127.0.0.1/groups/root/calendar"
-                             xlink:title="Calendar" xlink:type="simple"/>
-                   <relationships
-                                  xlink:href="http://127.0.0.1/groups/root/calendar/relationships"
-                                  xlink:title="Calendar subscriptions" xlink:type="simple"/>
-                   <acl xlink:href="http://127.0.0.1/groups/root/calendar/acl"
-                        xlink:title="Calendar ACL" xlink:type="simple"/>
-               </group>""")
 
 
 class TestResourceView(ApplicationObjectViewTestMixin, unittest.TestCase):
@@ -627,13 +491,9 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTests([unittest.makeSuite(test) for test in
                     (TestAppView,
-                     TestGroupContainerView,
                      TestResourceContainerView,
-                     TestGroupFileFactory,
                      TestResourceFileFactory,
-                     TestGroupFile,
                      TestResourceFile,
-                     TestGroupView,
                      TestResourceView)])
 
     suite.addTest(doctest.DocTestSuite(optionflags=doctest.ELLIPSIS|

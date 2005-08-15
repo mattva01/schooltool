@@ -318,7 +318,7 @@ def doctest_PersonAddView():
     We can select groups that the user should be in.  First, let's create a
     group:
 
-        >>> from schoolbell.app.app import Group
+        >>> from schoolbell.app.group.group import Group
         >>> pov = app['groups']['pov'] = Group('PoV')
 
     Now, let's create and render a view:

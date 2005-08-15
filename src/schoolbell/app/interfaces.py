@@ -133,42 +133,8 @@ class ICalendarOwner(zope.interface.Interface):
         schema=ISchoolBellCalendar)
 
 
-class IGroupMember(zope.interface.Interface):
-    """An object that knows the groups it is a member of."""
-
-    groups = zope.interface.Attribute("""Groups (see IRelationshipProperty)""")
-
-
 class IHavePreferences(IAnnotatable):
     """An object that can have preferences. Namely a Person."""
-
-
-class IGroup(ICalendarOwner):
-    """Group."""
-
-    title = zope.schema.TextLine(
-        title=_("Title"),
-        description=_("Title of the group."))
-
-    description = zope.schema.Text(
-        title=_("Description"),
-        required=False,
-        description=_("Description of the group."))
-
-    members = zope.interface.Attribute(
-        """Members of the group (see IRelationshipProperty)""")
-
-
-class IGroupContainer(container.interfaces.IContainer):
-    """Container of groups."""
-
-    container.constraints.contains(IGroup)
-
-
-class IGroupContained(IGroup, container.interfaces.IContained):
-    """Group contained in an IGroupContainer."""
-
-    container.constraints.containers(IGroupContainer)
 
 
 class IResource(ICalendarOwner):
@@ -197,7 +163,7 @@ class IResourceContainer(container.interfaces.IContainer):
 
 
 class IResourceContained(IResource, container.interfaces.IContained):
-    """Group contained in an IGroupContainer."""
+    """Resource contained in an IResourceContainer."""
 
     container.constraints.containers(IResourceContainer)
 

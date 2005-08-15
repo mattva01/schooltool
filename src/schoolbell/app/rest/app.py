@@ -37,8 +37,7 @@ from schoolbell.app.rest.xmlparsing import XMLDocument
 from schoolbell.calendar.icalendar import convert_calendar_to_ical
 from schoolbell.app.interfaces import IWriteCalendar
 
-from schoolbell.app.app import Group, Resource
-from schoolbell.app.interfaces import IGroupContainer, IGroup
+from schoolbell.app.app import Resource
 from schoolbell.app.interfaces import IResourceContainer, IResource
 from schoolbell.app.browser.cal import CalendarOwnerHTTPTraverser
 
@@ -62,40 +61,6 @@ class ApplicationObjectFileFactory(object):
 
     def __call__(self, name, content_type, data):
         return self.factory(**self.parseXML(data))
-
-
-class GroupFileFactory(ApplicationObjectFileFactory):
-    """Adapter that adapts GroupContainer to FileFactory"""
-
-    adapts(IGroupContainer)
-
-    schema = '''<?xml version="1.0" encoding="UTF-8"?>
-        <grammar xmlns="http://relaxng.org/ns/structure/1.0"
-                 ns="http://schooltool.org/ns/model/0.1"
-                 datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
-          <start>
-            <element name="object">
-              <attribute name="title">
-                <text/>
-              </attribute>
-              <optional>
-                <attribute name="description">
-                  <text/>
-                </attribute>
-              </optional>
-            </element>
-          </start>
-        </grammar>
-        '''
-
-    factory = Group
-
-    def parseDoc(self, doc):
-        kwargs = {}
-        node = doc.query('/m:object')[0]
-        kwargs['title'] = node['title']
-        kwargs['description'] = node.get('description')
-        return kwargs
 
 
 class ResourceFileFactory(ApplicationObjectFileFactory):
@@ -153,17 +118,6 @@ class ApplicationObjectFile(object):
         factory = IFileFactory(container)
         kwargs = factory.parseXML(data)
         self.modify(**kwargs)
-
-
-class GroupFile(ApplicationObjectFile):
-    """Adapter that adapts IGroup to IWriteFile"""
-
-    adapts(IGroup)
-
-    def modify(self, title=None, description=None):
-        """Modify underlying schema."""
-        self.context.title = title
-        self.context.description = description
 
 
 class ResourceFile(ApplicationObjectFile):
@@ -228,20 +182,8 @@ class GenericContainerView(View):
         return u"Object created: %s" % location
 
 
-class GroupContainerView(GenericContainerView):
-    """RESTive view of a group container."""
-
-
 class ResourceContainerView(GenericContainerView):
     """RESTive view of a resource container."""
-
-
-class GroupView(View):
-    """RESTive view for groups"""
-
-    template = Template("templates/group.pt",
-                        content_type="text/xml; charset=UTF-8")
-    factory = GroupFile
 
 
 class ResourceView(View):

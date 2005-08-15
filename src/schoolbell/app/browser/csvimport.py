@@ -21,14 +21,12 @@ Classes for csv importing.
 
 $Id$
 """
-
 from zope.app.publisher.browser import BrowserView
 from zope.security.proxy import removeSecurityProxy
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import ISchoolBellApplication
-from schoolbell.app.app import SimpleNameChooser
-from schoolbell.app.app import Group, Resource
+from schoolbell.app.app import SimpleNameChooser, Resource
 
 import csv
 
@@ -215,33 +213,6 @@ class ImportErrorCollection(object):
         return "<%s %r>" % (self.__class__.__name__, self.__dict__)
 
 
-class GroupCSVImporter(BaseCSVImporter):
-    """Group CSV Importer"""
-
-    factory = Group
-
-    def createAndAdd(self, data, dry_run=True):
-        """Create objects and add them to the container."""
-
-        if len(data) < 1:
-            self.errors.fields.append(_('Insufficient data provided.'))
-            return
-
-        if not data[0]:
-            self.errors.fields.append(_('Titles may not be empty'))
-            return
-
-        if len(data) > 1:
-            description = data[1]
-        else:
-            description = ''
-
-        obj = self.factory(title=data[0], description=description)
-        name = self.chooser.chooseName('', obj)
-        if not dry_run:
-            self.container[name] = obj
-
-
 class ResourceCSVImporter(BaseCSVImporter):
     """Resource CSV Importer"""
 
@@ -271,12 +242,6 @@ class ResourceCSVImporter(BaseCSVImporter):
 
         if not dry_run:
             self.container[name] = obj
-
-
-class GroupCSVImportView(BaseCSVImportView):
-    """View for Group CSV importer."""
-
-    importer_class = GroupCSVImporter
 
 
 class ResourceCSVImportView(BaseCSVImportView):

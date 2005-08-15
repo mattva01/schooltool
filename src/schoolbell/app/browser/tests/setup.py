@@ -68,6 +68,8 @@ def setUpSchoolBellSite():
     # XXX: Refactor later to use a flexible test setup system
     from schoolbell.app.person.person import PersonContainer
     app['persons'] = PersonContainer()
+    from schoolbell.app.group.group import GroupContainer
+    app['groups'] = GroupContainer()
     setSite(app)
     return app
 

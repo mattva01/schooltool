@@ -35,12 +35,14 @@ def doctest_personPermissionsSubscriber():
     r"""
     Set up:
 
-        >>> from schoolbell.app.app import SchoolBellApplication, Group
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> from schoolbell.app.group.group import Group, GroupContainer
         >>> from schoolbell.app.person.person import Person, PersonContainer
         >>> root = setup.placefulSetUp(True)
         >>> setUpLocalGrants()
         >>> root['sb'] = SchoolBellApplication()
         >>> root['sb']['persons'] = PersonContainer()
+        >>> root['sb']['groups'] = GroupContainer()
 
         >>> group = Group('slackers')
         >>> root['sb']['groups']['slackers'] = group
