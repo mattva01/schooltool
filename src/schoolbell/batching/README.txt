@@ -45,15 +45,15 @@ like this:
  +----------------------------------------------------+----------------------+
 
 
-If we are on the first batch, the 'previous' text is contained in a span, while
-the 'next' text is a link:
+The 'previous' link will not actually be a link if there is no previous batch 
+(if we are on the first batch) and there will also be no number displayed for 
+the same reason.
 
     >>> print view()
     <BLANKLINE>
     ...
           <span class="previous">
             &laquo; <span>Previous</span>
-            <span>10</span>
           </span>
     ...
           <a class="next"
@@ -63,7 +63,7 @@ the 'next' text is a link:
           </a>
     ...
 
-If we go to the next batch, we will see a link back to the first batch
+If we go to the next batch, we will see a link back to the first batch.
 
     >>> view.batch = view.batch.next()
     >>> print view()
@@ -82,4 +82,20 @@ If we go to the next batch, we will see a link back to the first batch
           </a>
     ...
 
+If we go to the last batch, we will get the same behavior with the 'next' link
+
+    >>> view.batch = view.batch.batches()[-1]
+    >>> print view()
+    <BLANKLINE>
+    ...
+          <a class="previous"
+             href="?batch_start=30&amp;batch_size=10">
+            &laquo; <span>Previous</span>
+            <span>10</span>
+          </a>
+    ...
+          <span class="next">
+            <span>Next</span> &raquo;
+          </span>
+    ...
 

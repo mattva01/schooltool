@@ -131,7 +131,6 @@ Let's go to a group, and look at its members.
       <div class="batch-navigation">
           <span class="previous">
            &laquo; <span>Previous</span>
-           <span>10</span>
           </span>
         <div class="batch-extra-navigation">
           <a href="?batch_size=30" class="more">Show More</a>

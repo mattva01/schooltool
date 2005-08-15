@@ -25,7 +25,6 @@ Batch navigation shows up if:
     <tal:if condition="needsBatch">
       <span tal:condition="not:batch/prev" class="previous">
         &laquo; <span i18n:translate="">Previous</span>
-        <span tal:content="batch_size"/>
       </span>
 
       <a class="previous"
@@ -62,8 +61,7 @@ Batch navigation shows up if:
       </a>
 
       <span tal:condition="not:batch/next" i18n:translate="" class="next">
-        <span i18n:translate="">Next</span>
-        <span tal:content="batch_size"/> &raquo;
+        <span i18n:translate="">Next</span> &raquo;
       </span>
 
       <span tal:repeat="b batch/batches">
