@@ -1171,17 +1171,6 @@ table.event_booking td.booked {
     background: #314e6c;
 }
 
-.batch-extra-navigation {
-    float: right;
-    border-left: 1px #bab5ab solid;
-}
-
-.batch-extra-navigation .more,
-.batch-extra-navigation .less,
-.batch-extra-navigation .all {
-    padding: 0 0.5em;
-}
-
 /* Internal error pages */
 
 pre.traceback {
