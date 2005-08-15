@@ -139,7 +139,7 @@ Let's go to a group, and look at its members.
           <a class="next"
              href="?batch_start=10&amp;batch_size=10">
             <span>Next</span>
-            <span>10</span> &raquo;
+            <span>5</span> &raquo;
           </a>
           <span>
             <a href="?batch_start=0&amp;batch_size=10"

@@ -32,7 +32,7 @@ Batch navigation shows up if:
         tal:attributes="href python:'?batch_start=%s&batch_size=%s' % (batch.prev().start, batch_size)"
         i18n:translate="">
         &laquo; <span i18n:translate="">Previous</span>
-        <span tal:content="batch_size"/>
+        <span tal:content="python:len(batch.prev())"/>
       </a>
     </tal:if>
 
@@ -57,7 +57,7 @@ Batch navigation shows up if:
         tal:condition="batch/next"
         tal:attributes="href python:'?batch_start=%s&batch_size=%s' % (batch.next().start, batch_size)">
         <span i18n:translate="">Next</span>
-        <span tal:content="batch_size"/> &raquo;
+        <span tal:content="python:len(batch.next())"/> &raquo;
       </a>
 
       <span tal:condition="not:batch/next" i18n:translate="" class="next">

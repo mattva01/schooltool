@@ -82,7 +82,7 @@ If we go to the next batch, we will see a link back to the first batch.
           </a>
     ...
 
-If we go to the last batch, we will get the same behavior with the 'next' link
+If we go to the last batch, we will get the same behavior with the 'next' link:
 
     >>> view.batch = view.batch.batches()[-1]
     >>> print view()
@@ -99,3 +99,22 @@ If we go to the last batch, we will get the same behavior with the 'next' link
           </span>
     ...
 
+If we are not on the last batch, the number for 'next' represents how many
+items are left in the batch (how many will be displayed on the last page):
+
+    >>> view.batch = view.batch.prev()
+    >>> print view()
+    <BLANKLINE>
+    ...
+          <a class="previous"
+             href="?batch_start=20&amp;batch_size=10">
+            &laquo; <span>Previous</span>
+            <span>10</span>
+          </a>
+    ...
+          <a class="next"
+             href="?batch_start=40&amp;batch_size=10">
+            <span>Next</span>
+            <span>1</span> &raquo;
+          </a>
+    ...
