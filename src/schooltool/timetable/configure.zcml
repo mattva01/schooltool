@@ -75,7 +75,9 @@
 
   <content class=".TimetableDict">
     <require permission="schoolbell.edit"
-             interface="zope.app.container.interfaces.IContainer" />
+             interface="zope.app.container.interfaces.IWriteContainer" />
+    <require permission="schoolbell.view"
+             interface="zope.app.container.interfaces.IReadContainer" />
   </content>
 
   <content class=".TimetableSchemaContainer">

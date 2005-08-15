@@ -473,15 +473,44 @@ file or typing/pasting it into a text area field.
 
 A new section should have been created:
 
-XXX Bug: the section's title is not shown right.
-
     >>> print http(r"""
     ... GET /frogpond/sections/ HTTP/1.1
     ... Authorization: Basic frog:pwd
     ... """)
     HTTP/1.1 200 Ok
     ...
-    <a href="http://localhost/frogpond/sections/swimming--frog">...</a>
+          <tr>
+            <td>
+              <input type="checkbox"
+                     name="delete.swimming--frog" />
+            </td>
+            <td>
+              <a href="http://localhost/frogpond/courses/swimming">Swimming</a>
+            </td>
+            <td>
+              <a href="http://localhost/frogpond/sections/swimming--frog">Swimming - Frog</a>
+            </td>
+            <td>
+    <BLANKLINE>
+    <BLANKLINE>
+                <a href="http://localhost/frogpond/persons/frog">Frog</a>
+    <BLANKLINE>
+            </td>
+            <td>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+                  <a href="http://localhost/frogpond/sections/swimming--frog/timetables/2005-fall.default">2005-Fall.Default</a>
+    <BLANKLINE>
+    <BLANKLINE>
+            </td>
+            <td>
+              <span class="hint">
+                (1
+                <span>Students</span>)
+              </span>
+            </td>
+          </tr>
     ...
 
 We should see a timetable in the section's timetable list:
