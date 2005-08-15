@@ -42,6 +42,25 @@
 
   <menu id="schoolbell_actions" title="Actions" />
 
+<!-- Pluggable Traverser Plugins -->
+
+  <zope:subscriber
+      for="zope.app.container.interfaces.IReadContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
+      factory="zope.app.container.traversal.ContainerTraverser"
+      />
+
+<!-- Application Traverser -->
+
+  <zope:view
+      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory="schoolbell.app.traverser.browser.PluggableBrowserTraverser"
+      permission="zope.Public"
+      />
+
 <!-- Views for the application -->
 
   <addMenuItem
@@ -57,15 +76,6 @@
       template="templates/index.pt"
       permission="zope.Public"
       />
-
-  <zope:view
-      for="schoolbell.app.interfaces.ISchoolBellApplication"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-      factory=".app.SchoolBellApplicationTraverser"
-      permission="zope.Public"
-      />
-
 
   <!-- Make index.html the default ZMI view for ISchoolBellApplication -->
 
@@ -124,6 +134,19 @@
 
 <!-- Calendar views -->
 
+  <!-- Sigh. Cannot specify multiple for and permission in subsscriber ;-( -->
+  <zope:class class=".cal.CalendarOwnerTraverser">
+    <allow interface="schoolbell.app.traverser.interfaces.ITraverserPlugin" />
+  </zope:class>
+
+  <zope:subscriber
+      for="schoolbell.app.interfaces.ICalendarOwner
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
+      factory=".cal.CalendarOwnerTraverser"
+      />
+
+<!--
   <zope:view
       for="schoolbell.app.interfaces.ICalendarOwner"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
@@ -131,6 +154,7 @@
       factory=".cal.CalendarOwnerTraverser"
       permission="zope.Public"
       />
+-->
 
   <zope:view
       for="schoolbell.app.interfaces.ISchoolBellCalendar"

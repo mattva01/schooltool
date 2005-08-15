@@ -21,12 +21,14 @@ RESTive views for Person Preferences
 
 $Id: app.py 4596 2005-08-08 12:53:09Z gintas $
 """
+from zope.component import adapts
 from zope.interface import implements
 
-from schoolbell.app.rest import View, Template
+from schoolbell.app.rest import View, Template, IRestTraverser
 from schoolbell.app.rest.errors import RestError
 from schoolbell.app.rest.xmlparsing import XMLDocument
 
+from schoolbell.app.person.interfaces import IPerson
 from schoolbell.app.person.interfaces import IPersonPreferences
 from schoolbell.app.person.rest.interfaces import IPersonPreferencesAdapter
 
@@ -109,3 +111,17 @@ class PersonPreferencesView(View):
             setattr(self.preferences, name, value)
 
         return "Preferences updated"
+
+
+class PersonPreferencesHTTPTraverser(object):
+    """Traverser to person preferences."""
+
+    adapts(IPerson)
+    implements(IRestTraverser)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        return PersonPreferencesAdapter(self.context)

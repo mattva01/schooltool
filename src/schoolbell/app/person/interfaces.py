@@ -29,11 +29,15 @@ import zope.schema
 
 import zope.app.container.constraints
 from zope.app import container
+from zope.app.annotation.interfaces import IAnnotatable
 from zope.app.location.interfaces import ILocation
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import vocabulary
 from schoolbell.app.group.interfaces import IGroupMember
+
+class IHavePreferences(IAnnotatable):
+    """An object that can have preferences. Namely a Person."""
 
 class IReadPerson(IGroupMember):
     """Publically accessible part of IPerson."""

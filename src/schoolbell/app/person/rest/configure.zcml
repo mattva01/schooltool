@@ -3,6 +3,8 @@
            xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="schoolbell">
 
+<!-- Security Declarations -->
+
   <content class=".person.PersonPasswordWriter">
     <allow interface=".interfaces.IPasswordWriter" />
   </content>
@@ -16,19 +18,38 @@
     <allow interface=".interfaces.IPersonPhoto" />
   </content>
 
+<!-- Traversers -->
+
   <view
-      for="..interfaces.IPerson"
+      for="..interfaces.IPersonContainer"
       type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.IPublishTraverse"
-      factory="schoolbell.app.rest.RestPublishTraverse"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
 
   <view
       for="..interfaces.IPerson"
       type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.IHavePreferences"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="schoolbell.app.rest.IRestTraverser"
-      factory=".person.PersonHTTPTraverser"
+      factory=".preference.PersonPreferencesHTTPTraverser"
+      permission="zope.Public"
+      name="preferences"
+      />
+
+  <view
+      for="..interfaces.IPerson"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schoolbell.app.rest.IRestTraverser"
+      factory=".person.PersonPasswordHTTPTraverser"
       permission="zope.Public"
       name="password"
       />
@@ -37,7 +58,7 @@
       for="..interfaces.IPerson"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="schoolbell.app.rest.IRestTraverser"
-      factory=".person.PersonHTTPTraverser"
+      factory=".person.PersonPhotoHTTPTraverser"
       permission="zope.Public"
       name="photo"
       />

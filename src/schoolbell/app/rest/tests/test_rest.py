@@ -98,18 +98,6 @@ class TestRestPublishTraverse(PlacelessSetup, unittest.TestCase):
         request = traverser.request
         self.assertEqual(traverser.publishTraverse(request, 'acl'), 42)
 
-    def testContainerTraverse(self):
-        from zope.app.container.interfaces import ISimpleReadContainer
-
-        class Container:
-            implements(ISimpleReadContainer)
-            def get(self, key, default):
-                return {'item2': 69}.get(key, default)
-
-        traverser = self.create(Container())
-        request = traverser.request
-        self.assertEqual(traverser.publishTraverse(request, 'item2'), 69)
-
 
 def test_suite():
     return unittest.TestSuite((

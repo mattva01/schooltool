@@ -134,10 +134,6 @@ class ICalendarOwner(zope.interface.Interface):
         schema=ISchoolBellCalendar)
 
 
-class IHavePreferences(IAnnotatable):
-    """An object that can have preferences. Namely a Person."""
-
-
 class ISchoolBellApplication(container.interfaces.IReadContainer,
                              ICalendarOwner):
     """The main SchoolBell application object.

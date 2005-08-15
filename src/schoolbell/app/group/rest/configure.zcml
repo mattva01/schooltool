@@ -3,10 +3,18 @@
            i18n_domain="schoolbell">
 
   <view
+      for="..interfaces.IGroupContainer"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
       for="..interfaces.IGroup"
       type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.IPublishTraverse"
-      factory="schoolbell.app.rest.RestPublishTraverse"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
 

@@ -2,6 +2,8 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            i18n_domain="schoolbell">
 
+<!-- Security Declarations -->
+
   <content class=".acl.ACLAdapter">
     <allow attributes="context" />
   </content>
@@ -24,38 +26,31 @@
        />
   </content>
 
-  <view
-      for="schoolbell.app.interfaces.ISchoolBellApplication"
-      name="GET"
-      factory=".app.ApplicationView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
+  <content class=".RestPublishTraverse">
+    <allow interface="zope.publisher.interfaces.IPublishTraverse" />
+  </content>
+
+<!-- Traversers -->
+
+  <subscriber
+      for="zope.app.container.interfaces.IReadContainer
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
+      factory="zope.app.http.traversal.ContainerTraverser"
       />
 
-  <!-- traversal adapters -->
-  <!-- the multiplexer traversers for schoolbell objects -->
-
-  <!-- XXX: Band-aid to make application work. I think registering the -->
-  <!--      traverser separately for IPerson, IGroup and IResource is -->
-  <!--      okay, but not great (should have a separate ST directive or -->
-  <!--      special interface). For this first directive for the -->
-  <!--      container we really should have a special layer or a special -->
-  <!--      ST interface; I prefer the first suggestion. (SR) -->
-  <view
-      for="zope.app.container.interfaces.IContainer"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.IPublishTraverse"
+  <subscriber
+      for="zope.interface.Interface
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
       factory=".RestPublishTraverse"
-      permission="zope.Public"
       />
-
-  <!-- End band-aid -->
 
   <view
       for="schoolbell.app.interfaces.ISchoolBellApplication"
       type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.IPublishTraverse"
-      factory=".RestPublishTraverse"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
 
@@ -74,17 +69,6 @@
       provides="zope.publisher.interfaces.IPublishTraverse"
       factory=".relationships.LinkTraverser"
       permission="zope.Public"
-      />
-
-
-  <!-- XXX: Aaahhh!!! Why do we use the PersonHTTPTraverser? -->
-  <view
-      for="schoolbell.app.interfaces.IHavePreferences"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides=".IRestTraverser"
-      factory="schoolbell.app.person.rest.person.PersonHTTPTraverser"
-      permission="zope.Public"
-      name="preferences"
       />
 
   <view
@@ -149,6 +133,16 @@
       factory=".app.CalendarNullTraverser"
       permission="zope.Public"
       name="calendar.vfb"
+      />
+
+<!-- RESTive verbs implementations -->
+
+  <view
+      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      name="GET"
+      factory=".app.ApplicationView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
       />
 
   <view

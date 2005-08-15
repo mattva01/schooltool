@@ -5,8 +5,6 @@
 
   <content class=".person.PersonContainer">
     <implements
-        interface="schoolbell.app.interfaces.IHavePreferences" />
-    <implements
         interface="schoolbell.app.note.interfaces.IHaveNotes" />
 
     <allow
@@ -20,7 +18,7 @@
   </content>
 
   <content class=".person.Person">
-    <implements interface="schoolbell.app.interfaces.IHavePreferences" />
+    <implements interface=".interfaces.IHavePreferences" />
     <implements interface="schoolbell.app.note.interfaces.IHaveNotes" />
     <require
         permission="schoolbell.view"
@@ -55,7 +53,7 @@
   </content>
 
   <adapter
-      for="schoolbell.app.interfaces.IHavePreferences"
+      for=".interfaces.IHavePreferences"
       provides=".interfaces.IPersonPreferences"
       factory=".preference.getPersonPreferences"
       trusted="true"

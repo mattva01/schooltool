@@ -25,8 +25,6 @@ from zope.component import adapts
 from zope.interface import implements
 from zope.publisher.interfaces import NotFound
 
-# XXX: Eek! Browser code in rest. Smells like fish here.
-from schoolbell.app.browser.cal import CalendarOwnerHTTPTraverser
 from schoolbell.app.rest import View, Template, IRestTraverser
 from schoolbell.app.rest.app import ApplicationObjectFile
 from schoolbell.app.rest.app import ApplicationObjectFileFactory
@@ -94,21 +92,18 @@ class PersonView(View):
     factory = PersonFile
 
 
-class PersonHTTPTraverser(CalendarOwnerHTTPTraverser):
-    """A traverser that allows to traverse to a persons password, preferences or photo."""
+class PersonPasswordHTTPTraverser(object):
+    """Traverses to the password writer of a person"""
 
     adapts(IPerson)
     implements(IRestTraverser)
 
-    def publishTraverse(self, request, name):
-        if name == 'password':
-            return PersonPasswordWriter(self.context)
-        elif name == 'photo':
-            return PersonPhotoAdapter(self.context)
-        elif name == 'preferences':
-            return PersonPreferencesAdapter(self.context)
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
 
-        return CalendarOwnerHTTPTraverser.publishTraverse(self, request, name)
+    def publishTraverse(self, request, name):
+        return PersonPasswordWriter(self.context)
 
 
 class PersonPasswordWriter(object):
@@ -141,6 +136,20 @@ class PasswordWriterView(View):
         self.context.setPassword(password)
         self.request.response.setStatus("200")
         return ''
+
+
+class PersonPhotoHTTPTraverser(object):
+    """Traverses to the photo of a person"""
+
+    adapts(IPerson)
+    implements(IRestTraverser)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        return PersonPhotoAdapter(self.context)
 
 
 class PersonPhotoAdapter(object):

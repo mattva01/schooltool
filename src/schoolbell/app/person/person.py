@@ -32,7 +32,6 @@ from zope.app.container.interfaces import IObjectAddedEvent
 
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.cal import Calendar
-from schoolbell.app.interfaces import IHavePreferences
 from schoolbell.app.interfaces import ICalendarOwner
 from schoolbell.app.membership import URIMembership, URIMember, URIGroup
 from schoolbell.app.overlay import OverlaidCalendarsProperty

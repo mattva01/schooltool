@@ -32,7 +32,7 @@ from zope.server.http.commonaccesslogger import CommonAccessLogger
 from zope.server.http.publisherhttpserver import PublisherHTTPServer
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile \
                                                 as Template
-from zope.publisher.interfaces import IPublishTraverse
+from zope.publisher.interfaces.http import IHTTPPublisher
 from zope.app.container.interfaces import ISimpleReadContainer
 from zope.publisher.interfaces import NotFound
 from zope.app.http.traversal import ContainerTraverser
@@ -81,14 +81,18 @@ class View(object):
         return ""
 
 
-class IRestTraverser(IPublishTraverse):
+class IRestTraverser(IHTTPPublisher):
     """A named traverser for ReSTive views."""
 
 
 class RestPublishTraverse(object):
-    """A 'multiplexer' traverser for ReSTive views"""
+    """A 'multiplexer' traverser for ReSTive views.
 
-    implements(IPublishTraverse)
+    This traverser uses other traversers providing ``IRestTraverser`` to do
+    its work.
+    """
+
+    implements(IHTTPPublisher)
 
     def __init__(self, context, request):
         self.context = context
@@ -101,11 +105,5 @@ class RestPublishTraverse(object):
 
         if traverser is not None:
             return traverser.publishTraverse(request, name)
-        elif ISimpleReadContainer.providedBy(self.context):
-            # If the object is a container, we can simply use the container
-            # traverser.
-            traverser = ContainerTraverser(self.context, self.request)
-            return traverser.publishTraverse(request, name)
 
         raise NotFound(self.context, name, request)
-

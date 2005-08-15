@@ -265,56 +265,93 @@ class TestPersonPhotoView(ApplicationObjectViewTestMixin,
         self.assertRaises(NotFound, view.GET)
 
 
-def doctest_PersonHttpTraverser():
-    """Tests for PersonHttpTraverser.
+def doctest_PersonPasswordHttpTraverser():
+    r"""Tests for PersonPasswordHTTPTraverser.
 
-    PersonHttpTraverser allows you to access photo, preferences and password of
-    the person:
+    This traverser allows you to access the password of the person:
 
-        >>> from schoolbell.app.person.rest.person import PersonHTTPTraverser
+        >>> from schoolbell.app.person.rest.person import \
+        ...     PersonPasswordHTTPTraverser
         >>> person = Person()
         >>> request = TestRequest()
 
-        >>> from schoolbell.app.person.preference import getPersonPreferences
-        >>> from zope.app.annotation.interfaces import IAnnotations
-        >>> from schoolbell.app.person.interfaces import IPersonPreferences
-        >>> setup.setUpAnnotations()
-        >>> ztapi.provideAdapter(Person, IPersonPreferences,
-        ...                      getPersonPreferences)
-
-        >>> traverser = PersonHTTPTraverser(person, request)
+        >>> traverser = PersonPasswordHTTPTraverser(person, request)
         >>> traverser.context is person
         True
         >>> traverser.request is request
         True
 
-    The traverser should implement IBrowserPublisher:
+    The traverser should implement IHTTPPublisher:
 
-        >>> from zope.publisher.interfaces.browser import IBrowserPublisher
-        >>> verifyObject(IBrowserPublisher, traverser)
+        >>> from zope.publisher.interfaces.http import IHTTPPublisher
+        >>> verifyObject(IHTTPPublisher, traverser)
         True
 
-    The traverser inherits from CalendarOwnerHttpTraverser so we
-    should be able to access the calendar of his:
-
-        >>> traverser.publishTraverse(request, 'calendar') is person.calendar
-        True
-        >>> traverser.publishTraverse(request, 'calendar.ics') is person.calendar
-        True
-        >>> traverser.publishTraverse(request, 'calendar.vfb') is person.calendar
-        True
-
-    As well as password:
+    Now access the password:
 
         >>> traverser.publishTraverse(request, 'password')
         <schoolbell.app.person.rest.person.PersonPasswordWriter ...>
+    """
 
-    and photo:
+
+def doctest_PersonPhotoHttpTraverser():
+    r"""Tests for PersonPhotoHTTPTraverser.
+
+    This traverser allows you to access the photo of the person:
+
+        >>> from schoolbell.app.person.rest.person import \
+        ...     PersonPhotoHTTPTraverser
+        >>> person = Person()
+        >>> request = TestRequest()
+
+        >>> traverser = PersonPhotoHTTPTraverser(person, request)
+        >>> traverser.context is person
+        True
+        >>> traverser.request is request
+        True
+
+    The traverser should implement IHTTPPublisher:
+
+        >>> from zope.publisher.interfaces.http import IHTTPPublisher
+        >>> verifyObject(IHTTPPublisher, traverser)
+        True
+
+    Now access the password:
 
         >>> traverser.publishTraverse(request, 'photo')
         <schoolbell.app.person.rest.person.PersonPhotoAdapter ...>
+    """
 
-    and preferences:
+def doctest_PersonPreferencesHttpTraverser():
+    r"""Tests for PersonPreferencesHTTPTraverser.
+
+    PersonPreferencesHTTPTraverser allows you to access the preferences of the
+    person:
+
+        >>> from schoolbell.app.person.rest.preference import \
+        ...     PersonPreferencesHTTPTraverser
+        >>> person = Person()
+        >>> request = TestRequest()
+
+        >>> from schoolbell.app.person.preference import getPersonPreferences
+        >>> from schoolbell.app.person.interfaces import IPersonPreferences
+        >>> setup.setUpAnnotations()
+        >>> ztapi.provideAdapter(Person, IPersonPreferences,
+        ...                      getPersonPreferences)
+
+        >>> traverser = PersonPreferencesHTTPTraverser(person, request)
+        >>> traverser.context is person
+        True
+        >>> traverser.request is request
+        True
+
+    The traverser should implement IHTTPPublisher:
+
+        >>> from zope.publisher.interfaces.http import IHTTPPublisher
+        >>> verifyObject(IHTTPPublisher, traverser)
+        True
+
+    Now access the preferences:
 
         >>> traverser.publishTraverse(request, 'preferences')
         <schoolbell.app.person.rest.preference.PersonPreferencesAdapter ...>
@@ -327,18 +364,17 @@ def doctest_PersonPreferencesView():
 
     First lets create a view:
 
-        >>> from schoolbell.app.person.rest.person import PersonHTTPTraverser
+        >>> from schoolbell.app.person.rest.preference import \
+        ...     PersonPreferencesHTTPTraverser
         >>> from schoolbell.app.person.preference import getPersonPreferences
         >>> from schoolbell.app.person.interfaces import IPersonPreferences
-        >>> from schoolbell.app.interfaces import IHavePreferences
-        >>> from zope.app.annotation.interfaces import IAnnotations
         >>> setup.setUpAnnotations()
         >>> setup.placefulSetUp()
         >>> ztapi.provideAdapter(Person, IPersonPreferences,
         ...                      getPersonPreferences)
 
         >>> person = Person()
-        >>> traverser = PersonHTTPTraverser(person, TestRequest())
+        >>> traverser = PersonPreferencesHTTPTraverser(person, TestRequest())
         >>> adapter = traverser.publishTraverse(TestRequest(), 'preferences')
         >>> view = PersonPreferencesView(adapter, TestRequest())
 
