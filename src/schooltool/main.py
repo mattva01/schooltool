@@ -62,7 +62,8 @@ class Options(SchoolBellOptions):
 SCHOOLTOOL_SITE_DEFINITION = u"""\
 <?xml version="1.0" encoding="utf-8"?>
 <configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:browser="http://namespaces.zope.org/browser">
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="schooltool">
 
   <include package="zope.app" />
   <include package="zope.app.securitypolicy" file="meta.zcml" />
@@ -96,16 +97,13 @@ SCHOOLTOOL_SITE_DEFINITION = u"""\
 
   <grantAll role="zope.Manager" />
 
-  <unauthenticatedPrincipal id="zope.anybody" title="%(unauth_user)s" />
-  <unauthenticatedGroup id="zope.Anybody" title="%(unauth_users)s" />
-  <authenticatedGroup id="zope.Authenticated" title="%(auth_users)s" />
-  <everybodyGroup id="zope.Everybody" title="%(all_users)s" />
+  <unauthenticatedPrincipal id="zope.anybody" title="Unauthenticated User" />
+  <unauthenticatedGroup id="zope.Anybody" title="Unauthenticated Users" />
+  <authenticatedGroup id="zope.Authenticated" title="Authenticated Users" />
+  <everybodyGroup id="zope.Everybody" title="All Users" />
 
 </configure>
-""" % {'unauth_user': catalog.ugettext("Unauthenticated User"),
-       'unauth_users': catalog.ugettext("Unauthenticated Users"),
-       'auth_users': catalog.ugettext("Authenticated Users"),
-       'all_users': catalog.ugettext("All Users")}
+"""
 
 # Mark strings for i18n extractor
 _("Unauthenticated User"), _("Unauthenticated Users")
