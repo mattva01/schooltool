@@ -125,7 +125,7 @@ class ISchoolBellCalendarEvent(ICalendarEvent,
     def unbookResource(resource):
         """Book a resource."""
 
-# XXX: This screans adapter as well.
+# XXX: This screams adapter as well.
 class ICalendarOwner(zope.interface.Interface):
     """An object that has a calendar."""
 

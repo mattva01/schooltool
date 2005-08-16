@@ -194,6 +194,12 @@ def doctest_PersonPreferences():
         >>> prefs = getPersonPreferences(person)
         >>> verifyObject(IPersonPreferences, prefs)
         True
+
+        >>> prefs
+        <schoolbell.app.person.preference.PersonPreferences object at 0x...>
+
+        >>> prefs.cal_periods
+        True
         >>> prefs.timezone
         'UTC'
         >>> prefs.weekstart
@@ -202,6 +208,11 @@ def doctest_PersonPreferences():
     Need to have prefs.__parent__ refer to the person it's attached to:
 
         >>> prefs.__parent__ == person
+        True
+
+    Called another time, getPersonPreferences() returns the same object:
+
+        >>> getPersonPreferences(person) is prefs
         True
 
         >>> setup.placelessTearDown()
@@ -241,7 +252,7 @@ def doctest_PersonDetails():
 
 def test_suite():
     return unittest.TestSuite([
-        doctest.DocTestSuite(),
+        doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
         doctest.DocTestSuite('schoolbell.app.person.person'),
         ])
 
