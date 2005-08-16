@@ -607,8 +607,8 @@ def test_setUpLogger():
         False
         >>> logger.handlers
         [<logging.StreamHandler instance ...>, <...UnicodeFileHandler ...>]
-        >>> logger.handlers[0].stream
-        <open file '<stderr>', mode 'w' at 0x...>
+        >>> logger.handlers[0].stream is sys.stderr
+        True
         >>> logger.handlers[0].formatter
         <logging.Formatter instance at ...>
         >>> logger.handlers[0].formatter._fmt
