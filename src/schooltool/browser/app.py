@@ -263,11 +263,12 @@ class SectionInstructorView(BrowserView):
         elif 'CANCEL' in self.request:
             self.request.response.redirect(context_url)
 
-        if 'SEARCH' in self.request:
+        if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
             searchstr = self.request['SEARCH'].lower()
             results = [item for item in self.getPotentialInstructors()
                        if searchstr in item.title.lower()]
         else:
+            self.request.form['SEARCH'] = ''
             results = self.getPotentialInstructors()
 
         start = int(self.request.get('batch_start', 0))

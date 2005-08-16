@@ -35,10 +35,21 @@
 <fieldset>
   <legend i18n:translate="">Available Instructors</legend>
   <div class="instructor_list">
-    <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+  <tal:if tal:condition="batch">
+    <tal:if condition="request/SEARCH|nothing">
+      <tal:block define="extra_url python:'&SEARCH=%s' % request.get('SEARCH')">
+        <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+      </tal:block>
+    </tal:if>
+    <tal:if condition="not:request/SEARCH|nothing">
+      <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    </tal:if>
+  </tal:if>
     <input type="text" name="SEARCH"
-      tal:attributes="value context/request/SEARCH|nothing"/>
+      tal:attributes="value request/SEARCH|nothing"/>
     <input type="submit" name="SEARCH_BUTTON" value="Find Now"
+      i18n:attributes="value"/>
+    <input type="submit" name="CLEAR_SEARCH" value="Clear"
       i18n:attributes="value"/>
     <div tal:repeat="instructor batch" tal:condition="batch">
       <label>

@@ -414,9 +414,11 @@
 
 <metal:block define-macro="batch-search">
   <form method="post" class="batch-search">
-    <input type="text" name="SEARCH"
-      tal:attributes="value context/request/SEARCH|nothing"/>
+    <input id="batch-search-box" type="text" name="SEARCH"
+      tal:attributes="value request/SEARCH|nothing"/>
     <input type="submit" name="SEARCH_BUTTON" value="Find Now"
+      i18n:attributes="value"/>
+    <input type="submit" name="CLEAR_SEARCH" value="Clear"
       i18n:attributes="value"/>
   </form>
 </metal:block>
