@@ -126,7 +126,7 @@
       <p>
         <strong tal:replace="context/schoolbell:preferences/title"/>
         Server Running SchoolTool
-        <span tal:content="modules/schoolbell/VERSION"/>
+        <span tal:content="modules/schooltool/VERSION"/>
         &copy; The Shuttleworth Foundation 2003 - <span>2005</span>:
         Supporting Social Innovation.
       </p>

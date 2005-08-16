@@ -42,16 +42,20 @@ We will obviously need a SchoolTool instance.
     ...
 
 
-The SchoolTool version is displayed on the page:
+The SchoolTool version is displayed on the page (regression test for issue350):
 
+    >>> import schooltool
+    >>> old_version = schooltool.VERSION
+    >>> schooltool.VERSION = 'some-version-name-or-number'
     >>> page = http(r"""
     ... GET /frogpond/sections/his1 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
 
-    >>> import schoolbell
-    >>> str(page).count(schoolbell.VERSION) > 0
+    >>> 'some-version-name-or-number' in str(page)
     True
+
+    >>> schooltool.VERSION = old_version
 
 
 Let's create a person so that we can fool around with his calendar:
