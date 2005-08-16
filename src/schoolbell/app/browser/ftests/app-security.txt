@@ -496,3 +496,32 @@ Now, the group join must succeed.
     ...
     Location: http://localhost/frogpond/resources/venerable-frogs
     ...
+
+Regression test to see if recurring events in site-wide calendar can be viewed
+by unauthenticated users (issue345):
+
+  Add a recurring event to the site-wide calendar:
+
+    >>> print http("""
+    ... POST /frogpond/calendar/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Something&field.start_date=2005-02-03&\
+    ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
+    ... field.interval=1&field.recurrence=on&field.recurrence_type=daily&\
+    ... field.range=until&field.until=2005-02-08&UPDATE_SUBMIT=Add""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/calendar
+    ...
+
+  Make sure unauthenticated does not get redirected to the login page
+
+    >>> print http(r"""
+    ... GET /frogpond/calendar/2005-02-03 HTTP/1.1
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    ...
