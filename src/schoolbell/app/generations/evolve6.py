@@ -42,8 +42,7 @@ def evolve(context):
 
         if prefs.dateformat == 'MM/DD/YY':
             prefs.dateformat = '%m/%d/%y'
-        elif prefs.dateformat == 'YYYY-DD-MM':
+        elif prefs.dateformat == 'YYYY-MM-DD':
             prefs.dateformat = '%Y-%m-%d'
         elif prefs.dateformat == 'Day Month, Year':
             prefs.dateformat = '%d %B, %Y'
-
