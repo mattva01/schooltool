@@ -766,7 +766,7 @@ def doctest_PersonView():
     Let's create a view for a person:
 
         >>> from schooltool.browser.app import PersonView
-        >>> from schooltool.app import Person
+        >>> from schoolbell.app.person.person import Person
         >>> from schoolbell.app.person.interfaces import IPerson
         >>> from schoolbell.relationship.tests import setUp, tearDown
         >>> from schoolbell.app.person.details import getPersonDetails
@@ -776,7 +776,6 @@ def doctest_PersonView():
         >>> ztapi.provideAdapter(IPerson, IPersonDetails, getPersonDetails)
 
         >>> from schooltool.app import SchoolToolApplication
-        >>> from schooltool.app import Person
         >>> school = setUpSchool()
         >>> persons = school['persons']
         >>> sections = school['sections']

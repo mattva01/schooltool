@@ -43,7 +43,7 @@ from schoolbell.app.group.group import Group, GroupContainer
 
 import schooltool.app
 from schooltool.common import dedent
-from schooltool.app import Person, Course, Section
+from schooltool.app import Course, Section
 from schooltool.relationships import URISection, URISectionOfCourse
 from schooltool.browser.csvimport import InvalidCSVError
 from schooltool.interfaces import ApplicationInitializationEvent
@@ -136,7 +136,6 @@ class TestTimetableCSVImportView(unittest.TestCase):
         self.failIf(view.success)
 
     def test_POST_csvfile(self):
-        from schooltool.app import Person, Section
         tt_csv_text = '"fall","three-day"\n""\n""'
         tt_csv = StringIO(tt_csv_text)
         view = self.createView(form={'csvfile': tt_csv,

@@ -184,14 +184,4 @@
       permission="zope.Public"
       />
 
-
-  <!-- XXX: Temporary hack to override SB registrations. This can go away -->
-  <!--      once there is only 1 Person implementation in SB/ST. -->
-  <adapter
-      for="schoolbell.app.person.person.PersonContainer"
-      provides="zope.app.filerepresentation.interfaces.IFileFactory"
-      factory=".app.PersonFileFactory"
-      permission="zope.Public"
-      />
-
 </configure>

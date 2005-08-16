@@ -187,6 +187,17 @@ class TestDailyCalendarRowsView(unittest.TestCase):
 def doctest_CalendarSTOverlayView():
     r"""Tests for CalendarSTOverlayView
 
+     Some setup:
+
+        >>> from zope.component import provideAdapter
+        >>> from schooltool.app import ShowTimetables
+        >>> provideAdapter(ShowTimetables)
+
+        >>> from zope.interface import classImplements
+        >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
+        >>> from schoolbell.app.overlay import CalendarOverlayInfo
+        >>> classImplements(CalendarOverlayInfo, IAttributeAnnotatable)
+
         >>> from schooltool.browser.cal import CalendarSTOverlayView
         >>> View = SimpleViewClass('../templates/calendar_overlay.pt',
         ...                        bases=(CalendarSTOverlayView,))
@@ -206,7 +217,9 @@ def doctest_CalendarSTOverlayView():
     If you are an authenticated user looking at your own calendar, this view
     renders a calendar selection portlet.
 
-        >>> from schooltool.app import Person, Group, Section, Course
+        >>> from schoolbell.app.group.group import Group
+        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.app import Section, Course
         >>> from schoolbell.app.security import Principal
         >>> app = setUpSchoolToolSite()
         >>> person = app['persons']['whatever'] = Person('fred')
@@ -215,12 +228,15 @@ def doctest_CalendarSTOverlayView():
         >>> history = app['courses']['c1'] = Course(title="History")
         >>> section = app['sections']['s1'] = Section()
         >>> history.sections.add(section)
-        >>> person.overlaid_calendars.add(group1.calendar, show=True,
-        ...                               show_timetables=False)
-        >>> person.overlaid_calendars.add(group2.calendar, show=False,
-        ...                               show_timetables=True)
-        >>> person.overlaid_calendars.add(section.calendar, show=False,
-        ...                               show_timetables=True)
+
+        >>> from schooltool.interfaces import IShowTimetables
+        >>> person.overlaid_calendars.add(group1.calendar, show=True) #,
+        ...                               #showTimetables=False)
+        >>> IShowTimetables(tuple(
+        ...     person.overlaid_calendars)[-1]).showTimetables = False
+        >>> person.overlaid_calendars.add(group2.calendar, show=False)
+        >>> person.overlaid_calendars.add(section.calendar, show=False)
+
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('id', 'title', person))
         >>> view = View(person.calendar, request)
@@ -331,14 +347,18 @@ def doctest_CalendarListView(self):
         ...         return PersonStub(self.title, self)
         ...     __parent__ = property(_getParent)
 
+        >>> from zope.interface import implements
+        >>> from schooltool.interfaces import IShowTimetables
         >>> class OverlayInfoStub:
+        ...     implements(IShowTimetables)
+        ...
         ...     def __init__(self, title, color1, color2,
-        ...                  show=True, show_timetables=True):
+        ...                  show=True, showTimetables=True):
         ...         self.calendar = CalendarStub(title)
         ...         self.color1 = color1
         ...         self.color2 = color2
         ...         self.show = show
-        ...         self.show_timetables = show_timetables
+        ...         self.showTimetables = showTimetables
 
         >>> from schoolbell.app.person.interfaces import IPersonPreferences
         >>> from zope.interface import implements

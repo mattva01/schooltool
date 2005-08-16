@@ -356,7 +356,8 @@ only task left is to
 
   o create a student which attends the school:
 
-    >>> st['persons']['student'] = app.Person('student', 'Mr. Student')
+    >>> from schoolbell.app.person import person
+    >>> st['persons']['student'] = person.Person('student', 'Mr. Student')
     >>> student = st['persons']['student']
 
   o register an event listener, so that we can see the flow through the process:

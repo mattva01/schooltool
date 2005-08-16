@@ -39,7 +39,7 @@ from zope.interface.verify import verifyObject
 from zope.app.location.interfaces import ILocation
 from zope.app.traversing.interfaces import ITraversable
 from zope.app.component.testing import PlacefulSetup
-from zope.testing.doctest import DocTestSuite, ELLIPSIS
+from zope.testing.doctest import DocTestSuite, ELLIPSIS, NORMALIZE_WHITESPACE
 from zope.publisher.browser import TestRequest
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.publisher.interfaces.http import IHTTPRequest
@@ -120,8 +120,7 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         from schooltool.timetable import TimetablesAdapter
         from schooltool.timetable.interfaces import ITimetableDict
         from schooltool.app import SchoolToolApplication
-        from schooltool.app import Person
-        from schoolbell.app.person.person import PersonContainer
+        from schoolbell.app.person.person import Person, PersonContainer
         from schoolbell.app.resource.resource import Resource, ResourceContainer
         PlacefulSetup.setUp(self)
         self.app = SchoolToolApplication()
@@ -822,7 +821,7 @@ def test_suite():
     suite.addTest(DocTestSuite(optionflags=ELLIPSIS))
     suite.addTest(DocTestSuite('schooltool.timetable.rest',
                                setUp=setUp, tearDown=placelesssetup.tearDown,
-                               optionflags=ELLIPSIS))
+                               optionflags=ELLIPSIS|NORMALIZE_WHITESPACE))
     return suite
 
 if __name__ == '__main__':

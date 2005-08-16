@@ -541,10 +541,10 @@ Timetables on persons, groups, and resources
 Persons, groups and resources should have timetables.
 
 The person whom we have registered initially should be a schooltool.app.Person,
-not schoolbell.app.app.Person:
+not schoolbell.app.person.person.Person:
 
     >>> getRootFolder()['frogpond']['persons']['frog']
-    <schooltool.app.Person object at ...>
+    <schoolbell.app.person.person.Person object at ...>
 
 He hasn't got a permission to delete himself, so in SchoolTool there
 are no checkboxes around him:

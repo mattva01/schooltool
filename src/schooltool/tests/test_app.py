@@ -154,7 +154,8 @@ def doctest_Course():
 
     We need some sections and a person to test:
 
-        >>> from schooltool.app import Course, Section, Person
+        >>> from schooltool.app import Course, Section
+        >>> from schoolbell.app.person.person import Person
         >>> section1 = Section(title="section1")
         >>> section2 = Section(title="section2")
         >>> section3 = Section(title="section3")
@@ -228,7 +229,7 @@ def doctest_Section():
 
     We'll add an instructor to the section.
 
-        >>> from schooltool.app import Person
+        >>> from schoolbell.app.person.person import Person
         >>> from schoolbell.app.person.interfaces import IPerson
         >>> teacher = Person('teacher', 'Mr. Jones')
         >>> section.instructors.add(teacher)
@@ -356,7 +357,8 @@ def doctest_getSchoolToolApplication():
 
     Let's say we have a SchoolTool app, which is a site.
 
-      >>> from schooltool.app import SchoolToolApplication, Person
+      >>> from schooltool.app import SchoolToolApplication
+      >>> from schoolbell.app.person.person import Person
       >>> from zope.app.component.site import LocalSiteManager
       >>> app = SchoolToolApplication()
       >>> app.setSiteManager(LocalSiteManager(app))
@@ -408,7 +410,8 @@ def doctest_getSchoolToolApplication():
 
     Let's say we have a SchoolTool app.
 
-      >>> from schooltool.app import SchoolToolApplication, Person
+      >>> from schooltool.app import SchoolToolApplication
+      >>> from schoolbell.app.person.person import Person
       >>> from zope.app.component.site import LocalSiteManager
       >>> app = SchoolToolApplication()
       >>> app.setSiteManager(LocalSiteManager(app))
@@ -519,7 +522,8 @@ def doctest_applicationCalendarPermissionsSubscriber():
 
     Check that no permissions are set if the object added is not an app.
 
-        >>> person = app.Person('james')
+        >>> from schoolbell.app.person.person import Person
+        >>> person = Person('james')
         >>> root['sb']['persons']['james'] = person
         >>> app.applicationCalendarPermissionsSubscriber(
         ...     ObjectAddedEvent(person))

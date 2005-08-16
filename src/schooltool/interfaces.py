@@ -132,9 +132,10 @@ class ISectionContained(ISection, container.interfaces.IContained):
 #  Miscellaneous
 #
 
-class ICalendarAndTTOverlayInfo(ICalendarOverlayInfo):
+class IShowTimetables(zope.interface.Interface):
+    """Adapter to flag whether to show timetables in the calendar overlay."""
 
-    show_timetables = zope.schema.Bool(
+    showTimetables = zope.schema.Bool(
             title=u"Show timetables",
             description=u"""
             An option that controls whether the timetable of this calendar's

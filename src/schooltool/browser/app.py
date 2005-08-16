@@ -44,6 +44,7 @@ from schoolbell.app.person.browser.person import PersonContainerView
 from schoolbell.app.group.browser.group import GroupContainerView
 from schoolbell.app.resource.browser.resource import ResourceContainerView
 from schoolbell.app.person.interfaces import IPerson
+from schoolbell.app.person.person import Person
 from schoolbell.app.group.interfaces import IGroup
 
 from schooltool import SchoolToolMessageID as _
@@ -53,7 +54,6 @@ from schooltool.interfaces import ICourse, ISection
 from schooltool.interfaces import IApplicationPreferences
 from schooltool.interfaces import ISchoolToolApplication
 from schooltool.relationships import URIInstruction, URISection
-from schooltool.app import Person
 
 
 class SchoolToolApplicationView(BrowserView):

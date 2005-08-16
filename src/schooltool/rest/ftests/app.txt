@@ -190,7 +190,7 @@ are SchoolTool objects, rather than SchoolBell objects:
     ...
 
     >>> getRootFolder()['frogpond']['persons']['goose']
-    <schooltool.app.Person object at ...>
+    <schoolbell.app.person.person.Person object at ...>
     >>> getRootFolder()['frogpond']['groups']['birds']
     <schoolbell.app.group.group.Group object at ...>
     >>> getRootFolder()['frogpond']['resources']['lily']

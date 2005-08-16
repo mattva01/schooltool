@@ -1578,7 +1578,7 @@ def doctest_PersonTimetableSetupView():
 
     and a Person from that application
 
-        >>> from schooltool.app import Person
+        >>> from schoolbell.app.person.person import Person
         >>> from schoolbell.app.group.group import Group
         >>> context = Person("student", "Steven Udent")
         >>> app["persons"]["whatever"] = context
@@ -1881,7 +1881,7 @@ def doctest_PersonTimetableSetupView_no_timetables():
 
     and a Person from that application
 
-        >>> from schooltool.app import Person
+        >>> from schoolbell.app.person.person import Person
         >>> context = Person("student", "Steven Udent")
         >>> app["persons"]["whatever"] = context
 
@@ -1927,7 +1927,7 @@ def doctest_PersonTimetableSetupView_no_default_ttschema():
 
     and a Person from that application
 
-        >>> from schooltool.app import Person
+        >>> from schoolbell.app.person.person import Person
         >>> context = Person("student", "Steven Udent")
         >>> app["persons"]["whatever"] = context
 

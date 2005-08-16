@@ -41,7 +41,7 @@ from schoolbell.app.person.preference import PersonPreferences
 
 from schooltool.timetable import getPeriodsForDay
 from schooltool.timetable.interfaces import ITimetables
-from schooltool.interfaces import ISection
+from schooltool.interfaces import ISection, IShowTimetables
 
 
 class DailyCalendarRowsView(BrowserView):
@@ -157,7 +157,8 @@ class CalendarSTOverlayView(CalendarOverlayView):
                    'id': getPath(item.calendar.__parent__),
                    'calendar': item.calendar,
                    'checked': item.show and "checked" or '',
-                   'checked_tt': item.show_timetables and "checked" or '',
+                   'checked_tt':
+                       IShowTimetables(item).showTimetables and "checked" or '',
                    'color1': item.color1,
                    'color2': item.color2})
                  for item in person.overlaid_calendars
@@ -172,7 +173,7 @@ class CalendarSTOverlayView(CalendarOverlayView):
             selected = Set(self.request.get('overlay_timetables', []))
             for item in person.overlaid_calendars:
                 path = getPath(item.calendar.__parent__)
-                item.show_timetables = path in selected
+                IShowTimetables(item).showTimetables = path in selected
 
             # The unproxied object will only be used for annotations.
             person = removeSecurityProxy(person)
@@ -236,7 +237,7 @@ class CalendarListView(BrowserView):
                     yield (item.calendar, item.color1, item.color2)
 
                 # overlaid timetables
-                if item.show_timetables:
+                if IShowTimetables(item).showTimetables:
                     owner = item.calendar.__parent__
                     ttcalendar = ITimetables(owner).makeTimetableCalendar()
                     yield (ttcalendar, item.color1, item.color2)

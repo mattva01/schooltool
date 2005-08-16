@@ -27,12 +27,13 @@ import csv
 from zope.app.container.interfaces import INameChooser
 from zope.security.proxy import removeSecurityProxy
 
+from schoolbell.app.person.person import Person
 from schoolbell.app.browser import csvimport as sb
 
 from schooltool import SchoolToolMessageID as _
 from schooltool import getSchoolToolApplication
 from schooltool.interfaces import ISectionContainer
-from schooltool.app import Person, Section, Course
+from schooltool.app import Section, Course
 from schooltool.timetable import TimetableActivity
 from schooltool.timetable.interfaces import ITimetables
 

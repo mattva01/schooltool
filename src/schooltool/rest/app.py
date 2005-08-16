@@ -34,7 +34,6 @@ from zope.app.testing import setup
 from zope.app.traversing.api import getPath
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 
-from schoolbell.app.person.rest import person
 from schoolbell.app.rest.xmlparsing import XMLDocument
 from schoolbell.app.rest.app import GenericContainerView
 from schoolbell.app.rest import View, Template
@@ -45,20 +44,13 @@ from schoolbell.calendar.icalendar import ICalParseError
 from schoolbell.calendar.icalendar import ICalReader
 
 from schooltool import getSchoolToolApplication
-from schooltool.app import Person, Course, Section
+from schooltool.app import Course, Section
 from schooltool.app import CourseContainer, SectionContainer
 from schooltool.common import parse_date
 from schooltool.timetable.interfaces import ITerm, ITermContainer
 from schooltool.interfaces import ICourse, ICourseContainer
 from schooltool.interfaces import ISection, ISectionContainer
 from schooltool.timetable import Term
-
-
-# XXX: Temporary Hack
-class PersonFileFactory(person.PersonFileFactory):
-    """An adapter that creates SchoolTool persons in RESTive views"""
-
-    factory = Person
 
 
 class SchoolToolApplicationView(sb.ApplicationView):

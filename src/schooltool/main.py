@@ -31,8 +31,9 @@ import os.path
 
 from schoolbell.app.main import StandaloneServer as SchoolBellServer
 from schoolbell.app.main import Options as SchoolBellOptions
+from schoolbell.app.person.person import Person
 
-from schooltool.app import SchoolToolApplication, Person
+from schooltool.app import SchoolToolApplication
 from schooltool.interfaces import ISchoolToolApplication
 
 
@@ -81,7 +82,7 @@ SCHOOLTOOL_SITE_DEFINITION = u"""\
   <include package="schooltool" />
 
   <include package="zope.app.securitypolicy"/>
-  
+
   <!-- Basically a copy of zope.app.securitypolicy/securitypolicy.zcml  -->
   <securityPolicy
     component="zope.app.securitypolicy.zopepolicy.ZopeSecurityPolicy" />

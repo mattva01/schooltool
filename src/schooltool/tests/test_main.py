@@ -252,7 +252,7 @@ def doctest_setup():
     The manager is a SchoolTool person:
 
         >>> app['persons']['manager']
-        <schooltool.app.Person object at ...>
+        <schoolbell.app.person.person.Person object at ...>
 
     A web access logger has been set up:
 

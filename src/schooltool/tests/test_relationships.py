@@ -83,7 +83,8 @@ def doctest_CourseSections():
 
     We will need a course and several sections:
 
-        >>> from schooltool.app import Course, Section, Person
+        >>> from schooltool.app import Course, Section
+        >>> from schoolbell.app.person.person import Person
         >>> history = Course()
         >>> section1 = Section(title = "section1")
         >>> section2 = Section(title = "section2")
@@ -155,7 +156,8 @@ def doctest_updateInstructorCalendars():
         ...                                         IRelationshipAddedEvent
         >>> from schoolbell.relationship.interfaces import \
         ...                                         IRelationshipRemovedEvent
-        >>> from schooltool.app import Person, Section
+        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.app import Section
         >>> from schoolbell.relationship.tests import setUp, tearDown
         >>> setUp()
 
@@ -247,7 +249,8 @@ def doctest_updateStudentCalendars():
         ...                                         IRelationshipAddedEvent
         >>> from schoolbell.relationship.interfaces import \
         ...                                         IRelationshipRemovedEvent
-        >>> from schooltool.app import Person, Section
+        >>> from schooltool.app import Section
+        >>> from schoolbell.app.person.person import Person
         >>> from schoolbell.relationship.tests import setUp, tearDown
         >>> setUp()
 

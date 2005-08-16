@@ -19,6 +19,17 @@
       factory="schoolbell.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
+  <class class="schoolbell.app.overlay.CalendarOverlayInfo">
+    <implements
+        interface="zope.app.annotation.interfaces.IAttributeAnnotatable" />
+  </class>
+
+  <adapter
+      for="schoolbell.app.overlay.ICalendarOverlayInfo"
+      provides=".interfaces.IShowTimetables"
+      factory=".app.ShowTimetables"
+      />
+
   <!-- Subscribers -->
 
   <subscriber
@@ -133,20 +144,6 @@
              set_schema="schooltool.interfaces.ICourse" />
   </content>
 
-  <content class=".app.Person">
-    <require permission="schoolbell.view"
-             interface="schoolbell.app.person.interfaces.IReadPerson"
-             attributes="__cmp__" />
-    <require permission="schoolbell.edit"
-             interface="schoolbell.app.person.interfaces.IWritePerson"
-             set_schema="schoolbell.app.person.interfaces.IPerson" />
-
-    <!-- Calendar access protection is performed on the calendar object.
-         If we want local grants set on the calendar itself to work, then
-         the 'calendar' attribute must be publically available. -->
-    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
-  </content>
-
   <content class=".app.SectionContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schoolbell.view"
@@ -165,28 +162,12 @@
              set_schema="schooltool.interfaces.ISection" />
   </content>
 
-  <content class=".app.BoundOverlaidCalendarsAndTTProperty">
-    <allow attributes="__iter__ __contains__" />
-    <require
-        permission="schoolbell.viewCalendar"
-        attributes="add remove" />
-  </content>
-
-  <content class=".app.CalendarAndTTOverlayInfo">
-    <require
-        permission="schoolbell.view"
-        interface=".interfaces.ICalendarAndTTOverlayInfo"/>
-    <require
-        permission="schoolbell.viewCalendar"
-        set_schema=".interfaces.ICalendarAndTTOverlayInfo"/>
-  </content>
-
   <!-- Timetables for content components -->
   <class class="schoolbell.app.app.SchoolBellApplication">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
 
-  <class class="schooltool.app.Person">
+  <class class="schoolbell.app.person.person.Person">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
 

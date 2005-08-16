@@ -33,7 +33,8 @@ def doctest_NavigationView():
 
     This view works for any ILocatable object within a SchoolTool instance.
 
-      >>> from schooltool.app import SchoolToolApplication, Person
+      >>> from schooltool.app import SchoolToolApplication
+      >>> from schoolbell.app.person.person import Person
       >>> from test_app import setUpSchool
       >>> app = setUpSchool()
       >>> p = Person('1')
