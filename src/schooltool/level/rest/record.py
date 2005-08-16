@@ -29,12 +29,12 @@ from zope.app import zapi
 
 import schooltool
 from schooltool import app
-from schoolbell.app import rest
+from schoolbell.app import rest, person
 from schooltool.level import interfaces
 
 class PersonHTTPTraverser(object):
 
-    zope.component.adapts(schooltool.interfaces.IPerson)
+    zope.component.adapts(person.interfaces.IPerson)
     zope.interface.implements(rest.IRestTraverser)
 
     def __init__(self, context, request):
@@ -48,7 +48,7 @@ class PersonHTTPTraverser(object):
         elif name == 'academicHistory':
             return AcademicHistory(record)
         elif name == 'promotion':
-            if record.levelProcess is None: 
+            if record.levelProcess is None:
                 return AcademicProcessCreator(record)
             manager = app.getSchoolToolApplication()['groups']['manager']
             return [

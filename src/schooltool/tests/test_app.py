@@ -53,7 +53,19 @@ def doctest_SchoolToolApplication():
         True
 
         # Usually automatically called subscribers
+        # XXX: Should be done with test setup framework
         >>> from schooltool.interfaces import ApplicationInitializationEvent
+
+        >>> from schoolbell.app.person import person
+        >>> person.addPersonContainerToApplication(
+        ...     ApplicationInitializationEvent(app))
+        >>> from schoolbell.app.group import group
+        >>> group.addGroupContainerToApplication(
+        ...     ApplicationInitializationEvent(app))
+        >>> from schoolbell.app.resource import resource
+        >>> resource.addResourceContainerToApplication(
+        ...     ApplicationInitializationEvent(app))
+
         >>> import schooltool.app
         >>> schooltool.app.addCourseContainerToApplication(
         ...     ApplicationInitializationEvent(app))
@@ -72,8 +84,9 @@ def doctest_SchoolToolApplication():
     The person, group, and resource containers should be from
     SchoolTool, not SchoolBell:
 
-        >>> from schooltool.interfaces import IPersonContainer, IGroupContainer
-        >>> from schooltool.interfaces import IResourceContainer
+        >>> from schoolbell.app.person.interfaces import IPersonContainer
+        >>> from schoolbell.app.group.interfaces import IGroupContainer
+        >>> from schoolbell.app.resource.interfaces import IResourceContainer
         >>> verifyObject(IPersonContainer, app['persons'])
         True
         >>> verifyObject(IGroupContainer, app['groups'])
@@ -216,7 +229,7 @@ def doctest_Section():
     We'll add an instructor to the section.
 
         >>> from schooltool.app import Person
-        >>> from schooltool.interfaces import IPerson
+        >>> from schoolbell.app.person.interfaces import IPerson
         >>> teacher = Person('teacher', 'Mr. Jones')
         >>> section.instructors.add(teacher)
 
@@ -237,7 +250,7 @@ def doctest_Section():
 
     We can add a Group as a member
 
-        >>> from schooltool.app import Group
+        >>> from schoolbell.app.group.group import Group
         >>> group = Group('group','Group')
         >>> section.members.add(group)
         >>> for member in section.members:
@@ -302,7 +315,7 @@ def doctest_Section():
     Sections can have a location resource to indicate where the section
     regularly meets.
 
-        >>> from schooltool.app import Resource
+        >>> from schoolbell.app.resource.resource import Resource
         >>> section.location is None
         True
 
@@ -367,156 +380,6 @@ def doctest_getSchoolToolApplication():
       >>> setup.placelessTearDown()
     """
 
-def doctest_Person():
-    """
-        >>> from schooltool.app import Person
-        >>> p = Person("jonn")
-
-        >>> from schooltool.interfaces import IPerson
-        >>> verifyObject(IPerson, p)
-        True
-    """
-
-def doctest_Group():
-    """
-        >>> from schooltool.app import Group
-        >>> g = Group("The Beatles")
-
-        >>> from schooltool.interfaces import IGroup
-        >>> verifyObject(IGroup, g)
-        True
-    """
-
-def doctest_Resource():
-    """
-        >>> from schooltool.app import Resource
-        >>> r = Resource("Printer")
-
-        >>> from schooltool.interfaces import IResource
-        >>> verifyObject(IResource, r)
-        True
-    """
-
-
-def doctest_PersonContainer():
-    """
-    First, make sure that PersonContainer implements the advertised
-    interface:
-
-        >>> from schooltool.app import PersonContainer
-        >>> from schooltool.interfaces import IPersonContainer
-        >>> pc = PersonContainer()
-        >>> verifyObject(IPersonContainer, pc)
-        True
-
-    It should be able to contain persons:
-
-        >>> from schooltool.app import Group, Section, Course, Person, Resource
-        >>> from zope.app.container.constraints import checkObject
-        >>> checkObject(pc, 'name', Person())
-
-    But not groups and resources:
-
-        >>> checkObject(pc, 'name', Group())
-        Traceback (most recent call last):
-          ...
-        InvalidItemType: ...
-
-        >>> checkObject(pc, 'name', Section())
-        Traceback (most recent call last):
-          ...
-        InvalidItemType: ...
-
-        >>> checkObject(pc, 'name', Course())
-        Traceback (most recent call last):
-          ...
-        InvalidItemType: ...
-
-        >>> checkObject(pc, 'name', Resource())
-        Traceback (most recent call last):
-          ...
-        InvalidItemType: ...
-
-    """
-
-
-def doctest_GroupContainer():
-    """
-    First, make sure that GroupContainer implements the
-    IGroupContainer interface:
-
-        >>> from schooltool.app import GroupContainer
-        >>> from schooltool.interfaces import IGroupContainer
-        >>> gc = GroupContainer()
-        >>> verifyObject(IGroupContainer, gc)
-        True
-
-    Now, let's check that it can contain groups
-
-        >>> from schooltool.app import Group, Section, Course, Person
-        >>> from zope.app.container.constraints import checkObject
-        >>> checkObject(gc, 'name', Group())
-
-    It cannot contain persons, sections, or courses though:
-
-        >>> checkObject(gc, 'name', Person())
-        Traceback (most recent call last):
-          ...
-        InvalidItemType: ...
-
-        >>> checkObject(gc, 'name', Course())
-        Traceback (most recent call last):
-          ...
-        InvalidItemType: ...
-
-        >>> checkObject(gc, 'name', Section())
-        Traceback (most recent call last):
-          ...
-        InvalidContainerType: ...
-
-    """
-
-
-def doctest_ResourceContainer():
-    """
-    First, make sure that ResourceContainer implements the advertised
-    interface:
-
-        >>> from schooltool.app import ResourceContainer
-        >>> from schooltool.interfaces import IResourceContainer
-        >>> rc = ResourceContainer()
-        >>> verifyObject(IResourceContainer, rc)
-        True
-
-    It should be able to contain resources:
-
-        >>> from schooltool.app import Group, Section, Course, Person, Resource
-        >>> from zope.app.container.constraints import checkObject
-        >>> checkObject(rc, 'name', Resource())
-
-    But not groups and persons:
-
-        >>> checkObject(rc, 'name', Group())
-        Traceback (most recent call last):
-          ...
-        InvalidItemType: ...
-
-        >>> checkObject(rc, 'name', Section())
-        Traceback (most recent call last):
-          ...
-        InvalidItemType: ...
-
-        >>> checkObject(rc, 'name', Course())
-        Traceback (most recent call last):
-          ...
-        InvalidItemType: ...
-
-        >>> checkObject(rc, 'name', Person())
-        Traceback (most recent call last):
-          ...
-        InvalidItemType: ...
-
-    """
 
 def doctest_CourseContainer():
     r"""Schooltool toplevel container for Courses.
@@ -529,94 +392,14 @@ def doctest_CourseContainer():
 
     It should only be able to contain courses
 
-        >>> from schooltool.app import Group, Section, Course, Person, Resource
+        >>> from schooltool.app import Course, Section
         >>> from zope.app.container.constraints import checkObject
         >>> checkObject(courses, 'name', Course())
-
-        >>> checkObject(courses, 'name', Group())
-        Traceback (most recent call last):
-          ...
-        InvalidItemType: ...
-
-        >>> checkObject(courses, 'name', Person())
-        Traceback (most recent call last):
-          ...
-        InvalidItemType: ...
 
         >>> checkObject(courses, 'name', Section())
         Traceback (most recent call last):
           ...
         InvalidItemType: ...
-
-        >>> checkObject(courses, 'name', Resource())
-        Traceback (most recent call last):
-          ...
-        InvalidItemType: ...
-
-    """
-
-def doctest_PersonPreferences():
-    """Tests for SchoolTool PersonPreferences.
-
-    Simple check against the interface:
-
-        >>> from schooltool.app import PersonPreferences
-        >>> prefs = PersonPreferences()
-        >>> from schooltool.interfaces import IPersonPreferences
-        >>> verifyObject(IPersonPreferences, prefs)
-        True
-
-    Check the getPersonPreferences function too:
-
-        >>> setup.placelessSetUp()
-        >>> setup.setUpAnnotations()
-
-        >>> from schooltool.app import Person, getPersonPreferences
-        >>> person = Person('person')
-        >>> prefs = getPersonPreferences(person)
-
-    `prefs` is the SchoolTool preferences object, not SchoolBell:
-
-        >>> prefs
-        <schoolbell.app.app.PersonPreferences object at 0x...>
-
-        >>> prefs.cal_periods
-        True
-
-        >>> prefs.__parent__ is person
-        True
-
-    Called another time, getPersonPreferences() returns the same object:
-
-        >>> getPersonPreferences(person) is prefs
-        True
-
-    By the way, getPersonPreferences should preserve settings found in a
-    SchoolBell preferences object.
-
-        >>> from schoolbell.app import app as sb
-        >>> person = Person('person')
-        >>> old_prefs = sb.getPersonPreferences(person)
-        >>> old_prefs
-        <schoolbell.app.app.PersonPreferences object at 0x...>
-        >>> old_prefs.timezone = 'Europe/Vilnius'
-
-        >>> new_prefs = getPersonPreferences(person)
-        >>> new_prefs
-        <schoolbell.app.app.PersonPreferences object at 0x...>
-        >>> new_prefs.timezone
-        'Europe/Vilnius'
-
-    Afterwards even the SchoolBell getPersonPreferences function returns the ST
-    preferences object.
-
-        >>> sb.getPersonPreferences(person) is new_prefs
-        True
-
-    We're done.
-
-        >>> setup.placelessTearDown()
-
     """
 
 
@@ -659,7 +442,19 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> st = app.SchoolToolApplication()
 
         # Usually automatically called subscribers
+        # XXX: Should be done with test setup framework.
         >>> from schooltool.interfaces import ApplicationInitializationEvent
+
+        >>> from schoolbell.app.person import person
+        >>> person.addPersonContainerToApplication(
+        ...     ApplicationInitializationEvent(st))
+        >>> from schoolbell.app.group import group
+        >>> group.addGroupContainerToApplication(
+        ...     ApplicationInitializationEvent(st))
+        >>> from schoolbell.app.resource import resource
+        >>> resource.addResourceContainerToApplication(
+        ...     ApplicationInitializationEvent(st))
+
         >>> import schooltool.app
         >>> app.addCourseContainerToApplication(
         ...     ApplicationInitializationEvent(st))

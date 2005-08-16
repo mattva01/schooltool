@@ -21,12 +21,17 @@ Browser views for the SchoolTool application.
 
 $Id: __init__.py 3405 2005-04-12 16:08:43Z bskahan $
 """
+from zope.component import adapts
+from zope.interface import implements
 
+from zope.publisher.interfaces import NotFound
 from zope.app.publisher.browser import BrowserView
+from zope.app.annotation.interfaces import IAnnotatable
 
+from schoolbell.app.browser.cal import CalendarOwnerTraverser
+from schoolbell.app.traverser.interfaces import ITraverserPlugin
 from schooltool.app import getSchoolToolApplication
 from schooltool.timetable.interfaces import ITimetabled
-from schoolbell.app.browser.cal import CalendarOwnerTraverser
 
 
 class NavigationView(BrowserView):
@@ -45,14 +50,24 @@ class NavigationView(BrowserView):
     """
 
     def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
+        super(NavigationView, self).__init__(context, request)
         self.app = getSchoolToolApplication()
 
 
-class TimetabledTraverser(CalendarOwnerTraverser):
+class TimetabledTraverser(object):
+    """A traverser that allows to traverse to a calendar owner's calendar."""
+
+    # XXX: This really needs to become IHaveTimetables
+    adapts(IAnnotatable)
+    implements(ITraverserPlugin)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
 
     def publishTraverse(self, request, name):
         if name == 'timetables':
             return ITimetabled(self.context).timetables
-        else:
-            return CalendarOwnerTraverser.publishTraverse(self, request, name)
+
+        raise NotFound(self.context, name, request)
+

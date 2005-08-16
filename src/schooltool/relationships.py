@@ -25,7 +25,9 @@ $Id$
 
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 
-from schooltool.interfaces import ISection, ICourse, IPerson, IGroup
+from schooltool.interfaces import ISection, ICourse
+from schoolbell.app.person.interfaces import IPerson
+from schoolbell.app.group.interfaces import IGroup
 
 from schoolbell.app.membership import URIMembership, URIMember, URIGroup
 

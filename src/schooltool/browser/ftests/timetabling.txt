@@ -620,12 +620,12 @@ The activities should show up in the calendar:
 The group is a SchoolTool group:
 
     >>> getRootFolder()['frogpond']['groups']['animals']
-    <schoolbell.app.app.Group object at ...>
+    <schoolbell.app.group.group.Group object at ...>
 
 The resource is a SchoolTool resource:
 
     >>> getRootFolder()['frogpond']['resources']['mud']
-    <schoolbell.app.app.Resource object at ...>
+    <schoolbell.app.resource.resource.Resource object at ...>
 
 
 Epilogue

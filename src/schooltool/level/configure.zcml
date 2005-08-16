@@ -10,7 +10,7 @@
       id="schooltool.promotion"
       integration="zope.wfmc.adapter.integration"
       />
-  
+
   <!-- Participant: Manager -->
   <adapter
      for="zope.wfmc.interfaces.IActivity"
@@ -32,7 +32,7 @@
 
   <!-- Workflow Applications -->
   <!-- Note: The names start with a dot, because they are defined in the
-             pacakge not the process. We might want to change that later. -->  
+             pacakge not the process. We might want to change that later. -->
 
   <!-- Progress to Next Level (level : input/output)  -->
   <adapter
@@ -41,7 +41,7 @@
       factory=".promotion.ProgressToNextLevel"
       name=".progressToNextLevel"
       />
-  
+
   <!-- Select Initial Level (level : output)  -->
   <adapter
       for="zope.wfmc.interfaces.IParticipant"
@@ -49,7 +49,7 @@
       factory=".promotion.SelectInitialLevel"
       name=".selectInitialLevel"
       />
-  
+
   <!-- Set Level Outcome (outcome : output)  -->
   <adapter
       for="zope.wfmc.interfaces.IParticipant"
@@ -57,7 +57,7 @@
       factory=".promotion.SetLevelOutcome"
       name=".setLevelOutcome"
       />
-  
+
   <!-- Update Status (student : input)  -->
   <adapter
       for="zope.wfmc.interfaces.IParticipant"
@@ -65,7 +65,7 @@
       factory=".promotion.UpdateStatus"
       name=".updateStatus"
       />
-  
+
   <!-- Write Record (student : input, level: input)  -->
   <adapter
       for="zope.wfmc.interfaces.IParticipant"
@@ -79,7 +79,7 @@
       factory=".promotion.ManagerWorkItems"
       />
 
-  
+
   <!-- Application objects -->
 
   <content class=".level.LevelContainer">
@@ -106,7 +106,7 @@
       for="schooltool.interfaces.IApplicationInitializationEvent"
       handler=".level.addLevelContainerToApplication"
       />
-    
+
 
   <!-- Level vocabulary -->
   <vocabulary
@@ -117,7 +117,7 @@
   <class class=".record.History">
     <allow interface="zope.interface.common.sequence.IReadSequence" />
     <require permission="schoolbell.edit"
-             interface="zope.interface.common.sequence.IWriteSequence" 
+             interface="zope.interface.common.sequence.IWriteSequence"
              attributes="addRecord" />
   </class>
 
@@ -134,7 +134,7 @@
   </class>
 
   <adapter
-      for="schooltool.interfaces.IPerson"
+      for="schoolbell.app.person.interfaces.IPerson"
       provides=".interfaces.IAcademicRecord"
       factory=".record.AcademicRecord"
       trusted="true"

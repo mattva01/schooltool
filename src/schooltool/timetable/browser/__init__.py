@@ -49,6 +49,7 @@ from schoolbell.calendar.utils import parse_date, parse_time
 from schoolbell.calendar.utils import next_month, week_start
 from schoolbell.app.browser.cal import month_names
 from schoolbell.app.cal import CalendarEvent
+from schoolbell.app.person.interfaces import IPerson
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.timetable.interfaces import ITimetabled
@@ -56,7 +57,7 @@ from schooltool.timetable.interfaces import ITimetable, ITimetableSchema
 from schooltool.timetable.interfaces import ITermContainer, ITerm
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetableModelFactory
-from schooltool.interfaces import IPerson, ISection
+from schooltool.interfaces import ISection
 from schooltool.timetable import Term, Timetable, TimetableDay
 from schooltool.timetable import TimetableActivity
 from schooltool.timetable import TimetableSchema, TimetableSchemaDay
@@ -769,7 +770,7 @@ def format_timetable_for_presentation(timetable):
 
     Some timetable activities may have associated resources
 
-      >>> from schooltool.app import Resource
+      >>> from schoolbell.app.resource.resource import Resource
       >>> r1 = Resource('R1')
       >>> r2 = Resource('R2')
       >>> timetable['day 2'].add('C', TimetableActivity('Else',

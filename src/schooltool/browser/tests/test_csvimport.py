@@ -33,14 +33,18 @@ from zope.i18n import translate
 from zope.interface.verify import verifyObject
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 
-import schooltool.app
-from schooltool.common import dedent
-from schooltool.app import Person, Course, Section, Resource
-from schooltool.relationships import URISection, URISectionOfCourse
-from schoolbell.app.membership import URIMember
 from schoolbell.relationship.tests import setUp as setUpRelationshipStuff
 from schoolbell.relationship.tests import tearDown as tearDownRelationshipStuff
 from schoolbell.app.browser.tests.setup import setUp as testSetUp, tearDown
+from schoolbell.app.membership import URIMember
+from schoolbell.app.resource.resource import Resource, ResourceContainer
+from schoolbell.app.person.person import Person, PersonContainer
+from schoolbell.app.group.group import Group, GroupContainer
+
+import schooltool.app
+from schooltool.common import dedent
+from schooltool.app import Person, Course, Section
+from schooltool.relationships import URISection, URISectionOfCourse
 from schooltool.browser.csvimport import InvalidCSVError
 from schooltool.interfaces import ApplicationInitializationEvent
 from schooltool.timetable.interfaces import ITimetabled
@@ -64,6 +68,10 @@ class TestTimetableCSVImportView(unittest.TestCase):
         from schooltool.timetable import Term
         setUpRelationshipStuff()
         self.app = SchoolToolApplication()
+        # XXX: Use future test setup
+        self.app['resources'] = ResourceContainer()
+        self.app['persons'] = PersonContainer()
+        self.app['groups'] = GroupContainer()
 
         # Usually automatically called subscribers
         schooltool.app.addCourseContainerToApplication(
@@ -191,6 +199,10 @@ class TestTimetableCSVImporter(unittest.TestCase):
                              TimetabledAdapter)
 
         self.app = app = SchoolToolApplication()
+        # XXX: Use future test setup
+        self.app['resources'] = ResourceContainer()
+        self.app['persons'] = PersonContainer()
+        self.app['groups'] = GroupContainer()
 
         # Usually automatically called subscribers
         schooltool.app.addCourseContainerToApplication(
@@ -784,8 +796,8 @@ def doctest_GroupCSVImporter():
     Create a group container and an importer
 
         >>> from schooltool.browser.csvimport import GroupCSVImporter
-        >>> from schooltool.app import GroupContainer
-        >>> from schooltool.interfaces import IGroup
+        >>> from schoolbell.app.group.group import GroupContainer
+        >>> from schoolbell.app.group.interfaces import IGroup
         >>> container = GroupContainer()
         >>> importer = GroupCSVImporter(container, None)
 
@@ -814,8 +826,8 @@ def doctest_GroupCSVImportView():
     We'll create a group csv import view
 
         >>> from schooltool.browser.csvimport import GroupCSVImportView
-        >>> from schooltool.app import GroupContainer
-        >>> from schooltool.interfaces import IGroup
+        >>> from schoolbell.app.group.group import GroupContainer
+        >>> from schoolbell.app.group.interfaces import IGroup
         >>> from zope.publisher.browser import TestRequest
         >>> container = GroupContainer()
         >>> request = TestRequest()
@@ -839,8 +851,8 @@ def doctest_ResourceCSVImporter():
     Create a resource container and an importer
 
         >>> from schooltool.browser.csvimport import ResourceCSVImporter
-        >>> from schooltool.app import ResourceContainer
-        >>> from schooltool.interfaces import IResource
+        >>> from schoolbell.app.resource.resource import ResourceContainer
+        >>> from schoolbell.app.resource.interfaces import IResource
         >>> container = ResourceContainer()
         >>> importer = ResourceCSVImporter(container, None)
 
@@ -869,8 +881,8 @@ def doctest_ResourceCSVImportView():
     We'll create a resource csv import view
 
         >>> from schooltool.browser.csvimport import ResourceCSVImportView
-        >>> from schooltool.app import ResourceContainer
-        >>> from schooltool.interfaces import IResource
+        >>> from schoolbell.app.resource.resource import ResourceContainer
+        >>> from schoolbell.app.resource.interfaces import IResource
         >>> from zope.publisher.browser import TestRequest
         >>> container = ResourceContainer()
         >>> request = TestRequest()
@@ -895,7 +907,7 @@ def doctest_PersonCSVImporter():
     Create a person container and an importer
 
         >>> from schooltool.browser.csvimport import PersonCSVImporter
-        >>> from schooltool.app import PersonContainer
+        >>> from schoolbell.app.person.person import PersonContainer
         >>> container = PersonContainer()
         >>> importer = PersonCSVImporter(container, None)
 

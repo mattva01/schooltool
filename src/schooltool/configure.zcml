@@ -135,11 +135,11 @@
 
   <content class=".app.Person">
     <require permission="schoolbell.view"
-             interface="schoolbell.app.interfaces.IReadPerson"
+             interface="schoolbell.app.person.interfaces.IReadPerson"
              attributes="__cmp__" />
     <require permission="schoolbell.edit"
-             interface="schoolbell.app.interfaces.IWritePerson"
-             set_schema="schooltool.interfaces.IPerson" />
+             interface="schoolbell.app.person.interfaces.IWritePerson"
+             set_schema="schoolbell.app.person.interfaces.IPerson" />
 
     <!-- Calendar access protection is performed on the calendar object.
          If we want local grants set on the calendar itself to work, then

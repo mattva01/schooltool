@@ -32,9 +32,18 @@ from schoolbell.app.browser import csvimport as sb
 from schooltool import SchoolToolMessageID as _
 from schooltool import getSchoolToolApplication
 from schooltool.interfaces import ISectionContainer
-from schooltool.app import Person, Section, Course, Group, Resource
+from schooltool.app import Person, Section, Course
 from schooltool.timetable import TimetableActivity
 from schooltool.timetable.interfaces import ITimetabled
+
+
+# XXX: This should go away
+from schoolbell.app.group.browser.csvimport import GroupCSVImporter
+from schoolbell.app.group.browser.csvimport import GroupCSVImportView
+from schoolbell.app.resource.browser.csvimport import ResourceCSVImporter
+from schoolbell.app.resource.browser.csvimport import ResourceCSVImportView
+from schoolbell.app.person.browser import csvimport as person
+
 
 class ImportErrorCollection(object):
 
@@ -422,31 +431,7 @@ class CourseCSVImportView(sb.BaseCSVImportView):
     importer_class = CourseCSVImporter
 
 
-class GroupCSVImporter(sb.GroupCSVImporter):
-    """Group CSV Importer"""
-
-    factory = Group
-
-
-class GroupCSVImportView(sb.BaseCSVImportView):
-    """View for Group CSV importer."""
-
-    importer_class = GroupCSVImporter
-
-
-class ResourceCSVImporter(sb.ResourceCSVImporter):
-    """Resource CSV Importer"""
-
-    factory = Resource
-
-
-class ResourceCSVImportView(sb.BaseCSVImportView):
-    """View for Resource CSV importer."""
-
-    importer_class = ResourceCSVImporter
-
-
-class PersonCSVImporter(sb.PersonCSVImporter):
+class PersonCSVImporter(person.PersonCSVImporter):
     """Person CSV Importer."""
 
     def createAndAdd(self, data, dry_run=True):

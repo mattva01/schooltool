@@ -13,7 +13,7 @@
 
   <page
       name="schedule.html"
-      for="schooltool.interfaces.IPerson"
+      for="schoolbell.app.person.interfaces.IPerson"
       class="schooltool.timetable.browser.PersonTimetableSetupView"
       permission="zope.View"
       menu="schoolbell_actions"

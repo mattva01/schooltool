@@ -29,6 +29,7 @@ import zope.security
 from zope.app.annotation.interfaces import IAnnotations
 
 import schooltool.interfaces
+from schoolbell.app import person
 from schooltool.level import interfaces
 
 
@@ -81,7 +82,7 @@ class RecordProperty(object):
 
 
 class AcademicRecord(object):
-    zope.component.adapts(schooltool.interfaces.IPerson)
+    zope.component.adapts(person.interfaces.IPerson)
     zope.interface.implements(interfaces.IAcademicRecord)
 
     history = RecordProperty('history')

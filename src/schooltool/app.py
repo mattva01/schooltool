@@ -36,13 +36,18 @@ from zope.app.site.servicecontainer import SiteManagerContainer
 
 from schoolbell.relationship import RelationshipProperty
 from schoolbell.relationship.relationship import BoundRelationshipProperty
+from schoolbell.app import app as sb
 from schoolbell.app.cal import Calendar
+from schoolbell.app.group.group import Group
 from schoolbell.app.membership import URIMembership, URIGroup, URIMember
 from schoolbell.app.overlay import choose_color, DEFAULT_COLORS
 from schoolbell.app.overlay import OverlaidCalendarsProperty
 from schoolbell.app.overlay import BoundOverlaidCalendarsProperty
 from schoolbell.app.overlay import CalendarOverlayInfo
-from schoolbell.app import app as sb
+from schoolbell.app.group.interfaces import IGroup
+from schoolbell.app.person.interfaces import IPerson
+from schoolbell.app.person.person import Person as SBPerson
+from schoolbell.app.resource.interfaces import IResource
 
 from schooltool import SchoolToolMessageID as _
 from schooltool import interfaces, relationships
@@ -50,15 +55,10 @@ from schooltool import interfaces, relationships
 ###############################################################################
 # Import objects here, since they will eventually move here as well.
 
-from schoolbell.app.app import \
-     GroupContainer, PersonContainer, ResourceContainer
-from schoolbell.app.app import Group, Resource
 from schoolbell.app.app import SchoolBellApplication as SchoolToolApplication
 from schoolbell.app.app import getApplicationPreferences
 from schoolbell.app.app import \
      getSchoolBellApplication as getSchoolToolApplication
-from schoolbell.app.app import PersonPreferences
-from schoolbell.app.app import getPersonPreferences
 
 ###############################################################################
 
@@ -179,7 +179,7 @@ class CalendarAndTTOverlayInfo(CalendarOverlayInfo):
         self.color2 = color2
 
 
-class Person(sb.Person):
+class Person(SBPerson):
 
     overlaid_calendars = OverlaidCalendarsAndTTProperty()
 
@@ -229,15 +229,15 @@ class Section(Persistent, contained.Contained):
         msg = _('${instructors} -- ${courses}')
         msg.mapping = {'instructors': instructors, 'courses': courses}
         return msg
-    
+
     label = property(_getLabel)
 
     def _getSize(self):
         size = 0
         for member in self.members:
-            if interfaces.IPerson.providedBy(member):
+            if IPerson.providedBy(member):
                 size = size + 1
-            if interfaces.IGroup.providedBy(member):
+            if IGroup.providedBy(member):
                 size = size + len(member.members)
 
         return size
@@ -248,8 +248,7 @@ class Section(Persistent, contained.Contained):
 
     def _setLocation(self, location):
         if location is not None:
-            if (not interfaces.IResource.providedBy(location) or
-                not location.isLocation):
+            if (not IResource.providedBy(location) or not location.isLocation):
                 raise TypeError("Locations must be location resources.")
         self._location = location
 
@@ -281,7 +280,7 @@ class ApplicationPreferences(sb.ApplicationPreferences):
     """Object for storing any application-wide preferences we have."""
 
     title = 'SchoolTool'
-    
+
 
 def applicationCalendarPermissionsSubscriber(event):
     """Set the default permissions for schooltool.

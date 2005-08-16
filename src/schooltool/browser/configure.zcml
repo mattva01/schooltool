@@ -3,6 +3,7 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+
   <!-- Skin and resources -->
 
   <zope:subscriber
@@ -40,24 +41,34 @@
   <!-- Views -->
 
   <configure
+      package="schoolbell.app.person.browser"
+      i18n_domain="schoolbell">
+
+    <!-- Views from SchoolBell -->
+
+
+    <page
+        name="add.html"
+        for="schoolbell.app.person.interfaces.IPersonContainer"
+        class="schooltool.browser.app.PersonAddView"
+        template="person_add.pt"
+        permission="schoolbell.create"
+        layer="schooltool.browser.skin.ISchoolToolLayer"
+        menu="schoolbell_actions" title="New Person" />
+
+  </configure>
+
+  <configure
       package="schoolbell.app.browser"
       i18n_domain="schoolbell">
 
     <!-- Views from SchoolBell -->
 
-    <page
-        name="add.html"
-        for="schoolbell.app.interfaces.IPersonContainer"
-        class="schooltool.browser.app.PersonAddView"
-        template="templates/person_add.pt"
-        permission="schoolbell.create"
-        layer="schooltool.browser.skin.ISchoolToolLayer"
-        menu="schoolbell_actions" title="New Person" />
-
-    <addform
+<!-- XXX: Why do we need this???? -->
+    <!--addform
         label="Add a Group"
         name="addSchoolBellGroup.html"
-        schema="schoolbell.app.interfaces.IGroup"
+        schema="schoolbell.app.group.interfaces.IGroup"
         fields="title description"
         set_before_add="title"
         content_factory="schooltool.app.Group"
@@ -67,9 +78,9 @@
         layer="schooltool.browser.skin.ISchoolToolLayer"
         >
         <widget field="description" height="5" />
-    </addform>
+    </addform -->
 
-    <addform
+    <!--addform
         label="Add a Resource"
         name="addSchoolBellResource.html"
         schema="schoolbell.app.interfaces.IResource"
@@ -82,7 +93,7 @@
         layer="schooltool.browser.skin.ISchoolToolLayer"
         >
         <widget field="description" height="5" />
-    </addform>
+    </addform -->
 
     <addform
         label="Add a Course"
@@ -131,8 +142,8 @@
 
   <page
       name="person-csvimport.html"
-      for="schooltool.interfaces.IPersonContainer"
-      class="schooltool.browser.csvimport.PersonCSVImportView"
+      for="schoolbell.app.person.interfaces.IPersonContainer"
+      class="schoolbell.app.person.browser.csvimport.PersonCSVImportView"
       template="templates/person-csvimport.pt"
       permission="schoolbell.create"
       menu="schoolbell_actions"
@@ -142,8 +153,8 @@
 
   <page
       name="group-csvimport.html"
-      for="schooltool.interfaces.IGroupContainer"
-      class="schooltool.browser.csvimport.GroupCSVImportView"
+      for="schoolbell.app.group.interfaces.IGroupContainer"
+      class="schoolbell.app.group.browser.csvimport.GroupCSVImportView"
       template="templates/group-csvimport.pt"
       permission="schoolbell.create"
       menu="schoolbell_actions"
@@ -153,8 +164,8 @@
 
   <page
       name="resource-csvimport.html"
-      for="schooltool.interfaces.IResourceContainer"
-      class="schooltool.browser.csvimport.ResourceCSVImportView"
+      for="schoolbell.app.resource.interfaces.IResourceContainer"
+      class="schoolbell.app.resource.browser.csvimport.ResourceCSVImportView"
       template="templates/resource-csvimport.pt"
       permission="schoolbell.create"
       menu="schoolbell_actions"
@@ -287,18 +298,18 @@
     -->
   <page
       name="preferences.html"
-      for="schooltool.interfaces.IPerson"
+      for="schoolbell.app.person.interfaces.IPerson"
       class="schooltool.browser.app.PersonPreferencesView"
       template="templates/person_preferences.pt"
       permission="zope.View"
       menu="schoolbell_actions"
-      title="Change Preferences" 
+      title="Change Preferences"
       layer=".skin.ISchoolToolLayer"
       />
 
   <page
       name="index.html"
-      for="schooltool.interfaces.IPerson"
+      for="schoolbell.app.person.interfaces.IPerson"
       class="schooltool.browser.app.PersonView"
       template="templates/person.pt"
       permission="zope.View"
@@ -332,49 +343,28 @@
       permission="zope.View"
       />
 
-  <!-- We already have a traverser registered on ICalendarOwner which is not
-       aware of timetables.  However, we need to traverse into timetables
-       in the web views, so for now I'll resort to the ugly solution of just
-       registering a derived traverser for each timetabled object.
-  -->
-
-  <zope:view
-      for="schooltool.interfaces.IPerson"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-      factory=".TimetabledTraverser"
-      permission="zope.Public"
-      />
-  <zope:view
-      for="schooltool.interfaces.IGroup"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-      factory=".TimetabledTraverser"
-      permission="zope.Public"
-      />
-  <zope:view
-      for="schooltool.interfaces.IResource"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-      factory=".TimetabledTraverser"
-      permission="zope.Public"
-      />
-
-  <zope:view
-      for="schooltool.interfaces.ISection"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-      factory=".TimetabledTraverser"
-      permission="zope.Public"
-      />
-
   <!-- XXX: Switch to specific Timetabled interface later. -->
+
+  <zope:class class=".TimetabledTraverser">
+    <zope:allow
+        interface="schoolbell.app.traverser.interfaces.ITraverserPlugin" />
+  </zope:class>
+
+  <zope:subscriber
+      for="zope.app.annotation.interfaces.IAnnotatable
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
+      factory=".TimetabledTraverser"
+      />
+
   <menuItem
       menu="schoolbell_actions"
       title="View Timetables"
       for="zope.app.annotation.interfaces.IAnnotatable"
       action="timetables/index.html"
       />
+  <!-- end of timetabled specific stuff -->
+
 
   <!-- Skin -->
 

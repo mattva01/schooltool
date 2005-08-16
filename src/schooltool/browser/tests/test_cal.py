@@ -32,6 +32,9 @@ from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schoolbell.app.group.group import GroupContainer
+from schoolbell.app.person.person import Person, PersonContainer
+from schoolbell.app.resource.resource import ResourceContainer
 
 import schooltool.app
 from schooltool import timetable
@@ -44,11 +47,17 @@ from pytz import timezone
 utc = timezone('UTC')
 
 
+# XXX: Shrug, duplication of test_app,setUpSchool
 def setUpSchoolToolSite():
     from schooltool.app import SchoolToolApplication
     app = SchoolToolApplication()
 
     # Usually automatically called subscribers
+    # XXX: Use future test setup
+    app['resources'] = ResourceContainer()
+    app['persons'] = PersonContainer()
+    app['groups'] = GroupContainer()
+
     schooltool.app.addCourseContainerToApplication(
         ApplicationInitializationEvent(app))
     schooltool.app.addSectionContainerToApplication(
@@ -71,19 +80,18 @@ def dt(timestr):
 class TestDailyCalendarRowsView(unittest.TestCase):
 
     def setUp(self):
-        from schooltool.app import getPersonPreferences
-        from schooltool.interfaces import IPersonPreferences
-        from schoolbell.app.interfaces import IHavePreferences
+        from schoolbell.app.person.preference import getPersonPreferences
+        from schoolbell.app.person.interfaces import IPersonPreferences
+        from schoolbell.app.person.interfaces import IHavePreferences
 
         # set up adaptation (the view checks user preferences)
         setup.placelessSetUp()
         setup.setUpAnnotations()
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
+        ztapi.provideAdapter(Person, IPersonPreferences,
                              getPersonPreferences)
 
         # set up the site
         app = setUpSchoolToolSite()
-        from schooltool.app import Person
         self.person = app['persons']['person'] = Person('person')
 
         # set up the timetable schema
@@ -146,7 +154,7 @@ class TestDailyCalendarRowsView(unittest.TestCase):
 
     def test_calendarRows_no_periods(self):
         from schooltool.browser.cal import DailyCalendarRowsView
-        from schooltool.app import getPersonPreferences
+        from schoolbell.app.person.preference import getPersonPreferences
         from schoolbell.app.security import Principal
 
         prefs = getPersonPreferences(self.person)
@@ -332,7 +340,7 @@ def doctest_CalendarListView(self):
         ...         self.show = show
         ...         self.show_timetables = show_timetables
 
-        >>> from schoolbell.app.interfaces import IPersonPreferences
+        >>> from schoolbell.app.person.interfaces import IPersonPreferences
         >>> from zope.interface import implements
         >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
         >>> from schooltool.timetable.interfaces import ITimetabled
@@ -367,7 +375,7 @@ def doctest_CalendarListView(self):
 
         >>> from schooltool.browser.cal import CalendarListView
         >>> import calendar as pycalendar
-        >>> calendar = CalendarStub('My Calendar') 
+        >>> calendar = CalendarStub('My Calendar')
         >>> request = TestRequest()
         >>> view = CalendarListView(calendar, request)
         >>> for c, col1, col2 in view.getCalendars():
@@ -378,7 +386,7 @@ def doctest_CalendarListView(self):
     If the authenticated user is looking at his own calendar, then
     a list of overlaid calendars is taken into consideration
 
-        >>> from schoolbell.app.interfaces import IPerson
+        >>> from schoolbell.app.person.interfaces import IPerson
         >>> class PrincipalStub:
         ...     def __init__(self):
         ...         self.person = PersonStub('x', calendar=calendar)

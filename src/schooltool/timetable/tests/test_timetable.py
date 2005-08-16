@@ -814,7 +814,8 @@ class TestTimetablingPersistence(unittest.TestCase):
         from schooltool.timetable import TimetableActivity
         from zope.app.traversing.interfaces import IContainmentRoot
         import transaction
-        from schooltool.app import Person, Resource
+        from schooltool.app import Person
+        from schoolbell.app.resource.resource import Resource
 
         parent = PersistentLocatableStub()
         directlyProvides(parent, IContainmentRoot)

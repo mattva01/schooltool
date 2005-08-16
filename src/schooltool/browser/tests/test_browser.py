@@ -34,11 +34,8 @@ def doctest_NavigationView():
     This view works for any ILocatable object within a SchoolTool instance.
 
       >>> from schooltool.app import SchoolToolApplication, Person
-      >>> from zope.app.component.hooks import setSite
-      >>> from zope.app.component.site import LocalSiteManager
-      >>> app = SchoolToolApplication()
-      >>> app.setSiteManager(LocalSiteManager(app))
-      >>> setSite(app)
+      >>> from test_app import setUpSchool
+      >>> app = setUpSchool()
       >>> p = Person('1')
       >>> app['persons']['1'] = p
 
@@ -68,17 +65,6 @@ def doctest_TimetabledTraverser():
 
         >>> t.publishTraverse(request, 'timetables')
         'Timetables'
-
-    By the way, this traverser inherits from CalendarOwnerTraverser:
-
-        >>> t.publishTraverse(None, 'calendar')
-        'Calendar'
-
-        >>> t.publishTraverse(None, 'foobar') # doctest: +ELLIPSIS
-        Traceback (most recent call last):
-          ...
-        NotFound: Object: <...TimetabledStub instance at 0x...>, name: 'foobar'
-
     """
 
 

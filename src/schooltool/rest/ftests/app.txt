@@ -63,7 +63,7 @@ There is only the manager group
     >>> print rest("""
     ... GET /frogpond/groups/ HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... """, handle_errors=False)
+    ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
@@ -183,7 +183,7 @@ are SchoolTool objects, rather than SchoolBell objects:
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: text/xml
     ...
-    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding1" 
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding1"
     ...         course="birding" location="lily"/>
     ... """)
     HTTP/1.1 201 Created
@@ -192,9 +192,9 @@ are SchoolTool objects, rather than SchoolBell objects:
     >>> getRootFolder()['frogpond']['persons']['goose']
     <schooltool.app.Person object at ...>
     >>> getRootFolder()['frogpond']['groups']['birds']
-    <schoolbell.app.app.Group object at ...>
+    <schoolbell.app.group.group.Group object at ...>
     >>> getRootFolder()['frogpond']['resources']['lily']
-    <schoolbell.app.app.Resource object at ...>
+    <schoolbell.app.resource.resource.Resource object at ...>
     >>> getRootFolder()['frogpond']['courses']['birdwatching']
     <schooltool.app.Course object at ...>
     >>> getRootFolder()['frogpond']['sections']['birdwatching-1']
@@ -237,9 +237,9 @@ The same should happen if we post to respective containers:
     ...
 
     >>> getRootFolder()['frogpond']['groups']['animals']
-    <schoolbell.app.app.Group object at ...>
+    <schoolbell.app.group.group.Group object at ...>
     >>> getRootFolder()['frogpond']['resources']['water']
-    <schoolbell.app.app.Resource object at ...>
+    <schoolbell.app.resource.resource.Resource object at ...>
     >>> getRootFolder()['frogpond']['courses']['flight']
     <schooltool.app.Course object at ...>
 

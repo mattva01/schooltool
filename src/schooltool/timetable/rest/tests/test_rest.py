@@ -121,9 +121,13 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         from schooltool.timetable.interfaces import ITimetableDict
         from schooltool.app import SchoolToolApplication
         from schooltool.app import Person
-        from schooltool.app import Resource
+        from schoolbell.app.person.person import PersonContainer
+        from schoolbell.app.resource.resource import Resource, ResourceContainer
         PlacefulSetup.setUp(self)
         self.app = SchoolToolApplication()
+        # XXX: Case for the test setup framework
+        self.app['resources'] = ResourceContainer()
+        self.app['persons'] = PersonContainer()
         # Usually automatically called subscribers
         timetable.addToApplication(ApplicationInitializationEvent(self.app))
         self.app.setSiteManager(LocalSiteManager(self.app))
@@ -143,7 +147,7 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         ztapi.provideAdapter(IAttributeAnnotatable, ITimetabled,
                              TimetabledAdapter)
 
-        
+
 
     def createTerm(self):
         from schooltool.timetable import Term

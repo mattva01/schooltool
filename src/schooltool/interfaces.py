@@ -39,17 +39,14 @@ from schooltool import SchoolToolMessageID as _
 #
 
 # Those interfaces are imported here, since they will later actually move here.
-from schoolbell.app.interfaces import IPerson, IGroup, IResource
-from schoolbell.app.interfaces import \
-     IPersonContainer, IGroupContainer, IResourceContainer
+from schoolbell.app.note.interfaces import IHaveNotes
 from schoolbell.app.interfaces import \
      ISchoolBellApplication as ISchoolToolApplication
 from schoolbell.app.interfaces import IApplicationInitializationEvent
 from schoolbell.app.interfaces import ApplicationInitializationEvent
 from schoolbell.app.interfaces import IApplicationPreferences
-from schoolbell.app.interfaces import IHaveNotes
-from schoolbell.app.interfaces import IPersonPreferences
 
+from schoolbell.app.group.interfaces import IGroup
 
 class ICourse(zope.interface.Interface):
     """Courses are similar to groups, membership is restricted to Sections."""

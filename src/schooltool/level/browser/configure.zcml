@@ -1,4 +1,4 @@
-<configure 
+<configure
     xmlns="http://namespaces.zope.org/browser"
     xmlns:zope="http://namespaces.zope.org/zope"
     i18n_domain="schooltool">
@@ -12,7 +12,7 @@
         for="schooltool.level.interfaces.ILevelContainer"
         class="schooltool.level.browser.level.LevelContainerView"
         template="templates/container.pt"
-        permission="zope.View" 
+        permission="zope.View"
         menu="zmi_views" title="View"
         />
 
@@ -29,7 +29,7 @@
       for="..interfaces.ILevelContainer"
       class=".level.LevelValidationView"
       template="level_validation.pt"
-      permission="zope.View" 
+      permission="zope.View"
       menu="schoolbell_actions" title="Validate Levels"
       />
 
@@ -39,19 +39,19 @@
       name="info"
       for="..interfaces.ILevelLoopError"
       template="levellooperror_info.pt"
-      permission="zope.View" 
+      permission="zope.View"
       />
 
   <page
       name="info"
       for="..interfaces.IDisconnectedLevelsError"
       template="disconnectedlevelerror_info.pt"
-      permission="zope.View" 
+      permission="zope.View"
       />
 
   <!-- Level Views -->
 
-  <zope:adapter 
+  <zope:adapter
       factory=".level.EditLevelAdapter" />
 
   <configure package="schoolbell.app.browser">
@@ -128,7 +128,7 @@
 
   <page
       name="academicRecord.html"
-      for="schooltool.interfaces.IPerson"
+      for="schoolbell.app.person.interfaces.IPerson"
       template="record.pt"
       class=".record.AcademicRecordView"
       permission="zope.View"

@@ -78,13 +78,13 @@ class ProgressToNextLevel(object):
     """
     zope.component.adapts(zope.wfmc.interfaces.IParticipant)
     zope.interface.implements(zope.wfmc.interfaces.IWorkItem)
-    
+
     def __init__(self, participant):
         self.participant = participant
-    
+
     def start(self, level):
         self.finish(level.nextLevel)
-        
+
     def finish(self, level):
         self.participant.activity.workItemFinished(self, level)
 
@@ -97,7 +97,7 @@ class ISelectInitialLevelSchema(zope.interface.Interface):
         description=_("The initial level of the student in the school."),
         vocabulary="Levels",
         required=True)
-    
+
 
 class SelectInitialLevel(persistent.Persistent, location.location.Location):
     """Select the inital level of the student.
@@ -108,14 +108,14 @@ class SelectInitialLevel(persistent.Persistent, location.location.Location):
     zope.interface.implements(zope.wfmc.interfaces.IWorkItem)
 
     schema = ISelectInitialLevelSchema
-    
+
     def __init__(self, participant):
         self.participant = participant
         self.participant.workItems.addWorkItem(self)
-    
+
     def start(self):
         pass
-        
+
     def finish(self, level):
         self.participant.workItems.removeWorkItem(self)
         self.participant.activity.workItemFinished(self, level)
@@ -143,14 +143,14 @@ class SetLevelOutcome(persistent.Persistent, location.location.Location):
     zope.interface.implements(zope.wfmc.interfaces.IWorkItem)
 
     schema = ISetLevelOutcomeSchema
-    
+
     def __init__(self, participant):
         self.participant = participant
         self.participant.workItems.addWorkItem(self)
-    
+
     def start(self):
         pass
-        
+
     def finish(self, outcome):
         self.participant.workItems.removeWorkItem(self)
         self.participant.activity.workItemFinished(self, outcome)
@@ -165,10 +165,10 @@ class UpdateStatus(object):
     """
     zope.component.adapts(zope.wfmc.interfaces.IParticipant)
     zope.interface.implements(zope.wfmc.interfaces.IWorkItem)
-    
+
     def __init__(self, participant):
         self.participant = participant
-    
+
     def start(self, student):
         rec = interfaces.IAcademicRecord(student)
         act_id = self.participant.activity.definition.id
@@ -183,7 +183,6 @@ class UpdateStatus(object):
 
         self.finish()
 
-        
     def finish(self):
         self.participant.activity.workItemFinished(self)
 
@@ -197,10 +196,10 @@ class WriteRecord(object):
     """
     zope.component.adapts(zope.wfmc.interfaces.IParticipant)
     zope.interface.implements(zope.wfmc.interfaces.IWorkItem)
-    
+
     def __init__(self, participant):
         self.participant = participant
-    
+
     def start(self, student, level):
         rec = interfaces.IAcademicRecord(student)
         act_id = self.participant.activity.definition.id
@@ -223,7 +222,6 @@ class WriteRecord(object):
 
         self.finish()
 
-        
     def finish(self):
         self.participant.activity.workItemFinished(self)
 

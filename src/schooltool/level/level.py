@@ -50,7 +50,7 @@ class LevelContainer(btree.BTreeContainer):
                     raise interfaces.LevelLoopError(current)
                 visited.append(current)
                 current = current.nextLevel
-                
+
             allseen.update(visited)
 
         # Make sure that all levels are connected in a graph.
@@ -75,7 +75,7 @@ class Level(persistent.Persistent, contained.Contained):
         self.nextLevel = nextLevel
 
     def __repr__(self):
-        return "<Level '%s'>" %self.title 
+        return "<Level '%s'>" %self.title
 
 
 class LevelTerm(object):
@@ -88,7 +88,7 @@ class LevelTerm(object):
         self.title = level.title
 
     def __repr__(self):
-        return "<LevelTerm token='%s' title='%s'>" %(self.token, self.title) 
+        return "<LevelTerm token='%s' title='%s'>" %(self.token, self.title)
 
 
 class LevelVocabulary(object):

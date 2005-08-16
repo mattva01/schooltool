@@ -43,7 +43,7 @@ class ILevelLoopError(ILevelValidationError):
     level = zope.interface.Attribute("This is the level that points back "
                                      "to a level that was found in the graph "
                                      "before.")
-    
+
 class LevelLoopError(LevelValidationError):
     zope.interface.implements(ILevelLoopError)
 
@@ -57,7 +57,7 @@ class IDisconnectedLevelsError(ILevelValidationError):
 
     levels = zope.interface.Attribute(
         "A list of levels not properly connected.")
-    
+
 class DisconnectedLevelsError(LevelValidationError):
     zope.interface.implements(IDisconnectedLevelsError)
 

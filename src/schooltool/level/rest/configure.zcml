@@ -6,9 +6,9 @@
 
   <view
       for="..interfaces.ILevelContainer"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="zope.publisher.interfaces.IPublishTraverse"
-      factory="schoolbell.app.rest.RestPublishTraverse"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
 
@@ -61,7 +61,7 @@
   <!-- Academic Record Management -->
 
   <view
-      for="schooltool.interfaces.IPerson"
+      for="schoolbell.app.person.interfaces.IPerson"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
       provides="schoolbell.app.rest.IRestTraverser"
       factory=".record.PersonHTTPTraverser"
@@ -98,7 +98,7 @@
       />
 
   <view
-      for="schooltool.interfaces.IPerson"
+      for="schoolbell.app.person.interfaces.IPerson"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
       provides="schoolbell.app.rest.IRestTraverser"
       factory=".record.PersonHTTPTraverser"
@@ -119,7 +119,7 @@
       />
 
   <view
-      for="schooltool.interfaces.IPerson"
+      for="schoolbell.app.person.interfaces.IPerson"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
       provides="schoolbell.app.rest.IRestTraverser"
       factory=".record.PersonHTTPTraverser"

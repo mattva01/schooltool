@@ -35,12 +35,13 @@ from zope.app.annotation.interfaces import IAnnotations
 from zope.app.publisher.browser import BrowserView
 
 from schoolbell.app.browser.overlay import CalendarOverlayView
-from schoolbell.app.interfaces import ISchoolBellCalendar, IPerson
+from schoolbell.app.interfaces import ISchoolBellCalendar
+from schoolbell.app.person.interfaces import IPerson, IPersonPreferences
+from schoolbell.app.person.preference import PersonPreferences
 
-from schooltool.app import PersonPreferences
 from schooltool.timetable import getPeriodsForDay
 from schooltool.timetable.interfaces import ITimetabled
-from schooltool.interfaces import IPersonPreferences, ISection
+from schooltool.interfaces import ISection
 
 
 class DailyCalendarRowsView(BrowserView):
@@ -214,7 +215,7 @@ class CalendarListView(BrowserView):
             yield (ttcalendar, '#9db8d2', '#7590ae')
             return # unauthenticated user
 
-        unproxied_context = removeSecurityProxy(self.context) 
+        unproxied_context = removeSecurityProxy(self.context)
         unproxied_calendar = removeSecurityProxy(user.calendar)
         if unproxied_context is not unproxied_calendar:
             yield (ttcalendar, '#9db8d2', '#7590ae')

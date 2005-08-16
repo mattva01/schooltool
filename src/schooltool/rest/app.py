@@ -34,6 +34,7 @@ from zope.app.testing import setup
 from zope.app.traversing.api import getPath
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 
+from schoolbell.app.person.rest import person
 from schoolbell.app.rest.xmlparsing import XMLDocument
 from schoolbell.app.rest.app import GenericContainerView
 from schoolbell.app.rest import View, Template
@@ -54,7 +55,7 @@ from schooltool.timetable import Term
 
 
 # XXX: Temporary Hack
-class PersonFileFactory(sb.PersonFileFactory):
+class PersonFileFactory(person.PersonFileFactory):
     """An adapter that creates SchoolTool persons in RESTive views"""
 
     factory = Person

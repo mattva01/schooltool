@@ -53,6 +53,18 @@ def setUpSchool():
     app = SchoolToolApplication()
 
     # Usually automatically called subscribers
+    # XXX: Should be done with test setup framework
+
+    from schoolbell.app.person import person
+    person.addPersonContainerToApplication(
+        ApplicationInitializationEvent(app))
+    from schoolbell.app.group import group
+    group.addGroupContainerToApplication(
+        ApplicationInitializationEvent(app))
+    from schoolbell.app.resource import resource
+    resource.addResourceContainerToApplication(
+        ApplicationInitializationEvent(app))
+
     schooltool.app.addCourseContainerToApplication(
         ApplicationInitializationEvent(app))
     schooltool.app.addSectionContainerToApplication(
@@ -611,8 +623,8 @@ def doctest_SectionFileFactory():
 
 
         >>> app = setUpSchool()
-        >>> from schooltool.app import Resource
-        >>> import pprint
+        >>> from schoolbell.app.resource.resource import Resource
+
         >>> app['resources']['room1'] = room1 = Resource("Room 1",
         ...                                               isLocation=True)
         >>> app['resources']['printer'] = printer = Resource("Printer")

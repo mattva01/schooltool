@@ -35,6 +35,9 @@ import schooltool.app
 from schooltool import timetable
 from schooltool.interfaces import ApplicationInitializationEvent
 from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schoolbell.app.group.group import GroupContainer
+from schoolbell.app.person.person import PersonContainer
+from schoolbell.app.resource.resource import ResourceContainer
 
 # Used for CourseAddView and SectionAddView
 from zope.app.container.browser.adding import Adding
@@ -46,7 +49,13 @@ def setUpSchool():
     from zope.app.component.site import LocalSiteManager
     app = SchoolToolApplication()
 
+
     # Usually automatically called subscribers
+    # XXX: Use future test setup
+    app['resources'] = ResourceContainer()
+    app['persons'] = PersonContainer()
+    app['groups'] = GroupContainer()
+
     schooltool.app.addCourseContainerToApplication(
         ApplicationInitializationEvent(app))
     schooltool.app.addSectionContainerToApplication(
@@ -190,7 +199,8 @@ def doctest_SectionView():
 
     Let's create some students and a group:
 
-        >>> from schooltool.app import Group, Person
+        >>> from schoolbell.app.group.group import Group
+        >>> from schoolbell.app.person.person import Person
         >>> person1 = Person(title='Person1')
         >>> person2 = Person(title='Person2')
         >>> person3 = Person(title='Person3')
@@ -234,7 +244,7 @@ def doctest_LocationResourceVocabulary():
 
     Now we'll add some resources
 
-        >>> from schooltool.app import Resource
+        >>> from schoolbell.app.resource.resource import Resource
         >>> import pprint
         >>> app['resources']['room1'] = room1 = Resource("Room 1",
         ...                                               isLocation=True)
@@ -270,7 +280,7 @@ def doctest_SectionAddView():
         ...     def __init__(self, context, request): pass
         ...     def __call__(self): return "http://localhost/frogpond/groups"
         ...
-        >>> from schooltool.interfaces import IGroupContainer
+        >>> from schoolbell.app.group.interfaces import IGroupContainer
         >>> from zope.app.traversing.browser.interfaces import IAbsoluteURL
         >>> ztapi.browserViewProviding(IGroupContainer, FakeURL, \
         ...                            providing=IAbsoluteURL)
@@ -396,16 +406,12 @@ def doctest_SectionEditView():
     We need some setup for our vocabulary:
 
         >>> from schooltool.app import SchoolToolApplication
-        >>> app = SchoolToolApplication()
-        >>> from zope.app.component.site import LocalSiteManager
-        >>> app.setSiteManager(LocalSiteManager(app))
-        >>> from zope.app.component.hooks import setSite
-        >>> setSite(app)
+        >>> app = setUpSchool()
         >>> from zope.schema.vocabulary import getVocabularyRegistry
         >>> from schooltool.browser.app import LocationResourceVocabulary
         >>> registry = getVocabularyRegistry()
         >>> registry.register('LocationResources', LocationResourceVocabulary)
-        >>> from schooltool.app import Resource
+        >>> from schoolbell.app.resource.resource import Resource
         >>> app['resources']['room1'] = room1 = Resource("Room 1",
         ...                                               isLocation=True)
 
@@ -500,7 +506,7 @@ def doctest_SectionInstructorView():
     lets setup a schooltool instance with some members.
 
         >>> from schooltool.app import SchoolToolApplication
-        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.person.person import Person
         >>> school = setUpSchool()
         >>> persons = school['persons']
         >>> directlyProvides(school, IContainmentRoot)
@@ -592,7 +598,7 @@ def doctest_SectionLearnerView():
     lets setup a schooltool instance with some members.
 
         >>> from schooltool.app import SchoolToolApplication
-        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.person.person import Person
         >>> school = setUpSchool()
         >>> persons = school['persons']
         >>> directlyProvides(school, IContainmentRoot)
@@ -692,7 +698,8 @@ def doctest_SectionLearnerGroupView():
 
         >>> from schooltool.browser.app import SectionLearnerGroupView
         >>> from schooltool.app import SchoolToolApplication
-        >>> from schoolbell.app.app import Person, Group
+        >>> from schoolbell.app.group.group import Group
+        >>> from schoolbell.app.person.person import Person
         >>> school = setUpSchool()
         >>> persons = school['persons']
         >>> groups = school['groups']
@@ -760,10 +767,10 @@ def doctest_PersonView():
 
         >>> from schooltool.browser.app import PersonView
         >>> from schooltool.app import Person
-        >>> from schooltool.interfaces import IPerson
+        >>> from schoolbell.app.person.interfaces import IPerson
         >>> from schoolbell.relationship.tests import setUp, tearDown
-        >>> from schoolbell.app.app import getPersonDetails
-        >>> from schoolbell.app.interfaces import IPersonDetails
+        >>> from schoolbell.app.person.details import getPersonDetails
+        >>> from schoolbell.app.person.interfaces import IPersonDetails
         >>> setup.setUpAnnotations()
         >>> setUp()
         >>> ztapi.provideAdapter(IPerson, IPersonDetails, getPersonDetails)
@@ -836,7 +843,7 @@ def doctest_PersonView():
     Students can also participate in sections as part of a group, say all 10th
     grade students must take gym:
 
-        >>> from schooltool.app import Group
+        >>> from schoolbell.app.group.group import Group
         >>> tenth_grade = Group(title="Tenth Grade")
         >>> tenth_grade.members.add(student)
         >>> section4.members.add(tenth_grade)

@@ -5,7 +5,7 @@ Student Level Management
 Students, a special kind of ``Person``, during their academic career in a
 school will progress through a number of levels (or grades or standings) until
 they graduate. This package provides the basic level-support for
-SchoolTool. 
+SchoolTool.
 
   >>> import schooltool.level.level
   >>> from schooltool import level
@@ -21,7 +21,17 @@ school. So, given a schooltool application
   >>> st = app.SchoolToolApplication()
 
   # Usually done automatically via a subscriber.
+  # XXX: Should be done via test setup
+
   >>> from schooltool.interfaces import ApplicationInitializationEvent
+
+  >>> from schoolbell.app.person import person
+  >>> person.addPersonContainerToApplication(
+  ...     ApplicationInitializationEvent(st))
+  >>> from schoolbell.app.group import group
+  >>> group.addGroupContainerToApplication(
+  ...     ApplicationInitializationEvent(st))
+
   >>> level.level.addLevelContainerToApplication(
   ...     ApplicationInitializationEvent(st))
   >>> app.addManagerGroupToApplication(

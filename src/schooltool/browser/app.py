@@ -37,22 +37,23 @@ from schoolbell.app.browser import app as sb
 from schoolbell.app.membership import isTransitiveMember
 from schoolbell.relationship import getRelatedObjects
 from schoolbell.batching import Batch
+from schoolbell.app.person.interfaces import IPersonPreferences
+from schoolbell.app.browser.app import ContainerView
+from schoolbell.app.person.browser import person
+from schoolbell.app.person.browser.person import PersonContainerView
+from schoolbell.app.group.browser.group import GroupContainerView
+from schoolbell.app.resource.browser.resource import ResourceContainerView
+from schoolbell.app.person.interfaces import IPerson
+from schoolbell.app.group.interfaces import IGroup
 
 from schooltool import SchoolToolMessageID as _
 from schooltool import getSchoolToolApplication
 from schooltool.interfaces import ICourseContainer, ISectionContainer
 from schooltool.interfaces import ICourse, ISection
-from schooltool.interfaces import IPersonPreferences
-from schooltool.interfaces import IGroup, IPerson, IApplicationPreferences
+from schooltool.interfaces import IApplicationPreferences
 from schooltool.interfaces import ISchoolToolApplication
 from schooltool.relationships import URIInstruction, URISection
 from schooltool.app import Person
-
-# XXX: Import classes that will be in this module eventually
-from schoolbell.app.browser.app import ContainerView
-from schoolbell.app.browser.app import PersonContainerView
-from schoolbell.app.browser.app import GroupContainerView
-from schoolbell.app.browser.app import ResourceContainerView
 
 
 class SchoolToolApplicationView(BrowserView):
@@ -277,7 +278,7 @@ class SectionLearnerGroupView(SectionLearnerView):
         return container.values()
 
 
-class PersonView(sb.PersonView):
+class PersonView(person.PersonView):
     """Add additional information to the Person view.
 
     Tal friendly methods for determining if a person is a teacher or a
@@ -325,13 +326,13 @@ class PersonView(sb.PersonView):
         return results
 
 
-class PersonAddView(sb.PersonAddView):
+class PersonAddView(person.PersonAddView):
     """An add view that creates SchoolTool, rather than SchoolBell, persons"""
 
     _factory = Person
 
 
-class PersonPreferencesView(sb.PersonPreferencesView):
+class PersonPreferencesView(person.PersonPreferencesView):
     """View used for editing person preferences."""
 
     __used_for__ = IPersonPreferences

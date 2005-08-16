@@ -42,7 +42,7 @@ def doctest_Instruction():
 
     We will need some sample persons and sections for the demonstration
 
-        >>> from schoolbell.app.app import Person
+        >>> from schoolbell.app.person.person import Person
         >>> from schooltool.app import Section
         >>> jonas = Person()
         >>> petras = Person()

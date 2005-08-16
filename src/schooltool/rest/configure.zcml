@@ -2,39 +2,71 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
-  <!-- XXX: Temporary band-aid -->
+
+  <subscriber
+      handler=".restSchoolToolSubscriber"
+      for="zope.app.publication.interfaces.IBeforeTraverseEvent"
+      />
+
+<!-- Content Type Traversers -->
 
   <view
-      for="schooltool.interfaces.ICourse"
+      for="..interfaces.ICourseContainer"
       type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.IPublishTraverse"
-      factory="schoolbell.app.rest.RestPublishTraverse"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ICourse"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ISectionContainer"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ISection"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.timetable.interfaces.ITermContainer"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
 
   <view
       for="schooltool.timetable.interfaces.ITerm"
       type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.IPublishTraverse"
-      factory="schoolbell.app.rest.RestPublishTraverse"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
 
   <view
-      for="schooltool.interfaces.ISection"
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.IPublishTraverse"
-      factory="schoolbell.app.rest.RestPublishTraverse"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
 
-  <!-- End of band-aid -->
-
-
-  <subscriber
-      handler=".restSchoolToolSubscriber"
-      for="zope.app.publication.interfaces.IBeforeTraverseEvent"
-      />
+<!-- RESTive Verbs and name traversers -->
 
   <!-- XXX: Hack to get schooltool working; we should have a schooltool -->
   <!--      layer. -->
@@ -47,42 +79,10 @@
       />
 
   <view
-      for="schooltool.timetable.interfaces.ITermContainer"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="zope.publisher.interfaces.IPublishTraverse"
-      factory="schoolbell.app.rest.RestPublishTraverse"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.interfaces.ICourseContainer"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="zope.publisher.interfaces.IPublishTraverse"
-      factory="schoolbell.app.rest.RestPublishTraverse"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="zope.publisher.interfaces.IPublishTraverse"
-      factory="schoolbell.app.rest.RestPublishTraverse"
-      permission="zope.Public"
-      />
-
-  <view
       for="schooltool.interfaces.ICourseContainer"
       name="POST"
       factory=".app.CourseContainerView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.interfaces.ISectionContainer"
-      type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="zope.publisher.interfaces.IPublishTraverse"
-      factory="schoolbell.app.rest.RestPublishTraverse"
       permission="zope.Public"
       />
 
@@ -188,7 +188,7 @@
   <!-- XXX: Temporary hack to override SB registrations. This can go away -->
   <!--      once there is only 1 Person implementation in SB/ST. -->
   <adapter
-      for="schooltool.app.PersonContainer"
+      for="schoolbell.app.person.person.PersonContainer"
       provides="zope.app.filerepresentation.interfaces.IFileFactory"
       factory=".app.PersonFileFactory"
       permission="zope.Public"
