@@ -27,6 +27,13 @@
     </div>
   </form>
   <tal:if condition="batch">
+    <div class="count">
+      <span i18n:translate="">Showing</span>
+      <span tal:content="python:len(batch)"/>
+      <span i18n:translate="">of</span>
+      <span tal:content="python:len(batch.list)"/>
+      <span i18n:translate="">items</span>
+    </div>
     <form method="post"
       tal:attributes="action string:${context/@@absolute_url}/delete.html">
       <ul>
