@@ -1044,7 +1044,7 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
                     for section in sections:
                         if group in section.members:
                             in_group.append({'group': group,
-                                            'section': section})
+                                             'section': section})
 
                 selected = []
                 if not in_group:
