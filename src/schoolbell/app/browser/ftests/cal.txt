@@ -194,9 +194,8 @@ support is enabled.
     ... Authorization: Basic mgr:mgrpw
     ... """
 
-# This fails because of a bug.  See issue330.
-#    >>> not pdf_enabled or '%PDF-1.3' in str(http(request_headers))
-#    True
+    >>> not pdf_enabled or '%PDF-1.3' in str(http(request_headers))
+    True
 
 Now we will try disabling PDF views and check if the switch works.
 

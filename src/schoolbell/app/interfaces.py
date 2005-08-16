@@ -417,13 +417,20 @@ class ISchoolBellApplication(IReadContainer, ICalendarOwner):
     it can be used as the application root object.
     """
 
+    title = TextLine(
+        title=_("Title"),
+        required=True,
+        description=_("""The name for the school or organization running
+            this server.  This will be displayed on the public calendar, the
+            bottom of all pages and in the page title."""))
+
 
 class IApplicationPreferences(Interface):
     """Preferences stored in an annotation on the SchoolBellApplication."""
 
     title = TextLine(
         title=_("Title"),
-        required=False,
+        required=True,
         description=_("""The name for the school or organization running
             this server.  This will be displayed on the public calendar, the
             bottom of all pages and in the page title."""))
