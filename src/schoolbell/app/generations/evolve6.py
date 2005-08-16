@@ -42,7 +42,11 @@ def evolve(context):
 
         if prefs.dateformat == 'MM/DD/YY':
             prefs.dateformat = '%m/%d/%y'
-        elif prefs.dateformat == 'YYYY-MM-DD':
+        elif prefs.dateformat == 'YYYY-DD-MM':
+            # DD and MM are reversed intentionally -- browser views were buggy
+            # This script should also convert YYYY-MM-DD, but it's too late
+            # to change it now -- a new evolve script will do that instead.
             prefs.dateformat = '%Y-%m-%d'
         elif prefs.dateformat == 'Day Month, Year':
             prefs.dateformat = '%d %B, %Y'
+
