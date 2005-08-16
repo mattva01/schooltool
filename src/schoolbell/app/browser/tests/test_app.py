@@ -93,6 +93,59 @@ def doctest_SchoolBellApplicationView():
     """
 
 
+def doctest_ContainerView():
+    r"""Test for ContainerView
+
+    Let's create some persons to toy with in a person container:
+
+        >>> from schoolbell.app.browser.app import ContainerView
+        >>> from schoolbell.app.app import Person, PersonContainer
+        >>> from schoolbell.app.interfaces import IPerson
+        >>> setup.setUpAnnotations()
+
+        >>> personContainer = PersonContainer()
+        >>> directlyProvides(personContainer, IContainmentRoot)
+
+        >>> personContainer['pete'] = Person('pete', 'Pete Parrot')
+        >>> personContainer['john'] = Person('john', 'Long John')
+        >>> personContainer['frog'] = Person('frog', 'Frog Man')
+        >>> personContainer['toad'] = Person('toad', 'Taodsworth')
+        >>> request = TestRequest()
+        >>> view = ContainerView(personContainer, request)
+
+    After calling update, we should have a batch setup with everyone in it:
+
+        >>> view.update()
+        >>> [p.title for p in view.batch]
+        ['Frog Man', 'Long John', 'Pete Parrot', 'Taodsworth']
+
+
+    We can alter the batch size and starting point through the request
+
+        >>> request.form = {'batch_start': '2',
+        ...                 'batch_size': '2'}
+        >>> view.update()
+        >>> [p.title for p in view.batch]
+        ['Pete Parrot', 'Taodsworth']
+
+    We can search through the request:
+
+        >>> request.form = {'SEARCH': 'frog'}
+        >>> view.update()
+        >>> [p.title for p in view.batch]
+        ['Frog Man']
+
+    And we can clear the search (which ignores any search value):
+
+        >>> request.form = {'SEARCH': 'frog',
+        ...                 'CLEAR_SEARCH': 'on'}
+        >>> view.update()
+        >>> [p.title for p in view.batch]
+        ['Frog Man', 'Long John', 'Pete Parrot', 'Taodsworth']
+
+    """
+
+
 def doctest_ContainerDeleteView():
     r"""Test for ContainerDeleteView
 
