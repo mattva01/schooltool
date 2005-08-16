@@ -22,7 +22,7 @@ Upgrade SchoolTool to generation 3.
 evolve2.py creates a site calendar, but the default permissions prevent
 unknown visitors from seeing it.
 
-$Id: evolve2.py 4259 2005-07-21 00:57:30Z tvon $
+$Id$
 """
 
 from zope.app import zapi
@@ -37,23 +37,21 @@ def evolve(context):
     """Set the site security policy to the SchoolTool 0.11 defaults.
 
     See schooltool.app.applicationCalendarPermissionsSubscriber for details.
-
     """
-
     root = context.connection.root().get(ZopePublication.root_name, None)
     for app in findObjectsProviding(root, ISchoolToolApplication):
         unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
 
         app_perms = IPrincipalPermissionManager(app)
-        app_perms.grantPermissionToPrincipal('schoolbell.view',
-                                          unauthenticated.id)
-        app_perms.grantPermissionToPrincipal('schoolbell.viewCalendar',
-                                          unauthenticated.id)
+        app_perms.grantPermissionToPrincipal(
+            'schoolbell.view', unauthenticated.id)
+        app_perms.grantPermissionToPrincipal(
+            'schoolbell.viewCalendar', unauthenticated.id)
 
-        for container in ['persons', 'groups', 'resources', 'sections',
-                          'courses']:
+        containers = ['persons', 'groups', 'resources', 'sections', 'courses']
+        for container in containers:
             container_perms = IPrincipalPermissionManager(app[container])
-            container_perms.denyPermissionToPrincipal('schoolbell.view',
-                                              unauthenticated.id)
-            container_perms.denyPermissionToPrincipal('schoolbell.viewCalendar',
-                                              unauthenticated.id)
+            container_perms.denyPermissionToPrincipal(
+                    'schoolbell.view', unauthenticated.id)
+            container_perms.denyPermissionToPrincipal(
+                    'schoolbell.viewCalendar', unauthenticated.id)
