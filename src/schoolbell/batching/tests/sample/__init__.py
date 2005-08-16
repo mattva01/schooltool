@@ -33,3 +33,7 @@ data = ['Abe Alvarez', 'Bronson Arroyo', 'Tim Bausher', 'Chad Bradford',
         'Edgar Renteria', 'Kevin Youkilis', 'Johnny Damon', 'Adam Hyzdu',
         'Gabe Kapler', 'Trot Nixon', 'Manny Ramirez', 'Adam Stern',
         'David Ortiz']
+
+data2 = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta', 'eta', 'theta',
+         'iota', 'kappa', 'lamda', 'mu', 'nu', 'xi', 'omikron', 'pi', 'rho',
+         'sigma', 'tau', 'upsilon', 'phi', 'chi', 'psi', 'omega']
