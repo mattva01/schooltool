@@ -12,14 +12,14 @@
   <!-- Subscribers -->
 
   <subscriber
-      for=".interfaces.ITimetabled"
+      for=".interfaces.ITimetables"
       provides=".interfaces.ITimetableSource"
       factory="schooltool.timetable.source.MembershipTimetableSource"
       permission="zope.Public"
       />
 
   <subscriber
-      for=".interfaces.ITimetabled"
+      for=".interfaces.ITimetables"
       provides=".interfaces.ITimetableSource"
       factory="schooltool.timetable.source.InstructionTimetableSource"
       permission="zope.Public"
@@ -36,7 +36,7 @@
       provides="zope.app.container.interfaces.INameChooser" />
 
   <adapter
-      factory=".TimetabledAdapter"
+      factory=".TimetablesAdapter"
       trusted="true"
       permission="zope.Public" />
 

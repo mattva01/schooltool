@@ -24,13 +24,14 @@ $Id$
 
 import datetime
 
-from zope.app.location.interfaces import ILocation
 from zope.interface import Interface, Attribute, implements
-from zope.app.container.interfaces import IContainer, IContained
 from zope.schema import Field, Object, Int, Text, TextLine, List, Set, Tuple
 from zope.schema import Dict, Date, Timedelta, Bool, Choice
 from zope.schema.interfaces import IField
+from zope.app.annotation.interfaces import IAnnotatable
 from zope.app.container.constraints import contains, containers
+from zope.app.container.interfaces import IContainer, IContained
+from zope.app.location.interfaces import ILocation
 
 from schoolbell.app import interfaces as sb
 from schoolbell.calendar.interfaces import Unchanged
@@ -691,8 +692,12 @@ class ITimetableDict(IContainer):
     "default".
     """
 
+class IHaveTimetables(IAnnotatable):
+    """A marker interface for content objects to declare themselves as having
+       timetables."""
 
-class ITimetabled(Interface):
+
+class ITimetables(Interface):
     """The timetable content related to an object -- either its own,
     or composed of the timetables of related objects.
     """
@@ -758,7 +763,7 @@ class ITimetableReplacedEvent(Interface):
 
     object = Object(
         title=u"The owner of the timetable.",
-        schema=ITimetabled)
+        schema=ITimetables)
 
     key = Tuple(
         title=u"Tuple (time_period_id, schema_id).",

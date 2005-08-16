@@ -31,7 +31,7 @@ from zope.app.annotation.interfaces import IAnnotatable
 from schoolbell.app.browser.cal import CalendarOwnerTraverser
 from schoolbell.app.traverser.interfaces import ITraverserPlugin
 from schooltool.app import getSchoolToolApplication
-from schooltool.timetable.interfaces import ITimetabled
+from schooltool.timetable.interfaces import ITimetables, IHaveTimetables
 
 
 class NavigationView(BrowserView):
@@ -54,11 +54,10 @@ class NavigationView(BrowserView):
         self.app = getSchoolToolApplication()
 
 
-class TimetabledTraverser(object):
+class TimetablesTraverser(object):
     """A traverser that allows to traverse to a calendar owner's calendar."""
 
-    # XXX: This really needs to become IHaveTimetables
-    adapts(IAnnotatable)
+    adapts(IHaveTimetables)
     implements(ITraverserPlugin)
 
     def __init__(self, context, request):
@@ -67,7 +66,7 @@ class TimetabledTraverser(object):
 
     def publishTraverse(self, request, name):
         if name == 'timetables':
-            return ITimetabled(self.context).timetables
+            return ITimetables(self.context).timetables
 
         raise NotFound(self.context, name, request)
 

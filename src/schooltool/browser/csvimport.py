@@ -34,7 +34,7 @@ from schooltool import getSchoolToolApplication
 from schooltool.interfaces import ISectionContainer
 from schooltool.app import Person, Section, Course
 from schooltool.timetable import TimetableActivity
-from schooltool.timetable.interfaces import ITimetabled
+from schooltool.timetable.interfaces import ITimetables
 
 
 # XXX: This should go away
@@ -257,7 +257,7 @@ class TimetableCSVImporter(object):
             section.instructors.add(instructor)
 
         # Create a timetable
-        timetables = ITimetabled(section).timetables
+        timetables = ITimetables(section).timetables
         timetable_key = ".".join((self.term.__name__, self.ttschema.__name__))
         if timetable_key not in timetables.keys():
             tt = self.ttschema.createTimetable()

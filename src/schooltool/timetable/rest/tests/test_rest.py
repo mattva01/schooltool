@@ -51,16 +51,16 @@ from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin
 from schoolbell.app.rest.tests.utils import XMLCompareMixin
 from schoolbell.app.rest.errors import RestError
 from schooltool import timetable
-from schooltool.timetable import TimetabledAdapter
-from schooltool.timetable.interfaces import ITimetabled
+from schooltool.timetable import TimetablesAdapter
+from schooltool.timetable.interfaces import ITimetables
 from schooltool.interfaces import ApplicationInitializationEvent
 
 
 def setUp(test=None):
     placelesssetup.setUp(test)
     setup.setUpAnnotations()
-    ztapi.provideAdapter(IAttributeAnnotatable, ITimetabled,
-                         TimetabledAdapter)
+    ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
+                         TimetablesAdapter)
 
 
 class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
@@ -117,7 +117,7 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
     def setUp(self):
         from schooltool.rest.interfaces import ITimetableFileFactory
         from schooltool.timetable.rest import TimetableFileFactory
-        from schooltool.timetable import TimetabledAdapter
+        from schooltool.timetable import TimetablesAdapter
         from schooltool.timetable.interfaces import ITimetableDict
         from schooltool.app import SchoolToolApplication
         from schooltool.app import Person
@@ -144,8 +144,8 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         ztapi.provideAdapter((ITimetableDict, IHTTPRequest),
                               ITimetableFileFactory,
                               TimetableFileFactory)
-        ztapi.provideAdapter(IAttributeAnnotatable, ITimetabled,
-                             TimetabledAdapter)
+        ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
+                             TimetablesAdapter)
 
 
 
@@ -534,13 +534,13 @@ class TestTimetableFileFactory(TimetableTestMixin, unittest.TestCase):
         from schooltool.rest.interfaces import ITimetableFileFactory
         from schooltool.timetable.rest import TimetableFileFactory
         verifyObject(ITimetableFileFactory,
-                     TimetableFileFactory(ITimetabled(self.person).timetables,
+                     TimetableFileFactory(ITimetables(self.person).timetables,
                                           TestRequest()))
 
     def test_call(self):
         from schooltool.timetable.rest import TimetableFileFactory
 
-        factory = TimetableFileFactory(ITimetabled(self.person).timetables,
+        factory = TimetableFileFactory(ITimetables(self.person).timetables,
                                        TestRequest())
         timetable = factory("2003 fall.schema1", "text/xml", self.full_xml)
         self.assertEquals(timetable, self.createFull(self.person))
@@ -557,7 +557,7 @@ class TestTimetablePUT(TimetableTestMixin, unittest.TestCase):
 
         TimetableTestMixin.setUp(self)
         self.timetable =  self.createEmpty()
-        ITimetabled(self.person).timetables["2003 fall.schema1"] = \
+        ITimetables(self.person).timetables["2003 fall.schema1"] = \
                                                   self.timetable
 
     def test_put(self):
@@ -566,7 +566,7 @@ class TestTimetablePUT(TimetableTestMixin, unittest.TestCase):
         view = TimetablePUT(self.timetable, request)
         view.PUT()
         self.assertEquals(
-            ITimetabled(self.person).timetables["2003 fall.schema1"],
+            ITimetables(self.person).timetables["2003 fall.schema1"],
             self.createFull(self.person))
 
 
@@ -741,18 +741,18 @@ class TestTimetableDictView(TimetableTestMixin, unittest.TestCase):
 
     def setUp(self):
         TimetableTestMixin.setUp(self)
-        self.tt = ITimetabled(self.person).timetables["2003 fall.schema1"] \
+        self.tt = ITimetables(self.person).timetables["2003 fall.schema1"] \
                 = self.createEmpty()
 
     def test_getTimetables(self):
-        view = self.createView(ITimetabled(self.person).timetables,
+        view = self.createView(ITimetables(self.person).timetables,
                                TestRequest())
         timetables = view.getTimetables()
         self.assertEquals(len(timetables), 1)
         self.assert_(timetables[0] is self.tt)
 
     def test_timetables(self):
-        view = self.createView(ITimetabled(self.person).timetables,
+        view = self.createView(ITimetables(self.person).timetables,
                                TestRequest())
         self.assertEquals(view.timetables, [{
           'url': "http://127.0.0.1/persons/john/timetables/2003%20fall.schema1",
@@ -760,7 +760,7 @@ class TestTimetableDictView(TimetableTestMixin, unittest.TestCase):
           'schema': u'schema1'}])
 
     def test_get(self):
-        view = self.createView(ITimetabled(self.person).timetables,
+        view = self.createView(ITimetables(self.person).timetables,
                                TestRequest())
         self.assertEqualsXML(
             view.GET(),
@@ -771,15 +771,15 @@ class TestTimetableDictView(TimetableTestMixin, unittest.TestCase):
                </timetables>""")
 
 
-class TestCompositeTimetabledView(TimetableTestMixin, unittest.TestCase):
+class TestCompositeTimetablesView(TimetableTestMixin, unittest.TestCase):
 
     def createView(self, context, request):
-        from schooltool.timetable.rest import CompositeTimetabledView
-        return CompositeTimetabledView(ITimetabled(context), request)
+        from schooltool.timetable.rest import CompositeTimetablesView
+        return CompositeTimetablesView(ITimetables(context), request)
 
     def setUp(self):
         TimetableTestMixin.setUp(self)
-        self.tt = ITimetabled(self.person).timetables["2003 fall.schema1"] \
+        self.tt = ITimetables(self.person).timetables["2003 fall.schema1"] \
                 = self.createEmpty()
 
 
@@ -818,7 +818,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableFileFactory))
     suite.addTest(unittest.makeSuite(TestTimetablePUT))
     suite.addTest(unittest.makeSuite(TestTimetableDictView))
-    suite.addTest(unittest.makeSuite(TestCompositeTimetabledView))
+    suite.addTest(unittest.makeSuite(TestCompositeTimetablesView))
     suite.addTest(DocTestSuite(optionflags=ELLIPSIS))
     suite.addTest(DocTestSuite('schooltool.timetable.rest',
                                setUp=setUp, tearDown=placelesssetup.tearDown,

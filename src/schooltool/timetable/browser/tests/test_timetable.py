@@ -48,8 +48,8 @@ def setUp(test=None):
     setup.setUp(test)
     from schooltool import timetable
     ztapi.provideAdapter(IAttributeAnnotatable,
-                         timetable.interfaces.ITimetabled,
-                         timetable.TimetabledAdapter)
+                         timetable.interfaces.ITimetables,
+                         timetable.TimetablesAdapter)
 
 tearDown = setup.tearDown
 
@@ -768,13 +768,13 @@ def doctest_TimetableView():
         >>> from schooltool.timetable.browser import TimetableView
         >>> from schooltool.timetable import Timetable
         >>> from schooltool.timetable import TimetableDay, TimetableActivity
-        >>> from schooltool.timetable.interfaces import ITimetabled
+        >>> from schooltool.timetable.interfaces import ITimetables
         >>> from schooltool.app import Section
 
     Create some context:
 
         >>> s = Section()
-        >>> ITimetabled(s).timetables['term.schema'] = tt = Timetable(['day 1'])
+        >>> ITimetables(s).timetables['term.schema'] = tt = Timetable(['day 1'])
         >>> tt['day 1'] = ttd = TimetableDay(['A'])
         >>> ttd.add('A', TimetableActivity('Something'))
 
@@ -1560,7 +1560,7 @@ def doctest_PersonTimetableSetupView():
     We will need an application object
 
         >>> from schooltool.app import SchoolToolApplication
-        >>> from schooltool.timetable.interfaces import ITimetabled
+        >>> from schooltool.timetable.interfaces import ITimetables
         >>> app = SchoolToolApplication()
 
         # XXX: Should be setup by test framework
@@ -1658,12 +1658,12 @@ def doctest_PersonTimetableSetupView():
 
         >>> from schooltool.timetable import TimetableActivity
         >>> ttkey = "2005-fall.default"
-        >>> ITimetabled(math).timetables[ttkey] = ttschema.createTimetable()
-        >>> ITimetabled(math).timetables[ttkey]['Tue'].add('10:00',
+        >>> ITimetables(math).timetables[ttkey] = ttschema.createTimetable()
+        >>> ITimetables(math).timetables[ttkey]['Tue'].add('10:00',
         ...                                   TimetableActivity('Math'))
 
-        >>> ITimetabled(history).timetables[ttkey] = ttschema.createTimetable()
-        >>> ITimetabled(history).timetables[ttkey]['Tue'].add('10:00',
+        >>> ITimetables(history).timetables[ttkey] = ttschema.createTimetable()
+        >>> ITimetables(history).timetables[ttkey]['Tue'].add('10:00',
         ...                                   TimetableActivity('History'))
 
         >>> section_map = view.sectionMap(term, ttschema)
@@ -2035,9 +2035,9 @@ def doctest_SectionTimetableSetupView():
     We will need a section
 
         >>> from schooltool.app import Section
-        >>> from schooltool.timetable.interfaces import ITimetabled
+        >>> from schooltool.timetable.interfaces import ITimetables
         >>> app["sections"]["math"] = math = Section("Math")
-        >>> ITimetabled(math).timetables.keys()
+        >>> ITimetables(math).timetables.keys()
         []
 
     We will also need a timetable schema, and a term.
@@ -2148,11 +2148,11 @@ def doctest_SectionTimetableSetupView():
 
     An empty save request will create an empty timetable:
 
-        >>> ITimetabled(math).timetables['2005-fall.default']
+        >>> ITimetables(math).timetables['2005-fall.default']
         <Timetable: ...>
-        >>> ITimetabled(math).timetables['2005-fall.default']['Mon'].items()
+        >>> ITimetables(math).timetables['2005-fall.default']['Mon'].items()
         [('9:00', Set([])), ('10:00', Set([]))]
-        >>> ITimetabled(math).timetables['2005-fall.default']['Tue'].items()
+        >>> ITimetables(math).timetables['2005-fall.default']['Tue'].items()
         [('9:00', Set([])), ('10:00', Set([]))]
 
     Let\'s add some scheduled classes:
@@ -2183,13 +2183,13 @@ def doctest_SectionTimetableSetupView():
 
     Now we have a schedule for our course:
 
-        >>> ITimetabled(math).timetables['2005-fall.default']['Mon']['9:00']
+        >>> ITimetables(math).timetables['2005-fall.default']['Mon']['9:00']
         Set([TimetableActivity('', ...
-        >>> ITimetabled(math).timetables['2005-fall.default']['Mon']['10:00']
+        >>> ITimetables(math).timetables['2005-fall.default']['Mon']['10:00']
         Set([])
-        >>> ITimetabled(math).timetables['2005-fall.default']['Tue']['9:00']
+        >>> ITimetables(math).timetables['2005-fall.default']['Tue']['9:00']
         Set([TimetableActivity('', ...
-        >>> ITimetabled(math).timetables['2005-fall.default']['Tue']['10:00']
+        >>> ITimetables(math).timetables['2005-fall.default']['Tue']['10:00']
         Set([])
 
         >>> request = TestRequest(form={'ttschema': 'default',
@@ -2233,7 +2233,7 @@ def doctest_SectionTimetableSetupView():
 
     Tuesday\'s Activity is no longer there:
 
-        >>> ITimetabled(math).timetables['2005-fall.default']['Tue']['9:00']
+        >>> ITimetables(math).timetables['2005-fall.default']['Tue']['9:00']
         Set([])
 
 

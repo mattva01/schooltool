@@ -7,12 +7,12 @@
     <allow interface=".INullTimetable" />
   </content>
 
-  <content class=".CompositeTimetabled">
-    <allow interface=".ICompositeTimetabled" />
+  <content class=".CompositeTimetables">
+    <allow interface=".ICompositeTimetables" />
   </content>
 
   <view
-      for="zope.app.annotation.interfaces.IAnnotatable"
+      for="..interfaces.IHaveTimetables"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
       provides="schoolbell.app.rest.IRestTraverser"
       factory=".CompositeTimetableTraverser"
@@ -21,7 +21,7 @@
       />
 
   <view
-      for="zope.app.annotation.interfaces.IAnnotatable"
+      for="..interfaces.IHaveTimetables"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
       provides="schoolbell.app.rest.IRestTraverser"
       factory=".TimetableTraverser"
@@ -38,10 +38,10 @@
       />
 
   <view
-      for="schooltool.rest.interfaces.ICompositeTimetabled"
+      for="schooltool.rest.interfaces.ICompositeTimetables"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
       provides="zope.publisher.interfaces.IPublishTraverse"
-      factory=".CompositeTimetabledPublishTraverse"
+      factory=".CompositeTimetablesPublishTraverse"
       permission="zope.Public"
       />
 
@@ -118,9 +118,9 @@
       />
 
   <view
-      for="schooltool.rest.interfaces.ICompositeTimetabled"
+      for="schooltool.rest.interfaces.ICompositeTimetables"
       name="GET"
-      factory=".CompositeTimetabledView"
+      factory=".CompositeTimetablesView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />

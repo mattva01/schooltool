@@ -24,7 +24,7 @@ $Id$
 from sets import Set
 from zope.interface import implements
 
-from schooltool.timetable.interfaces import ITimetableSource, ITimetabled
+from schooltool.timetable.interfaces import ITimetableSource, ITimetables
 from schoolbell.relationship import getRelatedObjects
 from schoolbell.app.membership import URIGroup
 from schooltool.relationships import URISection
@@ -45,7 +45,7 @@ class BaseRelationshipTimetableSource(object):
     def getTimetable(self, term, schema):
         timetables = []
         for obj in getRelatedObjects(self.context.object, self.role):
-            tt = ITimetabled(obj).getCompositeTimetable(term, schema)
+            tt = ITimetables(obj).getCompositeTimetable(term, schema)
             if tt is not None:
                 timetables.append(tt)
 
@@ -61,7 +61,7 @@ class BaseRelationshipTimetableSource(object):
     def listTimetables(self):
         keys = Set()
         for obj in getRelatedObjects(self.context.object, self.role):
-            keys.update(ITimetabled(obj).listCompositeTimetables())
+            keys.update(ITimetables(obj).listCompositeTimetables())
         return keys
 
 

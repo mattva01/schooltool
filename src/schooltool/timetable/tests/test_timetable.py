@@ -43,7 +43,7 @@ from zope.app.location.interfaces import ILocation
 from schooltool.tests.helpers import diff, sorted
 from schoolbell.app.rest.tests.utils import NiceDiffsMixin, EqualsSortedMixin
 from schooltool import timetable
-from schooltool.timetable.interfaces import ITerm, ITimetabled
+from schooltool.timetable.interfaces import ITerm, ITimetables
 from schooltool.timetable.interfaces import ITimetable, ITimetableActivity
 from schoolbell.relationship import RelationshipProperty
 from schoolbell.app.membership import URIGroup, URIMember, URIMembership
@@ -985,7 +985,7 @@ class Content(object):
 
 class Parent(Content):
 
-    implements(ITimetabled)
+    implements(ITimetables)
 
     def __init__(self):
         self.object = self
@@ -1092,38 +1092,38 @@ class TestTimetableDict(EventTestMixin, unittest.TestCase):
         td['a.c'] = TimetableStub()
 
 
-class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
+class TestTimetablesMixin(NiceDiffsMixin, EqualsSortedMixin,
                           unittest.TestCase):
 
     def setUp(self):
         from schoolbell.relationship.tests import setUpRelationships
         from zope.app.traversing.interfaces import IPhysicallyLocatable
-        from schooltool.timetable.interfaces import ITimetable, ITimetabled
+        from schooltool.timetable.interfaces import ITimetable, ITimetables
         from schooltool.timetable.interfaces import ITimetableSource
         from schooltool.timetable.source import MembershipTimetableSource
-        from schooltool.timetable import TimetabledAdapter
+        from schooltool.timetable import TimetablesAdapter
 
         self.site = setup.placefulSetUp(True)
         setup.setUpAnnotations()
         setUpRelationships()
 
-        ztapi.subscribe((ITimetabled, ), ITimetableSource,
+        ztapi.subscribe((ITimetables, ), ITimetableSource,
                         MembershipTimetableSource)
 
-        ztapi.provideAdapter(IAttributeAnnotatable, ITimetabled,
-                             TimetabledAdapter)
+        ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
+                             TimetablesAdapter)
 
 
     def tearDown(self):
         setup.placefulTearDown()
 
     def test_interface(self):
-        from schooltool.timetable.interfaces import ITimetabled
-        from schooltool.timetable import TimetabledAdapter, TimetableDict
+        from schooltool.timetable.interfaces import ITimetables
+        from schooltool.timetable import TimetablesAdapter, TimetableDict
 
         content = Content()
-        tm = TimetabledAdapter(content)
-        verifyObject(ITimetabled, tm)
+        tm = TimetablesAdapter(content)
+        verifyObject(ITimetables, tm)
         self.assert_(isinstance(tm.timetables, TimetableDict))
         self.assertEqual(tm.timetables.__parent__, content)
 
@@ -1142,7 +1142,7 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         return tt
 
     def test_composite_table_own(self):
-        tm = ITimetabled(Content())
+        tm = ITimetables(Content())
         self.assertEqual(tm.timetables, {})
         self.assertEqual(tm.getCompositeTimetable("a", "b"), None)
         self.assertEqual(tm.listCompositeTimetables(), Set())
@@ -1160,7 +1160,7 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         from schooltool.timetable import TimetableActivity
         from schoolbell.app.membership import Membership
 
-        tm = ITimetabled(Content())
+        tm = ITimetables(Content())
         parent = Parent()
         Membership(group=parent, member=tm.object)
 
@@ -1202,7 +1202,7 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
 
     def test_paths(self):
         content = Content()
-        tm = ITimetabled(content)
+        tm = ITimetables(content)
         content.__name__ = 'stub'
         content.__parent__ = self.site
         tt = tm.timetables["2003-fall.sequential"] = self.newTimetable()
@@ -1228,7 +1228,7 @@ class TestTimetabledMixin(NiceDiffsMixin, EqualsSortedMixin,
         tss['sequential'] = self.newTimetableSchema()
         tss['other'] = self.newTimetableSchema()
         tss['and another'] = self.newTimetableSchema()
-        tm = ITimetabled(Content())
+        tm = ITimetables(Content())
 
         tt1 = self.newTimetable()
         tt1["A"].add("Green", TimetableActivity("AG"))
@@ -1431,7 +1431,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
     suite.addTest(unittest.makeSuite(TestTimetableSchemaContainer))
     suite.addTest(unittest.makeSuite(TestTermContainer))
-    suite.addTest(unittest.makeSuite(TestTimetabledMixin))
+    suite.addTest(unittest.makeSuite(TestTimetablesMixin))
     suite.addTest(unittest.makeSuite(TestGetPeriodsForDay))
     return suite
 

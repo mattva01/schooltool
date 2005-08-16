@@ -156,6 +156,7 @@
   </content>
 
   <content class=".app.Section">
+    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
     <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
     <require permission="schoolbell.view"
              attributes="title description instructors members
@@ -179,6 +180,24 @@
         permission="schoolbell.viewCalendar"
         set_schema=".interfaces.ICalendarAndTTOverlayInfo"/>
   </content>
+
+  <!-- Timetables for content components -->
+  <class class="schoolbell.app.app.SchoolBellApplication">
+    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
+  </class>
+
+  <class class="schooltool.app.Person">
+    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
+  </class>
+
+  <class class="schoolbell.app.group.group.Group">
+    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
+  </class>
+
+  <class class="schoolbell.app.resource.resource.Resource">
+    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
+  </class>
+
 
   <!-- Views -->
   <include package=".browser" />

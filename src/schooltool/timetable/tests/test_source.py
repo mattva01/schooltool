@@ -26,8 +26,8 @@ from sets import Set
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.testing import setup, ztapi
 from schooltool.timetable.tests.test_timetable import Content, Parent
-from schooltool.timetable.interfaces import ITimetabled
-from schooltool.timetable import TimetabledAdapter
+from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable import TimetablesAdapter
 from zope.interface.verify import verifyObject
 
 
@@ -40,15 +40,15 @@ class BaseTimetableSourceTest(object):
         setup.setUpAnnotations()
         setUpRelationships()
 
-        ztapi.provideAdapter(IAttributeAnnotatable, ITimetabled,
-                             TimetabledAdapter)
+        ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
+                             TimetablesAdapter)
 
     def tearDown(self):
         setup.placefulTearDown()
 
     def test(self):
         from schooltool.timetable.interfaces import ITimetableSource
-        context = ITimetabled(Content())
+        context = ITimetables(Content())
         adapter = self.createAdapter(context)
         verifyObject(ITimetableSource, adapter)
 
@@ -62,7 +62,7 @@ class BaseTimetableSourceTest(object):
     def test_getTimetable(self):
         from schooltool.timetable import TimetableActivity
 
-        tm = ITimetabled(Content())
+        tm = ITimetables(Content())
         parent = Parent()
         self.createRelationship(tm.object, parent)
 
@@ -108,7 +108,7 @@ class BaseTimetableSourceTest(object):
     def test_listTimetables(self):
         from schooltool.timetable import TimetableActivity
 
-        tm = ITimetabled(Content())
+        tm = ITimetables(Content())
 
         adapter = self.createAdapter(tm)
         self.assertEqual(adapter.listTimetables(), Set())

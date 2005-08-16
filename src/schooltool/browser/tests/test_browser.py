@@ -49,17 +49,17 @@ def doctest_NavigationView():
     """
 
 
-def doctest_TimetabledTraverser():
-    """Tests for TimetabledTraverser.
+def doctest_TimetablesTraverser():
+    """Tests for TimetablesTraverser.
 
-        >>> from schooltool.browser import TimetabledTraverser
-        >>> from schooltool.timetable.interfaces import ITimetabled
-        >>> class TimetabledStub:
-        ...     implements(ITimetabled)
+        >>> from schooltool.browser import TimetablesTraverser
+        >>> from schooltool.timetable.interfaces import ITimetables
+        >>> class TimetablesStub:
+        ...     implements(ITimetables)
         ...     timetables = 'Timetables'
         ...     calendar = 'Calendar'
         >>> request = TestRequest()
-        >>> t = TimetabledTraverser(TimetabledStub(), request)
+        >>> t = TimetablesTraverser(TimetablesStub(), request)
 
     If we ask for timetables, the corresponding object will be returned:
 

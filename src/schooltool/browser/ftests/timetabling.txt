@@ -489,7 +489,7 @@ We should see a timetable in the section's timetable list:
     >>> print http(r"""
     ... GET /frogpond/sections/swimming--frog/timetables/ HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
-    ... """, handle_errors=False)
+    ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8

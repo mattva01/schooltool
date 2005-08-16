@@ -47,8 +47,8 @@ from schooltool.app import Person, Course, Section
 from schooltool.relationships import URISection, URISectionOfCourse
 from schooltool.browser.csvimport import InvalidCSVError
 from schooltool.interfaces import ApplicationInitializationEvent
-from schooltool.timetable.interfaces import ITimetabled
-from schooltool.timetable import TimetabledAdapter
+from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable import TimetablesAdapter
 from schooltool import timetable
 
 __metaclass__ = type
@@ -56,8 +56,8 @@ __metaclass__ = type
 
 def setUp(test=None):
     testSetUp(test)
-    ztapi.provideAdapter(IAttributeAnnotatable, ITimetabled,
-                         TimetabledAdapter)
+    ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
+                         TimetablesAdapter)
 
 
 class TestTimetableCSVImportView(unittest.TestCase):
@@ -190,13 +190,13 @@ class TestTimetableCSVImporter(unittest.TestCase):
         from schooltool.app import SchoolToolApplication
 
         # Set up a name chooser to pick names for new sections.
-        from schooltool.interfaces import ISectionContainer 
+        from schooltool.interfaces import ISectionContainer
         from schoolbell.app.app import SimpleNameChooser
         from zope.app.container.interfaces import INameChooser
         ztapi.provideAdapter(ISectionContainer, INameChooser,
                              SimpleNameChooser)
-        ztapi.provideAdapter(IAttributeAnnotatable, ITimetabled,
-                             TimetabledAdapter)
+        ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
+                             TimetablesAdapter)
 
         self.app = app = SchoolToolApplication()
         # XXX: Use future test setup
@@ -364,7 +364,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assert_(persons['lorch'] in philosophy_guzman.members)
 
         # Look at the timetables of the sections
-        lorch_tt = ITimetabled(philosophy_lorch).timetables['summer.three-day']
+        lorch_tt = ITimetables(philosophy_lorch).timetables['summer.three-day']
         self.assertEquals(len(list(lorch_tt.itercontent())), 3)
         # Look at a couple of periods.
         self.assertEquals(len(lorch_tt['Monday']['B']), 1)
@@ -495,7 +495,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assert_(instructor in section.instructors)
 
         # Check timetable
-        tt = ITimetabled(section).timetables['fall.three-day']
+        tt = ITimetables(section).timetables['fall.three-day']
         self.assertEquals(len(list(tt.itercontent())), 2)
 
         # Check activities in timetable
@@ -518,7 +518,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         section2 = imp.createSection(course, instructor,
                                      periods=periods, dry_run=False)
         self.assert_(section2 is section)
-        self.assert_(ITimetabled(section).timetables['fall.three-day'] is tt)
+        self.assert_(ITimetables(section).timetables['fall.three-day'] is tt)
         self.assertEquals(len(list(tt.itercontent())), 2)
 
     def test_createSection_existing(self):
@@ -532,14 +532,14 @@ class TestTimetableCSVImporter(unittest.TestCase):
         title = 'Philosophy - Lorch'
         section = self.app['sections']['oogabooga'] = Section(title=title)
         tt = imp.ttschema.createTimetable()
-        ITimetabled(section).timetables['fall.three-day'] = tt
+        ITimetables(section).timetables['fall.three-day'] = tt
 
         # real run
         section2 = imp.createSection(course, instructor,
                                      periods=periods, dry_run=False)
 
         self.assert_(section is section2)
-        self.assert_(ITimetabled(section).timetables['fall.three-day'] is tt)
+        self.assert_(ITimetables(section).timetables['fall.three-day'] is tt)
 
     def test_importChunk(self):
         imp = self.createImporter(term='fall', ttschema='three-day')
@@ -555,7 +555,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.failIf(imp.errors.anyErrors(), imp.errors)
 
         philosophy_curtin = self.app['sections']['philosophy--curtin']
-        tt = ITimetabled(philosophy_curtin).timetables['fall.three-day']
+        tt = ITimetables(philosophy_curtin).timetables['fall.three-day']
         activities = list(tt.itercontent())
         self.assertEquals(len(activities), 2)
 

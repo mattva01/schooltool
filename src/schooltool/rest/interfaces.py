@@ -42,7 +42,7 @@ class INullTimetable(INullResource):
     """
 
 
-class ICompositeTimetabled(Interface):
+class ICompositeTimetables(Interface):
     """A marker interface used when traversing into composite timetables."""
 
     def getCompositeTimetable(term_id, tt_schema_id):

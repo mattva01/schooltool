@@ -3,7 +3,6 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
-
   <!-- Skin and resources -->
 
   <zope:subscriber
@@ -343,27 +342,24 @@
       permission="zope.View"
       />
 
-  <!-- XXX: Switch to specific Timetabled interface later. -->
-
-  <zope:class class=".TimetabledTraverser">
+  <zope:class class=".TimetablesTraverser">
     <zope:allow
         interface="schoolbell.app.traverser.interfaces.ITraverserPlugin" />
   </zope:class>
 
   <zope:subscriber
-      for="zope.app.annotation.interfaces.IAnnotatable
+      for="schooltool.timetable.interfaces.IHaveTimetables
            zope.publisher.interfaces.browser.IBrowserRequest"
       provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
-      factory=".TimetabledTraverser"
+      factory=".TimetablesTraverser"
       />
 
   <menuItem
       menu="schoolbell_actions"
       title="View Timetables"
-      for="zope.app.annotation.interfaces.IAnnotatable"
+      for="schooltool.timetable.interfaces.IHaveTimetables"
       action="timetables/index.html"
       />
-  <!-- end of timetabled specific stuff -->
 
 
   <!-- Skin -->

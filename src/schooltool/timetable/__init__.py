@@ -46,7 +46,7 @@ timetable's key.
 Objects that have timetables
 ----------------------------
 
-An object that has (or may have) timetables implements ITimetabled.
+An object that has (or may have) timetables implements ITimetables.
 
 An object's composite timetable is derived by combining the object's
 timetable with composite timetables of other objects, acquired by
@@ -169,7 +169,7 @@ from schooltool.timetable.interfaces import ITimetableReplacedEvent
 from schooltool.timetable.interfaces import ISchooldayPeriod
 from schooltool.timetable.interfaces import ISchooldayTemplate
 from schooltool.timetable.interfaces import ISchooldayTemplateWrite
-from schooltool.timetable.interfaces import ITimetabled
+from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITermContainer
 from schooltool.timetable.interfaces import ITermWrite, ITerm
@@ -714,14 +714,14 @@ class TimetableDict(PersistentDict):
 
 TIMETABLES_KEY = 'schooltool.timetable.timetables'
 
-class TimetabledAdapter(object):
+class TimetablesAdapter(object):
     """This adapter adapts any annotatable object to be timetabled.
 
-    It provides ``ITimetabled`` with the default semantics of
+    It provides ``ITimetables`` with the default semantics of
     timetable composition by membership and logic for searching for
     ``ICompositeTimetableProvider`` facets.
     """
-    implements(ITimetabled)
+    implements(ITimetables)
     adapts(IAnnotatable)
 
     def __init__(self, context):

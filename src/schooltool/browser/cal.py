@@ -40,7 +40,7 @@ from schoolbell.app.person.interfaces import IPerson, IPersonPreferences
 from schoolbell.app.person.preference import PersonPreferences
 
 from schooltool.timetable import getPeriodsForDay
-from schooltool.timetable.interfaces import ITimetabled
+from schooltool.timetable.interfaces import ITimetables
 from schooltool.interfaces import ISection
 
 
@@ -208,7 +208,7 @@ class CalendarListView(BrowserView):
         yield (self.context, '#9db8d2', '#7590ae')
 
         parent = zapi.getParent(self.context)
-        ttcalendar = ITimetabled(parent).makeTimetableCalendar()
+        ttcalendar = ITimetables(parent).makeTimetableCalendar()
 
         user = IPerson(self.request.principal, None)
         if user is None:
@@ -238,5 +238,5 @@ class CalendarListView(BrowserView):
                 # overlaid timetables
                 if item.show_timetables:
                     owner = item.calendar.__parent__
-                    ttcalendar = ITimetabled(owner).makeTimetableCalendar()
+                    ttcalendar = ITimetables(owner).makeTimetableCalendar()
                     yield (ttcalendar, item.color1, item.color2)

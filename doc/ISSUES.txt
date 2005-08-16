@@ -4,10 +4,6 @@ Issues with the `refactor` branch
 
 - There are several XXX.
 
-- Currently every annotatable object can have a timetable. Clearly this is
-  undesirable. We should implement a marker interface that is added to objects
-  via ZCML that determines the availability of time tables for objects.
-
 - There is an implicit expectation that all objects that can have a timetable
   also provide a title.
 
