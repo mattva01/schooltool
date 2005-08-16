@@ -91,10 +91,10 @@ and we would like to be able to traverse
 
   * all items of the container, as well as
 
-    >>> from zope.app.container.traversal import ContainerTraverser
+    >>> from schoolbell.app.traverser.traverser import ContainerTraverserPlugin
     >>> from schoolbell.app.traverser.interfaces import ITraverserPlugin
 
-    >>> provideSubscriptionAdapter(ContainerTraverser,
+    >>> provideSubscriptionAdapter(ContainerTraverserPlugin,
     ...                            (IMyContainer, IPublisherRequest),
     ...                            ITraverserPlugin)
 

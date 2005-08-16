@@ -117,3 +117,21 @@ def AdapterTraverserPlugin(traversalName, interface, adapterName=''):
                 (AdapterTraverserPluginTemplate,),
                 {'traversalName': traversalName,
                  'adapterName': adapterName, 'interface': interface})
+
+
+class ContainerTraverserPlugin(object):
+    """A traverser that knows how to look up objects by name in a container."""
+
+    implements(ITraverserPlugin)
+
+    def __init__(self, container, request):
+        self.context = container
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        """See zope.publisher.interfaces.IPublishTraverse"""
+        subob = self.context.get(name, None)
+        if subob is None:
+            raise NotFound(self.context, name, request)
+
+        return subob

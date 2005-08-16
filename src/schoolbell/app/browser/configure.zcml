@@ -48,7 +48,7 @@
       for="zope.app.container.interfaces.IReadContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
       provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
-      factory="zope.app.container.traversal.ContainerTraverser"
+      factory="schoolbell.app.traverser.traverser.ContainerTraverserPlugin"
       />
 
 <!-- Application Traverser -->
