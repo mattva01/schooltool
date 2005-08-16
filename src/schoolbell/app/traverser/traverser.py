@@ -21,7 +21,7 @@ Pluggable Traverser Implementation
 
 $Id$
 """
-from zope.component import subscribers, queryAdapter
+from zope.component import subscribers, queryAdapter, queryMultiAdapter
 from zope.interface import implements
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces import IPublishTraverse
@@ -40,11 +40,19 @@ class PluggableTraverser(object):
         self.request = request
 
     def publishTraverse(self, request, name):
+        # 1. Look at all the traverser plugins, whether they have an answer.
         for traverser in subscribers((self.context, request), ITraverserPlugin):
             try:
                 return traverser.publishTraverse(request, name)
             except NotFound:
                 pass
+
+        # 2. The traversers did not have an answer, so let's see whether it is
+        #    a view. 
+        view = queryMultiAdapter((self.context, request), name=name)
+        if view is not None:
+            return view
+
         raise NotFound(self.context, name, request)
 
 

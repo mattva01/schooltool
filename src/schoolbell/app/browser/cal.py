@@ -125,10 +125,6 @@ class CalendarOwnerTraverser(object):
             if view is not None:
                 return view
 
-        view = queryMultiAdapter((self.context, request), name=name)
-        if view is not None:
-            return view
-
         raise NotFound(self.context, name, request)
 
     def browserDefault(self, request):

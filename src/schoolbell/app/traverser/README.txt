@@ -65,6 +65,26 @@ However, an incorrect variable name will still return a ``NotFound`` error:
   ...
   NotFound: Object: <Content object at ...>, name: 'bad'
 
+Every traverser should also make sure that the passed in name is not a
+view. (This allows us to not specify the ``@@`` in front of a view.) So let's
+register one:
+
+  >>> class View(object):
+  ...     def __init__(self, context, request):
+  ...         pass
+
+  >>> from zope.component import provideAdapter
+  >>> from zope.publisher.interfaces import IPublisherRequest
+  >>> provideAdapter(View, 
+  ...                adapts=(IContent, IPublisherRequest),
+  ...                provides=Interface,
+  ...                name='view.html')
+
+Now we can lookup the view as well:
+
+  >>> traverser.publishTraverse(request, 'view.html')
+  <View object at ...>
+
 
 Advanced Uses
 -------------

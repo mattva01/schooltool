@@ -101,16 +101,6 @@ def doctest_CalendarOwnerTraverser():
         >>> view.request is traverser.request
         True
 
-    However, we should be able to access other views of the object:
-
-        >>> ztapi.browserView(IPerson, 'some_view.html', BrowserView)
-
-        >>> view = traverser.publishTraverse(request, 'some_view.html')
-        >>> view.context is traverser.context
-        True
-        >>> view.request is traverser.request
-        True
-
     If we try to look up a nonexistent view, we should get a NotFound error:
 
         >>> traverser.publishTraverse(request,
