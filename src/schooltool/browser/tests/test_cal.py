@@ -58,9 +58,11 @@ def setUpSchoolToolSite():
     app['persons'] = PersonContainer()
     app['groups'] = GroupContainer()
 
-    schooltool.app.addCourseContainerToApplication(
+    from schooltool.course import course
+    course.addCourseContainerToApplication(
         ApplicationInitializationEvent(app))
-    schooltool.app.addSectionContainerToApplication(
+    from schooltool.course import section
+    section.addSectionContainerToApplication(
         ApplicationInitializationEvent(app))
     timetable.addToApplication(ApplicationInitializationEvent(app))
 
@@ -219,7 +221,8 @@ def doctest_CalendarSTOverlayView():
 
         >>> from schoolbell.app.group.group import Group
         >>> from schoolbell.app.person.person import Person
-        >>> from schooltool.app import Section, Course
+        >>> from schooltool.course.course import Course
+        >>> from schooltool.course.section import Section
         >>> from schoolbell.app.security import Principal
         >>> app = setUpSchoolToolSite()
         >>> person = app['persons']['whatever'] = Person('fred')

@@ -5,7 +5,7 @@
 
   <page
       name="schedule.html"
-      for="schooltool.interfaces.ISection"
+      for="schooltool.course.interfaces.ISection"
       class="schooltool.timetable.browser.SectionTimetableSetupView"
       permission="zope.View"
       menu="schoolbell_actions"

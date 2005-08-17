@@ -25,12 +25,8 @@ import datetime
 from StringIO import StringIO
 import operator
 
-import libxml2
-
 from zope.component import adapts
 from zope.interface import implements
-from zope.app import zapi
-from zope.app.testing import setup
 from zope.app.traversing.api import getPath
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 
@@ -39,17 +35,10 @@ from schoolbell.app.rest.app import GenericContainerView
 from schoolbell.app.rest import View, Template
 from schoolbell.app.rest import app as sb
 from schoolbell.app.rest.errors import RestError
-from schoolbell.app.rest.rng import validate_against_schema
-from schoolbell.calendar.icalendar import ICalParseError
 from schoolbell.calendar.icalendar import ICalReader
 
-from schooltool import getSchoolToolApplication
-from schooltool.app import Course, Section
-from schooltool.app import CourseContainer, SectionContainer
 from schooltool.common import parse_date
 from schooltool.timetable.interfaces import ITerm, ITermContainer
-from schooltool.interfaces import ICourse, ICourseContainer
-from schooltool.interfaces import ISection, ISectionContainer
 from schooltool.timetable import Term
 
 
@@ -57,139 +46,6 @@ class SchoolToolApplicationView(sb.ApplicationView):
     """The root view for the application."""
 
     template = Template("templates/app.pt",
-                        content_type="text/xml; charset=UTF-8")
-
-
-class CourseFileFactory(sb.ApplicationObjectFileFactory):
-    """Adapter that adapts CourseContainer to FileFactory."""
-
-    adapts(ICourseContainer)
-
-    schema = '''<?xml version="1.0" encoding="UTF-8"?>
-        <grammar xmlns="http://relaxng.org/ns/structure/1.0"
-                 ns="http://schooltool.org/ns/model/0.1"
-                 datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
-          <start>
-            <element name="object">
-              <attribute name="title">
-                <text/>
-              </attribute>
-              <optional>
-                <attribute name="description">
-                  <text/>
-                </attribute>
-              </optional>
-            </element>
-          </start>
-        </grammar>
-        '''
-
-    factory = Course
-
-    def parseDoc(self, doc):
-        kwargs = {}
-        node = doc.query('/m:object')[0]
-        kwargs['title'] = node['title']
-        kwargs['description'] = node.get('description')
-        return kwargs
-
-
-class CourseContainerView(sb.GenericContainerView):
-    """RESTive view of a course container."""
-
-
-class CourseFile(sb.ApplicationObjectFile):
-    """Adapter that adapts ICourse to IWriteFile"""
-
-    adapts(ICourse)
-
-    def modify(self, title=None, description=None):
-        """Modifies underlying schema."""
-        self.context.title = title
-        self.context.description = description
-
-
-class CourseView(View):
-    """RESTive view for courses."""
-
-    template = Template("templates/course.pt",
-                        content_type="text/xml; charset=UTF-8")
-    factory = CourseFile
-
-
-class SectionFileFactory(sb.ApplicationObjectFileFactory):
-    """Adapter that adapts SectionContainer to FileFactory."""
-
-    adapts(ISectionContainer)
-
-    schema = '''<?xml version="1.0" encoding="UTF-8"?>
-        <grammar xmlns="http://relaxng.org/ns/structure/1.0"
-                 ns="http://schooltool.org/ns/model/0.1"
-                 datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
-          <start>
-            <element name="object">
-              <attribute name="title">
-                <text/>
-              </attribute>
-              <optional>
-                <attribute name="course">
-                  <text/>
-                </attribute>
-              </optional>
-              <optional>
-                <attribute name="description">
-                  <text/>
-                </attribute>
-              </optional>
-              <optional>
-                <attribute name="location">
-                  <text/>
-                </attribute>
-              </optional>
-            </element>
-          </start>
-        </grammar>
-        '''
-
-    factory = Section
-
-    def parseDoc(self, doc):
-        kwargs = {}
-        node = doc.query('/m:object')[0]
-        kwargs['title'] = node['title']
-        kwargs['description'] = node.get('description')
-        # Locations can be requested by title, we map them to the actual
-        # Resource object here:
-        desired_location = node.get('location')
-        if desired_location:
-            resources = getSchoolToolApplication()['resources']
-            try:
-                location = resources[desired_location]
-                kwargs['location'] = location
-            except KeyError:
-                raise RestError("No such location.")
-        return kwargs
-
-
-class SectionContainerView(sb.GenericContainerView):
-    """RESTive view of a section container."""
-
-
-class SectionFile(sb.ApplicationObjectFile):
-    """Adapter that adapts ISection to IWriteFile"""
-
-    adapts(ISection)
-
-    def modify(self, title=None, description=None):
-        """Modifies underlying schema."""
-        self.context.title = title
-        self.context.description = description
-
-
-class SectionView(View):
-    """RESTive view for sections."""
-
-    template = Template("templates/section.pt",
                         content_type="text/xml; charset=UTF-8")
 
 

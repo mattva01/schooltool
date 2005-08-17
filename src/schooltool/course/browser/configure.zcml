@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope">
+
+  <configure
+      package="schoolbell.app.browser"
+      i18n_domain="schoolbell">
+
+    <addform
+        label="Add a Course"
+        name="addSchoolToolCourse.html"
+        schema="schooltool.course.interfaces.ICourse"
+        fields="title description"
+        set_before_add="title"
+        content_factory="schooltool.course.course.Course"
+        permission="schoolbell.create"
+        template="templates/simple_add.pt"
+        class="schooltool.course.browser.course.CourseAddView">
+        <widget field="description" height="5" />
+    </addform>
+
+  </configure>
+
+  <page
+      name="index.html"
+      for="..interfaces.ICourse"
+      class=".course.CourseView"
+      template="course.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      layer="schooltool.browser.skin.ISchoolToolLayer"
+      />
+
+  <page
+      name="index.html"
+      for="..interfaces.ICourseContainer"
+      class=".course.CourseContainerView"
+      template="course_container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <containerViews
+      for="..interfaces.ICourseContainer"
+      contents="zope.ManageContent"
+      add="zope.View"
+      />
+
+  <page
+      name="course-csvimport.html"
+      for="..interfaces.ICourseContainer"
+      class=".csvimport.CourseCSVImportView"
+      template="course-csvimport.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Import Courses"
+      layer="schooltool.browser.skin.ISchoolToolLayer"
+      />
+
+  <menuItem
+      menu="schoolbell_actions"
+      title="New Course"
+      for="..interfaces.ICourseContainer"
+      action="+/addSchoolToolCourse.html"
+      />
+
+  <page
+      name="index.html"
+      for="..interfaces.ISectionContainer"
+      class=".section.SectionContainerView"
+      template="section_container.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
+      name="index.html"
+      for="..interfaces.ISection"
+      class=".section.SectionView"
+      template="section.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      layer="schooltool.browser.skin.ISchoolToolLayer"
+      />
+
+  <containerViews
+      for="..interfaces.ISectionContainer"
+      contents="zope.ManageContent"
+      add="zope.View"
+      />
+
+  <addform
+      label="Add a Section"
+      name="addSchoolToolSection.html"
+      schema="..interfaces.ISection"
+      fields="title description location"
+      set_before_add="title"
+      template="section_add.pt"
+      content_factory="..section.Section"
+      permission="schoolbell.create"
+      class=".section.SectionAddView">
+    <widget field="description" height="5" />
+  </addform>
+
+  <editform
+      label="Edit Section Information"
+      name="edit.html"
+      schema="..interfaces.ISection"
+      for="..interfaces.ISection"
+      fields="title description location"
+      template="section_edit.pt"
+      permission="schoolbell.edit"
+      class=".section.SectionEditView"
+      menu="schoolbell_actions"
+      title="Edit Info">
+    <widget field="description" height="5" />
+  </editform>
+
+  <page
+      name="instructors.html"
+      for="..interfaces.ISection"
+      class=".section.SectionInstructorView"
+      template="section_instructors.pt"
+      permission="schoolbell.manageMembership"
+      />
+
+  <page
+      name="learners.html"
+      for="..interfaces.ISection"
+      class=".section.SectionLearnerView"
+      template="section_learners.pt"
+      permission="schoolbell.manageMembership"
+      />
+
+  <page
+      name="learner-groups.html"
+      for="..interfaces.ISection"
+      class=".section.SectionLearnerGroupView"
+      template="section_learners.pt"
+      permission="schoolbell.manageMembership"
+      />
+
+</configure>

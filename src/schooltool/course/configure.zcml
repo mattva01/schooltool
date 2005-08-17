@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope">
+
+  <!-- Course Content Components -->
+
+  <content class=".course.CourseContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schoolbell.view"
+             attributes="keys values items __iter__ __len__" />
+    <require permission="schoolbell.create"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </content>
+
+  <content class=".course.Course">
+    <implements
+        interface="schoolbell.app.note.interfaces.IHaveNotes" />
+    <require permission="schoolbell.view"
+             attributes="title description sections __cmp__" />
+    <require permission="schoolbell.edit"
+             set_schema=".interfaces.ICourse" />
+  </content>
+
+  <subscriber
+      for="schoolbell.app.interfaces.IApplicationInitializationEvent"
+      handler=".course.addCourseContainerToApplication"
+      />
+
+  <adapter
+      for=".interfaces.ICourseContainer"
+      factory="schoolbell.app.app.SimpleNameChooser"
+      provides="zope.app.container.interfaces.INameChooser" />
+
+
+  <!-- Section Content Components -->
+
+  <content class=".section.SectionContainer">
+    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
+    <require permission="schoolbell.view"
+             attributes="keys values items __iter__ __len__" />
+    <require permission="schoolbell.create"
+             interface="zope.app.container.interfaces.IWriteContainer" />
+  </content>
+
+  <content class=".section.Section">
+    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
+    <implements
+        interface="schoolbell.app.note.interfaces.IHaveNotes" />
+    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
+    <require permission="schoolbell.view"
+             attributes="title description instructors members
+                         courses label size __cmp__ location" />
+    <require permission="schoolbell.edit"
+             set_schema=".interfaces.ISection" />
+  </content>
+
+  <subscriber
+      for="schoolbell.app.interfaces.IApplicationInitializationEvent"
+      handler=".section.addSectionContainerToApplication"
+      />
+
+  <adapter
+      for=".interfaces.ISectionContainer"
+      factory="schoolbell.app.app.SimpleNameChooser"
+      provides="zope.app.container.interfaces.INameChooser" />
+
+
+  <!-- Views -->
+  <include package=".browser" />
+  <include package=".rest" />
+
+</configure>

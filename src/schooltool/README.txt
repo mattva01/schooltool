@@ -11,7 +11,10 @@ We need some test setup:
     >>> from schoolbell.app.person.person import Person, PersonContainer
     >>> from schoolbell.app.person.person import addPersonContainerToApplication
     >>> from schooltool import app
-    >>> from schooltool.app import Course, Section
+    >>> from schooltool.course.course import Course
+    >>> from schooltool.course.course import addCourseContainerToApplication
+    >>> from schooltool.course.section import Section
+    >>> from schooltool.course.section import addSectionContainerToApplication
     >>> from schooltool.interfaces import ApplicationInitializationEvent
 
     >>> school = app.SchoolToolApplication()
@@ -22,15 +25,15 @@ We need some test setup:
     ...     ApplicationInitializationEvent(school))
     >>> addGroupContainerToApplication(
     ...     ApplicationInitializationEvent(school))
-    >>> app.addCourseContainerToApplication(
+    >>> addCourseContainerToApplication(
     ...     ApplicationInitializationEvent(school))
-    >>> app.addSectionContainerToApplication(
+    >>> addSectionContainerToApplication(
     ...     ApplicationInitializationEvent(school))
 
     >>> school['courses']
-    <schooltool.app.CourseContainer object at ...>
+    <schooltool.course.course.CourseContainer object at ...>
     >>> school['sections']
-    <schooltool.app.SectionContainer object at ...>
+    <schooltool.course.section.SectionContainer object at ...>
 
 A Course is a simple object with a title and description that can describe a
 particular course of study.
@@ -128,7 +131,7 @@ schoolbell.relationship methods.  There are convenience methods in PersonView
 as well:
 
     >>> from schoolbell.app.membership import URIGroup, URIMembership
-    >>> from schooltool.interfaces import ISection
+    >>> from schooltool.course.interfaces import ISection
     >>> for obj in getRelatedObjects(student2, URIGroup,
     ...                              rel_type=URIMembership):
     ...     ISection.providedBy(obj)

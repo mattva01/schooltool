@@ -39,9 +39,10 @@ from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.person.interfaces import IPerson, IPersonPreferences
 from schoolbell.app.person.preference import PersonPreferences
 
+from schooltool.course.interfaces import ISection
+from schooltool.interfaces import IShowTimetables
 from schooltool.timetable import getPeriodsForDay
 from schooltool.timetable.interfaces import ITimetables
-from schooltool.interfaces import ISection, IShowTimetables
 
 
 class DailyCalendarRowsView(BrowserView):

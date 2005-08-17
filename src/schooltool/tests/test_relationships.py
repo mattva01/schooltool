@@ -43,7 +43,7 @@ def doctest_Instruction():
     We will need some sample persons and sections for the demonstration
 
         >>> from schoolbell.app.person.person import Person
-        >>> from schooltool.app import Section
+        >>> from schooltool.course.section import Section
         >>> jonas = Person()
         >>> petras = Person()
         >>> developers = Section()
@@ -54,7 +54,7 @@ def doctest_Instruction():
 
         >>> Instruction(instructor=jonas, section=petras)
         Traceback (most recent call last):
-          ...
+        ...
         InvalidRelationship: Sections must provide ISection.
 
         >>> zope.event.subscribers[:] = old_subscribers
@@ -83,7 +83,8 @@ def doctest_CourseSections():
 
     We will need a course and several sections:
 
-        >>> from schooltool.app import Course, Section
+        >>> from schooltool.course.course import Course
+        >>> from schooltool.course.section import Section
         >>> from schoolbell.app.person.person import Person
         >>> history = Course()
         >>> section1 = Section(title = "section1")
@@ -157,7 +158,7 @@ def doctest_updateInstructorCalendars():
         >>> from schoolbell.relationship.interfaces import \
         ...                                         IRelationshipRemovedEvent
         >>> from schoolbell.app.person.person import Person
-        >>> from schooltool.app import Section
+        >>> from schooltool.course.section import Section
         >>> from schoolbell.relationship.tests import setUp, tearDown
         >>> setUp()
 
@@ -249,7 +250,7 @@ def doctest_updateStudentCalendars():
         ...                                         IRelationshipAddedEvent
         >>> from schoolbell.relationship.interfaces import \
         ...                                         IRelationshipRemovedEvent
-        >>> from schooltool.app import Section
+        >>> from schooltool.course.section import Section
         >>> from schoolbell.app.person.person import Person
         >>> from schoolbell.relationship.tests import setUp, tearDown
         >>> setUp()

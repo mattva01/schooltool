@@ -40,24 +40,6 @@
   <!-- Views -->
 
   <configure
-      package="schoolbell.app.person.browser"
-      i18n_domain="schoolbell">
-
-    <!-- Views from SchoolBell -->
-
-
-    <page
-        name="add.html"
-        for="schoolbell.app.person.interfaces.IPersonContainer"
-        class="schooltool.browser.app.PersonAddView"
-        template="person_add.pt"
-        permission="schoolbell.create"
-        layer="schooltool.browser.skin.ISchoolToolLayer"
-        menu="schoolbell_actions" title="New Person" />
-
-  </configure>
-
-  <configure
       package="schoolbell.app.browser"
       i18n_domain="schoolbell">
 
@@ -94,19 +76,6 @@
         <widget field="description" height="5" />
     </addform -->
 
-    <addform
-        label="Add a Course"
-        name="addSchoolToolCourse.html"
-        schema="schooltool.interfaces.ICourse"
-        fields="title description"
-        set_before_add="title"
-        content_factory="schooltool.app.Course"
-        permission="schoolbell.create"
-        template="templates/simple_add.pt"
-        class="schooltool.browser.app.CourseAddView">
-        <widget field="description" height="5" />
-    </addform>
-
   </configure>
 
   <page
@@ -116,27 +85,6 @@
       template="templates/index.pt"
       permission="zope.Public"
       layer="schooltool.browser.skin.ISchoolToolLayer"
-      />
-
-  <page
-      name="index.html"
-      for="schooltool.interfaces.ICourse"
-      class="schooltool.browser.app.CourseView"
-      template="templates/course.pt"
-      permission="zope.View"
-      menu="zmi_views"
-      title="View"
-      layer=".skin.ISchoolToolLayer"
-      />
-
-  <page
-      name="index.html"
-      for="schooltool.interfaces.ICourseContainer"
-      class=".app.CourseContainerView"
-      template="templates/course_container.pt"
-      permission="zope.View"
-      menu="zmi_views"
-      title="View"
       />
 
   <page
@@ -172,116 +120,16 @@
       layer=".skin.ISchoolToolLayer"
       />
 
-  <containerViews
-      for="schooltool.interfaces.ICourseContainer"
-      contents="zope.ManageContent"
-      add="zope.View"
-      />
-
-  <page
-      name="course-csvimport.html"
-      for="schooltool.interfaces.ICourseContainer"
-      class="schooltool.browser.csvimport.CourseCSVImportView"
-      template="templates/course-csvimport.pt"
-      permission="schoolbell.create"
-      menu="schoolbell_actions"
-      title="Import Courses"
-      layer=".skin.ISchoolToolLayer"
-      />
-
-  <menuItem
-      menu="schoolbell_actions"
-      title="New Course"
-      for="schooltool.interfaces.ICourseContainer"
-      action="+/addSchoolToolCourse.html"
-      />
-
-  <page
-      name="index.html"
-      for="schooltool.interfaces.ISectionContainer"
-      class=".app.SectionContainerView"
-      template="templates/section_container.pt"
-      permission="zope.View"
-      menu="zmi_views"
-      title="View"
-      />
-
-  <page
-      name="index.html"
-      for="schooltool.interfaces.ISection"
-      class="schooltool.browser.app.SectionView"
-      template="templates/section.pt"
-      permission="zope.View"
-      menu="zmi_views"
-      title="View"
-      layer="SchoolToolLayer"
-      />
-
-  <containerViews
-      for="schooltool.interfaces.ISectionContainer"
-      contents="zope.ManageContent"
-      add="zope.View"
-      />
-
   <zope:vocabulary
       name="LocationResources"
       factory=".app.LocationResourceVocabulary"
       />
 
-  <addform
-      label="Add a Section"
-      name="addSchoolToolSection.html"
-      schema="schooltool.interfaces.ISection"
-      fields="title description location"
-      set_before_add="title"
-      template="templates/section_add.pt"
-      content_factory="schooltool.app.Section"
-      permission="schoolbell.create"
-      class=".app.SectionAddView">
-    <widget field="description" height="5" />
-  </addform>
-
-  <editform
-      label="Edit Section Information"
-      name="edit.html"
-      schema="schooltool.interfaces.ISection"
-      for="schooltool.interfaces.ISection"
-      fields="title description location"
-      template="templates/section_edit.pt"
-      permission="schoolbell.edit"
-      class=".app.SectionEditView"
-      menu="schoolbell_actions"
-      title="Edit Info">
-    <widget field="description" height="5" />
-  </editform>
-
-  <page
-      name="instructors.html"
-      for="schooltool.interfaces.ISection"
-      class="schooltool.browser.app.SectionInstructorView"
-      template="templates/section_instructors.pt"
-      permission="schoolbell.manageMembership"
-      />
-
-  <page
-      name="learners.html"
-      for="schooltool.interfaces.ISection"
-      class="schooltool.browser.app.SectionLearnerView"
-      template="templates/section_learners.pt"
-      permission="schoolbell.manageMembership"
-      />
-
-  <page
-      name="learner-groups.html"
-      for="schooltool.interfaces.ISection"
-      class="schooltool.browser.app.SectionLearnerGroupView"
-      template="templates/section_learners.pt"
-      permission="schoolbell.manageMembership"
-      />
-
+  <!-- XXX: Mmh, is ISectionContainer the only component using this -->
+  <!--      view class? -->
   <page
       name="timetables-csvimport.html"
-      for="schooltool.interfaces.ISectionContainer"
+      for="schooltool.course.interfaces.ISectionContainer"
       class="schooltool.browser.csvimport.TimetableCSVImportView"
       template="templates/timetables-csvimport.pt"
       permission="schoolbell.create"
@@ -290,15 +138,15 @@
       title="Import Sections"
       />
 
-
     <!--
     FIXME: zope.View is certainly not the right permission.
     How can we say "a person may only edit their own preferences"?
     -->
+  <!-- XXX: Check whether needed; is template different? -->
   <page
       name="preferences.html"
       for="schoolbell.app.person.interfaces.IPerson"
-      class="schooltool.browser.app.PersonPreferencesView"
+      class="schoolbell.app.person.browser.person.PersonPreferencesView"
       template="templates/person_preferences.pt"
       permission="zope.View"
       menu="schoolbell_actions"

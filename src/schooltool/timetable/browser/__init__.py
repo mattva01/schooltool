@@ -57,14 +57,14 @@ from schooltool.timetable.interfaces import ITimetable, ITimetableSchema
 from schooltool.timetable.interfaces import ITermContainer, ITerm
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITimetableModelFactory
-from schooltool.interfaces import ISection
+from schooltool.course.interfaces import ISection
 from schooltool.timetable import Term, Timetable, TimetableDay
 from schooltool.timetable import TimetableActivity
 from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable import getNextTermForDate, getTermForDate
 from schooltool import getSchoolToolApplication
-from schooltool.browser.app import ContainerView
+from schoolbell.app.browser.app import ContainerView
 
 
 class TermContainerView(ContainerView):

@@ -34,11 +34,11 @@ Now, we can run the REST page tests:
                    xlink:href="http://localhost/frogpond/terms"
                    xlink:title="terms"/>
         <container xlink:type="simple"
-                   xlink:href="http://localhost/frogpond/persons"
-                   xlink:title="persons"/>
-        <container xlink:type="simple"
                    xlink:href="http://localhost/frogpond/courses"
                    xlink:title="courses"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/persons"
+                   xlink:title="persons"/>
         <container xlink:type="simple"
                    xlink:href="http://localhost/frogpond/levels"
                    xlink:title="levels"/>
@@ -196,9 +196,9 @@ are SchoolTool objects, rather than SchoolBell objects:
     >>> getRootFolder()['frogpond']['resources']['lily']
     <schoolbell.app.resource.resource.Resource object at ...>
     >>> getRootFolder()['frogpond']['courses']['birdwatching']
-    <schooltool.app.Course object at ...>
+    <schooltool.course.course.Course object at ...>
     >>> getRootFolder()['frogpond']['sections']['birdwatching-1']
-    <schooltool.app.Section object at ...>
+    <schooltool.course.section.Section object at ...>
     >>> getRootFolder()['frogpond']['sections']['birdwatching-1'].location is \
     ...                        getRootFolder()['frogpond']['resources']['lily']
     True
@@ -241,7 +241,7 @@ The same should happen if we post to respective containers:
     >>> getRootFolder()['frogpond']['resources']['water']
     <schoolbell.app.resource.resource.Resource object at ...>
     >>> getRootFolder()['frogpond']['courses']['flight']
-    <schooltool.app.Course object at ...>
+    <schooltool.course.course.Course object at ...>
 
 Let's see what our course looks like:
 

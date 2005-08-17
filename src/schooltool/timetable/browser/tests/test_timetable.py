@@ -769,7 +769,7 @@ def doctest_TimetableView():
         >>> from schooltool.timetable import Timetable
         >>> from schooltool.timetable import TimetableDay, TimetableActivity
         >>> from schooltool.timetable.interfaces import ITimetables
-        >>> from schooltool.app import Section
+        >>> from schooltool.course.section import Section
 
     Create some context:
 
@@ -1564,7 +1564,7 @@ def doctest_PersonTimetableSetupView():
         >>> app = SchoolToolApplication()
 
         # XXX: Should be setup by test framework
-        >>> from schooltool.app import SectionContainer
+        >>> from schooltool.course.section import SectionContainer
         >>> app['sections'] = SectionContainer()
         >>> from schoolbell.app.person.person import PersonContainer
         >>> app['persons'] = PersonContainer()
@@ -1587,7 +1587,7 @@ def doctest_PersonTimetableSetupView():
 
     We will need some sections
 
-        >>> from schooltool.app import Section
+        >>> from schooltool.course.section import Section
         >>> app["sections"]["math"] = math = Section("Math")
         >>> app["sections"]["biology"] = biology = Section("Biology")
         >>> app["sections"]["physics"] = physics = Section("Physics")
@@ -1670,7 +1670,7 @@ def doctest_PersonTimetableSetupView():
         >>> pprint(section_map)
         {('Mon', '10:00'): Set([]),
          ('Mon', '9:00'): Set([]),
-         ('Tue', '10:00'): Set([<schooltool.app.Section object at ...>]),
+         ('Tue', '10:00'): Set([<schooltool.course.section.Section ...>]),
          ('Tue', '9:00'): Set([])}
 
     allSections simply takes a union of a number of sets containing sections.
@@ -2024,7 +2024,8 @@ def doctest_SectionTimetableSetupView():
 
     We will need an application object
 
-        >>> from schooltool.app import SchoolToolApplication, SectionContainer
+        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.course.section import SectionContainer
         >>> app = SchoolToolApplication()
         >>> app['sections'] = SectionContainer()
         >>> timetable.addToApplication(ApplicationInitializationEvent(app))
@@ -2034,7 +2035,7 @@ def doctest_SectionTimetableSetupView():
 
     We will need a section
 
-        >>> from schooltool.app import Section
+        >>> from schooltool.course.section import Section
         >>> from schooltool.timetable.interfaces import ITimetables
         >>> app["sections"]["math"] = math = Section("Math")
         >>> ITimetables(math).timetables.keys()

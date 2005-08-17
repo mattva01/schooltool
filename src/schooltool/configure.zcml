@@ -9,16 +9,6 @@
 
   <!-- Adapters -->
 
-  <adapter
-      for=".interfaces.ICourseContainer"
-      factory="schoolbell.app.app.SimpleNameChooser"
-      provides="zope.app.container.interfaces.INameChooser" />
-
-  <adapter
-      for=".interfaces.ISectionContainer"
-      factory="schoolbell.app.app.SimpleNameChooser"
-      provides="zope.app.container.interfaces.INameChooser" />
-
   <class class="schoolbell.app.overlay.CalendarOverlayInfo">
     <implements
         interface="zope.app.annotation.interfaces.IAttributeAnnotatable" />
@@ -35,16 +25,6 @@
   <subscriber
       for="schooltool.interfaces.IApplicationInitializationEvent"
       handler=".app.addManagerGroupToApplication"
-      />
-
-  <subscriber
-      for="schooltool.interfaces.IApplicationInitializationEvent"
-      handler=".app.addSectionContainerToApplication"
-      />
-
-  <subscriber
-      for="schooltool.interfaces.IApplicationInitializationEvent"
-      handler=".app.addCourseContainerToApplication"
       />
 
   <subscriber
@@ -127,41 +107,6 @@
       handler=".relationships.enforceInstructionConstraints"
     />
 
-  <!-- Application objects -->
-
-  <content class=".app.CourseContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schoolbell.view"
-             attributes="keys values items __iter__ __len__" />
-    <require permission="schoolbell.create"
-             interface="zope.app.container.interfaces.IWriteContainer" />
-  </content>
-
-  <content class=".app.Course">
-    <require permission="schoolbell.view"
-             attributes="title description sections __cmp__" />
-    <require permission="schoolbell.edit"
-             set_schema="schooltool.interfaces.ICourse" />
-  </content>
-
-  <content class=".app.SectionContainer">
-    <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schoolbell.view"
-             attributes="keys values items __iter__ __len__" />
-    <require permission="schoolbell.create"
-             interface="zope.app.container.interfaces.IWriteContainer" />
-  </content>
-
-  <content class=".app.Section">
-    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
-    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
-    <require permission="schoolbell.view"
-             attributes="title description instructors members
-                         courses label size __cmp__ location" />
-    <require permission="schoolbell.edit"
-             set_schema="schooltool.interfaces.ISection" />
-  </content>
-
   <!-- Timetables for content components -->
   <class class="schoolbell.app.app.SchoolBellApplication">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
@@ -186,6 +131,7 @@
 
   <!-- Sub-packages -->
   <include package=".timetable" />
+  <include package=".course" />
   <include package=".level" />
 
 </configure>

@@ -43,7 +43,8 @@ from schoolbell.app.group.group import Group, GroupContainer
 
 import schooltool.app
 from schooltool.common import dedent
-from schooltool.app import Course, Section
+from schooltool.course.course import Course
+from schooltool.course.section import Section
 from schooltool.relationships import URISection, URISectionOfCourse
 from schooltool.browser.csvimport import InvalidCSVError
 from schooltool.interfaces import ApplicationInitializationEvent
@@ -74,9 +75,11 @@ class TestTimetableCSVImportView(unittest.TestCase):
         self.app['groups'] = GroupContainer()
 
         # Usually automatically called subscribers
-        schooltool.app.addCourseContainerToApplication(
+        from schooltool.course import course
+        course.addCourseContainerToApplication(
             ApplicationInitializationEvent(self.app))
-        schooltool.app.addSectionContainerToApplication(
+        from schooltool.course import section
+        section.addSectionContainerToApplication(
             ApplicationInitializationEvent(self.app))
         timetable.addToApplication(ApplicationInitializationEvent(self.app))
 
@@ -189,7 +192,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         from schooltool.app import SchoolToolApplication
 
         # Set up a name chooser to pick names for new sections.
-        from schooltool.interfaces import ISectionContainer
+        from schooltool.course.interfaces import ISectionContainer
         from schoolbell.app.app import SimpleNameChooser
         from zope.app.container.interfaces import INameChooser
         ztapi.provideAdapter(ISectionContainer, INameChooser,
@@ -204,9 +207,11 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.app['groups'] = GroupContainer()
 
         # Usually automatically called subscribers
-        schooltool.app.addCourseContainerToApplication(
+        from schooltool.course import course
+        course.addCourseContainerToApplication(
             ApplicationInitializationEvent(self.app))
-        schooltool.app.addSectionContainerToApplication(
+        from schooltool.course import section
+        section.addSectionContainerToApplication(
             ApplicationInitializationEvent(self.app))
         timetable.addToApplication(ApplicationInitializationEvent(self.app))
 
@@ -717,188 +722,6 @@ class TestTimetableCSVImporter(unittest.TestCase):
                                    ['two', '', '', 'elements'],
                                    ['cut', '', 'the', 'tail']])
 
-
-def doctest_CourseCSVImporter():
-    r"""Tests for CourseCSVImporter.
-
-    Create a course container and an importer
-
-        >>> from schooltool.browser.csvimport import CourseCSVImporter
-        >>> from schooltool.app import CourseContainer
-        >>> container = CourseContainer()
-        >>> importer = CourseCSVImporter(container, None)
-
-    Import some sample data
-
-        >>> csvdata='''Course 1, Course 1 Description
-        ... Course2
-        ... Course3, Course 3 Description, Some extra data'''
-        >>> importer.importFromCSV(csvdata)
-        True
-
-    Check that the courses exist
-
-        >>> [course for course in container]
-        [u'course-1', u'course2', u'course3']
-
-    Check that descriptions were imported properly
-
-        >>> [course.description for course in container.values()]
-        ['Course 1 Description', '', 'Course 3 Description']
-
-    """
-
-
-def doctest_CourseCSVImportView():
-    r"""
-    We'll create a course csv import view
-
-        >>> from schooltool.browser.csvimport import CourseCSVImportView
-        >>> from schooltool.app import CourseContainer
-        >>> from zope.publisher.browser import TestRequest
-        >>> container = CourseContainer()
-        >>> request = TestRequest()
-
-    Now we'll try a text import.  Note that the description is not required
-
-        >>> request.form = {'csvtext' : "A Course, The best Course\nAnother Course",
-        ...                 'charset' : 'UTF-8',
-        ...                 'UPDATE_SUBMIT': 1}
-        >>> view = CourseCSVImportView(container, request)
-        >>> view.update()
-        >>> [course for course in container]
-        [u'a-course', u'another-course']
-
-    If no data is provided, we naturally get an error
-
-        >>> request.form = {'charset' : 'UTF-8', 'UPDATE_SUBMIT': 1}
-        >>> view.update()
-        >>> view.errors
-        [u'No data provided']
-
-    We also get an error if a line starts with a comma (no title)
-
-        >>> request.form = {'csvtext' : ", No title provided here",
-        ...                 'charset' : 'UTF-8',
-        ...                 'UPDATE_SUBMIT': 1}
-        >>> view = CourseCSVImportView(container, request)
-        >>> view.update()
-        >>> view.errors
-        [u'Failed to import CSV text', u'Titles may not be empty']
-
-    """
-
-
-def doctest_GroupCSVImporter():
-    r"""Tests GroupCSVImporter to make sure we're generating Schooltool objects
-
-    Create a group container and an importer
-
-        >>> from schooltool.browser.csvimport import GroupCSVImporter
-        >>> from schoolbell.app.group.group import GroupContainer
-        >>> from schoolbell.app.group.interfaces import IGroup
-        >>> container = GroupContainer()
-        >>> importer = GroupCSVImporter(container, None)
-
-    Import some sample data
-
-        >>> csvdata='''Group 1, Group 1 Description
-        ... Group2
-        ... Group3, Group 3 Description, Some extra data'''
-        >>> importer.importFromCSV(csvdata)
-        True
-
-    Check that the groups are schooltool groups
-
-        >>> for group in container.values():
-        ...     verifyObject(IGroup, group)
-        True
-        True
-        True
-
-    """
-
-
-def doctest_GroupCSVImportView():
-    r"""Tests for GroupCSVImportView
-
-    We'll create a group csv import view
-
-        >>> from schooltool.browser.csvimport import GroupCSVImportView
-        >>> from schoolbell.app.group.group import GroupContainer
-        >>> from schoolbell.app.group.interfaces import IGroup
-        >>> from zope.publisher.browser import TestRequest
-        >>> container = GroupContainer()
-        >>> request = TestRequest()
-
-    Now we'll try a text import.  Note that the description is not required
-
-        >>> request.form = {'csvtext' : "A Group, The best Group\nAnother Group",
-        ...                 'charset' : 'UTF-8',
-        ...                 'UPDATE_SUBMIT': 1}
-        >>> view = GroupCSVImportView(container, request)
-        >>> view.update()
-        >>> [verifyObject(IGroup, group) for group in container.values()]
-        [True, True]
-
-    """
-
-
-def doctest_ResourceCSVImporter():
-    r"""Tests ResourceCSVImporter for generating Schooltool objects
-
-    Create a resource container and an importer
-
-        >>> from schooltool.browser.csvimport import ResourceCSVImporter
-        >>> from schoolbell.app.resource.resource import ResourceContainer
-        >>> from schoolbell.app.resource.interfaces import IResource
-        >>> container = ResourceContainer()
-        >>> importer = ResourceCSVImporter(container, None)
-
-    Import some sample data
-
-        >>> csvdata='''Resource 1, Resource 1 Description
-        ... Resource2
-        ... Resource3, Resource 3 Description, Some extra data'''
-        >>> importer.importFromCSV(csvdata)
-        True
-
-    Check that the resources are schooltool resources
-
-        >>> for resource in container.values():
-        ...     verifyObject(IResource, resource)
-        True
-        True
-        True
-
-    """
-
-
-def doctest_ResourceCSVImportView():
-    r"""Tests for ResourceCSVImportView
-
-    We'll create a resource csv import view
-
-        >>> from schooltool.browser.csvimport import ResourceCSVImportView
-        >>> from schoolbell.app.resource.resource import ResourceContainer
-        >>> from schoolbell.app.resource.interfaces import IResource
-        >>> from zope.publisher.browser import TestRequest
-        >>> container = ResourceContainer()
-        >>> request = TestRequest()
-
-    Now we'll try a text import.  Note that the description is not required
-
-        >>> request.form = {'csvtext' : "A Resource, The best Resource\nAnother Resource",
-        ...                 'charset' : 'UTF-8',
-        ...                 'UPDATE_SUBMIT': 1}
-        >>> view = ResourceCSVImportView(container, request)
-        >>> view.update()
-        >>> for resource in container.values():
-        ...     verifyObject(IResource, resource)
-        True
-        True
-
-    """
 
 def doctest_PersonCSVImporter():
     r"""Tests for PersonCSVImporter.

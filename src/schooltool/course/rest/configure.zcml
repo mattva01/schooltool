@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope">
+
+  <!-- Course RESTive registrations -->
+
+  <view
+      for="..interfaces.ICourseContainer"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ICourseContainer"
+      name="POST"
+      factory=".course.CourseContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="..interfaces.ICourseContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".course.CourseFileFactory"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ICourseContainer"
+      name="GET"
+      factory=".course.CourseContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ICourse"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ICourse"
+      name="GET"
+      factory=".course.CourseView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="..interfaces.ICourse"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      factory=".course.CourseFile"
+      permission="zope.Public"
+      />
+
+  <!-- Section RESTive registrations -->
+
+  <view
+      for="..interfaces.ISectionContainer"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ISectionContainer"
+      name="POST"
+      factory=".section.SectionContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ISectionContainer"
+      name="GET"
+      factory=".section.SectionContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="..interfaces.ISectionContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".section.SectionFileFactory"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ISection"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for="..interfaces.ISection"
+      name="GET"
+      factory=".section.SectionView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="..interfaces.ISection"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      factory=".section.SectionFile"
+      permission="zope.Public"
+      />
+
+</configure>

@@ -34,7 +34,7 @@ from schooltool import SchoolToolMessageID as _
 from schooltool.browser import app
 from schoolbell.app.browser import app as sb_app
 
-class LevelContainerView(app.ContainerView):
+class LevelContainerView(sb_app.ContainerView):
     """A Level Container view."""
 
     __used_for__ = interfaces.ILevelContainer

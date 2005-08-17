@@ -22,32 +22,22 @@ SchoolTool application
 $Id$
 
 """
-
-from persistent import Persistent
-
 import zope.component
 import zope.interface
+
 from zope.app import zapi
-from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
-from zope.app.container import btree, contained
+from zope.app.annotation.interfaces import IAnnotations
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.app.security.interfaces import IUnauthenticatedGroup
-from zope.app.site.servicecontainer import SiteManagerContainer
 
-from schoolbell.relationship import RelationshipProperty
-from schoolbell.relationship.relationship import BoundRelationshipProperty
 from schoolbell.app import app as sb
-from schoolbell.app.cal import Calendar
 from schoolbell.app.group.group import Group
-from schoolbell.app.membership import URIMembership, URIGroup, URIMember
 from schoolbell.app.overlay import ICalendarOverlayInfo
-from schoolbell.app.group.interfaces import IGroup
-from schoolbell.app.person.interfaces import IPerson
-from schoolbell.app.resource.interfaces import IResource
 
 from schooltool import SchoolToolMessageID as _
 from schooltool import interfaces, relationships
+
 
 ###############################################################################
 # Import objects here, since they will eventually move here as well.
@@ -107,98 +97,6 @@ class ShowTimetables(object):
         self.annotations[SHOW_TIMETABLES_KEY] = value
 
     showTimetables = property(getShowTimetables, setShowTimetables)
-
-
-class CourseContainer(btree.BTreeContainer):
-    """Container of Courses."""
-
-    zope.interface.implements(interfaces.ICourseContainer,
-                              IAttributeAnnotatable)
-
-
-def addCourseContainerToApplication(event):
-    event.object['courses'] = CourseContainer()
-
-
-class Course(Persistent, contained.Contained):
-
-    zope.interface.implements(interfaces.ICourse,
-                              interfaces.IHaveNotes,
-                              IAttributeAnnotatable)
-
-    sections = RelationshipProperty(relationships.URICourseSections,
-                                    relationships.URICourse,
-                                    relationships.URISectionOfCourse)
-
-    def __init__(self, title=None, description=None):
-        self.title = title
-        self.description = description
-
-
-class Section(Persistent, contained.Contained):
-
-    zope.interface.implements(interfaces.ISection,
-                              interfaces.IHaveNotes, IAttributeAnnotatable)
-
-    def __init__(self, title="Section", description=None, schedule=None,
-                 courses=None, location=None):
-        self.title = title
-        self.description = description
-        self.calendar = Calendar(self)
-        self.location = location
-
-
-    def _getLabel(self):
-        instructors = " ".join([i.title for i in self.instructors])
-        courses = " ".join([c.title for c in self.courses])
-        msg = _('${instructors} -- ${courses}')
-        msg.mapping = {'instructors': instructors, 'courses': courses}
-        return msg
-
-    label = property(_getLabel)
-
-    def _getSize(self):
-        size = 0
-        for member in self.members:
-            if IPerson.providedBy(member):
-                size = size + 1
-            if IGroup.providedBy(member):
-                size = size + len(member.members)
-
-        return size
-
-    size = property(_getSize)
-
-    _location = None
-
-    def _setLocation(self, location):
-        if location is not None:
-            if (not IResource.providedBy(location) or not location.isLocation):
-                raise TypeError("Locations must be location resources.")
-        self._location = location
-
-    location = property(lambda self: self._location, _setLocation)
-
-    instructors = RelationshipProperty(relationships.URIInstruction,
-                                       relationships.URISection,
-                                       relationships.URIInstructor)
-
-    courses = RelationshipProperty(relationships.URICourseSections,
-                                   relationships.URISectionOfCourse,
-                                   relationships.URICourse)
-
-    members = RelationshipProperty(URIMembership, URIGroup, URIMember)
-
-
-class SectionContainer(btree.BTreeContainer):
-    """Container of Sections."""
-
-    zope.interface.implements(interfaces.ISectionContainer,
-                              IAttributeAnnotatable)
-
-
-def addSectionContainerToApplication(event):
-    event.object['sections'] = SectionContainer()
 
 
 class ApplicationPreferences(sb.ApplicationPreferences):

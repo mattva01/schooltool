@@ -101,7 +101,7 @@
 
   <page
       name="promotion.html"
-      for="schooltool.interfaces.IGroup"
+      for="schoolbell.app.group.interfaces.IGroup"
       template="promotion.pt"
       class=".promotion.PromotionWorkItemsView"
       permission="schoolbell.edit"

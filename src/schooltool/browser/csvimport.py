@@ -27,23 +27,17 @@ import csv
 from zope.app.container.interfaces import INameChooser
 from zope.security.proxy import removeSecurityProxy
 
-from schoolbell.app.person.person import Person
 from schoolbell.app.browser import csvimport as sb
+from schoolbell.app.person.person import Person
+# XXX: This should go away; maybe, maybe not.
+from schoolbell.app.person.browser import csvimport as person
 
 from schooltool import SchoolToolMessageID as _
 from schooltool import getSchoolToolApplication
-from schooltool.interfaces import ISectionContainer
-from schooltool.app import Section, Course
+from schooltool.course.interfaces import ISectionContainer
+from schooltool.course.section import Section
 from schooltool.timetable import TimetableActivity
 from schooltool.timetable.interfaces import ITimetables
-
-
-# XXX: This should go away
-from schoolbell.app.group.browser.csvimport import GroupCSVImporter
-from schoolbell.app.group.browser.csvimport import GroupCSVImportView
-from schoolbell.app.resource.browser.csvimport import ResourceCSVImporter
-from schoolbell.app.resource.browser.csvimport import ResourceCSVImportView
-from schoolbell.app.person.browser import csvimport as person
 
 
 class ImportErrorCollection(object):
@@ -384,6 +378,7 @@ class TimetableCSVImportView(sb.BaseCSVImportView):
         if err.generic:
             self.errors.extend(err.generic)
 
+        # XXX: Shrug, this seems not very extensible.
         for key, msg in [
             ('day_ids', _("Day ids not defined in selected schema: ${args}.")),
             ('periods', _("Periods not defined in selected days: ${args}.")),
@@ -397,39 +392,6 @@ class TimetableCSVImportView(sb.BaseCSVImportView):
                 values = ', '.join([unicode(st) for st in v])
                 msg.mapping = {'args': values}
                 self.errors.append(msg)
-
-
-class CourseCSVImporter(sb.BaseCSVImporter):
-    """Course CSV Importer"""
-
-    factory = Course
-
-    def createAndAdd(self, data, dry_run=True):
-        """Create objects and add them to the container."""
-
-        if len(data) < 1:
-            self.errors.fields.append(_('Insufficient data provided.'))
-            return
-
-        if not data[0]:
-            self.errors.fields.append(_('Titles may not be empty'))
-            return
-
-        if len(data) > 1:
-            description = data[1]
-        else:
-            description = ''
-
-        obj = self.factory(title=data[0], description=description)
-        name = self.chooser.chooseName('', obj)
-        if not dry_run:
-            self.container[name] = obj
-
-
-class CourseCSVImportView(sb.BaseCSVImportView):
-    """View for Course CSV importer."""
-
-    importer_class = CourseCSVImporter
 
 
 class PersonCSVImporter(person.PersonCSVImporter):
@@ -447,7 +409,7 @@ class PersonCSVImporter(person.PersonCSVImporter):
 
         if not data[0]:
             self.errors.fields.append(_("username may not be empty"))
-            return 
+            return
 
         if not data[1]:
             self.errors.fields.append(_("fullname may not be empty"))
@@ -478,4 +440,3 @@ class PersonCSVImportView(sb.BaseCSVImportView):
     """View for Person CSV importer."""
 
     importer_class = PersonCSVImporter
-

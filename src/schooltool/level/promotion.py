@@ -30,6 +30,8 @@ from zope.wfmc import attributeintegration
 from zope.app import location
 from zope.app.annotation.interfaces import IAnnotations
 
+from schoolbell.app import group
+
 import schooltool.interfaces
 from schooltool import app
 from schooltool import SchoolToolMessageID as _
@@ -40,7 +42,7 @@ WorkItemsKey = 'schooltool.workflows.promotion.workitems'
 
 
 class ManagerWorkItems(object):
-    zope.component.adapts(schooltool.interfaces.IGroup)
+    zope.component.adapts(group.interfaces.IGroup)
     zope.interface.implements(interfaces.IManagerWorkItems)
 
     def __init__(self, manager):

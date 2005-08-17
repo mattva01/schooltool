@@ -11,38 +11,6 @@
 <!-- Content Type Traversers -->
 
   <view
-      for="..interfaces.ICourseContainer"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.http.IHTTPPublisher"
-      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
-      permission="zope.Public"
-      />
-
-  <view
-      for="..interfaces.ICourse"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.http.IHTTPPublisher"
-      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
-      permission="zope.Public"
-      />
-
-  <view
-      for="..interfaces.ISectionContainer"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.http.IHTTPPublisher"
-      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
-      permission="zope.Public"
-      />
-
-  <view
-      for="..interfaces.ISection"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.http.IHTTPPublisher"
-      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
-      permission="zope.Public"
-      />
-
-  <view
       for="schooltool.timetable.interfaces.ITermContainer"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.http.IHTTPPublisher"
@@ -74,82 +42,6 @@
       for="schooltool.app.SchoolToolApplication"
       name="GET"
       factory=".app.SchoolToolApplicationView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.interfaces.ICourseContainer"
-      name="POST"
-      factory=".app.CourseContainerView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.interfaces.ISectionContainer"
-      name="POST"
-      factory=".app.SectionContainerView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <adapter
-      for="schooltool.interfaces.ICourseContainer"
-      provides="zope.app.filerepresentation.interfaces.IFileFactory"
-      factory=".app.CourseFileFactory"
-      permission="zope.Public"
-      />
-
-  <adapter
-      for="schooltool.interfaces.ICourse"
-      provides="zope.app.filerepresentation.interfaces.IWriteFile"
-      factory=".app.CourseFile"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.interfaces.ICourseContainer"
-      name="GET"
-      factory=".app.CourseContainerView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.interfaces.ICourse"
-      name="GET"
-      factory=".app.CourseView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <adapter
-      for="schooltool.interfaces.ISectionContainer"
-      provides="zope.app.filerepresentation.interfaces.IFileFactory"
-      factory=".app.SectionFileFactory"
-      permission="zope.Public"
-      />
-
-  <adapter
-      for="schooltool.interfaces.ISection"
-      provides="zope.app.filerepresentation.interfaces.IWriteFile"
-      factory=".app.SectionFile"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.interfaces.ISectionContainer"
-      name="GET"
-      factory=".app.SectionContainerView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.interfaces.ISection"
-      name="GET"
-      factory=".app.SectionView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />
