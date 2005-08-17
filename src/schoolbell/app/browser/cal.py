@@ -81,6 +81,11 @@ from schoolbell.calendar.utils import week_start, prev_month, next_month
 from schoolbell.calendar.icalendar import ical_datetime
 from schoolbell import SchoolBellMessageID as _
 
+
+def same(a, b):
+    """Return True if a and b points to the same possibly proxied object."""
+    return removeSecurityProxy(a) is removeSecurityProxy(b)
+
 #
 # Constants
 #
@@ -547,8 +552,9 @@ class CalendarViewBase(BrowserView):
         end_dt = end_dt.replace(tzinfo=self.timezone)
         for calendar, color1, color2 in self.getCalendars():
             for event in calendar.expand(start_dt, end_dt):
-                if (removeSecurityProxy(event.__parent__) is removeSecurityProxy(self.context) and
-                    calendar is not self.context) or event.allday:
+                allday = removeSecurityProxy(event).allday
+                if (same(event.__parent__, self.context) and
+                    calendar is not self.context) or allday:
                     # Skip resource booking events (coming from
                     # overlaid calendars) if they were booked by the
                     # person whose calendar we are viewing.
@@ -563,7 +569,7 @@ class CalendarViewBase(BrowserView):
         """Get a list of EventForDisplay objects for the all-day events at the
         cursors current position.
 
-        'day' can be None, or the day the allday events should be taken from
+        'day' can be None, or the day the allday events should be taken from.
         """
         if not date:
             date = self.cursor
@@ -573,9 +579,9 @@ class CalendarViewBase(BrowserView):
                        tzinfo=self.timezone)
         for calendar, color1, color2 in self.getCalendars():
             for event in calendar.expand(start, end):
-                # XXX removeSecurityProxy needed here
-                if event.__parent__ is self.context and calendar is not \
-                        self.context or not event.allday:
+                allday = removeSecurityProxy(event).allday
+                if (same(event.__parent__, self.context)
+                    and calendar is not self.context) or not allday:
                     continue
                 yield EventForDisplay(event, color1, color2, calendar,
                                       self.timezone)

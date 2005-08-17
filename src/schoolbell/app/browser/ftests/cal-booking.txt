@@ -382,7 +382,7 @@ Editing view should have a link to its booking view:
     <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid/booking.html">Book resources</a>
     ...
 
-Lets book the mud again (Regression test for 266, deletion of events
+Let's book the mud again (Regression test for 266, deletion of events
 that book resources should remove events from resource calendars):
 
     >>> print http("""
@@ -697,3 +697,97 @@ Unless we are looking at the event 2 itself:
     <BLANKLINE>
             </tr>
     ...
+
+
+Let's add another person, frog's boss:
+
+    >>> print http("""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Stork&field.username=stork&field.password=pwd&\
+    ... field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add\
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+The boss decides to take a mud bath, so he creates an event.
+
+    >>> print http(r"""
+    ... PUT /frogpond/persons/stork/calendar/calendar.ics HTTP/1.1
+    ... Host: localhost:7080
+    ... Authorization: Basic stork:pwd
+    ... Content-Type: text/calendar
+    ...
+    ... BEGIN:VCALENDAR
+    ... VERSION:2.0
+    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    ... BEGIN:VEVENT
+    ... UID:smartie-uid
+    ... SUMMARY:Mud bath
+    ... DTSTART:20050807T100000
+    ... DURATION:PT2H
+    ... DTSTAMP:20050818T150000
+    ... END:VEVENT
+    ... END:VCALENDAR
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    Set-Cookie: ...
+    <BLANKLINE>
+
+Stork should have access to the resources:
+
+    >>> print http("""
+    ... POST /frogpond/resources/mud/calendar/acl.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... marker-sb.person.stork=1&\
+    ... sb.person.stork=schoolbell.addEvent&\
+    ... sb.person.stork=schoolbell.viewCalendar&\
+    ... UPDATE_SUBMIT=Set
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/resources/mud/calendar
+    ...
+
+And then stork books mud.
+
+    >>> print http("""
+    ... POST /frogpond/persons/stork/calendar/smartie-uid/booking.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... date=2005-08-07&\
+    ... marker-mud=1&\
+    ... mud=booked&\
+    ... marker-fish=1&\
+    ... UPDATE_SUBMIT=Set\
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons/stork/calendar
+    ...
+
+Frog should still be able to see the resource's calendar
+(regression test for issue 352):
+
+    >>> print http("""
+    ... POST /frogpond/resources/mud/calendar/2005-08-07 HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+    <h6 ...>
+      <a href="http://localhost/frogpond/resources/mud/calendar/smartie-uid"
+         title="Mud bath">
+        Mud bath
+      ...
+    </h6>
+    ...
+
