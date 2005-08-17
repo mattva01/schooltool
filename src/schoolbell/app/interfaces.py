@@ -119,7 +119,6 @@ class IHaveCalendar(zope.interface.Interface):
     """
 
 
-# XXX: This screams adapter.
 class ISchoolBellCalendarEvent(ICalendarEvent,
                                container.interfaces.IContained):
     """An event that is contained in a SchoolBell calendar."""
