@@ -342,8 +342,8 @@ class ICalendarEvent(Interface):
         """)
 
     allday = Bool(
-            title=u"All Day Event",
-            required=False)
+        title=u"All Day Event",
+        required=False)
 
     def replace(**kw):
         """Return a calendar event with new specified fields.
