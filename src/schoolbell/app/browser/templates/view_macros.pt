@@ -72,7 +72,7 @@
                   tal:attributes="href person/@@absolute_url"
                   tal:content="user/title">Schoolbell Person</a> |
                 <a id="tools-calendar" i18n:translate=""
-                  tal:attributes="href person/calendar/@@absolute_url"
+                  tal:attributes="href string:${person/@@absolute_url}/calendar"
                   >My Calendar</a> |
                 <a id="tools-logout" i18n:translate=""
                   tal:attributes="href string:${url}/@@logout.html"

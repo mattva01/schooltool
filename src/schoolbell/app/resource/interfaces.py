@@ -28,10 +28,9 @@ import zope.app.container.constraints
 from zope.app import container
 
 from schoolbell import SchoolBellMessageID as _
-from schoolbell.app.interfaces import ICalendarOwner
 
 
-class IResource(ICalendarOwner):
+class IResource(zope.interface.Interface):
     """Resource."""
 
     title = zope.schema.TextLine(

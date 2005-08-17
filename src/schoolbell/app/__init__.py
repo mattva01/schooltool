@@ -25,3 +25,18 @@ TODO: feature list
 
 TODO: mention that schoolbell libraries are reusable for all Zope 3 apps.
 """
+
+def registerTestSetup():
+    from zope.interface import classImplements
+    from schoolbell.app.testing import registry
+
+    def haveCalendar():
+        from schoolbell.app.app import SchoolBellApplication
+        from schoolbell.app.interfaces import IHaveCalendar
+        if not IHaveCalendar.implementedBy(SchoolBellApplication):
+            classImplements(SchoolBellApplication, IHaveCalendar)
+    registry.register('CalendarComponents', haveCalendar)
+
+registerTestSetup()
+del registerTestSetup
+

@@ -29,7 +29,6 @@ from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree
 from zope.app.container.contained import Contained
 
-from schoolbell.app.cal import Calendar
 from schoolbell.app.resource import interfaces
 
 
@@ -44,12 +43,12 @@ class Resource(Persistent, Contained):
 
     implements(interfaces.IResourceContained, IAttributeAnnotatable)
 
+    # BBB: ...
     isLocation = False # backwards compatibility
 
     def __init__(self, title=None, description=None, isLocation=False):
         self.title = title
         self.description = description
-        self.calendar = Calendar(self)
         self.isLocation = isLocation
 
 

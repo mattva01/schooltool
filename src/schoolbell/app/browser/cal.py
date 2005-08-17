@@ -60,9 +60,10 @@ from schoolbell.app.browser import ViewPreferences
 from schoolbell.app.browser import pdfcal
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.cal import CalendarEvent
-from schoolbell.app.interfaces import ICalendarOwner, ISchoolBellCalendarEvent
+from schoolbell.app.interfaces import ISchoolBellCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.interfaces import ISchoolBellApplication
+from schoolbell.app.interfaces import IHaveCalendar
 from schoolbell.app.interfaces import vocabulary
 from schoolbell.app.person.interfaces import IPerson, IPersonPreferences
 from schoolbell.app.resource.interfaces import IResource
@@ -109,7 +110,7 @@ utc = timezone('UTC')
 class CalendarOwnerTraverser(object):
     """A traverser that allows to traverse to a calendar owner's calendar."""
 
-    adapts(ICalendarOwner)
+    adapts(IHaveCalendar)
     implements(IBrowserPublisher)
 
     def __init__(self, context, request):
@@ -118,9 +119,9 @@ class CalendarOwnerTraverser(object):
 
     def publishTraverse(self, request, name):
         if name == 'calendar':
-            return self.context.calendar
+            return ISchoolBellCalendar(self.context)
         elif name in ('calendar.ics', 'calendar.vfb'):
-            calendar = self.context.calendar
+            calendar = ISchoolBellCalendar(self.context)
             view = queryMultiAdapter((calendar, request), name=name)
             if view is not None:
                 return view
@@ -134,7 +135,7 @@ class CalendarOwnerTraverser(object):
 class CalendarTraverser(object):
     """A smart calendar traverser that can handle dates in the URL."""
 
-    adapts(ICalendarOwner)
+    adapts(IHaveCalendar)
     implements(IBrowserPublisher)
 
     queryMultiAdapter = staticmethod(queryMultiAdapter)
@@ -236,7 +237,7 @@ class CalendarOwnerHTTPTraverser(object):
     For HTTPRequests.
     """
 
-    adapts(ICalendarOwner)
+    adapts(IHaveCalendar)
     implements(IBrowserPublisher)
 
     def __init__(self, context, request):
@@ -245,7 +246,7 @@ class CalendarOwnerHTTPTraverser(object):
 
     def publishTraverse(self, request, name):
         if name in ('calendar.ics', 'calendar.vfb', 'calendar'):
-            return self.context.calendar
+            return ISchoolBellCalendar(self.context)
 
         raise NotFound(self.context, name, request)
 
@@ -1828,7 +1829,7 @@ class CalendarEventBookingView(CalendarEventView):
         calendar_owner = removeSecurityProxy(self.context.__parent__.__parent__)
         sb = getSchoolBellApplication()
         for resource in sb["resources"].values():
-            if ((canAccess(resource.calendar, "addEvent") or
+            if ((canAccess(ISchoolBellCalendar(resource), "addEvent") or
                  self.hasBooked(resource)) and
                 resource is not calendar_owner):
                 resources.append(resource)
@@ -1847,10 +1848,10 @@ class CalendarEventBookingView(CalendarEventView):
     def getConflictingEvents(self, resource):
         """Return a list of events that would conflict when booking resource."""
         events = []
-        if not canAccess(resource.calendar, "expand"):
+        if not canAccess(ISchoolBellCalendar(resource), "expand"):
             return events
 
-        for event in resource.calendar.expand(
+        for event in ISchoolBellCalendar(resource).expand(
             self.context.dtstart,
             self.context.dtstart + self.context.duration):
             if event != self.context:
@@ -1873,8 +1874,8 @@ class CalendarListView(BrowserView):
         if user is None:
             return
 
-        unproxied_context = removeSecurityProxy(self.context) 
-        unproxied_calendar = removeSecurityProxy(user.calendar)
+        unproxied_context = removeSecurityProxy(self.context)
+        unproxied_calendar = removeSecurityProxy(ISchoolBellCalendar(user))
         if unproxied_context is unproxied_calendar:
             for item in user.overlaid_calendars:
                 if item.show and canAccess(item.calendar, '__iter__'):
@@ -1947,7 +1948,7 @@ def enableICalendarUpload(ical_view):
 
     When the user performs an HTTP PUT request on /path/to/calendar.ics,
     Zope 3 traverses to a view named 'calendar.ics' (which is most likely
-    a schoolbell.calendar.browser.CalendarICalendarView).  Then Zope 3 finds an
+    a schoolbell.calendar.browser.Calendar ICalendarView).  Then Zope 3 finds an
     IHTTPrequest view named 'PUT'.  There is a standard one, that adapts
     its context (which happens to be the view named 'calendar.ics' in this
     case) to IWriteFile, and calls `write` on it.
@@ -1962,7 +1963,7 @@ def enableICalendarUpload(ical_view):
 
         >>> from schoolbell.calendar.interfaces import IEditCalendar
         >>> from schoolbell.app.cal import Calendar
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
 
     We have a fake "real adapter" for IEditCalendar
 

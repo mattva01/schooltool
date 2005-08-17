@@ -21,12 +21,18 @@ Calendar overlays.
 
 This module defines relationships used to store calendar subscriptions.
 
-    >>> from schoolbell.relationship.tests import setUp, tearDown
-    >>> setUp()
+    >>> from zope.app.testing import setup
+    >>> setup.placelessSetUp()
+    >>> setup.setUpAnnotations()
+
+    >>> from schoolbell.app.testing import setup as sbsetup
+    >>> sbsetup.setupCalendaring()
+
+    >>> from schoolbell.relationship.tests import setUpRelationships
+    >>> setUpRelationships()
 
 We will need some sample persons and groups for the demonstration
 
-    # XXX: Use stubs??? (SR)
     >>> from schoolbell.app.group.group import Group
     >>> from schoolbell.app.person.person import Person
     >>> john = Person(title="John")
@@ -37,13 +43,13 @@ We will need some sample persons and groups for the demonstration
 Let's say John wants to see the calendars of Smith and the Developers group
 overlaid on his own calendar
 
-    >>> john.overlaid_calendars.add(smith.calendar)
-    >>> john.overlaid_calendars.add(developers.calendar)
+    >>> john.overlaid_calendars.add(ISchoolBellCalendar(smith))
+    >>> john.overlaid_calendars.add(ISchoolBellCalendar(developers))
 
 He also wants the Admins group calendar to be displayed in the overlaid
 calendars portlet, but hidden by default:
 
-    >>> john.overlaid_calendars.add(admins.calendar, show=False)
+    >>> john.overlaid_calendars.add(ISchoolBellCalendar(admins), show=False)
 
 Iterating over `overlaid_calendars` returns ICalendarOverlayInfo objects
 
@@ -58,14 +64,14 @@ Iterating over `overlaid_calendars` returns ICalendarOverlayInfo objects
 
 However, 'in' checks for the presence of a calendar
 
-    >>> smith.calendar in john.overlaid_calendars
+    >>> ISchoolBellCalendar(smith) in john.overlaid_calendars
     True
-    >>> Person(title="Newcomer").calendar in john.overlaid_calendars
+    >>> ISchoolBellCalendar(Person(title="Newcomer")) in john.overlaid_calendars
     False
 
 Clean up
 
-    >>> tearDown()
+    >>> setup.placelessTearDown()
 
 """
 

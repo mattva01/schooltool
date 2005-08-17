@@ -140,16 +140,21 @@ def doctest_applicationCalendarPermissionsSubscriber():
 
     Call our subscriber:
 
+        >>> from schoolbell.app.testing.setup import setupCalendaring
+        >>> setupCalendaring()
+
         >>> from schoolbell.app.security import \
         ...         applicationCalendarPermissionsSubscriber
         >>> applicationCalendarPermissionsSubscriber(ObjectAddedEvent(app))
 
-    Check that unauthenticated has calendarView permission on app.calendar:
+    Check that unauthenticated has calendarView permission on the
+    application's calendar:
 
         >>> from zope.app.securitypolicy.interfaces import \
         ...         IPrincipalPermissionManager
         >>> unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
-        >>> map = IPrincipalPermissionManager(app.calendar)
+        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
+        >>> map = IPrincipalPermissionManager(ISchoolBellCalendar(app))
         >>> x = map.getPermissionsForPrincipal(unauthenticated.id)
         >>> x.sort()
         >>> print x
@@ -160,7 +165,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> person = Person('james')
         >>> root['sb']['persons']['james'] = person
         >>> applicationCalendarPermissionsSubscriber(ObjectAddedEvent(person))
-        >>> map = IPrincipalPermissionManager(person.calendar)
+        >>> map = IPrincipalPermissionManager(ISchoolBellCalendar(person))
         >>> map.getPermissionsForPrincipal(unauthenticated.id)
         []
 

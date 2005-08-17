@@ -30,7 +30,6 @@ from zope.app.container import btree
 from zope.app.container.contained import Contained
 
 from schoolbell.relationship import RelationshipProperty
-from schoolbell.app.cal import Calendar
 from schoolbell.app.membership import URIMembership, URIMember, URIGroup
 
 from schoolbell.app.group import interfaces
@@ -53,7 +52,6 @@ class Group(Persistent, Contained):
     def __init__(self, title=None, description=None):
         self.title = title
         self.description = description
-        self.calendar = Calendar(self)
 
 
 def addGroupContainerToApplication(event):

@@ -24,11 +24,12 @@ $Id$
 
 import unittest
 from datetime import datetime, date, timedelta, time
-from zope.testing import doctest
-from zope.publisher.browser import TestRequest
-from zope.interface import directlyProvides
-from zope.interface.verify import verifyObject
+
 from zope.i18n import translate
+from zope.interface import directlyProvides, implements
+from zope.interface.verify import verifyObject
+from zope.publisher.browser import TestRequest
+from zope.testing import doctest
 from zope.app.tests import setup, ztapi
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.interfaces import IContainmentRoot
@@ -38,13 +39,13 @@ from pytz import timezone
 # Used in defining CalendarEventAddTestView
 from schoolbell.app.browser.cal import CalendarEventAddView
 from schoolbell.app.browser.cal import ICalendarEventAddForm
-from schoolbell.app.cal import CalendarEvent
-from schoolbell.app.cal import Calendar
+from schoolbell.app.cal import CalendarEvent, Calendar
+from schoolbell.app.interfaces import ISchoolBellCalendar
 
 # Used in defining CalendarEventEditTestView
 from schoolbell.app.browser.cal import CalendarEventEditView
 from schoolbell.app.browser.cal import ICalendarEventEditForm
-from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schoolbell.app.browser.tests.setup import setUp as browserSetUp, tearDown
 from schoolbell.app.testing import setup as sbsetup
 
 # Used for the PrincipalStub
@@ -55,6 +56,11 @@ from schoolbell.app.person.preference import getPersonPreferences
 from schoolbell.app.person.interfaces import IPersonPreferences
 
 utc = timezone('UTC')
+
+
+def setUp(test=None):
+    browserSetUp(test)
+    sbsetup.setupCalendaring()
 
 
 def doctest_CalendarOwnerTraverser():
@@ -88,7 +94,8 @@ def doctest_CalendarOwnerTraverser():
 
     The whole point of this class is that we can ask for the calendar:
 
-        >>> traverser.publishTraverse(request, 'calendar') is person.calendar
+        >>> calendar = ISchoolBellCalendar(person)
+        >>> traverser.publishTraverse(request, 'calendar') is calendar
         True
 
     We can also get the calendar as iCalendar:
@@ -96,7 +103,7 @@ def doctest_CalendarOwnerTraverser():
         >>> from schoolbell.app.interfaces import ISchoolBellCalendar
         >>> ztapi.browserView(ISchoolBellCalendar, 'calendar.ics', BrowserView)
         >>> view = traverser.publishTraverse(request, 'calendar.ics')
-        >>> view.context is traverser.context.calendar
+        >>> view.context is ISchoolBellCalendar(traverser.context)
         True
         >>> view.request is traverser.request
         True
@@ -118,7 +125,7 @@ def doctest_CalendarTraverser():
 
         >>> from schoolbell.app.browser.cal import CalendarTraverser
         >>> from schoolbell.app.cal import Calendar
-        >>> cal = Calendar()
+        >>> cal = Calendar(None)
         >>> request = TestRequest()
         >>> traverser = CalendarTraverser(cal, request)
         >>> traverser.context is cal
@@ -264,11 +271,12 @@ def doctest_CalendarOwnerHttpTraverser():
 
     The whole point of this class is that we can ask for the calendar:
 
-        >>> traverser.publishTraverse(request, 'calendar') is person.calendar
+        >>> calendar = ISchoolBellCalendar(person)
+        >>> traverser.publishTraverse(request, 'calendar') is calendar
         True
-        >>> traverser.publishTraverse(request, 'calendar.ics') is person.calendar
+        >>> traverser.publishTraverse(request, 'calendar.ics') is calendar
         True
-        >>> traverser.publishTraverse(request, 'calendar.vfb') is person.calendar
+        >>> traverser.publishTraverse(request, 'calendar.vfb') is calendar
         True
 
     """
@@ -282,7 +290,7 @@ def doctest_CalendarHttpTraverser():
         >>> from schoolbell.app.browser.cal import CalendarHTTPTraverser
         >>> person = Person()
         >>> request = TestRequest()
-        >>> calendar = person.calendar
+        >>> calendar = ISchoolBellCalendar(person)
         >>> traverser = CalendarHTTPTraverser(calendar, request)
         >>> traverser.context is calendar
         True
@@ -310,9 +318,10 @@ def doctest_EventForDisplay():
         >>> from schoolbell.app.browser.cal import EventForDisplay
         >>> from schoolbell.app.resource.resource import Resource
         >>> person = Person("p1")
+        >>> calendar = ISchoolBellCalendar(person)
         >>> e1 = createEvent('2004-01-02 14:45:50', '5min', 'yawn')
-        >>> person.calendar.addEvent(e1)
-        >>> e1 = EventForDisplay(e1, 'red', 'green', person.calendar)
+        >>> calendar.addEvent(e1)
+        >>> e1 = EventForDisplay(e1, 'red', 'green', calendar)
 
     EventForDisplay lets us access all the usual attributes
 
@@ -324,7 +333,7 @@ def doctest_EventForDisplay():
         'UTC'
         >>> e1.title
         'yawn'
-        >>> e1.source_calendar is person.calendar
+        >>> e1.source_calendar is calendar
         True
 
     It adds some additional attributes
@@ -348,7 +357,7 @@ def doctest_EventForDisplay():
 
         >>> e2 = createEvent('2004-01-02 12:00:00', '15min',
         ...                  'sleeping for a little while because I was tired')
-        >>> e2 = EventForDisplay(e2, 'blue', 'yellow', person.calendar)
+        >>> e2 = EventForDisplay(e2, 'blue', 'yellow', calendar)
         >>> e2.shortTitle
         'sleeping for a ...'
 
@@ -366,7 +375,7 @@ def doctest_EventForDisplay():
     The same CalendarEvent can be renderered for display in a particular
     timezone.
 
-        >>> e2east = EventForDisplay(e2, 'blue', 'yellow', person.calendar,
+        >>> e2east = EventForDisplay(e2, 'blue', 'yellow', calendar,
         ...                      timezone=timezone('US/Eastern'))
         >>> print e2east.renderShort().replace('&ndash;', '--')
         sleeping for a ... (07:00--07:15)
@@ -376,13 +385,13 @@ def doctest_EventForDisplay():
 
        >>> resource = Resource("r1")
        >>> e1.bookResource(resource)
-       >>> e1.source_calendar = resource.calendar
+       >>> e1.source_calendar = ISchoolBellCalendar(resource)
        >>> e1.getBooker() is person
        True
 
     If an event does not have a __parent__, getBooker() will return None:
 
-        >>> e1.context.__parent__ is person.calendar
+        >>> e1.context.__parent__ is calendar
         True
         >>> e1.context.__parent__ = None
         >>> print e1.getBooker()
@@ -390,7 +399,7 @@ def doctest_EventForDisplay():
 
     QED.  Now restore the fixture.
 
-        >>> e1.context.__parent__ = person.calendar
+        >>> e1.context.__parent__ = calendar
 
     We should not see booked resources though:
 
@@ -400,7 +409,7 @@ def doctest_EventForDisplay():
     But if we are looking at the persons calendar we should get the
     list of them:
 
-       >>> e1.source_calendar = person.calendar
+       >>> e1.source_calendar = calendar
        >>> [resource.title for resource in  e1.getBookedResources()]
        ['r1']
 
@@ -408,12 +417,12 @@ def doctest_EventForDisplay():
 
         >>> e3 = createEvent('2004-01-02 12:00:00', '15min',
         ...                  'sleeping for a little while because I was tired')
-        >>> e3utc = EventForDisplay(e3, 'blue', 'yellow', person.calendar)
+        >>> e3utc = EventForDisplay(e3, 'blue', 'yellow', calendar)
         >>> print e3utc.dtstarttz
         2004-01-02 12:00:00+00:00
         >>> print e3utc.dtendtz
         2004-01-02 12:15:00+00:00
-        >>> e3cairo = EventForDisplay(e3, 'blue', 'yellow', person.calendar,
+        >>> e3cairo = EventForDisplay(e3, 'blue', 'yellow', calendar,
         ...                           timezone('Africa/Cairo'))
         >>> print e3cairo.dtstarttz
         2004-01-02 14:00:00+02:00
@@ -640,7 +649,7 @@ class TestCalendarViewBase(unittest.TestCase):
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
 
-        cal = Calendar()
+        cal = Calendar(None)
         view = CalendarViewBase(cal, request)
         self.assertEquals(view.first_day_of_week, 0) # Monday by default
         self.assertEquals(view.time_fmt, '%H:%M')
@@ -677,7 +686,7 @@ class TestCalendarViewBase(unittest.TestCase):
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
 
-        cal = Calendar()
+        cal = Calendar(None)
         view = CalendarViewBase(cal, request)
         view.first_day_of_week = 2 # Wednesday
 
@@ -711,7 +720,7 @@ class TestCalendarViewBase(unittest.TestCase):
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
 
-        cal = Calendar()
+        cal = Calendar(None)
         view = CalendarViewBase(cal, request)
 
         def getDaysStub(start, end):
@@ -749,7 +758,7 @@ class TestCalendarViewBase(unittest.TestCase):
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
 
-        cal = Calendar()
+        cal = Calendar(None)
         view = CalendarViewBase(cal, request)
 
         def getMonthStub(dt):
@@ -787,7 +796,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
             >>> from schoolbell.app.cal import Calendar
             >>> from schoolbell.app.browser.cal import CalendarViewBase
-            >>> view = CalendarViewBase(Calendar(), TestRequest())
+            >>> view = CalendarViewBase(Calendar(None), TestRequest())
 
         Now, if we call the method, the output of our stub will be returned:
 
@@ -812,7 +821,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
             >>> from schoolbell.app.browser.cal import CalendarViewBase
             >>> from schoolbell.app.cal import Calendar
-            >>> cal1 = Calendar()
+            >>> cal1 = Calendar(None)
             >>> cal1.addEvent(createEvent('2005-02-26 19:39', '1h', 'code'))
             >>> cal1.addEvent(createEvent('2005-02-20 16:00', '1h', 'walk'))
             >>> view = CalendarViewBase(cal1, TestRequest())
@@ -857,7 +866,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
         We will stub view.getCalendars to simulate overlayed calendars
 
-            >>> cal2 = Calendar()
+            >>> cal2 = Calendar(None)
             >>> cal2.addEvent(createEvent('2005-02-27 12:00', '1h', 'rest'))
             >>> view.getCalendars = lambda:[(cal1, 'r', 'g'), (cal2, 'b', 'y')]
             >>> for e in view.getEvents(datetime(2005, 2, 21),
@@ -1008,7 +1017,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
             >>> from schoolbell.app.browser.cal import CalendarViewBase
             >>> from schoolbell.app.cal import Calendar
-            >>> cal = Calendar()
+            >>> cal = Calendar(None)
             >>> cal.addEvent(createEvent('2005-02-20 16:00', '1h', 
             ...      'A Birthday', allday=True))
             >>> cal.addEvent(createEvent('2005-02-20 16:00', '1h', 'walk'))
@@ -1050,7 +1059,7 @@ class TestCalendarViewBase(unittest.TestCase):
         e7 = createEvent('2004-08-12 00:00', '1d+1sec', "e7")
         e8 = createEvent('2004-08-15 00:00', '0sec', "e8")
 
-        cal = Calendar()
+        cal = Calendar(None)
         for e in [e0, e2, e3, e4, e5, e6, e7, e8]:
             cal.addEvent(e)
 
@@ -1086,7 +1095,7 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getJumpToYears(self):
         from schoolbell.app.cal import Calendar
         from schoolbell.app.browser.cal import CalendarViewBase
-        cal = Calendar()
+        cal = Calendar(None)
         directlyProvides(cal, IContainmentRoot)
 
         first_year = datetime.today().year - 2
@@ -1106,7 +1115,7 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getJumpToMonths(self):
         from schoolbell.app.cal import Calendar
         from schoolbell.app.browser.cal import CalendarViewBase
-        cal = Calendar()
+        cal = Calendar(None)
         directlyProvides(cal, IContainmentRoot)
 
         view = CalendarViewBase(cal, TestRequest())
@@ -1145,7 +1154,7 @@ def doctest_CalendarEventView():
         >>> from schoolbell.app.cal import Calendar
         >>> from schoolbell.app.browser.cal import CalendarEventView
         >>> from schoolbell.app.browser.cal import makeRecurrenceRule
-        >>> cal = Calendar()
+        >>> cal = Calendar(None)
         >>> event = CalendarEvent(datetime(2002, 2, 3, 12, 30),
         ...                       timedelta(minutes=59), "Event")
         >>> cal.addEvent(event)
@@ -1203,7 +1212,7 @@ def doctest_CalendarEventAddView_add():
 
     First, let's simply render the CalendarEventAddTestView.
 
-        >>> view = CalendarEventAddTestView(Calendar(), TestRequest())
+        >>> view = CalendarEventAddTestView(Calendar(None), TestRequest())
         >>> view.update()
 
     Let's try to add an event:
@@ -1216,7 +1225,7 @@ def doctest_CalendarEventAddView_add():
         ...                             'field.recurrence_type': 'daily',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1251,7 +1260,7 @@ def doctest_CalendarEventAddView_add():
     In that case we are redirected to today's calendar.
 
         >>> request = TestRequest(form={'CANCEL': 'Cancel'})
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1275,7 +1284,7 @@ def doctest_CalendarEventAddView_add():
         ...                             'field.weekdays-empty-marker': '1',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1322,7 +1331,7 @@ def doctest_CalendarEventAddView_add():
         ...                             'field.weekdays-empty-marker': '1',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> eastern = timezone('US/Eastern')
@@ -1390,7 +1399,7 @@ def doctest_CalendarEventAddView_add_validation():
         ...                             'field.recurrence_type': 'daily',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1502,7 +1511,7 @@ def doctest_CalendarEventAddView_add_recurrence():
         ...                             'field.range': 'forever',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1526,7 +1535,7 @@ def doctest_CalendarEventAddView_add_recurrence():
         ...                             'field.recurrence.used': '',
         ...                             'field.recurrence_type': 'daily',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1568,7 +1577,7 @@ def doctest_CalendarEventAddView_add_recurrence():
         ...                             'UPDATE_SUBMIT': 'Add'})
 
 
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1618,7 +1627,7 @@ def doctest_CalendarEventAddView_recurrence_exceptions():
         ...               'UPDATE_SUBMIT': 'Add'})
 
 
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1637,7 +1646,7 @@ def doctest_CalendarEventAddView_recurrence_exceptions():
     We should skip additional newlines when parsing the input:
 
         >>> request.form['field.exceptions'] = '2004-08-14\n\n2004-08-19\n\n\n2004-08-20'
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1657,7 +1666,7 @@ def doctest_CalendarEventAddView_recurrence_exceptions():
     is signaled:
 
         >>> request.form['field.exceptions'] = '2004-08-14\n2004'
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1674,7 +1683,7 @@ def doctest_CalendarEventAddView_recurrence_exceptions():
 def doctest_CalendarEventAddView_getMonthDay():
     r"""Tests for CalendarEventAddView.getMonthDay().
 
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> request = TestRequest()
         >>> request.form['field.start_date'] = u''
         >>> view = CalendarEventAddTestView(calendar, request)
@@ -1693,7 +1702,7 @@ def doctest_CalendarEventAddView_getMonthDay():
 def doctest_CalendarEventAddView_weekdayChecked():
     r"""Tests for CalendarEventAddView.weekdayChecked().
 
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> request = TestRequest()
         >>> request.form['field.start_date'] = u''
         >>> view = CalendarEventAddTestView(calendar, request)
@@ -1725,7 +1734,7 @@ def doctest_CalendarEventAddView_weekdayChecked():
 def doctest_CalendarEventAddView_weekdayDisabled():
     r"""Tests for CalendarEventAddView.weekdayDisabled().
 
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> request = TestRequest()
         >>> request.form['field.start_date'] = u''
         >>> view = CalendarEventAddTestView(calendar, request)
@@ -1767,7 +1776,7 @@ def doctest_CalendarEventAddView_getWeekDay():
         ...                             'field.recurrence_type': 'daily',
         ...                             'field.interval': '2',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> view = CalendarEventAddTestView(calendar, request)
 
         >>> request.form['field.start_date'] = "2004-10-01"
@@ -1822,7 +1831,7 @@ def doctest_CalendarEventAddView_getLastWeekDay():
         ...                             'field.recurrence_type': 'daily',
         ...                             'field.interval': '2',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
 
         >>> request.form['field.start_date'] = ""
         >>> view = CalendarEventAddTestView(calendar, request)
@@ -1862,7 +1871,7 @@ def doctest_CalendarEventAddView_cross_validation():
         ...                             'field.count': '6',
         ...                             'field.until': '2004-01-01',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
@@ -1882,7 +1891,7 @@ def doctest_CalendarEventAddView_cross_validation():
         ...                             'field.range': 'until',
         ...                             'field.until': '2002-01-01',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
@@ -1901,7 +1910,7 @@ def doctest_CalendarEventAddView_cross_validation():
         ...                             'field.range': 'until',
         ...                             'field.count': '23',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
@@ -2071,7 +2080,7 @@ def doctest_CalendarEventEditView_nextURL():
     Let's create an event:
 
         >>> import datetime
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
 
         >>> event = CalendarEvent(title="Hacking",
@@ -2512,7 +2521,7 @@ def doctest_TestCalendarEventBookingView():
         >>> event = CalendarEvent(datetime(2002, 2, 2, 2, 2),
         ...                       timedelta(hours=2), "Some event",
         ...                       unique_id="ev1")
-        >>> person.calendar.addEvent(event)
+        >>> ISchoolBellCalendar(person).addEvent(event)
 
     Now let's create a view for the event:
 
@@ -2533,7 +2542,7 @@ def doctest_TestCalendarEventBookingView():
         >>> r_event = CalendarEvent(datetime(2002, 2, 2, 2, 2),
         ...                       timedelta(hours=2), "Some event",
         ...                       unique_id="rev")
-        >>> app['resources']['res3'].calendar.addEvent(r_event)
+        >>> ISchoolBellCalendar(app['resources']['res3']).addEvent(r_event)
         >>> view.context = r_event
 
         >>> [resource.title for resource in view.availableResources]
@@ -2682,19 +2691,21 @@ def doctest_getEvents_booking():
         >>> from schoolbell.app.resource.resource import Resource
 
         >>> person = Person(u"frog")
+        >>> calendar = ISchoolBellCalendar(person)
         >>> resource = Resource(u"mud")
 
         >>> event = createEvent('2005-02-26 19:39', '1h', 'code')
-        >>> person.calendar.addEvent(event)
+        >>> calendar.addEvent(event)
         >>> event.bookResource(resource)
 
     We will stub view.getCalendars to simulate overlayed calendars
 
     We can see only one instance of the event:
 
-        >>> view = CalendarViewBase(person.calendar, TestRequest())
-        >>> view.getCalendars = lambda:[(person.calendar, 'r', 'g'),
-        ...                             (resource.calendar, 'b', 'y')]
+        >>> view = CalendarViewBase(calendar, TestRequest())
+        >>> view.getCalendars = lambda: [
+        ...     (calendar, 'r', 'g'),
+        ...     (ISchoolBellCalendar(resource), 'b', 'y')]
         >>> for e in view.getEvents(datetime(2005, 2, 21),
         ...                         datetime(2005, 3, 1)):
         ...     print e.title, '(%s)' % e.color1
@@ -2704,14 +2715,15 @@ def doctest_getEvents_booking():
 
         >>> toad = Person(u"toad")
         >>> event = createEvent('2005-02-26 9:39', '1h', 'swim')
-        >>> toad.calendar.addEvent(event)
+        >>> ISchoolBellCalendar(toad).addEvent(event)
         >>> event.bookResource(resource)
 
     We should see only one box for code, yet we should see swim twice:
 
-        >>> view.getCalendars = lambda:[(person.calendar, 'r', 'g'),
-        ...                             (resource.calendar, 'b', 'y'),
-        ...                             (toad.calendar, 'm', 'c')]
+        >>> view.getCalendars = lambda:[
+        ...     (calendar, 'r', 'g'),
+        ...     (ISchoolBellCalendar(resource), 'b', 'y'),
+        ...     (ISchoolBellCalendar(toad), 'm', 'c')]
         >>> for e in view.getEvents(datetime(2005, 2, 21),
         ...                         datetime(2005, 3, 1)):
         ...     print e.title, '(%s)' % e.color1
@@ -2727,6 +2739,8 @@ class TestDailyCalendarView(unittest.TestCase):
         setup.placelessSetUp()
         registerCalendarHelperViews()
         sbsetup.setupSessions()
+        setup.setUpAnnotations()
+        sbsetup.setupCalendaring()
 
     def tearDown(self):
         setup.placelessTearDown()
@@ -2734,7 +2748,7 @@ class TestDailyCalendarView(unittest.TestCase):
     def test_title(self):
         from schoolbell.app.browser.cal import DailyCalendarView
 
-        view = DailyCalendarView(Person().calendar, TestRequest())
+        view = DailyCalendarView(ISchoolBellCalendar(Person()), TestRequest())
         view.update()
         self.assertEquals(view.cursor, date.today())
 
@@ -2749,7 +2763,7 @@ class TestDailyCalendarView(unittest.TestCase):
         from schoolbell.app.browser.cal import DailyCalendarView
 
         person = Person("Da Boss")
-        cal = person.calendar
+        cal = ISchoolBellCalendar(person)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 8, 16)
 
@@ -2779,7 +2793,7 @@ class TestDailyCalendarView(unittest.TestCase):
         ev2 = createEvent('2004-08-12 13:00', '2h', "ev2")
         ev3 = createEvent('2004-08-12 14:00', '2h', "ev3")
         ev4 = createEvent('2004-08-11 14:00', '3d', "ev4")
-        cal = Person().calendar
+        cal = ISchoolBellCalendar(Person())
         for e in [ev1, ev2, ev3, ev4]:
             cal.addEvent(e)
         view = DailyCalendarView(cal, TestRequest())
@@ -2792,10 +2806,9 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_getColumns(self):
         from schoolbell.app.browser.cal import DailyCalendarView
-        from schoolbell.app.app import Calendar
 
         person = Person(title="Da Boss")
-        cal = person.calendar
+        cal = ISchoolBellCalendar(person)
         view = DailyCalendarView(cal, TestRequest())
         view.request = TestRequest()
         view.cursor = date(2004, 8, 12)
@@ -2852,11 +2865,10 @@ class TestDailyCalendarView(unittest.TestCase):
 
     def test_getColumns_periods(self):
         from schoolbell.app.browser.cal import DailyCalendarView
-        from schoolbell.app.app import Calendar
         from schoolbell.calendar.utils import parse_datetimetz
 
         person = Person(title="Da Boss")
-        cal = person.calendar
+        cal = ISchoolBellCalendar(person)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 8, 12)
         view.calendarRows = lambda: iter([
@@ -2874,7 +2886,7 @@ class TestDailyCalendarView(unittest.TestCase):
         from schoolbell.app.browser.cal import DailyCalendarView
 
         person = Person(title="Da Boss")
-        cal = person.calendar
+        cal = ISchoolBellCalendar(person)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 8, 12)
         view.starthour = 10
@@ -2888,7 +2900,7 @@ class TestDailyCalendarView(unittest.TestCase):
         from schoolbell.app.browser.cal import DailyCalendarView
 
         person = Person(title="Da Boss")
-        cal = person.calendar
+        cal = ISchoolBellCalendar(person)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 8, 12)
         view.starthour = 10
@@ -2993,7 +3005,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
         # Some setup.
         person = Person(title="Da Boss")
-        cal = person.calendar
+        cal = ISchoolBellCalendar(person)
         view = DailyCalendarView(cal, TestRequest())
         view.cursor = date(2004, 8, 12)
 
@@ -3161,7 +3173,7 @@ def doctest_CalendarViewBase():
 
         >>> from schoolbell.app.browser.cal import CalendarViewBase
         >>> from schoolbell.app.cal import Calendar
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
 
     Set up the checkers for canEdit/canView on events:
@@ -3285,7 +3297,7 @@ def doctest_DailyCalendarView():
         >>> from schoolbell.app.browser.cal import DailyCalendarView
 
         >>> from schoolbell.app.cal import Calendar
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = DailyCalendarView(calendar, TestRequest())
 
@@ -3317,7 +3329,7 @@ def doctest_WeeklyCalendarView():
         >>> from schoolbell.app.browser.cal import WeeklyCalendarView
 
         >>> from schoolbell.app.cal import Calendar
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = WeeklyCalendarView(calendar, TestRequest())
 
@@ -3366,7 +3378,7 @@ def doctest_MonthlyCalendarView():
         >>> from schoolbell.app.browser.cal import MonthlyCalendarView
 
         >>> from schoolbell.app.cal import Calendar
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = MonthlyCalendarView(calendar, TestRequest())
 
@@ -3423,7 +3435,7 @@ def doctest_YearlyCalendarView():
         >>> from schoolbell.app.browser.cal import YearlyCalendarView
 
         >>> from schoolbell.app.cal import Calendar
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = YearlyCalendarView(calendar, TestRequest())
 
@@ -3513,7 +3525,7 @@ def doctest_AtomCalendarView():
 
         >>> from schoolbell.app.cal import Calendar
         >>> from schoolbell.app.browser.cal import CalendarDay
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> directlyProvides(calendar, IContainmentRoot)
 
     Populate the calendar:
@@ -3745,7 +3757,7 @@ def doctest_EventDeleteView():
     Overlaid events should have their removal links pointing to their
     source calendars so they are not handled:
 
-        >>> cal2 = Calendar() # a dummy calendar
+        >>> cal2 = Calendar(None) # a dummy calendar
         >>> owner = container['friend'] = Person('friend')
         >>> owner.overlaid_calendars.add(cal)
         >>> owner.overlaid_calendars.add(cal2)
@@ -3753,7 +3765,7 @@ def doctest_EventDeleteView():
         ...                             'date': '2005-02-03'})
         >>> request.setPrincipal(ConformantStub(owner))
 
-        >>> view = EventDeleteView(owner.calendar, request)
+        >>> view = EventDeleteView(ISchoolBellCalendar(owner), request)
         >>> print view.handleEvent()
         None
 
@@ -3784,7 +3796,7 @@ def doctest_CalendarListView(self):
         >>> class CalendarStub:
         ...     def __init__(self, title):
         ...         self.title = title
-        >>> calendar = CalendarStub('My Calendar') 
+        >>> calendar = CalendarStub('My Calendar')
         >>> request = TestRequest()
         >>> view = CalendarListView(calendar, request)
         >>> for c, col1, col2 in view.getCalendars():
@@ -3806,11 +3818,15 @@ def doctest_CalendarListView(self):
         ...         self.timeformat = "%H:%M"
         ...         self.dateformat = "%Y-%m-%d"
         ...         self.timezone = 'UTC'
+        >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
+        >>> from schoolbell.app.interfaces import IHaveCalendar
+        >>> from schoolbell.app.cal import CALENDAR_KEY
         >>> class PersonStub:
+        ...     implements(IHaveCalendar, IAttributeAnnotatable)
         ...     def __conform__(self, interface):
         ...         if interface is IPersonPreferences:
         ...             return PreferenceStub()
-        ...     calendar = calendar
+        ...     __annotations__ = {CALENDAR_KEY: calendar}
         ...     overlaid_calendars = [
         ...         OverlayInfoStub('Other Calendar', 'red', 'blue'),
         ...         OverlayInfoStub('Hidden', 'green', 'red', False)]

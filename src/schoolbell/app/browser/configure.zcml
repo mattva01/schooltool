@@ -140,7 +140,7 @@
   </zope:class>
 
   <zope:subscriber
-      for="schoolbell.app.interfaces.ICalendarOwner
+      for="schoolbell.app.interfaces.IHaveCalendar
            zope.publisher.interfaces.browser.IBrowserRequest"
       provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
       factory=".cal.CalendarOwnerTraverser"
@@ -157,7 +157,7 @@
   <menuItem
       menu="schoolbell_actions"
       title="View Calendar"
-      for="schoolbell.app.interfaces.ICalendarOwner"
+      for="schoolbell.app.interfaces.IHaveCalendar"
       permission="schoolbell.viewCalendar"
       action="calendar"
       />

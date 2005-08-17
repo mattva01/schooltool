@@ -27,7 +27,6 @@ import zope.app.container.constraints
 from zope.app import container
 
 from schoolbell import SchoolBellMessageID as _
-from schoolbell.app.interfaces import ICalendarOwner
 
 class IGroupMember(zope.interface.Interface):
     """An object that knows the groups it is a member of."""
@@ -35,7 +34,7 @@ class IGroupMember(zope.interface.Interface):
     groups = zope.interface.Attribute("""Groups (see IRelationshipProperty)""")
 
 
-class IGroup(ICalendarOwner):
+class IGroup(zope.interface.Interface):
     """Group."""
 
     title = zope.schema.TextLine(

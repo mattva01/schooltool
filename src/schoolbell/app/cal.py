@@ -28,7 +28,7 @@ from persistent import Persistent
 from zope.interface import implements
 from zope.schema import getFieldNames
 from zope.component import adapts
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.container.contained import Contained
 from zope.app.location.interfaces import ILocation
 
@@ -40,6 +40,8 @@ from schoolbell.calendar.simple import SimpleCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.interfaces import IWriteCalendar
+
+CALENDAR_KEY = 'schoolbell.app.calendar.Calendar'
 
 
 class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
@@ -64,20 +66,21 @@ class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
             return self.__parent__
 
     def bookResource(self, resource):
+        calendar = ISchoolBellCalendar(resource)
         if resource in self.resources:
             raise ValueError('resource already booked')
-        if resource.calendar is self.__parent__:
+        if calendar is self.__parent__:
             raise ValueError('cannot book itself')
         self._resources += (resource, )
         if self.__parent__ is not None:
-            resource.calendar.addEvent(self)
+            calendar.addEvent(self)
 
     def unbookResource(self, resource):
         if resource not in self.resources:
             raise ValueError('resource not booked')
         self._resources = tuple([r for r in self.resources
                                  if r is not resource])
-        resource.calendar.removeEvent(self)
+        ISchoolBellCalendar(resource).removeEvent(self)
 
 
 class Calendar(Persistent, CalendarMixin):
@@ -91,7 +94,7 @@ class Calendar(Persistent, CalendarMixin):
 
     title = property(lambda self: self.__parent__.title)
 
-    def __init__(self, owner=None):
+    def __init__(self, owner):
         self.events = PersistentDict()
         self.__parent__ = owner
 
@@ -107,11 +110,11 @@ class Calendar(Persistent, CalendarMixin):
             raise ValueError('an event with this unique_id already exists')
         if event.__parent__ is None:
             for resource in event.resources:
-                if resource.calendar is self:
+                if ISchoolBellCalendar(resource) is self:
                     raise ValueError('cannot book itself')
             event.__parent__ = self
             for resource in event.resources:
-                resource.calendar.addEvent(event)
+                ISchoolBellCalendar(resource).addEvent(event)
         elif self.__parent__ not in event.resources:
             raise ValueError("Event already belongs to a calendar")
         self.events[event.unique_id] = event
@@ -137,10 +140,21 @@ class Calendar(Persistent, CalendarMixin):
         return self.events[unique_id]
 
 
+def getCalendar(owner):
+    """Adapt an ``IAnnotatable`` object to ``ISchoolBellCalendar``."""
+    annotations = IAnnotations(owner)
+    try:
+        return annotations[CALENDAR_KEY]
+    except KeyError:
+        calendar = Calendar(owner)
+        annotations[CALENDAR_KEY] = calendar
+        return calendar
+
+
 class WriteCalendar(object):
     r"""An adapter that allows writing iCalendar data to a calendar.
 
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> adapter = WriteCalendar(calendar)
         >>> adapter.write('''\
         ... BEGIN:VCALENDAR
@@ -161,7 +175,7 @@ class WriteCalendar(object):
 
     Supporting other charsets would be nice too:
 
-        >>> calendar = Calendar()
+        >>> calendar = Calendar(None)
         >>> adapter = WriteCalendar(calendar)
         >>> adapter.write('''\
         ... BEGIN:VCALENDAR

@@ -48,6 +48,7 @@ def doctest_SchoolBellApplicationView():
         >>> app = sbsetup.setupSchoolBellSite()
 
         >>> setup.setUpAnnotations()
+        >>> sbsetup.setupCalendaring()
 
         >>> ztapi.provideAdapter(ISchoolBellApplication,
         ...                      IApplicationPreferences,
@@ -170,6 +171,21 @@ def doctest_LoginView():
 
     Some framework setup:
 
+        >>> setup.setUpAnnotations()
+
+        >>> def getCalendarWithNakedObject(obj):
+        ...     from schoolbell.app.cal import getCalendar
+        ...     from zope.security.proxy import removeSecurityProxy
+        ...     return getCalendar(removeSecurityProxy(obj))
+
+        >>> from schoolbell.app.interfaces import IHaveCalendar
+        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
+        >>> ztapi.provideAdapter(IHaveCalendar, ISchoolBellCalendar,
+        ...                      getCalendarWithNakedObject)
+
+        >>> from schoolbell.app.testing import registry
+        >>> registry.setupCalendarComponents()
+
         >>> from schoolbell.app.interfaces import ISchoolBellApplication
         >>> from schoolbell.app.interfaces import IApplicationPreferences
         >>> from schoolbell.app.app import getApplicationPreferences
@@ -181,8 +197,7 @@ def doctest_LoginView():
 
         >>> from schoolbell.app.person.person import Person
         >>> from zope.security.checker import defineChecker, Checker
-        >>> defineChecker(Person,
-        ...               Checker({'calendar': 'zope.Public'},{}))
+        >>> defineChecker(Person, Checker({},{}))
 
     Suppose we have a SchoolBell app and a person:
 

@@ -30,15 +30,17 @@ from zope.app.container.contained import ObjectAddedEvent
 from zope.app.tests import ztapi, setup
 
 from schoolbell.app.tests.test_security import setUpLocalGrants
+from schoolbell.app.testing import setup as sbsetup
 
 def doctest_personPermissionsSubscriber():
     r"""
     Set up:
 
+        >>> root = setup.placefulSetUp(True)
+
         >>> from schoolbell.app.app import SchoolBellApplication
         >>> from schoolbell.app.group.group import Group, GroupContainer
         >>> from schoolbell.app.person.person import Person, PersonContainer
-        >>> root = setup.placefulSetUp(True)
         >>> setUpLocalGrants()
         >>> root['sb'] = SchoolBellApplication()
         >>> root['sb']['persons'] = PersonContainer()
@@ -167,11 +169,17 @@ def doctest_Person():
 
     Persons have a calendar:
 
-        >>> person.calendar.__name__
+        >>> setup.placelessSetUp()
+        >>> setup.setUpAnnotations()
+        >>> sbsetup.setupCalendaring()
+
+        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
+        >>> calendar = ISchoolBellCalendar(person)
+        >>> calendar.__name__
         'calendar'
-        >>> person.calendar.__parent__ is person
+        >>> calendar.__parent__ is person
         True
-        >>> len(person.calendar)
+        >>> len(calendar)
         0
     """
 

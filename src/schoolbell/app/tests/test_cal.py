@@ -27,8 +27,13 @@ from textwrap import dedent
 from datetime import date, datetime, timedelta
 
 from zope.testing import doctest
+from zope.interface import implements
 from zope.interface.verify import verifyObject
+from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.app.testing import setup
 
+from schoolbell.app.interfaces import IHaveCalendar
+from schoolbell.app.testing import setup as sbsetup
 
 class ResourceStub(object):
     """Stub resource.
@@ -36,10 +41,7 @@ class ResourceStub(object):
     For the purposes of resource booking, a resource is anything that
     has a 'calendar' attribute.
     """
-
-    def __init__(self):
-        from schoolbell.app.cal import Calendar
-        self.calendar = Calendar(self)
+    implements(IHaveCalendar, IAttributeAnnotatable)
 
 
 def doctest_CalendarEvent():
@@ -94,10 +96,14 @@ def doctest_CalendarEvent():
 def doctest_CalendarEvent_resource_booking():
     """Resource booking tests for CalendarEvent.
 
+        >>> setup.setUpAnnotations()
+        >>> sbsetup.setupCalendaring()
+
     All calendar events have a `resources` argument, but initially it is empty.
 
+        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
         >>> from schoolbell.app.cal import Calendar, CalendarEvent
-        >>> c = Calendar()
+        >>> c = Calendar(None)
         >>> e = CalendarEvent(datetime(2005, 2, 28), None, '')
         >>> c.addEvent(e)
         >>> e.resources
@@ -117,7 +123,7 @@ def doctest_CalendarEvent_resource_booking():
         >>> e.bookResource(r)
         >>> e.resources
         (<...ResourceStub object at...>,)
-        >>> e in r.calendar
+        >>> e in ISchoolBellCalendar(r)
         True
 
     CalendarEvent.unbookResource undoes this
@@ -125,7 +131,7 @@ def doctest_CalendarEvent_resource_booking():
         >>> e.unbookResource(r)
         >>> e.resources
         ()
-        >>> e in r.calendar
+        >>> e in ISchoolBellCalendar(r)
         False
 
     When you create a CalendarEvent, you can pass a list of resources
@@ -139,7 +145,7 @@ def doctest_CalendarEvent_resource_booking():
         >>> c.addEvent(e)
         >>> a in e.resources and b in e.resources
         True
-        >>> e in a.calendar and e in b.calendar
+        >>> e in ISchoolBellCalendar(a) and e in ISchoolBellCalendar(b)
         True
         >>> e.__parent__ is c
         True
@@ -167,7 +173,7 @@ def doctest_Calendar():
     Let's create a Calendar:
 
         >>> from schoolbell.app.cal import Calendar
-        >>> cal = Calendar()
+        >>> cal = Calendar(None)
         >>> cal.__name__
         'calendar'
 
@@ -205,7 +211,7 @@ def doctest_Calendar():
 
     You should not try to add the same event to a different calendar:
 
-        >>> cal2 = Calendar()
+        >>> cal2 = Calendar(None)
         >>> cal2.addEvent(event)
         Traceback (most recent call last):
         ...
@@ -291,6 +297,9 @@ def doctest_Calendar():
 def doctest_Calendar_addEvent_resource_booking():
     """Tests for Calendar.addEvent.
 
+        >>> setup.setUpAnnotations()
+        >>> sbsetup.setupCalendaring()
+
     For the purposes of resource booking, a resource is anything that
     has a 'calendar' attribute.
 
@@ -302,13 +311,14 @@ def doctest_Calendar_addEvent_resource_booking():
     different calendars.
 
         >>> from schoolbell.app.cal import Calendar, CalendarEvent
-        >>> cal = Calendar()
+        >>> cal = Calendar(None)
         >>> e = CalendarEvent(datetime(2005, 2, 28), None, '')
         >>> cal.addEvent(e)
         >>> e.__parent__ is cal
         True
 
-        >>> resource.calendar.addEvent(e)
+        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
+        >>> ISchoolBellCalendar(resource).addEvent(e)
         Traceback (most recent call last):
           ...
         ValueError: Event already belongs to a calendar
@@ -320,8 +330,9 @@ def doctest_Calendar_addEvent_resource_booking():
         >>> resource in e.resources
         True
 
-        >>> resource.calendar.addEvent(e)
-        >>> e in resource.calendar
+        >>> calendar = ISchoolBellCalendar(resource)
+        >>> calendar.addEvent(e)
+        >>> e in calendar
         True
 
     Event's __parent__ is not changed in this case.
@@ -338,7 +349,7 @@ def doctest_WriteCalendar():
     WriteCalendar is an adapter for calendars into IWriteFile
 
         >>> from schoolbell.app.cal import Calendar, WriteCalendar
-        >>> cal = Calendar()
+        >>> cal = Calendar(None)
         >>> writer = WriteCalendar(cal)
 
         >>> from schoolbell.app.interfaces import IWriteCalendar
@@ -401,7 +412,7 @@ def doctest_WriteCalendar_sophisticated():
 
         >>> from datetime import datetime, timedelta
         >>> from schoolbell.app.cal import Calendar, CalendarEvent
-        >>> cal = Calendar()
+        >>> cal = Calendar(None)
         >>> event1 = CalendarEvent(title='Play Doom',
         ...                        dtstart=datetime(2005, 2, 28),
         ...                        duration=timedelta(hours=2),
@@ -472,9 +483,11 @@ def doctest_WriteCalendar_sophisticated():
 
 def test_suite():
     return unittest.TestSuite([
-                doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
-                doctest.DocTestSuite('schoolbell.app.cal',
-                                     optionflags=doctest.ELLIPSIS),
+        doctest.DocTestSuite(setUp=setup.placelessSetUp,
+                             tearDown=setup.placelessTearDown,
+                             optionflags=doctest.ELLIPSIS),
+        doctest.DocTestSuite('schoolbell.app.cal',
+                             optionflags=doctest.ELLIPSIS),
            ])
 
 

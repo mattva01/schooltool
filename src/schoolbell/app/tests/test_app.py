@@ -31,12 +31,12 @@ from zope.interface import directlyProvides
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.testing import setup, placelesssetup
 
-from schoolbell.app.testing import setup
+from schoolbell.app.testing import setup as sbsetup
 
 def doctest_SchoolBellApplication():
     r"""Tests for SchoolBellApplication.
 
-        >>> app = setup.createSchoolBellApplication()
+        >>> app = sbsetup.createSchoolBellApplication()
 
     We need to register an adapter to make the title attribute available:
 
@@ -49,8 +49,6 @@ def doctest_SchoolBellApplication():
         >>> from schoolbell.app.interfaces import ISchoolBellApplication
         >>> verifyObject(ISchoolBellApplication, app)
         True
-
-        >>> placelesssetup.tearDown()
 
     Person, group and resource containers are reachable as items of the
     application object.
@@ -89,14 +87,22 @@ def doctest_SchoolBellApplication():
 
     SchoolBellApplication is also a calendar owner:
 
-        >>> from schoolbell.app.interfaces import ICalendarOwner
-        >>> verifyObject(ICalendarOwner, app)
+        >>> setup.setUpAnnotations()
+        >>> sbsetup.setupCalendaring()
+
+        >>> from schoolbell.app.interfaces import IHaveCalendar
+        >>> verifyObject(IHaveCalendar, app)
         True
 
-    and naturally has a calendar attribute:
+    and naturally can be adapted to ISchoolBellCalendar:
 
-        >>> app.calendar
+        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
+        >>> ISchoolBellCalendar(app)
         <schoolbell.app.cal.Calendar object at ...
+
+    Cleanup:
+
+        >>> placelesssetup.tearDown()
 
     """
 

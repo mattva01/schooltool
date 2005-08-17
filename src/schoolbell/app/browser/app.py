@@ -44,6 +44,7 @@ from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IApplicationPreferences
+from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.browser.cal import CalendarOwnerTraverser
 from schoolbell.app.person.interfaces import IPerson
@@ -71,7 +72,8 @@ class SchoolBellApplicationView(BrowserView):
     def update(self):
         prefs = IApplicationPreferences(getSchoolBellApplication())
         if prefs.frontPageCalendar:
-            url = zapi.absoluteURL(self.context.calendar, self.request)
+            url = zapi.absoluteURL(
+                ISchoolBellCalendar(self.context), self.request)
             self.request.response.redirect(url)
 
 
@@ -180,7 +182,8 @@ class LoginView(BrowserView):
                 if 'nexturl' in self.request:
                     nexturl = self.request['nexturl']
                 elif person is not None:
-                    nexturl = zapi.absoluteURL(person.calendar, self.request)
+                    nexturl = zapi.absoluteURL(
+                        ISchoolBellCalendar(person), self.request)
                 else:
                     nexturl = zapi.absoluteURL(self.context, self.request)
                 self.request.response.redirect(nexturl)

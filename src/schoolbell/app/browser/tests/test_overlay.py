@@ -26,10 +26,17 @@ import unittest
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
-from zope.app.component.hooks import setSite
 
-from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schoolbell.app.browser.tests.setup import setUp as browserSetUp, tearDown
+from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.testing import setup
+
+def setUp(test=None):
+    browserSetUp(test)
+    from zope.app.testing.setup import setUpAnnotations
+    setUpAnnotations()
+    setup.setupCalendaring()
+
 
 def doctest_CalendarOverlayView():
     r"""Tests for CalendarOverlayView
@@ -60,12 +67,13 @@ def doctest_CalendarOverlayView():
         >>> person = app['persons']['whatever'] = Person('fred')
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
         >>> group2 = app['groups']['g2'] = Group(title="Group 2")
-        >>> person.overlaid_calendars.add(group1.calendar)
-        >>> person.overlaid_calendars.add(group2.calendar, show=False)
+        >>> person.overlaid_calendars.add(ISchoolBellCalendar(group1))
+        >>> person.overlaid_calendars.add(ISchoolBellCalendar(group2),
+        ...                               show=False)
 
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('id', 'title', person))
-        >>> view = View(person.calendar, request)
+        >>> view = View(ISchoolBellCalendar(person), request)
 
         >>> print view()
         <div id="portlet-calendar-overlay" class="portlet">
@@ -113,7 +121,7 @@ def doctest_CalendarOverlayView():
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('id', 'title', person))
         >>> request.form['OVERLAY_MORE'] = u"More..."
-        >>> view = View(person.calendar, request)
+        >>> view = View(ISchoolBellCalendar(person), request)
         >>> content = view()
         >>> request.response.getStatus()
         302
@@ -144,15 +152,16 @@ def doctest_CalendarOverlayView_items():
         >>> from schoolbell.app.security import Principal
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('', '', person))
-        >>> context = person.calendar
+        >>> context = ISchoolBellCalendar(person)
         >>> view = CalendarOverlayView(context, request)
         >>> view.items()
         []
 
     When the person has calendars in his overlay list
 
-        >>> person.overlaid_calendars.add(group2.calendar)
-        >>> person.overlaid_calendars.add(group1.calendar, show=False)
+        >>> person.overlaid_calendars.add(ISchoolBellCalendar(group2))
+        >>> person.overlaid_calendars.add(ISchoolBellCalendar(group1),
+        ...                               show=False)
 
         >>> from zope.testing.doctestunit import pprint
         >>> pprint(view.items())
@@ -178,7 +187,7 @@ def doctest_CalendarSelectionView():
         >>> from schoolbell.app.interfaces import IApplicationPreferences
         >>> from schoolbell.app.app import getApplicationPreferences
         >>> from zope.app.testing import ztapi
-        >>> ztapi.provideAdapter(ISchoolBellApplication, 
+        >>> ztapi.provideAdapter(ISchoolBellApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
         >>> from schoolbell.app.browser.overlay import CalendarSelectionView
@@ -240,7 +249,7 @@ def doctest_CalendarSelectionView():
     If a person's calendar is added to your overlaid calendars list, you
     can see that in the form.
 
-        >>> fred.overlaid_calendars.add(eric.calendar, show=False)
+        >>> fred.overlaid_calendars.add(ISchoolBellCalendar(eric), show=False)
 
         >>> print view()
         <BLANKLINE>
@@ -275,11 +284,11 @@ def doctest_CalendarSelectionView():
 
     We can see that the calendars we selected were added to the list
 
-        >>> igor.calendar in fred.overlaid_calendars
+        >>> ISchoolBellCalendar(igor) in fred.overlaid_calendars
         True
-        >>> admins.calendar in fred.overlaid_calendars
+        >>> ISchoolBellCalendar(admins) in fred.overlaid_calendars
         True
-        >>> car.calendar in fred.overlaid_calendars
+        >>> ISchoolBellCalendar(car) in fred.overlaid_calendars
         True
 
     We can also remove calendars
@@ -296,7 +305,7 @@ def doctest_CalendarSelectionView():
               </select>
         ...
 
-        >>> eric.calendar in fred.overlaid_calendars
+        >>> ISchoolBellCalendar(eric) in fred.overlaid_calendars
         False
 
     When you submit the form, you are redirected back to the original view

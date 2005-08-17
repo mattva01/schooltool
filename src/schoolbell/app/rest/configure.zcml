@@ -72,7 +72,7 @@
       />
 
   <view
-      for="schoolbell.app.interfaces.ICalendarOwner"
+      for="schoolbell.app.interfaces.IHaveCalendar"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory="schoolbell.app.browser.cal.CalendarOwnerHTTPTraverser"
@@ -81,7 +81,7 @@
       />
 
   <view
-      for="schoolbell.app.interfaces.ICalendarOwner"
+      for="schoolbell.app.interfaces.IHaveCalendar"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory="schoolbell.app.browser.cal.CalendarOwnerHTTPTraverser"
@@ -90,7 +90,7 @@
       />
 
   <view
-      for="schoolbell.app.interfaces.ICalendarOwner"
+      for="schoolbell.app.interfaces.IHaveCalendar"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory="schoolbell.app.browser.cal.CalendarOwnerHTTPTraverser"

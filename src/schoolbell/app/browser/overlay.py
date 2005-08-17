@@ -33,9 +33,9 @@ from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess
 
 from schoolbell import SchoolBellMessageID as _
+from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.person.interfaces import IPerson
-from schoolbell.app.app import getSchoolBellApplication
 
 
 class CalendarOverlayView(BrowserView):
@@ -51,6 +51,13 @@ class CalendarOverlayView(BrowserView):
     def show_overlay(self):
         """Check whether the calendar overlay portlet needs to be rendered.
 
+            >>> from zope.app.testing import setup
+            >>> setup.placelessSetUp()
+            >>> setup.setUpAnnotations()
+
+            >>> from schoolbell.app.testing import setup as sbsetup
+            >>> sbsetup.setupCalendaring()
+
         The portlet is only shown when an authenticated user is looking
         at his/her calendar.
 
@@ -60,7 +67,7 @@ class CalendarOverlayView(BrowserView):
             >>> from schoolbell.app.person.person import Person
             >>> request = TestRequest()
             >>> person = Person()
-            >>> context = person.calendar
+            >>> context = ISchoolBellCalendar(person)
             >>> view = CalendarOverlayView(context, request)
             >>> view.show_overlay()
             False
@@ -77,6 +84,10 @@ class CalendarOverlayView(BrowserView):
             >>> request.setPrincipal(Principal('id', 'title', Person()))
             >>> view.show_overlay()
             False
+
+       Cleanup:
+
+            >>> setup.placelessTearDown()
 
         """
         if not ILocation.providedBy(self.context):
@@ -150,12 +161,17 @@ class CalendarSelectionView(BrowserView):
         if user is None:
             return []
         app = getSchoolBellApplication()
-        return [{'id': o.__name__,
-                 'title': o.title,
-                 'selected': o.calendar in user.overlaid_calendars,
-                 'calendar': o.calendar}
-                for o in app[container].values()
-                if o is not user and canAccess(o.calendar, '__iter__')]
+
+        result = []
+        for obj in app[container].values():
+            calendar = ISchoolBellCalendar(obj)
+            if obj is not user and canAccess(calendar, '__iter__'):
+                result.append(
+                    {'id': obj.__name__,
+                     'title': obj.title,
+                     'selected': calendar in user.overlaid_calendars,
+                     'calendar': calendar})
+        return result
 
     def getApplicationCalendar(self):
         """Return the application calendar.
@@ -166,11 +182,12 @@ class CalendarSelectionView(BrowserView):
         if user is None:
             return None
         app = getSchoolBellApplication()
+        calendar = ISchoolBellCalendar(app)
 
-        if canAccess(app.calendar, '__iter__'):
+        if canAccess(calendar, '__iter__'):
             return {'title': app.title,
-                    'selected': app.calendar in user.overlaid_calendars,
-                    'calendar': app.calendar}
+                    'selected': calendar in user.overlaid_calendars,
+                    'calendar': calendar}
 
         return None
 
@@ -198,10 +215,10 @@ class CalendarSelectionView(BrowserView):
                     elif item['id'] not in selected and item['selected']:
                         user.overlaid_calendars.remove(item['calendar'])
             appcal = self.application['calendar']
-            if ('application' in self.request and 
+            if ('application' in self.request and
                     appcal not in user.overlaid_calendars):
                 user.overlaid_calendars.add(appcal)
-            elif ('application' not in self.request and 
+            elif ('application' not in self.request and
                     appcal in user.overlaid_calendars):
                 user.overlaid_calendars.remove(appcal)
             self.message = _('Saved changes.')

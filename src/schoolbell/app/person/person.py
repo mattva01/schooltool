@@ -31,8 +31,7 @@ from zope.app.container.contained import Contained
 from zope.app.container.interfaces import IObjectAddedEvent
 
 from schoolbell.app.app import getSchoolBellApplication
-from schoolbell.app.cal import Calendar
-from schoolbell.app.interfaces import ICalendarOwner
+from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.membership import URIMembership, URIMember, URIGroup
 from schoolbell.app.overlay import OverlaidCalendarsProperty
 from schoolbell.app.person import interfaces
@@ -56,8 +55,7 @@ class PersonContainer(btree.BTreeContainer):
 class Person(Persistent, Contained):
     """Person."""
 
-    implements(interfaces.IPersonContained, ICalendarOwner,
-               IAttributeAnnotatable)
+    implements(interfaces.IPersonContained, IAttributeAnnotatable)
 
     photo = None
     username = None
@@ -69,7 +67,6 @@ class Person(Persistent, Contained):
     def __init__(self, username=None, title=None):
         self.title = title
         self.username = username
-        self.calendar = Calendar(self)
 
     def setPassword(self, password):
         self._hashed_password = hash_password(password)
@@ -120,7 +117,7 @@ def personAppCalendarOverlaySubscriber(event):
         if interfaces.IPerson.providedBy(event.object):
             try:
                 app = getSchoolBellApplication()
-                event.object.overlaid_calendars.add(app.calendar)
+                event.object.overlaid_calendars.add(ISchoolBellCalendar(app))
             except ValueError:
                 # If we get this we are probably in the initial new-site setup
                 # or creating a new manager during startup.  This should be

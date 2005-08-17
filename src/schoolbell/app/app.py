@@ -32,18 +32,11 @@ from zope.interface import implements
 from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.component.hooks import getSite
 from zope.app.component.site import SiteManagerContainer
-from zope.app.container import btree, sample
-from zope.app.container.contained import Contained, NameChooser
-from zope.app.container.interfaces import INameChooser, IObjectAddedEvent
-from zope.app.location.interfaces import ILocation
+from zope.app.container import sample
+from zope.app.container.contained import NameChooser
+from zope.app.container.interfaces import INameChooser
 
-import schoolbell.app.note.interfaces
 from schoolbell.app import interfaces
-from schoolbell.app import note
-from schoolbell.app.cal import Calendar
-from schoolbell.app.membership import URIMembership, URIMember, URIGroup
-from schoolbell.app.overlay import OverlaidCalendarsProperty
-from schoolbell.relationship import RelationshipProperty
 
 
 class SchoolBellApplication(Persistent, sample.SampleContainer,
@@ -58,7 +51,6 @@ class SchoolBellApplication(Persistent, sample.SampleContainer,
 
     def __init__(self):
         super(SchoolBellApplication, self).__init__()
-        self.calendar = Calendar(self)
         notify(interfaces.ApplicationInitializationEvent(self))
 
     def _newContainerData(self):

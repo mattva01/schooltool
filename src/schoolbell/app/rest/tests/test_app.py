@@ -214,6 +214,13 @@ class ApplicationObjectViewTestMixin(ContainerViewTestMixin):
 def doctest_CalendarView():
     r"""Tests for CalendarView.
 
+        >>> from zope.app.testing import setup
+        >>> setup.placelessSetUp()
+        >>> setup.setUpAnnotations()
+
+        >>> from schoolbell.app.testing import setup as sbsetup
+        >>> sbsetup.setupCalendaring()
+
     First lets create a view:
 
         >>> from schoolbell.app.rest.app import CalendarView
@@ -224,7 +231,7 @@ def doctest_CalendarView():
         ...                      WriteCalendar)
 
         >>> person = Person()
-        >>> calendar = person.calendar
+        >>> calendar = ISchoolBellCalendar(person)
         >>> view = CalendarView(calendar, TestRequest())
 
         >>> print view.GET()._outstream.getvalue().replace("\r\n", "\n")
@@ -268,6 +275,10 @@ def doctest_CalendarView():
         >>> titles = [e.title for e in calendar]
         >>> titles[0]
         u'LAN party \xa3'
+
+    Cleanup:
+
+        >>> setup.placelessTearDown()
 
     """
 

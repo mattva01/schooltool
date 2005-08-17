@@ -111,6 +111,14 @@ class ISchoolBellCalendar(IEditCalendar, ILocation):
         description=u"Title of the calendar.")
 
 
+class IHaveCalendar(zope.interface.Interface):
+    """Marker interface for components that can have calendars.
+
+    Components providing this interface are adaptable to
+    ``ISchoolBellCalendar``.
+    """
+
+
 # XXX: This screams adapter.
 class ISchoolBellCalendarEvent(ICalendarEvent,
                                container.interfaces.IContained):
@@ -125,17 +133,8 @@ class ISchoolBellCalendarEvent(ICalendarEvent,
     def unbookResource(resource):
         """Book a resource."""
 
-# XXX: This screams adapter as well.
-class ICalendarOwner(zope.interface.Interface):
-    """An object that has a calendar."""
 
-    calendar = zope.schema.Object(
-        title=u"The object's calendar.",
-        schema=ISchoolBellCalendar)
-
-
-class ISchoolBellApplication(container.interfaces.IReadContainer,
-                             ICalendarOwner):
+class ISchoolBellApplication(container.interfaces.IReadContainer):
     """The main SchoolBell application object.
 
     The application is a read-only container with the following items:
