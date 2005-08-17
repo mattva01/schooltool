@@ -32,7 +32,8 @@ from zope.app.testing import setup, ztapi
 from zope.app.traversing import namespace
 from zope.app.traversing.interfaces import ITraversable
 
-from schooltool.rest.tests.test_app import setUpSchool, compareXML
+from schoolbell.app.testing import setup as sbsetup
+from schooltool.rest.tests.test_app import compareXML
 
 from schooltool.course.course import Course, CourseContainer
 from schooltool.course.interfaces import ICourseContainer
@@ -112,7 +113,7 @@ def doctest_CourseContainerView():
         ...                     IFileFactory,
         ...                     CourseFileFactory)
 
-        >>> app = setUpSchool()
+        >>> app = sbsetup.setupSchoolBellSite()
         >>> courses = app['courses']
         >>> courses['course1'] = course1 = Course()
 
@@ -167,7 +168,7 @@ def doctest_CourseView():
         >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
         ...                   namespace.view)
 
-        >>> app = setUpSchool()
+        >>> app = sbsetup.setupSchoolBellSite()
         >>> courses = app['courses']
         >>> courses['course1'] = course1 = Course(title="Course 1",
         ...                                       description="Something")
@@ -226,7 +227,7 @@ def doctest_SectionFileFactory():
     setup:
 
 
-        >>> app = setUpSchool()
+        >>> app = sbsetup.setupSchoolBellSite()
         >>> from schoolbell.app.resource.resource import Resource
 
         >>> app['resources']['room1'] = room1 = Resource("Room 1",
@@ -311,7 +312,7 @@ def doctest_SectionContainerView():
         ...                     IFileFactory,
         ...                     SectionFileFactory)
 
-        >>> app = setUpSchool()
+        >>> app = sbsetup.setupSchoolBellSite()
         >>> sections = app['sections']
         >>> sections['section1'] = section1 = Section()
 
@@ -368,7 +369,7 @@ def doctest_SectionView():
         >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
         ...                   namespace.view)
 
-        >>> app = setUpSchool()
+        >>> app = sbsetup.setupSchoolBellSite()
         >>> sections = app['sections']
         >>> sections['section1'] = section1 = Section(title="Section 1",
         ...                                       description="Something")

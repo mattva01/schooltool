@@ -27,6 +27,9 @@ from zope.interface import implements
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 
+from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schoolbell.app.testing import setup
+
 
 def doctest_NavigationView():
     """Unit tests for NavigationView.
@@ -35,8 +38,7 @@ def doctest_NavigationView():
 
       >>> from schooltool.app import SchoolToolApplication
       >>> from schoolbell.app.person.person import Person
-      >>> from test_app import setUpSchool
-      >>> app = setUpSchool()
+      >>> app = setup.setupSchoolBellSite()
       >>> p = Person('1')
       >>> app['persons']['1'] = p
 
@@ -71,7 +73,7 @@ def doctest_TimetablesTraverser():
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite())
+    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown))
     suite.addTest(doctest.DocTestSuite('schoolbell.app.browser'))
     return suite
 

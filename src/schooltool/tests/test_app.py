@@ -21,24 +21,22 @@ Unit tests for schooltool.app.
 
 $Id$
 """
-
 import unittest
+
 from zope.component import provideAdapter
+from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app import zapi
-from zope.interface.verify import verifyObject
-from zope.app.testing import setup, ztapi, placelesssetup
-from schoolbell.app.tests.test_security import setUpLocalGrants
 from zope.app.container.contained import ObjectAddedEvent
+from zope.app.testing import setup, ztapi, placelesssetup
+
+from schoolbell.app.tests.test_security import setUpLocalGrants
+
+from schoolbell.app.testing import setup as sbsetup
 
 
 def doctest_SchoolToolApplication():
     """SchoolToolApplication
-
-    Let's check that the interface is satisfied:
-
-        >>> from schooltool.app import SchoolToolApplication
-        >>> from schooltool.interfaces import ISchoolToolApplication
 
     We need to register an adapter to make the title attribute available:
 
@@ -48,54 +46,29 @@ def doctest_SchoolToolApplication():
         >>> provideAdapter(ApplicationPreferences,
         ...                provides=IApplicationPreferences)
 
-        >>> app = SchoolToolApplication()
+        >>> app = sbsetup.createSchoolBellApplication()
+
+    Let's check that the interface is satisfied:
+
+        >>> from schooltool.interfaces import ISchoolToolApplication
         >>> verifyObject(ISchoolToolApplication, app)
-        True
-
-        # Usually automatically called subscribers
-        # XXX: Should be done with test setup framework
-        >>> from schooltool.interfaces import ApplicationInitializationEvent
-
-        >>> from schoolbell.app.person import person
-        >>> person.addPersonContainerToApplication(
-        ...     ApplicationInitializationEvent(app))
-        >>> from schoolbell.app.group import group
-        >>> group.addGroupContainerToApplication(
-        ...     ApplicationInitializationEvent(app))
-        >>> from schoolbell.app.resource import resource
-        >>> resource.addResourceContainerToApplication(
-        ...     ApplicationInitializationEvent(app))
-
-        >>> import schooltool.course.course
-        >>> schooltool.course.course.addCourseContainerToApplication(
-        ...     ApplicationInitializationEvent(app))
-        >>> import schooltool.course.section
-        >>> schooltool.course.section.addSectionContainerToApplication(
-        ...     ApplicationInitializationEvent(app))
-
-
-    Also, the app is a schoolbell application:
-
-        >>> from schoolbell.app.interfaces import ISchoolBellApplication
-        >>> verifyObject(ISchoolBellApplication, app)
         True
 
         >>> placelesssetup.tearDown()
 
-    The person, group, and resource containers should be from
-    SchoolTool, not SchoolBell:
+    The most basic containers should be available:
 
         >>> from schoolbell.app.person.interfaces import IPersonContainer
-        >>> from schoolbell.app.group.interfaces import IGroupContainer
-        >>> from schoolbell.app.resource.interfaces import IResourceContainer
         >>> verifyObject(IPersonContainer, app['persons'])
         True
+
+        >>> from schoolbell.app.group.interfaces import IGroupContainer
         >>> verifyObject(IGroupContainer, app['groups'])
         True
+
+        >>> from schoolbell.app.resource.interfaces import IResourceContainer
         >>> verifyObject(IResourceContainer, app['resources'])
         True
-
-    We should have a CourseContainer and a SectionContainer
 
         >>> from schooltool.course.interfaces import ICourseContainer
         >>> verifyObject(ICourseContainer, app['courses'])
@@ -108,7 +81,7 @@ def doctest_SchoolToolApplication():
     We should also have a calendar:
 
         >>> app.calendar
-        <schoolbell.app.cal.Calendar object at ...
+        <schoolbell.app.cal.Calendar object at ...>
 
     Our ApplicationPreferences title should be 'SchoolTool' by default:
 
@@ -129,9 +102,9 @@ def doctest_getSchoolToolApplication():
     Let's say we have a SchoolTool app, which is a site.
 
       >>> from schooltool.app import SchoolToolApplication
-      >>> from schoolbell.app.person.person import Person
-      >>> from zope.app.component.site import LocalSiteManager
       >>> app = SchoolToolApplication()
+
+      >>> from zope.app.component.site import LocalSiteManager
       >>> app.setSiteManager(LocalSiteManager(app))
 
     If site is not a SchoolToolApplication, we get an error
@@ -161,30 +134,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> from schooltool import app
         >>> root = setup.placefulSetUp(True)
         >>> setUpLocalGrants()
-        >>> st = app.SchoolToolApplication()
-
-        # Usually automatically called subscribers
-        # XXX: Should be done with test setup framework.
-        >>> from schooltool.interfaces import ApplicationInitializationEvent
-
-        >>> from schoolbell.app.person import person
-        >>> person.addPersonContainerToApplication(
-        ...     ApplicationInitializationEvent(st))
-        >>> from schoolbell.app.group import group
-        >>> group.addGroupContainerToApplication(
-        ...     ApplicationInitializationEvent(st))
-        >>> from schoolbell.app.resource import resource
-        >>> resource.addResourceContainerToApplication(
-        ...     ApplicationInitializationEvent(st))
-
-        >>> import schooltool.course.course
-        >>> schooltool.course.course.addCourseContainerToApplication(
-        ...     ApplicationInitializationEvent(st))
-        >>> import schooltool.course.section
-        >>> schooltool.course.section.addSectionContainerToApplication(
-        ...     ApplicationInitializationEvent(st))
-        >>> from schooltool import timetable
-        >>> timetable.addToApplication(ApplicationInitializationEvent(st))
+        >>> st = sbsetup.createSchoolBellApplication()
 
         >>> root['sb'] = st
 

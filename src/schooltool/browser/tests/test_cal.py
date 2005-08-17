@@ -21,57 +21,26 @@ Tests for SchoolTool-specific calendar views.
 
 $Id$
 """
-
 import unittest
 from datetime import date, timedelta, time
-from zope.testing import doctest
+from pytz import timezone
+
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
-from zope.app.tests import setup, ztapi
+from zope.testing import doctest
+from zope.app.testing import setup, ztapi
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
-from schoolbell.app.group.group import GroupContainer
-from schoolbell.app.person.person import Person, PersonContainer
-from schoolbell.app.resource.resource import ResourceContainer
+from schoolbell.app.testing import setup as sbsetup
 
 import schooltool.app
-from schooltool import timetable
 from schooltool.common import parse_datetime
-from schooltool.interfaces import ApplicationInitializationEvent
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable import SequentialDaysTimetableModel
-from pytz import timezone
 
 utc = timezone('UTC')
-
-
-# XXX: Shrug, duplication of test_app,setUpSchool
-def setUpSchoolToolSite():
-    from schooltool.app import SchoolToolApplication
-    app = SchoolToolApplication()
-
-    # Usually automatically called subscribers
-    # XXX: Use future test setup
-    app['resources'] = ResourceContainer()
-    app['persons'] = PersonContainer()
-    app['groups'] = GroupContainer()
-
-    from schooltool.course import course
-    course.addCourseContainerToApplication(
-        ApplicationInitializationEvent(app))
-    from schooltool.course import section
-    section.addSectionContainerToApplication(
-        ApplicationInitializationEvent(app))
-    timetable.addToApplication(ApplicationInitializationEvent(app))
-
-    directlyProvides(app, IContainmentRoot)
-    from zope.app.component.site import LocalSiteManager
-    app.setSiteManager(LocalSiteManager(app))
-    from zope.app.component.hooks import setSite
-    setSite(app)
-    return app
 
 
 def dt(timestr):
@@ -82,18 +51,18 @@ def dt(timestr):
 class TestDailyCalendarRowsView(unittest.TestCase):
 
     def setUp(self):
+        setUp()
+
+        # set up adaptation (the view checks user preferences)
         from schoolbell.app.person.preference import getPersonPreferences
         from schoolbell.app.person.interfaces import IPersonPreferences
         from schoolbell.app.person.interfaces import IHavePreferences
-
-        # set up adaptation (the view checks user preferences)
-        setup.placelessSetUp()
-        setup.setUpAnnotations()
-        ztapi.provideAdapter(Person, IPersonPreferences,
-                             getPersonPreferences)
+        from schoolbell.app.person.person import Person
+        ztapi.provideAdapter(Person, IPersonPreferences, getPersonPreferences)
 
         # set up the site
-        app = setUpSchoolToolSite()
+        app = sbsetup.setupSchoolBellSite()
+
         self.person = app['persons']['person'] = Person('person')
 
         # set up the timetable schema
@@ -118,7 +87,7 @@ class TestDailyCalendarRowsView(unittest.TestCase):
         term.add(date(2004, 11, 5))
 
     def tearDown(self):
-        setup.placelessTearDown()
+        tearDown()
 
     def createSchema(self, days, *periods_for_each_day):
         """Create a timetable schema."""
@@ -224,7 +193,7 @@ def doctest_CalendarSTOverlayView():
         >>> from schooltool.course.course import Course
         >>> from schooltool.course.section import Section
         >>> from schoolbell.app.security import Principal
-        >>> app = setUpSchoolToolSite()
+        >>> app = sbsetup.setupSchoolBellSite()
         >>> person = app['persons']['whatever'] = Person('fred')
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
         >>> group2 = app['groups']['g2'] = Group(title="Group 2")

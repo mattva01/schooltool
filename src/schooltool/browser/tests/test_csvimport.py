@@ -21,42 +21,39 @@ Unit tests for schooltool.browser.csvimport
 
 $Id$
 """
-
 import unittest
 import datetime
-from StringIO import StringIO
 from logging import INFO
-from zope.testing import doctest
-from zope.app.testing import ztapi
-from zope.publisher.browser import TestRequest
+from StringIO import StringIO
+
 from zope.i18n import translate
 from zope.interface.verify import verifyObject
-from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.publisher.browser import TestRequest
+from zope.testing import doctest
+from zope.app.testing import ztapi
 
-from schoolbell.relationship.tests import setUp as setUpRelationshipStuff
-from schoolbell.relationship.tests import tearDown as tearDownRelationshipStuff
 from schoolbell.app.browser.tests.setup import setUp as testSetUp, tearDown
 from schoolbell.app.membership import URIMember
-from schoolbell.app.resource.resource import Resource, ResourceContainer
-from schoolbell.app.person.person import Person, PersonContainer
-from schoolbell.app.group.group import Group, GroupContainer
+from schoolbell.app.resource.resource import Resource
+from schoolbell.app.person.person import Person
+from schoolbell.app.group.group import Group
+from schoolbell.app.testing import setup
 
-import schooltool.app
+from schooltool.browser.csvimport import InvalidCSVError
 from schooltool.common import dedent
 from schooltool.course.course import Course
 from schooltool.course.section import Section
 from schooltool.relationships import URISection, URISectionOfCourse
-from schooltool.browser.csvimport import InvalidCSVError
-from schooltool.interfaces import ApplicationInitializationEvent
 from schooltool.timetable.interfaces import ITimetables
-from schooltool.timetable import TimetablesAdapter
-from schooltool import timetable
 
 __metaclass__ = type
 
 
 def setUp(test=None):
     testSetUp(test)
+
+    from zope.app.annotation.interfaces import IAttributeAnnotatable
+    from schooltool.timetable import TimetablesAdapter
     ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
                          TimetablesAdapter)
 
@@ -64,45 +61,22 @@ def setUp(test=None):
 class TestTimetableCSVImportView(unittest.TestCase):
 
     def setUp(self):
+        setUp()
+        self.app = setup.setupSchoolBellSite()
+
         from schooltool.timetable import TimetableSchema, TimetableSchemaDay
-        from schooltool.app import SchoolToolApplication
-        from schooltool.timetable import Term
-        setUpRelationshipStuff()
-        self.app = SchoolToolApplication()
-        # XXX: Use future test setup
-        self.app['resources'] = ResourceContainer()
-        self.app['persons'] = PersonContainer()
-        self.app['groups'] = GroupContainer()
-
-        # Usually automatically called subscribers
-        from schooltool.course import course
-        course.addCourseContainerToApplication(
-            ApplicationInitializationEvent(self.app))
-        from schooltool.course import section
-        section.addSectionContainerToApplication(
-            ApplicationInitializationEvent(self.app))
-        timetable.addToApplication(ApplicationInitializationEvent(self.app))
-
-
-        from zope.interface import directlyProvides
-        from zope.app.traversing.interfaces import IContainmentRoot
-        from zope.app.component.site import LocalSiteManager
-        from zope.app.component.hooks import setSite
-        directlyProvides(self.app, IContainmentRoot)
-        self.app.setSiteManager(LocalSiteManager(self.app))
-        setSite(self.app)
-
         ttschema = TimetableSchema(["1","2","3"])
         for day in range(1, 4):
             ttschema[str(day)] = TimetableSchemaDay([str(day)])
         self.app['ttschemas']['three-day'] = ttschema
 
+        from schooltool.timetable import Term
         self.app['terms']['fall'] = Term("Fall term",
                                          datetime.datetime(2004, 1, 1),
                                          datetime.datetime(2004, 5, 1))
 
     def tearDown(self):
-        tearDownRelationshipStuff()
+        tearDown()
 
     def createView(self, form=None):
         from schooltool.browser.csvimport import TimetableCSVImportView
@@ -186,10 +160,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
     periods = ("A", "B", "C")
 
     def setUp(self):
-        setUpRelationshipStuff()
-        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
-        from schooltool.timetable import Term
-        from schooltool.app import SchoolToolApplication
+        setUp()
 
         # Set up a name chooser to pick names for new sections.
         from schooltool.course.interfaces import ISectionContainer
@@ -197,31 +168,8 @@ class TestTimetableCSVImporter(unittest.TestCase):
         from zope.app.container.interfaces import INameChooser
         ztapi.provideAdapter(ISectionContainer, INameChooser,
                              SimpleNameChooser)
-        ztapi.provideAdapter(IAttributeAnnotatable, ITimetables,
-                             TimetablesAdapter)
 
-        self.app = app = SchoolToolApplication()
-        # XXX: Use future test setup
-        self.app['resources'] = ResourceContainer()
-        self.app['persons'] = PersonContainer()
-        self.app['groups'] = GroupContainer()
-
-        # Usually automatically called subscribers
-        from schooltool.course import course
-        course.addCourseContainerToApplication(
-            ApplicationInitializationEvent(self.app))
-        from schooltool.course import section
-        section.addSectionContainerToApplication(
-            ApplicationInitializationEvent(self.app))
-        timetable.addToApplication(ApplicationInitializationEvent(self.app))
-
-        from zope.interface import directlyProvides
-        from zope.app.traversing.interfaces import IContainmentRoot
-        from zope.app.component.site import LocalSiteManager
-        from zope.app.component.hooks import setSite
-        directlyProvides(app, IContainmentRoot)
-        app.setSiteManager(LocalSiteManager(app))
-        setSite(app)
+        self.app = app = setup.setupSchoolBellSite()
 
         self.course = app['courses']['philosophy'] = Course(title="Philosophy")
         self.section = app['sections']['section'] = Section(title="Something")
@@ -229,11 +177,13 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.location2 = app['resources']['location2'] = Resource("Outside")
 
         # set a timetable schema
+        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
         ttschema = TimetableSchema(self.days)
         for day in self.days:
             ttschema[day] = TimetableSchemaDay(self.periods)
         self.app["ttschemas"]['three-day'] = ttschema
 
+        from schooltool.timetable import Term
         term = Term("Summer term",
                     datetime.datetime(2004, 1, 1),
                     datetime.datetime(2004, 5, 1))
@@ -254,7 +204,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
             self.app['courses'][name] = Course(title)
 
     def tearDown(self):
-        tearDownRelationshipStuff()
+        tearDown()
 
     def createImporter(self, term=None, ttschema=None, charset=None):
         from schooltool.browser.csvimport import TimetableCSVImporter

@@ -39,6 +39,8 @@ from zope.app.component.site import LocalSiteManager
 from zope.i18n import translate
 
 from schoolbell.app.browser.tests import setup
+from schoolbell.app.testing import setup as sbsetup
+
 from schoolbell.app.rest.tests.utils import NiceDiffsMixin
 from schooltool import timetable
 from schooltool.interfaces import ApplicationInitializationEvent
@@ -1559,22 +1561,7 @@ def doctest_PersonTimetableSetupView():
 
     We will need an application object
 
-        >>> from schooltool.app import SchoolToolApplication
-        >>> from schooltool.timetable.interfaces import ITimetables
-        >>> app = SchoolToolApplication()
-
-        # XXX: Should be setup by test framework
-        >>> from schooltool.course.section import SectionContainer
-        >>> app['sections'] = SectionContainer()
-        >>> from schoolbell.app.person.person import PersonContainer
-        >>> app['persons'] = PersonContainer()
-        >>> from schoolbell.app.group.group import GroupContainer
-        >>> app['groups'] = GroupContainer()
-
-        >>> timetable.addToApplication(ApplicationInitializationEvent(app))
-        >>> directlyProvides(app, IContainmentRoot)
-        >>> app.setSiteManager(LocalSiteManager(app))
-        >>> setSite(app)
+        >>> app = sbsetup.setupSchoolBellSite()
 
     and a Person from that application
 
@@ -1656,6 +1643,7 @@ def doctest_PersonTimetableSetupView():
     It gets more interesting when sections actually have some scheduled
     activities:
 
+        >>> from schooltool.timetable.interfaces import ITimetables
         >>> from schooltool.timetable import TimetableActivity
         >>> ttkey = "2005-fall.default"
         >>> ITimetables(math).timetables[ttkey] = ttschema.createTimetable()
@@ -1867,17 +1855,7 @@ def doctest_PersonTimetableSetupView_no_timetables():
 
     We will need an application object
 
-        >>> from schooltool.app import SchoolToolApplication
-        >>> app = SchoolToolApplication()
-
-        # XXX: Should be setup by test framework
-        >>> from schoolbell.app.person.person import PersonContainer
-        >>> app['persons'] = PersonContainer()
-
-        >>> timetable.addToApplication(ApplicationInitializationEvent(app))
-        >>> directlyProvides(app, IContainmentRoot)
-        >>> app.setSiteManager(LocalSiteManager(app))
-        >>> setSite(app)
+        >>> app = sbsetup.setupSchoolBellSite()
 
     and a Person from that application
 
@@ -1913,17 +1891,7 @@ def doctest_PersonTimetableSetupView_no_default_ttschema():
 
     We will need an application object
 
-        >>> from schooltool.app import SchoolToolApplication
-        >>> app = SchoolToolApplication()
-
-        # XXX: Should be setup by test framework
-        >>> from schoolbell.app.person.person import PersonContainer
-        >>> app['persons'] = PersonContainer()
-
-        >>> timetable.addToApplication(ApplicationInitializationEvent(app))
-        >>> directlyProvides(app, IContainmentRoot)
-        >>> app.setSiteManager(LocalSiteManager(app))
-        >>> setSite(app)
+        >>> app = sbsetup.setupSchoolBellSite()
 
     and a Person from that application
 

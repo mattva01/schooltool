@@ -880,4 +880,18 @@ def getPeriodsForDay(date):
 def addToApplication(event):
     event.object['terms'] = TermContainer()
     event.object['ttschemas'] = TimetableSchemaContainer()
-    
+
+
+def registerTestSetup():
+    from schoolbell.app.testing import registry
+
+    def addTermAndTTSchemasContainer(app):
+        app['terms'] = TermContainer()
+        app['ttschemas'] = TimetableSchemaContainer()
+
+    registry.register('ApplicationContainers', addTermAndTTSchemasContainer)
+
+registerTestSetup()
+del registerTestSetup
+
+

@@ -21,61 +21,24 @@ Unit tests for schooltool.rest.app.
 
 $Id: test_app.py 3526 2005-04-28 17:16:47Z bskahan $
 """
-
 import unittest
 import datetime
-
 from StringIO import StringIO
-from zope.testing import doctest
-from schooltool.common import dedent
-from zope.app import zapi
+
 from zope.interface import directlyProvides, Interface
-from zope.app.traversing.interfaces import ITraversable
 from zope.interface.verify import verifyObject
+from zope.publisher.browser import TestRequest
+from zope.testing import doctest
+from zope.app import zapi
+from zope.app.filerepresentation.interfaces import IFileFactory
+from zope.app.testing import setup, ztapi
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.traversing import namespace
-from zope.app.testing import setup, ztapi
-from zope.publisher.browser import TestRequest
-from zope.app.traversing.interfaces import IContainmentRoot
-from zope.app.filerepresentation.interfaces import IFileFactory
 
-import schooltool.course.course
-import schooltool.course.section
-from schooltool import timetable
-from schooltool.interfaces import ApplicationInitializationEvent
 from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin, diff
 from schoolbell.app.rest.tests.utils import normalize_xml
-
-
-def setUpSchool():
-    from schooltool.app import SchoolToolApplication
-    from zope.app.component.hooks import setSite
-    from zope.app.component.site import LocalSiteManager
-    app = SchoolToolApplication()
-
-    # Usually automatically called subscribers
-    # XXX: Should be done with test setup framework
-
-    from schoolbell.app.person import person
-    person.addPersonContainerToApplication(
-        ApplicationInitializationEvent(app))
-    from schoolbell.app.group import group
-    group.addGroupContainerToApplication(
-        ApplicationInitializationEvent(app))
-    from schoolbell.app.resource import resource
-    resource.addResourceContainerToApplication(
-        ApplicationInitializationEvent(app))
-
-    schooltool.course.course.addCourseContainerToApplication(
-        ApplicationInitializationEvent(app))
-    schooltool.course.section.addSectionContainerToApplication(
-        ApplicationInitializationEvent(app))
-    timetable.addToApplication(ApplicationInitializationEvent(app))
-
-    app.setSiteManager(LocalSiteManager(app))
-    directlyProvides(app, IContainmentRoot)
-    setSite(app)
-    return app
+from schoolbell.app.testing import setup as sbsetup
+from schooltool.common import dedent
 
 
 def doctest_SchoolToolApplicationView():
@@ -85,7 +48,7 @@ def doctest_SchoolToolApplicationView():
 
         >>> from schooltool.rest.app import SchoolToolApplicationView
         >>> setup.placefulSetUp()
-        >>> app = setUpSchool()
+        >>> app = sbsetup.setupSchoolBellSite()
         >>> view = SchoolToolApplicationView(app, TestRequest())
         >>> result = view.GET()
 
@@ -153,10 +116,6 @@ def doctest_SchoolToolApplicationView():
         >>> doc.free()
 
     XXX this is what our output should look like:
-
-
-
-
 
     """
 

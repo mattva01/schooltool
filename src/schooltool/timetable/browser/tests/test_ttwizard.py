@@ -37,6 +37,7 @@ from zope.app.component.site import LocalSiteManager
 from zope.app.component.hooks import setSite
 from zope.app.container.interfaces import INameChooser
 
+from schoolbell.app.testing import setup
 from schoolbell.app.browser.tests import setup as schoolbell_setup
 from schoolbell.app.app import SimpleNameChooser
 from schooltool.tests import setUpApplicationPreferences
@@ -57,22 +58,6 @@ def setUpNameChoosers():
                          SimpleNameChooser)
 
 
-def setUpApplicationAndSite():
-    """Set up a SchoolTool application as the active site.
-
-    Returns the application.
-    """
-    app = SchoolToolApplication()
-
-    # Usually automatically called subscribers
-    timetable.addToApplication(ApplicationInitializationEvent(app))
-
-    directlyProvides(app, IContainmentRoot)
-    app.setSiteManager(LocalSiteManager(app))
-    setSite(app)
-    return app
-
-
 def setUp(test):
     """Test setup.
 
@@ -83,10 +68,10 @@ def setUp(test):
     a global named `app` in all doctests.
     """
     schoolbell_setup.setUp(test)
-    schoolbell_setup.setUpSessions()
+    setup.setupSessions()
     setUpApplicationPreferences()
     setUpNameChoosers()
-    test.globs['app'] = setUpApplicationAndSite()
+    test.globs['app'] = setup.setupSchoolBellSite()
 
 
 def tearDown(test):

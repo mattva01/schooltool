@@ -27,44 +27,10 @@ import unittest
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 from zope.publisher.browser import TestRequest
-from zope.interface import directlyProvides
-from zope.app.traversing.interfaces import IContainmentRoot
 from zope.i18n import translate
 
-import schooltool.course.course
-import schooltool.course.section
-from schooltool import timetable
-from schooltool.interfaces import ApplicationInitializationEvent
 from schoolbell.app.browser.tests.setup import setUp, tearDown
-from schoolbell.app.group.group import GroupContainer
-from schoolbell.app.person.person import PersonContainer
-from schoolbell.app.resource.resource import ResourceContainer
-
-
-def setUpSchool():
-    from schooltool.app import SchoolToolApplication
-    from zope.app.component.hooks import setSite
-    from zope.app.component.site import LocalSiteManager
-    app = SchoolToolApplication()
-
-
-    # Usually automatically called subscribers
-    # XXX: Use future test setup
-    app['resources'] = ResourceContainer()
-    app['persons'] = PersonContainer()
-    app['groups'] = GroupContainer()
-
-    schooltool.course.course.addCourseContainerToApplication(
-        ApplicationInitializationEvent(app))
-    schooltool.course.section.addSectionContainerToApplication(
-        ApplicationInitializationEvent(app))
-    timetable.addToApplication(ApplicationInitializationEvent(app))
-
-    app.setSiteManager(LocalSiteManager(app))
-    directlyProvides(app, IContainmentRoot)
-    setSite(app)
-    return app
-
+from schoolbell.app.testing import setup as sbsetup
 
 def doctest_SchoolBellApplicationView():
     r"""Test for SchoolBellApplicationView
@@ -75,13 +41,11 @@ def doctest_SchoolBellApplicationView():
         >>> from schooltool.interfaces import IApplicationPreferences
         >>> from schooltool.interfaces import ISchoolToolApplication
 
-        >>> app = setUpSchool()
+        >>> app = sbsetup.setupSchoolBellSite()
 
         >>> ztapi.provideAdapter(ISchoolToolApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
-
-        >>> directlyProvides(app, IContainmentRoot)
 
     Now lets create a view
 
@@ -118,7 +82,7 @@ def doctest_LocationResourceVocabulary():
     We should be able to choose any Resource in the resource container that is
     marked with isLocation.
 
-        >>> app = setUpSchool()
+        >>> app = sbsetup.setupSchoolBellSite()
 
     There's no potential terms:
 
@@ -157,15 +121,11 @@ def doctest_PersonView():
         >>> from schooltool.browser.app import PersonView
         >>> from schoolbell.app.person.person import Person
         >>> from schoolbell.app.person.interfaces import IPerson
-        >>> from schoolbell.relationship.tests import setUp, tearDown
         >>> from schoolbell.app.person.details import getPersonDetails
         >>> from schoolbell.app.person.interfaces import IPersonDetails
-        >>> setup.setUpAnnotations()
-        >>> setUp()
         >>> ztapi.provideAdapter(IPerson, IPersonDetails, getPersonDetails)
 
-        >>> from schooltool.app import SchoolToolApplication
-        >>> school = setUpSchool()
+        >>> school = sbsetup.setupSchoolBellSite()
         >>> persons = school['persons']
         >>> sections = school['sections']
 
@@ -254,8 +214,6 @@ def doctest_PersonView():
         >>> student_view = PersonView(student, TestRequest())
         >>> [group.title for group in student_view.memberOf()]
         ['Tenth Grade', 'Sports Team']
-
-        >>> tearDown()
 
     """
 

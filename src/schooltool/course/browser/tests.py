@@ -32,7 +32,7 @@ from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.testing import ztapi
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
-from schooltool.browser.tests.test_app import setUpSchool
+from schoolbell.app.testing import setup
 
 class AddingStub(Adding):
     pass
@@ -76,7 +76,7 @@ def doctest_CourseAddView():
         ...     _factory = Course
 
 
-        >>> app = setUpSchool()
+        >>> app = setup.setupSchoolBellSite()
         >>> container = app['courses']
         >>> request = TestRequest()
         >>> context = AddingStub(container, request)
@@ -270,7 +270,7 @@ def doctest_SectionAddView():
     create a SchoolTool instance:
 
         >>> from schooltool.app import SchoolToolApplication
-        >>> app = setUpSchool()
+        >>> app = setup.setupSchoolBellSite()
         >>> directlyProvides(app, IContainmentRoot)
         >>> sections = app['sections']
         >>> courses = app['courses']
@@ -363,7 +363,7 @@ def doctest_SectionEditView():
     We need some setup for our vocabulary:
 
         >>> from schooltool.app import SchoolToolApplication
-        >>> app = setUpSchool()
+        >>> app = setup.setupSchoolBellSite()
         >>> from zope.schema.vocabulary import getVocabularyRegistry
         >>> from schooltool.browser.app import LocationResourceVocabulary
         >>> registry = getVocabularyRegistry()
@@ -464,7 +464,7 @@ def doctest_SectionInstructorView():
 
         >>> from schooltool.app import SchoolToolApplication
         >>> from schoolbell.app.person.person import Person
-        >>> school = setUpSchool()
+        >>> school = setup.setupSchoolBellSite()
         >>> persons = school['persons']
         >>> directlyProvides(school, IContainmentRoot)
         >>> sections = school['sections']
@@ -556,7 +556,7 @@ def doctest_SectionLearnerView():
 
         >>> from schooltool.app import SchoolToolApplication
         >>> from schoolbell.app.person.person import Person
-        >>> school = setUpSchool()
+        >>> school = setup.setupSchoolBellSite()
         >>> persons = school['persons']
         >>> directlyProvides(school, IContainmentRoot)
         >>> sections = school['sections']
@@ -658,7 +658,7 @@ def doctest_SectionLearnerGroupView():
         >>> from schooltool.app import SchoolToolApplication
         >>> from schoolbell.app.group.group import Group
         >>> from schoolbell.app.person.person import Person
-        >>> school = setUpSchool()
+        >>> school = setup.setupSchoolBellSite()
         >>> persons = school['persons']
         >>> groups = school['groups']
         >>> directlyProvides(school, IContainmentRoot)

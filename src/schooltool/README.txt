@@ -4,31 +4,16 @@ and Resources, SchoolTool adds Course and Sections.
 
 We need some test setup:
 
+    >>> from schoolbell.app.testing import setup
     >>> from schoolbell.relationship.tests import setUp, tearDown
     >>> setUp()
     >>> from schoolbell.app.group.group import Group
-    >>> from schoolbell.app.group.group import addGroupContainerToApplication
     >>> from schoolbell.app.person.person import Person, PersonContainer
-    >>> from schoolbell.app.person.person import addPersonContainerToApplication
     >>> from schooltool import app
     >>> from schooltool.course.course import Course
-    >>> from schooltool.course.course import addCourseContainerToApplication
     >>> from schooltool.course.section import Section
-    >>> from schooltool.course.section import addSectionContainerToApplication
-    >>> from schooltool.interfaces import ApplicationInitializationEvent
 
-    >>> school = app.SchoolToolApplication()
-
-    # Usually automatically called subscribers
-    # XXX: Should be done with test setup framework
-    >>> addPersonContainerToApplication(
-    ...     ApplicationInitializationEvent(school))
-    >>> addGroupContainerToApplication(
-    ...     ApplicationInitializationEvent(school))
-    >>> addCourseContainerToApplication(
-    ...     ApplicationInitializationEvent(school))
-    >>> addSectionContainerToApplication(
-    ...     ApplicationInitializationEvent(school))
+    >>> school = setup.createSchoolBellApplication()
 
     >>> school['courses']
     <schooltool.course.course.CourseContainer object at ...>

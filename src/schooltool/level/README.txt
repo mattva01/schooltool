@@ -17,25 +17,13 @@ Level Management
 The first task of any school manager is to setup the levels for the
 school. So, given a schooltool application
 
-  >>> from schooltool import app
-  >>> st = app.SchoolToolApplication()
+  >>> from schoolbell.app.testing import setup
+  >>> st = setup.createSchoolBellApplication()
 
-  # Usually done automatically via a subscriber.
-  # XXX: Should be done via test setup
+with a manager group, which is setup during database instantiation,
 
-  >>> from schooltool.interfaces import ApplicationInitializationEvent
-
-  >>> from schoolbell.app.person import person
-  >>> person.addPersonContainerToApplication(
-  ...     ApplicationInitializationEvent(st))
-  >>> from schoolbell.app.group import group
-  >>> group.addGroupContainerToApplication(
-  ...     ApplicationInitializationEvent(st))
-
-  >>> level.level.addLevelContainerToApplication(
-  ...     ApplicationInitializationEvent(st))
-  >>> app.addManagerGroupToApplication(
-  ...     ApplicationInitializationEvent(st))
+  >>> from schoolbell.app.group.group import Group
+  >>> st['groups']['manager'] = Group(u'Manager', u'Manager Group.')
 
 we can inspect the defined levels:
 

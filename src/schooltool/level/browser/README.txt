@@ -69,7 +69,7 @@ loop validation error:
   >>> browser.click('Edit Info')
   >>> browser.controls['field.nextLevel'] = ['level1']
   >>> browser.click('Apply')
-  
+
   >>> browser.click('Levels')
   >>> browser.click('Validate Levels')
   >>> browser.click('Validate')
@@ -161,7 +161,7 @@ level. Our student will enter the first grade:
   <div id="message">Student processes successfully updated.</div>
   ...
   <div class="value">
-  <select name="...outcome" size="1" >
+  <select id="...outcome" name="...outcome" size="1" >
   <option selected="selected" value="pass">pass</option>
   <option value="fail">fail</option>
   <option value="withdraw">withdraw</option>
@@ -185,7 +185,7 @@ The student passes the first grade
   ...
   <span>2nd Grade</span>
   ...
-  
+
 but fails the second grade the first time around:
 
   >>> form = browser.forms['outcome']
@@ -281,7 +281,7 @@ academic history:
   <BLANKLINE>
   ...
   <h1>
-    Academic Record for <em>Tom Hoffman</em> 
+    Academic Record for <em>Tom Hoffman</em>
   </h1>
   ...
   <h3>Status</h3>
@@ -299,7 +299,7 @@ We can see that there is currently no workflow and the history is empty. Let's
 now create the workflow:
 
   >>> browser.click('Initialize')
- 
+
   >>> print browser.contents
   <BLANKLINE>
   ...

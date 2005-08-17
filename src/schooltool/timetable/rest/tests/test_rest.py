@@ -46,14 +46,12 @@ from zope.publisher.interfaces.http import IHTTPRequest
 from zope.app.annotation.interfaces import IAnnotatable, IAttributeAnnotatable
 from zope.interface import directlyProvidedBy
 
-
 from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin
 from schoolbell.app.rest.tests.utils import XMLCompareMixin
 from schoolbell.app.rest.errors import RestError
-from schooltool import timetable
+from schoolbell.app.testing import setup as sbsetup
 from schooltool.timetable import TimetablesAdapter
 from schooltool.timetable.interfaces import ITimetables
-from schooltool.interfaces import ApplicationInitializationEvent
 
 
 def setUp(test=None):
@@ -115,31 +113,24 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         """
 
     def setUp(self):
-        from schooltool.rest.interfaces import ITimetableFileFactory
-        from schooltool.timetable.rest import TimetableFileFactory
-        from schooltool.timetable import TimetablesAdapter
-        from schooltool.timetable.interfaces import ITimetableDict
-        from schooltool.app import SchoolToolApplication
-        from schoolbell.app.person.person import Person, PersonContainer
-        from schoolbell.app.resource.resource import Resource, ResourceContainer
         PlacefulSetup.setUp(self)
-        self.app = SchoolToolApplication()
-        # XXX: Case for the test setup framework
-        self.app['resources'] = ResourceContainer()
-        self.app['persons'] = PersonContainer()
-        # Usually automatically called subscribers
-        timetable.addToApplication(ApplicationInitializationEvent(self.app))
-        self.app.setSiteManager(LocalSiteManager(self.app))
-        setSite(self.app)
-        directlyProvides(self.app, IContainmentRoot)
+        self.app = sbsetup.setupSchoolBellSite()
+
+        from schoolbell.app.person.person import Person
+        from schoolbell.app.resource.resource import Resource
         self.app["persons"]["john"] = self.person = Person("john", "John Smith")
         self.app["resources"]['room1'] = Resource("Room1")
         self.app["resources"]['lab1'] = Resource("Lab1")
         self.app["resources"]['lab2'] = Resource("Lab2")
+
         self.schema = self.app["ttschemas"]["schema1"] = self.createSchema()
         self.term = self.app["terms"]["2003 fall"] = self.createTerm()
         self.term2 = self.app["terms"]["2004 fall"] = self.createTerm()
 
+        from schooltool.rest.interfaces import ITimetableFileFactory
+        from schooltool.timetable.rest import TimetableFileFactory
+        from schooltool.timetable import TimetablesAdapter
+        from schooltool.timetable.interfaces import ITimetableDict
         ztapi.provideAdapter((ITimetableDict, IHTTPRequest),
                               ITimetableFileFactory,
                               TimetableFileFactory)
@@ -251,9 +242,7 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
         from schooltool.timetable import SequentialDayIdBasedTimetableModel
         from schooltool.timetable.interfaces import ITimetableModelFactory
 
-        self.app = SchoolToolApplication()
-        # Usually automatically called subscribers
-        timetable.addToApplication(ApplicationInitializationEvent(self.app))
+        self.app = sbsetup.createSchoolBellApplication()
         self.schemaContainer = self.app["ttschemas"]
 
         setup.placelessSetUp()
@@ -574,15 +563,8 @@ def doctest_TimetableDictPublishTraverse():
 
     Some setup is needed:
 
-        >>> setup.placelessSetUp()
-
-        >>> from zope.app.component.hooks import setSite
-        >>> from zope.app.component.site import LocalSiteManager
-        >>> from schooltool.app import SchoolToolApplication
-        >>> app = SchoolToolApplication()
-        >>> timetable.addToApplication(ApplicationInitializationEvent(app))
-        >>> app.setSiteManager(LocalSiteManager(app))
-        >>> setSite(app)
+        >>> setup.placefulSetUp()
+        >>> app = sbsetup.setupSchoolBellSite()
 
         >>> from datetime import date
         >>> from schooltool.timetable import Term
@@ -648,7 +630,7 @@ def doctest_TimetableDictPublishTraverse():
 
     Cleanup:
 
-        >>> setup.placelessTearDown()
+        >>> setup.placefulTearDown()
 
     """
 
