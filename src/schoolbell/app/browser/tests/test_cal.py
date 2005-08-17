@@ -44,8 +44,8 @@ from schoolbell.app.cal import Calendar
 # Used in defining CalendarEventEditTestView
 from schoolbell.app.browser.cal import CalendarEventEditView
 from schoolbell.app.browser.cal import ICalendarEventEditForm
-from schoolbell.app.browser.tests.setup import setUp, tearDown, setUpSessions
-from schoolbell.app.browser.tests.setup import setUpSchoolBellSite
+from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schoolbell.app.testing import setup as sbsetup
 
 # Used for the PrincipalStub
 # XXX: Bad, it depends on the person package.
@@ -579,7 +579,7 @@ class TestCalendarViewBase(unittest.TestCase):
         setup.setUpTraversal()
         setup.setUpAnnotations()
 
-        setUpSessions()
+        sbsetup.setupSessions()
         registerCalendarHelperViews()
 
         # Usually registered for IHavePreferences
@@ -805,7 +805,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
             >>> setup.placelessSetUp()
             >>> registerCalendarHelperViews()
-            >>> setUpSessions()
+            >>> sbsetup.setupSessions()
 
         CalendarViewBase.getEvents returns a list of wrapped calendar
         events.
@@ -2495,7 +2495,7 @@ def doctest_TestCalendarEventBookingView():
         >>> from schoolbell.app.resource.resource import Resource
         >>> from schoolbell.app.cal import CalendarEvent
 
-        >>> app = setUpSchoolBellSite()
+        >>> app = sbsetup.setupSchoolBellSite()
 
         >>> from zope.security.checker import defineChecker, Checker
         >>> defineChecker(Calendar,
@@ -2726,7 +2726,7 @@ class TestDailyCalendarView(unittest.TestCase):
     def setUp(self):
         setup.placelessSetUp()
         registerCalendarHelperViews()
-        setUpSessions()
+        sbsetup.setupSessions()
 
     def tearDown(self):
         setup.placelessTearDown()
@@ -3157,7 +3157,7 @@ class TestDailyCalendarView(unittest.TestCase):
 def doctest_CalendarViewBase():
     """Tests for CalendarViewBase.
 
-        >>> setUpSessions()
+        >>> sbsetup.setupSessions()
 
         >>> from schoolbell.app.browser.cal import CalendarViewBase
         >>> from schoolbell.app.cal import Calendar

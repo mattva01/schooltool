@@ -24,13 +24,13 @@ $Id$
 
 import unittest
 from StringIO import StringIO
-from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.publisher.http import HTTPRequest
 from zope.app.testing import setup, ztapi
-from zope.app.traversing.interfaces import IContainmentRoot
 from schoolbell.app.rest.tests.utils import XMLCompareMixin, QuietLibxml2Mixin
 from schoolbell.app.rest.xmlparsing import XMLDocument, XMLParseError
+
+from schoolbell.app.testing import setup as sbsetup
 
 
 class TestAclView(unittest.TestCase, XMLCompareMixin):
@@ -58,21 +58,13 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
         setUpRelationships()
 
         # SchoolBellApplication
-        from schoolbell.app.rest.app import ApplicationView
-        from schoolbell.app.app import SchoolBellApplication
-        from schoolbell.app.group.group import Group, GroupContainer
-        from schoolbell.app.person.person import Person, PersonContainer
-        from schoolbell.app.security import setUpLocalAuth
-        from zope.app.component.hooks import setSite
-        self.app = SchoolBellApplication()
-        self.app['groups'] = GroupContainer()
-        self.app['persons'] = PersonContainer()
-        directlyProvides(self.app, IContainmentRoot)
-        setUpLocalAuth(self.app)
-        setSite(self.app)
+        self.app = sbsetup.setupSchoolBellSite()
 
+        from schoolbell.app.person.person import Person
         self.person = self.app['persons']['joe'] = Person('joe')
         self.app['persons']['ann'] = Person('ann')
+
+        from schoolbell.app.group.group import Group
         self.app['groups']['admins'] = Group('Admins')
 
         self.registerSpecialGroups()
@@ -161,7 +153,7 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
         #    no change
 
         # These have to do with inheriting permissions:
-    
+
         # 6. Permission granted on parent but unchecked on context -- deny
         # 7. Permission granted on parent and granted on context -- unset
         # 8. Permission unset on parent and unset on context -- see 2, 4.

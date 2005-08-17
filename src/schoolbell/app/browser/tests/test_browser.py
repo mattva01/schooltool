@@ -31,7 +31,8 @@ from zope.app.testing import ztapi, setup
 from zope.i18n import translate
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
-from schoolbell.app.browser.tests.setup import setUpSchoolBellSite
+from schoolbell.app.testing import setup as sbsetup
+
 
 def doctest_SchoolBellAPI():
     r"""Tests for SchoolBellAPI.
@@ -45,7 +46,7 @@ def doctest_SchoolBellAPI():
 
     'context/schoolbell:app' returns the nearest ISchoolBellApplication
 
-        >>> app = setUpSchoolBellSite()
+        >>> app = sbsetup.setupSchoolBellSite()
 
         >>> SchoolBellAPI(app['persons']).app is app
         True
@@ -215,7 +216,7 @@ def doctest_NavigationView():
 
     This view works for any ILocatable object within a SchoolBell instance.
 
-      >>> app = setUpSchoolBellSite()
+      >>> app = sbsetup.setupSchoolBellSite()
 
       >>> from schoolbell.app.person.person import Person
       >>> p = Person('1')
@@ -236,7 +237,7 @@ def doctest_SchoolBellSized():
       >>> from schoolbell.app.browser import SchoolBellSized
       >>> from schoolbell.app.person.person import Person
 
-      >>> app = setUpSchoolBellSite()
+      >>> app = sbsetup.setupSchoolBellSite()
       >>> sized = SchoolBellSized(app)
 
       >>> sized.sizeForSorting(), translate(sized.sizeForDisplay())

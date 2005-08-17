@@ -29,7 +29,7 @@ from zope.testing import doctest
 from zope.app.traversing.interfaces import IContainmentRoot
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
-from schoolbell.app.browser.tests.setup import setUpSchoolBellSite
+from schoolbell.app.testing import setup
 
 
 def doctest_GroupListView():
@@ -43,9 +43,7 @@ def doctest_GroupListView():
 
     One requirement: the person has to know where he is.
 
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> app = setUpSchoolBellSite()
-        >>> directlyProvides(app, IContainmentRoot)
+        >>> app = setup.setupSchoolBellSite()
         >>> app['persons']['ignas'] = person
 
     We will be testing the person's awareness of the world, so we will
@@ -144,7 +142,6 @@ def doctest_GroupListView():
         >>> [group.title for group in person.groups]
         []
 
-
         >>> endInteraction()
 
     """
@@ -166,9 +163,7 @@ def doctest_MemberListView():
 
     We need these objects to live in an application:
 
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> app = setUpSchoolBellSite()
-        >>> directlyProvides(app, IContainmentRoot)
+        >>> app = setup.setupSchoolBellSite()
         >>> app['groups']['pov'] = pov
         >>> app['persons']['gintas'] = gintas
         >>> app['persons']['ignas'] = ignas

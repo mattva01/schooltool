@@ -25,7 +25,7 @@ import unittest
 from StringIO import StringIO
 
 import zope
-from zope.interface import directlyProvides, Interface
+from zope.interface import Interface
 from zope.interface.verify import verifyObject
 from zope.app.traversing.interfaces import ITraversable
 from zope.publisher.browser import TestRequest
@@ -36,31 +36,25 @@ from zope.testing import doctest
 from zope.app.component.testing import PlacefulSetup
 from zope.app.container.interfaces import INameChooser
 from zope.app.testing import ztapi, setup
-from zope.app.traversing.interfaces import IContainmentRoot
 
 from schoolbell.app.app import SimpleNameChooser
-from schoolbell.app.group.group import Group, GroupContainer
+from schoolbell.app.group.group import Group
 from schoolbell.app.group.interfaces import IGroupContainer
 from schoolbell.app.group.rest.group import GroupFileFactory, GroupContainerView
-from schoolbell.app.person.person import Person, PersonContainer
+from schoolbell.app.person.person import Person
 from schoolbell.app.resource.interfaces import IResourceContainer
-from schoolbell.app.resource.resource import ResourceContainer
 from schoolbell.app.resource.rest.resource import ResourceFileFactory
 from schoolbell.app.rest.tests.utils import XMLCompareMixin, QuietLibxml2Mixin
 from schoolbell.app.rest.xmlparsing import XMLDocument, XMLParseError
 
+from schoolbell.app.testing import setup as sbsetup
 
 class TestAppView(XMLCompareMixin, unittest.TestCase):
 
     def setUp(self):
-        from schoolbell.app.rest.app import ApplicationView
-        from schoolbell.app.app import SchoolBellApplication
         setup.placefulSetUp()
-        self.app = SchoolBellApplication()
-        self.app['persons'] = PersonContainer()
-        self.app['groups'] = GroupContainer()
-        self.app['resources'] = ResourceContainer()
-        directlyProvides(self.app, IContainmentRoot)
+        self.app = sbsetup.setupSchoolBellSite()
+        from schoolbell.app.rest.app import ApplicationView
         self.view = ApplicationView(self.app, TestRequest())
 
     def tearDown(self):
@@ -128,31 +122,24 @@ class ContainerViewTestMixin(XMLCompareMixin, QuietLibxml2Mixin):
     """Common code for Container View tests"""
 
     def setUp(self):
-        from schoolbell.app.app import SchoolBellApplication
-        from zope.app.filerepresentation.interfaces import IFileFactory
-
         setup.placefulSetUp()
         self.setUpLibxml2()
 
+        from zope.app.filerepresentation.interfaces import IFileFactory
         ztapi.provideView(Interface, Interface, ITraversable, 'view',
                           zope.app.traversing.namespace.view)
-        ztapi.provideAdapter(IGroupContainer,
-                             INameChooser,
+        ztapi.provideAdapter(IGroupContainer, INameChooser,
                              SimpleNameChooser)
-        ztapi.provideAdapter(IGroupContainer,
-                             IFileFactory,
+        ztapi.provideAdapter(IGroupContainer, IFileFactory,
                              GroupFileFactory)
-        ztapi.provideAdapter(IResourceContainer,
-                             IFileFactory,
+        ztapi.provideAdapter(IResourceContainer, IFileFactory,
                              ResourceFileFactory)
 
 
-        self.app = SchoolBellApplication()
-
-        self.groupContainer = self.app['groups'] = GroupContainer()
+        self.app = sbsetup.setupSchoolBellSite()
+        self.groupContainer = self.app['groups']
         self.group = self.app['groups']['root'] = Group("Root group")
 
-        directlyProvides(self.app, IContainmentRoot)
 
     def tearDown(self):
         self.tearDownLibxml2()
@@ -213,6 +200,8 @@ class ApplicationObjectViewTestMixin(ContainerViewTestMixin):
 
     def setUp(self):
         ContainerViewTestMixin.setUp(self)
+        self.personContainer = self.app['persons']
+        self.groupContainer = self.app['groups']
 
     def get(self):
         """Perform a GET of the view being tested."""

@@ -44,8 +44,7 @@ class TestResourceContainerView(ContainerViewTestMixin,
 
     def setUp(self):
         ContainerViewTestMixin.setUp(self)
-
-        self.resourceContainer = self.app['resources'] = ResourceContainer()
+        self.resourceContainer = self.app['resources']
         self.resource = self.app['resources']['root'] = Resource("Root resource")
 
     def test_render(self):
@@ -153,7 +152,6 @@ class TestResourceView(ApplicationObjectViewTestMixin, unittest.TestCase):
     def setUp(self):
         ApplicationObjectViewTestMixin.setUp(self)
 
-        self.app['resources'] = ResourceContainer()
         self.testObject = self.app['resources']['root'] = Resource("Root resource")
 
     def makeTestView(self, object, request):

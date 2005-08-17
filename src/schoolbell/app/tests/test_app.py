@@ -31,19 +31,12 @@ from zope.interface import directlyProvides
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.testing import setup, placelesssetup
 
+from schoolbell.app.testing import setup
 
 def doctest_SchoolBellApplication():
     r"""Tests for SchoolBellApplication.
 
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> app = SchoolBellApplication()
-
-        >>> from schoolbell.app.group.group import GroupContainer
-        >>> app['groups'] = GroupContainer()
-        >>> from schoolbell.app.person.person import PersonContainer
-        >>> app['persons'] = PersonContainer()
-        >>> from schoolbell.app.resource.resource import ResourceContainer
-        >>> app['resources'] = ResourceContainer()
+        >>> app = setup.createSchoolBellApplication()
 
     We need to register an adapter to make the title attribute available:
 

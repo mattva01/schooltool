@@ -27,15 +27,12 @@ from pprint import pprint
 from zope.testing import doctest
 from zope.app import zapi
 from zope.app.testing import setup, ztapi
-from zope.interface import directlyProvides
-from zope.app.traversing.interfaces import IContainmentRoot
 from zope.publisher.browser import TestRequest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
-from zope.app.component.hooks import setSite
+
+from schoolbell.app.testing import setup as sbsetup
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
-from schoolbell.app.browser.tests.setup import setUpSessions
-from schoolbell.app.browser.tests.setup import setUpSchoolBellSite
 
 
 def doctest_SchoolBellApplicationView():
@@ -43,26 +40,18 @@ def doctest_SchoolBellApplicationView():
 
     Some setup
 
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> from zope.app.component.site import LocalSiteManager
-        >>> from zope.app.component.hooks import setSite
         >>> from schoolbell.app.app import getApplicationPreferences
         >>> from zope.app.annotation.interfaces import IAnnotations
         >>> from schoolbell.app.interfaces import IApplicationPreferences
         >>> from schoolbell.app.interfaces import ISchoolBellApplication
-        >>> from schoolbell.app.app import SchoolBellApplication
 
-        >>> app = SchoolBellApplication()
+        >>> app = sbsetup.setupSchoolBellSite()
 
-        >>> app.setSiteManager(LocalSiteManager(app))
         >>> setup.setUpAnnotations()
-        >>> setSite(app)
 
         >>> ztapi.provideAdapter(ISchoolBellApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
-
-        >>> directlyProvides(app, IContainmentRoot)
 
     Now lets create a view
 
@@ -100,6 +89,9 @@ def doctest_ContainerDeleteView():
         >>> setup.setUpAnnotations()
 
         >>> personContainer = PersonContainer()
+
+        >>> from zope.interface import directlyProvides
+        >>> from zope.app.traversing.interfaces import IContainmentRoot
         >>> directlyProvides(personContainer, IContainmentRoot)
 
         >>> personContainer['pete'] = Person('pete', 'Pete Parrot')
@@ -194,14 +186,8 @@ def doctest_LoginView():
 
     Suppose we have a SchoolBell app and a person:
 
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> from schoolbell.app.security import setUpLocalAuth
-        >>> app = SchoolBellApplication()
-        >>> directlyProvides(app, IContainmentRoot)
-        >>> setUpLocalAuth(app)
-        >>> setSite(app)
-        >>> from schoolbell.app.person.person import PersonContainer
-        >>> persons = app['persons'] = PersonContainer()
+        >>> app = sbsetup.setupSchoolBellSite()
+        >>> persons = app['persons']
 
         >>> frog = Person('frog')
         >>> persons[None] = frog
@@ -231,7 +217,7 @@ def doctest_LoginView():
         >>> auth = SchoolBellAuthenticationUtility()
         >>> ztapi.provideUtility(IAuthentication, auth)
         >>> auth.__parent__ = app
-        >>> setUpSessions()
+        >>> sbsetup.setupSessions()
 
     It does not authenticate our session:
 
@@ -300,14 +286,8 @@ def doctest_LogoutView():
     """
     Suppose we have a SchoolBell app and a person:
 
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> from schoolbell.app.security import setUpLocalAuth
-        >>> app = SchoolBellApplication()
-        >>> directlyProvides(app, IContainmentRoot)
-        >>> setUpLocalAuth(app)
-        >>> setSite(app)
-        >>> from schoolbell.app.person.person import PersonContainer
-        >>> persons = app['persons'] = PersonContainer()
+        >>> app = sbsetup.setupSchoolBellSite()
+        >>> persons = app['persons']
 
         >>> from schoolbell.app.person.person import Person
         >>> frog = Person('frog')
@@ -321,7 +301,7 @@ def doctest_LogoutView():
         >>> auth = SchoolBellAuthenticationUtility()
         >>> ztapi.provideUtility(IAuthentication, auth)
         >>> auth.__parent__ = app
-        >>> setUpSessions()
+        >>> sbsetup.setupSessions()
 
     We have a request in an authenticated session:
 
@@ -387,17 +367,7 @@ def doctest_ACLView():
 
     Suppose we have a SchoolBell app:
 
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> app = SchoolBellApplication()
-        >>> directlyProvides(app, IContainmentRoot)
-        >>> from schoolbell.app.person.person import PersonContainer
-        >>> persons = app['persons'] = PersonContainer()
-        >>> from schoolbell.app.group.group import GroupContainer
-        >>> app['groups'] = GroupContainer()
-        >>> from schoolbell.app.security import setUpLocalAuth
-        >>> setUpLocalAuth(app)
-        >>> from zope.app.component.hooks import setSite
-        >>> setSite(app)
+        >>> app = sbsetup.setupSchoolBellSite()
 
     We have a couple of persons and groups:
 
@@ -787,7 +757,6 @@ def doctest_ACLView():
         >>> url = zapi.absoluteURL(app, request)
         >>> request.response.getHeader('Location') == url
         True
-
     """
 
 def doctest_ACLView_inheritance():
@@ -811,17 +780,7 @@ def doctest_ACLView_inheritance():
 
     Suppose we have a SchoolBell app:
 
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> app = SchoolBellApplication()
-        >>> directlyProvides(app, IContainmentRoot)
-        >>> from schoolbell.app.person.person import PersonContainer
-        >>> persons = app['persons'] = PersonContainer()
-        >>> from schoolbell.app.group.group import GroupContainer
-        >>> app['groups'] = GroupContainer()
-        >>> from schoolbell.app.security import setUpLocalAuth
-        >>> setUpLocalAuth(app)
-        >>> from zope.app.component.hooks import setSite
-        >>> setSite(app)
+        >>> app = sbsetup.setupSchoolBellSite()
 
     We have a couple of persons and groups:
 
@@ -923,15 +882,7 @@ def doctest_hasPermission():
 
     Suppose we have a Schoolbell object:
 
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> app = SchoolBellApplication()
-        >>> directlyProvides(app, IContainmentRoot)
-        >>> from schoolbell.app.person.person import PersonContainer
-        >>> persons = app['persons'] = PersonContainer()
-        >>> from schoolbell.app.security import setUpLocalAuth
-        >>> setUpLocalAuth(app)
-        >>> from zope.app.component.hooks import setSite
-        >>> setSite(app)
+        >>> app = sbsetup.setupSchoolBellSite()
 
     In it, we have a principal:
 
@@ -975,33 +926,21 @@ def doctest_ApplicationPreferencesView():
     We need to setup a SchoolBellApplication site and build our
     ISchoolBellApplication adapter:
 
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> from schoolbell.app.person.person import Person
-        >>> from zope.app.component.site import LocalSiteManager
-        >>> app = SchoolBellApplication()
-        >>> app.setSiteManager(LocalSiteManager(app))
-        >>> from zope.app.component.hooks import setSite
-        >>> setSite(app)
+        >>> app = sbsetup.setupSchoolBellSite()
+
         >>> from schoolbell.app.browser.app import ApplicationPreferencesView
         >>> from schoolbell.app.app import getApplicationPreferences
-        >>> from zope.app.annotation.interfaces import IAnnotations
         >>> from schoolbell.app.interfaces import IApplicationPreferences
         >>> from schoolbell.app.interfaces import ISchoolBellApplication
-        >>> from schoolbell.app.app import SchoolBellApplication
 
         >>> setup.setUpAnnotations()
         >>> ztapi.provideAdapter(ISchoolBellApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
-        >>> from schoolbell.app.app import getSchoolBellApplication
-
 
     Make sure we can create a view:
 
-        >>> app = getSchoolBellApplication()
-
         >>> request = TestRequest()
-
         >>> view = ApplicationPreferencesView(app, request)
 
     Now we can setup a post and set the site title:

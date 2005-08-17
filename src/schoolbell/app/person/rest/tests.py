@@ -59,7 +59,6 @@ class TestPersonContainerView(ContainerViewTestMixin,
         ztapi.provideAdapter(IPersonContainer, IFileFactory,
                              PersonFileFactory)
 
-        self.app['persons'] = PersonContainer()
         self.person = self.app['persons']['root'] = Person("root",
                                                            "Root person")
         self.personContainer = self.app['persons']
@@ -125,7 +124,6 @@ class TestPersonView(ApplicationObjectViewTestMixin, unittest.TestCase):
 
     def setUp(self):
         ApplicationObjectViewTestMixin.setUp(self)
-        self.app['persons'] = PersonContainer()
 
         self.testObject = self.app['persons']['root'] = Person("root",
             title="Root person")
@@ -174,7 +172,6 @@ class TestPersonPasswordWriterView(ApplicationObjectViewTestMixin,
 
     def setUp(self):
         ApplicationObjectViewTestMixin.setUp(self)
-        self.app['persons'] = PersonContainer()
         self.person = self.app['persons']['root'] = Person("root",
                                                            title="Root person")
 
@@ -226,7 +223,6 @@ class TestPersonPhotoView(ApplicationObjectViewTestMixin,
 
     def setUp(self):
         ApplicationObjectViewTestMixin.setUp(self)
-        self.app['persons'] = PersonContainer()
         self.person = self.app['persons']['root'] = Person("root",
                                                            title="Root person")
 

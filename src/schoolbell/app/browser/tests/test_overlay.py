@@ -29,8 +29,7 @@ from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.component.hooks import setSite
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
-from schoolbell.app.browser.tests.setup import setUpSchoolBellSite
-
+from schoolbell.app.testing import setup
 
 def doctest_CalendarOverlayView():
     r"""Tests for CalendarOverlayView
@@ -57,7 +56,7 @@ def doctest_CalendarOverlayView():
         >>> from schoolbell.app.group.group import Group
         >>> from schoolbell.app.person.person import Person
         >>> from schoolbell.app.security import Principal
-        >>> app = setUpSchoolBellSite()
+        >>> app = setup.setupSchoolBellSite()
         >>> person = app['persons']['whatever'] = Person('fred')
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
         >>> group2 = app['groups']['g2'] = Group(title="Group 2")
@@ -133,7 +132,7 @@ def doctest_CalendarOverlayView_items():
 
         >>> from schoolbell.app.group.group import Group
         >>> from schoolbell.app.person.person import Person
-        >>> app = setUpSchoolBellSite()
+        >>> app = setup.setupSchoolBellSite()
         >>> person = app['persons']['p1'] = Person('p1', title="Person")
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
         >>> group2 = app['groups']['g2'] = Group(title="Group 2")
@@ -192,7 +191,7 @@ def doctest_CalendarSelectionView():
         >>> from schoolbell.app.group.group import Group
         >>> from schoolbell.app.person.person import Person
         >>> from schoolbell.app.security import Principal
-        >>> app = setUpSchoolBellSite()
+        >>> app = setup.setupSchoolBellSite()
         >>> persons = app['persons']
         >>> groups = app['groups']
         >>> resources = app['resources']

@@ -3,15 +3,8 @@ Setup code for SchoolBell unit tests.
 """
 
 import os.path
-from zope.interface import directlyProvides, implements
+from zope.interface import implements
 from zope.app.testing import setup, ztapi
-from zope.app.session.session import ClientId, Session
-from zope.app.session.session import PersistentSessionDataContainer
-from zope.publisher.interfaces import IRequest
-from zope.app.session.http import CookieClientIdManager
-from zope.app.session.interfaces import ISessionDataContainer
-from zope.app.session.interfaces import IClientId
-from zope.app.session.interfaces import IClientIdManager, ISession
 from zope.app.form.interfaces import IInputWidget
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema.interfaces import \
@@ -42,38 +35,6 @@ from schoolbell.app.browser import SchoolBellAPI, SortBy
 from schoolbell.app.browser import NavigationView
 from schoolbell.app.browser.macros import SchoolToolMacros
 
-
-def setUpSessions():
-    """Set up the session machinery.
-
-    Do this after placelessSetUp().
-    """
-    ztapi.provideAdapter(IRequest, IClientId, ClientId)
-    ztapi.provideAdapter(IRequest, ISession, Session)
-    ztapi.provideUtility(IClientIdManager, CookieClientIdManager())
-    sdc = PersistentSessionDataContainer()
-    ztapi.provideUtility(ISessionDataContainer, sdc)
-
-
-def setUpSchoolBellSite():
-    """Set up a schoolbell site.
-
-    Do this after placelessSetup().
-    """
-    from schoolbell.app.app import SchoolBellApplication
-    from schoolbell.app.security import setUpLocalAuth
-    app = SchoolBellApplication()
-    directlyProvides(app, IContainmentRoot)
-    setUpLocalAuth(app)
-    # XXX: Refactor later to use a flexible test setup system
-    from schoolbell.app.person.person import PersonContainer
-    app['persons'] = PersonContainer()
-    from schoolbell.app.group.group import GroupContainer
-    app['groups'] = GroupContainer()
-    from schoolbell.app.resource.resource import ResourceContainer
-    app['resources'] = ResourceContainer()
-    setSite(app)
-    return app
 
 class BrowserMenuStub(object):
     """A stub that fakes browser menu.

@@ -33,9 +33,6 @@ from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.publisher.http import HTTPRequest
 from zope.app.testing import setup, ztapi
-from zope.app.traversing.interfaces import IContainmentRoot
-from zope.app.component.hooks import setSite
-from schoolbell.app.security import setUpLocalAuth
 
 from schoolbell.app.rest.errors import RestError
 from schoolbell.relationship.interfaces import IRelationshipLinks
@@ -50,11 +47,13 @@ from schoolbell.app.rest.xmlparsing import XMLDocument, XMLParseError
 from schoolbell.app.membership import Membership, URIMember, URIGroup
 from schoolbell.app.rest.xmlparsing import XMLValidationError
 
+from schoolbell.app.testing import setup as sbsetup
+
+
 class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
     def setUp(self):
-        from schoolbell.app.app import SchoolBellApplication
-        from schoolbell.app.group.group import Group, GroupContainer
-        from schoolbell.app.person.person import Person, PersonContainer
+        from schoolbell.app.group.group import Group
+        from schoolbell.app.person.person import Person
         from schoolbell.relationship.tests import setUpRelationships
 
         setup.placefulSetUp()
@@ -77,12 +76,8 @@ class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
                              INameChooser,
                              SimpleNameChooser)
 
-        self.app = SchoolBellApplication()
-        self.app['persons'] = PersonContainer()
-        self.app['groups'] = GroupContainer()
-        setUpLocalAuth(self.app)
-        setSite(self.app)
-        directlyProvides(self.app, IContainmentRoot)
+        self.app = sbsetup.setupSchoolBellSite()
+
         self.group = self.app['groups']["root"] = Group("group")
         self.new = self.app['groups']["new"] = Group("New Group")
         self.person = self.app['persons']["pete"] = Person(username="pete",

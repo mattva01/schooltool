@@ -39,7 +39,6 @@ from schoolbell.app.group.rest.group import GroupFileFactory
 class TestGroupFileFactory(unittest.TestCase):
 
     def setUp(self):
-
         self.groupContainer = GroupContainer()
         self.factory = GroupFileFactory(self.groupContainer)
 
@@ -66,6 +65,7 @@ class TestGroupContainerView(ContainerViewTestMixin,
 
     def setUp(self):
         ContainerViewTestMixin.setUp(self)
+        self.groupContainer = self.app['groups']
 
     def test_render(self):
         view = GroupContainerView(self.groupContainer,

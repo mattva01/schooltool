@@ -420,7 +420,7 @@ def doctest_WriteCalendar_sophisticated():
 
     We will now upload a new calendar that does not change event1, removes
     event2, modifies event3 and adds a new event, event4.
-    
+
         >>> from schoolbell.app.cal import WriteCalendar
         >>> writer = WriteCalendar(cal)
         >>> writer.write(dedent('''\
