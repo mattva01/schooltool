@@ -92,6 +92,11 @@ other parameters in a configuration file called schoolbell.conf.  There's
 an example file called schoolbell.conf.in, you can simply rename it and modify
 to suit your needs.
 
+Beware that the file which contains the database, Data.fs, is not given any
+special permissions to prevent it from being read by other users by default.
+You will have to change the umask or the permissions of the file manually to
+prevent unauthorized access.
+
 By default a user with manager privileges is created in the new database.
 The username is 'manager', and the password is 'schoolbell'.
 
