@@ -21,14 +21,14 @@ function that has no arguments:
   >>> def addOne():
   ...     result.append(1)
 
-You register the function as follows in the `SampleSetup` setup registry:
+You register the function as follows in the `SampleFill` setup registry:
 
-  >>> registry.register('SampleSetup', addOne)
+  >>> registry.register('SampleFill', addOne)
 
 Now you execute the setup using the ``setup()`` method:
 
   >>> result = []
-  >>> registry.setup('SampleSetup')
+  >>> registry.setup('SampleFill')
   >>> result
   [1]
 
@@ -36,20 +36,20 @@ Now we can register more complex functions as well, of course:
 
   >>> def addTwo(number):
   ...     result.append(number)
-  >>> registry.register('SampleSetup', addTwo, 2)
+  >>> registry.register('SampleFill', addTwo, 2)
 
   >>> def addThree(number=None):
   ...     result.append(number)
-  >>> registry.register('SampleSetup', addThree, number=3)
+  >>> registry.register('SampleFill', addThree, number=3)
 
   >>> def addFour(number1, number2=None):
   ...     result.append(number1+number2)
-  >>> registry.register('SampleSetup', addFour, 3, number2=1)
+  >>> registry.register('SampleFill', addFour, 3, number2=1)
 
 And here is the result:
 
   >>> result = []
-  >>> registry.setup('SampleSetup')
+  >>> registry.setup('SampleFill')
   >>> result
   [1, 2, 3, 4]
 
@@ -79,11 +79,11 @@ the setup:
 
   >>> def addOneToContainer(container):
   ...     container.add(1)
-  >>> registry.register('ContainerSetup', addOneToContainer)
+  >>> registry.register('ContainerValues', addOneToContainer)
 
   >>> def addTwoToContainer(container, number=None):
   ...     container.add(number)
-  >>> registry.register('ContainerSetup', addTwoToContainer, number=2)
+  >>> registry.register('ContainerValues', addTwoToContainer, number=2)
 
 But how do we pass in the container? The ``setup()`` method allows you to
 specify additional positional and keyword arguments. The positional arguments
@@ -91,11 +91,23 @@ passed via the ``setup()`` are *appended* to the original ones. The additional
 keyword arguments are merged (updated) into the original keyword arguments.
 
   >>> container = Container()
-  >>> registry.setup('ContainerSetup', container)
+  >>> registry.setup('ContainerValues', container)
   >>> container.data
   [1, 2]
 
   >>> container = Container()
-  >>> registry.setup('ContainerSetup', container=container)
+  >>> registry.setup('ContainerValues', container=container)
+  >>> container.data
+  [1, 2]
+
+Note: As you might have already noticed, every test-setup registry has its own
+semantics and functions of a particular registry often have the same or
+similar signatures.
+
+As syntactic sugar, a setup function will be registered for all registries of
+the form ``setup<registry name``:
+
+  >>> container = Container()
+  >>> registry.setupContainerValues(container)
   >>> container.data
   [1, 2]

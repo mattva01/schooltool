@@ -22,11 +22,18 @@ Testing registries.
 $Id: app.py 4705 2005-08-15 14:49:07Z srichter $
 """
 __docformat__ = 'restructuredtext'
+import sys
+
 
 _registries = {}
 
 def register(reg_name, func, *args, **kw):
     reg = _registries.setdefault(reg_name, [])
+    if reg == []:
+        def setupUsingRegistry(*args, **kw):
+            setup(reg_name, *args, **kw)
+        globals()['setup'+reg_name] = setupUsingRegistry
+
     reg.append((func, args, kw))
 
 

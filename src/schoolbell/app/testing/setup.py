@@ -53,7 +53,7 @@ def createSchoolBellApplication():
     """Create a ``SchoolBellApplication`` instance with all its high-level
     containers."""
     app = SchoolBellApplication()
-    registry.setup('ApplicationContainers', app)
+    registry.setupApplicationContainers(app)
     return app
 
 
