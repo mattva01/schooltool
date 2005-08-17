@@ -235,6 +235,14 @@ class PDFCalendarViewBase(BrowserView):
                     # checking that their __parent__ does not match the
                     # calendar they are coming from.
                     continue
+
+                if canAccess(calendar, '__iter__'):
+                    # This is a booking event and it is coming from a different
+                    # calendar.  We check if we can access the context
+                    # calendar and if so, we shed the security proxy.
+                    # XXX This is not tested.
+                    event = removeSecurityProxy(event)
+
                 if event.allday:
                     allday_events.append(event)
                 else:
