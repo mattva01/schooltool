@@ -79,7 +79,7 @@ Now let's create some resources to book:
     Location: http://localhost/frogpond/resources
     ...
 
-Now a let's set up a calendar for Frog:
+Now let's set up a calendar for Frog:
 
     >>> print http(r"""
     ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
@@ -506,7 +506,7 @@ And it should not be seen in mud's calendar too:
     >>> "dummy-uid" not in str(result)
     True
 
-Let's do some event clashing, first we set up some overlaping
+Let's do some event clashing, first we set up some overlapping
 events:
 
     >>> print http(r"""
@@ -547,7 +547,7 @@ events:
     Set-Cookie: ...
     <BLANKLINE>
 
-Now let's allow frog access all the resources:
+Now let's allow frog access to all resources:
 
 
     >>> print http("""
@@ -614,7 +614,7 @@ If we book some resources for the second event:
     Location: http://localhost/frogpond/persons/frog/calendar
     ...
 
-We should see the conflicts when booking the for the events overlaping Test event2:
+We should see the conflicts when booking events overlapping Test event2:
 
     >>> print http("""
     ... POST /frogpond/persons/frog/calendar/dummy-uid1/booking.html HTTP/1.1
