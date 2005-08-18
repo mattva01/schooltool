@@ -13,7 +13,7 @@
 
   <content class=".course.Course">
     <implements
-        interface="schoolbell.app.note.interfaces.IHaveNotes" />
+        interface="schooltool.note.interfaces.IHaveNotes" />
     <require permission="schoolbell.view"
              attributes="title description sections __cmp__" />
     <require permission="schoolbell.edit"
@@ -43,7 +43,7 @@
 
   <content class=".section.Section">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
-    <implements interface="schoolbell.app.note.interfaces.IHaveNotes" />
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
 
     <require permission="schoolbell.view"

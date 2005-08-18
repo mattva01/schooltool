@@ -57,7 +57,7 @@
   </class>
 
   <view
-      for="schoolbell.app.note.interfaces.IHaveNotes"
+      for="schooltool.note.interfaces.IHaveNotes"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="schoolbell.app.rest.IRestTraverser"
       factory=".rest.NotesTraverser"

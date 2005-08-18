@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.app.note
+Unit tests for schooltool.note
 
 $Id$
 """
@@ -53,10 +53,10 @@ def doctest_getNotes():
 
     Now we can check that a new Notes object is created automatically
 
-        >>> from schoolbell.app.note.note import getNotes
+        >>> from schooltool.note.note import getNotes
         >>> notes = getNotes(obj)
 
-        >>> from schoolbell.app.note.interfaces import INotes
+        >>> from schooltool.note.interfaces import INotes
         >>> from zope.interface.verify import verifyObject
         >>> verifyObject(INotes, notes)
         True
@@ -77,7 +77,7 @@ def doctest_browser_NoteAddView():
         ...     def __init__(self, context, request): pass
         ...     def __call__(self):
         ...         return "http://localhost/frogpond/persons/milton"
-        >>> from schoolbell.app.note.interfaces import IHaveNotes, INotes
+        >>> from schooltool.note.interfaces import IHaveNotes, INotes
         >>> from zope.app.traversing.browser.interfaces import IAbsoluteURL
         >>> ztapi.browserViewProviding(IHaveNotes, FakeURL, \
         ...                            providing=IAbsoluteURL)
@@ -95,7 +95,7 @@ def doctest_browser_NoteAddView():
 
     Now let's create a NoteAddView for the owner
 
-        >>> from schoolbell.app.note.browser import NoteAddView
+        >>> from schooltool.note.browser import NoteAddView
         >>> view = NoteAddView(owner, TestRequest())
         >>> view.update()
 
@@ -103,7 +103,7 @@ def doctest_browser_NoteAddView():
 
         >>> from zope.app.annotation.interfaces import IAnnotations
         >>> setup.setUpAnnotations()
-        >>> from schoolbell.app.note.note import getNotes
+        >>> from schooltool.note.note import getNotes
         >>> ztapi.provideAdapter(IHaveNotes, INotes, getNotes)
 
     Let's try to add a note:
@@ -136,13 +136,13 @@ def doctest_rest_views():
         >>> from zope.publisher.browser import TestRequest
         >>> from StringIO import StringIO
 
-        >>> from schoolbell.app.note.rest import NotesViewFactory
-        >>> from schoolbell.app.note.rest import NotesTraverser
-        >>> from schoolbell.app.note.rest import NotesView
+        >>> from schooltool.note.rest import NotesViewFactory
+        >>> from schooltool.note.rest import NotesTraverser
+        >>> from schooltool.note.rest import NotesView
 
-        >>> from schoolbell.app.note.note import getNotes
-        >>> from schoolbell.app.note.interfaces import INotes
-        >>> from schoolbell.app.note.interfaces import IHaveNotes
+        >>> from schooltool.note.note import getNotes
+        >>> from schooltool.note.interfaces import INotes
+        >>> from schooltool.note.interfaces import IHaveNotes
         >>> from zope.app.annotation.interfaces import IAnnotations
         >>> setup.setUpAnnotations()
         >>> setup.placefulSetUp()
@@ -249,8 +249,8 @@ def test_suite():
         doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
                              optionflags=doctest.ELLIPSIS|
                              doctest.REPORT_NDIFF),
-        doctest.DocTestSuite('schoolbell.app.note.rest'),
-        doctest.DocTestSuite('schoolbell.app.note.note'),
+        doctest.DocTestSuite('schooltool.note.rest'),
+        doctest.DocTestSuite('schooltool.note.note'),
            ])
 
 if __name__ == '__main__':

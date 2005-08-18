@@ -27,8 +27,8 @@ from zope.security.checker import ProxyFactory
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.xmlparsing import XMLDocument
 
-from schoolbell.app.note.interfaces import INotes
-from schoolbell.app.note.note import Note
+from schooltool.note.interfaces import INotes
+from schooltool.note.note import Note
 
 
 def NotesViewFactory(context, request):

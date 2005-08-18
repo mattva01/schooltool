@@ -5,7 +5,7 @@
 
   <content class=".person.PersonContainer">
     <implements
-        interface="schoolbell.app.note.interfaces.IHaveNotes" />
+        interface="schooltool.note.interfaces.IHaveNotes" />
 
     <allow
         interface="zope.app.container.interfaces.ISimpleReadContainer" />
@@ -19,7 +19,7 @@
 
   <content class=".person.Person">
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
-    <implements interface="schoolbell.app.note.interfaces.IHaveNotes" />
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
     <implements interface=".interfaces.IHavePreferences" />
     <require
         permission="schoolbell.view"

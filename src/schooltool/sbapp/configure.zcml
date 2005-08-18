@@ -126,7 +126,7 @@
   </content>
 
   <content class=".cal.CalendarEvent">
-    <implements interface="schoolbell.app.note.interfaces.IHaveNotes" />
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
     <require permission="schoolbell.viewCalendar"
              interface="schooltool.calendar.interfaces.ICalendarEvent"
              attributes="resources" />
