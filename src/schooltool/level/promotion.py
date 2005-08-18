@@ -30,11 +30,10 @@ from zope.wfmc import attributeintegration
 from zope.app import location
 from zope.app.annotation.interfaces import IAnnotations
 
-from schoolbell.app import group
 
-import schooltool.interfaces
-from schooltool import app
 from schooltool import SchoolToolMessageID as _
+from schooltool import group
+from schooltool.app import app
 from schooltool.level import interfaces, record
 
 

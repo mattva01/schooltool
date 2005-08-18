@@ -28,7 +28,7 @@ import zope.schema
 from zope.app import zapi
 from zope.app.container import contained, btree
 
-from schooltool import app
+from schooltool.app import app
 from schooltool.level import interfaces
 
 class LevelContainer(btree.BTreeContainer):

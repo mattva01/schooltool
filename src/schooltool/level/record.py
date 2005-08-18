@@ -28,8 +28,7 @@ import zope.interface
 import zope.security
 from zope.app.annotation.interfaces import IAnnotations
 
-import schooltool.interfaces
-from schoolbell.app import person
+from schooltool import person
 from schooltool.level import interfaces
 
 
