@@ -135,7 +135,7 @@
 <!-- Calendar views -->
 
   <!-- Sigh. Cannot specify multiple for and permission in subsscriber ;-( -->
-  <zope:class class=".cal.CalendarOwnerTraverser">
+  <zope:class class=".cal.ToCalendarTraverser">
     <allow interface="schoolbell.app.traverser.interfaces.ITraverserPlugin" />
   </zope:class>
 
@@ -143,7 +143,7 @@
       for="schoolbell.app.interfaces.IHaveCalendar
            zope.publisher.interfaces.browser.IBrowserRequest"
       provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
-      factory=".cal.CalendarOwnerTraverser"
+      factory=".cal.ToCalendarTraverser"
       />
 
   <zope:view

@@ -63,16 +63,16 @@ def setUp(test=None):
     sbsetup.setupCalendaring()
 
 
-def doctest_CalendarOwnerTraverser():
+def doctest_ToCalendarTraverser():
     """Tests for CalendarOwnerTraverser.
 
     CalendarOwnerTraverser allows you to traverse directly to the calendar
     of a calendar owner.
 
-        >>> from schoolbell.app.browser.cal import CalendarOwnerTraverser
+        >>> from schoolbell.app.browser.cal import ToCalendarTraverser
         >>> person = Person()
         >>> request = TestRequest()
-        >>> traverser = CalendarOwnerTraverser(person, request)
+        >>> traverser = ToCalendarTraverser(person, request)
         >>> traverser.context is person
         True
         >>> traverser.request is request

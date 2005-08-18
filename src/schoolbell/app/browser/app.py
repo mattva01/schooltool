@@ -46,24 +46,10 @@ from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IApplicationPreferences
 from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.app import getSchoolBellApplication
-from schoolbell.app.browser.cal import CalendarOwnerTraverser
 from schoolbell.app.person.interfaces import IPerson
 
 from schoolbell.batching import Batch
 from schoolbell.batching.browser import MultiBatchViewMixin
-
-
-class SchoolBellApplicationTraverser(CalendarOwnerTraverser):
-    """Traverser for a SchoolBellApplication."""
-
-    adapts(ISchoolBellApplication)
-
-    def publishTraverse(self, request, name):
-        obj = self.context.get(name)
-        if obj is not None:
-            return obj
-
-        return CalendarOwnerTraverser.publishTraverse(self, request, name)
 
 
 class SchoolBellApplicationView(BrowserView):

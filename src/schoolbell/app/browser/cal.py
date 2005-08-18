@@ -107,7 +107,7 @@ utc = timezone('UTC')
 # Traversal
 #
 
-class CalendarOwnerTraverser(object):
+class ToCalendarTraverser(object):
     """A traverser that allows to traverse to a calendar owner's calendar."""
 
     adapts(IHaveCalendar)
