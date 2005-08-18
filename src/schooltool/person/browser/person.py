@@ -69,6 +69,46 @@ class PersonView(BrowserView):
         BrowserView.__init__(self, context, request)
         self.details = IPersonDetails(self.context)
 
+    def isTeacher(self):
+
+        if len(getRelatedObjects(self.context, URISection,
+                                 rel_type=URIInstruction)) > 0:
+            return True
+        else:
+            return False
+
+    def isLearner(self):
+        for obj in self.context.groups:
+            if ISection.providedBy(obj):
+                return True
+
+        return False
+
+    def instructorOf(self):
+        return getRelatedObjects(self.context, URISection,
+                                 rel_type=URIInstruction)
+
+    def memberOf(self):
+        """Seperate out generic groups from sections."""
+
+        return [group for group in self.context.groups if not
+                ISection.providedBy(group)]
+
+    def learnerOf(self):
+        results = []
+        sections = getSchoolToolApplication()['sections'].values()
+        for section in sections:
+            if self.context in section.members:
+                results.append({'section': section, 'group': None})
+            # XXX isTransitiveMember works in the test fixture but not in the
+            # application, working around it for the time being.
+            for group in self.memberOf():
+                if group in section.members:
+                    results.append({'section': section,
+                                    'group': group})
+
+        return results
+
 
 class PersonPhotoView(BrowserView):
     """View that returns photo of a Person."""

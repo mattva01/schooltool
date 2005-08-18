@@ -99,18 +99,6 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
                           self.app, '++etc++site/default/SchoolBellAuth')
 
 
-def setUpLocalGrants():
-    """Set up annotations and AnnotatationPrincipalPermissionManager"""
-    from zope.app.annotation.interfaces import IAnnotatable
-    from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
-    from zope.app.securitypolicy.principalpermission import \
-         AnnotationPrincipalPermissionManager
-    setup.setUpAnnotations()
-    setup.setUpTraversal()
-    ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
-                         AnnotationPrincipalPermissionManager)
-
-
 def doctest_applicationCalendarPermissionsSubscriber():
     r"""
     Set up:
@@ -118,7 +106,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.person.person import Person, PersonContainer
         >>> root = setup.placefulSetUp(True)
-        >>> setUpLocalGrants()
+        >>> setupLocalGrants()
         >>> app = SchoolToolApplication()
         >>> app['persons'] = PersonContainer()
         >>> root['sb'] = app

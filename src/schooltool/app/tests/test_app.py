@@ -30,7 +30,7 @@ from zope.app import zapi
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.testing import setup, ztapi, placelesssetup
 
-from schoolbell.app.tests.test_security import setUpLocalGrants
+from schooltool.testing.setup import setupLocalGrants
 
 from schooltool.testing import setup as sbsetup
 
@@ -129,7 +129,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> from schooltool import app
         >>> root = setup.placefulSetUp(True)
         >>> sbsetup.setupCalendaring()
-        >>> setUpLocalGrants()
+        >>> setupLocalGrants()
         >>> st = sbsetup.createSchoolToolApplication()
 
         >>> root['sb'] = st

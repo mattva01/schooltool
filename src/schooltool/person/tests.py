@@ -29,7 +29,7 @@ from zope.testing import doctest
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.tests import ztapi, setup
 
-from schoolbell.app.tests.test_security import setUpLocalGrants
+from schooltool.testing.setup import setupLocalGrants
 from schooltool.testing import setup as sbsetup
 
 def doctest_personPermissionsSubscriber():
@@ -41,7 +41,7 @@ def doctest_personPermissionsSubscriber():
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.group.group import Group, GroupContainer
         >>> from schooltool.person.person import Person, PersonContainer
-        >>> setUpLocalGrants()
+        >>> setupLocalGrants()
         >>> root['sb'] = SchoolToolApplication()
         >>> root['sb']['persons'] = PersonContainer()
         >>> root['sb']['groups'] = GroupContainer()
