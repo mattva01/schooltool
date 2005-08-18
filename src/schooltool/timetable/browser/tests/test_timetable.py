@@ -27,7 +27,7 @@ import datetime
 import itertools
 from pprint import pprint
 
-from zope.interface import directlyProvides
+from zope.interface import directlyProvides, implements
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.testing.doctestunit import pprint
@@ -746,6 +746,25 @@ def doctest_TermRenderer_week():
         24 2005-05-07 7 True holiday javascript:toggle(24)
 
     '''
+
+
+def doctest_TimetablesTraverser():
+    """Tests for TimetablesTraverser.
+
+        >>> from schooltool.timetable.browser import TimetablesTraverser
+        >>> from schooltool.timetable.interfaces import ITimetables
+        >>> class TimetablesStub:
+        ...     implements(ITimetables)
+        ...     timetables = 'Timetables'
+        ...     calendar = 'Calendar'
+        >>> request = TestRequest()
+        >>> t = TimetablesTraverser(TimetablesStub(), request)
+
+    If we ask for timetables, the corresponding object will be returned:
+
+        >>> t.publishTraverse(request, 'timetables')
+        'Timetables'
+    """
 
 
 def print_cal(calendar, day_format='%(number)3d'):

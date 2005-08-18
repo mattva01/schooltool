@@ -24,6 +24,7 @@ $Id$
 """
 import zope.component
 import zope.interface
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 from zope.app import zapi
 from zope.app.annotation.interfaces import IAnnotations
@@ -144,3 +145,13 @@ def applicationCalendarPermissionsSubscriber(event):
                                               unauthenticated.id)
             container_perms.denyPermissionToPrincipal('schoolbell.viewCalendar',
                                               unauthenticated.id)
+
+
+class LocationResourceVocabulary(SimpleVocabulary):
+    """Choice vocabulary of all location resources."""
+
+    def __init__(self, context):
+        resources = getSchoolToolApplication()['resources']
+        locations = [SimpleTerm(l, token=l.title) for l in resources.values() \
+                                                  if l.isLocation]
+        super(LocationResourceVocabulary, self).__init__(locations)

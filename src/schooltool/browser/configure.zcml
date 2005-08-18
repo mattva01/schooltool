@@ -20,22 +20,19 @@
       interface=".skin.ISchoolToolSkin"
       />
 
+  <page
+      name="generic_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/generic_macros.pt"
+      layer=".skin.ISchoolToolLayer"
+      />
+
   <resource name="logo.png" file="resources/schooltool.png"
             layer=".skin.ISchoolToolLayer" />
 
   <resource name="schooltool.css" file="resources/schooltool.css"
             layer=".skin.ISchoolToolLayer" />
-
-  <!-- Navigation -->
-
-  <page
-      for="*"
-      name="schoolbell_navigation"
-      layer=".skin.ISchoolToolLayer"
-      template="templates/navigation.pt"
-      class=".NavigationView"
-      permission="zope.View"
-      />
 
   <!-- Views -->
 
@@ -46,37 +43,6 @@
       template="templates/index.pt"
       permission="zope.Public"
       layer="schooltool.browser.skin.ISchoolToolLayer"
-      />
-
-  <zope:vocabulary
-      name="LocationResources"
-      factory=".app.LocationResourceVocabulary"
-      />
-
-  <!-- XXX: Mmh, is ISectionContainer the only component using this -->
-  <!--      view class? -->
-  <page
-      name="timetables-csvimport.html"
-      for="schooltool.course.interfaces.ISectionContainer"
-      class="schooltool.browser.csvimport.TimetableCSVImportView"
-      template="templates/timetables-csvimport.pt"
-      permission="schoolbell.create"
-      layer="SchoolToolLayer"
-      menu="schoolbell_actions"
-      title="Import Sections"
-      />
-
-  <!-- XXX: Needs to be here until we switch to pagelet system or -->
-  <!--      write a macro -->
-  <page
-      name="index.html"
-      for="schoolbell.app.person.interfaces.IPerson"
-      class="schooltool.browser.app.PersonView"
-      template="templates/person.pt"
-      permission="zope.View"
-      menu="zmi_views"
-      title="View"
-      layer=".skin.ISchoolToolLayer"
       />
 
   <page
@@ -104,33 +70,39 @@
       permission="zope.View"
       />
 
-  <zope:class class=".TimetablesTraverser">
-    <zope:allow
-        interface="schoolbell.app.traverser.interfaces.ITraverserPlugin" />
-  </zope:class>
-
-  <zope:subscriber
-      for="schooltool.timetable.interfaces.IHaveTimetables
-           zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
-      factory=".TimetablesTraverser"
-      />
-
-  <menuItem
-      menu="schoolbell_actions"
-      title="View Timetables"
-      for="schooltool.timetable.interfaces.IHaveTimetables"
-      action="timetables/index.html"
-      />
-
-
-  <!-- Skin -->
-
+  <!-- XXX: Necessary for now, but we might find a macro way of doing this. -->
   <page
-      name="generic_macros"
       for="*"
+      name="schoolbell_navigation"
+      layer=".skin.ISchoolToolLayer"
+      template="templates/navigation.pt"
+      class=".NavigationView"
       permission="zope.View"
-      template="templates/generic_macros.pt"
+      />
+
+  <!-- XXX: Mmh, is ISectionContainer the only component using this -->
+  <!--      view class? -->
+  <page
+      name="timetables-csvimport.html"
+      for="schooltool.course.interfaces.ISectionContainer"
+      class="schooltool.browser.csvimport.TimetableCSVImportView"
+      template="templates/timetables-csvimport.pt"
+      permission="schoolbell.create"
+      layer="SchoolToolLayer"
+      menu="schoolbell_actions"
+      title="Import Sections"
+      />
+
+  <!-- XXX: Needs to be here until we switch to pagelet system or -->
+  <!--      write a macro -->
+  <page
+      name="index.html"
+      for="schoolbell.app.person.interfaces.IPerson"
+      class="schooltool.browser.app.PersonView"
+      template="templates/person.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
       layer=".skin.ISchoolToolLayer"
       />
 

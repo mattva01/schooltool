@@ -3,6 +3,31 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+  <!-- Traversers -->
+
+  <zope:class class=".TimetablesTraverser">
+    <zope:allow
+        interface="schoolbell.app.traverser.interfaces.ITraverserPlugin" />
+  </zope:class>
+
+  <zope:subscriber
+      for="schooltool.timetable.interfaces.IHaveTimetables
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
+      factory=".TimetablesTraverser"
+      />
+
+  <!-- Menu Items -->
+
+  <menuItem
+      menu="schoolbell_actions"
+      title="View Timetables"
+      for="schooltool.timetable.interfaces.IHaveTimetables"
+      action="timetables/index.html"
+      />
+
+  <!-- Views -->
+
   <page
       name="schedule.html"
       for="schooltool.course.interfaces.ISection"

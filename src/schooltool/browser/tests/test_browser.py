@@ -23,9 +23,7 @@ $Id: test_browser.py 3710 2005-05-15 10:27:21Z gintas $
 """
 
 import unittest
-from zope.interface import implements
 from zope.testing import doctest
-from zope.publisher.browser import TestRequest
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 from schoolbell.app.testing import setup
@@ -49,25 +47,6 @@ def doctest_NavigationView():
       >>> view.app is app
       True
 
-    """
-
-
-def doctest_TimetablesTraverser():
-    """Tests for TimetablesTraverser.
-
-        >>> from schooltool.browser import TimetablesTraverser
-        >>> from schooltool.timetable.interfaces import ITimetables
-        >>> class TimetablesStub:
-        ...     implements(ITimetables)
-        ...     timetables = 'Timetables'
-        ...     calendar = 'Calendar'
-        >>> request = TestRequest()
-        >>> t = TimetablesTraverser(TimetablesStub(), request)
-
-    If we ask for timetables, the corresponding object will be returned:
-
-        >>> t.publishTraverse(request, 'timetables')
-        'Timetables'
     """
 
 

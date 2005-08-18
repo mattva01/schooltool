@@ -263,7 +263,7 @@ def doctest_SectionAddView():
     We need some setup for our vocabulary:
 
         >>> from zope.schema.vocabulary import getVocabularyRegistry
-        >>> from schooltool.browser.app import LocationResourceVocabulary
+        >>> from schooltool.app import LocationResourceVocabulary
         >>> registry = getVocabularyRegistry()
         >>> registry.register('LocationResources', LocationResourceVocabulary)
 
@@ -365,7 +365,7 @@ def doctest_SectionEditView():
         >>> from schooltool.app import SchoolToolApplication
         >>> app = setup.setupSchoolBellSite()
         >>> from zope.schema.vocabulary import getVocabularyRegistry
-        >>> from schooltool.browser.app import LocationResourceVocabulary
+        >>> from schooltool.app import LocationResourceVocabulary
         >>> registry = getVocabularyRegistry()
         >>> registry.register('LocationResources', LocationResourceVocabulary)
         >>> from schoolbell.app.resource.resource import Resource

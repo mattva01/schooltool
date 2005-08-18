@@ -218,6 +218,52 @@ def doctest_applicationCalendarPermissionsSubscriber():
     """
 
 
+def doctest_LocationResourceVocabulary():
+    r"""Tests for location choice vocabulary.
+
+        >>> from schooltool.app import LocationResourceVocabulary
+
+    Set up:
+
+        >>> root = setup.placefulSetUp(True)
+
+    We should be able to choose any Resource in the resource container that is
+    marked with isLocation.
+
+        >>> app = sbsetup.setupSchoolBellSite()
+
+    There's no potential terms:
+
+        >>> vocab = LocationResourceVocabulary(app['sections'])
+        >>> vocab.by_token
+        {}
+
+    Now we'll add some resources
+
+        >>> from schoolbell.app.resource.resource import Resource
+        >>> import pprint
+        >>> app['resources']['room1'] = room1 = Resource("Room 1",
+        ...                                               isLocation=True)
+        >>> app['resources']['room2'] = room2 = Resource("Room 2",
+        ...                                               isLocation=True)
+        >>> app['resources']['room3'] = room3 = Resource("Room 3",
+        ...                                               isLocation=True)
+        >>> app['resources']['printer'] = printer = Resource("Printer")
+
+    All of our rooms are available, but the printer is not.
+
+        >>> vocab = LocationResourceVocabulary(app['sections'])
+        >>> pprint.pprint(vocab.by_token)
+        {'Room 1': <zope.schema.vocabulary.SimpleTerm object at ...,
+         'Room 2': <zope.schema.vocabulary.SimpleTerm object at ...,
+         'Room 3': <zope.schema.vocabulary.SimpleTerm object at ...}
+
+    Clean up:
+
+        >>> setup.placefulTearDown()
+    """
+
+
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),

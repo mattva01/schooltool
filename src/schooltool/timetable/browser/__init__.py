@@ -27,23 +27,25 @@ import itertools
 import sets
 import re
 
-from zope.interface import Interface
+from zope.component import adapts
+from zope.i18n import translate
+from zope.interface import Interface, implements
+from zope.publisher.interfaces import NotFound
 from zope.schema import TextLine, Date, Int
 from zope.schema.interfaces import RequiredMissing
+from zope.security.proxy import removeSecurityProxy
+
 from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
-from zope.app.form.browser.add import AddView
-from zope.app.form.browser.submit import Update
-from zope.app.form.utility import setUpEditWidgets
-from zope.app.form.interfaces import WidgetsError
 from zope.app.container.interfaces import INameChooser
 from zope.app.event.objectevent import modified
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from zope.app.form.utility import getWidgetsData, setUpWidgets
+from zope.app.form.browser.add import AddView
+from zope.app.form.browser.submit import Update
+from zope.app.form.interfaces import WidgetsError, IWidgetInputError
 from zope.app.form.interfaces import IInputWidget
-from zope.app.form.interfaces import IWidgetInputError
-from zope.i18n import translate
-from zope.security.proxy import removeSecurityProxy
+from zope.app.form.utility import getWidgetsData, setUpWidgets
+from zope.app.form.utility import setUpEditWidgets
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from schoolbell.calendar.utils import parse_date, parse_time
 from schoolbell.calendar.utils import next_month, week_start
@@ -51,9 +53,10 @@ from schoolbell.app.browser.cal import month_names
 from schoolbell.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.person.interfaces import IPerson
+from schoolbell.app.traverser.interfaces import ITraverserPlugin
 
 from schooltool import SchoolToolMessageID as _
-from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable.interfaces import ITimetables, IHaveTimetables
 from schooltool.timetable.interfaces import ITimetable, ITimetableSchema
 from schooltool.timetable.interfaces import ITermContainer, ITerm
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
@@ -385,6 +388,23 @@ class TabindexMixin(object):
                                      for row in range(nrows)
                                        for col in range(ncols)]
         self.__tabindex += nrows * ncols
+
+
+class TimetablesTraverser(object):
+    """A traverser that allows to traverse to a calendar owner's calendar."""
+
+    adapts(IHaveTimetables)
+    implements(ITraverserPlugin)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        if name == 'timetables':
+            return ITimetables(self.context).timetables
+
+        raise NotFound(self.context, name, request)
 
 
 class TimetableSchemaContainerView(ContainerView):

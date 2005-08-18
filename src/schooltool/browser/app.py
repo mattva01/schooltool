@@ -21,7 +21,6 @@ SchoolTool application views.
 
 $Id: app.py 3481 2005-04-21 15:28:29Z bskahan $
 """
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 
@@ -45,18 +44,6 @@ class SchoolToolApplicationView(BrowserView):
             url = zapi.absoluteURL(ISchoolBellCalendar(self.context),
                                    self.request)
             self.request.response.redirect(url)
-
-
-class LocationResourceVocabulary(SimpleVocabulary):
-    """Choice vocabulary of all location resources."""
-
-    def __init__(self, context):
-        resources = getSchoolToolApplication()['resources']
-        locations = [SimpleTerm(l, token=l.title) for l in resources.values() \
-                                                  if l.isLocation]
-        super(LocationResourceVocabulary, self).__init__(locations)
-
-
 
 
 class PersonView(person.PersonView):
