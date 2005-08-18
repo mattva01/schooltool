@@ -25,7 +25,7 @@ $Id$
 import datetime
 from pytz import timezone
 from zope.interface import implements
-from schoolbell.calendar.interfaces import IExpandedCalendarEvent
+from schooltool.calendar.interfaces import IExpandedCalendarEvent
 
 utc = timezone('UTC')
 
@@ -37,7 +37,7 @@ class CalendarMixin(object):
 
     A class that uses this mixin must already implement ICalendar.__iter__.
 
-        >>> from schoolbell.calendar.interfaces import ICalendar
+        >>> from schooltool.calendar.interfaces import ICalendar
         >>> from zope.interface import implements
         >>> class MyCalendar(CalendarMixin):
         ...     implements(ICalendar)
@@ -72,7 +72,7 @@ class CalendarMixin(object):
         This particular implementation simply performs a linear search by
         iterating over all events and looking at their UIDs.
 
-            >>> from schoolbell.calendar.interfaces import ICalendar
+            >>> from schooltool.calendar.interfaces import ICalendar
             >>> from zope.interface import implements
 
             >>> class Event(object):
@@ -185,7 +185,7 @@ class CalendarEventMixin(object):
     Calendar events are equal iff all their attributes are equal.  We can get a
     list of those attributes easily because ICalendarEvent is a schema.
 
-        >>> from schoolbell.calendar.interfaces import ICalendarEvent
+        >>> from schooltool.calendar.interfaces import ICalendarEvent
         >>> from zope.schema import getFieldNames
         >>> all_attrs = getFieldNames(ICalendarEvent)
         >>> 'unique_id' in all_attrs
@@ -299,7 +299,7 @@ class CalendarEventMixin(object):
     def replace(self, **kw):
         r"""Return a copy of this event with some attributes replaced.
 
-            >>> from schoolbell.calendar.interfaces import ICalendarEvent
+            >>> from schooltool.calendar.interfaces import ICalendarEvent
             >>> from zope.schema import getFieldNames
             >>> all_attrs = getFieldNames(ICalendarEvent)
             >>> class Event(CalendarEventMixin):
@@ -312,7 +312,7 @@ class CalendarEventMixin(object):
             >>> from datetime import datetime, timedelta
             >>> e1 = Event(dtstart=datetime(2004, 12, 15, 18, 57,tzinfo=utc),
             ...            duration=timedelta(minutes=15),
-            ...            title='Work on schoolbell.calendar.simple',
+            ...            title='Work on schooltool.calendar.simple',
             ...            location=None)
 
             >>> e2 = e1.replace(location=u'Matar\u00f3')
@@ -329,7 +329,7 @@ class CalendarEventMixin(object):
 
         """
         # The import is here to avoid cyclic dependencies
-        from schoolbell.calendar.simple import SimpleCalendarEvent
+        from schooltool.calendar.simple import SimpleCalendarEvent
         for attr in ['dtstart', 'duration', 'title', 'description', 'location',
                      'unique_id', 'recurrence', 'allday']:
             kw.setdefault(attr, getattr(self, attr))
@@ -347,8 +347,8 @@ class ExpandedCalendarEvent(CalendarEventMixin):
     When creating an expanded event, you must specify the original recurrent
     event.
 
-        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
-        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> from schooltool.calendar.simple import SimpleCalendarEvent
+        >>> from schooltool.calendar.recurrent import DailyRecurrenceRule
         >>> dtstart = datetime.datetime(2005, 2, 10, 1, 2)
         >>> duration = datetime.timedelta(hours=3)
         >>> recurrence = DailyRecurrenceRule()

@@ -442,7 +442,7 @@ def doctest_bootstrapSchoolBell():
 
         >>> from zope.app.security.interfaces import IAuthentication
         >>> zapi.getUtility(IAuthentication, context=app)
-        <schoolbell.app.security.SchoolBellAuthenticationUtility object at ...>
+        <schooltool.app.security.SchoolBellAuthenticationUtility object at ...>
 
     It has an initial user (username 'manager', password 'schoolbell')
 
@@ -469,7 +469,7 @@ def doctest_bootstrapSchoolBell():
     bootstrapSchoolBell doesn't do anything if it finds the root object already
     present in the database.
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> manager = app['persons']['user1'] = Person('user1')
         >>> transaction.commit()
         >>> connection.close()

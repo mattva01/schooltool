@@ -632,7 +632,7 @@ class TimetableTraverser(object):
 
     We need a ITimetables object and a request:
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> from zope.publisher.browser import TestRequest
         >>> person = Person()
         >>> request = TestRequest()
@@ -760,7 +760,7 @@ class CompositeTimetableTraverser(object):
 
     We need a timetabled object and a request:
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> from zope.publisher.browser import TestRequest
         >>> person = Person()
         >>> request = TestRequest()
@@ -786,7 +786,7 @@ class CompositeTimetablesPublishTraverse(object):
 
     We need a timetabled object and a request:
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> from zope.publisher.browser import TestRequest
         >>> person = Person()
         >>> request = TestRequest()
@@ -805,7 +805,7 @@ class CompositeTimetablesPublishTraverse(object):
         >>> traverser.publishTraverse(request, "term.schema.aa")
         Traceback (most recent call last):
         ...
-        NotFound: Object: <schoolbell.app.person.person.Person ...>,
+        NotFound: Object: <schooltool.person.person.Person ...>,
                   name: 'term.schema.aa'
 
     If timetabled.getCompositeTimetable returns None we should get the
@@ -815,7 +815,7 @@ class CompositeTimetablesPublishTraverse(object):
         >>> traverser.publishTraverse(request, "term.schema")
         Traceback (most recent call last):
         ...
-        NotFound: Object: <schoolbell.app.person.person.Person ...>,
+        NotFound: Object: <schooltool.person.person.Person ...>,
                   name: 'term.schema'
 
     """

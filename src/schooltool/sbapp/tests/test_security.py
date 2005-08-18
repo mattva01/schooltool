@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.app.security
+Unit tests for schooltool.app.security
 
 $Id$
 """
@@ -63,7 +63,7 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         setup.placefulTearDown()
 
     def test(self):
-        from schoolbell.app.security import authSetUpSubscriber
+        from schooltool.app.security import authSetUpSubscriber
         self.assertRaises(ComponentLookupError, self.app.getSiteManager)
         event = ObjectAddedEvent(self.app)
         authSetUpSubscriber(event)
@@ -83,14 +83,14 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         authSetUpSubscriber(event)
 
     def test_other_object(self):
-        from schoolbell.app.security import authSetUpSubscriber
+        from schooltool.app.security import authSetUpSubscriber
         event = ObjectAddedEvent(self.root)
         authSetUpSubscriber(event)
         self.assertRaises(TraversalError, zapi.traverse,
                           self.root, '++etc++site/default/SchoolBellAuth')
 
     def test_other_event(self):
-        from schoolbell.app.security import authSetUpSubscriber
+        from schooltool.app.security import authSetUpSubscriber
         class SomeEvent:
             object = self.app
         authSetUpSubscriber(SomeEvent())
@@ -116,7 +116,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
     Set up:
 
         >>> from schoolbell.app.app import SchoolBellApplication
-        >>> from schoolbell.app.person.person import Person, PersonContainer
+        >>> from schooltool.person.person import Person, PersonContainer
         >>> root = setup.placefulSetUp(True)
         >>> setUpLocalGrants()
         >>> app = SchoolBellApplication()
@@ -140,10 +140,10 @@ def doctest_applicationCalendarPermissionsSubscriber():
 
     Call our subscriber:
 
-        >>> from schoolbell.app.testing.setup import setupCalendaring
+        >>> from schooltool.testing.setup import setupCalendaring
         >>> setupCalendaring()
 
-        >>> from schoolbell.app.security import \
+        >>> from schooltool.app.security import \
         ...         applicationCalendarPermissionsSubscriber
         >>> applicationCalendarPermissionsSubscriber(ObjectAddedEvent(app))
 

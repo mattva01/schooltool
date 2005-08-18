@@ -33,16 +33,16 @@ from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import ProxyFactory
 
 from schoolbell.app.app import getSchoolBellApplication
-from schoolbell.relationship.annotatable import getRelationshipLinks
-from schoolbell.relationship.uri import IURIObject
+from schooltool.relationship.annotatable import getRelationshipLinks
+from schooltool.relationship.uri import IURIObject
 from schoolbell.app.browser.app import ACLViewBase, hasPermission
 from schoolbell.app.rest import View, Template
 from schoolbell.app.rest.errors import RestError
 from zope.app.traversing.interfaces import IPhysicallyLocatable
 from schoolbell.app.rest.xmlparsing import XMLDocument
-from schoolbell.relationship.interfaces import IRelationshipLinks
-from schoolbell.relationship.interfaces import IRelationshipSchema
-from schoolbell.relationship.relationship import relate, unrelate
+from schooltool.relationship.interfaces import IRelationshipLinks
+from schooltool.relationship.interfaces import IRelationshipSchema
+from schooltool.relationship.relationship import relate, unrelate
 from zope.i18n import translate
 
 

@@ -23,10 +23,10 @@ See the README.txt file in this package for a detailed overview with working
 code examples.
 """
 
-from schoolbell.relationship.uri import URIObject, IURIObject       # reexport
-from schoolbell.relationship.relationship import relate             # reexport
-from schoolbell.relationship.relationship import unrelate           # reexport
-from schoolbell.relationship.relationship import unrelateAll        # reexport
-from schoolbell.relationship.relationship import getRelatedObjects  # reexport
-from schoolbell.relationship.relationship import RelationshipSchema # reexport
-from schoolbell.relationship.relationship import RelationshipProperty # ditto
+from schooltool.relationship.uri import URIObject, IURIObject       # reexport
+from schooltool.relationship.relationship import relate             # reexport
+from schooltool.relationship.relationship import unrelate           # reexport
+from schooltool.relationship.relationship import unrelateAll        # reexport
+from schooltool.relationship.relationship import getRelatedObjects  # reexport
+from schooltool.relationship.relationship import RelationshipSchema # reexport
+from schooltool.relationship.relationship import RelationshipProperty # ditto

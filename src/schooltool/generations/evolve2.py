@@ -27,7 +27,7 @@ $Id$
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
 from schooltool.interfaces import ISchoolToolApplication
-from schoolbell.app.cal import Calendar
+from schooltool.app.cal import Calendar
 from schooltool.timetable import TimetableDict
 
 

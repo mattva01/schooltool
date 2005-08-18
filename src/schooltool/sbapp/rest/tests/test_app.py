@@ -38,16 +38,16 @@ from zope.app.container.interfaces import INameChooser
 from zope.app.testing import ztapi, setup
 
 from schoolbell.app.app import SimpleNameChooser
-from schoolbell.app.group.group import Group
-from schoolbell.app.group.interfaces import IGroupContainer
-from schoolbell.app.group.rest.group import GroupFileFactory, GroupContainerView
-from schoolbell.app.person.person import Person
-from schoolbell.app.resource.interfaces import IResourceContainer
-from schoolbell.app.resource.rest.resource import ResourceFileFactory
+from schooltool.group.group import Group
+from schooltool.group.interfaces import IGroupContainer
+from schooltool.group.rest.group import GroupFileFactory, GroupContainerView
+from schooltool.person.person import Person
+from schooltool.resource.interfaces import IResourceContainer
+from schooltool.resource.rest.resource import ResourceFileFactory
 from schoolbell.app.rest.tests.utils import XMLCompareMixin, QuietLibxml2Mixin
 from schoolbell.app.rest.xmlparsing import XMLDocument, XMLParseError
 
-from schoolbell.app.testing import setup as sbsetup
+from schooltool.testing import setup as sbsetup
 
 class TestAppView(XMLCompareMixin, unittest.TestCase):
 
@@ -218,14 +218,14 @@ def doctest_CalendarView():
         >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
 
-        >>> from schoolbell.app.testing import setup as sbsetup
+        >>> from schooltool.testing import setup as sbsetup
         >>> sbsetup.setupCalendaring()
 
     First lets create a view:
 
         >>> from schoolbell.app.rest.app import CalendarView
         >>> from schoolbell.app.interfaces import ISchoolBellCalendar
-        >>> from schoolbell.app.cal import WriteCalendar
+        >>> from schooltool.app.cal import WriteCalendar
         >>> from schoolbell.app.interfaces import IWriteCalendar
         >>> ztapi.provideAdapter(ISchoolBellCalendar, IWriteCalendar,
         ...                      WriteCalendar)

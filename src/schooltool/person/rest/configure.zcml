@@ -24,7 +24,7 @@
       for="..interfaces.IPersonContainer"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.http.IHTTPPublisher"
-      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
 
@@ -32,7 +32,7 @@
       for="..interfaces.IPerson"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.http.IHTTPPublisher"
-      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
 

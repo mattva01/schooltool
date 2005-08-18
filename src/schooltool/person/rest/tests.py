@@ -35,19 +35,19 @@ from schoolbell.app.rest.tests.test_app import ApplicationObjectViewTestMixin
 from schoolbell.app.rest.tests.test_app import ContainerViewTestMixin
 from schoolbell.app.rest.tests.test_app import FileFactoriesSetUp
 
-from schoolbell.app.person.interfaces import IPersonContainer
-from schoolbell.app.person.person import PersonContainer, Person
-from schoolbell.app.person.rest.interfaces import IPasswordWriter
-from schoolbell.app.person.rest.interfaces import IPersonPhoto
-from schoolbell.app.person.rest.person import PersonContainerView, PersonView
-from schoolbell.app.person.rest.person import PersonPasswordWriter
-from schoolbell.app.person.rest.person import PersonPhotoAdapter
-from schoolbell.app.person.rest.person import PersonPhotoView
-from schoolbell.app.person.rest.person import PersonFile, PersonFileFactory
-from schoolbell.app.person.rest.person import PasswordWriterView
-from schoolbell.app.person.rest.preference import PersonPreferencesView
+from schooltool.person.interfaces import IPersonContainer
+from schooltool.person.person import PersonContainer, Person
+from schooltool.person.rest.interfaces import IPasswordWriter
+from schooltool.person.rest.interfaces import IPersonPhoto
+from schooltool.person.rest.person import PersonContainerView, PersonView
+from schooltool.person.rest.person import PersonPasswordWriter
+from schooltool.person.rest.person import PersonPhotoAdapter
+from schooltool.person.rest.person import PersonPhotoView
+from schooltool.person.rest.person import PersonFile, PersonFileFactory
+from schooltool.person.rest.person import PasswordWriterView
+from schooltool.person.rest.preference import PersonPreferencesView
 
-from schoolbell.app.person.person import Person, PersonContainer
+from schooltool.person.person import Person, PersonContainer
 
 
 class TestPersonContainerView(ContainerViewTestMixin,
@@ -266,7 +266,7 @@ def doctest_PersonPasswordHttpTraverser():
 
     This traverser allows you to access the password of the person:
 
-        >>> from schoolbell.app.person.rest.person import \
+        >>> from schooltool.person.rest.person import \
         ...     PersonPasswordHTTPTraverser
         >>> person = Person()
         >>> request = TestRequest()
@@ -286,7 +286,7 @@ def doctest_PersonPasswordHttpTraverser():
     Now access the password:
 
         >>> traverser.publishTraverse(request, 'password')
-        <schoolbell.app.person.rest.person.PersonPasswordWriter ...>
+        <schooltool.person.rest.person.PersonPasswordWriter ...>
     """
 
 
@@ -295,7 +295,7 @@ def doctest_PersonPhotoHttpTraverser():
 
     This traverser allows you to access the photo of the person:
 
-        >>> from schoolbell.app.person.rest.person import \
+        >>> from schooltool.person.rest.person import \
         ...     PersonPhotoHTTPTraverser
         >>> person = Person()
         >>> request = TestRequest()
@@ -315,7 +315,7 @@ def doctest_PersonPhotoHttpTraverser():
     Now access the password:
 
         >>> traverser.publishTraverse(request, 'photo')
-        <schoolbell.app.person.rest.person.PersonPhotoAdapter ...>
+        <schooltool.person.rest.person.PersonPhotoAdapter ...>
     """
 
 def doctest_PersonPreferencesHttpTraverser():
@@ -324,13 +324,13 @@ def doctest_PersonPreferencesHttpTraverser():
     PersonPreferencesHTTPTraverser allows you to access the preferences of the
     person:
 
-        >>> from schoolbell.app.person.rest.preference import \
+        >>> from schooltool.person.rest.preference import \
         ...     PersonPreferencesHTTPTraverser
         >>> person = Person()
         >>> request = TestRequest()
 
-        >>> from schoolbell.app.person.preference import getPersonPreferences
-        >>> from schoolbell.app.person.interfaces import IPersonPreferences
+        >>> from schooltool.person.preference import getPersonPreferences
+        >>> from schooltool.person.interfaces import IPersonPreferences
         >>> setup.setUpAnnotations()
         >>> ztapi.provideAdapter(Person, IPersonPreferences,
         ...                      getPersonPreferences)
@@ -350,7 +350,7 @@ def doctest_PersonPreferencesHttpTraverser():
     Now access the preferences:
 
         >>> traverser.publishTraverse(request, 'preferences')
-        <schoolbell.app.person.rest.preference.PersonPreferencesAdapter ...>
+        <schooltool.person.rest.preference.PersonPreferencesAdapter ...>
 
     """
 
@@ -360,10 +360,10 @@ def doctest_PersonPreferencesView():
 
     First lets create a view:
 
-        >>> from schoolbell.app.person.rest.preference import \
+        >>> from schooltool.person.rest.preference import \
         ...     PersonPreferencesHTTPTraverser
-        >>> from schoolbell.app.person.preference import getPersonPreferences
-        >>> from schoolbell.app.person.interfaces import IPersonPreferences
+        >>> from schooltool.person.preference import getPersonPreferences
+        >>> from schooltool.person.interfaces import IPersonPreferences
         >>> setup.setUpAnnotations()
         >>> setup.placefulSetUp()
         >>> ztapi.provideAdapter(Person, IPersonPreferences,

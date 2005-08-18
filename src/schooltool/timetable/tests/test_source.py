@@ -34,7 +34,7 @@ from zope.interface.verify import verifyObject
 class BaseTimetableSourceTest(object):
 
     def setUp(self):
-        from schoolbell.relationship.tests import setUpRelationships
+        from schooltool.relationship.tests import setUpRelationships
 
         self.site = setup.placefulSetUp(True)
         setup.setUpAnnotations()
@@ -141,7 +141,7 @@ class TestMembershipTimetableSource(BaseTimetableSourceTest,
         return MembershipTimetableSource(context)
 
     def createRelationship(self, context, related):
-        from schoolbell.app.membership import Membership
+        from schooltool.app.membership import Membership
         Membership(group=related, member=context)
 
 

@@ -29,11 +29,11 @@ from schoolbell.app.rest.tests.test_app import ApplicationObjectViewTestMixin
 from schoolbell.app.rest.tests.test_app import ContainerViewTestMixin
 from schoolbell.app.rest.tests.test_app import FileFactoriesSetUp
 
-from schoolbell.app.group.group import Group, GroupContainer
-from schoolbell.app.group.interfaces import IGroupContainer
-from schoolbell.app.group.rest.group import GroupView, GroupFile
-from schoolbell.app.group.rest.group import GroupContainerView
-from schoolbell.app.group.rest.group import GroupFileFactory
+from schooltool.group.group import Group, GroupContainer
+from schooltool.group.interfaces import IGroupContainer
+from schooltool.group.rest.group import GroupView, GroupFile
+from schooltool.group.rest.group import GroupContainerView
+from schooltool.group.rest.group import GroupFileFactory
 
 
 class TestGroupFileFactory(unittest.TestCase):

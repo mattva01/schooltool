@@ -40,8 +40,8 @@ from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IApplicationPreferences
 from schoolbell.app.app import getSchoolBellApplication
-from schoolbell.app.person.interfaces import IPerson
-from schoolbell.app.person.interfaces import IPersonPreferences
+from schooltool.person.interfaces import IPerson
+from schooltool.person.interfaces import IPersonPreferences
 
 utc = timezone('UTC')
 

@@ -28,8 +28,8 @@ import itertools
 import email.Utils
 from zope.interface import implements
 from pytz import timezone
-from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
-from schoolbell.calendar.mixins import CalendarEventMixin, CalendarMixin
+from schooltool.calendar.interfaces import ICalendar, ICalendarEvent
+from schooltool.calendar.mixins import CalendarEventMixin, CalendarMixin
 
 __metaclass__ = type
 
@@ -42,7 +42,7 @@ class SimpleCalendarEvent(CalendarEventMixin):
         >>> from zope.interface.verify import verifyObject
         >>> e = SimpleCalendarEvent(datetime(2004, 12, 15, 18, 57),
         ...                         timedelta(minutes=15),
-        ...                         'Work on schoolbell.calendar.simple')
+        ...                         'Work on schooltool.calendar.simple')
         >>> verifyObject(ICalendarEvent, e)
         True
 
@@ -55,7 +55,7 @@ class SimpleCalendarEvent(CalendarEventMixin):
 
         >>> e2 = SimpleCalendarEvent(datetime(2004, 12, 15, 18, 57),
         ...                         timedelta(minutes=15),
-        ...                         'Work on schoolbell.calendar.simple',
+        ...                         'Work on schooltool.calendar.simple',
         ...                         description="Python for fun and profit",
         ...                         location="Mt. Vernon Stable",
         ...                         recurrence='FakeRecurrance')
@@ -104,13 +104,13 @@ class ImmutableCalendar(CalendarMixin):
         >>> from zope.interface.verify import verifyObject
         >>> e = SimpleCalendarEvent(datetime(2004, 12, 15, 18, 57),
         ...                         timedelta(minutes=15),
-        ...                         'Work on schoolbell.calendar.simple')
+        ...                         'Work on schooltool.calendar.simple')
         >>> calendar = ImmutableCalendar([e])
         >>> verifyObject(ICalendar, calendar)
         True
 
         >>> [e.title for e in calendar]
-        ['Work on schoolbell.calendar.simple']
+        ['Work on schooltool.calendar.simple']
 
         >>> len(calendar)
         1
@@ -135,10 +135,10 @@ def combine_calendars(*calendars):
     Suppose you have several calendars with events
 
         >>> from datetime import datetime, timedelta
-        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+        >>> from schooltool.calendar.simple import SimpleCalendarEvent
         >>> e1 = SimpleCalendarEvent(datetime(2004, 12, 15, 18, 57),
         ...                          timedelta(minutes=15),
-        ...                          'Work on schoolbell.calendar.simple')
+        ...                          'Work on schooltool.calendar.simple')
         >>> calendar1 = ImmutableCalendar([e1])
         >>> e2 = SimpleCalendarEvent(datetime(2005, 2, 2, 20, 28),
         ...                          timedelta(minutes=10),
@@ -151,16 +151,16 @@ def combine_calendars(*calendars):
         >>> titles = [e.title for e in calendar]
         >>> titles.sort()
         >>> print '\n'.join(titles)
-        Work on schoolbell.calendar.simple
+        Work on schooltool.calendar.simple
         Write a test for combine_calendars
 
     This calendar is read-only
 
-        >>> from schoolbell.calendar.interfaces import IEditCalendar
+        >>> from schooltool.calendar.interfaces import IEditCalendar
         >>> IEditCalendar.providedBy(calendar)
         False
 
-        >>> from schoolbell.calendar.interfaces import ICalendar
+        >>> from schooltool.calendar.interfaces import ICalendar
         >>> ICalendar.providedBy(calendar)
         True
 

@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.relationship.uri
+Unit tests for schooltool.relationship.uri
 
 $Id$
 """
@@ -32,7 +32,7 @@ def doctest_URIObject():
 
     URIObject's constructor takes three arguments: URI, name and description
 
-        >>> from schoolbell.relationship.uri import URIObject
+        >>> from schooltool.relationship.uri import URIObject
         >>> uri = URIObject('http://example.com', 'Example', 'An example.')
         >>> uri
         <URIObject Example>
@@ -46,7 +46,7 @@ def doctest_URIObject():
     The attributes of an URIObject match those defined by IURIObject
 
         >>> from zope.interface.verify import verifyObject
-        >>> from schoolbell.relationship.uri import IURIObject
+        >>> from schooltool.relationship.uri import IURIObject
         >>> verifyObject(IURIObject, uri)
         True
 
@@ -128,7 +128,7 @@ def doctest_URIObject():
 
 def test_suite():
     return unittest.TestSuite([
-                doctest.DocTestSuite('schoolbell.relationship.uri'),
+                doctest.DocTestSuite('schooltool.relationship.uri'),
                 doctest.DocTestSuite(),
            ])
 

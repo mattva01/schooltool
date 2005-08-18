@@ -31,7 +31,7 @@ import os.path
 
 from schoolbell.app.main import StandaloneServer as SchoolBellServer
 from schoolbell.app.main import Options as SchoolBellOptions
-from schoolbell.app.person.person import Person
+from schooltool.person.person import Person
 
 from schooltool.app import SchoolToolApplication
 from schooltool.interfaces import ISchoolToolApplication

@@ -5,7 +5,7 @@
 
 <!-- Dependencies -->
 
-  <include package="schoolbell.batching" />
+  <include package="schooltool.batching" />
 
 <!-- TALES path expressions -->
 
@@ -32,7 +32,7 @@
       />
 
   <zope:adapter
-      for="schoolbell.calendar.browser.CalendarICalendarView"
+      for="schooltool.calendar.browser.CalendarICalendarView"
       provides="zope.app.filerepresentation.interfaces.IWriteFile"
       factory=".cal.enableICalendarUpload"
       trusted="yes"
@@ -47,8 +47,8 @@
   <zope:subscriber
       for="zope.app.container.interfaces.IReadContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
-      factory="schoolbell.app.traverser.traverser.ContainerTraverserPlugin"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory="schooltool.traverser.traverser.ContainerTraverserPlugin"
       />
 
 <!-- Application Traverser -->
@@ -57,7 +57,7 @@
       for="schoolbell.app.interfaces.ISchoolBellApplication"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-      factory="schoolbell.app.traverser.browser.PluggableBrowserTraverser"
+      factory="schooltool.traverser.browser.PluggableBrowserTraverser"
       permission="zope.Public"
       />
 
@@ -86,7 +86,7 @@
   <!-- XXX: Ahhh! Why is this a view of the person? -->
   <page
       name="site-preferences.html"
-      for="schoolbell.app.person.interfaces.IPerson"
+      for="schooltool.person.interfaces.IPerson"
       class="schoolbell.app.browser.app.ApplicationPreferencesView"
       template="templates/application_preferences.pt"
       permission="schoolbell.manageMembership"
@@ -136,13 +136,13 @@
 
   <!-- Sigh. Cannot specify multiple for and permission in subsscriber ;-( -->
   <zope:class class=".cal.ToCalendarTraverser">
-    <allow interface="schoolbell.app.traverser.interfaces.ITraverserPlugin" />
+    <allow interface="schooltool.traverser.interfaces.ITraverserPlugin" />
   </zope:class>
 
   <zope:subscriber
       for="schoolbell.app.interfaces.IHaveCalendar
            zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".cal.ToCalendarTraverser"
       />
 
@@ -246,7 +246,7 @@
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       name="calendar.ics"
       permission="schoolbell.viewCalendar"
-      class="schoolbell.calendar.browser.CalendarICalendarView"
+      class="schooltool.calendar.browser.CalendarICalendarView"
       attribute="show"
       menu="zmi_views"
       title="iCalendar"
@@ -256,7 +256,7 @@
       for="schoolbell.app.interfaces.ISchoolBellCalendar"
       name="calendar.vfb"
       permission="zope.Public"
-      class="schoolbell.calendar.browser.CalendarVfbView"
+      class="schooltool.calendar.browser.CalendarVfbView"
       attribute="show"
       menu="zmi_views"
       title="Free/Busy"
@@ -328,7 +328,7 @@
                          duration_type recurrence location description
                          recurrence_type interval range until count monthly
                          exceptions weekdays"
-      content_factory="schoolbell.app.cal.CalendarEvent"
+      content_factory="schooltool.app.cal.CalendarEvent"
       permission="schoolbell.addEvent"
       template="templates/event_add.pt"
       class=".cal.CalendarEventAddView">

@@ -33,8 +33,8 @@ from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.app.security.interfaces import IUnauthenticatedGroup
 
 from schoolbell.app import app as sb
-from schoolbell.app.group.group import Group
-from schoolbell.app.overlay import ICalendarOverlayInfo
+from schooltool.group.group import Group
+from schooltool.app.overlay import ICalendarOverlayInfo
 
 from schooltool import SchoolToolMessageID as _
 from schooltool import interfaces, relationships
@@ -64,7 +64,7 @@ class ShowTimetables(object):
         >>> setup.setUpAnnotations()
 
         >>> from zope.interface import classImplements
-        >>> from schoolbell.app.overlay import CalendarOverlayInfo
+        >>> from schooltool.app.overlay import CalendarOverlayInfo
         >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
         >>> classImplements(CalendarOverlayInfo, IAttributeAnnotatable)
 

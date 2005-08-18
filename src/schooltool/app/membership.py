@@ -21,9 +21,9 @@ Membership relationship.
 
 This module defines group membership as a relationship.
 
-We can reuse most of the test fixture from schoolbell.relationship.tests.
+We can reuse most of the test fixture from schooltool.relationship.tests.
 
-    >>> from schoolbell.relationship.tests import setUp, tearDown
+    >>> from schooltool.relationship.tests import setUp, tearDown
     >>> setUp()
 
 We also need to register an event subscriber for IBeforeRelationshipEvent,
@@ -35,8 +35,8 @@ to enforce relationship constraints.
 
 We will need some sample persons and groups for the demonstration
 
-    >>> from schoolbell.app.group.group import Group
-    >>> from schoolbell.app.person.person import Person
+    >>> from schooltool.group.group import Group
+    >>> from schooltool.person.person import Person
     >>> jonas = Person()
     >>> petras = Person()
     >>> developers = Group()
@@ -44,7 +44,7 @@ We will need some sample persons and groups for the demonstration
 
 You can create memberships this way:
 
-    >>> from schoolbell.app.membership import Membership
+    >>> from schooltool.app.membership import Membership
     >>> Membership(member=jonas, group=developers)
     >>> Membership(member=petras, group=developers)
     >>> Membership(member=petras, group=admins)
@@ -52,8 +52,8 @@ You can create memberships this way:
 You can find all members of a group, or groups of a persons this way:
 
     >>> from sets import Set
-    >>> from schoolbell.relationship import getRelatedObjects
-    >>> from schoolbell.app.membership import URIMember, URIGroup
+    >>> from schooltool.relationship import getRelatedObjects
+    >>> from schooltool.app.membership import URIMember, URIGroup
     >>> Set(getRelatedObjects(developers, URIMember)) == Set([jonas, petras])
     True
     >>> Set(getRelatedObjects(petras, URIGroup)) == Set([admins, developers])
@@ -76,8 +76,8 @@ You may not create cyclic memberships.
 
 You may not create ill-formed relationships
 
-    >>> from schoolbell.relationship import relate
-    >>> from schoolbell.app.membership import URIMembership
+    >>> from schooltool.relationship import relate
+    >>> from schooltool.app.membership import URIMembership
     >>> relate(URIMembership, (jonas, URIMember), (petras, URIMember))
     Traceback (most recent call last):
       ...
@@ -90,7 +90,7 @@ You may not create ill-formed relationships
 
 Resources can't be part of a group:
 
-    >>> from schoolbell.app.resource.resource import Resource
+    >>> from schooltool.resource.resource import Resource
     >>> printer = Resource()
     >>> relate(URIMembership, (admins, URIGroup), (printer, URIMember))
     Traceback (most recent call last):
@@ -111,12 +111,12 @@ That's all.
 
 import sets
 
-from schoolbell.relationship import URIObject, RelationshipSchema
-from schoolbell.relationship import getRelatedObjects
-from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
-from schoolbell.relationship.interfaces import InvalidRelationship
-from schoolbell.app.resource.interfaces import IResource
-from schoolbell.app.group.interfaces import IGroup
+from schooltool.relationship import URIObject, RelationshipSchema
+from schooltool.relationship import getRelatedObjects
+from schooltool.relationship.interfaces import IBeforeRelationshipEvent
+from schooltool.relationship.interfaces import InvalidRelationship
+from schooltool.resource.interfaces import IResource
+from schooltool.group.interfaces import IGroup
 
 
 URIMembership = URIObject('http://schooltool.org/ns/membership',
@@ -152,12 +152,12 @@ def enforceMembershipConstraints(event):
 def isTransitiveMember(obj, group):
     """Is `obj` a member of `group` (either directly or indirectly)?
 
-        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationship.tests import setUp, tearDown
         >>> setUp()
 
     Suppose we have four groups, named a, b, c and d.
 
-        >>> from schoolbell.app.group.group import Group
+        >>> from schooltool.group.group import Group
         >>> a, b, c, d = [Group() for n in range(4)]
 
     A is a member of b, which is a member of c.

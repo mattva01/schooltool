@@ -39,7 +39,7 @@ from zope.app.component.site import LocalSiteManager
 from zope.i18n import translate
 
 from schoolbell.app.browser.tests import setup
-from schoolbell.app.testing import setup as sbsetup
+from schooltool.testing import setup as sbsetup
 
 from schoolbell.app.rest.tests.utils import NiceDiffsMixin
 from schooltool import timetable
@@ -1584,8 +1584,8 @@ def doctest_PersonTimetableSetupView():
 
     and a Person from that application
 
-        >>> from schoolbell.app.person.person import Person
-        >>> from schoolbell.app.group.group import Group
+        >>> from schooltool.person.person import Person
+        >>> from schooltool.group.group import Group
         >>> context = Person("student", "Steven Udent")
         >>> app["persons"]["whatever"] = context
         >>> app["groups"]["juniors"] = juniors = Group("Juniors")
@@ -1878,7 +1878,7 @@ def doctest_PersonTimetableSetupView_no_timetables():
 
     and a Person from that application
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> context = Person("student", "Steven Udent")
         >>> app["persons"]["whatever"] = context
 
@@ -1914,7 +1914,7 @@ def doctest_PersonTimetableSetupView_no_default_ttschema():
 
     and a Person from that application
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> context = Person("student", "Steven Udent")
         >>> app["persons"]["whatever"] = context
 

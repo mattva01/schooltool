@@ -28,8 +28,8 @@ from schoolbell.app.rest.app import ApplicationObjectFile
 from schoolbell.app.rest.app import ApplicationObjectFileFactory
 from schoolbell.app.rest.app import GenericContainerView
 
-from schoolbell.app.resource.resource import Resource
-from schoolbell.app.resource.interfaces import IResourceContainer, IResource
+from schooltool.resource.resource import Resource
+from schooltool.resource.interfaces import IResourceContainer, IResource
 
 class ResourceFileFactory(ApplicationObjectFileFactory):
     """Adapter that adapts ResourceContainer to FileFactory"""

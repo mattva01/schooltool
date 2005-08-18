@@ -25,7 +25,7 @@ from persistent import Persistent
 from zope.interface import implements
 from zope.app.annotation.interfaces import IAnnotations
 
-from schoolbell.app.person import interfaces
+from schooltool.person import interfaces
 
 class PersonDetails(Persistent):
 

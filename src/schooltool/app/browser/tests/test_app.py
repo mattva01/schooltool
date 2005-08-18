@@ -30,7 +30,7 @@ from zope.publisher.browser import TestRequest
 from zope.i18n import translate
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
-from schoolbell.app.testing import setup as sbsetup
+from schooltool.testing import setup as sbsetup
 
 def doctest_SchoolBellApplicationView():
     r"""Test for SchoolBellApplicationView
@@ -80,10 +80,10 @@ def doctest_PersonView():
     Let's create a view for a person:
 
         >>> from schooltool.browser.app import PersonView
-        >>> from schoolbell.app.person.person import Person
-        >>> from schoolbell.app.person.interfaces import IPerson
-        >>> from schoolbell.app.person.details import getPersonDetails
-        >>> from schoolbell.app.person.interfaces import IPersonDetails
+        >>> from schooltool.person.person import Person
+        >>> from schooltool.person.interfaces import IPerson
+        >>> from schooltool.person.details import getPersonDetails
+        >>> from schooltool.person.interfaces import IPersonDetails
         >>> ztapi.provideAdapter(IPerson, IPersonDetails, getPersonDetails)
 
         >>> school = sbsetup.setupSchoolBellSite()
@@ -152,7 +152,7 @@ def doctest_PersonView():
     Students can also participate in sections as part of a group, say all 10th
     grade students must take gym:
 
-        >>> from schoolbell.app.group.group import Group
+        >>> from schooltool.group.group import Group
         >>> tenth_grade = Group(title="Tenth Grade")
         >>> tenth_grade.members.add(student)
         >>> section4.members.add(tenth_grade)

@@ -36,7 +36,7 @@
         doc_path="security.txt" />
 
     <!-- Calendar -->
-    <configure package="schoolbell.calendar">
+    <configure package="schooltool.calendar">
       <apidoc:bookchapter
           id="calendar"
           title="Calendar"
@@ -54,7 +54,7 @@
 
 <!-- Dependencies -->
 
-  <include package="schoolbell.relationship" />
+  <include package="schooltool.relationship" />
 
 <!-- Translations -->
 
@@ -117,7 +117,7 @@
 
   <content class=".cal.Calendar">
     <require permission="schoolbell.viewCalendar"
-             interface="schoolbell.calendar.interfaces.ICalendar"
+             interface="schooltool.calendar.interfaces.ICalendar"
              attributes="title __cmp__" />
     <require permission="schoolbell.addEvent"
              attributes="addEvent" />
@@ -128,10 +128,10 @@
   <content class=".cal.CalendarEvent">
     <implements interface="schoolbell.app.note.interfaces.IHaveNotes" />
     <require permission="schoolbell.viewCalendar"
-             interface="schoolbell.calendar.interfaces.ICalendarEvent"
+             interface="schooltool.calendar.interfaces.ICalendarEvent"
              attributes="resources" />
     <require permission="schoolbell.modifyEvent"
-             set_schema="schoolbell.calendar.interfaces.ICalendarEvent"
+             set_schema="schooltool.calendar.interfaces.ICalendarEvent"
              attributes="bookResource unbookResource"
              set_attributes="__parent__" />
   </content>
@@ -148,67 +148,67 @@
 
   <!-- XXX It feels wrong to tweak permissions of objects in a sibling. -->
 
-  <content class="schoolbell.calendar.mixins.ExpandedCalendarEvent">
+  <content class="schooltool.calendar.mixins.ExpandedCalendarEvent">
     <require permission="schoolbell.view"
-             interface="schoolbell.calendar.interfaces.IExpandedCalendarEvent"
+             interface="schooltool.calendar.interfaces.IExpandedCalendarEvent"
              attributes="resources"
              />
   </content>
 
-  <content class="schoolbell.calendar.recurrent.DailyRecurrenceRule">
+  <content class="schooltool.calendar.recurrent.DailyRecurrenceRule">
     <require permission="zope.Public"
-             interface="schoolbell.calendar.interfaces.IDailyRecurrenceRule" />
+             interface="schooltool.calendar.interfaces.IDailyRecurrenceRule" />
   </content>
 
-  <content class="schoolbell.calendar.recurrent.WeeklyRecurrenceRule">
+  <content class="schooltool.calendar.recurrent.WeeklyRecurrenceRule">
     <require permission="zope.Public"
-             interface="schoolbell.calendar.interfaces.IWeeklyRecurrenceRule"
+             interface="schooltool.calendar.interfaces.IWeeklyRecurrenceRule"
              />
   </content>
 
-  <content class="schoolbell.calendar.recurrent.MonthlyRecurrenceRule">
+  <content class="schooltool.calendar.recurrent.MonthlyRecurrenceRule">
     <require permission="zope.Public"
-             interface="schoolbell.calendar.interfaces.IMonthlyRecurrenceRule"
+             interface="schooltool.calendar.interfaces.IMonthlyRecurrenceRule"
              />
   </content>
 
-  <content class="schoolbell.calendar.recurrent.YearlyRecurrenceRule">
+  <content class="schooltool.calendar.recurrent.YearlyRecurrenceRule">
     <require permission="zope.Public"
-             interface="schoolbell.calendar.interfaces.IYearlyRecurrenceRule"
+             interface="schooltool.calendar.interfaces.IYearlyRecurrenceRule"
              />
   </content>
 
-  <content class="schoolbell.calendar.simple.ImmutableCalendar">
+  <content class="schooltool.calendar.simple.ImmutableCalendar">
     <require permission="schoolbell.view"
-             interface="schoolbell.calendar.interfaces.ICalendar" />
+             interface="schooltool.calendar.interfaces.ICalendar" />
   </content>
 
   <adapter
-      for="schoolbell.calendar.interfaces.IEditCalendar"
+      for="schooltool.calendar.interfaces.IEditCalendar"
       factory=".cal.WriteCalendar"
       provides=".interfaces.IWriteCalendar" />
 
   <content
-      class="schoolbell.app.overlay.BoundOverlaidCalendarsProperty">
+      class="schooltool.app.overlay.BoundOverlaidCalendarsProperty">
     <allow attributes="__iter__ __contains__" />
     <require
         permission="schoolbell.viewCalendar"
         attributes="add remove" />
   </content>
 
-  <content class="schoolbell.app.overlay.CalendarOverlayInfo">
+  <content class="schooltool.app.overlay.CalendarOverlayInfo">
     <require
         permission="schoolbell.view"
-        interface="schoolbell.app.overlay.ICalendarOverlayInfo"/>
+        interface="schooltool.app.overlay.ICalendarOverlayInfo"/>
     <require
         permission="schoolbell.viewCalendar"
-        set_schema="schoolbell.app.overlay.ICalendarOverlayInfo"/>
+        set_schema="schooltool.app.overlay.ICalendarOverlayInfo"/>
   </content>
 
 <!-- Events -->
 
   <subscriber
-      for="schoolbell.relationship.interfaces.IBeforeRelationshipEvent"
+      for="schooltool.relationship.interfaces.IBeforeRelationshipEvent"
       handler=".membership.enforceMembershipConstraints"
       />
 
@@ -237,17 +237,17 @@
   </localUtility>
 
   <utility
-      provides="schoolbell.relationship.interfaces.IRelationshipSchema"
+      provides="schooltool.relationship.interfaces.IRelationshipSchema"
       component=".membership.Membership"
       name="http://schooltool.org/ns/membership" />
 
   <utility
-      provides="schoolbell.relationship.uri.IURIObject"
+      provides="schooltool.relationship.uri.IURIObject"
       component=".membership.URIMember"
       name="http://schooltool.org/ns/membership/member" />
 
   <utility
-      provides="schoolbell.relationship.uri.IURIObject"
+      provides="schooltool.relationship.uri.IURIObject"
       component=".membership.URIGroup"
       name="http://schooltool.org/ns/membership/group" />
 

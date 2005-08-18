@@ -29,10 +29,10 @@ from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData
 from zope.app.publisher.browser import BrowserView
 
-from schoolbell.batching import Batch
+from schooltool.batching import Batch
 from schoolbell.app.browser.app import ContainerView, BaseEditView
-from schoolbell.app.group.interfaces import IGroup
-from schoolbell.app.person.interfaces import IPerson
+from schooltool.group.interfaces import IGroup
+from schooltool.person.interfaces import IPerson
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.app import getSchoolToolApplication

@@ -27,7 +27,7 @@ from zope.interface.common.interfaces import IException
 from zope.app.exception.interfaces import ISystemErrorView
 
 from schoolbell.app.rest import View
-from schoolbell.calendar.icalendar import ICalParseError
+from schooltool.calendar.icalendar import ICalParseError
 
 
 class TextErrorView(View):

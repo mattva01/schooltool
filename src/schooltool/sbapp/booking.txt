@@ -20,18 +20,18 @@ Set up the calendaring framework:
     >>> setup.placelessSetUp()
     >>> setup.setUpAnnotations()
 
-    >>> from schoolbell.app.testing import setup as sbsetup
+    >>> from schooltool.testing import setup as sbsetup
     >>> sbsetup.setupCalendaring()
 
 We will need some test fixture for relationships.
 
-    >>> from schoolbell.relationship.tests import setUpRelationships
+    >>> from schooltool.relationship.tests import setUpRelationships
     >>> setUpRelationships()
 
 You have a person and a resource
 
-    >>> from schoolbell.app.resource.resource import Resource
-    >>> from schoolbell.app.person.person import Person
+    >>> from schooltool.resource.resource import Resource
+    >>> from schooltool.person.person import Person
     >>> person = Person('froggy')
     >>> resource = Resource('lily')
     >>> resource2 = Resource('mud')
@@ -45,7 +45,7 @@ resource when you're creating an event.
 
     >>> from datetime import datetime, timedelta
     >>> from schoolbell.app.interfaces import ISchoolBellCalendar
-    >>> from schoolbell.app.cal import CalendarEvent
+    >>> from schooltool.app.cal import CalendarEvent
     >>> e = CalendarEvent(title="Presentation",
     ...                   dtstart=datetime(2005, 3, 2, 12, 45),
     ...                   duration=timedelta(minutes=45),

@@ -7,7 +7,7 @@
       for="..interfaces.ICourseContainer"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.http.IHTTPPublisher"
-      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
 
@@ -38,7 +38,7 @@
       for="..interfaces.ICourse"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.http.IHTTPPublisher"
-      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
 
@@ -63,7 +63,7 @@
       for="..interfaces.ISectionContainer"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.http.IHTTPPublisher"
-      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
 
@@ -94,7 +94,7 @@
       for="..interfaces.ISection"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.http.IHTTPPublisher"
-      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
 

@@ -97,7 +97,7 @@
   <!--      write a macro -->
   <page
       name="index.html"
-      for="schoolbell.app.person.interfaces.IPerson"
+      for="schooltool.person.interfaces.IPerson"
       class="schooltool.browser.app.PersonView"
       template="templates/person.pt"
       permission="zope.View"

@@ -35,26 +35,26 @@ from zope.publisher.http import HTTPRequest
 from zope.app.testing import setup, ztapi
 
 from schoolbell.app.rest.errors import RestError
-from schoolbell.relationship.interfaces import IRelationshipLinks
-from schoolbell.relationship.interfaces import IRelationshipSchema
-from schoolbell.relationship.uri import IURIObject
-from schoolbell.app.membership import Membership
+from schooltool.relationship.interfaces import IRelationshipLinks
+from schooltool.relationship.interfaces import IRelationshipSchema
+from schooltool.relationship.uri import IURIObject
+from schooltool.app.membership import Membership
 from schoolbell.app.app import SimpleNameChooser
-from schoolbell.relationship.annotatable import getRelationshipLinks
-from schoolbell.app.group.interfaces import IGroupContainer
+from schooltool.relationship.annotatable import getRelationshipLinks
+from schooltool.group.interfaces import IGroupContainer
 from schoolbell.app.rest.tests.utils import XMLCompareMixin, QuietLibxml2Mixin
 from schoolbell.app.rest.xmlparsing import XMLDocument, XMLParseError
-from schoolbell.app.membership import Membership, URIMember, URIGroup
+from schooltool.app.membership import Membership, URIMember, URIGroup
 from schoolbell.app.rest.xmlparsing import XMLValidationError
 
-from schoolbell.app.testing import setup as sbsetup
+from schooltool.testing import setup as sbsetup
 
 
 class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
     def setUp(self):
-        from schoolbell.app.group.group import Group
-        from schoolbell.app.person.person import Person
-        from schoolbell.relationship.tests import setUpRelationships
+        from schooltool.group.group import Group
+        from schooltool.person.person import Person
+        from schooltool.relationship.tests import setUpRelationships
 
         setup.placefulSetUp()
         setup.setUpAnnotations()

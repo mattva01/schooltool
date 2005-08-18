@@ -28,8 +28,8 @@ from schoolbell.app.rest.app import ApplicationObjectFile
 from schoolbell.app.rest.app import ApplicationObjectFileFactory
 from schoolbell.app.rest.app import GenericContainerView
 
-from schoolbell.app.group.group import Group
-from schoolbell.app.group.interfaces import IGroupContainer, IGroup
+from schooltool.group.group import Group
+from schooltool.group.interfaces import IGroupContainer, IGroup
 
 
 class GroupFileFactory(ApplicationObjectFileFactory):

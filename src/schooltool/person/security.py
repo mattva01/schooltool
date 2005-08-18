@@ -21,7 +21,7 @@ Person security infrastructure
 
 $Id: security.py 4431 2005-08-02 04:33:27Z tvon $
 """
-from schoolbell.app.person.interfaces import IPerson
+from schooltool.person.interfaces import IPerson
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 

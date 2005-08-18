@@ -29,7 +29,7 @@ from zope.testing import doctest
 from zope.app.traversing.interfaces import IContainmentRoot
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
-from schoolbell.app.testing import setup
+from schooltool.testing import setup
 
 
 def doctest_GroupListView():
@@ -38,7 +38,7 @@ def doctest_GroupListView():
     We will need a volunteer for this test:
 
         # XXX: Should use stub
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> person = Person(u'ignas')
 
     One requirement: the person has to know where he is.
@@ -49,7 +49,7 @@ def doctest_GroupListView():
     We will be testing the person's awareness of the world, so we will
     create some (empty) groups.
 
-        >>> from schoolbell.app.group.group import Group
+        >>> from schooltool.group.group import Group
         >>> world = app['groups']['the_world'] = Group("Others")
         >>> etria = app['groups']['etria'] = Group("Etria")
         >>> pov = app['groups']['pov'] = Group("PoV")
@@ -75,7 +75,7 @@ def doctest_GroupListView():
 
     Let's create a view for a person:
 
-        >>> from schoolbell.app.group.browser.group import GroupListView
+        >>> from schooltool.group.browser.group import GroupListView
         >>> request = TestRequest()
         >>> view = GroupListView(person, request)
 
@@ -152,11 +152,11 @@ def doctest_MemberListView():
 
     We will be (ab)using a group and three test subjects:
 
-        >>> from schoolbell.app.group.group import Group
+        >>> from schooltool.group.group import Group
         >>> pov = Group('PoV')
 
         # XXX: Use stub implementation
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> gintas = Person('gintas', 'Gintas')
         >>> ignas = Person('ignas', 'Ignas')
         >>> alga = Person('alga', 'Albertas')
@@ -171,7 +171,7 @@ def doctest_MemberListView():
 
     Let's create a view for our group:
 
-        >>> from schoolbell.app.group.browser.group import MemberViewPersons
+        >>> from schooltool.group.browser.group import MemberViewPersons
         >>> request = TestRequest()
         >>> view = MemberViewPersons(pov, request)
 
@@ -261,16 +261,16 @@ def doctest_GroupView():
 
     Let's create a view for a group:
 
-        >>> from schoolbell.app.group.browser.group import GroupView
-        >>> from schoolbell.app.group.group import Group
+        >>> from schooltool.group.browser.group import GroupView
+        >>> from schooltool.group.group import Group
         >>> group = Group()
         >>> request = TestRequest()
         >>> view = GroupView(group, request)
 
     Let's relate some objects to our group:
 
-        >>> from schoolbell.app.resource.resource import Resource
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.resource.resource import Resource
+        >>> from schooltool.person.person import Person
         >>> group.members.add(Person(title='First'))
         >>> group.members.add(Person(title='Last'))
         >>> group.members.add(Person(title='Intermediate'))
@@ -308,16 +308,16 @@ def doctest_GroupAddView():
     The container to which items will actually be added is accessible as the
     `context` attribute
 
-        >>> from schoolbell.app.group.group import GroupContainer
+        >>> from schooltool.group.group import GroupContainer
         >>> container = GroupContainer()
         >>> context.context = container
 
     ZCML configuration adds some attributes to GroupAddView, namely `schema`,
     'fieldNames', and `_factory`.
 
-        >>> from schoolbell.app.group.browser.group import GroupAddView
-        >>> from schoolbell.app.group.interfaces import IGroup
-        >>> from schoolbell.app.group.group import Group
+        >>> from schooltool.group.browser.group import GroupAddView
+        >>> from schooltool.group.interfaces import IGroup
+        >>> from schooltool.group.group import Group
         >>> class GroupAddViewForTesting(GroupAddView):
         ...     schema = IGroup
         ...     fieldNames = ('title', 'description')
@@ -367,9 +367,9 @@ def doctest_GroupEditView():
 
     Let's create a view for editing a group:
 
-        >>> from schoolbell.app.group.browser.group import GroupEditView
-        >>> from schoolbell.app.group.group import Group
-        >>> from schoolbell.app.group.interfaces import IGroup
+        >>> from schooltool.group.browser.group import GroupEditView
+        >>> from schooltool.group.group import Group
+        >>> from schooltool.group.interfaces import IGroup
         >>> group = Group()
         >>> directlyProvides(group, IContainmentRoot)
         >>> request = TestRequest()
@@ -456,8 +456,8 @@ def doctest_GroupCSVImporter():
 
     Create a group container and an importer
 
-        >>> from schoolbell.app.group.browser.csvimport import GroupCSVImporter
-        >>> from schoolbell.app.group.group import GroupContainer
+        >>> from schooltool.group.browser.csvimport import GroupCSVImporter
+        >>> from schooltool.group.group import GroupContainer
         >>> container = GroupContainer()
         >>> importer = GroupCSVImporter(container, None)
 
@@ -486,9 +486,9 @@ def doctest_GroupCSVImportView():
 
     We'll create a group csv import view
 
-        >>> from schoolbell.app.group.browser.csvimport import \
+        >>> from schooltool.group.browser.csvimport import \
         ...     GroupCSVImportView
-        >>> from schoolbell.app.group.group import GroupContainer
+        >>> from schooltool.group.group import GroupContainer
         >>> from zope.publisher.browser import TestRequest
         >>> container = GroupContainer()
         >>> request = TestRequest()

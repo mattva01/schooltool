@@ -30,17 +30,17 @@ from zope.app.testing import setup, ztapi
 from zope.app.traversing.interfaces import IContainmentRoot
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
-from schoolbell.app.testing import setup as sbsetup
+from schooltool.testing import setup as sbsetup
 
 def doctest_PersonContainerDeleteView():
     r"""Test for PersonContainerDeleteView
 
     Let's create some persons to delete from a person container:
 
-        >>> from schoolbell.app.person.browser.person import \
+        >>> from schooltool.person.browser.person import \
         ...     PersonContainerDeleteView
-        >>> from schoolbell.app.person.person import Person, PersonContainer
-        >>> from schoolbell.app.person.interfaces import IPerson
+        >>> from schooltool.person.person import Person, PersonContainer
+        >>> from schooltool.person.interfaces import IPerson
         >>> setup.setUpAnnotations()
 
         >>> personContainer = PersonContainer()
@@ -60,7 +60,7 @@ def doctest_PersonContainerDeleteView():
 
     Lets log in:
 
-        >>> from schoolbell.app.security import Principal
+        >>> from schooltool.app.security import Principal
         >>> principal = Principal('pete', 'Pete Parrot', personContainer['pete'])
         >>> request.setPrincipal(principal)
 
@@ -86,11 +86,11 @@ def doctest_PersonView():
 
     Let's create a view for a person:
 
-        >>> from schoolbell.app.person.browser.person import PersonView
-        >>> from schoolbell.app.person.person import Person
-        >>> from schoolbell.app.person.details import getPersonDetails
-        >>> from schoolbell.app.person.interfaces import IPersonDetails
-        >>> from schoolbell.app.person.interfaces import IPerson
+        >>> from schooltool.person.browser.person import PersonView
+        >>> from schooltool.person.person import Person
+        >>> from schooltool.person.details import getPersonDetails
+        >>> from schooltool.person.interfaces import IPersonDetails
+        >>> from schooltool.person.interfaces import IPerson
         >>> setup.setUpAnnotations()
         >>> ztapi.provideAdapter(IPerson, IPersonDetails, getPersonDetails)
         >>> person = Person()
@@ -105,13 +105,13 @@ def doctest_PersonPhotoView():
 
     We will need a person that has a photo:
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> person = Person()
         >>> person.photo = "I am a photo!"
 
     We can now create a view:
 
-        >>> from schoolbell.app.person.browser.person import PersonPhotoView
+        >>> from schooltool.person.browser.person import PersonPhotoView
         >>> request = TestRequest()
         >>> view = PersonPhotoView(person, request)
 
@@ -138,8 +138,8 @@ def doctest_PersonEditView():
 
     PersonEditView is a view on IPerson.
 
-        >>> from schoolbell.app.person.browser.person import PersonEditView
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.browser.person import PersonEditView
+        >>> from schooltool.person.person import Person
         >>> person = Person()
 
     Let's try creating one
@@ -241,7 +241,7 @@ def doctest_PersonAddView():
         ...     def __init__(self, context, request): pass
         ...     def __call__(self): return "http://localhost/frogpond/persons"
         ...
-        >>> from schoolbell.app.person.interfaces import IPersonContainer
+        >>> from schooltool.person.interfaces import IPersonContainer
         >>> from zope.app.traversing.browser.interfaces import IAbsoluteURL
         >>> ztapi.browserViewProviding(IPersonContainer, FakeURL, \
         ...                            providing=IAbsoluteURL)
@@ -254,7 +254,7 @@ def doctest_PersonAddView():
 
     Now let's create a PersonAddView for the container
 
-        >>> from schoolbell.app.person.browser.person import PersonAddView
+        >>> from schooltool.person.browser.person import PersonAddView
         >>> view = PersonAddView(pc, TestRequest())
         >>> view.update()
 
@@ -318,7 +318,7 @@ def doctest_PersonAddView():
     We can select groups that the user should be in.  First, let's create a
     group:
 
-        >>> from schoolbell.app.group.group import Group
+        >>> from schooltool.group.group import Group
         >>> pov = app['groups']['pov'] = Group('PoV')
 
     Now, let's create and render a view:
@@ -363,13 +363,13 @@ def doctest_PersonAddView():
 def doctest_PersonPreferencesView():
     """
 
-        >>> from schoolbell.app.person.browser.person import \\
+        >>> from schooltool.person.browser.person import \\
         ...     PersonPreferencesView
-        >>> from schoolbell.app.person.person import Person
-        >>> from schoolbell.app.person.preference import getPersonPreferences
+        >>> from schooltool.person.person import Person
+        >>> from schooltool.person.preference import getPersonPreferences
         >>> from zope.app.annotation.interfaces import IAnnotations
-        >>> from schoolbell.app.person.interfaces import IPerson
-        >>> from schoolbell.app.person.interfaces import IPersonPreferences
+        >>> from schooltool.person.interfaces import IPerson
+        >>> from schooltool.person.interfaces import IPersonPreferences
 
         >>> setup.setUpAnnotations()
 
@@ -409,11 +409,11 @@ def doctest_PersonPreferencesView():
 def doctest_PersonDetailsView():
     """
 
-        >>> from schoolbell.app.person.browser.person import PersonDetailsView
-        >>> from schoolbell.app.person.person import Person
-        >>> from schoolbell.app.person.details import getPersonDetails
-        >>> from schoolbell.app.person.interfaces import IPersonDetails
-        >>> from schoolbell.app.person.interfaces import IPerson
+        >>> from schooltool.person.browser.person import PersonDetailsView
+        >>> from schooltool.person.person import Person
+        >>> from schooltool.person.details import getPersonDetails
+        >>> from schooltool.person.interfaces import IPersonDetails
+        >>> from schooltool.person.interfaces import IPerson
 
         >>> setup.setUpAnnotations()
         >>> ztapi.provideAdapter(IPerson, IPersonDetails, \
@@ -437,9 +437,9 @@ def doctest_PersonCSVImporter():
 
     Create a person container and an importer
 
-        >>> from schoolbell.app.person.browser.csvimport import \
+        >>> from schooltool.person.browser.csvimport import \
         ...     PersonCSVImporter
-        >>> from schoolbell.app.person.person import PersonContainer
+        >>> from schooltool.person.person import PersonContainer
         >>> container = PersonContainer()
         >>> importer = PersonCSVImporter(container, None)
 

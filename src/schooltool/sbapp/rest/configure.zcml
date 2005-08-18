@@ -8,21 +8,21 @@
     <allow attributes="context" />
   </content>
 
-  <content class="schoolbell.relationship.relationship.LinkSet">
+  <content class="schooltool.relationship.relationship.LinkSet">
     <allow
-       interface="schoolbell.relationship.interfaces.IRelationshipLinks"
+       interface="schooltool.relationship.interfaces.IRelationshipLinks"
        />
   </content>
 
-  <content class="schoolbell.relationship.relationship.Link">
+  <content class="schooltool.relationship.relationship.Link">
     <allow
-       interface="schoolbell.relationship.interfaces.IRelationshipLink"
+       interface="schooltool.relationship.interfaces.IRelationshipLink"
        />
   </content>
 
-  <content class="schoolbell.relationship.uri.URIObject">
+  <content class="schooltool.relationship.uri.URIObject">
     <allow
-       interface="schoolbell.relationship.uri.IURIObject"
+       interface="schooltool.relationship.uri.IURIObject"
        />
   </content>
 
@@ -35,14 +35,14 @@
   <subscriber
       for="zope.app.container.interfaces.IReadContainer
            zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory="zope.app.http.traversal.ContainerTraverser"
       />
 
   <subscriber
       for="zope.interface.Interface
            zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".RestPublishTraverse"
       />
 
@@ -50,7 +50,7 @@
       for="schoolbell.app.interfaces.ISchoolBellApplication"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.http.IHTTPPublisher"
-      factory="schoolbell.app.traverser.traverser.PluggableTraverser"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
 
@@ -64,7 +64,7 @@
 
 
   <view
-      for="schoolbell.relationship.interfaces.IRelationshipLinks"
+      for="schooltool.relationship.interfaces.IRelationshipLinks"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.IPublishTraverse"
       factory=".relationships.LinkTraverser"
@@ -193,14 +193,14 @@
   </class>
 
   <view
-      for="schoolbell.relationship.interfaces.IRelationshipLinks"
+      for="schooltool.relationship.interfaces.IRelationshipLinks"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       factory="schoolbell.app.rest.relationships.RelationshipsViewFactory"
       name="GET"
       />
 
   <view
-      for="schoolbell.relationship.interfaces.IRelationshipLinks"
+      for="schooltool.relationship.interfaces.IRelationshipLinks"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       factory="schoolbell.app.rest.relationships.RelationshipsViewFactory"
       name="POST"
@@ -213,14 +213,14 @@
   </class>
 
   <view
-      for="schoolbell.relationship.interfaces.IRelationshipLink"
+      for="schooltool.relationship.interfaces.IRelationshipLink"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       factory="schoolbell.app.rest.relationships.LinkViewFactory"
       name="GET"
       />
 
   <view
-      for="schoolbell.relationship.interfaces.IRelationshipLink"
+      for="schooltool.relationship.interfaces.IRelationshipLink"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       factory="schoolbell.app.rest.relationships.LinkViewFactory"
       name="DELETE"

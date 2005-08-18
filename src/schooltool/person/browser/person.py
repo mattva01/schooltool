@@ -36,11 +36,11 @@ from zope.app.publisher.browser import BrowserView
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.browser.app import ContainerView, ContainerDeleteView
-from schoolbell.app.person.interfaces import IPerson
-from schoolbell.app.person.interfaces import IPersonPreferences, IPersonDetails
-from schoolbell.app.person.interfaces import IPersonContainer, IPersonContained
+from schooltool.person.interfaces import IPerson
+from schooltool.person.interfaces import IPersonPreferences, IPersonDetails
+from schooltool.person.interfaces import IPersonContainer, IPersonContained
 
-from schoolbell.app.person.person import Person
+from schooltool.person.person import Person
 
 class PersonContainerView(ContainerView):
     """A Person Container view."""

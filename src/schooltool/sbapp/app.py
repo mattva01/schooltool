@@ -77,7 +77,7 @@ class SimpleNameChooser(NameChooser):
     `chooseName` uses the title of the object to be added, converts it to
     lowercase, strips punctuation, and replaces spaces with hyphens:
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> obj = Person(title='Mr. Smith')
         >>> chooser.chooseName('', obj)
         u'mr-smith'

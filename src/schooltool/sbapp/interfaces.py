@@ -49,7 +49,7 @@ from zope.app.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILogout
 
 from schoolbell import SchoolBellMessageID as _
-from schoolbell.calendar.interfaces import IEditCalendar, ICalendarEvent
+from schooltool.calendar.interfaces import IEditCalendar, ICalendarEvent
 
 
 # Dirty hacks that provide sensible i10n for widget error messages.

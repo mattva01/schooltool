@@ -27,13 +27,13 @@ import calendar
 from sets import Set
 
 from zope.interface import implements
-from schoolbell.calendar.icalendar import ical_weekdays
-from schoolbell.calendar.icalendar import ical_date, ical_datetime
-from schoolbell.calendar.mixins import CalendarEventMixin
-from schoolbell.calendar.mixins import ExpandedCalendarEvent
-from schoolbell.calendar.simple import SimpleCalendarEvent
-from schoolbell.calendar.interfaces import Unchanged
-from schoolbell.calendar.interfaces import \
+from schooltool.calendar.icalendar import ical_weekdays
+from schooltool.calendar.icalendar import ical_date, ical_datetime
+from schooltool.calendar.mixins import CalendarEventMixin
+from schooltool.calendar.mixins import ExpandedCalendarEvent
+from schooltool.calendar.simple import SimpleCalendarEvent
+from schooltool.calendar.interfaces import Unchanged
+from schooltool.calendar.interfaces import \
     IDailyRecurrenceRule, IWeeklyRecurrenceRule, IMonthlyRecurrenceRule, \
     IYearlyRecurrenceRule, IRecurrenceRule
 

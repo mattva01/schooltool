@@ -29,7 +29,7 @@ from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 
 from schoolbell.app.browser.tests.setup import setUp as browserSetUp, tearDown
 from schoolbell.app.interfaces import ISchoolBellCalendar
-from schoolbell.app.testing import setup
+from schooltool.testing import setup
 
 def setUp(test=None):
     browserSetUp(test)
@@ -60,9 +60,9 @@ def doctest_CalendarOverlayView():
     If you are an authenticated user looking at your own calendar, this view
     renders a calendar selection portlet.
 
-        >>> from schoolbell.app.group.group import Group
-        >>> from schoolbell.app.person.person import Person
-        >>> from schoolbell.app.security import Principal
+        >>> from schooltool.group.group import Group
+        >>> from schooltool.person.person import Person
+        >>> from schooltool.app.security import Principal
         >>> app = setup.setupSchoolBellSite()
         >>> person = app['persons']['whatever'] = Person('fred')
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
@@ -138,8 +138,8 @@ def doctest_CalendarOverlayView_items():
 
     We will need some persons and groups for the demonstration.
 
-        >>> from schoolbell.app.group.group import Group
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.group.group import Group
+        >>> from schooltool.person.person import Person
         >>> app = setup.setupSchoolBellSite()
         >>> person = app['persons']['p1'] = Person('p1', title="Person")
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
@@ -149,7 +149,7 @@ def doctest_CalendarOverlayView_items():
     an empty list
 
         >>> from zope.publisher.browser import TestRequest
-        >>> from schoolbell.app.security import Principal
+        >>> from schooltool.app.security import Principal
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('', '', person))
         >>> context = ISchoolBellCalendar(person)
@@ -165,13 +165,13 @@ def doctest_CalendarOverlayView_items():
 
         >>> from zope.testing.doctestunit import pprint
         >>> pprint(view.items())
-        [{'calendar': <schoolbell.app.cal.Calendar object at ...>,
+        [{'calendar': <schooltool.app.cal.Calendar object at ...>,
           'checked': '',
           'color1': '#eed680',
           'color2': '#d1940c',
           'id': u'/groups/g1',
           'title': 'Group 1'},
-         {'calendar': <schoolbell.app.cal.Calendar object at ...>,
+         {'calendar': <schooltool.app.cal.Calendar object at ...>,
           'checked': 'checked',
           'color1': '#e0b6af',
           'color2': '#c1665a',
@@ -196,10 +196,10 @@ def doctest_CalendarSelectionView():
 
     CalendarSelectionView is a view on IPerson
 
-        >>> from schoolbell.app.resource.resource import Resource
-        >>> from schoolbell.app.group.group import Group
-        >>> from schoolbell.app.person.person import Person
-        >>> from schoolbell.app.security import Principal
+        >>> from schooltool.resource.resource import Resource
+        >>> from schooltool.group.group import Group
+        >>> from schooltool.person.person import Person
+        >>> from schooltool.app.security import Principal
         >>> app = setup.setupSchoolBellSite()
         >>> persons = app['persons']
         >>> groups = app['groups']

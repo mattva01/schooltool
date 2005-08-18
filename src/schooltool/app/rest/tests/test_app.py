@@ -37,7 +37,7 @@ from zope.app.traversing import namespace
 
 from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin, diff
 from schoolbell.app.rest.tests.utils import normalize_xml
-from schoolbell.app.testing import setup as sbsetup
+from schooltool.testing import setup as sbsetup
 from schooltool.common import dedent
 
 

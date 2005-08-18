@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.calendar
+Unit tests for schooltool.calendar
 
 $Id$
 """
@@ -29,7 +29,7 @@ from zope.testing import doctest
 def doctest_interfaces():
     """Look for syntax errors in interfaces.py
 
-        >>> import schoolbell.calendar.interfaces
+        >>> import schooltool.calendar.interfaces
 
     """
 
@@ -41,9 +41,9 @@ def doctest_CalendarMixin_expand():
     set of events
 
         >>> from datetime import datetime, timedelta
-        >>> from schoolbell.calendar.mixins import CalendarMixin
-        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
-        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> from schooltool.calendar.mixins import CalendarMixin
+        >>> from schooltool.calendar.simple import SimpleCalendarEvent
+        >>> from schooltool.calendar.recurrent import DailyRecurrenceRule
         >>> Event = SimpleCalendarEvent # shorter
 
         >>> class MyCalendar(CalendarMixin):
@@ -140,7 +140,7 @@ def doctest_CalendarMixin_expand():
 
     Recurring events are replaced by proxy objects
 
-        >>> from schoolbell.calendar.interfaces import IExpandedCalendarEvent
+        >>> from schooltool.calendar.interfaces import IExpandedCalendarEvent
         >>> events = list(cal.expand(datetime(2005, 2, 2),
         ...                          datetime(2005, 2, 6)))
         >>> events.sort()
@@ -198,9 +198,9 @@ def doctest_CalendarMixin_expand_at_midnight():
     Bug: an event that occurs at midnight and is 0 minutes long gets lost.
 
         >>> from datetime import datetime, timedelta
-        >>> from schoolbell.calendar.mixins import CalendarMixin
-        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
-        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> from schooltool.calendar.mixins import CalendarMixin
+        >>> from schooltool.calendar.simple import SimpleCalendarEvent
+        >>> from schooltool.calendar.recurrent import DailyRecurrenceRule
         >>> e1 = SimpleCalendarEvent(datetime(2005, 3, 2, 0, 0), timedelta(0),
         ...                          "Corner case")
         >>> e2 = SimpleCalendarEvent(datetime(2005, 3, 4, 0, 0), timedelta(0),
@@ -238,8 +238,8 @@ def doctest_CalendarEventMixin_hasOccurrences():
     CalendarEventMixin
 
         >>> from datetime import date, datetime, timedelta
-        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
-        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> from schooltool.calendar.simple import SimpleCalendarEvent
+        >>> from schooltool.calendar.recurrent import DailyRecurrenceRule
 
     A simple event always has occurrences.
 
@@ -284,7 +284,7 @@ def doctest_CalendarEventMixin_hasOccurrences():
 def doctest_CalendarEventMixin_replace():
     """Make sure CalendarEventMixin.replace does not forget any attributes.
 
-        >>> from schoolbell.calendar.interfaces import ICalendarEvent
+        >>> from schooltool.calendar.interfaces import ICalendarEvent
         >>> from zope.schema import getFieldNames
         >>> all_attrs = getFieldNames(ICalendarEvent)
 
@@ -292,10 +292,10 @@ def doctest_CalendarEventMixin_replace():
     CalendarEventMixin
 
         >>> from datetime import datetime, timedelta
-        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+        >>> from schooltool.calendar.simple import SimpleCalendarEvent
         >>> e1 = SimpleCalendarEvent(datetime(2004, 12, 15, 18, 57),
         ...                          timedelta(minutes=15),
-        ...                          'Work on schoolbell.calendar.simple')
+        ...                          'Work on schooltool.calendar.simple')
 
         # XXX Need a better test for this.  event.dtstart should always be a
         # datetime object not a string
@@ -309,12 +309,12 @@ def doctest_CalendarEventMixin_replace():
 
 
 def doctest_weeknum_bounds():
-    """Unit test for schoolbell.calendar.utils.weeknum_bounds.
+    """Unit test for schooltool.calendar.utils.weeknum_bounds.
 
     Check that weeknum_bounds is the reverse of datetime.isocalendar().
 
         >>> from datetime import date
-        >>> from schoolbell.calendar.utils import weeknum_bounds
+        >>> from schooltool.calendar.utils import weeknum_bounds
         >>> d = date(2000, 1, 1)
         >>> while d < date(2010, 1, 1):
         ...     year, weeknum, weekday = d.isocalendar()
@@ -329,11 +329,11 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite())
     suite.addTest(doctest.DocFileSuite('../README.txt'))
-    suite.addTest(doctest.DocTestSuite('schoolbell.calendar.mixins'))
-    suite.addTest(doctest.DocTestSuite('schoolbell.calendar.simple'))
-    suite.addTest(doctest.DocTestSuite('schoolbell.calendar.recurrent'))
-    suite.addTest(doctest.DocTestSuite('schoolbell.calendar.utils'))
-    suite.addTest(doctest.DocTestSuite('schoolbell.calendar.browser',
+    suite.addTest(doctest.DocTestSuite('schooltool.calendar.mixins'))
+    suite.addTest(doctest.DocTestSuite('schooltool.calendar.simple'))
+    suite.addTest(doctest.DocTestSuite('schooltool.calendar.recurrent'))
+    suite.addTest(doctest.DocTestSuite('schooltool.calendar.utils'))
+    suite.addTest(doctest.DocTestSuite('schooltool.calendar.browser',
                         optionflags=doctest.ELLIPSIS | doctest.REPORT_UDIFF))
     return suite
 

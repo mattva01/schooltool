@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.relationship.objectevents
+Unit tests for schooltool.relationship.objectevents
 
 $Id$
 """
@@ -30,21 +30,21 @@ from zope.testing import doctest
 def doctest_delete_breaks_relationships():
     """When you delete an object, all of its relationships should be removed
 
-        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationship.tests import setUp, tearDown
         >>> setUp()
 
         >>> import zope.event
         >>> old_subscribers = zope.event.subscribers[:]
-        >>> from schoolbell.relationship.objectevents import unrelateOnDeletion
+        >>> from schooltool.relationship.objectevents import unrelateOnDeletion
         >>> zope.event.subscribers.append(unrelateOnDeletion)
 
     Suppose we have two related objects
 
-        >>> from schoolbell.relationship.tests import SomeObject
+        >>> from schooltool.relationship.tests import SomeObject
         >>> apple = SomeObject('apple')
         >>> orange = SomeObject('orange')
 
-        >>> from schoolbell.relationship import getRelatedObjects, relate
+        >>> from schooltool.relationship import getRelatedObjects, relate
         >>> relate('example:Relationship',
         ...             (apple, 'example:One'),
         ...             (orange, 'example:Two'))
@@ -77,23 +77,23 @@ def doctest_copy_breaks_relationships():
     wary of that path.  What happens if you copy and paste objects between
     different application instances?)
 
-        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationship.tests import setUp, tearDown
         >>> setUp()
 
         >>> import zope.event
         >>> old_subscribers = zope.event.subscribers[:]
-        >>> from schoolbell.relationship.objectevents import unrelateOnCopy
+        >>> from schooltool.relationship.objectevents import unrelateOnCopy
         >>> zope.event.subscribers.append(unrelateOnCopy)
 
     Suppose we have two related objects.  We must have objects that are
     IContained, otherwise ObjectCopier will happily duplicate all related
     objects as well as relationship links.
 
-        >>> from schoolbell.relationship.tests import SomeContained
+        >>> from schooltool.relationship.tests import SomeContained
         >>> apple = SomeContained('apple')
         >>> orange = SomeContained('orange')
 
-        >>> from schoolbell.relationship import getRelatedObjects, relate
+        >>> from schooltool.relationship import getRelatedObjects, relate
         >>> relate('example:Relationship',
         ...             (apple, 'example:One'),
         ...             (orange, 'example:Two'))
@@ -117,7 +117,7 @@ def doctest_copy_breaks_relationships():
 
     When we copy an object, all of its relationships should disappear
 
-        >>> from schoolbell.relationship.interfaces import IRelationshipLinks
+        >>> from schooltool.relationship.interfaces import IRelationshipLinks
         >>> list(IRelationshipLinks(copy_of_orange))
         []
 
@@ -141,23 +141,23 @@ def doctest_copy_does_not_break_inside_relationships():
     where x.y is a subobject of x, when you copy x to x', all links from x'
     will be removed, but the copied link on x'.y' will remain.
 
-        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationship.tests import setUp, tearDown
         >>> setUp()
 
         >>> import zope.event
         >>> old_subscribers = zope.event.subscribers[:]
-        >>> from schoolbell.relationship.objectevents import unrelateOnCopy
+        >>> from schooltool.relationship.objectevents import unrelateOnCopy
         >>> zope.event.subscribers.append(unrelateOnCopy)
 
     Suppose we have two related objects.  We must have objects that are
     IContained, otherwise ObjectCopier will happily duplicate all related
     objects as well as relationship links.
 
-        >>> from schoolbell.relationship.tests import SomeContained
+        >>> from schooltool.relationship.tests import SomeContained
         >>> apple = SomeContained('apple')
         >>> orange = SomeContained('orange')
 
-        >>> from schoolbell.relationship import getRelatedObjects, relate
+        >>> from schooltool.relationship import getRelatedObjects, relate
         >>> relate('example:Relationship',
         ...             (apple, 'example:One'),
         ...             (orange, 'example:Two'))

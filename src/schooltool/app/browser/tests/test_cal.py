@@ -34,7 +34,7 @@ from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 from schoolbell.app.interfaces import ISchoolBellCalendar
-from schoolbell.app.testing import setup as sbsetup
+from schooltool.testing import setup as sbsetup
 
 import schooltool.app
 from schooltool.common import parse_datetime
@@ -56,10 +56,10 @@ class TestDailyCalendarRowsView(unittest.TestCase):
         sbsetup.setupCalendaring()
 
         # set up adaptation (the view checks user preferences)
-        from schoolbell.app.person.preference import getPersonPreferences
-        from schoolbell.app.person.interfaces import IPersonPreferences
-        from schoolbell.app.person.interfaces import IHavePreferences
-        from schoolbell.app.person.person import Person
+        from schooltool.person.preference import getPersonPreferences
+        from schooltool.person.interfaces import IPersonPreferences
+        from schooltool.person.interfaces import IHavePreferences
+        from schooltool.person.person import Person
         ztapi.provideAdapter(Person, IPersonPreferences, getPersonPreferences)
 
         # set up the site
@@ -102,7 +102,7 @@ class TestDailyCalendarRowsView(unittest.TestCase):
 
     def test_calendarRows(self):
         from schooltool.browser.cal import DailyCalendarRowsView
-        from schoolbell.app.security import Principal
+        from schooltool.app.security import Principal
 
         request = TestRequest()
         principal = Principal('person', 'Some person', person=self.person)
@@ -127,8 +127,8 @@ class TestDailyCalendarRowsView(unittest.TestCase):
 
     def test_calendarRows_no_periods(self):
         from schooltool.browser.cal import DailyCalendarRowsView
-        from schoolbell.app.person.preference import getPersonPreferences
-        from schoolbell.app.security import Principal
+        from schooltool.person.preference import getPersonPreferences
+        from schooltool.app.security import Principal
 
         prefs = getPersonPreferences(self.person)
         prefs.cal_periods = False # do not show periods
@@ -170,7 +170,7 @@ def doctest_CalendarSTOverlayView():
 
         >>> from zope.interface import classImplements
         >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
-        >>> from schoolbell.app.overlay import CalendarOverlayInfo
+        >>> from schooltool.app.overlay import CalendarOverlayInfo
         >>> classImplements(CalendarOverlayInfo, IAttributeAnnotatable)
 
         >>> from schooltool.browser.cal import CalendarSTOverlayView
@@ -192,11 +192,11 @@ def doctest_CalendarSTOverlayView():
     If you are an authenticated user looking at your own calendar, this view
     renders a calendar selection portlet.
 
-        >>> from schoolbell.app.group.group import Group
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.group.group import Group
+        >>> from schooltool.person.person import Person
         >>> from schooltool.course.course import Course
         >>> from schooltool.course.section import Section
-        >>> from schoolbell.app.security import Principal
+        >>> from schooltool.app.security import Principal
         >>> app = sbsetup.setupSchoolBellSite()
         >>> person = app['persons']['whatever'] = Person('fred')
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
@@ -343,9 +343,9 @@ def doctest_CalendarListView(self):
         ...         self.show = show
         ...         self.showTimetables = showTimetables
 
-        >>> from schoolbell.app.person.interfaces import IPersonPreferences
+        >>> from schooltool.person.interfaces import IPersonPreferences
         >>> from schoolbell.app.interfaces import IHaveCalendar
-        >>> from schoolbell.app.cal import CALENDAR_KEY
+        >>> from schooltool.app.cal import CALENDAR_KEY
         >>> from zope.interface import implements
         >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
         >>> from schooltool.timetable.interfaces import ITimetables
@@ -391,7 +391,7 @@ def doctest_CalendarListView(self):
     If the authenticated user is looking at his own calendar, then
     a list of overlaid calendars is taken into consideration
 
-        >>> from schoolbell.app.person.interfaces import IPerson
+        >>> from schooltool.person.interfaces import IPerson
         >>> class PrincipalStub:
         ...     def __init__(self):
         ...         self.person = PersonStub('x', calendar=calendar)

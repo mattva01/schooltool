@@ -134,7 +134,7 @@
       for="zope.app.apidoc.apidoc.APIDocumentation"
       class="zope.app.apidoc.browser.apidoc.APIDocumentationView"
       permission="zope.app.apidoc.UseAPIDoc"
-      layer="schoolbell.app.devmode.skin.IDevModeLayer">
+      layer="schooltool.devmode.skin.IDevModeLayer">
   
     <browser:page
         name="modulelist.html"
@@ -146,36 +146,36 @@
     <browser:page
         for=".ifacemodule.InterfaceModule"
         permission="zope.app.apidoc.UseAPIDoc"
-        class="schoolbell.app.devmode.apidoc.InterfaceMenu"
+        class="schooltool.devmode.apidoc.InterfaceMenu"
         name="menu.html"
         template="menu.pt"
-        layer="schoolbell.app.devmode.skin.IDevModeLayer"
+        layer="schooltool.devmode.skin.IDevModeLayer"
         />
 
     <browser:page
         for=".ifacemodule.InterfaceModule"
         permission="zope.app.apidoc.UseAPIDoc"
-        class="schoolbell.app.devmode.restdoc.RESTMenu"
+        class="schooltool.devmode.restdoc.RESTMenu"
         name="restmenu.html"
         template="menu.pt"
-        layer="schoolbell.app.devmode.skin.IDevModeLayer"
+        layer="schooltool.devmode.skin.IDevModeLayer"
         />
   </configure>
 
   <browser:page
       for="zope.app.apidoc.codemodule.codemodule.CodeModule"
       permission="zope.app.apidoc.UseAPIDoc"
-      class="schoolbell.app.devmode.apidoc.CodeMenu"
+      class="schooltool.devmode.apidoc.CodeMenu"
       name="menu.html"
       template="code_menu.pt" 
-      layer="schoolbell.app.devmode.skin.IDevModeLayer"
+      layer="schooltool.devmode.skin.IDevModeLayer"
       />
 
   <configure package="zope.app.apidoc.bookmodule">
     <browser:page
         for="zope.app.onlinehelp.onlinehelptopic.RESTOnlineHelpTopic"
         permission="zope.app.apidoc.UseAPIDoc"
-        class="schoolbell.app.devmode.apidoc.BookMenu"
+        class="schooltool.devmode.apidoc.BookMenu"
         name="menu.html"
         template="menu.pt"
         />

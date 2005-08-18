@@ -31,7 +31,7 @@ from zope.app.testing import ztapi, setup
 from zope.i18n import translate
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
-from schoolbell.app.testing import setup as sbsetup
+from schooltool.testing import setup as sbsetup
 
 
 def doctest_SchoolBellAPI():
@@ -81,7 +81,7 @@ def doctest_SchoolBellAPI():
 
     'context/schoolbell:person' adapts the context to IPerson:
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> p = Person()
         >>> SchoolBellAPI(p).person is p
         True
@@ -218,7 +218,7 @@ def doctest_NavigationView():
 
       >>> app = sbsetup.setupSchoolBellSite()
 
-      >>> from schoolbell.app.person.person import Person
+      >>> from schooltool.person.person import Person
       >>> p = Person('1')
       >>> app['persons']['1'] = p
 
@@ -235,7 +235,7 @@ def doctest_SchoolBellSized():
     """Unit tests for SchoolBellSized.
 
       >>> from schoolbell.app.browser import SchoolBellSized
-      >>> from schoolbell.app.person.person import Person
+      >>> from schooltool.person.person import Person
 
       >>> app = sbsetup.setupSchoolBellSite()
       >>> sized = SchoolBellSized(app)
@@ -264,9 +264,9 @@ def doctest_ViewPrefences():
         >>> from zope.publisher.browser import TestRequest
 
         >>> from schoolbell.app.browser import ViewPreferences
-        >>> from schoolbell.app.person.interfaces import IPerson
-        >>> from schoolbell.app.person.interfaces import IPersonPreferences
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.interfaces import IPerson
+        >>> from schooltool.person.interfaces import IPersonPreferences
+        >>> from schooltool.person.person import Person
 
         >>> class PreferenceStub:
         ...     def __init__(self):

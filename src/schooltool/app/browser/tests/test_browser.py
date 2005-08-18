@@ -26,7 +26,7 @@ import unittest
 from zope.testing import doctest
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
-from schoolbell.app.testing import setup
+from schooltool.testing import setup
 
 
 def doctest_NavigationView():
@@ -35,7 +35,7 @@ def doctest_NavigationView():
     This view works for any ILocatable object within a SchoolTool instance.
 
       >>> from schooltool.app import SchoolToolApplication
-      >>> from schoolbell.app.person.person import Person
+      >>> from schooltool.person.person import Person
       >>> app = setup.setupSchoolBellSite()
       >>> p = Person('1')
       >>> app['persons']['1'] = p

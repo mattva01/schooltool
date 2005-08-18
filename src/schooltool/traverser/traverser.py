@@ -26,8 +26,8 @@ from zope.interface import implements
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces import IPublishTraverse
 
-from schoolbell.app.traverser.interfaces import ITraverserPlugin
-from schoolbell.app.traverser.interfaces import IPluggableTraverser
+from schooltool.traverser.interfaces import ITraverserPlugin
+from schooltool.traverser.interfaces import IPluggableTraverser
 
 
 class PluggableTraverser(object):

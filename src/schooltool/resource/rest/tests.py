@@ -31,11 +31,11 @@ from schoolbell.app.rest.tests.test_app import ContainerViewTestMixin
 from schoolbell.app.rest.tests.test_app import FileFactoriesSetUp
 from schoolbell.app.rest.xmlparsing import XMLParseError
 
-from schoolbell.app.resource.resource import Resource, ResourceContainer
-from schoolbell.app.resource.interfaces import IResourceContainer
-from schoolbell.app.resource.rest.resource import ResourceView, ResourceFile
-from schoolbell.app.resource.rest.resource import ResourceContainerView
-from schoolbell.app.resource.rest.resource import ResourceFileFactory
+from schooltool.resource.resource import Resource, ResourceContainer
+from schooltool.resource.interfaces import IResourceContainer
+from schooltool.resource.rest.resource import ResourceView, ResourceFile
+from schooltool.resource.rest.resource import ResourceContainerView
+from schooltool.resource.rest.resource import ResourceFileFactory
 
 
 class TestResourceContainerView(ContainerViewTestMixin,

@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 r"""
-Browser views for schoolbell.calendar.
+Browser views for schooltool.calendar.
 
 $Id$
 
@@ -27,8 +27,8 @@ iCalendar views
 CalendarICalendarView can export calendars in iCalendar format
 
     >>> from datetime import datetime, timedelta
-    >>> from schoolbell.calendar.simple import ImmutableCalendar
-    >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+    >>> from schooltool.calendar.simple import ImmutableCalendar
+    >>> from schooltool.calendar.simple import SimpleCalendarEvent
     >>> event = SimpleCalendarEvent(datetime(2004, 12, 16, 11, 46, 16),
     ...                             timedelta(hours=1), "doctests",
     ...                             location=u"Matar\u00f3",
@@ -62,8 +62,8 @@ CalendarICalendarView can export calendars in iCalendar format
 We can also render just the Free/Busy component of iCal
 
     >>> from datetime import datetime, timedelta
-    >>> from schoolbell.calendar.simple import ImmutableCalendar
-    >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+    >>> from schooltool.calendar.simple import ImmutableCalendar
+    >>> from schooltool.calendar.simple import SimpleCalendarEvent
     >>> event = SimpleCalendarEvent(datetime(2004, 12, 16, 11, 46, 16),
     ...                             timedelta(hours=1), "doctests",
     ...                             location=u"Matar\u00f3",
@@ -91,27 +91,27 @@ We can also render just the Free/Busy component of iCal
 Register the iCalendar read view in ZCML as
 
     <browser:page
-        for="schoolbell.calendar.interfaces.ICalendar"
+        for="schooltool.calendar.interfaces.ICalendar"
         name="calendar.ics"
         permission="zope.Public"
-        class="schoolbell.calendar.browser.CalendarICalendarView"
+        class="schooltool.calendar.browser.CalendarICalendarView"
         attribute="show"
         />
 
 Register the VfbView as calendar.vfb
 
     <browser:page
-        for="schoolbell.calendar.interfaces.ICalendar"
+        for="schooltool.calendar.interfaces.ICalendar"
         name="calendar.vfb"
         permission="zope.Public"
-        class="schoolbell.calendar.browser.CalendarVfbView"
+        class="schooltool.calendar.browser.CalendarVfbView"
         attribute="show"
         />
 
 """
 
-from schoolbell.calendar.icalendar import convert_calendar_to_ical
-from schoolbell.calendar.icalendar import convert_calendar_to_vfb
+from schooltool.calendar.icalendar import convert_calendar_to_ical
+from schooltool.calendar.icalendar import convert_calendar_to_vfb
 
 
 class CalendarICalendarView(object):

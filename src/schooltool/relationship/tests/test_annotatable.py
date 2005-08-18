@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.relationship.annotatable
+Unit tests for schooltool.relationship.annotatable
 
 $Id$
 """
@@ -31,7 +31,7 @@ from zope.app.annotation.interfaces import IAttributeAnnotatable
 
 
 def doctest_getRelationshipLinks():
-    r"""Test for schoolbell.relationship.annotatable.getRelationshipLinks.
+    r"""Test for schooltool.relationship.annotatable.getRelationshipLinks.
 
     We need to set up Zope 3 annotations
 
@@ -50,11 +50,11 @@ def doctest_getRelationshipLinks():
 
     Now we can check that a new LinkSet is created automatically
 
-        >>> from schoolbell.relationship.annotatable \
+        >>> from schooltool.relationship.annotatable \
         ...         import getRelationshipLinks
         >>> linkset = getRelationshipLinks(obj)
 
-        >>> from schoolbell.relationship.interfaces import IRelationshipLinks
+        >>> from schooltool.relationship.interfaces import IRelationshipLinks
         >>> from zope.interface.verify import verifyObject
         >>> verifyObject(IRelationshipLinks, linkset)
         True

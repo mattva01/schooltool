@@ -12,7 +12,7 @@ The test-setup registry was designed to de-centralize the creation of a
 testing environment, allowing several independent packages to contribute to a
 particular setup. The codebase is located in:
 
-  >>> from schoolbell.app.testing import registry
+  >>> from schooltool.testing import registry
 
 In the module you will find a ``register()`` method that allows you to
 register a function for a particular setup. The simplest case is to register a

@@ -32,7 +32,7 @@ from zope.app.testing import setup, ztapi, placelesssetup
 
 from schoolbell.app.tests.test_security import setUpLocalGrants
 
-from schoolbell.app.testing import setup as sbsetup
+from schooltool.testing import setup as sbsetup
 
 
 def doctest_SchoolToolApplication():
@@ -58,15 +58,15 @@ def doctest_SchoolToolApplication():
 
     The most basic containers should be available:
 
-        >>> from schoolbell.app.person.interfaces import IPersonContainer
+        >>> from schooltool.person.interfaces import IPersonContainer
         >>> verifyObject(IPersonContainer, app['persons'])
         True
 
-        >>> from schoolbell.app.group.interfaces import IGroupContainer
+        >>> from schooltool.group.interfaces import IGroupContainer
         >>> verifyObject(IGroupContainer, app['groups'])
         True
 
-        >>> from schoolbell.app.resource.interfaces import IResourceContainer
+        >>> from schooltool.resource.interfaces import IResourceContainer
         >>> verifyObject(IResourceContainer, app['resources'])
         True
 
@@ -188,7 +188,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
 
     Check that no permissions are set if the object added is not an app.
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> person = Person('james')
         >>> root['sb']['persons']['james'] = person
         >>> app.applicationCalendarPermissionsSubscriber(
@@ -240,7 +240,7 @@ def doctest_LocationResourceVocabulary():
 
     Now we'll add some resources
 
-        >>> from schoolbell.app.resource.resource import Resource
+        >>> from schooltool.resource.resource import Resource
         >>> import pprint
         >>> app['resources']['room1'] = room1 = Resource("Room 1",
         ...                                               isLocation=True)

@@ -22,7 +22,7 @@ csv importing.
 $Id: csvimport.py 4108 2005-06-15 14:27:59Z bskahan $
 """
 from schoolbell.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
-from schoolbell.app.resource.resource import Resource
+from schooltool.resource.resource import Resource
 
 from schoolbell import SchoolBellMessageID as _
 

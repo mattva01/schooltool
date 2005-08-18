@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.batching.browser
+Unit tests for schooltool.batching.browser
 
 $Id$
 """
@@ -38,7 +38,7 @@ def doctest_MultiBatchViewMixin():
         >>> data2 = [100, 200, 300, 400, 500]
 
         >>> from zope.app.publisher.browser import BrowserView
-        >>> from schoolbell.batching.browser import MultiBatchViewMixin
+        >>> from schooltool.batching.browser import MultiBatchViewMixin
 
         >>> class SampleView(BrowserView, MultiBatchViewMixin):
         ...
@@ -88,7 +88,7 @@ def doctest_MultiBatchViewMixin():
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
-                doctest.DocTestSuite('schoolbell.batching.browser'),
+                doctest.DocTestSuite('schooltool.batching.browser'),
            ])
 
 if __name__ == '__main__':

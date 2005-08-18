@@ -29,8 +29,8 @@ Outlook meeting planner.
 If you have a calendar, you can convert it to an iCalendar file like this:
 
     >>> from datetime import datetime, timedelta
-    >>> from schoolbell.calendar.simple import ImmutableCalendar
-    >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+    >>> from schooltool.calendar.simple import ImmutableCalendar
+    >>> from schooltool.calendar.simple import SimpleCalendarEvent
     >>> event = SimpleCalendarEvent(datetime(2004, 12, 16, 10, 58, 47),
     ...                             timedelta(hours=1), "doctests",
     ...                             location=u"Matar\u00f3",
@@ -73,7 +73,7 @@ import calendar
 import re
 from cStringIO import StringIO
 from sets import Set
-from schoolbell.calendar.simple import SimpleCalendarEvent
+from schooltool.calendar.simple import SimpleCalendarEvent
 
 
 EMPTY_CALENDAR_PLACEHOLDER = 'empty-calendar-placeholder@schooltool.org'
@@ -122,7 +122,7 @@ def convert_event_to_ical(event):
         DTSTAMP:...
         END:VEVENT
 
-        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> from schooltool.calendar.recurrent import DailyRecurrenceRule
         >>> event = SimpleCalendarEvent(datetime(2005, 2, 11, 22, 42, 50),
         ...                             timedelta(minutes=15), "iCal tests",
         ...                             recurrence=DailyRecurrenceRule(),
@@ -140,8 +140,8 @@ def convert_event_to_ical(event):
 
     All-day events have DTSTART as a date:
 
-        >>> from schoolbell.calendar.recurrent import WeeklyRecurrenceRule
-        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> from schooltool.calendar.recurrent import WeeklyRecurrenceRule
+        >>> from schooltool.calendar.recurrent import DailyRecurrenceRule
         >>> event = SimpleCalendarEvent(datetime(2005, 2, 11, 0, 0, 0),
         ...                             timedelta(days=2), "iCal tests",
         ...                             recurrence=WeeklyRecurrenceRule(),
@@ -188,8 +188,8 @@ def convert_calendar_to_vfb(calendar):
     Returns a list of strings (without newlines) in UTF-8.  They should be
     joined with '\r\n' to get a valid iCalendar file.
 
-        >>> from schoolbell.calendar.simple import ImmutableCalendar
-        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+        >>> from schooltool.calendar.simple import ImmutableCalendar
+        >>> from schooltool.calendar.simple import SimpleCalendarEvent
         >>> from datetime import datetime, timedelta
         >>> event1 = SimpleCalendarEvent(datetime(2004, 11, 16, 10, 7, 29),
         ...                             timedelta(hours=1), "iCal rendering",
@@ -245,8 +245,8 @@ def convert_calendar_to_ical(calendar):
     Returns a list of strings (without newlines) in UTF-8.  They should be
     joined with '\r\n' to get a valid iCalendar file.
 
-        >>> from schoolbell.calendar.simple import ImmutableCalendar
-        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+        >>> from schooltool.calendar.simple import ImmutableCalendar
+        >>> from schooltool.calendar.simple import SimpleCalendarEvent
         >>> from datetime import datetime, timedelta
         >>> event = SimpleCalendarEvent(datetime(2004, 12, 16, 10, 7, 29),
         ...                             timedelta(hours=1), "iCal rendering",
@@ -872,7 +872,7 @@ def _parse_recurrence_weekly(args):
     WeeklyRecurrenceRule(1, None, None, (), (0, 2, 6))
 
     """
-    from schoolbell.calendar.recurrent import WeeklyRecurrenceRule
+    from schooltool.calendar.recurrent import WeeklyRecurrenceRule
     weekdays = []
     days = args.get('BYDAY', None)
     if days is not None:
@@ -901,7 +901,7 @@ def _parse_recurrence_monthly(args):
     >>> _parse_recurrence_monthly({'BYDAY': '-1WE'})
     MonthlyRecurrenceRule(1, None, None, (), 'lastweekday')
     """
-    from schoolbell.calendar.recurrent import MonthlyRecurrenceRule
+    from schooltool.calendar.recurrent import MonthlyRecurrenceRule
     if 'BYDAY' in args:
         if args['BYDAY'][0] == '-':
             monthly = 'lastweekday'
@@ -962,8 +962,8 @@ def parse_recurrence_rule(value):
     DailyRecurrenceRule(1, None, None, ())
 
     """
-    from schoolbell.calendar.recurrent import DailyRecurrenceRule
-    from schoolbell.calendar.recurrent import YearlyRecurrenceRule
+    from schooltool.calendar.recurrent import DailyRecurrenceRule
+    from schooltool.calendar.recurrent import YearlyRecurrenceRule
 
     # split up the given value into parameters
     params = {}

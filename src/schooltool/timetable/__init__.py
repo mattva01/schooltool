@@ -153,8 +153,8 @@ from zope.app.location.interfaces import ILocation
 from zope.app.location.traversing import LocationPhysicallyLocatable
 from zope.app.traversing.api import getPath
 
-from schoolbell.app.cal import CalendarEvent
-from schoolbell.calendar.simple import ImmutableCalendar
+from schooltool.app.cal import CalendarEvent
+from schooltool.calendar.simple import ImmutableCalendar
 
 from schooltool.timetable.interfaces import ITimetableSchema
 from schooltool.timetable.interfaces import ITimetableSchemaDay
@@ -883,7 +883,7 @@ def addToApplication(event):
 
 
 def registerTestSetup():
-    from schoolbell.app.testing import registry
+    from schooltool.testing import registry
 
     def addTermAndTTSchemasContainer(app):
         app['terms'] = TermContainer()

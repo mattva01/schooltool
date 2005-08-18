@@ -32,8 +32,8 @@ from schoolbell.app.tests.test_app import run_unit_tests
 def doctest_GroupContainer():
     """Tests for GroupContainer
 
-        >>> from schoolbell.app.group.interfaces import IGroupContainer
-        >>> from schoolbell.app.group.group import GroupContainer
+        >>> from schooltool.group.interfaces import IGroupContainer
+        >>> from schooltool.group.group import GroupContainer
         >>> c = GroupContainer()
         >>> verifyObject(IGroupContainer, c)
         True
@@ -51,8 +51,8 @@ def doctest_GroupContainer():
 def doctest_Group():
     r"""Tests for Group
 
-        >>> from schoolbell.app.group.interfaces import IGroupContained
-        >>> from schoolbell.app.group.group import Group
+        >>> from schooltool.group.interfaces import IGroupContained
+        >>> from schooltool.group.group import Group
         >>> group = Group()
         >>> verifyObject(IGroupContained, group)
         True

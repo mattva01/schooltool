@@ -7,13 +7,13 @@
 
   <zope:class class=".TimetablesTraverser">
     <zope:allow
-        interface="schoolbell.app.traverser.interfaces.ITraverserPlugin" />
+        interface="schooltool.traverser.interfaces.ITraverserPlugin" />
   </zope:class>
 
   <zope:subscriber
       for="schooltool.timetable.interfaces.IHaveTimetables
            zope.publisher.interfaces.browser.IBrowserRequest"
-      provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".TimetablesTraverser"
       />
 
@@ -38,7 +38,7 @@
 
   <page
       name="schedule.html"
-      for="schoolbell.app.person.interfaces.IPerson"
+      for="schooltool.person.interfaces.IPerson"
       class="schooltool.timetable.browser.PersonTimetableSetupView"
       permission="zope.View"
       menu="schoolbell_actions"

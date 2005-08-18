@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.relationship
+Unit tests for schooltool.relationship
 
 $Id$
 """
@@ -35,8 +35,8 @@ def doctest_relate():
     directly in the object
 
         >>> from zope.interface import implements
-        >>> from schoolbell.relationship.interfaces import IRelationshipLinks
-        >>> from schoolbell.relationship.relationship import Link
+        >>> from schooltool.relationship.interfaces import IRelationshipLinks
+        >>> from schooltool.relationship.relationship import Link
 
         >>> class Relatable:
         ...     implements(IRelationshipLinks)
@@ -55,7 +55,7 @@ def doctest_relate():
 
     Now we can test relate
 
-        >>> from schoolbell.relationship.relationship import relate
+        >>> from schooltool.relationship.relationship import relate
         >>> relate('marriage', (fred, 'husband'), (wilma, 'wife'))
         Linking Fred with Wilma (the wife in marriage)
         Linking Wilma with Fred (the husband in marriage)
@@ -71,8 +71,8 @@ def doctest_getRelatedObjects():
     directly in the object
 
         >>> from zope.interface import implements
-        >>> from schoolbell.relationship.interfaces import IRelationshipLinks
-        >>> from schoolbell.relationship.relationship import Link
+        >>> from schooltool.relationship.interfaces import IRelationshipLinks
+        >>> from schooltool.relationship.relationship import Link
 
         >>> class Relatable:
         ...     implements(IRelationshipLinks)
@@ -85,7 +85,7 @@ def doctest_getRelatedObjects():
 
     Now we can test getRelatedObjects
 
-        >>> from schoolbell.relationship.relationship import getRelatedObjects
+        >>> from schooltool.relationship.relationship import getRelatedObjects
         >>> getRelatedObjects(obj, 'role_of_a')
         ['a']
         >>> getRelatedObjects(obj, 'role_of_b')
@@ -99,12 +99,12 @@ def doctest_getRelatedObjects():
 def doctest_RelationshipSchema():
     """Tests for RelationshipSchema
 
-        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationship.tests import setUp, tearDown
         >>> setUp()
 
     The constructor takes exactly two keyword arguments
 
-        >>> from schoolbell.relationship import RelationshipSchema
+        >>> from schooltool.relationship import RelationshipSchema
         >>> RelationshipSchema('example:Mgmt', manager='example:Mgr',
         ...                    report='example:Rpt', supervisor='example:Spv')
         Traceback (most recent call last):
@@ -123,13 +123,13 @@ def doctest_RelationshipSchema():
 
     You can call relationship schemas
 
-        >>> from schoolbell.relationship.tests import SomeObject
+        >>> from schooltool.relationship.tests import SomeObject
         >>> a, b = map(SomeObject, ['a', 'b'])
         >>> Management(manager=a, report=b)
 
     You will see that a is b's manager, and b is a's report:
 
-        >>> from schoolbell.relationship import getRelatedObjects
+        >>> from schooltool.relationship import getRelatedObjects
         >>> getRelatedObjects(b, 'example:Mgr')
         [a]
         >>> getRelatedObjects(a, 'example:Rpt')
@@ -169,7 +169,7 @@ def doctest_RelationshipSchema():
 def doctest_unrelateAll():
     r"""Tests for unrelateAll.
 
-        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationship.tests import setUp, tearDown
         >>> setUp()
 
     Let us catch all events and remember them
@@ -181,16 +181,16 @@ def doctest_unrelateAll():
 
     Nothing happens if the object has no relationships.
 
-        >>> from schoolbell.relationship.tests import SomeObject
+        >>> from schooltool.relationship.tests import SomeObject
         >>> a = SomeObject('a')
-        >>> from schoolbell.relationship import unrelateAll
+        >>> from schooltool.relationship import unrelateAll
         >>> unrelateAll(a)
         >>> events
         []
 
     Suppose that the object has a number of relationships
 
-        >>> from schoolbell.relationship import relate
+        >>> from schooltool.relationship import relate
         >>> b, c, d = map(SomeObject, ['b', 'c', 'd'])
         >>> relationships = [
         ...       ('example:SomeRelationship', (a, 'example:Foo'),
@@ -215,22 +215,22 @@ def doctest_unrelateAll():
 
         >>> unrelateAll(a)
 
-        >>> from schoolbell.relationship.interfaces import IRelationshipLinks
+        >>> from schooltool.relationship.interfaces import IRelationshipLinks
         >>> list(IRelationshipLinks(a))
         []
 
     Relationships are broken properly, from both ends
 
-        >>> from schoolbell.relationship import getRelatedObjects
+        >>> from schooltool.relationship import getRelatedObjects
         >>> getRelatedObjects(b, 'example:Foo')
         []
 
     Also, we got a bunch of events
 
         >>> from sets import Set
-        >>> from schoolbell.relationship.interfaces \
+        >>> from schooltool.relationship.interfaces \
         ...         import IBeforeRemovingRelationshipEvent
-        >>> from schoolbell.relationship.interfaces \
+        >>> from schooltool.relationship.interfaces \
         ...         import IRelationshipRemovedEvent
         >>> before_removal_events = Set([
         ...         (e.rel_type, (e.participant1, e.role1),
@@ -256,7 +256,7 @@ def doctest_unrelateAll():
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocFileSuite('../README.txt'),
-                doctest.DocTestSuite('schoolbell.relationship.relationship'),
+                doctest.DocTestSuite('schooltool.relationship.relationship'),
                 doctest.DocTestSuite(),
            ])
 

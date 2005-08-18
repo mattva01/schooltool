@@ -26,13 +26,13 @@ all IAnnotatable objects that uses Zope 3 annotations.
 """
 
 from zope.app.annotation.interfaces import IAnnotations
-from schoolbell.relationship.relationship import LinkSet
+from schooltool.relationship.relationship import LinkSet
 
 
 def getRelationshipLinks(context):
     """Adapt an IAnnotatable object to IRelationshipLinks."""
     annotations = IAnnotations(context)
-    key = 'schoolbell.relationship.RelationshipLinks'
+    key = 'schooltool.relationship.RelationshipLinks'
     try:
         return annotations[key]
     except KeyError:

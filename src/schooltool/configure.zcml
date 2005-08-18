@@ -16,13 +16,13 @@
 
   <!-- Adapters -->
 
-  <class class="schoolbell.app.overlay.CalendarOverlayInfo">
+  <class class="schooltool.app.overlay.CalendarOverlayInfo">
     <implements
         interface="zope.app.annotation.interfaces.IAttributeAnnotatable" />
   </class>
 
   <adapter
-      for="schoolbell.app.overlay.ICalendarOverlayInfo"
+      for="schooltool.app.overlay.ICalendarOverlayInfo"
       provides=".interfaces.IShowTimetables"
       factory=".app.ShowTimetables"
       />
@@ -35,32 +35,32 @@
       />
 
   <subscriber
-      for="schoolbell.relationship.interfaces.IRelationshipAddedEvent"
+      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
       handler=".relationships.setInstructorPermissions"
       />
 
   <subscriber
-      for="schoolbell.relationship.interfaces.IRelationshipRemovedEvent"
+      for="schooltool.relationship.interfaces.IRelationshipRemovedEvent"
       handler=".relationships.setInstructorPermissions"
       />
 
   <subscriber
-      for="schoolbell.relationship.interfaces.IRelationshipAddedEvent"
+      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
       handler=".relationships.updateStudentCalendars"
       />
 
   <subscriber
-      for="schoolbell.relationship.interfaces.IRelationshipRemovedEvent"
+      for="schooltool.relationship.interfaces.IRelationshipRemovedEvent"
       handler=".relationships.updateStudentCalendars"
       />
 
   <subscriber
-      for="schoolbell.relationship.interfaces.IRelationshipAddedEvent"
+      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
       handler=".relationships.updateInstructorCalendars"
       />
 
   <subscriber
-      for="schoolbell.relationship.interfaces.IRelationshipRemovedEvent"
+      for="schooltool.relationship.interfaces.IRelationshipRemovedEvent"
       handler=".relationships.updateInstructorCalendars"
       />
 
@@ -78,39 +78,39 @@
       />
 
   <utility
-      provides="schoolbell.relationship.interfaces.IRelationshipSchema"
+      provides="schooltool.relationship.interfaces.IRelationshipSchema"
       component=".relationships.Instruction"
       name="http://schooltool.org/ns/instruction" />
 
   <utility
-      provides="schoolbell.relationship.uri.IURIObject"
+      provides="schooltool.relationship.uri.IURIObject"
       component=".relationships.URIInstructor"
       name="http://schooltool.org/ns/instruction/instructor" />
 
   <utility
-      provides="schoolbell.relationship.uri.IURIObject"
+      provides="schooltool.relationship.uri.IURIObject"
       component=".relationships.URISection"
       name="http://schooltool.org/ns/instruction/section" />
 
   <utility
-      provides="schoolbell.relationship.interfaces.IRelationshipSchema"
+      provides="schooltool.relationship.interfaces.IRelationshipSchema"
       component=".relationships.CourseSections"
       name="http://schooltool.org/ns/coursesections" />
 
   <utility
-      provides="schoolbell.relationship.uri.IURIObject"
+      provides="schooltool.relationship.uri.IURIObject"
       component=".relationships.URICourse"
       name="http://schooltool.org/ns/coursesections/course" />
 
   <utility
-      provides="schoolbell.relationship.uri.IURIObject"
+      provides="schooltool.relationship.uri.IURIObject"
       component=".relationships.URISectionOfCourse"
       name="http://schooltool.org/ns/coursesections/section" />
 
   <!-- Events -->
 
   <subscriber
-      for="schoolbell.relationship.interfaces.IBeforeRelationshipEvent"
+      for="schooltool.relationship.interfaces.IBeforeRelationshipEvent"
       handler=".relationships.enforceInstructionConstraints"
     />
 
@@ -119,15 +119,15 @@
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
 
-  <class class="schoolbell.app.person.person.Person">
+  <class class="schooltool.person.person.Person">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
 
-  <class class="schoolbell.app.group.group.Group">
+  <class class="schooltool.group.group.Group">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
 
-  <class class="schoolbell.app.resource.resource.Resource">
+  <class class="schooltool.resource.resource.Resource">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
 

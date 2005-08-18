@@ -34,7 +34,7 @@ from zope.app.location.interfaces import ILocation
 
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.interfaces import vocabulary
-from schoolbell.app.group.interfaces import IGroupMember
+from schooltool.group.interfaces import IGroupMember
 
 class IHavePreferences(IAnnotatable):
     """An object that can have preferences. Namely a Person."""

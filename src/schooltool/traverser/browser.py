@@ -22,7 +22,7 @@ Pluggable Traverser Implementation for the Browser
 $Id$
 """
 from zope.app import zapi
-from schoolbell.app.traverser.traverser import PluggableTraverser
+from schooltool.traverser.traverser import PluggableTraverser
 
 
 class PluggableBrowserTraverser(PluggableTraverser):

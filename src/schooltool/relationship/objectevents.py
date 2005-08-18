@@ -31,8 +31,8 @@ from zope.app.container.interfaces import IObjectRemovedEvent
 from zope.app.container.contained import getProxiedObject
 from zope.app.event.interfaces import IObjectCopiedEvent
 
-from schoolbell.relationship.interfaces import IRelationshipLinks
-from schoolbell.relationship.relationship import unrelateAll
+from schooltool.relationship.interfaces import IRelationshipLinks
+from schooltool.relationship.relationship import unrelateAll
 
 
 def unrelateOnDeletion(event):

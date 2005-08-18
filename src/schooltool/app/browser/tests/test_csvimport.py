@@ -33,11 +33,11 @@ from zope.testing import doctest
 from zope.app.testing import ztapi
 
 from schoolbell.app.browser.tests.setup import setUp as testSetUp, tearDown
-from schoolbell.app.membership import URIMember
-from schoolbell.app.resource.resource import Resource
-from schoolbell.app.person.person import Person
-from schoolbell.app.group.group import Group
-from schoolbell.app.testing import setup
+from schooltool.app.membership import URIMember
+from schooltool.resource.resource import Resource
+from schooltool.person.person import Person
+from schooltool.group.group import Group
+from schooltool.testing import setup
 
 from schooltool.browser.csvimport import InvalidCSVError
 from schooltool.common import dedent
@@ -679,7 +679,7 @@ def doctest_PersonCSVImporter():
     Create a person container and an importer
 
         >>> from schooltool.browser.csvimport import PersonCSVImporter
-        >>> from schoolbell.app.person.person import PersonContainer
+        >>> from schooltool.person.person import PersonContainer
         >>> container = PersonContainer()
         >>> importer = PersonCSVImporter(container, None)
 

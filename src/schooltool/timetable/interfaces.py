@@ -34,7 +34,7 @@ from zope.app.container.interfaces import IContainer, IContained
 from zope.app.location.interfaces import ILocation
 
 from schoolbell.app import interfaces as sb
-from schoolbell.calendar.interfaces import Unchanged
+from schooltool.calendar.interfaces import Unchanged
 
 from schooltool import SchoolToolMessageID as _
 

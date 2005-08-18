@@ -24,9 +24,9 @@ $Id: app.py 3481 2005-04-21 15:28:29Z bskahan $
 from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 
-from schoolbell.relationship import getRelatedObjects
+from schooltool.relationship import getRelatedObjects
 from schoolbell.app.interfaces import ISchoolBellCalendar
-from schoolbell.app.person.browser import person
+from schooltool.person.browser import person
 
 from schooltool import getSchoolToolApplication
 from schooltool.course.interfaces import ISection

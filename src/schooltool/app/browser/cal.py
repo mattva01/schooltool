@@ -36,8 +36,8 @@ from zope.app.publisher.browser import BrowserView
 
 from schoolbell.app.browser.overlay import CalendarOverlayView
 from schoolbell.app.interfaces import ISchoolBellCalendar
-from schoolbell.app.person.interfaces import IPerson, IPersonPreferences
-from schoolbell.app.person.preference import PersonPreferences
+from schooltool.person.interfaces import IPerson, IPersonPreferences
+from schooltool.person.preference import PersonPreferences
 
 from schooltool.course.interfaces import ISection
 from schooltool.interfaces import IShowTimetables

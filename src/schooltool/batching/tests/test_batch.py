@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.batching.batch
+Unit tests for schooltool.batching.batch
 
 $Id$
 """
@@ -38,7 +38,7 @@ def doctest_Batch():
 
     Now we can feed this to our Batch class.
 
-      >>> from schoolbell.batching.batch import Batch
+      >>> from schooltool.batching.batch import Batch
       >>> batch = Batch(testData, 0, 3)
 
     Our 'batch' instance is now loaded up with our testData. The batch starts
@@ -189,7 +189,7 @@ def doctest_Batch():
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
-                doctest.DocTestSuite('schoolbell.batching.batch'),
+                doctest.DocTestSuite('schooltool.batching.batch'),
            ])
 
 if __name__ == '__main__':

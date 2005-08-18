@@ -22,13 +22,13 @@ Batching for schoolbell.
 $Id$
 """
 
-from schoolbell.batching.interfaces import IBatch
+from schooltool.batching.interfaces import IBatch
 
 
 class Batch(object):
     """Batching mechanism for SchoolBell.
 
-    See schoolbell.batching.interfaces.IBatch.
+    See schooltool.batching.interfaces.IBatch.
     """
 
     def __init__(self, iterable, start, size, sort_by=None):

@@ -25,16 +25,16 @@ This module defines relationships used to store calendar subscriptions.
     >>> setup.placelessSetUp()
     >>> setup.setUpAnnotations()
 
-    >>> from schoolbell.app.testing import setup as sbsetup
+    >>> from schooltool.testing import setup as sbsetup
     >>> sbsetup.setupCalendaring()
 
-    >>> from schoolbell.relationship.tests import setUpRelationships
+    >>> from schooltool.relationship.tests import setUpRelationships
     >>> setUpRelationships()
 
 We will need some sample persons and groups for the demonstration
 
-    >>> from schoolbell.app.group.group import Group
-    >>> from schoolbell.app.person.person import Person
+    >>> from schooltool.group.group import Group
+    >>> from schooltool.person.person import Person
     >>> john = Person(title="John")
     >>> smith = Person(title="Smith")
     >>> developers = Group(title="Developers")
@@ -81,9 +81,9 @@ from zope.interface import Interface, implements
 from zope.schema import Object, TextLine, Bool
 from zope.security.proxy import removeSecurityProxy
 
-from schoolbell.relationship import URIObject
-from schoolbell.relationship.interfaces import IRelationshipLinks
-from schoolbell.relationship.relationship import BoundRelationshipProperty
+from schooltool.relationship import URIObject
+from schooltool.relationship.interfaces import IRelationshipLinks
+from schooltool.relationship.relationship import BoundRelationshipProperty
 from schoolbell.app.interfaces import ISchoolBellCalendar
 
 
@@ -211,9 +211,9 @@ class BoundOverlaidCalendarsProperty(BoundRelationshipProperty):
 
     Stores the list of overlaid calendars in relationships.
 
-        >>> from schoolbell.relationship.tests import setUp, tearDown
-        >>> from schoolbell.relationship.tests import SomeObject
-        >>> from schoolbell.relationship import getRelatedObjects
+        >>> from schooltool.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationship.tests import SomeObject
+        >>> from schooltool.relationship import getRelatedObjects
         >>> setUp()
 
     Given a relatable object, and a relatable calendar

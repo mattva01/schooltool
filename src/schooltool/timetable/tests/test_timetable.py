@@ -45,8 +45,8 @@ from schoolbell.app.rest.tests.utils import NiceDiffsMixin, EqualsSortedMixin
 from schooltool import timetable
 from schooltool.timetable.interfaces import ITerm, ITimetables
 from schooltool.timetable.interfaces import ITimetable, ITimetableActivity
-from schoolbell.relationship import RelationshipProperty
-from schoolbell.app.membership import URIGroup, URIMember, URIMembership
+from schooltool.relationship import RelationshipProperty
+from schooltool.app.membership import URIGroup, URIMember, URIMembership
 from schooltool.interfaces import ApplicationInitializationEvent
 
 __metaclass__ = type
@@ -814,8 +814,8 @@ class TestTimetablingPersistence(unittest.TestCase):
         from schooltool.timetable import TimetableActivity
         from zope.app.traversing.interfaces import IContainmentRoot
         import transaction
-        from schoolbell.app.person.person import Person
-        from schoolbell.app.resource.resource import Resource
+        from schooltool.person.person import Person
+        from schooltool.resource.resource import Resource
 
         parent = PersistentLocatableStub()
         directlyProvides(parent, IContainmentRoot)
@@ -1096,7 +1096,7 @@ class TestTimetablesMixin(NiceDiffsMixin, EqualsSortedMixin,
                           unittest.TestCase):
 
     def setUp(self):
-        from schoolbell.relationship.tests import setUpRelationships
+        from schooltool.relationship.tests import setUpRelationships
         from zope.app.traversing.interfaces import IPhysicallyLocatable
         from schooltool.timetable.interfaces import ITimetable, ITimetables
         from schooltool.timetable.interfaces import ITimetableSource
@@ -1158,7 +1158,7 @@ class TestTimetablesMixin(NiceDiffsMixin, EqualsSortedMixin,
 
     def test_composite_table_related(self):
         from schooltool.timetable import TimetableActivity
-        from schoolbell.app.membership import Membership
+        from schooltool.app.membership import Membership
 
         tm = ITimetables(Content())
         parent = Parent()
@@ -1215,7 +1215,7 @@ class TestTimetablesMixin(NiceDiffsMixin, EqualsSortedMixin,
 
     def test_makeTimetableCalendar(self):
         from schooltool.timetable import TimetableActivity, Timetable
-        from schoolbell.app.cal import Calendar, CalendarEvent
+        from schooltool.app.cal import Calendar, CalendarEvent
         from schooltool.app import SchoolToolApplication
         from zope.app.component.site import LocalSiteManager
         from zope.app.component.hooks import setSite

@@ -4,11 +4,11 @@ and Resources, SchoolTool adds Course and Sections.
 
 We need some test setup:
 
-    >>> from schoolbell.app.testing import setup
-    >>> from schoolbell.relationship.tests import setUp, tearDown
+    >>> from schooltool.testing import setup
+    >>> from schooltool.relationship.tests import setUp, tearDown
     >>> setUp()
-    >>> from schoolbell.app.group.group import Group
-    >>> from schoolbell.app.person.person import Person, PersonContainer
+    >>> from schooltool.group.group import Group
+    >>> from schooltool.person.person import Person, PersonContainer
     >>> from schooltool import app
     >>> from schooltool.course.course import Course
     >>> from schooltool.course.section import Section
@@ -78,11 +78,11 @@ sections can have more than one instructor:
     ['Teacher1', 'Teacher2']
 
 
-You can determine if a Person is a teacher using schoolbell.relationship
+You can determine if a Person is a teacher using schooltool.relationship
 methods, there is also a method PersonView.isTeacher in schooltool's web UI:
 
     >>> from schooltool.relationships import URISection, URIInstruction
-    >>> from schoolbell.relationship import getRelatedObjects
+    >>> from schooltool.relationship import getRelatedObjects
     >>> len(getRelatedObjects(teacher1, URISection,
     ...                       rel_type=URIInstruction)) > 0
     True
@@ -94,7 +94,7 @@ is possible because Sections implement the IGroup interface.
 
     >>> [student.username for student in section1.members]
     []
-    >>> from schoolbell.app.membership import Membership
+    >>> from schooltool.app.membership import Membership
     >>> Membership(group=section1, member=student1)
     >>> Membership(group=section1, member=student2)
     >>> [student.username for student in section1.members]
@@ -112,10 +112,10 @@ schools.
     ['Form1']
 
 Checking for a person's status as a student is also handled with the
-schoolbell.relationship methods.  There are convenience methods in PersonView
+schooltool.relationship methods.  There are convenience methods in PersonView
 as well:
 
-    >>> from schoolbell.app.membership import URIGroup, URIMembership
+    >>> from schooltool.app.membership import URIGroup, URIMembership
     >>> from schooltool.course.interfaces import ISection
     >>> for obj in getRelatedObjects(student2, URIGroup,
     ...                              rel_type=URIMembership):

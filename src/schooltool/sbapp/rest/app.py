@@ -34,7 +34,7 @@ from schoolbell.app.rest import View, Template, IRestTraverser
 from schoolbell.app.rest.errors import RestError
 from schoolbell.app.rest.xmlparsing import XMLValidationError, XMLParseError
 from schoolbell.app.rest.xmlparsing import XMLDocument
-from schoolbell.calendar.icalendar import convert_calendar_to_ical
+from schooltool.calendar.icalendar import convert_calendar_to_ical
 from schoolbell.app.interfaces import IWriteCalendar
 
 from schoolbell.app.browser.cal import CalendarOwnerHTTPTraverser

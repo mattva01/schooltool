@@ -27,14 +27,14 @@ from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 
 from schoolbell import SchoolBellMessageID as _
-from schoolbell.batching import Batch
+from schooltool.batching import Batch
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.browser.app import ContainerView, BaseAddView, BaseEditView
-from schoolbell.app.person.interfaces import IPerson
-from schoolbell.app.resource.interfaces import IResource
+from schooltool.person.interfaces import IPerson
+from schooltool.resource.interfaces import IResource
 
-from schoolbell.app.group.interfaces import IGroupMember
-from schoolbell.app.group.interfaces import IGroupContainer, IGroupContained
+from schooltool.group.interfaces import IGroupMember
+from schooltool.group.interfaces import IGroupContainer, IGroupContained
 
 
 class GroupContainerView(ContainerView):

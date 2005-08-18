@@ -32,8 +32,8 @@ def doctest_ResourceView():
 
     Let's create a view for a resource:
 
-        >>> from schoolbell.app.resource.browser.resource import ResourceView
-        >>> from schoolbell.app.resource.resource import Resource
+        >>> from schooltool.resource.browser.resource import ResourceView
+        >>> from schooltool.resource.resource import Resource
         >>> resource = Resource()
         >>> request = TestRequest()
         >>> view = ResourceView(resource, request)
@@ -46,9 +46,9 @@ def doctest_ResourceCSVImporter():
 
     Create a resource container and an importer
 
-        >>> from schoolbell.app.resource.browser.csvimport import \
+        >>> from schooltool.resource.browser.csvimport import \
         ...     ResourceCSVImporter
-        >>> from schoolbell.app.resource.resource import ResourceContainer
+        >>> from schooltool.resource.resource import ResourceContainer
         >>> container = ResourceContainer()
         >>> importer = ResourceCSVImporter(container, None)
 
@@ -79,9 +79,9 @@ def doctest_ResourceCSVImportView():
     r"""
     We'll create a resource csv import view
 
-        >>> from schoolbell.app.resource.browser.csvimport import \
+        >>> from schooltool.resource.browser.csvimport import \
         ...     ResourceCSVImportView
-        >>> from schoolbell.app.resource.resource import ResourceContainer
+        >>> from schooltool.resource.resource import ResourceContainer
         >>> container = ResourceContainer()
         >>> request = TestRequest()
 

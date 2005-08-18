@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.calendar.icalendar
+Unit tests for schooltool.calendar.icalendar
 
 $Id$
 """
@@ -86,7 +86,7 @@ class TestParseDateTime(TimezoneTestMixin, unittest.TestCase):
 
     def test_timezones(self):
         # The simple tests are in the doctest of parse_date_time.
-        from schoolbell.calendar.icalendar import parse_date_time
+        from schooltool.calendar.icalendar import parse_date_time
 
         if not self.have_tzset:
             return # Do not run this test on Windows
@@ -110,7 +110,7 @@ class TestParseDateTime(TimezoneTestMixin, unittest.TestCase):
 class TestPeriod(unittest.TestCase):
 
     def test(self):
-        from schoolbell.calendar.icalendar import Period
+        from schooltool.calendar.icalendar import Period
         dt1 = datetime(2001, 2, 3, 14, 30, 5)
         dt2 = datetime(2001, 2, 3, 16, 35, 20)
         td = dt2 - dt1
@@ -135,7 +135,7 @@ class TestPeriod(unittest.TestCase):
         self.assertRaises(ValueError, Period, dt1, -td)
 
     def test_overlap(self):
-        from schoolbell.calendar.icalendar import Period
+        from schooltool.calendar.icalendar import Period
         p1 = Period(datetime(2004, 1, 1, 12, 0), timedelta(hours=1))
         p2 = Period(datetime(2004, 1, 1, 11, 30), timedelta(hours=1))
         p3 = Period(datetime(2004, 1, 1, 12, 30), timedelta(hours=1))
@@ -159,7 +159,7 @@ class TestPeriod(unittest.TestCase):
 class TestVEvent(unittest.TestCase):
 
     def test_add(self):
-        from schoolbell.calendar.icalendar import VEvent, ICalParseError
+        from schooltool.calendar.icalendar import VEvent, ICalParseError
         vevent = VEvent()
         value, params = 'bar', {'VALUE': 'TEXT'}
         vevent.add('foo', value, params)
@@ -178,7 +178,7 @@ class TestVEvent(unittest.TestCase):
         self.assertRaises(ICalParseError, vevent.add, 'uid', '2')
 
     def test_hasProp(self):
-        from schoolbell.calendar.icalendar import VEvent
+        from schooltool.calendar.icalendar import VEvent
         vevent = VEvent()
         vevent.add('foo', 'bar', {})
         self.assert_(vevent.hasProp('foo'))
@@ -186,7 +186,7 @@ class TestVEvent(unittest.TestCase):
         self.assert_(not vevent.hasProp('baz'))
 
     def test__getType(self):
-        from schoolbell.calendar.icalendar import VEvent
+        from schooltool.calendar.icalendar import VEvent
         vevent = VEvent()
         vevent.add('x-explicit', '', {'VALUE': 'INTEGER'})
         vevent.add('dtstart', 'implicit type', {})
@@ -200,7 +200,7 @@ class TestVEvent(unittest.TestCase):
         self.assertRaises(KeyError, vevent._getType, 'nonexistent')
 
     def test_getOne(self):
-        from schoolbell.calendar.icalendar import VEvent
+        from schooltool.calendar.icalendar import VEvent
         vevent = VEvent()
 
         vevent.add('foo', 'bar', {})
@@ -253,7 +253,7 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.getOne('unknown'), 'magic')
 
     def test_iterDates(self):
-        from schoolbell.calendar.icalendar import VEvent
+        from schooltool.calendar.icalendar import VEvent
         vevent = VEvent()
         vevent.all_day_event = True
         vevent.dtstart = date(2003, 1, 2)
@@ -268,7 +268,7 @@ class TestVEvent(unittest.TestCase):
         self.assertRaises(ValueError, list, vevent.iterDates())
 
     def test_iterDates_with_rdate_exdate(self):
-        from schoolbell.calendar.icalendar import VEvent
+        from schooltool.calendar.icalendar import VEvent
         vevent = VEvent()
         vevent.all_day_event = True
         vevent.dtstart = date(2003, 1, 5)
@@ -299,7 +299,7 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(list(vevent.iterDates()), expected)
 
     def test_validate_error_cases(self):
-        from schoolbell.calendar.icalendar import VEvent, ICalParseError
+        from schooltool.calendar.icalendar import VEvent, ICalParseError
 
         vevent = VEvent()
         self.assertRaises(ICalParseError, vevent.validate)
@@ -325,7 +325,7 @@ class TestVEvent(unittest.TestCase):
         self.assertRaises(ICalParseError, vevent.validate)
 
     def test_validate_all_day_events(self):
-        from schoolbell.calendar.icalendar import VEvent, ICalParseError
+        from schooltool.calendar.icalendar import VEvent, ICalParseError
 
         vevent = VEvent()
         vevent.add('summary', 'An event', {})
@@ -376,7 +376,7 @@ class TestVEvent(unittest.TestCase):
         self.assertRaises(ICalParseError, vevent.validate)
 
     def test_validate_not_all_day_events(self):
-        from schoolbell.calendar.icalendar import VEvent, ICalParseError
+        from schooltool.calendar.icalendar import VEvent, ICalParseError
 
         vevent = VEvent()
         vevent.add('dtstart', '20010203T040506')
@@ -434,7 +434,7 @@ class TestVEvent(unittest.TestCase):
         self.assertRaises(ICalParseError, vevent.validate)
 
     def test_validate_location(self):
-        from schoolbell.calendar.icalendar import VEvent
+        from schooltool.calendar.icalendar import VEvent
         vevent = VEvent()
         vevent.add('dtstart', '20010203T040506')
         vevent.add('uid', 'unique5', {})
@@ -443,7 +443,7 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.location, 'Somewhere')
 
     def test_validate_description(self):
-        from schoolbell.calendar.icalendar import VEvent
+        from schooltool.calendar.icalendar import VEvent
         vevent = VEvent()
         vevent.add('dtstart', '20010203T040506')
         vevent.add('uid', 'unique5', {})
@@ -452,7 +452,7 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.description, 'Some long text')
 
     def test_validate_rrule(self):
-        from schoolbell.calendar.icalendar import VEvent
+        from schooltool.calendar.icalendar import VEvent
         vevent = VEvent()
         vevent.add('dtstart', '20010203T040506')
         vevent.add('uid', 'unique5', {})
@@ -466,7 +466,7 @@ class TestVEvent(unittest.TestCase):
         self.assertEquals(vevent.rrule.exceptions, ())
 
     def test_validate_rrule_exceptions(self):
-        from schoolbell.calendar.icalendar import VEvent
+        from schooltool.calendar.icalendar import VEvent
         vevent = VEvent()
         vevent.add('dtstart', '20010203T040506')
         vevent.add('uid', 'unique5', {})
@@ -486,7 +486,7 @@ class TestVEvent(unittest.TestCase):
         self.assert_(not isinstance(vevent.rrule.exceptions[0], datetime))
 
     def test_extractListOfDates(self):
-        from schoolbell.calendar.icalendar import VEvent, Period, ICalParseError
+        from schooltool.calendar.icalendar import VEvent, Period, ICalParseError
 
         vevent = VEvent()
         vevent.add('rdate', '20010205T040506')
@@ -606,7 +606,7 @@ class TestICalReader(unittest.TestCase):
         """)
 
     def test_iterEvents(self):
-        from schoolbell.calendar.icalendar import ICalReader, ICalParseError
+        from schooltool.calendar.icalendar import ICalReader, ICalParseError
         file = StringIO(self.example_ical)
         reader = ICalReader(file)
         result = list(reader.iterEvents())
@@ -710,7 +710,7 @@ class TestICalReader(unittest.TestCase):
         self.assertEquals(list(reader.iterEvents()), [])
 
     def test_iterRow(self):
-        from schoolbell.calendar.icalendar import ICalReader
+        from schooltool.calendar.icalendar import ICalReader
         file = StringIO("key1\n"
                         " :value1\n"
                         " \n"
@@ -748,7 +748,7 @@ class TestICalReader(unittest.TestCase):
                          [("KEY", u"value \u263B", {'PARAM': u'\u263B'})])
 
     def test_parseRow(self):
-        from schoolbell.calendar.icalendar import ICalReader, ICalParseError
+        from schooltool.calendar.icalendar import ICalReader, ICalParseError
         parseRow = ICalReader._parseRow
         self.assertEqual(parseRow("key:"), ("KEY", "", {}))
         self.assertEqual(parseRow("key:value"), ("KEY", "value", {}))
@@ -787,7 +787,7 @@ def doctest_ical_reader_empty_summary():
     read as a CalendarEvent with title = None in schoolbell, which broke
     things.
 
-        >>> from schoolbell.calendar.icalendar import read_icalendar
+        >>> from schooltool.calendar.icalendar import read_icalendar
         >>> events = list(read_icalendar('''\
         ... BEGIN:VCALENDAR
         ... VERSION:2.0
@@ -828,7 +828,7 @@ def doctest_ical_reader_empty_summary():
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite())
-    suite.addTest(doctest.DocTestSuite('schoolbell.calendar.icalendar',
+    suite.addTest(doctest.DocTestSuite('schooltool.calendar.icalendar',
                         optionflags=doctest.ELLIPSIS | doctest.REPORT_UDIFF))
     suite.addTest(unittest.makeSuite(TestParseDateTime))
     suite.addTest(unittest.makeSuite(TestPeriod))

@@ -25,7 +25,7 @@ import zope.interface
 import zope.schema
 from zope.app import container
 
-from schoolbell.app.group.interfaces import IGroup
+from schooltool.group.interfaces import IGroup
 from schooltool import SchoolToolMessageID as _
 
 
@@ -43,7 +43,7 @@ class ICourse(zope.interface.Interface):
 
     sections = zope.interface.Attribute(
         """The Sections that implement this course material,
-           see schoolbell.relationship.interfaces.IRelationshipProperty.""")
+           see schooltool.relationship.interfaces.IRelationshipProperty.""")
 
 
 class ICourseContainer(container.interfaces.IContainer):

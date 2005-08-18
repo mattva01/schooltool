@@ -21,7 +21,7 @@ URI objects.
 
 Relationship types and roles are identified by URIs (the idea was borrowed
 from XLink and RDF).  Instead of dealing with strings directly,
-schoolbell.relationship uses introspectable URI objects that also have an
+schooltool.relationship uses introspectable URI objects that also have an
 optional short name and a description in addition to the URI itself.
 
 By convention, names of global URI object constants start with 'URI'.

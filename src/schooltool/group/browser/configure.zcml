@@ -8,15 +8,15 @@
       for="..interfaces.IGroup"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-      factory="schoolbell.app.traverser.browser.PluggableBrowserTraverser"
+      factory="schooltool.traverser.browser.PluggableBrowserTraverser"
       permission="zope.Public"
       />
 
   <configure package="schoolbell.app.browser">
     <page
         name="index.html"
-        for="schoolbell.app.group.interfaces.IGroupContainer"
-        class="schoolbell.app.group.browser.group.GroupContainerView"
+        for="schooltool.group.interfaces.IGroupContainer"
+        class="schooltool.group.browser.group.GroupContainerView"
         template="templates/container.pt"
         permission="zope.View"
         menu="zmi_views"
@@ -26,25 +26,25 @@
     <addform
         label="Add a Group"
         name="addSchoolBellGroup.html"
-        schema="schoolbell.app.group.interfaces.IGroup"
+        schema="schooltool.group.interfaces.IGroup"
         fields="title description"
         set_before_add="title"
-        content_factory="schoolbell.app.group.group.Group"
+        content_factory="schooltool.group.group.Group"
         permission="schoolbell.create"
         template="templates/simple_add.pt"
-        class="schoolbell.app.group.browser.group.GroupAddView">
+        class="schooltool.group.browser.group.GroupAddView">
       <widget field="description" height="5" />
     </addform>
 
     <editform
-        for="schoolbell.app.group.interfaces.IGroup"
+        for="schooltool.group.interfaces.IGroup"
         name="edit.html"
         label="Edit Group Information"
-        schema="schoolbell.app.group.interfaces.IGroup"
+        schema="schooltool.group.interfaces.IGroup"
         fields="title description"
         permission="schoolbell.edit"
         template="templates/simple_edit.pt"
-        class="schoolbell.app.group.browser.group.GroupEditView"
+        class="schooltool.group.browser.group.GroupEditView"
         menu="schoolbell_actions"
         title="Edit Info"
         />

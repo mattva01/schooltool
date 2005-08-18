@@ -27,12 +27,12 @@ import zope.interface
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree, contained
 
-from schoolbell.relationship import RelationshipProperty
+from schooltool.relationship import RelationshipProperty
 from schoolbell.app import membership
-from schoolbell.app.cal import Calendar
-from schoolbell.app.group.interfaces import IGroup
-from schoolbell.app.person.interfaces import IPerson
-from schoolbell.app.resource.interfaces import IResource
+from schooltool.app.cal import Calendar
+from schooltool.group.interfaces import IGroup
+from schooltool.person.interfaces import IPerson
+from schooltool.resource.interfaces import IResource
 
 from schooltool import SchoolToolMessageID as _
 from schooltool import relationships

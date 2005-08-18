@@ -26,16 +26,16 @@ $Id$
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 
 from schooltool.course.interfaces import ICourse, ISection
-from schoolbell.app.person.interfaces import IPerson
-from schoolbell.app.group.interfaces import IGroup
+from schooltool.person.interfaces import IPerson
+from schooltool.group.interfaces import IGroup
 
-from schoolbell.app.membership import URIMembership, URIMember, URIGroup
+from schooltool.app.membership import URIMembership, URIMember, URIGroup
 
-from schoolbell.relationship import URIObject, RelationshipSchema
-from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
-from schoolbell.relationship.interfaces import IRelationshipAddedEvent
-from schoolbell.relationship.interfaces import IRelationshipRemovedEvent
-from schoolbell.relationship.interfaces import InvalidRelationship
+from schooltool.relationship import URIObject, RelationshipSchema
+from schooltool.relationship.interfaces import IBeforeRelationshipEvent
+from schooltool.relationship.interfaces import IRelationshipAddedEvent
+from schooltool.relationship.interfaces import IRelationshipRemovedEvent
+from schooltool.relationship.interfaces import InvalidRelationship
 
 #
 # The Instruction relationship
@@ -151,7 +151,7 @@ CourseSections = RelationshipSchema(URICourseSections,
 # Additional handling of the section membership relationship to add sections
 # to members' (students') overlay portlets automatically.  In Group membership
 # relationships users must manually add the calendar to the portlet (see
-# schoolbell.app.membership).
+# schooltool.app.membership).
 #
 
 def updateStudentCalendars(event):

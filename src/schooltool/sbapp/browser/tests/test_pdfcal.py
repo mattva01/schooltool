@@ -30,11 +30,11 @@ from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from zope.app.tests import setup, ztapi
 from zope.app.publisher.browser import BrowserView
-from schoolbell.app.cal import CalendarEvent
+from schooltool.app.cal import CalendarEvent
 from schoolbell.app.browser.pdfcal import PDFCalendarViewBase
 from schoolbell.app.browser.pdfcal import setUpMSTTCoreFonts
-from schoolbell.app.person.person import Person
-from schoolbell.app.resource.resource import Resource
+from schooltool.person.person import Person
+from schooltool.resource.resource import Resource
 from schoolbell import SchoolBellMessageID as _
 
 
@@ -239,7 +239,7 @@ def doctest_PDFCalendarViewBase_dayEvents():
 
     Let's add a recurring event to check expansion:
 
-        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> from schooltool.calendar.recurrent import DailyRecurrenceRule
         >>> evt3 = CalendarEvent(datetime(2005, 7, 5, 9, 3),
         ...                      timedelta(hours=2), "evt3",
         ...                      recurrence=DailyRecurrenceRule())
@@ -324,7 +324,7 @@ def doctest_PDFCalendarViewBase_eventInfoCell():
     If the event is recurrent, it is flagged.  The location, if provided,
     is also indicated.
 
-        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> from schooltool.calendar.recurrent import DailyRecurrenceRule
         >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
         ...                     timedelta(hours=2), "Some event",
         ...                     location=u"\u0105 location",
@@ -663,7 +663,7 @@ def test_getCalendars(self):
         >>> ztapi.browserView(ISchoolBellCalendar, 'calendar_list',
         ...                   CalendarListViewStub)
 
-        >>> from schoolbell.app.cal import Calendar
+        >>> from schooltool.app.cal import Calendar
         >>> view = PDFCalendarViewBase(Calendar(), TestRequest())
 
     Now, if we call the method, the output of our stub will be returned:

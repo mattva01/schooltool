@@ -27,7 +27,7 @@ SchoolBell authentication utility
 
     >>> from zope.app.tests import setup
     >>> root = setup.placefulSetUp(True)
-    >>> from schoolbell.relationship.tests import setUpRelationships
+    >>> from schooltool.relationship.tests import setUpRelationships
     >>> setUpRelationships()
 
     Global auth utility:
@@ -72,7 +72,7 @@ SchoolBell is a possible site:
 The SchoolBellAuthenticationUtility is an IAuthentication utility that
 lives in that site:
 
-    >>> from schoolbell.app.security import SchoolBellAuthenticationUtility
+    >>> from schooltool.app.security import SchoolBellAuthenticationUtility
     >>> from schoolbell.app.interfaces import ISchoolBellAuthentication
     >>> auth = SchoolBellAuthenticationUtility()
     >>> verifyObject(IAuthentication, auth)
@@ -83,7 +83,7 @@ lives in that site:
 Let's provide the location of auth:
 
     >>> root['frogpond'] = app
-    >>> from schoolbell.app.security import setUpLocalAuth
+    >>> from schooltool.app.security import setUpLocalAuth
     >>> setUpLocalAuth(app, auth)
     >>> from zope.app.component.hooks import setSite
     >>> setSite(app)
@@ -101,7 +101,7 @@ getPrincipal
 
 The utility knows about the users of the application:
 
-    >>> from schoolbell.app.person.person import Person, PersonContainer
+    >>> from schooltool.person.person import Person, PersonContainer
     >>> from zope.app.security.interfaces import IPrincipal
     >>> app['persons'] = PersonContainer()
     >>> person = Person(username=u"frog", title="Frog")
@@ -137,10 +137,10 @@ raised:
 
 The groups of the SchoolBell instance are also principals:
 
-    >>> from schoolbell.app.group.group import GroupContainer
+    >>> from schooltool.group.group import GroupContainer
     >>> app['groups'] = GroupContainer()
 
-    >>> from schoolbell.app.group.group import Group
+    >>> from schooltool.group.group import Group
     >>> group = Group()
     >>> group.title = "The Management"
     >>> app['groups']['management'] = group
@@ -214,7 +214,7 @@ Now, it is authenticated by our utility:
 
 Our principal is adaptable to IPerson:
 
-    >>> from schoolbell.app.person.interfaces import IPerson
+    >>> from schooltool.person.interfaces import IPerson
     >>> from zope.security.proxy import removeSecurityProxy
     >>> removeSecurityProxy(IPerson(principal)) is  app['persons']['frog']
     True

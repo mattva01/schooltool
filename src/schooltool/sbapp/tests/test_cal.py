@@ -33,7 +33,7 @@ from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.testing import setup
 
 from schoolbell.app.interfaces import IHaveCalendar
-from schoolbell.app.testing import setup as sbsetup
+from schooltool.testing import setup as sbsetup
 
 class ResourceStub(object):
     """Stub resource.
@@ -50,7 +50,7 @@ def doctest_CalendarEvent():
     CalendarEvents are almost like SimpleCalendarEvents, the main difference
     is that CalendarEvents are mutable and IContained.
 
-        >>> from schoolbell.app.cal import CalendarEvent, Calendar
+        >>> from schooltool.app.cal import CalendarEvent, Calendar
 
         >>> event = CalendarEvent(datetime(2005, 2, 7, 16, 24),
         ...                       timedelta(hours=3),
@@ -77,7 +77,7 @@ def doctest_CalendarEvent():
 
         >>> event.__parent__ = object()
 
-        >>> from schoolbell.calendar.interfaces import ICalendar
+        >>> from schooltool.calendar.interfaces import ICalendar
         >>> ICalendar(event) is event.__parent__
         True
 
@@ -102,7 +102,7 @@ def doctest_CalendarEvent_resource_booking():
     All calendar events have a `resources` argument, but initially it is empty.
 
         >>> from schoolbell.app.interfaces import ISchoolBellCalendar
-        >>> from schoolbell.app.cal import Calendar, CalendarEvent
+        >>> from schooltool.app.cal import Calendar, CalendarEvent
         >>> c = Calendar(None)
         >>> e = CalendarEvent(datetime(2005, 2, 28), None, '')
         >>> c.addEvent(e)
@@ -172,14 +172,14 @@ def doctest_Calendar():
 
     Let's create a Calendar:
 
-        >>> from schoolbell.app.cal import Calendar
+        >>> from schooltool.app.cal import Calendar
         >>> cal = Calendar(None)
         >>> cal.__name__
         'calendar'
 
     The calendar should be an ILocation and it should implement IEditCalendar.
 
-        >>> from schoolbell.calendar.interfaces import IEditCalendar
+        >>> from schooltool.calendar.interfaces import IEditCalendar
         >>> from zope.app.location.interfaces import ILocation
         >>> verifyObject(IEditCalendar, cal)
         True
@@ -195,7 +195,7 @@ def doctest_Calendar():
 
     We can add events by using addEvent():
 
-        >>> from schoolbell.app.cal import CalendarEvent
+        >>> from schooltool.app.cal import CalendarEvent
         >>> event = CalendarEvent(datetime(2005, 2, 28), None, 'Example 1')
 
         >>> cal.addEvent(event)
@@ -310,7 +310,7 @@ def doctest_Calendar_addEvent_resource_booking():
     set.  Thus normally you cannot add the same calendar event into two
     different calendars.
 
-        >>> from schoolbell.app.cal import Calendar, CalendarEvent
+        >>> from schooltool.app.cal import Calendar, CalendarEvent
         >>> cal = Calendar(None)
         >>> e = CalendarEvent(datetime(2005, 2, 28), None, '')
         >>> cal.addEvent(e)
@@ -348,7 +348,7 @@ def doctest_WriteCalendar():
 
     WriteCalendar is an adapter for calendars into IWriteFile
 
-        >>> from schoolbell.app.cal import Calendar, WriteCalendar
+        >>> from schooltool.app.cal import Calendar, WriteCalendar
         >>> cal = Calendar(None)
         >>> writer = WriteCalendar(cal)
 
@@ -381,7 +381,7 @@ def doctest_WriteCalendar():
 
     As iCalendar is a bit unwieldy for testing, we will plant a hook:
 
-        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+        >>> from schooltool.calendar.simple import SimpleCalendarEvent
         >>> def event(unique_id, title, day=22, duration=3, **kwargs):
         ...     return SimpleCalendarEvent(title=title,
         ...                                dtstart=datetime(2005, 2, day),
@@ -411,7 +411,7 @@ def doctest_WriteCalendar_sophisticated():
     We start with three calendar events.
 
         >>> from datetime import datetime, timedelta
-        >>> from schoolbell.app.cal import Calendar, CalendarEvent
+        >>> from schooltool.app.cal import Calendar, CalendarEvent
         >>> cal = Calendar(None)
         >>> event1 = CalendarEvent(title='Play Doom',
         ...                        dtstart=datetime(2005, 2, 28),
@@ -432,7 +432,7 @@ def doctest_WriteCalendar_sophisticated():
     We will now upload a new calendar that does not change event1, removes
     event2, modifies event3 and adds a new event, event4.
 
-        >>> from schoolbell.app.cal import WriteCalendar
+        >>> from schooltool.app.cal import WriteCalendar
         >>> writer = WriteCalendar(cal)
         >>> writer.write(dedent('''\
         ... BEGIN:VCALENDAR
@@ -486,7 +486,7 @@ def test_suite():
         doctest.DocTestSuite(setUp=setup.placelessSetUp,
                              tearDown=setup.placelessTearDown,
                              optionflags=doctest.ELLIPSIS),
-        doctest.DocTestSuite('schoolbell.app.cal',
+        doctest.DocTestSuite('schooltool.app.cal',
                              optionflags=doctest.ELLIPSIS),
            ])
 

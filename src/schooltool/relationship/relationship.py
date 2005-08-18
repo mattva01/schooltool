@@ -33,16 +33,16 @@ from zope.interface import implements
 import zope.event
 from zope.app.location.interfaces import ILocation
 
-from schoolbell.relationship.interfaces import IRelationshipLinks
-from schoolbell.relationship.interfaces import IRelationshipLink
-from schoolbell.relationship.interfaces import IRelationshipProperty
-from schoolbell.relationship.interfaces import IBeforeRelationshipEvent
-from schoolbell.relationship.interfaces import IRelationshipAddedEvent
-from schoolbell.relationship.interfaces import IBeforeRemovingRelationshipEvent
-from schoolbell.relationship.interfaces import IRelationshipRemovedEvent
-from schoolbell.relationship.interfaces import DuplicateRelationship
-from schoolbell.relationship.interfaces import NoSuchRelationship
-from schoolbell.relationship.interfaces import IRelationshipSchema
+from schooltool.relationship.interfaces import IRelationshipLinks
+from schooltool.relationship.interfaces import IRelationshipLink
+from schooltool.relationship.interfaces import IRelationshipProperty
+from schooltool.relationship.interfaces import IBeforeRelationshipEvent
+from schooltool.relationship.interfaces import IRelationshipAddedEvent
+from schooltool.relationship.interfaces import IBeforeRemovingRelationshipEvent
+from schooltool.relationship.interfaces import IRelationshipRemovedEvent
+from schooltool.relationship.interfaces import DuplicateRelationship
+from schooltool.relationship.interfaces import NoSuchRelationship
+from schooltool.relationship.interfaces import IRelationshipSchema
 
 
 def relate(rel_type, (a, role_of_a), (b, role_of_b), extra_info=None):
@@ -210,8 +210,8 @@ class RelationshipSchema(object):
 
     Boring doctest setup:
 
-        >>> from schoolbell.relationship.tests import setUp, tearDown
-        >>> from schoolbell.relationship.tests import SomeObject
+        >>> from schooltool.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationship.tests import SomeObject
         >>> setUp()
         >>> a = SomeObject('a')
         >>> b = SomeObject('b')

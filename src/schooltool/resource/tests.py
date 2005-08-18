@@ -31,8 +31,8 @@ from schoolbell.app.tests.test_app import run_unit_tests
 def doctest_ResourceContainer():
     """Tests for ResourceContainer
 
-        >>> from schoolbell.app.resource.interfaces import IResourceContainer
-        >>> from schoolbell.app.resource.resource import ResourceContainer
+        >>> from schooltool.resource.interfaces import IResourceContainer
+        >>> from schooltool.resource.resource import ResourceContainer
         >>> c = ResourceContainer()
         >>> verifyObject(IResourceContainer, c)
         True
@@ -50,8 +50,8 @@ def doctest_ResourceContainer():
 def doctest_Resource():
     r"""Tests for Resource
 
-        >>> from schoolbell.app.resource.interfaces import IResourceContained
-        >>> from schoolbell.app.resource.resource import Resource
+        >>> from schooltool.resource.interfaces import IResourceContained
+        >>> from schooltool.resource.resource import Resource
         >>> resource = Resource()
         >>> verifyObject(IResourceContained, resource)
         True

@@ -32,10 +32,10 @@ from zope.app.container.interfaces import IObjectAddedEvent
 
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellCalendar
-from schoolbell.app.membership import URIMembership, URIMember, URIGroup
-from schoolbell.app.overlay import OverlaidCalendarsProperty
-from schoolbell.app.person import interfaces
-from schoolbell.relationship import RelationshipProperty
+from schooltool.app.membership import URIMembership, URIMember, URIGroup
+from schooltool.app.overlay import OverlaidCalendarsProperty
+from schooltool.person import interfaces
+from schooltool.relationship import RelationshipProperty
 
 
 class PersonContainer(btree.BTreeContainer):

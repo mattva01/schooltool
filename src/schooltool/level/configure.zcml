@@ -134,7 +134,7 @@
   </class>
 
   <adapter
-      for="schoolbell.app.person.interfaces.IPerson"
+      for="schooltool.person.interfaces.IPerson"
       provides=".interfaces.IAcademicRecord"
       factory=".record.AcademicRecord"
       trusted="true"

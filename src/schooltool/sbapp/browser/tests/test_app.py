@@ -30,7 +30,7 @@ from zope.app.testing import setup, ztapi
 from zope.publisher.browser import TestRequest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 
-from schoolbell.app.testing import setup as sbsetup
+from schooltool.testing import setup as sbsetup
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
 
@@ -85,8 +85,8 @@ def doctest_ContainerDeleteView():
     Let's create some persons to delete from a person container:
 
         >>> from schoolbell.app.browser.app import ContainerDeleteView
-        >>> from schoolbell.app.person.person import Person, PersonContainer
-        >>> from schoolbell.app.person.interfaces import IPerson
+        >>> from schooltool.person.person import Person, PersonContainer
+        >>> from schooltool.person.interfaces import IPerson
         >>> setup.setUpAnnotations()
 
         >>> personContainer = PersonContainer()
@@ -174,7 +174,7 @@ def doctest_LoginView():
         >>> setup.setUpAnnotations()
 
         >>> def getCalendarWithNakedObject(obj):
-        ...     from schoolbell.app.cal import getCalendar
+        ...     from schooltool.app.cal import getCalendar
         ...     from zope.security.proxy import removeSecurityProxy
         ...     return getCalendar(removeSecurityProxy(obj))
 
@@ -183,7 +183,7 @@ def doctest_LoginView():
         >>> ztapi.provideAdapter(IHaveCalendar, ISchoolBellCalendar,
         ...                      getCalendarWithNakedObject)
 
-        >>> from schoolbell.app.testing import registry
+        >>> from schooltool.testing import registry
         >>> registry.setupCalendarComponents()
 
         >>> from schoolbell.app.interfaces import ISchoolBellApplication
@@ -195,7 +195,7 @@ def doctest_LoginView():
 
     We have to set up a security checker for person objects:
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> from zope.security.checker import defineChecker, Checker
         >>> defineChecker(Person, Checker({},{}))
 
@@ -227,7 +227,7 @@ def doctest_LoginView():
 
     If we have authentication utility:
 
-        >>> from schoolbell.app.security import SchoolBellAuthenticationUtility
+        >>> from schooltool.app.security import SchoolBellAuthenticationUtility
         >>> from zope.app.security.interfaces import IAuthentication
         >>> auth = SchoolBellAuthenticationUtility()
         >>> ztapi.provideUtility(IAuthentication, auth)
@@ -252,7 +252,7 @@ def doctest_LoginView():
         >>> request.response.getHeader('Location')
         'http://127.0.0.1/persons/frog/calendar'
         >>> auth.authenticate(request)
-        <schoolbell.app.security.Principal object at 0x...>
+        <schooltool.app.security.Principal object at 0x...>
 
     If we pass bad credentials, we get a nice error and a form.
 
@@ -274,7 +274,7 @@ def doctest_LoginView():
 
         >>> principal = auth.authenticate(request)
         >>> principal
-        <schoolbell.app.security.Principal object at 0x...>
+        <schooltool.app.security.Principal object at 0x...>
         >>> principal.id
         'sb.person.frog'
 
@@ -304,14 +304,14 @@ def doctest_LogoutView():
         >>> app = sbsetup.setupSchoolBellSite()
         >>> persons = app['persons']
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> frog = Person('frog')
         >>> persons[None] = frog
         >>> frog.setPassword('pond')
 
     Also, we have an authentication utility:
 
-        >>> from schoolbell.app.security import SchoolBellAuthenticationUtility
+        >>> from schooltool.app.security import SchoolBellAuthenticationUtility
         >>> from zope.app.security.interfaces import IAuthentication
         >>> auth = SchoolBellAuthenticationUtility()
         >>> ztapi.provideUtility(IAuthentication, auth)
@@ -386,8 +386,8 @@ def doctest_ACLView():
 
     We have a couple of persons and groups:
 
-        >>> from schoolbell.app.group.group import Group
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.group.group import Group
+        >>> from schooltool.person.person import Person
         >>> app['persons']['1'] = Person('albert', title='Albert')
         >>> app['persons']['2'] = Person('marius', title='Marius')
         >>> app['groups']['3'] = Group('office')
@@ -799,7 +799,7 @@ def doctest_ACLView_inheritance():
 
     We have a couple of persons and groups:
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> app['persons']['1'] = Person('albert', title='Albert')
         >>> app['persons']['2'] = Person('marius', title='Marius')
 
@@ -901,7 +901,7 @@ def doctest_hasPermission():
 
     In it, we have a principal:
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> app['persons']['1'] = Person('joe', title='Joe')
 
     He does not have a 'super' permission on our schoolbell app:

@@ -2,7 +2,7 @@
 
 def registerTestSetup():
     from zope.interface import classImplements
-    from schoolbell.app.testing import registry
+    from schooltool.testing import registry
 
     def addCourseAndSectionContainer(app):
         from schooltool.course import course, section

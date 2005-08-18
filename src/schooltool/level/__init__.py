@@ -1,7 +1,7 @@
 # Make a package.
 
 def registerTestSetup():
-    from schoolbell.app.testing import registry
+    from schooltool.testing import registry
 
     def addLevelContainer(app):
         from schooltool.level import level

@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.app.security
+Unit tests for schooltool.app.security
 
 $Id: test_security.py 4431 2005-08-02 04:33:27Z tvon $
 """
@@ -30,7 +30,7 @@ from zope.app.container.contained import ObjectAddedEvent
 from zope.app.tests import ztapi, setup
 
 from schoolbell.app.tests.test_security import setUpLocalGrants
-from schoolbell.app.testing import setup as sbsetup
+from schooltool.testing import setup as sbsetup
 
 def doctest_personPermissionsSubscriber():
     r"""
@@ -39,8 +39,8 @@ def doctest_personPermissionsSubscriber():
         >>> root = setup.placefulSetUp(True)
 
         >>> from schoolbell.app.app import SchoolBellApplication
-        >>> from schoolbell.app.group.group import Group, GroupContainer
-        >>> from schoolbell.app.person.person import Person, PersonContainer
+        >>> from schooltool.group.group import Group, GroupContainer
+        >>> from schooltool.person.person import Person, PersonContainer
         >>> setUpLocalGrants()
         >>> root['sb'] = SchoolBellApplication()
         >>> root['sb']['persons'] = PersonContainer()
@@ -51,7 +51,7 @@ def doctest_personPermissionsSubscriber():
 
     Call our subscriber:
 
-        >>> from schoolbell.app.security import groupPermissionsSubscriber
+        >>> from schooltool.app.security import groupPermissionsSubscriber
         >>> groupPermissionsSubscriber(ObjectAddedEvent(group))
 
     Check that the group has a view permission on self:
@@ -82,15 +82,15 @@ def doctest_personPermissionsSubscriber():
 def doctest_PersonContainer():
     """Tests for PersonContainer
 
-        >>> from schoolbell.app.person.interfaces import IPersonContainer
-        >>> from schoolbell.app.person.person import PersonContainer
+        >>> from schooltool.person.interfaces import IPersonContainer
+        >>> from schooltool.person.person import PersonContainer
         >>> c = PersonContainer()
         >>> verifyObject(IPersonContainer, c)
         True
 
     PersonContainer uses the `username` attribute of persons as the key
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> person = Person(username="itsme")
         >>> c['doesnotmatter'] = person
         >>> c['itsme'] is person
@@ -105,8 +105,8 @@ def doctest_PersonContainer():
 def doctest_Person():
     r"""Tests for Person
 
-        >>> from schoolbell.app.person.interfaces import IPersonContained
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.interfaces import IPersonContained
+        >>> from schooltool.person.person import Person
         >>> person = Person('person')
         >>> verifyObject(IPersonContained, person)
         True
@@ -189,7 +189,7 @@ def doctest_PersonPreferences():
         >>> from zope.app.tests import setup
         >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
 
         >>> person = Person('person')
 
@@ -197,14 +197,14 @@ def doctest_PersonPreferences():
 
     Make sure the attribute stores the correct interface
 
-        >>> from schoolbell.app.person.interfaces import IPersonPreferences
-        >>> from schoolbell.app.person.preference import getPersonPreferences
+        >>> from schooltool.person.interfaces import IPersonPreferences
+        >>> from schooltool.person.preference import getPersonPreferences
         >>> prefs = getPersonPreferences(person)
         >>> verifyObject(IPersonPreferences, prefs)
         True
 
         >>> prefs
-        <schoolbell.app.person.preference.PersonPreferences object at 0x...>
+        <schooltool.person.preference.PersonPreferences object at 0x...>
 
         >>> prefs.cal_periods
         True
@@ -234,14 +234,14 @@ def doctest_PersonDetails():
         >>> from zope.app.tests import setup
         >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
 
         >>> person = Person('person')
 
     Make sure the attribute stores the correct interface
 
-        >>> from schoolbell.app.person.interfaces import IPersonDetails
-        >>> from schoolbell.app.person.details import getPersonDetails
+        >>> from schooltool.person.interfaces import IPersonDetails
+        >>> from schooltool.person.details import getPersonDetails
         >>> details = getPersonDetails(person)
         >>> verifyObject(IPersonDetails, details)
         True
@@ -261,7 +261,7 @@ def doctest_PersonDetails():
 def test_suite():
     return unittest.TestSuite([
         doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
-        doctest.DocTestSuite('schoolbell.app.person.person'),
+        doctest.DocTestSuite('schooltool.person.person'),
         ])
 
 

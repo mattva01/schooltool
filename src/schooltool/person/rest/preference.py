@@ -28,9 +28,9 @@ from schoolbell.app.rest import View, Template, IRestTraverser
 from schoolbell.app.rest.errors import RestError
 from schoolbell.app.rest.xmlparsing import XMLDocument
 
-from schoolbell.app.person.interfaces import IPerson
-from schoolbell.app.person.interfaces import IPersonPreferences
-from schoolbell.app.person.rest.interfaces import IPersonPreferencesAdapter
+from schooltool.person.interfaces import IPerson
+from schooltool.person.interfaces import IPersonPreferences
+from schooltool.person.rest.interfaces import IPersonPreferencesAdapter
 
 
 class PersonPreferencesAdapter(object):

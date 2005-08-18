@@ -1,7 +1,7 @@
 SchoolBell calendaring library
 ==============================
 
-schoolbell.calendar is a calendaring library for Zope 3.
+schooltool.calendar is a calendaring library for Zope 3.
 
 
 Features
@@ -25,34 +25,34 @@ Features
 Quick overview
 --------------
 
-At the moment schoolbell.calendar contains building blocks for calendaring
+At the moment schooltool.calendar contains building blocks for calendaring
 in your own application.
 
-schoolbell.calendar.interfaces defines interfaces for calendars and calendar
+schooltool.calendar.interfaces defines interfaces for calendars and calendar
 events.
 
-schoolbell.calendar.simple defines simple calendar and calendar event classes.
+schooltool.calendar.simple defines simple calendar and calendar event classes.
 They are not tied into any particular storage system, so if you want to
 store your calendars in the ZODB or in a relational database, you will
 want to write your own.
 
   TODO: there should be a standard Persistent calendar class in this package.
 
-schoolbell.calendar.mixins defines mixins that make implementation of
+schooltool.calendar.mixins defines mixins that make implementation of
 your own calendar and event classes easier.
 
-schoolbell.calendar.icalendar lets you parse and generate iCalendar (RFC 2445)
+schooltool.calendar.icalendar lets you parse and generate iCalendar (RFC 2445)
 files.
 
-schoolbell.calendar.browser defines some browser views for calendars.  It is
+schooltool.calendar.browser defines some browser views for calendars.  It is
 very lean at the moment.
 
   TODO: flesh out browser views.
 
-schoolbell.calendar.recurrent defines some recurrence rules that let you
+schooltool.calendar.recurrent defines some recurrence rules that let you
 describe events recurring daily, weekly, monthly or yearly.
 
-schoolbell.calendar.utils contains a number of small standalone utility
+schooltool.calendar.utils contains a number of small standalone utility
 functions for manipulating dates and times.
 
 
@@ -64,20 +64,20 @@ duration, a title, and a bunch of other (optional) attributes like location
 or description.  Here's a sample calendar event:
 
     >>> from datetime import datetime, timedelta
-    >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+    >>> from schooltool.calendar.simple import SimpleCalendarEvent
     >>> appointment = SimpleCalendarEvent(datetime(2004, 12, 28, 13, 40),
     ...                                   timedelta(hours=1),
     ...                                   'Dentist')
 
 Calendar events are described by the ICalendarEvent interface.
 
-    >>> from schoolbell.calendar.interfaces import ICalendarEvent
+    >>> from schooltool.calendar.interfaces import ICalendarEvent
     >>> ICalendarEvent.providedBy(appointment)
     True
 
 Here's another calendar event.  It repeats every week:
 
-    >>> from schoolbell.calendar.recurrent import WeeklyRecurrenceRule
+    >>> from schooltool.calendar.recurrent import WeeklyRecurrenceRule
     >>> meeting = SimpleCalendarEvent(datetime(2005, 2, 7, 18, 0),
     ...                               timedelta(hours=1),
     ...                               'IRC meeting',
@@ -87,7 +87,7 @@ Here's another calendar event.  It repeats every week:
 A calendar is a set of events.  Some calendars are read-only, while others
 are editable.  Here's a simple read-only calendar that contains two events:
 
-    >>> from schoolbell.calendar.simple import ImmutableCalendar
+    >>> from schooltool.calendar.simple import ImmutableCalendar
     >>> calendar = ImmutableCalendar([meeting, appointment])
     >>> len(calendar)
     2
@@ -126,17 +126,17 @@ SchoolBell was designed to allow flexibility in calendar storage: calendars
 may be stored in the ZODB, in a relational database, as iCalendar files on
 disk, or computed on the fly from some other data source.
 
-To achieve this, schoolbell.calendar defines interfaces for calendars
+To achieve this, schooltool.calendar defines interfaces for calendars
 (ICalendar and IEditCalendar) and calendar events (ICalendarEvent) and relies
 on objects implementing those interfaces.
 
 You can define your own calendar and calendar event classes.  There are
 mixins (CalendarMixin, EditableCalendarMixin, CalendarEventMixin) defined
-in schoolbell.calendar.mixins that you can use (if you want to) to implement
+in schooltool.calendar.mixins that you can use (if you want to) to implement
 some of calendar/calendar event operations.
 
 There are some simple implementations of calendars and calendar events in
-schoolbell.calendar.simple: SimpleCalendarEvent and ImmutableCalendar.
+schooltool.calendar.simple: SimpleCalendarEvent and ImmutableCalendar.
 They are particularly useful for calendars that are generated on the fly.
 For example, suppose we have a list of (fictious) deadlines for a project:
 
@@ -146,9 +146,9 @@ For example, suppose we have a list of (fictious) deadlines for a project:
 
 We can generate a calendar like this
 
-    >>> from schoolbell.calendar.simple import ImmutableCalendar
-    >>> from schoolbell.calendar.simple import SimpleCalendarEvent
-    >>> from schoolbell.calendar.utils import parse_datetime
+    >>> from schooltool.calendar.simple import ImmutableCalendar
+    >>> from schooltool.calendar.simple import SimpleCalendarEvent
+    >>> from schooltool.calendar.utils import parse_datetime
     >>> from datetime import timedelta
 
     >>> deadline_calendar = ImmutableCalendar([
@@ -177,15 +177,15 @@ format.
   __ http://www.ietf.org/rfc/rfc2445.txt
 
 There is a sample iCalendar file (created with Ximian Evolution) in
-schoolbell.calendar.tests
+schooltool.calendar.tests
 
-    >>> import os, schoolbell.calendar
-    >>> filename = os.path.join(os.path.dirname(schoolbell.calendar.__file__),
+    >>> import os, schooltool.calendar
+    >>> filename = os.path.join(os.path.dirname(schooltool.calendar.__file__),
     ...                         'tests', 'sample.ics')
 
 You can read an iCalendar file event by event:
 
-    >>> from schoolbell.calendar.icalendar import read_icalendar
+    >>> from schooltool.calendar.icalendar import read_icalendar
     >>> print_cal(read_icalendar(open(filename)))
     2005-02-09 SchoollTool 0.9 release
     2005-02-09 SchoolTool release party!
@@ -194,14 +194,14 @@ You can read an iCalendar file event by event:
 Note that read_icalendar returns an iterator, and not a calendar.  If you want
 a calendar object, you can create one as follows:
 
-    >>> from schoolbell.calendar.simple import ImmutableCalendar
+    >>> from schooltool.calendar.simple import ImmutableCalendar
     >>> sample_calendar = ImmutableCalendar(read_icalendar(open(filename)))
     >>> len(sample_calendar)
     3
 
 You can create an iCalendar file from a SchoolBell calendar.
 
-    >>> from schoolbell.calendar.icalendar import convert_calendar_to_ical
+    >>> from schooltool.calendar.icalendar import convert_calendar_to_ical
     >>> lines = convert_calendar_to_ical(sample_calendar)
     >>> print "\n".join(lines)                          # doctest: +ELLIPSIS
     BEGIN:VCALENDAR
@@ -226,7 +226,7 @@ stream.  fileobject.writelines(lines) should just work.  Although there
 are other complications with automatic LF -> CRLF transformations when
 file objects are opened in text mode.
 
-iCalendar is a large specification, and schoolbell.calendar supports only a
+iCalendar is a large specification, and schooltool.calendar supports only a
 subset of it.  This subset should be enough to interoperate with most open
 source calendaring software, but you should keep in mind that reading an
 iCalendar file into SchoolBell objects and writing it back is a lossy
@@ -240,7 +240,7 @@ It is often useful to display several calendars at the same time.  Rather
 than iterating over a number of calendars, you may want to construct a single
 calendar that contains all the events from those other calendars:
 
-    >>> from schoolbell.calendar.simple import combine_calendars
+    >>> from schooltool.calendar.simple import combine_calendars
     >>> cal = combine_calendars(deadline_calendar, sample_calendar)
     >>> len(cal) == len(deadline_calendar) + len(sample_calendar)
     True
@@ -263,11 +263,11 @@ Recurring events are calendar events with a defined recurrence rule.  An
 example of a recurrence rule that says "this event repeats 5 times on every
 third day" is
 
-    >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+    >>> from schooltool.calendar.recurrent import DailyRecurrenceRule
     >>> rule = DailyRecurrenceRule(count=5, interval=3)
 
 Currently there are four kinds of recurrence rules defined in
-schoolbell.calendar.recurrent:
+schooltool.calendar.recurrent:
 
 - daily recurrences (e.g. "every second day")
 - weekly recurrences (e.g. "every week on Monday through Friday")
@@ -313,7 +313,7 @@ Monthly recurrence rules also let you choose one of three variants:
 
 Here's how you create recurring events:
 
-    >>> from schoolbell.calendar.recurrent import YearlyRecurrenceRule
+    >>> from schooltool.calendar.recurrent import YearlyRecurrenceRule
     >>> event = SimpleCalendarEvent(datetime(2005, 1, 29, 12),
     ...                             timedelta(hours=1),
     ...                             'My birthday',
@@ -359,35 +359,35 @@ You can check if an even is "empty" by calling event.hasOccurrences():
 Utilities
 ---------
 
-schoolbell.calendar.utils contains a number of small standalone functions
+schooltool.calendar.utils contains a number of small standalone functions
 for parsing and manipulating dates.
 
-    >>> from schoolbell.calendar.utils import parse_date, parse_datetime
+    >>> from schooltool.calendar.utils import parse_date, parse_datetime
     >>> parse_date('2004-02-11')
     datetime.date(2004, 2, 11)
     >>> parse_datetime('2004-02-11 15:35:44')
     datetime.datetime(2004, 2, 11, 15, 35, 44)
 
     >>> from datetime import date
-    >>> from schoolbell.calendar.utils import prev_month, next_month
+    >>> from schooltool.calendar.utils import prev_month, next_month
     >>> prev_month(date(2004, 2, 11))
     datetime.date(2004, 1, 1)
     >>> next_month(date(2004, 2, 11))
     datetime.date(2004, 3, 1)
 
     >>> from calendar import SUNDAY
-    >>> from schoolbell.calendar.utils import week_start
+    >>> from schooltool.calendar.utils import week_start
     >>> week_start(date(2004, 2, 11)).strftime('%a, %b %d %Y')
     'Mon, Feb 09 2004'
     >>> week_start(date(2004, 2, 11), SUNDAY).strftime('%a, %b %d %Y')
     'Sun, Feb 08 2004'
 
-    >>> from schoolbell.calendar.utils import weeknum_bounds
+    >>> from schooltool.calendar.utils import weeknum_bounds
     >>> s, e = [d.strftime('%a, %b %d') for d in weeknum_bounds(2005, 1)]
     >>> print 'Week 1 of 2005 started on %s and ended on %s.' % (s, e)
     Week 1 of 2005 started on Mon, Jan 03 and ended on Sun, Jan 09.
 
-    >>> from schoolbell.calendar.utils import check_weeknum
+    >>> from schooltool.calendar.utils import check_weeknum
     >>> if check_weeknum(2004, 53):
     ...     print "There was a 53-th week in 2004"
     There was a 53-th week in 2004

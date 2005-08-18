@@ -30,10 +30,10 @@ from schoolbell.app.rest.app import ApplicationObjectFile
 from schoolbell.app.rest.app import ApplicationObjectFileFactory
 from schoolbell.app.rest.app import GenericContainerView
 
-from schoolbell.app.person.interfaces import IPersonContainer, IPerson
-from schoolbell.app.person.person import Person
-from schoolbell.app.person.rest.preference import PersonPreferencesAdapter
-from schoolbell.app.person.rest.interfaces import IPasswordWriter, IPersonPhoto
+from schooltool.person.interfaces import IPersonContainer, IPerson
+from schooltool.person.person import Person
+from schooltool.person.rest.preference import PersonPreferencesAdapter
+from schooltool.person.rest.interfaces import IPasswordWriter, IPersonPhoto
 
 
 class PersonFileFactory(ApplicationObjectFileFactory):

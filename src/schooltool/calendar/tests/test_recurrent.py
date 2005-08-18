@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.calendar.recurrent.
+Unit tests for schooltool.calendar.recurrent.
 
 $Id$
 """
@@ -93,16 +93,16 @@ class RecurrenceRuleTestBase:
 class TestDailyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
     def createRule(self, *args, **kwargs):
-        from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        from schooltool.calendar.recurrent import DailyRecurrenceRule
         return DailyRecurrenceRule(*args, **kwargs)
 
     def test(self):
-        from schoolbell.calendar.interfaces import IDailyRecurrenceRule
+        from schooltool.calendar.interfaces import IDailyRecurrenceRule
         rule = self.createRule()
         verifyObject(IDailyRecurrenceRule, rule)
 
     def test_apply(self):
-        from schoolbell.calendar.simple import SimpleCalendarEvent
+        from schooltool.calendar.simple import SimpleCalendarEvent
         rule = self.createRule()
         ev = SimpleCalendarEvent(datetime(2004, 10, 13, 12, 0),
                            timedelta(minutes=10),
@@ -155,16 +155,16 @@ class TestDailyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 class TestYearlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
     def createRule(self, *args, **kwargs):
-        from schoolbell.calendar.recurrent import YearlyRecurrenceRule
+        from schooltool.calendar.recurrent import YearlyRecurrenceRule
         return YearlyRecurrenceRule(*args, **kwargs)
 
     def test(self):
-        from schoolbell.calendar.interfaces import IYearlyRecurrenceRule
+        from schooltool.calendar.interfaces import IYearlyRecurrenceRule
         rule = self.createRule()
         verifyObject(IYearlyRecurrenceRule, rule)
 
     def test_apply(self):
-        from schoolbell.calendar.simple import SimpleCalendarEvent
+        from schooltool.calendar.simple import SimpleCalendarEvent
         rule = self.createRule()
         ev = SimpleCalendarEvent(datetime(1978, 5, 17, 12, 0),
                            timedelta(minutes=10),
@@ -214,11 +214,11 @@ class TestYearlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 class TestWeeklyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
     def createRule(self, *args, **kwargs):
-        from schoolbell.calendar.recurrent import WeeklyRecurrenceRule
+        from schooltool.calendar.recurrent import WeeklyRecurrenceRule
         return WeeklyRecurrenceRule(*args, **kwargs)
 
     def test(self):
-        from schoolbell.calendar.interfaces import IWeeklyRecurrenceRule
+        from schooltool.calendar.interfaces import IWeeklyRecurrenceRule
         rule = self.createRule()
         verifyObject(IWeeklyRecurrenceRule, rule)
 
@@ -232,7 +232,7 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         assert rule != rule.replace(weekdays=(1,))
 
     def test_apply(self):
-        from schoolbell.calendar.simple import SimpleCalendarEvent
+        from schooltool.calendar.simple import SimpleCalendarEvent
         rule = self.createRule()
         ev = SimpleCalendarEvent(datetime(1978, 5, 17, 12, 0),
                            timedelta(minutes=10),
@@ -294,11 +294,11 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
     def createRule(self, *args, **kwargs):
-        from schoolbell.calendar.recurrent import MonthlyRecurrenceRule
+        from schooltool.calendar.recurrent import MonthlyRecurrenceRule
         return MonthlyRecurrenceRule(*args, **kwargs)
 
     def test(self):
-        from schoolbell.calendar.interfaces import IMonthlyRecurrenceRule
+        from schooltool.calendar.interfaces import IMonthlyRecurrenceRule
         rule = self.createRule()
         verifyObject(IMonthlyRecurrenceRule, rule)
 
@@ -316,7 +316,7 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         assert rule != rule.replace(monthly="monthday")
 
     def test_apply_monthday(self):
-        from schoolbell.calendar.simple import SimpleCalendarEvent
+        from schooltool.calendar.simple import SimpleCalendarEvent
         rule = self.createRule(monthly="monthday")
         ev = SimpleCalendarEvent(datetime(1978, 5, 17, 12, 0),
                            timedelta(minutes=10),
@@ -362,7 +362,7 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         self.assertEqual(result, expected)
 
     def test_apply_endofmonth(self):
-        from schoolbell.calendar.simple import SimpleCalendarEvent
+        from schooltool.calendar.simple import SimpleCalendarEvent
         rule = self.createRule(monthly="monthday")
         ev = SimpleCalendarEvent(datetime(2001, 1, 31, 0, 0),
                            timedelta(minutes=10),
@@ -386,7 +386,7 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
                                   date(2002, 1, 31),])
 
     def test_apply_weekday(self):
-        from schoolbell.calendar.simple import SimpleCalendarEvent
+        from schooltool.calendar.simple import SimpleCalendarEvent
         rule = self.createRule(monthly="weekday")
         ev = SimpleCalendarEvent(datetime(1978, 5, 17, 12, 0),  # 3rd Wednesday
                            timedelta(minutes=10),
@@ -437,7 +437,7 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         self.assertEqual(result, expected)
 
     def test_apply_lastweekday(self):
-        from schoolbell.calendar.simple import SimpleCalendarEvent
+        from schooltool.calendar.simple import SimpleCalendarEvent
         rule = self.createRule(monthly="lastweekday")
         ev = SimpleCalendarEvent(datetime(1978, 5, 17, 12, 0),  # 3rd last Wednesday
                            timedelta(minutes=10),
@@ -517,7 +517,7 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 class TestWeekSpan(unittest.TestCase):
 
     def test_weekspan(self):
-        from schoolbell.calendar.recurrent import weekspan
+        from schooltool.calendar.recurrent import weekspan
 
         # The days are in the same week
         self.assertEqual(weekspan(date(2004, 10, 11), date(2004, 10, 17)), 0)
@@ -539,7 +539,7 @@ class TestWeekSpan(unittest.TestCase):
 class TestMonthIndex(unittest.TestCase):
 
     def test_monthindex(self):
-        from schoolbell.calendar.recurrent import monthindex
+        from schooltool.calendar.recurrent import monthindex
         # First Friday of October 2004
         self.assertEqual(monthindex(2004, 10, 1, 4), date(2004, 10, 1))
         self.assertEqual(monthindex(2004, 10, 1, 3), date(2004, 10, 7))

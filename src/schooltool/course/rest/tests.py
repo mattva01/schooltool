@@ -32,7 +32,7 @@ from zope.app.testing import setup, ztapi
 from zope.app.traversing import namespace
 from zope.app.traversing.interfaces import ITraversable
 
-from schoolbell.app.testing import setup as sbsetup
+from schooltool.testing import setup as sbsetup
 from schooltool.rest.tests.test_app import compareXML
 
 from schooltool.course.course import Course, CourseContainer
@@ -228,7 +228,7 @@ def doctest_SectionFileFactory():
 
 
         >>> app = sbsetup.setupSchoolBellSite()
-        >>> from schoolbell.app.resource.resource import Resource
+        >>> from schooltool.resource.resource import Resource
 
         >>> app['resources']['room1'] = room1 = Resource("Room 1",
         ...                                               isLocation=True)

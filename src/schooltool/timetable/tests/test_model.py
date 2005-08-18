@@ -153,7 +153,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         self.assertNotEqual(model, model2)
 
     def test_createCalendar(self):
-        from schoolbell.calendar.interfaces import ICalendar
+        from schooltool.calendar.interfaces import ICalendar
 
         tt = self.createTimetable()
         model = self.createModel()
@@ -259,7 +259,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
 
 
     def test_periodsInDay_originalPeriodsInDay(self):
-        from schoolbell.calendar.interfaces import ICalendar
+        from schooltool.calendar.interfaces import ICalendar
         from schooltool.timetable import SchooldayPeriod
         from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 
@@ -319,7 +319,7 @@ class TestSequentialDayIdBasedTimetableModel(PlacelessSetup,
         return template1, template2
 
     def test_createCalendar(self):
-        from schoolbell.calendar.interfaces import ICalendar
+        from schooltool.calendar.interfaces import ICalendar
         from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
         from schooltool.timetable.model import \
              SequentialDayIdBasedTimetableModel

@@ -29,10 +29,10 @@ from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree
 from zope.app.container.contained import Contained
 
-from schoolbell.relationship import RelationshipProperty
-from schoolbell.app.membership import URIMembership, URIMember, URIGroup
+from schooltool.relationship import RelationshipProperty
+from schooltool.app.membership import URIMembership, URIMember, URIGroup
 
-from schoolbell.app.group import interfaces
+from schooltool.group import interfaces
 
 
 class GroupContainer(btree.BTreeContainer):

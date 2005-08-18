@@ -49,7 +49,7 @@ from zope.interface import directlyProvidedBy
 from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin
 from schoolbell.app.rest.tests.utils import XMLCompareMixin
 from schoolbell.app.rest.errors import RestError
-from schoolbell.app.testing import setup as sbsetup
+from schooltool.testing import setup as sbsetup
 from schooltool.timetable import TimetablesAdapter
 from schooltool.timetable.interfaces import ITimetables
 
@@ -116,8 +116,8 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         PlacefulSetup.setUp(self)
         self.app = sbsetup.setupSchoolBellSite()
 
-        from schoolbell.app.person.person import Person
-        from schoolbell.app.resource.resource import Resource
+        from schooltool.person.person import Person
+        from schooltool.resource.resource import Resource
         self.app["persons"]["john"] = self.person = Person("john", "John Smith")
         self.app["resources"]['room1'] = Resource("Room1")
         self.app["resources"]['lab1'] = Resource("Lab1")

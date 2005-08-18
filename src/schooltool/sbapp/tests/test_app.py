@@ -31,7 +31,7 @@ from zope.interface import directlyProvides
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.testing import setup, placelesssetup
 
-from schoolbell.app.testing import setup as sbsetup
+from schooltool.testing import setup as sbsetup
 
 def doctest_SchoolBellApplication():
     r"""Tests for SchoolBellApplication.
@@ -53,17 +53,17 @@ def doctest_SchoolBellApplication():
     Person, group and resource containers are reachable as items of the
     application object.
 
-        >>> from schoolbell.app.person.interfaces import IPersonContainer
+        >>> from schooltool.person.interfaces import IPersonContainer
         >>> persons = app['persons']
         >>> verifyObject(IPersonContainer, persons)
         True
 
-        >>> from schoolbell.app.group.interfaces import IGroupContainer
+        >>> from schooltool.group.interfaces import IGroupContainer
         >>> groups = app['groups']
         >>> verifyObject(IGroupContainer, groups)
         True
 
-        >>> from schoolbell.app.resource.interfaces import IResourceContainer
+        >>> from schooltool.resource.interfaces import IResourceContainer
         >>> resources = app['resources']
         >>> verifyObject(IResourceContainer, resources)
         True
@@ -98,7 +98,7 @@ def doctest_SchoolBellApplication():
 
         >>> from schoolbell.app.interfaces import ISchoolBellCalendar
         >>> ISchoolBellCalendar(app)
-        <schoolbell.app.cal.Calendar object at ...
+        <schooltool.app.cal.Calendar object at ...
 
     Cleanup:
 
@@ -113,7 +113,7 @@ def doctest_getSchoolBellApplication():
     Let's say we have a SchoolBell app.
 
       >>> from schoolbell.app.app import SchoolBellApplication
-      >>> from schoolbell.app.person.person import Person
+      >>> from schooltool.person.person import Person
       >>> from zope.app.component.site import LocalSiteManager
       >>> app = SchoolBellApplication()
       >>> app.setSiteManager(LocalSiteManager(app))
@@ -196,8 +196,8 @@ def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
                 doctest.DocTestSuite('schoolbell.app.app'),
-                doctest.DocTestSuite('schoolbell.app.membership'),
-                doctest.DocTestSuite('schoolbell.app.overlay'),
+                doctest.DocTestSuite('schooltool.app.membership'),
+                doctest.DocTestSuite('schooltool.app.overlay'),
            ])
 
 if __name__ == '__main__':

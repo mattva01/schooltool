@@ -47,8 +47,8 @@ from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellAuthentication
 from schoolbell.app.interfaces import ISchoolBellCalendar
-from schoolbell.app.group.interfaces import IGroup
-from schoolbell.app.person.interfaces import IPerson
+from schooltool.group.interfaces import IGroup
+from schooltool.person.interfaces import IPerson
 
 
 class Principal(Contained):

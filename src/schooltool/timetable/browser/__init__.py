@@ -47,13 +47,13 @@ from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.form.utility import setUpEditWidgets
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
-from schoolbell.calendar.utils import parse_date, parse_time
-from schoolbell.calendar.utils import next_month, week_start
+from schooltool.calendar.utils import parse_date, parse_time
+from schooltool.calendar.utils import next_month, week_start
 from schoolbell.app.browser.cal import month_names
-from schoolbell.app.cal import CalendarEvent
+from schooltool.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar
-from schoolbell.app.person.interfaces import IPerson
-from schoolbell.app.traverser.interfaces import ITraverserPlugin
+from schooltool.person.interfaces import IPerson
+from schooltool.traverser.interfaces import ITraverserPlugin
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.timetable.interfaces import ITimetables, IHaveTimetables
@@ -791,7 +791,7 @@ def format_timetable_for_presentation(timetable):
 
     Some timetable activities may have associated resources
 
-      >>> from schoolbell.app.resource.resource import Resource
+      >>> from schooltool.resource.resource import Resource
       >>> r1 = Resource('R1')
       >>> r2 = Resource('R2')
       >>> timetable['day 2'].add('C', TimetableActivity('Else',

@@ -59,27 +59,27 @@ from zope.security.checker import canAccess
 from schoolbell.app.browser import ViewPreferences
 from schoolbell.app.browser import pdfcal
 from schoolbell.app.app import getSchoolBellApplication
-from schoolbell.app.cal import CalendarEvent
+from schooltool.app.cal import CalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.interfaces import ISchoolBellApplication
 from schoolbell.app.interfaces import IHaveCalendar
 from schoolbell.app.interfaces import vocabulary
-from schoolbell.app.person.interfaces import IPerson, IPersonPreferences
-from schoolbell.app.resource.interfaces import IResource
-from schoolbell.calendar.interfaces import ICalendar, ICalendarEvent
-from schoolbell.calendar.recurrent import DailyRecurrenceRule
-from schoolbell.calendar.recurrent import YearlyRecurrenceRule
-from schoolbell.calendar.recurrent import MonthlyRecurrenceRule
-from schoolbell.calendar.recurrent import WeeklyRecurrenceRule
-from schoolbell.calendar.interfaces import IDailyRecurrenceRule
-from schoolbell.calendar.interfaces import IYearlyRecurrenceRule
-from schoolbell.calendar.interfaces import IMonthlyRecurrenceRule
-from schoolbell.calendar.interfaces import IWeeklyRecurrenceRule
-from schoolbell.calendar.utils import parse_date, parse_datetimetz
-from schoolbell.calendar.utils import parse_time, weeknum_bounds
-from schoolbell.calendar.utils import week_start, prev_month, next_month
-from schoolbell.calendar.icalendar import ical_datetime
+from schooltool.person.interfaces import IPerson, IPersonPreferences
+from schooltool.resource.interfaces import IResource
+from schooltool.calendar.interfaces import ICalendar, ICalendarEvent
+from schooltool.calendar.recurrent import DailyRecurrenceRule
+from schooltool.calendar.recurrent import YearlyRecurrenceRule
+from schooltool.calendar.recurrent import MonthlyRecurrenceRule
+from schooltool.calendar.recurrent import WeeklyRecurrenceRule
+from schooltool.calendar.interfaces import IDailyRecurrenceRule
+from schooltool.calendar.interfaces import IYearlyRecurrenceRule
+from schooltool.calendar.interfaces import IMonthlyRecurrenceRule
+from schooltool.calendar.interfaces import IWeeklyRecurrenceRule
+from schooltool.calendar.utils import parse_date, parse_datetimetz
+from schooltool.calendar.utils import parse_time, weeknum_bounds
+from schooltool.calendar.utils import week_start, prev_month, next_month
+from schooltool.calendar.icalendar import ical_datetime
 from schoolbell import SchoolBellMessageID as _
 
 #
@@ -1948,7 +1948,7 @@ def enableICalendarUpload(ical_view):
 
     When the user performs an HTTP PUT request on /path/to/calendar.ics,
     Zope 3 traverses to a view named 'calendar.ics' (which is most likely
-    a schoolbell.calendar.browser.Calendar ICalendarView).  Then Zope 3 finds an
+    a schooltool.calendar.browser.Calendar ICalendarView).  Then Zope 3 finds an
     IHTTPrequest view named 'PUT'.  There is a standard one, that adapts
     its context (which happens to be the view named 'calendar.ics' in this
     case) to IWriteFile, and calls `write` on it.
@@ -1961,8 +1961,8 @@ def enableICalendarUpload(ical_view):
 
     We have a calendar that provides IEditCalendar.
 
-        >>> from schoolbell.calendar.interfaces import IEditCalendar
-        >>> from schoolbell.app.cal import Calendar
+        >>> from schooltool.calendar.interfaces import IEditCalendar
+        >>> from schooltool.app.cal import Calendar
         >>> calendar = Calendar(None)
 
     We have a fake "real adapter" for IEditCalendar

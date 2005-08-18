@@ -32,16 +32,16 @@ from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.container.contained import Contained
 from zope.app.location.interfaces import ILocation
 
-from schoolbell.calendar.icalendar import read_icalendar
-from schoolbell.calendar.interfaces import ICalendar
-from schoolbell.calendar.interfaces import ICalendarEvent
-from schoolbell.calendar.mixins import CalendarMixin
-from schoolbell.calendar.simple import SimpleCalendarEvent
+from schooltool.calendar.icalendar import read_icalendar
+from schooltool.calendar.interfaces import ICalendar
+from schooltool.calendar.interfaces import ICalendarEvent
+from schooltool.calendar.mixins import CalendarMixin
+from schooltool.calendar.simple import SimpleCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendarEvent
 from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.interfaces import IWriteCalendar
 
-CALENDAR_KEY = 'schoolbell.app.calendar.Calendar'
+CALENDAR_KEY = 'schooltool.app.calendar.Calendar'
 
 
 class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):

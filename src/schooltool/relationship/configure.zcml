@@ -4,25 +4,25 @@
     i18n_domain="schoolbell">
 
   <content
-      class="schoolbell.relationship.relationship.BoundRelationshipProperty">
+      class="schooltool.relationship.relationship.BoundRelationshipProperty">
     <allow attributes="__iter__ __contains__" />
   </content>
 
   <adapter
       for="zope.app.annotation.interfaces.IAnnotatable"
-      provides="schoolbell.relationship.interfaces.IRelationshipLinks"
-      factory="schoolbell.relationship.annotatable.getRelationshipLinks"
+      provides="schooltool.relationship.interfaces.IRelationshipLinks"
+      factory="schooltool.relationship.annotatable.getRelationshipLinks"
       trusted="true"
       />
 
   <subscriber
       for="zope.app.container.interfaces.IObjectRemovedEvent"
-      handler="schoolbell.relationship.objectevents.unrelateOnDeletion"
+      handler="schooltool.relationship.objectevents.unrelateOnDeletion"
       />
 
   <subscriber
       for="zope.app.event.interfaces.IObjectCopiedEvent"
-      handler="schoolbell.relationship.objectevents.unrelateOnCopy"
+      handler="schooltool.relationship.objectevents.unrelateOnCopy"
       />
 
   <configure 

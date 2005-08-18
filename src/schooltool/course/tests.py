@@ -74,7 +74,7 @@ def doctest_Course():
 
     To test the relationship we need to do some setup:
 
-        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationship.tests import setUp, tearDown
         >>> from schooltool.relationships import enforceCourseSectionConstraint
         >>> setUp()
         >>> import zope.event
@@ -85,7 +85,7 @@ def doctest_Course():
 
         >>> from schooltool.course.course import Course
         >>> from schooltool.course.section import Section
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> section1 = Section(title="section1")
         >>> section2 = Section(title="section2")
         >>> section3 = Section(title="section3")
@@ -138,8 +138,8 @@ def doctest_Course():
 def doctest_Section():
     r"""Tests for course section groups.
 
-        >>> from schoolbell.relationship.tests import setUp, tearDown
-        >>> from schoolbell.relationship import getRelatedObjects
+        >>> from schooltool.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationship import getRelatedObjects
         >>> setUp()
 
         >>> from schooltool.course.section import Section
@@ -159,8 +159,8 @@ def doctest_Section():
 
     We'll add an instructor to the section.
 
-        >>> from schoolbell.app.person.person import Person
-        >>> from schoolbell.app.person.interfaces import IPerson
+        >>> from schooltool.person.person import Person
+        >>> from schooltool.person.interfaces import IPerson
         >>> teacher = Person('teacher', 'Mr. Jones')
         >>> section.instructors.add(teacher)
 
@@ -181,7 +181,7 @@ def doctest_Section():
 
     We can add a Group as a member
 
-        >>> from schoolbell.app.group.group import Group
+        >>> from schooltool.group.group import Group
         >>> group = Group('group','Group')
         >>> section.members.add(group)
         >>> for member in section.members:
@@ -246,7 +246,7 @@ def doctest_Section():
     Sections can have a location resource to indicate where the section
     regularly meets.
 
-        >>> from schoolbell.app.resource.resource import Resource
+        >>> from schooltool.resource.resource import Resource
         >>> section.location is None
         True
 

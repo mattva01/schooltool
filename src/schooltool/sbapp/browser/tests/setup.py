@@ -30,7 +30,7 @@ from zope.app.publisher.browser.menu import MenuAccessView
 from zope.app.publisher.interfaces.browser import IMenuItemType, IBrowserMenu
 from zope.app.component.hooks import setSite
 
-from schoolbell.relationship.tests import setUpRelationships
+from schooltool.relationship.tests import setUpRelationships
 from schoolbell.app.browser import SchoolBellAPI, SortBy
 from schoolbell.app.browser import NavigationView
 from schoolbell.app.browser.macros import SchoolToolMacros

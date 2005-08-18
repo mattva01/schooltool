@@ -32,13 +32,13 @@ from zope.app.publication.zopepublication import ZopePublication
 
 from schoolbell.app.interfaces import ICalendarOwner, ISchoolBellApplication
 from schoolbell.app.notes import getNotes
-from schoolbell.relationship.annotatable import getRelationshipLinks
-from schoolbell.relationship.interfaces import IRelationshipLinks
-from schoolbell.relationship.relationship import LinkSet
+from schooltool.relationship.annotatable import getRelationshipLinks
+from schooltool.relationship.interfaces import IRelationshipLinks
+from schooltool.relationship.relationship import LinkSet
 
 def setRelationshipLinks(context, linkset):
     annotations = IAnnotations(context)
-    key = 'schoolbell.relationship.RelationshipLinks'
+    key = 'schooltool.relationship.RelationshipLinks'
     annotations[key] = linkset
     linkset.__name__ = "relationships"
     linkset.__parent__ = context

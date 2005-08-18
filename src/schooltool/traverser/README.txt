@@ -13,7 +13,7 @@ The pluggable traverser allows developers, especially third-party developers,
 to add new traversers to an object without altering the original traversal
 implementation.
 
-  >>> from schoolbell.app.traverser.traverser import PluggableTraverser
+  >>> from schooltool.traverser.traverser import PluggableTraverser
 
 Let's say that we have an object
 
@@ -48,7 +48,7 @@ already, so we just have to register it:
 
   >>> from zope.component import provideSubscriptionAdapter
   >>> from zope.publisher.interfaces import IPublisherRequest
-  >>> from schoolbell.app.traverser.traverser import AttributeTraverserPlugin
+  >>> from schooltool.traverser.traverser import AttributeTraverserPlugin
 
   >>> provideSubscriptionAdapter(AttributeTraverserPlugin,
   ...                            (IContent, IPublisherRequest))
@@ -111,8 +111,8 @@ and we would like to be able to traverse
 
   * all items of the container, as well as
 
-    >>> from schoolbell.app.traverser.traverser import ContainerTraverserPlugin
-    >>> from schoolbell.app.traverser.interfaces import ITraverserPlugin
+    >>> from schooltool.traverser.traverser import ContainerTraverserPlugin
+    >>> from schooltool.traverser.interfaces import ITraverserPlugin
 
     >>> provideSubscriptionAdapter(ContainerTraverserPlugin,
     ...                            (IMyContainer, IPublisherRequest),
@@ -121,7 +121,7 @@ and we would like to be able to traverse
   * the ``foo`` attribute. Luckily we also have a predeveloped traverser for
     this:
 
-    >>> from schoolbell.app.traverser.traverser import \
+    >>> from schooltool.traverser.traverser import \
     ...     SingleAttributeTraverserPlugin
     >>> provideSubscriptionAdapter(SingleAttributeTraverserPlugin('foo'),
     ...                            (IMyContainer, IPublisherRequest))
@@ -172,7 +172,7 @@ take the following adapter:
 
 Now we register this adapter under the traversal name ``some``:
 
-  >>> from schoolbell.app.traverser.traverser import AdapterTraverserPlugin
+  >>> from schooltool.traverser.traverser import AdapterTraverserPlugin
   >>> provideSubscriptionAdapter(
   ...     AdapterTraverserPlugin('some', ISomeAdapter),
   ...     (IMyContainer, IPublisherRequest))

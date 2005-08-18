@@ -34,7 +34,7 @@ def doctest_Instruction():
 
         >>> from schooltool.relationships import *
 
-        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationship.tests import setUp, tearDown
         >>> setUp()
         >>> import zope.event
         >>> old_subscribers = zope.event.subscribers[:]
@@ -42,7 +42,7 @@ def doctest_Instruction():
 
     We will need some sample persons and sections for the demonstration
 
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> from schooltool.course.section import Section
         >>> jonas = Person()
         >>> petras = Person()
@@ -75,7 +75,7 @@ def doctest_CourseSections():
 
     Relationship tests require some setup:
 
-        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationship.tests import setUp, tearDown
         >>> setUp()
         >>> import zope.event
         >>> old_subscribers = zope.event.subscribers[:]
@@ -85,7 +85,7 @@ def doctest_CourseSections():
 
         >>> from schooltool.course.course import Course
         >>> from schooltool.course.section import Section
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> history = Course()
         >>> section1 = Section(title = "section1")
         >>> section2 = Section(title = "section2")
@@ -153,13 +153,13 @@ def doctest_updateInstructorCalendars():
         >>> from schooltool.relationships import updateInstructorCalendars
         >>> from schooltool.relationships import URIInstruction
         >>> from schooltool.relationships import URISection, URIInstructor
-        >>> from schoolbell.relationship.interfaces import \
+        >>> from schooltool.relationship.interfaces import \
         ...                                         IRelationshipAddedEvent
-        >>> from schoolbell.relationship.interfaces import \
+        >>> from schooltool.relationship.interfaces import \
         ...                                         IRelationshipRemovedEvent
-        >>> from schoolbell.app.person.person import Person
+        >>> from schooltool.person.person import Person
         >>> from schooltool.course.section import Section
-        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schooltool.relationship.tests import setUp, tearDown
         >>> setUp()
 
         >>> class AddEventStub(dict):
@@ -244,15 +244,15 @@ def doctest_updateInstructorCalendars():
 def doctest_updateStudentCalendars():
     r"""
         >>> from schooltool.relationships import updateStudentCalendars
-        >>> from schoolbell.app.membership import URIMembership
-        >>> from schoolbell.app.membership import URIGroup, URIMember
-        >>> from schoolbell.relationship.interfaces import \
+        >>> from schooltool.app.membership import URIMembership
+        >>> from schooltool.app.membership import URIGroup, URIMember
+        >>> from schooltool.relationship.interfaces import \
         ...                                         IRelationshipAddedEvent
-        >>> from schoolbell.relationship.interfaces import \
+        >>> from schooltool.relationship.interfaces import \
         ...                                         IRelationshipRemovedEvent
         >>> from schooltool.course.section import Section
-        >>> from schoolbell.app.person.person import Person
-        >>> from schoolbell.relationship.tests import setUp, tearDown
+        >>> from schooltool.person.person import Person
+        >>> from schooltool.relationship.tests import setUp, tearDown
         >>> setUp()
 
         >>> class AddEventStub(dict):

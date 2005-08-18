@@ -35,7 +35,7 @@ from zope.security.checker import canAccess
 from schoolbell import SchoolBellMessageID as _
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.interfaces import ISchoolBellCalendar
-from schoolbell.app.person.interfaces import IPerson
+from schooltool.person.interfaces import IPerson
 
 
 class CalendarOverlayView(BrowserView):
@@ -55,7 +55,7 @@ class CalendarOverlayView(BrowserView):
             >>> setup.placelessSetUp()
             >>> setup.setUpAnnotations()
 
-            >>> from schoolbell.app.testing import setup as sbsetup
+            >>> from schooltool.testing import setup as sbsetup
             >>> sbsetup.setupCalendaring()
 
         The portlet is only shown when an authenticated user is looking
@@ -64,7 +64,7 @@ class CalendarOverlayView(BrowserView):
         Anonymous user:
 
             >>> from zope.publisher.browser import TestRequest
-            >>> from schoolbell.app.person.person import Person
+            >>> from schooltool.person.person import Person
             >>> request = TestRequest()
             >>> person = Person()
             >>> context = ISchoolBellCalendar(person)
@@ -74,7 +74,7 @@ class CalendarOverlayView(BrowserView):
 
         Person that we're looking at
 
-            >>> from schoolbell.app.security import Principal
+            >>> from schooltool.app.security import Principal
             >>> request.setPrincipal(Principal('id', 'title', person))
             >>> view.show_overlay()
             True

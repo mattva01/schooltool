@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.relationship
+Unit tests for schooltool.relationship
 
 This module contains a `setUpRelationships` function that can be used in
 unit test setup code to register an IRelationshipLinks adapter for IAnnotatable
@@ -56,7 +56,7 @@ class SomeContained(SomeObject, Contained):
 
 
 def setUp():
-    """Set up for schoolbell.relationship doctests.
+    """Set up for schooltool.relationship doctests.
 
     Calls Zope's placelessSetUp, sets up annotations and relationships.
     """
@@ -81,8 +81,8 @@ def setUpRelationships():
     """
     from zope.app.tests import ztapi
     from zope.app.annotation.interfaces import IAnnotatable
-    from schoolbell.relationship.interfaces import IRelationshipLinks
-    from schoolbell.relationship.annotatable import getRelationshipLinks
+    from schooltool.relationship.interfaces import IRelationshipLinks
+    from schooltool.relationship.annotatable import getRelationshipLinks
     ztapi.provideAdapter(IAnnotatable, IRelationshipLinks,
                          getRelationshipLinks)
 

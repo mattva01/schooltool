@@ -22,8 +22,8 @@ SchoolBell Testing Support
 $Id: app.py 4705 2005-08-15 14:49:07Z srichter $
 """
 __docformat__ = 'restructuredtext'
-from schoolbell.app.security import setUpLocalAuth
-from schoolbell.app.testing import registry
+from schooltool.app.security import setUpLocalAuth
+from schooltool.testing import registry
 
 # ----------------------------- Session setup ------------------------------
 from zope.publisher.interfaces import IRequest
@@ -73,7 +73,7 @@ def setupSchoolBellSite():
 # --------------- Setup Calendar Adapter and set IHaveCalendar -------------
 from schoolbell.app.interfaces import IHaveCalendar
 from schoolbell.app.interfaces import ISchoolBellCalendar
-from schoolbell.app.cal import getCalendar
+from schooltool.app.cal import getCalendar
 def setupCalendaring():
     ztapi.provideAdapter(IHaveCalendar, ISchoolBellCalendar, getCalendar)
     registry.setupCalendarComponents()

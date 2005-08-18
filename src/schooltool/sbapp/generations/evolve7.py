@@ -28,7 +28,7 @@ from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
 
 from schoolbell.app.interfaces import ISchoolBellApplication
-from schoolbell.app.cal import Calendar
+from schooltool.app.cal import Calendar
 
 def evolve(context):
     root = context.connection.root().get(ZopePublication.root_name, None)

@@ -8,7 +8,7 @@
       for="..interfaces.IPerson"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       provides="zope.publisher.interfaces.browser.IBrowserPublisher"
-      factory="schoolbell.app.traverser.browser.PluggableBrowserTraverser"
+      factory="schooltool.traverser.browser.PluggableBrowserTraverser"
       permission="zope.Public"
       />
 
@@ -16,8 +16,8 @@
 
     <page
         name="index.html"
-        for="schoolbell.app.person.interfaces.IPersonContainer"
-        class="schoolbell.app.person.browser.person.PersonContainerView"
+        for="schooltool.person.interfaces.IPersonContainer"
+        class="schooltool.person.browser.person.PersonContainerView"
         template="templates/container.pt"
         permission="zope.View"
         menu="zmi_views"
@@ -25,7 +25,7 @@
         />
 
     <page
-        for="schoolbell.app.person.interfaces.IPerson"
+        for="schooltool.person.interfaces.IPerson"
         name="calendar_selection.html"
         layer="schoolbell.app.browser.skin.ISchoolBellLayer"
         class=".overlay.CalendarSelectionView"

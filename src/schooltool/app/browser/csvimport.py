@@ -28,9 +28,9 @@ from zope.app.container.interfaces import INameChooser
 from zope.security.proxy import removeSecurityProxy
 
 from schoolbell.app.browser import csvimport as sb
-from schoolbell.app.person.person import Person
+from schooltool.person.person import Person
 # XXX: This should go away; maybe, maybe not.
-from schoolbell.app.person.browser import csvimport as person
+from schooltool.person.browser import csvimport as person
 
 from schooltool import SchoolToolMessageID as _
 from schooltool import getSchoolToolApplication

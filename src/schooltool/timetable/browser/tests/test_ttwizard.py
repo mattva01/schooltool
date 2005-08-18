@@ -37,7 +37,7 @@ from zope.app.component.site import LocalSiteManager
 from zope.app.component.hooks import setSite
 from zope.app.container.interfaces import INameChooser
 
-from schoolbell.app.testing import setup
+from schooltool.testing import setup
 from schoolbell.app.browser.tests import setup as schoolbell_setup
 from schoolbell.app.app import SimpleNameChooser
 from schooltool.tests import setUpApplicationPreferences

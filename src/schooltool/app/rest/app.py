@@ -35,7 +35,7 @@ from schoolbell.app.rest.app import GenericContainerView
 from schoolbell.app.rest import View, Template
 from schoolbell.app.rest import app as sb
 from schoolbell.app.rest.errors import RestError
-from schoolbell.calendar.icalendar import ICalReader
+from schooltool.calendar.icalendar import ICalReader
 
 from schooltool.common import parse_date
 from schooltool.timetable.interfaces import ITerm, ITermContainer

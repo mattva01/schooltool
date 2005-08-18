@@ -27,12 +27,12 @@ from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 
 from schoolbell import SchoolBellMessageID as _
-from schoolbell.batching import Batch
+from schooltool.batching import Batch
 from schoolbell.app.app import getSchoolBellApplication
 from schoolbell.app.browser.app import ContainerView, BaseAddView, BaseEditView
 
-from schoolbell.app.resource.interfaces import IResourceContainer
-from schoolbell.app.resource.interfaces import IResourceContained
+from schooltool.resource.interfaces import IResourceContainer
+from schooltool.resource.interfaces import IResourceContained
 
 
 class ResourceContainerView(ContainerView):

@@ -43,8 +43,8 @@ from persistent.dict import PersistentDict
 from zope.interface import implements, classProvides
 from zope.app.traversing.api import getPath
 
-from schoolbell.app.cal import CalendarEvent
-from schoolbell.calendar.simple import ImmutableCalendar
+from schooltool.app.cal import CalendarEvent
+from schooltool.calendar.simple import ImmutableCalendar
 
 from schooltool.timetable.interfaces import IWeekdayBasedTimetableModel
 from schooltool.timetable.interfaces import IDayIdBasedTimetableModel

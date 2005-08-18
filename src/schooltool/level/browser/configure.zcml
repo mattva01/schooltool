@@ -101,7 +101,7 @@
 
   <page
       name="promotion.html"
-      for="schoolbell.app.group.interfaces.IGroup"
+      for="schooltool.group.interfaces.IGroup"
       template="promotion.pt"
       class=".promotion.PromotionWorkItemsView"
       permission="schoolbell.edit"
@@ -128,7 +128,7 @@
 
   <page
       name="academicRecord.html"
-      for="schoolbell.app.person.interfaces.IPerson"
+      for="schooltool.person.interfaces.IPerson"
       template="record.pt"
       class=".record.AcademicRecordView"
       permission="zope.View"

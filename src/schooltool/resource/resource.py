@@ -29,7 +29,7 @@ from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree
 from zope.app.container.contained import Contained
 
-from schoolbell.app.resource import interfaces
+from schooltool.resource import interfaces
 
 
 class ResourceContainer(btree.BTreeContainer):
