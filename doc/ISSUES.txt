@@ -11,10 +11,13 @@ Issues with the `refactor` branch
 
 - A generation script has to be written:
 
-   * Convert timetables data attribute to an annotation value. 
+   * Convert timetables data attribute to an annotation value.
 
 - Build a better preference system where single preference groups can be
   registered. I did a feasibility study and a modified zope.app.preference
   implementation will work.
 
 - Application title is currently SchoolBell.
+
+- SchoolBell Person preferences show cal_periods; that's okay for now. We need
+  to develop a generic preferences framework for components.

@@ -39,45 +39,6 @@
 
   <!-- Views -->
 
-  <configure
-      package="schoolbell.app.browser"
-      i18n_domain="schoolbell">
-
-    <!-- Views from SchoolBell -->
-
-<!-- XXX: Why do we need this???? -->
-    <!--addform
-        label="Add a Group"
-        name="addSchoolBellGroup.html"
-        schema="schoolbell.app.group.interfaces.IGroup"
-        fields="title description"
-        set_before_add="title"
-        content_factory="schooltool.app.Group"
-        permission="schoolbell.create"
-        template="templates/simple_add.pt"
-        class="schoolbell.app.browser.app.GroupAddView"
-        layer="schooltool.browser.skin.ISchoolToolLayer"
-        >
-        <widget field="description" height="5" />
-    </addform -->
-
-    <!--addform
-        label="Add a Resource"
-        name="addSchoolBellResource.html"
-        schema="schoolbell.app.interfaces.IResource"
-        fields="title description isLocation"
-        set_before_add="title"
-        content_factory="schooltool.app.Resource"
-        template="templates/simple_add.pt"
-        class="schoolbell.app.browser.app.ResourceAddView"
-        permission="schoolbell.create"
-        layer="schooltool.browser.skin.ISchoolToolLayer"
-        >
-        <widget field="description" height="5" />
-    </addform -->
-
-  </configure>
-
   <page
       name="index.html"
       for="schooltool.interfaces.ISchoolToolApplication"
@@ -85,39 +46,6 @@
       template="templates/index.pt"
       permission="zope.Public"
       layer="schooltool.browser.skin.ISchoolToolLayer"
-      />
-
-  <page
-      name="person-csvimport.html"
-      for="schoolbell.app.person.interfaces.IPersonContainer"
-      class="schoolbell.app.person.browser.csvimport.PersonCSVImportView"
-      template="templates/person-csvimport.pt"
-      permission="schoolbell.create"
-      menu="schoolbell_actions"
-      title="Import Persons"
-      layer=".skin.ISchoolToolLayer"
-      />
-
-  <page
-      name="group-csvimport.html"
-      for="schoolbell.app.group.interfaces.IGroupContainer"
-      class="schoolbell.app.group.browser.csvimport.GroupCSVImportView"
-      template="templates/group-csvimport.pt"
-      permission="schoolbell.create"
-      menu="schoolbell_actions"
-      title="Import Groups"
-      layer=".skin.ISchoolToolLayer"
-      />
-
-  <page
-      name="resource-csvimport.html"
-      for="schoolbell.app.resource.interfaces.IResourceContainer"
-      class="schoolbell.app.resource.browser.csvimport.ResourceCSVImportView"
-      template="templates/resource-csvimport.pt"
-      permission="schoolbell.create"
-      menu="schoolbell_actions"
-      title="Import Resources"
-      layer=".skin.ISchoolToolLayer"
       />
 
   <zope:vocabulary
@@ -138,22 +66,8 @@
       title="Import Sections"
       />
 
-    <!--
-    FIXME: zope.View is certainly not the right permission.
-    How can we say "a person may only edit their own preferences"?
-    -->
-  <!-- XXX: Check whether needed; is template different? -->
-  <page
-      name="preferences.html"
-      for="schoolbell.app.person.interfaces.IPerson"
-      class="schoolbell.app.person.browser.person.PersonPreferencesView"
-      template="templates/person_preferences.pt"
-      permission="zope.View"
-      menu="schoolbell_actions"
-      title="Change Preferences"
-      layer=".skin.ISchoolToolLayer"
-      />
-
+  <!-- XXX: Needs to be here until we switch to pagelet system or -->
+  <!--      write a macro -->
   <page
       name="index.html"
       for="schoolbell.app.person.interfaces.IPerson"
