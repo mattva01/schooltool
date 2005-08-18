@@ -1,0 +1,497 @@
+Functional doctest for schoolbell.app security
+==============================================
+
+SchoolBell as a Zope 3 content object
+-------------------------------------
+
+First, we'll go to the Zope 3 management interface and verify that you can add
+SchoolBell instances from the add menu.  You need manager permissions
+for that.:
+
+
+    >>> print http("""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&new_value=frogpond
+    ... """)
+    HTTP/1.1 303 See Other
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    Location: http://localhost/@@contents.html
+    ...
+
+Let's quickly create a user to run the tests with:
+
+    >>> print http("""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ... Content-Length: 112
+    ...
+    ... field.title=Frog&field.username=frog&\
+    ... field.password=pwd&\
+    ... field.verify_password=pwd&\
+    ... field.photo=&\
+    ... UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    Content-Length: ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+The user should have the view permission set by default, let's check
+it out:
+
+
+    >>> print http(r"""
+    ... GET /frogpond/ HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    ...
+    <h1>Welcome to SchoolBell</h1>
+    ...
+
+We can traverse to the person index:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/ HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <h1>Person index</h1>
+    ...
+
+We can traverse to the group index too
+
+    >>> print http(r"""
+    ... GET /frogpond/groups/ HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <h1>Group index</h1>
+    ...
+
+We can traverse to the resource index too
+
+    >>> print http(r"""
+    ... GET /frogpond/resources/ HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    <h1>Resource index</h1>
+    ...
+
+
+Adding stuff -- schoolbell.create permission
+--------------------------------------------
+
+Adding persons should not work without a schoolbell.create permission:
+
+    >>> print http("""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ... Content-Length: 120
+    ...
+    ... field.title=Snake&\
+    ... field.username=snake&\
+    ... field.password=badger&\
+    ... field.verify_password=badger&\
+    ... field.photo=&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/@@login.html...
+    ...
+
+Adding a group also fails:
+
+    >>> print http(r"""
+    ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 61
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Venerable+Frogs&UPDATE_SUBMIT=Add&add_input_name=
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/@@login.html...
+    ...
+
+And the resource too:
+
+    >>> print http(r"""
+    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 61
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Weed&UPDATE_SUBMIT=Add&add_input_name=
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/@@login.html...
+    ...
+
+
+Let's grant the permission to the user:
+
+    >>> print http("""
+    ... POST /frogpond/acl.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... marker-sb.person.frog=1&\
+    ... sb.person.frog=schoolbell.create&\
+    ... sb.person.frog=schoolbell.view&\
+    ... UPDATE_SUBMIT=Set
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond
+    ...
+
+Now the person adding works:
+
+    >>> print http("""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Snake&\
+    ... field.username=snake&\
+    ... field.password=badger&field.verify_password=badger&\
+    ... field.photo=&UPDATE_SUBMIT=Add
+    ... """, handle_errors=False)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+And a group:
+
+    >>> print http(r"""
+    ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 61
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Venerable+Frogs&UPDATE_SUBMIT=Add&add_input_name=
+    ... """, handle_errors=False)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/groups
+    ...
+
+
+And a resource too:
+
+    >>> print http(r"""
+    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 49
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Mud&UPDATE_SUBMIT=Add&add_input_name=
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/resources
+    ...
+
+Lets try deleting the snake:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/delete.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 14
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... delete.snake=1
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    ...
+      <ul>
+        <form method="post" action="delete.html">
+          <li>
+            <input type="hidden" name="delete.snake" />
+            <a href="http://localhost/frogpond/persons/snake">Snake</a>
+          </li>
+          <div class="controls">
+            <input type="submit" class="button-cancel"
+                   name="UPDATE_SUBMIT" value="Confirm" />
+            <input type="submit" class="button-cancel"
+                   name="CANCEL" value="Cancel" />
+          </div>
+        </form>
+      </ul>
+     ...
+
+Lets confirm it:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/delete.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 36
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... delete.snake=1&UPDATE_SUBMIT=Confirm
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+Snakes be gone:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/ HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    ...
+        <form method="post"
+              action="http://localhost/frogpond/persons/delete.html">
+          <div>
+            <input type="checkbox" name="delete.frog" />
+            <a href="http://localhost/frogpond/persons/frog">Frog</a>
+          </div>
+          <div class="controls">
+            <input type="submit" class="button-cancel"
+                   value="Delete" />
+          </div>
+        </form>
+    ...
+
+If frog tries deleting himself - he should get an error:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/delete.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Length: 13
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... delete.frog=1
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    ...
+      <p>
+        Sorry, you may not delete your own user account.
+      </p>
+    ...
+
+
+Editing things -- schoolbell.edit permission
+--------------------------------------------
+
+The user can edit his own info:
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/edit.html HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ... 
+    ... field.title=Toad&\
+    ... field.photo=&\
+    ... field.new_password=newpwd&\
+    ... field.verify_password=newpwd&\
+    ... UPDATE_SUBMIT=Add""", handle_errors=False)
+    HTTP/1.1 200 Ok
+    ...
+    ...Toad...
+    ...
+    ...Password was successfully changed!...
+    ...
+
+But we can revoke that permission from him:
+
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/acl.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... marker-sb.person.frog=1&\
+    ... sb.person.frog=schoolbell.create&\
+    ... sb.person.frog=schoolbell.view&\
+    ... sb.person.frog=schoolbell.viewCalendar&\
+    ... sb.person.frog=schoolbell.addEvent&\
+    ... sb.person.frog=schoolbell.modifyEvent&\
+    ... UPDATE_SUBMIT=Set
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons/frog
+    ...
+
+Now he can't edit the info:
+
+    >>> print http("""
+    ... POST /frogpond/persons/frog/edit.html HTTP/1.1
+    ... Authorization: Basic frog:newpwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Mr.+Toad&\
+    ... field.photo=&\
+    ... field.clear_photo.used=&\
+    ... field.new_password=whatever&\
+    ... field.verify_password=whatever&\
+    ... UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    Content-Length: ...
+    Location: http://localhost/frogpond/@@login.html...
+    ...
+
+The same goes for the groups and resources edit forms.  Not allowed:
+
+    >>> print http("""
+    ... POST /frogpond/groups/venerable-frogs/edit.html HTTP/1.1
+    ... Authorization: Basic frog:newpwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Venerables&\
+    ... field.description=&\
+    ... UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    Content-Length: ...
+    Location: http://localhost/frogpond/@@login.html...
+    ...
+
+    >>> print http("""
+    ... POST /frogpond/resources/mud/edit.html HTTP/1.1
+    ... Authorization: Basic frog:newpwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Silt&\
+    ... field.description=bottom&\
+    ... UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    Content-Length: ...
+    Location: http://localhost/frogpond/@@login.html...
+    ...
+
+Let's grant the edit permission:
+
+    >>> print http("""
+    ... POST /frogpond/acl.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... marker-sb.person.frog=1&\
+    ... sb.person.frog=schoolbell.edit&\
+    ... sb.person.frog=schoolbell.view&\
+    ... UPDATE_SUBMIT=Set
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond
+    ...
+
+Lo and behold:
+
+    >>> print http("""
+    ... POST /frogpond/groups/venerable-frogs/edit.html HTTP/1.1
+    ... Authorization: Basic frog:newpwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Venerables&\
+    ... field.description=&\
+    ... UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/groups/venerable-frogs
+    ...
+    ...Venerables...
+    ...
+
+    >>> print http("""
+    ... POST /frogpond/resources/mud/edit.html HTTP/1.1
+    ... Authorization: Basic frog:newpwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Silt&\
+    ... field.description=bottom&\
+    ... UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/resources/mud
+    ...
+    ...Silt...
+    ...
+
+Relationships
+-------------
+
+In order to add persons to groups, a user must have a manageMembership
+permission on those groups.
+
+    >>> print http("""
+    ... POST /frogpond/groups/venerable-frogs/members_persons.html HTTP/1.1
+    ... Authorization: Basic frog:newpwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... group.venerable-frogs=checked&\
+    ... UPDATE_SUBMIT=Apply
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/@@login.html...
+    ...
+
+Let's grant the guy the permission on the group:
+
+    >>> print http("""
+    ... POST /frogpond/groups/venerable-frogs/acl.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... marker-sb.person.frog=1&\
+    ... sb.person.frog=schoolbell.manageMembership&\
+    ... UPDATE_SUBMIT=Set
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/groups/venerable-frogs
+    ...
+
+Now, the group join must succeed.
+
+    >> print http("""
+    ... POST /frogpond/groups/venerable-frogs/members_persons.html HTTP/1.1
+    ... Authorization: Basic frog:newpwd
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... group.venerable-frogs=checked&\
+    ... UPDATE_SUBMIT=Apply
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/resources/venerable-frogs
+    ...

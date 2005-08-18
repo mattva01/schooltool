@@ -7,3 +7,4 @@ src/schooltool/locales/schooltool.pot
 ./testserver_rest_access.log
 ./web-access.log
 ./schooltool.log
+src/schooltool/sbapp/locales/schoolbell.pot

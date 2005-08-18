@@ -1,0 +1,142 @@
+<metal:block define-macro="page" i18n:domain="schoolbell">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="icon" type="image/png" href="favicon.ico"
+          tal:attributes="href context/++resource++favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="layout.css"
+          tal:attributes="href context/++resource++layout.css"/>
+    <link rel="stylesheet" type="text/css" href="style.css"
+          tal:attributes="href context/++resource++style.css"/>
+    <link type="text/css" rel="stylesheet" href="calwidget-calendar.css"
+          tal:attributes="href context/++resource++calwidget-calendar.css" />
+    <metal:block use-macro="view/@@schooltool_macros/generic/stylesheets" />
+    <script type="text/javascript" src="schoolbell.js"
+            tal:attributes="src context/++resource++schoolbell.js">
+    </script>
+    <script type="text/javascript" src=""
+            tal:attributes="src context/++resource++calwidget-calendar.js">
+    </script>
+    <metal:block define-slot="title">
+      <metal:block use-macro="view/@@schooltool_macros/generic/title" />
+    </metal:block>
+    <metal:block metal:define-slot="extrahead" />
+  </head>
+  <body>
+    <div id="header">
+      <div class="logo">
+        <a href=""
+          tal:define="url context/schoolbell:app/@@absolute_url"
+          tal:attributes="href url">
+          <img src="logo.png" alt="SchoolTool" i18n:attributes="alt"
+            tal:attributes="src context/++resource++logo.png"/>
+        </a>
+      </div>
+      <div class="tools">
+        <div class="breadcrumbs">
+        <tal:for tal:repeat="breadcrumb context/@@absolute_url/breadcrumbs">
+          <a tal:condition="repeat/breadcrumb/start"
+             tal:attributes="href breadcrumb/url"
+             i18n:translate="">top</a>
+          <tal:if condition="not:repeat/breadcrumb/start">&#187;</tal:if>
+          <a tal:condition="not:repeat/breadcrumb/start"
+             tal:attributes="href breadcrumb/url"
+             tal:content="breadcrumb/name|string:top">Breadcrumb</a>
+        </tal:for>
+        </div>
+        <div
+          tal:define="user request/principal;
+                      url context/schoolbell:app/@@absolute_url"
+          tal:on-error="nothing">
+
+          <tal:if condition="not:user/schoolbell:authenticated">
+            <a id="tools-login" i18n:translate=""
+              tal:attributes="href string:${url}/@@login.html">Log In</a>
+          </tal:if>
+
+          <tal:if condition="user/schoolbell:authenticated"
+                  define="person user/schoolbell:person">
+            <div metal:define-macro="logged_user">
+
+              <tal:span i18n:translate="">User:</tal:span>
+
+              <tal:if condition="not:person">
+                <span id="tools-zmi-principal" i18n:translate=""
+                  tal:content="user/title">ZMI Principal</span>
+              </tal:if>
+
+              <tal:if condition="person">
+                <a id="tools-principal" i18n:translate=""
+                  tal:attributes="href person/@@absolute_url"
+                  tal:content="user/title">Schoolbell Person</a> |
+                <a id="tools-calendar" i18n:translate=""
+                  tal:attributes="href string:${person/@@absolute_url}/calendar"
+                  >My Calendar</a> |
+                <a id="tools-logout" i18n:translate=""
+                  tal:attributes="href string:${url}/@@logout.html"
+                  >Log Out</a>
+              </tal:if>
+
+            </div>
+          </tal:if>
+
+        </div>
+      </div>
+    </div>
+    <div id="columns">
+      <metal:block define-slot="column-left">
+        <div id="column-left">
+          <div metal:define-slot="navigation-box"
+               tal:replace="structure context/@@schoolbell_navigation" 
+               tal:on-error="nothing"/>
+          <div class="portlet"
+               tal:condition="context/@@view_get_menu/schoolbell_actions">
+            <h4 i18n:translate="">Actions</h4>
+            <ul>
+              <li tal:repeat="view context/@@view_get_menu/schoolbell_actions">
+                <a tal:attributes="href view/action"
+                   tal:content="view/title" i18n:translate="" />
+              </li>
+            </ul>
+          </div>
+          <metal:block define-slot="column-left-extra"/>
+        </div>
+      </metal:block>
+      <div id="column-center">
+        <div id="content-header">
+          <metal:block define-slot="content-header"/>
+        </div>
+        <div id="content-body">
+          <metal:block define-slot="body"/>
+        </div>
+      </div>
+      <div class="clearer">&nbsp;</div>
+    </div>
+    <div id="footer">
+      <p>
+        <strong tal:replace="context/schoolbell:preferences/title"/>
+          <metal:block 
+              use-macro="view/@@schooltool_macros/generic/serverinfo" />
+          <span i18n:translate="">
+            &copy; The Shuttleworth Foundation 2003 - <span>2005</span>:
+            Supporting Social Innovation.
+          </span>
+      </p>
+      <p i18n:translate="">
+        SchoolTool&trade; is a Trademark of The Shuttleworth Foundation.
+      </p>
+    </div>
+  </body>
+</html>
+</metal:block>
+
+<metal:block define-macro="batch-search">
+  <form method="post" class="batch-search">
+    <input type="text" name="SEARCH"
+      tal:attributes="value context/request/SEARCH|nothing"/>
+    <input type="submit" name="SEARCH_BUTTON" value="Find Now"
+      i18n:attributes="value"/>
+  </form>
+</metal:block>

@@ -1,0 +1,188 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:apidoc="http://namespaces.zope.org/apidoc">
+
+  <!-- Setup schoolbell as a top-level package in API doc -->
+  <apidoc:rootModule module="schoolbell" />
+
+  <!-- Generic DevMode setup -->
+
+  <browser:layer
+      name="DevMode"
+      interface=".skin.IDevModeLayer" />
+
+  <browser:skin
+      name="SchoolBellDevMode"
+      interface=".skin.ISchoolBellDevModeSkin" />
+
+  <browser:page
+      name="view_macros"
+      for="*"
+      permission="zope.View"
+      template="view_macros.pt"
+      layer=".skin.IDevModeLayer"
+      />
+
+  <!-- DevTools Menu configuration -->
+
+  <browser:resource 
+      name="devmode.css" file="devmode.css"
+      layer=".skin.IDevModeLayer" 
+      />
+
+  <browser:resource 
+      name="box-bottom.png" file="box-bottom.png"
+      layer=".skin.IDevModeLayer" 
+      />
+
+  <browser:resource 
+      name="varrow.png" file="varrow.png"
+      layer=".skin.IDevModeLayer" 
+      />
+
+  <browser:resource 
+      name="harrow.png" file="harrow.png"
+      layer=".skin.IDevModeLayer" 
+      />
+
+  <browser:resource 
+      name="switch.js" file="switch.js"
+      layer=".skin.IDevModeLayer" 
+      />
+
+  <!-- Introspector -->
+  <browser:page
+      name="introspector.html"
+      for="*"
+      permission="schoolbell.view"
+      template="introspector.pt"
+      class=".introspector.Introspector"
+      layer=".skin.IDevModeLayer"
+      />
+
+  <browser:resource 
+      name="introspector.css" file="introspector.css"
+      layer=".skin.IDevModeLayer" 
+      />
+
+  <!-- ++annotations++ Namespace -->
+  <view
+      name="annotations" type="*"
+      provides="zope.app.traversing.interfaces.ITraversable" for="*"
+      factory=".introspector.annotationsNamespace"
+      />
+  <adapter
+      name="annotations"
+      provides="zope.app.traversing.interfaces.ITraversable" for="*"
+      factory=".introspector.annotationsNamespace"
+      />
+
+  <!-- ISequence ++items++ Namespace -->
+  <view
+      name="items" type="*"
+      provides="zope.app.traversing.interfaces.ITraversable" 
+      for="zope.interface.common.sequence.IMinimalSequence"
+      factory=".introspector.sequenceItemsNamespace"
+      />
+  <adapter
+      name="items"
+      provides="zope.app.traversing.interfaces.ITraversable"
+      for="zope.interface.common.sequence.IMinimalSequence"
+      factory=".introspector.sequenceItemsNamespace"
+      />
+
+  <!-- IMapping ++items++ Namespace -->
+  <view
+      name="items" type="*"
+      provides="zope.app.traversing.interfaces.ITraversable" 
+      for="zope.interface.common.mapping.IItemMapping"
+      factory=".introspector.mappingItemsNamespace"
+      />
+  <adapter
+      name="items"
+      provides="zope.app.traversing.interfaces.ITraversable"
+      for="zope.interface.common.mapping.IItemMapping"
+      factory=".introspector.mappingItemsNamespace"
+      />
+
+  <!-- Menu entries for Error Reporting Utility -->
+
+  <browser:menuItem
+      menu="schoolbell_actions"
+      for="zope.app.error.interfaces.IErrorReportingUtility"
+      action="@@configure.html"
+      title="Configure"
+      layer=".skin.IDevModeLayer"
+      />
+
+  <browser:menuItem
+      menu="schoolbell_actions"
+      for="zope.app.error.interfaces.IErrorReportingUtility"
+      action="@@index.html"
+      title="Error List"
+      layer=".skin.IDevModeLayer"
+      />
+
+  <!-- apidoc customization -->
+  <browser:resource 
+      name="apidoc.css" file="apidoc.css"
+      layer=".skin.IDevModeLayer" 
+      />
+
+  <browser:pages
+      for="zope.app.apidoc.apidoc.APIDocumentation"
+      class="zope.app.apidoc.browser.apidoc.APIDocumentationView"
+      permission="zope.app.apidoc.UseAPIDoc"
+      layer="schoolbell.app.devmode.skin.IDevModeLayer">
+  
+    <browser:page
+        name="modulelist.html"
+        template="modules.pt" />
+  
+  </browser:pages>
+
+  <configure package="zope.app.apidoc.ifacemodule">
+    <browser:page
+        for=".ifacemodule.InterfaceModule"
+        permission="zope.app.apidoc.UseAPIDoc"
+        class="schoolbell.app.devmode.apidoc.InterfaceMenu"
+        name="menu.html"
+        template="menu.pt"
+        layer="schoolbell.app.devmode.skin.IDevModeLayer"
+        />
+
+    <browser:page
+        for=".ifacemodule.InterfaceModule"
+        permission="zope.app.apidoc.UseAPIDoc"
+        class="schoolbell.app.devmode.restdoc.RESTMenu"
+        name="restmenu.html"
+        template="menu.pt"
+        layer="schoolbell.app.devmode.skin.IDevModeLayer"
+        />
+  </configure>
+
+  <browser:page
+      for="zope.app.apidoc.codemodule.codemodule.CodeModule"
+      permission="zope.app.apidoc.UseAPIDoc"
+      class="schoolbell.app.devmode.apidoc.CodeMenu"
+      name="menu.html"
+      template="code_menu.pt" 
+      layer="schoolbell.app.devmode.skin.IDevModeLayer"
+      />
+
+  <configure package="zope.app.apidoc.bookmodule">
+    <browser:page
+        for="zope.app.onlinehelp.onlinehelptopic.RESTOnlineHelpTopic"
+        permission="zope.app.apidoc.UseAPIDoc"
+        class="schoolbell.app.devmode.apidoc.BookMenu"
+        name="menu.html"
+        template="menu.pt"
+        />
+  </configure>
+
+  <!-- Misc -->
+  <includeOverrides file="overrides.zcml" />
+
+
+</configure>

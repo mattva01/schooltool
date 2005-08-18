@@ -1,0 +1,231 @@
+#
+# SchoolTool - common information systems platform for school administration
+# Copyright (c) 2005 Shuttleworth Foundation
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+"""
+SchoolBell calendaring objects.
+
+$Id$
+"""
+
+import datetime
+from persistent.dict import PersistentDict
+from persistent import Persistent
+from zope.interface import implements
+from zope.schema import getFieldNames
+from zope.component import adapts
+from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
+from zope.app.container.contained import Contained
+from zope.app.location.interfaces import ILocation
+
+from schoolbell.calendar.icalendar import read_icalendar
+from schoolbell.calendar.interfaces import ICalendar
+from schoolbell.calendar.interfaces import ICalendarEvent
+from schoolbell.calendar.mixins import CalendarMixin
+from schoolbell.calendar.simple import SimpleCalendarEvent
+from schoolbell.app.interfaces import ISchoolBellCalendarEvent
+from schoolbell.app.interfaces import ISchoolBellCalendar
+from schoolbell.app.interfaces import IWriteCalendar
+
+CALENDAR_KEY = 'schoolbell.app.calendar.Calendar'
+
+
+class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
+    """A persistent calendar event contained in a persistent calendar."""
+
+    implements(ISchoolBellCalendarEvent, IAttributeAnnotatable)
+
+    __parent__ = None
+
+    resources = property(lambda self: self._resources)
+
+    def __init__(self, *args, **kwargs):
+        resources = kwargs.pop('resources', ())
+        SimpleCalendarEvent.__init__(self, *args, **kwargs)
+        self.__name__ = self.unique_id
+        self._resources = ()
+        for resource in resources:
+            self.bookResource(resource)
+
+    def __conform__(self, interface):
+        if interface is ICalendar:
+            return self.__parent__
+
+    def bookResource(self, resource):
+        calendar = ISchoolBellCalendar(resource)
+        if resource in self.resources:
+            raise ValueError('resource already booked')
+        if calendar is self.__parent__:
+            raise ValueError('cannot book itself')
+        self._resources += (resource, )
+        if self.__parent__ is not None:
+            calendar.addEvent(self)
+
+    def unbookResource(self, resource):
+        if resource not in self.resources:
+            raise ValueError('resource not booked')
+        self._resources = tuple([r for r in self.resources
+                                 if r is not resource])
+        ISchoolBellCalendar(resource).removeEvent(self)
+
+
+class Calendar(Persistent, CalendarMixin):
+    """A persistent calendar."""
+
+    # We use the expand() implementation from CalendarMixin
+
+    implements(ISchoolBellCalendar, IAttributeAnnotatable)
+
+    __name__ = 'calendar'
+
+    title = property(lambda self: self.__parent__.title)
+
+    def __init__(self, owner):
+        self.events = PersistentDict()
+        self.__parent__ = owner
+
+    def __iter__(self):
+        return self.events.itervalues()
+
+    def __len__(self):
+        return len(self.events)
+
+    def addEvent(self, event):
+        assert ISchoolBellCalendarEvent.providedBy(event)
+        if event.unique_id in self.events:
+            raise ValueError('an event with this unique_id already exists')
+        if event.__parent__ is None:
+            for resource in event.resources:
+                if ISchoolBellCalendar(resource) is self:
+                    raise ValueError('cannot book itself')
+            event.__parent__ = self
+            for resource in event.resources:
+                ISchoolBellCalendar(resource).addEvent(event)
+        elif self.__parent__ not in event.resources:
+            raise ValueError("Event already belongs to a calendar")
+        self.events[event.unique_id] = event
+
+    def removeEvent(self, event):
+        if self.__parent__ in event.resources:
+            event.unbookResource(self.__parent__)
+        else:
+            del self.events[event.unique_id]
+            parent_calendar = event.__parent__
+            if self is parent_calendar:
+                for resource in event.resources:
+                    event.unbookResource(resource)
+                event.__parent__ = None
+
+    def clear(self):
+        # clear is not actually used anywhere in schoolbell.app (except tests),
+        # so it doesn't have to be efficient.
+        for e in list(self):
+            self.removeEvent(e)
+
+    def find(self, unique_id):
+        return self.events[unique_id]
+
+
+def getCalendar(owner):
+    """Adapt an ``IAnnotatable`` object to ``ISchoolBellCalendar``."""
+    annotations = IAnnotations(owner)
+    try:
+        return annotations[CALENDAR_KEY]
+    except KeyError:
+        calendar = Calendar(owner)
+        annotations[CALENDAR_KEY] = calendar
+        return calendar
+
+
+class WriteCalendar(object):
+    r"""An adapter that allows writing iCalendar data to a calendar.
+
+        >>> calendar = Calendar(None)
+        >>> adapter = WriteCalendar(calendar)
+        >>> adapter.write('''\
+        ... BEGIN:VCALENDAR
+        ... VERSION:2.0
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ... BEGIN:VEVENT
+        ... UID:some-random-uid@example.com
+        ... SUMMARY:LAN party
+        ... DTSTART:20050226T160000
+        ... DURATION:PT6H
+        ... DTSTAMP:20050203T150000
+        ... END:VEVENT
+        ... END:VCALENDAR
+        ... ''')
+        >>> for e in calendar:
+        ...     print e.dtstart.strftime('%Y-%m-%d %H:%M'), e.title
+        2005-02-26 16:00 LAN party
+
+    Supporting other charsets would be nice too:
+
+        >>> calendar = Calendar(None)
+        >>> adapter = WriteCalendar(calendar)
+        >>> adapter.write('''\
+        ... BEGIN:VCALENDAR
+        ... VERSION:2.0
+        ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+        ... BEGIN:VEVENT
+        ... UID:some-random-uid@example.com
+        ... SUMMARY:LAN party %s
+        ... DTSTART:20050226T160000
+        ... DURATION:PT6H
+        ... DTSTAMP:20050203T150000
+        ... END:VEVENT
+        ... END:VCALENDAR
+        ... ''' %  chr(163), charset='latin-1')
+        >>> titles = [e.title for e in calendar]
+        >>> titles[0]
+        u'LAN party \xa3'
+
+    """
+
+    adapts(ISchoolBellCalendar)
+    implements(IWriteCalendar)
+
+    # Hook for unit tests.
+    read_icalendar = staticmethod(read_icalendar)
+
+    _event_attrs = getFieldNames(ICalendarEvent)
+
+    def __init__(self, context, request=None):
+        self.calendar = context
+
+    def write(self, data, charset='UTF-8'):
+        changes = {} # unique_id -> (old_event, new_event)
+        for e in self.calendar:
+            changes[e.unique_id] = (e, None)
+
+        for event in self.read_icalendar(data, charset):
+            old_event = changes.get(event.unique_id, (None, ))[0]
+            changes[event.unique_id] = (old_event, event)
+
+        for old_event, new_event in changes.itervalues():
+            if old_event is None:
+                # new_event is a SimpleCalendarEvent, we need a CalendarEvent
+                kwargs = dict([(attr, getattr(new_event, attr))
+                               for attr in self._event_attrs])
+                self.calendar.addEvent(CalendarEvent(**kwargs))
+            elif new_event is None:
+                self.calendar.removeEvent(old_event)
+            elif old_event != new_event:
+                # modify in place
+                for attr in self._event_attrs:
+                    setattr(old_event, attr, getattr(new_event, attr))
+

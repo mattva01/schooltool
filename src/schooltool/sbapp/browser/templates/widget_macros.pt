@@ -1,0 +1,52 @@
+<metal:block define-macro="widget_rows" i18n:domain="schoolbell">
+<div class="row" tal:repeat="widget view/widgets">
+  <metal:block define-macro="widget_row">
+  <div class="label" tal:condition="widget/label">
+    <label for="field.name" title="The widget's hint"
+      tal:attributes="for widget/name; title widget/hint"
+      tal:content="widget/label">The Label</label>
+  </div>
+  <p class="hint" tal:content="widget/hint" />
+  <div class="field">
+    <input type="text" style="width:100%" tal:replace="structure widget" />
+    <metal:block define-slot="extra" />
+  </div>
+  <div class="error" tal:define="error widget/error"
+    tal:condition="error" tal:content="structure error">
+    The Error
+  </div>
+  </metal:block>
+</div>
+</metal:block>
+
+<div class="field" metal:define-macro="checkbox_widget">
+  <input type="text" tal:replace="structure widget" />
+  <label tal:attributes="for widget/name"
+         tal:content="widget/label">Label</label>
+  <div class="error" tal:define="error widget/error"
+       tal:condition="error" tal:content="structure error">
+    Error message.
+  </div>
+</div>
+
+<div class="field" metal:define-macro="datepicker_widget">
+  <div class="label">
+    <label for="field.name" title="The widget's hint"
+      tal:attributes="for widget/name; title widget/hint"
+      tal:content="widget/label">The Label</label>
+  </div>
+  <p class="hint" tal:content="widget/hint" />
+  <div class="field">
+    <input type="text" tal:replace="structure widget"/>
+    <img class="CalIcon" src="" id="" onmousedown=""
+      tal:attributes="id string:${widget/name}Icon;
+        onclick string:clickWidgetIcon('${widget/name}');;;
+        src context/++resource++calwidget-icon.gif"/>
+    <div id="" style="background: #fff; position: absolute; display: none;"
+      tal:attributes="id string:${widget/name}Div"/>
+  </div>
+  <div class="error" tal:define="error widget/error"
+    tal:condition="error" tal:content="structure error">
+    The Error
+  </div>
+</div>

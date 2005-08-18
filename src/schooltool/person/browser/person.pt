@@ -1,0 +1,70 @@
+<metal:block use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+
+  <metal:block fill-slot="title">
+    <title i18n:translate="">Person info: <span tal:replace="context/title"
+        i18n:name="title"/></title>
+  </metal:block>
+
+  <metal:block fill-slot="content-header">
+
+    <tal:if condition="context/photo">
+      <img width="48px" src="photo" class="person-photo"
+           tal:attributes="src string:${context/@@absolute_url}/photo" />
+    </tal:if>
+    <h1 tal:content="context/title" />
+    <strong i18n:translate="">Username:</strong>
+    <span tal:replace="context/zope:name">not_doe</span>
+    <br />
+    <a class="modify" href=""
+       title="Change this person's name, picture, or password"
+       tal:attributes="href string:${context/@@absolute_url}/@@edit.html"
+       i18n:attributes="title"
+       i18n:translate="">
+       edit name
+    </a>
+
+  </metal:block>
+
+  <metal:block metal:fill-slot="body">
+
+    <tal:block replace="structure context/@@notes|nothing"/>
+
+    <div class="person-info">
+      <div class="info-block">
+        <h5 i18n:translate="">Details</h5>
+        <metal:block 
+            use-macro="view/@@schooltool_macros/calendar/person-details" />
+        <a class="modify" href="" title="Modify this person's details"
+           tal:attributes="href string:${context/@@absolute_url}/@@details.html"
+           i18n:attributes="title"
+           i18n:translate="">
+           edit details
+        </a>
+      </div>
+
+      <tal:block tal:define="groups context/groups/sortby:title">
+        <div class="info-block person-groups">
+          <h5 i18n:translate="">Groups</h5>
+          <ul tal:condition="groups">
+            <tal:loop repeat="group groups">
+              <li>
+                <a title=""
+                  tal:attributes="href group/@@absolute_url;
+                  title group/description|group/title"
+                  tal:content="group/title"></a>
+              </li>
+            </tal:loop>
+          </ul>
+          <a class="modify" href="" title="Manage this person's memberships"
+             tal:attributes="href string:${context/@@absolute_url}/@@groups.html"
+             i18n:attributes="title"
+             i18n:translate="">
+             edit groups
+          </a>
+        </div>
+      </tal:block>
+    </div>
+
+  </metal:block>
+
+</metal:block>

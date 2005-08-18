@@ -1,0 +1,255 @@
+Creating SchoolBell Notes
+=========================
+
+Set up
+------
+
+We create a SchoolBell instance
+
+    >>> print http(r"""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication
+    ... 
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&new_value=frogpond
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+We add a person
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 126
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=person1&field.username=person&field.password=&field.verify_password=&field.photo=&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+
+Test
+----
+
+Add a note to the person
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/person/@@addNote.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 4348
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=My%20Note&field.body=This%20is%20the%20note&field.privacy=public&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+We should see the note now:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/person HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    ...<div id="notes">
+    ...<h5>Notes</h5>
+    <BLANKLINE>
+    ...<div class="note public">
+    ...<div class="header">
+    ...<h6>
+    <BLANKLINE>
+    ...My Note
+    ...</h6>
+    ...</div>
+    ...<div class="body">
+    ...<p>This is the note</p>
+    ...</div>
+    ...</div>
+    <BLANKLINE>
+    </div>
+    ...
+
+Notes can also be private (viewable only to the person who added them):
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/person/@@addNote.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 4348
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=My%20Private%20Note&field.body=This%20is%20a%20private%20note&field.privacy=private&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+
+Make sure the note is there when we view it:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/person HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    ...<div id="notes">
+    ...<h5>Notes</h5>
+    <BLANKLINE>
+    ...<div class="note public">
+    ...<div class="header">
+    ...<h6>
+    <BLANKLINE>
+    ...My Note
+    ...</h6>
+    ...</div>
+    ...<div class="body">
+    ...<p>This is the note</p>
+    ...</div>
+    ...</div>
+    ...<div class="note private">
+    ...<div class="header">
+    ...<h6>
+    <BLANKLINE>
+    ...My Private Note
+    ...</h6>
+    ...</div>
+    ...<div class="body">
+    ...<p>This is a private note</p>
+    ...</div>
+    ...</div>
+    <BLANKLINE>
+    </div>
+    ...
+
+Add a user who won't be able to see the note:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/add.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 112
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... field.title=Frog&field.username=frog&field.password=pwd&field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/frogpond/persons
+    ...
+
+View the page as our new user and we will only see the first (public) note:
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/person HTTP/1.1
+    ... Authorization: Basic frog:pwd
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    ...<div id="notes">
+    ...<h5>Notes</h5>
+    <BLANKLINE>
+    ...<div class="note public">
+    ...<div class="header">
+    ...<h6>
+    <BLANKLINE>
+    ...My Note
+    ...</h6>
+    ...</div>
+    ...<div class="body">
+    ...<p>This is the note</p>
+    ...</div>
+    ...</div>
+    <BLANKLINE>
+    </div>
+    ...
+
+Notes can also be deleted, but only by the person who created the note:
+
+    >>> result = http(r"""
+    ... GET /frogpond/persons/person HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    >>> print result
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    ...<div id="notes">
+    ...<h5>Notes</h5>
+    <BLANKLINE>
+    ...<div class="note public">
+    ...<div class="header">
+    ...<h6>
+    <BLANKLINE>
+    ...My Note
+    ...</h6>
+    ...</div>
+    ...<div class="body">
+    ...<p>This is the note</p>
+    ...</div>
+    ...</div>
+    ...<div class="note private">
+    ...<div class="header">
+    ...<h6>
+    <BLANKLINE>
+    ...My Private Note
+    ...</h6>
+    ...</div>
+    ...<div class="body">
+    ...<p>This is a private note</p>
+    ...</div>
+    ...</div>
+    <BLANKLINE>
+    </div>
+    ...
+
+Store the id of a note we can delete:
+
+    >>> import re
+    >>> uid_result = re.search('uid=([0-9]*\.[0-9]*)', result.getBody())
+    >>> uid = uid_result.group(1)
+
+Now delete the note:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/person/index.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 112
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... DELETE_NOTE=1&uid=%s""" % uid)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+    ...<div id="notes">
+    ...<h5>Notes</h5>
+    <BLANKLINE>
+    ...<div class="note private">
+    ...<div class="header">
+    ...<h6>
+    <BLANKLINE>
+    ...My Private Note
+    ...</h6>
+    ...</div>
+    ...<div class="body">
+    ...<p>This is a private note</p>
+    ...</div>
+    ...</div>
+    <BLANKLINE>
+    </div>
+    ...
+

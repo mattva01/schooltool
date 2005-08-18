@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="http://www.blogger.com/styles/atom.css" type="text/css"?>
+<feed xmlns="http://purl.org/atom/ns#"
+      version="0.3"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:dc="http://purl.org/dc/elements/1.1/"
+      i18n:domain="schoolbell"
+      tal:define="days view/getCurrentWeek">
+
+  <div xmlns="http://www.w3.org/1999/xhtml">
+    <a xmlns="http://www.w3.org/1999/xhtml"
+      href=""
+      tal:attributes="href string:http://www.schooltool.org">
+      <img title="Schooltool" src="" alt="[Schooltool.org]" 
+           border="0px" i18n:attributes="alt;title"
+           tal:attributes="src context/++resource++logo.png"/>
+    </a>
+  </div>
+
+  <title>
+    <span i18n:translate="">
+      Events for
+    </span>
+    <tal:block content="context/title"/>
+  </title>
+  <tagline tal:content="view/current"></tagline>
+  <modified tal:content="view/w3cdtf_datetime_now">
+    XXX Need schoolbell.calendar.utils
+  </modified>
+  <link href="" rel="alternate" type="text/html" 
+        tal:attributes="href view/current"/>
+
+  <id tal:content="string:tag:${view/@@absolute_url}">
+    XXX Need unique ID generator
+  </id>
+  <generator url="http://www.schooltool.org/schoolbell" version="1.0">
+    Schoolbell
+  </generator>
+
+  <info mode="xml" type="text/html">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+    <span i18n:translate="atom_description">
+      This is an Atom formatted XML site feed. It is intended to be viewed
+      in a Newsreader or syndicated to another site. Please visit
+    </span>
+    <a href="http://www.atomenabled.org/" i18n:translate="atom_enabled">
+      Atom Enabled
+    </a>
+    <span i18n:translate="atom_more_info">
+      for more info.
+    </span>
+    <br xmlns="http://www.w3.org/1999/xhtml" />
+    <br xmlns="http://www.w3.org/1999/xhtml" />
+    <a xmlns="http://www.w3.org/1999/xhtml" href=""
+      tal:attributes="href string:http://www.atomenabled.org/feedvalidator/check.cgi?url=${view/@@absolute_url}/atom.xml">
+      <img title="Validate my Atom feed" width="88" height="31"
+           src="http://www.atomenabled.org/feedvalidator/images/valid-atom.png"
+           alt="[Valid Atom]" border="0px" i18n:attributes="alt;title"/>
+      </a>
+    </div>
+  </info>
+
+
+  <tal:loop repeat="day days">
+    <entry tal:repeat="event day/events">
+      <id tal:content="event/unique_id">
+        XXX Need unique ID generator
+      </id>
+      <title tal:content="event/title"></title>
+      <link rel="alternate" type="text/html" href=""
+            tal:attributes="href event/@@absolute_url" />
+      <content mode="escaped"
+               type="text/html"
+               xml:base=""
+               xml:space="preserve"
+               tal:content="event/description">
+      </content>
+      <author>
+        <name tal:content="context/title"></name>
+        <url tal:content="context/__parent__/@@absolute_url"></url>
+      </author>
+      <issued  tal:content="python:view.w3cdtf_datetime(event.dtstart)">
+        XXX Issued time
+      </issued>
+      <modified tal:content="python:view.w3cdtf_datetime(event.dtstart)">
+        XXX Modified time
+      </modified>
+    </entry>
+  </tal:loop>
+</feed>

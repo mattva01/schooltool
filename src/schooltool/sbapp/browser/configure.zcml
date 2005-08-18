@@ -1,0 +1,634 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schoolbell">
+
+<!-- Dependencies -->
+
+  <include package="schoolbell.batching" />
+
+<!-- TALES path expressions -->
+
+  <zope:adapter
+      for="*"
+      name="sortby"
+      provides="zope.app.traversing.interfaces.IPathAdapter"
+      factory=".SortBy"
+      />
+
+  <zope:adapter
+      for="*"
+      name="schoolbell"
+      provides="zope.app.traversing.interfaces.IPathAdapter"
+      factory=".SchoolBellAPI"
+      />
+
+<!-- Adapters -->
+
+  <zope:adapter
+      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      provides="zope.app.size.interfaces.ISized"
+      factory=".SchoolBellSized"
+      />
+
+  <zope:adapter
+      for="schoolbell.calendar.browser.CalendarICalendarView"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      factory=".cal.enableICalendarUpload"
+      trusted="yes"
+      />
+
+<!-- Actions menu -->
+
+  <menu id="schoolbell_actions" title="Actions" />
+
+<!-- Pluggable Traverser Plugins -->
+
+  <zope:subscriber
+      for="zope.app.container.interfaces.IReadContainer
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
+      factory="schoolbell.app.traverser.traverser.ContainerTraverserPlugin"
+      />
+
+<!-- Application Traverser -->
+
+  <zope:view
+      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory="schoolbell.app.traverser.browser.PluggableBrowserTraverser"
+      permission="zope.Public"
+      />
+
+<!-- Views for the application -->
+
+  <addMenuItem
+      title="SchoolBell"
+      class="schoolbell.app.app.SchoolBellApplication"
+      permission="zope.ManageContent"
+      />
+
+  <page
+      name="index.html"
+      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      class="schoolbell.app.browser.app.SchoolBellApplicationView"
+      template="templates/index.pt"
+      permission="zope.Public"
+      />
+
+  <!-- Make index.html the default ZMI view for ISchoolBellApplication -->
+
+  <menuItem
+      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      menu="zmi_views" title="View" action="index.html" />
+
+  <!-- XXX: Ahhh! Why is this a view of the person? -->
+  <page
+      name="site-preferences.html"
+      for="schoolbell.app.person.interfaces.IPerson"
+      class="schoolbell.app.browser.app.ApplicationPreferencesView"
+      template="templates/application_preferences.pt"
+      permission="schoolbell.manageMembership"
+      menu="schoolbell_actions"
+      title="Change Site Preferences" />
+
+<!-- Views for everything -->
+
+  <page
+      for="*"
+      name="login.html"
+      layer=".skin.ISchoolBellLayer"
+      template="templates/login.pt"
+      class=".app.LoginView"
+      permission="zope.Public"
+      />
+
+  <page
+      for="*"
+      name="logout.html"
+      layer=".skin.ISchoolBellLayer"
+      class=".app.LogoutView"
+      permission="zope.Public"
+      />
+
+  <page
+      for="zope.app.annotation.interfaces.IAnnotatable"
+      name="acl.html"
+      layer=".skin.ISchoolBellLayer"
+      class=".app.ACLView"
+      template="templates/acl.pt"
+      permission="schoolbell.controlAccess"
+      title="Set Up Access"
+      menu="schoolbell_actions"
+      />
+
+  <page
+      name="delete.html"
+      for="zope.app.container.interfaces.IContainer"
+      class="schoolbell.app.browser.app.ContainerDeleteView"
+      template="templates/container_delete.pt"
+      permission="zope.View"
+      />
+
+
+<!-- Calendar views -->
+
+  <!-- Sigh. Cannot specify multiple for and permission in subsscriber ;-( -->
+  <zope:class class=".cal.ToCalendarTraverser">
+    <allow interface="schoolbell.app.traverser.interfaces.ITraverserPlugin" />
+  </zope:class>
+
+  <zope:subscriber
+      for="schoolbell.app.interfaces.IHaveCalendar
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="schoolbell.app.traverser.interfaces.ITraverserPlugin"
+      factory=".cal.ToCalendarTraverser"
+      />
+
+  <zope:view
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory=".cal.CalendarTraverser"
+      permission="zope.Public"
+      />
+
+  <menuItem
+      menu="schoolbell_actions"
+      title="View Calendar"
+      for="schoolbell.app.interfaces.IHaveCalendar"
+      permission="schoolbell.viewCalendar"
+      action="calendar"
+      />
+
+  <page
+      name="daily.html"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      class=".cal.DailyCalendarView"
+      template="templates/cal_daily.pt"
+      permission="schoolbell.viewCalendar"
+      menu="zmi_views"
+      title="Calendar (Daily)"
+      />
+
+  <page
+      name="daily.pdf"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      class=".pdfcal.DailyPDFCalendarView"
+      attribute="pdfdata"
+      permission="schoolbell.viewCalendar"
+      menu="zmi_views"
+      title="Calendar (Daily, PDF)"
+      />
+
+  <page
+      name="weekly.html"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      class=".cal.WeeklyCalendarView"
+      template="templates/cal_weekly.pt"
+      permission="schoolbell.viewCalendar"
+      menu="zmi_views"
+      title="Calendar (Weekly)"
+      />
+
+  <page
+      name="weekly.pdf"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      class=".pdfcal.WeeklyPDFCalendarView"
+      attribute="pdfdata"
+      permission="schoolbell.viewCalendar"
+      menu="zmi_views"
+      title="Calendar (Weekly, PDF)"
+      />
+
+  <page
+      name="monthly.html"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      class=".cal.MonthlyCalendarView"
+      template="templates/cal_monthly.pt"
+      permission="schoolbell.viewCalendar"
+      menu="zmi_views"
+      title="Calendar (Monthly)"
+      />
+
+  <page
+      name="monthly.pdf"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      class=".pdfcal.MonthlyPDFCalendarView"
+      attribute="pdfdata"
+      permission="schoolbell.viewCalendar"
+      menu="zmi_views"
+      title="Calendar (Monthly, PDF)"
+      />
+
+  <page
+      name="yearly.html"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      class=".cal.YearlyCalendarView"
+      template="templates/cal_yearly.pt"
+      permission="schoolbell.viewCalendar"
+      menu="zmi_views"
+      title="Calendar (Yearly)"
+      />
+
+  <page
+      name="atom.xml"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      class=".cal.AtomCalendarView"
+      template="templates/cal_atom.pt"
+      permission="schoolbell.viewCalendar"
+      menu="zmi_views"
+      title="Atom View"
+      />
+
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      name="calendar.ics"
+      permission="schoolbell.viewCalendar"
+      class="schoolbell.calendar.browser.CalendarICalendarView"
+      attribute="show"
+      menu="zmi_views"
+      title="iCalendar"
+      />
+
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      name="calendar.vfb"
+      permission="zope.Public"
+      class="schoolbell.calendar.browser.CalendarVfbView"
+      attribute="show"
+      menu="zmi_views"
+      title="Free/Busy"
+      />
+
+  <menuItem
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      menu="schoolbell_actions" title="New Event"
+      action="add.html" permission="schoolbell.addEvent" />
+
+  <page
+      name="delete.html"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      class=".cal.EventDeleteView"
+      template="templates/recevent_delete.pt"
+      permission="schoolbell.modifyEvent"
+      />
+
+  <menuItem
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      menu="schoolbell_actions" title="Open in iCal"
+      action="../calendar.ics" permission="schoolbell.viewCalendar" />
+
+  <page
+      for="*"
+      name="calendar_overlay"
+      layer=".skin.ISchoolBellLayer"
+      class=".overlay.CalendarOverlayView"
+      template="templates/calendar_overlay.pt"
+      permission="zope.View"
+      />
+
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      name="calendar_list"
+      layer=".skin.ISchoolBellLayer"
+      class=".cal.CalendarListView"
+      permission="zope.View"
+      />
+
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      name="daily_calendar_rows"
+      layer=".skin.ISchoolBellLayer"
+      class=".cal.DailyCalendarRowsView"
+      permission="zope.View"
+      />
+
+
+<!-- Calendar event views -->
+
+  <page
+      name="index.html"
+      for="schoolbell.app.interfaces.ICalendarEvent"
+      class="schoolbell.app.browser.cal.CalendarEventView"
+      template="templates/event.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <addform
+      label="Add Event"
+      name="add.html"
+      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      schema=".cal.ICalendarEventAddForm"
+      arguments=""
+      keyword_arguments="title allday start_date start_time duration
+                         duration_type recurrence location description
+                         recurrence_type interval range until count monthly
+                         exceptions weekdays"
+      content_factory="schoolbell.app.cal.CalendarEvent"
+      permission="schoolbell.addEvent"
+      template="templates/event_add.pt"
+      class=".cal.CalendarEventAddView">
+
+    <widget field="description" height="5" />
+    <widget field="exceptions" width="20" height="5" />
+  </addform>
+
+  <editform
+      for="schoolbell.app.interfaces.ISchoolBellCalendarEvent"
+      name="edit.html"
+      label="Edit Event"
+      schema=".cal.ICalendarEventEditForm"
+      fields="title allday start_date start_time duration duration_type
+              recurrence location description recurrence_type interval
+              range until count monthly exceptions weekdays"
+      class=".cal.CalendarEventEditView"
+      permission="schoolbell.modifyEvent"
+      template="templates/event_add.pt">
+
+    <widget field="description" height="5" />
+    <widget field="exceptions" width="20" height="5" />
+  </editform>
+
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendarEvent"
+      name="booking.html"
+      layer=".skin.ISchoolBellLayer"
+      class=".cal.CalendarEventBookingView"
+      template="templates/event_booking.pt"
+      permission="schoolbell.edit"
+      />
+
+<!-- Skin and resources -->
+
+  <zope:subscriber
+      handler=".skin.schoolBellTraverseSubscriber"
+      for="zope.app.publication.interfaces.IBeforeTraverseEvent"
+      />
+
+  <layer
+      name="SchoolBell"
+      interface=".skin.ISchoolBellLayer" />
+
+  <skin
+      name="SchoolBell"
+      interface=".skin.ISchoolBellSkin" />
+
+  <page
+      name="standard_macros"
+      for="*"
+      class=".macros.StandardMacros"
+      allowed_interface="zope.interface.common.mapping.IItemMapping"
+      permission="zope.Public"
+      layer=".skin.ISchoolBellLayer"
+      />
+
+  <page
+      name="schooltool_macros"
+      for="*"
+      class=".macros.SchoolToolMacros"
+      allowed_interface="zope.interface.common.mapping.IItemMapping"
+      permission="zope.Public"
+      layer=".skin.ISchoolBellLayer"
+      />
+
+  <page
+      name="view_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/view_macros.pt"
+      layer=".skin.ISchoolBellLayer"
+      />
+
+  <page
+      name="calendar_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/calendar_macros.pt"
+      layer=".skin.ISchoolBellLayer"
+      />
+
+  <page
+      name="generic_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/generic_macros.pt"
+      layer=".skin.ISchoolBellLayer"
+      />
+
+  <page
+      name="widget_macros"
+      for="*"
+      permission="zope.View"
+      template="templates/widget_macros.pt"
+      layer=".skin.ISchoolBellLayer"
+      />
+
+  <icon
+      name="zmi_icon"
+      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      file="resources/icon.png"
+      />
+
+  <resource name="layout.css" file="resources/layout.css"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="style.css" file="resources/style.css"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="logo.png" file="resources/schoolbell.png"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="schoolbell.js" file="resources/schoolbell.js"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="favicon.ico" file="resources/favicon.ico"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="toolbar-background.png"
+            file="resources/toolbar-background.png"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="toolbar-background-hover.png"
+            file="resources/toolbar-background-hover.png"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="sidebar-background.png"
+            file="resources/sidebar-background.png"
+            layer=".skin.ISchoolBellLayer" />
+
+  <resource name="previous.png" file="resources/previous.png"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="next.png" file="resources/next.png"
+            layer=".skin.ISchoolBellLayer" />
+
+  <resource name="printer.png" file="resources/printer.png"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="day.png" file="resources/day.png"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="week.png" file="resources/week.png"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="month.png" file="resources/month.png"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="year.png" file="resources/year.png"
+            layer=".skin.ISchoolBellLayer" />
+
+  <resource name="delete.png" file="resources/delete.png"
+            layer=".skin.ISchoolBellLayer" />
+
+  <resource name="note-head-l.gif" file="resources/note-head-l.gif"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="note-head-r.gif" file="resources/note-head-r.gif"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="note-body-r.gif" file="resources/note-body-r.gif"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="note-body-l.gif" file="resources/note-body-l.gif"
+            layer=".skin.ISchoolBellLayer" />
+
+  <resource name="private-note-head-l.gif"
+            file="resources/private-note-head-l.gif"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="private-note-head-r.gif"
+            file="resources/private-note-head-r.gif"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="private-note-body-r.gif"
+            file="resources/private-note-body-r.gif"
+            layer=".skin.ISchoolBellLayer" />
+  <resource name="private-note-body-l.gif"
+            file="resources/private-note-body-l.gif"
+            layer=".skin.ISchoolBellLayer" />
+
+<!-- Navigation -->
+
+  <page
+      for="*"
+      name="schoolbell_navigation"
+      layer=".skin.ISchoolBellLayer"
+      template="templates/navigation.pt"
+      class=".NavigationView"
+      permission="zope.View"
+      />
+
+<!-- Breadcrumbs -->
+
+  <page
+      for="schoolbell.app.interfaces.ISchoolBellCalendarEvent"
+      name="absolute_url"
+      class=".cal.CalendarEventAbsoluteURL"
+      permission="zope.Public"
+      allowed_interface="zope.app.traversing.browser.interfaces.IAbsoluteURL"
+      />
+
+<!-- Error messages -->
+
+  <page
+      for="zope.interface.common.interfaces.IException"
+      name="index.html"
+      layer=".skin.ISchoolBellLayer"
+      class=".error.ErrorView"
+      template="templates/error.pt"
+      permission="zope.Public"
+      />
+
+  <page
+      for="zope.publisher.interfaces.INotFound"
+      name="index.html"
+      layer=".skin.ISchoolBellLayer"
+      class="zope.app.exception.browser.notfound.NotFound"
+      template="templates/notfound.pt"
+      permission="zope.Public"
+      />
+
+  <page
+      for="zope.security.interfaces.IUnauthorized"
+      name="index.html"
+      layer=".skin.ISchoolBellLayer"
+      class="zope.app.exception.browser.unauthorized.Unauthorized"
+      template="templates/unauthorized.pt"
+      permission="zope.Public"
+      />
+
+<!-- calwidget (external) -->
+
+  <resource name="calwidget-calendar.js"
+      file="resources/calwidget/calendar.js"
+      layer=".skin.ISchoolBellLayer" />
+
+  <resource name="calwidget-calendar.css"
+      file="resources/calwidget/calendar.css"
+      layer=".skin.ISchoolBellLayer" />
+
+  <resource name="calwidget-icon.gif"
+      file="resources/calwidget/icon.gif"
+      layer=".skin.ISchoolBellLayer" />
+
+  <configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      xmlns:apidoc="http://namespaces.zope.org/apidoc"
+      zcml:condition="have apidoc">
+
+    <apidoc:bookchapter
+        id="browser"
+        title="Browser UI"
+        parent="schoolbell"
+        doc_path="ftests/README.txt" />
+
+    <apidoc:bookchapter
+        id="copypaste"
+        title="Copy and Paste"
+        parent="schoolbell/browser"
+        doc_path="ftests/copypaste.txt" />
+
+    <apidoc:bookchapter
+        id="notes"
+        title="Notes"
+        parent="schoolbell/browser"
+        doc_path="ftests/notes.txt" />
+
+    <apidoc:bookchapter
+        id="login"
+        title="Login"
+        parent="schoolbell/browser"
+        doc_path="ftests/login.txt" />
+
+    <apidoc:bookchapter
+        id="errors"
+        title="Errors"
+        parent="schoolbell/browser"
+        doc_path="ftests/errors.txt" />
+
+    <apidoc:bookchapter
+        id="acl"
+        title="ACL"
+        parent="schoolbell/browser"
+        doc_path="ftests/acl.txt" />
+
+    <apidoc:bookchapter
+        id="cal"
+        title="Calendar"
+        parent="schoolbell/browser"
+        doc_path="ftests/cal.txt" />
+
+    <apidoc:bookchapter
+        id="navigation"
+        title="Navigation"
+        parent="schoolbell/browser"
+        doc_path="ftests/navigation.txt" />
+
+    <apidoc:bookchapter
+        id="app"
+        title="Application"
+        parent="schoolbell/browser"
+        doc_path="ftests/app.txt" />
+
+    <apidoc:bookchapter
+        id="calwidget"
+        title="Calendar Widget"
+        parent="schoolbell/browser"
+        doc_path="resources/calwidget/README.txt" />
+
+    <apidoc:bookchapter
+        id="templates"
+        title="Templates"
+        parent="schoolbell/browser"
+        doc_path="templates.txt" />
+
+  </configure>
+
+</configure>

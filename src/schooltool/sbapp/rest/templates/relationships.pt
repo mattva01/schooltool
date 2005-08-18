@@ -1,0 +1,17 @@
+<relationships
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns="http://schooltool.org/ns/model/0.1">
+  <existing>
+    <relationship
+      tal:repeat="r view/listLinks"
+      xlink:type="simple"
+      tal:attributes="xlink:role r/role;
+                      xlink:arcrole r/type;
+                      xlink:href r/traverse"
+    >
+      <manage xlink:type="simple"
+              tal:attributes="xlink:href  r/href" />
+    </relationship>
+  </existing>
+</relationships>

@@ -1,0 +1,11 @@
+<preferences xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:tal="http://xml.zope.org/namespaces/tal"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        i18n:domain="schooltool">
+
+  <preference id="timezone" tal:attributes="value view/preferences/timezone"/>
+  <preference id="timeformat" tal:attributes="value view/preferences/timeformat"/>
+  <preference id="dateformat" tal:attributes="value view/preferences/dateformat"/>
+  <preference id="weekstart" tal:attributes="value view/preferences/weekstart"/>
+
+</preferences>

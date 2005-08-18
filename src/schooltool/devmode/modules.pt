@@ -1,0 +1,43 @@
+<html metal:use-macro="views/apidoc_macros/details"
+    i18n:domain="zope">
+<body metal:fill-slot="contents" class="modulelist" >
+
+  <div class="apihead">
+      <a href="contents.html" target="main" i18n:translate="">
+        SchoolBell API Docs
+      </a>
+  </div>
+
+  <div class="modulelist" style="margin-left: 0.5em">
+    <ul class="modules">
+      <li>
+        <a href="Interface/@@menu.html" target="menu" i18n:translate="">
+          Interfaces
+        </a>
+      </li>
+      <li>
+        <a href="Code/@@menu.html" target="menu" i18n:translate="">
+          Code
+        </a>
+      </li>
+      <li>
+        <a href="Interface/@@restmenu.html" target="menu" i18n:translate="">
+          RESTive Views
+        </a>
+      </li>
+      <li>
+        <a href="Book/schoolbell/@@menu.html" target="menu" i18n:translate="">
+          Book
+        </a>
+      </li>
+    </ul>
+    <div id="preference_entry">
+      <a href="./++preferences++/apidoc/@@apidocMenu.html" target="menu"
+        i18n:translate="">
+        User Preferences
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>

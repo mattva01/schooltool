@@ -1,0 +1,21 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
+<head>
+  <title metal:fill-slot="title" tal:content="context/title" />
+</head>
+<body>
+<h1 metal:fill-slot="content-header"><span tal:replace="context/title" /></h1>
+<metal:block metal:fill-slot="body">
+
+  <div class="resource-info">
+    <tal:if condition="context/isLocation|nothing">
+      <strong i18n:translate="">Location</strong>
+    </tal:if>
+    <p class="description" tal:content="context/description"/>
+
+  </div>
+
+  <tal:block replace="structure context/@@notes|nothing"/>
+
+</metal:block>
+</body>
+</html>

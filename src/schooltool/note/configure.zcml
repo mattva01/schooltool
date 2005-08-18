@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<configure 
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="schoolbell">
+
+  <adapter
+      for=".interfaces.IHaveNotes"
+      provides=".interfaces.INotes"
+      factory=".note.getNotes"
+      trusted="true"
+      />
+
+  <content class=".note.Notes">
+    <require permission="zope.Public"
+             attributes="__iter__" />
+    <require permission="schoolbell.view"
+             attributes="add remove clear" />
+  </content>
+
+  <content class=".note.Note">
+    <require permission="zope.Public"
+             interface=".interfaces.INote" />
+    <require permission="schoolbell.create"
+             set_schema=".interfaces.INote" />
+  </content>
+
+  <!-- Browser UI -->
+
+  <browser:page
+      name="notes"
+      for=".interfaces.IHaveNotes"
+      layer="schoolbell.app.browser.skin.ISchoolBellLayer"
+      class=".browser.NotesView"
+      template="notes.pt"
+      permission="zope.Public"
+      />
+
+  <browser:page
+      name="addNote.html"
+      for=".interfaces.IHaveNotes"
+      class=".browser.NoteAddView"
+      template="note_add.pt"
+      permission="schoolbell.view"
+      menu="schoolbell_actions"
+      title="New Note" 
+      />
+
+  <!-- REST API -->
+
+  <content class=".rest.NotesAdapter">
+    <allow attributes="context" />
+  </content>
+
+  <class class=".rest.NotesView">
+    <allow interface=".rest.INotesView" />
+  </class>
+
+  <view
+      for="schoolbell.app.note.interfaces.IHaveNotes"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schoolbell.app.rest.IRestTraverser"
+      factory=".rest.NotesTraverser"
+      name="notes"
+      />
+
+  <view
+      for=".rest.INotesAdapter"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      factory=".rest.NotesViewFactory"
+      allowed_interface=".rest.INotesView"
+      permission="zope.Public"
+      name="GET"
+      />
+
+  <view
+      for=".rest.INotesAdapter"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      factory=".rest.NotesViewFactory"
+      allowed_interface=".rest.INotesView"
+      permission="zope.Public"
+      name="POST"
+      />
+
+</configure>

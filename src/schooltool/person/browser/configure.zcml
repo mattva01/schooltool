@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schoolbell">
+
+  <!-- Person Traverser -->
+  <zope:view
+      for="..interfaces.IPerson"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="zope.publisher.interfaces.browser.IBrowserPublisher"
+      factory="schoolbell.app.traverser.browser.PluggableBrowserTraverser"
+      permission="zope.Public"
+      />
+
+  <configure package="schoolbell.app.browser">
+
+    <page
+        name="index.html"
+        for="schoolbell.app.person.interfaces.IPersonContainer"
+        class="schoolbell.app.person.browser.person.PersonContainerView"
+        template="templates/container.pt"
+        permission="zope.View"
+        menu="zmi_views"
+        title="View"
+        />
+
+    <page
+        for="schoolbell.app.person.interfaces.IPerson"
+        name="calendar_selection.html"
+        layer="schoolbell.app.browser.skin.ISchoolBellLayer"
+        class=".overlay.CalendarSelectionView"
+        template="templates/calendar_selection.pt"
+        permission="schoolbell.edit"
+        />
+
+  </configure>
+
+  <containerViews
+      for="..interfaces.IPersonContainer"
+      contents="zope.ManageContent"
+      add="zope.View"
+      />
+
+  <page
+      name="index.html"
+      for="..interfaces.IPerson"
+      class=".person.PersonView"
+      template="person.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      />
+
+  <page
+      name="delete.html"
+      for="..interfaces.IPersonContainer"
+      class=".person.PersonContainerDeleteView"
+      template="person_container_delete.pt"
+      permission="zope.View"
+      />
+
+  <!-- FIXME: zope.View is certainly not the right permission. -->
+  <!-- How can we say "a person may only edit their own preferences"? -->
+  <page
+      name="preferences.html"
+      for="..interfaces.IPerson"
+      class=".person.PersonPreferencesView"
+      template="person_preferences.pt"
+      permission="zope.View"
+      menu="schoolbell_actions"
+      title="Change Preferences" />
+
+  <page
+      name="details.html"
+      for="..interfaces.IPerson"
+      class=".person.PersonDetailsView"
+      template="person_details.pt"
+      permission="zope.View"
+      menu="schoolbell_actions"
+      title="Change Details" />
+
+  <page
+      name="edit.html"
+      for="..interfaces.IPerson"
+      class=".person.PersonEditView"
+      template="person_edit.pt"
+      permission="zope.View"
+      menu="schoolbell_actions"
+      title="Edit Info"
+      />
+
+  <page
+      name="add.html"
+      for="..interfaces.IPersonContainer"
+      class=".person.PersonAddView"
+      template="person_add.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions" title="New Person" />
+
+  <page
+      name="photo"
+      for="..interfaces.IPerson"
+      class=".person.PersonPhotoView"
+      permission="zope.View" />
+
+  <page
+      name="person-csvimport.html"
+      for="..interfaces.IPersonContainer"
+      class=".csvimport.PersonCSVImportView"
+      template="person-csvimport.pt"
+      permission="schoolbell.create"
+      menu="schoolbell_actions"
+      title="Import Persons"
+      layer="schoolbell.app.browser.skin.ISchoolBellLayer"
+      />
+
+</configure>

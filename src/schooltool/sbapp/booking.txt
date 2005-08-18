@@ -1,0 +1,192 @@
+==============================
+Resource booking in SchoolBell
+==============================
+
+Overview
+--------
+
+Every calendar event may indicate that one or more resources (e.g., projectors,
+rooms) are needed for this event.  We call this "resource booking" in
+SchoolBell.  When a resource is booked, the calendar event is automatically
+added to the resource's calendar, and is kept in sync.
+
+
+Set up
+------
+
+Set up the calendaring framework:
+
+    >>> from zope.app.testing import setup
+    >>> setup.placelessSetUp()
+    >>> setup.setUpAnnotations()
+
+    >>> from schoolbell.app.testing import setup as sbsetup
+    >>> sbsetup.setupCalendaring()
+
+We will need some test fixture for relationships.
+
+    >>> from schoolbell.relationship.tests import setUpRelationships
+    >>> setUpRelationships()
+
+You have a person and a resource
+
+    >>> from schoolbell.app.resource.resource import Resource
+    >>> from schoolbell.app.person.person import Person
+    >>> person = Person('froggy')
+    >>> resource = Resource('lily')
+    >>> resource2 = Resource('mud')
+
+
+Resource booking and unbooking
+------------------------------
+
+You want to create a calendar event and book a resource.  You can specify the
+resource when you're creating an event.
+
+    >>> from datetime import datetime, timedelta
+    >>> from schoolbell.app.interfaces import ISchoolBellCalendar
+    >>> from schoolbell.app.cal import CalendarEvent
+    >>> e = CalendarEvent(title="Presentation",
+    ...                   dtstart=datetime(2005, 3, 2, 12, 45),
+    ...                   duration=timedelta(minutes=45),
+    ...                   resources=[resource])
+    >>> ISchoolBellCalendar(person).addEvent(e)
+
+The event magically appears in the resource's calendar
+
+    >>> ISchoolBellCalendar(resource).find(e.unique_id) is e
+    True
+
+You can change the event to remove the booking
+
+    >>> e.unbookResource(resource)
+    >>> ISchoolBellCalendar(resource).find(e.unique_id)
+    Traceback (most recent call last):
+      ...
+    KeyError: ...
+
+or you may book a different resource
+
+    >>> e.bookResource(resource2)
+    >>> ISchoolBellCalendar(resource2).find(e.unique_id) is e
+    True
+
+
+Delayed booking
+---------------
+
+If you create an event with resource bookings, but never add that event
+anywhere, it doesn't appear in resource calendars.
+
+    >>> e = CalendarEvent(title="Bluffing",
+    ...                   dtstart=datetime(2005, 3, 2, 12, 15),
+    ...                   duration=timedelta(minutes=5),
+    ...                   resources=[resource])
+    >>> e in ISchoolBellCalendar(resource)
+    False
+    >>> e.bookResource(resource2)
+    >>> e in ISchoolBellCalendar(resource2)
+    False
+
+However just add the event somewhere, and it materializes in all three calendars
+
+    >>> ISchoolBellCalendar(person).addEvent(e)
+    >>> [e in ISchoolBellCalendar(x) for x in [person, resource, resource2]]
+    [True, True, True]
+
+
+Deleting events
+---------------
+
+So, you have an event in two calendars:
+
+    >>> e = CalendarEvent(title="Presentation",
+    ...                   dtstart=datetime(2005, 3, 3, 12, 00),
+    ...                   duration=timedelta(minutes=45),
+    ...                   resources=[resource2])
+    >>> ISchoolBellCalendar(person).addEvent(e)
+    >>> e in ISchoolBellCalendar(resource2)
+    True
+    >>> e in ISchoolBellCalendar(person)
+    True
+
+If you remove it from the person's calendar, it gets removed from the
+resource's calendar too.
+
+    >>> ISchoolBellCalendar(person).removeEvent(e)
+
+    >>> e not in ISchoolBellCalendar(resource2)
+    True
+
+If you remove an event from a resource's calendar, it loses that booking.
+
+    >>> e = CalendarEvent(title="Big presentation",
+    ...                   dtstart=datetime(2005, 3, 4, 12, 45),
+    ...                   duration=timedelta(minutes=45),
+    ...                   resources=[resource, resource2])
+    >>> ISchoolBellCalendar(person).addEvent(e)
+    >>> [e in ISchoolBellCalendar(x) for x in [person, resource, resource2]]
+    [True, True, True]
+
+    >>> ISchoolBellCalendar(resource).removeEvent(e)
+    >>> [e in ISchoolBellCalendar(x) for x in [person, resource, resource2]]
+    [True, False, True]
+    >>> list(e.resources) == [resource2]
+    True
+
+Clearing a calendar is equivalent to removing all its events:
+
+    >>> ISchoolBellCalendar(resource2).clear()
+    >>> [e in ISchoolBellCalendar(x) for x in [person, resource, resource2]]
+    [True, False, False]
+    >>> list(e.resources) == []
+    True
+
+
+Insane corner cases
+-------------------
+
+Booking loops are not allowed
+
+    >>> e = CalendarEvent(title="Strange presentation",
+    ...                   dtstart=datetime(2005, 3, 4, 12, 45),
+    ...                   duration=timedelta(minutes=5))
+    >>> ISchoolBellCalendar(resource).addEvent(e)
+    >>> e.bookResource(resource)
+    Traceback (most recent call last):
+      ...
+    ValueError: cannot book itself
+
+    >>> e.resources
+    ()
+
+It doesn't work if you do it differently either
+
+    >>> e = CalendarEvent(title="Strange presentation",
+    ...                   dtstart=datetime(2005, 3, 4, 12, 50),
+    ...                   duration=timedelta(minutes=5),
+    ...                   resources=[resource2, resource])
+    >>> ISchoolBellCalendar(resource).addEvent(e)
+    Traceback (most recent call last):
+      ...
+    ValueError: cannot book itself
+
+    >>> e in ISchoolBellCalendar(resource)
+    False
+    >>> e in ISchoolBellCalendar(resource2)
+    False
+
+
+Tear down
+---------
+
+    >>> setup.placelessTearDown()
+
+
+Remaining issues
+----------------
+
+XXX what if I do
+     e = CalendarEvent(resources=[r])
+     e.unbookResource(r)
+     without adding a to any calendars?

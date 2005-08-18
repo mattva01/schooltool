@@ -1,0 +1,212 @@
+Functional tests for SchoolBell Notes ReSTive view
+==================================================
+
+First of all, we will need a schoolbell instance.  We will add it via
+the web ZMI:
+
+    >>> print http("""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Length: 81
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&\
+    ... new_value=frogpond""")
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+    >>> from schoolbell.app.rest.ftests import rest
+
+Now, let's create something that provides IHaveNotes
+
+    >>> print rest("""
+    ... POST /frogpond/groups/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="A Group"/>
+    ... """)
+    HTTP/1.1 201 Created
+    ...
+    Location: http://localhost/frogpond/groups/a-group
+    <BLANKLINE>
+    Object created: http://localhost/frogpond/groups/a-group
+
+
+Now the notes view for the new group should be empty
+
+    >>> print rest("""
+    ... GET /frogpond/groups/a-group/notes HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <notes xmlns:xlink="http://www.w3.org/1999/xlink">
+    <BLANKLINE>
+    <BLANKLINE>
+    </notes>
+    <BLANKLINE>
+
+We can add a note:
+
+    >>> print rest("""
+    ... POST /frogpond/groups/a-group/notes HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ...
+    ... <?xml version="1.0" encoding="utf-8"?>
+    ... <notes xmlns="http://schooltool.org/ns/model/0.1">
+    ... <note title="My Note" privacy="public" body="This is the note body"/>
+    ... </notes>
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    <BLANKLINE>
+
+
+And view it:
+
+    >>> print rest("""
+    ... GET /frogpond/groups/a-group/notes HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <notes xmlns:xlink="http://www.w3.org/1999/xlink">
+    <BLANKLINE>
+        <note body="This is the note body" privacy="public"
+                  title="My Note"/>
+    <BLANKLINE>
+    </notes>
+    <BLANKLINE>
+
+We can add multiple notes:
+
+    >>> print rest("""
+    ... POST /frogpond/groups/a-group/notes HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ...
+    ... <?xml version="1.0" encoding="utf-8"?>
+    ... <notes xmlns="http://schooltool.org/ns/model/0.1">
+    ... <note title="My Note 2" privacy="public" body="This is note 2"/>
+    ... <note title="My Note 3" privacy="public" body="This is note 3"/>
+    ... <note title="My Note 4" privacy="public" body="This is note 4"/>
+    ... </notes>
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    <BLANKLINE>
+
+    >>> print rest("""
+    ... GET /frogpond/groups/a-group/notes HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <notes xmlns:xlink="http://www.w3.org/1999/xlink">
+    <BLANKLINE>
+        <note body="This is the note body" privacy="public"
+                  title="My Note"/>
+    <BLANKLINE>
+    <BLANKLINE>
+        <note body="This is note 2" privacy="public"
+                  title="My Note 2"/>
+    <BLANKLINE>
+    <BLANKLINE>
+        <note body="This is note 3" privacy="public"
+                  title="My Note 3"/>
+    <BLANKLINE>
+    <BLANKLINE>
+        <note body="This is note 4" privacy="public"
+                  title="My Note 4"/>
+    <BLANKLINE>
+    </notes>
+    <BLANKLINE>
+
+We can also add private notes:
+
+    >>> print rest("""
+    ... POST /frogpond/groups/a-group/notes HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ...
+    ... <?xml version="1.0" encoding="utf-8"?>
+    ... <notes xmlns="http://schooltool.org/ns/model/0.1">
+    ... <note title="My Private Note" privacy="private" body="This is it"/>
+    ... </notes>
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    <BLANKLINE>
+
+And while we can view it:
+
+    >>> print rest("""
+    ... GET /frogpond/groups/a-group/notes HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <notes xmlns:xlink="http://www.w3.org/1999/xlink">
+    <BLANKLINE>
+        <note body="This is the note body" privacy="public"
+                  title="My Note"/>
+    <BLANKLINE>
+    <BLANKLINE>
+        <note body="This is note 2" privacy="public"
+                  title="My Note 2"/>
+    <BLANKLINE>
+    <BLANKLINE>
+        <note body="This is note 3" privacy="public"
+                  title="My Note 3"/>
+    <BLANKLINE>
+    <BLANKLINE>
+        <note body="This is note 4" privacy="public"
+                  title="My Note 4"/>
+    <BLANKLINE>
+    <BLANKLINE>
+        <note body="This is it" privacy="private"
+              title="My Private Note"/>
+    <BLANKLINE>
+    </notes>
+    <BLANKLINE>
+
+Others can only view the public notes:
+
+    >>> print rest("""
+    ... GET /frogpond/groups/a-group/notes HTTP/1.1
+    ... Authorization: Basic john:ann
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    ...
+    <notes xmlns:xlink="http://www.w3.org/1999/xlink">
+    <BLANKLINE>
+    <BLANKLINE>
+        <note body="This is the note body" privacy="public"
+              title="My Note"/>
+    <BLANKLINE>
+    <BLANKLINE>
+        <note body="This is note 2" privacy="public"
+              title="My Note 2"/>
+    <BLANKLINE>
+    <BLANKLINE>
+        <note body="This is note 3" privacy="public"
+              title="My Note 3"/>
+    <BLANKLINE>
+    <BLANKLINE>
+        <note body="This is note 4" privacy="public"
+              title="My Note 4"/>
+    <BLANKLINE>
+    <BLANKLINE>
+    </notes>
+    <BLANKLINE>
