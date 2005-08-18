@@ -64,7 +64,7 @@ instructor at a particular time to cover the course material.
 The teacher of a section is defined with the Instruction relationship and can
 be accessed via the section.instructors RelationshipProperty:
 
-    >>> from schooltool.relationships import Instruction
+    >>> from schooltool.app.relationships import Instruction
     >>> [teacher.username for teacher in section1.instructors]
     []
     >>> Instruction(instructor=teacher1, section=section1)
@@ -81,7 +81,7 @@ sections can have more than one instructor:
 You can determine if a Person is a teacher using schooltool.relationship
 methods, there is also a method PersonView.isTeacher in schooltool's web UI:
 
-    >>> from schooltool.relationships import URISection, URIInstruction
+    >>> from schooltool.app.relationships import URISection, URIInstruction
     >>> from schooltool.relationship import getRelatedObjects
     >>> len(getRelatedObjects(teacher1, URISection,
     ...                       rel_type=URIInstruction)) > 0

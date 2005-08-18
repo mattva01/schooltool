@@ -75,7 +75,7 @@ def doctest_Course():
     To test the relationship we need to do some setup:
 
         >>> from schooltool.relationship.tests import setUp, tearDown
-        >>> from schooltool.relationships import enforceCourseSectionConstraint
+        >>> from schooltool.app.relationships import enforceCourseSectionConstraint
         >>> setUp()
         >>> import zope.event
         >>> old_subscribers = zope.event.subscribers[:]

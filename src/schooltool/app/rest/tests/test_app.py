@@ -35,10 +35,9 @@ from zope.app.testing import setup, ztapi
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.traversing import namespace
 
-from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin, diff
-from schoolbell.app.rest.tests.utils import normalize_xml
+from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin
 from schooltool.testing import setup as sbsetup
-from schooltool.common import dedent
+from schooltool.app.rest.testing import dedent
 
 
 def doctest_SchoolToolApplicationView():
@@ -366,26 +365,6 @@ class TestTermFile(QuietLibxml2Mixin, unittest.TestCase):
                 schooldays.append(date)
         expected = [datetime.date(2003, 9, d) for d in 1, 2, 4, 5]
         self.assertEquals(schooldays, expected)
-
-
-def compareXML(result, expected, recursively_sort=()):
-    """Compare 2 XML snippets for equality.
-
-    This is a doctest version of XMLCompareMixin.assertEqualsXML from
-    schoolbell.app.rest.tests.utils.
-
-    If recursively_sort is given, it is a sequence of tags that will have
-    test:sort="recursively" appended to their attribute lists in 'result' text.
-    See the docstring for normalize_xml for more information about this
-    attribute.
-    """
-    result = normalize_xml(result, recursively_sort=recursively_sort)
-    expected = normalize_xml(expected, recursively_sort=recursively_sort)
-    if result == expected:
-        return True
-    else:
-        print diff(expected, result)
-        return False
 
 def test_suite():
     return unittest.TestSuite([

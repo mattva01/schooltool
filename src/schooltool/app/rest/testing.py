@@ -362,6 +362,25 @@ class XMLCompareMixin:
     assertEqualXML = assertEqualsXML
 
 
+def compareXML(result, expected, recursively_sort=()):
+    """Compare 2 XML snippets for equality.
+
+    This is a doctest version of XMLCompareMixin.assertEqualsXML.
+
+    If recursively_sort is given, it is a sequence of tags that will have
+    test:sort="recursively" appended to their attribute lists in 'result' text.
+    See the docstring for normalize_xml for more information about this
+    attribute.
+    """
+    result = normalize_xml(result, recursively_sort=recursively_sort)
+    expected = normalize_xml(expected, recursively_sort=recursively_sort)
+    if result == expected:
+        return True
+    else:
+        print diff(expected, result)
+        return False
+
+
 class QuietLibxml2Mixin:
     """Text mixin that disables libxml2 error reporting.
 

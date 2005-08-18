@@ -33,7 +33,7 @@ from zope.app.traversing import namespace
 from zope.app.traversing.interfaces import ITraversable
 
 from schooltool.testing import setup as sbsetup
-from schooltool.rest.tests.test_app import compareXML
+from schooltool.app.rest.testing import compareXML
 
 from schooltool.course.course import Course, CourseContainer
 from schooltool.course.interfaces import ICourseContainer

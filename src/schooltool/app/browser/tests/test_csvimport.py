@@ -43,7 +43,7 @@ from schooltool.browser.csvimport import InvalidCSVError
 from schooltool.common import dedent
 from schooltool.course.course import Course
 from schooltool.course.section import Section
-from schooltool.relationships import URISection, URISectionOfCourse
+from schooltool.app.relationships import URISection, URISectionOfCourse
 from schooltool.timetable.interfaces import ITimetables
 
 __metaclass__ = type

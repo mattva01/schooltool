@@ -153,7 +153,7 @@ class TestInstructionTimetableSource(BaseTimetableSourceTest,
         return InstructionTimetableSource(context)
 
     def createRelationship(self, context, related):
-        from schooltool.relationships import Instruction
+        from schooltool.app.relationships import Instruction
         Instruction(instructor=context, section=related)
 
 

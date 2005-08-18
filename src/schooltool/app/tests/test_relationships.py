@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.relationships
+Unit tests for schooltool.app.relationships
 
 $Id: test_app.py 3504 2005-04-22 16:34:13Z bskahan $
 """
@@ -32,7 +32,7 @@ from zope.interface import implements
 def doctest_Instruction():
     r"""Tests for Instruction URIs and methods
 
-        >>> from schooltool.relationships import *
+        >>> from schooltool.app.relationships import *
 
         >>> from schooltool.relationship.tests import setUp, tearDown
         >>> setUp()
@@ -68,10 +68,10 @@ def doctest_CourseSections():
 
     Lets import the pieces of CourseSections
 
-        >>> from schooltool.relationships import URICourseSections, URICourse
-        >>> from schooltool.relationships import CourseSections
-        >>> from schooltool.relationships import URISectionOfCourse
-        >>> from schooltool.relationships import enforceCourseSectionConstraint
+        >>> from schooltool.app.relationships import URICourseSections, URICourse
+        >>> from schooltool.app.relationships import CourseSections
+        >>> from schooltool.app.relationships import URISectionOfCourse
+        >>> from schooltool.app.relationships import enforceCourseSectionConstraint
 
     Relationship tests require some setup:
 
@@ -150,9 +150,9 @@ def doctest_CourseSections():
 
 def doctest_updateInstructorCalendars():
     r"""
-        >>> from schooltool.relationships import updateInstructorCalendars
-        >>> from schooltool.relationships import URIInstruction
-        >>> from schooltool.relationships import URISection, URIInstructor
+        >>> from schooltool.app.relationships import updateInstructorCalendars
+        >>> from schooltool.app.relationships import URIInstruction
+        >>> from schooltool.app.relationships import URISection, URIInstructor
         >>> from schooltool.relationship.interfaces import \
         ...                                         IRelationshipAddedEvent
         >>> from schooltool.relationship.interfaces import \
@@ -243,7 +243,7 @@ def doctest_updateInstructorCalendars():
 
 def doctest_updateStudentCalendars():
     r"""
-        >>> from schooltool.relationships import updateStudentCalendars
+        >>> from schooltool.app.relationships import updateStudentCalendars
         >>> from schooltool.app.membership import URIMembership
         >>> from schooltool.app.membership import URIGroup, URIMember
         >>> from schooltool.relationship.interfaces import \
@@ -372,7 +372,7 @@ def doctest_updateStudentCalendars():
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
-                doctest.DocTestSuite('schooltool.relationships',
+                doctest.DocTestSuite('schooltool.app.relationships',
                                      optionflags=doctest.ELLIPSIS),
            ])
 

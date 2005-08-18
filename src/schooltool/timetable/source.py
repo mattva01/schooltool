@@ -27,7 +27,7 @@ from zope.interface import implements
 from schooltool.timetable.interfaces import ITimetableSource, ITimetables
 from schooltool.relationship import getRelatedObjects
 from schooltool.app.membership import URIGroup
-from schooltool.relationships import URISection
+from schooltool.app.relationships import URISection
 
 
 class BaseRelationshipTimetableSource(object):
