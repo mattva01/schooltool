@@ -13,7 +13,7 @@ We need some test setup:
     >>> from schooltool.course.course import Course
     >>> from schooltool.course.section import Section
 
-    >>> school = setup.createSchoolBellApplication()
+    >>> school = setup.createSchoolToolApplication()
 
     >>> school['courses']
     <schooltool.course.course.CourseContainer object at ...>

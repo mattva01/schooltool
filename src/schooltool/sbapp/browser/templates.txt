@@ -20,7 +20,7 @@ path expressions.
 
     >>> from zope.component import provideAdapter
     >>> from zope.app.traversing.interfaces import IPathAdapter
-    >>> from schoolbell.app.browser import SortBy
+    >>> from schooltool.app.browser import SortBy
     >>> provideAdapter(SortBy, name='sortby', provides=IPathAdapter)
 
 Suppose we have a sequence of dicts that have a 'title' key.

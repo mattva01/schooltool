@@ -42,11 +42,11 @@ def doctest_SchoolToolApplication():
 
         >>> placelesssetup.setUp()
         >>> from schoolbell.app.app import ApplicationPreferences
-        >>> from schoolbell.app.interfaces import IApplicationPreferences
+        >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> provideAdapter(ApplicationPreferences,
         ...                provides=IApplicationPreferences)
 
-        >>> app = sbsetup.createSchoolBellApplication()
+        >>> app = sbsetup.createSchoolToolApplication()
 
     Let's check that the interface is satisfied:
 
@@ -81,7 +81,7 @@ def doctest_SchoolToolApplication():
     Our ApplicationPreferences title should be 'SchoolTool' by default:
 
       >>> setup.setUpAnnotations()
-      >>> from schooltool.app import getApplicationPreferences
+      >>> from schooltool.app.app import getApplicationPreferences
       >>> getApplicationPreferences(app).title
       'SchoolBell'
 
@@ -96,7 +96,7 @@ def doctest_getSchoolToolApplication():
 
     Let's say we have a SchoolTool app, which is a site.
 
-      >>> from schooltool.app import SchoolToolApplication
+      >>> from schooltool.app.app import SchoolToolApplication
       >>> app = SchoolToolApplication()
 
       >>> from zope.app.component.site import LocalSiteManager
@@ -130,7 +130,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> root = setup.placefulSetUp(True)
         >>> sbsetup.setupCalendaring()
         >>> setUpLocalGrants()
-        >>> st = sbsetup.createSchoolBellApplication()
+        >>> st = sbsetup.createSchoolToolApplication()
 
         >>> root['sb'] = st
 
@@ -193,8 +193,8 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> root['sb']['persons']['james'] = person
         >>> app.applicationCalendarPermissionsSubscriber(
         ...     ObjectAddedEvent(person))
-        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
-        >>> map = IPrincipalPermissionManager(ISchoolBellCalendar(person))
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> map = IPrincipalPermissionManager(ISchoolToolCalendar(person))
         >>> map.getPermissionsForPrincipal(unauthenticated.id)
         []
 
@@ -221,7 +221,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
 def doctest_LocationResourceVocabulary():
     r"""Tests for location choice vocabulary.
 
-        >>> from schooltool.app import LocationResourceVocabulary
+        >>> from schooltool.app.app import LocationResourceVocabulary
 
     Set up:
 

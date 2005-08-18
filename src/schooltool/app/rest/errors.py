@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-RESTive views for errors in SchoolBellApplication
+RESTive views for errors in SchoolToolApplication
 
 $Id$
 """
@@ -26,7 +26,7 @@ from zope.interface import classImplements, implements
 from zope.interface.common.interfaces import IException
 from zope.app.exception.interfaces import ISystemErrorView
 
-from schoolbell.app.rest import View
+from schooltool.app.rest import View
 from schooltool.calendar.icalendar import ICalParseError
 
 

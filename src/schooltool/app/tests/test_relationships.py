@@ -331,7 +331,7 @@ def doctest_updateStudentCalendars():
     If you add a person to a Group that isn't a section, nothing happens, the
     user will have to overlay the calendar manually:
 
-        >>> from schooltool.app import Group
+        >>> from schooltool.app.app import Group
         >>> person = Person()
         >>> group = Group()
         >>> add = AddEventStub()

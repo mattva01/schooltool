@@ -32,7 +32,7 @@
     <div id="header">
       <div class="logo">
         <a href=""
-          tal:define="url context/schoolbell:app/@@absolute_url"
+          tal:define="url context/schooltool:app/@@absolute_url"
           tal:attributes="href url">
           <img src="logo.png" alt="SchoolTool" i18n:attributes="alt"
             tal:attributes="src context/++resource++logo.png"/>
@@ -53,16 +53,16 @@
         </div>
         <div
           tal:define="user request/principal;
-                      url context/schoolbell:app/@@absolute_url"
+                      url context/schooltool:app/@@absolute_url"
           tal:on-error="nothing">
 
-          <tal:if condition="not:user/schoolbell:authenticated">
+          <tal:if condition="not:user/schooltool:authenticated">
             <a id="tools-login" i18n:translate=""
               tal:attributes="href string:${url}/@@login.html">Log in</a>
           </tal:if>
 
-          <tal:if condition="user/schoolbell:authenticated"
-                  define="person user/schoolbell:person">
+          <tal:if condition="user/schooltool:authenticated"
+                  define="person user/schooltool:person">
             <div metal:define-macro="logged_user">
 
               <tal:span i18n:translate="">User:</tal:span>
@@ -127,7 +127,7 @@
     </div>
     <div id="footer" i18n:translate="">
       <p>
-        <strong tal:replace="context/schoolbell:preferences/title"/>
+        <strong tal:replace="context/schooltool:preferences/title"/>
         Server Running SchoolBell
         <span tal:content="modules/schoolbell/VERSION"/>
         &copy; The Shuttleworth Foundation 2003 - <span>2005</span>:

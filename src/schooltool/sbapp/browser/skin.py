@@ -24,7 +24,7 @@ $Id$
 from zope.app.publisher.browser import applySkin
 from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserRequest
-from schoolbell.app.interfaces import ISchoolBellApplication
+from schooltool.app.interfaces import ISchoolToolApplication
 
 
 class ISchoolBellLayer(ILayer, IBrowserRequest):
@@ -41,6 +41,6 @@ def schoolBellTraverseSubscriber(event):
     Sets the SchoolBell skin if the object traversed is a SchoolBell
     application instance.
     """
-    if (ISchoolBellApplication.providedBy(event.object) and
+    if (ISchoolToolApplication.providedBy(event.object) and
         IBrowserRequest.providedBy(event.request)):
         applySkin(event.request, ISchoolBellSkin)

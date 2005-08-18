@@ -11,7 +11,7 @@
   </content>
 
   <content class=".group.Group">
-    <implements interface="schoolbell.app.interfaces.IHaveCalendar" />
+    <implements interface="schooltool.app.interfaces.IHaveCalendar" />
     <implements interface="schoolbell.app.note.interfaces.IHaveNotes" />
 
     <allow attributes="__cmp__" />
@@ -28,7 +28,7 @@
 
   <!-- Application hook -->
   <subscriber
-      for="schoolbell.app.interfaces.IApplicationInitializationEvent"
+      for="schooltool.app.interfaces.IApplicationInitializationEvent"
       handler=".group.addGroupContainerToApplication"
       />
 

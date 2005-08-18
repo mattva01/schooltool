@@ -25,11 +25,11 @@ $Id$
 """
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
-from schoolbell.app.interfaces import ISchoolBellApplication
+from schooltool.app.interfaces import ISchoolToolApplication
 
 def evolve(context):
     root = context.connection.root().get(ZopePublication.root_name, None)
-    for app in findObjectsProviding(root, ISchoolBellApplication):
+    for app in findObjectsProviding(root, ISchoolToolApplication):
         for person in app['persons'].values():
             person.overlaid_calendars.__parent__ = person
             for info in person.overlaid_calendars:

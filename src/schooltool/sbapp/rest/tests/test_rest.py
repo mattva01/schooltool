@@ -44,7 +44,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             }
 
     def test_http(self):
-        from schoolbell.app.rest import RestPublicationRequestFactory
+        from schooltool.app.rest import RestPublicationRequestFactory
 
         factory = RestPublicationRequestFactory(None)
         for method in ('HEAD', 'PUT', 'POST', 'DELETE',
@@ -60,7 +60,7 @@ class TestRestPublishTraverse(PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
         from zope.publisher.interfaces.http import IHTTPRequest
-        from schoolbell.app.rest import IRestTraverser
+        from schooltool.app.rest import IRestTraverser
 
         PlacelessSetup.setUp(self)
 
@@ -75,7 +75,7 @@ class TestRestPublishTraverse(PlacelessSetup, unittest.TestCase):
                              IRestTraverser, StubTraverser, name='acl')
 
     def create(self, context=None):
-        from schoolbell.app.rest import RestPublishTraverse
+        from schooltool.app.rest import RestPublishTraverse
         from zope.publisher.browser import TestRequest
 
         class StubContext:

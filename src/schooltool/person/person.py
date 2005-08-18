@@ -30,8 +30,8 @@ from zope.app.container import btree
 from zope.app.container.contained import Contained
 from zope.app.container.interfaces import IObjectAddedEvent
 
-from schoolbell.app.app import getSchoolBellApplication
-from schoolbell.app.interfaces import ISchoolBellCalendar
+from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.membership import URIMembership, URIMember, URIGroup
 from schooltool.app.overlay import OverlaidCalendarsProperty
 from schooltool.person import interfaces
@@ -116,8 +116,8 @@ def personAppCalendarOverlaySubscriber(event):
     if IObjectAddedEvent.providedBy(event):
         if interfaces.IPerson.providedBy(event.object):
             try:
-                app = getSchoolBellApplication()
-                event.object.overlaid_calendars.add(ISchoolBellCalendar(app))
+                app = getSchoolToolApplication()
+                event.object.overlaid_calendars.add(ISchoolToolCalendar(app))
             except ValueError:
                 # If we get this we are probably in the initial new-site setup
                 # or creating a new manager during startup.  This should be

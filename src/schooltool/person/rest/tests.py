@@ -31,9 +31,9 @@ from zope.testing import doctest
 from zope.app.filerepresentation.interfaces import IFileFactory
 from zope.app.testing import ztapi, setup
 
-from schoolbell.app.rest.tests.test_app import ApplicationObjectViewTestMixin
-from schoolbell.app.rest.tests.test_app import ContainerViewTestMixin
-from schoolbell.app.rest.tests.test_app import FileFactoriesSetUp
+from schooltool.app.rest.testing import ApplicationObjectViewTestMixin
+from schooltool.app.rest.testing import ContainerViewTestMixin
+from schooltool.app.rest.testing import FileFactoriesSetUp
 
 from schooltool.person.interfaces import IPersonContainer
 from schooltool.person.person import PersonContainer, Person

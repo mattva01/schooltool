@@ -29,7 +29,7 @@ from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 from zope.app.traversing.interfaces import IContainmentRoot
 
-from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup as sbsetup
 
 def doctest_PersonContainerDeleteView():
@@ -248,7 +248,7 @@ def doctest_PersonAddView():
 
     Let's create a PersonContainer
 
-        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> app = sbsetup.setupSchoolBellSite()
         >>> pc = app['persons']
 

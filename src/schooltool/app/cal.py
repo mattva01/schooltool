@@ -37,9 +37,9 @@ from schooltool.calendar.interfaces import ICalendar
 from schooltool.calendar.interfaces import ICalendarEvent
 from schooltool.calendar.mixins import CalendarMixin
 from schooltool.calendar.simple import SimpleCalendarEvent
-from schoolbell.app.interfaces import ISchoolBellCalendarEvent
-from schoolbell.app.interfaces import ISchoolBellCalendar
-from schoolbell.app.interfaces import IWriteCalendar
+from schooltool.app.interfaces import ISchoolToolCalendarEvent
+from schooltool.app.interfaces import ISchoolToolCalendar
+from schooltool.app.interfaces import IWriteCalendar
 
 CALENDAR_KEY = 'schooltool.app.calendar.Calendar'
 
@@ -47,7 +47,7 @@ CALENDAR_KEY = 'schooltool.app.calendar.Calendar'
 class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
     """A persistent calendar event contained in a persistent calendar."""
 
-    implements(ISchoolBellCalendarEvent, IAttributeAnnotatable)
+    implements(ISchoolToolCalendarEvent, IAttributeAnnotatable)
 
     __parent__ = None
 
@@ -66,7 +66,7 @@ class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
             return self.__parent__
 
     def bookResource(self, resource):
-        calendar = ISchoolBellCalendar(resource)
+        calendar = ISchoolToolCalendar(resource)
         if resource in self.resources:
             raise ValueError('resource already booked')
         if calendar is self.__parent__:
@@ -80,7 +80,7 @@ class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
             raise ValueError('resource not booked')
         self._resources = tuple([r for r in self.resources
                                  if r is not resource])
-        ISchoolBellCalendar(resource).removeEvent(self)
+        ISchoolToolCalendar(resource).removeEvent(self)
 
 
 class Calendar(Persistent, CalendarMixin):
@@ -88,7 +88,7 @@ class Calendar(Persistent, CalendarMixin):
 
     # We use the expand() implementation from CalendarMixin
 
-    implements(ISchoolBellCalendar, IAttributeAnnotatable)
+    implements(ISchoolToolCalendar, IAttributeAnnotatable)
 
     __name__ = 'calendar'
 
@@ -105,16 +105,16 @@ class Calendar(Persistent, CalendarMixin):
         return len(self.events)
 
     def addEvent(self, event):
-        assert ISchoolBellCalendarEvent.providedBy(event)
+        assert ISchoolToolCalendarEvent.providedBy(event)
         if event.unique_id in self.events:
             raise ValueError('an event with this unique_id already exists')
         if event.__parent__ is None:
             for resource in event.resources:
-                if ISchoolBellCalendar(resource) is self:
+                if ISchoolToolCalendar(resource) is self:
                     raise ValueError('cannot book itself')
             event.__parent__ = self
             for resource in event.resources:
-                ISchoolBellCalendar(resource).addEvent(event)
+                ISchoolToolCalendar(resource).addEvent(event)
         elif self.__parent__ not in event.resources:
             raise ValueError("Event already belongs to a calendar")
         self.events[event.unique_id] = event
@@ -141,7 +141,7 @@ class Calendar(Persistent, CalendarMixin):
 
 
 def getCalendar(owner):
-    """Adapt an ``IAnnotatable`` object to ``ISchoolBellCalendar``."""
+    """Adapt an ``IAnnotatable`` object to ``ISchoolToolCalendar``."""
     annotations = IAnnotations(owner)
     try:
         return annotations[CALENDAR_KEY]
@@ -196,7 +196,7 @@ class WriteCalendar(object):
 
     """
 
-    adapts(ISchoolBellCalendar)
+    adapts(ISchoolToolCalendar)
     implements(IWriteCalendar)
 
     # Hook for unit tests.

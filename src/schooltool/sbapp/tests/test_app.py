@@ -33,21 +33,21 @@ from zope.app.testing import setup, placelesssetup
 
 from schooltool.testing import setup as sbsetup
 
-def doctest_SchoolBellApplication():
-    r"""Tests for SchoolBellApplication.
+def doctest_SchoolToolApplication():
+    r"""Tests for SchoolToolApplication.
 
-        >>> app = sbsetup.createSchoolBellApplication()
+        >>> app = sbsetup.createSchoolToolApplication()
 
     We need to register an adapter to make the title attribute available:
 
         >>> placelesssetup.setUp()
         >>> from schoolbell.app.app import ApplicationPreferences
-        >>> from schoolbell.app.interfaces import IApplicationPreferences
+        >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> provideAdapter(ApplicationPreferences,
         ...                provides=IApplicationPreferences)
 
-        >>> from schoolbell.app.interfaces import ISchoolBellApplication
-        >>> verifyObject(ISchoolBellApplication, app)
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> verifyObject(ISchoolToolApplication, app)
         True
 
     Person, group and resource containers are reachable as items of the
@@ -85,19 +85,19 @@ def doctest_SchoolBellApplication():
         >>> resources.__name__
         u'resources'
 
-    SchoolBellApplication is also a calendar owner:
+    SchoolToolApplication is also a calendar owner:
 
         >>> setup.setUpAnnotations()
         >>> sbsetup.setupCalendaring()
 
-        >>> from schoolbell.app.interfaces import IHaveCalendar
+        >>> from schooltool.app.interfaces import IHaveCalendar
         >>> verifyObject(IHaveCalendar, app)
         True
 
-    and naturally can be adapted to ISchoolBellCalendar:
+    and naturally can be adapted to ISchoolToolCalendar:
 
-        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
-        >>> ISchoolBellCalendar(app)
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> ISchoolToolCalendar(app)
         <schooltool.app.cal.Calendar object at ...
 
     Cleanup:
@@ -107,31 +107,31 @@ def doctest_SchoolBellApplication():
     """
 
 
-def doctest_getSchoolBellApplication():
-    """Tests for getSchoolBellApplication.
+def doctest_getSchoolToolApplication():
+    """Tests for getSchoolToolApplication.
 
     Let's say we have a SchoolBell app.
 
-      >>> from schoolbell.app.app import SchoolBellApplication
+      >>> from schooltool.app.app import SchoolToolApplication
       >>> from schooltool.person.person import Person
       >>> from zope.app.component.site import LocalSiteManager
-      >>> app = SchoolBellApplication()
+      >>> app = SchoolToolApplication()
       >>> app.setSiteManager(LocalSiteManager(app))
 
-    If site is not a SchoolBellApplication, we get an error
+    If site is not a SchoolToolApplication, we get an error
 
-      >>> from schoolbell.app.app import getSchoolBellApplication
-      >>> getSchoolBellApplication()
+      >>> from schooltool.app.app import getSchoolToolApplication
+      >>> getSchoolToolApplication()
       Traceback (most recent call last):
       ...
-      ValueError: can't get a SchoolBellApplication
+      ValueError: can't get a SchoolToolApplication
 
-    If current site is a SchoolBellApplication, we get it:
+    If current site is a SchoolToolApplication, we get it:
 
       >>> from zope.app.component.hooks import setSite
       >>> setSite(app)
 
-      >>> getSchoolBellApplication() is app
+      >>> getSchoolToolApplication() is app
       True
     """
 
@@ -143,8 +143,8 @@ def doctest_getApplicationPreferences():
 
       >>> from zope.app.tests import setup
       >>> setup.setUpAnnotations()
-      >>> from schoolbell.app.app import SchoolBellApplication
-      >>> app = SchoolBellApplication()
+      >>> from schooltool.app.app import SchoolToolApplication
+      >>> app = SchoolToolApplication()
 
     Now we can get the preferences object.
 
@@ -154,42 +154,6 @@ def doctest_getApplicationPreferences():
       <schoolbell.app.app.ApplicationPreferences...
 
     """
-
-
-def run_unit_tests(testcase):
-    r"""Hack to call into unittest from doctests.
-
-        >>> import unittest
-        >>> class SampleTestCase(unittest.TestCase):
-        ...     def test1(self):
-        ...         self.assertEquals(2 + 2, 4)
-        >>> run_unit_tests(SampleTestCase)
-
-        >>> class BadTestCase(SampleTestCase):
-        ...     def test2(self):
-        ...         self.assertEquals(2 * 2, 5)
-        >>> run_unit_tests(BadTestCase) # doctest: +REPORT_NDIFF
-        .F
-        ======================================================================
-        FAIL: test2 (schoolbell.app.tests.test_app.BadTestCase)
-        ----------------------------------------------------------------------
-        Traceback (most recent call last):
-        ...
-        AssertionError: 4 != 5
-        <BLANKLINE>
-        ----------------------------------------------------------------------
-        Ran 2 tests in ...s
-        <BLANKLINE>
-        FAILED (failures=1)
-
-    """
-    import unittest
-    from StringIO import StringIO
-    testsuite = unittest.makeSuite(testcase)
-    output = StringIO()
-    result = unittest.TextTestRunner(output).run(testsuite)
-    if not result.wasSuccessful():
-        print output.getvalue(),
 
 
 def test_suite():

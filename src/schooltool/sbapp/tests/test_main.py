@@ -202,7 +202,7 @@ def doctest_load_options():
 def doctest_configureReportlab():
     """Tests for configureReportlab.
 
-        >>> from schoolbell.app.browser import pdfcal
+        >>> from schooltool.app.browser import pdfcal
         >>> from schoolbell.app.main import StandaloneServer
 
         >>> server = StandaloneServer()
@@ -424,7 +424,7 @@ def doctest_bootstrapSchoolBell():
         >>> from zope.app.publication.zopepublication import ZopePublication
         >>> app = root.get(ZopePublication.root_name)
         >>> app
-        <schoolbell.app.app.SchoolBellApplication object at ...>
+        <schoolbell.app.app.SchoolToolApplication object at ...>
 
     This new application object is the containment root
 
@@ -529,8 +529,8 @@ def doctest_restoreManagerUser():
 
     We also need an application:
 
-        >>> from schoolbell.app.app import SchoolBellApplication
-        >>> app = SchoolBellApplication()
+        >>> from schooltool.app.app import SchoolToolApplication
+        >>> app = SchoolToolApplication()
 
     Initially, there's no manager user in the database:
 

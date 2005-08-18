@@ -44,23 +44,23 @@ You want to create a calendar event and book a resource.  You can specify the
 resource when you're creating an event.
 
     >>> from datetime import datetime, timedelta
-    >>> from schoolbell.app.interfaces import ISchoolBellCalendar
+    >>> from schooltool.app.interfaces import ISchoolToolCalendar
     >>> from schooltool.app.cal import CalendarEvent
     >>> e = CalendarEvent(title="Presentation",
     ...                   dtstart=datetime(2005, 3, 2, 12, 45),
     ...                   duration=timedelta(minutes=45),
     ...                   resources=[resource])
-    >>> ISchoolBellCalendar(person).addEvent(e)
+    >>> ISchoolToolCalendar(person).addEvent(e)
 
 The event magically appears in the resource's calendar
 
-    >>> ISchoolBellCalendar(resource).find(e.unique_id) is e
+    >>> ISchoolToolCalendar(resource).find(e.unique_id) is e
     True
 
 You can change the event to remove the booking
 
     >>> e.unbookResource(resource)
-    >>> ISchoolBellCalendar(resource).find(e.unique_id)
+    >>> ISchoolToolCalendar(resource).find(e.unique_id)
     Traceback (most recent call last):
       ...
     KeyError: ...
@@ -68,7 +68,7 @@ You can change the event to remove the booking
 or you may book a different resource
 
     >>> e.bookResource(resource2)
-    >>> ISchoolBellCalendar(resource2).find(e.unique_id) is e
+    >>> ISchoolToolCalendar(resource2).find(e.unique_id) is e
     True
 
 
@@ -82,16 +82,16 @@ anywhere, it doesn't appear in resource calendars.
     ...                   dtstart=datetime(2005, 3, 2, 12, 15),
     ...                   duration=timedelta(minutes=5),
     ...                   resources=[resource])
-    >>> e in ISchoolBellCalendar(resource)
+    >>> e in ISchoolToolCalendar(resource)
     False
     >>> e.bookResource(resource2)
-    >>> e in ISchoolBellCalendar(resource2)
+    >>> e in ISchoolToolCalendar(resource2)
     False
 
 However just add the event somewhere, and it materializes in all three calendars
 
-    >>> ISchoolBellCalendar(person).addEvent(e)
-    >>> [e in ISchoolBellCalendar(x) for x in [person, resource, resource2]]
+    >>> ISchoolToolCalendar(person).addEvent(e)
+    >>> [e in ISchoolToolCalendar(x) for x in [person, resource, resource2]]
     [True, True, True]
 
 
@@ -104,18 +104,18 @@ So, you have an event in two calendars:
     ...                   dtstart=datetime(2005, 3, 3, 12, 00),
     ...                   duration=timedelta(minutes=45),
     ...                   resources=[resource2])
-    >>> ISchoolBellCalendar(person).addEvent(e)
-    >>> e in ISchoolBellCalendar(resource2)
+    >>> ISchoolToolCalendar(person).addEvent(e)
+    >>> e in ISchoolToolCalendar(resource2)
     True
-    >>> e in ISchoolBellCalendar(person)
+    >>> e in ISchoolToolCalendar(person)
     True
 
 If you remove it from the person's calendar, it gets removed from the
 resource's calendar too.
 
-    >>> ISchoolBellCalendar(person).removeEvent(e)
+    >>> ISchoolToolCalendar(person).removeEvent(e)
 
-    >>> e not in ISchoolBellCalendar(resource2)
+    >>> e not in ISchoolToolCalendar(resource2)
     True
 
 If you remove an event from a resource's calendar, it loses that booking.
@@ -124,20 +124,20 @@ If you remove an event from a resource's calendar, it loses that booking.
     ...                   dtstart=datetime(2005, 3, 4, 12, 45),
     ...                   duration=timedelta(minutes=45),
     ...                   resources=[resource, resource2])
-    >>> ISchoolBellCalendar(person).addEvent(e)
-    >>> [e in ISchoolBellCalendar(x) for x in [person, resource, resource2]]
+    >>> ISchoolToolCalendar(person).addEvent(e)
+    >>> [e in ISchoolToolCalendar(x) for x in [person, resource, resource2]]
     [True, True, True]
 
-    >>> ISchoolBellCalendar(resource).removeEvent(e)
-    >>> [e in ISchoolBellCalendar(x) for x in [person, resource, resource2]]
+    >>> ISchoolToolCalendar(resource).removeEvent(e)
+    >>> [e in ISchoolToolCalendar(x) for x in [person, resource, resource2]]
     [True, False, True]
     >>> list(e.resources) == [resource2]
     True
 
 Clearing a calendar is equivalent to removing all its events:
 
-    >>> ISchoolBellCalendar(resource2).clear()
-    >>> [e in ISchoolBellCalendar(x) for x in [person, resource, resource2]]
+    >>> ISchoolToolCalendar(resource2).clear()
+    >>> [e in ISchoolToolCalendar(x) for x in [person, resource, resource2]]
     [True, False, False]
     >>> list(e.resources) == []
     True
@@ -151,7 +151,7 @@ Booking loops are not allowed
     >>> e = CalendarEvent(title="Strange presentation",
     ...                   dtstart=datetime(2005, 3, 4, 12, 45),
     ...                   duration=timedelta(minutes=5))
-    >>> ISchoolBellCalendar(resource).addEvent(e)
+    >>> ISchoolToolCalendar(resource).addEvent(e)
     >>> e.bookResource(resource)
     Traceback (most recent call last):
       ...
@@ -166,14 +166,14 @@ It doesn't work if you do it differently either
     ...                   dtstart=datetime(2005, 3, 4, 12, 50),
     ...                   duration=timedelta(minutes=5),
     ...                   resources=[resource2, resource])
-    >>> ISchoolBellCalendar(resource).addEvent(e)
+    >>> ISchoolToolCalendar(resource).addEvent(e)
     Traceback (most recent call last):
       ...
     ValueError: cannot book itself
 
-    >>> e in ISchoolBellCalendar(resource)
+    >>> e in ISchoolToolCalendar(resource)
     False
-    >>> e in ISchoolBellCalendar(resource2)
+    >>> e in ISchoolToolCalendar(resource2)
     False
 
 

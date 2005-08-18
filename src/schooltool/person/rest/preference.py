@@ -24,9 +24,9 @@ $Id: app.py 4596 2005-08-08 12:53:09Z gintas $
 from zope.component import adapts
 from zope.interface import implements
 
-from schoolbell.app.rest import View, Template, IRestTraverser
-from schoolbell.app.rest.errors import RestError
-from schoolbell.app.rest.xmlparsing import XMLDocument
+from schooltool.app.rest import View, Template, IRestTraverser
+from schooltool.app.rest.errors import RestError
+from schooltool.app.rest.xmlparsing import XMLDocument
 
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonPreferences

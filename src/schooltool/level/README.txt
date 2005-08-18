@@ -18,7 +18,7 @@ The first task of any school manager is to setup the levels for the
 school. So, given a schooltool application
 
   >>> from schooltool.testing import setup
-  >>> st = setup.createSchoolBellApplication()
+  >>> st = setup.createSchoolToolApplication()
 
 with a manager group, which is setup during database instantiation,
 

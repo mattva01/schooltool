@@ -30,7 +30,7 @@ from zope.testing import doctest
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.tests import setup, ztapi
 
-from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schooltool.app.browser.testing import setUp, tearDown
 
 
 def doctest_getNotes():

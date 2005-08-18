@@ -27,8 +27,8 @@ from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 
-from schoolbell.app.browser.tests.setup import setUp as browserSetUp, tearDown
-from schoolbell.app.interfaces import ISchoolBellCalendar
+from schooltool.app.browser.testing import setUp as browserSetUp, tearDown
+from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.testing import setup
 
 def setUp(test=None):
@@ -41,7 +41,7 @@ def setUp(test=None):
 def doctest_CalendarOverlayView():
     r"""Tests for CalendarOverlayView
 
-        >>> from schoolbell.app.browser.overlay import CalendarOverlayView
+        >>> from schooltool.app.browser.overlay import CalendarOverlayView
         >>> View = SimpleViewClass('../templates/calendar_overlay.pt',
         ...                        bases=(CalendarOverlayView,))
 
@@ -67,13 +67,13 @@ def doctest_CalendarOverlayView():
         >>> person = app['persons']['whatever'] = Person('fred')
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
         >>> group2 = app['groups']['g2'] = Group(title="Group 2")
-        >>> person.overlaid_calendars.add(ISchoolBellCalendar(group1))
-        >>> person.overlaid_calendars.add(ISchoolBellCalendar(group2),
+        >>> person.overlaid_calendars.add(ISchoolToolCalendar(group1))
+        >>> person.overlaid_calendars.add(ISchoolToolCalendar(group2),
         ...                               show=False)
 
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('id', 'title', person))
-        >>> view = View(ISchoolBellCalendar(person), request)
+        >>> view = View(ISchoolToolCalendar(person), request)
 
         >>> print view()
         <div id="portlet-calendar-overlay" class="portlet">
@@ -121,7 +121,7 @@ def doctest_CalendarOverlayView():
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('id', 'title', person))
         >>> request.form['OVERLAY_MORE'] = u"More..."
-        >>> view = View(ISchoolBellCalendar(person), request)
+        >>> view = View(ISchoolToolCalendar(person), request)
         >>> content = view()
         >>> request.response.getStatus()
         302
@@ -134,7 +134,7 @@ def doctest_CalendarOverlayView():
 def doctest_CalendarOverlayView_items():
     """Tests for CalendarOverlayView.items().
 
-        >>> from schoolbell.app.browser.overlay import CalendarOverlayView
+        >>> from schooltool.app.browser.overlay import CalendarOverlayView
 
     We will need some persons and groups for the demonstration.
 
@@ -152,15 +152,15 @@ def doctest_CalendarOverlayView_items():
         >>> from schooltool.app.security import Principal
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('', '', person))
-        >>> context = ISchoolBellCalendar(person)
+        >>> context = ISchoolToolCalendar(person)
         >>> view = CalendarOverlayView(context, request)
         >>> view.items()
         []
 
     When the person has calendars in his overlay list
 
-        >>> person.overlaid_calendars.add(ISchoolBellCalendar(group2))
-        >>> person.overlaid_calendars.add(ISchoolBellCalendar(group1),
+        >>> person.overlaid_calendars.add(ISchoolToolCalendar(group2))
+        >>> person.overlaid_calendars.add(ISchoolToolCalendar(group1),
         ...                               show=False)
 
         >>> from zope.testing.doctestunit import pprint
@@ -183,14 +183,14 @@ def doctest_CalendarOverlayView_items():
 def doctest_CalendarSelectionView():
     """Tests for CalendarSelectionView
 
-        >>> from schoolbell.app.interfaces import ISchoolBellApplication
-        >>> from schoolbell.app.interfaces import IApplicationPreferences
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> from schoolbell.app.app import getApplicationPreferences
         >>> from zope.app.testing import ztapi
-        >>> ztapi.provideAdapter(ISchoolBellApplication,
+        >>> ztapi.provideAdapter(ISchoolToolApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
-        >>> from schoolbell.app.browser.overlay import CalendarSelectionView
+        >>> from schooltool.app.browser.overlay import CalendarSelectionView
         >>> View = SimpleViewClass('../templates/calendar_selection.pt',
         ...                        bases=(CalendarSelectionView,))
 
@@ -249,7 +249,7 @@ def doctest_CalendarSelectionView():
     If a person's calendar is added to your overlaid calendars list, you
     can see that in the form.
 
-        >>> fred.overlaid_calendars.add(ISchoolBellCalendar(eric), show=False)
+        >>> fred.overlaid_calendars.add(ISchoolToolCalendar(eric), show=False)
 
         >>> print view()
         <BLANKLINE>
@@ -284,11 +284,11 @@ def doctest_CalendarSelectionView():
 
     We can see that the calendars we selected were added to the list
 
-        >>> ISchoolBellCalendar(igor) in fred.overlaid_calendars
+        >>> ISchoolToolCalendar(igor) in fred.overlaid_calendars
         True
-        >>> ISchoolBellCalendar(admins) in fred.overlaid_calendars
+        >>> ISchoolToolCalendar(admins) in fred.overlaid_calendars
         True
-        >>> ISchoolBellCalendar(car) in fred.overlaid_calendars
+        >>> ISchoolToolCalendar(car) in fred.overlaid_calendars
         True
 
     We can also remove calendars
@@ -305,7 +305,7 @@ def doctest_CalendarSelectionView():
               </select>
         ...
 
-        >>> ISchoolBellCalendar(eric) in fred.overlaid_calendars
+        >>> ISchoolToolCalendar(eric) in fred.overlaid_calendars
         False
 
     When you submit the form, you are redirected back to the original view
@@ -339,7 +339,7 @@ def test_suite():
                                        optionflags=doctest.ELLIPSIS|
                                             doctest.REPORT_NDIFF|
                                             doctest.NORMALIZE_WHITESPACE))
-    suite.addTest(doctest.DocTestSuite('schoolbell.app.browser.overlay'))
+    suite.addTest(doctest.DocTestSuite('schooltool.app.browser.overlay'))
     return suite
 
 if __name__ == '__main__':

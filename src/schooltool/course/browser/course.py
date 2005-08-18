@@ -24,7 +24,7 @@ $Id: app.py 4691 2005-08-12 18:59:44Z srichter $
 from zope.app import zapi
 from zope.app.form.browser.add import AddView
 from zope.app.publisher.browser import BrowserView
-from schoolbell.app.browser.app import ContainerView
+from schooltool.app.browser.app import ContainerView
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.course.interfaces import ICourse, ICourseContainer

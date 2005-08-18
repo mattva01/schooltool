@@ -11,7 +11,7 @@ def registerTestSetup():
 
     def haveCalendar():
         from schooltool.person import person
-        from schoolbell.app.interfaces import IHaveCalendar
+        from schooltool.app.interfaces import IHaveCalendar
         if not IHaveCalendar.implementedBy(person.Person):
             classImplements(person.Person, IHaveCalendar)
     registry.register('CalendarComponents', haveCalendar)

@@ -19,7 +19,7 @@
 """
 Upgrade to generation 7.
 
-We need to add a calendar to the root SchoolBellApplication object.
+We need to add a calendar to the root SchoolToolApplication object.
 
 $Id$
 """
@@ -27,11 +27,11 @@ $Id$
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
 
-from schoolbell.app.interfaces import ISchoolBellApplication
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.cal import Calendar
 
 def evolve(context):
     root = context.connection.root().get(ZopePublication.root_name, None)
-    for app in findObjectsProviding(root, ISchoolBellApplication):
+    for app in findObjectsProviding(root, ISchoolToolApplication):
         app.calendar = Calendar(app)
 

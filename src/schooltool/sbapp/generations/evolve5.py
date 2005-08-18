@@ -29,7 +29,7 @@ from pytz import timezone
 
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
-from schoolbell.app.interfaces import ICalendarOwner
+from schooltool.app.interfaces import ICalendarOwner
 from schooltool.app.cal import CalendarEvent, Calendar
 
 utc = timezone('UTC')

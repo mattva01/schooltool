@@ -10,7 +10,7 @@ the web ZMI:
     ... Content-Length: 81
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&\
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolToolApplication&\
     ... new_value=frogpond""", handle_errors=False)
     HTTP/1.1 303 See Other
     ...
@@ -123,7 +123,7 @@ Also, there is a special exception that generates a Bad Request
 response.  Let's create a view that raises this error:
 
     >>> from zope.app.testing import ztapi
-    >>> from schoolbell.app.rest.errors import RestError
+    >>> from schooltool.app.rest.errors import RestError
 
     >>> class BadView:
     ...     def __init__(self, context, request):
@@ -132,10 +132,10 @@ response.  Let's create a view that raises this error:
     ...     def POST(self):
     ...         raise RestError("Houston, we've got a problem")
 
-    >>> from schoolbell.app.interfaces import ISchoolBellApplication
+    >>> from schooltool.app.interfaces import ISchoolToolApplication
     >>> from zope.publisher.interfaces.http import IHTTPRequest
     >>> from zope.interface import Interface
-    >>> ztapi.provideAdapter((ISchoolBellApplication, IHTTPRequest), Interface,
+    >>> ztapi.provideAdapter((ISchoolToolApplication, IHTTPRequest), Interface,
     ...                      BadView, 'POST')
 
 Now, let's trigger it:

@@ -43,13 +43,13 @@ We will need some sample persons and groups for the demonstration
 Let's say John wants to see the calendars of Smith and the Developers group
 overlaid on his own calendar
 
-    >>> john.overlaid_calendars.add(ISchoolBellCalendar(smith))
-    >>> john.overlaid_calendars.add(ISchoolBellCalendar(developers))
+    >>> john.overlaid_calendars.add(ISchoolToolCalendar(smith))
+    >>> john.overlaid_calendars.add(ISchoolToolCalendar(developers))
 
 He also wants the Admins group calendar to be displayed in the overlaid
 calendars portlet, but hidden by default:
 
-    >>> john.overlaid_calendars.add(ISchoolBellCalendar(admins), show=False)
+    >>> john.overlaid_calendars.add(ISchoolToolCalendar(admins), show=False)
 
 Iterating over `overlaid_calendars` returns ICalendarOverlayInfo objects
 
@@ -64,9 +64,9 @@ Iterating over `overlaid_calendars` returns ICalendarOverlayInfo objects
 
 However, 'in' checks for the presence of a calendar
 
-    >>> ISchoolBellCalendar(smith) in john.overlaid_calendars
+    >>> ISchoolToolCalendar(smith) in john.overlaid_calendars
     True
-    >>> ISchoolBellCalendar(Person(title="Newcomer")) in john.overlaid_calendars
+    >>> ISchoolToolCalendar(Person(title="Newcomer")) in john.overlaid_calendars
     False
 
 Clean up
@@ -84,7 +84,7 @@ from zope.security.proxy import removeSecurityProxy
 from schooltool.relationship import URIObject
 from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.relationship import BoundRelationshipProperty
-from schoolbell.app.interfaces import ISchoolBellCalendar
+from schooltool.app.interfaces import ISchoolToolCalendar
 
 
 URICalendarSubscription = URIObject(
@@ -122,7 +122,7 @@ class ICalendarOverlayInfo(Interface):
 
     calendar = Object(
             title=u"Calendar",
-            schema=ISchoolBellCalendar,
+            schema=ISchoolToolCalendar,
             description=u"""
             Calendar.
             """)

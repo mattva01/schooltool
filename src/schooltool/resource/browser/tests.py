@@ -25,7 +25,7 @@ import unittest
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 
-from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schooltool.app.browser.testing import setUp, tearDown
 
 def doctest_ResourceView():
     r"""Test for ResourceView

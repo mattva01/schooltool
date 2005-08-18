@@ -28,7 +28,7 @@ from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.traversing.interfaces import IContainmentRoot
 
-from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup
 
 

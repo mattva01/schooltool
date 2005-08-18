@@ -31,7 +31,7 @@ from zope.app.container.browser.adding import Adding
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.testing import ztapi
 
-from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup
 
 class AddingStub(Adding):
@@ -263,13 +263,13 @@ def doctest_SectionAddView():
     We need some setup for our vocabulary:
 
         >>> from zope.schema.vocabulary import getVocabularyRegistry
-        >>> from schooltool.app import LocationResourceVocabulary
+        >>> from schooltool.app.app import LocationResourceVocabulary
         >>> registry = getVocabularyRegistry()
         >>> registry.register('LocationResources', LocationResourceVocabulary)
 
     create a SchoolTool instance:
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> app = setup.setupSchoolBellSite()
         >>> directlyProvides(app, IContainmentRoot)
         >>> sections = app['sections']
@@ -362,10 +362,10 @@ def doctest_SectionEditView():
 
     We need some setup for our vocabulary:
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> app = setup.setupSchoolBellSite()
         >>> from zope.schema.vocabulary import getVocabularyRegistry
-        >>> from schooltool.app import LocationResourceVocabulary
+        >>> from schooltool.app.app import LocationResourceVocabulary
         >>> registry = getVocabularyRegistry()
         >>> registry.register('LocationResources', LocationResourceVocabulary)
         >>> from schooltool.resource.resource import Resource
@@ -462,7 +462,7 @@ def doctest_SectionInstructorView():
 
     lets setup a schooltool instance with some members.
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.person.person import Person
         >>> school = setup.setupSchoolBellSite()
         >>> persons = school['persons']
@@ -554,7 +554,7 @@ def doctest_SectionLearnerView():
 
     lets setup a schooltool instance with some members.
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.person.person import Person
         >>> school = setup.setupSchoolBellSite()
         >>> persons = school['persons']
@@ -655,7 +655,7 @@ def doctest_SectionLearnerGroupView():
 
         >>> from schooltool.course.browser.section import \
         ...     SectionLearnerGroupView
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.group.group import Group
         >>> from schooltool.person.person import Person
         >>> school = setup.setupSchoolBellSite()

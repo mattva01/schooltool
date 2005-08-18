@@ -43,10 +43,10 @@ from zope.security.checker import ProxyFactory
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.app.security.interfaces import IUnauthenticatedGroup
 
-from schoolbell.app.app import getSchoolBellApplication
-from schoolbell.app.interfaces import ISchoolBellApplication
-from schoolbell.app.interfaces import ISchoolBellAuthentication
-from schoolbell.app.interfaces import ISchoolBellCalendar
+from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolAuthentication
+from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.group.interfaces import IGroup
 from schooltool.person.interfaces import IPerson
 
@@ -70,13 +70,13 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
     """A local SchoolBell authentication utility.
 
     This utility serves principals for groups and persons in the
-    nearest SchoolBellApplication instance.
+    nearest SchoolToolApplication instance.
 
     It authenticates the requests containing usernames and passwords
     in the session.
     """
 
-    implements(ISchoolBellAuthentication, ILocation)
+    implements(ISchoolToolAuthentication, ILocation)
 
     person_prefix = "sb.person."
     group_prefix = "sb.group."
@@ -100,7 +100,7 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
                 return self.getPrincipal('sb.person.' + login)
 
     def _checkPassword(self, username, password):
-        app = getSchoolBellApplication()
+        app = getSchoolToolApplication()
         if username in app['persons']:
             person = app['persons'][username]
             return person.checkPassword(password)
@@ -120,7 +120,7 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
             # to redirect an iCalendar client to an HTML login form.
             next = getNextUtility(self, IAuthentication)
             return next.unauthorized(id, request)
-        app = getSchoolBellApplication()
+        app = getSchoolToolApplication()
         url = zapi.absoluteURL(app, request)
         request.response.redirect("%s/@@login.html?forbidden=yes&nexturl=%s"
                                   % (url, request.URL))
@@ -130,7 +130,7 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
 
         Returns principals for groups and persons.
         """
-        app = getSchoolBellApplication()
+        app = getSchoolToolApplication()
         if id.startswith(self.person_prefix):
             username = id[len(self.person_prefix):]
             if username in app['persons']:
@@ -208,7 +208,7 @@ def authSetUpSubscriber(event):
     This is a handler for IObjectAddedEvent.
     """
     if IObjectAddedEvent.providedBy(event):
-        if ISchoolBellApplication.providedBy(event.object):
+        if ISchoolToolApplication.providedBy(event.object):
             setUpLocalAuth(event.object)
 
             # Grant schoolbell.view to all authenticated users
@@ -233,9 +233,9 @@ def groupPermissionsSubscriber(event):
 def applicationCalendarPermissionsSubscriber(event):
     """Set permissions on application calendar."""
     if IObjectAddedEvent.providedBy(event):
-        if ISchoolBellApplication.providedBy(event.object):
+        if ISchoolToolApplication.providedBy(event.object):
             unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
-            calendar = ISchoolBellCalendar(event.object)
+            calendar = ISchoolToolCalendar(event.object)
             perms = IPrincipalPermissionManager(calendar)
             perms.grantPermissionToPrincipal('schoolbell.viewCalendar',
                                               unauthenticated.id)

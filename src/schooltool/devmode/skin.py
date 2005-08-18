@@ -23,7 +23,7 @@ $Id: skin.py 3335 2005-03-25 18:53:11Z ignas $
 """
 from zope.app.publisher.browser import applySkin
 from zope.publisher.interfaces.browser import IBrowserRequest
-from schoolbell.app.interfaces import ISchoolBellApplication
+from schooltool.app.interfaces import ISchoolToolApplication
 from schoolbell.app.browser.skin import ISchoolBellSkin 
 
 
@@ -41,6 +41,6 @@ def schoolBellTraverseSubscriber(event):
     Sets the SchoolBell skin if the object traversed is a SchoolBell
     application instance.
     """
-    if (ISchoolBellApplication.providedBy(event.object) and
+    if (ISchoolToolApplication.providedBy(event.object) and
         IBrowserRequest.providedBy(event.request)):
         applySkin(event.request, ISchoolBellDevModeSkin)

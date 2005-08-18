@@ -54,7 +54,7 @@ def doctest_SchoolToolApplicationView():
 
     Lets test the XML output:
 
-        >>> from schoolbell.app.rest.xmlparsing import XMLDocument
+        >>> from schooltool.app.rest.xmlparsing import XMLDocument
         >>> doc = XMLDocument(result)
         >>> doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
 
@@ -277,7 +277,7 @@ class TestTermFileFactory(QuietLibxml2Mixin, unittest.TestCase):
         self.assertEquals(schooldays, expected)
 
     def test_invalid_name(self):
-        from schoolbell.app.rest.errors import RestError
+        from schooltool.app.rest.errors import RestError
         self.assertRaises(RestError, self.fileFactory, "foo.bar", "", "")
 
 

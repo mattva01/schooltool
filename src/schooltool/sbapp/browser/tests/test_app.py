@@ -32,33 +32,33 @@ from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 
 from schooltool.testing import setup as sbsetup
 
-from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schooltool.app.browser.testing import setUp, tearDown
 
 
-def doctest_SchoolBellApplicationView():
-    r"""Test for SchoolBellApplicationView
+def doctest_SchoolToolApplicationView():
+    r"""Test for SchoolToolApplicationView
 
     Some setup
 
         >>> from schoolbell.app.app import getApplicationPreferences
         >>> from zope.app.annotation.interfaces import IAnnotations
-        >>> from schoolbell.app.interfaces import IApplicationPreferences
-        >>> from schoolbell.app.interfaces import ISchoolBellApplication
+        >>> from schooltool.app.interfaces import IApplicationPreferences
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
 
         >>> app = sbsetup.setupSchoolBellSite()
 
         >>> setup.setUpAnnotations()
         >>> sbsetup.setupCalendaring()
 
-        >>> ztapi.provideAdapter(ISchoolBellApplication,
+        >>> ztapi.provideAdapter(ISchoolToolApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
 
     Now lets create a view
 
-        >>> from schoolbell.app.browser.app import SchoolBellApplicationView
+        >>> from schooltool.app.browser.app import SchoolToolApplicationView
         >>> request = TestRequest()
-        >>> view = SchoolBellApplicationView(app, request)
+        >>> view = SchoolToolApplicationView(app, request)
         >>> view.update()
 
         >>> request.response.getStatus()
@@ -70,7 +70,7 @@ def doctest_SchoolBellApplicationView():
 
         >>> IApplicationPreferences(app).frontPageCalendar = False
         >>> request = TestRequest()
-        >>> view = SchoolBellApplicationView(app, request)
+        >>> view = SchoolToolApplicationView(app, request)
         >>> view.update()
 
         >>> request.response.getStatus()
@@ -84,7 +84,7 @@ def doctest_ContainerDeleteView():
 
     Let's create some persons to delete from a person container:
 
-        >>> from schoolbell.app.browser.app import ContainerDeleteView
+        >>> from schooltool.app.browser.app import ContainerDeleteView
         >>> from schooltool.person.person import Person, PersonContainer
         >>> from schooltool.person.interfaces import IPerson
         >>> setup.setUpAnnotations()
@@ -178,18 +178,18 @@ def doctest_LoginView():
         ...     from zope.security.proxy import removeSecurityProxy
         ...     return getCalendar(removeSecurityProxy(obj))
 
-        >>> from schoolbell.app.interfaces import IHaveCalendar
-        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
-        >>> ztapi.provideAdapter(IHaveCalendar, ISchoolBellCalendar,
+        >>> from schooltool.app.interfaces import IHaveCalendar
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> ztapi.provideAdapter(IHaveCalendar, ISchoolToolCalendar,
         ...                      getCalendarWithNakedObject)
 
         >>> from schooltool.testing import registry
         >>> registry.setupCalendarComponents()
 
-        >>> from schoolbell.app.interfaces import ISchoolBellApplication
-        >>> from schoolbell.app.interfaces import IApplicationPreferences
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> from schoolbell.app.app import getApplicationPreferences
-        >>> ztapi.provideAdapter(ISchoolBellApplication,
+        >>> ztapi.provideAdapter(ISchoolToolApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
 
@@ -210,7 +210,7 @@ def doctest_LoginView():
 
     We create our view:
 
-        >>> from schoolbell.app.browser.app import LoginView
+        >>> from schooltool.app.browser.app import LoginView
         >>> request = TestRequest()
         >>> class StubPrincipal:
         ...     title = "Some user"
@@ -326,7 +326,7 @@ def doctest_LogoutView():
 
     And we call the logout view:
 
-        >>> from schoolbell.app.browser.app import LogoutView
+        >>> from schooltool.app.browser.app import LogoutView
         >>> view = LogoutView(app, request)
         >>> view()
 
@@ -367,10 +367,10 @@ def doctest_ACLView():
         >>> setup.setUpTraversal()
         >>> ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
         ...                      AnnotationPrincipalPermissionManager)
-        >>> from schoolbell.app.interfaces import ISchoolBellApplication
-        >>> from schoolbell.app.interfaces import IApplicationPreferences
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> from schoolbell.app.app import getApplicationPreferences
-        >>> ztapi.provideAdapter(ISchoolBellApplication,
+        >>> ztapi.provideAdapter(ISchoolToolApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
 
@@ -395,7 +395,7 @@ def doctest_ACLView():
 
     We create an ACLView:
 
-        >>> from schoolbell.app.browser.app import ACLView
+        >>> from schooltool.app.browser.app import ACLView
         >>> View = SimpleViewClass("../templates/acl.pt", bases=(ACLView, ))
         >>> request = TestRequest()
         >>> class StubPrincipal:
@@ -820,7 +820,7 @@ def doctest_ACLView_inheritance():
     Let's create an ACLView on a subobject of the object that holds
     the grants:
 
-        >>> from schoolbell.app.browser.app import ACLView
+        >>> from schooltool.app.browser.app import ACLView
         >>> View = SimpleViewClass("../templates/acl.pt", bases=(ACLView, ))
         >>> request = TestRequest()
         >>> view = View(app['persons'], request)
@@ -906,7 +906,7 @@ def doctest_hasPermission():
 
     He does not have a 'super' permission on our schoolbell app:
 
-        >>> from schoolbell.app.browser.app import hasPermission
+        >>> from schooltool.app.browser.app import hasPermission
         >>> hasPermission('super', app, 'sb.person.joe')
         False
 
@@ -938,18 +938,18 @@ def doctest_hasPermission():
 def doctest_ApplicationPreferencesView():
     """
 
-    We need to setup a SchoolBellApplication site and build our
-    ISchoolBellApplication adapter:
+    We need to setup a SchoolToolApplication site and build our
+    ISchoolToolApplication adapter:
 
         >>> app = sbsetup.setupSchoolBellSite()
 
-        >>> from schoolbell.app.browser.app import ApplicationPreferencesView
+        >>> from schooltool.app.browser.app import ApplicationPreferencesView
         >>> from schoolbell.app.app import getApplicationPreferences
-        >>> from schoolbell.app.interfaces import IApplicationPreferences
-        >>> from schoolbell.app.interfaces import ISchoolBellApplication
+        >>> from schooltool.app.interfaces import IApplicationPreferences
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
 
         >>> setup.setUpAnnotations()
-        >>> ztapi.provideAdapter(ISchoolBellApplication,
+        >>> ztapi.provideAdapter(ISchoolToolApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
 

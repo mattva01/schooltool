@@ -39,9 +39,9 @@ from zope.app.container.interfaces import INameChooser
 
 from schooltool.testing import setup
 from schoolbell.app.browser.tests import setup as schoolbell_setup
-from schoolbell.app.app import SimpleNameChooser
+from schooltool.app.app import SimpleNameChooser
 from schooltool.tests import setUpApplicationPreferences
-from schooltool.app import SchoolToolApplication
+from schooltool.app.app import SchoolToolApplication
 from schooltool import timetable
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.browser import format_time_range

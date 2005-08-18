@@ -26,10 +26,10 @@ from zope.security.proxy import removeSecurityProxy
 from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 
-from schoolbell import SchoolBellMessageID as _
+from schooltool import SchoolToolMessageID as _
 from schooltool.batching import Batch
-from schoolbell.app.app import getSchoolBellApplication
-from schoolbell.app.browser.app import ContainerView, BaseAddView, BaseEditView
+from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.browser.app import ContainerView, BaseAddView, BaseEditView
 
 from schooltool.resource.interfaces import IResourceContainer
 from schooltool.resource.interfaces import IResourceContained

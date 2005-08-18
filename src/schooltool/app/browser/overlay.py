@@ -32,9 +32,9 @@ from zope.app.location.interfaces import ILocation
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess
 
-from schoolbell import SchoolBellMessageID as _
-from schoolbell.app.app import getSchoolBellApplication
-from schoolbell.app.interfaces import ISchoolBellCalendar
+from schooltool import SchoolToolMessageID as _
+from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.interfaces import IPerson
 
 
@@ -67,7 +67,7 @@ class CalendarOverlayView(BrowserView):
             >>> from schooltool.person.person import Person
             >>> request = TestRequest()
             >>> person = Person()
-            >>> context = ISchoolBellCalendar(person)
+            >>> context = ISchoolToolCalendar(person)
             >>> view = CalendarOverlayView(context, request)
             >>> view.show_overlay()
             False
@@ -160,11 +160,11 @@ class CalendarSelectionView(BrowserView):
         user = removeSecurityProxy(IPerson(self.request.principal, None))
         if user is None:
             return []
-        app = getSchoolBellApplication()
+        app = getSchoolToolApplication()
 
         result = []
         for obj in app[container].values():
-            calendar = ISchoolBellCalendar(obj)
+            calendar = ISchoolToolCalendar(obj)
             if obj is not user and canAccess(calendar, '__iter__'):
                 result.append(
                     {'id': obj.__name__,
@@ -181,8 +181,8 @@ class CalendarSelectionView(BrowserView):
         user = IPerson(self.request.principal, None)
         if user is None:
             return None
-        app = getSchoolBellApplication()
-        calendar = ISchoolBellCalendar(app)
+        app = getSchoolToolApplication()
+        calendar = ISchoolToolCalendar(app)
 
         if canAccess(calendar, '__iter__'):
             return {'title': app.title,

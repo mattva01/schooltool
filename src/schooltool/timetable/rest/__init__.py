@@ -43,11 +43,11 @@ from zope.app.http.interfaces import INullResource
 from zope.app.filerepresentation.interfaces import IWriteDirectory
 from zope.app.event.objectevent import ObjectCreatedEvent
 
-from schoolbell.app.rest import View, Template
-from schoolbell.app.rest import IRestTraverser
-from schoolbell.app.rest.app import GenericContainerView
-from schoolbell.app.rest.errors import RestError
-from schoolbell.app.rest.xmlparsing import XMLDocument
+from schooltool.app.rest import View, Template
+from schooltool.app.rest import IRestTraverser
+from schooltool.app.rest.app import GenericContainerView
+from schooltool.app.rest.errors import RestError
+from schooltool.app.rest.xmlparsing import XMLDocument
 from schooltool import getSchoolToolApplication
 from schooltool.common import parse_date, parse_time
 from schooltool.timetable.interfaces import ITimetableModelFactory

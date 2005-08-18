@@ -22,10 +22,10 @@ RESTive views for Courses
 $Id: app.py 4691 2005-08-12 18:59:44Z srichter $
 """
 from zope.component import adapts
-from schoolbell.app.rest import View, Template
-from schoolbell.app.rest.app import ApplicationObjectFile
-from schoolbell.app.rest.app import ApplicationObjectFileFactory
-from schoolbell.app.rest.app import GenericContainerView
+from schooltool.app.rest import View, Template
+from schooltool.app.rest.app import ApplicationObjectFile
+from schooltool.app.rest.app import ApplicationObjectFileFactory
+from schooltool.app.rest.app import GenericContainerView
 
 from schooltool.course.course import Course
 from schooltool.course.interfaces import ICourseContainer, ICourse

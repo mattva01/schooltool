@@ -54,12 +54,12 @@ from zope.app.component.site import LocalSiteManager
 from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 from zope.app.container.contained import ObjectAddedEvent
 
-from schoolbell.app.app import SchoolBellApplication
-from schoolbell.app.interfaces import ISchoolBellApplication
+from schooltool.app.app import SchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.person import Person
 from schooltool.app.security import setUpLocalAuth
-from schoolbell.app.rest import restServerType
-from schoolbell.app.browser import pdfcal
+from schooltool.app.rest import restServerType
+from schooltool.app.browser import pdfcal
 
 
 locale_charset = locale.getpreferredencoding()
@@ -373,8 +373,8 @@ class StandaloneServer(object):
     Options = Options
     Person = Person
 
-    AppFactory = SchoolBellApplication
-    AppInterface = ISchoolBellApplication
+    AppFactory = SchoolToolApplication
+    AppInterface = ISchoolToolApplication
 
     devmode = False
 

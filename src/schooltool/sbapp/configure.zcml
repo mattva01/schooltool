@@ -81,9 +81,9 @@
 
 <!-- Core content objects -->
 
-  <content class=".app.SchoolBellApplication">
-    <implements interface="schoolbell.app.interfaces.IHaveCalendar" />
-    <allow interface=".interfaces.ISchoolBellApplication" />
+  <content class=".app.SchoolToolApplication">
+    <implements interface="schooltool.app.interfaces.IHaveCalendar" />
+    <allow interface=".interfaces.ISchoolToolApplication" />
     <allow attributes="getSiteManager" />
   </content>
 
@@ -91,19 +91,19 @@
 
   <adapter
       for=".interfaces.IHaveCalendar"
-      provides=".interfaces.ISchoolBellCalendar"
+      provides=".interfaces.ISchoolToolCalendar"
       factory=".cal.getCalendar"
       trusted="true"
       />
 
   <adapter
-      for=".interfaces.ISchoolBellCalendar"
+      for=".interfaces.ISchoolToolCalendar"
       provides=".interfaces.IWriteCalendar"
       factory=".cal.WriteCalendar"
       />
 
   <adapter
-      for=".interfaces.ISchoolBellApplication"
+      for=".interfaces.ISchoolToolApplication"
       provides=".interfaces.IApplicationPreferences"
       factory=".app.getApplicationPreferences"
       trusted="true"

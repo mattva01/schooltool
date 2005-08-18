@@ -34,18 +34,18 @@ from zope.publisher.browser import TestRequest
 from zope.publisher.http import HTTPRequest
 from zope.app.testing import setup, ztapi
 
-from schoolbell.app.rest.errors import RestError
+from schooltool.app.rest.errors import RestError
 from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.interfaces import IRelationshipSchema
 from schooltool.relationship.uri import IURIObject
 from schooltool.app.membership import Membership
-from schoolbell.app.app import SimpleNameChooser
+from schooltool.app.app import SimpleNameChooser
 from schooltool.relationship.annotatable import getRelationshipLinks
 from schooltool.group.interfaces import IGroupContainer
 from schoolbell.app.rest.tests.utils import XMLCompareMixin, QuietLibxml2Mixin
-from schoolbell.app.rest.xmlparsing import XMLDocument, XMLParseError
+from schooltool.app.rest.xmlparsing import XMLDocument, XMLParseError
 from schooltool.app.membership import Membership, URIMember, URIGroup
-from schoolbell.app.rest.xmlparsing import XMLValidationError
+from schooltool.app.rest.xmlparsing import XMLValidationError
 
 from schooltool.testing import setup as sbsetup
 

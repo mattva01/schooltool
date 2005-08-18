@@ -26,10 +26,10 @@ from cStringIO import StringIO
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 
-from schoolbell.app.rest.tests.test_app import ApplicationObjectViewTestMixin
-from schoolbell.app.rest.tests.test_app import ContainerViewTestMixin
-from schoolbell.app.rest.tests.test_app import FileFactoriesSetUp
-from schoolbell.app.rest.xmlparsing import XMLParseError
+from schooltool.app.rest.testing import ApplicationObjectViewTestMixin
+from schooltool.app.rest.testing import ContainerViewTestMixin
+from schooltool.app.rest.testing import FileFactoriesSetUp
+from schooltool.app.rest.xmlparsing import XMLParseError
 
 from schooltool.resource.resource import Resource, ResourceContainer
 from schooltool.resource.interfaces import IResourceContainer

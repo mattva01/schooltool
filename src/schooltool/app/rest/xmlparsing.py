@@ -9,7 +9,7 @@ import libxml2
 from zope.interface import implements
 from zope.interface.common.interfaces import IException
 
-from schoolbell.app.rest.rng import validate_against_schema
+from schooltool.app.rest.rng import validate_against_schema
 
 
 class UnicodeAwareException(Exception):

@@ -20,13 +20,13 @@
       for="*"
       name="schoolbell"
       provides="zope.app.traversing.interfaces.IPathAdapter"
-      factory=".SchoolBellAPI"
+      factory=".SchoolToolAPI"
       />
 
 <!-- Adapters -->
 
   <zope:adapter
-      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
       provides="zope.app.size.interfaces.ISized"
       factory=".SchoolBellSized"
       />
@@ -54,7 +54,7 @@
 <!-- Application Traverser -->
 
   <zope:view
-      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       provides="zope.publisher.interfaces.browser.IBrowserPublisher"
       factory="schooltool.traverser.browser.PluggableBrowserTraverser"
@@ -65,29 +65,29 @@
 
   <addMenuItem
       title="SchoolBell"
-      class="schoolbell.app.app.SchoolBellApplication"
+      class="schoolbell.app.app.SchoolToolApplication"
       permission="zope.ManageContent"
       />
 
   <page
       name="index.html"
-      for="schoolbell.app.interfaces.ISchoolBellApplication"
-      class="schoolbell.app.browser.app.SchoolBellApplicationView"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class="schooltool.app.browser.app.SchoolToolApplicationView"
       template="templates/index.pt"
       permission="zope.Public"
       />
 
-  <!-- Make index.html the default ZMI view for ISchoolBellApplication -->
+  <!-- Make index.html the default ZMI view for ISchoolToolApplication -->
 
   <menuItem
-      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
       menu="zmi_views" title="View" action="index.html" />
 
   <!-- XXX: Ahhh! Why is this a view of the person? -->
   <page
       name="site-preferences.html"
       for="schooltool.person.interfaces.IPerson"
-      class="schoolbell.app.browser.app.ApplicationPreferencesView"
+      class="schooltool.app.browser.app.ApplicationPreferencesView"
       template="templates/application_preferences.pt"
       permission="schoolbell.manageMembership"
       menu="schoolbell_actions"
@@ -126,7 +126,7 @@
   <page
       name="delete.html"
       for="zope.app.container.interfaces.IContainer"
-      class="schoolbell.app.browser.app.ContainerDeleteView"
+      class="schooltool.app.browser.app.ContainerDeleteView"
       template="templates/container_delete.pt"
       permission="zope.View"
       />
@@ -140,14 +140,14 @@
   </zope:class>
 
   <zope:subscriber
-      for="schoolbell.app.interfaces.IHaveCalendar
+      for="schooltool.app.interfaces.IHaveCalendar
            zope.publisher.interfaces.browser.IBrowserRequest"
       provides="schooltool.traverser.interfaces.ITraverserPlugin"
       factory=".cal.ToCalendarTraverser"
       />
 
   <zope:view
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       provides="zope.publisher.interfaces.browser.IBrowserPublisher"
       factory=".cal.CalendarTraverser"
@@ -157,14 +157,14 @@
   <menuItem
       menu="schoolbell_actions"
       title="View Calendar"
-      for="schoolbell.app.interfaces.IHaveCalendar"
+      for="schooltool.app.interfaces.IHaveCalendar"
       permission="schoolbell.viewCalendar"
       action="calendar"
       />
 
   <page
       name="daily.html"
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.DailyCalendarView"
       template="templates/cal_daily.pt"
       permission="schoolbell.viewCalendar"
@@ -174,7 +174,7 @@
 
   <page
       name="daily.pdf"
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".pdfcal.DailyPDFCalendarView"
       attribute="pdfdata"
       permission="schoolbell.viewCalendar"
@@ -184,7 +184,7 @@
 
   <page
       name="weekly.html"
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.WeeklyCalendarView"
       template="templates/cal_weekly.pt"
       permission="schoolbell.viewCalendar"
@@ -194,7 +194,7 @@
 
   <page
       name="weekly.pdf"
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".pdfcal.WeeklyPDFCalendarView"
       attribute="pdfdata"
       permission="schoolbell.viewCalendar"
@@ -204,7 +204,7 @@
 
   <page
       name="monthly.html"
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.MonthlyCalendarView"
       template="templates/cal_monthly.pt"
       permission="schoolbell.viewCalendar"
@@ -214,7 +214,7 @@
 
   <page
       name="monthly.pdf"
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".pdfcal.MonthlyPDFCalendarView"
       attribute="pdfdata"
       permission="schoolbell.viewCalendar"
@@ -224,7 +224,7 @@
 
   <page
       name="yearly.html"
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.YearlyCalendarView"
       template="templates/cal_yearly.pt"
       permission="schoolbell.viewCalendar"
@@ -234,7 +234,7 @@
 
   <page
       name="atom.xml"
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.AtomCalendarView"
       template="templates/cal_atom.pt"
       permission="schoolbell.viewCalendar"
@@ -243,7 +243,7 @@
       />
 
   <page
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       name="calendar.ics"
       permission="schoolbell.viewCalendar"
       class="schooltool.calendar.browser.CalendarICalendarView"
@@ -253,7 +253,7 @@
       />
 
   <page
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       name="calendar.vfb"
       permission="zope.Public"
       class="schooltool.calendar.browser.CalendarVfbView"
@@ -263,20 +263,20 @@
       />
 
   <menuItem
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       menu="schoolbell_actions" title="New Event"
       action="add.html" permission="schoolbell.addEvent" />
 
   <page
       name="delete.html"
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.EventDeleteView"
       template="templates/recevent_delete.pt"
       permission="schoolbell.modifyEvent"
       />
 
   <menuItem
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       menu="schoolbell_actions" title="Open in iCal"
       action="../calendar.ics" permission="schoolbell.viewCalendar" />
 
@@ -290,7 +290,7 @@
       />
 
   <page
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       name="calendar_list"
       layer=".skin.ISchoolBellLayer"
       class=".cal.CalendarListView"
@@ -298,7 +298,7 @@
       />
 
   <page
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       name="daily_calendar_rows"
       layer=".skin.ISchoolBellLayer"
       class=".cal.DailyCalendarRowsView"
@@ -310,7 +310,7 @@
 
   <page
       name="index.html"
-      for="schoolbell.app.interfaces.ICalendarEvent"
+      for="schooltool.app.interfaces.ICalendarEvent"
       class="schoolbell.app.browser.cal.CalendarEventView"
       template="templates/event.pt"
       permission="zope.View"
@@ -321,7 +321,7 @@
   <addform
       label="Add Event"
       name="add.html"
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       schema=".cal.ICalendarEventAddForm"
       arguments=""
       keyword_arguments="title allday start_date start_time duration
@@ -338,7 +338,7 @@
   </addform>
 
   <editform
-      for="schoolbell.app.interfaces.ISchoolBellCalendarEvent"
+      for="schooltool.app.interfaces.ISchoolToolCalendarEvent"
       name="edit.html"
       label="Edit Event"
       schema=".cal.ICalendarEventEditForm"
@@ -354,7 +354,7 @@
   </editform>
 
   <page
-      for="schoolbell.app.interfaces.ISchoolBellCalendarEvent"
+      for="schooltool.app.interfaces.ISchoolToolCalendarEvent"
       name="booking.html"
       layer=".skin.ISchoolBellLayer"
       class=".cal.CalendarEventBookingView"
@@ -429,7 +429,7 @@
 
   <icon
       name="zmi_icon"
-      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
       file="resources/icon.png"
       />
 
@@ -508,7 +508,7 @@
 <!-- Breadcrumbs -->
 
   <page
-      for="schoolbell.app.interfaces.ISchoolBellCalendarEvent"
+      for="schooltool.app.interfaces.ISchoolToolCalendarEvent"
       name="absolute_url"
       class=".cal.CalendarEventAbsoluteURL"
       permission="zope.Public"

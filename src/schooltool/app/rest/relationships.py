@@ -32,14 +32,14 @@ from zope.publisher.interfaces import NotFound
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import ProxyFactory
 
-from schoolbell.app.app import getSchoolBellApplication
+from schooltool.app.app import getSchoolToolApplication
 from schooltool.relationship.annotatable import getRelationshipLinks
 from schooltool.relationship.uri import IURIObject
-from schoolbell.app.browser.app import ACLViewBase, hasPermission
-from schoolbell.app.rest import View, Template
-from schoolbell.app.rest.errors import RestError
+from schooltool.app.browser.app import ACLViewBase, hasPermission
+from schooltool.app.rest import View, Template
+from schooltool.app.rest.errors import RestError
 from zope.app.traversing.interfaces import IPhysicallyLocatable
-from schoolbell.app.rest.xmlparsing import XMLDocument
+from schooltool.app.rest.xmlparsing import XMLDocument
 from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.interfaces import IRelationshipSchema
 from schooltool.relationship.relationship import relate, unrelate
@@ -171,7 +171,7 @@ class RelationshipsView(View):
             raise RestError("Bad URI: %s" % target_role)
 
         try:
-            sb_app = getSchoolBellApplication()
+            sb_app = getSchoolToolApplication()
             sb_url = zapi.absoluteURL(sb_app, self.request)
             path = path.replace("%s/" % sb_url, "")
             target = traverse(sb_app, path)

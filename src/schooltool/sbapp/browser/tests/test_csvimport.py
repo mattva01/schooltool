@@ -28,7 +28,7 @@ from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from zope.i18n import translate
 
-from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schooltool.app.browser.testing import setUp, tearDown
 
 __metaclass__ = type
 
@@ -38,7 +38,7 @@ def doctest_BaseCSVImporter():
 
     Set up
 
-        >>> from schoolbell.app.browser.csvimport import BaseCSVImporter
+        >>> from schooltool.app.browser.csvimport import BaseCSVImporter
         >>> importer = BaseCSVImporter(None)
 
     Subclasses need to define the createAndAdd method
@@ -99,7 +99,7 @@ def doctest_ImportErrorCollection():
     r"""
     Make the class
 
-        >>> from schoolbell.app.browser.csvimport import ImportErrorCollection
+        >>> from schooltool.app.browser.csvimport import ImportErrorCollection
         >>> errors = ImportErrorCollection()
         >>> errors
         <ImportErrorCollection {'generic': [], 'fields': []}>

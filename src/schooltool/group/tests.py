@@ -27,7 +27,7 @@ import unittest
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
 
-from schoolbell.app.tests.test_app import run_unit_tests
+from schooltool.testing.util import run_unit_tests
 
 def doctest_GroupContainer():
     """Tests for GroupContainer

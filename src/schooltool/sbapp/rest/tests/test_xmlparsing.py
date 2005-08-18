@@ -32,7 +32,7 @@ def test_xpath_context_sharing():
 
     We want to make sure that this sharing does not break XPath queries.
 
-        >>> from schoolbell.app.rest.xmlparsing import XMLDocument
+        >>> from schooltool.app.rest.xmlparsing import XMLDocument
         >>> doc = XMLDocument('''
         ...    <sample>
         ...      <child>
@@ -70,7 +70,7 @@ def test_xpath_context_sharing():
 def test_xpath_namespace_sharing():
     """XMLDocument and XMLNode instances share the same set of namespaces.
 
-        >>> from schoolbell.app.rest.xmlparsing import XMLDocument
+        >>> from schooltool.app.rest.xmlparsing import XMLDocument
         >>> doc = XMLDocument('''
         ...   <sample xmlns="http://example.com/ns/samplens"
         ...           xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -99,7 +99,7 @@ def test_multilevel_query():
     XMLNode.query would pass self instead of self._doc to XMLNodes
     that it created.
 
-        >>> from schoolbell.app.rest.xmlparsing import XMLDocument
+        >>> from schooltool.app.rest.xmlparsing import XMLDocument
         >>> doc = XMLDocument('<a><b><c>d</c></b></a>')
         >>> a = doc.query('a')[0]
         >>> b = a.query('b')[0]
@@ -116,7 +116,7 @@ def test_validate_ill_formed_document():
     validate_against_schema may raise a libxml2.parseError that was not
     caught in XMLDocument.__init__.
 
-        >>> from schoolbell.app.rest.xmlparsing import XMLDocument
+        >>> from schooltool.app.rest.xmlparsing import XMLDocument
         >>> schema = '''
         ...   <grammar xmlns="http://relaxng.org/ns/structure/1.0">
         ...     <start>

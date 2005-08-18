@@ -35,7 +35,7 @@ from schoolbell.app.browser.pdfcal import PDFCalendarViewBase
 from schoolbell.app.browser.pdfcal import setUpMSTTCoreFonts
 from schooltool.person.person import Person
 from schooltool.resource.resource import Resource
-from schoolbell import SchoolBellMessageID as _
+from schooltool import SchoolToolMessageID as _
 
 
 class StubbedBaseView(PDFCalendarViewBase):
@@ -181,7 +181,7 @@ def test_buildPageHeader():
 def test_disabled():
     """Test for PDFCalendarViewBase in disabled state.
 
-        >>> from schoolbell.app.browser import pdfcal
+        >>> from schooltool.app.browser import pdfcal
         >>> real_pdfcal_disabled = pdfcal.disabled
 
     Reset the disabled flag to True for the moment:
@@ -550,7 +550,7 @@ def doctest_MonthlyPDFCalendarView():
 def doctest_setUpMSTTCoreFonts():
     r"""TrueType font setup tests.
 
-        >>> from schoolbell.app.browser import pdfcal
+        >>> from schooltool.app.browser import pdfcal
 
     The actual setup has been done at import-time by the test_suite function.
     We only test the results here.
@@ -659,8 +659,8 @@ def test_getCalendars(self):
         ...     def getCalendars(self):
         ...         return [('some calendar', 'color1', 'color2'),
         ...                 ('another calendar', 'color1', 'color2')]
-        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
-        >>> ztapi.browserView(ISchoolBellCalendar, 'calendar_list',
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> ztapi.browserView(ISchoolToolCalendar, 'calendar_list',
         ...                   CalendarListViewStub)
 
         >>> from schooltool.app.cal import Calendar
@@ -694,7 +694,7 @@ def tryToSetUpReportLab():
     except ImportError:
         return False # We don't have reportlab, so we can't get anywhere.
 
-    from schoolbell.app.browser import pdfcal
+    from schooltool.app.browser import pdfcal
     if not pdfcal.disabled:
         return True # Assume that reportlab has been configured already.
 

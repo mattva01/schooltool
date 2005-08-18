@@ -57,7 +57,7 @@
     </div>
     <div class="controls">
       <a class="button-ok" href="" title="New Section"
-        tal:attributes="href string:${context/schoolbell:app/@@absolute_url}/sections/+/addSchoolToolSection.html?field.course_id=${context/__name__}">
+        tal:attributes="href string:${context/schooltool:app/@@absolute_url}/sections/+/addSchoolToolSection.html?field.course_id=${context/__name__}">
         New Section
       </a>
     </div>

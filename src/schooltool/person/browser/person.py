@@ -33,9 +33,9 @@ from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.publisher.browser import BrowserView
 
-from schoolbell import SchoolBellMessageID as _
-from schoolbell.app.app import getSchoolBellApplication
-from schoolbell.app.browser.app import ContainerView, ContainerDeleteView
+from schooltool import SchoolToolMessageID as _
+from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.browser.app import ContainerView, ContainerDeleteView
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonPreferences, IPersonDetails
 from schooltool.person.interfaces import IPersonContainer, IPersonContained
@@ -217,7 +217,7 @@ class PersonAddView(AddView):
 
     def getAllGroups(self):
         """Return a list of all groups in the system."""
-        return getSchoolBellApplication()['groups'].values()
+        return getSchoolToolApplication()['groups'].values()
 
     def create(self, title, username, password, photo):
         person = self._factory(username=username, title=title)

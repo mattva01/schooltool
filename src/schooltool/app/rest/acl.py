@@ -25,10 +25,10 @@ $Id$
 from zope.interface import Interface, Attribute
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.interface import Interface, implements
-from schoolbell.app.rest import View, Template
-from schoolbell.app.rest.errors import RestError
-from schoolbell.app.browser.app import ACLViewBase, hasPermission
-from schoolbell.app.rest.xmlparsing import XMLDocument
+from schooltool.app.rest import View, Template
+from schooltool.app.rest.errors import RestError
+from schooltool.app.browser.app import ACLViewBase, hasPermission
+from schooltool.app.rest.xmlparsing import XMLDocument
 from zope.security.proxy import removeSecurityProxy, ProxyFactory
 
 

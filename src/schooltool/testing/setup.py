@@ -47,11 +47,11 @@ def setupSessions():
 
 
 # --------------------- Create a SchoolBell application --------------------
-from schoolbell.app.app import SchoolBellApplication
-def createSchoolBellApplication():
-    """Create a ``SchoolBellApplication`` instance with all its high-level
+from schooltool.app.app import SchoolToolApplication
+def createSchoolToolApplication():
+    """Create a ``SchoolToolApplication`` instance with all its high-level
     containers."""
-    app = SchoolBellApplication()
+    app = SchoolToolApplication()
     registry.setupApplicationContainers(app)
     return app
 
@@ -63,7 +63,7 @@ from zope.app.component.site import LocalSiteManager
 from zope.app.traversing.interfaces import IContainmentRoot
 def setupSchoolBellSite():
     """This should only be called after ``placefulSetUp()``."""
-    app = createSchoolBellApplication()
+    app = createSchoolToolApplication()
     directlyProvides(app, IContainmentRoot)
     app.setSiteManager(LocalSiteManager(app))
     setUpLocalAuth(app)
@@ -71,10 +71,10 @@ def setupSchoolBellSite():
     return app
 
 # --------------- Setup Calendar Adapter and set IHaveCalendar -------------
-from schoolbell.app.interfaces import IHaveCalendar
-from schoolbell.app.interfaces import ISchoolBellCalendar
+from schooltool.app.interfaces import IHaveCalendar
+from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.cal import getCalendar
 def setupCalendaring():
-    ztapi.provideAdapter(IHaveCalendar, ISchoolBellCalendar, getCalendar)
+    ztapi.provideAdapter(IHaveCalendar, ISchoolToolCalendar, getCalendar)
     registry.setupCalendarComponents()
 

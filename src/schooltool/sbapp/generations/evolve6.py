@@ -28,7 +28,7 @@ $Id$
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
 
-from schoolbell.app.interfaces import IHavePreferences, IPersonPreferences
+from schooltool.app.interfaces import IHavePreferences, IPersonPreferences
 
 def evolve(context):
     root = context.connection.root().get(ZopePublication.root_name, None)

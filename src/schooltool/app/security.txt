@@ -58,8 +58,8 @@ SchoolBell is a possible site:
     >>> from zope.interface.verify import verifyObject
     >>> from zope.app.component.interfaces import IPossibleSite, ISite
 
-    >>> from schoolbell.app.app import SchoolBellApplication
-    >>> app = SchoolBellApplication()
+    >>> from schooltool.app.app import SchoolToolApplication
+    >>> app = SchoolToolApplication()
     >>> verifyObject(IPossibleSite, app)
     True
     >>> verifyObject(ISite, app)
@@ -73,11 +73,11 @@ The SchoolBellAuthenticationUtility is an IAuthentication utility that
 lives in that site:
 
     >>> from schooltool.app.security import SchoolBellAuthenticationUtility
-    >>> from schoolbell.app.interfaces import ISchoolBellAuthentication
+    >>> from schooltool.app.interfaces import ISchoolToolAuthentication
     >>> auth = SchoolBellAuthenticationUtility()
     >>> verifyObject(IAuthentication, auth)
     True
-    >>> verifyObject(ISchoolBellAuthentication, auth)
+    >>> verifyObject(ISchoolToolAuthentication, auth)
     True
 
 Let's provide the location of auth:

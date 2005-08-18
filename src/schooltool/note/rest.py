@@ -24,8 +24,8 @@ $Id$
 from zope.interface import Interface, Attribute, implements
 from zope.security.checker import ProxyFactory
 
-from schoolbell.app.rest import View, Template
-from schoolbell.app.rest.xmlparsing import XMLDocument
+from schooltool.app.rest import View, Template
+from schooltool.app.rest.xmlparsing import XMLDocument
 
 from schoolbell.app.note.interfaces import INotes
 from schoolbell.app.note.note import Note

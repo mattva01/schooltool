@@ -21,7 +21,7 @@
   </content>
 
   <subscriber
-      for="schoolbell.app.interfaces.IApplicationInitializationEvent"
+      for="schooltool.app.interfaces.IApplicationInitializationEvent"
       handler=".course.addCourseContainerToApplication"
       />
 
@@ -44,7 +44,7 @@
   <content class=".section.Section">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
     <implements interface="schoolbell.app.note.interfaces.IHaveNotes" />
-    <implements interface="schoolbell.app.interfaces.IHaveCalendar" />
+    <implements interface="schooltool.app.interfaces.IHaveCalendar" />
 
     <require permission="schoolbell.view"
              attributes="title description instructors members
@@ -54,7 +54,7 @@
   </content>
 
   <subscriber
-      for="schoolbell.app.interfaces.IApplicationInitializationEvent"
+      for="schooltool.app.interfaces.IApplicationInitializationEvent"
       handler=".section.addSectionContainerToApplication"
       />
 

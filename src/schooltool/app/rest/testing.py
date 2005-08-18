@@ -21,6 +21,7 @@ Common utilities (stubs, mixins) for schooltool unit tests.
 
 $Id$
 """
+__metaclass__ = type
 
 import os
 import sets
@@ -31,13 +32,29 @@ from pprint import pformat
 import difflib
 import cgi
 import libxml2
+from StringIO import StringIO
 
+import zope
 import zope.event
-from zope.interface import implements, directlyProvides
-from zope.app.traversing.interfaces import ITraversable, TraversalError
+from zope.interface import implements, directlyProvides, Interface
+from zope.interface.verify import verifyObject
+from zope.publisher.browser import TestRequest
 from zope.testing.cleanup import CleanUp
 
-__metaclass__ = type
+from zope.app.component.testing import PlacefulSetup
+from zope.app.container.interfaces import INameChooser
+from zope.app.testing import ztapi, setup
+from zope.app.traversing.interfaces import ITraversable, TraversalError
+
+from schooltool.testing import setup as sbsetup
+from schooltool.app.app import SimpleNameChooser
+from schooltool.app.rest.xmlparsing import XMLDocument, XMLParseError
+from schooltool.group.group import Group
+from schooltool.group.interfaces import IGroupContainer
+from schooltool.group.rest.group import GroupFileFactory, GroupContainerView
+from schooltool.person.person import Person
+from schooltool.resource.interfaces import IResourceContainer
+from schooltool.resource.rest.resource import ResourceFileFactory
 
 
 def dedent(text):
@@ -364,3 +381,94 @@ class QuietLibxml2Mixin:
         def on_error_callback(ctx, msg):
             sys.stderr.write(msg)
         libxml2.registerErrorHandler(on_error_callback, None)
+
+
+class ContainerViewTestMixin(XMLCompareMixin, QuietLibxml2Mixin):
+    """Common code for Container View tests"""
+
+    def setUp(self):
+        setup.placefulSetUp()
+        self.setUpLibxml2()
+
+        from zope.app.filerepresentation.interfaces import IFileFactory
+        ztapi.provideView(Interface, Interface, ITraversable, 'view',
+                          zope.app.traversing.namespace.view)
+        ztapi.provideAdapter(IGroupContainer, INameChooser,
+                             SimpleNameChooser)
+        ztapi.provideAdapter(IGroupContainer, IFileFactory,
+                             GroupFileFactory)
+        ztapi.provideAdapter(IResourceContainer, IFileFactory,
+                             ResourceFileFactory)
+
+
+        self.app = sbsetup.setupSchoolBellSite()
+        self.groupContainer = self.app['groups']
+        self.group = self.app['groups']['root'] = Group("Root group")
+
+
+    def tearDown(self):
+        self.tearDownLibxml2()
+        setup.placefulTearDown()
+
+    def test_post(self, suffix="", view=None,
+                  body="""<object xmlns="http://schooltool.org/ns/model/0.1"
+                                  title="New Group"/>"""):
+        view = GroupContainerView(self.groupContainer,
+                                  TestRequest(StringIO(body)))
+        result = view.POST()
+        response = view.request.response
+
+        self.assertEquals(response.getStatus(), 201)
+        self.assertEquals(response._reason, "Created")
+
+        location = response.getHeader('location')
+        base = "http://127.0.0.1/groups/"
+        self.assert_(location.startswith(base),
+                     "%r.startswith(%r) failed" % (location, base))
+        name = location[len(base):]
+        self.assert_(name in self.app['groups'].keys())
+        self.assertEquals(response.getHeader('content-type'),
+                          "text/plain; charset=UTF-8")
+        self.assert_(location in result)
+        return name
+
+    def test_post_with_a_description(self):
+        name = self.test_post(body='''
+            <object title="New Group"
+                    description="A new group"
+                    xmlns='http://schooltool.org/ns/model/0.1'/>''')
+        self.assertEquals(self.app['groups'][name].title, 'New Group')
+        self.assertEquals(self.app['groups'][name].description, 'A new group')
+        self.assertEquals(name, 'new-group')
+
+    def test_post_error(self):
+        view = GroupContainerView(
+            self.groupContainer,
+            TestRequest(StringIO('<element title="New Group">')))
+        self.assertRaises(XMLParseError, view.POST)
+
+
+class FileFactoriesSetUp(PlacefulSetup):
+
+    def setUp(self):
+        from zope.app.filerepresentation.interfaces import IFileFactory
+        PlacefulSetup.setUp(self)
+        ztapi.provideAdapter(IGroupContainer, IFileFactory,
+                             GroupFileFactory)
+        ztapi.provideAdapter(IResourceContainer, IFileFactory,
+                             ResourceFileFactory)
+
+
+class ApplicationObjectViewTestMixin(ContainerViewTestMixin):
+
+    def setUp(self):
+        ContainerViewTestMixin.setUp(self)
+        self.personContainer = self.app['persons']
+        self.groupContainer = self.app['groups']
+
+    def get(self):
+        """Perform a GET of the view being tested."""
+        view = self.makeTestView(self.testObject, TestRequest())
+        result = view.GET()
+
+        return result, view.request.response

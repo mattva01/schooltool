@@ -115,7 +115,7 @@
     />
 
   <!-- Timetables for content components -->
-  <class class="schoolbell.app.app.SchoolBellApplication">
+  <class class="schoolbell.app.app.SchoolToolApplication">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
   </class>
 

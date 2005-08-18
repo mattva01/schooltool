@@ -26,14 +26,14 @@ $Id$
 """
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
-from schoolbell.app.interfaces import ISchoolBellApplication, IHavePreferences
+from schooltool.app.interfaces import ISchoolToolApplication, IHavePreferences
 from schoolbell.app.app import getPersonPreferences
 import datetime
 import random
 
 def evolve(context):
     root = context.connection.root().get(ZopePublication.root_name, None)
-    for app in findObjectsProviding(root, ISchoolBellApplication):
+    for app in findObjectsProviding(root, ISchoolToolApplication):
         for person in findObjectsProviding(root, IHavePreferences):
             preferences = getPersonPreferences(person)
             if preferences.weekstart == "Sunday":

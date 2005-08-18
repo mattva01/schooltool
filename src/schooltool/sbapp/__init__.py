@@ -31,10 +31,10 @@ def registerTestSetup():
     from schooltool.testing import registry
 
     def haveCalendar():
-        from schoolbell.app.app import SchoolBellApplication
-        from schoolbell.app.interfaces import IHaveCalendar
-        if not IHaveCalendar.implementedBy(SchoolBellApplication):
-            classImplements(SchoolBellApplication, IHaveCalendar)
+        from schooltool.app.app import SchoolToolApplication
+        from schooltool.app.interfaces import IHaveCalendar
+        if not IHaveCalendar.implementedBy(SchoolToolApplication):
+            classImplements(SchoolToolApplication, IHaveCalendar)
     registry.register('CalendarComponents', haveCalendar)
 
 registerTestSetup()

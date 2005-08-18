@@ -29,17 +29,17 @@ from zope.app.testing import setup, ztapi
 from zope.publisher.browser import TestRequest
 from zope.i18n import translate
 
-from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup as sbsetup
 
-def doctest_SchoolBellApplicationView():
-    r"""Test for SchoolBellApplicationView
+def doctest_SchoolToolApplicationView():
+    r"""Test for SchoolToolApplicationView
 
     Some setup
 
         >>> sbsetup.setupCalendaring()
 
-        >>> from schooltool.app import getApplicationPreferences
+        >>> from schooltool.app.app import getApplicationPreferences
         >>> from schooltool.interfaces import IApplicationPreferences
         >>> from schooltool.interfaces import ISchoolToolApplication
 

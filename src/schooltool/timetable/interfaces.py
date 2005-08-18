@@ -33,7 +33,7 @@ from zope.app.container.constraints import contains, containers
 from zope.app.container.interfaces import IContainer, IContained
 from zope.app.location.interfaces import ILocation
 
-from schoolbell.app import interfaces as sb
+from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.calendar.interfaces import Unchanged
 
 from schooltool import SchoolToolMessageID as _
@@ -672,7 +672,7 @@ class ITimetableActivityRemovedEvent(ITimetableActivityEvent):
     """Event that gets sent when an activity is removed from a timetable."""
 
 
-class ITimetableCalendarEvent(sb.ISchoolBellCalendarEvent):
+class ITimetableCalendarEvent(ISchoolToolCalendarEvent):
     """A calendar event that has been created from a timetable."""
 
     period_id = TextLine(

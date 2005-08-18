@@ -39,7 +39,7 @@ def doctest_schoolToolTraverseSubscriber():
         >>> from zope.app.publication.zopepublication import BeforeTraverseEvent
         >>> from schooltool.browser.skin import schoolToolTraverseSubscriber
         >>> from schooltool.browser.skin import ISchoolToolSkin
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> from schoolbell.app.browser.skin import ISchoolBellSkin
 
         >>> ob = SchoolToolApplication()

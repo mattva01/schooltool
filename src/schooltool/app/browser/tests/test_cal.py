@@ -32,8 +32,8 @@ from zope.app.testing import setup, ztapi
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 
-from schoolbell.app.browser.tests.setup import setUp, tearDown
-from schoolbell.app.interfaces import ISchoolBellCalendar
+from schooltool.app.browser.testing import setUp, tearDown
+from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.testing import setup as sbsetup
 
 import schooltool.app
@@ -107,7 +107,7 @@ class TestDailyCalendarRowsView(unittest.TestCase):
         request = TestRequest()
         principal = Principal('person', 'Some person', person=self.person)
         request.setPrincipal(principal)
-        view = DailyCalendarRowsView(ISchoolBellCalendar(self.person), request)
+        view = DailyCalendarRowsView(ISchoolToolCalendar(self.person), request)
         result = list(view.calendarRows(date(2004, 11, 5), 8, 19))
 
         expected = [("1", dt('08:00'), timedelta(hours=1)),
@@ -135,7 +135,7 @@ class TestDailyCalendarRowsView(unittest.TestCase):
         request = TestRequest()
         principal = Principal('person', 'Some person', person=self.person)
         request.setPrincipal(principal)
-        view = DailyCalendarRowsView(ISchoolBellCalendar(self.person), request)
+        view = DailyCalendarRowsView(ISchoolToolCalendar(self.person), request)
 
         result = list(view.calendarRows(date(2004, 11, 5), 8, 19))
 
@@ -148,7 +148,7 @@ class TestDailyCalendarRowsView(unittest.TestCase):
 
         request = TestRequest()
         # do not set the principal
-        view = DailyCalendarRowsView(ISchoolBellCalendar(self.person), request)
+        view = DailyCalendarRowsView(ISchoolToolCalendar(self.person), request)
         result = list(view.calendarRows(date(2004, 11, 5), 8, 19))
 
         # the default is not to show periods
@@ -165,7 +165,7 @@ def doctest_CalendarSTOverlayView():
         >>> sbsetup.setupCalendaring()
 
         >>> from zope.component import provideAdapter
-        >>> from schooltool.app import ShowTimetables
+        >>> from schooltool.app.app import ShowTimetables
         >>> provideAdapter(ShowTimetables)
 
         >>> from zope.interface import classImplements
@@ -207,18 +207,18 @@ def doctest_CalendarSTOverlayView():
 
         >>> from schooltool.interfaces import IShowTimetables
         >>> person.overlaid_calendars.add(
-        ...     ISchoolBellCalendar(group1), show=True)
+        ...     ISchoolToolCalendar(group1), show=True)
 
         >>> IShowTimetables(tuple(
         ...     person.overlaid_calendars)[-1]).showTimetables = False
         >>> person.overlaid_calendars.add(
-        ...     ISchoolBellCalendar(group2), show=False)
+        ...     ISchoolToolCalendar(group2), show=False)
         >>> person.overlaid_calendars.add(
-        ...     ISchoolBellCalendar(section), show=False)
+        ...     ISchoolToolCalendar(section), show=False)
 
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('id', 'title', person))
-        >>> view = View(ISchoolBellCalendar(person), request)
+        >>> view = View(ISchoolToolCalendar(person), request)
 
         >>> print view()
         <div id="portlet-calendar-overlay" class="portlet">
@@ -293,7 +293,7 @@ def doctest_CalendarSTOverlayView():
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('id', 'title', person))
         >>> request.form['OVERLAY_MORE'] = u"More..."
-        >>> view = View(ISchoolBellCalendar(person), request)
+        >>> view = View(ISchoolToolCalendar(person), request)
         >>> content = view()
         >>> request.response.getStatus()
         302
@@ -344,7 +344,7 @@ def doctest_CalendarListView(self):
         ...         self.showTimetables = showTimetables
 
         >>> from schooltool.person.interfaces import IPersonPreferences
-        >>> from schoolbell.app.interfaces import IHaveCalendar
+        >>> from schooltool.app.interfaces import IHaveCalendar
         >>> from schooltool.app.cal import CALENDAR_KEY
         >>> from zope.interface import implements
         >>> from zope.app.annotation.interfaces import IAttributeAnnotatable

@@ -30,15 +30,15 @@ def doctest_schoolBellTraverseSubscriber():
     """Tests for schoolBellTraverseSubscriber.
 
     We subscribe to Zope's BeforeTraverseEvent and apply the SchoolBell skin
-    whenever an ISchoolBellApplication is traversed during URL traversal.
+    whenever an ISchoolToolApplication is traversed during URL traversal.
 
         >>> from zope.publisher.browser import TestRequest
         >>> from zope.app.publication.zopepublication import BeforeTraverseEvent
         >>> from schoolbell.app.browser.skin import schoolBellTraverseSubscriber
         >>> from schoolbell.app.browser.skin import ISchoolBellSkin
-        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> from schooltool.app.app import SchoolToolApplication
 
-        >>> ob = SchoolBellApplication()
+        >>> ob = SchoolToolApplication()
         >>> request = TestRequest()
         >>> ev = BeforeTraverseEvent(ob, request)
         >>> schoolBellTraverseSubscriber(ev)

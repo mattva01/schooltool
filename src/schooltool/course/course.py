@@ -28,7 +28,7 @@ from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container import btree, contained
 
 from schooltool.relationship import RelationshipProperty
-from schooltool import relationships
+from schooltool.app import relationships
 from schooltool.course import interfaces
 
 class CourseContainer(btree.BTreeContainer):

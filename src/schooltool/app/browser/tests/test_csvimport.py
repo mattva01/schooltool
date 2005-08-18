@@ -32,7 +32,7 @@ from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.testing import ztapi
 
-from schoolbell.app.browser.tests.setup import setUp as testSetUp, tearDown
+from schooltool.app.browser.testing import setUp as testSetUp, tearDown
 from schooltool.app.membership import URIMember
 from schooltool.resource.resource import Resource
 from schooltool.person.person import Person
@@ -164,7 +164,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
 
         # Set up a name chooser to pick names for new sections.
         from schooltool.course.interfaces import ISectionContainer
-        from schoolbell.app.app import SimpleNameChooser
+        from schooltool.app.app import SimpleNameChooser
         from zope.app.container.interfaces import INameChooser
         ztapi.provideAdapter(ISectionContainer, INameChooser,
                              SimpleNameChooser)

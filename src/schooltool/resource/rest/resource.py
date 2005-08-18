@@ -23,10 +23,10 @@ $Id: app.py 4704 2005-08-15 13:22:06Z srichter $
 """
 from zope.component import adapts
 
-from schoolbell.app.rest import View, Template
-from schoolbell.app.rest.app import ApplicationObjectFile
-from schoolbell.app.rest.app import ApplicationObjectFileFactory
-from schoolbell.app.rest.app import GenericContainerView
+from schooltool.app.rest import View, Template
+from schooltool.app.rest.app import ApplicationObjectFile
+from schooltool.app.rest.app import ApplicationObjectFileFactory
+from schooltool.app.rest.app import GenericContainerView
 
 from schooltool.resource.resource import Resource
 from schooltool.resource.interfaces import IResourceContainer, IResource

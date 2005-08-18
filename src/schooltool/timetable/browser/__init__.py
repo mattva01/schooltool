@@ -49,9 +49,9 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from schooltool.calendar.utils import parse_date, parse_time
 from schooltool.calendar.utils import next_month, week_start
-from schoolbell.app.browser.cal import month_names
+from schooltool.app.browser.cal import month_names
 from schooltool.app.cal import CalendarEvent
-from schoolbell.app.interfaces import ISchoolBellCalendar
+from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.interfaces import IPerson
 from schooltool.traverser.interfaces import ITraverserPlugin
 
@@ -68,7 +68,7 @@ from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable import getNextTermForDate, getTermForDate
 from schooltool import getSchoolToolApplication
-from schoolbell.app.browser.app import ContainerView
+from schooltool.app.browser.app import ContainerView
 
 
 class TermContainerView(ContainerView):
@@ -1444,7 +1444,7 @@ class EmergencyDayView(BrowserView):
                 exceptionDayIds[self.replacement] = removeSecurityProxy(day_id)
 
             # Post calendar events to schoolwide calendar
-            calendar = ISchoolBellCalendar(getSchoolToolApplication())
+            calendar = ISchoolToolCalendar(getSchoolToolApplication())
             dtstart = datetime.datetime.combine(self.date, datetime.time())
             msg = _('School cancelled due to emergency.'
                     ' Replacement day $replacement.')

@@ -28,7 +28,7 @@ from zope.publisher.browser import TestRequest
 from zope.publisher.http import HTTPRequest
 from zope.app.testing import setup, ztapi
 from schoolbell.app.rest.tests.utils import XMLCompareMixin, QuietLibxml2Mixin
-from schoolbell.app.rest.xmlparsing import XMLDocument, XMLParseError
+from schooltool.app.rest.xmlparsing import XMLDocument, XMLParseError
 
 from schooltool.testing import setup as sbsetup
 
@@ -57,7 +57,7 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
         from schooltool.relationship.tests import setUpRelationships
         setUpRelationships()
 
-        # SchoolBellApplication
+        # SchoolToolApplication
         self.app = sbsetup.setupSchoolBellSite()
 
         from schooltool.person.person import Person
@@ -260,7 +260,7 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
 
     def test_parseData_errors(self):
         from schoolbell.app.rest.acl import ACLView, ACLAdapter
-        from schoolbell.app.rest.errors import RestError
+        from schooltool.app.rest.errors import RestError
         view = ACLView(ACLAdapter(self.person), TestRequest())
 
         body = """<acl xmlns="http://schooltool.org/ns/model/0.1">

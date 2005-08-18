@@ -21,10 +21,10 @@ csv importing.
 
 $Id: csvimport.py 4108 2005-06-15 14:27:59Z bskahan $
 """
-from schoolbell.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
+from schooltool.app.browser.csvimport import BaseCSVImporter, BaseCSVImportView
 from schooltool.resource.resource import Resource
 
-from schoolbell import SchoolBellMessageID as _
+from schooltool import SchoolToolMessageID as _
 
 
 class ResourceCSVImporter(BaseCSVImporter):

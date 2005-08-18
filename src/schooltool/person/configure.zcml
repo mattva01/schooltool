@@ -18,7 +18,7 @@
   </content>
 
   <content class=".person.Person">
-    <implements interface="schoolbell.app.interfaces.IHaveCalendar" />
+    <implements interface="schooltool.app.interfaces.IHaveCalendar" />
     <implements interface="schoolbell.app.note.interfaces.IHaveNotes" />
     <implements interface=".interfaces.IHavePreferences" />
     <require
@@ -73,7 +73,7 @@
 
   <!-- Application hook -->
   <subscriber
-      for="schoolbell.app.interfaces.IApplicationInitializationEvent"
+      for="schooltool.app.interfaces.IApplicationInitializationEvent"
       handler=".person.addPersonContainerToApplication"
       />
 

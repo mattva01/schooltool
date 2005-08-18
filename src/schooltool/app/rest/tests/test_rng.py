@@ -36,7 +36,7 @@ class TestRelaxNGValidation(QuietLibxml2Mixin, unittest.TestCase):
         self.tearDownLibxml2()
 
     def test_validate_against_schema(self):
-        from schoolbell.app.rest.rng import validate_against_schema
+        from schooltool.app.rest.rng import validate_against_schema
         schema = '''<?xml version="1.0" encoding="UTF-8"?>
             <grammar xmlns="http://relaxng.org/ns/structure/1.0"
                 ns="http://schooltool.org/ns/test"

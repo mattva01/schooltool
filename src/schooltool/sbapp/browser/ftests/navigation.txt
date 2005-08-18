@@ -17,7 +17,7 @@ We will create a SchoolBell object and a resource
     ... Content-Length: 81
     ... Content-Type: application/x-www-form-urlencoded
     ...
-    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&new_value=frogpond
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolToolApplication&new_value=frogpond
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -58,7 +58,7 @@ a portlet with the navigation links depending on the authorized user.
     </div>
 
 The main technical challenge in this view is finding the nearest
-ISchoolBellApplication instance, and providing the links relative to
+ISchoolToolApplication instance, and providing the links relative to
 it.
 
     >>> print http(r"""

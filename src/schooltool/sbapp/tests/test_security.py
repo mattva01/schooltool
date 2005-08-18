@@ -37,9 +37,9 @@ from zope.app.container.contained import ObjectAddedEvent
 class TestAuthSetUpSubscriber(unittest.TestCase):
 
     def setUp(self):
-        from schoolbell.app.app import SchoolBellApplication
+        from schooltool.app.app import SchoolToolApplication
         self.root = setup.placefulSetUp(True)
-        self.app = SchoolBellApplication()
+        self.app = SchoolToolApplication()
         self.root['frogpond'] = self.app
 
         # Authenticated group
@@ -115,11 +115,11 @@ def doctest_applicationCalendarPermissionsSubscriber():
     r"""
     Set up:
 
-        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.person.person import Person, PersonContainer
         >>> root = setup.placefulSetUp(True)
         >>> setUpLocalGrants()
-        >>> app = SchoolBellApplication()
+        >>> app = SchoolToolApplication()
         >>> app['persons'] = PersonContainer()
         >>> root['sb'] = app
 
@@ -153,8 +153,8 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> from zope.app.securitypolicy.interfaces import \
         ...         IPrincipalPermissionManager
         >>> unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
-        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
-        >>> map = IPrincipalPermissionManager(ISchoolBellCalendar(app))
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> map = IPrincipalPermissionManager(ISchoolToolCalendar(app))
         >>> x = map.getPermissionsForPrincipal(unauthenticated.id)
         >>> x.sort()
         >>> print x
@@ -165,7 +165,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> person = Person('james')
         >>> root['sb']['persons']['james'] = person
         >>> applicationCalendarPermissionsSubscriber(ObjectAddedEvent(person))
-        >>> map = IPrincipalPermissionManager(ISchoolBellCalendar(person))
+        >>> map = IPrincipalPermissionManager(ISchoolToolCalendar(person))
         >>> map.getPermissionsForPrincipal(unauthenticated.id)
         []
 

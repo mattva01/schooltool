@@ -1216,7 +1216,7 @@ class TestTimetablesMixin(NiceDiffsMixin, EqualsSortedMixin,
     def test_makeTimetableCalendar(self):
         from schooltool.timetable import TimetableActivity, Timetable
         from schooltool.app.cal import Calendar, CalendarEvent
-        from schooltool.app import SchoolToolApplication
+        from schooltool.app.app import SchoolToolApplication
         from zope.app.component.site import LocalSiteManager
         from zope.app.component.hooks import setSite
         app = SchoolToolApplication()
@@ -1346,7 +1346,7 @@ class TestGetPeriodsForDay(PlacelessSetup, unittest.TestCase):
         from schooltool.timetable import TimetableSchema
         from schooltool.timetable import Term
         from schooltool.timetable import TimetableSchemaContainer
-        from schooltool.app import SchoolToolApplication
+        from schooltool.app.app import SchoolToolApplication
         from zope.app.component.hooks import setSite
         from zope.app.component.site import LocalSiteManager
         app = SchoolToolApplication()

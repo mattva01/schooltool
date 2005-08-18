@@ -26,7 +26,7 @@ import zope.schema
 import zope.app.container.constraints
 from zope.app import container
 
-from schoolbell import SchoolBellMessageID as _
+from schooltool import SchoolToolMessageID as _
 
 class IGroupMember(zope.interface.Interface):
     """An object that knows the groups it is a member of."""

@@ -25,9 +25,9 @@ import unittest
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 
-from schoolbell.app.rest.tests.test_app import ApplicationObjectViewTestMixin
-from schoolbell.app.rest.tests.test_app import ContainerViewTestMixin
-from schoolbell.app.rest.tests.test_app import FileFactoriesSetUp
+from schooltool.app.rest.testing import ApplicationObjectViewTestMixin
+from schooltool.app.rest.testing import ContainerViewTestMixin
+from schooltool.app.rest.testing import FileFactoriesSetUp
 
 from schooltool.group.group import Group, GroupContainer
 from schooltool.group.interfaces import IGroupContainer

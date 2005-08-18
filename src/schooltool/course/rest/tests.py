@@ -105,7 +105,7 @@ def doctest_CourseContainerView():
 
     Lets create a container and a course:
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> setup.placefulSetUp()
         >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
         ...                   namespace.view)
@@ -163,7 +163,7 @@ def doctest_CourseContainerView():
 def doctest_CourseView():
     r"""Test for RESTive view of courses.
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> setup.placefulSetUp()
         >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
         ...                   namespace.view)
@@ -304,7 +304,7 @@ def doctest_SectionContainerView():
 
     Lets create a container and a section:
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> setup.placefulSetUp()
         >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
         ...                   namespace.view)
@@ -364,7 +364,7 @@ def doctest_SectionContainerView():
 def doctest_SectionView():
     r"""Test for RESTive view of sections.
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> setup.placefulSetUp()
         >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
         ...                   namespace.view)

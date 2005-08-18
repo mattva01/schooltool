@@ -21,12 +21,25 @@ Restive XML views for the SchoolTool application.
 
 $Id: __init__.py 3405 2005-04-12 16:08:43Z bskahan $
 """
-
+from zope.interface import implements, Interface
 from zope.interface import directlyProvidedBy, directlyProvides
-from zope.publisher.interfaces.http import IHTTPRequest
+from zope.publisher.http import HTTPRequest
+from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.publisher.interfaces.http import IHTTPRequest, IHTTPPublisher
+from zope.server.http.commonaccesslogger import CommonAccessLogger
+from zope.server.http.publisherhttpserver import PublisherHTTPServer
 
-from schooltool.interfaces import ISchoolToolApplication
+from zope.app import zapi
+from zope.app.container.interfaces import ISimpleReadContainer
+from zope.app.http.traversal import ContainerTraverser
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile \
+                                                as Template
+from zope.app.publication.interfaces import IPublicationRequestFactory
+from zope.app.publication.http import HTTPPublication
+from zope.app.server.servertype import ServerType
+
+from schooltool.app.interfaces import ISchoolToolApplication
 
 
 class ISchoolToolRequest(IHTTPRequest):
@@ -43,3 +56,74 @@ def restSchoolToolSubscriber(event):
         and not IBrowserRequest.providedBy(event.request)):
         interfaces = directlyProvidedBy(event.request)
         directlyProvides(event.request, interfaces + ISchoolToolRequest)
+
+
+class RestPublicationRequestFactory(object):
+    """Request factory for the RESTive server.
+
+    This request factory always creates HTTPRequests, regardless of
+    the method or content type of the incoming request.
+    """
+
+    implements(IPublicationRequestFactory)
+
+    def __init__(self, db):
+        """See `zope.app.publication.interfaces.IPublicationRequestFactory`"""
+        self.db = db
+
+    def __call__(self, input_stream, output_steam, env):
+        """See `zope.app.publication.interfaces.IPublicationRequestFactory`"""
+        request = HTTPRequest(input_stream, output_steam, env)
+        request.setPublication(HTTPPublication(self.db))
+
+        return request
+
+
+restServerType = ServerType(PublisherHTTPServer,
+                            RestPublicationRequestFactory,
+                            CommonAccessLogger,
+                            7001, True)
+
+
+class View(object):
+    """A base class for RESTive views."""
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def GET(self):
+        return self.template(self.request, view=self, context=self.context)
+
+    def HEAD(self):
+        body = self.GET()
+        request.setHeader('Content-Length', len(body))
+        return ""
+
+
+class IRestTraverser(IHTTPPublisher):
+    """A named traverser for ReSTive views."""
+
+
+class RestPublishTraverse(object):
+    """A 'multiplexer' traverser for ReSTive views.
+
+    This traverser uses other traversers providing ``IRestTraverser`` to do
+    its work.
+    """
+
+    implements(IHTTPPublisher)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def publishTraverse(self, request, name):
+        # Find a traverser for the specific name; also known as name traversers
+        traverser = zapi.queryMultiAdapter((self.context, request),
+                                           IRestTraverser, name=name)
+
+        if traverser is not None:
+            return traverser.publishTraverse(request, name)
+
+        raise NotFound(self.context, name, request)

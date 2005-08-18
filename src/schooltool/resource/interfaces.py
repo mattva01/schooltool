@@ -27,7 +27,7 @@ import zope.schema
 import zope.app.container.constraints
 from zope.app import container
 
-from schoolbell import SchoolBellMessageID as _
+from schooltool import SchoolToolMessageID as _
 
 
 class IResource(zope.interface.Interface):

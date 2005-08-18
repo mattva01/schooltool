@@ -23,13 +23,13 @@ $Id: app.py 4691 2005-08-12 18:59:44Z srichter $
 """
 from zope.component import adapts
 
-from schoolbell.app.rest import View, Template
-from schoolbell.app.rest.app import ApplicationObjectFile
-from schoolbell.app.rest.app import ApplicationObjectFileFactory
-from schoolbell.app.rest.app import GenericContainerView
-from schoolbell.app.rest.errors import RestError
+from schooltool.app.rest import View, Template
+from schooltool.app.rest.app import ApplicationObjectFile
+from schooltool.app.rest.app import ApplicationObjectFileFactory
+from schooltool.app.rest.app import GenericContainerView
+from schooltool.app.rest.errors import RestError
 
-from schooltool.app import getSchoolToolApplication
+from schooltool.app.app import getSchoolToolApplication
 from schooltool.course.section import Section
 from schooltool.course.interfaces import ISectionContainer, ISection
 

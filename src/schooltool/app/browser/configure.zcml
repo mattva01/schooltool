@@ -55,7 +55,7 @@
       />
 
   <page
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       name="calendar_list"
       layer=".skin.ISchoolToolLayer"
       class=".cal.CalendarListView"
@@ -63,7 +63,7 @@
       />
 
   <page
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       name="daily_calendar_rows"
       layer=".skin.ISchoolToolLayer"
       class=".cal.DailyCalendarRowsView"

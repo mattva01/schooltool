@@ -25,14 +25,14 @@ $Id$
 """
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
-from schoolbell.app.interfaces import ISchoolBellApplication, IHaveNotes
+from schooltool.app.interfaces import ISchoolToolApplication, IHaveNotes
 from schoolbell.app.notes import getNotes
 import datetime
 import random
 
 def evolve(context):
     root = context.connection.root().get(ZopePublication.root_name, None)
-    for app in findObjectsProviding(root, ISchoolBellApplication):
+    for app in findObjectsProviding(root, ISchoolToolApplication):
         for noted in findObjectsProviding(root, IHaveNotes):
             for note in getNotes(noted):
                 note.unique_id = '%d.%d' % (datetime.datetime.now().microsecond,

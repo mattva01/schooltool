@@ -52,7 +52,7 @@ def doctest_restSchoolToolSubscriber():
     However, if the object is a SchoolToolApplication, the request is
     marked as an ISchoolToolRequest.
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> context = SchoolToolApplication()
         >>> event = BeforeTraverseEvent(context, request)
         >>> restSchoolToolSubscriber(event)

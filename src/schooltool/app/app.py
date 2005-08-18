@@ -22,40 +22,155 @@ SchoolTool application
 $Id$
 
 """
-import zope.component
-import zope.interface
+from persistent import Persistent
+from persistent.dict import PersistentDict
+
+from zope.component import adapts
+from zope.event import notify
+from zope.interface import implements
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 from zope.app import zapi
-from zope.app.annotation.interfaces import IAnnotations
+from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
+from zope.app.component.hooks import getSite
+from zope.app.component.site import SiteManagerContainer
+from zope.app.container import sample
+from zope.app.container.contained import NameChooser
+from zope.app.container.interfaces import INameChooser
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.app.security.interfaces import IUnauthenticatedGroup
 
-from schoolbell.app import app as sb
-from schooltool.group.group import Group
-from schooltool.app.overlay import ICalendarOverlayInfo
-
 from schooltool import SchoolToolMessageID as _
-from schooltool import interfaces, relationships
+from schooltool.group.group import Group
+from schooltool.app import relationships
+from schooltool.app.overlay import ICalendarOverlayInfo
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.interfaces import IShowTimetables
+from schooltool.app.interfaces import ApplicationInitializationEvent
 
-
-###############################################################################
-# Import objects here, since they will eventually move here as well.
-
-from schoolbell.app.app import SchoolBellApplication as SchoolToolApplication
-from schoolbell.app.app import getApplicationPreferences
-from schoolbell.app.app import \
-     getSchoolBellApplication as getSchoolToolApplication
-
-###############################################################################
+SHOW_TIMETABLES_KEY = 'schooltool.timetable.showTimetables'
 
 
 def addManagerGroupToApplication(event):
     event.object['groups']['manager'] = Group(u'Manager', u'Manager Group.')
 
 
-SHOW_TIMETABLES_KEY = 'schooltool.timetable.showTimetables'
+class SchoolToolApplication(Persistent, sample.SampleContainer,
+                            SiteManagerContainer):
+    """The main application object.
+
+    This object can be added as a regular content object to a folder,
+    or it can be used as the application root object.
+    """
+
+    implements(ISchoolToolApplication, IAttributeAnnotatable)
+
+    def __init__(self):
+        super(SchoolToolApplication, self).__init__()
+        notify(ApplicationInitializationEvent(self))
+
+    def _newContainerData(self):
+        return PersistentDict()
+
+    def title(self):
+        """This is required for the site calendar views to work."""
+        return IApplicationPreferences(self).title
+    title = property(title)
+
+
+def getSchoolToolApplication():
+    """Return the nearest ISchoolToolApplication"""
+    candidate = getSite()
+    if ISchoolToolApplication.providedBy(candidate):
+        return candidate
+    else:
+        raise ValueError("can't get a SchoolToolApplication")
+
+
+class SimpleNameChooser(NameChooser):
+    """A name chooser that uses object titles as names.
+
+    SimpleNameChooser is an adapter for containers
+
+        >>> container = {}
+        >>> chooser = SimpleNameChooser(container)
+
+    It expects objects to have a `title` attribute, so only register it
+    as an adapter for containers that limit their contents to objects
+    with such attribute.
+
+    `chooseName` uses the title of the object to be added, converts it to
+    lowercase, strips punctuation, and replaces spaces with hyphens:
+
+        >>> from schooltool.person.person import Person
+        >>> obj = Person(title='Mr. Smith')
+        >>> chooser.chooseName('', obj)
+        u'mr-smith'
+
+    If the name is already taken, SimpleNameChooser adds a number at the end
+
+        >>> container['mr-smith'] = 42
+        >>> chooser.chooseName('', obj)
+        u'mr-smith-2'
+
+    If you provide a suggested name, it uses that one.
+
+        >>> chooser.chooseName('suggested-name', obj)
+        'suggested-name'
+
+    Bad names cause errors
+
+        >>> chooser.chooseName('@notallowed', obj)
+        Traceback (most recent call last):
+          ...
+        UserError: Names cannot begin with '+' or '@' or contain '/'
+
+    """
+
+    implements(INameChooser)
+
+    def chooseName(self, name, obj):
+        """See INameChooser."""
+        if not name:
+            name = u''.join([c for c in obj.title.lower()
+                             if c.isalnum() or c == ' ']).replace(' ', '-')
+        n = name
+        i = 1
+        while n in self.context:
+            i += 1
+            n = name + u'-' + unicode(i)
+        # Make sure the name is valid
+        self.checkName(n, obj)
+        return n
+
+
+class ApplicationPreferences(Persistent):
+    """Object for storing any application-wide preferences we have.
+
+    See schooltool.app.interfaces.ApplicationPreferences.
+    """
+    implements(IApplicationPreferences)
+    adapts(ISchoolToolApplication)
+
+    title = 'SchoolTool'
+
+    frontPageCalendar = True
+
+
+def getApplicationPreferences(app):
+    """Adapt a SchoolToolApplication to IApplicationPreferences."""
+
+    annotations = IAnnotations(app)
+    key = 'schoolbell.app.ApplicationPreferences'
+    try:
+        return annotations[key]
+    except KeyError:
+        annotations[key] = ApplicationPreferences()
+        annotations[key].__parent__ = app
+        return annotations[key]
+
 
 class ShowTimetables(object):
     """Adapter from ICalendarOverlayInfo to IShowTimetables.
@@ -73,7 +188,7 @@ class ShowTimetables(object):
         >>> stt = ShowTimetables(info)
 
         >>> from zope.interface.verify import verifyObject
-        >>> verifyObject(interfaces.IShowTimetables, stt)
+        >>> verifyObject(IShowTimetables, stt)
         True
 
         >>> stt.showTimetables
@@ -85,8 +200,8 @@ class ShowTimetables(object):
         >>> stt.showTimetables
         False
     """
-    zope.component.adapts(ICalendarOverlayInfo)
-    zope.interface.implements(interfaces.IShowTimetables)
+    adapts(ICalendarOverlayInfo)
+    implements(IShowTimetables)
 
     def __init__(self, context):
         self.annotations = IAnnotations(context)
@@ -98,12 +213,6 @@ class ShowTimetables(object):
         self.annotations[SHOW_TIMETABLES_KEY] = value
 
     showTimetables = property(getShowTimetables, setShowTimetables)
-
-
-class ApplicationPreferences(sb.ApplicationPreferences):
-    """Object for storing any application-wide preferences we have."""
-
-    title = 'SchoolTool'
 
 
 def applicationCalendarPermissionsSubscriber(event):
@@ -129,7 +238,7 @@ def applicationCalendarPermissionsSubscriber(event):
         # zcml?
         return
 
-    if interfaces.ISchoolToolApplication.providedBy(event.object):
+    if ISchoolToolApplication.providedBy(event.object):
         unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
 
         app_perms = IPrincipalPermissionManager(event.object)

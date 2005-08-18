@@ -30,7 +30,7 @@ from zope.app.annotation.interfaces import IAnnotations
 from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
 
-from schoolbell.app.interfaces import ICalendarOwner, ISchoolBellApplication
+from schooltool.app.interfaces import ICalendarOwner, ISchoolToolApplication
 from schoolbell.app.notes import getNotes
 from schooltool.relationship.annotatable import getRelationshipLinks
 from schooltool.relationship.interfaces import IRelationshipLinks

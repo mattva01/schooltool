@@ -119,7 +119,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.container.interfaces import INameChooser
 from zope.app.session.interfaces import ISession
 
-from schoolbell.app.browser.cal import day_of_week_names
+from schooltool.app.browser.cal import day_of_week_names
 from schooltool.timetable.browser import parse_time_range
 from schooltool.timetable.browser import format_time_range
 from schooltool import SchoolToolMessageID as _

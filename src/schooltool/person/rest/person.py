@@ -25,10 +25,10 @@ from zope.component import adapts
 from zope.interface import implements
 from zope.publisher.interfaces import NotFound
 
-from schoolbell.app.rest import View, Template, IRestTraverser
-from schoolbell.app.rest.app import ApplicationObjectFile
-from schoolbell.app.rest.app import ApplicationObjectFileFactory
-from schoolbell.app.rest.app import GenericContainerView
+from schooltool.app.rest import View, Template, IRestTraverser
+from schooltool.app.rest.app import ApplicationObjectFile
+from schooltool.app.rest.app import ApplicationObjectFileFactory
+from schooltool.app.rest.app import GenericContainerView
 
 from schooltool.person.interfaces import IPersonContainer, IPerson
 from schooltool.person.person import Person

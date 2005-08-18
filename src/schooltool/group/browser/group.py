@@ -26,10 +26,10 @@ from zope.security.proxy import removeSecurityProxy
 from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 
-from schoolbell import SchoolBellMessageID as _
+from schooltool import SchoolToolMessageID as _
 from schooltool.batching import Batch
-from schoolbell.app.app import getSchoolBellApplication
-from schoolbell.app.browser.app import ContainerView, BaseAddView, BaseEditView
+from schooltool.app.app import getSchoolToolApplication
+from schooltool.app.browser.app import ContainerView, BaseAddView, BaseEditView
 from schooltool.person.interfaces import IPerson
 from schooltool.resource.interfaces import IResource
 
@@ -58,7 +58,7 @@ class GroupListView(BrowserView):
 
     def getPotentialGroups(self):
         """Return a list of groups the current user is not a member of."""
-        groups = getSchoolBellApplication()['groups']
+        groups = getSchoolToolApplication()['groups']
         return [group for group in groups.values()
                 if checkPermission('schoolbell.manageMembership', group)
                 and group not in self.context.groups]
@@ -124,7 +124,7 @@ class MemberViewPersons(BrowserView):
 
     def getPotentialMembers(self):
         """Return a list of all possible members."""
-        container = getSchoolBellApplication()[self.container_name]
+        container = getSchoolToolApplication()[self.container_name]
         return [m for m in container.values() if m not in self.context.members]
 
     def searchPotentialMembers(self, s):

@@ -30,51 +30,51 @@ from zope.app.location.interfaces import ILocation
 from zope.app.testing import ztapi, setup
 from zope.i18n import translate
 
-from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schooltool.app.browser.testing import setUp, tearDown
 from schooltool.testing import setup as sbsetup
 
 
-def doctest_SchoolBellAPI():
-    r"""Tests for SchoolBellAPI.
+def doctest_SchoolToolAPI():
+    r"""Tests for SchoolToolAPI.
 
         >>> from zope.tales.interfaces import ITALESFunctionNamespace
-        >>> from schoolbell.app.browser import SchoolBellAPI
+        >>> from schooltool.app.browser import SchoolToolAPI
         >>> context = object()
-        >>> ns = SchoolBellAPI(context)
+        >>> ns = SchoolToolAPI(context)
         >>> verifyObject(ITALESFunctionNamespace, ns)
         True
 
-    'context/schoolbell:app' returns the nearest ISchoolBellApplication
+    'context/schoolbell:app' returns the nearest ISchoolToolApplication
 
         >>> app = sbsetup.setupSchoolBellSite()
 
-        >>> SchoolBellAPI(app['persons']).app is app
+        >>> SchoolToolAPI(app['persons']).app is app
         True
 
 
     It does so even for objects that do not adapt to
-    ISchoolBellApplication, but are sublocations of SchoolBellApplication:
+    ISchoolToolApplication, but are sublocations of SchoolToolApplication:
 
         >>> class Adding:
         ...     implements(ILocation)
         ...     __parent__ = app['persons']
         ...
         >>> adding = Adding()
-        >>> SchoolBellAPI(adding).app is app
+        >>> SchoolToolAPI(adding).app is app
         True
 
 
     'context/schoolbell:preferences' returns an ApplicationPreferences object
-    for the nearest ISchoolBellApplication
+    for the nearest ISchoolToolApplication
 
         >>> setup.setUpAnnotations()
-        >>> from schoolbell.app.interfaces import ISchoolBellApplication
-        >>> from schoolbell.app.interfaces import IApplicationPreferences
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
+        >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> from schoolbell.app.app import getApplicationPreferences
-        >>> ztapi.provideAdapter(ISchoolBellApplication,
+        >>> ztapi.provideAdapter(ISchoolToolApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
-        >>> preferences = SchoolBellAPI(app).preferences
+        >>> preferences = SchoolToolAPI(app).preferences
         >>> preferences.title
         'SchoolBell'
 
@@ -83,9 +83,9 @@ def doctest_SchoolBellAPI():
 
         >>> from schooltool.person.person import Person
         >>> p = Person()
-        >>> SchoolBellAPI(p).person is p
+        >>> SchoolToolAPI(p).person is p
         True
-        >>> SchoolBellAPI(app).person is None
+        >>> SchoolToolAPI(app).person is None
         True
 
 
@@ -98,12 +98,12 @@ def doctest_SchoolBellAPI():
         >>> anonymous = UnauthenticatedPrincipal('anonymous', 'Anonymous',
         ...                             "Anyone who did not bother to log in")
 
-        >>> SchoolBellAPI(root).authenticated
+        >>> SchoolToolAPI(root).authenticated
         True
-        >>> SchoolBellAPI(anonymous).authenticated
+        >>> SchoolToolAPI(anonymous).authenticated
         False
 
-        >>> SchoolBellAPI(Person()).authenticated
+        >>> SchoolToolAPI(Person()).authenticated
         Traceback (most recent call last):
           ...
         TypeError: schoolbell:authenticated can only be applied to a principal
@@ -114,7 +114,7 @@ def doctest_SchoolBellAPI():
 def doctest_SortBy():
     """Tests for SortBy adapter.
 
-        >>> from schoolbell.app.browser import SortBy
+        >>> from schooltool.app.browser import SortBy
         >>> adapter = SortBy([])
 
         >>> from zope.app.traversing.interfaces import IPathAdapter
@@ -198,7 +198,7 @@ def doctest_SortBy_security():
     opposed to ForbiddenAttribute for '__getitem__', which will happen if
     hasattr hides the first error).
 
-        >>> from schoolbell.app.browser import SortBy
+        >>> from schooltool.app.browser import SortBy
         >>> list(SortBy(a_list).traverse('title'))  # doctest: +ELLIPSIS
         Traceback (most recent call last):
           ...
@@ -224,7 +224,7 @@ def doctest_NavigationView():
 
     It makes the application available as `view.app`:
 
-      >>> from schoolbell.app.browser import NavigationView
+      >>> from schooltool.app.browser import NavigationView
       >>> view = NavigationView(p, None)
       >>> view.app is app
       True
@@ -234,7 +234,7 @@ def doctest_NavigationView():
 def doctest_SchoolBellSized():
     """Unit tests for SchoolBellSized.
 
-      >>> from schoolbell.app.browser import SchoolBellSized
+      >>> from schooltool.app.browser import SchoolBellSized
       >>> from schooltool.person.person import Person
 
       >>> app = sbsetup.setupSchoolBellSite()
@@ -263,7 +263,7 @@ def doctest_ViewPrefences():
 
         >>> from zope.publisher.browser import TestRequest
 
-        >>> from schoolbell.app.browser import ViewPreferences
+        >>> from schooltool.app.browser import ViewPreferences
         >>> from schooltool.person.interfaces import IPerson
         >>> from schooltool.person.interfaces import IPersonPreferences
         >>> from schooltool.person.person import Person

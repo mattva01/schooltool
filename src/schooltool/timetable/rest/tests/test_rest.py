@@ -48,7 +48,7 @@ from zope.interface import directlyProvidedBy
 
 from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin
 from schoolbell.app.rest.tests.utils import XMLCompareMixin
-from schoolbell.app.rest.errors import RestError
+from schooltool.app.rest.errors import RestError
 from schooltool.testing import setup as sbsetup
 from schooltool.timetable import TimetablesAdapter
 from schooltool.timetable.interfaces import ITimetables
@@ -235,14 +235,14 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
     schema_without_title_xml = schema_xml.replace("<title>Title</title>", "")
 
     def setUp(self):
-        from schooltool.app import SchoolToolApplication
+        from schooltool.app.app import SchoolToolApplication
         from schooltool.timetable.interfaces import ITimetableSchemaContainer
         from schooltool.timetable.rest import TimetableSchemaFileFactory
         from schooltool.timetable import SequentialDaysTimetableModel
         from schooltool.timetable import SequentialDayIdBasedTimetableModel
         from schooltool.timetable.interfaces import ITimetableModelFactory
 
-        self.app = sbsetup.createSchoolBellApplication()
+        self.app = sbsetup.createSchoolToolApplication()
         self.schemaContainer = self.app["ttschemas"]
 
         setup.placelessSetUp()
@@ -478,7 +478,7 @@ class TestTimetableSchemaFileFactory(TimetableSchemaMixin, unittest.TestCase):
         self.assertEquals(schema, self.createExtendedSchema())
 
     def test_invalid_name(self):
-        from schoolbell.app.rest.errors import RestError
+        from schooltool.app.rest.errors import RestError
         self.assertRaises(RestError, IFileFactory(self.schemaContainer),
                           "foo.bar", "text/xml", self.schema_xml)
 

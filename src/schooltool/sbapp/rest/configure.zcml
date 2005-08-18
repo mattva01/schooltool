@@ -47,7 +47,7 @@
       />
 
   <view
-      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.http.IHTTPPublisher"
       factory="schooltool.traverser.traverser.PluggableTraverser"
@@ -55,7 +55,7 @@
       />
 
   <view
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides="zope.publisher.interfaces.IPublishTraverse"
       factory=".RestPublishTraverse"
@@ -72,7 +72,7 @@
       />
 
   <view
-      for="schoolbell.app.interfaces.IHaveCalendar"
+      for="schooltool.app.interfaces.IHaveCalendar"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory="schoolbell.app.browser.cal.CalendarOwnerHTTPTraverser"
@@ -81,7 +81,7 @@
       />
 
   <view
-      for="schoolbell.app.interfaces.IHaveCalendar"
+      for="schooltool.app.interfaces.IHaveCalendar"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory="schoolbell.app.browser.cal.CalendarOwnerHTTPTraverser"
@@ -90,7 +90,7 @@
       />
 
   <view
-      for="schoolbell.app.interfaces.IHaveCalendar"
+      for="schooltool.app.interfaces.IHaveCalendar"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory="schoolbell.app.browser.cal.CalendarOwnerHTTPTraverser"
@@ -118,7 +118,7 @@
 
   <!-- the following are used by PUT requests on the normal web server -->
   <view
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory=".app.CalendarNullTraverser"
@@ -127,7 +127,7 @@
       />
 
   <view
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory=".app.CalendarNullTraverser"
@@ -138,7 +138,7 @@
 <!-- RESTive verbs implementations -->
 
   <view
-      for="schoolbell.app.interfaces.ISchoolBellApplication"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
       name="GET"
       factory=".app.ApplicationView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
@@ -146,7 +146,7 @@
       />
 
   <view
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       name="GET"
       factory=".app.CalendarView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
@@ -154,7 +154,7 @@
       />
 
   <view
-      for="schoolbell.app.interfaces.ISchoolBellCalendar"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
       name="PUT"
       factory=".app.CalendarView"
       type="zope.publisher.interfaces.http.IHTTPRequest"

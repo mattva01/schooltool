@@ -10,9 +10,9 @@ We will obviously need a SchoolBell instance.
     ... POST /@@contents.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: application/x-www-form-urlencoded
-    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication
+    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schoolbell.app.app.SchoolToolApplication
     ...
-    ... type_name=BrowserAdd__schoolbell.app.app.SchoolBellApplication&new_value=frogpond\
+    ... type_name=BrowserAdd__schoolbell.app.app.SchoolToolApplication&new_value=frogpond\
     ... """)
     HTTP/1.1 303 See Other
     ...
@@ -188,7 +188,7 @@ test.  We shall try to enable them.
 
 Now we will try disabling PDF views and check if the switch works.
 
-    >>> from schoolbell.app.browser import pdfcal
+    >>> from schooltool.app.browser import pdfcal
     >>> real_pdfcal_disabled = pdfcal.disabled
     >>> pdfcal.disabled = True
 

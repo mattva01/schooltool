@@ -848,7 +848,7 @@ def doctest_TimetableSchemaView():
 class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.app import SchoolToolApplication
+        from schooltool.app.app import SchoolToolApplication
         setUp()
         self.app = SchoolToolApplication()
 
@@ -871,7 +871,7 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
                              WeeklyTimetableModel,
                              'WeeklyTimetableModel')
         from schooltool.timetable.interfaces import ITimetableSchemaContainer
-        from schoolbell.app.app import SimpleNameChooser
+        from schooltool.app.app import SimpleNameChooser
         from zope.app.container.interfaces import INameChooser
         ztapi.provideAdapter(ITimetableSchemaContainer,
                              INameChooser,
@@ -1225,7 +1225,7 @@ def doctest_SimpleTimetableSchemaAdd():
         ...                      'WeeklyTimetableModel')
         >>> from schooltool.timetable.interfaces import \
         ...                           ITimetableSchemaContainer
-        >>> from schoolbell.app.app import SimpleNameChooser
+        >>> from schooltool.app.app import SimpleNameChooser
         >>> from zope.app.container.interfaces import INameChooser
         >>> ztapi.provideAdapter(ITimetableSchemaContainer,
         ...                      INameChooser,
@@ -1234,7 +1234,7 @@ def doctest_SimpleTimetableSchemaAdd():
     Suppose we have a SchoolTool instance, and create a view for its
     timetable schemas container:
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.timetable.browser import SimpleTimetableSchemaAdd
         >>> app = SchoolToolApplication()
         >>> timetable.addToApplication(ApplicationInitializationEvent(app))
@@ -1489,7 +1489,7 @@ def doctest_SimpleTimetableSchemaAdd_errors():
     Suppose we have a SchoolTool instance, and create a view for its
     timetable schemas container:
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.timetable.browser import SimpleTimetableSchemaAdd
         >>> app = SchoolToolApplication()
         >>> timetable.addToApplication(ApplicationInitializationEvent(app))
@@ -1947,7 +1947,7 @@ def doctest_TimetableSchemaContainerView():
 
     We will need an application:
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> app = SchoolToolApplication()
         >>> timetable.addToApplication(ApplicationInitializationEvent(app))
 
@@ -2011,7 +2011,7 @@ def doctest_SectionTimetableSetupView():
 
     We will need an application object
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.course.section import SectionContainer
         >>> app = SchoolToolApplication()
         >>> app['sections'] = SectionContainer()
@@ -2240,7 +2240,7 @@ def doctest_SpecialDayView():
         >>> from schooltool.tests import setUpApplicationPreferences
         >>> setUpApplicationPreferences()
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> app = SchoolToolApplication()
         >>> timetable.addToApplication(ApplicationInitializationEvent(app))
         >>> directlyProvides(app, IContainmentRoot)
@@ -2705,7 +2705,7 @@ def doctest_EmergencyDayView():
 
     First of all, we need an app object:
 
-        >>> from schooltool.app import SchoolToolApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> app = sbsetup.setupSchoolBellSite()
 
     We have a timetable schema to put the view on:
@@ -2907,8 +2907,8 @@ def doctest_EmergencyDayView():
     notifying of the shift:
 
         >>> from schooltool import getSchoolToolApplication
-        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
-        >>> cal = ISchoolBellCalendar(getSchoolToolApplication())
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> cal = ISchoolToolCalendar(getSchoolToolApplication())
         >>> events = list(cal)
         >>> events.sort()
         >>> for event in events:

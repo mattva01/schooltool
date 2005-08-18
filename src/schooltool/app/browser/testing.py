@@ -31,9 +31,9 @@ from zope.app.publisher.interfaces.browser import IMenuItemType, IBrowserMenu
 from zope.app.component.hooks import setSite
 
 from schooltool.relationship.tests import setUpRelationships
-from schoolbell.app.browser import SchoolBellAPI, SortBy
-from schoolbell.app.browser import NavigationView
-from schoolbell.app.browser.macros import SchoolToolMacros
+from schooltool.app.browser import SchoolToolAPI, SortBy
+from schooltool.app.browser import NavigationView
+from schooltool.app.browser.macros import SchoolToolMacros
 
 
 class BrowserMenuStub(object):
@@ -111,30 +111,30 @@ def setUp(test=None):
     ztapi.provideView(None, None, ITraversable, 'resource', resource)
 
     # schoolbell: namespace in tal
-    ztapi.provideAdapter(None, IPathAdapter, SchoolBellAPI, 'schoolbell')
+    ztapi.provideAdapter(None, IPathAdapter, SchoolToolAPI, 'schoolbell')
 
     # sortby: namespace in tal
-    ztapi.provideAdapter(None, IPathAdapter, SchoolBellAPI, 'schoolbell')
+    ztapi.provideAdapter(None, IPathAdapter, SchoolToolAPI, 'schoolbell')
     ztapi.provideAdapter(None, IPathAdapter, SortBy, 'sortby')
 
     # standard_macros, schooltool_macros and schoolbell_navigation
     ztapi.browserView(None, 'standard_macros', StandardMacros)
     ztapi.browserView(None, 'view_macros',
-                      SimpleViewClass("../templates/view_macros.pt"))
+                      SimpleViewClass("./templates/view_macros.pt"))
 
     ztapi.browserView(None, 'schooltool_macros', SchoolToolMacros)
     ztapi.browserView(None, 'calendar_macros',
-                      SimpleViewClass("../templates/calendar_macros.pt"))
+                      SimpleViewClass("./templates/calendar_macros.pt"))
     ztapi.browserView(None, 'generic_macros',
-                      SimpleViewClass("../templates/generic_macros.pt"))
+                      SimpleViewClass("./templates/generic_macros.pt"))
 
     ztapi.browserView(None, 'schoolbell_navigation',
-                      SimpleViewClass("../templates/navigation.pt",
+                      SimpleViewClass("./templates/navigation.pt",
                                       bases=(NavigationView,)))
 
     # batching macros
     ztapi.browserView(None, 'batch_macros',
-                      SimpleViewClass("../../../batching/macros.pt"))
+                      SimpleViewClass("../../batching/macros.pt"))
 
     # form macros
     ztapi.browserView(None, 'form_macros', FormMacros)
@@ -151,7 +151,7 @@ def setUp(test=None):
             return "a dummy resource"
 
     for name in ['layout.css', 'style.css', 'schoolbell.js', 'logo.png',
-                 'next.png', 'prev.png', 'favicon.ico', 
+                 'next.png', 'prev.png', 'favicon.ico',
                  'calwidget-calendar.js', 'calwidget-calendar.css',
                  'calwidget-icon.gif']:
         ztapi.browserResource(name, ResourceStub)

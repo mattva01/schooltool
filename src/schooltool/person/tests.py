@@ -38,11 +38,11 @@ def doctest_personPermissionsSubscriber():
 
         >>> root = setup.placefulSetUp(True)
 
-        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.group.group import Group, GroupContainer
         >>> from schooltool.person.person import Person, PersonContainer
         >>> setUpLocalGrants()
-        >>> root['sb'] = SchoolBellApplication()
+        >>> root['sb'] = SchoolToolApplication()
         >>> root['sb']['persons'] = PersonContainer()
         >>> root['sb']['groups'] = GroupContainer()
 
@@ -98,7 +98,7 @@ def doctest_PersonContainer():
         >>> c.get('doesnotmatter') is None
         True
 
-    Adaptation (i.e. __conform__) is tested in doctest_SchoolBellApplication.
+    Adaptation (i.e. __conform__) is tested in doctest_SchoolToolApplication.
     """
 
 
@@ -173,8 +173,8 @@ def doctest_Person():
         >>> setup.setUpAnnotations()
         >>> sbsetup.setupCalendaring()
 
-        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
-        >>> calendar = ISchoolBellCalendar(person)
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> calendar = ISchoolToolCalendar(person)
         >>> calendar.__name__
         'calendar'
         >>> calendar.__parent__ is person

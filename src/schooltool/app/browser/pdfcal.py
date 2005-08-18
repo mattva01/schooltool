@@ -31,10 +31,10 @@ from zope.app.publisher.browser import BrowserView
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess
-from schoolbell.app.interfaces import ISchoolBellCalendar
+from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.interfaces import IPerson
 from schooltool.calendar.utils import parse_date, week_start
-from schoolbell import SchoolBellMessageID as _
+from schooltool import SchoolToolMessageID as _
 
 global disabled
 disabled = True
@@ -58,7 +58,7 @@ class PDFCalendarViewBase(BrowserView):
 
     # We do imports from reportlab locally to avoid a hard dependency.
 
-    __used_for__ = ISchoolBellCalendar
+    __used_for__ = ISchoolToolCalendar
 
     title = None # override this in subclasses
 
@@ -252,7 +252,7 @@ class PDFCalendarViewBase(BrowserView):
         span multiple days.
         """
         # avoid recursive imports
-        from schoolbell.app.browser.cal import day_of_week_names
+        from schooltool.app.browser.cal import day_of_week_names
         day_of_week_msgid = day_of_week_names[date.weekday()]
         day_of_week = translate(day_of_week_msgid, context=self.request)
         return "%s, %s" % (date.isoformat(), day_of_week)
@@ -314,7 +314,7 @@ class MonthlyPDFCalendarView(PDFCalendarViewBase):
     def dateTitle(self, date):
         # TODO: take format from user preferences
         # avoid recursive import
-        from schoolbell.app.browser.cal import month_names
+        from schooltool.app.browser.cal import month_names
         month_name = translate(month_names[date.month], context=self.request)
         return "%s, %d" % (month_name, date.year)
 
