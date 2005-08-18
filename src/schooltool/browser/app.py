@@ -26,6 +26,7 @@ from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 
 from schoolbell.relationship import getRelatedObjects
+from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.person.browser import person
 
 from schooltool import getSchoolToolApplication
@@ -41,7 +42,8 @@ class SchoolToolApplicationView(BrowserView):
     def update(self):
         prefs = IApplicationPreferences(getSchoolToolApplication())
         if prefs.frontPageCalendar:
-            url = zapi.absoluteURL(self.context.calendar, self.request)
+            url = zapi.absoluteURL(ISchoolBellCalendar(self.context),
+                                   self.request)
             self.request.response.redirect(url)
 
 

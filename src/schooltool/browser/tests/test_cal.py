@@ -33,6 +33,7 @@ from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 
 from schoolbell.app.browser.tests.setup import setUp, tearDown
+from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.testing import setup as sbsetup
 
 import schooltool.app
@@ -52,6 +53,7 @@ class TestDailyCalendarRowsView(unittest.TestCase):
 
     def setUp(self):
         setUp()
+        sbsetup.setupCalendaring()
 
         # set up adaptation (the view checks user preferences)
         from schoolbell.app.person.preference import getPersonPreferences
@@ -105,7 +107,7 @@ class TestDailyCalendarRowsView(unittest.TestCase):
         request = TestRequest()
         principal = Principal('person', 'Some person', person=self.person)
         request.setPrincipal(principal)
-        view = DailyCalendarRowsView(self.person.calendar, request)
+        view = DailyCalendarRowsView(ISchoolBellCalendar(self.person), request)
         result = list(view.calendarRows(date(2004, 11, 5), 8, 19))
 
         expected = [("1", dt('08:00'), timedelta(hours=1)),
@@ -133,7 +135,7 @@ class TestDailyCalendarRowsView(unittest.TestCase):
         request = TestRequest()
         principal = Principal('person', 'Some person', person=self.person)
         request.setPrincipal(principal)
-        view = DailyCalendarRowsView(self.person.calendar, request)
+        view = DailyCalendarRowsView(ISchoolBellCalendar(self.person), request)
 
         result = list(view.calendarRows(date(2004, 11, 5), 8, 19))
 
@@ -146,7 +148,7 @@ class TestDailyCalendarRowsView(unittest.TestCase):
 
         request = TestRequest()
         # do not set the principal
-        view = DailyCalendarRowsView(self.person.calendar, request)
+        view = DailyCalendarRowsView(ISchoolBellCalendar(self.person), request)
         result = list(view.calendarRows(date(2004, 11, 5), 8, 19))
 
         # the default is not to show periods
@@ -159,6 +161,8 @@ def doctest_CalendarSTOverlayView():
     r"""Tests for CalendarSTOverlayView
 
      Some setup:
+
+        >>> sbsetup.setupCalendaring()
 
         >>> from zope.component import provideAdapter
         >>> from schooltool.app import ShowTimetables
@@ -202,16 +206,19 @@ def doctest_CalendarSTOverlayView():
         >>> history.sections.add(section)
 
         >>> from schooltool.interfaces import IShowTimetables
-        >>> person.overlaid_calendars.add(group1.calendar, show=True) #,
-        ...                               #showTimetables=False)
+        >>> person.overlaid_calendars.add(
+        ...     ISchoolBellCalendar(group1), show=True)
+
         >>> IShowTimetables(tuple(
         ...     person.overlaid_calendars)[-1]).showTimetables = False
-        >>> person.overlaid_calendars.add(group2.calendar, show=False)
-        >>> person.overlaid_calendars.add(section.calendar, show=False)
+        >>> person.overlaid_calendars.add(
+        ...     ISchoolBellCalendar(group2), show=False)
+        >>> person.overlaid_calendars.add(
+        ...     ISchoolBellCalendar(section), show=False)
 
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('id', 'title', person))
-        >>> view = View(person.calendar, request)
+        >>> view = View(ISchoolBellCalendar(person), request)
 
         >>> print view()
         <div id="portlet-calendar-overlay" class="portlet">
@@ -286,7 +293,7 @@ def doctest_CalendarSTOverlayView():
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('id', 'title', person))
         >>> request.form['OVERLAY_MORE'] = u"More..."
-        >>> view = View(person.calendar, request)
+        >>> view = View(ISchoolBellCalendar(person), request)
         >>> content = view()
         >>> request.response.getStatus()
         302
@@ -309,6 +316,10 @@ def doctest_CalendarListView(self):
     CalendarListView.getCalendars returns a list of calendars that
     should be displayed.  This list always includes the context of
     the view, but it may also include other calendars as well.
+
+    Som initial setup:
+
+        >>> sbsetup.setupCalendaring()
 
     A handful of useful stubs:
 
@@ -333,14 +344,16 @@ def doctest_CalendarListView(self):
         ...         self.showTimetables = showTimetables
 
         >>> from schoolbell.app.person.interfaces import IPersonPreferences
+        >>> from schoolbell.app.interfaces import IHaveCalendar
+        >>> from schoolbell.app.cal import CALENDAR_KEY
         >>> from zope.interface import implements
         >>> from zope.app.annotation.interfaces import IAttributeAnnotatable
         >>> from schooltool.timetable.interfaces import ITimetables
         >>> class PersonStub:
-        ...     implements(IAttributeAnnotatable, ITimetables)
+        ...     implements(IAttributeAnnotatable, IHaveCalendar, ITimetables)
         ...     def __init__(self, title, calendar=None):
         ...         self.title = title
-        ...         self.calendar = calendar
+        ...         self.__annotations__= {CALENDAR_KEY: calendar}
         ...     def makeTimetableCalendar(self):
         ...         return CalendarStub(self.title + ' (timetable)')
         ...     def __conform__(self, interface):

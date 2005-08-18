@@ -1232,14 +1232,14 @@ class TestTimetablesMixin(NiceDiffsMixin, EqualsSortedMixin,
 
         tt1 = self.newTimetable()
         tt1["A"].add("Green", TimetableActivity("AG"))
-        cal1 = Calendar()
+        cal1 = Calendar(None)
         ev1 = CalendarEvent(datetime(2003, 11, 26, 12, 00),
                             timedelta(minutes=30), "AG")
         cal1.addEvent(ev1)
 
         tt2 = self.newTimetable()
         tt2["A"].add("Blue", TimetableActivity("AB"))
-        cal2 = Calendar()
+        cal2 = Calendar(None)
         ev2 = CalendarEvent(datetime(2003, 11, 26, 13, 00),
                             timedelta(minutes=30), "AB")
         cal2.addEvent(ev2)

@@ -2680,17 +2680,14 @@ def doctest_EmergencyDayView():
     Set up
     ======
 
+        >>> sbsetup.setupCalendaring()
         >>> from schooltool.tests import setUpApplicationPreferences
         >>> setUpApplicationPreferences()
 
     First of all, we need an app object:
 
         >>> from schooltool.app import SchoolToolApplication
-        >>> app = SchoolToolApplication()
-        >>> timetable.addToApplication(ApplicationInitializationEvent(app))
-        >>> directlyProvides(app, IContainmentRoot)
-        >>> app.setSiteManager(LocalSiteManager(app))
-        >>> setSite(app)
+        >>> app = sbsetup.setupSchoolBellSite()
 
     We have a timetable schema to put the view on:
 
@@ -2891,7 +2888,8 @@ def doctest_EmergencyDayView():
     notifying of the shift:
 
         >>> from schooltool import getSchoolToolApplication
-        >>> cal = getSchoolToolApplication().calendar
+        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
+        >>> cal = ISchoolBellCalendar(getSchoolToolApplication())
         >>> events = list(cal)
         >>> events.sort()
         >>> for event in events:

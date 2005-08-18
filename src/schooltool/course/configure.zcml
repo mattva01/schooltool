@@ -43,9 +43,9 @@
 
   <content class=".section.Section">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
-    <implements
-        interface="schoolbell.app.note.interfaces.IHaveNotes" />
-    <allow interface="schoolbell.app.interfaces.ICalendarOwner" />
+    <implements interface="schoolbell.app.note.interfaces.IHaveNotes" />
+    <implements interface="schoolbell.app.interfaces.IHaveCalendar" />
+
     <require permission="schoolbell.view"
              attributes="title description instructors members
                          courses label size __cmp__ location" />

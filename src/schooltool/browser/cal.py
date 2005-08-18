@@ -218,7 +218,7 @@ class CalendarListView(BrowserView):
             return # unauthenticated user
 
         unproxied_context = removeSecurityProxy(self.context)
-        unproxied_calendar = removeSecurityProxy(user.calendar)
+        unproxied_calendar = removeSecurityProxy(ISchoolBellCalendar(user))
         if unproxied_context is not unproxied_calendar:
             yield (ttcalendar, '#9db8d2', '#7590ae')
             return # user looking at the calendar of some other person

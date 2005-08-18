@@ -49,6 +49,7 @@ from schoolbell.calendar.utils import parse_date, parse_time
 from schoolbell.calendar.utils import next_month, week_start
 from schoolbell.app.browser.cal import month_names
 from schoolbell.app.cal import CalendarEvent
+from schoolbell.app.interfaces import ISchoolBellCalendar
 from schoolbell.app.person.interfaces import IPerson
 
 from schooltool import SchoolToolMessageID as _
@@ -1423,7 +1424,7 @@ class EmergencyDayView(BrowserView):
                 exceptionDayIds[self.replacement] = removeSecurityProxy(day_id)
 
             # Post calendar events to schoolwide calendar
-            calendar = getSchoolToolApplication().calendar
+            calendar = ISchoolBellCalendar(getSchoolToolApplication())
             dtstart = datetime.datetime.combine(self.date, datetime.time())
             msg = _('School cancelled due to emergency.'
                     ' Replacement day $replacement.')

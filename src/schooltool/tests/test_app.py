@@ -78,11 +78,6 @@ def doctest_SchoolToolApplication():
         >>> verifyObject(ISectionContainer, app['sections'])
         True
 
-    We should also have a calendar:
-
-        >>> app.calendar
-        <schoolbell.app.cal.Calendar object at ...>
-
     Our ApplicationPreferences title should be 'SchoolTool' by default:
 
       >>> setup.setUpAnnotations()
@@ -133,6 +128,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
 
         >>> from schooltool import app
         >>> root = setup.placefulSetUp(True)
+        >>> sbsetup.setupCalendaring()
         >>> setUpLocalGrants()
         >>> st = sbsetup.createSchoolBellApplication()
 
@@ -197,7 +193,8 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> root['sb']['persons']['james'] = person
         >>> app.applicationCalendarPermissionsSubscriber(
         ...     ObjectAddedEvent(person))
-        >>> map = IPrincipalPermissionManager(person.calendar)
+        >>> from schoolbell.app.interfaces import ISchoolBellCalendar
+        >>> map = IPrincipalPermissionManager(ISchoolBellCalendar(person))
         >>> map.getPermissionsForPrincipal(unauthenticated.id)
         []
 

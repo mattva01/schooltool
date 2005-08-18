@@ -37,6 +37,8 @@ def doctest_SchoolBellApplicationView():
 
     Some setup
 
+        >>> sbsetup.setupCalendaring()
+
         >>> from schooltool.app import getApplicationPreferences
         >>> from schooltool.interfaces import IApplicationPreferences
         >>> from schooltool.interfaces import ISchoolToolApplication
