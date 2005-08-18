@@ -2,7 +2,7 @@
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schoolbell">
   <head>
     <title metal:fill-slot="title" i18n:translate="">
-      Upload schooltool groups as CSV
+      Upload SchoolTool groups as CSV
     </title>
   </head>
   <body>
@@ -10,7 +10,8 @@
     <metal:block metal:fill-slot="body">
 
       <div class="info" tal:condition="view/success">
-        <p tal:repeat="msg view/success" tal:content="msg" />
+        <p i18n:translate=""
+           tal:repeat="msg view/success" tal:content="msg" />
       </div>
       <div class="error" tal:condition="view/errors"
         tal:repeat="err view/errors" tal:content="err" />
