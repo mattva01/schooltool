@@ -33,7 +33,7 @@ We will need a SchoolTool instance.  Let's call it 'frogpond'.
 
 Also, we need the REST HTTP caller:
 
-    >>> from schoolbell.app.rest.ftests import rest
+    >>> from schooltool.app.rest.ftests import rest
 
 Add a term:
 

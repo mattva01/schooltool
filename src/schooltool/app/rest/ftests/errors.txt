@@ -19,7 +19,7 @@ the web ZMI:
 
 Also, we need the REST HTTP caller:
 
-    >>> from schoolbell.app.rest.ftests import rest
+    >>> from schooltool.app.rest.ftests import rest
 
 We need to shut up libxml2, so it does not spew errors to stderr:
 

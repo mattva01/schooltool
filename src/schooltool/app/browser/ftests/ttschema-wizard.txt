@@ -194,7 +194,7 @@ Now we see the newly created timetable schema in the list.
 
 We can examine its composition more easily by invoking the RESTive view.
 
-  >>> from schoolbell.app.rest.ftests import rest
+  >>> from schooltool.app.rest.ftests import rest
   >>> print rest(r"""
   ... GET /frogpond/ttschemas/default HTTP/1.1
   ... Authorization: Basic mgr:mgrpw

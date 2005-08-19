@@ -17,7 +17,22 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Tests for schooltool.app.rest
+Tests for scholltool.rest.app
 
 $Id: __init__.py 3344 2005-03-30 22:36:28Z alga $
 """
+
+from zope.app.testing.functional import HTTPCaller
+from zope.publisher.http import HTTPRequest
+from zope.app.publication.http import HTTPPublication
+
+
+class RESTCaller(HTTPCaller):
+    """An HTTP caller for REST functional page tests"""
+
+    def chooseRequestClass(self, method, path, environment):
+        """Always returns HTTPRequests regardless of methods and content"""
+        return HTTPRequest, HTTPPublication
+
+
+rest = RESTCaller()

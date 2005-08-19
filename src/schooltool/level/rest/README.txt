@@ -22,7 +22,7 @@ the web ZMI:
 
 Also, we need the REST HTTP caller:
 
-    >>> from schoolbell.app.rest.ftests import rest
+    >>> from schooltool.app.rest.ftests import rest
 
 Initially, we have no levels.
 
