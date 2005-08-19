@@ -50,7 +50,7 @@ SchoolBell authentication utility
     >>> ztapi.provideAdapter(IRequest, ISession, Session)
     >>> ztapi.provideUtility(IClientIdManager, CookieClientIdManager())
     >>> sdc = PersistentSessionDataContainer()
-    >>> ztapi.provideUtility(ISessionDataContainer, sdc, 'schoolbell.auth')
+    >>> ztapi.provideUtility(ISessionDataContainer, sdc, 'schooltool.auth')
 
 
 SchoolBell is a possible site:

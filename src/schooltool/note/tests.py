@@ -34,7 +34,7 @@ from schooltool.app.browser.testing import setUp, tearDown
 
 
 def doctest_getNotes():
-    r"""Test for schoolbell.app.annotatable.getNotes.
+    r"""Test for schooltool.note.note.getNotes.
 
     We need to set up Zope 3 annotations
 

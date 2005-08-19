@@ -189,7 +189,7 @@ def doctest_SortBy_security():
 
         >>> from zope.security.checker import NamesChecker
         >>> from zope.security.checker import ProxyFactory
-        >>> checker = NamesChecker(['title'], 'schoolbell.View')
+        >>> checker = NamesChecker(['title'], 'schooltool.View')
         >>> protected_obj = ProxyFactory(obj, checker)
         >>> a_list = [protected_obj]
 
@@ -201,7 +201,7 @@ def doctest_SortBy_security():
         >>> list(SortBy(a_list).traverse('title'))  # doctest: +ELLIPSIS
         Traceback (most recent call last):
           ...
-        Unauthorized: (<...SacredObj instance...>, 'title', 'schoolbell.View')
+        Unauthorized: (<...SacredObj instance...>, 'title', 'schooltool.View')
 
     Tear down:
 

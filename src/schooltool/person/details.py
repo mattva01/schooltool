@@ -48,7 +48,7 @@ class PersonDetails(Persistent):
 def getPersonDetails(person):
     """Adapt an IPerson object to IPersonDetails."""
     annotations = IAnnotations(person)
-    key = 'schoolbell.app.PersonDetails'
+    key = 'schooltool.app.PersonDetails'
     try:
         return annotations[key]
     except KeyError:

@@ -45,7 +45,7 @@ import zope.app.form.browser.textwidgets
 zope.app.form.browser.textwidgets._ = _
 # Here we do a particulary evil thing: we override the translation (_) function
 # in the textwidgets module.  This means that all the messages in that module
-# are now in the 'schoolbell' domain.  This is the list of the messages
+# are now in the 'schooltool' domain.  This is the list of the messages
 # (don't remove the list, it is used in localizable string extraction).
 textwidgets_strings=[_('Form input is not a file object'),
                      _("Invalid integer data"),

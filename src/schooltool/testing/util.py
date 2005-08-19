@@ -251,7 +251,7 @@ def run_unit_tests(testcase):
         >>> run_unit_tests(BadTestCase) # doctest: +REPORT_NDIFF
         .F
         ======================================================================
-        FAIL: test2 (schoolbell.app.tests.test_app.BadTestCase)
+        FAIL: test2 (schooltool.app.tests.test_app.BadTestCase)
         ----------------------------------------------------------------------
         Traceback (most recent call last):
         ...

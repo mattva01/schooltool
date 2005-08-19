@@ -20,7 +20,7 @@ This is an early development version of SchoolBell.  To get it running
 5. Create a file named schoolbell-configure.zcml in package-includes/ with the
    following content:
 
-      <include package="schoolbell.app" />
+      <include package="schooltool.sbapp" />
 
 6. Start z3.py
 7. Go to http://localhost:8080/@@manage, log in as 'gandalf' with

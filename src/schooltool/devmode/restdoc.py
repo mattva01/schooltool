@@ -30,9 +30,9 @@ class RESTMenu(ifacemodule.menu.Menu):
 
     def findInterfaces(self):
         for entry in super(RESTMenu, self).findInterfaces():
-            if 'schoolbell' not in entry['name']:
+            if 'schooltool' not in entry['name']:
                 continue
-            entry['name'] = entry['name'].replace('schoolbell', 'sb')
+            entry['name'] = entry['name'].replace('schooltool', 'sb')
             entry['url'] = entry['url'].replace('apiindex.html',
                                                 'restviews.html')
             yield entry

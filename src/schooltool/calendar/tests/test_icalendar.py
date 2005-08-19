@@ -784,7 +784,7 @@ def doctest_ical_reader_empty_summary():
     r"""Regression test for read_icalendar
 
     Mozilla Calendar allows events with an empty summary.  This used to be
-    read as a CalendarEvent with title = None in schoolbell, which broke
+    read as a CalendarEvent with title = None in schooltool, which broke
     things.
 
         >>> from schooltool.calendar.icalendar import read_icalendar

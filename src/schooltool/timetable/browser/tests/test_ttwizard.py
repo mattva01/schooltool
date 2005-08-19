@@ -38,7 +38,7 @@ from zope.app.component.hooks import setSite
 from zope.app.container.interfaces import INameChooser
 
 from schooltool.testing import setup
-from schooltool.app.browser import testing as schoolbell_setup
+from schooltool.app.browser import testing as schooltool_setup
 from schooltool.app.app import SimpleNameChooser
 from schooltool.testing.setup import setUpApplicationPreferences
 from schooltool.app.app import SchoolToolApplication
@@ -67,7 +67,7 @@ def setUp(test):
     and the containment root.  The application object is available as
     a global named `app` in all doctests.
     """
-    schoolbell_setup.setUp(test)
+    schooltool_setup.setUp(test)
     setup.setupSessions()
     setUpApplicationPreferences()
     setUpNameChoosers()
@@ -76,7 +76,7 @@ def setUp(test):
 
 def tearDown(test):
     """Test cleanup."""
-    schoolbell_setup.tearDown(test)
+    schooltool_setup.tearDown(test)
 
 
 def print_day_templates(daytemplates):

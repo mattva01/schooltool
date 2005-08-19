@@ -30,9 +30,9 @@ class InterfaceMenu(ifacemodule.menu.Menu):
 
     def findInterfaces(self):
         for entry in super(InterfaceMenu, self).findInterfaces():
-            if 'schoolbell' not in entry['name']:
+            if 'schooltool' not in entry['name']:
                 continue
-            entry['name'] = entry['name'].replace('schoolbell', 'sb')
+            entry['name'] = entry['name'].replace('schooltool', 'sb')
             yield entry
 
 
@@ -40,9 +40,9 @@ class CodeMenu(codemodule.browser.menu.Menu):
 
     def findClasses(self):
         for entry in super(CodeMenu, self).findClasses():
-            if 'schoolbell' not in entry['path']:
+            if 'schooltool' not in entry['path']:
                 continue
-            entry['path'] = entry['path'].replace('schoolbell', 'sb')
+            entry['path'] = entry['path'].replace('schooltool', 'sb')
             yield entry
 
 

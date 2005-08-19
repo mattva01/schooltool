@@ -29,7 +29,7 @@ from zope.app.annotation.interfaces import IAnnotations
 
 from schooltool.person import interfaces
 
-PERSON_PREFERENCES_KEY = 'schoolbell.app.PersonPreferences'
+PERSON_PREFERENCES_KEY = 'schooltool.app.PersonPreferences'
 
 
 class PersonPreferences(Persistent):

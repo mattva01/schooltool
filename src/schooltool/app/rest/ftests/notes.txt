@@ -1,7 +1,7 @@
 Functional tests for SchoolBell Notes ReSTive view
 ==================================================
 
-First of all, we will need a schoolbell instance.  We will add it via
+First of all, we will need a schooltool instance.  We will add it via
 the web ZMI:
 
     >>> print http("""

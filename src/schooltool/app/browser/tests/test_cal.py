@@ -2513,7 +2513,7 @@ class TestGetRecurrenceRule(unittest.TestCase):
 def doctest_TestCalendarEventBookingView():
     r"""A test for the resource booking view.
 
-    We must have a schoolbell application with some resources, a
+    We must have a schooltool application with some resources, a
     person and his calendar with an event:
 
         >>> from schooltool.app.browser.cal import CalendarEventBookingView

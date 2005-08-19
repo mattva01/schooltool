@@ -1,7 +1,7 @@
 Rendering ordered lists in page templates
 =========================================
 
-schoolbell.app defines a TALES path adapter ("thingy" for short) that lets
+schooltool.app defines a TALES path adapter ("thingy" for short) that lets
 you sort lists of objects directly in a page template by writing, for example,
 the following:
 

@@ -1,7 +1,7 @@
-Functional doctest for schoolbell.app
-=====================================
+Functional doctest for schooltool.sbapp
+=======================================
 
-This is a functional doctest for schoolbell.app.  To find out more about
+This is a functional doctest for schooltool.sbapp.  To find out more about
 functional doctests, read Zope3/src/zope/app/ftests/doctest.txt
 
 

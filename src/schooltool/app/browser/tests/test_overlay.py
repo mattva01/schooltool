@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Tests for schoolbell views.
+Tests for schooltool views.
 
 $Id$
 """
@@ -41,9 +41,9 @@ def setUp(test=None):
 def doctest_CalendarOverlayView():
     r"""Tests for CalendarOverlayView
 
-        >>> from schooltool.app.browser.overlay import CalendarOverlayView
+        >>> from schooltool.app.browser.cal import CalendarSTOverlayView
         >>> View = SimpleViewClass('../templates/calendar_overlay.pt',
-        ...                        bases=(CalendarOverlayView,))
+        ...                        bases=(CalendarSTOverlayView,))
 
     CalendarOverlayView is a view on anything.
 

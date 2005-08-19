@@ -51,7 +51,7 @@ from schooltool.note import interfaces
 def getNotes(context):
     """Adapt an IAnnotatable object to INotes."""
     annotations = IAnnotations(context)
-    key = 'schoolbell.app.Notes'
+    key = 'schooltool.app.Notes'
     try:
         return annotations[key]
     except KeyError:

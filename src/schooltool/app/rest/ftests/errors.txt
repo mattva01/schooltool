@@ -1,7 +1,7 @@
 Error handling in REST views
 ============================
 
-First of all, we will need a schoolbell instance.  We will add it via
+First of all, we will need a schooltool instance.  We will add it via
 the web ZMI:
 
     >>> print http("""

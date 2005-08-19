@@ -158,7 +158,7 @@ def getApplicationPreferences(app):
     """Adapt a SchoolToolApplication to IApplicationPreferences."""
 
     annotations = IAnnotations(app)
-    key = 'schoolbell.app.ApplicationPreferences'
+    key = 'schooltool.app.ApplicationPreferences'
     try:
         return annotations[key]
     except KeyError:

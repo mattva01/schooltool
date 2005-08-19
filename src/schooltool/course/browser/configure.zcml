@@ -4,7 +4,7 @@
 
   <configure
       package="schooltool.app.browser"
-      i18n_domain="schoolbell">
+      i18n_domain="schooltool">
 
     <addform
         label="Add a Course"

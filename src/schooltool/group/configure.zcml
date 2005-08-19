@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope"
-           i18n_domain="schoolbell">
+           i18n_domain="schooltool">
 
   <content class=".group.GroupContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />

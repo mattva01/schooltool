@@ -66,7 +66,7 @@ def setUp():
 
 
 def tearDown():
-    """Tear down for schoolbell.relationshp doctests."""
+    """Tear down for schooltool.relationshp doctests."""
     setup.placelessTearDown()
 
 

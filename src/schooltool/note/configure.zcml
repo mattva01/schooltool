@@ -2,7 +2,7 @@
 <configure 
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
-    i18n_domain="schoolbell">
+    i18n_domain="schooltool">
 
   <adapter
       for=".interfaces.IHaveNotes"

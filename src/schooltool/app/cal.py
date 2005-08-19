@@ -131,7 +131,7 @@ class Calendar(Persistent, CalendarMixin):
                 event.__parent__ = None
 
     def clear(self):
-        # clear is not actually used anywhere in schoolbell.app (except tests),
+        # clear is not actually used anywhere in schooltool.app (except tests),
         # so it doesn't have to be efficient.
         for e in list(self):
             self.removeEvent(e)
