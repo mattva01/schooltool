@@ -26,16 +26,29 @@ import os
 import sys
 import unittest
 from datetime import datetime, date, timedelta
+
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
-from zope.app.tests import setup, ztapi
+from zope.app.testing import setup, ztapi
 from zope.app.publisher.browser import BrowserView
+
+from schooltool import SchoolToolMessageID as _
 from schooltool.app.cal import CalendarEvent
 from schooltool.app.browser.pdfcal import PDFCalendarViewBase
 from schooltool.app.browser.pdfcal import setUpMSTTCoreFonts
+from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.person import Person
 from schooltool.resource.resource import Resource
-from schooltool import SchoolToolMessageID as _
+from schooltool.testing import setup as sbsetup
+
+
+def pdfSetUp(test=None):
+    setup.placefulSetUp()
+    sbsetup.setupCalendaring()
+
+
+def pdfTearDown(test=None):
+    setup.placefulTearDown()
 
 
 class StubbedBaseView(PDFCalendarViewBase):
@@ -59,7 +72,7 @@ def doctest_PDFCalendarViewBase():
 
         >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> person = Person(title="Mr. Smith")
-        >>> view = StubbedBaseView(person.calendar, request)
+        >>> view = StubbedBaseView(ISchoolToolCalendar(person), request)
 
         >>> print view.pdfdata()
         %PDF-1.3...
@@ -73,7 +86,7 @@ def doctest_PDFCalendarViewBase():
     If we do not specify a date, today is taken by default:
 
         >>> request = TestRequest()
-        >>> view = StubbedBaseView(person.calendar, request)
+        >>> view = StubbedBaseView(ISchoolToolCalendar(person), request)
 
         >>> print view.pdfdata()
         %PDF-1.3...
@@ -87,7 +100,7 @@ def doctest_PDFCalendarViewBase_buildStory():
 
     buildStory returns a list of platypus objects.
 
-        >>> calendar = Person(title="Mr. Smith").calendar
+        >>> calendar = ISchoolToolCalendar(Person(title="Mr. Smith"))
         >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> view = StubbedBaseView(calendar, request)
 
@@ -129,7 +142,7 @@ def doctest_PDFCalendarViewBase_buildStory_unicode():
     Unicode text is treated properly:
 
         >>> person = Person(title=u"\u0105 person")
-        >>> calendar = person.calendar
+        >>> calendar = ISchoolToolCalendar(person)
         >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
         ...                     timedelta(hours=5), u"\u0105 event")
         >>> calendar.addEvent(evt)
@@ -161,9 +174,8 @@ def doctest_PDFCalendarViewBase_buildStory_unicode():
 def test_buildPageHeader():
     r"""Tests for PDFCalendarViewBase.buildPageHeader.
 
-
         >>> request = TestRequest(form={'date': '2005-07-08'})
-        >>> view = StubbedBaseView(Person().calendar, request)
+        >>> view = StubbedBaseView(ISchoolToolCalendar(Person()), request)
 
         >>> view.configureStyles()
         >>> paras = view.buildPageHeader(u'\0105n owner', date(2005, 7, 3))
@@ -204,9 +216,9 @@ def test_disabled():
 def doctest_PDFCalendarViewBase_dayEvents():
     """Event listing tests.
 
-        >>> calendar = Person(title="Mr. Smith").calendar
+        >>> calendar = ISchoolToolCalendar(Person(title="Mr. Smith"))
         >>> resource = Resource()
-        >>> calendar2 = resource.calendar
+        >>> calendar2 = ISchoolToolCalendar(resource)
         >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> view = StubbedBaseView(calendar, request)
         >>> view.getCalendars = lambda: [calendar, calendar2]
@@ -272,7 +284,7 @@ def doctest_PDFCalendarViewBase_dayEvents():
 def doctest_PDFCalendarViewBase_buildEventTable():
     """Tests for buildEventTable.
 
-        >>> calendar = Person(title="Mr. Smith").calendar
+        >>> calendar = ISchoolToolCalendar(Person(title="Mr. Smith"))
         >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> view = StubbedBaseView(calendar, request)
         >>> view.configureStyles()
@@ -305,7 +317,7 @@ def doctest_PDFCalendarViewBase_buildEventTable():
 def doctest_PDFCalendarViewBase_eventInfoCell():
     r"""Tests for buildEventTable.
 
-        >>> calendar = Person(title="Mr. Smith").calendar
+        >>> calendar = ISchoolToolCalendar(Person(title="Mr. Smith"))
         >>> request = TestRequest(form={'date': '2005-07-08'})
         >>> view = StubbedBaseView(calendar, request)
         >>> view.configureStyles()
@@ -340,7 +352,7 @@ def doctest_PDFCalendarViewBase_eventInfoCell():
 
     Overlaid events are also recognized.
 
-        >>> calendar2 = Person(title='Mr. X').calendar
+        >>> calendar2 = ISchoolToolCalendar(Person(title='Mr. X'))
         >>> evt.__parent__ = calendar2
         >>> paragraphs = view.eventInfoCell(evt)
         >>> paragraphs[2].text
@@ -353,7 +365,7 @@ def doctest_DailyPDFCalendarView():
     r"""Tests for DailyPDFCalendarView.
 
         >>> from schooltool.app.browser.pdfcal import DailyPDFCalendarView
-        >>> calendar = Person().calendar
+        >>> calendar = ISchoolToolCalendar(Person())
         >>> request = TestRequest(form={'date': '2005-07-01'})
         >>> view = DailyPDFCalendarView(calendar, request)
         >>> view.getCalendars = lambda: [calendar]
@@ -401,7 +413,7 @@ def doctest_WeeklyPDFCalendarView():
     r"""Tests for WeeklyPDFCalendarView.
 
         >>> from schooltool.app.browser.pdfcal import WeeklyPDFCalendarView
-        >>> calendar = Person().calendar
+        >>> calendar = ISchoolToolCalendar(Person())
         >>> request = TestRequest(form={'date': '2005-07-01'})
         >>> view = WeeklyPDFCalendarView(calendar, request)
         >>> view.getCalendars = lambda: [calendar]
@@ -472,7 +484,7 @@ def doctest_MonthlyPDFCalendarView():
     r"""Tests for MonthlyPDFCalendarView.
 
         >>> from schooltool.app.browser.pdfcal import MonthlyPDFCalendarView
-        >>> calendar = Person().calendar
+        >>> calendar = ISchoolToolCalendar(Person())
         >>> request = TestRequest(form={'date': '2005-07-01'})
         >>> view = MonthlyPDFCalendarView(calendar, request)
         >>> view.getCalendars = lambda: [calendar]
@@ -650,8 +662,6 @@ def doctest_setUpMSTTCoreFonts():
 def test_getCalendars(self):
     """Test for PDFCalendarViewBase.getCalendars().
 
-        >>> setup.placelessSetUp()
-
     getCalendars() only delegates the task to a calendar list view.  We
     will provide a stub view to test the method.
 
@@ -664,16 +674,12 @@ def test_getCalendars(self):
         ...                   CalendarListViewStub)
 
         >>> from schooltool.app.cal import Calendar
-        >>> view = PDFCalendarViewBase(Calendar(), TestRequest())
+        >>> view = PDFCalendarViewBase(Calendar(None), TestRequest())
 
     Now, if we call the method, the output of our stub will be returned:
 
         >>> view.getCalendars()
         ['some calendar', 'another calendar']
-
-    We're done:
-
-        >>> setup.placelessTearDown()
 
     """
 
@@ -714,7 +720,8 @@ def test_suite():
     suite.addTest(doctest.DocTestSuite('schooltool.app.browser.pdfcal'))
     success = tryToSetUpReportLab()
     if success:
-        docsuite = doctest.DocTestSuite(optionflags=doctest.ELLIPSIS)
+        docsuite = doctest.DocTestSuite(setUp=pdfSetUp, tearDown=pdfTearDown,
+                                        optionflags=doctest.ELLIPSIS)
         suite.addTest(docsuite)
     else:
         print >> sys.stderr, ("reportlab or TrueType fonts not found;"

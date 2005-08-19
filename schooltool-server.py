@@ -25,5 +25,5 @@ basedir = os.path.abspath(os.path.dirname(sys.argv[0]))
 sys.path.insert(0, os.path.join(basedir, 'src'))
 sys.path.insert(0, os.path.join(basedir, 'Zope3', 'src'))
 
-import schooltool.main
-schooltool.main.StandaloneServer().main()
+import schooltool.app.main
+schooltool.app.main.StandaloneServer().main()

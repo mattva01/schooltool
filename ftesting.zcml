@@ -23,7 +23,6 @@
        this menu -->
   <browser:menu id="help_actions" />
 
-  <include package="schoolbell.app" />
   <include package="schooltool" />
 
   <include package="zope.app.securitypolicy" />
