@@ -44,7 +44,7 @@ class GroupContainerView(ContainerView):
 
     index_title = _("Group index")
     add_title = _("Add a new group")
-    add_url = "+/addSchoolBellGroup.html"
+    add_url = "+/addSchoolToolGroup.html"
 
 
 class GroupListView(BrowserView):

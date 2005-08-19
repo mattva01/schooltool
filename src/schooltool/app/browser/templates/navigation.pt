@@ -17,6 +17,5 @@
          i18n:translate="">School Timetables</a></li>
   <li><a tal:attributes="href view/app/levels/@@absolute_url"
          i18n:translate="">Levels</a></li>
-
 </ul>
 </div>

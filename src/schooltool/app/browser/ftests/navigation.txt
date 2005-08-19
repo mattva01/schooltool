@@ -1,7 +1,7 @@
 Navigation
 ----------
 
-We have a view called 'schoolbell_navigation'.  Its output is included in the
+We have a view called 'schooltool_navigation'.  Its output is included in the
 page macros template to get the navigation portlet.  Browser requests, such
 as used in this functional test, do not represent normal usage.
 
@@ -23,7 +23,7 @@ We will create a SchoolBell object and a resource
     ...
 
     >>> print http(r"""
-    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
+    ... POST /frogpond/resources/+/addSchoolToolResource.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 50
     ... Content-Type: application/x-www-form-urlencoded
@@ -37,11 +37,11 @@ We will create a SchoolBell object and a resource
 Navigation view
 ---------------
 
-The schoolbell_navigation view is registered for "*".  It will present
+The schooltool_navigation view is registered for "*".  It will present
 a portlet with the navigation links depending on the authorized user.
 
     >>> print http(r"""
-    ... GET /frogpond/schoolbell_navigation HTTP/1.1
+    ... GET /frogpond/schooltool_navigation HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
@@ -51,18 +51,24 @@ a portlet with the navigation links depending on the authorized user.
     <div class="portlet">
     <h4>Navigation</h4>
     <ul>
-       <li><a href="http://localhost/frogpond/persons">Persons</a></li>
-       <li><a href="http://localhost/frogpond/groups">Groups</a></li>
-       <li><a href="http://localhost/frogpond/resources">Resources</a></li>
+      <li><a href="http://localhost/frogpond/persons">Persons</a></li>
+      <li><a href="http://localhost/frogpond/courses">Courses</a></li>
+      <li><a href="http://localhost/frogpond/sections">Sections</a></li>
+      <li><a href="http://localhost/frogpond/groups">Groups</a></li>
+      <li><a href="http://localhost/frogpond/resources">Resources</a></li>
+      <li><a href="http://localhost/frogpond/terms">Terms</a></li>
+      <li><a href="http://localhost/frogpond/ttschemas">School Timetables</a></li>
+      <li><a href="http://localhost/frogpond/levels">Levels</a></li>
     </ul>
     </div>
+    <BLANKLINE>
 
 The main technical challenge in this view is finding the nearest
-ISchoolToolApplication instance, and providing the links relative to
+``ISchoolToolApplication`` instance, and providing the links relative to
 it.
 
     >>> print http(r"""
-    ... GET /frogpond/resources/lily/schoolbell_navigation HTTP/1.1
+    ... GET /frogpond/resources/lily/schooltool_navigation HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
@@ -72,16 +78,21 @@ it.
     <div class="portlet">
     <h4>Navigation</h4>
     <ul>
-       <li><a href="http://localhost/frogpond/persons">Persons</a></li>
-       <li><a href="http://localhost/frogpond/groups">Groups</a></li>
-       <li><a href="http://localhost/frogpond/resources">Resources</a></li>
+      <li><a href="http://localhost/frogpond/persons">Persons</a></li>
+      <li><a href="http://localhost/frogpond/courses">Courses</a></li>
+      <li><a href="http://localhost/frogpond/sections">Sections</a></li>
+      <li><a href="http://localhost/frogpond/groups">Groups</a></li>
+      <li><a href="http://localhost/frogpond/resources">Resources</a></li>
+      <li><a href="http://localhost/frogpond/terms">Terms</a></li>
+      <li><a href="http://localhost/frogpond/ttschemas">School Timetables</a></li>
+      <li><a href="http://localhost/frogpond/levels">Levels</a></li>
     </ul>
     </div>
 
-This view is only available in the SchoolBell skin:
+This view is only available in the SchoolTool skin:
 
     >>> print http(r"""
-    ... GET /schoolbell_navigation HTTP/1.1
+    ... GET /schooltool_navigation HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 404 Not Found

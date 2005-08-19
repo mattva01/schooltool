@@ -25,7 +25,7 @@
 
     <addform
         label="Add a Group"
-        name="addSchoolBellGroup.html"
+        name="addSchoolToolGroup.html"
         schema="schooltool.group.interfaces.IGroup"
         fields="title description"
         set_before_add="title"
@@ -71,7 +71,7 @@
       menu="schooltool_actions"
       title="New Group"
       for="..interfaces.IGroupContainer"
-      action="+/addSchoolBellGroup.html"
+      action="+/addSchoolToolGroup.html"
       />
 
   <addMenuItem
@@ -79,7 +79,7 @@
       description="A Group"
       class="..group.Group"
       permission="schooltool.create"
-      view="addSchoolBellGroup.html"
+      view="addSchoolToolGroup.html"
       />
 
   <page

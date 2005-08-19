@@ -367,13 +367,13 @@ group index:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    <a href="+/addSchoolBellGroup.html">New Group</a>
+    <a href="+/addSchoolToolGroup.html">New Group</a>
     ...
 
 We can click on it and get a form:
 
     >>> print http(r"""
-    ... GET /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
+    ... GET /frogpond/groups/+/addSchoolToolGroup.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
@@ -383,7 +383,7 @@ We can click on it and get a form:
     ...
       <form method="post" enctype="multipart/form-data"
           class="standalone"
-          action="http://localhost/frogpond/groups/+/addSchoolBellGroup.html">
+          action="http://localhost/frogpond/groups/+/addSchoolToolGroup.html">
     ...
            <input class="textType" id="field.title" name="field.title" size="20" type="text" value=""  />
     ...
@@ -393,7 +393,7 @@ We can click on it and get a form:
 After submitting the form
 
     >>> print http(r"""
-    ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
+    ... POST /frogpond/groups/+/addSchoolToolGroup.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 433
     ... Content-Type: multipart/form-data; boundary=---------------------------68355286210571712431437723486
@@ -536,13 +536,13 @@ the resource index:
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>
     ...
-    <a href="+/addSchoolBellResource.html">New Resource</a>
+    <a href="+/addSchoolToolResource.html">New Resource</a>
     ...
 
 We can click on it and get a form:
 
     >>> print http(r"""
-    ... GET /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
+    ... GET /frogpond/resources/+/addSchoolToolResource.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... """)
     HTTP/1.1 200 Ok
@@ -552,7 +552,7 @@ We can click on it and get a form:
     ...
       <form method="post" enctype="multipart/form-data"
             class="standalone"
-            action="http://localhost/frogpond/resources/+/addSchoolBellResource.html">
+            action="http://localhost/frogpond/resources/+/addSchoolToolResource.html">
     ...<input class="textType" id="field.title" name="field.title" size="20" type="text" value=""  />...
     ...<label for="field.isLocation" title="Indicate this resource is a location, like a classroom.">A Location.</label>...
       </form>
@@ -561,7 +561,7 @@ We can click on it and get a form:
 After submitting the form
 
     >>> print http("""
-    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
+    ... POST /frogpond/resources/+/addSchoolToolResource.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: application/x-www-form-urlencoded
     ...
@@ -605,7 +605,7 @@ We should have a view for that resource as well:
 Cancelling the resource addition redirects us to the resource index:
 
     >>> print http("""
-    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
+    ... POST /frogpond/resources/+/addSchoolToolResource.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: application/x-www-form-urlencoded
     ...

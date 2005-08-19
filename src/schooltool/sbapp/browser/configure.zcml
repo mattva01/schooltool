@@ -79,7 +79,7 @@
   <!-- XXX: Necessary for now, but we might find a macro way of doing this. -->
   <page
       for="*"
-      name="schoolbell_navigation"
+      name="schooltool_navigation"
       layer=".skin.ISchoolBellLayer"
       template="templates/navigation.pt"
       class=".NavigationView"

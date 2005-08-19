@@ -9,7 +9,7 @@ SchoolTool as a Zope 3 content object
 -------------------------------------
 
 First, we'll go to the Zope 3 management interface and verify that you can add
-SchoolBell instances from the add menu.
+SchoolTool instances from the add menu.
 
     >>> print http(r"""
     ... GET /@@contents.html HTTP/1.1
@@ -23,7 +23,7 @@ SchoolBell instances from the add menu.
     <h4>Add:</h4>
     ...
     <a href="http://localhost/@@contents.html?type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication"
-       class="">SchoolBell</a>
+       class="">SchoolTool</a>
     ...
 
 We will obviously need a SchoolTool instance.
@@ -49,8 +49,8 @@ The SchoolTool version is displayed on the page:
     ... Authorization: Basic mgr:mgrpw
     ... """)
 
-    >>> import schoolbell
-    >>> str(page).count(schoolbell.VERSION) > 0
+    >>> import schooltool
+    >>> str(page).count(schooltool.VERSION) > 0
     True
 
 
@@ -95,7 +95,7 @@ Let's create a second person so that we can test access control.
 Also, let's create a group:
 
     >>> print http(r"""
-    ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
+    ... POST /frogpond/groups/+/addSchoolToolGroup.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: application/x-www-form-urlencoded
     ...

@@ -45,8 +45,8 @@ session.
 
 Make sure the current version number is somewhere on the page:
 
-    >>> import schoolbell
-    >>> str(login_page).count(schoolbell.VERSION) > 0
+    >>> import schooltool
+    >>> str(login_page).count(schooltool.VERSION) > 0
     True
 
 Incorrect password:
@@ -80,7 +80,7 @@ Another attempt:
 Now we are authenticated:
 
     >>> print http("""
-    ... GET /frogpond HTTP/1.1
+    ... GET /frogpond/persons HTTP/1.1
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -103,7 +103,7 @@ We are logged out:
     >>> print http("""
     ... GET /frogpond HTTP/1.1
     ... """)
-    HTTP/1.1 200 Ok
+    HTTP/1.1 ...
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
     <BLANKLINE>

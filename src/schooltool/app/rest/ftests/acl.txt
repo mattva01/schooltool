@@ -52,6 +52,18 @@ the web ZMI:
           <permission id="schooltool.manageMembership" />
     <BLANKLINE>
       </principal>
+      <principal id="sb.group.manager">
+    <BLANKLINE>
+          <permission id="schooltool.view" />
+          <permission id="schooltool.edit" />
+          <permission id="schooltool.create" />
+          <permission id="schooltool.viewCalendar" />
+          <permission id="schooltool.addEvent" />
+          <permission id="schooltool.modifyEvent" />
+          <permission id="schooltool.controlAccess" />
+          <permission id="schooltool.manageMembership" />
+    <BLANKLINE>
+      </principal>
     </acl>
     <BLANKLINE>
 
@@ -116,6 +128,18 @@ Now, the ACL view should include those new principals as well:
       </principal>
       <principal id="zope.Anybody">
     <BLANKLINE>
+          <permission setting="on" id="schooltool.view" />
+          <permission id="schooltool.edit" />
+          <permission id="schooltool.create" />
+          <permission setting="on" id="schooltool.viewCalendar" />
+          <permission id="schooltool.addEvent" />
+          <permission id="schooltool.modifyEvent" />
+          <permission id="schooltool.controlAccess" />
+          <permission id="schooltool.manageMembership" />
+    <BLANKLINE>
+      </principal>
+      <principal id="sb.group.a-group">
+    <BLANKLINE>
           <permission id="schooltool.view" />
           <permission id="schooltool.edit" />
           <permission id="schooltool.create" />
@@ -126,7 +150,7 @@ Now, the ACL view should include those new principals as well:
           <permission id="schooltool.manageMembership" />
     <BLANKLINE>
       </principal>
-      <principal id="sb.group.a-group">
+      <principal id="sb.group.manager">
     <BLANKLINE>
           <permission id="schooltool.view" />
           <permission id="schooltool.edit" />
@@ -263,6 +287,18 @@ Now, the permissions are changed and John can see them:
           <permission id="schooltool.edit" />
           <permission id="schooltool.create" />
           <permission setting="on" id="schooltool.viewCalendar" />
+          <permission id="schooltool.addEvent" />
+          <permission id="schooltool.modifyEvent" />
+          <permission id="schooltool.controlAccess" />
+          <permission id="schooltool.manageMembership" />
+    <BLANKLINE>
+      </principal>
+      <principal id="sb.group.manager">
+    <BLANKLINE>
+          <permission id="schooltool.view" />
+          <permission id="schooltool.edit" />
+          <permission id="schooltool.create" />
+          <permission id="schooltool.viewCalendar" />
           <permission id="schooltool.addEvent" />
           <permission id="schooltool.modifyEvent" />
           <permission id="schooltool.controlAccess" />

@@ -26,7 +26,7 @@
 
     <addform
         label="Add a Resource"
-        name="addSchoolBellResource.html"
+        name="addSchoolToolResource.html"
         schema="schooltool.resource.interfaces.IResource"
         fields="title description isLocation"
         set_before_add="title"
@@ -64,7 +64,7 @@
       menu="schooltool_actions"
       title="New Resource"
       for="..interfaces.IResourceContainer"
-      action="+/addSchoolBellResource.html"
+      action="+/addSchoolToolResource.html"
       />
 
   <addMenuItem
@@ -72,7 +72,7 @@
       description="A Resource"
       class="..resource.Resource"
       permission="schooltool.create"
-      view="addSchoolBellResource.html"
+      view="addSchoolToolResource.html"
       />
 
   <page

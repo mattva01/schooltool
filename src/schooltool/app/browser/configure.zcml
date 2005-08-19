@@ -181,6 +181,7 @@
       template="templates/navigation.pt"
       class=".NavigationView"
       permission="zope.View"
+      layer=".skin.ISchoolToolLayer"
       />
 
   <!-- Breadcrumbs -->

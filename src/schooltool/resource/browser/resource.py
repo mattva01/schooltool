@@ -42,7 +42,7 @@ class ResourceContainerView(ContainerView):
 
     index_title = _("Resource index")
     add_title = _("Add a new resource")
-    add_url = "+/addSchoolBellResource.html"
+    add_url = "+/addSchoolToolResource.html"
 
 
 class ResourceView(BrowserView):

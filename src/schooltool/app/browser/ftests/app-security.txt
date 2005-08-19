@@ -50,11 +50,12 @@ it out:
     ... GET /frogpond/ HTTP/1.1
     ... Authorization: Basic frog:pwd
     ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
+    HTTP/1.1 303 See Other
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
+    Location: http://localhost/frogpond/calendar
     ...
-    <h1>Welcome to SchoolBell</h1>
+    <h1>Welcome to SchoolTool</h1>
     ...
 
 We can traverse to the person index:
@@ -125,7 +126,7 @@ Adding persons should not work without a schooltool.create permission:
 Adding a group also fails:
 
     >>> print http(r"""
-    ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
+    ... POST /frogpond/groups/+/addSchoolToolGroup.html HTTP/1.1
     ... Authorization: Basic frog:pwd
     ... Content-Length: 61
     ... Content-Type: application/x-www-form-urlencoded
@@ -140,7 +141,7 @@ Adding a group also fails:
 And the resource too:
 
     >>> print http(r"""
-    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
+    ... POST /frogpond/resources/+/addSchoolToolResource.html HTTP/1.1
     ... Authorization: Basic frog:pwd
     ... Content-Length: 61
     ... Content-Type: application/x-www-form-urlencoded
@@ -190,7 +191,7 @@ Now the person adding works:
 And a group:
 
     >>> print http(r"""
-    ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
+    ... POST /frogpond/groups/+/addSchoolToolGroup.html HTTP/1.1
     ... Authorization: Basic frog:pwd
     ... Content-Length: 61
     ... Content-Type: application/x-www-form-urlencoded
@@ -206,7 +207,7 @@ And a group:
 And a resource too:
 
     >>> print http(r"""
-    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
+    ... POST /frogpond/resources/+/addSchoolToolResource.html HTTP/1.1
     ... Authorization: Basic frog:pwd
     ... Content-Length: 49
     ... Content-Type: application/x-www-form-urlencoded

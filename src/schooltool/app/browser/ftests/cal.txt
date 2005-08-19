@@ -50,7 +50,7 @@ Let's create a second person so that we can test access control.
 Also, let's create a group:
 
     >>> print http(r"""
-    ... POST /frogpond/groups/+/addSchoolBellGroup.html HTTP/1.1
+    ... POST /frogpond/groups/+/addSchoolToolGroup.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: application/x-www-form-urlencoded
     ...
@@ -181,7 +181,7 @@ test.  We shall try to enable them.
     ... Authorization: Basic frog:pwd
     ... """
 
-    >>> from schoolbell.app.browser.tests.test_pdfcal import tryToSetUpReportLab
+    >>> from schooltool.app.browser.tests.test_pdfcal import tryToSetUpReportLab
     >>> pdf_enabled = tryToSetUpReportLab()
     >>> if pdf_enabled:
     ...     text = '%PDF-1.3' in str(http(request_headers))
@@ -618,8 +618,9 @@ calendar, you will see a new portlet on the left:
       <form method="post"
             action="http://localhost/frogpond/persons/frog/calendar/daily.html">
     ...
-            <input type="checkbox" checked="checked" disabled="disabled" />
-            My Calendar
+            <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
+    ...
+            <td style="width: 100%">My Calendar</td>
     ...
           <input name="OVERLAY_APPLY" type="submit"
                  value="Apply" />
@@ -666,24 +667,28 @@ Now, you can see both calendars in the overlay portlet:
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     ...
-          <label class="disabled">
-            <input type="checkbox" checked="checked" disabled="disabled" />
-            My Calendar
-          </label>
+        <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
+        <td><input type="checkbox" name="my_timetable"
+                   checked="checked" /></td>
+        <td style="width: 100%">My Calendar</td>
     ...
-         <label>
-           <input type="checkbox" name="overlay:list"
-                  checked="checked"
-                  value="/frogpond/groups/animals" />
-           <span>Animals</span>
-         </label>
+        <td><input type="checkbox" name="overlay:list"
+                   checked="checked"
+                   value="/frogpond/groups/animals" /></td>
+        <td><input type="checkbox"
+                   name="overlay_timetables:list"
+                   checked="checked"
+                   value="/frogpond/groups/animals" /></td>
+        <td style="width: 100%">Animals</td>
     ...
-         <label>
-           <input type="checkbox" name="overlay:list"
-                  checked="checked"
-                  value="/frogpond/persons/toad" />
-           <span>Toad</span>
-         </label>
+        <td><input type="checkbox" name="overlay:list"
+                   checked="checked"
+                   value="/frogpond/persons/toad" /></td>
+        <td><input type="checkbox"
+                   name="overlay_timetables:list"
+                   checked="checked"
+                   value="/frogpond/persons/toad" /></td>
+        <td style="width: 100%">Toad</td>
     ...
 
 Regression test for Issue243 (Calendars with identical titles are
@@ -698,7 +703,7 @@ Rename the group so it's title would be Toad:
     HTTP/1.1 303 See Other
     ...
 
-Calendars with identical titles will get sorted in random order so i
+Calendars with identical titles will get sorted in random order so I
 am just checking that they are there:
 
     >>> result = http("""
@@ -709,28 +714,32 @@ am just checking that they are there:
     >>> print result
     HTTP/1.1 200 Ok
     ...
-          <label class="disabled">
-            <input type="checkbox" checked="checked" disabled="disabled" />
-            My Calendar
-          </label>
+        <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
+        <td><input type="checkbox" name="my_timetable"
+                   checked="checked" /></td>
+        <td style="width: 100%">My Calendar</td>
     ...
-         <label>
-           <input type="checkbox" name="overlay:list"
-                  checked="checked"
-                  value="/frogpond/groups/animals" />
-           <span>Toad</span>
-         </label>
+        <td><input type="checkbox" name="overlay:list"
+                   checked="checked"
+                   value="/frogpond/groups/animals" /></td>
+        <td><input type="checkbox"
+                   name="overlay_timetables:list"
+                   checked="checked"
+                   value="/frogpond/groups/animals" /></td>
+        <td style="width: 100%">Toad</td>
     ...
 
     >>> print result
     HTTP/1.1 200 Ok
     ...
-         <label>
-           <input type="checkbox" name="overlay:list"
-                  checked="checked"
-                  value="/frogpond/persons/toad" />
-           <span>Toad</span>
-         </label>
+        <td><input type="checkbox" name="overlay:list"
+                   checked="checked"
+                   value="/frogpond/persons/toad" /></td>
+        <td><input type="checkbox"
+                   name="overlay_timetables:list"
+                   checked="checked"
+                   value="/frogpond/persons/toad" /></td>
+        <td style="width: 100%">Toad</td>
     ...
 
 Rename the group back to Animals:

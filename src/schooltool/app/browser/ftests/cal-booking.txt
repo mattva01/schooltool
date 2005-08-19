@@ -41,7 +41,7 @@ Let's create a person so that we can fool around with his calendar:
 Now let's create some resources to book:
 
     >>> print http("""
-    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
+    ... POST /frogpond/resources/+/addSchoolToolResource.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 34
     ... Content-Type: application/x-www-form-urlencoded
@@ -54,7 +54,7 @@ Now let's create some resources to book:
     ...
 
     >>> print http("""
-    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
+    ... POST /frogpond/resources/+/addSchoolToolResource.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 34
     ... Content-Type: application/x-www-form-urlencoded
@@ -67,7 +67,7 @@ Now let's create some resources to book:
     ...
 
     >>> print http("""
-    ... POST /frogpond/resources/+/addSchoolBellResource.html HTTP/1.1
+    ... POST /frogpond/resources/+/addSchoolToolResource.html HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 34
     ... Content-Type: application/x-www-form-urlencoded

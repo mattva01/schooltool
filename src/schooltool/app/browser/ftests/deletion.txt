@@ -27,7 +27,7 @@ We create a SchoolBell instance
 We add a group
 
     >>> print http(r"""
-    ... POST /frogpond/groups/+/addSchoolBellGroup.html%3D HTTP/1.1
+    ... POST /frogpond/groups/+/addSchoolToolGroup.html%3D HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 36
     ... Content-Type: application/x-www-form-urlencoded
