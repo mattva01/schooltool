@@ -176,7 +176,7 @@ from schooltool.timetable.interfaces import ITermWrite, ITerm
 from schooltool.timetable.interfaces import ITimetableSource
 from schooltool.timetable.interfaces import Unchanged
 from schooltool.timetable.interfaces import IDateRange
-from schooltool import getSchoolToolApplication
+from schooltool.app.app import getSchoolToolApplication
 
 # Imports for ZODB compatibility
 from schooltool.timetable.model import BaseTimetableModel

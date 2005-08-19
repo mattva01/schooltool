@@ -2,76 +2,15 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
-
   <subscriber
       handler=".restSchoolToolSubscriber"
       for="zope.app.publication.interfaces.IBeforeTraverseEvent"
       />
 
-<!-- Content Type Traversers -->
-
   <view
-      for="schooltool.timetable.interfaces.ITermContainer"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.http.IHTTPPublisher"
-      factory="schooltool.traverser.traverser.PluggableTraverser"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.timetable.interfaces.ITerm"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.http.IHTTPPublisher"
-      factory="schooltool.traverser.traverser.PluggableTraverser"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="zope.publisher.interfaces.http.IHTTPPublisher"
-      factory="schooltool.traverser.traverser.PluggableTraverser"
-      permission="zope.Public"
-      />
-
-<!-- RESTive Verbs and name traversers -->
-
-  <!-- XXX: Hack to get schooltool working; we should have a schooltool -->
-  <!--      layer. -->
-  <view
-      for="schooltool.app.SchoolToolApplication"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
       name="GET"
-      factory=".app.SchoolToolApplicationView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.timetable.interfaces.ITermContainer"
-      name="GET"
-      factory=".app.TermContainerView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <adapter
-      for="schooltool.timetable.interfaces.ITermContainer"
-      provides="zope.app.filerepresentation.interfaces.IFileFactory"
-      factory=".app.TermFileFactory"
-      permission="zope.Public"
-      />
-
-  <adapter
-      for="schooltool.timetable.interfaces.ITerm"
-      provides="zope.app.filerepresentation.interfaces.IWriteFile"
-      factory=".app.TermFile"
-      permission="zope.Public"
-      />
-
-  <view
-      for="schooltool.timetable.interfaces.ITerm"
-      name="GET"
-      factory=".app.TermView"
+      factory=".app.ApplicationView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />

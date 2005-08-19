@@ -5,7 +5,7 @@
 
   <!-- Level Container Views -->
 
-  <configure package="schoolbell.app.browser">
+  <configure package="schooltool.app.browser">
 
     <page
         name="index.html"
@@ -30,7 +30,7 @@
       class=".level.LevelValidationView"
       template="level_validation.pt"
       permission="zope.View"
-      menu="schoolbell_actions" title="Validate Levels"
+      menu="schooltool_actions" title="Validate Levels"
       />
 
   <!-- Level Graph Validation Error Views -->
@@ -54,7 +54,7 @@
   <zope:adapter
       factory=".level.EditLevelAdapter" />
 
-  <configure package="schoolbell.app.browser">
+  <configure package="schooltool.app.browser">
 
     <addform
         label="Add a Level"
@@ -63,7 +63,7 @@
         fields="title isInitial previousLevel nextLevel"
         arguments="title"
         content_factory="schooltool.level.level.Level"
-        permission="schoolbell.create"
+        permission="schooltool.create"
         template="templates/simple_add.pt"
         class="schooltool.level.browser.level.LevelAddView"
         />
@@ -76,14 +76,14 @@
         fields="title isInitial previousLevel nextLevel"
         template="templates/simple_edit.pt"
         class="schooltool.level.browser.level.LevelEditView"
-        permission="schoolbell.edit"
-        menu="schoolbell_actions" title="Edit Info"
+        permission="schooltool.edit"
+        menu="schooltool_actions" title="Edit Info"
         />
 
   </configure>
 
   <menuItem
-      menu="schoolbell_actions"
+      menu="schooltool_actions"
       title="New Level"
       for="..interfaces.ILevelContainer"
       action="+/addSchoolToolLevel.html"
@@ -104,8 +104,8 @@
       for="schooltool.group.interfaces.IGroup"
       template="promotion.pt"
       class=".promotion.PromotionWorkItemsView"
-      permission="schoolbell.edit"
-      menu="schoolbell_actions" title="Student Management"
+      permission="schooltool.edit"
+      menu="schooltool_actions" title="Student Management"
       />
 
   <zope:view
@@ -113,7 +113,7 @@
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       provides=".promotion.IFinishSchemaWorkitem"
       factory=".promotion.SchemaWorkItemView"
-      permission="schoolbell.view"
+      permission="schooltool.view"
       />
 
   <zope:view
@@ -121,7 +121,7 @@
       type="zope.publisher.interfaces.browser.IBrowserRequest"
       provides=".promotion.IFinishSchemaWorkitem"
       factory=".promotion.SetLevelOutcomeView"
-      permission="schoolbell.view"
+      permission="schooltool.view"
       />
 
   <!-- Academic Record Views -->
@@ -132,7 +132,7 @@
       template="record.pt"
       class=".record.AcademicRecordView"
       permission="zope.View"
-      menu="schoolbell_actions" title="Academic Record"
+      menu="schooltool_actions" title="Academic Record"
       />
 
 </configure>

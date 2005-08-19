@@ -67,7 +67,7 @@ from schooltool.timetable import TimetableActivity
 from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable import getNextTermForDate, getTermForDate
-from schooltool import getSchoolToolApplication
+from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.browser.app import ContainerView
 
 

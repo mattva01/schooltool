@@ -24,7 +24,7 @@ $Id: test_cal.py 415 2003-11-28 15:21:45Z alga $
 
 import unittest
 import libxml2
-from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin
+from schooltool.app.rest.testing import QuietLibxml2Mixin
 
 
 class TestRelaxNGValidation(QuietLibxml2Mixin, unittest.TestCase):

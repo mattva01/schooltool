@@ -103,7 +103,7 @@
       type="zope.publisher.interfaces.http.IHTTPRequest"
       provides=".IRestTraverser"
       factory=".acl.ACLTraverser"
-      permission="schoolbell.controlAccess"
+      permission="schooltool.controlAccess"
       name="acl"
       />
 
@@ -138,14 +138,6 @@
 <!-- RESTive verbs implementations -->
 
   <view
-      for="schooltool.app.interfaces.ISchoolToolApplication"
-      name="GET"
-      factory=".app.ApplicationView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       name="GET"
       factory=".app.CalendarView"
@@ -163,7 +155,7 @@
 
   <class class="schoolbell.app.rest.acl.ACLView">
     <require
-      permission="schoolbell.controlAccess"
+      permission="schooltool.controlAccess"
       interface="schoolbell.app.rest.acl.IACLView"
       />
   </class>
@@ -172,7 +164,7 @@
       for="schoolbell.app.rest.acl.IACLAdapter"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       factory="schoolbell.app.rest.acl.ACLViewFactory"
-      permission="schoolbell.controlAccess"
+      permission="schooltool.controlAccess"
       allowed_interface="schoolbell.app.rest.acl.IACLView"
       name="GET"
       />
@@ -181,14 +173,14 @@
       for="schoolbell.app.rest.acl.IACLAdapter"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       factory="schoolbell.app.rest.acl.ACLViewFactory"
-      permission="schoolbell.controlAccess"
+      permission="schooltool.controlAccess"
       allowed_interface="schoolbell.app.rest.acl.IACLView"
       name="POST"
       />
 
   <class class="schoolbell.app.rest.relationships.RelationshipsView">
     <allow attributes="GET" />
-    <require permission="schoolbell.manageMembership"
+    <require permission="schooltool.manageMembership"
              attributes="POST" />
   </class>
 
@@ -208,7 +200,7 @@
 
   <class class="schoolbell.app.rest.relationships.LinkView">
     <allow attributes="GET info" />
-    <require permission="schoolbell.manageMembership"
+    <require permission="schooltool.manageMembership"
              attributes="DELETE" />
   </class>
 
@@ -244,7 +236,7 @@
       />
 
   <view
-      for="schoolbell.app.rest.xmlparsing.IXMLError"
+      for="schooltool.app.rest.xmlparsing.IXMLError"
       name="GET"
       factory=".errors.XMLErrorView"
       type="zope.publisher.interfaces.http.IHTTPRequest"

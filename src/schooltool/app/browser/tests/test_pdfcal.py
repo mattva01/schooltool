@@ -31,8 +31,8 @@ from zope.publisher.browser import TestRequest
 from zope.app.tests import setup, ztapi
 from zope.app.publisher.browser import BrowserView
 from schooltool.app.cal import CalendarEvent
-from schoolbell.app.browser.pdfcal import PDFCalendarViewBase
-from schoolbell.app.browser.pdfcal import setUpMSTTCoreFonts
+from schooltool.app.browser.pdfcal import PDFCalendarViewBase
+from schooltool.app.browser.pdfcal import setUpMSTTCoreFonts
 from schooltool.person.person import Person
 from schooltool.resource.resource import Resource
 from schooltool import SchoolToolMessageID as _
@@ -352,7 +352,7 @@ def doctest_PDFCalendarViewBase_eventInfoCell():
 def doctest_DailyPDFCalendarView():
     r"""Tests for DailyPDFCalendarView.
 
-        >>> from schoolbell.app.browser.pdfcal import DailyPDFCalendarView
+        >>> from schooltool.app.browser.pdfcal import DailyPDFCalendarView
         >>> calendar = Person().calendar
         >>> request = TestRequest(form={'date': '2005-07-01'})
         >>> view = DailyPDFCalendarView(calendar, request)
@@ -400,7 +400,7 @@ def doctest_DailyPDFCalendarView():
 def doctest_WeeklyPDFCalendarView():
     r"""Tests for WeeklyPDFCalendarView.
 
-        >>> from schoolbell.app.browser.pdfcal import WeeklyPDFCalendarView
+        >>> from schooltool.app.browser.pdfcal import WeeklyPDFCalendarView
         >>> calendar = Person().calendar
         >>> request = TestRequest(form={'date': '2005-07-01'})
         >>> view = WeeklyPDFCalendarView(calendar, request)
@@ -471,7 +471,7 @@ def doctest_WeeklyPDFCalendarView():
 def doctest_MonthlyPDFCalendarView():
     r"""Tests for MonthlyPDFCalendarView.
 
-        >>> from schoolbell.app.browser.pdfcal import MonthlyPDFCalendarView
+        >>> from schooltool.app.browser.pdfcal import MonthlyPDFCalendarView
         >>> calendar = Person().calendar
         >>> request = TestRequest(form={'date': '2005-07-01'})
         >>> view = MonthlyPDFCalendarView(calendar, request)
@@ -711,7 +711,7 @@ def tryToSetUpReportLab():
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite('schoolbell.app.browser.pdfcal'))
+    suite.addTest(doctest.DocTestSuite('schooltool.app.browser.pdfcal'))
     success = tryToSetUpReportLab()
     if success:
         docsuite = doctest.DocTestSuite(optionflags=doctest.ELLIPSIS)

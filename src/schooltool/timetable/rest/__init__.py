@@ -48,7 +48,7 @@ from schooltool.app.rest import IRestTraverser
 from schooltool.app.rest.app import GenericContainerView
 from schooltool.app.rest.errors import RestError
 from schooltool.app.rest.xmlparsing import XMLDocument
-from schooltool import getSchoolToolApplication
+from schooltool.app.app import getSchoolToolApplication
 from schooltool.common import parse_date, parse_time
 from schooltool.timetable.interfaces import ITimetableModelFactory
 from schooltool.timetable.interfaces import IHaveTimetables, ITimetables
@@ -58,8 +58,8 @@ from schooltool.timetable import SchooldayTemplate
 from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
 from schooltool.timetable import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import TimetableSchemaContainer
-from schooltool.rest.interfaces import ITimetableFileFactory
-from schooltool.rest.interfaces import INullTimetable, ICompositeTimetables
+from schooltool.app.rest.interfaces import ITimetableFileFactory
+from schooltool.app.rest.interfaces import INullTimetable, ICompositeTimetables
 
 
 def parseDate(date_str):

@@ -40,12 +40,12 @@ def doctest_SchoolToolApplicationView():
 
     Some setup
 
-        >>> from schoolbell.app.app import getApplicationPreferences
+        >>> from schooltool.app.app import getApplicationPreferences
         >>> from zope.app.annotation.interfaces import IAnnotations
         >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> from schooltool.app.interfaces import ISchoolToolApplication
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
 
         >>> setup.setUpAnnotations()
         >>> sbsetup.setupCalendaring()
@@ -188,7 +188,7 @@ def doctest_LoginView():
 
         >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> from schooltool.app.interfaces import IApplicationPreferences
-        >>> from schoolbell.app.app import getApplicationPreferences
+        >>> from schooltool.app.app import getApplicationPreferences
         >>> ztapi.provideAdapter(ISchoolToolApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
@@ -201,7 +201,7 @@ def doctest_LoginView():
 
     Suppose we have a SchoolBell app and a person:
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
         >>> persons = app['persons']
 
         >>> frog = Person('frog')
@@ -301,7 +301,7 @@ def doctest_LogoutView():
     """
     Suppose we have a SchoolBell app and a person:
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
         >>> persons = app['persons']
 
         >>> from schooltool.person.person import Person
@@ -369,7 +369,7 @@ def doctest_ACLView():
         ...                      AnnotationPrincipalPermissionManager)
         >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> from schooltool.app.interfaces import IApplicationPreferences
-        >>> from schoolbell.app.app import getApplicationPreferences
+        >>> from schooltool.app.app import getApplicationPreferences
         >>> ztapi.provideAdapter(ISchoolToolApplication,
         ...                      IApplicationPreferences,
         ...                      getApplicationPreferences)
@@ -382,7 +382,7 @@ def doctest_ACLView():
 
     Suppose we have a SchoolBell app:
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
 
     We have a couple of persons and groups:
 
@@ -795,7 +795,7 @@ def doctest_ACLView_inheritance():
 
     Suppose we have a SchoolBell app:
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
 
     We have a couple of persons and groups:
 
@@ -897,7 +897,7 @@ def doctest_hasPermission():
 
     Suppose we have a Schoolbell object:
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
 
     In it, we have a principal:
 
@@ -941,10 +941,10 @@ def doctest_ApplicationPreferencesView():
     We need to setup a SchoolToolApplication site and build our
     ISchoolToolApplication adapter:
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
 
         >>> from schooltool.app.browser.app import ApplicationPreferencesView
-        >>> from schoolbell.app.app import getApplicationPreferences
+        >>> from schooltool.app.app import getApplicationPreferences
         >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> from schooltool.app.interfaces import ISchoolToolApplication
 

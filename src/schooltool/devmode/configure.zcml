@@ -55,7 +55,7 @@
   <browser:page
       name="introspector.html"
       for="*"
-      permission="schoolbell.view"
+      permission="schooltool.view"
       template="introspector.pt"
       class=".introspector.Introspector"
       layer=".skin.IDevModeLayer"
@@ -109,7 +109,7 @@
   <!-- Menu entries for Error Reporting Utility -->
 
   <browser:menuItem
-      menu="schoolbell_actions"
+      menu="schooltool_actions"
       for="zope.app.error.interfaces.IErrorReportingUtility"
       action="@@configure.html"
       title="Configure"
@@ -117,7 +117,7 @@
       />
 
   <browser:menuItem
-      menu="schoolbell_actions"
+      menu="schooltool_actions"
       for="zope.app.error.interfaces.IErrorReportingUtility"
       action="@@index.html"
       title="Error List"

@@ -5,18 +5,18 @@
 
   <content class=".course.CourseContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schoolbell.view"
+    <require permission="schooltool.view"
              attributes="keys values items __iter__ __len__" />
-    <require permission="schoolbell.create"
+    <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
   <content class=".course.Course">
     <implements
         interface="schooltool.note.interfaces.IHaveNotes" />
-    <require permission="schoolbell.view"
+    <require permission="schooltool.view"
              attributes="title description sections __cmp__" />
-    <require permission="schoolbell.edit"
+    <require permission="schooltool.edit"
              set_schema=".interfaces.ICourse" />
   </content>
 
@@ -27,7 +27,7 @@
 
   <adapter
       for=".interfaces.ICourseContainer"
-      factory="schoolbell.app.app.SimpleNameChooser"
+      factory="schooltool.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
 
@@ -35,9 +35,9 @@
 
   <content class=".section.SectionContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schoolbell.view"
+    <require permission="schooltool.view"
              attributes="keys values items __iter__ __len__" />
-    <require permission="schoolbell.create"
+    <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
@@ -46,10 +46,10 @@
     <implements interface="schooltool.note.interfaces.IHaveNotes" />
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
 
-    <require permission="schoolbell.view"
+    <require permission="schooltool.view"
              attributes="title description instructors members
                          courses label size __cmp__ location" />
-    <require permission="schoolbell.edit"
+    <require permission="schooltool.edit"
              set_schema=".interfaces.ISection" />
   </content>
 
@@ -60,7 +60,7 @@
 
   <adapter
       for=".interfaces.ISectionContainer"
-      factory="schoolbell.app.app.SimpleNameChooser"
+      factory="schooltool.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
 

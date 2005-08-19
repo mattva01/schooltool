@@ -41,7 +41,7 @@ def doctest_SchoolToolApplication():
     We need to register an adapter to make the title attribute available:
 
         >>> placelesssetup.setUp()
-        >>> from schoolbell.app.app import ApplicationPreferences
+        >>> from schooltool.app.app import ApplicationPreferences
         >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> provideAdapter(ApplicationPreferences,
         ...                provides=IApplicationPreferences)
@@ -50,7 +50,7 @@ def doctest_SchoolToolApplication():
 
     Let's check that the interface is satisfied:
 
-        >>> from schooltool.interfaces import ISchoolToolApplication
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> verifyObject(ISchoolToolApplication, app)
         True
 
@@ -83,9 +83,8 @@ def doctest_SchoolToolApplication():
       >>> setup.setUpAnnotations()
       >>> from schooltool.app.app import getApplicationPreferences
       >>> getApplicationPreferences(app).title
-      'SchoolBell'
+      'SchoolTool'
 
-      XXX: Acceptable for now to see SchoolBell here.
     """
 
 
@@ -104,7 +103,7 @@ def doctest_getSchoolToolApplication():
 
     If site is not a SchoolToolApplication, we get an error
 
-      >>> from schooltool import getSchoolToolApplication
+      >>> from schooltool.app.app import getSchoolToolApplication
       >>> getSchoolToolApplication()
       Traceback (most recent call last):
       ...
@@ -126,7 +125,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
     r"""
     Set up:
 
-        >>> from schooltool import app
+        >>> from schooltool.app import app
         >>> root = setup.placefulSetUp(True)
         >>> sbsetup.setupCalendaring()
         >>> setupLocalGrants()
@@ -198,20 +197,6 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> map.getPermissionsForPrincipal(unauthenticated.id)
         []
 
-    Nothing happens if the event isn't ObjectAdded:
-
-        >>> from zope.app.container.contained import ObjectRemovedEvent
-        >>> st2 = app.SchoolToolApplication()
-        >>> app.applicationCalendarPermissionsSubscriber(
-        ...     ObjectRemovedEvent(st2))
-        >>> map2 = IPrincipalPermissionManager(st2)
-        >>> x2 = map.getPermissionsForPrincipal(unauthenticated.id)
-        >>> x2.sort()
-        >>> print x2
-        []
-
-
-
     Clean up:
 
         >>> setup.placefulTearDown()
@@ -230,7 +215,7 @@ def doctest_LocationResourceVocabulary():
     We should be able to choose any Resource in the resource container that is
     marked with isLocation.
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
 
     There's no potential terms:
 
@@ -267,7 +252,7 @@ def doctest_LocationResourceVocabulary():
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
-                doctest.DocTestSuite('schooltool.app',
+                doctest.DocTestSuite('schooltool.app.app',
                                      optionflags=doctest.ELLIPSIS),
                 doctest.DocFileSuite('../README.txt',
                                      optionflags=doctest.ELLIPSIS)

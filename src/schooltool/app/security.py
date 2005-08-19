@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolBell security infrastructure
+SchoolTool security infrastructure
 
 $Id$
 """
@@ -66,8 +66,8 @@ class Principal(Contained):
             return self._person
 
 
-class SchoolBellAuthenticationUtility(Persistent, Contained):
-    """A local SchoolBell authentication utility.
+class SchoolToolAuthenticationUtility(Persistent, Contained):
+    """A local SchoolTool authentication utility.
 
     This utility serves principals for groups and persons in the
     nearest SchoolToolApplication instance.
@@ -80,7 +80,7 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
 
     person_prefix = "sb.person."
     group_prefix = "sb.group."
-    session_name = "schoolbell.auth"
+    session_name = "schooltool.auth"
 
     def authenticate(self, request):
         """Identify a principal for request.
@@ -179,14 +179,14 @@ class SchoolBellAuthenticationUtility(Persistent, Contained):
 
 
 def setUpLocalAuth(site, auth=None):
-    """Set up local authentication for SchoolBell.
+    """Set up local authentication for SchoolTool.
 
     Creates a site management folder in a site and sets up local
     authentication.
     """
 
     if auth is None:
-        auth = SchoolBellAuthenticationUtility()
+        auth = SchoolToolAuthenticationUtility()
 
     if not ISite.providedBy(site):
         site.setSiteManager(LocalSiteManager(site))
@@ -194,16 +194,16 @@ def setUpLocalAuth(site, auth=None):
     default = zapi.traverse(site, '++etc++site/default')
     reg_manager = default.registrationManager
 
-    if 'SchoolBellAuth' not in default:
+    if 'SchoolToolAuth' not in default:
         # Add and register the auth utility
-        default['SchoolBellAuth'] = auth
+        default['SchoolToolAuth'] = auth
         registration = UtilityRegistration('', IAuthentication, auth)
         reg_manager.addRegistration(registration)
         registration.status = ActiveStatus
 
 
 def authSetUpSubscriber(event):
-    """Set up local authentication for newly added SchoolBell apps.
+    """Set up local authentication for newly added SchoolTool apps.
 
     This is a handler for IObjectAddedEvent.
     """
@@ -211,11 +211,11 @@ def authSetUpSubscriber(event):
         if ISchoolToolApplication.providedBy(event.object):
             setUpLocalAuth(event.object)
 
-            # Grant schoolbell.view to all authenticated users
+            # Grant schooltool.view to all authenticated users
             allusers = zapi.queryUtility(IAuthenticatedGroup)
             if allusers is not None:
                 perms = IPrincipalPermissionManager(event.object)
-                perms.grantPermissionToPrincipal('schoolbell.view',
+                perms.grantPermissionToPrincipal('schooltool.view',
                                                  allusers.id)
 
 
@@ -225,8 +225,8 @@ def groupPermissionsSubscriber(event):
         if IGroup.providedBy(event.object):
             map = IPrincipalPermissionManager(event.object)
             principalid = 'sb.group.' + event.object.__name__
-            map.grantPermissionToPrincipal('schoolbell.view', principalid)
-            map.grantPermissionToPrincipal('schoolbell.viewCalendar',
+            map.grantPermissionToPrincipal('schooltool.view', principalid)
+            map.grantPermissionToPrincipal('schooltool.viewCalendar',
                                            principalid)
 
 
@@ -237,5 +237,5 @@ def applicationCalendarPermissionsSubscriber(event):
             unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
             calendar = ISchoolToolCalendar(event.object)
             perms = IPrincipalPermissionManager(calendar)
-            perms.grantPermissionToPrincipal('schoolbell.viewCalendar',
+            perms.grantPermissionToPrincipal('schooltool.viewCalendar',
                                               unauthenticated.id)

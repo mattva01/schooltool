@@ -27,7 +27,7 @@ from StringIO import StringIO
 from zope.publisher.browser import TestRequest
 from zope.publisher.http import HTTPRequest
 from zope.app.testing import setup, ztapi
-from schoolbell.app.rest.tests.utils import XMLCompareMixin, QuietLibxml2Mixin
+from schooltool.app.rest.testing import XMLCompareMixin, QuietLibxml2Mixin
 from schooltool.app.rest.xmlparsing import XMLDocument, XMLParseError
 
 from schooltool.testing import setup as sbsetup
@@ -58,7 +58,7 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
         setUpRelationships()
 
         # SchoolToolApplication
-        self.app = sbsetup.setupSchoolBellSite()
+        self.app = sbsetup.setupSchoolToolSite()
 
         from schooltool.person.person import Person
         self.person = self.app['persons']['joe'] = Person('joe')

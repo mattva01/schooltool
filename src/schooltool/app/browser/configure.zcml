@@ -34,15 +34,19 @@
   <resource name="schooltool.css" file="resources/schooltool.css"
             layer=".skin.ISchoolToolLayer" />
 
+<!-- Actions menu -->
+
+  <menu id="schooltool_actions" title="Actions" />
+
   <!-- Views -->
 
   <page
       name="index.html"
-      for="schooltool.interfaces.ISchoolToolApplication"
-      class="schooltool.browser.app.SchoolToolApplicationView"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class="schooltool.app.browser.app.SchoolToolApplicationView"
       template="templates/index.pt"
       permission="zope.Public"
-      layer="schooltool.browser.skin.ISchoolToolLayer"
+      layer="schooltool.app.browser.skin.ISchoolToolLayer"
       />
 
   <page
@@ -85,25 +89,12 @@
   <page
       name="timetables-csvimport.html"
       for="schooltool.course.interfaces.ISectionContainer"
-      class="schooltool.browser.csvimport.TimetableCSVImportView"
+      class="schooltool.app.browser.csvimport.TimetableCSVImportView"
       template="templates/timetables-csvimport.pt"
-      permission="schoolbell.create"
+      permission="schooltool.create"
       layer="SchoolToolLayer"
-      menu="schoolbell_actions"
+      menu="schooltool_actions"
       title="Import Sections"
-      />
-
-  <!-- XXX: Needs to be here until we switch to pagelet system or -->
-  <!--      write a macro -->
-  <page
-      name="index.html"
-      for="schooltool.person.interfaces.IPerson"
-      class="schooltool.browser.app.PersonView"
-      template="templates/person.pt"
-      permission="zope.View"
-      menu="zmi_views"
-      title="View"
-      layer=".skin.ISchoolToolLayer"
       />
 
 </configure>

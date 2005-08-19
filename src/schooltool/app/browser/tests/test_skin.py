@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Tests for schooltool.browser.skin.
+Tests for schooltool.app.browser.skin.
 
 $Id: test_skin.py 2643 2005-02-01 11:13:58Z mg $
 """
@@ -37,8 +37,8 @@ def doctest_schoolToolTraverseSubscriber():
 
         >>> from zope.publisher.browser import TestRequest
         >>> from zope.app.publication.zopepublication import BeforeTraverseEvent
-        >>> from schooltool.browser.skin import schoolToolTraverseSubscriber
-        >>> from schooltool.browser.skin import ISchoolToolSkin
+        >>> from schooltool.app.browser.skin import schoolToolTraverseSubscriber
+        >>> from schooltool.app.browser.skin import ISchoolToolSkin
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schoolbell.app.browser.skin import ISchoolBellSkin
 
@@ -52,9 +52,9 @@ def doctest_schoolToolTraverseSubscriber():
         False
         >>> skin = list(providedBy(request).interfaces())[1]
         >>> skin
-        <InterfaceClass schooltool.browser.skin.ISchoolToolSkin>
+        <InterfaceClass schooltool.app.browser.skin.ISchoolToolSkin>
         >>> pprint.pprint(skin.getBases())
-        (<InterfaceClass schooltool.browser.skin.ISchoolToolLayer>,
+        (<InterfaceClass schooltool.app.browser.skin.ISchoolToolLayer>,
          <InterfaceClass schoolbell.app.browser.skin.ISchoolBellLayer>,
          <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)
 

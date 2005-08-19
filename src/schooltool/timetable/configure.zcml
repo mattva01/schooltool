@@ -5,7 +5,7 @@
 
   <!-- Application hook -->
   <subscriber
-      for="schooltool.interfaces.IApplicationInitializationEvent"
+      for="schooltool.app.interfaces.IApplicationInitializationEvent"
       handler=".addToApplication"
       />
 
@@ -27,12 +27,12 @@
 
   <adapter
       for=".interfaces.ITermContainer"
-      factory="schoolbell.app.app.SimpleNameChooser"
+      factory="schooltool.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
   <adapter
       for=".interfaces.ITimetableSchemaContainer"
-      factory="schoolbell.app.app.SimpleNameChooser"
+      factory="schooltool.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
   <adapter
@@ -70,27 +70,27 @@
 
   <content class=".TermContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schoolbell.view"
+    <require permission="schooltool.view"
              attributes="keys values __iter__ __len__" />
-    <require permission="schoolbell.create"
+    <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
   <content class=".Term">
     <allow interface=".interfaces.ITerm"
            attributes="__cmp__"/>
-    <require permission="schoolbell.edit"
+    <require permission="schooltool.edit"
              interface=".interfaces.ITermWrite"
              set_schema=".interfaces.ITerm" />
   </content>
 
   <content class=".TimetableDict">
-    <require permission="schoolbell.edit"
+    <require permission="schooltool.edit"
              interface="zope.app.container.interfaces.IContainer" />
   </content>
 
   <content class=".TimetableSchemaContainer">
-    <require permission="schoolbell.create"
+    <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer"
              set_attributes="default_id" />
     <require permission="zope.View"
@@ -100,21 +100,21 @@
 
   <content class=".Timetable">
     <allow interface=".interfaces.ITimetable" />
-    <require permission="schoolbell.edit"
+    <require permission="schooltool.edit"
              interface=".interfaces.ITimetableWrite"
              set_schema=".interfaces.ITimetable" />
   </content>
 
   <content class=".TimetableDay">
     <allow interface=".interfaces.ITimetableDay" />
-    <require permission="schoolbell.edit"
+    <require permission="schooltool.edit"
              interface=".interfaces.ITimetableDayWrite"
              set_schema=".interfaces.ITimetableDay" />
   </content>
 
   <content class=".TimetableSchema">
     <allow interface=".interfaces.ITimetableSchema" />
-    <require permission="schoolbell.edit"
+    <require permission="schooltool.edit"
              interface=".interfaces.ITimetableSchemaWrite"
              set_schema=".interfaces.ITimetableSchema" />
   </content>
@@ -125,7 +125,7 @@
 
   <content class=".SchooldayTemplate">
     <allow interface=".interfaces.ISchooldayTemplate" />
-    <require permission="schoolbell.edit"
+    <require permission="schooltool.edit"
              interface=".interfaces.ISchooldayTemplateWrite"
              set_schema=".interfaces.ISchooldayTemplate" />
   </content>

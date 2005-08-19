@@ -30,8 +30,8 @@ from pytz import UTC
 from zope.interface.verify import verifyObject
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.testing import ztapi
-from schoolbell.app.rest.tests.utils import NiceDiffsMixin, EqualsSortedMixin
-from schooltool.tests.helpers import diff, sorted
+from schooltool.app.rest.testing import NiceDiffsMixin, EqualsSortedMixin
+from schooltool.testing.util import diff, sorted
 from schooltool.timetable.tests.test_timetable import TermStub
 
 

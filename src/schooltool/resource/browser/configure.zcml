@@ -12,7 +12,7 @@
       permission="zope.Public"
       />
 
-  <configure package="schoolbell.app.browser">
+  <configure package="schooltool.app.browser">
 
     <page
         name="index.html"
@@ -33,7 +33,7 @@
         content_factory="schooltool.resource.resource.Resource"
         template="templates/simple_add.pt"
         class="schooltool.resource.browser.resource.ResourceAddView"
-        permission="schoolbell.create">
+        permission="schooltool.create">
       <widget field="description" height="5" />
     </addform>
 
@@ -43,10 +43,10 @@
         label="Edit Resource Information"
         schema="schooltool.resource.interfaces.IResource"
         fields="title description isLocation"
-        permission="schoolbell.edit"
+        permission="schooltool.edit"
         template="templates/simple_edit.pt"
         class="schooltool.resource.browser.resource.ResourceEditView"
-        menu="schoolbell_actions"
+        menu="schooltool_actions"
         title="Edit Info">
       <widget field="description" height="5" />
     </editform>
@@ -57,11 +57,11 @@
   <containerViews
       for="..interfaces.IResourceContainer"
       contents="zope.View"
-      add="schoolbell.create"
+      add="schooltool.create"
       />
 
   <menuItem
-      menu="schoolbell_actions"
+      menu="schooltool_actions"
       title="New Resource"
       for="..interfaces.IResourceContainer"
       action="+/addSchoolBellResource.html"
@@ -71,7 +71,7 @@
       title="SchoolBell Resource"
       description="A Resource"
       class="..resource.Resource"
-      permission="schoolbell.create"
+      permission="schooltool.create"
       view="addSchoolBellResource.html"
       />
 
@@ -90,10 +90,9 @@
       for="..interfaces.IResourceContainer"
       class=".csvimport.ResourceCSVImportView"
       template="resource-csvimport.pt"
-      permission="schoolbell.create"
-      menu="schoolbell_actions"
+      permission="schooltool.create"
+      menu="schooltool_actions"
       title="Import Resources"
-      layer="schoolbell.app.browser.skin.ISchoolBellLayer"
       />
 
 </configure>

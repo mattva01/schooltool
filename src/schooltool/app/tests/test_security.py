@@ -67,7 +67,7 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         self.assertRaises(ComponentLookupError, self.app.getSiteManager)
         event = ObjectAddedEvent(self.app)
         authSetUpSubscriber(event)
-        auth = zapi.traverse(self.app, '++etc++site/default/SchoolBellAuth')
+        auth = zapi.traverse(self.app, '++etc++site/default/SchoolToolAuth')
         auth1 = zapi.getUtility(IAuthentication, context=self.app)
         self.assert_(auth is auth1)
 
@@ -75,7 +75,7 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
              IPrincipalPermissionManager
         from zope.app.security.settings import Allow
         perms = IPrincipalPermissionManager(self.app)
-        self.assert_(('schoolbell.view', Allow) in
+        self.assert_(('schooltool.view', Allow) in
                      perms.getPermissionsForPrincipal('zope.authenticated'))
 
         # If we fire the event again, it does not fail.  Such events
@@ -87,7 +87,7 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         event = ObjectAddedEvent(self.root)
         authSetUpSubscriber(event)
         self.assertRaises(TraversalError, zapi.traverse,
-                          self.root, '++etc++site/default/SchoolBellAuth')
+                          self.root, '++etc++site/default/SchoolToolAuth')
 
     def test_other_event(self):
         from schooltool.app.security import authSetUpSubscriber
@@ -96,7 +96,7 @@ class TestAuthSetUpSubscriber(unittest.TestCase):
         authSetUpSubscriber(SomeEvent())
         self.assertRaises(ComponentLookupError, self.app.getSiteManager)
         self.assertRaises(TraversalError, zapi.traverse,
-                          self.app, '++etc++site/default/SchoolBellAuth')
+                          self.app, '++etc++site/default/SchoolToolAuth')
 
 
 def doctest_applicationCalendarPermissionsSubscriber():
@@ -106,6 +106,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.person.person import Person, PersonContainer
         >>> root = setup.placefulSetUp(True)
+        >>> from schooltool.testing.setup import setupLocalGrants
         >>> setupLocalGrants()
         >>> app = SchoolToolApplication()
         >>> app['persons'] = PersonContainer()
@@ -146,7 +147,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> x = map.getPermissionsForPrincipal(unauthenticated.id)
         >>> x.sort()
         >>> print x
-        [('schoolbell.viewCalendar', PermissionSetting: Allow)]
+        [('schooltool.viewCalendar', PermissionSetting: Allow)]
 
     Check that no permissions are set if the object added is not a person:
 

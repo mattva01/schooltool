@@ -30,8 +30,7 @@ from zope.app.publisher.browser import BrowserView
 from schooltool.person.person import Person
 
 from schooltool import SchoolToolMessageID as _
-from schooltool import getSchoolToolApplication
-from schooltool import SchoolToolMessageID as _
+from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.app import SimpleNameChooser
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.course.interfaces import ISectionContainer

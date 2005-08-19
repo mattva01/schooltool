@@ -46,8 +46,8 @@ from zope.publisher.interfaces.http import IHTTPRequest
 from zope.app.annotation.interfaces import IAnnotatable, IAttributeAnnotatable
 from zope.interface import directlyProvidedBy
 
-from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin
-from schoolbell.app.rest.tests.utils import XMLCompareMixin
+from schooltool.app.rest.testing import QuietLibxml2Mixin
+from schooltool.app.rest.testing import XMLCompareMixin
 from schooltool.app.rest.errors import RestError
 from schooltool.testing import setup as sbsetup
 from schooltool.timetable import TimetablesAdapter
@@ -114,7 +114,7 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
 
     def setUp(self):
         PlacefulSetup.setUp(self)
-        self.app = sbsetup.setupSchoolBellSite()
+        self.app = sbsetup.setupSchoolToolSite()
 
         from schooltool.person.person import Person
         from schooltool.resource.resource import Resource
@@ -127,7 +127,7 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         self.term = self.app["terms"]["2003 fall"] = self.createTerm()
         self.term2 = self.app["terms"]["2004 fall"] = self.createTerm()
 
-        from schooltool.rest.interfaces import ITimetableFileFactory
+        from schooltool.app.rest.interfaces import ITimetableFileFactory
         from schooltool.timetable.rest import TimetableFileFactory
         from schooltool.timetable import TimetablesAdapter
         from schooltool.timetable.interfaces import ITimetableDict
@@ -458,7 +458,7 @@ class TestTimetableSchemaFileFactory(TimetableSchemaMixin, unittest.TestCase):
 
     def test(self):
         from schooltool.timetable.rest import TimetableSchemaFileFactory
-        from schooltool.rest.interfaces import ITimetableFileFactory
+        from schooltool.app.rest.interfaces import ITimetableFileFactory
         verifyObject(IFileFactory,
                      TimetableSchemaFileFactory(self.schemaContainer))
 
@@ -519,7 +519,7 @@ class TestTimetableFileFactory(TimetableTestMixin, unittest.TestCase):
                   'xlink': 'http://www.w3.org/1999/xlink'}
 
     def test(self):
-        from schooltool.rest.interfaces import ITimetableFileFactory
+        from schooltool.app.rest.interfaces import ITimetableFileFactory
         from schooltool.timetable.rest import TimetableFileFactory
         verifyObject(ITimetableFileFactory,
                      TimetableFileFactory(ITimetables(self.person).timetables,
@@ -564,7 +564,7 @@ def doctest_TimetableDictPublishTraverse():
     Some setup is needed:
 
         >>> setup.placefulSetUp()
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
 
         >>> from datetime import date
         >>> from schooltool.timetable import Term
@@ -643,7 +643,7 @@ def doctest_NullTimetablePUT():
 
         >>> setup.placelessSetUp()
         >>> from schooltool.timetable.interfaces import ITimetableDict
-        >>> from schooltool.rest.interfaces import ITimetableFileFactory
+        >>> from schooltool.app.rest.interfaces import ITimetableFileFactory
         >>> from schooltool.timetable import Timetable
         >>> from zope.publisher.interfaces.http import IHTTPRequest
         >>> class TimetableFileFactoryStub(object):

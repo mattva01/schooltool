@@ -39,7 +39,7 @@ from schooltool.app.browser.macros import SchoolToolMacros
 class BrowserMenuStub(object):
     """A stub that fakes browser menu.
 
-    So we could display schoolbell_actions menu in unit tests.
+    So we could display schooltool_actions menu in unit tests.
     """
 
     implements(IBrowserMenu)
@@ -159,7 +159,7 @@ def setUp(test=None):
     # menus
     ztapi.browserView(None, 'view_get_menu', MenuAccessView)
     ztapi.provideUtility(IBrowserMenu, BrowserMenuStub('zmi_views'), 'zmi_views')
-    ztapi.provideUtility(IBrowserMenu, BrowserMenuStub('schoolbell_actions'), 'schoolbell_actions')
+    ztapi.provideUtility(IBrowserMenu, BrowserMenuStub('schooltool_actions'), 'schooltool_actions')
 
 
 def tearDown(test=None):

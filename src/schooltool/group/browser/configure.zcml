@@ -12,7 +12,7 @@
       permission="zope.Public"
       />
 
-  <configure package="schoolbell.app.browser">
+  <configure package="schooltool.app.browser">
     <page
         name="index.html"
         for="schooltool.group.interfaces.IGroupContainer"
@@ -30,7 +30,7 @@
         fields="title description"
         set_before_add="title"
         content_factory="schooltool.group.group.Group"
-        permission="schoolbell.create"
+        permission="schooltool.create"
         template="templates/simple_add.pt"
         class="schooltool.group.browser.group.GroupAddView">
       <widget field="description" height="5" />
@@ -42,10 +42,10 @@
         label="Edit Group Information"
         schema="schooltool.group.interfaces.IGroup"
         fields="title description"
-        permission="schoolbell.edit"
+        permission="schooltool.edit"
         template="templates/simple_edit.pt"
         class="schooltool.group.browser.group.GroupEditView"
-        menu="schoolbell_actions"
+        menu="schooltool_actions"
         title="Edit Info"
         />
 
@@ -56,8 +56,8 @@
       for="..interfaces.IGroupMember"
       class=".group.GroupListView"
       template="groups.pt"
-      permission="schoolbell.manageMembership"
-      menu="schoolbell_actions"
+      permission="schooltool.manageMembership"
+      menu="schooltool_actions"
       title="Change Membership"
       />
 
@@ -68,7 +68,7 @@
       />
 
   <menuItem
-      menu="schoolbell_actions"
+      menu="schooltool_actions"
       title="New Group"
       for="..interfaces.IGroupContainer"
       action="+/addSchoolBellGroup.html"
@@ -78,7 +78,7 @@
       title="SchoolBell Group"
       description="A Group"
       class="..group.Group"
-      permission="schoolbell.create"
+      permission="schooltool.create"
       view="addSchoolBellGroup.html"
       />
 
@@ -97,8 +97,8 @@
       for="..interfaces.IGroup"
       class=".group.MemberViewPersons"
       template="members.pt"
-      permission="schoolbell.manageMembership"
-      menu="schoolbell_actions"
+      permission="schooltool.manageMembership"
+      menu="schooltool_actions"
       title="Add/Remove Members"
       />
 
@@ -107,10 +107,9 @@
       for="..interfaces.IGroupContainer"
       class=".csvimport.GroupCSVImportView"
       template="group-csvimport.pt"
-      permission="schoolbell.create"
-      menu="schoolbell_actions"
+      permission="schooltool.create"
+      menu="schooltool_actions"
       title="Import Groups"
-      layer="schoolbell.app.browser.skin.ISchoolBellLayer"
       />
 
 </configure>

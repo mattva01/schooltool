@@ -1,0 +1,328 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n">
+
+  <!-- Vocabularies -->
+
+  <vocabulary
+      name="LocationResources"
+      factory=".app.LocationResourceVocabulary"
+      />
+
+  <!-- Adapters -->
+
+  <class class="schooltool.app.overlay.CalendarOverlayInfo">
+    <implements
+        interface="zope.app.annotation.interfaces.IAttributeAnnotatable" />
+  </class>
+
+  <adapter
+      for="schooltool.app.overlay.ICalendarOverlayInfo"
+      provides=".interfaces.IShowTimetables"
+      factory=".app.ShowTimetables"
+      />
+
+  <adapter
+      for=".interfaces.IHaveCalendar"
+      provides=".interfaces.ISchoolToolCalendar"
+      factory=".cal.getCalendar"
+      trusted="true"
+      />
+
+  <adapter
+      for=".interfaces.ISchoolToolCalendar"
+      provides=".interfaces.IWriteCalendar"
+      factory=".cal.WriteCalendar"
+      />
+
+  <adapter
+      for=".interfaces.ISchoolToolApplication"
+      provides=".interfaces.IApplicationPreferences"
+      factory=".app.getApplicationPreferences"
+      trusted="true"
+      />
+
+  <class class=".cal.WriteCalendar">
+    <allow interface=".interfaces.IWriteCalendar" />
+  </class>
+
+  <!-- Utilities -->
+
+  <localUtility class=".security.SchoolToolAuthenticationUtility">
+    <require
+        permission="zope.ManageServices"
+        interface="zope.app.security.interfaces.IAuthentication"
+        />
+  </localUtility>
+
+  <utility
+      provides="schooltool.relationship.interfaces.IRelationshipSchema"
+      component=".relationships.Instruction"
+      name="http://schooltool.org/ns/instruction" />
+
+  <utility
+      provides="schooltool.relationship.interfaces.IRelationshipSchema"
+      component=".relationships.CourseSections"
+      name="http://schooltool.org/ns/coursesections" />
+
+  <utility
+      provides="schooltool.relationship.interfaces.IRelationshipSchema"
+      component=".membership.Membership"
+      name="http://schooltool.org/ns/membership" />
+
+  <utility
+      provides="schooltool.relationship.uri.IURIObject"
+      component=".relationships.URIInstructor"
+      name="http://schooltool.org/ns/instruction/instructor" />
+
+  <utility
+      provides="schooltool.relationship.uri.IURIObject"
+      component=".relationships.URISection"
+      name="http://schooltool.org/ns/instruction/section" />
+
+  <utility
+      provides="schooltool.relationship.uri.IURIObject"
+      component=".relationships.URICourse"
+      name="http://schooltool.org/ns/coursesections/course" />
+
+  <utility
+      provides="schooltool.relationship.uri.IURIObject"
+      component=".relationships.URISectionOfCourse"
+      name="http://schooltool.org/ns/coursesections/section" />
+
+  <utility
+      provides="schooltool.relationship.uri.IURIObject"
+      component=".membership.URIMember"
+      name="http://schooltool.org/ns/membership/member" />
+
+  <utility
+      provides="schooltool.relationship.uri.IURIObject"
+      component=".membership.URIGroup"
+      name="http://schooltool.org/ns/membership/group" />
+
+  <!-- Event Subscribers -->
+
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".security.authSetUpSubscriber"
+      />
+
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".security.groupPermissionsSubscriber"
+      />
+
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".security.applicationCalendarPermissionsSubscriber"
+      />
+
+  <subscriber
+      for="zope.app.container.interfaces.IObjectAddedEvent"
+      handler=".app.applicationCalendarPermissionsSubscriber"
+      />
+
+  <subscriber
+      for="schooltool.relationship.interfaces.IBeforeRelationshipEvent"
+      handler=".membership.enforceMembershipConstraints"
+      />
+
+  <subscriber
+      for="schooltool.relationship.interfaces.IBeforeRelationshipEvent"
+      handler=".relationships.enforceInstructionConstraints"
+    />
+
+  <subscriber
+      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
+      handler=".relationships.setInstructorPermissions"
+      />
+
+  <subscriber
+      for="schooltool.relationship.interfaces.IRelationshipRemovedEvent"
+      handler=".relationships.setInstructorPermissions"
+      />
+
+  <subscriber
+      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
+      handler=".relationships.updateStudentCalendars"
+      />
+
+  <subscriber
+      for="schooltool.relationship.interfaces.IRelationshipRemovedEvent"
+      handler=".relationships.updateStudentCalendars"
+      />
+
+  <subscriber
+      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
+      handler=".relationships.updateInstructorCalendars"
+      />
+
+  <subscriber
+      for="schooltool.relationship.interfaces.IRelationshipRemovedEvent"
+      handler=".relationships.updateInstructorCalendars"
+      />
+
+  <!-- Timetables for content components -->
+  <class class="schooltool.app.app.SchoolToolApplication">
+    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
+  </class>
+
+  <class class="schooltool.person.person.Person">
+    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
+  </class>
+
+  <class class="schooltool.group.group.Group">
+    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
+  </class>
+
+  <class class="schooltool.resource.resource.Resource">
+    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
+  </class>
+
+  <!-- Core and Domain content objects -->
+
+  <content class=".app.SchoolToolApplication">
+    <implements interface="schooltool.app.interfaces.IHaveCalendar" />
+    <allow interface=".interfaces.ISchoolToolApplication" />
+    <allow attributes="getSiteManager" />
+  </content>
+
+  <content class=".cal.Calendar">
+    <require permission="schooltool.viewCalendar"
+             interface="schooltool.calendar.interfaces.ICalendar"
+             attributes="title __cmp__" />
+    <require permission="schooltool.addEvent"
+             attributes="addEvent" />
+    <require permission="schooltool.modifyEvent"
+             attributes="clear removeEvent" />
+  </content>
+
+  <content class=".cal.CalendarEvent">
+    <implements interface="schooltool.note.interfaces.IHaveNotes" />
+    <require permission="schooltool.viewCalendar"
+             interface="schooltool.calendar.interfaces.ICalendarEvent"
+             attributes="resources" />
+    <require permission="schooltool.modifyEvent"
+             set_schema="schooltool.calendar.interfaces.ICalendarEvent"
+             attributes="bookResource unbookResource"
+             set_attributes="__parent__" />
+  </content>
+
+  <content class=".app.ApplicationPreferences">
+    <require permission="zope.Public"
+             interface=".interfaces.IApplicationPreferences" />
+    <!-- Not really appropriate permission to require -->
+    <require permission="schooltool.manageMembership"
+             set_schema=".interfaces.IApplicationPreferences" />
+  </content>
+
+  <!-- Views -->
+
+  <include package=".browser" />
+  <include package=".rest" />
+
+  <!-- Security declarations for calendaring -->
+
+  <!-- XXX It feels wrong to tweak permissions of objects in a sibling. -->
+
+  <content class="schooltool.calendar.mixins.ExpandedCalendarEvent">
+    <require permission="schooltool.view"
+             interface="schooltool.calendar.interfaces.IExpandedCalendarEvent"
+             attributes="resources"
+             />
+  </content>
+
+  <content class="schooltool.calendar.recurrent.DailyRecurrenceRule">
+    <require permission="zope.Public"
+             interface="schooltool.calendar.interfaces.IDailyRecurrenceRule" />
+  </content>
+
+  <content class="schooltool.calendar.recurrent.WeeklyRecurrenceRule">
+    <require permission="zope.Public"
+             interface="schooltool.calendar.interfaces.IWeeklyRecurrenceRule"
+             />
+  </content>
+
+  <content class="schooltool.calendar.recurrent.MonthlyRecurrenceRule">
+    <require permission="zope.Public"
+             interface="schooltool.calendar.interfaces.IMonthlyRecurrenceRule"
+             />
+  </content>
+
+  <content class="schooltool.calendar.recurrent.YearlyRecurrenceRule">
+    <require permission="zope.Public"
+             interface="schooltool.calendar.interfaces.IYearlyRecurrenceRule"
+             />
+  </content>
+
+  <content class="schooltool.calendar.simple.ImmutableCalendar">
+    <require permission="schooltool.view"
+             interface="schooltool.calendar.interfaces.ICalendar" />
+  </content>
+
+  <adapter
+      for="schooltool.calendar.interfaces.IEditCalendar"
+      factory=".cal.WriteCalendar"
+      provides=".interfaces.IWriteCalendar" />
+
+  <content
+      class="schooltool.app.overlay.BoundOverlaidCalendarsProperty">
+    <allow attributes="__iter__ __contains__" />
+    <require
+        permission="schooltool.viewCalendar"
+        attributes="add remove" />
+  </content>
+
+  <content class="schooltool.app.overlay.CalendarOverlayInfo">
+    <require
+        permission="schooltool.view"
+        interface="schooltool.app.overlay.ICalendarOverlayInfo"/>
+    <require
+        permission="schooltool.viewCalendar"
+        set_schema="schooltool.app.overlay.ICalendarOverlayInfo"/>
+  </content>
+
+  <!-- Documentation -->
+
+  <configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      xmlns:apidoc="http://namespaces.zope.org/apidoc"
+      zcml:condition="have apidoc">
+
+    <apidoc:bookchapter
+        id="schooltool"
+        title="SchoolTool"
+        doc_path="README.txt" />
+
+    <!-- Security -->
+    <apidoc:bookchapter
+        id="security"
+        title="Security (General)"
+        parent="schooltool"
+        doc_path="security.txt" />
+
+    <!-- Calendar -->
+    <configure package="schooltool.calendar">
+      <apidoc:bookchapter
+          id="calendar"
+          title="Calendar"
+          parent="schooltool"
+          doc_path="README.txt" />
+    </configure>
+
+    <apidoc:bookchapter
+        id="booking"
+        title="Booking Resources"
+        parent="schooltool/calendar"
+        doc_path="booking.txt" />
+
+  </configure>
+
+  <!-- Devmode stuff must be at the end, so it can override stuff -->
+
+  <include
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      zcml:condition="have devmode"
+      package=".devmode" />
+
+</configure>

@@ -10,10 +10,10 @@
     <allow
         interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require
-        permission="schoolbell.view"
+        permission="schooltool.view"
         attributes="keys values items __iter__ __len__" />
     <require
-        permission="schoolbell.create"
+        permission="schooltool.create"
         interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
@@ -22,28 +22,28 @@
     <implements interface="schooltool.note.interfaces.IHaveNotes" />
     <implements interface=".interfaces.IHavePreferences" />
     <require
-        permission="schoolbell.view"
+        permission="schooltool.view"
         interface=".interfaces.IReadPerson"
         attributes="__cmp__" />
     <require
-        permission="schoolbell.edit"
+        permission="schooltool.edit"
         interface=".interfaces.IWritePerson"
         set_schema=".interfaces.IPerson" />
   </content>
 
   <content class=".preference.PersonPreferences">
     <require
-        permission="schoolbell.edit"
+        permission="schooltool.edit"
         interface=".interfaces.IPersonPreferences"
         set_schema=".interfaces.IPersonPreferences" />
   </content>
 
   <content class=".details.PersonDetails">
     <require
-        permission="schoolbell.view"
+        permission="schooltool.view"
         interface=".interfaces.IPersonDetails" />
     <require
-        permission="schoolbell.edit"
+        permission="schooltool.edit"
         set_schema=".interfaces.IPersonDetails" />
   </content>
 

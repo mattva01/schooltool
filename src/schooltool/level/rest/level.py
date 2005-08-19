@@ -22,8 +22,7 @@ REST interface for level objects
 $Id$
 """
 import zope.component
-from schoolbell.app import rest
-from schooltool import app
+from schooltool.app import app, rest
 
 from schooltool.level import interfaces, level
 

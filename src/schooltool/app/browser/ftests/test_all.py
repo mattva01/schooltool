@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional tests for schoolbell.app.app.
+Functional tests for schooltool.app.app.
 
 $Id: test_all.py 2922 2005-02-22 19:04:44Z mg $
 """

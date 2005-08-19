@@ -4,9 +4,9 @@
 
   <content class=".group.GroupContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schoolbell.view"
+    <require permission="schooltool.view"
              attributes="keys values items __iter__ __len__" />
-    <require permission="schoolbell.create"
+    <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
@@ -15,15 +15,15 @@
     <implements interface="schooltool.note.interfaces.IHaveNotes" />
 
     <allow attributes="__cmp__" />
-    <require permission="schoolbell.view"
+    <require permission="schooltool.view"
              attributes="title description groups members" />
-    <require permission="schoolbell.edit"
+    <require permission="schooltool.edit"
              set_schema=".interfaces.IGroup" />
   </content>
 
   <adapter
       for=".interfaces.IGroupContainer"
-      factory="schoolbell.app.app.SimpleNameChooser"
+      factory="schooltool.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
   <!-- Application hook -->

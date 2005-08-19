@@ -44,7 +44,7 @@ from schooltool.group.rest.group import GroupFileFactory, GroupContainerView
 from schooltool.person.person import Person
 from schooltool.resource.interfaces import IResourceContainer
 from schooltool.resource.rest.resource import ResourceFileFactory
-from schoolbell.app.rest.tests.utils import XMLCompareMixin, QuietLibxml2Mixin
+from schooltool.app.rest.testing import XMLCompareMixin, QuietLibxml2Mixin
 from schooltool.app.rest.xmlparsing import XMLDocument, XMLParseError
 
 from schooltool.testing import setup as sbsetup
@@ -53,7 +53,7 @@ class TestAppView(XMLCompareMixin, unittest.TestCase):
 
     def setUp(self):
         setup.placefulSetUp()
-        self.app = sbsetup.setupSchoolBellSite()
+        self.app = sbsetup.setupSchoolToolSite()
         from schooltool.app.rest.app import ApplicationView
         self.view = ApplicationView(self.app, TestRequest())
 

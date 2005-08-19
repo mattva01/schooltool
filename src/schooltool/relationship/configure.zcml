@@ -25,11 +25,11 @@
       handler="schooltool.relationship.objectevents.unrelateOnCopy"
       />
 
-  <configure 
+  <configure
       xmlns="http://namespaces.zope.org/apidoc"
       xmlns:zcml="http://namespaces.zope.org/zcml"
       zcml:condition="have apidoc">
-    <bookchapter 
+    <bookchapter
         id="relationships"
         title="Relationships"
         doc_path="README.txt"

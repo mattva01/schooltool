@@ -3,71 +3,36 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schooltool">
 
+  <!-- Load devmode-specific Zope packages -->
+
+  <configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      zcml:condition="have devmode">
+    <include package="zope.app.apidoc" file="meta.zcml" />
+    <include package="zope.app.preference" file="meta.zcml" />
+    <include package="zope.app.renderer" file="meta.zcml" />
+    <include package="zope.app.onlinehelp" file="meta.zcml" />
+    <include package="zope.app.apidoc" />
+    <include package="zope.app.preference" />
+    <include package="zope.app.renderer" />
+    <include package="zope.app.tree" />
+    <include package="zope.app.onlinehelp" />
+  </configure>
+
   <!-- Translations -->
 
   <i18n:registerTranslations directory="locales" />
 
-  <!-- Vocabularies -->
+  <!-- Permissions -->
 
-  <vocabulary
-      name="LocationResources"
-      factory=".app.LocationResourceVocabulary"
-      />
-
-  <!-- Adapters -->
-
-  <class class="schooltool.app.overlay.CalendarOverlayInfo">
-    <implements
-        interface="zope.app.annotation.interfaces.IAttributeAnnotatable" />
-  </class>
-
-  <adapter
-      for="schooltool.app.overlay.ICalendarOverlayInfo"
-      provides=".interfaces.IShowTimetables"
-      factory=".app.ShowTimetables"
-      />
-
-  <!-- Subscribers -->
-
-  <subscriber
-      for="schooltool.interfaces.IApplicationInitializationEvent"
-      handler=".app.addManagerGroupToApplication"
-      />
-
-  <subscriber
-      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
-      handler=".relationships.setInstructorPermissions"
-      />
-
-  <subscriber
-      for="schooltool.relationship.interfaces.IRelationshipRemovedEvent"
-      handler=".relationships.setInstructorPermissions"
-      />
-
-  <subscriber
-      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
-      handler=".relationships.updateStudentCalendars"
-      />
-
-  <subscriber
-      for="schooltool.relationship.interfaces.IRelationshipRemovedEvent"
-      handler=".relationships.updateStudentCalendars"
-      />
-
-  <subscriber
-      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
-      handler=".relationships.updateInstructorCalendars"
-      />
-
-  <subscriber
-      for="schooltool.relationship.interfaces.IRelationshipRemovedEvent"
-      handler=".relationships.updateInstructorCalendars"
-      />
-
-  <subscriber
-      for="zope.app.container.interfaces.IObjectAddedEvent"
-      handler=".app.applicationCalendarPermissionsSubscriber"
-      />
+  <permission id="schooltool.view" title="View" />
+  <permission id="schooltool.edit" title="Edit Info" />
+  <permission id="schooltool.viewCalendar"  title="View calendar" />
+  <permission id="schooltool.addEvent"  title="Add Event" />
+  <permission id="schooltool.modifyEvent"  title="Modify Event" />
+  <permission id="schooltool.controlAccess"  title="Set up access" />
+  <permission id="schooltool.create"  title="Create new objects" />
+  <permission id="schooltool.manageMembership"  title="Manage membership" />
 
   <!-- Utilities -->
 
@@ -77,67 +42,15 @@
       component=".generations.schemaManager"
       />
 
-  <utility
-      provides="schooltool.relationship.interfaces.IRelationshipSchema"
-      component=".relationships.Instruction"
-      name="http://schooltool.org/ns/instruction" />
-
-  <utility
-      provides="schooltool.relationship.uri.IURIObject"
-      component=".relationships.URIInstructor"
-      name="http://schooltool.org/ns/instruction/instructor" />
-
-  <utility
-      provides="schooltool.relationship.uri.IURIObject"
-      component=".relationships.URISection"
-      name="http://schooltool.org/ns/instruction/section" />
-
-  <utility
-      provides="schooltool.relationship.interfaces.IRelationshipSchema"
-      component=".relationships.CourseSections"
-      name="http://schooltool.org/ns/coursesections" />
-
-  <utility
-      provides="schooltool.relationship.uri.IURIObject"
-      component=".relationships.URICourse"
-      name="http://schooltool.org/ns/coursesections/course" />
-
-  <utility
-      provides="schooltool.relationship.uri.IURIObject"
-      component=".relationships.URISectionOfCourse"
-      name="http://schooltool.org/ns/coursesections/section" />
-
-  <!-- Events -->
-
-  <subscriber
-      for="schooltool.relationship.interfaces.IBeforeRelationshipEvent"
-      handler=".relationships.enforceInstructionConstraints"
-    />
-
-  <!-- Timetables for content components -->
-  <class class="schoolbell.app.app.SchoolToolApplication">
-    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
-  </class>
-
-  <class class="schooltool.person.person.Person">
-    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
-  </class>
-
-  <class class="schooltool.group.group.Group">
-    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
-  </class>
-
-  <class class="schooltool.resource.resource.Resource">
-    <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
-  </class>
-
-
-  <!-- Views -->
-  <include package=".browser" />
-  <include package=".rest" />
-
   <!-- Sub-packages -->
+
+  <include package=".relationship" />
+  <include package=".app" />
   <include package=".timetable" />
+  <include package=".person" />
+  <include package=".group" />
+  <include package=".resource" />
+  <include package=".note" />
   <include package=".course" />
   <include package=".level" />
 

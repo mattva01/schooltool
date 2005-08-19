@@ -39,7 +39,7 @@
   <view
       for="..interfaces.IHavePreferences"
       type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schoolbell.app.rest.IRestTraverser"
+      provides="schooltool.app.rest.IRestTraverser"
       factory=".preference.PersonPreferencesHTTPTraverser"
       permission="zope.Public"
       name="preferences"
@@ -48,7 +48,7 @@
   <view
       for="..interfaces.IPerson"
       type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schoolbell.app.rest.IRestTraverser"
+      provides="schooltool.app.rest.IRestTraverser"
       factory=".person.PersonPasswordHTTPTraverser"
       permission="zope.Public"
       name="password"
@@ -57,7 +57,7 @@
   <view
       for="..interfaces.IPerson"
       type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schoolbell.app.rest.IRestTraverser"
+      provides="schooltool.app.rest.IRestTraverser"
       factory=".person.PersonPhotoHTTPTraverser"
       permission="zope.Public"
       name="photo"

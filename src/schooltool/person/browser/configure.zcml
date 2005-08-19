@@ -12,7 +12,7 @@
       permission="zope.Public"
       />
 
-  <configure package="schoolbell.app.browser">
+  <configure package="schooltool.app.browser">
 
     <page
         name="index.html"
@@ -27,10 +27,9 @@
     <page
         for="schooltool.person.interfaces.IPerson"
         name="calendar_selection.html"
-        layer="schoolbell.app.browser.skin.ISchoolBellLayer"
         class=".overlay.CalendarSelectionView"
         template="templates/calendar_selection.pt"
-        permission="schoolbell.edit"
+        permission="schooltool.edit"
         />
 
   </configure>
@@ -94,7 +93,7 @@
       for="..interfaces.IPersonContainer"
       class=".person.PersonAddView"
       template="person_add.pt"
-      permission="schoolbell.create"
+      permission="schooltool.create"
       menu="schooltool_actions" title="New Person" />
 
   <page
@@ -108,10 +107,9 @@
       for="..interfaces.IPersonContainer"
       class=".csvimport.PersonCSVImportView"
       template="person-csvimport.pt"
-      permission="schoolbell.create"
+      permission="schooltool.create"
       menu="schooltool_actions"
       title="Import Persons"
-      layer="schoolbell.app.browser.skin.ISchoolBellLayer"
       />
 
 </configure>

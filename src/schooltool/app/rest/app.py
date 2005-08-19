@@ -217,10 +217,3 @@ class CalendarNullTraverser(object):
         return self.context
 
 
-class SchoolToolApplicationView(ApplicationView):
-    """The root view for the application."""
-
-    template = Template("templates/app.pt",
-                        content_type="text/xml; charset=UTF-8")
-
-

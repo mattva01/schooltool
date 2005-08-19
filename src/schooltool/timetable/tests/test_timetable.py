@@ -40,14 +40,14 @@ from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.container.contained import Contained
 from zope.app.location.interfaces import ILocation
 
-from schooltool.tests.helpers import diff, sorted
-from schoolbell.app.rest.tests.utils import NiceDiffsMixin, EqualsSortedMixin
+from schooltool.testing.util import diff, sorted
+from schooltool.app.rest.testing import NiceDiffsMixin, EqualsSortedMixin
 from schooltool import timetable
 from schooltool.timetable.interfaces import ITerm, ITimetables
 from schooltool.timetable.interfaces import ITimetable, ITimetableActivity
 from schooltool.relationship import RelationshipProperty
 from schooltool.app.membership import URIGroup, URIMember, URIMembership
-from schooltool.interfaces import ApplicationInitializationEvent
+from schooltool.app.interfaces import ApplicationInitializationEvent
 
 __metaclass__ = type
 

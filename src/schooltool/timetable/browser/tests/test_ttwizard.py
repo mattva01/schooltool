@@ -38,14 +38,14 @@ from zope.app.component.hooks import setSite
 from zope.app.container.interfaces import INameChooser
 
 from schooltool.testing import setup
-from schoolbell.app.browser.tests import setup as schoolbell_setup
+from schooltool.app.browser import testing as schoolbell_setup
 from schooltool.app.app import SimpleNameChooser
-from schooltool.tests import setUpApplicationPreferences
+from schooltool.testing.setup import setUpApplicationPreferences
 from schooltool.app.app import SchoolToolApplication
 from schooltool import timetable
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.browser import format_time_range
-from schooltool.interfaces import ApplicationInitializationEvent
+from schooltool.app.interfaces import ApplicationInitializationEvent
 
 
 def setUpNameChoosers():
@@ -71,7 +71,7 @@ def setUp(test):
     setup.setupSessions()
     setUpApplicationPreferences()
     setUpNameChoosers()
-    test.globs['app'] = setup.setupSchoolBellSite()
+    test.globs['app'] = setup.setupSchoolToolSite()
 
 
 def tearDown(test):

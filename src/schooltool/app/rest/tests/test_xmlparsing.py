@@ -24,7 +24,7 @@ $Id$
 
 import unittest
 from zope.testing.doctest import DocTestSuite
-from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin
+from schooltool.app.rest.testing import QuietLibxml2Mixin
 
 
 def test_xpath_context_sharing():
@@ -144,10 +144,10 @@ def test_validate_ill_formed_document():
 def test_suite():
     suite = unittest.TestSuite()
     mixin = QuietLibxml2Mixin()
-    suite.addTest(DocTestSuite('schoolbell.app.rest.xmlparsing',
+    suite.addTest(DocTestSuite('schooltool.app.rest.xmlparsing',
                                setUp=lambda *args: mixin.setUpLibxml2(),
                                tearDown=lambda *args: mixin.tearDownLibxml2()))
-    suite.addTest(DocTestSuite('schoolbell.app.rest.tests.test_xmlparsing',
+    suite.addTest(DocTestSuite('schooltool.app.rest.tests.test_xmlparsing',
                                setUp=lambda *args: mixin.setUpLibxml2(),
                                tearDown=lambda *args: mixin.tearDownLibxml2()))
     return suite

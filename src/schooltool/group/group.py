@@ -56,3 +56,4 @@ class Group(Persistent, Contained):
 
 def addGroupContainerToApplication(event):
     event.object['groups'] = GroupContainer()
+    event.object['groups']['manager'] = Group(u'Manager', u'Manager Group.')

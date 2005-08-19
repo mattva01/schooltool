@@ -86,24 +86,24 @@
     <implements
         interface="zope.app.annotation.interfaces.IAttributeAnnotatable" />
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
-    <require permission="schoolbell.view"
+    <require permission="schooltool.view"
              attributes="keys values items __iter__ __len__ validate" />
-    <require permission="schoolbell.create"
+    <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
   <content class=".level.Level">
     <implements
         interface="zope.app.annotation.interfaces.IAttributeAnnotatable" />
-    <require permission="schoolbell.view"
+    <require permission="schooltool.view"
              interface=".interfaces.ILevel" />
-    <require permission="schoolbell.edit"
+    <require permission="schooltool.edit"
              set_schema=".interfaces.ILevel" />
   </content>
 
   <!-- Application hook -->
   <subscriber
-      for="schooltool.interfaces.IApplicationInitializationEvent"
+      for="schooltool.app.interfaces.IApplicationInitializationEvent"
       handler=".level.addLevelContainerToApplication"
       />
 
@@ -116,20 +116,20 @@
   <!-- Academic Record Adapter -->
   <class class=".record.History">
     <allow interface="zope.interface.common.sequence.IReadSequence" />
-    <require permission="schoolbell.edit"
+    <require permission="schooltool.edit"
              interface="zope.interface.common.sequence.IWriteSequence"
              attributes="addRecord" />
   </class>
 
   <class class=".record.HistoricalRecord">
-    <require permission="schoolbell.view"
+    <require permission="schooltool.view"
              interface=".interfaces.IHistoricalRecord" />
   </class>
 
   <class class=".record.AcademicRecord">
-    <require permission="schoolbell.view"
+    <require permission="schooltool.view"
              interface=".interfaces.IAcademicRecord" />
-    <require permission="schoolbell.edit"
+    <require permission="schooltool.edit"
              set_schema=".interfaces.IAcademicRecord" />
   </class>
 

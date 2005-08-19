@@ -28,8 +28,8 @@ import zope.wfmc
 from zope.app import zapi
 
 import schooltool
-from schooltool import app
-from schoolbell.app import rest, person
+from schooltool import person
+from schooltool.app import app, rest
 from schooltool.level import interfaces
 
 class PersonHTTPTraverser(object):

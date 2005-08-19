@@ -75,7 +75,7 @@ from zope.interface import directlyProvides
 from zope.app.component.hooks import setSite
 from zope.app.component.site import LocalSiteManager
 from zope.app.traversing.interfaces import IContainmentRoot
-def setupSchoolBellSite():
+def setupSchoolToolSite():
     """This should only be called after ``placefulSetUp()``."""
     app = createSchoolToolApplication()
     directlyProvides(app, IContainmentRoot)
@@ -92,3 +92,12 @@ def setupCalendaring():
     ztapi.provideAdapter(IHaveCalendar, ISchoolToolCalendar, getCalendar)
     registry.setupCalendarComponents()
 
+
+# ----------------- Setup SchoolTool application preferences ---------------
+from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.app import getApplicationPreferences
+def setUpApplicationPreferences():
+    """A utility method for setting up the ApplicationPreferences adapter."""
+    ztapi.provideAdapter(ISchoolToolApplication, IApplicationPreferences,
+                         getApplicationPreferences)

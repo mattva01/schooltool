@@ -42,7 +42,7 @@ from schooltool.app.membership import Membership
 from schooltool.app.app import SimpleNameChooser
 from schooltool.relationship.annotatable import getRelationshipLinks
 from schooltool.group.interfaces import IGroupContainer
-from schoolbell.app.rest.tests.utils import XMLCompareMixin, QuietLibxml2Mixin
+from schooltool.app.rest.testing import XMLCompareMixin, QuietLibxml2Mixin
 from schooltool.app.rest.xmlparsing import XMLDocument, XMLParseError
 from schooltool.app.membership import Membership, URIMember, URIGroup
 from schooltool.app.rest.xmlparsing import XMLValidationError
@@ -76,7 +76,7 @@ class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
                              INameChooser,
                              SimpleNameChooser)
 
-        self.app = sbsetup.setupSchoolBellSite()
+        self.app = sbsetup.setupSchoolToolSite()
 
         self.group = self.app['groups']["root"] = Group("group")
         self.new = self.app['groups']["new"] = Group("New Group")

@@ -11,10 +11,12 @@
     <allow interface=".ICompositeTimetables" />
   </content>
 
+  <!-- Traversers -->
+
   <view
       for="..interfaces.IHaveTimetables"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="schoolbell.app.rest.IRestTraverser"
+      provides="schooltool.app.rest.IRestTraverser"
       factory=".CompositeTimetableTraverser"
       permission="zope.Public"
       name="composite-timetables"
@@ -23,7 +25,7 @@
   <view
       for="..interfaces.IHaveTimetables"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="schoolbell.app.rest.IRestTraverser"
+      provides="schooltool.app.rest.IRestTraverser"
       factory=".TimetableTraverser"
       permission="zope.Public"
       name="timetables"
@@ -38,12 +40,71 @@
       />
 
   <view
-      for="schooltool.rest.interfaces.ICompositeTimetables"
+      for="schooltool.app.rest.interfaces.ICompositeTimetables"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
       provides="zope.publisher.interfaces.IPublishTraverse"
       factory=".CompositeTimetablesPublishTraverse"
       permission="zope.Public"
       />
+
+  <view
+      for="schooltool.timetable.interfaces.ITermContainer"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.timetable.interfaces.ITerm"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <!-- Term Views -->
+
+  <view
+      for="schooltool.timetable.interfaces.ITermContainer"
+      name="GET"
+      factory=".term.TermContainerView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="schooltool.timetable.interfaces.ITermContainer"
+      provides="zope.app.filerepresentation.interfaces.IFileFactory"
+      factory=".term.TermFileFactory"
+      permission="zope.Public"
+      />
+
+  <adapter
+      for="schooltool.timetable.interfaces.ITerm"
+      provides="zope.app.filerepresentation.interfaces.IWriteFile"
+      factory=".term.TermFile"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.timetable.interfaces.ITerm"
+      name="GET"
+      factory=".term.TermView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+
+  <!-- Timetable Views -->
 
   <view
       for=".NullTimetable"
@@ -66,7 +127,7 @@
   <adapter
       for="schooltool.timetable.interfaces.ITimetableDict
            zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schooltool.rest.interfaces.ITimetableFileFactory"
+      provides="schooltool.app.rest.interfaces.ITimetableFileFactory"
       factory=".TimetableFileFactory"
       permission="zope.Public"
       />
@@ -118,7 +179,7 @@
       />
 
   <view
-      for="schooltool.rest.interfaces.ICompositeTimetables"
+      for="schooltool.app.rest.interfaces.ICompositeTimetables"
       name="GET"
       factory=".CompositeTimetablesView"
       type="zope.publisher.interfaces.http.IHTTPRequest"

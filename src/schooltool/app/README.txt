@@ -9,7 +9,7 @@ We need some test setup:
     >>> setUp()
     >>> from schooltool.group.group import Group
     >>> from schooltool.person.person import Person, PersonContainer
-    >>> from schooltool import app
+    >>> from schooltool.app import app
     >>> from schooltool.course.course import Course
     >>> from schooltool.course.section import Section
 
@@ -122,7 +122,7 @@ as well:
     ...     ISection.providedBy(obj)
     True
 
-See schooltool.browser.app for showing individual members of the form in the
+See schooltool.app.browser.app for showing individual members of the form in the
 UI.
 
 Sections can be part of more than 1 course and sections have a courses

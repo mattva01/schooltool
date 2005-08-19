@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.browser.csvimport
+Unit tests for schooltool.app.browser.csvimport
 
 $Id$
 """
@@ -39,7 +39,7 @@ from schooltool.person.person import Person
 from schooltool.group.group import Group
 from schooltool.testing import setup
 
-from schooltool.browser.csvimport import InvalidCSVError
+from schooltool.app.browser.csvimport import InvalidCSVError
 from schooltool.common import dedent
 from schooltool.course.course import Course
 from schooltool.course.section import Section
@@ -62,7 +62,7 @@ class TestTimetableCSVImportView(unittest.TestCase):
 
     def setUp(self):
         setUp()
-        self.app = setup.setupSchoolBellSite()
+        self.app = setup.setupSchoolToolSite()
 
         from schooltool.timetable import TimetableSchema, TimetableSchemaDay
         ttschema = TimetableSchema(["1","2","3"])
@@ -79,7 +79,7 @@ class TestTimetableCSVImportView(unittest.TestCase):
         tearDown()
 
     def createView(self, form=None):
-        from schooltool.browser.csvimport import TimetableCSVImportView
+        from schooltool.app.browser.csvimport import TimetableCSVImportView
         if form is None:
             form = {}
         request = TestRequest(form=form)
@@ -169,7 +169,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         ztapi.provideAdapter(ISectionContainer, INameChooser,
                              SimpleNameChooser)
 
-        self.app = app = setup.setupSchoolBellSite()
+        self.app = app = setup.setupSchoolToolSite()
 
         self.course = app['courses']['philosophy'] = Course(title="Philosophy")
         self.section = app['sections']['section'] = Section(title="Something")
@@ -207,7 +207,7 @@ class TestTimetableCSVImporter(unittest.TestCase):
         tearDown()
 
     def createImporter(self, term=None, ttschema=None, charset=None):
-        from schooltool.browser.csvimport import TimetableCSVImporter
+        from schooltool.app.browser.csvimport import TimetableCSVImporter
         importer = TimetableCSVImporter(self.app['sections'], charset=charset)
         if term is not None:
             importer.term = self.app['terms'][term]
@@ -678,7 +678,7 @@ def doctest_PersonCSVImporter():
 
     Create a person container and an importer
 
-        >>> from schooltool.browser.csvimport import PersonCSVImporter
+        >>> from schooltool.app.browser.csvimport import PersonCSVImporter
         >>> from schooltool.person.person import PersonContainer
         >>> container = PersonContainer()
         >>> importer = PersonCSVImporter(container, None)

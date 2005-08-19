@@ -420,7 +420,7 @@ class ContainerViewTestMixin(XMLCompareMixin, QuietLibxml2Mixin):
                              ResourceFileFactory)
 
 
-        self.app = sbsetup.setupSchoolBellSite()
+        self.app = sbsetup.setupSchoolToolSite()
         self.groupContainer = self.app['groups']
         self.group = self.app['groups']['root'] = Group("Root group")
 

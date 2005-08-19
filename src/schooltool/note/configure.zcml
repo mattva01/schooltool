@@ -14,14 +14,14 @@
   <content class=".note.Notes">
     <require permission="zope.Public"
              attributes="__iter__" />
-    <require permission="schoolbell.view"
+    <require permission="schooltool.view"
              attributes="add remove clear" />
   </content>
 
   <content class=".note.Note">
     <require permission="zope.Public"
              interface=".interfaces.INote" />
-    <require permission="schoolbell.create"
+    <require permission="schooltool.create"
              set_schema=".interfaces.INote" />
   </content>
 
@@ -30,7 +30,6 @@
   <browser:page
       name="notes"
       for=".interfaces.IHaveNotes"
-      layer="schoolbell.app.browser.skin.ISchoolBellLayer"
       class=".browser.NotesView"
       template="notes.pt"
       permission="zope.Public"
@@ -41,8 +40,8 @@
       for=".interfaces.IHaveNotes"
       class=".browser.NoteAddView"
       template="note_add.pt"
-      permission="schoolbell.view"
-      menu="schoolbell_actions"
+      permission="schooltool.view"
+      menu="schooltool_actions"
       title="New Note" 
       />
 
@@ -59,7 +58,7 @@
   <view
       for="schooltool.note.interfaces.IHaveNotes"
       type="zope.publisher.interfaces.http.IHTTPRequest"
-      provides="schoolbell.app.rest.IRestTraverser"
+      provides="schooltool.app.rest.IRestTraverser"
       factory=".rest.NotesTraverser"
       name="notes"
       />

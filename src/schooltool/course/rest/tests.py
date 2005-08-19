@@ -113,7 +113,7 @@ def doctest_CourseContainerView():
         ...                     IFileFactory,
         ...                     CourseFileFactory)
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
         >>> courses = app['courses']
         >>> courses['course1'] = course1 = Course()
 
@@ -168,7 +168,7 @@ def doctest_CourseView():
         >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
         ...                   namespace.view)
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
         >>> courses = app['courses']
         >>> courses['course1'] = course1 = Course(title="Course 1",
         ...                                       description="Something")
@@ -227,7 +227,7 @@ def doctest_SectionFileFactory():
     setup:
 
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
         >>> from schooltool.resource.resource import Resource
 
         >>> app['resources']['room1'] = room1 = Resource("Room 1",
@@ -312,7 +312,7 @@ def doctest_SectionContainerView():
         ...                     IFileFactory,
         ...                     SectionFileFactory)
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
         >>> sections = app['sections']
         >>> sections['section1'] = section1 = Section()
 
@@ -369,7 +369,7 @@ def doctest_SectionView():
         >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
         ...                   namespace.view)
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
         >>> sections = app['sections']
         >>> sections['section1'] = section1 = Section(title="Section 1",
         ...                                       description="Something")

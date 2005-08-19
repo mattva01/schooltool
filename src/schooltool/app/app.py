@@ -42,7 +42,6 @@ from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.app.security.interfaces import IUnauthenticatedGroup
 
 from schooltool import SchoolToolMessageID as _
-from schooltool.group.group import Group
 from schooltool.app import relationships
 from schooltool.app.overlay import ICalendarOverlayInfo
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -51,10 +50,6 @@ from schooltool.app.interfaces import IShowTimetables
 from schooltool.app.interfaces import ApplicationInitializationEvent
 
 SHOW_TIMETABLES_KEY = 'schooltool.timetable.showTimetables'
-
-
-def addManagerGroupToApplication(event):
-    event.object['groups']['manager'] = Group(u'Manager', u'Manager Group.')
 
 
 class SchoolToolApplication(Persistent, sample.SampleContainer,
@@ -233,11 +228,6 @@ def applicationCalendarPermissionsSubscriber(event):
         school/courses
 
     """
-    if not IObjectAddedEvent.providedBy(event):
-        # TODO: Do we need to do this in python if the subscriber is set in
-        # zcml?
-        return
-
     if ISchoolToolApplication.providedBy(event.object):
         unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
 

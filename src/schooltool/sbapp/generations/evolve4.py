@@ -27,7 +27,7 @@ $Id$
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
 from schooltool.app.interfaces import ISchoolToolApplication, IHavePreferences
-from schoolbell.app.app import getPersonPreferences
+from schooltool.app.app import getPersonPreferences
 import datetime
 import random
 

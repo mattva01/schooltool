@@ -27,7 +27,7 @@ $Id: evolve2.py 4259 2005-07-21 00:57:30Z tvon $
 
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.generations.utility import findObjectsProviding
-from schooltool.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import ISchoolToolApplication
 
 import schooltool.app
 import schooltool.level.level

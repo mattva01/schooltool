@@ -8,9 +8,9 @@ First, create a SchoolBell instance:
     ... Authorization: Basic mgr:mgrpw
     ... Content-Length: 81
     ... Content-Type: application/x-www-form-urlencoded
-    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schoolbell.app.app.SchoolToolApplication
+    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication
     ...
-    ... type_name=BrowserAdd__schoolbell.app.app.SchoolToolApplication&new_value=frogpond""")
+    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&new_value=frogpond""")
     HTTP/1.1 303 See Other
     ...
 

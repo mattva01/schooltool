@@ -76,7 +76,7 @@ def doctest_CourseAddView():
         ...     _factory = Course
 
 
-        >>> app = setup.setupSchoolBellSite()
+        >>> app = setup.setupSchoolToolSite()
         >>> container = app['courses']
         >>> request = TestRequest()
         >>> context = AddingStub(container, request)
@@ -270,7 +270,7 @@ def doctest_SectionAddView():
     create a SchoolTool instance:
 
         >>> from schooltool.app.app import SchoolToolApplication
-        >>> app = setup.setupSchoolBellSite()
+        >>> app = setup.setupSchoolToolSite()
         >>> directlyProvides(app, IContainmentRoot)
         >>> sections = app['sections']
         >>> courses = app['courses']
@@ -363,7 +363,7 @@ def doctest_SectionEditView():
     We need some setup for our vocabulary:
 
         >>> from schooltool.app.app import SchoolToolApplication
-        >>> app = setup.setupSchoolBellSite()
+        >>> app = setup.setupSchoolToolSite()
         >>> from zope.schema.vocabulary import getVocabularyRegistry
         >>> from schooltool.app.app import LocationResourceVocabulary
         >>> registry = getVocabularyRegistry()
@@ -464,7 +464,7 @@ def doctest_SectionInstructorView():
 
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.person.person import Person
-        >>> school = setup.setupSchoolBellSite()
+        >>> school = setup.setupSchoolToolSite()
         >>> persons = school['persons']
         >>> directlyProvides(school, IContainmentRoot)
         >>> sections = school['sections']
@@ -556,7 +556,7 @@ def doctest_SectionLearnerView():
 
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.person.person import Person
-        >>> school = setup.setupSchoolBellSite()
+        >>> school = setup.setupSchoolToolSite()
         >>> persons = school['persons']
         >>> directlyProvides(school, IContainmentRoot)
         >>> sections = school['sections']
@@ -658,7 +658,7 @@ def doctest_SectionLearnerGroupView():
         >>> from schooltool.app.app import SchoolToolApplication
         >>> from schooltool.group.group import Group
         >>> from schooltool.person.person import Person
-        >>> school = setup.setupSchoolBellSite()
+        >>> school = setup.setupSchoolToolSite()
         >>> persons = school['persons']
         >>> groups = school['groups']
         >>> directlyProvides(school, IContainmentRoot)

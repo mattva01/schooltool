@@ -63,7 +63,7 @@
   <view
       for="schooltool.person.interfaces.IPerson"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="schoolbell.app.rest.IRestTraverser"
+      provides="schooltool.app.rest.IRestTraverser"
       factory=".record.PersonHTTPTraverser"
       permission="zope.Public"
       name="academicStatus"
@@ -100,7 +100,7 @@
   <view
       for="schooltool.person.interfaces.IPerson"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="schoolbell.app.rest.IRestTraverser"
+      provides="schooltool.app.rest.IRestTraverser"
       factory=".record.PersonHTTPTraverser"
       permission="zope.Public"
       name="academicHistory"
@@ -121,7 +121,7 @@
   <view
       for="schooltool.person.interfaces.IPerson"
       type="zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="schoolbell.app.rest.IRestTraverser"
+      provides="schooltool.app.rest.IRestTraverser"
       factory=".record.PersonHTTPTraverser"
       permission="zope.Public"
       name="promotion"

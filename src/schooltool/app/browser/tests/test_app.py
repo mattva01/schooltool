@@ -40,10 +40,10 @@ def doctest_SchoolToolApplicationView():
         >>> sbsetup.setupCalendaring()
 
         >>> from schooltool.app.app import getApplicationPreferences
-        >>> from schooltool.interfaces import IApplicationPreferences
-        >>> from schooltool.interfaces import ISchoolToolApplication
+        >>> from schooltool.app.interfaces import IApplicationPreferences
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
 
         >>> ztapi.provideAdapter(ISchoolToolApplication,
         ...                      IApplicationPreferences,
@@ -51,7 +51,7 @@ def doctest_SchoolToolApplicationView():
 
     Now lets create a view
 
-        >>> from schooltool.browser.app import SchoolToolApplicationView
+        >>> from schooltool.app.browser.app import SchoolToolApplicationView
         >>> request = TestRequest()
         >>> view = SchoolToolApplicationView(app, request)
         >>> view.update()
@@ -79,14 +79,14 @@ def doctest_PersonView():
 
     Let's create a view for a person:
 
-        >>> from schooltool.browser.app import PersonView
+        >>> from schooltool.app.browser.app import PersonView
         >>> from schooltool.person.person import Person
         >>> from schooltool.person.interfaces import IPerson
         >>> from schooltool.person.details import getPersonDetails
         >>> from schooltool.person.interfaces import IPersonDetails
         >>> ztapi.provideAdapter(IPerson, IPersonDetails, getPersonDetails)
 
-        >>> school = sbsetup.setupSchoolBellSite()
+        >>> school = sbsetup.setupSchoolToolSite()
         >>> persons = school['persons']
         >>> sections = school['sections']
 

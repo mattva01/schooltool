@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.app.app.
+Unit tests for schooltool.app.app.
 
 $Id$
 """
@@ -41,7 +41,7 @@ def doctest_SchoolToolApplication():
     We need to register an adapter to make the title attribute available:
 
         >>> placelesssetup.setUp()
-        >>> from schoolbell.app.app import ApplicationPreferences
+        >>> from schooltool.app.app import ApplicationPreferences
         >>> from schooltool.app.interfaces import IApplicationPreferences
         >>> provideAdapter(ApplicationPreferences,
         ...                provides=IApplicationPreferences)
@@ -148,10 +148,10 @@ def doctest_getApplicationPreferences():
 
     Now we can get the preferences object.
 
-      >>> from schoolbell.app.app import getApplicationPreferences
+      >>> from schooltool.app.app import getApplicationPreferences
       >>> prefs = getApplicationPreferences(app)
       >>> prefs
-      <schoolbell.app.app.ApplicationPreferences...
+      <schooltool.app.app.ApplicationPreferences...
 
     """
 
@@ -159,7 +159,7 @@ def doctest_getApplicationPreferences():
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
-                doctest.DocTestSuite('schoolbell.app.app'),
+                doctest.DocTestSuite('schooltool.app.app'),
                 doctest.DocTestSuite('schooltool.app.membership'),
                 doctest.DocTestSuite('schooltool.app.overlay'),
            ])

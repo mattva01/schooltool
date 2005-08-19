@@ -35,7 +35,7 @@ from zope.app.testing import setup, ztapi
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.traversing import namespace
 
-from schoolbell.app.rest.tests.utils import QuietLibxml2Mixin
+from schooltool.app.rest.testing import QuietLibxml2Mixin
 from schooltool.testing import setup as sbsetup
 from schooltool.app.rest.testing import dedent
 
@@ -47,7 +47,7 @@ def doctest_SchoolToolApplicationView():
 
         >>> from schooltool.rest.app import SchoolToolApplicationView
         >>> setup.placefulSetUp()
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
         >>> view = SchoolToolApplicationView(app, TestRequest())
         >>> result = view.GET()
 
@@ -369,7 +369,7 @@ class TestTermFile(QuietLibxml2Mixin, unittest.TestCase):
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
-                doctest.DocTestSuite('schooltool.rest.app',
+                doctest.DocTestSuite('schooltool.app.rest.app',
                                      optionflags=doctest.ELLIPSIS),
                 unittest.makeSuite(TestTermView),
                 unittest.makeSuite(TestTermFileFactory),

@@ -63,7 +63,7 @@ def doctest_CalendarOverlayView():
         >>> from schooltool.group.group import Group
         >>> from schooltool.person.person import Person
         >>> from schooltool.app.security import Principal
-        >>> app = setup.setupSchoolBellSite()
+        >>> app = setup.setupSchoolToolSite()
         >>> person = app['persons']['whatever'] = Person('fred')
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
         >>> group2 = app['groups']['g2'] = Group(title="Group 2")
@@ -140,7 +140,7 @@ def doctest_CalendarOverlayView_items():
 
         >>> from schooltool.group.group import Group
         >>> from schooltool.person.person import Person
-        >>> app = setup.setupSchoolBellSite()
+        >>> app = setup.setupSchoolToolSite()
         >>> person = app['persons']['p1'] = Person('p1', title="Person")
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
         >>> group2 = app['groups']['g2'] = Group(title="Group 2")
@@ -185,7 +185,7 @@ def doctest_CalendarSelectionView():
 
         >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> from schooltool.app.interfaces import IApplicationPreferences
-        >>> from schoolbell.app.app import getApplicationPreferences
+        >>> from schooltool.app.app import getApplicationPreferences
         >>> from zope.app.testing import ztapi
         >>> ztapi.provideAdapter(ISchoolToolApplication,
         ...                      IApplicationPreferences,
@@ -200,7 +200,7 @@ def doctest_CalendarSelectionView():
         >>> from schooltool.group.group import Group
         >>> from schooltool.person.person import Person
         >>> from schooltool.app.security import Principal
-        >>> app = setup.setupSchoolBellSite()
+        >>> app = setup.setupSchoolToolSite()
         >>> persons = app['persons']
         >>> groups = app['groups']
         >>> resources = app['resources']

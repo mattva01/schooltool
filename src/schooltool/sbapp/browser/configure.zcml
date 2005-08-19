@@ -38,10 +38,6 @@
       trusted="yes"
       />
 
-<!-- Actions menu -->
-
-  <menu id="schoolbell_actions" title="Actions" />
-
 <!-- Pluggable Traverser Plugins -->
 
   <zope:subscriber
@@ -65,7 +61,7 @@
 
   <addMenuItem
       title="SchoolBell"
-      class="schoolbell.app.app.SchoolToolApplication"
+      class="schooltool.app.app.SchoolToolApplication"
       permission="zope.ManageContent"
       />
 
@@ -89,8 +85,8 @@
       for="schooltool.person.interfaces.IPerson"
       class="schooltool.app.browser.app.ApplicationPreferencesView"
       template="templates/application_preferences.pt"
-      permission="schoolbell.manageMembership"
-      menu="schoolbell_actions"
+      permission="schooltool.manageMembership"
+      menu="schooltool_actions"
       title="Change Site Preferences" />
 
 <!-- Views for everything -->
@@ -118,9 +114,9 @@
       layer=".skin.ISchoolBellLayer"
       class=".app.ACLView"
       template="templates/acl.pt"
-      permission="schoolbell.controlAccess"
+      permission="schooltool.controlAccess"
       title="Set Up Access"
-      menu="schoolbell_actions"
+      menu="schooltool_actions"
       />
 
   <page
@@ -155,10 +151,10 @@
       />
 
   <menuItem
-      menu="schoolbell_actions"
+      menu="schooltool_actions"
       title="View Calendar"
       for="schooltool.app.interfaces.IHaveCalendar"
-      permission="schoolbell.viewCalendar"
+      permission="schooltool.viewCalendar"
       action="calendar"
       />
 
@@ -167,7 +163,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.DailyCalendarView"
       template="templates/cal_daily.pt"
-      permission="schoolbell.viewCalendar"
+      permission="schooltool.viewCalendar"
       menu="zmi_views"
       title="Calendar (Daily)"
       />
@@ -177,7 +173,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".pdfcal.DailyPDFCalendarView"
       attribute="pdfdata"
-      permission="schoolbell.viewCalendar"
+      permission="schooltool.viewCalendar"
       menu="zmi_views"
       title="Calendar (Daily, PDF)"
       />
@@ -187,7 +183,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.WeeklyCalendarView"
       template="templates/cal_weekly.pt"
-      permission="schoolbell.viewCalendar"
+      permission="schooltool.viewCalendar"
       menu="zmi_views"
       title="Calendar (Weekly)"
       />
@@ -197,7 +193,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".pdfcal.WeeklyPDFCalendarView"
       attribute="pdfdata"
-      permission="schoolbell.viewCalendar"
+      permission="schooltool.viewCalendar"
       menu="zmi_views"
       title="Calendar (Weekly, PDF)"
       />
@@ -207,7 +203,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.MonthlyCalendarView"
       template="templates/cal_monthly.pt"
-      permission="schoolbell.viewCalendar"
+      permission="schooltool.viewCalendar"
       menu="zmi_views"
       title="Calendar (Monthly)"
       />
@@ -217,7 +213,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".pdfcal.MonthlyPDFCalendarView"
       attribute="pdfdata"
-      permission="schoolbell.viewCalendar"
+      permission="schooltool.viewCalendar"
       menu="zmi_views"
       title="Calendar (Monthly, PDF)"
       />
@@ -227,7 +223,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.YearlyCalendarView"
       template="templates/cal_yearly.pt"
-      permission="schoolbell.viewCalendar"
+      permission="schooltool.viewCalendar"
       menu="zmi_views"
       title="Calendar (Yearly)"
       />
@@ -237,7 +233,7 @@
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.AtomCalendarView"
       template="templates/cal_atom.pt"
-      permission="schoolbell.viewCalendar"
+      permission="schooltool.viewCalendar"
       menu="zmi_views"
       title="Atom View"
       />
@@ -245,7 +241,7 @@
   <page
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       name="calendar.ics"
-      permission="schoolbell.viewCalendar"
+      permission="schooltool.viewCalendar"
       class="schooltool.calendar.browser.CalendarICalendarView"
       attribute="show"
       menu="zmi_views"
@@ -264,21 +260,21 @@
 
   <menuItem
       for="schooltool.app.interfaces.ISchoolToolCalendar"
-      menu="schoolbell_actions" title="New Event"
-      action="add.html" permission="schoolbell.addEvent" />
+      menu="schooltool_actions" title="New Event"
+      action="add.html" permission="schooltool.addEvent" />
 
   <page
       name="delete.html"
       for="schooltool.app.interfaces.ISchoolToolCalendar"
       class=".cal.EventDeleteView"
       template="templates/recevent_delete.pt"
-      permission="schoolbell.modifyEvent"
+      permission="schooltool.modifyEvent"
       />
 
   <menuItem
       for="schooltool.app.interfaces.ISchoolToolCalendar"
-      menu="schoolbell_actions" title="Open in iCal"
-      action="../calendar.ics" permission="schoolbell.viewCalendar" />
+      menu="schooltool_actions" title="Open in iCal"
+      action="../calendar.ics" permission="schooltool.viewCalendar" />
 
   <page
       for="*"
@@ -329,7 +325,7 @@
                          recurrence_type interval range until count monthly
                          exceptions weekdays"
       content_factory="schooltool.app.cal.CalendarEvent"
-      permission="schoolbell.addEvent"
+      permission="schooltool.addEvent"
       template="templates/event_add.pt"
       class=".cal.CalendarEventAddView">
 
@@ -346,7 +342,7 @@
               recurrence location description recurrence_type interval
               range until count monthly exceptions weekdays"
       class=".cal.CalendarEventEditView"
-      permission="schoolbell.modifyEvent"
+      permission="schooltool.modifyEvent"
       template="templates/event_add.pt">
 
     <widget field="description" height="5" />
@@ -359,7 +355,7 @@
       layer=".skin.ISchoolBellLayer"
       class=".cal.CalendarEventBookingView"
       template="templates/event_booking.pt"
-      permission="schoolbell.edit"
+      permission="schooltool.edit"
       />
 
 <!-- Skin and resources -->
@@ -557,6 +553,21 @@
   <resource name="calwidget-icon.gif"
       file="resources/calwidget/icon.gif"
       layer=".skin.ISchoolBellLayer" />
+
+
+  <!-- XXX: Needs to be here until we switch to pagelet system or -->
+  <!--      write a macro -->
+  <page
+      name="index.html"
+      for="schooltool.person.interfaces.IPerson"
+      class="schooltool.person.browser.person.PersonView"
+      template="templates/person.pt"
+      permission="zope.View"
+      menu="zmi_views"
+      title="View"
+      layer=".skin.ISchoolBellLayer"
+      />
+
 
   <configure
       xmlns:zcml="http://namespaces.zope.org/zcml"

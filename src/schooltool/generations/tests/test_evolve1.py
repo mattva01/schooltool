@@ -42,7 +42,7 @@ def doctest_evolve1():
     Let's create some mock objects that demonstrates the current
     situation:
 
-        >>> from schooltool.interfaces import ISchoolToolApplication
+        >>> from schooltool.app.interfaces import ISchoolToolApplication
         >>> from schooltool.timetable.interfaces import ITimetableModel
         >>> class MockSchoolTool(dict):
         ...     implements(ISchoolToolApplication)

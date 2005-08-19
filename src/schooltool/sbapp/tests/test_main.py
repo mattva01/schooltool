@@ -21,9 +21,6 @@ Unit tests for schoolbell.app.main.
 
 $Id$
 """
-
-import os
-import sys
 import unittest
 from zope.testing import doctest
 from zope.app import zapi
@@ -52,7 +49,7 @@ def doctest_main():
     Since we don't want to actually create disk files and start a web server in
     a test, we will set up some stubs.
 
-        >>> from schoolbell.app.main import Options
+        >>> from schooltool.sbapp.main import Options
         >>> options = Options()
         >>> class ConfigStub:
         ...     pid_file = ''
@@ -65,8 +62,9 @@ def doctest_main():
         ...     assert opts is options
         >>> def run_stub():
         ...     print "Running..."
-        >>> from schoolbell.app import main
-        >>> server = main.StandaloneServer()
+        >>> from schooltool.app import main
+        >>> from schooltool.sbapp.main import StandaloneServer
+        >>> server = StandaloneServer()
         >>> old_run = main.run
         >>> server.load_options = load_options_stub
         >>> server.setup = setup_stub
@@ -199,118 +197,6 @@ def doctest_load_options():
     """
 
 
-def doctest_configureReportlab():
-    """Tests for configureReportlab.
-
-        >>> from schooltool.app.browser import pdfcal
-        >>> from schoolbell.app.main import StandaloneServer
-
-        >>> server = StandaloneServer()
-
-        >>> def setupStub(fontdir):
-        ...     print 'reportlab set up: %s' % fontdir
-        >>> realSetup = pdfcal.setUpMSTTCoreFonts
-        >>> pdfcal.setUpMSTTCoreFonts = setupStub
-
-    First, if a null path is given, nothing happens (PDF support is
-    left disabled):
-
-        >>> server.configureReportlab(None)
-
-    Now, let's imitate a situation where a font path is given, but reportlab
-    can not be imported.
-
-        >>> old_stderr = sys.stderr
-        >>> sys.stderr = sys.stdout
-
-        >>> try:
-        ...     import reportlab
-        ... except ImportError:
-        ...     pass
-
-        >>> real_reportlab = sys.modules.get('reportlab')
-        >>> sys.modules['reportlab'] = None
-
-    reportlab can not be imported, see?
-
-        >>> import reportlab
-        Traceback (most recent call last):
-          ...
-        ImportError: No module named reportlab
-
-    Good.  Now configureReportLab should print a warning.
-
-        >>> server.configureReportlab('.')
-        Warning: could not find the reportlab library.
-        PDF support disabled.
-
-        >>> sys.modules['reportlab'] = object()
-
-    Now test the check that the font path is a directory:
-
-        >>> server.configureReportlab(__file__)
-        Warning: font directory '...test_main...' does not exist.
-        PDF support disabled.
-
-    We will cheat and temporarily override pdfcal.font_map:
-
-        >>> pseudo_fontdir = os.path.dirname(__file__)
-        >>> real_font_map = pdfcal.font_map
-        >>> pdfcal.font_map = {'1': 'test_main.py', '2': 'nonexistent_file'}
-
-        >>> server.configureReportlab(pseudo_fontdir)
-        Warning: font '...nonexistent_file' does not exist.
-        PDF support disabled.
-
-    Now let's simulate a successful scenario:
-
-        >>> del pdfcal.font_map['2']
-        >>> server.configureReportlab(pseudo_fontdir)
-        reportlab set up: ...tests
-
-    Cleaning up.
-
-        >>> pdfcal.font_map = real_font_map
-        >>> sys.stderr = old_stderr
-        >>> if real_reportlab:
-        ...     sys.modules['reportlab'] = real_reportlab
-        >>> pdfcal.setUpMSTTCoreFonts = realSetup
-
-    """
-
-
-def doctest_setLanguage():
-    """Tests for setLanguage.
-
-        >>> from zope.app.testing import setup
-        >>> setup.placelessSetUp()
-
-    First, the 'automatic mode':
-
-        >>> from schoolbell.app.main import setLanguage
-        >>> setLanguage('auto')
-
-    The language adapter shouldn't have been installed:
-
-        >>> from zope.i18n.interfaces import IUserPreferredLanguages
-        >>> from zope.publisher.browser import TestRequest
-        >>> request = TestRequest()
-        >>> IUserPreferredLanguages(request).getPreferredLanguages()
-        []
-
-    Now, if we specify a language, a language adapter should be set up:
-
-        >>> setLanguage('lt')
-        >>> IUserPreferredLanguages(request).getPreferredLanguages()
-        ('lt',)
-
-    We're done.
-
-        >>> setup.placelessTearDown()
-
-    """
-
-
 def doctest_setup():
     """Tests for setup()
 
@@ -398,241 +284,9 @@ def doctest_setup():
     """
 
 
-def doctest_bootstrapSchoolBell():
-    r"""Tests for bootstrapSchoolBell()
-
-    Normally, bootstrapSchoolBell is called when Zope 3 is fully configured
-
-        >>> from schoolbell.app.main import StandaloneServer
-        >>> server = StandaloneServer()
-        >>> server.configure()
-
-    When we start with an empty database, bootstrapSchoolBell creates a
-    SchoolBell application in it.
-
-        >>> import transaction
-        >>> from ZODB.DB import DB
-        >>> from ZODB.MappingStorage import MappingStorage
-        >>> db = DB(MappingStorage())
-
-        >>> server.bootstrapSchoolBell(db)
-
-    Let's take a look...
-
-        >>> connection = db.open()
-        >>> root = connection.root()
-        >>> from zope.app.publication.zopepublication import ZopePublication
-        >>> app = root.get(ZopePublication.root_name)
-        >>> app
-        <schoolbell.app.app.SchoolToolApplication object at ...>
-
-    This new application object is the containment root
-
-        >>> from zope.app.traversing.interfaces import IContainmentRoot
-        >>> IContainmentRoot.providedBy(app)
-        True
-
-    It is also a site
-
-        >>> from zope.app.component.interfaces import ISite
-        >>> ISite.providedBy(app)
-        True
-
-    It has a local authentication utility
-
-        >>> from zope.app.security.interfaces import IAuthentication
-        >>> zapi.getUtility(IAuthentication, context=app)
-        <schooltool.app.security.SchoolBellAuthenticationUtility object at ...>
-
-    It has an initial user (username 'manager', password 'schoolbell')
-
-        >>> manager = app['persons']['manager']
-        >>> manager.checkPassword('schoolbell')
-        True
-
-    This user has a grant for zope.Manager role
-
-        >>> from zope.app.securitypolicy.interfaces import \
-        ...     IPrincipalRoleManager
-        >>> grants = IPrincipalRoleManager(app)
-        >>> grants.getRolesForPrincipal('sb.person.manager')
-        [('zope.Manager', PermissionSetting: Allow)]
-
-    All users have a 'schoolbell.view' permission:
-
-        >>> from zope.app.securitypolicy.interfaces import \
-        ...     IPrincipalPermissionMap
-        >>> grants = IPrincipalPermissionMap(app)
-        >>> grants.getPermissionsForPrincipal('zope.Authenticated')
-        [('schoolbell.view', PermissionSetting: Allow)]
-
-    bootstrapSchoolBell doesn't do anything if it finds the root object already
-    present in the database.
-
-        >>> from schooltool.person.person import Person
-        >>> manager = app['persons']['user1'] = Person('user1')
-        >>> transaction.commit()
-        >>> connection.close()
-
-        >>> server.bootstrapSchoolBell(db)
-
-        >>> connection = db.open()
-        >>> root = connection.root()
-        >>> 'user1' in root[ZopePublication.root_name]['persons']
-        True
-
-    However it fails if the application root is not a SchoolBell application
-
-        >>> root[ZopePublication.root_name] = 'the object is strange'
-        >>> transaction.commit()
-        >>> connection.close()
-
-        >>> server.bootstrapSchoolBell(db)
-        Traceback (most recent call last):
-          ...
-        IncompatibleDatabase: incompatible database
-
-    It also checks for the presence of an old data.
-
-        >>> connection = db.open()
-        >>> root = connection.root()
-        >>> del root[ZopePublication.root_name]
-        >>> root['schooltool'] = object()
-        >>> transaction.commit()
-        >>> connection.close()
-
-        >>> server.bootstrapSchoolBell(db)
-        Traceback (most recent call last):
-          ...
-        OldDatabase: old database
-
-    Clean up
-
-        >>> transaction.abort()
-        >>> connection.close()
-
-        >>> from zope.app.testing import setup
-        >>> setup.placelessTearDown()
-
-    """
-
-
-def doctest_restoreManagerUser():
-    """Unittest for StandaloneServer.restoreManagerUser
-
-    We need a configured server:
-
-        >>> from schoolbell.app.main import StandaloneServer
-        >>> server = StandaloneServer()
-        >>> server.configure()
-
-
-    We also need an application:
-
-        >>> from schooltool.app.app import SchoolToolApplication
-        >>> app = SchoolToolApplication()
-
-    Initially, there's no manager user in the database:
-
-        >>> app['persons']['manager']
-        Traceback (most recent call last):
-          ...
-        KeyError: 'manager'
-
-    When we call restoreManagerUser, it gets created:
-
-        >>> server.restoreManagerUser(app)
-
-        >>> manager = app['persons']['manager']
-        >>> manager.checkPassword('schoolbell')
-        True
-
-    This user has a grant for zope.Manager role
-
-        >>> from zope.app.securitypolicy.interfaces import \\
-        ...     IPrincipalRoleManager
-        >>> grants = IPrincipalRoleManager(app)
-        >>> grants.getRolesForPrincipal('sb.person.manager')
-        [('zope.Manager', PermissionSetting: Allow)]
-
-    Let's break the manager user by forgetting his password and
-    revoking his permissions:
-
-        >>> marker = object()
-        >>> manager.calendar = marker
-        >>> manager.setPassword('randomrandom')
-        >>> grants.removeRoleFromPrincipal('zope.Manager', 'sb.person.manager')
-
-        >>> manager.checkPassword('schoolbell')
-        False
-        >>> grants.getRolesForPrincipal('sb.person.manager')
-        [('zope.Manager', PermissionSetting: Deny)]
-
-    If we call restoreManagerUser again, the object remains the same,
-    but its password and permissions get reset:
-
-        >>> server.restoreManagerUser(app)
-
-        >>> manager = app['persons']['manager']
-        >>> manager.checkPassword('schoolbell')
-        True
-        >>> grants.getRolesForPrincipal('sb.person.manager')
-        [('zope.Manager', PermissionSetting: Allow)]
-
-    The manager is the same:
-
-        >>> manager.calendar is marker
-        True
-
-    Cleanup:
-
-        >>> from zope.app.testing import setup
-        >>> setup.placelessTearDown()
-    """
-
-
-def test_setUpLogger():
-    r"""Tests for setUpLogger.
-
-    setUpLogger sets up a logger:
-
-        >>> import logging
-        >>> from schoolbell.app.main import setUpLogger
-        >>> setUpLogger('schoolbell.just_testing',
-        ...             ['STDERR', '_just_testing.log'],
-        ...             '%(asctime)s %(message)s')
-
-        >>> logger = logging.getLogger('schoolbell.just_testing')
-        >>> logger.propagate
-        False
-        >>> logger.handlers
-        [<logging.StreamHandler instance ...>, <...UnicodeFileHandler ...>]
-        >>> logger.handlers[0].stream
-        <open file '<stderr>', mode 'w' at 0x...>
-        >>> logger.handlers[0].formatter
-        <logging.Formatter instance at ...>
-        >>> logger.handlers[0].formatter._fmt
-        '%(asctime)s %(message)s'
-
-    Let's clean up after ourselves (logging is messy):
-
-        >>> logger.handlers[1].close()
-        >>> del logger.handlers[:]
-        >>> logger.propagate = True
-        >>> logger.disabled = False
-        >>> logger.setLevel(0)
-
-        >>> import os
-        >>> os.unlink('_just_testing.log')
-
-    """
-
-
 def test_suite():
     return unittest.TestSuite([
                 doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
-                doctest.DocTestSuite('schoolbell.app.main',
-                                     optionflags=doctest.ELLIPSIS),
            ])
 
 if __name__ == '__main__':

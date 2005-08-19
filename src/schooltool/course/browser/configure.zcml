@@ -3,7 +3,7 @@
            xmlns:zope="http://namespaces.zope.org/zope">
 
   <configure
-      package="schoolbell.app.browser"
+      package="schooltool.app.browser"
       i18n_domain="schoolbell">
 
     <addform
@@ -13,7 +13,7 @@
         fields="title description"
         set_before_add="title"
         content_factory="schooltool.course.course.Course"
-        permission="schoolbell.create"
+        permission="schooltool.create"
         template="templates/simple_add.pt"
         class="schooltool.course.browser.course.CourseAddView">
         <widget field="description" height="5" />
@@ -29,7 +29,7 @@
       permission="zope.View"
       menu="zmi_views"
       title="View"
-      layer="schooltool.browser.skin.ISchoolToolLayer"
+      layer="schooltool.app.browser.skin.ISchoolToolLayer"
       />
 
   <page
@@ -53,14 +53,14 @@
       for="..interfaces.ICourseContainer"
       class=".csvimport.CourseCSVImportView"
       template="course-csvimport.pt"
-      permission="schoolbell.create"
-      menu="schoolbell_actions"
+      permission="schooltool.create"
+      menu="schooltool_actions"
       title="Import Courses"
-      layer="schooltool.browser.skin.ISchoolToolLayer"
+      layer="schooltool.app.browser.skin.ISchoolToolLayer"
       />
 
   <menuItem
-      menu="schoolbell_actions"
+      menu="schooltool_actions"
       title="New Course"
       for="..interfaces.ICourseContainer"
       action="+/addSchoolToolCourse.html"
@@ -84,7 +84,7 @@
       permission="zope.View"
       menu="zmi_views"
       title="View"
-      layer="schooltool.browser.skin.ISchoolToolLayer"
+      layer="schooltool.app.browser.skin.ISchoolToolLayer"
       />
 
   <containerViews
@@ -101,7 +101,7 @@
       set_before_add="title"
       template="section_add.pt"
       content_factory="..section.Section"
-      permission="schoolbell.create"
+      permission="schooltool.create"
       class=".section.SectionAddView">
     <widget field="description" height="5" />
   </addform>
@@ -113,9 +113,9 @@
       for="..interfaces.ISection"
       fields="title description location"
       template="section_edit.pt"
-      permission="schoolbell.edit"
+      permission="schooltool.edit"
       class=".section.SectionEditView"
-      menu="schoolbell_actions"
+      menu="schooltool_actions"
       title="Edit Info">
     <widget field="description" height="5" />
   </editform>
@@ -125,7 +125,7 @@
       for="..interfaces.ISection"
       class=".section.SectionInstructorView"
       template="section_instructors.pt"
-      permission="schoolbell.manageMembership"
+      permission="schooltool.manageMembership"
       />
 
   <page
@@ -133,7 +133,7 @@
       for="..interfaces.ISection"
       class=".section.SectionLearnerView"
       template="section_learners.pt"
-      permission="schoolbell.manageMembership"
+      permission="schooltool.manageMembership"
       />
 
   <page
@@ -141,7 +141,7 @@
       for="..interfaces.ISection"
       class=".section.SectionLearnerGroupView"
       template="section_learners.pt"
-      permission="schoolbell.manageMembership"
+      permission="schooltool.manageMembership"
       />
 
 </configure>

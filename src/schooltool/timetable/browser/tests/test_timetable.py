@@ -38,22 +38,22 @@ from zope.app.component.hooks import setSite
 from zope.app.component.site import LocalSiteManager
 from zope.i18n import translate
 
-from schoolbell.app.browser.tests import setup
+from schooltool.app.browser import testing
 from schooltool.testing import setup as sbsetup
 
-from schoolbell.app.rest.tests.utils import NiceDiffsMixin
+from schooltool.app.rest.testing import NiceDiffsMixin
 from schooltool import timetable
-from schooltool.interfaces import ApplicationInitializationEvent
+from schooltool.app.interfaces import ApplicationInitializationEvent
 
 
 def setUp(test=None):
-    setup.setUp(test)
+    testing.setUp(test)
     from schooltool import timetable
     ztapi.provideAdapter(IAttributeAnnotatable,
                          timetable.interfaces.ITimetables,
                          timetable.TimetablesAdapter)
 
-tearDown = setup.tearDown
+tearDown = testing.tearDown
 
 
 def createSchema(days, *periods_for_each_day):
@@ -876,7 +876,7 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
         ztapi.provideAdapter(ITimetableSchemaContainer,
                              INameChooser,
                              SimpleNameChooser)
-        from schooltool.tests import setUpApplicationPreferences
+        from schooltool.testing.setup import setUpApplicationPreferences
         setUpApplicationPreferences()
 
     def tearDown(self):
@@ -1215,7 +1215,7 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
 def doctest_SimpleTimetableSchemaAdd():
     r'''Doctest for the SimpleTimetableSchemaAdd view
 
-        >>> from schooltool.tests import setUpApplicationPreferences
+        >>> from schooltool.testing.setup import setUpApplicationPreferences
         >>> setUpApplicationPreferences()
 
         >>> from schooltool.timetable import WeeklyTimetableModel
@@ -1477,7 +1477,7 @@ def doctest_SimpleTimetableSchemaAdd():
 def doctest_SimpleTimetableSchemaAdd_errors():
     '''Doctest for the SimpleTimetableSchemaAdd view
 
-        >>> from schooltool.tests import setUpApplicationPreferences
+        >>> from schooltool.testing.setup import setUpApplicationPreferences
         >>> setUpApplicationPreferences()
 
         >>> from schooltool.timetable import WeeklyTimetableModel
@@ -1575,12 +1575,12 @@ def doctest_PersonTimetableSetupView():
 
     Setup the ApplicationPreferences adapter
 
-        >>> from schooltool.tests import setUpApplicationPreferences
+        >>> from schooltool.testing.setup import setUpApplicationPreferences
         >>> setUpApplicationPreferences()
 
     We will need an application object
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
 
     and a Person from that application
 
@@ -1869,12 +1869,12 @@ def doctest_PersonTimetableSetupView_no_timetables():
 
     Setup the ApplicationPreferences adapter
 
-        >>> from schooltool.tests import setUpApplicationPreferences
+        >>> from schooltool.testing.setup import setUpApplicationPreferences
         >>> setUpApplicationPreferences()
 
     We will need an application object
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
 
     and a Person from that application
 
@@ -1910,7 +1910,7 @@ def doctest_PersonTimetableSetupView_no_default_ttschema():
 
     We will need an application object
 
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
 
     and a Person from that application
 
@@ -2006,7 +2006,7 @@ def doctest_SectionTimetableSetupView():
 
     Setup the ApplicationPreferences adapter
 
-        >>> from schooltool.tests import setUpApplicationPreferences
+        >>> from schooltool.testing.setup import setUpApplicationPreferences
         >>> setUpApplicationPreferences()
 
     We will need an application object
@@ -2237,7 +2237,7 @@ def doctest_SpecialDayView():
 
     First of all, we need an app object:
 
-        >>> from schooltool.tests import setUpApplicationPreferences
+        >>> from schooltool.testing.setup import setUpApplicationPreferences
         >>> setUpApplicationPreferences()
 
         >>> from schooltool.app.app import SchoolToolApplication
@@ -2700,13 +2700,13 @@ def doctest_EmergencyDayView():
     ======
 
         >>> sbsetup.setupCalendaring()
-        >>> from schooltool.tests import setUpApplicationPreferences
+        >>> from schooltool.testing.setup import setUpApplicationPreferences
         >>> setUpApplicationPreferences()
 
     First of all, we need an app object:
 
         >>> from schooltool.app.app import SchoolToolApplication
-        >>> app = sbsetup.setupSchoolBellSite()
+        >>> app = sbsetup.setupSchoolToolSite()
 
     We have a timetable schema to put the view on:
 
@@ -2906,7 +2906,7 @@ def doctest_EmergencyDayView():
     All day events get posted to the schoolwide calendar on both days,
     notifying of the shift:
 
-        >>> from schooltool import getSchoolToolApplication
+        >>> from schooltool.app.app import getSchoolToolApplication
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
         >>> cal = ISchoolToolCalendar(getSchoolToolApplication())
         >>> events = list(cal)
