@@ -22,6 +22,7 @@ SchoolBell calendar views.
 $Id$
 """
 from datetime import datetime, date, time, timedelta
+from pytz import timezone
 
 from zope.app.publisher.browser import BrowserView
 from zope.security.proxy import removeSecurityProxy
@@ -31,6 +32,8 @@ from schooltool.app.browser import ViewPreferences
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.person.interfaces import IPerson
+
+utc = timezone('UTC')
 
 
 class DailyCalendarRowsView(BrowserView):

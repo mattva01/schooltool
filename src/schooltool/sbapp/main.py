@@ -55,43 +55,7 @@ class Options(main.Options):
 
 SCHOOLBELL_SITE_DEFINITION = """\
 <?xml version="1.0" encoding="utf-8"?>
-<configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:browser="http://namespaces.zope.org/browser">
-
-  <include package="zope.app" />
-  <include package="zope.app.securitypolicy" file="meta.zcml" />
-
-  <include package="zope.app.session" />
-  <include package="zope.app.server" />
-  <include package="zope.app.http" />
-
-  <!-- XXX: Remove later when dependecies are cleared. -->
-  <include package="zope.app.wfmc" file="meta.zcml" />
-  <include package="zope.app.wfmc" />
-
-  <!-- Workaround to shut down a DeprecationWarning that appears because we do
-       not include zope.app.onlinehelp and the rotterdam skin tries to look for
-       this menu -->
-  <browser:menu id="help_actions" />
-
-  <include package="schooltool" />
-  <include package="schooltool.sbapp" />
-
-  <include package="zope.app.securitypolicy"/>
-
-  <!-- Basically a copy of zope.app.securitypolicy/securitypolicy.zcml  -->
-  <securityPolicy
-    component="zope.app.securitypolicy.zopepolicy.ZopeSecurityPolicy" />
-
-  <role id="zope.Anonymous" title="Everybody"
-                 description="All users have this role implicitly" />
-  <role id="zope.Manager" title="Site Manager" />
-  <role id="zope.Member" title="Site Member" />
-
-  <grant permission="zope.View" role="zope.Anonymous" />
-  <grant permission="zope.app.dublincore.view" role="zope.Anonymous" />
-
-  <grantAll role="zope.Manager" />
+<configure xmlns="http://namespaces.zope.org/zope">
 
   <unauthenticatedPrincipal id="zope.anybody" title="%(unauth_user)s" />
   <unauthenticatedGroup id="zope.Anybody" title="%(unauth_users)s" />

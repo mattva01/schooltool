@@ -42,17 +42,13 @@
       component=".generations.schemaManager"
       />
 
-  <!-- Sub-packages -->
+  <!-- *Core* sub-packages -->
 
   <include package=".batching" />
   <include package=".relationship" />
   <include package=".app" />
-  <include package=".timetable" />
   <include package=".person" />
   <include package=".group" />
   <include package=".resource" />
-  <include package=".note" />
-  <include package=".course" />
-  <include package=".level" />
 
 </configure>

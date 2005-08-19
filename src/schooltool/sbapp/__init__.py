@@ -26,4 +26,4 @@ TODO: feature list
 TODO: mention that schoolbell libraries are reusable for all Zope 3 apps.
 """
 
-
+VERSION="SVN"

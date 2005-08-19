@@ -237,9 +237,16 @@ def applicationCalendarPermissionsSubscriber(event):
         app_perms.grantPermissionToPrincipal('schooltool.viewCalendar',
                                           unauthenticated.id)
 
+        # XXX: This should be split into various pieces and put into the
+        #      packages.
         for container in ['persons', 'groups', 'resources', 'sections',
                           'courses']:
-            container_perms = IPrincipalPermissionManager(event.object[container])
+            # XXX: Needs test
+            # Note every container might be installed.
+            if container not in event.object:
+                continue
+            container_perms = IPrincipalPermissionManager(
+                event.object[container])
             container_perms.denyPermissionToPrincipal('schooltool.view',
                                               unauthenticated.id)
             container_perms.denyPermissionToPrincipal('schooltool.viewCalendar',

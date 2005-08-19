@@ -1,6 +1,4 @@
 src/schooltool/locales/schooltool.pot
-./Data.fs
-./Data.fs.*
 ./testserver_app.log
 ./testserver.log
 ./testserver_web_access.log
@@ -8,3 +6,6 @@ src/schooltool/locales/schooltool.pot
 ./web-access.log
 ./schooltool.log
 src/schooltool/sbapp/locales/schoolbell.pot
+./*-Data.fs
+./*-Data.fs.*
+./schoolbell.log

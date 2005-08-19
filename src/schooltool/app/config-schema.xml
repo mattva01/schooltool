@@ -254,4 +254,14 @@
     <metadefault>off</metadefault>
   </key>
 
+  <key name="site-definition" default="schooltool-site.zcml">
+    <description>
+      The name of the top-level ZCML file that defines the component
+      configuration used for this site.
+    </description>
+    <example>
+      site-definition schooltool-site.zcml
+    </example>
+  </key>
+
 </schema>

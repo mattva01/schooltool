@@ -7,5 +7,5 @@
 
 <metal:block define-macro="serverinfo">
   <span i18n:translate="">Server Running SchoolBell</span>
-  <span tal:content="modules/schoolbell/VERSION"/>
+  <span tal:content="modules/schooltool/sbapp/VERSION"/>
 </metal:block>
