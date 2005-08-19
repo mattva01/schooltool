@@ -3,8 +3,8 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:apidoc="http://namespaces.zope.org/apidoc">
 
-  <!-- Setup schoolbell as a top-level package in API doc -->
-  <apidoc:rootModule module="schoolbell" />
+  <!-- Setup schooltool as a top-level package in API doc -->
+  <apidoc:rootModule module="schooltool" />
 
   <!-- Generic DevMode setup -->
 
@@ -13,8 +13,8 @@
       interface=".skin.IDevModeLayer" />
 
   <browser:skin
-      name="SchoolBellDevMode"
-      interface=".skin.ISchoolBellDevModeSkin" />
+      name="SchoolToolDevMode"
+      interface=".skin.ISchoolToolDevModeSkin" />
 
   <browser:page
       name="view_macros"
@@ -26,29 +26,29 @@
 
   <!-- DevTools Menu configuration -->
 
-  <browser:resource 
+  <browser:resource
       name="devmode.css" file="devmode.css"
-      layer=".skin.IDevModeLayer" 
+      layer=".skin.IDevModeLayer"
       />
 
-  <browser:resource 
+  <browser:resource
       name="box-bottom.png" file="box-bottom.png"
-      layer=".skin.IDevModeLayer" 
+      layer=".skin.IDevModeLayer"
       />
 
-  <browser:resource 
+  <browser:resource
       name="varrow.png" file="varrow.png"
-      layer=".skin.IDevModeLayer" 
+      layer=".skin.IDevModeLayer"
       />
 
-  <browser:resource 
+  <browser:resource
       name="harrow.png" file="harrow.png"
-      layer=".skin.IDevModeLayer" 
+      layer=".skin.IDevModeLayer"
       />
 
-  <browser:resource 
+  <browser:resource
       name="switch.js" file="switch.js"
-      layer=".skin.IDevModeLayer" 
+      layer=".skin.IDevModeLayer"
       />
 
   <!-- Introspector -->
@@ -61,9 +61,9 @@
       layer=".skin.IDevModeLayer"
       />
 
-  <browser:resource 
+  <browser:resource
       name="introspector.css" file="introspector.css"
-      layer=".skin.IDevModeLayer" 
+      layer=".skin.IDevModeLayer"
       />
 
   <!-- ++annotations++ Namespace -->
@@ -81,7 +81,7 @@
   <!-- ISequence ++items++ Namespace -->
   <view
       name="items" type="*"
-      provides="zope.app.traversing.interfaces.ITraversable" 
+      provides="zope.app.traversing.interfaces.ITraversable"
       for="zope.interface.common.sequence.IMinimalSequence"
       factory=".introspector.sequenceItemsNamespace"
       />
@@ -95,7 +95,7 @@
   <!-- IMapping ++items++ Namespace -->
   <view
       name="items" type="*"
-      provides="zope.app.traversing.interfaces.ITraversable" 
+      provides="zope.app.traversing.interfaces.ITraversable"
       for="zope.interface.common.mapping.IItemMapping"
       factory=".introspector.mappingItemsNamespace"
       />
@@ -125,9 +125,9 @@
       />
 
   <!-- apidoc customization -->
-  <browser:resource 
+  <browser:resource
       name="apidoc.css" file="apidoc.css"
-      layer=".skin.IDevModeLayer" 
+      layer=".skin.IDevModeLayer"
       />
 
   <browser:pages
@@ -135,11 +135,11 @@
       class="zope.app.apidoc.browser.apidoc.APIDocumentationView"
       permission="zope.app.apidoc.UseAPIDoc"
       layer="schooltool.devmode.skin.IDevModeLayer">
-  
+
     <browser:page
         name="modulelist.html"
         template="modules.pt" />
-  
+
   </browser:pages>
 
   <configure package="zope.app.apidoc.ifacemodule">
@@ -167,7 +167,7 @@
       permission="zope.app.apidoc.UseAPIDoc"
       class="schooltool.devmode.apidoc.CodeMenu"
       name="menu.html"
-      template="code_menu.pt" 
+      template="code_menu.pt"
       layer="schooltool.devmode.skin.IDevModeLayer"
       />
 

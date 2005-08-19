@@ -283,13 +283,13 @@ def doctest_NavigationView():
 
       >>> from schooltool.app.app import SchoolToolApplication
       >>> from schooltool.person.person import Person
-      >>> app = setup.setupSchoolToolSite()
+      >>> app = sbsetup.setupSchoolToolSite()
       >>> p = Person('1')
       >>> app['persons']['1'] = p
 
     It makes the application available as `view.app`:
 
-      >>> from schooltool.browser import NavigationView
+      >>> from schooltool.app.browser import NavigationView
       >>> view = NavigationView(p, None)
       >>> view.app is app
       True

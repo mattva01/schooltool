@@ -323,6 +323,6 @@
   <include
       xmlns:zcml="http://namespaces.zope.org/zcml"
       zcml:condition="have devmode"
-      package=".devmode" />
+      package="..devmode" />
 
 </configure>

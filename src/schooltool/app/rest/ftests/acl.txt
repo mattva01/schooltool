@@ -30,26 +30,26 @@ the web ZMI:
     <acl xmlns="http://schooltool.org/ns/model/0.1">
       <principal id="zope.Authenticated">
     <BLANKLINE>
-          <permission setting="on" id="schoolbell.view" />
-          <permission id="schoolbell.edit" />
-          <permission id="schoolbell.create" />
-          <permission id="schoolbell.viewCalendar" />
-          <permission id="schoolbell.addEvent" />
-          <permission id="schoolbell.modifyEvent" />
-          <permission id="schoolbell.controlAccess" />
-          <permission id="schoolbell.manageMembership" />
+          <permission setting="on" id="schooltool.view" />
+          <permission id="schooltool.edit" />
+          <permission id="schooltool.create" />
+          <permission id="schooltool.viewCalendar" />
+          <permission id="schooltool.addEvent" />
+          <permission id="schooltool.modifyEvent" />
+          <permission id="schooltool.controlAccess" />
+          <permission id="schooltool.manageMembership" />
     <BLANKLINE>
       </principal>
       <principal id="zope.Anybody">
     <BLANKLINE>
-          <permission id="schoolbell.view" />
-          <permission id="schoolbell.edit" />
-          <permission id="schoolbell.create" />
-          <permission id="schoolbell.viewCalendar" />
-          <permission id="schoolbell.addEvent" />
-          <permission id="schoolbell.modifyEvent" />
-          <permission id="schoolbell.controlAccess" />
-          <permission id="schoolbell.manageMembership" />
+          <permission id="schooltool.view" />
+          <permission id="schooltool.edit" />
+          <permission id="schooltool.create" />
+          <permission id="schooltool.viewCalendar" />
+          <permission id="schooltool.addEvent" />
+          <permission id="schooltool.modifyEvent" />
+          <permission id="schooltool.controlAccess" />
+          <permission id="schooltool.manageMembership" />
     <BLANKLINE>
       </principal>
     </acl>
@@ -104,50 +104,50 @@ Now, the ACL view should include those new principals as well:
     <acl xmlns="http://schooltool.org/ns/model/0.1">
       <principal id="zope.Authenticated">
     <BLANKLINE>
-          <permission setting="on" id="schoolbell.view" />
-          <permission id="schoolbell.edit" />
-          <permission id="schoolbell.create" />
-          <permission id="schoolbell.viewCalendar" />
-          <permission id="schoolbell.addEvent" />
-          <permission id="schoolbell.modifyEvent" />
-          <permission id="schoolbell.controlAccess" />
-          <permission id="schoolbell.manageMembership" />
+          <permission setting="on" id="schooltool.view" />
+          <permission id="schooltool.edit" />
+          <permission id="schooltool.create" />
+          <permission id="schooltool.viewCalendar" />
+          <permission id="schooltool.addEvent" />
+          <permission id="schooltool.modifyEvent" />
+          <permission id="schooltool.controlAccess" />
+          <permission id="schooltool.manageMembership" />
     <BLANKLINE>
       </principal>
       <principal id="zope.Anybody">
     <BLANKLINE>
-          <permission id="schoolbell.view" />
-          <permission id="schoolbell.edit" />
-          <permission id="schoolbell.create" />
-          <permission id="schoolbell.viewCalendar" />
-          <permission id="schoolbell.addEvent" />
-          <permission id="schoolbell.modifyEvent" />
-          <permission id="schoolbell.controlAccess" />
-          <permission id="schoolbell.manageMembership" />
+          <permission id="schooltool.view" />
+          <permission id="schooltool.edit" />
+          <permission id="schooltool.create" />
+          <permission id="schooltool.viewCalendar" />
+          <permission id="schooltool.addEvent" />
+          <permission id="schooltool.modifyEvent" />
+          <permission id="schooltool.controlAccess" />
+          <permission id="schooltool.manageMembership" />
     <BLANKLINE>
       </principal>
       <principal id="sb.group.a-group">
     <BLANKLINE>
-          <permission id="schoolbell.view" />
-          <permission id="schoolbell.edit" />
-          <permission id="schoolbell.create" />
-          <permission id="schoolbell.viewCalendar" />
-          <permission id="schoolbell.addEvent" />
-          <permission id="schoolbell.modifyEvent" />
-          <permission id="schoolbell.controlAccess" />
-          <permission id="schoolbell.manageMembership" />
+          <permission id="schooltool.view" />
+          <permission id="schooltool.edit" />
+          <permission id="schooltool.create" />
+          <permission id="schooltool.viewCalendar" />
+          <permission id="schooltool.addEvent" />
+          <permission id="schooltool.modifyEvent" />
+          <permission id="schooltool.controlAccess" />
+          <permission id="schooltool.manageMembership" />
     <BLANKLINE>
       </principal>
       <principal id="sb.person.john">
     <BLANKLINE>
-          <permission setting="on" id="schoolbell.view" />
-          <permission id="schoolbell.edit" />
-          <permission id="schoolbell.create" />
-          <permission id="schoolbell.viewCalendar" />
-          <permission id="schoolbell.addEvent" />
-          <permission id="schoolbell.modifyEvent" />
-          <permission id="schoolbell.controlAccess" />
-          <permission id="schoolbell.manageMembership" />
+          <permission setting="on" id="schooltool.view" />
+          <permission id="schooltool.edit" />
+          <permission id="schooltool.create" />
+          <permission id="schooltool.viewCalendar" />
+          <permission id="schooltool.addEvent" />
+          <permission id="schooltool.modifyEvent" />
+          <permission id="schooltool.controlAccess" />
+          <permission id="schooltool.manageMembership" />
     <BLANKLINE>
       </principal>
     </acl>
@@ -171,14 +171,14 @@ John can not set the permissions as well:
     ...
     ... <acl xmlns="http://schooltool.org/ns/model/0.1">
     ...   <principal id="sb.group.a-group">
-    ...     <permission id="schoolbell.view" />
-    ...     <permission id="schoolbell.edit" />
-    ...     <permission id="schoolbell.create" />
-    ...     <permission id="schoolbell.viewCalendar" />
-    ...     <permission id="schoolbell.addEvent" />
-    ...     <permission id="schoolbell.modifyEvent" />
-    ...     <permission id="schoolbell.controlAccess" />
-    ...     <permission id="schoolbell.manageMembership" />
+    ...     <permission id="schooltool.view" />
+    ...     <permission id="schooltool.edit" />
+    ...     <permission id="schooltool.create" />
+    ...     <permission id="schooltool.viewCalendar" />
+    ...     <permission id="schooltool.addEvent" />
+    ...     <permission id="schooltool.modifyEvent" />
+    ...     <permission id="schooltool.controlAccess" />
+    ...     <permission id="schooltool.manageMembership" />
     ...   </principal>
     ... </acl>
     ... """)
@@ -195,24 +195,24 @@ permissions:
     ...
     ... <acl xmlns="http://schooltool.org/ns/model/0.1">
     ...   <principal id="sb.group.a-group">
-    ...     <permission id="schoolbell.view" />
-    ...     <permission id="schoolbell.edit" />
-    ...     <permission id="schoolbell.create" />
-    ...     <permission id="schoolbell.viewCalendar" setting="on" />
-    ...     <permission id="schoolbell.addEvent" />
-    ...     <permission id="schoolbell.modifyEvent" />
-    ...     <permission id="schoolbell.controlAccess" />
-    ...     <permission id="schoolbell.manageMembership" />
+    ...     <permission id="schooltool.view" />
+    ...     <permission id="schooltool.edit" />
+    ...     <permission id="schooltool.create" />
+    ...     <permission id="schooltool.viewCalendar" setting="on" />
+    ...     <permission id="schooltool.addEvent" />
+    ...     <permission id="schooltool.modifyEvent" />
+    ...     <permission id="schooltool.controlAccess" />
+    ...     <permission id="schooltool.manageMembership" />
     ...   </principal>
     ...   <principal id="sb.person.john">
-    ...     <permission id="schoolbell.view" />
-    ...     <permission id="schoolbell.edit" />
-    ...     <permission id="schoolbell.create" />
-    ...     <permission id="schoolbell.viewCalendar" />
-    ...     <permission id="schoolbell.addEvent" />
-    ...     <permission id="schoolbell.modifyEvent" />
-    ...     <permission id="schoolbell.controlAccess" setting="on" />
-    ...     <permission id="schoolbell.manageMembership" />
+    ...     <permission id="schooltool.view" />
+    ...     <permission id="schooltool.edit" />
+    ...     <permission id="schooltool.create" />
+    ...     <permission id="schooltool.viewCalendar" />
+    ...     <permission id="schooltool.addEvent" />
+    ...     <permission id="schooltool.modifyEvent" />
+    ...     <permission id="schooltool.controlAccess" setting="on" />
+    ...     <permission id="schooltool.manageMembership" />
     ...   </principal>
     ... </acl>
     ... """)
@@ -235,50 +235,50 @@ Now, the permissions are changed and John can see them:
     <acl xmlns="http://schooltool.org/ns/model/0.1">
       <principal id="zope.Authenticated">
     <BLANKLINE>
-          <permission setting="on" id="schoolbell.view" />
-          <permission id="schoolbell.edit" />
-          <permission id="schoolbell.create" />
-          <permission id="schoolbell.viewCalendar" />
-          <permission id="schoolbell.addEvent" />
-          <permission id="schoolbell.modifyEvent" />
-          <permission id="schoolbell.controlAccess" />
-          <permission id="schoolbell.manageMembership" />
+          <permission setting="on" id="schooltool.view" />
+          <permission id="schooltool.edit" />
+          <permission id="schooltool.create" />
+          <permission id="schooltool.viewCalendar" />
+          <permission id="schooltool.addEvent" />
+          <permission id="schooltool.modifyEvent" />
+          <permission id="schooltool.controlAccess" />
+          <permission id="schooltool.manageMembership" />
     <BLANKLINE>
       </principal>
       <principal id="zope.Anybody">
     <BLANKLINE>
-          <permission id="schoolbell.view" />
-          <permission id="schoolbell.edit" />
-          <permission id="schoolbell.create" />
-          <permission id="schoolbell.viewCalendar" />
-          <permission id="schoolbell.addEvent" />
-          <permission id="schoolbell.modifyEvent" />
-          <permission id="schoolbell.controlAccess" />
-          <permission id="schoolbell.manageMembership" />
+          <permission id="schooltool.view" />
+          <permission id="schooltool.edit" />
+          <permission id="schooltool.create" />
+          <permission id="schooltool.viewCalendar" />
+          <permission id="schooltool.addEvent" />
+          <permission id="schooltool.modifyEvent" />
+          <permission id="schooltool.controlAccess" />
+          <permission id="schooltool.manageMembership" />
     <BLANKLINE>
       </principal>
       <principal id="sb.group.a-group">
     <BLANKLINE>
-          <permission id="schoolbell.view" />
-          <permission id="schoolbell.edit" />
-          <permission id="schoolbell.create" />
-          <permission setting="on" id="schoolbell.viewCalendar" />
-          <permission id="schoolbell.addEvent" />
-          <permission id="schoolbell.modifyEvent" />
-          <permission id="schoolbell.controlAccess" />
-          <permission id="schoolbell.manageMembership" />
+          <permission id="schooltool.view" />
+          <permission id="schooltool.edit" />
+          <permission id="schooltool.create" />
+          <permission setting="on" id="schooltool.viewCalendar" />
+          <permission id="schooltool.addEvent" />
+          <permission id="schooltool.modifyEvent" />
+          <permission id="schooltool.controlAccess" />
+          <permission id="schooltool.manageMembership" />
     <BLANKLINE>
       </principal>
       <principal id="sb.person.john">
     <BLANKLINE>
-          <permission id="schoolbell.view" />
-          <permission id="schoolbell.edit" />
-          <permission id="schoolbell.create" />
-          <permission id="schoolbell.viewCalendar" />
-          <permission id="schoolbell.addEvent" />
-          <permission id="schoolbell.modifyEvent" />
-          <permission setting="on" id="schoolbell.controlAccess" />
-          <permission id="schoolbell.manageMembership" />
+          <permission id="schooltool.view" />
+          <permission id="schooltool.edit" />
+          <permission id="schooltool.create" />
+          <permission id="schooltool.viewCalendar" />
+          <permission id="schooltool.addEvent" />
+          <permission id="schooltool.modifyEvent" />
+          <permission setting="on" id="schooltool.controlAccess" />
+          <permission id="schooltool.manageMembership" />
     <BLANKLINE>
       </principal>
     </acl>
@@ -292,14 +292,14 @@ And John can modify the permissions:
     ...
     ... <acl xmlns="http://schooltool.org/ns/model/0.1">
     ...   <principal id="sb.group.a-group">
-    ...     <permission id="schoolbell.view" />
-    ...     <permission id="schoolbell.edit" />
-    ...     <permission id="schoolbell.create" />
-    ...     <permission id="schoolbell.viewCalendar" />
-    ...     <permission id="schoolbell.addEvent" />
-    ...     <permission id="schoolbell.modifyEvent" />
-    ...     <permission id="schoolbell.controlAccess" />
-    ...     <permission id="schoolbell.manageMembership" />
+    ...     <permission id="schooltool.view" />
+    ...     <permission id="schooltool.edit" />
+    ...     <permission id="schooltool.create" />
+    ...     <permission id="schooltool.viewCalendar" />
+    ...     <permission id="schooltool.addEvent" />
+    ...     <permission id="schooltool.modifyEvent" />
+    ...     <permission id="schooltool.controlAccess" />
+    ...     <permission id="schooltool.manageMembership" />
     ...   </principal>
     ... </acl>
     ... """)

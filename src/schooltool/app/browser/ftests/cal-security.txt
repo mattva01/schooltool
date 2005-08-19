@@ -81,7 +81,7 @@ Let's grant the Toad the viewCalendar permission on Frog's calendar:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schoolbell.viewCalendar&\
+    ... sb.person.toad=schooltool.viewCalendar&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -126,7 +126,7 @@ Let's grant the Toad the addEvent permission on Frog's calendar:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schoolbell.addEvent&\
+    ... sb.person.toad=schooltool.addEvent&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -222,7 +222,7 @@ Let's grant the Toad the viewCalendar permission on Frog's calendar:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schoolbell.viewCalendar&\
+    ... sb.person.toad=schooltool.viewCalendar&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -259,8 +259,8 @@ Let's grant the Toad the modifyEvent permission on Frog's calendar:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schoolbell.modifyEvent&\
-    ... sb.person.toad=schoolbell.viewCalendar&\
+    ... sb.person.toad=schooltool.modifyEvent&\
+    ... sb.person.toad=schooltool.viewCalendar&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -326,7 +326,7 @@ The manager can let Toad see Frog's calendar:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schoolbell.viewCalendar&\
+    ... sb.person.toad=schooltool.viewCalendar&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -379,9 +379,9 @@ Unless the manager grants him modification permissions too.
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schoolbell.viewCalendar&\
-    ... sb.person.toad=schoolbell.addEvent&\
-    ... sb.person.toad=schoolbell.modifyEvent&\
+    ... sb.person.toad=schooltool.viewCalendar&\
+    ... sb.person.toad=schooltool.addEvent&\
+    ... sb.person.toad=schooltool.modifyEvent&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -420,8 +420,8 @@ existing ones.
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schoolbell.viewCalendar&\
-    ... sb.person.toad=schoolbell.addEvent&\
+    ... sb.person.toad=schooltool.viewCalendar&\
+    ... sb.person.toad=schooltool.addEvent&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -513,8 +513,8 @@ Now let's allow modification, but not addition
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schoolbell.viewCalendar&\
-    ... sb.person.toad=schoolbell.modifyEvent&\
+    ... sb.person.toad=schooltool.viewCalendar&\
+    ... sb.person.toad=schooltool.modifyEvent&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other

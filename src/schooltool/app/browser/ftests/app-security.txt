@@ -100,10 +100,10 @@ We can traverse to the resource index too
     ...
 
 
-Adding stuff -- schoolbell.create permission
+Adding stuff -- schooltool.create permission
 --------------------------------------------
 
-Adding persons should not work without a schoolbell.create permission:
+Adding persons should not work without a schooltool.create permission:
 
     >>> print http("""
     ... POST /frogpond/persons/add.html HTTP/1.1
@@ -161,8 +161,8 @@ Let's grant the permission to the user:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schoolbell.create&\
-    ... sb.person.frog=schoolbell.view&\
+    ... sb.person.frog=schooltool.create&\
+    ... sb.person.frog=schooltool.view&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -303,7 +303,7 @@ If frog tries deleting himself - he should get an error:
     ...
 
 
-Editing things -- schoolbell.edit permission
+Editing things -- schooltool.edit permission
 --------------------------------------------
 
 The user can edit his own info:
@@ -334,11 +334,11 @@ But we can revoke that permission from him:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schoolbell.create&\
-    ... sb.person.frog=schoolbell.view&\
-    ... sb.person.frog=schoolbell.viewCalendar&\
-    ... sb.person.frog=schoolbell.addEvent&\
-    ... sb.person.frog=schoolbell.modifyEvent&\
+    ... sb.person.frog=schooltool.create&\
+    ... sb.person.frog=schooltool.view&\
+    ... sb.person.frog=schooltool.viewCalendar&\
+    ... sb.person.frog=schooltool.addEvent&\
+    ... sb.person.frog=schooltool.modifyEvent&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -403,8 +403,8 @@ Let's grant the edit permission:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schoolbell.edit&\
-    ... sb.person.frog=schoolbell.view&\
+    ... sb.person.frog=schooltool.edit&\
+    ... sb.person.frog=schooltool.view&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -473,7 +473,7 @@ Let's grant the guy the permission on the group:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schoolbell.manageMembership&\
+    ... sb.person.frog=schooltool.manageMembership&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other

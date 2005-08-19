@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Functional tests for schooltool.rest.
+Functional tests for schooltool.app.rest.
 
 $Id: test_all.py 3344 2005-03-30 22:36:28Z alga $
 """

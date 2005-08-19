@@ -13,8 +13,8 @@
     <link type="text/css" rel="stylesheet" href="calwidget-calendar.css"
           tal:attributes="href context/++resource++calwidget-calendar.css" />
     <metal:block use-macro="view/@@schooltool_macros/generic/stylesheets" />
-    <script type="text/javascript" src="schoolbell.js"
-            tal:attributes="src context/++resource++schoolbell.js">
+    <script type="text/javascript" src="schooltool.js"
+            tal:attributes="src context/++resource++schooltool.js">
     </script>
     <script type="text/javascript" src=""
             tal:attributes="src context/++resource++calwidget-calendar.js">
@@ -92,10 +92,10 @@
                tal:replace="structure context/@@schoolbell_navigation" 
                tal:on-error="nothing"/>
           <div class="portlet"
-               tal:condition="context/@@view_get_menu/schoolbell_actions">
+               tal:condition="context/@@view_get_menu/schooltool_actions">
             <h4 i18n:translate="">Actions</h4>
             <ul>
-              <li tal:repeat="view context/@@view_get_menu/schoolbell_actions">
+              <li tal:repeat="view context/@@view_get_menu/schooltool_actions">
                 <a tal:attributes="href view/action"
                    tal:content="view/title" i18n:translate="" />
               </li>

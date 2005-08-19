@@ -77,15 +77,15 @@ def setInstructorPermissions(event):
     if IRelationshipAddedEvent.providedBy(event):
         map = IPrincipalPermissionManager(event[URISection])
         principalid = 'sb.person.' + event[URIInstructor].__name__
-        map.grantPermissionToPrincipal('schoolbell.view', principalid)
-        map.grantPermissionToPrincipal('schoolbell.viewCalendar', principalid)
-        map.grantPermissionToPrincipal('schoolbell.addEvent', principalid)
+        map.grantPermissionToPrincipal('schooltool.view', principalid)
+        map.grantPermissionToPrincipal('schooltool.viewCalendar', principalid)
+        map.grantPermissionToPrincipal('schooltool.addEvent', principalid)
     elif IRelationshipRemovedEvent.providedBy(event):
         map = IPrincipalPermissionManager(event[URISection])
         principalid = 'sb.person.' + event[URIInstructor].__name__
-        map.denyPermissionToPrincipal('schoolbell.view', principalid)
-        map.denyPermissionToPrincipal('schoolbell.viewCalendar', principalid)
-        map.denyPermissionToPrincipal('schoolbell.addEvent', principalid)
+        map.denyPermissionToPrincipal('schooltool.view', principalid)
+        map.denyPermissionToPrincipal('schooltool.viewCalendar', principalid)
+        map.denyPermissionToPrincipal('schooltool.addEvent', principalid)
 
 
 def updateInstructorCalendars(event):

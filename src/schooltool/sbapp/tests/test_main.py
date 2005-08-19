@@ -17,10 +17,12 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schoolbell.app.main.
+Unit tests for schooltool.sbapp.main.
 
 $Id$
 """
+import os
+import sys
 import unittest
 from zope.testing import doctest
 from zope.app import zapi
@@ -33,7 +35,7 @@ def doctest_Options():
     The only interesting thing Options does is find the default configuration
     file.
 
-        >>> from schoolbell.app.main import Options
+        >>> from schooltool.sbapp.main import Options
         >>> options = Options()
         >>> options.config_file
         '...schoolbell.conf...'
@@ -89,7 +91,7 @@ def doctest_load_options():
 
     We will use a sample configuration file that comes with these tests.
 
-        >>> from schoolbell.app import tests
+        >>> from schooltool.sbapp import tests
         >>> test_dir = os.path.dirname(tests.__file__)
         >>> sample_config_file = os.path.join(test_dir, 'sample.conf')
         >>> empty_config_file = os.path.join(test_dir, 'empty.conf')
@@ -104,14 +106,10 @@ def doctest_load_options():
     Load options parses command line arguments and the configuration file.
     Warnings about obsolete options are shown.
 
-        >>> from schoolbell.app.main import StandaloneServer
+        >>> from schooltool.sbapp.main import StandaloneServer
         >>> server = StandaloneServer()
         >>> o = server.load_options(['sb.py', '-c', sample_config_file, '-r'])
         Reading configuration from ...sample.conf
-        sb.py: warning: ignored configuration option 'module'
-        sb.py: warning: ignored configuration option 'domain'
-        sb.py: warning: ignored configuration option 'path'
-        sb.py: warning: ignored configuration option 'app_log_file'
 
     Some options come from the command line
 
@@ -209,7 +207,7 @@ def doctest_setup():
 
     It is difficult to unit test, but we'll try.
 
-        >>> from schoolbell.app.main import Options, StandaloneServer
+        >>> from schooltool.sbapp.main import Options, StandaloneServer
         >>> from ZODB.MappingStorage import MappingStorage
         >>> from ZODB.DB import DB
         >>> options = Options()

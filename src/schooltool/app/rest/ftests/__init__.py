@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Tests for schooltool.rest
+Tests for schooltool.app.rest
 
 $Id: __init__.py 3344 2005-03-30 22:36:28Z alga $
 """

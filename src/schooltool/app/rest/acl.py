@@ -124,7 +124,7 @@ class ACLView(View, ACLViewBase):
     def POST(self):
         settings = self.parseData(self.request.bodyFile.read())
         manager = IPrincipalPermissionManager(self.context)
-        # this view is protected by schoolbell.controlAccess
+        # this view is protected by schooltool.controlAccess
         manager = removeSecurityProxy(manager)
         for principal in settings:
             for permission, title in self.permissions:

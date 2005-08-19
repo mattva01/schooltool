@@ -232,17 +232,17 @@ def applicationCalendarPermissionsSubscriber(event):
         unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
 
         app_perms = IPrincipalPermissionManager(event.object)
-        app_perms.grantPermissionToPrincipal('schoolbell.view',
+        app_perms.grantPermissionToPrincipal('schooltool.view',
                                           unauthenticated.id)
-        app_perms.grantPermissionToPrincipal('schoolbell.viewCalendar',
+        app_perms.grantPermissionToPrincipal('schooltool.viewCalendar',
                                           unauthenticated.id)
 
         for container in ['persons', 'groups', 'resources', 'sections',
                           'courses']:
             container_perms = IPrincipalPermissionManager(event.object[container])
-            container_perms.denyPermissionToPrincipal('schoolbell.view',
+            container_perms.denyPermissionToPrincipal('schooltool.view',
                                               unauthenticated.id)
-            container_perms.denyPermissionToPrincipal('schoolbell.viewCalendar',
+            container_perms.denyPermissionToPrincipal('schooltool.viewCalendar',
                                               unauthenticated.id)
 
 

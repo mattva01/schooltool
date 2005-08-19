@@ -3,8 +3,8 @@
     xmlns:browser="http://namespaces.zope.org/browser">
 
   <subscriber
-      handler=".skin.schoolBellTraverseSubscriber"
+      handler=".skin.schoolToolTraverseSubscriber"
       for="zope.app.publication.interfaces.IBeforeTraverseEvent"
-      />  
+      />
 
 </configure>

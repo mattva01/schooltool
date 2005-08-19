@@ -40,7 +40,6 @@ def doctest_schoolToolTraverseSubscriber():
         >>> from schooltool.app.browser.skin import schoolToolTraverseSubscriber
         >>> from schooltool.app.browser.skin import ISchoolToolSkin
         >>> from schooltool.app.app import SchoolToolApplication
-        >>> from schoolbell.app.browser.skin import ISchoolBellSkin
 
         >>> ob = SchoolToolApplication()
         >>> request = TestRequest()
@@ -48,14 +47,11 @@ def doctest_schoolToolTraverseSubscriber():
         >>> schoolToolTraverseSubscriber(ev)
         >>> ISchoolToolSkin.providedBy(request)
         True
-        >>> ISchoolBellSkin.providedBy(request)
-        False
         >>> skin = list(providedBy(request).interfaces())[1]
         >>> skin
         <InterfaceClass schooltool.app.browser.skin.ISchoolToolSkin>
         >>> pprint.pprint(skin.getBases())
         (<InterfaceClass schooltool.app.browser.skin.ISchoolToolLayer>,
-         <InterfaceClass schoolbell.app.browser.skin.ISchoolBellLayer>,
          <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)
 
 

@@ -62,8 +62,8 @@ def doctest_personPermissionsSubscriber():
         >>> perms = map.getPermissionsForPrincipal('sb.group.slackers')
         >>> perms.sort()
         >>> pprint(perms)
-        [('schoolbell.view', PermissionSetting: Allow),
-         ('schoolbell.viewCalendar', PermissionSetting: Allow)]
+        [('schooltool.view', PermissionSetting: Allow),
+         ('schooltool.viewCalendar', PermissionSetting: Allow)]
 
     Check that no permissions are set if the object added is not a group:
 

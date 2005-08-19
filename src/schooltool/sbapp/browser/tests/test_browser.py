@@ -32,7 +32,7 @@ def doctest_NavigationView():
 
     This view works for any ILocatable object within a SchoolBell instance.
 
-      >>> app = sbsetup.setupSchoolToolSite()
+      >>> app = setup.setupSchoolToolSite()
 
       >>> from schooltool.person.person import Person
       >>> p = Person('1')

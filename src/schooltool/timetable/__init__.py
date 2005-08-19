@@ -146,7 +146,7 @@ from zope.interface import directlyProvides
 
 from zope.app import zapi
 from zope.app.annotation.interfaces import IAttributeAnnotatable
-from zope.app.annotation.interfaces import IAnnotatable, IAnnotations
+from zope.app.annotation.interfaces import IAnnotations
 from zope.app.container.btree import BTreeContainer
 from zope.app.container.contained import Contained
 from zope.app.location.interfaces import ILocation
@@ -169,7 +169,7 @@ from schooltool.timetable.interfaces import ITimetableReplacedEvent
 from schooltool.timetable.interfaces import ISchooldayPeriod
 from schooltool.timetable.interfaces import ISchooldayTemplate
 from schooltool.timetable.interfaces import ISchooldayTemplateWrite
-from schooltool.timetable.interfaces import ITimetables
+from schooltool.timetable.interfaces import ITimetables, IHaveTimetables
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.interfaces import ITermContainer
 from schooltool.timetable.interfaces import ITermWrite, ITerm
@@ -722,7 +722,7 @@ class TimetablesAdapter(object):
     ``ICompositeTimetableProvider`` facets.
     """
     implements(ITimetables)
-    adapts(IAnnotatable)
+    adapts(IHaveTimetables)
 
     def __init__(self, context):
         self.object = context

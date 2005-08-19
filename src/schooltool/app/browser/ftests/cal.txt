@@ -591,8 +591,8 @@ Let's allow frog to see all calendars:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schoolbell.viewCalendar&\
-    ... sb.person.frog=schoolbell.view&\
+    ... sb.person.frog=schooltool.viewCalendar&\
+    ... sb.person.frog=schooltool.view&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -789,7 +789,7 @@ see your calendar, albeit without overlaid events:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schoolbell.view&\
+    ... sb.person.frog=schooltool.view&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other

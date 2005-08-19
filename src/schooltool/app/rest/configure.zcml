@@ -2,10 +2,140 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+<!-- Security Declarations -->
+
+  <content class=".acl.ACLAdapter">
+    <allow attributes="context" />
+  </content>
+
+  <content class="schooltool.relationship.relationship.LinkSet">
+    <allow
+       interface="schooltool.relationship.interfaces.IRelationshipLinks"
+       />
+  </content>
+
+  <content class="schooltool.relationship.relationship.Link">
+    <allow
+       interface="schooltool.relationship.interfaces.IRelationshipLink"
+       />
+  </content>
+
+  <content class="schooltool.relationship.uri.URIObject">
+    <allow
+       interface="schooltool.relationship.uri.IURIObject"
+       />
+  </content>
+
+  <content class=".RestPublishTraverse">
+    <allow interface="zope.publisher.interfaces.IPublishTraverse" />
+  </content>
+
+<!-- Traversers -->
+
   <subscriber
-      handler=".restSchoolToolSubscriber"
-      for="zope.app.publication.interfaces.IBeforeTraverseEvent"
+      for="zope.app.container.interfaces.IReadContainer
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory="zope.app.http.traversal.ContainerTraverser"
       />
+
+  <subscriber
+      for="zope.interface.Interface
+           zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.traverser.interfaces.ITraverserPlugin"
+      factory=".RestPublishTraverse"
+      />
+
+  <view
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.http.IHTTPPublisher"
+      factory="schooltool.traverser.traverser.PluggableTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory=".RestPublishTraverse"
+      permission="zope.Public"
+      />
+
+
+  <view
+      for="schooltool.relationship.interfaces.IRelationshipLinks"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="zope.publisher.interfaces.IPublishTraverse"
+      factory=".relationships.LinkTraverser"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.app.interfaces.IHaveCalendar"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides=".IRestTraverser"
+      factory="schooltool.app.browser.cal.CalendarOwnerHTTPTraverser"
+      permission="zope.Public"
+      name="calendar"
+      />
+
+  <view
+      for="schooltool.app.interfaces.IHaveCalendar"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides=".IRestTraverser"
+      factory="schooltool.app.browser.cal.CalendarOwnerHTTPTraverser"
+      permission="zope.Public"
+      name="calendar.ics"
+      />
+
+  <view
+      for="schooltool.app.interfaces.IHaveCalendar"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides=".IRestTraverser"
+      factory="schooltool.app.browser.cal.CalendarOwnerHTTPTraverser"
+      permission="zope.Public"
+      name="calendar.vfb"
+      />
+
+  <view
+      for="zope.app.annotation.interfaces.IAnnotatable"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides=".IRestTraverser"
+      factory=".acl.ACLTraverser"
+      permission="schooltool.controlAccess"
+      name="acl"
+      />
+
+  <view
+      for="zope.app.annotation.interfaces.IAnnotatable"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides=".IRestTraverser"
+      factory=".relationships.RelationshipsTraverser"
+      permission="zope.Public"
+      name="relationships"
+      />
+
+  <!-- the following are used by PUT requests on the normal web server -->
+  <view
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides=".IRestTraverser"
+      factory=".app.CalendarNullTraverser"
+      permission="zope.Public"
+      name="calendar.ics"
+      />
+
+  <view
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      provides=".IRestTraverser"
+      factory=".app.CalendarNullTraverser"
+      permission="zope.Public"
+      name="calendar.vfb"
+      />
+
+<!-- RESTive verbs implementations -->
 
   <view
       for="schooltool.app.interfaces.ISchoolToolApplication"
@@ -14,5 +144,177 @@
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />
+
+  <view
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      name="GET"
+      factory=".app.CalendarView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      name="PUT"
+      factory=".app.CalendarView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <class class="schooltool.app.rest.acl.ACLView">
+    <require
+      permission="schooltool.controlAccess"
+      interface="schooltool.app.rest.acl.IACLView"
+      />
+  </class>
+
+  <view
+      for="schooltool.app.rest.acl.IACLAdapter"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      factory="schooltool.app.rest.acl.ACLViewFactory"
+      permission="schooltool.controlAccess"
+      allowed_interface="schooltool.app.rest.acl.IACLView"
+      name="GET"
+      />
+
+  <view
+      for="schooltool.app.rest.acl.IACLAdapter"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      factory="schooltool.app.rest.acl.ACLViewFactory"
+      permission="schooltool.controlAccess"
+      allowed_interface="schooltool.app.rest.acl.IACLView"
+      name="POST"
+      />
+
+  <class class="schooltool.app.rest.relationships.RelationshipsView">
+    <allow attributes="GET" />
+    <require permission="schooltool.manageMembership"
+             attributes="POST" />
+  </class>
+
+  <view
+      for="schooltool.relationship.interfaces.IRelationshipLinks"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      factory="schooltool.app.rest.relationships.RelationshipsViewFactory"
+      name="GET"
+      />
+
+  <view
+      for="schooltool.relationship.interfaces.IRelationshipLinks"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      factory="schooltool.app.rest.relationships.RelationshipsViewFactory"
+      name="POST"
+      />
+
+  <class class="schooltool.app.rest.relationships.LinkView">
+    <allow attributes="GET info" />
+    <require permission="schooltool.manageMembership"
+             attributes="DELETE" />
+  </class>
+
+  <view
+      for="schooltool.relationship.interfaces.IRelationshipLink"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      factory="schooltool.app.rest.relationships.LinkViewFactory"
+      name="GET"
+      />
+
+  <view
+      for="schooltool.relationship.interfaces.IRelationshipLink"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      factory="schooltool.app.rest.relationships.LinkViewFactory"
+      name="DELETE"
+      />
+
+
+  <!-- Error views -->
+
+  <defaultView
+      for="zope.interface.common.interfaces.IException"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      name="GET"
+      />
+
+    <!-- but restore the original default view for browser requests -->
+
+  <defaultView
+      for="zope.interface.common.interfaces.IException"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="index.html"
+      />
+
+  <view
+      for="schooltool.app.rest.xmlparsing.IXMLError"
+      name="GET"
+      factory=".errors.XMLErrorView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.app.rest.errors.ICalParseError"
+      name="GET"
+      factory=".errors.ICalParseErrorView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="zope.interface.common.interfaces.IException"
+      name="GET"
+      factory=".errors.SystemErrorView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <view
+      for="schooltool.app.rest.errors.RestError"
+      name="GET"
+      factory=".errors.TextErrorView"
+      type="zope.publisher.interfaces.http.IHTTPRequest"
+      permission="zope.Public"
+      />
+
+  <configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      xmlns:apidoc="http://namespaces.zope.org/apidoc"
+      zcml:condition="have apidoc">
+
+    <apidoc:bookchapter
+        id="rest"
+        title="REST Interface"
+        parent="schooltool" />
+
+    <apidoc:bookchapter
+        id="relationships"
+        title="Relationships"
+        parent="schooltool/rest"
+        doc_path="ftests/relationships.txt" />
+
+    <apidoc:bookchapter
+        id="notes"
+        title="Notes"
+        parent="schooltool/rest"
+        doc_path="ftests/notes.txt" />
+
+    <apidoc:bookchapter
+        id="errors"
+        title="Errors"
+        parent="schooltool/rest"
+        doc_path="ftests/errors.txt" />
+
+    <apidoc:bookchapter
+        id="acl"
+        title="ACL"
+        parent="schooltool/rest"
+        doc_path="ftests/acl.txt" />
+
+    <apidoc:bookchapter
+        id="app"
+        title="Application"
+        parent="schooltool/rest"
+        doc_path="ftests/app.txt" />
+
+  </configure>
 
 </configure>

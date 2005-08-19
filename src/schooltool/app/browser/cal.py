@@ -311,7 +311,7 @@ class EventForDisplay(object):
             # Due to limitations in the default Zope 3 security policy, a
             # calendar event inherits permissions from the calendar of its
             # __parent__.  However if there's an event that books a resource,
-            # and the authenticated user has schoolbell.viewCalendar access
+            # and the authenticated user has schooltool.viewCalendar access
             # for the resource's calendar, she should be able to view this
             # event when it comes from the resource's calendar.  For this
             # reason we have to remove the security proxy and check the
@@ -1119,6 +1119,11 @@ class DailyCalendarRowsView(BrowserView):
                 yield ('%d:%02d' % (start.hour, start.minute), start, duration)
             start = end
 
+    def rowTitle(self, hour, minute):
+        """Return the row title as HH:MM or H:MM am/pm."""
+        prefs = ViewPreferences(self.request)
+        return time(hour, minute).strftime(prefs.timeformat)
+
 
 class CalendarSTOverlayView(CalendarOverlayView):
     """View for the calendar overlay portlet.
@@ -1134,7 +1139,7 @@ class CalendarSTOverlayView(CalendarOverlayView):
     contain 'OVERLAY_APPLY' or 'OVERLAY_MORE' in the request.
     """
 
-    SHOW_TIMETABLE_KEY = 'schooltool.browser.cal.show_my_timetable'
+    SHOW_TIMETABLE_KEY = 'schooltool.app.browser.cal.show_my_timetable'
 
     def items(self):
         """Return items to be shown in the calendar overlay.

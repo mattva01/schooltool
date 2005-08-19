@@ -58,6 +58,88 @@ def setUp(test=None):
                          TimetablesAdapter)
 
 
+def doctest_BaseCSVImporter():
+    r"""Test for BaseCSVImporter
+
+    Set up
+
+        >>> from schooltool.app.browser.csvimport import BaseCSVImporter
+        >>> importer = BaseCSVImporter(None)
+
+    Subclasses need to define the createAndAdd method
+
+        >>> importer.createAndAdd(None)
+        Traceback (most recent call last):
+        ...
+        NotImplementedError: Please override this method in subclasses
+
+    When given a list of CSV rows parseCSVRows should return a list of lists
+
+        >>> data = ["one, two, three", "four, five, six"]
+        >>> importer.parseCSVRows(data)
+        [['one', 'two', 'three'], ['four', 'five', 'six']]
+
+    parseCSVRows can also set errors should they occur
+
+        >>> data = ["one, \xff"]
+        >>> importer.charset = 'UTF-8'
+        >>> importer.parseCSVRows(data)
+        >>> translate(importer.errors.generic[0])
+        u'Conversion to unicode failed in line 1'
+
+    Moving on, importFromCSV calls createAndAdd which we have not defined
+
+        >>> csvdata = "one, two, three\nfour, five, six"
+        >>> importer.importFromCSV(csvdata)
+        Traceback (most recent call last):
+        ...
+        NotImplementedError: Please override this method in subclasses
+
+    We need to make a subclass to test this properly
+
+        >>> class TestCSVImporter(BaseCSVImporter):
+        ...     def __init__(self):
+        ...         BaseCSVImporter.__init__(self, None, 'UTF-8')
+        ...     def createAndAdd(self, data, True):
+        ...         pass
+
+        >>> myimporter = TestCSVImporter()
+
+    importFromCSV just returns True if everything goes well
+
+        >>> myimporter.importFromCSV(csvdata)
+        True
+
+    False is returned if there are errors
+
+        >>> myimporter.importFromCSV("one, two\nthree, \xff")
+        False
+        >>> translate(myimporter.errors.generic[0])
+        u'Conversion to unicode failed in line 2'
+
+    """
+
+
+def doctest_ImportErrorCollection():
+    r"""
+    Make the class
+
+        >>> from schooltool.app.browser.csvimport import ImportErrorCollection
+        >>> errors = ImportErrorCollection()
+        >>> errors
+        <ImportErrorCollection {'generic': [], 'fields': []}>
+
+    anyErrors returns True if there are errors and False if not
+
+        >>> errors.anyErrors()
+        False
+        >>> errors.fields.append('A Sample Error Message')
+        >>> errors.anyErrors()
+        True
+
+    """
+
+
 class TestTimetableCSVImportView(unittest.TestCase):
 
     def setUp(self):
@@ -673,65 +755,14 @@ class TestTimetableCSVImporter(unittest.TestCase):
                                    ['cut', '', 'the', 'tail']])
 
 
-def doctest_PersonCSVImporter():
-    r"""Tests for PersonCSVImporter.
-
-    Create a person container and an importer
-
-        >>> from schooltool.app.browser.csvimport import PersonCSVImporter
-        >>> from schooltool.person.person import PersonContainer
-        >>> container = PersonContainer()
-        >>> importer = PersonCSVImporter(container, None)
-
-    Import a user and verify that it worked
-
-        >>> importer.createAndAdd([u'joe', u'Joe Smith'], False)
-        >>> [p for p in container]
-        [u'joe']
-
-    Import a user with a password and verify it
-
-        >>> importer.createAndAdd([u'jdoe', u'John Doe', u'monkey'], False)
-        >>> container['jdoe'].checkPassword('monkey')
-        True
-
-    Some basic data validation exists.  Note that the errors are cumulative
-    between calls on an instance.
-
-        >>> importer.createAndAdd([], False)
-        >>> importer.errors.fields
-        [u'Insufficient data provided.']
-        >>> importer.createAndAdd([u'', u'Jim Smith'], False)
-        >>> importer.errors.fields
-        [u'Insufficient data provided.', u'username may not be empty']
-        >>> importer.createAndAdd([u'user', u''], False)
-        >>> importer.errors.fields
-        [u'Insufficient data provided.', u'username may not be empty', u'fullname may not be empty']
-
-    Let's clear the errors and review the contents of the container
-
-        >>> importer.errors.fields = []
-        >>> [p for p in container]
-        [u'jdoe', u'joe']
-
-    Now we'll try to add another 'jdoe' username.  In this case the error
-    message contains a translated variable, so we need zope.i18n.translate to
-    properly demonstrate it.
-
-        >>> from zope.i18n import translate
-        >>> importer.createAndAdd([u'jdoe', u'Jim Doe'], False)
-        >>> [translate(error) for error in importer.errors.fields]
-        [u'Duplicate username: jdoe, Jim Doe']
-
-    """
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTimetableCSVImportView))
     suite.addTest(unittest.makeSuite(TestTimetableCSVImporter))
-    suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
-                                       optionflags=doctest.ELLIPSIS|
-                                                   doctest.REPORT_NDIFF))
+    suite.addTest(doctest.DocTestSuite(
+        setUp=setUp, tearDown=tearDown,
+        optionflags=doctest.ELLIPSIS|doctest.REPORT_NDIFF))
     return suite
 
 

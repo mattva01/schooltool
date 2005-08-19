@@ -93,6 +93,14 @@ def setupCalendaring():
     registry.setupCalendarComponents()
 
 
+# -------------- Setup Timetable Adapter and set IHaveTimetable ------------
+from schooltool.timetable.interfaces import IHaveTimetables, ITimetables
+from schooltool.timetable import TimetablesAdapter
+def setupTimetabling():
+    ztapi.provideAdapter(IHaveTimetables, ITimetables, TimetablesAdapter)
+    registry.setupTimetablesComponents()
+
+
 # ----------------- Setup SchoolTool application preferences ---------------
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolApplication

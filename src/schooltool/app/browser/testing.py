@@ -1,7 +1,26 @@
+#
+# SchoolTool - common information systems platform for school administration
+# Copyright (c) 2005 Shuttleworth Foundation
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
 """
-Setup code for SchoolBell unit tests.
-"""
+Setup code for SchoolTool application browser unit tests
 
+$Id$
+"""
 import os.path
 from zope.interface import implements
 from zope.app.testing import setup, ztapi
@@ -58,7 +77,7 @@ class BrowserMenuStub(object):
 
 
 def setUp(test=None):
-    """Set up the test fixture for schoolbell.app.browser doctests.
+    """Set up the test fixture for schooltool.app.browser doctests.
 
     Performs what is called a "placeless setup" in the Zope 3 world, then sets
     up annotations, relationships, and registers widgets as views for some
@@ -110,14 +129,13 @@ def setUp(test=None):
     ztapi.provideView(None, None, ITraversable, 'view', view)
     ztapi.provideView(None, None, ITraversable, 'resource', resource)
 
-    # schoolbell: namespace in tal
-    ztapi.provideAdapter(None, IPathAdapter, SchoolToolAPI, 'schoolbell')
+    # schooltool: namespace in tal
+    ztapi.provideAdapter(None, IPathAdapter, SchoolToolAPI, 'schooltool')
 
     # sortby: namespace in tal
-    ztapi.provideAdapter(None, IPathAdapter, SchoolToolAPI, 'schoolbell')
     ztapi.provideAdapter(None, IPathAdapter, SortBy, 'sortby')
 
-    # standard_macros, schooltool_macros and schoolbell_navigation
+    # standard_macros, schooltool_macros and schooltool_navigation
     ztapi.browserView(None, 'standard_macros', StandardMacros)
     ztapi.browserView(None, 'view_macros',
                       SimpleViewClass("./templates/view_macros.pt"))
@@ -128,7 +146,7 @@ def setUp(test=None):
     ztapi.browserView(None, 'generic_macros',
                       SimpleViewClass("./templates/generic_macros.pt"))
 
-    ztapi.browserView(None, 'schoolbell_navigation',
+    ztapi.browserView(None, 'schooltool_navigation',
                       SimpleViewClass("./templates/navigation.pt",
                                       bases=(NavigationView,)))
 
@@ -150,19 +168,21 @@ def setUp(test=None):
         def __call__(self):
             return "a dummy resource"
 
-    for name in ['layout.css', 'style.css', 'schoolbell.js', 'logo.png',
-                 'next.png', 'prev.png', 'favicon.ico',
+    for name in ['layout.css', 'style.css', 'schooltool.css', 'schooltool.js',
+                 'logo.png', 'next.png', 'prev.png', 'favicon.ico',
                  'calwidget-calendar.js', 'calwidget-calendar.css',
                  'calwidget-icon.gif']:
         ztapi.browserResource(name, ResourceStub)
 
     # menus
     ztapi.browserView(None, 'view_get_menu', MenuAccessView)
-    ztapi.provideUtility(IBrowserMenu, BrowserMenuStub('zmi_views'), 'zmi_views')
-    ztapi.provideUtility(IBrowserMenu, BrowserMenuStub('schooltool_actions'), 'schooltool_actions')
+    ztapi.provideUtility(IBrowserMenu, BrowserMenuStub('zmi_views'),
+                         'zmi_views')
+    ztapi.provideUtility(IBrowserMenu, BrowserMenuStub('schooltool_actions'),
+                         'schooltool_actions')
 
 
 def tearDown(test=None):
-    """Tear down the test fixture for schoolbell.app.browser doctests."""
+    """Tear down the test fixture for schooltool.app.browser doctests."""
     setup.placefulTearDown()
 

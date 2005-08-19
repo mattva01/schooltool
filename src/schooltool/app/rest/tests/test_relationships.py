@@ -93,7 +93,7 @@ class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
 class TestRelationshipsView(CommonSetupMixin, unittest.TestCase):
 
     def setUp(self):
-        from schoolbell.app.rest.relationships import RelationshipsView
+        from schooltool.app.rest.relationships import RelationshipsView
         CommonSetupMixin.setUp(self)
         self.request = TestRequest()
         self.view = RelationshipsView(IRelationshipLinks(self.new), self.request)
@@ -145,7 +145,7 @@ class TestRelationshipsView(CommonSetupMixin, unittest.TestCase):
                </relationships>""")
 
     def testPOST(self):
-        from schoolbell.app.rest.relationships import RelationshipsView
+        from schooltool.app.rest.relationships import RelationshipsView
 
         body = """<relationship xmlns="http://schooltool.org/ns/model/0.1"
                                      xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -173,7 +173,7 @@ class TestRelationshipsView(CommonSetupMixin, unittest.TestCase):
         self.assert_(location in result)
 
     def testBadPOSTs(self):
-        from schoolbell.app.rest.relationships import RelationshipsView
+        from schooltool.app.rest.relationships import RelationshipsView
         bad_requests = [
             # Document not valid according to schema.
             (XMLValidationError,
@@ -251,7 +251,7 @@ class TestRelationshipsView(CommonSetupMixin, unittest.TestCase):
 class TestLinkView(CommonSetupMixin, unittest.TestCase):
 
     def setUp(self):
-        from schoolbell.app.rest.relationships import LinkView
+        from schooltool.app.rest.relationships import LinkView
         CommonSetupMixin.setUp(self)
         self.request = TestRequest()
         self.view = LinkView(getRelationshipLinks(self.group)['1'], self.request)

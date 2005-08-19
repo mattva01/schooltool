@@ -44,6 +44,7 @@
 
   <!-- Sub-packages -->
 
+  <include package=".batching" />
   <include package=".relationship" />
   <include package=".app" />
   <include package=".timetable" />

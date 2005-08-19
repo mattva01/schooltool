@@ -7,7 +7,7 @@ General design
 
 The security system of SchoolBell consists of:
 
- * SchoolBellAuthenticationUtility
+ * SchoolToolAuthenticationUtility
  * views for login/logout
  * a view for editing the ACL
 
@@ -69,12 +69,12 @@ SchoolBell is a possible site:
     ...
 
 
-The SchoolBellAuthenticationUtility is an IAuthentication utility that
+The SchoolToolAuthenticationUtility is an IAuthentication utility that
 lives in that site:
 
-    >>> from schooltool.app.security import SchoolBellAuthenticationUtility
+    >>> from schooltool.app.security import SchoolToolAuthenticationUtility
     >>> from schooltool.app.interfaces import ISchoolToolAuthentication
-    >>> auth = SchoolBellAuthenticationUtility()
+    >>> auth = SchoolToolAuthenticationUtility()
     >>> verifyObject(IAuthentication, auth)
     True
     >>> verifyObject(ISchoolToolAuthentication, auth)

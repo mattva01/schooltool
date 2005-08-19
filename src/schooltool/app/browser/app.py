@@ -45,15 +45,12 @@ from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolCalendar
-from schooltool.app.relationships import URIInstruction, URISection
 from schooltool.batching import Batch
 from schooltool.batching.browser import MultiBatchViewMixin
-from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson
-from schooltool.relationship import getRelatedObjects
 
 
-class SchoolToolApplicationView(BrowserView):
+class ApplicationView(BrowserView):
     """A view for the main application."""
 
     def update(self):
@@ -190,14 +187,14 @@ class ACLViewBase(object):
     """A base view for both browser and restive access control views."""
 
     permissions = [
-        ('schoolbell.view', _('View')),
-        ('schoolbell.edit', _('Edit')),
-        ('schoolbell.create', _('Create new objects')),
-        ('schoolbell.viewCalendar', _('View calendar')),
-        ('schoolbell.addEvent', _('Add events')),
-        ('schoolbell.modifyEvent', _('Modify/delete events')),
-        ('schoolbell.controlAccess', _('Control access')),
-        ('schoolbell.manageMembership', _('Manage membership')),
+        ('schooltool.view', _('View')),
+        ('schooltool.edit', _('Edit')),
+        ('schooltool.create', _('Create new objects')),
+        ('schooltool.viewCalendar', _('View calendar')),
+        ('schooltool.addEvent', _('Add events')),
+        ('schooltool.modifyEvent', _('Modify/delete events')),
+        ('schooltool.controlAccess', _('Control access')),
+        ('schooltool.manageMembership', _('Manage membership')),
         ]
 
     def getPersons(self):
@@ -256,7 +253,7 @@ class ACLView(BrowserView, ACLViewBase, MultiBatchViewMixin):
 
         if 'UPDATE_SUBMIT' in self.request:
             map = IPrincipalPermissionManager(self.context)
-            # this view is protected by schoolbell.controlAccess
+            # this view is protected by schooltool.controlAccess
             map = removeSecurityProxy(map)
 
             def permChecked(perm, principalid):

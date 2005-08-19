@@ -31,8 +31,8 @@ from schooltool.app import main
 
 locale_charset = locale.getpreferredencoding()
 
-localedir = os.path.join(os.path.dirname(__file__), 'locales')
-catalog = gettext.translation('schoolbell', localedir, fallback=True)
+localedir = os.path.join(os.path.dirname(__file__), '..', 'locales')
+catalog = gettext.translation('schooltool', localedir, fallback=True)
 _ = lambda us: catalog.ugettext(us).encode(locale_charset, 'replace')
 
 sb_incompatible_db_error_msg = _("""
@@ -47,7 +47,7 @@ Please run the standalone database upgrade script.
 """).strip()
 
 
-class Options(main.options):
+class Options(main.Options):
     """SchoolBell process options."""
 
     config_filename = 'schoolbell.conf'
@@ -65,12 +65,17 @@ SCHOOLBELL_SITE_DEFINITION = """\
   <include package="zope.app.server" />
   <include package="zope.app.http" />
 
+  <!-- XXX: Remove later when dependecies are cleared. -->
+  <include package="zope.app.wfmc" file="meta.zcml" />
+  <include package="zope.app.wfmc" />
+
   <!-- Workaround to shut down a DeprecationWarning that appears because we do
        not include zope.app.onlinehelp and the rotterdam skin tries to look for
        this menu -->
   <browser:menu id="help_actions" />
 
-  <include package="schoolbell.app" />
+  <include package="schooltool" />
+  <include package="schooltool.sbapp" />
 
   <include package="zope.app.securitypolicy"/>
 

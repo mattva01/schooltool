@@ -54,25 +54,25 @@ class BookMenu(bookmodule.browser.Menu):
 
 
 def patchZCMLModule():
-    from schoolbell.app import main
+    from schooltool.app import main
     from zope.configuration import docutils, xmlconfig, config
 
     def _makeDocStructure(self):
         context = config.ConfigurationMachine()
         context.provideFeature('devmode')
         xmlconfig.registerCommonDirectives(context)
-        context = xmlconfig.string(main.SCHOOLBELL_SITE_DEFINITION,
+        context = xmlconfig.string(main.SCHOOLTOOL_SITE_DEFINITION,
                                    context=context,
                                    execute=False)
         namespaces, subdirs = docutils.makeDocStructures(context)
-        
+
         # Empty keys are not so good for a container
         if namespaces.has_key(''):
             namespaces['ALL'] = namespaces['']
             del namespaces['']
-        
+
         # Some trivial caching
         zcmlmodule.namespaces = namespaces
         zcmlmodule.subdirs = subdirs
-            
+
     zcmlmodule.ZCMLModule._makeDocStructure = _makeDocStructure

@@ -31,12 +31,12 @@ def personPermissionsSubscriber(event):
         if IPerson.providedBy(event.object):
             map = IPrincipalPermissionManager(event.object)
             principalid = 'sb.person.' + event.object.__name__
-            map.grantPermissionToPrincipal('schoolbell.view', principalid)
-            map.grantPermissionToPrincipal('schoolbell.edit', principalid)
-            map.grantPermissionToPrincipal('schoolbell.addEvent', principalid)
-            map.grantPermissionToPrincipal('schoolbell.modifyEvent',
+            map.grantPermissionToPrincipal('schooltool.view', principalid)
+            map.grantPermissionToPrincipal('schooltool.edit', principalid)
+            map.grantPermissionToPrincipal('schooltool.addEvent', principalid)
+            map.grantPermissionToPrincipal('schooltool.modifyEvent',
                                            principalid)
-            map.grantPermissionToPrincipal('schoolbell.viewCalendar',
+            map.grantPermissionToPrincipal('schooltool.viewCalendar',
                                            principalid)
-            map.grantPermissionToPrincipal('schoolbell.controlAccess',
+            map.grantPermissionToPrincipal('schooltool.controlAccess',
                                            principalid)

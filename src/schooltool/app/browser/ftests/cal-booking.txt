@@ -128,8 +128,8 @@ But we can give him access to some resources:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schoolbell.addEvent&\
-    ... sb.person.frog=schoolbell.viewCalendar&\
+    ... sb.person.frog=schooltool.addEvent&\
+    ... sb.person.frog=schooltool.viewCalendar&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -143,8 +143,8 @@ But we can give him access to some resources:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schoolbell.addEvent&\
-    ... sb.person.frog=schoolbell.viewCalendar&\
+    ... sb.person.frog=schooltool.addEvent&\
+    ... sb.person.frog=schooltool.viewCalendar&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -287,7 +287,7 @@ Now if we remove the permission to book the fish:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schoolbell.viewCalendar&\
+    ... sb.person.frog=schooltool.viewCalendar&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -556,8 +556,8 @@ Now let's allow frog access all the resources:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schoolbell.addEvent&\
-    ... sb.person.frog=schoolbell.viewCalendar&\
+    ... sb.person.frog=schooltool.addEvent&\
+    ... sb.person.frog=schooltool.viewCalendar&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -571,8 +571,8 @@ Now let's allow frog access all the resources:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schoolbell.addEvent&\
-    ... sb.person.frog=schoolbell.viewCalendar&\
+    ... sb.person.frog=schooltool.addEvent&\
+    ... sb.person.frog=schooltool.viewCalendar&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other
@@ -586,8 +586,8 @@ Now let's allow frog access all the resources:
     ... Content-Type: application/x-www-form-urlencoded
     ...
     ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schoolbell.addEvent&\
-    ... sb.person.frog=schoolbell.viewCalendar&\
+    ... sb.person.frog=schooltool.addEvent&\
+    ... sb.person.frog=schooltool.viewCalendar&\
     ... UPDATE_SUBMIT=Set
     ... """)
     HTTP/1.1 303 See Other

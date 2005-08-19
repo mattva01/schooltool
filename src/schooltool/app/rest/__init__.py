@@ -22,11 +22,9 @@ Restive XML views for the SchoolTool application.
 $Id: __init__.py 3405 2005-04-12 16:08:43Z bskahan $
 """
 from zope.interface import implements, Interface
-from zope.interface import directlyProvidedBy, directlyProvides
 from zope.publisher.http import HTTPRequest
 from zope.publisher.interfaces import NotFound
-from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.publisher.interfaces.http import IHTTPRequest, IHTTPPublisher
+from zope.publisher.interfaces.http import IHTTPPublisher
 from zope.server.http.commonaccesslogger import CommonAccessLogger
 from zope.server.http.publisherhttpserver import PublisherHTTPServer
 
@@ -38,24 +36,6 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile \
 from zope.app.publication.interfaces import IPublicationRequestFactory
 from zope.app.publication.http import HTTPPublication
 from zope.app.server.servertype import ServerType
-
-from schooltool.app.interfaces import ISchoolToolApplication
-
-
-class ISchoolToolRequest(IHTTPRequest):
-    """A request in SchoolTool (rather than SchoolBell) application"""
-
-
-def restSchoolToolSubscriber(event):
-    """This event subscriber to BeforeTraverseEvent sets a marker
-    interface on a RESTive request if we traverse into a SchoolTool
-    instance.
-    """
-
-    if (ISchoolToolApplication.providedBy(event.object)
-        and not IBrowserRequest.providedBy(event.request)):
-        interfaces = directlyProvidedBy(event.request)
-        directlyProvides(event.request, interfaces + ISchoolToolRequest)
 
 
 class RestPublicationRequestFactory(object):

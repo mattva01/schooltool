@@ -60,7 +60,7 @@ class GroupListView(BrowserView):
         """Return a list of groups the current user is not a member of."""
         groups = getSchoolToolApplication()['groups']
         return [group for group in groups.values()
-                if checkPermission('schoolbell.manageMembership', group)
+                if checkPermission('schooltool.manageMembership', group)
                 and group not in self.context.groups]
 
     def update(self):

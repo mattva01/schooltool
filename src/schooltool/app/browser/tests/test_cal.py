@@ -22,7 +22,7 @@ Tests for SchoolTool-specific calendar views.
 $Id$
 """
 import unittest
-from datetime import date, timedelta, time
+from datetime import datetime, date, timedelta, time
 from pytz import timezone
 
 from zope.i18n import translate
@@ -593,9 +593,7 @@ class TestCalendarViewBase(unittest.TestCase):
     # Legacy unit tests from SchoolTool.
 
     def setUp(self):
-        setup.placelessSetUp()
-        setup.setUpTraversal()
-        setup.setUpAnnotations()
+        setup.placefulSetUp()
 
         sbsetup.setupSessions()
         registerCalendarHelperViews()
@@ -605,7 +603,7 @@ class TestCalendarViewBase(unittest.TestCase):
                              getPersonPreferences)
 
     def tearDown(self):
-        setup.placelessTearDown()
+        setup.placefulTearDown()
 
     def test_dayTitle(self):
         from schooltool.app.browser.cal import CalendarViewBase
@@ -821,16 +819,19 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getEvents(self):
         """Test for CalendarViewBase.getEvents
 
-            >>> setup.placelessSetUp()
+            >>> setup.placefulSetUp()
+            >>> app = sbsetup.setupSchoolToolSite()
+            >>> setup.setUpAnnotations()
             >>> registerCalendarHelperViews()
             >>> sbsetup.setupSessions()
+            >>> sbsetup.setupTimetabling()
 
         CalendarViewBase.getEvents returns a list of wrapped calendar
         events.
 
             >>> from schooltool.app.browser.cal import CalendarViewBase
             >>> from schooltool.app.cal import Calendar
-            >>> cal1 = Calendar(None)
+            >>> cal1 = Calendar(Person())
             >>> cal1.addEvent(createEvent('2005-02-26 19:39', '1h', 'code'))
             >>> cal1.addEvent(createEvent('2005-02-20 16:00', '1h', 'walk'))
             >>> view = CalendarViewBase(cal1, TestRequest())
@@ -1010,15 +1011,19 @@ class TestCalendarViewBase(unittest.TestCase):
 
         We're done:
 
-            >>> setup.placelessSetUp()
+            >>> setup.placefulSetUp()
 
         """
 
     def test_getAllDayEvents(self):
         """Test for CalendarViewBase.getAllDayEvents
 
-            >>> setup.placelessSetUp()
+            >>> setup.placefulSetUp()
+            >>> app = sbsetup.setupSchoolToolSite()
+            >>> setup.setUpAnnotations()
             >>> registerCalendarHelperViews()
+            >>> sbsetup.setupSessions()
+            >>> sbsetup.setupTimetabling()
 
         CalendarViewBase.getAllDayEvents returns a list of wrapped all-day
         calendar events for a specified date or the date of the view cursor if
@@ -1026,7 +1031,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
             >>> from schooltool.app.browser.cal import CalendarViewBase
             >>> from schooltool.app.cal import Calendar
-            >>> cal = Calendar(None)
+            >>> cal = Calendar(Person())
             >>> cal.addEvent(createEvent('2005-02-20 16:00', '1h', 
             ...      'A Birthday', allday=True))
             >>> cal.addEvent(createEvent('2005-02-20 16:00', '1h', 'walk'))
@@ -1058,6 +1063,8 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getDays(self):
         from schooltool.app.browser.cal import CalendarViewBase
         from schooltool.app.cal import Calendar
+        app = sbsetup.setupSchoolToolSite()
+        sbsetup.setupTimetabling()
 
         e0 = createEvent('2004-08-10 11:00', '1h', "e0")
         e2 = createEvent('2004-08-11 11:00', '1h', "e2")
@@ -1068,7 +1075,7 @@ class TestCalendarViewBase(unittest.TestCase):
         e7 = createEvent('2004-08-12 00:00', '1d+1sec', "e7")
         e8 = createEvent('2004-08-15 00:00', '0sec', "e8")
 
-        cal = Calendar(None)
+        cal = Calendar(Person())
         for e in [e0, e2, e3, e4, e5, e6, e7, e8]:
             cal.addEvent(e)
 
@@ -1104,7 +1111,7 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getJumpToYears(self):
         from schooltool.app.cal import Calendar
         from schooltool.app.browser.cal import CalendarViewBase
-        cal = Calendar(None)
+        cal = Calendar(Person())
         directlyProvides(cal, IContainmentRoot)
 
         first_year = datetime.today().year - 2
@@ -1124,7 +1131,7 @@ class TestCalendarViewBase(unittest.TestCase):
     def test_getJumpToMonths(self):
         from schooltool.app.cal import Calendar
         from schooltool.app.browser.cal import CalendarViewBase
-        cal = Calendar(None)
+        cal = Calendar(Person())
         directlyProvides(cal, IContainmentRoot)
 
         view = CalendarViewBase(cal, TestRequest())
@@ -1163,7 +1170,7 @@ def doctest_CalendarEventView():
         >>> from schooltool.app.cal import Calendar
         >>> from schooltool.app.browser.cal import CalendarEventView
         >>> from schooltool.app.browser.cal import makeRecurrenceRule
-        >>> cal = Calendar(None)
+        >>> cal = Calendar(Person())
         >>> event = CalendarEvent(datetime(2002, 2, 3, 12, 30),
         ...                       timedelta(minutes=59), "Event")
         >>> cal.addEvent(event)
@@ -1179,7 +1186,7 @@ def doctest_CalendarEventView():
     event.
 
         >>> type(view.display)
-        <class 'schoolbell.app.browser.cal.EventForDisplay'>
+        <class 'schooltool.app.browser.cal.EventForDisplay'>
 
     The display's dtstarttz and dtendtz should be datetime representations of
     view.start and view.end.
@@ -1221,7 +1228,7 @@ def doctest_CalendarEventAddView_add():
 
     First, let's simply render the CalendarEventAddTestView.
 
-        >>> view = CalendarEventAddTestView(Calendar(None), TestRequest())
+        >>> view = CalendarEventAddTestView(Calendar(Person()), TestRequest())
         >>> view.update()
 
     Let's try to add an event:
@@ -1234,7 +1241,7 @@ def doctest_CalendarEventAddView_add():
         ...                             'field.recurrence_type': 'daily',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1269,7 +1276,7 @@ def doctest_CalendarEventAddView_add():
     In that case we are redirected to today's calendar.
 
         >>> request = TestRequest(form={'CANCEL': 'Cancel'})
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1293,7 +1300,7 @@ def doctest_CalendarEventAddView_add():
         ...                             'field.weekdays-empty-marker': '1',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1340,7 +1347,7 @@ def doctest_CalendarEventAddView_add():
         ...                             'field.weekdays-empty-marker': '1',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> eastern = timezone('US/Eastern')
@@ -1408,7 +1415,7 @@ def doctest_CalendarEventAddView_add_validation():
         ...                             'field.recurrence_type': 'daily',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1520,7 +1527,7 @@ def doctest_CalendarEventAddView_add_recurrence():
         ...                             'field.range': 'forever',
         ...                             'UPDATE_SUBMIT': 'Add'})
 
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1544,7 +1551,7 @@ def doctest_CalendarEventAddView_add_recurrence():
         ...                             'field.recurrence.used': '',
         ...                             'field.recurrence_type': 'daily',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1586,7 +1593,7 @@ def doctest_CalendarEventAddView_add_recurrence():
         ...                             'UPDATE_SUBMIT': 'Add'})
 
 
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1636,7 +1643,7 @@ def doctest_CalendarEventAddView_recurrence_exceptions():
         ...               'UPDATE_SUBMIT': 'Add'})
 
 
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1655,7 +1662,7 @@ def doctest_CalendarEventAddView_recurrence_exceptions():
     We should skip additional newlines when parsing the input:
 
         >>> request.form['field.exceptions'] = '2004-08-14\n\n2004-08-19\n\n\n2004-08-20'
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1675,7 +1682,7 @@ def doctest_CalendarEventAddView_recurrence_exceptions():
     is signaled:
 
         >>> request.form['field.exceptions'] = '2004-08-14\n2004'
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
@@ -1692,7 +1699,7 @@ def doctest_CalendarEventAddView_recurrence_exceptions():
 def doctest_CalendarEventAddView_getMonthDay():
     r"""Tests for CalendarEventAddView.getMonthDay().
 
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> request = TestRequest()
         >>> request.form['field.start_date'] = u''
         >>> view = CalendarEventAddTestView(calendar, request)
@@ -1711,7 +1718,7 @@ def doctest_CalendarEventAddView_getMonthDay():
 def doctest_CalendarEventAddView_weekdayChecked():
     r"""Tests for CalendarEventAddView.weekdayChecked().
 
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> request = TestRequest()
         >>> request.form['field.start_date'] = u''
         >>> view = CalendarEventAddTestView(calendar, request)
@@ -1743,7 +1750,7 @@ def doctest_CalendarEventAddView_weekdayChecked():
 def doctest_CalendarEventAddView_weekdayDisabled():
     r"""Tests for CalendarEventAddView.weekdayDisabled().
 
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> request = TestRequest()
         >>> request.form['field.start_date'] = u''
         >>> view = CalendarEventAddTestView(calendar, request)
@@ -1785,7 +1792,7 @@ def doctest_CalendarEventAddView_getWeekDay():
         ...                             'field.recurrence_type': 'daily',
         ...                             'field.interval': '2',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> view = CalendarEventAddTestView(calendar, request)
 
         >>> request.form['field.start_date'] = "2004-10-01"
@@ -1840,7 +1847,7 @@ def doctest_CalendarEventAddView_getLastWeekDay():
         ...                             'field.recurrence_type': 'daily',
         ...                             'field.interval': '2',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
 
         >>> request.form['field.start_date'] = ""
         >>> view = CalendarEventAddTestView(calendar, request)
@@ -1880,7 +1887,7 @@ def doctest_CalendarEventAddView_cross_validation():
         ...                             'field.count': '6',
         ...                             'field.until': '2004-01-01',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
@@ -1900,7 +1907,7 @@ def doctest_CalendarEventAddView_cross_validation():
         ...                             'field.range': 'until',
         ...                             'field.until': '2002-01-01',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
@@ -1919,7 +1926,7 @@ def doctest_CalendarEventAddView_cross_validation():
         ...                             'field.range': 'until',
         ...                             'field.count': '23',
         ...                             'UPDATE_SUBMIT': 'Add'})
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> view = CalendarEventAddTestView(calendar, request)
         >>> view.update()
         u'An error occured.'
@@ -2089,7 +2096,7 @@ def doctest_CalendarEventEditView_nextURL():
     Let's create an event:
 
         >>> import datetime
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
 
         >>> event = CalendarEvent(title="Hacking",
@@ -2745,14 +2752,15 @@ def doctest_getEvents_booking():
 class TestDailyCalendarView(unittest.TestCase):
 
     def setUp(self):
-        setup.placelessSetUp()
+        setup.placefulSetUp()
+        self.app = sbsetup.setupSchoolToolSite()
         registerCalendarHelperViews()
         sbsetup.setupSessions()
-        setup.setUpAnnotations()
+        sbsetup.setupTimetabling()
         sbsetup.setupCalendaring()
 
     def tearDown(self):
-        setup.placelessTearDown()
+        setup.placefulTearDown()
 
     def test_title(self):
         from schooltool.app.browser.cal import DailyCalendarView
@@ -3182,7 +3190,7 @@ def doctest_CalendarViewBase():
 
         >>> from schooltool.app.browser.cal import CalendarViewBase
         >>> from schooltool.app.cal import Calendar
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
 
     Set up the checkers for canEdit/canView on events:
@@ -3306,7 +3314,7 @@ def doctest_DailyCalendarView():
         >>> from schooltool.app.browser.cal import DailyCalendarView
 
         >>> from schooltool.app.cal import Calendar
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = DailyCalendarView(calendar, TestRequest())
 
@@ -3338,7 +3346,7 @@ def doctest_WeeklyCalendarView():
         >>> from schooltool.app.browser.cal import WeeklyCalendarView
 
         >>> from schooltool.app.cal import Calendar
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = WeeklyCalendarView(calendar, TestRequest())
 
@@ -3387,7 +3395,7 @@ def doctest_MonthlyCalendarView():
         >>> from schooltool.app.browser.cal import MonthlyCalendarView
 
         >>> from schooltool.app.cal import Calendar
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = MonthlyCalendarView(calendar, TestRequest())
 
@@ -3444,7 +3452,7 @@ def doctest_YearlyCalendarView():
         >>> from schooltool.app.browser.cal import YearlyCalendarView
 
         >>> from schooltool.app.cal import Calendar
-        >>> calendar = Calendar(None)
+        >>> calendar = Calendar(Person())
         >>> directlyProvides(calendar, IContainmentRoot)
         >>> view = YearlyCalendarView(calendar, TestRequest())
 
@@ -3527,15 +3535,18 @@ def doctest_AtomCalendarView():
 
     Some setup:
 
-        >>> setup.placelessSetUp()
+        >>> setup.placefulSetUp()
+        >>> app = sbsetup.setupSchoolToolSite()
+        >>> sbsetup.setupTimetabling()
         >>> registerCalendarHelperViews()
 
         >>> from schooltool.app.browser.cal import AtomCalendarView
 
         >>> from schooltool.app.cal import Calendar
         >>> from schooltool.app.browser.cal import CalendarDay
-        >>> calendar = Calendar(None)
-        >>> directlyProvides(calendar, IContainmentRoot)
+        >>> person = Person()
+        >>> calendar = Calendar(person)
+        >>> directlyProvides(person, IContainmentRoot)
 
     Populate the calendar:
 
@@ -3766,7 +3777,7 @@ def doctest_EventDeleteView():
     Overlaid events should have their removal links pointing to their
     source calendars so they are not handled:
 
-        >>> cal2 = Calendar(None) # a dummy calendar
+        >>> cal2 = Calendar(Person()) # a dummy calendar
         >>> owner = container['friend'] = Person('friend')
         >>> owner.overlaid_calendars.add(cal)
         >>> owner.overlaid_calendars.add(cal2)
@@ -3843,7 +3854,7 @@ class TestDailyCalendarRowsView(unittest.TestCase):
         return schema
 
     def test_calendarRows(self):
-        from schooltool.browser.cal import DailyCalendarRowsView
+        from schooltool.app.browser.cal import DailyCalendarRowsView
         from schooltool.app.security import Principal
 
         request = TestRequest()
@@ -3868,7 +3879,7 @@ class TestDailyCalendarRowsView(unittest.TestCase):
         self.assertEquals(result, expected)
 
     def test_calendarRows_no_periods(self):
-        from schooltool.browser.cal import DailyCalendarRowsView
+        from schooltool.app.browser.cal import DailyCalendarRowsView
         from schooltool.person.preference import getPersonPreferences
         from schooltool.app.security import Principal
 
@@ -3886,7 +3897,7 @@ class TestDailyCalendarRowsView(unittest.TestCase):
         self.assertEquals(result, expected)
 
     def test_calendarRows_default(self):
-        from schooltool.browser.cal import DailyCalendarRowsView
+        from schooltool.app.browser.cal import DailyCalendarRowsView
 
         request = TestRequest()
         # do not set the principal
@@ -3915,7 +3926,7 @@ def doctest_CalendarSTOverlayView():
         >>> from schooltool.app.overlay import CalendarOverlayInfo
         >>> classImplements(CalendarOverlayInfo, IAttributeAnnotatable)
 
-        >>> from schooltool.browser.cal import CalendarSTOverlayView
+        >>> from schooltool.app.browser.cal import CalendarSTOverlayView
         >>> View = SimpleViewClass('../templates/calendar_overlay.pt',
         ...                        bases=(CalendarSTOverlayView,))
 
@@ -4120,7 +4131,7 @@ def doctest_CalendarListView(self):
 
     A simple check:
 
-        >>> from schooltool.browser.cal import CalendarListView
+        >>> from schooltool.app.browser.cal import CalendarListView
         >>> import calendar as pycalendar
         >>> calendar = CalendarStub('My Calendar')
         >>> request = TestRequest()
@@ -4157,7 +4168,7 @@ def doctest_CalendarListView(self):
 
         >>> from zope.app.annotation.interfaces import IAnnotations
         >>> annotations = IAnnotations(principal.person)
-        >>> from schooltool.browser.cal import CalendarSTOverlayView
+        >>> from schooltool.app.browser.cal import CalendarSTOverlayView
         >>> annotations[CalendarSTOverlayView.SHOW_TIMETABLE_KEY] = False
 
         >>> for c, col1, col2 in view.getCalendars():

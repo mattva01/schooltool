@@ -63,7 +63,7 @@ from schooltool.app.browser import pdfcal
 
 locale_charset = locale.getpreferredencoding()
 
-localedir = os.path.join(os.path.dirname(__file__), 'locales')
+localedir = os.path.join(os.path.dirname(__file__), '..', 'locales')
 catalog = gettext.translation('schooltool', localedir, fallback=True)
 _ = lambda us: catalog.ugettext(us).encode(locale_charset, 'replace')
 
@@ -302,7 +302,8 @@ def daemonize():
 SCHOOLTOOL_SITE_DEFINITION = u"""\
 <?xml version="1.0" encoding="utf-8"?>
 <configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:browser="http://namespaces.zope.org/browser">
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:meta="http://namespaces.zope.org/meta">
 
   <include package="zope.app" />
   <include package="zope.app.securitypolicy" file="meta.zcml" />
@@ -317,6 +318,7 @@ SCHOOLTOOL_SITE_DEFINITION = u"""\
        this menu -->
   <browser:menu id="help_actions" />
 
+  <meta:provides feature="schooltool" />
   <include package="schooltool" />
 
   <include package="zope.app.securitypolicy"/>

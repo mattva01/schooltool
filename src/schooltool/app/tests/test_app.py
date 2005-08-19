@@ -161,7 +161,7 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> x = map.getPermissionsForPrincipal(unauthenticated.id)
         >>> x.sort()
         >>> print x
-        [('schoolbell.view', PermissionSetting: Allow), ('schoolbell.viewCalendar', PermissionSetting: Allow)]
+        [('schooltool.view', PermissionSetting: Allow), ('schooltool.viewCalendar', PermissionSetting: Allow)]
 
     We don't want to open up everything:
 
@@ -171,11 +171,11 @@ def doctest_applicationCalendarPermissionsSubscriber():
         ...     x = map.getPermissionsForPrincipal(unauthenticated.id)
         ...     x.sort()
         ...     print x
-        [('schoolbell.view', PermissionSetting: Deny), ('schoolbell.viewCalendar', PermissionSetting: Deny)]
-        [('schoolbell.view', PermissionSetting: Deny), ('schoolbell.viewCalendar', PermissionSetting: Deny)]
-        [('schoolbell.view', PermissionSetting: Deny), ('schoolbell.viewCalendar', PermissionSetting: Deny)]
-        [('schoolbell.view', PermissionSetting: Deny), ('schoolbell.viewCalendar', PermissionSetting: Deny)]
-        [('schoolbell.view', PermissionSetting: Deny), ('schoolbell.viewCalendar', PermissionSetting: Deny)]
+        [('schooltool.view', PermissionSetting: Deny), ('schooltool.viewCalendar', PermissionSetting: Deny)]
+        [('schooltool.view', PermissionSetting: Deny), ('schooltool.viewCalendar', PermissionSetting: Deny)]
+        [('schooltool.view', PermissionSetting: Deny), ('schooltool.viewCalendar', PermissionSetting: Deny)]
+        [('schooltool.view', PermissionSetting: Deny), ('schooltool.viewCalendar', PermissionSetting: Deny)]
+        [('schooltool.view', PermissionSetting: Deny), ('schooltool.viewCalendar', PermissionSetting: Deny)]
 
         >>> for container in ['terms', 'ttschemas']:
         ...     map = IPrincipalPermissionManager(st[container])

@@ -36,11 +36,14 @@ from zope.app.publisher.browser import BrowserView
 from schooltool import SchoolToolMessageID as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.browser.app import ContainerView, ContainerDeleteView
+from schooltool.app.relationships import URIInstruction, URISection
+from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonPreferences, IPersonDetails
 from schooltool.person.interfaces import IPersonContainer, IPersonContained
-
 from schooltool.person.person import Person
+from schooltool.relationship import getRelatedObjects
+
 
 class PersonContainerView(ContainerView):
     """A Person Container view."""

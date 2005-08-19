@@ -24,18 +24,18 @@ $Id: skin.py 3335 2005-03-25 18:53:11Z ignas $
 from zope.app.publisher.browser import applySkin
 from zope.publisher.interfaces.browser import IBrowserRequest
 from schooltool.app.interfaces import ISchoolToolApplication
-from schoolbell.app.browser.skin import ISchoolBellSkin 
+from schooltool.app.browser.skin import ISchoolToolSkin
 
 
 class IDevModeLayer(IBrowserRequest):
     """SchoolBell devmode layer."""
 
 
-class ISchoolBellDevModeSkin(IDevModeLayer, ISchoolBellSkin):
+class ISchoolToolDevModeSkin(IDevModeLayer, ISchoolToolSkin):
     """The SchoolBell devmode skin"""
 
 
-def schoolBellTraverseSubscriber(event):
+def schoolToolTraverseSubscriber(event):
     """A subscriber to BeforeTraverseEvent.
 
     Sets the SchoolBell skin if the object traversed is a SchoolBell
@@ -43,4 +43,4 @@ def schoolBellTraverseSubscriber(event):
     """
     if (ISchoolToolApplication.providedBy(event.object) and
         IBrowserRequest.providedBy(event.request)):
-        applySkin(event.request, ISchoolBellDevModeSkin)
+        applySkin(event.request, ISchoolToolDevModeSkin)

@@ -17,65 +17,92 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.rest.
+Tests for infrastructure of restive views.
 
 $Id$
 """
-
+import unittest
 from StringIO import StringIO
 
-from zope.testing import doctest
-import unittest
+from zope.interface import Interface, implements
+from zope.app.testing.placelesssetup import PlacelessSetup
+from zope.app.testing import ztapi
+from zope.app.publication.http import HTTPPublication
+from zope.publisher.http import HTTPRequest
 
 
-def doctest_restSchoolToolSubscriber():
-    """
-    This event subscriber will mark the request with the
-    ISchoolToolRequest interface once the SchoolTool application is
-    traversed.  This interface will be used in order to override SB
-    REST views.
+class Test(PlacelessSetup, unittest.TestCase):
 
-        >>> from schooltool.rest import restSchoolToolSubscriber
-        >>> from schooltool.rest import ISchoolToolRequest
-        >>> from zope.app.publication.interfaces import BeforeTraverseEvent
-        >>> from zope.publisher.http import HTTPRequest
+    def setUp(self):
+        super(Test, self).setUp()
+        self.__env =  {
+            'SERVER_URL':         'http://127.0.0.1',
+            'HTTP_HOST':          '127.0.0.1',
+            'CONTENT_LENGTH':     '0',
+            'GATEWAY_INTERFACE':  'TestFooInterface/1.0',
+            }
 
-    On an arbitrary object, the subscriber does nothing:
+    def test_http(self):
+        from schooltool.app.rest import RestPublicationRequestFactory
 
-        >>> context = object()
-        >>> request = HTTPRequest(StringIO(), StringIO(), {})
-        >>> event = BeforeTraverseEvent(context, request)
-        >>> restSchoolToolSubscriber(event)
-        >>> ISchoolToolRequest.providedBy(request)
-        False
+        factory = RestPublicationRequestFactory(None)
+        for method in ('HEAD', 'PUT', 'POST', 'DELETE',
+                       'head', 'put', 'post', 'delete',
+                       'whatnot'):
+            self.__env['REQUEST_METHOD'] = method
+            request = factory(StringIO(''), StringIO(), self.__env)
+            self.assertEqual(request.__class__, HTTPRequest)
+            self.assertEqual(request.publication.__class__, HTTPPublication)
 
-    However, if the object is a SchoolToolApplication, the request is
-    marked as an ISchoolToolRequest.
 
-        >>> from schooltool.app.app import SchoolToolApplication
-        >>> context = SchoolToolApplication()
-        >>> event = BeforeTraverseEvent(context, request)
-        >>> restSchoolToolSubscriber(event)
-        >>> ISchoolToolRequest.providedBy(request)
-        True
+class TestRestPublishTraverse(PlacelessSetup, unittest.TestCase):
 
-    Even if the object is a SchoolToolApplication, the request is
-    unchanged if it is a browser request:
+    def setUp(self):
+        from zope.publisher.interfaces.http import IHTTPRequest
+        from schooltool.app.rest import IRestTraverser
 
-        >>> from zope.publisher.browser import TestRequest
-        >>> context = SchoolToolApplication()
-        >>> request = TestRequest()
-        >>> event = BeforeTraverseEvent(context, request)
-        >>> restSchoolToolSubscriber(event)
-        >>> ISchoolToolRequest.providedBy(request)
-        False
+        PlacelessSetup.setUp(self)
 
-    """
+        class StubTraverser:
+            implements(IRestTraverser)
+            def __init__(self, context, request):
+                pass
+            def publishTraverse(self, request, name):
+                return 42
+
+        ztapi.provideAdapter((Interface, IHTTPRequest),
+                             IRestTraverser, StubTraverser, name='acl')
+
+    def create(self, context=None):
+        from schooltool.app.rest import RestPublishTraverse
+        from zope.publisher.browser import TestRequest
+
+        class StubContext:
+            implements(Interface)
+
+        if context is None:
+            context = StubContext()
+
+        return RestPublishTraverse(context, TestRequest('/path'))
+
+    def testNotFound(self):
+        from zope.publisher.interfaces import NotFound
+        traverser = self.create()
+        self.assertRaises(NotFound,
+                          traverser.publishTraverse,
+                          traverser.request, 'whatever')
+
+    def testNamedTraverse(self):
+        traverser = self.create()
+        request = traverser.request
+        self.assertEqual(traverser.publishTraverse(request, 'acl'), 42)
+
 
 def test_suite():
-    return unittest.TestSuite([
-                doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
-           ])
+    return unittest.TestSuite((
+        unittest.makeSuite(Test),
+        unittest.makeSuite(TestRestPublishTraverse),
+        ))
 
-if __name__ == '__main__':
+if __name__=='__main__':
     unittest.main(defaultTest='test_suite')

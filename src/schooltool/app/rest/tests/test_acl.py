@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Tests for schollbell.rest.acl
+Tests for scholltool.app.rest.acl
 
 $Id$
 """
@@ -74,8 +74,8 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
              IPrincipalPermissionManager
 
         perms = IPrincipalPermissionManager(self.person)
-        perms.grantPermissionToPrincipal('schoolbell.edit', 'sb.person.joe')
-        perms.grantPermissionToPrincipal('schoolbell.view',
+        perms.grantPermissionToPrincipal('schooltool.edit', 'sb.person.joe')
+        perms.grantPermissionToPrincipal('schooltool.view',
                                          'zope.unauthenticated')
 
     def tearDown(self):
@@ -103,42 +103,42 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
         principalRegistry.registerGroup(authenticated)
 
     def test_GET(self):
-        from schoolbell.app.rest.acl import ACLView, ACLAdapter
+        from schooltool.app.rest.acl import ACLView, ACLAdapter
         view = ACLView(ACLAdapter(self.person), TestRequest())
 
         # Let's limit the list of permissions so the output is shorter
-        view.permissions = [('schoolbell.view', 'View'),
-                            ('schoolbell.edit', 'Edit')]
+        view.permissions = [('schooltool.view', 'View'),
+                            ('schooltool.edit', 'Edit')]
 
         result = view.GET()
         expected = """
             <acl xmlns="http://schooltool.org/ns/model/0.1">
               <principal id="zope.authenticated">
-                 <permission id="schoolbell.view"/>
-                 <permission id="schoolbell.edit"/>
+                 <permission id="schooltool.view"/>
+                 <permission id="schooltool.edit"/>
               </principal>
               <principal id="zope.unauthenticated">
-                 <permission id="schoolbell.view" setting="on"/>
-                 <permission id="schoolbell.edit"/>
+                 <permission id="schooltool.view" setting="on"/>
+                 <permission id="schooltool.edit"/>
               </principal>
               <principal id="sb.group.admins">
-                <permission id="schoolbell.view"/>
-                <permission id="schoolbell.edit"/>
+                <permission id="schooltool.view"/>
+                <permission id="schooltool.edit"/>
               </principal>
               <principal id="sb.person.ann">
-                <permission id="schoolbell.view"/>
-                <permission id="schoolbell.edit"/>
+                <permission id="schooltool.view"/>
+                <permission id="schooltool.edit"/>
               </principal>
               <principal id="sb.person.joe">
-                <permission id="schoolbell.view"/>
-                <permission id="schoolbell.edit" setting="on"/>
+                <permission id="schooltool.view"/>
+                <permission id="schooltool.edit" setting="on"/>
               </principal>
             </acl>
             """
         self.assertEqualsXML(result, expected)
 
     def test_POST(self):
-        from schoolbell.app.rest.acl import ACLView, ACLAdapter
+        from schooltool.app.rest.acl import ACLView, ACLAdapter
         from zope.app.securitypolicy.interfaces import \
              IPrincipalPermissionManager
 
@@ -160,34 +160,34 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
 
         perms = IPrincipalPermissionManager(self.person)
         grant = perms.grantPermissionToPrincipal
-        grant('schoolbell.edit', 'sb.person.joe')
-        grant('schoolbell.view', 'zope.unauthenticated')
-        grant('schoolbell.view', 'sb.group.admins')
+        grant('schooltool.edit', 'sb.person.joe')
+        grant('schooltool.view', 'zope.unauthenticated')
+        grant('schooltool.view', 'sb.group.admins')
 
         parentperms = IPrincipalPermissionManager(self.person.__parent__)
         pgrant = parentperms.grantPermissionToPrincipal
-        pgrant('schoolbell.edit', 'sb.person.joe')
-        pgrant('schoolbell.edit', 'sb.person.ann')
+        pgrant('schooltool.edit', 'sb.person.joe')
+        pgrant('schooltool.edit', 'sb.person.ann')
 
         body = """
             <acl xmlns="http://schooltool.org/ns/model/0.1">
 
               <principal id="zope.unauthenticated">
                 <!-- 1. no change -->
-                <permission id="schoolbell.view" setting="on"/>
-                <!-- 4. schoolbell.edit remains unset -->
+                <permission id="schooltool.view" setting="on"/>
+                <!-- 4. schooltool.edit remains unset -->
               </principal>
 
               <principal id="sb.person.joe">
-                <!-- 2. remove schoolbell.view -->
-                <!-- 6. deny inherited schoolbell.edit -->
+                <!-- 2. remove schooltool.view -->
+                <!-- 6. deny inherited schooltool.edit -->
               </principal>
 
               <principal id="sb.person.ann">
-                <!-- 3. add schoolbell.view -->
-                <permission id="schoolbell.view" setting="on"/>
-                <!-- 7. unset inherited schoolbell.edit -->
-                <permission id="schoolbell.edit" setting="on"/>
+                <!-- 3. add schooltool.view -->
+                <permission id="schooltool.view" setting="on"/>
+                <!-- 7. unset inherited schooltool.edit -->
+                <permission id="schooltool.edit" setting="on"/>
               </principal>
 
               <!--   5. sb.groups.admins is not mentioned -->
@@ -196,8 +196,8 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
         view = ACLView(ACLAdapter(self.person), TestRequest(StringIO(body)))
 
         # Let's limit the list of permissions so the output is shorter
-        view.permissions = [('schoolbell.view', 'View'),
-                            ('schoolbell.edit', 'Edit')]
+        view.permissions = [('schooltool.view', 'View'),
+                            ('schooltool.edit', 'Edit')]
 
         view.POST()
 
@@ -205,24 +205,24 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
         expected = """
             <acl xmlns="http://schooltool.org/ns/model/0.1">
               <principal id="zope.authenticated">
-                 <permission id="schoolbell.view"/>
-                 <permission id="schoolbell.edit"/>
+                 <permission id="schooltool.view"/>
+                 <permission id="schooltool.edit"/>
               </principal>
               <principal id="zope.unauthenticated">
-                 <permission id="schoolbell.view" setting="on"/>
-                 <permission id="schoolbell.edit"/>
+                 <permission id="schooltool.view" setting="on"/>
+                 <permission id="schooltool.edit"/>
               </principal>
               <principal id="sb.group.admins">
-                <permission id="schoolbell.view" setting="on"/>
-                <permission id="schoolbell.edit"/>
+                <permission id="schooltool.view" setting="on"/>
+                <permission id="schooltool.edit"/>
               </principal>
               <principal id="sb.person.ann">
-                <permission id="schoolbell.view" setting="on"/>
-                <permission id="schoolbell.edit"  setting="on"/>
+                <permission id="schooltool.view" setting="on"/>
+                <permission id="schooltool.edit"  setting="on"/>
               </principal>
               <principal id="sb.person.joe">
-                <permission id="schoolbell.view"/>
-                <permission id="schoolbell.edit"/>
+                <permission id="schooltool.view"/>
+                <permission id="schooltool.edit"/>
               </principal>
             </acl>
             """
@@ -230,42 +230,42 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
 
         # Check cases 6 and 7
         from zope.app.security.settings import Allow, Deny, Unset
-        self.assertEqual(perms.getSetting('schoolbell.edit', 'sb.person.ann'),
+        self.assertEqual(perms.getSetting('schooltool.edit', 'sb.person.ann'),
                          Unset)
-        self.assertEqual(perms.getSetting('schoolbell.edit', 'sb.person.joe'),
+        self.assertEqual(perms.getSetting('schooltool.edit', 'sb.person.joe'),
                          Deny)
 
     def test_parseData(self):
-        from schoolbell.app.rest.acl import ACLView, ACLAdapter
+        from schooltool.app.rest.acl import ACLView, ACLAdapter
         body = """
             <acl xmlns="http://schooltool.org/ns/model/0.1">
               <principal id="sb.person.ann">
-                <permission id="schoolbell.view" setting="on"/>
+                <permission id="schooltool.view" setting="on"/>
               </principal>
               <principal id="sb.person.joe">
-                <permission id="schoolbell.view" setting="on"/>
-                <permission id="schoolbell.edit" setting="on"/>
-                <permission id="schoolbell.create" setting="on"/>
-                <permission id="schoolbell.addEvents"/>
+                <permission id="schooltool.view" setting="on"/>
+                <permission id="schooltool.edit" setting="on"/>
+                <permission id="schooltool.create" setting="on"/>
+                <permission id="schooltool.addEvents"/>
               </principal>
             </acl>
         """
         view = ACLView(ACLAdapter(self.person), TestRequest())
 
         data = view.parseData(body)
-        self.assertEquals(data, {'sb.person.ann': ['schoolbell.view'],
-                                 'sb.person.joe': ['schoolbell.view',
-                                                   'schoolbell.edit',
-                                                   'schoolbell.create']})
+        self.assertEquals(data, {'sb.person.ann': ['schooltool.view'],
+                                 'sb.person.joe': ['schooltool.view',
+                                                   'schooltool.edit',
+                                                   'schooltool.create']})
 
     def test_parseData_errors(self):
-        from schoolbell.app.rest.acl import ACLView, ACLAdapter
+        from schooltool.app.rest.acl import ACLView, ACLAdapter
         from schooltool.app.rest.errors import RestError
         view = ACLView(ACLAdapter(self.person), TestRequest())
 
         body = """<acl xmlns="http://schooltool.org/ns/model/0.1">
                    <principal id="zope.anonymous">
-                     <permission id="schoolbell.view" setting="on"/>
+                     <permission id="schooltool.view" setting="on"/>
                    </principal>
                   </acl>"""
         self.assertRaises(RestError, view.parseData, body)
