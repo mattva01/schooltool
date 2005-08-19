@@ -53,31 +53,7 @@ class Options(main.Options):
     config_filename = 'schoolbell.conf'
 
 
-SCHOOLBELL_SITE_DEFINITION = """\
-<?xml version="1.0" encoding="utf-8"?>
-<configure xmlns="http://namespaces.zope.org/zope">
-
-  <unauthenticatedPrincipal id="zope.anybody" title="%(unauth_user)s" />
-  <unauthenticatedGroup id="zope.Anybody" title="%(unauth_users)s" />
-  <authenticatedGroup id="zope.Authenticated" title="%(auth_users)s" />
-  <everybodyGroup id="zope.Everybody" title="%(all_users)s" />
-
-</configure>
-""" % {'unauth_user': catalog.ugettext("Unauthenticated User"),
-       'unauth_users': catalog.ugettext("Unauthenticated Users"),
-       'auth_users': catalog.ugettext("Authenticated Users"),
-       'all_users': catalog.ugettext("All Users")}
-
-# Mark strings for i18n extractor
-_("Unauthenticated User"), _("Unauthenticated Users")
-_("Authenticated Users"), _("All Users")
-
-SCHOOLBELL_SITE_DEFINITION = SCHOOLBELL_SITE_DEFINITION.encode('utf-8')
-
-
 class StandaloneServer(main.StandaloneServer):
-
-    SITE_DEFINITION = SCHOOLBELL_SITE_DEFINITION
 
     incompatible_db_error_msg = sb_incompatible_db_error_msg
     old_db_error_msg = sb_old_db_error_msg

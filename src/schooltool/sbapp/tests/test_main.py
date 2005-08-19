@@ -227,6 +227,7 @@ def doctest_setup():
         ...     lang = 'lt'
         ...     reportlab_fontdir = ''
         ...     devmode = True
+        ...     site_definition = 'schoolbell-site.zcml'
         >>> options.config = ConfigStub()
 
     Workaround to fix a Windows failure:

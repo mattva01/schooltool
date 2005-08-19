@@ -89,6 +89,9 @@ def doctest_main():
 def doctest_load_options():
     """Tests for load_options().
 
+        >>> from zope.app.testing import setup
+        >>> setup.placelessSetUp()
+
     We will use a sample configuration file that comes with these tests.
 
         >>> import os
@@ -185,6 +188,8 @@ def doctest_load_options():
     Cleaning up.
 
         >>> sys.stderr = old_stderr
+
+        >>> setup.placelessTearDown()
 
     """
 
@@ -304,6 +309,9 @@ def doctest_setLanguage():
 def doctest_setup():
     """Tests for setup()
 
+        >>> from zope.app.testing import setup
+        >>> setup.placelessSetUp()
+
     setup() does everything except enter the main application loop:
 
     - sets up loggers
@@ -333,6 +341,7 @@ def doctest_setup():
         ...     lang = 'lt'
         ...     reportlab_fontdir = ''
         ...     devmode = False
+        ...     site_definition = 'schooltool-site.zcml'
         >>> options.config = ConfigStub()
 
     Workaround to fix a Windows failure:
@@ -397,7 +406,6 @@ def doctest_setup():
         ...     logger1.disabled = False
         ...     logger1.setLevel(0)
 
-        >>> from zope.app.testing import setup
         >>> setup.placelessTearDown()
 
     """
@@ -405,10 +413,18 @@ def doctest_setup():
 def doctest_bootstrapSchoolTool():
     r"""Tests for bootstrapSchoolTool()
 
+        >>> from zope.app.testing import setup
+        >>> setup.placelessSetUp()
+
     Normally, bootstrapSchoolTool is called when Zope 3 is fully configured
 
         >>> from schooltool.app.main import StandaloneServer
         >>> server = StandaloneServer()
+
+        >>> import schooltool
+        >>> dir = os.path.join(os.path.dirname(schooltool.__file__), '..', '..')
+        >>> server.siteConfigFile = os.path.join(dir, 'schooltool-site.zcml')
+
         >>> server.configure()
 
     When we start with an empty database, bootstrapSchoolTool creates a
@@ -515,7 +531,6 @@ def doctest_bootstrapSchoolTool():
         >>> transaction.abort()
         >>> connection.close()
 
-        >>> from zope.app.testing import setup
         >>> setup.placelessTearDown()
 
     """
@@ -524,12 +539,19 @@ def doctest_bootstrapSchoolTool():
 def doctest_restoreManagerUser():
     """Unittest for StandaloneServer.restoreManagerUser
 
+        >>> from zope.app.testing import setup
+        >>> setup.placelessSetUp()
+
     We need a configured server:
 
         >>> from schooltool.app.main import StandaloneServer
         >>> server = StandaloneServer()
-        >>> server.configure()
 
+        >>> import schooltool
+        >>> dir = os.path.join(os.path.dirname(schooltool.__file__), '..', '..')
+        >>> server.siteConfigFile = os.path.join(dir, 'schooltool-site.zcml')
+
+        >>> server.configure()
 
     We also need an application:
 
@@ -590,7 +612,6 @@ def doctest_restoreManagerUser():
 
     Cleanup:
 
-        >>> from zope.app.testing import setup
         >>> setup.placelessTearDown()
     """
 

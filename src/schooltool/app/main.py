@@ -299,7 +299,7 @@ def daemonize():
     os.dup(0)
 
 
-SCHOOLTOOL_SITE_DEFINITION = u"""\
+LOCALIZED_PRINCIPALS = u"""\
 <?xml version="1.0" encoding="utf-8"?>
 <configure xmlns="http://namespaces.zope.org/zope">
 
@@ -318,7 +318,7 @@ SCHOOLTOOL_SITE_DEFINITION = u"""\
 _("Unauthenticated User"), _("Unauthenticated Users")
 _("Authenticated Users"), _("All Users")
 
-SCHOOLTOOL_SITE_DEFINITION = SCHOOLTOOL_SITE_DEFINITION.encode('utf-8')
+LOCALIZED_PRINCIPALS = LOCALIZED_PRINCIPALS.encode('utf-8')
 
 
 class StandaloneServer(object):
@@ -326,7 +326,7 @@ class StandaloneServer(object):
     ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__),
                                   'config-schema.xml')
 
-    SITE_DEFINITION = SCHOOLTOOL_SITE_DEFINITION
+    LOCALIZED_PRINCIPALS = LOCALIZED_PRINCIPALS
 
     usage_message = st_usage_message
     no_storage_error_msg = st_no_storage_error_msg
@@ -349,7 +349,7 @@ class StandaloneServer(object):
         zope.configuration.xmlconfig.registerCommonDirectives(context)
         context = zope.configuration.xmlconfig.file(
             self.siteConfigFile, context=context)
-        zope.configuration.xmlconfig.string(self.SITE_DEFINITION, context)
+        zope.configuration.xmlconfig.string(self.LOCALIZED_PRINCIPALS, context)
 
         # Store the configuration context
         from zope.app.appsetup import appsetup

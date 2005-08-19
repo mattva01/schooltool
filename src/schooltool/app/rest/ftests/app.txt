@@ -22,6 +22,7 @@ Also, we need the REST HTTP caller:
 
 Now, we can run the REST page tests:
 
+    # XXX: Very brittle test that depends heavily on app layout.
     >>> print rest("""
     ... GET /frogpond HTTP/1.1
     ... """)
@@ -34,11 +35,11 @@ Now, we can run the REST page tests:
                    xlink:href="http://localhost/frogpond/terms"
                    xlink:title="terms"/>
         <container xlink:type="simple"
-                   xlink:href="http://localhost/frogpond/courses"
-                   xlink:title="courses"/>
-        <container xlink:type="simple"
                    xlink:href="http://localhost/frogpond/persons"
                    xlink:title="persons"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost/frogpond/courses"
+                   xlink:title="courses"/>
         <container xlink:type="simple"
                    xlink:href="http://localhost/frogpond/levels"
                    xlink:title="levels"/>
