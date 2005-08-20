@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser">
+
+  <page
+      name="breakit.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class="schooltool.app.browser.ftests.test_all.BrokenView"
+      permission="zope.Public"
+      />
+
+</configure>

@@ -47,29 +47,8 @@ Internal server errors
 ----------------------
 
 When an internal server error happens, we show a nice view pointing to our
-issue tracker.
-
-    >>> from zope.interface import implements
-    >>> from zope.app.publisher.browser import BrowserView
-    >>> from zope.publisher.interfaces.browser import IBrowserPublisher
-    >>> class BrokenView(BrowserView):
-    ...     implements(IBrowserPublisher)
-    ...     def browserDefault(self, request):
-    ...         return self, ()
-    ...     def publishTraverse(self, name, request):
-    ...         raise LookupError(name)
-    ...     def __call__(self):
-    ...         raise RuntimeError("Houston, we've got a problem")
-
-    >>> from zope.security.checker import NamesChecker
-    >>> from zope.security.checker import defineChecker
-    >>> defineChecker(BrokenView, NamesChecker(['__call__', 'browserDefault']))
-
-    >>> from zope.app.testing import ztapi
-    >>> from schooltool.app.interfaces import ISchoolToolApplication
-    >>> ztapi.browserView(ISchoolToolApplication, 'breakit.html', BrokenView)
-
-Now, let's trigger it:
+issue tracker. For testing purposes a view that causes a runtime error has
+been registered. Now, let's trigger it:
 
     >>> print http("""
     ... GET /frogpond/breakit.html HTTP/1.1

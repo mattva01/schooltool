@@ -33,13 +33,27 @@ from schooltool.testing import setup
 
 def setUp(test=None):
     browserSetUp(test)
-    from zope.app.testing.setup import setUpAnnotations
-    setUpAnnotations()
+    #from zope.app.testing.setup import setUpAnnotations
+    #setUpAnnotations()
     setup.setupCalendaring()
 
 
 def doctest_CalendarOverlayView():
     r"""Tests for CalendarOverlayView
+
+    Some initial setup:
+
+        >>> from schooltool.app.overlay import CalendarOverlayInfo
+        >>> from schooltool.app.interfaces import IShowTimetables
+        >>> from schooltool.app.app import ShowTimetables
+        >>> from zope.app.testing import ztapi
+        >>> ztapi.provideAdapter(CalendarOverlayInfo, IShowTimetables,
+        ...                      ShowTimetables)
+
+        >>> from zope.app.annotation.interfaces import IAnnotations
+        >>> from zope.app.annotation.attribute import AttributeAnnotations
+        >>> ztapi.provideAdapter(CalendarOverlayInfo, IAnnotations,
+        ...                      AttributeAnnotations)
 
         >>> from schooltool.app.browser.cal import CalendarSTOverlayView
         >>> View = SimpleViewClass('../templates/calendar_overlay.pt',
@@ -78,11 +92,11 @@ def doctest_CalendarOverlayView():
         >>> print view()
         <div id="portlet-calendar-overlay" class="portlet">
         ...
-        <input type="checkbox" name="overlay:list"
-               checked="checked" value="/groups/g1" />
+        <td><input type="checkbox" name="overlay:list"
+               checked="checked" value="/groups/g1" /></td>
         ...
-        <input type="checkbox" name="overlay:list"
-               value="/groups/g2" />
+        <td><input type="checkbox" name="overlay:list"
+               value="/groups/g2" /></td>
         ...
         </div>
 
@@ -94,11 +108,11 @@ def doctest_CalendarOverlayView():
         >>> print view()
         <div id="portlet-calendar-overlay" class="portlet">
         ...
-        <input type="checkbox" name="overlay:list"
-               value="/groups/g1" />
+        <td><input type="checkbox" name="overlay:list"
+               value="/groups/g1" /></td>
         ...
-        <input type="checkbox" name="overlay:list"
-               checked="checked" value="/groups/g2" />
+        <td><input type="checkbox" name="overlay:list"
+               checked="checked" value="/groups/g2" /></td>
         ...
         </div>
 

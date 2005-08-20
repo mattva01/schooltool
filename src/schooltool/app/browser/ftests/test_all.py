@@ -25,9 +25,25 @@ $Id: test_all.py 2922 2005-02-22 19:04:44Z mg $
 import os
 import unittest
 
+from zope.interface import implements
+from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.testing import doctest
+from zope.app.publisher.browser import BrowserView
 from zope.app.testing.functional import FunctionalTestSetup
 from zope.app.testing.functional import FunctionalDocFileSuite
+
+class BrokenView(BrowserView):
+    implements(IBrowserPublisher)
+
+    def browserDefault(self, request):
+        return self, ()
+
+    def publishTraverse(self, name, request):
+        raise LookupError(name)
+
+    def __call__(self):
+        raise RuntimeError("Houston, we've got a problem")
+
 
 
 def find_ftesting_zcml():

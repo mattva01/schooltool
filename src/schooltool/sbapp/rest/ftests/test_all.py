@@ -57,8 +57,11 @@ def test_suite():
     dir = os.path.dirname(__file__)
     filenames = [fn for fn in os.listdir(dir)
                  if fn.endswith('.txt') and not fn.startswith('.')]
-    suites = [FunctionalDocFileSuite(filename, optionflags=optionflags)
-              for filename in filenames]
+    suites = []
+    for filename in filenames:
+        suite = FunctionalDocFileSuite(filename, optionflags=optionflags)
+        suite.level = 2
+        suites.append(suite)
     return unittest.TestSuite(suites)
 
 
