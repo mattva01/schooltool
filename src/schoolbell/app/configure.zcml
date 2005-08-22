@@ -23,30 +23,30 @@
       xmlns:apidoc="http://namespaces.zope.org/apidoc"
       zcml:condition="have apidoc">
 
-    <apidoc:bookchapter 
-        id="schoolbell" 
-        title="SchoolBell" 
+    <apidoc:bookchapter
+        id="schoolbell"
+        title="SchoolBell"
         doc_path="README.txt" />
 
     <!-- Security -->
-    <apidoc:bookchapter 
-        id="security" 
-        title="Security (General)" 
+    <apidoc:bookchapter
+        id="security"
+        title="Security (General)"
         parent="schoolbell"
         doc_path="security.txt" />
 
     <!-- Calendar -->
     <configure package="schoolbell.calendar">
-      <apidoc:bookchapter 
-          id="calendar" 
-          title="Calendar" 
+      <apidoc:bookchapter
+          id="calendar"
+          title="Calendar"
           parent="schoolbell"
           doc_path="README.txt" />
     </configure>
 
-    <apidoc:bookchapter 
-        id="booking" 
-        title="Booking Resources" 
+    <apidoc:bookchapter
+        id="booking"
+        title="Booking Resources"
         parent="schoolbell/calendar"
         doc_path="booking.txt" />
 
@@ -177,8 +177,8 @@
 
   <content class=".app.PersonPreferences">
     <require permission="schoolbell.edit"
-        interface="schoolbell.app.interfaces.IPersonPreferences"
-        set_schema="schoolbell.app.interfaces.IPersonPreferences" />
+             interface="schoolbell.app.interfaces.IPersonPreferences"
+             set_schema="schoolbell.app.interfaces.IPersonPreferences" />
   </content>
 
   <content class=".app.PersonDetails">
