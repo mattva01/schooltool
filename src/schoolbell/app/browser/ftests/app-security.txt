@@ -366,6 +366,20 @@ Now he can't edit the info:
     Location: http://localhost/frogpond/@@login.html...
     ...
 
+But still can see his calendar (regression test for Issue354 User
+can't View calendar without Edit permission):
+
+    >>> print http(r"""
+    ... GET /frogpond/persons/frog/calendar/2005-08-22 HTTP/1.1
+    ... Authorization: Basic frog:newpwd
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+        <title>
+            Calendar for Toad - Monday, 2005-08-22
+        </title>
+    ...
+
 The same goes for the groups and resources edit forms.  Not allowed:
 
     >>> print http("""
