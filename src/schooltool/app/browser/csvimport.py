@@ -247,6 +247,7 @@ class BaseCSVImporter(object):
         raise NotImplementedError("Please override this method in subclasses")
 
 
+# XXX: This should be in the schooltool.timetable package.
 class TimetableCSVImporter(object):
     """A timetable CSV parser and importer.
 

@@ -3836,7 +3836,7 @@ class TestDailyCalendarRowsView(unittest.TestCase):
         app['ttschemas']['default'] = schema
 
         # set up terms
-        from schooltool.timetable import Term
+        from schooltool.timetable.term import Term
         app['terms']['term'] = term = Term("Some term", date(2004, 9, 1),
                                            date(2004, 12, 31))
         term.add(date(2004, 11, 5))
@@ -3846,8 +3846,8 @@ class TestDailyCalendarRowsView(unittest.TestCase):
 
     def createSchema(self, days, *periods_for_each_day):
         """Create a timetable schema."""
-        from schooltool.timetable import TimetableSchema
-        from schooltool.timetable import TimetableSchemaDay
+        from schooltool.timetable.schema import TimetableSchema
+        from schooltool.timetable.schema import TimetableSchemaDay
         schema = TimetableSchema(days, title="A Schema")
         for day, periods in zip(days, periods_for_each_day):
             schema[day] = TimetableSchemaDay(list(periods))

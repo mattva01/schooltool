@@ -86,7 +86,7 @@ from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson, IPersonPreferences
 from schooltool.person.preference import PersonPreferences
 from schooltool.resource.interfaces import IResource
-from schooltool.timetable import getPeriodsForDay
+from schooltool.timetable.schema import getPeriodsForDay
 from schooltool.timetable.interfaces import ITimetables
 
 #

@@ -44,7 +44,7 @@ class TestTermView(QuietLibxml2Mixin, unittest.TestCase):
     def setUp(self):
         setup.placelessSetUp()
         setup.setUpTraversal()
-        from schooltool.timetable import Term, TermContainer
+        from schooltool.timetable.term import Term, TermContainer
         from schooltool.timetable.rest.term import TermView
 
         self.terms = TermContainer()
@@ -112,7 +112,7 @@ class TestTermView(QuietLibxml2Mixin, unittest.TestCase):
 
 class TestTermFileFactory(QuietLibxml2Mixin, unittest.TestCase):
     def setUp(self):
-        from schooltool.timetable import Term, TermContainer
+        from schooltool.timetable.term import Term, TermContainer
         from schooltool.timetable.rest.term import TermFileFactory
         from schooltool.timetable.rest.term import TermFile
         from schooltool.timetable.rest.term import TermView
@@ -200,7 +200,7 @@ class TestTermFileFactory(QuietLibxml2Mixin, unittest.TestCase):
 class TestTermFile(QuietLibxml2Mixin, unittest.TestCase):
 
     def setUp(self):
-        from schooltool.timetable import Term, TermContainer
+        from schooltool.timetable.term import Term, TermContainer
         from schooltool.timetable.interfaces import ITermContainer
         from schooltool.timetable.rest.term import TermFileFactory
         from schooltool.timetable.rest.term import TermFile

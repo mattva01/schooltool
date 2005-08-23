@@ -146,13 +146,14 @@ class TestTimetableCSVImportView(unittest.TestCase):
         setUp()
         self.app = setup.setupSchoolToolSite()
 
-        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
+        from schooltool.timetable.schema import TimetableSchema
+        from schooltool.timetable.schema import TimetableSchemaDay
         ttschema = TimetableSchema(["1","2","3"])
         for day in range(1, 4):
             ttschema[str(day)] = TimetableSchemaDay([str(day)])
         self.app['ttschemas']['three-day'] = ttschema
 
-        from schooltool.timetable import Term
+        from schooltool.timetable.term import Term
         self.app['terms']['fall'] = Term("Fall term",
                                          datetime.datetime(2004, 1, 1),
                                          datetime.datetime(2004, 5, 1))
@@ -259,13 +260,14 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.location2 = app['resources']['location2'] = Resource("Outside")
 
         # set a timetable schema
-        from schooltool.timetable import TimetableSchema, TimetableSchemaDay
+        from schooltool.timetable.schema import TimetableSchema
+        from schooltool.timetable.schema import TimetableSchemaDay
         ttschema = TimetableSchema(self.days)
         for day in self.days:
             ttschema[day] = TimetableSchemaDay(self.periods)
         self.app["ttschemas"]['three-day'] = ttschema
 
-        from schooltool.timetable import Term
+        from schooltool.timetable.term import Term
         term = Term("Summer term",
                     datetime.datetime(2004, 1, 1),
                     datetime.datetime(2004, 5, 1))

@@ -135,7 +135,7 @@
   <view
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       name="GET"
-      factory=".TimetableSchemaContainerView"
+      factory=".schema.TimetableSchemaContainerView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />
@@ -143,21 +143,21 @@
   <adapter
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
       provides="zope.app.filerepresentation.interfaces.IFileFactory"
-      factory=".TimetableSchemaFileFactory"
+      factory=".schema.TimetableSchemaFileFactory"
       permission="zope.Public"
       />
 
   <adapter
       for="schooltool.timetable.interfaces.ITimetableSchema"
       provides="zope.app.filerepresentation.interfaces.IWriteFile"
-      factory=".TimetableSchemaFile"
+      factory=".schema.TimetableSchemaFile"
       permission="zope.Public"
       />
 
   <view
       for="schooltool.timetable.interfaces.ITimetableSchema"
       name="GET"
-      factory=".TimetableSchemaView"
+      factory=".schema.TimetableSchemaView"
       type="zope.publisher.interfaces.http.IHTTPRequest"
       permission="zope.Public"
       />

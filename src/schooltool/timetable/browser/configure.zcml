@@ -47,7 +47,7 @@
   <page
       name="index.html"
       for="schooltool.timetable.interfaces.ITermContainer"
-      class=".TermContainerView"
+      class=".term.TermContainerView"
       template="templates/term-container.pt"
       permission="zope.View"
       menu="zmi_views"
@@ -57,7 +57,7 @@
   <page
       name="add.html"
       for="schooltool.timetable.interfaces.ITermContainer"
-      class="schooltool.timetable.browser.TermAddView"
+      class=".term.TermAddView"
       template="templates/term_add_edit.pt"
       permission="schooltool.create"
       menu="schooltool_actions" title="New Term"
@@ -66,7 +66,7 @@
   <page
       name="index.html"
       for="schooltool.timetable.interfaces.ITerm"
-      class="schooltool.timetable.browser.TermView"
+      class=".term.TermView"
       template="templates/term.pt"
       permission="zope.View"
       menu="zmi_views" title="View"
@@ -75,7 +75,7 @@
   <page
       name="edit.html"
       for="schooltool.timetable.interfaces.ITerm"
-      class="schooltool.timetable.browser.TermEditView"
+      class=".term.TermEditView"
       template="templates/term_add_edit.pt"
       permission="schooltool.edit"
       menu="schooltool_actions" title="Edit"
@@ -84,7 +84,7 @@
   <page
       name="index.html"
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
-      class=".TimetableSchemaContainerView"
+      class=".schema.TimetableSchemaContainerView"
       template="templates/timetable-schema-container.pt"
       permission="zope.View"
       menu="zmi_views"
@@ -94,21 +94,21 @@
   <page
       name="simpleadd.html"
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
-      class=".SimpleTimetableSchemaAdd"
+      class=".schema.SimpleTimetableSchemaAdd"
       permission="schooltool.create"
       />
 
   <page
       name="complexadd.html"
       for="schooltool.timetable.interfaces.ITimetableSchemaContainer"
-      class=".AdvancedTimetableSchemaAdd"
+      class=".schema.AdvancedTimetableSchemaAdd"
       permission="schooltool.create"
       />
 
   <page
       name="index.html"
       for="schooltool.timetable.interfaces.ITimetableSchema"
-      class=".TimetableSchemaView"
+      class=".schema.TimetableSchemaView"
       template="templates/timetable.pt"
       permission="schooltool.view"
       menu="zmi_views" title="View"

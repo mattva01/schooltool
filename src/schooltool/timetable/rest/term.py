@@ -39,7 +39,7 @@ from schooltool.app.rest.app import GenericContainerView
 from schooltool.app.rest.xmlparsing import XMLDocument
 from schooltool.app.rest.errors import RestError
 
-from schooltool.timetable import Term
+from schooltool.timetable.term import Term
 from schooltool.timetable.interfaces import ITermContainer, ITerm
 
 

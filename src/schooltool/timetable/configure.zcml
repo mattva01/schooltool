@@ -68,7 +68,7 @@
     <allow interface=".interfaces.ITimetableCalendarEvent" />
   </content>
 
-  <content class=".TermContainer">
+  <content class=".term.TermContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
              attributes="keys values __iter__ __len__" />
@@ -76,7 +76,7 @@
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
 
-  <content class=".Term">
+  <content class=".term.Term">
     <allow interface=".interfaces.ITerm"
            attributes="__cmp__"/>
     <require permission="schooltool.edit"
@@ -89,7 +89,7 @@
              interface="zope.app.container.interfaces.IContainer" />
   </content>
 
-  <content class=".TimetableSchemaContainer">
+  <content class=".schema.TimetableSchemaContainer">
     <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer"
              set_attributes="default_id" />
@@ -112,14 +112,14 @@
              set_schema=".interfaces.ITimetableDay" />
   </content>
 
-  <content class=".TimetableSchema">
+  <content class=".schema.TimetableSchema">
     <allow interface=".interfaces.ITimetableSchema" />
     <require permission="schooltool.edit"
              interface=".interfaces.ITimetableSchemaWrite"
              set_schema=".interfaces.ITimetableSchema" />
   </content>
 
-  <content class=".TimetableSchemaDay">
+  <content class=".schema.TimetableSchemaDay">
     <allow interface=".interfaces.ITimetableSchemaDay" />
   </content>
 

@@ -141,14 +141,10 @@ from persistent import Persistent
 from persistent.list import PersistentList
 from persistent.dict import PersistentDict
 from zope.component import provideAdapter, adapts
-from zope.interface import implements
-from zope.interface import directlyProvides
+from zope.interface import directlyProvides, implements
 
 from zope.app import zapi
-from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.annotation.interfaces import IAnnotations
-from zope.app.container.btree import BTreeContainer
-from zope.app.container.contained import Contained
 from zope.app.location.interfaces import ILocation
 from zope.app.location.traversing import LocationPhysicallyLocatable
 from zope.app.traversing.api import getPath
@@ -156,9 +152,6 @@ from zope.app.traversing.api import getPath
 from schooltool.app.cal import CalendarEvent
 from schooltool.calendar.simple import ImmutableCalendar
 
-from schooltool.timetable.interfaces import ITimetableSchema
-from schooltool.timetable.interfaces import ITimetableSchemaDay
-from schooltool.timetable.interfaces import ITimetableSchemaWrite
 from schooltool.timetable.interfaces import ITimetable, ITimetableWrite
 from schooltool.timetable.interfaces import ITimetableDay, ITimetableDayWrite
 from schooltool.timetable.interfaces import ITimetableDict
@@ -170,12 +163,8 @@ from schooltool.timetable.interfaces import ISchooldayPeriod
 from schooltool.timetable.interfaces import ISchooldayTemplate
 from schooltool.timetable.interfaces import ISchooldayTemplateWrite
 from schooltool.timetable.interfaces import ITimetables, IHaveTimetables
-from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable.interfaces import ITermContainer
-from schooltool.timetable.interfaces import ITermWrite, ITerm
 from schooltool.timetable.interfaces import ITimetableSource
 from schooltool.timetable.interfaces import Unchanged
-from schooltool.timetable.interfaces import IDateRange
 from schooltool.app.app import getSchoolToolApplication
 
 # Imports for ZODB compatibility
@@ -185,185 +174,9 @@ from schooltool.timetable.model import SequentialDaysTimetableModel
 from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
 from schooltool.timetable.model import TimetableCalendarEvent
 
-__metaclass__ = type
-
-
-
-#
-# Date ranges and terms
-#
-
-class DateRange:
-
-    implements(IDateRange)
-
-    def __init__(self, first, last):
-        self.first = first
-        self.last = last
-        if last < first:
-            # import timemachine
-            raise ValueError("Last date %r less than first date %r" %
-                             (last, first))
-
-    def __iter__(self):
-        date = self.first
-        while date <= self.last:
-            yield date
-            date += datetime.date.resolution
-
-    def __len__(self):
-        return (self.last - self.first).days + 1
-
-    def __contains__(self, date):
-        return self.first <= date <= self.last
-
-
-class Term(DateRange, Persistent):
-
-    implements(ITerm, ITermWrite, ILocation)
-
-    __name__ = None
-    __parent__ = None
-
-    def __init__(self, title, first, last):
-        DateRange.__init__(self, first, last)
-        self.title = title
-        self._schooldays = Set()
-
-    def _validate(self, date):
-        if not date in self:
-            raise ValueError("Date %r not in term [%r, %r]" %
-                             (date, self.first, self.last))
-
-    def isSchoolday(self, date):
-        self._validate(date)
-        if date in self._schooldays:
-            return True
-        return False
-
-    def add(self, date):
-        self._validate(date)
-        self._schooldays.add(date)
-        self._schooldays = self._schooldays  # persistence
-
-    def remove(self, date):
-        self._validate(date)
-        self._schooldays.remove(date)
-        self._schooldays = self._schooldays  # persistence
-
-    def addWeekdays(self, *weekdays):
-        for date in self:
-            if date.weekday() in weekdays:
-                self.add(date)
-
-    def removeWeekdays(self, *weekdays):
-        for date in self:
-            if date.weekday() in weekdays and self.isSchoolday(date):
-                self.remove(date)
-
-    def toggleWeekdays(self, *weekdays):
-        for date in self:
-            if date.weekday() in weekdays:
-                if self.isSchoolday(date):
-                    self.remove(date)
-                else:
-                    self.add(date)
-
-    def reset(self, first, last):
-        if last < first:
-            # import timemachine
-            raise ValueError("Last date %r less than first date %r" %
-                             (last, first))
-        self.first = first
-        self.last = last
-        self._schooldays.clear()
-
-
 #
 # Timetabling
 #
-
-class TimetableSchema(Persistent, Contained):
-
-    implements(ITimetableSchema, ITimetableSchemaWrite)
-
-    def __init__(self, day_ids, title=None, model=None):
-        """Create a new empty timetable schema.
-
-        day_ids is a sequence of the day ids of this timetable.
-
-        The caller must then assign a TimetableDay for each day ID and
-        set the model before trying to use the timetable.
-        """
-        self.title = title
-        if self.title is None:
-            self.title = "Schema"
-        self.day_ids = day_ids
-        self.days = PersistentDict()
-        self.model = model
-
-    def keys(self):
-        return list(self.day_ids)
-
-    def items(self):
-        return [(day, self.days[day]) for day in self.day_ids]
-
-    def __getitem__(self, key):
-        return self.days[key]
-
-    def __setitem__(self, key, value):
-        if not ITimetableSchemaDay.providedBy(value):
-            raise TypeError("Timetable schema can only contain"
-                            " ITimetableSchemaDay objects (got %r)" % (value,))
-        elif key not in self.day_ids:
-            raise ValueError("Key %r not in day_ids %r" % (key, self.day_ids))
-        self.days[key] = value
-
-    def createTimetable(self):
-        other = Timetable(self.day_ids)
-        other.model = self.model
-        for day_id in self.day_ids:
-            other[day_id] = TimetableDay(self[day_id].periods)
-        return other
-
-    def __eq__(self, other):
-        if ITimetableSchema.providedBy(other):
-            return (self.items() == other.items()
-                    and self.model == other.model)
-        else:
-            return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-
-class TimetableSchemaDay(Persistent):
-
-    implements(ITimetableSchemaDay)
-
-    def __init__(self, periods=()):
-        self.periods = periods
-
-    def keys(self):
-        return self.periods
-
-    def items(self):
-        return [(period, Set()) for period in self.periods]
-
-    def __getitem__(self, period):
-        if period not in self.periods:
-            raise KeyError(period)
-        return Set()
-
-    def __eq__(self, other):
-        if ITimetableSchemaDay.providedBy(other):
-            return self.periods == other.periods
-        else:
-            return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
 
 class Timetable(Persistent):
 
@@ -519,7 +332,7 @@ class TimetableDay(Persistent):
         return not self.__eq__(other)
 
 
-class TimetableActivity:
+class TimetableActivity(object):
     """Timetable activity.
 
     Instances are immutable.
@@ -571,7 +384,7 @@ class TimetableActivity:
                                  resources=resources, timetable=timetable)
 
 
-class TimetableReplacedEvent:
+class TimetableReplacedEvent(object):
 
     implements(ITimetableReplacedEvent)
 
@@ -586,7 +399,7 @@ class TimetableReplacedEvent:
                 % (getPath(self.object), self.object.title, self.key))
 
 
-class TimetableActivityEvent:
+class TimetableActivityEvent(object):
 
     def __init__(self, activity, day_id, period_id):
         self.activity = activity
@@ -602,7 +415,7 @@ class TimetableActivityRemovedEvent(TimetableActivityEvent):
     implements(ITimetableActivityRemovedEvent)
 
 
-class SchooldayPeriod:
+class SchooldayPeriod(object):
 
     implements(ISchooldayPeriod)
 
@@ -625,7 +438,7 @@ class SchooldayPeriod:
         return hash((self.title, self.tstart, self.duration))
 
 
-class SchooldayTemplate:
+class SchooldayTemplate(object):
 
     # TODO: ideally, schoolday template should be an object that takes
     # a date and a period id and returns a schoolday period.  This way
@@ -783,102 +596,10 @@ class TimetablesAdapter(object):
         return result
 
 
-class TimetableSchemaContainer(BTreeContainer):
-
-    implements(ITimetableSchemaContainer, IAttributeAnnotatable)
-
-    _default_id = None
-
-    def _set_default_id(self, new_id):
-        if new_id is not None and new_id not in self:
-            raise ValueError("Timetable schema %r does not exist" % new_id)
-        self._default_id = new_id
-
-    default_id = property(lambda self: self._default_id, _set_default_id)
-
-    def __setitem__(self, schema_id, ttschema):
-        assert ITimetableSchema.providedBy(ttschema)
-        if self.has_key(schema_id):
-            BTreeContainer.__delitem__(self, schema_id)
-        BTreeContainer.__setitem__(self, schema_id, ttschema)
-        if self.default_id is None:
-            self.default_id = schema_id
-
-    def __delitem__(self, schema_id):
-        BTreeContainer.__delitem__(self, schema_id)
-        if schema_id == self.default_id:
-            self.default_id = None
-
-    def getDefault(self):
-        return self[self.default_id]
-
-
-class TermContainer(BTreeContainer):
-
-    implements(ITermContainer, IAttributeAnnotatable)
-
-
-def getTermForDate(date):
-    """Find the term that contains `date`.
-
-    Returns None if `date` falls outside all terms.
-    """
-    terms = getSchoolToolApplication()["terms"]
-    for term in terms.values():
-        if date in term:
-            return term
-    else:
-        return None
-
-
-def getNextTermForDate(date):
-    """Find the term that contains `date`, or the next one.
-
-    If there is a term that contains `date`, it is returned.  Otherwise, the
-    first term that starts after `date` is returned.  If there are none,
-    the last term that ended before `date` is returned.
-
-    Returns None if there are no terms.
-    """
-    terms = getSchoolToolApplication()["terms"]
-    before, after = [], []
-    for term in terms.values():
-        if date in term:
-            return term
-        if date > term.last:
-            before.append((term.last, term))
-        if date < term.first:
-            after.append((term.first, term))
-    if after:
-        return after[0][1]
-        return min(after)[1]
-    if before:
-        return max(before)[1]
-    return None
-
-
-def getPeriodsForDay(date):
-    """Return a list of timetable periods defined for `date`.
-
-    This function uses the default timetable schema and the appropriate time
-    period for `date`.
-
-    Returns a list of ISchooldayPeriod objects.
-
-    Returns an empty list if there are no periods defined for `date` (e.g.
-    if there is no default timetable schema, or `date` falls outside all
-    time periods, or it happens to be a holiday).
-    """
-    schooldays = getTermForDate(date)
-    ttcontainer = getSchoolToolApplication()['ttschemas']
-    if ttcontainer.default_id is None or schooldays is None:
-        return []
-    ttschema = ttcontainer.getDefault()
-    return ttschema.model.periodsInDay(schooldays, ttschema, date)
-
-
 def addToApplication(event):
+    from schooltool.timetable.term import TermContainer
     event.object['terms'] = TermContainer()
+    from schooltool.timetable.schema import TimetableSchemaContainer
     event.object['ttschemas'] = TimetableSchemaContainer()
 
 
@@ -886,7 +607,9 @@ def registerTestSetup():
     from schooltool.testing import registry
 
     def addTermAndTTSchemasContainer(app):
+        from schooltool.timetable.term import TermContainer
         app['terms'] = TermContainer()
+        from schooltool.timetable.schema import TimetableSchemaContainer
         app['ttschemas'] = TimetableSchemaContainer()
 
     registry.register('ApplicationContainers', addTermAndTTSchemasContainer)

@@ -1605,7 +1605,7 @@ def doctest_FinalStep_add():
         >>> request = TestRequest()
         >>> view = FinalStep(context, request)
 
-        >>> from schooltool.timetable import TimetableSchema
+        >>> from schooltool.timetable.schema import TimetableSchema
         >>> ttschema = TimetableSchema([], title="Timetable Schema")
         >>> view.add(ttschema)
 

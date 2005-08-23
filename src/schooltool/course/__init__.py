@@ -17,5 +17,13 @@ def registerTestSetup():
             classImplements(section.Section, IHaveCalendar)
     registry.register('CalendarComponents', haveCalendar)
 
+    def haveTimetables():
+        from schooltool.course import section
+        from schooltool.timetable.interfaces import IHaveTimetables
+        if not IHaveTimetables.implementedBy(section.Section):
+            classImplements(section.Section, IHaveTimetables)
+    registry.register('TimetablesComponents', haveTimetables)
+
 registerTestSetup()
 del registerTestSetup
+

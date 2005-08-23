@@ -124,8 +124,7 @@ from schooltool.timetable.browser import parse_time_range
 from schooltool.timetable.browser import format_time_range
 from schooltool import SchoolToolMessageID as _
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
-from schooltool.timetable import TimetableSchema
-from schooltool.timetable import TimetableSchemaDay
+from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable import WeeklyTimetableModel
 from schooltool.timetable import SequentialDaysTimetableModel
