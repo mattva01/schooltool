@@ -7,79 +7,62 @@ events that book them.
 Set up
 ------
 
-We will obviously need a SchoolBell instance.
+We will obviously need a SchoolTool instance.
 
-    >>> print http("""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&\
-    ... new_value=frogpond""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/@@contents.html
-    ...
+    >>> from testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/contents.html')
+
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getControl(name='new_value').value = 'frogpond'
+    >>> manager.getControl('Apply').click()
+    >>> manager.getLink('frogpond').click()
 
 Let's create a person so that we can fool around with his calendar:
 
-    >>> print http("""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 112
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Frog&field.username=frog&field.password=pwd&\
-    ... field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons
-    ...
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
 
-Now let's create some resources to book:
+    >>> manager.getControl('Full name').value = 'Frog'
+    >>> manager.getControl('Username').value = 'frog'
+    >>> manager.getControl('Password').value = 'pwd'
+    >>> manager.getControl('Verify password').value = 'pwd'
+    >>> manager.getControl('Add').click()
 
-    >>> print http("""
-    ... POST /frogpond/resources/+/addSchoolToolResource.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 34
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=lilly&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/resources
-    ...
+Now let's create some resources that can be booked:
 
-    >>> print http("""
-    ... POST /frogpond/resources/+/addSchoolToolResource.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 34
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=mud&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/resources
-    ...
+    >>> manager.getLink('Resources').click()
 
-    >>> print http("""
-    ... POST /frogpond/resources/+/addSchoolToolResource.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 34
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=fish&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/resources
-    ...
+    >>> manager.getLink('New Resource').click()
+    >>> manager.getControl('Title').value = 'lilly'
+    >>> manager.getControl('Add').click()
+    >>> 'lilly' in manager.contents
+    True
 
-Now a let's set up a calendar for Frog:
+    >>> manager.getLink('New Resource').click()
+    >>> manager.getControl('Title').value = 'mud'
+    >>> manager.getControl('Add').click()
+    >>> 'mud' in manager.contents
+    True
+
+    >>> manager.getLink('New Resource').click()
+    >>> manager.getControl('Title').value = 'fish'
+    >>> manager.getControl('Add').click()
+    >>> 'fish' in manager.contents
+    True
+
+We log in as the frog
+
+    >>> frog = Browser()
+    >>> frog.open('http://localhost/frogpond/')
+    >>> frog.getLink('Log In').click()
+    >>> frog.getControl('Username').value = 'frog'
+    >>> frog.getControl('Password').value = 'pwd'
+    >>> frog.getControl('Log in').click()
+
+and set up a calendar for Frog:
 
     >>> print http(r"""
     ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
@@ -107,11 +90,11 @@ Now a let's set up a calendar for Frog:
 
 Frog should not be capable of booking any resources yet:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/booking.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-02-04')
+    >>> frog.getLink('Test event').click()
+    >>> frog.getLink('edit resources').click()
+    >>> print frog.contents
+    <BLANKLINE>
     ...
       <fieldset>
         <legend>Available Resources</legend>
@@ -122,43 +105,23 @@ Frog should not be capable of booking any resources yet:
 
 But we can give him access to some resources:
 
-    >>> print http("""
-    ... POST /frogpond/resources/mud/calendar/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schooltool.addEvent&\
-    ... sb.person.frog=schooltool.viewCalendar&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/resources/mud/calendar
-    ...
+    >>> manager.open(
+    ...     'http://localhost/frogpond/resources/mud/calendar/acl.html')
+    >>> ctrl = manager.getControl(name='sb.person.frog')
+    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
+    >>> manager.getControl('Set Access', index=1).click()
 
-    >>> print http("""
-    ... POST /frogpond/resources/fish/calendar/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schooltool.addEvent&\
-    ... sb.person.frog=schooltool.viewCalendar&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/resources/fish/calendar
-    ...
+    >>> manager.open(
+    ...     'http://localhost/frogpond/resources/fish/calendar/acl.html')
+    >>> ctrl = manager.getControl(name='sb.person.frog')
+    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
+    >>> manager.getControl('Set Access', index=1).click()
 
 Frog should see the mud and the fish now:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/booking.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.reload()
+    >>> print frog.contents
+    <BLANKLINE>
     ...
       <fieldset>
         <legend>Available Resources</legend>
@@ -176,28 +139,15 @@ Frog should see the mud and the fish now:
 
 Let's book one of them:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/booking.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... date=2005-02-04&\
-    ... marker-mud=1&\
-    ... mud=booked&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> frog.getControl('mud').selected = True
+    >>> frog.getControl('Book').click()
 
 We should see the resource as a booked resource:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/booking.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.getLink('Test event').click()
+    >>> frog.getLink('edit resources').click()
+    >>> print frog.contents
+    <BLANKLINE>
     ...
       <fieldset>
         <legend>Available Resources</legend>
@@ -215,29 +165,16 @@ We should see the resource as a booked resource:
 
 Let's unbook one of them and book another:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/booking.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... date=2005-02-04&\
-    ... marker-mud=1&\
-    ... marker-fish=1&\
-    ... fish=booked&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> frog.getControl('mud').selected = False
+    >>> frog.getControl('fish').selected = True
+    >>> frog.getControl('Book').click()
 
 Now another resource is booked:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/booking.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.getLink('Test event').click()
+    >>> frog.getLink('edit resources').click()
+    >>> print frog.contents
+    <BLANKLINE>
     ...
       <fieldset>
         <legend>Available Resources</legend>
@@ -255,53 +192,44 @@ Now another resource is booked:
 
 Frog should see the event in the resource calendar too:
 
-    >>> print http("""
-    ... POST /frogpond/resources/fish/calendar/2005-02-04/ HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.open(
+    ...     'http://localhost/frogpond/resources/fish/calendar/2005-02-04/')
+    >>> print frog.contents
+    <BLANKLINE>
     ...
-                <a href="http://localhost/frogpond/resources/fish/calendar/dummy-uid"
-                   title="Test event">
-                  Test event
-                  <span class="start-end">
-                    (<span>10:00</span> -
-                    <span>11:00</span>)
-                  </span>
-                </a>
+    <a href="http://localhost/frogpond/resources/fish/calendar/dummy-uid"
+       title="Test event">
+      Test event
+      <span class="start-end">
+        (<span>10:00</span> -
+        <span>11:00</span>)
+      </span>
+    </a>
     ...
-          <div class="booked-resources">
-            <h6 class="booked-resource-header"
-                     style="background: #7590ae">
-              <a style="color: #000;"
-                      href="http://localhost/frogpond/persons/frog/calendar/dummy-uid/booking.html?date=2005-02-04">Booked by</a></h6>
-            <a href="http://localhost/frogpond/persons/frog">Frog</a>
-          </div>
+    <div class="booked-resources">
+      <h6 class="booked-resource-header"
+               style="background: #7590ae">
+        <a style="color: #000;"
+           href="...dummy-uid/booking.html?date=2005-02-04">Booked by</a></h6>
+      <a href="http://localhost/frogpond/persons/frog">Frog</a>
+    </div>
     ...
 
 Now if we remove the permission to book the fish:
 
-    >>> print http("""
-    ... POST /frogpond/resources/fish/calendar/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schooltool.viewCalendar&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/resources/fish/calendar
-    ...
+    >>> manager.open(
+    ...     'http://localhost/frogpond/resources/fish/calendar/acl.html')
+    >>> ctrl = manager.getControl(name='sb.person.frog')
+    >>> ctrl.value = ['schooltool.viewCalendar']
+    >>> manager.getControl('Set Access', index=1).click()
 
 The fish should stay in the bookable resources list:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/booking.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-02-04')
+    >>> frog.getLink('Test event').click()
+    >>> frog.getLink('edit resources').click()
+    >>> print frog.contents
+    <BLANKLINE>
     ...
       <fieldset>
         <legend>Available Resources</legend>
@@ -319,26 +247,13 @@ The fish should stay in the bookable resources list:
 
 Unless unbooked:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/booking.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... date=2005-02-04&\
-    ... marker-mud=1&\
-    ... marker-fish=1&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> frog.getControl('fish').selected = False
+    >>> frog.getControl('Book').click()
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/booking.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.getLink('Test event').click()
+    >>> frog.getLink('edit resources').click()
+    >>> print frog.contents
+    <BLANKLINE>
     ...
       <fieldset>
         <legend>Available Resources</legend>
@@ -355,158 +270,107 @@ Unless unbooked:
 When adding a new event we should get redirected to resource booking
 if Book Resources is checked:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Length: 216
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Sleeping&field.start_date=2005-02-03&\
-    ... field.start_time=01:00&field.duration=500&\
-    ... field.recurrence.used=&field.recurrence_type=daily&field.book.used=&\
-    ... field.book=1&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar/.../booking.html
-    ...
+    >>> frog.getLink('My Calendar').click()
+    >>> frog.getLink('New Event').click()
+    >>> frog.getControl('Title').value = 'Sleeping'
+    >>> frog.getControl('Date').value = '2005-02-03'
+    >>> frog.getControl('Time').value = '01:00'
+    >>> frog.getControl('Duration').value = '500'
+    >>> frog.getControl('Recurring').selected = True
+    >>> frog.getControl(name='field.recurrence.used').value = '1'
+    >>> frog.getControl('Book Resources').selected = True
+    >>> frog.getControl('Add').click()
+
+    >>> 'Resource Booking for Sleeping' in frog.contents
+    True
 
 Editing view should have a link to its booking view:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid/booking.html">Book resources</a>
-    ...
+    >>> frog.open(
+    ...   'http://localhost/frogpond/persons/frog/calendar/dummy-uid/edit.html')
+    >>> frog.getLink('Book resources')
+    <Link text='Book resources'
+          url='.../frog/calendar/dummy-uid/booking.html'>
 
 Lets book the mud again (Regression test for 266, deletion of events
 that book resources should remove events from resource calendars):
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/booking.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... date=2005-02-04&\
-    ... marker-mud=1&\
-    ... mud=booked&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> frog.getLink('Book resources').click()
+    >>> frog.getControl('mud').selected = True
+    >>> frog.getControl('Book').click()
 
 We can see the event in mud's calendar:
 
-    >>> print http("""
-    ... GET /frogpond/resources/mud/calendar/2005-02-04 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.open('http://localhost/frogpond/resources/mud/calendar/2005-02-04')
+    >>> print frog.contents
+    <BLANKLINE>
     ...
-              <a style="color: #000;"
-                      href="http://localhost/frogpond/persons/frog/calendar/dummy-uid/booking.html?date=2005-02-04">Booked by</a></h6>
+    <a style="color: #000;"
+       href="http://.../booking.html?date=2005-02-04">Booked by</a></h6>
     ...
 
 If we will delete the event from mud's calendar the original event
 should stay in place, yet the resource should become unbooked:
 
-    >>> print http("""
-    ... GET /frogpond/resources/mud/calendar/delete.html?event_id=dummy-uid&date=2005-02-04 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/resources/mud/calendar
-
+    XXX: Have to call URL, since I could not find the link!!!
+    >>> manager.open('http://localhost/frogpond/resources/mud/calendar/'
+    ...           'delete.html?event_id=dummy-uid&date=2005-02-04')
+    >>> 'Test event' in manager.contents
+    False
 
 Frog still can see the event:
 
-    >>> print http("""
-    ... GET /frogpond/persons/frog/calendar/2005-02-04 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...<a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid"
-    ...
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-02-04')
+    >>> 'Test event' in frog.contents
+    True
 
 Yet mud is not booked anymore:
 
-    >>> print http("""
-    ... GET /frogpond/persons/frog/calendar/dummy-uid/booking.html?date=2005-02-04 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.getLink('Test event').click()
+    >>> frog.getLink('edit resources').click()
+    >>> print frog.contents
+    <BLANKLINE>
     ...
-              <td class="booked">
-                <input type="checkbox" value="booked" name="mud"
-                       id="mud" />
-              </td>
+    <td class="booked">
+      <input type="checkbox" value="booked" name="mud"
+             id="mud" />
+    </td>
     ...
 
 Lets book it again:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/booking.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... date=2005-02-04&\
-    ... marker-mud=1&\
-    ... mud=booked&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> frog.getControl('mud').selected = True
+    >>> frog.getControl('Book').click()
 
 It is in mud's calendar again:
 
-    >>> print http("""
-    ... GET /frogpond/resources/mud/calendar/2005-02-04 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.open('http://localhost/frogpond/resources/mud/calendar/2005-02-04')
+    >>> print frog.contents
+    <BLANKLINE>
     ...
-              <a style="color: #000;"
-                      href="http://localhost/frogpond/persons/frog/calendar/dummy-uid/booking.html?date=2005-02-04">Booked by</a></h6>
+    <a style="color: #000;"
+       href="http://.../booking.html?date=2005-02-04">Booked by</a></h6>
     ...
 
 And delete the event from frog's calendar:
 
-    >>> print http("""
-    ... GET /frogpond/persons/frog/calendar/delete.html?event_id=dummy-uid&date=2005-02-04 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
+    >>> manager.open(
+    ...     'http://localhost/frogpond/persons/frog/calendar/2005-02-04')
+    >>> manager.getLink(url='delete.html?event_id=dummy-uid').click()
 
 The event should be gone from the frog's calendar:
 
-    >>> result = http("""
-    ... GET /frogpond/persons/frog/calendar/2005-02-04 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    >>> "dummy-uid" not in str(result)
-    True
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-02-04')
+    >>> "dummy-uid" in frog.contents
+    False
 
 And it should not be seen in mud's calendar too:
 
-    >>> result = http("""
-    ... GET /frogpond/resources/mud/calendar/2005-02-04 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    >>> "dummy-uid" not in str(result)
-    True
+    >>> frog.open('http://localhost/frogpond/resources/mud/calendar/2005-02-04')
+    >>> "dummy-uid" in frog.contents
+    False
 
-Let's do some event clashing, first we set up some overlaping
+Let's do some event clashing, first we set up some overlapping
 events:
 
     >>> print http(r"""
@@ -549,151 +413,117 @@ events:
 
 Now let's allow frog access all the resources:
 
+    >>> manager.open('http://localhost/frogpond')
 
-    >>> print http("""
-    ... POST /frogpond/resources/mud/calendar/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schooltool.addEvent&\
-    ... sb.person.frog=schooltool.viewCalendar&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/resources/mud/calendar
-    ...
+    >>> manager.getLink('Resources').click()
+    >>> manager.getLink('mud').click()
+    >>> manager.getLink('View Calendar').click()
+    >>> manager.getLink('Set Up Access').click()
+    >>> ctrl = manager.getControl(name='sb.person.frog')
+    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
+    >>> manager.getControl('Set Access', index=1).click()
 
-    >>> print http("""
-    ... POST /frogpond/resources/fish/calendar/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schooltool.addEvent&\
-    ... sb.person.frog=schooltool.viewCalendar&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/resources/fish/calendar
-    ...
+    >>> manager.getLink('resources').click()
+    >>> manager.getLink('fish').click()
+    >>> manager.getLink('View Calendar').click()
+    >>> manager.getLink('Set Up Access').click()
+    >>> ctrl = manager.getControl(name='sb.person.frog')
+    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
+    >>> manager.getControl('Set Access', index=1).click()
 
-    >>> print http("""
-    ... POST /frogpond/resources/lilly/calendar/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schooltool.addEvent&\
-    ... sb.person.frog=schooltool.viewCalendar&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/resources/lilly/calendar
-    ...
+    >>> manager.getLink('resources').click()
+    >>> manager.getLink('lilly').click()
+    >>> manager.getLink('View Calendar').click()
+    >>> manager.getLink('Set Up Access').click()
+    >>> ctrl = manager.getControl(name='sb.person.frog')
+    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
+    >>> manager.getControl('Set Access', index=1).click()
 
-If we book some resources for the second event:
+If we book some resources for the second event,
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid2/booking.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... date=2005-02-04&\
-    ... marker-mud=1&\
-    ... mud=booked&\
-    ... marker-fish=1&\
-    ... fish=booked&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> frog.handleErrors = False
+    >>> frog.open(
+    ...     'http://localhost/frogpond/persons/frog/calendar/dummy-uid2')
+    >>> frog.getLink('edit resources').click()
+    >>> frog.getControl('mud').selected = True
+    >>> frog.getControl('fish').selected = True
+    >>> frog.getControl('Book').click()
 
-We should see the conflicts when booking the for the events overlaping Test event2:
+we should see the conflicts when booking the for the events overlapping
+"Test event 1":
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid1/booking.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/dummy-uid1')
+    >>> frog.getLink('edit resources').click()
+    >>> print frog.contents
+    <BLANKLINE>
     ...
       <fieldset>
         <legend>Available Resources</legend>
         <table class="event_booking">
     ...
-                <input type="checkbox" value="booked"
-                       name="fish" id="fish" />
+    <input type="checkbox" value="booked"
+           name="fish" id="fish" />
     ...
-              <td>
-                <fieldset style="text-align: left;">
-                  <legend>Conflicting events</legend>
-                  <div>
-                    <div>
-                      <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid2/edit.html">Test event2</a>
-                        (10:00 -
-                        11:00)
-                         <a href="http://localhost/frogpond/persons/frog/calendar/2005-02-04/">Frog</a>
-                    </div>
-                  </div>
-                </fieldset>
-              </td>
+    <td>
+      <fieldset style="text-align: left;">
+        <legend>Conflicting events</legend>
+        <div>
+          <div>
+            <a href="http://.../calendar/dummy-uid2/edit.html">Test event2</a>
+              (10:00 -
+              11:00)
+               <a href="http://.../calendar/2005-02-04/">Frog</a>
+          </div>
+        </div>
+      </fieldset>
+    </td>
     ...
-                <input type="checkbox" value="booked"
-                       name="mud" id="mud" />
+    <input type="checkbox" value="booked"
+           name="mud" id="mud" />
     ...
-              <td>
-                <fieldset style="text-align: left;">
-                  <legend>Conflicting events</legend>
-                  <div>
-                    <div>
-                      <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid2/edit.html">Test event2</a>
-                        (10:00 -
-                        11:00)
-                         <a href="http://localhost/frogpond/persons/frog/calendar/2005-02-04/">Frog</a>
-                    </div>
-                  </div>
-                </fieldset>
-              </td>
+    <td>
+      <fieldset style="text-align: left;">
+        <legend>Conflicting events</legend>
+        <div>
+          <div>
+            <a href="http://.../calendar/dummy-uid2/edit.html">Test event2</a>
+              (10:00 -
+              11:00)
+               <a href="http://.../calendar/2005-02-04/">Frog</a>
+          </div>
+        </div>
+      </fieldset>
+    </td>
     ...
         </table>
       </fieldset>
     ...
 
-Unless we are looking at the event 2 itself:
+Unless we are looking at "Test event 2" itself:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid2/booking.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/dummy-uid2')
+    >>> frog.getLink('edit resources').click()
+    >>> print frog.contents
+    <BLANKLINE>
     ...
       <fieldset>
         <legend>Available Resources</legend>
         <table class="event_booking">
     ...
-                <input type="checkbox" value="booked"
-                       checked="checked" name="fish" id="fish" />
-              </td>
-              <th class="resource">
-                <label for="fish">fish</label>
-                <input type="hidden" value="1"
-                       name="marker-fish" />
-              </th>
-    <BLANKLINE>
-            </tr>
+      <input type="checkbox" value="booked"
+             checked="checked" name="fish" id="fish" />
+    </td>
+    <th class="resource">
+      <label for="fish">fish</label>
+      <input type="hidden" value="1"
+             name="marker-fish" />
+    </th>
     ...
-                <input type="checkbox" value="booked"
-                       checked="checked" name="mud" id="mud" />
-              </td>
-              <th class="resource">
-                <label for="mud">mud</label>
-                <input type="hidden" value="1" name="marker-mud" />
-              </th>
-    <BLANKLINE>
-            </tr>
+      <input type="checkbox" value="booked"
+             checked="checked" name="mud" id="mud" />
+    </td>
+    <th class="resource">
+      <label for="mud">mud</label>
+      <input type="hidden" value="1" name="marker-mud" />
+    </th>
     ...
