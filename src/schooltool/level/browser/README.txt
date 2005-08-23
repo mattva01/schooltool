@@ -17,7 +17,7 @@ student via a promotion workflow from the perspective of the Web UI.
 
   >>> "test" in browser.contents
   True
-  >>> browser.click('test')
+  >>> browser.getLink('test').click()
 
 
 Level Management
@@ -27,28 +27,28 @@ First we create a couple of levels.
 
   >>> browser.open('http://localhost/test/levels')
 
-  >>> browser.click('New Level')
-  >>> browser.controls['field.title'] = u'1st Grade'
-  >>> browser.controls['field.isInitial'] = True
-  >>> browser.controls['add_input_name'] = u'level1'
-  >>> browser.click('Add')
+  >>> browser.getLink('New Level').click()
+  >>> browser.getControl('Title').value = u'1st Grade'
+  >>> browser.getControl('Initial Level').selected = True
+  >>> browser.getControl(name='add_input_name').value = u'level1'
+  >>> browser.getControl('Add').click()
 
   >>> '1st Grade' in browser.contents
   True
 
-  >>> browser.click('New Level')
-  >>> browser.controls['field.title'] = u'2nd Grade'
-  >>> browser.controls['field.isInitial'] = False
-  >>> browser.controls['add_input_name'] = u'level2'
-  >>> browser.click('Add')
+  >>> browser.getLink('New Level').click()
+  >>> browser.getControl('Title').value = u'2nd Grade'
+  >>> browser.getControl('Initial Level').selected = False
+  >>> browser.getControl(name='add_input_name').value = u'level2'
+  >>> browser.getControl('Add').click()
 
   >>> '2nd Grade' in browser.contents
   True
 
 Since we did not connect the two levels, validation should fail:
 
-  >>> browser.click('Validate Levels')
-  >>> browser.click('Validate')
+  >>> browser.getLink('Validate Levels').click()
+  >>> browser.getControl('Validate').click()
 
   >>> "One or more disconnected levels detected." in browser.contents
   True
@@ -58,21 +58,21 @@ Since we did not connect the two levels, validation should fail:
 If we connect `level1` to `level2` and also `level2` to `level1`, we get a
 loop validation error:
 
-  >>> browser.click('Levels')
-  >>> browser.click('1st Grade')
-  >>> browser.click('Edit Info')
-  >>> browser.controls['field.nextLevel'] = ['level2']
-  >>> browser.click('Apply')
+  >>> browser.getLink('Levels').click()
+  >>> browser.getLink('1st Grade').click()
+  >>> browser.getLink('Edit Info').click()
+  >>> browser.getControl('Next Level').value = ['level2']
+  >>> browser.getControl('Apply').click()
 
-  >>> browser.click('Levels')
-  >>> browser.click('2nd Grade')
-  >>> browser.click('Edit Info')
-  >>> browser.controls['field.nextLevel'] = ['level1']
-  >>> browser.click('Apply')
+  >>> browser.getLink('Levels').click()
+  >>> browser.getLink('2nd Grade').click()
+  >>> browser.getLink('Edit Info').click()
+  >>> browser.getControl('Next Level').value = ['level1']
+  >>> browser.getControl('Apply').click()
 
-  >>> browser.click('Levels')
-  >>> browser.click('Validate Levels')
-  >>> browser.click('Validate')
+  >>> browser.getLink('Levels').click()
+  >>> browser.getLink('Validate Levels').click()
+  >>> browser.getControl('Validate').click()
 
   >>> "A Level Loop Error was detected." in browser.contents
   True
@@ -86,15 +86,15 @@ loop validation error:
 Okay, so let's do what the error tells us and remove the link in `level2` to
 `level1`:
 
-  >>> browser.click('Levels')
-  >>> browser.click('1st Grade')
-  >>> browser.click('Edit Info')
-  >>> browser.controls['field.previousLevel'] = []
-  >>> browser.click('Apply')
+  >>> browser.getLink('Levels').click()
+  >>> browser.getLink('1st Grade').click()
+  >>> browser.getLink('Edit Info').click()
+  >>> browser.getControl('Previous Level').value = []
+  >>> browser.getControl('Apply').click()
 
-  >>> browser.click('Levels')
-  >>> browser.click('Validate Levels')
-  >>> browser.click('Validate')
+  >>> browser.getLink('Levels').click()
+  >>> browser.getLink('Validate Levels').click()
+  >>> browser.getControl('Validate').click()
 
   >>> print browser.contents
   <BLANKLINE>
@@ -110,15 +110,15 @@ Before we can do anything, we have to create a student:
 
   >>> import StringIO
 
-  >>> browser.click('Persons')
-  >>> browser.click('New Person')
+  >>> browser.getLink('Persons').click()
+  >>> browser.getLink('New Person').click()
 
-  >>> browser.controls['field.title'] = 'Stephan Richter'
-  >>> browser.controls['field.username'] = 'srichter'
-  >>> browser.controls['field.password'] = 'foobar'
-  >>> browser.controls['field.verify_password'] = 'foobar'
-  >>> browser.controls['field.photo'] = StringIO.StringIO()
-  >>> browser.click('Add')
+  >>> browser.getControl('Full name').value = 'Stephan Richter'
+  >>> browser.getControl('Username').value = 'srichter'
+  >>> browser.getControl('Password').value = 'foobar'
+  >>> browser.getControl('Verify password').value = 'foobar'
+  >>> browser.getControl('Photo').value = StringIO.StringIO()
+  >>> browser.getControl('Add').click()
 
   >>> 'Stephan Richter' in browser.contents
   True
@@ -126,14 +126,14 @@ Before we can do anything, we have to create a student:
 Now we go to the manager group, and walk the student through the academic
 career:
 
-  >>> browser.click('Groups')
-  >>> browser.click('Manager')
-  >>> browser.click('Student Management')
+  >>> browser.getLink('Groups').click()
+  >>> browser.getLink('Manager').click()
+  >>> browser.getLink('Student Management').click()
 
 We now select the student which we want to enroll in the school.
 
   >>> form = browser.forms['enroll']
-  >>> form.controls['ids:list'] = ['srichter']
+  >>> form.getControl(name='ids:list').value = ['srichter']
   >>> form.submit('Enroll')
 
   >>> print browser.contents
@@ -152,7 +152,7 @@ level. Our student will enter the first grade:
   >>> ctrl = form.getControl(name='ids:list')
   >>> id = ctrl.options[0]
   >>> ctrl.value = [id]
-  >>> form.controls[id+'.level'] = ['level1']
+  >>> form.getControl(name=id+'.level').value = ['level1']
   >>> form.submit('Apply')
 
   >>> print browser.contents
@@ -175,7 +175,7 @@ The student passes the first grade
   >>> ctrl = form.getControl(name='ids:list')
   >>> id = ctrl.options[0]
   >>> ctrl.value = [id]
-  >>> browser.controls[id+'.outcome'] = ['pass']
+  >>> browser.getControl(name=id+'.outcome').value = ['pass']
   >>> form.submit('Apply')
 
   >>> print browser.contents
@@ -192,7 +192,7 @@ but fails the second grade the first time around:
   >>> ctrl = browser.getControl(name='ids:list')
   >>> id = ctrl.options[0]
   >>> ctrl.value = [id]
-  >>> browser.controls[id+'.outcome'] = ['fail']
+  >>> browser.getControl(name=id+'.outcome').value = ['fail']
   >>> form.submit('Apply')
 
   >>> print browser.contents
@@ -208,7 +208,7 @@ If you forget to select the student, you get a nice notice:
   >>> form = browser.forms['outcome']
   >>> ctrl = form.getControl(name='ids:list')
   >>> id = ctrl.options[0]
-  >>> browser.controls[id+'.outcome'] = ['fail']
+  >>> browser.getControl(name=id+'.outcome').value = ['fail']
   >>> form.submit('Apply')
 
   >>> print browser.contents
@@ -224,7 +224,7 @@ appear at the top of the list again:
   >>> ctrl = form.getControl(name='ids:list')
   >>> id = ctrl.options[0]
   >>> ctrl.value = [id]
-  >>> browser.controls[id+'.outcome'] = ['pass']
+  >>> browser.getControl(name=id+'.outcome').value = ['pass']
   >>> form.submit('Apply')
 
   >>> print browser.contents
@@ -253,15 +253,15 @@ And a second time ...
 Let's now do this again in a student-specific UI. To make the walkthrough
 cleaner, we create a new student first:
 
-  >>> browser.click('Persons')
-  >>> browser.click('New Person')
+  >>> browser.getLink('Persons').click()
+  >>> browser.getLink('New Person').click()
 
-  >>> browser.controls['field.title'] = 'Tom Hoffman'
-  >>> browser.controls['field.username'] = 'tom'
-  >>> browser.controls['field.password'] = 'foobar'
-  >>> browser.controls['field.verify_password'] = 'foobar'
-  >>> browser.controls['field.photo'] = StringIO.StringIO()
-  >>> browser.click('Add')
+  >>> browser.getControl('Full name').value = 'Tom Hoffman'
+  >>> browser.getControl('Username').value = 'tom'
+  >>> browser.getControl('Password').value = 'foobar'
+  >>> browser.getControl('Verify password').value = 'foobar'
+  >>> browser.getControl('Photo').value = StringIO.StringIO()
+  >>> browser.getControl('Add').click()
 
   >>> print browser.contents
   <BLANKLINE>
@@ -271,8 +271,8 @@ cleaner, we create a new student first:
 
 Now we enter the new student and look at his academic career:
 
-  >>> browser.click('Tom Hoffman')
-  >>> browser.click('Academic Record')
+  >>> browser.getLink('Tom Hoffman').click()
+  >>> browser.getLink('Academic Record').click()
 
 In the academic record you see the status of the student, the workflow and the
 academic history:
@@ -298,7 +298,7 @@ academic history:
 We can see that there is currently no workflow and the history is empty. Let's
 now create the workflow:
 
-  >>> browser.click('Initialize')
+  >>> browser.getControl('Initialize').click()
 
   >>> print browser.contents
   <BLANKLINE>
@@ -324,9 +324,9 @@ You see that we can now specify the initial level of the student and a history
 entry was added signalizing the beginning of the student's academic
 career. Let's now select the initial level:
 
-  >>> id = browser.controls['workitemId']
-  >>> browser.controls[id+'.level'] = ['level1']
-  >>> browser.click('Finish')
+  >>> id = browser.getControl(name='workitemId').value
+  >>> browser.getControl(name=id+'.level').value = ['level1']
+  >>> browser.getControl('Finish').click()
 
   >>> print browser.contents
   <BLANKLINE>
@@ -340,9 +340,9 @@ career. Let's now select the initial level:
 
 Now let's fail the student in the first grade:
 
-  >>> id = browser.controls['workitemId']
-  >>> browser.controls[id+'.outcome'] = ['fail']
-  >>> browser.click('Finish')
+  >>> id = browser.getControl(name='workitemId').value
+  >>> browser.getControl(name=id+'.outcome').value = ['fail']
+  >>> browser.getControl('Finish').click()
 
   >>> print browser.contents
   <BLANKLINE>
@@ -367,9 +367,9 @@ Now let's fail the student in the first grade:
 
 After the first grade, the student withdraws from the school:
 
-  >>> id = browser.controls['workitemId']
-  >>> browser.controls[id+'.outcome'] = ['withdraw']
-  >>> browser.click('Finish')
+  >>> id = browser.getControl(name='workitemId').value
+  >>> browser.getControl(name=id+'.outcome').value = ['withdraw']
+  >>> browser.getControl('Finish').click()
 
   >>> print browser.contents
   <BLANKLINE>
@@ -395,7 +395,7 @@ After the first grade, the student withdraws from the school:
 
 As you can see, the withdrawing from the school also removed the process.
 
-To get the correct status,w e first have to reload:
+To get the correct status, we first have to reload:
 
   >>> browser.reload()
   >>> print browser.contents
@@ -409,8 +409,8 @@ To get the correct status,w e first have to reload:
 One very powerful feature of the academic record screen is the removal of a
 workflow:
 
-  >>> browser.click('Initialize')
-  >>> browser.click('Remove')
+  >>> browser.getControl('Initialize').click()
+  >>> browser.getControl('Remove').click()
 
   >>> print browser.contents
   <BLANKLINE>
@@ -423,9 +423,9 @@ workflow:
 
 We just need to make sure that all the workitems got deleted as well:
 
-  >>> browser.click('Groups')
-  >>> browser.click('Manager')
-  >>> browser.click('Student Management')
+  >>> browser.getLink('Groups').click()
+  >>> browser.getLink('Manager').click()
+  >>> browser.getLink('Student Management').click()
 
   >>> print browser.contents
   <BLANKLINE>

@@ -76,7 +76,7 @@ class ILevel(zope.interface.Interface):
         required=True)
 
     isInitial = zope.schema.Bool(
-        title=_("Is Inital Level"),
+        title=_("Is Initial Level"),
         description=_("Is this level an initial level for the school."),
         required=True,
         default=False)
