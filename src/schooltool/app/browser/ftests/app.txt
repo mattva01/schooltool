@@ -11,243 +11,169 @@ SchoolTool as a Zope 3 content object
 First, we'll go to the Zope 3 management interface and verify that you can add
 SchoolTool instances from the add menu.
 
-    >>> print http(r"""
-    ... GET /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
+    >>> from testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/contents.html')
+    >>> print manager.contents
+    <!DOCTYPE ...>
     ...
     <h4>Add:</h4>
     ...
-    <a href="http://localhost/@@contents.html?type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication"
+    <a href="http://localhost/@@contents.html?type_name=..."
        class="">SchoolTool</a>
     ...
 
 We will obviously need a SchoolTool instance.
 
-    >>> print http(r"""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
-    ... Content-Type: application/x-www-form-urlencoded
-    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication
-    ...
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&new_value=frogpond""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/@@contents.html
-    ...
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getControl(name='new_value').value = 'frogpond'
+    >>> manager.getControl('Apply').click()
 
+    >>> 'frogpond' in manager.contents
+    True
 
 The SchoolTool version is displayed on the page:
 
-    >>> page = http(r"""
-    ... GET /frogpond/sections/his1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
+    >>> manager.getLink('frogpond').click()
 
     >>> import schooltool
-    >>> str(page).count(schooltool.VERSION) > 0
+    >>> str(manager.contents).count(schooltool.VERSION) > 0
     True
-
 
 Let's create a person so that we can fool around with his calendar:
 
-    >>> print http("""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Frog&\
-    ... field.username=frog&\
-    ... field.password=pwd&\
-    ... field.verify_password=pwd&\
-    ... field.photo=&\
-    ... field.photo.used=&\
-    ... UPDATE_SUBMIT=Add""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons
-    ...
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+
+    >>> manager.getControl('Full name').value = 'Frog'
+    >>> manager.getControl('Username').value = 'frog'
+    >>> manager.getControl('Password').value = 'pwd'
+    >>> manager.getControl('Verify password').value = 'pwd'
+    >>> manager.getControl('Add').click()
+
+    >>> 'Frog' in manager.contents
+    True
 
 Let's create a second person so that we can test access control.
 
-    >>> print http("""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Toad&\
-    ... field.username=toad&\
-    ... field.password=doat&\
-    ... field.verify_password=doat&\
-    ... field.photo=&\
-    ... field.photo.used=&\
-    ... UPDATE_SUBMIT=Add""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons
-    ...
+    >>> manager.getLink('New Person').click()
+
+    >>> manager.getControl('Full name').value = 'Toad'
+    >>> manager.getControl('Username').value = 'toad'
+    >>> manager.getControl('Password').value = 'doat'
+    >>> manager.getControl('Verify password').value = 'doat'
+    >>> manager.getControl('Add').click()
+
+    >>> 'Toad' in manager.contents
+    True
 
 Also, let's create a group:
 
-    >>> print http(r"""
-    ... POST /frogpond/groups/+/addSchoolToolGroup.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Animals&UPDATE_SUBMIT=Add&add_input_name=""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/groups
-    ...
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('New Group').click()
 
-The daily view should be the default for a person's calendar:
+    >>> manager.getControl('Title').value = 'Animals'
+    >>> manager.getControl('Add').click()
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/ HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...calendar-view-day...
+    >>> 'Animals' in manager.contents
+    True
 
+Now we log in as the frog:
 
-Let's make sure that we can see the SchoolTool preferences page:
-
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/@@preferences.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...cal_periods...
+    >>> frog = Browser()
+    >>> frog.open('http://localhost/frogpond/')
+    >>> frog.getLink('Log In').click()
+    >>> frog.getControl('Username').value = 'frog'
+    >>> frog.getControl('Password').value = 'pwd'
+    >>> frog.getControl('Log in').click()
 
 We should be redirected from the index page to the calendar
 
-    >>> print http(r"""
-    ... GET /frogpond HTTP/1.1
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/calendar
-    ...
+    >>> frog.url
+    'http://localhost/frogpond/persons/frog/calendar'
 
-And when we follow that redirect we should have permission to see the
-calendar:
+And we should have permission to see the calendar:
 
-    >>> print http(r"""
-    ... GET /frogpond/calendar HTTP/1.1
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
+    >>> frog.headers['status']
+    '200 Ok'
+
+The daily view should be the default for a person's calendar:
+
+    >>> frog.getLink('My Calendar').click()
+    >>> 'calendar-view-day' in frog.contents
+    True
+
+Let's make sure that we can see the SchoolTool preferences page:
+
+    >>> frog.getLink('Frog').click()
+    >>> frog.getLink('Change Preferences').click()
+    >>> 'cal_periods' in frog.contents
+    True
 
 We should be able to see terms and schemas without authenticating:
 
-    >>> print http(r"""
-    ... GET /frogpond/terms HTTP/1.1
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
+    >>> anonymous = Browser()
+    >>> anonymous.open('http://localhost/frogpond/terms')
+    >>> anonymous.headers['status']
+    '200 Ok'
 
-    >>> print http(r"""
-    ... GET /frogpond/ttschemas HTTP/1.1
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
+    >>> anonymous.open('http://localhost/frogpond/ttschemas')
+    >>> anonymous.headers['status']
+    '200 Ok'
 
 But you have to log in to see persons, groups, and other locations:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons HTTP/1.1
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    ...Location: http://localhost/frogpond/@@login.html?forbidden=yes...
-    ...
+    >>> anonymous.open('http://localhost/frogpond/persons')
+    >>> print anonymous.url
+    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
 
-    >>> print http(r"""
-    ... GET /frogpond/persons HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
+    >>> anonymous.open('http://localhost/frogpond/groups')
+    >>> print anonymous.url
+    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
 
-    >>> print http(r"""
-    ... GET /frogpond/groups HTTP/1.1
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    ...Location: http://localhost/frogpond/@@login.html?forbidden=yes...
-    ...
-
-    >>> print http(r"""
-    ... GET /frogpond/resources HTTP/1.1
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    ...Location: http://localhost/frogpond/@@login.html?forbidden=yes...
-    ...
-
+    >>> anonymous.open('http://localhost/frogpond/resources')
+    >>> print anonymous.url
+    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
 
 The section container view points to the timetable import form:
 
-    >>> print http(r"""
-    ... GET /frogpond/sections HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> manager.open('http://localhost/frogpond/sections')
+    >>> print manager.contents
+    <!DOCTYPE ...>
     ...
     ...<a href="@@timetables-csvimport.html">Import Sections</a>...
     ...
 
 This is a school, so we should add some courses
 
-    >>> print http(r"""
-    ... POST /frogpond/courses/+/addSchoolToolCourse.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=History&UPDATE_SUBMIT=Add&add_input_name=""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/courses
-    ...
+    >>> manager.getLink('Courses').click()
+    >>> manager.getLink('New Course').click()
+    >>> manager.getControl('Title').value = 'History'
+    >>> manager.getControl('Add').click()
+
+    >>> 'History' in manager.contents
+    True
 
 Let's see that course:
 
-    >>> print http(r"""
-    ... GET /frogpond/courses/history HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...History...
-    ...
+    >>> manager.getLink('History').click()
+    >>> 'History' in manager.contents
+    True
 
 Lets create a section to add to that course:
 
-    >>> print http(r"""
-    ... POST /frogpond/sections/+/addSchoolToolSection.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=HIS1&field.description=Section1&field.course_id=history&UPDATE_SUBMIT=Add&add_input_name=""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/courses/history
-    ...
+    >>> manager.getLink('New Section').click()
+    >>> manager.getControl('Code').value = 'HIS1'
+    >>> manager.getControl('Description').value = 'Section1'
+    >>> manager.getControl('Add').click()
 
 Notice we got redirected to the course we added the section to.
 
-    >>> print http(r"""
-    ... GET /frogpond/courses/history HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> print manager.contents
+    <!DOCTYPE ...>
     ...
     ...History...
     ...
@@ -258,11 +184,9 @@ Notice we got redirected to the course we added the section to.
 
 Looking at the section:
 
-    >>> print http(r"""
-    ... GET /frogpond/sections/his1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> manager.getLink('(HIS1)').click()
+    >>> print manager.contents
+    <!DOCTYPE ...>
     ...
     ...Section of
     <BLANKLINE>
@@ -272,20 +196,15 @@ Looking at the section:
 
 Frog can't see the section's calendar by default
 
-    >>> print http(r"""
-    ... GET /frogpond/sections/his1/calendar HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
+    >>> frog.open('http://localhost/frogpond/sections/his1/calendar')
+    >>> print frog.url
+    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
 
 Frog's overlay portlet has just his own calendar:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.getLink('My Calendar').click()
+    >>> print frog.contents
+    <!DOCTYPE ...>
     ...
         <table class="overlays">
     <BLANKLINE>
@@ -309,25 +228,27 @@ Frog's overlay portlet has just his own calendar:
         </table>
     ...
 
-
 Adding a teacher:
 
-    >>> print http(r"""
-    ... POST /frogpond/sections/his1/instructors.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl(name='add_instructor.frog').value = True
+    >>> manager.getControl('Add').click()
+
+    >>> print manager.contents
+    <BLANKLINE>
     ...
-    ... add_instructor.frog=On&ADD_INSTRUCTORS=Apply""")
-    HTTP/1.1 200 Ok
+      <legend>Current Instructors</legend>
+    ...
+    Frog
+    ...
+      <legend>Available Instructors</legend>
     ...
 
 Now Frog is in the Instructors div
 
-    >>> print http(r"""
-    ... GET /frogpond/sections/his1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> manager.getControl('Cancel').click()
+    >>> print manager.contents
+    <!DOCTYPE ...>
     ...
     ...Section of
     <BLANKLINE>
@@ -344,20 +265,15 @@ Now Frog is in the Instructors div
 
 Frog can see the calendar now
 
-    >>> print http(r"""
-    ... GET /frogpond/sections/his1/calendar HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
+    >>> frog.open('http://localhost/frogpond/sections/his1/calendar')
+    >>> 'Calendar for HIS1' in frog.contents
+    True
 
 And Frog's overlay portlet shows the section:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.getLink('My Calendar').click()
+    >>> print frog.contents
+    <!DOCTYPE ...>
     ...
         <table class="overlays">
     <BLANKLINE>
@@ -398,31 +314,21 @@ And Frog's overlay portlet shows the section:
 
 If we fire Frog, in hopes of getting Salamander to step in:
 
-    >>> print http(r"""
-    ... POST /frogpond/sections/his1/instructors.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... remove_instructor.frog=on&REMOVE_INSTRUCTORS=Remove""")
-    HTTP/1.1 200 Ok
-    ...
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl(name='remove_instructor.frog').value = True
+    >>> manager.getControl('Remove').click()
 
 Frog can't see the section's calendar any more
 
-    >>> print http(r"""
-    ... GET /frogpond/sections/his1/calendar HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
+    >>> frog.open('http://localhost/frogpond/sections/his1/calendar')
+    >>> print frog.url
+    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
 
 and he's no longer an instructor:
 
-    >>> print http(r"""
-    ... GET /frogpond/sections/his1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> manager.getControl('Cancel').click()
+    >>> print manager.contents
+    <!DOCTYPE ...>
     ...
           <h3>Instructors</h3>
           <ul>
@@ -431,11 +337,9 @@ and he's no longer an instructor:
 
 And the section's calendar is no longer in his overlay portlet.
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.getLink('My Calendar').click()
+    >>> print frog.contents
+    <!DOCTYPE ...>
     ...
         <table class="overlays">
     <BLANKLINE>
@@ -459,31 +363,20 @@ And the section's calendar is no longer in his overlay portlet.
         </table>
     ...
 
-
 Adding a student:
 
-    >>> print http(r"""
-    ... POST /frogpond/sections/his1/learners.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... member.toad=On&UPDATE_SUBMIT=Apply""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/sections/his1
-    ...
+    >>> manager.getLink('edit individuals').click()
+    >>> manager.getControl(name='member.toad').value = True
+    >>> manager.getControl('Apply').click()
 
 Now toad is in the Students div
 
-    >>> print http(r"""
-    ... GET /frogpond/sections/his1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> print manager.contents
+    <BLANKLINE>
     ...
     ...Section of
     <BLANKLINE>
-          <a href="http://localhost/frogpond/courses/history">History</a>
+        <a href="http://localhost/frogpond/courses/history">History</a>
     <BLANKLINE>
     ...
           <h3>Students</h3>
