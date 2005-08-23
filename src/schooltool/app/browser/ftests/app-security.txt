@@ -8,97 +8,65 @@ First, we'll go to the Zope 3 management interface and verify that you can add
 SchoolBell instances from the add menu.  You need manager permissions
 for that.:
 
+    >>> from testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/contents.html')
 
-    >>> print http("""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&new_value=frogpond
-    ... """)
-    HTTP/1.1 303 See Other
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    Location: http://localhost/@@contents.html
-    ...
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getControl(name='new_value').value = 'frogpond'
+    >>> manager.getControl('Apply').click()
+    >>> manager.getLink('frogpond').click()
 
 Let's quickly create a user to run the tests with:
 
-    >>> print http("""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ... Content-Length: 112
-    ...
-    ... field.title=Frog&field.username=frog&\
-    ... field.password=pwd&\
-    ... field.verify_password=pwd&\
-    ... field.photo=&\
-    ... UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    Content-Length: ...
-    Location: http://localhost/frogpond/persons
-    ...
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+
+    >>> manager.getControl('Full name').value = 'Frog'
+    >>> manager.getControl('Username').value = 'frog'
+    >>> manager.getControl('Password').value = 'pwd'
+    >>> manager.getControl('Verify password').value = 'pwd'
+    >>> manager.getControl('Add').click()
+
+Now we log in as the frog:
+
+    >>> frog = Browser()
+    >>> frog.open('http://localhost/frogpond/')
+    >>> frog.getLink('Log In').click()
+    >>> frog.getControl('Username').value = 'frog'
+    >>> frog.getControl('Password').value = 'pwd'
+    >>> frog.getControl('Log in').click()
 
 The user should have the view permission set by default, let's check
-it out:
+it out, but the redirection to the calendar is not available:
 
-
-    >>> print http(r"""
-    ... GET /frogpond/ HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 303 See Other
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    Location: http://localhost/frogpond/calendar
-    ...
-    <h1>Welcome to SchoolTool</h1>
-    ...
+    >>> frog.open('http://localhost/frogpond')
+    >>> print frog.url
+    http...?forbidden=yes&nexturl=http://localhost/frogpond/calendar/daily.html
+    >>> frog.headers['status']
+    '200 Ok'
 
 We can traverse to the person index:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/ HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    ...
-    <h1>Person index</h1>
-    ...
+    >>> frog.getLink('Persons').click()
+    >>> print frog.url
+    http://localhost/frogpond/persons
+    >>> frog.headers['status']
+    '200 Ok'
 
 We can traverse to the group index too
 
-    >>> print http(r"""
-    ... GET /frogpond/groups/ HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    ...
-    <h1>Group index</h1>
-    ...
+    >>> frog.getLink('Groups').click()
+    >>> '<h1>Group index</h1>' in frog.contents
+    True
 
 We can traverse to the resource index too
 
-    >>> print http(r"""
-    ... GET /frogpond/resources/ HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    ...
-    <h1>Resource index</h1>
-    ...
+    >>> frog.getLink('Resources').click()
+    >>> '<h1>Resource index</h1>' in frog.contents
+    True
 
 
 Adding stuff -- schooltool.create permission
@@ -106,132 +74,89 @@ Adding stuff -- schooltool.create permission
 
 Adding persons should not work without a schooltool.create permission:
 
-    >>> print http("""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ... Content-Length: 120
-    ...
-    ... field.title=Snake&\
-    ... field.username=snake&\
-    ... field.password=badger&\
-    ... field.verify_password=badger&\
-    ... field.photo=&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/@@login.html...
-    ...
+    >>> frog.getLink('Persons').click()
+
+    >>> 'New Person' in frog.contents
+    False
+
+    >>> frog.open('http://localhost/frogpond/persons/add.html')
+    >>> print frog.url
+    http...?forbidden=yes&nexturl=http://localhost/frogpond/persons/add.html
 
 Adding a group also fails:
 
-    >>> print http(r"""
-    ... POST /frogpond/groups/+/addSchoolToolGroup.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Length: 61
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Venerable+Frogs&UPDATE_SUBMIT=Add&add_input_name=
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/@@login.html...
-    ...
+    >>> frog.getLink('Groups').click()
+
+    >>> 'New Group' in frog.contents
+    False
+
+    >>> frog.open('http://localhost/frogpond/groups/+/addSchoolToolGroup.html')
+    >>> print frog.url
+    http...?forbidden=yes&nexturl=http://localhost/frogpond/groups/+/...
 
 And the resource too:
 
-    >>> print http(r"""
-    ... POST /frogpond/resources/+/addSchoolToolResource.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Length: 61
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Weed&UPDATE_SUBMIT=Add&add_input_name=
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/@@login.html...
-    ...
+    >>> frog.getLink('Resources').click()
 
+    >>> 'New Resource' in frog.contents
+    False
+
+    >>> frog.open(
+    ...     'http://localhost/frogpond/resources/+/addSchoolToolResource.html')
+    >>> print frog.url
+    http...?forbidden=yes&nexturl=http://localhost/frogpond/resources/+/...
 
 Let's grant the permission to the user:
 
-    >>> print http("""
-    ... POST /frogpond/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schooltool.create&\
-    ... sb.person.frog=schooltool.view&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond
-    ...
+    >>> manager.open('http://localhost/frogpond/acl.html')
+    >>> ctrl = manager.getControl(name='sb.person.frog')
+    >>> ctrl.value = ['schooltool.create', 'schooltool.view']
+    >>> manager.getControl('Set Access', index=1).click()
 
 Now the person adding works:
 
-    >>> print http("""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Snake&\
-    ... field.username=snake&\
-    ... field.password=badger&field.verify_password=badger&\
-    ... field.photo=&UPDATE_SUBMIT=Add
-    ... """, handle_errors=False)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons
-    ...
+    >>> frog.getLink('Persons').click()
+    >>> frog.getLink('New Person').click()
+
+    >>> frog.getControl('Full name').value = 'Snake'
+    >>> frog.getControl('Username').value = 'snake'
+    >>> frog.getControl('Password').value = 'badger'
+    >>> frog.getControl('Verify password').value = 'badger'
+    >>> frog.getControl('Add').click()
+
+    >>> 'Snake' in frog.contents
+    True
 
 And a group:
 
-    >>> print http(r"""
-    ... POST /frogpond/groups/+/addSchoolToolGroup.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Length: 61
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Venerable+Frogs&UPDATE_SUBMIT=Add&add_input_name=
-    ... """, handle_errors=False)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/groups
-    ...
+    >>> frog.getLink('Groups').click()
+    >>> frog.getLink('New Group').click()
 
+    >>> frog.getControl('Title').value = 'Venerable Frogs'
+    >>> frog.getControl('Add').click()
+
+    >>> 'Venerable Frogs' in frog.contents
+    True
 
 And a resource too:
 
-    >>> print http(r"""
-    ... POST /frogpond/resources/+/addSchoolToolResource.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Length: 49
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Mud&UPDATE_SUBMIT=Add&add_input_name=
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/resources
-    ...
+    >>> frog.getLink('Resources').click()
+    >>> frog.getLink('New Resource').click()
+
+    >>> frog.getControl('Title').value = 'Mud'
+    >>> frog.getControl('Add').click()
+
+    >>> 'Mud' in frog.contents
+    True
 
 Lets try deleting the snake:
 
-    >>> print http(r"""
-    ... POST /frogpond/persons/delete.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Length: 14
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... delete.snake=1
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
+    >>> frog.getLink('Persons').click()
+    >>> frog.getControl(name='delete.snake').value = '1'
+    >>> frog.getControl('Delete').click()
+
+    >>> print frog.contents
+    <BLANKLINE>
     ...
       <ul>
         <form method="post" action="delete.html">
@@ -251,52 +176,21 @@ Lets try deleting the snake:
 
 Lets confirm it:
 
-    >>> print http(r"""
-    ... POST /frogpond/persons/delete.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Length: 36
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... delete.snake=1&UPDATE_SUBMIT=Confirm
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
+    >>> frog.getControl('Confirm').click()
 
 Snakes be gone:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/ HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    ...
-        <form method="post"
-              action="http://localhost/frogpond/persons/delete.html">
-          <div>
-            <input type="checkbox" name="delete.frog" />
-            <a href="http://localhost/frogpond/persons/frog">Frog</a>
-          </div>
-          <div class="controls">
-            <input type="submit" class="button-cancel"
-                   value="Delete" />
-          </div>
-        </form>
-    ...
+    >>> 'Snake' in frog.contents
+    False
 
 If frog tries deleting himself - he should get an error:
 
-    >>> print http(r"""
-    ... POST /frogpond/persons/delete.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Length: 13
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... delete.frog=1
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
+    >>> frog.getLink('Persons').click()
+    >>> frog.getControl(name='delete.frog').value = '1'
+    >>> frog.getControl('Delete').click()
+
+    >>> print frog.contents
+    <BLANKLINE>
     ...
       <p>
         Sorry, you may not delete your own user account.
@@ -309,143 +203,97 @@ Editing things -- schooltool.edit permission
 
 The user can edit his own info:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/edit.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ... 
-    ... field.title=Toad&\
-    ... field.photo=&\
-    ... field.new_password=newpwd&\
-    ... field.verify_password=newpwd&\
-    ... UPDATE_SUBMIT=Add""", handle_errors=False)
-    HTTP/1.1 200 Ok
-    ...
-    ...Toad...
-    ...
-    ...Password was successfully changed!...
-    ...
+    >>> frog.getLink('Frog').click()
+    >>> frog.getLink('edit name').click()
+
+    >>> frog.getControl('Full name').value = 'Toad'
+    >>> frog.getControl('New password').value = 'newpwd'
+    >>> frog.getControl('Verify password').value = 'newpwd'
+    >>> frog.getControl('Apply').click()
+
+    >>> 'Toad' in frog.contents
+    True
+    >>> 'Password was successfully changed!' in frog.contents
+    True
+
+We need to log in again:
+
+    >>> frog.getLink('Log Out').click()
+    >>> frog.getLink('Log In').click()
+    >>> frog.getControl('Username').value = 'frog'
+    >>> frog.getControl('Password').value = 'newpwd'
+    >>> frog.getControl('Log in').click()
 
 But we can revoke that permission from him:
 
-
-    >>> print http("""
-    ... POST /frogpond/persons/frog/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schooltool.create&\
-    ... sb.person.frog=schooltool.view&\
-    ... sb.person.frog=schooltool.viewCalendar&\
-    ... sb.person.frog=schooltool.addEvent&\
-    ... sb.person.frog=schooltool.modifyEvent&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog
-    ...
+    >>> manager.open('http://localhost/frogpond/persons/frog/acl.html')
+    >>> ctrl = manager.getControl(name='sb.person.frog')
+    >>> ctrl.value = ['schooltool.create', 'schooltool.view',
+    ...               'schooltool.viewCalendar', 'schooltool.addEvent',
+    ...               'schooltool.modifyEvent']
+    >>> manager.getControl('Set Access', index=1).click()
 
 Now he can't edit the info:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/edit.html HTTP/1.1
-    ... Authorization: Basic frog:newpwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Mr.+Toad&\
-    ... field.photo=&\
-    ... field.clear_photo.used=&\
-    ... field.new_password=whatever&\
-    ... field.verify_password=whatever&\
-    ... UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    Content-Length: ...
-    Location: http://localhost/frogpond/@@login.html...
-    ...
+    >>> frog.getLink('Toad').click()
+    >>> frog.getLink('edit name').click()
+
+    >>> frog.getControl('Full name').value = 'Mr. Toad'
+    >>> frog.getControl('New password').value = 'whatever'
+    >>> frog.getControl('Verify password').value = 'whatever'
+    >>> frog.getControl('Apply').click()
+
+    >>> print frog.url
+    http...?forbidden=yes&nexturl=http://.../persons/frog/@@edit.html
 
 The same goes for the groups and resources edit forms.  Not allowed:
 
-    >>> print http("""
-    ... POST /frogpond/groups/venerable-frogs/edit.html HTTP/1.1
-    ... Authorization: Basic frog:newpwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Venerables&\
-    ... field.description=&\
-    ... UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    Content-Length: ...
-    Location: http://localhost/frogpond/@@login.html...
-    ...
+    >>> frog.getLink('Groups').click()
+    >>> frog.getLink('Venerable Frogs').click()
+    >>> 'Edit Info' in frog.contents
+    False
+    >>> frog.open('http://localhost/frogpond/groups/venerable-frogs/edit.html')
+    >>> print frog.url
+    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
 
-    >>> print http("""
-    ... POST /frogpond/resources/mud/edit.html HTTP/1.1
-    ... Authorization: Basic frog:newpwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Silt&\
-    ... field.description=bottom&\
-    ... UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    Content-Length: ...
-    Location: http://localhost/frogpond/@@login.html...
-    ...
+    >>> frog.getLink('Resources').click()
+    >>> frog.getLink('Mud').click()
+    >>> 'Edit Info' in frog.contents
+    False
+    >>> frog.open('http://localhost/frogpond/resources/mud/edit.html')
+    >>> print frog.url
+    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
 
 Let's grant the edit permission:
 
-    >>> print http("""
-    ... POST /frogpond/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schooltool.edit&\
-    ... sb.person.frog=schooltool.view&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond
-    ...
+    >>> manager.open('http://localhost/frogpond/acl.html')
+    >>> ctrl = manager.getControl(name='sb.person.frog')
+    >>> ctrl.value = ['schooltool.edit', 'schooltool.view']
+    >>> manager.getControl('Set Access', index=1).click()
 
 Lo and behold:
 
-    >>> print http("""
-    ... POST /frogpond/groups/venerable-frogs/edit.html HTTP/1.1
-    ... Authorization: Basic frog:newpwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Venerables&\
-    ... field.description=&\
-    ... UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/groups/venerable-frogs
-    ...
-    ...Venerables...
-    ...
+    >>> frog.getLink('Groups').click()
+    >>> frog.getLink('Venerable Frogs').click()
+    >>> 'Edit Info' in frog.contents
+    True
+    >>> frog.getLink('Edit Info').click()
+    >>> frog.getControl('Title').value = 'Venerables'
+    >>> frog.getControl('Apply').click()
+    >>> 'Venerables' in frog.contents
+    True
 
-    >>> print http("""
-    ... POST /frogpond/resources/mud/edit.html HTTP/1.1
-    ... Authorization: Basic frog:newpwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Silt&\
-    ... field.description=bottom&\
-    ... UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/resources/mud
-    ...
-    ...Silt...
-    ...
+    >>> frog.getLink('Resources').click()
+    >>> frog.getLink('Mud').click()
+    >>> 'Edit Info' in frog.contents
+    True
+    >>> frog.getLink('Edit Info').click()
+    >>> frog.getControl('Title').value = 'Silt'
+    >>> frog.getControl('Description').value = 'bottom'
+    >>> frog.getControl('Apply').click()
+    >>> 'Silt' in frog.contents
+    True
+
 
 Relationships
 -------------
@@ -453,46 +301,34 @@ Relationships
 In order to add persons to groups, a user must have a manageMembership
 permission on those groups.
 
-    >>> print http("""
-    ... POST /frogpond/groups/venerable-frogs/members_persons.html HTTP/1.1
-    ... Authorization: Basic frog:newpwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... group.venerable-frogs=checked&\
-    ... UPDATE_SUBMIT=Apply
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/@@login.html...
-    ...
+    >>> frog.getLink('Groups').click()
+    >>> frog.getLink('Venerables').click()
+    >>> frog.getLink('edit members').click()
+    >>> print frog.url
+    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
 
 Let's grant the guy the permission on the group:
 
-    >>> print http("""
-    ... POST /frogpond/groups/venerable-frogs/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schooltool.manageMembership&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/groups/venerable-frogs
-    ...
+    >>> manager.open(
+    ...     'http://localhost/frogpond/groups/venerable-frogs/acl.html')
+    >>> ctrl = manager.getControl(name='sb.person.frog')
+    >>> ctrl.value = ['schooltool.view', 'schooltool.manageMembership']
+    >>> manager.getControl('Set Access', index=1).click()
 
 Now, the group join must succeed.
 
-    >> print http("""
-    ... POST /frogpond/groups/venerable-frogs/members_persons.html HTTP/1.1
-    ... Authorization: Basic frog:newpwd
-    ... Content-Type: application/x-www-form-urlencoded
+    >>> frog.getLink('Groups').click()
+    >>> frog.getLink('Venerables').click()
+    >>> frog.getLink('edit members').click()
+
+    >>> frog.getControl(name='ADD_MEMBER.frog').value = True
+    >>> frog.getControl('Add Members').click()
+    >>> print frog.contents
+    <BLANKLINE>
     ...
-    ... group.venerable-frogs=checked&\
-    ... UPDATE_SUBMIT=Apply
-    ... """)
-    HTTP/1.1 303 See Other
+      <legend>Current Members</legend>
     ...
-    Location: http://localhost/frogpond/resources/venerable-frogs
+    Toad
+    ...
+      <legend>Add Members</legend>
     ...
