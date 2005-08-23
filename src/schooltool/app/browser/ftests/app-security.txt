@@ -6,7 +6,7 @@ SchoolBell as a Zope 3 content object
 
 First, we'll go to the Zope 3 management interface and verify that you can add
 SchoolBell instances from the add menu.  You need manager permissions
-for that.:
+for that.
 
     >>> from testbrowser import Browser
     >>> manager = Browser()
