@@ -29,7 +29,7 @@
         name="addSchoolToolResource.html"
         schema="schooltool.resource.interfaces.IResource"
         fields="title description isLocation"
-        set_before_add="title"
+        set_before_add="title description isLocation"
         content_factory="schooltool.resource.resource.Resource"
         template="templates/simple_add.pt"
         class="schooltool.resource.browser.resource.ResourceAddView"

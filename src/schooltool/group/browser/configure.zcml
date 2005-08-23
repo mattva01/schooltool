@@ -28,7 +28,7 @@
         name="addSchoolToolGroup.html"
         schema="schooltool.group.interfaces.IGroup"
         fields="title description"
-        set_before_add="title"
+        set_before_add="title description"
         content_factory="schooltool.group.group.Group"
         permission="schooltool.create"
         template="templates/simple_add.pt"
