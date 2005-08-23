@@ -3,104 +3,75 @@ Access control view
 
 First, create a SchoolBell instance:
 
-    >>> print http(r"""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
-    ... Content-Type: application/x-www-form-urlencoded
-    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication
-    ...
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&new_value=frogpond""")
-    HTTP/1.1 303 See Other
-    ...
+    >>> from testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/contents.html')
+
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getControl(name='new_value').value = 'frogpond'
+    >>> manager.getControl('Apply').click()
+
+    >>> 'frogpond' in manager.contents
+    True
 
 Let's create a person so that we can fool around with his calendar:
 
-    >>> print http(r"""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 112
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Frog&field.username=frog&field.password=pwd&field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
+    >>> manager.getLink('frogpond').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
 
-He can't access the ACL view:
+    >>> manager.getControl('Full name').value = 'Frog'
+    >>> manager.getControl('Username').value = 'frog'
+    >>> manager.getControl('Password').value = 'pwd'
+    >>> manager.getControl('Verify password').value = 'pwd'
+    >>> manager.getControl('Add').click()
 
-    >>> print http(r"""
-    ... GET /frogpond/acl.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: ...login.html...
+    >>> 'Frog' in manager.contents
+    True
+
+After logging in the frog
+
+    >>> frog = Browser()
+    >>> frog.open('http://localhost/frogpond/')
+    >>> frog.getLink('Log In').click()
+    >>> frog.getControl('Username').value = 'frog'
+    >>> frog.getControl('Password').value = 'pwd'
+    >>> frog.getControl('Log in').click()
+
+he can't access the ACL view:
+
+    >>> frog.open('http://localhost/frogpond/acl.html')
+    >>> print frog.url
+    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
 
 Grant him a 'schooltool.controlAccess' permission on the app:
 
-    >>> print http("""
-    ... POST /frogpond/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schooltool.controlAccess&\
-    ... sb.person.frog=schooltool.view&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond
-    ...
+    >>> manager.open('http://localhost/frogpond/acl.html')
+    >>> ctrl = manager.getControl(name='sb.person.frog')
+    >>> ctrl.value = ['schooltool.controlAccess', 'schooltool.view']
+    >>> manager.getControl('Set Access', index=1).click()
 
 Now he can access the acl.html view on app:
 
-    >>> print http(r"""
-    ... GET /frogpond/acl.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    ...
+    >>> frog.open('http://localhost/frogpond/acl.html')
+    >>> 'Access control for SchoolTool' in frog.contents
+    True
 
 Also, he can set the permissions, even elevate his own permissions:
 
-    >>> print http("""
-    ... POST /frogpond/acl.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schooltool.view&\
-    ... sb.person.frog=schooltool.edit&\
-    ... sb.person.frog=schooltool.addEvent&\
-    ... sb.person.frog=schooltool.modifyEvent&\
-    ... sb.person.frog=schooltool.controlAccess&\
-    ... sb.person.frog=schooltool.create&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond
-    ...
+    >>> ctrl = frog.getControl(name='sb.person.frog')
+    >>> ctrl.value = ['schooltool.view', 'schooltool.edit',
+    ...               'schooltool.addEvent', 'schooltool.modifyEvent',
+    ...               'schooltool.controlAccess', 'schooltool.create']
+    >>> frog.getControl('Set Access', index=1).click()
 
 It works for subobjects of the app too:
 
-    >>> print http("""
-    ... POST /frogpond/persons/acl.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schooltool.view&\
-    ... sb.person.frog=schooltool.edit&\
-    ... sb.person.frog=schooltool.addEvent&\
-    ... sb.person.frog=schooltool.modifyEvent&\
-    ... sb.person.frog=schooltool.controlAccess&\
-    ... sb.person.frog=schooltool.create&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons
-    ...
+    >>> frog.open('http://localhost/frogpond/persons/acl.html')
+    >>> ctrl = frog.getControl(name='sb.person.frog')
+    >>> ctrl.value = ['schooltool.view', 'schooltool.edit',
+    ...               'schooltool.addEvent', 'schooltool.modifyEvent',
+    ...               'schooltool.controlAccess', 'schooltool.create']
+    >>> frog.getControl('Set Access', index=1).click()
