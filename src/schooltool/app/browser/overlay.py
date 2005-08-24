@@ -179,17 +179,14 @@ class CalendarSelectionView(BrowserView):
         Returns None if the user lacks sufficient permissions.
         """
         user = IPerson(self.request.principal, None)
-        if user is None:
-            return None
-        app = getSchoolToolApplication()
-        calendar = ISchoolToolCalendar(app)
-
-        if canAccess(calendar, '__iter__'):
-            return {'title': app.title,
-                    'selected': calendar in user.overlaid_calendars,
-                    'calendar': calendar}
-
-        return None
+        if user:
+            app = getSchoolToolApplication()
+            calendar = ISchoolToolCalendar(app)
+            if canAccess(calendar, '__iter__'):
+                return {'title': app.title,
+                        'selected': calendar in user.overlaid_calendars,
+                        'calendar': calendar}
+        return {}
 
     application = property(getApplicationCalendar)
     persons = property(lambda self: self.getCalendars('persons'))
@@ -214,13 +211,14 @@ class CalendarSelectionView(BrowserView):
                         user.overlaid_calendars.add(item['calendar'])
                     elif item['id'] not in selected and item['selected']:
                         user.overlaid_calendars.remove(item['calendar'])
-            appcal = self.application['calendar']
-            if ('application' in self.request and
-                    appcal not in user.overlaid_calendars):
-                user.overlaid_calendars.add(appcal)
-            elif ('application' not in self.request and
-                    appcal in user.overlaid_calendars):
-                user.overlaid_calendars.remove(appcal)
+            appcal = self.application.get('calendar')
+            if appcal is not None:
+                if ('application' in self.request and
+                        appcal not in user.overlaid_calendars):
+                    user.overlaid_calendars.add(appcal)
+                elif ('application' not in self.request and
+                        appcal in user.overlaid_calendars):
+                    user.overlaid_calendars.remove(appcal)
             self.message = _('Saved changes.')
             nexturl = self.request.form.get('nexturl')
             if nexturl:

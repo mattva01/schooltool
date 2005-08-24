@@ -32,6 +32,7 @@ if sys.version_info < (2, 3):
 
 import os
 import re
+import tempfile
 from distutils.core import setup
 from distutils.command.install import install as _install
 from distutils.command.install_data import install_data as _install_data
@@ -41,13 +42,61 @@ from distutils.archive_util import ARCHIVE_FORMATS
 from distutils.dir_util import mkpath
 from distutils.spawn import spawn
 
+here = os.path.abspath(os.path.dirname(__file__))
+
+# if we have an Zope3 external, then we use it
+# XXX - try import zope, check version and perhaps error
+zope3 = os.path.join(here, 'Zope3', 'src')
+if os.path.isdir(zope3):
+    sys.path.insert(1, zope3)
+from zope.app.locales import extract
+
+# prepend the local schooltool
+sys.path.insert(0, os.path.join(here, 'src'))
+import schooltool
+
+#
+# Translations
+#
+
+def build_pot():
+    """Build the *.pot."""
+    # where is eveything
+    here = os.path.abspath(os.path.dirname(__file__))
+    domain = 'schooltool'
+    path = os.path.join(here, 'src')
+    output_dir = os.path.join(here, 'src', 'schooltool', 'locales')
+    base_dir = os.path.join(here, 'src', 'schooltool')
+
+    # Setup
+    (zcml, zcml_filename) = tempfile.mkstemp()
+    file = open(zcml_filename, 'w')
+    file.write("""<configure xmlns="http://namespaces.zope.org/zope">
+                     <include package="zope.app" />
+                     <include package="zope.app.wfmc" file="meta.zcml" />
+                     <include package="schooltool" />
+                  </configure>""")
+    file.close()
+
+    output_file = os.path.join(path, output_dir, domain + '.pot')
+
+    # Create the POT
+    maker = extract.POTMaker(output_file, path)
+    maker.add(extract.py_strings(path, domain), base_dir)
+    maker.add(extract.zcml_strings(path, domain, site_zcml=zcml_filename), base_dir)
+    maker.add(extract.tal_strings(path, domain), base_dir)
+    maker.write()
+
+    # Cleanup
+    os.remove(zcml_filename)
+
 
 #
 # Distutils Customization
 #
 
 def make_schooltool_tarball(base_name, base_dir, verbose=0, dry_run=0):
-    """Make a tarball with the right permissions/ownership."""
+    """Make a tarball with the right permissions/owenership."""
     archive_name = base_name + ".tar"
     mkpath(os.path.dirname(archive_name), dry_run=dry_run)
     spawn(["tar", "--owner=0", "--group=0", "--mode=a+r",
@@ -79,7 +128,7 @@ class install_data(_install_data):
 class install(_install):
     """Specialized install command for schooltool and schoolbell.
 
-    Make it possilble to pass the --paths and --default-config options to the
+    Make it possible to pass the --paths and --default-config options to the
     install_scripts command.
     """
 
@@ -117,8 +166,6 @@ class install_scripts(_install_scripts):
         self.set_undefined_options('install',
                 ('paths', 'paths'),
                 ('default_config', 'default_config'))
-        if not self.paths:
-            self.paths = ''
         return _install_scripts.finalize_options(self)
 
     def update_scripts(self):
@@ -132,9 +179,10 @@ class install_scripts(_install_scripts):
             # Update the paths in the script
             paths_regex = re.compile(r'# paths begin\n.*# paths end', re.S)
             paths = ['# paths begin', '# paths end']
-            for path in self.paths.split(';'):
-                paths.insert(-1, 'sys.path.insert(0, %s)'
-                             % repr(os.path.abspath(path)))
+            if self.paths:
+                for path in self.paths.split(';'):
+                    paths.insert(-1, 'sys.path.insert(0, %s)'
+                                 % repr(os.path.abspath(path)))
             script_str = re.sub(paths_regex, '\n'.join(paths), script_str)
             # Update the default config file
             config_regex = re.compile(r'# config begin\n.*# config end', re.S)
@@ -170,6 +218,12 @@ if sys.version_info < (2, 3):
             del kwargs["classifiers"]
         _setup(**kwargs)
 
+# Re-build the translations every time setup.py is invoked. Really nasty,
+# but safe and easy.
+
+print "Extracting translations"
+build_pot()
+
 # find the data files
 # if you modify this, also modify MANIFEST.in recursive includes
 # XXX - do something more intelligent with *.mo files. It's a mess - jinty
@@ -187,11 +241,6 @@ for root, dirs, files in os.walk(os.path.join('src', 'schooltool')):
     # If any, add them to the files to be copied
     if tmp:
         data_files.append((root[4:], tmp))
-
-# get the version number of schooltool
-sys.path.insert(1, os.path.join(os.path.dirname(__file__), 'Zope3', 'src'))
-sys.path.insert(1, os.path.join(os.path.dirname(__file__), 'src'))
-import schooltool
 
 # Setup SchoolTool
 setup(name="schooltool",
@@ -235,8 +284,8 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
               'install_data': install_data},
     package_dir={'': 'src'},
     packages=['schooltool',
-              'schooltool.rest',
-              'schooltool.browser',
+              #'schooltool.app.rest',
+              'schooltool.app.browser',
               'schooltool.timetable',
               'schooltool.timetable.browser',
               'schooltool.timetable.rest',

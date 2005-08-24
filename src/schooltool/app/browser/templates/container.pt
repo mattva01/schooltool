@@ -21,7 +21,7 @@
     <form tal:condition="canModify"
           method="post"
           tal:attributes="action string:${context/@@absolute_url}/delete.html">
-      <div tal:repeat="obj batch/sortby:title">
+      <div tal:repeat="obj batch">
         <input type="checkbox" tal:attributes="name string:delete.${obj/zope:name}" />
         <a tal:content="obj/title"
            tal:attributes="href obj/@@absolute_url">Some Object</a>
@@ -32,7 +32,7 @@
       </div>
     </form>
     <ul tal:condition="not:canModify">
-      <li tal:repeat="obj batch/sortby:title">
+      <li tal:repeat="obj batch">
         <a tal:content="obj/title"
            tal:attributes="href obj/@@absolute_url">Some Object</a>
       </li>

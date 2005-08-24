@@ -16,10 +16,13 @@ ROSETTA_LOCALES=de el fr id lt nl nb pa pt tr
 .PHONY: all
 all: build
 
+Zope3:
+	svn co svn://svn.zope.org/repos/main/Zope3/branches/Zope-3.1 Zope3
+
 .PHONY: build
-build:
-	cd Zope3 && $(PYTHON) setup.py build_ext -i
-	$(PYTHON) setup.py build_ext -i
+build: Zope3
+	[ ! -d Zope3 ] || cd Zope3 && $(PYTHON) setup.py build_ext -i
+	$(PYTHON) setup.py build
 	$(PYTHON) remove-stale-bytecode.py
 
 .PHONY: clean
@@ -83,7 +86,7 @@ Zope3/package-includes/schooltool-configure.zcml:
 	echo '<include package="schooltool" />' > $@
 
 .PHONY: dist
-dist: realclean build extract-translations update-translations clean
+dist: realclean build update-translations clean
 	rm -rf dist
 	find . -name '*.py[dco]' -exec rm -f {} \;
 	./setup.py sdist --formats=schooltooltgz
@@ -95,10 +98,10 @@ signtar: dist
 	mv dist/md5sum.asc dist/md5sum
 
 .PHONY: extract-translations
-extract-translations: Zope3/principals.zcml Zope3/package-includes/schoolbell-configure.zcml Zope3/package-includes/schooltool-configure.zcml
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) \
-		Zope3/utilities/i18nextract.py -d schooltool \
-			-o locales -p src/schooltool schooltool
+extract-translations:
+	# here for backwards compatibility only,
+	# setup.py does the work!
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) setup.py
 
 .PHONY: update-translations
 update-translations:
@@ -111,7 +114,7 @@ update-translations:
 
 .PHONY: update-rosetta-pot
 update-rosetta-pot:
-	$(MAKE) build extract-translations
+	$(PYTHON) setup.py build
 	touch ../launchpad_cookies
 	chmod 0600 ../launchpad_cookies ../launchpad_pwd
 	curl -kc ../launchpad_cookies -D ../header_login\

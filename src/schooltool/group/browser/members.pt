@@ -4,8 +4,7 @@
   <title metal:fill-slot="title" tal:content="context/title" />
 </head>
 <body>
-  <metal:block metal:fill-slot="body"
-    tal:define="batch_search request/SEARCH|nothing">
+  <metal:block metal:fill-slot="body">
 
 <form method="post" tal:attributes="action request/URL" class="standalone"
   tal:define="batch view/batch">
@@ -26,8 +25,8 @@
       </label>
     </div>
     <div class="controls">
-      <input type="submit" class="button-ok" name="REMOVE_MEMBERS" 
-        value="Remove Members" tal:condition="batch"
+      <input type="submit" class="button-ok" name="REMOVE_MEMBERS"
+        value="Remove Members"
         title="Shortcut: Alt-R" accesskey="R"
         i18n:attributes="value submit-button; accesskey" />
     </div>
@@ -59,7 +58,8 @@
       </div>
     </div>
     <div class="controls">
-      <input type="submit" class="button-ok" name="ADD_MEMBERS" value="Add Members"
+      <input type="submit" class="button-ok" name="ADD_MEMBERS"
+             value="Add Members"
         tal:condition="batch"
         title="Shortcut: Alt-A" accesskey="A"
         i18n:attributes="value submit-button; accesskey" />

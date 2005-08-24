@@ -1,0 +1,321 @@
+Functional doctest for group membership
+=======================================
+
+Setup
+-----
+
+We need an application with a few groups and persons.
+
+Application:
+
+    >>> print http("""
+    ... POST /@@contents.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication
+    ...
+    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&new_value=frogpond\
+    ... """)
+    HTTP/1.1 303 See Other
+    ...
+    Location: http://localhost/@@contents.html
+    ...
+
+Bunch of persons:
+
+    >>> print http("""
+    ... POST /frogpond/persons/@@person-csvimport.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: multipart/form-data; boundary=---------------------------68355286210571712431437723486
+    ...
+    ... -----------------------------68355286210571712431437723486
+    ... Content-Disposition: form-data; name="csvtext"
+    ...
+    ... person001, Q. Bert
+    ... person002, W. Bert
+    ... person003, E. Bert
+    ... person004, R. Bert
+    ... person005, T. Bert
+    ... person006, Y. Bert
+    ... person007, U. Bert
+    ... person008, I. Bert
+    ... person009, O. Bert
+    ... person010, P. Bert
+    ... person011, A. Bert
+    ... person012, S. Bert
+    ... person013, D. Bert
+    ... person014, F. Bert
+    ... person015, G. Bert
+    ... -----------------------------68355286210571712431437723486
+    ... Content-Disposition: form-data; name="charset"
+    ...
+    ... UTF-8
+    ... -----------------------------68355286210571712431437723486
+    ... Content-Disposition: form-data; name="UPDATE_SUBMIT"
+    ...
+    ... 1
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+            <p>CSV text imported successfully.</p>
+    ...
+
+
+Bunch of groups:
+
+    >>> print http("""
+    ... POST /frogpond/groups/@@group-csvimport.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: multipart/form-data; boundary=---------------------------68355286210571712431437723486
+    ...
+    ... -----------------------------68355286210571712431437723486
+    ... Content-Disposition: form-data; name="csvtext"
+    ...
+    ... group001, Z Team
+    ... group002, X Team
+    ... group003, C Team
+    ... group004, V Team
+    ... group005, B Team
+    ... group006, N Team
+    ... group007, M Team
+    ... group008, L Team
+    ... group009, K Team
+    ... group010, J Team
+    ... group011, H Team
+    ... group012, G Team
+    ... group013, F Team
+    ... group014, D Team
+    ... group015, S Team
+    ... -----------------------------68355286210571712431437723486
+    ... Content-Disposition: form-data; name="charset"
+    ...
+    ... UTF-8
+    ... -----------------------------68355286210571712431437723486
+    ... Content-Disposition: form-data; name="UPDATE_SUBMIT"
+    ...
+    ... 1
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+            <p>CSV text imported successfully.</p>
+    ...
+
+Group member view
+-----------------
+
+Let's go to a group, and look at its members.
+
+    >>> print http(r"""
+    ... GET /frogpond/groups/group001/members_persons.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+        <title>group001</title>
+    ...
+    <form method="post" class="standalone"
+          action="http://localhost/frogpond/groups/group001/members_persons.html">
+    <h3>
+      Members of group001
+    </h3>
+    <fieldset>
+      <legend>Current Members</legend>
+      <p>
+        There are none.
+      </p>
+    </fieldset>
+    <fieldset>
+      <legend>Add Members</legend>
+      <div class="batch-navigation">
+          <span class="previous">
+            &laquo; <span>Previous</span>
+          </span>
+          <a class="next"
+             href="?batch_start=10&amp;batch_size=10">
+            <span>Next</span>
+            <span>5</span> &raquo;
+          </a>
+          <span>
+            <a href="?batch_start=0&amp;batch_size=10"
+               class="current">1</a>
+            </span>
+          <span>
+            <a href="?batch_start=10&amp;batch_size=10">2</a>
+          </span>
+      </div>
+      <div class="batch-search">
+        <input type="text" name="SEARCH" />
+        <input type="submit" name="SEARCH_BUTTON"
+               value="Find Now" />
+      </div>
+        <div class="member_list">
+          <div>
+            <label>
+              <input type="checkbox" name="ADD_MEMBER.person011" />
+              A. Bert
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="ADD_MEMBER.person013" />
+              D. Bert
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="ADD_MEMBER.person003" />
+              E. Bert
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="ADD_MEMBER.person014" />
+              F. Bert
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="ADD_MEMBER.person015" />
+              G. Bert
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="ADD_MEMBER.person008" />
+              I. Bert
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="ADD_MEMBER.person009" />
+              O. Bert
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="ADD_MEMBER.person010" />
+              P. Bert
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="ADD_MEMBER.person001" />
+              Q. Bert
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" name="ADD_MEMBER.person004" />
+              R. Bert
+            </label>
+          </div>
+        </div>
+        <div class="controls">
+          <input type="submit" class="button-ok"
+                 name="ADD_MEMBERS" value="Add Members"
+                 title="Shortcut: Alt-A" accesskey="A" />
+        </div>
+    </fieldset>
+    <div class="controls">
+      <input type="submit" class="button-cancel" name="DONE"
+             value="Done" />
+    </div>
+    </form>
+    ...
+
+Let's add a few members.
+
+    >>> print http(r"""
+    ... POST /frogpond/groups/group001/members_persons.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... ADD_MEMBERS=Add+Members&ADD_MEMBER.person001=on&ADD_MEMBER.person008=on
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+        <title>group001</title>
+    ...
+    <fieldset>
+      <legend>Current Members</legend>
+        <div>
+          <label>
+            <input type="checkbox"
+                   name="REMOVE_MEMBER.person008" />
+            I. Bert
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox"
+                   name="REMOVE_MEMBER.person001" />
+            Q. Bert
+          </label>
+        </div>
+        <div class="controls">
+          <input type="submit" class="button-ok"
+                 name="REMOVE_MEMBERS" value="Remove Members"
+                 title="Shortcut: Alt-R" accesskey="R" />
+        </div>
+    </fieldset>
+    ...
+
+We can perform a search and limit the list in the 'Add Members' box.
+This particular bit also serves as a regression test for issue 341.
+
+    >>> print http(r"""
+    ... POST /frogpond/groups/group001/members_persons.html HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ...
+    ... SEARCH=something&SEARCH_BUTTON=Find+Now
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+        <title>group001</title>
+    ...
+    <fieldset>
+      <legend>Current Members</legend>
+        <div>
+          <label>
+            <input type="checkbox"
+                   name="REMOVE_MEMBER.person008" />
+            I. Bert
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox"
+                   name="REMOVE_MEMBER.person001" />
+            Q. Bert
+          </label>
+        </div>
+        <div class="controls">
+          <input type="submit" class="button-ok"
+                 name="REMOVE_MEMBERS" value="Remove Members"
+                 title="Shortcut: Alt-R" accesskey="R" />
+        </div>
+    </fieldset>
+    <fieldset>
+      <legend>Add Members</legend>
+      <p>
+        There are none to add.
+      </p>
+      <div class="batch-search">
+        <input type="text" name="SEARCH" />
+        <input type="submit" name="SEARCH_BUTTON"
+               value="Find Now" />
+      </div>
+    ...
+
+
+TODO: make this test more extensive -- test that removal works, etc, etc.

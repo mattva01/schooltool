@@ -17,23 +17,61 @@
   <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
   <div metal:use-macro="view/@@view_macros/batch-search"/>
   <p tal:condition="not:batch" i18n:translate="">There are none.</p>
-  <form method="post"
+  <form method="post" tal:condition="batch"
         tal:attributes="action string:${context/@@absolute_url}/delete.html">
-    <ul tal:condition="batch">
-      <li tal:repeat="obj batch/sortby:title">
-        <input type="checkbox" tal:attributes="name string:delete.${obj/zope:name}" />
-        <a tal:content="obj/label" i18n:translate=""
-           tal:attributes="href obj/@@absolute_url">Some Object</a>
-        <span class="hint">
-          (<span tal:replace="obj/size"/>
-          <span i18n:translate="">Students</span>)
-        </span>
-      </li>
-      <div class="controls">
-        <input type="submit" class="button-cancel" value="Delete"
-               i18n:attributes="value delete-button;" />
-      </div>
-    </ul>
+    <table class="container">
+      <tr class="header">
+        <th i18n:translate="">
+        </th>
+        <th i18n:translate="">
+          Courses
+        </th>
+        <th i18n:translate="">
+          Section
+        </th>
+        <th i18n:translate="">
+          Instructors
+        </th>
+        <th i18n:translate="">
+          Current Size
+        </th>
+      </tr>
+      <tr tal:repeat="obj batch">
+        <td>
+          <input type="checkbox"
+                 tal:attributes="name string:delete.${obj/zope:name}" />
+        </td>
+        <td>
+          <a tal:repeat="course obj/courses"
+             tal:attributes="href course/@@absolute_url"
+             tal:content="course/title">
+              Some Object
+          </a>
+        </td>
+        <td>
+          <a tal:attributes="href obj/@@absolute_url"
+             tal:content="obj/title">
+              Some Object
+          </a>
+        </td>
+        <td>
+          <tal:loop repeat="instructor obj/instructors">
+            <span tal:condition="not:repeat/instructor/start">, </span>
+            <a href="" tal:attributes="href instructor/@@absolute_url" tal:content="instructor/title" />
+          </tal:loop>
+        </td>
+        <td>
+          <span class="hint">
+            (<span tal:replace="obj/size"/>
+            <span i18n:translate="">Students</span>)
+          </span>
+        </td>
+      </tr>
+    </table>
+    <div class="controls">
+      <input type="submit" class="button-cancel" value="Delete"
+             i18n:attributes="value delete-button;" />
+    </div>
   </form>
 
 </metal:block>

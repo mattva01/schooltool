@@ -179,16 +179,17 @@ def doctest_MemberListView():
 
         >>> view.update()
 
-    First, all persons should be listed in alphabetical order:
+    First, all persons should be listed (the page template puts them in
+    alphabetical order later):
 
-        >>> [g.title for g in view.getPotentialMembers()]
+        >>> sorted([g.title for g in view.getPotentialMembers()])
         ['Albertas', 'Gintas', 'Ignas']
 
     We can search persons not in the group
 
-        >>> [g.title for g in view.searchPotentialMembers('al')]
+        >>> sorted([g.title for g in view.searchPotentialMembers('al')])
         ['Albertas']
-        >>> [g.title for g in view.searchPotentialMembers('i')]
+        >>> sorted([g.title for g in view.searchPotentialMembers('i')])
         ['Gintas', 'Ignas']
 
     Let's make Ignas a member of PoV:
@@ -200,12 +201,12 @@ def doctest_MemberListView():
 
     He should have joined:
 
-        >>> [person.title for person in pov.members]
+        >>> sorted([person.title for person in pov.members])
         ['Ignas']
 
     Search again to make sure members do not appear in the results:
 
-        >>> [g.title for g in view.searchPotentialMembers('as')]
+        >>> sorted([g.title for g in view.searchPotentialMembers('as')])
         ['Albertas', 'Gintas']
 
     We can cancel an action if we want to:
@@ -214,7 +215,7 @@ def doctest_MemberListView():
         >>> request.form = {'ADD_MEMBER.gintas': 'on', 'DONE': 'Done'}
         >>> view = MemberViewPersons(pov, request)
         >>> view.update()
-        >>> [person.title for person in pov.members]
+        >>> sorted([person.title for person in pov.members])
         ['Ignas']
         >>> request.response.getStatus()
         302
@@ -237,7 +238,7 @@ def doctest_MemberListView():
 
     Mission accomplished:
 
-        >>> [person.title for person in pov.members]
+        >>> sorted([person.title for person in pov.members])
         ['Albertas']
 
     Click 'Done' when we are finished and we go back to the group view
@@ -252,6 +253,29 @@ def doctest_MemberListView():
         'http://127.0.0.1/groups/pov'
 
     TODO: check resource view
+
+    """
+
+def doctest_MemberViewPersons_updateBatch():
+    r"""Test for MemberViewPersons.updateBatch.
+
+        >>> from schooltool.group.browser.group import MemberViewPersons
+        >>> from schooltool.group.group import Group
+        >>> from schooltool.person.person import Person
+        >>> pov = Group('PoV')
+        >>> gintas = Person('gintas', 'Gintas')
+        >>> ignas = Person('ignas', 'Ignas')
+        >>> alga = Person('alga', 'Albertas')
+
+        >>> request = TestRequest()
+        >>> view = MemberViewPersons(pov, request)
+
+    updateBatch takes a list of persons, and creates a Batch object
+    from that list.
+
+        >>> view.updateBatch([ignas, alga, gintas])
+        >>> [p.title for p in view.batch]
+        ['Albertas', 'Gintas', 'Ignas']
 
     """
 

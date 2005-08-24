@@ -1134,7 +1134,7 @@ table.event_booking td.booked {
     vertical-align: top;
     margin: 1em auto;
     overflow: auto;
-    font-size: 94%;
+    font-size: smaller;
 }
 
 .batch-navigation a {
@@ -1162,23 +1162,13 @@ table.event_booking td.booked {
 
 .batch-navigation span.next,
 .batch-navigation span.previous {
-    color: #BAB5AB;
+    color: #bab5ab;
     font-weight: bold;
 }
 
 .batch-navigation a.current {
-    text-decoration: underline;
-}
-
-.batch-extra-navigation {
-    float: right;
-    border-left: 1px #bab5ab solid;
-}
-
-.batch-extra-navigation .more,
-.batch-extra-navigation .less,
-.batch-extra-navigation .all {
-    padding: 0 0.5em;
+    color: #fff;
+    background: #314e6c;
 }
 
 /* Internal error pages */

@@ -277,7 +277,8 @@
                  id="field.untilIcon"
                  tal:attributes="src context/++resource++calwidget-icon.gif"/>
             <div id="field.untilDiv"
-                 style="background: #fff; position: absolute; display: none;"/>
+                 style="background: #fff; position: absolute; display: none;">
+            </div>
 
             <tal:block tal:define="widget nocall:view/until_widget">
               <div class="error" tal:define="error widget/error"

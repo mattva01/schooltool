@@ -109,14 +109,9 @@ class GroupView(BrowserView):
 
 
 class MemberViewPersons(BrowserView):
-    """A base view class for adding / removing members from a group.
-
-    Subclasses must override container_name.
-    """
+    """View class for adding / removing members to / from a group."""
 
     __used_for__ = IGroupContained
-
-    container_name = 'persons'
 
     def getMembers(self):
         """Return a list of current group memebers."""
@@ -124,17 +119,18 @@ class MemberViewPersons(BrowserView):
 
     def getPotentialMembers(self):
         """Return a list of all possible members."""
-        container = getSchoolToolApplication()[self.container_name]
+        container = getSchoolToolApplication()['persons']
         return [m for m in container.values() if m not in self.context.members]
 
     def searchPotentialMembers(self, s):
+        """Return a list of possible members with a `s` in their title."""
         potentials = self.getPotentialMembers()
         return [m for m in potentials if s.lower() in m.title.lower()]
 
     def updateBatch(self, lst):
         start = int(self.request.get('batch_start', 0))
         size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(lst, start, size)
+        self.batch = Batch(lst, start, size, sort_by='title')
 
     def update(self):
         context_url = zapi.absoluteURL(self.context, self.request)
