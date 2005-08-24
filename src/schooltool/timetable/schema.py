@@ -169,3 +169,13 @@ def getPeriodsForDay(date):
         return []
     ttschema = ttcontainer.getDefault()
     return ttschema.model.periodsInDay(schooldays, ttschema, date)
+
+
+##############################################################################
+# BBB: Make sure the old data object references are still there.
+#      Needs to be here to avoid circular imports.
+from schooltool import timetable
+timetable.TimetableSchemaContainer = TimetableSchemaContainer
+timetable.TimetableSchema = TimetableSchema
+timetable.TimetableSchemaDay = TimetableSchemaDay
+##############################################################################

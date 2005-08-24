@@ -174,6 +174,24 @@ from schooltool.timetable.model import SequentialDaysTimetableModel
 from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
 from schooltool.timetable.model import TimetableCalendarEvent
 
+
+##############################################################################
+# BBB: Make sure the old data object references are still there.
+from zope.deprecation import deprecated
+
+from schooltool.timetable.term import TermContainer, Term
+deprecated(('TermContainer', 'Term'),
+           'This class has moved to schooltool.timetable.term. '
+           'The reference will be gone in 0.15')
+
+# Those classes are added from the schema module to avoid recursive imports
+deprecated(('TimetableSchemaContainer', 'TimetableSchema',
+            'TimetableSchemaDay'),
+           'This class has moved to schooltool.timetable.schema. '
+           'The reference will be gone in 0.15')
+
+##############################################################################
+
 #
 # Timetabling
 #

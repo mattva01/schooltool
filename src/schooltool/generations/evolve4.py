@@ -17,14 +17,15 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
+Upgrade SchoolTool to generation 3.
 
-$Id$
+This generation ensures that all schooltool applications have a levels folder
+and a manager group.
+
+$Id: evolve2.py 4259 2005-07-21 00:57:30Z tvon $
 """
 
-from zope.app.generations.generations import SchemaManager
+# XXX: Placeholder till we merge with trunk.
 
-schemaManager = SchemaManager(
-    minimum_generation=5,
-    generation=5,
-    package_name='schooltool.generations')
+def evolve(context):
+    pass

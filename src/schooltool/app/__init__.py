@@ -22,6 +22,59 @@ SchoolTool Application
 $Id$
 """
 
+##############################################################################
+# BBB: Make sure the old data object references are still there.
+from zope.deprecation import deprecated
+
+from schooltool.app.app import SchoolToolApplication
+from schooltool.app.app import ApplicationPreferences
+deprecated(('ApplicationPreferences',),
+           'This class has moved to schooltool.app.app. '
+           'The reference will be gone in 0.15')
+
+from schooltool.app.overlay import \
+     CalendarOverlayInfo #as CalendarAndTTOverlayInfo
+class CalendarAndTTOverlayInfo(CalendarOverlayInfo):
+    def __new__(*args, **kw):
+        #import pdb; pdb.set_trace()
+        return CalendarOverlayInfo.__new__(*args, **kw)
+
+deprecated(('CalendarAndTTOverlayInfo',),
+           'This specific class has been deprecated. Use '
+           '`schooltool.app.overlay.CalendarOverlayInfo` and the '
+           '`IShowTimetables` instead. '
+           'The reference will be gone in 0.15')
+
+from schooltool.person.person import PersonContainer, Person
+from schooltool.person.preference import PersonPreferences
+from schooltool.person.details import PersonDetails
+deprecated(('PersonContainer', 'Person', 'PersonPreferences', 'PersonDetails'),
+           'This class has moved to schooltool.person.person. '
+           'The reference will be gone in 0.15')
+
+from schooltool.group.group import GroupContainer, Group
+deprecated(('GroupContainer', 'Group'),
+           'This class has moved to schooltool.group.group. '
+           'The reference will be gone in 0.15')
+
+from schooltool.resource.resource import ResourceContainer, Resource
+deprecated(('ResourceContainer', 'Resource'),
+           'This class has moved to schooltool.resource.resource. '
+           'The reference will be gone in 0.15')
+
+from schooltool.course.course import CourseContainer, Course
+deprecated(('CourseContainer', 'Course'),
+           'This class has moved to schooltool.course.course. '
+           'The reference will be gone in 0.15')
+
+from schooltool.course.section import SectionContainer, Section
+deprecated(('SectionContainer', 'Section'),
+           'This class has moved to schooltool.course.section. '
+           'The reference will be gone in 0.15')
+
+##############################################################################
+
+
 def registerTestSetup():
     from zope.interface import classImplements
     from schooltool.testing import registry

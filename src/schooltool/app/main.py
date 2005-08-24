@@ -86,7 +86,7 @@ uncomment one of the ZODB storage sections.
 
 
 st_incompatible_db_error_msg = _("""
-This is not a SchoolTool 0.10 database file, aborting.
+This is not a SchoolTool 0.11 database file, aborting.
 """).strip()
 
 
