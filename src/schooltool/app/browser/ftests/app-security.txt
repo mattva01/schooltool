@@ -8,7 +8,7 @@ First, we'll go to the Zope 3 management interface and verify that you can add
 SchoolBell instances from the add menu.  You need manager permissions
 for that.
 
-    >>> from testbrowser import Browser
+    >>> from zope.testbrowser import Browser
     >>> manager = Browser()
     >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
     >>> manager.handleErrors = False

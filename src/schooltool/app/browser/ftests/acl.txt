@@ -3,7 +3,7 @@ Access control view
 
 First, create a SchoolBell instance:
 
-    >>> from testbrowser import Browser
+    >>> from zope.testbrowser import Browser
     >>> manager = Browser()
     >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
     >>> manager.handleErrors = False

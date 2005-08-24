@@ -11,7 +11,7 @@ SchoolTool as a Zope 3 content object
 First, we'll go to the Zope 3 management interface and verify that you can add
 SchoolTool instances from the add menu.
 
-    >>> from testbrowser import Browser
+    >>> from zope.testbrowser import Browser
     >>> manager = Browser()
     >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
 

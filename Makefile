@@ -19,8 +19,11 @@ all: build
 Zope3:
 	svn co svn://svn.zope.org/repos/main/Zope3/branches/Zope-3.1 Zope3
 
+testbrowser: Zope3
+	svn co svn://svn.zope.org/repos/main/Zope3/branches/testbrowser-integration/src/zope/testbrowser Zope3/src/zope/testbrowser
+
 .PHONY: build
-build: Zope3
+build: Zope3 testbrowser
 	[ ! -d Zope3 ] || cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) setup.py build
 	$(PYTHON) remove-stale-bytecode.py

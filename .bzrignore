@@ -9,3 +9,7 @@ src/schooltool/sbapp/locales/schoolbell.pot
 ./*-Data.fs
 ./*-Data.fs.*
 ./schoolbell.log
+./build
+./Zope3
+./schoolbell.conf
+./schooltool.conf

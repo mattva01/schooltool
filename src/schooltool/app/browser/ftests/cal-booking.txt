@@ -9,7 +9,7 @@ Set up
 
 We will obviously need a SchoolTool instance.
 
-    >>> from testbrowser import Browser
+    >>> from zope.testbrowser import Browser
     >>> manager = Browser()
     >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
     >>> manager.handleErrors = False

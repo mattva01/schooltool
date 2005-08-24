@@ -5,7 +5,7 @@ Level Management and Academic Workflow via the Web UI
 This document presents the management of levels and the academic career of a
 student via a promotion workflow from the perspective of the Web UI.
 
-  >>> from testbrowser import Browser
+  >>> from zope.testbrowser import Browser
   >>> browser = Browser()
   >>> browser.addHeader('Authorization', 'Basic mgr:mgrpw')
 
@@ -133,7 +133,7 @@ career:
 
 We now select the student which we want to enroll in the school.
 
-  >>> form = browser.forms['enroll']
+  >>> form = browser.getForm(name='enroll')
   >>> form.getControl(name='ids:list').value = ['srichter']
   >>> form.submit('Enroll')
 
@@ -149,7 +149,7 @@ We now select the student which we want to enroll in the school.
 Now that the student is enrolled, we can initialize him at a particular
 level. Our student will enter the first grade:
 
-  >>> form = browser.forms['initialize']
+  >>> form = browser.getForm(name='initialize')
   >>> ctrl = form.getControl(name='ids:list')
   >>> id = ctrl.options[0]
   >>> ctrl.value = [id]
@@ -172,7 +172,7 @@ level. Our student will enter the first grade:
 
 The student passes the first grade
 
-  >>> form = browser.forms['outcome']
+  >>> form = browser.getForm(name='outcome')
   >>> ctrl = form.getControl(name='ids:list')
   >>> id = ctrl.options[0]
   >>> ctrl.value = [id]
@@ -189,7 +189,7 @@ The student passes the first grade
 
 but fails the second grade the first time around:
 
-  >>> form = browser.forms['outcome']
+  >>> form = browser.getForm(name='outcome')
   >>> ctrl = browser.getControl(name='ids:list')
   >>> id = ctrl.options[0]
   >>> ctrl.value = [id]
@@ -206,7 +206,7 @@ but fails the second grade the first time around:
 
 If you forget to select the student, you get a nice notice:
 
-  >>> form = browser.forms['outcome']
+  >>> form = browser.getForm(name='outcome')
   >>> ctrl = form.getControl(name='ids:list')
   >>> id = ctrl.options[0]
   >>> browser.getControl(name=id+'.outcome').value = ['fail']
@@ -221,7 +221,7 @@ If you forget to select the student, you get a nice notice:
 Now we finally pass the student, so he will graduate; that means he will
 appear at the top of the list again:
 
-  >>> form = browser.forms['outcome']
+  >>> form = browser.getForm(name='outcome')
   >>> ctrl = form.getControl(name='ids:list')
   >>> id = ctrl.options[0]
   >>> ctrl.value = [id]

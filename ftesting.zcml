@@ -5,7 +5,7 @@
   <include file="schooltool-site.zcml" />
 
   <include package="zope.app.securitypolicy.tests" file="functional.zcml" />
-  <include package="testbrowser.ftests" file="ftesting.zcml" />
+  <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
   <include files="schooltool-includes/*-ftesting.zcml" />
 
   <unauthenticatedPrincipal id="zope.anybody" title="Unauthenticated User" />
