@@ -48,7 +48,7 @@ class PluggableTraverser(object):
                 pass
 
         # 2. The traversers did not have an answer, so let's see whether it is
-        #    a view. 
+        #    a view.
         view = queryMultiAdapter((self.context, request), name=name)
         if view is not None:
             return view
