@@ -292,7 +292,7 @@ Editing view should have a link to its booking view:
     <Link text='Book resources'
           url='.../frog/calendar/dummy-uid/booking.html'>
 
-Lets book the mud again (Regression test for 266, deletion of events
+Let's book the mud again (Regression test for 266, deletion of events
 that book resources should remove events from resource calendars):
 
     >>> frog.getLink('Book resources').click()
@@ -337,7 +337,7 @@ Yet mud is not booked anymore:
     </td>
     ...
 
-Lets book it again:
+Let's book it again:
 
     >>> frog.getControl('mud').selected = True
     >>> frog.getControl('Book').click()
@@ -370,8 +370,7 @@ And it should not be seen in mud's calendar too:
     >>> "dummy-uid" in frog.contents
     False
 
-Let's do some event clashing, first we set up some overlapping
-events:
+Let's do some event clashing, first we set up some overlapping events:
 
     >>> print http(r"""
     ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
@@ -411,7 +410,7 @@ events:
     Set-Cookie: ...
     <BLANKLINE>
 
-Now let's allow frog access all the resources:
+Now let's allow frog access all resources:
 
     >>> manager.open('http://localhost/frogpond')
 
@@ -450,7 +449,7 @@ If we book some resources for the second event,
     >>> frog.getControl('Book').click()
 
 we should see the conflicts when booking the for the events overlapping
-"Test event 1":
+"Test event1":
 
     >>> frog.open('http://localhost/frogpond/persons/frog/calendar/dummy-uid1')
     >>> frog.getLink('edit resources').click()
@@ -499,7 +498,7 @@ we should see the conflicts when booking the for the events overlapping
       </fieldset>
     ...
 
-Unless we are looking at "Test event 2" itself:
+Unless we are looking at "Test event2" itself:
 
     >>> frog.open('http://localhost/frogpond/persons/frog/calendar/dummy-uid2')
     >>> frog.getLink('edit resources').click()
@@ -527,3 +526,81 @@ Unless we are looking at "Test event 2" itself:
       <input type="hidden" value="1" name="marker-mud" />
     </th>
     ...
+
+Let's add another person, frog's boss:
+
+    >>> manager.open('http://localhost/frogpond/persons')
+    >>> manager.getLink('New Person').click()
+
+    >>> manager.getControl('Full name').value = 'Stork'
+    >>> manager.getControl('Username').value = 'stork'
+    >>> manager.getControl('Password').value = 'pwd'
+    >>> manager.getControl('Verify password').value = 'pwd'
+    >>> manager.getControl('Add').click()
+
+    >>> 'Stork' in manager.contents
+    True
+
+The boss decides to take a mud bath, so he creates an event.
+
+    >>> print http(r"""
+    ... PUT /frogpond/persons/stork/calendar/calendar.ics HTTP/1.1
+    ... Host: localhost:7080
+    ... Authorization: Basic stork:pwd
+    ... Content-Type: text/calendar
+    ...
+    ... BEGIN:VCALENDAR
+    ... VERSION:2.0
+    ... PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
+    ... BEGIN:VEVENT
+    ... UID:smartie-uid
+    ... SUMMARY:Mud bath
+    ... DTSTART:20050807T100000
+    ... DURATION:PT2H
+    ... DTSTAMP:20050818T150000
+    ... END:VEVENT
+    ... END:VCALENDAR
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: 0
+    Set-Cookie: ...
+    <BLANKLINE>
+
+Stork should have access to the resources:
+
+    >>> manager.open(
+    ...     'http://localhost/frogpond/resources/mud/calendar/acl.html')
+    >>> ctrl = manager.getControl(name='sb.person.stork')
+    >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
+    >>> manager.getControl('Set Access', index=1).click()
+
+And then stork books mud.
+
+    >>> stork = Browser()
+    >>> stork.open('http://localhost/frogpond/')
+    >>> stork.getLink('Log In').click()
+    >>> stork.getControl('Username').value = 'stork'
+    >>> stork.getControl('Password').value = 'pwd'
+    >>> stork.getControl('Log in').click()
+
+    >>> stork.open(
+    ...     'http://localhost/frogpond/persons/stork/calendar/smartie-uid')
+    >>> stork.getLink('edit resources').click()
+    >>> stork.getControl('mud').selected = True
+    >>> stork.getControl('Book').click()
+
+Frog should still be able to see the resource's calendar
+(regression test for issue 352):
+
+    >>> frog.open('http://localhost/frogpond/resources/mud/calendar/2005-08-07')
+    >>> print frog.contents
+    <BLANKLINE>
+    ...
+    <h6 ...>
+      <a href="http://localhost/frogpond/resources/mud/calendar/smartie-uid"
+         title="Mud bath">
+        Mud bath
+      ...
+    </h6>
+    ...
+

@@ -25,6 +25,7 @@ import unittest
 from pprint import pprint
 
 from zope.i18n import translate
+from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app import zapi
@@ -73,6 +74,59 @@ def doctest_ApplicationView():
 
         >>> request.response.getStatus()
         599
+
+    """
+
+def doctest_ContainerView():
+    r"""Test for ContainerView
+
+    Let's create some persons to toy with in a person container:
+
+        >>> from schooltool.app.browser.app import ContainerView
+        >>> from schooltool.person.person import Person, PersonContainer
+        >>> from schooltool.person.interfaces import IPerson
+        >>> setup.setUpAnnotations()
+
+        >>> personContainer = PersonContainer()
+        >>> from zope.app.traversing.interfaces import IContainmentRoot
+        >>> directlyProvides(personContainer, IContainmentRoot)
+
+        >>> personContainer['pete'] = Person('pete', 'Pete Parrot')
+        >>> personContainer['john'] = Person('john', 'Long John')
+        >>> personContainer['frog'] = Person('frog', 'Frog Man')
+        >>> personContainer['toad'] = Person('toad', 'Taodsworth')
+        >>> request = TestRequest()
+        >>> view = ContainerView(personContainer, request)
+
+    After calling update, we should have a batch setup with everyone in it:
+
+        >>> view.update()
+        >>> [p.title for p in view.batch]
+        ['Frog Man', 'Long John', 'Pete Parrot', 'Taodsworth']
+
+
+    We can alter the batch size and starting point through the request
+
+        >>> request.form = {'batch_start': '2',
+        ...                 'batch_size': '2'}
+        >>> view.update()
+        >>> [p.title for p in view.batch]
+        ['Pete Parrot', 'Taodsworth']
+
+    We can search through the request:
+
+        >>> request.form = {'SEARCH': 'frog'}
+        >>> view.update()
+        >>> [p.title for p in view.batch]
+        ['Frog Man']
+
+    And we can clear the search (which ignores any search value):
+
+        >>> request.form = {'SEARCH': 'frog',
+        ...                 'CLEAR_SEARCH': 'on'}
+        >>> view.update()
+        >>> [p.title for p in view.batch]
+        ['Frog Man', 'Long John', 'Pete Parrot', 'Taodsworth']
 
     """
 

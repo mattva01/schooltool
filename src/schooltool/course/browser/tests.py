@@ -556,7 +556,26 @@ def doctest_SectionInstructorView():
         >>> [person.title for person in section.instructors]
         ['Ms. Stevens']
 
+    We also use a batch in this view
 
+        >>> [i.title for i in view.batch]
+        ['Mr. Smith', 'Mrs. Jones']
+
+    Which is searchable
+
+        >>> request.form = {'SEARCH': 'Smith'}
+        >>> view = SectionInstructorView(section, request)
+        >>> view.update()
+        >>> [i.title for i in view.batch]
+        ['Mr. Smith']
+
+    And the search can be cleared, ignoring any search value passed:
+
+        >>> request.form = {'SEARCH': 'Smith', 'CLEAR_SEARCH': 'on'}
+        >>> view = SectionInstructorView(section, request)
+        >>> view.update()
+        >>> [i.title for i in view.batch]
+        ['Mr. Smith', 'Mrs. Jones']
     """
 
 

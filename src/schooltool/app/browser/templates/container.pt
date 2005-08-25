@@ -14,10 +14,24 @@
              tal:define="batch view/batch;
                          canModify view/canModify">
   <tal:if tal:condition="batch">
-    <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    <tal:if condition="request/SEARCH|nothing">
+      <tal:block define="extra_url python:'&SEARCH=%s' % request.get('SEARCH')">
+        <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+      </tal:block>
+    </tal:if>
+    <tal:if condition="not:request/SEARCH|nothing">
+      <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    </tal:if>
   </tal:if>
   <div metal:use-macro="view/@@view_macros/batch-search"/>
   <tal:if condition="batch">
+    <div class="count">
+      <span i18n:translate="">Showing</span>
+      <span tal:content="python:len(batch)"/>
+      <span i18n:translate="">of</span>
+      <span tal:content="python:len(batch.list)"/>
+      <span i18n:translate="">items</span>
+    </div>
     <form tal:condition="canModify"
           method="post"
           tal:attributes="action string:${context/@@absolute_url}/delete.html">

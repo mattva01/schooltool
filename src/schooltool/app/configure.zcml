@@ -226,7 +226,7 @@
   <!-- XXX It feels wrong to tweak permissions of objects in a sibling. -->
 
   <content class="schooltool.calendar.mixins.ExpandedCalendarEvent">
-    <require permission="schooltool.view"
+    <require permission="schooltool.viewCalendar"
              interface="schooltool.calendar.interfaces.IExpandedCalendarEvent"
              attributes="resources"
              />

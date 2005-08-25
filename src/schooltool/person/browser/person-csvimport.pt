@@ -14,7 +14,7 @@
            tal:repeat="msg view/success" tal:content="msg" />
       </div>
       <div class="error" tal:condition="view/errors"
-        tal:repeat="err view/errors" tal:content="err" />
+        tal:repeat="err view/errors" tal:content="err" i18n:translate="" />
 
       <form method="POST" enctype="multipart/form-data" class="standalone"
         tal:attributes="action request/URL">

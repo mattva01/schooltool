@@ -154,6 +154,20 @@ CourseSections = RelationshipSchema(URICourseSections,
 # schooltool.app.membership).
 #
 
+def grantViewPermissionToMember(member, map):
+    """Allow a member to view the calendar of a section."""
+    memberid = 'sb.person.' + member.username
+    map.grantPermissionToPrincipal('schooltool.view', memberid)
+    map.grantPermissionToPrincipal('schooltool.viewCalendar',
+                                   memberid)
+
+def unsetViewPermissionToMember(member, map):
+    """Unset a member's permission to view the calendar of a section."""
+    memberid = 'sb.person.' + member.username
+    map.unsetPermissionForPrincipal('schooltool.view', memberid)
+    map.unsetPermissionForPrincipal('schooltool.viewCalendar',
+                                   memberid)
+
 def updateStudentCalendars(event):
     """Add section's calendar to students overlaid calendars."""
 
@@ -168,10 +182,15 @@ def updateStudentCalendars(event):
 
     member = event[URIMember]
 
+    section_map = IPrincipalPermissionManager(section)
+
     if IRelationshipAddedEvent.providedBy(event):
         if IPerson.providedBy(member) and \
-                      section.calendar not in member.overlaid_calendars:
+                            section.calendar not in member.overlaid_calendars:
             member.overlaid_calendars.add(section.calendar)
+
+            grantViewPermissionToMember(member, section_map)
+
         elif IGroup.providedBy(member):
             for person in member.members:
                 # we don't handle nested groups any more so there
@@ -180,12 +199,22 @@ def updateStudentCalendars(event):
                 if IPerson.providedBy(person) and \
                          section.calendar not in person.overlaid_calendars:
                     person.overlaid_calendars.add(section.calendar)
+
+                    grantViewPermissionToMember(person, section_map)
+
     elif IRelationshipRemovedEvent.providedBy(event):
-        if IPerson.providedBy(member) and \
-                              section.calendar in member.overlaid_calendars:
-            member.overlaid_calendars.remove(section.calendar)
+        if IPerson.providedBy(member):
+            unsetViewPermissionToMember(member, section_map)
+
+            if section.calendar in member.overlaid_calendars:
+                member.overlaid_calendars.remove(section.calendar)
+
         elif IGroup.providedBy(member):
             for person in member.members:
-                if IPerson.providedBy(person) and \
-                         section.calendar in person.overlaid_calendars:
-                    person.overlaid_calendars.remove(section.calendar)
+                if IPerson.providedBy(person):
+
+                    unsetViewPermissionToMember(person, section_map)
+
+                    if section.calendar in person.overlaid_calendars:
+                        person.overlaid_calendars.remove(section.calendar)
+

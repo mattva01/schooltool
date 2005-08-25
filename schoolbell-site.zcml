@@ -37,6 +37,11 @@
 
   <grantAll role="zope.Manager" />
 
+  <unauthenticatedPrincipal id="zope.anybody" title="Unauthenticated User" />
+  <unauthenticatedGroup id="zope.Anybody" title="Unauthenticated Users" />
+  <authenticatedGroup id="zope.Authenticated" title="Authenticated Users" />
+  <everybodyGroup id="zope.Everybody" title="All Users" />
+
   <!-- Provide local overrides of standard configurations-->
   <includeOverrides files="schoolbell-includes/*-overrides.zcml" />
 

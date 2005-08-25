@@ -31,6 +31,7 @@ from zope.app.form.utility import getWidgetsData
 from zope.app.publisher.browser import BrowserView
 
 from schooltool.batching import Batch
+from schooltool.timetable.interfaces import ITimetables
 from schooltool.app.browser.app import ContainerView, BaseEditView
 from schooltool.group.interfaces import IGroup
 from schooltool.person.interfaces import IPerson
@@ -48,6 +49,10 @@ class SectionContainerView(ContainerView):
     index_title = _("Section index")
     add_title = _("Add a new section")
     add_url = "+/addSchoolToolSection.html"
+
+    # XXX: very hacky, but necessary for now. :-(
+    def getTimetables(self, obj):
+        return ITimetables(obj).timetables
 
 
 class SectionView(BrowserView):
@@ -165,11 +170,12 @@ class SectionInstructorView(BrowserView):
         elif 'CANCEL' in self.request:
             self.request.response.redirect(context_url)
 
-        if 'SEARCH' in self.request:
+        if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
             searchstr = self.request['SEARCH'].lower()
             results = [item for item in self.getPotentialInstructors()
                        if searchstr in item.title.lower()]
         else:
+            self.request.form['SEARCH'] = ''
             results = self.getPotentialInstructors()
 
         start = int(self.request.get('batch_start', 0))

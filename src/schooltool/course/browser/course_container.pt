@@ -14,9 +14,23 @@
                          canModify view/canModify">
 
   <p tal:condition="not:batch" i18n:translate="">There are none.</p>
-  <tal:block tal:condition="batch">
-    <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+  <tal:if tal:condition="batch">
+    <tal:if condition="request/SEARCH|nothing">
+      <tal:block define="extra_url python:'&SEARCH=%s' % request.get('SEARCH')">
+        <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+      </tal:block>
+    </tal:if>
+    <tal:if condition="not:request/SEARCH|nothing">
+      <div metal:use-macro="view/@@batch_macros/batch-navigation"/>
+    </tal:if>
     <div metal:use-macro="view/@@view_macros/batch-search"/>
+    <div class="count">
+      <span i18n:translate="">Showing</span>
+      <span tal:content="python:len(batch)"/>
+      <span i18n:translate="">of</span>
+      <span tal:content="python:len(batch.list)"/>
+      <span i18n:translate="">items</span>
+    </div>
     <form method="post"
           tal:condition="canModify"
           tal:attributes="action string:${context/@@absolute_url}/delete.html">
@@ -60,7 +74,7 @@
         </ul>
       </li>
     </ul>
-  </tal:block>
+  </tal:if>
 
 </metal:block>
 </body>

@@ -128,7 +128,7 @@ update-rosetta-pot:
 	curl -kc ../launchpad_cookies -b ../launchpad_cookies\
 	    -F "file=@src/schooltool/locales/schooltool.pot" \
 	    -F "UPLOAD=Upload" \
-	    https://launchpad.ubuntu.com/products/schooltool/0.10-rc1/+pots/schooltool/+edit > ../launchpad_log2
+	    https://launchpad.ubuntu.com/products/schooltool/0.10-rc1/+pots/schooltool/+upload > ../launchpad_log2
 	rm ../launchpad_cookies
 
 .PHONY: get-rosetta-translations

@@ -147,9 +147,11 @@ Let's go to a group, and look at its members.
           </span>
       </div>
       <div class="batch-search">
-        <input type="text" name="SEARCH" />
+        <input id="batch-search-box" type="text" name="SEARCH" 
+               value="" />
         <input type="submit" name="SEARCH_BUTTON"
                value="Find Now" />
+        <input type="submit" name="CLEAR_SEARCH" value="Clear" />
       </div>
         <div class="member_list">
           <div>
@@ -244,6 +246,7 @@ Let's add a few members.
     ...
     <fieldset>
       <legend>Current Members</legend>
+    <BLANKLINE>
         <div>
           <label>
             <input type="checkbox"
@@ -311,9 +314,11 @@ This particular bit also serves as a regression test for issue 341.
         There are none to add.
       </p>
       <div class="batch-search">
-        <input type="text" name="SEARCH" />
+        <input id="batch-search-box" type="text" name="SEARCH"
+               value="something" />
         <input type="submit" name="SEARCH_BUTTON"
                value="Find Now" />
+        <input type="submit" name="CLEAR_SEARCH" value="Clear" />
       </div>
     ...
 

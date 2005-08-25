@@ -1171,6 +1171,12 @@ table.event_booking td.booked {
     background: #314e6c;
 }
 
+/* "Showing aaa of bbb items" */
+div.count {
+  font-size: smaller;
+  color: #76797c;
+}
+
 /* Internal error pages */
 
 pre.traceback {

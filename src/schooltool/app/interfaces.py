@@ -132,7 +132,10 @@ class ISchoolToolApplication(container.interfaces.IReadContainer):
 
     title = zope.schema.TextLine(
         title=_("Title"),
-        description=_("Title of the application."))
+        required=True,
+        description=_("""The name for the school or organization running
+            this server.  This will be displayed on the public calendar, the
+            bottom of all pages and in the page title."""))
 
 
 class IApplicationPreferences(zope.interface.Interface):
@@ -140,7 +143,7 @@ class IApplicationPreferences(zope.interface.Interface):
 
     title = zope.schema.TextLine(
         title=_("Title"),
-        required=False,
+        required=True,
         description=_("""The name for the school or organization running
             this server.  This will be displayed on the public calendar, the
             bottom of all pages and in the page title."""))

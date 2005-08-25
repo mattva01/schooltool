@@ -71,7 +71,7 @@ Installing and Configuring with Distutils (optional)
 
 WARNING: distutils does not yet take care of removing old packages or ensuring
 that dependencies are correct. If you don't know how to resolve these issues
-manually, you should probably use one of the packages or run SchoolBell from
+manually, you should probably use one of the packages or run SchoolTool from
 an unpacked tarball/subversion checkout.
 
 It is possible to install SchoolTool using python distutils.  To do this, you
@@ -112,6 +112,11 @@ an existing one.  You can customize the location of the database and a few
 other parameters in a configuration file called schooltool.conf.  There's
 an example file called schooltool.conf.in, you can simply rename it and modify
 to suit your needs.
+
+Beware that the file which contains the database, Data.fs, is not given any
+special permissions to prevent it from being read by other users by default.
+You will have to change the umask or the permissions of the file manually to
+prevent unauthorized access.
 
 By default a user with manager privileges is created in the new database.
 The username is 'manager', and the password is 'schooltool'.  The database

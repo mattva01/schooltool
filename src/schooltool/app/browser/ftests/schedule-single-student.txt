@@ -391,7 +391,7 @@ Lets add John to Birdwatching 1:
             </td>
     ...
 
-If john will be added to bw1 and bw2 a conflict should arise:
+If john is added to bw1 and bw2 a conflict should arise:
 
     >>> print http(r"""
     ... POST /frogpond/persons/john/@@schedule.html HTTP/1.1
@@ -436,17 +436,17 @@ If john will be added to bw1 and bw2 a conflict should arise:
             <td>
               <select name="sections:list">
                 <option value="">none</option>
-                <option value="birdwatching-1"> -- Birding</option>
                 <option selected="selected"
-                        value="birdwatching-2"> -- Birding</option>
+                        value="birdwatching-1"> -- Birding</option>
+                <option value="birdwatching-2"> -- Birding</option>
               </select>
             </td>
             <td>
               <select name="sections:list">
                 <option value="">none</option>
+                <option value="birdwatching-1"> -- Birding</option>
                 <option selected="selected"
-                        value="birdwatching-1"> -- Birding</option>
-                <option value="birdwatching-2"> -- Birding</option>
+                        value="birdwatching-2"> -- Birding</option>
               </select>
             </td>
             <td class="conflict">

@@ -8,11 +8,6 @@
   <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
   <include files="schooltool-includes/*-ftesting.zcml" />
 
-  <unauthenticatedPrincipal id="zope.anybody" title="Unauthenticated User" />
-  <unauthenticatedGroup id="zope.Anybody" title="Unauthenticated Users" />
-  <authenticatedGroup id="zope.Authenticated" title="Authenticated Users" />
-  <everybodyGroup id="zope.Everybody" title="All Users" />
-
   <!-- Principal that tests generally run as -->
 
   <principal id="zope.mgr" title="Manager" login="mgr" password="mgrpw" />

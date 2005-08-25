@@ -449,21 +449,32 @@ class PersonTimetableSetupView(TimetableSetupViewMixin):
                 yield {'title': day_id,
                        'periods': list(periods(day_id, day))}
 
+        def sortedbytitle(seq, key=None):
+            l = list(seq)
+            if key is None:
+                l.sort(lambda x, y: cmp(x.title, y.title))
+            else:
+                l.sort(lambda x, y: cmp(x[key].title, y[key].title))
+            return l
+
         def periods(day_id, day):
             for period_id in day.periods:
                 sections = section_map[day_id, period_id]
+                sections = sortedbytitle(sections)
 
                 in_group = []
-                for group in self.context.groups:
+                for group in sortedbytitle(self.context.groups):
                     for section in sections:
                         if group in section.members:
                             in_group.append({'group': group,
                                             'section': section})
+                in_group = sortedbytitle(in_group, 'section')
 
                 selected = []
                 if not in_group:
                     selected = [section for section in sections
                                 if self.context in section.members]
+                    selected = sortedbytitle(selected)
                 if not selected:
                     selected = [None]
 

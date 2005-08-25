@@ -246,8 +246,17 @@ Now he can't edit the info:
     >>> print frog.url
     http...?forbidden=yes&nexturl=http://.../persons/frog/@@edit.html
 
+
+But still can see his calendar (regression test for Issue354 User
+can't View calendar without Edit permission):
+
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-08-22')
+    >>> 'Calendar for Toad - Monday, 2005-08-22' in frog.contents
+    True
+
 The same goes for the groups and resources edit forms.  Not allowed:
 
+    >>> frog.open('http://localhost/frogpond/')
     >>> frog.getLink('Groups').click()
     >>> frog.getLink('Venerable Frogs').click()
     >>> 'Edit Info' in frog.contents
@@ -332,3 +341,29 @@ Now, the group join must succeed.
     ...
       <legend>Add Members</legend>
     ...
+
+Regression test to see if recurring events in site-wide calendar can be viewed
+by unauthenticated users (issue345):
+
+  Add a recurring event to the site-wide calendar:
+
+    >>> manager.open('http://localhost/frogpond/calendar')
+    >>> manager.getLink('New Event').click()
+
+    >>> manager.getControl('Title').value = 'Something'
+    >>> manager.getControl('Date').value = '2005-02-03'
+    >>> manager.getControl('Time').value = '01:00'
+    >>> manager.getControl('Duration').value = '500'
+    >>> manager.getControl('Recurring').selected = True
+    >>> manager.getControl(name='field.recurrence.used').value = '1'
+    >>> manager.getControl('Repeat until').selected = True
+    >>> manager.getControl(name='field.until').value = '2005-02-08'
+    >>> manager.getControl('Add').click()
+
+  Make sure unauthenticated does not get redirected to the login page
+
+    >>> anonymous = Browser()
+    >>> anonymous.handleErrors = False
+    >>> anonymous.open('http://localhost/frogpond/calendar/2005-02-03')
+    >>> print anonymous.url
+    http://localhost/frogpond/calendar/2005-02-03

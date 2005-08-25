@@ -74,11 +74,12 @@ class ContainerView(BrowserView):
     """
 
     def update(self):
-        if 'SEARCH' in self.request:
+        if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
             searchstr = self.request['SEARCH'].lower()
             results = [item for item in self.context.values()
                        if searchstr in item.title.lower()]
         else:
+            self.request.form['SEARCH'] = ''
             results = self.context.values()
 
         start = int(self.request.get('batch_start', 0))

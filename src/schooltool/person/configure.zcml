@@ -33,8 +33,10 @@
 
   <content class=".preference.PersonPreferences">
     <require
+        permission="schooltool.view"
+        interface=".interfaces.IPersonPreferences" />
+    <require
         permission="schooltool.edit"
-        interface=".interfaces.IPersonPreferences"
         set_schema=".interfaces.IPersonPreferences" />
   </content>
 

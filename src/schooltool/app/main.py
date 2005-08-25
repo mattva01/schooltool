@@ -299,34 +299,10 @@ def daemonize():
     os.dup(0)
 
 
-LOCALIZED_PRINCIPALS = u"""\
-<?xml version="1.0" encoding="utf-8"?>
-<configure xmlns="http://namespaces.zope.org/zope">
-
-  <unauthenticatedPrincipal id="zope.anybody" title="%(unauth_user)s" />
-  <unauthenticatedGroup id="zope.Anybody" title="%(unauth_users)s" />
-  <authenticatedGroup id="zope.Authenticated" title="%(auth_users)s" />
-  <everybodyGroup id="zope.Everybody" title="%(all_users)s" />
-
-</configure>
-""" % {'unauth_user': catalog.ugettext("Unauthenticated User"),
-       'unauth_users': catalog.ugettext("Unauthenticated Users"),
-       'auth_users': catalog.ugettext("Authenticated Users"),
-       'all_users': catalog.ugettext("All Users")}
-
-# Mark strings for i18n extractor
-_("Unauthenticated User"), _("Unauthenticated Users")
-_("Authenticated Users"), _("All Users")
-
-LOCALIZED_PRINCIPALS = LOCALIZED_PRINCIPALS.encode('utf-8')
-
-
 class StandaloneServer(object):
 
     ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__),
                                   'config-schema.xml')
-
-    LOCALIZED_PRINCIPALS = LOCALIZED_PRINCIPALS
 
     usage_message = st_usage_message
     no_storage_error_msg = st_no_storage_error_msg
@@ -349,7 +325,6 @@ class StandaloneServer(object):
         zope.configuration.xmlconfig.registerCommonDirectives(context)
         context = zope.configuration.xmlconfig.file(
             self.siteConfigFile, context=context)
-        zope.configuration.xmlconfig.string(self.LOCALIZED_PRINCIPALS, context)
 
         # Store the configuration context
         from zope.app.appsetup import appsetup

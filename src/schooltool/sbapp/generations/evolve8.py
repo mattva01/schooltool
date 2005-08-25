@@ -17,14 +17,24 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
+Upgrade to generation 8.
 
-$Id$
+Issue349 - while the original evolution script (evolve6) evolved
+properties that were set properly. Default settings 'YYYY-MM-DD' were
+left unmodified.
+
+$Id: evolve6.py 4741 2005-08-16 17:41:15Z ignas $
 """
 
-from zope.app.generations.generations import SchemaManager
+from zope.app.publication.zopepublication import ZopePublication
+from zope.app.generations.utility import findObjectsProviding
 
-schemaManager = SchemaManager(
-    minimum_generation=8,
-    generation=8,
-    package_name='schoolbell.app.generations')
+from schoolbell.app.interfaces import IHavePreferences, IPersonPreferences
+
+def evolve(context):
+    root = context.connection.root().get(ZopePublication.root_name, None)
+    for person in findObjectsProviding(root, IHavePreferences):
+        prefs = IPersonPreferences(person)
+
+        if prefs.dateformat == 'YYYY-MM-DD':
+            prefs.dateformat = '%Y-%m-%d'

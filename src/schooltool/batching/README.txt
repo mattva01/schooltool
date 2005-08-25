@@ -40,9 +40,9 @@ call the macro like this:
 This will give you a navigation bar that (after CSS is applied) looks roughly
 like this:
 
- +----------------------------------------------------+----------------------+
- | << previous 10         1 2 3 4 5        next 10 >> | show more   show all |
- +----------------------------------------------------+----------------------+
+    +------------------------------------------------------------+
+    | << previous 10         1 2 3 4 5 6 7 8 9        next 10 >> |
+    +------------------------------------------------------------+
 
 
 The 'previous' link will not actually be a link if there is no previous batch 

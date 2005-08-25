@@ -298,7 +298,7 @@ def doctest_PersonTimetableSetupView():
           10:00: [] [none]
         Tue
            9:00: [] [none]
-          10:00: [Math, History] [none]
+          10:00: [History, Math] [none]
 
         >>> math.members.add(context)
 
@@ -309,7 +309,7 @@ def doctest_PersonTimetableSetupView():
           10:00: [] [none]
         Tue
            9:00: [] [none]
-          10:00: [Math, History] [Math]
+          10:00: [History, Math] [Math]
 
     And finally, __call__ ties everything together -- it processes the form and
     renders a page template.
@@ -388,7 +388,7 @@ def doctest_PersonTimetableSetupView():
           10:00: [] [none]
         Tue
            9:00: [] [none]
-          10:00: [Math, History] [none]
+          10:00: [History, Math] [none]
 
     When people are members of a section as part of a form (group) we don\'t
     allow changing that period from here.  They must be removed from the
@@ -426,19 +426,19 @@ def doctest_PersonTimetableSetupView():
               <tr class="conflict">
                 <th>10:00</th>
                 <td>
-                  <a href="http://127.0.0.1/sections/math">Math</a>
-                  <span class="hint">
-                    <span>as part of</span>
-                    <a href="http://127.0.0.1/groups/juniors">Juniors</a>
-                  </span>
-                </td>
-                <td>
                   <a href="http://127.0.0.1/sections/history">History</a>
                   <span class="hint">
                   <span>as part of</span>
                   <a href="http://127.0.0.1/groups/juniors">Juniors</a>
                 </span>
               </td>
+                <td>
+                  <a href="http://127.0.0.1/sections/math">Math</a>
+                  <span class="hint">
+                    <span>as part of</span>
+                    <a href="http://127.0.0.1/groups/juniors">Juniors</a>
+                  </span>
+                </td>
               <td class="conflict">
               Scheduling conflict.
               </td>

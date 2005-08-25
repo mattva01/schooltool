@@ -247,6 +247,42 @@ Frog's overlay portlet has just his own calendar:
         </table>
     ...
 
+As does Toad's:
+
+    >>> toad = Browser()
+    >>> toad.open('http://localhost/frogpond/')
+    >>> toad.getLink('Log In').click()
+    >>> toad.getControl('Username').value = 'toad'
+    >>> toad.getControl('Password').value = 'doat'
+    >>> toad.getControl('Log in').click()
+
+    >>> frog.getLink('My Calendar').click()
+    >>> print frog.contents
+    <!DOCTYPE ...>
+    ...
+        <table class="overlays">
+    <BLANKLINE>
+          <tr>
+            <th style="text-align: center">
+              <acronym title="Personal calendar">Cal</acronym>
+            </th>
+            <th><acronym title="Timetable calendar">TT</acronym></th>
+            <th></th>
+            <th></th>
+          </tr>
+    <BLANKLINE>
+          <tr style="background: #9db8d2">
+            <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
+            <td><input type="checkbox" name="my_timetable"
+                       checked="checked" /></td>
+            <td style="width: 100%">My Calendar</td>
+            <td></td>
+          </tr>
+    <BLANKLINE>
+        </table>
+    ...
+
+
 Adding a teacher:
 
     >>> manager.getLink('edit instructors').click()
@@ -404,6 +440,55 @@ Now toad is in the Students div
               <a href="http://localhost/frogpond/persons/toad">Toad</a>
             </li>
           </ul>
+    ...
+
+
+Toad can see the calendar now:
+
+    >>> toad.open('http://localhost/frogpond/sections/his1/calendar')
+    >>> print toad.url
+    http://localhost/frogpond/sections/his1/calendar
+
+And Toad's overlay portlet shows the section:
+
+    >>> toad.open('http://localhost/frogpond/persons/toad/calendar')
+    >>> print toad.contents
+    <BLANKLINE>
+    ...
+        <table class="overlays">
+    <BLANKLINE>
+          <tr>
+            <th style="text-align: center">
+              <acronym title="Personal calendar">Cal</acronym>
+            </th>
+            <th><acronym title="Timetable calendar">TT</acronym></th>
+            <th></th>
+            <th></th>
+          </tr>
+    <BLANKLINE>
+          <tr style="background: #9db8d2">
+            <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
+            <td><input type="checkbox" name="my_timetable"
+                       checked="checked" /></td>
+            <td style="width: 100%">My Calendar</td>
+            <td></td>
+          </tr>
+    <BLANKLINE>
+          <tr style="background: #eed680">
+            <td><input type="checkbox" name="overlay:list"
+                       checked="checked"
+                       value="/frogpond/sections/his1" /></td>
+            <td><input type="checkbox"
+                       name="overlay_timetables:list"
+                       checked="checked"
+                       value="/frogpond/sections/his1" /></td>
+            <td style="width: 100%"> -- History</td>
+            <td><a class="go"
+                   style="background: #d1940c;
+                color: #d1940c"
+                   href="http://localhost/frogpond/sections/his1/calendar">&nbsp;</a></td>
+        </tr>
+        </table>
     ...
 
 

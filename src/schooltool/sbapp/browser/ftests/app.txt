@@ -953,3 +953,72 @@ Now 'Adam' is at the top of the list.
     ...
               <a href="http://localhost/frogpond/persons/frog">Frog</a>
     ...
+
+If we perform a search, the search value will be passed through to the batch
+navigation links allowing us to navigation through the search results.
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ... 
+    ... SEARCH=Person&SEARCH_BUTTON=Find%20Now""")
+    ... GET /frogpond/persons/?SEARCH=3 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    ...
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+          <a class="next"
+             href="?batch_start=10&amp;batch_size=10&amp;SEARCH=Person">
+            <span>Next</span>
+            <span>10</span> &raquo;
+          </a>
+    ...
+      <a href="?batch_start=0&amp;batch_size=10&amp;SEARCH=Person"
+         class="current">1</a>
+    ...
+      <a href="?batch_start=10&amp;batch_size=10&amp;SEARCH=Person">2</a>
+    ...
+      <a href="?batch_start=20&amp;batch_size=10&amp;SEARCH=Person">3</a>
+    ...
+      <a href="?batch_start=30&amp;batch_size=10&amp;SEARCH=Person">4</a>
+    ...
+
+If we click 'Clear' on the search, any search value is ignored and our batching
+links return to normal:
+
+    >>> print http(r"""
+    ... POST /frogpond/persons/ HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... Content-Type: application/x-www-form-urlencoded
+    ... 
+    ... SEARCH=Person&CLEAR_SEARCH=Clear""")
+    ... GET /frogpond/persons/?SEARCH=3 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """)
+    ...
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/html;charset=utf-8
+    <BLANKLINE>
+    ...
+          <a class="next"
+             href="?batch_start=10&amp;batch_size=10">
+            <span>Next</span>
+            <span>10</span> &raquo;
+          </a>
+    ...
+      <a href="?batch_start=0&amp;batch_size=10"
+         class="current">1</a>
+    ...
+      <a href="?batch_start=10&amp;batch_size=10">2</a>
+    ...
+      <a href="?batch_start=20&amp;batch_size=10">3</a>
+    ...
+      <a href="?batch_start=30&amp;batch_size=10">4</a>
+    ...
+
