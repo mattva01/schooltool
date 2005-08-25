@@ -28,7 +28,7 @@ from zope.deprecation import deprecated
 
 from schooltool.app.app import SchoolToolApplication
 from schooltool.app.app import ApplicationPreferences
-deprecated(('ApplicationPreferences',),
+deprecated(('SchoolToolApplication', 'ApplicationPreferences'),
            'This class has moved to schooltool.app.app. '
            'The reference will be gone in 0.15')
 

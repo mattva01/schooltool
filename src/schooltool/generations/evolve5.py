@@ -42,19 +42,12 @@ This generation converts all the old class paths to their new ones.
 
 $Id: evolve2.py 4259 2005-07-21 00:57:30Z tvon $
 """
+from zope.app.securitypolicy.securitymap import PersistentSecurityMap
 
-from zope.app.publication.zopepublication import ZopePublication
-from zope.app.generations.utility import findObjectsProviding
-from schooltool.app.interfaces import ISchoolToolApplication
-
-from schooltool.note.interfaces import IHaveNotes, INotes
-from schooltool.relationship import getRelatedObjects
-from schooltool.relationship.interfaces import IRelationshipLinks
-from schooltool.timetable.interfaces import IHaveTimetables
 from schooltool.timetable import TIMETABLES_KEY
+from schooltool.timetable.interfaces import IHaveTimetables
 from schooltool.app.cal import CALENDAR_KEY
 from schooltool.app.interfaces import IHaveCalendar
-from schooltool.app.relationships import URIInstruction, URISection
 
 
 def fixAnnotations(obj):
@@ -65,12 +58,6 @@ def fixAnnotations(obj):
             obj.__annotations__['schooltool'+key[10:]] = data
             del obj.__annotations__[key]
 
-def fixNotes(obj):
-    if IHaveNotes.providedBy(obj):
-        notes = INotes(obj)
-        notes._p_changed = True
-        for note in notes:
-            note._p_changed = True
 
 def fixCalendar(obj):
     if IHaveCalendar.providedBy(obj):
@@ -82,75 +69,53 @@ def fixCalendar(obj):
             obj.__annotations__[CALENDAR_KEY] = calendar
             del obj.calendar
 
+
 def fixTimetables(obj):
     if IHaveTimetables.providedBy(obj):
         if hasattr(obj, 'timetables'):
             obj.__annotations__[TIMETABLES_KEY] = obj.timetables
             del obj.timetables
 
-def fixRelationships(obj):
-    obj.rel_type
-    obj.my_role
-    obj.other_role
-    for link in IRelationshipLinks(obj.this):
-        link._p_changed = True
+
+def fixOverlaidCalendars(obj):
+    if hasattr(obj, 'overlaid_calendars') and \
+           hasattr(obj.overlaid_calendars, 'show_timetables'):
+        show_timetables = obj.overlaid_calendars.show_timetables
+        IShowTimetables(obj.overlaid_calendars).showTimetables = show_timetables
+        del obj.overlaid_calendars.show_timetables
+
+
+def fixPermissionMap(obj):
+    if isinstance(obj, PersistentSecurityMap):
+        for pkey, data in obj._byrow.items():
+            if pkey.startswith('schoolbell'):
+                obj._byrow['schooltool' + pkey[10:]] = data
+                del obj._byrow[pkey]
+
+        for key, data in obj._bycol.items():
+            for pkey, pdata in data.items():
+                if pkey.startswith('schoolbell'):
+                    obj._bycol[key]['schooltool' + pkey[10:]] = pdata
+                    del obj._bycol[key][pkey]
+
 
 def evolve(context):
-    root = context.connection.root().get(ZopePublication.root_name)
+    storage = context.connection._storage
+    next_oid = None
+    while True:
+        oid, tid, data, next_oid = storage.record_iternext(next_oid)
+        obj = context.connection.get(oid)
+        # Make sure that we tell all objects that they have been changed. Who
+        # cares whether it is true! :-)
+        obj._p_activate()
+        obj._p_changed = True
 
-    fixAnnotations(root)
-    fixNotes(root)
-    fixCalendar(root)
-    fixTimetables(root)
+        # Now fix up other things
+        fixAnnotations(obj)
+        fixCalendar(obj)
+        fixTimetables(obj)
+        fixOverlaidCalendars(obj)
+        fixPermissionMap(obj)
 
-    # Let's create a new authentication utility, so all old references
-    # are fixed.
-    from zope.app.component.interfaces.registration import InactiveStatus
-    from zope.app.component.interfaces.registration import IRegistered
-    from schooltool.app.security import setUpLocalAuth
-    auth = root.getSiteManager()['default']['SchoolBellAuth']
-    reg = IRegistered(auth).registrations()[0]
-    reg.status = InactiveStatus
-    reg_name = reg.__name__
-
-    del root.getSiteManager()['default'].registrationManager[reg_name]
-    del root.getSiteManager()['default']['SchoolBellAuth']
-    setUpLocalAuth(root)
-
-    # Core content components
-    for container in root.values():
-
-        fixAnnotations(container)
-        fixNotes(container)
-        container._p_changed = True
-
-        for entry in container.values():
-            fixAnnotations(entry)
-            fixNotes(entry)
-            fixCalendar(entry)
-            fixTimetables(entry)
-            entry._p_changed = True
-
-    for person in root['persons'].values():
-        if hasattr(person.overlaid_calendars, 'show_timetables'):
-            show_timetables = person.overlaid_calendars.show_timetables
-            IShowTimetables(person).showTimetables = show_timetables
-            del person.overlaid_calendars.show_timetables
-        fixRelationships(person.groups)
-        getRelatedObjects(person, URISection, rel_type=URIInstruction)
-
-    for group in root['groups'].values():
-        fixRelationships(group.members)
-
-    for course in root['courses'].values():
-        fixRelationships(course.sections)
-
-    for section in root['sections'].values():
-        fixRelationships(section.instructors)
-        fixRelationships(section.members)
-        fixRelationships(section.courses)
-
-    for schema in root['ttschemas'].values():
-        for name, day in schema.items():
-            day._p_changed = True
-
+        if next_oid is None:
+            break
