@@ -131,7 +131,7 @@ Often you are only interested in a particular element or text. The
 particular note. A list of all found nodes will be returned. The nodes will be
 returned as a serialized string.
 
-  >>> html = u'''
+  >>> html = '''
   ... <html>
   ...   <head>
   ...     <title>My Page</title>
@@ -140,7 +140,23 @@ returned as a serialized string.
   ...     <h1>This is my page!</h1>
   ...   </body>
   ... </html>
-  ... '''.encode('UTF-8')
+  ... '''
+
+  >>> print analyze.queryHTML('html/body/h1', html)[0]
+  <h1>This is my page!</h1>
+
+It works also with XHTML compliant documents.
+
+  >>> html = '''
+  ... <html xmlns="http://www.w3.org/1999/xhtml">
+  ...   <head>
+  ...     <title>My Page</title>
+  ...   </head>
+  ...   <body>
+  ...     <h1>This is my page!</h1>
+  ...   </body>
+  ... </html>
+  ... '''
 
   >>> print analyze.queryHTML('html/body/h1', html)[0]
   <h1>This is my page!</h1>

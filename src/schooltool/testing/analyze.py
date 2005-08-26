@@ -21,11 +21,13 @@ HTML Analyzation Tools
 
 $Id$
 """
+import libxml2
 # XXX: XMLDocument seems to be generally useful.
-from schooltool.app.rest.app import XMLDocument
+from schooltool.app.rest.xmlparsing import XMLDocument
 
 def queryHTML(xpath, response):
-    doc = XMLDocument(response)
+    doc = XMLDocument(libxml2.htmlParseDoc(response, 'utf-8'))
+    doc.registerNs('', 'http://www.w3.org/1999/xhtml')
     result = [str(node) for node in doc.query(xpath)]
     doc.free()
     return result
