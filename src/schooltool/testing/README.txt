@@ -111,3 +111,36 @@ the form ``setup<registry name``:
   >>> registry.setupContainerValues(container)
   >>> container.data
   [1, 2]
+
+
+HTML Analyzation Tools
+----------------------
+
+There is a set (currently one ;-) of helpful analyzation tools available.
+
+  >>> from schooltool.testing import analyze
+
+They are designed to ease the inspection of HTML and other testing output.
+
+
+Pick an Element using an XPath expression
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Often you are only interested in a particular element or text. The
+``queryHTML()`` method allows you to specify an XPath query to pick out a
+particular note. A list of all found nodes will be returned. The nodes will be
+returned as a serialized string.
+
+  >>> html = u'''
+  ... <html>
+  ...   <head>
+  ...     <title>My Page</title>
+  ...   </head>
+  ...   <body>
+  ...     <h1>This is my page!</h1>
+  ...   </body>
+  ... </html>
+  ... '''.encode('UTF-8')
+
+  >>> print analyze.queryHTML('html/body/h1', html)[0]
+  <h1>This is my page!</h1>
