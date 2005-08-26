@@ -109,6 +109,19 @@ def test_multilevel_query():
 
     """
 
+def test_xmlnode_repr():
+    """The XML Node represents itself as the serialized version of the XML.
+
+        >>> from schooltool.app.rest.xmlparsing import XMLDocument
+        >>> doc = XMLDocument('<html><body><h1>Title</h1></body></html>')
+        >>> doc.query('html/body/h1')[0]
+        '<h1>Title</h1>'
+        >>> print str(doc.query('html/body/h1')[0])
+        <h1>Title</h1>
+
+        >>> doc.free()
+    """
+
 
 def test_validate_ill_formed_document():
     """Regression test for a bug in XMLDocument.__init__.

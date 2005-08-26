@@ -477,6 +477,12 @@ class XMLNode(object):
             raise XMLXPathError('Ill-formed XPath query (%r).'
                                 % xpath_query)
 
+    def __str__(self):
+        return self._node.serialize()
+
+    def __repr__(self):
+        return "'%s'" %self._node.serialize()
+
 
 class IXMLError(IException): pass
 class IXMLParseError(IXMLError): pass
