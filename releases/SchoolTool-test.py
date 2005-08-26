@@ -8,7 +8,7 @@ def do(command):
 
 do('rm -rf SchoolTool-0.0.0*')
 do('../../../zpkgtools/bin/zpkg '
-   '-x zope.app -C SchoolTool.cfg ScholTool')
+   '-x reportlab -C SchoolTool.cfg SchoolTool')
 do('tar xozf SchoolTool-0.0.0.tgz')
 os.chdir('SchoolTool-0.0.0')
 do('./configure --prefix `pwd`/z --with-python=%s' %sys.executable)
