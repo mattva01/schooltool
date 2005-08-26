@@ -171,10 +171,14 @@ class XMLDocument(object):
                     raise XMLSchemaError("Invalid RelaxNG schema.")
                 else:
                     raise XMLParseError("Ill-formed document.")
-        try:
-            self._doc = libxml2.parseDoc(body)
-        except libxml2.parserError:
-            raise XMLParseError("Ill-formed document.")
+
+        if isinstance(body, libxml2.xmlDoc):
+            self._doc = body
+        else:
+            try:
+                self._doc = libxml2.parseDoc(body)
+            except libxml2.parserError:
+                raise XMLParseError("Ill-formed document.")
         self._xpathctx = self._doc.xpathNewContext()
         self.namespaces = {}
         if namespaces:
