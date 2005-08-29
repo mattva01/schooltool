@@ -32,6 +32,8 @@ from zope.app.publisher.browser import BrowserView
 from zope.app.testing.functional import FunctionalTestSetup
 from zope.app.testing.functional import FunctionalDocFileSuite
 
+from schooltool.testing import analyze
+
 class BrokenView(BrowserView):
     implements(IBrowserPublisher)
 
@@ -73,7 +75,10 @@ def test_suite():
     dir = os.path.dirname(__file__)
     filenames = [fn for fn in os.listdir(dir)
                  if fn.endswith('.txt') and not fn.startswith('.')]
-    suites = [FunctionalDocFileSuite(filename, optionflags=optionflags)
+    suites = [
+        FunctionalDocFileSuite(filename,
+                               globs={'analyze': analyze},
+                               optionflags=optionflags)
               for filename in filenames]
     return unittest.TestSuite(suites)
 

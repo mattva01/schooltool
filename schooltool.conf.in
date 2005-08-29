@@ -129,7 +129,7 @@ pid-file schooltool.pid
 #    error-log-file /var/log/schooltool/error.log
 #    error-log-file STDERR
 #
-error-log-file schooltool.log
+error-log-file var/schooltool.log
 error-log-file STDERR
 
 #
@@ -149,7 +149,7 @@ error-log-file STDERR
 #    rest-access-log-file /var/log/schooltool/access.log
 #    rest-access-log-file STDOUT
 #
-rest-access-log-file rest-access.log
+rest-access-log-file var/rest-access.log
 
 #
 # web-access-log-file
@@ -168,7 +168,7 @@ rest-access-log-file rest-access.log
 #    web-access-log-file /var/log/schooltool/access.log
 #    web-access-log-file STDOUT
 #
-web-access-log-file web-access.log
+web-access-log-file var/web-access.log
 
 #
 # lang
@@ -215,7 +215,7 @@ web-access-log-file web-access.log
   #   quota size		default: no quota
   # </filestorage>
   <filestorage>
-    path SchhoolTool-Data.fs
+    path var/SchhoolTool-Data.fs
   </filestorage>
 
   # <mappingstorage>		in-memory MappingStorage

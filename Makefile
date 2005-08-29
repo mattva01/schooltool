@@ -17,7 +17,7 @@ ROSETTA_LOCALES=de el fr id lt nl nb pa pt tr
 all: build
 
 Zope3:
-	svn co svn://svn.zope.org/repos/main/Zope3/branches/Zope-3.1 Zope3
+	svn co svn://svn.zope.org/repos/main/Zope3/trunk Zope3
 
 testbrowser: Zope3
 	svn co svn://svn.zope.org/repos/main/Zope3/branches/testbrowser-integration/src/zope/testbrowser Zope3/src/zope/testbrowser
@@ -26,7 +26,7 @@ testbrowser: Zope3
 build: Zope3 testbrowser
 	[ ! -d Zope3 ] || cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) setup.py build
-	$(PYTHON) remove-stale-bytecode.py
+	$(PYTHON) utilities/remove-stale-bytecode.py
 
 .PHONY: clean
 clean:
@@ -134,7 +134,7 @@ update-rosetta-pot:
 .PHONY: get-rosetta-translations
 get-rosetta-translations:
 	# This needs to be vewy vewy quiet as it will probably be called by cron
-	./get-rosetta-translations.py \
+	./utilities/get-rosetta-translations.py \
 	    --baseurl $(ROSETTA_URL)\
 	    --filepattern $(LOCALE_PATTERN)\
 	    --loglevel='ERROR' $(ROSETTA_LOCALES)

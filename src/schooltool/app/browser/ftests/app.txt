@@ -17,14 +17,9 @@ SchoolTool instances from the add menu.
 
     >>> manager.handleErrors = False
     >>> manager.open('http://localhost/contents.html')
-    >>> print manager.contents
-    <!DOCTYPE ...>
-    ...
-    <h4>Add:</h4>
-    ...
-    <a href="http://localhost/@@contents.html?type_name=..."
+    >>> print analyze.queryHTML('//a[text()="SchoolTool"]', manager.contents)[0]
+    <a href="...?type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication"
        class="">SchoolTool</a>
-    ...
 
 We will obviously need a SchoolTool instance.
 
