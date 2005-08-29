@@ -1,0 +1,20 @@
+# These some packaged requirements
+#
+mechanize               ../src/mechanize
+ClientForm              ../src/ClientForm
+ClientCookie            ../src/ClientCookie
+pullparser              ../src/pulllparser
+zope.testbrowser        svn://svn.zope.org/repos/main/Zope3/branches/testbrowser-integration/src/zope/testbrowser
+#zope.testing            svn://svn.zope.org/repos/main/zope.testing/tags/initial/src/zope/testing
+
+# These packages are the SchoolTool components.
+#
+schooltool               ../src/schooltool
+schooltool.*             ../src/schooltool/
+
+# These packages are the release collections based on the SchoolTool
+# project; they define what goes into the SchoolTool and related
+# releases.
+#
+SchoolTool            ../releases/SchoolTool
+STRelationship        ../releases/STRelationship
