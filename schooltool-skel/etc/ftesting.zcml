@@ -1,0 +1,21 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="zope">
+
+  <include file="schooltool-site.zcml" />
+
+  <include package="zope.app.securitypolicy.tests" file="functional.zcml" />
+  <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
+  <include files="schooltool-skel/etc/package-includes/*-ftesting.zcml" />
+
+  <!-- Principal that tests generally run as -->
+
+  <principal id="zope.mgr" title="Manager" login="mgr" password="mgrpw" />
+
+  <!-- Bootstrap principal used to make local grant to the principal above -->
+  <principal id="zope.globalmgr" title="Manager" login="globalmgr"
+             password="globalmgrpw" />
+
+  <grant role="zope.Manager" principal="zope.globalmgr" />
+
+</configure>
