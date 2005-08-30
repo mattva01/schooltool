@@ -1,0 +1,44 @@
+#!/usr/bin/python
+#
+# SchoolTool - common information systems platform for school administration
+# Copyright (c) 2005 Shuttleworth Foundation
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+"""
+Test script to run the unit and functional tests in a Zope installation.
+
+$Id$
+"""
+import sys, os
+
+here = os.path.dirname(os.path.realpath(__file__))
+here = os.path.dirname(here)
+
+if sys.platform in ("win32",):
+    lib = os.path.join(here, "Lib", "site-packages")
+else:
+    lib = os.path.join(here, "lib", "python")
+sys.path.insert(0, lib)
+
+ftesting = os.path.join(here, "schooltool-skel", "etc", "ftesting.zcml")
+
+import zope.app.testing.test
+zope.app.testing.test.FTESTING = ftesting
+
+if __name__ == '__main__':
+    st = os.path.join(lib, 'schooltool')
+    args = sys.argv[:1] + ["-l", lib] + ["-u"] + sys.argv[1:]
+    zope.app.testing.test.process_args(args)
