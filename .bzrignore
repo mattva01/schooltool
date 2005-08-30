@@ -8,3 +8,6 @@ releases/SchoolTool-0.0.0*
 releases/STRelationship-0.0.0*
 ./zpkgsetup
 schooltool-skel/etc/package-includes/*.zcml
+schooltool-skel/log/*.log
+schooltool-skel/var/Data.fs*
+schooltool-skel/var/*.pid

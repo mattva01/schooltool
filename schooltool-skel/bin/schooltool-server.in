@@ -6,7 +6,8 @@ A script to start the schooltool server from the source directory.
 import sys
 import os.path
 
-SOFTWARE_HOME = r"<<SOFTWARE_HOME>>"
+ZOPE_SOFTWARE_HOME = r"<<ZOPE_SOFTWARE_HOME>>"
+SCHOOLTOOL_SOFTWARE_HOME = r"<<SCHOOLTOOL_SOFTWARE_HOME>>"
 INSTANCE_HOME = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 CONFIG_FILE = os.path.join(INSTANCE_HOME, "etc", "schooltool.conf")
 
@@ -23,12 +24,10 @@ def run():
     basepath = filter(None, sys.path)
 
     sys.path[:] = [os.path.join(INSTANCE_HOME, "lib", "python"),
-                   SOFTWARE_HOME] + basepath
-
-    sys.argv.insert(1, ['--config', CONFIG_FILE])
+                   SCHOOLTOOL_SOFTWARE_HOME, ZOPE_SOFTWARE_HOME] + basepath
 
     from schooltool.app import main
-    main.StandaloneServer().main()
+    main.StandaloneServer().main(sys.argv + ['--config', CONFIG_FILE])
 
 
 if __name__ == '__main__':
