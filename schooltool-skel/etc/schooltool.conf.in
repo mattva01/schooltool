@@ -1,7 +1,13 @@
 # Sample SchoolTool HTTP server configuration file
 
+%define INSTANCE  <<INSTANCE_HOME>>
+
+%define CONFDIR   $INSTANCE/etc
+%define DATADIR   $INSTANCE/var
+%define LOGDIR    $INSTANCE/log
+
 # identify the component configuration used to define the site:
-site-definition schooltool-skel/etc/site.zcml
+site-definition $CONFDIR/site.zcml
 
 #
 # path /path/to/add
@@ -110,7 +116,7 @@ web 7080
 #
 # Default: no pidfile
 #
-pid-file schooltool-skel/var/schooltool.pid
+pid-file $DATADIR/schooltool.pid
 
 #
 # error-log-file
@@ -129,7 +135,7 @@ pid-file schooltool-skel/var/schooltool.pid
 #    error-log-file /var/log/schooltool/error.log
 #    error-log-file STDERR
 #
-error-log-file schooltool-skel/var/schooltool.log
+error-log-file $LOGDIR/schooltool.log
 error-log-file STDERR
 
 #
@@ -149,7 +155,7 @@ error-log-file STDERR
 #    rest-access-log-file /var/log/schooltool/access.log
 #    rest-access-log-file STDOUT
 #
-rest-access-log-file schooltool-skel/log/rest-access.log
+rest-access-log-file $LOGDIR/rest-access.log
 
 #
 # web-access-log-file
@@ -168,7 +174,7 @@ rest-access-log-file schooltool-skel/log/rest-access.log
 #    web-access-log-file /var/log/schooltool/access.log
 #    web-access-log-file STDOUT
 #
-web-access-log-file schooltool-skel/log/web-access.log
+web-access-log-file $LOGDIR/web-access.log
 
 #
 # lang
@@ -215,7 +221,7 @@ web-access-log-file schooltool-skel/log/web-access.log
   #   quota size		default: no quota
   # </filestorage>
   <filestorage>
-    path schooltool-skel/var/Data.fs
+    path $DATADIR/Data.fs
   </filestorage>
 
   # <mappingstorage>		in-memory MappingStorage
@@ -274,4 +280,4 @@ web-access-log-file schooltool-skel/log/web-access.log
 #    reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
 #
 # Uncomment the following and update the path to enable PDF generation:
-#reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts
+# reportlab_fontdir /usr/share/fonts/truetype/msttcorefonts

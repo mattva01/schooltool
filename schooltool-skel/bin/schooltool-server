@@ -1,0 +1,35 @@
+#!<<PYTHON>>
+"""
+A script to start the schooltool server from the source directory.
+"""
+
+import sys
+import os.path
+
+SOFTWARE_HOME = r"<<SOFTWARE_HOME>>"
+INSTANCE_HOME = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+CONFIG_FILE = os.path.join(INSTANCE_HOME, "etc", "schooltool.conf")
+
+
+def run():
+    if sys.version_info < (2, 3):
+        print >> sys.stderr, '%s: need Python 2.3 or later.' % sys.argv[0]
+        print >> sys.stderr, 'Your python is %s' % sys.version
+        sys.exit(1)
+
+    # This removes the script directory from sys.path, which we do
+    # since there are no modules here.
+    #
+    basepath = filter(None, sys.path)
+
+    sys.path[:] = [os.path.join(INSTANCE_HOME, "lib", "python"),
+                   SOFTWARE_HOME] + basepath
+
+    sys.argv.insert(1, ['--config', CONFIG_FILE])
+
+    from schooltool.app import main
+    main.StandaloneServer().main()
+
+
+if __name__ == '__main__':
+    run()

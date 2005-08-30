@@ -16,9 +16,9 @@
        this menu -->
   <browser:menu id="help_actions" />
 
-  <include files="schooltool-skel/etc/package-includes/*-meta.zcml" />
+  <include files="package-includes/*-meta.zcml" />
   <include package="schooltool" />
-  <include files="schooltool-skel/etc/package-includes/*-configure.zcml" />
+  <include files="package-includes/*-configure.zcml" />
 
   <include package="zope.app.securitypolicy"/>
 
@@ -42,6 +42,6 @@
   <everybodyGroup id="zope.Everybody" title="All Users" />
 
   <!-- Provide local overrides of standard configurations-->
-  <includeOverrides files="schooltool-includes/*-overrides.zcml" />
+  <includeOverrides files="package-includes/*-overrides.zcml" />
 
 </configure>
