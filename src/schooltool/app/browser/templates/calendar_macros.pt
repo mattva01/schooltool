@@ -194,6 +194,9 @@
 
 <metal:block define-macro="portlet-tomorrow-events" i18n:domain="schoolbell">
 
+  <!-- XXX: The on-error call is almost certainly a hack; someone who
+            really knows what's going on should check it out. I think
+            this might be due to the new METAL 1.1 standard. -->
   <tal:block define="next view/nextDay;
                      tomorrow python:next.today() + next.resolution;
                      tevents python:view.dayEvents(tomorrow)">
@@ -205,7 +208,8 @@
           <a href="" title=""
              tal:attributes="title event/title;
                              style string:color: ${event/color2};
-                             href event/@@absolute_url">
+                             href event/context/@@absolute_url"
+             tal:on-error="event/title">
             <strong tal:content="
                 python: event.dtstart.astimezone(
                             view.timezone).strftime('%H:%M')" />
