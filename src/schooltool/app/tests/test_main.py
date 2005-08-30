@@ -341,7 +341,7 @@ def doctest_setup():
         ...     lang = 'lt'
         ...     reportlab_fontdir = ''
         ...     devmode = False
-        ...     site_definition = 'schooltool-site.zcml'
+        ...     site_definition = 'schooltool-skel/etc/site.zcml'
         >>> options.config = ConfigStub()
 
     Workaround to fix a Windows failure:
@@ -421,9 +421,11 @@ def doctest_bootstrapSchoolTool():
         >>> from schooltool.app.main import StandaloneServer
         >>> server = StandaloneServer()
 
+        # XXX: Very, very brittle test. Will not work in distributions.
         >>> import schooltool
         >>> dir = os.path.join(os.path.dirname(schooltool.__file__), '..', '..')
-        >>> server.siteConfigFile = os.path.join(dir, 'schooltool-site.zcml')
+        >>> server.siteConfigFile = os.path.join(
+        ...     dir, 'schooltool-skel', 'etc', 'site.zcml')
 
         >>> server.configure()
 
@@ -547,9 +549,11 @@ def doctest_restoreManagerUser():
         >>> from schooltool.app.main import StandaloneServer
         >>> server = StandaloneServer()
 
+        # XXX: Very brittle test. Will fail in distributions.
         >>> import schooltool
         >>> dir = os.path.join(os.path.dirname(schooltool.__file__), '..', '..')
-        >>> server.siteConfigFile = os.path.join(dir, 'schooltool-site.zcml')
+        >>> server.siteConfigFile = os.path.join(
+        ...     dir, 'schooltool-skel', 'etc', 'site.zcml')
 
         >>> server.configure()
 
