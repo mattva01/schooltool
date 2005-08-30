@@ -6,7 +6,7 @@
 
   <include package="zope.app.securitypolicy.tests" file="functional.zcml" />
   <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
-  <include files="schooltool-includes/*-ftesting.zcml" />
+  <include files="schooltool-skel/etc/package-includes/*-ftesting.zcml" />
 
   <!-- Principal that tests generally run as -->
 

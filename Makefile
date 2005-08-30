@@ -12,6 +12,7 @@ PYTHONPATH=src:Zope3/src
 LOCALE_PATTERN='src/schooltool/locales/@locale@/LC_MESSAGES/schoolbell.po'
 ROSETTA_URL='https://launchpad.ubuntu.com/products/schooltool/0.10-rc1/+pots/schooltool'
 ROSETTA_LOCALES=de el fr id lt nl nb pa pt tr
+SETUPFLAGS=
 
 .PHONY: all
 all: build
@@ -22,10 +23,14 @@ Zope3:
 testbrowser: Zope3
 	svn co svn://svn.zope.org/repos/main/Zope3/branches/testbrowser-integration/src/zope/testbrowser Zope3/src/zope/testbrowser
 
+zpkgsetup:
+	svn co svn://svn.zope.org/repos/main/zpkgtools/trunk/zpkgsetup
+
 .PHONY: build
-build: Zope3 testbrowser
+build: Zope3 testbrowser zpkgsetup
 	[ ! -d Zope3 ] || cd Zope3 && $(PYTHON) setup.py build_ext -i
-	$(PYTHON) setup.py build
+	$(PYTHON) setup.py $(SETUPFLAGS) \
+                build_ext -i install_data --install-dir .
 	$(PYTHON) utilities/remove-stale-bytecode.py
 
 .PHONY: clean

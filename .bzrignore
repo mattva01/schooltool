@@ -15,3 +15,5 @@ var/testserver_rest_access.log
 var/web-access.log
 var/schooltool.log
 var/schoolbell.log
+./zpkgsetup
+schooltool-skel/etc/package-includes/*.zcml

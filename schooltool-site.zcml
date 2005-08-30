@@ -16,9 +16,9 @@
        this menu -->
   <browser:menu id="help_actions" />
 
-  <include files="schooltool-includes/*-meta.zcml" />
+  <include files="schooltool-skel/etc/package-includes/*-meta.zcml" />
   <include package="schooltool" />
-  <include files="schooltool-includes/*-configure.zcml" />
+  <include files="schooltool-skel/etc/package-includes/*-configure.zcml" />
 
   <include package="zope.app.securitypolicy"/>
 
