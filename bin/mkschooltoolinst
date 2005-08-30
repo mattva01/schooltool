@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.3
+#!/usr/bin/python
 ##############################################################################
 #
 # Copyright (c) 2004 Zope Corporation and Contributors.
@@ -34,12 +34,13 @@ for parts in [("src",), ("lib", "python"), ("Lib", "site-packages"),
             d = os.path.join(swhome, *parts)
             sys.path.insert(0, d)
 
-else:
-    try:
-        import zope.app.server
-    except ImportError:
-        print >>sys.stderr, "Could not locate Zope software installation!"
-        sys.exit(1)
+try:
+    import schooltool.setup
+    import zope.app.server
+except ImportError:
+    print >> sys.stderr, \
+          "Could not locate SchoolTool or Zope software installation!"
+    sys.exit(1)
 
 
 # Insert our custom skeleton directory
