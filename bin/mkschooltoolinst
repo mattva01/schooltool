@@ -50,7 +50,7 @@ sys.argv.insert(1, '--skelsrc=%s' %os.path.join(swhome, 'schooltool-skel'))
 from schooltool.app import main
 if '-u' not in sys.argv and '--user' not in sys.argv:
     sys.argv.insert(
-        1, '-u %s:%s' %(main.MANAGER_USERNAME, main.MANAGER_PASSWORD))
+        1, '-u%s:%s' %(main.MANAGER_USERNAME, main.MANAGER_PASSWORD))
 
 from schooltool.setup.mkschooltoolinst import main
 
