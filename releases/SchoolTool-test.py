@@ -14,7 +14,10 @@ do('./configure --prefix `pwd`/z --with-python=%s' %sys.executable)
 do('make install')
 os.chdir('z')
 do("bin/schooltooltest -vp1")
-do("bin/mkschooltoolinst -d`pwd`/../i -u admin:123")
-os.chdir('../i')
+# Use default username and password
+do("bin/mkschooltoolinst -d`pwd`/../i1")
+# Choose a username and password
+do("bin/mkschooltoolinst -d`pwd`/../i2 -u admin:123")
+os.chdir('../i2')
 do("bin/test --testschooltool")
 do('bin/schooltool-server')
