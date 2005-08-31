@@ -27,6 +27,10 @@ def run():
                    SCHOOLTOOL_SOFTWARE_HOME, ZOPE_SOFTWARE_HOME] + basepath
 
     from schooltool.app import main
+
+    main.MANAGER_USERNAME = r"<<USERNAME>>"
+    main.MANAGER_PASSWORD = r"<<PASSWORD>>"
+
     main.StandaloneServer().main(sys.argv + ['--config', CONFIG_FILE])
 
 

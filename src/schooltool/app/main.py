@@ -60,6 +60,8 @@ from schooltool.app.security import setUpLocalAuth
 from schooltool.app.rest import restServerType
 from schooltool.app.browser import pdfcal
 
+MANAGER_USERNAME = 'manager'
+MANAGER_PASSWORD = 'schooltool'
 
 locale_charset = locale.getpreferredencoding()
 
@@ -406,11 +408,11 @@ class StandaloneServer(object):
         """
         _('%s Manager') # mark for l10n
         manager_title = catalog.ugettext('%s Manager') % self.system_name
-        if 'manager' not in app['persons']:
-            manager = Person('manager', manager_title)
+        if MANAGER_USERNAME not in app['persons']:
+            manager = Person(MANAGER_USERNAME, manager_title)
             app['persons']['manager'] = manager
         manager = app['persons']['manager']
-        manager.setPassword(self.system_name.lower())
+        manager.setPassword(MANAGER_PASSWORD)
         roles = IPrincipalRoleManager(app)
         roles.assignRoleToPrincipal('zope.Manager', 'sb.person.manager')
 
