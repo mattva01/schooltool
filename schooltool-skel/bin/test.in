@@ -1,0 +1,62 @@
+#!<<PYTHON>> -u
+##############################################################################
+#
+# Copyright (c) 2004 Zope Corporation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+"""Run tests in a Zope instance home.
+
+$Id$
+"""
+import sys, os
+
+here = os.path.dirname(os.path.realpath(__file__))
+here = os.path.dirname(here)
+
+SOFTWARE_HOME = r"<<SOFTWARE_HOME>>"
+
+instance_lib = os.path.join(here, "lib", "python")
+
+sys.path[:0] = [instance_lib, SOFTWARE_HOME]
+
+
+from zope.app.testing import test
+
+
+testschooltool = "--testschooltool" in sys.argv[1:]
+if testschooltool:
+    sys.argv.remove("--testschooltool")
+    test_lib = SOFTWARE_HOME
+    # We only want to run schooltool tests; but allow it to be overridden
+    if '-s' not in sys.argv and '--dir' not in sys.argv:
+        additional = ["-s", "schooltool"]
+else:
+    test_lib = instance_lib
+    additional = []
+
+ftesting = os.path.join(here, "etc", "ftesting.zcml")
+
+test.FTESTING = ftesting
+
+args = sys.argv[:1] + ["-l", test_lib] + additional + sys.argv[1:]
+test.__doc__ += """
+
+Two additional options are supported:
+
+--testschooltool
+    When specified, the tests for the installed SchoolTool software are run
+    instead of the tests for the software installed in the instance.
+    This is useful to determine the effects of additional software
+    installation and configuration changes on the base Zope software.
+    Unlike other options, this cannot be abbreviated.
+
+"""
+test.process_args(args)
