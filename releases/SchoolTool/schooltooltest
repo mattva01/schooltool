@@ -45,7 +45,5 @@ if __name__ == '__main__':
     # We only want to run schooltool tests; but allow it to be overridden
     if '-s' not in sys.argv and '--dir' not in sys.argv:
         args += ["-s", "schooltool"]
-    # Temporarly, till we are brave enough to try running functional tests
-    args += ["-u"]
     args += sys.argv[1:]
     zope.app.testing.test.process_args(args)

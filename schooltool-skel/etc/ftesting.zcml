@@ -2,11 +2,11 @@
            xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="zope">
 
-  <include file="schooltool-site.zcml" />
+  <include file="site.zcml" />
 
   <include package="zope.app.securitypolicy.tests" file="functional.zcml" />
   <include package="zope.testbrowser.ftests" file="ftesting.zcml" />
-  <include files="schooltool-skel/etc/package-includes/*-ftesting.zcml" />
+  <include files="package-includes/*-ftesting.zcml" />
 
   <!-- Principal that tests generally run as -->
 
