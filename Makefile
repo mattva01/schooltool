@@ -5,6 +5,7 @@
 # $Id$
 
 PYTHON=python
+ZPKG=../../zpkgtools/bin/zpkg
 TESTFLAGS=-w
 POT=src/schooltool/locales/schooltool.pot
 PO=$(wildcard src/schooltool/locales/*/LC_MESSAGES/*.po)
@@ -18,13 +19,13 @@ SETUPFLAGS=
 all: build
 
 Zope3:
-	svn co svn://svn.zope.org/repos/main/Zope3/trunk Zope3
+	svn co svn+ssh://svn.zope.org/repos/main/Zope3/trunk Zope3
 
 testbrowser: Zope3
-	svn co svn://svn.zope.org/repos/main/Zope3/branches/testbrowser-integration/src/zope/testbrowser Zope3/src/zope/testbrowser
+	svn co svn+ssh://svn.zope.org/repos/main/Zope3/branches/testbrowser-integration/src/zope/testbrowser Zope3/src/zope/testbrowser
 
 zpkgsetup:
-	svn co svn://svn.zope.org/repos/main/zpkgtools/trunk/zpkgsetup
+	svn co svn+ssh://svn.zope.org/repos/main/zpkgtools/trunk/zpkgsetup buildsupport/zpkgsetup
 
 .PHONY: build
 build: Zope3 testbrowser zpkgsetup
@@ -94,14 +95,12 @@ Zope3/package-includes/schooltool-configure.zcml:
 	echo '<include package="schooltool" />' > $@
 
 .PHONY: dist
-dist: realclean build update-translations clean
-	rm -rf dist
-	find . -name '*.py[dco]' -exec rm -f {} \;
-	./setup.py sdist --formats=schooltooltgz
+dist: realclean update-translations
+	$(ZPKG) -x reportlab -C releases/SchoolTool.cfg
 
 .PHONY: signtar
 signtar: dist
-	md5sum dist/school*.tar.gz > dist/md5sum
+	md5sum dist/SchoolTool*.tgz > dist/md5sum
 	gpg --clearsign dist/md5sum
 	mv dist/md5sum.asc dist/md5sum
 
