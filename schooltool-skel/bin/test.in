@@ -1,4 +1,4 @@
-#!<<PYTHON>> -u
+#!/usr/bin/python -u
 ##############################################################################
 #
 # Copyright (c) 2004 Zope Corporation and Contributors.
@@ -21,7 +21,7 @@ import sys, os
 here = os.path.dirname(os.path.realpath(__file__))
 here = os.path.dirname(here)
 
-SOFTWARE_HOME = r"<<SOFTWARE_HOME>>"
+SOFTWARE_HOME = r"<<SCHOOLTOOL_SOFTWARE_HOME>>"
 
 instance_lib = os.path.join(here, "lib", "python")
 
