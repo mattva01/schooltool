@@ -52,7 +52,7 @@ def find_ftesting_zcml():
     """Find ftesting.zcml in the closest parent directory."""
     dir = os.path.abspath(os.path.dirname(__file__))
     while True:
-        filename = os.path.join(dir, 'ftesting.zcml')
+        filename = os.path.join(dir, 'schooltool-skel', 'etc', 'ftesting.zcml')
         if os.path.exists(filename):
             return filename
         dir = os.path.dirname(dir)
