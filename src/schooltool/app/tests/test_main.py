@@ -28,6 +28,16 @@ from zope.testing import doctest
 from zope.app import zapi
 from zope.interface.verify import verifyObject
 
+def findSiteZCML():
+    import schooltool
+    dir = os.path.dirname(schooltool.__file__)
+    for trial in (('..', '..', 'schooltool-skel', 'etc', 'site.zcml'),
+                  ('..', '..', '..', 'schooltool-skel', 'etc', 'site.zcml'),
+                  ('..', '..', '..', 'etc', 'site.zcml')):
+        path = os.path.abspath(os.path.join(dir, *trial))
+        if os.path.exists(path):
+            return path
+    raise ValueError('`site.zcml` not found.')
 
 def doctest_Options():
     """Tests for Options.
@@ -420,13 +430,7 @@ def doctest_bootstrapSchoolTool():
 
         >>> from schooltool.app.main import StandaloneServer
         >>> server = StandaloneServer()
-
-        # XXX: Very, very brittle test. Will not work in distributions.
-        >>> import schooltool
-        >>> dir = os.path.join(os.path.dirname(schooltool.__file__), '..', '..')
-        >>> server.siteConfigFile = os.path.join(
-        ...     dir, 'schooltool-skel', 'etc', 'site.zcml')
-
+        >>> server.siteConfigFile = findSiteZCML()
         >>> server.configure()
 
     When we start with an empty database, bootstrapSchoolTool creates a
@@ -548,13 +552,7 @@ def doctest_restoreManagerUser():
 
         >>> from schooltool.app.main import StandaloneServer
         >>> server = StandaloneServer()
-
-        # XXX: Very brittle test. Will fail in distributions.
-        >>> import schooltool
-        >>> dir = os.path.join(os.path.dirname(schooltool.__file__), '..', '..')
-        >>> server.siteConfigFile = os.path.join(
-        ...     dir, 'schooltool-skel', 'etc', 'site.zcml')
-
+        >>> server.siteConfigFile = findSiteZCML()
         >>> server.configure()
 
     We also need an application:
