@@ -410,11 +410,12 @@ class StandaloneServer(object):
         manager_title = catalog.ugettext('%s Manager') % self.system_name
         if MANAGER_USERNAME not in app['persons']:
             manager = Person(MANAGER_USERNAME, manager_title)
-            app['persons']['manager'] = manager
-        manager = app['persons']['manager']
+            app['persons'][MANAGER_USERNAME] = manager
+        manager = app['persons'][MANAGER_USERNAME]
         manager.setPassword(MANAGER_PASSWORD)
         roles = IPrincipalRoleManager(app)
-        roles.assignRoleToPrincipal('zope.Manager', 'sb.person.manager')
+        roles.assignRoleToPrincipal(
+            'zope.Manager', 'sb.person.' + MANAGER_USERNAME)
 
     def main(self, argv=sys.argv):
         """Start the SchoolTool server."""

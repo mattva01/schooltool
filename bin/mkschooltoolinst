@@ -46,6 +46,12 @@ except ImportError:
 # Insert our custom skeleton directory
 sys.argv.insert(1, '--skelsrc=%s' %os.path.join(swhome, 'schooltool-skel'))
 
+# If no username and password was specified, use the default ones
+from schooltool.app import main
+if '-u' not in sys.argv and '--user' not in sys.argv:
+    sys.argv.insert(
+        1, '-u %s:%s' %(main.MANAGER_USERNAME, main.MANAGER_PASSWORD))
+
 from schooltool.setup.mkschooltoolinst import main
 
 sys.exit(main(from_checkout=from_checkout))
