@@ -351,7 +351,7 @@ def doctest_setup():
         ...     lang = 'lt'
         ...     reportlab_fontdir = ''
         ...     devmode = False
-        ...     site_definition = 'schooltool-skel/etc/site.zcml'
+        ...     site_definition = findSiteZCML()
         >>> options.config = ConfigStub()
 
     Workaround to fix a Windows failure:
