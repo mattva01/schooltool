@@ -22,6 +22,7 @@ Unit tests for schoolbell.calendar.recurrent.
 $Id$
 """
 
+import time
 import unittest
 from datetime import datetime, date, timedelta
 from zope.interface.verify import verifyObject
@@ -151,6 +152,16 @@ class TestDailyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         self.assertEqual(result, [date(2004, 10, 13), date(2004, 10, 14),
                                   date(2004, 10, 15)])
 
+        # Far in future
+        tick = time.clock()
+        rule = self.createRule(interval=3)
+        result = list(rule.apply(ev, startdate=date(3000, 01, 01),
+                                 enddate=date(3000, 01, 20)))
+        self.assertEquals(int(time.clock() - tick), 0)
+        self.assertEqual(result,
+                         [date(3000, 1, 3), date(3000, 1, 6),
+                          date(3000, 1, 9), date(3000, 1, 12),
+                          date(3000, 1, 15), date(3000, 1, 18)])
 
 class TestYearlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 

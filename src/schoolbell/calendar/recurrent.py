@@ -121,14 +121,21 @@ class RecurrenceRule(object):
             assert isinstance(enddate, datetime.date), "enddate must be a date"
             assert not isinstance(enddate, datetime.datetime), \
                     "enddate must be a date, not a datetime"
-        cur = event.dtstart.date()
-        count = 0
+        if startdate is None:
+            startdate = event.dtstart.date()
+        if startdate >= event.dtstart.date():
+            days = (startdate - event.dtstart.date()).days
+        else:
+            days = 0
+        count = days / self.interval
+        cur = event.dtstart.date() + datetime.timedelta(count * self.interval)
+
         while True:
             if ((enddate and cur > enddate) or
                 (self.count is not None and count >= self.count) or
                 (self.until and cur > self.until)):
                 break
-            if cur not in self.exceptions:
+            if cur not in self.exceptions and cur >= startdate:
                 yield cur
             count += 1
             cur = self._nextRecurrence(cur)
