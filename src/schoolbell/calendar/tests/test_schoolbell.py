@@ -191,46 +191,6 @@ def doctest_CalendarMixin_expand():
 
     """
 
-
-def doctest_CalendarMixin_expand_at_midnight():
-    """Regression tests for CalendarMixin.expand.
-
-    Bug: an event that occurs at midnight and is 0 minutes long gets lost.
-
-        >>> from datetime import datetime, timedelta
-        >>> from schoolbell.calendar.mixins import CalendarMixin
-        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
-        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
-        >>> e1 = SimpleCalendarEvent(datetime(2005, 3, 2, 0, 0), timedelta(0),
-        ...                          "Corner case")
-        >>> e2 = SimpleCalendarEvent(datetime(2005, 3, 4, 0, 0), timedelta(0),
-        ...                          "Recurring case",
-        ...                          recurrence=DailyRecurrenceRule())
-
-        >>> class MyCalendar(CalendarMixin):
-        ...     def __iter__(self):
-        ...         return iter([e1, e2])
-        >>> cal = MyCalendar()
-
-        >>> [e.title
-        ...  for e in cal.expand(datetime(2005, 3, 2), datetime(2005, 3, 3))]
-        ['Corner case']
-
-        >>> [e.title
-        ...  for e in cal.expand(datetime(2005, 3, 1), datetime(2005, 3, 2))]
-        []
-
-        >>> [e.title
-        ...  for e in cal.expand(datetime(2005, 3, 4), datetime(2005, 3, 5))]
-        ['Recurring case']
-
-        >>> [e.title
-        ...  for e in cal.expand(datetime(2005, 3, 3), datetime(2005, 3, 4))]
-        []
-
-    """
-
-
 def doctest_CalendarEventMixin_hasOccurrences():
     """Tests for CalendarEventMixin.hasOccurrences.
 
@@ -307,6 +267,83 @@ def doctest_CalendarEventMixin_replace():
 
     """
 
+def doctest_CalendarEventMixin_expand():
+    """Test expanding of recurring events
+
+        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+
+    For non-recurring events, expand yields the event if it is in the
+    range passed as arguments:
+
+        >>> from pytz import timezone
+        >>> utc = timezone('UTC')
+        >>> from datetime import datetime, timedelta
+        >>> e1 = SimpleCalendarEvent(datetime(2004, 12, 15, 18, 57),
+        ...                          timedelta(minutes=15),
+        ...                          'Work on schoolbell.calendar.simple')
+        >>> expanded = list(e1.expand(
+        ...     datetime(2004, 12, 15, 0, 0, tzinfo=utc),
+        ...     datetime(2004, 12, 16, 0, 0, tzinfo=utc)))
+        >>> expanded
+        [<schoolbell.calendar.simple.SimpleCalendarEvent object at ...>]
+        >>> expanded[0] is e1
+        True
+
+    If the event is outside the datetime range passed, the method
+    yields nothing.
+
+        >>> list(e1.expand(datetime(2004, 12, 16, 0, 0, tzinfo=utc),
+        ...                datetime(2004, 12, 17, 0, 0, tzinfo=utc)))
+        []
+
+    See doctest_CalendarMixin_expand doctest for an elaborate
+    demonstration of the expanding functionality.
+    """
+
+
+def doctest_CalendarMixin_expand_at_midnight():
+    """Regression tests for CalendarMixin.expand.
+
+    Bug: an event that occurs at midnight and is 0 minutes long gets lost.
+
+        >>> from datetime import datetime, timedelta
+        >>> from schoolbell.calendar.simple import SimpleCalendarEvent
+        >>> from schoolbell.calendar.recurrent import DailyRecurrenceRule
+        >>> e1 = SimpleCalendarEvent(datetime(2005, 3, 2, 0, 0), timedelta(0),
+        ...                          "Corner case")
+        >>> e2 = SimpleCalendarEvent(datetime(2005, 3, 4, 0, 0), timedelta(0),
+        ...                          "Recurring case",
+        ...                          recurrence=DailyRecurrenceRule())
+
+        >>> for event in e1, e2:
+        ...     [e.title
+        ...      for e in event.expand(datetime(2005, 3, 2),
+        ...                            datetime(2005, 3, 3))]
+        ['Corner case']
+        []
+
+        >>> for event in e1, e2:
+        ...     [e.title
+        ...      for e in event.expand(datetime(2005, 3, 1),
+        ...                            datetime(2005, 3, 2))]
+        []
+        []
+
+        >>> for event in e1, e2:
+        ...     [e.title
+        ...      for e in event.expand(datetime(2005, 3, 4),
+        ...                            datetime(2005, 3, 5))]
+        []
+        ['Recurring case']
+
+        >>> for event in e1, e2:
+        ...     [e.title
+        ...      for e in event.expand(datetime(2005, 3, 3),
+        ...                            datetime(2005, 3, 4))]
+        []
+        []
+
+    """
 
 def doctest_weeknum_bounds():
     """Unit test for schoolbell.calendar.utils.weeknum_bounds.
@@ -327,7 +364,7 @@ def doctest_weeknum_bounds():
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite())
+    suite.addTest(doctest.DocTestSuite(optionflags=doctest.ELLIPSIS))
     suite.addTest(doctest.DocFileSuite('../README.txt'))
     suite.addTest(doctest.DocTestSuite('schoolbell.calendar.mixins'))
     suite.addTest(doctest.DocTestSuite('schoolbell.calendar.simple'))
