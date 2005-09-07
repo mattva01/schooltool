@@ -123,12 +123,8 @@ class RecurrenceRule(object):
                     "enddate must be a date, not a datetime"
         if startdate is None:
             startdate = event.dtstart.date()
-        if startdate >= event.dtstart.date():
-            days = (startdate - event.dtstart.date()).days
-        else:
-            days = 0
-        count = days / self.interval
-        cur = event.dtstart.date() + datetime.timedelta(count * self.interval)
+
+        count, cur = self._scroll(event, startdate)
 
         while True:
             if ((enddate and cur > enddate) or
@@ -188,6 +184,17 @@ class DailyRecurrenceRule(RecurrenceRule):
 
     ical_freq = 'DAILY'
 
+    def _scroll(self, event, startdate):
+        """Given a startdate, finds a nearest event recurrence and its nr"""
+        if startdate >= event.dtstart.date():
+            days = (startdate - event.dtstart.date()).days
+        else:
+            days = 0
+        count = days / self.interval
+        cur = event.dtstart.date() + datetime.timedelta(count * self.interval)
+        return count, cur
+
+
 
 class YearlyRecurrenceRule(RecurrenceRule):
     """Yearly recurrence rule.
@@ -200,8 +207,29 @@ class YearlyRecurrenceRule(RecurrenceRule):
 
     def _nextRecurrence(self, date):
         """Adds the basic step of recurrence to the date"""
-        nextyear = date.year + self.interval
-        return date.replace(year=nextyear)
+        delta = self.interval
+        while True:
+            try:
+                nextyear = date.year + delta
+                return date.replace(year=nextyear)
+            except ValueError:
+                # Jump over illegal leap days
+                delta += self.interval
+
+    def _scroll(self, event, startdate):
+        """Given a startdate, finds a nearest event recurrence and its nr"""
+        if startdate >= event.dtstart.date():
+            years = startdate.year - event.dtstart.date().year
+        else:
+            years = 0
+        count = years / self.interval
+        while True:
+            try:
+                newyear = event.dtstart.date().year + count * self.interval
+                cur = event.dtstart.date().replace(year=newyear)
+                return count, cur
+            except ValueError:
+                count -= self.interval
 
     def _iCalArgs(self, dtstart):
         """Return iCalendar parameters specific to monthly reccurence."""
@@ -345,6 +373,26 @@ class MonthlyRecurrenceRule(RecurrenceRule):
     def _tupleForComparison(self):
         return (self.__class__.__name__, self.interval, self.count,
                 self.until, self.exceptions, self.monthly)
+
+    def _scroll(self, event, startdate):
+        """Given a startdate, finds a nearest event recurrence and its nr"""
+        dstart = event.dtstart.date()
+        if startdate > event.dtstart.date():
+            months = (12 * (startdate.year - dstart.year) +
+                      startdate.month - dstart.month)
+        else:
+            months = 0
+
+        count = months / self.interval
+        while True:
+            try:
+                year, month = divmod(dstart.year * 12 + dstart.month +
+                                     count * self.interval - 1, 12)
+                month += 1 # 1..12
+                cur = event.dtstart.date().replace(year=year, month=month)
+                return count, cur
+            except ValueError:
+                count -= 1
 
     def _nextRecurrence(self, date):
         """Add basic step of recurrence to the date."""

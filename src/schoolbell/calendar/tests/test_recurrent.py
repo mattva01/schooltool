@@ -163,6 +163,48 @@ class TestDailyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
                           date(3000, 1, 9), date(3000, 1, 12),
                           date(3000, 1, 15), date(3000, 1, 18)])
 
+    def test_scroll(self):
+        from schoolbell.calendar.simple import SimpleCalendarEvent
+        rule = self.createRule()
+        ev = SimpleCalendarEvent(datetime(2004, 10, 13, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+
+        # if the start date is before the event,
+        # return the original event date.
+        self.assertEqual(rule._scroll(ev, date(2004, 1, 1)),
+                         (0, date(2004, 10, 13)))
+
+        # if the start date coincides with the event, date
+        self.assertEqual(rule._scroll(ev, date(2004, 10, 13)),
+                         (0, date(2004, 10, 13)))
+
+        # if the start date is later than the event date
+        self.assertEqual(rule._scroll(ev, date(2004, 10, 23)),
+                         (10, date(2004, 10, 23)))
+
+        rule = self.createRule(interval=3)
+
+        # if the start date is before the event,
+        # return the original event date.
+        self.assertEqual(rule._scroll(ev, date(2004, 1, 1)),
+                         (0, date(2004, 10, 13)))
+
+        # if the start date coincides with the event, date
+        self.assertEqual(rule._scroll(ev, date(2004, 10, 13)),
+                         (0, date(2004, 10, 13)))
+
+        # if the start date is later than the event date
+        self.assertEqual(rule._scroll(ev, date(2004, 10, 23)),
+                         (3, date(2004, 10, 22)))
+
+        self.assertEqual(rule._scroll(ev, date(2004, 10, 22)),
+                         (3, date(2004, 10, 22)))
+
+        self.assertEqual(rule._scroll(ev, date(2004, 10, 21)),
+                         (2, date(2004, 10, 19)))
+
+
 class TestYearlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
     def createRule(self, *args, **kwargs):
@@ -221,6 +263,46 @@ class TestYearlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
                          [date(1978, 5, 17), date(1979, 5, 17),
                           date(1981, 5, 17)])
 
+        # Event somewhere in the future
+        rule = self.createRule(interval=2)
+        result = list(rule.apply(ev, date(2000, 1, 1), date(2006, 1, 1)))
+        self.assertEqual(result, [date(2000, 5, 17), date(2002, 5, 17),
+                                  date(2004, 5, 17)])
+
+        # Frebruary 29
+        ev = SimpleCalendarEvent(datetime(1996, 2, 29, 12, 0),
+                           timedelta(minutes=10),
+                           "once in 4 years", unique_id='uid')
+        rule = self.createRule()
+        result = list(rule.apply(ev, date(1995, 1, 1), date(2006, 1, 1)))
+        self.assertEqual(result, [date(1996, 2, 29), date(2000, 2, 29),
+                                  date(2004, 2, 29)])
+
+    def test_scroll(self):
+        from schoolbell.calendar.simple import SimpleCalendarEvent
+        rule = self.createRule()
+        ev = SimpleCalendarEvent(datetime(1978, 5, 17, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+        self.assertEqual(rule._scroll(ev, date(1900, 3, 1)),
+                         (0, date(1978, 5, 17)))
+        self.assertEqual(rule._scroll(ev, date(2000, 3, 1)),
+                         (22, date(2000, 5, 17)))
+
+    def test_scroll_feb29(self):
+        from schoolbell.calendar.simple import SimpleCalendarEvent
+        rule = self.createRule()
+        ev = SimpleCalendarEvent(datetime(1996, 2, 29, 12, 0),
+                           timedelta(minutes=10),
+                           "once in 4 years", unique_id='uid')
+        self.assertEqual(rule._scroll(ev, date(1900, 3, 1)),
+                         (0, date(1996, 2, 29)))
+        self.assertEqual(rule._scroll(ev, date(1999, 3, 1)),
+                         (0, date(1996, 2, 29)))
+        self.assertEqual(rule._scroll(ev, date(2000, 3, 1)),
+                         (4, date(2000, 2, 29)))
+        self.assertEqual(rule._scroll(ev, date(2004, 3, 1)),
+                         (8, date(2004, 2, 29)))
 
 class TestWeeklyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
@@ -372,6 +454,14 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         expected = [date(1978, 5, 17), date(1978, 9, 17)]
         self.assertEqual(result, expected)
 
+        # With a start date
+        rule = self.createRule(monthly="monthday", interval=2,
+                               exceptions=[date(1978, 7, 17)])
+        result = list(rule.apply(ev,startdate=date(2000, 1, 1),
+                                 enddate=date(2000, 6, 17)))
+        expected = [date(2000, 1, 17), date(2000, 3, 17), date(2000, 5, 17)]
+        self.assertEqual(result, expected)
+
     def test_apply_endofmonth(self):
         from schoolbell.calendar.simple import SimpleCalendarEvent
         rule = self.createRule(monthly="monthday")
@@ -393,6 +483,12 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         self.assertEqual(result, [date(2001, 1, 31),
                                   date(2001, 3, 31),
                                   date(2001, 5, 31),
+                                  date(2001, 7, 31),
+                                  date(2002, 1, 31),])
+
+        result = list(rule.apply(ev, startdate=date(2001, 4, 1),
+                                 enddate=date(2002, 1, 31)))
+        self.assertEqual(result, [date(2001, 5, 31),
                                   date(2001, 7, 31),
                                   date(2002, 1, 31),])
 
@@ -497,6 +593,38 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         result = list(rule.apply(ev, enddate=date(1978, 9, 30)))
         expected = [date(1978, 5, 17), date(1978, 9, 13)]
         self.assertEqual(result, expected)
+
+    def test_scroll(self):
+        from schoolbell.calendar.simple import SimpleCalendarEvent
+        rule = self.createRule(interval=3)
+        ev = SimpleCalendarEvent(datetime(2004, 10, 13, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+
+        # start before event
+        self.assertEqual(rule._scroll(ev, date(2004, 1, 1)),
+                         (0, date(2004, 10, 13)))
+
+        # start on event date
+        self.assertEqual(rule._scroll(ev, date(2004, 10, 13)),
+                         (0, date(2004, 10, 13)))
+
+        # start after date
+        self.assertEqual(rule._scroll(ev, date(2005, 3, 14)),
+                         (1, date(2005, 1, 13)))
+
+        # If we ask for an illegal dates, we get less events
+        rule = self.createRule()
+        ev = SimpleCalendarEvent(datetime(2004, 1, 30, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+        self.assertEqual(rule._scroll(ev, date(2004, 1, 29)),
+                         (0, date(2004, 1, 30)))
+        self.assertEqual(rule._scroll(ev, date(2004, 2, 28)),
+                         (0, date(2004, 1, 30)))
+        # sequence nr 1 is taken by illegal date 2004-02-30
+        self.assertEqual(rule._scroll(ev, date(2004, 3, 1)),
+                         (2, date(2004, 3, 30)))
 
     def test_iCalRepresentation(self):
         # This method deliberately overrides the test in the base class.
