@@ -320,9 +320,9 @@ def doctest_EventForDisplay():
         >>> from schoolbell.app.browser.cal import EventForDisplay
         >>> from schoolbell.app.app import Resource, Person
         >>> person = Person("p1")
-        >>> e1 = createEvent('2004-01-02 14:45:50', '5min', 'yawn')
-        >>> person.calendar.addEvent(e1)
-        >>> e1 = EventForDisplay(e1, 'red', 'green', person.calendar)
+        >>> event = createEvent('2004-01-02 14:45:50', '5min', 'yawn')
+        >>> person.calendar.addEvent(event)
+        >>> e1 = EventForDisplay(event, 'red', 'green', person.calendar)
 
     EventForDisplay lets us access all the usual attributes
 
@@ -336,6 +336,17 @@ def doctest_EventForDisplay():
         'yawn'
         >>> e1.source_calendar is person.calendar
         True
+        >>> e1.allday
+        False
+
+    If event is an allday event EventForDisplay has it's allday
+    attribute set:
+
+        >>> event.allday = True
+        >>> allday_efd = EventForDisplay(event, 'red', 'green', person.calendar)
+        >>> allday_efd.allday
+        True
+        >>> event.allday = False
 
     It adds some additional attributes
 
@@ -862,23 +873,6 @@ class TestCalendarViewBase(unittest.TestCase):
             code
             2005-02-26 19:39:00+00:00
 
-        Note that all-day events are ignored, so adding one does not change the
-        output.
-
-            >>> cal1.addEvent(createEvent('2005-02-20 16:00', '1h', 
-            ...      'A Birthday', allday=True))
-
-        Verify that the all-day event is in the calendar
-
-            >>> 'A Birthday' in [e.title for e in cal1]
-            True
-
-        Now verify that it is not included in the output
-
-            >>> 'A Birthday' in [e.title for e in 
-            ...   view.getEvents(datetime(2005, 2, 19), datetime(2005, 3, 1))]
-            False
-
         Changes in the view's timezone are reflected in the events dtstarttz
 
             >>> view.timezone = timezone('US/Eastern')
@@ -1031,47 +1025,6 @@ class TestCalendarViewBase(unittest.TestCase):
         We're done:
 
             >>> setup.placelessSetUp()
-
-        """
-
-    def test_getAllDayEvents(self):
-        """Test for CalendarViewBase.getAllDayEvents
-
-            >>> setup.placelessSetUp()
-            >>> registerCalendarHelperViews()
-
-        CalendarViewBase.getAllDayEvents returns a list of wrapped all-day
-        calendar events for a specified date or the date of the view cursor if
-        a date is not specified.
-
-            >>> from schoolbell.app.browser.cal import CalendarViewBase
-            >>> from schoolbell.app.cal import Calendar
-            >>> cal = Calendar()
-            >>> cal.addEvent(createEvent('2005-02-20 16:00', '1h', 
-            ...      'A Birthday', allday=True))
-            >>> cal.addEvent(createEvent('2005-02-20 16:00', '1h', 'walk'))
-            >>> view = CalendarViewBase(cal, TestRequest())
-
-        Only all-day events are returned
-
-            >>> for e in view.getAllDayEvents(datetime(2005, 2, 20)):
-            ...     print e.title
-            ...     print e.dtstarttz
-            A Birthday
-            2005-02-20 16:00:00+00:00
-
-        If no date is specified, the view cursor is used
-
-            >>> view.cursor = datetime(2005, 2, 22)
-            >>> [e for e in view.getAllDayEvents()]
-            []
-            >>> view.cursor = datetime(2005, 2, 20)
-            >>> [e.title for e in view.getAllDayEvents()]
-            ['A Birthday']
-
-        We're done:
-
-            >>> setup.placelessTearDown()
 
         """
 
@@ -3039,6 +2992,26 @@ class TestDailyCalendarView(unittest.TestCase):
                            {'title': '22:00', 'cols': ('', None, None)},
                            {'title': '23:00', 'cols': ('', None, None)}])
 
+    def test_getHours_allday_events(self):
+        from schoolbell.app.browser.cal import DailyCalendarView
+        from schoolbell.app.app import Person
+
+        person = Person(title="Da Boss")
+        cal = person.calendar
+        view = DailyCalendarView(cal, TestRequest())
+        view.cursor = date(2004, 8, 12)
+        view.starthour = 0
+        view.endhour = 23
+        no_allday_events = list(view.getHours())
+
+        ev1 = createEvent('2004-08-12 14:00', '5min', "My Birthday")
+        ev1.allday = True
+        cal.addEvent(ev1)
+        result = list(view.getHours())
+
+        self.assertEquals(result, no_allday_events)
+
+
     def test_getHours_short_periods(self):
         from schoolbell.app.browser.cal import DailyCalendarView
         from schoolbell.app.app import Person
@@ -3204,6 +3177,45 @@ class TestDailyCalendarView(unittest.TestCase):
         check('2004-08-12 10:00', '24h+44m', 32)
         check('2004-08-11 10:00', '48h+44m', 40)
         check('2004-08-11 10:00', '24h', 8)
+
+    def test_getAllDayEvents(self):
+        """Test for DailyCalendarView.getAllDayEvents
+
+            >>> setup.placelessSetUp()
+            >>> registerCalendarHelperViews()
+
+        DailyCalendarView.getAllDayEvents returns a list of wrapped
+        all-day calendar events for the date of the view cursor.
+
+            >>> from schoolbell.app.browser.cal import DailyCalendarView
+            >>> from schoolbell.app.cal import Calendar
+            >>> cal = Calendar()
+            >>> cal.addEvent(createEvent('2005-02-20 16:00', '1h',
+            ...      'A Birthday', allday=True))
+            >>> cal.addEvent(createEvent('2005-02-20 16:00', '1h', 'walk'))
+            >>> view = DailyCalendarView(cal, TestRequest())
+
+        Only all-day events are returned
+
+            >>> view.cursor = date(2005, 2, 20)
+            >>> for e in view.getAllDayEvents():
+            ...     print e.title
+            ...     print e.dtstarttz
+            A Birthday
+            2005-02-20 16:00:00+00:00
+
+        Only events that happen on the day specified by the cursor are
+        displayed:
+
+            >>> view.cursor = date(2005, 2, 22)
+            >>> [e for e in view.getAllDayEvents()]
+            []
+
+        We're done:
+
+            >>> setup.placelessTearDown()
+
+        """
 
 
 def doctest_CalendarViewBase():
