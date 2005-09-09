@@ -56,7 +56,7 @@
 </tal:loop>
 
 <!-- Events -->
-<div class="events">
+<div class="events" tal:define="compress python:view.getColumns() > 2">
   <tal:loop repeat="hour hours">
     <tal:block define="num repeat/hour/index; top python:num * height"
                repeat="ev hour/cols">
@@ -65,7 +65,6 @@
              onmouseover="this.style.zIndex=9; this.style.overflow='visible'; this.style.display='block';"
              onmouseout="this.style.zIndex=1; this.style.overflow='hidden'; this.style.display='block';"
              tal:define="num repeat/ev/index;
-                         compress python:view.getColumns() > 2;
                          unit python:compress and '%' or 'em';
                          indent python:compress and 15 or 20.5;
                          left python:num * indent;
