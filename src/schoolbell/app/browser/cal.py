@@ -543,14 +543,14 @@ class CalendarViewBase(BrowserView):
             self._day_events[date] = day
         return day.events
 
-    __calendars = None # cache
+    _calendars = None # cache
 
     def getCalendars(self):
         view = zapi.getMultiAdapter((self.context, self.request),
                                     name='calendar_list')
-        if self.__calendars is None:
-            self.__calendars = list(view.getCalendars())
-        return self.__calendars
+        if self._calendars is None:
+            self._calendars = list(view.getCalendars())
+        return self._calendars
 
     def getEvents(self, start_dt, end_dt):
         """Get a list of EventForDisplay objects for a selected time interval.

@@ -867,7 +867,7 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> from schoolbell.app.browser.cal import CalendarViewBase
             >>> view = CalendarViewBase(Calendar(), TestRequest())
 
-            >>> view._CalendarViewBase__calendars is None
+            >>> view._calendars is None
             True
 
         When we get the list of calendars for the first time it gets
@@ -875,12 +875,12 @@ class TestCalendarViewBase(unittest.TestCase):
 
             >>> view.getCalendars()
             ['some calendar', 'another calendar']
-            >>> view._CalendarViewBase__calendars
+            >>> view._calendars
             ['some calendar', 'another calendar']
 
         Next call of getCalendars will return the cached value:
 
-            >>> view._CalendarViewBase__calendars.append('random calendar')
+            >>> view._calendars.append('random calendar')
             >>> view.getCalendars()
             ['some calendar', 'another calendar', 'random calendar']
 
