@@ -19,13 +19,13 @@ SETUPFLAGS=
 all: build
 
 Zope3:
-	svn co svn://svn.zope.org/repos/main/Zope3/trunk Zope3
+	svn co svn://svn.zope.org/repos/main/Zope3/trunk Zope3 || svn up Zope3
 
 testbrowser: Zope3
-	svn co svn://svn.zope.org/repos/main/Zope3/branches/testbrowser-integration/src/zope/testbrowser Zope3/src/zope/testbrowser
+	svn co svn://svn.zope.org/repos/main/Zope3/branches/testbrowser-integration/src/zope/testbrowser Zope3/src/zope/testbrowser || svn up Zope3/src/zope/testbrowser
 
 zpkgsetup:
-	svn co svn://svn.zope.org/repos/main/zpkgtools/trunk/zpkgsetup buildsupport/zpkgsetup
+	svn co svn://svn.zope.org/repos/main/zpkgtools/trunk/zpkgsetup buildsupport/zpkgsetup || svn up buildsupport/zpkgsetup
 
 .PHONY: build
 build: Zope3 testbrowser zpkgsetup
