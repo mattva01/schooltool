@@ -1,7 +1,7 @@
 <metal:block define-macro="page" i18n:domain="schoolbell">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="icon" type="image/png" href="favicon.ico"
@@ -14,6 +14,7 @@
           tal:attributes="href context/++resource++calwidget-calendar.css" />
     <link type="text/css" rel="stylesheet" href="devmode.css"
           tal:attributes="href context/++resource++devmode.css" />
+    <metal:block use-macro="view/@@schooltool_macros/generic/stylesheets" />
     <script type="text/javascript" src="schooltool.js"
             tal:attributes="src context/++resource++schooltool.js">
     </script>
@@ -24,7 +25,7 @@
             tal:attributes="src context/++resource++calwidget-calendar.js">
     </script>
     <metal:block define-slot="title">
-      <title i18n:translate="">SchoolBell</title>
+      <metal:block use-macro="view/@@schooltool_macros/generic/title" />
     </metal:block>
     <metal:block metal:define-slot="extrahead" />
   </head>
@@ -58,7 +59,7 @@
 
           <tal:if condition="not:user/schooltool:authenticated">
             <a id="tools-login" i18n:translate=""
-              tal:attributes="href string:${url}/@@login.html">Log in</a>
+              tal:attributes="href string:${url}/@@login.html">Log In</a>
           </tal:if>
 
           <tal:if condition="user/schooltool:authenticated"
@@ -77,14 +78,8 @@
                   tal:attributes="href person/@@absolute_url"
                   tal:content="user/title">Schoolbell Person</a> |
                 <a id="tools-calendar" i18n:translate=""
-                  tal:attributes="href person/calendar/@@absolute_url"
+                  tal:attributes="href string:${person/@@absolute_url}/calendar"
                   >My Calendar</a> |
-                <tal:disable condition="nothing">
-                  XXX Preferences view is not implemented yet
-                <a id="tools-preferences" i18n:translate=""
-                  tal:attributes="href string:${person/@@absolute_url}/preferences.html"
-                  >My Preferences</a> |
-                </tal:disable>
                 <a id="tools-logout" i18n:translate=""
                   tal:attributes="href string:${url}/@@logout.html"
                   >Log Out</a>
@@ -125,15 +120,17 @@
       </div>
       <div class="clearer">&nbsp;</div>
     </div>
-    <div id="footer" i18n:translate="">
+    <div id="footer">
       <p>
         <strong tal:replace="context/schooltool:preferences/title"/>
-        Server Running SchoolBell
-        <span tal:content="modules/schoolbell/VERSION"/>
-        &copy; The Shuttleworth Foundation 2003 - <span>2005</span>:
-        Supporting Social Innovation.
+          <metal:block 
+              use-macro="view/@@schooltool_macros/generic/serverinfo" />
+          <span i18n:translate="">
+            &copy; The Shuttleworth Foundation 2003 - <span>2005</span>:
+            Supporting Social Innovation.
+          </span>
       </p>
-      <p>
+      <p i18n:translate="">
         SchoolTool&trade; is a Trademark of The Shuttleworth Foundation.
       </p>
     </div>
@@ -141,6 +138,20 @@
 </html>
 </metal:block>
 
+<metal:block define-macro="batch-search">
+  <form method="post" class="batch-search">
+    <input id="batch-search-box" type="text" name="SEARCH"
+      tal:attributes="value request/SEARCH|nothing"/>
+    <input type="submit" name="SEARCH_BUTTON" value="Find Now"
+      i18n:attributes="value"/>
+    <input type="submit" name="CLEAR_SEARCH" value="Clear"
+      i18n:attributes="value"/>
+  </form>
+</metal:block>
+
+
+<!-- XXX: Huge hack that I am not proud of, but I think pagelets will solve -->
+<!--      the problem for us. -->
 <metal:block define-macro="displaySwitch">
 
   <a href="javascript:switchDisplay('')" style="text-decoration: none"
@@ -177,7 +188,7 @@
 </metal:block>
 
 <metal:block define-macro="devtools">
-  <div class="devtools" 
+  <div class="devtools"
        tal:define="elementId string:devtools;
                    show python:False">
     <div class="header" style="clear: both">
