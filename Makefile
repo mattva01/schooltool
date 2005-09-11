@@ -32,7 +32,7 @@ build: Zope3 testbrowser zpkgsetup
 	[ ! -d Zope3 ] || cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) setup.py $(SETUPFLAGS) \
                 build_ext -i install_data --install-dir .
-	$(PYTHON) utilities/remove-stale-bytecode.py
+	$(PYTHON) bin/remove-stale-bytecode.py
 
 .PHONY: clean
 clean:
