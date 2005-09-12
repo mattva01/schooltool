@@ -807,16 +807,11 @@ class ApplicationPreferencesView(BrowserView):
 
 
 class ProbeParticipation:
-    """A stub participation for use in hasPermission."""
+    """A stub participation for use in hasPermissions."""
     implements(IParticipation)
     def __init__(self, principal):
         self.principal = principal
         self.interaction = None
-
-
-def hasPermission(permission, object, principalid):
-    """Test if the principal has access according to the security policy."""
-    return hasPermissions([permission], object, principalid)[0]
 
 
 def hasPermissions(permissions, object, principalid):
