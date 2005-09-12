@@ -1872,6 +1872,81 @@ def doctest_hasPermission():
         False
         >>> hasPermission('super', object(), 'sb.person.joe')
         False
+
+    """
+
+
+def doctest_hasPermissions():
+    r"""The Zope security machinery does not have tools to check
+    whether a random principal has some permission on some object.  So
+    we need to construct our own.
+
+    Set up for local grants:
+
+        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.app.securitypolicy.interfaces import \
+        ...                         IPrincipalPermissionManager
+        >>> from zope.app.securitypolicy.principalpermission import \
+        ...                         AnnotationPrincipalPermissionManager
+        >>> setup.setUpAnnotations()
+        >>> setup.setUpTraversal()
+        >>> ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
+        ...                      AnnotationPrincipalPermissionManager)
+
+
+    Let's set the Zope security policy:
+
+        >>> from zope.security.management import setSecurityPolicy
+        >>> from zope.app.securitypolicy.zopepolicy import ZopeSecurityPolicy
+        >>> old = setSecurityPolicy(ZopeSecurityPolicy)
+
+    Suppose we have a Schoolbell object:
+
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> persons = app['persons']
+        >>> from schoolbell.app.security import setUpLocalAuth
+        >>> setUpLocalAuth(app)
+        >>> from zope.app.component.hooks import setSite
+        >>> setSite(app)
+
+    In it, we have a principal:
+
+        >>> from schoolbell.app.app import Person
+        >>> app['persons']['1'] = Person('joe', title='Joe')
+
+    He does not have neither 'super' nor 'duper' permissions on our
+    schoolbell app:
+
+        >>> from schoolbell.app.browser.app import hasPermissions
+        >>> hasPermissions(['super', 'duper'], app, 'sb.person.joe')
+        [False, False]
+
+    However, we can add a local grant:
+
+        >>> perms = IPrincipalPermissionManager(app)
+        >>> perms.grantPermissionToPrincipal('super', 'sb.person.joe')
+
+    And everything changes!
+
+        >>> hasPermissions(['super', 'duper'], app, 'sb.person.joe')
+        [True, False]
+
+    The same works for subobjects:
+
+        >>> hasPermissions(['duper', 'super'], app['persons'], 'sb.person.joe')
+        [False, True]
+        >>> hasPermissions(['super', 'duper'], app['persons']['joe'], 'sb.person.joe')
+        [True, False]
+
+    Also, it works gracefully for None or random objects:
+
+        >>> hasPermissions(['super'], None, 'sb.person.joe')
+        [False]
+        >>> hasPermissions(['super'], object(), 'sb.person.joe')
+        [False]
+
     """
 
 
