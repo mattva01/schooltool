@@ -42,7 +42,7 @@ def doctest_restSchoolBellSubscriber():
     On an arbitrary object, the subscriber does nothing:
 
         >>> context = object()
-        >>> request = HTTPRequest(StringIO(), StringIO(), {})
+        >>> request = HTTPRequest(StringIO(), {})
         >>> event = BeforeTraverseEvent(context, request)
         >>> restSchoolBellSubscriber(event)
         >>> ISchoolBellRequest.providedBy(request)

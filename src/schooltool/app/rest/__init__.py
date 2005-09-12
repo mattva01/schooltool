@@ -26,7 +26,7 @@ from zope.publisher.http import HTTPRequest
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.http import IHTTPPublisher
 from zope.server.http.commonaccesslogger import CommonAccessLogger
-from zope.server.http.publisherhttpserver import PublisherHTTPServer
+from zope.server.http.wsgihttpserver import WSGIHTTPServer
 
 from zope.app import zapi
 from zope.app.container.interfaces import ISimpleReadContainer
@@ -51,15 +51,15 @@ class RestPublicationRequestFactory(object):
         """See `zope.app.publication.interfaces.IPublicationRequestFactory`"""
         self.db = db
 
-    def __call__(self, input_stream, output_steam, env):
+    def __call__(self, input_stream, env):
         """See `zope.app.publication.interfaces.IPublicationRequestFactory`"""
-        request = HTTPRequest(input_stream, output_steam, env)
+        request = HTTPRequest(input_stream, env)
         request.setPublication(HTTPPublication(self.db))
 
         return request
 
 
-restServerType = ServerType(PublisherHTTPServer,
+restServerType = ServerType(WSGIHTTPServer,
                             RestPublicationRequestFactory,
                             CommonAccessLogger,
                             7001, True)

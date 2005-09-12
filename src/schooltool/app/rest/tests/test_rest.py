@@ -50,7 +50,7 @@ class Test(PlacelessSetup, unittest.TestCase):
                        'head', 'put', 'post', 'delete',
                        'whatnot'):
             self.__env['REQUEST_METHOD'] = method
-            request = factory(StringIO(''), StringIO(), self.__env)
+            request = factory(StringIO(''), self.__env)
             self.assertEqual(request.__class__, HTTPRequest)
             self.assertEqual(request.publication.__class__, HTTPPublication)
 
