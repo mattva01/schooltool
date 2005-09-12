@@ -1387,6 +1387,77 @@ def doctest_ACLViewBase_applyPermissionChanges():
     """
 
 
+def doctest_ACLViewBase_permsForPrincipal():
+    r"""Test for ACLViewBase.permsForPrincipal
+
+    Set up for local grants:
+
+        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.app.securitypolicy.interfaces import \
+        ...                         IPrincipalPermissionManager
+        >>> from zope.app.securitypolicy.principalpermission import \
+        ...                         AnnotationPrincipalPermissionManager
+        >>> setup.setUpAnnotations()
+        >>> setup.setUpTraversal()
+        >>> ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
+        ...                      AnnotationPrincipalPermissionManager)
+
+    Let's set the Zope security policy:
+
+        >>> from zope.security.management import setSecurityPolicy
+        >>> from zope.app.securitypolicy.zopepolicy import ZopeSecurityPolicy
+        >>> old = setSecurityPolicy(ZopeSecurityPolicy)
+
+    Suppose we have a Schoolbell object:
+
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+        >>> directlyProvides(app, IContainmentRoot)
+        >>> persons = app['persons']
+        >>> from schoolbell.app.security import setUpLocalAuth
+        >>> setUpLocalAuth(app)
+        >>> from zope.app.component.hooks import setSite
+        >>> setSite(app)
+
+    In it, we have a principal:
+
+        >>> from schoolbell.app.app import Person
+        >>> joe = app['persons']['1'] = Person('joe', title='Joe')
+
+
+    Let's create an ACLViewBase:
+
+        >>> from schoolbell.app.browser.app import ACLViewBase
+        >>> vb = ACLViewBase()
+        >>> vb.context = app
+
+    He can't do anything yet:
+
+        >>> vb.permsForPrincipal('sb.person.joe')
+        []
+
+    However, we can add a local grant:
+
+        >>> perms = IPrincipalPermissionManager(app)
+        >>> perms.grantPermissionToPrincipal('schoolbell.view', 'sb.person.joe')
+
+    And everything changes!
+
+        >>> vb.permsForPrincipal('sb.person.joe')
+        ['schoolbell.view']
+
+    The same works for subobjects:
+
+        >>> vb.context = app['persons']
+        >>> vb.permsForPrincipal('sb.person.joe')
+        ['schoolbell.view']
+        >>> vb.context = app['persons']['joe']
+        >>> vb.permsForPrincipal('sb.person.joe')
+        ['schoolbell.view']
+
+    """
+
+
 # TODO: extract separate unit tests for other ACLViewBase methods
 
 
