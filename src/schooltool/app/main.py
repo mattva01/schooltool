@@ -45,7 +45,7 @@ from zope.server.taskthreads import ThreadedTaskDispatcher
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.app.server.main import run
-from zope.app.server.http import http
+from zope.app.server.wsgi import http
 from zope.app.appsetup import DatabaseOpened, ProcessStarting
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.traversing.interfaces import IContainmentRoot
