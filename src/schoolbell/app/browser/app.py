@@ -661,6 +661,8 @@ class ACLViewBase(object):
         ('schoolbell.controlAccess', _('Control access')),
         ('schoolbell.manageMembership', _('Manage membership')),
         ]
+    permission_ids = [permission for permission, title in permissions]
+    del permission, title # list comprehensions clutter local scope
 
     def getPersons(self):
         app = getSchoolBellApplication()
@@ -676,9 +678,10 @@ class ACLViewBase(object):
 
     def permsForPrincipal(self, principalid):
         """Return a list of permissions allowed for principal."""
-        return [perm
-                for perm, title in self.permissions
-                if hasPermission(perm, self.context, principalid)]
+        permission_bits = hasPermissions(self.permission_ids, self.context,
+                                         principalid)
+        return [perm for perm, has in zip(self.permission_ids, permission_bits)
+                if has]
 
     def getGroups(self):
         app = getSchoolBellApplication()
@@ -717,13 +720,14 @@ class ACLViewBase(object):
         """
         parent = self.context.__parent__
         manager = IPrincipalPermissionManager(self.context)
-        # This view is protected by schoolbell.controlAccess, so
+        # ACL views are protected by schoolbell.controlAccess, so
         # removeSecurityProxy does not lead to privilege escalation
         # problems.
         manager = removeSecurityProxy(manager)
-        for permission, title in self.permissions:
+        permission_bits = hasPermissions(self.permission_ids, parent,
+                                         principalid)
+        for permission, in_parent in zip(self.permission_ids, permission_bits):
             requested = permission in permissions
-            in_parent = hasPermission(permission, parent, principalid)
             if requested and not in_parent:
                 manager.grantPermissionToPrincipal(permission, principalid)
             elif not requested and in_parent:
