@@ -745,17 +745,6 @@ class ACLView(BrowserView, ACLViewBase, MultiBatchViewMixin):
             self.request.response.redirect(url)
 
         if 'UPDATE_SUBMIT' in self.request:
-            map = IPrincipalPermissionManager(self.context)
-            # this view is protected by schoolbell.controlAccess
-            map = removeSecurityProxy(map)
-
-            def permChecked(perm, principalid):
-                """Test if a checkbox for (perm, principalid) is checked."""
-                if principalid in self.request:
-                    return (perm in self.request[principalid] or
-                            perm == self.request[principalid])
-                return False
-
             for info in self.persons + self.groups:
                 principalid = info['id']
                 if 'marker-' + principalid not in self.request:
