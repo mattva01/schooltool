@@ -801,10 +801,7 @@ class ProbeParticipation:
 
 def hasPermission(permission, object, principalid):
     """Test if the principal has access according to the security policy."""
-    principal = zapi.getUtility(IAuthentication).getPrincipal(principalid)
-    participation = ProbeParticipation(principal)
-    interaction = getSecurityPolicy()(participation)
-    return interaction.checkPermission(permission, object)
+    return hasPermissions([permission], object, principalid)[0]
 
 
 def hasPermissions(permissions, object, principalid):
