@@ -1270,8 +1270,129 @@ def doctest_LogoutView():
     """
 
 
+def doctest_ACLViewBase_applyPermissionChanges():
+    r"""Tests for ACLViewBase.applyPermissionChanges.
+
+    Import the view:
+
+        >>> from schoolbell.app.browser.app import ACLViewBase
+
+    Set up local permission grants:
+
+        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.app.securitypolicy.interfaces import \
+        ...                         IPrincipalPermissionManager
+        >>> from zope.app.securitypolicy.principalpermission import \
+        ...                         AnnotationPrincipalPermissionManager
+        >>> setup.setUpAnnotations()
+        >>> setup.setUpTraversal()
+        >>> ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
+        ...                      AnnotationPrincipalPermissionManager)
+
+    Install the Zope security policy:
+
+        >>> from zope.security.management import setSecurityPolicy
+        >>> from zope.app.securitypolicy.zopepolicy import ZopeSecurityPolicy
+        >>> policy = setSecurityPolicy(ZopeSecurityPolicy)
+
+    Set up the application:
+
+        >>> from schoolbell.app.app import SchoolBellApplication
+        >>> app = SchoolBellApplication()
+        >>> from schoolbell.app.security import setUpLocalAuth
+        >>> setUpLocalAuth(app)
+        >>> from zope.app.component.hooks import setSite
+        >>> setSite(app)
+
+    And a person:
+
+        >>> from schoolbell.app.app import Person
+        >>> app['persons']['1'] = Person('joe', title='Joe')
+
+    Create the view base:
+
+        >>> vb = ACLViewBase()
+        >>> vb.context = app['persons']
+
+    At the moment Joe can't do anything with the person container:
+
+        >>> from schoolbell.app.browser.app import hasPermissions
+        >>> hasPermissions(['schoolbell.view',
+        ...                 'schoolbell.edit',
+        ...                 'schoolbell.create'],
+        ...                app['persons'],
+        ...                'sb.person.joe')
+        [False, False, False]
+
+    Let's give him some permissions:
+
+        >>> vb.applyPermissionChanges('sb.person.joe',
+        ...                           ['schoolbell.view',
+        ...                            'schoolbell.edit'])
+
+    Now he can view and edit properties of the container:
+
+        >>> hasPermissions(['schoolbell.view',
+        ...                 'schoolbell.edit',
+        ...                 'schoolbell.create'],
+        ...                app['persons'],
+        ...                'sb.person.joe')
+        [True, True, False]
+
+    By default Joe can do with Persons anything that he can do with
+    Person container:
+
+        >>> hasPermissions(['schoolbell.view',
+        ...                 'schoolbell.edit',
+        ...                 'schoolbell.create'],
+        ...                app['persons']['joe'],
+        ...                'sb.person.joe')
+        [True, True, False]
+
+    But we can change it by granting or denying him these privilegies
+    through the same view:
+
+        >>> vb2 = ACLViewBase()
+        >>> vb2.context = app['persons']['joe']
+
+        >>> vb2.applyPermissionChanges('sb.person.joe',
+        ...                           ['schoolbell.view',
+        ...                            'schoolbell.create'])
+
+    Our user just lost his permission to edit, though now he has the
+    permission to create:
+
+        >>> hasPermissions(['schoolbell.view',
+        ...                 'schoolbell.edit',
+        ...                 'schoolbell.create'],
+        ...                app['persons']['joe'],
+        ...                'sb.person.joe')
+        [True, False, True]
+
+    View is still inherited from person container so if we will
+    retract the view permission on the container:
+
+        >>> vb.applyPermissionChanges('sb.person.joe',
+        ...                           ['schoolbell.edit'])
+
+    Joe will not be capable of viewing his own properties anymore:
+
+        >>> hasPermissions(['schoolbell.view',
+        ...                 'schoolbell.edit',
+        ...                 'schoolbell.create'],
+        ...                app['persons']['joe'],
+        ...                'sb.person.joe')
+        [False, False, True]
+
+    """
+
+
+# TODO: extract separate unit tests for other ACLViewBase methods
+
+
 def doctest_ACLView():
-    r"""
+    r"""Tests for ACLView.
+
     Set up for local grants:
 
         >>> from zope.app.annotation.interfaces import IAnnotatable
@@ -1336,7 +1457,7 @@ def doctest_ACLView():
          {'perms': [], 'id': u'sb.group.4', 'title': 'mgmt'}]
 
     If we have an authenticated group and an unauthenticated group, we
-    get then as well:
+    get them as well:
 
         >>> from zope.app.security.interfaces import IAuthentication
         >>> from zope.app.security.interfaces import IAuthenticatedGroup
@@ -1380,7 +1501,7 @@ def doctest_ACLView():
          ('schoolbell.manageMembership', u'Manage membership')]
 
     The view displays a matrix with groups and persons as rows and
-    permisssions as columns:
+    permissions as columns:
 
         >>> print view()
         <BLANKLINE>
@@ -2000,10 +2121,11 @@ def doctest_ApplicationPreferencesView():
 
 
 def test_suite():
+    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF
+                   | doctest.REPORT_ONLY_FIRST_FAILURE)
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
-                                       optionflags=doctest.ELLIPSIS|
-                                                   doctest.REPORT_NDIFF))
+                                       optionflags=optionflags))
     return suite
 
 

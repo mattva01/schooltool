@@ -703,6 +703,34 @@ class ACLViewBase(object):
         return result
     groups = property(getGroups)
 
+    def applyPermissionChanges(self, principalid, permissions):
+        """Apply new permission settings for a single principal.
+
+        Make it so `principal` has exactly the permissions specified
+        in `permissions` (and not more) on self.context.
+
+        If the requested permission grant on self.context matches the
+        one on self.context.__parent__, this method removes any
+        specific local grants from self.context.  Otherwise, it adds a
+        local grant that either grants or denies the permission
+        directly on self.context.
+        """
+        parent = self.context.__parent__
+        manager = IPrincipalPermissionManager(self.context)
+        # This view is protected by schoolbell.controlAccess, so
+        # removeSecurityProxy does not lead to privilege escalation
+        # problems.
+        manager = removeSecurityProxy(manager)
+        for permission, title in self.permissions:
+            requested = permission in permissions
+            in_parent = hasPermission(permission, parent, principalid)
+            if requested and not in_parent:
+                manager.grantPermissionToPrincipal(permission, principalid)
+            elif not requested and in_parent:
+                manager.denyPermissionToPrincipal(permission, principalid)
+            else:
+                manager.unsetPermissionForPrincipal(permission, principalid)
+
 
 class ACLView(BrowserView, ACLViewBase, MultiBatchViewMixin):
     """A view for editing SchoolBell-relevant local grants"""
@@ -732,16 +760,10 @@ class ACLView(BrowserView, ACLViewBase, MultiBatchViewMixin):
                 principalid = info['id']
                 if 'marker-' + principalid not in self.request:
                     continue # skip this principal
-                for perm, permtitle in self.permissions:
-                    parent = self.context.__parent__
-                    checked_in_request = permChecked(perm, principalid)
-                    grant_in_parent = hasPermission(perm, parent, principalid)
-                    if checked_in_request and not grant_in_parent:
-                        map.grantPermissionToPrincipal(perm, principalid)
-                    elif not checked_in_request and grant_in_parent:
-                        map.denyPermissionToPrincipal(perm, principalid)
-                    else:
-                        map.unsetPermissionForPrincipal(perm, principalid)
+                permissions = self.request.get(principalid, [])
+                if isinstance(permissions, basestring):
+                    permissions = [permissions]
+                self.applyPermissionChanges(principalid, permissions)
 
         MultiBatchViewMixin.update(self)
 
