@@ -191,7 +191,7 @@ class IRecurrenceRule(Interface):
     def __ne__(other):
         """See if self != other."""
 
-    def apply(event, enddate=None):
+    def apply(event, startdate=None, enddate=None):
        """Apply this rule to an event.
 
        This is a generator that returns the dates on which the event should
@@ -422,4 +422,3 @@ class IExpandedCalendarEvent(ICalendarEvent):
         IExpandedCalendarEvent and its dtstart attribute will be the date and
         time of the original event rather than this specific occurrence.
         """
-

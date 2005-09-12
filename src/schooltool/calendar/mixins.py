@@ -125,7 +125,8 @@ class CalendarMixin(object):
             if event.recurrence is not None:
                 naivetime = event.dtstart.time()
                 starttime = naivetime.replace(tzinfo=utc)
-                for recdate in event.recurrence.apply(event, last.date()):
+                for recdate in event.recurrence.apply(event, first.date(),
+                                                      last.date()):
                     dtstart = datetime.datetime.combine(recdate, starttime)
                     dtend = dtstart + event.duration
                     if event.duration == zero: # corner case: zero-length event

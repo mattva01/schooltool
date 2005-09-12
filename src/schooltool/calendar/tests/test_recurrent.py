@@ -22,6 +22,7 @@ Unit tests for schooltool.calendar.recurrent.
 $Id$
 """
 
+import time
 import unittest
 from datetime import datetime, date, timedelta
 from zope.interface.verify import verifyObject
@@ -109,11 +110,11 @@ class TestDailyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
                            "reality check", unique_id='uid')
 
         # The event happened after the range -- empty result
-        result = list(rule.apply(ev, date(2003, 10, 1)))
+        result = list(rule.apply(ev, enddate=date(2003, 10, 1)))
         self.assertEqual(result, [])
 
         # Simplest case
-        result = list(rule.apply(ev, date(2004, 10, 20)))
+        result = list(rule.apply(ev, enddate=date(2004, 10, 20)))
         self.assertEqual(result, [date(2004, 10, d) for d in range(13, 21)])
 
         # With an end date
@@ -133,13 +134,13 @@ class TestDailyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
         # With an interval
         rule = self.createRule(interval=2)
-        result = list(rule.apply(ev, date(2004, 10, 20)))
+        result = list(rule.apply(ev, enddate=date(2004, 10, 20)))
         self.assertEqual(result, [date(2004, 10, d) for d in range(13, 21, 2)])
 
         # With exceptions
         rule = self.createRule(exceptions=[date(2004, 10, d)
                                            for d in range(16, 21)])
-        result = list(rule.apply(ev, date(2004, 10, 20)))
+        result = list(rule.apply(ev, enddate=date(2004, 10, 20)))
         self.assertEqual(result, [date(2004, 10, d) for d in range(13, 16)])
 
         # With exceptions and count -- exceptions are excluded after
@@ -147,9 +148,61 @@ class TestDailyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         rule = self.createRule(exceptions=[date(2004, 10, d)
                                            for d in range(16, 21)],
                                count=6)
-        result = list(rule.apply(ev, date(2004, 10, 20)))
+        result = list(rule.apply(ev, enddate=date(2004, 10, 20)))
         self.assertEqual(result, [date(2004, 10, 13), date(2004, 10, 14),
                                   date(2004, 10, 15)])
+
+        # Far in future
+        tick = time.clock()
+        rule = self.createRule(interval=3)
+        result = list(rule.apply(ev, startdate=date(3000, 01, 01),
+                                 enddate=date(3000, 01, 20)))
+        self.assertEquals(int(time.clock() - tick), 0)
+        self.assertEqual(result,
+                         [date(3000, 1, 3), date(3000, 1, 6),
+                          date(3000, 1, 9), date(3000, 1, 12),
+                          date(3000, 1, 15), date(3000, 1, 18)])
+
+    def test_scroll(self):
+        from schooltool.calendar.simple import SimpleCalendarEvent
+        rule = self.createRule()
+        ev = SimpleCalendarEvent(datetime(2004, 10, 13, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+
+        # if the start date is before the event,
+        # return the original event date.
+        self.assertEqual(rule._scroll(ev, date(2004, 1, 1)),
+                         (0, date(2004, 10, 13)))
+
+        # if the start date coincides with the event, date
+        self.assertEqual(rule._scroll(ev, date(2004, 10, 13)),
+                         (0, date(2004, 10, 13)))
+
+        # if the start date is later than the event date
+        self.assertEqual(rule._scroll(ev, date(2004, 10, 23)),
+                         (10, date(2004, 10, 23)))
+
+        rule = self.createRule(interval=3)
+
+        # if the start date is before the event,
+        # return the original event date.
+        self.assertEqual(rule._scroll(ev, date(2004, 1, 1)),
+                         (0, date(2004, 10, 13)))
+
+        # if the start date coincides with the event, date
+        self.assertEqual(rule._scroll(ev, date(2004, 10, 13)),
+                         (0, date(2004, 10, 13)))
+
+        # if the start date is later than the event date
+        self.assertEqual(rule._scroll(ev, date(2004, 10, 23)),
+                         (3, date(2004, 10, 22)))
+
+        self.assertEqual(rule._scroll(ev, date(2004, 10, 22)),
+                         (3, date(2004, 10, 22)))
+
+        self.assertEqual(rule._scroll(ev, date(2004, 10, 21)),
+                         (2, date(2004, 10, 19)))
 
 
 class TestYearlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
@@ -171,11 +224,11 @@ class TestYearlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
                            "reality check", unique_id='uid')
 
         # The event happened after the range -- empty result
-        result = list(rule.apply(ev, date(1970, 1, 1)))
+        result = list(rule.apply(ev, enddate=date(1970, 1, 1)))
         self.assertEqual(result, [])
 
         # Simplest case
-        result = list(rule.apply(ev, date(2004, 10, 20)))
+        result = list(rule.apply(ev, enddate=date(2004, 10, 20)))
         self.assertEqual(result, [date(y, 5, 17) for y in range(1978, 2005)])
 
         # With an end date
@@ -190,14 +243,14 @@ class TestYearlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
         # With an interval
         rule = self.createRule(interval=4)
-        result = list(rule.apply(ev, date(2004, 10, 20)))
+        result = list(rule.apply(ev, enddate=date(2004, 10, 20)))
         self.assertEqual(result,
                          [date(y, 5, 17)
                           for y in [1978, 1982, 1986, 1990, 1994, 1998, 2002]])
 
         # With exceptions
         rule = self.createRule(exceptions=[date(1980, 5, 17)])
-        result = list(rule.apply(ev, date(2004, 10, 20)))
+        result = list(rule.apply(ev, enddate=date(2004, 10, 20)))
         self.assertEqual(result,
                          [date(y, 5, 17)
                           for y in [1978, 1979] + range(1981, 2005)])
@@ -205,11 +258,51 @@ class TestYearlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         # With exceptions and count -- the total nr. of events is less
         # that count.
         rule = self.createRule(exceptions=[date(1980, 5, 17)], count=4)
-        result = list(rule.apply(ev, date(2004, 10, 20)))
+        result = list(rule.apply(ev, enddate=date(2004, 10, 20)))
         self.assertEqual(result,
                          [date(1978, 5, 17), date(1979, 5, 17),
                           date(1981, 5, 17)])
 
+        # Event somewhere in the future
+        rule = self.createRule(interval=2)
+        result = list(rule.apply(ev, date(2000, 1, 1), date(2006, 1, 1)))
+        self.assertEqual(result, [date(2000, 5, 17), date(2002, 5, 17),
+                                  date(2004, 5, 17)])
+
+        # Frebruary 29
+        ev = SimpleCalendarEvent(datetime(1996, 2, 29, 12, 0),
+                           timedelta(minutes=10),
+                           "once in 4 years", unique_id='uid')
+        rule = self.createRule()
+        result = list(rule.apply(ev, date(1995, 1, 1), date(2006, 1, 1)))
+        self.assertEqual(result, [date(1996, 2, 29), date(2000, 2, 29),
+                                  date(2004, 2, 29)])
+
+    def test_scroll(self):
+        from schooltool.calendar.simple import SimpleCalendarEvent
+        rule = self.createRule()
+        ev = SimpleCalendarEvent(datetime(1978, 5, 17, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+        self.assertEqual(rule._scroll(ev, date(1900, 3, 1)),
+                         (0, date(1978, 5, 17)))
+        self.assertEqual(rule._scroll(ev, date(2000, 3, 1)),
+                         (22, date(2000, 5, 17)))
+
+    def test_scroll_feb29(self):
+        from schooltool.calendar.simple import SimpleCalendarEvent
+        rule = self.createRule()
+        ev = SimpleCalendarEvent(datetime(1996, 2, 29, 12, 0),
+                           timedelta(minutes=10),
+                           "once in 4 years", unique_id='uid')
+        self.assertEqual(rule._scroll(ev, date(1900, 3, 1)),
+                         (0, date(1996, 2, 29)))
+        self.assertEqual(rule._scroll(ev, date(1999, 3, 1)),
+                         (0, date(1996, 2, 29)))
+        self.assertEqual(rule._scroll(ev, date(2000, 3, 1)),
+                         (4, date(2000, 2, 29)))
+        self.assertEqual(rule._scroll(ev, date(2004, 3, 1)),
+                         (8, date(2004, 2, 29)))
 
 class TestWeeklyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
@@ -239,11 +332,11 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
                            "reality check", unique_id='uid')
 
         # The event happened after the range -- empty result
-        result = list(rule.apply(ev, date(1970, 1, 1)))
+        result = list(rule.apply(ev, enddate=date(1970, 1, 1)))
         self.assertEqual(result, [])
 
         # Simplest case
-        result = list(rule.apply(ev, date(1978, 7, 17))) # Wednesday
+        result = list(rule.apply(ev, enddate=date(1978, 7, 17))) # Wednesday
         expected = [date(1978, 5, 17) + timedelta(w * 7) for w in range(9)]
         self.assertEqual(result, expected)
 
@@ -264,7 +357,7 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
         # With an interval
         rule = self.createRule(interval=2, weekdays=(3,))
-        result = list(rule.apply(ev, date(1978, 7, 12)))
+        result = list(rule.apply(ev, enddate=date(1978, 7, 12)))
         expected = [date(1978, 5, 17), date(1978, 5, 18),
                     date(1978, 5, 31), date(1978, 6, 1),
                     date(1978, 6, 14), date(1978, 6, 15),
@@ -275,7 +368,7 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         # With exceptions
         rule = self.createRule(interval=2, weekdays=(3,),
                                exceptions=[date(1978, 6, 29)])
-        result = list(rule.apply(ev, date(1978, 7, 12)))
+        result = list(rule.apply(ev, enddate=date(1978, 7, 12)))
         expected = [date(1978, 5, 17), date(1978, 5, 18),
                     date(1978, 5, 31), date(1978, 6, 1),
                     date(1978, 6, 14), date(1978, 6, 15),
@@ -323,16 +416,16 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
                            "reality check", unique_id='uid')
 
         # The event happened after the range -- empty result
-        result = list(rule.apply(ev, date(1970, 1, 1)))
+        result = list(rule.apply(ev, enddate=date(1970, 1, 1)))
         self.assertEqual(result, [])
 
         # Simplest case
-        result = list(rule.apply(ev, date(1978, 8, 17)))
+        result = list(rule.apply(ev, enddate=date(1978, 8, 17)))
         expected = [date(1978, m, 17) for m in range(5,9)]
         self.assertEqual(result, expected)
 
         # Over the end of the year
-        result = list(rule.apply(ev, date(1979, 2, 17)))
+        result = list(rule.apply(ev, enddate=date(1979, 2, 17)))
         expected = ([date(1978, m, 17) for m in range(5, 13)] +
                     [date(1979, m, 17) for m in range(1, 3)])
         self.assertEqual(result, expected)
@@ -349,7 +442,7 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
         # With an interval
         rule = self.createRule(monthly="monthday", interval=2)
-        result = list(rule.apply(ev, date(1979, 2, 17)))
+        result = list(rule.apply(ev, enddate=date(1979, 2, 17)))
         expected = [date(1978, 5, 17), date(1978, 7, 17),date(1978, 9, 17),
                     date(1978, 11, 17), date(1979, 1, 17)]
         self.assertEqual(result, expected)
@@ -357,8 +450,16 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         # With exceptions
         rule = self.createRule(monthly="monthday", interval=2,
                                exceptions=[date(1978, 7, 17)])
-        result = list(rule.apply(ev, date(1978, 9, 17)))
+        result = list(rule.apply(ev, enddate=date(1978, 9, 17)))
         expected = [date(1978, 5, 17), date(1978, 9, 17)]
+        self.assertEqual(result, expected)
+
+        # With a start date
+        rule = self.createRule(monthly="monthday", interval=2,
+                               exceptions=[date(1978, 7, 17)])
+        result = list(rule.apply(ev,startdate=date(2000, 1, 1),
+                                 enddate=date(2000, 6, 17)))
+        expected = [date(2000, 1, 17), date(2000, 3, 17), date(2000, 5, 17)]
         self.assertEqual(result, expected)
 
     def test_apply_endofmonth(self):
@@ -369,19 +470,25 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
                            "End of month", unique_id="uid")
 
         # The event happened after the range -- empty result
-        result = list(rule.apply(ev, date(2001, 12, 31)))
+        result = list(rule.apply(ev, enddate=date(2001, 12, 31)))
         self.assertEqual(len(result), 7)
 
         rule = self.createRule(monthly="monthday", count=7)
-        result = list(rule.apply(ev, date(2001, 12, 31)))
+        result = list(rule.apply(ev, enddate=date(2001, 12, 31)))
         self.assertEqual(len(result), 7)
         self.assertEqual(result[-1], date(2001, 12, 31))
 
         rule = self.createRule(monthly="monthday", interval=2)
-        result = list(rule.apply(ev, date(2002, 1, 31)))
+        result = list(rule.apply(ev, enddate=date(2002, 1, 31)))
         self.assertEqual(result, [date(2001, 1, 31),
                                   date(2001, 3, 31),
                                   date(2001, 5, 31),
+                                  date(2001, 7, 31),
+                                  date(2002, 1, 31),])
+
+        result = list(rule.apply(ev, startdate=date(2001, 4, 1),
+                                 enddate=date(2002, 1, 31)))
+        self.assertEqual(result, [date(2001, 5, 31),
                                   date(2001, 7, 31),
                                   date(2002, 1, 31),])
 
@@ -393,17 +500,17 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
                            "reality check", unique_id='uid')
 
         # The event happened after the range -- empty result
-        result = list(rule.apply(ev, date(1970, 1, 1)))
+        result = list(rule.apply(ev, enddate=date(1970, 1, 1)))
         self.assertEqual(result, [])
 
         # Simplest case
-        result = list(rule.apply(ev, date(1978, 8, 17)))
+        result = list(rule.apply(ev, enddate=date(1978, 8, 17)))
         expected = [date(1978, 5, 17), date(1978, 6, 21),
                     date(1978, 7, 19), date(1978, 8, 16)]
         self.assertEqual(result, expected)
 
         # Over the end of the year
-        result = list(rule.apply(ev, date(1979, 2, 21)))
+        result = list(rule.apply(ev, enddate=date(1979, 2, 21)))
         expected = [date(1978, 5, 17), date(1978, 6, 21),
                     date(1978, 7, 19), date(1978, 8, 16),
                     date(1978, 9, 20), date(1978, 10, 18),
@@ -423,7 +530,7 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
         # With an interval
         rule = self.createRule(monthly="weekday", interval=2)
-        result = list(rule.apply(ev, date(1979, 2, 21)))
+        result = list(rule.apply(ev, enddate=date(1979, 2, 21)))
         expected = [date(1978, 5, 17), date(1978, 7, 19),
                     date(1978, 9, 20), date(1978, 11, 15),
                     date(1979, 1, 17)]
@@ -432,7 +539,7 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         # With exceptions
         rule = self.createRule(monthly="weekday", interval=2,
                                exceptions=[date(1978, 7, 19)])
-        result = list(rule.apply(ev, date(1978, 9, 30)))
+        result = list(rule.apply(ev, enddate=date(1978, 9, 30)))
         expected = [date(1978, 5, 17), date(1978, 9, 20)]
         self.assertEqual(result, expected)
 
@@ -444,17 +551,17 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
                            "reality check", unique_id='uid')
 
         # The event happened after the range -- empty result
-        result = list(rule.apply(ev, date(1970, 1, 1)))
+        result = list(rule.apply(ev, enddate=date(1970, 1, 1)))
         self.assertEqual(result, [])
 
         # Simplest case
-        result = list(rule.apply(ev, date(1978, 8, 17)))
+        result = list(rule.apply(ev, enddate=date(1978, 8, 17)))
         expected = [date(1978, 5, 17), date(1978, 6, 14),
                     date(1978, 7, 12), date(1978, 8, 16)]
         self.assertEqual(result, expected)
 
         # Over the end of the year
-        result = list(rule.apply(ev, date(1979, 2, 21)))
+        result = list(rule.apply(ev, enddate=date(1979, 2, 21)))
         expected = [date(1978, 5, 17), date(1978, 6, 14),
                     date(1978, 7, 12), date(1978, 8, 16),
                     date(1978, 9, 13), date(1978, 10, 11),
@@ -474,7 +581,7 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
 
         # With an interval
         rule = self.createRule(monthly="lastweekday", interval=2)
-        result = list(rule.apply(ev, date(1979, 2, 21)))
+        result = list(rule.apply(ev, enddate=date(1979, 2, 21)))
         expected = [date(1978, 5, 17), date(1978, 7, 12),
                     date(1978, 9, 13), date(1978, 11, 15),
                     date(1979, 1, 17)]
@@ -483,9 +590,41 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         # With exceptions
         rule = self.createRule(monthly="lastweekday", interval=2,
                                exceptions=[date(1978, 7, 12)])
-        result = list(rule.apply(ev, date(1978, 9, 30)))
+        result = list(rule.apply(ev, enddate=date(1978, 9, 30)))
         expected = [date(1978, 5, 17), date(1978, 9, 13)]
         self.assertEqual(result, expected)
+
+    def test_scroll(self):
+        from schooltool.calendar.simple import SimpleCalendarEvent
+        rule = self.createRule(interval=3)
+        ev = SimpleCalendarEvent(datetime(2004, 10, 13, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+
+        # start before event
+        self.assertEqual(rule._scroll(ev, date(2004, 1, 1)),
+                         (0, date(2004, 10, 13)))
+
+        # start on event date
+        self.assertEqual(rule._scroll(ev, date(2004, 10, 13)),
+                         (0, date(2004, 10, 13)))
+
+        # start after date
+        self.assertEqual(rule._scroll(ev, date(2005, 3, 14)),
+                         (1, date(2005, 1, 13)))
+
+        # If we ask for an illegal dates, we get less events
+        rule = self.createRule()
+        ev = SimpleCalendarEvent(datetime(2004, 1, 30, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+        self.assertEqual(rule._scroll(ev, date(2004, 1, 29)),
+                         (0, date(2004, 1, 30)))
+        self.assertEqual(rule._scroll(ev, date(2004, 2, 28)),
+                         (0, date(2004, 1, 30)))
+        # sequence nr 1 is taken by illegal date 2004-02-30
+        self.assertEqual(rule._scroll(ev, date(2004, 3, 1)),
+                         (2, date(2004, 3, 30)))
 
     def test_iCalRepresentation(self):
         # This method deliberately overrides the test in the base class.
