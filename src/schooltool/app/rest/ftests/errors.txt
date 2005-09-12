@@ -54,7 +54,7 @@ An ill-well formed document:
     Ill-formed document.
 
 ## Method not supported errors:
-## 
+##
 ##     >>> print rest("""
 ##     ... POST /frogpond HTTP/1.1
 ##     ...
@@ -64,9 +64,9 @@ An ill-well formed document:
 ##     Allow: GET
 ##     <BLANKLINE>
 ##     Method Not Allowed
-## 
+##
 ## This is emitted by a special adapter:
-## 
+##
 ##     >>> print rest("""
 ##     ... DELETE /frogpond HTTP/1.1
 ##     ...
@@ -75,7 +75,7 @@ An ill-well formed document:
 ##     Allow: GET
 ##     <BLANKLINE>
 ##     Method Not Allowed
-## 
+##
 
 Unauthorized errors are handled by Zope for us:
 
@@ -87,7 +87,7 @@ Unauthorized errors are handled by Zope for us:
     ... """)
     HTTP/1.1 401 Unauthorized
     Content-Length: 0
-    Www-Authenticate: basic realm='Zope'
+    WWW-Authenticate: basic realm='Zope'
     <BLANKLINE>
 
 

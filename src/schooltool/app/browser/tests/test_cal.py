@@ -1269,7 +1269,7 @@ def doctest_CalendarEventAddView_add():
 
         >>> view.request.response.getStatus()
         302
-        >>> view.request.response.getHeaders()['Location']
+        >>> view.request.response.getHeader('Location')
         'http://127.0.0.1/calendar'
 
     We can cowardly run away if we decide so, i.e., cancel our request.
@@ -1283,7 +1283,7 @@ def doctest_CalendarEventAddView_add():
         ''
         >>> view.request.response.getStatus()
         302
-        >>> location = view.request.response.getHeaders()['Location']
+        >>> location = view.request.response.getHeader('Location')
         >>> expected = 'http://127.0.0.1/calendar'
         >>> (location == expected) or location
         True
@@ -3648,7 +3648,7 @@ def doctest_EventDeleteView():
         >>> def redirected(request, person='person'):
         ...     if view.request.response.getStatus() != 302:
         ...         return False
-        ...     location = view.request.response.getHeaders()['Location']
+        ...     location = view.request.response.getHeader('Location')
         ...     expected = 'http://127.0.0.1/%s/calendar' % (person, )
         ...     assert location == expected, location
         ...     return True

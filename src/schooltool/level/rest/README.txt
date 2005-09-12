@@ -122,9 +122,9 @@ Let's first look at the academic status. You can simply get it and put it:
   ... """)
   HTTP/1.1 200 Ok
   Content-Length: 0
-  Content-Type: text/plain;charset=utf-8
+  Content-Type: text/plain
   <BLANKLINE>
-  
+
   >>> print rest("""
   ... POST /test/persons/stephan/academicStatus HTTP/1.1
   ... Authorization: Basic mgr:mgrpw
@@ -134,19 +134,19 @@ Let's first look at the academic status. You can simply get it and put it:
   ... """)
   HTTP/1.1 200 Ok
   ...
-  
+
   >>> print rest("""
   ... GET /test/persons/stephan/academicStatus HTTP/1.1
   ... Authorization: Basic mgr:mgrpw
   ... """)
   HTTP/1.1 200 Ok
   Content-Length: 8
-  Content-Type: text/plain;charset=utf-8
+  Content-Type: text/plain
   <BLANKLINE>
   Enrolled
 
 
-Now let's create a promotion workflow At the beginning there is nothing: 
+Now let's create a promotion workflow At the beginning there is nothing:
 
   >>> print rest("""
   ... GET /test/persons/stephan/promotion HTTP/1.1
@@ -262,7 +262,7 @@ Now the promotion process is done and the promotion obejct is empty again:
   ... """)
   HTTP/1.1 200 Ok
   Content-Length: 0
-  Content-Type: text/plain;charset=utf-8
+  Content-Type: text/plain
   <BLANKLINE>
 
 Now that the workflow is done, we can look at the academic history of the

@@ -174,8 +174,7 @@ class CalendarView(View):
                                    'text/calendar; charset=UTF-8')
         request.response.setHeader('Content-Length', len(data))
         request.response.setStatus(200)
-        request.response.write(data)
-        return request.response
+        return data
 
     def PUT(self):
         request = self.request

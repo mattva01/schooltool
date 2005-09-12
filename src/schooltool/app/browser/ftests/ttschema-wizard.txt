@@ -176,6 +176,7 @@ For now, let's say that periods are designated by time.
   ... """)
   HTTP/1.1 303 See Other
   Content-Length: 0
+  Content-Type: text/plain
   Location: http://localhost/frogpond/ttschemas
   ...
 
@@ -1971,6 +1972,7 @@ However we can press the Cancel button and go back to the beginning
   ... """)
   HTTP/1.1 303 See Other
   Content-Length: 0
+  Content-Type: text/plain
   Location: http://localhost/frogpond/ttschemas
   ...
 

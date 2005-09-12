@@ -187,8 +187,7 @@ class PersonPhotoView(View):
 
         self.request.response.setHeader('Content-Type', "image/jpeg")
         self.request.response.setStatus(200)
-        self.request.response.write(photo)
-        return self.request.response
+        return photo
 
     def DELETE(self):
         self.context.deletePhoto()

@@ -126,7 +126,7 @@ def doctest_GroupListView():
 
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1/persons/ignas'
 
     Finally, let's remove him out of PoV for a weekend and add him
@@ -219,7 +219,7 @@ def doctest_MemberListView():
         ['Ignas']
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1/groups/pov'
 
     Let's remove Ignas from PoV (he went home early today);
@@ -249,7 +249,7 @@ def doctest_MemberListView():
         >>> view.update()
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1/groups/pov'
 
     TODO: check resource view
@@ -368,7 +368,7 @@ def doctest_GroupAddView():
         >>> view.update()
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1'
 
     If 'CANCEL' is not present in the request, the view calls inherited
@@ -425,7 +425,7 @@ def doctest_GroupEditView():
         u'Updated on ${date_time}'
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1'
 
         >>> group.title
@@ -442,7 +442,7 @@ def doctest_GroupEditView():
         ''
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1'
 
         >>> group.title
@@ -470,7 +470,7 @@ def doctest_GroupEditView():
         >>> view.update()
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1'
 
     """

@@ -415,7 +415,7 @@ def doctest_SectionEditView():
         u'Updated on ${date_time}'
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1'
 
         >>> section.title
@@ -434,7 +434,7 @@ def doctest_SectionEditView():
         ''
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1'
 
         >>> section.title
@@ -462,7 +462,7 @@ def doctest_SectionEditView():
         >>> view.update()
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1'
 
     """
@@ -529,7 +529,7 @@ def doctest_SectionInstructorView():
         ['Mr. Smith']
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1/sections/section'
 
     a Section can have more than one instructor:
@@ -632,7 +632,7 @@ def doctest_SectionLearnerView():
 
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1/sections/section'
 
     Someone might want to cancel a change.
@@ -647,7 +647,7 @@ def doctest_SectionLearnerView():
         ['John Smith']
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1/sections/section'
 
     a Section can have more than one learner:

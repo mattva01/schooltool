@@ -206,7 +206,7 @@ Now we will try disabling PDF views and check if the switch works.
     >>> print http(request_headers, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...
-    Content-Type: text/plain;charset=utf-8
+    Content-Type: text/plain
     <BLANKLINE>
     PDF support is disabled...
 

@@ -62,7 +62,7 @@ def doctest_ApplicationView():
 
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1/calendar'
 
     If we change a the front page preference, we should not be redirected
@@ -183,7 +183,7 @@ def doctest_ContainerDeleteView():
 
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1'
 
     If we press Cancel no one should get hurt though:
@@ -203,7 +203,7 @@ def doctest_ContainerDeleteView():
 
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1'
 
     No redirection if nothing was pressed should happen:
@@ -211,7 +211,7 @@ def doctest_ContainerDeleteView():
         >>> request.form = {'delete.frog': 'on',
         ...                 'delete.toad': 'on'}
         >>> view.update()
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1'
 
     """

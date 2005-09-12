@@ -313,7 +313,7 @@ def doctest_PersonEditView():
         >>> view.update()
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1'
 
     """
@@ -442,7 +442,7 @@ def doctest_PersonAddView():
         >>> view.update()
         >>> request.response.getStatus()
         302
-        >>> request.response.getHeaders()['Location']
+        >>> request.response.getHeader('Location')
         'http://127.0.0.1/persons'
 
     """

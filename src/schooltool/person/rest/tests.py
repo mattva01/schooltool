@@ -243,8 +243,7 @@ class TestPersonPhotoView(ApplicationObjectViewTestMixin,
         response = view.request.response
 
         self.assertEquals(response.getStatus(), 200)
-        self.assertEquals(result, response)
-        self.assert_(result._outstream.getvalue().endswith("Icky Picky"))
+        self.assertEqual(result, "Icky Picky")
 
     def testPUT(self):
         view = self.makeTestView()

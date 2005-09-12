@@ -142,12 +142,7 @@ def doctest_CalendarView():
         >>> calendar = ISchoolToolCalendar(person)
         >>> view = CalendarView(calendar, TestRequest())
 
-        >>> print view.GET()._outstream.getvalue().replace("\r\n", "\n")
-        Status: 200 Ok
-        Content-Length: ...
-        Content-Type: text/calendar; charset=UTF-8
-        X-Powered-By: Zope (www.zope.org), Python (www.python.org)
-        <BLANKLINE>
+        >>> print view.GET().replace("\r\n", "\n")
         BEGIN:VCALENDAR
         VERSION:2.0
         PRODID:-//SchoolTool.org/NONSGML SchoolBell//EN
