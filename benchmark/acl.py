@@ -3,38 +3,13 @@
 Benchmark the ACL view.
 """
 
-import sys
-import os
-import time
 import random
-import timeit
 import urllib
-import textwrap
 
-basedir = os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0])))
-sys.path.insert(0, os.path.join(basedir, 'src'))
-sys.path.insert(0, os.path.join(basedir, 'Zope3', 'src'))
+from benchmark import *
 
 import transaction
-from zope.app.testing.functional import FunctionalTestSetup
-from zope.app.testing.functional import HTTPCaller
-
-from schoolbell.app.browser.ftests.test_all import find_ftesting_zcml
 from schoolbell.app.app import Person, Group
-
-
-def http(indented_request_string, http_caller=HTTPCaller()):
-    """Dedent the request string and perform the HTTP request."""
-    rq = textwrap.dedent(indented_request_string).strip()
-    return http_caller(rq, handle_errors=False)
-
-
-def load_ftesting_zcml():
-    """Load ZCML.
-
-    First call is expensive, subsequent calls are virtually free.
-    """
-    return FunctionalTestSetup(find_ftesting_zcml())
 
 
 def setup_benchmark():
@@ -106,25 +81,12 @@ def do_benchmark_update(n_users_in_form=10):
     assert r.getStatus() == 303
 
 
-def measure(fn):
-    """Measure the running time of `fn` in seconds (very crudely)."""
-    t0 = time.time()
-    fn()
-    return time.time() - t0
-
-
-def benchmark(title, fn, count=5):
-    print title
-    for n in range(count):
-        time = measure(fn)
-        print "  %.3f seconds" % time
-
-
 def main():
     print "ZCML took %.3f seconds." % measure(load_ftesting_zcml)
     print "Setup took %.3f seconds." % measure(setup_benchmark)
     benchmark("ACL view render", do_benchmark_render)
     benchmark("ACL view update", do_benchmark_update)
+
 
 if __name__ == '__main__':
     main()
