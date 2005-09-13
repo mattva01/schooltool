@@ -42,6 +42,7 @@ def stddev(seq):
 def benchmark(title, fn, count=5):
     """Benchmark a function."""
     print title
+    print "  warmup: %.3f seconds" % measure(fn)
     times = []
     for n in range(count):
         time = measure(fn)
