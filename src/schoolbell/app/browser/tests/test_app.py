@@ -1518,14 +1518,14 @@ def doctest_ACLView():
         >>> request.setPrincipal(StubPrincipal())
         >>> view = View(app, request)
 
-    The view has methods to list persons:
+    The view has methods to list persons and groups:
 
         >>> pprint(view.persons)
-        [{'perms': [], 'id': u'sb.person.albert', 'title': 'Albert'},
-         {'perms': [], 'id': u'sb.person.marius', 'title': 'Marius'}]
+        [{'id': u'sb.person.albert', 'title': 'Albert'},
+         {'id': u'sb.person.marius', 'title': 'Marius'}]
         >>> pprint(view.groups)
-        [{'perms': [], 'id': u'sb.group.3', 'title': 'office'},
-         {'perms': [], 'id': u'sb.group.4', 'title': 'mgmt'}]
+        [{'id': u'sb.group.3', 'title': 'office'},
+         {'id': u'sb.group.4', 'title': 'mgmt'}]
 
     If we have an authenticated group and an unauthenticated group, we
     get them as well:
@@ -1552,12 +1552,10 @@ def doctest_ACLView():
         >>> principalRegistry.registerGroup(authenticated)
 
         >>> pprint(view.groups)
-        [{'perms': [], 'id': 'zope.authenticated', 'title': u'Authenticated users'},
-         {'id': 'zope.unauthenticated',
-          'perms': [],
-          'title': u'Unauthenticated users'},
-         {'perms': [], 'id': u'sb.group.3', 'title': 'office'},
-         {'perms': [], 'id': u'sb.group.4', 'title': 'mgmt'}]
+        [{'id': 'zope.authenticated', 'title': u'Authenticated users'},
+         {'id': 'zope.unauthenticated', 'title': u'Unauthenticated users'},
+         {'id': u'sb.group.3', 'title': 'office'},
+         {'id': u'sb.group.4', 'title': 'mgmt'}]
 
     Also it knows a list of permissions to display:
 
@@ -1707,14 +1705,14 @@ def doctest_ACLView():
         >>> grants.getPermissionsForPrincipal('sb.group.3')
         [('schoolbell.create', PermissionSetting: Allow)]
 
-        >>> pprint(view.persons)
+        >>> pprint(list(view.batches['persons']))
         [{'id': u'sb.person.albert',
           'perms': ['schoolbell.view', 'schoolbell.edit'],
           'title': 'Albert'},
          {'id': u'sb.person.marius',
           'perms': ['schoolbell.create'],
           'title': 'Marius'}]
-        >>> pprint(view.groups)
+        >>> pprint(list(view.batches['groups']))
         [{'perms': [], 'id': 'zope.authenticated', 'title': u'Authenticated users'},
          {'id': 'zope.unauthenticated',
           'perms': [],
@@ -1947,10 +1945,11 @@ def doctest_ACLView_inheritance():
         >>> View = SimpleViewClass("../templates/acl.pt", bases=(ACLView, ))
         >>> request = TestRequest()
         >>> view = View(app['persons'], request)
+        >>> view.update()
 
-    Now, view.persons shows the principals have the permissions:
+    Now, view.batches['persons'] shows the principals have the permissions:
 
-        >>> pprint(view.persons)
+        >>> pprint(list(view.batches['persons']))
         [{'id': u'sb.person.albert',
           'perms': ['schoolbell.controlAccess'],
           'title': 'Albert'},
