@@ -443,6 +443,8 @@ class StandaloneServer(object):
         self.devmode = options.config.devmode
 
         # Process ZCML
+        global SCHOOLTOOL_SITE_DEFINITION
+        SCHOOLTOOL_SITE_DEFINITION = options.config.site_definition
         self.siteConfigFile = options.config.site_definition
         self.configure()
 

@@ -26,7 +26,7 @@
         </a>
       </li>
       <li>
-        <a href="Book/schoolbell/@@menu.html" target="menu" i18n:translate="">
+        <a href="Book/schooltool/@@menu.html" target="menu" i18n:translate="">
           Book
         </a>
       </li>

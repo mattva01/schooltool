@@ -61,9 +61,9 @@ def patchZCMLModule():
         context = config.ConfigurationMachine()
         context.provideFeature('devmode')
         xmlconfig.registerCommonDirectives(context)
-        context = xmlconfig.string(main.SCHOOLTOOL_SITE_DEFINITION,
-                                   context=context,
-                                   execute=False)
+        context = xmlconfig.file(main.SCHOOLTOOL_SITE_DEFINITION,
+                                 context=context,
+                                 execute=False)
         namespaces, subdirs = docutils.makeDocStructures(context)
 
         # Empty keys are not so good for a container

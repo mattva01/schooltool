@@ -8,15 +8,15 @@
       <span i18n:translate="">Class Finder:</span> <br/>
       <i i18n:translate="">(Enter partial Python path)</i></div>
     <form action="menu.html" method="post">
-      <input type="text" name="path" 
+      <input type="text" name="path"
              style="font-size: 80%; width=95%" />
-      <input type="submit" name="SUBMIT" value="Find" 
+      <input type="submit" name="SUBMIT" value="Find"
              i18n:attributes="value find-button" style="font-size: 80%"/>
     </form>
 
     <p style="font-size: 120%">
-      <a href="./schoolbell/index.html" target="main" i18n:translate="">
-        Browse SchoolBell Source
+      <a href="./schooltool/index.html" target="main" i18n:translate="">
+        Browse SchoolTool Source
       </a>
     </p>
 
