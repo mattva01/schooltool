@@ -3,6 +3,11 @@
 
   <!-- Course Content Components -->
 
+  <interface
+      interface=".interfaces.ICourseContainer"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
   <content class=".course.CourseContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
@@ -10,6 +15,11 @@
     <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
+
+  <interface
+      interface=".interfaces.ICourse"
+      type="zope.app.content.interfaces.IContentType"
+      />
 
   <content class=".course.Course">
     <implements
@@ -33,6 +43,11 @@
 
   <!-- Section Content Components -->
 
+  <interface
+      interface=".interfaces.ISectionContainer"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
   <content class=".section.SectionContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
@@ -40,6 +55,11 @@
     <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
+
+  <interface
+      interface=".interfaces.ISection"
+      type="zope.app.content.interfaces.IContentType"
+      />
 
   <content class=".section.Section">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />

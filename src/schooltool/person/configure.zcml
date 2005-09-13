@@ -3,6 +3,11 @@
            xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="schooltool">
 
+  <interface
+      interface=".interfaces.IPersonContainer"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
   <content class=".person.PersonContainer">
     <implements
         interface="schooltool.note.interfaces.IHaveNotes" />
@@ -16,6 +21,11 @@
         permission="schooltool.create"
         interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
+
+  <interface
+      interface=".interfaces.IPerson"
+      type="zope.app.content.interfaces.IContentType"
+      />
 
   <content class=".person.Person">
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />

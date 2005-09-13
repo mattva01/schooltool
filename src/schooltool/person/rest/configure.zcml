@@ -86,14 +86,6 @@
       />
 
   <view
-      for="..interfaces.IPersonContainer"
-      name="DELETE"
-      factory=".person.PersonContainerView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
       for="..interfaces.IPerson"
       name="GET"
       factory=".person.PersonView"

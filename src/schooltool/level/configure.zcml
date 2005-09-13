@@ -82,6 +82,11 @@
 
   <!-- Application objects -->
 
+  <interface
+      interface=".interfaces.ILevelContainer"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
   <content class=".level.LevelContainer">
     <implements
         interface="zope.app.annotation.interfaces.IAttributeAnnotatable" />
@@ -91,6 +96,11 @@
     <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
+
+  <interface
+      interface=".interfaces.ILevel"
+      type="zope.app.content.interfaces.IContentType"
+      />
 
   <content class=".level.Level">
     <implements

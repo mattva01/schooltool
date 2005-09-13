@@ -49,14 +49,6 @@
       />
 
   <view
-      for="..interfaces.IResourceContainer"
-      name="DELETE"
-      factory=".resource.ResourceContainerView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
       for="..interfaces.IResource"
       name="GET"
       factory=".resource.ResourceView"

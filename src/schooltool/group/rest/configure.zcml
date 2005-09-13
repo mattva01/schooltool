@@ -49,14 +49,6 @@
       />
 
   <view
-      for="..interfaces.IGroupContainer"
-      name="DELETE"
-      factory=".group.GroupContainerView"
-      type="zope.publisher.interfaces.http.IHTTPRequest"
-      permission="zope.Public"
-      />
-
-  <view
       for="..interfaces.IGroup"
       name="GET"
       factory=".group.GroupView"

@@ -2,6 +2,11 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+  <interface
+      interface=".interfaces.IGroupContainer"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
   <content class=".group.GroupContainer">
     <allow interface="zope.app.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
@@ -9,6 +14,11 @@
     <require permission="schooltool.create"
              interface="zope.app.container.interfaces.IWriteContainer" />
   </content>
+
+  <interface
+      interface=".interfaces.IGroup"
+      type="zope.app.content.interfaces.IContentType"
+      />
 
   <content class=".group.Group">
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
