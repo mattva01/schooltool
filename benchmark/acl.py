@@ -26,7 +26,7 @@ from schoolbell.app.app import Person, Group
 def http(indented_request_string, http_caller=HTTPCaller()):
     """Dedent the request string and perform the HTTP request."""
     rq = textwrap.dedent(indented_request_string).strip()
-    return http_caller(rq)
+    return http_caller(rq, handle_errors=False)
 
 
 def load_ftesting_zcml():
