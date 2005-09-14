@@ -824,10 +824,10 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(result, expected,
                           '%s != %s' % (fmt(result), fmt(expected)))
 
-    def test_pigeonHole(self):
-        r"""Test for CalendarViewBase.pigeonHole().
+    def doctest_pigeonhole(self):
+        r"""Test for CalendarViewBase.pigeonhole().
 
-        Our pigeon holer operates on date intervals and CalendarDays:
+        Our pigeonholer operates on date intervals and CalendarDays:
 
             >>> from schoolbell.app.browser.cal import CalendarViewBase
             >>> from schoolbell.app.cal import CalendarEvent
@@ -837,43 +837,45 @@ class TestCalendarViewBase(unittest.TestCase):
             >>> calendar = Calendar()
             >>> vb = CalendarViewBase(calendar, TestRequest())
 
-        Pigeon holer returns an empty list if interval list is empty:
+        Pigeonholer returns an empty list if the interval list is empty:
 
-            >>> vb.pigeonHole([], [])
+            >>> vb.pigeonhole([], [])
             []
 
-        Though should return a list of lists if we will pass it a non
-        empty list of intervals with an empty list of CalendarDays:
+        It returns a list of (empty) lists if we will pass it a
+        non-empty list of intervals and an empty list of CalendarDays:
 
-        Interval is a tuple of 2 dates:
+        An interval is a tuple of 2 dates (start and end; the former
+        is inclusive while the latter is exclusive):
 
             >>> intervals = [(date(2005, 1, 1),
             ...               date(2005, 1, 8)),
             ...              (date(2005, 1, 8),
             ...               date(2005, 1, 15))]
-            >>> vb.pigeonHole(intervals, [])
+            >>> vb.pigeonhole(intervals, [])
             [[], []]
 
-        Let's pigeon hole a couple of days into intervals:
+        Let's pigeonhole a couple of days' worth of events into
+        intervals:
 
             >>> days = vb.getDays(date(2005, 1, 7),
             ...                   date(2005, 1, 9))
 
-            >>> weeks = vb.pigeonHole(intervals, days)
+            >>> weeks = vb.pigeonhole(intervals, days)
             >>> [day.date for day in weeks[0]]
             [datetime.date(2005, 1, 7)]
             >>> [day.date for day in weeks[1]]
             [datetime.date(2005, 1, 8)]
 
-        If intervals overlap - common days should be included in both
-        of them:
+        If intervals overlap, then common days should be included in
+        all of them:
 
             >>> intervals = [(date(2005, 1, 1),
             ...               date(2005, 1, 9)),
             ...              (date(2005, 1, 7),
             ...               date(2005, 1, 15))]
 
-            >>> weeks = vb.pigeonHole(intervals, days)
+            >>> weeks = vb.pigeonhole(intervals, days)
             >>> [day.date for day in weeks[0]]
             [datetime.date(2005, 1, 7), datetime.date(2005, 1, 8)]
             >>> [day.date for day in weeks[1]]
@@ -881,7 +883,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
         """
 
-    def test_getCalendars(self):
+    def doctest_getCalendars(self):
         """Test for CalendarViewBase.getCalendars().
 
             >>> setup.placelessSetUp()
@@ -911,7 +913,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
         """
 
-    def test_getCalendars_cache(self):
+    def doctest_getCalendars_cache(self):
         """Test for CalendarViewBase.getCalendars() caching.
 
         Let's set up needed stubs:
@@ -948,7 +950,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
         """
 
-    def test_getEvents(self):
+    def doctest_getEvents(self):
         """Test for CalendarViewBase.getEvents
 
             >>> setup.placelessSetUp()
