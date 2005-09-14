@@ -514,7 +514,7 @@ class CalendarViewBase(BrowserView):
         end = start + timedelta(7)
         return self.getDays(start, end)
 
-    def getMonth(self, dt):
+    def getMonth(self, dt, days=None):
         """Return a nested list of days in the month that contains dt.
 
         Returns a list of lists of date objects.  Days in neighbouring
@@ -532,7 +532,11 @@ class CalendarViewBase(BrowserView):
             start_of_week = start_of_next_week
 
         end_of_display_month = start_of_week
-        days = self.getDays(start_of_display_month, end_of_display_month)
+        if not days:
+            days = self.getDays(start_of_display_month, end_of_display_month)
+        # Make sure the cache contains all the days we're interested in
+        assert days[0].date <= start_of_display_month, 'not enough days'
+        assert days[-1].date >= end_of_display_month - timedelta(1), 'not enough days'
         weeks = self.pigeonhole(week_intervals, days)
         return weeks
 
@@ -542,9 +546,19 @@ class CalendarViewBase(BrowserView):
         This returns a list of quarters, each quarter is a list of months,
         each month is a list of weeks, and each week is a list of CalendarDays.
         """
+
+        first_day_of_year = date(dt.year, 1, 1)
+        year_start_day_padded_weeks = week_start(first_day_of_year)
+        last_day_of_year = date(dt.year, 12, 31)
+        year_end_day_padded_weeks = week_start(last_day_of_year) + timedelta(7)
+
+        day_cache = self.getDays(year_start_day_padded_weeks,
+                                 year_end_day_padded_weeks)
+
         quarters = []
         for q in range(4):
-            quarter = [self.getMonth(date(dt.year, month + (q * 3), 1))
+            quarter = [self.getMonth(date(dt.year, month + (q * 3), 1),
+                                     day_cache)
                        for month in range(1, 4)]
             quarters.append(quarter)
         return quarters

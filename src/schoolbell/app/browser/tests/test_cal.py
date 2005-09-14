@@ -592,6 +592,17 @@ def registerCalendarHelperViews():
                       DailyCalendarRowsView)
 
 
+def getDaysStub(start, end):
+    """Stub for CalendarViewBase.getDays."""
+    from schoolbell.app.browser.cal import CalendarDay
+    days = []
+    day = start
+    while day < end:
+        days.append(CalendarDay(day))
+        day += timedelta(1)
+    return days
+
+
 class TestCalendarViewBase(unittest.TestCase):
     # Legacy unit tests from SchoolTool.
 
@@ -742,31 +753,50 @@ class TestCalendarViewBase(unittest.TestCase):
                            CalendarDay(date(2004, 8, 25))])
 
     def test_getMonth(self):
-        from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
+        from schoolbell.app.browser.cal import CalendarViewBase
         from schoolbell.app.cal import Calendar
-        from schoolbell.app.app import getPersonPreferences
-        from schoolbell.app.interfaces import IPersonPreferences
-        from schoolbell.app.interfaces import IHavePreferences
-
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
-                             getPersonPreferences)
-
-        request = TestRequest()
-        request.setPrincipal(PrincipalStub())
-
         cal = Calendar()
+        request = TestRequest()
         view = CalendarViewBase(cal, request)
-
-        def getDaysStub(start, end):
-            days = []
-            day = start
-            while day < end:
-                days.append(CalendarDay(day))
-                day += timedelta(1)
-            return days
         view.getDays = getDaysStub
 
-        weeks = view.getMonth(date(2004, 8, 11))
+        self.do_test_getMonth(view)
+
+    def test_getMonth_with_caching(self):
+        from schoolbell.app.browser.cal import CalendarViewBase
+        view = CalendarViewBase(None, TestRequest())
+
+        # We can pass a list of CalendarDays to getMonth to speed it up.
+        # This list must contain consecutive days only!
+        days = getDaysStub(date(2004, 1, 1), date(2004, 12, 31))
+
+        # The view now never needs to call self.getDays, so we might
+        # just as well get rid of it
+        def dontCallUsWellCallYou(*args):
+            raise NotImplementedError, "don't call us, we'll call you"
+        view.getDays = dontCallUsWellCallYou
+
+        self.do_test_getMonth(view, days)
+
+    def test_getMonth_caching_corner_cases(self):
+        from schoolbell.app.browser.cal import CalendarViewBase
+        view = CalendarViewBase(None, TestRequest())
+        days = getDaysStub(date(2004, 7, 27), date(2004, 12, 31))
+        self.assertRaises(AssertionError,
+                          view.getMonth, date(2004, 8, 11), days=days)
+        days = getDaysStub(date(2004, 1, 1), date(2004, 9, 5))
+        self.assertRaises(AssertionError,
+                          view.getMonth, date(2004, 8, 11), days=days)
+        days = getDaysStub(date(2004, 7, 26), date(2004, 9, 6))
+        view.getMonth(date(2004, 8, 11), days=days)
+
+    def do_test_getMonth(self, view, days=None):
+        """Test basic functionality of getMonth.
+
+        We want to test getMonth with the same data set irrespective
+        of whether caching is used or not.
+        """
+        weeks = view.getMonth(date(2004, 8, 11), days=days)
         self.assertEquals(len(weeks), 6)
         bounds = [(week[0].date, week[-1].date) for week in weeks]
         self.assertEquals(bounds,
@@ -779,38 +809,31 @@ class TestCalendarViewBase(unittest.TestCase):
 
         # October 2004 ends with a Sunday, so we use it to check that
         # no days from the next month are included.
-        weeks = view.getMonth(date(2004, 10, 1))
+        weeks = view.getMonth(date(2004, 10, 1), days=days)
         bounds = [(week[0].date, week[-1].date) for week in weeks]
         self.assertEquals(bounds[4],
                           (date(2004, 10, 25), date(2004, 10, 31)))
 
         # Same here, just check the previous month.
-        weeks = view.getMonth(date(2004, 11, 1))
+        weeks = view.getMonth(date(2004, 11, 1), days=days)
         bounds = [(week[0].date, week[-1].date) for week in weeks]
         self.assertEquals(bounds[0],
                           (date(2004, 11, 1), date(2004, 11, 7)))
 
     def test_getYear(self):
-        from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
-        from schoolbell.app.cal import Calendar
-        from schoolbell.app.app import getPersonPreferences
-        from schoolbell.app.interfaces import IPersonPreferences
-        from schoolbell.app.interfaces import IHavePreferences
+        from schoolbell.app.browser.cal import CalendarViewBase
 
-        ztapi.provideAdapter(IHavePreferences, IPersonPreferences,
-                             getPersonPreferences)
+        view = CalendarViewBase(None, TestRequest)
+        view.getDays = getDaysStub
 
-        request = TestRequest()
-        request.setPrincipal(PrincipalStub())
-
-        cal = Calendar()
-        view = CalendarViewBase(cal, request)
-
-        def getMonthStub(dt):
+        def getMonthStub(dt, days=None):
+            # Check that boundaries of `days` are ones that we expect
+            self.assertEquals(days[0].date, date(2003, 12, 29))
+            self.assertEquals(days[-1].date, date(2005, 1, 2))
             return dt
         view.getMonth = getMonthStub
 
-        year = view.getYear(date(2004, 03, 04))
+        year = view.getYear(date(2004, 3, 4))
         self.assertEquals(len(year), 4)
         months = []
         for quarter in year:
