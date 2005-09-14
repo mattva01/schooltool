@@ -1,6 +1,9 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:meta="http://namespaces.zope.org/meta"
            i18n_domain="zope">
+
+  <meta:provides feature="devmode" />
 
   <include file="site.zcml" />
 

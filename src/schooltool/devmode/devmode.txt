@@ -1,0 +1,136 @@
+=============================
+Developer Mode User Interface
+=============================
+
+The developer mode of the user interface is intended to help SchoolBell
+developers and people using SchoolBell as a development platform to debug
+their code and find documentation as quickly as possible. To start, open a
+Zope 3 site in your browser
+
+    >>> import zope.testbrowser
+    >>> browser = zope.testbrowser.Browser()
+    >>> browser.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> browser.open('http://localhost/manage')
+
+and add a new SchoolBell instance:
+
+    >>> browser.getLink('SchoolTool').click()
+    >>> browser.getControl(name='new_value').value = 'st'
+    >>> browser.getControl('Apply').click()
+
+Once we enter the SchoolTool instance
+
+    >>> browser.getLink('st').click()
+
+the developer mode should be visible:
+
+    >>> browser.contents
+    '...<h4>Developer Tools</h4>...
+     ...<a href=".../RootErrorReportingUtility" target="new">Errors</a>...
+     ...<a href="@@introspector.html" target="new">Introspector</a>...
+     ...<a href="/++apidoc++" target="new">API Docs</a>...'
+
+Note that we only see the developer tools here, because these tests are run
+with the developer mode turned on. Commonly, the develoepr mode can be
+controlled in ``schooltool.conf``'s ``devmode`` switch. Simply add ``devmode
+on`` to your ``schooltool.conf`` file to turn on the mode.
+
+Error Reporting
+---------------
+
+Even though error reporting is always available, it is usually not easily
+accessible via the Web UI. By clicking on the `Errors` menu option
+
+    >>> browser.getLink('Errors').click()
+
+you are brought to the root error reporting utility.
+
+However, for the purpose of this test, we need to
+
+* create a `RootErrorReportingUtility` for the SchoolTool site:
+
+    >>> browser.open('http://localhost/st/++etc++site/default/+/')
+    >>> ctrl = browser.getControl('Error Logging Utility').click()
+    >>> browser.getControl(name='id').value = 'RootErrorReportingUtility'
+    >>> browser.getControl('Add').click()
+    >>> browser.getControl('Register').click()
+    >>> browser.getControl('Add').click()
+
+* switch to the developer mode skin manually:
+
+    >>> browser.open('http://localhost/++skin++SchoolToolDevMode/st/'
+    ...              '++etc++site/default/RootErrorReportingUtility')
+
+Here you can configure the utility and view errors:
+
+    >>> browser.contents
+    '...<a href="@@configure.html">Configure</a>...
+     ...<a href="@@index.html">Error List</a>...'
+
+In the configuration
+
+    >>> browser.getLink('Configure').click()
+
+you can specify how many exceptions to keep, whether to copy the errors to the
+event log and what exceptions can be ignored:
+
+    >>> keep_entries = browser.getControl(name='keep_entries')
+    >>> keep_entries.value
+    '20'
+    >>> keep_entries.value = '30'
+
+    >>> copy_to_zlog = browser.getControl(name='copy_to_zlog')
+    >>> copy_to_zlog.value
+    False
+    >>> copy_to_zlog.value = True
+
+    >>> ignored_exceptions = browser.getControl(name='ignored_exceptions:lines')
+    >>> ignored_exceptions.value
+    'Unauthorized'
+    >>> ignored_exceptions.value += '\nNotImplementedError'
+
+    >>> browser.getControl('Save Changes').click()
+
+    >>> browser.getControl(name='keep_entries').value
+    '30'
+    >>> browser.getControl(name='copy_to_zlog').value
+    True
+    >>> print browser.getControl(name='ignored_exceptions:lines').value
+    Unauthorized
+    NotImplementedError
+
+Let's now make sure that we can get to the error list. First let's create a
+``NotFound`` error:
+
+    # Unfortunately, urllib2 raises errors on HTTP Not Found errors. :-(
+    >>> import urllib2
+    >>> try:
+    ...     browser.open('http://localhost/++skin++SchoolToolDevMode/st/foo')
+    ... except urllib2.HTTPError:
+    ...     pass
+
+    Now let's see the report:
+
+    >>> browser.open('http://localhost/++skin++SchoolToolDevMode/st/'
+    ...              '++etc++site/default/RootErrorReportingUtility')
+    >>> browser.getLink('Error List').click()
+    >>> print browser.contents
+    <BLANKLINE>
+    ...
+    <tr>
+      <td valign="top" nowrap="nowrap">
+        <span>...</span>
+      </td>
+      <td>
+        <span>mgr, zope.mgr, Manager, </span>
+      </td>
+      <td valign="top">
+        <a href="showEntry.html?id=...">
+          <span>NotFound</span>:
+          <span>Object: &lt;schooltool.app.app.SchoolToolApplication ...</span>
+        </a>
+      </td>
+    </tr>
+    ...
+
+
