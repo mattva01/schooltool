@@ -758,32 +758,37 @@ class TestCalendarViewBase(unittest.TestCase):
         view = CalendarViewBase(cal, request)
 
         def getDaysStub(start, end):
-            return [CalendarDay(start), CalendarDay(end)]
+            days = []
+            day = start
+            while day < end:
+                days.append(CalendarDay(day))
+                day += timedelta(1)
+            return days
         view.getDays = getDaysStub
 
         weeks = view.getMonth(date(2004, 8, 11))
         self.assertEquals(len(weeks), 6)
-        bounds = [(d1.date, d2.date) for d1, d2 in weeks]
+        bounds = [(week[0].date, week[-1].date) for week in weeks]
         self.assertEquals(bounds,
-                          [(date(2004, 7, 26), date(2004, 8, 2)),
-                           (date(2004, 8, 2), date(2004, 8, 9)),
-                           (date(2004, 8, 9), date(2004, 8, 16)),
-                           (date(2004, 8, 16), date(2004, 8, 23)),
-                           (date(2004, 8, 23), date(2004, 8, 30)),
-                           (date(2004, 8, 30), date(2004, 9, 6))])
+                          [(date(2004, 7, 26), date(2004, 8, 1)),
+                           (date(2004, 8, 2), date(2004, 8, 8)),
+                           (date(2004, 8, 9), date(2004, 8, 15)),
+                           (date(2004, 8, 16), date(2004, 8, 22)),
+                           (date(2004, 8, 23), date(2004, 8, 29)),
+                           (date(2004, 8, 30), date(2004, 9, 5))])
 
         # October 2004 ends with a Sunday, so we use it to check that
         # no days from the next month are included.
         weeks = view.getMonth(date(2004, 10, 1))
-        bounds = [(d1.date, d2.date) for d1, d2 in weeks]
+        bounds = [(week[0].date, week[-1].date) for week in weeks]
         self.assertEquals(bounds[4],
-                          (date(2004, 10, 25), date(2004, 11, 1)))
+                          (date(2004, 10, 25), date(2004, 10, 31)))
 
         # Same here, just check the previous month.
         weeks = view.getMonth(date(2004, 11, 1))
-        bounds = [(d1.date, d2.date) for d1, d2 in weeks]
+        bounds = [(week[0].date, week[-1].date) for week in weeks]
         self.assertEquals(bounds[0],
-                          (date(2004, 11, 1), date(2004, 11, 8)))
+                          (date(2004, 11, 1), date(2004, 11, 7)))
 
     def test_getYear(self):
         from schoolbell.app.browser.cal import CalendarViewBase, CalendarDay
@@ -818,6 +823,63 @@ class TestCalendarViewBase(unittest.TestCase):
         fmt = lambda x: '[%s]' % ', '.join([e.title for e in x])
         self.assertEquals(result, expected,
                           '%s != %s' % (fmt(result), fmt(expected)))
+
+    def test_pigeonHole(self):
+        r"""Test for CalendarViewBase.pigeonHole().
+
+        Our pigeon holer operates on date intervals and CalendarDays:
+
+            >>> from schoolbell.app.browser.cal import CalendarViewBase
+            >>> from schoolbell.app.cal import CalendarEvent
+            >>> from schoolbell.app.cal import Calendar
+            >>> registerCalendarHelperViews()
+
+            >>> calendar = Calendar()
+            >>> vb = CalendarViewBase(calendar, TestRequest())
+
+        Pigeon holer returns an empty list if interval list is empty:
+
+            >>> vb.pigeonHole([], [])
+            []
+
+        Though should return a list of lists if we will pass it a non
+        empty list of intervals with an empty list of CalendarDays:
+
+        Interval is a tuple of 2 dates:
+
+            >>> intervals = [(date(2005, 1, 1),
+            ...               date(2005, 1, 8)),
+            ...              (date(2005, 1, 8),
+            ...               date(2005, 1, 15))]
+            >>> vb.pigeonHole(intervals, [])
+            [[], []]
+
+        Let's pigeon hole a couple of days into intervals:
+
+            >>> days = vb.getDays(date(2005, 1, 7),
+            ...                   date(2005, 1, 9))
+
+            >>> weeks = vb.pigeonHole(intervals, days)
+            >>> [day.date for day in weeks[0]]
+            [datetime.date(2005, 1, 7)]
+            >>> [day.date for day in weeks[1]]
+            [datetime.date(2005, 1, 8)]
+
+        If intervals overlap - common days should be included in both
+        of them:
+
+            >>> intervals = [(date(2005, 1, 1),
+            ...               date(2005, 1, 9)),
+            ...              (date(2005, 1, 7),
+            ...               date(2005, 1, 15))]
+
+            >>> weeks = vb.pigeonHole(intervals, days)
+            >>> [day.date for day in weeks[0]]
+            [datetime.date(2005, 1, 7), datetime.date(2005, 1, 8)]
+            >>> [day.date for day in weeks[1]]
+            [datetime.date(2005, 1, 7), datetime.date(2005, 1, 8)]
+
+        """
 
     def test_getCalendars(self):
         """Test for CalendarViewBase.getCalendars().

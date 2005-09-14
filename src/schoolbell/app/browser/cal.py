@@ -487,6 +487,26 @@ class CalendarViewBase(BrowserView):
         """Return True if dt is in the period currently being shown."""
         raise NotImplementedError("override in subclasses")
 
+    def pigeonHole(self, intervals, days):
+        """Sort CalendarDay objects into date intervals.
+
+        Sort a list of CalendarDay objects into weeks, months,
+        quarters etc.
+
+        Intervals are inclusive from the start and exclusve in the end -
+        [start_date, end_date).
+        """
+
+        holes = [[] for interval in intervals]
+
+        for day in days:
+            for num, interval in enumerate(intervals):
+                start, end = interval
+                if (day.date >= start and
+                    day.date < end):
+                    holes[num].append(day)
+        return holes
+
     def getWeek(self, dt):
         """Return the week that contains the day dt.
 
@@ -503,13 +523,19 @@ class CalendarViewBase(BrowserView):
         months are included if they fall into a week that contains days in
         the current month.
         """
-        weeks = []
         start_of_next_month = next_month(dt)
         start_of_week = week_start(dt.replace(day=1), self.first_day_of_week)
+        start_of_display_month = start_of_week
+
+        week_intervals = []
         while start_of_week < start_of_next_month:
             start_of_next_week = start_of_week + timedelta(7)
-            weeks.append(self.getDays(start_of_week, start_of_next_week))
+            week_intervals.append((start_of_week, start_of_next_week))
             start_of_week = start_of_next_week
+
+        end_of_display_month = start_of_week
+        days = self.getDays(start_of_display_month, end_of_display_month)
+        weeks = self.pigeonHole(week_intervals, days)
         return weeks
 
     def getYear(self, dt):
