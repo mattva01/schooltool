@@ -223,8 +223,9 @@ def get_test_files(cfg):
 def import_module(filename, cfg, tracer=None):
     """Import and return a module."""
     filename = os.path.splitext(filename)[0]
-    assert filename.startswith(cfg.basedir)
-    modname = filename[len(cfg.basedir):].replace(os.path.sep, '.')
+    if filename.startswith(cfg.basedir):
+        filename = filename[len(cfg.basedir):]
+    modname = filename.replace(os.path.sep, '.')
     if modname.startswith('.'):
         modname = modname[1:]
     if tracer is not None:
@@ -357,22 +358,36 @@ def get_test_cases(test_files, cfg, tracer=None):
 
 def get_test_hooks(test_files, cfg, tracer=None):
     """Return a list of test hooks from a given list of test modules."""
-    results = []
     dirs = Set(map(os.path.dirname, test_files))
     for dir in list(dirs):
         if os.path.basename(dir) == 'ftests':
             dirs.add(os.path.join(os.path.dirname(dir), 'tests'))
     dirs = list(dirs)
     dirs.sort()
+    hook_modules = []
     for dir in dirs:
         filename = os.path.join(dir, 'checks.py')
         if os.path.exists(filename):
             module = import_module(filename, cfg, tracer=tracer)
-            if tracer is not None:
-                hooks = tracer.runfunc(module.test_hooks)
-            else:
-                hooks = module.test_hooks()
-            results.extend(hooks)
+            hook_modules.append(module)
+    # Also look in a a directory 'testsupport' which is a sibling of
+    # cfg.basedir
+    dir = os.path.join(os.path.dirname(cfg.basedir), 'testsupport')
+    filename = os.path.join(dir, 'checks.py')
+    if os.path.exists(filename):
+        sys.path.insert(0, dir)
+        try:
+            module = import_module('checks.py', cfg, tracer=tracer)
+            hook_modules.append(module)
+        finally:
+            del sys.path[0]
+    results = []
+    for module in hook_modules:
+        if tracer is not None:
+            hooks = tracer.runfunc(module.test_hooks)
+        else:
+            hooks = module.test_hooks()
+        results.extend(hooks)
     return results
 
 
