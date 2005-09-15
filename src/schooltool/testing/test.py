@@ -171,11 +171,11 @@ def get_test_files(cfg):
     """Return a list of test module filenames."""
     matcher = compile_matcher(cfg.pathname_regex)
     allresults = []
-    test_names = []
+    testdir_names = []
     if cfg.functional_tests:
-        test_names.append('ftests')
+        testdir_names.append('ftests')
     if cfg.unit_tests:
-        test_names.append('tests')
+        testdir_names.append('tests')
     baselen = len(cfg.basedir) + 1
     def visit(ignored, dir, files):
         # Ignore files starting with a dot.
@@ -190,9 +190,9 @@ def get_test_files(cfg):
         for idx in remove:
             del files[idx]
         # Skip non-test directories, but look for tests.py and/or ftests.py
-        if os.path.basename(dir) != test_name:
-            if test_name + '.py' in files:
-                path = os.path.join(dir, test_name + '.py')
+        if os.path.basename(dir) != testdir_name:
+            if testdir_name + '.py' in files:
+                path = os.path.join(dir, testdir_name + '.py')
                 if matcher(path[baselen:]):
                     results.append(path)
             return
@@ -209,7 +209,7 @@ def get_test_files(cfg):
     else:
         walker = os.path.walk
 
-    for test_name in test_names:
+    for testdir_name in testdir_names:
         results = []
         for dir in cfg.search_in:
             walker(dir, visit, None)
