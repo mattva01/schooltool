@@ -76,6 +76,7 @@ import sys
 import time
 import types
 import getopt
+import doctest
 import unittest
 import traceback
 import linecache
@@ -236,16 +237,33 @@ def import_module(filename, cfg, tracer=None):
     return mod
 
 
-def name_of_test(test):
+# Classess passed to isinstance to see whether a test is a DocFileCase.
+# There's doctest.DocFileCase, and then there might be
+# zope.testing.doctest.DocFileCase.
+DocFileCase_classes = (doctest.DocFileCase,)
+
+
+def name_of_test(test, basedir=None):
     """Return the name of a test.
 
     In most cases the name will be "package.module.class.method", however it
-    is different for doctest files.
+    is different for doctest files, where it will be "subdir/subdir/filename".
     """
-    return test.id()
+    if isinstance(test, DocFileCase_classes):
+        # test.id() returns something like "README_txt", while str(test)
+        # returns the pathname
+        doctest_filename = os.path.abspath(str(test))
+        if basedir and doctest_filename.startswith(basedir + '/'):
+            doctest_filename = doctest_filename[len(basedir) + 1:]
+        return doctest_filename
+    else:
+        # test.id() returns something like
+        # "package.module.TestClass.test_method", while str(test)
+        # returns "test_method (package.module.TestClass)".
+        return test.id()
 
 
-def filter_testsuite(suite, matcher, level=None):
+def filter_testsuite(suite, matcher, level=None, basedir=None):
     """Return a flattened list of test cases that match the given matcher."""
     if not isinstance(suite, unittest.TestSuite):
         raise TypeError('not a TestSuite', suite)
@@ -254,11 +272,11 @@ def filter_testsuite(suite, matcher, level=None):
         if level is not None and getattr(test, 'level', 0) > level:
             continue
         if isinstance(test, unittest.TestCase):
-            testname = name_of_test(test)
+            testname = name_of_test(test, basedir)
             if matcher(testname):
                 results.append(test)
         else:
-            filtered = filter_testsuite(test, matcher, level)
+            filtered = filter_testsuite(test, matcher, level, basedir)
             results.extend(filtered)
     return results
 
@@ -325,7 +343,7 @@ def get_test_cases(test_files, cfg, tracer=None):
         if (cfg.level is not None and
             getattr(test_suite, 'level', 0) > cfg.level):
             continue
-        filtered = filter_testsuite(test_suite, matcher, cfg.level)
+        filtered = filter_testsuite(test_suite, matcher, cfg.level, cfg.basedir)
         results.extend(filtered)
     stopTime = time.time()
     timeTaken = float(stopTime - startTime)
@@ -735,10 +753,10 @@ class CustomTestResult(unittest._TextTestResult):
         self.__super_stopTest(test)
 
     def getDescription(self, test):
-        return name_of_test(test)
+        return name_of_test(test, self.cfg.basedir)
 
     def getShortDescription(self, test):
-        s = name_of_test(test)
+        s = name_of_test(test, self.cfg.basedir)
         if len(s) > self._maxWidth:
             # In most cases s is "package.module.class.method".
             # Try to keep the method name intact, and replace the middle
@@ -1038,13 +1056,21 @@ def main(argv):
         except ImportError:
             pass
 
+    try:
+        import zope.testing.doctest
+        global DocFileCase_classes
+        DocFileCase_classes += (zope.testing.doctest.DocFileCase,)
+    except ImportError:
+        pass
+
     # Running
     success = True
     if cfg.list_files:
         baselen = len(cfg.basedir) + 1
         print "\n".join([fn[baselen:] for fn in test_files])
     if cfg.list_tests:
-        print "\n".join([name_of_test(test) for test in test_cases])
+        print "\n".join([name_of_test(test, cfg.basedir)
+                         for test in test_cases])
     if cfg.list_hooks:
         print "\n".join([str(hook) for hook in test_hooks])
     if cfg.run_tests:
