@@ -236,6 +236,15 @@ def import_module(filename, cfg, tracer=None):
     return mod
 
 
+def name_of_test(test):
+    """Return the name of a test.
+
+    In most cases the name will be "package.module.class.method", however it
+    is different for doctest files.
+    """
+    return test.id()
+
+
 def filter_testsuite(suite, matcher, level=None):
     """Return a flattened list of test cases that match the given matcher."""
     if not isinstance(suite, unittest.TestSuite):
@@ -245,7 +254,7 @@ def filter_testsuite(suite, matcher, level=None):
         if level is not None and getattr(test, 'level', 0) > level:
             continue
         if isinstance(test, unittest.TestCase):
-            testname = test.id() # package.module.class.method
+            testname = name_of_test(test)
             if matcher(testname):
                 results.append(test)
         else:
@@ -726,11 +735,14 @@ class CustomTestResult(unittest._TextTestResult):
         self.__super_stopTest(test)
 
     def getDescription(self, test):
-        return test.id() # package.module.class.method
+        return name_of_test(test)
 
     def getShortDescription(self, test):
-        s = test.id() # package.module.class.method
+        s = name_of_test(test)
         if len(s) > self._maxWidth:
+            # In most cases s is "package.module.class.method".
+            # Try to keep the method name intact, and replace the middle
+            # part of "package.module.class" with an ellipsis.
             namelen = len(s.split('.')[-1])
             left = max(0, (self._maxWidth - namelen) / 2 - 1)
             right = self._maxWidth - left - 3
@@ -1032,7 +1044,7 @@ def main(argv):
         baselen = len(cfg.basedir) + 1
         print "\n".join([fn[baselen:] for fn in test_files])
     if cfg.list_tests:
-        print "\n".join([test.id() for test in test_cases])
+        print "\n".join([name_of_test(test) for test in test_cases])
     if cfg.list_hooks:
         print "\n".join([str(hook) for hook in test_hooks])
     if cfg.run_tests:
