@@ -69,6 +69,7 @@ def diff(old, new, oldlabel="expected output", newlabel="actual output"):
     return "\n".join(diff)
 
 
+# XXX this can go away now that we require Python 2.4
 def sorted(l):
     l = list(l) # make a copy
     l.sort()

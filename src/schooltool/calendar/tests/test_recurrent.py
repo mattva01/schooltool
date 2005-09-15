@@ -403,6 +403,8 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         self.createRule(monthly="monthday")
         self.createRule(monthly="weekday")
 
+    # XXX what's with the trailing underscore?
+    #     there's another test in this class, called test_replace
     def test_replace_(self):
         rule = self.createRule(monthly="lastweekday")
         assert rule == rule.replace()
