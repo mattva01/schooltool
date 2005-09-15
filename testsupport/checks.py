@@ -24,6 +24,8 @@ import sys
 import sets
 import logging
 
+from schooltool.testing.test import name_of_test
+
 __metaclass__ = type
 
 
@@ -60,7 +62,7 @@ class TransactionChecks:
         import transaction
         txn = transaction.get()
         if txn._resources:
-            warn("%s left an unclean transaction" % test.id())
+            warn("%s left an unclean transaction" % name_of_test(test))
             txn.abort()
 
 
@@ -121,13 +123,13 @@ class StdoutChecks:
         sys.stdout = self.old_stdout
         sys.stderr = self.old_stderr
         if warn_stdout_replaced:
-            warn("%s replaced sys.stdout" % test.id())
+            warn("%s replaced sys.stdout" % name_of_test(test))
         if warn_stderr_replaced:
-            warn("%s replaced sys.stderr" % test.id())
+            warn("%s replaced sys.stderr" % name_of_test(test))
         if self.stdout_wrapper.written:
-            warn("%s wrote to sys.stdout" % test.id())
+            warn("%s wrote to sys.stdout" % name_of_test(test))
         if self.stderr_wrapper.written:
-            warn("%s wrote to sys.stderr" % test.id())
+            warn("%s wrote to sys.stderr" % name_of_test(test))
 
         import pdb
         pdb.set_trace = self.old_pdb_set_trace
@@ -144,7 +146,7 @@ class LibxmlChecks:
         mem = libxml2.debugMemory(1)
         if mem > self.last_mem:
             warn("libxml2 used %d bytes of memory before test %s"
-                 % (mem - self.last_mem, test.id()))
+                 % (mem - self.last_mem, name_of_test(test)))
 
         # Attempts to call libxml2.cleanupParser() in stopTest and then check
         # that debugMemory() returns 0 were unsuccessful.  It appears that
@@ -200,7 +202,7 @@ class LoggingChecks:
     def stopTest(self, test):
         new_snapshot = self.makeSnapshot()
         if new_snapshot != self.snapshot:
-            warn("%s changed logging configuration" % test.id())
+            warn("%s changed logging configuration" % name_of_test(test))
             if self.verbose:
                 old_loggers = sets.Set(self.snapshot.keys())
                 new_loggers = sets.Set(new_snapshot.keys())
