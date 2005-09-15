@@ -4,6 +4,12 @@ Functional doctest for SchoolTool
 This is a functional doctest for schooltool.  To find out more about
 functional doctests, read Zope3/src/zope/app/ftests/doctest.txt
 
+We need to shut up libxml2, so it does not spew errors to stderr:
+
+   >>> import libxml2
+   >>> libxml2.registerErrorHandler(lambda ctx, error: None, None)
+   1
+
 
 SchoolTool as a Zope 3 content object
 -------------------------------------
@@ -489,5 +495,13 @@ And Toad's overlay portlet shows the section:
 
 Epilogue
 --------
+
+Restore the libxml2 error handling:
+
+    >>> import sys
+    >>> def on_error_callback(ctx, msg):
+    ...     sys.stderr.write(msg)
+    >>> libxml2.registerErrorHandler(on_error_callback, None)
+    1
 
  vim: ft=rest
