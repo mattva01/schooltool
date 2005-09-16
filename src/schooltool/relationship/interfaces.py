@@ -41,11 +41,7 @@ class IRelationshipProperty(Interface):
         """
 
     def __len__():
-        """Return the number of related objects.
-
-        Equivalent to len(list(self)), but can be implemented more
-        efficiently.
-        """
+        """Return the number of related objects."""
 
     def __iter__():
         """Iterate over all related objects."""

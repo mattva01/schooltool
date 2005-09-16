@@ -55,6 +55,11 @@ class CalendarMixin(object):
         This implementation just returns len(list(self)), which is not very
         efficient.
 
+        XXX it might be even less efficient than I thought -- Python calls
+        __len__ when implementing list(), as a performance optimisation --
+        then gets a RuntimeError: maximum recursion depth exceeded and falls
+        back to a less optimised implementation.
+
             >>> class MyCalendar(CalendarMixin):
             ...     def __iter__(self):
             ...         return iter(['event' for n in range(3)])

@@ -339,6 +339,7 @@ class BoundRelationshipProperty(object):
             return True
 
     def __len__(self):
+        # XXX: list(x) calls x.__len__ as an optimisation
         return len(list(self))
 
     def __iter__(self):
