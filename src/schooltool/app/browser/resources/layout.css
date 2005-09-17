@@ -6,23 +6,23 @@
 /******************************************************* BEGIN: Base.css */
 
 BODY {
-    font-size: x-small; /* for IE5/Win */
-    voice-family: "\"}\"";
-    voice-family: inherit;
-    font-size: small; /* for IE6/Win */
+	font-size: x-small; /* for IE5/Win */
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	font-size: small; /* for IE6/Win */
 }
 
 HTML>BODY {
-    font-size: x-small; /* for Opera */
+	font-size: x-small; /* for Opera */
 }
 
 head:first-child+BODY {
-    font-size: small; /* for Mozilla, IE5/Mac */
+	font-size: small; /* for Mozilla, IE5/Mac */
 }
 
 BODY {
-    margin: 0;
-    padding:0 ;
+	margin: 0;
+	padding:0 ;
 }
 
 /********************************************************* END: Base.css */
@@ -31,30 +31,27 @@ BODY {
 /************************************************* BEGIN: Schooltool.css */
 
 BODY {
-    font-family: Verdana, Helvetica, Arial, Sans-Serif;
-    background: #fff;
-    color: #000;
-    min-width: 700px;
+	font-family: Verdana, Helvetica, Arial, Sans-Serif;
+	background: #fff;
+	color: #000;
+	min-width: 700px;
 }
 
 UL {
-    padding-left: 2em;
+	padding-left: 2em;
 }
 
 IMG {
-    border: none;
+	border: none;
 }
 
 A, A:link, A:visited, A:hover, A:active {
-    color: #314e6c;
-    font-weight: bold;
-}
-
-A:hover {
+	color: #314e6c;
+	font-weight: bold;
 }
 
 H1, H2, H3, H4, H5, H6 {
-    font-family: "Trebuchet MS", Sans-Serif;
+	font-family: "Trebuchet MS", Sans-Serif;
 }
 
 H1, H2, H3, H4, H5, H6 { margin: 0; padding: 0; }
@@ -66,9 +63,9 @@ H5 { font-size: 80%; }
 H6 { font-size: 75%; }
 
 PRE {
-  margin: 1em;
-  padding: 1em;
-  border: 1px #000 dotted;
+	margin: 1em;
+	padding: 1em;
+	border: 1px #000 dotted;
 }
 
 /*************************************************** END: Schooltool.css */
@@ -77,154 +74,154 @@ PRE {
 /***************************************************** BEGIN: Layout.css */
 
 #footer {
-    width: 70%;
-    padding: 1em 15%;
-    margin-top: 2em;
-    margin-bottom: 1em;
+	width: 70%;
+	padding: 1em 15%;
+	margin-top: 2em;
+	margin-bottom: 1em;
 }
 
 #columns {
-    margin-bottom: 1em;
+	margin-bottom: 1em;
 }
 
 .clearer {
-    clear: both;
-    margin-top: 2em;
+	clear: both;
+	margin-top: 2em;
 }
 
 FORM.standalone {
-    width: 40em;
-    margin: auto;
+	width: 40em;
+	margin: auto;
 }
 
 FORM.standalone FIELDSET {
-    margin: 1em;
+	margin: 1em;
 }
 
 FORM.standalone h3 {
-    margin: 0;
-    padding: 0.25em;
+	margin: 0;
+	padding: 0.25em;
 }
 
 FORM.standalone .row {
-    margin: 0.5em 0em;
+	margin: 0.5em 0em;
 }
 
 FORM.standalone > .row {
-    margin: 0.5em;
+	margin: 0.5em;
 }
 
 FORM.standalone .controls {
-    margin: 0.5em 1em 1em 1em;
+	margin: 0.5em 1em 1em 1em;
 }
 
 #header {
 }
 
 #header .logo IMG {
-    float: left;
+	float: left;
 }
 
 #header .logo {
-    height: 30px;
-    padding: 10px;
-    vertical-align: middle;
+	height: 30px;
+	padding: 10px;
+	vertical-align: middle;
 }
 
 #header .logo H1 {
-    margin: 0;
+	margin: 0;
 }
 
 #header .tools {
-    text-align: right;
-    padding: 2px 1ex;
+	text-align: right;
+	padding: 2px 1ex;
 }
 
 #header .breadcrumbs {
-    float: left;
+	float: left;
 }
 
 #column-left {
-    float: left;
-    width: 14em;
-    margin-bottom: 5em;
+	float: left;
+	width: 14em;
+	margin-bottom: 5em;
 }
 
 #column-center {
-    margin-left: 14em;
+	margin-left: 14em;
 }
 
 #footer {
-    text-align: center;
-    clear: both;
+	text-align: center;
+	clear: both;
 }
 
 /* Calendar Views */
 #calendar-view-year {
-    text-align: center;
-    margin: auto;
+	text-align: center;
+	margin: auto;
 }
 
 
 /********************************************************* BEGIN: Style.css */
 
 .center {
-    text-align: center;
+	text-align: center;
 }
 
 .inline {
-  display: inline;
+	display: inline;
 }
 
 .popup {
-    font-size: smaller;
+	font-size: smaller;
 
-    width:100% !important;
+	width:100% !important;
 }
 
 DIV.search-results {
-    height:10em;
-    overflow: auto;
-    border: 1px #bab5ab solid;
-    background: #eae8e3;
+	height:10em;
+	overflow: auto;
+	border: 1px #bab5ab solid;
+	background: #eae8e3;
 }
 
 FORM.standalone {
-    background: #eae8e3;
-    border: 1px #bab5ab solid;
+	background: #eae8e3;
+	border: 1px #bab5ab solid;
 }
 
 FORM.standalone h3 {
-    background: #bab5ab;
+	background: #bab5ab;
 }
 
 FORM.standalone FIELDSET {
-    border: 1px #bab5ab solid;
-    /* Mozilla's default padding for fieldsets -- makes it nice in MSIE too */
-    padding: 0.35em 0.625em 0.75em 0.625em;
+	border: 1px #bab5ab solid;
+	/* Mozilla's default padding for fieldsets -- makes it nice in MSIE too */
+	padding: 0.35em 0.625em 0.75em 0.625em;
 }
 
 FORM.standalone p {
-    margin: 0.5em;
+	margin: 0.5em;
 }
 
 FORM.standalone p.hint {
-    font-size: 80%;
-    font-style: italic;
-    color: #bab5ab;
+	font-size: 80%;
+	font-style: italic;
+	color: #bab5ab;
 }
 
 FORM.standalone .controls INPUT {
-    background: #fff;
+	background: #fff;
 }
 
 FORM.standalone DIV.label {
-    width: 10em;
-    padding-top: 0.5ex;
+	width: 10em;
+	padding-top: 0.5ex;
 }
 
 FORM.booking_form {
-    width: 75%;
+	width: 75%;
 }
 
 INPUT[type=text],
@@ -232,23 +229,23 @@ INPUT[type=password],
 INPUT[type=submit],
 SELECT,
 TEXTAREA {
-    padding: 2px;
-    border: 1px #bab5ab solid;
-    background: #ffffff;
-    vertical-align: middle;
+	padding: 2px;
+	border: 1px #bab5ab solid;
+	background: #ffffff;
+	vertical-align: middle;
 }
 
 SELECT {
-    padding: 0;
-    vertical-align: top;
+	padding: 0;
+	vertical-align: top;
 }
 
 #column-left SELECT {
-    width: 10em;
+	width: 10em;
 }
 
 OPTION {
-    border-bottom: 1px #eae8e3 solid;
+	border-bottom: 1px #eae8e3 solid;
 }
 
 INPUT[type=text]:focus,
@@ -257,30 +254,30 @@ INPUT[type=submit]:focus,
 INPUT[type=checkbox]:focus,
 INPUT[type=radio]:focus,
 TEXTAREA:focus  {
-    border: 1px #565248 solid;
+	border: 1px #565248 solid;
 }
 
 DIV.info {
-    margin: 0.5em;
-    font-weight: bold;
-    color: #009900;
+	margin: 0.5em;
+	font-weight: bold;
+	color: #009900;
 }
 
 P.error {
-    margin: 0.5em;
-    font-weight: bold;
-    color: #990000;
+	margin: 0.5em;
+	font-weight: bold;
+	color: #990000;
 }
 
 DIV.error {
-    margin: 0.5em;
-    font-weight: bold;
-    color: #990000;
+	margin: 0.5em;
+	font-weight: bold;
+	color: #990000;
 }
 
 .error LABEL {
-    font-weight: bold;
-    color: #990000;
+	font-weight: bold;
+	color: #990000;
 }
 
 .error INPUT[type=text],
@@ -288,9 +285,9 @@ DIV.error {
 .error INPUT[type=checkbox],
 .error SELECT,
 .error TEXTAREA  {
-    padding: 2px;
-    border: 1px #C1665A solid;
-    background: #e0b6af;
+	padding: 2px;
+	border: 1px #C1665A solid;
+	background: #e0b6af;
 }
 
 .error INPUT[type=text]:focus,
@@ -298,68 +295,68 @@ DIV.error {
 .error INPUT[type=checkbox]:focus,
 .error SELECT:focus,
 .error TEXTAREA:focus  {
-    border: 1px #663822 solid;
+	border: 1px #663822 solid;
 }
 
 .controls {
-    margin-top: 1ex;
+	margin-top: 1ex;
 }
 
 A.button-cancel,
 A.button-ok {
-  color: white;
-  text-decoration: none;
-  margin: 5px;
-  padding: 2px 5px;
+	color: white;
+	text-decoration: none;
+	margin: 5px;
+	padding: 2px 5px;
 }
 
 .button-ok {
-    background: #83A67F !important;
-    border: 1px #445632 solid !important;
-    color: #fff;
-    font-weight: bold;
+	background: #83A67F !important;
+	border: 1px #445632 solid !important;
+	color: #fff;
+	font-weight: bold;
 }
 
 .button-cancel {
-    background: #C1665A !important;
-    border: 1px #663822 solid !important;
-    color: #fff;
-    font-weight: bold;
+	background: #C1665A !important;
+	border: 1px #663822 solid !important;
+	color: #fff;
+	font-weight: bold;
 }
 
 /***************************/
 
 #header {
-    background: #eae8e3;
+	background: #eae8e3;
 }
 
 #header .tools {
-    color: #f0f0f0;
-    background: #990000 url(++resource++toolbar-background.png) top left repeat-x;
-    border-top: 2px #800 solid;
-    border-bottom: 2px #700 solid;
-    font-size: smaller;
+	color: #f0f0f0;
+	background: #990000 url(++resource++toolbar-background.png) top left repeat-x;
+	border-top: 2px #800 solid;
+	border-bottom: 2px #700 solid;
+	font-size: smaller;
 }
 
 #header .tools a {
-    color: #f0f0f0;
-    background: inherit;
-    text-decoration: none;
-    padding: 2px 1ex;
-    font-weight: bold;
-    margin: 0 1px;
+	color: #f0f0f0;
+	background: inherit;
+	text-decoration: none;
+	padding: 2px 1ex;
+	font-weight: bold;
+	margin: 0 1px;
 }
 
 #header .tools a:hover {
-    color: #ffffff;
-    background: #C40000 url(++resource++toolbar-background-hover.png) top left repeat-x;
-    margin: 0;
-    border-left: 1px #800 solid;
-    border-right: 1px #800 solid;
+	color: #ffffff;
+	background: #C40000 url(++resource++toolbar-background-hover.png) top left repeat-x;
+	margin: 0;
+	border-left: 1px #800 solid;
+	border-right: 1px #800 solid;
 }
 
 #tools-zmi-principal {
-    font-style: italic;
+	font-style: italic;
 }
 
 /*
@@ -367,66 +364,66 @@ A.button-ok {
 */
 
 #column-left {
-    background: #eae8e3 url(++resource++sidebar-background.png) bottom right no-repeat;
-    padding-right: 3px;
-    padding-bottom: 2em;
+	background: #eae8e3 url(++resource++sidebar-background.png) bottom right no-repeat;
+	padding-right: 3px;
+	padding-bottom: 2em;
 }
 
 #column-left .portlet {
-    margin-top: 1em;
+	margin-top: 1em;
 }
 
 #column-left .portlet H4 {
-    margin: 0;
-    padding: 0 1em;
-    border-top: 1px #bab5ab solid;
-    border-bottom: 1px #bab5ab solid;
-    background: #d6d6d6;
-    font-size: small;
+	margin: 0;
+	padding: 0 1em;
+	border-top: 1px #bab5ab solid;
+	border-bottom: 1px #bab5ab solid;
+	background: #d6d6d6;
+	font-size: small;
 }
 
 #column-left .portlet UL {
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 #portlet-next-day-events.portlet UL {
-    margin: 0.5em;
-    padding: 0;
+	margin: 0.5em;
+	padding: 0;
 }
 
 #column-left .portlet LI {
-    list-style: none;
-    padding: 1px 0;
-    margin-top: 1px;
-    margin-bottom: 0;
+	list-style: none;
+	padding: 1px 0;
+	margin-top: 1px;
+	margin-bottom: 0;
 }
 
 #column-left .portlet LI A {
-    display: block;
-    margin: 1px 0;
-    padding: 2px 1em;
-    color: #304D6B;
-    font-weight: bold;
-    text-decoration: none;
+	display: block;
+	margin: 1px 0;
+	padding: 2px 1em;
+	color: #304D6B;
+	font-weight: bold;
+	text-decoration: none;
 }
 
 #column-left .portlet LI A:hover {
-    background: #748FAD;
-    background: #7590ae;
-    margin: 0;
-    border-top: 1px #314e6c solid;
-    border-bottom: 1px #314e6c solid;
-    color: #fff !important;
+	background: #748FAD;
+	background: #7590ae;
+	margin: 0;
+	border-top: 1px #314e6c solid;
+	border-bottom: 1px #314e6c solid;
+	color: #fff !important;
 }
 
 #column-left .portlet .controls {
-    margin: 1ex 1ex 1ex 1ex;
-    text-align: right;
+	margin: 1ex 1ex 1ex 1ex;
+	text-align: right;
 }
 
 #column-left .portlet .controls INPUT {
-    font-size: x-small;
+	font-size: x-small;
 }
 
 /*
@@ -434,64 +431,64 @@ A.button-ok {
 */
 
 #column-center {
-    padding: 15px 20px;
+	padding: 15px 20px;
 }
 
 #content-header,
 #content-header H1 {
-    margin: 0;
+	margin: 0;
 }
 
 #content-header H1 {
 }
 
 #breadcrumbs {
-    list-style: none;
-    padding: 0;
-    /* This compensates for the padding on #column-center */
-    margin: -0.5em 0 0 -1em;
+	list-style: none;
+	padding: 0;
+	/* This compensates for the padding on #column-center */
+	margin: -0.5em 0 0 -1em;
 }
 
 #breadcrumbs LI {
-    display: inline;
-    margin: 0;
+	display: inline;
+	margin: 0;
 }
 
 #breadcrumbs LI.breadcrumb:after {
-    content: "\00BB \0020";
+	content: "\00BB \0020";
 }
 
 #breadcrumbs LI.last:after {
-    content: '';
+	content: '';
 }
 
 .breadcrumb A {
-    font-size: smaller;
-    text-decoration: none;
+	font-size: smaller;
+	text-decoration: none;
 }
 
 #message {
-    /*
-    * A status message for the user.  There should only be one of these as it
-    * is meant to be displayed prominently
-    */
+	/*
+	* A status message for the user.  There should only be one of these as it
+	* is meant to be displayed prominently
+	*/
 
-    margin: 1em;
-    padding: 1em;
-    background: #EED680;
-    border: 1px #D1940C solid;
+	margin: 1em;
+	padding: 1em;
+	background: #EED680;
+	border: 1px #D1940C solid;
 }
 
 #footer {
-    font-size: xx-small;
-    background: #eae8e3;
-    border-top: 1px solid #bab5ab;
-    border-bottom: 1px solid #bab5ab;
-    line-height: 1em;
+	font-size: xx-small;
+	background: #eae8e3;
+	border-top: 1px solid #bab5ab;
+	border-bottom: 1px solid #bab5ab;
+	line-height: 1em;
 }
 
 #footer P {
-  margin: 0.5ex;
+	margin: 0.5ex;
 }
 
 /*
@@ -499,9 +496,9 @@ A.button-ok {
 */
 
 #calendar-navigation {
-    position: absolute;
-    top: 1em;
-    right: 1em;
+	position: absolute;
+	top: 1em;
+	right: 1em;
 }
 
 #calendar-navigation-pdf,
@@ -509,120 +506,120 @@ A.button-ok {
 #calendar-navigation-week,
 #calendar-navigation-month,
 #calendar-navigation-year {
-    display: block;
-    margin: 2px;
-    float: left;
-    text-decoration: none;
-    border: 0;
-    padding: 0;
-    width: 24px;
+	display: block;
+	margin: 2px;
+	float: left;
+	text-decoration: none;
+	border: 0;
+	padding: 0;
+	width: 24px;
 }
 
 #calendar-navigation-pdf {
-    margin-right: 16px;
+	margin-right: 16px;
 }
 
 #calendar-navigation-context {
-    background: #eae8e3;
-    border: 1px #bab5ab solid;
-    margin: 1ex auto;
-    vertical-align: middle;
-    overflow: auto;
+	background: #eae8e3;
+	border: 1px #bab5ab solid;
+	margin: 1ex auto;
+	vertical-align: middle;
+	overflow: auto;
 }
 
 #calendar-navigation-context-previous,
 #calendar-navigation-context-current,
 #calendar-navigation-context-next {
-    display: block;
-    text-decoration: none;
-    width: 33.33%;
-    float: left;
+	display: block;
+	text-decoration: none;
+	width: 33.33%;
+	float: left;
 }
 
 #calendar-navigation-context-previous {
-    text-align: left;
+	text-align: left;
 }
 
 #calendar-navigation-context-previous SPAN {
-    padding-left: 24px;
-    background: url("++resource++previous.png") left center no-repeat;
+	padding-left: 24px;
+	background: url("++resource++previous.png") left center no-repeat;
 }
 
 #calendar-navigation-context-current {
-    text-align: center;
+	text-align: center;
 }
 
 #calendar-navigation-context-next {
-    text-align: right;
+	text-align: right;
 }
 
 #calendar-navigation-context-next SPAN {
-    padding-right: 24px;
-    background: url("++resource++next.png") right center no-repeat;
+	padding-right: 24px;
+	background: url("++resource++next.png") right center no-repeat;
 }
 
 #calendar-navigation-context-previous:hover,
 #calendar-navigation-context-current:hover,
 #calendar-navigation-context-next:hover {
-    background: #cfc9bc;
+	background: #cfc9bc;
 }
 
 #calendar-view-year TD.month {
-    padding: 1em;
+	padding: 1em;
 }
 
 #calendar-view-year TABLE.month,
 #portlet-calendar-view-month TABLE.month,
 #calendar-view-month {
-    background: #eae8e3;
-    border: 1px #4B6983 solid;
+	background: #eae8e3;
+	border: 1px #4B6983 solid;
 }
 
 #calendar-view-month {
-    width: 99%;
-    min-width: 100%;
+	width: 99%;
+	min-width: 100%;
 }
 
 #calendar-view-year TABLE.month TH,
 #portlet-calendar-view-month TABLE.month TH,
 #calendar-view-month TH,
 #calendar-view-month TD.weekno {
-    background: #9DB8D2;
+	background: #9DB8D2;
 }
 
 #calendar-view-month TD.weekno {
-    border-right: 2px #4B6983 solid;
-    border-bottom: 1px #4b6983 solid;
-    font-family: cursive, serif;
-    font-size: x-large;
-    font-style: italic;
+	border-right: 2px #4B6983 solid;
+	border-bottom: 1px #4b6983 solid;
+	font-family: cursive, serif;
+	font-size: x-large;
+	font-style: italic;
 }
 
 #calendar-view-year TABLE.month TH.month-weekday,
 #calendar-view-month TH.weekday {
-    font-weight: normal;
-    padding: 2px;
-    border-bottom: 1px #4B6983 solid;
+	font-weight: normal;
+	padding: 2px;
+	border-bottom: 1px #4B6983 solid;
 }
 
 .cal_yearly_day_busy {
-    background: #9DB8D2;
-    color: #9C0000;
+	background: #9DB8D2;
+	color: #9C0000;
 }
 
 #calendar-view-year TABLE.month TH.month-title A {
-    display: block;
-    width: 100%;
-    height: 100%;
-    text-decoration: none;
-    color: #f0f0f0;
-    background: #4B6983;
-    padding-top: 3px;
-    padding-bottom: 1px;
+	display: block;
+	width: 100%;
+	height: 100%;
+	text-decoration: none;
+	color: #f0f0f0;
+	background: #4B6983;
+	padding-top: 3px;
+	padding-bottom: 1px;
 }
 
 #calendar-view-year TABLE.month TH.month-title A:hover {
-    background: #314e6c;
+	background: #314e6c;
 }
 
 #calendar-view-year TABLE.month TH {
@@ -633,29 +630,29 @@ A.button-ok {
 
 #calendar-view-year TABLE.month TD A,
 #calendar-view-month TD A  {
-    text-decoration: none;
-    display: block;
-    padding: 1px;
+	text-decoration: none;
+	display: block;
+	padding: 1px;
 }
 
 #portlet-calendar-view-month TABLE.month TD A {
-    text-decoration: none;
-    display: block;
-    font-weight: normal;
-    padding: 1px;
+	text-decoration: none;
+	display: block;
+	font-weight: normal;
+	padding: 1px;
 }
 
 #calendar-view-month TH.month-title {
-    color: #f0f0f0;
-    background: #4B6983;
+	color: #f0f0f0;
+	background: #4B6983;
 }
 
 #calendar-view-year TABLE.month TD A:hover,
 #calendar-view-month TD A:hover,
 #portlet-calendar-view-month TABLE.month TD A:hover,
 #calendar-view-week TH A:hover {
-    color: #f0f0f0;
-    background: #314e6c;
+	color: #f0f0f0;
+	background: #314e6c;
 }
 
 #calendar-view-month TD.weekno {
@@ -663,115 +660,115 @@ A.button-ok {
 
 #calendar-view-month TD.day,
 #portlet-calendar-view-month TABLE.month TD {
-    border-right: 1px #bab5ab solid;
-    border-bottom: 1px #bab5ab solid;
+	border-right: 1px #bab5ab solid;
+	border-bottom: 1px #bab5ab solid;
 }
 
 #calendar-view-month TD.day A,
 #calendar-view-month TD.day-other A,
 #calendar-view-month TD.weekno A {
-    margin: auto;
-    display: block;
-    height: 100%;
-    min-height: 80px;
+	margin: auto;
+	display: block;
+	height: 100%;
+	min-height: 80px;
 }
 
 #calendar-view-month TD.weekno A {
-    height: 100%;
-    width: 100%;
-    color: #7590AE;
-    padding-left: 0.5ex;
-    padding-right: 0.5ex;
+	height: 100%;
+	width: 100%;
+	color: #7590AE;
+	padding-left: 0.5ex;
+	padding-right: 0.5ex;
 }
 
 #calendar-view-month TD.day-other {
-    background: #bab5ab;
+	background: #bab5ab;
 }
 
 #calendar-view-month TD.day-other A {
-    color: #807d74;
+	color: #807d74;
 }
 
 #calendar-view-month .event,
 #calendar-view-month .comp_event {
-    font-weight: normal;
-    font-size: xx-small;
-    display: block;
-    padding: 1px;
-    border: 1px #eae8e3 solid;
+	font-weight: normal;
+	font-size: xx-small;
+	display: block;
+	padding: 1px;
+	border: 1px #eae8e3 solid;
 }
 
 #calendar-view-month A:hover .event,
 #calendar-view-month A:hover .comp_event {
-    color: #000;
-    border: 1px #314e6c solid;
+	color: #000;
+	border: 1px #314e6c solid;
 }
 
 #calendar-view-month .event {
-    background: #9db8d2;
+	background: #9db8d2;
 }
 
 #calendar-view-month .comp_event {
-    background: #e0b6af;
+	background: #e0b6af;
 }
 
 #calendar-view-week {
-    border-top: 1px #4B6983 solid;
+	border-top: 1px #4B6983 solid;
 }
 
 #calendar-view-week TD {
-    width: 20em;
-    background: #eae8e3;
-    font-size: smaller;
+	width: 20em;
+	background: #eae8e3;
+	font-size: smaller;
 }
 #calendar-view-week TH {
-    border-right: 1px #4B6983 solid;
+	border-right: 1px #4B6983 solid;
 }
 
 #calendar-view-week TH.first {
-    border-left: 1px #4B6983 solid;
+	border-left: 1px #4B6983 solid;
 }
 
 #calendar-view-week TH.day-title {
-    background: #9DB8D2;
-    border-bottom: 1px #4B6983 solid;
+	background: #9DB8D2;
+	border-bottom: 1px #4B6983 solid;
 }
 
 #calendar-view-week TH A {
-    display: block;
-    width: 100%;
-    text-align: center;
-    text-decoration: none;
+	display: block;
+	width: 100%;
+	text-align: center;
+	text-decoration: none;
 }
 
 #calendar-view-week TD {
-    border-right: 1px #bab5ab solid;
-    border-bottom: 1px #bab5ab solid;
+	border-right: 1px #bab5ab solid;
+	border-bottom: 1px #bab5ab solid;
 }
 
 #calendar-view-week TD.first {
-    border-left: 1px #bab5ab solid;
+	border-left: 1px #bab5ab solid;
 }
 
 #calendar-view-week TD A {
-    display: block;
-    border: 1px solid;
-    margin: 2px;
-    padding: 0.5em;
-    text-decoration: none;
-    font-weight: normal;
+	display: block;
+	border: 1px solid;
+	margin: 2px;
+	padding: 0.5em;
+	text-decoration: none;
+	font-weight: normal;
 }
 
 #calendar-view-week TD A .time {
-    font-size: smaller;
+	font-size: smaller;
 }
 
 #calendar-view-week TD A.first {
 }
 
 #calendar-view-week TD A:hover {
-    color: #f0f0f0;
-    background: #314e6c;
+	color: #f0f0f0;
+	background: #314e6c;
 }
 
 /* Day View
@@ -779,175 +776,175 @@ A.button-ok {
 * day
 */
 #calendar-view-day {
-    border: #aaaaaa 1px solid;
-    border-top: none;
-    position: relative;
-    padding-top: 2px;
+	border: #aaaaaa 1px solid;
+	border-top: none;
+	position: relative;
+	padding-top: 2px;
 }
 
 #events-allday {
-  margin-bottom: 1px;
+	margin-bottom: 1px;
 }
 
 #events-allday .event-allday {
-  position: relative;
-  margin-top: 1px;
+	position: relative;
+	margin-top: 1px;
 }
 
 #events-allday .event-allday H6 {
-  margin: 0;
-  font-size: small;
-  text-align: center;
+	margin: 0;
+	font-size: small;
+	text-align: center;
 }
 #events-allday .event-allday H6 A {
-    text-decoration: none;
-    display: block;
+	text-decoration: none;
+	display: block;
 }
 
 #events-allday .event-allday A.delete {
-    position: absolute;
-    top: 0px;
-    right: 2px;
-    display: block;
-    text-decoration: none;
-    overflow: hidden;
-    border: 0;
-    padding: 0;
-    cursor: pointer;
+	position: absolute;
+	top: 0px;
+	right: 2px;
+	display: block;
+	text-decoration: none;
+	overflow: hidden;
+	border: 0;
+	padding: 0;
+	cursor: pointer;
 }
 
 #events-allday .event-allday P {
-  font-size: smaller;
-  margin: 0 1em;
-  text-align: center;
+	font-size: smaller;
+	margin: 0 1em;
+	text-align: center;
 }
 
 
 
 #calendar-view-day .hour {
-    border-top: 1px #bab5ab solid;
-    width: 100%;
-    position: absolute;
-    height: 4em;
-    margin: 0 !important;
-    padding: 0 !important;
+	border-top: 1px #bab5ab solid;
+	width: 100%;
+	position: absolute;
+	height: 4em;
+	margin: 0 !important;
+	padding: 0 !important;
 }
 
 #calendar-view-day .even {
-    background: #eae8e3;
+	background: #eae8e3;
 }
 
 #calendar-view-day .hour .title {
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-weight: bold;
-    margin-left: 0.5em;
+	position: absolute;
+	top: 0;
+	left: 0;
+	font-weight: bold;
+	margin-left: 0.5em;
 }
 
 #calendar-view-day .events {
-    position: absolute;
-    margin-left: 5.5em;
-    left: 0;
-    top: 0;
-    width: 100%;
+	position: absolute;
+	margin-left: 5.5em;
+	left: 0;
+	top: 0;
+	width: 100%;
 }
 
 #calendar-view-day .event {
-    display: block;
-    position: absolute;
-    margin-left: 5em;
-    width: 20em;
-    min-width: 20em;
-    border: 1px #4b6983 solid;
-    background: #9db8d2;
-    opacity: 0.85;
-    z-index: 1;
-    overflow: hidden;
+	display: block;
+	position: absolute;
+	margin-left: 5em;
+	width: 20em;
+	min-width: 20em;
+	border: 1px #4b6983 solid;
+	background: #9db8d2;
+	opacity: 0.85;
+	z-index: 1;
+	overflow: hidden;
 }
 
 #calendar-view-day .other {
-    background: #e0b6af;
-    border: 1px #884631 solid;
+	background: #e0b6af;
+	border: 1px #884631 solid;
 }
 
 #calendar-view-day .event:hover {
-    opacity: 1;
-    z-index: 9;
-    height: auto !important;
+	opacity: 1;
+	z-index: 9;
+	height: auto !important;
 }
 
 #calendar-view-day .event H6 {
-    font-size: small;
-    margin: 0;
-    padding: 2px;
-    background: #7590ae;
-    font-weight: bold;
-    line-height: 1em;
-    opacity: 1 !important;
+	font-size: small;
+	margin: 0;
+	padding: 2px;
+	background: #7590ae;
+	font-weight: bold;
+	line-height: 1em;
+	opacity: 1 !important;
 }
 
 #calendar-view-day .other H6 {
-    background: #c1665a;
+	background: #c1665a;
 }
 
 #calendar-view-day .event H6 A {
-    color: #fff;
-    text-decoration: none;
-    display: block;
+	color: #fff;
+	text-decoration: none;
+	display: block;
 }
 
 #calendar-view-day .event H6 .start-end {
-    font-weight: bold;
-    color: #000;
+	font-weight: bold;
+	color: #000;
 }
 
 #calendar-view-day .event A.delete {
-    position: absolute;
-    top: 1px;
-    right: 1px;
-    display: block;
-    text-decoration: none;
-    overflow: hidden;
-    border: 0;
-    padding: 0;
-    cursor: pointer;
+	position: absolute;
+	top: 1px;
+	right: 1px;
+	display: block;
+	text-decoration: none;
+	overflow: hidden;
+	border: 0;
+	padding: 0;
+	cursor: pointer;
 }
 
 #calendar-view-day .event .body {
-    margin: 0.5ex;
-    padding: 0.5ex;
+	margin: 0.5ex;
+	padding: 0.5ex;
 }
 
 #calendar-view-day .event .booked-resources {
-    border: 1px;
-    padding: 0.5ex;
-    font-size: 80%;
+	border: 1px;
+	padding: 0.5ex;
+	font-size: 80%;
 }
 
 #calendar-view-day .event .booked-resources-header A {
-    color: #000;
-    text-decoration: none;
-    display: block;
+	color: #000;
+	text-decoration: none;
+	display: block;
 }
 
 #calendar-view-day .event .booked-resources a {
-    display: block;
+	display: block;
 }
 
 #calendar-view-day .event .body .title {
-    font-style: italic;
+	font-style: italic;
 }
 
 #calendar-view-day .hour A.event-new {
-    padding: 0.5ex;
-    cursor: pointer;
-    text-decoration: none;
+	padding: 0.5ex;
+	cursor: pointer;
+	text-decoration: none;
 }
 
 #calendar-view-day .hour SPAN.event-new {
-    font-weight: bold;
-    padding: 0.5ex;
+	font-weight: bold;
+	padding: 0.5ex;
 }
 
 /*
@@ -955,207 +952,207 @@ A.button-ok {
 */
 
 body#path-login H1 {
-    display: none;
+	display: none;
 }
 
 body#path-login #column-center {
-    margin-left: 0;
+	margin-left: 0;
 }
 
 body#path-login FORM.standalone {
-    vertical-align: middle;
-    margin-top: 10%;
-    margin-bottom: 10%;
+	vertical-align: middle;
+	margin-top: 10%;
+	margin-bottom: 10%;
 }
 
 #portlet-navigation-calendar {
-    padding-left: 3em !important;
-    background: url("/calendar.png") left no-repeat;
+	padding-left: 3em !important;
+	background: url("/calendar.png") left no-repeat;
 }
 
 #portlet-navigation-calendar:hover {
-    padding-left: 3em !important;
-    background: #748fad url("/calendar.png") left no-repeat !important;
+	padding-left: 3em !important;
+	background: #748fad url("/calendar.png") left no-repeat !important;
 }
 
 #portlet-navigation-information {
-    padding-left: 3em !important;
-    background: url("/information.png") left no-repeat;
+	padding-left: 3em !important;
+	background: url("/information.png") left no-repeat;
 }
 
 #portlet-navigation-information:hover {
-    padding-left: 3em !important;
-    background: #748fad url(".png") left no-repeat !important;
+	padding-left: 3em !important;
+	background: #748fad url(".png") left no-repeat !important;
 }
 
 #portlet-calendar-view-month {
-    text-align: center;
+	text-align: center;
 }
 
 #portlet-calendar-view-month TABLE.month {
-    margin: 0.5em auto;
+	margin: 0.5em auto;
 }
 
 #portlet-jumpto FORM {
-    border-bottom: 1px #aaa dashed;
-    padding: 0.5em;
-    font-size: smaller;
-    margin: auto;
+	border-bottom: 1px #aaa dashed;
+	padding: 0.5em;
+	font-size: smaller;
+	margin: auto;
 }
 
 #portlet-calendar-overlay FORM {
-    margin: 2px;
+	margin: 2px;
 }
 #portlet-calendar-overlay INPUT {
-    margin-left: 0.5em;
+	margin-left: 0.5em;
 }
 
 #portlet-calendar-overlay LABEL {
-    display: block;
+	display: block;
 }
 
 #portlet-calendar-overlay LABEL:hover {
-    color: #888888;
+	color: #888888;
 }
 
 #portlet-calendar-overlay LABEL.disabled {
-    color: #888888;
+	color: #888888;
 }
 
 #portlet-calendar-overlay A.go {
-    float: right;
-    top: -1.25em;
-    margin-right: 0.25em;
-    width: 1em;
-    height: 1em;
-    position: relative;
-    text-decoration: none;
+	float: right;
+	top: -1.25em;
+	margin-right: 0.25em;
+	width: 1em;
+	height: 1em;
+	position: relative;
+	text-decoration: none;
 }
 #portlet-calendar-overlay A.go IMG {
-    border: none;
+	border: none;
 }
 
 /** Specific Page Styling **/
 
 .info-block {
-    width: 62%;
-    border: none;
-    border-top: 1px #d6d6d6 solid;
-    margin: 1em 0em;
-    padding: 0em 0.5em;
+	width: 62%;
+	border: none;
+	border-top: 1px #d6d6d6 solid;
+	margin: 1em 0em;
+	padding: 0em 0.5em;
 }
 
 .info-block H5 {
-    margin: 0px;
-    padding: 0px;
-    font-weight: bold;
+	margin: 0px;
+	padding: 0px;
+	font-weight: bold;
 }
 
 .info-block A {
-    font-weight: normal;
+	font-weight: normal;
 }
 
 .info-block UL {
-    margin: 0.25em;
-    list-style: circle;
+	margin: 0.25em;
+	list-style: circle;
 }
 
 A.modify {
-    display: block;
-    padding: 0.25em;
-    font-weight: normal;
+	display: block;
+	padding: 0.25em;
+	font-weight: normal;
 }
 
 .person-photo {
-    float: left;
-    margin: 0 0.5em 0 0;
-    background: #d6d6d6;
-    padding: 2px;
-    border: 1px #999 solid;
+	float: left;
+	margin: 0 0.5em 0 0;
+	background: #d6d6d6;
+	padding: 2px;
+	border: 1px #999 solid;
 }
 
 TD.dl {
-  text-align: left;
+	text-align: left;
 }
 
 TD.dr {
-  text-align: right;
+	text-align: right;
 }
 
 TABLE.person-details {
-    text-align: center;
+	text-align: center;
 }
 .person-details .address {
-    margin: 0.25em;
-    font-size: 85%;
+	margin: 0.25em;
+	font-size: 85%;
 }
 
 TABLE.acl {
-    border: none;
-    border-collapse: collapse;
-    width: 100%;
+	border: none;
+	border-collapse: collapse;
+	width: 100%;
 }
 
 TABLE.acl TR.header TH {
-    border-bottom: 1px solid #bab5ab;
+	border-bottom: 1px solid #bab5ab;
 }
 TABLE.acl TR.even {
-    background: #d6d6d6;
+	background: #d6d6d6;
 }
 
 TABLE.acl TD {
-    text-align: center;
+	text-align: center;
 }
 
 TABLE.acl TH {
-    text-align: left;
+	text-align: left;
 }
 
 TABLE.acl TH.permission {
-    width: 7em;
-    text-align: center;
+	width: 7em;
+	text-align: center;
 }
 
 TABLE.event_booking {
-    border: none;
-    border-collapse: collapse;
-    width: 100%;
+	border: none;
+	border-collapse: collapse;
+	width: 100%;
 }
 
 TABLE.event_booking TR.header TH {
-    border-bottom: 1px solid #bab5ab;
+	border-bottom: 1px solid #bab5ab;
 }
 
 TABLE.event_booking TR.even {
-    background: #d6d6d6;
+	background: #d6d6d6;
 }
 
 TABLE.event_booking TD {
-    text-align: center;
+	text-align: center;
 }
 
 TABLE.event_booking TH {
-    text-align: left;
+	text-align: left;
 }
 
 TABLE.event_booking TH.permission {
-    width: 7em;
-    text-align: center;
+	width: 7em;
+	text-align: center;
 }
 
 TABLE.event_booking TD.booked {
-    width: 2em;
-    text-align: center;
+	width: 2em;
+	text-align: center;
 }
 
 #notes {
-  float: right;
-  width: 32%;
+	float: right;
+	width: 32%;
 }
 
 #notes H5 {
-  display: none; /* XXX Hide this here, but keep it in the template for */
-                 /* accessibility (or should we just remove from template? */
+	display: none; /* XXX Hide this here, but keep it in the template for */
+	             /* accessibility (or should we just remove from template? */
 }
 
 /* Rounded corners for notes, taken from:
@@ -1163,151 +1160,151 @@ TABLE.event_booking TD.booked {
 */
 
 .note {
-  margin-bottom: 1ex;
-  background: #eed680 url(++resource++note-body-r.gif) no-repeat bottom right;
+	margin-bottom: 1ex;
+	background: #eed680 url(++resource++note-body-r.gif) no-repeat bottom right;
 }
 
 .note P {
-  padding: 1em 2em 2em 2em;
-  margin: 0;
+	padding: 1em 2em 2em 2em;
+	margin: 0;
 }
 
 .note .header {
-  background: #d1940c url(++resource++note-head-r.gif) no-repeat top right;
-  margin: 0;
-  padding: 0;
-  position: relative;
+	background: #d1940c url(++resource++note-head-r.gif) no-repeat top right;
+	margin: 0;
+	padding: 0;
+	position: relative;
 }
 
 .note .header H6 {
-  background: url(++resource++note-head-l.gif) no-repeat top left;
-  font-weight: bold; 
-  font-size: small;
-  margin: 0;
-  padding: 6px 0 0 15px;
+	background: url(++resource++note-head-l.gif) no-repeat top left;
+	font-weight: bold; 
+	font-size: small;
+	margin: 0;
+	padding: 6px 0 0 15px;
 }
 
 .note .header A.delete {
-  background: url(++resource++delete.png) no-repeat top left;
-  display: block;
-  width: 10px;
-  height: 0px;
-  padding-top: 10px;
-  height/**/: 0px;
-  overflow: hidden;
-  float: right;
-  position: absolute;
-  right: 11px;
-  top: 9px;
+	background: url(++resource++delete.png) no-repeat top left;
+	display: block;
+	width: 10px;
+	height: 0px;
+	padding-top: 10px;
+	height/**/: 0px;
+	overflow: hidden;
+	float: right;
+	position: absolute;
+	right: 11px;
+	top: 9px;
 }
 
 .note .body {
-  background: url(++resource++note-body-l.gif) no-repeat bottom left;
-  margin: 0;
-  font-size: x-small;
+	background: url(++resource++note-body-l.gif) no-repeat bottom left;
+	margin: 0;
+	font-size: x-small;
 }
 
 .note.private {
-  background: #c1665a url(++resource++private-note-body-r.gif) no-repeat bottom right;
+	background: #c1665a url(++resource++private-note-body-r.gif) no-repeat bottom right;
 }
 
 .note.private .header {
-  background: #900 url(++resource++private-note-head-r.gif) no-repeat top right;
+	background: #900 url(++resource++private-note-head-r.gif) no-repeat top right;
 }
 
 .note.private .privacy {
-  font-size: x-small;
+	font-size: x-small;
 }
 
 .note.private H6 {
-  background: url(++resource++private-note-head-l.gif) no-repeat top left;
-  color: #f0f0f0;
+	background: url(++resource++private-note-head-l.gif) no-repeat top left;
+	color: #f0f0f0;
 }
 
 .note.private .body {
-  background: url(++resource++private-note-body-l.gif) no-repeat bottom left;
+	background: url(++resource++private-note-body-l.gif) no-repeat bottom left;
 }
 
 /* Batch navigation */
 
 .batch-navigation {
-    background: #d6d6d6;
-    border: 1px #bab5ab solid;
-    text-align: center;
-    vertical-align: top;
-    margin: 1em auto;
-    overflow: auto;
-    font-size: smaller;
+	background: #d6d6d6;
+	border: 1px #bab5ab solid;
+	text-align: center;
+	vertical-align: top;
+	margin: 1em auto;
+	overflow: auto;
+	font-size: smaller;
 }
 
 .batch-navigation A {
-    text-decoration: none;
-    padding: 0 0.5em;
+	text-decoration: none;
+	padding: 0 0.5em;
 }
 
 .batch-navigation A:hover {
-    background: #bab5ab;
+	background: #bab5ab;
 }
 
 .batch-navigation SPAN.previous,
 .batch-navigation A.previous {
-    text-align: left;
-    float: left;
-    padding-left: 1em;
+	text-align: left;
+	float: left;
+	padding-left: 1em;
 }
 
 .batch-navigation SPAN.next,
 .batch-navigation A.next {
-    text-align: right;
-    float: right;
-    padding-right: 1em;
+	text-align: right;
+	float: right;
+	padding-right: 1em;
 }
 
 .batch-navigation SPAN.next,
 .batch-navigation SPAN.previous {
-    color: #bab5ab;
-    font-weight: bold;
+	color: #bab5ab;
+	font-weight: bold;
 }
 
 .batch-navigation A.current {
-    color: #fff;
-    background: #314e6c;
+	color: #fff;
+	background: #314e6c;
 }
 
 /* "Showing aaa of bbb items" */
 DIV.count {
-  font-size: smaller;
-  color: #76797c;
+	font-size: smaller;
+	color: #76797c;
 }
 
 /* Internal error pages */
 
 PRE.traceback {
-  color: #444444;
-  font-size: small;
-  overflow: auto;
-  background: #f0f0f0;
+	color: #444444;
+	font-size: small;
+	overflow: auto;
+	background: #f0f0f0;
 }
 
 PRE.traceback SPAN.filename {
-  color: blue;
+	color: blue;
 }
 
 PRE.traceback SPAN.lineno,
 PRE.traceback SPAN.column {
-  color: red;
+	color: red;
 }
 
 PRE.traceback SPAN.method {
-  color: green;
+	color: green;
 }
 
 PRE.traceback SPAN.expr {
-  color: green;
+	color: green;
 }
 
 PRE.traceback SPAN.source {
-  color: black;
+	color: black;
 }
 
 /*********************************************************** END: Style.css */
