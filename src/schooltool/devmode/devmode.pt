@@ -1,0 +1,24 @@
+<div class="devtools">
+
+  <div class="header" style="clear: both">
+    <a href="javascript:switchDisplay('devtools')"
+       style="text-decoration: none">
+      <img src="/@@/harrow.png" border="0" id=".arrow"
+           style="vertical-align: middle"
+           tal:attributes="id string:devtools.arrow" />
+    </a>
+    <h4>Developer Tools</h4>
+  </div>
+
+  <div id="devtools" style="display:none;">
+    <div class="body">
+      <a href="/++etc++site/default/RootErrorReportingUtility"
+         target="new">Errors</a>
+      <a href="@@introspector.html"
+         target="new">Introspector</a>
+      <a href="/++apidoc++"
+         target="new">API Docs</a>
+    </div>
+  </div>
+
+</div>

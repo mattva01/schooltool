@@ -16,12 +16,31 @@
       name="SchoolToolDevMode"
       interface=".skin.ISchoolToolDevModeSkin" />
 
-  <browser:page
-      name="view_macros"
+  <browser:pagelet
+      name="devmode"
       for="*"
+      slot="schooltool.app.browser.skin.HeaderSlot"
+      template="devmode.pt"
       permission="zope.View"
-      template="view_macros.pt"
-      layer=".skin.IDevModeLayer"
+      layer="schooltool.devmode.skin.IDevModeLayer"
+      />
+
+  <browser:pagelet
+      name="devmode_javascript"
+      for="*"
+      slot="schooltool.app.browser.skin.JavaScriptSlot"
+      template="devmode_javascript.pt"
+      permission="zope.View"
+      layer="schooltool.devmode.skin.IDevModeLayer"
+      />
+
+  <browser:pagelet
+      name="devmode_css"
+      for="*"
+      slot="schooltool.app.browser.skin.CSSSlot"
+      template="devmode_css.pt"
+      permission="zope.View"
+      layer="schooltool.devmode.skin.IDevModeLayer"
       />
 
   <!-- DevTools Menu configuration -->
@@ -113,7 +132,7 @@
       for="zope.app.error.interfaces.IErrorReportingUtility"
       action="@@configure.html"
       title="Configure"
-      layer=".skin.IDevModeLayer"
+      layer="schooltool.devmode.skin.IDevModeLayer"
       />
 
   <browser:menuItem
@@ -180,6 +199,24 @@
         template="menu.pt"
         />
   </configure>
+
+  <!-- RESTive API documentation -->
+  <browser:page
+      for="zope.app.apidoc.codemodule.codemodule.CodeModule"
+      permission="zope.app.apidoc.UseAPIDoc"
+      class="schooltool.devmode.restdoc.RESTMenu"
+      name="restmenu.html"
+      template="restmenu.pt"
+      layer="schooltool.devmode.skin.IDevModeLayer"
+      />
+
+  <browser:page
+      for="zope.app.apidoc.codemodule.interfaces.IClassDocumentation"
+      permission="zope.app.apidoc.UseAPIDoc"
+      class=".restdoc.RESTDocumentation"
+      name="restviews.html"
+      template="restdoc.pt"
+      />
 
   <!-- Misc -->
   <includeOverrides file="overrides.zcml" />

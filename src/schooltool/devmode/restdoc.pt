@@ -1,0 +1,131 @@
+<html metal:use-macro="views/apidoc_macros/details"
+    i18n:domain="zope">
+<body metal:fill-slot="contents">
+
+  <h1 class="details-header" i18n:translate="">
+    RESTive API for <code tal:content="context/getPath" i18n:name="iface" />
+  </h1>
+
+  <h2 class="details-section" i18n:translate="">Verbs</h2>
+
+
+  <div class="indent"
+       tal:define="info view/getGETInfo"
+       tal:condition="info">
+
+    <h3>GET <i>&lt;<span tal:replace="context/zope:name" />&gt;</i></h3>
+    <div class="indent">
+      <div condition="info/factory/path">
+        <i i18n:translate="">factory path:</i>
+        <a href=""
+           tal:condition="info/factory/referencable"
+           tal:attributes="href 
+               string: ../../Code/${info/factory/url}/index.html"
+           tal:content="info/factory/path" />
+        <span
+           tal:condition="not:info/factory/referencable"
+           tal:content="info/factory/path" />
+      </div>
+
+      <div tal:condition="info/factory/template">
+        <i i18n:translate="">template:</i>
+        <span tal:replace="info/factory/template" />
+      </div>
+  
+      <div tal:condition="info/read_perm">
+        <i i18n:translate="">Permission:</i>
+        <span tal:replace="info/read_perm">zope.View</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="indent"
+       tal:repeat="info view/getCreatePUTInfo">
+
+    <h3>
+      PUT 
+      <i>&lt;<span tal:replace="info/container_name" />&gt;</i> /
+      <i>&lt;<span tal:replace="info/object_name" />&gt;</i>
+      <span tal:condition="info/file_extension">
+        .<span tal:replace="info/file_extension" />
+      </span>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <span style="font-size: 80%" i18n:translate="">(create)</span>
+    </h3>
+
+    <div class="indent">
+        <i i18n:translate="">factory path:</i>
+        <a href=""
+           tal:condition="info/factory/referencable"
+           tal:attributes="href 
+               string: ../../Code/${info/factory/url}/index.html"
+           tal:content="info/factory/path" />
+        <span
+           tal:condition="not:info/factory/referencable"
+           tal:content="info/factory/path" />
+
+      <div tal:condition="info/schema">
+        <i i18n:translate="">schema:</i>
+        <pre tal:content="info/schema" />
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="indent"
+       tal:repeat="info view/getEditPUTInfo">
+
+    <h3>
+      PUT 
+      <i>&lt;<span tal:replace="info/object_name" />&gt;</i>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <span style="font-size: 80%" i18n:translate="">(edit)</span>
+    </h3>
+
+    <div class="indent">
+        <i i18n:translate="">factory path:</i>
+        <a href=""
+           tal:condition="info/factory/referencable"
+           tal:attributes="href 
+               string: ../../Code/${info/factory/url}/index.html"
+           tal:content="info/factory/path" />
+        <span
+           tal:condition="not:info/factory/referencable"
+           tal:content="info/factory/path" />
+
+      <div>
+        <i i18n:translate="">schema:</i>
+        <span i18n:translate="">See the PUT creation schema.</span>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="indent"
+       tal:repeat="info view/getCreatePUTInfo">
+
+    <h3>
+      DELETE 
+      <i>&lt;<span tal:replace="info/container_name" />&gt;</i> /
+      <i>&lt;<span tal:replace="info/object_name" />&gt;</i>
+    </h3>
+
+  </div>
+
+
+
+    <h3>POST &lt;<span tal:replace="context/zope:name" />&gt;</h3>
+
+
+  <h2 class="details-section" i18n:translate="">Name Traversers</h2>
+  <div class="indent">
+  </div>
+
+</body>
+</html>

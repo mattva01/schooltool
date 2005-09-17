@@ -21,11 +21,25 @@ SchoolBell skin.
 
 $Id: skin.py 3335 2005-03-25 18:53:11Z ignas $
 """
-from zope.app.publisher.browser import applySkin
+from zope.interface import Interface
 from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.app.publisher.browser import applySkin
 
 from schooltool.app.interfaces import ISchoolToolApplication
+
+
+class HeaderSlot(Interface):
+    """Provides a pagelet hook for the header of a page."""
+
+
+class JavaScriptSlot(Interface):
+    """Provides a pagelet hook for the javascript link entries."""
+
+
+class CSSSlot(Interface):
+    """Provides a pagelet hook for the CSS link entries."""
+
 
 class ISchoolToolLayer(ILayer, IBrowserRequest):
     """SchoolTool layer."""

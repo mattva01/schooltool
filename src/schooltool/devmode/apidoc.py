@@ -23,6 +23,9 @@ $Id$
 """
 __docformat__ = 'restructuredtext'
 
+import zope.app.apidoc.ifacemodule.menu
+import zope.app.apidoc.codemodule.browser.menu
+import zope.app.apidoc.bookmodule.browser
 from zope.app.apidoc import ifacemodule, codemodule, bookmodule, zcmlmodule
 
 

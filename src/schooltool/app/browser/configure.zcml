@@ -20,6 +20,21 @@
       interface=".skin.ISchoolToolSkin"
       />
 
+  <zope:interface
+      interface=".skin.HeaderSlot"
+      type="zope.app.pagelet.interfaces.IPageletSlot"
+      />
+
+  <zope:interface
+      interface=".skin.JavaScriptSlot"
+      type="zope.app.pagelet.interfaces.IPageletSlot"
+      />
+
+  <zope:interface
+      interface=".skin.CSSSlot"
+      type="zope.app.pagelet.interfaces.IPageletSlot"
+      />
+
   <page
       name="standard_macros"
       for="*"

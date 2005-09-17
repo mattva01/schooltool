@@ -17,6 +17,13 @@
     <script type="text/javascript" src=""
             tal:attributes="src context/++resource++calwidget-calendar.js">
     </script>
+    <tal:block
+        repeat="pagelet pagelets:schooltool.app.browser.skin.CSSSlot"
+        replace="structure pagelet" />
+
+    <tal:block
+        repeat="pagelet pagelets:schooltool.app.browser.skin.JavaScriptSlot"
+        replace="structure pagelet" />
     <metal:block define-slot="title">
       <metal:block use-macro="view/@@schooltool_macros/generic/title" />
     </metal:block>
@@ -31,6 +38,9 @@
           <img src="logo.png" alt="SchoolTool" i18n:attributes="alt"
             tal:attributes="src context/++resource++logo.png"/>
         </a>
+        <tal:block
+            repeat="pagelet pagelets:schooltool.app.browser.skin.HeaderSlot"
+            replace="structure pagelet" />
       </div>
       <div class="tools">
         <div class="breadcrumbs">

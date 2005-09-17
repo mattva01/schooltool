@@ -1,0 +1,2 @@
+<link type="text/css" rel="stylesheet" href="devmode.css"
+      tal:attributes="href context/++resource++devmode.css" />

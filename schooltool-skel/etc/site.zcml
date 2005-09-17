@@ -6,10 +6,12 @@
   <include package="zope.app" />
   <include package="zope.app.securitypolicy" file="meta.zcml" />
   <include package="zope.app.wfmc" file="meta.zcml" />
+  <include package="zope.app.pagelet" file="meta.zcml" />
 
   <include package="zope.app.session" />
   <include package="zope.app.server" />
   <include package="zope.app.http" />
+  <include package="zope.app.pagelet" />
 
   <!-- Workaround to shut down a DeprecationWarning that appears because we do
        not include zope.app.onlinehelp and the rotterdam skin tries to look for

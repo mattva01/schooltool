@@ -1,0 +1,21 @@
+<html metal:use-macro="views/apidoc_macros/menu"
+    i18n:domain="zope">
+<body>
+
+  <div metal:fill-slot="menu" class="small">
+
+    <div>Available Content Classes</div>
+
+    <div tal:define="classes view/listClasses">
+        <a href="" target="main"
+           tal:repeat="info classes"
+           tal:attributes="href info/url"
+           tal:content="info/path">
+          /zope/app/Application
+        </a>
+    </div>
+
+  </div>
+
+</body>
+</html>
