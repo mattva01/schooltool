@@ -1,13 +1,80 @@
 /*
  * Stylesheet for SchoolTool
  *
- * Layout and positioning
- *
  */
 
-body {
-    margin: 0;
+/******************************************************* BEGIN: Base.css */
+
+BODY {
+    font-size: x-small; /* for IE5/Win */
+    voice-family: "\"}\"";
+    voice-family: inherit;
+    font-size: small; /* for IE6/Win */
 }
+
+HTML>BODY {
+    font-size: x-small; /* for Opera */
+}
+
+head:first-child+BODY {
+    font-size: small; /* for Mozilla, IE5/Mac */
+}
+
+BODY {
+    margin: 0;
+    padding:0 ;
+}
+
+/********************************************************* END: Base.css */
+
+
+/************************************************* BEGIN: Schooltool.css */
+
+BODY {
+    font-family: Verdana, Helvetica, Arial, Sans-Serif;
+    background: #fff;
+    color: #000;
+    min-width: 700px;
+}
+
+UL {
+    padding-left: 2em;
+}
+
+IMG {
+    border: none;
+}
+
+A, A:link, A:visited, A:hover, A:active {
+    color: #314e6c;
+    font-weight: bold;
+}
+
+A:hover {
+}
+
+H1, H2, H3, H4, H5, H6 {
+    font-family: "Trebuchet MS", Sans-Serif;
+}
+
+H1, H2, H3, H4, H5, H6 { margin: 0; padding: 0; }
+H1 { font-size: 120%; }
+H2 { font-size: 110%; }
+H3 { font-size: 100%; }
+H4 { font-size: 90%; }
+H5 { font-size: 80%; }
+H6 { font-size: 75%; }
+
+pre {
+  margin: 1em;
+  padding: 1em;
+  border: 1px #000 dotted;
+}
+
+/*************************************************** END: Schooltool.css */
+
+
+/***************************************************** BEGIN: Layout.css */
 
 #footer {
     width: 70%;
@@ -23,10 +90,6 @@ body {
 .clearer {
     clear: both;
     margin-top: 2em;
-}
-
-ul {
-    padding-left: 2em;
 }
 
 form.standalone {
@@ -101,3 +164,1152 @@ form.standalone .controls {
     text-align: center;
     margin: auto;
 }
+
+
+/********************************************************* BEGIN: Style.css */
+
+.center {
+    text-align: center;
+}
+
+.inline {
+  display: inline;
+}
+
+.popup {
+    font-size: smaller;
+
+    width:100% !important;
+}
+
+div.search-results {
+    height:10em;
+    overflow: auto;
+    border: 1px #bab5ab solid;
+    background: #eae8e3;
+}
+
+form.standalone {
+    background: #eae8e3;
+    border: 1px #bab5ab solid;
+}
+
+form.standalone h3 {
+    background: #bab5ab;
+}
+
+form.standalone fieldset {
+    border: 1px #bab5ab solid;
+    /* Mozilla's default padding for fieldsets -- makes it nice in MSIE too */
+    padding: 0.35em 0.625em 0.75em 0.625em;
+}
+
+form.standalone p {
+    margin: 0.5em;
+}
+
+form.standalone p.hint {
+    font-size: 80%;
+    font-style: italic;
+    color: #bab5ab;
+}
+
+form.standalone .controls input {
+    background: #fff;
+}
+
+form.standalone div.label {
+    width: 10em;
+    padding-top: 0.5ex;
+}
+
+form.booking_form {
+    width: 75%;
+}
+
+input[type=text],
+input[type=password],
+input[type=submit],
+select,
+textarea {
+    padding: 2px;
+    border: 1px #bab5ab solid;
+    background: #ffffff;
+    vertical-align: middle;
+}
+
+select {
+    padding: 0;
+    vertical-align: top;
+}
+
+#column-left select {
+    width: 10em;
+}
+
+option {
+    border-bottom: 1px #eae8e3 solid;
+}
+
+input[type=text]:focus,
+input[type=password]:focus,
+input[type=submit]:focus,
+input[type=checkbox]:focus,
+input[type=radio]:focus,
+textarea:focus  {
+    border: 1px #565248 solid;
+}
+
+div.info {
+    margin: 0.5em;
+    font-weight: bold;
+    color: #009900;
+}
+
+p.error {
+    margin: 0.5em;
+    font-weight: bold;
+    color: #990000;
+}
+
+div.error {
+    margin: 0.5em;
+    font-weight: bold;
+    color: #990000;
+}
+
+.error label {
+    font-weight: bold;
+    color: #990000;
+}
+
+.error input[type=text],
+.error input[type=password],
+.error input[type=checkbox],
+.error select,
+.error textarea  {
+    padding: 2px;
+    border: 1px #C1665A solid;
+    background: #e0b6af;
+}
+
+.error input[type=text]:focus,
+.error input[type=password]:focus,
+.error input[type=checkbox]:focus,
+.error select:focus,
+.error textarea:focus  {
+    border: 1px #663822 solid;
+}
+
+.controls {
+    margin-top: 1ex;
+}
+
+a.button-cancel,
+a.button-ok {
+  color: white;
+  text-decoration: none;
+  margin: 5px;
+  padding: 2px 5px;
+}
+
+.button-ok {
+    background: #83A67F !important;
+    border: 1px #445632 solid !important;
+    color: #fff;
+    font-weight: bold;
+}
+
+.button-cancel {
+    background: #C1665A !important;
+    border: 1px #663822 solid !important;
+    color: #fff;
+    font-weight: bold;
+}
+
+/***************************/
+
+#header {
+    background: #eae8e3;
+}
+
+#header .tools {
+    color: #f0f0f0;
+    background: #990000 url(++resource++toolbar-background.png) top left repeat-x;
+    border-top: 2px #800 solid;
+    border-bottom: 2px #700 solid;
+    font-size: smaller;
+}
+
+#header .tools a {
+    color: #f0f0f0;
+    background: inherit;
+    text-decoration: none;
+    padding: 2px 1ex;
+    font-weight: bold;
+    margin: 0 1px;
+}
+
+#header .tools a:hover {
+    color: #ffffff;
+    background: #C40000 url(++resource++toolbar-background-hover.png) top left repeat-x;
+    margin: 0;
+    border-left: 1px #800 solid;
+    border-right: 1px #800 solid;
+}
+
+#tools-zmi-principal {
+    font-style: italic;
+}
+
+/*
+* Left Column and portlets
+*/
+
+#column-left {
+    background: #eae8e3 url(++resource++sidebar-background.png) bottom right no-repeat;
+    padding-right: 3px;
+    padding-bottom: 2em;
+}
+
+#column-left .portlet {
+    margin-top: 1em;
+}
+
+#column-left .portlet h4 {
+    margin: 0;
+    padding: 0 1em;
+    border-top: 1px #bab5ab solid;
+    border-bottom: 1px #bab5ab solid;
+    background: #d6d6d6;
+    font-size: small;
+}
+
+#column-left .portlet ul {
+    margin: 0;
+    padding: 0;
+}
+
+#portlet-next-day-events.portlet ul {
+    margin: 0.5em;
+    padding: 0;
+}
+
+#column-left .portlet li {
+    list-style: none;
+    padding: 1px 0;
+    margin-top: 1px;
+    margin-bottom: 0;
+}
+
+#column-left .portlet li a {
+    display: block;
+    margin: 1px 0;
+    padding: 2px 1em;
+    color: #304D6B;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#column-left .portlet li a:hover {
+    background: #748FAD;
+    background: #7590ae;
+    margin: 0;
+    border-top: 1px #314e6c solid;
+    border-bottom: 1px #314e6c solid;
+    color: #fff !important;
+}
+
+#column-left .portlet .controls {
+    margin: 1ex 1ex 1ex 1ex;
+    text-align: right;
+}
+
+#column-left .portlet .controls input {
+    font-size: x-small;
+}
+
+/*
+* Center Column and Content
+*/
+
+#column-center {
+    padding: 15px 20px;
+}
+
+#content-header,
+#content-header h1 {
+    margin: 0;
+}
+
+#content-header h1 {
+}
+
+#breadcrumbs {
+    list-style: none;
+    padding: 0;
+    /* This compensates for the padding on #column-center */
+    margin: -0.5em 0 0 -1em;
+}
+
+#breadcrumbs li {
+    display: inline;
+    margin: 0;
+}
+
+#breadcrumbs li.breadcrumb:after {
+    content: "\00BB \0020";
+}
+
+#breadcrumbs li.last:after {
+    content: '';
+}
+
+.breadcrumb a {
+    font-size: smaller;
+    text-decoration: none;
+}
+
+#message {
+    /*
+    * A status message for the user.  There should only be one of these as it
+    * is meant to be displayed prominently
+    */
+
+    margin: 1em;
+    padding: 1em;
+    background: #EED680;
+    border: 1px #D1940C solid;
+}
+
+#footer {
+    font-size: xx-small;
+    background: #eae8e3;
+    border-top: 1px solid #bab5ab;
+    border-bottom: 1px solid #bab5ab;
+    line-height: 1em;
+}
+
+#footer p {
+  margin: 0.5ex;
+}
+
+/*
+* Calendar Views
+*/
+
+#calendar-navigation {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+}
+
+#calendar-navigation-pdf,
+#calendar-navigation-day,
+#calendar-navigation-week,
+#calendar-navigation-month,
+#calendar-navigation-year {
+    display: block;
+    margin: 2px;
+    float: left;
+    text-decoration: none;
+    border: 0;
+    padding: 0;
+    width: 24px;
+}
+
+#calendar-navigation-pdf {
+    margin-right: 16px;
+}
+
+#calendar-navigation-context {
+    background: #eae8e3;
+    border: 1px #bab5ab solid;
+    margin: 1ex auto;
+    vertical-align: middle;
+    overflow: auto;
+}
+
+#calendar-navigation-context-previous,
+#calendar-navigation-context-current,
+#calendar-navigation-context-next {
+    display: block;
+    text-decoration: none;
+    width: 33.33%;
+    float: left;
+}
+
+#calendar-navigation-context-previous {
+    text-align: left;
+}
+
+#calendar-navigation-context-previous span {
+    padding-left: 24px;
+    background: url("++resource++previous.png") left center no-repeat;
+}
+
+#calendar-navigation-context-current {
+    text-align: center;
+}
+
+#calendar-navigation-context-next {
+    text-align: right;
+}
+
+#calendar-navigation-context-next span {
+    padding-right: 24px;
+    background: url("++resource++next.png") right center no-repeat;
+}
+
+#calendar-navigation-context-previous:hover,
+#calendar-navigation-context-current:hover,
+#calendar-navigation-context-next:hover {
+    background: #cfc9bc;
+}
+
+#calendar-view-year td.month {
+    padding: 1em;
+}
+
+#calendar-view-year table.month,
+#portlet-calendar-view-month table.month,
+#calendar-view-month {
+    background: #eae8e3;
+    border: 1px #4B6983 solid;
+}
+
+#calendar-view-month {
+    width: 99%;
+    min-width: 100%;
+}
+
+#calendar-view-year table.month th,
+#portlet-calendar-view-month table.month th,
+#calendar-view-month th,
+#calendar-view-month td.weekno {
+    background: #9DB8D2;
+}
+
+#calendar-view-month td.weekno {
+    border-right: 2px #4B6983 solid;
+    border-bottom: 1px #4b6983 solid;
+    font-family: cursive, serif;
+    font-size: x-large;
+    font-style: italic;
+}
+
+#calendar-view-year table.month th.month-weekday,
+#calendar-view-month th.weekday {
+    font-weight: normal;
+    padding: 2px;
+    border-bottom: 1px #4B6983 solid;
+}
+
+.cal_yearly_day_busy {
+    background: #9DB8D2;
+    color: #9C0000;
+}
+
+#calendar-view-year table.month th.month-title a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: #f0f0f0;
+    background: #4B6983;
+    padding-top: 3px;
+    padding-bottom: 1px;
+}
+
+#calendar-view-year table.month th.month-title a:hover {
+    background: #314e6c;
+}
+
+#calendar-view-year table.month th {
+}
+
+#calendar-view-year table.month td {
+}
+
+#calendar-view-year table.month td a,
+#calendar-view-month td a  {
+    text-decoration: none;
+    display: block;
+    padding: 1px;
+}
+
+#portlet-calendar-view-month table.month td a {
+    text-decoration: none;
+    display: block;
+    font-weight: normal;
+    padding: 1px;
+}
+
+#calendar-view-month th.month-title {
+    color: #f0f0f0;
+    background: #4B6983;
+}
+
+#calendar-view-year table.month td a:hover,
+#calendar-view-month td a:hover,
+#portlet-calendar-view-month table.month td a:hover,
+#calendar-view-week th a:hover {
+    color: #f0f0f0;
+    background: #314e6c;
+}
+
+#calendar-view-month td.weekno {
+}
+
+#calendar-view-month td.day,
+#portlet-calendar-view-month table.month td {
+    border-right: 1px #bab5ab solid;
+    border-bottom: 1px #bab5ab solid;
+}
+
+#calendar-view-month td.day a,
+#calendar-view-month td.day-other a,
+#calendar-view-month td.weekno a {
+    margin: auto;
+    display: block;
+    height: 100%;
+    min-height: 80px;
+}
+
+#calendar-view-month td.weekno a {
+    height: 100%;
+    width: 100%;
+    color: #7590AE;
+    padding-left: 0.5ex;
+    padding-right: 0.5ex;
+}
+
+#calendar-view-month td.day-other {
+    background: #bab5ab;
+}
+
+#calendar-view-month td.day-other a {
+    color: #807d74;
+}
+
+#calendar-view-month .event,
+#calendar-view-month .comp_event {
+    font-weight: normal;
+    font-size: xx-small;
+    display: block;
+    padding: 1px;
+    border: 1px #eae8e3 solid;
+}
+
+#calendar-view-month a:hover .event,
+#calendar-view-month a:hover .comp_event {
+    color: #000;
+    border: 1px #314e6c solid;
+}
+
+#calendar-view-month .event {
+    background: #9db8d2;
+}
+
+#calendar-view-month .comp_event {
+    background: #e0b6af;
+}
+
+#calendar-view-week {
+    border-top: 1px #4B6983 solid;
+}
+
+#calendar-view-week td {
+    width: 20em;
+    background: #eae8e3;
+    font-size: smaller;
+}
+#calendar-view-week th {
+    border-right: 1px #4B6983 solid;
+}
+
+#calendar-view-week th.first {
+    border-left: 1px #4B6983 solid;
+}
+
+#calendar-view-week th.day-title {
+    background: #9DB8D2;
+    border-bottom: 1px #4B6983 solid;
+}
+
+#calendar-view-week th a {
+    display: block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+}
+
+#calendar-view-week td {
+    border-right: 1px #bab5ab solid;
+    border-bottom: 1px #bab5ab solid;
+}
+
+#calendar-view-week td.first {
+    border-left: 1px #bab5ab solid;
+}
+
+#calendar-view-week td a {
+    display: block;
+    border: 1px solid;
+    margin: 2px;
+    padding: 0.5em;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+#calendar-view-week td a .time {
+    font-size: smaller;
+}
+
+#calendar-view-week td a.first {
+}
+
+#calendar-view-week td a:hover {
+    color: #f0f0f0;
+    background: #314e6c;
+}
+
+/* Day View
+* The height attribute is defined inline depending on the length of the visible
+* day
+*/
+#calendar-view-day {
+    border: #aaaaaa 1px solid;
+    border-top: none;
+    position: relative;
+    padding-top: 2px;
+}
+
+#events-allday {
+  margin-bottom: 1px;
+}
+
+#events-allday .event-allday {
+  position: relative;
+  margin-top: 1px;
+}
+
+#events-allday .event-allday h6 {
+  margin: 0;
+  font-size: small;
+  text-align: center;
+}
+#events-allday .event-allday h6 a {
+    text-decoration: none;
+    display: block;
+}
+
+#events-allday .event-allday a.delete {
+    position: absolute;
+    top: 0px;
+    right: 2px;
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+#events-allday .event-allday p {
+  font-size: smaller;
+  margin: 0 1em;
+  text-align: center;
+}
+
+
+
+#calendar-view-day .hour {
+    border-top: 1px #bab5ab solid;
+    width: 100%;
+    position: absolute;
+    height: 4em;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#calendar-view-day .even {
+    background: #eae8e3;
+}
+
+#calendar-view-day .hour .title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: bold;
+    margin-left: 0.5em;
+}
+
+#calendar-view-day .events {
+    position: absolute;
+    margin-left: 5.5em;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+#calendar-view-day .event {
+    display: block;
+    position: absolute;
+    margin-left: 5em;
+    width: 20em;
+    min-width: 20em;
+    border: 1px #4b6983 solid;
+    background: #9db8d2;
+    opacity: 0.85;
+    z-index: 1;
+    overflow: hidden;
+}
+
+#calendar-view-day .other {
+    background: #e0b6af;
+    border: 1px #884631 solid;
+}
+
+#calendar-view-day .event:hover {
+    opacity: 1;
+    z-index: 9;
+    height: auto !important;
+}
+
+#calendar-view-day .event h6 {
+    font-size: small;
+    margin: 0;
+    padding: 2px;
+    background: #7590ae;
+    font-weight: bold;
+    line-height: 1em;
+    opacity: 1 !important;
+}
+
+#calendar-view-day .other h6 {
+    background: #c1665a;
+}
+
+#calendar-view-day .event h6 a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+}
+
+#calendar-view-day .event h6 .start-end {
+    font-weight: bold;
+    color: #000;
+}
+
+#calendar-view-day .event a.delete {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+#calendar-view-day .event .body {
+    margin: 0.5ex;
+    padding: 0.5ex;
+}
+
+#calendar-view-day .event .booked-resources {
+    border: 1px;
+    padding: 0.5ex;
+    font-size: 80%;
+}
+
+#calendar-view-day .event .booked-resources-header a {
+    color: #000;
+    text-decoration: none;
+    display: block;
+}
+
+#calendar-view-day .event .booked-resources a {
+    display: block;
+}
+
+#calendar-view-day .event .body .title {
+    font-style: italic;
+}
+
+#calendar-view-day .hour a.event-new {
+    padding: 0.5ex;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+#calendar-view-day .hour span.event-new {
+    font-weight: bold;
+    padding: 0.5ex;
+}
+
+/*
+* Content specific styling
+*/
+
+body#path-login h1 {
+    display: none;
+}
+
+body#path-login #column-center {
+    margin-left: 0;
+}
+
+body#path-login form.standalone {
+    vertical-align: middle;
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+#portlet-navigation-calendar {
+    padding-left: 3em !important;
+    background: url("/calendar.png") left no-repeat;
+}
+
+#portlet-navigation-calendar:hover {
+    padding-left: 3em !important;
+    background: #748fad url("/calendar.png") left no-repeat !important;
+}
+
+#portlet-navigation-information {
+    padding-left: 3em !important;
+    background: url("/information.png") left no-repeat;
+}
+
+#portlet-navigation-information:hover {
+    padding-left: 3em !important;
+    background: #748fad url(".png") left no-repeat !important;
+}
+
+#portlet-calendar-view-month {
+    text-align: center;
+}
+
+#portlet-calendar-view-month table.month {
+    margin: 0.5em auto;
+}
+
+#portlet-jumpto form {
+    border-bottom: 1px #aaa dashed;
+    padding: 0.5em;
+    font-size: smaller;
+    margin: auto;
+}
+
+#portlet-calendar-overlay form {
+    margin: 2px;
+}
+#portlet-calendar-overlay input {
+    margin-left: 0.5em;
+}
+
+#portlet-calendar-overlay label {
+    display: block;
+}
+
+#portlet-calendar-overlay label:hover {
+    color: #888888;
+}
+
+#portlet-calendar-overlay label.disabled {
+    color: #888888;
+}
+
+#portlet-calendar-overlay a.go {
+    float: right;
+    top: -1.25em;
+    margin-right: 0.25em;
+    width: 1em;
+    height: 1em;
+    position: relative;
+    text-decoration: none;
+}
+#portlet-calendar-overlay a.go img {
+    border: none;
+}
+
+/** Specific Page Styling **/
+
+.info-block {
+    width: 62%;
+    border: none;
+    border-top: 1px #d6d6d6 solid;
+    margin: 1em 0em;
+    padding: 0em 0.5em;
+}
+
+.info-block h5 {
+    margin: 0px;
+    padding: 0px;
+    font-weight: bold;
+}
+
+.info-block a {
+    font-weight: normal;
+}
+
+.info-block ul {
+    margin: 0.25em;
+    list-style: circle;
+}
+
+a.modify {
+    display: block;
+    padding: 0.25em;
+    font-weight: normal;
+}
+
+.person-photo {
+    float: left;
+    margin: 0 0.5em 0 0;
+    background: #d6d6d6;
+    padding: 2px;
+    border: 1px #999 solid;
+}
+
+td.dl {
+  text-align: left;
+}
+
+td.dr {
+  text-align: right;
+}
+
+table.person-details {
+    text-align: center;
+}
+.person-details .address {
+    margin: 0.25em;
+    font-size: 85%;
+}
+
+table.acl {
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.acl tr.header th {
+    border-bottom: 1px solid #bab5ab;
+}
+table.acl tr.even {
+    background: #d6d6d6;
+}
+
+table.acl td {
+    text-align: center;
+}
+
+table.acl th {
+    text-align: left;
+}
+
+table.acl th.permission {
+    width: 7em;
+    text-align: center;
+}
+
+table.event_booking {
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.event_booking tr.header th {
+    border-bottom: 1px solid #bab5ab;
+}
+
+table.event_booking tr.even {
+    background: #d6d6d6;
+}
+
+table.event_booking td {
+    text-align: center;
+}
+
+table.event_booking th {
+    text-align: left;
+}
+
+table.event_booking th.permission {
+    width: 7em;
+    text-align: center;
+}
+
+table.event_booking td.booked {
+    width: 2em;
+    text-align: center;
+}
+
+#notes {
+  float: right;
+  width: 32%;
+}
+
+#notes h5 {
+  display: none; /* XXX Hide this here, but keep it in the template for */
+                 /* accessibility (or should we just remove from template? */
+}
+
+/* Rounded corners for notes, taken from:
+* http://www.vertexwerks.com/tests/sidebox/
+*/
+
+.note {
+  margin-bottom: 1ex;
+  background: #eed680 url(++resource++note-body-r.gif) no-repeat bottom right;
+}
+
+.note p {
+  padding: 1em 2em 2em 2em;
+  margin: 0;
+}
+
+.note .header {
+  background: #d1940c url(++resource++note-head-r.gif) no-repeat top right;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.note .header h6 {
+  background: url(++resource++note-head-l.gif) no-repeat top left;
+  font-weight: bold; 
+  font-size: small;
+  margin: 0;
+  padding: 6px 0 0 15px;
+}
+
+.note .header a.delete {
+  background: url(++resource++delete.png) no-repeat top left;
+  display: block;
+  width: 10px;
+  height: 0px;
+  padding-top: 10px;
+  height/**/: 0px;
+  overflow: hidden;
+  float: right;
+  position: absolute;
+  right: 11px;
+  top: 9px;
+}
+
+.note .body {
+  background: url(++resource++note-body-l.gif) no-repeat bottom left;
+  margin: 0;
+  font-size: x-small;
+}
+
+.note.private {
+  background: #c1665a url(++resource++private-note-body-r.gif) no-repeat bottom right;
+}
+
+.note.private .header {
+  background: #900 url(++resource++private-note-head-r.gif) no-repeat top right;
+}
+
+.note.private .privacy {
+  font-size: x-small;
+}
+
+.note.private h6 {
+  background: url(++resource++private-note-head-l.gif) no-repeat top left;
+  color: #f0f0f0;
+}
+
+.note.private .body {
+  background: url(++resource++private-note-body-l.gif) no-repeat bottom left;
+}
+
+/* Batch navigation */
+
+.batch-navigation {
+    background: #d6d6d6;
+    border: 1px #bab5ab solid;
+    text-align: center;
+    vertical-align: top;
+    margin: 1em auto;
+    overflow: auto;
+    font-size: smaller;
+}
+
+.batch-navigation a {
+    text-decoration: none;
+    padding: 0 0.5em;
+}
+
+.batch-navigation a:hover {
+    background: #bab5ab;
+}
+
+.batch-navigation span.previous,
+.batch-navigation a.previous {
+    text-align: left;
+    float: left;
+    padding-left: 1em;
+}
+
+.batch-navigation span.next,
+.batch-navigation a.next {
+    text-align: right;
+    float: right;
+    padding-right: 1em;
+}
+
+.batch-navigation span.next,
+.batch-navigation span.previous {
+    color: #bab5ab;
+    font-weight: bold;
+}
+
+.batch-navigation a.current {
+    color: #fff;
+    background: #314e6c;
+}
+
+/* "Showing aaa of bbb items" */
+div.count {
+  font-size: smaller;
+  color: #76797c;
+}
+
+/* Internal error pages */
+
+pre.traceback {
+  color: #444444;
+  font-size: small;
+  overflow: auto;
+  background: #f0f0f0;
+}
+
+pre.traceback span.filename {
+  color: blue;
+}
+
+pre.traceback span.lineno,
+pre.traceback span.column {
+  color: red;
+}
+
+pre.traceback span.method {
+  color: green;
+}
+
+pre.traceback span.expr {
+  color: green;
+}
+
+pre.traceback span.source {
+  color: black;
+}
+
+/*********************************************************** END: Style.css */
+
+/* vi: sw=4 ts=4 noet

@@ -168,7 +168,7 @@ def setUp(test=None):
         def __call__(self):
             return "a dummy resource"
 
-    for name in ['layout.css', 'style.css', 'schooltool.css', 'schooltool.js',
+    for name in ['layout.css', 'schooltool.css', 'schooltool.js',
                  'logo.png', 'next.png', 'prev.png', 'favicon.ico',
                  'calwidget-calendar.js', 'calwidget-calendar.css',
                  'calwidget-icon.gif']:

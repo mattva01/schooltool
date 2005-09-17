@@ -8,8 +8,6 @@
           tal:attributes="href context/++resource++favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="layout.css"
           tal:attributes="href context/++resource++layout.css"/>
-    <link rel="stylesheet" type="text/css" href="style.css"
-          tal:attributes="href context/++resource++style.css"/>
     <link type="text/css" rel="stylesheet" href="calwidget-calendar.css"
           tal:attributes="href context/++resource++calwidget-calendar.css" />
     <link type="text/css" rel="stylesheet" href="devmode.css"

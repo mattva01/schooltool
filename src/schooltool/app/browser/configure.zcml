@@ -85,8 +85,6 @@
 
   <resource name="layout.css" file="resources/layout.css"
             layer=".skin.ISchoolToolLayer" />
-  <resource name="style.css" file="resources/style.css"
-            layer=".skin.ISchoolToolLayer" />
   <resource name="schooltool.js" file="resources/schooltool.js"
             layer=".skin.ISchoolToolLayer" />
   <resource name="favicon.ico" file="resources/favicon.ico"
