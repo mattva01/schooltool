@@ -181,6 +181,22 @@ def setUp(test=None):
     ztapi.provideUtility(IBrowserMenu, BrowserMenuStub('schooltool_actions'),
                          'schooltool_actions')
 
+    # viewlet TALES namespaces
+    from zope.app.pagetemplate import metaconfigure
+    from zope.app.viewlet import tales
+    metaconfigure.registerType('viewlets', tales.TALESViewletsExpression)
+    metaconfigure.registerType('viewlet', tales.TALESViewletExpression)
+
+    # viewlet regions
+    from zope.app.viewlet.interfaces import IRegion
+    from zope.app.component.interface import provideInterface
+    from schooltool.app.browser import skin
+    provideInterface('schooltool.app.browser.skin.HeaderRegion',
+                     skin.HeaderRegion, IRegion)
+    provideInterface('schooltool.app.browser.skin.JavaScriptRegion',
+                     skin.JavaScriptRegion, IRegion)
+    provideInterface('schooltool.app.browser.skin.CSSRegion',
+                     skin.CSSRegion, IRegion)
 
 def tearDown(test=None):
     """Tear down the test fixture for schooltool.app.browser doctests."""

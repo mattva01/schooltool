@@ -21,9 +21,9 @@
         repeat="viewlet viewlets:schooltool.app.browser.skin.CSSRegion"
         replace="structure viewlet" />
 
-    <tal:block
+    <!--tal:block
         repeat="viewlet viewlets:schooltool.app.browser.skin.JavaScriptRegion"
-        replace="structure viewlet" />
+        replace="structure viewlet" /-->
     <metal:block define-slot="title">
       <metal:block use-macro="view/@@schooltool_macros/generic/title" />
     </metal:block>
@@ -38,9 +38,9 @@
           <img src="logo.png" alt="SchoolTool" i18n:attributes="alt"
             tal:attributes="src context/++resource++logo.png"/>
         </a>
-        <tal:block
+        <!--tal:block
             repeat="viewlet viewlets:schooltool.app.browser.skin.HeaderRegion"
-            replace="structure viewlet" />
+            replace="structure viewlet" /-->
       </div>
       <div class="tools">
         <div class="breadcrumbs">
