@@ -21,16 +21,56 @@ SchoolBell skin.
 
 $Id: skin.py 3335 2005-03-25 18:53:11Z ignas $
 """
+import os
+import sys
+
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import ILayer, IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.app.publisher.browser import applySkin
+from zope.app.traversing import api
+from zope.app.viewlet import viewlet
 
 from schooltool.app.interfaces import ISchoolToolApplication
 
 
-class HeaderRegion(Interface):
-    """Provides a viewlet hook for the header of a page."""
+class ResourceViewletBase(object):
+
+    _path = None
+
+    def getFileURL(self):
+        resource = api.traverse(self.context, '++resource++' + self._path,
+                                request=self.request)
+        return resource()
+
+    def __call__(self, *args, **kw):
+        return self.index(*args, **kw)
+
+
+def JavaScriptViewlet(path):
+    """Create a viewlet that can simply insert a javascript link."""
+    src = os.path.join(os.path.dirname(__file__), 'templates',
+                       'javascript_viewlet.pt')
+
+    klass = type('JavaScriptViewlet',
+                 (ResourceViewletBase, viewlet.SimpleViewlet),
+                  {'index': viewlet.ViewletPageTemplateFile(src),
+                   '_path': path})
+
+    return klass
+
+
+def CSSViewlet(path):
+    """Create a viewlet that can simply insert a javascript link."""
+    src = os.path.join(os.path.dirname(__file__), 'templates',
+                       'css_viewlet.pt')
+
+    klass = type('JavaScriptViewlet',
+                 (ResourceViewletBase, viewlet.SimpleViewlet),
+                  {'index': viewlet.ViewletPageTemplateFile(src),
+                   '_path': path})
+
+    return klass
 
 
 class JavaScriptRegion(Interface):
@@ -39,6 +79,10 @@ class JavaScriptRegion(Interface):
 
 class CSSRegion(Interface):
     """Provides a viewlet hook for the CSS link entries."""
+
+
+class HeaderRegion(Interface):
+    """Provides a viewlet hook for the header of a page."""
 
 
 class ISchoolToolLayer(ILayer, IBrowserRequest):

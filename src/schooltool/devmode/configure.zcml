@@ -29,7 +29,7 @@
       name="devmode_javascript"
       for="*"
       region="schooltool.app.browser.skin.JavaScriptRegion"
-      template="devmode_javascript.pt"
+      class=".devmode.DevmodeJavascriptViewlet"
       permission="zope.View"
       layer="schooltool.devmode.skin.IDevModeLayer"
       />
@@ -38,7 +38,7 @@
       name="devmode_css"
       for="*"
       region="schooltool.app.browser.skin.CSSRegion"
-      template="devmode_css.pt"
+      class=".devmode.DevmodeCSSViewlet"
       permission="zope.View"
       layer="schooltool.devmode.skin.IDevModeLayer"
       />

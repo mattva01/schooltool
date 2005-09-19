@@ -1,0 +1,2 @@
+<link type="text/css" rel="stylesheet" href="somestyle.css"
+      tal:attributes="href viewlet/getFileURL" />

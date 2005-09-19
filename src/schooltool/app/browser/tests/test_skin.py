@@ -25,8 +25,9 @@ $Id: test_skin.py 2643 2005-02-01 11:13:58Z mg $
 import unittest
 import pprint
 
-from zope.testing import doctest
 from zope.interface import Interface, providedBy
+from zope.testing import doctest
+from zope.app.testing import setup, ztapi
 
 
 def doctest_schoolToolTraverseSubscriber():
@@ -64,6 +65,56 @@ def doctest_schoolToolTraverseSubscriber():
         >>> ISchoolToolSkin.providedBy(request)
         False
 
+    """
+
+def doctest_viewletClasses():
+    """Test the viewlet classes.
+
+    In the skin module we define a couple of helper functions to make it
+    simpler to create viewlets for common patterns, such as the insertion of
+    CSS or JS links in the template.
+
+    First, we have to make create  placeful setup and register a resource:
+
+      >>> setup.placefulSetUp()
+      >>> setup.setUpTraversal()
+
+      >>> from zope.app.traversing.interfaces import ITraversable
+      >>> from zope.app.traversing.namespace import resource
+      >>> ztapi.provideAdapter(None, ITraversable, resource, name="resource")
+      >>> ztapi.provideView(None, None, ITraversable, "resource", resource)
+
+      >>> from zope.app.publisher.browser.resource import Resource
+      >>> class Style(Resource):
+      ...     __name__ = 'style.css'
+
+      >>> ztapi.browserResource('style.css', Style)
+
+    Now we can create the viewlet for the resource:
+
+      >>> from schooltool.app.browser import skin
+      >>> CSSViewletClass = skin.CSSViewlet('style.css')
+
+    During the render process the following happens:
+
+      >>> from zope.publisher.browser import TestRequest
+      >>> css_viewlet = CSSViewletClass(object(), TestRequest(), None)
+      >>> print css_viewlet().strip()
+      <link type="text/css" rel="stylesheet"
+            href="http://127.0.0.1/@@/style.css" />
+
+    Let's repeat this demonstration for the Javascript version:
+
+      >>> class Menu(Resource):
+      ...     __name__ = 'menu.js'
+      >>> ztapi.browserResource('menu.js', Menu)
+
+      >>> JSViewletClass = skin.JavaScriptViewlet('menu.js')
+      >>> js_viewlet = JSViewletClass(object(), TestRequest(), None)
+      >>> print js_viewlet().strip()
+      <script type="text/javascript"
+              src="http://127.0.0.1/@@/menu.js">
+      </script>
     """
 
 

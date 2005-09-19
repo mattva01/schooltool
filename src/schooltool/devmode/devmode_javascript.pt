@@ -1,3 +1,0 @@
-<script type="text/javascript" src="switch.js"
-        tal:attributes="src context/++resource++switch.js">
-</script>
