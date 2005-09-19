@@ -16,28 +16,28 @@
       name="SchoolToolDevMode"
       interface=".skin.ISchoolToolDevModeSkin" />
 
-  <browser:pagelet
+  <browser:viewlet
       name="devmode"
       for="*"
-      slot="schooltool.app.browser.skin.HeaderSlot"
+      region="schooltool.app.browser.skin.HeaderRegion"
       template="devmode.pt"
       permission="zope.View"
       layer="schooltool.devmode.skin.IDevModeLayer"
       />
 
-  <browser:pagelet
+  <browser:viewlet
       name="devmode_javascript"
       for="*"
-      slot="schooltool.app.browser.skin.JavaScriptSlot"
+      region="schooltool.app.browser.skin.JavaScriptRegion"
       template="devmode_javascript.pt"
       permission="zope.View"
       layer="schooltool.devmode.skin.IDevModeLayer"
       />
 
-  <browser:pagelet
+  <browser:viewlet
       name="devmode_css"
       for="*"
-      slot="schooltool.app.browser.skin.CSSSlot"
+      region="schooltool.app.browser.skin.CSSRegion"
       template="devmode_css.pt"
       permission="zope.View"
       layer="schooltool.devmode.skin.IDevModeLayer"

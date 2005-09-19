@@ -18,12 +18,12 @@
             tal:attributes="src context/++resource++calwidget-calendar.js">
     </script>
     <tal:block
-        repeat="pagelet pagelets:schooltool.app.browser.skin.CSSSlot"
-        replace="structure pagelet" />
+        repeat="viewlet viewlets:schooltool.app.browser.skin.CSSRegion"
+        replace="structure viewlet" />
 
     <tal:block
-        repeat="pagelet pagelets:schooltool.app.browser.skin.JavaScriptSlot"
-        replace="structure pagelet" />
+        repeat="viewlet viewlets:schooltool.app.browser.skin.JavaScriptRegion"
+        replace="structure viewlet" />
     <metal:block define-slot="title">
       <metal:block use-macro="view/@@schooltool_macros/generic/title" />
     </metal:block>
@@ -39,8 +39,8 @@
             tal:attributes="src context/++resource++logo.png"/>
         </a>
         <tal:block
-            repeat="pagelet pagelets:schooltool.app.browser.skin.HeaderSlot"
-            replace="structure pagelet" />
+            repeat="viewlet viewlets:schooltool.app.browser.skin.HeaderRegion"
+            replace="structure viewlet" />
       </div>
       <div class="tools">
         <div class="breadcrumbs">

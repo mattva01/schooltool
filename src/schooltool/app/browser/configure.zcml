@@ -21,18 +21,18 @@
       />
 
   <zope:interface
-      interface=".skin.HeaderSlot"
-      type="zope.app.pagelet.interfaces.IPageletSlot"
+      interface=".skin.HeaderRegion"
+      type="zope.app.viewlet.interfaces.IRegion"
       />
 
   <zope:interface
-      interface=".skin.JavaScriptSlot"
-      type="zope.app.pagelet.interfaces.IPageletSlot"
+      interface=".skin.JavaScriptRegion"
+      type="zope.app.viewlet.interfaces.IRegion"
       />
 
   <zope:interface
-      interface=".skin.CSSSlot"
-      type="zope.app.pagelet.interfaces.IPageletSlot"
+      interface=".skin.CSSRegion"
+      type="zope.app.viewlet.interfaces.IRegion"
       />
 
   <page

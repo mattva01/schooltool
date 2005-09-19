@@ -29,16 +29,16 @@ from zope.app.publisher.browser import applySkin
 from schooltool.app.interfaces import ISchoolToolApplication
 
 
-class HeaderSlot(Interface):
-    """Provides a pagelet hook for the header of a page."""
+class HeaderRegion(Interface):
+    """Provides a viewlet hook for the header of a page."""
 
 
-class JavaScriptSlot(Interface):
-    """Provides a pagelet hook for the javascript link entries."""
+class JavaScriptRegion(Interface):
+    """Provides a viewlet hook for the javascript link entries."""
 
 
-class CSSSlot(Interface):
-    """Provides a pagelet hook for the CSS link entries."""
+class CSSRegion(Interface):
+    """Provides a viewlet hook for the CSS link entries."""
 
 
 class ISchoolToolLayer(ILayer, IBrowserRequest):

@@ -86,7 +86,7 @@
       permission="zope.View"
       />
 
-  <!-- XXX: Needs to be here until we switch to pagelet system or -->
+  <!-- XXX: Needs to be here until we switch to viewlet system or -->
   <!--      write a macro -->
   <page
       name="index.html"
