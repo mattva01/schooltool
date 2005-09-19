@@ -29,7 +29,7 @@ zope3-update:
 
 .PHONY: testbrowser-checkout
 testbrowser-checkout: zope3-checkout
-	- svn co $(ZOPE_REPOSITORY)/branches/testbrowser-integration/src/zope/testbrowser Zope3/src/zope/testbrowser
+	- svn co $(ZOPE_REPOSITORY)/Zope3/branches/testbrowser-integration/src/zope/testbrowser Zope3/src/zope/testbrowser
 
 .PHONY: testbrowser-update
 testbrowser-update:
