@@ -134,9 +134,7 @@ extract-translations:
 
 .PHONY: update-translations
 update-translations:
-	# XXX - fail on error (set -e) when
-	# https://launchpad.ubuntu.com/malone/bugs/710 is fixed - jinty
-	-for f in $(PO); do			\
+	set -e; for f in $(PO); do		\
 	     msgmerge -U $$f $(POT);		\
 	     msgfmt -o $${f%.po}.mo $$f;	\
 	done
