@@ -6,6 +6,7 @@
 
 PYTHON=python
 ZPKG=../../zpkgtools/bin/zpkg
+ZOPE_REPOSITORY=svn://svn.zope.org/repos/main/
 TESTFLAGS=-w
 POT=src/schooltool/locales/schooltool.pot
 PO=$(wildcard src/schooltool/locales/*/LC_MESSAGES/*.po)
@@ -18,17 +19,38 @@ SETUPFLAGS=
 .PHONY: all
 all: build
 
-Zope3:
-	svn co svn://svn.zope.org/repos/main/Zope3/trunk Zope3 || svn up Zope3
+.PHONY: zope3-checkout
+zope3-checkout:
+	- svn co $(ZOPE_REPOSITORY)/Zope3/trunk Zope3
 
-testbrowser: Zope3
-	svn co svn://svn.zope.org/repos/main/Zope3/branches/testbrowser-integration/src/zope/testbrowser Zope3/src/zope/testbrowser || svn up Zope3/src/zope/testbrowser
+.PHONY: zope3-update
+zope3-update:
+	 svn up Zope3
 
-zpkgsetup:
-	svn co svn://svn.zope.org/repos/main/zpkgtools/trunk/zpkgsetup buildsupport/zpkgsetup || svn up buildsupport/zpkgsetup
+.PHONY: testbrowser-checkout
+testbrowser-checkout: zope3-checkout
+	- svn co $(ZOPE_REPOSITORY)/branches/testbrowser-integration/src/zope/testbrowser Zope3/src/zope/testbrowser
+
+.PHONY: testbrowser-update
+testbrowser-update:
+	 svn up Zope3/src/zope/testbrowser
+
+.PHONY: zpkgsetup-checkout
+zpkgsetup-checkout:
+	- svn co $(ZOPE_REPOSITORY)/zpkgtools/trunk/zpkgsetup buildsupport/zpkgsetup
+
+.PHONY: zpkgsetup-update
+zpkgsetup-update:
+	 svn up buildsupport/zpkgsetup
+
+.PHONY: checkout
+checkout: zope3-checkout testbrowser-checkout zpkgsetup-checkout
+
+.PHONY: update
+update: checkout zope3-update testbrowser-update zpkgsetup-update
 
 .PHONY: build
-build: Zope3 testbrowser zpkgsetup
+build: zope3-checkout testbrowser-checkout zpkgsetup-checkout
 	[ ! -d Zope3 ] || cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) setup.py $(SETUPFLAGS) \
                 build_ext -i install_data --install-dir .
