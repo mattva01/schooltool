@@ -324,6 +324,47 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         assert rule == rule.replace()
         assert rule != rule.replace(weekdays=(1,))
 
+    def test_scroll(self):
+        from schooltool.calendar.simple import SimpleCalendarEvent
+        rule = self.createRule()
+        ev = SimpleCalendarEvent(datetime(1978, 5, 17, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+
+        self.assertEqual(rule._scroll(ev, date(1978, 5, 25)),
+                         (1, date(1978, 5, 24)))
+        self.assertEqual(rule._scroll(ev, date(1978, 6, 2)),
+                         (1, date(1978, 5, 24)))
+
+        # tricky case!
+        # --  Tu We
+        # -- -- --
+        # Mo Tu We
+        # -- -- --
+        # Mo Tu We
+        # ...
+
+        rule = self.createRule(weekdays=(0, 3,), interval=2)
+
+        # We don't care that we get the closest event.  What we care
+        # about is that the sequence of events is correct:
+        goodresults = [(0, date(1978, 5, 17)),
+                       (1, date(1978, 5, 18)),
+                       (2, date(1978, 5, 29)),
+                       (3, date(1978, 5, 31)),
+                       (4, date(1978, 6, 1)),
+                       (5, date(1978, 6, 5)),
+                       (6, date(1978, 6, 7)),
+                       (7, date(1978, 6, 8))]
+
+        for delta in range(40):
+            d = date(1978, 5, 17) + date.resolution * delta
+            self.assert_(rule._scroll(ev, d) in goodresults, d)
+
+        # Still, it does not always return the zeroth result:
+        self.assertEqual(rule._scroll(ev, date(1978, 6, 29)),
+                         (6, date(1978, 6, 14)))
+
     def test_apply(self):
         from schooltool.calendar.simple import SimpleCalendarEvent
         rule = self.createRule()
@@ -373,6 +414,15 @@ class TestWeeklyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
                     date(1978, 5, 31), date(1978, 6, 1),
                     date(1978, 6, 14), date(1978, 6, 15),
                     date(1978, 6, 28), date(1978, 7, 12)]
+        self.assertEqual(result, expected)
+
+        # With a start date
+        rule = self.createRule(interval=2, weekdays=(3,), count=9)
+        result = list(rule.apply(ev, startdate=date(1978, 6, 15)))
+        expected = [date(1978, 6, 15),
+                    date(1978, 6, 28), date(1978, 6, 29),
+                    date(1978, 7, 12)]
+
         self.assertEqual(result, expected)
 
     def test_iCalRepresentation_weekly(self):
@@ -511,6 +561,22 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
                     date(1978, 7, 19), date(1978, 8, 16)]
         self.assertEqual(result, expected)
 
+        # With a start date
+        result = list(rule.apply(ev, startdate=date(1978, 8, 1),
+                                 enddate=date(1979, 2, 21)))
+
+        expected = [date(1978, 8, 16), date(1978, 9, 20),
+                    date(1978, 10, 18), date(1978, 11, 15),
+                    date(1978, 12, 20), date(1979, 1, 17), date(1979, 2, 21)]
+
+        # With a start date later than recurrence on that month
+        result = list(rule.apply(ev, startdate=date(1978, 8, 17),
+                                 enddate=date(1979, 2, 21)))
+
+        expected = [date(1978, 9, 20), date(1978, 10, 18), date(1978, 11, 15),
+                    date(1978, 12, 20), date(1979, 1, 17), date(1979, 2, 21)]
+
+        self.assertEqual(result, expected)
         # Over the end of the year
         result = list(rule.apply(ev, enddate=date(1979, 2, 21)))
         expected = [date(1978, 5, 17), date(1978, 6, 21),
@@ -560,6 +626,23 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
         result = list(rule.apply(ev, enddate=date(1978, 8, 17)))
         expected = [date(1978, 5, 17), date(1978, 6, 14),
                     date(1978, 7, 12), date(1978, 8, 16)]
+        self.assertEqual(result, expected)
+
+        # With a start date
+        result = list(rule.apply(ev, startdate=date(1978, 8, 1),
+                                 enddate=date(1979, 2, 21)))
+        expected = [date(1978, 8, 16),
+                    date(1978, 9, 13), date(1978, 10, 11),
+                    date(1978, 11, 15), date(1978, 12, 13),
+                    date(1979, 1, 17), date(1979, 2, 14)]
+        self.assertEqual(result, expected)
+
+        # With a start date later than the recurrence
+        result = list(rule.apply(ev, startdate=date(1978, 8, 17),
+                                 enddate=date(1979, 2, 21)))
+        expected = [date(1978, 9, 13), date(1978, 10, 11),
+                    date(1978, 11, 15), date(1978, 12, 13),
+                    date(1979, 1, 17), date(1979, 2, 14)]
         self.assertEqual(result, expected)
 
         # Over the end of the year

@@ -288,14 +288,27 @@ class WeeklyRecurrenceRule(RecurrenceRule):
         return (self.__class__.__name__, self.interval, self.count,
                 self.until, self.exceptions, self.weekdays)
 
+    def _scroll(self, event, startdate):
+        """Fast-forward to recurrences near startdate"""
+        start = event.dtstart.date()
+        weeks = weekspan(start, startdate)
+        perweek = len(self.weekdays) + 1 # nr of recurrences per week
+        count = weeks / self.interval * perweek
+        if count > perweek:
+            count -= perweek # to get entries with weekday < that of start
+        offset = datetime.timedelta(7) * count / perweek * self.interval
+        return count, start + offset
+
     def apply(self, event, startdate=None, enddate=None):
         """Generate dates of recurrences."""
         if enddate:
             assert isinstance(enddate, datetime.date), "enddate must be a date"
             assert not isinstance(enddate, datetime.datetime), \
                     "enddate must be a date, not a datetime"
-        cur = start = event.dtstart.date()
-        count = 0
+        start = event.dtstart.date()
+        if startdate is None:
+            startdate = start
+        count, cur = self._scroll(event, startdate)
         weekdays = Set(self.weekdays)
         weekdays.add(event.dtstart.weekday())
         while True:
@@ -307,7 +320,7 @@ class WeeklyRecurrenceRule(RecurrenceRule):
             # the desired weekday
             if (weekspan(start, cur) % self.interval == 0 and
                 cur.weekday() in weekdays):
-                if cur not in self.exceptions:
+                if cur not in self.exceptions and cur >= startdate:
                     yield cur
                 count += 1
             cur = self._nextRecurrence(cur)
@@ -423,12 +436,16 @@ class MonthlyRecurrenceRule(RecurrenceRule):
 
     def _applyWeekday(self, event, startdate=None, enddate=None):
         """Generator that generates dates of recurrences."""
-        cur = start = event.dtstart.date()
-        count = 0
-        year = start.year
-        month = start.month
+        start = event.dtstart.date()
         weekday = start.weekday()
         index = start.day / 7 + 1
+
+        if startdate is None:
+            startdate = start
+
+        count, cur = self._scroll(event, startdate)
+        year = cur.year
+        month = cur.month
 
         while True:
             cur = monthindex(year, month, index, weekday)
@@ -436,7 +453,7 @@ class MonthlyRecurrenceRule(RecurrenceRule):
                 (self.count is not None and count >= self.count) or
                 (self.until and cur > self.until)):
                 break
-            if cur not in self.exceptions:
+            if cur not in self.exceptions and cur >= startdate:
                 yield cur
             count += 1
             # Next month, please.
@@ -445,13 +462,17 @@ class MonthlyRecurrenceRule(RecurrenceRule):
 
     def _applyLastWeekday(self, event, startdate=None, enddate=None):
         """Generator that generates dates of recurrences."""
-        cur = start = event.dtstart.date()
-        count = 0
-        year = start.year
-        month = start.month
+        start = event.dtstart.date()
         weekday = start.weekday()
-        daysinmonth = calendar.monthrange(year, month)[1]
+        daysinmonth = calendar.monthrange(start.year, start.month)[1]
         index = (start.day - daysinmonth - 1) / 7
+
+        if startdate is None:
+            startdate = start
+
+        count, cur = self._scroll(event, startdate)
+        year = cur.year
+        month = cur.month
 
         while True:
             cur = monthindex(year, month, index, weekday)
@@ -459,7 +480,7 @@ class MonthlyRecurrenceRule(RecurrenceRule):
                 (self.count is not None and count >= self.count) or
                 (self.until and cur > self.until)):
                 break
-            if cur not in self.exceptions:
+            if cur not in self.exceptions and cur >= startdate:
                 yield cur
             count += 1
             # Next month, please.
