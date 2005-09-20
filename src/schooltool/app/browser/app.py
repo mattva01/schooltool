@@ -21,7 +21,11 @@ SchoolTool application views.
 
 $Id: app.py 3481 2005-04-21 15:28:29Z bskahan $
 """
-from zope.interface import implements
+
+import itertools
+
+from zope.interface import Interface, implements
+
 from zope.component import adapts
 from zope.security.checker import canAccess
 from zope.security.interfaces import IParticipation
@@ -207,8 +211,7 @@ class ACLViewBase(object):
         result = []
         for person in app['persons'].values():
             pid = auth.person_prefix + person.__name__
-            result.append({'title': person.title, 'id': pid,
-                           'perms': self.permsForPrincipal(pid)})
+            result.append({'title': person.title, 'id': pid})
         return result
     persons = property(getPersons)
 
@@ -227,18 +230,15 @@ class ACLViewBase(object):
         all = zapi.queryUtility(IAuthenticatedGroup)
         if all is not None:
             result.append({'title': _('Authenticated users'),
-                           'id': all.id,
-                           'perms': self.permsForPrincipal(all.id)})
+                           'id': all.id})
         unauth = zapi.queryUtility(IUnauthenticatedGroup)
         if unauth is not None:
             result.append({'title': _('Unauthenticated users'),
-                           'id': unauth.id,
-                           'perms': self.permsForPrincipal(unauth.id)})
+                           'id': unauth.id})
         for group in app['groups'].values():
             pid = auth.group_prefix + group.__name__
             result.append({'title': group.title,
-                           'id': pid,
-                           'perms': self.permsForPrincipal(pid)})
+                           'id': pid})
         return result
     groups = property(getGroups)
 
@@ -298,6 +298,10 @@ class ACLView(BrowserView, ACLViewBase, MultiBatchViewMixin):
 
         self.updateBatch('persons', self.persons)
         self.updateBatch('groups', self.groups)
+
+        for infodict in itertools.chain(self.batches['persons'],
+                                        self.batches['groups']):
+            infodict['perms'] = self.permsForPrincipal(infodict['id'])
 
     def __call__(self):
         self.update()
