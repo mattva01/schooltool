@@ -95,6 +95,37 @@ def doctest_PDFCalendarViewBase():
     """
 
 
+def doctest_PDFCalendarViewBase_getTimezone():
+    """Tests for PDFCalendarViewBase.getTimezone.
+
+    We need some extra setup here:
+
+        >>> from schooltool.person.interfaces import IPerson
+        >>> from schooltool.person.interfaces import IPersonPreferences
+        >>> from schooltool.person.preference import getPersonPreferences
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> setup.setUpAnnotations()
+        >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
+        ...                      getPersonPreferences)
+
+        >>> request = TestRequest(form={'date': '2005-07-08'})
+        >>> person = Person(title="Mr. Smith")
+        >>> view = StubbedBaseView(ISchoolToolCalendar(person), request)
+        >>> view.getTimezone()
+        <UTC>
+
+        >>> from schooltool.app.browser.tests.test_cal import PrincipalStub
+        >>> principal = PrincipalStub()
+        >>> IPersonPreferences(IPerson(principal)).timezone = "Europe/Vilnius"
+        >>> request.setPrincipal(principal)
+
+        >>> from pytz import timezone
+        >>> view.getTimezone() == timezone('Europe/Vilnius')
+        True
+
+    """
+
+
 def doctest_PDFCalendarViewBase_buildStory():
     r"""Tests for PDFCalendarViewBase.buildStory.
 

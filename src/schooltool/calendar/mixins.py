@@ -110,6 +110,8 @@ class CalendarMixin(object):
 
         See ICalendar for more details.
         """
+        assert first.tzname() is not None
+        assert last.tzname() is not None
 
         for event in self:
             for recurrence in event.expand(first, last):
@@ -320,19 +322,6 @@ class CalendarEventMixin(object):
 
         See ICalendarEvent for more details.
         """
-        if first.tzname() is None:
-            if last.tzname() not in (None, 'UTC'):
-                first = first.replace(tzinfo=last.tzinfo)
-            else:
-                first = first.replace(tzinfo=utc)
-
-        if last.tzname() is None:
-            last = last.replace(tzinfo=first.tzinfo)
-
-        if first.tzname() != last.tzname():
-            raise ValueError('Cannot expand mixed TimeZones: %s and %s',
-                             first.tzname(), last.tzname())
-
         zero = datetime.timedelta(0)
         epsilon = datetime.timedelta.resolution
         if self.recurrence is not None:

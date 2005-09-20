@@ -32,9 +32,11 @@ from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import canAccess
 from schooltool.app.interfaces import ISchoolToolCalendar
+from schooltool.app.browser import ViewPreferences
 from schooltool.person.interfaces import IPerson
 from schooltool.calendar.utils import parse_date, week_start
 from schooltool import SchoolToolMessageID as _
+
 
 global disabled
 disabled = True
@@ -216,6 +218,11 @@ class PDFCalendarViewBase(BrowserView):
             tags.append(tag % event.__parent__.__parent__.title)
         return tags
 
+    def getTimezone(self):
+        """Return the timezone for the PDF report."""
+        prefs = ViewPreferences(self.request)
+        return prefs.timezone
+
     def dayEvents(self, date):
         """Return a list of events that should be shown.
 
@@ -223,7 +230,8 @@ class PDFCalendarViewBase(BrowserView):
         """
         allday_events = []
         events = []
-        start = datetime.datetime.combine(date, datetime.time(0))
+        tz = self.getTimezone()
+        start = datetime.datetime.combine(date, datetime.time(0, tzinfo=tz))
         end = start + datetime.timedelta(days=1)
 
         for calendar in self.getCalendars():
@@ -306,6 +314,7 @@ class WeeklyPDFCalendarView(PDFCalendarViewBase):
                                        self.subtitle_style))
                 story.append(self.buildDayTable(events))
         return story
+
 
 class MonthlyPDFCalendarView(PDFCalendarViewBase):
 

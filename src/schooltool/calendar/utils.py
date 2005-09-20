@@ -231,7 +231,7 @@ def parse_datetime(s):
 
 
 def parse_datetimetz(s):
-    """Similar to parse_datetime, but sets the tzinfo to utc
+    """Parse a ISO 8601 date/time value in UTC.
 
     Only a small subset of ISO 8601 is accepted:
 
@@ -240,11 +240,13 @@ def parse_datetimetz(s):
       YYYY-MM-DDTHH:MM:SS
       YYYY-MM-DDTHH:MM:SS.ssssss
 
-    Returns a datetime.datetime object without a time zone.
+    optionally followed by the letter Z to indicate UTC time.
+
+    Returns a datetime.datetime object with tzinfo=UTC.
 
     Examples:
 
-        >>> dt1 = parse_datetimetz('2003-04-05 11:22:33.456789')
+        >>> dt1 = parse_datetimetz('2003-04-05 11:22:33.456789Z')
         >>> dt1.date()
         datetime.date(2003, 4, 5)
         >>> dt1.time()
@@ -280,7 +282,8 @@ def parse_datetimetz(s):
         ValueError: Bad datetime: 01/02/03
 
     """
-    m = re.match(r"(\d+)-(\d+)-(\d+)[ T](\d+):(\d+):(\d+)([.](\d+))?([-+](\d+):(\d+))?$", s)
+    m = re.match(r"(\d+)-(\d+)-(\d+)[ T]"
+                 r"(\d+):(\d+):(\d+)([.](\d+))?([-+](\d+):(\d+))?Z?$", s)
     if not m:
         raise ValueError("Bad datetime: %s" % s)
     ssssss = m.groups()[7]

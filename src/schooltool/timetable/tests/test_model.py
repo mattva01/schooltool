@@ -47,7 +47,7 @@ class BaseTestTimetableModel:
     def extractCalendarEvents(self, cal, daterange):
         result = []
         for d in daterange:
-            dt = datetime.combine(d, time(0, 0))
+            dt = datetime.combine(d, time(0, 0, tzinfo=UTC))
             dt1 = dt + d.resolution
             calday = cal.expand(dt, dt1)
             events = []

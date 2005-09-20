@@ -63,9 +63,11 @@ A calendar is a set of events.  A calendar event has a date and time, a
 duration, a title, and a bunch of other (optional) attributes like location
 or description.  Here's a sample calendar event:
 
+    >>> from pytz import utc
     >>> from datetime import datetime, timedelta
     >>> from schooltool.calendar.simple import SimpleCalendarEvent
-    >>> appointment = SimpleCalendarEvent(datetime(2004, 12, 28, 13, 40),
+    >>> appointment = SimpleCalendarEvent(datetime(2004, 12, 28, 13, 40,
+    ...                                            tzinfo=utc),
     ...                                   timedelta(hours=1),
     ...                                   'Dentist')
 
@@ -78,7 +80,7 @@ Calendar events are described by the ICalendarEvent interface.
 Here's another calendar event.  It repeats every week:
 
     >>> from schooltool.calendar.recurrent import WeeklyRecurrenceRule
-    >>> meeting = SimpleCalendarEvent(datetime(2005, 2, 7, 18, 0),
+    >>> meeting = SimpleCalendarEvent(datetime(2005, 2, 7, 18, 0, tzinfo=utc),
     ...                               timedelta(hours=1),
     ...                               'IRC meeting',
     ...                               location='#schooltool',
@@ -112,7 +114,8 @@ call calendar.expand.  Since some events may repeat indefinitely, expand
 takes two datetime arguments and limits returned events to the specified
 datetime range.
 
-    >>> print_cal(calendar.expand(datetime(2005, 2, 1), datetime(2005, 3, 1)))
+    >>> print_cal(calendar.expand(datetime(2005, 2, 1, tzinfo=utc),
+    ...                           datetime(2005, 3, 1, tzinfo=utc)))
     2005-02-07 IRC meeting
     2005-02-14 IRC meeting
     2005-02-21 IRC meeting
@@ -148,11 +151,11 @@ We can generate a calendar like this
 
     >>> from schooltool.calendar.simple import ImmutableCalendar
     >>> from schooltool.calendar.simple import SimpleCalendarEvent
-    >>> from schooltool.calendar.utils import parse_datetime
+    >>> from schooltool.calendar.utils import parse_datetimetz
     >>> from datetime import timedelta
 
     >>> deadline_calendar = ImmutableCalendar([
-    ...         SimpleCalendarEvent(parse_datetime(date + ' 00:00:00'),
+    ...         SimpleCalendarEvent(parse_datetimetz(date + ' 00:00:00Z'),
     ...                             timedelta(hours=1),
     ...                             deadline)
     ...         for date, deadline in deadlines])
@@ -314,7 +317,7 @@ Monthly recurrence rules also let you choose one of three variants:
 Here's how you create recurring events:
 
     >>> from schooltool.calendar.recurrent import YearlyRecurrenceRule
-    >>> event = SimpleCalendarEvent(datetime(2005, 1, 29, 12),
+    >>> event = SimpleCalendarEvent(datetime(2005, 1, 29, 12, tzinfo=utc),
     ...                             timedelta(hours=1),
     ...                             'My birthday',
     ...                             recurrence=YearlyRecurrenceRule())
@@ -331,8 +334,9 @@ Here's how you can get all recurrence dates of an event:
 
 Usually you will use ICalendar.expand.
 
-    >>> print_cal(ImmutableCalendar([event]).expand(datetime(2003, 1, 1),
-    ...                                             datetime(2009, 1, 1)))
+    >>> cal = ImmutableCalendar([event])
+    >>> print_cal(cal.expand(datetime(2003, 1, 1, tzinfo=utc),
+    ...                      datetime(2009, 1, 1, tzinfo=utc)))
     2005-01-29 My birthday
     2006-01-29 My birthday
     2007-01-29 My birthday
@@ -341,7 +345,7 @@ Usually you will use ICalendar.expand.
 Sometimes a recurrence rule may exclude even the original occurrence:
 
     >>> from datetime import date
-    >>> empty_event = SimpleCalendarEvent(datetime(2005, 2, 3, 12),
+    >>> empty_event = SimpleCalendarEvent(datetime(2005, 2, 3, 12, tzinfo=utc),
     ...                     timedelta(hours=1), 'Copious free time',
     ...                     recurrence=YearlyRecurrenceRule(
     ...                                     until=date(2005, 1, 1)))
@@ -363,10 +367,13 @@ schooltool.calendar.utils contains a number of small standalone functions
 for parsing and manipulating dates.
 
     >>> from schooltool.calendar.utils import parse_date, parse_datetime
+    >>> from schooltool.calendar.utils import parse_datetimetz
     >>> parse_date('2004-02-11')
     datetime.date(2004, 2, 11)
     >>> parse_datetime('2004-02-11 15:35:44')
     datetime.datetime(2004, 2, 11, 15, 35, 44)
+    >>> parse_datetimetz('2004-02-11 15:35:44Z')
+    datetime.datetime(2004, 2, 11, 15, 35, 44, tzinfo=<UTC>)
 
     >>> from datetime import date
     >>> from schooltool.calendar.utils import prev_month, next_month
@@ -399,6 +406,4 @@ for parsing and manipulating dates.
 Future goals
 ------------
 
-- Timezones
-- All day events
 - Ready to use calendar as a Zope 3 content component, with browser views

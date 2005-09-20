@@ -46,13 +46,18 @@ def doctest_CalendarMixin_expand():
         >>> from schooltool.calendar.recurrent import DailyRecurrenceRule
         >>> Event = SimpleCalendarEvent # shorter
 
+        >>> from pytz import utc
+
         >>> class MyCalendar(CalendarMixin):
         ...     def __iter__(self):
-        ...         return iter([Event(datetime(2004, 12, 14, 12, 30,tzinfo=utc),
+        ...         return iter([Event(datetime(2004, 12, 14, 12, 30,
+        ...                                     tzinfo=utc),
         ...                            timedelta(hours=1), 'a'),
-        ...                      Event(datetime(2004, 12, 15, 16, 30,tzinfo=utc),
+        ...                      Event(datetime(2004, 12, 15, 16, 30,
+        ...                                     tzinfo=utc),
         ...                            timedelta(hours=1), 'c'),
-        ...                      Event(datetime(2004, 12, 15, 14, 30,tzinfo=utc),
+        ...                      Event(datetime(2004, 12, 15, 14, 30,
+        ...                                     tzinfo=utc),
         ...                            timedelta(hours=1), 'b'),
         ...                      Event(datetime(2004, 12, 16, 17, 30,
         ...                                     tzinfo=utc),
@@ -80,22 +85,12 @@ def doctest_CalendarMixin_expand():
     We will define a convenience function for showing all events returned
     by expand:
 
-        >>> from pytz import timezone
-        >>> utc = timezone('UTC')
         >>> def show(first, last):
-        ...     if first.tzinfo is None:
-        ...         first.replace(tzinfo=utc)
-        ...     if last.tzinfo is None:
-        ...         last.replace(tzinfo=utc)
         ...     events = list(cal.expand(first, last))
         ...     events.sort()
         ...     print '[%s]' % ', '.join([e.title for e in events])
 
         >>> def show_long(first, last):
-        ...     if first.tzinfo is None:
-        ...         first.replace(tzinfo=utc)
-        ...     if last.tzinfo is None:
-        ...         last.replace(tzinfo=utc)
         ...     events = list(cal.expand(first, last))
         ...     events.sort()
         ...     for e in events:
@@ -103,37 +98,42 @@ def doctest_CalendarMixin_expand():
 
     Events that fall inside the interval
 
-        >>> show(datetime(2004, 12, 1, tzinfo=utc), datetime(2004, 12, 31,tzinfo=utc))
+        >>> show(datetime(2004, 12, 1, tzinfo=utc),
+        ...      datetime(2004, 12, 31, tzinfo=utc))
         [a, b, c, d]
 
-        >>> show(datetime(2004, 12, 15), datetime(2004, 12, 16))
+        >>> show(datetime(2004, 12, 15, tzinfo=utc),
+        ...      datetime(2004, 12, 16, tzinfo=utc))
         [b, c]
 
     Events that fall partially in the interval
 
-        >>> show(datetime(2004, 12, 15, 17, 0),
-        ...      datetime(2004, 12, 16, 18, 0))
+        >>> show(datetime(2004, 12, 15, 17, 0, tzinfo=utc),
+        ...      datetime(2004, 12, 16, 18, 0, tzinfo=utc))
         [c, d]
 
-    Corner cases: if event.dtstart + event.duration == last, or
-    event.dtstart == first, the event is not included.
+    Corner cases: if event.dtstart + event.duration == first, or
+    event.dtstart == last, the event is not included.
 
-        >>> show(datetime(2004, 12, 15, 15, 30),
-        ...      datetime(2004, 12, 15, 16, 30))
+        >>> show(datetime(2004, 12, 15, 15, 30, tzinfo=utc),
+        ...      datetime(2004, 12, 15, 16, 30, tzinfo=utc))
         []
 
     Recurring events:
 
-        >>> show_long(datetime(2005, 2, 2), datetime(2005, 2, 5))
+        >>> show_long(datetime(2005, 2, 2, tzinfo=utc),
+        ...           datetime(2005, 2, 5, tzinfo=utc))
         2005-02-03 simple
         2005-02-04 recurring
 
-        >>> show_long(datetime(2005, 2, 2), datetime(2005, 2, 6))
+        >>> show_long(datetime(2005, 2, 2, tzinfo=utc),
+        ...           datetime(2005, 2, 6, tzinfo=utc))
         2005-02-03 simple
         2005-02-04 recurring
         2005-02-05 recurring
 
-        >>> show_long(datetime(2005, 2, 10), datetime(2005, 2, 13))
+        >>> show_long(datetime(2005, 2, 10, tzinfo=utc),
+        ...           datetime(2005, 2, 13, tzinfo=utc))
         2005-02-10 recurring
         2005-02-11 recurring
         2005-02-12 recurring
@@ -141,92 +141,37 @@ def doctest_CalendarMixin_expand():
     Recurring events are replaced by proxy objects
 
         >>> from schooltool.calendar.interfaces import IExpandedCalendarEvent
-        >>> events = list(cal.expand(datetime(2005, 2, 2),
-        ...                          datetime(2005, 2, 6)))
+        >>> events = list(cal.expand(datetime(2005, 2, 2, tzinfo=utc),
+        ...                          datetime(2005, 2, 6, tzinfo=utc)))
         >>> events.sort()
         >>> [IExpandedCalendarEvent.providedBy(e) for e in events]
         [False, True, True]
         >>> events[1].original is events[2].original
         True
 
-    When we ask for a date with UTC or no timezone we get just the events as
-    they are stored
-
-        >>> show(datetime(2005, 6, 17), datetime(2005, 6, 17))
-        [e]
-        >>> show(datetime(2005, 6, 17, tzinfo=utc), datetime(2005, 6, 17))
-        [e]
-        >>> show(datetime(2005, 6, 17, tzinfo=utc),
-        ...     datetime(2005, 6, 17, tzinfo=utc))
-        [e]
-        >>> show(datetime(2005, 6, 17), datetime(2005, 6, 17, tzinfo=utc))
-        [e]
-
-    when we expand with a different timezone, we see the events that occur on
+    When we expand with a different timezone, we see the events that occur on
     that date in the given timezone.
 
+        >>> from pytz import timezone
         >>> eastern = timezone('US/Eastern')
         >>> show(datetime(2005, 6, 17, tzinfo=eastern),
-        ...     datetime(2005, 6, 18, tzinfo=eastern))
+        ...      datetime(2005, 6, 18, tzinfo=eastern))
         [recurring, f, g, recurring]
 
-        >>> vilnius= timezone('Europe/Vilnius')
+        >>> vilnius = timezone('Europe/Vilnius')
         >>> show(datetime(2005, 6, 17, tzinfo=vilnius),
-        ...     datetime(2005, 6, 18, tzinfo=vilnius))
+        ...      datetime(2005, 6, 18, tzinfo=vilnius))
         [e, recurring, f]
 
-        >>> show(datetime(2005, 6, 17),
-        ...     datetime(2005, 6, 18, tzinfo=vilnius))
-        [e, recurring, f]
+    You can even mix timezones:
 
         >>> show(datetime(2005, 6, 17, tzinfo=utc),
-        ...     datetime(2005, 6, 18, tzinfo=vilnius))
-        Traceback (most recent call last):
-        ...
-        ValueError: ('Cannot expand mixed TimeZones: %s and %s', 'UTC', 'WMT')
-
-        >>> show(datetime(2005, 6, 17, tzinfo=vilnius),
-        ...     datetime(2005, 6, 18))
+        ...      datetime(2005, 6, 18, tzinfo=vilnius))
         [e, recurring, f]
 
-    """
-
-
-def doctest_CalendarMixin_expand_at_midnight():
-    """Regression tests for CalendarMixin.expand.
-
-    Bug: an event that occurs at midnight and is 0 minutes long gets lost.
-
-        >>> from datetime import datetime, timedelta
-        >>> from schooltool.calendar.mixins import CalendarMixin
-        >>> from schooltool.calendar.simple import SimpleCalendarEvent
-        >>> from schooltool.calendar.recurrent import DailyRecurrenceRule
-        >>> e1 = SimpleCalendarEvent(datetime(2005, 3, 2, 0, 0), timedelta(0),
-        ...                          "Corner case")
-        >>> e2 = SimpleCalendarEvent(datetime(2005, 3, 4, 0, 0), timedelta(0),
-        ...                          "Recurring case",
-        ...                          recurrence=DailyRecurrenceRule())
-
-        >>> class MyCalendar(CalendarMixin):
-        ...     def __iter__(self):
-        ...         return iter([e1, e2])
-        >>> cal = MyCalendar()
-
-        >>> [e.title
-        ...  for e in cal.expand(datetime(2005, 3, 2), datetime(2005, 3, 3))]
-        ['Corner case']
-
-        >>> [e.title
-        ...  for e in cal.expand(datetime(2005, 3, 1), datetime(2005, 3, 2))]
-        []
-
-        >>> [e.title
-        ...  for e in cal.expand(datetime(2005, 3, 4), datetime(2005, 3, 5))]
-        ['Recurring case']
-
-        >>> [e.title
-        ...  for e in cal.expand(datetime(2005, 3, 3), datetime(2005, 3, 4))]
-        []
+        >>> show(datetime(2005, 6, 17, tzinfo=vilnius),
+        ...      datetime(2005, 6, 18, tzinfo=utc))
+        [e, recurring, f]
 
     """
 
@@ -281,6 +226,7 @@ def doctest_CalendarEventMixin_hasOccurrences():
 
     """
 
+
 def doctest_CalendarEventMixin_replace():
     """Make sure CalendarEventMixin.replace does not forget any attributes.
 
@@ -308,6 +254,81 @@ def doctest_CalendarEventMixin_replace():
     """
 
 
+def doctest_CalendarEventMixin_expand():
+    """Test expanding of recurring events
+
+        >>> from schooltool.calendar.simple import SimpleCalendarEvent
+
+    For non-recurring events, expand yields the event if it is in the
+    range passed as arguments:
+
+        >>> from pytz import utc
+        >>> from datetime import datetime, timedelta
+        >>> e1 = SimpleCalendarEvent(datetime(2004, 12, 15, 18, 57, tzinfo=utc),
+        ...                          timedelta(minutes=15),
+        ...                          'Work on schoolbell.calendar.simple')
+        >>> expanded = list(e1.expand(
+        ...     datetime(2004, 12, 15, 0, 0, tzinfo=utc),
+        ...     datetime(2004, 12, 16, 0, 0, tzinfo=utc)))
+        >>> expanded
+        [<schooltool.calendar.simple.SimpleCalendarEvent object at ...>]
+        >>> expanded[0] is e1
+        True
+
+    If the event is outside the datetime range passed, the method
+    yields nothing.
+
+        >>> list(e1.expand(datetime(2004, 12, 16, 0, 0, tzinfo=utc),
+        ...                datetime(2004, 12, 17, 0, 0, tzinfo=utc)))
+        []
+
+    See doctest_CalendarMixin_expand doctest for an elaborate
+    demonstration of the expanding functionality.
+    """
+
+
+def doctest_CalendarEventMixin_expand_at_midnight():
+    """Regression tests for CalendarEventMixin.expand.
+
+    Bug: an event that occurs at midnight and is 0 minutes long gets lost.
+
+        >>> from pytz import utc
+        >>> from datetime import datetime, timedelta
+        >>> from schooltool.calendar.simple import SimpleCalendarEvent
+        >>> from schooltool.calendar.recurrent import DailyRecurrenceRule
+        >>> e1 = SimpleCalendarEvent(datetime(2005, 3, 2, 0, 0, tzinfo=utc),
+        ...                          timedelta(0), "Corner case")
+        >>> e2 = SimpleCalendarEvent(datetime(2005, 3, 4, 0, 0, tzinfo=utc),
+        ...                          timedelta(0), "Recurring case",
+        ...                          recurrence=DailyRecurrenceRule())
+
+        >>> def show(first, last):
+        ...     for event in e1, e2:
+        ...         print [e.title for e in event.expand(first, last)]
+
+        >>> show(datetime(2005, 3, 1, tzinfo=utc),
+        ...      datetime(2005, 3, 2, tzinfo=utc))
+        []
+        []
+
+        >>> show(datetime(2005, 3, 2, tzinfo=utc),
+        ...      datetime(2005, 3, 3, tzinfo=utc))
+        ['Corner case']
+        []
+
+        >>> show(datetime(2005, 3, 3, tzinfo=utc),
+        ...      datetime(2005, 3, 4, tzinfo=utc))
+        []
+        []
+
+        >>> show(datetime(2005, 3, 4, tzinfo=utc),
+        ...      datetime(2005, 3, 5, tzinfo=utc))
+        []
+        ['Recurring case']
+
+    """
+
+
 def doctest_weeknum_bounds():
     """Unit test for schooltool.calendar.utils.weeknum_bounds.
 
@@ -327,7 +348,7 @@ def doctest_weeknum_bounds():
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite())
+    suite.addTest(doctest.DocTestSuite(optionflags=doctest.ELLIPSIS))
     suite.addTest(doctest.DocFileSuite('../README.txt'))
     suite.addTest(doctest.DocTestSuite('schooltool.calendar.mixins'))
     suite.addTest(doctest.DocTestSuite('schooltool.calendar.simple'))
