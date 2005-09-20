@@ -432,6 +432,8 @@ class CalendarViewBase(BrowserView):
         self.dateformat = prefs.dateformat
         self.timezone = prefs.timezone
 
+        self._days_cache = None
+
     def pdfURL(self):
         if pdfcal.disabled:
             return None
@@ -472,7 +474,29 @@ class CalendarViewBase(BrowserView):
 
         return '%s/%s' % (self.__url, dt)
 
+    def _initDaysCache(self):
+        """Initialize the _days_cache attribute.
+
+        When ``update`` figures out which time period will be displayed to the
+        user, it calls ``_initDaysCache`` to give the view a chance to
+        precompute the calendar events for the time interval.
+
+        The base implementation designates three months around self.cursor as
+        the time interval for caching.
+        """
+        # The calendar portlet will always want three months around self.cursor
+        start_of_prev_month = prev_month(self.cursor)
+        first = week_start(start_of_prev_month, self.first_day_of_week)
+        end_of_next_month = next_month(next_month(self.cursor)) - timedelta(1)
+        last = week_start(end_of_next_month,
+                          self.first_day_of_week) + timedelta(7)
+        self._days_cache = DaysCache(self._getDays, first, last)
+
     def update(self):
+        """Figure out which date we're supposed to be showing.
+
+        Can extract date from the request or the session.  Defaults on today.
+        """
         session = ISession(self.request)['calendar']
         dt = session.get('last_visited_day')
 
@@ -487,9 +511,29 @@ class CalendarViewBase(BrowserView):
         if not (dt and self.inCurrentPeriod(dt)):
             session['last_visited_day'] = self.cursor
 
+        self._initDaysCache()
+
     def inCurrentPeriod(self, dt):
         """Return True if dt is in the period currently being shown."""
         raise NotImplementedError("override in subclasses")
+
+    def pigeonhole(self, intervals, days):
+        """Sort CalendarDay objects into date intervals.
+
+        Can be used to sort a list of CalendarDay objects into weeks,
+        months, quarters etc.
+
+        `intervals` is a list of date pairs that define half-open time
+        intervals (the start date is inclusive, and the end date is
+        exclusive).  Intervals can overlap.
+
+        Returns a list of CalendarDay object lists -- one list for
+        each interval.
+        """
+        results = []
+        for start, end in intervals:
+            results.append([day for day in days if start <= day.date < end])
+        return results
 
     def getWeek(self, dt):
         """Return the week that contains the day dt.
@@ -500,20 +544,30 @@ class CalendarViewBase(BrowserView):
         end = start + timedelta(7)
         return self.getDays(start, end)
 
-    def getMonth(self, dt):
+    def getMonth(self, dt, days=None):
         """Return a nested list of days in the month that contains dt.
 
         Returns a list of lists of date objects.  Days in neighbouring
         months are included if they fall into a week that contains days in
         the current month.
         """
-        weeks = []
         start_of_next_month = next_month(dt)
         start_of_week = week_start(dt.replace(day=1), self.first_day_of_week)
+        start_of_display_month = start_of_week
+
+        week_intervals = []
         while start_of_week < start_of_next_month:
             start_of_next_week = start_of_week + timedelta(7)
-            weeks.append(self.getDays(start_of_week, start_of_next_week))
+            week_intervals.append((start_of_week, start_of_next_week))
             start_of_week = start_of_next_week
+
+        end_of_display_month = start_of_week
+        if not days:
+            days = self.getDays(start_of_display_month, end_of_display_month)
+        # Make sure the cache contains all the days we're interested in
+        assert days[0].date <= start_of_display_month, 'not enough days'
+        assert days[-1].date >= end_of_display_month - timedelta(1), 'not enough days'
+        weeks = self.pigeonhole(week_intervals, days)
         return weeks
 
     def getYear(self, dt):
@@ -522,9 +576,19 @@ class CalendarViewBase(BrowserView):
         This returns a list of quarters, each quarter is a list of months,
         each month is a list of weeks, and each week is a list of CalendarDays.
         """
+
+        first_day_of_year = date(dt.year, 1, 1)
+        year_start_day_padded_weeks = week_start(first_day_of_year)
+        last_day_of_year = date(dt.year, 12, 31)
+        year_end_day_padded_weeks = week_start(last_day_of_year) + timedelta(7)
+
+        day_cache = self.getDays(year_start_day_padded_weeks,
+                                 year_end_day_padded_weeks)
+
         quarters = []
         for q in range(4):
-            quarter = [self.getMonth(date(dt.year, month + (q * 3), 1))
+            quarter = [self.getMonth(date(dt.year, month + (q * 3), 1),
+                                     day_cache)
                        for month in range(1, 4)]
             quarters.append(quarter)
         return quarters
@@ -582,6 +646,23 @@ class CalendarViewBase(BrowserView):
     def getDays(self, start, end):
         """Get a list of CalendarDay objects for a selected period of time.
 
+        Uses the _days_cache.
+
+        `start` and `end` (date objects) are bounds (half-open) for the result.
+
+        Events spanning more than one day get included in all days they
+        overlap.
+        """
+        if self._days_cache is None:
+            return self._getDays(start, end)
+        else:
+            return self._days_cache.getDays(start, end)
+
+    def _getDays(self, start, end):
+        """Get a list of CalendarDay objects for a selected period of time.
+
+        No caching.
+
         `start` and `end` (date objects) are bounds (half-open) for the result.
 
         Events spanning more than one day get included in all days they
@@ -594,6 +675,7 @@ class CalendarViewBase(BrowserView):
             day += timedelta(1)
 
         # We have date objects, but ICalendar.expand needs datetime objects
+        # XXX utc here is a bug, probably http://issues.schooltool.org/issue373
         start_dt = datetime.combine(start, time(tzinfo=utc))
         end_dt = datetime.combine(end, time(tzinfo=utc))
         for event in self.getEvents(start_dt, end_dt):
@@ -708,6 +790,64 @@ class CalendarViewBase(BrowserView):
     def canRemoveEvents(self):
         """Return True if current viewer can remove events to this calendar."""
         return canAccess(self.context, "removeEvent")
+
+
+class DaysCache(object):
+    """A cache of calendar days.
+
+    Since the expansion of recurrent calendar events, and the pigeonholing of
+    calendar events into days is an expensive task, it is better to compute
+    the calendar days of a single larger period of time, and then refer
+    to subsets of the result.
+
+    DaysCache provides an object that is able to do so.  The goal here is that
+    any view will need perform the expensive computation only once or twice.
+    """
+
+    def __init__(self, expensive_getDays, cache_first, cache_last):
+        """Create a cache.
+
+        ``expensive_getDays`` is a function that takes a half-open date range
+        and returns a list of CalendarDay objects.
+
+        ``cache_first`` and ``cache_last`` provide the initial approximation
+        of the date range that will be needed in the future.  You may later
+        extend the cache interval by calling ``extend``.
+        """
+        self.expensive_getDays = expensive_getDays
+        self.cache_first = cache_first
+        self.cache_last = cache_last
+        self._cache = None
+
+    def extend(self, first, last):
+        """Extend the cache.
+
+        You should call ``extend`` before any calls to ``getDays``, and not
+        after.
+        """
+        self.cache_first = min(self.cache_first, first)
+        self.cache_last = max(self.cache_last, last)
+
+    def getDays(self, first, last):
+        """Return a list of calendar days from ``first`` to ``last``.
+
+        If the interval from ``first`` to ``last`` falls into the cached
+        range, and the cache is already computed, this operation becomes
+        fast.
+
+        If the interval is not in cache, delegates to the expensive_getDays
+        computation.
+        """
+        assert first <= last, 'invalid date range: %s..%s' % (first, last)
+        if first >= self.cache_first and last <= self.cache_last:
+            if self._cache is None:
+                self._cache = self.expensive_getDays(self.cache_first,
+                                                     self.cache_last)
+            first_idx = (first - self.cache_first).days
+            last_idx = (last - self.cache_first).days
+            return self._cache[first_idx:last_idx]
+        else:
+            return self.expensive_getDays(first, last)
 
 
 class WeeklyCalendarView(CalendarViewBase):
@@ -845,6 +985,24 @@ class YearlyCalendarView(CalendarViewBase):
 
     def shortDayOfWeek(self, date):
         return short_day_of_week_names[date.weekday()]
+
+    def _initDaysCache(self):
+        """Initialize the _days_cache attribute.
+
+        When ``update`` figures out which time period will be displayed to the
+        user, it calls ``_initDaysCache`` to give the view a chance to
+        precompute the calendar events for the time interval.
+
+        This implementation designates the year of self.cursor as the time
+        interval for caching.
+        """
+        CalendarViewBase._initDaysCache(self)
+        first_day_of_year = self.cursor.replace(month=1, day=1)
+        first = week_start(first_day_of_year, self.first_day_of_week)
+        last_day_of_year = self.cursor.replace(month=12, day=31)
+        last = week_start(last_day_of_year,
+                          self.first_day_of_week) + timedelta(7)
+        self._days_cache.extend(first, last)
 
 
 class DailyCalendarView(CalendarViewBase):

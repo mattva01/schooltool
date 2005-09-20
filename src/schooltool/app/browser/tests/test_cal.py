@@ -22,6 +22,7 @@ Tests for SchoolTool-specific calendar views.
 $Id$
 """
 import unittest
+import calendar
 from datetime import datetime, date, timedelta, time
 from pytz import timezone
 
@@ -34,6 +35,7 @@ from zope.app.tests import setup, ztapi
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.interfaces import IContainmentRoot
+from zope.app.session.interfaces import ISession
 
 import schooltool.app
 from schooltool.common import parse_datetime
@@ -600,6 +602,17 @@ def registerCalendarHelperViews():
                       DailyCalendarRowsView)
 
 
+def getDaysStub(start, end):
+    """Stub for CalendarViewBase.getDays."""
+    from schooltool.app.browser.cal import CalendarDay
+    days = []
+    day = start
+    while day < end:
+        days.append(CalendarDay(day))
+        day += timedelta(1)
+    return days
+
+
 class TestCalendarViewBase(unittest.TestCase):
     # Legacy unit tests from SchoolTool.
 
@@ -615,6 +628,58 @@ class TestCalendarViewBase(unittest.TestCase):
 
     def tearDown(self):
         setup.placefulTearDown()
+
+    def test_initDayCache(self):
+        from schooltool.app.browser.cal import CalendarViewBase
+        view = CalendarViewBase(None, TestRequest())
+
+        view.cursor = date(2005, 6, 9)
+        view.first_day_of_week = calendar.SUNDAY
+        view._initDaysCache()
+        self.assertEquals(view._days_cache.expensive_getDays, view._getDays)
+        self.assertEquals(view._days_cache.cache_first, date(2005, 5, 1))
+        self.assertEquals(view._days_cache.cache_last, date(2005, 8, 7))
+
+        view.cursor = date(2005, 6, 9)
+        view.first_day_of_week = calendar.MONDAY
+        view._initDaysCache()
+        self.assertEquals(view._days_cache.expensive_getDays, view._getDays)
+        self.assertEquals(view._days_cache.cache_first, date(2005, 4, 25))
+        self.assertEquals(view._days_cache.cache_last, date(2005, 8, 1))
+
+    def test_update_today_by_default(self):
+        from schooltool.app.browser.cal import CalendarViewBase
+        request = TestRequest()
+        view = CalendarViewBase(None, request)
+        view.update()
+        self.assertEquals(view.cursor, date.today())
+
+    def test_update_explicit_date(self):
+        from schooltool.app.browser.cal import CalendarViewBase
+        request = TestRequest(form={'date': '2005-03-04'})
+        view = CalendarViewBase(None, request)
+        view.update()
+        self.assertEquals(view.cursor, date(2005, 3, 4))
+
+    def test_update_date_from_session(self):
+        from schooltool.app.browser.cal import CalendarViewBase
+        request = TestRequest()
+        ISession(request)['calendar']['last_visited_day'] = date(2005, 1, 2)
+        view = CalendarViewBase(None, request)
+        view.inCurrentPeriod = lambda dt: False
+        view.update()
+        self.assertEquals(view.cursor, date(2005, 1, 2))
+
+    # update is also tested in doctest_CalendarViewBase
+
+    def test_update_initializes_days_cache(self):
+        from schooltool.app.browser.cal import CalendarViewBase
+        request = TestRequest(form={'date': '2005-03-04'})
+        view = CalendarViewBase(None, request)
+        view.update()
+        self.assert_(view._days_cache is not None)
+        first, last = view._days_cache.cache_first, view._days_cache.cache_last
+        self.assert_(first <= view.cursor <= last)
 
     def test_dayTitle(self):
         from schooltool.app.browser.cal import CalendarViewBase
@@ -732,58 +797,91 @@ class TestCalendarViewBase(unittest.TestCase):
                            CalendarDay(date(2004, 8, 25))])
 
     def test_getMonth(self):
-        from schooltool.app.browser.cal import CalendarViewBase, CalendarDay
+        from schooltool.app.browser.cal import CalendarViewBase
         from schooltool.app.cal import Calendar
-
-        request = TestRequest()
-        request.setPrincipal(PrincipalStub())
-
         cal = Calendar(None)
+        request = TestRequest()
+        view = CalendarViewBase(cal, request)
+        view.getDays = getDaysStub
+        self.do_test_getMonth(view)
+
+    def test_getMonth_with_caching(self):
+        from schooltool.app.browser.cal import CalendarViewBase
+        cal = Calendar(None)
+        request = TestRequest()
         view = CalendarViewBase(cal, request)
 
-        def getDaysStub(start, end):
-            return [CalendarDay(start), CalendarDay(end)]
-        view.getDays = getDaysStub
+        # We can pass a list of CalendarDays to getMonth to speed it up.
+        # This list must contain consecutive days only!
+        days = getDaysStub(date(2004, 1, 1), date(2004, 12, 31))
 
-        weeks = view.getMonth(date(2004, 8, 11))
+        # The view now never needs to call self.getDays, so we might
+        # just as well get rid of it
+        def dontCallUsWellCallYou(*args):
+            raise NotImplementedError, "don't call us, we'll call you"
+        view.getDays = dontCallUsWellCallYou
+
+        self.do_test_getMonth(view, days)
+
+    def test_getMonth_caching_corner_cases(self):
+        from schooltool.app.browser.cal import CalendarViewBase
+        view = CalendarViewBase(None, TestRequest())
+        days = getDaysStub(date(2004, 7, 27), date(2004, 12, 31))
+        self.assertRaises(AssertionError,
+                          view.getMonth, date(2004, 8, 11), days=days)
+        days = getDaysStub(date(2004, 1, 1), date(2004, 9, 5))
+        self.assertRaises(AssertionError,
+                          view.getMonth, date(2004, 8, 11), days=days)
+        days = getDaysStub(date(2004, 7, 26), date(2004, 9, 6))
+        view.getMonth(date(2004, 8, 11), days=days)
+
+    def do_test_getMonth(self, view, days=None):
+        """Test basic functionality of getMonth.
+
+        We want to test getMonth with the same data set irrespective
+        of whether caching is used or not.
+        """
+        weeks = view.getMonth(date(2004, 8, 11), days=days)
         self.assertEquals(len(weeks), 6)
-        bounds = [(d1.date, d2.date) for d1, d2 in weeks]
+        bounds = [(week[0].date, week[-1].date) for week in weeks]
         self.assertEquals(bounds,
-                          [(date(2004, 7, 26), date(2004, 8, 2)),
-                           (date(2004, 8, 2), date(2004, 8, 9)),
-                           (date(2004, 8, 9), date(2004, 8, 16)),
-                           (date(2004, 8, 16), date(2004, 8, 23)),
-                           (date(2004, 8, 23), date(2004, 8, 30)),
-                           (date(2004, 8, 30), date(2004, 9, 6))])
+                          [(date(2004, 7, 26), date(2004, 8, 1)),
+                           (date(2004, 8, 2), date(2004, 8, 8)),
+                           (date(2004, 8, 9), date(2004, 8, 15)),
+                           (date(2004, 8, 16), date(2004, 8, 22)),
+                           (date(2004, 8, 23), date(2004, 8, 29)),
+                           (date(2004, 8, 30), date(2004, 9, 5))])
 
         # October 2004 ends with a Sunday, so we use it to check that
         # no days from the next month are included.
-        weeks = view.getMonth(date(2004, 10, 1))
-        bounds = [(d1.date, d2.date) for d1, d2 in weeks]
+        weeks = view.getMonth(date(2004, 10, 1), days=days)
+        bounds = [(week[0].date, week[-1].date) for week in weeks]
         self.assertEquals(bounds[4],
-                          (date(2004, 10, 25), date(2004, 11, 1)))
+                          (date(2004, 10, 25), date(2004, 10, 31)))
 
         # Same here, just check the previous month.
-        weeks = view.getMonth(date(2004, 11, 1))
-        bounds = [(d1.date, d2.date) for d1, d2 in weeks]
+        weeks = view.getMonth(date(2004, 11, 1), days=days)
+        bounds = [(week[0].date, week[-1].date) for week in weeks]
         self.assertEquals(bounds[0],
-                          (date(2004, 11, 1), date(2004, 11, 8)))
+                          (date(2004, 11, 1), date(2004, 11, 7)))
 
     def test_getYear(self):
-        from schooltool.app.browser.cal import CalendarViewBase, CalendarDay
-        from schooltool.app.cal import Calendar
+        from schooltool.app.browser.cal import CalendarViewBase
 
         request = TestRequest()
         request.setPrincipal(PrincipalStub())
 
-        cal = Calendar(None)
-        view = CalendarViewBase(cal, request)
+        view = CalendarViewBase(None, request)
+        view.getDays = getDaysStub
 
-        def getMonthStub(dt):
+        def getMonthStub(dt, days=None):
+            # Check that boundaries of `days` are ones that we expect
+            self.assertEquals(days[0].date, date(2003, 12, 29))
+            self.assertEquals(days[-1].date, date(2005, 1, 2))
             return dt
         view.getMonth = getMonthStub
 
-        year = view.getYear(date(2004, 03, 04))
+        year = view.getYear(date(2004, 3, 4))
         self.assertEquals(len(year), 4)
         months = []
         for quarter in year:
@@ -797,7 +895,70 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(result, expected,
                           '%s != %s' % (fmt(result), fmt(expected)))
 
-    def test_getCalendars(self):
+    def doctest_pigeonhole(self):
+        r"""Test for CalendarViewBase.pigeonhole().
+
+        Our pigeonholer operates on date intervals and CalendarDays:
+
+            >>> from schooltool.app.browser.cal import CalendarViewBase
+            >>> from schooltool.app.cal import Calendar
+
+            >>> setup.placefulSetUp()
+            >>> app = sbsetup.setupSchoolToolSite()
+            >>> setup.setUpAnnotations()
+            >>> registerCalendarHelperViews()
+            >>> sbsetup.setupTimetabling()
+
+            >>> calendar = Calendar(Person())
+            >>> vb = CalendarViewBase(calendar, TestRequest())
+
+        Pigeonholer returns an empty list if the interval list is empty:
+
+            >>> vb.pigeonhole([], [])
+            []
+
+        It returns a list of (empty) lists if we will pass it a
+        non-empty list of intervals and an empty list of CalendarDays:
+
+        An interval is a tuple of 2 dates (start and end; the former
+        is inclusive while the latter is exclusive):
+
+            >>> intervals = [(date(2005, 1, 1),
+            ...               date(2005, 1, 8)),
+            ...              (date(2005, 1, 8),
+            ...               date(2005, 1, 15))]
+            >>> vb.pigeonhole(intervals, [])
+            [[], []]
+
+        Let's pigeonhole a couple of days' worth of events into
+        intervals:
+
+            >>> days = vb._getDays(date(2005, 1, 7),
+            ...                    date(2005, 1, 9))
+
+            >>> weeks = vb.pigeonhole(intervals, days)
+            >>> [day.date for day in weeks[0]]
+            [datetime.date(2005, 1, 7)]
+            >>> [day.date for day in weeks[1]]
+            [datetime.date(2005, 1, 8)]
+
+        If intervals overlap, then common days should be included in
+        all of them:
+
+            >>> intervals = [(date(2005, 1, 1),
+            ...               date(2005, 1, 9)),
+            ...              (date(2005, 1, 7),
+            ...               date(2005, 1, 15))]
+
+            >>> weeks = vb.pigeonhole(intervals, days)
+            >>> [day.date for day in weeks[0]]
+            [datetime.date(2005, 1, 7), datetime.date(2005, 1, 8)]
+            >>> [day.date for day in weeks[1]]
+            [datetime.date(2005, 1, 7), datetime.date(2005, 1, 8)]
+
+        """
+
+    def doctest_getCalendars(self):
         """Test for CalendarViewBase.getCalendars().
 
             >>> setup.placelessSetUp()
@@ -827,7 +988,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
         """
 
-    def test_getCalendars_cache(self):
+    def doctest_getCalendars_cache(self):
         """Test for CalendarViewBase.getCalendars() caching.
 
         Let's set up needed stubs:
@@ -865,7 +1026,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
         """
 
-    def test_getEvents(self):
+    def doctest_getEvents(self):
         """Test for CalendarViewBase.getEvents
 
             >>> setup.placefulSetUp()
@@ -1047,6 +1208,26 @@ class TestCalendarViewBase(unittest.TestCase):
 
         """
 
+    def test_getDays_cache(self):
+        from schooltool.app.browser.cal import CalendarViewBase
+        view = CalendarViewBase(None, TestRequest())
+        view._getDays = lambda *args: ['got some computed days']
+
+        start = date(2004, 8, 10)
+        end = date(2004, 8, 16)
+
+        assert view._days_cache is None
+        days = view.getDays(start, end)
+        self.assertEquals(days, ['got some computed days'])
+
+        class DaysCacheStub:
+            def getDays(self, start, end):
+                return ['got some cached days here']
+        view._days_cache = DaysCacheStub()
+
+        days = view.getDays(start, end)
+        self.assertEquals(days, ['got some cached days here'])
+
     def test_getDays(self):
         from schooltool.app.browser.cal import CalendarViewBase
         from schooltool.app.cal import Calendar
@@ -1070,12 +1251,12 @@ class TestCalendarViewBase(unittest.TestCase):
         view = CalendarViewBase(cal, request)
 
         start = date(2004, 8, 10)
-        days = view.getDays(start, start)
+        days = view._getDays(start, start)
         self.assertEquals(len(days), 0)
 
         start = date(2004, 8, 10)
         end = date(2004, 8, 16)
-        days = view.getDays(start, end)
+        days = view._getDays(start, end)
 
         self.assertEquals(len(days), 6)
         for i, day in enumerate(days):
@@ -1090,7 +1271,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
         start = date(2004, 8, 11)
         end = date(2004, 8, 12)
-        days = view.getDays(start, end)
+        days = view._getDays(start, end)
         self.assertEquals(len(days), 1)
         self.assertEquals(days[0].date, start)
         self.assertEqualEventLists(days[0].events, [e5, e2])
@@ -3632,6 +3813,40 @@ def doctest_YearlyCalendarView():
     """
 
 
+def doctest_YearlyCalendarView_initDaysCache():
+    r"""Tests for YearlyCalendarView._initDaysCache.
+
+        >>> from schooltool.app.browser.cal import YearlyCalendarView
+        >>> view = YearlyCalendarView(None, TestRequest())
+
+    _initDaysCache designates the year of self.cursor (padded to week
+    boundaries) as the time for caching
+
+        >>> view.cursor = date(2005, 6, 12)
+        >>> view.first_day_of_week = calendar.SUNDAY
+        >>> view._initDaysCache()
+        >>> view._days_cache.expensive_getDays == view._getDays
+        True
+        >>> print view._days_cache.cache_first, view._days_cache.cache_last
+        2004-12-26 2006-01-01
+
+        >>> view.first_day_of_week = calendar.MONDAY
+        >>> view._initDaysCache()
+        >>> print view._days_cache.cache_first, view._days_cache.cache_last
+        2004-12-27 2006-01-02
+
+    When the cursor is close to the beginning/end of the year, we also have
+    to include the surrounding three months (for the calendar portlet)
+
+        >>> view.cursor = date(2005, 1, 1)
+        >>> view.first_day_of_week = calendar.SUNDAY
+        >>> view._initDaysCache()
+        >>> print view._days_cache.cache_first, view._days_cache.cache_last
+        2004-11-28 2006-01-01
+
+    """
+
+
 def doctest_AtomCalendarView():
     r"""Tests for AtomCalendarView.
 
@@ -4291,6 +4506,101 @@ def doctest_CalendarListView(self):
         ...     print '%s (%s, %s)' % (c.title, col1, col2)
         Some Calendar (#9db8d2, #7590ae)
         Some Calendar (timetable) (#9db8d2, #7590ae)
+
+    """
+
+
+def doctest_DaysCache():
+    """Unit tests for DaysCache.
+
+    We will need a pretend expensive computation function that returns
+    a list of dates.  Since it is expensive, we want to see when exactly
+    it gets called.
+
+        >>> from schooltool.app.browser.cal import CalendarDay
+        >>> def expensive_getDays(first, last):
+        ...     print "Computing days from %s to %s" % (first, last)
+        ...     return getDaysStub(first, last)
+
+    Let's create a DaysCache and specify an initial date range for caching.
+
+        >>> from schooltool.app.browser.cal import DaysCache
+        >>> cache = DaysCache(expensive_getDays, date(2005, 6, 7),
+        ...                   date(2005, 7, 9))
+
+        >>> print cache.cache_first, cache.cache_last
+        2005-06-07 2005-07-09
+
+    Extending by the same interval changes nothing
+
+        >>> cache.extend(date(2005, 6, 7), date(2005, 7, 9))
+        >>> print cache.cache_first, cache.cache_last
+        2005-06-07 2005-07-09
+
+    We can extend it by a few days on both ends
+
+        >>> cache.extend(date(2005, 6, 3), date(2005, 7, 4))
+        >>> print cache.cache_first, cache.cache_last
+        2005-06-03 2005-07-09
+
+        >>> cache.extend(date(2005, 6, 11), date(2005, 7, 12))
+        >>> print cache.cache_first, cache.cache_last
+        2005-06-03 2005-07-12
+
+    If we call getDays for a range outside the caching range, the expensive
+    function gets called and its result is returned.
+
+        >>> days = cache.getDays(date(2005, 6, 1), date(2005, 6, 3))
+        Computing days from 2005-06-01 to 2005-06-03
+        >>> [str(day.date) for day in days]
+        ['2005-06-01', '2005-06-02']
+
+    If we do call getDays for a subset of the caching range, the expensive
+    function gets called (once) for the whole range, and subsequent calls
+    do not invoke any expensive computations.
+
+        >>> days = cache.getDays(date(2005, 6, 7), date(2005, 6, 9))
+        Computing days from 2005-06-03 to 2005-07-12
+        >>> [str(day.date) for day in days]
+        ['2005-06-07', '2005-06-08']
+
+        >>> days = cache.getDays(date(2005, 7, 7), date(2005, 7, 9))
+        >>> [str(day.date) for day in days]
+        ['2005-07-07', '2005-07-08']
+
+    Corner case: the whole range
+
+        >>> days = cache.getDays(date(2005, 6, 3), date(2005, 7, 12))
+        >>> [str(day.date) for day in days[:2] + days[-2:]]
+        ['2005-06-03', '2005-06-04', '2005-07-10', '2005-07-11']
+
+    We can we call getDays for a range outside the caching range, if we
+    need to.
+
+        >>> days = cache.getDays(date(2005, 7, 12), date(2005, 7, 14))
+        Computing days from 2005-07-12 to 2005-07-14
+        >>> [str(day.date) for day in days]
+        ['2005-07-12', '2005-07-13']
+
+    You can also call getDays with date ranges overlapping the caching
+    interval, but you'll get no benefit from that.
+
+        >>> days = cache.getDays(date(2005, 6, 1), date(2005, 6, 4))
+        Computing days from 2005-06-01 to 2005-06-04
+        >>> [str(day.date) for day in days]
+        ['2005-06-01', '2005-06-02', '2005-06-03']
+
+        >>> days = cache.getDays(date(2005, 7, 11), date(2005, 7, 14))
+        Computing days from 2005-07-11 to 2005-07-14
+        >>> [str(day.date) for day in days]
+        ['2005-07-11', '2005-07-12', '2005-07-13']
+
+    You will get an assertion error if you try to pass in an invalid date range
+
+        >>> cache.getDays(date(2005, 7, 12), date(2005, 7, 11))
+        Traceback (most recent call last):
+          ...
+        AssertionError: invalid date range: 2005-07-12..2005-07-11
 
     """
 
