@@ -305,6 +305,7 @@ class EventForDisplay(object):
         cssClass - 'class' attribute for styles
         dtstarttz -- dtstart renderred in the view's timezone
         dtendtz -- dtend renderred in the view's timezone
+        allday -- whether this event is an all day event or not
 
     """
 
@@ -327,6 +328,7 @@ class EventForDisplay(object):
         self.color1 = color1
         self.color2 = color2
         self.shortTitle = self.title
+        self.allday = event.allday
         if len(self.title) > 16:
             self.shortTitle = self.title[:15] + '...'
         self.dtstarttz = event.dtstart.astimezone(timezone)
@@ -556,36 +558,14 @@ class CalendarViewBase(BrowserView):
         end_dt = end_dt.replace(tzinfo=self.timezone)
         for calendar, color1, color2 in self.getCalendars():
             for event in calendar.expand(start_dt, end_dt):
-                allday = removeSecurityProxy(event).allday
                 if (same(event.__parent__, self.context) and
-                    calendar is not self.context) or allday:
+                    calendar is not self.context):
                     # Skip resource booking events (coming from
                     # overlaid calendars) if they were booked by the
                     # person whose calendar we are viewing.
                     # removeSecurityProxy(event.__parent__) and
                     # removeSecurityProxy(self.context) are needed so we
                     # could compare them.
-                    continue
-                yield EventForDisplay(event, color1, color2, calendar,
-                                      self.timezone)
-
-    def getAllDayEvents(self, date=None):
-        """Get a list of EventForDisplay objects for the all-day events at the
-        cursors current position.
-
-        'day' can be None, or the day the allday events should be taken from.
-        """
-        if not date:
-            date = self.cursor
-        start = datetime(date.year, date.month, date.day,
-                         tzinfo=self.timezone)
-        end = datetime(date.year, date.month, date.day, 23, 59,
-                       tzinfo=self.timezone)
-        for calendar, color1, color2 in self.getCalendars():
-            for event in calendar.expand(start, end):
-                allday = removeSecurityProxy(event).allday
-                if (same(event.__parent__, self.context)
-                    and calendar is not self.context) or not allday:
                     continue
                 yield EventForDisplay(event, color1, color2, calendar,
                                       self.timezone)
@@ -697,8 +677,7 @@ class CalendarViewBase(BrowserView):
         for day in week:
             result.append('<td class="cal_yearly_day">')
             if day.date.month == month:
-                if len(day.events + 
-                        [e for e in self.getAllDayEvents(day.date)]):
+                if len(day.events):
                     cssClass = 'cal_yearly_day_busy'
                 else:
                     cssClass = 'cal_yearly_day'
@@ -974,8 +953,11 @@ class DailyCalendarView(CalendarViewBase):
 
         """
         nr_cols = self.getColumns()
-        events = self.dayEvents(self.cursor)
-        self._setRange(events)
+        all_events = self.dayEvents(self.cursor)
+        # Filter allday events
+        simple_events = [event for event in all_events
+                         if not event.allday]
+        self._setRange(simple_events)
         slots = Slots()
         top = 0
         for title, start, duration in self.calendarRows():
@@ -989,8 +971,8 @@ class DailyCalendarView(CalendarViewBase):
                     del slots[i]
 
             # Add events that start during (or before) this hour
-            while (events and events[0].dtstart < end):
-                event = events.pop(0)
+            while (simple_events and simple_events[0].dtstart < end):
+                event = simple_events.pop(0)
                 slots.add(event)
 
             cols = []
@@ -1061,6 +1043,14 @@ class DailyCalendarView(CalendarViewBase):
     def isResourceCalendar(self):
         """Return True if we are showing a calendar of some resource."""
         return IResource.providedBy(self.context.__parent__)
+
+    def getAllDayEvents(self):
+        """Get a list of EventForDisplay objects for the all-day events at the
+        cursors current position.
+        """
+        for event in self.dayEvents(self.cursor):
+            if event.allday:
+                yield event
 
 
 class DailyCalendarRowsView(BrowserView):
