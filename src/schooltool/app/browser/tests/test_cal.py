@@ -827,6 +827,44 @@ class TestCalendarViewBase(unittest.TestCase):
 
         """
 
+    def test_getCalendars_cache(self):
+        """Test for CalendarViewBase.getCalendars() caching.
+
+        Let's set up needed stubs:
+
+            >>> class CalendarListViewStub(BrowserView):
+            ...     def getCalendars(self):
+            ...         return ['some calendar', 'another calendar']
+            >>> from schooltool.app.interfaces import ISchoolToolCalendar
+            >>> ztapi.browserView(ISchoolToolCalendar, 'calendar_list',
+            ...                   CalendarListViewStub)
+
+        The cache for calendar list is None by default:
+
+            >>> from schooltool.app.cal import Calendar
+            >>> from schooltool.app.browser.cal import CalendarViewBase
+            >>> from schooltool.person.person import Person
+            >>> view = CalendarViewBase(Calendar(Person()), TestRequest())
+
+            >>> view._calendars is None
+            True
+
+        When we get the list of calendars for the first time it gets
+        set:
+
+            >>> view.getCalendars()
+            ['some calendar', 'another calendar']
+            >>> view._calendars
+            ['some calendar', 'another calendar']
+
+        Next call of getCalendars will return the cached value:
+
+            >>> view._calendars.append('random calendar')
+            >>> view.getCalendars()
+            ['some calendar', 'another calendar', 'random calendar']
+
+        """
+
     def test_getEvents(self):
         """Test for CalendarViewBase.getEvents
 
@@ -2770,13 +2808,52 @@ class TestDailyCalendarView(unittest.TestCase):
         self.assertEquals(result, expected,
                           '%s != %s' % (fmt(result), fmt(expected)))
 
+    def test_dayEvents_cache(self):
+        from schooltool.app.browser.cal import DailyCalendarView
+        from schooltool.app.interfaces import ISchoolToolCalendar
+        from schooltool.person.person import Person
+
+        ev1 = createEvent('2004-08-12 12:00', '2h', "ev1")
+        ev2 = createEvent('2004-08-12 13:00', '2h', "ev2")
+        ev3 = createEvent('2004-08-12 14:00', '2h', "ev3")
+        ev4 = createEvent('2004-08-11 14:00', '3d', "ev4")
+        cal = ISchoolToolCalendar(Person())
+        for e in [ev1, ev2, ev3, ev4]:
+            cal.addEvent(e)
+        view = DailyCalendarView(cal, TestRequest())
+        view.request = TestRequest()
+        # Cache is set to None when view is created
+        self.assertEquals(view._day_events, None)
+        result = view.dayEvents(date(2004, 8, 12))
+        # Each day you look at is added to the cache
+        self.assertEquals(len(view._day_events), 1)
+        cached_result = view._day_events[date(2004, 8, 12)].events
+
+        fmt = lambda x: '[%s]' % ', '.join([e.title for e in x])
+        self.assertEquals(result, cached_result,
+                          '%s != %s' % (fmt(result), fmt(cached_result)))
+
+        result = view.dayEvents(date(2004, 8, 11))
+        cached_result = view._day_events[
+            date(2004, 8, 11)].events
+        self.assertEquals(len(view._day_events), 2)
+        self.assertEquals(result, cached_result,
+                          '%s != %s' % (fmt(result), fmt(cached_result)))
+
+        # If we call the function with the same arguments - we should
+        # get the list that was stored in the cache
+        view._day_events[date(2004, 8, 11)].events.append(ev1)
+        result = view.dayEvents(date(2004, 8, 11))
+        expected = [ev4, ev1]
+        self.assertEquals(result, expected,
+                          '%s != %s' % (fmt(result), fmt(expected)))
+
     def test_getColumns(self):
         from schooltool.app.browser.cal import DailyCalendarView
 
         person = Person(title="Da Boss")
         cal = ISchoolToolCalendar(person)
         view = DailyCalendarView(cal, TestRequest())
-        view.request = TestRequest()
         view.cursor = date(2004, 8, 12)
 
         self.assertEquals(view.getColumns(), 1)
@@ -2795,6 +2872,8 @@ class TestDailyCalendarView(unittest.TestCase):
         #
         #  Expected result: 2
 
+        view = DailyCalendarView(cal, TestRequest())
+        view.cursor = date(2004, 8, 12)
         cal.addEvent(createEvent('2004-08-12 13:00', '2h', "Lunch"))
         cal.addEvent(createEvent('2004-08-12 14:00', '2h', "Another meeting"))
         self.assertEquals(view.getColumns(), 2)
@@ -2810,6 +2889,8 @@ class TestDailyCalendarView(unittest.TestCase):
         #
         #  Expected result: 3
 
+        view = DailyCalendarView(cal, TestRequest())
+        view.cursor = date(2004, 8, 12)
         cal.addEvent(createEvent('2004-08-12 13:00', '2h',
                                  "Call Mark during lunch"))
         self.assertEquals(view.getColumns(), 3)
@@ -2823,6 +2904,8 @@ class TestDailyCalendarView(unittest.TestCase):
         #
         #  Expected result: 3
 
+        view = DailyCalendarView(cal, TestRequest())
+        view.cursor = date(2004, 8, 12)
         cal.clear()
         cal.addEvent(createEvent('2004-08-12 12:00', '30min', "a"))
         cal.addEvent(createEvent('2004-08-12 12:30', '30min', "b"))
@@ -2867,10 +2950,13 @@ class TestDailyCalendarView(unittest.TestCase):
 
         person = Person(title="Da Boss")
         cal = ISchoolToolCalendar(person)
-        view = DailyCalendarView(cal, TestRequest())
-        view.cursor = date(2004, 8, 12)
-        view.starthour = 10
-        view.endhour = 16
+        def createView():
+            view = DailyCalendarView(cal, TestRequest())
+            view.cursor = date(2004, 8, 12)
+            view.starthour = 10
+            view.endhour = 16
+            return view
+        view = createView()
         result = list(view.getHours())
         self.assertEquals(result,
                           [{'duration': 60, 'time': '10:00',
@@ -2895,6 +2981,7 @@ class TestDailyCalendarView(unittest.TestCase):
 
         ev1 = createEvent('2004-08-12 12:00', '2h', "Meeting")
         cal.addEvent(ev1)
+        view = createView()
         result = list(view.getHours())
 
         def clearMisc(l):
@@ -2927,6 +3014,7 @@ class TestDailyCalendarView(unittest.TestCase):
         cal.addEvent(ev2)
         cal.addEvent(ev3)
 
+        view = createView()
         result = list(view.getHours())
         self.assertEquals(clearMisc(result),
                           [{'title': '10:00', 'cols': (None, None)},
@@ -2939,6 +3027,7 @@ class TestDailyCalendarView(unittest.TestCase):
         ev4 = createEvent('2004-08-11 14:00', '3d', "Visit")
         cal.addEvent(ev4)
 
+        view = createView()
         result = list(view.getHours())
         self.assertEquals(clearMisc(result),
                           [{'title': '0:00', 'cols': (ev4, None, None)},

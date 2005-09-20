@@ -529,23 +529,32 @@ class CalendarViewBase(BrowserView):
             quarters.append(quarter)
         return quarters
 
+    _day_events = None # cache
+
     def dayEvents(self, date):
         """Return events for a day sorted by start time.
 
         Events spanning several days and overlapping with this day
         are included.
         """
-        day = self.getDays(date, date + timedelta(1))[0]
+        if self._day_events is None:
+            self._day_events = {}
+
+        if date in self._day_events:
+            day = self._day_events[date]
+        else:
+            day = self.getDays(date, date + timedelta(1))[0]
+            self._day_events[date] = day
         return day.events
 
-    __calendars = None # cache
+    _calendars = None # cache
 
     def getCalendars(self):
         view = zapi.getMultiAdapter((self.context, self.request),
                                     name='calendar_list')
-        if self.__calendars is None:
-            self.__calendars = list(view.getCalendars())
-        return self.__calendars
+        if self._calendars is None:
+            self._calendars = list(view.getCalendars())
+        return self._calendars
 
     def getEvents(self, start_dt, end_dt):
         """Get a list of EventForDisplay objects for a selected time interval.
