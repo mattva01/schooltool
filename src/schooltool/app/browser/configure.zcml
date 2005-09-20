@@ -602,12 +602,6 @@
         doc_path="ftests/README.txt" />
 
     <apidoc:bookchapter
-        id="copypaste"
-        title="Copy and Paste"
-        parent="schooltool/browser"
-        doc_path="ftests/copypaste.txt" />
-
-    <apidoc:bookchapter
         id="notes"
         title="Notes"
         parent="schooltool/browser"

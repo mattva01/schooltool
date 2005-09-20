@@ -86,7 +86,7 @@ class CalendarEvent(SimpleCalendarEvent, Persistent, Contained):
 class Calendar(Persistent, CalendarMixin):
     """A persistent calendar."""
 
-    # We use the expand() implementation from CalendarMixin
+    # CalendarMixin is only used for the expand() method
 
     implements(ISchoolToolCalendar, IAttributeAnnotatable)
 

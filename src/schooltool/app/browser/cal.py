@@ -626,7 +626,6 @@ class CalendarViewBase(BrowserView):
         `start_dt` and `end_dt` (datetime objects) are bounds (half-open) for
         the result.
         """
-        my_events = []
         start_dt = start_dt.replace(tzinfo=self.timezone)
         end_dt = end_dt.replace(tzinfo=self.timezone)
         for calendar, color1, color2 in self.getCalendars():
