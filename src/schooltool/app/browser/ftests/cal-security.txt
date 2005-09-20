@@ -6,150 +6,122 @@ This test verifies the security checking for calendars.
 Set up
 ------
 
-We will obviously need a SchoolBell instance.
+We will obviously need a SchoolTool instance.
 
-    >>> print http("""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&\
-    ... new_value=frogpond""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/@@contents.html
-    ...
+    >>> from zope.testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/contents.html')
+
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getControl(name='new_value').value = 'frogpond'
+    >>> manager.getControl('Apply').click()
+
+    >>> 'frogpond' in manager.contents
+    True
+    >>> manager.getLink('frogpond').click()
 
 Let's create a person so that we can fool around with his calendar:
 
-    >>> print http("""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 112
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Frog&field.username=frog&field.password=pwd&\
-    ... field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons
-    ...
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+
+    >>> manager.getControl('Full name').value = 'Frog'
+    >>> manager.getControl('Username').value = 'frog'
+    >>> manager.getControl('Password').value = 'pwd'
+    >>> manager.getControl('Verify password').value = 'pwd'
+
+    >>> manager.getControl('Add').click()
+    >>> 'Frog' in manager.contents
+    True
 
 Let's create more persons so that we can test access control.
 
-    >>> print http("""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 114
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Toad&field.username=toad&field.password=doat&\
-    ... field.verify_password=doat&field.photo=&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons
-    ...
+    >>> manager.getLink('New Person').click()
+
+    >>> manager.getControl('Full name').value = 'Toad'
+    >>> manager.getControl('Username').value = 'toad'
+    >>> manager.getControl('Password').value = 'doat'
+    >>> manager.getControl('Verify password').value = 'doat'
+
+    >>> manager.getControl('Add').click()
+    >>> 'Toad' in manager.contents
+    True
+
 
 Adding new events
 -----------------
 
 Let the Frog add an ordinary event that takes place on 3rd February, 2005:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Length: 159
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Sleeping&field.start_date=2005-02-03&\
-    ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> frog = Browser()
+    >>> frog.open('http://localhost/frogpond/')
+    >>> frog.getLink('Log In').click()
+    >>> frog.getControl('Username').value = 'frog'
+    >>> frog.getControl('Password').value = 'pwd'
+    >>> frog.getControl('Log in').click()
+
+    >>> frog.getLink('New Event').click()
+
+    >>> frog.getControl('Title').value = 'Sleeping'
+    >>> frog.getControl('Date').value = '2005-02-03'
+    >>> frog.getControl('Time').value = '01:00'
+    >>> frog.getControl('Duration').value = '500'
+
+    >>> frog.getControl('Add').click()
 
 Let's grant the Toad the viewCalendar permission on Frog's calendar:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schooltool.viewCalendar&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> manager.getLink('Frog').click()
+    >>> manager.getLink('View Calendar').click()
+    >>> manager.getLink('Set Up Access').click()
+
+    >>> toad_settings = manager.getControl(name='sb.person.toad')
+    >>> toad_settings.value = ['schooltool.viewCalendar']
+
+    >>> manager.getControl('Set Access', index=0).click()
 
 Toad should still not even see the new event links (but span tags instead):
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar HTTP/1.1
-    ... Authorization: Basic toad:doat
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    ...
-          <span class="event-new"
-    ...
+    >>> toad = Browser()
+    >>> toad.open('http://localhost/frogpond/')
+    >>> toad.getLink('Log In').click()
+    >>> toad.getControl('Username').value = 'toad'
+    >>> toad.getControl('Password').value = 'doat'
+    >>> toad.getControl('Log in').click()
 
-Now let the Toad try to add an event on the Frog's calendar (even though there
-is no link for it):
+    # Sigh, there is really no way to get to Frog's calendar :-(
+    >>> toad.handleErrors = False
+    >>> toad.open('http://localhost/frogpond/persons/frog/calendar/')
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
-    ... Authorization: Basic toad:doat
-    ... Content-Length: 159
-    ... Content-Type: application/x-www-form-urlencoded
+Now let Toad try to add an event on Frog's calendar (even though there is no
+link for it):
+
+    >>> toad.open('http://localhost/frogpond/persons/frog/calendar/add.html')
+    Traceback (most recent call last):
     ...
-    ... field.title=Dreaming&field.start_date=2005-02-03&\
-    ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/@@login.html...
-    ...
+    Unauthorized: (..., 'schooltool.addEvent')
 
 Let's grant the Toad the addEvent permission on Frog's calendar:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schooltool.addEvent&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> manager.getLink('Set Up Access').click()
+
+    >>> toad_settings = manager.getControl(name='sb.person.toad')
+    >>> toad_settings.value = ['schooltool.viewCalendar', 'schooltool.addEvent']
+
+    >>> manager.getControl('Set Access', index=0).click()
 
 Now the Toad can add events to Frog's calendar:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
-    ... Authorization: Basic toad:doat
-    ... Content-Length: 159
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Dreaming&field.start_date=2005-02-03&\
-    ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
-    ... """, handle_errors=False)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> toad.open('http://localhost/frogpond/persons/frog/calendar/add.html')
+
+    >>> toad.getControl('Title').value = 'Dreaming'
+    >>> toad.getControl('Date').value = '2005-02-03'
+    >>> toad.getControl('Time').value = '01:00'
+    >>> toad.getControl('Duration').value = '500'
+
+    >>> toad.getControl('Add').click()
 
 
 Editing events
@@ -182,108 +154,65 @@ Let's add a calendar through iCalendar PUT view (so we would know the event id):
 
 Let the Frog modify this event:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Length: 159
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Sleeping&field.start_date=2005-02-03&\
-    ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
-    ... """, handle_errors=False)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/'
+    ...           'dummy-uid/edit.html?date=2005-02-04')
+
+    >>> frog.getControl('Title').value = 'Sleeping'
+    >>> frog.getControl('Date').value = '2005-02-03'
+    >>> frog.getControl('Time').value = '01:00'
+    >>> frog.getControl('Duration').value = '500'
+
+    >>> frog.getControl('Update', index=1).click()
 
 Now let the Toad try and modify the event too:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04 HTTP/1.1
-    ... Authorization: Basic toad:doat
-    ... Content-Length: 159
-    ... Content-Type: application/x-www-form-urlencoded
+    >>> toad.open('http://localhost/frogpond/persons/frog/calendar/'
+    ...           'dummy-uid/edit.html?date=2005-02-04')
+    Traceback (most recent call last):
     ...
-    ... field.title=Sleeping&field.start_date=2005-02-03&\
-    ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=http://localhost/frogpond/persons/frog/calendar/dummy-uid
-    ...
-
-Let's grant the Toad the viewCalendar permission on Frog's calendar:
-
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schooltool.viewCalendar&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    Unauthorized: (..., 'schooltool.modifyEvent')
 
 Toad should not see the event delete link
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2005-02-03 HTTP/1.1
-    ... Authorization: Basic toad:doat
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
+    >>> toad.open('http://localhost/frogpond/persons/frog/calendar/2005-02-03')
+    >>> print toad.contents
+    <BLANKLINE>
     ...
-               <h6 style="background: #7590ae">
-                 <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid"
-                    title="Sleeping">
-                   Sleeping
-                   <span class="start-end">
-                     (<span>01:00</span>
-                        -
-                      <span>09:20</span>)
-                   </span>
-                 </a>
-               </h6>
+    <h6 style="background: #7590ae">
+      <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid"
+         title="Sleeping">
+        Sleeping
+        <span class="start-end">
+          (<span>01:00</span>
+             -
+           <span>09:20</span>)
+        </span>
+      </a>
+    </h6>
     ...
 
-Let's grant the Toad the modifyEvent permission on Frog's calendar:
+Let's grant Toad the `modifyEvent` permission on Frog's calendar:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schooltool.modifyEvent&\
-    ... sb.person.toad=schooltool.viewCalendar&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> manager.getLink('Set Up Access').click()
+
+    >>> toad_settings = manager.getControl(name='sb.person.toad')
+    >>> toad_settings.value = ['schooltool.viewCalendar',
+    ...                        'schooltool.addEvent',
+    ...                        'schooltool.modifyEvent']
+
+    >>> manager.getControl('Set Access', index=0).click()
 
 Now let the Toad try and modify the event too:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04 HTTP/1.1
-    ... Authorization: Basic toad:doat
-    ... Content-Length: 159
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Sleeping&field.start_date=2005-02-03&\
-    ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> toad.open('http://localhost/frogpond/persons/frog/calendar/'
+    ...           'dummy-uid/edit.html?date=2005-02-04')
+
+    >>> toad.getControl('Title').value = 'Sleeping'
+    >>> toad.getControl('Date').value = '2005-02-03'
+    >>> toad.getControl('Time').value = '01:00'
+    >>> toad.getControl('Duration').value = '500'
+
+    >>> toad.getControl('Update', index=1).click()
 
 
 Uploading iCalendar files
@@ -291,11 +220,12 @@ Uploading iCalendar files
 
 Random anonymous persons cannot see or overwrite someone's calendar
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar.ics HTTP/1.1
-    ... """, handle_errors=True)
-    HTTP/1.1 401 Unauthorized
+    >>> anonymous = Browser()
+    >>> anonymous.handleErrors = False
+    >>> anonymous.open('http://localhost/frogpond/persons/frog/calendar.ics')
+    Traceback (most recent call last):
     ...
+    Unauthorized: (..., 'schooltool.viewCalendar')
 
     >>> print http(r"""
     ... PUT /frogpond/persons/frog/calendar.ics HTTP/1.1
@@ -314,41 +244,29 @@ Random anonymous persons cannot see or overwrite someone's calendar
     ... DTSTAMP:20050203T150000
     ... END:VEVENT
     ... END:VCALENDAR
-    ... """, handle_errors=True)
-    HTTP/1.1 401 Unauthorized
-    ...
-
-The manager can let Toad see Frog's calendar:
-
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/@@acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schooltool.viewCalendar&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
-
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/ HTTP/1.1
-    ... Authorization: Basic toad:doat
     ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
+    Traceback (most recent call last):
     ...
+    Unauthorized: (..., 'schooltool.viewCalendar')
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar.ics HTTP/1.1
-    ... Authorization: Basic toad:doat
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    ...
+The manager now allows Toad to only see Frog's calendar, but not modify it:
 
-However Toad cannot modify the calendar.
+    >>> manager.getLink('Set Up Access').click()
+
+    >>> toad_settings = manager.getControl(name='sb.person.toad')
+    >>> toad_settings.value = ['schooltool.viewCalendar']
+
+    >>> manager.getControl('Set Access', index=0).click()
+
+    >>> toad.open('http://localhost/frogpond/persons/frog/calendar/')
+    >>> toad.headers['status']
+    '200 Ok'
+
+    >>> toad.open('http://localhost/frogpond/persons/frog/calendar.ics')
+    >>> toad.headers['status']
+    '200 Ok'
+
+So Toad cannot modify the calendar.
 
     >>> print http(r"""
     ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
@@ -367,27 +285,19 @@ However Toad cannot modify the calendar.
     ... DTSTAMP:20050203T150000
     ... END:VEVENT
     ... END:VCALENDAR
-    ... """, handle_errors=True)
-    HTTP/1.1 401 Unauthorized
+    ... """, handle_errors=False)
+    Traceback (most recent call last):
     ...
+    Unauthorized: (..., 'schooltool.addEvent')
 
 Unless the manager grants him modification permissions too.
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/@@acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schooltool.viewCalendar&\
-    ... sb.person.toad=schooltool.addEvent&\
-    ... sb.person.toad=schooltool.modifyEvent&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> manager.getLink('Set Up Access').click()
+    >>> toad_settings = manager.getControl(name='sb.person.toad')
+    >>> toad_settings.value = ['schooltool.viewCalendar',
+    ...                        'schooltool.addEvent',
+    ...                        'schooltool.modifyEvent']
+    >>> manager.getControl('Set Access', index=0).click()
 
     >>> print http(r"""
     ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
@@ -410,24 +320,15 @@ Unless the manager grants him modification permissions too.
     HTTP/1.1 200 Ok
     ...
 
-The permissions are more finely-grained: if Toad has the addEvent permission,
-but not modifyEvent, he can only add new events, but not modify or delete
-existing ones.
+The permissions are more finely-grained: If Toad has the `addEvent`
+permission, but not modifyEvent, he can only add new events, but not modify or
+delete existing ones.
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/@@acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schooltool.viewCalendar&\
-    ... sb.person.toad=schooltool.addEvent&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> manager.getLink('Set Up Access').click()
+    >>> toad_settings = manager.getControl(name='sb.person.toad')
+    >>> toad_settings.value = ['schooltool.viewCalendar',
+    ...                        'schooltool.addEvent']
+    >>> manager.getControl('Set Access', index=0).click()
 
 Modification: forbidden
 
@@ -507,20 +408,11 @@ Addition: allowed
 
 Now let's allow modification, but not addition
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/@@acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.toad=1&\
-    ... sb.person.toad=schooltool.viewCalendar&\
-    ... sb.person.toad=schooltool.modifyEvent&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> manager.getLink('Set Up Access').click()
+    >>> toad_settings = manager.getControl(name='sb.person.toad')
+    >>> toad_settings.value = ['schooltool.viewCalendar',
+    ...                        'schooltool.modifyEvent']
+    >>> manager.getControl('Set Access', index=0).click()
 
 Removal: allowed
 
