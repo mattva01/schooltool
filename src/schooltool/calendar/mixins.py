@@ -111,40 +111,9 @@ class CalendarMixin(object):
         See ICalendar for more details.
         """
 
-        if first.tzname() is None:
-            if last.tzname() not in (None, 'UTC'):
-                first = first.replace(tzinfo=last.tzinfo)
-            else:
-                first = first.replace(tzinfo=utc)
-
-        if last.tzname() is None:
-            last = last.replace(tzinfo=first.tzinfo)
-
-        if first.tzname() != last.tzname():
-            raise ValueError('Cannot expand mixed TimeZones: %s and %s',
-                             first.tzname(), last.tzname())
-
-        zero = datetime.timedelta(0)
-        epsilon = datetime.timedelta.resolution
         for event in self:
-            if event.recurrence is not None:
-                naivetime = event.dtstart.time()
-                starttime = naivetime.replace(tzinfo=utc)
-                for recdate in event.recurrence.apply(event, first.date(),
-                                                      last.date()):
-                    dtstart = datetime.datetime.combine(recdate, starttime)
-                    dtend = dtstart + event.duration
-                    if event.duration == zero: # corner case: zero-length event
-                        dtend += epsilon       # treat it as a very short event
-                    if dtend > first and dtstart < last:
-                        yield ExpandedCalendarEvent(event, dtstart=dtstart)
-            else:
-                dtstart = event.dtstart
-                dtend = dtstart + event.duration
-                if event.duration == zero: # corner case: zero-length event
-                    dtend += epsilon       # treat it as a very short event
-                if dtend > first and dtstart < last:
-                    yield event
+            for recurrence in event.expand(first, last):
+                yield recurrence
 
 
 class EditableCalendarMixin(object):
@@ -345,6 +314,45 @@ class CalendarEventMixin(object):
         # instantiating new instances will implicitly create new rows in
         # a relational database table.
         return SimpleCalendarEvent(**kw)
+
+    def expand(self, first, last):
+        """Return an iterator over all expanded events in a given time period.
+
+        See ICalendarEvent for more details.
+        """
+        if first.tzname() is None:
+            if last.tzname() not in (None, 'UTC'):
+                first = first.replace(tzinfo=last.tzinfo)
+            else:
+                first = first.replace(tzinfo=utc)
+
+        if last.tzname() is None:
+            last = last.replace(tzinfo=first.tzinfo)
+
+        if first.tzname() != last.tzname():
+            raise ValueError('Cannot expand mixed TimeZones: %s and %s',
+                             first.tzname(), last.tzname())
+
+        zero = datetime.timedelta(0)
+        epsilon = datetime.timedelta.resolution
+        if self.recurrence is not None:
+            naivetime = self.dtstart.time()
+            starttime = naivetime.replace(tzinfo=utc)
+            for recdate in self.recurrence.apply(self, first.date(),
+                                                 last.date()):
+                dtstart = datetime.datetime.combine(recdate, starttime)
+                dtend = dtstart + self.duration
+                if self.duration == zero: # corner case: zero-length self
+                    dtend += epsilon       # treat it as a very short self
+                if dtend > first and dtstart < last:
+                    yield ExpandedCalendarEvent(self, dtstart=dtstart)
+        else:
+            dtstart = self.dtstart
+            dtend = dtstart + self.duration
+            if self.duration == zero: # corner case: zero-length self
+                dtend += epsilon       # treat it as a very short self
+            if dtend > first and dtstart < last:
+                yield self
 
 
 class ExpandedCalendarEvent(CalendarEventMixin):
