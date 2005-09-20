@@ -35,7 +35,6 @@ from zope.security.checker import ProxyFactory
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.relationship.annotatable import getRelationshipLinks
 from schooltool.relationship.uri import IURIObject
-from schooltool.app.browser.app import ACLViewBase, hasPermission
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
 from zope.app.traversing.interfaces import IPhysicallyLocatable

@@ -405,8 +405,188 @@ def doctest_LogoutView():
     """
 
 
+def doctest_ACLViewBase_applyPermissionChanges():
+    r"""Tests for ACLViewBase.applyPermissionChanges.
+
+    Import the view:
+
+        >>> from schooltool.app.browser.app import ACLViewBase
+
+    Set up local permission grants:
+
+        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.app.securitypolicy.interfaces import \
+        ...                         IPrincipalPermissionManager
+        >>> from zope.app.securitypolicy.principalpermission import \
+        ...                         AnnotationPrincipalPermissionManager
+        >>> setup.setUpAnnotations()
+        >>> setup.setUpTraversal()
+        >>> ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
+        ...                      AnnotationPrincipalPermissionManager)
+
+    Install the Zope security policy:
+
+        >>> from zope.security.management import setSecurityPolicy
+        >>> from zope.app.securitypolicy.zopepolicy import ZopeSecurityPolicy
+        >>> policy = setSecurityPolicy(ZopeSecurityPolicy)
+
+    Set up the application:
+
+        >>> app = sbsetup.setupSchoolToolSite()
+
+    And a person:
+
+        >>> from schooltool.person.person import Person
+        >>> app['persons']['1'] = Person('joe', title='Joe')
+
+    Create the view base:
+
+        >>> vb = ACLViewBase()
+        >>> vb.context = app['persons']
+
+    At the moment Joe can't do anything with the person container:
+
+        >>> from schooltool.app.browser.app import hasPermissions
+        >>> hasPermissions(['schooltool.view',
+        ...                 'schooltool.edit',
+        ...                 'schooltool.create'],
+        ...                app['persons'],
+        ...                'sb.person.joe')
+        [False, False, False]
+
+    Let's give him some permissions:
+
+        >>> vb.applyPermissionChanges('sb.person.joe',
+        ...                           ['schooltool.view',
+        ...                            'schooltool.edit'])
+
+    Now he can view and edit properties of the container:
+
+        >>> hasPermissions(['schooltool.view',
+        ...                 'schooltool.edit',
+        ...                 'schooltool.create'],
+        ...                app['persons'],
+        ...                'sb.person.joe')
+        [True, True, False]
+
+    By default Joe can do with Persons anything that he can do with
+    Person container:
+
+        >>> hasPermissions(['schooltool.view',
+        ...                 'schooltool.edit',
+        ...                 'schooltool.create'],
+        ...                app['persons']['joe'],
+        ...                'sb.person.joe')
+        [True, True, False]
+
+    But we can change it by granting or denying him these privilegies
+    through the same view:
+
+        >>> vb2 = ACLViewBase()
+        >>> vb2.context = app['persons']['joe']
+
+        >>> vb2.applyPermissionChanges('sb.person.joe',
+        ...                           ['schooltool.view',
+        ...                            'schooltool.create'])
+
+    Our user just lost his permission to edit, though now he has the
+    permission to create:
+
+        >>> hasPermissions(['schooltool.view',
+        ...                 'schooltool.edit',
+        ...                 'schooltool.create'],
+        ...                app['persons']['joe'],
+        ...                'sb.person.joe')
+        [True, False, True]
+
+    View is still inherited from person container so if we will
+    retract the view permission on the container:
+
+        >>> vb.applyPermissionChanges('sb.person.joe',
+        ...                           ['schooltool.edit'])
+
+    Joe will not be capable of viewing his own properties anymore:
+
+        >>> hasPermissions(['schooltool.view',
+        ...                 'schooltool.edit',
+        ...                 'schooltool.create'],
+        ...                app['persons']['joe'],
+        ...                'sb.person.joe')
+        [False, False, True]
+
+    """
+
+
+def doctest_ACLViewBase_permsForPrincipal():
+    r"""Test for ACLViewBase.permsForPrincipal
+
+    Set up for local grants:
+
+        >>> from zope.app.annotation.interfaces import IAnnotatable
+        >>> from zope.app.securitypolicy.interfaces import \
+        ...                         IPrincipalPermissionManager
+        >>> from zope.app.securitypolicy.principalpermission import \
+        ...                         AnnotationPrincipalPermissionManager
+        >>> setup.setUpAnnotations()
+        >>> setup.setUpTraversal()
+        >>> ztapi.provideAdapter(IAnnotatable, IPrincipalPermissionManager,
+        ...                      AnnotationPrincipalPermissionManager)
+
+    Let's set the Zope security policy:
+
+        >>> from zope.security.management import setSecurityPolicy
+        >>> from zope.app.securitypolicy.zopepolicy import ZopeSecurityPolicy
+        >>> old = setSecurityPolicy(ZopeSecurityPolicy)
+
+    Suppose we have a SchoolTool object:
+
+        >>> app = sbsetup.setupSchoolToolSite()
+
+    In it, we have a principal:
+
+        >>> from schooltool.person.person import Person
+        >>> joe = app['persons']['1'] = Person('joe', title='Joe')
+
+
+    Let's create an ACLViewBase:
+
+        >>> from schooltool.app.browser.app import ACLViewBase
+        >>> vb = ACLViewBase()
+        >>> vb.context = app
+
+    He can't do anything yet:
+
+        >>> vb.permsForPrincipal('sb.person.joe')
+        []
+
+    However, we can add a local grant:
+
+        >>> perms = IPrincipalPermissionManager(app)
+        >>> perms.grantPermissionToPrincipal('schooltool.view', 'sb.person.joe')
+
+    And everything changes!
+
+        >>> vb.permsForPrincipal('sb.person.joe')
+        ['schooltool.view']
+
+    The same works for subobjects:
+
+        >>> vb.context = app['persons']
+        >>> vb.permsForPrincipal('sb.person.joe')
+        ['schooltool.view']
+        >>> vb.context = app['persons']['joe']
+        >>> vb.permsForPrincipal('sb.person.joe')
+        ['schooltool.view']
+
+    """
+
+
+# TODO: extract separate unit tests for other ACLViewBase methods
+
+
 def doctest_ACLView():
-    r"""
+    r"""Tests for ACLView.
+
     Set up for local grants:
 
         >>> from zope.app.annotation.interfaces import IAnnotatable
@@ -465,7 +645,7 @@ def doctest_ACLView():
          {'perms': [], 'id': u'sb.group.4', 'title': 'mgmt'}]
 
     If we have an authenticated group and an unauthenticated group, we
-    get then as well:
+    get them as well:
 
         >>> from zope.app.security.interfaces import IAuthentication
         >>> from zope.app.security.interfaces import IAuthenticatedGroup
@@ -509,7 +689,7 @@ def doctest_ACLView():
          ('schooltool.manageMembership', u'Manage membership')]
 
     The view displays a matrix with groups and persons as rows and
-    permisssions as columns:
+    permissions as columns:
 
         >>> print view()
         <BLANKLINE>
@@ -920,10 +1100,11 @@ def doctest_ACLView_inheritance():
 
     """
 
-def doctest_hasPermission():
+
+def doctest_hasPermissions():
     r"""The Zope security machinery does not have tools to check
     whether a random principal has some permission on some object.  So
-    we need co construct our own.
+    we need to construct our own.
 
     Set up for local grants:
 
@@ -953,39 +1134,42 @@ def doctest_hasPermission():
         >>> from schooltool.person.person import Person
         >>> app['persons']['1'] = Person('joe', title='Joe')
 
-    He does not have a 'super' permission on our schooltool app:
+    He does not have neither 'super' nor 'duper' permissions on our
+    schooltool app:
 
-        >>> from schooltool.app.browser.app import hasPermission
-        >>> hasPermission('super', app, 'sb.person.joe')
-        False
+        >>> from schooltool.app.browser.app import hasPermissions
+        >>> hasPermissions(['super', 'duper'], app, 'sb.person.joe')
+        [False, False]
 
     However, we can add a local grant:
 
         >>> perms = IPrincipalPermissionManager(app)
         >>> perms.grantPermissionToPrincipal('super', 'sb.person.joe')
 
-    Now, hasPermission returns true:
+    And everything changes!
 
-        >>> hasPermission('super', app, 'sb.person.joe')
-        True
+        >>> hasPermissions(['super', 'duper'], app, 'sb.person.joe')
+        [True, False]
 
     The same works for subobjects:
 
-        >>> hasPermission('super', app['persons'], 'sb.person.joe')
-        True
-        >>> hasPermission('super', app['persons']['joe'], 'sb.person.joe')
-        True
+        >>> hasPermissions(['duper', 'super'], app['persons'], 'sb.person.joe')
+        [False, True]
+        >>> hasPermissions(['super', 'duper'], app['persons']['joe'], 'sb.person.joe')
+        [True, False]
 
     Also, it works gracefully for None or random objects:
 
-        >>> hasPermission('super', None, 'sb.person.joe')
-        False
-        >>> hasPermission('super', object(), 'sb.person.joe')
-        False
+        >>> hasPermissions(['super'], None, 'sb.person.joe')
+        [False]
+        >>> hasPermissions(['super'], object(), 'sb.person.joe')
+        [False]
+
     """
 
+
 def doctest_ApplicationPreferencesView():
-    """
+    """Test for ApplicationPreferencesView.
 
     We need to setup a SchoolToolApplication site and build our
     ISchoolToolApplication adapter:
@@ -1023,10 +1207,11 @@ def doctest_ApplicationPreferencesView():
 
 
 def test_suite():
+    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF
+                   | doctest.REPORT_ONLY_FIRST_FAILURE)
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
-                                       optionflags=doctest.ELLIPSIS|
-                                                   doctest.REPORT_NDIFF))
+                                       optionflags=optionflags))
     return suite
 
 

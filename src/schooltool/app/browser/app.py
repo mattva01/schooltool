@@ -197,6 +197,8 @@ class ACLViewBase(object):
         ('schooltool.controlAccess', _('Control access')),
         ('schooltool.manageMembership', _('Manage membership')),
         ]
+    permission_ids = [permission for permission, title in permissions]
+    del permission, title # list comprehensions clutter local scope
 
     def getPersons(self):
         app = getSchoolToolApplication()
@@ -212,9 +214,10 @@ class ACLViewBase(object):
 
     def permsForPrincipal(self, principalid):
         """Return a list of permissions allowed for principal."""
-        return [perm
-                for perm, title in self.permissions
-                if hasPermission(perm, self.context, principalid)]
+        permission_bits = hasPermissions(self.permission_ids, self.context,
+                                         principalid)
+        return [perm for perm, has in zip(self.permission_ids, permission_bits)
+                if has]
 
     def getGroups(self):
         app = getSchoolToolApplication()
@@ -239,6 +242,35 @@ class ACLViewBase(object):
         return result
     groups = property(getGroups)
 
+    def applyPermissionChanges(self, principalid, permissions):
+        """Apply new permission settings for a single principal.
+
+        Make it so `principal` has exactly the permissions specified
+        in `permissions` (and not more) on self.context.
+
+        If the requested permission grant on self.context matches the
+        one on self.context.__parent__, this method removes any
+        specific local grants from self.context.  Otherwise, it adds a
+        local grant that either grants or denies the permission
+        directly on self.context.
+        """
+        parent = self.context.__parent__
+        manager = IPrincipalPermissionManager(self.context)
+        # ACL views are protected by schoolbell.controlAccess, so
+        # removeSecurityProxy does not lead to privilege escalation
+        # problems.
+        manager = removeSecurityProxy(manager)
+        permission_bits = hasPermissions(self.permission_ids, parent,
+                                         principalid)
+        for permission, in_parent in zip(self.permission_ids, permission_bits):
+            requested = permission in permissions
+            if requested and not in_parent:
+                manager.grantPermissionToPrincipal(permission, principalid)
+            elif not requested and in_parent:
+                manager.denyPermissionToPrincipal(permission, principalid)
+            else:
+                manager.unsetPermissionForPrincipal(permission, principalid)
+
 
 class ACLView(BrowserView, ACLViewBase, MultiBatchViewMixin):
     """A view for editing SchoolBell-relevant local grants"""
@@ -253,31 +285,14 @@ class ACLView(BrowserView, ACLViewBase, MultiBatchViewMixin):
             self.request.response.redirect(url)
 
         if 'UPDATE_SUBMIT' in self.request:
-            map = IPrincipalPermissionManager(self.context)
-            # this view is protected by schooltool.controlAccess
-            map = removeSecurityProxy(map)
-
-            def permChecked(perm, principalid):
-                """Test if a checkbox for (perm, principalid) is checked."""
-                if principalid in self.request:
-                    return (perm in self.request[principalid] or
-                            perm == self.request[principalid])
-                return False
-
             for info in self.persons + self.groups:
                 principalid = info['id']
                 if 'marker-' + principalid not in self.request:
                     continue # skip this principal
-                for perm, permtitle in self.permissions:
-                    parent = self.context.__parent__
-                    checked_in_request = permChecked(perm, principalid)
-                    grant_in_parent = hasPermission(perm, parent, principalid)
-                    if checked_in_request and not grant_in_parent:
-                        map.grantPermissionToPrincipal(perm, principalid)
-                    elif not checked_in_request and grant_in_parent:
-                        map.denyPermissionToPrincipal(perm, principalid)
-                    else:
-                        map.unsetPermissionForPrincipal(perm, principalid)
+                permissions = self.request.get(principalid, [])
+                if isinstance(permissions, basestring):
+                    permissions = [permissions]
+                self.applyPermissionChanges(principalid, permissions)
 
         MultiBatchViewMixin.update(self)
 
@@ -328,16 +343,17 @@ class ApplicationPreferencesView(BrowserView):
 
 
 class ProbeParticipation:
-    """A stub participation for use in hasPermission."""
+    """A stub participation for use in hasPermissions."""
     implements(IParticipation)
     def __init__(self, principal):
         self.principal = principal
         self.interaction = None
 
 
-def hasPermission(permission, object, principalid):
+def hasPermissions(permissions, object, principalid):
     """Test if the principal has access according to the security policy."""
     principal = zapi.getUtility(IAuthentication).getPrincipal(principalid)
     participation = ProbeParticipation(principal)
     interaction = getSecurityPolicy()(participation)
-    return interaction.checkPermission(permission, object)
+    return [interaction.checkPermission(permission, object)
+            for permission in permissions]

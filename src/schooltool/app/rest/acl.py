@@ -27,7 +27,7 @@ from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.interface import Interface, implements
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
-from schooltool.app.browser.app import ACLViewBase, hasPermission
+from schooltool.app.browser.app import ACLViewBase
 from schooltool.app.rest.xmlparsing import XMLDocument
 from zope.security.proxy import removeSecurityProxy, ProxyFactory
 
@@ -123,21 +123,8 @@ class ACLView(View, ACLViewBase):
 
     def POST(self):
         settings = self.parseData(self.request.bodyFile.read())
-        manager = IPrincipalPermissionManager(self.context)
-        # this view is protected by schooltool.controlAccess
-        manager = removeSecurityProxy(manager)
-        for principal in settings:
-            for permission, title in self.permissions:
-                parent = self.context.__parent__
-                requested = permission in settings[principal]
-                in_parent = hasPermission(permission, parent, principal)
-                if requested and not in_parent:
-                    manager.grantPermissionToPrincipal(permission, principal)
-                elif not requested and in_parent:
-                    manager.denyPermissionToPrincipal(permission, principal)
-                else:
-                    manager.unsetPermissionForPrincipal(permission, principal)
-
+        for principalid, permissions in settings.items():
+            self.applyPermissionChanges(principalid, permissions)
         return "Permissions updated"
 
     def parseData(self, body):
