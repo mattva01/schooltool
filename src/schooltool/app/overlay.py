@@ -385,7 +385,7 @@ def choose_color(colors, used_colors):
     return best_color
 
 
-def unrelateCelandarOnDeletion(event):
+def unrelateCalendarOnDeletion(event):
     """When you delete an object, relationships of it's calendar should be removed
 
         >>> from zope.app.testing import setup
@@ -397,8 +397,8 @@ def unrelateCelandarOnDeletion(event):
 
         >>> import zope.event
         >>> old_subscribers = zope.event.subscribers[:]
-        >>> from schooltool.app.overlay import unrelateCelandarOnDeletion
-        >>> zope.event.subscribers.append(unrelateCelandarOnDeletion)
+        >>> from schooltool.app.overlay import unrelateCalendarOnDeletion
+        >>> zope.event.subscribers.append(unrelateCalendarOnDeletion)
 
 
     We will need some object that implements IHaveCalendar for that:

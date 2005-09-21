@@ -164,7 +164,7 @@
 
   <subscriber
       for="zope.app.container.interfaces.IObjectRemovedEvent"
-      handler=".overlay.unrelateCelandarOnDeletion"
+      handler=".overlay.unrelateCalendarOnDeletion"
       />
 
   <!-- Timetables for content components -->
