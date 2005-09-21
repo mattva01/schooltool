@@ -239,9 +239,12 @@ def import_module(filename, cfg, tracer=None):
 
 
 # Classess passed to isinstance to see whether a test is a DocFileCase.
-# There's doctest.DocFileCase, and then there might be
+# There's doctest.DocFileCase (if you have Python 2.4), and then there might be
 # zope.testing.doctest.DocFileCase.
-DocFileCase_classes = (doctest.DocFileCase,)
+if hasattr(doctest, 'DocFileCase'):
+    DocFileCase_classes = (doctest.DocFileCase,)
+else:
+    DocFileCase_classes = ()
 
 
 def name_of_test(test, basedir=None):
