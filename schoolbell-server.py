@@ -6,8 +6,8 @@ A script to start the schoolbell server from the source directory.
 import sys
 import os.path
 
-if sys.version_info < (2, 3):
-    print >> sys.stderr, '%s: need Python 2.3 or later.' % sys.argv[0]
+if sys.version_info < (2, 4):
+    print >> sys.stderr, '%s: need Python 2.4 or later.' % sys.argv[0]
     print >> sys.stderr, 'Your python is %s' % sys.version
     sys.exit(1)
 

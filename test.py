@@ -24,6 +24,11 @@ $Id$
 """
 import sys, os
 
+if sys.version_info < (2, 4):
+    print >> sys.stderr, '%s: need Python 2.4 or later.' % sys.argv[0]
+    print >> sys.stderr, 'Your python is %s' % sys.version
+    sys.exit(1)
+
 here = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, os.path.join(here, 'src'))
 sys.path.insert(0, os.path.join(here, 'Zope3', 'src'))
