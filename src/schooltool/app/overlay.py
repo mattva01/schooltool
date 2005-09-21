@@ -77,14 +77,18 @@ Clean up
 
 import sys
 from persistent import Persistent
+from zope.proxy import getProxiedObject
 from zope.interface import Interface, implements
 from zope.schema import Object, TextLine, Bool
 from zope.security.proxy import removeSecurityProxy
+from zope.app.container.interfaces import IObjectRemovedEvent
 
 from schooltool.relationship import URIObject
 from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.relationship import BoundRelationshipProperty
 from schooltool.app.interfaces import ISchoolToolCalendar
+from schooltool.app.interfaces import IHaveCalendar
+from schooltool.relationship.relationship import unrelateAll
 
 
 URICalendarSubscription = URIObject(
@@ -379,3 +383,58 @@ def choose_color(colors, used_colors):
             best_color = c
             min_count = count
     return best_color
+
+
+def unrelateCelandarOnDeletion(event):
+    """When you delete an object, relationships of it's calendar should be removed
+
+        >>> from zope.app.testing import setup
+        >>> from schooltool.relationship.tests import setUp, tearDown
+        >>> from schooltool.testing.setup import setupCalendaring
+
+        >>> setUp()
+        >>> setupCalendaring()
+
+        >>> import zope.event
+        >>> old_subscribers = zope.event.subscribers[:]
+        >>> from schooltool.app.overlay import unrelateCelandarOnDeletion
+        >>> zope.event.subscribers.append(unrelateCelandarOnDeletion)
+
+
+    We will need some object that implements IHaveCalendar for that:
+
+        >>> from zope.app.container.btree import BTreeContainer
+        >>> container = BTreeContainer()
+        >>> from schooltool.person.person import Person
+        >>> container = BTreeContainer()
+        >>> container['jonas'] = jonas = Person(username="Jonas")
+        >>> container['petras'] = petras =  Person(username="Petras")
+
+    Let's add calendar of Petras to the list of overlaid calendars:
+
+        >>> jonas.overlaid_calendars.add(ISchoolToolCalendar(petras))
+        >>> list(jonas.overlaid_calendars)
+        [<schooltool.app.overlay.CalendarOverlayInfo object at ...>]
+
+    If we delete Petras - Jonas should have no calendars in his overlay list:
+
+        >>> del container['petras']
+        >>> list(jonas.overlaid_calendars)
+        []
+
+    Restore old subscribers:
+
+        >>> zope.event.subscribers[:] = old_subscribers
+        >>> tearDown()
+
+    """
+    if not IObjectRemovedEvent.providedBy(event):
+        return
+    # event.object may be a ContainedProxy
+    obj = getProxiedObject(event.object)
+    if not IHaveCalendar.providedBy(obj):
+        return
+    calendar = ISchoolToolCalendar(obj)
+    linkset = IRelationshipLinks(calendar, None)
+    if linkset is not None:
+        unrelateAll(calendar)
