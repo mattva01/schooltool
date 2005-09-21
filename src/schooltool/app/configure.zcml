@@ -162,6 +162,11 @@
       handler=".relationships.updateInstructorCalendars"
       />
 
+  <subscriber
+      for="zope.app.container.interfaces.IObjectRemovedEvent"
+      handler=".overlay.unrelateCelandarOnDeletion"
+      />
+
   <!-- Timetables for content components -->
   <class class="schooltool.app.app.SchoolToolApplication">
     <implements interface="schooltool.timetable.interfaces.IHaveTimetables" />
