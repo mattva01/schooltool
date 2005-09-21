@@ -69,12 +69,15 @@ class SchoolToolApplication(Persistent, sample.SampleContainer,
     def _newContainerData(self):
         return PersistentDict()
 
-    def title(self):
-        """This is required for the site calendar views to work."""
-        # XXX This docstring does not explain anything at all.  It does hint
-        #     at the fact that an ugly hack is hiding beneath.
+    def _title(self):
+        """This is required for the site calendar views to work.
+
+        Calendar views expect that their underlying objects (calendar
+        parents) have an attribute named `title`.
+        """
         return IApplicationPreferences(self).title
-    title = property(title)
+
+    title = property(_title)
 
 
 def getSchoolToolApplication():
