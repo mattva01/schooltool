@@ -106,6 +106,12 @@ def doctest_ApplicationView():
 
     XXX this is what our output should look like:
 
+    XXX mg: who wrote the XXX above, and what does it mean?
+
+    Cleanup:
+
+        >>> setup.placefulTearDown()
+
     """
 
 
