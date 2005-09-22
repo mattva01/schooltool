@@ -1353,6 +1353,8 @@ class CalendarSTOverlayView(CalendarOverlayView):
             selected = Set(self.request.get('overlay_timetables', []))
             for item in person.overlaid_calendars:
                 path = getPath(item.calendar.__parent__)
+                # XXX this is related to the issue
+                # http://issues.schooltool.org/issue391!
                 IShowTimetables(item).showTimetables = path in selected
 
             # The unproxied object will only be used for annotations.
