@@ -25,6 +25,9 @@ import libxml2
 # XXX: XMLDocument seems to be generally useful.
 from schooltool.app.rest.xmlparsing import XMLDocument
 
+# We need to shut up libxml2, so it does not spew errors to stderr.
+libxml2.registerErrorHandler(lambda ctx, error: None, None)
+
 def queryHTML(xpath, response):
     doc = XMLDocument(libxml2.htmlParseDoc(response, 'utf-8'))
     doc.registerNs('', 'http://www.w3.org/1999/xhtml')
