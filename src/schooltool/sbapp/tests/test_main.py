@@ -134,7 +134,7 @@ def doctest_load_options():
     Note that "listen 123" in config.py produces ('localhost', 123) on
     Windows, but ('', 123) on other platforms.
 
-    The developer mode can also be turned on via the configuration file:  
+    The developer mode can also be turned on via the configuration file:
 
         >>> o.config.devmode
         True
@@ -207,6 +207,9 @@ def doctest_setup():
 
     It is difficult to unit test, but we'll try.
 
+        >>> from zope.app.testing import setup
+        >>> setup.placelessSetUp()
+
         >>> from schooltool.sbapp.main import Options, StandaloneServer
         >>> from ZODB.MappingStorage import MappingStorage
         >>> from ZODB.DB import DB
@@ -277,7 +280,6 @@ def doctest_setup():
         ...     logger1.disabled = False
         ...     logger1.setLevel(0)
 
-        >>> from zope.app.testing import setup
         >>> setup.placelessTearDown()
 
     """
