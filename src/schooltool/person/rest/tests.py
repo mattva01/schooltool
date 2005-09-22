@@ -330,6 +330,7 @@ def doctest_PersonPreferencesHttpTraverser():
 
         >>> from schooltool.person.preference import getPersonPreferences
         >>> from schooltool.person.interfaces import IPersonPreferences
+        >>> setup.placelessSetUp()
         >>> setup.setUpAnnotations()
         >>> ztapi.provideAdapter(Person, IPersonPreferences,
         ...                      getPersonPreferences)
@@ -351,6 +352,10 @@ def doctest_PersonPreferencesHttpTraverser():
         >>> traverser.publishTraverse(request, 'preferences')
         <schooltool.person.rest.preference.PersonPreferencesAdapter ...>
 
+    Clean up:
+
+        >>> setup.placelessTearDown()
+
     """
 
 
@@ -363,7 +368,6 @@ def doctest_PersonPreferencesView():
         ...     PersonPreferencesHTTPTraverser
         >>> from schooltool.person.preference import getPersonPreferences
         >>> from schooltool.person.interfaces import IPersonPreferences
-        >>> setup.setUpAnnotations()
         >>> setup.placefulSetUp()
         >>> ztapi.provideAdapter(Person, IPersonPreferences,
         ...                      getPersonPreferences)
@@ -416,6 +420,10 @@ def doctest_PersonPreferencesView():
         Traceback (most recent call last):
         ...
         RestError: Preference value "Tatooine/Mos Isley" does not pass validation on "timezone"
+
+    Clean up:
+
+        >>> setup.placelessTearDown()
 
     """
 

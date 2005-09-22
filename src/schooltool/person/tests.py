@@ -32,6 +32,7 @@ from zope.app.tests import ztapi, setup
 from schooltool.testing.setup import setupLocalGrants
 from schooltool.testing import setup as sbsetup
 
+
 def doctest_personPermissionsSubscriber():
     r"""
     Set up:
@@ -78,6 +79,7 @@ def doctest_personPermissionsSubscriber():
 
         >>> setup.placefulTearDown()
     """
+
 
 def doctest_PersonContainer():
     """Tests for PersonContainer
@@ -181,7 +183,13 @@ def doctest_Person():
         True
         >>> len(calendar)
         0
+
+    Clean up:
+
+        >>> setup.placelessTearDown()
+
     """
+
 
 def doctest_PersonPreferences():
     r"""Tests for the Preferences adapter
@@ -223,6 +231,8 @@ def doctest_PersonPreferences():
         >>> getPersonPreferences(person) is prefs
         True
 
+    Clean up:
+
         >>> setup.placelessTearDown()
 
     """
@@ -254,6 +264,10 @@ def doctest_PersonDetails():
 
         >>> details.__parent__ == person
         True
+
+    Clean up:
+
+        >>> setup.placelessTearDown()
 
     """
 

@@ -163,6 +163,10 @@ def doctest_RelationshipSchema():
           ...
         TypeError: Too many keyword arguments.
 
+    Cleanup
+
+        >>> tearDown()
+
     """
 
 

@@ -64,6 +64,10 @@ def doctest_getRelationshipLinks():
         >>> linkset is getRelationshipLinks(obj)
         True
 
+    Cleanup
+
+        >>> setup.placelessTearDown()
+
     """
 
 
