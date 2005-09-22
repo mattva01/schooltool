@@ -3,110 +3,69 @@ Login and Logout views
 
 We have an app instance:
 
-    >>> print http("""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication\
-    ... &new_value=frogpond
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
+    >>> from zope.testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/contents.html')
+
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getControl(name='new_value').value = 'frogpond'
+    >>> manager.getControl('Apply').click()
+    >>> manager.getLink('frogpond').click()
 
 We add a person
 
-    >>> print http("""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 126
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Some+User&field.username=user&field.password=secret\
-    ... &field.verify_password=secret&field.photo=&UPDATE_SUBMIT=Add
-    ... """, handle_errors=False)
-    HTTP/1.1 303 See Other
-    ...
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
 
-We have the views @@login.html and @@logout.html on the main
-application object.  Those views log in or log out the user of the
-session.
+    >>> manager.getControl('Full name').value = 'Some User'
+    >>> manager.getControl('Username').value = 'user'
+    >>> manager.getControl('Password').value = 'secret'
+    >>> manager.getControl('Verify password').value = 'secret'
+    >>> manager.getControl('Add').click()
 
-    >>> login_page = http(r"""
-    ... GET /frogpond/@@login.html HTTP/1.1
-    ... """)
-    >>> print login_page
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    ...
+We have the views ``@@login.html`` and ``@@logout.html`` on the main
+application object. Those views log in or log out the user of the session.
+
+    >>> anonymous = Browser()
+    >>> anonymous.open('http://localhost/frogpond')
+    >>> anonymous.getLink('Log In').click()
+    >>> anonymous.headers['status']
+    '200 Ok'
 
 Make sure the current version number is somewhere on the page:
 
     >>> import schooltool
-    >>> str(login_page).count(schooltool.VERSION) > 0
+    >>> schooltool.VERSION in anonymous.contents
     True
 
 Incorrect password:
 
-    >>> print http("""
-    ... GET /frogpond/@@login.html?username=user&password=bad&LOGIN=Please\
-    ...  HTTP/1.1
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    ...
-                   href="http://localhost/frogpond/@@login.html">Log In</a>
-    ...
-        <p class="error">Username or password is incorrect</p>
-    ...
+    >>> anonymous.getControl('Username').value = 'user'
+    >>> anonymous.getControl('Password').value = 'bad'
+    >>> anonymous.getControl('Log in').click()
+    >>> 'Username or password is incorrect' in anonymous.contents
+    True
 
 Another attempt:
 
-    >>> print http("""
-    ... GET /frogpond/@@login.html?username=user&password=secret&LOGIN=Please\
-    ...  HTTP/1.1
-    ... """)
-    HTTP/1.1 303 See Other
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    ...
+    >>> anonymous.getControl('Username').value = 'user'
+    >>> anonymous.getControl('Password').value = 'secret'
+    >>> anonymous.getControl('Log in').click()
 
 Now we are authenticated:
 
-    >>> print http("""
-    ... GET /frogpond/persons HTTP/1.1
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    ...
-    ...Some User</a> |
-    ...
+    >>> 'Some User' in anonymous.contents
+    True
 
 Now we can log out:
 
-    >>> print http("""
-    ... GET /frogpond/@@logout.html HTTP/1.1
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
+    >>> anonymous.getLink('Log Out').click()
 
 We are logged out:
 
-    >>> print http("""
-    ... GET /frogpond HTTP/1.1
-    ... """)
-    HTTP/1.1 ...
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
+    >>> anonymous.getLink('Log in')
+    Traceback (most recent call last):
     ...
-                   href="http://localhost/frogpond/@@login.html">Log In</a>
-    ...
+    LinkNotFoundError
