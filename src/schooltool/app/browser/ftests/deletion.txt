@@ -44,7 +44,6 @@ We add a person
 
     >>> manager.getControl('Full name').value = 'person1'
     >>> manager.getControl('Username').value = 'person'
-    >>> manager.getControl('Password').value = ''
     >>> manager.getControl('group1').click()
     >>> manager.getControl('Add').click()
 
