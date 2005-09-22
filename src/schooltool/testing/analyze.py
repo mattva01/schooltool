@@ -21,16 +21,21 @@ HTML Analyzation Tools
 
 $Id$
 """
+import sys
 import libxml2
 # XXX: XMLDocument seems to be generally useful.
 from schooltool.app.rest.xmlparsing import XMLDocument
 
-# We need to shut up libxml2, so it does not spew errors to stderr.
-libxml2.registerErrorHandler(lambda ctx, error: None, None)
+def on_error_callback(ctx, msg):
+    sys.stderr.write(msg)
+
 
 def queryHTML(xpath, response):
+    # We need to shut up libxml2, so it does not spew errors to stderr.
+    libxml2.registerErrorHandler(lambda ctx, error: None, None)
     doc = XMLDocument(libxml2.htmlParseDoc(response, 'utf-8'))
     doc.registerNs('', 'http://www.w3.org/1999/xhtml')
     result = [str(node) for node in doc.query(xpath)]
     doc.free()
+    libxml2.registerErrorHandler(on_error_callback, None)
     return result

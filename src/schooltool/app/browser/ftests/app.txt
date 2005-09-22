@@ -489,12 +489,4 @@ And Toad's overlay portlet shows the section:
 Epilogue
 --------
 
-Restore the libxml2 error handling:
-
-    >>> import sys
-    >>> def on_error_callback(ctx, msg):
-    ...     sys.stderr.write(msg)
-    >>> libxml2.registerErrorHandler(on_error_callback, None)
-    1
-
  vim: ft=rest
