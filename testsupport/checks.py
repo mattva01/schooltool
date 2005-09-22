@@ -233,10 +233,42 @@ class LoggingChecks:
         return info
 
 
+class CleanUpChecks:
+    """Try to detect unit tests that perform placeless setup, but not teardown.
+
+    The check actually counts the number of times CleanUp().cleanUp() is called
+    during the setup, test itself, and teardown.  Since both placelessSetUp
+    and placelessTearDown call CleanUp().cleanUp(), we expect to see at least
+    two cleanups during that time.  If we see only one, something is wrong.
+    """
+
+    def __init__(self):
+        from zope.testing.cleanup import addCleanUp
+        self._testThatCalledCleanUp = {}
+        self._current_test = None
+        addCleanUp(self.doCleanUp)
+
+    def doCleanUp(self):
+        assert self._current_test is not None
+        self._testThatCalledCleanUp.setdefault(self._current_test, 0)
+        self._testThatCalledCleanUp[self._current_test] += 1
+
+    def startTest(self, test):
+        self._current_test = test
+
+    def stopTest(self, test):
+        count = self._testThatCalledCleanUp.get(test, 0)
+        if count == 1:
+            warn("%s called CleanUp only once"
+                 " (probably in setUp, but not in tearDown)" % test.id())
+        self._current_test = None
+
+
 def test_hooks():
     return [
         StdoutChecks(),     # should be the first one
         TransactionChecks(),
         LibxmlChecks(),
         LoggingChecks(),
+        CleanUpChecks(),
     ]
