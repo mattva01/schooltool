@@ -77,6 +77,7 @@ def doctest_ApplicationView():
 
     """
 
+
 def doctest_ContainerView():
     r"""Test for ContainerView
 
@@ -129,6 +130,7 @@ def doctest_ContainerView():
         ['Frog Man', 'Long John', 'Pete Parrot', 'Taodsworth']
 
     """
+
 
 def doctest_ContainerDeleteView():
     r"""Test for ContainerDeleteView
@@ -1000,6 +1002,7 @@ def doctest_ACLView():
         >>> request.response.getHeader('Location') == url
         True
     """
+
 
 def doctest_ACLView_inheritance():
     r"""This test is to check that the ACL view deals correctly with

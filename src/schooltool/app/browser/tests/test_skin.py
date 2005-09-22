@@ -67,6 +67,7 @@ def doctest_schoolToolTraverseSubscriber():
 
     """
 
+
 def doctest_viewletClasses():
     """Test the viewlet classes.
 
@@ -115,6 +116,9 @@ def doctest_viewletClasses():
       <script type="text/javascript"
               src="http://127.0.0.1/@@/menu.js">
       </script>
+
+      >>> setup.placefulTearDown()
+
     """
 
 

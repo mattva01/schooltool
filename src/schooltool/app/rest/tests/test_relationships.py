@@ -51,6 +51,7 @@ from schooltool.testing import setup as sbsetup
 
 
 class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
+
     def setUp(self):
         from schooltool.group.group import Group
         from schooltool.person.person import Person
@@ -89,6 +90,10 @@ class CommonSetupMixin(XMLCompareMixin, QuietLibxml2Mixin):
         Membership(group=self.new, member=self.person)
         Membership(group=self.new, member=self.person2)
 
+    def tearDown(self):
+        self.tearDownLibxml2()
+        setup.placefulTearDown()
+
 
 class TestRelationshipsView(CommonSetupMixin, unittest.TestCase):
 
@@ -97,9 +102,6 @@ class TestRelationshipsView(CommonSetupMixin, unittest.TestCase):
         CommonSetupMixin.setUp(self)
         self.request = TestRequest()
         self.view = RelationshipsView(IRelationshipLinks(self.new), self.request)
-
-    def tearDown(self):
-        self.tearDownLibxml2()
 
     def test_listLinks(self):
         from pprint import pformat
