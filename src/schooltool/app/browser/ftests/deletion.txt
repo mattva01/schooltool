@@ -10,105 +10,87 @@ and will, therefore, break views that try to determine its absolute URL).
 Set up
 ------
 
-We create a SchoolBell instance
+We create a SchoolTool instance
 
-    >>> print http(r"""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
-    ... Content-Type: application/x-www-form-urlencoded
-    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication
-    ... 
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&new_value=frogpond
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
+    >>> from zope.testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/contents.html')
+
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getControl(name='new_value').value = 'frogpond'
+    >>> manager.getControl('Apply').click()
+
+    >>> 'frogpond' in manager.contents
+    True
+    >>> manager.getLink('frogpond').click()
 
 We add a group
 
-    >>> print http(r"""
-    ... POST /frogpond/groups/+/addSchoolToolGroup.html%3D HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 36
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=group1&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('New Group').click()
+
+    >>> manager.getControl('Title').value = 'group1'
+    >>> manager.getControl('Add').click()
+
+    >>> 'group1' in manager.contents
+    True
 
 We add a person
 
-    >>> print http(r"""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 126
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=person1&field.username=person&field.password=&field.verify_password=&field.photo=&group.group1=on&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+
+    >>> manager.getControl('Full name').value = 'person1'
+    >>> manager.getControl('Username').value = 'person'
+    >>> manager.getControl('Password').value = ''
+    >>> manager.getControl('group1').click()
+    >>> manager.getControl('Add').click()
+
+    >>> 'person1' in manager.contents
+    True
 
 We look at the groups of the person we added
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/person HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...group1...
-    ...
+    >>> manager.getLink('person1').click()
+    >>> 'group1' in manager.contents
+    True
 
 We look at the members of the group
 
-    >>> print http(r"""
-    ... GET /frogpond/groups/group1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...person1...
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('group1').click()
+    >>> 'person1' in manager.contents
+    True
+
 
 Test
 ----
 
 We delete the person
 
-    >>> print http(r"""
-    ... POST /frogpond/persons/@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ... Content-Length: 46
-    ...
-    ... ids:list=person&container_delete_button=Delete
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
+    >>> manager.getLink('Persons').click()
+    >>> manager.getControl(name='delete.person').value = ['on']
+    >>> manager.getControl('Delete').click()
+    >>> manager.getControl('Confirm').click()
 
 It is no longer there
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/person HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 404 Not Found
-    ...
+    >>> manager.getLink('Persons').click()
+    >>> 'person1' not in manager.contents
+    True
 
 We look at the members of the group (this used to cause internal errors in an
-earlier version of SchoolBell)
+earlier version of SchoolTool):
 
-    >>> r = http(r"""
-    ... GET /frogpond/groups/group1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    >>> print r
-    HTTP/1.1 200 Ok
-    ...
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('group1').click()
+    >>> manager.headers['status']
+    '200 Ok'
 
 'person1' is no longer there
 
-    >>> 'person1' not in str(r)
+    >>> 'person1' not in manager.contents
     True
 
