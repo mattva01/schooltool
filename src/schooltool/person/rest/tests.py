@@ -34,7 +34,6 @@ from zope.app.testing import ztapi, setup
 from schooltool.app.rest.testing import ApplicationObjectViewTestMixin
 from schooltool.app.rest.testing import ContainerViewTestMixin
 from schooltool.app.rest.testing import FileFactoriesSetUp
-
 from schooltool.person.interfaces import IPersonContainer
 from schooltool.person.person import PersonContainer, Person
 from schooltool.person.rest.interfaces import IPasswordWriter
@@ -46,8 +45,6 @@ from schooltool.person.rest.person import PersonPhotoView
 from schooltool.person.rest.person import PersonFile, PersonFileFactory
 from schooltool.person.rest.person import PasswordWriterView
 from schooltool.person.rest.preference import PersonPreferencesView
-
-from schooltool.person.person import Person, PersonContainer
 
 
 class TestPersonContainerView(ContainerViewTestMixin,
@@ -317,6 +314,7 @@ def doctest_PersonPhotoHttpTraverser():
         <schooltool.person.rest.person.PersonPhotoAdapter ...>
     """
 
+
 def doctest_PersonPreferencesHttpTraverser():
     r"""Tests for PersonPreferencesHTTPTraverser.
 
@@ -377,11 +375,18 @@ def doctest_PersonPreferencesView():
         >>> adapter = traverser.publishTraverse(TestRequest(), 'preferences')
         >>> view = PersonPreferencesView(adapter, TestRequest())
 
-        >>> view.GET()
-        u'<preferences xmlns:xlink="http://www.w3.org/1999/xlink">\n\n  <preference id="timezone" value="UTC"/>\n  <preference id="timeformat" value="%H:%M"/>\n  <preference id="dateformat" value="%Y-%m-%d"/>\n  <preference id="weekstart" value="0"/>\n\n</preferences>\n'
+        >>> print view.GET()
+        <preferences xmlns:xlink="http://www.w3.org/1999/xlink">
+        <BLANKLINE>
+          <preference id="timezone" value="UTC"/>
+          <preference id="timeformat" value="%H:%M"/>
+          <preference id="dateformat" value="%Y-%m-%d"/>
+          <preference id="weekstart" value="0"/>
+        <BLANKLINE>
+        </preferences>
+        <BLANKLINE>
 
-
-        Set a preference:
+    Set a preference:
 
         >>> from StringIO import StringIO
         >>> body = '<preferences xmlns="http://schooltool.org/ns/model/0.1">' \
@@ -392,12 +397,12 @@ def doctest_PersonPreferencesView():
         >>> view.PUT()
         'Preferences updated'
 
-        Check that the preference was set:
+    Check that the preference was set:
 
-        >>> u'  <preference id="timezone" value="US/Eastern"/>' in view.GET().splitlines()
+        >>> u'<preference id="timezone" value="US/Eastern"/>' in view.GET()
         True
 
-        Attempting to set a preference that does not exist will raise an error:
+    Attempting to set a preference that does not exist will raise an error:
 
         >>> body = '<preferences xmlns="http://schooltool.org/ns/model/0.1">' \
         ...        '  <preference id="fakepref" value="1"/>' \
@@ -409,7 +414,8 @@ def doctest_PersonPreferencesView():
         ...
         RestError: Preference "fakepref" unknown
 
-        Attempting to set a preference to an invalid value will also raise an error:
+    Attempting to set a preference to an invalid value will also raise an
+    error:
 
         >>> body = '<preferences xmlns="http://schooltool.org/ns/model/0.1">' \
         ...        '  <preference id="timezone" value="Tatooine/Mos Isley"/>' \
@@ -426,6 +432,7 @@ def doctest_PersonPreferencesView():
         >>> setup.placelessTearDown()
 
     """
+
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -445,6 +452,7 @@ def test_suite():
                     doctest.REPORT_ONLY_FIRST_FAILURE)
         )
     return suite
+
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')
