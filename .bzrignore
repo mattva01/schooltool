@@ -11,3 +11,4 @@ schooltool-skel/log/*.log
 schooltool-skel/var/Data.fs*
 schooltool-skel/var/*.pid
 buildsupport/zpkgsetup
+schooltool-skel/var/*.log
