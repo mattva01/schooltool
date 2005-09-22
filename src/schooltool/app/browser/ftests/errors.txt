@@ -4,18 +4,15 @@ Error handling in browser views
 First of all, we will need a schooltool instance.  We will add it via
 the web:
 
-    >>> print http("""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&\
-    ... new_value=frogpond""", handle_errors=False)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/@@contents.html
-    ...
+    >>> from zope.testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/contents.html')
+
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getControl(name='new_value').value = 'frogpond'
+    >>> manager.getControl('Apply').click()
 
 
 NotFound
