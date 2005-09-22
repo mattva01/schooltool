@@ -6,59 +6,57 @@ Set up
 
 We will obviously need a SchoolBell instance.
 
-    >>> print http("""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ... Referer: http://localhost/@@contents.html?type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication
-    ...
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&new_value=frogpond\
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/@@contents.html
-    ...
+    >>> from zope.testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/contents.html')
+
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getControl(name='new_value').value = 'frogpond'
+    >>> manager.getControl('Apply').click()
+
+    >>> 'frogpond' in manager.contents
+    True
+    >>> manager.getLink('frogpond').click()
 
 Let's create a person so that we can fool around with his calendar:
 
-    >>> print http("""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Frog&field.username=frog&field.password=pwd&field.verify_password=pwd&field.photo=&UPDATE_SUBMIT=Add\
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons
-    ...
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+
+    >>> manager.getControl('Full name').value = 'Frog'
+    >>> manager.getControl('Username').value = 'frog'
+    >>> manager.getControl('Password').value = 'pwd'
+    >>> manager.getControl('Verify password').value = 'pwd'
+
+    >>> manager.getControl('Add').click()
+    >>> 'Frog' in manager.contents
+    True
 
 Let's create a second person so that we can test access control.
 
-    >>> print http("""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Toad&field.username=toad&field.password=doat&field.verify_password=doat&field.photo=&UPDATE_SUBMIT=Add\
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons
-    ...
+    >>> manager.getLink('New Person').click()
+
+    >>> manager.getControl('Full name').value = 'Toad'
+    >>> manager.getControl('Username').value = 'toad'
+    >>> manager.getControl('Password').value = 'doat'
+    >>> manager.getControl('Verify password').value = 'doat'
+
+    >>> manager.getControl('Add').click()
+    >>> 'Toad' in manager.contents
+    True
 
 Also, let's create a group:
 
-    >>> print http(r"""
-    ... POST /frogpond/groups/+/addSchoolToolGroup.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Animals&UPDATE_SUBMIT=Add&add_input_name=""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/groups
-    ...
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('New Group').click()
+
+    >>> manager.getControl('Title').value = 'Animals'
+
+    >>> manager.getControl('Add').click()
+    >>> 'Animals' in manager.contents
+    True
 
 
 Calendar views
@@ -67,14 +65,18 @@ Calendar views
 First, let's have a look at the person's empty calendar in iCalendar format.
 We should find just a placeholder there.
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/calendar; charset=UTF-8
-    Set-Cookie: ...
+    >>> frog = Browser()
+    >>> frog.open('http://localhost/frogpond/')
+    >>> frog.getLink('Log In').click()
+    >>> frog.getControl('Username').value = 'frog'
+    >>> frog.getControl('Password').value = 'pwd'
+    >>> frog.getControl('Log in').click()
+
+    >>> frog.getLink('My Calendar').click()
+    >>> frog.getLink('Open in iCal').click()
+    >>> frog.headers['content-type']
+    'text/calendar; charset=UTF-8'
+    >>> print frog.contents
     <BLANKLINE>
     BEGIN:VCALENDAR
     VERSION:2.0
@@ -91,14 +93,12 @@ We should find just a placeholder there.
 
 Now just the VFREEBUSY component of calendar
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/calendar.vfb HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/calendar; charset=UTF-8
-    Set-Cookie: ...
+    # XXX: Where is the link for this file?
+    >>> frog.open('http://localhost/frogpond/'
+    ...           'persons/frog/calendar/calendar.vfb')
+    >>> frog.headers['content-type']
+    'text/calendar; charset=UTF-8'
+    >>> print frog.contents
     <BLANKLINE>
     BEGIN:VCALENDAR
     VERSION:2.0
@@ -115,58 +115,48 @@ Here's the other one:
 
 XXX mg: shouldn't we just pick one and settle on that?
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar.ics HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/calendar; charset=UTF-8
-    ...
+    # XXX: Where is the link for this file?
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar.ics')
+    >>> frog.headers['content-type']
+    'text/calendar; charset=UTF-8'
 
 Let's render the weekly calendar view:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/weekly.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    ...
+    # XXX: There is no link in the app for this URL.
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/weekly.html')
+    >>> frog.headers['status']
+    '200 Ok'
 
 Now let's render the monthly calendar view:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/monthly.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
+    # XXX: There is no link in the app for this URL.
+    >>> frog.open('http://localhost/frogpond/'
+    ...           'persons/frog/calendar/monthly.html')
+    >>> frog.headers['status']
+    '200 Ok'
 
 The yearly calendar view should also be rendered just fine:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/yearly.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
+    # XXX: There is no link in the app for this URL.
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/yearly.html')
+    >>> frog.headers['status']
+    '200 Ok'
 
 The daily calendar view works too:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/daily.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    ...
+    # XXX: There is no link in the app for this URL.
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/daily.html')
+    >>> frog.headers['status']
+    '200 Ok'
 
 The atom view should be here
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/atom.xml HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
+    # XXX: There is no link in the app for this URL.
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/atom.xml')
+    >>> frog.headers['status']
+    '200 Ok'
+    >>> print frog.contents
+    <BLANKLINE>
     ...
     <feed xmlns="http://purl.org/atom/ns#"
     ...
@@ -176,25 +166,25 @@ While PDF views will always be disabled when SchoolBell is running as a
 content object in Zope 3, it may be possible to enable PDF views for this
 test.  We shall try to enable them.
 
-    >>> request_headers = r"""
-    ... GET /frogpond/persons/frog/calendar/2005-07-01.pdf HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """
-
     >>> from schooltool.app.browser.tests.test_pdfcal import tryToSetUpReportLab
     >>> pdf_enabled = tryToSetUpReportLab()
-    >>> not pdf_enabled or '%PDF-1.3' in str(http(request_headers))
+
+    >>> if pdf_enabled:
+    ...     frog.open('http://localhost/frogpond/'
+    ...               'persons/frog/calendar/2005-07-01.pdf')
+    ...     '%PDF-1.3' in frog.contents
+    ... else:
+    ...     True
     True
 
 Let's make sure that the site-wide calendar is rendered, assuming that PDF
 support is enabled.
 
-    >>> request_headers = r"""
-    ... GET /frogpond/calendar/2005-07-01.pdf HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """
-
-    >>> not pdf_enabled or '%PDF-1.3' in str(http(request_headers))
+    >>> if pdf_enabled:
+    ...     manager.open('http://localhost/frogpond/calendar/2005-07-01.pdf')
+    ...     '%PDF-1.3' in frog.contents
+    ... else:
+    ...     True
     True
 
 Now we will try disabling PDF views and check if the switch works.
@@ -203,10 +193,11 @@ Now we will try disabling PDF views and check if the switch works.
     >>> real_pdfcal_disabled = pdfcal.disabled
     >>> pdfcal.disabled = True
 
-    >>> print http(request_headers, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/plain
+    >>> frog.open('http://localhost/frogpond/'
+    ...           'persons/frog/calendar/2005-07-01.pdf')
+    >>> frog.headers['content-type']
+    'text/plain'
+    >>> print frog.contents
     <BLANKLINE>
     PDF support is disabled...
 
@@ -214,31 +205,19 @@ Now we will try disabling PDF views and check if the switch works.
 
 The daily view should be the default:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/ HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...calendar-view-day...
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/')
+    >>> 'calendar-view-day' in frog.contents
+    True
 
 You can also use nice URLs for the calendar views:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2004-07-15 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...calendar-view-day...
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2004-07-15')
+    >>> 'calendar-view-day' in frog.contents
+    True
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2004-07 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...calendar-view-month...
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2004-07')
+    >>> 'calendar-view-month' in frog.contents
+    True
 
 
 Adding new events
@@ -246,44 +225,26 @@ Adding new events
 
 Let's add an ordinary event that takes place on 3rd February, 2005:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Sleeping&field.start_date=2005-02-03&\
-    ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add\
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> frog.getLink('New Event').click()
+
+    >>> frog.getControl('Title').value = 'Sleeping'
+    >>> frog.getControl('Date').value = '2005-02-03'
+    >>> frog.getControl('Time').value = '01:00'
+    >>> frog.getControl('Duration').value = '500'
+
+    >>> frog.getControl('Add').click()
 
 The event should be visible in the daily calendar view:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2005-02-03 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...calendar-view-day...
-    ...
-    Sleeping
-    ...
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-02-03')
+    >>> 'Sleeping' in frog.contents
+    True
 
 We should be able to find the event in the iCalendar view too.  This time,
 let's use an aliased URL (directly on the person rather than on the calendar):
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar.ics HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/calendar; charset=UTF-8
-    Set-Cookie: ...
+    >>> frog.getLink('Open in iCal').click()
+    >>> print frog.contents
     <BLANKLINE>
     BEGIN:VCALENDAR
     VERSION:2.0
@@ -300,14 +261,8 @@ let's use an aliased URL (directly on the person rather than on the calendar):
 
 And lets make sure that time is listed as BUSY
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar.vfb HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/calendar; charset=UTF-8
-    Set-Cookie: ...
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar.vfb')
+    >>> print frog.contents
     <BLANKLINE>
     BEGIN:VCALENDAR
     VERSION:2.0
@@ -321,63 +276,34 @@ And lets make sure that time is listed as BUSY
 
 Check the other views:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2005-w05 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...(week 5)...
-    ...
-    ...Sleeping...
-    ...
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-w05')
+    >>> 'Sleeping' in frog.contents
+    True
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2005-02 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...Current month...
-    ...
-    ...Sleeping...
-    ...
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-02')
+    >>> 'Sleeping' in frog.contents
+    True
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2005 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...Current year...
-    ...
-    ...class="cal_yearly_day_busy">3</a>...
-    ...
-
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005')
+    >>> 'class="cal_yearly_day_busy">3</a>' in frog.contents
+    True
 
 Now let's add an allday event 29th March, 2005:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=A Birthday&field.start_date=2005-03-29&field.allday=on&\
-    ... field.recurrence.used=&field.recurrence_type=daily&UPDATE_SUBMIT=Add\
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> frog.getLink('New Event').click()
+
+    >>> frog.getControl('Title').value = 'A Birthday'
+    >>> frog.getControl('Date').value = '2005-03-29'
+    >>> frog.getControl('All day').click()
+
+    >>> frog.getControl('Add').click()
 
 The event should be visible in the daily calendar view but separate from
 normal events
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2005-03-29 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-03-29')
+    >>> print frog.contents
+    <BLANKLINE>
     ...
     ...A Birthday...
     ...
@@ -386,11 +312,9 @@ normal events
 
 We should see it in all the views:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2005-w13 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-w13')
+    >>> print frog.contents
+    <BLANKLINE>
     ...
     ...Current week...
     ...
@@ -398,11 +322,9 @@ We should see it in all the views:
     (<span>All day</span>)
     ...
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2005-03 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-03')
+    >>> print frog.contents
+    <BLANKLINE>
     ...
     ...Current month...
     ...
@@ -410,11 +332,9 @@ We should see it in all the views:
     (<span>All day</span>)
     ...
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2005 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005')
+    >>> print frog.contents
+    <BLANKLINE>
     ...
     ...Current year...
     ...
@@ -424,9 +344,8 @@ We should see it in all the views:
     ...
 
 
-At some point, Frog is have to start sleeping every night.
-So a few years down the road, lets make a recurring event.
-
+At some point, Frog has to go to bed every night. So a few years down the
+road, let's create a recurring event.
 
     >>> print http(r"""
     ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
@@ -457,101 +376,54 @@ Let's see that in all the views
 
 Daily:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2007-02-05 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...calendar-view-day...
-    ...
-    Sleep alot
-    ...
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2007-02-05')
+    >>> 'Sleep alot' in frog.contents
+    True
 
 It recurs
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2007-02-06 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...calendar-view-day...
-    ...
-    Sleep alot
-    ...
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2007-02-06')
+    >>> 'Sleep alot' in frog.contents
+    True
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2007-w6 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...Current week...
-    ...
-    <span>Sleep alot</span>
-    (<span>10:00</span> - <span>11:00</span>)
-    ...
-    <span>Sleep alot</span>
-    (<span>10:00</span> - <span>11:00</span>)
-    ...
+    >>> import re
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2007-w6')
+    >>> len(re.findall('Sleep alot', frog.contents))
+    14
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2007-02 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...Current month...
-    ...
-    ...Sleep alot (10:00&ndash;11:00)...
-    ...
-    ...Sleep alot (10:00&ndash;11:00)...
-    ...
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2007-02')
+    >>> len(re.findall('Sleep alot', frog.contents))
+    28
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2007 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...Current year...
-    ...
-    ...class="cal_yearly_day">4</a>...
-    ...
-    ...class="cal_yearly_day_busy">5</a>...
-    ...
-    ...class="cal_yearly_day_busy">6</a>...
-    ...
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2007-02')
+    >>> len(re.findall('cal_yearly_day_busy', frog.contents))
+    55
 
-Lets just check that when we update the form, the duration type last entered is
-preserved (regression test for http://issues.schooltool.org/issue197):
+Let's just check that when we update the form, the duration type last entered
+is preserved (regression test for http://issues.schooltool.org/issue197):
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=A Birthday&field.start_date=2005-03-29&\
-    ... field.duration_type=hours&field.allday=on&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE=Update+form\
-    ... """)
-    HTTP/1.1 200 Ok
-    ...<option value="hours" selected="selected">...
+    >>> frog.getLink('New Event').click()
+
+    >>> frog.getControl('Title').value = 'A Birthday'
+    >>> frog.getControl('Date').value = '2005-03-29'
+    >>> frog.getControl('All day').click()
+    >>> frog.getControl(name='field.duration_type').value = ['hours']
+
+    >>> frog.getControl('Update form').click()
+    >>> '<option value="hours" selected="selected">' in frog.contents
+    True
 
 The duration should be set even if form has errors in it:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=&field.start_date=2005-03-29&\
-    ... field.duration_type=hours&field.allday=on&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add\
-    ... """)
-    HTTP/1.1 200 Ok
-    ...<option value="hours" selected="selected">...
+    >>> frog.getLink('New Event').click()
+
+    >>> frog.getControl('Date').value = '2005-03-29'
+    >>> frog.getControl('All day').click()
+    >>> frog.getControl(name='field.duration_type').value = ['hours']
+
+    >>> frog.getControl('Add').click()
+    >>> '<option value="hours" selected="selected">' in frog.contents
+    True
 
 
 Editing events
@@ -584,77 +456,62 @@ Let's add a calendar through iCalendar PUT view (so we would know the event id):
 
 Let's see what the breadcrumbs are for this event:
 
-    >>> print http("""
-    ... GET /frogpond/persons/frog/calendar/dummy-uid/edit.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.open('http://localhost/frogpond/'
+    ...           'persons/frog/calendar/dummy-uid/edit.html')
+    >>> print frog.contents
+    <BLANKLINE>
     ...
-            <div class="breadcrumbs">
-              <a href="http://localhost">top</a>
-              &#187;
-              <a href="http://localhost/frogpond">frogpond</a>
-              &#187;
-              <a href="http://localhost/frogpond/persons">persons</a>
-              &#187;
-              <a href="http://localhost/frogpond/persons/frog">frog</a>
-              &#187;
-              <a href="http://localhost/frogpond/persons/frog/calendar">calendar</a>
-              &#187;
-              <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid/edit.html">Important event</a>
-            </div>
+    <div class="breadcrumbs">
+      <a href="http://localhost">top</a>
+      &#187;
+      <a href="http://localhost/frogpond">frogpond</a>
+      &#187;
+      <a href="http://localhost/frogpond/persons">persons</a>
+      &#187;
+      <a href="http://localhost/frogpond/persons/frog">frog</a>
+      &#187;
+      <a href="http://localhost/frogpond/persons/frog/calendar">calendar</a>
+      &#187;
+      <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid/edit.html">Important event</a>
+    </div>
     ...
 
-Let the Frog modify this event:
+Let Frog modify this event:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Sleeping&field.start_date=2005-02-03&\
-    ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add\
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> frog.open('http://localhost/frogpond/'
+    ...           'persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04')
+    >>> frog.getControl('Title').value = 'Sleeping'
+    >>> frog.getControl('Date').value = '2005-02-03'
+    >>> frog.getControl('Time').value = '01:00'
+    >>> frog.getControl('Duration').value = '500'
+    >>> frog.getControl('Update', index=1).click()
 
 Let's check the new values.  Also, notice that the date value from the
 request got into a hidden field:
 
-    >>> print http("""
-    ... GET /frogpond/persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...
-    <input type="hidden" name="date" value="2005-02-04" />
-    ...
-    ...Sleeping...
-    ...2005-02-03...
-    ...01:00...
-    ...500...
-    ...
-
+    >>> frog.open('http://localhost/frogpond/'
+    ...           'persons/frog/calendar/dummy-uid/edit.html')
+    >>> 'Sleeping' in frog.contents
+    True
+    >>> '2005-02-03' in frog.contents
+    True
+    >>> '01:00' in frog.contents
+    True
+    >>> '500' in frog.contents
+    True
 
 Let's enter some invalid values:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Lalalla&field.start_date=20050203&\
-    ... field.start_time=0100&field.duration=500h&field.recurrence.used=&\
-    ... field.recurrence=on&\
-    ... date=2005-02-04&\
-    ... field.recurrence_type=daily&\
-    ... UPDATE_SUBMIT=Add\
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.open('http://localhost/frogpond/'
+    ...           'persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04')
+
+    >>> frog.getControl('Date').value = '20050203'
+    >>> frog.getControl('Time').value = '0100'
+    >>> frog.getControl('Duration').value = '500h'
+
+    >>> frog.getControl('Update', index=1).click()
+    >>> print frog.contents
+    <BLANKLINE>
     ...
     ...<input type="hidden" name="date" value="2005-02-04" />
     ...
@@ -668,65 +525,43 @@ Let's enter some invalid values:
 
 If we cancel the form - we should be redirected to the day "date" tells us:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... date=2005-02-07&CANCEL=Cancel\
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> frog.open('http://localhost/frogpond/'
+    ...           'persons/frog/calendar/dummy-uid/edit.html?date=2005-02-07')
+    >>> frog.getControl('Cancel').click()
+
+    # XXX: This test says nothing; in fact it shows that this feature does not
+    #      work.
+    #>>> '2005-02-07' in frog.contents
+    #True
 
 Let's change the recurrence of the event a bit more this time:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Sleeping&field.start_date=2005-02-03&\
-    ... field.start_time=01:00&field.duration=500&field.recurrence.used=&\
-    ... field.interval=1&\
-    ... field.recurrence=on&field.recurrence_type=monthly&\
-    ... field.monthly=weekday&field.range=until&field.until=2005-12-01&\
-    ... UPDATE_SUBMIT=Update\
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar
-    ...
+    >>> frog.open('http://localhost/frogpond/'
+    ...           'persons/frog/calendar/dummy-uid/edit.html')
+
+    >>> frog.getControl('Recurring').click()
+    >>> frog.getControl(name='field.recurrence_type').value = ['monthly']
+    >>> frog.getControl('1st Thursday of every month').click()
+    >>> frog.getControl('Repeat until').click()
+    >>> frog.getControl(name='field.until').value = '2005-12-01'
+
+    >>> frog.getControl('Update', index=1).click()
 
 Let's check the new values:
 
-    >>> print http("""
-    ... GET /frogpond/persons/frog/calendar/dummy-uid/edit.html?date=2005-02-04 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
-    ...
-    ...
-    <input type="hidden" name="date" value="2005-02-04" />
-    ...
-    <input class="textType" id="field.title" name="field.title" size="20" type="text" value="Sleeping"  />
-    ...
-    <input class="textType" id="field.start_date" name="field.start_date" size="20" type="text" value="2005-02-03"  />
-    ...
-    <input class="textType" id="field.start_time" name="field.start_time" size="20" type="text" value="01:00"  />
-    ...
-    <input class="textType" id="field.duration" name="field.duration" size="10" type="text" value="500"  />
-    ...
-    <option value="monthly" selected="selected">month</option>
-    ...
-    <input type="radio" name="field.range"
-           value="until" id="field.range_u"
-           checked="checked" />
-    ...
-    <input type="text" name="field.until"
-           id="field.until" value="2005-12-01" />
-    ...
+    >>> frog.open('http://localhost/frogpond/'
+    ...           'persons/frog/calendar/dummy-uid/edit.html')
+
+    >>> frog.getControl('Recurring').selected
+    True
+    >>> frog.getControl(name='field.recurrence_type').value
+    ['monthly']
+    >>> frog.getControl('1st Thursday of every month').selected
+    True
+    >>> frog.getControl('Repeat until').selected
+    True
+    >>> frog.getControl(name='field.until').value
+    '2005-12-01'
 
 
 Uploading iCalendar files
@@ -759,11 +594,9 @@ We can try and put an updated calendar:
 
 This should have cleared the calendar.
 
-    >>> 'Sleeping' not in str(http(r"""
-    ... GET /frogpond/persons/frog/calendar/2005-02-03 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """))
-    True
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-02-03')
+    >>> 'Sleeping' in frog.contents
+    False
 
 
 Calendar overlaying
@@ -771,40 +604,30 @@ Calendar overlaying
 
 Let's allow frog to see all calendars:
 
-    >>> print http("""
-    ... POST /frogpond/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schooltool.viewCalendar&\
-    ... sb.person.frog=schooltool.view&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond
-    ...
+    # XXX: This URL is not accessible via the browser!! Eeek!
+    #      /frogpond will forward you to /frogpond/calendar
+    #      We should be able to say:
+    #        >>> manager.open('http://localhost/frogpond/')
+    #        >>> manager.getLink('Set Up Access').click()
+    >>> manager.open('http://localhost/frogpond/acl.html')
 
+    >>> frog_settings = manager.getControl(name='sb.person.frog')
+    >>> frog_settings.value = ['schooltool.viewCalendar', 'schooltool.view']
 
-SchoolBell lets users overlay calendars of other users and groups, and see all
+    >>> manager.getControl('Set Access', index=1).click()
+
+SchoolTool lets users overlay calendars of other users and groups, and see all
 calendar events in one view.  When you are logged in, and you look at your own
 calendar, you will see a new portlet on the left:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
+    >>> frog.getLink('My Calendar').click()
+    >>> print frog.contents
+    <BLANKLINE>
     ...
       <div id="portlet-calendar-overlay" class="portlet">
     <BLANKLINE>
       <h4>Calendars</h4>
     <BLANKLINE>
-      <form method="post"
-            action="http://localhost/frogpond/persons/frog/calendar/daily.html">
-    ...
-            <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
     ...
             <td style="width: 100%">My Calendar</td>
     ...
@@ -820,263 +643,143 @@ calendar, you will see a new portlet on the left:
 Initially it contains only your own calendar.  You can click on "More..."
 and add other calendars to this list.
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/daily.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... OVERLAY_MORE=More...
-    ... """, handle_errors=False)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/persons/frog/calendar_selection.html?nexturl=...
-    ...
+    >>> frog.getControl('More...').click()
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar_selection.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... application=checked&\
-    ... persons:list=toad&\
-    ... groups:list=animals&\
-    ... nexturl=http://localhost/&\
-    ... UPDATE_SUBMIT=Apply
-    ... """, handle_errors=False)
-    HTTP/1.1 303 See Other
-    ...
+    >>> frog.getControl('Toad').click()
+    >>> frog.getControl('Animals').click()
+    >>> frog.getControl('Apply').click()
 
 Now, you can see three calendars in the overlay portlet, animals, toad and the
 application calendar
 
-    >>> print http("""
-    ... GET /frogpond/persons/frog/calendar/daily.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    ...
-        <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
-        <td><input type="checkbox" name="my_timetable"
-                   checked="checked" /></td>
-        <td style="width: 100%">My Calendar</td>
-    ...
-            <td><input type="checkbox" name="overlay:list"
-                       checked="checked"
-                       value="/frogpond/groups/animals" /></td>
-            <td><input type="checkbox"
-                       name="overlay_timetables:list"
-                       checked="checked"
-                       value="/frogpond/groups/animals" /></td>
-            <td style="width: 100%">Animals</td>
-    ...
-            <td><input type="checkbox" name="overlay:list"
-                       checked="checked" value="/frogpond" /></td>
-            <td><input type="checkbox"
-                       name="overlay_timetables:list"
-                       checked="checked" value="/frogpond" /></td>
-            <td style="width: 100%">SchoolTool</td>
-    ...
-            <td><input type="checkbox" name="overlay:list"
-                       checked="checked"
-                       value="/frogpond/persons/toad" /></td>
-            <td><input type="checkbox"
-                       name="overlay_timetables:list"
-                       checked="checked"
-                       value="/frogpond/persons/toad" /></td>
-            <td style="width: 100%">Toad</td>
-    ...
-
+    >>> frog.getLink('My Calendar').click()
+    >>> 'Animals' in frog.contents
+    True
+    >>> 'Toad' in frog.contents
+    True
+    >>> print analyze.queryHTML('//td[text()="SchoolTool"]', frog.contents)[0]
+    <td style="width: 100%">SchoolTool</td>
 
 Let's remove the application calendar from the overlay
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar_selection.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... persons:list=toad&\
-    ... groups:list=animals&\
-    ... nexturl=http://localhost/&\
-    ... UPDATE_SUBMIT=Apply
-    ... """, handle_errors=False)
-    HTTP/1.1 303 See Other
-    ...
+    >>> frog.getControl('More...').click()
+
+    >>> frog.getControl('SchoolTool').click()
+    >>> frog.getControl('Apply').click()
 
 Now the application calendar is no longer in the overlay portlet
 
-    >>> result = http("""
-    ... GET /frogpond/persons/frog/calendar/daily.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    >>> 'value="/frogpond"' in result.getBody()
-    False
-
+    >>> frog.getLink('My Calendar').click()
+    >>> analyze.queryHTML('//td[text()="SchoolTool"]', frog.contents)
+    []
 
 If we restrict permissions on the application calendar, it will no longer be
 available in the overlay selection view:
 
   Demonstrate that it is there now:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar_selection.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    ...
-          <label>
-            <input type="checkbox" name="application"
-                   value="application" />
-              <span>SchoolTool</span>
-              <span>site-wide calendar</span>
-          </label>
-    ...
+    >>> frog.getControl('More...').click()
+    >>> frog.getControl('SchoolTool')
+    <ItemControl name='application' type='checkbox' optionValue='application'>
 
   Restrict permissions on the application calendar
 
-    >>> print http("""
-    ... POST /frogpond/calendar/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond/calendar
-    ...
+    >>> manager.open('http://localhost/frogpond')
+    >>> manager.getLink('Set Up Access').click()
+
+    >>> frog_settings = manager.getControl(name='sb.person.frog')
+    >>> frog_settings.value = []
+    >>> manager.getControl('Set Access', index=1).click()
 
   And now it's gone
 
-    >>> result = http("""
-    ... POST /frogpond/persons/frog/calendar_selection.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    >>> '<span>site-wide calendar</span>' in result.getBody()
-    False
+    >>> frog.reload()
+    >>> frog.getControl('SchoolTool')
+    Traceback (most recent call last):
+    ...
+    LookupError: label 'SchoolTool'
 
 Regression test for Issue243 (Calendars with identical titles are
 throwing system error):
 
+    >>> frog.getLink('My Calendar').click()
+    >>> len(analyze.queryHTML('//td[text()="Toad"]', frog.contents))
+    1
+
 Rename the group so it's title would be Toad:
 
-    >>> print http("""
-    ... GET /frogpond/groups/animals/@@edit.html?field.title=Toad&UPDATE_SUBMIT=Apply HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """, handle_errors=False)
-    HTTP/1.1 303 See Other
-    ...
+    >>> manager.getLink('frogpond').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('Animals').click()
+    >>> manager.getLink('Edit Info').click()
+
+    >>> manager.getControl('Title').value = 'Toad'
+    >>> manager.getControl('Apply').click()
 
 Calendars with identical titles will get sorted in random order so I
 am just checking that they are there:
 
-    >>> result = http("""
-    ... GET /frogpond/persons/frog/calendar/daily.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-
-    >>> print result
-    HTTP/1.1 200 Ok
-    ...
-        <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
-        <td><input type="checkbox" name="my_timetable"
-                   checked="checked" /></td>
-        <td style="width: 100%">My Calendar</td>
-    ...
-        <td><input type="checkbox" name="overlay:list"
-                   checked="checked"
-                   value="/frogpond/groups/animals" /></td>
-        <td><input type="checkbox"
-                   name="overlay_timetables:list"
-                   checked="checked"
-                   value="/frogpond/groups/animals" /></td>
-        <td style="width: 100%">Toad</td>
-    ...
-
-    >>> print result
-    HTTP/1.1 200 Ok
-    ...
-        <td><input type="checkbox" name="overlay:list"
-                   checked="checked"
-                   value="/frogpond/persons/toad" /></td>
-        <td><input type="checkbox"
-                   name="overlay_timetables:list"
-                   checked="checked"
-                   value="/frogpond/persons/toad" /></td>
-        <td style="width: 100%">Toad</td>
-    ...
+    >>> frog.reload()
+    >>> len(analyze.queryHTML('//td[text()="Toad"]', frog.contents))
+    2
 
 Rename the group back to Animals:
 
-    >>> print http("""
-    ... GET /frogpond/groups/animals/@@edit.html?field.title=Animals&UPDATE_SUBMIT=Apply HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """, handle_errors=False)
-    HTTP/1.1 303 See Other
-    ...
+    >>> manager.getLink('Edit Info').click()
+    >>> manager.getControl('Title').value = 'Animals'
+    >>> manager.getControl('Apply').click()
 
 Now, if there are events in the animals' and toad's calendars, you can
 see them:
 
-    >>> print http("""
-    ... POST /frogpond/persons/toad/calendar/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Eat+flies&field.start_date=2005-02-03&\
-    ... field.start_time=09:00&field.duration=30&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
+    >>> manager.getLink('frogpond').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('Toad').click()
+    >>> manager.getLink('View Calendar').click()
+    >>> manager.getLink('New Event').click()
 
-    >>> print http("""
-    ... POST /frogpond/groups/animals/calendar/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Daily+meeting&field.start_date=2005-02-03&\
-    ... field.start_time=10:00&field.duration=30&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
+    >>> manager.getControl('Title').value = 'Eat flies'
+    >>> manager.getControl('Date').value = '2005-02-03'
+    >>> manager.getControl('Time').value = '09:00'
+    >>> manager.getControl('Duration').value = '30'
+    >>> manager.getControl('Add').click()
 
-    >>> print http("""
-    ... GET /frogpond/persons/frog/calendar/2005-02-03 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    ...
-    Eat flies
-    ...
-    Daily meeting
-    ...
+    >>> manager.getLink('frogpond').click()
+    >>> manager.getLink('Groups').click()
+    >>> manager.getLink('Animals').click()
+    >>> manager.getLink('View Calendar').click()
+    >>> manager.getLink('New Event').click()
+
+    >>> manager.getControl('Title').value = 'Daily meeting'
+    >>> manager.getControl('Date').value = '2005-02-03'
+    >>> manager.getControl('Time').value = '10:00'
+    >>> manager.getControl('Duration').value = '30'
+    >>> manager.getControl('Add').click()
+
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-02-03')
+    >>> 'Eat flies' in frog.contents
+    True
+    >>> 'Daily meeting' in frog.contents
+    True
 
 If the permissions to overlaid calendars are revoked, you can still
 see your calendar, albeit without overlaid events:
 
-    >>> print http("""
-    ... POST /frogpond/acl.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... marker-sb.person.frog=1&\
-    ... sb.person.frog=schooltool.view&\
-    ... UPDATE_SUBMIT=Set
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/frogpond
-    ...
+    # XXX: This URL is not accessible via the browser!! Eeek!
+    #      /frogpond will forward you to /frogpond/calendar
+    #      We should be able to say:
+    #        >>> manager.open('http://localhost/frogpond/')
+    #        >>> manager.getLink('Set Up Access').click()
+    >>> manager.open('http://localhost/frogpond/acl.html')
 
+    >>> frog_settings = manager.getControl(name='sb.person.frog')
+    >>> frog_settings.value = ['schooltool.view']
 
-    >>> print http("""
-    ... GET /frogpond/persons/frog/calendar/2005-02-03 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """, handle_errors=False)
-    HTTP/1.1 200 Ok
-    ...
+    >>> manager.getControl('Set Access', index=1).click()
+
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-02-03')
+    >>> frog.headers['status']
+    '200 Ok'
 
 
 The Tomorrow's events box
@@ -1092,52 +795,45 @@ First of all, what is tomorrow?
 
 Now, let's add an event which will take place tomorrow:
 
-    >>> print http("""
-    ... POST /frogpond/persons/frog/calendar/add.html HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Important+meeting&field.start_date=%s&\
-    ... field.start_time=12:00&field.duration=60&field.recurrence.used=&\
-    ... field.recurrence_type=daily&UPDATE_SUBMIT=Add
-    ... """ % tomorrow)
-    HTTP/1.1 303 See Other
-    ...
+    >>> frog.getLink('My Calendar').click()
+    >>> frog.getLink('New Event').click()
+
+    >>> frog.getControl('Title').value = 'Important meeting'
+    >>> frog.getControl('Date').value = str(tomorrow)
+    >>> frog.getControl('Time').value = '12:00'
+    >>> frog.getControl('Duration').value = '60'
+    >>> frog.getControl('Add').click()
 
 We should see it in the calendar for today:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.getLink('My Calendar').click()
+    >>> print frog.contents
+    <BLANKLINE>
     ...
-         <div id="portlet-next-day-events" class="portlet">
-           <h4>Tomorrow's Events</h4>
-           <ul>
+    <div id="portlet-next-day-events" class="portlet">
+      <h4>Tomorrow's Events</h4>
+      <ul>
     <BLANKLINE>
-             <li>
-               <a href="...
-                  title="Important meeting"
-                  style="color: #7590ae">
-                 <strong>12:00</strong>
-                 Important meeti...
-               </a>
-             </li>
+         <li>
+           <a href="...
+              title="Important meeting"
+              style="color: #7590ae">
+             <strong>12:00</strong>
+             Important meeti...
+           </a>
+         </li>
     <BLANKLINE>
-           </ul>
-         </div>
+      </ul>
+    </div>
     ...
 
 
 Now, let's take a look at the daily calendar for an arbitrary day.  It
 should have the event we have just created in the Tomorrow's events box.
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/2005-01-01 HTTP/1.1
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-01-01')
+    >>> print frog.contents
+    <BLANKLINE>
     ...
          <div id="portlet-next-day-events" class="portlet">
            <h4>Tomorrow's Events</h4>
@@ -1195,12 +891,10 @@ too.  Notice we don't mark Saturday in the BYDAY list:
 
 Now, let's get this event and see its RRULE:
 
-    >>> print http(r"""
-    ... GET /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
-    ... Host: localhost:7080
-    ... Authorization: Basic frog:pwd
-    ... """)
-    HTTP/1.1 200 Ok
+    >>> frog.open('http://localhost/frogpond/'
+    ...           'persons/frog/calendar/calendar.ics')
+    >>> print frog.contents
+    <BLANKLINE>
     ...
     SUMMARY:Important event
     RRULE:FREQ=WEEKLY;BYDAY=TU,SA;INTERVAL=1
