@@ -21,6 +21,7 @@ Tests for course-related RESTive views.
 
 $Id: test_app.py 4691 2005-08-12 18:59:44Z srichter $
 """
+
 import unittest
 from cStringIO import StringIO
 
@@ -34,12 +35,10 @@ from zope.app.traversing.interfaces import ITraversable
 
 from schooltool.testing import setup as sbsetup
 from schooltool.app.rest.testing import compareXML
-
 from schooltool.course.course import Course, CourseContainer
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.rest.course import CourseFile, CourseFileFactory
 from schooltool.course.rest.course import CourseView, CourseContainerView
-
 from schooltool.course.section import Section, SectionContainer
 from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.rest.section import SectionFile, SectionFileFactory
@@ -49,10 +48,10 @@ from schooltool.course.rest.section import SectionView, SectionContainerView
 def doctest_CourseFileFactory():
     r"""Tests for CourseFileFactory
 
-        >>> courses = CourseContainer
-        >>> factory = CourseFileFactory(courses)
+        >>> factory = CourseFileFactory(CourseContainer)
 
     We can create a few courses
+
         >>> course = factory("course1", None,
         ...              '''<object xmlns="http://schooltool.org/ns/model/0.1"
         ...                         title="New Course"/>''')
@@ -105,7 +104,6 @@ def doctest_CourseContainerView():
 
     Lets create a container and a course:
 
-        >>> from schooltool.app.app import SchoolToolApplication
         >>> setup.placefulSetUp()
         >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
         ...                   namespace.view)
@@ -163,7 +161,6 @@ def doctest_CourseContainerView():
 def doctest_CourseView():
     r"""Test for RESTive view of courses.
 
-        >>> from schooltool.app.app import SchoolToolApplication
         >>> setup.placefulSetUp()
         >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
         ...                   namespace.view)
@@ -199,8 +196,10 @@ def doctest_CourseView():
 def doctest_SectionFileFactory():
     r"""Tests for SectionFileFactory
 
-        >>> sections = SectionContainer
-        >>> factory = SectionFileFactory(sections)
+        >>> setup.placefulSetUp()
+        >>> app = sbsetup.setupSchoolToolSite()
+
+        >>> factory = SectionFileFactory(SectionContainer)
 
     We can create a few sections
 
@@ -304,7 +303,6 @@ def doctest_SectionContainerView():
 
     Lets create a container and a section:
 
-        >>> from schooltool.app.app import SchoolToolApplication
         >>> setup.placefulSetUp()
         >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
         ...                   namespace.view)
@@ -364,7 +362,6 @@ def doctest_SectionContainerView():
 def doctest_SectionView():
     r"""Test for RESTive view of sections.
 
-        >>> from schooltool.app.app import SchoolToolApplication
         >>> setup.placefulSetUp()
         >>> ztapi.provideView(Interface, Interface, ITraversable, 'view',
         ...                   namespace.view)
@@ -398,7 +395,9 @@ def doctest_SectionView():
 
 def test_suite():
     return unittest.TestSuite([
-                doctest.DocTestSuite(optionflags=doctest.ELLIPSIS),
+                doctest.DocTestSuite(setUp=setup.placelessSetUp,
+                                     tearDown=setup.placelessTearDown,
+                                     optionflags=doctest.ELLIPSIS),
            ])
 
 if __name__ == '__main__':
