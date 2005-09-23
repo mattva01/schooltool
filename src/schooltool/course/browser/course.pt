@@ -19,7 +19,10 @@
         <div class="section-list">
           <tal:loop tal:repeat="section sections/sortby:label">
 
-            <!-- XXX This should be moved into a macro -->
+            <tal:comment condition="nothing">
+               XXX This should be moved into a macro
+            </tal:comment>
+
             <div class="section"
                  tal:define="instructors section/instructors|nothing;
                              learners section/learners|nothing;
