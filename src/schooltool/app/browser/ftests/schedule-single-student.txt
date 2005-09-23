@@ -19,17 +19,16 @@ Prologue
 
 We will need a SchoolTool instance.  Let's call it 'frogpond'.
 
-    >>> print http(r"""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&new_value=frogpond""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/@@contents.html
-    ...
+    >>> from zope.testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/contents.html')
+
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getControl(name='new_value').value = 'frogpond'
+    >>> manager.getControl('Apply').click()
+    >>> manager.getLink('frogpond').click()
 
 Also, we need the REST HTTP caller:
 
@@ -41,7 +40,7 @@ Add a term:
     ... PUT /frogpond/terms/2005-fall HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
     ...             first="2003-09-01" last="2003-09-07">
     ...     <title>2005 Fall</title>
@@ -61,7 +60,7 @@ Add a schema:
     ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
     ...   <title>Some Title</title>
     ...   <model factory="SequentialDaysTimetableModel">
@@ -115,7 +114,7 @@ Lets add a course and 3 sections:
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: text/xml
     ...
-    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding1" 
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding1"
     ...         course="birding"/>
     ... """)
     HTTP/1.1 201 Created
@@ -126,7 +125,7 @@ Lets add a course and 3 sections:
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: text/xml
     ...
-    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding2" 
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding2"
     ...         course="birding"/>
     ... """)
     HTTP/1.1 201 Created
@@ -137,7 +136,7 @@ Lets add a course and 3 sections:
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: text/xml
     ...
-    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding3" 
+    ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding3"
     ...         course="birding"/>
     ... """)
     HTTP/1.1 201 Created
@@ -197,7 +196,7 @@ Lets add a timetable for the first section:
     ... PUT /frogpond/sections/birdwatching-1/timetables/2005-fall.schema1 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
     ...   <day id="Day 1">
@@ -226,7 +225,7 @@ For the second one:
     ... PUT /frogpond/sections/birdwatching-2/timetables/2005-fall.schema1 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
     ...   <day id="Day 1">
@@ -255,7 +254,7 @@ And the third one:
     ... PUT /frogpond/sections/birdwatching-3/timetables/2005-fall.schema1 HTTP/1.1
     ... Authorization: Basic mgr:mgrpw
     ... Content-Type: text/xml
-    ... 
+    ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
     ...            xmlns:xlink="http://www.w3.org/1999/xlink">
     ...   <day id="Day 1">

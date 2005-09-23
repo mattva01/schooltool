@@ -9,95 +9,83 @@ as used in this functional test, do not represent normal usage.
 Set up
 ------
 
-We will create a SchoolBell object and a resource
+We will create a SchoolTool object and a resource
 
-    >>> print http(r"""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&new_value=frogpond
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
+    >>> from zope.testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/contents.html')
 
-    >>> print http(r"""
-    ... POST /frogpond/resources/+/addSchoolToolResource.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 50
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... field.title=Lily&UPDATE_SUBMIT=Add&add_input_name=
-    ... """)
-    HTTP/1.1 303 See Other
-    ...
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getControl(name='new_value').value = 'frogpond'
+    >>> manager.getControl('Apply').click()
+    >>> manager.getLink('frogpond').click()
 
 
 Navigation view
 ---------------
 
-The schooltool_navigation view is registered for "*".  It will present
+The `schooltool_navigation` view is registered for "*".  It will present
 a portlet with the navigation links depending on the authorized user.
 
-    >>> print http(r"""
-    ... GET /frogpond/schooltool_navigation HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    <div class="portlet">
-    <h4>Navigation</h4>
-    <ul>
-      <li><a href="http://localhost/frogpond/persons">Persons</a></li>
-      <li><a href="http://localhost/frogpond/courses">Courses</a></li>
-      <li><a href="http://localhost/frogpond/sections">Sections</a></li>
-      <li><a href="http://localhost/frogpond/groups">Groups</a></li>
-      <li><a href="http://localhost/frogpond/resources">Resources</a></li>
-      <li><a href="http://localhost/frogpond/terms">Terms</a></li>
-      <li><a href="http://localhost/frogpond/ttschemas">School Timetables</a></li>
-      <li><a href="http://localhost/frogpond/levels">Levels</a></li>
-    </ul>
-    </div>
-    <BLANKLINE>
+    >>> manager.open('http://localhost/frogpond/schooltool_navigation')
+
+    >>> print analyze.queryHTML('//a[text()="Persons"]', manager.contents)[0]
+    <a href="http://localhost/frogpond/persons">Persons</a>
+
+    >>> print analyze.queryHTML('//a[text()="Courses"]', manager.contents)[0]
+    <a href="http://localhost/frogpond/courses">Courses</a>
+
+    >>> print analyze.queryHTML('//a[text()="Sections"]', manager.contents)[0]
+    <a href="http://localhost/frogpond/sections">Sections</a>
+
+    >>> print analyze.queryHTML('//a[text()="Resources"]', manager.contents)[0]
+    <a href="http://localhost/frogpond/resources">Resources</a>
+
+    >>> print analyze.queryHTML('//a[text()="Terms"]', manager.contents)[0]
+    <a href="http://localhost/frogpond/terms">Terms</a>
+
+    >>> print analyze.queryHTML('//a[text()="School Timetables"]',
+    ...                         manager.contents)[0]
+    <a href="http://localhost/frogpond/ttschemas">School Timetables</a>
+
+    >>> print analyze.queryHTML('//a[text()="Levels"]', manager.contents)[0]
+    <a href="http://localhost/frogpond/levels">Levels</a>
 
 The main technical challenge in this view is finding the nearest
 ``ISchoolToolApplication`` instance, and providing the links relative to
 it.
 
-    >>> print http(r"""
-    ... GET /frogpond/resources/lily/schooltool_navigation HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 200 Ok
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
-    <div class="portlet">
-    <h4>Navigation</h4>
-    <ul>
-      <li><a href="http://localhost/frogpond/persons">Persons</a></li>
-      <li><a href="http://localhost/frogpond/courses">Courses</a></li>
-      <li><a href="http://localhost/frogpond/sections">Sections</a></li>
-      <li><a href="http://localhost/frogpond/groups">Groups</a></li>
-      <li><a href="http://localhost/frogpond/resources">Resources</a></li>
-      <li><a href="http://localhost/frogpond/terms">Terms</a></li>
-      <li><a href="http://localhost/frogpond/ttschemas">School Timetables</a></li>
-      <li><a href="http://localhost/frogpond/levels">Levels</a></li>
-    </ul>
-    </div>
+    >>> manager.open('http://localhost/frogpond/'
+    ...              'groups/manager/schooltool_navigation')
+
+    >>> print analyze.queryHTML('//a[text()="Persons"]', manager.contents)[0]
+    <a href="http://localhost/frogpond/persons">Persons</a>
+
+    >>> print analyze.queryHTML('//a[text()="Courses"]', manager.contents)[0]
+    <a href="http://localhost/frogpond/courses">Courses</a>
+
+    >>> print analyze.queryHTML('//a[text()="Sections"]', manager.contents)[0]
+    <a href="http://localhost/frogpond/sections">Sections</a>
+
+    >>> print analyze.queryHTML('//a[text()="Resources"]', manager.contents)[0]
+    <a href="http://localhost/frogpond/resources">Resources</a>
+
+    >>> print analyze.queryHTML('//a[text()="Terms"]', manager.contents)[0]
+    <a href="http://localhost/frogpond/terms">Terms</a>
+
+    >>> print analyze.queryHTML('//a[text()="School Timetables"]',
+    ...                         manager.contents)[0]
+    <a href="http://localhost/frogpond/ttschemas">School Timetables</a>
+
+    >>> print analyze.queryHTML('//a[text()="Levels"]', manager.contents)[0]
+    <a href="http://localhost/frogpond/levels">Levels</a>
 
 This view is only available in the SchoolTool skin:
 
-    >>> print http(r"""
-    ... GET /schooltool_navigation HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... """)
-    HTTP/1.1 404 Not Found
-    Content-Length: ...
-    Content-Type: text/html;charset=utf-8
-    <BLANKLINE>
+    >>> manager.open('http://localhost/schooltool_navigation')
+    Traceback (most recent call last):
     ...
-
+    NotFound: Object: <zope.app.folder.folder.Folder object at ...>,
+                      name: u'schooltool_navigation'
