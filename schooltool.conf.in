@@ -174,18 +174,16 @@ web-access-log-file schooltool-skel/log/web-access.log
 # lang
 #
 #   Specifies the locale of the messages to be used on the server.
-#   Several languages can be specified.
 #
-#   If a translation for a string is not found in a locale, the next listed
-#   locale is tried. If no translation is found, the string from the default
-#   locale is used.
+#   If 'auto' is set, the language is chosen according to the user's
+#   preference specified in the web browser configuration.
 #
 # Default:
-#   lang en_US
+#   lang auto
 #
 # Examples:
 #   lang en_UK
-#   lang en_US.UTF-8
+#   lang fr
 
 #
 # domain
