@@ -118,8 +118,8 @@ The page presented next contains a selection of these dates:
       <input type="hidden" name="date" value="2005-07-07" />
     ...
       <div class="row">
-        <label>Replacement</label>
-        <select name="replacement">
+        <label for="replacement">Replacement</label>
+        <select id="replacement" name="replacement">
           <option>2005-07-10</option>
           <option>2005-07-17</option>
           <option>2005-07-24</option>
