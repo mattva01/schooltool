@@ -311,24 +311,92 @@ def doctest_PDFCalendarViewBase_dayEvents():
 
     """
 
+def doctest_PDFCalendarViewBase_dayEvents_timezone():
+    """Let's test that dayEvents handles timezones correctly.
+
+    First' let's someone setup the user a timezone:
+
+        >>> from schooltool.person.interfaces import IPerson
+        >>> from schooltool.person.interfaces import IPersonPreferences
+        >>> from schooltool.person.preference import getPersonPreferences
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> setup.setUpAnnotations()
+        >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
+        ...                      getPersonPreferences)
+        >>> from schooltool.app.browser.tests.test_cal import PrincipalStub
+        >>> principal = PrincipalStub()
+        >>> IPersonPreferences(IPerson(principal)).timezone = "Europe/Vilnius"
+
+    Let's create a calendar and a view:
+
+        >>> calendar = ISchoolToolCalendar(Person(title="Mr. Smith"))
+        >>> request = TestRequest()
+        >>> request.setPrincipal(principal)
+        >>> view = StubbedBaseView(calendar, request)
+
+    Let's add several edge-case events to the user's calendar:
+
+        >>> from pytz import utc
+        >>> calendar.addEvent(
+        ...     CalendarEvent(datetime(2005, 7, 7, 20, 0, tzinfo=utc),
+        ...                   timedelta(minutes=10), '20Z'))
+        >>> calendar.addEvent(
+        ...     CalendarEvent(datetime(2005, 7, 7, 21, 0, tzinfo=utc),
+        ...                   timedelta(minutes=10), '21Z'))
+        >>> calendar.addEvent(
+        ...     CalendarEvent(datetime(2005, 7, 7, 22, 0, tzinfo=utc),
+        ...                   timedelta(minutes=10), '22Z'))
+
+        >>> calendar.addEvent(
+        ...     CalendarEvent(datetime(2005, 7, 8, 19, 0, tzinfo=utc),
+        ...                   timedelta(minutes=10), '19Z+1d'))
+        >>> calendar.addEvent(
+        ...     CalendarEvent(datetime(2005, 7, 8, 20, 0, tzinfo=utc),
+        ...                   timedelta(minutes=10), '20Z+1d'))
+        >>> calendar.addEvent(
+        ...     CalendarEvent(datetime(2005, 7, 8, 21, 0, tzinfo=utc),
+        ...                   timedelta(minutes=10), '21Z+1d'))
+
+    We should get only the events that fall into July 8 in Vilnius
+    timezone:
+
+        >>> result = view.dayEvents(date(2005, 7, 8))
+        >>> [event.title for event in result]
+        ['21Z', '22Z', '19Z+1d', '20Z+1d']
+
+
+    """
 
 def doctest_PDFCalendarViewBase_buildEventTable():
     """Tests for buildEventTable.
 
+        >>> from schooltool.person.interfaces import IPerson
+        >>> from schooltool.person.interfaces import IPersonPreferences
+        >>> from schooltool.person.preference import getPersonPreferences
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> setup.setUpAnnotations()
+        >>> ztapi.provideAdapter(IPerson, IPersonPreferences,
+        ...                      getPersonPreferences)
+        >>> from schooltool.app.browser.tests.test_cal import PrincipalStub
+        >>> principal = PrincipalStub()
+        >>> IPersonPreferences(IPerson(principal)).timezone = "Europe/Vilnius"
+
         >>> calendar = ISchoolToolCalendar(Person(title="Mr. Smith"))
         >>> request = TestRequest(form={'date': '2005-07-08'})
+        >>> request.setPrincipal(principal)
         >>> view = StubbedBaseView(calendar, request)
         >>> view.configureStyles()
 
     Let's check the representation of an ordinary event:
 
-        >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10),
+        >>> from pytz import utc
+        >>> evt = CalendarEvent(datetime(2005, 7, 8, 9, 10, tzinfo=utc),
         ...                     timedelta(hours=2), "Some event")
         >>> calendar.addEvent(evt)
 
         >>> table = view.buildDayTable([evt])
         >>> table._cellvalues[0][0].text
-        '09:10-11:10'
+        '12:10-14:10'
         >>> table._cellvalues[0][1][0].text
         'Some event'
 

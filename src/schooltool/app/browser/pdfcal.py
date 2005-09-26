@@ -164,8 +164,9 @@ class PDFCalendarViewBase(BrowserView):
             if event.allday:
                 time_cell_text = translate(_("all day"), context=self.request)
             else:
-                dtend = event.dtstart + event.duration
-                time_cell_text = "%s-%s" % (event.dtstart.strftime('%H:%M'),
+                start = event.dtstart.astimezone(self.getTimezone())
+                dtend = start + event.duration
+                time_cell_text = "%s-%s" % (start.strftime('%H:%M'),
                                             dtend.strftime('%H:%M'))
             time_cell = Paragraph(time_cell_text.encode('utf-8'),
                                   self.italic_style)
@@ -231,7 +232,7 @@ class PDFCalendarViewBase(BrowserView):
         allday_events = []
         events = []
         tz = self.getTimezone()
-        start = datetime.datetime.combine(date, datetime.time(0, tzinfo=tz))
+        start = tz.localize(datetime.datetime.combine(date, datetime.time(0)))
         end = start + datetime.timedelta(days=1)
 
         for calendar in self.getCalendars():
