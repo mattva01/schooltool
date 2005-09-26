@@ -311,7 +311,9 @@ class EventForDisplay(object):
 
     cssClass = 'event'  # at the moment no other classes are used
 
-    def __init__(self, event, color1, color2, source_calendar, timezone):
+    def __init__(self, event, request, color1, color2, source_calendar,
+                 timezone):
+        self.request = request
         self.source_calendar = source_calendar
         if canAccess(source_calendar, '__iter__'):
             # Due to limitations in the default Zope 3 security policy, a
@@ -362,6 +364,19 @@ class EventForDisplay(object):
         if self.source_calendar == self.context.__parent__:
             return self.context.resources
         return ()
+
+    def editLink(self):
+        """Return the URL where you can edit this event.
+
+        Returns None if the event is not editable (e.g. it is a timetable
+        event).
+        """
+        if self.context.__parent__ is None:
+            return None
+        # XXX mg: Is the date argument needed?  If so, should it be
+        #         self.dtstart, or self.dtstarttz?
+        return (zapi.absoluteURL(self.context, self.request) + '/edit.html?' +
+                'date=%s' % self.dtstart.strftime('%Y-%m-%d'))
 
     def renderShort(self):
         """Short representation of the event for the monthly view."""
@@ -638,8 +653,8 @@ class CalendarViewBase(BrowserView):
                     # removeSecurityProxy(self.context) are needed so we
                     # could compare them.
                     continue
-                yield EventForDisplay(event, color1, color2, calendar,
-                                      self.timezone)
+                yield EventForDisplay(event, self.request, color1, color2,
+                                      calendar, self.timezone)
 
     def getDays(self, start, end):
         """Get a list of CalendarDay objects for a selected period of time.
@@ -1546,6 +1561,10 @@ class Slots(dict):
 class CalendarEventView(BrowserView):
     """View for single events."""
 
+    # XXX what are these used for?
+    color1 = '#9db8d2'
+    color2 = '#7590ae'
+
     def __init__(self, context, request):
         self.context = context
         self.request = request
@@ -1560,7 +1579,8 @@ class CalendarEventView(BrowserView):
         dayformat = '%A, ' + self.preferences.dateformat
         self.day = unicode(self.dtstart.strftime(dayformat))
 
-        self.display = EventForDisplay(context,'#9db8d2', '#7590ae',
+        self.display = EventForDisplay(context, self.request,
+                                       self.color1, self.color2,
                                        context.__parent__,
                                        timezone=self.preferences.timezone)
 

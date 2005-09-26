@@ -22,18 +22,13 @@
             tal:define="start repeat/day/start"
             tal:attributes="class python:start and 'first' or ''">
           <div tal:repeat="event day/events">
-            <a tal:define="
-                   evdate python:event.dtstart.strftime('%Y-%m-%d');
-                   url python:event.__parent__
-                         and path('string:${event/@@absolute_url}/edit.html?date=${evdate}')"
-               tal:attributes="
+            <a tal:attributes="
                    start repeat/event/start;
-                   evdate evdate;
                    class python:start and 'first' or '';
                    style string:background: ${event/color1};;
                                 border-color: ${event/color2};
                    title event/title;
-                   href url">
+                   href event/editLink">
               <span tal:content="event/shortTitle"/>
               <tal:if condition="not:event/allday">
                 (<span tal:content="

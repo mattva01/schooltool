@@ -8,6 +8,7 @@ We will obviously need a SchoolBell instance.
 
     >>> from zope.testbrowser import Browser
     >>> manager = Browser()
+    >>> manager.handleErrors = False
     >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
     >>> manager.handleErrors = False
     >>> manager.open('http://localhost/contents.html')
@@ -66,6 +67,7 @@ First, let's have a look at the person's empty calendar in iCalendar format.
 We should find just a placeholder there.
 
     >>> frog = Browser()
+    >>> frog.handleErrors = False
     >>> frog.open('http://localhost/frogpond/')
     >>> frog.getLink('Log In').click()
     >>> frog.getControl('Username').value = 'frog'

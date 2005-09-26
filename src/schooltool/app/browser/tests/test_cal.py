@@ -330,7 +330,8 @@ def doctest_EventForDisplay():
         >>> calendar = ISchoolToolCalendar(person)
         >>> event = createEvent('2004-01-02 14:45:50', '5min', 'yawn')
         >>> calendar.addEvent(event)
-        >>> e1 = EventForDisplay(event, 'red', 'green', calendar, utc)
+        >>> request = TestRequest()
+        >>> e1 = EventForDisplay(event, request, 'red', 'green', calendar, utc)
 
     EventForDisplay lets us access all the usual attributes
 
@@ -347,11 +348,11 @@ def doctest_EventForDisplay():
         >>> e1.allday
         False
 
-    If event is an allday event EventForDisplay has it's allday
-    attribute set:
+    If event is an allday event EventForDisplay has it's allday attribute set:
 
         >>> event.allday = True
-        >>> allday_efd = EventForDisplay(event, 'red', 'green', calendar, utc)
+        >>> allday_efd = EventForDisplay(event, request, 'red', 'green',
+        ...                              calendar, utc)
         >>> allday_efd.allday
         True
         >>> event.allday = False
@@ -377,7 +378,7 @@ def doctest_EventForDisplay():
 
         >>> e2 = createEvent('2004-01-02 12:00:00', '15min',
         ...                  'sleeping for a little while because I was tired')
-        >>> e2 = EventForDisplay(e2, 'blue', 'yellow', calendar, utc)
+        >>> e2 = EventForDisplay(e2, request, 'blue', 'yellow', calendar, utc)
         >>> e2.shortTitle
         'sleeping for a ...'
 
@@ -395,7 +396,7 @@ def doctest_EventForDisplay():
     The same CalendarEvent can be renderered for display in a particular
     timezone.
 
-        >>> e2east = EventForDisplay(e2, 'blue', 'yellow', calendar,
+        >>> e2east = EventForDisplay(e2, request, 'blue', 'yellow', calendar,
         ...                          timezone=timezone('US/Eastern'))
         >>> print e2east.renderShort().replace('&ndash;', '--')
         sleeping for a ... (07:00--07:15)
@@ -437,12 +438,13 @@ def doctest_EventForDisplay():
 
         >>> e3 = createEvent('2004-01-02 12:00:00', '15min',
         ...                  'sleeping for a little while because I was tired')
-        >>> e3utc = EventForDisplay(e3, 'blue', 'yellow', calendar, utc)
+        >>> e3utc = EventForDisplay(e3, request, 'blue', 'yellow', calendar,
+        ...                         utc)
         >>> print e3utc.dtstarttz
         2004-01-02 12:00:00+00:00
         >>> print e3utc.dtendtz
         2004-01-02 12:15:00+00:00
-        >>> e3cairo = EventForDisplay(e3, 'blue', 'yellow', calendar,
+        >>> e3cairo = EventForDisplay(e3, request, 'blue', 'yellow', calendar,
         ...                           timezone('Africa/Cairo'))
         >>> print e3cairo.dtstarttz
         2004-01-02 14:00:00+02:00
@@ -453,6 +455,35 @@ def doctest_EventForDisplay():
 
         >>> print e3cairo.dtstarttz.strftime('%Y-%m-%d')
         2004-01-02
+
+    """
+
+
+def doctest_EventForDisplay_editLink():
+    """Test for EventForDisplay.editLink.
+
+        >>> from schooltool.app.browser.cal import EventForDisplay
+        >>> from schooltool.app.cal import Calendar, CalendarEvent
+        >>> event = CalendarEvent(datetime(2005, 9, 26, 21, 2),
+        ...                       timedelta(hours=1), "Clickety-click",
+        ...                       unique_id='xyzzy')
+        >>> request = TestRequest()
+        >>> color1 = color2 = None
+        >>> calendar = Calendar(None)
+
+    Some events are not editable.
+
+        >>> e = EventForDisplay(event, request, color1, color2, calendar, utc)
+        >>> print e.editLink()
+        None
+
+    Other events are
+
+        >>> calendar.addEvent(event)
+        >>> directlyProvides(calendar, IContainmentRoot)
+        >>> e = EventForDisplay(event, request, color1, color2, calendar, utc)
+        >>> print e.editLink()
+        http://127.0.0.1/calendar/xyzzy/edit.html?date=2005-09-26
 
     """
 
@@ -4612,7 +4643,8 @@ def test_suite():
     suite.addTest(doctest.DocTestSuite(
         setUp=setUp, tearDown=tearDown,
         optionflags=doctest.ELLIPSIS|doctest.REPORT_NDIFF|
-                    doctest.NORMALIZE_WHITESPACE))
+                    doctest.NORMALIZE_WHITESPACE|
+                    doctest.REPORT_ONLY_FIRST_FAILURE))
     suite.addTest(doctest.DocTestSuite('schooltool.app.browser.cal'))
     return suite
 
