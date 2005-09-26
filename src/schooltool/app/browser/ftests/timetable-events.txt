@@ -1,0 +1,189 @@
+Tests for timetable events in calendar views
+--------------------------------------------
+
+Regression test for issue405:
+
+Traceback when trying to render weekly view when there are timetable
+events.
+
+A manager logs in and adds a SchoolTool instance:
+
+    >>> from zope.testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/contents.html')
+
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getControl(name='new_value').value = 'frogpond'
+    >>> manager.getControl('Apply').click()
+
+    >>> 'frogpond' in manager.contents
+    True
+
+Let's add a user:
+
+    >>> manager.getLink('frogpond').click()
+    >>> manager.getLink('Persons').click()
+    >>> manager.getLink('New Person').click()
+
+    >>> manager.getControl('Full name').value = 'Frog'
+    >>> manager.getControl('Username').value = 'frog'
+    >>> manager.getControl('Password').value = 'pwd'
+    >>> manager.getControl('Verify password').value = 'pwd'
+    >>> manager.getControl('Add').click()
+
+We will need a term and a School timetable:
+
+    >>> manager.open('http://localhost/frogpond/terms')
+    >>> manager.getLink('New Term').click()
+
+    >>> manager.getControl('Title').value = '2005 Fall'
+    >>> manager.getControl('Start date').value = '2005-09-01'
+    >>> manager.getControl('End date').value = '2006-01-31'
+    >>> manager.getControl('Next').click()
+
+
+    >>> manager.getControl('Sunday').click()
+    >>> manager.getControl('Saturday').click()
+    >>> manager.getControl('Add term').click()
+
+    >>> from schooltool.testing import analyze
+    >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
+    <div id="content-body">
+        <ul><li>
+            <a href="http://localhost/frogpond/terms/2005-fall">2005 Fall</a>
+          </li>
+        </ul></div>
+
+
+Now the timetable:
+
+    >>> manager.open('http://localhost/frogpond/ttschemas')
+    >>> manager.getLink('New Timetable').click()
+
+    >>> manager.getControl('Title').value = 'default'
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Days of the week').click()
+    >>> manager.getControl('Same time each day').click()
+    >>> manager.getControl(name='field.times').value = """
+    ...    9:30-10:25
+    ...    10:30-11:25
+    ...    11:35-12:20
+    ...    12:45-13:30
+    ...    13:35-14:20
+    ...    14:30-15:15
+    ... """
+    >>> manager.getControl('Next').click()
+    >>> manager.getControl('Designated by time').click()
+
+
+We will need a course:
+
+    >>> manager.open('http://localhost/frogpond/courses')
+    >>> manager.getLink('New Course').click()
+
+    >>> manager.getControl('Title').value = 'History 6'
+    >>> manager.getControl('Description').value = 'History for the sixth class'
+    >>> manager.getControl('Add').click()
+
+And a section:
+
+    >>> manager.getLink('History 6').click()
+    >>> manager.getLink('New Section').click()
+    >>> manager.getControl('Code').value = 'history-6a'
+    >>> manager.getControl('Description').value = 'History for the class 6A'
+    >>> manager.getControl('Add').click()
+
+Let's assign Frog as a teacher for History 6:
+
+    >>> manager.getLink(url='http://localhost/frogpond/sections/history6a').click()
+    >>> manager.getLink('edit instructors').click()
+    >>> manager.getControl('Frog').selected = True
+    >>> manager.getControl('Add').click()
+
+    >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
+    <div id="content-body">
+    ...
+    <fieldset><legend>Current Instructors</legend>
+    <div>
+      <label>
+        <input type="checkbox" name="remove_instructor.frog">
+        Frog
+      </label>
+    </div>
+    ...
+
+
+And schedule the section:
+
+    >>> manager.open('http://localhost/frogpond/sections/history6a')
+    >>> manager.getLink('Schedule').click()
+
+    >>> manager.getControl(name="Monday.09:30-10:25").value = True
+    >>> manager.getControl(name="Wednesday.11:35-12:20").value = True
+    >>> manager.getControl('Save').click()
+
+Frog logs in:
+
+    >>> frog = Browser()
+    >>> frog.handleErrors = False
+    >>> frog.addHeader('Authorization', 'Basic frog:pwd')
+
+Looks at his daily view:
+
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-09-07')
+    >>> print analyze.queryHTML('id("content-body")', frog.contents)[0]
+    <div id="content-body">
+    ...
+    <h6 style="background: #d1940c">
+                  History 6
+                  <span class="start-end">
+                    (<span>11:35</span>
+                       -
+                     <span>12:20</span>)
+                  </span>
+              </h6>
+    ...
+
+And tries to get an overview of the whole week:
+
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-w37')
+    >>> print analyze.queryHTML('id("content-body")', frog.contents)[0]
+    <div id="content-body">
+    ...
+
+Month:
+
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-09')
+
+    >>> def print_table_cell_for_day(date):
+    ...    print analyze.queryHTML('id("content-body")'
+    ...                            '//td/a[contains(@href, "%s")]' % date,
+    ...                            frog.contents)[0]
+
+    >>> print_table_cell_for_day('2005-09-11')
+    <a href="http://localhost/frogpond/persons/frog/calendar/2005-09-11">
+      <span class="">11</span>
+    </a>
+
+    >>> print_table_cell_for_day('2005-09-12')
+    <a href="http://localhost/frogpond/persons/frog/calendar/2005-09-12">
+      <span class="">12</span>
+          <span style="background: #9db8d2;
+                                border-color: #7590ae" class="event">History 6 (09:30...10:25)</span>
+          <span style="background: #eed680;
+                                border-color: #d1940c" class="event">History 6 (09:30...10:25)</span>
+    </a>
+
+XXX Note that we are seeing the same event twice -- this is issue367.
+
+Year:
+
+    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005')
+    >>> print_table_cell_for_day('2005-09-11')
+    <a href="http://localhost/frogpond/persons/frog/calendar/2005-09-11" class="cal_yearly_day">11</a>
+
+    >>> print_table_cell_for_day('2005-09-12')
+    <a href="http://localhost/frogpond/persons/frog/calendar/2005-09-12" class="cal_yearly_day_busy">12</a>
+
