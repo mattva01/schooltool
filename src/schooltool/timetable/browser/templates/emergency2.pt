@@ -30,8 +30,8 @@ and several days after the term.
   </p>
 
   <div class="row">
-    <label i18n:translate="">Replacement</label>
-    <select name="replacement">
+    <label for="replacement" i18n:translate="">Replacement</label>
+    <select id="replacement" name="replacement">
       <option tal:repeat="date view/replacements"
               tal:content="date"/>
     </select>
