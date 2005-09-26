@@ -328,7 +328,6 @@ class EventForDisplay(object):
         self.color1 = color1
         self.color2 = color2
         self.shortTitle = self.title
-        self.allday = event.allday
         if len(self.title) > 16:
             self.shortTitle = self.title[:15] + '...'
         self.dtstarttz = event.dtstart.astimezone(timezone)
