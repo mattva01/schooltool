@@ -3,18 +3,16 @@ Functional test for timetable schema add wizard
 
 Let's create a SchoolTool instance:
 
-  >>> print http("""
-  ... POST /@@contents.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Length: ...
-  ... Content-Type: application/x-www-form-urlencoded
-  ... 
-  ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&\
-  ... new_value=frogpond""")
-  HTTP/1.1 303 See Other
-  ...
-  Location: http://localhost/@@contents.html
-  ...
+    >>> from zope.testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/contents.html')
+
+    >>> manager.getLink('SchoolTool').click()
+    >>> manager.getControl(name='new_value').value = 'frogpond'
+    >>> manager.getControl('Apply').click()
+    >>> manager.getLink('frogpond').click()
 
 
 Weekly timetable
@@ -22,176 +20,49 @@ Weekly timetable
 
 .. image:: ttschema-wizard-1.png
 
-Let's go to the new timetable schema wizard:
+Let's go to the `new timetable schema` wizard:
 
-  >>> print http(r"""
-  ... GET /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <div class="row">
-    <div class="label">
-      <label for="field.title" title="">Title</label>
-    </div>
-    <p class="hint"></p>
-    <div class="field">
-      <input class="textType" id="field.title" name="field.title" size="20"
-             type="text" value="default"  />
-    </div>
-    </div>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="NEXT"
-             value="Next" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getLink('School Timetables').click()
+    >>> manager.getLink('New Timetable').click()
+    >>> '<h1>New timetable schema</h1>' in manager.contents
+    True
 
-We enter a title and press Next
+We enter a title and press `Next` button:
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.title=Default&NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Does your school's timetable cycle use days of the week, or a rotating
-       cycle?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Days of the week" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Rotating cycle" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl('Title').value = 'Default'
+    >>> manager.getControl('Next').click()
 
-Let's choose weekly for now -- we'll try the rotating cycle later.
+You can now choose the general type of the schedule. Let's choose the weekly
+type for now -- we'll try the rotating cycle later.
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.0=Days+of+the+week
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Do classes begin and end at the same time each day in your school's
-       timetable?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Same time each day" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Different times" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl('Days of the week').click()
 
-Let's say that classes begin at the same time
+Now you can choose whether the classes start at the same time every day. Let's
+say that classes begin at the same time:
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.0=Same+time
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Enter start and end times for each slot, one slot (HH:MM - HH:MM) per
-       line.</p>
-    <div class="row">
-    <p class="hint"></p>
-    <div class="field">
-      <textarea cols="60" id="field.times" name="field.times" rows="15"
-      >9:30-10:25
-      10:30-11:25</textarea>
-    </div>
-    </div>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="NEXT"
-             value="Next" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl('Same time each day').click()
 
-Let's add two more periods.
+Enter now start and end times for each slot, one slot (HH:MM - HH:MM) per
+line. By default there are two periods. Let's add two more entries.
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.times=9:30-10:25%0D%0A10:30-11:25%0D%0A11:30-12:25%0D%0A12:30-13:25&NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <p>Do periods have names or are they simply designated by time?</p>
-  ...
+    >>> manager.getControl(name='field.times').value = """\
+    ... 9:30-10:25
+    ... 10:30-11:25
+    ... 11:30-12:25
+    ... 12:30-13:25
+    ... """
+    >>> manager.getControl('Next').click()
 
-For now, let's say that periods are designated by time.
+Do periods have names or are they simply designated by time? For now, let's
+say that periods are designated by time.
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.1=Designated+by+time
-  ... """)
-  HTTP/1.1 303 See Other
-  Content-Length: 0
-  Content-Type: text/plain
-  Location: http://localhost/frogpond/ttschemas
-  ...
+    >>> manager.getControl('Designated by time').click()
 
-The timetable schema gets created.
+The timetable schema gets created. Now we see the newly created timetable
+schema in the list.
 
-Now we see the newly created timetable schema in the list.
-
-  >>> print http(r"""
-  ... GET /frogpond/ttschemas HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... """, handle_errors=False)
-  HTTP/1.1 200 Ok
-  ...
-          <a href="http://localhost/frogpond/ttschemas/default">Default</a>
-  ...
+    >>> manager.getLink('Default')
+    <Link text='Default' url='http://localhost/frogpond/ttschemas/default'>
 
 We can examine its composition more easily by invoking the RESTive view.
 
@@ -255,281 +126,73 @@ Rotating timetable
 
 Let's do it again!
 
-  >>> print http(r"""
-  ... GET /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <div class="row">
-    <div class="label">
-      <label for="field.title" title="">Title</label>
-    </div>
-    <p class="hint"></p>
-    <div class="field">
-      <input class="textType" id="field.title" name="field.title" size="20"
-             type="text" value="default"  />
-    </div>
-    </div>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="NEXT"
-             value="Next" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getLink('School Timetables').click()
+    >>> manager.getLink('New Timetable').click()
 
-We enter a title and press Next
+We enter a title and press the `Next` button:
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.title=Rotating&NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Does your school's timetable cycle use days of the week, or a rotating
-       cycle?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Days of the week" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Rotating cycle" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl('Title').value = 'Rotating'
+    >>> manager.getControl('Next').click()
 
 Let's choose rotating.
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.1=Rotating+cycle
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Enter names of days in cycle, one per line.</p>
-    <div class="row">
-    <p class="hint"></p>
-    <div class="field">
-      <textarea cols="60" id="field.days" name="field.days" rows="15"
-      ></textarea>
-    </div>
-    </div>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="NEXT"
-             value="Next" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl('Rotating cycle').click()
 
-We shall have three days, designated A, B, and ... (oh no! the suspense!) ...
-C.
+Enter names of days in cycle, one per line. We shall have three days,
+designated A, B, and ... (oh no! the suspense!) ...  C.
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.days=A%0D%0AB%0D%0AC%0D%0A&NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Do classes begin and end at the same time each day in your school's
-       timetable?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Same time each day" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Different times" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
 
-Let's say that classes begin at the same time
+    >>> manager.getControl(name='field.days').value = """\
+    ... A
+    ... B
+    ... C
+    ... """
+    >>> manager.getControl('Next').click()
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.0=Same+time
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Enter start and end times for each slot, one slot (HH:MM - HH:MM) per
-       line.</p>
-    <div class="row">
-    <p class="hint"></p>
-    <div class="field">
-      <textarea cols="60" id="field.times" name="field.times" rows="15"
-      >9:30-10:25
-      10:30-11:25</textarea>
-    </div>
-    </div>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="NEXT"
-             value="Next" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+Do classes begin and end at the same time each day in your school's timetable?
+Let's say that classes begin at the same time:
 
-Let's add two more periods.
+    >>> manager.getControl('Same time each day').click()
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.times=9:30-10:25%0D%0A10:30-11:25%0D%0A11:30-12:25%0D%0A12:30-13:25&NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <p>Do periods have names or are they simply designated by time?</p>
-  ...
+Enter start and end times for each slot, one slot (HH:MM - HH:MM) per
+line. Let's add two more periods.
 
-This time, let's say that periods are named.
+    >>> manager.getControl(name='field.times').value = """\
+    ... 9:30-10:25
+    ... 10:30-11:25
+    ... 11:30-12:25
+    ... 12:30-13:25
+    ... """
+    >>> manager.getControl('Next').click()
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.0=Named
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <p>Enter names of periods, one per line.</p>
-  ...
-  <textarea ... name="field.periods" rows="15" ></textarea>
-  ...
+Do periods have names or are they simply designated by time? This time, let's
+say that periods are named.
 
-We get to choose whether sequences of periods in all days are the same:
+    >>> manager.getControl('Have names').click()
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.periods=Period_A%0D%0APeriod_B%0D%0APeriod_C%0D%0APeriod_D
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <p>Is the sequence of periods each day the same or different?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Same" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Different" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  ...
+Enter names of periods, one per line.
 
-Let's say they are the same.
+    >>> manager.getControl(name='field.periods').value = """\
+    ... Period_A
+    ... Period_C
+    ... Period_B
+    ... Period_D
+    ... """
+    >>> manager.getControl('Next').click()
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.0=Same
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <BLANKLINE>
-  ...
-  <p>Please put the periods in order:</p>
-  <div class="row">
-    <select name="period_0">
-      <option selected="selected">Period_A</option>
-      <option>Period_B</option>
-      <option>Period_C</option>
-      <option>Period_D</option>
-    </select>
-  </div>
-  <div class="row">
-    <select name="period_1">
-      <option>Period_A</option>
-      <option selected="selected">Period_B</option>
-      <option>Period_C</option>
-      <option>Period_D</option>
-    </select>
-  </div>
-  ...
-  <div class="controls">
-    <input type="submit" class="button-ok" name="NEXT"
-           value="Next" />
-    <input type="submit" class="button-cancel" name="CANCEL"
-           value="Cancel" />
-  </div>
-  ...
+We get to choose whether sequences of periods in all days are the same. Let's
+say they are the same.
 
-We can rearrange the periods:
+    >>> manager.getControl('Same').click()
 
-  >>> print http("""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... period_0=Period_A&\
-  ... period_1=Period_C&\
-  ... period_2=Period_B&\
-  ... period_3=Period_D""", handle_errors=False)
-  HTTP/1.1 303 See Other
-  ...
-  Location: http://localhost/frogpond/ttschemas
-  ...
+We can rearrange the periods now:
+
+    >>> manager.getControl('Next').click()
 
 Now we see the newly created timetable schema in the list.
 
-  >>> print http(r"""
-  ... GET /frogpond/ttschemas HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... """, handle_errors=False)
-  HTTP/1.1 200 Ok
-  ...
-          <a href="http://localhost/frogpond/ttschemas/rotating">Rotating</a>
-  ...
+    >>> manager.getLink('Rotating')
+    <Link text='Rotating' url='http://localhost/frogpond/ttschemas/rotating'>
 
 We can examine its composition more easily by invoking the RESTive view.
 
@@ -580,413 +243,136 @@ Rotating timetable, take two
 
 Let's do it again!
 
-  >>> print http(r"""
-  ... GET /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <div class="row">
-    <div class="label">
-      <label for="field.title" title="">Title</label>
-    </div>
-    <p class="hint"></p>
-    <div class="field">
-      <input class="textType" id="field.title" name="field.title" size="20"
-             type="text" value="default"  />
-    </div>
-    </div>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="NEXT"
-             value="Next" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getLink('School Timetables').click()
+    >>> manager.getLink('New Timetable').click()
 
-We enter a title and press Next
+We enter a title and press the `Next` button:
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.title=Rotating+2&NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Does your school's timetable cycle use days of the week, or a rotating
-       cycle?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Days of the week" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Rotating cycle" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl('Title').value = 'Rotating 2'
+    >>> manager.getControl('Next').click()
 
 Let's choose rotating.
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.1=Rotating+cycle
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Enter names of days in cycle, one per line.</p>
-    <div class="row">
-    <p class="hint"></p>
-    <div class="field">
-      <textarea cols="60" id="field.days" name="field.days" rows="15"
-      ></textarea>
-    </div>
-    </div>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="NEXT"
-             value="Next" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl('Rotating cycle').click()
 
 We shall have three days, designated A, B, and C.
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.days=A%0D%0AB%0D%0AC%0D%0A&NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Do classes begin and end at the same time each day in your school's
-       timetable?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Same time each day" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Different times" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl(name='field.days').value = """\
+    ... A
+    ... B
+    ... C
+    ... """
+    >>> manager.getControl('Next').click()
 
-Let's say that classes begin at the same time
+Do classes begin and end at the same time each day in your school's timetable?
+Let's say that classes begin at the same time:
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.0=Same+time
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Enter start and end times for each slot, one slot (HH:MM - HH:MM) per
-       line.</p>
-    <div class="row">
-    <p class="hint"></p>
-    <div class="field">
-      <textarea cols="60" id="field.times" name="field.times" rows="15"
-      >9:30-10:25
-      10:30-11:25</textarea>
-    </div>
-    </div>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="NEXT"
-             value="Next" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl('Same time each day').click()
 
-Let's add two more periods.
+Enter start and end times for each slot, one slot (HH:MM - HH:MM) per
+line. Let's add two more periods to the default two:
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.times=9:30-10:25%0D%0A10:30-11:25%0D%0A11:30-12:25%0D%0A12:30-13:25&NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <p>Do periods have names or are they simply designated by time?</p>
-  ...
+    >>> manager.getControl(name='field.times').value = """\
+    ... 9:30-10:25
+    ... 10:30-11:25
+    ... 11:30-12:25
+    ... 12:30-13:25
+    ... """
+    >>> manager.getControl('Next').click()
 
-Let's say that periods are named.
+Do periods have names or are they simply designated by time? Let's say that
+periods are named.
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.0=Named
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <p>Enter names of periods, one per line.</p>
-  ...
-  <textarea ... name="field.periods" rows="15" ></textarea>
-  ...
+    >>> manager.getControl('Have names').click()
 
-We get to choose whether sequences of periods in all days are the same:
+Enter names of periods, one per line.
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.periods=Period_A%0D%0APeriod_B%0D%0APeriod_C%0D%0APeriod_D
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <p>Is the sequence of periods each day the same or different?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Same" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Different" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  ...
+    >>> manager.getControl(name='field.periods').value = """\
+    ... Period_A
+    ... Period_B
+    ... Period_C
+    ... Period_D
+    ... """
+    >>> manager.getControl('Next').click()
 
-Let's say they are different.
+We get to choose whether sequences of periods in all days are the same. Let's
+say they are different.
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.1=Different
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <BLANKLINE>
-  ...
-  <p>Please put the periods in order for each day:</p>
-  <table>
-    <tr>
-      <th>A</th>
-      <th>B</th>
-      <th>C</th>
-    </tr>
-    <tr>
-      <td>
-        <select name="period_0_0">
-          <option selected="selected">Period_A</option>
-          <option>Period_B</option>
-          <option>Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_1_0">
-          <option selected="selected">Period_A</option>
-          <option>Period_B</option>
-          <option>Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_2_0">
-          <option selected="selected">Period_A</option>
-          <option>Period_B</option>
-          <option>Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <select name="period_0_1">
-          <option>Period_A</option>
-          <option selected="selected">Period_B</option>
-          <option>Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_1_1">
-          <option>Period_A</option>
-          <option selected="selected">Period_B</option>
-          <option>Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_2_1">
-          <option>Period_A</option>
-          <option selected="selected">Period_B</option>
-          <option>Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <select name="period_0_2">
-          <option>Period_A</option>
-          <option>Period_B</option>
-          <option selected="selected">Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_1_2">
-          <option>Period_A</option>
-          <option>Period_B</option>
-          <option selected="selected">Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_2_2">
-          <option>Period_A</option>
-          <option>Period_B</option>
-          <option selected="selected">Period_C</option>
-          <option>Period_D</option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <select name="period_0_3">
-          <option>Period_A</option>
-          <option>Period_B</option>
-          <option>Period_C</option>
-          <option selected="selected">Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_1_3">
-          <option>Period_A</option>
-          <option>Period_B</option>
-          <option>Period_C</option>
-          <option selected="selected">Period_D</option>
-        </select>
-      </td>
-      <td>
-        <select name="period_2_3">
-          <option>Period_A</option>
-          <option>Period_B</option>
-          <option>Period_C</option>
-          <option selected="selected">Period_D</option>
-        </select>
-      </td>
-    </tr>
-  </table>
-  ...
+    >>> manager.getControl('Different').click()
 
-We can rearrange them:
+Please put the periods in order for each day. We can rearrange them to our
+liking:
 
-  >>> print http("""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... period_0_0=Period_A&period_1_0=Period_D&period_2_0=Period_A&\
-  ... period_0_1=Period_C&period_1_1=Period_B&period_2_1=Period_B&\
-  ... period_0_2=Period_B&period_1_2=Period_C&period_2_2=Period_C&\
-  ... period_0_3=Period_D&period_1_3=Period_A&period_2_3=Period_D&\
-  ... NEXT=Next""", handle_errors=False)
-  HTTP/1.1 303 See Other
-  ...
-  Location: http://localhost/frogpond/ttschemas
-  ...
+    >>> manager.getControl(name='period_0_0').value = ['Period_A']
+    >>> manager.getControl(name='period_0_1').value = ['Period_C']
+    >>> manager.getControl(name='period_0_2').value = ['Period_B']
+    >>> manager.getControl(name='period_0_3').value = ['Period_D']
+
+    >>> manager.getControl(name='period_1_0').value = ['Period_D']
+    >>> manager.getControl(name='period_1_1').value = ['Period_B']
+    >>> manager.getControl(name='period_1_2').value = ['Period_C']
+    >>> manager.getControl(name='period_1_3').value = ['Period_A']
+
+    >>> manager.getControl(name='period_2_0').value = ['Period_A']
+    >>> manager.getControl(name='period_2_1').value = ['Period_B']
+    >>> manager.getControl(name='period_2_2').value = ['Period_C']
+    >>> manager.getControl(name='period_2_3').value = ['Period_D']
+    >>> manager.getControl('Next').click()
 
 The schema is now created:
 
-  >>> print rest(r"""
-  ... GET /frogpond/ttschemas/rotating-2 HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... """, handle_errors=False)
-  HTTP/1.1 200 Ok
-  Content-Length: ...
-  Content-Type: text/xml; charset=UTF-8
-  <BLANKLINE>
-  <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-    <title>Rotating 2</title>
-    <model factory="SequentialDayIdBasedTimetableModel">
-      <daytemplate>
-        <used when="A"/>
-        <period duration="55" id="Period_A" tstart="09:30"/>
-        <period duration="55" id="Period_B" tstart="11:30"/>
-        <period duration="55" id="Period_C" tstart="10:30"/>
-        <period duration="55" id="Period_D" tstart="12:30"/>
-      </daytemplate>
-      <daytemplate>
-        <used when="B"/>
-        <period duration="55" id="Period_A" tstart="12:30"/>
-        <period duration="55" id="Period_B" tstart="10:30"/>
-        <period duration="55" id="Period_C" tstart="11:30"/>
-        <period duration="55" id="Period_D" tstart="09:30"/>
-      </daytemplate>
-      <daytemplate>
-        <used when="C"/>
-        <period duration="55" id="Period_A" tstart="09:30"/>
-        <period duration="55" id="Period_B" tstart="10:30"/>
-        <period duration="55" id="Period_C" tstart="11:30"/>
-        <period duration="55" id="Period_D" tstart="12:30"/>
-      </daytemplate>
-    </model>
-    <day id="A">
-      <period id="Period_A"/>
-      <period id="Period_C"/>
-      <period id="Period_B"/>
-      <period id="Period_D"/>
-    </day>
-    <day id="B">
-      <period id="Period_D"/>
-      <period id="Period_B"/>
-      <period id="Period_C"/>
-      <period id="Period_A"/>
-    </day>
-    <day id="C">
-      <period id="Period_A"/>
-      <period id="Period_B"/>
-      <period id="Period_C"/>
-      <period id="Period_D"/>
-    </day>
-  </timetable>
+    >>> print rest(r"""
+    ... GET /frogpond/ttschemas/rotating-2 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+      <title>Rotating 2</title>
+      <model factory="SequentialDayIdBasedTimetableModel">
+        <daytemplate>
+          <used when="A"/>
+          <period duration="55" id="Period_A" tstart="09:30"/>
+          <period duration="55" id="Period_B" tstart="11:30"/>
+          <period duration="55" id="Period_C" tstart="10:30"/>
+          <period duration="55" id="Period_D" tstart="12:30"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="B"/>
+          <period duration="55" id="Period_A" tstart="12:30"/>
+          <period duration="55" id="Period_B" tstart="10:30"/>
+          <period duration="55" id="Period_C" tstart="11:30"/>
+          <period duration="55" id="Period_D" tstart="09:30"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="C"/>
+          <period duration="55" id="Period_A" tstart="09:30"/>
+          <period duration="55" id="Period_B" tstart="10:30"/>
+          <period duration="55" id="Period_C" tstart="11:30"/>
+          <period duration="55" id="Period_D" tstart="12:30"/>
+        </daytemplate>
+      </model>
+      <day id="A">
+        <period id="Period_A"/>
+        <period id="Period_C"/>
+        <period id="Period_B"/>
+        <period id="Period_D"/>
+      </day>
+      <day id="B">
+        <period id="Period_D"/>
+        <period id="Period_B"/>
+        <period id="Period_C"/>
+        <period id="Period_A"/>
+      </day>
+      <day id="C">
+        <period id="Period_A"/>
+        <period id="Period_B"/>
+        <period id="Period_C"/>
+        <period id="Period_D"/>
+      </day>
+    </timetable>
 
 
 Weekly timetable, take two
@@ -996,430 +382,196 @@ Weekly timetable, take two
 
 Let's go to the timetable schema wizard:
 
-  >>> print http(r"""
-  ... GET /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <div class="row">
-    <div class="label">
-      <label for="field.title" title="">Title</label>
-    </div>
-    <p class="hint"></p>
-    <div class="field">
-      <input class="textType" id="field.title" name="field.title" size="20"
-             type="text" value="default"  />
-    </div>
-    </div>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="NEXT"
-             value="Next" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getLink('School Timetables').click()
+    >>> manager.getLink('New Timetable').click()
 
 We enter a title and press Next
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.title=Weekly+2&NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Does your school's timetable cycle use days of the week, or a rotating
-       cycle?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Days of the week" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Rotating cycle" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl('Title').value = 'Weekly 2'
+    >>> manager.getControl('Next').click()
 
+Does your school's timetable cycle use days of the week, or a rotating cycle?
 Let's choose weekly again.
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.0=Days+of+the+week
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Do classes begin and end at the same time each day in your school's
-       timetable?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Same time each day" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Different times" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl('Days of the week').click()
 
-Let's say that classes begin at different times
+Do classes begin and end at the same time each day in your school's timetable?
+Let's say that classes begin at different times:
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.1=Different+times
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Enter start and end times for each slot on each day, one slot (HH:MM -
-       HH:MM) per line.</p>
-    <table>
-      <tr>
-        <th>Monday</th>
-        <th>Tuesday</th>
-        <th>Wednesday</th>
-        <th>Thursday</th>
-        <th>Friday</th>
-      </tr>
-      <tr>
-        <td>
-          <textarea rows="12" cols="15" name="times.0">8:00 - 8:45
-    9:05 - 9:50
-    </textarea>
-        </td>
-        ...
-        <td>
-          <textarea rows="12" cols="15" name="times.4">8:00 - 8:45
-    9:05 - 9:50
-    </textarea>
-        </td>
-      </tr>
-    </table>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="NEXT"
-             value="Next" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl('Different times').click()
 
-Let's add a few periods.  All days have the same periods, except Friday.
+Enter start and end times for each slot on each day, one slot (HH:MM - HH:MM)
+per line.  Let's add a few periods.  All days have the same periods, except
+Friday.
 
-  >>> print http("""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... times.0=9:30-10:25%0D%0A10:30-11:25%0D%0A11:30-12:25%0D%0A12:30-13:25&\
-  ... times.1=9:30-10:25%0D%0A10:30-11:25%0D%0A11:30-12:25%0D%0A12:30-13:25&\
-  ... times.2=9:30-10:25%0D%0A10:30-11:25%0D%0A11:30-12:25%0D%0A12:30-13:25&\
-  ... times.3=9:30-10:25%0D%0A10:30-11:25%0D%0A11:30-12:25%0D%0A12:30-13:25&\
-  ... times.4=9:30-10:20%0D%0A10:25-11:15%0D%0A11:20-12:10%0D%0A&\
-  ... NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <p>Do periods have names or are they simply designated by time?</p>
-  ...
+    >>> manager.getControl(name='times.0').value = """\
+    ... 9:30-10:25
+    ... 10:30-11:25
+    ... 11:30-12:25
+    ... 12:30-13:25
+    ... """
 
-Let's say that periods are named.
+    >>> manager.getControl(name='times.1').value = """\
+    ... 9:30-10:25
+    ... 10:30-11:25
+    ... 11:30-12:25
+    ... 12:30-13:25
+    ... """
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.0=Named
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <p>Enter names of periods, one per line.</p>
-  ...
-  <textarea ... name="field.periods" rows="15" ></textarea>
-  ...
+    >>> manager.getControl(name='times.2').value = """\
+    ... 9:30-10:25
+    ... 10:30-11:25
+    ... 11:30-12:25
+    ... 12:30-13:25
+    ... """
 
-We will name them periods A, B, C, D, E, F.  Next we get to choose whether
-sequences of periods in all days are the same:
+    >>> manager.getControl(name='times.3').value = """\
+    ... 9:30-10:25
+    ... 10:30-11:25
+    ... 11:30-12:25
+    ... 12:30-13:25
+    ... """
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.periods=A%0D%0AB%0D%0AC%0D%0AD%0D%0AE%0D%0AF%0D%0A&NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <p>Is the sequence of periods each day the same or different?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Same" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Different" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  ...
+    >>> manager.getControl(name='times.4').value = """\
+    ... 9:30-10:20
+    ... 10:25-11:15
+    ... 11:20-12:10
+    ... """
+    >>> manager.getControl('Next').click()
 
-Let's say they are different.
+Do periods have names or are they simply designated by time? Let's say that
+periods are named.
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.1=Different
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <BLANKLINE>
-  ...
-    <p>Please put the periods in order for each day:</p>
-    <table>
-      <tr>
-        <th>Monday</th>
-        <th>Tuesday</th>
-        <th>Wednesday</th>
-        <th>Thursday</th>
-        <th>Friday</th>
-      </tr>
-      <tr>
-        <td>
-          <select name="period_0_0">
-            <option selected="selected">A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-        <td>
-          <select name="period_1_0">
-            <option selected="selected">A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-        ...
-        <td>
-          <select name="period_4_0">
-            <option selected="selected">A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <select name="period_0_1">
-            <option>A</option>
-            <option selected="selected">B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-        <td>
-          <select name="period_1_1">
-            <option>A</option>
-            <option selected="selected">B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-        ...
-        <td>
-          <select name="period_4_1">
-            <option>A</option>
-            <option selected="selected">B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-      </tr>
-      ...
-      <tr>
-        <td>
-          <select name="period_0_3">
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option selected="selected">D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-        <td>
-          <select name="period_1_3">
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option selected="selected">D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-        ...
-        <td>
-          <select name="period_3_3">
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option selected="selected">D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-        <td>
-        </td>
-      </tr>
-    </table>
-  ...
+    >>> manager.getControl('Have names').click()
 
-We can rearrange a little bit:
+Now enter names of periods, one per line. We will name them periods A, B, C,
+D, E, F.  Next we get to choose whether sequences of periods in all days are
+the same:
 
-  >>> print http("""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... period_0_0=A&period_1_0=B&period_2_0=C&period_3_0=D&period_4_0=C&\
-  ... period_0_1=B&period_1_1=C&period_2_1=D&period_3_1=E&period_4_1=D&\
-  ... period_0_2=C&period_1_2=D&period_2_2=E&period_3_2=F&period_4_2=E&\
-  ... period_0_3=D&period_1_3=E&period_2_3=F&period_3_3=A&\
-  ... NEXT=Next""", handle_errors=False)
-  HTTP/1.1 303 See Other
-  ...
-  Location: http://localhost/frogpond/ttschemas
-  ...
+    >>> manager.getControl(name='field.periods').value = """\
+    ... A
+    ... B
+    ... C
+    ... D
+    ... E
+    ... F
+    ... """
+    >>> manager.getControl('Next').click()
+
+Is the sequence of periods each day the same or different? Let's say they are
+different.
+
+    >>> manager.getControl('Different').click()
+
+Please put the periods in order for each day. We can rearrange a little bit:
+
+    >>> manager.getControl(name='period_0_0').value = ['A']
+    >>> manager.getControl(name='period_0_1').value = ['B']
+    >>> manager.getControl(name='period_0_2').value = ['C']
+    >>> manager.getControl(name='period_0_3').value = ['D']
+
+    >>> manager.getControl(name='period_1_0').value = ['B']
+    >>> manager.getControl(name='period_1_1').value = ['C']
+    >>> manager.getControl(name='period_1_2').value = ['D']
+    >>> manager.getControl(name='period_1_3').value = ['E']
+
+    >>> manager.getControl(name='period_2_0').value = ['C']
+    >>> manager.getControl(name='period_2_1').value = ['D']
+    >>> manager.getControl(name='period_2_2').value = ['E']
+    >>> manager.getControl(name='period_2_3').value = ['F']
+
+    >>> manager.getControl(name='period_3_0').value = ['D']
+    >>> manager.getControl(name='period_3_1').value = ['E']
+    >>> manager.getControl(name='period_3_2').value = ['F']
+    >>> manager.getControl(name='period_3_3').value = ['A']
+
+    >>> manager.getControl(name='period_4_0').value = ['C']
+    >>> manager.getControl(name='period_4_1').value = ['D']
+    >>> manager.getControl(name='period_4_2').value = ['E']
+
+    >>> manager.getControl('Next').click()
 
 The schema is now created:
 
-  >>> print rest(r"""
-  ... GET /frogpond/ttschemas/weekly-2 HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... """, handle_errors=False)
-  HTTP/1.1 200 Ok
-  Content-Length: ...
-  Content-Type: text/xml; charset=UTF-8
-  <BLANKLINE>
-  <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-    <title>Weekly 2</title>
-    <model factory="WeeklyTimetableModel">
-      <daytemplate>
-        <used when="Friday"/>
-        <period duration="50" id="C" tstart="09:30"/>
-        <period duration="50" id="D" tstart="10:25"/>
-        <period duration="50" id="E" tstart="11:20"/>
-      </daytemplate>
-      <daytemplate>
-        <used when="Monday"/>
-        <period duration="55" id="A" tstart="09:30"/>
-        <period duration="55" id="B" tstart="10:30"/>
-        <period duration="55" id="C" tstart="11:30"/>
-        <period duration="55" id="D" tstart="12:30"/>
-      </daytemplate>
-      <daytemplate>
-        <used when="Thursday"/>
-        <period duration="55" id="A" tstart="12:30"/>
-        <period duration="55" id="D" tstart="09:30"/>
-        <period duration="55" id="E" tstart="10:30"/>
-        <period duration="55" id="F" tstart="11:30"/>
-      </daytemplate>
-      <daytemplate>
-        <used when="Tuesday"/>
-        <period duration="55" id="B" tstart="09:30"/>
-        <period duration="55" id="C" tstart="10:30"/>
-        <period duration="55" id="D" tstart="11:30"/>
-        <period duration="55" id="E" tstart="12:30"/>
-      </daytemplate>
-      <daytemplate>
-        <used when="Wednesday"/>
-        <period duration="55" id="C" tstart="09:30"/>
-        <period duration="55" id="D" tstart="10:30"/>
-        <period duration="55" id="E" tstart="11:30"/>
-        <period duration="55" id="F" tstart="12:30"/>
-      </daytemplate>
-      <daytemplate>
-        <used when="default"/>
-      </daytemplate>
-    </model>
-    <day id="Monday">
-      <period id="A"/>
-      <period id="B"/>
-      <period id="C"/>
-      <period id="D"/>
-    </day>
-    <day id="Tuesday">
-      <period id="B"/>
-      <period id="C"/>
-      <period id="D"/>
-      <period id="E"/>
-    </day>
-    <day id="Wednesday">
-      <period id="C"/>
-      <period id="D"/>
-      <period id="E"/>
-      <period id="F"/>
-    </day>
-    <day id="Thursday">
-      <period id="D"/>
-      <period id="E"/>
-      <period id="F"/>
-      <period id="A"/>
-    </day>
-    <day id="Friday">
-      <period id="C"/>
-      <period id="D"/>
-      <period id="E"/>
-    </day>
-  </timetable>
+    >>> print rest(r"""
+    ... GET /frogpond/ttschemas/weekly-2 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+      <title>Weekly 2</title>
+      <model factory="WeeklyTimetableModel">
+        <daytemplate>
+          <used when="Friday"/>
+          <period duration="50" id="C" tstart="09:30"/>
+          <period duration="50" id="D" tstart="10:25"/>
+          <period duration="50" id="E" tstart="11:20"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="Monday"/>
+          <period duration="55" id="A" tstart="09:30"/>
+          <period duration="55" id="B" tstart="10:30"/>
+          <period duration="55" id="C" tstart="11:30"/>
+          <period duration="55" id="D" tstart="12:30"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="Thursday"/>
+          <period duration="55" id="A" tstart="12:30"/>
+          <period duration="55" id="D" tstart="09:30"/>
+          <period duration="55" id="E" tstart="10:30"/>
+          <period duration="55" id="F" tstart="11:30"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="Tuesday"/>
+          <period duration="55" id="B" tstart="09:30"/>
+          <period duration="55" id="C" tstart="10:30"/>
+          <period duration="55" id="D" tstart="11:30"/>
+          <period duration="55" id="E" tstart="12:30"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="Wednesday"/>
+          <period duration="55" id="C" tstart="09:30"/>
+          <period duration="55" id="D" tstart="10:30"/>
+          <period duration="55" id="E" tstart="11:30"/>
+          <period duration="55" id="F" tstart="12:30"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="default"/>
+        </daytemplate>
+      </model>
+      <day id="Monday">
+        <period id="A"/>
+        <period id="B"/>
+        <period id="C"/>
+        <period id="D"/>
+      </day>
+      <day id="Tuesday">
+        <period id="B"/>
+        <period id="C"/>
+        <period id="D"/>
+        <period id="E"/>
+      </day>
+      <day id="Wednesday">
+        <period id="C"/>
+        <period id="D"/>
+        <period id="E"/>
+        <period id="F"/>
+      </day>
+      <day id="Thursday">
+        <period id="D"/>
+        <period id="E"/>
+        <period id="F"/>
+        <period id="A"/>
+      </day>
+      <day id="Friday">
+        <period id="C"/>
+        <period id="D"/>
+        <period id="E"/>
+      </day>
+    </timetable>
 
 
 Rotating timetable, take four
@@ -1429,441 +581,157 @@ Rotating timetable, take four
 
 Let's do it one last time!
 
-  >>> print http(r"""
-  ... GET /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <div class="row">
-    <div class="label">
-      <label for="field.title" title="">Title</label>
-    </div>
-    <p class="hint"></p>
-    <div class="field">
-      <input class="textType" id="field.title" name="field.title" size="20"
-             type="text" value="default"  />
-    </div>
-    </div>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="NEXT"
-             value="Next" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getLink('School Timetables').click()
+    >>> manager.getLink('New Timetable').click()
 
-We enter a title and press Next
+We enter a title and press the `Next` button:
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.title=Rotating+4&NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Does your school's timetable cycle use days of the week, or a rotating
-       cycle?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Days of the week" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Rotating cycle" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl('Title').value = 'Rotating 4'
+    >>> manager.getControl('Next').click()
 
 Let's choose rotating.
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.1=Rotating+cycle
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Enter names of days in cycle, one per line.</p>
-    <div class="row">
-    <p class="hint"></p>
-    <div class="field">
-      <textarea cols="60" id="field.days" name="field.days" rows="15"
-      ></textarea>
-    </div>
-    </div>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="NEXT"
-             value="Next" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl('Rotating cycle').click()
 
 We shall have three days, designated Day A, Day B, and Day C.
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.days=Day+A%0D%0ADay+B%0D%0ADay+C%0D%0A&NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Do classes begin and end at the same time each day in your school's
-       timetable?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Same time each day" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Different times" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl(name='field.days').value = """\
+    ... Day A
+    ... Day B
+    ... Day C
+    ... """
+    >>> manager.getControl('Next').click()
 
-Let's say that classes begin at different times
+Do classes begin and end at the same time each day in your school's timetable?
+Let's say that classes begin at the same time:
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.1=Different+times
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Enter start and end times for each slot on each day, one slot (HH:MM -
-       HH:MM) per line.</p>
-    <table>
-      <tr>
-        <th>Day A</th>
-        <th>Day B</th>
-        <th>Day C</th>
-      </tr>
-      <tr>
-        <td>
-          <textarea rows="12" cols="15" name="times.0">8:00 - 8:45
-    9:05 - 9:50
-    </textarea>
-        </td>
-        <td>
-          <textarea rows="12" cols="15" name="times.1">8:00 - 8:45
-    9:05 - 9:50
-    </textarea>
-        </td>
-        <td>
-          <textarea rows="12" cols="15" name="times.2">8:00 - 8:45
-    9:05 - 9:50
-    </textarea>
-        </td>
-      </tr>
-    </table>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="NEXT"
-             value="Next" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl('Different times').click()
 
-Let's add a few periods.  Day 2 will have one period more.
+Enter start and end times for each slot on each day, one slot (HH:MM - HH:MM)
+per line. Let's add a few periods.  Day 2 will have one period more.
 
-  >>> print http("""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... times.0=9:30-10:25%0D%0A10:30-11:25%0D%0A11:30-12:25%0D%0A12:30-13:25&\
-  ... times.1=9:00-09:55%0D%0A10:00-10:55%0D%0A11:00-11:55%0D%0A12:00-12:55%0D%0A13:00-13:55&\
-  ... times.2=9:30-10:25%0D%0A10:30-11:25%0D%0A11:30-12:25%0D%0A12:30-13:25&\
-  ... NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <p>Do periods have names or are they simply designated by time?</p>
-  ...
+    >>> manager.getControl(name='times.0').value = """\
+    ... 9:30-10:25
+    ... 10:30-11:25
+    ... 11:30-12:25
+    ... 12:30-13:25
+    ... """
 
-Let's say that periods are named.
+    >>> manager.getControl(name='times.1').value = """\
+    ... 9:00-9:55
+    ... 10:00-10:55
+    ... 11:00-11:55
+    ... 12:00-12:55
+    ... 13:00-13:55
+    ... """
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.0=Named
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <p>Enter names of periods, one per line.</p>
-  ...
-  <textarea ... name="field.periods" rows="15" ></textarea>
-  ...
+    >>> manager.getControl(name='times.2').value = """\
+    ... 9:30-10:25
+    ... 10:30-11:25
+    ... 11:30-12:25
+    ... 12:30-13:25
+    ... """
+    >>> manager.getControl('Next').click()
+
+Do periods have names or are they simply designated by time? Let's say that
+periods are named.
+
+    >>> manager.getControl('Have names').click()
 
 We will name them periods A, B, C, D, E, F.  Next we get to choose whether
 sequences of periods in all days are the same:
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.periods=A%0D%0AB%0D%0AC%0D%0AD%0D%0AE%0D%0AF%0D%0A&NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <p>Is the sequence of periods each day the same or different?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Same" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Different" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  ...
+    >>> manager.getControl(name='field.periods').value = """\
+    ... A
+    ... B
+    ... C
+    ... D
+    ... E
+    ... F
+    ... """
+    >>> manager.getControl('Next').click()
 
-Let's say they are different.
+Is the sequence of periods each day the same or different? Let's say they are
+different.
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... NEXT.1=Different
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-  <BLANKLINE>
-  ...
-  <p>Please put the periods in order for each day:</p>
-  <table>
-      <tr>
-        <th>Day A</th>
-        <th>Day B</th>
-        <th>Day C</th>
-      </tr>
-      <tr>
-        <td>
-          <select name="period_0_0">
-            <option selected="selected">A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-        <td>
-          <select name="period_1_0">
-            <option selected="selected">A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-        <td>
-          <select name="period_2_0">
-            <option selected="selected">A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <select name="period_0_1">
-            <option>A</option>
-            <option selected="selected">B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-        <td>
-          <select name="period_1_1">
-            <option>A</option>
-            <option selected="selected">B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-        <td>
-          <select name="period_2_1">
-            <option>A</option>
-            <option selected="selected">B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-      </tr>
-      ...
-      <tr>
-        <td>
-          <select name="period_0_3">
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option selected="selected">D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-        <td>
-          <select name="period_1_3">
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option selected="selected">D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-        <td>
-          <select name="period_2_3">
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option selected="selected">D</option>
-            <option>E</option>
-            <option>F</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        </td>
-        <td>
-          <select name="period_1_4">
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option selected="selected">E</option>
-            <option>F</option>
-          </select>
-        </td>
-        <td>
-        </td>
-      </tr>
-    </table>
-  ...
+    >>> manager.getControl('Different').click()
 
-We can rearrange them a bit:
+Please put the periods in order for each day. We can rearrange them a bit:
 
-  >>> print http("""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... period_0_0=A&period_1_0=B&period_2_0=C&\
-  ... period_0_1=B&period_1_1=C&period_2_1=D&\
-  ... period_0_2=C&period_1_2=D&period_2_2=E&\
-  ... period_0_3=D&period_1_3=E&period_2_3=F&\
-  ... period_1_4=F&\
-  ... NEXT=Next""", handle_errors=False)
-  HTTP/1.1 303 See Other
-  ...
-  Location: http://localhost/frogpond/ttschemas
-  ...
+    >>> manager.getControl(name='period_0_0').value = ['A']
+    >>> manager.getControl(name='period_0_1').value = ['B']
+    >>> manager.getControl(name='period_0_2').value = ['C']
+    >>> manager.getControl(name='period_0_3').value = ['D']
+
+    >>> manager.getControl(name='period_1_0').value = ['B']
+    >>> manager.getControl(name='period_1_1').value = ['C']
+    >>> manager.getControl(name='period_1_2').value = ['D']
+    >>> manager.getControl(name='period_1_3').value = ['E']
+    >>> manager.getControl(name='period_1_4').value = ['F']
+
+    >>> manager.getControl(name='period_2_0').value = ['C']
+    >>> manager.getControl(name='period_2_1').value = ['D']
+    >>> manager.getControl(name='period_2_2').value = ['E']
+    >>> manager.getControl(name='period_2_3').value = ['F']
+
+    >>> manager.getControl('Next').click()
 
 The schema is now created:
 
-  >>> print rest(r"""
-  ... GET /frogpond/ttschemas/rotating-4 HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... """, handle_errors=False)
-  HTTP/1.1 200 Ok
-  Content-Length: ...
-  Content-Type: text/xml; charset=UTF-8
-  <BLANKLINE>
-  <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-    <title>Rotating 4</title>
-    <model factory="SequentialDayIdBasedTimetableModel">
-      <daytemplate>
-        <used when="Day A"/>
-        <period duration="55" id="A" tstart="09:30"/>
-        <period duration="55" id="B" tstart="10:30"/>
-        <period duration="55" id="C" tstart="11:30"/>
-        <period duration="55" id="D" tstart="12:30"/>
-      </daytemplate>
-      <daytemplate>
-        <used when="Day B"/>
-        <period duration="55" id="B" tstart="09:00"/>
-        <period duration="55" id="C" tstart="10:00"/>
-        <period duration="55" id="D" tstart="11:00"/>
-        <period duration="55" id="E" tstart="12:00"/>
-        <period duration="55" id="F" tstart="13:00"/>
-      </daytemplate>
-      <daytemplate>
-        <used when="Day C"/>
-        <period duration="55" id="C" tstart="09:30"/>
-        <period duration="55" id="D" tstart="10:30"/>
-        <period duration="55" id="E" tstart="11:30"/>
-        <period duration="55" id="F" tstart="12:30"/>
-      </daytemplate>
-    </model>
-    <day id="Day A">
-      <period id="A"/>
-      <period id="B"/>
-      <period id="C"/>
-      <period id="D"/>
-    </day>
-    <day id="Day B">
-      <period id="B"/>
-      <period id="C"/>
-      <period id="D"/>
-      <period id="E"/>
-      <period id="F"/>
-    </day>
-    <day id="Day C">
-      <period id="C"/>
-      <period id="D"/>
-      <period id="E"/>
-      <period id="F"/>
-    </day>
-  </timetable>
+    >>> print rest(r"""
+    ... GET /frogpond/ttschemas/rotating-4 HTTP/1.1
+    ... Authorization: Basic mgr:mgrpw
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    <BLANKLINE>
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+      <title>Rotating 4</title>
+      <model factory="SequentialDayIdBasedTimetableModel">
+        <daytemplate>
+          <used when="Day A"/>
+          <period duration="55" id="A" tstart="09:30"/>
+          <period duration="55" id="B" tstart="10:30"/>
+          <period duration="55" id="C" tstart="11:30"/>
+          <period duration="55" id="D" tstart="12:30"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="Day B"/>
+          <period duration="55" id="B" tstart="09:00"/>
+          <period duration="55" id="C" tstart="10:00"/>
+          <period duration="55" id="D" tstart="11:00"/>
+          <period duration="55" id="E" tstart="12:00"/>
+          <period duration="55" id="F" tstart="13:00"/>
+        </daytemplate>
+        <daytemplate>
+          <used when="Day C"/>
+          <period duration="55" id="C" tstart="09:30"/>
+          <period duration="55" id="D" tstart="10:30"/>
+          <period duration="55" id="E" tstart="11:30"/>
+          <period duration="55" id="F" tstart="12:30"/>
+        </daytemplate>
+      </model>
+      <day id="Day A">
+        <period id="A"/>
+        <period id="B"/>
+        <period id="C"/>
+        <period id="D"/>
+      </day>
+      <day id="Day B">
+        <period id="B"/>
+        <period id="C"/>
+        <period id="D"/>
+        <period id="E"/>
+        <period id="F"/>
+      </day>
+      <day id="Day C">
+        <period id="C"/>
+        <period id="D"/>
+        <period id="E"/>
+        <period id="F"/>
+      </day>
+    </timetable>
 
 
 The Cancel button
@@ -1871,145 +739,37 @@ The Cancel button
 
 Let's do it once more!
 
-  >>> print http(r"""
-  ... GET /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <div class="row">
-    <div class="label">
-      <label for="field.title" title="">Title</label>
-    </div>
-    <p class="hint"></p>
-    <div class="field">
-      <input class="textType" id="field.title" name="field.title" size="20"
-             type="text" value="default"  />
-    </div>
-    </div>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="NEXT"
-             value="Next" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getLink('School Timetables').click()
+    >>> manager.getLink('New Timetable').click()
 
 We enter a title and press Next
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... field.title=Rotating&NEXT=Next
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Does your school's timetable cycle use days of the week, or a rotating
-       cycle?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Days of the week" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Rotating cycle" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getControl('Title').value = 'Rotating'
+    >>> manager.getControl('Next').click()
 
 And now we suddenly realize that we don't need another schema.  We can't
 simply go away and forget about this wizard, because it remembers the
 last step we completed:
 
-  >>> print http(r"""
-  ... GET /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <p>Does your school's timetable cycle use days of the week, or a rotating
-       cycle?</p>
-    <div class="controls">
-      <input class="button-ok" type="submit" name="NEXT.0"
-             value="Days of the week" />
-      <input class="button-ok" type="submit" name="NEXT.1"
-             value="Rotating cycle" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
+    >>> manager.getLink('School Timetables').click()
+    >>> manager.getLink('New Timetable').click()
+    >>> "Days of the week" in manager.contents
+    True
+    >>> "Rotating cycle" in manager.contents
+    True
 
 However we can press the Cancel button and go back to the beginning
 
-  >>> print http(r"""
-  ... POST /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... Content-Type: application/x-www-form-urlencoded
-  ...
-  ... CANCEL=Cancel
-  ... """)
-  HTTP/1.1 303 See Other
-  Content-Length: 0
-  Content-Type: text/plain
-  Location: http://localhost/frogpond/ttschemas
-  ...
+    >>> manager.getControl('Cancel').click()
+    >>> manager.url
+    'http://localhost/frogpond/ttschemas'
 
 If we now click on the New Timetable button, we'll see the first page
 again.
 
-  >>> print http(r"""
-  ... GET /frogpond/ttschemas/add.html HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
-  ... """)
-  HTTP/1.1 200 Ok
-  ...
-      <title>New timetable schema</title>
-  ...
-            <h1>New timetable schema</h1>
-  ...
-  <form class="plain" method="POST"
-        action="http://localhost/frogpond/ttschemas/add.html">
-    <div class="row">
-    <div class="label">
-      <label for="field.title" title="">Title</label>
-    </div>
-    <p class="hint"></p>
-    <div class="field">
-      <input class="textType" id="field.title" name="field.title" size="20"
-             type="text" value="default"  />
-    </div>
-    </div>
-    <div class="controls">
-      <input type="submit" class="button-ok" name="NEXT"
-             value="Next" />
-      <input type="submit" class="button-cancel" name="CANCEL"
-             value="Cancel" />
-    </div>
-  </form>
-  ...
-
+    >>> manager.getLink('New Timetable').click()
+    >>> manager.getControl('Title')
+    <Control name='field.title' type='text'>
 
 Epilogue
 --------
