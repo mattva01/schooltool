@@ -311,7 +311,7 @@ class EventForDisplay(object):
 
     cssClass = 'event'  # at the moment no other classes are used
 
-    def __init__(self, event, color1, color2, source_calendar, timezone=utc):
+    def __init__(self, event, color1, color2, source_calendar, timezone):
         self.source_calendar = source_calendar
         if canAccess(source_calendar, '__iter__'):
             # Due to limitations in the default Zope 3 security policy, a

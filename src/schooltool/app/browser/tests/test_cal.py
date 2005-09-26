@@ -24,7 +24,7 @@ $Id$
 import unittest
 import calendar
 from datetime import datetime, date, timedelta, time
-from pytz import timezone
+from pytz import timezone, utc
 
 from zope.i18n import translate
 from zope.interface import directlyProvides, implements
@@ -60,8 +60,6 @@ from schooltool.person.person import Person, PersonContainer
 from schooltool.person.interfaces import IPerson
 from schooltool.person.preference import getPersonPreferences
 from schooltool.person.interfaces import IPersonPreferences
-
-utc = timezone('UTC')
 
 
 def dt(timestr):
@@ -332,7 +330,7 @@ def doctest_EventForDisplay():
         >>> calendar = ISchoolToolCalendar(person)
         >>> event = createEvent('2004-01-02 14:45:50', '5min', 'yawn')
         >>> calendar.addEvent(event)
-        >>> e1 = EventForDisplay(event, 'red', 'green', calendar)
+        >>> e1 = EventForDisplay(event, 'red', 'green', calendar, utc)
 
     EventForDisplay lets us access all the usual attributes
 
@@ -353,7 +351,7 @@ def doctest_EventForDisplay():
     attribute set:
 
         >>> event.allday = True
-        >>> allday_efd = EventForDisplay(event, 'red', 'green', calendar)
+        >>> allday_efd = EventForDisplay(event, 'red', 'green', calendar, utc)
         >>> allday_efd.allday
         True
         >>> event.allday = False
@@ -379,7 +377,7 @@ def doctest_EventForDisplay():
 
         >>> e2 = createEvent('2004-01-02 12:00:00', '15min',
         ...                  'sleeping for a little while because I was tired')
-        >>> e2 = EventForDisplay(e2, 'blue', 'yellow', calendar)
+        >>> e2 = EventForDisplay(e2, 'blue', 'yellow', calendar, utc)
         >>> e2.shortTitle
         'sleeping for a ...'
 
@@ -398,12 +396,12 @@ def doctest_EventForDisplay():
     timezone.
 
         >>> e2east = EventForDisplay(e2, 'blue', 'yellow', calendar,
-        ...                      timezone=timezone('US/Eastern'))
+        ...                          timezone=timezone('US/Eastern'))
         >>> print e2east.renderShort().replace('&ndash;', '--')
         sleeping for a ... (07:00--07:15)
 
-    If the event is a booking event and the source calendar is a calendar of the
-    resource we should get the booker of the event:
+    If the event is a booking event and the source calendar is a calendar of
+    the resource we should get the booker of the event:
 
        >>> resource = Resource("r1")
        >>> e1.bookResource(resource)
@@ -439,7 +437,7 @@ def doctest_EventForDisplay():
 
         >>> e3 = createEvent('2004-01-02 12:00:00', '15min',
         ...                  'sleeping for a little while because I was tired')
-        >>> e3utc = EventForDisplay(e3, 'blue', 'yellow', calendar)
+        >>> e3utc = EventForDisplay(e3, 'blue', 'yellow', calendar, utc)
         >>> print e3utc.dtstarttz
         2004-01-02 12:00:00+00:00
         >>> print e3utc.dtendtz
