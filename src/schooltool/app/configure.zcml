@@ -118,11 +118,6 @@
       />
 
   <subscriber
-      for="zope.app.container.interfaces.IObjectAddedEvent"
-      handler=".app.applicationCalendarPermissionsSubscriber"
-      />
-
-  <subscriber
       for="schooltool.relationship.interfaces.IBeforeRelationshipEvent"
       handler=".membership.enforceMembershipConstraints"
       />

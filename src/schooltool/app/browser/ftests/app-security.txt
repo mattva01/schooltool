@@ -367,3 +367,9 @@ by unauthenticated users (issue345):
     >>> anonymous.open('http://localhost/frogpond/calendar/2005-02-03')
     >>> print anonymous.url
     http://localhost/frogpond/calendar/2005-02-03
+
+  Even if he is accessing the calendar indirectly:
+
+    >>> anonymous.open('http://localhost/frogpond')
+    >>> print anonymous.url
+    http://localhost/frogpond/calendar
