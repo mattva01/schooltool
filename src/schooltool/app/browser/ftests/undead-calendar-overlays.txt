@@ -13,7 +13,6 @@ Setup
 First we create an application:
 
   >>> from zope.testbrowser import Browser
-  >>> from schooltool.testing import analyze
   >>> manager_browser = Browser()
   >>> manager_browser.addHeader('Authorization', 'Basic mgr:mgrpw')
   >>> manager_browser.handleErrors = False

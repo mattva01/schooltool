@@ -48,7 +48,6 @@ We will need a term and a School timetable:
     >>> manager.getControl('Saturday').click()
     >>> manager.getControl('Add term').click()
 
-    >>> from schooltool.testing import analyze
     >>> print analyze.queryHTML('id("content-body")', manager.contents)[0]
     <div id="content-body">
         <ul><li>
