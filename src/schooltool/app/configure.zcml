@@ -256,7 +256,7 @@
   </content>
 
   <content class="schooltool.calendar.simple.ImmutableCalendar">
-    <require permission="schooltool.view"
+    <require permission="zope.Public"
              interface="schooltool.calendar.interfaces.ICalendar" />
   </content>
 

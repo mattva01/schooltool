@@ -135,37 +135,21 @@ def doctest_applicationCalendarPermissionsSubscriber():
 
         >>> applicationCalendarPermissionsSubscriber(ObjectAddedEvent(st))
 
-    Check that unauthenticated has calendarView permission on st.calendar:
+    Check that unauthenticated has only viewCalendar permission on st.calendar:
 
         >>> from zope.app.securitypolicy.interfaces import \
         ...         IPrincipalPermissionManager
         >>> unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
+
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> map = IPrincipalPermissionManager(ISchoolToolCalendar(st))
+        >>> print map.getPermissionsForPrincipal(unauthenticated.id)
+        [('schooltool.viewCalendar', PermissionSetting: Allow)]
+
+    And has no permissions on the app itself:
+
         >>> map = IPrincipalPermissionManager(st)
-        >>> x = map.getPermissionsForPrincipal(unauthenticated.id)
-        >>> x.sort()
-        >>> print x
-        [('schooltool.view', PermissionSetting: Allow), ('schooltool.viewCalendar', PermissionSetting: Allow)]
-
-    We don't want to open up everything:
-
-        >>> for container in ['persons', 'groups', 'resources', 'sections',
-        ...                   'courses']:
-        ...     map = IPrincipalPermissionManager(st[container])
-        ...     x = map.getPermissionsForPrincipal(unauthenticated.id)
-        ...     x.sort()
-        ...     print x
-        [('schooltool.view', PermissionSetting: Deny), ('schooltool.viewCalendar', PermissionSetting: Deny)]
-        [('schooltool.view', PermissionSetting: Deny), ('schooltool.viewCalendar', PermissionSetting: Deny)]
-        [('schooltool.view', PermissionSetting: Deny), ('schooltool.viewCalendar', PermissionSetting: Deny)]
-        [('schooltool.view', PermissionSetting: Deny), ('schooltool.viewCalendar', PermissionSetting: Deny)]
-        [('schooltool.view', PermissionSetting: Deny), ('schooltool.viewCalendar', PermissionSetting: Deny)]
-
-        >>> for container in ['terms', 'ttschemas']:
-        ...     map = IPrincipalPermissionManager(st[container])
-        ...     x = map.getPermissionsForPrincipal(unauthenticated.id)
-        ...     x.sort()
-        ...     print x
-        []
+        >>> print map.getPermissionsForPrincipal(unauthenticated.id)
         []
 
     Check that no permissions are set if the object added is not an app.
@@ -175,7 +159,6 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> root['sb']['persons']['james'] = person
         >>> applicationCalendarPermissionsSubscriber(
         ...     ObjectAddedEvent(person))
-        >>> from schooltool.app.interfaces import ISchoolToolCalendar
         >>> map = IPrincipalPermissionManager(ISchoolToolCalendar(person))
         >>> map.getPermissionsForPrincipal(unauthenticated.id)
         []

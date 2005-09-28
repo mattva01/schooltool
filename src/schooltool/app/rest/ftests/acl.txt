@@ -128,10 +128,10 @@ Now, the ACL view should include those new principals as well:
       </principal>
       <principal id="zope.Anybody">
     <BLANKLINE>
-          <permission setting="on" id="schooltool.view" />
+          <permission id="schooltool.view" />
           <permission id="schooltool.edit" />
           <permission id="schooltool.create" />
-          <permission setting="on" id="schooltool.viewCalendar" />
+          <permission id="schooltool.viewCalendar" />
           <permission id="schooltool.addEvent" />
           <permission id="schooltool.modifyEvent" />
           <permission id="schooltool.controlAccess" />
