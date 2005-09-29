@@ -1049,18 +1049,6 @@ def main(argv):
         tracer = trace.Trace(count=True, trace=False,
                     ignoremods=ignoremods, ignoredirs=ignoredirs)
 
-    # Finding and importing
-    test_files = get_test_files(cfg)
-    if cfg.list_tests or cfg.run_tests:
-        test_cases = get_test_cases(test_files, cfg, tracer=tracer)
-    if cfg.list_hooks or cfg.run_tests:
-        test_hooks = get_test_hooks(test_files, cfg, tracer=tracer)
-
-    # Configure the logging module
-    import logging
-    logging.basicConfig()
-    logging.root.setLevel(logging.CRITICAL)
-
     # Configure doctests
     if cfg.first_doctest_failure:
         import doctest
@@ -1074,12 +1062,25 @@ def main(argv):
         except ImportError:
             pass
 
+    # Make sure we can identify doctests before we start the filtering
     try:
         import zope.testing.doctest
         global DocFileCase_classes
         DocFileCase_classes += (zope.testing.doctest.DocFileCase,)
     except ImportError:
         pass
+
+    # Finding and importing
+    test_files = get_test_files(cfg)
+    if cfg.list_tests or cfg.run_tests:
+        test_cases = get_test_cases(test_files, cfg, tracer=tracer)
+    if cfg.list_hooks or cfg.run_tests:
+        test_hooks = get_test_hooks(test_files, cfg, tracer=tracer)
+
+    # Configure the logging module
+    import logging
+    logging.basicConfig()
+    logging.root.setLevel(logging.CRITICAL)
 
     # Running
     success = True
