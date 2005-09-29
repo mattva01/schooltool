@@ -21,27 +21,27 @@ all: build
 
 .PHONY: zope3-checkout
 zope3-checkout:
-	- svn co $(ZOPE_REPOSITORY)/Zope3/trunk Zope3
+	-test -d Zope3 || svn co $(ZOPE_REPOSITORY)/Zope3/trunk Zope3
 
 .PHONY: zope3-update
 zope3-update:
-	 svn up Zope3
+	svn up Zope3
 
 .PHONY: testbrowser-checkout
 testbrowser-checkout: zope3-checkout
-	- svn co $(ZOPE_REPOSITORY)/Zope3/branches/testbrowser-integration/src/zope/testbrowser Zope3/src/zope/testbrowser
+	-test -d Zope3/src/zope/testbrowser || svn co $(ZOPE_REPOSITORY)/Zope3/branches/testbrowser-integration/src/zope/testbrowser Zope3/src/zope/testbrowser
 
 .PHONY: testbrowser-update
 testbrowser-update:
-	 svn up Zope3/src/zope/testbrowser
+	svn up Zope3/src/zope/testbrowser
 
 .PHONY: zpkgsetup-checkout
 zpkgsetup-checkout:
-	- svn co $(ZOPE_REPOSITORY)/zpkgtools/trunk/zpkgsetup buildsupport/zpkgsetup
+	-test -d buildsupport/zpkgsetup || svn co $(ZOPE_REPOSITORY)/zpkgtools/trunk/zpkgsetup buildsupport/zpkgsetup
 
 .PHONY: zpkgsetup-update
 zpkgsetup-update:
-	 svn up buildsupport/zpkgsetup
+	svn up buildsupport/zpkgsetup
 
 .PHONY: checkout
 checkout: zope3-checkout testbrowser-checkout zpkgsetup-checkout
@@ -51,7 +51,7 @@ update: checkout zope3-update testbrowser-update zpkgsetup-update
 
 .PHONY: build
 build: zope3-checkout testbrowser-checkout zpkgsetup-checkout
-	[ ! -d Zope3 ] || cd Zope3 && $(PYTHON) setup.py build_ext -i
+	test -d Zope3 && cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) setup.py $(SETUPFLAGS) \
                 build_ext -i install_data --install-dir .
 	$(PYTHON) bin/remove-stale-bytecode.py
