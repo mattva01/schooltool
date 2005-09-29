@@ -45,7 +45,7 @@ def main():
 
     try:
         print "Try these test scripts:"
-        os.system('find %s -name "*.txt" ! -path "*/.svn/*"'
+        os.system('find %s -path "*/ftests/*.txt" ! -path "*/.svn/*"'
                   % os.path.join(basedir, 'src'))
         print
         while True:
