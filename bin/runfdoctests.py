@@ -24,28 +24,29 @@ def main():
     args = sys.argv[1:]
 
     # Hack hack hack!
-    sys.path.insert(0, os.path.abspath('src')) # breaks horribly without os.path.abspath
-    sys.path.insert(0, os.path.abspath('Zope3/src'))
+    basedir = os.path.normpath(os.path.join(os.path.dirname(__file__),
+                                            os.path.pardir))
+    sys.path.insert(0, os.path.abspath(os.path.join(basedir, 'src')))
+    sys.path.insert(0, os.path.abspath(os.path.join(basedir, 'Zope3/src')))
     # Load and set up Zope 3.
     start = time.time()
-    print "Bringing up Zope 3 (wait 20 seconds or so)"
-    from zope.app.testing.functional import FunctionalTestSetup
-    from zope.app.testing.functional import FunctionalDocFileSuite
-    FunctionalTestSetup('ftesting.zcml')
+    print "Bringing up ftesting.zcml (wait 20 seconds or so)"
+    from schooltool.testing.functional import load_ftesting_zcml
+    from schooltool.testing import analyze
+    load_ftesting_zcml()
     elapsed = time.time() - start
     print "Setup ate %.3f seconds" % elapsed
 
     from zope.testing import doctest
+    from zope.app.testing.functional import FunctionalDocFileSuite
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
                    doctest.NORMALIZE_WHITESPACE |
                    doctest.REPORT_ONLY_FIRST_FAILURE)
 
     try:
-        testdir = 'src/schooltool/browser/ftests'
-        print "Try test scripts in %s:" % testdir
-        fns = glob.glob('%s/*.txt' % testdir)
-        fns.sort()
-        print "\n".join(fns)
+        print "Try these test scripts:"
+        os.system('find %s -name "*.txt" ! -path "*/.svn/*"'
+                  % os.path.join(basedir, 'src'))
         print
         while True:
             if args:
@@ -62,7 +63,9 @@ def main():
                 import pdb; pdb.set_trace()
             else:
                 try:
+                    filename = os.path.join(os.path.pardir, filename)
                     suite = FunctionalDocFileSuite(filename,
+                                                   globs={'analyze': analyze},
                                                    optionflags=optionflags)
                     run(suite)
                 except Exception, e:
