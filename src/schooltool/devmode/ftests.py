@@ -22,23 +22,16 @@ Functional tests for devmode.
 $Id: test_all.py 2922 2005-02-22 19:04:44Z mg $
 """
 
-import os
 import unittest
 
-from zope.testing import doctest
-from zope.app.testing.functional import FunctionalDocFileSuite
-
 from schooltool.testing.functional import load_ftesting_zcml
+from schooltool.testing.functional import collect_ftests
 
 
 def test_suite():
     load_ftesting_zcml()
-    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
-                   doctest.NORMALIZE_WHITESPACE |
-                   doctest.REPORT_ONLY_FIRST_FAILURE)
-    return unittest.TestSuite((
-        FunctionalDocFileSuite('devmode.txt', optionflags=optionflags),
-        ))
+    return collect_ftests()
+
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

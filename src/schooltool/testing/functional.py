@@ -23,8 +23,13 @@ $Id$
 """
 
 import os
+import unittest
 
+from zope.testing import doctest
 from zope.app.testing.functional import FunctionalTestSetup
+from zope.app.testing.functional import FunctionalDocFileSuite
+
+from schooltool.testing import analyze
 
 
 def find_ftesting_zcml():
@@ -52,4 +57,29 @@ def load_ftesting_zcml():
         # is perfectly fine -- the user might be running Zope 3 tests.
         if str(e) != 'Already configured with a different config file':
             raise
+
+
+def collect_ftests(package=None, level=None):
+    """Collect all functional doctest files in a given package.
+
+    If `package` is None, looks up the call stack for the right module.
+
+    Returns a unittest.TestSuite.
+    """
+    package = doctest._normalize_module(package)
+    testdir = os.path.dirname(package.__file__)
+    filenames = [fn for fn in os.listdir(testdir)
+                 if fn.endswith('.txt') and not fn.startswith('.')]
+    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
+                   doctest.NORMALIZE_WHITESPACE |
+                   doctest.REPORT_ONLY_FIRST_FAILURE)
+    suites = []
+    for filename in filenames:
+        suite = FunctionalDocFileSuite(filename, package=package,
+                                       optionflags=optionflags,
+                                       globs={'analyze': analyze})
+        if level is not None:
+            suite.level = level
+        suites.append(suite)
+    return unittest.TestSuite(suites)
 

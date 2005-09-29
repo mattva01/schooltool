@@ -22,26 +22,15 @@ Functional tests for schooltool.level.
 $Id: test_all.py 2922 2005-02-22 19:04:44Z mg $
 """
 
-import os
 import unittest
 
-from zope.testing import doctest
-from zope.app.testing.functional import FunctionalDocFileSuite
-
 from schooltool.testing.functional import load_ftesting_zcml
+from schooltool.testing.functional import collect_ftests
 
 
 def test_suite():
     load_ftesting_zcml()
-    optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
-                   doctest.NORMALIZE_WHITESPACE |
-                   doctest.REPORT_ONLY_FIRST_FAILURE)
-    dir = os.path.dirname(__file__)
-    filenames = [fn for fn in os.listdir(dir)
-                 if fn.endswith('.txt') and not fn.startswith('.')]
-    suites = [FunctionalDocFileSuite(filename, optionflags=optionflags)
-              for filename in filenames]
-    return unittest.TestSuite(suites)
+    return collect_ftests()
 
 
 if __name__ == '__main__':
