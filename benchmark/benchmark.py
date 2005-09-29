@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.join(basedir, 'Zope3', 'src'))
 
 from zope.app.testing.functional import FunctionalTestSetup
 from zope.app.testing.functional import HTTPCaller
-from schooltool.app.browser.ftests.test_all import find_ftesting_zcml
+from schooltool.testing.functional import find_ftesting_zcml
 
 
 def measure(fn):

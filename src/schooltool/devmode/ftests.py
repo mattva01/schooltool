@@ -28,18 +28,11 @@ import unittest
 from zope.testing import doctest
 from zope.app.testing.functional import FunctionalDocFileSuite
 
-from schooltool.app.browser.ftests.test_all import find_ftesting_zcml
-from zope.app.testing.functional import FunctionalTestSetup
+from schooltool.testing.functional import load_ftesting_zcml
+
 
 def test_suite():
-    # Find SchoolTool's ftesting.zcml and load it.
-    try:
-        FunctionalTestSetup(find_ftesting_zcml())
-    except NotImplementedError, e:
-        # It appears that some other ftesting.zcml was already loaded, which
-        # is perfectly fine -- the user might be running Zope 3 tests.
-        if str(e) != 'Already configured with a different config file':
-            raise
+    load_ftesting_zcml()
     optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
                    doctest.NORMALIZE_WHITESPACE |
                    doctest.REPORT_ONLY_FIRST_FAILURE)

@@ -9,6 +9,7 @@ import urllib
 from benchmark import *
 
 import transaction
+import schooltool.app # dead chicken to avoid circular import
 from schooltool.person.person import Person
 from schooltool.group.group import Group
 

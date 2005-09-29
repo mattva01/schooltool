@@ -11,7 +11,7 @@ from benchmark import *
 import transaction
 from zope.app.testing.functional import FunctionalTestSetup
 from zope.app.testing.functional import HTTPCaller
-from schooltool.app.browser.ftests.test_all import find_ftesting_zcml
+
 from schooltool.app.cal import CalendarEvent
 from schooltool.person.person import Person
 from schooltool.group.group import Group

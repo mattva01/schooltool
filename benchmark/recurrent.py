@@ -8,9 +8,9 @@ from datetime import datetime, timedelta
 from benchmark import *
 
 import transaction
+from schooltool.app.cal import CalendarEvent
 from schooltool.person.person import Person
 from schooltool.group.group import Group
-from schooltool.app.cal import CalendarEvent
 from schooltool.calendar.recurrent import DailyRecurrenceRule
 from schooltool.calendar.recurrent import WeeklyRecurrenceRule
 from schooltool.calendar.recurrent import MonthlyRecurrenceRule
