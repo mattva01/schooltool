@@ -39,12 +39,12 @@ Now we log in as the frog:
     >>> frog.getControl('Password').value = 'pwd'
     >>> frog.getControl('Log in').click()
 
-The user should have the view permission set by default, let's check
-it out, but the redirection to the calendar is not available:
+The user should have the view permission set by default, as well as
+viewCalendar set for the application calendar:
 
     >>> frog.open('http://localhost/frogpond')
     >>> print frog.url
-    http...?forbidden=yes&nexturl=http://localhost/frogpond/calendar/daily.html
+    http://localhost/frogpond/calendar
     >>> frog.headers['status']
     '200 Ok'
 

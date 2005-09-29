@@ -122,6 +122,14 @@ def doctest_applicationCalendarPermissionsSubscriber():
         ...                      UnauthenticatedGroup('zope.unauthenticated',
         ...                                         'Unauthenticated users',
         ...                                         ''))
+
+        >>> from zope.app.security.interfaces import IAuthenticatedGroup
+        >>> from zope.app.security.principalregistry import AuthenticatedGroup
+        >>> ztapi.provideUtility(IAuthenticatedGroup,
+        ...                      AuthenticatedGroup('zope.authenticated',
+        ...                                         'Authenticated users',
+        ...                                         ''))
+
         >>> from zope.app.annotation.interfaces import IAnnotatable
         >>> from zope.app.securitypolicy.interfaces import \
         ...      IPrincipalPermissionManager
@@ -162,6 +170,15 @@ def doctest_applicationCalendarPermissionsSubscriber():
         >>> map = IPrincipalPermissionManager(ISchoolToolCalendar(person))
         >>> map.getPermissionsForPrincipal(unauthenticated.id)
         []
+
+    Authenticated users should be allowed to see the application calendar too:
+
+        >>> authenticated = zapi.queryUtility(IAuthenticatedGroup)
+
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> map = IPrincipalPermissionManager(ISchoolToolCalendar(st))
+        >>> print map.getPermissionsForPrincipal(authenticated.id)
+        [('schooltool.viewCalendar', PermissionSetting: Allow)]
 
     Clean up:
 

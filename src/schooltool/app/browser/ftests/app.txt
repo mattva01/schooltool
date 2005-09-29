@@ -213,33 +213,31 @@ Frog can't see the section's calendar by default
     >>> print frog.url
     http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
 
-Frog's overlay portlet has just his own calendar:
+Frog's overlay portlet has just his own calendar and application
+calendar:
 
     >>> frog.getLink('My Calendar').click()
-    >>> print frog.contents
-    <!DOCTYPE ...>
-    ...
-        <table class="overlays">
-    <BLANKLINE>
-          <tr>
-            <th style="text-align: center">
+    >>> def print_portlet(contents):
+    ...     print analyze.queryHTML(
+    ...         'id("portlet-calendar-overlay")//table[@class="overlays"]', contents)[0]
+
+    >>> print_portlet(frog.contents)
+    <table class="overlays"><tr><th style="text-align: center">
               <acronym title="Personal calendar">Cal</acronym>
             </th>
             <th><acronym title="Timetable calendar">TT</acronym></th>
             <th></th>
             <th></th>
-          </tr>
-    <BLANKLINE>
-          <tr style="background: #9db8d2">
-            <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
-            <td><input type="checkbox" name="my_timetable"
-                       checked="checked" /></td>
+          </tr><tr style="background: #9db8d2"><td><input type="checkbox" checked disabled></td>
+            <td><input type="checkbox" name="my_timetable" checked></td>
             <td style="width: 100%">My Calendar</td>
             <td></td>
-          </tr>
-    <BLANKLINE>
-        </table>
-    ...
+          </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/frogpond"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/frogpond"></td>
+            <td style="width: 100%">SchoolTool</td>
+            <td><a class="go" style="background: #c1665a;
+                color: #c1665a" href="http://localhost/frogpond/calendar">...</a></td>
+        </tr></table>
 
 As does Toad's:
 
@@ -250,32 +248,24 @@ As does Toad's:
     >>> toad.getControl('Password').value = 'doat'
     >>> toad.getControl('Log in').click()
 
-    >>> frog.getLink('My Calendar').click()
-    >>> print frog.contents
-    <!DOCTYPE ...>
-    ...
-        <table class="overlays">
-    <BLANKLINE>
-          <tr>
-            <th style="text-align: center">
+    >>> toad.getLink('My Calendar').click()
+    >>> print_portlet(toad.contents)
+    <table class="overlays"><tr><th style="text-align: center">
               <acronym title="Personal calendar">Cal</acronym>
             </th>
             <th><acronym title="Timetable calendar">TT</acronym></th>
             <th></th>
             <th></th>
-          </tr>
-    <BLANKLINE>
-          <tr style="background: #9db8d2">
-            <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
-            <td><input type="checkbox" name="my_timetable"
-                       checked="checked" /></td>
+          </tr><tr style="background: #9db8d2"><td><input type="checkbox" checked disabled></td>
+            <td><input type="checkbox" name="my_timetable" checked></td>
             <td style="width: 100%">My Calendar</td>
             <td></td>
-          </tr>
-    <BLANKLINE>
-        </table>
-    ...
-
+          </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/frogpond"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/frogpond"></td>
+            <td style="width: 100%">SchoolTool</td>
+            <td><a class="go" style="background: #c1665a;
+                color: #c1665a" href="http://localhost/frogpond/calendar">...</a></td>
+        </tr></table>
 
 Adding a teacher:
 
@@ -321,45 +311,28 @@ Frog can see the calendar now
 And Frog's overlay portlet shows the section:
 
     >>> frog.getLink('My Calendar').click()
-    >>> print frog.contents
-    <!DOCTYPE ...>
-    ...
-        <table class="overlays">
-    <BLANKLINE>
-          <tr>
-            <th style="text-align: center">
+    >>> print_portlet(frog.contents)
+    <table class="overlays"><tr><th style="text-align: center">
               <acronym title="Personal calendar">Cal</acronym>
             </th>
             <th><acronym title="Timetable calendar">TT</acronym></th>
             <th></th>
             <th></th>
-          </tr>
-    <BLANKLINE>
-          <tr style="background: #9db8d2">
-            <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
-            <td><input type="checkbox" name="my_timetable"
-                       checked="checked" /></td>
+          </tr><tr style="background: #9db8d2"><td><input type="checkbox" checked disabled></td>
+            <td><input type="checkbox" name="my_timetable" checked></td>
             <td style="width: 100%">My Calendar</td>
             <td></td>
-          </tr>
-    <BLANKLINE>
-          <tr style="background: #eed680">
-            <td><input type="checkbox" name="overlay:list"
-                       checked="checked"
-                       value="/frogpond/sections/his1" /></td>
-            <td><input type="checkbox"
-                       name="overlay_timetables:list"
-                       checked="checked"
-                       value="/frogpond/sections/his1" /></td>
+          </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/frogpond/sections/his1"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/frogpond/sections/his1"></td>
             <td style="width: 100%">Frog -- History</td>
-            <td><a class="go"
-                   style="background: #d1940c;
-                color: #d1940c"
-                   href="http://localhost/frogpond/sections/his1/calendar">&nbsp;</a></td>
-        </tr>
-        </table>
-    ...
-
+            <td><a class="go" style="background: #d1940c;
+                color: #d1940c" href="http://localhost/frogpond/sections/his1/calendar">...</a></td>
+        </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/frogpond"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/frogpond"></td>
+            <td style="width: 100%">SchoolTool</td>
+            <td><a class="go" style="background: #c1665a;
+                color: #c1665a" href="http://localhost/frogpond/calendar">...</a></td>
+        </tr></table>
 
 If we fire Frog, in hopes of getting Salamander to step in:
 
@@ -387,30 +360,23 @@ and he's no longer an instructor:
 And the section's calendar is no longer in his overlay portlet.
 
     >>> frog.getLink('My Calendar').click()
-    >>> print frog.contents
-    <!DOCTYPE ...>
-    ...
-        <table class="overlays">
-    <BLANKLINE>
-          <tr>
-            <th style="text-align: center">
+    >>> print_portlet(frog.contents)
+    <table class="overlays"><tr><th style="text-align: center">
               <acronym title="Personal calendar">Cal</acronym>
             </th>
             <th><acronym title="Timetable calendar">TT</acronym></th>
             <th></th>
             <th></th>
-          </tr>
-    <BLANKLINE>
-          <tr style="background: #9db8d2">
-            <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
-            <td><input type="checkbox" name="my_timetable"
-                       checked="checked" /></td>
+          </tr><tr style="background: #9db8d2"><td><input type="checkbox" checked disabled></td>
+            <td><input type="checkbox" name="my_timetable" checked></td>
             <td style="width: 100%">My Calendar</td>
             <td></td>
-          </tr>
-    <BLANKLINE>
-        </table>
-    ...
+          </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/frogpond"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/frogpond"></td>
+            <td style="width: 100%">SchoolTool</td>
+            <td><a class="go" style="background: #c1665a;
+                color: #c1665a" href="http://localhost/frogpond/calendar">...</a></td>
+        </tr></table>
 
 Adding a student:
 
@@ -446,44 +412,28 @@ Toad can see the calendar now:
 And Toad's overlay portlet shows the section:
 
     >>> toad.open('http://localhost/frogpond/persons/toad/calendar')
-    >>> print toad.contents
-    <BLANKLINE>
-    ...
-        <table class="overlays">
-    <BLANKLINE>
-          <tr>
-            <th style="text-align: center">
+    >>> print_portlet(toad.contents)
+    <table class="overlays"><tr><th style="text-align: center">
               <acronym title="Personal calendar">Cal</acronym>
             </th>
             <th><acronym title="Timetable calendar">TT</acronym></th>
             <th></th>
             <th></th>
-          </tr>
-    <BLANKLINE>
-          <tr style="background: #9db8d2">
-            <td><input type="checkbox" checked="checked" disabled="disabled" /></td>
-            <td><input type="checkbox" name="my_timetable"
-                       checked="checked" /></td>
+          </tr><tr style="background: #9db8d2"><td><input type="checkbox" checked disabled></td>
+            <td><input type="checkbox" name="my_timetable" checked></td>
             <td style="width: 100%">My Calendar</td>
             <td></td>
-          </tr>
-    <BLANKLINE>
-          <tr style="background: #eed680">
-            <td><input type="checkbox" name="overlay:list"
-                       checked="checked"
-                       value="/frogpond/sections/his1" /></td>
-            <td><input type="checkbox"
-                       name="overlay_timetables:list"
-                       checked="checked"
-                       value="/frogpond/sections/his1" /></td>
+          </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/frogpond/sections/his1"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/frogpond/sections/his1"></td>
             <td style="width: 100%"> -- History</td>
-            <td><a class="go"
-                   style="background: #d1940c;
-                color: #d1940c"
-                   href="http://localhost/frogpond/sections/his1/calendar">&nbsp;</a></td>
-        </tr>
-        </table>
-    ...
+            <td><a class="go" style="background: #d1940c;
+                color: #d1940c" href="http://localhost/frogpond/sections/his1/calendar">...</a></td>
+        </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/frogpond"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/frogpond"></td>
+            <td style="width: 100%">SchoolTool</td>
+            <td><a class="go" style="background: #c1665a;
+                color: #c1665a" href="http://localhost/frogpond/calendar">...</a></td>
+        </tr></table>
 
 
 Epilogue

@@ -211,7 +211,9 @@ def authSetUpSubscriber(event):
         if ISchoolToolApplication.providedBy(event.object):
             setUpLocalAuth(event.object)
 
-            # Grant schooltool.view to all authenticated users
+            # Grant schooltool.view on the application and
+            # schooltool.viewCalendar on the application calendar to
+            # all authenticated users
             allusers = zapi.queryUtility(IAuthenticatedGroup)
             if allusers is not None:
                 perms = IPrincipalPermissionManager(event.object)
@@ -249,9 +251,14 @@ def applicationCalendarPermissionsSubscriber(event):
 
     """
     if ISchoolToolApplication.providedBy(event.object):
-        unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
-
         calendar = ISchoolToolCalendar(event.object)
         app_calendar_perms = IPrincipalPermissionManager(calendar)
+
+        unauthenticated = zapi.queryUtility(IUnauthenticatedGroup)
         app_calendar_perms.grantPermissionToPrincipal('schooltool.viewCalendar',
                                                       unauthenticated.id)
+
+        authenticated = zapi.queryUtility(IAuthenticatedGroup)
+        cal_perms = IPrincipalPermissionManager(calendar)
+        app_calendar_perms.grantPermissionToPrincipal('schooltool.viewCalendar',
+                                                      authenticated.id)
