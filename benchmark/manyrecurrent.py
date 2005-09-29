@@ -9,8 +9,6 @@ from datetime import datetime, timedelta
 from benchmark import *
 
 import transaction
-from zope.app.testing.functional import FunctionalTestSetup
-from zope.app.testing.functional import HTTPCaller
 
 from schooltool.app.cal import CalendarEvent
 from schooltool.person.person import Person
