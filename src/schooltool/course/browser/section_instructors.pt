@@ -32,6 +32,8 @@
     There are none.
   </p>
 </fieldset>
+</form>
+<form method="post" tal:attributes="action request/URL" class="standalone">
 <fieldset>
   <legend i18n:translate="">Available Instructors</legend>
   <div class="instructor_list">
