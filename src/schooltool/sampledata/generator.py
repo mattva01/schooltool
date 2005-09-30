@@ -36,6 +36,7 @@ from zope.app import zapi
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.sampledata.interfaces import CyclicDependencyError
 
+
 def generate(app, seed=None):
     """Generate sample data provided by all plugins.
 

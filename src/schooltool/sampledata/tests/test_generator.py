@@ -22,14 +22,14 @@ Unit tests for schooltool.sampledata.generator
 $Id$
 """
 
-from pprint import pprint
 import unittest
+from pprint import pprint, profmat
 
 from zope.testing import doctest
 from zope.app import zapi
 from zope.interface import implements
 from zope.app.testing import setup, ztapi
-from pprint import pformat
+
 
 def doctest_generate():
     """Unit test for schooltool.sampledata.generator.generate
