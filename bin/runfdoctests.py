@@ -77,7 +77,7 @@ def main():
 
 def run(suite):
     try:
-        from test import CustomTestRunner, Options, Colorizer, light_colormap
+        from schooltool.testing.test import CustomTestRunner, Options, Colorizer, light_colormap
     except ImportError:
         runner = unittest.TextTestRunner()
     else:
