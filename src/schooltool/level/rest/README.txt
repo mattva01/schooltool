@@ -4,10 +4,6 @@ Functional tests for SchoolTool Level RESTive views
 Level Managament
 ----------------
 
-We need the REST HTTP caller:
-
-    >>> from schooltool.app.rest.ftests import rest
-
 Initially, we have no levels.
 
     >>> print rest("""

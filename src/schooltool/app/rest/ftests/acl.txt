@@ -1,7 +1,7 @@
 Functional tests for SchoolBell ACL ReSTive view
 ================================================
 
-    >>> from schooltool.app.rest.ftests import rest
+Initial state
 
     >>> print rest("""
     ... GET /persons/acl HTTP/1.1

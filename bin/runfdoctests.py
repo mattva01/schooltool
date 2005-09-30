@@ -33,6 +33,7 @@ def main():
     print "Bringing up ftesting.zcml (wait 20 seconds or so)"
     from schooltool.testing.functional import load_ftesting_zcml
     from schooltool.testing import analyze
+    from schooltool.app.rest.ftests import rest
     load_ftesting_zcml()
     elapsed = time.time() - start
     print "Setup ate %.3f seconds" % elapsed
@@ -65,7 +66,8 @@ def main():
                 try:
                     filename = os.path.join(os.path.pardir, filename)
                     suite = FunctionalDocFileSuite(filename,
-                                                   globs={'analyze': analyze},
+                                                   globs={'analyze': analyze,
+                                                          'rest': rest},
                                                    optionflags=optionflags)
                     run(suite)
                 except Exception, e:

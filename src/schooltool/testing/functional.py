@@ -32,6 +32,7 @@ from zope.app.appsetup.interfaces import IDatabaseOpenedEvent
 import zope.event
 
 from schooltool.testing import analyze
+from schooltool.app.rest.ftests import rest
 
 
 def find_ftesting_zcml():
@@ -101,7 +102,8 @@ def collect_ftests(package=None, level=None):
     for filename in filenames:
         suite = FunctionalDocFileSuite(filename, package=package,
                                        optionflags=optionflags,
-                                       globs={'analyze': analyze})
+                                       globs={'analyze': analyze,
+                                              'rest': rest})
         if level is not None:
             suite.level = level
         suites.append(suite)

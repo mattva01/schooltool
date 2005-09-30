@@ -1,11 +1,6 @@
 Functional tests for SchoolBell relationship RESTive views
 ==========================================================
 
-We need the REST HTTP caller:
-
-    >>> from schooltool.app.rest.ftests import rest
-
-
 We can add some groups with POST:
 
     >>> print rest("""

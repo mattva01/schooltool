@@ -15,10 +15,6 @@ Overview
 Prologue
 --------
 
-We need the REST HTTP caller:
-
-    >>> from schooltool.app.rest.ftests import rest
-
 Add a term:
 
     >>> print http(r"""

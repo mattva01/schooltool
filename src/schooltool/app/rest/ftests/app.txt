@@ -1,11 +1,7 @@
 Functional tests for SchoolTool app RESTive views
 =================================================
 
-We need the REST HTTP caller:
-
-    >>> from schooltool.app.rest.ftests import rest
-
-Now, we can run the REST page tests:
+The front page:
 
     # XXX: Very brittle test that depends heavily on app layout.
     >>> print rest("""

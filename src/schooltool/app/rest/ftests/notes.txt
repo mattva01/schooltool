@@ -1,9 +1,7 @@
 Functional tests for SchoolBell Notes ReSTive view
 ==================================================
 
-    >>> from schooltool.app.rest.ftests import rest
-
-Now, let's create something that provides IHaveNotes
+Let's create something that provides IHaveNotes
 
     >>> print rest("""
     ... POST /groups/ HTTP/1.1

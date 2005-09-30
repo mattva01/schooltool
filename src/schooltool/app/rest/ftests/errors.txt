@@ -1,10 +1,6 @@
 Error handling in REST views
 ============================
 
-We need the REST HTTP caller:
-
-    >>> from schooltool.app.rest.ftests import rest
-
 We need to shut up libxml2, so it does not spew errors to stderr:
 
    >>> import libxml2

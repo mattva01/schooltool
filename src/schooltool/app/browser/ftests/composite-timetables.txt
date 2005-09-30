@@ -25,10 +25,6 @@ Prologue
     >>> 'SchoolTool' in manager.contents
     True
 
-Also, we need the REST HTTP caller:
-
-    >>> from schooltool.app.rest.ftests import rest
-
 Add a term:
 
     >>> print http(r"""

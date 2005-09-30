@@ -13,14 +13,6 @@ Overview
 3. Usage of timetables
 
 
-Prologue
---------
-
-We need the REST HTTP caller:
-
-    >>> from schooltool.app.rest.ftests import rest
-
-
 Terms
 -----
 
