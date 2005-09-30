@@ -59,58 +59,58 @@ schema in the list.
 
 We can examine its composition more easily by invoking the RESTive view.
 
-  >>> from schooltool.app.rest.ftests import rest
-  >>> print rest(r"""
-  ... GET /ttschemas/default HTTP/1.1
-  ... Authorization: Basic manager:schooltool
-  ... """, handle_errors=False)
-  HTTP/1.1 200 Ok
-  Content-Length: ...
-  Content-Type: text/xml; charset=UTF-8
-  Set-Cookie: ...
-  <BLANKLINE>
-  <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-    <title>Default</title>
-    <model factory="WeeklyTimetableModel">
-      <daytemplate>
-        <used when="default"/>
-        <period duration="55" id="09:30-10:25" tstart="09:30"/>
-        <period duration="55" id="10:30-11:25" tstart="10:30"/>
-        <period duration="55" id="11:30-12:25" tstart="11:30"/>
-        <period duration="55" id="12:30-13:25" tstart="12:30"/>
-      </daytemplate>
-    </model>
-    <day id="Monday">
-      <period id="09:30-10:25"/>
-      <period id="10:30-11:25"/>
-      <period id="11:30-12:25"/>
-      <period id="12:30-13:25"/>
-    </day>
-    <day id="Tuesday">
-      <period id="09:30-10:25"/>
-      <period id="10:30-11:25"/>
-      <period id="11:30-12:25"/>
-      <period id="12:30-13:25"/>
-    </day>
-    <day id="Wednesday">
-      <period id="09:30-10:25"/>
-      <period id="10:30-11:25"/>
-      <period id="11:30-12:25"/>
-      <period id="12:30-13:25"/>
-    </day>
-    <day id="Thursday">
-      <period id="09:30-10:25"/>
-      <period id="10:30-11:25"/>
-      <period id="11:30-12:25"/>
-      <period id="12:30-13:25"/>
-    </day>
-    <day id="Friday">
-      <period id="09:30-10:25"/>
-      <period id="10:30-11:25"/>
-      <period id="11:30-12:25"/>
-      <period id="12:30-13:25"/>
-    </day>
-  </timetable>
+    >>> from schooltool.app.rest.ftests import rest
+    >>> print rest(r"""
+    ... GET /ttschemas/default HTTP/1.1
+    ... Authorization: Basic manager:schooltool
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
+    <BLANKLINE>
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+      <title>Default</title>
+      <model factory="WeeklyTimetableModel">
+        <daytemplate>
+          <used when="default"/>
+          <period duration="55" id="09:30-10:25" tstart="09:30"/>
+          <period duration="55" id="10:30-11:25" tstart="10:30"/>
+          <period duration="55" id="11:30-12:25" tstart="11:30"/>
+          <period duration="55" id="12:30-13:25" tstart="12:30"/>
+        </daytemplate>
+      </model>
+      <day id="Monday">
+        <period id="09:30-10:25"/>
+        <period id="10:30-11:25"/>
+        <period id="11:30-12:25"/>
+        <period id="12:30-13:25"/>
+      </day>
+      <day id="Tuesday">
+        <period id="09:30-10:25"/>
+        <period id="10:30-11:25"/>
+        <period id="11:30-12:25"/>
+        <period id="12:30-13:25"/>
+      </day>
+      <day id="Wednesday">
+        <period id="09:30-10:25"/>
+        <period id="10:30-11:25"/>
+        <period id="11:30-12:25"/>
+        <period id="12:30-13:25"/>
+      </day>
+      <day id="Thursday">
+        <period id="09:30-10:25"/>
+        <period id="10:30-11:25"/>
+        <period id="11:30-12:25"/>
+        <period id="12:30-13:25"/>
+      </day>
+      <day id="Friday">
+        <period id="09:30-10:25"/>
+        <period id="10:30-11:25"/>
+        <period id="11:30-12:25"/>
+        <period id="12:30-13:25"/>
+      </day>
+    </timetable>
 
 
 Rotating timetable
@@ -190,45 +190,45 @@ Now we see the newly created timetable schema in the list.
 
 We can examine its composition more easily by invoking the RESTive view.
 
-  >>> print rest(r"""
-  ... GET /ttschemas/rotating HTTP/1.1
-  ... Authorization: Basic manager:schooltool
-  ... """, handle_errors=False)
-  HTTP/1.1 200 Ok
-  Content-Length: ...
-  Content-Type: text/xml; charset=UTF-8
-  Set-Cookie: ...
-  <BLANKLINE>
-  <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
-    <title>Rotating</title>
-    <model factory="SequentialDayIdBasedTimetableModel">
-      <daytemplate>
-        <used when="A B C"/>
-        <period duration="55" id="Period_A" tstart="09:30"/>
-        <period duration="55" id="Period_B" tstart="11:30"/>
-        <period duration="55" id="Period_C" tstart="10:30"/>
-        <period duration="55" id="Period_D" tstart="12:30"/>
-      </daytemplate>
-    </model>
-    <day id="A">
-      <period id="Period_A"/>
-      <period id="Period_C"/>
-      <period id="Period_B"/>
-      <period id="Period_D"/>
-    </day>
-    <day id="B">
-      <period id="Period_A"/>
-      <period id="Period_C"/>
-      <period id="Period_B"/>
-      <period id="Period_D"/>
-    </day>
-    <day id="C">
-      <period id="Period_A"/>
-      <period id="Period_C"/>
-      <period id="Period_B"/>
-      <period id="Period_D"/>
-    </day>
-  </timetable>
+    >>> print rest(r"""
+    ... GET /ttschemas/rotating HTTP/1.1
+    ... Authorization: Basic manager:schooltool
+    ... """, handle_errors=False)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
+    <BLANKLINE>
+    <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
+      <title>Rotating</title>
+      <model factory="SequentialDayIdBasedTimetableModel">
+	<daytemplate>
+	  <used when="A B C"/>
+	  <period duration="55" id="Period_A" tstart="09:30"/>
+	  <period duration="55" id="Period_B" tstart="11:30"/>
+	  <period duration="55" id="Period_C" tstart="10:30"/>
+	  <period duration="55" id="Period_D" tstart="12:30"/>
+	</daytemplate>
+      </model>
+      <day id="A">
+	<period id="Period_A"/>
+	<period id="Period_C"/>
+	<period id="Period_B"/>
+	<period id="Period_D"/>
+      </day>
+      <day id="B">
+	<period id="Period_A"/>
+	<period id="Period_C"/>
+	<period id="Period_B"/>
+	<period id="Period_D"/>
+      </day>
+      <day id="C">
+	<period id="Period_A"/>
+	<period id="Period_C"/>
+	<period id="Period_B"/>
+	<period id="Period_D"/>
+      </day>
+    </timetable>
 
 
 Rotating timetable, take two

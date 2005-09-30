@@ -10,64 +10,64 @@ overlay lists of other persons, causing problems later on.
 Setup
 -----
 
-  >>> from zope.testbrowser import Browser
-  >>> manager_browser = Browser()
-  >>> manager_browser.addHeader('Authorization', 'Basic manager:schooltool')
-  >>> manager_browser.handleErrors = False
-  >>> manager_browser.open('http://localhost/')
-  >>> "SchoolTool" in manager_browser.contents
-  True
+    >>> from zope.testbrowser import Browser
+    >>> manager_browser = Browser()
+    >>> manager_browser.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager_browser.handleErrors = False
+    >>> manager_browser.open('http://localhost/')
+    >>> "SchoolTool" in manager_browser.contents
+    True
 
 We will need a user and a group:
 
-  >>> manager_browser.getLink('Groups').click()
-  >>> manager_browser.getLink('New Group').click()
-  >>> manager_browser.getControl('Title').value = 'A Group'
-  >>> manager_browser.getControl('Add').click()
+    >>> manager_browser.getLink('Groups').click()
+    >>> manager_browser.getLink('New Group').click()
+    >>> manager_browser.getControl('Title').value = 'A Group'
+    >>> manager_browser.getControl('Add').click()
 
-  >>> manager_browser.getLink('Persons').click()
-  >>> manager_browser.getLink('New Person').click()
-  >>> manager_browser.getControl('Full name').value = 'Stephan Richter'
-  >>> manager_browser.getControl('Username').value = 'srichter'
-  >>> manager_browser.getControl('Password').value = 'foobar'
-  >>> manager_browser.getControl('Verify password').value = 'foobar'
+    >>> manager_browser.getLink('Persons').click()
+    >>> manager_browser.getLink('New Person').click()
+    >>> manager_browser.getControl('Full name').value = 'Stephan Richter'
+    >>> manager_browser.getControl('Username').value = 'srichter'
+    >>> manager_browser.getControl('Password').value = 'foobar'
+    >>> manager_browser.getControl('Verify password').value = 'foobar'
 
   (we'll have to add the user to the group)
 
-  >>> manager_browser.getControl(name='group.a-group').value = True
+    >>> manager_browser.getControl(name='group.a-group').value = True
 
-  >>> manager_browser.getControl('Add').click()
+    >>> manager_browser.getControl('Add').click()
 
 Let's log in as the new user:
 
-  >>> srichter_browser = Browser()
-  >>> srichter_browser.handleErrors = False
-  >>> srichter_browser.addHeader('Authorization', 'Basic srichter:foobar')
+    >>> srichter_browser = Browser()
+    >>> srichter_browser.handleErrors = False
+    >>> srichter_browser.addHeader('Authorization', 'Basic srichter:foobar')
 
 Let's add the group's calendar to his calendar overlays:
 
-  >>> srichter_browser.open('http://localhost/persons/srichter/calendar')
-  >>> srichter_browser.getControl('More...').click()
+    >>> srichter_browser.open('http://localhost/persons/srichter/calendar')
+    >>> srichter_browser.getControl('More...').click()
 
-  >>> srichter_browser.getControl('A Group').selected = True
-  >>> srichter_browser.getControl('Apply').click()
+    >>> srichter_browser.getControl('A Group').selected = True
+    >>> srichter_browser.getControl('Apply').click()
 
 Now we have to dodge two unrelated bugs.  Bug #1 is issue391.  The most
 straightforward way to fix it is to uncheck the 'public calendar' checkbox
 in the form we've just submitted, but here we stumble onto bug #2 -- issue395
 So, we have to do it the hard way.
 
-  >>> import transaction
-  >>> from zope.app import zapi
-  >>> app = getRootFolder()
-  >>> srichter_person = zapi.traverse(app, '/persons/srichter')
-  >>> for overlay_info in srichter_person.overlaid_calendars:
-  ...     if overlay_info.calendar.__parent__ is app:
-  ...         print "Removing the school-wide calendar."
-  ...         srichter_person.overlaid_calendars.remove(overlay_info.calendar)
-  ...         break
-  Removing the school-wide calendar.
-  >>> transaction.commit()
+    >>> import transaction
+    >>> from zope.app import zapi
+    >>> app = getRootFolder()
+    >>> srichter_person = zapi.traverse(app, '/persons/srichter')
+    >>> for overlay_info in srichter_person.overlaid_calendars:
+    ...     if overlay_info.calendar.__parent__ is app:
+    ...         print "Removing the school-wide calendar."
+    ...         srichter_person.overlaid_calendars.remove(overlay_info.calendar)
+    ...         break
+    Removing the school-wide calendar.
+    >>> transaction.commit()
 
 
 Test
@@ -75,24 +75,24 @@ Test
 
 We just added A Group to Stephan's overlays:
 
-  >>> srichter_browser.open('http://localhost/persons/srichter/calendar')
-  >>> 'http://localhost/groups/a-group/calendar' in srichter_browser.contents
-  True
+    >>> srichter_browser.open('http://localhost/persons/srichter/calendar')
+    >>> 'http://localhost/groups/a-group/calendar' in srichter_browser.contents
+    True
 
 If we delete the group from the database:
 
-  >>> manager_browser.open('http://localhost/groups/')
-  >>> manager_browser.getControl(name='delete.a-group').value = True
-  >>> manager_browser.getControl('Delete').click()
-  >>> manager_browser.getControl('Confirm').click()
+    >>> manager_browser.open('http://localhost/groups/')
+    >>> manager_browser.getControl(name='delete.a-group').value = True
+    >>> manager_browser.getControl('Delete').click()
+    >>> manager_browser.getControl('Confirm').click()
 
 It should disappear from the overlay list.
 
-  >>> srichter_browser.open('http://localhost/persons/srichter/calendar')
-  >>> 'http://localhost/groups/a-group/calendar' in srichter_browser.contents
-  False
+    >>> srichter_browser.open('http://localhost/persons/srichter/calendar')
+    >>> 'http://localhost/groups/a-group/calendar' in srichter_browser.contents
+    False
 
 User should still be capable of modifying his overlay list:
 
-  >>> srichter_browser.getControl(name='my_timetable').value = False
-  >>> srichter_browser.getControl('Apply').click()
+    >>> srichter_browser.getControl(name='my_timetable').value = False
+    >>> srichter_browser.getControl('Apply').click()

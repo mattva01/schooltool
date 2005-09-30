@@ -134,8 +134,8 @@ Finally we post the completed form:
 Now we see the newly created timetable schema in the list, it should
 be the default one:
 
-  >>> '<option selected="selected" value="weekly">' in manager.contents
-  True
+    >>> '<option selected="selected" value="weekly">' in manager.contents
+    True
 
 The unauthenticated user can also, surprisingly, see what is the
 default schema:
@@ -236,16 +236,16 @@ Lets add one more schema:
 
 It should appear on the list:
 
-  >>> '<option value="schema-2">' in manager.contents
-  True
+    >>> '<option value="schema-2">' in manager.contents
+    True
 
 We can change the default ttschema if we want to:
 
     >>> manager.getControl('Schema 2').click()
     >>> manager.getControl('Change').click()
 
-  >>> '<option selected="selected" value="schema-2">' in manager.contents
-  True
+    >>> '<option selected="selected" value="schema-2">' in manager.contents
+    True
 
 
 Simple timetable add view
@@ -273,8 +273,8 @@ Now let's try the simple timetable schema setup view:
 
 A new timetable schema appeared:
 
-  >>> '<option value="other">' in manager.contents
-  True
+    >>> '<option value="other">' in manager.contents
+    True
 
 
 Special days
