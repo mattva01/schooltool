@@ -46,7 +46,7 @@ def generate(app, seed=None):
     In essence, this function performs a topological sort in a
     directed acyclic graph.
 
-    Raises a ValueError if the dependency graph has a cycle.
+    Raises a CyclicDependencyError if the dependency graph has a cycle.
     """
     plugins = dict([(obj.name, obj) for name, obj in
                     zapi.getUtilitiesFor(ISampleDataPlugin)])
@@ -69,7 +69,7 @@ def generate(app, seed=None):
     def visit(name):
         """The recursive part of the topological sort
 
-        Raises a ValueError if cyclic depencencies are found.
+        Raises a CyclicDependencyError if cyclic depencencies are found.
         """
         if status[name] == new:
             status[name] = open
