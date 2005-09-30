@@ -162,7 +162,7 @@ def dedent(text):
 
 
 def to_unicode(s):
-    r"""Convert an UTF-8 string to Unicode.
+    r"""Convert a UTF-8 string to Unicode.
 
     Example:
 
