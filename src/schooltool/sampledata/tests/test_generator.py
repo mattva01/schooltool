@@ -23,7 +23,7 @@ $Id$
 """
 
 import unittest
-from pprint import pprint, profmat
+from pprint import pprint, pformat
 
 from zope.testing import doctest
 from zope.app import zapi
