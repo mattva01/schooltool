@@ -10,17 +10,12 @@ We will obviously need a SchoolTool instance.
 
     >>> from zope.testbrowser import Browser
     >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/contents.html')
+    >>> manager.open('http://localhost/')
 
-    >>> manager.getLink('SchoolTool').click()
-    >>> manager.getControl(name='new_value').value = 'frogpond'
-    >>> manager.getControl('Apply').click()
-
-    >>> 'frogpond' in manager.contents
+    >>> 'SchoolTool' in manager.contents
     True
-    >>> manager.getLink('frogpond').click()
 
 Let's create a person so that we can fool around with his calendar:
 
@@ -56,7 +51,7 @@ Adding new events
 Let the Frog add an ordinary event that takes place on 3rd February, 2005:
 
     >>> frog = Browser()
-    >>> frog.open('http://localhost/frogpond/')
+    >>> frog.open('http://localhost/')
     >>> frog.getLink('Log In').click()
     >>> frog.getControl('Username').value = 'frog'
     >>> frog.getControl('Password').value = 'pwd'
@@ -85,7 +80,7 @@ Let's grant the Toad the viewCalendar permission on Frog's calendar:
 Toad should still not even see the new event links (but span tags instead):
 
     >>> toad = Browser()
-    >>> toad.open('http://localhost/frogpond/')
+    >>> toad.open('http://localhost/')
     >>> toad.getLink('Log In').click()
     >>> toad.getControl('Username').value = 'toad'
     >>> toad.getControl('Password').value = 'doat'
@@ -93,12 +88,12 @@ Toad should still not even see the new event links (but span tags instead):
 
     # Sigh, there is really no way to get to Frog's calendar :-(
     >>> toad.handleErrors = False
-    >>> toad.open('http://localhost/frogpond/persons/frog/calendar/')
+    >>> toad.open('http://localhost/persons/frog/calendar/')
 
 Now let Toad try to add an event on Frog's calendar (even though there is no
 link for it):
 
-    >>> toad.open('http://localhost/frogpond/persons/frog/calendar/add.html')
+    >>> toad.open('http://localhost/persons/frog/calendar/add.html')
     Traceback (most recent call last):
     ...
     Unauthorized: (..., 'schooltool.addEvent')
@@ -114,7 +109,7 @@ Let's grant the Toad the addEvent permission on Frog's calendar:
 
 Now the Toad can add events to Frog's calendar:
 
-    >>> toad.open('http://localhost/frogpond/persons/frog/calendar/add.html')
+    >>> toad.open('http://localhost/persons/frog/calendar/add.html')
 
     >>> toad.getControl('Title').value = 'Dreaming'
     >>> toad.getControl('Date').value = '2005-02-03'
@@ -130,7 +125,7 @@ Editing events
 Let's add a calendar through iCalendar PUT view (so we would know the event id):
 
     >>> print http(r"""
-    ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
+    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
     ... Authorization: Basic frog:pwd
     ... Content-Length: 244
     ... Content-Type: text/calendar
@@ -154,7 +149,7 @@ Let's add a calendar through iCalendar PUT view (so we would know the event id):
 
 Let the Frog modify this event:
 
-    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/'
+    >>> frog.open('http://localhost/persons/frog/calendar/'
     ...           'dummy-uid/edit.html?date=2005-02-04')
 
     >>> frog.getControl('Title').value = 'Sleeping'
@@ -166,7 +161,7 @@ Let the Frog modify this event:
 
 Now let the Toad try and modify the event too:
 
-    >>> toad.open('http://localhost/frogpond/persons/frog/calendar/'
+    >>> toad.open('http://localhost/persons/frog/calendar/'
     ...           'dummy-uid/edit.html?date=2005-02-04')
     Traceback (most recent call last):
     ...
@@ -174,12 +169,12 @@ Now let the Toad try and modify the event too:
 
 Toad should not see the event delete link
 
-    >>> toad.open('http://localhost/frogpond/persons/frog/calendar/2005-02-03')
+    >>> toad.open('http://localhost/persons/frog/calendar/2005-02-03')
     >>> print toad.contents
     <BLANKLINE>
     ...
     <h6 style="background: #7590ae">
-      <a href="http://localhost/frogpond/persons/frog/calendar/dummy-uid"
+      <a href="http://localhost/persons/frog/calendar/dummy-uid"
          title="Sleeping">
         Sleeping
         <span class="start-end">
@@ -204,7 +199,7 @@ Let's grant Toad the `modifyEvent` permission on Frog's calendar:
 
 Now let the Toad try and modify the event too:
 
-    >>> toad.open('http://localhost/frogpond/persons/frog/calendar/'
+    >>> toad.open('http://localhost/persons/frog/calendar/'
     ...           'dummy-uid/edit.html?date=2005-02-04')
 
     >>> toad.getControl('Title').value = 'Sleeping'
@@ -222,13 +217,13 @@ Random anonymous persons cannot see or overwrite someone's calendar
 
     >>> anonymous = Browser()
     >>> anonymous.handleErrors = False
-    >>> anonymous.open('http://localhost/frogpond/persons/frog/calendar.ics')
+    >>> anonymous.open('http://localhost/persons/frog/calendar.ics')
     Traceback (most recent call last):
     ...
     Unauthorized: (..., 'schooltool.viewCalendar')
 
     >>> print http(r"""
-    ... PUT /frogpond/persons/frog/calendar.ics HTTP/1.1
+    ... PUT /persons/frog/calendar.ics HTTP/1.1
     ... Host: localhost:7080
     ... Content-Length: 244
     ... Content-Type: text/calendar
@@ -258,18 +253,18 @@ The manager now allows Toad to only see Frog's calendar, but not modify it:
 
     >>> manager.getControl('Set Access', index=0).click()
 
-    >>> toad.open('http://localhost/frogpond/persons/frog/calendar/')
+    >>> toad.open('http://localhost/persons/frog/calendar/')
     >>> toad.headers['status']
     '200 Ok'
 
-    >>> toad.open('http://localhost/frogpond/persons/frog/calendar.ics')
+    >>> toad.open('http://localhost/persons/frog/calendar.ics')
     >>> toad.headers['status']
     '200 Ok'
 
 So Toad cannot modify the calendar.
 
     >>> print http(r"""
-    ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
+    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
     ... Authorization: Basic toad:doat
     ... Content-Length: 244
     ... Content-Type: text/calendar
@@ -300,7 +295,7 @@ Unless the manager grants him modification permissions too.
     >>> manager.getControl('Set Access', index=0).click()
 
     >>> print http(r"""
-    ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
+    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
     ... Authorization: Basic toad:doat
     ... Content-Length: 244
     ... Content-Type: text/calendar
@@ -333,7 +328,7 @@ delete existing ones.
 Modification: forbidden
 
     >>> print http(r"""
-    ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
+    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
     ... Authorization: Basic toad:doat
     ... Content-Length: 244
     ... Content-Type: text/calendar
@@ -356,7 +351,7 @@ Modification: forbidden
 Removal: forbidden
 
     >>> print http(r"""
-    ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
+    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
     ... Authorization: Basic toad:doat
     ... Content-Length: 244
     ... Content-Type: text/calendar
@@ -379,7 +374,7 @@ Removal: forbidden
 Addition: allowed
 
     >>> print http(r"""
-    ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
+    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
     ... Authorization: Basic toad:doat
     ... Content-Length: 244
     ... Content-Type: text/calendar
@@ -417,7 +412,7 @@ Now let's allow modification, but not addition
 Removal: allowed
 
     >>> print http(r"""
-    ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
+    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
     ... Authorization: Basic toad:doat
     ... Content-Length: 244
     ... Content-Type: text/calendar
@@ -440,7 +435,7 @@ Removal: allowed
 Modification: allowed
 
     >>> print http(r"""
-    ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
+    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
     ... Authorization: Basic toad:doat
     ... Content-Length: 244
     ... Content-Type: text/calendar
@@ -463,7 +458,7 @@ Modification: allowed
 Addition: not allowed
 
     >>> print http(r"""
-    ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
+    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
     ... Authorization: Basic toad:doat
     ... Content-Length: 244
     ... Content-Type: text/calendar

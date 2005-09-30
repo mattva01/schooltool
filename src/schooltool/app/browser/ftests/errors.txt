@@ -1,19 +1,6 @@
 Error handling in browser views
 ===============================
 
-First of all, we will need a schooltool instance.  We will add it via
-the web:
-
-    >>> from zope.testbrowser import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/contents.html')
-
-    >>> manager.getLink('SchoolTool').click()
-    >>> manager.getControl(name='new_value').value = 'frogpond'
-    >>> manager.getControl('Apply').click()
-
 
 NotFound
 --------
@@ -22,7 +9,7 @@ When you go to a location that doesn't exist, you get a pretty standard
 404 error page
 
     >>> print http("""
-    ... GET /frogpond/nosuchthing HTTP/1.1
+    ... GET /nosuchthing HTTP/1.1
     ... """)
     HTTP/1.1 404 Not Found
     Content-Length: ...
@@ -48,7 +35,7 @@ issue tracker. For testing purposes a view that causes a runtime error has
 been registered. Now, let's trigger it:
 
     >>> print http("""
-    ... GET /frogpond/breakit.html HTTP/1.1
+    ... GET /breakit.html HTTP/1.1
     ... """)
     HTTP/1.1 500 Internal Server Error
     Content-Length: ...

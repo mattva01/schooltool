@@ -4,18 +4,11 @@ Creating SchoolBell Notes
 Set up
 ------
 
-We create a SchoolBell instance
-
     >>> from zope.testbrowser import Browser
     >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/contents.html')
-
-    >>> manager.getLink('SchoolTool').click()
-    >>> manager.getControl(name='new_value').value = 'frogpond'
-    >>> manager.getControl('Apply').click()
-    >>> manager.getLink('frogpond').click()
+    >>> manager.open('http://localhost/')
 
 We add a person
 
@@ -105,7 +98,7 @@ View the page as our new user and we will only see the first (public) note:
     >>> frog = Browser()
     >>> frog.addHeader('Authorization', 'Basic frog:pwd')
     >>> frog.handleErrors = False
-    >>> frog.open('http://localhost/frogpond/persons/person')
+    >>> frog.open('http://localhost/persons/person')
 
     >>> print analyze.queryHTML("//div[@id='notes']", frog.contents)[0]
     <div id="notes">

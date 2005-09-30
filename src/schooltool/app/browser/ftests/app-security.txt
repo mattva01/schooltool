@@ -10,14 +10,9 @@ for that.
 
     >>> from zope.testbrowser import Browser
     >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/contents.html')
-
-    >>> manager.getLink('SchoolTool').click()
-    >>> manager.getControl(name='new_value').value = 'frogpond'
-    >>> manager.getControl('Apply').click()
-    >>> manager.getLink('frogpond').click()
+    >>> manager.open('http://localhost/')
 
 Let's quickly create a user to run the tests with:
 
@@ -33,7 +28,7 @@ Let's quickly create a user to run the tests with:
 Now we log in as the frog:
 
     >>> frog = Browser()
-    >>> frog.open('http://localhost/frogpond/')
+    >>> frog.open('http://localhost/')
     >>> frog.getLink('Log In').click()
     >>> frog.getControl('Username').value = 'frog'
     >>> frog.getControl('Password').value = 'pwd'
@@ -42,9 +37,9 @@ Now we log in as the frog:
 The user should have the view permission set by default, as well as
 viewCalendar set for the application calendar:
 
-    >>> frog.open('http://localhost/frogpond')
+    >>> frog.open('http://localhost')
     >>> print frog.url
-    http://localhost/frogpond/calendar
+    http://localhost/calendar
     >>> frog.headers['status']
     '200 Ok'
 
@@ -52,7 +47,7 @@ We can traverse to the person index:
 
     >>> frog.getLink('Persons').click()
     >>> print frog.url
-    http://localhost/frogpond/persons
+    http://localhost/persons
     >>> frog.headers['status']
     '200 Ok'
 
@@ -79,9 +74,9 @@ Adding persons should not work without a schooltool.create permission:
     >>> 'New Person' in frog.contents
     False
 
-    >>> frog.open('http://localhost/frogpond/persons/add.html')
+    >>> frog.open('http://localhost/persons/add.html')
     >>> print frog.url
-    http...?forbidden=yes&nexturl=http://localhost/frogpond/persons/add.html
+    http...?forbidden=yes&nexturl=http://localhost/persons/add.html
 
 Adding a group also fails:
 
@@ -90,9 +85,9 @@ Adding a group also fails:
     >>> 'New Group' in frog.contents
     False
 
-    >>> frog.open('http://localhost/frogpond/groups/+/addSchoolToolGroup.html')
+    >>> frog.open('http://localhost/groups/+/addSchoolToolGroup.html')
     >>> print frog.url
-    http...?forbidden=yes&nexturl=http://localhost/frogpond/groups/+/...
+    http...?forbidden=yes&nexturl=http://localhost/groups/+/...
 
 And the resource too:
 
@@ -102,13 +97,13 @@ And the resource too:
     False
 
     >>> frog.open(
-    ...     'http://localhost/frogpond/resources/+/addSchoolToolResource.html')
+    ...     'http://localhost/resources/+/addSchoolToolResource.html')
     >>> print frog.url
-    http...?forbidden=yes&nexturl=http://localhost/frogpond/resources/+/...
+    http...?forbidden=yes&nexturl=http://localhost/resources/+/...
 
 Let's grant the permission to the user:
 
-    >>> manager.open('http://localhost/frogpond/acl.html')
+    >>> manager.open('http://localhost/acl.html')
     >>> ctrl = manager.getControl(name='sb.person.frog')
     >>> ctrl.value = ['schooltool.create', 'schooltool.view']
     >>> manager.getControl('Set Access', index=1).click()
@@ -162,7 +157,7 @@ Lets try deleting the snake:
         <form method="post" action="delete.html">
           <li>
             <input type="hidden" name="delete.snake" />
-            <a href="http://localhost/frogpond/persons/snake">Snake</a>
+            <a href="http://localhost/persons/snake">Snake</a>
           </li>
           <div class="controls">
             <input type="submit" class="button-cancel"
@@ -226,7 +221,7 @@ We need to log in again:
 
 But we can revoke that permission from him:
 
-    >>> manager.open('http://localhost/frogpond/persons/frog/acl.html')
+    >>> manager.open('http://localhost/persons/frog/acl.html')
     >>> ctrl = manager.getControl(name='sb.person.frog')
     >>> ctrl.value = ['schooltool.create', 'schooltool.view',
     ...               'schooltool.viewCalendar', 'schooltool.addEvent',
@@ -250,32 +245,32 @@ Now he can't edit the info:
 But still can see his calendar (regression test for Issue354 User
 can't View calendar without Edit permission):
 
-    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-08-22')
+    >>> frog.open('http://localhost/persons/frog/calendar/2005-08-22')
     >>> 'Calendar for Toad - Monday, 2005-08-22' in frog.contents
     True
 
 The same goes for the groups and resources edit forms.  Not allowed:
 
-    >>> frog.open('http://localhost/frogpond/')
+    >>> frog.open('http://localhost/')
     >>> frog.getLink('Groups').click()
     >>> frog.getLink('Venerable Frogs').click()
     >>> 'Edit Info' in frog.contents
     False
-    >>> frog.open('http://localhost/frogpond/groups/venerable-frogs/edit.html')
+    >>> frog.open('http://localhost/groups/venerable-frogs/edit.html')
     >>> print frog.url
-    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
+    http://localhost/@@login.html?forbidden=yes&nexturl=...
 
     >>> frog.getLink('Resources').click()
     >>> frog.getLink('Mud').click()
     >>> 'Edit Info' in frog.contents
     False
-    >>> frog.open('http://localhost/frogpond/resources/mud/edit.html')
+    >>> frog.open('http://localhost/resources/mud/edit.html')
     >>> print frog.url
-    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
+    http://localhost/@@login.html?forbidden=yes&nexturl=...
 
 Let's grant the edit permission:
 
-    >>> manager.open('http://localhost/frogpond/acl.html')
+    >>> manager.open('http://localhost/acl.html')
     >>> ctrl = manager.getControl(name='sb.person.frog')
     >>> ctrl.value = ['schooltool.edit', 'schooltool.view']
     >>> manager.getControl('Set Access', index=1).click()
@@ -314,12 +309,12 @@ permission on those groups.
     >>> frog.getLink('Venerables').click()
     >>> frog.getLink('edit members').click()
     >>> print frog.url
-    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
+    http://localhost/@@login.html?forbidden=yes&nexturl=...
 
 Let's grant the guy the permission on the group:
 
     >>> manager.open(
-    ...     'http://localhost/frogpond/groups/venerable-frogs/acl.html')
+    ...     'http://localhost/groups/venerable-frogs/acl.html')
     >>> ctrl = manager.getControl(name='sb.person.frog')
     >>> ctrl.value = ['schooltool.view', 'schooltool.manageMembership']
     >>> manager.getControl('Set Access', index=1).click()
@@ -347,7 +342,7 @@ by unauthenticated users (issue345):
 
   Add a recurring event to the site-wide calendar:
 
-    >>> manager.open('http://localhost/frogpond/calendar')
+    >>> manager.open('http://localhost/calendar')
     >>> manager.getLink('New Event').click()
 
     >>> manager.getControl('Title').value = 'Something'
@@ -364,12 +359,12 @@ by unauthenticated users (issue345):
 
     >>> anonymous = Browser()
     >>> anonymous.handleErrors = False
-    >>> anonymous.open('http://localhost/frogpond/calendar/2005-02-03')
+    >>> anonymous.open('http://localhost/calendar/2005-02-03')
     >>> print anonymous.url
-    http://localhost/frogpond/calendar/2005-02-03
+    http://localhost/calendar/2005-02-03
 
   Even if he is accessing the calendar indirectly:
 
-    >>> anonymous.open('http://localhost/frogpond')
+    >>> anonymous.open('http://localhost')
     >>> print anonymous.url
-    http://localhost/frogpond/calendar
+    http://localhost/calendar

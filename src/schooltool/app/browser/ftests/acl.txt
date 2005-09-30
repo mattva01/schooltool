@@ -1,24 +1,18 @@
 Access control view
 ===================
 
-First, create a SchoolBell instance:
+First, log in
 
     >>> from zope.testbrowser import Browser
     >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
     >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/contents.html')
-
-    >>> manager.getLink('SchoolTool').click()
-    >>> manager.getControl(name='new_value').value = 'frogpond'
-    >>> manager.getControl('Apply').click()
-
-    >>> 'frogpond' in manager.contents
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.open('http://localhost/')
+    >>> 'SchoolTool' in manager.contents
     True
 
 Let's create a person so that we can fool around with his calendar:
 
-    >>> manager.getLink('frogpond').click()
     >>> manager.getLink('Persons').click()
     >>> manager.getLink('New Person').click()
 
@@ -34,7 +28,7 @@ Let's create a person so that we can fool around with his calendar:
 After logging in the frog
 
     >>> frog = Browser()
-    >>> frog.open('http://localhost/frogpond/')
+    >>> frog.open('http://localhost/')
     >>> frog.getLink('Log In').click()
     >>> frog.getControl('Username').value = 'frog'
     >>> frog.getControl('Password').value = 'pwd'
@@ -42,20 +36,20 @@ After logging in the frog
 
 he can't access the ACL view:
 
-    >>> frog.open('http://localhost/frogpond/acl.html')
+    >>> frog.open('http://localhost/acl.html')
     >>> print frog.url
-    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
+    http://localhost/@@login.html?forbidden=yes&nexturl=...
 
 Grant him a 'schooltool.controlAccess' permission on the app:
 
-    >>> manager.open('http://localhost/frogpond/acl.html')
+    >>> manager.open('http://localhost/acl.html')
     >>> ctrl = manager.getControl(name='sb.person.frog')
     >>> ctrl.value = ['schooltool.controlAccess', 'schooltool.view']
     >>> manager.getControl('Set Access', index=1).click()
 
 Now he can access the acl.html view on app:
 
-    >>> frog.open('http://localhost/frogpond/acl.html')
+    >>> frog.open('http://localhost/acl.html')
     >>> 'Access control for SchoolTool' in frog.contents
     True
 
@@ -69,7 +63,7 @@ Also, he can set the permissions, even elevate his own permissions:
 
 It works for subobjects of the app too:
 
-    >>> frog.open('http://localhost/frogpond/persons/acl.html')
+    >>> frog.open('http://localhost/persons/acl.html')
     >>> ctrl = frog.getControl(name='sb.person.frog')
     >>> ctrl.value = ['schooltool.view', 'schooltool.edit',
     ...               'schooltool.addEvent', 'schooltool.modifyEvent',

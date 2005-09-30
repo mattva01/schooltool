@@ -1,31 +1,16 @@
 Functional tests for SchoolBell ACL ReSTive view
 ================================================
 
-First of all, we will need a schooltool instance.  We will add it via
-the web ZMI:
-
-    >>> print http("""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&\
-    ... new_value=frogpond""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/@@contents.html
-    ...
-
     >>> from schooltool.app.rest.ftests import rest
 
     >>> print rest("""
-    ... GET /frogpond/persons/acl HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /persons/acl HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
+    Set-Cookie: ...
     <BLANKLINE>
     <acl xmlns="http://schooltool.org/ns/model/0.1">
       <principal id="zope.Authenticated">
@@ -64,6 +49,19 @@ the web ZMI:
           <permission id="schooltool.manageMembership" />
     <BLANKLINE>
       </principal>
+      <principal id="sb.person.manager">
+    <BLANKLINE>
+          <permission setting="on" id="schooltool.view" />
+          <permission setting="on" id="schooltool.edit" />
+          <permission setting="on" id="schooltool.create" />
+          <permission setting="on" id="schooltool.viewCalendar" />
+          <permission setting="on" id="schooltool.addEvent" />
+          <permission setting="on" id="schooltool.modifyEvent" />
+          <permission setting="on" id="schooltool.controlAccess" />
+          <permission setting="on"
+                      id="schooltool.manageMembership" />
+    <BLANKLINE>
+      </principal>
     </acl>
     <BLANKLINE>
 
@@ -71,21 +69,22 @@ the web ZMI:
 Now, let's create some groups and persons:
 
     >>> print rest("""
-    ... POST /frogpond/groups/ HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /groups/ HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="A Group"/>
     ... """)
     HTTP/1.1 201 Created
     ...
-    Location: http://localhost/frogpond/groups/a-group
+    Location: http://localhost/groups/a-group
+    Set-Cookie: ...
     <BLANKLINE>
-    Object created: http://localhost/frogpond/groups/a-group
+    Object created: http://localhost/groups/a-group
 
     >>> print rest("""
-    ... PUT /frogpond/persons/john HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /persons/john HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="John"/>
@@ -94,24 +93,26 @@ Now, let's create some groups and persons:
     ...
 
     >>> print rest("""
-    ... PUT /frogpond/persons/john/password HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /persons/john/password HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ...
     ... ann
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: 0
+    Set-Cookie: ...
     <BLANKLINE>
 
 Now, the ACL view should include those new principals as well:
 
     >>> print rest("""
-    ... GET /frogpond/acl HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /acl HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
+    Set-Cookie: ...
     <BLANKLINE>
     <acl xmlns="http://schooltool.org/ns/model/0.1">
       <principal id="zope.Authenticated">
@@ -174,6 +175,19 @@ Now, the ACL view should include those new principals as well:
           <permission id="schooltool.manageMembership" />
     <BLANKLINE>
       </principal>
+      <principal id="sb.person.manager">
+    <BLANKLINE>
+          <permission setting="on" id="schooltool.view" />
+          <permission setting="on" id="schooltool.edit" />
+          <permission setting="on" id="schooltool.create" />
+          <permission setting="on" id="schooltool.viewCalendar" />
+          <permission setting="on" id="schooltool.addEvent" />
+          <permission setting="on" id="schooltool.modifyEvent" />
+          <permission setting="on" id="schooltool.controlAccess" />
+          <permission setting="on"
+                      id="schooltool.manageMembership" />
+    <BLANKLINE>
+      </principal>
     </acl>
     <BLANKLINE>
 
@@ -181,7 +195,7 @@ Now, the ACL view should include those new principals as well:
 John cannot see the permissions, though:
 
     >>> print rest("""
-    ... GET /frogpond/persons/acl HTTP/1.1
+    ... GET /persons/acl HTTP/1.1
     ... """)
     HTTP/1.1 401 Unauthorized
     ...
@@ -190,7 +204,7 @@ John cannot see the permissions, though:
 John can not set the permissions as well:
 
     >>> print rest("""
-    ... POST /frogpond/persons/acl HTTP/1.1
+    ... POST /persons/acl HTTP/1.1
     ... Authorization: Basic john:ann
     ...
     ... <acl xmlns="http://schooltool.org/ns/model/0.1">
@@ -214,8 +228,8 @@ Let's change some permissions and grant John the right to manage
 permissions:
 
     >>> print rest("""
-    ... POST /frogpond/persons/acl HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /persons/acl HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ...
     ... <acl xmlns="http://schooltool.org/ns/model/0.1">
     ...   <principal id="sb.group.a-group">
@@ -241,19 +255,21 @@ permissions:
     ... </acl>
     ... """)
     HTTP/1.1 200 Ok
-    Content-Length: 19
+    Content-Length: ...
+    Set-Cookie: ...
     <BLANKLINE>
     Permissions updated
 
 Now, the permissions are changed and John can see them:
 
     >>> print rest("""
-    ... GET /frogpond/persons/acl HTTP/1.1
+    ... GET /persons/acl HTTP/1.1
     ... Authorization: Basic john:ann
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/html;charset=utf-8
+    Set-Cookie: ...
     ...
     <BLANKLINE>
     <acl xmlns="http://schooltool.org/ns/model/0.1">
@@ -317,13 +333,26 @@ Now, the permissions are changed and John can see them:
           <permission id="schooltool.manageMembership" />
     <BLANKLINE>
       </principal>
+      <principal id="sb.person.manager">
+    <BLANKLINE>
+          <permission setting="on" id="schooltool.view" />
+          <permission setting="on" id="schooltool.edit" />
+          <permission setting="on" id="schooltool.create" />
+          <permission setting="on" id="schooltool.viewCalendar" />
+          <permission setting="on" id="schooltool.addEvent" />
+          <permission setting="on" id="schooltool.modifyEvent" />
+          <permission setting="on" id="schooltool.controlAccess" />
+          <permission setting="on"
+                      id="schooltool.manageMembership" />
+    <BLANKLINE>
+      </principal>
     </acl>
     <BLANKLINE>
 
 And John can modify the permissions:
 
     >>> print rest("""
-    ... POST /frogpond/persons/acl HTTP/1.1
+    ... POST /persons/acl HTTP/1.1
     ... Authorization: Basic john:ann
     ...
     ... <acl xmlns="http://schooltool.org/ns/model/0.1">
@@ -347,50 +376,50 @@ And John can modify the permissions:
 The ACL views work everywhere:
 
     >>> print rest("""
-    ... GET /frogpond/acl HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /acl HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     ...
 
     >>> print rest("""
-    ... GET /frogpond/persons/acl HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /persons/acl HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     ...
 
     >>> print rest("""
-    ... GET /frogpond/groups/acl HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /groups/acl HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     ...
 
     >>> print rest("""
-    ... GET /frogpond/groups/a-group/acl HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /groups/a-group/acl HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     ...
 
     >>> print rest("""
-    ... GET /frogpond/groups/a-group/calendar/acl HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /groups/a-group/calendar/acl HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     ...
 
     >>> print rest("""
-    ... GET /frogpond/persons/john/acl HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /persons/john/acl HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     ...
 
     >>> print rest("""
-    ... GET /frogpond/persons/john/calendar/acl HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /persons/john/calendar/acl HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     ...

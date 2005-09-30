@@ -28,6 +28,8 @@ import unittest
 from zope.testing import doctest
 from zope.app.testing.functional import FunctionalTestSetup
 from zope.app.testing.functional import FunctionalDocFileSuite
+from zope.app.appsetup.interfaces import IDatabaseOpenedEvent
+import zope.event
 
 from schooltool.testing import analyze
 
@@ -44,19 +46,41 @@ def find_ftesting_zcml():
             raise RuntimeError("I can't find ftesting.zcml!")
 
 
+def install_db_bootstrap_hook():
+    """Install schooltool_db_setup into zope.event.subscribers."""
+    zope.event.subscribers.insert(0, schooltool_db_setup)
+
+
+def uninstall_db_bootstrap_hook():
+    """Remove schooltool_db_setup from zope.event.subscribers."""
+    zope.event.subscribers.remove(schooltool_db_setup)
+
+
+def schooltool_db_setup(event):
+    """IDatabaseOpenedEvent handler that bootstraps SchoolTool."""
+    if IDatabaseOpenedEvent.providedBy(event):
+        import schooltool.app.main
+        server = schooltool.app.main.StandaloneServer()
+        server.bootstrapSchoolTool(event.database)
+
+
 def load_ftesting_zcml():
     """Find SchoolTool's ftesting.zcml and load it.
 
     Can be safely called more than once.
     """
-    # Find SchoolTool's ftesting.zcml and load it.
+    # SchoolTool needs to bootstrap the database first, before the Zope 3
+    # IDatabaseOpenedEvent gets a chance to create its own root folder and
+    # stuff.  Unfortunatelly, we cannot install a IDatabaseOpenedEvent
+    # subscriber via ftesting.zcml and ensure it will get called first.
+    # Instead we place our own subscriber directly into zope.event.subscribers,
+    # where it gets a chance to intercept IDatabaseOpenedEvent before the
+    # Zope 3 event dispatcher sees it.
+    install_db_bootstrap_hook()
     try:
         FunctionalTestSetup(find_ftesting_zcml())
-    except NotImplementedError, e:
-        # It appears that some other ftesting.zcml was already loaded, which
-        # is perfectly fine -- the user might be running Zope 3 tests.
-        if str(e) != 'Already configured with a different config file':
-            raise
+    finally:
+        uninstall_db_bootstrap_hook()
 
 
 def collect_ftests(package=None, level=None):

@@ -15,30 +15,15 @@ Overview
 Prologue
 --------
 
-We will need a SchoolTool instance.  Let's call it 'frogpond'.
-
-    >>> print http(r"""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&new_value=frogpond""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/@@contents.html
-    ...
-
-
-Also, we need the REST HTTP caller:
+We need the REST HTTP caller:
 
     >>> from schooltool.app.rest.ftests import rest
 
 Add a term:
 
     >>> print http(r"""
-    ... PUT /frogpond/terms/2005-fall HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /terms/2005-fall HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ... 
     ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
@@ -51,14 +36,13 @@ Add a term:
     ... </schooldays>
     ... """)
     HTTP/1.1 201 Created
-    Content-Length: 0
-    <BLANKLINE>
+    ...
 
 Add Schema:
 
     >>> print rest(r"""
-    ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ... 
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
@@ -93,14 +77,13 @@ Add Schema:
     ... </timetable>
     ... """)
     HTTP/1.1 201 Created
-    Content-Length: 0
-    <BLANKLINE>
+    ...
 
 Add a person:
 
     >>> print rest("""
-    ... PUT /frogpond/persons/john HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /persons/john HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="John"/>
@@ -111,8 +94,8 @@ Add a person:
 Add a 2 groups:
 
     >>> print rest("""
-    ... PUT /frogpond/groups/boys HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /groups/boys HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Boys"/>
@@ -121,8 +104,8 @@ Add a 2 groups:
     ...
 
     >>> print rest("""
-    ... PUT /frogpond/groups/guys HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /groups/guys HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Guys"/>
@@ -133,8 +116,8 @@ Add a 2 groups:
 Add John to boys an guys:
 
     >>> print rest("""
-    ... POST /frogpond/persons/john/relationships HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /persons/john/relationships HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
@@ -142,14 +125,14 @@ Add John to boys an guys:
     ...               xlink:type="simple"
     ...               xlink:role="http://schooltool.org/ns/membership/group"
     ...               xlink:arcrole="http://schooltool.org/ns/membership"
-    ...               xlink:href="http://localhost/frogpond/groups/boys"/>
+    ...               xlink:href="http://localhost/groups/boys"/>
     ... """)
     HTTP/1.1 201 Created
     ...
 
     >>> print rest("""
-    ... POST /frogpond/persons/john/relationships HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /persons/john/relationships HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
@@ -157,7 +140,7 @@ Add John to boys an guys:
     ...               xlink:type="simple"
     ...               xlink:role="http://schooltool.org/ns/membership/group"
     ...               xlink:arcrole="http://schooltool.org/ns/membership"
-    ...               xlink:href="http://localhost/frogpond/groups/guys"/>
+    ...               xlink:href="http://localhost/groups/guys"/>
     ... """)
     HTTP/1.1 201 Created
     ...
@@ -165,8 +148,8 @@ Add John to boys an guys:
 Add group timetables:
 
     >>> print rest(r"""
-    ... PUT /frogpond/groups/boys/timetables/2005-fall.schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /groups/boys/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ... 
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
@@ -187,12 +170,11 @@ Add group timetables:
     ... </timetable>
     ... """)
     HTTP/1.1 201 Created
-    Content-Length: 0
-    <BLANKLINE>
+    ...
 
     >>> print rest(r"""
-    ... PUT /frogpond/groups/guys/timetables/2005-fall.schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /groups/guys/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ... 
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
@@ -213,18 +195,18 @@ Add group timetables:
     ... </timetable>
     ... """)
     HTTP/1.1 201 Created
-    Content-Length: 0
-    <BLANKLINE>
+    ...
 
 
-Lets look at johns composite timetable:
+Lets look at john's composite timetable:
 
     >>> print rest(r"""
-    ... GET /frogpond/persons/john/composite-timetables/2005-fall.schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw""", handle_errors=False)
+    ... GET /persons/john/composite-timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool""", handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
                xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -254,15 +236,16 @@ Lets look at johns composite timetable:
 There is a view listing all of them too:
 
     >>> print rest(r"""
-    ... GET /frogpond/persons/john/composite-timetables/ HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw""", handle_errors=False)
+    ... GET /persons/john/composite-timetables/ HTTP/1.1
+    ... Authorization: Basic manager:schooltool""", handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
       <timetable xlink:type="simple" term="2005-fall"
-                 xlink:href="http://localhost/frogpond/persons/john/composite-timetables/2005-fall.schema1"
+                 xlink:href="http://localhost/persons/john/composite-timetables/2005-fall.schema1"
                  schema="schema1"/>
     </timetables>
     <BLANKLINE>
@@ -270,13 +253,13 @@ There is a view listing all of them too:
 We can't delete composite timetables:
 
     >>> print rest(r"""
-    ... DELETE /frogpond/persons/john/composite-timetables/2005-fall.schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw""", handle_errors=False)
+    ... DELETE /persons/john/composite-timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool""", handle_errors=False)
     HTTP/1.1 200 Ok
-    Content-Length: 0
-    <BLANKLINE>
+    ...
 
 
+Epilogue
 --------
 
  vim: ft=rest

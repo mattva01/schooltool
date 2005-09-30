@@ -10,21 +10,15 @@ and will, therefore, break views that try to determine its absolute URL).
 Set up
 ------
 
-We create a SchoolTool instance
+We go to the front page
 
     >>> from zope.testbrowser import Browser
     >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/contents.html')
-
-    >>> manager.getLink('SchoolTool').click()
-    >>> manager.getControl(name='new_value').value = 'frogpond'
-    >>> manager.getControl('Apply').click()
-
-    >>> 'frogpond' in manager.contents
+    >>> manager.open('http://localhost/')
+    >>> 'SchoolTool' in manager.contents
     True
-    >>> manager.getLink('frogpond').click()
 
 We add a group
 

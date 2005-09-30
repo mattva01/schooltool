@@ -6,18 +6,11 @@ Setup
 
 We need an application with a few groups and persons.
 
-Application:
-
     >>> from zope.testbrowser import Browser
     >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/contents.html')
-
-    >>> manager.getLink('SchoolTool').click()
-    >>> manager.getControl(name='new_value').value = 'frogpond'
-    >>> manager.getControl('Apply').click()
-    >>> manager.getLink('frogpond').click()
+    >>> manager.open('http://localhost/')
 
 A bunch of persons:
 

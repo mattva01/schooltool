@@ -5,7 +5,6 @@ Functional test for timetable schemas
 Overview
 --------
 
-0. Create a SchoolTool instance.
 1. Add a timetable schema named 'weekly' with the advanced add view.
 2. Add another timetable schema -- one called 'Schema 2'.
 3. Choose the second schema as the default one.
@@ -21,18 +20,11 @@ Overview
 Setup
 -----
 
-Let's create a SchoolTool instance:
-
     >>> from zope.testbrowser import Browser
     >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/contents.html')
-
-    >>> manager.getLink('SchoolTool').click()
-    >>> manager.getControl(name='new_value').value = 'frogpond'
-    >>> manager.getControl('Apply').click()
-    >>> manager.getLink('frogpond').click()
+    >>> manager.open('http://localhost/')
 
 The schema container is empty initially:
 
@@ -150,14 +142,14 @@ default schema:
 
     >>> anonymous = Browser()
     >>> anonymous.handleErrors = False
-    >>> anonymous.open('http://localhost/frogpond/ttschemas')
+    >>> anonymous.open('http://localhost/ttschemas')
 
     >>> print anonymous.contents
     <BLANKLINE>
     ...
     <div class="row">
       <label for="ttschema">Default Timetable Schema:</label>
-      <a href="http://localhost/frogpond/ttschemas/weekly">weekly</a>
+      <a href="http://localhost/ttschemas/weekly">weekly</a>
     </div>
     ...
 

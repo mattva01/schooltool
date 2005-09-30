@@ -16,22 +16,7 @@ Overview
 Prologue
 --------
 
-We will need a SchoolTool instance.  Let's call it 'frogpond'.
-
-    >>> print http(r"""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&new_value=frogpond""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/@@contents.html
-    ...
-
-
-Also, we need the REST HTTP caller:
+We need the REST HTTP caller:
 
     >>> from schooltool.app.rest.ftests import rest
 
@@ -42,27 +27,28 @@ Terms
 Initially there are no terms defined.
 
     >>> print rest(r"""
-    ... GET /frogpond/terms HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /terms HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <container xmlns:xlink="http://www.w3.org/1999/xlink">
       <name>terms</name>
       <items>
       </items>
       <acl xlink:type="simple" xlink:title="ACL"
-           xlink:href="http://localhost/frogpond/terms/acl"/>
+           xlink:href="http://localhost/terms/acl"/>
     </container>
     <BLANKLINE>
 
 The manager can add one.
 
     >>> print http(r"""
-    ... PUT /frogpond/terms/2005-fall HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /terms/2005-fall HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ... 
     ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
@@ -76,27 +62,29 @@ The manager can add one.
     ... """)
     HTTP/1.1 201 Created
     Content-Length: 0
+    Set-Cookie: ...
     <BLANKLINE>
 
 The new term is there
 
     >>> print rest(r"""
-    ... GET /frogpond/terms HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /terms HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <container xmlns:xlink="http://www.w3.org/1999/xlink">
       <name>terms</name>
       <items>
         <item xlink:type="simple"
-              xlink:href="http://localhost/frogpond/terms/2005-fall"
+              xlink:href="http://localhost/terms/2005-fall"
               xlink:title="2005 Fall"/>
       </items>
       <acl xlink:type="simple" xlink:title="ACL"
-           xlink:href="http://localhost/frogpond/terms/acl"/>
+           xlink:href="http://localhost/terms/acl"/>
     </container>
     <BLANKLINE>
 
@@ -104,43 +92,44 @@ The new term is there
 You can look at it
 
     >>> print str(rest(r"""
-    ... GET /frogpond/terms/2005-fall HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /terms/2005-fall HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)).replace("\r\n", "\n")
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/calendar; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     BEGIN:VCALENDAR
     PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     VERSION:2.0
     BEGIN:VEVENT
-    UID:school-period-/frogpond/terms/2005-fall@localhost
+    UID:school-period-/terms/2005-fall@localhost
     SUMMARY:School Period
     DTSTART;VALUE=DATE:20030901
     DTEND;VALUE=DATE:20030908
     DTSTAMP:...
     END:VEVENT
     BEGIN:VEVENT
-    UID:schoolday-20030901-/frogpond/terms/2005-fall@localhost
+    UID:schoolday-20030901-/terms/2005-fall@localhost
     SUMMARY:Schoolday
     DTSTART;VALUE=DATE:20030901
     DTSTAMP:...
     END:VEVENT
     BEGIN:VEVENT
-    UID:schoolday-20030902-/frogpond/terms/2005-fall@localhost
+    UID:schoolday-20030902-/terms/2005-fall@localhost
     SUMMARY:Schoolday
     DTSTART;VALUE=DATE:20030902
     DTSTAMP:...
     END:VEVENT
     BEGIN:VEVENT
-    UID:schoolday-20030904-/frogpond/terms/2005-fall@localhost
+    UID:schoolday-20030904-/terms/2005-fall@localhost
     SUMMARY:Schoolday
     DTSTART;VALUE=DATE:20030904
     DTSTAMP:...
     END:VEVENT
     BEGIN:VEVENT
-    UID:schoolday-20030905-/frogpond/terms/2005-fall@localhost
+    UID:schoolday-20030905-/terms/2005-fall@localhost
     SUMMARY:Schoolday
     DTSTART;VALUE=DATE:20030905
     DTSTAMP:...
@@ -152,34 +141,34 @@ You can look at it
 You can edit it:
 
     >>> print rest(r"""
-    ... PUT /frogpond/terms/2005-fall HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /terms/2005-fall HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/calendar; charset=UTF-8
     ...
     ... BEGIN:VCALENDAR
     ... PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     ... VERSION:2.0
     ... BEGIN:VEVENT
-    ... UID:school-period-/frogpond/terms/2005-fall@localhost
+    ... UID:school-period-/terms/2005-fall@localhost
     ... SUMMARY:School Period
     ... DTSTART;VALUE=DATE:20030901
     ... DTEND;VALUE=DATE:20030908
     ... DTSTAMP:20050511T145037Z
     ... END:VEVENT
     ... BEGIN:VEVENT
-    ... UID:schoolday-20030901-/frogpond/terms/2005-fall@localhost
+    ... UID:schoolday-20030901-/terms/2005-fall@localhost
     ... SUMMARY:Schoolday
     ... DTSTART;VALUE=DATE:20030901
     ... DTSTAMP:20050511T145037Z
     ... END:VEVENT
     ... BEGIN:VEVENT
-    ... UID:schoolday-20030902-/frogpond/terms/2005-fall@localhost
+    ... UID:schoolday-20030902-/terms/2005-fall@localhost
     ... SUMMARY:Schoolday
     ... DTSTART;VALUE=DATE:20030902
     ... DTSTAMP:20050511T145037Z
     ... END:VEVENT
     ... BEGIN:VEVENT
-    ... UID:schoolday-20030903-/frogpond/terms/2005-fall@localhost
+    ... UID:schoolday-20030903-/terms/2005-fall@localhost
     ... SUMMARY:Schoolday
     ... DTSTART;VALUE=DATE:20030903
     ... DTSTAMP:20050511T145037Z
@@ -188,6 +177,7 @@ You can edit it:
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: 0
+    Set-Cookie: ...
     <BLANKLINE>
 
 
@@ -195,37 +185,38 @@ Last two days should not be holidays now, and there should be an
 additional day:
 
     >>> print str(rest(r"""
-    ... GET /frogpond/terms/2005-fall HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /terms/2005-fall HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)).replace("\r\n", "\n")
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/calendar; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     BEGIN:VCALENDAR
     PRODID:-//SchoolTool.org/NONSGML SchoolTool//EN
     VERSION:2.0
     BEGIN:VEVENT
-    UID:school-period-/frogpond/terms/2005-fall@localhost
+    UID:school-period-/terms/2005-fall@localhost
     SUMMARY:School Period
     DTSTART;VALUE=DATE:20030901
     DTEND;VALUE=DATE:20030908
     DTSTAMP:...
     END:VEVENT
     BEGIN:VEVENT
-    UID:schoolday-20030901-/frogpond/terms/2005-fall@localhost
+    UID:schoolday-20030901-/terms/2005-fall@localhost
     SUMMARY:Schoolday
     DTSTART;VALUE=DATE:20030901
     DTSTAMP:...
     END:VEVENT
     BEGIN:VEVENT
-    UID:schoolday-20030902-/frogpond/terms/2005-fall@localhost
+    UID:schoolday-20030902-/terms/2005-fall@localhost
     SUMMARY:Schoolday
     DTSTART;VALUE=DATE:20030902
     DTSTAMP:...
     END:VEVENT
     BEGIN:VEVENT
-    UID:schoolday-20030903-/frogpond/terms/2005-fall@localhost
+    UID:schoolday-20030903-/terms/2005-fall@localhost
     SUMMARY:Schoolday
     DTSTART;VALUE=DATE:20030903
     DTSTAMP:...
@@ -236,29 +227,31 @@ additional day:
 We should be capable of deleting the term:
 
     >>> print rest(r"""
-    ... DELETE /frogpond/terms/2005-fall HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... DELETE /terms/2005-fall HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: 0
+    Set-Cookie: ...
     <BLANKLINE>
 
 The term should be gone now:
 
     >>> print rest(r"""
-    ... GET /frogpond/terms HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /terms HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <container xmlns:xlink="http://www.w3.org/1999/xlink">
       <name>terms</name>
       <items>
       </items>
       <acl xlink:type="simple" xlink:title="ACL"
-           xlink:href="http://localhost/frogpond/terms/acl"/>
+           xlink:href="http://localhost/terms/acl"/>
     </container>
     <BLANKLINE>
 
@@ -269,27 +262,28 @@ Timetable schemas
 There should be no timetable schemas yet:
 
     >>> print rest(r"""
-    ... GET /frogpond/ttschemas/ HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /ttschemas/ HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <container xmlns:xlink="http://www.w3.org/1999/xlink">
       <name>ttschemas</name>
       <items>
       </items>
       <acl xlink:type="simple" xlink:title="ACL"
-           xlink:href="http://localhost/frogpond/ttschemas/acl"/>
+           xlink:href="http://localhost/ttschemas/acl"/>
     </container>
     <BLANKLINE>
 
 Let's add a timetable schema:
 
     >>> print rest(r"""
-    ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ... 
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
@@ -322,28 +316,30 @@ Let's add a timetable schema:
     ... """)
     HTTP/1.1 201 Created
     Content-Length: 0
+    Set-Cookie: ...
     <BLANKLINE>
 
 
 We should see this new schema in the container:
 
     >>> print rest(r"""
-    ... GET /frogpond/ttschemas/ HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /ttschemas/ HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
-    Content-Length: 352
+    Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <container xmlns:xlink="http://www.w3.org/1999/xlink">
       <name>ttschemas</name>
       <items>
         <item xlink:type="simple"
-              xlink:href="http://localhost/frogpond/ttschemas/schema1"
+              xlink:href="http://localhost/ttschemas/schema1"
               xlink:title="schema1"/>
       </items>
       <acl xlink:type="simple" xlink:title="ACL"
-           xlink:href="http://localhost/frogpond/ttschemas/acl"/>
+           xlink:href="http://localhost/ttschemas/acl"/>
     </container>
     <BLANKLINE>
 
@@ -351,11 +347,12 @@ We should see this new schema in the container:
 Let's see what's inside:
 
     >>> print rest(r"""
-    ... GET /frogpond/ttschemas/schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...
+    Set-Cookie: ...
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
       <title>Some Title</title>
@@ -389,8 +386,8 @@ Let's see what's inside:
 Let's modify the timetable schema:
 
     >>> print rest(r"""
-    ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ... 
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
@@ -426,14 +423,15 @@ Let's modify the timetable schema:
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: 0
+    Set-Cookie: ...
     <BLANKLINE>
 
 
 And check that schema was indeed modified:
 
     >>> print rest(r"""
-    ... GET /frogpond/ttschemas/schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -469,8 +467,8 @@ And check that schema was indeed modified:
 Trying to put an invalid schema should get us an error:
 
     >>> print rest(r"""
-    ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ... 
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
@@ -508,8 +506,8 @@ We will need at least one term (we have deleted the one inserted in the first
 test):
 
     >>> print http(r"""
-    ... PUT /frogpond/terms/2005-fall HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /terms/2005-fall HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ... 
     ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
@@ -523,13 +521,14 @@ test):
     ... """)
     HTTP/1.1 201 Created
     Content-Length: 0
+    Set-Cookie: ...
     <BLANKLINE>
 
 Let's add a person:
 
     >>> print rest("""
-    ... PUT /frogpond/persons/john HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /persons/john HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="John"/>
@@ -540,8 +539,8 @@ Let's add a person:
 We can now add a timetable for the person:
 
     >>> print rest(r"""
-    ... PUT /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ... 
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
@@ -563,16 +562,18 @@ We can now add a timetable for the person:
     ... """)
     HTTP/1.1 201 Created
     Content-Length: 0
+    Set-Cookie: ...
     <BLANKLINE>
 
 It should be there:
 
     >>> print rest(r"""
-    ... GET /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw""")
+    ... GET /persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool""")
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
                xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -595,8 +596,8 @@ It should be there:
 Let's modify it:
 
     >>> print rest(r"""
-    ... PUT /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ... 
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
@@ -620,16 +621,18 @@ Let's modify it:
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: 0
+    Set-Cookie: ...
     <BLANKLINE>
 
 The timetable should look different now:
 
     >>> print rest(r"""
-    ... GET /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw""")
+    ... GET /persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool""")
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
                xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -656,15 +659,16 @@ The timetable should look different now:
 Let's look at the list of timetables we have now:
 
     >>> print rest(r"""
-    ... GET /frogpond/persons/john/timetables/ HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw""")
+    ... GET /persons/john/timetables/ HTTP/1.1
+    ... Authorization: Basic manager:schooltool""")
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
       <timetable xlink:type="simple" term="2005-fall"
-                 xlink:href="http://localhost/frogpond/persons/john/timetables/2005-fall.schema1"
+                 xlink:href="http://localhost/persons/john/timetables/2005-fall.schema1"
                  schema="schema1"/>
     </timetables>
     <BLANKLINE>
@@ -672,20 +676,22 @@ Let's look at the list of timetables we have now:
 Let's delete it:
 
     >>> print rest(r"""
-    ... DELETE /frogpond/persons/john/timetables/2005-fall.schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw""")
+    ... DELETE /persons/john/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool""")
     HTTP/1.1 200 Ok
     Content-Length: 0
+    Set-Cookie: ...
     <BLANKLINE>
 
 Now it's gone:
 
     >>> print rest(r"""
-    ... GET /frogpond/persons/john/timetables/ HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw""")
+    ... GET /persons/john/timetables/ HTTP/1.1
+    ... Authorization: Basic manager:schooltool""")
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <timetables xmlns:xlink="http://www.w3.org/1999/xlink">
     </timetables>

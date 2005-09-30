@@ -1,18 +1,11 @@
 Functional test for timetable schema add wizard
 ===============================================
 
-Let's create a SchoolTool instance:
-
     >>> from zope.testbrowser import Browser
     >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/contents.html')
-
-    >>> manager.getLink('SchoolTool').click()
-    >>> manager.getControl(name='new_value').value = 'frogpond'
-    >>> manager.getControl('Apply').click()
-    >>> manager.getLink('frogpond').click()
+    >>> manager.open('http://localhost/')
 
 
 Weekly timetable
@@ -62,18 +55,19 @@ The timetable schema gets created. Now we see the newly created timetable
 schema in the list.
 
     >>> manager.getLink('Default')
-    <Link text='Default' url='http://localhost/frogpond/ttschemas/default'>
+    <Link text='Default' url='http://localhost/ttschemas/default'>
 
 We can examine its composition more easily by invoking the RESTive view.
 
   >>> from schooltool.app.rest.ftests import rest
   >>> print rest(r"""
-  ... GET /frogpond/ttschemas/default HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... GET /ttschemas/default HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... """, handle_errors=False)
   HTTP/1.1 200 Ok
   Content-Length: ...
   Content-Type: text/xml; charset=UTF-8
+  Set-Cookie: ...
   <BLANKLINE>
   <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
     <title>Default</title>
@@ -192,17 +186,18 @@ We can rearrange the periods now:
 Now we see the newly created timetable schema in the list.
 
     >>> manager.getLink('Rotating')
-    <Link text='Rotating' url='http://localhost/frogpond/ttschemas/rotating'>
+    <Link text='Rotating' url='http://localhost/ttschemas/rotating'>
 
 We can examine its composition more easily by invoking the RESTive view.
 
   >>> print rest(r"""
-  ... GET /frogpond/ttschemas/rotating HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... GET /ttschemas/rotating HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... """, handle_errors=False)
   HTTP/1.1 200 Ok
   Content-Length: ...
   Content-Type: text/xml; charset=UTF-8
+  Set-Cookie: ...
   <BLANKLINE>
   <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
     <title>Rotating</title>
@@ -322,12 +317,13 @@ liking:
 The schema is now created:
 
     >>> print rest(r"""
-    ... GET /frogpond/ttschemas/rotating-2 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /ttschemas/rotating-2 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
       <title>Rotating 2</title>
@@ -494,12 +490,13 @@ Please put the periods in order for each day. We can rearrange a little bit:
 The schema is now created:
 
     >>> print rest(r"""
-    ... GET /frogpond/ttschemas/weekly-2 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /ttschemas/weekly-2 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
       <title>Weekly 2</title>
@@ -679,12 +676,13 @@ Please put the periods in order for each day. We can rearrange them a bit:
 The schema is now created:
 
     >>> print rest(r"""
-    ... GET /frogpond/ttschemas/rotating-4 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /ttschemas/rotating-4 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
       <title>Rotating 4</title>
@@ -762,7 +760,7 @@ However we can press the Cancel button and go back to the beginning
 
     >>> manager.getControl('Cancel').click()
     >>> manager.url
-    'http://localhost/frogpond/ttschemas'
+    'http://localhost/ttschemas'
 
 If we now click on the New Timetable button, we'll see the first page
 again.

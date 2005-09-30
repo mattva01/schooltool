@@ -5,14 +5,11 @@ We have an app instance:
 
     >>> from zope.testbrowser import Browser
     >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
     >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/contents.html')
-
-    >>> manager.getLink('SchoolTool').click()
-    >>> manager.getControl(name='new_value').value = 'frogpond'
-    >>> manager.getControl('Apply').click()
-    >>> manager.getLink('frogpond').click()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.open('http://localhost/')
+    >>> 'SchoolTool' in manager.contents
+    True
 
 We add a person
 
@@ -29,7 +26,7 @@ We have the views ``@@login.html`` and ``@@logout.html`` on the main
 application object. Those views log in or log out the user of the session.
 
     >>> anonymous = Browser()
-    >>> anonymous.open('http://localhost/frogpond')
+    >>> anonymous.open('http://localhost/')
     >>> anonymous.getLink('Log In').click()
     >>> anonymous.headers['status']
     '200 Ok'

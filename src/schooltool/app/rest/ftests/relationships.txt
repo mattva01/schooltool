@@ -1,23 +1,7 @@
 Functional tests for SchoolBell relationship RESTive views
 ==========================================================
 
-First of all, we will need a schooltool instance.  We will add it via
-the web ZMI:
-
-    >>> print http("""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&\
-    ... new_value=frogpond""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/@@contents.html
-    ...
-
-Also, we need the REST HTTP caller:
+We need the REST HTTP caller:
 
     >>> from schooltool.app.rest.ftests import rest
 
@@ -25,51 +9,54 @@ Also, we need the REST HTTP caller:
 We can add some groups with POST:
 
     >>> print rest("""
-    ... POST /frogpond/groups/ HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /groups/ HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="A Group"/>
     ... """)
     HTTP/1.1 201 Created
     ...
-    Location: http://localhost/frogpond/groups/a-group
+    Location: http://localhost/groups/a-group
+    Set-Cookie: ...
     <BLANKLINE>
-    Object created: http://localhost/frogpond/groups/a-group
+    Object created: http://localhost/groups/a-group
 
 
     >>> print rest("""
-    ... POST /frogpond/groups/ HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /groups/ HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Another group"/>
     ... """)
     HTTP/1.1 201 Created
     ...
-    Location: http://localhost/frogpond/groups/another-group
+    Location: http://localhost/groups/another-group
+    Set-Cookie: ...
     <BLANKLINE>
-    Object created: http://localhost/frogpond/groups/another-group
+    Object created: http://localhost/groups/another-group
 
 
     >>> print rest("""
-    ... POST /frogpond/groups/ HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /groups/ HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="One more group"/>
     ... """)
     HTTP/1.1 201 Created
     ...
-    Location: http://localhost/frogpond/groups/one-more-group
+    Location: http://localhost/groups/one-more-group
+    Set-Cookie: ...
     <BLANKLINE>
-    Object created: http://localhost/frogpond/groups/one-more-group
+    Object created: http://localhost/groups/one-more-group
 
 Now some users:
 
     >>> print rest("""
-    ... PUT /frogpond/persons/john HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /persons/john HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="John"/>
@@ -78,8 +65,8 @@ Now some users:
     ...
 
     >>> print rest("""
-    ... PUT /frogpond/persons/pete HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /persons/pete HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Pete"/>
@@ -88,8 +75,8 @@ Now some users:
     ...
 
     >>> print rest("""
-    ... PUT /frogpond/persons/frog HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /persons/frog HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Frog"/>
@@ -101,8 +88,8 @@ The list of relationships of persons should only contain the initial site-wide
 calendar:
 
     >>> print rest("""
-    ... GET /frogpond/persons/frog/relationships HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /persons/frog/relationships HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     ...
@@ -112,9 +99,9 @@ calendar:
         <relationship xlink:type="simple"
                       xlink:role="http://schooltool.org/ns/calendar_subscription/provider"
                       xlink:arcrole="http://schooltool.org/ns/calendar_subscription"
-                      xlink:href="http://localhost/frogpond/calendar">
+                      xlink:href="http://localhost/calendar">
           <manage xlink:type="simple"
-                  xlink:href="http://localhost/frogpond/persons/frog/relationships/1"/>
+                  xlink:href="http://localhost/persons/frog/relationships/1"/>
         </relationship>
       </existing>
     </relationships>
@@ -123,8 +110,8 @@ calendar:
 Groups have no relationships:
 
     >>> print rest("""
-    ... GET /frogpond/groups/a-group/relationships HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /groups/a-group/relationships HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -137,8 +124,8 @@ Groups have no relationships:
 We can add some users by adding a relationship to our user:
 
     >>> print rest("""
-    ... POST /frogpond/persons/john/relationships HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /persons/john/relationships HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
@@ -146,7 +133,7 @@ We can add some users by adding a relationship to our user:
     ...               xlink:type="simple"
     ...               xlink:role="http://schooltool.org/ns/membership/group"
     ...               xlink:arcrole="http://schooltool.org/ns/membership"
-    ...               xlink:href="http://localhost/frogpond/groups/a-group"/>
+    ...               xlink:href="http://localhost/groups/a-group"/>
     ... """, handle_errors=False)
     HTTP/1.1 201 Created
     ...
@@ -154,8 +141,8 @@ We can add some users by adding a relationship to our user:
 or our group:
 
     >>> print rest("""
-    ... POST /frogpond/groups/a-group/relationships HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /groups/a-group/relationships HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
@@ -163,7 +150,7 @@ or our group:
     ...               xlink:type="simple"
     ...               xlink:role="http://schooltool.org/ns/membership/member"
     ...               xlink:arcrole="http://schooltool.org/ns/membership"
-    ...               xlink:href="http://localhost/frogpond/persons/pete"/>
+    ...               xlink:href="http://localhost/persons/pete"/>
     ... """)
     HTTP/1.1 201 Created
     ...
@@ -171,8 +158,8 @@ or our group:
 We should see relationships we have just created:
 
     >>> print rest("""
-    ... GET /frogpond/groups/a-group/relationships HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /groups/a-group/relationships HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -182,16 +169,16 @@ We should see relationships we have just created:
         <relationship xlink:type="simple"
                       xlink:role="http://schooltool.org/ns/membership/member"
                       xlink:arcrole="http://schooltool.org/ns/membership"
-                      xlink:href="http://localhost/frogpond/persons/john">
+                      xlink:href="http://localhost/persons/john">
           <manage xlink:type="simple"
-                  xlink:href="http://localhost/frogpond/groups/a-group/relationships/1"/>
+                  xlink:href="http://localhost/groups/a-group/relationships/1"/>
         </relationship>
         <relationship xlink:type="simple"
                       xlink:role="http://schooltool.org/ns/membership/member"
                       xlink:arcrole="http://schooltool.org/ns/membership"
-                      xlink:href="http://localhost/frogpond/persons/pete">
+                      xlink:href="http://localhost/persons/pete">
           <manage xlink:type="simple"
-                  xlink:href="http://localhost/frogpond/groups/a-group/relationships/2"/>
+                  xlink:href="http://localhost/groups/a-group/relationships/2"/>
         </relationship>
       </existing>
     </relationships>
@@ -199,8 +186,8 @@ We should see relationships we have just created:
 We can GET the relationship:
 
     >>> print rest("""
-    ... GET /frogpond/groups/a-group/relationships/1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /groups/a-group/relationships/1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -208,14 +195,14 @@ We can GET the relationship:
                   xlink:type="simple"
                   xlink:role="http://schooltool.org/ns/membership/member"
                   xlink:arcrole="http://schooltool.org/ns/membership"
-                  xlink:href="http://localhost/frogpond/persons/john"/>
+                  xlink:href="http://localhost/persons/john"/>
     <BLANKLINE>
 
 Or delete them:
 
     >>> print rest("""
-    ... DELETE /frogpond/groups/a-group/relationships/1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... DELETE /groups/a-group/relationships/1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -225,8 +212,8 @@ Or delete them:
 We just lost one of the relationships:
 
     >>> print rest("""
-    ... GET /frogpond/groups/a-group/relationships HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /groups/a-group/relationships HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -236,9 +223,9 @@ We just lost one of the relationships:
         <relationship xlink:type="simple"
                       xlink:role="http://schooltool.org/ns/membership/member"
                       xlink:arcrole="http://schooltool.org/ns/membership"
-                      xlink:href="http://localhost/frogpond/persons/pete">
+                      xlink:href="http://localhost/persons/pete">
           <manage xlink:type="simple"
-                  xlink:href="http://localhost/frogpond/groups/a-group/relationships/2"/>
+                  xlink:href="http://localhost/groups/a-group/relationships/2"/>
         </relationship>
       </existing>
     </relationships>
@@ -246,19 +233,20 @@ We just lost one of the relationships:
 Lets see how permissions work:
 
     >>> print rest("""
-    ... PUT /frogpond/persons/john/password HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /persons/john/password HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ...
     ... ann
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: 0
+    Set-Cookie: ...
     <BLANKLINE>
 
 John should not be capable of adding himself back into the group:
 
     >>> print rest("""
-    ... POST /frogpond/persons/john/relationships HTTP/1.1
+    ... POST /persons/john/relationships HTTP/1.1
     ... Authorization: Basic john:ann
     ... Content-Type: text/xml
     ...
@@ -267,7 +255,7 @@ John should not be capable of adding himself back into the group:
     ...               xlink:type="simple"
     ...               xlink:role="http://schooltool.org/ns/membership/group"
     ...               xlink:arcrole="http://schooltool.org/ns/membership"
-    ...               xlink:href="http://localhost/frogpond/groups/a-group"/>
+    ...               xlink:href="http://localhost/groups/a-group"/>
     ... """)
     HTTP/1.1 401 Unauthorized
     ...
@@ -275,7 +263,7 @@ John should not be capable of adding himself back into the group:
 Or deleting any relationships:
 
     >>> print rest("""
-    ... DELETE /frogpond/groups/a-group/relationships/2 HTTP/1.1
+    ... DELETE /groups/a-group/relationships/2 HTTP/1.1
     ... Authorization: Basic john:ann
     ... """)
     HTTP/1.1 401 Unauthorized
@@ -284,7 +272,7 @@ Or deleting any relationships:
 But should be capable of viewing relationships:
 
     >>> print rest("""
-    ... GET /frogpond/groups/a-group/relationships/2 HTTP/1.1
+    ... GET /groups/a-group/relationships/2 HTTP/1.1
     ... Authorization: Basic john:ann
     ... """)
     HTTP/1.1 200 Ok
@@ -293,14 +281,14 @@ But should be capable of viewing relationships:
                   xlink:type="simple"
                   xlink:role="http://schooltool.org/ns/membership/member"
                   xlink:arcrole="http://schooltool.org/ns/membership"
-                  xlink:href="http://localhost/frogpond/persons/pete"/>
+                  xlink:href="http://localhost/persons/pete"/>
     <BLANKLINE>
 
 We can give him needed permissions though:
 
     >>> print rest("""
-    ... POST /frogpond/persons/acl HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /persons/acl HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ...
     ... <acl xmlns="http://schooltool.org/ns/model/0.1">
     ...   <principal id="sb.group.a-group">
@@ -337,13 +325,14 @@ We can give him needed permissions though:
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: 19
+    Set-Cookie: ...
     <BLANKLINE>
     Permissions updated
 
 John should now be capable of adding himself back into the group:
 
     >>> print rest("""
-    ... POST /frogpond/persons/john/relationships HTTP/1.1
+    ... POST /persons/john/relationships HTTP/1.1
     ... Authorization: Basic john:ann
     ... Content-Type: text/xml
     ...
@@ -352,19 +341,19 @@ John should now be capable of adding himself back into the group:
     ...               xlink:type="simple"
     ...               xlink:role="http://schooltool.org/ns/membership/group"
     ...               xlink:arcrole="http://schooltool.org/ns/membership"
-    ...               xlink:href="http://localhost/frogpond/groups/a-group"/>
+    ...               xlink:href="http://localhost/groups/a-group"/>
     ... """)
     HTTP/1.1 201 Created
     ...
-    Location: http://localhost/frogpond/persons/john/relationships/2
+    Location: http://localhost/persons/john/relationships/2
     ...
     <BLANKLINE>
-    Relationship created: http://localhost/frogpond/persons/john/relationships/2
+    Relationship created: http://localhost/persons/john/relationships/2
 
 He can delete the other relationship now too:
 
     >>> print rest("""
-    ... DELETE /frogpond/persons/pete/relationships/1 HTTP/1.1
+    ... DELETE /persons/pete/relationships/1 HTTP/1.1
     ... Authorization: Basic john:ann
     ... """)
     HTTP/1.1 200 Ok
@@ -375,8 +364,8 @@ He can delete the other relationship now too:
 Calendars have their relationships too:
 
     >>> print rest("""
-    ... GET /frogpond/persons/frog/calendar/relationships HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /persons/frog/calendar/relationships HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """, handle_errors=False)
     HTTP/1.1 200 Ok
     ...

@@ -7,18 +7,10 @@ student via a promotion workflow from the perspective of the Web UI.
 
   >>> from zope.testbrowser import Browser
   >>> browser = Browser()
-  >>> browser.addHeader('Authorization', 'Basic mgr:mgrpw')
+  >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
 
   >>> browser.handleErrors = False
-  >>> browser.open('http://localhost/contents.html')
-
-  >>> browser.getLink('SchoolTool').click()
-  >>> browser.getControl(name='new_value').value = 'test'
-  >>> browser.getControl('Apply').click()
-
-  >>> "test" in browser.contents
-  True
-  >>> browser.getLink('test').click()
+  >>> browser.open('http://localhost/')
 
 
 Level Management
@@ -26,7 +18,7 @@ Level Management
 
 First we create a couple of levels.
 
-  >>> browser.open('http://localhost/test/levels')
+  >>> browser.open('http://localhost/levels')
 
   >>> browser.getLink('New Level').click()
   >>> browser.getControl('Title').value = u'1st Grade'
@@ -128,7 +120,7 @@ Now we go to the manager group, and walk the student through the academic
 career:
 
   >>> browser.getLink('Groups').click()
-  >>> browser.getLink('Manager').click()
+  >>> browser.getLink('Manager', url="groups/manager").click()
   >>> browser.getLink('Student Management').click()
 
 We now select the student which we want to enroll in the school.
@@ -190,7 +182,7 @@ The student passes the first grade
 but fails the second grade the first time around:
 
   >>> form = browser.getForm(name='outcome')
-  >>> ctrl = browser.getControl(name='ids:list')
+  >>> ctrl = browser.getControl(name='ids:list', index=1)
   >>> id = ctrl.options[0]
   >>> ctrl.value = [id]
   >>> browser.getControl(name=id+'.outcome').value = ['fail']
@@ -267,7 +259,7 @@ cleaner, we create a new student first:
   >>> print browser.contents
   <BLANKLINE>
   ...
-  <a href="http://localhost/test/persons/tom">Tom Hoffman</a>
+  <a href="http://localhost/persons/tom">Tom Hoffman</a>
   ...
 
 Now we enter the new student and look at his academic career:
@@ -314,7 +306,7 @@ now create the workflow:
       <em>Enrolled</em>
       <div style="font-size: smaller">
          on <span>...</span>
-         by <span>zope.mgr</span>
+         by <span>sb.person.manager</span>
       </div>
       <p>Enrolled at school</p>
     </li>
@@ -359,7 +351,7 @@ Now let's fail the student in the first grade:
       <em>Failed</em>
       <div style="font-size: smaller">
          on <span>...</span>
-         by <span>zope.mgr</span>
+         by <span>sb.person.manager</span>
       </div>
       <p>Failed level "1st Grade"</p>
     </li>
@@ -387,7 +379,7 @@ After the first grade, the student withdraws from the school:
       <em>Withdrawn</em>
       <div style="font-size: smaller">
          on <span>...</span>
-         by <span>zope.mgr</span>
+         by <span>sb.person.manager</span>
       </div>
       <p>Withdrew before or during level "1st Grade"</p>
     </li>
@@ -425,7 +417,7 @@ workflow:
 We just need to make sure that all the workitems got deleted as well:
 
   >>> browser.getLink('Groups').click()
-  >>> browser.getLink('Manager').click()
+  >>> browser.getLink('Manager', url='groups/manager').click()
   >>> browser.getLink('Student Management').click()
 
   >>> print browser.contents

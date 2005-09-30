@@ -4,25 +4,15 @@ Developer Mode User Interface
 
 The developer mode of the user interface is intended to help SchoolBell
 developers and people using SchoolBell as a development platform to debug
-their code and find documentation as quickly as possible. To start, open a
-Zope 3 site in your browser
+their code and find documentation as quickly as possible. To start, open the
+SchoolTool site in your browser
 
     >>> import zope.testbrowser
     >>> browser = zope.testbrowser.Browser()
-    >>> browser.addHeader('Authorization', 'Basic mgr:mgrpw')
-    >>> browser.open('http://localhost/manage')
+    >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> browser.open('http://localhost/')
 
-and add a new SchoolBell instance:
-
-    >>> browser.getLink('SchoolTool').click()
-    >>> browser.getControl(name='new_value').value = 'st'
-    >>> browser.getControl('Apply').click()
-
-Once we enter the SchoolTool instance
-
-    >>> browser.getLink('st').click()
-
-the developer mode should be visible:
+The developer mode should be visible:
 
     >>> browser.contents
     '...<h4>Developer Tools</h4>...
@@ -44,22 +34,6 @@ accessible via the Web UI. By clicking on the `Errors` menu option
     >>> browser.getLink('Errors').click()
 
 you are brought to the root error reporting utility.
-
-However, for the purpose of this test, we need to
-
-* create a `RootErrorReportingUtility` for the SchoolTool site:
-
-    >>> browser.open('http://localhost/st/++etc++site/default/+/')
-    >>> ctrl = browser.getControl('Error Logging Utility').click()
-    >>> browser.getControl(name='id').value = 'RootErrorReportingUtility'
-    >>> browser.getControl('Add').click()
-    >>> browser.getControl('Register').click()
-    >>> browser.getControl('Add').click()
-
-* switch to the developer mode skin manually:
-
-    >>> browser.open('http://localhost/++skin++SchoolToolDevMode/st/'
-    ...              '++etc++site/default/RootErrorReportingUtility')
 
 Here you can configure the utility and view errors:
 
@@ -105,13 +79,13 @@ Let's now make sure that we can get to the error list. First let's create a
     # Unfortunately, urllib2 raises errors on HTTP Not Found errors. :-(
     >>> import urllib2
     >>> try:
-    ...     browser.open('http://localhost/++skin++SchoolToolDevMode/st/foo')
+    ...     browser.open('http://localhost/foo')
     ... except urllib2.HTTPError:
     ...     pass
 
     Now let's see the report:
 
-    >>> browser.open('http://localhost/++skin++SchoolToolDevMode/st/'
+    >>> browser.open('http://localhost/'
     ...              '++etc++site/default/RootErrorReportingUtility')
     >>> browser.getLink('Error List').click()
     >>> print browser.contents
@@ -122,7 +96,7 @@ Let's now make sure that we can get to the error list. First let's create a
         <span>...</span>
       </td>
       <td>
-        <span>mgr, zope.mgr, Manager, </span>
+        <span>unauthenticated, sb.person.manager, SchoolTool Manager, </span>
       </td>
       <td valign="top">
         <a href="showEntry.html?id=...">

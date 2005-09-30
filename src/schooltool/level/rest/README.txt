@@ -4,31 +4,15 @@ Functional tests for SchoolTool Level RESTive views
 Level Managament
 ----------------
 
-First of all, we will need a schooltool instance.  We will add it via
-the web ZMI:
-
-    >>> print http("""
-    ... POST /@@contents.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
-    ... Content-Length: 81
-    ... Content-Type: application/x-www-form-urlencoded
-    ...
-    ... type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication&\
-    ... new_value=test""")
-    HTTP/1.1 303 See Other
-    ...
-    Location: http://localhost/@@contents.html
-    ...
-
-Also, we need the REST HTTP caller:
+We need the REST HTTP caller:
 
     >>> from schooltool.app.rest.ftests import rest
 
 Initially, we have no levels.
 
     >>> print rest("""
-    ... GET /test/levels/ HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /levels/ HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     ...
@@ -37,15 +21,15 @@ Initially, we have no levels.
       <items>
       </items>
       <acl xlink:type="simple" xlink:title="ACL"
-           xlink:href="http://localhost/test/levels/acl"/>
+           xlink:href="http://localhost/levels/acl"/>
     </container>
     <BLANKLINE>
 
 Let's now create two levels:
 
     >>> print rest("""
-    ... PUT /test/levels/level2 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /levels/level2 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1"
@@ -54,13 +38,13 @@ Let's now create two levels:
     HTTP/1.1 201 Created
     ...
 
-    >>> level2 = getRootFolder()['test']['levels']['level2']
+    >>> level2 = getRootFolder()['levels']['level2']
     >>> level2
     <Level '2nd Grade'>
 
     >>> print rest("""
-    ... PUT /test/levels/level1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /levels/level1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1"
@@ -69,7 +53,7 @@ Let's now create two levels:
     HTTP/1.1 201 Created
     ...
 
-    >>> level1 = getRootFolder()['test']['levels']['level1']
+    >>> level1 = getRootFolder()['levels']['level1']
     >>> level1
     <Level '1st Grade'>
     >>> level1.nextLevel is level2
@@ -78,12 +62,13 @@ Let's now create two levels:
 Let's see what a level looks like:
 
     >>> print rest("""
-    ... GET /test/levels/level1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /levels/level1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
-    Content-Length: 420
+    Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <level xmlns:xlink="http://www.w3.org/1999/xlink">
       <title>1st Grade</title>
@@ -91,9 +76,9 @@ Let's see what a level looks like:
       <nextLevel>level2</nextLevel>
       <relationships xlink:type="simple"
                      xlink:title="Relationships"
-                     xlink:href="http://localhost/test/levels/level1/relationships"/>
+                     xlink:href="http://localhost/levels/level1/relationships"/>
       <acl xlink:type="simple" xlink:title="ACL"
-           xlink:href="http://localhost/test/levels/level1/acl"/>
+           xlink:href="http://localhost/levels/level1/acl"/>
     </level>
     <BLANKLINE>
 
@@ -104,8 +89,8 @@ Academic Record of a Student
 We first have to create a student for which we observe the academic record:
 
   >>> print rest("""
-  ... PUT /test/persons/stephan HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... PUT /persons/stephan HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... Content-Type: text/xml
   ...
   ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Stephan"/>
@@ -117,17 +102,18 @@ We first have to create a student for which we observe the academic record:
 Let's first look at the academic status. You can simply get it and put it:
 
   >>> print rest("""
-  ... GET /test/persons/stephan/academicStatus HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... GET /persons/stephan/academicStatus HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... """)
   HTTP/1.1 200 Ok
   Content-Length: 0
   Content-Type: text/plain
+  Set-Cookie: ...
   <BLANKLINE>
 
   >>> print rest("""
-  ... POST /test/persons/stephan/academicStatus HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... POST /persons/stephan/academicStatus HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... Content-Type: text/xml
   ...
   ... Enrolled
@@ -136,12 +122,13 @@ Let's first look at the academic status. You can simply get it and put it:
   ...
 
   >>> print rest("""
-  ... GET /test/persons/stephan/academicStatus HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... GET /persons/stephan/academicStatus HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... """)
   HTTP/1.1 200 Ok
   Content-Length: 8
   Content-Type: text/plain
+  Set-Cookie: ...
   <BLANKLINE>
   Enrolled
 
@@ -149,8 +136,8 @@ Let's first look at the academic status. You can simply get it and put it:
 Now let's create a promotion workflow At the beginning there is nothing:
 
   >>> print rest("""
-  ... GET /test/persons/stephan/promotion HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... GET /persons/stephan/promotion HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... """)
   HTTP/1.1 200 Ok
   ...
@@ -158,8 +145,8 @@ Now let's create a promotion workflow At the beginning there is nothing:
 You can create one by putting it there.
 
   >>> print rest("""
-  ... PUT /test/persons/stephan/promotion HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... PUT /persons/stephan/promotion HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... """)
   HTTP/1.1 200 Ok
   ...
@@ -168,12 +155,13 @@ If we now look at the promotion again, we will see that it now returns a
 workflow item.
 
   >>> print rest("""
-  ... GET /test/persons/stephan/promotion HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... GET /persons/stephan/promotion HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... """)
   HTTP/1.1 200 Ok
   Content-Length: 55
   Content-Type: text/xml; charset=UTF-8
+  Set-Cookie: ...
   <BLANKLINE>
   <setinitiallevel>
     <initialLevel/>
@@ -183,15 +171,16 @@ workflow item.
 Now we set the initial level:
 
   >>> print rest("""
-  ... POST /test/persons/stephan/promotion HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... POST /persons/stephan/promotion HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... Content-Type: text/xml
   ...
   ... <object xmlns="http://schooltool.org/ns/model/0.1"
   ...         initialLevel="level1" />
   ... """)
   HTTP/1.1 200 Ok
-  Content-Length: 23
+  Content-Length: ...
+  Set-Cookie: ...
   <BLANKLINE>
   Initial Level selected.
 
@@ -199,12 +188,13 @@ We can see that the next action must be setting the outcome of the first
 grade:
 
   >>> print rest("""
-  ... GET /test/persons/stephan/promotion HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... GET /persons/stephan/promotion HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... """)
   HTTP/1.1 200 Ok
-  Content-Length: 74
+  Content-Length: ...
   Content-Type: text/xml; charset=UTF-8
+  Set-Cookie: ...
   <BLANKLINE>
   <setleveloutcome>
     <level>level1</level>
@@ -213,27 +203,29 @@ grade:
   <BLANKLINE>
 
   >>> print rest("""
-  ... POST /test/persons/stephan/promotion HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... POST /persons/stephan/promotion HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... Content-Type: text/xml
   ...
   ... <object xmlns="http://schooltool.org/ns/model/0.1"
   ...         outcome="pass" />
   ... """, handle_errors=False)
   HTTP/1.1 200 Ok
-  Content-Length: 18
+  Content-Length: ...
+  Set-Cookie: ...
   <BLANKLINE>
   Outcome submitted.
 
 Also pass the second grade:
 
   >>> print rest("""
-  ... GET /test/persons/stephan/promotion HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... GET /persons/stephan/promotion HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... """)
   HTTP/1.1 200 Ok
-  Content-Length: 74
+  Content-Length: ...
   Content-Type: text/xml; charset=UTF-8
+  Set-Cookie: ...
   <BLANKLINE>
   <setleveloutcome>
     <level>level2</level>
@@ -242,39 +234,42 @@ Also pass the second grade:
   <BLANKLINE>
 
   >>> print rest("""
-  ... POST /test/persons/stephan/promotion HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... POST /persons/stephan/promotion HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... Content-Type: text/xml
   ...
   ... <object xmlns="http://schooltool.org/ns/model/0.1"
   ...         outcome="pass" />
   ... """, handle_errors=False)
   HTTP/1.1 200 Ok
-  Content-Length: 18
+  Content-Length: ...
+  Set-Cookie: ...
   <BLANKLINE>
   Outcome submitted.
 
 Now the promotion process is done and the promotion obejct is empty again:
 
   >>> print rest("""
-  ... GET /test/persons/stephan/promotion HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... GET /persons/stephan/promotion HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... """)
   HTTP/1.1 200 Ok
   Content-Length: 0
   Content-Type: text/plain
+  Set-Cookie: ...
   <BLANKLINE>
 
 Now that the workflow is done, we can look at the academic history of the
 student:
 
   >>> print rest("""
-  ... GET /test/persons/stephan/academicHistory HTTP/1.1
-  ... Authorization: Basic mgr:mgrpw
+  ... GET /persons/stephan/academicHistory HTTP/1.1
+  ... Authorization: Basic manager:schooltool
   ... """)
   HTTP/1.1 200 Ok
   Content-Length: ...
   Content-Type: text/xml; charset=UTF-8
+  Set-Cookie: ...
   <BLANKLINE>
   <history>
     <entry>

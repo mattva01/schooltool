@@ -17,28 +17,15 @@ Overview
 Prologue
 --------
 
-We will need a SchoolTool instance.  Let's call it 'frogpond'.
-
-    >>> from zope.testbrowser import Browser
-    >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
-    >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/contents.html')
-
-    >>> manager.getLink('SchoolTool').click()
-    >>> manager.getControl(name='new_value').value = 'frogpond'
-    >>> manager.getControl('Apply').click()
-    >>> manager.getLink('frogpond').click()
-
-Also, we need the REST HTTP caller:
+We need the REST HTTP caller:
 
     >>> from schooltool.app.rest.ftests import rest
 
 Add a term:
 
     >>> print http(r"""
-    ... PUT /frogpond/terms/2005-fall HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /terms/2005-fall HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
@@ -51,14 +38,13 @@ Add a term:
     ... </schooldays>
     ... """)
     HTTP/1.1 201 Created
-    Content-Length: 0
-    <BLANKLINE>
+    ...
 
 Add a schema:
 
     >>> print rest(r"""
-    ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
@@ -94,14 +80,13 @@ Add a schema:
     ... </timetable>
     ... """)
     HTTP/1.1 201 Created
-    Content-Length: 0
-    <BLANKLINE>
+    ...
 
 Lets add a course and 3 sections:
 
     >>> print rest("""
-    ... PUT /frogpond/courses/birdwatching HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /courses/birdwatching HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding"/>
@@ -110,8 +95,8 @@ Lets add a course and 3 sections:
     ...
 
     >>> print rest("""
-    ... PUT /frogpond/sections/birdwatching-1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /sections/birdwatching-1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding1"
@@ -121,8 +106,8 @@ Lets add a course and 3 sections:
     ...
 
     >>> print rest("""
-    ... PUT /frogpond/sections/birdwatching-2 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /sections/birdwatching-2 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding2"
@@ -132,8 +117,8 @@ Lets add a course and 3 sections:
     ...
 
     >>> print rest("""
-    ... PUT /frogpond/sections/birdwatching-3 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /sections/birdwatching-3 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Birding3"
@@ -143,8 +128,8 @@ Lets add a course and 3 sections:
     ...
 
     >>> print rest("""
-    ... POST /frogpond/courses/birdwatching/relationships HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /courses/birdwatching/relationships HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
@@ -152,14 +137,14 @@ Lets add a course and 3 sections:
     ...               xlink:type="simple"
     ...  xlink:role="http://schooltool.org/ns/coursesections/section"
     ...               xlink:arcrole="http://schooltool.org/ns/coursesections"
-    ...  xlink:href="http://localhost/frogpond/sections/birdwatching-1"/>
+    ...  xlink:href="http://localhost/sections/birdwatching-1"/>
     ... """, handle_errors=False)
     HTTP/1.1 201 Created
     ...
 
     >>> print rest("""
-    ... POST /frogpond/courses/birdwatching/relationships HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /courses/birdwatching/relationships HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
@@ -167,14 +152,14 @@ Lets add a course and 3 sections:
     ...               xlink:type="simple"
     ...  xlink:role="http://schooltool.org/ns/coursesections/section"
     ...               xlink:arcrole="http://schooltool.org/ns/coursesections"
-    ...  xlink:href="http://localhost/frogpond/sections/birdwatching-2"/>
+    ...  xlink:href="http://localhost/sections/birdwatching-2"/>
     ... """, handle_errors=False)
     HTTP/1.1 201 Created
     ...
 
     >>> print rest("""
-    ... POST /frogpond/courses/birdwatching/relationships HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /courses/birdwatching/relationships HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
@@ -182,7 +167,7 @@ Lets add a course and 3 sections:
     ...               xlink:type="simple"
     ...  xlink:role="http://schooltool.org/ns/coursesections/section"
     ...               xlink:arcrole="http://schooltool.org/ns/coursesections"
-    ...  xlink:href="http://localhost/frogpond/sections/birdwatching-3"/>
+    ...  xlink:href="http://localhost/sections/birdwatching-3"/>
     ... """, handle_errors=False)
     HTTP/1.1 201 Created
     ...
@@ -193,8 +178,8 @@ Add timetables to sections
 Lets add a timetable for the first section:
 
     >>> print rest(r"""
-    ... PUT /frogpond/sections/birdwatching-1/timetables/2005-fall.schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /sections/birdwatching-1/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
@@ -216,14 +201,13 @@ Lets add a timetable for the first section:
     ... </timetable>
     ... """)
     HTTP/1.1 201 Created
-    Content-Length: 0
-    <BLANKLINE>
+    ...
 
 For the second one:
 
     >>> print rest(r"""
-    ... PUT /frogpond/sections/birdwatching-2/timetables/2005-fall.schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /sections/birdwatching-2/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
@@ -245,14 +229,13 @@ For the second one:
     ... </timetable>
     ... """)
     HTTP/1.1 201 Created
-    Content-Length: 0
-    <BLANKLINE>
+    ...
 
 And the third one:
 
     >>> print rest(r"""
-    ... PUT /frogpond/sections/birdwatching-3/timetables/2005-fall.schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /sections/birdwatching-3/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
@@ -274,14 +257,13 @@ And the third one:
     ... </timetable>
     ... """)
     HTTP/1.1 201 Created
-    Content-Length: 0
-    <BLANKLINE>
+    ...
 
 We will need a student too:
 
     >>> print http(r"""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /persons/add.html HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Length: 112
     ... Content-Type: application/x-www-form-urlencoded
     ...
@@ -289,7 +271,7 @@ We will need a student too:
     ... """)
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/persons
+    Location: http://localhost/persons
     ...
 
 Rendering view
@@ -298,8 +280,8 @@ Rendering view
 All the sections sohuld bee seen in the drop down lists:
 
     >>> print http(r"""
-    ... GET /frogpond/persons/john/@@schedule.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /persons/john/@@schedule.html HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
@@ -343,8 +325,8 @@ All the sections sohuld bee seen in the drop down lists:
 Lets add John to Birdwatching 1:
 
     >>> print http(r"""
-    ... POST /frogpond/persons/john/@@schedule.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /persons/john/@@schedule.html HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Length: 33
     ... Content-Type: application/x-www-form-urlencoded
     ...
@@ -393,8 +375,8 @@ Lets add John to Birdwatching 1:
 If john is added to bw1 and bw2 a conflict should arise:
 
     >>> print http(r"""
-    ... POST /frogpond/persons/john/@@schedule.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /persons/john/@@schedule.html HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Length: 57
     ... Content-Type: application/x-www-form-urlencoded
     ...
@@ -457,8 +439,8 @@ If john is added to bw1 and bw2 a conflict should arise:
 Lets resolve the conflict by moving the student to the bw3:
 
     >>> print http(r"""
-    ... POST /frogpond/persons/john/@@schedule.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /persons/john/@@schedule.html HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Length: 57
     ... Content-Type: application/x-www-form-urlencoded
     ...
@@ -469,12 +451,13 @@ Lets resolve the conflict by moving the student to the bw3:
 Now our student should be in sections bw1 and bw2:
 
     >>> print rest(r"""
-    ... GET /frogpond/persons/john/relationships/ HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /persons/john/relationships/ HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     Content-Length: ...
     Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
     <BLANKLINE>
     <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
                    xmlns="http://schooltool.org/ns/model/0.1">
@@ -483,23 +466,23 @@ Now our student should be in sections bw1 and bw2:
         <relationship xlink:type="simple"
                       xlink:role="http://schooltool.org/ns/membership/group"
                       xlink:arcrole="http://schooltool.org/ns/membership"
-                      xlink:href="http://localhost/frogpond/sections/birdwatching-1">
+                      xlink:href="http://localhost/sections/birdwatching-1">
           <manage xlink:type="simple"
-                  xlink:href="http://localhost/frogpond/persons/john/relationships/2"/>
+                  xlink:href="http://localhost/persons/john/relationships/2"/>
         </relationship>
         <relationship xlink:type="simple"
                       xlink:role="http://schooltool.org/ns/calendar_subscription/provider"
                       xlink:arcrole="http://schooltool.org/ns/calendar_subscription"
-                      xlink:href="http://localhost/frogpond/sections/birdwatching-1/calendar">
+                      xlink:href="http://localhost/sections/birdwatching-1/calendar">
           <manage xlink:type="simple"
-                  xlink:href="http://localhost/frogpond/persons/john/relationships/3"/>
+                  xlink:href="http://localhost/persons/john/relationships/3"/>
         </relationship>
         <relationship xlink:type="simple"
                       xlink:role="http://schooltool.org/ns/membership/group"
                       xlink:arcrole="http://schooltool.org/ns/membership"
-                      xlink:href="http://localhost/frogpond/sections/birdwatching-3">
+                      xlink:href="http://localhost/sections/birdwatching-3">
           <manage xlink:type="simple"
-                  xlink:href="http://localhost/frogpond/persons/john/relationships/..."/>
+                  xlink:href="http://localhost/persons/john/relationships/..."/>
         </relationship>
       </existing>
     </relationships>

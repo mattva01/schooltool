@@ -4,34 +4,15 @@ Functional doctest for SchoolTool
 This is a functional doctest for schooltool.  To find out more about
 functional doctests, read Zope3/src/zope/app/ftests/doctest.txt
 
-SchoolTool as a Zope 3 content object
--------------------------------------
-
-First, we'll go to the Zope 3 management interface and verify that you can add
-SchoolTool instances from the add menu.
-
     >>> from zope.testbrowser import Browser
     >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
-
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/contents.html')
-    >>> print analyze.queryHTML('//a[text()="SchoolTool"]', manager.contents)[0]
-    <a href="...?type_name=BrowserAdd__schooltool.app.app.SchoolToolApplication"
-       class="">SchoolTool</a>
-
-We will obviously need a SchoolTool instance.
-
-    >>> manager.getLink('SchoolTool').click()
-    >>> manager.getControl(name='new_value').value = 'frogpond'
-    >>> manager.getControl('Apply').click()
-
-    >>> 'frogpond' in manager.contents
+    >>> manager.open('http://localhost/')
+    >>> 'SchoolTool' in manager.contents
     True
 
 The SchoolTool version is displayed on the page:
-
-    >>> manager.getLink('frogpond').click()
 
     >>> import schooltool
     >>> str(manager.contents).count(schooltool.VERSION) > 0
@@ -78,7 +59,7 @@ Also, let's create a group:
 Now we log in as the frog:
 
     >>> frog = Browser()
-    >>> frog.open('http://localhost/frogpond/')
+    >>> frog.open('http://localhost/')
     >>> frog.getLink('Log In').click()
     >>> frog.getControl('Username').value = 'frog'
     >>> frog.getControl('Password').value = 'pwd'
@@ -87,7 +68,7 @@ Now we log in as the frog:
 We should be redirected from the index page to the calendar
 
     >>> frog.url
-    'http://localhost/frogpond/persons/frog/calendar'
+    'http://localhost/persons/frog/calendar'
 
 And we should have permission to see the calendar:
 
@@ -110,31 +91,31 @@ Let's make sure that we can see the SchoolTool preferences page:
 We should be able to see terms and schemas without authenticating:
 
     >>> anonymous = Browser()
-    >>> anonymous.open('http://localhost/frogpond/terms')
+    >>> anonymous.open('http://localhost/terms')
     >>> anonymous.headers['status']
     '200 Ok'
 
-    >>> anonymous.open('http://localhost/frogpond/ttschemas')
+    >>> anonymous.open('http://localhost/ttschemas')
     >>> anonymous.headers['status']
     '200 Ok'
 
 But you have to log in to see persons, groups, and other locations:
 
-    >>> anonymous.open('http://localhost/frogpond/persons')
+    >>> anonymous.open('http://localhost/persons')
     >>> print anonymous.url
-    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
+    http://localhost/@@login.html?forbidden=yes&nexturl=...
 
-    >>> anonymous.open('http://localhost/frogpond/groups')
+    >>> anonymous.open('http://localhost/groups')
     >>> print anonymous.url
-    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
+    http://localhost/@@login.html?forbidden=yes&nexturl=...
 
-    >>> anonymous.open('http://localhost/frogpond/resources')
+    >>> anonymous.open('http://localhost/resources')
     >>> print anonymous.url
-    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
+    http://localhost/@@login.html?forbidden=yes&nexturl=...
 
 The section container view points to the timetable import form:
 
-    >>> manager.open('http://localhost/frogpond/sections')
+    >>> manager.open('http://localhost/sections')
     >>> print manager.contents
     <!DOCTYPE ...>
     ...
@@ -184,7 +165,7 @@ Looking at the section:
     ...
     ...Section of
     <BLANKLINE>
-          <a href="http://localhost/frogpond/courses/history">History</a>
+          <a href="http://localhost/courses/history">History</a>
     <BLANKLINE>
     ...
     ...change location...
@@ -192,7 +173,7 @@ Looking at the section:
 
 Students aren't given the option to change the location:
 
-    >>> frog.open('http://localhost/frogpond/sections/his1')
+    >>> frog.open('http://localhost/sections/his1')
     >>> frog.headers['status']
     '200 Ok'
     >>> "change location" not in frog.contents
@@ -201,17 +182,17 @@ Students aren't given the option to change the location:
 The section's edit view:
 
     >>> print http(r"""
-    ... GET /frogpond/sections/his1/@@edit.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... GET /sections/his1/@@edit.html HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... """)
     HTTP/1.1 200 Ok
     ...
 
 Frog can't see the section's calendar by default
 
-    >>> frog.open('http://localhost/frogpond/sections/his1/calendar')
+    >>> frog.open('http://localhost/sections/his1/calendar')
     >>> print frog.url
-    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
+    http://localhost/@@login.html?forbidden=yes&nexturl=...
 
 Frog's overlay portlet has just his own calendar and application
 calendar:
@@ -232,17 +213,17 @@ calendar:
             <td><input type="checkbox" name="my_timetable" checked></td>
             <td style="width: 100%">My Calendar</td>
             <td></td>
-          </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/frogpond"></td>
-            <td><input type="checkbox" name="overlay_timetables:list" checked value="/frogpond"></td>
+          </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
             <td style="width: 100%">SchoolTool</td>
             <td><a class="go" style="background: #c1665a;
-                color: #c1665a" href="http://localhost/frogpond/calendar">...</a></td>
+                color: #c1665a" href="http://localhost/calendar">...</a></td>
         </tr></table>
 
 As does Toad's:
 
     >>> toad = Browser()
-    >>> toad.open('http://localhost/frogpond/')
+    >>> toad.open('http://localhost/')
     >>> toad.getLink('Log In').click()
     >>> toad.getControl('Username').value = 'toad'
     >>> toad.getControl('Password').value = 'doat'
@@ -260,11 +241,11 @@ As does Toad's:
             <td><input type="checkbox" name="my_timetable" checked></td>
             <td style="width: 100%">My Calendar</td>
             <td></td>
-          </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/frogpond"></td>
-            <td><input type="checkbox" name="overlay_timetables:list" checked value="/frogpond"></td>
+          </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
             <td style="width: 100%">SchoolTool</td>
             <td><a class="go" style="background: #c1665a;
-                color: #c1665a" href="http://localhost/frogpond/calendar">...</a></td>
+                color: #c1665a" href="http://localhost/calendar">...</a></td>
         </tr></table>
 
 Adding a teacher:
@@ -291,20 +272,20 @@ Now Frog is in the Instructors div
     ...
     ...Section of
     <BLANKLINE>
-          <a href="http://localhost/frogpond/courses/history">History</a>
+          <a href="http://localhost/courses/history">History</a>
     <BLANKLINE>
     ...
           <h3>Instructors</h3>
           <ul>
             <li>
-              <a href="http://localhost/frogpond/persons/frog">Frog</a>
+              <a href="http://localhost/persons/frog">Frog</a>
             </li>
           </ul>
     ...
 
 Frog can see the calendar now
 
-    >>> frog.open('http://localhost/frogpond/sections/his1/calendar')
+    >>> frog.open('http://localhost/sections/his1/calendar')
     >>> 'Calendar for HIS1' in frog.contents
     True
 
@@ -322,16 +303,16 @@ And Frog's overlay portlet shows the section:
             <td><input type="checkbox" name="my_timetable" checked></td>
             <td style="width: 100%">My Calendar</td>
             <td></td>
-          </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/frogpond/sections/his1"></td>
-            <td><input type="checkbox" name="overlay_timetables:list" checked value="/frogpond/sections/his1"></td>
+          </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/sections/his1"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/sections/his1"></td>
             <td style="width: 100%">Frog -- History</td>
             <td><a class="go" style="background: #d1940c;
-                color: #d1940c" href="http://localhost/frogpond/sections/his1/calendar">...</a></td>
-        </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/frogpond"></td>
-            <td><input type="checkbox" name="overlay_timetables:list" checked value="/frogpond"></td>
+                color: #d1940c" href="http://localhost/sections/his1/calendar">...</a></td>
+        </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
             <td style="width: 100%">SchoolTool</td>
             <td><a class="go" style="background: #c1665a;
-                color: #c1665a" href="http://localhost/frogpond/calendar">...</a></td>
+                color: #c1665a" href="http://localhost/calendar">...</a></td>
         </tr></table>
 
 If we fire Frog, in hopes of getting Salamander to step in:
@@ -342,9 +323,9 @@ If we fire Frog, in hopes of getting Salamander to step in:
 
 Frog can't see the section's calendar any more
 
-    >>> frog.open('http://localhost/frogpond/sections/his1/calendar')
+    >>> frog.open('http://localhost/sections/his1/calendar')
     >>> print frog.url
-    http://localhost/frogpond/@@login.html?forbidden=yes&nexturl=...
+    http://localhost/@@login.html?forbidden=yes&nexturl=...
 
 and he's no longer an instructor:
 
@@ -371,11 +352,11 @@ And the section's calendar is no longer in his overlay portlet.
             <td><input type="checkbox" name="my_timetable" checked></td>
             <td style="width: 100%">My Calendar</td>
             <td></td>
-          </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/frogpond"></td>
-            <td><input type="checkbox" name="overlay_timetables:list" checked value="/frogpond"></td>
+          </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
             <td style="width: 100%">SchoolTool</td>
             <td><a class="go" style="background: #c1665a;
-                color: #c1665a" href="http://localhost/frogpond/calendar">...</a></td>
+                color: #c1665a" href="http://localhost/calendar">...</a></td>
         </tr></table>
 
 Adding a student:
@@ -391,13 +372,13 @@ Now toad is in the Students div
     ...
     ...Section of
     <BLANKLINE>
-        <a href="http://localhost/frogpond/courses/history">History</a>
+        <a href="http://localhost/courses/history">History</a>
     <BLANKLINE>
     ...
           <h3>Students</h3>
           <ul>
             <li class="individual">
-              <a href="http://localhost/frogpond/persons/toad">Toad</a>
+              <a href="http://localhost/persons/toad">Toad</a>
             </li>
           </ul>
     ...
@@ -405,13 +386,13 @@ Now toad is in the Students div
 
 Toad can see the calendar now:
 
-    >>> toad.open('http://localhost/frogpond/sections/his1/calendar')
+    >>> toad.open('http://localhost/sections/his1/calendar')
     >>> print toad.url
-    http://localhost/frogpond/sections/his1/calendar
+    http://localhost/sections/his1/calendar
 
 And Toad's overlay portlet shows the section:
 
-    >>> toad.open('http://localhost/frogpond/persons/toad/calendar')
+    >>> toad.open('http://localhost/persons/toad/calendar')
     >>> print_portlet(toad.contents)
     <table class="overlays"><tr><th style="text-align: center">
               <acronym title="Personal calendar">Cal</acronym>
@@ -423,16 +404,16 @@ And Toad's overlay portlet shows the section:
             <td><input type="checkbox" name="my_timetable" checked></td>
             <td style="width: 100%">My Calendar</td>
             <td></td>
-          </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/frogpond/sections/his1"></td>
-            <td><input type="checkbox" name="overlay_timetables:list" checked value="/frogpond/sections/his1"></td>
+          </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/sections/his1"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/sections/his1"></td>
             <td style="width: 100%"> -- History</td>
             <td><a class="go" style="background: #d1940c;
-                color: #d1940c" href="http://localhost/frogpond/sections/his1/calendar">...</a></td>
-        </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/frogpond"></td>
-            <td><input type="checkbox" name="overlay_timetables:list" checked value="/frogpond"></td>
+                color: #d1940c" href="http://localhost/sections/his1/calendar">...</a></td>
+        </tr><tr style="background: #e0b6af"><td><input type="checkbox" name="overlay:list" checked value="/"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" checked value="/"></td>
             <td style="width: 100%">SchoolTool</td>
             <td><a class="go" style="background: #c1665a;
-                color: #c1665a" href="http://localhost/frogpond/calendar">...</a></td>
+                color: #c1665a" href="http://localhost/calendar">...</a></td>
         </tr></table>
 
 

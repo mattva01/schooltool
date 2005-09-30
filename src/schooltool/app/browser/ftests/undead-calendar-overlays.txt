@@ -10,22 +10,13 @@ overlay lists of other persons, causing problems later on.
 Setup
 -----
 
-First we create an application:
-
   >>> from zope.testbrowser import Browser
   >>> manager_browser = Browser()
-  >>> manager_browser.addHeader('Authorization', 'Basic mgr:mgrpw')
+  >>> manager_browser.addHeader('Authorization', 'Basic manager:schooltool')
   >>> manager_browser.handleErrors = False
-
-  >>> manager_browser.open('http://localhost/contents.html')
-
-  >>> manager_browser.getLink('SchoolTool').click()
-  >>> manager_browser.getControl(name='new_value').value = 'test'
-  >>> manager_browser.getControl('Apply').click()
-
-  >>> "test" in manager_browser.contents
+  >>> manager_browser.open('http://localhost/')
+  >>> "SchoolTool" in manager_browser.contents
   True
-  >>> manager_browser.getLink('test').click()
 
 We will need a user and a group:
 
@@ -55,7 +46,7 @@ Let's log in as the new user:
 
 Let's add the group's calendar to his calendar overlays:
 
-  >>> srichter_browser.open('http://localhost/test/persons/srichter/calendar')
+  >>> srichter_browser.open('http://localhost/persons/srichter/calendar')
   >>> srichter_browser.getControl('More...').click()
 
   >>> srichter_browser.getControl('A Group').selected = True
@@ -68,9 +59,8 @@ So, we have to do it the hard way.
 
   >>> import transaction
   >>> from zope.app import zapi
-  >>> root = getRootFolder()
-  >>> app = zapi.traverse(root, '/test')
-  >>> srichter_person = zapi.traverse(root, '/test/persons/srichter')
+  >>> app = getRootFolder()
+  >>> srichter_person = zapi.traverse(app, '/persons/srichter')
   >>> for overlay_info in srichter_person.overlaid_calendars:
   ...     if overlay_info.calendar.__parent__ is app:
   ...         print "Removing the school-wide calendar."
@@ -85,21 +75,21 @@ Test
 
 We just added A Group to Stephan's overlays:
 
-  >>> srichter_browser.open('http://localhost/test/persons/srichter/calendar')
-  >>> 'http://localhost/test/groups/a-group/calendar' in srichter_browser.contents
+  >>> srichter_browser.open('http://localhost/persons/srichter/calendar')
+  >>> 'http://localhost/groups/a-group/calendar' in srichter_browser.contents
   True
 
 If we delete the group from the database:
 
-  >>> manager_browser.open('http://localhost/test/groups/')
+  >>> manager_browser.open('http://localhost/groups/')
   >>> manager_browser.getControl(name='delete.a-group').value = True
   >>> manager_browser.getControl('Delete').click()
   >>> manager_browser.getControl('Confirm').click()
 
 It should disappear from the overlay list.
 
-  >>> srichter_browser.open('http://localhost/test/persons/srichter/calendar')
-  >>> 'http://localhost/test/groups/a-group/calendar' in srichter_browser.contents
+  >>> srichter_browser.open('http://localhost/persons/srichter/calendar')
+  >>> 'http://localhost/groups/a-group/calendar' in srichter_browser.contents
   False
 
 User should still be capable of modifying his overlay list:

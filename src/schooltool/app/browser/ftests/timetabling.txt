@@ -16,18 +16,11 @@ Overview
 Prologue
 --------
 
-We will need a SchoolTool instance.  Let's call it 'frogpond'.
-
     >>> from zope.testbrowser import Browser
     >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/contents.html')
-
-    >>> manager.getLink('SchoolTool').click()
-    >>> manager.getControl(name='new_value').value = 'frogpond'
-    >>> manager.getControl('Apply').click()
-    >>> manager.getLink('frogpond').click()
+    >>> manager.open('http://localhost/')
 
 Let's create a person for use in tests:
 
@@ -103,7 +96,7 @@ Finally, you click on the 'Add term' button.
     >>> manager.getControl('Add term').click()
 
     >>> manager.url
-    'http://localhost/frogpond/terms'
+    'http://localhost/terms'
     >>> '2005 Fall' in manager.contents
     True
 
@@ -245,7 +238,7 @@ A new section should have been created:
     <tr><td>
         <input type="checkbox" name="delete.swimming--frog"></td>
       <td>
-        <a href="http://localhost/frogpond/courses/swimming">Swimming</a>
+        <a href="http://localhost/courses/swimming">Swimming</a>
       </td>
       <td>
         <a href=".../sections/swimming--frog">Swimming - Frog</a>
@@ -253,7 +246,7 @@ A new section should have been created:
       <td>
     <BLANKLINE>
     <BLANKLINE>
-        <a href="http://localhost/frogpond/persons/frog">Frog</a>
+        <a href="http://localhost/persons/frog">Frog</a>
     <BLANKLINE>
       </td>
       <td>
@@ -339,7 +332,7 @@ We can view the person's timetable list, although it will be empty:
 
 The activities should show up in the calendar:
 
-    >>> manager.open('http://localhost/frogpond/'
+    >>> manager.open('http://localhost/'
     ...              'persons/frog/calendar/2005-09-05')
 
     >>> print analyze.queryHTML('//h6[fn:contains(text(), "Swimming")]',

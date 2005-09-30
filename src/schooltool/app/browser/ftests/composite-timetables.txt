@@ -17,21 +17,13 @@ Overview
 Prologue
 --------
 
-We will need a SchoolTool instance.  Let's call it 'frogpond'.
-
     >>> from zope.testbrowser import Browser
     >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/contents.html')
-
-    >>> manager.getLink('SchoolTool').click()
-    >>> manager.getControl(name='new_value').value = 'frogpond'
-    >>> manager.getControl('Apply').click()
-
-    >>> 'frogpond' in manager.contents
+    >>> manager.open('http://localhost/')
+    >>> 'SchoolTool' in manager.contents
     True
-    >>> manager.getLink('frogpond').click()
 
 Also, we need the REST HTTP caller:
 
@@ -40,8 +32,8 @@ Also, we need the REST HTTP caller:
 Add a term:
 
     >>> print http(r"""
-    ... PUT /frogpond/terms/2005-fall HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /terms/2005-fall HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
@@ -55,13 +47,14 @@ Add a term:
     ... """)
     HTTP/1.1 201 Created
     Content-Length: 0
+    Set-Cookie: ...
     <BLANKLINE>
 
 Add Schema:
 
     >>> print rest(r"""
-    ... PUT /frogpond/ttschemas/schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /ttschemas/schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
@@ -98,13 +91,13 @@ Add Schema:
     ... """, handle_errors=False)
     HTTP/1.1 201 Created
     Content-Length: 0
-    <BLANKLINE>
+    ...
 
 Let's create a person so that we can fool around with his calendar:
 
     >>> print http(r"""
-    ... POST /frogpond/persons/add.html HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /persons/add.html HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Length: 112
     ... Content-Type: application/x-www-form-urlencoded
     ...
@@ -112,14 +105,14 @@ Let's create a person so that we can fool around with his calendar:
     ... """)
     HTTP/1.1 303 See Other
     ...
-    Location: http://localhost/frogpond/persons
+    Location: http://localhost/persons
     ...
 
 Add a 2 groups:
 
     >>> print rest("""
-    ... PUT /frogpond/groups/boys HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /groups/boys HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Boys"/>
@@ -128,8 +121,8 @@ Add a 2 groups:
     ...
 
     >>> print rest("""
-    ... PUT /frogpond/groups/guys HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /groups/guys HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1" title="Guys"/>
@@ -140,8 +133,8 @@ Add a 2 groups:
 Add John to boys and guys:
 
     >>> print rest("""
-    ... POST /frogpond/persons/john/relationships HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /persons/john/relationships HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
@@ -149,14 +142,14 @@ Add John to boys and guys:
     ...               xlink:type="simple"
     ...               xlink:role="http://schooltool.org/ns/membership/group"
     ...               xlink:arcrole="http://schooltool.org/ns/membership"
-    ...               xlink:href="http://localhost/frogpond/groups/boys"/>
+    ...               xlink:href="http://localhost/groups/boys"/>
     ... """, handle_errors=False)
     HTTP/1.1 201 Created
     ...
 
     >>> print rest("""
-    ... POST /frogpond/persons/john/relationships HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... POST /persons/john/relationships HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <relationship xmlns="http://schooltool.org/ns/model/0.1"
@@ -164,7 +157,7 @@ Add John to boys and guys:
     ...               xlink:type="simple"
     ...               xlink:role="http://schooltool.org/ns/membership/group"
     ...               xlink:arcrole="http://schooltool.org/ns/membership"
-    ...               xlink:href="http://localhost/frogpond/groups/guys"/>
+    ...               xlink:href="http://localhost/groups/guys"/>
     ... """, handle_errors=False)
     HTTP/1.1 201 Created
     ...
@@ -172,8 +165,8 @@ Add John to boys and guys:
 Add group timetables:
 
     >>> print rest(r"""
-    ... PUT /frogpond/groups/boys/timetables/2005-fall.schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /groups/boys/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
@@ -194,12 +187,11 @@ Add group timetables:
     ... </timetable>
     ... """, handle_errors=False)
     HTTP/1.1 201 Created
-    Content-Length: 0
-    <BLANKLINE>
+    ...
 
     >>> print rest(r"""
-    ... PUT /frogpond/groups/guys/timetables/2005-fall.schema1 HTTP/1.1
-    ... Authorization: Basic mgr:mgrpw
+    ... PUT /groups/guys/timetables/2005-fall.schema1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
     ... Content-Type: text/xml
     ...
     ... <timetable xmlns="http://schooltool.org/ns/timetable/0.1"
@@ -220,8 +212,7 @@ Add group timetables:
     ... </timetable>
     ... """, handle_errors=False)
     HTTP/1.1 201 Created
-    Content-Length: 0
-    <BLANKLINE>
+    ...
 
 Finally, we're done with setup.
 
@@ -231,7 +222,7 @@ Rendering views
 Let's look at John's composite calendar:
 
     >>> print http(r"""
-    ... GET /frogpond/persons/john/calendar/2003-09-02 HTTP/1.1
+    ... GET /persons/john/calendar/2003-09-02 HTTP/1.1
     ... Authorization: Basic john:pwd""", handle_errors=False)
     HTTP/1.1 200 Ok
     Content-Length: ...

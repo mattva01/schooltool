@@ -7,18 +7,11 @@ events that book them.
 Set up
 ------
 
-We will obviously need a SchoolTool instance.
-
     >>> from zope.testbrowser import Browser
     >>> manager = Browser()
-    >>> manager.addHeader('Authorization', 'Basic mgr:mgrpw')
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
     >>> manager.handleErrors = False
-    >>> manager.open('http://localhost/contents.html')
-
-    >>> manager.getLink('SchoolTool').click()
-    >>> manager.getControl(name='new_value').value = 'frogpond'
-    >>> manager.getControl('Apply').click()
-    >>> manager.getLink('frogpond').click()
+    >>> manager.open('http://localhost/')
 
 Let's create a person so that we can fool around with his calendar:
 
@@ -56,7 +49,7 @@ Now let's create some resources that can be booked:
 We log in as the frog
 
     >>> frog = Browser()
-    >>> frog.open('http://localhost/frogpond/')
+    >>> frog.open('http://localhost/')
     >>> frog.getLink('Log In').click()
     >>> frog.getControl('Username').value = 'frog'
     >>> frog.getControl('Password').value = 'pwd'
@@ -65,7 +58,7 @@ We log in as the frog
 and set up a calendar for Frog:
 
     >>> print http(r"""
-    ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
+    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
     ... Host: localhost:7080
     ... Authorization: Basic frog:pwd
     ... Content-Length: 244
@@ -90,7 +83,7 @@ and set up a calendar for Frog:
 
 Frog should not be capable of booking any resources yet:
 
-    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-02-04')
+    >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
     >>> frog.getLink('Test event').click()
     >>> frog.getLink('edit resources').click()
     >>> print frog.contents
@@ -106,13 +99,13 @@ Frog should not be capable of booking any resources yet:
 But we can give him access to some resources:
 
     >>> manager.open(
-    ...     'http://localhost/frogpond/resources/mud/calendar/acl.html')
+    ...     'http://localhost/resources/mud/calendar/acl.html')
     >>> ctrl = manager.getControl(name='sb.person.frog')
     >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
     >>> manager.getControl('Set Access', index=1).click()
 
     >>> manager.open(
-    ...     'http://localhost/frogpond/resources/fish/calendar/acl.html')
+    ...     'http://localhost/resources/fish/calendar/acl.html')
     >>> ctrl = manager.getControl(name='sb.person.frog')
     >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
     >>> manager.getControl('Set Access', index=1).click()
@@ -193,11 +186,11 @@ Now another resource is booked:
 Frog should see the event in the resource calendar too:
 
     >>> frog.open(
-    ...     'http://localhost/frogpond/resources/fish/calendar/2005-02-04/')
+    ...     'http://localhost/resources/fish/calendar/2005-02-04/')
     >>> print frog.contents
     <BLANKLINE>
     ...
-    <a href="http://localhost/frogpond/resources/fish/calendar/dummy-uid"
+    <a href="http://localhost/resources/fish/calendar/dummy-uid"
        title="Test event">
       Test event
       <span class="start-end">
@@ -211,21 +204,21 @@ Frog should see the event in the resource calendar too:
                style="background: #7590ae">
         <a style="color: #000;"
            href="...dummy-uid/booking.html?date=2005-02-04">Booked by</a></h6>
-      <a href="http://localhost/frogpond/persons/frog">Frog</a>
+      <a href="http://localhost/persons/frog">Frog</a>
     </div>
     ...
 
 Now if we remove the permission to book the fish:
 
     >>> manager.open(
-    ...     'http://localhost/frogpond/resources/fish/calendar/acl.html')
+    ...     'http://localhost/resources/fish/calendar/acl.html')
     >>> ctrl = manager.getControl(name='sb.person.frog')
     >>> ctrl.value = ['schooltool.viewCalendar']
     >>> manager.getControl('Set Access', index=1).click()
 
 The fish should stay in the bookable resources list:
 
-    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-02-04')
+    >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
     >>> frog.getLink('Test event').click()
     >>> frog.getLink('edit resources').click()
     >>> print frog.contents
@@ -287,7 +280,7 @@ if Book Resources is checked:
 Editing view should have a link to its booking view:
 
     >>> frog.open(
-    ...   'http://localhost/frogpond/persons/frog/calendar/dummy-uid/edit.html')
+    ...   'http://localhost/persons/frog/calendar/dummy-uid/edit.html')
     >>> frog.getLink('Book resources')
     <Link text='Book resources'
           url='.../frog/calendar/dummy-uid/booking.html'>
@@ -301,7 +294,7 @@ that book resources should remove events from resource calendars):
 
 We can see the event in mud's calendar:
 
-    >>> frog.open('http://localhost/frogpond/resources/mud/calendar/2005-02-04')
+    >>> frog.open('http://localhost/resources/mud/calendar/2005-02-04')
     >>> print frog.contents
     <BLANKLINE>
     ...
@@ -313,14 +306,14 @@ If we will delete the event from mud's calendar the original event
 should stay in place, yet the resource should become unbooked:
 
     XXX: Have to call URL, since I could not find the link!!!
-    >>> manager.open('http://localhost/frogpond/resources/mud/calendar/'
+    >>> manager.open('http://localhost/resources/mud/calendar/'
     ...           'delete.html?event_id=dummy-uid&date=2005-02-04')
     >>> 'Test event' in manager.contents
     False
 
 Frog still can see the event:
 
-    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-02-04')
+    >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
     >>> 'Test event' in frog.contents
     True
 
@@ -344,7 +337,7 @@ Let's book it again:
 
 It is in mud's calendar again:
 
-    >>> frog.open('http://localhost/frogpond/resources/mud/calendar/2005-02-04')
+    >>> frog.open('http://localhost/resources/mud/calendar/2005-02-04')
     >>> print frog.contents
     <BLANKLINE>
     ...
@@ -355,25 +348,25 @@ It is in mud's calendar again:
 And delete the event from frog's calendar:
 
     >>> manager.open(
-    ...     'http://localhost/frogpond/persons/frog/calendar/2005-02-04')
+    ...     'http://localhost/persons/frog/calendar/2005-02-04')
     >>> manager.getLink(url='delete.html?event_id=dummy-uid').click()
 
 The event should be gone from the frog's calendar:
 
-    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/2005-02-04')
+    >>> frog.open('http://localhost/persons/frog/calendar/2005-02-04')
     >>> "dummy-uid" in frog.contents
     False
 
 And it should not be seen in mud's calendar too:
 
-    >>> frog.open('http://localhost/frogpond/resources/mud/calendar/2005-02-04')
+    >>> frog.open('http://localhost/resources/mud/calendar/2005-02-04')
     >>> "dummy-uid" in frog.contents
     False
 
 Let's do some event clashing, first we set up some overlapping events:
 
     >>> print http(r"""
-    ... PUT /frogpond/persons/frog/calendar/calendar.ics HTTP/1.1
+    ... PUT /persons/frog/calendar/calendar.ics HTTP/1.1
     ... Host: localhost:7080
     ... Authorization: Basic frog:pwd
     ... Content-Length: 244
@@ -412,7 +405,7 @@ Let's do some event clashing, first we set up some overlapping events:
 
 Now let's allow frog access all resources:
 
-    >>> manager.open('http://localhost/frogpond')
+    >>> manager.open('http://localhost')
 
     >>> manager.getLink('Resources').click()
     >>> manager.getLink('mud').click()
@@ -442,7 +435,7 @@ If we book some resources for the second event,
 
     >>> frog.handleErrors = False
     >>> frog.open(
-    ...     'http://localhost/frogpond/persons/frog/calendar/dummy-uid2')
+    ...     'http://localhost/persons/frog/calendar/dummy-uid2')
     >>> frog.getLink('edit resources').click()
     >>> frog.getControl('mud').selected = True
     >>> frog.getControl('fish').selected = True
@@ -451,7 +444,7 @@ If we book some resources for the second event,
 we should see the conflicts when booking the for the events overlapping
 "Test event1":
 
-    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/dummy-uid1')
+    >>> frog.open('http://localhost/persons/frog/calendar/dummy-uid1')
     >>> frog.getLink('edit resources').click()
     >>> print frog.contents
     <BLANKLINE>
@@ -500,7 +493,7 @@ we should see the conflicts when booking the for the events overlapping
 
 Unless we are looking at "Test event2" itself:
 
-    >>> frog.open('http://localhost/frogpond/persons/frog/calendar/dummy-uid2')
+    >>> frog.open('http://localhost/persons/frog/calendar/dummy-uid2')
     >>> frog.getLink('edit resources').click()
     >>> print frog.contents
     <BLANKLINE>
@@ -529,7 +522,7 @@ Unless we are looking at "Test event2" itself:
 
 Let's add another person, frog's boss:
 
-    >>> manager.open('http://localhost/frogpond/persons')
+    >>> manager.open('http://localhost/persons')
     >>> manager.getLink('New Person').click()
 
     >>> manager.getControl('Full name').value = 'Stork'
@@ -544,7 +537,7 @@ Let's add another person, frog's boss:
 The boss decides to take a mud bath, so he creates an event.
 
     >>> print http(r"""
-    ... PUT /frogpond/persons/stork/calendar/calendar.ics HTTP/1.1
+    ... PUT /persons/stork/calendar/calendar.ics HTTP/1.1
     ... Host: localhost:7080
     ... Authorization: Basic stork:pwd
     ... Content-Type: text/calendar
@@ -569,7 +562,7 @@ The boss decides to take a mud bath, so he creates an event.
 Stork should have access to the resources:
 
     >>> manager.open(
-    ...     'http://localhost/frogpond/resources/mud/calendar/acl.html')
+    ...     'http://localhost/resources/mud/calendar/acl.html')
     >>> ctrl = manager.getControl(name='sb.person.stork')
     >>> ctrl.value = ['schooltool.addEvent', 'schooltool.viewCalendar']
     >>> manager.getControl('Set Access', index=1).click()
@@ -577,14 +570,14 @@ Stork should have access to the resources:
 And then stork books mud.
 
     >>> stork = Browser()
-    >>> stork.open('http://localhost/frogpond/')
+    >>> stork.open('http://localhost/')
     >>> stork.getLink('Log In').click()
     >>> stork.getControl('Username').value = 'stork'
     >>> stork.getControl('Password').value = 'pwd'
     >>> stork.getControl('Log in').click()
 
     >>> stork.open(
-    ...     'http://localhost/frogpond/persons/stork/calendar/smartie-uid')
+    ...     'http://localhost/persons/stork/calendar/smartie-uid')
     >>> stork.getLink('edit resources').click()
     >>> stork.getControl('mud').selected = True
     >>> stork.getControl('Book').click()
@@ -592,12 +585,12 @@ And then stork books mud.
 Frog should still be able to see the resource's calendar
 (regression test for issue 352):
 
-    >>> frog.open('http://localhost/frogpond/resources/mud/calendar/2005-08-07')
+    >>> frog.open('http://localhost/resources/mud/calendar/2005-08-07')
     >>> print frog.contents
     <BLANKLINE>
     ...
     <h6 ...>
-      <a href="http://localhost/frogpond/resources/mud/calendar/smartie-uid"
+      <a href="http://localhost/resources/mud/calendar/smartie-uid"
          title="Mud bath">
         Mud bath
       ...
