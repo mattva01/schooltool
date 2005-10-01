@@ -21,16 +21,16 @@ Tests for groups.
 
 $Id: test_app.py 4691 2005-08-12 18:59:44Z srichter $
 """
+
 import unittest
+
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 
 from schooltool.app.rest.testing import ApplicationObjectViewTestMixin
 from schooltool.app.rest.testing import ContainerViewTestMixin
 from schooltool.app.rest.testing import FileFactoriesSetUp
-
 from schooltool.group.group import Group, GroupContainer
-from schooltool.group.interfaces import IGroupContainer
 from schooltool.group.rest.group import GroupView, GroupFile
 from schooltool.group.rest.group import GroupContainerView
 from schooltool.group.rest.group import GroupFileFactory

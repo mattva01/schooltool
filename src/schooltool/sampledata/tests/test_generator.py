@@ -23,10 +23,9 @@ $Id$
 """
 
 import unittest
-from pprint import pprint, pformat
+from pprint import pprint
 
 from zope.testing import doctest
-from zope.app import zapi
 from zope.interface import implements
 from zope.app.testing import setup, ztapi
 

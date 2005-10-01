@@ -138,18 +138,15 @@ from sets import Set, ImmutableSet
 
 import zope.event
 from persistent import Persistent
-from persistent.list import PersistentList
 from persistent.dict import PersistentDict
-from zope.component import provideAdapter, adapts
+from zope.component import adapts
 from zope.interface import directlyProvides, implements
 
 from zope.app import zapi
 from zope.app.annotation.interfaces import IAnnotations
 from zope.app.location.interfaces import ILocation
-from zope.app.location.traversing import LocationPhysicallyLocatable
 from zope.app.traversing.api import getPath
 
-from schooltool.app.cal import CalendarEvent
 from schooltool.calendar.simple import ImmutableCalendar
 
 from schooltool.timetable.interfaces import ITimetable, ITimetableWrite

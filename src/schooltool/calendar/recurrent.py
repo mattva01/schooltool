@@ -27,11 +27,9 @@ import calendar
 from sets import Set
 
 from zope.interface import implements
+
 from schooltool.calendar.icalendar import ical_weekdays
 from schooltool.calendar.icalendar import ical_date, ical_datetime
-from schooltool.calendar.mixins import CalendarEventMixin
-from schooltool.calendar.mixins import ExpandedCalendarEvent
-from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.calendar.interfaces import Unchanged
 from schooltool.calendar.interfaces import \
     IDailyRecurrenceRule, IWeeklyRecurrenceRule, IMonthlyRecurrenceRule, \

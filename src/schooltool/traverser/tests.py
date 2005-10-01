@@ -16,9 +16,10 @@
 $Id: tests.py 29143 2005-02-14 22:43:16Z srichter $
 """
 import unittest
+
 from zope.testing import doctest
 from zope.component import testing
-from zope.app.testing import setup
+
 
 def test_suite():
     return unittest.TestSuite((

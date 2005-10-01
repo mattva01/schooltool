@@ -27,11 +27,9 @@ all IAnnotatable objects that uses Zope 3 annotations.
 
 from BTrees.OOBTree import OOBTree
 from persistent import Persistent
-from zope.app.container.btree import BTreeContainer
 from zope.app.container.contained import Contained
 from zope.interface import implements
 import zope.event
-from zope.app.location.interfaces import ILocation
 
 from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.interfaces import IRelationshipLink

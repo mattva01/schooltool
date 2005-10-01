@@ -28,7 +28,6 @@ import zope.app.event.objectevent
 import zope.app.container.constraints
 from zope.app import container
 from zope.app import event
-from zope.app.annotation.interfaces import IAnnotatable
 from zope.app.location.interfaces import ILocation
 from zope.app.security.interfaces import IAuthentication, ILogout
 

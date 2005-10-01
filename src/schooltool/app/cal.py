@@ -23,6 +23,7 @@ $Id$
 """
 
 import datetime
+
 from persistent.dict import PersistentDict
 from persistent import Persistent
 from zope.interface import implements
@@ -30,7 +31,6 @@ from zope.schema import getFieldNames
 from zope.component import adapts
 from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.container.contained import Contained
-from zope.app.location.interfaces import ILocation
 
 from schooltool.calendar.icalendar import read_icalendar
 from schooltool.calendar.interfaces import ICalendar
@@ -40,6 +40,7 @@ from schooltool.calendar.simple import SimpleCalendarEvent
 from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IWriteCalendar
+
 
 CALENDAR_KEY = 'schooltool.app.calendar.Calendar'
 

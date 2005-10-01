@@ -18,31 +18,27 @@
 #
 """
 RESTive views for relationships
-from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 
 $Id$
 """
+
 from zope.app import zapi
 from zope.app.traversing.api import traverse
 from zope.app.traversing.interfaces import TraversalError
 from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
-from zope.interface import Interface, Attribute
 from zope.publisher.interfaces import NotFound
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import ProxyFactory
 
 from schooltool.app.app import getSchoolToolApplication
-from schooltool.relationship.annotatable import getRelationshipLinks
 from schooltool.relationship.uri import IURIObject
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
-from zope.app.traversing.interfaces import IPhysicallyLocatable
 from schooltool.app.rest.xmlparsing import XMLDocument
 from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.interfaces import IRelationshipSchema
 from schooltool.relationship.relationship import relate, unrelate
-from zope.i18n import translate
 
 
 def RelationshipsViewFactory(context, request):

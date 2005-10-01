@@ -24,7 +24,7 @@ $Id$
 
 import unittest
 from pprint import pprint
-from zope.interface.verify import verifyObject
+
 from zope.testing import doctest
 from zope.app.tests import setup, ztapi
 from zope.app import zapi
@@ -34,7 +34,6 @@ from zope.app.security.interfaces import IAuthentication
 from zope.app.container.contained import ObjectAddedEvent
 
 from schooltool.testing.setup import setupLocalGrants
-
 from schooltool.testing import setup as sbsetup
 
 

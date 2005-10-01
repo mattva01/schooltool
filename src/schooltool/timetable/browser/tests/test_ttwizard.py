@@ -28,24 +28,19 @@ from pprint import pprint
 
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
-from zope.interface import Interface, directlyProvides
+from zope.interface import Interface
 from zope.schema import TextLine
 from zope.i18n import translate
 from zope.app.testing import ztapi
-from zope.app.traversing.interfaces import IContainmentRoot
-from zope.app.component.site import LocalSiteManager
-from zope.app.component.hooks import setSite
 from zope.app.container.interfaces import INameChooser
 
 from schooltool.testing import setup
 from schooltool.app.browser import testing as schooltool_setup
 from schooltool.app.app import SimpleNameChooser
 from schooltool.testing.setup import setUpApplicationPreferences
-from schooltool.app.app import SchoolToolApplication
 from schooltool import timetable
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.browser import format_time_range
-from schooltool.app.interfaces import ApplicationInitializationEvent
 
 
 def setUpNameChoosers():

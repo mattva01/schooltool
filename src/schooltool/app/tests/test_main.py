@@ -21,12 +21,14 @@ Unit tests for schooltool.app.main.
 
 $Id$
 """
+
 import os
 import sys
 import unittest
+
 from zope.testing import doctest
 from zope.app import zapi
-from zope.interface.verify import verifyObject
+
 
 def findSiteZCML():
     import schooltool
@@ -38,6 +40,7 @@ def findSiteZCML():
         if os.path.exists(path):
             return path
     raise ValueError('`site.zcml` not found.')
+
 
 def doctest_Options():
     """Tests for Options.
@@ -52,6 +55,7 @@ def doctest_Options():
         '...schooltool.conf...'
 
     """
+
 
 def doctest_main():
     """Tests for main().
@@ -419,6 +423,7 @@ def doctest_setup():
         >>> setup.placelessTearDown()
 
     """
+
 
 def doctest_bootstrapSchoolTool():
     r"""Tests for bootstrapSchoolTool()

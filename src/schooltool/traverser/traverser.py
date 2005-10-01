@@ -27,7 +27,6 @@ from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces import IPublishTraverse
 
 from schooltool.traverser.interfaces import ITraverserPlugin
-from schooltool.traverser.interfaces import IPluggableTraverser
 
 
 class PluggableTraverser(object):

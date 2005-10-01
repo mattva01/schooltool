@@ -29,14 +29,13 @@ from datetime import datetime, date, time, timedelta
 from pytz import timezone
 from sets import Set
 
-from zope.component import queryView, queryMultiAdapter, adapts
+from zope.component import queryMultiAdapter, adapts
 from zope.event import notify
 from zope.interface import implements, Interface
 from zope.i18n import translate
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
 from zope.security.proxy import removeSecurityProxy
-from zope.security.interfaces import ForbiddenAttribute
 from zope.security.checker import canAccess
 from zope.schema import Date, TextLine, Choice, Int, Bool, List, Text
 from zope.schema.interfaces import RequiredMissing, ConstraintNotSatisfied
@@ -50,11 +49,9 @@ from zope.app.form.interfaces import ConversionError
 from zope.app.form.interfaces import IWidgetInputError, IInputWidget
 from zope.app.form.interfaces import WidgetInputError, WidgetsError
 from zope.app.form.utility import getWidgetsData
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.browser.absoluteurl import absoluteURL, AbsoluteURL
 from zope.app.filerepresentation.interfaces import IWriteFile, IReadFile
-from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from zope.app.session.interfaces import ISession
 from zope.app.traversing.api import getPath
 
@@ -63,10 +60,7 @@ from schooltool.app.browser import ViewPreferences
 from schooltool.app.browser import pdfcal
 from schooltool.app.browser.overlay import CalendarOverlayView
 from schooltool.app.app import getSchoolToolApplication
-from schooltool.app.cal import CalendarEvent
-from schooltool.app.interfaces import ISchoolToolCalendarEvent
 from schooltool.app.interfaces import ISchoolToolCalendar
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IHaveCalendar, IShowTimetables
 from schooltool.app.interfaces import vocabulary
 from schooltool.calendar.interfaces import ICalendar, ICalendarEvent
@@ -81,7 +75,6 @@ from schooltool.calendar.interfaces import IWeeklyRecurrenceRule
 from schooltool.calendar.utils import parse_date, parse_datetimetz
 from schooltool.calendar.utils import parse_time, weeknum_bounds
 from schooltool.calendar.utils import week_start, prev_month, next_month
-from schooltool.calendar.icalendar import ical_datetime
 from schooltool.course.interfaces import ISection
 from schooltool.person.interfaces import IPerson, IPersonPreferences
 from schooltool.person.preference import PersonPreferences

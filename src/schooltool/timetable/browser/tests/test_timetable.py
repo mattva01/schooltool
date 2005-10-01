@@ -21,28 +21,20 @@ Tests for schooltool timetabling views.
 
 $Id$
 """
+
 import unittest
 import datetime
 import itertools
-from pprint import pprint
 
 from zope.i18n import translate
-from zope.interface import directlyProvides, implements
+from zope.interface import implements
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.testing.doctestunit import pprint
-from zope.app.annotation.interfaces import IAttributeAnnotatable
-from zope.app.testing import ztapi
-from zope.app.traversing.interfaces import IContainmentRoot
-from zope.app.component.hooks import setSite
-from zope.app.component.site import LocalSiteManager
 
 from schooltool.app.browser import testing
 from schooltool.testing import setup as sbsetup
-
-from schooltool.app.rest.testing import NiceDiffsMixin
 from schooltool import timetable
-from schooltool.app.interfaces import ApplicationInitializationEvent
 
 
 def setUp(test=None):

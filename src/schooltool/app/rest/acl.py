@@ -22,14 +22,13 @@ RESTive views for access control
 $Id$
 """
 
-from zope.interface import Interface, Attribute
-from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
-from zope.interface import Interface, implements
+from zope.interface import Interface, Attribute, implements
+from zope.security.proxy import ProxyFactory
+
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
 from schooltool.app.browser.app import ACLViewBase
 from schooltool.app.rest.xmlparsing import XMLDocument
-from zope.security.proxy import removeSecurityProxy, ProxyFactory
 
 
 class IACLView(Interface):

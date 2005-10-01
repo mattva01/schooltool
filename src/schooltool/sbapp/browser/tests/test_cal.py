@@ -33,7 +33,7 @@ from schooltool.testing import setup as sbsetup
 
 # Used for the PrincipalStub
 # XXX: Bad, it depends on the person package.
-from schooltool.person.person import Person, PersonContainer
+from schooltool.person.person import Person
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonPreferences
 

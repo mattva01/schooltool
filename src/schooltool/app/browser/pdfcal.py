@@ -30,10 +30,8 @@ from zope.component import getMultiAdapter
 from zope.app.publisher.browser import BrowserView
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
-from zope.security.checker import canAccess
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.browser import ViewPreferences
-from schooltool.person.interfaces import IPerson
 from schooltool.calendar.utils import parse_date, week_start
 from schooltool import SchoolToolMessageID as _
 

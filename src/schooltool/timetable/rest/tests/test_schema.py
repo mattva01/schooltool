@@ -86,7 +86,6 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
     schema_without_title_xml = schema_xml.replace("<title>Title</title>", "")
 
     def setUp(self):
-        from schooltool.app.app import SchoolToolApplication
         from schooltool.timetable.interfaces import ITimetableSchemaContainer
         from schooltool.timetable.rest.schema import TimetableSchemaFileFactory
         from schooltool.timetable import SequentialDaysTimetableModel
@@ -310,7 +309,6 @@ class TestTimetableSchemaFileFactory(TimetableSchemaMixin, unittest.TestCase):
 
     def test(self):
         from schooltool.timetable.rest.schema import TimetableSchemaFileFactory
-        from schooltool.app.rest.interfaces import ITimetableFileFactory
         verifyObject(IFileFactory,
                      TimetableSchemaFileFactory(self.schemaContainer))
 

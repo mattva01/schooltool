@@ -27,7 +27,7 @@ from pprint import pprint
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
 from zope.app.container.contained import ObjectAddedEvent
-from zope.app.tests import ztapi, setup
+from zope.app.tests import setup
 
 from schooltool.testing.setup import setupLocalGrants
 from schooltool.testing import setup as sbsetup

@@ -38,7 +38,6 @@ from zope.app.form.browser import \
 from zope.app.form.interfaces import IWidgetInputError
 from zope.app.form.browser.interfaces import IWidgetInputErrorView
 from zope.app.form.browser.exception import WidgetInputErrorView
-from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.traversing.interfaces import ITraversable
 from zope.app.traversing.namespace import view, resource
 from zope.app.traversing.interfaces import IPathAdapter
@@ -46,8 +45,7 @@ from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.basicskin.standardmacros import StandardMacros
 from zope.app.form.browser.macros import FormMacros
 from zope.app.publisher.browser.menu import MenuAccessView
-from zope.app.publisher.interfaces.browser import IMenuItemType, IBrowserMenu
-from zope.app.component.hooks import setSite
+from zope.app.publisher.interfaces.browser import IBrowserMenu
 
 from schooltool.relationship.tests import setUpRelationships
 from schooltool.app.browser import SchoolToolAPI, SortBy

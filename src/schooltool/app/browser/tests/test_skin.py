@@ -25,7 +25,7 @@ $Id: test_skin.py 2643 2005-02-01 11:13:58Z mg $
 import unittest
 import pprint
 
-from zope.interface import Interface, providedBy
+from zope.interface import providedBy
 from zope.testing import doctest
 from zope.app.testing import setup, ztapi
 

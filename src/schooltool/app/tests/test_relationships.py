@@ -26,8 +26,6 @@ from pprint import pprint
 import unittest
 
 from zope.testing import doctest
-from zope.app import zapi
-from zope.interface.verify import verifyObject
 from zope.interface import implements
 
 

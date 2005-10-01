@@ -26,9 +26,7 @@ import unittest
 from zope.component import provideAdapter
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
-from zope.app import zapi
-from zope.app.container.contained import ObjectAddedEvent
-from zope.app.testing import setup, ztapi, placelesssetup
+from zope.app.testing import setup, placelesssetup
 
 from schooltool.testing import setup as sbsetup
 

@@ -49,14 +49,12 @@ from zope.app.server.wsgi import http
 from zope.app.appsetup import DatabaseOpened, ProcessStarting
 from zope.app.publication.zopepublication import ZopePublication
 from zope.app.traversing.interfaces import IContainmentRoot
-from zope.app.component.site import LocalSiteManager
 from zope.app.securitypolicy.interfaces import IPrincipalRoleManager
 from zope.app.container.contained import ObjectAddedEvent
 
 from schooltool.app.app import SchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.person.person import Person
-from schooltool.app.security import setUpLocalAuth
 from schooltool.app.rest import restServerType
 from schooltool.app.browser import pdfcal
 

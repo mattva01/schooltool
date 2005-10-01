@@ -36,8 +36,7 @@ from zope.app.security.interfaces import IAuthentication, ILoginPassword
 from zope.app.security.interfaces import IAuthenticatedGroup, IEveryoneGroup
 from zope.app.session.interfaces import ISession
 from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
-from zope.component.servicenames import Utilities
-from zope.interface import implements, directlyProvides, directlyProvidedBy
+from zope.interface import implements
 from zope.security.interfaces import IGroupAwarePrincipal
 from zope.security.checker import ProxyFactory
 from zope.publisher.interfaces.browser import IBrowserRequest

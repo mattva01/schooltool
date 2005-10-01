@@ -26,10 +26,9 @@ __docformat__ = 'restructuredtext'
 import zope.interface
 from zope.component.site import AdapterRegistration
 from zope.publisher.interfaces.http import IHTTPRequest
-from zope.security.proxy import removeSecurityProxy
 
 from zope.app import zapi
-from zope.app.apidoc import ifacemodule, presentation, utilities
+from zope.app.apidoc import presentation, utilities
 from zope.app.apidoc.classregistry import classRegistry
 from zope.app.apidoc.interfaces import IDocumentationModule
 from zope.app.content.interfaces import IContentType

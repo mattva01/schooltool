@@ -28,31 +28,27 @@ import sets
 import sys
 import time
 import unittest
-from pprint import pformat
 import difflib
 import cgi
 import libxml2
+from pprint import pformat
 from StringIO import StringIO
 
 import zope
 import zope.event
-from zope.interface import implements, directlyProvides, Interface
-from zope.interface.verify import verifyObject
+from zope.interface import Interface
 from zope.publisher.browser import TestRequest
-from zope.testing.cleanup import CleanUp
-
 from zope.app.component.testing import PlacefulSetup
 from zope.app.container.interfaces import INameChooser
 from zope.app.testing import ztapi, setup
-from zope.app.traversing.interfaces import ITraversable, TraversalError
+from zope.app.traversing.interfaces import ITraversable
 
 from schooltool.testing import setup as sbsetup
 from schooltool.app.app import SimpleNameChooser
-from schooltool.app.rest.xmlparsing import XMLDocument, XMLParseError
+from schooltool.app.rest.xmlparsing import XMLParseError
 from schooltool.group.group import Group
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.group.rest.group import GroupFileFactory, GroupContainerView
-from schooltool.person.person import Person
 from schooltool.resource.interfaces import IResourceContainer
 from schooltool.resource.rest.resource import ResourceFileFactory
 

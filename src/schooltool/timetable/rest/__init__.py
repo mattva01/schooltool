@@ -30,16 +30,13 @@ from zope.event import notify
 from zope.component import adapts
 from zope.component import queryMultiAdapter
 from zope.interface import implements
-from zope.interface import Interface
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.security.proxy import removeSecurityProxy
-from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 from zope.app.traversing.api import traverse
 from zope.app.traversing.interfaces import TraversalError
 from zope.app.http.put import NullResource
-from zope.app.http.interfaces import INullResource
 from zope.app.filerepresentation.interfaces import IWriteDirectory
 from zope.app.event.objectevent import ObjectCreatedEvent
 
@@ -49,12 +46,9 @@ from schooltool.app.rest.errors import RestError
 from schooltool.app.rest.xmlparsing import XMLDocument
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.common import parse_date, parse_time
-from schooltool.timetable.interfaces import ITimetableModelFactory
 from schooltool.timetable.interfaces import IHaveTimetables, ITimetables
 from schooltool.timetable.interfaces import ITimetableDict
-from schooltool.timetable import SchooldayPeriod
-from schooltool.timetable import SchooldayTemplate
-from schooltool.timetable import Timetable, TimetableDay, TimetableActivity
+from schooltool.timetable import Timetable, TimetableActivity
 from schooltool.app.rest.interfaces import ITimetableFileFactory
 from schooltool.app.rest.interfaces import INullTimetable, ICompositeTimetables
 

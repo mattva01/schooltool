@@ -24,14 +24,11 @@ $Id: app.py 3481 2005-04-21 15:28:29Z bskahan $
 
 import itertools
 
-from zope.interface import Interface, implements
-
-from zope.component import adapts
+from zope.interface import implements
 from zope.security.checker import canAccess
 from zope.security.interfaces import IParticipation
 from zope.security.management import getSecurityPolicy
 from zope.security.proxy import removeSecurityProxy
-
 from zope.app import zapi
 from zope.app.form.utility import getWidgetsData, setUpWidgets
 from zope.app.form.browser.add import AddView
@@ -46,7 +43,6 @@ from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.app.app import getSchoolToolApplication
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.batching import Batch

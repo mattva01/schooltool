@@ -23,27 +23,22 @@ $Id$
 """
 import unittest
 import datetime
-from logging import INFO
 from StringIO import StringIO
 
 from zope.i18n import translate
-from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest
 from zope.app.testing import ztapi
 
 from schooltool.app.browser.testing import setUp as testSetUp, tearDown
-from schooltool.app.membership import URIMember
 from schooltool.resource.resource import Resource
 from schooltool.person.person import Person
-from schooltool.group.group import Group
 from schooltool.testing import setup
 
 from schooltool.app.browser.csvimport import InvalidCSVError
 from schooltool.common import dedent
 from schooltool.course.course import Course
 from schooltool.course.section import Section
-from schooltool.app.relationships import URISection, URISectionOfCourse
 from schooltool.timetable.interfaces import ITimetables
 
 __metaclass__ = type

@@ -23,6 +23,7 @@ The first incompatible change from 2 was introduced in rev .
 
 $Id$
 """
+
 import datetime
 import random
 
@@ -30,10 +31,8 @@ from zope.app.annotation.interfaces import IAnnotations
 from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
 
-from schooltool.app.interfaces import ICalendarOwner, ISchoolToolApplication
-from schooltool.notes import getNotes
+from schooltool.app.interfaces import ICalendarOwner
 from schooltool.relationship.annotatable import getRelationshipLinks
-from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.relationship import LinkSet
 
 def setRelationshipLinks(context, linkset):

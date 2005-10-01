@@ -21,15 +21,15 @@ Student Promotion Process Implementation
 
 $Id$
 """
+
 import time
 import persistent
+
 import zope.interface
 import zope.schema
 import zope.wfmc
-from zope.wfmc import attributeintegration
 from zope.app import location
 from zope.app.annotation.interfaces import IAnnotations
-
 
 from schooltool import SchoolToolMessageID as _
 from schooltool import group

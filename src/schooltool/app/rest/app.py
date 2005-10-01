@@ -23,21 +23,13 @@ $Id: app.py 3419 2005-04-14 18:34:36Z alga $
 """
 from zope.app import zapi
 from zope.interface import implements
-from zope.component import adapts
 from zope.app.container.interfaces import INameChooser
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
-from zope.publisher.interfaces import NotFound
-from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.schema.interfaces import IField
 
-from schooltool.app.rest import View, Template, IRestTraverser
-from schooltool.app.rest.errors import RestError
-from schooltool.app.rest.xmlparsing import XMLValidationError, XMLParseError
+from schooltool.app.rest import View, Template
 from schooltool.app.rest.xmlparsing import XMLDocument
-from schooltool.calendar.icalendar import convert_calendar_to_ical
 from schooltool.app.interfaces import IWriteCalendar
-
-from schooltool.app.browser.cal import CalendarOwnerHTTPTraverser
+from schooltool.calendar.icalendar import convert_calendar_to_ical
 
 
 class ApplicationObjectFileFactory(object):

@@ -24,12 +24,11 @@ $Id$
 
 import unittest
 from StringIO import StringIO
-from zope.publisher.browser import TestRequest
-from zope.publisher.http import HTTPRequest
-from zope.app.testing import setup, ztapi
-from schooltool.app.rest.testing import XMLCompareMixin, QuietLibxml2Mixin
-from schooltool.app.rest.xmlparsing import XMLDocument, XMLParseError
 
+from zope.publisher.browser import TestRequest
+from zope.app.testing import setup, ztapi
+
+from schooltool.app.rest.testing import XMLCompareMixin
 from schooltool.testing import setup as sbsetup
 
 
@@ -229,7 +228,7 @@ class TestAclView(unittest.TestCase, XMLCompareMixin):
         self.assertEqualsXML(result, expected)
 
         # Check cases 6 and 7
-        from zope.app.security.settings import Allow, Deny, Unset
+        from zope.app.security.settings import Deny, Unset
         self.assertEqual(perms.getSetting('schooltool.edit', 'sb.person.ann'),
                          Unset)
         self.assertEqual(perms.getSetting('schooltool.edit', 'sb.person.joe'),

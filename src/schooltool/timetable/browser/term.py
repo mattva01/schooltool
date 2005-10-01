@@ -34,7 +34,7 @@ from zope.app.form.browser.add import AddView
 from zope.app.form.browser.submit import Update
 from zope.app.form.interfaces import WidgetsError
 from zope.app.form.utility import getWidgetsData
-from zope.app.form.utility import setUpWidgets, setUpEditWidgets
+from zope.app.form.utility import setUpEditWidgets
 from zope.app.publisher.browser import BrowserView
 
 from schooltool.app.browser.app import ContainerView

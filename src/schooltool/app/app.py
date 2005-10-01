@@ -30,19 +30,13 @@ from zope.event import notify
 from zope.interface import implements
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
-from zope.app import zapi
 from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.component.hooks import getSite
 from zope.app.component.site import SiteManagerContainer
 from zope.app.container import sample
 from zope.app.container.contained import NameChooser
 from zope.app.container.interfaces import INameChooser
-from zope.app.container.interfaces import IObjectAddedEvent
-from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
-from zope.app.security.interfaces import IUnauthenticatedGroup
 
-from schooltool import SchoolToolMessageID as _
-from schooltool.app import relationships
 from schooltool.app.overlay import ICalendarOverlayInfo
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences

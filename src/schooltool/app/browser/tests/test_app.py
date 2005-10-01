@@ -24,7 +24,6 @@ $Id: test_app.py 3481 2005-04-21 15:28:29Z bskahan $
 import unittest
 from pprint import pprint
 
-from zope.i18n import translate
 from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
 from zope.testing import doctest

@@ -24,7 +24,7 @@ $Id$
 
 import unittest
 from textwrap import dedent
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 
 from zope.testing import doctest
 from zope.interface import implements

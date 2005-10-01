@@ -21,9 +21,10 @@ Unit tests for the schooltool.timetable module.
 
 $Id$
 """
+
 import unittest
 from sets import Set
-from datetime import date, time, timedelta, datetime
+from datetime import time, timedelta, datetime
 
 from persistent import Persistent
 from zope.app.testing import setup
@@ -35,10 +36,9 @@ from zope.app.testing import ztapi
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.location.interfaces import ILocation
 
-from schooltool.testing.util import diff, sorted
 from schooltool.app.rest.testing import NiceDiffsMixin, EqualsSortedMixin
 from schooltool import timetable
-from schooltool.timetable.interfaces import ITerm, ITimetables
+from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ITimetable, ITimetableActivity
 from schooltool.relationship import RelationshipProperty
 from schooltool.app.membership import URIGroup, URIMember, URIMembership
@@ -808,7 +808,6 @@ class TestTimetablesMixin(NiceDiffsMixin, EqualsSortedMixin,
 
     def setUp(self):
         from schooltool.relationship.tests import setUpRelationships
-        from zope.app.traversing.interfaces import IPhysicallyLocatable
         from schooltool.timetable.interfaces import ITimetable, ITimetables
         from schooltool.timetable.interfaces import ITimetableSource
         from schooltool.timetable.source import MembershipTimetableSource

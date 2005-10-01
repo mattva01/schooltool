@@ -21,9 +21,10 @@ Testing the package.
 
 $Id$
 """
+
 import unittest
-from zope.testing import doctest, doctestunit
-from zope.component import testing
+from zope.testing import doctest
+
 
 def test_suite():
     return unittest.TestSuite((

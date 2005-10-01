@@ -31,8 +31,6 @@ from zope.testing import doctest
 from zope.app.traversing.interfaces import IContainmentRoot
 
 from schooltool.app.browser import testing
-from schooltool.testing import setup as sbsetup
-
 from schooltool.timetable.browser.tests.test_timetable import setUp, tearDown
 from schooltool.timetable.browser.tests.test_timetable import print_cal
 

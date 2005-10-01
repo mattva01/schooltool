@@ -27,8 +27,6 @@ from zope.security.proxy import removeSecurityProxy
 from zope.app.container.interfaces import INameChooser
 from zope.app.publisher.browser import BrowserView
 
-from schooltool.person.person import Person
-
 from schooltool import SchoolToolMessageID as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.app import SimpleNameChooser

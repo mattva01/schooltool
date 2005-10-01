@@ -29,9 +29,8 @@ import re
 
 from zope.component import adapts
 from zope.i18n import translate
-from zope.interface import Interface, implements
+from zope.interface import implements
 from zope.publisher.interfaces import NotFound
-from zope.schema import TextLine, Date, Int
 from zope.security.proxy import removeSecurityProxy
 
 from zope.app import zapi
@@ -54,7 +53,6 @@ from schooltool.timetable import TimetableActivity
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable.term import getNextTermForDate, getTermForDate
 from schooltool.app.app import getSchoolToolApplication
-from schooltool.app.browser.app import ContainerView
 
 
 class TabindexMixin(object):

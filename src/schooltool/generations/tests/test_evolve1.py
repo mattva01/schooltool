@@ -23,12 +23,12 @@ $Id$
 """
 
 import unittest
-from zope.testing import doctest
-from zope.app import zapi
-from zope.interface import implements
-from zope.interface.verify import verifyObject
-from zope.app.publication.zopepublication import ZopePublication
+
 from BTrees.OOBTree import OOBTree
+from zope.testing import doctest
+from zope.interface import implements
+from zope.app.publication.zopepublication import ZopePublication
+
 
 def doctest_evolve1():
     """Evolution to generation 1.

@@ -21,32 +21,28 @@ Tests for schollbell.rest.relationship
 
 $Id$
 """
+
 import unittest
 from StringIO import StringIO
 
 import zope
-
 from zope.interface import Interface
 from zope.app.traversing.interfaces import ITraversable
 from zope.app.container.interfaces import INameChooser
-from zope.interface import directlyProvides
 from zope.publisher.browser import TestRequest
-from zope.publisher.http import HTTPRequest
 from zope.app.testing import setup, ztapi
 
 from schooltool.app.rest.errors import RestError
 from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.interfaces import IRelationshipSchema
 from schooltool.relationship.uri import IURIObject
-from schooltool.app.membership import Membership
+from schooltool.app.membership import Membership, URIMember, URIGroup
 from schooltool.app.app import SimpleNameChooser
 from schooltool.relationship.annotatable import getRelationshipLinks
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.rest.testing import XMLCompareMixin, QuietLibxml2Mixin
-from schooltool.app.rest.xmlparsing import XMLDocument, XMLParseError
-from schooltool.app.membership import Membership, URIMember, URIGroup
+from schooltool.app.rest.xmlparsing import XMLParseError
 from schooltool.app.rest.xmlparsing import XMLValidationError
-
 from schooltool.testing import setup as sbsetup
 
 

@@ -76,11 +76,11 @@ Clean up
 """
 
 import sys
+
 from persistent import Persistent
 from zope.proxy import getProxiedObject
 from zope.interface import Interface, implements
 from zope.schema import Object, TextLine, Bool
-from zope.security.proxy import removeSecurityProxy
 from zope.app.container.interfaces import IObjectRemovedEvent
 
 from schooltool.relationship import URIObject

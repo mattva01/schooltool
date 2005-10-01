@@ -32,7 +32,6 @@ from schooltool.app.rest.app import GenericContainerView
 
 from schooltool.person.interfaces import IPersonContainer, IPerson
 from schooltool.person.person import Person
-from schooltool.person.rest.preference import PersonPreferencesAdapter
 from schooltool.person.rest.interfaces import IPasswordWriter, IPersonPhoto
 
 

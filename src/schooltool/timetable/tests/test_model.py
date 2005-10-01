@@ -21,17 +21,19 @@ Unit tests for the schooltool.timetable.model module.
 
 $Id$
 """
+
 import calendar
 import unittest
 from datetime import date, time, timedelta, datetime
 from pprint import pformat
-from pytz import UTC
 
+from pytz import UTC
 from zope.interface.verify import verifyObject
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.testing import ztapi
-from schooltool.app.rest.testing import NiceDiffsMixin, EqualsSortedMixin
-from schooltool.testing.util import diff, sorted
+
+from schooltool.app.rest.testing import NiceDiffsMixin
+from schooltool.testing.util import diff
 from schooltool.timetable.tests.test_timetable import TermStub
 
 

@@ -21,21 +21,19 @@ Restive XML views for the SchoolTool application.
 
 $Id: __init__.py 3405 2005-04-12 16:08:43Z bskahan $
 """
-from zope.interface import implements, Interface
+
+from zope.interface import implements
 from zope.publisher.http import HTTPRequest
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.http import IHTTPPublisher
 from zope.server.http.commonaccesslogger import CommonAccessLogger
 from zope.server.http.wsgihttpserver import WSGIHTTPServer
-
 from zope.app import zapi
-from zope.app.container.interfaces import ISimpleReadContainer
-from zope.app.http.traversal import ContainerTraverser
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile \
-                                                as Template
 from zope.app.publication.interfaces import IPublicationRequestFactory
 from zope.app.publication.http import HTTPPublication
 from zope.app.server.servertype import ServerType
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile \
+                                                as Template # reexport
 
 
 class RestPublicationRequestFactory(object):

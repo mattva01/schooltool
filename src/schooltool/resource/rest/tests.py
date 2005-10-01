@@ -21,18 +21,17 @@ Tests for groups.
 
 $Id: test_app.py 4691 2005-08-12 18:59:44Z srichter $
 """
+
 import unittest
 from cStringIO import StringIO
+
 from zope.publisher.browser import TestRequest
-from zope.testing import doctest
 
 from schooltool.app.rest.testing import ApplicationObjectViewTestMixin
 from schooltool.app.rest.testing import ContainerViewTestMixin
 from schooltool.app.rest.testing import FileFactoriesSetUp
 from schooltool.app.rest.xmlparsing import XMLParseError
-
 from schooltool.resource.resource import Resource, ResourceContainer
-from schooltool.resource.interfaces import IResourceContainer
 from schooltool.resource.rest.resource import ResourceView, ResourceFile
 from schooltool.resource.rest.resource import ResourceContainerView
 from schooltool.resource.rest.resource import ResourceFileFactory

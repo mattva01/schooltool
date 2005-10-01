@@ -25,17 +25,15 @@ __docformat__ = 'restructuredtext'
 
 import inspect
 import types
+
 import zope.interface
 import zope.security.proxy
-
-from zope.component.exceptions import ComponentLookupError
-from zope.interface import directlyProvides, directlyProvidedBy
-
+from zope.interface import directlyProvidedBy
 from zope.app import zapi, apidoc, annotation
-from zope.app.component.interface import getInterface
 from zope.app.location import location
 from zope.app.publisher.browser import BrowserView
 from zope.app.traversing.interfaces import IPhysicallyLocatable
+
 
 def getTypeLink(type):
     if type is types.NoneType:
@@ -49,10 +47,10 @@ class annotationsNamespace(object):
 
     def __init__(self, ob, request=None):
         self.context = ob
-        
+
     def traverse(self, name, ignore):
         # This is pretty unsafe, so this should really just be available in
-        # devmode. 
+        # devmode.
         naked = zope.security.proxy.removeSecurityProxy(self.context)
         annotations = annotation.interfaces.IAnnotations(naked)
         obj = name and annotations[name] or annotations
@@ -67,7 +65,7 @@ class sequenceItemsNamespace(object):
 
     def __init__(self, ob, request=None):
         self.context = ob
-        
+
     def traverse(self, name, ignore):
         obj = self.context[int(name)]
         if not IPhysicallyLocatable(obj, False):
@@ -86,7 +84,7 @@ class mappingItemsNamespace(object):
 
     def __init__(self, ob, request=None):
         self.context = ob
-        
+
     def traverse(self, name, ignore):
         obj = self.context[name]
         if not IPhysicallyLocatable(obj, False):
@@ -163,7 +161,7 @@ class Introspector(BrowserView):
                 signature = apidoc.utilities.getFunctionSignature(val)
             else:
                 signature = '(...)'
-                
+
             entry = {
                 'name': name,
                 'signature': signature,
@@ -219,7 +217,7 @@ class Introspector(BrowserView):
 
     def getAnnotationsInfo(self):
         # We purposefully strip the security here; this is the introspector,
-        # so we want to see things that we usually cannot see 
+        # so we want to see things that we usually cannot see
         naked = zope.security.proxy.removeSecurityProxy(self.context)
         annotations = annotation.interfaces.IAnnotations(naked)
         if not hasattr(annotations, 'items'):

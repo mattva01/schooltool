@@ -41,7 +41,7 @@ $Id$
 
 from zope.interface import Interface
 from zope.schema import Text, TextLine, Int, Datetime, Date, Timedelta
-from zope.schema import List, Set, Choice, Field, Object, Bool
+from zope.schema import List, Set, Choice, Object, Bool
 
 
 Unchanged = object() # marker
