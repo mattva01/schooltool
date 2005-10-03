@@ -3,7 +3,7 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schooltool">
 
-  <!-- Load devmode-specific Zope packages -->
+  <!-- Load devmode-specific Zope and SchoolTool packages -->
 
   <configure
       xmlns:zcml="http://namespaces.zope.org/zcml"
@@ -17,6 +17,8 @@
     <include package="zope.app.renderer" />
     <include package="zope.app.tree" />
     <include package="zope.app.onlinehelp" />
+
+    <include package=".sampledata" />
   </configure>
 
   <!-- Translations -->

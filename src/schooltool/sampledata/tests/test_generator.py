@@ -29,6 +29,22 @@ from zope.testing import doctest
 from zope.interface import implements
 from zope.app.testing import setup, ztapi
 
+from schooltool.sampledata.interfaces  import ISampleDataPlugin
+
+
+class DummyPlugin:
+    """A dummy sample data plugin that logs the args to a class attribute"""
+    implements(ISampleDataPlugin)
+
+    log = []  # one for all
+
+    def __init__(self, name, deps=()):
+        self.name = name
+        self.dependencies = deps
+
+    def generate(self, app, seed=None):
+        self.log.append((self.name, app, seed))
+
 
 def doctest_generate():
     """Unit test for schooltool.sampledata.generator.generate
@@ -37,20 +53,6 @@ def doctest_generate():
     data plugin interface and runs the generate methods of them.
 
     First, let's register several plugins:
-
-        >>> from schooltool.sampledata.interfaces \\
-        ...      import ISampleDataPlugin
-        >>> class DummyPlugin:
-        ...    log = []  # one for all
-        ...    implements(ISampleDataPlugin)
-        ...
-        ...    def __init__(self, name, deps=()):
-        ...        self.name = name
-        ...        self.dependencies = deps
-        ...
-        ...    def generate(self, app, seed=None):
-        ...        self.log.append((self.name, app, seed))
-        ...
 
         >>> p1 = DummyPlugin("p1", ())
         >>> p2 = DummyPlugin("p2", ())
@@ -61,8 +63,7 @@ def doctest_generate():
 
     Now, let's run the generator:
 
-        >>> DummyPlugin.log
-        []
+        >>> DummyPlugin.log = []
         >>> import schooltool.sampledata.generator
 
         >>> app = 'app'

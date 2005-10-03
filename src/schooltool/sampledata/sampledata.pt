@@ -1,0 +1,41 @@
+<html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
+<head>
+  <title metal:fill-slot="title" i18n:translate="">
+    Sample Data Generation
+  </title>
+</head>
+<body>
+
+<h1 metal:fill-slot="content-header"
+    i18n:translate="">Sample Data Generation</h1>
+
+<metal:block metal:fill-slot="body">
+
+<p i18n:translate="" class="error">Warning: proceeding will populate
+the database with randomly generated data.  Do not do this if you have
+any valuable data in your SchoolTool instance.</p>
+
+<p i18n:translate="">Setting a random seed allows you to to reproduce
+the same set of sample data by generating it again with the same value
+of the random seed.</p>
+
+<form tal:attributes="action request/URL" method="POST">
+  <div class="row">
+    <div class="label">
+       <label>Random seed</label>
+    </div>
+    <div class="field">
+       <input name="seed" tal:attributes="value view/seed"/>
+    </div>
+  </div>
+  <div class="controls">
+    <input type="submit" class="button-ok" name="SUBMIT"
+           value="Generate" i18n:attributes="value" />
+    <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+           i18n:attributes="value cancel-button" />
+  </div>
+</form>
+
+</metal:block>
+</body>
+</html>

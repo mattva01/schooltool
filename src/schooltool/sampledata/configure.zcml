@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <browser:page
+      name="sampledata.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class=".browser.SampleDataView"
+      permission="schooltool.create"
+      />
+
+</configure>
