@@ -129,7 +129,7 @@ Looks at his daily view:
     >>> print analyze.queryHTML('id("content-body")', frog.contents)[0]
     <div id="content-body">
     ...
-    <h6 style="background: #d1940c">
+              <h6 style="background: #...">
                   History 6
                   <span class="start-end">
                     (<span>11:35</span>
@@ -163,13 +163,9 @@ Month:
     >>> print_table_cell_for_day('2005-09-12')
     <a href="http://localhost/persons/frog/calendar/2005-09-12">
       <span class="">12</span>
-          <span style="background: #9db8d2;
-                                border-color: #7590ae" class="event">History 6 (09:30...10:25)</span>
-          <span style="background: #eed680;
-                                border-color: #d1940c" class="event">History 6 (09:30...10:25)</span>
+          <span style="background: #...;
+                                border-color: #..." class="event">History 6 (09:30...10:25)</span>
     </a>
-
-XXX Note that we are seeing the same event twice -- this is issue367.
 
 Year:
 

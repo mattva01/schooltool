@@ -25,8 +25,11 @@ $Id$
 import unittest
 
 from zope.testing import doctest
+from zope.interface import classImplements
 from zope.publisher.browser import TestRequest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
+from zope.app.annotation.interfaces import IAttributeAnnotatable
+from zope.app.testing import ztapi
 
 from schooltool.app.browser.testing import setUp as browserSetUp, tearDown
 from schooltool.app.interfaces import ISchoolToolCalendar
@@ -35,27 +38,19 @@ from schooltool.testing import setup
 
 def setUp(test=None):
     browserSetUp(test)
-    #from zope.app.testing.setup import setUpAnnotations
-    #setUpAnnotations()
     setup.setupCalendaring()
+
+    from schooltool.app.overlay import CalendarOverlayInfo
+    from schooltool.app.interfaces import IShowTimetables
+    from schooltool.app.app import ShowTimetables
+    ztapi.provideAdapter(CalendarOverlayInfo, IShowTimetables, ShowTimetables)
+    classImplements(CalendarOverlayInfo, IAttributeAnnotatable)
 
 
 def doctest_CalendarOverlayView():
     r"""Tests for CalendarOverlayView
 
     Some initial setup:
-
-        >>> from schooltool.app.overlay import CalendarOverlayInfo
-        >>> from schooltool.app.interfaces import IShowTimetables
-        >>> from schooltool.app.app import ShowTimetables
-        >>> from zope.app.testing import ztapi
-        >>> ztapi.provideAdapter(CalendarOverlayInfo, IShowTimetables,
-        ...                      ShowTimetables)
-
-        >>> from zope.app.annotation.interfaces import IAnnotations
-        >>> from zope.app.annotation.attribute import AttributeAnnotations
-        >>> ztapi.provideAdapter(CalendarOverlayInfo, IAnnotations,
-        ...                      AttributeAnnotations)
 
         >>> from schooltool.app.browser.cal import CalendarSTOverlayView
         >>> View = SimpleViewClass('../templates/calendar_overlay.pt',
@@ -374,6 +369,7 @@ def doctest_CalendarSelectionView_updateSelection():
     """Test for CalendarSelectionView._updateSelection
 
         >>> from schooltool.app.browser.overlay import CalendarSelectionView
+        >>> from schooltool.app.interfaces import IShowTimetables
         >>> from schooltool.person.person import Person
         >>> from schooltool.group.group import Group
         >>> from schooltool.resource.resource import Resource
@@ -421,31 +417,47 @@ def doctest_CalendarSelectionView_updateSelection():
         ...             'calendar': appcal}
         >>> view.getApplicationCalendar = stub_getApplicationCalendar
 
+        >>> def print_overlays(user=user):
+        ...     l = [(cal.calendar.title, cal)
+        ...          for cal in user.overlaid_calendars]
+        ...     l.sort()
+        ...     for title, info in l:
+        ...         showtt = IShowTimetables(info).showTimetables 
+        ...         print '[%s][%s] %s' % (info.show and '+' or '-',
+        ...                                showtt and '+' or '-',
+        ...                                title)
+
     So, we have two calendars available for selection, but we choose none of
     them.  Nothing happens.
 
         >>> view._updateSelection(user)
+        >>> print_overlays()
 
     We can choose one, and it appears in the overlay list.
 
         >>> request.form['resources'] = ['beamer']
         >>> view._updateSelection(user)
-        >>> [cal.calendar.title for cal in user.overlaid_calendars]
-        ['A beamer']
+        >>> print_overlays()
+        [+][-] A beamer
+
+    Note that the calendar overlay is visible by default (indicated by '+' in
+    the first checkbox), but the timetable is hidden (indicated by '-' in the
+    second checkbox).
 
     We can choose both
 
         >>> request.form['resources'] = ['beamer', 'book']
         >>> view._updateSelection(user)
-        >>> sorted([cal.calendar.title for cal in user.overlaid_calendars])
-        ['A beamer', 'A book']
+        >>> print_overlays()
+        [+][-] A beamer
+        [+][-] A book
 
     We can choose one again, and the other disappears
 
         >>> request.form['resources'] = ['book']
         >>> view._updateSelection(user)
-        >>> [cal.calendar.title for cal in user.overlaid_calendars]
-        ['A book']
+        >>> print_overlays()
+        [+][-] A book
 
     It works with persons and groups as well
 
@@ -453,36 +465,38 @@ def doctest_CalendarSelectionView_updateSelection():
         >>> request.form['groups'] = ['friends']
         >>> request.form['resources'] = []
         >>> view._updateSelection(user)
-        >>> [cal.calendar.title for cal in user.overlaid_calendars]
-        ['Joe', 'Friends']
+        >>> print_overlays()
+        [+][-] Friends
+        [+][+] Joe
+
+    Note that for persons (and only for persons), both the calendar, and the
+    timetable are visible.
 
         >>> request.form['persons'] = []
         >>> request.form['groups'] = []
         >>> request.form['resources'] = []
         >>> view._updateSelection(user)
-        >>> [cal.calendar.title for cal in user.overlaid_calendars]
-        []
+        >>> print_overlays()
 
     You can choose the application calendar as well
 
         >>> request.form['application'] = ''
         >>> view._updateSelection(user)
-        >>> [cal.calendar.title for cal in user.overlaid_calendars]
-        ['Application']
+        >>> print_overlays()
+        [+][+] Application
 
     Avoid duplicate additions:
 
         >>> request.form['application'] = ''
         >>> view._updateSelection(user)
-        >>> [cal.calendar.title for cal in user.overlaid_calendars]
-        ['Application']
+        >>> print_overlays()
+        [+][+] Application
 
     And remove it
 
         >>> del request.form['application']
         >>> view._updateSelection(user)
-        >>> [cal.calendar.title for cal in user.overlaid_calendars]
-        []
+        >>> print_overlays()
 
     """
 

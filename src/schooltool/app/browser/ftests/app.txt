@@ -304,7 +304,7 @@ And Frog's overlay portlet shows the section:
             <td style="width: 100%">My Calendar</td>
             <td></td>
           </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/sections/his1"></td>
-            <td><input type="checkbox" name="overlay_timetables:list" checked value="/sections/his1"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" value="/sections/his1"></td>
             <td style="width: 100%">Frog -- History</td>
             <td><a class="go" style="background: #d1940c;
                 color: #d1940c" href="http://localhost/sections/his1/calendar">...</a></td>
@@ -405,7 +405,7 @@ And Toad's overlay portlet shows the section:
             <td style="width: 100%">My Calendar</td>
             <td></td>
           </tr><tr style="background: #eed680"><td><input type="checkbox" name="overlay:list" checked value="/sections/his1"></td>
-            <td><input type="checkbox" name="overlay_timetables:list" checked value="/sections/his1"></td>
+            <td><input type="checkbox" name="overlay_timetables:list" value="/sections/his1"></td>
             <td style="width: 100%"> -- History</td>
             <td><a class="go" style="background: #d1940c;
                 color: #d1940c" href="http://localhost/sections/his1/calendar">...</a></td>

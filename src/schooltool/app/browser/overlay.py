@@ -35,6 +35,7 @@ from zope.security.checker import canAccess
 from schooltool import SchoolToolMessageID as _
 from schooltool.app.app import getSchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
+from schooltool.app.interfaces import IShowTimetables
 from schooltool.person.interfaces import IPerson
 
 
@@ -216,8 +217,9 @@ class CalendarSelectionView(BrowserView):
             selected = Set(self.request.form.get(container, []))
             for item in self.getCalendars(container):
                 if item['id'] in selected and not item['selected']:
-                    user.overlaid_calendars.add(item['calendar'])
-                    # TODO: uncheck showTimetables if this is a group/resource
+                    ovl_info = user.overlaid_calendars.add(item['calendar'])
+                    if container != 'persons':
+                        IShowTimetables(ovl_info).showTimetables = False
                 elif item['id'] not in selected and item['selected']:
                     user.overlaid_calendars.remove(item['calendar'])
         appcal = self.getApplicationCalendar().get('calendar')

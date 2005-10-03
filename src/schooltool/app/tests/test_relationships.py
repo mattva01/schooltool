@@ -27,6 +27,24 @@ import unittest
 
 from zope.testing import doctest
 from zope.interface import implements
+from zope.app.testing import ztapi
+
+from schooltool.app.interfaces import IShowTimetables
+
+
+class ShowTimetablesStub(object):
+    implements(IShowTimetables)
+
+    def __init__(self, context):
+        self.context = context
+
+    def _getShowTimetables(self):
+        return getattr(self.context, '_show_timetables', True)
+
+    def _setShowTimetables(self, value):
+        self.context._show_timetables = value
+
+    showTimetables = property(_getShowTimetables, _setShowTimetables)   
 
 
 def doctest_Instruction():
@@ -162,6 +180,10 @@ def doctest_updateInstructorCalendars():
         >>> from schooltool.relationship.tests import setUp, tearDown
         >>> setUp()
 
+        >>> from schooltool.app.overlay import CalendarOverlayInfo
+        >>> ztapi.provideAdapter(CalendarOverlayInfo, IShowTimetables,
+        ...                      ShowTimetablesStub)
+
         >>> class AddEventStub(dict):
         ...     rel_type = URIInstruction
         ...     implements(IRelationshipAddedEvent)
@@ -187,6 +209,13 @@ def doctest_updateInstructorCalendars():
         >>> updateInstructorCalendars(add)
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         ['SectionA']
+
+    The calendar of the section is visible by default, but the timetable is
+    hidden.
+
+        >>> [(cal.show, IShowTimetables(cal).showTimetables) for cal in
+        ...  person.overlaid_calendars]
+        [(True, False)]
 
     The calendar is removed when the instructor is no longer in the section:
 
@@ -292,6 +321,11 @@ def doctest_updateStudentCalendars():
         >>> from schooltool.testing.setup import setupLocalGrants
         >>> setupLocalGrants()
 
+        >>> from schooltool.app.overlay import CalendarOverlayInfo
+        >>> ztapi.provideAdapter(CalendarOverlayInfo, IShowTimetables,
+        ...                      ShowTimetablesStub)
+
+
         >>> class AddEventStub(dict):
         ...     rel_type = URIMembership
         ...     implements(IRelationshipAddedEvent)
@@ -317,6 +351,13 @@ def doctest_updateStudentCalendars():
         >>> updateStudentCalendars(add)
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         ['SectionA']
+
+    The calendar of the section is visible by default, but the timetable is
+    hidden.
+
+        >>> [(cal.show, IShowTimetables(cal).showTimetables) for cal in
+        ...  person.overlaid_calendars]
+        [(True, False)]
 
     The person is granted access to view the section's calendar:
 
@@ -438,6 +479,10 @@ def doctest_updateStudentCalendars():
         >>> updateStudentCalendars(add)
         >>> [cal.calendar.title for cal in student.overlaid_calendars]
         ['Freshmen Math']
+
+        >>> [(cal.show, IShowTimetables(cal).showTimetables) for cal in
+        ...  student.overlaid_calendars]
+        [(True, False)]
 
         >>> perms = IPrincipalPermissionManager(section)
         >>> x = perms.getPermissionsForPrincipal('sb.person.p3')

@@ -28,14 +28,14 @@ from zope.app.securitypolicy.interfaces import IPrincipalPermissionManager
 from schooltool.course.interfaces import ICourse, ISection
 from schooltool.person.interfaces import IPerson
 from schooltool.group.interfaces import IGroup
-
+from schooltool.app.interfaces import IShowTimetables
 from schooltool.app.membership import URIMembership, URIMember, URIGroup
-
 from schooltool.relationship import URIObject, RelationshipSchema
 from schooltool.relationship.interfaces import IBeforeRelationshipEvent
 from schooltool.relationship.interfaces import IRelationshipAddedEvent
 from schooltool.relationship.interfaces import IRelationshipRemovedEvent
 from schooltool.relationship.interfaces import InvalidRelationship
+
 
 #
 # The Instruction relationship
@@ -98,7 +98,8 @@ def updateInstructorCalendars(event):
         person = event[URIInstructor]
         section = event[URISection]
         if section.calendar not in person.overlaid_calendars:
-            person.overlaid_calendars.add(section.calendar)
+            overlay_info = person.overlaid_calendars.add(section.calendar)
+            IShowTimetables(overlay_info).showTimetables = False
     elif IRelationshipRemovedEvent.providedBy(event):
         person = event[URIInstructor]
         section = event[URISection]
@@ -187,7 +188,8 @@ def updateStudentCalendars(event):
     if IRelationshipAddedEvent.providedBy(event):
         if IPerson.providedBy(member) and \
                             section.calendar not in member.overlaid_calendars:
-            member.overlaid_calendars.add(section.calendar)
+            overlay_info = member.overlaid_calendars.add(section.calendar)
+            IShowTimetables(overlay_info).showTimetables = False
 
             grantViewPermissionToMember(member, section_map)
 
@@ -198,7 +200,8 @@ def updateStudentCalendars(event):
                 # TODO make sure nested groups are not possible via REST
                 if IPerson.providedBy(person) and \
                          section.calendar not in person.overlaid_calendars:
-                    person.overlaid_calendars.add(section.calendar)
+                    overlay_info = person.overlaid_calendars.add(section.calendar)
+                    IShowTimetables(overlay_info).showTimetables = False
 
                     grantViewPermissionToMember(person, section_map)
 
