@@ -179,6 +179,7 @@ class ShowTimetables(object):
 
         >>> calendar = object()
         >>> info = CalendarOverlayInfo(calendar, True, 'red', 'yellow')
+        >>> info.__parent__ = calendar
         >>> stt = ShowTimetables(info)
 
         >>> from zope.interface.verify import verifyObject
@@ -193,7 +194,14 @@ class ShowTimetables(object):
         >>> stt.showTimetables = False
         >>> stt.showTimetables
         False
+
+    We need a __parent__ attribute for local security grants:
+
+        >>> stt.__parent__ is calendar
+        True
+
     """
+
     adapts(ICalendarOverlayInfo)
     implements(IShowTimetables)
 
