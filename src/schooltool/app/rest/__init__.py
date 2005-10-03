@@ -31,7 +31,8 @@ from zope.server.http.wsgihttpserver import WSGIHTTPServer
 from zope.app import zapi
 from zope.app.publication.interfaces import IPublicationRequestFactory
 from zope.app.publication.http import HTTPPublication
-from zope.app.server.servertype import ServerType
+from zope.app.server.wsgi import ServerType
+from zope.app.wsgi import WSGIPublisherApplication
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile \
                                                 as Template # reexport
 
@@ -58,9 +59,10 @@ class RestPublicationRequestFactory(object):
 
 
 restServerType = ServerType(WSGIHTTPServer,
-                            RestPublicationRequestFactory,
+                            WSGIPublisherApplication,
                             CommonAccessLogger,
-                            7001, True)
+                            7001, True,
+                            requestFactory=RestPublicationRequestFactory)
 
 
 class View(object):
