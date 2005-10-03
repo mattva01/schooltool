@@ -172,8 +172,6 @@ def test_suite():
                                      optionflags=doctest.ELLIPSIS),
                 doctest.DocTestSuite('schooltool.app.membership',
                                      optionflags=doctest.ELLIPSIS),
-                doctest.DocTestSuite('schooltool.app.overlay',
-                                     optionflags=doctest.ELLIPSIS),
                 doctest.DocFileSuite('../README.txt',
                                      optionflags=doctest.ELLIPSIS)
            ])

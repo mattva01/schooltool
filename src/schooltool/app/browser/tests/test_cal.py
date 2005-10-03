@@ -4125,8 +4125,8 @@ def doctest_EventDeleteView():
 
         >>> cal2 = Calendar(Person()) # a dummy calendar
         >>> owner = container['friend'] = Person('friend')
-        >>> owner.overlaid_calendars.add(cal)
-        >>> owner.overlaid_calendars.add(cal2)
+        >>> info = owner.overlaid_calendars.add(cal)
+        >>> info = owner.overlaid_calendars.add(cal2)
         >>> request = TestRequest(form={'event_id': 'counted',
         ...                             'date': '2005-02-03'})
         >>> request.setPrincipal(ConformantStub(owner))
@@ -4305,14 +4305,12 @@ def doctest_CalendarSTOverlayView():
         >>> history.sections.add(section)
 
         >>> from schooltool.app.interfaces import IShowTimetables
-        >>> person.overlaid_calendars.add(
+        >>> info = person.overlaid_calendars.add(
         ...     ISchoolToolCalendar(group1), show=True)
-
-        >>> IShowTimetables(tuple(
-        ...     person.overlaid_calendars)[-1]).showTimetables = False
-        >>> person.overlaid_calendars.add(
+        >>> IShowTimetables(info).showTimetables = False
+        >>> info = person.overlaid_calendars.add(
         ...     ISchoolToolCalendar(group2), show=False)
-        >>> person.overlaid_calendars.add(
+        >>> info = person.overlaid_calendars.add(
         ...     ISchoolToolCalendar(section), show=False)
 
         >>> request = TestRequest()

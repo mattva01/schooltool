@@ -68,6 +68,7 @@ def doctest_evolve6_get_rid_of_dead_calendars():
 
         >>> dead_persons_calendar = ISchoolToolCalendar(dead_person)
         >>> person.overlaid_calendars.add(dead_persons_calendar)
+        <...CalendarOverlayInfo object at ...>
 
     (In real life, dead_person was alive when person overlaid his
     calendar, but then dead_person got removed.  The late person's
@@ -102,6 +103,7 @@ def doctest_evolve6_doesnt_do_too_much():
 
         >>> another_persons_calendar = ISchoolToolCalendar(another_person)
         >>> person.overlaid_calendars.add(another_persons_calendar)
+        <...CalendarOverlayInfo object at ...>
 
     The evolution script shouldn't try to access nonexistent properties
     of other objects
@@ -132,7 +134,7 @@ def doctest_evolve6_removal_while_iteration():
         >>> for n in range(20):
         ...     dead_person = Person()
         ...     dead_persons_calendar = ISchoolToolCalendar(dead_person)
-        ...     person.overlaid_calendars.add(dead_persons_calendar)
+        ...     info = person.overlaid_calendars.add(dead_persons_calendar)
 
         >>> from schooltool.generations.evolve6 import evolve
         >>> evolve(context)

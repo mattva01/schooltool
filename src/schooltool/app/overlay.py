@@ -44,12 +44,16 @@ Let's say John wants to see the calendars of Smith and the Developers group
 overlaid on his own calendar
 
     >>> john.overlaid_calendars.add(ISchoolToolCalendar(smith))
+    <...CalendarOverlayInfo object at ...>
     >>> john.overlaid_calendars.add(ISchoolToolCalendar(developers))
+    <...CalendarOverlayInfo object at ...>
 
 He also wants the Admins group calendar to be displayed in the overlaid
-calendars portlet, but hidden by default:
+calendars portlet, but hidden by default, and perhaps set the colour to green:
 
-    >>> john.overlaid_calendars.add(ISchoolToolCalendar(admins), show=False)
+    >>> info = john.overlaid_calendars.add(ISchoolToolCalendar(admins),
+    ...                                    show=False)
+    >>> info.color1 = 'green'
 
 Iterating over `overlaid_calendars` returns ICalendarOverlayInfo objects
 
@@ -60,7 +64,7 @@ Iterating over `overlaid_calendars` returns ICalendarOverlayInfo objects
     ...                                    item.color1, item.color2)
     [+] Smith      (#e0b6af, #c1665a)
     [+] Developers (#eed680, #d1940c)
-    [ ] Admins     (#c5d2c8, #83a67f)
+    [ ] Admins     (green, #83a67f)
 
 However, 'in' checks for the presence of a calendar
 
@@ -232,6 +236,7 @@ class BoundOverlaidCalendarsProperty(BoundRelationshipProperty):
     The `add` method establishes a URICalendarSubscriber relationship
 
         >>> overlaid_calendars.add(cal)
+        <...CalendarOverlayInfo object at ...>
         >>> getRelatedObjects(a, URICalendarProvider)
         [cal]
         >>> getRelatedObjects(cal, URICalendarSubscriber)
@@ -260,6 +265,7 @@ class BoundOverlaidCalendarsProperty(BoundRelationshipProperty):
 
         >>> overlaid_calendars.add(cal, show=False,
         ...                        color1="red", color2="green")
+        <...CalendarOverlayInfo object at ...>
 
     You can extract these when iterating
 
@@ -289,6 +295,7 @@ class BoundOverlaidCalendarsProperty(BoundRelationshipProperty):
         info = CalendarOverlayInfo(calendar, show, color1, color2)
         info.__parent__ = self.this
         BoundRelationshipProperty.add(self, calendar, info)
+        return info
 
     def __contains__(self, calendar):
         for item in self:
@@ -413,6 +420,7 @@ def unrelateCalendarOnDeletion(event):
     Let's add calendar of Petras to the list of overlaid calendars:
 
         >>> jonas.overlaid_calendars.add(ISchoolToolCalendar(petras))
+        <...CalendarOverlayInfo object at ...>
         >>> list(jonas.overlaid_calendars)
         [<schooltool.app.overlay.CalendarOverlayInfo object at ...>]
 

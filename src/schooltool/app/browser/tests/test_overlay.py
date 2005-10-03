@@ -82,8 +82,10 @@ def doctest_CalendarOverlayView():
         >>> group1 = app['groups']['g1'] = Group(title="Group 1")
         >>> group2 = app['groups']['g2'] = Group(title="Group 2")
         >>> person.overlaid_calendars.add(ISchoolToolCalendar(group1))
+        <...CalendarOverlayInfo object at ...>
         >>> person.overlaid_calendars.add(ISchoolToolCalendar(group2),
         ...                               show=False)
+        <...CalendarOverlayInfo object at ...>
 
         >>> request = TestRequest()
         >>> request.setPrincipal(Principal('id', 'title', person))
@@ -174,8 +176,10 @@ def doctest_CalendarOverlayView_items():
     When the person has calendars in his overlay list
 
         >>> person.overlaid_calendars.add(ISchoolToolCalendar(group2))
+        <...CalendarOverlayInfo object at ...>
         >>> person.overlaid_calendars.add(ISchoolToolCalendar(group1),
         ...                               show=False)
+        <...CalendarOverlayInfo object at ...>
 
         >>> from zope.testing.doctestunit import pprint
         >>> pprint(view.items())
@@ -270,6 +274,7 @@ def doctest_CalendarSelectionView():
     can see that in the form.
 
         >>> fred.overlaid_calendars.add(ISchoolToolCalendar(eric), show=False)
+        <...CalendarOverlayInfo object at ...>
 
         >>> print view()
         <BLANKLINE>

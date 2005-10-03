@@ -201,6 +201,7 @@ def doctest_updateInstructorCalendars():
 
         >>> sectionb = Section(title="SectionB")
         >>> person.overlaid_calendars.add(sectionb.calendar)
+        <...CalendarOverlayInfo object at ...>
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         ['SectionB']
 
@@ -350,6 +351,7 @@ def doctest_updateStudentCalendars():
 
         >>> sectionb = Section(title="SectionB")
         >>> person.overlaid_calendars.add(sectionb.calendar)
+        <...CalendarOverlayInfo object at ...>
         >>> [cal.calendar.title for cal in person.overlaid_calendars]
         ['SectionB']
         >>> perms = IPrincipalPermissionManager(sectionb)
