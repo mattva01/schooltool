@@ -204,23 +204,27 @@ class CalendarSelectionView(BrowserView):
         if user is None:
             return
         if 'UPDATE_SUBMIT' in self.request:
-            for container in 'persons', 'groups', 'resources':
-                selected = Set(self.request.form.get(container, []))
-                for item in self.getCalendars(container):
-                    if item['id'] in selected and not item['selected']:
-                        user.overlaid_calendars.add(item['calendar'])
-                    elif item['id'] not in selected and item['selected']:
-                        user.overlaid_calendars.remove(item['calendar'])
-            appcal = self.application.get('calendar')
-            if appcal is not None:
-                if ('application' in self.request and
-                        appcal not in user.overlaid_calendars):
-                    user.overlaid_calendars.add(appcal)
-                elif ('application' not in self.request and
-                        appcal in user.overlaid_calendars):
-                    user.overlaid_calendars.remove(appcal)
+            self._updateSelection(user)
             self.message = _('Saved changes.')
             nexturl = self.request.form.get('nexturl')
             if nexturl:
                 self.request.response.redirect(nexturl)
 
+    def _updateSelection(self, user):
+        """Apply calendar selection changes  for `user`."""
+        for container in 'persons', 'groups', 'resources':
+            selected = Set(self.request.form.get(container, []))
+            for item in self.getCalendars(container):
+                if item['id'] in selected and not item['selected']:
+                    user.overlaid_calendars.add(item['calendar'])
+                    # TODO: uncheck showTimetables if this is a group/resource
+                elif item['id'] not in selected and item['selected']:
+                    user.overlaid_calendars.remove(item['calendar'])
+        appcal = self.getApplicationCalendar().get('calendar')
+        if appcal is not None:
+            if ('application' in self.request and
+                    appcal not in user.overlaid_calendars):
+                user.overlaid_calendars.add(appcal)
+            elif ('application' not in self.request and
+                    appcal in user.overlaid_calendars):
+                user.overlaid_calendars.remove(appcal)

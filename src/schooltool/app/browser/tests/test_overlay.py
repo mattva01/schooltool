@@ -23,6 +23,7 @@ $Id$
 """
 
 import unittest
+
 from zope.testing import doctest
 from zope.publisher.browser import TestRequest
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
@@ -30,6 +31,7 @@ from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from schooltool.app.browser.testing import setUp as browserSetUp, tearDown
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.testing import setup
+
 
 def setUp(test=None):
     browserSetUp(test)
@@ -197,6 +199,7 @@ def doctest_CalendarOverlayView_items():
           'title': 'Group 2'}]
 
     """
+
 
 def doctest_CalendarSelectionView():
     """Tests for CalendarSelectionView
@@ -367,6 +370,123 @@ def doctest_CalendarSelectionView():
     """
 
 
+def doctest_CalendarSelectionView_updateSelection():
+    """Test for CalendarSelectionView._updateSelection
+
+        >>> from schooltool.app.browser.overlay import CalendarSelectionView
+        >>> from schooltool.person.person import Person
+        >>> from schooltool.group.group import Group
+        >>> from schooltool.resource.resource import Resource
+        >>> from schooltool.app.cal import Calendar
+        >>> request = TestRequest()
+        >>> context = None
+        >>> view = CalendarSelectionView(context, request)
+        >>> user = Person()
+        >>> book = Resource('A book')
+        >>> beamer = Resource('A beamer')
+        >>> friends = Group('Friends')
+        >>> joe = Person(title='Joe')
+        >>> appcal = Calendar(Resource('Application'))
+
+        >>> def stub_getCalendars(container):
+        ...     if container == 'persons':
+        ...         return [{'id': 'joe',
+        ...                  'title': 'Joe',
+        ...                  'selected': ISchoolToolCalendar(joe)
+        ...                                 in user.overlaid_calendars,
+        ...                  'calendar': ISchoolToolCalendar(joe)}]
+        ...     elif container == 'groups':
+        ...         return [{'id': 'friends',
+        ...                  'title': 'Friends',
+        ...                  'selected': ISchoolToolCalendar(friends)
+        ...                                 in user.overlaid_calendars,
+        ...                  'calendar': ISchoolToolCalendar(friends)}]
+        ...     elif container == 'resources':
+        ...         return [{'id': 'book',
+        ...                  'title': 'The book',
+        ...                  'selected': ISchoolToolCalendar(book)
+        ...                                 in user.overlaid_calendars,
+        ...                  'calendar': ISchoolToolCalendar(book)},
+        ...                 {'id': 'beamer',
+        ...                  'title': 'A beamer',
+        ...                  'selected': ISchoolToolCalendar(beamer)
+        ...                                 in user.overlaid_calendars,
+        ...                  'calendar': ISchoolToolCalendar(beamer)}]
+        ...     else:
+        ...         return []
+        >>> view.getCalendars = stub_getCalendars
+        >>> def stub_getApplicationCalendar():
+        ...     return {'title': 'Applcation',
+        ...             'selected': appcal in user.overlaid_calendars,
+        ...             'calendar': appcal}
+        >>> view.getApplicationCalendar = stub_getApplicationCalendar
+
+    So, we have two calendars available for selection, but we choose none of
+    them.  Nothing happens.
+
+        >>> view._updateSelection(user)
+
+    We can choose one, and it appears in the overlay list.
+
+        >>> request.form['resources'] = ['beamer']
+        >>> view._updateSelection(user)
+        >>> [cal.calendar.title for cal in user.overlaid_calendars]
+        ['A beamer']
+
+    We can choose both
+
+        >>> request.form['resources'] = ['beamer', 'book']
+        >>> view._updateSelection(user)
+        >>> sorted([cal.calendar.title for cal in user.overlaid_calendars])
+        ['A beamer', 'A book']
+
+    We can choose one again, and the other disappears
+
+        >>> request.form['resources'] = ['book']
+        >>> view._updateSelection(user)
+        >>> [cal.calendar.title for cal in user.overlaid_calendars]
+        ['A book']
+
+    It works with persons and groups as well
+
+        >>> request.form['persons'] = ['joe']
+        >>> request.form['groups'] = ['friends']
+        >>> request.form['resources'] = []
+        >>> view._updateSelection(user)
+        >>> [cal.calendar.title for cal in user.overlaid_calendars]
+        ['Joe', 'Friends']
+
+        >>> request.form['persons'] = []
+        >>> request.form['groups'] = []
+        >>> request.form['resources'] = []
+        >>> view._updateSelection(user)
+        >>> [cal.calendar.title for cal in user.overlaid_calendars]
+        []
+
+    You can choose the application calendar as well
+
+        >>> request.form['application'] = ''
+        >>> view._updateSelection(user)
+        >>> [cal.calendar.title for cal in user.overlaid_calendars]
+        ['Application']
+
+    Avoid duplicate additions:
+
+        >>> request.form['application'] = ''
+        >>> view._updateSelection(user)
+        >>> [cal.calendar.title for cal in user.overlaid_calendars]
+        ['Application']
+
+    And remove it
+
+        >>> del request.form['application']
+        >>> view._updateSelection(user)
+        >>> [cal.calendar.title for cal in user.overlaid_calendars]
+        []
+
+    """
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
@@ -375,6 +495,7 @@ def test_suite():
                                             doctest.NORMALIZE_WHITESPACE))
     suite.addTest(doctest.DocTestSuite('schooltool.app.browser.overlay'))
     return suite
+
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')
