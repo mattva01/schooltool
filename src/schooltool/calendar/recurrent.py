@@ -436,7 +436,8 @@ class MonthlyRecurrenceRule(RecurrenceRule):
         """Generator that generates dates of recurrences."""
         start = event.dtstart.date()
         weekday = start.weekday()
-        index = start.day / 7 + 1
+        # Which week of the month is it
+        index = (start.day - 1) / 7 + 1
 
         if startdate is None:
             startdate = start

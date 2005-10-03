@@ -544,6 +544,21 @@ class TestMonthlyRecurrenceRule(unittest.TestCase, RecurrenceRuleTestBase):
                                   date(2001, 7, 31),
                                   date(2002, 1, 31),])
 
+    def test_apply_weekday_edge_case(self):
+        # A test for Issue381 (monthly repeat causes bad date)
+        from schooltool.calendar.simple import SimpleCalendarEvent
+        rule = self.createRule(monthly="weekday")
+        # 1st Tuesday and 7th day of the week
+        ev = SimpleCalendarEvent(datetime(2006, 2, 7, 12, 0),
+                           timedelta(minutes=10),
+                           "reality check", unique_id='uid')
+
+        result = list(rule.apply(ev, enddate=date(2006, 5, 10)))
+        expected = [date(2006, 2, 7), date(2006, 3, 7),
+                    date(2006, 4, 4), date(2006, 5, 2)]
+        self.assertEqual(result, expected)
+
+
     def test_apply_weekday(self):
         from schooltool.calendar.simple import SimpleCalendarEvent
         rule = self.createRule(monthly="weekday")
