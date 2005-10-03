@@ -199,6 +199,7 @@ class ShowTimetables(object):
 
     def __init__(self, context):
         self.annotations = IAnnotations(context)
+        self.__parent__ = context.__parent__ # for local security grants
 
     def getShowTimetables(self):
         return self.annotations.get(SHOW_TIMETABLES_KEY, True)

@@ -20,7 +20,17 @@
       for="schooltool.app.overlay.ICalendarOverlayInfo"
       provides=".interfaces.IShowTimetables"
       factory=".app.ShowTimetables"
+      trusted="true"
       />
+
+  <class class=".app.ShowTimetables">
+    <require
+        permission="schooltool.view"
+        interface=".interfaces.IShowTimetables" />
+    <require
+        permission="schooltool.viewCalendar"
+        set_schema=".interfaces.IShowTimetables" />
+  </class>
 
   <adapter
       for=".interfaces.IHaveCalendar"
