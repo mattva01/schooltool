@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolBell application object
+SchoolTool resource object
 
 $Id: app.py 4704 2005-08-15 13:22:06Z srichter $
 """
