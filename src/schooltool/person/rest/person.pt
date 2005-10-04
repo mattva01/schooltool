@@ -1,6 +1,7 @@
 <person xmlns:xlink="http://www.w3.org/1999/xlink"
         xmlns:tal="http://xml.zope.org/namespaces/tal"
         xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        xmlns="http://schooltool.org/ns/model/0.1"
         i18n:domain="schooltool">
   <title tal:content="view/context/title">Pete</title>
   <relationships xlink:type="simple" xlink:title="Relationships"

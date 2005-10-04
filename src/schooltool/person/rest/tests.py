@@ -134,7 +134,8 @@ class TestPersonView(ApplicationObjectViewTestMixin, unittest.TestCase):
         self.assertEquals(response.getHeader('content-type'),
                           "text/xml; charset=UTF-8")
         self.assertEqualsXML(result,
-            """<person xmlns:xlink="http://www.w3.org/1999/xlink">
+            """<person xmlns="http://schooltool.org/ns/model/0.1"
+                       xmlns:xlink="http://www.w3.org/1999/xlink">
                    <title>Root person</title>
                    <relationships xlink:href="http://127.0.0.1/persons/root/relationships"
                                   xlink:title="Relationships" xlink:type="simple"/>
