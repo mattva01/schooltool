@@ -42,6 +42,19 @@
       handler=".resource.addResourceContainerToApplication"
       />
 
+  <!-- sample data -->
+  <configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      zcml:condition="have devmode">
+
+    <utility
+        factory=".sampledata.SampleResources"
+        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
+        name="resources"
+        />
+
+  </configure>
+
   <include package=".browser" />
   <include package=".rest" />
 
