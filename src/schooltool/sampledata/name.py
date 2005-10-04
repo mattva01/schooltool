@@ -28,7 +28,7 @@ import random
 class NameGenerator(object):
     """Person name generator
 
-    Generates random full names and makes sure they don't repeat.
+    Generates random full names.  Names can recur.
     """
 
     def __init__(self, seed):
