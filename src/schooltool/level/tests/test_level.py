@@ -28,7 +28,7 @@ from zope.component import testing
 from zope.app.testing import setup
 
 def setUp(test):
-    test.globs['this_directory'] = os.path.dirname(__file__)
+    test.globs['this_directory'] = os.path.join(os.path.dirname(__file__), '..')
     setup.placefulSetUp()
 
 def tearDown(test):
@@ -42,7 +42,7 @@ def showApplications(activity, pd):
 
 def test_suite():
     return unittest.TestSuite((
-        doctest.DocFileSuite('README.txt',
+        doctest.DocFileSuite('../README.txt',
                              setUp=setUp, tearDown=tearDown,
                              globs={'pprint': doctestunit.pprint,
                                     'showApplications': showApplications},
