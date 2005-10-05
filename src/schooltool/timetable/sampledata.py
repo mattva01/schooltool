@@ -28,9 +28,10 @@ import datetime
 from zope.interface import implements
 
 from schooltool.sampledata.interfaces import ISampleDataPlugin
+from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable.model import SequentialDaysTimetableModel
-from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+from schooltool.timetable.term import Term
 
 
 class SampleTimetableSchema(object):
@@ -56,3 +57,20 @@ class SampleTimetableSchema(object):
         for day_id in day_ids:
             ttschema[day_id] = TimetableSchemaDay(period_ids)
         app['ttschemas']['simple'] = ttschema
+
+
+class SampleTerms(object):
+    implements(ISampleDataPlugin)
+
+    name = 'terms'
+    dependencies = ()
+
+    def generate(self, app, seed=None):
+        date = datetime.date
+        fall = Term('2005-fall', date(2005, 8, 22), date(2005, 12, 23))
+        fall.addWeekdays(0, 1, 2, 3, 4)
+        app['terms']['2005-fall'] = fall
+
+        spring = Term('2006-spring', date(2006, 1, 26), date(2006, 5, 31))
+        spring.addWeekdays(0, 1, 2, 3, 4)
+        app['terms']['2006-spring'] = spring

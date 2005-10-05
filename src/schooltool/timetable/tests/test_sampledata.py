@@ -88,6 +88,43 @@ def doctest_SampleTimetableSchema():
         ...     assert schema[day] == schema['Day 1']
         >>> schema['Day 1'].keys()
         ['A', 'B', 'C', 'D', 'E', 'F']
+    """
+
+
+def doctest_SampleTerms():
+    """A sample data plugin that creates terms
+
+        >>> from schooltool.timetable.sampledata import SampleTerms
+        >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
+        >>> plugin = SampleTerms()
+        >>> verifyObject(ISampleDataPlugin, plugin)
+        True
+
+    This plugin generates two terms:
+
+        >>> app = stsetup.setupSchoolToolSite()
+        >>> plugin.generate(app, 42)
+        >>> len(app['terms'])
+        2
+
+    These terms are 90 schooldays long:
+
+        >>> fall = app['terms']['2005-fall']
+        >>> schooldays = [day for day in fall if fall.isSchoolday(day)]
+        >>> len(schooldays)
+        90
+
+        >>> spring = app['terms']['2006-spring']
+        >>> schooldays = [day for day in spring if spring.isSchoolday(day)]
+        >>> len(schooldays)
+        90
+
+    They span these dates:
+
+        >>> print fall.first, fall.last
+        2005-08-22 2005-12-23
+        >>> print spring.first, spring.last
+        2006-01-26 2006-05-31
 
     """
 

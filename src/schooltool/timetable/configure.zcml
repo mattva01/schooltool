@@ -179,6 +179,12 @@
         name="ttschema"
         />
 
+    <utility
+        factory=".sampledata.SampleTerms"
+        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
+        name="terms"
+        />
+
   </configure>
 
   <include package=".browser" />
