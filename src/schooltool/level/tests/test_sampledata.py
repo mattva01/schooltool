@@ -121,7 +121,8 @@ def doctest_SampleLevels():
 
         >>> from schooltool.level.interfaces import IAcademicRecord
         >>> from zope.security.proxy import removeSecurityProxy
-        >>> for person in app['persons'].values():
+        >>> for i in range(3):
+        ...     person = app['persons']['student00' + str(i)]
         ...     proc = IAcademicRecord(person).levelProcess
         ...     print proc.workflowRelevantData.level
         <Level '11th grade'>
