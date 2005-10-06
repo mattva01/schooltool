@@ -135,6 +135,10 @@ XXX There used to be a way to get the calendar derived from all timetables
   POST ...path/acl
     change the access control list for a location
 
+We use POST rather than PUT on the ACL, because you do not send the full
+repesentation of the whole ACL.  You can change a subset of the access list
+by submitting just a subset.  Using PUT for that would be non-RESTive.
+
   GET ...object/relationships
     list all object's relationships (where the object can be a person, group or a
     resource)
