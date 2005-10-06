@@ -42,7 +42,7 @@ def tearDown(test):
 
 
 def doctest_SampleTimetableSchema():
-    """A sample data plugin that generates students
+    """A sample data plugin that generates a timetable schema
 
         >>> from schooltool.timetable.sampledata import SampleTimetableSchema
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
