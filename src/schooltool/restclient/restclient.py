@@ -64,7 +64,7 @@ def make_basic_auth(username, password):
 
 
 def to_xml(s):
-    r"""Prepare s for inclusion into XML (convert to UTF-8 and escape).
+    r"""Prepare `s` for inclusion into XML (convert to UTF-8 and escape).
 
         >>> to_xml('foo')
         'foo'
@@ -72,6 +72,8 @@ def to_xml(s):
         '\xe2\x98\xbb'
         >>> to_xml('<brackets> & "quotes"')
         '&lt;brackets&gt; &amp; &quot;quotes&quot;'
+        >>> to_xml(42)
+        '42'
 
     """
     return cgi.escape(unicode(s).encode('UTF-8'), True)
@@ -513,8 +515,7 @@ def _parseRelationships(body, uriobjects=None):
 
 
 def _parsePersonInfo(body):
-    # XXX update documentation
-    """Parse the data provided by the person info facet."""
+    """Parse the data provided by the person XML representation."""
     try:
         doc = libxml2.parseDoc(body)
     except libxml2.parserError:
@@ -604,21 +605,6 @@ class MemberInfo:
     def __repr__(self):
         return "%s(%r)" % (self.__class__.__name__, self.person_path)
 
-
-class CourseInfo:
-    """Information about a Course."""
-
-class SectionInfo:
-    """Information about a Section."""
-
-class TermInfo:
-    """Information about a Term."""
-
-class SchoolTimetableInfo:
-    """Information about School Timetable."""
-
-class TimetableInfo:
-    """Information about Timetable."""
 
 class RelationshipInfo:
     """Information about a relationship."""
