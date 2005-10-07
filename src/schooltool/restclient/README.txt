@@ -16,8 +16,14 @@ Introduction
 
 Let us connect to the SchoolTool server running on localhost, port 7001:
 
-    >>> from schooltool.restclient import SchoolToolClient
+    >>> from schooltool.restclient.restclient import SchoolToolClient
     >>> client = SchoolToolClient('localhost', port=7001, ssl=False)
+
+Since we do not want to make actual HTTP connections in a functional test, we'll
+use a stub connectionFactory.
+
+    >>> from schooltool.restclient.tests import RestConnectionFactory
+    >>> client.connectionFactory = RestConnectionFactory
 
 We will authenticate as the user 'manager' with password 'schooltool'
 
@@ -26,9 +32,36 @@ We will authenticate as the user 'manager' with password 'schooltool'
 We can take a look around
 
     >>> print client.get('/')
-    <schooltool>
-      Welcome, come see a bit of XML here.
+    <schooltool xmlns:xlink="http://www.w3.org/1999/xlink">
+      <message>Welcome to the SchoolTool server</message>
+      <containers>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost:7001/terms"
+                   xlink:title="terms"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost:7001/persons"
+                   xlink:title="persons"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost:7001/courses"
+                   xlink:title="courses"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost:7001/levels"
+                   xlink:title="levels"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost:7001/groups"
+                   xlink:title="groups"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost:7001/ttschemas"
+                   xlink:title="ttschemas"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost:7001/sections"
+                   xlink:title="sections"/>
+        <container xlink:type="simple"
+                   xlink:href="http://localhost:7001/resources"
+                   xlink:title="resources"/>
+      </containers>
     </schooltool>
+
 
 XXX mg: idea: RESTiveClient() that has get/put/post/delete, and
         SchoolToolClient which either subclasses or delegates and provides
@@ -92,13 +125,18 @@ Suppose we need to import a list of users.  Some of the users have photos
     ... Person5, username5, password5, snukis.jpg
     ... '''.strip()
 
+    >>> import os
+    >>> import schooltool.restclient.tests
+    >>> basedir = os.path.dirname(schooltool.restclient.tests.__file__)
+
     >>> import csv
     >>> for row in csv.reader(data.splitlines()):
-    ...     title, username, password = row[:3]
+    ...     title, username, password = map(str.strip, row[:3])
     ...     person = client.createPerson(title, username)
     ...     person.setPassword(password)
     ...     if len(row) > 3:
-    ...         photo = file(row[3], 'rb').read()
+    ...         filename = os.path.join(basedir, row[3].strip())
+    ...         photo = file(filename, 'rb').read()
     ...         person.setPhoto(photo, 'image/jpeg')
 
 XXX TODO: getPhoto -- how do we get the content type?  What happens when there
@@ -133,6 +171,7 @@ First let us populate the maps with existing users and groups:
 Now we loop through the data line by line, creating persons and groups if
 necessary, and adding persons as group members.
 
+    >>> from schooltool.restclient.restclient import SchoolToolError
     >>> for line in data.splitlines():
     ...     group_title, person_title = line.split()
     ...     group = group_map.get(group_title)
@@ -151,4 +190,97 @@ necessary, and adding persons as group members.
 
 XXX mg: but if we get 500 ServerError, or http timeout/connection refused, then
 we don't want to ignore that exception!
+
+More imports
+------------
+
+We can add Resources, Sections, Courses in a similar way too:
+
+Resources:
+
+    >>> data = '''
+    ... Resource1, A simple resource
+    ... Resource2, A complex resource
+    ... '''.strip()
+
+    >>> for row in csv.reader(data.splitlines()):
+    ...     title, description = map(str.strip, row)
+    ...     resource = client.createResource(title, description)
+
+Courses:
+
+    >>> data = '''
+    ... History, History for the sixth grade
+    ... English, English for the first grade
+    ... '''.strip()
+
+    >>> for row in csv.reader(data.splitlines()):
+    ...     title, description = map(str.strip, row)
+    ...     course = client.createCourse(title, description)
+
+Sections are a bit more difficult because most of the time they come
+attached to some course, have some learners and an instructor:
+
+    >>> data = '''
+    ... History, 6a, Hoffman
+    ... English, 6a, James
+    ... History, 7a, Nathaniel
+    ... '''.strip()
+
+We will need to know which groups and courses we have already created.
+
+    >>> person_map = {}
+    >>> group_map = {}
+    >>> course_map = {}
+
+First let us populate the maps with existing groups and courses:
+
+    >>> for person in client.getPersons():
+    ...     person_map[person.title] = person
+
+    >>> for group in client.getGroups():
+    ...     group_map[group.title] = group
+
+    >>> for course in client.getCourses():
+    ...     course_map[course.title] = course
+
+Now we loop through the data line by line, creating courses and groups if
+necessary, and adding sections as group members.
+
+    >>> for line in data.splitlines():
+    ...     course_title, group_title, person_title = line.split()
+    ...     group = group_map.get(group_title)
+    ...     if group is None:
+    ...         group = client.createGroup(group_title)
+    ...         group_map[group_title] = group
+    ...     course = course_map.get(course_title)
+    ...     if course is None:
+    ...         course = client.createCourse(course_title)
+    ...         course_map[course_title] = course
+    ...     person = person_map.get(person_title)
+    ...     if person is None:
+    ...         username = person_title.lower().replace(' ', '-')
+    ...         person = client.createPerson(person_title, username)
+    ...         person_map[person_title] = person
+    ...     section = client.createSection('%s %s' % (course_title, group_title))
+    ...     try:
+    ...         course.addSection(section)
+    ...         section.addInstructor(person)
+    ...         section.addLearner/Member(group)
+    ...     except SchoolToolError, e:
+    ...         pass # already a member
+
+
+Timetabling
+-----------
+
+At the moment we can at least list existing terms:
+
+    >>> client.getTerms()
+    [<Term 2004 Fall at http://localhost:7001/terms/2004-fall>]
+
+Same for school timetables:
+
+    >>> client.getSchoolTimetabes()
+    [<SchoolTimetable Standard Weekly at http://localhost:7001/ttschemas/standard-weekly>]
 
