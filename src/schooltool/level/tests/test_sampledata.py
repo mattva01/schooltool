@@ -39,9 +39,10 @@ def setUpLevels():
     package = xpdl.read(open(os.path.join(os.path.dirname(__file__),
                                           '..', 'promotion.xpdl')))
     pd = package['promotion']
+    pd.id = u'schooltool.promotion'
 
     from zope.wfmc.interfaces import IProcessDefinition
-    ztapi.provideUtility(IProcessDefinition, pd, name='promotion')
+    ztapi.provideUtility(IProcessDefinition, pd, name='schooltool.promotion')
 
     from zope.wfmc.adapter import integration
     pd.integration = integration
@@ -52,20 +53,20 @@ def setUpLevels():
 
     zope.component.provideAdapter(promotion.Manager,
                                   provides=zope.wfmc.interfaces.IParticipant,
-                                  name='promotion.manager')
+                                  name='.manager')
 
     zope.component.provideAdapter(promotion.ProgressToNextLevel,
-                                  name='promotion.progressToNextLevel')
+                                  name='.progressToNextLevel')
     zope.component.provideAdapter(promotion.SelectInitialLevel,
                                   provides=zope.wfmc.interfaces.IWorkItem,
-                                  name='promotion.selectInitialLevel')
+                                  name='.selectInitialLevel')
     zope.component.provideAdapter(promotion.SetLevelOutcome,
                                   provides=zope.wfmc.interfaces.IWorkItem,
-                                  name='promotion.setLevelOutcome')
+                                  name='.setLevelOutcome')
     zope.component.provideAdapter(promotion.UpdateStatus,
-                                  name='promotion.updateStatus')
+                                  name='.updateStatus')
     zope.component.provideAdapter(promotion.WriteRecord,
-                                  name='promotion.writeRecord')
+                                  name='.writeRecord')
     zope.component.provideAdapter(promotion.ManagerWorkItems)
 
     from schooltool.level import record

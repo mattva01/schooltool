@@ -55,7 +55,7 @@ class SampleLevels(object):
         levels['9th-grade'] = Level('9th grade', isInitial=True,
                                     nextLevel=levels['10th-grade'])
 
-        pd = zapi.getUtility(IProcessDefinition, 'promotion')
+        pd = zapi.getUtility(IProcessDefinition, 'schooltool.promotion')
 
         for personid in app['persons']:
             if personid.startswith('student'):
