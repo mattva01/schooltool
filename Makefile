@@ -27,14 +27,6 @@ zope3-checkout:
 zope3-update:
 	svn up Zope3
 
-.PHONY: testbrowser-checkout
-testbrowser-checkout: zope3-checkout
-	-test -d Zope3/src/zope/testbrowser || svn co $(ZOPE_REPOSITORY)/Zope3/branches/testbrowser-integration/src/zope/testbrowser Zope3/src/zope/testbrowser
-
-.PHONY: testbrowser-update
-testbrowser-update:
-	svn up Zope3/src/zope/testbrowser
-
 .PHONY: zpkgsetup-checkout
 zpkgsetup-checkout:
 	-test -d buildsupport/zpkgsetup || svn co $(ZOPE_REPOSITORY)/zpkgtools/trunk/zpkgsetup buildsupport/zpkgsetup
@@ -44,13 +36,13 @@ zpkgsetup-update:
 	svn up buildsupport/zpkgsetup
 
 .PHONY: checkout
-checkout: zope3-checkout testbrowser-checkout zpkgsetup-checkout
+checkout: zope3-checkout zpkgsetup-checkout
 
 .PHONY: update
-update: checkout zope3-update testbrowser-update zpkgsetup-update
+update: checkout zope3-update zpkgsetup-update
 
 .PHONY: build
-build: zope3-checkout testbrowser-checkout zpkgsetup-checkout
+build: zope3-checkout zpkgsetup-checkout
 	test -d Zope3 && cd Zope3 && $(PYTHON) setup.py build_ext -i
 	$(PYTHON) setup.py $(SETUPFLAGS) \
                 build_ext -i install_data --install-dir .
