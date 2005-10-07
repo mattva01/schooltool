@@ -28,10 +28,12 @@ import base64
 
 from zope.testing.doctest import DocTestSuite
 
+# XXX this module shouldn't depend on schooltool.app
 from schooltool.app.rest.testing import dedent, diff
 from schooltool.app.rest.testing import XMLCompareMixin
 from schooltool.app.rest.testing import NiceDiffsMixin
 from schooltool.app.rest.testing import QuietLibxml2Mixin
+from schooltool.xmlparsing import XMLParseError
 
 __metaclass__ = type
 
@@ -835,6 +837,11 @@ class TestParseFunctions(NiceDiffsMixin, QuietLibxml2Mixin, unittest.TestCase):
                     (u'barney', '/persons/barney')]
         self.assertEquals(results, expected)
 
+    def test__parseContainer_errors(self):
+        from schooltool.restclient.restclient import _parseContainer
+        body = "<This is not XML"
+        self.assertRaises(XMLParseError, _parseContainer, body)
+
     def test__parseRelationships(self):
         from schooltool.restclient.restclient import _parseRelationships
         from schooltool.restclient.restclient import RelationshipInfo, URIObject
@@ -992,7 +999,7 @@ class TestParseFunctions(NiceDiffsMixin, QuietLibxml2Mixin, unittest.TestCase):
         from schooltool.restclient.restclient import _parsePersonInfo
         from schooltool.restclient.restclient import SchoolToolError
         body = "<This is not XML"
-        self.assertRaises(SchoolToolError, _parsePersonInfo, body)
+        self.assertRaises(XMLParseError, _parsePersonInfo, body)
         body = """
             <person xmlns:xlink="http://www.w3.org/1999/xlink"
                     xmlns="http://schooltool.org/ns/model/0.1">

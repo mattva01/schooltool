@@ -513,26 +513,14 @@ def _parseRelationships(body, uriobjects=None):
 
 def _parsePersonInfo(body):
     """Parse the data provided by the person XML representation."""
+    doc = XMLDocument(body)
+    doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
+    doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
     try:
-        doc = libxml2.parseDoc(body)
-    except libxml2.parserError:
-        raise SchoolToolError(_("Could not parse person info"))
-    ctx = doc.xpathNewContext()
-    try:
-        xlink = "http://www.w3.org/1999/xlink"
-        ctx.xpathRegisterNs("xlink", xlink)
-        xmlns = "http://schooltool.org/ns/model/0.1"
-        ctx.xpathRegisterNs("m", xmlns)
-        try:
-            node = ctx.xpathEval("/m:person/m:title")[0]
-            title = to_unicode(node.content)
-        except IndexError:
-            raise SchoolToolError(_("Insufficient data in person info"))
-
-        return PersonInfo(title)
-    finally:
-        doc.freeDoc()
-        ctx.xpathFreeContext()
+        node = doc.query("/m:person/m:title")[0]
+        return PersonInfo(node.content)
+    except IndexError:
+        raise SchoolToolError(_("Insufficient data in person info"))
 
 
 #
