@@ -79,7 +79,7 @@ Here's how you can look at the person list:
 
     >>> all_persons = client.getPersons()
     >>> all_persons
-    [<Person SchoolTool Manager at http://localhost:7001/persons/manager>]
+    [<PersonRef SchoolTool Manager at http://localhost:7001/persons/manager>]
 
 Initially our server has only one user -- the manager
 
@@ -93,13 +93,26 @@ Here's how you can look at the group list:
 
     >>> all_groups = client.getGroups()
     >>> all_groups
-    [<Group Manager at http://localhost:7001/groups/manager>]
+    [<GroupRef Manager at http://localhost:7001/groups/manager>]
 
     >>> manager_group = all_groups[0]
     >>> manager_group.title
     u'Manager'
     >>> manager_group.url
     u'http://localhost:7001/groups/manager'
+
+You can take a closer look at that person or group
+
+    >>> person_info = manager.getInfo()
+    >>> person_info.title
+    u'SchoolTool Manager'
+
+    >>> group_info = manager_group.getInfo()
+    >>> group_info.title
+    u'Manager'
+    >>> group_info.description
+    u'The manager group.'
+
     >>> manager_group.getMembers()
     []
 
@@ -191,6 +204,7 @@ necessary, and adding persons as group members.
 XXX mg: but if we get 500 ServerError, or http timeout/connection refused, then
 we don't want to ignore that exception!
 
+
 More imports
 ------------
 
@@ -201,6 +215,8 @@ Resources:
     >>> data = '''
     ... Resource1, A simple resource
     ... Resource2, A complex resource
+    ... beamer-1, A good new beamer
+    ... beamer-2, An old bad beamer
     ... '''.strip()
 
     >>> for row in csv.reader(data.splitlines()):
@@ -277,10 +293,93 @@ Timetabling
 At the moment we can at least list existing terms:
 
     >>> client.getTerms()
-    [<Term 2004 Fall at http://localhost:7001/terms/2004-fall>]
+    [<TermRef 2004 Fall at http://localhost:7001/terms/2004-fall>]
 
 Same for school timetables:
 
     >>> client.getSchoolTimetabes()
-    [<SchoolTimetable Standard Weekly at http://localhost:7001/ttschemas/standard-weekly>]
+    [<SchoolTimetableRef Standard Weekly at http://localhost:7001/ttschemas/standard-weekly>]
 
+
+Information
+-----------
+
+Use case: download all information about a resource, edit it, upload it back.
+
+    >>> resource = client.getResource('/resources/beamer-2')
+    >>> resource.title
+    >>> resource.url
+    >>> resource_info = resource.getInfo()
+    >>> resource_info.title
+    '...'
+    >>> resource_info.description
+    '...'
+    >>> resource_info.is_location
+    False
+
+Modify!
+
+    >>> resource_info.is_location = True
+    >>> resource_info.description += '\n' + 'Tastes good with mustard.'
+    >>> resource.changeInfo(resource_info)
+
+You do it the same way with persons/groups/courses/sections.
+
+
+Deleting objects
+----------------
+
+Suppose we got bored of the second beamer.
+
+    >>> resource.delete()
+
+or we could do
+
+    >>> client.delete('/resources/beamer-2')
+
+That's it.
+
+
+Calendars
+---------
+
+    >>> manager.calendar
+    <CalendarRef http://localhost:7001/persons/manager/calendar>
+    >>> manager.calendar.get_iCalendar()
+    'BEGIN:VCALENDAR...'
+
+
+Arbitrary relationships
+-----------------------
+
+You can create new relationships
+
+    >>> manager.createRelationship(beamer.calendar,
+    ...                            URICalendarSubscription,
+    ...                            URICalendarProvider)
+
+You can see a list of all relationships.
+
+    >>> relationships = manager.getRelationships()
+    >>> relationships
+    [<Relationship /persons/manager (Member) -> /groups/manager (Group)>,
+     <Relationship /perosns/manbager (Member) -> /resources/beamer-1 (Resource)>]
+
+    >>> relationships[0].url
+    'http://localhost/persons/manager/relationships/1'
+    >>> relationships[0].target
+    <ObjectRef DaGroup#2 http:///localhost:7001/...>
+    >>> relationships[0].target.url
+    'http://loclahost:8001/resources/beamer-1'
+    >>> relationships[0].target.title
+    'Da group # 2'
+    >>> relationships[0].target_role
+    URIGroup
+    >>> relationships[0].arcrole
+    URIMememberthisp
+
+You can destroy existing ones
+
+    >>> relationships[-1].delete()
+
+Ta-da.
