@@ -581,7 +581,7 @@ class SectionTimetableSetupView(TimetableSetupViewMixin):
             return self.template()
         self.terms = self.getTerms()
         self.ttschema = self.getSchema()
-        self.ttkeys = [''.join((term.__name__, '.', self.ttschema.__name__))
+        self.ttkeys = ['.'.join((term.__name__, self.ttschema.__name__))
                        for term in self.terms]
         self.days = self.getDays(self.ttschema)
         #XXX dumb, this doesn't space course names
@@ -598,7 +598,7 @@ class SectionTimetableSetupView(TimetableSetupViewMixin):
                 ITimetables(section).timetables[key] = timetable
                 for day_id, day in timetable.items():
                     for period_id in day.periods:
-                        if ''.join((day_id, '.',period_id)) in self.request:
+                        if '.'.join((day_id, period_id)) in self.request:
                             act =  TimetableActivity(title=course_title,
                                                      owner=section)
                             timetable[day_id].add(period_id, act)
