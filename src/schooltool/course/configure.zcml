@@ -83,6 +83,30 @@
       factory="schooltool.app.app.SimpleNameChooser"
       provides="zope.app.container.interfaces.INameChooser" />
 
+  <!-- sample data -->
+  <configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      zcml:condition="have devmode">
+
+    <utility
+        factory=".sampledata.SampleCourses"
+        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
+        name="couses"
+        />
+
+    <utility
+        factory=".sampledata.SampleSections"
+        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
+        name="sections"
+        />
+
+    <utility
+        factory=".sampledata.PopulateSectionTimetables"
+        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
+        name="section_timetables"
+        />
+
+  </configure>
 
   <!-- Views -->
   <include package=".browser" />

@@ -88,6 +88,12 @@ def doctest_SampleTimetableSchema():
         ...     assert schema[day] == schema['Day 1']
         >>> schema['Day 1'].keys()
         ['A', 'B', 'C', 'D', 'E', 'F']
+
+    The default timetable schema is set:
+
+        >>> app['ttschemas'].getDefault()
+        <schooltool.timetable.schema.TimetableSchema object at ...>
+
     """
 
 
