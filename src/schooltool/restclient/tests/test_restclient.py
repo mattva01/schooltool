@@ -167,6 +167,24 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         for conn, path in zip(client._connections, paths):
             self.assertEquals(conn.path, path)
 
+    def test_init(self):
+        from schooltool.restclient.restclient import SchoolToolClient
+        client = SchoolToolClient()
+        self.assertEquals(client.server, 'localhost')
+        self.assertEquals(client.port, 7001)
+        self.assertEquals(client.ssl, False)
+        self.assertEquals(client.user, None)
+        self.assertEquals(client.password, '')
+
+        client = SchoolToolClient('uni.edu.mars', 32764, ssl=True)
+        self.assertEquals(client.server, 'uni.edu.mars')
+        self.assertEquals(client.port, 32764)
+        self.assertEquals(client.ssl, True)
+
+        client = SchoolToolClient(user='mangler', password='42')
+        self.assertEquals(client.user, 'mangler')
+        self.assertEquals(client.password, '42')
+
     def test_setServer(self):
         from schooltool.restclient.restclient import SchoolToolClient
         server = 'example.com'
@@ -238,8 +256,8 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         client = self.newClient(response)
         result = client._request('FOO', path)
         conn = self.oneConnection(client)
-        self.assertEquals(conn.server, SchoolToolClient.server)
-        self.assertEquals(conn.port, SchoolToolClient.port)
+        self.assertEquals(conn.server, 'localhost')
+        self.assertEquals(conn.port, 7001)
         self.assertEquals(conn.method, 'FOO')
         self.assertEquals(conn.path, path)
         self.assertEquals(conn.headers, {})
@@ -262,8 +280,8 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         result = client._request('BAR', path, 'body body body',
                                  {'X-Foo': 'Foo!'})
         conn = self.oneConnection(client)
-        self.assertEquals(conn.server, SchoolToolClient.server)
-        self.assertEquals(conn.port, SchoolToolClient.port)
+        self.assertEquals(conn.server, 'localhost')
+        self.assertEquals(conn.port, 7001)
         self.assertEquals(conn.method, 'BAR')
         self.assertEquals(conn.path, path)
         self.assertEquals(conn.headers,
@@ -755,6 +773,40 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         #     header, or returns an ill-formed location header, or something
         #     unexpected like 'mailto:jonas@example.com' or 'http://webserver'
         #     without a trailing slash?
+
+
+class TestResponse(unittest.TestCase):
+
+    class RealResponseStub:
+        status = 42
+        reason = 'of life, the universe, and everything'
+        _used = False
+        _headers = {'Beauty': 'True'}
+
+        def read(self):
+            if self._used: raise EOFError
+            self._used = True
+            return '<body/>'
+
+        def getheader(self, header):
+            return self._headers[header]
+
+    def test(self):
+        from schooltool.restclient.restclient import Response
+        real_response = RealResponseStub()
+        response = Response(real_response)
+        self.assertEquals(response.status, real_response.status)
+        self.assertEquals(response.reason, real_response.reason)
+        self.assertEquals(response.body, '<body/>')
+        self.assertEquals(response.getheader('Beauty'), 'True')
+        self.assertEquals(str(response), '<body/>')
+        self.assertEquals(response.read(), '<body/>')
+        # can do that multiple times, and it doesn't call real_response.read()
+        # again
+        self.assertEquals(response.read(), '<body/>')
+        # just to make sure -- if response did call real_response.read() again,
+        # it would get an error
+        self.assertRaises(EOFError, real_response.read)
 
 
 class TestParseFunctions(NiceDiffsMixin, QuietLibxml2Mixin, unittest.TestCase):

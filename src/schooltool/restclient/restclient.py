@@ -89,17 +89,20 @@ class SchoolToolClient:
     path within the server.
     """
 
-    server = 'localhost'
-    port = 7001
-    user = None
-    ssl = False
-    password = ''
-    status = ''
-    version = ''
-
     # Hooks for unit tests.
     connectionFactory = httplib.HTTPConnection
     secureConnectionFactory = httplib.HTTPSConnection
+
+    def __init__(self, server='localhost', port=7001, ssl=False,
+                 user=None, password=''):
+        self.server = server
+        self.port = port
+        self.ssl = ssl
+        self.user = user
+        self.password = password
+        self.status = ''
+        self.version = ''
+
 
     # Generic HTTP methods
 
@@ -428,6 +431,8 @@ class Response:
 
     def read(self):
         return self.body
+
+    __str__ = read
 
 
 #
