@@ -776,7 +776,7 @@ class TestResponse(unittest.TestCase):
 
     def test(self):
         from schooltool.restclient.restclient import Response
-        real_response = RealResponseStub()
+        real_response = self.RealResponseStub()
         response = Response(real_response)
         self.assertEquals(response.status, real_response.status)
         self.assertEquals(response.reason, real_response.reason)
@@ -1104,6 +1104,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.restclient.restclient'))
     suite.addTest(unittest.makeSuite(TestSchoolToolClient))
+    suite.addTest(unittest.makeSuite(TestResponse))
     suite.addTest(unittest.makeSuite(TestParseFunctions))
     suite.addTest(unittest.makeSuite(TestInfoClasses))
     suite.addTest(unittest.makeSuite(TestPersonRef))
