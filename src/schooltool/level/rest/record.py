@@ -40,10 +40,14 @@ class PersonHTTPTraverser(object):
     zope.interface.implements(rest.IRestTraverser)
 
     def __init__(self, context, request):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
         self.context = context
         self.request = request
 
     def publishTraverse(self, request, name):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
         record = interfaces.IAcademicRecord(self.context)
         if name == 'academicStatus':
             return AcademicStatus(record)
@@ -62,18 +66,26 @@ class PersonHTTPTraverser(object):
 class AcademicStatus(object):
 
     def __init__(self, record):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
         self.record = record
 
     def getStatus(self):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
         return self.record.status
 
     def setStatus(self, status):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
         self.record.status = status
 
 
 class AcademicStatusView(rest.View):
 
     def PUT(self):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
 
         for name in self.request:
             if name.startswith('HTTP_CONTENT_'):
@@ -90,6 +102,8 @@ class AcademicStatusView(rest.View):
     POST = PUT
 
     def GET(self):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
         self.request.response.setHeader('Content-Type', "text/plain")
         self.request.response.setStatus(200)
         return self.context.getStatus() or ''
@@ -98,15 +112,19 @@ class AcademicStatusView(rest.View):
 class AcademicHistory(object):
 
     def __init__(self, record):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
         self.record = record
-        
-        
+
+
 class AcademicHistoryView(rest.View):
 
     template = rest.Template("history.pt",
                              content_type="text/xml; charset=UTF-8")
 
     def history(self):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
         formatter = self.request.locale.dates.getFormatter('dateTime', 'medium')
         for record in self.context.record.history:
             yield {'title': record.title,
@@ -117,9 +135,13 @@ class AcademicHistoryView(rest.View):
 class AcademicProcessCreator(object):
 
     def __init__(self, record):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
         self.record = record
 
     def create(self):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
         pd = zapi.getUtility(zope.wfmc.interfaces.IProcessDefinition,
                              name='schooltool.promotion')
         process = pd()
@@ -127,17 +149,21 @@ class AcademicProcessCreator(object):
             zope.security.proxy.removeSecurityProxy(self.record).context,
             None, None)
         self.record.levelProcess = process
-    
-        
+
+
 class AcademicProcessCreatorView(rest.View):
 
     def PUT(self):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
         self.context.create()
         self.request.response.setStatus("200")
         return ''
 
 
     def GET(self):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
         self.request.response.setHeader('Content-Type', "text/plain")
         self.request.response.setStatus(200)
         return ''
@@ -163,6 +189,8 @@ class SelectInitialLevelView(rest.View):
     </grammar>'''
 
     def POST(self):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
         body = self.request.bodyFile.read()
         doc = XMLDocument(body, self.schema)
         doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
@@ -203,11 +231,15 @@ class SetLevelOutcomeView(rest.View):
     </grammar>'''
 
     def level(self):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
         process = zope.security.proxy.removeSecurityProxy(
             self.context).participant.activity.process
         return zapi.getName(process.workflowRelevantData.level)
 
     def POST(self):
+        # XXX not unit tested -- uncomment the following line for proof
+        #raise NotImplementedError
         body = self.request.bodyFile.read()
         doc = XMLDocument(body, self.schema)
         doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
