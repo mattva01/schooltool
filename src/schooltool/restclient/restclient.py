@@ -219,35 +219,38 @@ class SchoolToolClient:
 
     # SchoolTool specific methods
 
-    def getListOfPersons(self):
+    def getPersons(self):
         """Return the list of all persons.
 
-        Returns a sequence of tuples (person_title, person_path).
+        Returns a sequence of PersonRef objects.
         """
         response = self.get('/persons')
         if response.status != 200:
             raise ResponseStatusError(response)
-        return _parseContainer(response.read())
+        return [PersonRef(self, url, title)
+                for title, url in _parseContainer(response.read())]
 
-    def getListOfGroups(self):
+    def getGroups(self):
         """Return the list of all groups.
 
-        Returns a sequence of tuples (group_title, group_path).
+        Returns a sequence of GroupRef objects.
         """
         response = self.get('/groups')
         if response.status != 200:
             raise ResponseStatusError(response)
-        return _parseContainer(response.read())
+        return [GroupRef(self, url, title)
+                for title, url in _parseContainer(response.read())]
 
-    def getListOfResources(self):
+    def getResources(self):
         """Return the list of all resources.
 
-        Returns a sequence of tuples (resource_title, resource_path).
+        Returns a sequence of ResourceRef objects.
         """
         response = self.get('/resources')
         if response.status != 200:
             raise ResponseStatusError(response)
-        return _parseContainer(response.read())
+        return [ResourceRef(self, url, title)
+                for title, url in _parseContainer(response.read())]
 
     def getGroupInfo(self, group_path):
         """Return information page about a group.
@@ -544,7 +547,101 @@ def _parsePersonInfo(body):
 
 
 #
-# Application object representation
+# Object representations
+#
+
+
+class ObjectRef(object):
+    """Reference to an object.
+
+    Pythonic equivalent of an xlink.  Has a URL and an (optional) title.  Knows
+    whence it came from (that is, has a reference to the SchoolToolClient).
+    """
+
+    def __init__(self, client, url, title=None):
+        """Create an object reference.
+
+            >>> client = SchoolToolClient()
+            >>> obj_ref = ObjectRef(client, 'http://localhost:7001/foo')
+            >>> obj_ref.client is client
+            True
+            >>> obj_ref.title
+            >>> obj_ref.url
+            'http://localhost:7001/foo'
+
+            >>> obj_ref = ObjectRef(client, 'http://localhost:7001/foo', 'Me!')
+            >>> obj_ref.title
+            'Me!'
+
+        """
+        self.client = client
+        self.url = url
+        self.title = title
+
+    def __eq__(self, other):
+        """Compare object references.
+
+            >>> client = SchoolToolClient()
+            >>> other_client = SchoolToolClient()
+            >>> r = ObjectRef(client, '/path/r1', 'Some title')
+            >>> r == ObjectRef(client, '/path/r1', 'Some other title')
+            True
+            >>> r == ObjectRef(client, '/path/r2', 'Some title')
+            False
+            >>> r == ObjectRef(other_client, '/path/r1', 'Some title')
+            False
+            >>> r == 42
+            False
+    
+        """
+        return (type(self) == type(other)
+                and self.client == other.client and self.url == other.url)
+    
+    def __repr__(self):
+        """Return a string representation of the object reference.
+
+            >>> ObjectRef(None, 'http://street.corner:7001/bar', 'A Bar')
+            <ObjectRef A Bar at http://street.corner:7001/bar>
+
+        """
+        return '<%s %s at %s>' % (self.__class__.__name__, self.title,
+                                  self.url)
+
+
+class PersonRef(ObjectRef):
+    """Reference to a person object.
+
+        >>> pr = PersonRef(None, 'http://street.corner:7001/bar', 'A Bar')
+        >>> pr
+        <PersonRef A Bar at http://street.corner:7001/bar>
+
+    References of different types are not equal.
+
+        >>> pr == ObjectRef(None, 'http://street.corner:7001/bar', 'A Bar')
+        False
+
+    """
+
+
+class GroupRef(ObjectRef):
+    """Reference to a group object."""
+
+
+class ResourceRef(ObjectRef):
+    """Reference to a resource object."""
+
+
+class CourseRef(ObjectRef):
+    """Reference to a course object."""
+
+
+class SectionRef(ObjectRef):
+    """Reference to a section object."""
+
+
+#
+# Old-school application object representation
+# XXX mg: will go away *soon*, I promise.  Yes.  Really.  Err.  Yes.
 #
 
 

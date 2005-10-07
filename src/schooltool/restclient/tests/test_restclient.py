@@ -337,7 +337,8 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         self.assertEquals(client.version, '')
         self.assert_(conn.closed)
 
-    def test_getListOfPersons(self):
+    def test_getPersons(self):
+        from schooltool.restclient.restclient import PersonRef
         body = dedent("""
             <container xmlns:xlink="http://www.w3.org/1999/xlink">
               <items>
@@ -347,21 +348,22 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
             </container>
         """)
         client = self.newClient(ResponseStub(200, 'OK', body))
-        results = client.getListOfPersons()
-        expected = [('Fred', '/persons/fred'),
-                    ('Barney', '/persons/barney')]
+        results = client.getPersons()
+        expected = [PersonRef(client, '/persons/fred', 'Fred'),
+                    PersonRef(client, '/persons/barney', 'Barney')]
         self.assertEquals(results, expected)
         self.checkConnPath(client, '/persons')
 
-    def test_getListOfPersons_with_errors(self):
+    def test_getPersons_with_errors(self):
         from schooltool.restclient.restclient import SchoolToolError
         client = self.newClient(error=socket.error(23, 'out of persons'))
-        self.assertRaises(SchoolToolError, client.getListOfPersons)
+        self.assertRaises(SchoolToolError, client.getPersons)
 
         client = self.newClient(ResponseStub(500, 'Internal Error'))
-        self.assertRaises(SchoolToolError, client.getListOfPersons)
+        self.assertRaises(SchoolToolError, client.getPersons)
 
-    def test_getListOfGroups(self):
+    def test_getGroups(self):
+        from schooltool.restclient.restclient import GroupRef
         body = dedent("""
             <container xmlns:xlink="http://www.w3.org/1999/xlink">
               <items>
@@ -371,21 +373,22 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
             </container>
         """)
         client = self.newClient(ResponseStub(200, 'OK', body))
-        results = client.getListOfGroups()
-        expected = [('Fred', '/groups/fred'),
-                    ('Barney', '/groups/barney')]
+        results = client.getGroups()
+        expected = [GroupRef(client, '/groups/fred', 'Fred'),
+                    GroupRef(client, '/groups/barney', 'Barney')]
         self.assertEquals(results, expected)
         self.checkConnPath(client, '/groups')
 
-    def test_getListOfGroups_with_errors(self):
+    def test_getGroups_with_errors(self):
         from schooltool.restclient.restclient import SchoolToolError
         client = self.newClient(error=socket.error(23, 'out of groups'))
-        self.assertRaises(SchoolToolError, client.getListOfGroups)
+        self.assertRaises(SchoolToolError, client.getGroups)
 
         client = self.newClient(ResponseStub(500, 'Internal Error'))
-        self.assertRaises(SchoolToolError, client.getListOfGroups)
+        self.assertRaises(SchoolToolError, client.getGroups)
 
-    def test_getListOfResources(self):
+    def test_getResources(self):
+        from schooltool.restclient.restclient import ResourceRef
         body = dedent("""
             <container xmlns:xlink="http://www.w3.org/1999/xlink">
               <items>
@@ -395,19 +398,19 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
             </container>
         """)
         client = self.newClient(ResponseStub(200, 'OK', body))
-        results = client.getListOfResources()
-        expected = [('Nut', '/resources/nut'),
-                    ('Bolt', '/resources/bolt')]
+        results = client.getResources()
+        expected = [ResourceRef(client, '/resources/nut', 'Nut'),
+                    ResourceRef(client, '/resources/bolt', 'Bolt')]
         self.assertEquals(results, expected)
         self.checkConnPath(client, '/resources')
 
-    def test_getListOfResources_with_errors(self):
+    def test_getResources_with_errors(self):
         from schooltool.restclient.restclient import SchoolToolError
         client = self.newClient(error=socket.error(23, 'out of resources'))
-        self.assertRaises(SchoolToolError, client.getListOfResources)
+        self.assertRaises(SchoolToolError, client.getResources)
 
         client = self.newClient(ResponseStub(500, 'Internal Error'))
-        self.assertRaises(SchoolToolError, client.getListOfResources)
+        self.assertRaises(SchoolToolError, client.getResources)
 
     def test_getGroupInfo(self):
         from schooltool.restclient.restclient import MemberInfo
