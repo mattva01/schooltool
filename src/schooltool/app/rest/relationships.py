@@ -31,11 +31,11 @@ from zope.publisher.interfaces import NotFound
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import ProxyFactory
 
+from schooltool.xmlparsing import XMLDocument
 from schooltool.app.app import getSchoolToolApplication
-from schooltool.relationship.uri import IURIObject
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
-from schooltool.app.rest.xmlparsing import XMLDocument
+from schooltool.relationship.uri import IURIObject
 from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.interfaces import IRelationshipSchema
 from schooltool.relationship.relationship import relate, unrelate

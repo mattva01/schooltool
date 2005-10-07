@@ -45,7 +45,7 @@ from zope.app.traversing.interfaces import ITraversable
 
 from schooltool.testing import setup as sbsetup
 from schooltool.app.app import SimpleNameChooser
-from schooltool.app.rest.xmlparsing import XMLParseError
+from schooltool.xmlparsing import XMLParseError
 from schooltool.group.group import Group
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.group.rest.group import GroupFileFactory, GroupContainerView

@@ -32,7 +32,7 @@ from zope.app.testing import ztapi, setup
 
 from schooltool.person.person import Person
 from schooltool.app.rest.testing import XMLCompareMixin
-from schooltool.app.rest.xmlparsing import XMLDocument
+from schooltool.xmlparsing import XMLDocument
 from schooltool.testing import setup as sbsetup
 
 

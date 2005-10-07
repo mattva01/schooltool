@@ -21,13 +21,14 @@ RESTive views for SchoolToolApplication
 
 $Id: app.py 3419 2005-04-14 18:34:36Z alga $
 """
+
 from zope.app import zapi
 from zope.interface import implements
 from zope.app.container.interfaces import INameChooser
 from zope.app.filerepresentation.interfaces import IFileFactory, IWriteFile
 
+from schooltool.xmlparsing import XMLDocument
 from schooltool.app.rest import View, Template
-from schooltool.app.rest.xmlparsing import XMLDocument
 from schooltool.app.interfaces import IWriteCalendar
 from schooltool.calendar.icalendar import convert_calendar_to_ical
 

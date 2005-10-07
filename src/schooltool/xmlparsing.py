@@ -5,65 +5,32 @@ $Id$
 """
 
 import libxml2
-
 from zope.interface import implements
 from zope.interface.common.interfaces import IException
 
-from schooltool.app.rest.rng import validate_against_schema
+from schooltool.common import UnicodeAwareException
+from schooltool.common import to_unicode
 
 
-class UnicodeAwareException(Exception):
-    r"""Unicode-friendly exception.
+def validate_against_schema(schema, xml):
+    """Return True iff the XML document conforms to the given RelaxNG schema.
 
-    Sadly, the standard Python exceptions deal badly with Unicode strings:
-
-        >>> e = ValueError(u"\u2639")
-        >>> unicode(e)
-        Traceback (most recent call last):
-            ...
-        UnicodeEncodeError: 'ascii' codec can't encode character u'\u2639' in position 0: ordinal not in range(128)
-
-    UnicodeAwareException fixes this problem, so please subclass it for custom
-    SchoolTool exceptions that might be shown to the user and therefore need
-    to be internationalized.
-
-        >>> e1 = UnicodeAwareException(u"\u2639")
-        >>> unicode(e1)
-        u'\u2639'
-
-        >>> e2 = UnicodeAwareException(u"\u2639", e1)
-        >>> unicode(e2)
-        u'\u2639 \u2639'
-
-    See also
-    http://sf.net/tracker/?func=detail&aid=1012952&group_id=5470&atid=355470
+    Raises libxml2.parserError if the document is not well-formed.
     """
 
-    def __unicode__(self):
-        return u" ".join(map(unicode, self.args))
-
-
-def to_unicode(s):
-    r"""Convert an UTF-8 string to Unicode.
-
-    Example:
-
-        >>> to_unicode('\xc4\x84\xc5\xbeuol\xc5\xb3')
-        u'\u0104\u017euol\u0173'
-
-    For convenience, to_unicode accepts None as the argument value.  This makes
-    it easier to use it with libxml2 functions such as nsProp, which return
-    None for missing attribute values.
-
-        >>> to_unicode(None) is None
-        True
-
-    """
-    if s is None:
-        return None
-    else:
-        return unicode(s, 'UTF-8')
-
+    rngp = libxml2.relaxNGNewMemParserCtxt(schema, len(schema))
+    try:
+        rngs = rngp.relaxNGParse()
+        ctxt = rngs.relaxNGNewValidCtxt()
+        doc = libxml2.parseDoc(xml)
+        try:
+            result = doc.relaxNGValidateDoc(ctxt)
+        finally:
+            doc.freeDoc()
+        return result == 0
+    finally:
+        # what does this do?
+        libxml2.relaxNGCleanupTypes()
 
 
 class XMLDocument(object):

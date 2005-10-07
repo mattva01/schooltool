@@ -31,6 +31,8 @@ import schooltool
 from schooltool import person
 from schooltool.app import app, rest
 from schooltool.level import interfaces
+from schooltool.xmlparsing import XMLDocument
+
 
 class PersonHTTPTraverser(object):
 
@@ -162,7 +164,7 @@ class SelectInitialLevelView(rest.View):
 
     def POST(self):
         body = self.request.bodyFile.read()
-        doc = rest.xmlparsing.XMLDocument(body, self.schema)
+        doc = XMLDocument(body, self.schema)
         doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
         node = doc.query('/m:object')[0]
         levels = app.getSchoolToolApplication()['levels']
@@ -207,7 +209,7 @@ class SetLevelOutcomeView(rest.View):
 
     def POST(self):
         body = self.request.bodyFile.read()
-        doc = rest.xmlparsing.XMLDocument(body, self.schema)
+        doc = XMLDocument(body, self.schema)
         doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
         node = doc.query('/m:object')[0]
         zope.security.proxy.removeSecurityProxy(self.context).finish(

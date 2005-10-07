@@ -30,7 +30,7 @@ from zope.publisher.browser import TestRequest
 from schooltool.app.rest.testing import ApplicationObjectViewTestMixin
 from schooltool.app.rest.testing import ContainerViewTestMixin
 from schooltool.app.rest.testing import FileFactoriesSetUp
-from schooltool.app.rest.xmlparsing import XMLParseError
+from schooltool.xmlparsing import XMLParseError
 from schooltool.resource.resource import Resource, ResourceContainer
 from schooltool.resource.rest.resource import ResourceView, ResourceFile
 from schooltool.resource.rest.resource import ResourceContainerView

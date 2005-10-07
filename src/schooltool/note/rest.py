@@ -21,12 +21,12 @@ RESTive views for notes
 
 $Id$
 """
+
 from zope.interface import Interface, Attribute, implements
 from zope.security.checker import ProxyFactory
 
+from schooltool.xmlparsing import XMLDocument
 from schooltool.app.rest import View, Template
-from schooltool.app.rest.xmlparsing import XMLDocument
-
 from schooltool.note.interfaces import INotes
 from schooltool.note.note import Note
 

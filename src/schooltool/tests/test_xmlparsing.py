@@ -17,14 +17,35 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Unit tests for schooltool.app.rest.xmlparsing
+Unit tests for schooltool.xmlparsing
 
 $Id$
 """
 
 import unittest
+import libxml2
 from zope.testing.doctest import DocTestSuite
-from schooltool.app.rest.testing import QuietLibxml2Mixin
+
+
+class QuietLibxml2Mixin:
+    """Text mixin that disables libxml2 error reporting.
+
+    Sadly the API of libxml2 does not allow us to restore the error reporting
+    function in tearDown.  <Insert derogatory comments here>
+    """
+
+    def setUpLibxml2(self):
+        import libxml2
+        libxml2.registerErrorHandler(lambda ctx, error: None, None)
+
+    def tearDownLibxml2(self):
+        import libxml2
+        # It's not possible to restore the error handler that was installed
+        # before (libxml2 API limitation), so we set up a generic one that
+        # prints everything to stdout.
+        def on_error_callback(ctx, msg):
+            sys.stderr.write(msg)
+        libxml2.registerErrorHandler(on_error_callback, None)
 
 
 def test_xpath_context_sharing():
@@ -32,7 +53,7 @@ def test_xpath_context_sharing():
 
     We want to make sure that this sharing does not break XPath queries.
 
-        >>> from schooltool.app.rest.xmlparsing import XMLDocument
+        >>> from schooltool.xmlparsing import XMLDocument
         >>> doc = XMLDocument('''
         ...    <sample>
         ...      <child>
@@ -70,7 +91,7 @@ def test_xpath_context_sharing():
 def test_xpath_namespace_sharing():
     """XMLDocument and XMLNode instances share the same set of namespaces.
 
-        >>> from schooltool.app.rest.xmlparsing import XMLDocument
+        >>> from schooltool.xmlparsing import XMLDocument
         >>> doc = XMLDocument('''
         ...   <sample xmlns="http://example.com/ns/samplens"
         ...           xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -99,7 +120,7 @@ def test_multilevel_query():
     XMLNode.query would pass self instead of self._doc to XMLNodes
     that it created.
 
-        >>> from schooltool.app.rest.xmlparsing import XMLDocument
+        >>> from schooltool.xmlparsing import XMLDocument
         >>> doc = XMLDocument('<a><b><c>d</c></b></a>')
         >>> a = doc.query('a')[0]
         >>> b = a.query('b')[0]
@@ -109,10 +130,11 @@ def test_multilevel_query():
 
     """
 
+
 def test_xmlnode_repr():
     """The XML Node represents itself as the serialized version of the XML.
 
-        >>> from schooltool.app.rest.xmlparsing import XMLDocument
+        >>> from schooltool.xmlparsing import XMLDocument
         >>> doc = XMLDocument('<html><body><h1>Title</h1></body></html>')
         >>> doc.query('html/body/h1')[0]
         '<h1>Title</h1>'
@@ -129,7 +151,7 @@ def test_validate_ill_formed_document():
     validate_against_schema may raise a libxml2.parseError that was not
     caught in XMLDocument.__init__.
 
-        >>> from schooltool.app.rest.xmlparsing import XMLDocument
+        >>> from schooltool.xmlparsing import XMLDocument
         >>> schema = '''
         ...   <grammar xmlns="http://relaxng.org/ns/structure/1.0">
         ...     <start>
@@ -154,16 +176,53 @@ def test_validate_ill_formed_document():
     """
 
 
+class TestRelaxNGValidation(QuietLibxml2Mixin, unittest.TestCase):
+
+    def setUp(self):
+        self.setUpLibxml2()
+
+    def tearDown(self):
+        self.tearDownLibxml2()
+
+    def test_validate_against_schema(self):
+        from schooltool.xmlparsing import validate_against_schema
+        schema = '''<?xml version="1.0" encoding="UTF-8"?>
+            <grammar xmlns="http://relaxng.org/ns/structure/1.0"
+                ns="http://schooltool.org/ns/test"
+                datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+              <start>
+                <element name="foo">
+                    <attribute name="bar">
+                      <text/>
+                    </attribute>
+                </element>
+              </start>
+            </grammar>
+            '''
+
+        xml = '<foo xmlns="http://schooltool.org/ns/test" bar="baz"/>'
+        self.assert_(validate_against_schema(schema, xml))
+
+        badxml = '<foo xmlns="http://schooltool.org/ns/test" baz="baz"/>'
+        self.assert_(not validate_against_schema(schema, badxml))
+
+        notxml = 'who am I?'
+        self.assertRaises(libxml2.parserError,
+                          validate_against_schema, schema, notxml)
+
+
+
 def test_suite():
     suite = unittest.TestSuite()
     mixin = QuietLibxml2Mixin()
-    suite.addTest(DocTestSuite('schooltool.app.rest.xmlparsing',
+    suite.addTest(unittest.makeSuite(TestRelaxNGValidation))
+    suite.addTest(DocTestSuite('schooltool.xmlparsing',
                                setUp=lambda *args: mixin.setUpLibxml2(),
                                tearDown=lambda *args: mixin.tearDownLibxml2()))
-    suite.addTest(DocTestSuite('schooltool.app.rest.tests.test_xmlparsing',
-                               setUp=lambda *args: mixin.setUpLibxml2(),
+    suite.addTest(DocTestSuite(setUp=lambda *args: mixin.setUpLibxml2(),
                                tearDown=lambda *args: mixin.tearDownLibxml2()))
     return suite
+
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

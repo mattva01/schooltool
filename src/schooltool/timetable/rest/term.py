@@ -32,9 +32,9 @@ from zope.app.traversing.api import getPath
 
 from schooltool.calendar.icalendar import ICalReader
 from schooltool.common import parse_date
+from schooltool.xmlparsing import XMLDocument
 from schooltool.app.rest import View
 from schooltool.app.rest.app import GenericContainerView
-from schooltool.app.rest.xmlparsing import XMLDocument
 from schooltool.app.rest.errors import RestError
 
 from schooltool.timetable.term import Term

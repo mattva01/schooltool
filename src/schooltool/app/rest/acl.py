@@ -28,7 +28,7 @@ from zope.security.proxy import ProxyFactory
 from schooltool.app.rest import View, Template
 from schooltool.app.rest.errors import RestError
 from schooltool.app.browser.app import ACLViewBase
-from schooltool.app.rest.xmlparsing import XMLDocument
+from schooltool.xmlparsing import XMLDocument
 
 
 class IACLView(Interface):

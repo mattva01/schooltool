@@ -43,8 +43,8 @@ from zope.app.event.objectevent import ObjectCreatedEvent
 from schooltool.app.rest import View, Template
 from schooltool.app.rest import IRestTraverser
 from schooltool.app.rest.errors import RestError
-from schooltool.app.rest.xmlparsing import XMLDocument
 from schooltool.app.app import getSchoolToolApplication
+from schooltool.xmlparsing import XMLDocument
 from schooltool.common import parse_date, parse_time
 from schooltool.timetable.interfaces import IHaveTimetables, ITimetables
 from schooltool.timetable.interfaces import ITimetableDict

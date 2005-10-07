@@ -21,16 +21,18 @@ HTML Analyzation Tools
 
 $Id$
 """
+
 import sys
 import libxml2
-# XXX: XMLDocument seems to be generally useful.
-from schooltool.app.rest.xmlparsing import XMLDocument
+from schooltool.xmlparsing import XMLDocument
+
 
 def on_error_callback(ctx, msg):
     sys.stderr.write(msg)
 
 
 def queryHTML(xpath, response):
+    """XXX write me a docstring please XXX"""
     # We need to shut up libxml2, so it does not spew errors to stderr.
     libxml2.registerErrorHandler(lambda ctx, error: None, None)
     doc = XMLDocument(libxml2.htmlParseDoc(response, 'utf-8'))
