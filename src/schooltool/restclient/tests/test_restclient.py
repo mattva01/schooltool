@@ -940,7 +940,7 @@ class TestParseFunctions(NiceDiffsMixin, QuietLibxml2Mixin, unittest.TestCase):
         from schooltool.restclient.restclient import _parseRelationships
         from schooltool.restclient.restclient import SchoolToolError
         body = "<This is not XML"
-        self.assertRaises(SchoolToolError, _parseRelationships, body, {})
+        self.assertRaises(XMLParseError, _parseRelationships, body, {})
 
         # Two manage elements
         body = dedent("""

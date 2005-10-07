@@ -29,7 +29,6 @@ import datetime
 import urllib
 import base64
 import cgi
-import libxml2
 
 from schooltool.common import parse_datetime, parse_date, to_unicode
 from schooltool.common import UnicodeAwareException
@@ -467,48 +466,34 @@ def _parseRelationships(body, uriobjects=None):
     if uriobjects is None:
         uriobjects = {}
 
-    try:
-        doc = libxml2.parseDoc(body)
-    except libxml2.parserError:
-        raise SchoolToolError(_("Could not parse relationship list"))
-    ctx = doc.xpathNewContext()
-    try:
-        xlink = "http://www.w3.org/1999/xlink"
-        ctx.xpathRegisterNs("xlink", xlink)
-        xmlns = "http://schooltool.org/ns/model/0.1"
-        ctx.xpathRegisterNs("m", xmlns)
-        res = ctx.xpathEval("/m:relationships/m:existing/m:relationship")
-        relationships = []
-        for node in res:
-            href = to_unicode(node.nsProp('href', xlink))
-            role_uri = to_unicode(node.nsProp('role', xlink))
-            arcrole_uri = to_unicode(node.nsProp('arcrole', xlink))
-            if (not href
-                or not looks_like_a_uri(role_uri)
-                or not looks_like_a_uri(arcrole_uri)):
-                continue
-            title = to_unicode(node.nsProp('title', xlink))
-            if title is None:
-                title = href.split('/')[-1]
-            try:
-                role = uriobjects[role_uri]
-            except KeyError:
-                role = uriobjects[role_uri] = URIObject(role_uri)
-            try:
-                arcrole = uriobjects[arcrole_uri]
-            except KeyError:
-                arcrole = uriobjects[arcrole_uri] = URIObject(arcrole_uri)
-            ctx.setContextNode(node)
-            manage_nodes = ctx.xpathEval("m:manage/@xlink:href")
-            if len(manage_nodes) != 1:
-                raise SchoolToolError(_("Could not parse relationship list"))
-            link_href = to_unicode(manage_nodes[0].content)
-            relationships.append(RelationshipInfo(arcrole, role, title,
-                                                  href, link_href))
-        return relationships
-    finally:
-        doc.freeDoc()
-        ctx.xpathFreeContext()
+    doc = XMLDocument(body)
+    doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
+    doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
+    relationships = []
+    for node in doc.query("/m:relationships/m:existing/m:relationship"):
+        href = node.get('xlink:href')
+        role_uri = node.get('xlink:role')
+        arcrole_uri = node.get('xlink:arcrole')
+        if (not href
+            or not looks_like_a_uri(role_uri)
+            or not looks_like_a_uri(arcrole_uri)):
+            continue
+        title = node.get('xlink:title', href.split('/')[-1])
+        try:
+            role = uriobjects[role_uri]
+        except KeyError:
+            role = uriobjects[role_uri] = URIObject(role_uri)
+        try:
+            arcrole = uriobjects[arcrole_uri]
+        except KeyError:
+            arcrole = uriobjects[arcrole_uri] = URIObject(arcrole_uri)
+        manage_nodes = node.query("m:manage/@xlink:href")
+        if len(manage_nodes) != 1:
+            raise SchoolToolError(_("Could not parse relationship list"))
+        link_href = manage_nodes[0].content
+        relationships.append(RelationshipInfo(arcrole, role, title,
+                                              href, link_href))
+    return relationships
 
 
 def _parsePersonInfo(body):
