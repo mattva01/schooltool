@@ -128,8 +128,8 @@ class ResponseStub:
         return self._headers[name.lower()]
 
 
-class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
-                           unittest.TestCase):
+class SchoolToolClientTestMixin(QuietLibxml2Mixin, XMLCompareMixin,
+                                NiceDiffsMixin):
 
     def setUp(self):
         self.setUpLibxml2()
@@ -145,6 +145,9 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
         client.connectionFactory = factory.create
         client.secureConnectionFactory = factory.createSSL
         return client
+
+
+class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
 
     def newClientMulti(self, responses):
         from schooltool.restclient.restclient import SchoolToolClient
@@ -446,31 +449,6 @@ class TestSchoolToolClient(QuietLibxml2Mixin, XMLCompareMixin, NiceDiffsMixin,
 
         client = self.newClient(ResponseStub(404, 'Not Found'))
         self.assertRaises(SchoolToolError, client.getGroupInfo, group_id)
-
-    def test_getPersonInfo(self):
-        from schooltool.restclient.restclient import PersonInfo
-        body = dedent("""
-            <person xmlns:xlink="http://www.w3.org/1999/xlink"
-                    xmlns="http://schooltool.org/ns/model/0.1">
-              <title>SchoolTool Manager</title>
-              <relationships xlink:type="simple"
-                             xlink:title="Relationships"
-                             xlink:href="/persons/manager/relationships"/>
-              <acl xlink:type="simple" xlink:title="ACL"
-                   xlink:href="/persons/manager/acl"/>
-              <calendar xlink:type="simple" xlink:title="Calendar"
-                        xlink:href="/persons/manager/calendar"/>
-              <relationships xlink:type="simple"
-                             xlink:title="Calendar subscriptions"
-                             xlink:href="/persons/manager/calendar/relationships"/>
-              <acl xlink:type="simple" xlink:title="Calendar ACL"
-                   xlink:href="/persons/manager/calendar/acl"/>
-            </person>
-        """)
-        client = self.newClient(ResponseStub(200, 'OK', body))
-        person_path = '/persons/manager'
-        result = client.getPersonInfo(person_path)
-        self.assertEquals(result.title, 'SchoolTool Manager')
 
     def test_savePersonInfo(self):
         from schooltool.restclient.restclient import PersonInfo
@@ -1093,12 +1071,42 @@ class TestInfoClasses(unittest.TestCase, InfoClassTestMixin):
         self.assertRaises(AssertionError, URIObject, "invalid_uri")
 
 
+class TestPersonRef(SchoolToolClientTestMixin, unittest.TestCase):
+
+    def test_getInfo(self):
+        """A test for PersonRef.getInfo."""
+        from schooltool.restclient.restclient import PersonRef
+        body = dedent("""
+            <person xmlns:xlink="http://www.w3.org/1999/xlink"
+                    xmlns="http://schooltool.org/ns/model/0.1">
+              <title>SchoolTool Manager</title>
+              <relationships xlink:type="simple"
+                             xlink:title="Relationships"
+                             xlink:href="/persons/manager/relationships"/>
+              <acl xlink:type="simple" xlink:title="ACL"
+                   xlink:href="/persons/manager/acl"/>
+              <calendar xlink:type="simple" xlink:title="Calendar"
+                        xlink:href="/persons/manager/calendar"/>
+              <relationships xlink:type="simple"
+                             xlink:title="Calendar subscriptions"
+                             xlink:href="/persons/manager/calendar/relationships"/>
+              <acl xlink:type="simple" xlink:title="Calendar ACL"
+                   xlink:href="/persons/manager/calendar/acl"/>
+            </person>
+        """)
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        ref = PersonRef(client, '/persons/manager')
+        result = ref.getInfo()
+        self.assertEquals(result.title, 'SchoolTool Manager')
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.restclient.restclient'))
     suite.addTest(unittest.makeSuite(TestSchoolToolClient))
     suite.addTest(unittest.makeSuite(TestParseFunctions))
     suite.addTest(unittest.makeSuite(TestInfoClasses))
+    suite.addTest(unittest.makeSuite(TestPersonRef))
     return suite
 
 if __name__ == '__main__':

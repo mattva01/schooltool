@@ -264,16 +264,6 @@ class SchoolToolClient:
                    for member_relationship in member_relationships]
         return GroupInfo(members)
 
-    def getPersonInfo(self, person_path):
-        """Return information about a person.
-
-        Returns a PersonInfo object.
-        """
-        response = self.get(person_path)
-        if response.status != 200:
-            raise ResponseStatusError(response)
-        return _parsePersonInfo(response.read())
-
     def savePersonInfo(self, person_path, person_info):
         """Put a PersonInfo object."""
         path = person_path
@@ -554,11 +544,11 @@ class ObjectRef(object):
             False
             >>> r == 42
             False
-    
+
         """
         return (type(self) == type(other)
                 and self.client == other.client and self.url == other.url)
-    
+
     def __repr__(self):
         """Return a string representation of the object reference.
 
@@ -584,6 +574,16 @@ class PersonRef(ObjectRef):
 
     """
 
+    def getInfo(self):
+        """Return information about a person.
+
+        Returns a PersonInfo object.
+        """
+        response = self.client.get(self.url)
+        if response.status != 200:
+            raise ResponseStatusError(response)
+        return _parsePersonInfo(response.read())
+
 
 class GroupRef(ObjectRef):
     """Reference to a group object."""
@@ -599,6 +599,13 @@ class CourseRef(ObjectRef):
 
 class SectionRef(ObjectRef):
     """Reference to a section object."""
+
+
+class PersonInfo:
+    """An object containing the data for a person."""
+
+    def __init__(self, title=None):
+        self.title = title
 
 
 #
@@ -633,13 +640,6 @@ URIInstructor_uri = 'http://schooltool.org/ns/instruction/instructor'
 URICourseSections_uri = 'http://schooltool.org/ns/coursesections'
 URICourse_uri = 'http://schooltool.org/ns/coursesections/course'
 URISectionOfCourse_uri = 'http://schooltool.org/ns/coursesections/section'
-
-
-class PersonInfo:
-    """An object containing the data for a person"""
-
-    def __init__(self, title=None):
-        self.title = title
 
 
 class GroupInfo:
