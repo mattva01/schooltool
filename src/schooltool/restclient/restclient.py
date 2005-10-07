@@ -25,15 +25,16 @@ Note that all strings used in data objects are Unicode strings.
 
 import httplib
 import socket
-import libxml2
 import datetime
 import urllib
 import base64
 import cgi
+import libxml2
 
 from schooltool.common import parse_datetime, parse_date, to_unicode
 from schooltool.common import UnicodeAwareException
 from schooltool.common import looks_like_a_uri
+from schooltool.xmlparsing import XMLDocument
 from schooltool import SchoolToolMessageID as _
 
 __metaclass__ = type
@@ -447,26 +448,14 @@ def _parseContainer(body):
 
     Returns a list of tuples (object_title, object_href).
     """
-    try:
-        doc = libxml2.parseDoc(body)
-    except libxml2.parserError:
-        raise SchoolToolError(_("Could not parse item list"))
-    ctx = doc.xpathNewContext()
-    try:
-        xlink = "http://www.w3.org/1999/xlink"
-        ctx.xpathRegisterNs("xlink", xlink)
-        res = ctx.xpathEval("/container/items/item[@xlink:href]")
-        items = []
-        for node in res:
-            href = to_unicode(node.nsProp('href', xlink))
-            title = to_unicode(node.nsProp('title', xlink))
-            if title is None:
-                title = href.split('/')[-1]
-            items.append((title, href))
-        return items
-    finally:
-        doc.freeDoc()
-        ctx.xpathFreeContext()
+    doc = XMLDocument(body)
+    doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
+    items = []
+    for node in doc.query("/container/items/item[@xlink:href]"):
+        href = node['xlink:href']
+        title = node.get('xlink:title', href.split('/')[-1])
+        items.append((title, href))
+    return items
 
 
 def _parseRelationships(body, uriobjects=None):
