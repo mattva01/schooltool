@@ -94,6 +94,10 @@ def doctest_viewletClasses():
     Now we can create the viewlet for the resource:
 
       >>> from schooltool.app.browser import skin
+
+      >>> skin.CSSViewlet('style.css')
+      <class 'schooltool.app.browser.skin.CSSViewlet'>
+
       >>> CSSViewletClass = skin.CSSViewlet('style.css')
 
     During the render process the following happens:
@@ -109,6 +113,9 @@ def doctest_viewletClasses():
       >>> class Menu(Resource):
       ...     __name__ = 'menu.js'
       >>> ztapi.browserResource('menu.js', Menu)
+
+      >>> skin.JavaScriptViewlet('menu.js')
+      <class 'schooltool.app.browser.skin.JavaScriptViewlet'>
 
       >>> JSViewletClass = skin.JavaScriptViewlet('menu.js')
       >>> js_viewlet = JSViewletClass(object(), TestRequest(), None)

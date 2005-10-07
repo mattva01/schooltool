@@ -61,11 +61,11 @@ def JavaScriptViewlet(path):
 
 
 def CSSViewlet(path):
-    """Create a viewlet that can simply insert a javascript link."""
+    """Create a viewlet that can simply insert a css link."""
     src = os.path.join(os.path.dirname(__file__), 'templates',
                        'css_viewlet.pt')
 
-    klass = type('JavaScriptViewlet',
+    klass = type('CSSViewlet',
                  (ResourceViewletBase, viewlet.SimpleViewlet),
                   {'index': viewlet.ViewletPageTemplateFile(src),
                    '_path': path})
