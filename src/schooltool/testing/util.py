@@ -24,9 +24,11 @@ $Id$
 __metaclass__ = type
 
 import cgi
+import sets
 import difflib
 import libxml2
 import unittest
+from pprint import pformat
 from StringIO import StringIO
 
 from schooltool.common import dedent  # it used to live here
@@ -74,6 +76,14 @@ def sorted(l):
     l = list(l) # make a copy
     l.sort()
     return l
+
+
+def pformat_set(s):
+    """Pretty-print a Set."""
+    items = list(s)
+    items.sort()
+    return 'sets.Set(%s)' % pformat(items)
+
 
 
 def normalize_xml(xml, recursively_sort=()):
@@ -240,7 +250,6 @@ def normalize_xml(xml, recursively_sort=()):
 def run_unit_tests(testcase):
     r"""Hack to call into unittest from doctests.
 
-        >>> import unittest
         >>> class SampleTestCase(unittest.TestCase):
         ...     def test1(self):
         ...         self.assertEquals(2 + 2, 4)
@@ -269,3 +278,111 @@ def run_unit_tests(testcase):
     result = unittest.TextTestRunner(output).run(testsuite)
     if not result.wasSuccessful():
         print output.getvalue(),
+
+
+
+class _Anything:
+    """An object that is equal to any other object."""
+
+    def __eq__(self, other):
+        return True
+
+    def __ne__(self, other):
+        return False
+
+    def __repr__(self):
+        return 'Anything'
+
+Anything = _Anything()
+
+
+class EqualsSortedMixin:
+    """Mixin that adds a helper method for comparing lists ignoring order."""
+
+    def assertEqualsSorted(self, a, b):
+        x = list(a)
+        y = list(b)
+        x.sort()
+        y.sort()
+        self.assertEquals(x, y)
+
+    assertEqualSorted = assertEqualsSorted
+
+
+class NiceDiffsMixin:
+    """Mixin that changes assertEquals to show a unified diff of pretty-printed
+    values.
+    """
+
+    def assertEquals(self, results, expected, msg=None):
+        if msg is None:
+            if (isinstance(expected, basestring)
+                and isinstance(results, basestring)):
+                msg = "\n" + diff(expected, results)
+            elif (isinstance(expected, sets.Set)
+                and isinstance(results, sets.Set)):
+                msg = "\n" + diff(pformat_set(expected), pformat_set(results))
+            else:
+                msg = "\n" + diff(pformat(expected), pformat(results))
+        unittest.TestCase.assertEquals(self, results, expected, msg)
+
+    assertEqual = assertEquals
+
+
+
+class XMLCompareMixin:
+
+    def assertEqualsXML(self, result, expected, recursively_sort=()):
+        """Assert that two XML documents are equivalent.
+
+        If recursively_sort is given, it is a sequence of tags that
+        will have test:sort="recursively" appended to their attribute lists
+        in 'result' text.  See the docstring for normalize_xml for more
+        information about this attribute.
+        """
+        result = normalize_xml(result, recursively_sort=recursively_sort)
+        expected = normalize_xml(expected, recursively_sort=recursively_sort)
+        self.assertEquals(result, expected, "\n" + diff(expected, result))
+
+    assertEqualXML = assertEqualsXML
+
+
+def compareXML(result, expected, recursively_sort=()):
+    """Compare 2 XML snippets for equality.
+
+    This is a doctest version of XMLCompareMixin.assertEqualsXML.
+
+    If recursively_sort is given, it is a sequence of tags that will have
+    test:sort="recursively" appended to their attribute lists in 'result' text.
+    See the docstring for normalize_xml for more information about this
+    attribute.
+    """
+    result = normalize_xml(result, recursively_sort=recursively_sort)
+    expected = normalize_xml(expected, recursively_sort=recursively_sort)
+    if result == expected:
+        return True
+    else:
+        print diff(expected, result)
+        return False
+
+
+class QuietLibxml2Mixin:
+    """Text mixin that disables libxml2 error reporting.
+
+    Sadly the API of libxml2 does not allow us to restore the error reporting
+    function in tearDown.  <Insert derogatory comments here>
+    """
+
+    def setUpLibxml2(self):
+        import libxml2
+        libxml2.registerErrorHandler(lambda ctx, error: None, None)
+
+    def tearDownLibxml2(self):
+        import libxml2
+        # It's not possible to restore the error handler that was installed
+        # before (libxml2 API limitation), so we set up a generic one that
+        # prints everything to stdout.
+        def on_error_callback(ctx, msg):
+            sys.stderr.write(msg)
+        libxml2.registerErrorHandler(on_error_callback, None)
+

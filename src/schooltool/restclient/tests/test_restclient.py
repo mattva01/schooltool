@@ -28,11 +28,10 @@ import base64
 
 from zope.testing.doctest import DocTestSuite
 
-# XXX this module shouldn't depend on schooltool.app
-from schooltool.app.rest.testing import dedent, diff
-from schooltool.app.rest.testing import XMLCompareMixin
-from schooltool.app.rest.testing import NiceDiffsMixin
-from schooltool.app.rest.testing import QuietLibxml2Mixin
+from schooltool.common import dedent
+from schooltool.testing.util import XMLCompareMixin
+from schooltool.testing.util import NiceDiffsMixin
+from schooltool.testing.util import QuietLibxml2Mixin
 from schooltool.xmlparsing import XMLParseError
 
 __metaclass__ = type
