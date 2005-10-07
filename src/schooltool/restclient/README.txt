@@ -19,10 +19,10 @@ Let us connect to the SchoolTool server running on localhost, port 7001:
     >>> from schooltool.restclient.restclient import SchoolToolClient
     >>> client = SchoolToolClient('localhost', port=7001, ssl=False)
 
-Since we do not want to make actual HTTP connections in a functional test, we'll
-use a stub connectionFactory.
+Since we do not want to make actual HTTP connections in a functional test,
+we'll use a stub connectionFactory.
 
-    >>> from schooltool.restclient.tests import RestConnectionFactory
+    >>> from schooltool.restclient.ftests import RestConnectionFactory
     >>> client.connectionFactory = RestConnectionFactory
 
 We will authenticate as the user 'manager' with password 'schooltool'
@@ -135,12 +135,12 @@ Suppose we need to import a list of users.  Some of the users have photos
 
     >>> data = '''
     ... Person1, username1, password1
-    ... Person5, username5, password5, snukis.jpg
+    ... Person5, username5, password5, face.txt
     ... '''.strip()
 
     >>> import os
-    >>> import schooltool.restclient.tests
-    >>> basedir = os.path.dirname(schooltool.restclient.tests.__file__)
+    >>> import schooltool.restclient.ftests
+    >>> basedir = os.path.dirname(schooltool.restclient.ftests.__file__)
 
     >>> import csv
     >>> for row in csv.reader(data.splitlines()):
