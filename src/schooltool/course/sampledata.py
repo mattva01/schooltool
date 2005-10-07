@@ -38,6 +38,8 @@ from schooltool.app.membership import Membership
 from schooltool.relationship import getRelatedObjects
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable import TimetableActivity
+from schooltool.app.cal import CalendarEvent
+from schooltool.app.interfaces import ISchoolToolCalendar
 
 
 class SampleCourses(object):
@@ -160,3 +162,31 @@ class PopulateSectionTimetables(object):
                     period_id = self.random.choice(timetable[day_id].keys())
                     activity = TimetableActivity(course.title, owner=section)
                     timetable[day_id].add(period_id, activity)
+
+
+class SampleSectionAssignments(object):
+    """A plugin that generates assignments and other events for sections"""
+
+    implements(ISampleDataPlugin)
+
+    name = "section_events"
+
+    dependencies = ('section_timetables', )
+
+    excuses = ('Assignment', 'Quiz', 'Quiz', 'Quiz', 'Homework',
+               'Homework', 'Homework','Homework', 'Test',
+               'Presentation', 'Deadline for essay',
+               'Deadline for project', 'Read the book', 'Lab work', )
+
+    def generate(self, app, seed=None):
+        app = removeSecurityProxy(app)
+        self.random = random.Random()
+        self.random.seed(str(seed) + self.name)
+
+        for section in app['sections'].values():
+            ttcal = ITimetables(section).makeTimetableCalendar()
+            for event in ttcal:
+                if self.random.randrange(13) == 7: # is today lucky?
+                    title = self.random.choice(self.excuses)
+                    ev = CalendarEvent(event.dtstart, event.duration, title)
+                    ISchoolToolCalendar(section).addEvent(ev)

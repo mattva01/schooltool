@@ -106,6 +106,12 @@
         name="section_timetables"
         />
 
+    <utility
+        factory=".sampledata.SampleSectionAssignments"
+        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
+        name="section_events"
+        />
+
   </configure>
 
   <!-- Views -->

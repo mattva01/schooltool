@@ -37,6 +37,8 @@ def setUp(test):
     setup.placefulSetUp()
     setUpRelationships()
     stsetup.setupTimetabling()
+    stsetup.setupCalendaring()
+
 
 def tearDown(test):
     setup.placefulTearDown()
@@ -233,6 +235,82 @@ def doctest_PopulateSectionTimetables():
         Day 6 D Hard Science
 
     """
+
+
+def doctest_SampleSectionAssignments():
+    """A sample data plugin that creates events in section calendars
+
+        >>> from schooltool.course.sampledata import SampleSectionAssignments
+        >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
+        >>> plugin = SampleSectionAssignments()
+        >>> verifyObject(ISampleDataPlugin, plugin)
+        True
+
+    This plugin needs the timetables to be set up for sections, so we
+    need lots of set up:
+
+        >>> plugin.dependencies
+        ('section_timetables',)
+
+        >>> app = stsetup.setupSchoolToolSite()
+
+        >>> from schooltool.course.course import Course
+        >>> from schooltool.course.section import Section
+        >>> s1 = app['sections']['section000'] = Section('section000')
+        >>> s2 = app['sections']['section001'] = Section('section001')
+        >>> s3 = app['sections']['section002'] = Section('section002')
+        >>> c = app['courses']['somecourse'] = Course('Hard Science')
+
+        >>> from schooltool.app.relationships import CourseSections
+        >>> CourseSections(course=c, section=s1)
+        >>> CourseSections(course=c, section=s2)
+        >>> CourseSections(course=c, section=s3)
+
+        >>> from schooltool.timetable.sampledata import SampleTimetableSchema
+        >>> from schooltool.timetable.sampledata import SampleTerms
+        >>> from schooltool.course.sampledata import PopulateSectionTimetables
+        >>> SampleTimetableSchema().generate(app, 42)
+        >>> SampleTerms().generate(app, 42)
+        >>> PopulateSectionTimetables().generate(app, 42)
+
+    Now, Let's run the plugin:
+
+        >>> plugin.generate(app, 42)
+
+    What we get is that the calendars of sections get events in them
+    roughly once in 13 times the group meets.
+
+        >>> from schooltool.app.interfaces import ISchoolToolCalendar
+        >>> len(ISchoolToolCalendar(s1))
+        15
+        >>> len(ISchoolToolCalendar(s2))
+        10
+        >>> len(ISchoolToolCalendar(s3))
+        9
+
+    These events have random titles and times coinciding with section
+    timetable events:
+
+        >>> for ev in sorted(ISchoolToolCalendar(s1)):
+        ...     print ev.dtstart.strftime("%Y-%m-%d %R"), ev.title
+        2005-09-01 13:30 Homework
+        2005-09-02 09:00 Homework
+        2005-10-03 10:00 Deadline for essay
+        2005-10-19 08:00 Homework
+        2005-10-24 10:00 Lab work
+        2005-11-04 08:00 Deadline for essay
+        2005-11-14 10:00 Homework
+        2005-11-17 10:00 Test
+        2006-01-26 11:00 Quiz
+        2006-01-27 13:30 Deadline for essay
+        2006-02-28 11:00 Test
+        2006-03-01 09:00 Lab work
+        2006-03-14 12:30 Read the book
+        2006-03-15 10:00 Lab work
+        2006-04-05 13:30 Lab work
+
+    """
+
 
 def test_suite():
     return unittest.TestSuite([
