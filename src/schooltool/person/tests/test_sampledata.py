@@ -72,6 +72,12 @@ def doctest_SampleStudents():
         Daniela Petersen
         Gabbie Cunningham
 
+    The students get their passwords set the same as their logins:
+
+        >>> for i in range(5):
+        ...     login = 'student%03d' % i
+        ...     assert app['persons'][login].checkPassword(login)
+
     """
 
 
@@ -119,6 +125,12 @@ def doctest_SampleTeachers():
         Helen Patterson
         Iris Laurent
         Philippa Stewart
+
+    The teachers get their passwords set the same as their logins:
+
+        >>> for i in range(5):
+        ...     login = 'teacher%03d' % i
+        ...     assert app['persons'][login].checkPassword(login)
 
     """
 

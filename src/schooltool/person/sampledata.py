@@ -46,8 +46,9 @@ class SampleStudents(object):
         namegen = NameGenerator(str(seed) + self.name)
         for i in range(self.power):
             name = namegen.generate()
-            app['persons']['student%03d' % i] = Person('student%03d' % i,
-                                                       title=name)
+            person_id = 'student%03d' % i
+            app['persons'][person_id] = Person(person_id, title=name)
+            app['persons'][person_id].setPassword(person_id)
 
 
 class SampleTeachers(object):
@@ -64,6 +65,8 @@ class SampleTeachers(object):
         teachers = app['groups']['teachers'] = Group(title='Teachers')
         for i in range(self.power):
             name = namegen.generate()
-            person = Person('teacher%03d' % i, title=name)
+            person_id = 'teacher%03d' % i
+            person = Person(person_id, title=name)
+            person.setPassword(person_id)
             teachers.members.add(person)
-            app['persons']['teacher%03d' % i] = person
+            app['persons'][person_id] = person
