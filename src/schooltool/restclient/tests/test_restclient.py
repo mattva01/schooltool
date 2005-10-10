@@ -251,6 +251,62 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(client.status, 'out of spam (23)')
         self.assertEquals(client.version, '')
 
+    def doctest_canonizeUrl(self):
+        """A test for SchoolToolClient.canonizeUrl
+
+            >>> from schooltool.restclient.restclient import SchoolToolClient
+            >>> client = SchoolToolClient()
+
+            >>> client.canonizeUrl("http://localhost:7001")
+            '/'
+
+            >>> client.canonizeUrl("/")
+            '/'
+
+            >>> client.canonizeUrl("http://localhost:7001/persons/john")
+            '/persons/john'
+
+            >>> client.canonizeUrl("http://localhost:7001/")
+            '/'
+
+            >>> client.canonizeUrl("http://localhost:7001")
+            '/'
+
+            >>> client.canonizeUrl("http://foo.com:7001/persons/john")
+            Traceback (most recent call last):
+              ...
+            SchoolToolError: won't follow external URL http://foo.com:7001/persons/john
+
+        """
+
+    def doctest_canonizeUrl_default_ports(self):
+        """A test for SchoolToolClient.canonizeUrl
+
+            >>> from schooltool.restclient.restclient import SchoolToolClient
+            >>> client = SchoolToolClient(port=80)
+
+            >>> client.canonizeUrl("http://localhost")
+            '/'
+
+            >>> client.canonizeUrl("http://localhost/persons/john")
+            '/persons/john'
+
+            >>> client.canonizeUrl("http://localhost:80/persons/john")
+            '/persons/john'
+
+            >>> client = SchoolToolClient(port=443, ssl=True)
+
+            >>> client.canonizeUrl("https://localhost")
+            '/'
+
+            >>> client.canonizeUrl("https://localhost/persons/john")
+            '/persons/john'
+
+            >>> client.canonizeUrl("https://localhost:443/persons/john")
+            '/persons/john'
+
+        """
+
     def test_request(self):
         from schooltool.restclient.restclient import SchoolToolClient
         path = '/path'
@@ -340,6 +396,16 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(client.status, "out of spam (23)")
         self.assertEquals(client.version, '')
         self.assert_(conn.closed)
+
+    def test_request_absolute_url(self):
+        response = ResponseStub(200, 'OK')
+        client = self.newClient(response)
+        result = client._request('GET', 'http://localhost:7001/test/me')
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.server, 'localhost')
+        self.assertEquals(conn.port, 7001)
+        self.assertEquals(conn.method, 'GET')
+        self.assertEquals(conn.path, '/test/me')
 
     def test_getPersons(self):
         from schooltool.restclient.restclient import PersonRef
@@ -704,6 +770,32 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
                 location='http://localhost/persons/john/relationships/004'))
         result = client.createRelationship('/persons/john', '/groups/teachers',
                                            URIMembership_uri, URIGroup_uri)
+        self.assertEquals(result, '/persons/john/relationships/004')
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/persons/john/relationships')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        expected = """
+            <relationship xmlns="http://schooltool.org/ns/model/0.1"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xlink:type="simple"
+                 xlink:href="/groups/teachers"
+                 xlink:arcrole="http://schooltool.org/ns/membership"
+                 xlink:role="http://schooltool.org/ns/membership/group"
+                 />
+                 """
+        self.assertEqualsXML(conn.body, expected)
+
+    def test_createRelationship_absolute_urls(self):
+        from schooltool.restclient.restclient import URIObject
+        from schooltool.restclient.restclient import URIMembership_uri
+        from schooltool.restclient.restclient import URIGroup_uri
+        client = self.newClient(ResponseStub(201, 'Created',
+                location='http://localhost/persons/john/relationships/004'))
+        result = client.createRelationship(
+                    'http://localhost:7001/persons/john',
+                    'http://localhost:7001/groups/teachers',
+                    URIMembership_uri, URIGroup_uri)
         self.assertEquals(result, '/persons/john/relationships/004')
         conn = self.oneConnection(client)
         self.assertEquals(conn.path, '/persons/john/relationships')
@@ -1102,6 +1194,7 @@ class TestPersonRef(SchoolToolClientTestMixin, unittest.TestCase):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.restclient.restclient'))
+    suite.addTest(DocTestSuite())
     suite.addTest(unittest.makeSuite(TestSchoolToolClient))
     suite.addTest(unittest.makeSuite(TestResponse))
     suite.addTest(unittest.makeSuite(TestParseFunctions))

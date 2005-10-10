@@ -27,6 +27,7 @@ import httplib
 import socket
 import datetime
 import urllib
+import urlparse
 import base64
 import cgi
 
@@ -138,48 +139,72 @@ class SchoolToolClient:
             # self.status has been set and will be shown on the status bar
             pass
 
-    def get(self, path, headers=None):
-        """Perform an HTTP GET request for a given path.
+    def get(self, url, headers=None):
+        """Perform an HTTP GET request for a given URL.
 
         Returns the response object.
 
         Sets status and version attributes if the communication succeeds.
         Raises SchoolToolError if the communication fails.
         """
-        return self._request('GET', path, headers=headers)
+        return self._request('GET', url, headers=headers)
 
-    def post(self, path, body, headers=None):
-        """Perform an HTTP POST request for a given path.
-
-        Returns the response object.
-
-        Sets status and version attributes if the communication succeeds.
-        Raises SchoolToolError if the communication fails.
-        """
-        return self._request('POST', path, body, headers=headers)
-
-    def put(self, path, body, headers=None):
-        """Perform an HTTP PUT request for a given path.
+    def post(self, url, body, headers=None):
+        """Perform an HTTP POST request for a given url.
 
         Returns the response object.
 
         Sets status and version attributes if the communication succeeds.
         Raises SchoolToolError if the communication fails.
         """
-        return self._request('PUT', path, body, headers=headers)
+        return self._request('POST', url, body, headers=headers)
 
-    def delete(self, path, headers=None):
-        """Perform an HTTP DELETE request for a given path.
+    def put(self, url, body, headers=None):
+        """Perform an HTTP PUT request for a given url.
 
         Returns the response object.
 
         Sets status and version attributes if the communication succeeds.
         Raises SchoolToolError if the communication fails.
         """
-        return self._request('DELETE', path, '', headers=headers)
+        return self._request('PUT', url, body, headers=headers)
 
-    def _request(self, method, path, body=None, headers=None):
-        """Perform an HTTP request for a given path.
+    def delete(self, url, headers=None):
+        """Perform an HTTP DELETE request for a given url.
+
+        Returns the response object.
+
+        Sets status and version attributes if the communication succeeds.
+        Raises SchoolToolError if the communication fails.
+        """
+        return self._request('DELETE', url, '', headers=headers)
+
+    def canonizeUrl(self, url):
+        """Converts absolute urls to relative, leaving relative urls untouched.
+
+            >>> client = SchoolToolClient()
+            >>> client.canonizeUrl("/persons/john")
+            '/persons/john'
+            >>> client.canonizeUrl("http://localhost:7001/persons/john")
+            '/persons/john'
+
+        """
+        scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
+        my_scheme = self.ssl and "https" or "http"
+        my_netloc = "%s:%s" % (self.server, self.port)
+        if netloc == self.server:
+            netloc = "%s:%s" % (self.server, self.ssl and 443 or 80)
+        if scheme not in ('', my_scheme) or netloc not in ('', my_netloc):
+            raise SchoolToolError("won't follow external URL %s" % url)
+        if not path:
+            path = '/'
+        return urlparse.urlunsplit(('', '', path, query, fragment))
+
+    def _request(self, method, url, body=None, headers=None):
+        """Perform an HTTP request for a given URL.
+
+        The URL can be an absolute path (e.g. '/persons'), or a full
+        absolute URL, but only if it points to the right server.
 
         Returns the response object.
 
@@ -204,6 +229,7 @@ class SchoolToolClient:
                 hdrs['Authorization'] = creds
             if headers:
                 hdrs.update(headers)
+            path = self.canonizeUrl(url)
             conn.request(method, path, body, hdrs)
             response = Response(conn.getresponse())
             conn.close()
@@ -252,39 +278,38 @@ class SchoolToolClient:
         return [ResourceRef(self, url, title)
                 for title, url in _parseContainer(response.read())]
 
-    def getGroupInfo(self, group_path):
+    def getGroupInfo(self, group_url):
         """Return information page about a group.
 
         Returns a GroupInfo object.
         """
-        relationships = self.getObjectRelationships(group_path)
+        relationships = self.getObjectRelationships(group_url)
         member_relationships = [relationship for relationship in relationships
                                 if relationship.role.uri == URIMember_uri]
         members = [MemberInfo(member_relationship.target_path)
                    for member_relationship in member_relationships]
         return GroupInfo(members)
 
-    def savePersonInfo(self, person_path, person_info):
+    def savePersonInfo(self, person_url, person_info):
         """Put a PersonInfo object."""
-        path = person_path
         body = """
             <object xmlns:xlink="http://www.w3.org/1999/xlink"
                     xmlns="http://schooltool.org/ns/model/0.1"
                     title="%s" />
         """ % to_xml(person_info.title)
 
-        response = self.put(path, body)
+        response = self.put(person_url, body)
         if response.status / 100 != 2:
             raise ResponseStatusError(response)
 
-    def getPersonPhoto(self, person_path):
+    def getPersonPhoto(self, person_url):
         """Return the photo of a person.
 
         Returns an 8-bit string with JPEG data.
 
         Returns None if the person does not have a photo.
         """
-        response = self.get(person_path + '/photo')
+        response = self.get(person_url + '/photo')
         if response.status == 404:
             return None
         elif response.status != 200:
@@ -292,30 +317,30 @@ class SchoolToolClient:
         else:
             return response.read()
 
-    def savePersonPhoto(self, person_path, person_photo):
+    def savePersonPhoto(self, person_url, person_photo):
         """Upload a photo for a person.
 
         photo should be an 8-bit string with image data.
         """
-        path = person_path + '/photo'
-        response = self.put(path, person_photo,
+        url = person_url + '/photo'
+        response = self.put(url, person_photo,
                         headers={'Content-Type': 'application/octet-stream'})
         if response.status / 100 != 2:
             raise ResponseStatusError(response)
 
-    def removePersonPhoto(self, person_path):
+    def removePersonPhoto(self, person_url):
         """Remove a person's photo."""
-        path = person_path + '/photo'
-        response = self.delete(path)
+        url = person_url + '/photo'
+        response = self.delete(url)
         if response.status / 100 != 2:
             raise ResponseStatusError(response)
 
-    def getObjectRelationships(self, object_path):
+    def getObjectRelationships(self, object_url):
         """Return relationships of an application object (group or person).
 
         Returns a list of RelationshipInfo objects.
         """
-        response = self.get('%s/relationships' % object_path)
+        response = self.get('%s/relationships' % object_url)
         if response.status != 200:
             raise ResponseStatusError(response)
         return _parseRelationships(response.read())
@@ -323,7 +348,7 @@ class SchoolToolClient:
     def getTerms(self):
         """Return a list of terms.
 
-        Returns a sequence of tuples (term_title, term_path).
+        Returns a sequence of tuples (term_title, term_url).
         """
         response = self.get("/terms")
         if response.status != 200:
@@ -333,7 +358,7 @@ class SchoolToolClient:
     def getTimetableSchemas(self):
         """Return a list of timetable schemas.
 
-        Returns a sequence of tuples (term_title, term_path).
+        Returns a sequence of tuples (term_title, term_url).
         """
         response = self.get("/ttschemas")
         if response.status != 200:
@@ -344,17 +369,17 @@ class SchoolToolClient:
         body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
                 ' title="%s"/>' % to_xml(person_title))
 
-        path = '/persons/' + name
-        response = self.put(path, body)
+        url = '/persons/' + name
+        response = self.put(url, body)
 
         if response.status != 201:
             raise ResponseStatusError(response)
 
         if password is not None:
-            response = self.put(path + '/password', password)
+            response = self.put(url + '/password', password)
             if response.status != 200:
                 raise ResponseStatusError(response)
-        return path
+        return url
 
     def changePassword(self, username, new_password):
         """Change the password for a persons."""
@@ -372,7 +397,7 @@ class SchoolToolClient:
             raise ResponseStatusError(response)
         return self._pathFromResponse(response)
 
-    def createRelationship(self, obj1_path, obj2_path, reltype, obj2_role):
+    def createRelationship(self, obj1_url, obj2_url, reltype, obj2_role):
         """Create a relationship between two objects.
 
         reltype and obj2_role are simple string URIs, not URIObjects.
@@ -381,6 +406,8 @@ class SchoolToolClient:
           client.createRelationship('/persons/john', '/groups/teachers',
                                     URIMembership_uri, URIMember_uri)
         """
+        obj1_path = self.canonizeUrl(obj1_url)
+        obj2_path = self.canonizeUrl(obj2_url)
         body = ('<relationship xmlns="http://schooltool.org/ns/model/0.1"'
                 ' xmlns:xlink="http://www.w3.org/1999/xlink"'
                 ' xlink:type="simple"'
@@ -398,9 +425,9 @@ class SchoolToolClient:
         slash = location.index('/', slashslash + 2)
         return location[slash:]
 
-    def deleteObject(self, object_path):
+    def deleteObject(self, object_url):
         """Delete an object."""
-        response = self.delete(object_path)
+        response = self.delete(object_url)
         if response.status != 200:
             raise ResponseStatusError(response)
 
