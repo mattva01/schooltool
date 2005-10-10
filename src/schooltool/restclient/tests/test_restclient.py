@@ -407,6 +407,32 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(conn.method, 'GET')
         self.assertEquals(conn.path, '/test/me')
 
+    def test_getContainerItems(self):
+        body = dedent("""
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <items>
+                <item xlink:href="/objects/dumdum1" xlink:title="Dum" />
+                <item xlink:href="/objects/damdam2" xlink:title="Dam"/>
+              </items>
+            </container>
+        """)
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        results = client.getContainerItems('/objects', lambda *args: args)
+        expected = [(client, '/objects/dumdum1', 'Dum'),
+                    (client, '/objects/damdam2', 'Dam')]
+        self.assertEquals(results, expected)
+        self.checkConnPath(client, '/objects')
+
+    def test_getContainerItems_with_errors(self):
+        from schooltool.restclient.restclient import SchoolToolError
+        client = self.newClient(error=socket.error(23, 'out of objects'))
+        self.assertRaises(SchoolToolError, client.getContainerItems, '/persons',
+                          lambda *args: args)
+
+        client = self.newClient(ResponseStub(500, 'Internal Error'))
+        self.assertRaises(SchoolToolError, client.getContainerItems, '/persons',
+                          lambda *args: args)
+
     def test_getPersons(self):
         from schooltool.restclient.restclient import PersonRef
         body = dedent("""
@@ -423,14 +449,6 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
                     PersonRef(client, '/persons/barney', 'Barney')]
         self.assertEquals(results, expected)
         self.checkConnPath(client, '/persons')
-
-    def test_getPersons_with_errors(self):
-        from schooltool.restclient.restclient import SchoolToolError
-        client = self.newClient(error=socket.error(23, 'out of persons'))
-        self.assertRaises(SchoolToolError, client.getPersons)
-
-        client = self.newClient(ResponseStub(500, 'Internal Error'))
-        self.assertRaises(SchoolToolError, client.getPersons)
 
     def test_getGroups(self):
         from schooltool.restclient.restclient import GroupRef
@@ -481,6 +499,40 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
 
         client = self.newClient(ResponseStub(500, 'Internal Error'))
         self.assertRaises(SchoolToolError, client.getResources)
+
+    def test_getSections(self):
+        from schooltool.restclient.restclient import SectionRef
+        body = dedent("""
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <items>
+                <item xlink:href="/sections/history1a" xlink:title="History 1A" />
+                <item xlink:href="/sections/history2a" xlink:title="History 2A"/>
+              </items>
+            </container>
+        """)
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        results = client.getSections()
+        expected = [SectionRef(client, '/sections/history1a', 'History 1A'),
+                    SectionRef(client, '/sections/history2a', 'History 2A')]
+        self.assertEquals(results, expected)
+        self.checkConnPath(client, '/sections')
+
+    def test_getCourses(self):
+        from schooltool.restclient.restclient import CourseRef
+        body = dedent("""
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <items>
+                <item xlink:href="/courses/history" xlink:title="History" />
+                <item xlink:href="/courses/english" xlink:title="English"/>
+              </items>
+            </container>
+        """)
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        results = client.getCourses()
+        expected = [CourseRef(client, '/courses/history', 'History'),
+                    CourseRef(client, '/courses/english', 'English')]
+        self.assertEquals(results, expected)
+        self.checkConnPath(client, '/courses')
 
     def test_savePersonInfo(self):
         from schooltool.restclient.restclient import PersonInfo

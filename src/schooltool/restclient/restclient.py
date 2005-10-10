@@ -245,38 +245,51 @@ class SchoolToolClient:
 
     # SchoolTool specific methods
 
+    def getContainerItems(self, url, ref_class):
+        """Parse an XML representation of a container.
+
+        Returns a sequence of ref_class items.
+        """
+        response = self.get(url)
+        if response.status != 200:
+            raise ResponseStatusError(response)
+        return [ref_class(self, url, title)
+                for title, url in _parseContainer(response.read())]
+
     def getPersons(self):
         """Return the list of all persons.
 
         Returns a sequence of PersonRef objects.
         """
-        response = self.get('/persons')
-        if response.status != 200:
-            raise ResponseStatusError(response)
-        return [PersonRef(self, url, title)
-                for title, url in _parseContainer(response.read())]
+        return self.getContainerItems('/persons', PersonRef)
 
     def getGroups(self):
         """Return the list of all groups.
 
         Returns a sequence of GroupRef objects.
         """
-        response = self.get('/groups')
-        if response.status != 200:
-            raise ResponseStatusError(response)
-        return [GroupRef(self, url, title)
-                for title, url in _parseContainer(response.read())]
+        return self.getContainerItems('/groups', GroupRef)
 
     def getResources(self):
         """Return the list of all resources.
 
         Returns a sequence of ResourceRef objects.
         """
-        response = self.get('/resources')
-        if response.status != 200:
-            raise ResponseStatusError(response)
-        return [ResourceRef(self, url, title)
-                for title, url in _parseContainer(response.read())]
+        return self.getContainerItems('/resources', ResourceRef)
+
+    def getSections(self):
+        """Return the list of all sections.
+
+        Returns a sequence of SectionRef objects.
+        """
+        return self.getContainerItems('/sections', SectionRef)
+
+    def getCourses(self):
+        """Return the list of all courses.
+
+        Returns a sequence of CourseRef objects.
+        """
+        return self.getContainerItems('/courses', CourseRef)
 
     def savePersonInfo(self, person_url, person_info):
         """Put a PersonInfo object."""
