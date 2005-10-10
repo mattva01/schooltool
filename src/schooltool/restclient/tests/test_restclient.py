@@ -511,17 +511,6 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         client = self.newClient(ResponseStub(401, 'Unauthorized', 'errmsg'))
         self.assertRaises(SchoolToolError, client.getPersonPhoto, '/persons/x')
 
-    def test_savePersonPhoto(self):
-        body = "[pretend this is JPEG]"
-        client = self.newClient(ResponseStub(200, 'OK', 'Uploaded'))
-        client.savePersonPhoto('/persons/jfk', body)
-        conn = self.oneConnection(client)
-        self.assertEqualsXML(conn.body, body)
-        self.assertEquals(conn.path, '/persons/jfk/photo')
-        self.assertEquals(conn.headers['Content-Type'],
-                          'application/octet-stream')
-        self.assertEquals(conn.method, "PUT")
-
     def test_removePersonPhoto(self):
         client = self.newClient(ResponseStub(200, 'OK', 'Deleted'))
         client.removePersonPhoto('/persons/jfk')
@@ -641,11 +630,13 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertRaises(SchoolToolError, client.getTimetableSchemas)
 
     def test_createPerson(self):
+        from schooltool.restclient.restclient import PersonRef
         client = self.newClient(
             ResponseStub(201, 'OK', 'Created',
                          location='http://localhost/persons/john'))
         result = client.createPerson('John "mad cat" Doe', "john")
-        self.assertEquals(result, '/persons/john')
+        expected = PersonRef(client, '/persons/john', 'John "mad cat" Doe')
+        self.assertEquals(result, expected)
         conn = self.oneConnection(client)
         self.assertEquals(conn.path, '/persons/john')
         self.assertEquals(conn.method, 'PUT')
@@ -659,7 +650,8 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
                          location=('http://localhost/persons/root')),
             ResponseStub(200, 'OK', 'Password set')])
         result = client.createPerson('John "mad cat" Doe', "root", "foo")
-        self.assertEquals(result, '/persons/root')
+        expected = PersonRef(client, '/persons/root', 'John "mad cat" Doe')
+        self.assertEquals(result, expected)
         self.assertEquals(len(client._connections), 2)
         conn = client._connections[0]
         self.assertEquals(conn.path, '/persons/root')
@@ -678,22 +670,6 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         client = self.newClient(ResponseStub(400, 'Bad Request'))
         self.assertRaises(SchoolToolError, client.createPerson,
                           'John Doe', 'john')
-
-    def test_changePassword(self):
-        from schooltool.restclient.restclient import SchoolToolError
-        client = self.newClient(ResponseStub(200, 'OK', 'Password set'))
-        client.changePassword('luser1', 'wp')
-        conn = self.oneConnection(client)
-        self.assertEquals(conn.path, '/persons/luser1/password')
-        self.assertEquals(conn.method, 'PUT')
-        self.assertEquals(conn.headers['Content-Type'], 'text/plain')
-        self.assertEqualsXML(conn.body, 'wp')
-
-    def test_changePassword_with_errors(self):
-        from schooltool.restclient.restclient import SchoolToolError
-        client = self.newClient(ResponseStub(400, 'Bad Request'))
-        self.assertRaises(SchoolToolError,
-                          client.changePassword, 'luser1', 'wp')
 
     def test_createGroup(self):
         client = self.newClient(ResponseStub(201, 'OK', 'Created',
@@ -1177,6 +1153,52 @@ class TestPersonRef(SchoolToolClientTestMixin, unittest.TestCase):
         ref = PersonRef(client, '/persons/manager')
         result = ref.getInfo()
         self.assertEquals(result.title, 'SchoolTool Manager')
+
+    def test_setPassword(self):
+        from schooltool.restclient.restclient import SchoolToolError
+        from schooltool.restclient.restclient import PersonRef
+        client = self.newClient(ResponseStub(200, 'OK', 'Password set'))
+        ref = PersonRef(client, '/persons/luser1')
+        ref.setPassword('wp')
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/persons/luser1/password')
+        self.assertEquals(conn.method, 'PUT')
+        self.assertEquals(conn.headers['Content-Type'], 'text/plain')
+        self.assertEqualsXML(conn.body, 'wp')
+
+    def test_setPassword_with_errors(self):
+        from schooltool.restclient.restclient import SchoolToolError
+        from schooltool.restclient.restclient import PersonRef
+        client = self.newClient(ResponseStub(400, 'Bad Request'))
+        ref = PersonRef(client, '/persons/luser1')
+        self.assertRaises(SchoolToolError,
+                          ref.setPassword, 'wp')
+
+    def test_setPhoto(self):
+        from schooltool.restclient.restclient import PersonRef
+        body = "[pretend this is JPEG]"
+        client = self.newClient(ResponseStub(200, 'OK', 'Uploaded'))
+        ref = PersonRef(client, '/persons/jfk')
+        ref.setPhoto(body)
+        conn = self.oneConnection(client)
+        self.assertEqualsXML(conn.body, body)
+        self.assertEquals(conn.path, '/persons/jfk/photo')
+        self.assertEquals(conn.headers['Content-Type'],
+                          'application/octet-stream')
+        self.assertEquals(conn.method, "PUT")
+
+    def test_setPhoto_alternative_content_type(self):
+        from schooltool.restclient.restclient import PersonRef
+        body = "[pretend this is PNG]"
+        client = self.newClient(ResponseStub(200, 'OK', 'Uploaded'))
+        ref = PersonRef(client, '/persons/jfk')
+        ref.setPhoto(body, 'image/png')
+        conn = self.oneConnection(client)
+        self.assertEqualsXML(conn.body, body)
+        self.assertEquals(conn.path, '/persons/jfk/photo')
+        self.assertEquals(conn.headers['Content-Type'],
+                          'image/png')
+        self.assertEquals(conn.method, "PUT")
 
 
 class TestGroupRef(SchoolToolClientTestMixin, unittest.TestCase):

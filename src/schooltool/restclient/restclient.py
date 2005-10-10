@@ -305,17 +305,6 @@ class SchoolToolClient:
         else:
             return response.read()
 
-    def savePersonPhoto(self, person_url, person_photo):
-        """Upload a photo for a person.
-
-        photo should be an 8-bit string with image data.
-        """
-        url = person_url + '/photo'
-        response = self.put(url, person_photo,
-                        headers={'Content-Type': 'application/octet-stream'})
-        if response.status / 100 != 2:
-            raise ResponseStatusError(response)
-
     def removePersonPhoto(self, person_url):
         """Remove a person's photo."""
         url = person_url + '/photo'
@@ -367,14 +356,7 @@ class SchoolToolClient:
             response = self.put(url + '/password', password)
             if response.status != 200:
                 raise ResponseStatusError(response)
-        return url
-
-    def changePassword(self, username, new_password):
-        """Change the password for a persons."""
-        response = self.put('/persons/%s/password' % username, new_password,
-                            headers={'Content-Type': 'text/plain'})
-        if response.status != 200:
-            raise ResponseStatusError(response)
+        return PersonRef(self, url, person_title)
 
     def createGroup(self, title, description=""):
         body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
@@ -611,6 +593,25 @@ class PersonRef(ObjectRef):
         if response.status != 200:
             raise ResponseStatusError(response)
         return _parsePersonInfo(response.read())
+
+    def setPassword(self, new_password):
+        """Change the password for this person."""
+        response = self.client.put('%s/password' % self.url, new_password,
+                                   headers={'Content-Type': 'text/plain'})
+        if response.status != 200:
+            raise ResponseStatusError(response)
+
+    def setPhoto(self, photo, content_type='application/octet-stream'):
+        """Upload a photo for a person.
+
+        photo should be an 8-bit string with image data.
+        """
+        url = self.url + '/photo'
+        response = self.client.put(url, photo,
+                                   headers={'Content-Type':
+                                            content_type})
+        if response.status not in (200, 201):
+            raise ResponseStatusError(response)
 
 
 class GroupRef(ObjectRef):
