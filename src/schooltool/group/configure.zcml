@@ -45,4 +45,19 @@
   <include package=".browser" />
   <include package=".rest" />
 
+  <!-- sample data -->
+  <configure
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      zcml:condition="have devmode">
+
+    <utility
+        factory=".sampledata.SampleGroups"
+        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
+        name="groups"
+        />
+
+  </configure>
+
+
+  
 </configure>
