@@ -642,6 +642,21 @@ class TestTimetableCSVImporter(unittest.TestCase):
         self.assertEquals(translate(imp.errors.generic[0]),
                           'Incomplete section description on line 5')
 
+    def test_importChunk_errors_location_issue424(self):
+        # Regression test for issue 424 (UnboundLocal error in importChunk)
+        # importChunk used to fail if it encountered an invalid location
+        # that was already flagged as invalid.
+        lines = [['relativity_theory', 'einstein'],
+                 ['Monday', 'A', 'location z']]
+        imp = self.createImporter(term='fall', ttschema='three-day')
+        imp.errors.locations.append('location z') # record invalid location
+        imp.importChunk(lines, line=5)
+        self.assertEquals(imp.errors.day_ids, [])
+        self.assertEquals(imp.errors.periods, [])
+        self.assertEquals(imp.errors.locations, ['location z'])
+        self.assertEquals(translate(imp.errors.generic[0]),
+                          'Incomplete section description on line 5')
+
     def test_importChunk_errors_wrong_period_descr(self):
         # miss out on the period id
         lines = [['relativity_theory', 'einstein'],

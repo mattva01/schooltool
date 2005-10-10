@@ -362,8 +362,8 @@ class TimetableCSVImporter(object):
                 try:
                     location = self.app['resources'][location_id]
                 except KeyError:
+                    location = invalid_location
                     if location_id not in self.errors.locations:
-                        location = invalid_location
                         self.errors.locations.append(location_id)
             else:
                 location = None
