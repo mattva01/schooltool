@@ -40,7 +40,8 @@ from schooltool.app.membership import Membership, URIMember, URIGroup
 from schooltool.app.app import SimpleNameChooser
 from schooltool.relationship.annotatable import getRelationshipLinks
 from schooltool.group.interfaces import IGroupContainer
-from schooltool.app.rest.testing import XMLCompareMixin, QuietLibxml2Mixin
+from schooltool.testing.util import XMLCompareMixin
+from schooltool.testing.util import QuietLibxml2Mixin
 from schooltool.xmlparsing import XMLParseError
 from schooltool.xmlparsing import XMLValidationError
 from schooltool.testing import setup as sbsetup

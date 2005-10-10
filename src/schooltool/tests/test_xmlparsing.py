@@ -25,27 +25,7 @@ $Id$
 import unittest
 import libxml2
 from zope.testing.doctest import DocTestSuite
-
-
-class QuietLibxml2Mixin:
-    """Text mixin that disables libxml2 error reporting.
-
-    Sadly the API of libxml2 does not allow us to restore the error reporting
-    function in tearDown.  <Insert derogatory comments here>
-    """
-
-    def setUpLibxml2(self):
-        import libxml2
-        libxml2.registerErrorHandler(lambda ctx, error: None, None)
-
-    def tearDownLibxml2(self):
-        import libxml2
-        # It's not possible to restore the error handler that was installed
-        # before (libxml2 API limitation), so we set up a generic one that
-        # prints everything to stdout.
-        def on_error_callback(ctx, msg):
-            sys.stderr.write(msg)
-        libxml2.registerErrorHandler(on_error_callback, None)
+from schooltool.testing.util import QuietLibxml2Mixin
 
 
 def test_xpath_context_sharing():
@@ -209,7 +189,6 @@ class TestRelaxNGValidation(QuietLibxml2Mixin, unittest.TestCase):
         notxml = 'who am I?'
         self.assertRaises(libxml2.parserError,
                           validate_against_schema, schema, notxml)
-
 
 
 def test_suite():

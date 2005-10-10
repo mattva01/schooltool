@@ -28,7 +28,7 @@ from StringIO import StringIO
 from zope.publisher.browser import TestRequest
 from zope.app.testing import setup, ztapi
 
-from schooltool.app.rest.testing import XMLCompareMixin
+from schooltool.testing.util import XMLCompareMixin
 from schooltool.testing import setup as sbsetup
 
 

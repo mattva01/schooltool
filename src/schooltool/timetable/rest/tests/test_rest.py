@@ -37,7 +37,7 @@ from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 
-from schooltool.app.rest.testing import XMLCompareMixin
+from schooltool.testing.util import XMLCompareMixin
 from schooltool.testing import setup as sbsetup
 from schooltool.timetable import TimetablesAdapter
 from schooltool.timetable.interfaces import ITimetables

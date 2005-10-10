@@ -32,7 +32,7 @@ from zope.interface.verify import verifyObject
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.testing import ztapi
 
-from schooltool.app.rest.testing import NiceDiffsMixin
+from schooltool.testing.util import NiceDiffsMixin
 from schooltool.testing.util import diff
 from schooltool.timetable.tests.test_timetable import TermStub
 

@@ -21,6 +21,7 @@ Unit tests for RESTive term views.
 
 $Id: test_app.py 3526 2005-04-28 17:16:47Z bskahan $
 """
+
 import unittest
 import datetime
 
@@ -30,8 +31,9 @@ from zope.app.filerepresentation.interfaces import IFileFactory
 from zope.app.testing import ztapi, setup
 from zope.app.traversing.interfaces import IContainmentRoot
 
-from schooltool.app.rest.testing import QuietLibxml2Mixin
-from schooltool.app.rest.testing import dedent
+from schooltool.testing.util import QuietLibxml2Mixin
+from schooltool.common import dedent
+
 
 class DatetimeStub:
 
@@ -290,6 +292,7 @@ def test_suite():
         unittest.makeSuite(TestTermFileFactory),
         unittest.makeSuite(TestTermFile)
         ])
+
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

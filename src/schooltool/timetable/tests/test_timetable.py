@@ -36,7 +36,6 @@ from zope.app.testing import ztapi
 from zope.app.annotation.interfaces import IAttributeAnnotatable
 from zope.app.location.interfaces import ILocation
 
-from schooltool.app.rest.testing import NiceDiffsMixin, EqualsSortedMixin
 from schooltool import timetable
 from schooltool.timetable.interfaces import ITimetables
 from schooltool.timetable.interfaces import ITimetable, ITimetableActivity
@@ -44,6 +43,8 @@ from schooltool.relationship import RelationshipProperty
 from schooltool.app.membership import URIGroup, URIMember, URIMembership
 
 from schooltool.testing import setup as sbsetup
+from schooltool.testing.util import NiceDiffsMixin
+from schooltool.testing.util import EqualsSortedMixin
 from schooltool.timetable.tests.test_term import TermStub
 
 class ActivityStub(object):

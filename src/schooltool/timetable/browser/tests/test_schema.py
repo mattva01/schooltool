@@ -21,6 +21,7 @@ Tests for schooltool timetable schema views.
 
 $Id: test_timetable.py 4822 2005-08-19 01:35:11Z srichter $
 """
+
 import unittest
 from pprint import pprint
 
@@ -33,14 +34,12 @@ from zope.app.testing import ztapi
 from schooltool import timetable
 from schooltool.app.app import SimpleNameChooser
 from schooltool.app.browser import testing
-from schooltool.app.rest.testing import NiceDiffsMixin
 from schooltool.testing import setup as sbsetup
-
+from schooltool.testing.util import NiceDiffsMixin
 from schooltool.timetable import SequentialDaysTimetableModel
 from schooltool.timetable import WeeklyTimetableModel
 from schooltool.timetable.interfaces import ITimetableModelFactory
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
-
 from schooltool.timetable.browser.tests.test_timetable import setUp, tearDown
 from schooltool.timetable.browser.tests.test_timetable import createSchema
 from schooltool.timetable.browser.tests.test_timetable import createDayTemplate

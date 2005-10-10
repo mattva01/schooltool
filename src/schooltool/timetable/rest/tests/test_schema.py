@@ -33,9 +33,9 @@ from zope.app.traversing.interfaces import ITraversable
 from zope.app.traversing.interfaces import IContainmentRoot
 
 from schooltool.testing import setup as sbsetup
+from schooltool.testing.util import QuietLibxml2Mixin
+from schooltool.testing.util import XMLCompareMixin
 from schooltool.app.rest.errors import RestError
-from schooltool.app.rest.testing import QuietLibxml2Mixin
-from schooltool.app.rest.testing import XMLCompareMixin
 
 
 class TimetableSchemaMixin(QuietLibxml2Mixin):

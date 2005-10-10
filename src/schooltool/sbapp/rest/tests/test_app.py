@@ -31,9 +31,9 @@ from zope.testing import doctest
 from zope.app.testing import ztapi, setup
 
 from schooltool.person.person import Person
-from schooltool.app.rest.testing import XMLCompareMixin
 from schooltool.xmlparsing import XMLDocument
 from schooltool.testing import setup as sbsetup
+from schooltool.testing.util import XMLCompareMixin
 
 
 class TestAppView(XMLCompareMixin, unittest.TestCase):

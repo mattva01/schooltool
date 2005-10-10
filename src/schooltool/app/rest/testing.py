@@ -34,6 +34,8 @@ from zope.app.testing import ztapi, setup
 from zope.app.traversing.interfaces import ITraversable
 
 from schooltool.testing import setup as sbsetup
+from schooltool.testing.util import XMLCompareMixin
+from schooltool.testing.util import QuietLibxml2Mixin
 from schooltool.app.app import SimpleNameChooser
 from schooltool.xmlparsing import XMLParseError
 from schooltool.group.group import Group
@@ -41,19 +43,6 @@ from schooltool.group.interfaces import IGroupContainer
 from schooltool.group.rest.group import GroupFileFactory, GroupContainerView
 from schooltool.resource.interfaces import IResourceContainer
 from schooltool.resource.rest.resource import ResourceFileFactory
-
-from schooltool.testing.util import dedent # XXX temporary reexport
-from schooltool.testing.util import unidiff # XXX temporary reexport
-from schooltool.testing.util import diff # XXX temporary reexport
-from schooltool.testing.util import sorted # XXX temporary reexport
-from schooltool.testing.util import normalize_xml # XXX temporary reexport
-from schooltool.testing.util import pformat_set # XXX temporary reexport
-from schooltool.testing.util import Anything # XXX temporary reexport
-from schooltool.testing.util import EqualsSortedMixin # XXX temporary reexport
-from schooltool.testing.util import NiceDiffsMixin # XXX temporary reexport
-from schooltool.testing.util import XMLCompareMixin # XXX temporary reexport
-from schooltool.testing.util import compareXML # XXX temporary reexport
-from schooltool.testing.util import QuietLibxml2Mixin # XXX temporary reexport
 
 
 
