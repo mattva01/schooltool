@@ -145,7 +145,7 @@ class RelationshipsView(View):
                 for link in self.context]
 
     def POST(self):
-        body = self.request.bodyFile.read()
+        body = self.request.bodyStream.read()
         response = self.request.response
 
         doc = XMLDocument(body, self.schema)

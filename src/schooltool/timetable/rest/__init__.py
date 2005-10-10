@@ -319,7 +319,7 @@ class TimetablePUT(object):
                 request.response.setStatus(501)
                 return ''
 
-        body = self.request.bodyFile
+        body = self.request.bodyStream
         data = body.read()
         container = self.context.__parent__
         name = self.context.__name__
@@ -415,7 +415,7 @@ class NullTimetablePUT(object):
         name = self.context.name
         factory = queryMultiAdapter((container, self.request),
                                     ITimetableFileFactory)
-        data = self.request.bodyFile.read()
+        data = self.request.bodyStream.read()
         timetable = factory(name, self.request.getHeader('content-type', ''),
                             data)
         notify(ObjectCreatedEvent(timetable))

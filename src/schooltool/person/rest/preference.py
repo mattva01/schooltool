@@ -105,7 +105,7 @@ class PersonPreferencesView(View):
         Validates preferences through validatePreference which can return a
         RestError.
         """
-        data = self.parseData(self.request.bodyFile.read())
+        data = self.parseData(self.request.bodyStream.read())
         for name, value in data.items():
             self.validatePreference(name, value)
             setattr(self.preferences, name, value)

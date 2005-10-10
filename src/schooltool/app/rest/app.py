@@ -107,7 +107,7 @@ class GenericContainerView(View):
         """Create a new object from the data supplied in the request."""
 
         response = self.request.response
-        body = self.request.bodyFile.read()
+        body = self.request.bodyStream.read()
 
         factory = IFileFactory(self.context)
         item = factory(None, None, body)
@@ -178,7 +178,7 @@ class CalendarView(View):
                 request.response.setStatus(501)
                 return ''
 
-        body = self.request.bodyFile
+        body = self.request.bodyStream
         data = body.read()
         charset = getCharset(self.request.getHeader("Content-Type"))
 

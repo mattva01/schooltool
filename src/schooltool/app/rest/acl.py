@@ -121,7 +121,7 @@ class ACLView(View, ACLViewBase):
         return groupids + personids
 
     def POST(self):
-        settings = self.parseData(self.request.bodyFile.read())
+        settings = self.parseData(self.request.bodyStream.read())
         for principalid, permissions in settings.items():
             self.applyPermissionChanges(principalid, permissions)
         return "Permissions updated"

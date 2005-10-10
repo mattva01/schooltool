@@ -130,7 +130,7 @@ class PasswordWriterView(View):
                 request.response.setStatus(501)
                 return ''
 
-        body = self.request.bodyFile
+        body = self.request.bodyStream
         password = body.read().split("\n")[0]
         self.context.setPassword(password)
         self.request.response.setStatus("200")
@@ -201,7 +201,7 @@ class PersonPhotoView(View):
                 request.response.setStatus(501)
                 return ''
 
-        body = self.request.bodyFile
+        body = self.request.bodyStream
         self.context.writePhoto(body.read())
         self.request.response.setStatus("200")
         return ''

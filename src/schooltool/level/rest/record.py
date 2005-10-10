@@ -93,7 +93,7 @@ class AcademicStatusView(rest.View):
                 self.request.response.setStatus(501)
                 return ''
 
-        body = self.request.bodyFile
+        body = self.request.bodyStream
         status = body.read().split("\n")[0]
         self.context.setStatus(status)
         self.request.response.setStatus("200")
@@ -191,7 +191,7 @@ class SelectInitialLevelView(rest.View):
     def POST(self):
         # XXX not unit tested -- uncomment the following line for proof
         #raise NotImplementedError
-        body = self.request.bodyFile.read()
+        body = self.request.bodyStream.read()
         doc = XMLDocument(body, self.schema)
         doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
         node = doc.query('/m:object')[0]
@@ -240,7 +240,7 @@ class SetLevelOutcomeView(rest.View):
     def POST(self):
         # XXX not unit tested -- uncomment the following line for proof
         #raise NotImplementedError
-        body = self.request.bodyFile.read()
+        body = self.request.bodyStream.read()
         doc = XMLDocument(body, self.schema)
         doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
         node = doc.query('/m:object')[0]

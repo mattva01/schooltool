@@ -96,7 +96,7 @@ class NotesView(View):
     notes = property(_getNotes)
 
     def POST(self):
-        body = self.request.bodyFile.read()
+        body = self.request.bodyStream.read()
 
         doc = XMLDocument(body, self.schema)
         try:
