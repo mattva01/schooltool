@@ -378,7 +378,8 @@ class SchoolToolClient:
         response = self.post('/groups', body)
         if response.status != 201:
             raise ResponseStatusError(response)
-        return self._pathFromResponse(response)
+        url = self._pathFromResponse(response)
+        return GroupRef(self, url, title)
 
     def createRelationship(self, obj1_url, obj2_url, reltype, obj2_role):
         """Create a relationship between two objects.

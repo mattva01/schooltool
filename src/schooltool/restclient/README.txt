@@ -111,7 +111,7 @@ You can take a closer look at that person or group
     >>> group_info.title
     u'Manager'
     >>> group_info.description
-    u'The manager group.'
+    u'Manager Group.'
 
     >>> manager_group.getMembers()
     []

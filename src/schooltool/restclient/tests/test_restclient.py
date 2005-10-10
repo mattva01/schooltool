@@ -724,10 +724,13 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
                           'John Doe', 'john')
 
     def test_createGroup(self):
+        from schooltool.restclient.restclient import GroupRef
         client = self.newClient(ResponseStub(201, 'OK', 'Created',
                                     location='http://localhost/groups/titlewithstrangechars'))
         result = client.createGroup('Title<with"strange&chars')
-        self.assertEquals(result, '/groups/titlewithstrangechars')
+        expected = GroupRef(client, '/groups/titlewithstrangechars',
+                            'Title<with"strange&chars')
+        self.assertEquals(result, expected)
         conn = self.oneConnection(client)
         self.assertEquals(conn.path, '/groups')
         self.assertEquals(conn.method, 'POST')
@@ -738,11 +741,13 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
                        ' description=""/>')
 
     def test_createGroup_description(self):
+        from schooltool.restclient.restclient import GroupRef
         client = self.newClient(ResponseStub(201, 'OK', 'Created',
                                     location='http://localhost/groups/huba'))
         result = client.createGroup('<Huba>',
                                     description='<Buba>')
-        self.assertEquals(result, '/groups/huba')
+        expected = GroupRef(client, '/groups/huba', '<Huba>')
+        self.assertEquals(result, expected)
         conn = self.oneConnection(client)
         self.assertEquals(conn.path, '/groups')
         self.assertEquals(conn.method, 'POST')
