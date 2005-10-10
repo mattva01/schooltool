@@ -278,18 +278,6 @@ class SchoolToolClient:
         return [ResourceRef(self, url, title)
                 for title, url in _parseContainer(response.read())]
 
-    def getGroupInfo(self, group_url):
-        """Return information page about a group.
-
-        Returns a GroupInfo object.
-        """
-        relationships = self.getObjectRelationships(group_url)
-        member_relationships = [relationship for relationship in relationships
-                                if relationship.role.uri == URIMember_uri]
-        members = [MemberInfo(member_relationship.target_path)
-                   for member_relationship in member_relationships]
-        return GroupInfo(members)
-
     def savePersonInfo(self, person_url, person_info):
         """Put a PersonInfo object."""
         body = """
@@ -525,6 +513,19 @@ def _parsePersonInfo(body):
         raise SchoolToolError(_("Insufficient data in person info"))
 
 
+def _parseGroupInfo(body):
+    """Parse the data provided by the group XML representation."""
+    doc = XMLDocument(body)
+    doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
+    doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
+    try:
+        title = doc.query("/m:group/m:title")[0].content
+        description = doc.query("/m:group/m:description")[0].content
+        return GroupInfo(title, description)
+    except IndexError:
+        raise SchoolToolError(_("Insufficient data in group info"))
+
+
 #
 # Object representations
 #
@@ -615,6 +616,27 @@ class PersonRef(ObjectRef):
 class GroupRef(ObjectRef):
     """Reference to a group object."""
 
+    def getInfo(self):
+        """Return information about a group.
+
+        Returns a GroupInfo object.
+        """
+        response = self.client.get(self.url)
+        if response.status != 200:
+            raise ResponseStatusError(response)
+        return _parseGroupInfo(response.read())
+
+    def getMembers(self):
+        """Return a list of group members.
+
+        Returns a list of MemberRef objects.
+        """
+        relationships = self.client.getObjectRelationships(self.url)
+        member_relationships = [relationship for relationship in relationships
+                                if relationship.role.uri == URIMember_uri]
+        return [PersonRef(self.client, member_relationship.target_path)
+                for member_relationship in member_relationships]
+
 
 class ResourceRef(ObjectRef):
     """Reference to a resource object."""
@@ -633,6 +655,14 @@ class PersonInfo:
 
     def __init__(self, title=None):
         self.title = title
+
+
+class GroupInfo:
+    """An object containing the data for a group."""
+
+    def __init__(self, title, description=None):
+        self.title = title
+        self.description = description
 
 
 #
@@ -667,34 +697,6 @@ URIInstructor_uri = 'http://schooltool.org/ns/instruction/instructor'
 URICourseSections_uri = 'http://schooltool.org/ns/coursesections'
 URICourse_uri = 'http://schooltool.org/ns/coursesections/course'
 URISectionOfCourse_uri = 'http://schooltool.org/ns/coursesections/section'
-
-
-class GroupInfo:
-    """Information about a group."""
-
-    # List of group members
-    members = None
-
-    def __init__(self, members):
-        self.members = members
-
-
-class MemberInfo:
-    """Information about a group member."""
-
-    person_path = None
-
-    def __init__(self, path):
-        self.person_path = path
-
-    def __cmp__(self, other):
-        if not isinstance(other, MemberInfo):
-            raise NotImplementedError("cannot compare %r with %r"
-                                      % (self, other))
-        return cmp(self.person_path, other.person_path)
-
-    def __repr__(self):
-        return "%s(%r)" % (self.__class__.__name__, self.person_path)
 
 
 class RelationshipInfo:

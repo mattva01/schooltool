@@ -145,6 +145,14 @@ class SchoolToolClientTestMixin(QuietLibxml2Mixin, XMLCompareMixin,
         client.secureConnectionFactory = factory.createSSL
         return client
 
+    def oneConnection(self, client):
+        self.assertEquals(len(client._connections), 1)
+        return client._connections[0]
+
+    def checkConnPath(self, client, path):
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, path)
+
 
 class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
 
@@ -156,14 +164,6 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         client.connectionFactory = factory.create
         client.secureConnectionFactory = factory.createSSL
         return client
-
-    def oneConnection(self, client):
-        self.assertEquals(len(client._connections), 1)
-        return client._connections[0]
-
-    def checkConnPath(self, client, path):
-        conn = self.oneConnection(client)
-        self.assertEquals(conn.path, path)
 
     def checkConnPaths(self, client, paths):
         self.assertEquals(len(client._connections),
@@ -481,39 +481,6 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
 
         client = self.newClient(ResponseStub(500, 'Internal Error'))
         self.assertRaises(SchoolToolError, client.getResources)
-
-    def test_getGroupInfo(self):
-        from schooltool.restclient.restclient import MemberInfo
-        body = dedent("""
-            <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
-                           xmlns="http://schooltool.org/ns/model/0.1">
-              <existing>
-                <relationship xlink:type="simple"
-                              xlink:role="http://schooltool.org/ns/membership/member"
-                              xlink:arcrole="http://schooltool.org/ns/membership"
-                              xlink:href="/persons/person1">
-                  <manage xlink:type="simple"
-                          xlink:href="/groups/manager/relationships/1"/>
-                </relationship>
-              </existing>
-            </relationships>
-        """)
-        expected = [MemberInfo('/persons/person1')]
-        client = self.newClient(ResponseStub(200, 'OK', body))
-        group_id = '/groups/group1'
-        group_relationships = '/groups/group1/relationships'
-        result = client.getGroupInfo(group_id)
-        self.assertEquals(list(result.members), expected)
-        self.checkConnPath(client, group_relationships)
-
-    def test_getGroupInfo_with_errors(self):
-        from schooltool.restclient.restclient import SchoolToolError
-        group_id = '/groups/group1'
-        client = self.newClient(error=socket.error(23, 'out of groups'))
-        self.assertRaises(SchoolToolError, client.getGroupInfo, group_id)
-
-        client = self.newClient(ResponseStub(404, 'Not Found'))
-        self.assertRaises(SchoolToolError, client.getGroupInfo, group_id)
 
     def test_savePersonInfo(self):
         from schooltool.restclient.restclient import PersonInfo
@@ -1088,6 +1055,32 @@ class TestParseFunctions(NiceDiffsMixin, QuietLibxml2Mixin, unittest.TestCase):
         """
         self.assertRaises(SchoolToolError, _parsePersonInfo, body)
 
+    def test__parseGroupInfo(self):
+        from schooltool.restclient.restclient import _parseGroupInfo
+        from schooltool.restclient.restclient import SchoolToolError
+        body = """
+            <group xmlns:xlink="http://www.w3.org/1999/xlink"
+                   xmlns="http://schooltool.org/ns/model/0.1">
+              <title>Managers</title>
+              <description>We are the managers.</description>
+              <relationships xlink:type="simple"
+                             xlink:title="Relationships"
+                             xlink:href="/groups/managers/relationships"/>
+              <acl xlink:type="simple" xlink:title="ACL"
+                   xlink:href="/groups/managers/acl"/>
+              <calendar xlink:type="simple" xlink:title="Calendar"
+                        xlink:href="/groups/managers/calendar"/>
+              <relationships xlink:type="simple"
+                             xlink:title="Calendar subscriptions"
+                             xlink:href="/groups/managers/calendar/relationships"/>
+              <acl xlink:type="simple" xlink:title="Calendar ACL"
+                   xlink:href="/groups/managers/calendar/acl"/>
+            </group>
+        """
+        result = _parseGroupInfo(body)
+        self.assertEquals(result.title, u'Managers')
+        self.assertEquals(result.description, u'We are the managers.')
+
 
 class InfoClassTestMixin:
     """Mixin for testing classes that are tuple replacements."""
@@ -1138,11 +1131,6 @@ class InfoClassTestMixin:
 
 class TestInfoClasses(unittest.TestCase, InfoClassTestMixin):
 
-    def test_MemberInfo(self):
-        from schooltool.restclient.restclient import MemberInfo
-        self._test_repr(MemberInfo, 1)
-        self._test_cmp(MemberInfo, 1, ('person_path', ))
-
     def test_RelationshipInfo(self):
         from schooltool.restclient.restclient import RelationshipInfo
         self._test_repr(RelationshipInfo, 5)
@@ -1191,6 +1179,73 @@ class TestPersonRef(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(result.title, 'SchoolTool Manager')
 
 
+class TestGroupRef(SchoolToolClientTestMixin, unittest.TestCase):
+
+    def test_getInfo(self):
+        """A test for PersonRef.getInfo."""
+        from schooltool.restclient.restclient import GroupRef
+        body = dedent("""
+            <group xmlns:xlink="http://www.w3.org/1999/xlink"
+                    xmlns="http://schooltool.org/ns/model/0.1">
+              <title>Manager</title>
+              <description>Manager Group.</description>
+              <relationships xlink:type="simple"
+                             xlink:title="Relationships"
+                             xlink:href="/groups/manager/relationships"/>
+              <acl xlink:type="simple" xlink:title="ACL"
+                   xlink:href="/groups/manager/acl"/>
+              <calendar xlink:type="simple" xlink:title="Calendar"
+                        xlink:href="/groups/manager/calendar"/>
+              <relationships xlink:type="simple"
+                             xlink:title="Calendar subscriptions"
+                             xlink:href="/groups/manager/calendar/relationships"/>
+              <acl xlink:type="simple" xlink:title="Calendar ACL"
+                   xlink:href="/groups/manager/calendar/acl"/>
+            </group>
+        """)
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        ref = GroupRef(client, '/groups/manager')
+        result = ref.getInfo()
+        self.assertEquals(result.title, 'Manager')
+        self.assertEquals(result.description, 'Manager Group.')
+
+    def test_getMembers(self):
+        from schooltool.restclient.restclient import PersonRef
+        from schooltool.restclient.restclient import GroupRef
+        body = dedent("""
+            <relationships xmlns:xlink="http://www.w3.org/1999/xlink"
+                           xmlns="http://schooltool.org/ns/model/0.1">
+              <existing>
+                <relationship xlink:type="simple"
+                              xlink:role="http://schooltool.org/ns/membership/member"
+                              xlink:arcrole="http://schooltool.org/ns/membership"
+                              xlink:href="/persons/person1">
+                  <manage xlink:type="simple"
+                          xlink:href="/groups/manager/relationships/1"/>
+                </relationship>
+              </existing>
+            </relationships>
+        """)
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        expected = [PersonRef(client, '/persons/person1')]
+        ref = GroupRef(client, '/groups/group1')
+        group_relationships = '/groups/group1/relationships'
+        result = ref.getMembers()
+        self.assertEquals(list(result), expected)
+        self.checkConnPath(client, group_relationships)
+
+    def test_getMembers_with_errors(self):
+        from schooltool.restclient.restclient import GroupRef
+        from schooltool.restclient.restclient import SchoolToolError
+        group_id = '/groups/group1'
+        client = self.newClient(error=socket.error(23, 'out of groups'))
+        ref = GroupRef(client, group_id)
+        self.assertRaises(SchoolToolError, ref.getMembers)
+
+        client = self.newClient(ResponseStub(404, 'Not Found'))
+        self.assertRaises(SchoolToolError, ref.getMembers)
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite('schooltool.restclient.restclient'))
@@ -1200,6 +1255,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestParseFunctions))
     suite.addTest(unittest.makeSuite(TestInfoClasses))
     suite.addTest(unittest.makeSuite(TestPersonRef))
+    suite.addTest(unittest.makeSuite(TestGroupRef))
     return suite
 
 if __name__ == '__main__':
