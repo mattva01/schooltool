@@ -30,7 +30,7 @@ from zope.interface import implements
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
 from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
-from schooltool.timetable.model import SequentialDaysTimetableModel
+from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
 from schooltool.timetable.term import Term
 
 
@@ -44,18 +44,27 @@ class SampleTimetableSchema(object):
     def generate(self, app, seed=None):
         day_ids = ['Day %d' % i for i in range(1, 7)]
         period_ids = ['A', 'B', 'C', 'D', 'E', 'F']
-        day_template = SchooldayTemplate()
         t, dt = datetime.time, datetime.timedelta
-        day_template.add(SchooldayPeriod('A', t(8, 0), dt(minutes=55)))
-        day_template.add(SchooldayPeriod('B', t(9, 0), dt(minutes=55)))
-        day_template.add(SchooldayPeriod('C', t(10, 0), dt(minutes=55)))
-        day_template.add(SchooldayPeriod('D', t(11, 0), dt(minutes=55)))
-        day_template.add(SchooldayPeriod('E', t(12, 30), dt(minutes=55)))
-        day_template.add(SchooldayPeriod('F', t(13, 30), dt(minutes=60)))
-        model = SequentialDaysTimetableModel(day_ids, {None: day_template})
+        slots = [(t(8, 0), dt(minutes=55)),
+                 (t(9, 0), dt(minutes=55)),
+                 (t(10, 0), dt(minutes=55)),
+                 (t(11, 0), dt(minutes=55)),
+                 (t(12, 30), dt(minutes=55)),
+                 (t(13, 30), dt(minutes=60))]
+
+        day_templates = {}
+        for day_idx, day_id in enumerate(day_ids):
+            day_template = SchooldayTemplate()
+            for idx, (tstart, duration) in enumerate(slots):
+                period = period_ids[(day_idx + idx) % len(period_ids)]
+                day_template.add(SchooldayPeriod(period, tstart, duration))
+            day_templates[day_id] = day_template
+
+        model = SequentialDayIdBasedTimetableModel(day_ids, day_templates)
         ttschema = TimetableSchema(day_ids, model=model)
-        for day_id in day_ids:
-            ttschema[day_id] = TimetableSchemaDay(period_ids)
+        for idx, day_id in enumerate(day_ids):
+            periods = period_ids[idx:] + period_ids[:idx]
+            ttschema[day_id] = TimetableSchemaDay(periods)
         app['ttschemas']['simple'] = ttschema
 
 

@@ -230,9 +230,9 @@ def doctest_PopulateSectionTimetables():
         Day 1 B Hard Science
         Day 1 E Hard Science
         Day 1 F Hard Science
-        Day 4 B Hard Science
-        Day 5 E Hard Science
-        Day 6 D Hard Science
+        Day 4 E Hard Science
+        Day 5 C Hard Science
+        Day 6 C Hard Science
 
     """
 

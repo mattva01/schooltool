@@ -66,11 +66,10 @@ def doctest_SampleTimetableSchema():
         >>> schema.model.timetableDayIds
         ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6']
 
-    The timetable model has one schoolday template with these
-    schoolday periods:
+    Let's check the slots in the first day template:
 
         >>> result = []
-        >>> for period in schema.model.dayTemplates[None]:
+        >>> for period in schema.model.dayTemplates['Day 1']:
         ...      result.append((period.title, period.tstart, period.duration))
         >>> result.sort()
         >>> for line in result:
@@ -82,12 +81,20 @@ def doctest_SampleTimetableSchema():
         E 12:30:00 0:55:00
         F 13:30:00 1:00:00
 
-    The timetable schema has identical timetable days with periods A-F:
+    The timetable model has schoolday templates for all days in cycle.
 
-        >>> for day in schema.keys():
-        ...     assert schema[day] == schema['Day 1']
-        >>> schema['Day 1'].keys()
-        ['A', 'B', 'C', 'D', 'E', 'F']
+        >>> for day in schema.day_ids:
+        ...    result = []
+        ...    for period in schema.model.dayTemplates[day]:
+        ...        result.append((period.tstart, period.title))
+        ...    result.sort()
+        ...    print day, ' '.join([title for tstart, title in result])
+        Day 1 A B C D E F
+        Day 2 B C D E F A
+        Day 3 C D E F A B
+        Day 4 D E F A B C
+        Day 5 E F A B C D
+        Day 6 F A B C D E
 
     The default timetable schema is set:
 
