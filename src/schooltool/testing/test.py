@@ -915,7 +915,8 @@ def main(argv):
 
     # Defaults
     cfg = Options()
-    cfg.basedir = os.path.join(os.path.dirname(argv[0]), 'src')
+    if not cfg.basedir:
+        cfg.basedir = os.path.join(os.path.dirname(argv[0]), 'src')
     cfg.basedir = os.path.abspath(cfg.basedir)
 
     # Figure out terminal size
@@ -1027,11 +1028,7 @@ def main(argv):
         cfg.print_import_time = False
 
     # Set up the python path
-    sys.path[0] = cfg.basedir
-    # XXX The following bit is SchoolTool specific: we need the Zope3 tree in
-    #     sys.path, in addition to basedir.
-    sys.path.insert(1, os.path.join(os.path.dirname(cfg.basedir),
-                                    'Zope3', 'src'))
+    sys.path.insert(0, cfg.basedir)
 
     # Set up tracing before we start importing things
     tracer = None
