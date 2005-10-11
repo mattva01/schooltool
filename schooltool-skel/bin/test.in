@@ -28,7 +28,7 @@ instance_lib = os.path.join(here, "lib", "python")
 sys.path[:0] = [instance_lib, SOFTWARE_HOME]
 
 
-from zope.app.testing import test
+from schooltool.testing import test
 
 
 testschooltool = "--testschooltool" in sys.argv[1:]
@@ -36,20 +36,20 @@ if testschooltool:
     sys.argv.remove("--testschooltool")
     test_lib = SOFTWARE_HOME
     # We only want to run schooltool tests; but allow it to be overridden
-    if '-s' not in sys.argv and '--dir' not in sys.argv:
-        additional = ["-s", "schooltool"]
+    if '-search-in' not in sys.argv and '--s' not in sys.argv:
+        additional = ["-s", os.path.join(test_lib, "schooltool")]
 else:
     test_lib = instance_lib
     additional = []
 
-ftesting = os.path.join(here, "etc", "ftesting.zcml")
+# XXX - this monkey patch is a temporary solution until the zope test runner
+# can cope with different ftesting.zcml's for different levels.
+test.Options.basedir = test_lib
 
-test.FTESTING = ftesting
-
-args = sys.argv[:1] + ["-l", test_lib] + additional + sys.argv[1:]
+args = sys.argv[:1] + additional + sys.argv[1:]
 test.__doc__ += """
 
-Two additional options are supported:
+One additional options are supported:
 
 --testschooltool
     When specified, the tests for the installed SchoolTool software are run
@@ -59,4 +59,4 @@ Two additional options are supported:
     Unlike other options, this cannot be abbreviated.
 
 """
-test.process_args(args)
+test.main(args)

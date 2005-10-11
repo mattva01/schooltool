@@ -39,6 +39,9 @@ def find_ftesting_zcml():
     """Find ftesting.zcml to be used for SchoolTool functional tests."""
     dir = os.path.abspath(os.path.dirname(__file__))
     while True:
+        filename = os.path.join(dir, 'etc', 'ftesting.zcml')
+        if os.path.exists(filename):
+            return filename # We are testing in an instance
         filename = os.path.join(dir, 'schooltool-skel', 'etc', 'ftesting.zcml')
         if os.path.exists(filename):
             return filename
