@@ -717,6 +717,23 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(conn.method, 'PUT')
         self.assertEqualsXML(conn.body, 'foo')
 
+    def test_createPerson_overrides(self):
+        from schooltool.restclient.restclient import PersonRef
+        client = self.newClient(
+            ResponseStub(200, 'OK', 'Updated',
+                         location='http://localhost/persons/john'))
+        result = client.createPerson('John "the other one" Smith', "john")
+        expected = PersonRef(client, '/persons/john',
+                             'John "the other one" Smith')
+        self.assertEquals(result, expected)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/persons/john')
+        self.assertEquals(conn.method, 'PUT')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="John &quot;the other one&quot; Smith"/>')
+
     def test_createPerson_with_errors(self):
         from schooltool.restclient.restclient import SchoolToolError
         client = self.newClient(ResponseStub(400, 'Bad Request'))

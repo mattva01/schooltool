@@ -362,7 +362,7 @@ class SchoolToolClient:
         url = '/persons/' + name
         response = self.put(url, body)
 
-        if response.status != 201:
+        if response.status not in (200, 201):
             raise ResponseStatusError(response)
 
         if password is not None:
