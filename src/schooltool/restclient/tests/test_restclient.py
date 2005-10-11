@@ -1324,6 +1324,104 @@ class TestGroupRef(SchoolToolClientTestMixin, unittest.TestCase):
         client = self.newClient(ResponseStub(404, 'Not Found'))
         self.assertRaises(SchoolToolError, ref.getMembers)
 
+    def test_addMember(self):
+        from schooltool.restclient.restclient import GroupRef
+        from schooltool.restclient.restclient import PersonRef
+        client = self.newClient(ResponseStub(201, 'Created',
+                location='http://localhost/groups/teachers/relationships/004'))
+        group = GroupRef(client, '/groups/teachers', 'Teachers')
+        person = PersonRef(client, '/persons/john')
+        group.addMember(person)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/groups/teachers/relationships')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        expected = """
+            <relationship xmlns="http://schooltool.org/ns/model/0.1"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xlink:type="simple"
+                 xlink:href="/persons/john"
+                 xlink:arcrole="http://schooltool.org/ns/membership"
+                 xlink:role="http://schooltool.org/ns/membership/member"
+                 />
+                 """
+        self.assertEqualsXML(conn.body, expected)
+
+
+class TestCourseRef(SchoolToolClientTestMixin, unittest.TestCase):
+
+    def test_addSection(self):
+        from schooltool.restclient.restclient import CourseRef
+        from schooltool.restclient.restclient import SectionRef
+        client = self.newClient(ResponseStub(201, 'Created',
+                location='http://localhost/courses/history/relationships/004'))
+        course = CourseRef(client, '/courses/history', 'History')
+        section = SectionRef(client, '/sections/history1a')
+        course.addSection(section)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/courses/history/relationships')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        expected = """
+            <relationship xmlns="http://schooltool.org/ns/model/0.1"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xlink:type="simple"
+                 xlink:href="/sections/history1a"
+                 xlink:arcrole="http://schooltool.org/ns/coursesections"
+                 xlink:role="http://schooltool.org/ns/coursesections/section"
+                 />
+                 """
+        self.assertEqualsXML(conn.body, expected)
+
+
+class TestSectionRef(SchoolToolClientTestMixin, unittest.TestCase):
+
+    def test_addInstructor(self):
+        from schooltool.restclient.restclient import SectionRef
+        from schooltool.restclient.restclient import PersonRef
+        client = self.newClient(ResponseStub(201, 'Created',
+                location='http://localhost/sections/history1a/relationships/004'))
+        section = SectionRef(client, '/sections/history1a', 'History for 1A')
+        instructor = PersonRef(client, '/persons/john')
+        section.addInstructor(instructor)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/sections/history1a/relationships')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        expected = """
+            <relationship xmlns="http://schooltool.org/ns/model/0.1"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xlink:type="simple"
+                 xlink:href="/persons/john"
+                 xlink:arcrole="http://schooltool.org/ns/instruction"
+                 xlink:role="http://schooltool.org/ns/instruction/instructor"
+                 />
+                 """
+        self.assertEqualsXML(conn.body, expected)
+
+    def test_addLearner(self):
+        from schooltool.restclient.restclient import SectionRef
+        from schooltool.restclient.restclient import GroupRef
+        client = self.newClient(ResponseStub(201, 'Created',
+                location='http://localhost/sections/history1a/relationships/004'))
+        section = SectionRef(client, '/sections/history1a', 'History for 1A')
+        member = GroupRef(client, '/groups/managers')
+        section.addLearner(member)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/sections/history1a/relationships')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        expected = """
+            <relationship xmlns="http://schooltool.org/ns/model/0.1"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xlink:type="simple"
+                 xlink:href="/groups/managers"
+                 xlink:arcrole="http://schooltool.org/ns/membership"
+                 xlink:role="http://schooltool.org/ns/membership/member"
+                 />
+                 """
+        self.assertEqualsXML(conn.body, expected)
+
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -1335,6 +1433,8 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestInfoClasses))
     suite.addTest(unittest.makeSuite(TestPersonRef))
     suite.addTest(unittest.makeSuite(TestGroupRef))
+    suite.addTest(unittest.makeSuite(TestCourseRef))
+    suite.addTest(unittest.makeSuite(TestSectionRef))
     return suite
 
 if __name__ == '__main__':

@@ -652,6 +652,11 @@ class GroupRef(ObjectRef):
         return [PersonRef(self.client, member_relationship.target_path)
                 for member_relationship in member_relationships]
 
+    def addMember(self, member):
+        """Add a member to this group."""
+        self.client.createRelationship(self.url, member.url,
+                                       URIMembership_uri, URIMember_uri)
+
 
 class ResourceRef(ObjectRef):
     """Reference to a resource object."""
@@ -660,9 +665,25 @@ class ResourceRef(ObjectRef):
 class CourseRef(ObjectRef):
     """Reference to a course object."""
 
+    def addSection(self, section):
+        """Add a section to this course."""
+        self.client.createRelationship(self.url, section.url,
+                                       URICourseSections_uri,
+                                       URISectionOfCourse_uri)
+
 
 class SectionRef(ObjectRef):
     """Reference to a section object."""
+
+    def addInstructor(self, instructor):
+        """Add an instructor to this section."""
+        self.client.createRelationship(self.url, instructor.url,
+                                       URIInstruction_uri, URIInstructor_uri)
+
+    def addLearner(self, learner):
+        """Add a learner to this section."""
+        self.client.createRelationship(self.url, learner.url,
+                                       URIMembership_uri, URIMember_uri)
 
 
 class PersonInfo:

@@ -282,7 +282,7 @@ necessary, and adding sections as group members.
     ...     try:
     ...         course.addSection(section)
     ...         section.addInstructor(person)
-    ...         section.addLearner/Member(group)
+    ...         section.addLearner(group)
     ...     except SchoolToolError, e:
     ...         pass # already a member
 
