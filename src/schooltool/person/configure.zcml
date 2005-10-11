@@ -109,6 +109,12 @@
         name="teachers"
         />
 
+    <utility
+        factory=".sampledata.SamplePersonalEvents"
+        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
+        name="personalevents"
+        />
+
   </configure>
 
 </configure>

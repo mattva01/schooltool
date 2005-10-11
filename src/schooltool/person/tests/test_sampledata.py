@@ -23,6 +23,7 @@ $Id$
 """
 import unittest
 from pprint import pprint
+import datetime
 
 from zope.interface.verify import verifyObject
 from zope.testing import doctest
@@ -31,10 +32,13 @@ from zope.app.testing import setup
 from schooltool.testing.setup import setupLocalGrants
 from schooltool.testing import setup as stsetup
 from schooltool.relationship.tests import setUpRelationships
+from schooltool.timetable.term import Term
+from schooltool.app.interfaces import ISchoolToolCalendar
+
 
 def setUp(test):
     setup.placefulSetUp()
-
+    stsetup.setupCalendaring()
 
 def tearDown(test):
     setup.placefulTearDown()
@@ -132,6 +136,71 @@ def doctest_SampleTeachers():
         ...     login = 'teacher%03d' % i
         ...     assert app['persons'][login].checkPassword(login)
 
+    """
+
+
+def doctest_SamplePersonalEvents():
+    """A sample data plugin that generates random personal events.
+
+        >>> setUpRelationships()
+        
+        >>> from schooltool.person.sampledata import SamplePersonalEvents
+        >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
+        >>> plugin = SamplePersonalEvents()
+        >>> verifyObject(ISampleDataPlugin, plugin)
+        True
+
+        >>> app = stsetup.setupSchoolToolSite()
+
+        >>> from schooltool.person.sampledata import SampleStudents
+        >>> from schooltool.person.sampledata import SampleTeachers
+        >>> from schooltool.timetable.sampledata import SampleTerms
+        >>> plugin_students = SampleStudents()
+        >>> plugin_students.power = 20
+        >>> plugin_teachers = SampleTeachers()
+        >>> plugin_teachers.power = 3
+        >>> plugin_terms = SampleTerms()
+        >>> plugin_students.generate(app, 42)
+        >>> plugin_teachers.generate(app, 42)
+        >>> plugin_terms.generate(app, 42)
+
+    Probability of person having event on any day in percents:
+
+        >>> plugin.probability
+        10
+        
+        >>> plugin.probability = 50
+
+    Create random events for all students and teachers.
+        
+        >>> plugin.generate(app, 42)
+
+        >>> for i in range(5):
+        ...     person = app['persons']['student%03d' % i]
+        ...     calendar = ISchoolToolCalendar(person)
+        ...     print len(calendar)
+        142
+        124
+        149
+        140
+        131
+
+        >>> person = app['persons']['teacher000']
+        >>> calendar = ISchoolToolCalendar(person)
+        >>> len(calendar)
+        154
+        
+        >>> events = list(calendar)
+        >>> events.sort()
+        >>> for event in events[0:5]:
+        ...     print event.dtstart,
+        ...     print event.duration,
+        ...     print event.title    
+        2005-08-22 10:30:00+00:00 5:00:00 Birding
+        2005-08-23 23:30:00+00:00 3:30:00 Soccer
+        2005-08-24 20:30:00+00:00 0:30:00 Flashmob
+        2005-08-27 06:00:00+00:00 3:30:00 Circus
+        2005-08-29 14:00:00+00:00 6:00:00 Boating
     """
 
 

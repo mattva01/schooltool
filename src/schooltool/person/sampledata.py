@@ -22,14 +22,20 @@ Person sample data generation
 $Id$
 """
 
+import datetime
 import random
+import os
 
+from pytz import utc
 from zope.interface import implements
 
 from schooltool.sampledata.interfaces import ISampleDataPlugin
+from schooltool.sampledata.name import NameGenerator
 from schooltool.person.person import Person
 from schooltool.group.group import Group
-from schooltool.sampledata.name import NameGenerator
+from schooltool.timetable.term import DateRange
+from schooltool.app.interfaces import ISchoolToolCalendar
+from schooltool.app.cal import CalendarEvent
 
 
 class SampleStudents(object):
@@ -70,3 +76,59 @@ class SampleTeachers(object):
             person.setPassword(person_id)
             teachers.members.add(person)
             app['persons'][person_id] = person
+
+
+class SamplePersonalEvents(object):
+    """Sample data plugin class that generates personal random events."""
+
+    implements(ISampleDataPlugin)
+
+    name = 'personalevents'
+    dependencies = ('students', 'teachers', 'terms')
+
+    probability = 10 # probability of having an event on any day
+
+    def _readLines(self, filename):
+        """Read in lines from file
+
+        Filename is relative to the module.
+        Returned lines are stripped.
+        """
+        fullpath = os.path.join(os.path.dirname(__file__), filename)
+        lines = file(fullpath).readlines()
+        return [line.strip() for line in lines]
+
+    def generate(self, app, seed=None):
+        self.random = random.Random(seed)
+        event_titles = self._readLines('event_titles.txt')
+        person_ids = [person for person in app['persons'].keys()
+                      if person.startswith('student') or
+                         person.startswith('teacher')]
+        dates = []
+        for term in app['terms'].values():
+            dates.append(term.first)
+            dates.append(term.last)
+        first = min(dates)
+        last = max(dates)
+        days = DateRange(first, last)
+        for person_id in person_ids:
+            person = app['persons'][person_id]
+            calendar = ISchoolToolCalendar(person)
+            for day in days:
+                if self.random.randrange(0, 100) < self.probability:
+                    event_title = self.random.choice(event_titles)
+                    time_hour = self.random.randint(6, 23)
+                    time_min = self.random.choice((0, 30))
+                    event_time = datetime.datetime(day.year,
+                                                   day.month,
+                                                   day.day,
+                                                   time_hour,
+                                                   time_min,
+                                                   tzinfo=utc)
+                    event_duration = datetime.timedelta(
+                                       minutes=self.random.randint(1, 12)*30)
+                    event = CalendarEvent(event_time,
+                                          event_duration,
+                                          event_title)
+                    calendar.addEvent(event)
+
