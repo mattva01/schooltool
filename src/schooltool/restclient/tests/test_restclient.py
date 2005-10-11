@@ -762,6 +762,46 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         client = self.newClient(ResponseStub(400, 'Bad Request'))
         self.assertRaises(SchoolToolError, client.createGroup, 'Slackers')
 
+    def test_createResource(self):
+        from schooltool.restclient.restclient import ResourceRef
+        client = self.newClient(ResponseStub(201, 'OK', 'Created',
+                                location='http://localhost/resources/a-res'))
+        result = client.createResource('Title<with"strange&chars')
+        expected = ResourceRef(client, '/resources/a-res',
+                               'Title<with"strange&chars')
+        self.assertEquals(result, expected)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/resources')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="Title&lt;with&quot;strange&amp;chars"'
+                       ' description=""/>')
+
+    def test_createResource_description(self):
+        from schooltool.restclient.restclient import ResourceRef
+        client = self.newClient(ResponseStub(201, 'OK', 'Created',
+                                location='http://localhost/resources/a-res'))
+        result = client.createResource('Title<with"strange&chars',
+                                       'A description < &c.')
+        expected = ResourceRef(client, '/resources/a-res',
+                               'Title<with"strange&chars')
+        self.assertEquals(result, expected)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/resources')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="Title&lt;with&quot;strange&amp;chars"'
+                       ' description="A description &lt; &amp;c."/>')
+
+    def test_createResource_with_errors(self):
+        from schooltool.restclient.restclient import SchoolToolError
+        client = self.newClient(ResponseStub(400, 'Bad Request'))
+        self.assertRaises(SchoolToolError, client.createResource, 'Whatever')
+
     def test_createRelationship(self):
         from schooltool.restclient.restclient import URIObject
         from schooltool.restclient.restclient import URIMembership_uri

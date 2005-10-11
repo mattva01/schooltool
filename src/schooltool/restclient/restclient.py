@@ -381,6 +381,16 @@ class SchoolToolClient:
         url = self._pathFromResponse(response)
         return GroupRef(self, url, title)
 
+    def createResource(self, title, description=""):
+        body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
+                ' title="%s"'
+                ' description="%s"/>' % (to_xml(title), to_xml(description)))
+        response = self.post('/resources', body)
+        if response.status != 201:
+            raise ResponseStatusError(response)
+        url = self._pathFromResponse(response)
+        return ResourceRef(self, url, title)
+
     def createRelationship(self, obj1_url, obj2_url, reltype, obj2_role):
         """Create a relationship between two objects.
 
