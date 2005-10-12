@@ -31,6 +31,7 @@ from cmd import Cmd
 from StringIO import StringIO
 from xml.sax import make_parser, SAXParseException
 from xml.sax.handler import ContentHandler, feature_namespaces
+
 from schooltool.common import to_unicode, StreamWrapper
 
 __metaclass__ = type
@@ -57,6 +58,7 @@ welcome to change it and/or distribute copies of it under certain conditions.
     ssl = False
     accept = 'text/xml'
     links = True
+    headers = False
 
     # Hooks for unit tests.
     connectionFactory = httplib.HTTPConnection
@@ -180,7 +182,7 @@ welcome to change it and/or distribute copies of it under certain conditions.
     def do_user(self, line):
         """Set the user and password to be used with the server.
 
-        user [username] [password]
+        user [username [password]]
 
         Missing password means empty password, missing username means
         no authentication.
@@ -208,6 +210,7 @@ welcome to change it and/or distribute copies of it under certain conditions.
         perusal (see do_save), parses xlinks if the response is text/xml
         and link parsing is enabled.
         """
+        # TODO: this big function could use some refactoring
         self.last_data = None
         self.resources = []
         try:
@@ -233,7 +236,12 @@ welcome to change it and/or distribute copies of it under certain conditions.
                 return
             ctype = response.getheader('Content-Type',
                                        'application/octet-stream')
-            self.emit("Content-Type: %s" % ctype)
+            if self.headers:
+                for hdr, value in response.getheaders():
+                    self.emit("%s: %s" % (hdr, value))
+                self.emit()
+            else:
+                self.emit("Content-Type: %s" % ctype)
             self.last_data = data = response.read()
             conn.close()
             if not ctype.startswith('text/'):
@@ -393,10 +401,26 @@ welcome to change it and/or distribute copies of it under certain conditions.
         """
         if not line:
             self.emit(self.links and "on" or "off")
-        if line.lower() == "on":
+        elif line.lower() == "on":
             self.links = True
-        if line.lower() == "off":
+        elif line.lower() == "off":
             self.links = False
+        else:
+            self.emit("'on' or 'off' expected, got '%s'" % line)
+
+    def do_headers(self, line):
+        """Toggle the display of HTTP response headers.
+
+        headers [on|off]
+        """
+        if not line:
+            self.emit(self.headers and "on" or "off")
+        elif line.lower() == "on":
+            self.headers = True
+        elif line.lower() == "off":
+            self.headers = False
+        else:
+            self.emit("'on' or 'off' expected, got '%s'" % line)
 
     def do_follow(self, line):
         """Follow the link from the last document.

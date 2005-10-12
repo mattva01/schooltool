@@ -133,7 +133,13 @@ class ResponseStub:
                 return 'text/xml; charset=UTF-8'
             else:
                 return 'text/plain'
+        elif name.lower() == 'x-random-server-header':
+            return '42'
         return default
+
+    def getheaders(self):
+        return [(hdr, self.getheader(hdr))
+                for hdr in ['Content-Type', 'X-Random-Server-Header']]
 
 
 class TestClient(unittest.TestCase):
@@ -516,6 +522,35 @@ class TestClient(unittest.TestCase):
         self.assertEqual(self.client.resources, [])
         self.assertEqual(self.client.last_data, 'DELETE')
 
+    def test_headers(self):
+        self.assertEqual(self.client.headers, False) # initial state
+        data = (('on', True), ('off', False), ('ON', True), ('OFf', False))
+        for arg, result in data:
+            self.client.do_headers(arg)
+            self.assertEqual(self.client.headers, result)
+        self.assertEmitted("")
+
+        self.client.do_headers("")
+        self.assertEmitted("off")
+        self.client.do_headers("on")
+        self.emitted = ""
+        self.client.do_headers("")
+        self.assertEmitted("on")
+
+        self.emitted = ""
+        self.client.do_headers("42")
+        self.assertEmitted("'on' or 'off' expected, got '42'")
+
+    def test_request_shows_headers(self):
+        self.client.headers = True
+        self.client._request('GET', '/')
+        self.assertEmitted(dedent("""
+            200 OK
+            Content-Type: text/plain
+            X-Random-Server-Header: 42
+
+            Welcome"""))
+
     def test_links(self):
         self.assertEqual(self.client.links, True)
         data = (('on', True), ('off', False), ('ON', True), ('OFf', False))
@@ -530,6 +565,10 @@ class TestClient(unittest.TestCase):
         self.emitted = ""
         self.client.do_links("")
         self.assertEmitted("on")
+
+        self.emitted = ""
+        self.client.do_links("42")
+        self.assertEmitted("'on' or 'off' expected, got '42'")
 
     def test_links_get(self):
         self.assertEqual(self.client.links, True)
