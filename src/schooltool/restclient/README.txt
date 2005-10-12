@@ -328,11 +328,11 @@ You can create a term
 At the moment we can at least list existing terms:
 
     >>> client.getTerms()
-    [<TermRef Fall of 2004 at /terms/2004-fall>]
+    [<TermRef Fall of 2004 at http://localhost:7001/terms/2004-fall>]
 
 Same for school timetables:
 
-    >>> client.getSchoolTimetabes()
+    >>> client.getSchoolTimetables()
     [<SchoolTimetableRef Standard Weekly at http://localhost:7001/ttschemas/standard-weekly>]
 
 

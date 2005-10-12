@@ -627,6 +627,7 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
                           group_id)
 
     def test_getTerms(self):
+        from schooltool.restclient.restclient import TermRef
         body = """
             <container xmlns:xlink="http://www.w3.org/1999/xlink">
               <name>terms</name>
@@ -642,10 +643,10 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
                    xlink:href="http://localhost:7001/terms/acl"/>
             </container>
         """
-        expected = [(u'2003-fall', u'/terms/2003-fall'),
-                    (u'2003-fall', u'/terms/2004-spring')]
         client = self.newClient(ResponseStub(200, 'OK', body))
         results = client.getTerms()
+        expected = [TermRef(client, '/terms/2003-fall', '2003-fall'),
+                    TermRef(client, '/terms/2004-spring', '2003-fall')]
         self.assertEquals(results, expected)
         self.checkConnPath(client, '/terms')
 

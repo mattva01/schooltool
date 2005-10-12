@@ -338,12 +338,9 @@ class SchoolToolClient:
     def getTerms(self):
         """Return a list of terms.
 
-        Returns a sequence of tuples (term_title, term_url).
+        Returns a sequence of TermRef objects.
         """
-        response = self.get("/terms")
-        if response.status != 200:
-            raise ResponseStatusError(response)
-        return _parseContainer(response.read())
+        return self.getContainerItems('/terms', TermRef)
 
     def getTimetableSchemas(self):
         """Return a list of timetable schemas.
