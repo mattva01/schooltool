@@ -928,6 +928,47 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertRaises(SchoolToolError, client.createRelationship,
                 '/persons/john', '/groups/teachers', URIMembership, URIGroup)
 
+    def test_createTerm(self, response_code=201):
+        from schooltool.restclient.restclient import TermRef
+        client = self.newClient(ResponseStub(response_code, 'Created',
+                        location='http://localhost/terms/2005-fall'))
+        result = client.createTerm('2005 Fall', '2005-fall',
+                                   datetime.date(2005, 9, 1),
+                                   datetime.date(2005, 12, 31),
+                                   daysofweek=[0, 2, 3, 4, 6],
+                                   holidays=[datetime.date(2005, 12, 25),
+                                             datetime.date(2005, 11, 1)])
+        expected = TermRef(client, '/terms/2005-fall', '2005 Fall')
+        self.assertEquals(result, expected)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/terms/2005-fall')
+        self.assertEquals(conn.method, 'PUT')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body, """
+            <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
+                        first="2005-09-01" last="2005-12-31">
+              <title>2005 Fall</title>
+              <daysofweek>Monday Wednesday Thursday Friday Sunday</daysofweek>
+              <holiday date="2005-12-25">Holiday</holiday>
+              <holiday date="2005-11-01">Holiday</holiday>
+            </schooldays>
+                """)
+
+    def test_createTerm_overrides(self):
+        self.test_createTerm(response_code=200)
+
+    def test_createTerm_errors(self):
+        from schooltool.restclient.restclient import SchoolToolError
+        client = self.newClient(ResponseStub(401, 'Unauthorized'))
+        self.assertRaises(SchoolToolError,
+                          client.createTerm,
+                          '2005 Fall', '2005-fall',
+                          datetime.date(2005, 9, 1),
+                          datetime.date(2005, 12, 31),
+                          daysofweek=[0, 2, 3, 4, 6],
+                          holidays=[datetime.date(2005, 12, 25),
+                                    datetime.date(2005, 11, 1)])
+
     def test_deleteObject(self):
         client = self.newClient(ResponseStub(200, 'OK', 'Deleted'))
         client.deleteObject('/path/to/object')

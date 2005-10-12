@@ -445,6 +445,42 @@ class SchoolToolClient:
             raise ResponseStatusError(response)
         return self._pathFromResponse(response)
 
+    def createTerm(self, title, name, first, last, daysofweek, holidays=()):
+        """Create a term.
+
+        The term stats on `first` and ends on `last` (datetime.date objects).
+
+        `daysofweek` is a sequence of constants (calendar.MONDAY through
+        calendar.SUNDAY) that tell on which weekdays there are lessons, or,
+        in other words, which days are school days.
+
+        `holidays` is a list of dates (datetime.date objects) that are not
+        school days.
+
+        Returns a TermRef.
+        """
+        weekday_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
+                         'Friday', 'Saturday', 'Sunday']
+        daysofweek_xml = " ".join([weekday_names[day]
+                                   for day in range(7)
+                                   if day in daysofweek])
+        holidays_xml = "\n".join(['<holiday date="%s">Holiday</holiday>' % d
+                                  for d in holidays])
+        url = "/terms/%s" % name
+        body = """
+            <schooldays xmlns="http://schooltool.org/ns/schooldays/0.1"
+                        first="%s" last="%s">
+              <title>%s</title>
+              <daysofweek>%s</daysofweek>
+              %s
+            </schooldays>
+        """ % (to_xml(first), to_xml(last), to_xml(title), daysofweek_xml,
+               holidays_xml)
+        response = self.put(url, body)
+        if response.status not in (200, 201):
+            raise ResponseStatusError(response)
+        return TermRef(self, url, title)
+
     def _pathFromResponse(self, response):
         """Return the path portion of the Location header in the response."""
         location = response.getheader('Location')
@@ -730,6 +766,10 @@ class SectionRef(ObjectRef):
         """Add a learner to this section."""
         self.client.createRelationship(self.url, learner.url,
                                        URIMembership_uri, URIMember_uri)
+
+
+class TermRef(ObjectRef):
+    """Reference to a term."""
 
 
 class PersonInfo:

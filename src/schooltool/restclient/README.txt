@@ -161,6 +161,25 @@ XXX TODO: getPhoto -- how do we get the content type?  What happens when there
 is no photo -- do we get None or an exception?
 
 
+Duplicate users
+---------------
+
+If you try to create a person which already exists, well, the new person
+overrides the old one.
+
+    >>> client.createPerson('John Smith', 'john')
+    <PersonRef John Smith at /persons/john>
+
+    >>> client.createPerson('John Doe', 'john')
+    <PersonRef John Doe at /persons/john>
+
+    >>> print client.get('/persons/john').read()
+    <person ...>
+      <title>John Doe</title>
+      ...
+    </person>
+
+
 Importing groups
 ----------------
 
@@ -295,10 +314,21 @@ necessary, and adding sections as group members.
 Timetabling
 -----------
 
+You can create a term
+
+    >>> import calendar
+    >>> from datetime import date
+    >>> client.createTerm(name='2004-fall', title='Fall of 2004',
+    ...                   first=date(2004, 9, 1), last=date(2004, 12, 31),
+    ...                   daysofweek=range(calendar.MONDAY, calendar.FRIDAY+1),
+    ...                   holidays=[date(2004, 10, 31),
+    ...                             date(2004, 12, 25)])
+    <TermRef Fall of 2004 at /terms/2004-fall>
+
 At the moment we can at least list existing terms:
 
     >>> client.getTerms()
-    [<TermRef 2004 Fall at http://localhost:7001/terms/2004-fall>]
+    [<TermRef Fall of 2004 at /terms/2004-fall>]
 
 Same for school timetables:
 
