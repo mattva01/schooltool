@@ -826,24 +826,6 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
                        ' title="Title&lt;with&quot;strange&amp;chars"'
                        ' description=""/>')
 
-    def test_createGenericObject_overwites_existing(self):
-        from schooltool.restclient.restclient import ResourceRef
-        client = self.newClient(ResponseStub(200, 'OK', 'Saved',
-                                    location='http://localhost/resources/ref'))
-        result = client._createGenericObject(ResourceRef, '/resources',
-                                             'Title<with"strange&chars')
-        expected = ResourceRef(client, '/resources/ref',
-                               'Title<with"strange&chars')
-        self.assertEquals(result, expected)
-        conn = self.oneConnection(client)
-        self.assertEquals(conn.path, '/resources')
-        self.assertEquals(conn.method, 'POST')
-        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
-        self.assertEqualsXML(conn.body,
-                '<object xmlns="http://schooltool.org/ns/model/0.1"'
-                       ' title="Title&lt;with&quot;strange&amp;chars"'
-                       ' description=""/>')
-
     def test_createGenericObject_description(self):
         from schooltool.restclient.restclient import GroupRef
         client = self.newClient(ResponseStub(201, 'OK', 'Created',

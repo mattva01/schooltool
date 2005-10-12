@@ -419,7 +419,7 @@ class SchoolToolClient:
                 ' title="%s"'
                 ' description="%s"/>' % (to_xml(title), to_xml(description)))
         response = self.post(where, body)
-        if response.status not in (200, 201):
+        if response.status != 201:
             raise ResponseStatusError(response)
         url = self._pathFromResponse(response)
         return ref_class(self, url, title)
