@@ -183,20 +183,11 @@ class SampleSectionAssignments(object):
                'Presentation', 'Deadline for essay',
                'Deadline for project', 'Read the book', 'Lab work', )
 
-    def _eventConflicts(self, ev1, ev2):
-        (ev1, ev2) = sorted((ev1, ev2))
-        return ev1.dtstart + ev1.duration > ev2.dtstart
-
     def _findProjector(self, ev, projectors):
         for projector in projectors:
-            calendar = ISchoolToolCalendar(projector)
-            busy = False
-            for res_event in calendar:
-                busy = busy or self._eventConflicts(ev, res_event)
-            if not busy:
+            if (projector, ev.dtstart) not in self.taken_projectors:
                 return projector
         return None
-
 
     def generate(self, app, seed=None):
         app = removeSecurityProxy(app)
@@ -207,6 +198,9 @@ class SampleSectionAssignments(object):
                       for resource in app['resources'].values()
                           if resource.__name__.startswith('projector')]
 
+        # tuples of (projector, datetime)
+        self.taken_projectors = set()
+
         for section in app['sections'].values():
             ttcal = ITimetables(section).makeTimetableCalendar()
             for event in ttcal:
@@ -216,4 +210,6 @@ class SampleSectionAssignments(object):
                     projector = self._findProjector(ev, projectors)
                     if projector is not None:
                         ev.bookResource(projector)
+                        self.taken_projectors.add((projector, ev.dtstart))
                     ISchoolToolCalendar(section).addEvent(ev)
+
