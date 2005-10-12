@@ -356,6 +356,10 @@ class SchoolToolClient:
         return _parseContainer(response.read())
 
     def createPerson(self, person_title, name, password=None):
+        """Create a person object.
+
+        Returns a PersonRef for the new person.
+        """
         body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
                 ' title="%s"/>' % to_xml(person_title))
 
@@ -372,24 +376,37 @@ class SchoolToolClient:
         return PersonRef(self, url, person_title)
 
     def createGroup(self, title, description=""):
-        body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
-                ' title="%s"'
-                ' description="%s"/>' % (to_xml(title), to_xml(description)))
-        response = self.post('/groups', body)
-        if response.status != 201:
-            raise ResponseStatusError(response)
-        url = self._pathFromResponse(response)
-        return GroupRef(self, url, title)
+        """Create a group object.
+
+        Returns a GroupRef for the new group.
+        """
+        return self._createGenericObject(GroupRef, '/groups',
+                                         title, description)
 
     def createResource(self, title, description=""):
+        """Create a resource object.
+
+        Returns a ResourceRef for the new resource.
+        """
+        return self._createGenericObject(ResourceRef, '/resources',
+                                         title, description)
+
+    def _createGenericObject(self, ref_class, where, title, description=""):
+        """Create a generic object that can be represented in XML as:
+
+            <object xmlns="http://schooltool.org/ns/model/0.1"
+                    title="$title" description="$description" />
+
+        Returns a ref_class instance for the new object.
+        """
         body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
                 ' title="%s"'
                 ' description="%s"/>' % (to_xml(title), to_xml(description)))
-        response = self.post('/resources', body)
-        if response.status != 201:
+        response = self.post(where, body)
+        if response.status not in (200, 201):
             raise ResponseStatusError(response)
         url = self._pathFromResponse(response)
-        return ResourceRef(self, url, title)
+        return ref_class(self, url, title)
 
     def createRelationship(self, obj1_url, obj2_url, reltype, obj2_role):
         """Create a relationship between two objects.

@@ -743,7 +743,7 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
     def test_createGroup(self):
         from schooltool.restclient.restclient import GroupRef
         client = self.newClient(ResponseStub(201, 'OK', 'Created',
-                                    location='http://localhost/groups/titlewithstrangechars'))
+                    location='http://localhost/groups/titlewithstrangechars'))
         result = client.createGroup('Title<with"strange&chars')
         expected = GroupRef(client, '/groups/titlewithstrangechars',
                             'Title<with"strange&chars')
@@ -756,28 +756,6 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
                 '<object xmlns="http://schooltool.org/ns/model/0.1"'
                        ' title="Title&lt;with&quot;strange&amp;chars"'
                        ' description=""/>')
-
-    def test_createGroup_description(self):
-        from schooltool.restclient.restclient import GroupRef
-        client = self.newClient(ResponseStub(201, 'OK', 'Created',
-                                    location='http://localhost/groups/huba'))
-        result = client.createGroup('<Huba>',
-                                    description='<Buba>')
-        expected = GroupRef(client, '/groups/huba', '<Huba>')
-        self.assertEquals(result, expected)
-        conn = self.oneConnection(client)
-        self.assertEquals(conn.path, '/groups')
-        self.assertEquals(conn.method, 'POST')
-        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
-        self.assertEqualsXML(conn.body,
-                '<object xmlns="http://schooltool.org/ns/model/0.1"'
-                       ' title="&lt;Huba&gt;"'
-                       ' description="&lt;Buba&gt;"/>')
-
-    def test_createGroup_with_errors(self):
-        from schooltool.restclient.restclient import SchoolToolError
-        client = self.newClient(ResponseStub(400, 'Bad Request'))
-        self.assertRaises(SchoolToolError, client.createGroup, 'Slackers')
 
     def test_createResource(self):
         from schooltool.restclient.restclient import ResourceRef
@@ -796,13 +774,13 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
                        ' title="Title&lt;with&quot;strange&amp;chars"'
                        ' description=""/>')
 
-    def test_createResource_description(self):
+    def test_createGenericObject(self):
         from schooltool.restclient.restclient import ResourceRef
         client = self.newClient(ResponseStub(201, 'OK', 'Created',
-                                location='http://localhost/resources/a-res'))
-        result = client.createResource('Title<with"strange&chars',
-                                       'A description < &c.')
-        expected = ResourceRef(client, '/resources/a-res',
+                                    location='http://localhost/resources/ref'))
+        result = client._createGenericObject(ResourceRef, '/resources',
+                                             'Title<with"strange&chars')
+        expected = ResourceRef(client, '/resources/ref',
                                'Title<with"strange&chars')
         self.assertEquals(result, expected)
         conn = self.oneConnection(client)
@@ -812,12 +790,48 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEqualsXML(conn.body,
                 '<object xmlns="http://schooltool.org/ns/model/0.1"'
                        ' title="Title&lt;with&quot;strange&amp;chars"'
-                       ' description="A description &lt; &amp;c."/>')
+                       ' description=""/>')
 
-    def test_createResource_with_errors(self):
+    def test_createGenericObject_overwites_existing(self):
+        from schooltool.restclient.restclient import ResourceRef
+        client = self.newClient(ResponseStub(200, 'OK', 'Saved',
+                                    location='http://localhost/resources/ref'))
+        result = client._createGenericObject(ResourceRef, '/resources',
+                                             'Title<with"strange&chars')
+        expected = ResourceRef(client, '/resources/ref',
+                               'Title<with"strange&chars')
+        self.assertEquals(result, expected)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/resources')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="Title&lt;with&quot;strange&amp;chars"'
+                       ' description=""/>')
+
+    def test_createGenericObject_description(self):
+        from schooltool.restclient.restclient import GroupRef
+        client = self.newClient(ResponseStub(201, 'OK', 'Created',
+                            location='http://localhost/groups/huba'))
+        result = client._createGenericObject(GroupRef, '/groups', '<Huba>',
+                                             description='<Buba>')
+        expected = GroupRef(client, '/groups/huba', '<Huba>')
+        self.assertEquals(result, expected)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/groups')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="&lt;Huba&gt;"'
+                       ' description="&lt;Buba&gt;"/>')
+
+    def test_createGenericObject_with_errors(self):
         from schooltool.restclient.restclient import SchoolToolError
         client = self.newClient(ResponseStub(400, 'Bad Request'))
-        self.assertRaises(SchoolToolError, client.createResource, 'Whatever')
+        self.assertRaises(SchoolToolError, client._createGenericObject,
+                          None, '/whatever', 'Slackers')
 
     def test_createRelationship(self):
         from schooltool.restclient.restclient import URIObject
