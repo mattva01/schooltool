@@ -23,6 +23,7 @@ Things common to the SchoolTool server and clients.
 import re
 import locale
 import datetime
+import urllib
 
 __metaclass__ = type
 
@@ -385,3 +386,16 @@ def looks_like_a_uri(uri):
     """
     uri_re = re.compile(r"^[A-Za-z][A-Za-z0-9+-.]*:\S\S*$")
     return bool(uri and uri_re.match(uri) is not None)
+
+
+def unquote_uri(uri):
+    r"""Unquote a URI.
+
+       >>> unquote_uri('/terms/%C5%BEiema')
+       u'/terms/\u017eiema'
+
+       >>> unquote_uri(u'/terms/%C5%BEiema')
+       u'/terms/\u017eiema'
+
+    """
+    return urllib.unquote(str(uri)).decode('UTF-8')
