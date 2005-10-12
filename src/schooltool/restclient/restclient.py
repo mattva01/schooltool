@@ -391,6 +391,22 @@ class SchoolToolClient:
         return self._createGenericObject(ResourceRef, '/resources',
                                          title, description)
 
+    def createCourse(self, title, description=""):
+        """Create a course object.
+
+        Returns a CourseRef for the new course.
+        """
+        return self._createGenericObject(CourseRef, '/courses',
+                                         title, description)
+
+    def createSection(self, title, description=""):
+        """Create a section object.
+
+        Returns a SectionRef for the new section.
+        """
+        return self._createGenericObject(SectionRef, '/sections',
+                                         title, description)
+
     def _createGenericObject(self, ref_class, where, title, description=""):
         """Create a generic object that can be represented in XML as:
 

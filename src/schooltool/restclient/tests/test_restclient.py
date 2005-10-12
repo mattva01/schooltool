@@ -774,6 +774,40 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
                        ' title="Title&lt;with&quot;strange&amp;chars"'
                        ' description=""/>')
 
+    def test_createCourse(self):
+        from schooltool.restclient.restclient import CourseRef
+        client = self.newClient(ResponseStub(201, 'OK', 'Created',
+                                location='http://localhost/courses/ac'))
+        result = client.createCourse('Title<with"strange&chars')
+        expected = CourseRef(client, '/courses/ac',
+                            'Title<with"strange&chars')
+        self.assertEquals(result, expected)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/courses')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="Title&lt;with&quot;strange&amp;chars"'
+                       ' description=""/>')
+
+    def test_createSection(self):
+        from schooltool.restclient.restclient import SectionRef
+        client = self.newClient(ResponseStub(201, 'OK', 'Created',
+                                location='http://localhost/sections/ac'))
+        result = client.createSection('Title<with"strange&chars')
+        expected = SectionRef(client, '/sections/ac',
+                              'Title<with"strange&chars')
+        self.assertEquals(result, expected)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/sections')
+        self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="Title&lt;with&quot;strange&amp;chars"'
+                       ' description=""/>')
+
     def test_createGenericObject(self):
         from schooltool.restclient.restclient import ResourceRef
         client = self.newClient(ResponseStub(201, 'OK', 'Created',
