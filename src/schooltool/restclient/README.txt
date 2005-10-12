@@ -366,13 +366,7 @@ Deleting objects
 
 Suppose we got bored of the second beamer.
 
-    >>> client.delete(resource.url)
-    <Response: 200 Ok>
-
-XXX mg: or is it better to have
-      client.deleteObject(resource) or perhaps resource.delete()
-    that would also check the status code and raise ResponseStatusError if
-    something is amiss?
+    >>> client.deleteObject(resource)
 
 It is gone now:
 

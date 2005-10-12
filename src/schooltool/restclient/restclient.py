@@ -485,8 +485,9 @@ class SchoolToolClient:
         slash = location.index('/', slashslash + 2)
         return location[slash:]
 
-    def deleteObject(self, object_url):
+    def deleteObject(self, object_ref_or_url):
         """Delete an object."""
+        object_url = getattr(object_ref_or_url, 'url', object_ref_or_url)
         response = self.delete(object_url)
         if response.status != 200:
             raise ResponseStatusError(response)

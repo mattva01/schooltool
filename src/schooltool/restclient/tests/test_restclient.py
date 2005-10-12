@@ -960,6 +960,16 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(conn.method, 'DELETE')
         self.assertEquals(conn.body, '')
 
+    def test_deleteObject_object_ref(self):
+        from schooltool.restclient.restclient import ObjectRef
+        client = self.newClient(ResponseStub(200, 'OK', 'Deleted'))
+        ref = ObjectRef(client, '/path/to/object')
+        client.deleteObject(ref)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/path/to/object')
+        self.assertEquals(conn.method, 'DELETE')
+        self.assertEquals(conn.body, '')
+
     def test_deleteObject_with_errors(self):
         from schooltool.restclient.restclient import SchoolToolError
         client = self.newClient(ResponseStub(400, 'Bad Request'))
