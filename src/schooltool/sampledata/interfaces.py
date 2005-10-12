@@ -40,8 +40,7 @@ class ISampleDataPlugin(zope.interface.Interface):
         title=u"A list of dependenies",
         value_type=zope.schema.Id(title=u"Sample data generator name"),
         description=u"""
-        A list of names of sample data generators this
-        one depends on.
+        A list of names of sample data generators this one depends on.
         """)
 
     def generate(app, seed=None):
