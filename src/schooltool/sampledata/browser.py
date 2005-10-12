@@ -50,6 +50,4 @@ class SampleDataView(BrowserView):
                 zapi.absoluteURL(self.context, self.request))
         if 'SUBMIT' in self.request:
             # TODO: maybe clear database here
-            generate(self.context, self.seed)
-            self.request.response.redirect(
-                zapi.absoluteURL(self.context, self.request))
+            self.times = generate(self.context, self.seed)

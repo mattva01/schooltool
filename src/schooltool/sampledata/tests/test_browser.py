@@ -98,12 +98,10 @@ def doctest_SampleDataView_update():
           <schooltool.app.app.SchoolToolApplication object at ...>,
           'data')]
 
-    When the work is done we get redirected to the main page:
+    When the work is done the times attribute is set on the view:
 
-        >>> request.response.getStatus()
-        302
-        >>> request.response.getHeader('location')
-        'http://127.0.0.1'
+        >>> pprint(view.times)
+        {'play': 0.0, 'work': 0.0}
 
     If we press the cancel button, we also get redirected to the main page:
 
@@ -127,6 +125,15 @@ def doctest_SampleDataView__call__():
 
         >>> schooltool.app.browser.testing.setUp()
         >>> setUpApplicationPreferences()
+
+    Let's set up some plugins so they are called:
+
+        >>> from schooltool.sampledata.tests.test_generator import DummyPlugin
+        >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
+        >>> p1 = DummyPlugin("work", ())
+        >>> p2 = DummyPlugin("play", ("work", ))
+        >>> ztapi.provideUtility(ISampleDataPlugin, p1, 'work')
+        >>> ztapi.provideUtility(ISampleDataPlugin, p2, 'play')
 
     Let's create an application object and a view:
 
@@ -160,6 +167,31 @@ def doctest_SampleDataView__call__():
         </form>
         ...
 
+    Let's render the view.  The default value of the seed is displayed there.
+
+        >>> request = TestRequest(form={'seed': 'test', 'SUBMIT': 'Yes'})
+        >>> view = SampleDataView(app, request)
+        >>> print view()
+        <BLANKLINE>
+        ...
+        <p>Sample data generated.  Below is the list of plugins executed along
+        with the CPU time it took to run them</p>
+        <BLANKLINE>
+        <table>
+          <tr>
+            <th>Plugin Name</th>
+            <th>CPU time used (seconds)</th>
+          </tr>
+          <tr>
+            <td>play</td>
+            <td>...</td>
+          </tr>
+          <tr>
+            <td>work</td>
+            <td>...</td>
+          </tr>
+        </table>
+        ...
     """
 
 def test_suite():

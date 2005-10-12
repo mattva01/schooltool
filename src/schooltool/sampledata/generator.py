@@ -32,6 +32,7 @@ interface schooltool.sampledata.interfaces.ISampleDataGeneratorPlugin.
 
 $Id$
 """
+import time
 from zope.app import zapi
 from schooltool.sampledata.interfaces import ISampleDataPlugin
 from schooltool.sampledata.interfaces import CyclicDependencyError
@@ -47,7 +48,11 @@ def generate(app, seed=None):
     directed acyclic graph.
 
     Raises a CyclicDependencyError if the dependency graph has a cycle.
+
+    Returns a dict with names of plugins run as keys and CPU times as
+    values.
     """
+
     plugins = dict([(obj.name, obj) for name, obj in
                     zapi.getUtilitiesFor(ISampleDataPlugin)])
 
@@ -66,6 +71,9 @@ def generate(app, seed=None):
     closed = 'closed'
     status = dict([(name, new) for name in plugins])
 
+    # dict with used CPU cycles for each plugin
+    times = {}
+
     def visit(name):
         """The recursive part of the topological sort
 
@@ -76,7 +84,9 @@ def generate(app, seed=None):
             plugin = plugins[name]
             for dep in plugin.dependencies:
                 visit(dep)
+            start = time.clock()
             plugin.generate(app, seed)
+            times[name] = time.clock() - start
             status[name] = closed
 
         elif status[name] == closed:
@@ -88,3 +98,5 @@ def generate(app, seed=None):
 
     for name in plugins:
         visit(name)
+
+    return times
