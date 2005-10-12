@@ -481,6 +481,9 @@ class Response:
 
     __str__ = read
 
+    def __repr__(self):
+        return '<Response: %s %s>' % (self.status, self.reason)
+
 
 #
 # Parsing utilities

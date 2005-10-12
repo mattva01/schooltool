@@ -8,7 +8,11 @@ Big Fat Warning
 This is currently science fiction, i.e. it doesn't work.  It represents an idea
 of the ideal restive client API.
 
-Perhaps it will be possible to convert it to a working functional test.
+It is now a functional test that you can run by doing ::
+
+    ./test.py -s src/schooltool/restclient -f --all
+
+It is disabled by default because it is not implemented yet.
 
 
 Introduction
@@ -24,6 +28,7 @@ we'll use a stub connectionFactory.
 
     >>> from schooltool.restclient.ftests import RestConnectionFactory
     >>> client.connectionFactory = RestConnectionFactory
+    >>> client.connectionFactory.handleErrors = True
 
 We will authenticate as the user 'manager' with password 'schooltool'
 
@@ -331,13 +336,18 @@ Deleting objects
 
 Suppose we got bored of the second beamer.
 
-    >>> resource.delete()
+    >>> client.delete(resource.url)
+    <Response: 200 Ok>
 
-or we could do
+XXX mg: or is it better to have
+      client.deleteObject(resource) or perhaps resource.delete()
+    that would also check the status code and raise ResponseStatusError if
+    something is amiss?
 
-    >>> client.delete('/resources/beamer-2')
+It is gone now:
 
-That's it.
+    >>> client.get(resource.url)
+    <Response: 404 Not Found>
 
 
 Calendars
