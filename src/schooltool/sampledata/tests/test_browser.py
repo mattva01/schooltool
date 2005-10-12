@@ -102,6 +102,8 @@ def doctest_SampleDataView_update():
 
         >>> pprint(view.times)
         {'play': 0.0, 'work': 0.0}
+        >>> view.work_done
+        True
 
     If we press the cancel button, we also get redirected to the main page:
 
@@ -192,6 +194,26 @@ def doctest_SampleDataView__call__():
           </tr>
         </table>
         ...
+    """
+
+def doctest_SampleDataView_work_done():
+    """Tests for SampleDataView.work_done propery.
+
+        >>> from schooltool.sampledata.browser import SampleDataView
+        >>> request = TestRequest()
+        >>> view = SampleDataView(object(), request)
+
+    Before any processing is done, work_done is False:
+
+        >>> view.work_done
+        False
+
+    When the update sets the times attribute, it becomes True:
+
+        >>> view.times = {}
+        >>> view.work_done
+        True
+
     """
 
 def test_suite():

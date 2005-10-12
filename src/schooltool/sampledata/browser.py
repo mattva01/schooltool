@@ -36,6 +36,8 @@ class SampleDataView(BrowserView):
 
     template = ViewPageTemplateFile("sampledata.pt")
 
+    work_done = property(lambda self: hasattr(self, 'times'))
+
     def __call__(self):
         self.update()
         return self.template()

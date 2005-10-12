@@ -10,7 +10,7 @@
     i18n:translate="">Sample Data Generation</h1>
 
 <metal:block metal:fill-slot="body">
-<tal:block condition="python: not hasattr(view, 'times')">
+<tal:block condition="not: view/work_done">
 <p i18n:translate="" class="error">Warning: proceeding will populate
 the database with randomly generated data.  Do not do this if you have
 any valuable data in your SchoolTool instance.</p>
@@ -37,7 +37,7 @@ of the random seed.</p>
 </form>
 </tal:block>
 
-<tal:block condition="python: hasattr(view, 'times')">
+<tal:block condition="view/work_done">
 
 <p>Sample data generated.  Below is the list of plugins executed along
 with the CPU time it took to run them</p>
