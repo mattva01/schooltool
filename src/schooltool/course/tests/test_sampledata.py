@@ -250,21 +250,33 @@ def doctest_SampleSectionAssignments():
     need lots of set up:
 
         >>> plugin.dependencies
-        ('section_timetables',)
+        ('section_timetables', 'resources')
 
         >>> app = stsetup.setupSchoolToolSite()
 
         >>> from schooltool.course.course import Course
         >>> from schooltool.course.section import Section
-        >>> s1 = app['sections']['section000'] = Section('section000')
-        >>> s2 = app['sections']['section001'] = Section('section001')
-        >>> s3 = app['sections']['section002'] = Section('section002')
+        >>> s0 = app['sections']['section000'] = Section('section000')
+        >>> s1 = app['sections']['section001'] = Section('section001')
+        >>> s2 = app['sections']['section002'] = Section('section002')
+        >>> s3 = app['sections']['section003'] = Section('section003')
+        >>> s4 = app['sections']['section004'] = Section('section004')
+        >>> s5 = app['sections']['section005'] = Section('section005')
+        >>> s6 = app['sections']['section006'] = Section('section006')
+        >>> s7 = app['sections']['section007'] = Section('section007')
+        >>> s8 = app['sections']['section008'] = Section('section008')
         >>> c = app['courses']['somecourse'] = Course('Hard Science')
 
         >>> from schooltool.app.relationships import CourseSections
+        >>> CourseSections(course=c, section=s0)
         >>> CourseSections(course=c, section=s1)
         >>> CourseSections(course=c, section=s2)
         >>> CourseSections(course=c, section=s3)
+        >>> CourseSections(course=c, section=s4)
+        >>> CourseSections(course=c, section=s5)
+        >>> CourseSections(course=c, section=s6)
+        >>> CourseSections(course=c, section=s7)
+        >>> CourseSections(course=c, section=s8)
 
         >>> from schooltool.timetable.sampledata import SampleTimetableSchema
         >>> from schooltool.timetable.sampledata import SampleTerms
@@ -272,6 +284,9 @@ def doctest_SampleSectionAssignments():
         >>> SampleTimetableSchema().generate(app, 42)
         >>> SampleTerms().generate(app, 42)
         >>> PopulateSectionTimetables().generate(app, 42)
+
+        >>> from schooltool.resource.sampledata import SampleResources
+        >>> SampleResources().generate(app, 42)
 
     Now, Let's run the plugin:
 
@@ -281,33 +296,51 @@ def doctest_SampleSectionAssignments():
     roughly once in 13 times the group meets.
 
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
-        >>> len(ISchoolToolCalendar(s1))
+        >>> len(ISchoolToolCalendar(s0))
         15
-        >>> len(ISchoolToolCalendar(s2))
+        >>> len(ISchoolToolCalendar(s1))
         10
-        >>> len(ISchoolToolCalendar(s3))
+        >>> len(ISchoolToolCalendar(s2))
         9
 
     These events have random titles and times coinciding with section
     timetable events:
+        
+        >>> for ev in sorted(ISchoolToolCalendar(s8)):
+        ...     resources = [res.__name__ for res in ev.resources]
+        ...     print ev.dtstart, ev.title, resources
+        2005-08-25 10:00:00+00:00 Presentation [u'projector00']
+        2005-09-08 10:00:00+00:00 Homework [u'projector00']
+        2005-11-01 08:00:00+00:00 Presentation [u'projector01']
+        2005-11-09 10:00:00+00:00 Quiz [u'projector00']
+        2005-11-10 08:00:00+00:00 Homework [u'projector00']
+        2005-11-22 12:30:00+00:00 Homework [u'projector00']
+        2005-12-09 09:00:00+00:00 Homework [u'projector00']
+        2006-03-06 12:30:00+00:00 Read the book [u'projector00']
+        2006-03-22 12:30:00+00:00 Homework [u'projector00']
+        2006-03-29 09:00:00+00:00 Homework [u'projector00']
+        2006-04-03 12:30:00+00:00 Deadline for essay [u'projector00']
+        2006-04-24 09:00:00+00:00 Homework [u'projector00']
+        2006-04-27 12:30:00+00:00 Homework [u'projector00']
+        2006-05-02 08:00:00+00:00 Quiz [u'projector00']
+        2006-05-24 09:00:00+00:00 Homework [u'projector01']
 
-        >>> for ev in sorted(ISchoolToolCalendar(s1)):
-        ...     print ev.dtstart.strftime("%Y-%m-%d %R"), ev.title
-        2005-09-01 13:30 Homework
-        2005-09-02 09:00 Homework
-        2005-10-03 10:00 Deadline for essay
-        2005-10-19 08:00 Homework
-        2005-10-24 10:00 Lab work
-        2005-11-04 08:00 Deadline for essay
-        2005-11-14 10:00 Homework
-        2005-11-17 10:00 Test
-        2006-01-26 11:00 Quiz
-        2006-01-27 13:30 Deadline for essay
-        2006-02-28 11:00 Test
-        2006-03-01 09:00 Lab work
-        2006-03-14 12:30 Read the book
-        2006-03-15 10:00 Lab work
-        2006-04-05 13:30 Lab work
+    Resources must have events in calendars.
+
+        >>> projector = app['resources']['projector00']
+        >>> calendar = ISchoolToolCalendar(projector)
+        >>> for ev in sorted(calendar)[0:10]:
+        ...     print ev.dtstart, ev.duration, ev.title
+        2005-08-22 09:00:00+00:00 0:55:00 Assignment
+        2005-08-22 12:30:00+00:00 0:55:00 Quiz
+        2005-08-25 08:00:00+00:00 0:55:00 Lab work
+        2005-08-25 10:00:00+00:00 0:55:00 Presentation
+        2005-08-26 09:00:00+00:00 0:55:00 Presentation
+        2005-09-01 13:30:00+00:00 1:00:00 Homework
+        2005-09-02 09:00:00+00:00 0:55:00 Homework
+        2005-09-06 10:00:00+00:00 0:55:00 Homework
+        2005-09-06 12:30:00+00:00 0:55:00 Homework
+        2005-09-07 11:00:00+00:00 0:55:00 Read the book
 
     """
 
