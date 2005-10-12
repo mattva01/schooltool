@@ -789,9 +789,8 @@ class ResponseStatusError(SchoolToolError):
 
     def __init__(self, response):
         errmsg = "%d %s" % (response.status, response.reason)
-        if response.getheader('Content-Type') == 'text/plain':
+        if response.getheader('Content-Type').startswith('text/plain'):
             errmsg += '\n%s' % response.read()
         SchoolToolError.__init__(self, errmsg)
         self.status = response.status
         self.reason = response.reason
-
