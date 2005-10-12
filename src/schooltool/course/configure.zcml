@@ -101,7 +101,7 @@
         />
 
     <utility
-        factory=".sampledata.PopulateSectionTimetables"
+        factory=".sampledata.SampleTimetables"
         provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
         name="section_timetables"
         />

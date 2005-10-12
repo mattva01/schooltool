@@ -103,25 +103,6 @@ class SampleSections(object):
         assert len(courses) == 0
         assert len(sections) == 0
 
-        # Now we want to assign students to sections.
-        # Each student must be in a section for each subject.
-        # There are 6 subjects, 4 courses for each.
-
-        # Let's sort the sections by subject.
-        sections = dict([(subject, [])
-                         for subject in SampleCourses.subjects])
-        for section in app['sections'].values():
-            course = getRelatedObjects(section, URICourse)[0]
-            course_subject = course.title.split()[0]
-            sections[course_subject].append(section)
-
-        # Now let's assign student to one section of each subject.
-        for person in app['persons'].values():
-            if person.__name__.startswith('student'):
-                for subject in SampleCourses.subjects:
-                    section = self.random.choice(sections[subject])
-                    Membership(group=section, member=person)
-
         # Now let's assign rooms to sections.  In order to avoid
         # collisions we'll in fact assign rooms to teachers.
 
@@ -137,31 +118,55 @@ class SampleSections(object):
                     section.location = room
 
 
-
-class PopulateSectionTimetables(object):
-    """A sample data plugin that populates section timetables with events"""
+class SampleTimetables(object):
+    """Set up a random schedule for teachers and students"""
 
     implements(ISampleDataPlugin)
 
-    name = 'section_timetables'
+    name = "section_timetables"
 
-    dependencies = ('sections', 'ttschema', 'terms')
+    dependencies = ("sections", "ttschema", "terms")
+
+    def assignPeriodToSection(self, app, period, section):
+        course = getRelatedObjects(section, URICourse)[0]
+        for ttname in '2005-fall.simple', '2006-spring.simple':
+            timetable = app['ttschemas'].getDefault().createTimetable()
+            ITimetables(section).timetables[ttname] = timetable
+            for day_id in timetable.keys():
+                activity = TimetableActivity(course.title, owner=section,
+                                             resources=(section.location, ))
+                timetable[day_id].add(period, activity)
 
     def generate(self, app, seed=None):
-        app = removeSecurityProxy(app)
+        # Let's assign a period for each teacher's sections
         self.random = random.Random()
         self.random.seed(str(seed) + self.name)
+        app = removeSecurityProxy(app)
+        sections = {}
+        for person in app['persons'].values():
+            if person.__name__.startswith('teacher'):
+                periods = ['A', 'B', 'C', 'D', 'E', 'F']
+                for section in getRelatedObjects(person, URISection):
+                    course = getRelatedObjects(section, URICourse)[0]
+                    subject = course.title.split()[0]
+                    period = self.random.choice(periods)
+                    periods.remove(period)
+                    self.assignPeriodToSection(app, period, section)
+                    if (subject, period) not in sections:
+                        sections[(subject, period)] = []
+                    sections[(subject, period)].append(section)
 
-        for section in app['sections'].values():
-            course = getRelatedObjects(section, URICourse)[0]
-            for ttname in '2005-fall.simple', '2006-spring.simple':
-                timetable = app['ttschemas'].getDefault().createTimetable()
-                ITimetables(section).timetables[ttname] = timetable
-                for i in range(6):
-                    day_id = self.random.choice(timetable.keys())
-                    period_id = self.random.choice(timetable[day_id].keys())
-                    activity = TimetableActivity(course.title, owner=section)
-                    timetable[day_id].add(period_id, activity)
+        assert len(sections) == 36, "Try a different random seed please"
+
+        # Now, let's choose timetables for each student:
+        for person in app['persons'].values():
+            if person.__name__.startswith('student'):
+                periods = ['A', 'B', 'C', 'D', 'E', 'F']
+                for subject in SampleCourses.subjects:
+                    period = self.random.choice(periods)
+                    periods.remove(period)
+                    section = self.random.choice(sections[(subject, period)])
+                    Membership(group=section, member=person)
 
 
 class SampleSectionAssignments(object):
@@ -181,7 +186,7 @@ class SampleSectionAssignments(object):
     def _eventConflicts(self, ev1, ev2):
         (ev1, ev2) = sorted((ev1, ev2))
         return ev1.dtstart + ev1.duration > ev2.dtstart
-    
+
     def _findProjector(self, ev, projectors):
         for projector in projectors:
             calendar = ISchoolToolCalendar(projector)
@@ -192,16 +197,16 @@ class SampleSectionAssignments(object):
                 return projector
         return None
 
-    
+
     def generate(self, app, seed=None):
         app = removeSecurityProxy(app)
         self.random = random.Random()
         self.random.seed(str(seed) + self.name)
- 
+
         projectors = [resource
                       for resource in app['resources'].values()
                           if resource.__name__.startswith('projector')]
-         
+
         for section in app['sections'].values():
             ttcal = ITimetables(section).makeTimetableCalendar()
             for event in ttcal:

@@ -126,113 +126,156 @@ def doctest_SampleSections():
         >>> for course in app['courses'].values():
         ...    assert len(getRelatedObjects(course, URISectionOfCourse)) == 10
 
-    All students get assigned to 6 sections, one of each subject:
-
-        >>> from schooltool.app.membership import URIGroup
-        >>> import zope.i18n
-        >>> student = app['persons']['student042']
-        >>> for section in getRelatedObjects(student, URIGroup):
-        ...     print zope.i18n.translate(section.label)
-        Daniel Reid -- English C
-        Callum Mendoza -- Math D
-        Francisco Hunt -- History D
-        Sanne Parks -- Science A
-        Dorothy Mendoza -- Spanish C
-        Hank Nielsen -- Art C
-
-    Each section has a room attached:
-
-        >>> from schooltool.app.membership import URIGroup
-        >>> import zope.i18n
-        >>> student = app['persons']['student042']
-        >>> for section in getRelatedObjects(student, URIGroup):
-        ...     print section.location.title
-        Room 12
-        Room 41
-        Room 20
-        Room 40
-        Room 52
-        Room 08
-
     All sections of a teacher gather in one room:
 
         >>> import zope.i18n
         >>> student = app['persons']['teacher042']
         >>> for section in getRelatedObjects(student, URISection):
         ...     print section.location.title
-        Room 22
-        Room 22
-        Room 22
-        Room 22
-        Room 22
+        Room 60
+        Room 60
+        Room 60
+        Room 60
+        Room 60
 
     """
 
 
-def doctest_PopulateSectionTimetables():
-    """A sample data plugin that populates section timetables with events
+def doctest_SampleTimetables():
+    """A sample data plugin that creates timetables for students and teachers
 
-        >>> from schooltool.course.sampledata import PopulateSectionTimetables
+        >>> from schooltool.course.sampledata import SampleTimetables
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
-        >>> plugin = PopulateSectionTimetables()
+        >>> plugin = SampleTimetables()
         >>> verifyObject(ISampleDataPlugin, plugin)
         True
 
-    This plugin depends on some stuff:
+    This plugin needs the sections set up, and that requires a lot:
 
         >>> plugin.dependencies
         ('sections', 'ttschema', 'terms')
 
-    As always, we'll need an application instance:
-
         >>> app = stsetup.setupSchoolToolSite()
+        >>> from schooltool.person.sampledata import SampleStudents
+        >>> from schooltool.person.sampledata import SampleTeachers
+        >>> from schooltool.course.sampledata import SampleCourses
+        >>> from schooltool.resource.sampledata import SampleResources
+        >>> from schooltool.course.sampledata import SampleSections
+        >>> from schooltool.timetable.sampledata import SampleTimetableSchema
+        >>> from schooltool.timetable.sampledata import SampleTerms
+        >>> SampleTeachers().generate(app, 42)
+        >>> SampleStudents().generate(app, 42)
+        >>> SampleCourses().generate(app, 42)
+        >>> SampleResources().generate(app, 42)
+        >>> SampleSections().generate(app, 42)
+        >>> SampleTimetableSchema().generate(app, 42)
+        >>> SampleTerms().generate(app, 42)
 
-    In the application we'll need several sections and a course:
+    Let's call the plugin:
+
+        >>> plugin.generate(app, 42)
+
+    It randomly assigns a period for each section, so that no sections
+    of the same teacher happen on the same period:
+
+        >>> from schooltool.timetable.interfaces import ITimetables
+        >>> from schooltool.relationship import getRelatedObjects
+        >>> from schooltool.app.relationships import URISection
+        >>> teacher = app['persons']['teacher042']
+        >>> for section in getRelatedObjects(teacher, URISection):
+        ...     timetables = ITimetables(section)
+        ...     timetable = timetables.timetables['2005-fall.simple']
+        ...     for period, activities in timetable['Day 1'].items():
+        ...         if activities:
+        ...             print period, section.__name__
+        F section215
+        E section009
+        B section117
+        A section188
+        C section212
+
+    Also, on each day the same section gets the same slot:
+
+        >>> section = getRelatedObjects(teacher, URISection)[0]
+        >>> timetable = ITimetables(section).timetables['2005-fall.simple']
+        >>> for day, period, activity in timetable.itercontent():
+        ...     print day, period, activity.title
+        Day 1 F Spanish C
+        Day 2 F Spanish C
+        Day 3 F Spanish C
+        Day 4 F Spanish C
+        Day 5 F Spanish C
+        Day 6 F Spanish C
+
+    The students get assigned to sections so that they get into one
+    section of each subject, and they fall into different periods.
+
+        >>> student = app['persons']['student042']
+        >>> from schooltool.app.membership import URIGroup
+        >>> for section in getRelatedObjects(student, URIGroup):
+        ...     timetable = ITimetables(section).timetables['2005-fall.simple']
+        ...     for day, period, activity in list(timetable.itercontent())[:1]:
+        ...         print period, activity.title
+        D English B
+        B Math A
+        A History A
+        E Science C
+        C Spanish A
+        F Art A
+
+    """
+
+
+def doctest_SampleTimetables_assignPeriodToSection():
+    """Test for SampleTimetables.assignPeriodToSection method
+
+        >>> from schooltool.course.sampledata import SampleTimetables
+        >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
+        >>> plugin = SampleTimetables()
+
+    We need a section and a course for this method:
 
         >>> from schooltool.course.course import Course
         >>> from schooltool.course.section import Section
-        >>> s1 = app['sections']['section000'] = Section('section000')
-        >>> s2 = app['sections']['section001'] = Section('section001')
-        >>> s3 = app['sections']['section002'] = Section('section002')
-        >>> c = app['courses']['somecourse'] = Course('Hard Science')
-
         >>> from schooltool.app.relationships import CourseSections
-        >>> CourseSections(course=c, section=s1)
-        >>> CourseSections(course=c, section=s2)
-        >>> CourseSections(course=c, section=s3)
+        >>> app = stsetup.setupSchoolToolSite()
+        >>> c = app['courses']['my_course'] = Course('My Course')
+        >>> s = app['sections']['the_sect'] = Section('Sect')
+        >>> CourseSections(course=c, section=s)
 
-    As for the ttschema and terms, it's easier just to invoke the plugins:
+    Also, we need a timetable schema with terms:
 
         >>> from schooltool.timetable.sampledata import SampleTimetableSchema
         >>> from schooltool.timetable.sampledata import SampleTerms
         >>> SampleTimetableSchema().generate(app, 42)
         >>> SampleTerms().generate(app, 42)
 
-    Let's run the plugin:
+    Let's call the method:
 
-        >>> plugin.generate(app, 42)
+        >>> plugin.assignPeriodToSection(app, 'B', s)
 
-    All sections get timetables attached to them:
+    Now, let's inspect the timetables for this section:
 
         >>> from schooltool.timetable.interfaces import ITimetables
-        >>> for schema in s1, s2, s3:
-        ...  ITimetables(schema).timetables.keys()
-        ['2005-fall.simple', '2006-spring.simple']
-        ['2005-fall.simple', '2006-spring.simple']
-        ['2005-fall.simple', '2006-spring.simple']
-
-    These timetables have events randomly scattered in them, 6 events
-    in each:
-
-        >>> timetable = ITimetables(schema).timetables['2005-fall.simple']
+        >>> timetable = ITimetables(s).timetables['2005-fall.simple']
         >>> for day, period, activity in timetable.itercontent():
         ...     print day, period, activity.title
-        Day 1 B Hard Science
-        Day 1 E Hard Science
-        Day 1 F Hard Science
-        Day 4 E Hard Science
-        Day 5 C Hard Science
-        Day 6 C Hard Science
+        Day 1 B My Course
+        Day 2 B My Course
+        Day 3 B My Course
+        Day 4 B My Course
+        Day 5 B My Course
+        Day 6 B My Course
+
+        >>> timetable = ITimetables(s).timetables['2006-spring.simple']
+        >>> for day, period, activity in timetable.itercontent():
+        ...     print day, period, activity.title
+        Day 1 B My Course
+        Day 2 B My Course
+        Day 3 B My Course
+        Day 4 B My Course
+        Day 5 B My Course
+        Day 6 B My Course
 
     """
 
@@ -280,15 +323,26 @@ def doctest_SampleSectionAssignments():
 
         >>> from schooltool.timetable.sampledata import SampleTimetableSchema
         >>> from schooltool.timetable.sampledata import SampleTerms
-        >>> from schooltool.course.sampledata import PopulateSectionTimetables
         >>> SampleTimetableSchema().generate(app, 42)
         >>> SampleTerms().generate(app, 42)
-        >>> PopulateSectionTimetables().generate(app, 42)
 
         >>> from schooltool.resource.sampledata import SampleResources
         >>> SampleResources().generate(app, 42)
 
-    Now, Let's run the plugin:
+    The sections will need to have some timetables.  We'll assign them
+    to the same period
+
+        >>> from schooltool.timetable.interfaces import ITimetables
+        >>> from schooltool.timetable import TimetableActivity
+        >>> Timetable = app['ttschemas'].getDefault().createTimetable
+        >>> for sect in (s0, s1, s2, s3, s4, s5, s6, s7, s8):
+        ...     timetables = ITimetables(sect).timetables
+        ...     tt = timetables['2005-fall.simple'] = Timetable()
+        ...     for day in range(1, 7):
+        ...         activity = TimetableActivity('Stuff', owner=sect)
+        ...         tt['Day %d' % day].add('A', activity)
+
+    Now, let's run the plugin:
 
         >>> plugin.generate(app, 42)
 
@@ -297,33 +351,27 @@ def doctest_SampleSectionAssignments():
 
         >>> from schooltool.app.interfaces import ISchoolToolCalendar
         >>> len(ISchoolToolCalendar(s0))
-        15
+        7
         >>> len(ISchoolToolCalendar(s1))
-        10
+        8
         >>> len(ISchoolToolCalendar(s2))
-        9
+        7
 
     These events have random titles and times coinciding with section
     timetable events:
-        
+
         >>> for ev in sorted(ISchoolToolCalendar(s8)):
         ...     resources = [res.__name__ for res in ev.resources]
         ...     print ev.dtstart, ev.title, resources
-        2005-08-25 10:00:00+00:00 Presentation [u'projector00']
-        2005-09-08 10:00:00+00:00 Homework [u'projector00']
-        2005-11-01 08:00:00+00:00 Presentation [u'projector01']
-        2005-11-09 10:00:00+00:00 Quiz [u'projector00']
-        2005-11-10 08:00:00+00:00 Homework [u'projector00']
-        2005-11-22 12:30:00+00:00 Homework [u'projector00']
-        2005-12-09 09:00:00+00:00 Homework [u'projector00']
-        2006-03-06 12:30:00+00:00 Read the book [u'projector00']
-        2006-03-22 12:30:00+00:00 Homework [u'projector00']
-        2006-03-29 09:00:00+00:00 Homework [u'projector00']
-        2006-04-03 12:30:00+00:00 Deadline for essay [u'projector00']
-        2006-04-24 09:00:00+00:00 Homework [u'projector00']
-        2006-04-27 12:30:00+00:00 Homework [u'projector00']
-        2006-05-02 08:00:00+00:00 Quiz [u'projector00']
-        2006-05-24 09:00:00+00:00 Homework [u'projector01']
+        2005-08-31 13:30:00+00:00 Quiz [u'projector01']
+        2005-09-07 08:00:00+00:00 Quiz [u'projector01']
+        2005-09-22 09:00:00+00:00 Lab work [u'projector01']
+        2005-11-10 10:00:00+00:00 Read the book [u'projector00']
+        2005-11-11 09:00:00+00:00 Homework [u'projector00']
+        2005-11-24 12:30:00+00:00 Read the book [u'projector00']
+        2005-12-13 11:00:00+00:00 Homework [u'projector00']
+        2005-12-14 10:00:00+00:00 Quiz [u'projector00']
+        2005-12-15 09:00:00+00:00 Homework [u'projector00']
 
     Resources must have events in calendars.
 
@@ -331,16 +379,16 @@ def doctest_SampleSectionAssignments():
         >>> calendar = ISchoolToolCalendar(projector)
         >>> for ev in sorted(calendar)[0:10]:
         ...     print ev.dtstart, ev.duration, ev.title
-        2005-08-22 09:00:00+00:00 0:55:00 Assignment
-        2005-08-22 12:30:00+00:00 0:55:00 Quiz
-        2005-08-25 08:00:00+00:00 0:55:00 Lab work
-        2005-08-25 10:00:00+00:00 0:55:00 Presentation
-        2005-08-26 09:00:00+00:00 0:55:00 Presentation
-        2005-09-01 13:30:00+00:00 1:00:00 Homework
-        2005-09-02 09:00:00+00:00 0:55:00 Homework
-        2005-09-06 10:00:00+00:00 0:55:00 Homework
-        2005-09-06 12:30:00+00:00 0:55:00 Homework
-        2005-09-07 11:00:00+00:00 0:55:00 Read the book
+        2005-08-23 13:30:00+00:00 1:00:00 Quiz
+        2005-08-24 12:30:00+00:00 0:55:00 Deadline for essay
+        2005-08-26 10:00:00+00:00 0:55:00 Read the book
+        2005-08-29 09:00:00+00:00 0:55:00 Quiz
+        2005-08-31 13:30:00+00:00 1:00:00 Quiz
+        2005-09-01 12:30:00+00:00 0:55:00 Homework
+        2005-09-02 11:00:00+00:00 0:55:00 Homework
+        2005-09-05 10:00:00+00:00 0:55:00 Homework
+        2005-09-07 08:00:00+00:00 0:55:00 Assignment
+        2005-09-12 11:00:00+00:00 0:55:00 Homework
 
     """
 
