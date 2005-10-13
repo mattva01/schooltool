@@ -72,7 +72,7 @@ testall: build
 
 .PHONY: ftest
 ftest: build
-	$(PYTHON) test.py $(TESTFLAGS) -s src/schooltool -f
+	$(PYTHON) test.py $(TESTFLAGS) -s src/schooltool -f --level 2
 
 .PHONY: run
 run: build

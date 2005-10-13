@@ -1,0 +1,50 @@
+Sample Data Generation
+======================
+
+A manager logs in.
+
+    >>> from zope.testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/')
+
+He sees an entry for Sample Data Generation in the Developer Tools box and
+clicks on it
+
+    >>> print analyze.queryHTML("//div[@id='devtools']", manager.contents)[0]
+    <div id="devtools" style="display:none;">
+      <div class="body">
+        ...
+        <a target="new" href="http://localhost/@@sampledata.html">Sample data</a>
+      </div>
+    </div>
+
+    >>> manager.getLink('Sample data').click()
+
+The Sample Data Generation page appears
+
+    >>> print analyze.queryHTML("//title", manager.contents)[0]
+    <title> Sample Data Generation </title>
+
+    >>> print analyze.queryHTML("//h1", manager.contents)[0]
+    <h1>Sample Data Generation</h1>
+
+    >>> print analyze.queryHTML("//form", manager.contents)[0]
+    <form method="POST" action="http://localhost/@@sampledata.html">
+    ...<input name="seed" value="SchoolTool">...
+    ...<input type="submit" class="button-ok" name="SUBMIT" value="Generate">...
+    </form>
+
+Let's do it, thinks our valiant manager, and pushes the button.
+
+    >>> manager.getControl('Generate').click()
+
+A couple of minutes later he gets a result
+
+    >>> print manager.contents
+    <BLANKLINE>
+    ...<title> Sample Data Generation </title>...
+    ...<h1>Sample Data Generation</h1>...
+    ...<p>Sample data generated...
+

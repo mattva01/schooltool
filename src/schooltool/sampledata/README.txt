@@ -36,11 +36,10 @@ If you only have schooltool.conf.in, copy it to schooltool.conf and
 then edit it.
 
 You need to run the sample data generation with an empty database, so
-most probably you need to remove the Data.fs* files.  Start the
+most probably you need to remove the Data.fs file.  Start the
 SchoolTool server, log in as `manager`, choose Sample Data from the
 developer mode menu, change the random seed if you want to, and press
-'Generate'.  Be patient, it takes several minutes on fast machines and
-could take 10 or 20 minutes on a slow machine.
+'Generate'.  Be patient, it takes several minutes even on fast machines.
 
 When the generation is done, you'll get a summary of how much CPU time
 each plugin took.  Unfortunately, generating this amount of data
@@ -62,7 +61,7 @@ given that the dependencies have already been satisfied.
 If your plugin depends on some objects, such as persons, groups,
 courses, timetable setup, you can find out the names of the
 appropriate plugins by looking at the source of the existing plugins
-in these modules:
+in these modules::
 
   schooltool.person.sampledata
   schooltool.group.sampledata
@@ -75,35 +74,32 @@ in these modules:
 Crude example
 -------------
 
-Let's say you want to create a plugin that adds a 'color' attribute to
-all persons, with randomly chosen values of 'red', 'green', or 'blue'.
-Obviously, your plugin depends on teachers and students already being
-in the database, so you will depend on plugins 'teachers' and 'students'.
+Let's say you want to create a plugin that adds a 'favorite_color' annotation
+to all persons, with randomly chosen values of 'red', 'green', or 'blue'.
+Obviously, your plugin depends on teachers and students already being in the
+database, so you will depend on plugins 'teachers' and 'students'.
 
-You need to define a plugin:
+You need to define a plugin::
 
   import random
   import zope.interface
   from zope.app.annotation.interfaces import IAnnotations
   from schooltool.sampledata.interfaces import ISampleDataPlugin
 
-
   class PersonColorPlugin(object):
-
       zope.interface.implements(ISampleDataPlugin)
       name = 'person_color'
       dependencies = ('teachers', 'students')
 
       def generate(app, seed=None):
-           rng = random.Random(seed)
-
-           for person in app['persons'].values():
-               color = rng.choice(['red', 'green', 'blue'])
-               IAnnotations(person)['favorite_color'] = color
+          rng = random.Random(seed)
+          for person in app['persons'].values():
+              color = rng.choice(['red', 'green', 'blue'])
+              IAnnotations(person)['favorite_color'] = color
 
 Now, you need to register it in your configure.zcml.  You need to
 conditionally include your registration of the sample data plugin for
-the developer mode.
+the developer mode::
 
   <configure xmlns="http://namespaces.zope.org/zope">
 
@@ -125,3 +121,4 @@ the developer mode.
 
 Voila!  Remove Data.fs, regenerate sample data, and all your teachers
 and students should know their colours!
+
