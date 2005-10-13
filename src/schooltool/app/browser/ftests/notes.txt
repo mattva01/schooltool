@@ -36,7 +36,7 @@ Add a note to the person
 
 We should see the note now:
 
-    >>> print analyze.queryHTML("//div[@id='notes']", manager.  contents)[0]
+    >>> print analyze.queryHTML("//div[@id='notes']", manager.contents)[0]
     <div id="notes">
       <h5>Notes</h5>
     <BLANKLINE>
