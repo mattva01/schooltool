@@ -53,8 +53,12 @@ class ManagerWorkItems(object):
     def addWorkItem(self, item):
         """Add a work item to the manager group."""
         id = str(time.time())
-        while id in [i.__name__ for i in self.items]:
-            id = str(time.time())
+## These two lines, although possibly necessary, but ARE NOT UNIT TESTED AT
+## ALL, and removing them speeds up sample data generation by 20% by getting
+## rid of a horribly inefficient O(N**2) algorithm
+##                  -- mgedmin in a very bad mood (splitting headache)
+##      while id in [i.__name__ for i in self.items]:
+##          id = str(time.time())
         location.location.locate(item, self.context, id)
         self.items.append(item)
 
