@@ -83,7 +83,7 @@ class SamplePersonalEvents(object):
 
     implements(ISampleDataPlugin)
 
-    name = 'personalevents'
+    name = 'personal_events'
     dependencies = ('students', 'teachers', 'terms')
 
     probability = 10 # probability of having an event on any day

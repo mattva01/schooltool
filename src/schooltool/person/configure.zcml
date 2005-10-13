@@ -112,7 +112,7 @@
     <utility
         factory=".sampledata.SamplePersonalEvents"
         provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="personalevents"
+        name="personal_events"
         />
 
   </configure>
