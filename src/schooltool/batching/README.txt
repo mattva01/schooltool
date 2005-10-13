@@ -40,9 +40,9 @@ call the macro like this:
 This will give you a navigation bar that (after CSS is applied) looks roughly
 like this:
 
-    +------------------------------------------------------------+
-    | << previous 10         1 2 3 4 5 6 7 8 9        next 10 >> |
-    +------------------------------------------------------------+
+    +-------------------------------------------------------------+----------+
+    | << Previous 10    1 ... 4 5 6 7 8 9 10 ... 15    next 10 >> | Show All |
+    +-------------------------------------------------------------+----------+
 
 
 The 'previous' link will not actually be a link if there is no previous batch 
@@ -118,3 +118,6 @@ items are left in the batch (how many will be displayed on the last page):
             <span>1</span> &raquo;
           </a>
     ...
+
+TODO: convert to testbrowser; test "show all"/"show less"; test multi-batch
+      navigation macros.

@@ -36,6 +36,8 @@ Batch navigation shows up if:
       </a>
     </tal:if>
 
+    <metal:macro use-macro="view/@@batch_macros/batch-navigation-all-or-less"/>
+
     <tal:if condition="needsBatch">
       <a class="next"
         tal:condition="batch/next"
@@ -122,6 +124,21 @@ Batch navigation shows up if:
   </a>
 </metal:block>
 
+<metal:block define-macro="batch-navigation-all-or-less">
+  <div class="batch-extra-navigation"
+       tal:define="full_size python:len(batch.list)">
+
+    <a href="?batch_size=10"
+       tal:condition="python:batch_size > 10"
+       class="less">Show Less</a>
+
+    <a tal:attributes="href string:?batch_size=${full_size}"
+       tal:condition="python:batch_size < full_size"
+       class="all">Show All</a>
+
+  </div>
+</metal:block>
+
 <!-- multi-batch navigation
 
 multi-batch-navigation is intended for use with the MultiBatchViewMixin class.
@@ -147,6 +164,8 @@ It follows the same guidelins as batch-navigation with the addition of:
         i18n:translate=""
         >&laquo; Previous</a>
     </tal:if>
+
+    <metal:macro use-macro="view/@@batch_macros/multi-batch-navigation-all-or-less"/>
 
     <tal:if condition="needsBatch">
       <a class="next"
@@ -213,4 +232,19 @@ It follows the same guidelins as batch-navigation with the addition of:
     class python:batch == b and 'current' or None"
     tal:content="b/num">
   </a>
+</metal:block>
+
+<metal:block define-macro="multi-batch-navigation-all-or-less">
+  <div class="batch-extra-navigation"
+       tal:define="full_size python:len(batch.list)">
+
+    <a tal:attributes="href string:?batch_size.${batch_name}=10"
+       tal:condition="python:batch_size > 10"
+       class="less">Show Less</a>
+
+    <a tal:attributes="href string:?batch_size.${batch_name}=${full_size}"
+       tal:condition="python:batch_size < full_size"
+       class="all">Show All</a>
+
+  </div>
 </metal:block>
