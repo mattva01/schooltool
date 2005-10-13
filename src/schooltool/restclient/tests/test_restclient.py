@@ -1562,58 +1562,56 @@ class TestSectionRef(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEqualsXML(conn.body, expected)
 
 
-class TestResponseStatusError(SchoolToolClientTestMixin, unittest.TestCase):
+def doctest_ResponseStatusError():
+    """Test for ResponseStatusError
 
-    def doctest__init__(self):
-        """Test for ResponseStatusError.__init__
+    We will need a sample response:
 
-        We will need a sample response:
+        >>> response = ResponseStub(500, 'Internal Error',
+        ...                         "You are trying to create a duplicate"
+        ...                         " relationship.")
 
-            >>> response = ResponseStub(500, 'Internal Error',
-            ...                         "You are trying to create a duplicate"
-            ...                         " relationship.")
+    Let's instantiante an error:
 
-        Let's instantiante an error:
+        >>> from schooltool.restclient.restclient import ResponseStatusError
+        >>> error = ResponseStatusError(response)
 
-            >>> from schooltool.restclient.restclient import ResponseStatusError
-            >>> error = ResponseStatusError(response)
+        >>> error.status
+        500
+        >>> error.reason
+        'Internal Error'
 
-            >>> error.status
-            500
-            >>> error.reason
-            'Internal Error'
+    and raise it:
 
-        and raise it:
+        >>> raise error
+        Traceback (most recent call last):
+        ...
+        ResponseStatusError: 500 Internal Error
+        You are trying to create a duplicate relationship.
 
-            >>> raise error
-            Traceback (most recent call last):
-            ...
-            ResponseStatusError: 500 Internal Error
-            You are trying to create a duplicate relationship.
+    We should not print the body of the response if it is not a
+    plain text (so users would not get binary data printed into
+    their terminals):
 
-        We should not print the body of the response if it is not a
-        plain text (so users would not get binary data printed into
-        their terminals):
+        >>> response = ResponseStub(500, 'Internal Error',
+        ...                         "I am a PNG", content_type="image/png")
+        >>> raise ResponseStatusError(response)
+        Traceback (most recent call last):
+        ...
+        ResponseStatusError: 500 Internal Error
 
-            >>> response = ResponseStub(500, 'Internal Error',
-            ...                         "I am a PNG", content_type="image/png")
-            >>> raise ResponseStatusError(response)
-            Traceback (most recent call last):
-            ...
-            ResponseStatusError: 500 Internal Error
+    Though texts with charset set should be printed:
 
-        Though texts with charset set should be printed:
+        >>> response = ResponseStub(500, 'Internal Error',
+        ...                         "I am a UTF text!",
+        ...                         content_type="text/plain;charset=UTF-8")
+        >>> raise ResponseStatusError(response)
+        Traceback (most recent call last):
+        ...
+        ResponseStatusError: 500 Internal Error
+        I am a UTF text!
 
-            >>> response = ResponseStub(500, 'Internal Error',
-            ...                         "I am a UTF text!",
-            ...                         content_type="text/plain;charset=UTF-8")
-            >>> raise ResponseStatusError(response)
-            Traceback (most recent call last):
-            ...
-            ResponseStatusError: 500 Internal Error
-            I am a UTF text!
-
-        """
+    """
 
 
 def test_suite():
@@ -1628,7 +1626,6 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestGroupRef))
     suite.addTest(unittest.makeSuite(TestCourseRef))
     suite.addTest(unittest.makeSuite(TestSectionRef))
-    suite.addTest(unittest.makeSuite(TestResponseStatusError))
     return suite
 
 if __name__ == '__main__':
