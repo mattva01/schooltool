@@ -3,12 +3,9 @@
  *
  * Aesthetic styling
  *
- * Most CSS is inherited from schoolbell/app/browser/resources/style.css
- *
  */
 
 
-/* XXX move this into Schoolbell style.css after release */
 ul {
     list-style: none;
     padding-left: 1em;
