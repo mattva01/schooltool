@@ -16,8 +16,7 @@ Batch navigation shows up if:
 -->
 <metal:block define-macro="batch-navigation" i18n:domain="schoolbell">
   <div class="batch-navigation"
-    tal:define="batch_size request/batch_size|string:10;
-                batch_size python:int(batch_size);
+    tal:define="batch_size python:int(request.get('batch_size', 10));
                 extra_url extra_url|nothing;
                 extra_url python:extra_url or '';
                 needsBatch python:bool(batch.prev() or batch.next());"
@@ -133,7 +132,7 @@ It follows the same guidelins as batch-navigation with the addition of:
 -->
 <metal:block define-macro="multi-batch-navigation">
   <div class="batch-navigation"
-    tal:define="batch_size python:request.get('batch_size.' + batch_name, 10);
+    tal:define="batch_size python:int(request.get('batch_size.' + batch_name, 10));
                 extra_url extra_url|nothing;
                 extra_url python:extra_url or '';
                 needsBatch python:bool(batch.prev() or batch.next());"
