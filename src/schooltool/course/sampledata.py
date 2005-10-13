@@ -203,6 +203,7 @@ class SampleSectionAssignments(object):
 
         for section in app['sections'].values():
             ttcal = ITimetables(section).makeTimetableCalendar()
+            calendar = ISchoolToolCalendar(section)
             for event in ttcal:
                 if self.random.randrange(13) == 7: # is today lucky?
                     title = self.random.choice(self.excuses)
@@ -211,5 +212,5 @@ class SampleSectionAssignments(object):
                     if projector is not None:
                         ev.bookResource(projector)
                         self.taken_projectors.add((projector, ev.dtstart))
-                    ISchoolToolCalendar(section).addEvent(ev)
+                    calendar.addEvent(ev)
 
