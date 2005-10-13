@@ -758,6 +758,23 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
                        ' title="Title&lt;with&quot;strange&amp;chars"'
                        ' description=""/>')
 
+    def test_createGroup_wit_name(self):
+        from schooltool.restclient.restclient import GroupRef
+        client = self.newClient(ResponseStub(201, 'OK', 'Created',
+                    location='http://localhost/groups/group1'))
+        result = client.createGroup('Title<with"strange&chars', name="group1")
+        expected = GroupRef(client, '/groups/group1',
+                            'Title<with"strange&chars')
+        self.assertEquals(result, expected)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/groups/group1')
+        self.assertEquals(conn.method, 'PUT')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="Title&lt;with&quot;strange&amp;chars"'
+                       ' description=""/>')
+
     def test_createResource(self):
         from schooltool.restclient.restclient import ResourceRef
         client = self.newClient(ResponseStub(201, 'OK', 'Created',
@@ -769,6 +786,23 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         conn = self.oneConnection(client)
         self.assertEquals(conn.path, '/resources')
         self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="Title&lt;with&quot;strange&amp;chars"'
+                       ' description=""/>')
+
+    def test_createResource_with_name(self):
+        from schooltool.restclient.restclient import ResourceRef
+        client = self.newClient(ResponseStub(201, 'OK', 'Created',
+                                location='http://localhost/resources/a-res'))
+        result = client.createResource('Title<with"strange&chars', name='a-res')
+        expected = ResourceRef(client, '/resources/a-res',
+                               'Title<with"strange&chars')
+        self.assertEquals(result, expected)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/resources/a-res')
+        self.assertEquals(conn.method, 'PUT')
         self.assertEquals(conn.headers['Content-Type'], 'text/xml')
         self.assertEqualsXML(conn.body,
                 '<object xmlns="http://schooltool.org/ns/model/0.1"'
@@ -792,6 +826,23 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
                        ' title="Title&lt;with&quot;strange&amp;chars"'
                        ' description=""/>')
 
+    def test_createCourse_with_name(self):
+        from schooltool.restclient.restclient import CourseRef
+        client = self.newClient(ResponseStub(201, 'OK', 'Created',
+                                location='http://localhost/courses/ac'))
+        result = client.createCourse('Title<with"strange&chars', name="ac")
+        expected = CourseRef(client, '/courses/ac',
+                            'Title<with"strange&chars')
+        self.assertEquals(result, expected)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/courses/ac')
+        self.assertEquals(conn.method, 'PUT')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="Title&lt;with&quot;strange&amp;chars"'
+                       ' description=""/>')
+
     def test_createSection(self):
         from schooltool.restclient.restclient import SectionRef
         client = self.newClient(ResponseStub(201, 'OK', 'Created',
@@ -803,6 +854,23 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         conn = self.oneConnection(client)
         self.assertEquals(conn.path, '/sections')
         self.assertEquals(conn.method, 'POST')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="Title&lt;with&quot;strange&amp;chars"'
+                       ' description=""/>')
+
+    def test_createSection_with_name(self):
+        from schooltool.restclient.restclient import SectionRef
+        client = self.newClient(ResponseStub(201, 'OK', 'Created',
+                                location='http://localhost/sections/ac'))
+        result = client.createSection('Title<with"strange&chars', name='ac')
+        expected = SectionRef(client, '/sections/ac',
+                              'Title<with"strange&chars')
+        self.assertEquals(result, expected)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/sections/ac')
+        self.assertEquals(conn.method, 'PUT')
         self.assertEquals(conn.headers['Content-Type'], 'text/xml')
         self.assertEqualsXML(conn.body,
                 '<object xmlns="http://schooltool.org/ns/model/0.1"'
@@ -843,6 +911,44 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
                 '<object xmlns="http://schooltool.org/ns/model/0.1"'
                        ' title="&lt;Huba&gt;"'
                        ' description="&lt;Buba&gt;"/>')
+
+    def test_createGenericObject_with_name(self):
+        from schooltool.restclient.restclient import GroupRef
+        client = self.newClient(
+            ResponseStub(201, 'OK', 'Created',
+                         location='http://localhost/groups/teachers'))
+        result = client._createGenericObject(GroupRef, '/groups',
+                                             'Teachers', name="teachers",
+                                             description="Group of teachers")
+        expected = GroupRef(client, '/groups/teachers', 'Teachers')
+        self.assertEquals(result, expected)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/groups/teachers')
+        self.assertEquals(conn.method, 'PUT')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="Teachers"'
+                       ' description="Group of teachers" />')
+
+    def test_createGenericObject_with_name_overrides(self):
+        from schooltool.restclient.restclient import GroupRef
+        client = self.newClient(
+            ResponseStub(200, 'OK', 'Updated',
+                         location='http://localhost/groups/teachers'))
+        result = client._createGenericObject(GroupRef, '/groups',
+                                             'Teachers', name="teachers",
+                                             description="Group of teachers")
+        expected = GroupRef(client, '/groups/teachers', 'Teachers')
+        self.assertEquals(result, expected)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/groups/teachers')
+        self.assertEquals(conn.method, 'PUT')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="Teachers"'
+                       ' description="Group of teachers" />')
 
     def test_createGenericObject_with_errors(self):
         from schooltool.restclient.restclient import SchoolToolError
@@ -1610,6 +1716,16 @@ def doctest_ResponseStatusError():
         ...
         ResponseStatusError: 500 Internal Error
         I am a UTF text!
+
+    If content-type header is None - the body should be ignored:
+
+        >>> response = ResponseStub(400, 'Unauthorized',
+        ...                         "",
+        ...                         content_type=None)
+        >>> raise ResponseStatusError(response)
+        Traceback (most recent call last):
+        ...
+        ResponseStatusError: 400 Unauthorized
 
     """
 

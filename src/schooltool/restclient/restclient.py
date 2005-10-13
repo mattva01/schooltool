@@ -372,39 +372,40 @@ class SchoolToolClient:
                 raise ResponseStatusError(response)
         return PersonRef(self, url, person_title)
 
-    def createGroup(self, title, description=""):
+    def createGroup(self, title, description="", name=None):
         """Create a group object.
 
         Returns a GroupRef for the new group.
         """
         return self._createGenericObject(GroupRef, '/groups',
-                                         title, description)
+                                         title, description, name)
 
-    def createResource(self, title, description=""):
+    def createResource(self, title, description="", name=None):
         """Create a resource object.
 
         Returns a ResourceRef for the new resource.
         """
         return self._createGenericObject(ResourceRef, '/resources',
-                                         title, description)
+                                         title, description, name)
 
-    def createCourse(self, title, description=""):
+    def createCourse(self, title, description="", name=None):
         """Create a course object.
 
         Returns a CourseRef for the new course.
         """
         return self._createGenericObject(CourseRef, '/courses',
-                                         title, description)
+                                         title, description, name)
 
-    def createSection(self, title, description=""):
+    def createSection(self, title, description="", name=None):
         """Create a section object.
 
         Returns a SectionRef for the new section.
         """
         return self._createGenericObject(SectionRef, '/sections',
-                                         title, description)
+                                         title, description, name)
 
-    def _createGenericObject(self, ref_class, where, title, description=""):
+    def _createGenericObject(self, ref_class, where, title, description="",
+                             name=None):
         """Create a generic object that can be represented in XML as:
 
             <object xmlns="http://schooltool.org/ns/model/0.1"
@@ -415,8 +416,16 @@ class SchoolToolClient:
         body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
                 ' title="%s"'
                 ' description="%s"/>' % (to_xml(title), to_xml(description)))
-        response = self.post(where, body)
-        if response.status != 201:
+
+        if name:
+            where = "%s/%s" % (where, name)
+            response = self.put(where, body)
+            acceptable_statuses = [200, 201]
+        else:
+            response = self.post(where, body)
+            acceptable_statuses = [201]
+
+        if response.status not in acceptable_statuses:
             raise ResponseStatusError(response)
         url = self._pathFromResponse(response)
         return ref_class(self, url, title)
@@ -863,7 +872,8 @@ class ResponseStatusError(SchoolToolError):
 
     def __init__(self, response):
         errmsg = "%d %s" % (response.status, response.reason)
-        if response.getheader('Content-Type').startswith('text/plain'):
+        if (response.getheader('Content-Type') and
+            response.getheader('Content-Type').startswith('text/plain')):
             errmsg += '\n%s' % response.read()
         SchoolToolError.__init__(self, errmsg)
         self.status = response.status
