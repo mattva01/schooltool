@@ -96,6 +96,10 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
               </activity>
             </period>
             <period id="D">
+              <activity title="CompSci">
+                <resource xlink:type="simple" xlink:href="http://127.0.0.1/resources/%C5%BEabas"
+                          xlink:title="Zabas"/>
+              </activity>
             </period>
           </day>
         </timetable>
@@ -111,6 +115,7 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         self.app["resources"]['room1'] = Resource("Room1")
         self.app["resources"]['lab1'] = Resource("Lab1")
         self.app["resources"]['lab2'] = Resource("Lab2")
+        self.app["resources"][u'\u017eabas'] = Resource("Zabas")
 
         self.schema = self.app["ttschemas"]["schema1"] = self.createSchema()
         self.term = self.app["terms"]["2003 fall"] = self.createTerm()
@@ -151,10 +156,12 @@ class TimetableTestMixin(PlacefulSetup, XMLCompareMixin):
         room1 = self.app["resources"]['room1']
         lab1 = self.app["resources"]['lab1']
         lab2 = self.app["resources"]['lab2']
+        zab = self.app["resources"][u'\u017eabas']
         tt['Day 1'].add('A', TimetableActivity('Maths', owner, [room1]))
         tt['Day 1'].add('B', TimetableActivity('English', owner))
         tt['Day 1'].add('B', TimetableActivity('French', owner))
         tt['Day 2'].add('C', TimetableActivity('CompSci', owner, [lab1, lab2]))
+        tt['Day 2'].add('D', TimetableActivity('CompSci', owner, [zab]))
         return tt
 
 

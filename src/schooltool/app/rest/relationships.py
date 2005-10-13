@@ -39,6 +39,8 @@ from schooltool.relationship.uri import IURIObject
 from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.interfaces import IRelationshipSchema
 from schooltool.relationship.relationship import relate, unrelate
+from schooltool.relationship.interfaces import DuplicateRelationship
+from schooltool.common import unquote_uri
 
 
 def RelationshipsViewFactory(context, request):
@@ -155,7 +157,7 @@ class RelationshipsView(View):
             node = doc.query('/m:relationship')[0]
             rel_type = node['xlink:arcrole']
             target_role = node['xlink:role']
-            path = node['xlink:href']
+            path = unquote_uri(node['xlink:href'])
         finally:
             doc.free()
 
@@ -183,9 +185,15 @@ class RelationshipsView(View):
         parent = removeSecurityProxy(self.context.__parent__)
 
         rel_type = schema.rel_type
-        relate(rel_type,
-               (parent, my_role),
-               (target, target_role))
+
+        try:
+            relate(rel_type,
+                   (parent, my_role),
+                   (target, target_role))
+        except DuplicateRelationship:
+            raise RestError(
+                "Duplicate relationship between '%s' and '%s' of type '%s'" %
+                (zapi.absoluteURL(parent, self.request), path, rel_type))
 
         link = self.context.find(my_role, target, target_role, rel_type)
         location = zapi.absoluteURL(link, self.request)

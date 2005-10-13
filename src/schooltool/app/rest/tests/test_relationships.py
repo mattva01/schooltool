@@ -171,8 +171,55 @@ class TestRelationshipsView(CommonSetupMixin, unittest.TestCase):
         self.assertEquals(response.getHeader('location'), location)
         self.assert_(location in result)
 
+    def testUrlQuotedURIs(self):
+        from schooltool.app.rest.relationships import RelationshipsView
+        from schooltool.person.person import Person
+        self.person3 = Person(username=u"\u017eilvinas", title=u"\u017eilvinas")
+        self.app['persons'][u"\u017eilvinas"] = self.person3
+
+        body = """<relationship xmlns="http://schooltool.org/ns/model/0.1"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xlink:type="simple"
+                                xlink:role="http://schooltool.org/ns/membership/member"
+                                xlink:arcrole="http://schooltool.org/ns/membership"
+                                xlink:href="http://127.0.0.1/persons/%C5%BEilvinas"/>"""
+
+        request = TestRequest(StringIO(body))
+        view = RelationshipsView(IRelationshipLinks(self.group), request)
+
+        self.assertEquals(len(view.listLinks()), 1)
+        self.assert_(self.person3 not in
+                     [l.target for l in getRelationshipLinks(self.group)])
+        result = view.POST()
+        response = view.request.response
+        self.assertEquals(response.getStatus(), 201)
+        self.assertEquals(len(view.listLinks()), 2)
+        self.assert_(self.person3 in
+                     [l.target for l in getRelationshipLinks(self.group)])
+        self.assertEquals(response.getHeader('content-type'),
+                          "text/plain; charset=UTF-8")
+        location = "http://127.0.0.1/groups/root/relationships/2"
+        self.assertEquals(response.getHeader('location'), location)
+        self.assert_(location in result)
+
     def testBadPOSTs(self):
         from schooltool.app.rest.relationships import RelationshipsView
+        # let's post a valid relationship so we would cause a
+        # duplication error later
+
+        body = """<relationship xmlns="http://schooltool.org/ns/model/0.1"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xlink:type="simple"
+                                xlink:role="http://schooltool.org/ns/membership/member"
+                                xlink:arcrole="http://schooltool.org/ns/membership"
+                                xlink:href="http://127.0.0.1/persons/john"/>"""
+
+        request = TestRequest(StringIO(body))
+        view = RelationshipsView(IRelationshipLinks(self.new), request)
+        result = view.POST()
+        response = view.request.response
+        self.assertEquals(response.getStatus(), 201)
+
         bad_requests = [
             # Document not valid according to schema.
             (XMLValidationError,
@@ -181,6 +228,14 @@ class TestRelationshipsView(CommonSetupMixin, unittest.TestCase):
                               xlink:role="http://schooltool.org/ns/membership/group"
                               xlink:arcrole="http://schooltool.org/ns/membership"
                               xlink:href="/groups/new"/>"""),
+            # Duplicate relationship
+            (RestError,
+             """<relationship xmlns="http://schooltool.org/ns/model/0.1"
+                                     xmlns:xlink="http://www.w3.org/1999/xlink"
+                                     xlink:type="simple"
+                                     xlink:role="http://schooltool.org/ns/membership/member"
+                                     xlink:arcrole="http://schooltool.org/ns/membership"
+                                     xlink:href="http://127.0.0.1/persons/john"/>"""),
             # Bad URI: BADPATH
             (RestError,
              """<relationship xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -242,9 +297,9 @@ class TestRelationshipsView(CommonSetupMixin, unittest.TestCase):
             request = TestRequest(body)
             view = RelationshipsView(IRelationshipLinks(self.new), request)
 
-            self.assertEquals(len(view.listLinks()), 2)
+            self.assertEquals(len(view.listLinks()), 3)
             self.assertRaises(exception, view.POST)
-            self.assertEquals(len(view.listLinks()), 2)
+            self.assertEquals(len(view.listLinks()), 3)
 
 
 class TestLinkView(CommonSetupMixin, unittest.TestCase):

@@ -51,6 +51,7 @@ from schooltool.timetable.interfaces import ITimetableDict
 from schooltool.timetable import Timetable, TimetableActivity
 from schooltool.app.rest.interfaces import ITimetableFileFactory
 from schooltool.app.rest.interfaces import INullTimetable, ICompositeTimetables
+from schooltool.common import unquote_uri
 
 
 def parseDate(date_str):
@@ -285,7 +286,7 @@ class TimetableFileFactory(object):
         title = activity_node['title']
         resources = []
         for resource in activity_node.query('tt:resource'):
-            path = resource['xlink:href']
+            path = unquote_uri(resource['xlink:href'])
             try:
                 st_app = getSchoolToolApplication()
                 st_url = zapi.absoluteURL(st_app, self.request)
