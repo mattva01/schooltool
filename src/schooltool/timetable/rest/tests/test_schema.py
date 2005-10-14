@@ -159,11 +159,11 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
                                            4: day_template2})
         tt.model = tm
 
-        short_template = SchooldayTemplate()
-        short_template.add(SchooldaySlot(time(8, 0), half))
-        short_template.add(SchooldaySlot(time(8, 30), half))
-        short_template.add(SchooldaySlot(time(9, 0), half))
-        short_template.add(SchooldaySlot(time(9, 30), half))
+        short_template = [
+            ('A', SchooldaySlot(time(8, 0), half)),
+            ('B', SchooldaySlot(time(8, 30), half)),
+            ('C', SchooldaySlot(time(9, 0), half)),
+            ('D', SchooldaySlot(time(9, 30), half))]
         tt.model.exceptionDays[date(2005, 7, 7)] = short_template
         tt.model.exceptionDayIds[date(2005, 7, 8)] = 'Day 2'
         tt.model.exceptionDayIds[date(2005, 7, 9)] = 'Day 1'
@@ -179,10 +179,10 @@ class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
           <model factory="SequentialDaysTimetableModel">
             <daytemplate>
               <used when="2005-07-07"/>
-              <period duration="30" tstart="08:00"/>
-              <period duration="30" tstart="08:30"/>
-              <period duration="30" tstart="09:00"/>
-              <period duration="30" tstart="09:30"/>
+              <period duration="30" id="A" tstart="08:00"/>
+              <period duration="30" id="B" tstart="08:30"/>
+              <period duration="30" id="C" tstart="09:00"/>
+              <period duration="30" id="D" tstart="09:30"/>
             </daytemplate>
             <daytemplate>
               <used when="Friday Thursday"/>

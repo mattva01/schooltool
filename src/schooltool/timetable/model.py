@@ -178,11 +178,12 @@ class BaseTimetableModel(Persistent):
 
         # Now choose the periods that are in this day
         result = []
-        if original:
-            day_template = self._getUsualTemplateForDay(day, day_id)
-        else:
-            day_template = self._getTemplateForDay(day, day_id)
-        for period, slot in zip(timetable[day_id].keys(), sorted(day_template)):
+        usual = self._getUsualTemplateForDay(day, day_id)
+        periods = zip(timetable[day_id].keys(), sorted(usual))
+        if not original:
+            periods = self.exceptionDays.get(day, periods)
+
+        for period, slot in periods:
             if period in timetable[day_id].keys():
                 result.append((period, slot.tstart, slot.duration))
 
@@ -196,11 +197,6 @@ class BaseTimetableModel(Persistent):
     def originalPeriodsInDay(self, term, timetable, day):
         """See ITimetableModel.originalPeriodsInDay"""
         return self._periodsInDay(term, timetable, day, original=True)[1]
-
-    def _getTemplateForDay(self, date, day_id):
-        """Returns the schoolday template for a certain date"""
-        usual = self._getUsualTemplateForDay(date, day_id)
-        return self.exceptionDays.get(date, usual)
 
     def schooldayStrategy(self, date, generator):
         raise NotImplementedError

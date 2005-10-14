@@ -167,8 +167,8 @@ day.
     ...                             'SUBMIT': 'next',
     ...                             'First_start': '8:00',
     ...                             'First_end': '8:30',
-    ...                             'Second_start': '8:45',
-    ...                             'Second_end': '9:15',
+    ...                             'Second_start': '',
+    ...                             'Second_end': '',
     ...                             'Third_start': '9:30',
     ...                             'Third_end': '10:00',
     ...                             'Fourth_start': '',
@@ -179,7 +179,6 @@ day.
     >>> view.update()
     >>> pprint(view.extractPeriods())
     [('First', datetime.time(8, 0), datetime.timedelta(0, 1800)),
-     ('Second', datetime.time(8, 45), datetime.timedelta(0, 1800)),
      ('Third', datetime.time(9, 30), datetime.timedelta(0, 1800))]
 
 The processing does not raise:
@@ -195,14 +194,13 @@ The actual exception gets added:
 
     >>> exception = ttschema.model.exceptionDays[datetime.date(2005, 7, 5)]
     >>> exception
-    <schooltool.timetable.SchooldayTemplate object at ...>
-    >>> periods = list(exception)
-    >>> periods.sort(lambda x, y: cmp(x.tstart, y.tstart))
-    >>> for period in periods:
-    ...     print period.tstart, period.duration
-    08:00:00 0:30:00
-    08:45:00 0:30:00
-    09:30:00 0:30:00
+    [('First', <schooltool.timetable.SchooldaySlot object at ...>),
+     ('Third', <schooltool.timetable.SchooldaySlot object at ...>)]
+
+    >>> for period, slot in exception:
+    ...     print period, slot.tstart, slot.duration
+    First 08:00:00 0:30:00
+    Third 09:30:00 0:30:00
 
 The user is redirected to the schema main page:
 
@@ -243,10 +241,10 @@ of the exceptional template filled in in the form:
            <td>10:00</td>
            <td>10:45</td>
            <td>
-             <input type="text" name="Second_start" value="08:45" />
+             <input type="text" name="Second_start" value="" />
            </td>
            <td>
-             <input type="text" name="Second_end" value="09:15" />
+             <input type="text" name="Second_end" value="" />
            </td>
          </tr>
          <tr>

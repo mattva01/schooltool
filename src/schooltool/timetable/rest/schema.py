@@ -80,7 +80,8 @@ class TimetableSchemaView(View):
             periods = []
             for period in day:
                 periods.append(
-                    {'tstart': period.tstart.strftime("%H:%M"),
+                    {'id': None,
+                     'tstart': period.tstart.strftime("%H:%M"),
                      'duration': period.duration.seconds / 60})
             periods.sort()
             for template in result:
@@ -95,10 +96,11 @@ class TimetableSchemaView(View):
 
         for date, day in self.context.model.exceptionDays.items():
             periods = []
-            for period in day:
+            for period, slot in day:
                 periods.append(
-                    {'tstart': period.tstart.strftime("%H:%M"),
-                     'duration': period.duration.seconds / 60})
+                    {'id': period,
+                     'tstart': slot.tstart.strftime("%H:%M"),
+                     'duration': slot.duration.seconds / 60})
             periods.sort()
             result.append({'used': str(date), 'periods': periods})
 
@@ -235,20 +237,9 @@ class TimetableSchemaFileFactory(object):
 
             for template in templates:
                 day = SchooldayTemplate()
+                day_list = []
 
-                # parse SchoolDayPeriods
-                for period in template.query('tt:period'):
-                    tstart_str = period['tstart']
-                    dur_str = period['duration']
-                    try:
-                        tstart = parse_time(tstart_str)
-                        duration = datetime.timedelta(minutes=int(dur_str))
-                    except ValueError:
-                        raise RestError("Bad period")
-                    else:
-                        day.add(SchooldaySlot(tstart, duration))
                 used = template.query('tt:used')[0]['when']
-
                 # the used attribute might contain a date, a list of
                 # week days, or a string "default"
                 try:
@@ -256,10 +247,29 @@ class TimetableSchemaFileFactory(object):
                 except ValueError:
                     date = None
 
+                # parse SchoolDayPeriods
+                for period in template.query('tt:period'):
+                    tstart_str = period['tstart']
+                    dur_str = period['duration']
+                    period_id = period.get('id', None)
+                    try:
+                        tstart = parse_time(tstart_str)
+                        duration = datetime.timedelta(minutes=int(dur_str))
+                    except ValueError:
+                        raise RestError("Bad period")
+                    else:
+                        slot = SchooldaySlot(tstart, duration)
+                        day.add(slot)
+                        day_list.append((period_id, slot))
+
                 if date is not None:
                     # if used contains a valid date - we treat the
                     # template as an exception
-                    exceptions[date] = day
+                    for period, slot in day_list:
+                        if period is None:
+                            raise RestError("Period for %d did not have an id"
+                                            % date)
+                    exceptions[date] = day_list
                 elif used == 'default':
                     template_dict[None] = day
                 elif used in day_ids:

@@ -681,6 +681,7 @@ class SpecialDayView(BrowserView):
                 elif start is not None:
                     duration = self.delta(start, end)
                     result.append((period_id, start, duration))
+
         return result
 
     def update(self):
@@ -707,9 +708,9 @@ class SpecialDayView(BrowserView):
         if self.date:
             self.template = self.form_template
         if self.date and 'SUBMIT' in self.request:
-            daytemplate = SchooldayTemplate()
+            daytemplate = []
             for title, start, duration in self.extractPeriods():
-                daytemplate.add(SchooldaySlot(start, duration))
+                daytemplate.append((title, SchooldaySlot(start, duration)))
             if self.field_errors:
                 self.error = _('Some values were invalid.'
                                '  They are highlighted in red.')

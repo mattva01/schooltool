@@ -194,10 +194,9 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         schooldays.addWeekdays(0, 1, 2, 3, 4, 5) # Mon-Sat
 
         # Add an exception day
-        exception = SchooldayTemplate()
         t, td = time, timedelta
-        exception.add(SchooldaySlot(t(6, 0), td(minutes=90)))
-        exception.add(SchooldaySlot(t(8, 0), td(minutes=90)))
+        exception = [("Green", SchooldaySlot(t(6, 0), td(minutes=90))),
+                     ("Blue", SchooldaySlot(t(8, 0), td(minutes=90)))]
         model.exceptionDays[date(2003, 11, 22)] = exception
 
         # Run the calendar generation
@@ -268,10 +267,10 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         schooldays = TermStub()
 
         # Add an exception day
-        exception = SchooldayTemplate()
         t, td = time, timedelta
-        exception.add(SchooldaySlot(t(6, 0), td(minutes=90)))
-        exception.add(SchooldaySlot(t(8, 0), td(minutes=90)))
+        exception = [
+            ("Green", SchooldaySlot(t(6, 0), td(minutes=90))),
+            ("Blue", SchooldaySlot(t(8, 0), td(minutes=90)))]
         model.exceptionDays[date(2003, 11, 21)] = exception
 
         self.assertEqual(
@@ -452,12 +451,12 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         verifyObject(IWeekdayBasedTimetableModel, model)
 
         # Add an exception day
-        exception = SchooldayTemplate()
         t, td = time, timedelta
-        exception.add(SchooldaySlot(t(6, 0), td(minutes=45)))
-        exception.add(SchooldaySlot(t(7, 0), td(minutes=45)))
-        exception.add(SchooldaySlot(t(8, 0), td(minutes=45)))
-        exception.add(SchooldaySlot(t(9, 0), td(minutes=45)))
+        exception = [
+            ('1', SchooldaySlot(t(6, 0), td(minutes=45))),
+            ('2', SchooldaySlot(t(7, 0), td(minutes=45))),
+            ('3', SchooldaySlot(t(8, 0), td(minutes=45))),
+            ('4', SchooldaySlot(t(9, 0), td(minutes=45)))]
         model.exceptionDays[date(2003, 11, 22)] = exception
         model.exceptionDayIds[date(2003, 11, 22)] = "Monday"
 

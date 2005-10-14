@@ -232,13 +232,11 @@ class ITimetableModel(Interface):
     exceptionDays = Dict(
         title=u"Exception schoolday templates",
         key_type=Date(title=u"Date"),
-        value_type=Object(title=u"Schoolday template",
-                          schema=ISchooldayTemplate),
+        value_type=List(title=u"Schoolday template"),
         description=u"""
-        Schoolday templates for special days.
+        Timetables for special days
 
-        Schoolday templates provided in this attribute override the
-        templates in the dayTemplates attribute.
+        The values are lists of tuples of (period_id, SchooldaySlot).
         """)
 
     exceptionDayIds = Dict(
