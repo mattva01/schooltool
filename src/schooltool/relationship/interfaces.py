@@ -114,6 +114,7 @@ class IRelationshipEvent(Interface):
     role1 = Attribute("""Role of `participant1`.""")
     participant2 = Attribute("""One of the participants.""")
     role2 = Attribute("""Role of `participant2`.""")
+    extra_info = Attribute("""Extra info, as passed to relate().""")
 
     def __getitem__(role):
         """Return the participant with a given role.

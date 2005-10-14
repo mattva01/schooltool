@@ -269,6 +269,8 @@ When you establish a relationship, a RelationshipAddedEvent is sent out.
     ...                     event.rel_type.name,
     ...                     event.participant1, event.role1.name,
     ...                     event.participant2, event.role2.name)
+    ...         if event.extra_info:
+    ...             print '(BTW, %s)' % event.extra_info
     >>> zope.event.subscribers.append(my_subscriber)
 
     >>> kermit = SomeObject('kermit')
@@ -289,13 +291,16 @@ When you break a relationship, a RelationshipRemovedEvent is sent out.
     ...         import IRelationshipRemovedEvent
     >>> def my_subscriber(event):
     ...     if IBeforeRemovingRelationshipEvent.providedBy(event):
-    ...         if event[URIMember] is kermit:
+    ...         if (event.rel_type == URIMembership
+    ...             and event[URIMember] is kermit):
     ...             print "Please don't leave us!"
     ...     if IRelationshipRemovedEvent.providedBy(event):
     ...         print 'Relationship %s between %s (%s) and %s (%s) removed' % (
     ...                     event.rel_type.name,
     ...                     event.participant1, event.role1.name,
     ...                     event.participant2, event.role2.name)
+    ...         if event.extra_info:
+    ...             print '(BTW, %s)' % event.extra_info
     >>> zope.event.subscribers.append(my_subscriber)
 
     >>> Membership.unlink(member=kermit, group=frogs)
@@ -341,6 +346,7 @@ a label).  You can do so by passing an extra argument to `relate` and
     >>> relate(URIFriendship, (kermit, URIFriend), (frogger, URIFriend),
     ...        'kermit and frogger know each other for years')
     Relationship Friendship added between kermit (Friend) and frogger (Friend)
+    (BTW, kermit and frogger know each other for years)
 
 This extra argument should be either a read-only object, or a subclass of
 persistent.Persistent, because references to this object will be stored from
@@ -381,10 +387,17 @@ You can then use it like this:
     >>> fluffy.friends.add(kermit,
     ...         'fluffy just met kermit, but fluffy is very friendly')
     Relationship Friendship added between fluffy (Friend) and kermit (Friend)
+    (BTW, fluffy just met kermit, but fluffy is very friendly)
 
     >>> for friend, extra_info in fluffy.friends:
     ...     print '%s: %s' % (friend, extra_info)
     kermit: fluffy just met kermit, but fluffy is very friendly
+
+As you see, the extra info is accessible to all event handlers
+
+    >>> fluffy.friends.remove(kermit)
+    Relationship Friendship between fluffy (Friend) and kermit (Friend) removed
+    (BTW, fluffy just met kermit, but fluffy is very friendly)
 
 
 Caveats

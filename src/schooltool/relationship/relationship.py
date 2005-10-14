@@ -51,14 +51,16 @@ def relate(rel_type, (a, role_of_a), (b, role_of_b), extra_info=None):
             raise DuplicateRelationship
     zope.event.notify(BeforeRelationshipEvent(rel_type,
                                               (a, role_of_a),
-                                              (b, role_of_b)))
+                                              (b, role_of_b),
+                                              extra_info))
     IRelationshipLinks(a).add(Link(role_of_a, b, role_of_b, rel_type,
                                    extra_info))
     IRelationshipLinks(b).add(Link(role_of_b, a, role_of_a, rel_type,
                                    extra_info))
     zope.event.notify(RelationshipAddedEvent(rel_type,
                                              (a, role_of_a),
-                                             (b, role_of_b)))
+                                             (b, role_of_b),
+                                             extra_info))
 
 
 def unrelate(rel_type, (a, role_of_a), (b, role_of_b)):
@@ -69,9 +71,11 @@ def unrelate(rel_type, (a, role_of_a), (b, role_of_b)):
         link_a_to_b = links_of_a.find(role_of_a, b, role_of_b, rel_type)
     except ValueError:
         raise NoSuchRelationship
+    extra_info = link_a_to_b.extra_info
     zope.event.notify(BeforeRemovingRelationshipEvent(rel_type,
                                                       (a, role_of_a),
-                                                      (b, role_of_b)))
+                                                      (b, role_of_b),
+                                                      extra_info))
     links_of_a.remove(link_a_to_b)
     # If links_of_b.find raises a ValueError, our data structures are out of
     # sync.
@@ -79,7 +83,8 @@ def unrelate(rel_type, (a, role_of_a), (b, role_of_b)):
     links_of_b.remove(link_b_to_a)
     zope.event.notify(RelationshipRemovedEvent(rel_type,
                                                (a, role_of_a),
-                                               (b, role_of_b)))
+                                               (b, role_of_b),
+                                               extra_info))
 
 
 def unrelateAll(obj):
@@ -105,7 +110,8 @@ class RelationshipEvent(object):
     """Base class for relationship events.
 
         >>> event = RelationshipEvent('Membership',
-        ...                           ('a', 'Member'), ('b', 'Group'))
+        ...                           ('a', 'Member'), ('b', 'Group'),
+        ...                           None)
         >>> event['Member']
         'a'
         >>> event['Group']
@@ -117,12 +123,13 @@ class RelationshipEvent(object):
 
     """
 
-    def __init__(self, rel_type, (a, role_of_a), (b, role_of_b)):
+    def __init__(self, rel_type, (a, role_of_a), (b, role_of_b), extra_info):
         self.rel_type = rel_type
         self.participant1 = a
         self.role1 = role_of_a
         self.participant2 = b
         self.role2 = role_of_b
+        self.extra_info = extra_info
 
     def __getitem__(self, role):
         """Return the participant with a given role."""
@@ -139,7 +146,8 @@ class BeforeRelationshipEvent(RelationshipEvent):
         >>> from zope.interface.verify import verifyObject
         >>> event = BeforeRelationshipEvent('example:Membership',
         ...                                 ('a', 'example:Member'),
-        ...                                 ('letters', 'example:Group'))
+        ...                                 ('letters', 'example:Group'),
+        ...                                 None)
         >>> verifyObject(IBeforeRelationshipEvent, event)
         True
 
@@ -154,7 +162,8 @@ class RelationshipAddedEvent(RelationshipEvent):
         >>> from zope.interface.verify import verifyObject
         >>> event = RelationshipAddedEvent('example:Membership',
         ...                                ('a', 'example:Member'),
-        ...                                ('letters', 'example:Group'))
+        ...                                ('letters', 'example:Group'),
+        ...                                None)
         >>> verifyObject(IRelationshipAddedEvent, event)
         True
 
@@ -169,7 +178,8 @@ class BeforeRemovingRelationshipEvent(RelationshipEvent):
         >>> from zope.interface.verify import verifyObject
         >>> event = BeforeRemovingRelationshipEvent('example:Membership',
         ...                 ('a', 'example:Member'),
-        ...                 ('letters', 'example:Group'))
+        ...                 ('letters', 'example:Group'),
+        ...                 None)
         >>> verifyObject(IBeforeRemovingRelationshipEvent, event)
         True
 
@@ -184,7 +194,8 @@ class RelationshipRemovedEvent(RelationshipEvent):
         >>> from zope.interface.verify import verifyObject
         >>> event = RelationshipRemovedEvent('example:Membership',
         ...                                  ('a', 'example:Member'),
-        ...                                  ('letters', 'example:Group'))
+        ...                                  ('letters', 'example:Group'),
+        ...                                  None)
         >>> verifyObject(IRelationshipRemovedEvent, event)
         True
 
