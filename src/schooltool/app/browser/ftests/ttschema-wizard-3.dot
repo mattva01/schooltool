@@ -5,7 +5,9 @@ digraph "Timetable Schema Wizard" {
   DayEntryStep -> IndependentDaysStep [style="bold"];
   IndependentDaysStep -> SimpleSlotEntryStep [style="bold"];
   IndependentDaysStep -> WeeklySlotEntryStep;
-  IndependentDaysStep -> RotatingSlotEntryStep;
+  IndependentDaysStep -> SequentialModelStep;
+  SequentialModelStep -> WeeklySlotEntryStep;
+  SequentialModelStep -> RotatingSlotEntryStep;
   SimpleSlotEntryStep -> NamedPeriodsStep [style="bold"];
   RotatingSlotEntryStep -> NamedPeriodsStep;
   WeeklySlotEntryStep -> NamedPeriodsStep;
