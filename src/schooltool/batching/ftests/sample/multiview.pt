@@ -1,0 +1,18 @@
+<tal:block define="batch view/batches/arthurs;
+                   batch_name string:arthurs">
+  <metal:macro use-macro="view/@@batch_macros/multi-batch-navigation"/>
+  <h1 tal:content="batch_name"/>
+  <ul>
+    <li tal:repeat="item batch" tal:content="item"/>
+  </ul>
+</tal:block>
+
+<tal:block define="batch view/batches/zaphods;
+                   batch_name string:zaphods">
+  <metal:macro use-macro="view/@@batch_macros/multi-batch-navigation"/>
+  <h1 tal:content="batch_name"/>
+  <ul>
+    <li tal:repeat="item batch" tal:content="item"/>
+  </ul>
+</tal:block>
+

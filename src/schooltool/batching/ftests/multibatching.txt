@@ -1,0 +1,211 @@
+Multi-Batching large sets
+===================
+Batching provides a way for you to split a large set of data into smaller sets
+(batches) for presentation in a UI
+Multi-batching differs from "normal" batching by being able to support
+multiple batches on one page. For "normal" batches look batching.txt.
+
+Setup
+=====
+
+We need an application with some sample data.
+
+    >>> from zope.testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/@@multibatch.html')
+
+Navigation
+----------
+
+The batch navigation bar links to the previous and next batches. In TAL you can
+call the macro like this:
+
+    <tal:block define="batch view/batch;
+                       batch_name string:somename;">
+        <metal:macro use-macro="view/@@batch_macros/multi-batch-navigation"/>
+    </tal:block>
+
+To support multi-batching your need to use view class mixin
+MultiBatchViewMixin.
+
+    >>> simple_batche_contents = manager.contents
+    >>> print manager.contents
+    <BLANKLINE>
+    ...<span class="previous">&laquo; Previous</span>
+    ...<a class="all" href="http://localhost/@@multibatch.html?batch_size.arthurs=100">Show All</a>
+    ...<a class="next" href="http://localhost/@@multibatch.html?batch_start.arthurs=10&amp;batch_size.arthurs=10">Next &raquo;</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.arthurs=0&amp;batch_size.arthurs=10" class="current">1</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.arthurs=10&amp;batch_size.arthurs=10">2</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.arthurs=90&amp;batch_size.arthurs=10">10</a>
+    ...
+    <h1>arthurs</h1>
+    <ul>
+      <li>arthur00</li>
+      <li>arthur01</li>
+      <li>arthur02</li>
+      <li>arthur03</li>
+      <li>arthur04</li>
+      <li>arthur05</li>
+      <li>arthur06</li>
+      <li>arthur07</li>
+      <li>arthur08</li>
+      <li>arthur09</li>
+    ...
+    ...<span class="previous">&laquo; Previous</span>
+    ...<a class="all" href="http://localhost/@@multibatch.html?batch_size.zaphods=100">Show All</a>
+    ...<a class="next" href="http://localhost/@@multibatch.html?batch_start.zaphods=10&amp;batch_size.zaphods=10">Next &raquo;</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.zaphods=0&amp;batch_size.zaphods=10" class="current">1</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.zaphods=10&amp;batch_size.zaphods=10">2</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.zaphods=90&amp;batch_size.zaphods=10">10</a>
+    ...
+    <h1>zaphods</h1>
+    <ul>
+      <li>zaphod00</li>
+      <li>zaphod01</li>
+      <li>zaphod02</li>
+      <li>zaphod03</li>
+      <li>zaphod04</li>
+      <li>zaphod05</li>
+      <li>zaphod06</li>
+      <li>zaphod07</li>
+      <li>zaphod08</li>
+      <li>zaphod09</li>
+    ...
+
+Click first "Next" link.
+
+    >>> manager.getLink('Next', url='arthurs').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...<a class="previous" href="http://localhost/@@multibatch.html?batch_start.arthurs=0&amp;batch_size.arthurs=10">&laquo; Previous</a>
+    ...<a class="all" href="http://localhost/@@multibatch.html?batch_size.arthurs=100">Show All</a>
+    ...<a class="next" href="http://localhost/@@multibatch.html?batch_start.arthurs=20&amp;batch_size.arthurs=10">Next &raquo;</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.arthurs=0&amp;batch_size.arthurs=10">1</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.arthurs=10&amp;batch_size.arthurs=10" class="current">2</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.arthurs=90&amp;batch_size.arthurs=10">10</a>
+    ...
+    <h1>arthurs</h1>
+    <ul>
+      <li>arthur10</li>
+      <li>arthur11</li>
+      <li>arthur12</li>
+      <li>arthur13</li>
+      <li>arthur14</li>
+      <li>arthur15</li>
+      <li>arthur16</li>
+      <li>arthur17</li>
+      <li>arthur18</li>
+      <li>arthur19</li>
+    ...
+    ...<span class="previous">&laquo; Previous</span>
+    ...<a class="all" href="http://localhost/@@multibatch.html?batch_size.zaphods=100">Show All</a>
+    ...<a class="next" href="http://localhost/@@multibatch.html?batch_start.zaphods=10&amp;batch_size.zaphods=10">Next &raquo;</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.zaphods=0&amp;batch_size.zaphods=10" class="current">1</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.zaphods=10&amp;batch_size.zaphods=10">2</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.zaphods=90&amp;batch_size.zaphods=10">10</a>
+    ...
+    <h1>zaphods</h1>
+    <ul>
+      <li>zaphod00</li>
+      <li>zaphod01</li>
+      <li>zaphod02</li>
+      <li>zaphod03</li>
+      <li>zaphod04</li>
+      <li>zaphod05</li>
+      <li>zaphod06</li>
+      <li>zaphod07</li>
+      <li>zaphod08</li>
+      <li>zaphod09</li>
+    ...
+
+Now click on second "Next" link.
+
+    >>> manager.getLink('Next', url='zaphods').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...<span class="previous">&laquo; Previous</span>
+    ...<a class="all" href="http://localhost/@@multibatch.html?batch_size.arthurs=100">Show All</a>
+    ...<a class="next" href="http://localhost/@@multibatch.html?batch_start.arthurs=10&amp;batch_size.arthurs=10">Next &raquo;</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.arthurs=0&amp;batch_size.arthurs=10" class="current">1</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.arthurs=10&amp;batch_size.arthurs=10">2</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.arthurs=90&amp;batch_size.arthurs=10">10</a>
+    ...
+    <h1>arthurs</h1>
+    <ul>
+      <li>arthur00</li>
+      <li>arthur01</li>
+      <li>arthur02</li>
+      <li>arthur03</li>
+      <li>arthur04</li>
+      <li>arthur05</li>
+      <li>arthur06</li>
+      <li>arthur07</li>
+      <li>arthur08</li>
+      <li>arthur09</li>
+    ...
+    ...<a class="previous" href="http://localhost/@@multibatch.html?batch_start.zaphods=0&amp;batch_size.zaphods=10">&laquo; Previous</a>
+    ...<a class="all" href="http://localhost/@@multibatch.html?batch_size.zaphods=100">Show All</a>
+    ...<a class="next" href="http://localhost/@@multibatch.html?batch_start.zaphods=20&amp;batch_size.zaphods=10">Next &raquo;</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.zaphods=0&amp;batch_size.zaphods=10">1</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.zaphods=10&amp;batch_size.zaphods=10" class="current">2</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.zaphods=90&amp;batch_size.zaphods=10">10</a>
+    ...
+    <h1>zaphods</h1>
+    <ul>
+      <li>zaphod10</li>
+      <li>zaphod11</li>
+      <li>zaphod12</li>
+      <li>zaphod13</li>
+      <li>zaphod14</li>
+      <li>zaphod15</li>
+      <li>zaphod16</li>
+      <li>zaphod17</li>
+      <li>zaphod18</li>
+      <li>zaphod19</li>
+    ...
+
+Test "Show all" link for zaphods.
+
+    >>> manager.getLink('Show All', url='zaphods').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...<span class="previous">&laquo; Previous</span>
+    ...<a class="all" href="http://localhost/@@multibatch.html?batch_size.arthurs=100">Show All</a>
+    ...<a class="next" href="http://localhost/@@multibatch.html?batch_start.arthurs=10&amp;batch_size.arthurs=10">Next &raquo;</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.arthurs=0&amp;batch_size.arthurs=10" class="current">1</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.arthurs=10&amp;batch_size.arthurs=10">2</a>
+    ...<a href="http://localhost/@@multibatch.html?batch_start.arthurs=90&amp;batch_size.arthurs=10">10</a>
+    ...
+    <h1>arthurs</h1>
+    <ul>
+      <li>arthur00</li>
+      <li>arthur01</li>
+      <li>arthur02</li>
+      <li>arthur03</li>
+      <li>arthur04</li>
+      <li>arthur05</li>
+      <li>arthur06</li>
+      <li>arthur07</li>
+      <li>arthur08</li>
+      <li>arthur09</li>
+    ...
+    ...<a class="less" href="http://localhost/@@multibatch.html?batch_size.zaphods=10">Show Less</a>
+    ...<li>zaphod00</li>
+       <li>zaphod01</li>
+       <li>zaphod02</li>
+    ...<li>zaphod42</li>
+       <li>zaphod43</li>
+       <li>zaphod44</li>
+    ...<li>zaphod66</li>
+       <li>zaphod67</li>
+    ...<li>zaphod98</li>
+       <li>zaphod99</li>
+    ...
+
+Enough of this, show less...
+
+    >>> manager.getLink('Show Less', url='zaphods').click()
+    >>> assert manager.contents == simple_batche_contents
+

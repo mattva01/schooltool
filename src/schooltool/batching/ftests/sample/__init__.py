@@ -27,6 +27,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.publisher.browser import BrowserView
 
 from schooltool.batching import Batch
+from schooltool.batching.browser import MultiBatchViewMixin
 
 class BatchView(BrowserView):
     """A sample view that implements batching."""
@@ -40,5 +41,24 @@ class BatchView(BrowserView):
         start = int(self.request.get('batch_start', 0))
         size = int(self.request.get('batch_size', 10))
         self.batch = Batch(self.data, start, size)
+        return self.index()
+
+class MultiBatchView(BrowserView, MultiBatchViewMixin):
+    """A sample view that implements multi-batching."""
+    implements(IBrowserPublisher)
+
+    arthurs = ['arthur%02d' % i for i in range(100)]
+    zaphods = ['zaphod%02d' % i for i in range(100)]
+
+    index = ViewPageTemplateFile('multiview.pt')
+
+    def __init__(self, context, request):
+        BrowserView.__init__(self, context, request)
+        MultiBatchViewMixin.__init__(self, ['arthurs', 'zaphods'])
+
+    def __call__(self):
+        MultiBatchViewMixin.update(self)
+        self.updateBatch('arthurs', self.arthurs)
+        self.updateBatch('zaphods', self.zaphods)
         return self.index()
 

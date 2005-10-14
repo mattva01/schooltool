@@ -8,4 +8,11 @@
       permission="zope.Public"
       />
 
+  <page
+      name="multibatch.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class="schooltool.batching.ftests.sample.MultiBatchView"
+      permission="zope.Public"
+      />
+
 </configure>
