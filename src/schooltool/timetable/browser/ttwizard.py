@@ -125,7 +125,7 @@ from schooltool.timetable.browser import format_time_range
 from schooltool import SchoolToolMessageID as _
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
 from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
-from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable import WeeklyTimetableModel
 from schooltool.timetable import SequentialDaysTimetableModel
 from schooltool.timetable import SequentialDayIdBasedTimetableModel
@@ -730,8 +730,8 @@ class FinalStep(Step):
         same = True
         for n, (periods, slots) in enumerate(zip(periods_order, time_slots)):
             template = SchooldayTemplate()
-            for ptitle, (tstart, duration) in zip(periods, slots):
-                template.add(SchooldayPeriod(ptitle, tstart, duration))
+            for tstart, duration in slots:
+                template.add(SchooldaySlot(tstart, duration))
             templates[n] = template
             if n > 0 and template != templates[n-1]:
                 same = False

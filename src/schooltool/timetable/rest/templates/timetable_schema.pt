@@ -5,9 +5,8 @@
     <daytemplate tal:repeat="day view/daytemplates">
       <used tal:attributes="when day/used"/>
       <period tal:repeat="period day/periods"
-              tal:attributes="id period/id;
-                              tstart period/tstart;
-                              duration period/duration"/>
+              tal:attributes="tstart period/tstart;
+                              duration period/duration" />
     </daytemplate>
     <day tal:repeat="day view/exceptiondayids"
          tal:attributes="when day/when;

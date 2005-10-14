@@ -28,7 +28,7 @@ import datetime
 from zope.interface import implements
 
 from schooltool.sampledata.interfaces import ISampleDataPlugin
-from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable.model import SequentialDayIdBasedTimetableModel
 from schooltool.timetable.term import Term
@@ -56,8 +56,7 @@ class SampleTimetableSchema(object):
         for day_idx, day_id in enumerate(day_ids):
             day_template = SchooldayTemplate()
             for idx, (tstart, duration) in enumerate(slots):
-                period = period_ids[(day_idx + idx) % len(period_ids)]
-                day_template.add(SchooldayPeriod(period, tstart, duration))
+                day_template.add(SchooldaySlot(tstart, duration))
             day_templates[day_id] = day_template
 
         model = SequentialDayIdBasedTimetableModel(day_ids, day_templates)

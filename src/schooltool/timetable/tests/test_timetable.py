@@ -605,37 +605,33 @@ class TestTimetablingPersistence(unittest.TestCase):
             datamgr.close()
 
 
-class TestSchooldayPeriod(unittest.TestCase):
+class TestSchooldaySlot(unittest.TestCase):
 
     def test(self):
-        from schooltool.timetable import SchooldayPeriod
-        from schooltool.timetable.interfaces import ISchooldayPeriod
+        from schooltool.timetable import SchooldaySlot
+        from schooltool.timetable.interfaces import ISchooldaySlot
 
-        ev = SchooldayPeriod("1", time(9, 00), timedelta(minutes=45))
-        verifyObject(ISchooldayPeriod, ev)
-        self.assertEqual(ev.title, "1")
+        ev = SchooldaySlot(time(9, 00), timedelta(minutes=45))
+        verifyObject(ISchooldaySlot, ev)
         self.assertEqual(ev.tstart, time(9,0))
         self.assertEqual(ev.duration, timedelta(seconds=2700))
 
     def test_eq(self):
-        from schooltool.timetable import SchooldayPeriod
+        from schooltool.timetable import SchooldaySlot
         self.assertEqual(
-            SchooldayPeriod("1", time(9, 00), timedelta(minutes=45)),
-            SchooldayPeriod("1", time(9, 00), timedelta(minutes=45)))
+            SchooldaySlot(time(9, 00), timedelta(minutes=45)),
+            SchooldaySlot(time(9, 00), timedelta(minutes=45)))
         self.assertEqual(
-            hash(SchooldayPeriod("1", time(9, 0), timedelta(minutes=45))),
-            hash(SchooldayPeriod("1", time(9, 0), timedelta(minutes=45))))
+            hash(SchooldaySlot(time(9, 0), timedelta(minutes=45))),
+            hash(SchooldaySlot(time(9, 0), timedelta(minutes=45))))
         self.assertNotEqual(
-            SchooldayPeriod("1", time(9, 00), timedelta(minutes=45)),
-            SchooldayPeriod("2", time(9, 00), timedelta(minutes=45)))
+            SchooldaySlot(time(9, 00), timedelta(minutes=45)),
+            SchooldaySlot(time(9, 01), timedelta(minutes=45)))
         self.assertNotEqual(
-            SchooldayPeriod("1", time(9, 00), timedelta(minutes=45)),
-            SchooldayPeriod("1", time(9, 01), timedelta(minutes=45)))
+            SchooldaySlot(time(9, 00), timedelta(minutes=45)),
+            SchooldaySlot(time(9, 00), timedelta(minutes=90)))
         self.assertNotEqual(
-            SchooldayPeriod("1", time(9, 00), timedelta(minutes=45)),
-            SchooldayPeriod("1", time(9, 00), timedelta(minutes=90)))
-        self.assertNotEqual(
-            SchooldayPeriod("1", time(9, 00), timedelta(minutes=45)),
+            SchooldaySlot(time(9, 00), timedelta(minutes=45)),
             object())
 
 
@@ -651,14 +647,14 @@ class TestSchooldayTemplate(unittest.TestCase):
         verifyObject(ISchooldayTemplateWrite, tmpl)
 
     def test_add_remove_iter(self):
-        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+        from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 
         tmpl = SchooldayTemplate()
         self.assertEqual(list(iter(tmpl)), [])
         self.assertRaises(TypeError, tmpl.add, object())
 
-        lesson1 = SchooldayPeriod("1", time(9, 0), timedelta(minutes=45))
-        lesson2 = SchooldayPeriod("2", time(10, 0), timedelta(minutes=45))
+        lesson1 = SchooldaySlot(time(9, 0), timedelta(minutes=45))
+        lesson2 = SchooldaySlot(time(10, 0), timedelta(minutes=45))
 
         tmpl.add(lesson1)
         self.assertEqual(list(iter(tmpl)), [lesson1])
@@ -673,15 +669,15 @@ class TestSchooldayTemplate(unittest.TestCase):
         self.assertEqual(list(iter(tmpl)), [lesson2])
 
     def test_eq(self):
-        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+        from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 
         tmpl = SchooldayTemplate()
-        tmpl.add(SchooldayPeriod("1", time(9, 0), timedelta(minutes=45)))
-        tmpl.add(SchooldayPeriod("2", time(10, 0), timedelta(minutes=45)))
+        tmpl.add(SchooldaySlot(time(9, 0), timedelta(minutes=45)))
+        tmpl.add(SchooldaySlot(time(10, 0), timedelta(minutes=45)))
 
         tmpl2 = SchooldayTemplate()
-        tmpl2.add(SchooldayPeriod("1", time(9, 0), timedelta(minutes=45)))
-        tmpl2.add(SchooldayPeriod("2", time(10, 0), timedelta(minutes=45)))
+        tmpl2.add(SchooldaySlot(time(9, 0), timedelta(minutes=45)))
+        tmpl2.add(SchooldaySlot(time(10, 0), timedelta(minutes=45)))
 
         self.assertEqual(tmpl, tmpl)
         self.assertEqual(tmpl, tmpl2)
@@ -983,7 +979,7 @@ def test_suite():
     suite.addTest(unittest.makeSuite(TestTimetableEvents))
     suite.addTest(unittest.makeSuite(TestTimetablingPersistence))
     suite.addTest(unittest.makeSuite(TestTimetableDict))
-    suite.addTest(unittest.makeSuite(TestSchooldayPeriod))
+    suite.addTest(unittest.makeSuite(TestSchooldaySlot))
     suite.addTest(unittest.makeSuite(TestSchooldayTemplate))
     suite.addTest(unittest.makeSuite(TestTimetablesMixin))
     return suite

@@ -80,11 +80,11 @@ def print_day_templates(daytemplates):
     keys.sort()
     for key in keys:
         print "--- day template %r" % key
-        slots = [(period.tstart, period.duration, period.title)
+        slots = [(period.tstart, period.duration)
                  for period in daytemplates[key]]
         slots.sort()
-        for tstart, duration, title in slots:
-            print "%s: %s" % (format_time_range(tstart, duration), title)
+        for tstart, duration in slots:
+            print format_time_range(tstart, duration)
 
 
 def print_ttschema(ttschema):
@@ -1256,9 +1256,9 @@ def doctest_FinalStep_dayTemplates():
         >>> dt = FinalStep.dayTemplates([names] * 4, [slots] * 4)
         >>> print_day_templates(dt)
         --- day template None
-        09:00-09:50: A
-        12:35-13:25: B
-        14:15-15:10: C
+        09:00-09:50
+        12:35-13:25
+        14:15-15:10
 
     Time slots are the same for all days, but period order differs.
 
@@ -1269,22 +1269,9 @@ def doctest_FinalStep_dayTemplates():
         ...                             [slots] * 4)
         >>> print_day_templates(dt)
         --- day template None
-        --- day template 0
-        09:00-09:50: A
-        12:35-13:25: B
-        14:15-15:10: C
-        --- day template 1
-        09:00-09:50: B
-        12:35-13:25: C
-        14:15-15:10: A
-        --- day template 2
-        09:00-09:50: C
-        12:35-13:25: A
-        14:15-15:10: B
-        --- day template 3
-        09:00-09:50: B
-        12:35-13:25: A
-        14:15-15:10: C
+        09:00-09:50
+        12:35-13:25
+        14:15-15:10
 
     Time slots are different.
 
@@ -1299,21 +1286,21 @@ def doctest_FinalStep_dayTemplates():
         >>> print_day_templates(dt)
         --- day template None
         --- day template 0
-        09:00-09:30: A
-        10:00-10:30: B
-        11:00-11:30: C
+        09:00-09:30
+        10:00-10:30
+        11:00-11:30
         --- day template 1
-        09:05-09:35: B
-        10:05-10:35: C
-        11:05-11:35: A
+        09:05-09:35
+        10:05-10:35
+        11:05-11:35
         --- day template 2
-        09:10-09:40: C
-        10:10-10:40: A
-        11:10-11:40: B
+        09:10-09:40
+        10:10-10:40
+        11:10-11:40
         --- day template 3
-        09:15-09:45: B
-        10:15-10:45: A
-        11:15-11:45: C
+        09:15-09:45
+        10:15-10:45
+        11:15-11:45
 
     """
 
@@ -1358,8 +1345,8 @@ def doctest_FinalStep_createSchema():
 
         >>> print_day_templates(ttschema.model.dayTemplates)
         --- day template None
-        09:30-10:25: 09:30-10:25
-        10:30-11:25: 10:30-11:25
+        09:30-10:25
+        10:30-11:25
 
     The model can also be rotating.
 
@@ -1434,31 +1421,10 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_weekly():
 
         >>> print_day_templates(ttschema.model.dayTemplates)
         --- day template None
-        --- day template 0
-        08:00-08:45: A
-        09:00-09:45: B
-        10:00-10:45: C
-        11:00-11:45: D
-        --- day template 1
-        08:00-08:45: B
-        09:00-09:45: C
-        10:00-10:45: D
-        11:00-11:45: E
-        --- day template 2
-        08:00-08:45: C
-        09:00-09:45: D
-        10:00-10:45: E
-        11:00-11:45: F
-        --- day template 3
-        08:00-08:45: D
-        09:00-09:45: E
-        10:00-10:45: F
-        11:00-11:45: G
-        --- day template 4
-        08:00-08:45: E
-        09:00-09:45: F
-        10:00-10:45: G
-        11:00-11:45: H
+        08:00-08:45
+        09:00-09:45
+        10:00-10:45
+        11:00-11:45
 
     """
 
@@ -1502,20 +1468,20 @@ def doctest_FinalStep_createSchema_different_order_on_different_days_cyclic():
 
         >>> print_day_templates(ttschema.model.dayTemplates)
         --- day template 'Day 1'
-        08:00-08:45: A
-        09:00-09:45: B
-        10:00-10:45: C
-        11:00-11:45: D
+        08:00-08:45
+        09:00-09:45
+        10:00-10:45
+        11:00-11:45
         --- day template 'Day 2'
-        08:00-08:45: B
-        09:00-09:45: C
-        10:00-10:45: D
-        11:00-11:45: E
+        08:00-08:45
+        09:00-09:45
+        10:00-10:45
+        11:00-11:45
         --- day template 'Day 3'
-        08:00-08:45: C
-        09:00-09:45: D
-        10:00-10:45: E
-        11:00-11:45: F
+        08:00-08:45
+        09:00-09:45
+        10:00-10:45
+        11:00-11:45
 
     """
 
@@ -1564,30 +1530,30 @@ def doctest_FinalStep_createSchema_different_times():
         >>> print_day_templates(ttschema.model.dayTemplates)
         --- day template None
         --- day template 0
-        08:00-08:45: A
-        09:00-09:45: B
-        10:00-10:45: C
-        11:00-11:45: D
+        08:00-08:45
+        09:00-09:45
+        10:00-10:45
+        11:00-11:45
         --- day template 1
-        08:05-08:50: B
-        09:05-09:50: C
-        10:05-10:50: D
-        11:05-11:50: E
+        08:05-08:50
+        09:05-09:50
+        10:05-10:50
+        11:05-11:50
         --- day template 2
-        08:10-08:55: C
-        09:10-09:55: D
-        10:10-10:55: E
-        11:10-11:55: F
+        08:10-08:55
+        09:10-09:55
+        10:10-10:55
+        11:10-11:55
         --- day template 3
-        08:15-09:00: D
-        09:15-10:00: E
-        10:15-11:00: F
-        11:15-12:00: G
+        08:15-09:00
+        09:15-10:00
+        10:15-11:00
+        11:15-12:00
         --- day template 4
-        08:20-09:05: E
-        09:20-10:05: F
-        10:20-11:05: G
-        11:20-12:05: H
+        08:20-09:05
+        09:20-10:05
+        10:20-11:05
+        11:20-12:05
 
     """
 

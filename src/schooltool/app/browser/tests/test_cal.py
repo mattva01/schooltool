@@ -39,8 +39,9 @@ from zope.app.session.interfaces import ISession
 
 import schooltool.app
 from schooltool.common import parse_datetime
-from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable import SequentialDaysTimetableModel
+from schooltool.testing.util import NiceDiffsMixin
 
 # Used in defining CalendarEventAddTestView
 from schooltool.app.browser.cal import CalendarEventAddView
@@ -4148,7 +4149,7 @@ def doctest_EventDeleteView():
     """
 
 
-class TestDailyCalendarRowsView(unittest.TestCase):
+class TestDailyCalendarRowsView(NiceDiffsMixin, unittest.TestCase):
 
     def setUp(self):
         setUp()
@@ -4173,10 +4174,10 @@ class TestDailyCalendarRowsView(unittest.TestCase):
                                    ['1', '2', '3', '4'],
                                    ['1', '2', '3', '4'])
         template = SchooldayTemplate()
-        template.add(SchooldayPeriod('1', time(8, 0), timedelta(hours=1)))
-        template.add(SchooldayPeriod('2', time(10, 15), timedelta(hours=1)))
-        template.add(SchooldayPeriod('3', time(11, 30), timedelta(hours=1)))
-        template.add(SchooldayPeriod('4', time(12, 30), timedelta(hours=2)))
+        template.add(SchooldaySlot(time(8, 0), timedelta(hours=1)))
+        template.add(SchooldaySlot(time(10, 15), timedelta(hours=1)))
+        template.add(SchooldaySlot(time(11, 30), timedelta(hours=1)))
+        template.add(SchooldaySlot(time(12, 30), timedelta(hours=2)))
         schema.model = SequentialDaysTimetableModel(days, {None: template})
 
         app['ttschemas']['default'] = schema

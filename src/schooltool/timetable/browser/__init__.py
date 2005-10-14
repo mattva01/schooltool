@@ -50,7 +50,7 @@ from schooltool.timetable.interfaces import ITerm
 from schooltool.course.interfaces import ISection
 from schooltool.timetable import Timetable, TimetableDay
 from schooltool.timetable import TimetableActivity
-from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable.term import getNextTermForDate, getTermForDate
 from schooltool.app.app import getSchoolToolApplication
 
@@ -658,10 +658,11 @@ class SpecialDayView(BrowserView):
         """
         model = self.context.model
         result = []
-        for period in model.originalPeriodsInDay(self.term, self.context,
-                                                 self.date):
-            start_name = period.title + '_start'
-            end_name = period.title + '_end'
+        for info in model.originalPeriodsInDay(self.term, self.context,
+                                               self.date):
+            period_id, tstart, duration = info
+            start_name = period_id + '_start'
+            end_name = period_id + '_end'
             if (start_name in self.request and end_name in self.request
                 and (self.request[start_name] or self.request[end_name])):
                 start = end = None
@@ -679,7 +680,7 @@ class SpecialDayView(BrowserView):
                     self.field_errors.append(end_name)
                 elif start is not None:
                     duration = self.delta(start, end)
-                    result.append((period.title, start, duration))
+                    result.append((period_id, start, duration))
         return result
 
     def update(self):
@@ -708,7 +709,7 @@ class SpecialDayView(BrowserView):
         if self.date and 'SUBMIT' in self.request:
             daytemplate = SchooldayTemplate()
             for title, start, duration in self.extractPeriods():
-                daytemplate.add(SchooldayPeriod(title, start, duration))
+                daytemplate.add(SchooldaySlot(start, duration))
             if self.field_errors:
                 self.error = _('Some values were invalid.'
                                '  They are highlighted in red.')
@@ -744,18 +745,20 @@ class SpecialDayView(BrowserView):
         model = self.context.model
         result = []
         actual_times = {}
-        for period in model.periodsInDay(self.term, self.context, self.date):
-            endtime = self.timeplustd(period.tstart, period.duration)
-            actual_times[period.title] = (period.tstart.strftime("%H:%M"),
-                                          endtime.strftime("%H:%M"))
-        for period in model.originalPeriodsInDay(self.term, self.context,
+        for info in model.periodsInDay(self.term, self.context, self.date):
+            period_id, tstart, duration = info
+            endtime = self.timeplustd(tstart, duration)
+            actual_times[period_id] = (tstart.strftime("%H:%M"),
+                                       endtime.strftime("%H:%M"))
+        for info in model.originalPeriodsInDay(self.term, self.context,
                                                  self.date):
+            period_id, tstart, duration = info
             # datetime authors are cowards
-            endtime = self.timeplustd(period.tstart, period.duration)
-            result.append((period.title,
-                           period.tstart.strftime("%H:%M"),
+            endtime = self.timeplustd(tstart, duration)
+            result.append((period_id,
+                           tstart.strftime("%H:%M"),
                            endtime.strftime("%H:%M")) +
-                          actual_times.get(period.title, ('', '')))
+                          actual_times.get(period_id, ('', '')))
         return result
 
     def __call__(self):

@@ -70,25 +70,22 @@ def doctest_SampleTimetableSchema():
 
         >>> result = []
         >>> for period in schema.model.dayTemplates['Day 1']:
-        ...      result.append((period.title, period.tstart, period.duration))
-        >>> result.sort()
-        >>> for line in result:
-        ...    print ' '.join(map(str, line))
-        A 08:00:00 0:55:00
-        B 09:00:00 0:55:00
-        C 10:00:00 0:55:00
-        D 11:00:00 0:55:00
-        E 12:30:00 0:55:00
-        F 13:30:00 1:00:00
+        ...      print period.tstart, period.duration
+        08:00:00 0:55:00
+        09:00:00 0:55:00
+        10:00:00 0:55:00
+        11:00:00 0:55:00
+        12:30:00 0:55:00
+        13:30:00 1:00:00
 
     The timetable model has schoolday templates for all days in cycle.
 
         >>> for day in schema.day_ids:
         ...    result = []
-        ...    for period in schema.model.dayTemplates[day]:
-        ...        result.append((period.tstart, period.title))
-        ...    result.sort()
-        ...    print day, ' '.join([title for tstart, title in result])
+        ...    print day,
+        ...    for period in schema[day].keys():
+        ...         print period,
+        ...    print
         Day 1 A B C D E F
         Day 2 B C D E F A
         Day 3 C D E F A B

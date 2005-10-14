@@ -123,18 +123,18 @@ class BaseTimetableModel(Persistent):
         for date in term:
             day_id, periods = self._periodsInDay(term, timetable,
                                                  date, day_id_gen)
-            for period in periods:
-                dt = datetime.datetime.combine(date, period.tstart)
-                for activity in timetable[day_id][period.title]:
-                    key = (date, period.title, activity)
+            for period, tstart, duration in periods:
+                dt = datetime.datetime.combine(date, tstart)
+                for activity in timetable[day_id][period]:
+                    key = (date, period, activity)
                     # IDs for functionally derived calendars should be
                     # functionally derived, and not random
                     uid = '%d-%s' % (hash((activity.title, dt,
-                                           period.duration)), uid_suffix)
+                                           duration)), uid_suffix)
                     event = TimetableCalendarEvent(
-                                dt, period.duration, activity.title,
+                                dt, duration, activity.title,
                                 unique_id=uid,
-                                period_id=period.title, activity=activity)
+                                period_id=period, activity=activity)
                     events.append(event)
         return ImmutableCalendar(events)
 
@@ -182,12 +182,11 @@ class BaseTimetableModel(Persistent):
             day_template = self._getUsualTemplateForDay(day, day_id)
         else:
             day_template = self._getTemplateForDay(day, day_id)
-        for period in day_template:
-            dt = datetime.datetime.combine(day, period.tstart)
-            if period.title in timetable[day_id].keys():
-                result.append(period)
+        for period, slot in zip(timetable[day_id].keys(), sorted(day_template)):
+            if period in timetable[day_id].keys():
+                result.append((period, slot.tstart, slot.duration))
 
-        result.sort(lambda x, y: cmp(x.tstart, y.tstart))
+        result.sort(lambda x, y: cmp(x[1], y[1]))
         return day_id, result
 
     def periodsInDay(self, term, timetable, day):

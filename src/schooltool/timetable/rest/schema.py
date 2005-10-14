@@ -34,7 +34,7 @@ from schooltool.app.rest.app import GenericContainerView
 from schooltool.app.rest.errors import RestError
 from schooltool.xmlparsing import XMLDocument
 from schooltool.common import parse_date, parse_time
-from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable.interfaces import ITimetableModelFactory
 from schooltool.timetable.schema import TimetableSchema, TimetableSchemaDay
 from schooltool.timetable.schema import TimetableSchemaContainer
@@ -80,8 +80,7 @@ class TimetableSchemaView(View):
             periods = []
             for period in day:
                 periods.append(
-                    {'id': period.title,
-                     'tstart': period.tstart.strftime("%H:%M"),
+                    {'tstart': period.tstart.strftime("%H:%M"),
                      'duration': period.duration.seconds / 60})
             periods.sort()
             for template in result:
@@ -98,8 +97,7 @@ class TimetableSchemaView(View):
             periods = []
             for period in day:
                 periods.append(
-                    {'id': period.title,
-                     'tstart': period.tstart.strftime("%H:%M"),
+                    {'tstart': period.tstart.strftime("%H:%M"),
                      'duration': period.duration.seconds / 60})
             periods.sort()
             result.append({'used': str(date), 'periods': periods})
@@ -157,7 +155,10 @@ class TimetableSchemaFileFactory(object):
                      </element>
                      <zeroOrMore>
                        <element name="period">
-                         <ref name="idattr"/>
+                         <optional>
+                           <!-- Backwards compat -->
+                           <ref name="idattr"/>
+                         </optional>
                          <attribute name="tstart">
                            <!-- XXX  d?d:dd -->
                            <text/>
@@ -237,7 +238,6 @@ class TimetableSchemaFileFactory(object):
 
                 # parse SchoolDayPeriods
                 for period in template.query('tt:period'):
-                    pid = period['id']
                     tstart_str = period['tstart']
                     dur_str = period['duration']
                     try:
@@ -246,7 +246,7 @@ class TimetableSchemaFileFactory(object):
                     except ValueError:
                         raise RestError("Bad period")
                     else:
-                        day.add(SchooldayPeriod(pid, tstart, duration))
+                        day.add(SchooldaySlot(tstart, duration))
                 used = template.query('tt:used')[0]['when']
 
                 # the used attribute might contain a date, a list of

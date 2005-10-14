@@ -35,7 +35,7 @@ from zope.app.publisher.browser import BrowserView
 
 from schooltool import SchoolToolMessageID as _
 from schooltool.app.browser.app import ContainerView
-from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 from schooltool.timetable.interfaces import ITimetableModelFactory
 from schooltool.timetable.interfaces import ITimetableSchema
 from schooltool.timetable.interfaces import ITimetableSchemaContainer
@@ -134,7 +134,7 @@ class SimpleTimetableSchemaAdd(BrowserView):
     def createSchema(self, periods):
         daytemplate = SchooldayTemplate()
         for title, start, duration in periods:
-            daytemplate.add(SchooldayPeriod(title, start, duration))
+            daytemplate.add(SchooldaySlot(start, duration))
 
         factory = zapi.getUtility(ITimetableModelFactory,
                                   'WeeklyTimetableModel')
@@ -331,9 +331,8 @@ class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
         result = {None: SchooldayTemplate()}
         n = 1
         self.discarded_some_periods = False
-        while 'time%d.period' % n in self.request:
+        while 'time%d.day0' % n in self.request:
             raw_value = [0]
-            period = self.request['time%d.period' % n]
             for day in range(7):
                 value = self.request.form.get('time%d.day%d' % (n, day), '')
                 if not value:
@@ -346,7 +345,7 @@ class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
                     continue
                 if day not in result:
                     result[day] = SchooldayTemplate()
-                result[day].add(SchooldayPeriod(period, start, duration))
+                result[day].add(SchooldaySlot(start, duration))
             n += 1
         for day in range(1, 7):
             if 'COPY_PERIODS_%d' % day in self.request:
@@ -365,17 +364,20 @@ class AdvancedTimetableSchemaAdd(BrowserView, TabindexMixin):
                     periods.append(period)
         return periods
 
-    def period_times(self):
-        """Return a list of all period times for every day of the week."""
-        result = []
-        times_for = {}
-        for period in self.all_periods():
-            times = [None] * 7
-            times_for[period] = times
-            result.append({'title': period, 'times': times})
+    def slot_times(self):
+        """Return a list of lists of time periods for each day for each slot.
+
+                      |  mo tu we thu fri sa su
+             ---------+-------------------------
+             1st slot |
+             2nd slot |
+             ...      |
+        """
+        nr_rows = max([len(day.keys())
+                       for day_id, day in self.ttschema.items()])
+        result =  [[None] * 7 for i in range(nr_rows)]
         for day, template in self.day_templates.items():
-            for event in template:
-                if event.title in times_for:
-                    range = format_time_range(event.tstart, event.duration)
-                    times_for[event.title][day] = range
+            for idx, slot in enumerate(template):
+                slotfmt = format_time_range(slot.tstart, slot.duration)
+                result[idx][day] = slotfmt
         return result

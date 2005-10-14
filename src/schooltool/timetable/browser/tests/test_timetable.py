@@ -70,18 +70,18 @@ def createDayTemplate(periods):
 
     Example:
 
-        createDayTemplate([('Period 1', 9, 30, 45),
-                           ('Period 2', 10, 30, 45)])
+        createDayTemplate([(9, 30, 45),
+                           (10, 30, 45)])
 
     would create a day template containing two periods, the first one starting
     at 9:30, the second one starting at 10:30, both 45 minutes long.
     """
     from schooltool.timetable import SchooldayTemplate
-    from schooltool.timetable import SchooldayPeriod
+    from schooltool.timetable import SchooldaySlot
     day = SchooldayTemplate()
-    for period, h, m, duration in periods:
-        day.add(SchooldayPeriod(period, datetime.time(h, m),
-                                datetime.timedelta(minutes=duration)))
+    for h, m, duration in periods:
+        day.add(SchooldaySlot(datetime.time(h, m),
+                              datetime.timedelta(minutes=duration)))
     return day
 
 

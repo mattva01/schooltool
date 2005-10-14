@@ -156,35 +156,26 @@ class ISchooldayTemplate(Interface):
     example, a school that has shorter school days on Wednesdays will
     have one template for Wednesdays, and one other template for
     Monday, Tuesday, Thursday and Friday.
-
-    Other schools will want to re-order the periods on different days,
-    so they will have one template with periods ABCDEF in that order,
-    and another template with periods DEFABC.
     """
 
     def __iter__():
-        """Return an iterator over the ISchooldayPeriods of this template."""
+        """Return an iterator over the ISchooldaySlots of this template."""
 
 
 class ISchooldayTemplateWrite(Interface):
     """Write access to schoolday templates."""
 
     def add(obj):
-        """Add an ISchooldayPeriod to the template.
+        """Add an ISchooldaySlot to the template.
 
-        Raises a TypeError if obj is not an ISchooldayPeriod."""
+        Raises a TypeError if obj is not an ISchooldaySlot."""
 
     def remove(obj):
         """Remove an object from the template."""
 
 
-class ISchooldayPeriod(Interface):
-    """An object binding a timetable period to a concrete time
-    interval within a schoolday template.
-    """
-
-    title = TextLine(
-        title=u"Period id of this event")
+class ISchooldaySlot(Interface):
+    """A time interval during which a period can be scheduled."""
 
     tstart = Time(
         title=u"Time of the start of the event")
@@ -193,22 +184,22 @@ class ISchooldayPeriod(Interface):
         title=u"Timedelta of the duration of the event")
 
     def __eq__(other):
-        """SchooldayPeriods are equal if all three of their
-        attributes are equal.
+        """SchooldaySlots are equal if their start times and durations
+        are equal.
 
-        Raises TypeError if other does not implement ISchooldayPeriod.
+        Raises TypeError if other does not implement ISchooldaySlot.
         """
 
     def __ne__(other):
-        """SchooldayPeriods are not equal if any of their three
-        attributes are not equal.
+        """SchooldaySlots are not equal if either their start times
+        and durations are not equal.
 
-        Raises TypeError if other does not implement ISchooldayPeriod.
+        Raises TypeError if other does not implement ISchooldaySlot.
         """
 
     def __hash__():
-        """Hashes of ISchooldayPeriods are equal iff those
-        ISchooldayPeriods are equal.
+        """Hashes of ISchooldaySlots are equal iff those
+        ISchooldaySlots are equal.
         """
 
 

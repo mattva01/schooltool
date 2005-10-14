@@ -98,7 +98,7 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
         self.assertEquals(view.model_error, None)
         self.assertEquals(view.day_templates,
                           {None: createDayTemplate([]),
-                           0: createDayTemplate([('Period 1', 9, 0, 45)])})
+                           0: createDayTemplate([(9, 0, 45)])})
 
     def test_creation(self):
         request = TestRequest(form={'day1': 'Monday',
@@ -138,9 +138,7 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
 
     def test_buildDayTemplates_simple(self):
         request = TestRequest(form={
-            'time1.period': 'Period 1',
             'time1.day0': '9:00',
-            'time2.period': 'Period 2',
             'time2.day0': '10:00-10:45',
             'time2.day6': '10:30-11:10',
             'field.duration': '45'})
@@ -148,9 +146,9 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
         dt = view._buildDayTemplates()
         self.assertEquals(dt,
                           {None: createDayTemplate([]),
-                           0: createDayTemplate([('Period 1', 9, 0, 45),
-                                                 ('Period 2', 10, 0, 45)]),
-                           6: createDayTemplate([('Period 2', 10, 30, 40)])})
+                           0: createDayTemplate([(9, 0, 45),
+                                                 (10, 0, 45)]),
+                           6: createDayTemplate([(10, 30, 40)])})
         self.assert_(not view.discarded_some_periods)
 
     def test_buildDayTemplates_copy_day(self):
@@ -165,11 +163,11 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
         dt = view._buildDayTemplates()
         self.assertEquals(dt,
                           {None: createDayTemplate([]),
-                           0: createDayTemplate([('Period 1', 9, 0, 45),
-                                                 ('Period 2', 10, 0, 45)]),
-                           1: createDayTemplate([('Period 1', 9, 0, 45),
-                                                 ('Period 2', 10, 0, 45)]),
-                           6: createDayTemplate([('Period 2', 10, 30, 40)])})
+                           0: createDayTemplate([(9, 0, 45),
+                                                 (10, 0, 45)]),
+                           1: createDayTemplate([(9, 0, 45),
+                                                 (10, 0, 45)]),
+                           6: createDayTemplate([(10, 30, 40)])})
 
     def test_buildDayTemplates_copy_empty_day(self):
         request = TestRequest(form={
@@ -183,8 +181,8 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
         dt = view._buildDayTemplates()
         self.assertEquals(dt,
                           {None: createDayTemplate([]),
-                           0: createDayTemplate([('Period 1', 9, 0, 45),
-                                                 ('Period 2', 10, 0, 45)])})
+                           0: createDayTemplate([(9, 0, 45),
+                                                 (10, 0, 45)])})
 
     def test_buildDayTemplates_copy_empty_day_over_empty_day(self):
         request = TestRequest(form={
@@ -198,9 +196,9 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
         dt = view._buildDayTemplates()
         self.assertEquals(dt,
                           {None: createDayTemplate([]),
-                           0: createDayTemplate([('Period 1', 9, 0, 45),
-                                                 ('Period 2', 10, 0, 45)]),
-                           6: createDayTemplate([('Period 2', 10, 30, 40)])})
+                           0: createDayTemplate([(9, 0, 45),
+                                                 (10, 0, 45)]),
+                           6: createDayTemplate([(10, 30, 40)])})
 
     def test_buildDayTemplates_copy_first_day_ignored(self):
         request = TestRequest(form={
@@ -214,9 +212,9 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
         dt = view._buildDayTemplates()
         self.assertEquals(dt,
                           {None: createDayTemplate([]),
-                           0: createDayTemplate([('Period 1', 9, 0, 45),
-                                                 ('Period 2', 10, 0, 45)]),
-                           6: createDayTemplate([('Period 2', 10, 30, 40)])})
+                           0: createDayTemplate([(9, 0, 45),
+                                                 (10, 0, 45)]),
+                           6: createDayTemplate([(10, 30, 40)])})
 
     def test_buildDayTemplates_errors(self):
         request = TestRequest(form={
@@ -366,38 +364,37 @@ class TestAdvancedTimetableSchemaAdd(NiceDiffsMixin, unittest.TestCase):
                                      ['A', 'C'], ['B', 'D'], ['A', 'F'])
         self.assertEquals(view.all_periods(), ['A', 'C', 'B', 'D', 'F'])
 
-    def test_period_times(self):
+    def test_slot_times(self):
         view = self.createView()
         view.ttschema = createSchema(['Day 1', 'Day 2', 'Day 3'],
-                                     ['A', 'C'], ['B', 'D'], ['A', 'F'])
+                                     ['A', 'C'], ['B', 'D'], ['A', 'F', 'G'])
         view.day_templates = {}
-        titles = [p['title'] for p in view.period_times()]
-        self.assertEquals(titles, ['A', 'C', 'B', 'D', 'F'])
-        for p in view.period_times():
-            self.assertEquals(p['times'], 7 * [None])
+        result = view.slot_times()
+        # The length of the result is equal to the longest day in the tt.
+        self.assertEquals(len(result), 3)
+        for row in result:
+            self.assertEquals(row, 7 * [None])
 
-    def test_period_times_with_data(self):
+    def test_slot_times_with_data(self):
         view = self.createView()
         view.ttschema = createSchema(['Day 1', 'Day 2', 'Day 3'],
-                                     ['A', 'C'], ['B', 'D'], ['A', 'F'])
-        view.day_templates = {0: createDayTemplate([('A', 9, 0, 45),
-                                                    ('F', 10, 30, 40),
-                                                    ('X', 11, 22, 33)]),
-                              6: createDayTemplate([('A', 8, 55, 45),
-                                                    ('D', 0, 0, 24*60)])}
-        times = view.period_times()
-        titles = [p['title'] for p in times]
-        self.assertEquals(titles, ['A', 'C', 'B', 'D', 'F'])
-        self.assertEquals(times[0]['times'], ['09:00-09:45', None, None, None,
-                                              None, None, '08:55-09:40'])  # A
-        self.assertEquals(times[1]['times'], [None] * 7)                   # C
-        self.assertEquals(times[2]['times'], [None] * 7)                   # B
-        self.assertEquals(times[3]['times'], [None] * 6 + ['00:00-24:00']) # D
-        self.assertEquals(times[4]['times'], ['10:30-11:10'] + [None] * 6) # F
+                                     ['A', 'C'], ['B', 'D'], ['A', 'F', 'G'])
+        view.day_templates = {0: createDayTemplate([(9, 0, 45),
+                                                    (10, 30, 40),
+                                                    (11, 22, 33)]),
+                              6: createDayTemplate([(8, 55, 45),
+                                                    (0, 0, 24*60)])}
+        times = view.slot_times()
+        self.assertEquals(len(times), 3)
+        self.assertEquals(times[0], ['09:00-09:45', None, None, None,
+                                     None, None, '00:00-24:00'])
+        self.assertEquals(times[1], ['10:30-11:10', None, None, None,
+                                     None, None, '08:55-09:40'])
+        self.assertEquals(times[2], ['11:22-11:55'] + [None] * 6)
 
 
 def doctest_TimetableSchemaView():
-    '''Test for TimetableView.
+    """Test for TimetableView.
 
         >>> from schooltool.timetable.browser.schema import TimetableSchemaView
         >>> from schooltool.timetable.schema import TimetableSchema
@@ -423,11 +420,11 @@ def doctest_TimetableSchemaView():
         >>> view.rows()
         [[{'period': 'A', 'activity': ''}]]
 
-    '''
+    """
 
 
 def doctest_SimpleTimetableSchemaAdd():
-    r'''Doctest for the SimpleTimetableSchemaAdd view
+    r"""Doctest for the SimpleTimetableSchemaAdd view
 
         >>> from schooltool.timetable import WeeklyTimetableModel
         >>> from schooltool.timetable.interfaces import ITimetableModelFactory
@@ -534,9 +531,9 @@ def doctest_SimpleTimetableSchemaAdd():
         >>> print " ".join(schema.model.timetableDayIds)
         Monday Tuesday Wednesday Thursday Friday
         >>> for period in schema.model.dayTemplates[None]:
-        ...     print period.title, period.tstart, period.duration
-        Period 1 09:00:00 0:45:00
-        Period 2 10:00:00 0:45:00
+        ...     print period.tstart, period.duration
+        09:00:00 0:45:00
+        10:00:00 0:45:00
 
     We should get redirected to the ttschemas index:
 
@@ -679,11 +676,11 @@ def doctest_SimpleTimetableSchemaAdd():
         >>> 'already-2' in app['ttschemas']
         True
 
-    '''
+    """
 
 
 def doctest_SimpleTimetableSchemaAdd_errors():
-    r'''Doctest for the SimpleTimetableSchemaAdd view
+    r"""Doctest for the SimpleTimetableSchemaAdd view
 
         >>> from schooltool.timetable import WeeklyTimetableModel
         >>> from schooltool.timetable.interfaces import ITimetableModelFactory
@@ -768,11 +765,11 @@ def doctest_SimpleTimetableSchemaAdd_errors():
         >>> request.response.getStatus() != 302
         True
 
-    '''
+    """
 
 
 def doctest_TimetableSchemaContainerView():
-    r'''A test for TimetableSchemaContainer view
+    r"""A test for TimetableSchemaContainer view
 
     We will need an application:
 
@@ -826,7 +823,7 @@ def doctest_TimetableSchemaContainerView():
         >>> app["ttschemas"].default_id is None
         True
 
-    '''
+    """
 
 
 def test_suite():

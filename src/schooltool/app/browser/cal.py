@@ -1261,9 +1261,10 @@ class DailyCalendarRowsView(BrowserView):
         if periods:
             # Put starts and ends of periods into rows
             for period in periods:
-                pstart = datetime.combine(cursor, period.tstart)
+                period_id, tstart, duration = period
+                pstart = datetime.combine(cursor, tstart)
                 pstart = pstart.replace(tzinfo=tz)
-                pend = pstart + period.duration
+                pend = pstart + duration
                 for point in rows[:]:
                     if pstart < point < pend:
                         rows.remove(point)
@@ -1274,7 +1275,7 @@ class DailyCalendarRowsView(BrowserView):
             rows.sort()
 
         def periodIsStarting(dt):
-            pstart = datetime.combine(cursor, periods[0].tstart)
+            pstart = datetime.combine(cursor, periods[0][1])
             pstart = pstart.replace(tzinfo=tz)
             return pstart == dt
 
@@ -1282,7 +1283,7 @@ class DailyCalendarRowsView(BrowserView):
         for end in row_ends:
             if periods and periodIsStarting(start):
                 period = periods.pop(0)
-                yield (period.title, start, period.duration)
+                yield (period[0], start, period[2])
             else:
                 duration = end - start
                 yield ('%d:%02d' % (start.hour, start.minute), start, duration)

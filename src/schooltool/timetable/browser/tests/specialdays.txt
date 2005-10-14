@@ -28,10 +28,10 @@ The schema has a model attribute:
     >>> from schooltool.timetable.browser.tests.test_timetable import \
     ...      createDayTemplate
     >>> from schooltool.timetable import SequentialDaysTimetableModel
-    >>> default = createDayTemplate([('First', 9, 0, 45),
-    ...                              ('Second', 10, 0, 45),
-    ...                              ('Third', 11, 0, 45),
-    ...                              ('Fourth', 12, 0, 45)])
+    >>> default = createDayTemplate([(9, 0, 45),
+    ...                              (10, 0, 45),
+    ...                              (11, 0, 45),
+    ...                              (12, 0, 45)])
     >>> ttschema.model = SequentialDaysTimetableModel(['Day 1', 'Day 2'],
     ...                                               {None: default})
 
@@ -199,10 +199,10 @@ The actual exception gets added:
     >>> periods = list(exception)
     >>> periods.sort(lambda x, y: cmp(x.tstart, y.tstart))
     >>> for period in periods:
-    ...     print period.title, period.tstart, period.duration
-    First 08:00:00 0:30:00
-    Second 08:45:00 0:30:00
-    Third 09:30:00 0:30:00
+    ...     print period.tstart, period.duration
+    08:00:00 0:30:00
+    08:45:00 0:30:00
+    09:30:00 0:30:00
 
 The user is redirected to the schema main page:
 

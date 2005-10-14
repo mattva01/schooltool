@@ -156,7 +156,7 @@ from schooltool.timetable.interfaces import ITimetableActivity
 from schooltool.timetable.interfaces import ITimetableActivityAddedEvent
 from schooltool.timetable.interfaces import ITimetableActivityRemovedEvent
 from schooltool.timetable.interfaces import ITimetableReplacedEvent
-from schooltool.timetable.interfaces import ISchooldayPeriod
+from schooltool.timetable.interfaces import ISchooldaySlot
 from schooltool.timetable.interfaces import ISchooldayTemplate
 from schooltool.timetable.interfaces import ISchooldayTemplateWrite
 from schooltool.timetable.interfaces import ITimetables, IHaveTimetables
@@ -430,27 +430,36 @@ class TimetableActivityRemovedEvent(TimetableActivityEvent):
     implements(ITimetableActivityRemovedEvent)
 
 
-class SchooldayPeriod(object):
+class SchooldaySlot(object):
 
-    implements(ISchooldayPeriod)
+    implements(ISchooldaySlot)
 
-    def __init__(self, title, tstart, duration):
-        self.title = title
+    def __init__(self, tstart, duration):
         self.tstart = tstart
         self.duration = duration
 
     def __eq__(self, other):
-        if not ISchooldayPeriod.providedBy(other):
+        if not ISchooldaySlot.providedBy(other):
             return False
-        return (self.title == other.title and
-                self.tstart == other.tstart and
+        return (self.tstart == other.tstart and
                 self.duration == other.duration)
 
     def __ne__(self, other):
         return not (self == other)
 
+    def __cmp__(self, other):
+        return cmp((self.tstart, self.duration),
+                   (other.tstart, other.duration))
+
     def __hash__(self):
-        return hash((self.title, self.tstart, self.duration))
+        return hash((self.tstart, self.duration))
+
+
+# BBB for ZODB
+# The hash function was changed, but an exmeriment showed that we're
+# alright, the identical slots will be collapsed in the
+# SchooldayTemplate.events set.
+SchooldayPeriod = SchooldaySlot
 
 
 class SchooldayTemplate(object):
@@ -466,12 +475,12 @@ class SchooldayTemplate(object):
         self.events = Set()
 
     def __iter__(self):
-        return iter(self.events)
+        return iter(sorted(self.events))
 
     def add(self, obj):
-        if not ISchooldayPeriod.providedBy(obj):
+        if not ISchooldaySlot.providedBy(obj):
             raise TypeError("SchooldayTemplate can only contain "
-                            "ISchooldayPeriods (got %r)" % (obj,))
+                            "ISchooldaySlotss (got %r)" % (obj,))
         self.events.add(obj)
 
     def remove(self, obj):

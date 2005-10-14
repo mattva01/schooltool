@@ -11,8 +11,8 @@
                   ncols python:len(tt.day_ids) or 1;
                   rows view/rows;
                   nrows python:len(rows);
-                  period_times view/period_times;
-                  nperiods python:len(period_times)">
+                  slot_times view/slot_times;
+                  nslots python:len(slot_times)">
 
 <p i18n:translate="">
 Please choose a name for the timetable schema you want to create.
@@ -146,9 +146,8 @@ above, use the Update button to refresh the form.
 
 <div class="form">
   <table class="timetable">
-    <tr tal:define="dummy python:view.tabindex_matrix(nperiods + 1, 7);
+    <tr tal:define="dummy python:view.tabindex_matrix(nslots + 1, 7);
                     skip view/next_tabindex">
-      <th class="day"></th>
       <tal:block repeat="day view/days_of_week">
       <th class="day" tal:content="day" i18n:translate="">Monday</th>
       <th class="day" width="1%"
@@ -161,15 +160,9 @@ above, use the Update button to refresh the form.
       </th>
       </tal:block>
     </tr>
-    <tr tal:repeat="period period_times"><tal:block
-                                          define="n repeat/period/number">
-      <th class="period" nowrap="">
-        <span tal:replace="period/title">Period 1</span>
-        <input type="hidden"
-               tal:attributes="name string:time$n.period;
-                               value period/title" />
-      </th>
-      <td class="time" width="12%" tal:repeat="time period/times"
+    <tr tal:repeat="slots slot_times"><tal:block
+                                          define="n repeat/slots/number">
+      <td class="time" width="12%" tal:repeat="time slots"
           tal:attributes="colspan python: repeat['time'].start() and 1 or 2">
         <input class="text" type="text"
                tal:define="day repeat/time/index"

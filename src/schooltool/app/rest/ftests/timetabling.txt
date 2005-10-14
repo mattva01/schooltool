@@ -351,17 +351,13 @@ Let's see what's inside:
       <model factory="SequentialDaysTimetableModel">
         <daytemplate>
           <used when="Friday Thursday"/>
-          <period duration="60" id="A" tstart="08:00"/>
-          <period duration="60" id="B" tstart="11:00"/>
-          <period duration="60" id="C" tstart="08:00"/>
-          <period duration="60" id="D" tstart="11:00"/>
+          <period duration="60" tstart="08:00"/>
+          <period duration="60" tstart="11:00"/>
         </daytemplate>
         <daytemplate>
           <used when="default"/>
-          <period duration="60" id="A" tstart="09:00"/>
-          <period duration="60" id="B" tstart="10:00"/>
-          <period duration="60" id="C" tstart="09:00"/>
-          <period duration="60" id="D" tstart="10:00"/>
+          <period duration="60" tstart="09:00"/>
+          <period duration="60" tstart="10:00"/>
         </daytemplate>
       </model>
       <day id="Day 1">
@@ -433,17 +429,13 @@ And check that schema was indeed modified:
       <model factory="SequentialDaysTimetableModel">
         <daytemplate>
           <used when="Friday Thursday"/>
-          <period duration="70" id="A" tstart="08:00"/>
-          <period duration="70" id="B" tstart="11:00"/>
-          <period duration="70" id="C" tstart="08:00"/>
-          <period duration="70" id="D" tstart="11:00"/>
+          <period duration="70" tstart="08:00"/>
+          <period duration="70" tstart="11:00"/>
         </daytemplate>
         <daytemplate>
           <used when="default"/>
-          <period duration="60" id="A" tstart="10:00"/>
-          <period duration="60" id="B" tstart="11:00"/>
-          <period duration="60" id="C" tstart="10:00"/>
-          <period duration="60" id="D" tstart="11:00"/>
+          <period duration="60" tstart="10:00"/>
+          <period duration="60" tstart="11:00"/>
         </daytemplate>
       </model>
       <day id="Day 1">

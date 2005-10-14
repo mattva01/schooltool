@@ -164,8 +164,8 @@
     <allow interface=".interfaces.IWeekdayBasedTimetableModel" />
   </content>
 
-  <content class=".SchooldayPeriod">
-    <allow interface=".interfaces.ISchooldayPeriod" />
+  <content class=".SchooldaySlot">
+    <allow interface=".interfaces.ISchooldaySlot" />
   </content>
 
   <!-- sample data -->

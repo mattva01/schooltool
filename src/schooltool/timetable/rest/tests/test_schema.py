@@ -40,6 +40,8 @@ from schooltool.app.rest.errors import RestError
 
 class TimetableSchemaMixin(QuietLibxml2Mixin):
 
+    def setUpLibxml2(self): pass
+
     schema_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
           <title>Title</title>
@@ -131,7 +133,7 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
 
     def createExtendedSchema(self):
         from schooltool.timetable import SequentialDaysTimetableModel
-        from schooltool.timetable import SchooldayPeriod, SchooldayTemplate
+        from schooltool.timetable import SchooldaySlot, SchooldayTemplate
         from datetime import time, timedelta, date
 
         tt = self.createEmptySchema()
@@ -140,16 +142,16 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
         half = timedelta(minutes=30)
 
         day_template1 = SchooldayTemplate()
-        day_template1.add(SchooldayPeriod('A', time(9, 0), hour))
-        day_template1.add(SchooldayPeriod('B', time(10, 0), hour))
-        day_template1.add(SchooldayPeriod('C', time(9, 0), hour))
-        day_template1.add(SchooldayPeriod('D', time(10, 0), hour))
+        day_template1.add(SchooldaySlot(time(9, 0), hour))
+        day_template1.add(SchooldaySlot(time(10, 0), hour))
+        day_template1.add(SchooldaySlot(time(9, 0), hour))
+        day_template1.add(SchooldaySlot(time(10, 0), hour))
 
         day_template2 = SchooldayTemplate()
-        day_template2.add(SchooldayPeriod('A', time(8, 0), hour))
-        day_template2.add(SchooldayPeriod('B', time(11, 0), hour))
-        day_template2.add(SchooldayPeriod('C', time(8, 0), hour))
-        day_template2.add(SchooldayPeriod('D', time(11, 0), hour))
+        day_template2.add(SchooldaySlot(time(8, 0), hour))
+        day_template2.add(SchooldaySlot(time(11, 0), hour))
+        day_template2.add(SchooldaySlot(time(8, 0), hour))
+        day_template2.add(SchooldaySlot(time(11, 0), hour))
 
         tm = SequentialDaysTimetableModel(['Day 1', 'Day 2'],
                                           {None: day_template1,
@@ -158,10 +160,10 @@ class TimetableSchemaMixin(QuietLibxml2Mixin):
         tt.model = tm
 
         short_template = SchooldayTemplate()
-        short_template.add(SchooldayPeriod('A', time(8, 0), half))
-        short_template.add(SchooldayPeriod('B', time(8, 30), half))
-        short_template.add(SchooldayPeriod('C', time(9, 0), half))
-        short_template.add(SchooldayPeriod('D', time(9, 30), half))
+        short_template.add(SchooldaySlot(time(8, 0), half))
+        short_template.add(SchooldaySlot(time(8, 30), half))
+        short_template.add(SchooldaySlot(time(9, 0), half))
+        short_template.add(SchooldaySlot(time(9, 30), half))
         tt.model.exceptionDays[date(2005, 7, 7)] = short_template
         tt.model.exceptionDayIds[date(2005, 7, 8)] = 'Day 2'
         tt.model.exceptionDayIds[date(2005, 7, 9)] = 'Day 1'
@@ -177,24 +179,20 @@ class TestTimetableSchemaView(TimetableSchemaMixin, XMLCompareMixin,
           <model factory="SequentialDaysTimetableModel">
             <daytemplate>
               <used when="2005-07-07"/>
-              <period duration="30" id="A" tstart="08:00"/>
-              <period duration="30" id="B" tstart="08:30"/>
-              <period duration="30" id="C" tstart="09:00"/>
-              <period duration="30" id="D" tstart="09:30"/>
+              <period duration="30" tstart="08:00"/>
+              <period duration="30" tstart="08:30"/>
+              <period duration="30" tstart="09:00"/>
+              <period duration="30" tstart="09:30"/>
             </daytemplate>
             <daytemplate>
               <used when="Friday Thursday"/>
-              <period duration="60" id="A" tstart="08:00"/>
-              <period duration="60" id="B" tstart="11:00"/>
-              <period duration="60" id="C" tstart="08:00"/>
-              <period duration="60" id="D" tstart="11:00"/>
+              <period duration="60" tstart="08:00"/>
+              <period duration="60" tstart="11:00"/>
             </daytemplate>
             <daytemplate>
               <used when="default"/>
-              <period duration="60" id="A" tstart="09:00"/>
-              <period duration="60" id="B" tstart="10:00"/>
-              <period duration="60" id="C" tstart="09:00"/>
-              <period duration="60" id="D" tstart="10:00"/>
+              <period duration="60" tstart="09:00"/>
+              <period duration="60" tstart="10:00"/>
             </daytemplate>
             <day when="2005-07-08" id="Day 2" />
             <day when="2005-07-09" id="Day 1" />
@@ -233,17 +231,13 @@ class DayIdBasedModelMixin:
           <model factory="SequentialDayIdBasedTimetableModel">
             <daytemplate>
               <used when="Day 1"/>
-              <period duration="60" id="A" tstart="08:00"/>
-              <period duration="60" id="B" tstart="11:00"/>
-              <period duration="60" id="C" tstart="08:00"/>
-              <period duration="60" id="D" tstart="11:00"/>
+              <period duration="60" tstart="08:00"/>
+              <period duration="60" tstart="11:00"/>
             </daytemplate>
             <daytemplate>
               <used when="Day 2"/>
-              <period duration="60" id="A" tstart="09:00"/>
-              <period duration="60" id="B" tstart="10:00"/>
-              <period duration="60" id="C" tstart="09:00"/>
-              <period duration="60" id="D" tstart="10:00"/>
+              <period duration="60" tstart="09:00"/>
+              <period duration="60" tstart="10:00"/>
             </daytemplate>
             <day when="2005-07-08" id="Day 2" />
             <day when="2005-07-09" id="Day 1" />
@@ -267,7 +261,7 @@ class DayIdBasedModelMixin:
         from schooltool.timetable.schema import TimetableSchemaDay
         from schooltool.timetable.schema import TimetableSchema
         from schooltool.timetable import SequentialDayIdBasedTimetableModel
-        from schooltool.timetable import SchooldayPeriod, SchooldayTemplate
+        from schooltool.timetable import SchooldaySlot, SchooldayTemplate
         from datetime import time, timedelta, date
 
         tt = TimetableSchema(['Day 1', 'Day 2'])
@@ -279,16 +273,16 @@ class DayIdBasedModelMixin:
         half = timedelta(minutes=30)
 
         day_template1 = SchooldayTemplate()
-        day_template1.add(SchooldayPeriod('A', time(8, 0), hour))
-        day_template1.add(SchooldayPeriod('B', time(11, 0), hour))
-        day_template1.add(SchooldayPeriod('C', time(8, 0), hour))
-        day_template1.add(SchooldayPeriod('D', time(11, 0), hour))
+        day_template1.add(SchooldaySlot(time(8, 0), hour))
+        day_template1.add(SchooldaySlot(time(11, 0), hour))
+        day_template1.add(SchooldaySlot(time(8, 0), hour))
+        day_template1.add(SchooldaySlot(time(11, 0), hour))
 
         day_template2 = SchooldayTemplate()
-        day_template2.add(SchooldayPeriod('A', time(9, 0), hour))
-        day_template2.add(SchooldayPeriod('B', time(10, 0), hour))
-        day_template2.add(SchooldayPeriod('C', time(9, 0), hour))
-        day_template2.add(SchooldayPeriod('D', time(10, 0), hour))
+        day_template2.add(SchooldaySlot(time(9, 0), hour))
+        day_template2.add(SchooldaySlot(time(10, 0), hour))
+        day_template2.add(SchooldaySlot(time(9, 0), hour))
+        day_template2.add(SchooldaySlot(time(10, 0), hour))
 
         tm = SequentialDayIdBasedTimetableModel(['Day 1', 'Day 2'],
                                                 {'Day 1': day_template1,

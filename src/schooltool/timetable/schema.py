@@ -157,7 +157,7 @@ def getPeriodsForDay(date):
     This function uses the default timetable schema and the appropriate time
     period for `date`.
 
-    Returns a list of ISchooldayPeriod objects.
+    Returns a list of ISchooldaySlot objects.
 
     Returns an empty list if there are no periods defined for `date` (e.g.
     if there is no default timetable schema, or `date` falls outside all

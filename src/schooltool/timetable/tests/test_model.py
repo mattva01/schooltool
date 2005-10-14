@@ -73,10 +73,7 @@ class SequentialTestSetupMixin:
         """
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
-        #from schooltool.component import getOptions
         tt = Timetable(('A', 'B'))
-        #setPath(tt, '/path/to/tt')
-        #getOptions(tt).timetable_privacy = 'public'
         periods = ('Green', 'Blue')
         tt["A"] = TimetableDay(periods)
         tt["B"] = TimetableDay(periods)
@@ -110,16 +107,16 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         Blue period occurs at 11:00-12:30 on all days except Fridays, when it
         occurs at 10:30-12:00.
         """
-        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+        from schooltool.timetable import SchooldayTemplate, SchooldaySlot
         from schooltool.timetable import SequentialDaysTimetableModel
 
         t, td = time, timedelta
         template1 = SchooldayTemplate()
-        template1.add(SchooldayPeriod('Green', t(9, 0), td(minutes=90)))
-        template1.add(SchooldayPeriod('Blue', t(11, 0), td(minutes=90)))
+        template1.add(SchooldaySlot(t(9, 0), td(minutes=90)))
+        template1.add(SchooldaySlot(t(11, 0), td(minutes=90)))
         template2 = SchooldayTemplate()
-        template2.add(SchooldayPeriod('Green', t(9, 0), td(minutes=90)))
-        template2.add(SchooldayPeriod('Blue', t(10, 30), td(minutes=90)))
+        template2.add(SchooldaySlot(t(9, 0), td(minutes=90)))
+        template2.add(SchooldaySlot(t(10, 30), td(minutes=90)))
 
         model = SequentialDaysTimetableModel(("A", "B"),
                                              {None: template1,
@@ -189,7 +186,7 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
 
     def test_createCalendar_exceptionDays(self):
         from schooltool.timetable.term import Term
-        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+        from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 
         tt = self.createTimetable()
         model = self.createModel()
@@ -199,8 +196,8 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         # Add an exception day
         exception = SchooldayTemplate()
         t, td = time, timedelta
-        exception.add(SchooldayPeriod('Green', t(6, 0), td(minutes=90)))
-        exception.add(SchooldayPeriod('Blue', t(8, 0), td(minutes=90)))
+        exception.add(SchooldaySlot(t(6, 0), td(minutes=90)))
+        exception.add(SchooldaySlot(t(8, 0), td(minutes=90)))
         model.exceptionDays[date(2003, 11, 22)] = exception
 
         # Run the calendar generation
@@ -263,8 +260,8 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
 
     def test_periodsInDay_originalPeriodsInDay(self):
         from schooltool.calendar.interfaces import ICalendar
-        from schooltool.timetable import SchooldayPeriod
-        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+        from schooltool.timetable import SchooldaySlot
+        from schooltool.timetable import SchooldayTemplate, SchooldaySlot
 
         tt = self.createTimetable()
         model = self.createModel()
@@ -273,24 +270,24 @@ class TestSequentialDaysTimetableModel(PlacelessSetup,
         # Add an exception day
         exception = SchooldayTemplate()
         t, td = time, timedelta
-        exception.add(SchooldayPeriod('Green', t(6, 0), td(minutes=90)))
-        exception.add(SchooldayPeriod('Blue', t(8, 0), td(minutes=90)))
+        exception.add(SchooldaySlot(t(6, 0), td(minutes=90)))
+        exception.add(SchooldaySlot(t(8, 0), td(minutes=90)))
         model.exceptionDays[date(2003, 11, 21)] = exception
 
         self.assertEqual(
             model.periodsInDay(schooldays, tt, date(2003, 11, 20)),
-            [SchooldayPeriod("Green", time(9, 0), timedelta(minutes=90)),
-             SchooldayPeriod("Blue", time(11, 0), timedelta(minutes=90))])
+            [('Green', time(9, 0), timedelta(minutes=90)),
+             ('Blue',  time(11, 0), timedelta(minutes=90))])
 
         self.assertEqual(
             model.originalPeriodsInDay(schooldays, tt, date(2003, 11, 21)),
-            [SchooldayPeriod("Green", time(9, 0), timedelta(minutes=90)),
-             SchooldayPeriod("Blue", time(10, 30), timedelta(minutes=90))])
+            [('Green', time(9, 0), timedelta(minutes=90)),
+             ('Blue', time(10, 30), timedelta(minutes=90))])
 
         self.assertEqual(
             model.periodsInDay(schooldays, tt, date(2003, 11, 21)),
-            [SchooldayPeriod("Green", time(6, 0), timedelta(minutes=90)),
-             SchooldayPeriod("Blue", time(8, 0), timedelta(minutes=90))])
+            [('Green', time(6, 0), timedelta(minutes=90)),
+             ('Blue', time(8, 0), timedelta(minutes=90))])
 
         self.assertEqual(
             model.periodsInDay(schooldays, tt, date(2003, 11, 22)),
@@ -311,19 +308,19 @@ class TestSequentialDayIdBasedTimetableModel(PlacelessSetup,
                              TimetablePhysicallyLocatableAdapterStub)
 
     def createDayTemplates(self):
-        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+        from schooltool.timetable import SchooldayTemplate, SchooldaySlot
         t, td = time, timedelta
         template1 = SchooldayTemplate()
-        template1.add(SchooldayPeriod('Green', t(9, 0), td(minutes=90)))
-        template1.add(SchooldayPeriod('Blue', t(11, 0), td(minutes=90)))
+        template1.add(SchooldaySlot(t(9, 0), td(minutes=90)))
+        template1.add(SchooldaySlot(t(11, 0), td(minutes=90)))
         template2 = SchooldayTemplate()
-        template2.add(SchooldayPeriod('Green', t(11, 0), td(minutes=90)))
-        template2.add(SchooldayPeriod('Blue', t(13, 0), td(minutes=90)))
+        template2.add(SchooldaySlot(t(11, 0), td(minutes=90)))
+        template2.add(SchooldaySlot(t(13, 0), td(minutes=90)))
         return template1, template2
 
     def test_createCalendar(self):
         from schooltool.calendar.interfaces import ICalendar
-        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+        from schooltool.timetable import SchooldayTemplate, SchooldaySlot
         from schooltool.timetable.model import \
              SequentialDayIdBasedTimetableModel
 
@@ -407,7 +404,7 @@ class TestWeeklyTimetableModel(PlacelessSetup,
 
     def test(self):
         from schooltool.timetable import WeeklyTimetableModel
-        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+        from schooltool.timetable import SchooldayTemplate, SchooldaySlot
         from schooltool.timetable import Timetable, TimetableDay
         from schooltool.timetable import TimetableActivity
         from schooltool.timetable.term import Term
@@ -446,10 +443,10 @@ class TestWeeklyTimetableModel(PlacelessSetup,
 
         t, td = time, timedelta
         template = SchooldayTemplate()
-        template.add(SchooldayPeriod('1', t(9, 0), td(minutes=45)))
-        template.add(SchooldayPeriod('2', t(9, 50), td(minutes=45)))
-        template.add(SchooldayPeriod('3', t(10, 50), td(minutes=45)))
-        template.add(SchooldayPeriod('4', t(12, 0), td(minutes=45)))
+        template.add(SchooldaySlot(t(9, 0), td(minutes=45)))
+        template.add(SchooldaySlot(t(9, 50), td(minutes=45)))
+        template.add(SchooldaySlot(t(10, 50), td(minutes=45)))
+        template.add(SchooldaySlot(t(12, 0), td(minutes=45)))
 
         model = WeeklyTimetableModel(day_templates={None: template})
         verifyObject(IWeekdayBasedTimetableModel, model)
@@ -457,10 +454,10 @@ class TestWeeklyTimetableModel(PlacelessSetup,
         # Add an exception day
         exception = SchooldayTemplate()
         t, td = time, timedelta
-        exception.add(SchooldayPeriod('1', t(6, 0), td(minutes=45)))
-        exception.add(SchooldayPeriod('2', t(7, 0), td(minutes=45)))
-        exception.add(SchooldayPeriod('3', t(8, 0), td(minutes=45)))
-        exception.add(SchooldayPeriod('4', t(9, 0), td(minutes=45)))
+        exception.add(SchooldaySlot(t(6, 0), td(minutes=45)))
+        exception.add(SchooldaySlot(t(7, 0), td(minutes=45)))
+        exception.add(SchooldaySlot(t(8, 0), td(minutes=45)))
+        exception.add(SchooldaySlot(t(9, 0), td(minutes=45)))
         model.exceptionDays[date(2003, 11, 22)] = exception
         model.exceptionDayIds[date(2003, 11, 22)] = "Monday"
 
@@ -505,10 +502,10 @@ class TestWeeklyTimetableModel(PlacelessSetup,
 
     def test_not_enough_days(self):
         from schooltool.timetable import WeeklyTimetableModel
-        from schooltool.timetable import SchooldayTemplate, SchooldayPeriod
+        from schooltool.timetable import SchooldayTemplate, SchooldaySlot
         from schooltool.timetable import Timetable, TimetableDay
         template = SchooldayTemplate()
-        template.add(SchooldayPeriod('1', time(8), timedelta(minutes=30)))
+        template.add(SchooldaySlot(time(8), timedelta(minutes=30)))
         days = ["Mon", "Tue"]
         model = WeeklyTimetableModel(days, {None: template})
         day = date(2003, 11, 20)    # 2003-11-20 is a Thursday
