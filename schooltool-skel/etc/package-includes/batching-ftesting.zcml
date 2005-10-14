@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser">
+
+  <page
+      name="batch.html"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      class="schooltool.batching.ftests.sample.BatchView"
+      permission="zope.Public"
+      />
+
+</configure>

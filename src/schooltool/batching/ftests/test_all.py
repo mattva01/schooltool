@@ -17,23 +17,21 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Browser view for sample batch implementation
+Functional tests for schooltool.sampledata.
 
 $Id$
 """
 
-from zope.app.publisher.browser import BrowserView
+import unittest
 
-from schooltool.batching import Batch
+from schooltool.testing.functional import load_ftesting_zcml
+from schooltool.testing.functional import collect_ftests
 
-class BatchView(BrowserView):
-    """A sample view that implements batching."""
 
-    def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
-        self.data = context
+def test_suite():
+    load_ftesting_zcml()
+    return collect_ftests(level=1) # 'cause it is slow
 
-    def update(self):
-        start = int(self.request.get('batch_start', 0))
-        size = int(self.request.get('batch_size', 10))
-        self.batch = Batch(self.data, start, size)
+
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')

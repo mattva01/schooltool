@@ -1,0 +1,160 @@
+Batching large sets
+===================
+Batching provides a way for you to split a large set of data into smaller sets
+(batches) for presentation in a UI
+
+Setup
+=====
+
+We need an application with some sample data.
+
+    >>> from zope.testbrowser import Browser
+    >>> manager = Browser()
+    >>> manager.addHeader('Authorization', 'Basic manager:schooltool')
+    >>> manager.handleErrors = False
+    >>> manager.open('http://localhost/@@batch.html')
+
+Navigation
+----------
+
+The batch navigation bar links to the previous and next batches. In TAL you can
+call the macro like this:
+
+    <tal:block define="batch view/batch">
+        <metal:macro use-macro="view/@@batch_macros/batch-navigation"/>
+    </tal:block>
+
+This will give you a navigation bar that (after CSS is applied) looks roughly
+like this:
+
+    +-------------------------------------------------------------+----------+
+    | << Previous 10    1 ... 4 5 6 7 8 9 10 ... 15    next 10 >> | Show All |
+    +-------------------------------------------------------------+----------+
+
+The 'previous' link will not actually be a link if there is no previous batch 
+(if we are on the first batch) and there will also be no number displayed for 
+the same reason.
+
+    >>> batched_contents = manager.contents
+    >>> print manager.contents
+    <BLANKLINE>
+    ...<span>Previous</span>
+    ...<a class="all" href="http://localhost/@@batch.html?batch_size=1000">Show All</a>
+    ...<a class="next" href="http://localhost/@@batch.html?batch_start=10&amp;batch_size=10">
+    ...<span>Next</span>...<span>10</span>...</a>
+    ...<a href="http://localhost/@@batch.html?batch_start=0&amp;batch_size=10" class="current">1</a>
+    ...<a href="http://localhost/@@batch.html?batch_start=10&amp;batch_size=10">2</a>
+    ...<a href="http://localhost/@@batch.html?batch_start=20&amp;batch_size=10">3</a>
+    ...<a href="http://localhost/@@batch.html?batch_start=80&amp;batch_size=10">9</a>
+    ...<span class="separator">...</span>
+    ...<a href="http://localhost/@@batch.html?batch_start=990&amp;batch_size=10">100</a>
+    ...
+    <ul>
+    ...<li>Item000</li>
+    ...<li>Item001</li>
+    ...<li>Item002</li>
+    ...<li>Item003</li>
+    ...<li>Item004</li>
+    ...<li>Item005</li>
+    ...<li>Item006</li>
+    ...<li>Item007</li>
+    ...<li>Item008</li>
+    ...<li>Item009</li>
+    ...
+
+If we go to the next batch, we will see a link back to the first batch.
+
+    >>> next_link = manager.getLink('Next 10')
+    >>> print next_link.url
+    http://localhost/@@batch.html?batch_start=10&batch_size=10
+    >>> next_link.click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...<a class="previous" href="http://localhost/@@batch.html?batch_start=0&amp;batch_size=10">
+    ...<span>Previous</span>...<span>10</span>...</a>
+    ...<a class="all" href="http://localhost/@@batch.html?batch_size=1000">Show All</a>
+    ...<a class="next" href="http://localhost/@@batch.html?batch_start=20&amp;batch_size=10">
+    ...<span>Next</span>...<span>10</span>...</a>
+    ...<a href="http://localhost/@@batch.html?batch_start=0&amp;batch_size=10">1</a>
+    ...<a href="http://localhost/@@batch.html?batch_start=10&amp;batch_size=10" class="current">2</a>
+    ...<a href="http://localhost/@@batch.html?batch_start=20&amp;batch_size=10">3</a>
+    ...<a href="http://localhost/@@batch.html?batch_start=80&amp;batch_size=10">9</a>
+    ...<span class="separator">...</span>
+    ...<a href="http://localhost/@@batch.html?batch_start=990&amp;batch_size=10">100</a>
+    ...
+    <ul>
+      <li>Item010</li>
+      <li>Item011</li>
+      <li>Item012</li>
+      <li>Item013</li>
+      <li>Item014</li>
+      <li>Item015</li>
+      <li>Item016</li>
+      <li>Item017</li>
+      <li>Item018</li>
+      <li>Item019</li>
+    ...
+
+We can click on some batch number instead of clicking Next many times.
+
+    >>> manager.getLink('9').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...<a class="previous" href="http://localhost/@@batch.html?batch_start=70&amp;batch_size=10">
+    ...<span>Previous</span>...<span>10</span>...</a>
+    ...<a class="all" href="http://localhost/@@batch.html?batch_size=1000">Show All</a>
+    ...<a class="next" href="http://localhost/@@batch.html?batch_start=90&amp;batch_size=10">
+    ...<span>Next</span>...<span>10</span>...</a>
+    ...<a href="http://localhost/@@batch.html?batch_start=0&amp;batch_size=10">1</a>
+    ...<span class="separator">...</span>
+    ...<a href="http://localhost/@@batch.html?batch_start=60&amp;batch_size=10">7</a>
+    ...<a href="http://localhost/@@batch.html?batch_start=70&amp;batch_size=10">8</a>
+    ...<a href="http://localhost/@@batch.html?batch_start=80&amp;batch_size=10" class="current">9</a>
+    ...<a href="http://localhost/@@batch.html?batch_start=90&amp;batch_size=10">10</a>
+    ...<a href="http://localhost/@@batch.html?batch_start=100&amp;batch_size=10">11</a>
+    ...<span class="separator">...</span>
+    ...<a href="http://localhost/@@batch.html?batch_start=990&amp;batch_size=10">100</a>
+    ...
+    <ul>
+      <li>Item080</li>
+      <li>Item081</li>
+      <li>Item082</li>
+      <li>Item083</li>
+      <li>Item084</li>
+      <li>Item085</li>
+      <li>Item086</li>
+      <li>Item087</li>
+      <li>Item088</li>
+      <li>Item089</li>
+    ...
+
+Now if we click on the Show All link we get full list of items (no more batch
+navigation links).
+
+    >>> manager.getLink('Show All').click()
+    >>> print manager.contents
+    <BLANKLINE>
+    ...<a class="less" href="http://localhost/@@batch.html?batch_size=10">Show Less</a>
+    ...<li>Item000</li>
+       <li>Item001</li>
+       <li>Item002</li>
+    ...<li>Item042</li>
+       <li>Item043</li>
+    ...<li>Item404</li>
+    ...<li>Item500</li>
+       <li>Item501</li>
+       <li>Item502</li>
+       <li>Item503</li>
+    ...<li>Item666</li>
+    ...<li>Item777</li>
+    ...<li>Item888</li>
+    ...<li>Item998</li>
+       <li>Item999</li>
+    ...
+
+Now return to batched view by clicking on Show Less.
+
+    >>> manager.getLink('Show Less').click()
+    >>> assert manager.contents == batched_contents
+
+

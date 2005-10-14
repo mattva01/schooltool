@@ -89,9 +89,6 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocTestSuite(optionflags=doctest.ELLIPSIS))
     suite.addTest(doctest.DocTestSuite('schooltool.batching.browser'))
-    suite.addTest(doctest.DocFileSuite('../README.txt',
-                                        optionflags=doctest.ELLIPSIS|
-                                                    doctest.REPORT_NDIFF))
     return suite
 
 if __name__ == '__main__':

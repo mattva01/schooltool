@@ -19,7 +19,8 @@ Batch navigation shows up if:
     tal:define="batch_size python:int(request.get('batch_size', 10));
                 extra_url extra_url|nothing;
                 extra_url python:extra_url or '';
-                needsBatch python:bool(batch.prev() or batch.next());"
+                needsBatch python:bool(batch.prev() or batch.next());
+                base_url request/URL;"
     tal:condition="python:batch_size > 10 or needsBatch">
 
     <tal:if condition="needsBatch">
@@ -29,7 +30,7 @@ Batch navigation shows up if:
 
       <a class="previous"
         tal:condition="batch/prev"
-        tal:attributes="href python:'?batch_start=%s&batch_size=%s%s' % (batch.prev().start, batch_size, extra_url)"
+        tal:attributes="href python:'%s?batch_start=%s&batch_size=%s%s' % (base_url, batch.prev().start, batch_size, extra_url)"
         i18n:translate="">
         &laquo; <span i18n:translate="">Previous</span>
         <span tal:content="python:len(batch.prev())"/>
@@ -41,7 +42,7 @@ Batch navigation shows up if:
     <tal:if condition="needsBatch">
       <a class="next"
         tal:condition="batch/next"
-        tal:attributes="href python:'?batch_start=%s&batch_size=%s%s' % (batch.next().start, batch_size, extra_url)">
+        tal:attributes="href python:'%s?batch_start=%s&batch_size=%s%s' % (base_url, batch.next().start, batch_size, extra_url)">
         <span i18n:translate="">Next</span>
         <span tal:content="python:len(batch.next())"/> &raquo;
       </a>
@@ -118,7 +119,7 @@ Batch navigation shows up if:
 
 <metal:block define-macro="batch-navigation-link">
   <a tal:attributes="
-    href python:'?batch_start=%s&batch_size=%s%s' % (b.start, batch_size, extra_url);
+    href python:'%s?batch_start=%s&batch_size=%s%s' % (base_url, b.start, batch_size, extra_url);
     class python:batch == b and 'current' or None"
     tal:content="b/num">
   </a>
@@ -128,11 +129,11 @@ Batch navigation shows up if:
   <div class="batch-extra-navigation"
        tal:define="full_size python:len(batch.list)">
 
-    <a href="?batch_size=10"
+    <a tal:attributes="href string:${base_url}?batch_size=10"
        tal:condition="python:batch_size > 10"
        class="less">Show Less</a>
 
-    <a tal:attributes="href string:?batch_size=${full_size}"
+    <a tal:attributes="href string:${base_url}?batch_size=${full_size}"
        tal:condition="python:batch_size < full_size"
        class="all">Show All</a>
 
@@ -152,7 +153,8 @@ It follows the same guidelins as batch-navigation with the addition of:
     tal:define="batch_size python:int(request.get('batch_size.' + batch_name, 10));
                 extra_url extra_url|nothing;
                 extra_url python:extra_url or '';
-                needsBatch python:bool(batch.prev() or batch.next());"
+                needsBatch python:bool(batch.prev() or batch.next());
+                base_url request/URL"
     tal:condition="python:batch_size > 10 or needsBatch">
 
     <tal:if condition="needsBatch">
@@ -160,7 +162,7 @@ It follows the same guidelins as batch-navigation with the addition of:
         class="previous">&laquo; Previous</span>
       <a class="previous"
         tal:condition="batch/prev"
-        tal:attributes="href python:'?batch_start.%s=%s&batch_size.%s=%s%s' % (batch_name, batch.prev().start, batch_name, batch_size, extra_url)"
+        tal:attributes="href python:'%s?batch_start.%s=%s&batch_size.%s=%s%s' % (base_url, batch_name, batch.prev().start, batch_name, batch_size, extra_url)"
         i18n:translate=""
         >&laquo; Previous</a>
     </tal:if>
@@ -170,7 +172,7 @@ It follows the same guidelins as batch-navigation with the addition of:
     <tal:if condition="needsBatch">
       <a class="next"
         tal:condition="batch/next"
-        tal:attributes="href python:'?batch_start.%s=%s&batch_size.%s=%s%s' % (batch_name, batch.next().start, batch_name, batch_size, extra_url)"
+        tal:attributes="href python:'%s?batch_start.%s=%s&batch_size.%s=%s%s' % (base_url, batch_name, batch.next().start, batch_name, batch_size, extra_url)"
         i18n:translate=""
         >Next &raquo;</a>
 
@@ -228,7 +230,7 @@ It follows the same guidelins as batch-navigation with the addition of:
 </metal:block>
 
 <metal:block define-macro="multi-batch-navigation-link">
-  <a tal:attributes="href python:'?batch_start.%s=%s&batch_size.%s=%s%s' % (batch_name, b.start, batch_name, batch_size, extra_url);
+  <a tal:attributes="href python:'%s?batch_start.%s=%s&batch_size.%s=%s%s' % (base_url, batch_name, b.start, batch_name, batch_size, extra_url);
     class python:batch == b and 'current' or None"
     tal:content="b/num">
   </a>
@@ -238,11 +240,11 @@ It follows the same guidelins as batch-navigation with the addition of:
   <div class="batch-extra-navigation"
        tal:define="full_size python:len(batch.list)">
 
-    <a tal:attributes="href string:?batch_size.${batch_name}=10"
+    <a tal:attributes="href string:${base_url}?batch_size.${batch_name}=10"
        tal:condition="python:batch_size > 10"
        class="less">Show Less</a>
 
-    <a tal:attributes="href string:?batch_size.${batch_name}=${full_size}"
+    <a tal:attributes="href string:${base_url}?batch_size.${batch_name}=${full_size}"
        tal:condition="python:batch_size < full_size"
        class="all">Show All</a>
 
