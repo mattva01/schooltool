@@ -644,12 +644,7 @@ class PeriodOrderComplex(Step):
 
     def days(self):
         session = self.getSessionData()
-        if (session['cycle'] == 'rotating' and
-            session.get('time_model') == 'weekly'):
-            return [translate(day_of_week_names[i], context=self.request)
-                    for i in range(5)]
-        else:
-            return session['day_names']
+        return session['day_names']
 
     def numSlots(self):
         return [len(day) for day in self.getSessionData()['time_slots']]
@@ -795,7 +790,7 @@ class FinalStep(Step):
         """
         templates = {None: SchooldayTemplate()}
         same = True
-        for n, (periods, slots) in enumerate(zip(periods_order, time_slots)):
+        for n, slots in enumerate(time_slots):
             template = SchooldayTemplate()
             for tstart, duration in slots:
                 template.add(SchooldaySlot(tstart, duration))
@@ -828,19 +823,9 @@ class FinalStep(Step):
             default = day_templates[None]
             day_templates = dict([(day_id, day_templates.get(idx, default))
                                   for idx, day_id in enumerate(day_ids)])
-        if model_factory is SequentialDaysTimetableModel:
-            # It would be better to avoid comparing model factories
-            period_names = periods_order[0]
-            for day in periods_order[1:]:
-                for name in day:
-                    if name not in period_names:
-                        period_names.append(name)
-            periods_in_days = [period_names] * len(day_ids)
-        else:
-            periods_in_days = periods_order
         model = model_factory(day_ids, day_templates)
         ttschema = TimetableSchema(day_ids, title=title, model=model)
-        for day_id, periods in zip(day_ids, periods_in_days):
+        for day_id, periods in zip(day_ids, periods_order):
             ttschema[day_id] = TimetableSchemaDay(periods)
         return ttschema
 

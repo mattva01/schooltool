@@ -809,11 +809,9 @@ Let's say they are different.
     <p>Please put the periods in order for each day:</p>
     <table>
       <tr>
-        <th>Monday</th>
-        <th>Tuesday</th>
-        <th>Wednesday</th>
-        <th>Thursday</th>
-        <th>Friday</th>
+        <th>A</th>
+        <th>B</th>
+        <th>C</th>
       </tr>
       <tr>
         <td>
@@ -832,9 +830,8 @@ Let's say they are different.
             <option>Period_D</option>
           </select>
         </td>
-        ...
         <td>
-          <select name="period_4_0">
+          <select name="period_2_0">
             <option selected="selected">Period_A</option>
             <option>Period_B</option>
             <option>Period_C</option>
@@ -859,9 +856,8 @@ Let's say they are different.
             <option>Period_D</option>
           </select>
         </td>
-        ...
         <td>
-          <select name="period_4_1">
+          <select name="period_2_1">
             <option>Period_A</option>
             <option selected="selected">Period_B</option>
             <option>Period_C</option>
@@ -886,9 +882,8 @@ Let's say they are different.
             <option>Period_D</option>
           </select>
         </td>
-        ...
         <td>
-          <select name="period_4_2">
+          <select name="period_2_2">
             <option>Period_A</option>
             <option>Period_B</option>
             <option selected="selected">Period_C</option>
@@ -913,9 +908,8 @@ Let's say they are different.
             <option selected="selected">Period_D</option>
           </select>
         </td>
-        ...
         <td>
-          <select name="period_4_3">
+          <select name="period_2_3">
             <option>Period_A</option>
             <option>Period_B</option>
             <option>Period_C</option>
@@ -937,10 +931,6 @@ We can rearrange them:
   ... period_0_1=Period_C&period_1_1=Period_B&period_2_1=Period_B&\
   ... period_0_2=Period_B&period_1_2=Period_C&period_2_2=Period_C&\
   ... period_0_3=Period_D&period_1_3=Period_A&period_2_3=Period_D&\
-  ... period_3_0=Period_B&period_4_0=Period_D&\
-  ... period_3_1=Period_C&period_4_1=Period_C&\
-  ... period_3_2=Period_D&period_4_2=Period_B&\
-  ... period_3_3=Period_A&period_4_3=Period_A&\
   ... NEXT=Next""", handle_errors=False)
   HTTP/1.1 303 See Other
   ...
@@ -985,15 +975,15 @@ The schema is now created:
       <period id="Period_D"/>
     </day>
     <day id="B">
-      <period id="Period_A"/>
-      <period id="Period_C"/>
-      <period id="Period_B"/>
       <period id="Period_D"/>
+      <period id="Period_B"/>
+      <period id="Period_C"/>
+      <period id="Period_A"/>
     </day>
     <day id="C">
       <period id="Period_A"/>
-      <period id="Period_C"/>
       <period id="Period_B"/>
+      <period id="Period_C"/>
       <period id="Period_D"/>
     </day>
   </timetable>

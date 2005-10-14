@@ -1279,7 +1279,7 @@ def doctest_PeriodOrderComplex_weekly_rotating():
         ['A', 'B', 'C', 'D']
 
         >>> view.days()
-        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+        ['Day One', 'Day Two']
 
     The number of dropdowns for a day is equal to the number of slots:
 
@@ -1605,21 +1605,19 @@ def doctest_FinalStep_createSchema_different_order_cyclic_weekly():
         >>> data['named_periods'] = True
         >>> data['period_names'] = ['A', 'B', 'C', 'D', 'E', 'F']
         >>> data['periods_same'] = False
-        >>> data['periods_order'] = [['A', 'B', 'C', 'D'],
-        ...                          ['B', 'C', 'D', 'E'],
-        ...                          ['C', 'D', 'E', 'F'],
-        ...                          ['D', 'E', 'F', 'A'],
-        ...                          ['E', 'F', 'A', 'B']]
+        >>> data['periods_order'] = [['A', 'B', 'C', 'D', 'E', 'F'],
+        ...                          ['B', 'C', 'D', 'E', 'F', 'A'],
+        ...                          ['C', 'D', 'E', 'F', 'A', 'B']]
         >>> ttschema = view.createSchema()
 
         >>> print_ttschema(ttschema)
         Day 1        Day 2        Day 3
-        A            A            A
-        B            B            B
-        C            C            C
-        D            D            D
-        E            E            E
-        F            F            F
+        A            B            C
+        B            C            D
+        C            D            E
+        D            E            F
+        E            F            A
+        F            A            B
 
         >>> ttschema.model
         <...SequentialDaysTimetableModel object at ...>
