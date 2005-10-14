@@ -43,7 +43,7 @@ The workflow is as follows:
         timetable?"
 
         Continue with step 5 if "yes".
-        Skip to step 8 if "no", and "cycle" was chosen in step 2.
+        Skip to step 6 if "no", and "cycle" was chosen in step 2.
         Skip to step 7 if "no", and "days of the week" was chosen in step 2.
 
     5. "Enter start and end times for each slot"
@@ -52,7 +52,11 @@ The workflow is as follows:
 
         Jump to step 9.
 
-    6. There is no step 6.
+    6. "Do the start and end times vary based on the day of the week, or the
+        day in the cycle?"
+
+        Continue with step 7 if "days of week".
+        Continue with step 8 if "cycle".
 
     7. "Enter the start and end times of each slot on each day:"
 
@@ -316,7 +320,27 @@ class IndependentDaysStep(ChoiceStep):
             if session['cycle'] == 'weekly':
                 return WeeklySlotEntryStep(self.context, self.request)
             else:
-                return RotatingSlotEntryStep(self.context, self.request)
+                return SequentialModelStep(self.context, self.request)
+
+
+class SequentialModelStep(ChoiceStep):
+    """Step for choosing if start and end times vay based on the day of
+    the week or the day in the cycle."""
+
+    key = 'time_model'
+
+    question = _("Do start and end times vary based on the day of the week"
+                 " (Monday - Friday) or the day in the cycle?")
+
+    choices = [('weekly', _("Day of week")),
+               ('cycle_day', _("Day in cycle"))]
+
+    def next(self):
+        session = self.getSessionData()
+        if session['time_model'] == 'weekly':
+            return WeeklySlotEntryStep(self.context, self.request)
+        else:
+            return RotatingSlotEntryStep(self.context, self.request)
 
 
 def parse_name_list(names):
@@ -460,6 +484,28 @@ class WeeklySlotEntryStep(RotatingSlotEntryStep):
         return [translate(day_of_week_names[i], context=self.request)
                 for i in range(5)]
 
+    def update(self):
+        """Store the slots in the session.
+
+        If a rotating timetable cycle is selected and slots vary based on day
+        of week, each day must have the same number of slots.
+        """
+        result = RotatingSlotEntryStep.update(self)
+        session = self.getSessionData()
+        if (result and session['cycle'] == 'rotating'
+            and session.get('time_model') == 'weekly'):
+            slots = session['time_slots']
+            assert len(slots) == 5 # Monday - Friday
+            num_slots = len(slots[0])
+            for day in slots[1:]:
+                if len(day) != num_slots:
+                    self.error = _('As you have selected a rotating timetable'
+                                   ' cycle and slots based on day of week,'
+                                   ' all days must have the same number'
+                                   ' of time periods.')
+                    return False
+        return result
+
 
 class NamedPeriodsStep(ChoiceStep):
     """A step for choosing if periods have names or are designated by time"""
@@ -598,7 +644,12 @@ class PeriodOrderComplex(Step):
 
     def days(self):
         session = self.getSessionData()
-        return session['day_names']
+        if (session['cycle'] == 'rotating' and
+            session.get('time_model') == 'weekly'):
+            return [translate(day_of_week_names[i], context=self.request)
+                    for i in range(5)]
+        else:
+            return session['day_names']
 
     def numSlots(self):
         return [len(day) for day in self.getSessionData()['time_slots']]
@@ -657,23 +708,39 @@ class FinalStep(Step):
     def next(self):
         return FirstStep(self.context, self.request)
 
-    def modelFactory(cycle, similar_days):
+    def modelFactory(cycle, similar_days, time_model):
         """Return the timetable model factory for the chosen cycle.
 
         Cycle can be either 'weekly' or 'rotating'.  Weekly cycles always
         use the WeeklyTimetableModel.
 
-            >>> FinalStep.modelFactory('weekly', None)
+            >>> FinalStep.modelFactory('weekly', None, None)
             <...WeeklyTimetableModel...>
 
-        Rotating cycles use SequentialDayIdBasedTimetableModel.
+        Rotating cycles can either vary based on the day of the week, or
+        on the day in the cycle.
 
-            >>> FinalStep.modelFactory('rotating', False)
+            >>> FinalStep.modelFactory('rotating', False, 'weekly')
+            <...SequentialDaysTimetableModel...>
+
+            >>> FinalStep.modelFactory('rotating', False, 'cycle_day')
             <...SequentialDayIdBasedTimetableModel...>
+
+        but there's no distinction between the two if all days have the same
+        time slots.
+
+            >>> FinalStep.modelFactory('rotating', True, None)
+            <...SequentialDayIdBasedTimetableModel...>
+
         """
         assert cycle in ('weekly', 'rotating')
         if cycle == 'weekly':
             return WeeklyTimetableModel
+        if similar_days:
+            return SequentialDayIdBasedTimetableModel
+        assert time_model in ('weekly', 'cycle_day')
+        if time_model == 'weekly':
+            return SequentialDaysTimetableModel
         else:
             return SequentialDayIdBasedTimetableModel
 
@@ -754,7 +821,8 @@ class FinalStep(Step):
         day_templates = self.dayTemplates(periods_order, session['time_slots'])
 
         model_factory = self.modelFactory(session['cycle'],
-                                          session['similar_days'])
+                                          session['similar_days'],
+                                          session.get('time_model'))
         if model_factory is SequentialDayIdBasedTimetableModel:
             # This conversion is not very nice
             default = day_templates[None]
