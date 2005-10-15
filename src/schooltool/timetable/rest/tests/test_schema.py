@@ -40,8 +40,6 @@ from schooltool.app.rest.errors import RestError
 
 class TimetableSchemaMixin(QuietLibxml2Mixin):
 
-    def setUpLibxml2(self): pass
-
     schema_xml = """
         <timetable xmlns="http://schooltool.org/ns/timetable/0.1">
           <title>Title</title>
