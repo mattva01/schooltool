@@ -30,8 +30,9 @@ if sys.version_info < (2, 4):
     sys.exit(1)
 
 here = os.path.dirname(os.path.realpath(__file__))
-sys.path.insert(0, os.path.join(here, 'src'))
-sys.path.insert(0, os.path.join(here, 'Zope3', 'src'))
+# Replace the directory of this wrapper script with SchoolTool and Zope 3
+# source directories
+sys.path[:1] = [os.path.join(here, 'src'), os.path.join(here, 'Zope3', 'src')]
 
 from schooltool.testing import test
 
