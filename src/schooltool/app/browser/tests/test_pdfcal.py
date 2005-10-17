@@ -805,6 +805,7 @@ def tryToSetUpReportLab():
 
     # Heuristic to try and find the TrueType fonts.
     font_dirs = ['/usr/share/fonts/truetype/msttcorefonts',
+	         '/usr/share/fonts/corefonts',
                  r'C:\WINDOWS\Fonts']
     for font_dir in font_dirs:
         if os.path.exists(os.path.join(font_dir, 'arial.ttf')):
