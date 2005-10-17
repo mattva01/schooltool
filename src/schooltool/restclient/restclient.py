@@ -291,6 +291,13 @@ class SchoolToolClient:
         """
         return self.getContainerItems('/courses', CourseRef)
 
+    def getLevels(self):
+        """Return the list of all levels.
+
+        Returns a sequence of LevelRef objects.
+        """
+        return self.getContainerItems('/levels', LevelRef)
+
     def savePersonInfo(self, person_url, person_info):
         """Put a PersonInfo object."""
         body = """
@@ -611,6 +618,21 @@ def _parseGroupInfo(body):
         raise SchoolToolError(_("Insufficient data in group info"))
 
 
+def _parseLevelInfo(body):
+    """Parse the data provided by the level XML representation."""
+    doc = XMLDocument(body)
+    doc.registerNs('xlink', 'http://www.w3.org/1999/xlink')
+    doc.registerNs('m', 'http://schooltool.org/ns/model/0.1')
+    try:
+        title = doc.query("/m:level/m:title")[0].content
+        isInitial_string = doc.query("/m:level/m:isInitial")[0].content
+        isInitial = isInitial_string == "true"
+        nextLevel = doc.query("/m:level/m:nextLevel")[0].content
+        return LevelInfo(title, isInitial, nextLevel)
+    except IndexError:
+        raise SchoolToolError(_("Insufficient data in level info"))
+
+
 #
 # Object representations
 #
@@ -779,6 +801,10 @@ class TermRef(ObjectRef):
     """Reference to a term."""
 
 
+class LevelRef(ObjectRef):
+    """Reference to a level object."""
+
+
 class PersonInfo:
     """An object containing the data for a person."""
 
@@ -793,6 +819,13 @@ class GroupInfo:
         self.title = title
         self.description = description
 
+class LevelInfo:
+    """An object containing the data for a level."""
+
+    def __init__(self, title, isInitial, nextLevel):
+        self.title = title
+        self.isInitial = isInitial
+        self.nextLevel = nextLevel
 
 #
 # Old-school application object representation

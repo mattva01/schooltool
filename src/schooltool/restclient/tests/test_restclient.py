@@ -534,6 +534,23 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(results, expected)
         self.checkConnPath(client, '/courses')
 
+    def test_getLevels(self):
+        from schooltool.restclient.restclient import LevelRef
+        body = dedent("""
+            <container xmlns:xlink="http://www.w3.org/1999/xlink">
+              <items>
+                <item xlink:href="/levels/level2" xlink:title="2nd Grade" />
+                <item xlink:href="/levels/level3" xlink:title="3rd Grade"/>
+              </items>
+            </container>
+        """)
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        results = client.getLevels()
+        expected = [LevelRef(client, '/levels/level2', '2nd Grade'),
+                    LevelRef(client, '/levels/level3', '3rd Grade')]
+        self.assertEquals(results, expected)
+        self.checkConnPath(client, '/levels')
+
     def test_savePersonInfo(self):
         from schooltool.restclient.restclient import PersonInfo
         body = dedent("""
@@ -1358,6 +1375,27 @@ class TestParseFunctions(NiceDiffsMixin, QuietLibxml2Mixin, unittest.TestCase):
         result = _parseGroupInfo(body)
         self.assertEquals(result.title, u'Managers')
         self.assertEquals(result.description, u'We are the managers.')
+
+    def test__parseLevelInfo(self):
+        from schooltool.restclient.restclient import _parseLevelInfo
+        from schooltool.restclient.restclient import SchoolToolError
+        body = """
+            <level xmlns:xlink="http://www.w3.org/1999/xlink"
+                   xmlns="http://schooltool.org/ns/model/0.1">
+              <title>1st Grade</title>
+              <isInitial>true</isInitial>
+              <nextLevel>level2</nextLevel>
+              <relationships xlink:type="simple"
+                             xlink:title="Relationships"
+                             xlink:href="http://localhost/levels/level1/relationships"/>
+              <acl xlink:type="simple" xlink:title="ACL"
+                   xlink:href="http://localhost/levels/level1/acl"/>
+            </level>
+        """
+        result = _parseLevelInfo(body)
+        self.assertEquals(result.title, u'1st Grade')
+        self.assertEquals(result.isInitial, True)
+        self.assertEquals(result.nextLevel, "level2")
 
 
 class InfoClassTestMixin:
