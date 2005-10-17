@@ -411,6 +411,23 @@ class SchoolToolClient:
         return self._createGenericObject(SectionRef, '/sections',
                                          title, description, name)
 
+    def createLevel(self, name, title, isInitial=False, nextLevel=None):
+        """Create a level object."""
+        body = """
+            <object xmlns="http://schooltool.org/ns/model/0.1"
+                    title="%s"
+                    isInitial="%s"
+                    nextLevel="%s"/>
+          """ % (to_xml(title),
+                 isInitial and 'true' or 'false',\
+                 nextLevel and to_xml(nextLevel) or "")
+        level_url = "/levels/%s" % name
+        response = self.put(level_url, body)
+        if response.status not in [200, 201]:
+            raise ResponseStatusError(response)
+        return LevelRef(self, level_url, title)
+
+
     def _createGenericObject(self, ref_class, where, title, description="",
                              name=None):
         """Create a generic object that can be represented in XML as:
@@ -434,7 +451,12 @@ class SchoolToolClient:
 
         if response.status not in acceptable_statuses:
             raise ResponseStatusError(response)
-        url = self._pathFromResponse(response)
+
+        if name:
+            url = where
+        else:
+            url = self._pathFromResponse(response)
+
         return ref_class(self, url, title)
 
     def createRelationship(self, obj1_url, obj2_url, reltype, obj2_role):
@@ -506,6 +528,20 @@ class SchoolToolClient:
         object_url = getattr(object_ref_or_url, 'url', object_ref_or_url)
         response = self.delete(object_url)
         if response.status != 200:
+            raise ResponseStatusError(response)
+
+    def saveLevelInfo(self, level_url, level_info):
+        """Put a LevelInfo object."""
+        body = """
+            <object xmlns="http://schooltool.org/ns/model/0.1"
+                    title="%s"
+                    isInitial="%s"
+                    nextLevel="%s"/>
+        """ % (to_xml(level_info.title),
+               level_info.isInitial and 'true' or 'false',\
+               level_info.nextLevel and to_xml(level_info.nextLevel) or "")
+        response = self.put(level_url, body)
+        if response.status / 100 != 2:
             raise ResponseStatusError(response)
 
 
@@ -736,6 +772,19 @@ class PersonRef(ObjectRef):
                                    headers={'Content-Type':
                                             content_type})
         if response.status not in (200, 201):
+            raise ResponseStatusError(response)
+
+    def getAcademicStatus(self):
+        """Get academic status of a person."""
+        response = self.client.get("%s/academicStatus" % self.url)
+        if response.status != 200:
+            raise ResponseStatusError(response)
+        return response.read()
+
+    def initiatePromotion(self):
+        """Create promotion workflow."""
+        response = self.client.put("%s/promotion" % self.url, "")
+        if response.status != 200:
             raise ResponseStatusError(response)
 
 

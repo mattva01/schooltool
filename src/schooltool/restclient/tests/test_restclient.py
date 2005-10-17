@@ -1110,6 +1110,40 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         #     unexpected like 'mailto:jonas@example.com' or 'http://webserver'
         #     without a trailing slash?
 
+    def test_saveLevelInfo(self):
+        from schooltool.restclient.restclient import LevelInfo
+        body = dedent("""
+            <object title="1st Grade"
+                    isInitial="true"
+                    nextLevel="level2"
+                    xmlns="http://schooltool.org/ns/model/0.1" />
+        """)
+        client = self.newClient(ResponseStub(200, 'OK'))
+        data = LevelInfo('1st Grade', True, 'level2')
+        result = client.saveLevelInfo('/levels/level1', data)
+        conn = self.oneConnection(client)
+        self.assertEqualsXML(conn.body, body)
+        self.assertEquals(conn.path, '/levels/level1')
+        self.assertEquals(conn.method, "PUT")
+
+    def test_createLevel(self):
+        from schooltool.restclient.restclient import LevelRef
+        client = self.newClient(ResponseStub(201, 'OK', 'Created',
+                    location='http://localhost/levels/level2'))
+        result = client.createLevel('level2', '2nd Grade', False, None)
+        expected = LevelRef(client, '/levels/level2',
+                            '2nd Grade')
+        self.assertEquals(result, expected)
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.path, '/levels/level2')
+        self.assertEquals(conn.method, 'PUT')
+        self.assertEquals(conn.headers['Content-Type'], 'text/xml')
+        self.assertEqualsXML(conn.body,
+                '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' title="2nd Grade"'
+                       ' isInitial="false"'
+                       ' nextLevel=""/>')
+
 
 class TestResponse(unittest.TestCase):
 
@@ -1539,6 +1573,44 @@ class TestPersonRef(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(conn.headers['Content-Type'],
                           'image/png')
         self.assertEquals(conn.method, "PUT")
+
+    def test_getAcademicStatus(self):
+        """A test for PersonRef.getAcademicStatus."""
+        from schooltool.restclient.restclient import PersonRef
+        body = "Enrolled"
+        client = self.newClient(ResponseStub(200, 'OK', body))
+        ref = PersonRef(client, '/persons/manager')
+        result = ref.getAcademicStatus()
+        self.assertEquals(result, "Enrolled")
+        conn = self.oneConnection(client)
+        self.assertEquals(conn.method, "GET")
+        self.assertEquals(conn.path, '/persons/manager/academicStatus')
+
+    def test_getAcademicStatus_errors(self):
+        """A test for PersonRef.getAcademicStatus."""
+        from schooltool.restclient.restclient import PersonRef
+        from schooltool.restclient.restclient import ResponseStatusError
+        body = ""
+        client = self.newClient(ResponseStub(400, 'Bad Request', body))
+        ref = PersonRef(client, '/persons/manager')
+        self.assertRaises(ResponseStatusError, ref.getAcademicStatus)
+
+    def test_initiatePromotion(self):
+        from schooltool.restclient.restclient import PersonRef
+        client = self.newClient(ResponseStub(200, 'OK', 'Created'))
+        ref = PersonRef(client, '/persons/jfk')
+        ref.initiatePromotion()
+        conn = self.oneConnection(client)
+        self.assertEqualsXML(conn.body, "")
+        self.assertEquals(conn.path, '/persons/jfk/promotion')
+        self.assertEquals(conn.method, "PUT")
+
+    def test_initiatePromotion_errors(self):
+        from schooltool.restclient.restclient import PersonRef
+        from schooltool.restclient.restclient import ResponseStatusError
+        client = self.newClient(ResponseStub(400, 'Bad Request', ""))
+        ref = PersonRef(client, '/persons/manager')
+        self.assertRaises(ResponseStatusError, ref.initiatePromotion)
 
 
 class TestGroupRef(SchoolToolClientTestMixin, unittest.TestCase):
