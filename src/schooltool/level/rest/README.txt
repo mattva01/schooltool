@@ -44,7 +44,7 @@ Let's now create two levels:
     ... Content-Type: text/xml
     ...
     ... <object xmlns="http://schooltool.org/ns/model/0.1"
-    ...         title="1st Grade" isInitial="true" nextLevel="level2" />
+    ...         title="1st Grade" isInitial="true" />
     ... """)
     HTTP/1.1 201 Created
     ...
@@ -52,10 +52,50 @@ Let's now create two levels:
     >>> level1 = getRootFolder()['levels']['level1']
     >>> level1
     <Level '1st Grade'>
+
+By default levels get their nextLevel set to None:
+
+    >>> level1.nextLevel is None
+    True
+
+    >>> print rest("""
+    ... GET /levels/level1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
+    ... """)
+    HTTP/1.1 200 Ok
+    Content-Length: ...
+    Content-Type: text/xml; charset=UTF-8
+    Set-Cookie: ...
+    <BLANKLINE>
+    <level xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>1st Grade</title>
+      <isInitial>true</isInitial>
+      <nextLevel></nextLevel>
+      <relationships xlink:type="simple"
+                     xlink:title="Relationships"
+                     xlink:href="http://localhost/levels/level1/relationships"/>
+      <acl xlink:type="simple" xlink:title="ACL"
+           xlink:href="http://localhost/levels/level1/acl"/>
+    </level>
+    <BLANKLINE>
+
+Though we can set it to one of levels we have:
+
+    >>> print rest("""
+    ... PUT /levels/level1 HTTP/1.1
+    ... Authorization: Basic manager:schooltool
+    ... Content-Type: text/xml
+    ...
+    ... <object xmlns="http://schooltool.org/ns/model/0.1"
+    ...         title="1st Grade" isInitial="true" nextLevel="level2" />
+    ... """)
+    HTTP/1.1 200 Ok
+    ...
+
     >>> level1.nextLevel is level2
     True
 
-Let's see what a level looks like:
+Let's see how it looks now:
 
     >>> print rest("""
     ... GET /levels/level1 HTTP/1.1

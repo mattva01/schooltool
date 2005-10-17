@@ -4,7 +4,8 @@
             i18n:domain="schooltool">
   <title tal:content="context/title" />
   <isInitial tal:content="context/isInitial" />
-  <nextLevel tal:content="context/nextLevel/zope:name|nothing" />
+  <nextLevel tal:content="python: context.nextLevel
+                                  and path('context/nextLevel/zope:name')" />
   <relationships xlink:type="simple" xlink:title="Relationships"
                  i18n:attributes="xlink:title Relationships"
                  tal:attributes="xlink:href string:${context/@@absolute_url}/relationships" />
