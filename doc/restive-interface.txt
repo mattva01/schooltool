@@ -32,6 +32,22 @@ to the SchoolTool server.
   PUT /persons/person_id/preferences
     change the preferences of a person
 
+  GET /persons/person_id/academicStatus
+    view the person's academic status
+  POST /persons/person_id/academicStatus
+    change a person's academic status
+XXX why POST and not PUT?
+
+  GET /persons/person_id/promotion
+    view the person's promotion workflow
+  PUT /persons/person_id/promotion
+    create the person's promotion workflow
+  POST /persons/person_id/promotion
+    change the promotion workflow?
+
+  GET /persons/person_id/academicHistory
+    view the person's academic history.
+
   GET /groups
     lists all groups in the system
   POST /groups
@@ -83,6 +99,15 @@ to the SchoolTool server.
     shows the information for a section
   DELETE /sections/section_id
     permanently deletes a section from the system
+
+  GET /levels
+    lists all levels in the system
+  POST /levels
+    create a new level
+  PUT /levels/new_level_id
+    create or replace a level
+  DELETE /levels/level_id
+    remove a level
 
   GET /terms
     lists all terms in the system

@@ -169,7 +169,7 @@ Let's first look at the academic status. You can simply get it and put it:
     Enrolled
 
 
-Now let's create a promotion workflow At the beginning there is nothing:
+Now let's create a promotion workflow. At the beginning there is nothing:
 
     >>> print rest("""
     ... GET /persons/stephan/promotion HTTP/1.1
@@ -186,6 +186,9 @@ You can create one by putting it there.
     ... """)
     HTTP/1.1 200 Ok
     ...
+
+XXX mg: WTF?  I PUT the same thing I GOT and it suddenly changes into a
+        completely different thing?  That's not REST!
 
 If we now look at the promotion again, we will see that it now returns a
 workflow item.
