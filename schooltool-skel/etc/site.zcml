@@ -12,6 +12,7 @@
   <include package="zope.app.server" />
   <include package="zope.app.http" />
   <include package="zope.app.viewlet" />
+  <include package="zope.testrecorder" />
 
   <!-- Workaround to shut down a DeprecationWarning that appears because we do
        not include zope.app.onlinehelp and the rotterdam skin tries to look for
