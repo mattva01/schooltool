@@ -908,7 +908,7 @@ class AtomCalendarView(WeeklyCalendarView):
         return dt.strftime("%Y-%m-%dT%H:%M:%SZ")
 
     def w3cdtf_datetime_now(self):
-        return datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
+        return datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 class MonthlyCalendarView(CalendarViewBase):

@@ -35,6 +35,7 @@ def evolve(context):
     for app in findObjectsProviding(root, ISchoolToolApplication):
         for noted in findObjectsProviding(root, IHaveNotes):
             for note in getNotes(noted):
-                note.unique_id = '%d.%d' % (datetime.datetime.now().microsecond,
-                                         random.randrange(10 ** 6, 10 ** 7))
+                note.unique_id = '%d.%d' % (
+                    datetime.datetime.utcnow().microsecond,
+                    random.randrange(10 ** 6, 10 ** 7))
 

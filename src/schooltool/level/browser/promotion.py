@@ -75,7 +75,7 @@ class PromotionWorkItemsView(browser.BrowserView):
             {'name': id, 'title': person.title, 'username': person.username}
             for id, person in app.getSchoolToolApplication()['persons'].items()
             if interfaces.IAcademicRecord(person).levelProcess == None]
-    
+
     def initialLevelItems(self):
         """Return PT-friendly list of students who need to be initialized"""
         manager = app.getSchoolToolApplication()['groups']['manager']

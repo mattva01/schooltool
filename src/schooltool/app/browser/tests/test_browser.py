@@ -264,7 +264,7 @@ def doctest_ViewPrefences():
         >>> request.setPrincipal(PrincipalStub())
         >>> prefs = ViewPreferences(request)
         >>> from datetime import datetime
-        >>> prefs.timezone.tzname(datetime.now())
+        >>> prefs.timezone.tzname(datetime.utcnow())
         'UTC'
         >>> prefs.timeformat
         '%H:%M'

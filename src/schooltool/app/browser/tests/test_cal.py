@@ -726,7 +726,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
         request2 = TestRequest()
         request2.setPrincipal(PrincipalStub())
-        self.assertEquals(view1.timezone.tzname(datetime.now()), 'UTC')
+        self.assertEquals(view1.timezone.tzname(datetime.utcnow()), 'UTC')
 
         # set the dateformat preference to the long format and change the
         # timezone preference
@@ -1158,7 +1158,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
             >>> view.timezone = timezone('US/Eastern')
             >>> view.update()
-            >>> view.timezone.tzname(datetime.now())
+            >>> view.timezone.tzname(datetime.utcnow())
             'EST'
 
             >>> titles = []
@@ -1197,7 +1197,7 @@ class TestCalendarViewBase(unittest.TestCase):
 
             >>> view.timezone = timezone('Africa/Cairo')
             >>> view.update()
-            >>> view.timezone.tzname(datetime.now())
+            >>> view.timezone.tzname(datetime.utcnow())
             'EET'
 
             >>> titles = []
@@ -3897,11 +3897,11 @@ def doctest_AtomCalendarView():
 
     Populate the calendar:
 
-        >>> lastweek = CalendarEvent(datetime.now().replace(hour=12) -
+        >>> lastweek = CalendarEvent(datetime.utcnow().replace(hour=12) -
         ...                          timedelta(8),
         ...                          timedelta(hours=3), "Last Week")
         >>> monday_date = (datetime.now().replace(hour=12) -
-        ...                timedelta(datetime.now().weekday()))
+        ...                timedelta(datetime.utcnow().weekday()))
         >>> tuesday_date = monday_date + timedelta(1)
         >>> monday = CalendarEvent(monday_date,
         ...                        timedelta(hours=3), "Today")

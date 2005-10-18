@@ -52,7 +52,7 @@ class HistoricalRecord(persistent.Persistent):
     __parent__ = None
 
     def __init__(self, title, description=u''):
-        self.timestamp = datetime.datetime.now()
+        self.timestamp = datetime.datetime.utcnow()
         inter = zope.security.management.getInteraction()
         if inter.participations:
             self.user = inter.participations[0].principal.id

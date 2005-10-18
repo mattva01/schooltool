@@ -133,5 +133,5 @@ class Note(persistent.Persistent):
         self.body = body
         self.privacy = privacy
         self.owner = owner
-        self.unique_id = '%d.%d' %(datetime.datetime.now().microsecond,
+        self.unique_id = '%d.%d' %(datetime.datetime.utcnow().microsecond,
                                    random.randrange(10 ** 6, 10 ** 7))

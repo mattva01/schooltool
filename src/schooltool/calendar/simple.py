@@ -185,7 +185,7 @@ def new_unique_id():
         True
 
     """
-    more_uniqueness = '%d.%d' % (datetime.datetime.now().microsecond,
+    more_uniqueness = '%d.%d' % (datetime.datetime.utcnow().microsecond,
                                  random.randrange(10 ** 6, 10 ** 7))
     # generate an rfc-822 style id and strip angle brackets
     unique_id = email.Utils.make_msgid(more_uniqueness)[1:-1]
