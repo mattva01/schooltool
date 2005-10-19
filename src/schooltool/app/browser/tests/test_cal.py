@@ -3067,6 +3067,38 @@ class TestDailyCalendarView(unittest.TestCase):
             view.timezone = tz
             do_test([], (8, 19))
 
+        view.timezone = utc
+        events = [createEvent('2004-08-16 22:00', '30min', "late workout")]
+        do_test(events, (8, 23))
+
+        # after midnight
+        view.timezone = vilnius
+        do_test(events, (8, 19))
+
+        # before 19:00
+        view.timezone = eastern
+        do_test(events, (8, 19))
+
+        # between 19:00 and Midnight
+        view.timezone = london
+        do_test(events, (8, 24))
+
+        view.timezone = utc
+        events = [createEvent('2004-08-16 22:00', '180min', "long workout")]
+        do_test(events, (8, 24))
+
+        # start after midnight
+        view.timezone = vilnius
+        do_test(events, (8, 19))
+
+        # end between 19:00 and midnight
+        view.timezone = eastern
+        do_test(events, (8, 21))
+
+        # end after Midnight
+        view.timezone = london
+        do_test(events, (8, 24))
+
     def test_dayEvents(self):
         from schooltool.app.browser.cal import DailyCalendarView
 

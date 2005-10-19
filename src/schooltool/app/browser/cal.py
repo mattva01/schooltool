@@ -1092,9 +1092,10 @@ class DailyCalendarView(CalendarViewBase):
                                                 event.dtstart.astimezone(self.timezone))
                 self.starthour = newstart.hour
 
-            if event.dtstart + event.duration > end:
+            if event.dtstart + event.duration > end and \
+                event.dtstart.astimezone(self.timezone).day <= self.cursor.day:
                 newend = min(
-                    datetime.combine(self.cursor, time(tzinfo=utc)) + timedelta(1),
+                    datetime.combine(self.cursor, time(tzinfo=self.timezone)) + timedelta(1),
                     event.dtstart.astimezone(self.timezone) + event.duration + timedelta(0, 3599))
                 self.endhour = newend.hour
                 if self.endhour == 0:
