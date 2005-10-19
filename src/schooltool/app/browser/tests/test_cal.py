@@ -3001,6 +3001,72 @@ class TestDailyCalendarView(unittest.TestCase):
         events = [createEvent('2004-08-16 20:00', '5h', "long late workout")]
         do_test(events, (8, 24))
 
+    def test__setRange_timezones(self):
+        from schooltool.app.browser.cal import DailyCalendarView
+
+        london = timezone('Europe/London')
+        vilnius = timezone('Europe/Vilnius')
+        eastern = timezone('US/Eastern')
+
+        person = Person("Da Boss")
+        cal = ISchoolToolCalendar(person)
+        view = DailyCalendarView(cal, TestRequest())
+        view.cursor = date(2004, 8, 16)
+
+        def do_test(events, expected):
+            view.starthour, view.endhour = 8, 19
+            view._setRange(events)
+            self.assertEquals((view.starthour, view.endhour), expected)
+
+        for tz in (utc, london, vilnius, eastern):
+            view.timezone = tz
+            do_test([], (8, 19))
+
+        view.timezone = vilnius
+        events = [createEvent('2004-08-16 5:00', '60min', 'First Class')]
+        do_test(events, (8, 19))
+
+        events = [createEvent('2004-08-16 4:00', '60min', 'Before School')]
+        do_test(events, (7, 19))
+
+        view.timezone = eastern
+        do_test(events, (0, 19))
+
+        view.timezone = london
+        do_test(events, (5, 19))
+
+        view.timezone = utc
+        do_test(events, (4, 19))
+
+        events = [createEvent('2004-08-16 4:00', '60min', 'Before School'),
+                    createEvent('2004-08-16 18:00', '60min', 'Last Class')]
+        do_test(events, (4, 19))
+
+        view.timezone = vilnius
+        do_test(events, (7, 22))
+
+        view.timezone = eastern
+        do_test(events, (0, 19))
+
+        view.timezone = london
+        do_test(events, (5, 19))
+
+        view.timezone = vilnius
+        events = [createEvent('2004-08-16 4:00', '60min', 'Before School'),
+                    createEvent('2004-08-16 18:00', '61min', 'Running Late')]
+        do_test(events, (7, 23))
+
+        view.timezone = eastern
+        do_test(events, (0, 19))
+
+        view.timezone = london
+        do_test(events, (5, 21))
+
+        events = []
+        for tz in (utc, london, vilnius, eastern):
+            view.timezone = tz
+            do_test([], (8, 19))
+
     def test_dayEvents(self):
         from schooltool.app.browser.cal import DailyCalendarView
 
