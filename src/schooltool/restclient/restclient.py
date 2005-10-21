@@ -387,13 +387,35 @@ class SchoolToolClient:
         return self._createGenericObject(GroupRef, '/groups',
                                          title, description, name)
 
-    def createResource(self, title, description="", name=None):
+    def createResource(self, title, description="", isLocation=False ,name=None):
         """Create a resource object.
 
         Returns a ResourceRef for the new resource.
         """
-        return self._createGenericObject(ResourceRef, '/resources',
-                                         title, description, name)
+        body = ('<object xmlns="http://schooltool.org/ns/model/0.1"'
+                ' title="%s"'
+                ' isLocation="%s"'
+                ' description="%s"/>' % (to_xml(title),
+                                         isLocation and 'true' or 'false',
+                                         to_xml(description)))
+
+        if name:
+            where = "/resources/%s" % name
+            response = self.put(where, body)
+            acceptable_statuses = [200, 201]
+        else:
+            response = self.post('/resources', body)
+            acceptable_statuses = [201]
+
+        if response.status not in acceptable_statuses:
+            raise ResponseStatusError(response)
+
+        if name:
+            url = where
+        else:
+            url = self._pathFromResponse(response)
+
+        return ResourceRef(self, url, title)
 
     def createCourse(self, title, description="", name=None):
         """Create a course object.
