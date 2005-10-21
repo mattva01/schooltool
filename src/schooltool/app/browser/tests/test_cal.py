@@ -3049,7 +3049,7 @@ class TestDailyCalendarView(unittest.TestCase):
         do_test(events, (0, 19))
 
         view.timezone = london
-        do_test(events, (5, 19))
+        do_test(events, (5, 20))
 
         view.timezone = vilnius
         events = [createEvent('2004-08-16 4:00', '60min', 'Before School'),
