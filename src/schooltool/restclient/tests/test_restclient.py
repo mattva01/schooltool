@@ -806,6 +806,7 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(conn.headers['Content-Type'], 'text/xml')
         self.assertEqualsXML(conn.body,
                 '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' isLocation="false"'
                        ' title="Title&lt;with&quot;strange&amp;chars"'
                        ' description=""/>')
 
@@ -823,6 +824,7 @@ class TestSchoolToolClient(SchoolToolClientTestMixin, unittest.TestCase):
         self.assertEquals(conn.headers['Content-Type'], 'text/xml')
         self.assertEqualsXML(conn.body,
                 '<object xmlns="http://schooltool.org/ns/model/0.1"'
+                       ' isLocation="false"'
                        ' title="Title&lt;with&quot;strange&amp;chars"'
                        ' description=""/>')
 
