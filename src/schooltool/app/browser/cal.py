@@ -1084,19 +1084,21 @@ class DailyCalendarView(CalendarViewBase):
         for event in events:
             start = self.timezone.localize(datetime.combine(self.cursor,
                                             time(self.starthour)))
-            end = self.timezone.localize(datetime.combine(self.cursor, time()) +
-                   timedelta(hours=self.endhour)) # endhour may be 24
+            end = self.timezone.localize(datetime.combine(self.cursor,
+                   time()) + timedelta(hours=self.endhour)) # endhour may be 24
             if event.dtstart < start:
-                newstart = max(datetime.combine(self.cursor,
-                                                time(tzinfo=self.timezone)),
-                                                event.dtstart.astimezone(self.timezone))
+                newstart = max(self.timezone.localize(
+                                        datetime.combine(self.cursor, time())),
+                                        event.dtstart.astimezone(self.timezone))
                 self.starthour = newstart.hour
 
             if event.dtstart + event.duration > end and \
                 event.dtstart.astimezone(self.timezone).day <= self.cursor.day:
-                newend = min(
-                    datetime.combine(self.cursor, time(tzinfo=self.timezone)) + timedelta(1),
-                    event.dtstart.astimezone(self.timezone) + event.duration + timedelta(0, 3599))
+                newend = min(self.timezone.localize(
+                                        datetime.combine(self.cursor,
+                                                        time())) + timedelta(1),
+                            event.dtstart.astimezone(self.timezone) +
+                                        event.duration + timedelta(0, 3599))
                 self.endhour = newend.hour
                 if self.endhour == 0:
                     self.endhour = 24
