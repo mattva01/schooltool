@@ -1162,8 +1162,8 @@ class TestCalendarViewBase(unittest.TestCase):
             'EST'
 
             >>> titles = []
-            >>> for e in view.getEvents(datetime(2002, 2, 2),
-            ...                         datetime(2002, 2, 3)):
+            >>> for e in view.getEvents(datetime(2002, 2, 2, tzinfo=utc),
+            ...                         datetime(2002, 2, 3, tzinfo=utc)):
             ...     titles.append(e.title)
             >>> titles.sort()
             >>> for title in  titles:
@@ -1305,6 +1305,56 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(len(days), 1)
         self.assertEquals(days[0].date, start)
         self.assertEqualEventLists(days[0].events, [e5, e2])
+
+    def test_getDays_in_timezones(self):
+        from schooltool.app.browser.cal import CalendarViewBase
+        from schooltool.app.cal import Calendar
+        app = sbsetup.setupSchoolToolSite()
+        sbsetup.setupTimetabling()
+
+        e0 = createEvent('2004-08-10 22:00', '1h', "e0")
+        e1 = createEvent('2004-08-11 02:00', '1h', "e1")
+        e2 = createEvent('2004-08-11 12:00', '1h', "e2")
+        e3 = createEvent('2004-08-11 22:00', '1h', "e3")
+        e4 = createEvent('2004-08-12 02:00', '1d', "e4")
+
+        cal = Calendar(Person())
+        for e in [e0, e1, e2, e3, e4]:
+            cal.addEvent(e)
+
+        request = TestRequest()
+        view = CalendarViewBase(cal, request)
+
+        start = date(2004, 8, 11)
+        days = view._getDays(start, start)
+        self.assertEquals(len(days), 0)
+
+        start = date(2004, 8, 11)
+        end = date(2004, 8, 12)
+        days = view._getDays(start, end)
+
+        self.assertEquals(len(days), 1)
+        self.assertEquals(days[0].date, date(2004, 8, 11))
+
+        self.assertEqualEventLists(days[0].events, [e1, e2, e3])
+
+        view.timezone = timezone('US/Eastern')
+        days = view._getDays(start, end)
+
+        self.assertEquals(len(days), 1)
+        self.assertEquals(days[0].date, date(2004, 8, 11))
+
+        self.assertEqualEventLists(days[0].events, [e2, e3, e4])
+
+        view.timezone = timezone('Europe/Vilnius')
+        days = view._getDays(start, end)
+
+        self.assertEquals(len(days), 1)
+        self.assertEquals(days[0].date, date(2004, 8, 11))
+
+        self.assertEqualEventLists(days[0].events, [e0, e1, e2])
+
+
 
     def test_getJumpToYears(self):
         from schooltool.app.cal import Calendar

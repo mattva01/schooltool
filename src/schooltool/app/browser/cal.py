@@ -701,7 +701,7 @@ class CalendarViewBase(BrowserView):
             #                                      and duration > 0
             #               dtend.date()           otherwise
             dtend = event.dtend
-            first_day = event.dtstart.date()
+            first_day = event.dtstart.astimezone(self.timezone).date()
             last_day = max(first_day, (dtend - dtend.resolution).date())
             # Loop through the intersection of two day ranges:
             #    [start, end) intersect [first_day, last_day]
