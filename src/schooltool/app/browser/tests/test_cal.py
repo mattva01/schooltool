@@ -1316,7 +1316,7 @@ class TestCalendarViewBase(unittest.TestCase):
         e1 = createEvent('2004-08-11 02:00', '1h', "e1")
         e2 = createEvent('2004-08-11 12:00', '1h', "e2")
         e3 = createEvent('2004-08-11 22:00', '1h', "e3")
-        e4 = createEvent('2004-08-12 02:00', '1d', "e4")
+        e4 = createEvent('2004-08-12 02:00', '1h', "e4")
 
         cal = Calendar(Person())
         for e in [e0, e1, e2, e3, e4]:
@@ -1353,6 +1353,28 @@ class TestCalendarViewBase(unittest.TestCase):
         self.assertEquals(days[0].date, date(2004, 8, 11))
 
         self.assertEqualEventLists(days[0].events, [e0, e1, e2])
+
+        start = date(2004, 8, 12)
+        end = date(2004, 8, 13)
+        days = view._getDays(start, end)
+
+        view.timezone = timezone('US/Eastern')
+        days = view._getDays(start, end)
+
+        self.assertEquals(len(days), 1)
+        self.assertEquals(days[0].date, date(2004, 8, 12))
+
+        self.assertEqualEventLists(days[0].events, [])
+
+        view.timezone = timezone('Europe/Vilnius')
+        days = view._getDays(start, end)
+
+        self.assertEquals(len(days), 1)
+        self.assertEquals(days[0].date, date(2004, 8, 12))
+
+        self.assertEqualEventLists(days[0].events, [e3, e4])
+
+
 
 
 
