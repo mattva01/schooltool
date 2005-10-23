@@ -4067,11 +4067,11 @@ def doctest_AtomCalendarView():
 
     Populate the calendar:
 
-        >>> lastweek = CalendarEvent(datetime.utcnow().replace(hour=12) -
+        >>> lastweek = CalendarEvent(datetime.now().replace(hour=12) -
         ...                          timedelta(8),
         ...                          timedelta(hours=3), "Last Week")
         >>> monday_date = (datetime.now().replace(hour=12) -
-        ...                timedelta(datetime.utcnow().weekday()))
+        ...                timedelta(datetime.now().weekday()))
         >>> tuesday_date = monday_date + timedelta(1)
         >>> monday = CalendarEvent(monday_date,
         ...                        timedelta(hours=3), "Today")
